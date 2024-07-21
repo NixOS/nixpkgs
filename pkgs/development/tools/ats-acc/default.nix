@@ -11,12 +11,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Wp39488YNL40GKp4KaJwhi75PsYP+gMtrZqAvs4Q/sw=";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "mv acc \''$(PATSHOME)/bin/" "install -Dm755 acc ${placeholder "out"}/bin/"
+  '';
+
   nativeBuildInputs = [ ats2 ];
 
   meta = with lib; {
     description = "Pretty-print error messages of the ATS Compiler";
     homepage = "https://github.com/sparverius/ats-acc";
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
     license = licenses.unfree; # Upstream has no license
   };
 }

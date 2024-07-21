@@ -4,7 +4,7 @@
 , copyDesktopItems
 , makeDesktopItem
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , jre # old or modded versions of the game may require Java 8 (https://aur.archlinux.org/packages/minecraft-launcher/#pinned-674960)
 , xorg
@@ -38,7 +38,7 @@ let
     icon = "minecraft-launcher";
     comment = "Official launcher for Minecraft, a sandbox-building game";
     desktopName = "Minecraft Launcher";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   envLibPath = lib.makeLibraryPath [
@@ -100,8 +100,7 @@ stdenv.mkDerivation rec {
     sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook copyDesktopItems ];
-  buildInputs = [ gobject-introspection ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook3 copyDesktopItems gobject-introspection ];
 
   sourceRoot = ".";
 
@@ -139,7 +138,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${envLibPath} \
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
       --set JAVA_HOME ${lib.getBin jre} \
-      --run "cd /tmp" \
+      --chdir /tmp \
       "''${gappsWrapperArgs[@]}"
   '';
 
@@ -148,9 +147,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Official launcher for Minecraft, a sandbox-building game";
     homepage = "https://minecraft.net";
-    maintainers = with maintainers; [ cpages ryantm infinisil ];
+    maintainers = with maintainers; [ ryantm ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
+    # "minecraft-launcher will fail on NixOS for minecraft versions >1.19
+    # try prismlauncher or atlauncher instead"
+    broken = true;
   };
 
   passthru = {

@@ -1,10 +1,16 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.services.ttyd;
+
+  inherit (lib)
+    optionals
+    types
+    concatLists
+    mapAttrsToList
+    mkOption
+    ;
 
   # Command line arguments for the ttyd daemon
   args = [ "--port" (toString cfg.port) ]
@@ -14,6 +20,7 @@ let
          ++ (concatLists (mapAttrsToList (_k: _v: [ "--client-option" "${_k}=${_v}" ]) cfg.clientOptions))
          ++ [ "--terminal-type" cfg.terminalType ]
          ++ optionals cfg.checkOrigin [ "--check-origin" ]
+         ++ optionals cfg.writeable [ "--writable" ] # the typo is correct
          ++ [ "--max-clients" (toString cfg.maxClients) ]
          ++ optionals (cfg.indexFile != null) [ "--index" cfg.indexFile ]
          ++ optionals cfg.enableIPv6 [ "--ipv6" ]
@@ -30,7 +37,7 @@ in
 
   options = {
     services.ttyd = {
-      enable = mkEnableOption "ttyd daemon";
+      enable = lib.mkEnableOption ("ttyd daemon");
 
       port = mkOption {
         type = types.port;
@@ -55,7 +62,7 @@ in
       username = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Username for basic authentication.";
+        description = "Username for basic http authentication.";
       };
 
       passwordFile = mkOption {
@@ -63,9 +70,9 @@ in
         default = null;
         apply = value: if value == null then null else toString value;
         description = ''
-          File containing the password to use for basic authentication.
+          File containing the password to use for basic http authentication.
           For insecurely putting the password in the globally readable store use
-          <literal>pkgs.writeText "ttydpw" "MyPassword"</literal>.
+          `pkgs.writeText "ttydpw" "MyPassword"`.
         '';
       };
 
@@ -75,17 +82,45 @@ in
         description = "Signal to send to the command on session close.";
       };
 
+      entrypoint = mkOption {
+        type = types.listOf types.str;
+        default = [ "${pkgs.shadow}/bin/login" ];
+        defaultText = lib.literalExpression ''
+          [ "''${pkgs.shadow}/bin/login" ]
+        '';
+        example = lib.literalExpression ''
+          [ (lib.getExe pkgs.htop) ]
+        '';
+        description = "Which command ttyd runs.";
+        apply = lib.escapeShellArgs;
+      };
+
+      user = mkOption {
+        type = types.str;
+        # `login` needs to be run as root
+        default = "root";
+        description = "Which unix user ttyd should run as.";
+      };
+
+      writeable = mkOption {
+        type = types.nullOr types.bool;
+        default = null; # null causes an eval error, forcing the user to consider attack surface
+        example = true;
+        description = "Allow clients to write to the TTY.";
+      };
+
       clientOptions = mkOption {
         type = types.attrsOf types.str;
         default = {};
-        example = literalExpression ''{
-          fontSize = "16";
-          fontFamily = "Fira Code";
-
-        }'';
+        example = lib.literalExpression ''
+          {
+            fontSize = "16";
+            fontFamily = "Fira Code";
+          }
+        '';
         description = ''
           Attribute set of client options for xtermjs.
-          <link xlink:href="https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/"/>
+          <https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/>
         '';
       };
 
@@ -138,7 +173,7 @@ in
         description = ''
           SSL key file path.
           For insecurely putting the keyFile in the globally readable store use
-          <literal>pkgs.writeText "ttydKeyFile" "SSLKEY"</literal>.
+          `pkgs.writeText "ttydKeyFile" "SSLKEY"`.
         '';
       };
 
@@ -158,12 +193,14 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions =
       [ { assertion = cfg.enableSSL
             -> cfg.certFile != null && cfg.keyFile != null && cfg.caFile != null;
-          message = "SSL is enabled for ttyd, but no certFile, keyFile or caFile has been specefied."; }
+          message = "SSL is enabled for ttyd, but no certFile, keyFile or caFile has been specified."; }
+        { assertion = cfg.writeable != null;
+          message = "services.ttyd.writeable must be set"; }
         { assertion = ! (cfg.interface != null && cfg.socket != null);
           message = "Cannot set both interface and socket for ttyd."; }
         { assertion = (cfg.username != null) == (cfg.passwordFile != null);
@@ -176,20 +213,19 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        # Runs login which needs to be run as root
-        # login: Cannot possibly work without effective root
-        User = "root";
+        User = cfg.user;
+        LoadCredential = lib.optionalString (cfg.passwordFile != null) "TTYD_PASSWORD_FILE:${cfg.passwordFile}";
       };
 
       script = if cfg.passwordFile != null then ''
-        PASSWORD=$(cat ${escapeShellArg cfg.passwordFile})
+        PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/TTYD_PASSWORD_FILE")
         ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
-          --credential ${escapeShellArg cfg.username}:"$PASSWORD" \
-          ${pkgs.shadow}/bin/login
+          --credential ${lib.escapeShellArg cfg.username}:"$PASSWORD" \
+          ${cfg.entrypoint}
       ''
       else ''
         ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
-          ${pkgs.shadow}/bin/login
+          ${cfg.entrypoint}
       '';
     };
   };

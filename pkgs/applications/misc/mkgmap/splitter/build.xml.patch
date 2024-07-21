@@ -1,13 +1,6 @@
 --- a/build.xml	(revision 597)
 +++ a/build.xml	(working copy)
-@@ -207,12 +207,12 @@
- 		<property name="svn.version.build" value="unknown"/>
- 
- 		<propertyfile file="${build.classes}/splitter-version.properties">
--			<entry key="svn.version" value="${svn.version.build}" />
--			<entry key="build.timestamp" value="${build.timestamp}" />
-+			<entry key="svn.version" value="@version@" />
-+			<entry key="build.timestamp" value="unknown" />
+@@ -212,7 +212,7 @@
  		</propertyfile>
  	</target>
  
@@ -25,15 +18,6 @@
      <javac srcdir="${test}" destdir="${build.test-classes}" debug="yes" includeantruntime="false">
        <include name="**/*.java"/>
        <classpath refid="test.classpath"/>
-@@ -261,7 +261,7 @@
- 	  <fail if="junit.failure" message="Test failed.  See test-reports/index.html"/>
- 	</target>
- 
--  <target name="dist" depends="build, check-version, version-file" description="Make the distribution area">
-+  <target name="dist" depends="build, version-file" description="Make the distribution area">
- 
-     <mkdir dir="${dist}"/>
-     <mkdir dir="${dist}/doc/api"/>
 @@ -324,7 +324,7 @@
  	</target>
  

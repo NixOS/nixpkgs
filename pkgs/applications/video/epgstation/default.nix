@@ -1,71 +1,93 @@
 { lib
-, stdenv
+, fetchpatch
 , fetchFromGitHub
-, common-updater-scripts
-, genericUpdater
-, writers
+, buildNpmPackage
+, installShellFiles
 , makeWrapper
 , bash
 , nodejs
-, nodePackages
 , gzip
-, jq
+, python3
 }:
 
-let
-  # NOTE: use updateScript to bump the package version
-  pname = "EPGStation";
-  version = "1.7.5";
+buildNpmPackage rec {
+  pname = "epgstation";
+  version = "2.6.20";
+
   src = fetchFromGitHub {
     owner = "l3tnun";
     repo = "EPGStation";
     rev = "v${version}";
-    sha256 = "06yaf5yb5rp3q0kdhw33df7px7vyfby885ckb6bdzw3wnams5d8m";
+    sha256 = "K1cAvmqWEfS6EY4MKAtjXb388XLYHtouxNM70PWgFig=";
   };
 
-  workaround-opencollective-buildfailures = stdenv.mkDerivation {
-    # FIXME: This should be removed when a complete fix is available
-    # https://github.com/svanderburg/node2nix/issues/145
-    name = "workaround-opencollective-buildfailures";
-    dontUnpack = true;
-    installPhase = ''
-      mkdir -p $out/bin
-      touch $out/bin/opencollective-postinstall
-      chmod +x $out/bin/opencollective-postinstall
-    '';
+  patches = [
+    ./use-mysql-over-domain-socket.patch
+
+    # upgrade dependencies to make it compatible with node 18
+    (fetchpatch {
+      url = "https://github.com/midchildan/EPGStation/commit/5d6cad746b7d9b6d246adcdecf9c991b77c9d89e.patch";
+      sha256 = "sha256-9a8VUjczlyQHVO7w9MYorPIZunAuBuif1HNmtp1yMk8=";
+    })
+    (fetchpatch {
+      url = "https://github.com/midchildan/EPGStation/commit/c948e833e485c2b7cb7fb33b953cca1e20de3a70.patch";
+      sha256 = "sha256-nM6KkVRURuQFZLXZ2etLU1a1+BoaJnfjngo07TFbe58=";
+    })
+  ];
+
+  npmDepsHash = "sha256-dohencRGuvc+vSoclLVn5iles4GOuTq26BrEVeJ4GC4=";
+  npmBuildScript = "build-server";
+  npmRootPath = "/lib/node_modules/epgstation";
+
+  buildInputs = [ bash ];
+  nativeBuildInputs = [ installShellFiles makeWrapper python3 ];
+
+  clientDir = buildNpmPackage {
+    pname = "${pname}-client";
+    inherit version src installPhase meta;
+
+    npmDepsHash = "sha256-a/cDPABWI4lPxvSOI4D90O71A9lm8icPMak/g6DPYQY=";
+    npmRootPath = "";
+
+    sourceRoot = "${src.name}/client";
+    NODE_OPTIONS = "--openssl-legacy-provider";
   };
 
-  pkg = nodePackages.epgstation.override (drv: {
-    inherit src;
+  postBuild = ''
+    rm -rf client
+    cp -r ${clientDir} client
+  '';
 
-    buildInputs = [ bash ];
-    nativeBuildInputs = [
-      workaround-opencollective-buildfailures
-      makeWrapper
-      nodePackages.node-pre-gyp
-    ];
+  # installPhase is shared with clientDir
+  installPhase = ''
+    runHook preInstall
 
-    preRebuild = ''
-      # Fix for not being able to connect to mysql using domain sockets.
-      patch -p1 ${./use-mysql-over-domain-socket.patch}
-    '';
+    npm prune --omit dev --no-save \
+      $npmInstallFlags \
+      "''${npmInstallFlagsArray[@]}" \
+      $npmFlags \
+      "''${npmFlagsArray[@]}"
 
-    postInstall = let
+    mkdir -p $out$npmRootPath
+    cp -r . $out$npmRootPath
+
+    runHook postInstall
+  '';
+
+  postInstall =
+    let
       runtimeDeps = [ nodejs bash ];
     in
     ''
-      mkdir -p $out/{bin,libexec,share/doc/epgstation,share/man/man1}
+      mkdir -p $out/{bin,libexec,share/doc/epgstation}
 
-      pushd $out/lib/node_modules/EPGStation
+      pushd $out$npmRootPath
 
-      npm run build
-      npm prune --production
-
-      mv config/{enc.sh,enc.js} $out/libexec
+      mv config/enc.js.template $out/libexec/enc.js
       mv LICENSE Readme.md $out/share/doc/epgstation
       mv doc/* $out/share/doc/epgstation
-      sed 's/@DESCRIPTION@/${drv.meta.description}/g' ${./epgstation.1} \
-        | ${gzip}/bin/gzip > $out/share/man/man1/epgstation.1.gz
+      sed 's/@DESCRIPTION@/${meta.description}/g' ${./epgstation.1} > doc/epgstation.1
+      installManPage doc/epgstation.1
       rm -rf doc
 
       # just log to stdout and let journald do its job
@@ -75,49 +97,28 @@ let
       # symlinks. Without this, they would all be non-writable because they
       # reside in the Nix store. Note that the source path won't be accessible
       # at build time.
-      rm -r config data recorded thumbnail
+      rm -r config data drop recorded thumbnail src/db/subscribers src/db/migrations
       ln -sfT /etc/epgstation config
       ln -sfT /var/lib/epgstation data
+      ln -sfT /var/lib/epgstation/drop drop
       ln -sfT /var/lib/epgstation/recorded recorded
       ln -sfT /var/lib/epgstation/thumbnail thumbnail
+      ln -sfT /var/lib/epgstation/db/subscribers src/db/subscribers
+      ln -sfT /var/lib/epgstation/db/migrations src/db/migrations
 
       makeWrapper ${nodejs}/bin/npm $out/bin/epgstation \
-       --run "cd $out/lib/node_modules/EPGStation" \
-       --prefix PATH : ${lib.makeBinPath runtimeDeps}
+       --chdir $out$npmRootPath \
+       --prefix PATH : ${lib.makeBinPath runtimeDeps} \
+       --set APP_ROOT_PATH $out$npmRootPath
 
       popd
     '';
 
-    # NOTE: this may take a while since it has to update all packages in
-    # nixpkgs.nodePackages
-    passthru.updateScript = import ./update.nix {
-      inherit lib;
-      inherit (src.meta) homepage;
-      inherit
-        pname
-        version
-        common-updater-scripts
-        genericUpdater
-        writers
-        jq;
-    };
-
-    # nodePackages.epgstation is a stub package to fetch npm dependencies and
-    # is marked as broken to prevent users from installing it directly. This
-    # technique ensures epgstation can share npm packages with the rest of
-    # nixpkgs while still allowing us to heavily customize the build. It also
-    # allows us to provide devDependencies for the epgstation build process
-    # without doing the same for all the other node packages.
-    meta = drv.meta // { broken = false; };
-  });
-in
-pkg // {
-  name = "${pname}-${version}";
-
-  meta = with lib; pkg.meta // {
+  meta = with lib; {
+    description = "DVR software compatible with Mirakurun.";
+    homepage = "https://github.com/l3tnun/EPGStation";
+    license = licenses.mit;
     maintainers = with maintainers; [ midchildan ];
-
-    # NOTE: updateScript relies on this being correct
-    position = toString ./default.nix + ":1";
+    mainProgram = "epgstation";
   };
 }

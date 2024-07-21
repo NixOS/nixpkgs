@@ -70,9 +70,12 @@ static void init()
 
 }
 
-static const char * rewrite(const char * path, char * buf)
+static const char * rewrite(const char * volatile path, char * buf)
 {
+    // Marking the path volatile is needed so the the following check isn't
+    // optimized away by the compiler.
     if (path == NULL) return path;
+
     for (int n = 0; n < nrRedirects; ++n) {
         int len = strlen(from[n]);
         if (strncmp(path, from[n], len) != 0) continue;
@@ -82,6 +85,13 @@ static const char * rewrite(const char * path, char * buf)
     }
 
     return path;
+}
+
+static char * rewrite_non_const(char * path, char * buf)
+{
+    // as long as the argument `path` is non-const, we can consider discarding
+    // the const qualifier of the return value to be safe.
+    return (char *)rewrite(path, buf);
 }
 
 static int open_needs_mode(int flags)
@@ -99,7 +109,7 @@ static int open_needs_mode(int flags)
 
 WRAPPER(int, open)(const char * path, int flags, ...)
 {
-    int (*open_real) (const char *, int, mode_t) = LOOKUP_REAL(open);
+    int (*open_real) (const char *, int, ...) = LOOKUP_REAL(open);
     mode_t mode = 0;
     if (open_needs_mode(flags)) {
         va_list ap;
@@ -112,7 +122,8 @@ WRAPPER(int, open)(const char * path, int flags, ...)
 }
 WRAPPER_DEF(open)
 
-#ifndef __APPLE__
+// In musl libc, open64 is simply a macro for open
+#if !defined(__APPLE__) && !defined(open64)
 WRAPPER(int, open64)(const char * path, int flags, ...)
 {
     int (*open64_real) (const char *, int, mode_t) = LOOKUP_REAL(open64);
@@ -131,7 +142,7 @@ WRAPPER_DEF(open64)
 
 WRAPPER(int, openat)(int dirfd, const char * path, int flags, ...)
 {
-    int (*openat_real) (int, const char *, int, mode_t) = LOOKUP_REAL(openat);
+    int (*openat_real) (int, const char *, int, ...) = LOOKUP_REAL(openat);
     mode_t mode = 0;
     if (open_needs_mode(flags)) {
         va_list ap;
@@ -152,7 +163,7 @@ WRAPPER(FILE *, fopen)(const char * path, const char * mode)
 }
 WRAPPER_DEF(fopen)
 
-#ifndef __APPLE__
+#ifdef __GLIBC__
 WRAPPER(FILE *, __nss_files_fopen)(const char * path)
 {
     FILE * (*__nss_files_fopen_real) (const char *) = LOOKUP_REAL(__nss_files_fopen);
@@ -162,7 +173,8 @@ WRAPPER(FILE *, __nss_files_fopen)(const char * path)
 WRAPPER_DEF(__nss_files_fopen)
 #endif
 
-#ifndef __APPLE__
+// In musl libc, fopen64 is simply a macro for fopen
+#if !defined(__APPLE__) && !defined(fopen64)
 WRAPPER(FILE *, fopen64)(const char * path, const char * mode)
 {
     FILE * (*fopen64_real) (const char *, const char *) = LOOKUP_REAL(fopen64);
@@ -172,7 +184,7 @@ WRAPPER(FILE *, fopen64)(const char * path, const char * mode)
 WRAPPER_DEF(fopen64)
 #endif
 
-#ifndef __APPLE__
+#ifdef __linux__
 WRAPPER(int, __xstat)(int ver, const char * path, struct stat * st)
 {
     int (*__xstat_real) (int ver, const char *, struct stat *) = LOOKUP_REAL(__xstat);
@@ -182,7 +194,7 @@ WRAPPER(int, __xstat)(int ver, const char * path, struct stat * st)
 WRAPPER_DEF(__xstat)
 #endif
 
-#ifndef __APPLE__
+#ifdef __linux__
 WRAPPER(int, __xstat64)(int ver, const char * path, struct stat64 * st)
 {
     int (*__xstat64_real) (int ver, const char *, struct stat64 *) = LOOKUP_REAL(__xstat64);
@@ -192,6 +204,37 @@ WRAPPER(int, __xstat64)(int ver, const char * path, struct stat64 * st)
 WRAPPER_DEF(__xstat64)
 #endif
 
+#if defined(__linux__) && defined(STATX_TYPE)
+WRAPPER(int, statx)(int dirfd, const char * restrict pathname, int flags,
+    unsigned int mask, struct statx * restrict statxbuf)
+{
+    int (*statx_real) (int, const char * restrict, int,
+        unsigned int, struct statx * restrict) = LOOKUP_REAL(statx);
+    char buf[PATH_MAX];
+    return statx_real(dirfd, rewrite(pathname, buf), flags, mask, statxbuf);
+}
+WRAPPER_DEF(statx)
+#endif
+
+WRAPPER(int, fstatat)(int dirfd, const char * pathname, struct stat * statbuf, int flags)
+{
+    int (*fstatat_real) (int, const char *, struct stat *, int) = LOOKUP_REAL(fstatat);
+    char buf[PATH_MAX];
+    return fstatat_real(dirfd, rewrite(pathname, buf), statbuf, flags);
+}
+WRAPPER_DEF(fstatat);
+
+// In musl libc, fstatat64 is simply a macro for fstatat
+#if !defined(__APPLE__) && !defined(fstatat64)
+WRAPPER(int, fstatat64)(int dirfd, const char * pathname, struct stat64 * statbuf, int flags)
+{
+    int (*fstatat64_real) (int, const char *, struct stat64 *, int) = LOOKUP_REAL(fstatat64);
+    char buf[PATH_MAX];
+    return fstatat64_real(dirfd, rewrite(pathname, buf), statbuf, flags);
+}
+WRAPPER_DEF(fstatat64);
+#endif
+
 WRAPPER(int, stat)(const char * path, struct stat * st)
 {
     int (*__stat_real) (const char *, struct stat *) = LOOKUP_REAL(stat);
@@ -199,6 +242,17 @@ WRAPPER(int, stat)(const char * path, struct stat * st)
     return __stat_real(rewrite(path, buf), st);
 }
 WRAPPER_DEF(stat)
+
+// In musl libc, stat64 is simply a macro for stat
+#if !defined(__APPLE__) && !defined(stat64)
+WRAPPER(int, stat64)(const char * path, struct stat64 * st)
+{
+    int (*stat64_real) (const char *, struct stat64 *) = LOOKUP_REAL(stat64);
+    char buf[PATH_MAX];
+    return stat64_real(rewrite(path, buf), st);
+}
+WRAPPER_DEF(stat64)
+#endif
 
 WRAPPER(int, access)(const char * path, int mode)
 {
@@ -337,6 +391,14 @@ WRAPPER(int, system)(const char *command)
 }
 WRAPPER_DEF(system)
 
+WRAPPER(int, chdir)(const char *path)
+{
+    int (*chdir_real) (const char *) = LOOKUP_REAL(chdir);
+    char buf[PATH_MAX];
+    return chdir_real(rewrite(path, buf));
+}
+WRAPPER_DEF(chdir);
+
 WRAPPER(int, mkdir)(const char *path, mode_t mode)
 {
     int (*mkdir_real) (const char *path, mode_t mode) = LOOKUP_REAL(mkdir);
@@ -352,3 +414,117 @@ WRAPPER(int, mkdirat)(int dirfd, const char *path, mode_t mode)
     return mkdirat_real(dirfd, rewrite(path, buf), mode);
 }
 WRAPPER_DEF(mkdirat)
+
+WRAPPER(int, unlink)(const char *path)
+{
+    int (*unlink_real) (const char *path) = LOOKUP_REAL(unlink);
+    char buf[PATH_MAX];
+    return unlink_real(rewrite(path, buf));
+}
+WRAPPER_DEF(unlink)
+
+WRAPPER(int, unlinkat)(int dirfd, const char *path, int flags)
+{
+    int (*unlinkat_real) (int dirfd, const char *path, int flags) = LOOKUP_REAL(unlinkat);
+    char buf[PATH_MAX];
+    return unlinkat_real(dirfd, rewrite(path, buf), flags);
+}
+WRAPPER_DEF(unlinkat)
+
+WRAPPER(int, rmdir)(const char *path)
+{
+    int (*rmdir_real) (const char *path) = LOOKUP_REAL(rmdir);
+    char buf[PATH_MAX];
+    return rmdir_real(rewrite(path, buf));
+}
+WRAPPER_DEF(rmdir)
+
+static void copy_temp_wildcard(char * dest, char * src, int suffixlen) {
+    int dest_len = strnlen(dest, PATH_MAX);
+    int src_len = strnlen(src, PATH_MAX);
+    memcpy(dest + dest_len - (6 + suffixlen), src + src_len - (6 + suffixlen), 6);
+}
+
+WRAPPER(int, mkstemp)(char *template)
+{
+    int (*mkstemp_real) (char *template) = LOOKUP_REAL(mkstemp);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    int retval = mkstemp_real(rewritten);
+    if (retval >= 0 && rewritten != template) {
+        copy_temp_wildcard(template, rewritten, 0);
+    }
+    return retval;
+}
+WRAPPER_DEF(mkstemp)
+
+WRAPPER(int, mkostemp)(char *template, int flags)
+{
+    int (*mkostemp_real) (char *template, int flags) = LOOKUP_REAL(mkostemp);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    int retval = mkostemp_real(rewritten, flags);
+    if (retval >= 0 && rewritten != template) {
+        copy_temp_wildcard(template, rewritten, 0);
+    }
+    return retval;
+}
+WRAPPER_DEF(mkostemp)
+
+WRAPPER(int, mkstemps)(char *template, int suffixlen)
+{
+    int (*mkstemps_real) (char *template, int suffixlen) = LOOKUP_REAL(mkstemps);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    int retval = mkstemps_real(rewritten, suffixlen);
+    if (retval >= 0 && rewritten != template) {
+        copy_temp_wildcard(template, rewritten, suffixlen);
+    }
+    return retval;
+}
+WRAPPER_DEF(mkstemps)
+
+WRAPPER(int, mkostemps)(char *template, int suffixlen, int flags)
+{
+    int (*mkostemps_real) (char *template, int suffixlen, int flags) = LOOKUP_REAL(mkostemps);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    int retval = mkostemps_real(rewritten, suffixlen, flags);
+    if (retval >= 0 && rewritten != template) {
+        copy_temp_wildcard(template, rewritten, suffixlen);
+    }
+    return retval;
+}
+WRAPPER_DEF(mkostemps)
+
+WRAPPER(char *, mkdtemp)(char *template)
+{
+    char * (*mkdtemp_real) (char *template) = LOOKUP_REAL(mkdtemp);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    char * retval = mkdtemp_real(rewritten);
+    if (retval == NULL) {
+        return retval;
+    };
+    if (rewritten != template) {
+        copy_temp_wildcard(template, rewritten, 0);
+    }
+    return template;
+}
+WRAPPER_DEF(mkdtemp)
+
+WRAPPER(char *, mktemp)(char *template)
+{
+    char * (*mktemp_real) (char *template) = LOOKUP_REAL(mktemp);
+    char buf[PATH_MAX];
+    char * rewritten = rewrite_non_const(template, buf);
+    char * retval = mktemp_real(rewritten);
+    if (retval == NULL) {
+        return retval;
+    };
+    if (rewritten != template) {
+        copy_temp_wildcard(template, rewritten, 0);
+    }
+    return template;
+}
+WRAPPER_DEF(mktemp)

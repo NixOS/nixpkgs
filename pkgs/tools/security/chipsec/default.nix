@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , kernel ? null
-, libelf
+, elfutils
 , nasm
 , python3
 , withDriver ? false
@@ -10,28 +10,35 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
-  version = "1.6.1";
+  version = "1.10.6";
+
   disabled = !stdenv.isLinux;
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
     rev = version;
-    sha256 = "01sp24z63r3nqxx57zc4873b8i5dqipy7yrxzrwjns531vznhiy2";
+    hash = "sha256-+pbFG1SmSO/cnt1e+kel7ereC0I1OCJKKsS0KaJDWdc=";
   };
 
   patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ];
 
+  postPatch = ''
+    substituteInPlace tests/software/util.py \
+      --replace-fail "assertRegexpMatches" "assertRegex"
+  '';
+
   KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   nativeBuildInputs = [
-    libelf
     nasm
-  ];
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform elfutils) [
+    elfutils
+  ] ++ lib.optionals withDriver kernel.moduleBuildDependencies;
 
-  checkInputs = [
-    python3.pkgs.distro
-    python3.pkgs.pytestCheckHook
+  nativeCheckInputs = with python3.pkgs; [
+    distro
+    pytestCheckHook
   ];
 
   preBuild = lib.optionalString withDriver ''
@@ -39,16 +46,26 @@ python3.pkgs.buildPythonApplication rec {
     mkdir -p $CHIPSEC_BUILD_LIB/chipsec/helper/linux
   '';
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=dangling-pointer"
+  ];
+
   preInstall = lib.optionalString withDriver ''
     mkdir -p $out/${python3.pkgs.python.sitePackages}/drivers/linux
     mv $CHIPSEC_BUILD_LIB/chipsec/helper/linux/chipsec.ko \
       $out/${python3.pkgs.python.sitePackages}/drivers/linux/chipsec.ko
   '';
 
-  setupPyBuildFlags = [ "--build-lib=$CHIPSEC_BUILD_LIB" ]
-                   ++ lib.optional (!withDriver) "--skip-driver";
+  setupPyBuildFlags = [
+    "--build-lib=$CHIPSEC_BUILD_LIB"
+  ] ++ lib.optionals (!withDriver) [
+    "--skip-driver"
+  ];
 
-  pythonImportsCheck = [ "chipsec" ];
+  pythonImportsCheck = [
+    "chipsec"
+  ];
 
   meta = with lib; {
     description = "Platform Security Assessment Framework";
@@ -61,7 +78,9 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.gpl2Only;
     homepage = "https://github.com/chipsec/chipsec";
-    maintainers = with maintainers; [ johnazoidberg ];
-    platforms = if withDriver then [ "x86_64-linux" ] else platforms.all;
+    maintainers = with maintainers; [ johnazoidberg erdnaxe ];
+    platforms = [ "x86_64-linux" ] ++ lib.optional (!withDriver) "x86_64-darwin";
+    # https://github.com/chipsec/chipsec/issues/1793
+    broken = withDriver && kernel.kernelOlder "5.4" && kernel.isHardened;
   };
 }

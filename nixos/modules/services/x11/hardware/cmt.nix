@@ -22,7 +22,7 @@ in {
         example = "banjo";
         description = ''
           Which models to enable cmt for. Enter the Code Name for your Chromebook.
-          Code Name can be found at <link xlink:href="https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices" />.
+          Code Name can be found at <https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices>.
         '';
       };
     }; #closes services
@@ -46,10 +46,10 @@ in {
 
     assertions = [
       {
-        assertion = !config.services.xserver.libinput.enable;
+        assertion = !config.services.libinput.enable;
         message = ''
           cmt and libinput are incompatible, meaning you cannot enable them both.
-          To use cmt you need to disable libinput with `services.xserver.libinput.enable = false`
+          To use cmt you need to disable libinput with `services.libinput.enable = false`
           If you haven't enabled it in configuration.nix, it's enabled by default on a
           different xserver module.
         '';

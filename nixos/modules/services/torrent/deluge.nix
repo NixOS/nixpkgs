@@ -62,11 +62,11 @@ in {
           '';
           description = ''
             Deluge core configuration for the core.conf file. Only has an effect
-            when <option>services.deluge.declarative</option> is set to
-            <literal>true</literal>. String values must be quoted, integer and
+            when {option}`services.deluge.declarative` is set to
+            `true`. String values must be quoted, integer and
             boolean values must not. See
-            <link xlink:href="https://git.deluge-torrent.org/deluge/tree/deluge/core/preferencesmanager.py#n41"/>
-            for the availaible options.
+            <https://git.deluge-torrent.org/deluge/tree/deluge/core/preferencesmanager.py#n41>
+            for the available options.
           '';
         };
 
@@ -75,10 +75,10 @@ in {
           default = false;
           description = ''
             Whether to use a declarative deluge configuration.
-            Only if set to <literal>true</literal>, the options
-            <option>services.deluge.config</option>,
-            <option>services.deluge.openFirewall</option> and
-            <option>services.deluge.authFile</option> will be
+            Only if set to `true`, the options
+            {option}`services.deluge.config`,
+            {option}`services.deluge.openFirewall` and
+            {option}`services.deluge.authFile` will be
             applied.
           '';
         };
@@ -88,13 +88,13 @@ in {
           type = types.bool;
           description = ''
             Whether to open the firewall for the ports in
-            <option>services.deluge.config.listen_ports</option>. It only takes effet if
-            <option>services.deluge.declarative</option> is set to
-            <literal>true</literal>.
+            {option}`services.deluge.config.listen_ports`. It only takes effet if
+            {option}`services.deluge.declarative` is set to
+            `true`.
 
             It does NOT apply to the daemon port nor the web UI port. To access those
-            ports secuerly check the documentation
-            <link xlink:href="https://dev.deluge-torrent.org/wiki/UserGuide/ThinClient#CreateSSHTunnel"/>
+            ports securely check the documentation
+            <https://dev.deluge-torrent.org/wiki/UserGuide/ThinClient#CreateSSHTunnel>
             or use a VPN or configure certificates for deluge.
           '';
         };
@@ -114,10 +114,10 @@ in {
             The file managing the authentication for deluge, the format of this
             file is straightforward, each line contains a
             username:password:level tuple in plaintext. It only has an effect
-            when <option>services.deluge.declarative</option> is set to
-            <literal>true</literal>.
-            See <link xlink:href="https://dev.deluge-torrent.org/wiki/UserGuide/Authentication"/> for
-            more informations.
+            when {option}`services.deluge.declarative` is set to
+            `true`.
+            See <https://dev.deluge-torrent.org/wiki/UserGuide/Authentication> for
+            more information.
           '';
         };
 
@@ -147,13 +147,7 @@ in {
           '';
         };
 
-        package = mkOption {
-          type = types.package;
-          example = literalExpression "pkgs.deluge-2_x";
-          description = ''
-            Deluge package to use.
-          '';
-        };
+        package = mkPackageOption pkgs "deluge-2_x" { };
       };
 
       deluge.web = {
@@ -197,17 +191,25 @@ in {
     # Provide a default set of `extraPackages`.
     services.deluge.extraPackages = with pkgs; [ unzip gnutar xz bzip2 ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group}"
-      "d '${cfg.dataDir}/.config' 0770 ${cfg.user} ${cfg.group}"
-      "d '${cfg.dataDir}/.config/deluge' 0770 ${cfg.user} ${cfg.group}"
-    ]
-    ++ optional (cfg.config ? download_location)
-      "d '${cfg.config.download_location}' 0770 ${cfg.user} ${cfg.group}"
-    ++ optional (cfg.config ? torrentfiles_location)
-      "d '${cfg.config.torrentfiles_location}' 0770 ${cfg.user} ${cfg.group}"
-    ++ optional (cfg.config ? move_completed_path)
-      "d '${cfg.config.move_completed_path}' 0770 ${cfg.user} ${cfg.group}";
+    systemd.tmpfiles.settings."10-deluged" = let
+      defaultConfig = {
+        inherit (cfg) user group;
+        mode = "0770";
+      };
+    in {
+      "${cfg.dataDir}".d = defaultConfig;
+      "${cfg.dataDir}/.config".d = defaultConfig;
+      "${cfg.dataDir}/.config/deluge".d = defaultConfig;
+    }
+    // optionalAttrs (cfg.config ? download_location) {
+      ${cfg.config.download_location}.d = defaultConfig;
+    }
+    // optionalAttrs (cfg.config ? torrentfiles_location) {
+      ${cfg.config.torrentfiles_location}.d = defaultConfig;
+    }
+    // optionalAttrs (cfg.config ? move_completed_path) {
+      ${cfg.config.move_completed_path}.d = defaultConfig;
+    };
 
     systemd.services.deluged = {
       after = [ "network.target" ];

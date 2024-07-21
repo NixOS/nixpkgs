@@ -4,8 +4,9 @@ let
   json = pkgs.formats.json {};
 
   cfg = config.services.discourse;
+  opt = options.services.discourse;
 
-  # Keep in sync with https://github.com/discourse/discourse_docker/blob/master/image/base/Dockerfile#L5
+  # Keep in sync with https://github.com/discourse/discourse_docker/blob/main/image/base/slim.Dockerfile#L5
   upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_13;
 
   postgresqlPackage = if config.services.postgresql.enable then
@@ -18,9 +19,9 @@ let
   # We only want to create a database if we're actually going to connect to it.
   databaseActuallyCreateLocally = cfg.database.createLocally && cfg.database.host == null;
 
-  tlsEnabled = (cfg.enableACME
+  tlsEnabled = cfg.enableACME
                 || cfg.sslCertificate != null
-                || cfg.sslCertificateKey != null);
+                || cfg.sslCertificateKey != null;
 in
 {
   options = {
@@ -41,11 +42,8 @@ in
 
       hostname = lib.mkOption {
         type = lib.types.str;
-        default = if config.networking.domain != null then
-                    config.networking.fqdn
-                  else
-                    config.networking.hostName;
-        defaultText = lib.literalExpression "config.networking.fqdn";
+        default = config.networking.fqdnOrHostName;
+        defaultText = lib.literalExpression "config.networking.fqdnOrHostName";
         example = "discourse.example.com";
         description = ''
           The hostname to serve Discourse on.
@@ -58,18 +56,18 @@ in
         example = "/run/keys/secret_key_base";
         description = ''
           The path to a file containing the
-          <literal>secret_key_base</literal> secret.
+          `secret_key_base` secret.
 
-          Discourse uses <literal>secret_key_base</literal> to encrypt
+          Discourse uses `secret_key_base` to encrypt
           the cookie store, which contains session data, and to digest
           user auth tokens.
 
           Needs to be a 64 byte long string of hexadecimal
           characters. You can generate one by running
 
-          <screen>
-          <prompt>$ </prompt>openssl rand -hex 64 >/path/to/secret_key_base_file
-          </screen>
+          ```
+          openssl rand -hex 64 >/path/to/secret_key_base_file
+          ```
 
           This should be a string, not a nix path, since nix paths are
           copied into the world-readable nix store.
@@ -99,9 +97,9 @@ in
       enableACME = lib.mkOption {
         type = lib.types.bool;
         default = cfg.sslCertificate == null && cfg.sslCertificateKey == null;
-        defaultText = lib.literalDocBook ''
-          <literal>true</literal>, unless <option>services.discourse.sslCertificate</option>
-          and <option>services.discourse.sslCertificateKey</option> are set.
+        defaultText = lib.literalMD ''
+          `true`, unless {option}`services.discourse.sslCertificate`
+          and {option}`services.discourse.sslCertificateKey` are set.
         '';
         description = ''
           Whether an ACME certificate should be used to secure
@@ -122,15 +120,14 @@ in
         '';
         description = ''
           Additional settings to put in the
-          <filename>discourse.conf</filename> file.
+          {file}`discourse.conf` file.
 
           Look in the
-          <link xlink:href="https://github.com/discourse/discourse/blob/master/config/discourse_defaults.conf">discourse_defaults.conf</link>
+          [discourse_defaults.conf](https://github.com/discourse/discourse/blob/master/config/discourse_defaults.conf)
           file in the upstream distribution to find available options.
 
-          Setting an option to <literal>null</literal> means
-          <quote>define variable, but leave right-hand side
-          empty</quote>.
+          Setting an option to `null` means
+          “define variable, but leave right-hand side empty”.
         '';
       };
 
@@ -156,20 +153,20 @@ in
           they can still be overridden from the UI.
 
           Available settings can be found by looking in the
-          <link xlink:href="https://github.com/discourse/discourse/blob/master/config/site_settings.yml">site_settings.yml</link>
+          [site_settings.yml](https://github.com/discourse/discourse/blob/master/config/site_settings.yml)
           file of the upstream distribution. To find a setting's path,
           you only need to care about the first two levels; i.e. its
           category and name. See the example.
 
           Settings containing secret data should be set to an
           attribute set containing the attribute
-          <literal>_secret</literal> - a string pointing to a file
+          `_secret` - a string pointing to a file
           containing the value the option should be set to. See the
           example to get a better picture of this: in the resulting
-          <filename>config/nixos_site_settings.json</filename> file,
-          the <literal>login.github_client_secret</literal> key will
+          {file}`config/nixos_site_settings.json` file,
+          the `login.github_client_secret` key will
           be set to the contents of the
-          <filename>/run/keys/discourse_github_client_secret</filename>
+          {file}`/run/keys/discourse_github_client_secret`
           file.
         '';
       };
@@ -222,7 +219,7 @@ in
         type = lib.types.bool;
         default = true;
         description = ''
-          Whether an <literal>nginx</literal> virtual host should be
+          Whether an `nginx` virtual host should be
           set up to serve Discourse. Only disable if you're planning
           to use a different web server, which is not recommended.
         '';
@@ -241,8 +238,8 @@ in
           type = with lib.types; nullOr str;
           default = null;
           description = ''
-            Discourse database hostname. <literal>null</literal> means <quote>prefer
-            local unix socket connection</quote>.
+            Discourse database hostname. `null` means
+            “prefer local unix socket connection”.
           '';
         };
 
@@ -262,9 +259,9 @@ in
           default = true;
           description = ''
             Whether a database should be automatically created on the
-            local host. Set this to <literal>false</literal> if you plan
+            local host. Set this to `false` if you plan
             on provisioning a local database yourself. This has no effect
-            if <option>services.discourse.database.host</option> is customized.
+            if {option}`services.discourse.database.host` is customized.
           '';
         };
 
@@ -290,7 +287,7 @@ in
           description = ''
             Whether to allow other versions of PostgreSQL than the
             recommended one. Only effective when
-            <option>services.discourse.database.createLocally</option>
+            {option}`services.discourse.database.createLocally`
             is enabled.
           '';
         };
@@ -327,6 +324,7 @@ in
         useSSL = lib.mkOption {
           type = lib.types.bool;
           default = cfg.redis.host != "localhost";
+          defaultText = lib.literalExpression ''config.${opt.redis.host} != "localhost"'';
           description = ''
             Connect to Redis with SSL.
           '';
@@ -341,7 +339,7 @@ in
             "''${if config.services.discourse.mail.incoming.enable then "notifications" else "noreply"}@''${config.services.discourse.hostname}"
           '';
           description = ''
-            The <literal>from:</literal> email address used when
+            The `from:` email address used when
             sending all essential system emails. The domain specified
             here must have SPF, DKIM and reverse PTR records set
             correctly for email to arrive.
@@ -354,7 +352,7 @@ in
           description = ''
             Email address of key contact responsible for this
             site. Used for critical notifications, as well as on the
-            <literal>/about</literal> contact form for urgent matters.
+            `/about` contact form for urgent matters.
           '';
         };
 
@@ -399,6 +397,7 @@ in
           domain = lib.mkOption {
             type = lib.types.str;
             default = cfg.hostname;
+            defaultText = lib.literalExpression "config.${opt.hostname}";
             description = ''
               HELO domain to use for outgoing mail.
             '';
@@ -408,7 +407,7 @@ in
             type = with lib.types; nullOr (enum ["plain" "login" "cram_md5"]);
             default = null;
             description = ''
-              Authentication type to use, see http://api.rubyonrails.org/classes/ActionMailer/Base.html
+              Authentication type to use, see https://api.rubyonrails.org/classes/ActionMailer/Base.html
             '';
           };
 
@@ -424,7 +423,7 @@ in
             type = lib.types.str;
             default = "peer";
             description = ''
-              How OpenSSL checks the certificate, see http://api.rubyonrails.org/classes/ActionMailer/Base.html
+              How OpenSSL checks the certificate, see https://api.rubyonrails.org/classes/ActionMailer/Base.html
             '';
           };
 
@@ -472,7 +471,7 @@ in
             description = ''
               A file containing the Discourse API key used to add
               posts and messages from mail. If left at its default
-              value <literal>null</literal>, one will be automatically
+              value `null`, one will be automatically
               generated.
 
               This should be a string, not a nix path, since nix paths
@@ -492,9 +491,7 @@ in
           ];
         '';
         description = ''
-          Plugins to install as part of
-          <productname>Discourse</productname>, expressed as a list of
-          derivations.
+          Plugins to install as part of Discourse, expressed as a list of derivations.
         '';
       };
 
@@ -601,11 +598,11 @@ in
       cors_origin = "";
       serve_static_assets = false;
       sidekiq_workers = 5;
-      rtl_css = false;
       connection_reaper_age = 30;
       connection_reaper_interval = 30;
       relative_url_root = null;
       message_bus_max_backlog_size = 100;
+      message_bus_clear_every = 50;
       secret_key_base = cfg.secretKeyBaseFile;
       fallback_assets_path = null;
 
@@ -618,6 +615,7 @@ in
       s3_endpoint = null;
       s3_http_continue_timeout = null;
       s3_install_cors_rule = null;
+      s3_asset_cdn_url = null;
 
       max_user_api_reqs_per_minute = 20;
       max_user_api_reqs_per_day = 2880;
@@ -650,9 +648,20 @@ in
       multisite_config_path = "config/multisite.yml";
       enable_long_polling = null;
       long_polling_interval = null;
+      preload_link_header = false;
+      redirect_avatar_requests = false;
+      pg_force_readonly_mode = false;
+      dns_query_timeout_secs = null;
+      regex_timeout_seconds = 2;
+      allow_impersonation = true;
     };
 
-    services.redis.enable = lib.mkDefault (cfg.redis.host == "localhost");
+    services.redis.servers.discourse =
+      lib.mkIf (lib.elem cfg.redis.host [ "localhost" "127.0.0.1" ]) {
+        enable = true;
+        bind = cfg.redis.host;
+        port = cfg.backendSettings.redis_port;
+      };
 
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;
@@ -693,12 +702,12 @@ in
     systemd.services.discourse = {
       wantedBy = [ "multi-user.target" ];
       after = [
-        "redis.service"
+        "redis-discourse.service"
         "postgresql.service"
         "discourse-postgresql.service"
       ];
       bindsTo = [
-        "redis.service"
+        "redis-discourse.service"
       ] ++ lib.optionals (cfg.database.host == null) [
         "postgresql.service"
         "discourse-postgresql.service"
@@ -793,13 +802,13 @@ in
           "public"
           "sockets"
         ];
-        RuntimeDirectoryMode = 0750;
+        RuntimeDirectoryMode = "0750";
         StateDirectory = map (p: "discourse/" + p) [
           "uploads"
           "backups"
           "tmp"
         ];
-        StateDirectoryMode = 0750;
+        StateDirectoryMode = "0750";
         LogsDirectory = "discourse";
         TimeoutSec = "infinity";
         Restart = "on-failure";
@@ -818,10 +827,10 @@ in
 
     services.nginx = lib.mkIf cfg.nginx.enable {
       enable = true;
-      additionalModules = [ pkgs.nginxModules.brotli ];
 
       recommendedTlsSettings = true;
       recommendedOptimisation = true;
+      recommendedBrotliSettings = true;
       recommendedGzipSettings = true;
       recommendedProxySettings = true;
 
@@ -931,7 +940,6 @@ in
                   proxy_cache discourse;
                   proxy_cache_key "$scheme,$host,$request_uri";
                   proxy_cache_valid 200 301 302 7d;
-                  proxy_cache_valid any 1m;
                 '';
               };
               "/message-bus/" = proxy {
@@ -1010,6 +1018,7 @@ in
         notification_email = cfg.mail.notificationEmailAddress;
         contact_email = cfg.mail.contactEmailAddress;
       };
+      security.force_https = tlsEnabled;
       email = {
         manual_polling_enabled = cfg.mail.incoming.enable;
         reply_by_email_enabled = cfg.mail.incoming.enable;
@@ -1019,8 +1028,8 @@ in
 
     services.postfix = lib.mkIf cfg.mail.incoming.enable {
       enable = true;
-      sslCert = if cfg.sslCertificate != null then cfg.sslCertificate else "";
-      sslKey = if cfg.sslCertificateKey != null then cfg.sslCertificateKey else "";
+      sslCert = lib.optionalString (cfg.sslCertificate != null) cfg.sslCertificate;
+      sslKey = lib.optionalString (cfg.sslCertificateKey != null) cfg.sslCertificateKey;
 
       origin = cfg.hostname;
       relayDomains = [ cfg.hostname ];
@@ -1079,6 +1088,6 @@ in
     ];
   };
 
-  meta.doc = ./discourse.xml;
+  meta.doc = ./discourse.md;
   meta.maintainers = [ lib.maintainers.talyz ];
 }

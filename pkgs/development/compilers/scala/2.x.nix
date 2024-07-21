@@ -1,7 +1,5 @@
 { stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils, writeScript
-, common-updater-scripts, git, gnused, nix, nixfmt, majorVersion }:
-
-with lib;
+, common-updater-scripts, git, gnused, nix, nixfmt-classic, majorVersion }:
 
 let
   repo = "git@github.com:scala/scala.git";
@@ -20,14 +18,14 @@ let
     };
 
     "2.12" = {
-      version = "2.12.15";
-      sha256 = "F5RePKlHjQaoQ2BWqsa5r99g3q/cPjgsbAi2A5IberY=";
+      version = "2.12.18";
+      sha256 = "naIJCET+YPrbXln39F9aU3DBdnjcn7PYMmhDxETOA5g=";
       pname = "scala_2_12";
     };
 
     "2.13" = {
-      version = "2.13.7";
-      sha256 = "FO8WAIeGvHs3E1soS+YkUHcB9lE5bRb9ikijWkvOqU4=";
+      version = "2.13.12";
+      sha256 = "r+fm+1njyIRX6Z9wGHMOUvuifI0V49cVT3KWggbKhxk=";
       pname = "scala_2_13";
     };
   };
@@ -85,10 +83,10 @@ stdenv.mkDerivation rec {
           git
           gnused
           nix
-          nixfmt
+          nixfmt-classic
         ]
       }
-      versionSelect='v${versions.major version}.${versions.minor version}.*'
+      versionSelect='v${lib.versions.major version}.${lib.versions.minor version}.*'
       oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
       latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags ${repo} "$versionSelect" | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
       if [ "$oldVersion" != "$latestTag" ]; then
@@ -102,8 +100,8 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = {
-    description = "A general purpose programming language";
+  meta = with lib; {
+    description = "General purpose programming language";
     longDescription = ''
       Scala is a general purpose programming language designed to express
       common programming patterns in a concise, elegant, and type-safe way.
@@ -116,6 +114,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     branch = versions.majorMinor version;
-    maintainers = [ maintainers.nequissimus ];
+    maintainers = with maintainers; [ nequissimus kashw2 ];
   };
 }

@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , glibcLocales
 }:
 
@@ -7,11 +8,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.24.1";
+  version = "1.27.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dI2Yvj2llI9TlMFbs35ijYeFuGqoTovZyRh+ILhNMmY=";
+    hash = "sha256-0R2k5hRkAJbqgGZEPXWUb48oFxTKMKiQZckf3F+VC3I=";
   };
 
   propagatedBuildInputs = [
@@ -26,28 +27,30 @@ buildPythonApplication rec {
     pygments
     pymysql
     pyperclip
+    sqlglot
     sqlparse
   ];
 
-  checkInputs = [ pytest mock glibcLocales ];
+  nativeCheckInputs = [ pytestCheckHook glibcLocales ];
 
-  checkPhase = ''
+  preCheck = ''
     export HOME=.
     export LC_ALL="en_US.UTF-8"
-
-    py.test \
-      --ignore=mycli/packages/paramiko_stub/__init__.py
   '';
+
+  disabledTestPaths = [
+    "mycli/packages/paramiko_stub/__init__.py"
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse" \
-      --replace "importlib_resources >= 5.0.0" "importlib_resources"
+      --replace "cryptography == 36.0.2" "cryptography"
   '';
 
   meta = with lib; {
     inherit version;
     description = "Command-line interface for MySQL";
+    mainProgram = "mycli";
     longDescription = ''
       Rich command-line interface for MySQL with auto-completion and
       syntax highlighting.

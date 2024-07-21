@@ -10,14 +10,12 @@ If you find yourself repeating yourself over and over, it’s time to abstract. 
         adminAddr = "alice@example.org";
         forceSSL = true;
         enableACME = true;
-        enablePHP = true;
       };
       "wiki.example.org" = {
         documentRoot = "/webroot/wiki.example.org";
         adminAddr = "alice@example.org";
         forceSSL = true;
         enableACME = true;
-        enablePHP = true;
       };
     };
 }
@@ -35,7 +33,7 @@ in
 {
   services.httpd.virtualHosts =
     { "blog.example.org" = (commonConfig // { documentRoot = "/webroot/blog.example.org"; });
-      "wiki.example.org" = (commonConfig // { documentRoot = "/webroot/wiki.example.com"; });
+      "wiki.example.org" = (commonConfig // { documentRoot = "/webroot/wiki.example.org"; });
     };
 }
 ```
@@ -47,9 +45,9 @@ You can write a `let` wherever an expression is allowed. Thus, you also could ha
 ```nix
 {
   services.httpd.virtualHosts =
-    let commonConfig = ...; in
-    { "blog.example.org" = (commonConfig // { ... })
-      "wiki.example.org" = (commonConfig // { ... })
+    let commonConfig = { /* ... */ }; in
+    { "blog.example.org" = (commonConfig // { /* ... */ });
+      "wiki.example.org" = (commonConfig // { /* ... */ });
     };
 }
 ```

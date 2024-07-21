@@ -1,9 +1,13 @@
-{ buildPythonPackage, fetchPypi, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
 }:
 
 buildPythonPackage rec {
   pname = "stringcase";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

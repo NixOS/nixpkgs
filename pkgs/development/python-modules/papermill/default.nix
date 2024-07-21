@@ -1,74 +1,113 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ansiwrap
-, click
-, future
-, pyyaml
-, nbformat
-, nbconvert
-, nbclient
-, six
-, tqdm
-, jupyter-client
-, requests
-, entrypoints
-, tenacity
-, futures ? null
-, black
-, backports_tempfile
-, isPy27
-, pytest
-, pytest-cov
-, pytest-mock
+{
+  lib,
+  stdenv,
+  aiohttp,
+  ansicolors,
+  azure-datalake-store,
+  azure-identity,
+  azure-storage-blob,
+  boto3,
+  buildPythonPackage,
+  click,
+  entrypoints,
+  fetchFromGitHub,
+  gcsfs,
+  ipykernel,
+  moto,
+  nbclient,
+  nbformat,
+  pyarrow,
+  pygithub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools,
+  tenacity,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "papermill";
-  version = "2.3.3";
+  version = "2.6.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "349aecd526c15c39f73a08df836467e2fead877c474d82c7df349f27ad272525";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "nteract";
+    repo = "papermill";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NxC5+hRDdMCl/7ZIho5ml4hdENrgO+wzi87GRPeMv8Q=";
   };
 
-  propagatedBuildInputs = [
-    ansiwrap
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
-    future
     pyyaml
     nbformat
-    nbconvert
     nbclient
-    six
     tqdm
-    jupyter-client
     requests
     entrypoints
     tenacity
-    black
-  ] ++ lib.optionals isPy27 [
-    futures
-    backports_tempfile
-  ];
+    ansicolors
+  ] ++ lib.optionals (pythonAtLeast "3.12") [ aiohttp ];
 
-  checkInputs = [
-    pytest
-    pytest-cov
-    pytest-mock
-  ];
+  passthru.optional-dependencies = {
+    azure = [
+      azure-datalake-store
+      azure-identity
+      azure-storage-blob
+    ];
+    gcs = [ gcsfs ];
+    github = [ pygithub ];
+    hdfs = [ pyarrow ];
+    s3 = [ boto3 ];
+  };
 
-  checkPhase = ''
-    HOME=$(mktemp -d) pytest
+  nativeCheckInputs =
+    [
+      ipykernel
+      moto
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ passthru.optional-dependencies.azure
+    ++ passthru.optional-dependencies.s3
+    ++ passthru.optional-dependencies.gcs;
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
-  # the test suite depends on cloud resources azure/aws
-  doCheck = false;
+  pythonImportsCheck = [ "papermill" ];
+
+  disabledTests =
+    [
+      # pytest 8 compat
+      "test_read_with_valid_file_extension"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # might fail due to the sandbox
+      "test_end2end_autosave_slow_notebook"
+    ];
+
+  disabledTestPaths = [
+    # ImportError: cannot import name 'mock_s3' from 'moto'
+    "papermill/tests/test_s3.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "Parametrize and run Jupyter and nteract Notebooks";
+    description = "Parametrize and run Jupyter and interact with notebooks";
     homepage = "https://github.com/nteract/papermill";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "papermill";
   };
 }

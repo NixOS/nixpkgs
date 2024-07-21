@@ -2,7 +2,7 @@
 , autoPatchelfHook
 , dpkg
 , fetchurl
-, freeglut
+, libglut
 , gcc-unwrapped
 , libGL
 , libGLU
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    freeglut
+    libglut
     gcc-unwrapped.lib
     libGL
     libGLU
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = ''
     dpkg-deb -x ${src} ./
-    sed -e 's|/usr/bin|$out/bin|g' -i usr/share/applications/FAHViewer.desktop
+    sed -e "s|/usr/bin|$out/bin|g" -i usr/share/applications/FAHViewer.desktop
   '';
 
   installPhase = ''
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Folding@home viewer";
     homepage = "https://foldingathome.org/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.zimbatm ];
     platforms = [ "x86_64-linux" ];

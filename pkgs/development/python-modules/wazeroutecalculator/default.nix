@@ -1,22 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "wazeroutecalculator";
-  version = "0.13";
+  version = "0.15";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "WazeRouteCalculator";
     inherit version;
-    sha256 = "sha256-Ex9yglaJkk0+Uo3Y+xpimb5boXz+4QdbJS2O75U6dUg=";
+    hash = "sha256-DB5oWthWNwamFG3kNxA/kmUBOVogoSg5LI2KrI39s4M=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # there are no tests
   doCheck = false;

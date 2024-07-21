@@ -1,34 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, nose
-, toolz
-, python
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pytestCheckHook,
+  cython,
+  setuptools,
+  toolz,
+  python,
+  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "0.11.0";
+  version = "0.12.3";
+  pyproject = true;
+
   disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c64f3590c3eb40e1548f0d3c6b2ccde70493d0b8dc6cc7f9f3fec0bb3dcd4222";
+    hash = "sha256-RQPcWfTO1TpUZDJyxh3DBdHbv719a98paUjenzTDooI=";
   };
 
-  checkInputs = [ nose ];
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
+
   propagatedBuildInputs = [ toolz ];
 
-  checkPhase = ''
-    nosetests -v $out/${python.sitePackages}
+  # tests are located in cytoolz/tests, however we can't import cytoolz
+  # from $PWD, as it will break relative imports
+  preCheck = ''
+    cd cytoolz
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
-  meta = {
+  disabledTests = [
+    # https://github.com/pytoolz/cytoolz/issues/200
+    "test_inspect_wrapped_property"
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = with lib; {
     homepage = "https://github.com/pytoolz/cytoolz/";
     description = "Cython implementation of Toolz: High performance functional utilities";
-    license = "licenses.bsd3";
-    maintainers = with lib.maintainers; [ fridh ];
+    license = licenses.bsd3;
   };
 }

@@ -1,26 +1,36 @@
-{ lib, python3Packages, fetchFromGitHub, glibcLocales }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "asciinema";
-  version = "2.1.0";
+  version = "2.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "asciinema";
     rev = "v${version}";
-    sha256 = "1alcz018jrrpasrmgs8nw775a6pf62xq2xgs54c4mb396prdqy4x";
+    hash = "sha256-UegLwpJ+uc9cW3ozLQJsQBjIGD7+vzzwzQFRV5gmDmI=";
   };
 
-  checkInputs = [ glibcLocales python3Packages.nose ];
+  build-system = [ python3Packages.setuptools ];
 
-  checkPhase = ''
-    LC_ALL=en_US.UTF-8 nosetests
+  postPatch = ''
+    substituteInPlace tests/pty_test.py \
+      --replace-fail "python3" "${python3Packages.python.interpreter}"
   '';
+
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   meta = {
     description = "Terminal session recorder and the best companion of asciinema.org";
     homepage = "https://asciinema.org/";
-    license = with lib.licenses; [ gpl3 ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ eclairevoyant ];
+    platforms = lib.platforms.all;
+    mainProgram = "asciinema";
   };
 }
-

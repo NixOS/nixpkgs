@@ -1,29 +1,43 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy3k, python, typing }:
-let
-  testDir = if isPy3k then "src_py3" else "src_py2";
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  pythonOlder,
 
-in buildPythonPackage rec {
-  pname = "typing_extensions";
-  version = "3.10.0.2";
+  # reverse dependencies
+  mashumaro,
+  pydantic,
+}:
+
+buildPythonPackage rec {
+  pname = "typing-extensions";
+  version = "4.12.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "49f75d16ff11f1cd258e1b988ccff82a3ca5570217d7ad8c5f48205dd99a677e";
+    pname = "typing_extensions";
+    inherit version;
+    hash = "sha256-Gn6tVcflWd1N7ohW46iLQSJav+HOjfV7fBORX+Eh/7g=";
   };
 
-  checkInputs = lib.optional (pythonOlder "3.5") typing;
+  nativeBuildInputs = [ flit-core ];
 
-  # Error for Python3.6: ImportError: cannot import name 'ann_module'
-  # See https://github.com/python/typing/pull/280
-  doCheck = pythonOlder "3.6";
+  # Tests are not part of PyPI releases. GitHub source can't be used
+  # as it ends with an infinite recursion
+  doCheck = false;
 
-  checkPhase = ''
-    cd ${testDir}
-    ${python.interpreter} -m unittest discover
-  '';
+  pythonImportsCheck = [ "typing_extensions" ];
+
+  passthru.tests = {
+    inherit mashumaro pydantic;
+  };
 
   meta = with lib; {
-    description = "Backported and Experimental Type Hints for Python 3.5+";
+    description = "Backported and Experimental Type Hints for Python";
+    changelog = "https://github.com/python/typing_extensions/blob/${version}/CHANGELOG.md";
     homepage = "https://github.com/python/typing";
     license = licenses.psfl;
     maintainers = with maintainers; [ pmiddend ];

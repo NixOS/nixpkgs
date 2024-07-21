@@ -1,29 +1,35 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pydicom
-, pyfakefs
-, pytestCheckHook
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pydicom,
+  pyfakefs,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "pynetdicom";
-  version = "1.5.7";
+  version = "2.1.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pydicom";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0wr6nh0xrhzwf05gnf3dwg5r3lhn9nfwch3l16zkbj6fli871brc";
+    repo = "pynetdicom";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gAgNSvNn5VsctqhbT/CzFVhwCEpZwGb1pOh0JwkuAW8=";
   };
 
-  propagatedBuildInputs = [
-    pydicom
-  ];
+  build-system = [ poetry-core ];
 
-  checkInputs = [
+  dependencies = [ pydicom ];
+
+  nativeCheckInputs = [
     pyfakefs
     pytestCheckHook
     sqlalchemy
@@ -33,31 +39,53 @@ buildPythonPackage rec {
     # Some tests needs network capabilities
     "test_str_types_empty"
     "test_associate_reject"
+    "TestAEGoodAssociation"
     "TestEchoSCP"
     "TestEchoSCPCLI"
+    "TestEventHandlingAcceptor"
+    "TestEventHandlingRequestor"
     "TestFindSCP"
     "TestFindSCPCLI"
     "TestGetSCP"
     "TestGetSCPCLI"
     "TestMoveSCP"
     "TestMoveSCPCLI"
+    "TestPrimitive_N_GET"
     "TestQRGetServiceClass"
     "TestQRMoveServiceClass"
+    "TestSearch"
+    "TestState"
+    "TestStorageServiceClass"
     "TestStoreSCP"
     "TestStoreSCPCLI"
     "TestStoreSCU"
     "TestStoreSCUCLI"
-    "TestState"
   ];
 
+  disabledTestPaths =
+    [
+      # Ignore apps tests
+      "pynetdicom/apps/tests/"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # https://github.com/pydicom/pynetdicom/issues/924
+      "pynetdicom/tests/test_assoc.py"
+      "pynetdicom/tests/test_transport.py"
+    ];
+
   pythonImportsCheck = [ "pynetdicom" ];
+
+  pytestFlagsArray = [
+    # https://github.com/pydicom/pynetdicom/issues/923
+    "-W"
+    "ignore::pytest.PytestRemovedIn9Warning"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the DICOM networking protocol";
     homepage = "https://github.com/pydicom/pynetdicom";
+    changelog = "https://github.com/pydicom/pynetdicom/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    # Tests are not passing on Darwin/Aarch64, thus it's assumed that it doesn't work
-    broken = stdenv.isDarwin || stdenv.isAarch64;
   };
 }

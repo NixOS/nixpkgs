@@ -1,11 +1,13 @@
-{ stdenv, lib, fetchurl, makeWrapper
-, dpkg, patchelf
+{ stdenv, lib, fetchurl
+, dpkg, wrapGAppsHook3
+, hicolor-icon-theme
 , gtk3, glib, systemd
 , xorg, nss, nspr
 , atk, at-spi2-atk, dbus
 , gdk-pixbuf, pango, cairo
 , expat, libdrm, mesa
-, alsa-lib, at-spi2-core, cups }:
+, alsa-lib, at-spi2-core, cups
+, libxkbcommon }:
 
 let
   LD_LIBRARY_PATH = lib.makeLibraryPath [
@@ -13,24 +15,25 @@ let
     xorg.libX11 xorg.libxcb xorg.libXcomposite
     xorg.libXcursor xorg.libXext xorg.libXfixes
     xorg.libXi xorg.libXrender xorg.libXtst
-    nss nspr atk at-spi2-atk dbus
-    gdk-pixbuf pango cairo
+    xorg.libxshmfence libxkbcommon nss
+    nspr atk at-spi2-atk
+    dbus gdk-pixbuf pango cairo
     xorg.libXrandr expat libdrm
     mesa alsa-lib at-spi2-core
     cups
   ];
 in
-stdenv.mkDerivation rec {
-  version = "4.1.6";
+stdenv.mkDerivation (finalAttrs: {
+  version = "6.2.1";
   pname = "staruml";
 
-  src =
-    fetchurl {
-      url = "https://staruml.io/download/releases-v4/StarUML_${version}_amd64.deb";
-      sha256 = "sha256-CUOdpR8RExMLeOX8469egENotMNuPU4z8S1IGqA21z0=";
+  src = fetchurl {
+      url = "https://files.staruml.io/releases-v6/StarUML_${finalAttrs.version}_amd64.deb";
+      sha256 = "sha256-azfh27klczMK8m5jeVmJFkwJgN/qh6lzMUyYqkBNca8=";
     };
 
-  nativeBuildInputs = [ makeWrapper dpkg ];
+  nativeBuildInputs = [ wrapGAppsHook3 dpkg ];
+  buildInputs = [ glib hicolor-icon-theme ];
 
   unpackPhase = ''
     mkdir pkg
@@ -39,8 +42,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir $out
-    mv opt/StarUML $out/bin
+    mkdir -p $out/bin
+    mv opt $out
+
+    mv usr/share $out
+    rm -rf $out/share/doc
+
+    substituteInPlace $out/share/applications/staruml.desktop \
+      --replace "/opt/StarUML/staruml" "$out/bin/staruml"
 
     mkdir -p $out/lib
     ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
@@ -48,16 +57,24 @@ stdenv.mkDerivation rec {
 
     patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $out/bin/staruml
-    wrapProgram $out/bin/staruml \
-      --prefix LD_LIBRARY_PATH : $out/lib:${LD_LIBRARY_PATH}
+      $out/opt/StarUML/staruml
+
+    ln -s $out/opt/StarUML/staruml $out/bin/staruml
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH ':' $out/lib:${LD_LIBRARY_PATH}
+    )
   '';
 
   meta = with lib; {
-    description = "A sophisticated software modeler";
+    description = "Sophisticated software modeler";
     homepage = "https://staruml.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kashw2 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "staruml";
   };
-}
+})

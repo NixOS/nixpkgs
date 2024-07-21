@@ -1,15 +1,11 @@
-{ lib, buildGoPackage, fetchFromGitHub, go-bindata, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 let
-  goPackagePath = "k8s.io/kops";
-
   generic = { version, sha256, rev ? version, ... }@attrs:
     let attrs' = builtins.removeAttrs attrs [ "version" "sha256" "rev" ]; in
-    buildGoPackage
+    buildGoModule
       {
         pname = "kops";
         inherit version;
-
-        inherit goPackagePath;
 
         src = fetchFromGitHub {
           rev = rev;
@@ -18,55 +14,62 @@ let
           inherit sha256;
         };
 
-        nativeBuildInputs = [ go-bindata installShellFiles ];
+        vendorHash = null;
+
+        nativeBuildInputs = [ installShellFiles ];
+
         subPackages = [ "cmd/kops" ];
 
         ldflags = [
+          "-s"
+          "-w"
           "-X k8s.io/kops.Version=${version}"
           "-X k8s.io/kops.GitVersion=${version}"
         ];
 
-        preBuild = ''
-          (cd go/src/k8s.io/kops
-           go-bindata -o upup/models/bindata.go -pkg models -prefix upup/models/ upup/models/...)
-        '';
+        doCheck = false;
 
         postInstall = ''
-          for shell in bash zsh; do
-            $out/bin/kops completion $shell > kops.$shell
-            installShellCompletion kops.$shell
-          done
+          installShellCompletion --cmd kops \
+            --bash <($GOPATH/bin/kops completion bash) \
+            --fish <($GOPATH/bin/kops completion fish) \
+            --zsh <($GOPATH/bin/kops completion zsh)
         '';
 
         meta = with lib; {
           description = "Easiest way to get a production Kubernetes up and running";
+          mainProgram = "kops";
           homepage = "https://github.com/kubernetes/kops";
           changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;
-          maintainers = with maintainers; [ offline zimbatm diegolelis ];
-          platforms = platforms.unix;
+          maintainers = with maintainers; [ offline zimbatm diegolelis yurrriq ];
         };
       } // attrs';
 in
 rec {
-
   mkKops = generic;
 
-  kops_1_20 = mkKops rec {
-    version = "1.20.3";
-    sha256 = "sha256-Yrh0wFz7MQgTDwENqQouYh3pr1gOq64Rqft5yxIiCAo=";
+  kops_1_26 = mkKops rec {
+    version = "1.26.6";
+    sha256 = "sha256-qaehvPgB3phZl/K577hig4G4RxAUi6Im94vXP5ctnWM=";
     rev = "v${version}";
   };
 
-  kops_1_21 = mkKops rec {
-    version = "1.21.4";
-    sha256 = "sha256-f2xOVa3N/GH5IoI6H/QwDdKTeQoF/kEHX6lNytCZ9cs=";
+  kops_1_27 = mkKops rec {
+    version = "1.27.1";
+    sha256 = "sha256-WV+0380yj8GHckY4PDM3WspbZ/YuYZOAQEMd2ygEOjo=";
     rev = "v${version}";
   };
 
-  kops_1_22 = mkKops rec {
-    version = "1.22.2";
-    sha256 = "sha256-9LT4/iwlPFiz+hUHE0y8DK8T9xwL9HkrrFUXrEqKbM8=";
+  kops_1_28 = mkKops rec {
+    version = "1.28.5";
+    sha256 = "sha256-spw3lTrp6RlxkTNoZ/3Yz/U2tdvBnwiYORS2QtOSX9k=";
+    rev = "v${version}";
+  };
+
+  kops_1_29 = mkKops rec {
+    version = "1.29.0";
+    sha256 = "sha256-YneB9pc4IR+tYPRFE5CS+4JK/kPOHMo5/70A3k1x1tg=";
     rev = "v${version}";
   };
 }

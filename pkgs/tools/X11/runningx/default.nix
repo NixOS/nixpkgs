@@ -26,9 +26,10 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.fiction.net/blong/programs/mutt/";
-    description = "A program for testing if X is running";
+    description = "Program for testing if X is running";
     license = lib.licenses.free;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+    mainProgram = "RunningX";
   };
 }

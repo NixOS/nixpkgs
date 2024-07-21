@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ncurses }:
 
-if !lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 || lib.versionAtLeast ocaml.version "4.12"
 then throw "dune 1 is not available for OCaml ${ocaml.version}"
 else
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://dune.build/";
-    description = "A composable build system";
-    maintainers = [ maintainers.vbgl maintainers.marsam ];
+    description = "Composable build system";
+    maintainers = [ maintainers.vbgl ];
     license = licenses.mit;
     inherit (ocaml.meta) platforms;
   };

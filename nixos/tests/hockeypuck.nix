@@ -24,7 +24,7 @@ in {
   name = "hockeypuck";
   meta.maintainers = with lib.maintainers; [ etu ];
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     # Used for test
     environment.systemPackages = [ pkgs.gnupg ];
 
@@ -35,7 +35,7 @@ in {
       ensureDatabases = [ "hockeypuck" ];
       ensureUsers = [{
         name = "hockeypuck";
-        ensurePermissions."DATABASE hockeypuck" = "ALL PRIVILEGES";
+        ensureDBOwnership = true;
       }];
     };
   };
@@ -57,7 +57,7 @@ in {
     # Send the key to our local keyserver
     machine.succeed("GNUPGHOME=/tmp/GNUPGHOME gpg --keyserver hkp://127.0.0.1:11371 --send-keys " + keyId)
 
-    # Recieve the key from our local keyserver to a separate directory
+    # Receive the key from our local keyserver to a separate directory
     machine.succeed("GNUPGHOME=$(mktemp -d) gpg --keyserver hkp://127.0.0.1:11371 --recv-keys " + keyId)
   '';
 })

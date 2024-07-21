@@ -6,7 +6,7 @@ in {
     maintainers = with pkgs.lib.maintainers; [ thiagokokada ];
   };
 
-  machine = { pkgs, ... }:
+  nodes.machine = { pkgs, ... }:
     {
       imports = [
         ./common/user-account.nix
@@ -20,9 +20,11 @@ in {
     ''
       machine.start()
       machine.wait_for_x()
+
+      machine.wait_for_unit('graphical.target')
       machine.wait_for_unit("opentabletdriver.service", "${testUser}")
 
-      machine.succeed("cat /etc/udev/rules.d/99-opentabletdriver.rules")
+      machine.succeed("cat /etc/udev/rules.d/70-opentabletdriver.rules")
       # Will fail if service is not running
       # Needs to run as the same user that started the service
       machine.succeed("su - ${testUser} -c 'otd detect'")

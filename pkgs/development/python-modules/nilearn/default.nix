@@ -1,21 +1,43 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, matplotlib
-, nibabel, numpy, pandas, scikit-learn, scipy, joblib, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytestCheckHook,
+  hatch-vcs,
+  lxml,
+  matplotlib,
+  nibabel,
+  numpy,
+  pandas,
+  scikit-learn,
+  scipy,
+  joblib,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.8.1";
+  version = "0.10.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0489940855130f35bbc4cac0750479a6f82025215ea7b1d778faca064219298";
+    hash = "sha256-lFC9Vqd22ZezJPRd0Yv5bom9jYAWCXT8x1kzP7rqNcI=";
   };
 
-  checkInputs = [ pytestCheckHook ];
-  disabledTests = [ "test_clean_confounds" ];  # https://github.com/nilearn/nilearn/issues/2608
-  pytestFlagsArray = [ "nilearn" ];
+  nativeBuildInputs = [ hatch-vcs ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+  disabledTests = [ "test_clean_confounds" ]; # https://github.com/nilearn/nilearn/issues/2608
+  # do subset of tests which don't fetch resources
+  pytestFlagsArray = [ "nilearn/connectome/tests" ];
 
   propagatedBuildInputs = [
     joblib
+    lxml
     matplotlib
     nibabel
     numpy
@@ -27,7 +49,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://nilearn.github.io";
-    description = "A module for statistical learning on neuroimaging data";
+    description = "Module for statistical learning on neuroimaging data";
+    changelog = "https://github.com/nilearn/nilearn/releases/tag/${version}";
     license = licenses.bsd3;
   };
 }

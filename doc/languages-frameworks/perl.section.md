@@ -1,6 +1,6 @@
 # Perl {#sec-language-perl}
 
-## Running perl programs on the shell {#ssec-perl-running}
+## Running Perl programs on the shell {#ssec-perl-running}
 
 When executing a Perl script, it is possible you get an error such as `./myscript.pl: bad interpreter: /usr/bin/perl: no such file or directory`. This happens when the script expects Perl to be installed at `/usr/bin/perl`, which is not the case when using Perl from nixpkgs. You can fix the script by changing the first line to:
 
@@ -34,22 +34,27 @@ Nixpkgs provides a function `buildPerlPackage`, a generic package builder functi
 Perl packages from CPAN are defined in [pkgs/top-level/perl-packages.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/perl-packages.nix) rather than `pkgs/all-packages.nix`. Most Perl packages are so straight-forward to build that they are defined here directly, rather than having a separate function for each package called from `perl-packages.nix`. However, more complicated packages should be put in a separate file, typically in `pkgs/development/perl-modules`. Here is an example of the former:
 
 ```nix
-ClassC3 = buildPerlPackage rec {
-  name = "Class-C3-0.21";
-  src = fetchurl {
-    url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
-    sha256 = "1bl8z095y4js66pwxnm7s853pi9czala4sqc743fdlnk27kq94gz";
+{
+  ClassC3 = buildPerlPackage rec {
+    pname = "Class-C3";
+    version = "0.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FL/FLORA/${pname}-${version}.tar.gz";
+      hash = "sha256-/5GE5xHT0uYGOQxroqj6LMU7CtKn2s6vMVoSXxL4iK4=";
+    };
   };
-};
+}
 ```
 
-Note the use of `mirror://cpan/`, and the `${name}` in the URL definition to ensure that the name attribute is consistent with the source that we’re actually downloading. Perl packages are made available in `all-packages.nix` through the variable `perlPackages`. For instance, if you have a package that needs `ClassC3`, you would typically write
+Note the use of `mirror://cpan/`, and the `pname` and `version` in the URL definition to ensure that the `pname` attribute is consistent with the source that we’re actually downloading. Perl packages are made available in `all-packages.nix` through the variable `perlPackages`. For instance, if you have a package that needs `ClassC3`, you would typically write
 
 ```nix
-foo = import ../path/to/foo.nix {
-  inherit stdenv fetchurl ...;
-  inherit (perlPackages) ClassC3;
-};
+{
+  foo = import ../path/to/foo.nix {
+    inherit stdenv fetchurl /* ... */;
+    inherit (perlPackages) ClassC3;
+  };
+}
 ```
 
 in `all-packages.nix`. You can test building a Perl package as follows:
@@ -58,13 +63,7 @@ in `all-packages.nix`. You can test building a Perl package as follows:
 $ nix-build -A perlPackages.ClassC3
 ```
 
-`buildPerlPackage` adds `perl-` to the start of the name attribute, so the package above is actually called `perl-Class-C3-0.21`. So to install it, you can say:
-
-```ShellSession
-$ nix-env -i perl-Class-C3
-```
-
-(Of course you can also install using the attribute name: `nix-env -i -A perlPackages.ClassC3`.)
+To install it with `nix-env` instead: `nix-env -f. -iA perlPackages.ClassC3`.
 
 So what does `buildPerlPackage` do? It does the following:
 
@@ -78,11 +77,12 @@ So what does `buildPerlPackage` do? It does the following:
 { buildPerlPackage, fetchurl, db }:
 
 buildPerlPackage rec {
-  name = "BerkeleyDB-0.36";
+  pname = "BerkeleyDB";
+  version = "0.36";
 
   src = fetchurl {
-    url = "mirror://cpan/authors/id/P/PM/PMQS/${name}.tar.gz";
-    sha256 = "07xf50riarb60l1h6m2dqmql8q5dij619712fsgw7ach04d8g3z1";
+    url = "mirror://cpan/authors/id/P/PM/PMQS/${pname}-${version}.tar.gz";
+    hash = "sha256-4Y+HGgGQqcOfdiKcFIyMrWBEccVNVAMDBWZlFTMorh8=";
   };
 
   preConfigure = ''
@@ -95,16 +95,19 @@ buildPerlPackage rec {
 Dependencies on other Perl packages can be specified in the `buildInputs` and `propagatedBuildInputs` attributes. If something is exclusively a build-time dependency, use `buildInputs`; if it’s (also) a runtime dependency, use `propagatedBuildInputs`. For instance, this builds a Perl module that has runtime dependencies on a bunch of other modules:
 
 ```nix
-ClassC3Componentised = buildPerlPackage rec {
-  name = "Class-C3-Componentised-1.0004";
-  src = fetchurl {
-    url = "mirror://cpan/authors/id/A/AS/ASH/${name}.tar.gz";
-    sha256 = "0xql73jkcdbq4q9m0b0rnca6nrlvf5hyzy8is0crdk65bynvs8q1";
+{
+  ClassC3Componentised = buildPerlPackage rec {
+    pname = "Class-C3-Componentised";
+    version = "1.0004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AS/ASH/${pname}-${version}.tar.gz";
+      hash = "sha256-ASO9rV/FzJYZ0BH572Fxm2ZrFLMZLFATJng1NuU4FHc=";
+    };
+    propagatedBuildInputs = [
+      ClassC3 ClassInspector TestException MROCompat
+    ];
   };
-  propagatedBuildInputs = [
-    ClassC3 ClassInspector TestException MROCompat
-  ];
-};
+}
 ```
 
 On Darwin, if a script has too many `-Idir` flags in its first line (its “shebang line”), it will not run. This can be worked around by calling the `shortenPerlShebang` function from the `postInstall` phase:
@@ -112,20 +115,22 @@ On Darwin, if a script has too many `-Idir` flags in its first line (its “sheb
 ```nix
 { lib, stdenv, buildPerlPackage, fetchurl, shortenPerlShebang }:
 
-ImageExifTool = buildPerlPackage {
-  pname = "Image-ExifTool";
-  version = "11.50";
+{
+  ImageExifTool = buildPerlPackage {
+    pname = "Image-ExifTool";
+    version = "12.50";
 
-  src = fetchurl {
-    url = "https://www.sno.phy.queensu.ca/~phil/exiftool/Image-ExifTool-11.50.tar.gz";
-    sha256 = "0d8v48y94z8maxkmw1rv7v9m0jg2dc8xbp581njb6yhr7abwqdv3";
+    src = fetchurl {
+      url = "https://exiftool.org/${pname}-${version}.tar.gz";
+      hash = "sha256-vOhB/FwQMC8PPvdnjDvxRpU6jAZcC6GMQfc0AH4uwKg=";
+    };
+
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/exiftool
+    '';
   };
-
-  buildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    shortenPerlShebang $out/bin/exiftool
-  '';
-};
+}
 ```
 
 This will remove the `-I` flags from the shebang line, rewrite them in the `use lib` form, and put them on the next line instead. This function can be given any number of Perl scripts as arguments; it will modify them in-place.
@@ -135,22 +140,25 @@ This will remove the `-I` flags from the shebang line, rewrite them in the `use 
 Nix expressions for Perl packages can be generated (almost) automatically from CPAN. This is done by the program `nix-generate-from-cpan`, which can be installed as follows:
 
 ```ShellSession
-$ nix-env -i nix-generate-from-cpan
+$ nix-env -f "<nixpkgs>" -iA nix-generate-from-cpan
 ```
+
+Substitute `<nixpkgs>` by the path of a nixpkgs clone to use the latest version.
 
 This program takes a Perl module name, looks it up on CPAN, fetches and unpacks the corresponding package, and prints a Nix expression on standard output. For example:
 
 ```ShellSession
 $ nix-generate-from-cpan XML::Simple
   XMLSimple = buildPerlPackage rec {
-    name = "XML-Simple-2.22";
+    pname = "XML-Simple";
+    version = "2.22";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GR/GRANTM/${name}.tar.gz";
-      sha256 = "b9450ef22ea9644ae5d6ada086dc4300fa105be050a2030ebd4efd28c198eb49";
+      url = "mirror://cpan/authors/id/G/GR/GRANTM/XML-Simple-2.22.tar.gz";
+      hash = "sha256-uUUO8i6pZErl1q2ghtxDAPoQW+BQogMOvU79KMGY60k=";
     };
     propagatedBuildInputs = [ XMLNamespaceSupport XMLSAX XMLSAXExpat ];
     meta = {
-      description = "An API for simple XML files";
+      description = "API for simple XML files";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

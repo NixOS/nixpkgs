@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "1hpxzdqnjl1fiwgs2vrjg4kxm29c7pqwk3g1m4p5pm4x33a3d1q2";
   };
 
+  nativeBuildInputs = [ autoconf automake ];
   buildInputs = [
-    autoconf automake readline libX11 SDL2 bluez
+    readline libX11 SDL2 bluez
   ];
 
   preConfigure = "cd src;autoconf";
@@ -37,8 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://x11-basic.sourceforge.net/";
-    description = "A Basic interpreter and compiler with graphics capabilities";
+    homepage = "https://x11-basic.sourceforge.net/";
+    description = "Basic interpreter and compiler with graphics capabilities";
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.unix;

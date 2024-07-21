@@ -1,29 +1,59 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jupyterlab_server
-, notebook
-, pythonOlder
-, jupyter-packaging
-, nbclassic
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-jupyter-builder,
+  hatchling,
+  async-lru,
+  httpx,
+  packaging,
+  tornado,
+  ipykernel,
+  jupyter-core,
+  jupyter-lsp,
+  jupyterlab-server,
+  jupyter-server,
+  notebook-shim,
+  jinja2,
+  tomli,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "3.2.3";
-  disabled = pythonOlder "3.5";
+  version = "4.2.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d74593e52d4dbfacbb98e14cac4bc765ea2cffb1b980675f44930d622871705";
+    hash = "sha256-325Glp6lHWaBUWfyPZLxBUI7fx8G+mBNT0SusBjILHs=";
   };
 
-  nativeBuildInputs = [ jupyter-packaging ];
+  build-system = [
+    hatch-jupyter-builder
+    hatchling
+  ];
 
-  propagatedBuildInputs = [ jupyterlab_server notebook nbclassic ];
+  dependencies = [
+    async-lru
+    httpx
+    packaging
+    tornado
+    ipykernel
+    jupyter-core
+    jupyter-lsp
+    jupyterlab-server
+    jupyter-server
+    notebook-shim
+    jinja2
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   makeWrapperArgs = [
-    "--set" "JUPYTERLAB_DIR" "$out/share/jupyter/lab"
+    "--set"
+    "JUPYTERLAB_DIR"
+    "$out/share/jupyter/lab"
   ];
 
   # Depends on npm
@@ -32,9 +62,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jupyterlab" ];
 
   meta = with lib; {
-    description = "Jupyter lab environment notebook server extension.";
-    license = with licenses; [ bsd3 ];
+    changelog = "https://github.com/jupyterlab/jupyterlab/blob/v${version}/CHANGELOG.md";
+    description = "Jupyter lab environment notebook server extension";
+    license = licenses.bsd3;
     homepage = "https://jupyter.org/";
-    maintainers = with maintainers; [ zimbatm costrouc ];
+    maintainers = lib.teams.jupyter.members;
+    mainProgram = "jupyter-lab";
   };
 }

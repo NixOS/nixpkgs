@@ -1,16 +1,15 @@
 { lib, stdenv, fetchurl, gfortran, blas, lapack
-, enableCuda ? false, cudatoolkit
+, config
+, enableCuda ? config.cudaSupport, cudatoolkit
 }:
 
 let
-  version = "4.4.4";
-  name = "suitesparse-${version}";
-
   int_t = if blas.isILP64 then "int64_t" else "int32_t";
   SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
 in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  version = "4.4.4";
+  pname = "suitesparse";
 
   src = fetchurl {
     url = "http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${version}.tar.gz";
@@ -55,7 +54,7 @@ stdenv.mkDerivation {
     "LAPACK=-llapack"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin " -DNTIMER";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin " -DNTIMER";
 
   postInstall = ''
     # Build and install shared library
@@ -71,7 +70,7 @@ stdenv.mkDerivation {
     done
 
     # Install documentation
-    outdoc=$out/share/doc/${name}
+    outdoc=$out/share/doc/suitesparse-${version}
     mkdir -p $outdoc
     cp -r AMD/Doc $outdoc/amd
     cp -r BTF/Doc $outdoc/bft
@@ -92,7 +91,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "http://faculty.cse.tamu.edu/davis/suitesparse.html";
-    description = "A suite of sparse matrix algorithms";
+    description = "Suite of sparse matrix algorithms";
     license = with licenses; [ bsd2 gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ ttuegel ];
     platforms = with platforms; unix;

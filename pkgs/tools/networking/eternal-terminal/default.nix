@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , gflags
@@ -6,36 +7,55 @@
 , openssl
 , protobuf
 , zlib
+, catch2
 }:
 
 stdenv.mkDerivation rec {
   pname = "eternal-terminal";
-  version = "6.1.9";
+  version = "6.2.9";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
-    rev = "et-v${version}";
-    sha256 = "0kpabxpy779ppkaqaigq0x34ymz1jcwpsa78rm6nr55mdap2xxv6";
+    rev = "refs/tags/et-v${version}";
+    hash = "sha256-vukh3a6SxHaVCT4hmoVt4hEGB8Sqylu53Nz8fgBWkTM";
   };
 
-  cmakeFlags= [
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    gflags
+    libsodium
+    openssl
+    protobuf
+    zlib
+  ];
+
+  preBuild = ''
+    mkdir -p ../external_imported/Catch2/single_include/catch2
+    cp ${catch2}/include/catch2/catch.hpp ../external_imported/Catch2/single_include/catch2/catch.hpp
+  '';
+
+  cmakeFlags = [
     "-DDISABLE_VCPKG=TRUE"
     "-DDISABLE_SENTRY=TRUE"
     "-DDISABLE_CRASH_LOG=TRUE"
   ];
 
-  CXXFLAGS = lib.optional stdenv.cc.isClang "-std=c++17";
-  LDFLAGS = lib.optional stdenv.cc.isClang "-lc++fs";
+  CXXFLAGS = lib.optionals stdenv.cc.isClang [
+    "-std=c++17"
+  ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ gflags openssl zlib libsodium protobuf ];
+  doCheck = true;
 
   meta = with lib; {
     description = "Remote shell that automatically reconnects without interrupting the session";
-    license = licenses.asl20;
     homepage = "https://eternalterminal.dev/";
+    changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dezgeg jshort ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ dezgeg pingiun ];
   };
 }

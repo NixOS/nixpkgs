@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "coregarage";
-  version = "4.2.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2pOQwSj+QKwpHVJp7VCyq6QpVW5wLUf/BE7ReXrJ78s=";
+    hash = "sha256-WCSc3ppYaktj9WnPb4n7SmSNWxT2HiXNmPKS3md3ST4=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A settings manager for the C Suite";
+    description = "Settings manager for the C Suite";
+    mainProgram = "coregarage";
     homepage = "https://gitlab.com/cubocore/coreapps/coregarage";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

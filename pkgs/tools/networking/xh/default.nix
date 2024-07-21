@@ -1,44 +1,47 @@
-{ stdenv
-, lib
-, pkg-config
+{ lib
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
+, pkg-config
 , withNativeTls ? true
-, Security
-, libiconv
-, openssl }:
+, stdenv
+, darwin
+, openssl
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "xh";
-  version = "0.14.1";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     rev = "v${version}";
-    sha256 = "sha256-zq1jpkMcq7WHc6weht2iEFMlxIJSoDreWqJCi8F+Lxs=";
+    sha256 = "sha256-FhhVodpIdcB+2s4AkFk6phvoXFLYll/CFJV2/lHS0ww=";
   };
 
-  cargoSha256 = "sha256-NcznWWMcgK4RixqvumPEQUlvIFRyYkbeTTGvjQ91ggE=";
+  cargoHash = "sha256-P/OLzMpqWThrdCReWcPlVPGqVSjVD1veq3xL0TJ/soM=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = lib.optionals withNativeTls
-    (if stdenv.isDarwin then [ Security libiconv ] else [ openssl ]);
+    (if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.SystemConfiguration ] else [ openssl ]);
 
   # Get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR = 1;
 
   postInstall = ''
-    installShellCompletion --cmd xh \
-      --bash completions/xh.bash \
-      --fish completions/xh.fish \
+    installShellCompletion \
+      completions/xh.{bash,fish} \
       --zsh completions/_xh
 
-    # https://github.com/ducaale/xh#xh-and-xhs
+    installManPage doc/xh.1
+    ln -s $out/share/man/man1/xh.1 $out/share/man/man1/xhs.1
+
+    install -m444 -Dt $out/share/doc/xh README.md CHANGELOG.md
+
     ln -s $out/bin/xh $out/bin/xhs
   '';
 
@@ -56,6 +59,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ducaale/xh";
     changelog = "https://github.com/ducaale/xh/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ payas SuperSandro2000 ];
+    maintainers = with maintainers; [ figsoda bhankas ];
   };
 }

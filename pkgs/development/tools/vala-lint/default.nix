@@ -2,24 +2,26 @@
 , stdenv
 , fetchFromGitHub
 , glib
+, json-glib
 , meson
 , ninja
 , pantheon
 , pkg-config
 , vala
 , gettext
-, wrapGAppsHook
+, wrapGAppsHook3
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
-  pname = "vala-lint-unstable";
-  version = "2021-02-17";
+  pname = "vala-lint";
+  version = "0-unstable-2023-12-05";
 
   src = fetchFromGitHub {
     owner = "vala-lang";
     repo = "vala-lint";
-    rev = "5b06cc2341ae7e9f7f8c35c542ef78c36e864c30";
-    sha256 = "KwJ5sCp9ZrrxIqc6qi2+ZdHBt1esNOO1+uDkS+d9mW8=";
+    rev = "8ae2bb65fe66458263d94711ae4ddd978faece00";
+    sha256 = "sha256-FZV726ZeNEX4ulEh+IIzwZqpnVRr7IeZb47FV1C7YjU=";
   };
 
   nativeBuildInputs = [
@@ -28,14 +30,27 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     glib
+    json-glib
   ];
 
+  postPatch = ''
+    # https://github.com/vala-lang/vala-lint/issues/181
+    substituteInPlace test/meson.build \
+      --replace "test('auto-fix', auto_fix_test, env: test_envars)" ""
+  '';
+
   doCheck = true;
+
+  passthru = {
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/vala-lang/vala-lint.git";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/vala-lang/vala-lint";
@@ -47,5 +62,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.vala-lint";
   };
 }

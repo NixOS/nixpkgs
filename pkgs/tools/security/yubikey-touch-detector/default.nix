@@ -1,26 +1,40 @@
-{ lib, libnotify, buildGoModule, fetchFromGitHub, pkg-config }:
+{ lib, libnotify, gpgme, buildGoModule, fetchFromGitHub, pkg-config }:
 
 buildGoModule rec {
   pname = "yubikey-touch-detector";
-  version = "1.9.3";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "yubikey-touch-detector";
     rev = version;
-    sha256 = "sha256-f6j+YNYASH0Adg3236QijApALd/yXJjNMYEdP0Pifw0=";
+    hash = "sha256-XpaCKNQpQD9dNj4EOGJ6PdjfSAxxG5dC8mIzYr7t/+I=";
   };
-  vendorSha256 = "sha256-bmFbxMU3PEWpYI0eQw/1RRDP+JGfUY8kOCeTWbdVt9k=";
+  vendorHash = "sha256-mhmYTicj/ihGNzeCZd1ZijWPkvxQZjBxaC5dyAU1O7U=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libnotify ];
+  buildInputs = [ libnotify gpgme ];
+
+  postInstall = ''
+    install -Dm444 -t $out/share/doc/${pname} *.{md,example}
+
+    install -Dm444 -t $out/share/licenses/${pname} LICENSE
+
+    install -Dm444 -t $out/share/icons/hicolor/128x128/apps yubikey-touch-detector.png
+
+    install -Dm444 -t $out/lib/systemd/user *.{service,socket}
+
+    substituteInPlace $out/lib/systemd/user/*.service \
+      --replace /usr/bin/yubikey-touch-detector "$out/bin/yubikey-touch-detector --libnotify"
+  '';
 
   meta = with lib; {
-    description = "A tool to detect when your YubiKey is waiting for a touch (to send notification or display a visual indicator on the screen).";
+    description = "Tool to detect when your YubiKey is waiting for a touch";
     homepage = "https://github.com/maximbaz/yubikey-touch-detector";
     maintainers = with maintainers; [ sumnerevans ];
-    license = licenses.isc;
-    platforms = platforms.unix;
+    license = with licenses; [ bsd2 isc ];
+    platforms = platforms.linux;
+    mainProgram = "yubikey-touch-detector";
   };
 }

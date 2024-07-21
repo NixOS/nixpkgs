@@ -1,37 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, dask
-, numpy, toolz # dask[array]
-, numba
-, pandas
-, scikit-learn
-, scipy
-, dask-glm
-, six
-, multipledispatch
-, packaging
-, distributed
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  setuptools-scm,
+  dask,
+  dask-expr,
+  dask-glm,
+  distributed,
+  multipledispatch,
+  numba,
+  numpy,
+  packaging,
+  pandas,
+  scikit-learn,
+  scipy,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "1.9.0";
   pname = "dask-ml";
-  disabled = pythonOlder "3.6"; # >= 3.6
+  version = "2024.4.4";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2f376a7114133b484a6d393f62298473116fc49c79ec7d50d5b031d752f54307";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "dask";
+    repo = "dask-ml";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZiBpCk3b4Tk0Hwb4uapJLEx+Nb/qHFROCnkBTNGDzoU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    hatch-vcs
+    hatchling
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    dask
+  dependencies = [
+    dask-expr
     dask-glm
     distributed
     multipledispatch
@@ -41,14 +52,8 @@ buildPythonPackage rec {
     pandas
     scikit-learn
     scipy
-    six
-    toolz
-  ];
+  ] ++ dask.optional-dependencies.array ++ dask.optional-dependencies.dataframe;
 
-  # has non-standard build from source, and pypi doesn't include tests
-  doCheck = false;
-
-  # in lieu of proper tests
   pythonImportsCheck = [
     "dask_ml"
     "dask_ml.naive_bayes"
@@ -56,10 +61,28 @@ buildPythonPackage rec {
     "dask_ml.utils"
   ];
 
-  meta = with lib; {
-    homepage = "https://github.com/dask/dask-ml";
+  nativeCheckInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # AttributeError: 'csr_matrix' object has no attribute 'A'
+    # Fixed in https://github.com/dask/dask-ml/pull/996
+    "tests/test_svd.py"
+  ];
+
+  disabledTests = [
+    # Flaky: `Arrays are not almost equal to 3 decimals` (although values do actually match)
+    "test_whitening"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Scalable Machine Learn with Dask";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    homepage = "https://github.com/dask/dask-ml";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

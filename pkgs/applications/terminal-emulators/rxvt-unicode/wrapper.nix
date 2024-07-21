@@ -5,6 +5,7 @@
 , rxvt-unicode-unwrapped
 , rxvt-unicode-plugins
 , perlPackages
+, nixosTests
 , configure ? { availablePlugins, ... }:
   { plugins = builtins.attrValues availablePlugins;
     extraDeps = [ ];
@@ -51,7 +52,12 @@ let
             --suffix-each URXVT_PERL_LIB ':' "$out/lib/urxvt/perl"
         '';
 
-        passthru.plugins = plugins;
+        inherit (rxvt-unicode-unwrapped) meta;
+
+        passthru = {
+          plugins = plugins;
+          tests.test = nixosTests.terminal-emulators.urxvt;
+        };
       };
 
 in

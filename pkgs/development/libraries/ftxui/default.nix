@@ -3,19 +3,23 @@
 , fetchFromGitHub
 , cmake
 , doxygen
+, gbenchmark
 , graphviz
+, gtest
 }:
 
 stdenv.mkDerivation rec {
   pname = "ftxui";
-  version = "unstable-2021-08-13";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "ArthurSonzogni";
-    repo = pname;
-    rev = "69b0c9e53e523ac43a303964fc9c5bc0da7d5d61";
-    sha256 = "0cbljksgy1ckw34h0mq70s8sma0p16sznn4z9r4hwv76y530m0ww";
+    repo = "ftxui";
+    rev = "v${version}";
+    sha256 = "sha256-IF6G4wwQDksjK8nJxxAnxuCw2z2qvggCmRJ2rbg00+E=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -23,11 +27,25 @@ stdenv.mkDerivation rec {
     graphviz
   ];
 
+  checkInputs = [
+    gtest
+    gbenchmark
+  ];
+
+  cmakeFlags = [
+    "-DFTXUI_BUILD_EXAMPLES=OFF"
+    "-DFTXUI_BUILD_DOCS=ON"
+    "-DFTXUI_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
   meta = with lib; {
     homepage = "https://github.com/ArthurSonzogni/FTXUI";
-    description = "Functional Terminal User Interface for C++";
+    changelog = "https://github.com/ArthurSonzogni/FTXUI/blob/v${version}/CHANGELOG.md";
+    description = "Functional Terminal User Interface library for C++";
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
-    platforms = platforms.unix;
+    maintainers = [ ];
+    platforms = platforms.all;
   };
 }

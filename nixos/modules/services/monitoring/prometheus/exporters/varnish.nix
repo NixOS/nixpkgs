@@ -1,9 +1,15 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.varnish;
+  inherit (lib)
+    mkOption
+    types
+    mkDefault
+    optional
+    escapeShellArg
+    concatStringsSep
+    ;
 in
 {
   port = 9131;
@@ -45,7 +51,8 @@ in
     };
     instance = mkOption {
       type = types.nullOr types.str;
-      default = null;
+      default = config.services.varnish.stateDir;
+      defaultText = lib.literalExpression "config.services.varnish.stateDir";
       description = ''
         varnishstat -n value.
       '';
@@ -66,7 +73,7 @@ in
     };
   };
   serviceOpts = {
-    path = [ pkgs.varnish ];
+    path = [ config.services.varnish.package ];
     serviceConfig = {
       RestartSec = mkDefault 1;
       DynamicUser = false;

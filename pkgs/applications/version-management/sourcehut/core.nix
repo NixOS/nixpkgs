@@ -1,97 +1,94 @@
 { lib
-, fetchgit
-, fetchNodeModules
+, fetchFromSourcehut
 , buildPythonPackage
-, pgpy
 , flask
-, bleach
-, misaka
 , humanize
-, html5lib
-, markdown
-, psycopg2
-, pygments
-, requests
 , sqlalchemy
-, cryptography
-, beautifulsoup4
 , sqlalchemy-utils
-, prometheus-client
-, celery
-, alembic
-, importlib-metadata
+, psycopg2
+, markdown
 , mistletoe
-, minio
-, sassc
-, nodejs
+, bleach
+, requests
+, beautifulsoup4
+, pygments
+, cryptography
+, prometheus-client
+, alembic
 , redis
-, writeText
+, celery
+, html5lib
+, importlib-metadata
+, tinycss2
+, sassc
+, pythonOlder
+, minify
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.67.4";
+  version = "0.71.8";
+  pyproject = true;
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "core.sr.ht";
     rev = version;
-    sha256 = "sha256-XvzFfcBK5Mq8p7xEBAF/eupUE1kkUBh5k+ByM/WA9bc=";
+    hash = "sha256-rDpm2HJOWScvIxOmHcat6y4CWdBE9T2gE/jZskYAFB0=";
     fetchSubmodules = true;
   };
 
-  node_modules = fetchNodeModules {
-    src = "${src}/srht";
-    nodejs = nodejs;
-    sha256 = "sha256-IWKahdWv3qJ5DNyb1GB9JWYkZxghn6wzZe68clYXij8=";
-  };
-
   patches = [
-    ./disable-npm-install.patch
+    # Fix Unix socket support in RedisQueueCollector
+    patches/redis-socket/core/0001-Fix-Unix-socket-support-in-RedisQueueCollector.patch
   ];
 
   nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedNativeBuildInputs = [
     sassc
-    nodejs
+    minify
   ];
 
   propagatedBuildInputs = [
-    pgpy
     flask
-    bleach
-    misaka
     humanize
-    html5lib
-    markdown
-    psycopg2
-    pygments
-    requests
-    mistletoe
     sqlalchemy
-    cryptography
-    beautifulsoup4
     sqlalchemy-utils
+    psycopg2
+    markdown
+    mistletoe
+    bleach
+    requests
+    beautifulsoup4
+    pygments
+    cryptography
     prometheus-client
-
-    # Unofficial runtime dependencies?
-    celery
     alembic
-    importlib-metadata
-    minio
     redis
+    celery
+    # Used transitively through beautifulsoup4
+    html5lib
+    # Used transitively trough bleach.css_sanitizer
+    tinycss2
+    # Used by srht.debug
+    importlib-metadata
   ];
 
   PKGVER = version;
 
-  preBuild = ''
-    cp -r ${node_modules} srht/node_modules
-  '';
-
   dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "srht" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/srht";
     description = "Core modules for sr.ht";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [ eadwu christoph-heiss ];
   };
 }

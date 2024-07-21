@@ -1,40 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, decorator
-, packaging
-, pynput
-, regex
-, lark-parser
-, enum34
-, pyperclip
-, six
-, requests
-, psutil
-, json-rpc
-, werkzeug
-, kaldi-active-grammar
-, sounddevice
-, webrtcvad
-, setuptools
-, xdotool
-, wmctrl
-, xorg
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  decorator,
+  packaging,
+  pynput,
+  regex,
+  lark,
+  enum34,
+  pyperclip,
+  six,
+  requests,
+  psutil,
+  json-rpc,
+  werkzeug,
+  kaldi-active-grammar,
+  sounddevice,
+  webrtcvad,
+  setuptools,
+  xdotool,
+  wmctrl,
+  xorg,
 }:
 
 buildPythonPackage rec {
   pname = "dragonfly";
-  version = "0.32.0";
+  version = "0.35.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dictation-toolbox";
     repo = pname;
     rev = version;
-    sha256 = "BUbIhc8as/DVx8/4VeQS9emOLGcWFujNCxesSEEBqKQ=";
+    hash = "sha256-sqEEEr5/KG3cn4rmOGJt9zMNAjeLO6h3NJgg0EyewrM=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace 'lark-parser == 0.8.*' 'lark-parser'
+    substituteInPlace setup.py --replace 'lark-parser == 0.8.*' 'lark'
     substituteInPlace dragonfly/actions/keyboard/_x11_xdotool.py \
       --replace 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"'
     substituteInPlace dragonfly/windows/x11_window.py \
@@ -48,7 +50,7 @@ buildPythonPackage rec {
     packaging
     pynput
     regex
-    lark-parser
+    lark
     enum34
     pyperclip
     six
@@ -72,6 +74,6 @@ buildPythonPackage rec {
     description = "Speech recognition framework allowing powerful Python-based scripting";
     homepage = "https://github.com/dictation-toolbox/dragonfly";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = with maintainers; [ ];
   };
 }

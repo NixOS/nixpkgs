@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "atomicparsley";
-  version = "20210715.151551.e7ad03a";
+  version = "20240608.083822.1ed9031";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
-    sha256 = "sha256-77yWwfdEul4uLsUNX1dLwj8K0ilcuBaTVKMyXDvKVx4=";
+    sha256 = "sha256-VhrOMpGNMkNNYjcfCqlHI8gdApWr1ThtcxDwQ6gyV/g=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -40,10 +40,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A CLI program for reading, parsing and setting metadata into MPEG-4 files";
+    description = "CLI program for reading, parsing and setting metadata into MPEG-4 files";
     homepage = "https://github.com/wez/atomicparsley";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pjones ];
+    mainProgram = "AtomicParsley";
   };
 }

@@ -1,31 +1,38 @@
-{ lib
-, asynctest
-, buildPythonPackage
-, click
-, defusedxml
-, dicttoxml
-, fetchFromGitHub
-, httpx
-, pycryptodome
-, pytest-asyncio
-, pytest-raises
-, pytestCheckHook
-, pythonOlder
-, respx
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  click,
+  defusedxml,
+  dicttoxml,
+  fetchFromGitHub,
+  httpx,
+  pycryptodome,
+  pytest-asyncio,
+  pytest-raises,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "ismartgate";
-  version = "4.0.4";
-  disabled = pythonOlder "3.7";
+  version = "5.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-yh7gPyy3VMdyINBCZo5K2wA0BY7yYgHrKGZRB/pm77U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-mfiHoli0ldw/E1SrtOBpDO8ZTC0wTeaoSZ2nPnx5EaQ=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner>=5.2",' ""
+  '';
 
   propagatedBuildInputs = [
     click
@@ -36,24 +43,19 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-raises
     pytestCheckHook
     respx
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner>=5.2",' ""
-  '';
-
   pythonImportsCheck = [ "ismartgate" ];
 
   meta = with lib; {
     description = "Python module to work with the ismartgate and gogogate2 API";
     homepage = "https://github.com/bdraco/ismartgate";
+    changelog = "https://github.com/bdraco/ismartgate/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

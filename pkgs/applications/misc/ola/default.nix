@@ -4,6 +4,7 @@
 , bison
 , flex
 , pkg-config
+, libftdi1
 , libuuid
 , cppunit
 , protobuf
@@ -26,9 +27,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook bison flex pkg-config perl ];
-  buildInputs = [ libuuid cppunit protobuf zlib avahi libmicrohttpd python3 ];
+  buildInputs = [
+    # required for ola-ftdidmx plugin (support for 'dumb' FTDI devices)
+    libftdi1
+    libuuid
+    cppunit
+    protobuf
+    zlib
+    avahi
+    libmicrohttpd
+    python3
+  ];
   propagatedBuildInputs = [
-    python3.pkgs.protobuf
+    (python3.pkgs.protobuf.override { protobuf = protobuf; })
     python3.pkgs.numpy
   ];
 
@@ -37,9 +48,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A framework for controlling entertainment lighting equipment";
+    broken = stdenv.isDarwin;
+    description = "Framework for controlling entertainment lighting equipment";
     homepage = "https://www.openlighting.org/ola/";
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
     license = with licenses; [ lgpl21 gpl2Plus ];
     platforms = platforms.all;
   };

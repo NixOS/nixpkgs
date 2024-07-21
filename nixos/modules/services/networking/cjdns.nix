@@ -170,10 +170,9 @@ in
           type = types.str;
           default = "";
           example = "eth0";
-          description =
-            ''
+          description = ''
               Bind to this device for native ethernet operation.
-              <literal>all</literal> is a pseudo-name which will try to connect to all devices.
+              `all` is a pseudo-name which will try to connect to all devices.
             '';
         };
 
@@ -218,7 +217,7 @@ in
         default = false;
         description = ''
           Whether to add cjdns peers with an associated hostname to
-          <filename>/etc/hosts</filename>.  Beware that enabling this
+          {file}`/etc/hosts`.  Beware that enabling this
           incurs heavy eval-time costs.
         '';
       };
@@ -239,19 +238,15 @@ in
       after = [ "network-online.target" ];
       bindsTo = [ "network-online.target" ];
 
-      preStart = if cfg.confFile != null then "" else ''
+      preStart = optionalString (cfg.confFile == null) ''
         [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys
 
         if [ -z "$CJDNS_PRIVATE_KEY" ]; then
             shopt -s lastpipe
             ${pkg}/bin/makekeys | { read private ipv6 public; }
 
-            umask 0077
-            echo "CJDNS_PRIVATE_KEY=$private" >> /etc/cjdns.keys
-            echo -e "CJDNS_IPV6=$ipv6\nCJDNS_PUBLIC_KEY=$public" > /etc/cjdns.public
-
-            chmod 600 /etc/cjdns.keys
-            chmod 444 /etc/cjdns.public
+            install -m 600 <(echo "CJDNS_PRIVATE_KEY=$private") /etc/cjdns.keys
+            install -m 444 <(echo -e "CJDNS_IPV6=$ipv6\nCJDNS_PUBLIC_KEY=$public") /etc/cjdns.public
         fi
 
         if [ -z "$CJDNS_ADMIN_PASSWORD" ]; then

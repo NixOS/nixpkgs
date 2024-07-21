@@ -1,35 +1,35 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pbr
-, appdirs
-, cliff
-, dogpile-cache
-, jsonschema
-, keystoneauth1
-, openstacksdk
-, osc-lib
-, oslo-utils
-, pyyaml
-, requests
-, stevedore
-, stestr
-, requests-mock
-, oslotest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cliff,
+  dogpile-cache,
+  jsonschema,
+  keystoneauth1,
+  openstacksdk,
+  osc-lib,
+  oslo-utils,
+  oslotest,
+  pbr,
+  platformdirs,
+  pyyaml,
+  requests,
+  requests-mock,
+  stestr,
+  stevedore,
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-ironicclient";
-  version = "4.9.0";
+  version = "5.7.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "99d45e914b2845731ac44fbfc63ae3e1bd52211396748797b588f2adc4b3f341";
+    hash = "sha256-Blx0pr73uZA8eHd2iZ9WY+aozBFWsQhWpxoQKtjtJSk=";
   };
 
   propagatedBuildInputs = [
-    pbr
-    appdirs
     cliff
     dogpile-cache
     jsonschema
@@ -37,12 +37,14 @@ buildPythonApplication rec {
     openstacksdk
     osc-lib
     oslo-utils
+    pbr
+    platformdirs
     pyyaml
     requests
     stevedore
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     requests-mock
     oslotest
@@ -55,7 +57,8 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "ironicclient" ];
 
   meta = with lib; {
-    description = "A client for OpenStack bare metal provisioning API, includes a Python module (ironicclient) and CLI (baremetal).";
+    description = "Client for OpenStack bare metal provisioning API, includes a Python module (ironicclient) and CLI (baremetal)";
+    mainProgram = "baremetal";
     homepage = "https://github.com/openstack/python-ironicclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

@@ -8,6 +8,13 @@
    arguments. Normal users should not import this directly but instead
    import `pkgs/default.nix` or `default.nix`. */
 
+let
+  # An overlay to auto-call packages in ../by-name.
+  # By defining it at the top of the file,
+  # this value gets reused even if this file is imported multiple times,
+  # thanks to Nix's import-value cache.
+  autoCalledPackages = import ./by-name-overlay.nix ../by-name;
+in
 
 { ## Misc parameters kept the same for all stages
   ##
@@ -50,9 +57,7 @@
 , # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
   # outside of the store.  Thus, GCC, GFortran, & co. must always look for files
   # in standard system directories (/usr/include, etc.)
-  noSysDirs ? stdenv.buildPlatform.system != "x86_64-freebsd"
-           && stdenv.buildPlatform.system != "i686-freebsd"
-           && stdenv.buildPlatform.system != "x86_64-solaris"
+  noSysDirs ? stdenv.buildPlatform.system != "x86_64-solaris"
            && stdenv.buildPlatform.system != "x86_64-kfreebsd-gnu"
 
 , # The configuration attribute set
@@ -64,6 +69,32 @@
 } @args:
 
 let
+  # This is a function from parsed platforms (like
+  # stdenv.hostPlatform.parsed) to parsed platforms.
+  makeMuslParsedPlatform = parsed:
+    # The following line guarantees that the output of this function
+    # is a well-formed platform with no missing fields.  It will be
+    # uncommented in a separate PR, in case it breaks the build.
+    #(x: lib.trivial.pipe x [ (x: builtins.removeAttrs x [ "_type" ]) lib.systems.parse.mkSystem ])
+      (parsed // {
+        abi = {
+          gnu = lib.systems.parse.abis.musl;
+          gnueabi = lib.systems.parse.abis.musleabi;
+          gnueabihf = lib.systems.parse.abis.musleabihf;
+          gnuabin32 = lib.systems.parse.abis.muslabin32;
+          gnuabi64 = lib.systems.parse.abis.muslabi64;
+          gnuabielfv2 = lib.systems.parse.abis.musl;
+          gnuabielfv1 = lib.systems.parse.abis.musl;
+          # The following two entries ensure that this function is idempotent.
+          musleabi = lib.systems.parse.abis.musleabi;
+          musleabihf = lib.systems.parse.abis.musleabihf;
+          muslabin32 = lib.systems.parse.abis.muslabin32;
+          muslabi64 = lib.systems.parse.abis.muslabi64;
+        }.${parsed.abi.name}
+          or lib.systems.parse.abis.musl;
+      });
+
+
   stdenvAdapters = self: super:
     let
       res = import ../stdenv/adapters.nix {
@@ -75,10 +106,11 @@ let
     };
 
   trivialBuilders = self: super:
-    import ../build-support/trivial-builders.nix {
+    import ../build-support/trivial-builders {
       inherit lib;
+      inherit (self) config;
       inherit (self) runtimeShell stdenv stdenvNoCC;
-      inherit (self.pkgsBuildHost) shellcheck;
+      inherit (self.pkgsBuildHost) jq shellcheck-minimal;
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
 
@@ -112,14 +144,6 @@ let
     inherit stdenv;
   };
 
-  # The old identifiers for cross-compiling. These should eventually be removed,
-  # and the packages that rely on them refactored accordingly.
-  platformCompat = self: super: let
-    inherit (super.stdenv) buildPlatform hostPlatform targetPlatform;
-  in {
-    inherit buildPlatform hostPlatform targetPlatform;
-  };
-
   splice = self: super: import ./splice.nix lib self (adjacentPackages != null);
 
   allPackages = self: super:
@@ -128,7 +152,7 @@ let
       res self super;
     in res;
 
-  aliases = self: super: lib.optionalAttrs (config.allowAliases or true) (import ./aliases.nix lib self super);
+  aliases = self: super: lib.optionalAttrs config.allowAliases (import ./aliases.nix lib self super);
 
   # stdenvOverrides is used to avoid having multiple of versions
   # of certain dependencies that were used in bootstrapping the
@@ -181,23 +205,16 @@ let
 
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
-    # supported.
-    pkgsMusl = if stdenv.hostPlatform.isLinux then nixpkgsFun {
+    # supported. 32-bit is also not supported.
+    pkgsMusl = if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then nixpkgsFun {
       overlays = [ (self': super': {
         pkgsMusl = super';
       })] ++ overlays;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
-        parsed = stdenv.hostPlatform.parsed // {
-          abi = {
-            gnu = lib.systems.parse.abis.musl;
-            gnueabi = lib.systems.parse.abis.musleabi;
-            gnueabihf = lib.systems.parse.abis.musleabihf;
-          }.${stdenv.hostPlatform.parsed.abi.name}
-            or lib.systems.parse.abis.musl;
-        };
+        parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
       };
-    } else throw "Musl libc only supports Linux systems.";
+    } else throw "Musl libc only supports 64-bit Linux systems.";
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
@@ -212,6 +229,28 @@ let
         };
       };
     } else throw "i686 Linux package set can only be used with the x86 family.";
+
+    # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
+    pkgsx86_64Darwin = if stdenv.hostPlatform.isDarwin then nixpkgsFun {
+      overlays = [ (self': super': {
+        pkgsx86_64Darwin = super';
+      })] ++ overlays;
+      localSystem = {
+        parsed = stdenv.hostPlatform.parsed // {
+          cpu = lib.systems.parse.cpuTypes.x86_64;
+        };
+      };
+    } else throw "x86_64 Darwin package set can only be used on Darwin systems.";
+
+    # If already linux: the same package set unaltered
+    # Otherwise, return a natively built linux package set for the current cpu architecture string.
+    # (ABI and other details will be set to the default for the cpu/os pair)
+    pkgsLinux =
+      if stdenv.hostPlatform.isLinux
+      then self
+      else nixpkgsFun {
+        localSystem = lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux";
+      };
 
     # Extend the package set with zero or more overlays. This preserves
     # preexisting overlays. Prefer to initialize with the right overlays
@@ -236,23 +275,30 @@ let
       overlays = [ (self': super': {
         pkgsStatic = super';
       })] ++ overlays;
-    } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       crossSystem = {
         isStatic = true;
-        parsed = stdenv.hostPlatform.parsed // {
-          abi = {
-            gnu = lib.systems.parse.abis.musl;
-            gnueabi = lib.systems.parse.abis.musleabi;
-            gnueabihf = lib.systems.parse.abis.musleabihf;
-            musleabi = lib.systems.parse.abis.musleabi;
-            musleabihf = lib.systems.parse.abis.musleabihf;
-          }.${stdenv.hostPlatform.parsed.abi.name}
-            or lib.systems.parse.abis.musl;
-        };
-      } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
-        gcc.abi = "elfv2";
+        parsed =
+          if stdenv.isLinux
+          then makeMuslParsedPlatform stdenv.hostPlatform.parsed
+          else stdenv.hostPlatform.parsed;
+        gcc = lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; } //
+          stdenv.hostPlatform.gcc or {};
       };
     });
+
+    pkgsExtraHardening = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsExtraHardening = super';
+          stdenv = super'.withDefaultHardeningFlags (
+            super'.stdenv.cc.defaultHardeningFlags ++ [
+              "stackclashprotection"
+              "trivialautovarinit"
+            ]
+          ) super'.stdenv;
+        })
+      ] ++ overlays;
+    };
   };
 
   # The complete chain of package set builders, applied from top to bottom.
@@ -260,10 +306,10 @@ let
   # previous bootstrapping phases which have already been overlayed.
   toFix = lib.foldl' (lib.flip lib.extends) (self: {}) ([
     stdenvBootstappingAndPlatforms
-    platformCompat
     stdenvAdapters
     trivialBuilders
     splice
+    autoCalledPackages
     allPackages
     otherPackageSets
     aliases

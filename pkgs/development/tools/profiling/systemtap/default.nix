@@ -1,13 +1,13 @@
 { lib, fetchgit, pkg-config, gettext, runCommand, makeWrapper
-, elfutils, kernel, gnumake, python2, python2Packages
+, cpio, elfutils, kernel, gnumake, python3
 }:
 
 let
   ## fetchgit info
   url = "git://sourceware.org/git/systemtap.git";
   rev = "release-${version}";
-  sha256 = "sha256-3LgqMBCnUG2UmsekaIvV43lBpSPEocEXmFV9WpE7wE0=";
-  version = "4.5";
+  sha256 = "sha256-2L7+k/tgI6trkstDTY4xxfFzmNDlxbCHDRKAFaERQeM=";
+  version = "5.0a";
 
   inherit (kernel) stdenv;
 
@@ -16,34 +16,30 @@ let
     pname = "systemtap";
     inherit version;
     src = fetchgit { inherit url rev sha256; };
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ elfutils gettext python2 python2Packages.setuptools ];
+    nativeBuildInputs = [ pkg-config cpio python3 python3.pkgs.setuptools ];
+    buildInputs = [ elfutils gettext python3 ];
     enableParallelBuilding = true;
+    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ]; # Needed with GCC 12
   };
 
-  ## a kernel build dir as expected by systemtap
-  kernelBuildDir = runCommand "kbuild-${kernel.version}-merged" { } ''
-    mkdir -p $out
-    for f in \
-        ${kernel}/System.map \
-        ${kernel.dev}/vmlinux \
-        ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/{*,.*}
-    do
-      ln -s $(readlink -f $f) $out
-    done
+  ## symlink farm for --sysroot flag
+  sysroot = runCommand "systemtap-sysroot-${kernel.version}" { } ''
+    mkdir -p $out/boot $out/usr/lib/debug
+    ln -s ${kernel.dev}/vmlinux ${kernel.dev}/lib $out
+    ln -s ${kernel.dev}/vmlinux $out/usr/lib/debug
+    ln -s ${kernel}/System.map $out/boot/System.map-${kernel.version}
   '';
 
-  pypkgs = with python2Packages; makePythonPath [ pyparsing ];
+  pypkgs = with python3.pkgs; makePythonPath [ pyparsing ];
 
 in runCommand "systemtap-${kernel.version}-${version}" {
-  inherit stapBuild kernelBuildDir;
+  inherit stapBuild;
   nativeBuildInputs = [ makeWrapper ];
   meta = {
     homepage = "https://sourceware.org/systemtap/";
-    repositories.git = url;
     description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.systems.inspect.patterns.isGnu;
   };
 } ''
   mkdir -p $out/bin
@@ -52,7 +48,7 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   done
   rm $out/bin/stap $out/bin/dtrace
   makeWrapper $stapBuild/bin/stap $out/bin/stap \
-    --add-flags "-r $kernelBuildDir" \
+    --add-flags "--sysroot ${sysroot}" \
     --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc stdenv.cc.bintools elfutils gnumake ]}
   makeWrapper $stapBuild/bin/dtrace $out/bin/dtrace \
     --prefix PYTHONPATH : ${pypkgs}

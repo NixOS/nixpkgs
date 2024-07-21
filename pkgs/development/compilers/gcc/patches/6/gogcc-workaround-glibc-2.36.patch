@@ -1,0 +1,14 @@
+diff --git a/libgo/mksysinfo.sh b/libgo/mksysinfo.sh
+index dd456e907..24e607c7b 100755
+--- a/libgo/mksysinfo.sh
++++ b/libgo/mksysinfo.sh
+@@ -148,9 +148,6 @@ cat > sysinfo.c <<EOF
+ #if defined(HAVE_LINUX_ETHER_H)
+ #include <linux/ether.h>
+ #endif
+-#if defined(HAVE_LINUX_FS_H)
+-#include <linux/fs.h>
+-#endif
+ #if defined(HAVE_LINUX_REBOOT_H)
+ #include <linux/reboot.h>
+ #endif

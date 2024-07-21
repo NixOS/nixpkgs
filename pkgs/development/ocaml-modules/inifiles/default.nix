@@ -16,15 +16,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ ocaml findlib ];
+  postPatch = ''
+    substituteInPlace inifiles.ml --replace 'String.lowercase ' 'String.lowercase_ascii '
+  '';
+
+  nativeBuildInputs = [ ocaml findlib ];
   propagatedBuildInputs = [ ocaml_pcre ];
+
+  strictDeps = true;
 
   buildFlags = [ "all" "opt" ];
 
   createFindlibDestdir = true;
 
   meta = {
-    description = "A small OCaml library to read and write .ini files";
+    description = "Small OCaml library to read and write .ini files";
     license = lib.licenses.lgpl21Plus;
     inherit (ocaml.meta) platforms;
   };

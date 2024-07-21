@@ -1,7 +1,5 @@
 { lib, stdenv, fetchurl }:
 
-with lib;
-
 let
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -19,7 +17,7 @@ in stdenv.mkDerivation rec {
   version = "2.1.0.203";
 
   src = fetchurl {
-    url = "https://www.vpn.net/installers/${pname}-${version}-${arch}.tgz";
+    url = "https://vpn.net/installers/${pname}-${version}-${arch}.tgz";
     inherit sha256;
   };
 
@@ -36,8 +34,9 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with lib; {
-    description = "A hosted VPN service that lets you securely extend LAN-like networks to distributed teams";
+    description = "Hosted VPN service that lets you securely extend LAN-like networks to distributed teams";
     homepage = "https://secure.logmein.com/products/hamachi/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;

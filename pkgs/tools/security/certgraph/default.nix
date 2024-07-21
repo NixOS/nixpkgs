@@ -5,19 +5,20 @@
 
 buildGoModule rec {
   pname = "certgraph";
-  version = "20210224";
+  version = "20220513";
 
   src = fetchFromGitHub {
     owner = "lanrat";
     repo = pname;
     rev = version;
-    sha256 = "14l2bls25xwd8gnsmshc588br72rwz1s0gjnsnqksri4ksqkdqlz";
+    sha256 = "sha256-7tvPiJHZE9X7I79DFNF1ZAQiaAkrtrXiD2fY7AkbWMk=";
   };
 
-  vendorSha256 = "1vih64z0zwmaflc0pwvnwyj5fhrc8qfp0kvrz73nnfpcrcan2693";
+  vendorHash = "sha256-ErTn7pUCtz6ip2kL8FCe+3Rhs876xtqto+z5nZqQ6cI=";
 
   meta = with lib; {
     description = "Intelligence tool to crawl the graph of certificate alternate names";
+    mainProgram = "certgraph";
     homepage = "https://github.com/lanrat/certgraph";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ fab ];

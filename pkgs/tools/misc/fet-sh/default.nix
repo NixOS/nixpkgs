@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A fetch written in posix shell without any external commands";
+    description = "Fetch written in posix shell without any external commands";
     homepage = "https://github.com/6gk/fet.sh";
     license = licenses.isc;
     platforms = platforms.all;

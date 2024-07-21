@@ -1,7 +1,7 @@
 { fetchFromGitHub, fetchgit, fetchHex, rebar3Relx, buildRebar3, rebar3-proper
-, stdenv, writeScript, lib }:
+, stdenv, writeScript, lib, erlang }:
 let
-  version = "0.20.0";
+  version = "0.52.0";
   owner = "erlang-ls";
   repo = "erlang_ls";
   deps = import ./rebar-deps.nix {
@@ -11,6 +11,11 @@ let
       proper = super.proper.overrideAttrs (_: {
         configurePhase = "true";
       });
+      redbug = super.redbug.overrideAttrs (_: {
+        patchPhase = ''
+          substituteInPlace rebar.config --replace ", warnings_as_errors" ""
+          '';
+      });
     });
   };
 in
@@ -19,11 +24,17 @@ rebar3Relx {
   inherit version;
   src = fetchFromGitHub {
     inherit owner repo;
-    sha256 = "sha256-XBCauvPalIPjVOYlMfWC+5mKku28b/qqKhp9NgSkoyA=";
+    hash = "sha256-tV7M8y0R+BN5ATxM03K0/gtHgITI9KxtvA7o0ft8RuE=";
     rev = version;
   };
   releaseType = "escript";
   beamDeps = builtins.attrValues deps;
+
+  # https://github.com/erlang-ls/erlang_ls/issues/1429
+  postPatch =  ''
+    rm apps/els_lsp/test/els_diagnostics_SUITE.erl
+  '';
+
   buildPlugins = [ rebar3-proper ];
   buildPhase = "HOME=. make";
   # based on https://github.com/erlang-ls/erlang_ls/blob/main/.github/workflows/build.yml
@@ -35,23 +46,20 @@ rebar3Relx {
   '';
   # tests seem to be a bit flaky on darwin, skip them for now
   doCheck = !stdenv.isDarwin;
-  installPhase = ''
-    mkdir -p $out/bin
-    cp _build/default/bin/erlang_ls $out/bin/
-    cp _build/dap/bin/els_dap $out/bin/
-  '';
+  installFlags = [ "PREFIX=$(out)" ];
   meta = with lib; {
     homepage = "https://github.com/erlang-ls/erlang_ls";
-    description = "The Erlang Language Server";
+    description = "Erlang Language Server";
     platforms = platforms.unix;
     license = licenses.asl20;
+    mainProgram = "erlang_ls";
   };
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #! nix-shell -i bash -p common-updater-scripts coreutils git gnused gnutar gzip "rebar3WithPlugins { globalPlugins = [ beamPackages.rebar3-nix ]; }"
 
     set -ox errexit
-    latest=$(list-git-tags https://github.com/${owner}/${repo}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
+    latest=$(list-git-tags | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
     if [[ "$latest" != "${version}" ]]; then
       nixpkgs="$(git rev-parse --show-toplevel)"
       nix_path="$nixpkgs/pkgs/development/beam-modules/erlang-ls"

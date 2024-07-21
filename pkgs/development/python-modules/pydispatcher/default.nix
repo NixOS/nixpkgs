@@ -1,28 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "2.0.5";
+  version = "2.0.7";
+  format = "setuptools";
   pname = "pydispatcher";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1bswbmhlbqdxlgbxlb6xrlm4k253sg8nvpl1whgsys8p3fg0cw2m";
+    pname = "PyDispatcher";
+    inherit version;
+    hash = "sha256-t3fGrQgNwbrXSkwp1qRpFPpnAaxw+UsNZvvP3mL1vjE=";
   };
 
-  checkInputs = [ pytest ];
-
-  checkPhase = ''
-    py.test
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    homepage = "http://pydispatcher.sourceforge.net/";
+    homepage = "https://pydispatcher.sourceforge.net/";
     description = "Signal-registration and routing infrastructure for use in multiple contexts";
     license = licenses.bsd3;
   };
-
 }

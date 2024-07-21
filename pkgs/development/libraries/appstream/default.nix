@@ -3,8 +3,10 @@
 , substituteAll
 , fetchFromGitHub
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
+, cmake
 , gettext
 , xmlto
 , docbook-xsl-nons
@@ -14,27 +16,35 @@
 , glib
 , xapian
 , libxml2
+, libxmlb
 , libyaml
 , gobject-introspection
 , pcre
 , itstool
 , gperf
 , vala
-, lmdb
 , curl
+, cairo
+, gdk-pixbuf
+, pango
+, librsvg
+, systemd
+, nixosTests
+, testers
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "0.14.4";
+  version = "1.0.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchFromGitHub {
     owner = "ximion";
     repo = "appstream";
-    rev = "v${version}";
-    sha256 = "sha256-DJXCw50f+8c58bJw6xx0ECfkc9/KcWaeA+ne2zmTyhg=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-0NzZku6TQyyaTOAMWZD459RayhsH8cotlOaSKkVY/EQ=";
   };
 
   patches = [
@@ -43,12 +53,22 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       libstemmer_includedir = "${lib.getDev libstemmer}/include";
     })
+
+    # Allow installing installed tests to a separate output.
+    ./installed-tests-path.patch
+  ];
+
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    cmake
     gettext
     libxslt
     xmlto
@@ -57,6 +77,9 @@ stdenv.mkDerivation rec {
     gobject-introspection
     itstool
     vala
+    gperf
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -65,28 +88,46 @@ stdenv.mkDerivation rec {
     glib
     xapian
     libxml2
+    libxmlb
     libyaml
-    gperf
-    lmdb
     curl
+    cairo
+    gdk-pixbuf
+    pango
+    librsvg
+  ] ++ lib.optionals withSystemd [
+    systemd
   ];
 
   mesonFlags = [
     "-Dapidocs=false"
     "-Ddocs=false"
     "-Dvapi=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    "-Dcompose=true"
+  ] ++ lib.optionals (!withSystemd) [
+    "-Dsystemd=false"
   ];
+
+  passthru.tests = {
+    installed-tests = nixosTests.installed-tests.appstream;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     description = "Software metadata handling library";
-    homepage = "https://www.freedesktop.org/wiki/Distributions/AppStream/";
     longDescription = ''
       AppStream is a cross-distro effort for building Software-Center applications
       and enhancing metadata provided by software components.  It provides
       specifications for meta-information which is shipped by upstream projects and
       can be consumed by other software.
     '';
+    homepage = "https://www.freedesktop.org/wiki/Distributions/AppStream/";
     license = licenses.lgpl21Plus;
+    mainProgram = "appstreamcli";
     platforms = platforms.unix;
- };
-}
+    pkgConfigModules = [ "appstream" ];
+  };
+})

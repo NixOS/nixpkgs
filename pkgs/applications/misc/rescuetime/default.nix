@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, dpkg, patchelf, qt5, libXtst, libXext, libX11, mkDerivation, makeWrapper, libXScrnSaver, writeScript, common-updater-scripts, curl, pup }:
+{ stdenv, lib, fetchurl, dpkg, patchelf, qt5, libXtst, libXext, libX11, mkDerivation, libXScrnSaver, writeScript, common-updater-scripts, curl, pup }:
 
 let
   version = "2.16.5.1";
@@ -42,17 +42,15 @@ in mkDerivation rec {
     latestVersion="$(curl -sS https://www.rescuetime.com/release-notes/linux | pup '.release:first-of-type h2 strong text{}' | tr -d '\n')"
 
     for platform in ${lib.concatStringsSep " " meta.platforms}; do
-      # The script will not perform an update when the version attribute is up to date from previous platform run
-      # We need to clear it before each run
-      update-source-version ${pname} 0 $(yes 0 | head -64 | tr -d "\n") --system=$platform
-      update-source-version ${pname} "$latestVersion" --system=$platform
+      update-source-version ${pname} "$latestVersion" --system=$platform --ignore-same-version
     done
   '';
 
   meta = with lib; {
     description = "Helps you understand your daily habits so you can focus and be more productive";
     homepage    = "https://www.rescuetime.com";
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.unfree;
     platforms   = [ "i686-linux" "x86_64-linux" ];
   };

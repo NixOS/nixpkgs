@@ -21,7 +21,7 @@
 , gmp
 , openssl
 , dleyna-server
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
 
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     dleyna-server
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=format-security" # https://gitlab.gnome.org/GNOME/gnome-online-miners/merge_requests/3/diffs#note_942747
   ];
 
@@ -107,8 +107,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/GnomeOnlineMiners";
-    description = "A set of crawlers that go through your online content and index them locally in Tracker";
+    homepage = "https://gitlab.gnome.org/Archive/gnome-online-miners";
+    description = "Set of crawlers that go through your online content and index them locally in Tracker";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

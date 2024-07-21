@@ -1,28 +1,65 @@
-{ lib, stdenv, fetchurl, makeWrapper, xorgserver, getopt
-, xauth, util-linux, which, fontsConf, gawk, coreutils }:
-let
-  xvfb-run = fetchurl {
-    name = "xvfb-run";
-    url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/9cb733cefa92af3fca608fb051d5251160c9bbff/trunk/xvfb-run";
-    sha256 = "1307mz4nr8ga3qz73i8hbcdphky75rq8lrvfk2zm4kmv6pkbk611";
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, xorg
+, getopt
+, xauth
+, util-linux
+, which
+, fontsConf
+, gawk
+, coreutils
+, installShellFiles
+, xterm
+}:
+stdenvNoCC.mkDerivation rec {
+  pname = "xvfb-run";
+  version = "1+g87f6705";
+
+  src = fetchFromGitHub {
+    owner = "archlinux";
+    repo = "svntogit-packages";
+    rev = "87f67054c49b32511893acd22be94c47ecd44b4a";
+    sha256 = "sha256-KEg92RYgJd7naHFDKbdXEy075bt6NLcmX8VhQROHVPs=";
   };
-in
-stdenv.mkDerivation {
-  name = "xvfb-run";
-  nativeBuildInputs = [ makeWrapper ];
-  buildCommand = ''
+
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
+
+  dontUnpack = true;
+  dontBuild = true;
+  dontConfigure = true;
+
+  installPhase = ''
     mkdir -p $out/bin
-    cp ${xvfb-run} $out/bin/xvfb-run
+    cp $src/trunk/xvfb-run $out/bin/xvfb-run
+    installManPage $src/trunk/xvfb-run.1
 
     chmod a+x $out/bin/xvfb-run
     patchShebangs $out/bin/xvfb-run
     wrapProgram $out/bin/xvfb-run \
-      --set FONTCONFIG_FILE "${fontsConf}" \
-      --prefix PATH : ${lib.makeBinPath [ getopt xorgserver xauth which util-linux gawk coreutils ]}
+      --set-default FONTCONFIG_FILE "${fontsConf}" \
+      --prefix PATH : ${lib.makeBinPath [ getopt xorg.xvfb xauth which util-linux gawk coreutils ]}
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    (
+      unset PATH
+      echo "running xterm with xvfb-run"
+      $out/bin/xvfb-run ${lib.getBin xterm}/bin/xterm -e true
+    )
+  '';
+
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
   meta = with lib; {
+    description = "Convenience script to run a virtualized X-Server";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.artturin ];
+    mainProgram = "xvfb-run";
   };
 }

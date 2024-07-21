@@ -12,11 +12,11 @@ with lib;
     system.nssModules = mkOption {
       type = types.listOf types.path;
       internal = true;
-      default = [];
+      default = [ ];
       description = ''
         Search path for NSS (Name Service Switch) modules.  This allows
         several DNS resolution methods to be specified via
-        <filename>/etc/nsswitch.conf</filename>.
+        {file}`/etc/nsswitch.conf`.
       '';
       apply = list:
         {
@@ -29,61 +29,73 @@ with lib;
       passwd = mkOption {
         type = types.listOf types.str;
         description = ''
-          List of passwd entries to configure in <filename>/etc/nsswitch.conf</filename>.
+          List of passwd entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended while "systemd" is appended if nscd is enabled.
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
       };
 
       group = mkOption {
         type = types.listOf types.str;
         description = ''
-          List of group entries to configure in <filename>/etc/nsswitch.conf</filename>.
+          List of group entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended while "systemd" is appended if nscd is enabled.
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
       };
 
       shadow = mkOption {
         type = types.listOf types.str;
         description = ''
-          List of shadow entries to configure in <filename>/etc/nsswitch.conf</filename>.
+          List of shadow entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended.
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
+      };
+
+      sudoers = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of sudoers entries to configure in {file}`/etc/nsswitch.conf`.
+
+          Note that "files" is always prepended.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [ ];
       };
 
       hosts = mkOption {
         type = types.listOf types.str;
         description = ''
-          List of hosts entries to configure in <filename>/etc/nsswitch.conf</filename>.
+          List of hosts entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended, and "dns" and "myhostname" are always appended.
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
       };
 
       services = mkOption {
         type = types.listOf types.str;
         description = ''
-          List of services entries to configure in <filename>/etc/nsswitch.conf</filename>.
+          List of services entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended.
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
       };
     };
   };
@@ -95,11 +107,14 @@ with lib;
   config = {
     assertions = [
       {
-        # Prevent users from disabling nscd, with nssModules being set.
-        # If disabling nscd is really necessary, it's still possible to opt out
-        # by forcing config.system.nssModules to [].
         assertion = config.system.nssModules.path != "" -> config.services.nscd.enable;
-        message = "Loading NSS modules from system.nssModules (${config.system.nssModules.path}), requires services.nscd.enable being set to true.";
+        message = ''
+          Loading NSS modules from system.nssModules (${config.system.nssModules.path}),
+          requires services.nscd.enable being set to true.
+
+          If disabling nscd is really necessary, it is possible to disable loading NSS modules
+          by setting `system.nssModules = lib.mkForce [];` in your configuration.nix.
+        '';
       }
     ];
 
@@ -109,6 +124,7 @@ with lib;
       passwd:    ${concatStringsSep " " config.system.nssDatabases.passwd}
       group:     ${concatStringsSep " " config.system.nssDatabases.group}
       shadow:    ${concatStringsSep " " config.system.nssDatabases.shadow}
+      sudoers:   ${concatStringsSep " " config.system.nssDatabases.sudoers}
 
       hosts:     ${concatStringsSep " " config.system.nssDatabases.hosts}
       networks:  files
@@ -123,6 +139,7 @@ with lib;
       passwd = mkBefore [ "files" ];
       group = mkBefore [ "files" ];
       shadow = mkBefore [ "files" ];
+      sudoers = mkBefore [ "files" ];
       hosts = mkMerge [
         (mkOrder 998 [ "files" ])
         (mkOrder 1499 [ "dns" ])

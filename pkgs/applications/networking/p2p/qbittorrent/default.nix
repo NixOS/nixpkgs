@@ -1,57 +1,100 @@
-{ mkDerivation, lib, fetchFromGitHub, makeWrapper, pkg-config
-, boost, libtorrent-rasterbar, qtbase, qttools, qtsvg
-, debugSupport ? false
-, guiSupport ? true, dbus ? null # GUI (disable to run headless)
-, webuiSupport ? true # WebUI
-, trackerSearch ? true, python3 ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+
+, boost
+, cmake
+, Cocoa
+, libtorrent-rasterbar
+, ninja
+, qtbase
+, qtsvg
+, qttools
+, wrapGAppsHook3
+, wrapQtAppsHook
+
+, guiSupport ? true
+, dbus
+, qtwayland
+
+, trackerSearch ? true
+, python3
+
+, webuiSupport ? true
 }:
 
-assert guiSupport -> (dbus != null);
-assert trackerSearch -> (python3 != null);
-
-with lib;
-mkDerivation rec {
-  pname = "qbittorrent";
-  version = "4.3.9";
+let
+  qtVersion = lib.versions.major qtbase.version;
+in
+stdenv.mkDerivation rec {
+  pname = "qbittorrent"
+    + lib.optionalString (guiSupport && qtVersion == "5") "-qt5"
+    + lib.optionalString (!guiSupport) "-nox";
+  version = "4.6.5";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${version}";
-    sha256 = "sha256-pFHeozx72qVjA3cmW6GK058IIAOWmyNm1UQVCQ1v5EU=";
+    hash = "sha256-umJObvPv4VjdAZdQEuhqFCRvi1eZQViu1IO88oeTTq8=";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    cmake
+    ninja
+    wrapGAppsHook3
+    wrapQtAppsHook
+  ];
 
-  # NOTE: 2018-05-31: CMake is working but it is not officially supported
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  buildInputs = [
+    boost
+    libtorrent-rasterbar
+    qtbase
+    qtsvg
+    qttools
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+  ] ++ lib.optionals guiSupport [
+    dbus
+  ] ++ lib.optionals (guiSupport && stdenv.isLinux) [
+    qtwayland
+  ] ++ lib.optionals trackerSearch [
+    python3
+  ];
 
-  buildInputs = [ boost libtorrent-rasterbar qtbase qttools qtsvg ]
-    ++ optional guiSupport dbus # D(esktop)-Bus depends on GUI support
-    ++ optional trackerSearch python3;
+  cmakeFlags = lib.optionals (qtVersion == "6") [
+    "-DQT6=ON"
+  ] ++ lib.optionals (!guiSupport) [
+    "-DGUI=OFF"
+    "-DSYSTEMD=ON"
+    "-DSYSTEMD_SERVICES_INSTALL_DIR=${placeholder "out"}/lib/systemd/system"
+  ] ++ lib.optionals (!webuiSupport) [
+    "-DWEBUI=OFF"
+  ];
 
-  # Otherwise qm_gen.pri assumes lrelease-qt5, which does not exist.
-  QMAKE_LRELEASE = "lrelease";
+  qtWrapperArgs = lib.optionals trackerSearch [
+    "--prefix PATH : ${lib.makeBinPath [ python3 ]}"
+  ];
 
-  configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-    "--with-boost=${boost.dev}" ]
-    ++ optionals (!guiSupport) [ "--disable-gui" "--enable-systemd" ] # Also place qbittorrent-nox systemd service files
-    ++ optional (!webuiSupport) "--disable-webui"
-    ++ optional debugSupport "--enable-debug";
+  dontWrapGApps = true;
 
-  postInstall = "wrapProgram $out/bin/${
-    if guiSupport
-    then "qbittorrent"
-    else "qbittorrent-nox"
-  } --prefix PATH : ${makeBinPath [ python3 ]}";
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    APP_NAME=qbittorrent${lib.optionalString (!guiSupport) "-nox"}
+    mkdir -p $out/{Applications,bin}
+    cp -R $APP_NAME.app $out/Applications
+    makeWrapper $out/{Applications/$APP_NAME.app/Contents/MacOS,bin}/$APP_NAME
+  '';
 
-  meta = {
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  meta = with lib; {
     description = "Featureful free software BitTorrent client";
-    homepage    = "https://www.qbittorrent.org/";
-    changelog   = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ Anton-Latukha ];
+    homepage = "https://www.qbittorrent.org";
+    changelog = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ Anton-Latukha kashw2 ];
   };
 }

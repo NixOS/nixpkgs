@@ -1,18 +1,19 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "py-nightscout";
-  version = "1.3.2";
+  version = "1.3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "marciogranzotto";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06i8vc7ykk5112y66cjixbrks46mdx3r0ygkmyah6gfgq1ddc39j";
+    sha256 = "0kslmm3wrxhm307nqmjmq8i8vy1x6mjaqlgba0hgvisj6b4hx65k";
   };
 
   propagatedBuildInputs = [
@@ -30,16 +31,13 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytestCheckHook
     pytest-asyncio
   ];
 
-
-  pythonImportsCheck = [
-    "py_nightscout"
-  ];
+  pythonImportsCheck = [ "py_nightscout" ];
 
   meta = with lib; {
     description = "Python library that provides an interface to Nightscout";

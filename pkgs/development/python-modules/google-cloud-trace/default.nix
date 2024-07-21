@@ -1,27 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, google-cloud-testutils
-, mock
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-testutils,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.5.1";
+  version = "1.13.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fd4cb8a9efa20598c35a4e6f7ac013a04868e37d7d4ff4ec3080f528b06f8a0e";
+    hash = "sha256-wCO8ySoD2iAsA0ydtQki65yw1qteAHn1EUFLFhV0qdQ=";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core proto-plus ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  propagatedBuildInputs = [
+    google-api-core
+    proto-plus
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
+
+  nativeCheckInputs = [
+    google-cloud-testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   disabledTests = [
     # require credentials
@@ -37,8 +54,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cloud Trace API client library";
-    homepage = "https://github.com/googleapis/python-trace";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-trace";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-trace-v${version}/packages/google-cloud-trace/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

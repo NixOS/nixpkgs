@@ -40,7 +40,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A open source visual database applications creator, a long-awaited competitor for programs like MS Access or Filemaker";
+    description = "Open source visual database applications creator, a long-awaited competitor for programs like MS Access or Filemaker";
     longDescription = ''
       Kexi is a visual database applications creator.
       It can be used for creating database schemas,
@@ -49,7 +49,7 @@ mkDerivation rec {
       All database objects - tables, queries and forms - are stored in the database,
       making it easy to share data and design.
     '';
-    homepage = "http://kexi-project.org/";
+    homepage = "https://kexi-project.org/";
     maintainers = with maintainers; [ zraexy ];
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl2 ];

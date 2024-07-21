@@ -1,54 +1,36 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, intltool, dbus-glib, gtk2, libical, libnotify, tzdata
-, popt, libxfce4ui, xfce4-panel, withPanelPlugin ? true, wrapGAppsHook, xfce }:
+{ lib
+, mkXfceDerivation
+, gtk3
+, libical
+, libnotify
+, libxfce4ui
+, popt
+, tzdata
+}:
 
-assert withPanelPlugin -> libxfce4ui != null && xfce4-panel != null;
-
-let
-  inherit (lib) optionals;
-in
-
-stdenv.mkDerivation rec {
+mkXfceDerivation {
+  category = "apps";
   pname = "orage";
-  version = "4.12.1";
+  version = "4.18.0";
 
-  src = fetchurl {
-    url = "https://archive.xfce.org/src/apps/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-PPmqRBroPIaIhl+CIXAlzfPrqhUszkVxd3uMKqjdkGI=";
-  };
+  sha256 = "sha256-vL9zexPbQKPqIzK5UqUIxkE9I7hEupkDOJehMgj2Leo=";
 
-  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
-
-  buildInputs = [ dbus-glib gtk2 libical libnotify popt ]
-    ++ optionals withPanelPlugin [ libxfce4ui xfce4-panel ];
+  buildInputs = [
+    gtk3
+    libical
+    libnotify
+    libxfce4ui
+    popt
+  ];
 
   postPatch = ''
     substituteInPlace src/parameters.c        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
     substituteInPlace src/tz_zoneinfo_read.c  --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-    substituteInPlace tz_convert/tz_convert.c --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
-  postConfigure = "rm -rf libical"; # ensure pkgs.libical is used instead of one included in the orage sources
-
-  patches = [
-    # Fix build with libical 3.0
-    (fetchpatch {
-      name = "fix-libical3.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/libical3.patch?h=orage-4.10";
-      sha256 = "sha256-bsnQMGmeo4mRNGM/7UYXez2bNopXMHRFX7VFVg0IGtE=";
-    })
-  ];
-
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister "apps" pname;
-  };
-
   meta = with lib; {
-    description = "Simple calendar application with reminders";
-    homepage = "https://git.xfce.org/archive/orage/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    description = "Simple calendar application for Xfce";
+    mainProgram = "orage";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

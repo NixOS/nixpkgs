@@ -1,57 +1,85 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
+, meson
+, ninja
 , pkg-config
 , gobject-introspection
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
+, help2man
 , glib
 , python3
+, mesonEmulatorHook
 , libgudev
+, bash-completion
 , libmbim
 , libqrtr-glib
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 }:
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
-  version = "1.30.2";
+  version = "1.34.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional withIntrospection "devdoc";
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
-    sha256 = "sha256-vgHs4OosIZTL6ldEv1qvBsBLpft+x4h6ExFsdtEU/t0=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "mobile-broadband";
+    repo = "libqmi";
+    rev = version;
+    hash = "sha256-l9ev9ZOWicVNZ/Wj//KNd3NHcefIrLVriqJhEpwWvtQ=";
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
-    gobject-introspection
     python3
+  ] ++ lib.optionals withMan [
+    help2man
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
+  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
-    libgudev
+    bash-completion
     libmbim
+  ] ++ lib.optionals withIntrospection [
+    libgudev
   ];
 
   propagatedBuildInputs = [
     glib
+  ] ++ lib.optionals withIntrospection [
     libqrtr-glib
   ];
 
-  configureFlags = [
-    "--with-udev-base-dir=${placeholder "out"}/lib/udev"
-    "--enable-gtk-doc"
-    "--enable-introspection"
+  mesonFlags = [
+    "-Dudevdir=${placeholder "out"}/lib/udev"
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonBool "introspection" withIntrospection)
+    (lib.mesonBool "man" withMan)
+    (lib.mesonBool "qrtr" withIntrospection)
+    (lib.mesonBool "udev" withIntrospection)
   ];
 
-  enableParallelBuilding = true;
-
   doCheck = true;
+
+  postPatch = ''
+    patchShebangs \
+      build-aux/qmi-codegen/qmi-codegen
+  '';
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/libqmi/";

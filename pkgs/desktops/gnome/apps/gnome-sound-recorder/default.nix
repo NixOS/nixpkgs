@@ -1,12 +1,13 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , pkg-config
 , gettext
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook4
 , gjs
 , glib
-, gtk3
+, gtk4
 , gdk-pixbuf
 , gst_all_1
 , gnome
@@ -14,16 +15,16 @@
 , ninja
 , python3
 , desktop-file-utils
-, libhandy
+, libadwaita
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-sound-recorder";
-  version = "40.0";
+  version = "43.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "00b55vsfzx877b7mj744abzjws7zclz71wbvh0axsrbl9l84ranl";
+    sha256 = "bbbbmjsbUv0KtU+aW/Tymctx5SoTrF/fw+dOtGmFpOY=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
     desktop-file-utils
   ];
@@ -40,9 +41,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gjs
     glib
-    gtk3
+    gtk4
     gdk-pixbuf
-    libhandy
+    libadwaita
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base
@@ -52,6 +53,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
+    substituteInPlace build-aux/meson_post_install.py \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
     patchShebangs build-aux/meson_post_install.py
   '';
 
@@ -63,8 +66,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A simple and modern sound recorder";
-    homepage = "https://wiki.gnome.org/Apps/SoundRecorder";
+    description = "Simple and modern sound recorder";
+    mainProgram = "gnome-sound-recorder";
+    homepage = "https://gitlab.gnome.org/World/vocalis";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

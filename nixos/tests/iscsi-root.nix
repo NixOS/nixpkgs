@@ -7,8 +7,8 @@ import ./make-test-python.nix (
       {
         name = "iscsi";
         meta = {
-          maintainers = pkgs.lib.teams.deshaw.members
-          ++ (with pkgs.lib.maintainers; [ ajs124 ]);
+          maintainers = lib.teams.deshaw.members
+            ++ lib.teams.helsinki-systems.members;
         };
 
         nodes = {
@@ -59,7 +59,7 @@ import ./make-test-python.nix (
                         ];
                         portals = [
                           {
-                            ip_address = "0.0.0.0";
+                            ip_address = "[::]";
                             iser = false;
                             offload = false;
                             port = 3260;
@@ -93,13 +93,13 @@ import ./make-test-python.nix (
               xfsprogs
             ];
 
-            system.extraDependencies = [ nodes.initiatorRootDisk.config.system.build.toplevel ];
+            system.extraDependencies = [ nodes.initiatorRootDisk.system.build.toplevel ];
 
-            nix.binaryCaches = lib.mkForce [];
-            nix.extraOptions = ''
-              hashed-mirrors =
-              connect-timeout = 1
-            '';
+            nix.settings = {
+              substituters = lib.mkForce [];
+              hashed-mirrors = null;
+              connect-timeout = 1;
+            };
           };
 
           initiatorRootDisk = { config, pkgs, modulesPath, lib, ... }: {
@@ -108,7 +108,7 @@ import ./make-test-python.nix (
               [
                 "boot.shell_on_fail"
                 "console=tty1"
-                "ip=${config.networking.primaryIPAddress}:::255.255.255.0::ens9:none"
+                "ip=${config.networking.primaryIPAddress}:::255.255.255.0::eth1:none"
               ]
             );
 

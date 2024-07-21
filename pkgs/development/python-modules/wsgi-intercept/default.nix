@@ -1,20 +1,46 @@
-{ lib, buildPythonPackage, fetchPypi, six, httplib2, py, pytestCheckHook, requests, urllib3 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  httplib2,
+  py,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  urllib3,
+}:
 
 buildPythonPackage rec {
   pname = "wsgi-intercept";
-  version = "1.9.2";
+  version = "1.13.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "wsgi_intercept";
     inherit version;
-    sha256 = "1b6251d03jnhqywr54bzj9fnc3qzp2kvz22asxpd27jy984qx21n";
+    hash = "sha256-daA+HQHdtCAC+1a4Ss0qeo7OJe/dIGREoTqfH7z6k0w=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ httplib2 py pytestCheckHook requests urllib3 ];
+  nativeCheckInputs = [
+    httplib2
+    py
+    pytestCheckHook
+    requests
+    urllib3
+  ];
 
   disabledTests = [
+    # Tests require network access
+    "test_urllib3"
+    "test_requests"
     "test_http_not_intercepted"
     "test_https_not_intercepted"
     "test_https_no_ssl_verification_not_intercepted"
@@ -23,9 +49,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "wsgi_intercept" ];
 
   meta = with lib; {
-    description = "wsgi_intercept installs a WSGI application in place of a real URI for testing";
+    description = "Module that acts as a WSGI application in place of a real URI for testing";
     homepage = "https://github.com/cdent/wsgi-intercept";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ mikecm ];
   };
 }

@@ -1,8 +1,9 @@
+if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
 source $stdenv/setup
 
 unpackManually() {
     skip=$(sed 's/^skip=//; t; d' $src)
-    tail -n +$skip $src | xz -d | tar xvf -
+    tail -n +$skip $src | bsdtar xvf -
     sourceRoot=.
 }
 
@@ -13,6 +14,8 @@ unpackFile() {
 
 
 buildPhase() {
+    runHook preBuild
+
     if [ -n "$bin" ]; then
         # Create the module.
         echo "Building linux driver against kernel: $kernel";
@@ -22,10 +25,14 @@ buildPhase() {
 
         cd ..
     fi
+
+    runHook postBuild
 }
 
 
 installPhase() {
+    runHook preInstall
+
     # Install libGL and friends.
 
     # since version 391, 32bit libraries are bundled in the 32/ sub-directory
@@ -63,6 +70,7 @@ installPhase() {
     for i in $lib32 $out; do
         rm -f $i/lib/lib{glx,nvidia-wfb}.so.* # handled separately
         rm -f $i/lib/libnvidia-gtk* # built from source
+        rm -f $i/lib/libnvidia-wayland-client* # built from source
         if [ "$useGLVND" = "1" ]; then
             # Pre-built libglvnd
             rm $i/lib/lib{GL,GLX,EGL,GLESv1_CM,GLESv2,OpenGL,GLdispatch}.so.*
@@ -89,10 +97,11 @@ installPhase() {
                 sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_icd.json > nvidia_icd.json.fixed
             fi
 
-            if [ "$system" = "i686-linux" ]; then
+            # nvidia currently only supports x86_64 and i686
+            if [ "$i" == "$lib32" ]; then
                 install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.i686.json
             else
-                install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.json
+                install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.x86_64.json
             fi
         fi
 
@@ -118,7 +127,17 @@ installPhase() {
             fi
         fi
 
+        # Install libraries needed by Proton to support DLSS
+        if [ -e nvngx.dll ] && [ -e _nvngx.dll ]; then
+            install -Dm644 -t $i/lib/nvidia/wine/ nvngx.dll _nvngx.dll
+        fi
     done
+
+
+    # OptiX tries loading `$ORIGIN/nvoptix.bin` first
+    if [ -e nvoptix.bin ]; then
+        install -Dm444 -t $out/lib/ nvoptix.bin
+    fi
 
     if [ -n "$bin" ]; then
         # Install the X drivers.
@@ -144,6 +163,11 @@ installPhase() {
             cp nvidia-application-profiles-*-rc $bin/share/nvidia/nvidia-application-profiles-rc
             cp nvidia-application-profiles-*-key-documentation $bin/share/nvidia/nvidia-application-profiles-key-documentation
         fi
+    fi
+
+    if [ -n "$firmware" ]; then
+        # Install the GSP firmware
+        install -Dm644 -t $firmware/lib/firmware/nvidia/$version firmware/gsp*.bin
     fi
 
     # All libs except GUI-only are installed now, so fixup them.
@@ -179,9 +203,12 @@ installPhase() {
         mkdir -p $bin/share/man/man1
         cp -p *.1.gz $bin/share/man/man1
         rm -f $bin/share/man/man1/{nvidia-xconfig,nvidia-settings,nvidia-persistenced}.1.gz
+        if [ -e "nvidia-dbus.conf" ]; then
+            install -Dm644 nvidia-dbus.conf $bin/share/dbus-1/system.d/nvidia-dbus.conf
+        fi
 
         # Install the programs.
-        for i in nvidia-cuda-mps-control nvidia-cuda-mps-server nvidia-smi nvidia-debugdump; do
+        for i in nvidia-cuda-mps-control nvidia-cuda-mps-server nvidia-smi nvidia-debugdump nvidia-powerd; do
             if [ -e "$i" ]; then
                 install -Dm755 $i $bin/bin/$i
                 # unmodified binary backup for mounting in containers
@@ -190,9 +217,13 @@ installPhase() {
                     --set-rpath $out/lib:$libPath $bin/bin/$i
             fi
         done
-        # FIXME: needs PATH and other fixes
-        # install -Dm755 nvidia-bug-report.sh $bin/bin/nvidia-bug-report.sh
+        substituteInPlace nvidia-bug-report.sh \
+          --replace /bin/grep grep \
+          --replace /bin/ls ls
+        install -Dm755 nvidia-bug-report.sh $bin/bin/nvidia-bug-report.sh
     fi
+
+    runHook postInstall
 }
 
 genericBuild

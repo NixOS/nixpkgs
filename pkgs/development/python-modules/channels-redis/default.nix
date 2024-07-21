@@ -1,45 +1,57 @@
-{ lib
-, aioredis
-, asgiref
-, buildPythonPackage
-, channels
-, fetchPypi
-, hiredis
-, msgpack
-, pythonOlder
-, redis
+{
+  lib,
+  aioredis,
+  asgiref,
+  buildPythonPackage,
+  channels,
+  cryptography,
+  fetchFromGitHub,
+  hiredis,
+  msgpack,
+  pythonOlder,
+  redis,
 }:
 
 buildPythonPackage rec {
   pname = "channels-redis";
-  version = "3.3.1";
+  version = "4.1.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "channels_redis";
-    sha256 = "899dc6433f5416cf8ad74505baaf2acb5461efac3cad40751a41119e3f68421b";
+  src = fetchFromGitHub {
+    owner = "django";
+    repo = "channels_redis";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Eid9aWlLNnqr3WAnsLe+Pz9gsugCsdDKi0+nFNF02CI=";
   };
 
-  buildInputs = [ redis hiredis ];
+  buildInputs = [
+    hiredis
+    redis
+  ];
 
-  propagatedBuildInputs = [ channels msgpack aioredis asgiref ];
+  propagatedBuildInputs = [
+    aioredis
+    asgiref
+    channels
+    msgpack
+  ];
+
+  passthru.optional-dependencies = {
+    cryptography = [ cryptography ];
+  };
 
   # Fails with : ConnectionRefusedError: [Errno 111] Connect call failed ('127.0.0.1', 6379)
   # (even with a local Redis instance running)
   doCheck = false;
 
-  postPatch = ''
-    sed -i "s/msgpack~=0.6.0/msgpack/" setup.py
-    sed -i "s/aioredis~=1.0/aioredis/" setup.py
-  '';
-
   pythonImportsCheck = [ "channels_redis" ];
 
   meta = with lib; {
-    homepage = "https://github.com/django/channels_redis/";
     description = "Redis-backed ASGI channel layer implementation";
+    homepage = "https://github.com/django/channels_redis/";
+    changelog = "https://github.com/django/channels_redis/blob/${version}/CHANGELOG.txt";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];
   };

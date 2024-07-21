@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "terracognita";
-  version = "0.7.4";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "cycloidio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QaJoHnuzSQXxEuGpui9lyKAjT2wdz4XmMAh5cAOKvBg=";
+    hash = "sha256-pPY8y+pQdk9/F7dnUBz/y4lvcR1k/EClywcZATArZVA=";
   };
 
-  vendorSha256 = "sha256-7LRq1lG3DT1WQ0+78EEeQqCCrx6n6qTCUcYUuKSfvVE=";
+  vendorHash = "sha256-ApnJH0uIClXbfXK+k4t9Tcayc2mfndoG9iMqZY3iWys=";
 
   doCheck = false;
 
@@ -21,9 +21,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Reads from existing Cloud Providers (reverse Terraform) and generates your infrastructure as code on Terraform configuration";
+    mainProgram = "terracognita";
     homepage = "https://github.com/cycloidio/terracognita";
     changelog = "https://github.com/cycloidio/terracognita/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

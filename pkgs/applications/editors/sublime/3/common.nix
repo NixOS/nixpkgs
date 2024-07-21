@@ -1,6 +1,6 @@
 { buildVersion, x32sha256, x64sha256, dev ? false }:
 
-{ fetchurl, lib, stdenv, xorg, glib, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
+{ fetchurl, lib, stdenv, xorg, glib, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook3
 , pkexecPath ? "/run/wrappers/bin/pkexec"
 , openssl, bzip2, bash, unzip, zip
 }:
@@ -40,7 +40,7 @@ in let
     dontStrip = true;
     dontPatchELF = true;
     buildInputs = [ glib gtk3 ]; # for GSETTINGS_SCHEMAS_PATH
-    nativeBuildInputs = [ zip unzip makeWrapper wrapGAppsHook ];
+    nativeBuildInputs = [ zip unzip makeWrapper wrapGAppsHook3 ];
 
     # make exec.py in Default.sublime-package use own bash with an LD_PRELOAD instead of "/bin/bash"
     patchPhase = ''
@@ -101,7 +101,7 @@ in let
         "''${gappsWrapperArgs[@]}"
 
       # Without this, plugin_host crashes, even though it has the rpath
-      wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl.out}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
+      wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${lib.getLib openssl}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
     '';
   };
 in stdenv.mkDerivation (rec {
@@ -130,7 +130,8 @@ in stdenv.mkDerivation (rec {
   meta = with lib; {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = "https://www.sublimetext.com/";
-    maintainers = with maintainers; [ jtojnar wmertens demin-dmitriy zimbatm ];
+    maintainers = with maintainers; [ wmertens demin-dmitriy zimbatm ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

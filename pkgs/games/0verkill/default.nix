@@ -1,7 +1,7 @@
 { lib
 , gccStdenv
 , fetchFromGitHub
-, autoreconfHook
+, autoreconfHook269
 , xorgproto
 , libX11
 , libXpm
@@ -18,7 +18,7 @@ gccStdenv.mkDerivation rec {
     sha256 = "WO7PN192HhcDl6iHIbVbH7MVMi1Tl2KyQbDa9DWRO6M=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook269 ];
   buildInputs = [ libX11 xorgproto libXpm ];
 
   configureFlags = [ "--with-x" ];
@@ -27,6 +27,9 @@ gccStdenv.mkDerivation rec {
     autoupdate
   '';
 
+  # The code needs an update for gcc-10:
+  #   https://github.com/hackndev/0verkill/issues/7
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
   hardeningDisable = [ "all" ]; # Someday the upstream will update the code...
 
   meta = with lib; {

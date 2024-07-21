@@ -1,18 +1,24 @@
-{ stdenv, fetchurl, libxml2, gnutls, libxslt, pkg-config, libgcrypt, libtool
+{ stdenv, fetchurl, fetchpatch, libxml2, gnutls, libxslt, pkg-config, libgcrypt, libtool
 , openssl, nss, lib, runCommandCC, writeText }:
 
 lib.fix (self:
 stdenv.mkDerivation rec {
   pname = "xmlsec";
-  version = "1.2.33";
+  version = "1.2.34";
 
   src = fetchurl {
     url = "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
-    sha256 = "sha256-JgQdNaIKJF7Vovue4HXxCCVmTSdCIMtRkDQPqHpNCTE=";
+    sha256 = "sha256-Us7UlD81vX0IGKOCmMFSjKSsilRED9cRNKB9LRNwomI=";
   };
 
   patches = [
     ./lt_dladdsearchdir.patch
+
+    # Fix build with libxml2 2.12
+    (fetchpatch {
+      url = "https://github.com/lsh123/xmlsec/commit/ffb327376f5bb69e8dfe7f805529e45a40118c2b.patch";
+      hash = "sha256-o8CLemOiGIHJsYfVQtNzJNVyk03fdmCbvgA8c3OYxo4=";
+    })
   ] ++ lib.optionals stdenv.isDarwin [ ./remove_bsd_base64_decode_flag.patch ];
   postPatch = ''
     substituteAllInPlace src/dl.c
@@ -22,15 +28,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libxml2 gnutls libxslt libgcrypt libtool openssl nss ];
+  buildInputs = [ libxml2 gnutls libgcrypt libtool openssl nss ];
+
+  propagatedBuildInputs = [
+    # required by xmlsec/transforms.h
+    libxslt
+  ];
 
   enableParallelBuilding = true;
   doCheck = true;
-  checkInputs = [ nss.tools ];
+  nativeCheckInputs = [ nss.tools ];
   preCheck = ''
-  substituteInPlace tests/testrun.sh \
-    --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
-    --replace 'TMPFOLDER=/tmp' '$(mktemp -d)'
+    substituteInPlace tests/testrun.sh \
+      --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
+      --replace 'TMPFOLDER=/tmp' '$(mktemp -d)'
   '';
 
   # enable deprecated soap headers required by lasso
@@ -67,13 +78,14 @@ stdenv.mkDerivation rec {
     touch $out
   '';
 
-  meta = {
-    homepage = "http://www.aleksey.com/xmlsec";
-    downloadPage = "https://www.aleksey.com/xmlsec/download.html";
+  meta = with lib; {
     description = "XML Security Library in C based on libxml2";
-    license = lib.licenses.mit;
-    platforms = with lib.platforms; linux ++ darwin;
-    updateWalker = true;
+    homepage = "https://www.aleksey.com/xmlsec/";
+    downloadPage = "https://www.aleksey.com/xmlsec/download.html";
+    license = licenses.mit;
+    mainProgram = "xmlsec1";
+    maintainers = with maintainers; [ ];
+    platforms = with platforms; linux ++ darwin;
   };
 }
 )

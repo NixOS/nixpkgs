@@ -29,6 +29,7 @@ stdenv.mkDerivation {
     description = "VNC recorder";
     homepage = "http://ronja.twibright.com/utils/vncrec/";
     platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "vncrec";
   };
 }

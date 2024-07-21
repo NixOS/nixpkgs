@@ -1,19 +1,42 @@
-{ lib, stdenv, fetchsvn, pkg-config, libjpeg, libX11, libXxf86vm, curl, libogg
-, libvorbis, freetype, openal, libGL }:
+{ curl
+, fetchFromGitHub
+, freetype
+, lib
+, libGL
+, libjpeg
+, libogg
+, libvorbis
+, libX11
+, libXxf86vm
+, openal
+, pkg-config
+, stdenv
+}:
 
 stdenv.mkDerivation rec {
   pname = "alienarena";
-  version = "7.71.2";
+  version = "7.71.6";
 
-  src = fetchsvn {
-    url = "svn://svn.icculus.org/alienarena/trunk";
-    rev = "5673";
-    sha256 = "1qfrgrp7nznk5n1jqvjba6l1w8y2ixzyx9swkpvd02rdwlwrp9kw";
+  src = fetchFromGitHub {
+    owner = "alienarena";
+    repo = "alienarena";
+    rev = version;
+    hash = "sha256-Dml0VY5VQiWLq8LjItBSzNwJB9L4biJ/nJWmEGtG2ZY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libjpeg libX11 curl libogg libvorbis
-                  freetype openal libGL libXxf86vm ];
+
+  buildInputs = [
+    curl
+    freetype
+    libGL
+    libjpeg
+    libogg
+    libvorbis
+    libX11
+    libXxf86vm
+    openal
+  ];
 
   patchPhase = ''
     substituteInPlace ./configure \
@@ -22,7 +45,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free, stand-alone first-person shooter computer game";
+    changelog = "https://github.com/alienarena/alienarena/releases/tag/${version}";
+    description = "Free, stand-alone first-person shooter computer game";
     longDescription = ''
       Do you like old school deathmatch with modern features? How
       about rich, colorful, arcade-like atmospheres? How about retro
@@ -32,7 +56,7 @@ stdenv.mkDerivation rec {
       with a retro alien theme, while adding tons of original ideas to
       make the game quite unique.
     '';
-    homepage = "http://red.planetarena.org";
+    homepage = "https://alienarena.org";
     # Engine is under GPLv2, everything else is under
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ astsmtl ];

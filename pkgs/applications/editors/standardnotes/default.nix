@@ -1,67 +1,81 @@
-{ lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
-, fetchurl, libsecret, gtk3, gsettings-desktop-schemas }:
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, electron
+, libsecret
+, asar
+, glib
+, desktop-file-utils
+, callPackage
+}:
 
 let
-  version = "3.9.5";
-  pname = "standardnotes";
-  name = "${pname}-${version}";
+
+  srcjson = builtins.fromJSON (builtins.readFile ./src.json);
+
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
-  plat = {
-    i686-linux = "i386";
-    x86_64-linux = "x86_64";
-  }.${stdenv.hostPlatform.system} or throwSystem;
+in
 
-  sha256 = {
-    i686-linux = "sha256-7Mo8ELFV6roZ3IYWBtB2rRDAzJrq4ht9f1v6uohsauw=";
-    x86_64-linux = "sha256-9VPYII9E8E3yL7UuU0+GmaK3qxWX4bwfACDl7F7sngo=";
-  }.${stdenv.hostPlatform.system} or throwSystem;
+stdenv.mkDerivation rec {
 
-  src = fetchurl {
-    url = "https://github.com/standardnotes/desktop/releases/download/v${version}/standard-notes-${version}-linux-${plat}.AppImage";
-    inherit sha256;
-  };
+  pname = "standardnotes";
 
-  appimageContents = appimageTools.extract {
-    inherit name src;
-  };
+  src = fetchurl (srcjson.deb.${stdenv.hostPlatform.system} or throwSystem);
 
-  nativeBuildInputs = [ autoPatchelfHook desktop-file-utils ];
+  inherit (srcjson) version;
 
-in appimageTools.wrapType2 rec {
-  inherit name src;
+  dontConfigure = true;
 
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
+  dontBuild = true;
 
-  extraPkgs = pkgs: with pkgs; [
-    libsecret
-  ];
+  nativeBuildInputs = [ makeWrapper dpkg desktop-file-utils asar ];
 
-  extraInstallCommands = ''
-    # directory in /nix/store so readonly
-    cp -r  ${appimageContents}/* $out
-    cd $out
-    chmod -R +w $out
-    mv $out/bin/${name} $out/bin/${pname}
+  unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
 
-    # fixup and install desktop file
+  installPhase = let
+    libPath = lib.makeLibraryPath [
+      libsecret
+      glib
+      stdenv.cc.cc.lib
+    ];
+  in
+    ''
+    runHook preInstall
+
+    mkdir -p $out/bin $out/share/standardnotes
+    cp -R usr/share/{applications,icons} $out/share
+    cp -R opt/Standard\ Notes/resources/app.asar $out/share/standardnotes/
+    asar e $out/share/standardnotes/app.asar asar-unpacked
+    find asar-unpacked -name '*.node' -exec patchelf \
+      --add-rpath "${libPath}" \
+      {} \;
+    asar p asar-unpacked $out/share/standardnotes/app.asar
+
+    makeWrapper ${electron}/bin/electron $out/bin/standardnotes \
+      --add-flags $out/share/standardnotes/app.asar
+
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
-      --set-key Exec --set-value ${pname} standard-notes.desktop
+      --set-key Exec --set-value standardnotes usr/share/applications/standard-notes.desktop
 
-    rm usr/lib/* AppRun standard-notes.desktop .so*
+    runHook postInstall
   '';
+
+  passthru.updateScript = callPackage ./update.nix {};
 
   meta = with lib; {
-    description = "A simple and private notes app";
+    description = "Simple and private notes app";
     longDescription = ''
       Standard Notes is a private notes app that features unmatched simplicity,
       end-to-end encryption, powerful extensions, and open-source applications.
     '';
     homepage = "https://standardnotes.org";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ mgregoire chuangzhu ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ mgregoire chuangzhu squalus ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    platforms = builtins.attrNames srcjson.deb;
+    mainProgram = "standardnotes";
   };
 }

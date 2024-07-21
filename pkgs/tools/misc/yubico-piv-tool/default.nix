@@ -1,24 +1,79 @@
-{ lib, stdenv, fetchurl, pkg-config, openssl, check, pcsclite, PCSC
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, openssl
+, check
+, pcsclite
+, PCSC
+, gengetopt
+, help2man
+, cmake
+, zlib
+, nix-update-script
+, testers
 , withApplePCSC ? stdenv.isDarwin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yubico-piv-tool";
-  version = "2.0.0";
+  version = "2.5.2";
 
-  src = fetchurl {
-    url = "https://developers.yubico.com/yubico-piv-tool/Releases/yubico-piv-tool-${version}.tar.gz";
-    sha256 = "124lhlim05gw32ydjh1yawqbnx6wdllz1ir9j00j09wji3m11rfs";
+  outputs = [ "out" "dev" "man" ];
+
+  src = fetchFromGitHub {
+    owner = "Yubico";
+    repo = "yubico-piv-tool";
+    rev = "refs/tags/yubico-piv-tool-${finalAttrs.version}";
+    hash = "sha256-SBVYr6OcWqT+WKOZgIeZ1TmqCbcGAjbq/HaWIwPduFw=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl check ]
-    ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "-Werror" ""
+  '';
 
-  configureFlags = [ "--with-backend=${if withApplePCSC then "macscard" else "pcsc"}" ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    gengetopt
+    help2man
+  ];
 
-  meta = with lib; {
+  buildInputs = [
+    openssl
+    zlib.dev
+  ]
+  ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
+
+  cmakeFlags = [
+    (lib.cmakeBool "GENERATE_MAN_PAGES" true)
+    (lib.cmakeFeature "BACKEND" (if withApplePCSC then "macscard" else "pcsc"))
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_MANDIR" "share/man")
+  ];
+
+  doCheck = true;
+
+  nativeCheckInputs = [ check ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "yubico-piv-tool-([0-9.]+)$" ];
+    };
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "yubico-piv-tool --version";
+      };
+    };
+  };
+
+  meta = {
     homepage = "https://developers.yubico.com/yubico-piv-tool/";
+    changelog = "https://developers.yubico.com/yubico-piv-tool/Release_Notes.html";
     description = ''
       Used for interacting with the Privilege and Identification Card (PIV)
       application on a YubiKey
@@ -30,7 +85,10 @@ stdenv.mkDerivation rec {
       certificates, and create certificate requests, and other operations.
       A shared library and a command-line tool is included.
     '';
-    license = licenses.bsd2;
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ viraptor anthonyroussel ];
+    mainProgram = "yubico-piv-tool";
+    pkgConfigModules = [ "ykcs11" "ykpiv" ];
   };
-}
+})

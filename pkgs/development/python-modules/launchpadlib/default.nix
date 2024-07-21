@@ -1,30 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, httplib2
-, keyring
-, lazr-restfulclient
-, lazr-uri
-, setuptools
-, six
-, testresources
-, wadllib
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  httplib2,
+  keyring_24,
+  lazr-restfulclient,
+  lazr-uri,
+  setuptools,
+  six,
+  testresources,
+  wadllib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "launchpadlib";
-  version = "1.10.15.1";
+  version = "1.11.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4891f5b0c9bafbbb78aa06eeba1635629663c6aa80f621bcd1fc1057c8dd14b5";
+    hash = "sha256-AYmMk3R3sMZKdTOK2wl3Ao1zRqigGesCPPaP7ZmFAUY=";
   };
 
   propagatedBuildInputs = [
     httplib2
-    keyring
+    keyring_24
     lazr-restfulclient
     lazr-uri
     setuptools
@@ -33,7 +35,7 @@ buildPythonPackage rec {
     wadllib
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -41,10 +43,16 @@ buildPythonPackage rec {
 
   doCheck = isPy3k;
 
+  pythonImportsCheck = [
+    "launchpadlib"
+    "launchpadlib.apps"
+    "launchpadlib.credentials"
+  ];
+
   meta = with lib; {
     description = "Script Launchpad through its web services interfaces. Officially supported";
     homepage = "https://help.launchpad.net/API/launchpadlib";
     license = licenses.lgpl3Only;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

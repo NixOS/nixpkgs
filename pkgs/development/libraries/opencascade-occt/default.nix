@@ -1,20 +1,43 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, ninja, tcl, tk,
-  libGL, libGLU, libXext, libXmu, libXi, darwin }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, ninja
+, tcl
+, tk
+, libGL
+, libGLU
+, libXext
+, libXmu
+, libXi
+, darwin
+}:
 
 stdenv.mkDerivation rec {
   pname = "opencascade-occt";
-  version = "7.5.1";
+  version = "7.8.1";
   commit = "V${builtins.replaceStrings ["."] ["_"] version}";
 
   src = fetchurl {
     name = "occt-${commit}.tar.gz";
     url = "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=${commit};sf=tgz";
-    sha256 = "sha256-1whKU+7AMVYabfs15x8MabohKonn5oM54ZEtxF93wAo=";
+    hash = "sha256-AGMZqTLLjXbzJFW/RSTsohAGV8sMxlUmdU/Y2oOzkk8=";
   };
 
-  nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ tcl tk libGL libGLU libXext libXmu libXi ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+
+  buildInputs = [
+    tcl
+    tk
+    libGL
+    libGLU
+    libXext
+    libXmu
+    libXi
+  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
   meta = with lib; {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";

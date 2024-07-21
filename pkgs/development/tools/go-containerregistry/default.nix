@@ -1,18 +1,20 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 let bins = [ "crane" "gcrane" ]; in
 
 buildGoModule rec {
   pname = "go-containerregistry";
-  version = "0.6.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sk3g1i4w8sh40y1ffa61ap7jsscdvnhvh09k8nznydi465csbmq";
+    sha256 = "sha256-qImLnWDw7G4GPn+hj0gbgKwHAWQtXFdtBnEc9oxGcCw=";
   };
-  vendorSha256 = null;
+  vendorHash = null;
+
+  nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/crane" "cmd/gcrane" ];
 
@@ -29,7 +31,14 @@ buildGoModule rec {
         mv $out/bin/${bin} ''$${bin}/bin/ &&
         ln -s ''$${bin}/bin/${bin} $out/bin/
       '') bins
-    );
+    ) + ''
+      for cmd in crane gcrane; do
+        installShellCompletion --cmd "$cmd" \
+          --bash <($GOPATH/bin/$cmd completion bash) \
+          --fish <($GOPATH/bin/$cmd completion fish) \
+          --zsh <($GOPATH/bin/$cmd completion zsh)
+      done
+    '';
 
   # NOTE: no tests
   doCheck = false;
@@ -37,7 +46,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tools for interacting with remote images and registries including crane and gcrane";
     homepage = "https://github.com/google/go-containerregistry";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ yurrriq ];
   };
 }

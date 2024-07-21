@@ -25,6 +25,12 @@ in stdenv.mkDerivation rec {
     sha256 = "1k2ssrapfzhngc7bg1zrnd9n2vyxp9c9m70byvsma6wapbvib6l1";
   };
 
+  patches = [
+    # The awk script incorrectly parsed `glib/glib.h` and was trying to find `glib/gwin32.h`,
+    # that isn't included since we're building only for linux.
+    ./0000-fix_mkorder.patch
+  ];
+
   # The dependencies and their justification are explained at
   # http://smalltalk.gnu.org/download
   nativeBuildInputs = [ pkg-config ];
@@ -45,7 +51,7 @@ in stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A free implementation of the Smalltalk-80 language";
+    description = "Free implementation of the Smalltalk-80 language";
     longDescription = ''
       GNU Smalltalk is a free implementation of the Smalltalk-80 language. It
       runs on most POSIX compatible operating systems (including GNU/Linux, of
@@ -55,6 +61,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://smalltalk.gnu.org/";
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ skeidel ];
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

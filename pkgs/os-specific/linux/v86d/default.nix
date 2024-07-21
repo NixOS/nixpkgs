@@ -5,14 +5,16 @@
 , klibc
 }:
 
-stdenv.mkDerivation rec {
-  name = "v86d-${version}-${kernel.version}";
-  version = "0.1.10";
+let
+  pversion = "0.1.10";
+in stdenv.mkDerivation rec {
+  pname = "v86d";
+  version = "${pversion}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "mjanusz";
     repo = "v86d";
-    rev = "v86d-${version}";
+    rev = "v86d-${pversion}";
     hash = "sha256-95LRzVbO/DyddmPwQNNQ290tasCGoQk7FDHlst6LkbA=";
   };
 
@@ -36,9 +38,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ klibc ];
 
   meta = with lib; {
-    description = "A daemon to run x86 code in an emulated environment";
+    description = "Daemon to run x86 code in an emulated environment";
+    mainProgram = "v86d";
     homepage = "https://github.com/mjanusz/v86d";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ codyopel ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

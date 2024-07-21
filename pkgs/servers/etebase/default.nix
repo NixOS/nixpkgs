@@ -1,56 +1,73 @@
-{ lib, stdenv, python3, fetchFromGitHub }:
+{ lib
+, fetchFromGitHub
+, python3
+, withLdap ? false
+, withPostgres ? true
+, nix-update-script
+, nixosTests
+}:
 
 let
-  py = python3.override {
+  python = python3.override {
     packageOverrides = self: super: {
-      django = super.django_3;
+      pydantic = super.pydantic_1;
     };
   };
 in
-  with py.pkgs;
-
-buildPythonPackage rec {
+python.pkgs.buildPythonApplication rec {
   pname = "etebase-server";
-  version = "0.7.0";
-  format = "pyproject";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "server";
-    rev = "v${version}";
-    sha256 = "1r2a7ki9w2h3l6rwqa3fzxjlqfj2lbgfrm8lynjhvcdv02s5abbi";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GEieXue3Kvc4zZjfypKLmTmhNPbn/GR8g0qEqkl+wkw=";
   };
 
   patches = [ ./secret.patch ];
 
-  propagatedBuildInputs = with pythonPackages; [
-    asgiref
-    cffi
-    django
-    django-cors-headers
-    djangorestframework
-    drf-nested-routers
-    msgpack
-    psycopg2
-    pycparser
-    pynacl
-    pytz
-    six
-    sqlparse
-  ];
+  doCheck = false;
 
-  installPhase = ''
+  propagatedBuildInputs = with python.pkgs; [
+    aiofiles
+    django_4
+    fastapi
+    msgpack
+    pynacl
+    redis
+    uvicorn
+    websockets
+    watchfiles
+    uvloop
+    pyyaml
+    python-dotenv
+    httptools
+    typing-extensions
+  ] ++ lib.optional withLdap python-ldap
+    ++ lib.optional withPostgres psycopg2;
+
+  postInstall = ''
     mkdir -p $out/bin $out/lib
-    cp -r . $out/lib/etebase-server
-    ln -s $out/lib/etebase-server/manage.py $out/bin/etebase-server
+    cp manage.py $out/bin/etebase-server
     wrapProgram $out/bin/etebase-server --prefix PYTHONPATH : "$PYTHONPATH"
     chmod +x $out/bin/etebase-server
   '';
 
+  passthru.updateScript = nix-update-script {};
+  passthru.python = python;
+  # PYTHONPATH of all dependencies used by the package
+  passthru.pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+  passthru.tests = {
+    nixosTest = nixosTests.etebase-server;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/etesync/server";
-    description = "An Etebase (EteSync 2.0) server so you can run your own.";
+    description = "Etebase (EteSync 2.0) server so you can run your own";
+    mainProgram = "etebase-server";
+    changelog = "https://github.com/etesync/server/blob/${version}/ChangeLog.md";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ felschr ];
+    maintainers = with maintainers; [ felschr phaer ];
   };
 }

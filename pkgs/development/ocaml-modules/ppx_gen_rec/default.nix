@@ -9,14 +9,14 @@ buildDunePackage rec {
     sha256 = "sha256-/mMj5UT22KQGVy1sjgEoOgPzyCYyeDPtWJYNDvQ9nlk=";
   };
 
-  minimumOCamlVersion = "4.07";
-  useDune2 = true;
+  minimalOCamlVersion = "4.07";
+  duneVersion = "3";
 
   buildInputs = [ ppxlib ];
 
   meta = with lib; {
     homepage = "https://github.com/flowtype/ocaml-ppx_gen_rec";
-    description = "A ppx rewriter that transforms a recursive module expression into a struct.";
+    description = "Ppx rewriter that transforms a recursive module expression into a struct";
     license = licenses.mit;
     maintainers = with maintainers; [ frontsideair ];
   };

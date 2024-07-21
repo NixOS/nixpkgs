@@ -1,7 +1,5 @@
 { lib
 , bundlerApp
-, makeWrapper
-, kubectl
 , bundlerUpdateScript
 }:
 
@@ -10,18 +8,12 @@ bundlerApp {
   gemdir = ./.;
   exes = [ "krane" ];
 
-  buildInputs = [ makeWrapper ];
-
-  postBuild = ''
-    wrapProgram "$out/bin/krane" \
-      --prefix PATH : ${lib.makeBinPath [ kubectl ]}
-  '';
-
   passthru.updateScript = bundlerUpdateScript "krane";
 
   meta = with lib; {
-    description = "A command-line tool that helps you ship changes to a Kubernetes namespace and understand the result";
+    description = "Command-line tool that helps you ship changes to a Kubernetes namespace and understand the result";
     homepage = "https://github.com/Shopify/krane";
+    changelog = "https://github.com/Shopify/krane/blob/main/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau ];
   };

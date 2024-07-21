@@ -27,13 +27,8 @@ in {
   options = {
 
     services.riemann = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the Riemann network monitoring daemon.
-        '';
-      };
+      enable = mkEnableOption "Riemann network monitoring daemon";
+
       config = mkOption {
         type = types.lines;
         description = ''
@@ -47,7 +42,7 @@ in {
         description = ''
           Extra files containing Riemann configuration. These files will be
           loaded at runtime by Riemann (with Clojure's
-          <literal>load-file</literal> function) at the end of the
+          `load-file` function) at the end of the
           configuration if you use the config option, this is ignored if you
           use configFile.
         '';

@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tonelib-jam";
-  version = "4.7.0";
+  version = "4.7.8";
 
   src = fetchurl {
-    url = "https://www.tonelib.net/download/0930/ToneLib-Jam-amd64.deb";
-    sha256 = "sha256-xyBDp3DQVC+nK2WGnvrfUfD+9GvwtbldXgExTMmCGw0=";
+    url = "https://tonelib.net/download/221222/ToneLib-Jam-amd64.deb";
+    sha256 = "sha256-c6At2lRPngQPpE7O+VY/Hsfw+QfIb3COIuHfbqqIEuM=";
   };
 
   nativeBuildInputs = [
@@ -54,8 +54,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ToneLib Jam – the learning and practice software for guitar players";
     homepage = "https://tonelib.net/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "ToneLib-Jam";
   };
 }

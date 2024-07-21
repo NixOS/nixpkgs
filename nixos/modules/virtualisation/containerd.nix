@@ -53,6 +53,7 @@ in
     virtualisation.containerd = {
       args.config = toString containerdConfigChecked;
       settings = {
+        version = 2;
         plugins."io.containerd.grpc.v1.cri" = {
          containerd.snapshotter =
            lib.mkIf config.boot.zfs.enabled (lib.mkOptionDefault "zfs");
@@ -83,7 +84,6 @@ in
         # "limits" defined below are adopted from upstream: https://github.com/containerd/containerd/blob/master/containerd.service
         LimitNPROC = "infinity";
         LimitCORE = "infinity";
-        LimitNOFILE = "infinity";
         TasksMax = "infinity";
         OOMScoreAdjust = "-999";
 

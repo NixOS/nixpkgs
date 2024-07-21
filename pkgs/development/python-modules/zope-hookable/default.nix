@@ -1,20 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope_testing
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  zope-testing,
 }:
 
 buildPythonPackage rec {
   pname = "zope-hookable";
-  version = "5.0.1";
+  version = "6.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "zope.hookable";
     inherit version;
-    sha256 = "0hc82lfr7bk53nvbxvjkibkarngyrzgfk2i6bg8wshl0ly0pdl19";
+    hash = "sha256-FmiZPUCnz9yGeEPdVyWSnn+DpbDBlccJrx2u+CdPQ8s=";
   };
 
-  checkInputs = [ zope_testing ];
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [ zope-testing ];
 
   meta = with lib; {
     description = "Supports the efficient creation of “hookable” objects";

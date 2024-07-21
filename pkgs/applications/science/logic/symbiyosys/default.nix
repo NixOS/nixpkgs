@@ -48,14 +48,15 @@ stdenv.mkDerivation {
   '';
 
   doCheck = false; # not all provers are yet packaged...
-  checkInputs = [ python3 yosys boolector yices z3 aiger ];
+  nativeCheckInputs = [ python3 yosys boolector yices z3 aiger ];
   checkPhase = "make test";
 
   meta = {
     description = "Tooling for Yosys-based verification flows";
     homepage    = "https://symbiyosys.readthedocs.io/";
     license     = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ thoughtpolice emily ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    mainProgram = "sby";
     platforms   = lib.platforms.all;
   };
 }

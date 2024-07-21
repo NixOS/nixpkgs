@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "mage";
-  version = "1.11.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "magefile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ghOk44VcQUAAYm9NCLsgYdky1KEpwOeChBNrgUKjnC8=";
+    sha256 = "sha256-aZPv3+F4VMiThjR0nFP+mKQLI9zKj2jaOawClROnT34=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -22,7 +22,8 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A Make/Rake-like Build Tool Using Go";
+    description = "Make/Rake-like Build Tool Using Go";
+    mainProgram = "mage";
     homepage = "https://magefile.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ swdunlop ];

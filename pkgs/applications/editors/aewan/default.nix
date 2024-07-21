@@ -1,5 +1,7 @@
-{ lib, stdenv, fetchurl, fetchpatch, zlib, ncurses }:
+{ lib, gccStdenv, fetchurl, fetchpatch, zlib, ncurses }:
 
+let stdenv = gccStdenv;
+in
 stdenv.mkDerivation rec {
   pname = "aewan";
   version = "1.0.01";
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Ascii-art Editor Without A Name";
-    homepage = "http://aewan.sourceforge.net/";
+    homepage = "https://aewan.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };

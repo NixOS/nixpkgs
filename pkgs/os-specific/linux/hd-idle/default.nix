@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "hd-idle";
-  version = "1.16";
+  version = "1.21";
 
   src = fetchFromGitHub {
     owner = "adelolmo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LZcMwF/BhHiWWXMcrzbk8GyvwXdA3B2olmbOBxQwV5g=";
+    sha256 = "sha256-WHJcysTN9LHI1WnDuFGTyTirxXirpLpJIeNDj4sZGY0=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Spins down external disks after a period of idle time";
+    mainProgram = "hd-idle";
     homepage = "https://github.com/adelolmo/hd-idle";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

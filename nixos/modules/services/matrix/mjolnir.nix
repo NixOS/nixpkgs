@@ -30,7 +30,7 @@ let
 
   # these config files will be merged one after the other to build the final config
   configFiles = [
-    "${pkgs.mjolnir}/share/mjolnir/config/default.yaml"
+    "${pkgs.mjolnir}/libexec/mjolnir/deps/mjolnir/config/default.yaml"
     moduleConfigFile
   ];
 
@@ -73,8 +73,8 @@ in
       description = ''
         Where the homeserver is located (client-server URL).
 
-        If <literal>pantalaimon.enable</literal> is <literal>true</literal>, this option will become the homeserver to which <literal>pantalaimon</literal> connects.
-        The listen address of <literal>pantalaimon</literal> will then become the <literal>homeserverUrl</literal> of <literal>mjolnir</literal>.
+        If `pantalaimon.enable` is `true`, this option will become the homeserver to which `pantalaimon` connects.
+        The listen address of `pantalaimon` will then become the `homeserverUrl` of `mjolnir`.
       '';
     };
 
@@ -82,22 +82,22 @@ in
       type = with types; nullOr path;
       default = null;
       description = ''
-        File containing the matrix access token for the <literal>mjolnir</literal> user.
+        File containing the matrix access token for the `mjolnir` user.
       '';
     };
 
     pantalaimon = mkOption {
       description = ''
-        <literal>pantalaimon</literal> options (enables E2E Encryption support).
+        `pantalaimon` options (enables E2E Encryption support).
 
-        This will create a <literal>pantalaimon</literal> instance with the name "mjolnir".
+        This will create a `pantalaimon` instance with the name "mjolnir".
       '';
       default = { };
       type = types.submodule {
         options = {
           enable = mkEnableOption ''
-            If true, accessToken is ignored and the username/password below will be
-            used instead. The access token of the bot will be stored in the dataPath.
+            ignoring the accessToken. If true, accessToken is ignored and the username/password below will be
+            used instead. The access token of the bot will be stored in the dataPath
           '';
 
           username = mkOption {
@@ -109,7 +109,7 @@ in
             type = with types; nullOr path;
             default = null;
             description = ''
-              File containing the matrix password for the <literal>mjolnir</literal> user.
+              File containing the matrix password for the `mjolnir` user.
             '';
           };
 
@@ -117,7 +117,7 @@ in
             type = types.submodule (import ./pantalaimon-options.nix);
             default = { };
             description = ''
-              passthrough additional options to the <literal>pantalaimon</literal> service.
+              passthrough additional options to the `pantalaimon` service.
             '';
           };
         };
@@ -139,7 +139,7 @@ in
         The room ID where people can use the bot. The bot has no access controls, so
         anyone in this room can use the bot - secure your room!
         This should be a room alias or room ID - not a matrix.to URL.
-        Note: <literal>mjolnir</literal> is fairly verbose - expect a lot of messages from it.
+        Note: `mjolnir` is fairly verbose - expect a lot of messages from it.
       '';
     };
 
@@ -167,7 +167,7 @@ in
         }
       '';
       description = ''
-        Additional settings (see <link xlink:href="https://github.com/matrix-org/mjolnir/blob/main/config/default.yaml">mjolnir default config</link> for available settings). These settings will override settings made by the module config.
+        Additional settings (see [mjolnir default config](https://github.com/matrix-org/mjolnir/blob/main/config/default.yaml) for available settings). These settings will override settings made by the module config.
       '';
     };
   };
@@ -200,7 +200,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = ''${pkgs.mjolnir}/bin/mjolnir'';
+        ExecStart = ''${pkgs.mjolnir}/bin/mjolnir --mjolnir-config ./config/default.yaml'';
         ExecStartPre = [ generateConfig ];
         WorkingDirectory = cfg.dataPath;
         StateDirectory = "mjolnir";
@@ -236,7 +236,7 @@ in
   };
 
   meta = {
-    doc = ./mjolnir.xml;
+    doc = ./mjolnir.md;
     maintainers = with maintainers; [ jojosch ];
   };
 }

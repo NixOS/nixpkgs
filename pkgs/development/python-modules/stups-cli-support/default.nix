@@ -1,17 +1,19 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, clickclick
-, dnspython
-, requests
-, pytest
-, pytest-cov
-, isPy3k
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  clickclick,
+  dnspython,
+  requests,
+  pytest,
+  pytest-cov,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "stups-cli-support";
   version = "1.1.20";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
@@ -29,13 +31,13 @@ buildPythonPackage rec {
 
   preCheck = "export HOME=$TEMPDIR";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytest-cov
   ];
 
   meta = with lib; {
-    description = "Helper library for all STUPS command line tools.";
+    description = "Helper library for all STUPS command line tools";
     homepage = "https://github.com/zalando-stups/stups-cli-support";
     license = licenses.asl20;
     maintainers = [ maintainers.mschuwalow ];

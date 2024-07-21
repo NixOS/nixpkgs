@@ -24,16 +24,12 @@ let
 in {
 
   options.services.zookeeper = {
-    enable = mkOption {
-      description = "Whether to enable Zookeeper.";
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption "Zookeeper";
 
     port = mkOption {
       description = "Zookeeper Client port.";
       default = 2181;
-      type = types.int;
+      type = types.port;
     };
 
     id = mkOption {
@@ -107,13 +103,15 @@ in {
       '';
     };
 
-    package = mkOption {
-      description = "The zookeeper package to use";
-      default = pkgs.zookeeper;
-      defaultText = literalExpression "pkgs.zookeeper";
+    package = mkPackageOption pkgs "zookeeper" { };
+
+    jre = mkOption {
+      description = "The JRE with which to run Zookeeper";
+      default = cfg.package.jre;
+      defaultText = literalExpression "pkgs.zookeeper.jre";
+      example = literalExpression "pkgs.jre";
       type = types.package;
     };
-
   };
 
 
@@ -131,7 +129,7 @@ in {
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.jre}/bin/java \
+          ${cfg.jre}/bin/java \
             -cp "${cfg.package}/lib/*:${configDir}" \
             ${escapeShellArgs cfg.extraCmdLineOptions} \
             -Dzookeeper.datadir.autocreate=false \

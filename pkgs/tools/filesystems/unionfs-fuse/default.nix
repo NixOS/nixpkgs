@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Prevent the unionfs daemon from being killed during
     # shutdown. See
-    # http://www.freedesktop.org/wiki/Software/systemd/RootStorageDaemons/
+    # https://www.freedesktop.org/wiki/Software/systemd/RootStorageDaemons/
     # for details.
     ./prevent-kill-on-shutdown.patch
   ];
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "FUSE UnionFS implementation";
     homepage = "https://github.com/rpodgorny/unionfs-fuse";
     license = licenses.bsd3;

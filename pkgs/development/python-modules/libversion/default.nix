@@ -1,9 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libversion
-, pkg-config
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libversion,
+  pkg-config,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,20 +19,26 @@ buildPythonPackage rec {
     owner = "repology";
     repo = "py-libversion";
     rev = version;
-    sha256 = "sha256-p0wtSB+QXAERf+57MMb8cqWoy1bG3XaCpR9GPwYYvJM=";
+    hash = "sha256-p0wtSB+QXAERf+57MMb8cqWoy1bG3XaCpR9GPwYYvJM=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pkg-config'" "'$(command -v $PKG_CONFIG)'"
+  '';
 
-  buildInputs = [
-    libversion
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  pythonImportsCheck = [
-    "libversion"
-  ];
+  buildInputs = [ libversion ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    # import from $out
+    rm -r libversion
+  '';
+
+  pythonImportsCheck = [ "libversion" ];
 
   meta = with lib; {
     description = "Python bindings for libversion, which provides fast, powerful and correct generic version string comparison algorithm";

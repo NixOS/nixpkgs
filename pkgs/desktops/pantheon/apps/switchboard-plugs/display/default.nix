@@ -15,19 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-display";
-  version = "2.3.2";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3sYZCazGnTjIi3Iry5673TMI13sD0GuY+46AK+NJH70=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-NgTpV/hbPttAsDY8Y9AsqdpjRlZqTy2rTu3v1jQZjBo=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +38,10 @@ stdenv.mkDerivation rec {
     libhandy
     switchboard
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Switchboard Displays Plug";

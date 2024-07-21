@@ -1,14 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, ncurses }:
+{ lib, stdenv, fetchFromGitHub, cimg, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "imgcat";
-  version = "2.3.1";
+  version = "2.6.0";
 
-  nativeBuildInputs = [ autoconf automake libtool ];
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses cimg ];
 
   preConfigure = ''
-    ${autoconf}/bin/autoconf
     sed -i -e "s|-ltermcap|-L ${ncurses}/lib -lncurses|" Makefile
   '';
 
@@ -18,10 +16,10 @@ stdenv.mkDerivation rec {
     owner = "eddieantonio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0frz40rjwi73nx2dlqvmnn56zwr29bmnngfb11hhwr7v58yfajdi";
+    sha256 = "sha256-miFjlahTI0GDpgsjnA/K1R4R5654M8AoK78CycoLTqA=";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   meta = with lib; {
     description = "It's like cat, but for images";
@@ -29,6 +27,7 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ jwiegley ];
     platforms = platforms.unix;
+    mainProgram = "imgcat";
   };
 }
 

@@ -4,7 +4,7 @@
 , fparser
 , tinyxml
 , hdf5
-, cgal_5
+, cgal
 , vtk
 , boost
 , gmp
@@ -13,19 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "csxcad";
-  version = "unstable-2020-02-08";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "thliebig";
     repo = "CSXCAD";
-    rev = "ef6e40931dbd80e0959f37c8e9614c437bf7e518";
-    sha256 = "072s765jyzpdq8qqysdy0dld17m6sr9zfcs0ip2zk8c4imxaysnb";
+    rev = "v${version}";
+    sha256 = "sha256-SSV5ulx3rCJg99I/oOQbqe+gOSs+BfcCo6UkWHVhnSs=";
   };
 
   patches = [./searchPath.patch ];
 
   buildInputs = [
-    cgal_5
+    cgal
     boost
     gmp
     mpfr
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "A C++ library to describe geometrical objects";
+    description = "C++ library to describe geometrical objects";
     homepage = "https://github.com/thliebig/CSXCAD";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ matthuszagh ];

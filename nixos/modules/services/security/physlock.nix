@@ -18,14 +18,14 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to enable the <command>physlock</command> screen locking mechanism.
+          Whether to enable the {command}`physlock` screen locking mechanism.
 
-          Enable this and then run <command>systemctl start physlock</command>
+          Enable this and then run {command}`systemctl start physlock`
           to securely lock the screen.
 
           This will switch to a new virtual terminal, turn off console
           switching and disable SysRq mechanism (when
-          <option>services.physlock.disableSysRq</option> is set)
+          {option}`services.physlock.disableSysRq` is set)
           until the root or user password is given.
         '';
       };
@@ -57,6 +57,14 @@ in
         '';
       };
 
+      muteKernelMessages = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Disable kernel messages on console while physlock is running.
+        '';
+      };
+
       lockOn = {
 
         suspend = mkOption {
@@ -83,7 +91,7 @@ in
             Other targets to lock the screen just before.
 
             Useful if you want to e.g. both autologin to X11 so that
-            your <filename>~/.xsession</filename> gets executed and
+            your {file}`~/.xsession` gets executed and
             still to have the screen locked so that the system can be
             booted relatively unattended.
           '';
@@ -116,7 +124,7 @@ in
                 ++ cfg.lockOn.extraTargets;
         serviceConfig = {
           Type = "forking";
-          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.disableSysRq "s"}${optionalString (cfg.lockMessage != "") " -p \"${cfg.lockMessage}\""}";
+          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.muteKernelMessages "m"}${optionalString cfg.disableSysRq "s"}${optionalString (cfg.lockMessage != "") " -p \"${cfg.lockMessage}\""}";
         };
       };
 

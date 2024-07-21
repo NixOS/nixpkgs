@@ -1,26 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, pytestCheckHook
-, pythonOlder
-, pytz
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "feedgenerator";
-  version = "1.9.2";
+  version = "2.1.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sG1pQej9aiyecXkQeehsvno3iMciRKzAbwWTtJzaN5s=";
+    hash = "sha256-8HXyPyj9In8JfDayEhYcbPAS4cbKr3/1PV1rsCzUK50=";
   };
 
-  buildInputs = [
-    glibcLocales
-  ];
+  postPatch = ''
+    sed -i '/cov/d' setup.cfg
+  '';
+
+  buildInputs = [ glibcLocales ];
 
   LC_ALL = "en_US.UTF-8";
 
@@ -29,9 +33,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "feedgenerator" ];
 

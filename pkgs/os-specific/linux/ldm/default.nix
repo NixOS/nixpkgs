@@ -4,7 +4,6 @@ assert mountPath != "";
 
 let
   version = "0.5";
-  git = "https://github.com/LemonBoy/ldm.git";
 in
 stdenv.mkDerivation rec {
   pname = "ldm";
@@ -13,7 +12,7 @@ stdenv.mkDerivation rec {
   # There is a stable release, but we'll use the lvm branch, which
   # contains important fixes for LVM setups.
   src = fetchgit {
-    url = meta.repositories.git;
+    url = "https://github.com/LemonBoy/ldm";
     rev = "refs/tags/v${version}";
     sha256 = "0lxfypnbamfx6p9ar5k9wra20gvwn665l4pp2j4vsx4yi5q7rw2n";
   };
@@ -34,10 +33,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A lightweight device mounter, with libudev as only dependency";
+    description = "Lightweight device mounter, with libudev as only dependency";
+    mainProgram = "ldm";
     license = lib.licenses.mit;
-
     platforms = lib.platforms.linux;
-    repositories.git = git;
   };
 }

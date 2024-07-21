@@ -1,23 +1,33 @@
 { lib, stdenv, fetchFromGitHub, cmake, bash, gnugrep
 , fixDarwinDylibNames
 , file
-, fetchpatch
 , legacySupport ? false
-, static ? stdenv.hostPlatform.isStatic
+, static ? stdenv.hostPlatform.isStatic # generates static libraries *only*
+, enableStatic ? static
 # these need to be ran on the host, thus disable when cross-compiling
 , buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform
 , doCheck ? stdenv.hostPlatform == stdenv.buildPlatform
+, nix-update-script
+
+# for passthru.tests
+, libarchive
+, rocksdb
+, arrow-cpp
+, libzip
+, curl
+, python3Packages
+, haskellPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "zstd";
-  version = "1.5.0";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
     rev = "v${version}";
-    sha256 = "0icc0x89c35rq5bxd4d241vqxnz2i1qj2wwy01xls63p0z93brj7";
+    hash = "sha256-qcd92hQqVBjMT3hyntjcgk29o9wGQsg5Hg7HE5C0UNc=";
   };
 
   nativeBuildInputs = [ cmake ]
@@ -28,12 +38,6 @@ stdenv.mkDerivation rec {
     # This patches makes sure we do not attempt to use the MD5 implementation
     # of the host platform when running the tests
     ./playtests-darwin.patch
-
-    # Fixes linking for static builds
-    (fetchpatch {
-      url = "https://github.com/facebook/zstd/pull/2724/commits/e1f85dbca3a0ed5ef06c8396912a0914db8dea6a.patch";
-      sha256 = "sha256-PuYAqnJWAE+L9bsroOnnBGJhERW8LHrGSLtIEkKU9vg=";
-    })
   ];
 
   postPatch = lib.optionalString (!static) ''
@@ -49,7 +53,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.attrsets.mapAttrsToList
     (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}") {
       BUILD_SHARED = !static;
-      BUILD_STATIC = static;
+      BUILD_STATIC = enableStatic;
       BUILD_CONTRIB = buildContrib;
       PROGRAMS_LINK_SHARED = !static;
       LEGACY_SUPPORT = legacySupport;
@@ -62,7 +66,7 @@ stdenv.mkDerivation rec {
     mkdir -p build_ && cd $_
   '';
 
-  checkInputs = [ file ];
+  nativeCheckInputs = [ file ];
   inherit doCheck;
   checkPhase = ''
     runHook preCheck
@@ -80,15 +84,29 @@ stdenv.mkDerivation rec {
 
     substituteInPlace ../programs/zstdless \
       --replace "zstdcat" "$bin/bin/zstdcat"
-  '' + lib.optionalString buildContrib ''
-    cp contrib/pzstd/pzstd $bin/bin/pzstd
-  '' + lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
-  '';
+  '' + lib.optionalString buildContrib (
+    ''
+      cp contrib/pzstd/pzstd $bin/bin/pzstd
+    '' + lib.optionalString stdenv.isDarwin ''
+      install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
+    ''
+  );
 
   outputs = [ "bin" "dev" ]
     ++ lib.optional stdenv.hostPlatform.isUnix "man"
     ++ [ "out" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit libarchive rocksdb arrow-cpp;
+      libzip = libzip.override { withZstd = true; };
+      curl = curl.override { zstdSupport = true; };
+      python-zstd = python3Packages.zstd;
+      haskell-zstd = haskellPackages.zstd;
+      haskell-hs-zstd = haskellPackages.hs-zstd;
+    };
+  };
 
   meta = with lib; {
     description = "Zstandard real-time compression algorithm";

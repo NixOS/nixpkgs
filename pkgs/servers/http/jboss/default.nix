@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.jboss.org/";
     description = "Open Source J2EE application server";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl21;
     maintainers = [ maintainers.sander ];
     platforms = platforms.unix;

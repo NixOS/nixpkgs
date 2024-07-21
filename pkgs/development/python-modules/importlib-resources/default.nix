@@ -1,43 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, importlib-metadata
-, typing ? null
-, singledispatch ? null
-, pythonOlder
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  importlib-metadata,
+
+  # Reverse dependency
+  sage,
+
+  # tests
+  jaraco-collections,
+  jaraco-test,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "importlib-resources";
-  version = "5.4.0";
+  version = "6.4.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "importlib_resources";
     inherit version;
-    sha256 = "sha256-11bi+F3U3iuom+CyHboqO77C6HGkKjoWcZJYoR+HUGs=";
+    hash = "sha256-zbK0U7gEbKTjeY6x2E88zhRGoOjnte9O+2APGfw5gUU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    importlib-metadata
-  ] ++ lib.optional (pythonOlder "3.4") [
-    singledispatch
-  ] ++ lib.optional (pythonOlder "3.5") [
-    typing
+  dependencies = [ importlib-metadata ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    jaraco-collections
+    jaraco-test
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  pythonImportsCheck = [ "importlib_resources" ];
 
-  pythonImportsCheck = [
-    "importlib_resources"
-  ];
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
     description = "Read resources from Python packages";

@@ -1,26 +1,27 @@
 { lib, stdenv, fetchurl, makeWrapper, pkg-config, kronosnet, nss, nspr, libqb
-, dbus, rdma-core, libstatgrab, net-snmp
+, systemd, dbus, rdma-core, libstatgrab, net-snmp
 , enableDbus ? false
 , enableInfiniBandRdma ? false
 , enableMonitoring ? false
 , enableSnmp ? false
+, nixosTests
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "corosync";
-  version = "3.1.6";
+  version = "3.1.8";
 
   src = fetchurl {
     url = "http://build.clusterlabs.org/corosync/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ym7TK01/M+1hSvzodg/ljQ3pLGi1ddSWnrrNiS89Hic=";
+    sha256 = "sha256-cCNUT6O7NsALvKvZk1tyabQdiWc4oQjtMuqbnJsn7D0=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
   buildInputs = [
-    kronosnet nss nspr libqb
+    kronosnet nss nspr libqb systemd.dev
   ] ++ optional enableDbus dbus
     ++ optional enableInfiniBandRdma rdma-core
     ++ optional enableMonitoring libstatgrab
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
     "--with-logdir=/var/log/corosync"
     "--enable-watchdog"
     "--enable-qdevices"
+    # allows Type=notify in the systemd service
+    "--enable-systemd"
   ] ++ optional enableDbus "--enable-dbus"
     ++ optional enableInfiniBandRdma "--enable-rdma"
     ++ optional enableMonitoring "--enable-monitoring"
@@ -63,9 +66,13 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "$out/sbin:${libqb}/sbin"
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) pacemaker;
+  };
+
   meta = {
     homepage = "http://corosync.org/";
-    description = "A Group Communication System with features for implementing high availability within applications";
+    description = "Group Communication System with features for implementing high availability within applications";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ montag451 ryantm ];

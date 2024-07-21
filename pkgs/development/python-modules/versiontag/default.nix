@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, git }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+}:
 
 buildPythonPackage rec {
   pname = "versiontag";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thelabnyc";
@@ -11,7 +17,12 @@ buildPythonPackage rec {
     sha256 = "1axv2214ykgv5adajv10v2zy5fr9v77db54rkik6ja29p66zl90n";
   };
 
-  checkInputs = [ git ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "get_version(pypi=True)" '"${version}"'
+  '';
+
+  nativeCheckInputs = [ git ];
 
   pythonImportsCheck = [ "versiontag" ];
 

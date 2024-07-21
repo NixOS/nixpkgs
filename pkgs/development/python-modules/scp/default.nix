@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, paramiko
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  paramiko,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "scp";
-  version = "0.14.1";
+  version = "0.15.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b776bd6ce8c8385aa9a025b64a9815b5d798f12d4ef0d712d569503f62aece8b";
+    hash = "sha256-8bIumTISPM8X7r8Z4JU8bpFI9Yn5PZG4cpQaaWMFyD8=";
   };
 
-  propagatedBuildInputs = [
-    paramiko
-  ];
+  propagatedBuildInputs = [ paramiko ];
 
   checkPhase = ''
     SCPPY_PORT=10022 ${python.interpreter} test.py

@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Summarize system info from sosreports";
+    mainProgram = "xsos";
     homepage = "https://github.com/ryran/xsos";
     license = licenses.gpl3;
     platforms = [ "i686-linux" "x86_64-linux" ];

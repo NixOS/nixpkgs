@@ -21,33 +21,26 @@
 , libxplayer-plparser
 , pkg-config
 , python3
-, wrapGAppsHook
-, xapps
+, wrapGAppsHook3
+, xapp
 , yelp-tools }:
-
-let
-  pythonenv = python3.withPackages (ps: [
-    ps.pygobject3
-    ps.dbus-python # For one plugin
-  ]);
-in
 
 stdenv.mkDerivation rec {
   pname = "xplayer";
-  version = "2.4.2";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qoBJKY0CZyhp9foUehq5hInEENRGZuy1D6jAMjbjYhA=";
+    sha256 = "sha256-o2vLNIELd1EYWG26t5gOpnamJrBJeg4P6fcLirkcmfM=";
   };
 
   # configure wants to find gst-inspect-1.0 via pkgconfig but
   # the gstreamer toolsdir points to the wrong derivation output
   postPatch = ''
     substituteInPlace configure.ac \
-                      --replace '$gst10_toolsdir/gst-inspect-1.0' '${gstreamer.dev}/bin/gst-inspect-1.0' \
+                      --replace '$gst10_toolsdir/gst-inspect-1.0' '${gstreamer}/bin/gst-inspect-1.0' \
   '';
 
   preBuild = ''
@@ -59,21 +52,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     autoconf-archive
     gettext
     gtk-doc
     intltool
     itstool
     pkg-config
+    python3.pkgs.wrapPython
     yelp-tools
+    gobject-introspection
   ];
 
   buildInputs = [
     clutter-gst
     clutter-gtk
     glib
-    gobject-introspection
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
@@ -82,22 +76,22 @@ stdenv.mkDerivation rec {
     libpeas
     libxml2
     libxplayer-plparser
-    pythonenv
-    xapps
+    python3
+    xapp
     # to satisfy configure script
-    pythonenv.pkgs.pygobject3
+    python3.pkgs.pygobject3
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/xplayer \
-                --prefix PATH : ${lib.makeBinPath [ pythonenv ]}
+  postFixup = ''
+    buildPythonPath ${python3.pkgs.dbus-python}
+    patchPythonScript $out/lib/xplayer/plugins/dbus/dbusservice.py
   '';
 
   meta = with lib; {
-    description = "A generic media player from Linux Mint";
+    description = "Generic media player from Linux Mint";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     homepage = "https://github.com/linuxmint/xplayer";
-    maintainers = with maintainers; [ tu-maurice ];
+    maintainers = with maintainers; [ tu-maurice bobby285271 ];
     platforms = platforms.linux;
   };
 }

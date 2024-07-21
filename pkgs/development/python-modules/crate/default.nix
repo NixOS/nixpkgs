@@ -1,49 +1,82 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, urllib3
-, geojson
-, isPy3k
-, sqlalchemy
-, pytestCheckHook
-, stdenv
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  fetchpatch,
+  dask,
+  urllib3,
+  geojson,
+  verlib2,
+  pueblo,
+  pandas,
+  pythonOlder,
+  sqlalchemy,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "crate";
-  version = "0.26.0";
-  disabled = !isPy3k;
+  version = "0.35.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6f650c2efe250b89bf35f8fe3211eb37ebc8d76f7a9c09bd73db3076708fa2fc";
+    hash = "sha256-4hGACtsK71hvcn8L9ggID7zR+umtTwvskBxSHBpLyME=";
   };
+  patches = [
+    # Fix a pandas issue https://github.com/crate/crate-python/commit/db7ba4d0e1f4f4087739a8f9ebe1d71946333979
+    (fetchpatch {
+      url = "https://github.com/crate/crate-python/commit/db7ba4d0e1f4f4087739a8f9ebe1d71946333979.patch";
+      hash = "sha256-20g8T0t5gPMbK6kRJ2bzc4BNbB1Dg4hvngXNUPvxi5I=";
+      name = "python-crate-fix-pandas-error.patch";
+      # Patch doesn't apply due to other changes to these files
+      excludes = [
+        "setup.py"
+        "docs/by-example/sqlalchemy/dataframe.rst"
+      ];
+    })
+  ];
 
   propagatedBuildInputs = [
     urllib3
     sqlalchemy
     geojson
+    verlib2
+    pueblo
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    dask
+    pandas
     pytestCheckHook
+    pytz
   ];
 
   disabledTests = [
-    "RequestsCaBundleTest"
+    # the following tests require network access
+    "test_layer_from_uri"
+    "test_additional_settings"
+    "test_basic"
+    "test_cluster"
+    "test_default_settings"
+    "test_dynamic_http_port"
+    "test_environment_variables"
+    "test_verbosity"
   ];
-  disabledTestPaths = lib.optionals stdenv.isDarwin [ "src/crate/client/test_http.py" ];
+
+  disabledTestPaths = [
+    # imports setuptools.ssl_support, which doesn't exist anymore
+    "src/crate/client/test_http.py"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/crate/crate-python";
-    description = "A Python client library for CrateDB";
+    description = "Python client library for CrateDB";
+    changelog = "https://github.com/crate/crate-python/blob/${version}/CHANGES.txt";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];
-    # 2021-07-12 (@layus): Please unbreak when an update fixes compatibility
-    # with the version of SQLAlchemy in nixpkgs
-    # And also re-enable tests in pythonPackages.agate-sql.
-    # The version string below is intentionally split, so nixpkgs-update does
-    # not change it. That would make this warning pretty useless.
-    broken = assert version == "0.2"+"6.0"; true;
   };
 }

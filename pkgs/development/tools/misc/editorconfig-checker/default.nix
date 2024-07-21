@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, editorconfig-checker }:
 
 buildGoModule rec {
   pname = "editorconfig-checker";
-  version = "2.4.0";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "editorconfig-checker";
     repo = "editorconfig-checker";
-    rev = version;
-    sha256 = "sha256-uP+AgQO1k9fic7r0pOKqO5lUHKEf7Pwaw2U2a6ghzz0=";
+    rev = "v${version}";
+    hash = "sha256-lU7YGn3W3KGrvOUH/v++jHii4q3hSo9X8BAjDNJ7y3A=";
   };
 
-  vendorSha256 = "sha256-SrBrYyExeDHXhezvtfGLtm8NM1eX4/8kzwUICQLZDjo=";
+  vendorHash = "sha256-P5lOx9CH37Z7mkDshbwS+XJZQdQiqNKl71wR1iUvpm8=";
 
   doCheck = false;
 
@@ -23,8 +23,14 @@ buildGoModule rec {
     installManPage docs/editorconfig-checker.1
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = editorconfig-checker;
+  };
+
   meta = with lib; {
-    description = "A tool to verify that your files are in harmony with your .editorconfig";
+    changelog = "https://github.com/editorconfig-checker/editorconfig-checker/releases/tag/${src.rev}";
+    description = "Tool to verify that your files are in harmony with your .editorconfig";
+    mainProgram = "editorconfig-checker";
     homepage = "https://editorconfig-checker.github.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ uri-canva zowoq ];

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, pkg-config
+{ stdenv, lib, fetchurl, fetchpatch, cmake, pkg-config
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
 , makeWrapper, libXext, libGLU, qttools, qtbase, wrapQtAppsHook
@@ -25,11 +25,11 @@ assert !withQT -> default != "qt5";
 
 stdenv.mkDerivation rec {
   pname = "avidemux";
-  version = "2.7.8";
+  version = "2.8.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "sha256-YopAT1If8oEnYHAK4+KqeOWBaw/z+2/QWsPnUkjZdAE=";
+    sha256 = "sha256-d9m9yoaDzlfBkradIHz6t8+Sp3Wc4PY/o3tcjkKtPaI=";
   };
 
   patches = [
@@ -37,12 +37,22 @@ stdenv.mkDerivation rec {
     ./bootstrap_logging.patch
   ];
 
+  postPatch = ''
+    cp ${fetchpatch {
+      # Backport fix for binutils-2.41.
+      name = "binutils-2.41.patch";
+      url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
+      hash = "sha256-s9PcYbt0mFb2wvgMcFL1J+2OS6Sxyd2wYkGzLr2qd9M=";
+      stripLen = 1;
+    }} avidemux_core/ffmpeg_package/patches/
+  '';
+
   nativeBuildInputs =
-    [ yasm cmake pkg-config ]
+    [ yasm cmake pkg-config makeWrapper ]
     ++ lib.optional withQT wrapQtAppsHook;
   buildInputs = [
     zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
-    freetype alsa-lib libXext libGLU makeWrapper
+    freetype alsa-lib libXext libGLU
   ] ++ lib.optional withX264 x264
     ++ lib.optional withX265 x265
     ++ lib.optional withXvid xvidcore
@@ -55,8 +65,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withQT [ qttools qtbase ]
     ++ lib.optional withVPX libvpx;
 
+  dontWrapQtApps = true;
+
   buildCommand = let
-    qtVersion = "5.${lib.versions.minor qtbase.version}";
     wrapWith = makeWrapper: filename:
       "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
     wrapQtApp = wrapWith "wrapQtApp";
@@ -66,7 +77,6 @@ stdenv.mkDerivation rec {
     cd "$sourceRoot"
     patchPhase
 
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${libXext}/lib"
     ${stdenv.shell} bootStrap.bash \
       --with-core \
       ${if withQT then "--with-qt" else "--without-qt"} \
@@ -85,6 +95,11 @@ stdenv.mkDerivation rec {
 
     ln -s "$out/bin/avidemux3_${default}" "$out/bin/avidemux"
 
+    # make the install path match the rpath
+    if [[ -d ''${!outputLib}/lib64 ]]; then
+      mv ''${!outputLib}/lib64 ''${!outputLib}/lib
+      ln -s lib ''${!outputLib}/lib64
+    fi
     fixupPhase
   '';
 

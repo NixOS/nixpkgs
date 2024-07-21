@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-slang=${slang.dev}"
     "--with-ssl=${openssl.dev}"
+    "--with-slrnpull"
   ];
 
   buildInputs = [ slang ncurses openssl ];
 
   meta = with lib; {
-    description = "The slrn (S-Lang read news) newsreader";
-    homepage = "http://slrn.sourceforge.net/index.html";
-    maintainers = with maintainers; [ ehmry ];
+    description = "Slrn (S-Lang read news) newsreader";
+    homepage = "https://slrn.sourceforge.net/index.html";
     license = licenses.gpl2;
     platforms = with platforms; linux;
   };

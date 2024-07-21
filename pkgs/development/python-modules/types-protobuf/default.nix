@@ -1,15 +1,26 @@
-{ buildPythonPackage, fetchPypi, lib, types-futures }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  types-futures,
+}:
 
 buildPythonPackage rec {
   pname = "types-protobuf";
-  version = "3.18.0";
+  version = "5.27.0.20240626";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a391d1a9138fe53fe08aeb6aa15ca7f1a188659b9a6c12af5313c55730eccd6c";
+    hash = "sha256-aDuhQEO63meF4/k3p0mPJDs3iBqRrI2BuSAuz4sZHpw=";
   };
 
   propagatedBuildInputs = [ types-futures ];
+
+  # Module doesn't have tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "google-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for protobuf";

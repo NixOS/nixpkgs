@@ -2,6 +2,7 @@
 , pkgsHostHost
 , callPackage
 , fetchgit
+, fetchpatch
 , ghcjsSrcJson ? null
 , ghcjsSrc ? fetchgit (lib.importJSON ghcjsSrcJson)
 , bootPkgs
@@ -36,7 +37,7 @@ let
       })
 
       (callPackage ./common-overrides.nix {
-        inherit haskellLib;
+        inherit haskellLib fetchpatch buildPackages;
       })
       ghcjsDepOverrides
     ]);
@@ -46,6 +47,7 @@ let
     inherit (bootGhcjs) version;
     isGhcjs = true;
 
+    llvmPackages = null;
     enableShared = true;
 
     socket-io = pkgsHostHost.nodePackages."socket.io";
@@ -78,6 +80,11 @@ in stdenv.mkDerivation {
     ];
     dontConfigure = true;
     dontInstall = true;
+
+    # Newer versions of `config.sub` reject the `js-ghcjs` host string, but the
+    # older `config.sub` filed vendored within `ghc` still works
+    dontUpdateAutotoolsGnuConfigScripts = true;
+
     buildPhase = ''
       export HOME=$TMP
       mkdir $HOME/.cabal

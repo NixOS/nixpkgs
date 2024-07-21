@@ -1,19 +1,21 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config, docbook_xsl, libxslt, docbook_xml_dtd_45
-, acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, python, util-linux, json_c, nixosTests
+, acl, attr, boost, btrfs-progs, coreutils, dbus, diffutils, e2fsprogs, libxml2
+, lvm2, pam, util-linux, json_c, nixosTests
 , ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "snapper";
-  version = "0.9.1";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "1ci5mdsph2n5cqad51zf4sank35yj741adsqy2gg7vqwxrhpm8mj";
+    sha256 = "sha256-gD5GsD36KNqoJHFHjNkAUq5M7UZS9Fi176OXgGfqjQ8=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoreconfHook pkg-config
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam python util-linux json_c ncurses
+    lvm2 pam util-linux json_c ncurses
   ];
 
   passthru.tests.snapper = nixosTests.snapper;
@@ -40,11 +42,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-ext4"	# requires patched kernel & e2fsprogs
+    "DIFFBIN=${diffutils}/bin/diff"
+    "RMBIN=${coreutils}/bin/rm"
   ];
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   postInstall = ''
     rm -r $out/etc/cron.*
@@ -62,7 +66,8 @@ stdenv.mkDerivation rec {
     description = "Tool for Linux filesystem snapshot management";
     homepage = "http://snapper.io";
     license = licenses.gpl2Only;
+    mainProgram = "snapper";
+    maintainers = with maintainers; [ markuskowa ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tstrobel markuskowa ];
   };
 }

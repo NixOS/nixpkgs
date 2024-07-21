@@ -137,6 +137,7 @@ let
           # instead of `libtinfo.so.*.`
           { nixPackage = ncurses6; fileToCheckFor = "libncursesw.so.6"; }
         ];
+        isHadrian = true;
       };
     };
   };
@@ -209,6 +210,7 @@ stdenv.mkDerivation rec {
       (let buildExeGlob = ''ghc-${version}*/"${binDistUsed.exePathForLibraryCheck}"''; in
         lib.concatStringsSep "\n" [
           (''
+            shopt -u nullglob
             echo "Checking that ghc binary exists in bindist at ${buildExeGlob}"
             if ! test -e ${buildExeGlob}; then
               echo >&2 "GHC binary ${binDistUsed.exePathForLibraryCheck} could not be found in the bindist build directory (at ${buildExeGlob}) for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
@@ -248,6 +250,8 @@ stdenv.mkDerivation rec {
     ''
       patchShebangs ghc-${version}/utils/
       patchShebangs ghc-${version}/configure
+      test -d ghc-${version}/inplace/bin && \
+        patchShebangs ghc-${version}/inplace/bin
     '' +
     # We have to patch the GMP paths for the integer-gmp package.
     # Note that musl bindists do not contain them,
@@ -270,6 +274,20 @@ stdenv.mkDerivation rec {
     lib.optionalString stdenv.isLinux ''
       find . -type f -executable -exec patchelf \
           --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
+    '' +
+    # The hadrian install Makefile uses 'xxx' as a temporary placeholder in path
+    # substitution. Which can break the build if the store path / prefix happens
+    # to contain this string. This will be fixed with 9.4 bindists.
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/21402
+    ''
+      # Detect hadrian Makefile by checking for the target that has the problem
+      if grep '^update_package_db' ghc-${version}*/Makefile > /dev/null; then
+        echo Hadrian bindist, applying workaround for xxx path substitution.
+        # based on https://gitlab.haskell.org/ghc/ghc/-/commit/dd5fecb0e2990b192d92f4dfd7519ecb33164fad.patch
+        substituteInPlace ghc-${version}*/Makefile --replace 'xxx' '\0xxx\0'
+      else
+        echo Not a hadrian bindist, not applying xxx path workaround.
+      fi
     '';
 
   # fix for `configure: error: Your linker is affected by binutils #16177`
@@ -402,11 +420,21 @@ stdenv.mkDerivation rec {
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
+  }
+  # We duplicate binDistUsed here since we have a sensible default even if no bindist is avaible,
+  # this makes sure that getting the `meta` attribute doesn't throw even on unsupported platforms.
+  // lib.optionalAttrs (ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}.isHadrian or false) {
+    # Normal GHC derivations expose the hadrian derivation used to build them
+    # here. In the case of bindists we just make sure that the attribute exists,
+    # as it is used for checking if a GHC derivation has been built with hadrian.
+    # The isHadrian mechanism will become obsolete with GHCs that use hadrian
+    # exclusively, i.e. 9.6 (and 9.4?).
+    hadrian = null;
   };
 
   meta = rec {
     homepage = "http://haskell.org/ghc";
-    description = "The Glasgow Haskell Compiler";
+    description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
     # HACK: since we can't encode the libc / abi in platforms, we need
     # to make the platform list dependent on the evaluation platform
@@ -414,11 +442,10 @@ stdenv.mkDerivation rec {
     # platforms than the default libcs (i. e. glibc / libSystem).
     # This is done for the benefit of Hydra, so `packagePlatforms`
     # won't return any platforms that would cause an evaluation
-    # failure for `pkgsMusl.haskell.compiler.ghc8102Binary`, as
+    # failure for `pkgsMusl.haskell.compiler.ghc8107Binary`, as
     # long as the evaluator runs on a platform that supports
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
-    hydraPlatforms = builtins.filter (p: minimal || p != "aarch64-linux") platforms;
     maintainers = with lib.maintainers; [
       prusnak
       domenkozar

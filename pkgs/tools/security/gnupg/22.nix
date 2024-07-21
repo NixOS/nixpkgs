@@ -1,64 +1,62 @@
-{ fetchurl, fetchpatch, lib, stdenv, pkg-config, libgcrypt, libassuan, libksba
-, libgpg-error, libiconv, npth, gettext, texinfo, buildPackages
-
-# Each of the dependencies below are optional.
-# Gnupg can be built without them at the cost of reduced functionality.
-, guiSupport ? true, enableMinimal ? false
-, adns ? null , bzip2 ? null , gnutls ? null , libusb1 ? null , openldap ? null
-, pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ?
-null
+{ lib, stdenv, fetchurl, buildPackages
+, pkg-config, texinfo
+, gettext, libassuan, libgcrypt, libgpg-error, libiconv, libksba, npth
+, adns, bzip2, gnutls, libusb1, openldap, readline, sqlite, zlib
+, enableMinimal ? false
+, withPcsc ? !enableMinimal, pcsclite
+, guiSupport ? stdenv.isDarwin, pinentry
+, nixosTests
 }:
 
-with lib;
-
-assert guiSupport -> pinentry != null && enableMinimal == false;
+assert guiSupport -> enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-
-  version = "2.2.27";
+  version = "2.2.41";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    sha256 = "1693s2rp9sjwvdslj94n03wnb6rxysjy0dli0q1698af044h1ril";
+    hash = "sha256-E/MpEAel6FRvy3vAxmEM5EqqmzmVBZ1PgUW6Cf1b4+E=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [
-    libgcrypt libassuan libksba libiconv npth gettext
-    readline libusb1 gnutls adns openldap zlib bzip2 sqlite
+    gettext libassuan libgcrypt libgpg-error libiconv libksba npth
+  ] ++ lib.optionals (!enableMinimal) [
+    adns bzip2 gnutls libusb1 openldap readline sqlite zlib
   ];
 
   patches = [
     ./fix-libusb-include-path.patch
-    ./0001-dirmngr-Only-use-SKS-pool-CA-for-SKS-pool.patch
     ./tests-add-test-cases-for-import-without-uid.patch
-    ./allow-import-of-previously-known-keys-even-without-UI.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
+    ./22-allow-import-of-previously-known-keys-even-without-UI.patch
   ];
+
   postPatch = ''
     sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' configure doc/dirmngr.texi doc/gnupg.info-1
     # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
-  '' + lib.optionalString ( stdenv.isLinux && pcsclite != null) ''
-    sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
-  '';
+    '' + lib.optionalString (stdenv.isLinux && withPcsc) ''
+      sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
+    '';
 
-  pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
   configureFlags = [
     "--with-libgpg-error-prefix=${libgpg-error.dev}"
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-ksba-prefix=${libksba.dev}"
-    "--with-npth-prefix=${npth}"
-  ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
+    "GPGRT_CONFIG=${lib.getDev libgpg-error}/bin/gpgrt-config"
+  ]
+  ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentry.binaryPath or "bin/pinentry"}"
+  ++ lib.optional stdenv.isDarwin "--disable-ccid-driver";
 
   postInstall = if enableMinimal
   then ''
     rm -r $out/{libexec,sbin,share}
-    for f in `find $out/bin -type f -not -name gpg`
+    for f in $(find $out/bin -type f -not -name gpg)
     do
       rm $f
     done
@@ -73,12 +71,22 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/gpg $out/bin/gpg2
 
     # Make libexec tools available in PATH
+    for f in $out/libexec/; do
+      if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
+      ln -s $f $out/bin/$(basename $f)
+    done
+
     ln -s -t $out/bin $out/libexec/*
   '';
 
+  enableParallelBuilding = true;
+
+  passthru.tests = nixosTests.gnupg;
+
   meta = with lib; {
     homepage = "https://gnupg.org";
-    description = "Modern (2.1) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${pname}.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
+    description = "LTS release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = licenses.gpl3Plus;
     longDescription = ''
       The GNU Privacy Guard is the GNU project's complete and free
@@ -91,7 +99,8 @@ stdenv.mkDerivation rec {
       frontend applications and libraries are available.  Version 2 of GnuPG
       also provides support for S/MIME.
     '';
-    maintainers = with maintainers; [ fpletz vrthra ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;
+    mainProgram = "gpg";
   };
 }

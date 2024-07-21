@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "jallbrit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XFK6DiIb8CzVubTnEMkqRW8xZkX/SWjUsrfS+I7LOs8=";
+    hash = "sha256-XFK6DiIb8CzVubTnEMkqRW8xZkX/SWjUsrfS+I7LOs8=";
   };
 
   nativeBuildInputs = [ pkg-config scdoc ];
@@ -17,10 +17,11 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
   installFlags = [ "PREFIX=$(out)" ];
 
-  passthru.updateScript = nix-update-script { attrPath = pname; };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Grow bonsai trees in your terminal";
+    mainProgram = "cbonsai";
     homepage = "https://gitlab.com/jallbrit/cbonsai";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ manveru ];

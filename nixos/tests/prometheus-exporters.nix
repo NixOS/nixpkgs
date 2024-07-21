@@ -6,7 +6,7 @@
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
-    removeSuffix replaceChars singleton splitString;
+    removeSuffix replaceStrings singleton splitString makeBinPath;
 
   /*
     * The attrset `exporterTests` contains one attribute
@@ -35,7 +35,7 @@ let
     *      };
     *      exporterTest = ''
     *        wait_for_unit("prometheus-<exporterName>-exporter.service")
-    *        wait_for_open_port("1234")
+    *        wait_for_open_port(1234)
     *        succeed("curl -sSf 'localhost:1234/metrics'")
     *      '';
     *    };
@@ -52,7 +52,7 @@ let
     *    testScript = ''
     *      <exporterName>.start()
     *      <exporterName>.wait_for_unit("prometheus-<exporterName>-exporter.service")
-    *      <exporterName>.wait_for_open_port("1234")
+    *      <exporterName>.wait_for_open_port(1234)
     *      <exporterName>.succeed("curl -sSf 'localhost:1234/metrics'")
     *      <exporterName>.shutdown()
     *    '';
@@ -177,12 +177,32 @@ let
       '';
     };
 
+    borgmatic = {
+      exporterConfig = {
+        enable = true;
+        user = "root";
+      };
+      metricProvider = {
+        services.borgmatic.enable = true;
+        services.borgmatic.settings.source_directories = [ "/home" ];
+        services.borgmatic.settings.repositories = [ { label = "local"; path = "/var/backup"; } ];
+        services.borgmatic.settings.keep_daily = 10;
+      };
+      exporterTest = ''
+        succeed("borgmatic rcreate -e none")
+        succeed("borgmatic")
+        wait_for_unit("prometheus-borgmatic-exporter.service")
+        wait_for_open_port(9996)
+        succeed("curl -sSf localhost:9996/metrics | grep 'borg_total_backups{repository=\"/var/backup\"} 1'")
+      '';
+    };
+
     collectd = {
       exporterConfig = {
         enable = true;
         extraFlags = [ "--web.collectd-push-path /collectd" ];
       };
-      exporterTest = let postData = replaceChars [ "\n" ] [ "" ] ''
+      exporterTest = let postData = replaceStrings [ "\n" ] [ "" ] ''
         [{
           "values":[23],
           "dstypes":["gauge"],
@@ -209,6 +229,34 @@ let
         '';
     };
 
+    deluge = {
+      exporterConfig = {
+        enable = true;
+        port = 1234;
+        listenAddress = "127.0.0.1";
+
+        delugeUser = "user";
+        delugePort = 2345;
+        delugePasswordFile = pkgs.writeText "password" "weak_password";
+      };
+      metricProvider = {
+        services.deluge.enable = true;
+        services.deluge.declarative = true;
+        services.deluge.config.daemon_port = 2345;
+        services.deluge.authFile = pkgs.writeText "authFile" ''
+        localclient:abcdef:10
+        user:weak_password:10
+        '';
+      };
+      exporterTest = ''
+        wait_for_unit("deluged.service")
+        wait_for_open_port(2345)
+        wait_for_unit("prometheus-deluge-exporter.service")
+        wait_for_open_port(1234)
+        succeed("curl -sSf http://localhost:1234 | grep 'deluge_torrents'")
+      '';
+    };
+
     dnsmasq = {
       exporterConfig = {
         enable = true;
@@ -218,9 +266,60 @@ let
         services.dnsmasq.enable = true;
       };
       exporterTest = ''
+        wait_for_unit("dnsmasq.service")
+        wait_for_open_port(53)
+        wait_for_file("/var/lib/dnsmasq/dnsmasq.leases")
         wait_for_unit("prometheus-dnsmasq-exporter.service")
         wait_for_open_port(9153)
         succeed("curl -sSf http://localhost:9153/metrics | grep 'dnsmasq_leases 0'")
+      '';
+    };
+
+    dnssec = {
+      exporterConfig = {
+        enable = true;
+        configuration = {
+          records = [
+            {
+              zone = "example.com";
+              record = "@";
+              type = "SOA";
+            }
+          ];
+        };
+        resolvers = [ "127.0.0.1:53" ];
+      };
+      metricProvider = {
+        services.knot = {
+          enable = true;
+          settingsFile = pkgs.writeText "knot.conf" ''
+            server:
+              listen: 127.0.0.1@53
+            template:
+              - id: default
+                storage: ${pkgs.buildEnv {
+                  name = "zones";
+                  paths = [(pkgs.writeTextDir "example.com.zone" ''
+                    @ SOA ns1.example.com. noc.example.com. 2024032401 86400 7200 3600000 172800
+                    @       NS      ns1
+                    ns1     A       192.168.0.1
+                  '')];
+                }}
+                zonefile-load: difference
+                zonefile-sync: -1
+            zone:
+              - domain: example.com
+                file: example.com.zone
+                dnssec-signing: on
+          '';
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("knot.service")
+        wait_for_open_port(53)
+        wait_for_unit("prometheus-dnssec-exporter.service")
+        wait_for_open_port(9204)
+        succeed("curl -sSf http://localhost:9204/metrics | grep 'example.com'")
       '';
     };
 
@@ -234,9 +333,7 @@ let
       exporterTest = ''
         wait_for_unit("prometheus-domain-exporter.service")
         wait_for_open_port(9222)
-        succeed(
-            "curl -sSf 'http://localhost:9222/probe?target=nixos.org' | grep 'domain_probe_success 0'"
-        )
+        succeed("curl -sSf 'http://localhost:9222/probe?target=nixos.org'")
       '';
     };
 
@@ -259,6 +356,18 @@ let
       '';
     };
 
+    fastly = {
+      exporterConfig = {
+        enable = true;
+        tokenPath = pkgs.writeText "token" "abc123";
+      };
+
+      exporterTest = ''
+        wait_for_unit("prometheus-fastly-exporter.service")
+        wait_for_open_port(9118)
+      '';
+    };
+
     fritzbox = {
       # TODO add proper test case
       exporterConfig = {
@@ -270,6 +379,46 @@ let
         succeed(
             "curl -sSf http://localhost:9133/metrics | grep 'fritzbox_exporter_collect_errors 0'"
         )
+      '';
+    };
+
+    graphite = {
+      exporterConfig = {
+        enable = true;
+        port = 9108;
+        graphitePort = 9109;
+        mappingSettings.mappings = [{
+          match = "test.*.*";
+          name = "testing";
+          labels = {
+            protocol = "$1";
+            author = "$2";
+          };
+        }];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-graphite-exporter.service")
+        wait_for_open_port(9108)
+        wait_for_open_port(9109)
+        succeed("echo test.tcp.foo-bar 1234 $(date +%s) | nc -w1 localhost 9109")
+        succeed("curl -sSf http://localhost:9108/metrics | grep 'testing{author=\"foo-bar\",protocol=\"tcp\"} 1234'")
+      '';
+    };
+
+    idrac = {
+      exporterConfig = {
+        enable = true;
+        port = 9348;
+        configuration = {
+          hosts = {
+            default = { username = "username"; password = "password"; };
+          };
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-idrac-exporter.service")
+        wait_for_open_port(9348)
+        wait_until_succeeds("curl localhost:9348")
       '';
     };
 
@@ -294,6 +443,19 @@ let
       '';
     };
 
+    ipmi = {
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-ipmi-exporter.service")
+        wait_for_open_port(9290)
+        succeed(
+          "curl -sSf http://localhost:9290/metrics | grep 'ipmi_scrape_duration_seconds'"
+        )
+      '';
+    };
+
     jitsi = {
       exporterConfig = {
         enable = true;
@@ -302,7 +464,7 @@ let
         systemd.services.prometheus-jitsi-exporter.after = [ "jitsi-videobridge2.service" ];
         services.jitsi-videobridge = {
           enable = true;
-          apis = [ "colibri" "rest" ];
+          colibriRestApi = true;
         };
       };
       exporterTest = ''
@@ -322,9 +484,13 @@ let
         enable = true;
         url = "http://localhost";
         configFile = pkgs.writeText "json-exporter-conf.json" (builtins.toJSON {
-          metrics = [
-            { name = "json_test_metric"; path = "{ .test }"; }
-          ];
+          modules = {
+            default = {
+              metrics = [
+                { name = "json_test_metric"; path = "{ .test }"; }
+              ];
+            };
+          };
         });
       };
       metricProvider = {
@@ -347,43 +513,6 @@ let
       '';
     };
 
-    kea = let
-      controlSocketPath = "/run/kea/dhcp6.sock";
-    in
-    {
-      exporterConfig = {
-        enable = true;
-        controlSocketPaths = [
-          controlSocketPath
-        ];
-      };
-      metricProvider = {
-        systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6-server.service" ];
-
-        services.kea = {
-          dhcp6 = {
-            enable = true;
-            settings = {
-              control-socket = {
-                socket-type = "unix";
-                socket-name = controlSocketPath;
-              };
-            };
-          };
-        };
-      };
-
-      exporterTest = ''
-        wait_for_unit("kea-dhcp6-server.service")
-        wait_for_file("${controlSocketPath}")
-        wait_for_unit("prometheus-kea-exporter.service")
-        wait_for_open_port(9547)
-        succeed(
-            "curl --fail localhost:9547/metrics | grep 'packets_received_total'"
-        )
-      '';
-    };
-
     knot = {
       exporterConfig = {
         enable = true;
@@ -392,7 +521,7 @@ let
         services.knot = {
           enable = true;
           extraArgs = [ "-v" ];
-          extraConfig = ''
+          settingsFile = pkgs.writeText "knot.conf" ''
             server:
               listen: 127.0.0.1@53
 
@@ -433,7 +562,7 @@ let
         wait_for_unit("knot.service")
         wait_for_unit("prometheus-knot-exporter.service")
         wait_for_open_port(9433)
-        succeed("curl -sSf 'localhost:9433' | grep 'knot_server_zone_count 1.0'")
+        succeed("curl -sSf 'localhost:9433' | grep '2\.019031301'")
       '';
     };
 
@@ -544,10 +673,12 @@ let
         systemd.services.prometheus-mail-exporter = {
           after = [ "postfix.service" ];
           requires = [ "postfix.service" ];
-          preStart = ''
-            mkdir -p -m 0700 mail-exporter/new
-          '';
           serviceConfig = {
+            ExecStartPre = [
+              "${pkgs.writeShellScript "create-maildir" ''
+                mkdir -p -m 0700 mail-exporter/new
+              ''}"
+            ];
             ProtectHome = true;
             ReadOnlyPaths = "/";
             ReadWritePaths = "/var/spool/mail";
@@ -635,6 +766,41 @@ let
       '';
     };
 
+    mysqld = {
+      exporterConfig = {
+        enable = true;
+        runAsLocalSuperUser = true;
+        configFile = pkgs.writeText "test-prometheus-exporter-mysqld-config.my-cnf" ''
+          [client]
+          user = exporter
+          password = snakeoilpassword
+        '';
+      };
+      metricProvider = {
+        services.mysql = {
+          enable = true;
+          package = pkgs.mariadb;
+          initialScript = pkgs.writeText "mysql-init-script.sql" ''
+            CREATE USER 'exporter'@'localhost'
+            IDENTIFIED BY 'snakeoilpassword'
+            WITH MAX_USER_CONNECTIONS 3;
+            GRANT PROCESS, REPLICATION CLIENT, SLAVE MONITOR, SELECT ON *.* TO 'exporter'@'localhost';
+          '';
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-mysqld-exporter.service")
+        wait_for_open_port(9104)
+        wait_for_unit("mysql.service")
+        succeed("curl -sSf http://localhost:9104/metrics | grep 'mysql_up 1'")
+        systemctl("stop mysql.service")
+        succeed("curl -sSf http://localhost:9104/metrics | grep 'mysql_up 0'")
+        systemctl("start mysql.service")
+        wait_for_unit("mysql.service")
+        succeed("curl -sSf http://localhost:9104/metrics | grep 'mysql_up 1'")
+      '';
+    };
+
     nextcloud = {
       exporterConfig = {
         enable = true;
@@ -659,7 +825,7 @@ let
             basicAuth.nextcloud-exporter = "snakeoilpw";
             locations."/" = {
               root = "${pkgs.prometheus-nextcloud-exporter.src}/serverinfo/testdata";
-              tryFiles = "/negative-space.xml =404";
+              tryFiles = "/negative-space.json =404";
             };
           };
         };
@@ -675,6 +841,7 @@ let
     nginx = {
       exporterConfig = {
         enable = true;
+        constLabels = [ "foo=bar" ];
       };
       metricProvider = {
         services.nginx = {
@@ -687,7 +854,7 @@ let
         wait_for_unit("nginx.service")
         wait_for_unit("prometheus-nginx-exporter.service")
         wait_for_open_port(9113)
-        succeed("curl -sSf http://localhost:9113/metrics | grep 'nginx_up 1'")
+        succeed("curl -sSf http://localhost:9113/metrics | grep 'nginx_up{foo=\"bar\"} 1'")
       '';
     };
 
@@ -787,7 +954,7 @@ let
               attrs = {
                 objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
                 olcDatabase = "{1}mdb";
-                olcDbDirectory = "/var/db/openldap";
+                olcDbDirectory = "/var/lib/openldap/db";
                 olcSuffix = "dc=example";
                 olcRootDN = {
                   # cn=root,dc=example
@@ -825,28 +992,118 @@ let
       '';
     };
 
-    openvpn = {
+    pgbouncer = {
       exporterConfig = {
         enable = true;
-        group = "openvpn";
-        statusPaths = [ "/run/openvpn-test" ];
+        connectionStringFile = pkgs.writeText "connection.conf" "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
       };
+
       metricProvider = {
-        users.groups.openvpn = { };
-        services.openvpn.servers.test = {
-          config = ''
-            dev tun
-            status /run/openvpn-test
-            status-version 3
-          '';
-          up = "chmod g+r /run/openvpn-test";
+        services.postgresql.enable = true;
+        services.pgbouncer = {
+          # https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
+          ignoreStartupParameters = "extra_float_digits";
+          enable = true;
+          listenAddress = "*";
+          databases = { postgres = "host=/run/postgresql/ port=5432 auth_user=postgres dbname=postgres"; };
+          authType = "any";
+          maxClientConn = 99;
         };
-        systemd.services."openvpn-test".serviceConfig.Group = "openvpn";
       };
       exporterTest = ''
-        wait_for_unit("openvpn-test.service")
-        wait_for_unit("prometheus-openvpn-exporter.service")
-        succeed("curl -sSf http://localhost:9176/metrics | grep 'openvpn_up{.*} 1'")
+        wait_for_unit("postgresql.service")
+        wait_for_unit("pgbouncer.service")
+        wait_for_unit("prometheus-pgbouncer-exporter.service")
+        wait_for_open_port(9127)
+        succeed("curl -sSf http://localhost:9127/metrics | grep 'pgbouncer_up 1'")
+        succeed(
+            "curl -sSf http://localhost:9127/metrics | grep 'pgbouncer_config_max_client_connections 99'"
+        )
+      '';
+    };
+
+    php-fpm = {
+      nodeName = "php_fpm";
+      exporterConfig = {
+        enable = true;
+        environmentFile = pkgs.writeTextFile {
+          name = "/tmp/prometheus-php-fpm-exporter.env";
+          text = ''
+            PHP_FPM_SCRAPE_URI="tcp://127.0.0.1:9000/status"
+          '';
+        };
+      };
+      metricProvider = {
+        users.users."php-fpm-exporter" = {
+          isSystemUser = true;
+          group  = "php-fpm-exporter";
+        };
+        users.groups."php-fpm-exporter" = {};
+        services.phpfpm.pools."php-fpm-exporter" = {
+          user = "php-fpm-exporter";
+          group = "php-fpm-exporter";
+          settings = {
+            "pm" = "dynamic";
+            "pm.max_children" = 32;
+            "pm.max_requests" = 500;
+            "pm.start_servers" = 2;
+            "pm.min_spare_servers" = 2;
+            "pm.max_spare_servers" = 5;
+            "pm.status_path" = "/status";
+            "listen" = "127.0.0.1:9000";
+            "listen.allowed_clients" = "127.0.0.1";
+          };
+          phpEnv."PATH" = makeBinPath [ pkgs.php ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("phpfpm-php-fpm-exporter.service")
+        wait_for_unit("prometheus-php-fpm-exporter.service")
+        succeed("curl -sSf http://localhost:9253/metrics | grep 'phpfpm_up{.*} 1'")
+      '';
+    };
+
+    ping = {
+      exporterConfig = {
+        enable = true;
+
+        settings = {
+          targets = [ {
+            "localhost" = {
+              alias = "local machine";
+              env = "prod";
+              type = "domain";
+            };
+          } {
+            "127.0.0.1" = {
+              alias = "local machine";
+              type = "v4";
+            };
+          } {
+            "::1" = {
+              alias = "local machine";
+              type = "v6";
+            };
+          } {
+            "google.com" = {};
+          } ];
+          dns = {};
+          ping = {
+            interval = "2s";
+            timeout = "3s";
+            history-size = 42;
+            payload-size = 56;
+          };
+          log = {
+            level = "warn";
+          };
+        };
+      };
+
+      exporterTest = ''
+        wait_for_unit("prometheus-ping-exporter.service")
+        wait_for_open_port(9427)
+        succeed("curl -sSf http://localhost:9427/metrics | grep 'ping_up{.*} 1'")
       '';
     };
 
@@ -920,6 +1177,27 @@ let
       '';
     };
 
+    pve = let
+      pveExporterEnvFile = pkgs.writeTextFile {
+        name = "pve.env";
+        text = ''
+          PVE_USER="test_user@pam"
+          PVE_PASSWORD="hunter3"
+          PVE_VERIFY_SSL="false"
+        '';
+      };
+    in {
+      exporterConfig = {
+        enable = true;
+        environmentFile = pveExporterEnvFile;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-pve-exporter.service")
+        wait_for_open_port(9221)
+        wait_until_succeeds("curl localhost:9221")
+      '';
+    };
+
     py-air-control = {
       nodeName = "py_air_control";
       exporterConfig = {
@@ -948,6 +1226,39 @@ let
         wait_until_succeeds("curl -sSf localhost:9121/metrics | grep 'redis_up 1'")
       '';
     };
+
+    restic =
+      let
+        repository = "rest:http://127.0.0.1:8000";
+        passwordFile = pkgs.writeText "restic-test-password" "test-password";
+      in
+      {
+        exporterConfig = {
+          enable = true;
+          inherit repository passwordFile;
+        };
+        metricProvider = {
+          services.restic.server = {
+            enable = true;
+            extraFlags = [ "--no-auth" ];
+          };
+          environment.systemPackages = [ pkgs.restic ];
+        };
+        exporterTest = ''
+          # prometheus-restic-exporter.service fails without initialised repository
+          systemctl("stop prometheus-restic-exporter.service")
+
+          # Initialise the repository
+          wait_for_unit("restic-rest-server.service")
+          wait_for_open_port(8000)
+          succeed("restic init --repo ${repository} --password-file ${passwordFile}")
+
+          systemctl("start prometheus-restic-exporter.service")
+          wait_for_unit("prometheus-restic-exporter.service")
+          wait_for_open_port(9753)
+          wait_until_succeeds("curl -sSf localhost:9753/metrics | grep 'restic_check_success 1.0'")
+        '';
+      };
 
     rspamd = {
       exporterConfig = {
@@ -1000,6 +1311,74 @@ let
       '';
     };
 
+    sabnzbd = {
+      exporterConfig = {
+        enable = true;
+        servers = [{
+          baseUrl = "http://localhost:8080";
+          apiKeyFile = "/var/sabnzbd-apikey";
+        }];
+      };
+
+      metricProvider = {
+        services.sabnzbd.enable = true;
+
+        # unrar is required for sabnzbd
+        nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "unrar" ];
+
+        # extract the generated api key before starting
+        systemd.services.sabnzbd-apikey = {
+          requires = [ "sabnzbd.service" ];
+          after = [ "sabnzbd.service" ];
+          requiredBy = [ "prometheus-sabnzbd-exporter.service" ];
+          before = [ "prometheus-sabnzbd-exporter.service" ];
+          script = ''
+            grep -Po '^api_key = \K.+' /var/lib/sabnzbd/sabnzbd.ini > /var/sabnzbd-apikey
+          '';
+        };
+      };
+
+      exporterTest = ''
+        wait_for_unit("sabnzbd.service")
+        wait_for_unit("prometheus-sabnzbd-exporter.service")
+        wait_for_open_port(8080)
+        wait_for_open_port(9387)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:9387/metrics' | grep 'sabnzbd_queue_size{sabnzbd_instance=\"http://localhost:8080\"} 0.0'"
+        )
+      '';
+    };
+
+    scaphandre = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        boot.kernelModules = [ "intel_rapl_common" ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-scaphandre-exporter.service")
+        wait_for_open_port(8080)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:8080/metrics'"
+        )
+      '';
+    };
+
+    shelly = {
+      exporterConfig = {
+        enable = true;
+        metrics-file = "${pkgs.writeText "test.json" ''{}''}";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-shelly-exporter.service")
+        wait_for_open_port(9784)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:9784/metrics'"
+        )
+      '';
+    };
+
     script = {
       exporterConfig = {
         enable = true;
@@ -1026,13 +1405,8 @@ let
         ];
       };
       exporterTest = ''
-        wait_for_unit("prometheus-smartctl-exporter.service")
-        wait_for_open_port("9633")
         wait_until_succeeds(
-          "curl -sSf 'localhost:9633/metrics'"
-        )
-        wait_until_succeeds(
-            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "/dev/vda: Unable to detect device type"'
+            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Unable to detect device type"'
         )
       '';
     };
@@ -1047,12 +1421,12 @@ let
         wait_for_open_port(9374)
         wait_until_succeeds(
             "curl -sSf localhost:9374/metrics | grep '{}' | grep -v ' 0$'".format(
-                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1"} '
+                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1",source=""} '
             )
         )
         wait_until_succeeds(
             "curl -sSf localhost:9374/metrics | grep '{}'".format(
-                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1"}'
+                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1",source=""}'
             )
         )
       '';
@@ -1061,9 +1435,11 @@ let
     snmp = {
       exporterConfig = {
         enable = true;
-        configuration.default = {
-          version = 2;
-          auth.community = "public";
+        configuration = {
+          auths.public_v2 = {
+            community = "public";
+            version = 2;
+          };
         };
       };
       exporterTest = ''
@@ -1117,6 +1493,27 @@ let
       '';
     };
 
+    statsd = {
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-statsd-exporter.service")
+        wait_for_open_port(9102)
+        succeed("curl http://localhost:9102/metrics | grep 'statsd_exporter_build_info{'")
+        wait_until_succeeds(
+          "echo 'test.udp:1|c' > /dev/udp/localhost/9125 && \
+          curl http://localhost:9102/metrics | grep 'test_udp 1'",
+          timeout=10
+        )
+        wait_until_succeeds(
+          "echo 'test.tcp:1|c' > /dev/tcp/localhost/9125 && \
+          curl http://localhost:9102/metrics | grep 'test_tcp 1'",
+          timeout=10
+        )
+      '';
+    };
+
     surfboard = {
       exporterConfig = {
         enable = true;
@@ -1143,14 +1540,23 @@ let
     systemd = {
       exporterConfig = {
         enable = true;
+
+        extraFlags = [
+          "--systemd.collector.enable-restart-count"
+        ];
       };
       metricProvider = { };
       exporterTest = ''
         wait_for_unit("prometheus-systemd-exporter.service")
         wait_for_open_port(9558)
-        succeed(
+        wait_until_succeeds(
             "curl -sSf localhost:9558/metrics | grep '{}'".format(
                 'systemd_unit_state{name="basic.target",state="active",type="target"} 1'
+            )
+        )
+        succeed(
+            "curl -sSf localhost:9558/metrics | grep '{}'".format(
+                'systemd_service_restart_total{name="prometheus-systemd-exporter.service"} 0'
             )
         )
       '';
@@ -1175,15 +1581,13 @@ let
       '';
     };
 
-    unifi-poller = {
-      nodeName = "unifi_poller";
+    unpoller = {
+      nodeName = "unpoller";
       exporterConfig.enable = true;
       exporterConfig.controllers = [{ }];
       exporterTest = ''
-        wait_for_unit("prometheus-unifi-poller-exporter.service")
-        wait_for_open_port(9130)
-        succeed(
-            "curl -sSf localhost:9130/metrics | grep 'unifipoller_build_info{.\\+} 1'"
+        wait_until_succeeds(
+            'journalctl -eu prometheus-unpoller-exporter.service -o cat | grep "Connection Error"'
         )
       '';
     };
@@ -1191,8 +1595,7 @@ let
     unbound = {
       exporterConfig = {
         enable = true;
-        fetchType = "uds";
-        controlInterface = "/run/unbound/unbound.ctl";
+        unbound.host = "unix:///run/unbound/unbound.ctl";
       };
       metricProvider = {
         services.unbound = {
@@ -1207,7 +1610,68 @@ let
         wait_for_unit("unbound.service")
         wait_for_unit("prometheus-unbound-exporter.service")
         wait_for_open_port(9167)
-        succeed("curl -sSf localhost:9167/metrics | grep 'unbound_up 1'")
+        wait_until_succeeds("curl -sSf localhost:9167/metrics | grep 'unbound_up 1'")
+      '';
+    };
+
+    v2ray = {
+      exporterConfig = {
+        enable = true;
+      };
+
+      metricProvider = {
+        systemd.services.prometheus-nginx-exporter.after = [ "v2ray.service" ];
+        services.v2ray = {
+          enable = true;
+          config = {
+            stats = {};
+            api = {
+              tag = "api";
+              services = [ "StatsService" ];
+            };
+            inbounds = [
+              {
+                port = 1080;
+                listen = "127.0.0.1";
+                protocol = "http";
+              }
+              {
+                listen = "127.0.0.1";
+                port = 54321;
+                protocol = "dokodemo-door";
+                settings = { address = "127.0.0.1"; };
+                tag = "api";
+              }
+            ];
+            outbounds = [
+              {
+                protocol = "freedom";
+              }
+              {
+                protocol = "freedom";
+                settings = {};
+                tag = "api";
+              }
+            ];
+            routing = {
+              strategy = "rules";
+              settings = {
+                rules = [
+                  {
+                    inboundTag = [ "api" ];
+                    outboundTag = "api";
+                    type = "field";
+                  }
+                ];
+              };
+            };
+          };
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-v2ray-exporter.service")
+        wait_for_open_port(9299)
+        succeed("curl -sSf localhost:9299/scrape | grep 'v2ray_up 1'")
       '';
     };
 
@@ -1240,7 +1704,10 @@ let
       '';
     };
 
-    wireguard = let snakeoil = import ./wireguard/snakeoil-keys.nix; in
+    wireguard = let
+      snakeoil = import ./wireguard/snakeoil-keys.nix;
+      publicKeyWithoutNewlines = replaceStrings [ "\n" ] [ "" ] snakeoil.peer1.publicKey;
+    in
       {
         exporterConfig.enable = true;
         metricProvider = {
@@ -1262,10 +1729,26 @@ let
           wait_for_unit("prometheus-wireguard-exporter.service")
           wait_for_open_port(9586)
           wait_until_succeeds(
-              "curl -sSf http://localhost:9586/metrics | grep '${snakeoil.peer1.publicKey}'"
+              "curl -sSf http://localhost:9586/metrics | grep '${publicKeyWithoutNewlines}'"
           )
         '';
       };
+
+    zfs = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        boot.supportedFilesystems = [ "zfs" ];
+        networking.hostId = "7327ded7";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-zfs-exporter.service")
+        wait_for_unit("zfs.target")
+        wait_for_open_port(9134)
+        wait_until_succeeds("curl -f localhost:9134/metrics | grep 'zfs_scrape_collector_success{.*} 1'")
+      '';
+    };
   };
 in
 mapAttrs
@@ -1284,7 +1767,12 @@ mapAttrs
       testScript = ''
         ${nodeName}.start()
         ${concatStringsSep "\n" (map (line:
-          if (builtins.substring 0 1 line == " " || builtins.substring 0 1 line == ")")
+          if builtins.any (b: b) [
+            (builtins.match "^[[:space:]]*$" line != null)
+            (builtins.substring 0 1 line == "#")
+            (builtins.substring 0 1 line == " ")
+            (builtins.substring 0 1 line == ")")
+          ]
           then line
           else "${nodeName}.${line}"
         ) (splitString "\n" (removeSuffix "\n" testConfig.exporterTest)))}
@@ -1292,7 +1780,7 @@ mapAttrs
       '';
 
       meta = with maintainers; {
-        maintainers = [ willibutz elseym ];
+        maintainers = [ willibutz ];
       };
     }
   )))

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, spidermonkey_78 }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, spidermonkey_102 }:
 
 stdenv.mkDerivation {
   pname = "jsawk";
@@ -15,11 +15,12 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp $src/jsawk $out/bin/
     wrapProgram $out/bin/jsawk \
-      --prefix PATH : "${spidermonkey_78}/bin"
+      --prefix PATH : "${spidermonkey_102}/bin"
   '';
 
   meta = {
     description = "Like awk, but for JSON";
+    mainProgram = "jsawk";
     homepage = "https://github.com/micha/jsawk";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ puffnfresh ];

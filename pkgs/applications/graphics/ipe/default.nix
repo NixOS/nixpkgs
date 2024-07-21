@@ -1,5 +1,5 @@
 { lib
-, mkDerivation
+, stdenv
 , makeDesktopItem
 , fetchurl
 , pkg-config
@@ -13,22 +13,24 @@
 , libspiro
 , lua5
 , qtbase
-, texlive
+, qtsvg
+, texliveSmall
+, wrapQtAppsHook
 , zlib
+, withTeXLive ? true
+, buildPackages
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ipe";
-  version = "7.2.23";
+  version = "7.2.27";
 
   src = fetchurl {
-    url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${pname}-${version}-src.tar.gz";
-    sha256 = "0yvm3zfba1ljyy518vjnvwpyg7lgnmdwm19v5k0wfgz64aca56x1";
+    url = "https://github.com/otfried/ipe/releases/download/v${version}/ipe-${version}-src.tar.gz";
+    sha256 = "sha256-wx/bZy8kB7dpZsz58BeRGdS1BzbrIoafgEmLyFg7wZU=";
   };
 
-  sourceRoot = "${pname}-${version}/src";
-
-  nativeBuildInputs = [ pkg-config copyDesktopItems ];
+  nativeBuildInputs = [ pkg-config copyDesktopItems wrapQtAppsHook ];
 
   buildInputs = [
     cairo
@@ -40,15 +42,21 @@ mkDerivation rec {
     libspiro
     lua5
     qtbase
-    texlive
+    qtsvg
     zlib
+  ] ++ (lib.optionals withTeXLive [
+    texliveSmall
+  ]);
+
+  makeFlags = [
+    "-C src"
+    "IPEPREFIX=${placeholder "out"}"
+    "LUA_PACKAGE=lua"
+    "MOC=${buildPackages.qt6Packages.qtbase}/libexec/moc"
+    "IPE_NO_SPELLCHECK=1" # qtSpell is not yet packaged
   ];
 
-  IPEPREFIX = placeholder "out";
-  URWFONTDIR = "${texlive}/texmf-dist/fonts/type1/urw/";
-  LUA_PACKAGE = "lua";
-
-  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ texlive ]}" ];
+  qtWrapperArgs = lib.optionals withTeXLive [ "--prefix PATH : ${lib.makeBinPath [ texliveSmall ]}" ];
 
   enableParallelBuilding = true;
 
@@ -60,12 +68,10 @@ mkDerivation rec {
       comment = "A drawing editor for creating figures in PDF format";
       exec = "ipe";
       icon = "ipe";
-      mimeType = "text/xml;application/pdf";
-      categories = "Graphics;Qt;";
-      extraDesktopEntries = {
-        StartupWMClass = "ipe";
-        StartupNotify = "true";
-      };
+      mimeTypes = [ "text/xml" "application/pdf" ];
+      categories = [ "Graphics" "Qt" ];
+      startupNotify = true;
+      startupWMClass = "ipe";
     })
   ];
 
@@ -75,7 +81,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An editor for drawing figures";
+    description = "Editor for drawing figures";
     homepage = "http://ipe.otfried.org"; # https not available
     license = licenses.gpl3Plus;
     longDescription = ''

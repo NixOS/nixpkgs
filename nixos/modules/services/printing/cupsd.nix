@@ -4,9 +4,10 @@ with lib;
 
 let
 
-  inherit (pkgs) cups cups-pk-helper cups-filters;
+  inherit (pkgs) cups-pk-helper cups-filters xdg-utils;
 
   cfg = config.services.printing;
+  cups = cfg.package;
 
   avahiEnabled = config.services.avahi.enable;
   polkitEnabled = config.security.polkit.enable;
@@ -108,6 +109,12 @@ let
   containsGutenprint = pkgs: length (filterGutenprint pkgs) > 0;
   getGutenprint = pkgs: head (filterGutenprint pkgs);
 
+  parsePorts = addresses: let
+    splitAddress = addr: strings.splitString ":" addr;
+    extractPort = addr: builtins.foldl' (a: b: b) "" (splitAddress addr);
+  in
+    builtins.map (address: strings.toInt (extractPort address)) addresses;
+
 in
 
 {
@@ -131,6 +138,17 @@ in
         default = false;
         description = ''
           Whether to enable printing support through the CUPS daemon.
+        '';
+      };
+
+      package = lib.mkPackageOption pkgs "cups" {};
+
+      stateless = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set, all state directories relating to CUPS will be removed on
+          startup of the service.
         '';
       };
 
@@ -160,6 +178,15 @@ in
         apply = concatMapStringsSep "\n" (x: "Allow ${x}");
         description = ''
           From which hosts to allow unconditional access.
+        '';
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open the firewall for TCP/UDP ports specified in
+          listenAdrresses option.
         '';
       };
 
@@ -211,7 +238,7 @@ in
         default = "";
         description = ''
           Extra contents of the configuration file of the CUPS daemon
-          (<filename>cups-files.conf</filename>).
+          ({file}`cups-files.conf`).
         '';
       };
 
@@ -225,7 +252,7 @@ in
           '';
         description = ''
           Extra contents of the configuration file of the CUPS daemon
-          (<filename>cupsd.conf</filename>).
+          ({file}`cupsd.conf`).
         '';
       };
 
@@ -239,7 +266,7 @@ in
           '';
         description = ''
           The contents of the client configuration.
-          (<filename>client.conf</filename>)
+          ({file}`client.conf`)
         '';
       };
 
@@ -252,7 +279,7 @@ in
           '';
         description = ''
           The contents of the configuration. file of the CUPS Browsed daemon
-          (<filename>cups-browsed.conf</filename>)
+          ({file}`cups-browsed.conf`)
         '';
       };
 
@@ -262,7 +289,7 @@ in
           Address @LOCAL
         '';
         description = ''
-          The contents of <filename>/etc/cups/snmp.conf</filename>. See "man
+          The contents of {file}`/etc/cups/snmp.conf`. See "man
           cups-snmp.conf" for a complete description.
         '';
       };
@@ -275,8 +302,8 @@ in
           CUPS drivers to use. Drivers provided by CUPS, cups-filters,
           Ghostscript and Samba are added unconditionally. If this list contains
           Gutenprint (i.e. a derivation with
-          <literal>meta.isGutenprint = true</literal>) the PPD files in
-          <filename>/var/lib/cups/ppd</filename> will be updated automatically
+          `meta.isGutenprint = true`) the PPD files in
+          {file}`/var/lib/cups/ppd` will be updated automatically
           to avoid errors due to incompatible versions.
         '';
       };
@@ -304,10 +331,13 @@ in
         description = "CUPS printing services";
       };
 
-    environment.systemPackages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
+    # We need xdg-open (part of xdg-utils) for the desktop-file to proper open the users default-browser when opening "Manage Printing"
+    # https://github.com/NixOS/nixpkgs/pull/237994#issuecomment-1597510969
+    environment.systemPackages = [ cups.out xdg-utils ] ++ optional polkitEnabled cups-pk-helper;
     environment.etc.cups.source = "/var/lib/cups";
 
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
+    services.udev.packages = cfg.drivers;
 
     # Allow asswordless printer admin for members of wheel group
     security.polkit.extraConfig = mkIf polkitEnabled ''
@@ -332,7 +362,7 @@ in
 
     systemd.sockets.cups = mkIf cfg.startWhenNeeded {
       wantedBy = [ "sockets.target" ];
-      listenStreams = [ "/run/cups/cups.sock" ]
+      listenStreams = [ "" "/run/cups/cups.sock" ]
         ++ map (x: replaceStrings ["localhost"] ["127.0.0.1"] (removePrefix "*:" x)) cfg.listenAddresses;
     };
 
@@ -343,8 +373,9 @@ in
 
         path = [ cups.out ];
 
-        preStart =
-          ''
+        preStart = lib.optionalString cfg.stateless ''
+          rm -rf /var/cache/cups /var/lib/cups /var/spool/cups
+        '' + ''
             mkdir -m 0700 -p /var/cache/cups
             mkdir -m 0700 -p /var/spool/cups
             mkdir -m 0755 -p ${cfg.tempDir}
@@ -385,10 +416,7 @@ in
             ''}
           '';
 
-          serviceConfig = {
-            PrivateTmp = true;
-            RuntimeDirectory = [ "cups" ];
-          };
+          serviceConfig.PrivateTmp = true;
       };
 
     systemd.services.cups-browsed = mkIf avahiEnabled
@@ -452,6 +480,13 @@ in
       '';
 
     security.pam.services.cups = {};
+
+    networking.firewall = let
+      listenPorts = parsePorts cfg.listenAddresses;
+    in mkIf cfg.openFirewall {
+      allowedTCPPorts = listenPorts;
+      allowedUDPPorts = listenPorts;
+    };
 
   };
 

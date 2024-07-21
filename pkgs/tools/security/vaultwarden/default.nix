@@ -1,45 +1,48 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchurl, nixosTests
+{ lib, stdenv, callPackage, rustPlatform, fetchFromGitHub, nixosTests
 , pkg-config, openssl
-, libiconv, Security, CoreServices
+, libiconv, Security, CoreServices, SystemConfiguration
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
+
+let
+  webvault = callPackage ./webvault.nix {};
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.23.0";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
-    repo = pname;
+    repo = "vaultwarden";
     rev = version;
-    sha256 = "sha256-lbOsJsmZxdBNTbhsGJ1mcjWlJ6802GYM3waTiWYOErY=";
+    hash = "sha256-fQjTSLPJQk1byjX+HADtQvQRqEaEiCmWjgA1WIMLBu4=";
   };
 
-  cargoSha256 = "sha256-ViXpoPkBznB0o/dc/l1r3m0y+z2w58wqlU8/cg8u7tI=";
+  cargoHash = "sha256-VWKkZvuv+B9V6pgxZRGlLIRUdLEh61RpOfEnOtEBKU0=";
 
-  postPatch = ''
-    # Upstream specifies 1.57; nixpkgs has 1.56 which also produces a working
-    # vaultwarden when using RUSTC_BOOTSTRAP=1
-    sed -ri 's/^rust-version = .*//g' Cargo.toml
-  '';
+  # used for "Server Installed" version in admin panel
+  env.VW_VERSION = version;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = with lib; [ openssl ]
-    ++ optionals stdenv.isDarwin [ libiconv Security CoreServices ]
+    ++ optionals stdenv.isDarwin [ libiconv Security CoreServices SystemConfiguration ]
     ++ optional (dbBackend == "mysql") libmysqlclient
     ++ optional (dbBackend == "postgresql") postgresql;
 
-  # vaultwarden depends on rocket v0.5.0-dev, which requires nightly features.
-  # This may be removed if https://github.com/dani-garcia/vaultwarden/issues/712 is fixed.
-  RUSTC_BOOTSTRAP = 1;
-
   buildFeatures = dbBackend;
 
-  passthru.tests = nixosTests.vaultwarden;
+  passthru = {
+    inherit webvault;
+    tests = nixosTests.vaultwarden;
+    updateScript = callPackage ./update.nix {};
+  };
 
   meta = with lib; {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/vaultwarden";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ msteen ivan ];
+    changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${version}";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ dotlambda SuperSandro2000 ];
+    mainProgram = "vaultwarden";
   };
 }

@@ -99,7 +99,7 @@ in
       default     = false;
       description = ''
         Open the firewall ports corresponding to FoundationDB processes and coordinators
-        using <option>config.networking.firewall.*</option>.
+        using {option}`config.networking.firewall.*`.
       '';
     };
 
@@ -175,19 +175,19 @@ in
       default     = "8GiB";
       description = ''
         Maximum memory used by the process. The default value is
-        <literal>8GiB</literal>. When specified without a unit,
-        <literal>MiB</literal> is assumed. This parameter does not
+        `8GiB`. When specified without a unit,
+        `MiB` is assumed. This parameter does not
         change the memory allocation of the program. Rather, it sets
         a hard limit beyond which the process will kill itself and
-        be restarted. The default value of <literal>8GiB</literal>
+        be restarted. The default value of `8GiB`
         is double the intended memory usage in the default
         configuration (providing an emergency buffer to deal with
         memory leaks or similar problems). It is not recommended to
         decrease the value of this parameter below its default
         value. It may be increased if you wish to allocate a very
         large amount of storage engine memory or cache. In
-        particular, when the <literal>storageMemory</literal>
-        parameter is increased, the <literal>memory</literal>
+        particular, when the `storageMemory`
+        parameter is increased, the `memory`
         parameter should be increased by an equal amount.
       '';
     };
@@ -197,14 +197,14 @@ in
       default     = "1GiB";
       description = ''
         Maximum memory used for data storage. The default value is
-        <literal>1GiB</literal>. When specified without a unit,
-        <literal>MB</literal> is assumed. Clusters using the memory
+        `1GiB`. When specified without a unit,
+        `MB` is assumed. Clusters using the memory
         storage engine will be restricted to using this amount of
         memory per process for purposes of data storage. Memory
         overhead associated with storing the data is counted against
         this total. If you increase the
-        <literal>storageMemory</literal>, you should also increase
-        the <literal>memory</literal> parameter by the same amount.
+        `storageMemory`, you should also increase
+        the `memory` parameter by the same amount.
       '';
     };
 
@@ -424,6 +424,6 @@ in
     };
   };
 
-  meta.doc         = ./foundationdb.xml;
+  meta.doc         = ./foundationdb.md;
   meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 }

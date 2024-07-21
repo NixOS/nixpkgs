@@ -30,6 +30,16 @@ mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/testing/mapbox-gl-native/0002-skip-license-check.patch?id=6751a93dca26b0b3ceec9eb151272253a2fe497e";
       sha256 = "1yybwzxbvn0lqb1br1fyg7763p2h117s6mkmywkl4l7qg9daa7ba";
     })
+    (fetchpatch {
+      name = "fix-compilation.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-compilation.patch?h=mapbox-gl-native";
+      hash = "sha256-KgJHyoIdKdnQo+gedns3C+mEXlaTH/UtyQsaYR1T3iI=";
+    })
+    (fetchpatch {
+      name = "fix-narrowing-conversion.patch";
+      url = "https://github.com/mapbox/mapbox-gl-native/commit/2955d0e479f57a39a0af4a0fa7ca7683455cca58.patch";
+      hash = "sha256-Jk7OLb9/mVtc2mm0AL1h9zcSiQ54jogNI+q6ojY0HEo=";
+    })
   ];
 
   postPatch = ''
@@ -45,9 +55,11 @@ mkDerivation rec {
     "-DMBGL_WITH_QT_LIB_ONLY=ON"
     "-DMBGL_WITH_QT_HEADLESS=OFF"
   ];
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=type-limits";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=type-limits";
 
   meta = with lib; {
+    # Does not build against gcc-13, the repository is archived upstream.
+    broken = true;
     description = "Interactive, thoroughly customizable maps in native Android, iOS, macOS, Node.js, and Qt applications, powered by vector tiles and OpenGL";
     homepage = "https://mapbox.com/mobile";
     license = licenses.bsd2;

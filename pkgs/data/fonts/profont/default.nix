@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchzip, mkfontscale }:
+{ lib, stdenv, fetchzip, xorg }:
 
 stdenv.mkDerivation {
   pname = "profont";
   version = "2019-11";
 
   # Note: stripRoot doesn't work because the archive
-  # constains the metadata directory `__MACOSX`.
+  # contains the metadata directory `__MACOSX`.
   src = fetchzip {
     url = "https://tobiasjung.name/downloadfile.php?file=profont-x11.zip";
     sha256 = "12dbm87wvcpmn7nzgzwlk45cybp091diara8blqm6129ps27z6kb";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ mkfontscale ];
+  nativeBuildInputs = [ xorg.mkfontscale ];
 
   installPhase = ''
     mkdir -p "$out/share/fonts/misc"
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://tobiasjung.name/profont/";
-    description = "A monospaced font created to be a most readable font for programming";
+    description = "Monospaced font created to be a most readable font for programming";
     maintainers = with maintainers; [ myrl ];
     license = licenses.mit;
     platforms = platforms.all;

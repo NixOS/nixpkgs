@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.19";
+  version = "4.0.23";
   pname = "flmsg";
 
   src = fetchurl {
     url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Pm5qAUNbenkX9V3OSQWW09iIRR/WB1jB4ioyRCZmjqs=";
+    sha256 = "sha256-3eR0wrzkNjlqm5xW5dtgihs33cVUmZeS0/rf+xnPeRY=";
   };
 
   buildInputs = [
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dysinger ];
     platforms = lib.platforms.linux;
+    mainProgram = "flmsg";
   };
 }

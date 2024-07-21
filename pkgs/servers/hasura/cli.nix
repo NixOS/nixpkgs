@@ -9,7 +9,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/hasura" ];
 
-  vendorSha256 = "0c0zn3a3bq3g13zj1b7hz1gfd9mcc5wlch80vjgp31vgm23vvd8d";
+  vendorHash = "sha256-S6xyevC/7dpn2Ana5mkROwIOvtQVPThoNEVKkXQmUGY=";
 
   doCheck = false;
 
@@ -30,5 +30,6 @@ buildGoModule rec {
   meta = {
     inherit (hasura-graphql-engine.meta) license homepage maintainers;
     description = "Hasura GraphQL Engine CLI";
+    mainProgram = "hasura";
   };
 }

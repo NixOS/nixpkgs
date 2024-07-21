@@ -1,21 +1,20 @@
-{ lib, buildDunePackage, fetchFromGitHub }:
+{ lib, buildDunePackage, fetchurl }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
   pname = "owee";
-  version = "0.3";
+  version = "0.7";
 
-  src = fetchFromGitHub {
-    owner = "let-def";
-    repo = "owee";
-    rev = "v${version}";
-    sha256 = "0jp8ca57488d7sj2nqy4yxcdpda6sxx51yyi8k6888hbinhyqp0j";
+  src = fetchurl {
+    url =
+      "https://github.com/let-def/owee/releases/download/v${version}/owee-${version}.tbz";
+    hash = "sha256-9FXcmddHg5mk5UWgYd4kTPOLOY/p6A/OBuvfas4elUA=";
   };
 
-  meta = {
-    description = "An experimental OCaml library to work with DWARF format";
-    inherit (src.meta) homepage;
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+  meta = with lib; {
+    description = "Experimental OCaml library to work with DWARF format";
+    homepage = "https://github.com/let-def/owee/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vbgl alizter ];
   };
 }

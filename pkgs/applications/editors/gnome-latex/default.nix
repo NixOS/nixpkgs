@@ -1,40 +1,40 @@
-{ lib
-, stdenv
+{ stdenv
+, lib
 , fetchurl
 , fetchpatch
 , autoreconfHook
 , gtk-doc
 , vala
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , gsettings-desktop-schemas
 , gspell
-, gtksourceview4
+, libgedit-gtksourceview
+, libgedit-tepl
 , libgee
-, tepl
-, amtk
+, adwaita-icon-theme
 , gnome
 , glib
 , pkg-config
-, intltool
+, gettext
 , itstool
 , libxml2
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.38.0";
+  version = "3.46.0";
   pname = "gnome-latex";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xqd49pgi82dygqnxj08i1v22b0vwwhx3zvdinhrx4jny339yam8";
+    sha256 = "1nVVY5sqFaiuvVTzNTVORP40MxQ648s8ynqOJvgRKto=";
   };
 
   patches = [
-    # Fix build with latest tepl.
+    # Adapt for Tepl -> libgedit-tepl rename
     (fetchpatch {
-      url = "https://gitlab.gnome.org/Archive/gnome-latex/commit/e1b01186f8a4e5d3fee4c9ccfbedd6d098517df9.patch";
-      sha256 = "H8cbp5hDZoXytEdKE2D/oYHNKIbEFwxQoEaC4JMfGHY=";
+      url = "https://gitlab.gnome.org/swilmet/gnome-latex/-/commit/41e532c427f43a5eed9081766963d6e29a9975a1.patch";
+      hash = "sha256-gu8o/er4mP92dE5gWg9lGx5JwTHB8ytk3EMNlwlIpq4=";
     })
   ];
 
@@ -44,21 +44,20 @@ stdenv.mkDerivation rec {
     gtk-doc
     vala
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     itstool
-    intltool
+    gettext
   ];
 
   buildInputs = [
-    amtk
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     glib
     gsettings-desktop-schemas
     gspell
-    gtksourceview4
+    libgedit-gtksourceview
+    libgedit-tepl
     libgee
     libxml2
-    tepl
   ];
 
   configureFlags = [
@@ -67,7 +66,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   passthru.updateScript = gnome.updateScript {
     packageName = pname;
@@ -75,10 +74,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/GNOME-LaTeX";
-    description = "A LaTeX editor for the GNOME desktop";
-    maintainers = [ maintainers.manveru ];
+    homepage = "https://gitlab.gnome.org/swilmet/gnome-latex";
+    description = "LaTeX editor for the GNOME desktop";
+    maintainers = with maintainers; [ manveru bobby285271 ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "gnome-latex";
   };
 }

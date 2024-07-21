@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.pps.jussieu.fr/~jch/software/polipo/";
-    description = "A small and fast caching web proxy";
+    description = "Small and fast caching web proxy";
     license = licenses.mit;
-    maintainers = with maintainers; [ phreedom ehmry ];
+    maintainers = with maintainers; [ ehmry ];
     platforms = platforms.all;
     knownVulnerabilities = [
       "Unmaintained upstream: https://github.com/jech/polipo/commit/4d42ca1b5849"

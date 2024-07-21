@@ -1,32 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-xdist
-, torchvision
-, pythonOlder
-, matplotlib
-, mock
-, pytorch
-, scikit-learn
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-xdist,
+  torchvision,
+  pythonOlder,
+  matplotlib,
+  mock,
+  packaging,
+  torch,
+  scikit-learn,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.4.6";
+  version = "0.5.0.post2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-dlKGXjUUnyYmPDilo0LQg9OkSkBnMYNgzlFLIfI0T6I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Lg7ASODYwWWhC45X4+Bk50gSlSWwgn2tM4atLXWbQLI=";
   };
 
-  checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];
-  propagatedBuildInputs = [ pytorch scikit-learn tqdm ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    matplotlib
+    mock
+    pytest-xdist
+    torchvision
+  ];
+  propagatedBuildInputs = [
+    packaging
+    torch
+    scikit-learn
+    tqdm
+  ];
 
-  # runs succesfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
+  # runs successfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
   doCheck = pythonOlder "3.9";
 
   # Some packages are not in NixPkgs; other tests try to build distributed

@@ -63,6 +63,7 @@ perlPackages.buildPerlPackage rec {
 
     cp -r bin $out
     cp -r lib $out
+    cp -r share $out
 
     for cur in $out/bin/*; do
       if [ -x "$cur" ]; then
@@ -77,7 +78,7 @@ perlPackages.buildPerlPackage rec {
   meta = with lib; {
     homepage = "http://www.fusioninventory.org";
     description = "FusionInventory unified Agent for UNIX, Linux, Windows and MacOSX";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [ maintainers.phile314 ];
   };
 }

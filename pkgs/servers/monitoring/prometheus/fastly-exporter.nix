@@ -1,22 +1,31 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+}:
 
 buildGoModule rec {
   pname = "fastly-exporter";
-  version = "6.1.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
-    owner = "peterbourgon";
-    repo = pname;
+    owner = "fastly";
+    repo = "fastly-exporter";
     rev = "v${version}";
-    sha256 = "0my0pcxix5rk73m5ciz513nwmjcm7vjs6r8wg3vddm0xixv7zq94";
+    hash = "sha256-SpYdcLPknI7ecZ2ef3kJ2nBkQ39vzjk1fNTdDaFZwO0=";
   };
 
-  vendorSha256 = "1w9asky8h8l5gc0c6cv89m38qw50hyhma8qbsw3zirplhk9mb3r2";
+  vendorHash = "sha256-k/n9muWFtTBv8PxMdevFBeTtAOIiCDrK3GoCGeMtBn4=";
+
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) fastly;
+  };
 
   meta = with lib; {
     description = "Prometheus exporter for the Fastly Real-time Analytics API";
-    homepage = "https://github.com/peterbourgon/fastly-exporter";
+    homepage = "https://github.com/fastly/fastly-exporter";
     license = licenses.asl20;
     maintainers = teams.deshaw.members;
+    mainProgram = "fastly-exporter";
   };
 }

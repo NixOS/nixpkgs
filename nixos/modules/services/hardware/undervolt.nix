@@ -5,13 +5,14 @@ let
   cfg = config.services.undervolt;
 
   mkPLimit = limit: window:
-    if (isNull limit && isNull window) then null
-    else assert asserts.assertMsg (!isNull limit && !isNull window) "Both power limit and window must be set";
+    if (limit == null && window == null) then null
+    else assert asserts.assertMsg (limit != null && window != null) "Both power limit and window must be set";
       "${toString limit} ${toString window}";
   cliArgs = lib.cli.toGNUCommandLine {} {
     inherit (cfg)
       verbose
       temp
+      turbo
       ;
     # `core` and `cache` are both intentionally set to `cfg.coreOffset` as according to the undervolt docs:
     #
@@ -36,7 +37,7 @@ in
     enable = mkEnableOption ''
        Undervolting service for Intel CPUs.
 
-       Warning: This service is not endorsed by Intel and may permanently damage your hardware. Use at your own risk!
+       Warning: This service is not endorsed by Intel and may permanently damage your hardware. Use at your own risk
     '';
 
     verbose = mkOption {
@@ -47,14 +48,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.undervolt;
-      defaultText = literalExpression "pkgs.undervolt";
-      description = ''
-        undervolt derivation to use.
-      '';
-    };
+    package = mkPackageOption pkgs "undervolt" { };
 
     coreOffset = mkOption {
       type = types.nullOr types.int;
@@ -112,6 +106,14 @@ in
       '';
     };
 
+    turbo = mkOption {
+      type = types.nullOr types.int;
+      default = null;
+      description = ''
+        Changes the Intel Turbo feature status (1 is disabled and 0 is enabled).
+      '';
+    };
+
     p1.limit = mkOption {
       type = with types; nullOr int;
       default = null;
@@ -159,13 +161,11 @@ in
   };
 
   config = mkIf cfg.enable {
-    boot.kernelModules = [ "msr" ];
+    hardware.cpu.x86.msr.enable = true;
 
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.undervolt = {
-      path = [ pkgs.undervolt ];
-
       description = "Intel Undervolting Service";
 
       # Apply undervolt on boot, nixos generation switch and resume
@@ -175,7 +175,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         Restart = "no";
-        ExecStart = "${pkgs.undervolt}/bin/undervolt ${toString cliArgs}";
+        ExecStart = "${cfg.package}/bin/undervolt ${toString cliArgs}";
       };
     };
 

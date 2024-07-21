@@ -2,14 +2,14 @@
 
 buildDunePackage rec {
   pname = "routes";
-  version = "0.9.1";
+  version = "2.0.0";
 
-  useDune2 = true;
+  duneVersion = "3";
   minimalOCamlVersion = "4.05";
 
   src = fetchurl {
     url = "https://github.com/anuragsoni/routes/releases/download/${version}/routes-${version}.tbz";
-    sha256 = "0h2c1p5w6237c1lmsl5c8q2dj5dq20gf2cmb12nbmlfn12sfmcrl";
+    hash = "sha256-O2KdaYwrAOUEwTtM14NUgGNxnc8BWAycP1EEuB6w1og=";
   };
 
   meta = with lib; {

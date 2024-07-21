@@ -23,21 +23,21 @@ in {
 
         Example users file with plain-text passwords:
 
-        <literal>
+        ```
           test1:CL:password1
           test2:CL:password2
-        </literal>
+        ```
 
         Example users file with md5-crypted passwords:
 
-        <literal>
+        ```
           test1:CR:$1$tFkisVd2$1GA8JXkRmTXdLDytM/i3a1
           test2:CR:$1$rkpibm5J$Aq1.9VtYAn0JrqZ8M.1ME.
-        </literal>
+        ```
 
         You can generate md5-crypted passwords via https://unix4lyfe.org/crypt/
         Note that htpasswd tool generates incompatible md5-crypted passwords.
-        Consult <link xlink:href="https://github.com/z3APA3A/3proxy/wiki/How-To-(incomplete)#USERS">documentation</link> for more information.
+        Consult [documentation](https://github.com/z3APA3A/3proxy/wiki/How-To-%28incomplete%29#USERS) for more information.
       '';
     };
     services = mkOption {
@@ -58,32 +58,14 @@ in {
             description = ''
               Service type. The following values are valid:
 
-              <itemizedlist>
-                <listitem><para>
-                  <literal>"proxy"</literal>: HTTP/HTTPS proxy (default port 3128).
-                </para></listitem>
-                <listitem><para>
-                  <literal>"socks"</literal>: SOCKS 4/4.5/5 proxy (default port 1080).
-                </para></listitem>
-                <listitem><para>
-                  <literal>"pop3p"</literal>: POP3 proxy (default port 110).
-                </para></listitem>
-                <listitem><para>
-                  <literal>"ftppr"</literal>: FTP proxy (default port 21).
-                </para></listitem>
-                <listitem><para>
-                  <literal>"admin"</literal>: Web interface (default port 80).
-                </para></listitem>
-                <listitem><para>
-                  <literal>"dnspr"</literal>: Caching DNS proxy (default port 53).
-                </para></listitem>
-                <listitem><para>
-                  <literal>"tcppm"</literal>: TCP portmapper.
-                </para></listitem>
-                <listitem><para>
-                  <literal>"udppm"</literal>: UDP portmapper.
-                </para></listitem>
-              </itemizedlist>
+              - `"proxy"`: HTTP/HTTPS proxy (default port 3128).
+              - `"socks"`: SOCKS 4/4.5/5 proxy (default port 1080).
+              - `"pop3p"`: POP3 proxy (default port 110).
+              - `"ftppr"`: FTP proxy (default port 21).
+              - `"admin"`: Web interface (default port 80).
+              - `"dnspr"`: Caching DNS proxy (default port 53).
+              - `"tcppm"`: TCP portmapper.
+              - `"udppm"`: UDP portmapper.
             '';
           };
           bindAddress = mkOption {
@@ -116,21 +98,13 @@ in {
             description = ''
               Authentication type. The following values are valid:
 
-              <itemizedlist>
-                <listitem><para>
-                  <literal>"none"</literal>: disables both authentication and authorization. You can not use ACLs.
-                </para></listitem>
-                <listitem><para>
-                  <literal>"iponly"</literal>: specifies no authentication. ACLs authorization is used.
-                </para></listitem>
-                <listitem><para>
-                  <literal>"strong"</literal>: authentication by username/password. If user is not registered their access is denied regardless of ACLs.
-                </para></listitem>
-              </itemizedlist>
+              - `"none"`: disables both authentication and authorization. You can not use ACLs.
+              - `"iponly"`: specifies no authentication. ACLs authorization is used.
+              - `"strong"`: authentication by username/password. If user is not registered their access is denied regardless of ACLs.
 
               Double authentication is possible, e.g.
 
-              <literal>
+              ```
                 {
                   auth = [ "iponly" "strong" ];
                   acl = [
@@ -144,7 +118,7 @@ in {
                     }
                   ];
                 }
-              </literal>
+              ```
               In this example strong username authentication is not required to access 192.168.0.0/16.
             '';
           };
@@ -157,14 +131,8 @@ in {
                   description = ''
                     ACL rule. The following values are valid:
 
-                    <itemizedlist>
-                      <listitem><para>
-                        <literal>"allow"</literal>: connections allowed.
-                      </para></listitem>
-                      <listitem><para>
-                        <literal>"deny"</literal>: connections not allowed.
-                      </para></listitem>
-                    </itemizedlist>
+                    - `"allow"`: connections allowed.
+                    - `"deny"`: connections not allowed.
                   '';
                 };
                 users = mkOption {
@@ -190,7 +158,7 @@ in {
                   description = ''
                     List of target IP ranges, use empty list for any.
                     May also contain host names instead of addresses.
-                    It's possible to use wildmask in the begginning and in the the end of hostname, e.g. *badsite.com or *badcontent*.
+                    It's possible to use wildmask in the beginning and in the the end of hostname, e.g. `*badsite.com` or `*badcontent*`.
                     Hostname is only checked if hostname presents in request.
                   '';
                 };
@@ -230,7 +198,7 @@ in {
             example = "-46";
             description = ''
               Extra arguments for service.
-              Consult "Options" section in <link xlink:href="https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg">documentation</link> for available arguments.
+              Consult "Options" section in [documentation](https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg) for available arguments.
             '';
           };
           extraConfig = mkOption {
@@ -238,7 +206,7 @@ in {
             default = null;
             description = ''
               Extra configuration for service. Use this to configure things like bandwidth limiter or ACL-based redirection.
-              Consult <link xlink:href="https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg">documentation</link> for available options.
+              Consult [documentation](https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg) for available options.
             '';
           };
         };
@@ -341,7 +309,7 @@ in {
       default = null;
       description = ''
         Extra configuration, appended to the 3proxy configuration file.
-        Consult <link xlink:href="https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg">documentation</link> for available options.
+        Consult [documentation](https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg) for available options.
       '';
     };
   };

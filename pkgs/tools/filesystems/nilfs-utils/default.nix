@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libuuid, libselinux
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libuuid, libselinux
 , e2fsprogs }:
 
 stdenv.mkDerivation rec {
   pname = "nilfs-utils";
-  version = "2.2.8";
+  version = "2.2.11";
 
   src = fetchFromGitHub {
     owner = "nilfs-dev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "094mw7dsyppyiyzfdnf3f5hlkrh4bidk1kvvpn1kcvw5vn2xpfk7";
+    sha256 = "sha256-qvs0PBkMYzGfIQ/Z2Wz0aHe2Y2Ia6fA4pMSk5Jhejf4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -45,8 +45,7 @@ stdenv.mkDerivation rec {
     description = "NILFS utilities";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
-    license =  with licenses; [ gpl2 lgpl21 ];
+    license =  with licenses; [ gpl2Plus lgpl21 ];
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
-    updateWalker = true;
   };
 }

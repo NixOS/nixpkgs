@@ -17,8 +17,8 @@ in
         Whether to enable postfixadmin.
 
         Also enables nginx virtual host management.
-        Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-        See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+        Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+        See [](#opt-services.nginx.virtualHosts) for further information.
       '';
     };
 
@@ -42,7 +42,7 @@ in
       type = types.path;
       description = ''
         Password file for the admin.
-        Generate with <literal>php -r "echo password_hash('some password here', PASSWORD_DEFAULT);"</literal>
+        Generate with `php -r "echo password_hash('some password here', PASSWORD_DEFAULT);"`
       '';
     };
 
@@ -52,7 +52,7 @@ in
         default = "postfixadmin";
         description = ''
           Username for the postgresql connection.
-          If <literal>database.host</literal> is set to <literal>localhost</literal>, a unix user and group of the same name will be created as well.
+          If `database.host` is set to `localhost`, a unix user and group of the same name will be created as well.
         '';
       };
       host = mkOption {
@@ -60,14 +60,14 @@ in
         default = "localhost";
         description = ''
           Host of the postgresql server. If this is not set to
-          <literal>localhost</literal>, you have to create the
+          `localhost`, you have to create the
           postgresql user and database yourself, with appropriate
           permissions.
         '';
       };
       passwordFile = mkOption {
         type = types.path;
-        description = "Password file for the postgresql connection. Must be readable by user <literal>nginx</literal>.";
+        description = "Password file for the postgresql connection. Must be readable by user `nginx`.";
       };
       dbname = mkOption {
         type = types.str;
@@ -99,7 +99,11 @@ in
       ${cfg.extraConfig}
     '';
 
-    systemd.tmpfiles.rules = [ "d /var/cache/postfixadmin/templates_c 700 ${user} ${user}" ];
+    systemd.tmpfiles.settings."10-postfixadmin"."/var/cache/postfixadmin/templates_c".d = {
+      inherit user;
+      group = user;
+      mode = "700";
+    };
 
     services.nginx = {
       enable = true;
@@ -114,7 +118,7 @@ in
               location ~* \.php$ {
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
                 fastcgi_pass unix:${fpm.socket};
-                include ${pkgs.nginx}/conf/fastcgi_params;
+                include ${config.services.nginx.package}/conf/fastcgi_params;
                 include ${pkgs.nginx}/conf/fastcgi.conf;
               }
             '';
@@ -177,7 +181,7 @@ in
 
     services.phpfpm.pools.postfixadmin = {
       user = user;
-      phpPackage = pkgs.php74;
+      phpPackage = pkgs.php81;
       phpOptions = ''
         error_log = 'stderr'
         log_errors = on

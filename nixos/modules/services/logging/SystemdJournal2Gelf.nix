@@ -29,18 +29,11 @@ in
         default = "";
         description = ''
           Any extra flags to pass to SystemdJournal2Gelf. Note that
-          these are basically <literal>journalctl</literal> flags.
+          these are basically `journalctl` flags.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.systemd-journal2gelf;
-        defaultText = literalExpression "pkgs.systemd-journal2gelf";
-        description = ''
-          SystemdJournal2Gelf package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "systemd-journal2gelf" { };
 
     };
   };

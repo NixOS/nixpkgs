@@ -28,13 +28,19 @@ in
         description = "Group to run under when setuid is not enabled.";
       };
 
+      debug = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable debug mode.";
+      };
+
       settings = mkOption {
         type = format.type;
         default = { };
         description = ''
           Attrset that is converted and passed as config file. Available
           options can be found at
-          <link xlink:href="https://github.com/miquels/webdav-server-rs/blob/master/webdav-server.toml">here</link>.
+          [here](https://github.com/miquels/webdav-server-rs/blob/master/webdav-server.toml).
         '';
         example = literalExpression ''
           {
@@ -111,7 +117,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.webdav-server-rs}/bin/webdav-server -c ${cfg.configFile}";
+        ExecStart = "${pkgs.webdav-server-rs}/bin/webdav-server ${lib.optionalString cfg.debug "--debug"} -c ${cfg.configFile}";
 
         CapabilityBoundingSet = [
           "CAP_SETUID"

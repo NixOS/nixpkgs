@@ -1,31 +1,40 @@
-{ lib
-, buildPythonPackage
-, envoy-utils
-, fetchFromGitHub
-, httpx
-, pytest-asyncio
-, pytest-raises
-, pytestCheckHook
-, respx
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  envoy-utils,
+  fetchFromGitHub,
+  httpx,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-raises,
+  pythonOlder,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "envoy-reader";
-  version = "0.20.0";
+  version = "0.21.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jesserizzo";
     repo = "envoy_reader";
     rev = version;
-    sha256 = "sha256-nPB1Fvb1qwLHeFkXP2jXixD2ZGA09MtS1qXRhYGt0fM=";
+    hash = "sha256-aIpZ4ln4L57HwK8H0FqsyNnXosnAp3ingrJI6/MPS90=";
   };
 
   propagatedBuildInputs = [
+    beautifulsoup4
     envoy-utils
     httpx
+    pyjwt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-raises
     pytest-asyncio
     pytestCheckHook
@@ -34,7 +43,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner>=5.2" ""
+      --replace "pytest-runner>=5.2" "" \
+      --replace "pyjwt==2.1.0" "pyjwt>=2.1.0"
   '';
 
   pythonImportsCheck = [ "envoy_reader" ];

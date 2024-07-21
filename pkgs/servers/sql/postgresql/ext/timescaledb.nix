@@ -1,27 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5 }:
-
-# # To enable on NixOS:
-# config.services.postgresql = {
-#   extraPlugins = [ pkgs.timescaledb ];
-#   extraConfig = "shared_preload_libraries = 'timescaledb'";
-# }
+{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, enableUnfree ? true }:
 
 stdenv.mkDerivation rec {
-  pname = "timescaledb";
-  version = "2.5.1";
+  pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
+  version = "2.14.2";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl libkrb5 ];
 
   src = fetchFromGitHub {
-    owner  = "timescale";
-    repo   = "timescaledb";
-    # some branches are named like tags which confuses git
-    rev    = "refs/tags/${version}";
-    sha256 = "sha256-3G/foe4TlKEKP0Vi60oD7ZoxYdkNipyoOhGoF+GojZw=";
+    owner = "timescale";
+    repo = "timescaledb";
+    rev = version;
+    hash = "sha256-gJViEWHtIczvIiQKuvvuwCfWJMxAYoBhCHhD75no6r0=";
   };
 
   cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
+    ++ lib.optionals (!enableUnfree) [ "-DAPACHE_ONLY=ON" ]
     ++ lib.optionals stdenv.isDarwin [ "-DLINTER=OFF" ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
@@ -40,11 +34,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
-    homepage    = "https://www.timescale.com/";
-    changelog   = "https://github.com/timescale/timescaledb/raw/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ volth marsam ];
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.asl20;
-    broken      = versionOlder postgresql.version "12";
+    homepage = "https://www.timescale.com/";
+    changelog = "https://github.com/timescale/timescaledb/blob/${version}/CHANGELOG.md";
+    maintainers = with maintainers; [ ];
+    platforms = postgresql.meta.platforms;
+    license = with licenses; if enableUnfree then tsl else asl20;
+    broken = versionOlder postgresql.version "13";
   };
 }

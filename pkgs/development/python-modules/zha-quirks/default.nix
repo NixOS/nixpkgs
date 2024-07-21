@@ -1,31 +1,52 @@
-{ lib
-, aiohttp
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, zigpy
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.65";
+  version = "0.0.117";
+  pyproject = true;
+
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha-device-handlers";
-    rev = version;
-    sha256 = "sha256-3Lcmc95KotFMlL44zDugIQkHtplMMlyWjSb+SLehaqs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-uk1G8X5TLuA4spTrd+077wggCooqvqJZh3NIwC4/BFM=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     zigpy
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # RuntimeError: no running event loop
+    "test_mfg_cluster_events"
+    "test_co2_sensor"
+    "test_smart_air_sensor"
   ];
 
   pythonImportsCheck = [ "zhaquirks" ];
@@ -33,8 +54,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "ZHA Device Handlers are custom quirks implementations for Zigpy";
     homepage = "https://github.com/dmulcahey/zha-device-handlers";
+    changelog = "https://github.com/zigpy/zha-device-handlers/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;
   };
 }

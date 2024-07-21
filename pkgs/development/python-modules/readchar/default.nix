@@ -1,19 +1,47 @@
-{ lib, buildPythonPackage, fetchFromGitHub, flake8, pytest, pytest-cov, pexpect }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # tests
+  pytestCheckHook,
+  pexpect,
+}:
 
 buildPythonPackage rec {
   pname = "readchar";
-  version = "2.0.0";
+  version = "4.0.6";
+  pyproject = true;
 
   # Don't use wheels on PyPI
   src = fetchFromGitHub {
     owner = "magmax";
     repo = "python-${pname}";
-    rev = version;
-    sha256 = "0j1vj4f2j8x5f40rs6h8qplklcxcdbvkkvjpkpmr1xagw05i12bm";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XowLJ9YAHhP9nInFVYtoLEOmlWBRWQX259vwm9SVVZU=";
   };
 
-  nativeBuildInputs = [ flake8 ];
-  checkInputs = [ pytest pytest-cov pexpect ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=readchar" "" \
+      --replace "attr: readchar.__version__" "${version}"
+    # run Linux tests on Darwin as well
+    # see https://github.com/magmax/python-readchar/pull/99 for why this is not upstreamed
+    substituteInPlace tests/linux/conftest.py \
+      --replace 'sys.platform.startswith("linux")' 'sys.platform.startswith(("darwin", "linux"))'
+  '';
+
+  nativeBuildInputs = [ setuptools ];
+
+  pythonImportsCheck = [ "readchar" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pexpect
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/magmax/python-readchar";

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "mod";
-  version = "0.4.1";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "marwan-at-work";
     repo = "mod";
     rev = "v${version}";
-    sha256 = "sha256-IPdZ2PSS4rYVoMxrunse8Z2NHXLjXAoBcDvB6D70ki0=";
+    sha256 = "sha256-QkLARUN/NiN0D6VEhosdFJSce6DP+sWRWFwAEocZaOQ=";
   };
 
-  vendorSha256 = "sha256-1+06/yXi07iWZhcCEGNnoL2DpeVRYMW/NdyEhZQePbk=";
+  vendorHash = "sha256-5A4W99wcuXMWH0s+uykBWuKCxo8wr3GbTpUKj+Ql0os=";
 
   doCheck = false;
 
@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Automated Semantic Import Versioning Upgrades for Go";
+    mainProgram = "mod";
     longDescription = ''
       Command line tool to upgrade/downgrade Semantic Import Versioning in Go
       Modules.

@@ -1,38 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pytest-asyncio
-, python-rapidjson
-, pretend
-, freezegun
-, twisted
-, simplejson
-, six
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  pretend,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "21.2.0";
+  version = "24.4.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7ac42b565e1295712313f91edbcb64e0840a9037d888c8954f11fa6c43270e99";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "hynek";
+    repo = "structlog";
+    rev = "refs/tags/${version}";
+    hash = "sha256-z3ecgsep/BQJ+Fv78rV4XiFU4+1aaUEfNEtIqy44KV4=";
   };
 
-  checkInputs = [ pytest pytest-asyncio pretend freezegun simplejson twisted ]
-    ++ lib.optionals (pythonAtLeast "3.6") [ python-rapidjson ];
-  propagatedBuildInputs = [ six ];
+  build-system = [
+    hatch-fancy-pypi-readme
+    hatch-vcs
+    hatchling
+  ];
 
-  checkPhase = ''
-    # rm tests/test_twisted.py*
-    py.test
-  '';
+  nativeCheckInputs = [
+    freezegun
+    pretend
+    pytest-asyncio
+    pytestCheckHook
+    simplejson
+  ];
 
-  meta = {
+  pythonImportsCheck = [ "structlog" ];
+
+  meta = with lib; {
     description = "Painless structural logging";
-    homepage = "http://www.structlog.org/";
-    license = lib.licenses.asl20;
+    homepage = "https://github.com/hynek/structlog";
+    changelog = "https://github.com/hynek/structlog/blob/${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

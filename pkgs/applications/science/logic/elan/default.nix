@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "1.3.1";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "sha256-QNVzpnT77+9PXhq4Yz0q3o+GiQTVy7dOrg2yBTscoek=";
+    hash = "sha256-/g5bO3UQcg0XYm62KdoWcVQqOV3SIedWUYLufEcblmE=";
   };
 
-  cargoSha256 = "sha256-G70QopoMqFrkOnuui3+3cEHYvmnf0meX1Ecv4q8FCpM=";
+  cargoHash = "sha256-f8YVUTxHX1FY2p73DlnLDtCJaG/0JImUtJFraV6ErNM=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -24,9 +24,11 @@ rustPlatform.buildRustPackage rec {
 
   patches = lib.optionals stdenv.isLinux [
     # Run patchelf on the downloaded binaries.
-    # This necessary because Lean 4 now dynamically links to GMP.
+    # This is necessary because Lean 4 is now dynamically linked.
     (runCommand "0001-dynamically-patchelf-binaries.patch" {
         CC = stdenv.cc;
+        cc = "${stdenv.cc}/bin/cc";
+        ar = "${stdenv.cc}/bin/ar";
         patchelf = patchelf;
         shell = runtimeShell;
       } ''
@@ -34,6 +36,8 @@ rustPlatform.buildRustPackage rec {
      substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
        --subst-var patchelf \
        --subst-var dynamicLinker \
+       --subst-var cc \
+       --subst-var ar \
        --subst-var shell
     '')
   ];
@@ -57,7 +61,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Small tool to manage your installations of the Lean theorem prover";
     homepage = "https://github.com/leanprover/elan";
+    changelog = "https://github.com/leanprover/elan/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner ];
+    mainProgram = "elan";
   };
 }

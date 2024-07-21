@@ -1,29 +1,56 @@
 { lib
+, stdenv
+, darwin
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , lima
+, lima-bin
 , makeWrapper
+, qemu
+, testers
+, colima
+  # use lima-bin on darwin to support native macOS virtualization
+  # https://github.com/NixOS/nixpkgs/pull/209171
+, lima-drv ? if stdenv.isDarwin then lima-bin else lima
 }:
 
 buildGoModule rec {
   pname = "colima";
-  version = "0.2.2";
+  version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vWNkYsT2XF+oMOQ3pb1+/a207js8B+EmVanRQrYE/2A=";
+    hash = "sha256-gXLKqSmlj3TJNmqYuByJ2CcUCV3xD239YeuWzrN97lo=";
+    # We need the git revision
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse --short HEAD > $out/.git-revision
+      rm -rf $out/.git
+    '';
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
 
-  vendorSha256 = "sha256-F1ym88JrJWzsBg89Y1ufH4oefIRBwTGOw72BrjtpvBw=";
+  vendorHash = "sha256-OXK6ZHKghKxgETjY3mg1R2yp8pPpy5yV8M4K+Hh9Fjw=";
+
+  # disable flaky Test_extractZones
+  # https://hydra.nixos.org/build/212378003/log
+  excludedPackages = "gvproxy";
+
+  CGO_ENABLED = 1;
+
+  preConfigure = ''
+    ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${version} \
+    -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/colima \
-      --prefix PATH : ${lib.makeBinPath [ lima ]}
+      --prefix PATH : ${lib.makeBinPath [ lima-drv qemu ]}
 
     installShellCompletion --cmd colima \
       --bash <($out/bin/colima completion bash) \
@@ -31,11 +58,16 @@ buildGoModule rec {
       --zsh <($out/bin/colima completion zsh)
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = colima;
+    command = "HOME=$(mktemp -d) colima version";
+  };
+
   meta = with lib; {
-    description = "Container runtimes on MacOS with minimal setup";
+    description = "Container runtimes with minimal setup";
     homepage = "https://github.com/abiosoft/colima";
     license = licenses.mit;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ aaschmid ];
+    maintainers = with maintainers; [ aaschmid tricktron ];
+    mainProgram = "colima";
   };
 }

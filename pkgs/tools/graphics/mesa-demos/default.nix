@@ -1,25 +1,71 @@
-{ lib, stdenv, fetchurl, freeglut, glew, libGL, libGLU, libX11, libXext, mesa, pkg-config, wayland }:
+{ lib
+, stdenv
+, fetchurl
+, libglut
+, libGL
+, libGLU
+, libX11
+, libXext
+, mesa
+, meson
+, ninja
+, pkg-config
+, wayland
+, wayland-scanner
+, wayland-protocols
+, vulkan-loader
+, libxkbcommon
+, libdecor
+, glslang
+}:
 
 stdenv.mkDerivation rec {
   pname = "mesa-demos";
-  version = "8.4.0";
+  version = "9.0.0";
 
   src = fetchurl {
-    url = "ftp://ftp.freedesktop.org/pub/mesa/demos/${pname}-${version}.tar.bz2";
-    sha256 = "0zgzbz55a14hz83gbmm0n9gpjnf5zadzi2kjjvkn6khql2a9rs81";
+    url = "https://archive.mesa3d.org/demos/${pname}-${version}.tar.xz";
+    sha256 = "sha256-MEaj0mp7BRr3690lel8jv+sWDK1u2VIynN/x6fHtSWs=";
   };
 
-  buildInputs = [ freeglut glew libX11 libXext libGL libGLU mesa mesa.osmesa wayland ];
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
 
-  configureFlags = [ "--with-system-data-files" ];
-  enableParallelBuilding = true;
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+    glslang
+  ];
+
+  buildInputs = [
+    libglut
+    libX11
+    libXext
+    libGL
+    libGLU
+    mesa
+    wayland
+    wayland-protocols
+    vulkan-loader
+    libxkbcommon
+    libdecor
+  ];
+
+  mesonFlags = [
+    "-Dwith-system-data-files=true"
+    "-Dgles1=disabled"
+    "-Dosmesa=disabled"
+  ];
 
   meta = with lib; {
+    inherit (mesa.meta) homepage platforms;
     description = "Collection of demos and test programs for OpenGL and Mesa";
-    homepage = "https://www.mesa3d.org/";
     license = licenses.mit;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ andersk ];
   };
 }

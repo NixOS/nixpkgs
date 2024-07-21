@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dyff";
-  version = "1.4.6";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "dyff";
     rev = "v${version}";
-    sha256 = "sha256-xODOKKMGlpMePwO3A4IVReqsR1Kx0CwBjrhsvN+uDR4=";
+    sha256 = "sha256-RRLIogNOvbXylmdR59anMVSYCILdVr0Xeot21HqXlXU=";
   };
 
-  vendorSha256 = "sha256-W882fD4O4lPVH27KWmkRsS58R6qw7ENhKA2UgpNKvTw=";
+  vendorHash = "sha256-BLwdNBthYTMSNDcT5Cf8IcAr4uUmpewLdZRgIvq5htE=";
 
   subPackages = [
     "cmd/dyff"
@@ -41,7 +41,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A diff tool for YAML files, and sometimes JSON";
+    description = "Diff tool for YAML files, and sometimes JSON";
+    mainProgram = "dyff";
     longDescription = ''
       dyff is inspired by the way the old BOSH v1 deployment output reported
       changes from one version to another by only showing the parts of a YAML
@@ -52,6 +53,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/homeport/dyff";
     license = licenses.mit;
-    maintainers = with maintainers; [ edlimerkaj ];
+    maintainers = with maintainers; [ edlimerkaj jceb ];
   };
 }

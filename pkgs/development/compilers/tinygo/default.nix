@@ -1,64 +1,128 @@
-{ lib, buildGoModule, fetchFromGitHub, llvm, clang-unwrapped, lld, avrgcc
-, avrdude, openocd, gcc-arm-embedded, makeWrapper, fetchurl }:
+{ stdenv
+, lib
+, buildPackages
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, llvmPackages
+, go
+, xar
+, binaryen
+, avrdude
+, gdb
+, openocd
+, runCommand
+, tinygoTests ? [ "smoketest" ]
+}:
 
-let main = ./main.go;
-    gomod = ./go.mod;
+let
+  llvmMajor = lib.versions.major llvm.version;
+  inherit (llvmPackages) llvm clang compiler-rt lld;
+
+  # only doing this because only on darwin placing clang.cc in nativeBuildInputs
+  # doesn't build
+  bootstrapTools = runCommand "tinygo-bootstrap-tools" { } ''
+    mkdir -p $out
+    ln -s ${lib.getBin clang.cc}/bin/clang $out/clang-${llvmMajor}
+  '';
 in
+
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.16.0";
+  version = "0.31.2";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "063aszbsnr0myq56kms1slmrfs7m4nmg0zgh2p66lxdsifrfly7j";
+    hash = "sha256-e0zXxIdAtJZXJdP/S6lHRnPm5Rsf638Fhox8XcqOWrk=";
     fetchSubmodules = true;
   };
 
-  overrideModAttrs = (_: {
-      patches = [];
-      preBuild = ''
-      rm -rf *
-      cp ${main} main.go
-      cp ${gomod} go.mod
-      chmod +w go.mod
-      '';
-  });
+  vendorHash = "sha256-HZiyAgsTEBQv+Qp0T9RXTV1lkxvIGh7Q45rd45cfvjo=";
 
-  preBuild = "cp ${gomod} go.mod";
+  patches = [
+    ./0001-GNUmakefile.patch
+  ];
 
-  postBuild = "make gen-device";
+  nativeCheckInputs = [ binaryen ];
+  nativeBuildInputs = [ makeWrapper lld ];
+  buildInputs = [ llvm clang.cc ]
+    ++ lib.optionals stdenv.isDarwin [ xar ];
 
-  vendorSha256 = "12k2gin0v7aqz5543m12yhifc0xsz26qyqra5l4c68xizvzcvkxb";
+  doCheck = (stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+  inherit tinygoTests;
 
-  doCheck = false;
+  allowGoReference = true;
+  ldflags = [
+    "-X github.com/tinygo-org/tinygo/goenv.TINYGOROOT=${placeholder "out"}/share/tinygo"
+    "-X github.com/tinygo-org/tinygo/goenv.clangResourceDir=${clang.cc.lib}/lib/clang/${llvmMajor}"
+  ];
+  subPackages = [ "." ];
 
-  prePatch = ''
-    sed -i s/', "-nostdlibinc"'// builder/builtins.go
-    sed -i s/'"-nostdlibinc", '// compileopts/config.go builder/picolibc.go
+  # Output contains static libraries for different arm cpus
+  # and stripping could mess up these so only strip the compiler
+  stripDebugList = [ "bin" ];
+
+  postPatch = ''
+    # Borrow compiler-rt builtins from our source
+    # See https://github.com/tinygo-org/tinygo/pull/2471
+    mkdir -p lib/compiler-rt-builtins
+    cp -a ${compiler-rt.src}/compiler-rt/lib/builtins/* lib/compiler-rt-builtins/
+
+    substituteInPlace GNUmakefile \
+      --replace "build/release/tinygo/bin" "$out/bin" \
+      --replace "build/release/" "$out/share/"
   '';
 
-  subPackages = [ "." ];
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ llvm clang-unwrapped ];
-  propagatedBuildInputs = [ lld avrgcc avrdude openocd gcc-arm-embedded ];
+  preBuild = ''
+    export PATH=${bootstrapTools}:$PATH
+    export HOME=$TMPDIR
 
-  postInstall = ''
-    mkdir -p $out/share/tinygo
-    cp -a lib src targets $out/share/tinygo
-    wrapProgram $out/bin/tinygo --prefix "TINYGOROOT" : "$out/share/tinygo" \
-      --prefix "PATH" : "$out/libexec/tinygo"
-    mkdir -p $out/libexec/tinygo
-    ln -s ${clang-unwrapped}/bin/clang $out/libexec/tinygo/clang-10
-    ln -s ${lld}/bin/lld $out/libexec/tinygo/ld.lld-10
-    ln -sf $out/bin $out/share/tinygo
+    ldflags=("''$ldflags[@]/\"-buildid=\"")
+  '';
+
+  postBuild = ''
+    # Move binary
+    mkdir -p build
+    mv $GOPATH/bin/tinygo build/tinygo
+
+    # Build our own custom wasi-libc.
+    # This is necessary because we modify the build a bit for our needs (disable
+    # heap, enable debug symbols, etc).
+    make wasi-libc \
+      CLANG="${lib.getBin clang.cc}/bin/clang -resource-dir ${clang.cc.lib}/lib/clang/${llvmMajor}" \
+      LLVM_AR=${lib.getBin llvm}/bin/llvm-ar \
+      LLVM_NM=${lib.getBin llvm}/bin/llvm-nm
+
+    make gen-device -j $NIX_BUILD_CORES
+
+    export TINYGOROOT=$(pwd)
+  '';
+
+  checkPhase = lib.optionalString (tinygoTests != [ ] && tinygoTests != null) ''
+    make ''${tinygoTests[@]} TINYGO="$(pwd)/build/tinygo" MD5SUM=md5sum XTENSA=0
+  '';
+
+  # GDB upstream does not support ARM darwin
+  runtimeDeps = [ go clang.cc lld avrdude openocd binaryen ]
+    ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [ gdb ];
+
+  installPhase = ''
+    runHook preInstall
+
+    make build/release
+
+    wrapProgram $out/bin/tinygo \
+      --prefix PATH : ${lib.makeBinPath runtimeDeps }
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     homepage = "https://tinygo.org/";
     description = "Go compiler for small places";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura muscaln ];
   };
 }

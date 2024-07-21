@@ -1,34 +1,49 @@
-{ lib
-, stdenv
-, aiohttp
-, buildPythonPackage
-, eventlet
-, fetchFromGitHub
-, iana-etc
-, libredirect
-, mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, tornado
-, websocket-client
+{
+  lib,
+  stdenv,
+  aiohttp,
+  buildPythonPackage,
+  setuptools,
+  eventlet,
+  fetchFromGitHub,
+  iana-etc,
+  libredirect,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  simple-websocket,
+  tornado,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.3.0";
-  format = "setuptools";
+  version = "4.9.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
-    rev = "v${version}";
-    sha256 = "sha256-ohNRtceh0bHBlnGSFUckG5KzoLY8Q1jvpFee7T78Vto=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-wn2qiVkL05GTopGJeghHe9i+wyOQZbEeYDmEIIbXDS0=";
   };
 
-  checkInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [ simple-websocket ];
+
+  passthru.optional-dependencies = {
+    client = [
+      requests
+      websocket-client
+    ];
+    asyncio_client = [ aiohttp ];
+  };
+
+  nativeCheckInputs = [
     aiohttp
     eventlet
     mock
@@ -51,13 +66,9 @@ buildPythonPackage rec {
   '';
 
   # somehow effective log level does not change?
-  disabledTests = [
-    "test_logger"
-  ];
+  disabledTests = [ "test_logger" ];
 
-  pythonImportsCheck = [
-    "engineio"
-  ];
+  pythonImportsCheck = [ "engineio" ];
 
   meta = with lib; {
     description = "Python based Engine.IO client and server";
@@ -66,6 +77,7 @@ buildPythonPackage rec {
       bidirectional event-based communication between clients and a server.
     '';
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
+    changelog = "https://github.com/miguelgrinberg/python-engineio/blob/v${version}/CHANGES.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ mic92 ];
   };

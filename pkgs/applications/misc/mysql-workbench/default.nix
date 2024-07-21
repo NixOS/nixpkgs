@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , substituteAll
 , cmake
@@ -9,7 +10,7 @@
 , gtkmm3
 , pcre
 , swig
-, antlr4_8
+, antlr4_12
 , sudo
 , mysql
 , libxml2
@@ -23,7 +24,7 @@
 , libzip
 , libsecret
 , libssh
-, python2
+, python3
 , jre
 , boost
 , libsigcxx
@@ -34,27 +35,27 @@
 , cairo
 , libxkbcommon
 , libepoxy
-, wrapGAppsHook
+, wrapGAppsHook3
 , at-spi2-core
 , dbus
 , bash
 , coreutils
+, zstd
 }:
 
 let
-  inherit (python2.pkgs) paramiko pycairo pyodbc;
-in stdenv.mkDerivation rec {
+  inherit (python3.pkgs) paramiko pycairo pyodbc;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-workbench";
-  version = "8.0.21";
+  version = "8.0.38";
 
   src = fetchurl {
-    url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "0rqgr1dcbf6yp60hninbw5dnwykx5ngbyhhx0sbhgv0m0cq5a44h";
+    url = "https://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-W2RsA2hIRUaNRK0Q5pN1YODbEiw6HE3cfeisPdUcYPY=";
   };
 
   patches = [
-    ./fix-gdal-includes.patch
-
     (substituteAll {
       src = ./hardcode-paths.patch;
       catchsegv = "${glibc.bin}/bin/catchsegv";
@@ -66,6 +67,7 @@ in stdenv.mkDerivation rec {
       nohup = "${coreutils}/bin/nohup";
       rm = "${coreutils}/bin/rm";
       rmdir = "${coreutils}/bin/rmdir";
+      stat = "${coreutils}/bin/stat";
       sudo = "${sudo}/bin/sudo";
     })
 
@@ -75,12 +77,16 @@ in stdenv.mkDerivation rec {
       src = ./fix-swig-build.patch;
       cairoDev = "${cairo.dev}";
     })
+
+    # Don't try to override the ANTLR_JAR_PATH specified in cmakeFlags
+    ./dont-search-for-antlr-jar.patch
   ];
 
-  # have it look for 4.7.2 instead of 4.7.1
-  preConfigure = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "antlr-4.7.1-complete.jar" "antlr-4.8-complete.jar"
+  postPatch = ''
+    # For some reason CMakeCache.txt is part of source code, remove it
+    rm -f build/CMakeCache.txt
+
+    patchShebangs tools/get_wb_version.sh
   '';
 
   nativeBuildInputs = [
@@ -89,15 +95,15 @@ in stdenv.mkDerivation rec {
     pkg-config
     jre
     swig
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     gtk3
     gtkmm3
     libX11
-    antlr4_8.runtime.cpp
-    python2
+    antlr4_12.runtime.cpp
+    python3
     mysql
     libxml2
     libmysqlconnectorcpp
@@ -129,22 +135,27 @@ in stdenv.mkDerivation rec {
     libepoxy
     at-spi2-core
     dbus
+    zstd
   ];
 
-  postPatch = ''
-    patchShebangs tools/get_wb_version.sh
-  '';
-
-  # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = toString ([
+    # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
+    "-Wno-error=deprecated-declarations"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    # error: narrowing conversion of '-1' from 'int' to 'char'
+    "-Wno-error=narrowing"
+  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but problematic with some old GCCs
+    "-Wno-error=maybe-uninitialized"
+  ]);
 
   cmakeFlags = [
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
     "-DIODBC_CONFIG_PATH=${libiodbc}/bin/iodbc-config"
-    "-DWITH_ANTLR_JAR=${antlr4_8.jarLocation}"
     # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.
+    "-DANTLR_JAR_PATH=${antlr4_12.jarLocation}"
     "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"
   ];
 
@@ -154,7 +165,7 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${python2}/bin"
+      --prefix PATH : "${python3}/bin"
       --prefix PROJSO : "${proj}/lib/libproj.so"
       --set PYTHONPATH $PYTHONPATH
     )
@@ -172,7 +183,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Visual MySQL database modeling, administration and querying tool";
     longDescription = ''
       MySQL Workbench is a modeling tool that allows you to design
@@ -180,10 +191,10 @@ in stdenv.mkDerivation rec {
       and query development modules where you can manage MySQL server instances
       and execute SQL queries.
     '';
-
     homepage = "http://wb.mysql.com/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.kkallio ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    mainProgram = "mysql-workbench";
+    maintainers = with lib.maintainers; [ tomasajt ];
+    platforms = lib.platforms.linux;
   };
-}
+})

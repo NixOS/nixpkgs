@@ -1,24 +1,45 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-
-buildGoPackage rec {
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
+let
+  version = "2.2.2";
+in
+buildGoModule {
   pname = "go-toml";
-  version = "1.9.4";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "pelletier";
-    repo = pname;
+    repo = "go-toml";
     rev = "v${version}";
-    sha256 = "sha256-1ENmSeo3TtTvhgwtbmq+O9n9fD/FqSUiCrSplkJNTTg=";
+    sha256 = "sha256-Z17977v2qMdf/e6iHEuRyCuC//HeFF8tkLt2P8Z/NT4=";
   };
 
-  goPackagePath = "github.com/pelletier/go-toml";
+  vendorHash = "sha256-4t/ft3XTfc7yrsFVMSfjdCur8QULho3NI2ym6gqjexI=";
 
-  excludedPackages = [ "cmd/tomltestgen" ];
+  excludedPackages = [
+    "cmd/gotoml-test-decoder"
+    "cmd/gotoml-test-encoder"
+    "cmd/tomltestgen"
+  ];
 
-  meta = with lib; {
+  # allowGoReference adds the flag `-trimpath` which is also denoted by, go-toml's goreleaser config
+  #  <https://github.com/pelletier/go-toml/blob/a3d5a0bb530b5206c728eed9cb57323061922bcb/.goreleaser.yaml#L13>
+  allowGoReference = true;
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
+
+  meta = {
     description = "Go library for the TOML language";
     homepage = "https://github.com/pelletier/go-toml";
-    maintainers = [ maintainers.marsam ];
-    license = licenses.mit;
+    changelog = "https://github.com/pelletier/go-toml/releases/tag/v${version}";
+    maintainers = [ lib.maintainers.isabelroses ];
+    license = lib.licenses.mit;
   };
 }

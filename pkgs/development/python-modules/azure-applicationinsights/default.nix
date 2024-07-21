@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, msrest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  msrest,
 }:
 
 buildPythonPackage rec {
   pname = "azure-applicationinsights";
-  version = "0.1.0";
+  version = "0.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "6e1839169bb6ffd2d2c21ee3f4afbdd068ea428ad47cf884ea3167ecf7fd0859";
+    hash = "sha256-qIRbgDZbfyALrR9xqA0NMfO+wB7f1GfftsE+or1xupY=";
   };
 
   propagatedBuildInputs = [

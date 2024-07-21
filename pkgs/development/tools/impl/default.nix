@@ -2,25 +2,22 @@
 
 buildGoModule rec {
   pname = "impl";
-  version = "1.0.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "josharian";
     repo = "impl";
     rev = "v${version}";
-    sha256 = "0l21fkcgiaaf6ka91dmz8hx0l3nbp0kqi8p25kij1s5zb796z0dy";
+    hash = "sha256-a9jAoZp/wVnTyaE4l2yWSf5aSxXEtqN6SoxU68XhRhk=";
   };
 
-  vendorSha256 = "0xkalwy02w62px01jdwwr3vwwsh50f22dsxf8lrrwmw6k0rq57zv";
-
-  # go: cannot find GOROOT directory: go
-  doCheck = false;
+  vendorHash = "sha256-vTqDoM/LK5SHkayLKYig+tCrXLelOoILmQGCxlTWHog=";
 
   meta = with lib; {
     description = "Generate method stubs for implementing an interface";
+    mainProgram = "impl";
     homepage = "https://github.com/josharian/impl";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

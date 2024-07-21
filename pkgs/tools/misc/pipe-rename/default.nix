@@ -2,16 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pipe-rename";
-  version = "1.4.1";
+  version = "1.6.5";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-3Jl/G1QqcChwkI5n1zQLBgGxT2CYdh3XdMHkF+V5SG4=";
+    hash = "sha256-av/ig76O7t3dB4Irfi3yqyL30nkJJCzs5EayWRbpOI0=";
   };
 
-  cargoSha256 = "sha256-y5BsdkHrjJHNO66MQTbvA6kKx6tLP7jNk5UmAmslz14=";
+  cargoHash = "sha256-3p6Bf9UfCb5uc5rp/yuXixcDkuXfTiboLl8TI0O52hE=";
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
+
+  checkFlags = [
+    # tests are failing upstream
+    "--skip=test_dot"
+    "--skip=test_dotdot"
+  ];
 
   preCheck = ''
     patchShebangs tests/editors/env-editor.py
@@ -19,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Rename your files using your favorite text editor";
-    homepage = "https://github.com/marcusbuffet/pipe-rename";
+    homepage = "https://github.com/marcusbuffett/pipe-rename";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "renamer";

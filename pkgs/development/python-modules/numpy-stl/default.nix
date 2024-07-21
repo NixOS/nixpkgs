@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, cython
-, enum34
-, fetchPypi
-, nine
-, numpy
-, pytestCheckHook
-, python-utils
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  enum34,
+  fetchPypi,
+  nine,
+  numpy,
+  pytestCheckHook,
+  python-utils,
 }:
 
 buildPythonPackage rec {
   pname = "numpy-stl";
-  version = "2.16.3";
+  version = "3.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95890627001efb2cb8d17418730cdc1bdd64b8dbb9862b01a8e0359d79fe863e";
+    hash = "sha256-947qYsgJOL9T6pFPpbbJL0SPDqtWCeDlpzfd4DlAQzQ=";
   };
 
   propagatedBuildInputs = [
@@ -26,9 +28,7 @@ buildPythonPackage rec {
     python-utils
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "stl" ];
 

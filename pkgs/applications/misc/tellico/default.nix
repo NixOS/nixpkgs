@@ -1,5 +1,5 @@
 { lib
-, fetchurl
+, fetchFromGitLab
 , mkDerivation
 , cmake
 , exempi
@@ -24,15 +24,14 @@
 
 mkDerivation rec {
   pname = "tellico";
-  version = "3.4.1";
+  version = "3.5.3";
 
-  src = fetchurl {
-    # version 3.3.0 just uses 3.3 in its file name
-    urls = [
-      "https://tellico-project.org/files/tellico-${version}.tar.xz"
-      "https://tellico-project.org/files/tellico-${lib.versions.majorMinor version}.tar.xz"
-    ];
-    sha256 = "sha256-+FFN6sO0mvlage8JazyrqNZk4onejz1XJPiOK3gnhWE=";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "office";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-hg2sfBEh3jjVwMFmkgu9nXuXARsPqvlxzxX7kjSI/JU=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +61,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Collection management software, free and simple";
+    mainProgram = "tellico";
     homepage = "https://tellico-project.org/";
     license = with licenses; [ gpl2Only gpl3Only lgpl2Only ];
     maintainers = with maintainers; [ numkem ];

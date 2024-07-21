@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://wpitchoune.net/ptask/";
     description = "GTK-based GUI for taskwarrior";
+    mainProgram = "ptask";
     license = licenses.gpl2;
     maintainers = [ maintainers.spacefrogg ];
     platforms = platforms.linux;

@@ -1,24 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, git }:
 
 buildGoModule rec {
   pname = "go-license-detector";
-  version = "3.1.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
-    owner = "src-d";
+    owner = "go-enry";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ln1z3y9q5igf9djkxw05ql2hb1ijcvvz0mrbwz11cdv9xrsa4z4";
+    hash = "sha256-S9LKXjn5dL5FETOOAk+bs7bIVdu2x7MIhfjpZuXzuLo=";
   };
 
-  vendorSha256 = "0gan5l7vsq0hixxcymhhs8p07v92w60r0lhgvrr9a99nic12vmia";
+  vendorHash = "sha256-MtQsUsFd9zQGbP7NGZ4zcSoa6O2WSWvGig0GUwCc6uM=";
 
-  doCheck = false;
+  nativeCheckInputs = [ git ];
 
   meta = with lib; {
     description = "Reliable project licenses detector";
-    homepage = "https://github.com/src-d/go-license-detector";
+    homepage = "https://github.com/go-enry/go-license-detector";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "license-detector";
   };
 }

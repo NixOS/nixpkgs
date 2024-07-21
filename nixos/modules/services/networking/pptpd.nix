@@ -82,7 +82,7 @@ with lib;
       ppp-pptpd-wrapped = pkgs.stdenv.mkDerivation {
         name         = "ppp-pptpd-wrapped";
         phases       = [ "installPhase" ];
-        buildInputs  = with pkgs; [ makeWrapper ];
+        nativeBuildInputs  = with pkgs; [ makeWrapper ];
         installPhase = ''
           mkdir -p $out/bin
           makeWrapper ${pkgs.ppp}/bin/pppd $out/bin/pppd \
@@ -108,7 +108,7 @@ with lib;
         #username	pptpd	password	*
         EOF
 
-        chown root.root "$secrets"
+        chown root:root "$secrets"
         chmod 600 "$secrets"
       '';
 

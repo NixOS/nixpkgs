@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
-, coreutils, findutils, gnugrep, gawk, icu, pcre, m4
+, coreutils, findutils, gnugrep, gawk, icu, pcre2, m4
+, fetchpatch
 , buildPackages, nixosTests
 , withLDAP ? true, openldap
 , withPgSQL ? false, postgresql
@@ -24,15 +25,15 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.6.3";
+  version = "3.9.0";
 
   src = fetchurl {
-    url = "http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "1g5ii5vvcr87qkabsbyg3n7kzy1g5k2n5gwa8468w5d0ava424hg";
+    url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
+    hash = "sha256-VvXkIOfCVFWk6WwZtnL4D5oKNftb7MkkfJ49XcxhfzQ=";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
-  buildInputs = [ db openssl cyrus_sasl icu libnsl pcre ]
+  buildInputs = [ db openssl cyrus_sasl icu libnsl pcre2 ]
     ++ lib.optional withPgSQL postgresql
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withSQLite sqlite
@@ -46,6 +47,12 @@ in stdenv.mkDerivation rec {
     ./postfix-3.0-no-warnings.patch
     ./post-install-script.patch
     ./relative-symlinks.patch
+
+    # glibc 2.34 compat
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/postfix/raw/2f9d42453e67ebc43f786d98262a249037f80a77/f/postfix-3.6.2-glibc-234-build-fix.patch";
+      sha256 = "sha256-xRUL5gaoIt6HagGlhsGwvwrAfYvzMgydsltYMWvl9BI=";
+    })
   ];
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -77,6 +84,8 @@ in stdenv.mkDerivation rec {
     make makefiles CCARGS='${ccargs}' AUXLIBS='${auxlibs}'
   '';
 
+  enableParallelBuilding = true;
+
   NIX_LDFLAGS = lib.optionalString withLDAP "-llber";
 
   installTargets = [ "non-interactive-package" ];
@@ -92,13 +101,23 @@ in stdenv.mkDerivation rec {
       --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep ]}
     wrapProgram $out/libexec/postfix/postfix-script \
       --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep gawk gnused ]}
+
+    # Avoid dev-only outputs from being retained in final closure.
+    # `makedefs.out` is a documenttation-only file. It should be safe
+    # to store invalid store paths there.
+    sed -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i $out/etc/postfix/makedefs.out
   '';
 
-  passthru.tests = { inherit (nixosTests) postfix postfix-raise-smtpd-tls-security-level; };
+  passthru = {
+    tests = { inherit (nixosTests) postfix postfix-raise-smtpd-tls-security-level; };
+
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     homepage = "http://www.postfix.org/";
-    description = "A fast, easy to administer, and secure mail server";
+    changelog = "https://www.postfix.org/announcements/postfix-${version}.html";
+    description = "Fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ globin dotlambda lewo ];

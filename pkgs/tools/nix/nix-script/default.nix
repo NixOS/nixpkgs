@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     sha256 = "0yiqljamcj9x8z801bwj7r30sskrwv4rm6sdf39j83jqql1fyq7y";
   };
 
-  buildInputs  = [
+  strictDeps = true;
+  nativeBuildInputs  = [
     (haskellPackages.ghcWithPackages (hs: with hs; [ posix-escape ]))
   ];
 
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A shebang for running inside nix-shell";
+    description = "Shebang for running inside nix-shell";
     homepage    = "https://github.com/bennofs/nix-script";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ bennofs rnhmjoj ];

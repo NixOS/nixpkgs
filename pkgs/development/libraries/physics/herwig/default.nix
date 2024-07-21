@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "herwig";
-  version = "7.2.2";
+  version = "7.3.0";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
-    sha256 = "10y3fb33zsinr0z3hzap9rsbcqhy1yjqnv4b4vz21g7mdlw6pq2k";
+    hash = "sha256-JiSBnS3/EFupUuobXPEutvSSbUlRd0pBkHaZ4vVnaGw=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool gfortran ];
@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./
+
+    # Fix failing "make install" being unable to find HwEvtGenInterface.so
+    substituteInPlace src/defaults/decayers.in.in \
+      --replace "read EvtGenDecayer.in" ""
   '';
 
   configureFlags = [
@@ -26,7 +30,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A multi-purpose particle physics event generator";
+    description = "Multi-purpose particle physics event generator";
     homepage = "https://herwig.hepforge.org/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ veprbl ];

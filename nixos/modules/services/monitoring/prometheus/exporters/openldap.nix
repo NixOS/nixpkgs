@@ -1,9 +1,8 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.openldap;
+  inherit (lib) mkOption types concatStringsSep;
 in {
   port = 9330;
   extraOpts = {
@@ -12,14 +11,14 @@ in {
       example = "/run/keys/ldap_pass";
       description = ''
         Environment file to contain the credentials to authenticate against
-        <package>openldap</package>.
+        `openldap`.
 
         The file should look like this:
-        <programlisting>
+        ```
         ---
         ldapUser: "cn=monitoring,cn=Monitor"
         ldapPass: "secret"
-        </programlisting>
+        ```
       '';
     };
     protocol = mkOption {
@@ -27,14 +26,14 @@ in {
       example = "udp";
       type = types.str;
       description = ''
-        Which protocol to use to connect against <package>openldap</package>.
+        Which protocol to use to connect against `openldap`.
       '';
     };
     ldapAddr = mkOption {
       default = "localhost:389";
       type = types.str;
       description = ''
-        Address of the <package>openldap</package>-instance.
+        Address of the `openldap`-instance.
       '';
     };
     metricsPath = mkOption {

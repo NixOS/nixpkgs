@@ -19,7 +19,7 @@ let
   ];
 
   mkArgs = rule:
-    if (isNull rule.args) then ""
+    if (rule.args == null) then ""
     else if (length rule.args == 0) then "args"
     else "args ${concatStringsSep " " rule.args}";
 
@@ -27,9 +27,9 @@ let
     let
       opts = mkOpts rule;
 
-      as = optionalString (!isNull rule.runAs) "as ${rule.runAs}";
+      as = optionalString (rule.runAs != null) "as ${rule.runAs}";
 
-      cmd = optionalString (!isNull rule.cmd) "cmd ${rule.cmd}";
+      cmd = optionalString (rule.cmd != null) "cmd ${rule.cmd}";
 
       args = mkArgs rule;
     in
@@ -54,7 +54,7 @@ in
       type = with types; bool;
       default = false;
       description = ''
-        Whether to enable the <command>doas</command> command, which allows
+        Whether to enable the {command}`doas` command, which allows
         non-root users to execute commands as root.
       '';
     };
@@ -63,8 +63,8 @@ in
       type = with types; bool;
       default = true;
       description = ''
-        Whether users of the <code>wheel</code> group must provide a password to
-        run commands as super user via <command>doas</command>.
+        Whether users of the `wheel` group must provide a password to
+        run commands as super user via {command}`doas`.
       '';
     };
 
@@ -72,10 +72,12 @@ in
       default = [];
       description = ''
         Define specific rules to be set in the
-        <filename>/etc/doas.conf</filename> file. More specific rules should
+        {file}`/etc/doas.conf` file. More specific rules should
         come after more general ones in order to yield the expected behavior.
-        You can use <code>mkBefore</code> and/or <code>mkAfter</code> to ensure
-        this is the case when configuration options are merged.
+        You can use `mkBefore` and/or `mkAfter` to ensure
+        this is the case when configuration options are merged. Be aware that
+        this option cannot be used to override the behaviour allowing
+        passwordless operation for root.
       '';
       example = literalExpression ''
         [
@@ -114,7 +116,7 @@ in
               type = with types; bool;
               default = false;
               description = ''
-                If <code>true</code>, the user is not required to enter a
+                If `true`, the user is not required to enter a
                 password.
               '';
             };
@@ -123,9 +125,9 @@ in
               type = with types; bool;
               default = false;
               description = ''
-                If <code>true</code>, successful executions will not be logged
+                If `true`, successful executions will not be logged
                 to
-                <citerefentry><refentrytitle>syslogd</refentrytitle><manvolnum>8</manvolnum></citerefentry>.
+                {manpage}`syslogd(8)`.
               '';
             };
 
@@ -133,7 +135,7 @@ in
               type = with types; bool;
               default = false;
               description = ''
-                If <code>true</code>, do not ask for a password again for some
+                If `true`, do not ask for a password again for some
                 time after the user successfully authenticates.
               '';
             };
@@ -142,9 +144,9 @@ in
               type = with types; bool;
               default = false;
               description = ''
-                If <code>true</code>, environment variables other than those
+                If `true`, environment variables other than those
                 listed in
-                <citerefentry><refentrytitle>doas</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+                {manpage}`doas(1)`
                 are kept when creating the environment for the new process.
               '';
             };
@@ -155,15 +157,15 @@ in
               description = ''
                 Keep or set the specified variables. Variables may also be
                 removed with a leading '-' or set using
-                <code>variable=value</code>. If the first character of
-                <code>value</code> is a '$', the value to be set is taken from
+                `variable=value`. If the first character of
+                `value` is a '$', the value to be set is taken from
                 the existing environment variable of the indicated name. This
                 option is processed after the default environment has been
                 created.
 
-                NOTE: All rules have <code>setenv { SSH_AUTH_SOCK }</code> by
-                default. To prevent <code>SSH_AUTH_SOCK</code> from being
-                inherited, add <code>"-SSH_AUTH_SOCK"</code> anywhere in this
+                NOTE: All rules have `setenv { SSH_AUTH_SOCK }` by
+                default. To prevent `SSH_AUTH_SOCK` from being
+                inherited, add `"-SSH_AUTH_SOCK"` anywhere in this
                 list.
               '';
             };
@@ -185,12 +187,12 @@ in
               default = null;
               description = ''
                 Which user or group the specified command is allowed to run as.
-                When set to <code>null</code> (the default), all users are
+                When set to `null` (the default), all users are
                 allowed.
 
                 A user can be specified using just the username:
-                <code>"foo"</code>. It is also possible to only allow running as
-                a specific group with <code>":bar"</code>.
+                `"foo"`. It is also possible to only allow running as
+                a specific group with `":bar"`.
               '';
             };
 
@@ -199,7 +201,7 @@ in
               default = null;
               description = ''
                 The command the user is allowed to run. When set to
-                <code>null</code> (the default), all commands are allowed.
+                `null` (the default), all commands are allowed.
 
                 NOTE: It is best practice to specify absolute paths. If a
                 relative path is specified, only a restricted PATH will be
@@ -212,7 +214,7 @@ in
               default = null;
               description = ''
                 Arguments that must be provided to the command. When set to
-                <code>[]</code>, the command must be run without any arguments.
+                `[]`, the command must be run without any arguments.
               '';
             };
           };
@@ -224,7 +226,9 @@ in
       type = with types; lines;
       default = "";
       description = ''
-        Extra configuration text appended to <filename>doas.conf</filename>.
+        Extra configuration text appended to {file}`doas.conf`. Be aware that
+        this option cannot be used to override the behaviour allowing
+        passwordless operation for root.
       '';
     };
   };
@@ -266,14 +270,14 @@ in
             # completely replace the contents of this file, use
             # `environment.etc."doas.conf"`.
 
-            # "root" is allowed to do anything.
-            permit nopass keepenv root
-
             # extraRules
             ${concatStringsSep "\n" (lists.flatten (map mkRule cfg.extraRules))}
 
             # extraConfig
             ${cfg.extraConfig}
+
+            # "root" is allowed to do anything.
+            permit nopass keepenv root
           '';
           preferLocalBuild = true;
         }

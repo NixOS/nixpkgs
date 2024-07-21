@@ -1,46 +1,68 @@
 { lib, stdenv
-, fetchpatch
 , fetchFromGitHub
 , ncurses
 , python3
 , cunit
 , dpdk
+, fuse3
 , libaio
 , libbsd
 , libuuid
 , numactl
 , openssl
+, pkg-config
+, zlib
+, zstd
+, libpcap
+, libnl
+, elfutils
+, jansson
+, ensureNewerSourcesForZipFilesHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "spdk";
-  version = "21.10";
+
+  version = "24.05";
 
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
     rev = "v${version}";
-    sha256 = "sha256-pFynTbbSF1g58VD9bOhe3c4oCozeqE+35kECTQwDBDM=";
+    hash = "sha256-kjZWaarvNSYXseJ/uH7Ak7DbWEgrLnAwXcL8byJ9fjU=";
+    fetchSubmodules = true;
   };
-
-  patches = [
-    # Backport of upstream patch for ncurses-6.3 support.
-    # Will be in next release after 21.10.
-    ./ncurses-6.3.patch
-
-    # DPDK 21.11 compatibility.
-    (fetchpatch {
-      url = "https://github.com/spdk/spdk/commit/f72cab94dd35d7b45ec5a4f35967adf3184ca616.patch";
-      sha256 = "sha256-sSetvyNjlM/hSOUsUO3/dmPzAliVcteNDvy34yM5d4A=";
-    })
-  ];
 
   nativeBuildInputs = [
     python3
+    python3.pkgs.pip
+    python3.pkgs.setuptools
+    python3.pkgs.wheel
+    python3.pkgs.wrapPython
+    pkg-config
+    ensureNewerSourcesForZipFilesHook
   ];
 
   buildInputs = [
-    cunit dpdk libaio libbsd libuuid numactl openssl ncurses
+    cunit
+    dpdk
+    fuse3
+    jansson
+    libaio
+    libbsd
+    elfutils
+    libuuid
+    libpcap
+    libnl
+    numactl
+    openssl
+    ncurses
+    zlib
+    zstd
+  ];
+
+  propagatedBuildInputs = [
+    python3.pkgs.configshell
   ];
 
   postPatch = ''
@@ -49,11 +71,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--with-dpdk=${dpdk}" ];
+  configureFlags = [
+    "--with-dpdk=${dpdk}"
+  ];
 
-  NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
+  postCheck = ''
+    python3 -m spdk
+  '';
+
+  postFixup = ''
+    wrapPythonPrograms
+  '';
+
+  env.NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
   # otherwise does not find strncpy when compiling
-  NIX_LDFLAGS = "-lbsd";
+  env.NIX_LDFLAGS = "-lbsd";
 
   meta = with lib; {
     description = "Set of libraries for fast user-mode storage";

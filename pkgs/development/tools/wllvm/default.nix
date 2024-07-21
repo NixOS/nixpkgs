@@ -1,20 +1,19 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
-  version = "1.2.8";
+  version = "1.3.1";
   pname = "wllvm";
-  name = "${pname}-${version}";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "1d88fzg4ba4r3hwrinnv6agiyj3xxdy4yryb8wz2ml51nc6bi591";
+    hash = "sha256-PgV6V18FyezIZpqMQEbyv98MaVM7h7T7/Kvg3yMMwzE=";
   };
 
   meta = with lib; {
     homepage = "https://github.com/travitch/whole-program-llvm";
-    description = "A wrapper script to build whole-program LLVM bitcode files";
+    description = "Wrapper script to build whole-program LLVM bitcode files";
     license = licenses.mit;
-    maintainers = with maintainers; [ mic92 dtzWill ];
+    maintainers = with maintainers; [ mic92 ];
     platforms = platforms.all;
   };
 }

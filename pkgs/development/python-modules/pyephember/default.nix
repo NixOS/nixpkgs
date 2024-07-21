@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  paho-mqtt,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pyephember";
-  version = "0.3.1";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3eMdkP7u3TTg1AUK4OR7AGZkD0FxUUPp/etvZ2Rw74E=";
+    hash = "sha256-j3SftxXKs9EZwdio26W5U0y5owH4yTteS4RUmzkZkoE=";
   };
 
   propagatedBuildInputs = [
+    paho-mqtt
     requests
   ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyephember"
-  ];
+  pythonImportsCheck = [ "pyephember" ];
 
   meta = with lib; {
     description = "Python client to the EPH Control Systems Ember API";

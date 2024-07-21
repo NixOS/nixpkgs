@@ -1,4 +1,4 @@
-{ config, lib, pkgs, options }:
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.rtl_433;
@@ -16,7 +16,7 @@ in
           };
           "${field}" = lib.mkOption {
             type = int;
-            inherit description;
+            description = description;
           };
           location = lib.mkOption {
             type = str;
@@ -32,7 +32,7 @@ in
       example = "-C si -R 19";
       description = ''
         Flags passed verbatim to rtl_433 binary.
-        Having <literal>-C si</literal> (the default) is recommended since only Celsius temperatures are parsed.
+        Having `-C si` (the default) is recommended since only Celsius temperatures are parsed.
       '';
     };
     channels = lib.mkOption {

@@ -1,5 +1,5 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub, cmake
-, qtbase, qttools, sqlcipher, wrapGAppsHook, qtmacextras
+, qtbase, qttools, sqlcipher, wrapGAppsHook3, qtmacextras
 }:
 
 mkDerivation rec {
@@ -19,7 +19,7 @@ mkDerivation rec {
   # We *really* should get that cleaned up.
   buildInputs = [ qtbase sqlcipher ] ++ lib.optionals stdenv.isDarwin [ qtmacextras ];
 
-  nativeBuildInputs = [ cmake qttools wrapGAppsHook ];
+  nativeBuildInputs = [ cmake qttools wrapGAppsHook3 ];
 
   cmakeFlags = [
     "-Dsqlcipher=1"
@@ -27,6 +27,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "DB Browser for SQLite";
+    mainProgram = "sqlitebrowser";
     homepage = "https://sqlitebrowser.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];

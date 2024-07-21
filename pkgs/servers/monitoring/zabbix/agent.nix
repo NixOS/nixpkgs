@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, pkg-config, libiconv, openssl, pcre }:
 
-import ./versions.nix ({ version, sha256 }:
+import ./versions.nix ({ version, hash, ... }:
   stdenv.mkDerivation {
     pname = "zabbix-agent";
     inherit version;
 
     src = fetchurl {
       url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
-      inherit sha256;
+      inherit hash;
     };
 
     nativeBuildInputs = [ pkg-config ];
@@ -19,9 +19,14 @@ import ./versions.nix ({ version, sha256 }:
 
     configureFlags = [
       "--enable-agent"
+      "--enable-ipv6"
       "--with-iconv"
       "--with-libpcre"
       "--with-openssl=${openssl.dev}"
+    ];
+    makeFlags = [
+      "AR:=$(AR)"
+      "RANLIB:=$(RANLIB)"
     ];
 
     postInstall = ''
@@ -29,9 +34,9 @@ import ./versions.nix ({ version, sha256 }:
     '';
 
     meta = with lib; {
-      description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
+      description = "Enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = "https://www.zabbix.com/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       maintainers = with maintainers; [ mmahut psyanticy ];
       platforms = platforms.linux;
     };

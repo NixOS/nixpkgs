@@ -1,24 +1,24 @@
-{ lib, stdenv, fetchgit, libusb1, pkg-config, pmutils, udev} :
+{ lib, stdenv, fetchFromGitHub, libusb1, pkg-config, pmutils, udev} :
 
 let
-
-version = "2.1.1";
-daemonlib = fetchgit {
-    url = "https://github.com/Tinkerforge/daemonlib.git";
-    rev = "refs/tags/brickd-${version}";
-    sha256 = "097kaz7d0rzg0ijvcna3y620k3m5fgxpqsac5gbhah8pd7vlj1a4";
+  version = "2.1.1";
+  daemonlib = fetchFromGitHub {
+    owner = "Tinkerforge";
+    repo = "daemonlib";
+    rev = "brickd-${version}";
+    sha256 = "sha256-0HhuC4r1S4NJa2FSJa7+fNCfcoRTBckikYbGSE+2FbE=";
   };
-
 in
 
 stdenv.mkDerivation {
   pname = "brickd";
   inherit version;
 
-  src = fetchgit {
-    url = "git://github.com/Tinkerforge/brickd.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "0m2q01sbgf8z4559jpr6k3jivb8x98vxv1fhgx8nfcjbwz1q83gb";
+  src = fetchFromGitHub {
+    owner = "Tinkerforge";
+    repo = "brickd";
+    rev = "v${version}";
+    sha256 = "sha256-6w2Ew+dLMmdRf9CF3TdKHa0d5ZgmX5lKIR+5t3QAWFQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,10 +30,11 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    export
     # build the brickd binary
     mkdir src/daemonlib
     cp -r ${daemonlib}/* src/daemonlib
+    substituteInPlace src/daemonlib/utils.{c,h} \
+      --replace "_GNU_SOURCE" "__GLIBC__"
     cd src/brickd
     make
 
@@ -54,9 +55,10 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://www.tinkerforge.com/";
-    description = "A daemon (or service on Windows) that acts as a bridge between the Bricks/Bricklets and the API bindings for the different programming languages";
+    description = "Daemon (or service on Windows) that acts as a bridge between the Bricks/Bricklets and the API bindings for the different programming languages";
     maintainers = [ lib.maintainers.qknight ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+    mainProgram = "brickd";
   };
 }

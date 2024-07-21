@@ -27,9 +27,10 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A simple HTTP server for quickly sharing files";
+    description = "Simple HTTP server for quickly sharing files";
     homepage = "https://xyne.archlinux.ca/projects/quickserve/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ lassulus ];
+    mainProgram = "quickserve";
   };
 }

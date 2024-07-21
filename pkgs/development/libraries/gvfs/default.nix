@@ -1,11 +1,14 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
 , pkg-config
+, substituteAll
 , gettext
 , dbus
 , glib
+, udevSupport ? stdenv.isLinux
 , libgudev
 , udisks2
 , libgcrypt
@@ -17,6 +20,7 @@
 , fuse3
 , libcdio
 , libxml2
+, libsoup_3
 , libxslt
 , docbook_xsl
 , docbook_xml_dtd_42
@@ -24,10 +28,10 @@
 , libmtp
 , gnomeSupport ? false
 , gnome
-, gcr
+, gcr_4
 , glib-networking
 , gnome-online-accounts
-, wrapGAppsHook
+, wrapGAppsHook3
 , libimobiledevice
 , libbluray
 , libcdio-paranoia
@@ -35,24 +39,30 @@
 , openssh
 , libsecret
 , libgdata
+, libmsgraph
 , python3
+, python3Packages
 , gsettings-desktop-schemas
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.48.1";
+  version = "1.54.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1hlxl6368h6nyqp1888szxs9hnpcw98k3h23dgqi29xd38klzsmj";
+    url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
+    hash = "sha256-VJCPThC18cIx6QMwyMFbfyHyu2EPGUwDSzOON5xQjjw=";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./hardcode-ssh-path.patch;
+      ssh_program = "${lib.getBin openssh}/bin/ssh";
+    })
+  ];
+
   postPatch = ''
-    # patchShebangs requires executable file
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-    patchShebangs test test-driver
+    patchShebangs test
   '';
 
   nativeBuildInputs = [
@@ -61,8 +71,7 @@ stdenv.mkDerivation rec {
     python3
     pkg-config
     gettext
-    wrapGAppsHook
-    libxml2
+    wrapGAppsHook3
     libxslt
     docbook_xsl
     docbook_xml_dtd_42
@@ -70,55 +79,71 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libgudev
-    udisks2
     libgcrypt
     dbus
     libgphoto2
     avahi
     libarchive
+    libimobiledevice
+    libbluray
+    libnfs
+    libxml2
+    gsettings-desktop-schemas
+    libsoup_3
+  ] ++ lib.optionals udevSupport [
+    libgudev
+    udisks2
     fuse3
     libcdio
     samba
     libmtp
     libcap
     polkit
-    libimobiledevice
-    libbluray
     libcdio-paranoia
-    libnfs
-    openssh
-    gsettings-desktop-schemas
-    # TODO: a ligther version of libsoup to have FTP/HTTP support?
   ] ++ lib.optionals gnomeSupport [
-    gnome.libsoup
-    gcr
+    gcr_4
     glib-networking # TLS support
     gnome-online-accounts
     libsecret
     libgdata
+    libmsgraph
   ];
 
   mesonFlags = [
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "-Dtmpfilesdir=no"
+  ] ++ lib.optionals (!udevSupport) [
+    "-Dgudev=false"
+    "-Dudisks2=false"
+    "-Dfuse=false"
+    "-Dcdda=false"
+    "-Dsmb=false"
+    "-Dmtp=false"
+    "-Dadmin=false"
+    "-Dgphoto2=false"
+    "-Dlibusb=false"
+    "-Dlogind=false"
   ] ++ lib.optionals (!gnomeSupport) [
     "-Dgcr=false"
     "-Dgoa=false"
     "-Dkeyring=false"
-    "-Dhttp=false"
     "-Dgoogle=false"
+    "-Donedrive=false"
+  ] ++ lib.optionals (avahi == null) [
+    "-Ddnssd=false"
   ] ++ lib.optionals (samba == null) [
     # Xfce don't want samba
     "-Dsmb=false"
   ];
 
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
-  doInstallCheck = doCheck;
+  doInstallCheck = finalAttrs.doCheck;
+
+  separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gvfs";
       versionPolicy = "odd-unstable";
     };
   };
@@ -126,7 +151,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ ] ++ teams.gnome.members;
+    platforms = platforms.unix;
+    maintainers = teams.gnome.members;
   };
-}
+})

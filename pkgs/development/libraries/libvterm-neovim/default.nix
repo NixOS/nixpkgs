@@ -1,26 +1,27 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , perl
 , libtool
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libvterm-neovim";
   # Releases are not tagged, look at commit history to find latest release
-  version = "0.1.3";
+  version = "0.3.3";
 
-  src = fetchFromGitHub {
-    owner = "neovim";
-    repo = "libvterm";
-    rev = "65dbda3ed214f036ee799d18b2e693a833a0e591";
-    sha256 = "0r6yimzbkgrsi9aaxwvxahai2lzgjd1ysblr6m6by5w459853q3n";
+  src = fetchurl {
+    url = "https://launchpad.net/libvterm/trunk/v${lib.versions.majorMinor version}/+download/libvterm-${version}.tar.gz";
+    hash = "sha256-CRVvQ90hKL00fL7r5Q2aVx0yxk4M8Y0hEZeUav9yJuA=";
   };
 
   nativeBuildInputs = [ perl libtool ];
 
-  makeFlags = [ "PREFIX=$(out)" ]
-    ++ lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LIBTOOL=${libtool}/bin/libtool"
+    "PREFIX=$(out)"
+  ];
 
   enableParallelBuilding = true;
 

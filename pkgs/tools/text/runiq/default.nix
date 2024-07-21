@@ -1,18 +1,23 @@
-{ fetchCrate, lib, rustPlatform }:
+{ lib, rustPlatform, fetchCrate, stdenv, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "runiq";
-  version = "1.2.1";
+  version = "2.0.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "0xhd1z8mykxg9kiq8nw5agy1jxfk414czq62xm1s13ssig3h7jqj";
+    hash = "sha256-qcgPuJOpK2fCsHAgzoIKF7upb9B3ySIZkpu9xf4JnCc=";
   };
 
-  cargoSha256 = "1g4yfz5xq9lqwh0ggyn8kn8bnzrqfmh7kx455md5ranrqqh0x5db";
+  cargoHash = "sha256-WSMV0GNKNckN9uSPN647iDloGkNtaKcrZbeyglUappc=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   meta = with lib; {
-    description = "An efficient way to filter duplicate lines from input, à la uniq";
+    description = "Efficient way to filter duplicate lines from input, à la uniq";
+    mainProgram = "runiq";
     homepage = "https://github.com/whitfin/runiq";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

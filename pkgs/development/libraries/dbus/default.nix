@@ -3,44 +3,38 @@
 , fetchurl
 , pkg-config
 , expat
-, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
-, systemd
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
+, systemdMinimal
 , audit
 , libapparmor
-, libX11 ? null
-, libICE ? null
-, libSM ? null
-, x11Support ? (stdenv.isLinux || stdenv.isDarwin)
 , dbus
 , docbook_xml_dtd_44
 , docbook-xsl-nons
 , xmlto
+, autoreconfHook
+, autoconf-archive
+, x11Support ? (stdenv.isLinux || stdenv.isDarwin)
+, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "dbus";
-  version = "1.12.20";
+  version = "1.14.10";
 
   src = fetchurl {
-    url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "1zp5gpx61v1cpqf2zwb1cidhp9xylvw49d3zydkxqk6b1qa20xpp";
+    url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
+    sha256 = "sha256-uh8h0r2dM52i1KqHgMCd8y/qh5mLc9ok9Jq53x42pQ8=";
   };
 
-  patches = [
-    # 'generate.consistent.ids=1' ensures reproducible docs, for further details see
-    # http://docbook.sourceforge.net/release/xsl/current/doc/html/generate.consistent.ids.html
-    # Also applied upstream in https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/189,
-    # expected in version 1.14
-    ./docs-reproducible-ids.patch
-  ] ++ (lib.optional stdenv.isSunOS ./implement-getgrouplist.patch);
+  patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
 
   postPatch = ''
-    substituteInPlace tools/Makefile.in \
-      --replace 'install-localstatelibDATA:' 'disabled:' \
+    substituteInPlace bus/Makefile.am \
+      --replace 'install-data-hook:' 'disabled:' \
+      --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
+    substituteInPlace tools/Makefile.am \
       --replace 'install-data-local:' 'disabled:' \
       --replace 'installcheck-local:' 'disabled:'
-    substituteInPlace bus/Makefile.in \
-      --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
   '' + /* cleanup of runtime references */ ''
     substituteInPlace ./dbus/dbus-sysdeps-unix.c \
       --replace 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
@@ -49,8 +43,12 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "dev" "lib" "doc" "man" ];
+  separateDebugInfo = true;
 
+  strictDeps = true;
   nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
     pkg-config
     docbook_xml_dtd_44
     docbook-xsl-nons
@@ -62,13 +60,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optionals x11Support [
+    lib.optionals x11Support (with xorg; [
       libX11
       libICE
       libSM
-    ] ++ lib.optional enableSystemd systemd
+    ]) ++ lib.optional enableSystemd systemdMinimal
     ++ lib.optionals stdenv.isLinux [ audit libapparmor ];
   # ToDo: optional selinux?
+
+  __darwinAllowLocalNetworking = true;
 
   configureFlags = [
     "--enable-user-session"
@@ -84,13 +84,19 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
   ] ++ lib.optional (!x11Support) "--without-x"
-  ++ lib.optionals stdenv.isLinux [ "--enable-apparmor" "--enable-libaudit" ];
+  ++ lib.optionals stdenv.isLinux [ "--enable-apparmor" "--enable-libaudit" ]
+  ++ lib.optionals enableSystemd [ "SYSTEMCTL=${systemdMinimal}/bin/systemctl" ];
 
   NIX_CFLAGS_LINK = lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed";
 
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  makeFlags = [
+    # Fix paths in XML catalog broken by mismatching build/install datadir.
+    "dtddir=${placeholder "out"}/share/xml/dbus-1"
+  ];
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
@@ -105,12 +111,12 @@ stdenv.mkDerivation rec {
 
   passthru = {
     dbus-launch = "${dbus.lib}/bin/dbus-launch";
-    daemon = dbus.out;
   };
 
   meta = with lib; {
     description = "Simple interprocess messaging system";
-    homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
+    homepage = "https://www.freedesktop.org/wiki/Software/dbus/";
+    changelog = "https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-${version}/NEWS";
     license = licenses.gpl2Plus; # most is also under AFL-2.1
     maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;

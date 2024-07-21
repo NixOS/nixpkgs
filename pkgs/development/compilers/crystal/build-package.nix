@@ -1,4 +1,17 @@
-{ stdenv, lib, crystal, shards, git, pkg-config, which, linkFarm, fetchFromGitHub, installShellFiles }:
+{ stdenv
+, lib
+, crystal
+, pcre2
+, shards
+, git
+, pkg-config
+, which
+, linkFarm
+, fetchgit
+, fetchFromGitHub
+, installShellFiles
+, removeReferencesTo
+}:
 
 {
   # Some projects do not include a lock file, so you can pass one
@@ -12,6 +25,10 @@
   # Specify binaries to build in the form { foo.src = "src/foo.cr"; }
   # The default `crystal build` options can be overridden with { foo.options = [ "--optionname" ]; }
 , crystalBinaries ? { }
+, enableParallelBuilding ? true
+  # Copy all shards dependencies instead of symlinking and add write permissions
+  # to make environment more local-like
+, copyShardDeps ? false
 , ...
 }@args:
 
@@ -28,56 +45,74 @@ let
   crystalLib = linkFarm "crystal-lib" (lib.mapAttrsToList
     (name: value: {
       inherit name;
-      path = fetchFromGitHub value;
+      path =
+        if (builtins.hasAttr "url" value)
+        then fetchgit value
+        else fetchFromGitHub value;
     })
     (import shardsFile));
 
-  defaultOptions = [ "--release" "--progress" "--verbose" "--no-debug" ];
+  # We no longer use --no-debug in accordance with upstream's recommendation
+  defaultOptions = [ "--release" "--progress" "--verbose" ];
 
   buildDirectly = shardsFile == null || crystalBinaries != { };
+
+  mkCrystalBuildArgs = bin: attrs:
+    lib.concatStringsSep " " ([
+      "crystal"
+      "build"
+    ] ++ lib.optionals enableParallelBuilding [
+      "--threads"
+      "$NIX_BUILD_CORES"
+    ] ++ [
+      "-o"
+      bin
+      (attrs.src or (throw "No source file for crystal binary ${bin} provided"))
+      (lib.concatStringsSep " " (attrs.options or defaultOptions))
+    ]);
 
 in
 stdenv.mkDerivation (mkDerivationArgs // {
 
-  configurePhase = args.configurePhase or lib.concatStringsSep "\n"
-    (
+  configurePhase = args.configurePhase or (lib.concatStringsSep "\n" (
       [
         "runHook preConfigure"
       ]
       ++ lib.optional (lockFile != null) "cp ${lockFile} ./shard.lock"
       ++ lib.optionals (shardsFile != null) [
         "test -e lib || mkdir lib"
-        "for d in ${crystalLib}/*; do ln -s $d lib/; done"
+        (if copyShardDeps then "for d in ${crystalLib}/*; do cp -r $d/ lib/; done; chmod -R +w lib/"
+          else "for d in ${crystalLib}/*; do ln -s $d lib/; done")
         "cp shard.lock lib/.shards.info"
       ]
       ++ [ "runHook postConfigure" ]
-    );
+    ));
 
   CRFLAGS = lib.concatStringsSep " " defaultOptions;
 
   PREFIX = placeholder "out";
 
+  inherit enableParallelBuilding;
+  strictDeps = true;
   buildInputs = args.buildInputs or [ ] ++ [ crystal ]
-    ++ lib.optional (format != "crystal") shards;
+    ++ lib.optional (lib.versionAtLeast crystal.version "1.8") pcre2;
 
-  nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ git installShellFiles pkg-config which ];
+  nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
+    crystal
+    git
+    installShellFiles
+    removeReferencesTo
+    pkg-config
+    which
+  ] ++ lib.optional (format != "crystal") shards;
 
   buildPhase = args.buildPhase or (lib.concatStringsSep "\n" ([
     "runHook preBuild"
   ] ++ lib.optional (format == "make")
     "make \${buildTargets:-build} $makeFlags"
-  ++ lib.optionals (format == "crystal") (lib.mapAttrsToList
-    (bin: attrs: ''
-      crystal ${lib.escapeShellArgs ([
-        "build"
-        "-o"
-        bin
-        (attrs.src or (throw "No source file for crystal binary ${bin} provided"))
-      ] ++ (attrs.options or defaultOptions))}
-    '')
-    crystalBinaries)
+  ++ lib.optionals (format == "crystal") (lib.mapAttrsToList mkCrystalBuildArgs crystalBinaries)
   ++ lib.optional (format == "shards")
-    "shards build --local --production ${lib.concatStringsSep " " defaultOptions}"
+    "shards build --local --production ${lib.concatStringsSep " " (args.options or defaultOptions)}"
   ++ [ "runHook postBuild" ]));
 
   installPhase = args.installPhase or (lib.concatStringsSep "\n" ([
@@ -102,6 +137,7 @@ stdenv.mkDerivation (mkDerivationArgs // {
       installManPage man/*.?
     fi
   '') ++ [
+    "remove-references-to -t ${lib.getLib crystal} $out/bin/*"
     "runHook postInstall"
   ]));
 
@@ -119,6 +155,9 @@ stdenv.mkDerivation (mkDerivationArgs // {
 
   installCheckPhase = args.installCheckPhase or ''
     for f in $out/bin/*; do
+      if [ $f == $out/bin/*.dwarf ]; then
+        continue
+      fi
       $f --help > /dev/null
     done
   '';

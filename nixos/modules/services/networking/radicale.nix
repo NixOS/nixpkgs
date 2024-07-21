@@ -9,7 +9,7 @@ let
     listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault { });
   };
 
-  pkg = if isNull cfg.package then
+  pkg = if cfg.package == null then
     pkgs.radicale
   else
     cfg.package;
@@ -42,8 +42,8 @@ in {
       description = ''
         Radicale configuration, this will set the service
         configuration file.
-        This option is mutually exclusive with <option>settings</option>.
-        This option is deprecated.  Use <option>settings</option> instead.
+        This option is mutually exclusive with {option}`settings`.
+        This option is deprecated.  Use {option}`settings` instead.
       '';
     };
 
@@ -52,8 +52,8 @@ in {
       default = { };
       description = ''
         Configuration for Radicale. See
-        <link xlink:href="https://radicale.org/3.0.html#documentation/configuration" />.
-        This option is mutually exclusive with <option>config</option>.
+        <https://radicale.org/3.0.html#documentation/configuration>.
+        This option is mutually exclusive with {option}`config`.
       '';
       example = literalExpression ''
         server = {
@@ -74,10 +74,10 @@ in {
       type = format.type;
       description = ''
         Configuration for Radicale's rights file. See
-        <link xlink:href="https://radicale.org/3.0.html#documentation/authentication-and-rights" />.
-        This option only works in conjunction with <option>settings</option>.
-        Setting this will also set <option>settings.rights.type</option> and
-        <option>settings.rights.file</option> to approriate values.
+        <https://radicale.org/3.0.html#documentation/authentication-and-rights>.
+        This option only works in conjunction with {option}`settings`.
+        Setting this will also set {option}`settings.rights.type` and
+        {option}`settings.rights.file` to appropriate values.
       '';
       default = { };
       example = literalExpression ''
@@ -117,13 +117,13 @@ in {
       }
     ];
 
-    warnings = optional (isNull cfg.package && versionOlder config.system.stateVersion "17.09") ''
+    warnings = optional (cfg.package == null && versionOlder config.system.stateVersion "17.09") ''
       The configuration and storage formats of your existing Radicale
       installation might be incompatible with the newest version.
       For upgrade instructions see
       https://radicale.org/2.1.html#documentation/migration-from-1xx-to-2xx.
       Set services.radicale.package to suppress this warning.
-    '' ++ optional (isNull cfg.package && versionOlder config.system.stateVersion "20.09") ''
+    '' ++ optional (cfg.package == null && versionOlder config.system.stateVersion "20.09") ''
       The configuration format of your existing Radicale installation might be
       incompatible with the newest version.  For upgrade instructions see
       https://github.com/Kozea/Radicale/blob/3.0.6/NEWS.md#upgrade-checklist.
@@ -164,7 +164,7 @@ in {
         StateDirectoryMode = "0750";
         # Hardening
         CapabilityBoundingSet = [ "" ];
-        DeviceAllow = [ "/dev/stdin" ];
+        DeviceAllow = [ "/dev/stdin" "/dev/urandom" ];
         DevicePolicy = "strict";
         IPAddressAllow = mkIf bindLocalhost "localhost";
         IPAddressDeny = mkIf bindLocalhost "any";
@@ -200,5 +200,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ aneeshusa infinisil dotlambda ];
+  meta.maintainers = with lib.maintainers; [ dotlambda ];
 }

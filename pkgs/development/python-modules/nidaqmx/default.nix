@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, numpy
-, pytestCheckHook
-, pykka
-, enum34
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  numpy,
+  pytestCheckHook,
+  pykka,
+  pythonAtLeast,
 }:
 
 # Note we currently do not patch the path to the drivers
@@ -16,6 +16,10 @@
 buildPythonPackage rec {
   pname = "nidaqmx";
   version = src.rev;
+  format = "setuptools";
+
+  # 3.10 is not supported, upstream inactive
+  disabled = pythonAtLeast "3.10";
 
   src = fetchFromGitHub {
     owner = "ni";
@@ -27,11 +31,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     six
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    enum34
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pykka
   ];
@@ -43,13 +45,10 @@ buildPythonPackage rec {
   # Fixture "x_series_device" called directly. Fixtures are not meant to be called directly
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nidaqmx.task"
-  ];
+  pythonImportsCheck = [ "nidaqmx.task" ];
 
   meta = {
     description = "API for interacting with the NI-DAQmx driver";
     license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.fridh ];
   };
 }

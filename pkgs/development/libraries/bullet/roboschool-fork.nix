@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, freeglut
+{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, libglut
 , Cocoa,  OpenGL
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals stdenv.isLinux [ libGLU libGL freeglut ]
+  buildInputs = lib.optionals stdenv.isLinux [ libGLU libGL libglut ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
   patches = [ ./gwen-narrowing.patch ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    description = "A professional free 3D Game Multiphysics Library";
+    description = "Professional free 3D Game Multiphysics Library";
     longDescription = ''
       Bullet 3D Game Multiphysics Library provides state of the art collision
       detection, soft body and rigid body dynamics.
@@ -51,5 +51,8 @@ stdenv.mkDerivation {
     homepage = "http://bulletphysics.org";
     license = licenses.zlib;
     platforms = platforms.unix;
+    # /tmp/nix-build-bullet-2019-03-27.drv-0/source/src/Bullet3Common/b3Vector3.h:297:7: error: argument value 10880 is outside the valid range [0, 255] [-Wargument-outside-range]
+    #                 y = b3_splat_ps(y, 0x80);
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
   };
 }

@@ -8,10 +8,10 @@ in
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-bridge";
   meta = {
-    maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];
+    maintainers = with lib.maintainers; [ aristid aszlig kampfschlaefer ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;

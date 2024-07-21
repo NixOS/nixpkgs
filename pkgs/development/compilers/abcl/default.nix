@@ -1,38 +1,66 @@
-{lib, stdenv, fetchurl, ant, jre, jdk}:
-stdenv.mkDerivation rec {
-  pname = "abcl";
-  version = "1.8.0";
-  # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
-  src = fetchurl {
-    url = "https://common-lisp.net/project/armedbear/releases/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "0zr5mmqyj484vza089l8vc88d07g0m8ymxzglvar3ydwyvi1x1qx";
-  };
-  configurePhase = ''
-    mkdir nix-tools
-    export PATH="$PWD/nix-tools:$PATH"
-    echo "echo nix-builder.localdomain" > nix-tools/hostname
-    chmod a+x nix-tools/*
+{ lib
+, stdenv
+, writeShellScriptBin
+, fetchurl
+, ant
+, jdk
+, makeWrapper
+, stripJavaArchivesHook
+}:
 
-    hostname
+let
+  fakeHostname = writeShellScriptBin "hostname" ''
+    echo nix-builder.localdomain
   '';
-  buildPhase = ''
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "abcl";
+  version = "1.9.2";
+
+  src = fetchurl {
+    url = "https://common-lisp.net/project/armedbear/releases/${finalAttrs.version}/abcl-src-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Ti9Lj4Xi2V2V5b282foXrWExoX4vzxK8Gf+5e0i8HTg=";
+  };
+
+  # note for the future:
+  # if you use makeBinaryWrapper, you will trade bash for glibc, the closure will be slightly larger
+  nativeBuildInputs = [
     ant
+    jdk
+    fakeHostname
+    makeWrapper
+    stripJavaArchivesHook
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    ant \
+      -Dabcl.runtime.jar.path="$out/lib/abcl/abcl.jar" \
+      -Dadditional.jars="$out/lib/abcl/abcl-contrib.jar"
+
+    runHook postBuild
   '';
+
   installPhase = ''
-    mkdir -p "$out"/{bin,share/doc/abcl,lib/abcl}
+    runHook preInstall
+
+    mkdir -p "$out"/{share/doc/abcl,lib/abcl}
     cp -r README COPYING CHANGES examples/  "$out/share/doc/abcl/"
     cp -r dist/*.jar contrib/ "$out/lib/abcl/"
+    install -Dm555 abcl -t $out/bin
 
-    echo "#! ${stdenv.shell}" >> "$out/bin/abcl"
-    echo "${jre}/bin/java -cp \"$out/lib/abcl/abcl.jar:$out/lib/abcl/abcl-contrib.jar:\$CLASSPATH\" org.armedbear.lisp.Main \"\$@\"" >> "$out/bin/abcl"
-    chmod a+x "$out"/bin/*
+    runHook postInstall
   '';
-  buildInputs = [jre ant jdk jre];
+
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    description = "A JVM-based Common Lisp implementation";
-    license = lib.licenses.gpl3 ;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
+    description = "JVM-based Common Lisp implementation";
     homepage = "https://common-lisp.net/project/armedbear/";
+    license = lib.licenses.gpl2Classpath;
+    mainProgram = "abcl";
+    maintainers = lib.teams.lisp.members;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
-}
+})

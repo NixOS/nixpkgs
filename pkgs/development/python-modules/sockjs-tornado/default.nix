@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, tornado }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  tornado,
+}:
 
 buildPythonPackage rec {
   pname = "sockjs-tornado";
   version = "1.0.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

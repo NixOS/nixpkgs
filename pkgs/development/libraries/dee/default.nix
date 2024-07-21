@@ -56,10 +56,15 @@ stdenv.mkDerivation rec {
     "--with-pygi-overrides-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
+  # Compilation fails after a change in glib where
+  # g_string_free now returns a value
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A library that uses DBus to provide objects allowing you to create Model-View-Controller type programs across DBus";
+    description = "Library that uses DBus to provide objects allowing you to create Model-View-Controller type programs across DBus";
+    mainProgram = "dee-tool";
     homepage = "https://launchpad.net/dee";
     license = licenses.lgpl3;
     platforms = platforms.linux;

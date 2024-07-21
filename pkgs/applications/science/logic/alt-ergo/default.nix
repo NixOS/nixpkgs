@@ -1,47 +1,35 @@
-{ fetchFromGitHub, lib, which, ocamlPackages }:
+{ darwin, fetchurl, lib, ocamlPackages, stdenv }:
 
 let
   pname = "alt-ergo";
-  version = "2.4.1";
+  version = "2.5.4";
 
-  src = fetchFromGitHub {
-    owner = "OCamlPro";
-    repo = pname;
-    rev = version;
-    sha256 = "0hglj1p0753w2isds01h90knraxa42d2jghr35dpwf9g8a1sm9d3";
+  src = fetchurl {
+    url = "https://github.com/OCamlPro/alt-ergo/releases/download/v${version}/alt-ergo-${version}.tbz";
+    hash = "sha256-AsHok5i62vqJ5hK8XRiD8hM6JQaFv3dMxZAcVYEim6w=";
   };
-
-  useDune2 = true;
-
-  nativeBuildInputs = [ which ];
-
 in
 
 let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-lib";
-  inherit version src useDune2 nativeBuildInputs;
-  configureFlags = pname;
-  buildInputs = with ocamlPackages; [ dune-configurator ];
-  propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex stdlib-shims zarith ];
+  inherit version src;
+  buildInputs = with ocamlPackages; [ ppx_blob ];
+  propagatedBuildInputs = with ocamlPackages; [ camlzip dolmen_loop dune-build-info fmt ocplib-simplex seq stdlib-shims zarith ];
 }; in
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-parsers";
-  inherit version src useDune2 nativeBuildInputs;
-  configureFlags = pname;
-  buildInputs = with ocamlPackages; [ menhir ];
-  propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ camlzip psmt2-frontend ]);
+  inherit version src;
+  nativeBuildInputs = [ ocamlPackages.menhir ];
+  propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ psmt2-frontend ]);
 }; in
 
 ocamlPackages.buildDunePackage {
 
-  inherit pname version src useDune2 nativeBuildInputs;
+  inherit pname version src;
 
-  configureFlags = pname;
-
-  buildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [
-    cmdliner menhir ])
-  ;
+  nativeBuildInputs = [ ocamlPackages.menhir ] ++ lib.optionals stdenv.isDarwin [ darwin.sigtool ];
+  buildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [ cmdliner dune-site ]);
 
   meta = {
     description = "High-performance theorem prover and SMT solver";

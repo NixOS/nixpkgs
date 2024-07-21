@@ -7,12 +7,13 @@
 , libnotify
 , gst_all_1
 , libsecret
-, wrapGAppsHook
+, wrapGAppsHook3
 , gsettings-desktop-schemas
 , gnome-online-accounts
 , glib
 , gobject-introspection
 , folks
+, bash
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -39,11 +40,12 @@ python3Packages.buildPythonApplication rec {
     libsecret
     gnome-online-accounts
     folks
+    bash
   ];
 
   nativeBuildInputs = [
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
     python3Packages.pillow
     # For setup-hook
     gobject-introspection
@@ -59,15 +61,12 @@ python3Packages.buildPythonApplication rec {
   # See https://nixos.org/nixpkgs/manual/#ssec-gnome-common-issues-double-wrapped
   dontWrapGApps = true;
 
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {
-    description = "An extensible mail notification service.";
+    description = "Extensible mail notification service";
     homepage = "http://bubblemail.free.fr/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

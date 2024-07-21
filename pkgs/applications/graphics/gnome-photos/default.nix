@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , at-spi2-core
 , babl
@@ -7,22 +8,19 @@
 , dleyna-renderer
 , gdk-pixbuf
 , gegl
-, geocode-glib
+, geocode-glib_2
 , gettext
 , gexiv2
-, gfbgraph
 , glib
 , gnome-online-accounts
 , gnome
 , gobject-introspection
-, grilo
-, grilo-plugins
 , gsettings-desktop-schemas
 , gtk3
 , itstool
 , libdazzle
+, libportal-gtk3
 , libhandy
-, libgdata
 , libxml2
 , meson
 , ninja
@@ -31,18 +29,18 @@
 , python3
 , tracker
 , tracker-miners
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
-  version = "40.0";
+  version = "44.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "1bzi79plw6ji6qlckhxnwfnswy6jpnhzmmyanml2i2xg73hp6bg0";
+    sha256 = "544hA5fTxigJxs1VIdpuzLShHd6lvyr4YypH9Npcgp4=";
   };
 
   patches = [
@@ -64,7 +62,7 @@ stdenv.mkDerivation rec {
       pygobject3
       pyatspi
     ]))
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -73,19 +71,15 @@ stdenv.mkDerivation rec {
     dleyna-renderer
     gdk-pixbuf
     gegl
-    geocode-glib
+    geocode-glib_2
     gexiv2
-    gfbgraph
     glib
     gnome-online-accounts
-    gnome.adwaita-icon-theme
-    grilo
-    grilo-plugins
     gsettings-desktop-schemas
     gtk3
     libdazzle
+    libportal-gtk3
     libhandy
-    libgdata
     tracker
     tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
 
@@ -119,7 +113,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Access, organize and share your photos";
-    homepage = "https://wiki.gnome.org/Apps/Photos";
+    mainProgram = "gnome-photos";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-photos";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

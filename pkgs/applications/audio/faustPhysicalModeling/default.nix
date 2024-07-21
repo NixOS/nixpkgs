@@ -1,16 +1,18 @@
 { stdenv, lib, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
   pname = "faustPhysicalModeling";
-  version = "2.37.3";
+  version = "2.74.6";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    sha256 = "sha256-h6L+qRkN2chnI4821WrjD3uRFw3J0sUYVLL8w57vR1U=";
+    sha256 = "sha256-2qgw7pauDZBvEb5iySNiq2Fq+T+qw+AjVTwxaSQ9Eko=";
   };
 
   buildInputs = [ faust2jaqt faust2lv2 ];
+
+  dontWrapQtApps = true;
 
   buildPhase = ''
     cd examples/physicalModeling
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The physical models included with faust compiled as jack standalone and lv2 instruments";
+    description = "Physical models included with faust compiled as jack standalone and lv2 instruments";
     homepage = "https://github.com/grame-cncm/faust/tree/master-dev/examples/physicalModeling";
     license = licenses.mit;
     platforms = platforms.linux;

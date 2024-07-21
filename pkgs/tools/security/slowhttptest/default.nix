@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "slowhttptest";
-  version = "1.8.2";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "shekyan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1xv2j3hl4zj0s2cxcsvlwgridh9ap4g84g7c4918d03id15wydcx";
+    sha256 = "sha256-rIvd3LykVAbDXtFWZ1EQ+QKeALzqwK6pq7In0BsCOFo=";
   };
 
   buildInputs = [ openssl ];
@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/shekyan/slowhttptest";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "slowhttptest";
   };
 }

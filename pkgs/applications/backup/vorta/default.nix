@@ -3,46 +3,50 @@
 , fetchFromGitHub
 , wrapQtAppsHook
 , borgbackup
-, qt5
+, qtbase
+, qtwayland
+, stdenv
+, makeFontsConf
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "vorta";
-  version = "0.8.2";
+  version = "0.9.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
     rev = "v${version}";
-    sha256 = "sha256-ut4HCfLU/P22y5QbNakTV4d4CnFRxJvn+cnJ0ZGpTlw=";
+    hash = "sha256-wGlnldS2p92NAYAyRPqKjSneIlbdsOiJ0N42n/mMGFI=";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    python3Packages.setuptools
+    wrapQtAppsHook
+  ];
+
+  buildInputs = lib.optionals stdenv.isLinux [
+    qtwayland
+  ];
 
   propagatedBuildInputs = with python3Packages; [
-    paramiko
     peewee
-    pyqt5
-    python-dateutil
+    pyqt6
     psutil
-    qdarkstyle
     secretstorage
-    appdirs
     setuptools
+    platformdirs
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-    --replace setuptools_git "" \
-    --replace pytest-runner ""
-
     substituteInPlace src/vorta/assets/metadata/com.borgbase.Vorta.desktop \
-    --replace Exec=vorta "Exec=$out/bin/vorta" \
     --replace com.borgbase.Vorta "com.borgbase.Vorta-symbolic"
   '';
 
   postInstall = ''
     install -Dm644 src/vorta/assets/metadata/com.borgbase.Vorta.desktop $out/share/applications/com.borgbase.Vorta.desktop
+    install -Dm644 src/vorta/assets/icons/icon.svg $out/share/pixmaps/com.borgbase.Vorta-symbolic.svg
   '';
 
   preFixup = ''
@@ -52,42 +56,39 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytest-qt
     pytest-mock
     pytestCheckHook
   ];
 
-  preCheck = ''
+  preCheck = let
+    fontsConf = makeFontsConf {
+      fontDirectories = [ ];
+    };
+  in ''
     export HOME=$(mktemp -d)
+    export FONTCONFIG_FILE=${fontsConf};
     # For tests/test_misc.py::test_autostart
     mkdir -p $HOME/.config/autostart
-    export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
   '';
 
   disabledTestPaths = [
-    "tests/test_archives.py"
-    "tests/test_borg.py"
-    "tests/test_lock.py"
-    "tests/test_notifications.py"
-  ];
-
-  disabledTests = [
-    "diff_archives_dict_issue-Users"
-    "diff_archives-test"
-    "test_repo_unlink"
-    "test_repo_add_success"
-    "test_ssh_dialog"
-    "test_create"
-    "test_scheduler_create_backup"
+    # QObject::connect: No such signal QPlatformNativeInterface::systemTrayWindowChanged(QScreen*)
+    "tests/test_excludes.py"
+    "tests/integration"
+    "tests/unit"
   ];
 
   meta = with lib; {
-    license = licenses.gpl3Only;
-    homepage = "https://vorta.borgbase.com/";
-    maintainers = with maintainers; [ ma27 ];
+    changelog = "https://github.com/borgbase/vorta/releases/tag/${src.rev}";
     description = "Desktop Backup Client for Borg";
+    homepage = "https://vorta.borgbase.com/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ma27 ];
     platforms = platforms.linux;
+    mainProgram = "vorta";
   };
 }

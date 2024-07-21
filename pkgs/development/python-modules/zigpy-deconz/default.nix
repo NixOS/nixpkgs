@@ -1,25 +1,37 @@
-{ lib
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pyserial-asyncio
-, pytest-asyncio
-, pytestCheckHook
-, zigpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pyserial-asyncio,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-deconz";
-  version = "0.14.0";
-  format = "setuptools";
+  version = "0.23.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-PctS09twk8SRK3pTJvQU8drsqhmrPnMge2WO+VY84U8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-H3WsprBTfBpxMGqasWbj41Yikt/UMU0cKaROzXE2dLU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools-git-versioning<2"' "" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pyserial
@@ -27,21 +39,19 @@ buildPythonPackage rec {
     zigpy
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "zigpy_deconz"
-  ];
+  pythonImportsCheck = [ "zigpy_deconz" ];
 
   meta = with lib; {
     description = "Library which communicates with Deconz radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-deconz";
+    changelog = "https://github.com/zigpy/zigpy-deconz/releases/tag/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu mvnetbiz ];
+    maintainers = with maintainers; [ mvnetbiz ];
     platforms = platforms.linux;
   };
 }

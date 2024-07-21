@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.mpdscribble;
   mpdCfg = config.services.mpd;
+  mpdOpt = options.services.mpd;
 
   endpointUrls = {
     "last.fm" = "http://post.audioscrobbler.com";
@@ -76,7 +77,7 @@ in {
 
   options.services.mpdscribble = {
 
-    enable = mkEnableOption "mpdscribble";
+    enable = mkEnableOption "mpdscribble, an MPD client which submits info about tracks being played to Last.fm (formerly AudioScrobbler)";
 
     proxy = mkOption {
       default = null;
@@ -108,6 +109,11 @@ in {
         mpdCfg.network.listenAddress
       else
         "localhost");
+      defaultText = literalExpression ''
+        if config.${mpdOpt.network.listenAddress} != "any"
+        then config.${mpdOpt.network.listenAddress}
+        else "localhost"
+      '';
       type = types.str;
       description = ''
         Host for the mpdscribble daemon to search for a mpd daemon on.
@@ -122,16 +128,21 @@ in {
           mpdCfg.credentials).passwordFile
       else
         null;
+      defaultText = literalMD ''
+        The first password file with read access configured for MPD when using a local instance,
+        otherwise `null`.
+      '';
       type = types.nullOr types.str;
       description = ''
         File containing the password for the mpd daemon.
-        If there is a local mpd configured using <option>services.mpd.credentials</option>
+        If there is a local mpd configured using {option}`services.mpd.credentials`
         the default is automatically set to a matching passwordFile of the local mpd.
       '';
     };
 
     port = mkOption {
       default = mpdCfg.network.port;
+      defaultText = literalExpression "config.${mpdOpt.network.port}";
       type = types.port;
       description = ''
         Port for the mpdscribble daemon to search for a mpd daemon on.
@@ -145,8 +156,7 @@ in {
             url = mkOption {
               type = types.str;
               default = endpointUrls.${name} or "";
-              description =
-                "The url endpoint where the scrobble API is listening.";
+              description = "The url endpoint where the scrobble API is listening.";
             };
             username = mkOption {
               type = types.str;
@@ -156,8 +166,7 @@ in {
             };
             passwordFile = mkOption {
               type = types.nullOr types.str;
-              description =
-                "File containing the password, either as MD5SUM or cleartext.";
+              description = "File containing the password, either as MD5SUM or cleartext.";
             };
           };
         };

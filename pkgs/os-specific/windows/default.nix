@@ -6,7 +6,7 @@ lib.makeScope newScope (self: with self; {
 
   cygwinSetup = callPackage ./cygwin-setup { };
 
-  jom = callPackage ./jom { };
+  dlfcn = callPackage ./dlfcn { };
 
   w32api = callPackage ./w32api { };
 
@@ -17,10 +17,11 @@ lib.makeScope newScope (self: with self; {
     stdenv = crossLibcStdenv;
   };
 
+  # FIXME untested with llvmPackages_16 was using llvmPackages_8
   crossThreadsStdenv = overrideCC crossLibcStdenv
     (if stdenv.hostPlatform.useLLVM or false
-     then buildPackages.llvmPackages_8.clangNoLibcxx
-     else buildPackages.gccCrossStageStatic.override (old: {
+     then buildPackages.llvmPackages.clangNoLibcxx
+     else buildPackages.gccWithoutTargetLibc.override (old: {
        bintools = old.bintools.override {
          libc = libcCross;
        };
@@ -37,9 +38,9 @@ lib.makeScope newScope (self: with self; {
     stdenv = crossThreadsStdenv;
   };
 
-  pthreads = callPackage ./pthread-w32 { };
+  npiperelay = callPackage ./npiperelay { };
 
-  wxMSW = callPackage ./wxMSW-2.8 { };
+  pthreads = callPackage ./pthread-w32 { };
 
   libgnurx = callPackage ./libgnurx { };
 })

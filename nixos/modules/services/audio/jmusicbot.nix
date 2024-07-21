@@ -9,6 +9,8 @@ in
     services.jmusicbot = {
       enable = mkEnableOption "jmusicbot, a Discord music bot that's easy to set up and run yourself";
 
+      package = mkPackageOption pkgs "jmusicbot" { };
+
       stateDir = mkOption {
         type = types.path;
         description = ''
@@ -24,10 +26,11 @@ in
   config = mkIf cfg.enable {
     systemd.services.jmusicbot = {
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       description = "Discord music bot that's easy to set up and run yourself!";
       serviceConfig = mkMerge [{
-        ExecStart = "${pkgs.jmusicbot}/bin/JMusicBot";
+        ExecStart = "${cfg.package}/bin/JMusicBot";
         WorkingDirectory = cfg.stateDir;
         Restart = "always";
         RestartSec = 20;
@@ -37,5 +40,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ SuperSandro2000 ];
+  meta.maintainers = with maintainers; [ ];
 }

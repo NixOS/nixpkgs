@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwise";
-  version = "0.43";
+  version = "0.50";
 
   src = fetchFromGitHub {
     owner = "mellowcandle";
     repo = "bitwise";
     rev = "v${version}";
-    sha256 = "18sz7bfpq83s2zhw7c35snz6k3b6rzad2mmfq2qwmyqwypbp1g7l";
+    sha256 = "sha256-x+ky1X0c0bQZnkNvNNuXN2BoMDtDSCt/8dBAG92jCCQ=";
   };
 
   buildInputs = [ ncurses readline ];
@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = [ maintainers.whonore ];
     platforms = platforms.unix;
+    mainProgram = "bitwise";
   };
 }

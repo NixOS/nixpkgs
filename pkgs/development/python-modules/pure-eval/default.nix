@@ -1,38 +1,32 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, setuptools-scm
-, toml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools-scm,
+  toml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pure_eval";
-  version = "0.2.1";
+  version = "0.2.2";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+Vucu16NFPtQ23AbBH/cQU+klxp6DMicSScbnKegLZI=";
+    hash = "sha256-9N+UcgAv30s4ctgsBrOHiix4BoXhKPgxH/GOz/NIFdU=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  buildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    setuptools-scm
-  ];
+  propagatedBuildInputs = [ toml ];
 
-  propagatedBuildInputs = [
-    toml
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pure_eval" ];
 

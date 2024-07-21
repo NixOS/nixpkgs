@@ -8,23 +8,30 @@
 , openssl
 , udev
 , zlib
+, withPcsclite ? true
+, pcsclite
 }:
 
 stdenv.mkDerivation rec {
   pname = "libfido2";
-  version = "1.8.0";
+  version = "1.14.0";
 
   # releases on https://developers.yubico.com/libfido2/Releases/ are signed
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "07gxyy5yzgfh5hg7q9fr77z5mkj0xjvd5ya7p5f5kar4iwc92hjm";
+    sha256 = "sha256-NgF5LjIAMtQoACxMzoSZpMe4AzGQUaJaDJ8fE4/+5Fo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libcbor openssl zlib ]
+  buildInputs = [ libcbor zlib ]
     ++ lib.optionals stdenv.isDarwin [ hidapi ]
-    ++ lib.optionals stdenv.isLinux [ udev ];
+    ++ lib.optionals stdenv.isLinux [ udev ]
+    ++ lib.optionals (stdenv.isLinux && withPcsclite) [ pcsclite ];
+
+  propagatedBuildInputs = [ openssl ];
+
+  outputs = [ "out" "dev" "man" ];
 
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
@@ -33,7 +40,12 @@ stdenv.mkDerivation rec {
     "-DUSE_HIDAPI=1"
   ] ++ lib.optionals stdenv.isLinux [
     "-DNFC_LINUX=1"
+  ] ++ lib.optionals (stdenv.isLinux && withPcsclite) [
+    "-DUSE_PCSC=1"
   ];
+
+  # causes possible redefinition of _FORTIFY_SOURCE?
+  hardeningDisable = [ "fortify3" ];
 
   meta = with lib; {
     description = ''
@@ -41,7 +53,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Yubico/libfido2";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ dtzWill prusnak ];
+    maintainers = with maintainers; [ prusnak ];
     platforms = platforms.unix;
   };
 }

@@ -1,21 +1,39 @@
-{ lib, stdenv, fetchurl, openssl }:
+{
+  fetchurl
+, lib
+, nixosTests
+, openssl
+, stdenv
+, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stunnel";
-  version = "5.60";
+  version = "5.72";
+
+  outputs = [ "out" "doc" "man" ];
 
   src = fetchurl {
-    url    = "https://www.stunnel.org/downloads/${pname}-${version}.tar.gz";
-    sha256 = "sha256-xF12WxUhhh/qmwO0JbndfUizBVEowK7Gc7ul75uPeH0=";
-    # please use the contents of "https://www.stunnel.org/downloads/${name}.tar.gz.sha256",
+    url = "https://www.stunnel.org/archive/${lib.versions.major finalAttrs.version}.x/stunnel-${finalAttrs.version}.tar.gz";
+    hash = "sha256-PVMpQSga41MxlzUUTkrbmuSJoQt+MJxYpIFX8I9C6Uk=";
+    # please use the contents of "https://www.stunnel.org/downloads/stunnel-${version}.tar.gz.sha256",
     # not the output of `nix-prefetch-url`
   };
 
-  buildInputs = [ openssl ];
+  enableParallelBuilding = true;
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals systemdSupport [
+    systemd
+  ];
+
   configureFlags = [
     "--with-ssl=${openssl.dev}"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    (lib.enableFeature systemdSupport "systemd")
   ];
 
   postInstall = ''
@@ -28,11 +46,16 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
+  passthru.tests = {
+    stunnel = nixosTests.stunnel;
+  };
+
   meta = {
     description = "Universal tls/ssl wrapper";
-    homepage    = "https://www.stunnel.org/";
-    license     = lib.licenses.gpl2Plus;
-    platforms   = lib.platforms.unix;
+    homepage = "https://www.stunnel.org/";
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.thoughtpolice ];
+    platforms = lib.platforms.unix;
+    mainProgram = "stunnel";
   };
-}
+})

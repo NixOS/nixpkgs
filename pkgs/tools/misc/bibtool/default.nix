@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tool for manipulating BibTeX bibliographies";
     homepage = "http://www.gerd-neugebauer.de/software/TeX/BibTool/index.en.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.rycee ];
+    mainProgram = "bibtool";
   };
 }

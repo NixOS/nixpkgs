@@ -1,41 +1,45 @@
-{ lib
-, attrs
-, boto3
-, buildPythonPackage
-, click-completion
-, click-didyoumean
-, click-help-colors
-, colorama
-, fetchPypi
-, gradient_statsd
-, gradient-utils
-, halo
-, marshmallow
-, progressbar2
-, pyopenssl
-, pyyaml
-, requests
-, requests-toolbelt
-, terminaltables
-, websocket-client
+{
+  lib,
+  attrs,
+  boto3,
+  buildPythonPackage,
+  click-completion,
+  click-didyoumean,
+  click-help-colors,
+  colorama,
+  fetchPypi,
+  gradient-statsd,
+  gradient-utils,
+  gql,
+  halo,
+  marshmallow,
+  progressbar2,
+  pyopenssl,
+  pyyaml,
+  requests,
+  requests-toolbelt,
+  terminaltables,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "gradient";
-  version = "1.8.9";
+  version = "2.0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c05913efe7fcc9f75c1fe84c157d2c2cf3ec0983e132d418c6e59fabc6361a1e";
+    hash = "sha256-pqyyNzx2YPP3qmWQbzGd3q2HzCkrWlIVSJZeFrGm9dk=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'attrs<=' 'attrs>=' \
       --replace 'colorama==' 'colorama>=' \
-      --replace 'PyYAML==' 'PyYAML>=' \
+      --replace 'gql[requests]==3.0.0a6' 'gql' \
+      --replace 'PyYAML==5.*' 'PyYAML' \
       --replace 'marshmallow<' 'marshmallow>=' \
-      --replace 'websocket-client==' 'websocket-client>='
+      --replace 'websocket-client==0.57.*' 'websocket-client'
   '';
 
   propagatedBuildInputs = [
@@ -45,7 +49,8 @@ buildPythonPackage rec {
     click-didyoumean
     click-help-colors
     colorama
-    gradient_statsd
+    gql
+    gradient-statsd
     gradient-utils
     halo
     marshmallow
@@ -58,17 +63,21 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  # tries to use /homeless-shelter to mimic container usage, etc
+  # Tries to use /homeless-shelter to mimic container usage, etc
   doCheck = false;
 
+  # marshmallow.exceptions.StringNotCollectionError: "only" should be a collection of strings.
+  # Support for marshmallow > 3
+  # pythonImportsCheck = [
+  #   "gradient"
+  # ];
+
   meta = with lib; {
-    description = "The command line interface for Gradient";
+    description = "Command line interface for Gradient";
+    mainProgram = "gradient";
     homepage = "https://github.com/Paperspace/gradient-cli";
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
-    # There is no support for click > 8
-    # https://github.com/Paperspace/gradient-cli/issues/368
-    broken = true;
   };
 }

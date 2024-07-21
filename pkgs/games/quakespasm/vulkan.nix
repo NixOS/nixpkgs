@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper
+, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader, moltenvk
+}:
 
 stdenv.mkDerivation rec {
   pname = "vkquake";
-  version = "1.12.1";
+  version = "1.22.3";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     rev = version;
-    sha256 = "sha256-D6JtYhR+bkYYm4yuipNrsonziDGiDWICEohy4Mgdr+0=";
+    sha256 = "sha256-+8DU1QT3Lgqf1AIReVnXQ2Lq6R6eBb8VjdkJfAn/Rtc=";
   };
 
-  sourceRoot = "source/Quake";
+  sourceRoot = "${src.name}/Quake";
 
   nativeBuildInputs = [
     makeWrapper
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
     libvorbis
     libmad
     vulkan-loader
-  ];
+  ] ++ lib.optional stdenv.isDarwin moltenvk;
 
   buildFlags = [ "DO_USERDIRS=1" ];
 
@@ -33,6 +35,10 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "prefix=$(out) bindir=$(out)/bin" ];
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
+  };
 
   postFixup = ''
     wrapProgram $out/bin/vkquake \
@@ -43,6 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Vulkan Quake port based on QuakeSpasm";
+    mainProgram = "vkquake";
     homepage = src.meta.homepage;
     longDescription = ''
       vkQuake is a Quake 1 port using Vulkan instead of OpenGL for rendering.
@@ -53,7 +60,7 @@ stdenv.mkDerivation rec {
       specialization constants, CPU/GPU parallelism and memory pooling.
     '';
 
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ ylh ];
   };
 }

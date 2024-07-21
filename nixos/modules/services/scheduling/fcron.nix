@@ -6,7 +6,7 @@ let
 
   cfg = config.services.fcron;
 
-  queuelen = if cfg.queuelen == null then "" else "-q ${toString cfg.queuelen}";
+  queuelen = optionalString (cfg.queuelen != null) "-q ${toString cfg.queuelen}";
 
   # Duplicate code, also found in cron.nix. Needs deduplication.
   systemCronJobs =
@@ -40,7 +40,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the <command>fcron</command> daemon.";
+        description = "Whether to enable the {command}`fcron` daemon.";
       };
 
       allow = mkOption {
@@ -48,7 +48,7 @@ in
         default = [ "all" ];
         description = ''
           Users allowed to use fcrontab and fcrondyn (one name per
-          line, <literal>all</literal> for everyone).
+          line, `all` for everyone).
         '';
       };
 

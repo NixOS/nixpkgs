@@ -1,12 +1,11 @@
 { lib, stdenv
 , cairo
+, elfutils
 , fetchFromGitHub
-, gettext
 , glib
 , gobject-introspection
 , gtksourceview3
 , json-glib
-, libelf
 , makeWrapper
 , pango
 , pkg-config
@@ -15,22 +14,26 @@
 , scons
 , sphinx
 , util-linux
-, wrapGAppsHook
+, wrapGAppsHook3
 , withGui ? false }:
 
 assert withGui -> !stdenv.isDarwin;
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "rmlint";
-  version = "2.10.1";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "sahib";
     repo = "rmlint";
     rev = "v${version}";
-    sha256 = "15xfkcw1bkfyf3z8kl23k3rlv702m0h7ghqxvhniynvlwbgh6j2x";
+    sha256 = "sha256-pOo1YfeqHUU6xyBRFbcj2lX1MHJ+a5Hi31BMC1nYZGo=";
   };
+
+  patches = [
+    # pass through NIX_* environment variables to scons.
+    ./scons-nix-env.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -38,28 +41,26 @@ stdenv.mkDerivation rec {
     scons
   ] ++ lib.optionals withGui [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
+    gobject-introspection
   ];
 
   buildInputs = [
     glib
     json-glib
-    libelf
     util-linux
   ] ++ lib.optionals withGui [
     cairo
-    gobject-introspection
     gtksourceview3
     pango
     polkit
     python3
     python3.pkgs.pygobject3
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
   ];
 
   prePatch = ''
-    export CFLAGS="$NIX_CFLAGS_COMPILE"
-    export LDFLAGS="''${NIX_LDFLAGS//-rpath /-Wl,-rpath=}"
-
     # remove sources of nondeterminism
     substituteInPlace lib/cmdline.c \
       --replace "__DATE__" "\"Jan  1 1970\"" \
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
       --replace "gzip -c " "gzip -cn "
   '';
 
+  # Otherwise tries to access /usr.
   prefixKey = "--prefix=";
 
   sconsFlags = lib.optionals (!withGui) [ "--without-gui" ];
@@ -78,11 +80,12 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${python3.pkgs.pygobject3}):$(toPythonPath ${python3.pkgs.pycairo})")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Extremely fast tool to remove duplicates and other lint from your filesystem";
     homepage = "https://rmlint.readthedocs.org";
     platforms = platforms.unix;
     license = licenses.gpl3;
     maintainers = with maintainers; [ aaschmid koral ];
+    mainProgram = "rmlint";
   };
 }

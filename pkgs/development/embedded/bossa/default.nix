@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchgit, wxGTK, libX11, readline }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, wxGTK32
+, libX11
+, readline
+, darwin
+, fetchpatch
+}:
 
 let
   # BOSSA needs a "bin2c" program to embed images.
@@ -13,24 +21,48 @@ let
   };
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bossa";
-  version = "1.8";
+  version = "1.9.1";
 
-  src = fetchgit {
-    url = "https://github.com/shumatech/BOSSA";
-    rev = "3be622ca0aa6214a2fc51c1ec682c4a58a423d62";
-    sha256 = "19ik86qbffcb04cgmi4mnascbkck4ynfj87ha65qdk6fmp5q35vm";
+  src = fetchFromGitHub {
+    owner = "shumatech";
+    repo = "BOSSA";
+    rev = version;
+    sha256 = "sha256-8M3MU/+Y1L6SaQ1yoC9Z27A/gGruZdopLnL1z7h7YJw=";
   };
 
-  patches = [ ./bossa-no-applet-build.patch ];
+  patches = [
+    (fetchpatch {
+      # Required for building on Darwin with clang >=15.
+      name = "pr-172-fix.patch";
+      url = "https://github.com/shumatech/BOSSA/commit/6e54973c3c758674c3d04b5e2cf12e097006f6a3.patch";
+      hash = "sha256-2lp6Ej3IfofztC1n/yHLjabn0MH4BA/CM3dsnAw8klA=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "-arch x86_64" ""
+  '';
 
   nativeBuildInputs = [ bin2c ];
-  buildInputs = [ wxGTK libX11 readline ];
+  buildInputs = [
+    wxGTK32
+    libX11
+    readline
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
+  ];
 
-  # Explicitly specify targets so they don't get stripped.
-  makeFlags = [ "bin/bossac" "bin/bossash" "bin/bossa" ];
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  makeFlags = [
+    "WXVERSION=3.2"
+    # Explicitly specify targets so they don't get stripped.
+    "bin/bossac"
+    "bin/bossash"
+    "bin/bossa"
+  ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -38,7 +70,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
+    description = "Flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
     longDescription = ''
       BOSSA is a flash programming utility for Atmel's SAM family of
       flash-based ARM microcontrollers. The motivation behind BOSSA is
@@ -48,6 +80,6 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.shumatech.com/web/products/bossa";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,24 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
 }:
+
 buildPythonPackage rec {
   pname = "plac";
-  version = "1.3.4";
+  version = "1.4.3";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c91a4c9f9cc67c7e7213b6823b0ea15cd0afe5eaf8f8dda1fe5cb10192b137f5";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "ialbert";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-EWwDtS2cRLBe4aZuH72hgg2BQnVJQ39GmPx05NxTNjE=";
   };
 
+  # tests are broken, see https://github.com/ialbert/plac/issues/74
+  doCheck = false;
+
   checkPhase = ''
-    cd doc
-    ${python.interpreter} -m unittest discover -p "*test_plac*"
+    runHook preCheck
+
+    ${python.interpreter} doc/test_plac.py
+
+    runHook postCheck
   '';
+
+  pythonImportsCheck = [ "plac" ];
 
   meta = with lib; {
     description = "Parsing the Command Line the Easy Way";
+    mainProgram = "plac_runner.py";
     homepage = "https://github.com/micheles/plac";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ ];

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tcpreplay";
-  version = "4.3.4";
+  version = "4.5.1";
 
   src = fetchurl {
     url = "https://github.com/appneta/tcpreplay/releases/download/v${version}/tcpreplay-${version}.tar.gz";
-    sha256 = "sha256-7gZTEIBsIuL9NvAU4euzMbmKfsTblY6Rw9nL2gZA2Sw=";
+    sha256 = "sha256-Leeb/Wfsksqa4v+1BFbdHVP/QPP6cbQixl6AYgE8noU=";
   };
 
   buildInputs = [ libpcap ]
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     "--enable-shared"
     "--enable-tcpreplay-edit"
     "--with-libpcap=${libpcap}"
-    "--with-tcpdump=${tcpdump}/bin"
+    "--with-tcpdump=${tcpdump}/bin/tcpdump"
   ];
 
   meta = with lib; {
-    description = "A suite of utilities for editing and replaying network traffic";
+    description = "Suite of utilities for editing and replaying network traffic";
     homepage = "https://tcpreplay.appneta.com/";
     license = with licenses; [ bsdOriginalUC gpl3Only ];
     maintainers = with maintainers; [ eleanor ];

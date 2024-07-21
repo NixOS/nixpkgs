@@ -7,7 +7,7 @@ in symlinkJoin {
 
   paths = [ pidgin ] ++ plugins;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/pidgin \

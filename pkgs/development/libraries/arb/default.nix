@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arb";
-  version = "2.21.1";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
     owner = "fredrik-johansson";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OBY2gKVnvrZLVrv+d6rXQLo026mrGB9eyNV4LESgrNI=";
+    sha256 = "sha256-dt9PZ3Xfn60rhmnxYo7CEzNTEUN/wMVAXe8U5PzUO9U=";
   };
 
   buildInputs = [ mpir gmp mpfr flint ];
@@ -27,10 +27,12 @@ stdenv.mkDerivation rec {
     "--with-flint=${flint}"
   ];
 
+  enableParallelBuilding = true;
+
   doCheck = true;
 
   meta = with lib; {
-    description = "A library for arbitrary-precision interval arithmetic";
+    description = "Library for arbitrary-precision interval arithmetic";
     homepage = "https://arblib.org/";
     license = licenses.lgpl21Plus;
     maintainers = teams.sage.members;

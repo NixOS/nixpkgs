@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A C interpreter and API explorer";
+    description = "C interpreter and API explorer";
+    mainProgram = "bic";
     longDescription = ''
       bic This a project that allows developers to explore and test C-APIs using a
       read eval print loop, also known as a REPL.
@@ -38,5 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hexagonal-sun/bic";
     platforms = platforms.unix;
     maintainers = with maintainers; [ hexagonal-sun ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

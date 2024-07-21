@@ -13,10 +13,8 @@ in
     maintainers = [ berbiche ];
   };
 
-  machine = { config, ... }:
-  let
-    alice = config.users.users.alice;
-  in {
+  nodes.machine = { config, ... }:
+  {
     # Automatically login on tty1 as a normal user:
     imports = [ ./common/user-account.nix ];
     services.getty.autologinUser = "alice";
@@ -31,8 +29,9 @@ in
       fi
     '';
 
-    hardware.opengl.enable = true;
+    hardware.graphics.enable = true;
     programs.xwayland.enable = true;
+    security.polkit.enable = true;
     environment.systemPackages = [ pkgs.cagebreak pkgs.wayland-utils ];
 
     # Need to switch to a different GPU driver than the default one (-vga std) so that Cagebreak can launch:

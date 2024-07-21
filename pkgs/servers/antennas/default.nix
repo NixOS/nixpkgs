@@ -1,34 +1,38 @@
-{ lib, mkYarnPackage, fetchFromGitHub, nodejs }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+}:
 
-mkYarnPackage rec {
+buildNpmPackage rec {
   pname = "antennas";
-  version = "unstable-2021-01-21";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
-    owner = "TheJF";
+    owner = "jfarseneau";
     repo = "antennas";
-    rev = "5e1f7375004001255e3daef7d48f45af321c7a52";
-    sha256 = "0bahn4y0chk70x822nn32ya7kmn9x15jb80xa544y501x1s7w981";
+    rev = "v${version}";
+    hash = "sha256-UQ+wvm7+x/evmtGwzCkUkrrDMCIZzUL4iSkLmYKJ3Mc=";
   };
 
-  preFixup = ''
-    mkdir -p $out/bin
-    chmod a+x $out/libexec/antennas/deps/antennas/index.js
-    sed -i '1i#!${nodejs}/bin/node' $out/libexec/antennas/deps/antennas/index.js
-    ln -s $out/libexec/antennas/deps/antennas/index.js $out/bin/antennas
+  npmDepsHash = "sha256-D5ss7nCDY3ogZy64iFqLVKbmibAg7C/A+rEHJaE9c2U=";
+
+  dontNpmBuild = true;
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    npm run test
+
+    runHook postCheck
   '';
 
-  # The --production flag disables the devDependencies.
-  yarnFlags = [ "--offline" "--production" ];
-  yarnLock = ./yarn.lock;
-  packageJSON = ./package.json;
-  yarnNix = ./yarn.nix;
-
-  meta = with lib; {
-    description = "HDHomeRun emulator for Plex DVR to connect to Tvheadend. ";
-    homepage = "https://github.com/TheJF/antennas";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bachp ];
-    platforms = platforms.unix;
+  meta = {
+    description = "HDHomeRun emulator for Plex DVR to connect to Tvheadend";
+    homepage = "https://github.com/jfarseneau/antennas";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bachp ];
+    mainProgram = "antennas";
   };
 }

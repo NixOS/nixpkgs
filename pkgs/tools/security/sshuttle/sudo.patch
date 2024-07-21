@@ -1,11 +1,11 @@
-diff --git a/sshuttle/client.py b/sshuttle/client.py
-index cab5b1c..e89f8a6 100644
---- a/sshuttle/client.py
-+++ b/sshuttle/client.py
-@@ -192,7 +192,7 @@ class FirewallClient:
- 
+diff --git i/sshuttle/client.py w/sshuttle/client.py
+index 29c3dfa..da813ed 100644
+--- i/sshuttle/client.py
++++ w/sshuttle/client.py
+@@ -209,7 +209,7 @@ class FirewallClient:
+     def __init__(self, method_name, sudo_pythonpath):
          self.auto_nets = []
-         python_path = os.path.dirname(os.path.dirname(__file__))
+ 
 -        argvbase = ([sys.executable, sys.argv[0]] +
 +        argvbase = ([sys.argv[0]] +
                      ['-v'] * (helpers.verbose or 0) +

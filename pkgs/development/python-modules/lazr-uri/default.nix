@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ setuptools ];
 
   meta = with lib; {
-    description = "A self-contained, easily reusable library for parsing, manipulating";
+    description = "Self-contained, easily reusable library for parsing, manipulating";
     homepage = "https://launchpad.net/lazr.uri";
     license = licenses.lgpl3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

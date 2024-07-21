@@ -24,7 +24,7 @@ in
         type = types.lines;
         description = ''
           (Deprecated) Configuration for Spotifyd. For syntax and directives, see
-          <link xlink:href="https://github.com/Spotifyd/spotifyd#Configuration"/>.
+          <https://docs.spotifyd.rs/config/File.html>.
         '';
       };
 
@@ -34,7 +34,7 @@ in
         example = { global.bitrate = 320; };
         description = ''
           Configuration for Spotifyd. For syntax and directives, see
-          <link xlink:href="https://github.com/Spotifyd/spotifyd#Configuration"/>.
+          <https://docs.spotifyd.rs/config/File.html>.
         '';
       };
     };
@@ -50,6 +50,7 @@ in
 
     systemd.services.spotifyd = {
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" "sound.target" ];
       description = "spotifyd, a Spotify playing daemon";
       environment.SHELL = "/bin/sh";

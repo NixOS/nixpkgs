@@ -1,54 +1,96 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, brotlicffi
-, certifi
-, charset-normalizer
-, h2
-, httpcore
-, rfc3986
-, sniffio
-, pytestCheckHook
-, pytest-asyncio
-, pytest-trio
-, typing-extensions
-, trustme
-, uvicorn
+{
+  lib,
+  stdenv,
+  anyio,
+  brotli,
+  brotlicffi,
+  buildPythonPackage,
+  certifi,
+  chardet,
+  click,
+  fetchFromGitHub,
+  h2,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  httpcore,
+  idna,
+  isPyPy,
+  multipart,
+  pygments,
+  python,
+  pythonOlder,
+  rich,
+  sniffio,
+  socksio,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-trio,
+  trustme,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.19.0";
-  disabled = pythonOlder "3.6";
+  version = "0.27.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-bUxxeUYqOHBmSL2gPQG5cIq6k5QY4Kyhj9ToA5yZXPA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-13EnSzrCkseK6s6Yz9OpLzqo/2PTFiB31m5fAIJLoZg=";
   };
 
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatchling
+  ];
+
   propagatedBuildInputs = [
-    brotlicffi
+    anyio
     certifi
-    charset-normalizer
-    h2
     httpcore
-    rfc3986
+    idna
     sniffio
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    http2 = [ h2 ];
+    socks = [ socksio ];
+    brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
+    cli = [
+      click
+      rich
+      pygments
+    ];
+  };
+
+  # trustme uses pyopenssl
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+
+  nativeCheckInputs = [
+    chardet
+    multipart
     pytestCheckHook
     pytest-asyncio
     pytest-trio
     trustme
-    typing-extensions
     uvicorn
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [ "httpx" ];
+  # testsuite wants to find installed packages for testing entrypoint
+  preCheck = ''
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+  '';
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+    "-W"
+    "ignore::trio.TrioDeprecationWarning"
+  ];
 
   disabledTests = [
     # httpcore.ConnectError: [Errno 101] Network is unreachable
@@ -58,12 +100,18 @@ buildPythonPackage rec {
     "test_sync_proxy_close"
   ];
 
+  disabledTestPaths = [ "tests/test_main.py" ];
+
+  pythonImportsCheck = [ "httpx" ];
+
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "The next generation HTTP client";
+    changelog = "https://github.com/encode/httpx/blob/${src.rev}/CHANGELOG.md";
+    description = "Next generation HTTP client";
+    mainProgram = "httpx";
     homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc fab ];
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -4,35 +4,46 @@
 , pkg-config
 , readline
 , libxslt
+, libxcrypt
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , fixDarwinDylibNames
 , wafHook
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "talloc";
-  version = "2.3.3";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
-    sha256 = "sha256-a+lbI2i9CvHEzXqIFG62zuoY5Gw//JMwv2JitA0diqo=";
+    sha256 = "sha256-hez55GXiD5j5lQpS6aQR4UMgvFVfolfYdpe356mx2KY=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    fixDarwinDylibNames
     python3
     wafHook
     docbook-xsl-nons
     docbook_xml_dtd_42
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
 
   buildInputs = [
     python3
     readline
     libxslt
+    libxcrypt
   ];
+
+  # otherwise the configure script fails with
+  # PYTHONHASHSEED=1 missing! Don't use waf directly, use ./configure and make!
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
+  '';
 
   wafPath = "buildtools/bin/waf";
 
@@ -40,6 +51,9 @@ stdenv.mkDerivation rec {
     "--enable-talloc-compat1"
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   # python-config from build Python gives incorrect values when cross-compiling.
@@ -61,5 +75,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tdb.samba.org/";
     license = licenses.gpl3;
     platforms = platforms.all;
+    maintainers = [ maintainers.matthiasbeyer ];
   };
 }

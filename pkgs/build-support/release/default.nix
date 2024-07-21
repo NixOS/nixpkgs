@@ -1,21 +1,39 @@
 { lib, pkgs }:
 
-with pkgs;
+let
+  inherit (lib) optionalString;
+
+  inherit (pkgs)
+    autoconf
+    automake
+    checkinstall
+    clang-analyzer
+    cov-build
+    enableGCOVInstrumentation
+    lcov
+    libtool
+    makeGCOVReport
+    runCommand
+    stdenv
+    vmTools
+    xz
+    ;
+in
 
 rec {
 
   sourceTarball = args: import ./source-tarball.nix (
-    { inherit stdenv autoconf automake libtool;
+    { inherit lib stdenv autoconf automake libtool;
     } // args);
 
   makeSourceTarball = sourceTarball; # compatibility
 
   binaryTarball = args: import ./binary-tarball.nix (
-    { inherit stdenv;
+    { inherit lib stdenv;
     } // args);
 
   mvnBuild = args: import ./maven-build.nix (
-    { inherit stdenv;
+    { inherit lib stdenv;
     } // args);
 
   nixBuild = args: import ./nix-build.nix (
@@ -38,7 +56,7 @@ rec {
     } // args);
 
   rpmBuild = args: import ./rpm-build.nix (
-    { inherit vmTools;
+    { inherit lib vmTools;
     } // args);
 
   debBuild = args: import ./debian-build.nix (
@@ -88,9 +106,10 @@ rec {
       preferLocalBuild = true;
       _hydraAggregate = true;
 
-      phases = [ "unpackPhase" "patchPhase" "installPhase" ];
+      dontConfigure = true;
+      dontBuild = true;
 
-      patchPhase = lib.optionalString isNixOS ''
+      patchPhase = optionalString isNixOS ''
         touch .update-on-nixos-rebuild
       '';
 

@@ -13,7 +13,7 @@ let
 in
 {
   options.services.bepasty = {
-    enable = mkEnableOption "Bepasty servers";
+    enable = mkEnableOption "bepasty, a binary pastebin server";
 
     servers = mkOption {
       default = {};
@@ -75,8 +75,8 @@ in
 
               Warning: this secret is stored in the WORLD-READABLE Nix store!
 
-              It's recommended to use <option>secretKeyFile</option>
-              which takes precedence over <option>secretKey</option>.
+              It's recommended to use {option}`secretKeyFile`
+              which takes precedence over {option}`secretKey`.
               '';
             default = "";
           };
@@ -87,9 +87,9 @@ in
             description = ''
               A file that contains the server secret for safe session cookies, must be set.
 
-              <option>secretKeyFile</option> takes precedence over <option>secretKey</option>.
+              {option}`secretKeyFile` takes precedence over {option}`secretKey`.
 
-              Warning: when <option>secretKey</option> is non-empty <option>secretKeyFile</option>
+              Warning: when {option}`secretKey` is non-empty {option}`secretKeyFile`
               defaults to a file in the WORLD-READABLE Nix store containing that secret.
               '';
           };

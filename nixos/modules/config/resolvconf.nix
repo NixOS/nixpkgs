@@ -10,7 +10,8 @@ let
 
   resolvconfOptions = cfg.extraOptions
     ++ optional cfg.dnsSingleRequest "single-request"
-    ++ optional cfg.dnsExtensionMechanism "edns0";
+    ++ optional cfg.dnsExtensionMechanism "edns0"
+    ++ optional cfg.useLocalResolver "trust-ad";
 
   configText =
     ''
@@ -27,7 +28,7 @@ let
       resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
     '' + optionalString cfg.useLocalResolver ''
       # This hosts runs a full-blown DNS resolver.
-      name_servers='127.0.0.1'
+      name_servers='127.0.0.1${optionalString config.networking.enableIPv6 " ::1"}'
     '' + cfg.extraConfig;
 
 in
@@ -47,10 +48,23 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = false;
-        internal = true;
+        default = !(config.environment.etc ? "resolv.conf");
+        defaultText = literalExpression ''!(config.environment.etc ? "resolv.conf")'';
         description = ''
-          DNS configuration is managed by resolvconf.
+          Whether DNS configuration is managed by resolvconf.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.openresolv;
+        defaultText = literalExpression "pkgs.openresolv";
+        description = ''
+          The package that provides the system-wide resolvconf command. Defaults to `openresolv`
+          if this module is enabled. Otherwise, can be used by other modules (for example {option}`services.resolved`) to
+          provide a compatibility layer.
+
+          This option generally shouldn't be set by the user.
         '';
       };
 
@@ -71,8 +85,8 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Enable the <code>edns0</code> option in <filename>resolv.conf</filename>. With
-          that option set, <code>glibc</code> supports use of the extension mechanisms for
+          Enable the `edns0` option in {file}`resolv.conf`. With
+          that option set, `glibc` supports use of the extension mechanisms for
           DNS (EDNS) specified in RFC 2671. The most popular user of that feature is DNSSEC,
           which does not work without it.
         '';
@@ -83,7 +97,7 @@ in
         default = "";
         example = "libc=NO";
         description = ''
-          Extra configuration to append to <filename>resolvconf.conf</filename>.
+          Extra configuration to append to {file}`resolvconf.conf`.
         '';
       };
 
@@ -92,7 +106,7 @@ in
         default = [];
         example = [ "ndots:1" "rotate" ];
         description = ''
-          Set the options in <filename>/etc/resolv.conf</filename>.
+          Set the options in {file}`/etc/resolv.conf`.
         '';
       };
 
@@ -110,8 +124,6 @@ in
 
   config = mkMerge [
     {
-      networking.resolvconf.enable = !(config.environment.etc ? "resolv.conf");
-
       environment.etc."resolvconf.conf".text =
         if !cfg.enable then
           # Force-stop any attempts to use resolvconf
@@ -124,7 +136,9 @@ in
     }
 
     (mkIf cfg.enable {
-      environment.systemPackages = [ pkgs.openresolv ];
+      networking.resolvconf.package = pkgs.openresolv;
+
+      environment.systemPackages = [ cfg.package ];
 
       systemd.services.resolvconf = {
         description = "resolvconf update";
@@ -136,7 +150,7 @@ in
 
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${pkgs.openresolv}/bin/resolvconf -u";
+          ExecStart = "${cfg.package}/bin/resolvconf -u";
           RemainAfterExit = true;
         };
       };

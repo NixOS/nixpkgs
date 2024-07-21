@@ -1,19 +1,21 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "alerta-server";
-  version = "8.3.3";
+  version = "9.0.1";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "a2713a31c6e326c774a3ee0328f424f944b951935ff1b893a4a66598d61c5a97";
+    hash = "sha256-v4+0l5Sx9RTxmNFnKCoKrWFl1xu1JIRZ/kiI6zi/y0I=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     bcrypt
     blinker
+    cryptography
     flask
     flask-compress
     flask-cors
@@ -21,21 +23,28 @@ python3.pkgs.buildPythonApplication rec {
     psycopg2
     pyjwt
     pymongo
+    pyparsing
     python-dateutil
     pytz
     pyyaml
     requests
     requests-hawk
     sentry-sdk
+    setuptools
   ];
 
-  doCheck = false; # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
+  # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
+  doCheck = false;
 
-  disabled = python3.pythonOlder "3.6";
+  pythonImportsCheck = [
+    "alerta"
+  ];
 
   meta = with lib; {
     homepage = "https://alerta.io";
     description = "Alerta Monitoring System server";
+    mainProgram = "alertad";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

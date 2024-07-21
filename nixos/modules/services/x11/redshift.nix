@@ -41,7 +41,7 @@ in {
         default = 5500;
         description = ''
           Colour temperature to use during the day, between
-          <literal>1000</literal> and <literal>25000</literal> K.
+          `1000` and `25000` K.
         '';
       };
       night = mkOption {
@@ -49,7 +49,7 @@ in {
         default = 3700;
         description = ''
           Colour temperature to use at night, between
-          <literal>1000</literal> and <literal>25000</literal> K.
+          `1000` and `25000` K.
         '';
       };
     };
@@ -60,7 +60,7 @@ in {
         default = "1";
         description = ''
           Screen brightness to apply during the day,
-          between <literal>0.1</literal> and <literal>1.0</literal>.
+          between `0.1` and `1.0`.
         '';
       };
       night = mkOption {
@@ -68,19 +68,12 @@ in {
         default = "1";
         description = ''
           Screen brightness to apply during the night,
-          between <literal>0.1</literal> and <literal>1.0</literal>.
+          between `0.1` and `1.0`.
         '';
       };
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.redshift;
-      defaultText = literalExpression "pkgs.redshift";
-      description = ''
-        redshift derivation to use.
-      '';
-    };
+    package = mkPackageOption pkgs "redshift" { };
 
     executable = mkOption {
       type = types.str;
@@ -97,7 +90,7 @@ in {
       example = [ "-v" "-m randr" ];
       description = ''
         Additional command-line arguments to pass to
-        <command>redshift</command>.
+        {command}`redshift`.
       '';
     };
   };

@@ -11,11 +11,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-sound-theme";
   version = "1.1.0";
 
-  repoName = "sound-theme";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "sound-theme";
     rev = version;
     sha256 = "sha256-fR6gtKx9J6o2R1vQZ5yx4kEX3Ak+q8I6hRVMZzyB2E8=";
   };
@@ -27,13 +25,11 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    description = "A set of system sounds for elementary";
+    description = "Set of system sounds for elementary";
     homepage = "https://github.com/elementary/sound-theme";
     license = licenses.unlicense;
     platforms = platforms.linux;

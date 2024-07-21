@@ -4,222 +4,183 @@
 , unzip
 , autoconf
 , automake
-, libtool
+, libtool_1_5
 , makeWrapper
 , cups
+, jbigkit
+, glib
+, gtk3
+, gdk-pixbuf
+, pango
+, cairo
+, coreutils
+, atk
+, pkg-config
+, libxml2
+, runtimeShell
+, libredirect
 , ghostscript
-, pkgsi686Linux
+, pkgs
 , zlib
 }:
 
 let
+  system =
+    if stdenv.hostPlatform.system == "x86_64-linux" then "intel"
+    else if stdenv.hostPlatform.system == "aarch64-linux" then "arm"
+    else throw "Unsupported platform for Canon UFR2 Drivers: ${stdenv.hostPlatform.system}";
+  ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
+  libs = pkgs: lib.makeLibraryPath buildInputs;
 
-  i686_NIX_GCC = pkgsi686Linux.callPackage ({ gcc }: gcc) { };
-  i686_libxml2 = pkgsi686Linux.callPackage ({ libxml2 }: libxml2) { };
-
-  commonVer = "4.10";
-  version = "3.70";
-  dl = "4/0100010264/01";
+  version = "5.70";
+  dl = "8/0100007658/33";
 
   versionNoDots = builtins.replaceStrings [ "." ] [ "" ] version;
   src_canon = fetchurl {
-    url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-uken-07.tar.gz";
-    sha256 = "01nxpg3h1c64p5skxv904fg5c4sblmif486vkij2v62wwn6l65pz";
+    url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-m17n-11.tar.gz";
+    hash = "sha256-d5VHlPpUPAr3RWVdQRdn42YLuVekOw1IaMFLVt1Iu7o=";
   };
 
+  buildInputs = [ cups zlib jbigkit glib gtk3 libxml2 gdk-pixbuf pango cairo atk ];
 in
-
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "canon-cups-ufr2";
   inherit version;
   src = src_canon;
 
   postUnpack = ''
-    (cd $sourceRoot; tar -xzf Sources/cndrvcups-common-${commonVer}-1.tar.gz)
-    (cd $sourceRoot; tar -xzf Sources/cndrvcups-lb-${version}-1.tar.gz)
+    (
+      cd $sourceRoot
+      tar -xf Sources/cnrdrvcups-lb-${version}-1.11.tar.xz
+      sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-common-${version}/allgen.sh
+      sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-common-${version}/allgen.sh
+      sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-common-${version}/allgen.sh
+      sed -ie "s@/usr@$out@" cnrdrvcups-common-${version}/{{backend,rasterfilter}/Makefile.am,rasterfilter/cnrasterproc.h}
+      sed -ie "s@etc/cngplp@$out/etc/cngplp@" cnrdrvcups-common-${version}/cngplp/Makefile.am
+      sed -ie "s@usr/share/cngplp@$out/usr/share/cngplp@" cnrdrvcups-common-${version}/cngplp/src/Makefile.am
+      patchShebangs cnrdrvcups-common-${version}
+
+      sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie '/^cd \.\.\/cngplp/,/^cd files/{/^cd files/!{d}}' cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie "s@cd \.\./pdftocpca@cd pdftocpca@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie "s@/usr@$out@" cnrdrvcups-lb-${version}/pdftocpca/Makefile.am
+      sed -i "/CNGPLPDIR/d" cnrdrvcups-lb-${version}/Makefile
+      patchShebangs cnrdrvcups-lb-${version}
+    )
   '';
 
-  nativeBuildInputs = [ makeWrapper unzip autoconf automake libtool ];
+  nativeBuildInputs = [ makeWrapper unzip autoconf automake libtool_1_5 pkg-config ];
 
-  buildInputs = [ cups zlib ];
+  inherit buildInputs;
 
   installPhase = ''
     runHook preInstall
 
-    ##
-    ## cndrvcups-common buildPhase
-    ##
-    ( cd cndrvcups-common-${commonVer}/buftool
-      autoreconf -fi
-      ./autogen.sh --prefix=$out --enable-progpath=$out/bin --libdir=$out/lib --disable-shared --enable-static
-      make
-    )
-
-    ( cd cndrvcups-common-${commonVer}/backend
-      ./autogen.sh --prefix=$out --libdir=$out/lib
-      make
-    )
-
-    ( cd cndrvcups-common-${commonVer}/c3plmod_ipc
-      make
-    )
-
-    ##
-    ## cndrvcups-common installPhase
-    ##
-
-    ( cd cndrvcups-common-${commonVer}/buftool
+    (
+      cd cnrdrvcups-common-${version}
+      ./allgen.sh
       make install
     )
-
-    ( cd cndrvcups-common-${commonVer}/backend
+    (
+      cd cnrdrvcups-common-${version}/Rule
+      mkdir -p $out/share/cups/usb
+      install -m 644 *.usb-quirks $out/share/cups/usb
+    )
+    (
+      cd cnrdrvcups-lb-${version}
+      ./allgen.sh
       make install
+
+      mkdir -p $out/share/cups/model
+      install -m 644 ppd/*.ppd $out/share/cups/model/
     )
 
-    ( cd cndrvcups-common-${commonVer}/c3plmod_ipc
-      make install DESTDIR=$out/lib
-    )
+    (
+      cd lib
+      mkdir -p $out/lib
+      install -m 755 libs64/${system}/libColorGearCufr2.so.2.0.0 $out/lib
+      install -m 755 libs64/${system}/libcaepcmufr2.so.1.0 $out/lib
+      install -m 755 libs64/${system}/libcaiocnpkbidir.so.1.0.0 $out/lib
+      install -m 755 libs64/${system}/libcaiousb.so.1.0.0 $out/lib
+      install -m 755 libs64/${system}/libcaiowrapufr2.so.1.0.0 $out/lib
+      install -m 755 libs64/${system}/libcanon_slimufr2.so.1.0.0 $out/lib
+      install -m 755 libs64/${system}/libcanonufr2r.so.1.0.0 $out/lib
+      install -m 755 libs64/${system}/libcnaccm.so.1.0 $out/lib
+      install -m 755 libs64/${system}/libcnlbcmr.so.1.0 $out/lib
+      install -m 755 libs64/${system}/libcnncapcmr.so.1.0 $out/lib
+      install -m 755 libs64/${system}/libufr2filterr.so.1.0.0 $out/lib
 
-    ( cd cndrvcups-common-${commonVer}/libs
-      chmod 755 *
-      mkdir -p $out/lib32
-      mkdir -p $out/bin
-      cp libcaiowrap.so.1.0.0 $out/lib32
-      cp libcaiousb.so.1.0.0 $out/lib32
-      cp libc3pl.so.0.0.1 $out/lib32
-      cp libcaepcm.so.1.0 $out/lib32
-      cp libColorGear.so.0.0.0 $out/lib32
-      cp libColorGearC.so.1.0.0 $out/lib32
-      cp libcanon_slim.so.1.0.0 $out/lib32
-      cp c3pldrv $out/bin
-    )
+      install -m 755 libs64/${system}/cnpdfdrv $out/bin
+      install -m 755 libs64/${system}/cnpkbidir $out/bin
+      install -m 755 libs64/${system}/cnpkmoduleufr2r $out/bin
+      install -m 755 libs64/${system}/cnrsdrvufr2 $out/bin
+      install -m 755 libs64/${system}/cnsetuputil2 $out/bin/cnsetuputil2
 
-    (cd cndrvcups-common-${commonVer}/Rule
-      mkdir -p $out/share/usb
-      chmod 644 *.usb-quirks $out/share/usb
-    )
+      mkdir -p $out/share/cnpkbidir
+      install -m 644 libs64/${system}/cnpkbidir_info* $out/share/cnpkbidir
 
-    (cd cndrvcups-common-${commonVer}/data
-      chmod 644 *.ICC
-      mkdir -p $out/share/caepcm
-      cp *.ICC $out/share/caepcm
-      cp *.icc $out/share/caepcm
-      cp *.PRF $out/share/caepcm
-    )
-
-    (cd $out/lib32
-      ln -sf libc3pl.so.0.0.1 libc3pl.so.0
-      ln -sf libc3pl.so.0.0.1 libc3pl.so
-      ln -sf libcaepcm.so.1.0 libcaepcm.so.1
-      ln -sf libcaepcm.so.1.0 libcaepcm.so
-      ln -sf libcaiowrap.so.1.0.0 libcaiowrap.so.1
-      ln -sf libcaiowrap.so.1.0.0 libcaiowrap.so
-      ln -sf libcaiousb.so.1.0.0 libcaiousb.so.1
-      ln -sf libcaiousb.so.1.0.0 libcaiousb.so
-      ln -sf libcanon_slim.so.1.0.0 libcanon_slim.so.1
-      ln -sf libcanon_slim.so.1.0.0 libcanon_slim.so
-      ln -sf libColorGear.so.0.0.0 libColorGear.so.0
-      ln -sf libColorGear.so.0.0.0 libColorGear.so
-      ln -sf libColorGearC.so.1.0.0 libColorGearC.so.1
-      ln -sf libColorGearC.so.1.0.0 libColorGearC.so
-    )
-
-    (cd $out/lib
-      ln -sf libcanonc3pl.so.1.0.0 libcanonc3pl.so
-      ln -sf libcanonc3pl.so.1.0.0 libcanonc3pl.so.1
-    )
-
-    patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib" $out/lib32/libColorGear.so.0.0.0
-    patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib" $out/lib32/libColorGearC.so.1.0.0
-
-    patchelf --interpreter "$(cat ${i686_NIX_GCC}/nix-support/dynamic-linker)" --set-rpath "$out/lib32" $out/bin/c3pldrv
-
-    # c3pldrv is programmed with fixed paths that point to "/usr/{bin,lib.share}/..."
-    # preload32 wrappes all necessary function calls to redirect the fixed paths
-    # into $out.
-    mkdir -p $out/libexec
-    preload32=$out/libexec/libpreload32.so
-    ${i686_NIX_GCC}/bin/gcc -shared ${./preload.c} -o $preload32 -ldl -DOUT=\"$out\" -fPIC
-    wrapProgram "$out/bin/c3pldrv" \
-      --set PRELOAD_DEBUG 1 \
-      --set LD_PRELOAD $preload32 \
-      --prefix LD_LIBRARY_PATH : "$out/lib32"
-
-
-
-    ##
-    ## cndrvcups-lb buildPhase
-    ##
-
-    ( cd cndrvcups-lb-${version}/buftool
-      ./autogen.sh --prefix=$out --libdir=$out/lib --enable-progpath=$out/bin --enable-static
-      make
-    )
-
-    ( cd cndrvcups-lb-${version}/pstoufr2cpca
-      ./autogen.sh --prefix=$out --libdir=$out/lib
-      make
-    )
-
-    ##
-    ## cndrvcups-lb installPhase
-    ##
-
-    ( cd cndrvcups-lb-${version}/pstoufr2cpca
-      make install
-    )
-
-    ( cd cndrvcups-lb-${version}/libs
-      chmod 755 *
-      mkdir -p $out/lib32
-      mkdir -p $out/bin
-      cp libcanonufr2.la $out/lib32
-      cp libcanonufr2.so.1.0.0 $out/lib32
-      cp libufr2filter.so.1.0.0 $out/lib32
-      cp libEnoJBIG.so.1.0.0 $out/lib32
-      cp libEnoJPEG.so.1.0.0 $out/lib32
-      cp libcaiocnpkbidi.so.1.0.0 $out/lib32
-      cp libcnlbcm.so.1.0 $out/lib32
-
-      cp cnpkmoduleufr2 $out/bin #maybe needs setuid 4755
-      cp cnpkbidi $out/bin
-    )
-
-    ( cd $out/lib32
-      ln -sf libcanonufr2.so.1.0.0 libcanonufr2.so
-      ln -sf libcanonufr2.so.1.0.0 libcanonufr2.so.1
-      ln -sf libufr2filter.so.1.0.0 libufr2filter.so
-      ln -sf libufr2filter.so.1.0.0 libufr2filter.so.1
-      ln -sf libEnoJBIG.so.1.0.0 libEnoJBIG.so
-      ln -sf libEnoJBIG.so.1.0.0 libEnoJBIG.so.1
-      ln -sf libEnoJPEG.so.1.0.0 libEnoJPEG.so
-      ln -sf libEnoJPEG.so.1.0.0 libEnoJPEG.so.1
-      ln -sf libcaiocnpkbidi.so.1.0.0 libcaiocnpkbidi.so
-      ln -sf libcaiocnpkbidi.so.1.0.0 libcaiocnpkbidi.so.1
-      ln -sf libcnlbcm.so.1.0 libcnlbcm.so.1
-      ln -sf libcnlbcm.so.1.0 libcnlbcm.so
-    )
-
-    ( cd cndrvcups-lb-${version}
-      chmod 644 data/CnLB*
-      chmod 644 libs/cnpkbidi_info*
-      chmod 644 libs/ThLB*
-      mkdir -p $out/share/caepcm
-      mkdir -p $out/share/cnpkbidi
       mkdir -p $out/share/ufr2filter
-      cp data/CnLB* $out/share/caepcm
-      cp libs/cnpkbidi_info* $out/share/cnpkbidi
-      cp libs/ThLB* $out/share/ufr2filter
+      install -m 644 libs64/${system}/ThLB* $out/share/ufr2filter
     )
 
-    mkdir -p $out/share/cups/model
-    install -c -m 644 cndrvcups-lb-${version}/ppd/CN*.ppd $out/share/cups/model/
+    (
+      cd $out/lib
 
-    patchelf --set-rpath "$out/lib32:${i686_libxml2.out}/lib" $out/lib32/libcanonufr2.so.1.0.0
+      ln -sf libColorGearCufr2.so.2.0.0 libColorGearCufr2.so
+      ln -sf libColorGearCufr2.so.2.0.0 libColorGearCufr2.so.2
+      ln -sf libcaepcmufr2.so.1.0 libcaepcmufr2.so
+      ln -sf libcaepcmufr2.so.1.0 libcaepcmufr2.so.1
+      ln -sf libcaiocnpkbidir.so.1.0.0 libcaiocnpkbidir.so
+      ln -sf libcaiocnpkbidir.so.1.0.0 libcaiocnpkbidir.so.1
+      ln -sf libcaiowrapufr2.so.1.0.0 libcaiowrapufr2.so
+      ln -sf libcaiowrapufr2.so.1.0.0 libcaiowrapufr2.so.1
+      ln -sf libcanon_slimufr2.so.1.0.0 libcanon_slimufr2.so
+      ln -sf libcanon_slimufr2.so.1.0.0 libcanon_slimufr2.so.1
+      ln -sf libcanonufr2r.so.1.0.0 libcanonufr2r.so
+      ln -sf libcanonufr2r.so.1.0.0 libcanonufr2r.so.1
+      ln -sf libcnlbcmr.so.1.0 libcnlbcmr.so
+      ln -sf libcnlbcmr.so.1.0 libcnlbcmr.so.1
+      ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so
+      ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so.1
+      ln -sf libuictlufr2r.so.1.0.0 libuictlufr2r.so
+      ln -sf libuictlufr2r.so.1.0.0 libuictlufr2r.so.1
 
-    patchelf --interpreter "$(cat ${i686_NIX_GCC}/nix-support/dynamic-linker)" --set-rpath "$out/lib32" $out/bin/cnpkmoduleufr2
-    patchelf --interpreter "$(cat ${i686_NIX_GCC}/nix-support/dynamic-linker)" --set-rpath "$out/lib32:${i686_libxml2.out}/lib" $out/bin/cnpkbidi
+      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" libcanonufr2r.so.1.0.0
+      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" libcaepcmufr2.so.1.0
+      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" libColorGearCufr2.so.2.0.0
+    )
+
+    (
+      cd $out/bin
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" cnsetuputil2 cnpdfdrv
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnpkbidir cnrsdrvufr2 cnpkmoduleufr2r cnjbigufr2
+
+      wrapProgram $out/bin/cnrsdrvufr2 \
+        --prefix LD_LIBRARY_PATH ":" "$out/lib" \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+        --set NIX_REDIRECTS /usr/bin/cnpkmoduleufr2r=$out/bin/cnpkmoduleufr2r:/usr/bin/cnjbigufr2=$out/bin/cnjbigufr2
+
+      wrapProgram $out/bin/cnsetuputil2 \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+        --set NIX_REDIRECTS /usr/share/cnsetuputil2=$out/usr/share/cnsetuputil2
+    )
+
+    (
+      cd lib/data/ufr2
+      mkdir -p $out/share/caepcm
+      install -m 644 *.ICC $out/share/caepcm
+      install -m 644 *.icc $out/share/caepcm
+      install -m 644 *.PRF $out/share/caepcm
+      install -m 644 CnLB* $out/share/caepcm
+    )
+
+    (
+      cd cnrdrvcups-utility-${version}/data
+      mkdir -p $out/usr/share/cnsetuputil2
+      install -m 644 cnsetuputil* $out/usr/share/cnsetuputil2
+    )
 
     makeWrapper "${ghostscript}/bin/gs" "$out/bin/gs" \
       --prefix LD_LIBRARY_PATH ":" "$out/lib" \
@@ -231,9 +192,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "CUPS Linux drivers for Canon printers";
     homepage = "http://www.canon.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [
-      kylesferrazza
-    ];
+    maintainers = with maintainers; [ lluchs ];
   };
 }

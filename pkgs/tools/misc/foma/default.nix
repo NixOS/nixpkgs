@@ -1,34 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, zlib, flex, bison, readline, darwin }:
+{ lib, stdenv, fetchFromGitHub, bison, cmake, flex, pkg-config, readline, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "foma";
-  version = "0.9.18alpha";
+  version = "0.10.0alpha-unstable-03-13-2024";
 
   src = fetchFromGitHub {
     owner = "mhulden";
     repo = "foma";
-    rev = "4456a40e81f46e3fe909c5a97a15fcf1d2a3b6c1";
-    sha256 = "188yxj8wahlj2yf93rj1vx549j5cq0085d2jmj3vwzbfjq1mi1f0";
+    rev = "e0d8122bda4bbd56f18510bdfe840617f9736ae7";
+    hash = "sha256-UbwuHTilKWo4sVD3igcSlTqH78N6JQFvRD35QwfoX10=";
   };
 
-  sourceRoot = "source/foma";
+  sourceRoot = "${src.name}/foma";
 
-  nativeBuildInputs = [ flex bison ]
-    ++ lib.optional stdenv.isDarwin darwin.cctools;
-  buildInputs = [ zlib readline ];
+  outputs = [ "out" "dev" ];
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
+  nativeBuildInputs = [ bison cmake flex pkg-config ];
+  buildInputs = [ readline zlib ];
+
+  cmakeFlags = [
+    # the cmake package does not handle absolute CMAKE_INSTALL_XXXDIR
+    # correctly (setting it to an absolute path causes include files to go to
+    # $out/$out/include, because the absolute path is interpreted with root at
+    # $out).
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  patchPhase = ''
-    substituteInPlace Makefile \
-      --replace '-ltermcap' ' ' \
-      --replace '/usr/local' '$(out)'
-  '';
-
   meta = with lib; {
-    description = "A multi-purpose finite-state toolkit designed for applications ranging from natural language processing to research in automata theory";
+    description = "Multi-purpose finite-state toolkit designed for applications ranging from natural language processing to research in automata theory";
     homepage = "https://github.com/mhulden/foma";
     license = licenses.asl20;
     maintainers = [ maintainers.tckmn ];

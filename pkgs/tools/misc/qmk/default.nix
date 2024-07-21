@@ -1,51 +1,60 @@
 { lib
 , python3
+, fetchPypi
+, pkgsCross
+, avrdude
+, dfu-programmer
+, dfu-util
+, wb32-dfu-updater
+, gcc-arm-embedded
+, gnumake
+, teensy-loader-cli
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
-  version = "1.0.0";
+  version = "1.1.5";
+  format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2mLuxzxFSMw3sLm+OTcgLcOjAdwvJmNhDsynUaYQ+co=";
+    hash = "sha256-Lv48dSIwxrokuHGcO26FpWRL+PfQ3SN3V+2pt7fmCxE=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
-    flake8
-    nose2
-    pep8-naming
-    setuptools-scm
-    yapf
+    setuptools
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    appdirs
-    argcomplete
-    colorama
-    qmk-dotty-dict
+    dotty-dict
     hid
     hjson
     jsonschema
     milc
     pygments
+    pyserial
     pyusb
+    pillow
+  ] ++ [ # Binaries need to be in the path so this is in propagatedBuildInputs
+    avrdude
+    dfu-programmer
+    dfu-util
+    wb32-dfu-updater
+    teensy-loader-cli
+    gcc-arm-embedded
+    gnumake
+    pkgsCross.avr.buildPackages.binutils
+    pkgsCross.avr.buildPackages.binutils.bintools
+    pkgsCross.avr.buildPackages.gcc8
+    pkgsCross.avr.libcCross
   ];
-
-  # buildPythonApplication requires setup.py; the setup.py file crafted below
-  # acts as a wrapper to setup.cfg
-  postConfigure = ''
-    touch setup.py
-    echo "from setuptools import setup" >> setup.py
-    echo "setup()" >> setup.py
-  '';
 
   # no tests implemented
   doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/qmk/qmk_cli";
-    description = "A program to help users work with QMK Firmware";
+    description = "Program to help users work with QMK Firmware";
     longDescription = ''
       qmk_cli is a companion tool to QMK firmware. With it, you can:
 
@@ -61,6 +70,7 @@ python3.pkgs.buildPythonApplication rec {
       - ... and many more!
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple babariviere ];
+    maintainers = with maintainers; [ bhipple ekleog ];
+    mainProgram = "qmk";
   };
 }

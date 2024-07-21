@@ -23,10 +23,10 @@ in
       default = null;
       description = ''
         A path to a configuration file which will be placed at
-        <literal>/etc/nixos/configuration.nix</literal> and be used when switching
-        to a new configuration. If set to <literal>null</literal>, a default
+        `/etc/nixos/configuration.nix` and be used when switching
+        to a new configuration. If set to `null`, a default
         configuration is used that imports
-        <literal>(modulesPath + "/virtualisation/digital-ocean-config.nix")</literal>.
+        `(modulesPath + "/virtualisation/digital-ocean-config.nix")`.
       '';
     };
 

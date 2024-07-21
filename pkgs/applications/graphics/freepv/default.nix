@@ -4,7 +4,7 @@
 , libjpeg
 , libGLU
 , libGL
-, freeglut
+, libglut
 , zlib
 , cmake
 , libX11
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libjpeg libGLU libGL freeglut zlib libX11 libxml2 libpng libXxf86vm ];
+  buildInputs = [ libjpeg libGLU libGL libglut zlib libX11 libxml2 libpng libXxf86vm ];
 
   postPatch = ''
     sed -i -e '/GECKO/d' CMakeLists.txt
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
       --replace png_set_gray_1_2_4_to_8 png_set_expand_gray_1_2_4_to_8
   '';
 
-  NIX_CFLAGS_COMPILE = "-fpermissive -Wno-narrowing";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive -Wno-narrowing";
 
   meta = {
     description = "Open source panorama viewer using GL";
-    homepage = "http://freepv.sourceforge.net/";
+    homepage = "https://freepv.sourceforge.net/";
     license = [ lib.licenses.lgpl21 ];
   };
 }

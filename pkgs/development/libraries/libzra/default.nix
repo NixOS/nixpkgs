@@ -17,11 +17,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  # in submodule dev as of 1.4.7
+  postPatch = ''
+    (cd submodule/zstd && patch -Np1 < ${./fix-pkg-config.patch})
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/zraorg/ZRA";
     description = "Library for ZStandard random access";
     platforms = platforms.all;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     license = licenses.bsd3;
   };
 }

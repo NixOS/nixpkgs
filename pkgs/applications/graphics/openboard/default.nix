@@ -1,10 +1,10 @@
-{ mkDerivation, lib, fetchFromGitHub, copyDesktopItems, makeDesktopItem, qmake
-, qtbase, qtxmlpatterns, qttools, qtwebkit, libGL, fontconfig, openssl, poppler
+{ stdenv, lib, fetchFromGitHub, copyDesktopItems, makeDesktopItem, qmake
+, qtbase, qtxmlpatterns, qttools, qtwebengine, libGL, fontconfig, openssl, poppler, wrapQtAppsHook
 , ffmpeg, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
 , libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
 
 let
-  importer = mkDerivation rec {
+  importer = stdenv.mkDerivation {
     pname = "openboard-importer";
     version = "unstable-2016-10-08";
 
@@ -16,36 +16,38 @@ let
     };
 
     nativeBuildInputs = [ qmake ];
+    buildInputs = [ qtbase ];
+    dontWrapQtApps = true;
 
     installPhase = ''
       install -Dm755 OpenBoardImporter $out/bin/OpenBoardImporter
     '';
   };
-in mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
-    rev = "v${version}";
-    sha256 = "sha256-OlGXGIMghil/GG6eso20+CWo/hCjarXGs6edXX9pc/M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-OSAogtZoMisyRziv63ag9w8HQaaRdz0J28jQZR7cTMM=";
   };
 
   postPatch = ''
     substituteInPlace OpenBoard.pro \
-      --replace '/usr/include/quazip' '${quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
+      --replace '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
       --replace '-lquazip5' '-lquazip1-qt5' \
-      --replace '/usr/include/poppler' '${poppler.dev}/include/poppler'
+      --replace '/usr/include/poppler' '${lib.getDev poppler}/include/poppler'
   '';
 
-  nativeBuildInputs = [ qmake copyDesktopItems ];
+  nativeBuildInputs = [ qmake copyDesktopItems wrapQtAppsHook ];
 
   buildInputs = [
     qtbase
     qtxmlpatterns
     qttools
-    qtwebkit
+    qtwebengine
     libGL
     fontconfig
     openssl
@@ -79,8 +81,8 @@ in mkDerivation rec {
       icon = "OpenBoard";
       comment = "OpenBoard, an interactive white board application";
       desktopName = "OpenBoard";
-      mimeType = "application/ubz";
-      categories = "Education;";
+      mimeTypes = [ "application/ubz" ];
+      categories = [ "Education" ];
       startupNotify = true;
     })
   ];
@@ -112,5 +114,6 @@ in mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fufexan ];
     platforms = platforms.linux;
+    mainProgram = "OpenBoard";
   };
-}
+})

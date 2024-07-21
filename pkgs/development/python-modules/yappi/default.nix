@@ -1,41 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gevent
-, isPy27
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gevent,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "yappi";
-  version = "1.3.2";
+  version = "1.6.0";
+  format = "setuptools";
 
-  disabled = isPy27; # invalid syntax
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sumerc";
     repo = pname;
-    rev = "8bf7a650066f104f59c3cae4a189ec15e7d51c8c";
-    sha256 = "1q8lr9n0lny2g3mssy3mksbl9m4k1kqn1a4yv1hfqsahxdvpw2dp";
+    rev = "refs/tags/${version}";
+    hash = "sha256-zA4apOGyrbjBOxUKBARiKmmM9rSVFVGWsDpOaItOoLU=";
   };
 
   patches = [ ./tests.patch ];
 
-  checkInputs = [
-    gevent
-  ];
+  nativeCheckInputs = [ gevent ];
 
   checkPhase = ''
     ${python.interpreter} run_tests.py
   '';
 
-  pythonImportsCheck = [
-    "yappi"
-  ];
+  pythonImportsCheck = [ "yappi" ];
 
   meta = with lib; {
-    homepage = "https://github.com/sumerc/yappi";
     description = "Python profiler that supports multithreading and measuring CPU time";
+    mainProgram = "yappi";
+    homepage = "https://github.com/sumerc/yappi";
     license = licenses.mit;
     maintainers = with maintainers; [ orivej ];
   };

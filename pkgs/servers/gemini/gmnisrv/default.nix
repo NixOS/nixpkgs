@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromSourcehut, pkg-config, openssl, mime-types, scdoc }:
+{ stdenv, lib, fetchFromSourcehut, pkg-config, openssl, mailcap, scdoc }:
 
 stdenv.mkDerivation rec {
   pname = "gmnisrv";
@@ -11,17 +11,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-V9HXXYQIo3zeqZjJEn+dhemNg6AU+ee3FRmBmXgLuYQ=";
   };
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=deprecated-declarations"
+  ];
+
   postPatch = ''
     substituteInPlace config.sh \
       --replace "pkg-config" "${stdenv.cc.targetPrefix}pkg-config"
   '';
 
-  MIMEDB = "${mime-types}/etc/mime.types";
+  MIMEDB = "${mailcap}/etc/mime.types";
   nativeBuildInputs = [ pkg-config scdoc ];
-  buildInputs = [ openssl mime-types ];
+  buildInputs = [ openssl mailcap ];
 
   meta = with lib; {
-    description = "A simple Gemini protocol server";
+    description = "Simple Gemini protocol server";
+    mainProgram = "gmnisrv";
     homepage = "https://git.sr.ht/~sircmpwn/gmnisrv";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ bsima jb55 ];

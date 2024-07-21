@@ -15,13 +15,11 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.crossfire-server;
-      defaultText = literalExpression "pkgs.crossfire-server";
-      description = ''
-        The package to use for the Crossfire server (and map/arch data, if you
-        don't change dataDir).
+    package = mkPackageOption pkgs "crossfire-server" {
+      extraDescription = ''
+        ::: {.note}
+        This will also be used for map/arch data, if you don't change {option}`dataDir`
+        :::
       '';
     };
 
@@ -76,7 +74,7 @@ in {
         {
           dm_file = '''
             admin:secret_password:localhost
-            jane:xyzzy:*
+            alice:xyzzy:*
           ''';
           ban_file = '''
             # Bob is a jerk
@@ -131,9 +129,9 @@ in {
         exp_table = "";
         forbid = "";
         metaserver2 = "";
-        motd = (fileContents "${cfg.package}/etc/crossfire/motd");
-        news = (fileContents "${cfg.package}/etc/crossfire/news");
-        rules = (fileContents "${cfg.package}/etc/crossfire/rules");
+        motd = fileContents "${cfg.package}/etc/crossfire/motd";
+        news = fileContents "${cfg.package}/etc/crossfire/news";
+        rules = fileContents "${cfg.package}/etc/crossfire/rules";
         settings = "";
         stat_bonus = "";
       } // cfg.configFiles);

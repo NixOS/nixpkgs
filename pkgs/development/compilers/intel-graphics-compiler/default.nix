@@ -5,10 +5,12 @@
 , runCommandLocal
 , bison
 , flex
-, llvmPackages_11
-, lld_11
+, intel-compute-runtime
+, llvmPackages_14
 , opencl-clang
 , python3
+, spirv-tools
+, spirv-headers
 , spirv-llvm-translator
 
 , buildWithPatches ? true
@@ -18,64 +20,70 @@ let
   vc_intrinsics_src = fetchFromGitHub {
     owner = "intel";
     repo = "vc-intrinsics";
-    rev = "e5ad7e02aa4aa21a3cd7b3e5d1f3ec9b95f58872";
-    sha256 = "Vg1mngwpIQ3Tik0GgRXPG22lE4sLEAEFch492G2aIXs=";
+    rev = "v0.18.0";
+    hash = "sha256-F2GR3TDUUiygEhdQN+PsMT/CIYBATMQX5wkvwrziS2E=";
   };
-  llvmPkgs = llvmPackages_11 // {
-    inherit spirv-llvm-translator;
-  };
-  inherit (llvmPkgs) llvm;
-  inherit (if buildWithPatches then opencl-clang else llvmPkgs) clang libclang spirv-llvm-translator;
-  inherit (lib) getVersion optional optionals versionOlder versions;
+
+  inherit (llvmPackages_14) lld llvm;
+  inherit (if buildWithPatches then opencl-clang else llvmPackages_14) clang libclang;
+  spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
 in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.8744";
+  version = "1.0.16695.4";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    sha256 = "G5+dYD8uZDPkRyn1sgXsRngdq4NJndiCJCYTRXyUgTA=";
+    hash = "sha256-XgQ2Gk3HDKBpsfomlpRUt8WybEIoHfKlyuWJCwCnmDA=";
   };
 
-  nativeBuildInputs = [ clang cmake bison flex python3 ];
+  nativeBuildInputs = [ bison cmake flex (python3.withPackages (ps : with ps; [ mako ])) ];
 
-  buildInputs = [ clang opencl-clang spirv-llvm-translator llvm lld_11 ];
+  buildInputs = [ lld llvm spirv-headers spirv-llvm-translator' spirv-tools ];
 
   strictDeps = true;
 
-  # checkInputs = [ lit pythonPackages.nose ];
-
-  # FIXME: How do we run the test suite?
-  # https://github.com/intel/intel-graphics-compiler/issues/98
+  # testing is done via intel-compute-runtime
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace IGC/AdaptorOCL/igc-opencl.pc.in \
+      --replace '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
+      --replace '/@CMAKE_INSTALL_LIBDIR@' "/lib"
+  '';
 
   # Handholding the braindead build script
   # cmake requires an absolute path
   prebuilds = runCommandLocal "igc-cclang-prebuilds" { } ''
     mkdir $out
     ln -s ${clang}/bin/clang $out/
-    ln -s clang $out/clang-${versions.major (getVersion clang)}
     ln -s ${opencl-clang}/lib/* $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${getVersion clang}/include/opencl-c.h $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${getVersion clang}/include/opencl-c-base.h $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c.h $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c-base.h $out/
   '';
 
   cmakeFlags = [
     "-DVC_INTRINSICS_SRC=${vc_intrinsics_src}"
-    "-DINSTALL_SPIRVDLL=0"
     "-DCCLANG_BUILD_PREBUILDS=ON"
     "-DCCLANG_BUILD_PREBUILDS_DIR=${prebuilds}"
-    "-DIGC_PREFERRED_LLVM_VERSION=${getVersion llvm}"
+    "-DIGC_OPTION__SPIRV_TOOLS_MODE=Prebuilds"
+    "-DIGC_OPTION__VC_INTRINSICS_MODE=Source"
+    "-Wno-dev"
   ];
 
+  passthru.tests = {
+    inherit intel-compute-runtime;
+  };
+
   meta = with lib; {
-    homepage = "https://github.com/intel/intel-graphics-compiler";
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
+    homepage = "https://github.com/intel/intel-graphics-compiler";
+    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${src.rev}";
     license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ gloaming ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

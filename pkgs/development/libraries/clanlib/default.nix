@@ -9,7 +9,6 @@
 , file
 , freetype
 , fontconfig
-, xlibsWrapper
 , alsa-lib
 , libXrender
 }:
@@ -35,14 +34,13 @@ stdenv.mkDerivation rec {
     xorg.xorgproto
     freetype
     fontconfig
-    xlibsWrapper
     alsa-lib
     libXrender
   ];
 
   meta = with lib; {
     homepage = "https://github.com/sphair/ClanLib";
-    description = "A cross platform toolkit library with a primary focus on game creation";
+    description = "Cross platform toolkit library with a primary focus on game creation";
     license = licenses.mit;
     maintainers = with maintainers; [ nixinator ];
     platforms = [ "x86_64-linux" ];

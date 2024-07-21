@@ -4,13 +4,12 @@
 , pbr
 , requests
 , setuptools
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 }:
 
 buildPythonApplication rec {
   pname = "git-review";
-  version = "2.2.0";
+  version = "2.4.0";
 
   # Manually set version because prb wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
@@ -19,9 +18,9 @@ buildPythonApplication rec {
   src = fetchFromGitea {
     domain = "opendev.org";
     owner = "opendev";
-    repo = pname;
+    repo = "git-review";
     rev = version;
-    sha256 = "sha256-2+X5fPxB2FIp1fwqEUc+W0gH2NjhF/V+La+maE+XEpo=";
+    hash = "sha256-UfYc662NqnQt0+CKc+18jXnNTOcZv8urCNBsWd6x0VQ=";
   };
 
   outputs = [ "out" "man" ];
@@ -42,15 +41,13 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "git_review" ];
 
-  passthru.updateScript = genericUpdater {
-    inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Tool to submit code to Gerrit";
     homepage = "https://opendev.org/opendev/git-review";
     license = licenses.asl20;
     maintainers = with maintainers; [ kira-bruneau ];
+    mainProgram = "git-review";
   };
 }

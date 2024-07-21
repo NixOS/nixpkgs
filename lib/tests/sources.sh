@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+
+# Tests lib/sources.nix
+# Run:
+# [nixpkgs]$ lib/tests/sources.sh
+# or:
+# [nixpkgs]$ nix-build lib/tests/release.nix
+
 set -euo pipefail
 shopt -s inherit_errexit
 
@@ -23,14 +30,19 @@ clean_up() {
 trap clean_up EXIT
 cd "$work"
 
+# Crudely unquotes a JSON string by just taking everything between the first and the second quote.
+# We're only using this for resulting /nix/store paths, which can't contain " anyways,
+# nor can they contain any other characters that would need to be escaped specially in JSON
+# This way we don't need to add a dependency on e.g. jq
+crudeUnquoteJSON() {
+    cut -d \" -f2
+}
+
 touch {README.md,module.o,foo.bar}
 
-# nix-instantiate doesn't write out the source, only computing the hash, so
-# this uses the experimental nix command instead.
-
-dir="$(nix eval --impure --raw --expr '(with import <nixpkgs/lib>; "${
+dir="$(nix-instantiate --eval --strict --read-write-mode --json --expr '(with import <nixpkgs/lib>; "${
   cleanSource ./.
-}")')"
+}")' | crudeUnquoteJSON)"
 (cd "$dir"; find) | sort -f | diff -U10 - <(cat <<EOF
 .
 ./foo.bar
@@ -39,9 +51,9 @@ EOF
 ) || die "cleanSource 1"
 
 
-dir="$(nix eval --impure --raw --expr '(with import <nixpkgs/lib>; "${
+dir="$(nix-instantiate --eval --strict --read-write-mode --json --expr '(with import <nixpkgs/lib>; "${
   cleanSourceWith { src = '"$work"'; filter = path: type: ! hasSuffix ".bar" path; }
-}")')"
+}")' | crudeUnquoteJSON)"
 (cd "$dir"; find) | sort -f | diff -U10 - <(cat <<EOF
 .
 ./module.o
@@ -49,9 +61,9 @@ dir="$(nix eval --impure --raw --expr '(with import <nixpkgs/lib>; "${
 EOF
 ) || die "cleanSourceWith 1"
 
-dir="$(nix eval --impure --raw --expr '(with import <nixpkgs/lib>; "${
+dir="$(nix-instantiate --eval --strict --read-write-mode --json --expr '(with import <nixpkgs/lib>; "${
   cleanSourceWith { src = cleanSource '"$work"'; filter = path: type: ! hasSuffix ".bar" path; }
-}")')"
+}")' | crudeUnquoteJSON)"
 (cd "$dir"; find) | sort -f | diff -U10 - <(cat <<EOF
 .
 ./README.md

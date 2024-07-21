@@ -5,10 +5,7 @@
 The easiest way to get a working idris version is to install the `idris` attribute:
 
 ```ShellSession
-$ # On NixOS
-$ nix-env -i nixos.idris
-$ # On non-NixOS
-$ nix-env -i nixpkgs.idris
+$ nix-env -f "<nixpkgs>" -iA idris
 ```
 
 This however only provides the `prelude` and `base` libraries. To install idris with additional libraries, you can use the `idrisPackages.with-packages` function, e.g. in an overlay in `~/.config/nixpkgs/overlays/my-idris.nix`:
@@ -93,14 +90,14 @@ build-idris-package  {
     owner = "Heather";
     repo = "Idris.Yaml";
     rev = "5afa51ffc839844862b8316faba3bafa15656db4";
-    sha256 = "1g4pi0swmg214kndj85hj50ccmckni7piprsxfdzdfhg87s0avw7";
+    hash = "sha256-h28F9EEPuvab6zrfeE+0k1XGQJGwINnsJEG8yjWIl7w=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Idris YAML lib";
     homepage = "https://github.com/Heather/Idris.Yaml";
-    license = licenses.mit;
-    maintainers = [ maintainers.brainrape ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.brainrape ];
   };
 }
 ```
@@ -137,9 +134,9 @@ For example you could set
 
 ```nix
 build-idris-package {
-  idrisBuildOptions = [ "--log" "1" "--verbose" ]
+  idrisBuildOptions = [ "--log" "1" "--verbose" ];
 
-  ...
+  # ...
 }
 ```
 

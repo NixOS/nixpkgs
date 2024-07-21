@@ -6,11 +6,12 @@
 # files.
 
 stdenv.mkDerivation rec {
-  name = "acl-2.3.1";
+  pname = "acl";
+  version = "2.3.2";
 
   src = fetchurl {
-    url = "mirror://savannah/acl/${name}.tar.gz";
-    sha256 = "sha256-dgxhxokBs3/dXu/ur0wMeia9/disdHoe3/HODiQ8Ea8=";
+    url = "mirror://savannah/acl/acl-${version}.tar.gz";
+    hash = "sha256-XyvbrWKXB6p9hcYj+ZSqih0t7FWnPeUgW6wL9gWKL3w=";
   };
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
@@ -18,12 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext ];
   buildInputs = [ attr ];
 
-  # Upstream use C++-style comments in C code. Remove them.
-  # This comment breaks compilation if too strict gcc flags are used.
-  patchPhase = ''
-    echo "Removing C++-style comments from include/acl.h"
-    sed -e '/^\/\//d' -i include/acl.h
-
+  postPatch = ''
     patchShebangs .
   '';
 

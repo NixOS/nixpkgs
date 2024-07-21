@@ -1,44 +1,79 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
-, gettext, zsh, pinentry, cryptsetup, gnupg, util-linux, e2fsprogs, sudo
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, substituteAll
+, makeWrapper
+, zsh
+, coreutils
+, cryptsetup
+, e2fsprogs
+, file
+, gawk
+, getent
+, gettext
+, gnugrep
+, gnupg
+, libargon2
+, lsof
+, pinentry
+, util-linux
+, nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "tomb";
-  version = "2.9";
+  version = "2.10";
 
   src = fetchFromGitHub {
-    owner  = "dyne";
-    repo   = "Tomb";
-    rev    = "v${version}";
-    sha256 = "0d6vmfcf4kd0p2bcljmdnyc2fmbwvar81cc472zx86r7yc3ih102";
+    owner = "dyne";
+    repo = "Tomb";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lLxQJX0P6b6lbXEcrq45EsX9iKiayZ9XkhqgMfpN3/w=";
   };
 
-  buildInputs = [ sudo zsh pinentry ];
+  buildInputs = [ zsh pinentry ];
 
   nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
     # if not, it shows .tomb-wrapped when running
     substituteInPlace tomb \
-      --replace 'TOMBEXEC=$0' 'TOMBEXEC=tomb'
+      --replace-fail 'TOMBEXEC=$0' 'TOMBEXEC=tomb'
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = "$out/bin/tomb -h";
-
   installPhase = ''
-    install -Dm755 tomb       $out/bin/tomb
+    install -Dm755 tomb $out/bin/tomb
     install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
 
     wrapProgram $out/bin/tomb \
-      --prefix PATH : $out/bin:${lib.makeBinPath [ cryptsetup gettext gnupg pinentry util-linux e2fsprogs ]}
+      --prefix PATH : $out/bin:${lib.makeBinPath [
+          coreutils
+          cryptsetup
+          e2fsprogs
+          file
+          gawk
+          getent
+          gettext
+          gnugrep
+          gnupg
+          libargon2
+          lsof
+          pinentry
+          util-linux
+        ]}
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "File encryption on GNU/Linux";
-    homepage    = "https://www.dyne.org/software/tomb/";
-    license     = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.linux;
+    homepage = "https://www.dyne.org/software/tomb/";
+    changelog = "https://github.com/dyne/Tomb/blob/v${version}/ChangeLog.md";
+    license = licenses.gpl3Only;
+    mainProgram = "tomb";
+    maintainers = with maintainers; [ peterhoeg anthonyroussel ];
+    platforms = platforms.linux;
   };
 }

@@ -15,14 +15,8 @@ in
         description = "Enable the kodi multimedia center.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.kodi;
-        defaultText = literalExpression "pkgs.kodi";
-        example = literalExpression "pkgs.kodi.withPackages (p: with p; [ jellyfin pvr-iptvsimple vfs-sftp ])";
-        description = ''
-          Package that should be used for Kodi.
-        '';
+      package = mkPackageOption pkgs "kodi" {
+        example = "kodi.withPackages (p: with p; [ jellyfin pvr-iptvsimple vfs-sftp ])";
       };
     };
   };

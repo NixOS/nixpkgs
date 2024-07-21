@@ -1,14 +1,19 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+}:
 
 buildPythonPackage rec {
   pname = "dungeon-eos";
-  version = "0.0.4";
+  version = "0.0.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "0hxygjk9i4qlwsxnxr52cxhqy3i62pc373z1x5sh2pas5ag59bvl";
+    hash = "sha256-Z1fGtslXP8zcZmVeWjRrbcM2ZJsfbrWjpLWZ49uSCRY=";
   };
 
   doCheck = false; # there are no tests
@@ -16,8 +21,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/dungeon-eos";
-    description = "A package that simulates PMD EoS dungeon generation";
+    description = "Package that simulates PMD EoS dungeon generation";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 xfix ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

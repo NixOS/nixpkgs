@@ -9,7 +9,7 @@ let
     , nixosTests
     , tests
     , fetchurl
-    , makeWrapper
+    , makeBinaryWrapper
     , symlinkJoin
     , writeText
     , autoconf
@@ -27,12 +27,18 @@ let
     , system-sendmail
     , valgrind
     , xcbuild
+    , writeShellScript
+    , common-updater-scripts
+    , curl
+    , jq
 
     , version
-    , sha256
+    , phpSrc ? null
+    , hash ? null
     , extraPatches ? [ ]
     , packageOverrides ? (final: prev: { })
     , phpAttrsOverrides ? (attrs: { })
+    , pearInstallPhar ? (callPackage ./install-pear-nozlib-phar.nix { })
 
       # Sapi flags
     , cgiSupport ? true
@@ -43,12 +49,15 @@ let
     , phpdbgSupport ? true
 
       # Misc flags
-    , apxs2Support ? !stdenv.isDarwin
+    , apxs2Support ? false
     , argon2Support ? true
     , cgotoSupport ? false
     , embedSupport ? false
+    , staticSupport ? false
     , ipv6Support ? true
-    , systemdSupport ? stdenv.isLinux
+    , zendSignalsSupport ? true
+    , zendMaxExecutionTimersSupport ? false
+    , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
     , valgrindSupport ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
     , ztsSupport ? apxs2Support
     }@args:
@@ -81,7 +90,7 @@ let
 
           php-packages = (callPackage ../../../top-level/php-packages.nix {
             phpPackage = phpWithExtensions;
-          }).overrideScope' packageOverrides;
+          }).overrideScope packageOverrides;
 
           allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
           enabledExtensions =
@@ -91,7 +100,7 @@ let
               [ ]
               allExtensionFunctions;
 
-          getExtName = ext: lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
+          getExtName = ext: ext.extensionName;
 
           # Recursively get a list of all internal dependencies
           # for a list of extensions.
@@ -137,7 +146,7 @@ let
           phpWithExtensions = symlinkJoin {
             name = "php-with-extensions-${version}";
             inherit (php) version;
-            nativeBuildInputs = [ makeWrapper ];
+            nativeBuildInputs = [ makeBinaryWrapper ];
             passthru = php.passthru // {
               buildEnv = mkBuildEnv allArgs allExtensionFunctions;
               withExtensions = mkWithExtensions allArgs allExtensionFunctions;
@@ -155,7 +164,7 @@ let
                 nixos = lib.recurseIntoAttrs nixosTests."php${lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor php.version)}";
                 package = tests.php;
               };
-              inherit (php-packages) extensions buildPecl mkExtension;
+              inherit (php-packages) extensions buildPecl mkComposerRepository buildComposerProject buildComposerWithPlugin composerHooks mkExtension;
               packages = php-packages.tools;
               meta = php.meta // {
                 outputsToInstall = [ "out" ];
@@ -166,15 +175,19 @@ let
               ln -s ${extraInit} $out/lib/php.ini
 
               if test -e $out/bin/php; then
-                wrapProgram $out/bin/php --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/php --set-default PHP_INI_SCAN_DIR $out/lib
               fi
 
               if test -e $out/bin/php-fpm; then
-                wrapProgram $out/bin/php-fpm --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/php-fpm --set-default PHP_INI_SCAN_DIR $out/lib
               fi
 
               if test -e $out/bin/phpdbg; then
-                wrapProgram $out/bin/phpdbg --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/phpdbg --set-default PHP_INI_SCAN_DIR $out/lib
+              fi
+
+              if test -e $out/bin/php-cgi; then
+                wrapProgram $out/bin/php-cgi --set-default PHP_INI_SCAN_DIR $out/lib
               fi
             '';
           };
@@ -184,6 +197,11 @@ let
 
       mkWithExtensions = prevArgs: prevExtensionFunctions: extensions:
         mkBuildEnv prevArgs prevExtensionFunctions { inherit extensions; };
+
+      defaultPhpSrc = fetchurl {
+        url = "https://www.php.net/distributions/php-${version}.tar.bz2";
+        inherit hash;
+      };
     in
     stdenv.mkDerivation (
       let
@@ -202,7 +220,7 @@ let
             [ pcre2 ]
 
             # Enable sapis
-            ++ lib.optional pearSupport [ libxml2.dev ]
+            ++ lib.optionals pearSupport [ libxml2.dev ]
 
             # Misc deps
             ++ lib.optional apxs2Support apacheHttpd
@@ -219,19 +237,13 @@ let
             [ "--disable-all" ]
 
             # PCRE
-            ++ lib.optionals (lib.versionAtLeast version "7.4") [ "--with-external-pcre=${pcre2.dev}" ]
-            ++ [ "PCRE_LIBDIR=${pcre2}" ]
-
+            ++ [ "--with-external-pcre=${pcre2.dev}" ]
 
             # Enable sapis
             ++ lib.optional (!cgiSupport) "--disable-cgi"
             ++ lib.optional (!cliSupport) "--disable-cli"
             ++ lib.optional fpmSupport "--enable-fpm"
-            ++ lib.optional pearSupport [ "--with-pear" "--enable-xml" "--with-libxml" ]
-            ++ lib.optionals (pearSupport && (lib.versionOlder version "7.4")) [
-              "--enable-libxml"
-              "--with-libxml-dir=${libxml2.dev}"
-            ]
+            ++ lib.optionals pearSupport [ "--with-pear" "--enable-xml" "--with-libxml" ]
             ++ lib.optional pharSupport "--enable-phar"
             ++ lib.optional (!phpdbgSupport) "--disable-phpdbg"
 
@@ -240,12 +252,14 @@ let
             ++ lib.optional apxs2Support "--with-apxs2=${apacheHttpd.dev}/bin/apxs"
             ++ lib.optional argon2Support "--with-password-argon2=${libargon2}"
             ++ lib.optional cgotoSupport "--enable-re2c-cgoto"
-            ++ lib.optional embedSupport "--enable-embed"
+            ++ lib.optional embedSupport "--enable-embed${lib.optionalString staticSupport "=static"}"
             ++ lib.optional (!ipv6Support) "--disable-ipv6"
             ++ lib.optional systemdSupport "--with-fpm-systemd"
             ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
-            ++ lib.optional (ztsSupport && (lib.versionOlder version "8.0")) "--enable-maintainer-zts"
-            ++ lib.optional (ztsSupport && (lib.versionAtLeast version "8.0")) "--enable-zts"
+            ++ lib.optional ztsSupport "--enable-zts"
+            ++ lib.optional staticSupport "--enable-static"
+            ++ lib.optional (!zendSignalsSupport) ["--disable-zend-signals"]
+            ++ lib.optional zendMaxExecutionTimersSupport "--enable-zend-max-execution-timers"
 
 
             # Sendmail
@@ -258,30 +272,31 @@ let
             # Don't record the configure flags since this causes unnecessary
             # runtime dependencies
             ''
-              for i in main/build-defs.h.in scripts/php-config.in; do
-                substituteInPlace $i \
-                  --replace '@CONFIGURE_COMMAND@' '(omitted)' \
-                  --replace '@CONFIGURE_OPTIONS@' "" \
-                  --replace '@PHP_LDFLAGS@' ""
-              done
+              substituteInPlace main/build-defs.h.in \
+                --replace-fail '@CONFIGURE_COMMAND@' '(omitted)'
+              substituteInPlace scripts/php-config.in \
+                --replace-fail '@CONFIGURE_OPTIONS@' "" \
+                --replace-fail '@PHP_LDFLAGS@' ""
 
               export EXTENSION_DIR=$out/lib/php/extensions
-            ''
-            # PKG_CONFIG need not be a relative path
-            + lib.optionalString (!lib.versionAtLeast version "7.4") ''
-              for i in $(find . -type f -name "*.m4"); do
-                substituteInPlace $i \
-                  --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
-              done
-            '' + ''
+
               ./buildconf --copy --force
 
-              if test -f $src/genfiles; then
-                ./genfiles
+              if [ -f "scripts/dev/genfiles" ]; then
+                ./scripts/dev/genfiles
               fi
             '' + lib.optionalString stdenv.isDarwin ''
-              substituteInPlace configure --replace "-lstdc++" "-lc++"
+              substituteInPlace configure --replace-fail "-lstdc++" "-lc++"
             '';
+
+          # When compiling PHP sources from Github, this file is missing and we
+          # need to install it ourselves.
+          # On the other hand, a distribution includes this file by default.
+          preInstall = ''
+            if [[ ! -f ./pear/install-pear-nozlib.phar ]]; then
+              cp ${pearInstallPhar} ./pear/install-pear-nozlib.phar
+            fi
+          '';
 
           postInstall = ''
             test -d $out/etc || mkdir $out/etc
@@ -296,10 +311,7 @@ let
                $dev/share/man/man1/
           '';
 
-          src = fetchurl {
-            url = "https://www.php.net/distributions/php-${version}.tar.bz2";
-            inherit sha256;
-          };
+          src = if phpSrc == null then defaultPhpSrc else phpSrc;
 
           patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
 
@@ -308,6 +320,19 @@ let
           outputs = [ "out" "dev" ];
 
           passthru = {
+            updateScript =
+              let
+                script = writeShellScript "php${lib.versions.major version}${lib.versions.minor version}-update-script" ''
+                  set -o errexit
+                  PATH=${lib.makeBinPath [ common-updater-scripts curl jq ]}
+                  new_version=$(curl --silent "https://www.php.net/releases/active" | jq --raw-output '."${lib.versions.major version}"."${lib.versions.majorMinor version}".version')
+                  update-source-version "$UPDATE_NIX_ATTR_PATH.unwrapped" "$new_version" "--file=$1"
+                '';
+              in [
+                script
+                # Passed as an argument so that update.nix can ensure it does not become a store path.
+                (./. + "/${lib.versions.majorMinor version}.nix")
+              ];
             buildEnv = mkBuildEnv { } [ ];
             withExtensions = mkWithExtensions { } [ ];
             overrideAttrs =
@@ -321,9 +346,10 @@ let
           };
 
           meta = with lib; {
-            description = "An HTML-embedded scripting language";
+            description = "HTML-embedded scripting language";
             homepage = "https://www.php.net/";
             license = licenses.php301;
+            mainProgram = "php";
             maintainers = teams.php.members;
             platforms = platforms.all;
             outputsToInstall = [ "out" "dev" ];

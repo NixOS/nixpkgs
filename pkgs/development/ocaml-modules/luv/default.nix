@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchurl
+{ lib, buildDunePackage, ocaml, fetchurl
 , ctypes, result
 , alcotest
 , file
@@ -6,12 +6,13 @@
 
 buildDunePackage rec {
   pname = "luv";
-  version = "0.5.10";
-  useDune2 = true;
+  version = "0.5.12";
+
+  minimalOCamlVersion = "4.03";
 
   src = fetchurl {
     url = "https://github.com/aantron/luv/releases/download/${version}/luv-${version}.tar.gz";
-    sha256 = "0zygir01d6vglfs4b3klnbg90glvyl9agq5xnzn8hmsb6d8z0jqp";
+    sha256 = "sha256-dp9qCIYqSdROIAQ+Jw73F3vMe7hnkDe8BgZWImNMVsA=";
   };
 
   postConfigure = ''
@@ -23,7 +24,8 @@ buildDunePackage rec {
   nativeBuildInputs = [ file ];
   propagatedBuildInputs = [ ctypes result ];
   checkInputs = [ alcotest ];
-  doCheck = true;
+  # Alcotest depends on fmt that needs 4.08 or newer
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {
     homepage = "https://github.com/aantron/luv";

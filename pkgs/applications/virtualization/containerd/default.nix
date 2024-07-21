@@ -6,22 +6,21 @@
 , installShellFiles
 , util-linux
 , nixosTests
+, kubernetes
 }:
 
 buildGoModule rec {
   pname = "containerd";
-  version = "1.5.8";
-
-  outputs = [ "out" "man" ];
+  version = "1.7.20";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "sha256-XIAByE2/eVG8DAZXstKs51LQYdVPcPQuIlST3xCclrU=";
+    hash = "sha256-Q9lTzz+G5PSoChy8MZtbOpO81AyNWXC+CgGkdOg14uY=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 
@@ -32,24 +31,24 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make binaries man "VERSION=v${version}" "REVISION=${src.rev}"
+    make binaries "VERSION=v${version}" "REVISION=${src.rev}"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     install -Dm555 bin/* -t $out/bin
-    installManPage man/*.[1-9]
     installShellCompletion --bash contrib/autocomplete/ctr
     installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
     runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) docker; };
+  passthru.tests = { inherit (nixosTests) docker; } // kubernetes.tests;
 
   meta = with lib; {
+    changelog = "https://github.com/containerd/containerd/releases/tag/${src.rev}";
     homepage = "https://containerd.io/";
-    description = "A daemon to control runC";
+    description = "Daemon to control runC";
     license = licenses.asl20;
     maintainers = with maintainers; [ offline vdemeester ];
     platforms = platforms.linux;

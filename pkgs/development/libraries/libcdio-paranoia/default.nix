@@ -1,14 +1,15 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libcdio, pkg-config,
   libiconv, IOKit, DiskArbitration}:
 
-stdenv.mkDerivation {
-  name = "libcdio-paranoia-0.94+2";
+stdenv.mkDerivation rec {
+  pname = "libcdio-paranoia";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "libcdio-paranoia";
-    rev = "release-10.2+0.94+2";
-    sha256 = "1wjgmmaca4baw7k5c3vdap9hnjc49ciagi5kvpvync3aqfmdvkha";
+    rev = "release-10.2+${version}";
+    hash = "sha256-kNGhhslp5noAVeho0kBVfyvb4kQpDY56nyL3a4aFgjE=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -27,9 +28,10 @@ stdenv.mkDerivation {
       This is a port of xiph.org's cdda paranoia to use libcdio for CDROM
       access. By doing this, cdparanoia runs on platforms other than GNU/Linux.
     '';
-    license = licenses.gpl3;
     homepage = "https://github.com/rocky/libcdio-paranoia";
-    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.gpl3;
     maintainers = [ ];
+    mainProgram = "cd-paranoia";
+    platforms = platforms.unix;
   };
 }

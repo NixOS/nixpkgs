@@ -1,6 +1,7 @@
 { stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
 
-if !lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
+|| lib.versionAtLeast ocaml.version "5.0"
 then throw "erm_xml is not available for OCaml ${ocaml.version}"
 else
 
@@ -15,7 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OQdLTq9tJZc6XlcuPv2gxzYiQAUGd6AiBzfSi169XL0=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 

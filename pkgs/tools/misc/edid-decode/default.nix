@@ -1,26 +1,38 @@
-{ lib, stdenv, fetchgit }:
+{ lib
+, stdenv
+, fetchgit
+, unstableGitUpdater
+}:
 
-stdenv.mkDerivation rec {
-  pname = "edid-decode-unstable";
-  version = "unstable-2018-12-06";
+stdenv.mkDerivation {
+  pname = "edid-decode";
+  version = "0-unstable-2024-04-02";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchgit {
     url = "git://linuxtv.org/edid-decode.git";
-    rev = "6def7bc83dfb0338632e06a8b14c93faa6af8879";
-    sha256 = "0v6d6jy309pb02l377l0fpmgfsvcpiqc5bvyrli34v413mhq6p15";
+    rev = "3d635499e4aca3319f0796ba787213c981c5a770";
+    hash = "sha256-bqzO39YM/3h9p37xaGJAw9xERgWOD+4yqO/XQiq/QqM=";
   };
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp edid-decode $out/bin
+  preBuild = ''
+    export DESTDIR=$out
+    export bindir=/bin
+    export mandir=/share/man
   '';
 
-  meta = {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = with lib; {
     description = "EDID decoder and conformance tester";
-    homepage = "https://cgit.freedesktop.org/xorg/app/edid-decode/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.chiiruno ];
-    platforms = lib.platforms.all;
+    homepage = "https://git.linuxtv.org/edid-decode.git";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ Madouura ];
+    platforms = platforms.all;
+    mainProgram = "edid-decode";
   };
 }
-

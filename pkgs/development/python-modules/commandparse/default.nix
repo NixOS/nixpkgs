@@ -1,19 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "commandparse";
-  version = "1.1.1";
+  version = "1.1.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06mcxc0vs5qdcywalgyx5zm18z4xcsrg5g0wsqqv5qawkrvmvl53";
+    hash = "sha256-S9e90BtS6qMjFtYUmgC0w4IKQP8q1iR2tGqq5l2+n6o=";
   };
 
   # tests only distributed upstream source, not PyPi
   doCheck = false;
+
   pythonImportsCheck = [ "commandparse" ];
 
   meta = with lib; {

@@ -16,8 +16,7 @@ in
 
     services.morty = {
 
-      enable = mkEnableOption
-        "Morty proxy server. See https://github.com/asciimoo/morty";
+      enable = mkEnableOption "Morty proxy server. See https://github.com/asciimoo/morty";
 
       ipv6 = mkOption {
         type = types.bool;
@@ -32,7 +31,7 @@ in
           HMAC url validation key (hexadecimal encoded).
           Leave blank to disable. Without validation key, anyone can
           submit proxy requests. Leave blank to disable.
-          Generate with <literal>printf %s somevalue | openssl dgst -sha1 -hmac somekey</literal>
+          Generate with `printf %s somevalue | openssl dgst -sha1 -hmac somekey`
         '';
       };
 
@@ -42,15 +41,10 @@ in
         description = "Request timeout in seconds.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.morty;
-        defaultText = literalExpression "pkgs.morty";
-        description = "morty package to use.";
-      };
+      package = mkPackageOption pkgs "morty" { };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
         description = "Listing port";
       };

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy36
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "mailcap-fix";
   version = "1.0.1";
-  disabled = isPy36; # this fix is merged into python 3.6
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,9 +15,8 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A patched mailcap module that conforms to RFC 1524";
+    description = "Patched mailcap module that conforms to RFC 1524";
     homepage = "https://github.com/michael-lazar/mailcap_fix";
     license = licenses.unlicense;
   };
-
 }

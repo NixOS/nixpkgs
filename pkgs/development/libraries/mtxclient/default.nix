@@ -1,26 +1,27 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
-, openssl
-, olm
-, spdlog
-, nlohmann_json
 , coeurl
-, libevent
 , curl
+, libevent
+, nlohmann_json
+, olm
+, openssl
+, re2
+, spdlog
 }:
 
 stdenv.mkDerivation rec {
   pname = "mtxclient";
-  version = "0.6.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "mtxclient";
     rev = "v${version}";
-    sha256 = "0sxx7vj6a1n2d95c118pjq52707qwf16154fdvz5f4z1pq7c8dsi";
+    hash = "sha256-luWcbYCv5OM3aidxiO7glqD+VYnCZMElZYaPKbtvMYI=";
   };
 
   postPatch = ''
@@ -39,24 +40,26 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
-    spdlog
-    nlohmann_json
-    openssl
-    olm
     coeurl
-    libevent
     curl
+    libevent
+    nlohmann_json
+    olm
+    openssl
+    re2
+    spdlog
   ];
 
   meta = with lib; {
-    description = "Client API library for the Matrix protocol.";
+    description = "Client API library for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/mtxclient";
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz pstn ];
     platforms = platforms.all;
     # Should be fixable if a higher clang version is used, see:
     # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177
-    broken = stdenv.targetPlatform.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

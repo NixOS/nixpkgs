@@ -1,19 +1,23 @@
 { lib
 , stdenv
-, fetchFromGitLab
+, fetchurl
+, directoryListingUpdater
 , meson
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
+, libadwaita
 , libhandy
 , libxkbcommon
 , libgudev
 , callaudiod
 , pulseaudio
+, evince
 , glib
-, gtk3
+, gtk4
 , gnome
+, gnome-desktop
 , gcr
 , pam
 , systemd
@@ -26,46 +30,47 @@
 , networkmanager
 , polkit
 , libsecret
+, evolution-data-server
+, nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.14.0";
+  version = "0.39.0";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    group = "World";
-    owner = "Phosh";
-    repo = pname;
-    rev = "v${version}";
-    fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-pN2IWJDsQoTSOUki5gKhIucFYlYchzrqKHQYq6o4EkI=";
+  src = fetchurl {
+    # Release tarball which includes subprojects gvc and libcall-ui
+    url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-n1ZegSJAUr1Lbn0+Mx64vHhl4bwSJEdnO1xN/QdEKlw=";
   };
 
   nativeBuildInputs = [
+    libadwaita
     meson
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
+    evince
     phoc
     libhandy
     libsecret
     libxkbcommon
     libgudev
     callaudiod
+    evolution-data-server
     pulseaudio
     glib
     gcr
     networkmanager
     polkit
     gnome.gnome-control-center
-    gnome.gnome-desktop
+    gnome-desktop
     gnome.gnome-session
-    gtk3
+    gtk4
     pam
     systemd
     upower
@@ -73,7 +78,7 @@ stdenv.mkDerivation rec {
     feedbackd
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];
@@ -81,18 +86,21 @@ stdenv.mkDerivation rec {
   # Temporarily disabled - Test is broken (SIGABRT)
   doCheck = false;
 
-  mesonFlags = [ "-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc" ];
-
-  postPatch = ''
-    chmod +x build-aux/post_install.py
-    patchShebangs build-aux/post_install.py
-  '';
+  mesonFlags = [
+    "-Dsystemd=true"
+    "-Dcompositor=${phoc}/bin/phoc"
+    # https://github.com/NixOS/nixpkgs/issues/36468
+    # https://gitlab.gnome.org/World/Phosh/phosh/-/merge_requests/1363
+    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+    # Save some time building if tests are disabled
+    "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
+  ];
 
   checkPhase = ''
     runHook preCheck
     export NO_AT_BRIDGE=1
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
     runHook postCheck
   '';
@@ -105,24 +113,19 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  postFixup = ''
-    mkdir -p $out/share/wayland-sessions
-    ln -s $out/share/applications/sm.puri.Phosh.desktop $out/share/wayland-sessions/
-    # The OSK0.desktop points to a dummy stub that's not needed
-    rm $out/share/applications/sm.puri.OSK0.desktop
-  '';
-
   passthru = {
-    providedSessions = [
-     "sm.puri.Phosh"
-    ];
+    providedSessions = [ "phosh" ];
+    tests.phosh = nixosTests.phosh;
+    updateScript = directoryListingUpdater { };
   };
 
   meta = with lib; {
-    description = "A pure Wayland shell prototype for GNOME on mobile devices";
+    description = "Pure Wayland shell prototype for GNOME on mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${finalAttrs.version}/debian/changelog";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar masipcat zhaofengli ];
+    maintainers = with maintainers; [ masipcat zhaofengli ];
     platforms = platforms.linux;
+    mainProgram = "phosh-session";
   };
-}
+})

@@ -1,32 +1,37 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
+, fetchpatch2
 , nixosTests
 }:
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "pinnwand";
-  version = "1.3.0";
-  format = "pyproject";
+  version = "1.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "046xk2y59wa0pdp7s3hp1gh8sqdw0yl4xab22r2x44iwwcyb0gy5";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1Q/jRjFUoJb1S3cGF8aVuguWMJwYrAtXdKpZV8nRK0k=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'click = "^7.0"' 'click = "*"' \
-      --replace 'docutils = "^0.16"' 'docutils = "*"' \
-      --replace 'sqlalchemy = "^1.3"' 'sqlalchemy = "*"' \
-      --replace 'token-bucket = "^0.2.0"' 'token-bucket = "*"'
-  '';
+  patches = [
+    (fetchpatch2 {
+      # fix entrypoint
+      url = "https://github.com/supakeen/pinnwand/commit/7868b4b4dcd57066dd0023b5a3cbe91fc5a0a858.patch";
+      hash = "sha256-Fln9yJNRvNPHZ0JIgzmwwjUpAHMu55NaEb8ZVDWhLyE=";
+    })
+  ];
 
   nativeBuildInputs = [
-    poetry-core
+    pdm-pep517
+  ];
+
+  pythonRelaxDeps = [
+    "docutils"
+    "sqlalchemy"
   ];
 
   propagatedBuildInputs = [
@@ -34,17 +39,15 @@ with python3.pkgs; buildPythonApplication rec {
     docutils
     pygments
     pygments-better-html
+    python-dotenv
     sqlalchemy
     token-bucket
-    toml
+    tomli
     tornado
   ];
 
-  checkInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # pygments renamed rst to restructuredText, hence a mismatch on this test
-    "test_guess_language"
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -52,10 +55,12 @@ with python3.pkgs; buildPythonApplication rec {
   passthru.tests = nixosTests.pinnwand;
 
   meta = with lib; {
-    homepage = "https://supakeen.com/project/pinnwand/";
+    changelog = "https://github.com/supakeen/pinnwand/releases/tag/v${version}";
+    description = "Python pastebin that tries to keep it simple";
+    homepage = "https://github.com/supakeen/pinnwand";
     license = licenses.mit;
-    description = "A Python pastebin that tries to keep it simple";
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "pinnwand";
   };
 }
 

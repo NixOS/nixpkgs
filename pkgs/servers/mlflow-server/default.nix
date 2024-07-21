@@ -5,14 +5,13 @@ let
 in
 py.toPythonApplication
   (py.mlflow.overridePythonAttrs(old: rec {
-    pname = "mlflow-server";
 
     propagatedBuildInputs = old.propagatedBuildInputs ++ [
       py.boto3
       py.mysqlclient
     ];
 
-    postPatch = ''
+    postPatch = (old.postPatch or "") + ''
       substituteInPlace mlflow/utils/process.py --replace \
         "child = subprocess.Popen(cmd, env=cmd_env, cwd=cwd, universal_newlines=True," \
         "cmd[0]='$out/bin/gunicornMlflow'; child = subprocess.Popen(cmd, env=cmd_env, cwd=cwd, universal_newlines=True,"

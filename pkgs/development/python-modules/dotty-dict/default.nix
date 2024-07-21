@@ -1,16 +1,17 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dotty_dict";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6wA1o2KezYQ5emjx9C8elKvRw0V3oZzT6srTMe58uvA=";
+    hash = "sha256-SwFuA7iuJlU5dXpT66JLm/2lBvuU+84L7oQ8bwVUGhU=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "zsh-better-npm-completion";
+  pname = "zsh-better-npm-completion";
   version = "unstable-2019-11-19";
 
   src = fetchFromGitHub {
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "16z7k5n1rcl9i61lrm7i5dsqsmhvdp1y4y5ii6hv2xpp470addgy";
   };
 
+  strictDeps = true;
   installPhase = ''
     install -Dm 0644 zsh-better-npm-completion.plugin.zsh $out/share/zsh-better-npm-completion
   '';

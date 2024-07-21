@@ -33,5 +33,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ mahe ];
     platforms = with platforms; all;
+    mainProgram = "synapse";
   };
 }

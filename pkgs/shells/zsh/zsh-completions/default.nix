@@ -1,25 +1,34 @@
-{ lib, stdenv, fetchFromGitHub}:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "zsh-completions";
-  version = "0.33.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "zsh-users";
     repo = pname;
     rev = version;
-    sha256 = "0vs14n29wvkai84fvz3dz2kqznwsq2i5fzbwpv8nsfk1126ql13i";
+    sha256 = "sha256-GFHlZjIHUWwyeVoCpszgn4AmLPSSE8UVNfRmisnhkpg=";
   };
 
-  installPhase= ''
+  strictDeps = true;
+  installPhase = ''
     install -D --target-directory=$out/share/zsh/site-functions src/*
+
+    # tmuxp install it so avoid collision
+    rm $out/share/zsh/site-functions/_tmuxp
   '';
 
   meta = {
     description = "Additional completion definitions for zsh";
     homepage = "https://github.com/zsh-users/zsh-completions";
-    license = lib.licenses.free;
-
+    license = with lib.licenses; [
+      asl20
+      bsd3
+      isc
+      mit
+      zsh
+    ];
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.olejorgenb ];
   };

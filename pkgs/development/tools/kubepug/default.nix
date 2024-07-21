@@ -2,26 +2,26 @@
 
 buildGoModule rec {
   pname = "kubepug";
-  version = "1.2.2";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
-    owner = "rikatz";
+    owner = "kubepug";
     repo = "kubepug";
     rev = "v${version}";
-    sha256 = "sha256-jQ/LzwxYxfCKiu+2VhjQ3YWwLEqZkYrH7+olBOMUA1A=";
+    hash = "sha256-VNxaYQy81U0JWd6KS0jCvMexpyWL4v1cKpjxLRkxBLE=";
   };
 
-  vendorSha256 = "sha256-P5HoU9AAGFrSrp9iymjW+r8w5L90KUOrmaXM8p+Wn44=";
+  vendorHash = "sha256-HVsaQBd7fSZp2fOpOOmlDhYrHcHqWKiYWPFLQX0azEw=";
 
   ldflags = [
-    "-s" "-w" "-X=github.com/rikatz/kubepug/version.Version=${src.rev}"
+    "-s"
+    "-w"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=${version}"
   ];
-
-  subPackages = [ "cmd/kubepug.go" ];
 
   meta = with lib; {
     description = "Checks a Kubernetes cluster for objects using deprecated API versions";
-    homepage = "https://github.com/rikatz/kubepug";
+    homepage = "https://github.com/kubepug/kubepug";
     license = licenses.asl20;
     maintainers = with maintainers; [ mausch ];
   };

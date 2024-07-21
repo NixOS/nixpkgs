@@ -1,23 +1,31 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pillow, pytestCheckHook, pythonOlder }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "image-go-nord";
-  version = "0.1.5";
+  version = "1.1.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Schrodinger-Hat";
     repo = "ImageGoNord-pip";
-    rev = "v${version}";
-    sha256 = "sha256-O34COlGsXExJShRd2zvhdescNfYXWLNuGpkjcH3koPU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2Dnl0dcdMo4PnhHTb/5cJ7C0CvW84av4CCbrTLPqopg=";
   };
 
   propagatedBuildInputs = [ pillow ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "A tool that can convert rgb images to nordtheme palette";
+    description = "Tool that can convert rgb images to nordtheme palette";
     homepage = "https://github.com/Schrodinger-Hat/ImageGoNord-pip";
     license = licenses.mit;
     maintainers = with maintainers; [ kranzes ];

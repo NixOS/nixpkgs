@@ -3,7 +3,7 @@
 let
 
   inherit (lib.options) literalExpression mkEnableOption mkOption;
-  inherit (lib.types) bool enum ints lines attrsOf nullOr path str submodule;
+  inherit (lib.types) bool enum ints lines attrsOf nonEmptyStr nullOr path str submodule;
   inherit (lib.modules) mkDefault mkIf mkMerge;
 
   commonDescr = ''
@@ -16,8 +16,6 @@ let
     The default contains some reasonable
     configuration to yield an operational system.
   '';
-
-  str1 = lib.types.addCheck str (s: s!="");  # non-empty string
 
   configAttrType =
     # Options in HylaFAX configuration files can be
@@ -37,19 +35,19 @@ let
   modemConfigOptions = { name, config, ... }: {
     options = {
       name = mkOption {
-        type = str1;
+        type = nonEmptyStr;
         example = "ttyS1";
         description = ''
           Name of modem device,
-          will be searched for in <filename>/dev</filename>.
+          will be searched for in {file}`/dev`.
         '';
       };
       type = mkOption {
-        type = str1;
+        type = nonEmptyStr;
         example = "cirrus";
         description = ''
           Name of modem configuration file,
-          will be searched for in <filename>config</filename>
+          will be searched for in {file}`config`
           in the spooling area directory.
         '';
       };
@@ -65,7 +63,7 @@ let
           Attribute set of values for the given modem.
           ${commonDescr}
           Options defined here override options in
-          <option>commonModemConfig</option> for this modem.
+          {option}`commonModemConfig` for this modem.
         '';
       };
     };
@@ -128,21 +126,21 @@ in
       example = false;
       description = ''
         Autostart the HylaFAX queue manager at system start.
-        If this is <literal>false</literal>, the queue manager
+        If this is `false`, the queue manager
         will still be started if there are pending
         jobs or if a user tries to connect to it.
       '';
     };
 
     countryCode = mkOption {
-      type = nullOr str1;
+      type = nullOr nonEmptyStr;
       default = null;
       example = "49";
       description = "Country code for server and all modems.";
     };
 
     areaCode = mkOption {
-      type = nullOr str1;
+      type = nullOr nonEmptyStr;
       default = null;
       example = "30";
       description = "Area code for server and all modems.";
@@ -175,22 +173,22 @@ in
       type = path;
       default = "/etc/hosts.hfaxd";
       description = ''
-        The <filename>hosts.hfaxd</filename>
+        The {file}`hosts.hfaxd`
         file entry in the spooling area
         will be symlinked to the location given here.
         This file must exist and be
-        readable only by the <literal>uucp</literal> user.
+        readable only by the `uucp` user.
         See hosts.hfaxd(5) for details.
         This configuration permits access for all users:
-        <literal>
+        ```
           environment.etc."hosts.hfaxd" = {
             mode = "0600";
             user = "uucp";
             text = ".*";
           };
-        </literal>
+        ```
         Note that host-based access can be controlled with
-        <option>config.systemd.sockets.hylafax-hfaxd.listenStreams</option>;
+        {option}`config.systemd.sockets.hylafax-hfaxd.listenStreams`;
         by default, only 127.0.0.1 is permitted to connect.
       '';
     };
@@ -200,10 +198,10 @@ in
       example = literalExpression ''"''${pkgs.postfix}/bin/sendmail"'';
       # '' ;  # fix vim
       description = ''
-        Path to <filename>sendmail</filename> program.
+        Path to {file}`sendmail` program.
         The default uses the local sendmail wrapper
-        (see <option>config.services.mail.sendmailSetuidWrapper</option>),
-        otherwise the <filename>false</filename>
+        (see {option}`config.services.mail.sendmailSetuidWrapper`),
+        otherwise the {file}`false`
         binary to cause an error if used.
       '';
     };
@@ -213,7 +211,7 @@ in
       example.RecvqProtection = "0400";
       description = ''
         Attribute set of lines for the global
-        hfaxd config file <filename>etc/hfaxd.conf</filename>.
+        hfaxd config file {file}`etc/hfaxd.conf`.
         ${commonDescr}
       '';
     };
@@ -226,7 +224,7 @@ in
       };
       description = ''
         Attribute set of lines for the global
-        faxq config file <filename>etc/config</filename>.
+        faxq config file {file}`etc/config`.
         ${commonDescr}
       '';
     };
@@ -239,7 +237,7 @@ in
       };
       description = ''
         Attribute set of default values for
-        modem config files <filename>etc/config.*</filename>.
+        modem config files {file}`etc/config.*`.
         ${commonDescr}
         Think twice before changing
         paths of fax-processing scripts.
@@ -274,18 +272,18 @@ in
     };
 
     faxcron.enable.spoolInit = mkEnableOption ''
-      Purge old files from the spooling area with
-      <filename>faxcron</filename>
-      each time the spooling area is initialized.
+      purging old files from the spooling area with
+      {file}`faxcron`
+      each time the spooling area is initialized
     '';
     faxcron.enable.frequency = mkOption {
-      type = nullOr str1;
+      type = nullOr nonEmptyStr;
       default = null;
       example = "daily";
       description = ''
-        Purge old files from the spooling area with
-        <filename>faxcron</filename> with the given frequency
-        (see systemd.time(7)).
+        purging old files from the spooling area with
+        {file}`faxcron` with the given frequency
+        (see systemd.time(7))
       '';
     };
     faxcron.infoDays = mkOption {
@@ -314,17 +312,17 @@ in
     };
 
     faxqclean.enable.spoolInit = mkEnableOption ''
-      Purge old files from the spooling area with
-      <filename>faxqclean</filename>
-      each time the spooling area is initialized.
+      purging old files from the spooling area with
+      {file}`faxqclean`
+      each time the spooling area is initialized
     '';
     faxqclean.enable.frequency = mkOption {
-      type = nullOr str1;
+      type = nullOr nonEmptyStr;
       default = null;
       example = "daily";
       description = ''
         Purge old files from the spooling area with
-        <filename>faxcron</filename> with the given frequency
+        {file}`faxcron` with the given frequency
         (see systemd.time(7)).
       '';
     };
@@ -334,10 +332,10 @@ in
       example = "always";
       description = ''
         Enable or suppress job archiving:
-        <literal>never</literal> disables job archiving,
-        <literal>as-flagged</literal> archives jobs that
+        `never` disables job archiving,
+        `as-flagged` archives jobs that
         have been flagged for archiving by sendfax,
-        <literal>always</literal> forces archiving of all jobs.
+        `always` forces archiving of all jobs.
         See also sendfax(1) and faxqclean(8).
       '';
     };

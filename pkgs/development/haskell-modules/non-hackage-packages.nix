@@ -1,3 +1,5 @@
+{ pkgs, haskellLib }:
+
 # EXTRA HASKELL PACKAGES NOT ON HACKAGE
 #
 # This file should only contain packages that are not in ./hackage-packages.nix.
@@ -7,9 +9,9 @@
 # files.
 self: super: {
 
-  dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { };
+  changelog-d = self.callPackage ../misc/haskell/changelog-d {};
 
-  ldgallery-compiler = self.callPackage ../../tools/graphics/ldgallery/compiler { };
+  dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { };
 
   # Used by maintainers/scripts/regenerate-hackage-packages.sh, and generated
   # from the latest master instead of the current version on Hackage.
@@ -24,14 +26,13 @@ self: super: {
 
   nix-linter = self.callPackage ../../development/tools/analysis/nix-linter { };
 
-  nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor { };
-
   # hasura graphql-engine is not released to hackage.
   # https://github.com/hasura/graphql-engine/issues/7391
   ci-info = self.callPackage ../misc/haskell/hasura/ci-info.nix {};
   pg-client = self.callPackage ../misc/haskell/hasura/pg-client.nix {};
   graphql-parser = self.callPackage ../misc/haskell/hasura/graphql-parser.nix {};
   graphql-engine = self.callPackage ../misc/haskell/hasura/graphql-engine.nix {};
+  kriti-lang = self.callPackage ../misc/haskell/hasura/kriti-lang.nix {};
   hasura-resource-pool = self.callPackage ../misc/haskell/hasura/pool.nix {};
   hasura-ekg-core = self.callPackage ../misc/haskell/hasura/ekg-core.nix {};
   hasura-ekg-json = self.callPackage ../misc/haskell/hasura/ekg-json.nix {};
@@ -39,4 +40,5 @@ self: super: {
   # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
   hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix {};
+
 }

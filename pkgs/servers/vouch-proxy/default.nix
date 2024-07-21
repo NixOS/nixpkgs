@@ -1,20 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "vouch-proxy";
-  version = "0.35.1";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "vouch";
     repo = "vouch-proxy";
-    rev = "v${version}";
-    sha256 = "sha256-dKf68WjCynB73RBWneBsMoyowUcrEaBTnMKVKB0sgsg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/B7MMRkI5DhDBWa53mgFUME1CR3FSxxQ8UWjlN19EmQ=";
   };
 
-  vendorSha256 = "sha256-ifH+420FIrib+zQtzzHtMMYd84BED+vgnRw4xToYIl4=";
+  vendorHash = "sha256-1k9YFdackF10iJWJ22XlaENlOfRkZMs+IedDWnd/h8E=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=${version}"
   ];
 
@@ -24,8 +28,11 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/vouch/vouch-proxy";
-    description = "An SSO and OAuth / OIDC login solution for NGINX using the auth_request module";
+    description = "SSO and OAuth / OIDC login solution for NGINX using the auth_request module";
+    changelog = "https://github.com/vouch/vouch-proxy/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ em0lar ];
+    maintainers = with maintainers; [ leona erictapen ];
+    platforms = platforms.linux;
+    mainProgram = "vouch-proxy";
   };
 }

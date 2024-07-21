@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, gcc }:
+{ lib, stdenv, fetchgit, gcc, unstableGitUpdater }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cakelisp";
-  version = "0.1.0";
+  # using unstable as it's the only version that builds against gcc-13
+  version = "0.3.0-unstable-2024-04-25";
 
-  src = fetchFromGitHub {
-    owner = "makuto";
-    repo = "cakelisp";
-    rev = "v${version}";
-    sha256 = "126va59jy7rvy6c2wrf8j44m307f2d8jixqkc49s9wllxprj1dmg";
+  src = fetchgit {
+    url = "https://macoy.me/code/macoy/cakelisp";
+    rev = "eb4427f555c3def9d65612672ccfe59e11b14059";
+    hash = "sha256-wFyqAbHrBMFKqMYlBjS6flYHPn3Rxtaiqb1rRmlZrB4=";
   };
 
   buildInputs = [ gcc ];
@@ -25,18 +25,31 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
     ./Build.sh
+    runHook postBuild
   '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format";
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 bin/cakelisp -t $out/bin
+    runHook postInstall
   '';
 
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://macoy.me/code/macoy/cakelisp";
+  };
+
   meta = with lib; {
-    description = "A performance-oriented Lisp-like language";
-    homepage = "https://github.com/makuto/cakelisp";
+    description = "Performance-oriented Lisp-like language";
+    mainProgram = "cakelisp";
+    homepage = "https://macoy.me/code/macoy/cakelisp";
     license = licenses.gpl3Plus;
     platforms = platforms.darwin ++ platforms.linux;
     maintainers = [ maintainers.sbond75 ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

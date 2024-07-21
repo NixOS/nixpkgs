@@ -1,21 +1,23 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , gmp
 , flint
 , mpfr
 , libmpc
+, withShared ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "symengine";
-  version = "0.8.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine";
     rev = "v${version}";
-    sha256 = "sha256-HTDOSgdWo9MWmKeXOkOHAJjgvihUAkSXoYTeMz9XXLI=";
+    hash = "sha256-SfifujR2VM1OlPN0ZRUC3hWImXO/8PuiyrBdpyNoKW4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,16 +30,17 @@ stdenv.mkDerivation rec {
     "-DWITH_SYMENGINE_THREAD_SAFE=yes"
     "-DWITH_MPC=yes"
     "-DBUILD_FOR_DISTRIBUTION=yes"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # error: unrecognized instruction mnemonic, did you mean: bit, cnt, hint, ins, not?
+    "-DBUILD_TESTS=OFF"
+  ] ++ lib.optionals withShared [
+    "-DBUILD_SHARED_LIBS=ON"
   ];
 
   doCheck = true;
 
-  checkPhase = ''
-    ctest
-  '';
-
   meta = with lib; {
-    description = "A fast symbolic manipulation library";
+    description = "Fast symbolic manipulation library";
     homepage = "https://github.com/symengine/symengine";
     platforms = platforms.unix ++ platforms.windows;
     license = licenses.bsd3;

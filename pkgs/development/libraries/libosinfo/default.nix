@@ -9,7 +9,7 @@
 , gtk-doc
 , docbook_xsl
 , glib
-, libsoup
+, libsoup_3
 , libxml2
 , libxslt
 , check
@@ -23,14 +23,15 @@
 
 stdenv.mkDerivation rec {
   pname = "libosinfo";
-  version = "1.9.0";
+  version = "1.11.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-tPNBgVTvP0PZQggnKUkWrqGCcCGvwG4WRPxWlRgwo1k=";
+    sha256 = "sha256-G/lu7J4UYPPRpxMWPMof8NSAo0kLUImSkvFFSLOpa2A=";
   };
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,11 +46,11 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib
-    libsoup
+    libsoup_3
     libxml2
     libxslt
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     check
     curl
     perl
@@ -59,6 +60,12 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./osinfo-db-data-dir.patch;
       osinfo_db_data_dir = "${osinfo-db}/share";
+    })
+
+    # Fix build with libxml 2.12
+    (fetchpatch {
+      url = "https://gitlab.com/libosinfo/libosinfo/-/commit/5bbdd06503456784c5ffa22409e8bab50470d673.patch";
+      hash = "sha256-KqgHXI+lD5VYp2wtA58Drp15TgNK1O3xCaYBy4/B9wc=";
     })
   ];
 
@@ -77,8 +84,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GObject based library API for managing information about operating systems, hypervisors and the (virtual) hardware devices they can support";
     homepage = "https://libosinfo.org/";
+    changelog = "https://gitlab.com/libosinfo/libosinfo/-/blob/v${version}/NEWS";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

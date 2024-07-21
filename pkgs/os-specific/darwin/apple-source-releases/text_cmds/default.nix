@@ -20,6 +20,13 @@ appleDerivation {
     done
   '';
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # hardeningDisable doesn't cut it
+    "-Wno-error=format-security"
+    # Required to build with clang 16
+    "-Wno-error=deprecated-non-prototype"
+  ];
+
   meta = {
     platforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ matthewbauer ];

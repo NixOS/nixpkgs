@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, mock
-, parameterized
-, termcolor
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  mock,
+  parameterized,
+  termcolor,
 }:
 
 buildPythonPackage rec {
   pname = "nose-timer";
   version = "1.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mahmoudimus";
@@ -20,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ nose ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     nose
     parameterized
@@ -36,7 +38,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nosetimer" ];
 
   meta = with lib; {
-    description = "A timer plugin for nosetests";
+    description = "Timer plugin for nosetests";
     homepage = "https://github.com/mahmoudimus/nose-timer";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];

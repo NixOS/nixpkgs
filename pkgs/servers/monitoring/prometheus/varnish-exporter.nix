@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "prometheus_varnish_exporter";
-  version = "1.6";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "jonnenauha";
     repo = "prometheus_varnish_exporter";
     rev = version;
-    sha256 = "1cp7c1w237r271m8b1y8pj5jy7j2iadp4vbislxfyp4kga9i4dcc";
+    hash = "sha256-1sUzKLNkLP/eX0wYSestMAJpjAmX1iimjYoFYb6Mgpc=";
   };
 
-  vendorSha256 = "1cslg29l9mmyhpdz14ca9m18iaz4hhznplz8fmi3wa3l8r7ih751";
+  vendorHash = "sha256-P2fR0U2O0Y4Mci9jkAMb05WR+PrpuQ59vbLMG5b9KQI=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -25,7 +25,8 @@ buildGoModule rec {
   meta = {
     homepage = "https://github.com/jonnenauha/prometheus_varnish_exporter";
     description = "Varnish exporter for Prometheus";
+    mainProgram = "prometheus_varnish_exporter";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ MostAwesomeDude willibutz ];
+    maintainers = with lib.maintainers; [ MostAwesomeDude ];
   };
 }

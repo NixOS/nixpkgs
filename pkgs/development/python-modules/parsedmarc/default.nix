@@ -1,26 +1,36 @@
-{ buildPythonPackage
-, fetchPypi
-, fetchurl
-, pythonOlder
-, lib
-, nixosTests
-
-# pythonPackages
-, tqdm
-, dnspython
-, expiringdict
-, urllib3
-, requests
-, publicsuffix2
-, xmltodict
-, geoip2
-, imapclient
-, dateparser
-, elasticsearch-dsl
-, kafka-python
-, mailsuite
-, lxml
-, boto3
+{
+  lib,
+  azure-identity,
+  azure-monitor-ingestion,
+  boto3,
+  buildPythonPackage,
+  dateparser,
+  dnspython,
+  elastic-transport,
+  elasticsearch,
+  elasticsearch-dsl,
+  expiringdict,
+  fetchPypi,
+  fetchurl,
+  geoip2,
+  google-api-core,
+  google-api-python-client,
+  google-auth,
+  google-auth-httplib2,
+  google-auth-oauthlib,
+  hatchling,
+  imapclient,
+  kafka-python-ng,
+  lxml,
+  mailsuite,
+  msgraph-core,
+  nixosTests,
+  opensearch-py,
+  publicsuffixlist,
+  pythonOlder,
+  requests,
+  tqdm,
+  xmltodict,
 }:
 
 let
@@ -31,32 +41,56 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "7.0.1";
+  version = "8.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mi4hx410y7ikpfy1582lm252si0c3yryj0idqgqbx417fm21jjc";
+    hash = "sha256-mscc3TRMYuaTqrrxGPCVVKa2fg5sXwK/BglpbvLXbLc=";
   };
 
-  propagatedBuildInputs = [
-    tqdm
-    dnspython
-    expiringdict
-    urllib3
-    requests
-    publicsuffix2
-    xmltodict
-    geoip2
-    imapclient
-    dateparser
-    elasticsearch-dsl
-    kafka-python
-    mailsuite
-    lxml
-    boto3
+  nativeBuildInputs = [
+    hatchling
   ];
+
+  pythonRelaxDeps = [
+    "elasticsearch"
+    "elasticsearch-dsl"
+  ];
+
+  propagatedBuildInputs = [
+    azure-identity
+    azure-monitor-ingestion
+    boto3
+    dateparser
+    dnspython
+    elastic-transport
+    elasticsearch
+    elasticsearch-dsl
+    expiringdict
+    geoip2
+    google-api-core
+    google-api-python-client
+    google-auth
+    google-auth-httplib2
+    google-auth-oauthlib
+    imapclient
+    kafka-python-ng
+    lxml
+    mailsuite
+    msgraph-core
+    publicsuffixlist
+    requests
+    tqdm
+    xmltodict
+    opensearch-py
+  ];
+
+  # no tests on PyPI, no tags on GitHub
+  # https://github.com/domainaware/parsedmarc/issues/426
+  doCheck = false;
 
   pythonImportsCheck = [ "parsedmarc" ];
 
@@ -65,10 +99,16 @@ buildPythonPackage rec {
     tests = nixosTests.parsedmarc;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
-    maintainers = with lib.maintainers; [ talyz ];
-    license = lib.licenses.asl20;
+    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${
+      lib.replaceStrings [ "." ] [ "" ] version
+    }";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ talyz ];
+    mainProgram = "parsedmarc";
+    # https://github.com/domainaware/parsedmarc/issues/464
+    broken = lib.versionAtLeast msgraph-core.version "1.0.0";
   };
 }

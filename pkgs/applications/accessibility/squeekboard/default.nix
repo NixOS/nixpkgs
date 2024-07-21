@@ -1,51 +1,44 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, cargo
 , meson
 , ninja
 , pkg-config
 , gnome
+, gnome-desktop
 , glib
 , gtk3
 , wayland
 , wayland-protocols
+, libbsd
 , libxml2
 , libxkbcommon
 , rustPlatform
+, rustc
 , feedbackd
-, wrapGAppsHook
-, fetchpatch
+, wrapGAppsHook3
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "1.14.0";
+  version = "1.38.0";
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ayap40pgzcpmfydk5pbf3gwhh26m3cmbk6lyly4jihr9qw7dgb0";
+    hash = "sha256-ZVSnLH2wLPcOHkU2pO0BgIdGmULMNiacIYMRmhN+bZ8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    cargoUpdateHook = ''
-      cat Cargo.toml.in Cargo.deps > Cargo.toml
-    '';
     name = "${pname}-${version}";
-    sha256 = "0148ynzmapxfrlccikf20ikmi0ssbkn9fl5wi6nh6azflv50pzzn";
+    hash = "sha256-tcn1tRuRlHVTYvc8T/ePfCEPNjih6B9lo/hdX+WwitQ=";
   };
-
-  patches = [
-    # remove when updating from 1.14.0
-    (fetchpatch {
-      name = "fix-rust-1.54-build.patch";
-      url = "https://gitlab.gnome.org/World/Phosh/squeekboard/-/commit/9cd56185c59ace535a6af26384ef6beca4423816.patch";
-      sha256 = "sha256-8rWcfhQmGiwlc2lpkRvJ95XQp1Xg7St+0K85x8nQ0mk=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -53,26 +46,28 @@ stdenv.mkDerivation rec {
     pkg-config
     glib
     wayland
-    wrapGAppsHook
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    wrapGAppsHook3
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     gtk3
-    gnome.gnome-desktop
+    gnome-desktop
     wayland
     wayland-protocols
+    libbsd
     libxml2
     libxkbcommon
     feedbackd
   ];
 
+  passthru.tests.phosh = nixosTests.phosh;
+
   meta = with lib; {
-    description = "A virtual keyboard supporting Wayland";
-    homepage = "https://source.puri.sm/Librem5/squeekboard";
+    description = "Virtual keyboard supporting Wayland";
+    homepage = "https://gitlab.gnome.org/World/Phosh/squeekboard";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ artturin ];
     platforms = platforms.linux;

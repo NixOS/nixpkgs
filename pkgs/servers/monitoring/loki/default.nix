@@ -5,20 +5,22 @@
 , makeWrapper
 , nixosTests
 , systemd
+, testers
+, grafana-loki
 }:
 
 buildGoModule rec {
-  version = "2.4.1";
+  version = "3.1.0";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "sha256-QLHhGAeTtXe/76uMombWBORXGvfaUQMGCgkeGCnI0Ag=";
+    rev = "v${version}";
+    hash = "sha256-HISDW6qxpfJpOFweUQo6T+8aV5mvB3o3jnx8CZxweJo=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [
     # TODO split every executable into its own package
@@ -26,7 +28,10 @@ buildGoModule rec {
     "cmd/loki-canary"
     "clients/cmd/promtail"
     "cmd/logcli"
+    "cmd/lokitool"
   ];
+
+  tags = ["promtail_journal_enabled"];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
@@ -36,9 +41,15 @@ buildGoModule rec {
       --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';
 
-  passthru.tests = { inherit (nixosTests) loki; };
+  passthru.tests = {
+    inherit (nixosTests) loki;
+    version = testers.testVersion {
+      command = "loki --version";
+      package = grafana-loki;
+    };
+  };
 
-  ldflags = let t = "github.com/grafana/loki/pkg/util/build"; in [
+  ldflags = let t = "github.com/grafana/loki/v3/pkg/util/build"; in [
     "-s"
     "-w"
     "-X ${t}.Version=${version}"
@@ -48,13 +59,12 @@ buildGoModule rec {
     "-X ${t}.Revision=unknown"
   ];
 
-  doCheck = true;
-
   meta = with lib; {
     description = "Like Prometheus, but for logs";
+    mainProgram = "promtail";
     license = with licenses; [ agpl3Only asl20 ];
     homepage = "https://grafana.com/oss/loki/";
-    maintainers = with maintainers; [ willibutz globin mmahut ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/grafana/loki/releases/tag/v${version}";
+    maintainers = with maintainers; [ willibutz globin mmahut emilylange ] ++ teams.helsinki-systems.members;
   };
 }

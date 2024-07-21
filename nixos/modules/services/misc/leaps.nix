@@ -9,7 +9,7 @@ in
 {
   options = {
     services.leaps = {
-      enable = mkEnableOption "leaps";
+      enable = mkEnableOption "leaps, a pair programming service";
       port = mkOption {
         type = types.port;
         default = 8080;

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitLab, buildDunePackage
+{ buildDunePackage
 , menhirLib, menhirSdk
 }:
 
@@ -7,11 +7,12 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.03";
 
-  inherit (menhirLib) version src useDune2;
+  inherit (menhirLib) version src;
 
   buildInputs = [ menhirLib menhirSdk ];
 
   meta = menhirSdk.meta // {
-    description = "A LR(1) parser generator for OCaml";
+    description = "LR(1) parser generator for OCaml";
+    mainProgram = "menhir";
   };
 }

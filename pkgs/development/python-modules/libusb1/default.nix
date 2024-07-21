@@ -1,12 +1,20 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, libusb1, pytestCheckHook }:
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  libusb1,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "libusb1";
-  version = "2.0.1";
+  version = "3.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3ba82ecf7ab6a48d21dac6697e26504670cc3522b8e5941bd28fb56cf3f6c46";
+    sha256 = "4ee9b0a55f8bd0b3ea7017ae919a6c1f439af742c4a4b04543c5fd7af89b828c";
   };
 
   postPatch = ''
@@ -17,16 +25,17 @@ buildPythonPackage rec {
 
   buildInputs = [ libusb1 ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "usb1/testUSB1.py"
-  ];
+  pytestFlagsArray = [ "usb1/testUSB1.py" ];
 
   meta = with lib; {
-    homepage    = "https://github.com/vpelletier/python-libusb1";
+    homepage = "https://github.com/vpelletier/python-libusb1";
     description = "Python ctype-based wrapper around libusb1";
-    license     = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ prusnak rnhmjoj ];
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [
+      prusnak
+      rnhmjoj
+    ];
   };
 }

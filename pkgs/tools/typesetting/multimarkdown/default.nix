@@ -21,6 +21,13 @@ stdenv.mkDerivation rec {
     patchShebangs tools/enumsToPerl.pl
   '';
 
+  postInstall = ''
+    # Move files from $out/ to sub directories to prevent conflicts
+    # with other packages:
+    mkdir -p $out/share/doc/multimarkdown/
+    mv $out/LICENSE.txt $out/README.txt $out/share/doc/multimarkdown/
+  '';
+
   nativeBuildInputs = [
     cmake
     perl
@@ -29,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://fletcher.github.io/MultiMarkdown-6/introduction.html";
-    description = "A derivative of Markdown that adds new syntax features";
+    description = "Derivative of Markdown that adds new syntax features";
     longDescription = ''
       MultiMarkdown is a lightweight markup language created by
       Fletcher T. Penney and based on Markdown, which supports

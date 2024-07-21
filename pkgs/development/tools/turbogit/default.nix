@@ -10,7 +10,7 @@ buildGoModule rec {
     sha256 = "sha256-BHgVJlitRUX/9zYPoK5XfRpzzTZRbLhQVZJcx8KVshk=";
   };
 
-  vendorSha256 = "sha256-280OcGXZQJD4G6z0b2WnWAS+v7XVptyf2WnlPjG99/0=";
+  vendorHash = "sha256-280OcGXZQJD4G6z0b2WnWAS+v7XVptyf2WnlPjG99/0=";
 
   subPackages = [ "." ];
 
@@ -30,7 +30,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Keep your git workflow clean without headache.";
+    description = "Keep your git workflow clean without headache";
     longDescription = ''
       turbogit (tug) is a cli tool built to help you deal with your day-to-day git work.
       turbogit enforces convention (e.g. The Conventional Commits) but tries to keep things simple and invisible for you.

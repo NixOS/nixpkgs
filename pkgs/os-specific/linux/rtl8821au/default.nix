@@ -1,27 +1,33 @@
 { lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rtl8821au";
-  version = "${kernel.version}-unstable-2021-11-05";
+  version = "${kernel.version}-unstable-2024-03-16";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8821au-20210708";
-    rev = "dd9f442d86535fb749ab06f38f97160484d9f04b";
-    sha256 = "0d90zd45b8934wxy51q1x39lx4n3i28zjm6jcq98wkm4lypgphxv";
+    rev = "168ac48174067e17ffb9f8b15ab802f37447dacc";
+    hash = "sha256-eB9RCoU5jg5fgZkfcef9fsQ6tyD8gTPD+wYcR6PbWNw=";
   };
 
-  nativeBuildInputs = [ bc nukeReferences ];
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc nukeReferences ] ++ kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" "format" ];
 
-  NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
+  makeFlags = [
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+    ("CONFIG_PLATFORM_I386_PC=" + (if stdenv.hostPlatform.isx86 then "y" else "n"))
+    ("CONFIG_PLATFORM_ARM_RPI=" + (if (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) then "y" else "n"))
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
 
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
@@ -40,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "rtl8821AU and rtl8812AU chipset driver with firmware";
     homepage = "https://github.com/morrownr/8821au";
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = lib.platforms.linux;
     maintainers = with maintainers; [ plchldr ];
   };
 }

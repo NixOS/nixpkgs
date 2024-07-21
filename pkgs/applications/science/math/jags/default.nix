@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "JAGS";
-  version = "4.3.0";
+  version = "4.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcmc-jags/JAGS-${version}.tar.gz";
-    sha256 = "1z3icccg2ic56vmhyrpinlsvpq7kcaflk1731rgpvz9bk1bxvica";
+    sha256 = "sha256-hx9VavQDp8LOag8C8Vz4WlcnY+CT0mZY66xVxKtHL8g=";
   };
 
   nativeBuildInputs = [ gfortran ];
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Just Another Gibbs Sampler";
+    mainProgram = "jags";
     license = licenses.gpl2;
     homepage = "http://mcmc-jags.sourceforge.net";
     maintainers = [ maintainers.andres ];

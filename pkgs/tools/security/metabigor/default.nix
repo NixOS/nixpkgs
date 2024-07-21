@@ -5,16 +5,21 @@
 
 buildGoModule rec {
   pname = "metabigor";
-  version = "1.10";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "j3ssie";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-ADpnSsGZQbXaSGidPmxwkQOl+P8ZupqRaDUh7t+XoDw=";
+    repo = "metabigor";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JFt9PC6VHWTYuaIWh2t2BiGFm1tGwZDdhhdp2xtmXSI=";
   };
 
-  vendorSha256 = "sha256-la7bgeimycltFB7l6vNBYdlBIv4kD+HX7f2mo+eZhXM=";
+  vendorHash = "sha256-PGUOTEFcOL1pG+itTp9ce1qW+1V6hts8jKpA0E8orDk=";
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   # Disabled for now as there are some failures ("undefined:")
   doCheck = false;
@@ -22,7 +27,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool to perform OSINT tasks";
     homepage = "https://github.com/j3ssie/metabigor";
+    changelog = "https://github.com/j3ssie/metabigor/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "metabigor";
   };
 }

@@ -9,8 +9,10 @@
 , keybinder3
 , desktop-file-utils
 , shared-mime-info
-, wrapGAppsHook
+, wrapGAppsHook3
 , wafHook
+, bash
+, dbus
 }:
 
 with python3Packages;
@@ -27,19 +29,17 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook intltool
+    wrapGAppsHook3 intltool
     # For setup hook
     gobject-introspection wafHook
     itstool            # for help pages
     desktop-file-utils # for update-desktop-database
     shared-mime-info   # for update-mime-info
+    docutils # for rst2man
+    dbus # for detection of dbus-send during build
   ];
-  buildInputs = [ docutils libwnck keybinder3 ];
+  buildInputs = [ libwnck keybinder3 bash ];
   propagatedBuildInputs = [ pygobject3 gtk3 pyxdg dbus-python pycairo ];
-
-  # without strictDeps kupfer fails to build: Could not find the python module 'gi.repository.Gtk'
-  # see https://github.com/NixOS/nixpkgs/issues/56943 for details
-  strictDeps = false;
 
   postInstall = ''
     gappsWrapperArgs+=(
@@ -51,7 +51,7 @@ buildPythonApplication rec {
   doCheck = false; # no tests
 
   meta = with lib; {
-    description = "A smart, quick launcher";
+    description = "Smart, quick launcher";
     homepage    = "https://kupferlauncher.github.io/";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ cobbal ];

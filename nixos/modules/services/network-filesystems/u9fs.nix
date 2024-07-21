@@ -23,25 +23,23 @@ in
         example = [ "192.168.16.1:564" ];
         description = ''
           Sockets to listen for clients on.
-          See <command>man 5 systemd.socket</command> for socket syntax.
+          See {command}`man 5 systemd.socket` for socket syntax.
         '';
       };
 
       user = mkOption {
         type = types.str;
         default = "nobody";
-        description =
-          "User to run u9fs under.";
+        description = "User to run u9fs under.";
       };
 
       extraArgs = mkOption {
         type = types.str;
         default = "";
         example = "-a none";
-        description =
-          ''
+        description = ''
             Extra arguments to pass on invocation,
-            see <command>man 4 u9fs</command>
+            see {command}`man 4 u9fs`
           '';
       };
 

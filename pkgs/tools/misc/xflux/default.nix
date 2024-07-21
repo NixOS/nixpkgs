@@ -33,8 +33,10 @@ stdenv.mkDerivation {
       when the sun rises.
     '';
     homepage = "https://justgetflux.com/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.paholg ];
+    mainProgram = "xflux";
   };
 }

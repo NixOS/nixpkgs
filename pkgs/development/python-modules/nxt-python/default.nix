@@ -1,36 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-, isPy3k
-, pyusb
-, pybluez
-, pyfantom
-, git
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pybluez,
+  pytestCheckHook,
+  pythonOlder,
+  pyusb,
 }:
 
-buildPythonPackage {
-  version = "unstable-20160819";
+buildPythonPackage rec {
   pname = "nxt-python";
-  disabled = isPy3k;
+  version = "3.3.0";
+  pyproject = true;
 
-  src = fetchgit {
-    url = "https://github.com/Eelviny/nxt-python";
-    rev = "479e20b7491b28567035f4cee294c4a2af629297";
-    sha256 = "0mcsajhgm2wy4iy2lhmyi3xibgmbixbchanzmlhsxk6qyjccn9r9";
-    branchName= "pyusb";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "schodet";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-v65KEP5DuJsZAifd1Rh46x9lSAgBZgyo+e8PKSDKnhw=";
   };
 
-  propagatedBuildInputs = [ pyusb pybluez pyfantom git ];
+  build-system = [ poetry-core ];
 
-  # Tests fail on Mac dependency
-  doCheck = false;
+  dependencies = [ pyusb ];
+
+  optional-dependencies = {
+    bluetooth = [ pybluez ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "nxt" ];
 
   meta = with lib; {
     description = "Python driver/interface for Lego Mindstorms NXT robot";
-    homepage = "https://github.com/Eelviny/nxt-python";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ leenaars ];
+    homepage = "https://github.com/schodet/nxt-python";
+    changelog = "https://github.com/schodet/nxt-python/releases/tag/${version}";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ibizaman ];
   };
-
 }

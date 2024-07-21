@@ -1,73 +1,106 @@
-{ lib, fetchurl, python3Packages, intltool, file
-, wrapGAppsHook, gtk-vnc, vte, avahi, dconf
-, gobject-introspection, libvirt-glib, system-libvirt
-, gsettings-desktop-schemas, libosinfo, gnome
-, gtksourceview4, docutils
+{ lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook3, gtk-vnc
+, vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
+, gsettings-desktop-schemas, gst_all_1, libosinfo, adwaita-icon-theme, gtksourceview4, docutils, cpio
+, e2fsprogs, findutils, gzip, cdrtools, xorriso, fetchpatch
+, desktopToDarwinBundle, stdenv
 , spiceSupport ? true, spice-gtk ? null
-, cpio, e2fsprogs, findutils, gzip
-, cdrtools
 }:
 
-with lib;
-
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "virt-manager";
-  version = "3.2.0";
+  version = "4.1.0";
 
-  src = fetchurl {
-    url = "https://releases.pagure.org/virt-manager/${pname}-${version}.tar.gz";
-    sha256 = "11kvpzcmyir91qz0dsnk7748jbb4wr8mrc744w117qc91pcy6vrb";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-UgZ58WLXq0U3EDt4311kv0kayVU17In4kwnQ+QN1E7A=";
   };
+
+  patches = [
+    # refresh Fedora tree URLs in virt-install-osinfo* expected XMLs
+    (fetchpatch {
+      url = "https://github.com/virt-manager/virt-manager/commit/6e5c1db6b4a0af96afeb09a09fb2fc2b73308f01.patch";
+      hash = "sha256-zivVo6nHvfB7aHadOouQZCBXn5rY12nxFjQ4FFwjgZI=";
+    })
+    # fix test with libvirt 10
+    (fetchpatch {
+      url = "https://github.com/virt-manager/virt-manager/commit/83fcc5b2e8f2cede84564387756fe8971de72188.patch";
+      hash = "sha256-yEk+md5EkwYpP27u3E+oTJ8thgtH2Uy1x3JIWPBhqeE=";
+    })
+    # fix crash with some cursor themes
+    (fetchpatch {
+      url = "https://github.com/virt-manager/virt-manager/commit/cc4a39ea94f42bc92765eb3bb56e2b7f9198be67.patch";
+      hash = "sha256-dw6yrMaAOnTh8Z6xJQQKmYelOkOl6EBAOfJQU9vQ8Ws=";
+    })
+    # fix xml test output mismatch
+    (fetchpatch {
+      url = "https://github.com/virt-manager/virt-manager/commit/8b6db203f726965529567459b302aab1c68c70eb.patch";
+      hash = "sha256-FghrSyP4NaTkJhvyqlc2uDNWKaeiylKnaiqkl5Ax6yE=";
+    })
+  ];
 
   nativeBuildInputs = [
     intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
     docutils
-  ];
+    wrapGAppsHook3
+  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
-    wrapGAppsHook
-    libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    libvirt-glib vte dconf gtk-vnc adwaita-icon-theme avahi
     gsettings-desktop-schemas libosinfo gtksourceview4
-    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
-  ] ++ optional spiceSupport spice-gtk;
+  ] ++ lib.optional spiceSupport spice-gtk;
 
-  propagatedBuildInputs = with python3Packages; [
-    pygobject3 ipaddress libvirt libxml2 requests cdrtools
+  propagatedBuildInputs = with python3.pkgs; [
+    pygobject3 libvirt libxml2 requests cdrtools
   ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
     sed -i "/'install_egg_info'/d" setup.py
   '';
 
   postConfigure = ''
-    ${python3Packages.python.interpreter} setup.py configure --prefix=$out
+    ${python3.interpreter} setup.py configure --prefix=$out
   '';
 
-  setupPyGlobalFlags = [ "--no-update-icon-cache" ];
+  setupPyGlobalFlags = [ "--no-update-icon-cache" "--no-compile-schemas" ];
 
   dontWrapGApps = true;
 
   preFixup = ''
+    glib-compile-schemas $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
+
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
     # these are called from virt-install in initrdinject.py
-    gappsWrapperArgs+=(--prefix PATH : "${makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
 
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
+    # Fixes testCLI0051virt_install_initrd_inject on Darwin: "cpio: root:root: invalid group"
+    substituteInPlace virtinst/install/installerinject.py \
+      --replace "'--owner=root:root'" "'--owner=0:0'"
   '';
 
-  checkInputs = with python3Packages; [ cpio cdrtools pytestCheckHook ];
+  nativeCheckInputs = with python3.pkgs; [
+    pytest7CheckHook
+    cpio
+    cdrtools
+    xorriso
+  ];
 
-  disabledTestPaths = [
-    "tests/test_cli.py"
-    "tests/test_disk.py"
-    "tests/test_checkprops.py"
-    "tests/test_storage.py"
-  ]; # Error logs: https://gist.github.com/superherointj/fee040872beaafaaa19b8bf8f3ff0be5
+  disabledTests = [
+    "testAlterDisk"
+    "test_misc_nonpredicatble_generate"
+    "test_disk_dir_searchable"  # does something strange with permissions
+    "testCLI0001virt_install_many_devices"  # expects /var to exist
+  ];
 
   preCheck = ''
-    export HOME=.
+    export HOME=$(mktemp -d)
   ''; # <- Required for "tests/test_urldetect.py".
 
   postCheck = ''
@@ -75,7 +108,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "http://virt-manager.org";
+    homepage = "https://virt-manager.org";
     description = "Desktop user interface for managing virtual machines";
     longDescription = ''
       The virt-manager application is a desktop user interface for managing
@@ -83,8 +116,8 @@ python3Packages.buildPythonApplication rec {
       manages Xen and LXC (linux containers).
     '';
     license = licenses.gpl2;
-    # exclude Darwin since libvirt-glib currently doesn't build there
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "virt-manager";
     maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }

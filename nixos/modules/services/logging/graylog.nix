@@ -15,6 +15,7 @@ let
     message_journal_dir = ${cfg.messageJournalDir}
     mongodb_uri = ${cfg.mongodbUri}
     plugin_dir = /var/lib/graylog/plugins
+    data_dir = ${cfg.dataDir}
 
     ${cfg.extraConfig}
   '';
@@ -33,12 +34,12 @@ in
 
     services.graylog = {
 
-      enable = mkEnableOption "Graylog";
+      enable = mkEnableOption "Graylog, a log management solution";
 
       package = mkOption {
         type = types.package;
-        default = pkgs.graylog;
-        defaultText = literalExpression "pkgs.graylog";
+        default = if versionOlder config.system.stateVersion "23.05" then pkgs.graylog-3_3 else pkgs.graylog-5_1;
+        defaultText = literalExpression (if versionOlder config.system.stateVersion "23.05" then "pkgs.graylog-3_3" else "pkgs.graylog-5_1");
         description = "Graylog package to use.";
       };
 
@@ -93,6 +94,12 @@ in
         description = "List of valid URIs of the http ports of your elastic nodes. If one or more of your elasticsearch hosts require authentication, include the credentials in each node URI that requires authentication";
       };
 
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/graylog/data";
+        description = "Directory used to store Graylog server state.";
+      };
+
       messageJournalDir = mkOption {
         type = types.str;
         default = "/var/lib/graylog/data/journal";
@@ -132,7 +139,7 @@ in
         description = "Graylog server daemon user";
       };
     };
-    users.groups = mkIf (cfg.user == "graylog") {};
+    users.groups = mkIf (cfg.user == "graylog") { graylog = {}; };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.messageJournalDir}' - ${cfg.user} - - -"

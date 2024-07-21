@@ -1,46 +1,51 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , extra-cmake-modules
 , fcitx5
-, qtx11extras
-, libxcb
-, libXdmcp
 , qtbase
+, qtwayland
+, wrapQtAppsHook
+, wayland
 }:
-
-mkDerivation rec {
-  pname = "fcitx5-qt";
-  version = "5.0.8";
+let
+  majorVersion = lib.versions.major qtbase.version;
+in
+stdenv.mkDerivation rec {
+  pname = "fcitx5-qt${majorVersion}";
+  version = "5.1.6";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-qt";
     rev = version;
-    sha256 = "sha256-S7hbcAyoS+gagqoL+C3YgcyjODnE+ZvHEFIoAqAmOxo=";
+    hash = "sha256-ptAJNc7zhXQ+nFfjmVQd5nZvN5lyk0jV6AHBKQkUGOM=";
   };
 
-  preConfigure = ''
-    substituteInPlace qt5/platforminputcontext/CMakeLists.txt \
-      --replace \$"{CMAKE_INSTALL_QT5PLUGINDIR}" $out/${qtbase.qtPluginPrefix}
+  postPatch = ''
+    substituteInPlace qt${majorVersion}/platforminputcontext/CMakeLists.txt \
+      --replace \$"{CMAKE_INSTALL_QT${majorVersion}PLUGINDIR}" $out/${qtbase.qtPluginPrefix}
   '';
 
   cmakeFlags = [
-    "-DENABLE_QT4=0"
-    "-DENABLE_QT6=0"
+    "-DENABLE_QT4=OFF"
+    "-DENABLE_QT5=OFF"
+    "-DENABLE_QT6=OFF"
+    "-DENABLE_QT${majorVersion}=ON"
   ];
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
   buildInputs = [
+    qtbase
+    qtwayland
     fcitx5
-    qtx11extras
-    libxcb
-    libXdmcp
+    wayland
   ];
 
   meta = with lib; {

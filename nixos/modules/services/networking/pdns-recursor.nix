@@ -30,15 +30,15 @@ in {
     enable = mkEnableOption "PowerDNS Recursor, a recursive DNS server";
 
     dns.address = mkOption {
-      type = types.str;
-      default = "0.0.0.0";
+      type = oneOrMore types.str;
+      default = [ "::" "0.0.0.0" ];
       description = ''
-        IP address Recursor DNS server will bind to.
+        IP addresses Recursor DNS server will bind to.
       '';
     };
 
     dns.port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 53;
       description = ''
         Port number Recursor DNS server will bind to.
@@ -47,8 +47,12 @@ in {
 
     dns.allowFrom = mkOption {
       type = types.listOf types.str;
-      default = [ "10.0.0.0/8" "172.16.0.0/12" "192.168.0.0/16" ];
-      example = [ "0.0.0.0/0" ];
+      default = [
+        "127.0.0.0/8" "10.0.0.0/8" "100.64.0.0/10"
+        "169.254.0.0/16" "192.168.0.0/16" "172.16.0.0/12"
+        "::1/128" "fc00::/7" "fe80::/10"
+      ];
+      example = [ "0.0.0.0/0" "::/0" ];
       description = ''
         IP address ranges of clients allowed to make DNS queries.
       '';
@@ -63,7 +67,7 @@ in {
     };
 
     api.port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 8082;
       description = ''
         Port number Recursor REST API server will bind to.
@@ -72,7 +76,8 @@ in {
 
     api.allowFrom = mkOption {
       type = types.listOf types.str;
-      default = [ "0.0.0.0/0" ];
+      default = [ "127.0.0.1" "::1" ];
+      example = [ "0.0.0.0/0" "::/0" ];
       description = ''
         IP address ranges of clients allowed to make API requests.
       '';
@@ -96,7 +101,7 @@ in {
 
     forwardZonesRecurse = mkOption {
       type = types.attrs;
-      example = { eth = "127.0.0.1:5353"; };
+      example = { eth = "[::1]:5353"; };
       default = {};
       description = ''
         DNS zones to be forwarded to other recursive servers.
@@ -117,9 +122,9 @@ in {
       default = true;
       description = ''
         Whether to directly resolve the RFC1918 reverse-mapping domains:
-        <literal>10.in-addr.arpa</literal>,
-        <literal>168.192.in-addr.arpa</literal>,
-        <literal>16-31.172.in-addr.arpa</literal>
+        `10.in-addr.arpa`,
+        `168.192.in-addr.arpa`,
+        `16-31.172.in-addr.arpa`
         This saves load on the AS112 servers.
       '';
     };
@@ -137,7 +142,7 @@ in {
         PowerDNS Recursor settings. Use this option to configure Recursor
         settings not exposed in a NixOS option or to bypass one.
         See the full documentation at
-        <link xlink:href="https://doc.powerdns.com/recursor/settings.html"/>
+        <https://doc.powerdns.com/recursor/settings.html>
         for the available options.
       '';
     };
@@ -147,12 +152,14 @@ in {
       default = "";
       description = ''
         The content Lua configuration file for PowerDNS Recursor. See
-        <link xlink:href="https://doc.powerdns.com/recursor/lua-config/index.html"/>.
+        <https://doc.powerdns.com/recursor/lua-config/index.html>.
       '';
     };
   };
 
   config = mkIf cfg.enable {
+
+    environment.etc."pdns-recursor".source = configDir;
 
     services.pdns-recursor.settings = mkDefaultAttrs {
       local-address = cfg.dns.address;

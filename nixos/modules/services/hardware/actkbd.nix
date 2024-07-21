@@ -58,12 +58,12 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to enable the <command>actkbd</command> key mapping daemon.
+          Whether to enable the {command}`actkbd` key mapping daemon.
 
-          Turning this on will start an <command>actkbd</command>
+          Turning this on will start an {command}`actkbd`
           instance for every evdev input that has at least one key
           (which is okay even for systems with tiny memory footprint,
-          since actkbd normally uses &lt;100 bytes of memory per
+          since actkbd normally uses \<100 bytes of memory per
           instance).
 
           This allows binding keys globally without the need for e.g.
@@ -79,11 +79,11 @@ in
           ]
         '';
         description = ''
-          Key bindings for <command>actkbd</command>.
+          Key bindings for {command}`actkbd`.
 
-          See <command>actkbd</command> <filename>README</filename> for documentation.
+          See {command}`actkbd` {file}`README` for documentation.
 
-          The example shows a piece of what <option>sound.mediaKeys.enable</option> does when enabled.
+          The example shows a piece of what {option}`sound.mediaKeys.enable` does when enabled.
         '';
       };
 

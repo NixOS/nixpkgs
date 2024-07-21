@@ -1,58 +1,88 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, buildGoModule, buildEnv }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, fetchurl
+, nixosTests
+}:
 
-let
-  version = "5.37.5";
+buildGoModule rec {
+  pname = "mattermost";
+  # ESR releases only.
+  # See https://docs.mattermost.com/upgrade/extended-support-release.html
+  # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
+  # the version regex in passthru.updateScript as well.
+  version = "9.5.6";
 
-  mattermost-server = buildGoModule rec {
-    pname = "mattermost-server";
-    inherit version;
-
-    src = fetchFromGitHub {
-      owner = "mattermost";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "sha256-ddK7gxWl1arCtW2vqmon28AAeyZQPYlbGj3QtOlqtiU=";
-    };
-
-    vendorSha256 = null;
-    doCheck = false;
-
-    ldflags = [
-      "-s" "-w" "-X github.com/mattermost/mattermost-server/v${lib.versions.major version}/model.BuildNumber=${version}"
-    ];
-
+  src = fetchFromGitHub {
+    owner = "mattermost";
+    repo = "mattermost";
+    rev = "v${version}";
+    hash = "sha256-bLnvbduP6h9o82BQUNh9MyFpW/Cbl6c5o9hrPV0Z8+0=";
   };
 
-  mattermost-webapp = stdenv.mkDerivation {
-    pname = "mattermost-webapp";
-    inherit version;
-
-    src = fetchurl {
-      url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-      sha256 = "sha256-G6L8Ct6PtARg2LKxcoFyg9vrDJXIKGByxovquMc6p00=";
-    };
-
-    installPhase = ''
-      mkdir -p $out
-      tar --strip 1 --directory $out -xf $src \
-        mattermost/client \
-        mattermost/i18n \
-        mattermost/fonts \
-        mattermost/templates \
-        mattermost/config
+  # Needed because buildGoModule does not support go workspaces yet.
+  # We use go 1.22's workspace vendor command, which is not yet available
+  # in the default version of go used in nixpkgs, nor is it used by upstream:
+  # https://github.com/mattermost/mattermost/issues/26221#issuecomment-1945351597
+  overrideModAttrs = (_: {
+    buildPhase = ''
+      make setup-go-work
+      go work vendor -e
     '';
+  });
+
+  webapp = fetchurl {
+    url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
+    hash = "sha256-ZlvO/7kdMopIHBDdFp6wSQCR+NobGdDC6PcVd1iG16E=";
   };
 
-in
-  buildEnv {
-    name = "mattermost-${version}";
-    paths = [ mattermost-server mattermost-webapp ];
+  # Makes nix-update-script pick up the fetchurl for the webapp.
+  # https://github.com/Mic92/nix-update/blob/1.3.1/nix_update/eval.py#L179
+  offlineCache = webapp;
 
-    meta = with lib; {
-      description = "Open-source, self-hosted Slack-alternative";
-      homepage = "https://www.mattermost.org";
-      license = with licenses; [ agpl3 asl20 ];
-      maintainers = with maintainers; [ fpletz ryantm ];
-      platforms = platforms.unix;
+  vendorHash = "sha256-TJCtgNf56A1U0EbV5gXjTro+YudVBRWiSZoBC3nJxnE=";
+
+  modRoot = "./server";
+  preBuild = ''
+    make setup-go-work
+  '';
+
+  subPackages = [ "cmd/mattermost" ];
+
+  tags = [ "production" ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/mattermost/mattermost/server/public/model.Version=${version}"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildNumber=${version}-nixpkgs"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildDate=1970-01-01"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildHash=v${version}"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildHashEnterprise=none"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildEnterpriseReady=false"
+  ];
+
+  postInstall = ''
+    tar --strip 1 --directory $out -xf $webapp \
+      mattermost/{client,i18n,fonts,templates,config}
+
+    # For some reason a bunch of these files are executable
+    find $out/{client,i18n,fonts,templates,config} -type f -exec chmod -x {} \;
+  '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "^v(9\.5\.[0-9]+)$" ];
     };
-  }
+    tests.mattermost = nixosTests.mattermost;
+  };
+
+  meta = with lib; {
+    description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
+    homepage = "https://www.mattermost.org";
+    license = with licenses; [ agpl3Only asl20 ];
+    maintainers = with maintainers; [ ryantm numinit kranzes mgdelacroix ];
+    mainProgram = "mattermost";
+  };
+}

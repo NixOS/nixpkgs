@@ -1,28 +1,26 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
+, callPackage
 , cmake, pkg-config, unzip, zlib, pcre, hdf5
-, glog, boost, gflags, protobuf
+, glog, boost, gflags, protobuf_21
 , config
 
 , enableJPEG      ? true, libjpeg
 , enablePNG       ? true, libpng
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
-, enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
+, enableEXR ?     !stdenv.isDarwin, openexr_3
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
 
-, enableCuda      ? (config.cudaSupport or false) &&
-                    stdenv.hostPlatform.isx86_64, cudatoolkit
-
+, enableCuda      ? config.cudaSupport
+, cudaPackages
 , enableUnfree    ? false
 , enableIpp       ? false
 , enablePython    ? false, pythonPackages ? null
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
-, enableVtk       ? false, vtk
 , enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableTesseract ? false, tesseract, leptonica
@@ -32,7 +30,7 @@
 , enableDC1394    ? false, libdc1394
 , enableDocs      ? false, doxygen, graphviz-nox
 
-, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2
+, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2, CoreMedia, MediaToolbox, Accelerate
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
@@ -40,20 +38,23 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 assert enablePython -> pythonPackages != null;
 
 let
-  version = "3.4.15";
+  inherit (cudaPackages) backendStdenv cudatoolkit;
+  inherit (cudaPackages.cudaFlags) cudaCapabilities;
+
+  version = "3.4.18";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    hash   = "sha256-dLwQM2VhVlBV4xazS2rItTscKYeeNlNT0G8G1A1mOmc=";
+    hash   = "sha256-PgwAZNoPknFT0jCLt3TCzend6OYFY3iUIzDf/FptAYA=";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    hash   = "sha256-FJDRMmSOT5jA+n2Ke0gEH7n5rgGvB1UzYpYZ1vmucjg=";
+    hash   = "sha256-TEF/GHglOmsshlC6q4iw14ZMpvA0SaKwlidomAN+sRc=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -155,11 +156,6 @@ stdenv.mkDerivation {
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
-    # Fix usage of deprecated version of protobuf' SetTotalBytesLimit. Remove with the next release.
-    (fetchpatch {
-      url = "https://github.com/opencv/opencv/commit/384875f4fcf1782b10699a379aa245a03cb27a04.patch";
-      sha256 = "1agwd0pm07m2dy8a62vmfl4n73dsmsdll2a73q6kara9wm3jlp41";
-    })
   ];
 
   # This prevents cmake from using libraries in impure paths (which
@@ -189,16 +185,15 @@ stdenv.mkDerivation {
 
   buildInputs =
        [ zlib pcre hdf5 glog boost gflags ]
-    ++ lib.optional useSystemProtobuf protobuf
+    ++ lib.optional useSystemProtobuf protobuf_21
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
-    ++ lib.optional enableVtk vtk
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
     ++ lib.optional enableWebP libwebp
-    ++ lib.optionals enableEXR [ openexr ilmbase ]
+    ++ lib.optionals enableEXR [ openexr_3 ]
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
                      [ VideoDecodeAcceleration bzip2 ]
@@ -213,15 +208,15 @@ stdenv.mkDerivation {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
-    ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration ]
+    ++ lib.optionals stdenv.isDarwin [
+      bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate
+    ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
     ++ lib.optional enableCuda cudatoolkit;
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
-
-  NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   # Configure can't find the library without this.
   OpenBLAS_HOME = lib.optionalString enableOpenblas openblas;
@@ -245,15 +240,26 @@ stdenv.mkDerivation {
     (opencvFlag "TBB" enableTbb)
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
-    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+    "-DCUDA_HOST_COMPILER=${backendStdenv.cc}/bin/cc"
     "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
+    "-DCUDA_ARCH_BIN=${lib.concatStringsSep ";" cudaCapabilities}"
+    "-DCUDA_ARCH_PTX=${lib.last cudaCapabilities}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
-    "-DBUILD_opencv_videoio=OFF"
+
+    # Disable unnecessary vendoring that's enabled by default only for Darwin.
+    # Note that the opencvFlag feature flags listed above still take
+    # precedence, so we can safely list everything here.
+    "-DBUILD_ZLIB=OFF"
+    "-DBUILD_TIFF=OFF"
+    "-DBUILD_JASPER=OFF"
+    "-DBUILD_JPEG=OFF"
+    "-DBUILD_PNG=OFF"
+    "-DBUILD_WEBP=OFF"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
-  ] ++ lib.optional enableEigen [
+  ] ++ lib.optionals enableEigen [
     # Autodetection broken by https://github.com/opencv/opencv/pull/13337
     "-DEIGEN_INCLUDE_PATH=${eigen}/include/eigen3"
   ];
@@ -280,11 +286,17 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "bindnow" "relro" ];
 
-  passthru = lib.optionalAttrs enablePython { pythonPath = []; };
+  passthru = lib.optionalAttrs enablePython { pythonPath = []; } // {
+    tests = lib.optionalAttrs enableCuda {
+      no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { attrName = "opencv3"; };
+    };
+  };
 
   meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
+    # OpenCV 3 won't build with CUDA 12+
+    broken = enableCuda && cudaPackages.cudaAtLeast "12";
     license = with licenses; if enableUnfree then unfree else bsd3;
     maintainers = with maintainers; [mdaiter basvandijk];
     platforms = with platforms; linux ++ darwin;

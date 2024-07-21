@@ -46,14 +46,7 @@ in {
   options.services.pgmanage = {
     enable = mkEnableOption "PostgreSQL Administration for the web";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.pgmanage;
-      defaultText = literalExpression "pkgs.pgmanage";
-      description = ''
-        The pgmanage package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "pgmanage" { };
 
     connections = mkOption {
       type = types.attrsOf types.str;
@@ -64,10 +57,10 @@ in {
       };
       description = ''
         pgmanage requires at least one PostgreSQL server be defined.
-        </para><para>
+
         Detailed information about PostgreSQL connection strings is available at:
-        <link xlink:href="http://www.postgresql.org/docs/current/static/libpq-connect.html"/>
-        </para><para>
+        <https://www.postgresql.org/docs/current/libpq-connect.html>
+
         Note that you should not specify your user name or password. That
         information will be entered on the login screen. If you specify a
         username or password, it will be removed by pgmanage before attempting to
@@ -85,7 +78,7 @@ in {
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 8080;
       description = ''
         This tells pgmanage what port to listen on for browser requests.
@@ -165,7 +158,7 @@ in {
         configuration. This allows your web server to terminate the secure
         connection and pass on the request to pgmanage. You can find help to set
         up this configuration in:
-        <link xlink:href="https://github.com/pgManage/pgManage/blob/master/INSTALL_NGINX.md"/>
+        <https://github.com/pgManage/pgManage/blob/master/INSTALL_NGINX.md>
       '';
     };
 
@@ -187,7 +180,7 @@ in {
       serviceConfig = {
         User         = pgmanage;
         Group        = pgmanage;
-        ExecStart    = "${pkgs.pgmanage}/sbin/pgmanage -c ${confFile}" +
+        ExecStart    = "${cfg.package}/sbin/pgmanage -c ${confFile}" +
                        optionalString cfg.localOnly " --local-only=true";
       };
     };

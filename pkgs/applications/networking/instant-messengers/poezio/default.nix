@@ -1,59 +1,57 @@
 { lib
-, aiodns
-, buildPythonApplication
-, cffi
-, fetchFromGitHub
-, mpd2
+, fetchFromGitea
 , pkg-config
-, potr
-, pyasn1
-, pyasn1-modules
-, pyinotify
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, slixmpp
-, typing-extensions
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "poezio";
-  version = "0.13.1";
-  disabled = pythonOlder "3.4";
+  version = "0.14";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "poezio";
+    repo = "poezio";
     rev = "v${version}";
-    sha256 = "041y61pcbdb86s04qwp8s1g6bp84yskc7vdizwpi2hz18y01x5fy";
+    hash = "sha256-sk+8r+a0CcoB0RidqnE7hJUgt/xvN/MCJMkxiquvdJc=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
+  build-system = [ python3.pkgs.setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3.pkgs; [
     aiodns
     cffi
     mpd2
     potr
     pyasn1
     pyasn1-modules
+    pycares
     pyinotify
     setuptools
     slixmpp
-  ] ++ lib.optionals (pythonOlder "3.7") [
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [
+    "poezio"
+  ];
+
+  # remove poezio directory to prevent pytest import confusion
+  preCheck = ''
+    rm -r poezio
+  '';
 
   meta = with lib; {
     description = "Free console XMPP client";
     homepage = "https://poez.io";
+    changelog = "https://codeberg.org/poezio/poezio/src/tag/v${version}/CHANGELOG";
     license = licenses.zlib;
-    maintainers = [ maintainers.lsix ];
+    maintainers = with maintainers; [ lsix ];
   };
 }

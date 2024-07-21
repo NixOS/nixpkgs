@@ -1,21 +1,59 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rust
+, rustPlatform
+, cargo-c
+, python3
 
-stdenv.mkDerivation rec {
+# tests
+, testers
+, vips
+, libimagequant
+}:
+
+rustPlatform.buildRustPackage rec {
   pname = "libimagequant";
-  version = "2.15.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
-    repo = pname;
+    repo = "libimagequant";
     rev = version;
-    sha256 = "sha256-ElMwLeUdrJeJJ9YoieCF/CUNcNMwj5WcjXmMW/nMyAw=";
+    hash = "sha256-/gHe3LQaBWOQImBesKvHK46T42TtRld988wgxbut4i0=";
   };
 
-  preConfigure = ''
-    patchShebangs ./configure
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  configureFlags = lib.optionals (!stdenv.hostPlatform.isx86) [ "--disable-sse" ];
+  nativeBuildInputs = [ cargo-c ];
+
+  postBuild = ''
+    pushd imagequant-sys
+    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    popd
+  '';
+
+  postInstall = ''
+    pushd imagequant-sys
+    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    popd
+  '';
+
+  passthru.tests = {
+    inherit vips;
+    inherit (python3.pkgs) pillow;
+
+    pkg-config = testers.hasPkgConfigModules {
+      package = libimagequant;
+      moduleNames = [ "imagequant" ];
+    };
+  };
 
   meta = with lib; {
     homepage = "https://pngquant.org/lib/";
@@ -23,6 +61,6 @@ stdenv.mkDerivation rec {
     longDescription = "Small, portable C library for high-quality conversion of RGBA images to 8-bit indexed-color (palette) images.";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ma9e marsam ];
+    maintainers = with maintainers; [ ma9e ];
   };
 }

@@ -1,29 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jwcrypto,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  requests,
+  simplejson,
 }:
 
 buildPythonPackage rec {
-  version = "0.10.0";
   pname = "websockify";
+  version = "0.12.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6c4cc1bc132abb4a99834bcb1b4bd72f51d35a08d08093a817646ecc226ac44e";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "novnc";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+qjWmCkXJj8J5OImMSjTwXWyApmJ883NMr0157iqPS4=";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [
+    jwcrypto
+    numpy
+    redis
+    requests
+    simplejson
+  ];
 
-  # Ran 0 tests in 0.000s
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # this test failed on macos
+    # https://github.com/novnc/websockify/issues/552
+    "test_socket_set_keepalive_options"
+  ];
 
   pythonImportsCheck = [ "websockify" ];
 
   meta = with lib; {
     description = "WebSockets support for any application/server";
+    mainProgram = "websockify";
     homepage = "https://github.com/kanaka/websockify";
-    license = licenses.lgpl3;
+    changelog = "https://github.com/novnc/websockify/releases/tag/v${version}";
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [ ];
   };
 }

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, flex, bison, cmake, git, zlib}:
+{lib, stdenv, fetchFromGitHub, flex, bison, cmake, zlib}:
 
 stdenv.mkDerivation {
   version = "2018-08-15";
@@ -21,8 +21,8 @@ stdenv.mkDerivation {
   buildInputs = [ zlib ];
 
   meta = with lib; {
-    homepage = "http://pbrt.org";
-    description = "The renderer described in the third edition of the book 'Physically Based Rendering: From Theory To Implementation'";
+    homepage = "https://pbrt.org/";
+    description = "Renderer described in the third edition of the book 'Physically Based Rendering: From Theory To Implementation'";
     platforms = platforms.linux;
     license = licenses.bsd2;
     maintainers = [ maintainers.juliendehos ];

@@ -1,30 +1,52 @@
-{ lib, stdenv, fetchFromGitLab, gfortran, perl, procps
-, libyaml, libxc, fftw, blas, lapack, gsl, netcdf, arpack, autoreconfHook
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, pkg-config
+, ninja
+, gfortran
+, which
+, perl
+, procps
+, libvdwxc
+, libyaml
+, libxc
+, fftw
+, blas
+, lapack
+, gsl
+, netcdf
+, arpack
+, spglib
+, metis
+, scalapack
+, mpi
+, enableMpi ? true
 , python3
-, enableFma ? stdenv.hostPlatform.fmaSupport
-, enableFma4 ? stdenv.hostPlatform.fma4Support
-, enableAvx ? stdenv.hostPlatform.avx2Support
-, enableAvx512 ? stdenv.hostPlatform.avx512Support
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
+assert (blas.isILP64 == arpack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "octopus";
-  version = "11.3";
+  version = "14.1";
 
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
     rev = version;
-    sha256 = "0n04yvnc0rg3lvnkkdpbwkfl6zg544260p3s65vwkc5dflrhk34r";
+    hash = "sha256-8wZR+bYdxJFsUPMWbIGYxRdNzjLgHm+KFLjY7fSN7io=";
   };
 
   nativeBuildInputs = [
+    which
     perl
     procps
-    autoreconfHook
+    cmake
     gfortran
+    pkg-config
+    ninja
   ];
 
   buildInputs = [
@@ -36,22 +58,22 @@ stdenv.mkDerivation rec {
     fftw
     netcdf
     arpack
+    libvdwxc
+    spglib
+    metis
     (python3.withPackages (ps: [ ps.pyyaml ]))
+  ] ++ lib.optional enableMpi scalapack;
+
+  propagatedBuildInputs = lib.optional enableMpi mpi;
+  propagatedUserEnvPkgs = lib.optional enableMpi mpi;
+
+  cmakeFlags = [
+    (lib.cmakeBool "OCTOPUS_MPI" enableMpi)
+    (lib.cmakeBool "OCTOPUS_ScaLAPACK" enableMpi)
+    (lib.cmakeBool "OCTOPUS_OpenMP" true)
   ];
 
-  configureFlags = with lib; [
-    "--with-yaml-prefix=${libyaml}"
-    "--with-blas=-lblas"
-    "--with-lapack=-llapack"
-    "--with-fftw-prefix=${fftw.dev}"
-    "--with-gsl-prefix=${gsl}"
-    "--with-libxc-prefix=${libxc}"
-    "--enable-openmp"
-  ] ++ optional enableFma "--enable-fma3"
-    ++ optional enableFma4 "--enable-fma4"
-    ++ optional enableAvx "--enable-avx"
-    ++ optional enableAvx512 "--enable-avx512";
-
+  nativeCheckInputs = lib.optional.enableMpi mpi;
   doCheck = false;
   checkTarget = "check-short";
 
@@ -64,6 +86,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru = lib.attrsets.optionalAttrs enableMpi { inherit mpi; };
 
   meta = with lib; {
     description = "Real-space time dependent density-functional theory code";

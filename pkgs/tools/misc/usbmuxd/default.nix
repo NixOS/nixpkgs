@@ -1,27 +1,45 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libusb1, libimobiledevice }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libimobiledevice
+, libusb1
+}:
 
 stdenv.mkDerivation rec {
   pname = "usbmuxd";
-  version = "unstable-2021-05-08";
+  version = "1.1.1+date=2023-05-05";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "5e484e18f1383b5a0bd6c353ab1d668b03e4ffab";
-    sha256 = "sha256-hhbfRmLEhVVuJNnw65PakPnvjSCrN3oSMK6D7Zwnw60=";
+    rev = "01c94c77f59404924f1c46d99c4e5e0c7817281b";
+    hash = "sha256-WqbobkzlJ9g5fb9S2QPi3qdpCLx3pxtNlT7qDI63Zp4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  propagatedBuildInputs = [ libimobiledevice libusb1 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  preConfigure = ''
-    configureFlags="$configureFlags --with-udevrulesdir=$out/lib/udev/rules.d"
-    configureFlags="$configureFlags --with-systemdsystemunitdir=$out/lib/systemd/system"
+  propagatedBuildInputs = [
+    libimobiledevice
+    libusb1
+  ];
+
+  preAutoreconf = ''
+    export RELEASE_VERSION=${version}
   '';
+
+  configureFlags = [
+    "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/usbmuxd";
-    description = "A socket daemon to multiplex connections from and to iOS devices";
+    description = "Socket daemon to multiplex connections from and to iOS devices";
     longDescription = ''
       usbmuxd stands for "USB multiplexing daemon". This daemon is in charge of
       multiplexing connections over USB to an iOS device. To users, it means
@@ -32,7 +50,8 @@ stdenv.mkDerivation rec {
       in parallel. The higher-level layers are handled by libimobiledevice.
     '';
     license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ infinisil ];
+    platforms = platforms.unix;
+    maintainers = [ ];
+    mainProgram = "usbmuxd";
   };
 }

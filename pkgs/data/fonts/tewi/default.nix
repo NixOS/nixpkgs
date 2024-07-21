@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, python3
-, bdftopcf, mkfontscale
-, libfaketime, fonttosfnt
+, bdftopcf, xorg
+, libfaketime,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ python3 bdftopcf mkfontscale
-      libfaketime fonttosfnt
+    [ python3 bdftopcf xorg.mkfontscale
+      libfaketime xorg.fonttosfnt
     ];
 
   postPatch = ''
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A nice bitmap font, readable even at small sizes";
+    description = "Nice bitmap font, readable even at small sizes";
     longDescription = ''
       Tewi is a bitmap font, readable even at very small font sizes. This is
       particularily useful while programming, to fit a lot of code on your

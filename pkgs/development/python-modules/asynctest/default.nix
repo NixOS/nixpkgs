@@ -1,10 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, python }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  python,
+  pythonAtLeast,
+}:
 
 buildPythonPackage rec {
   pname = "asynctest";
   version = "0.13.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  # Unmaintained and incompatible python 3.11
+  disabled = pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;

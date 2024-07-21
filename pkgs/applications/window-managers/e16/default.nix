@@ -16,15 +16,17 @@
 , libsndfile
 , pango
 , perl
+, python3
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "e16";
-  version = "1.0.24";
+  version = "1.0.29";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/e16-${version}.tar.xz";
-    sha256 = "1anmwfjyynwl0ylkyksa7bnsqzf58l1yccjzp3kbwq6nw1gs7dbv";
+    hash = "sha256-LvLiw6+hduAl8dNBTtBwqvgKBRwojBUd5tNm1hZl5Hs=";
   };
 
   nativeBuildInputs = [
@@ -46,11 +48,19 @@ stdenv.mkDerivation rec {
     libsndfile
     pango
     perl
+    python3
   ];
 
   postPatch = ''
     substituteInPlace scripts/e_gen_menu --replace "/usr/local:" "/run/current-system/sw:/usr/local:"
+    substituteInPlace scripts/e_gen_menu --replace "'/opt'" "'/opt', '/run/current-system/sw'"
+    substituteInPlace scripts/e_gen_menu --replace "'/.local'" "'/.nix-profile', '/.local'"
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.enlightenment.org/e16/e16";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     homepage = "https://www.enlightenment.org/e16";

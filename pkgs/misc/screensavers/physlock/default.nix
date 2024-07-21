@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, pam, systemd }:
 
 stdenv.mkDerivation rec {
-  version = "v13";
+  version = "13";
   pname = "physlock";
   src = fetchFromGitHub {
     owner = "muennich";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "1mz4xxjip5ldiw9jgfq9zvqb6w10bcjfx6939w1appqg8f521a7s";
   };
 
@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "SESSION=systemd" ];
 
   meta = with lib; {
-    description = "A secure suspend/hibernate-friendly alternative to `vlock -an`";
-    license = licenses.gpl2;
+    description = "Secure suspend/hibernate-friendly alternative to `vlock -an`";
+    mainProgram = "physlock";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

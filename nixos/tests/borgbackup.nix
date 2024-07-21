@@ -7,6 +7,8 @@ let
   keepFile = "important_file";
   keepFileData = "important_data";
   localRepo = "/root/back:up";
+  # a repository on a file system which is not mounted automatically
+  localRepoMount = "/noAutoMount";
   archiveName = "my_archive";
   remoteRepo = "borg@server:."; # No need to specify path
   privateKey = pkgs.writeText "id_ed25519" ''
@@ -42,6 +44,12 @@ in {
 
   nodes = {
     client = { ... }: {
+      virtualisation.fileSystems.${localRepoMount} = {
+        device = "tmpfs";
+        fsType = "tmpfs";
+        options = [ "noauto" ];
+      };
+
       services.borgbackup.jobs = {
 
         local = {
@@ -63,6 +71,13 @@ in {
           exclude = [ "*/${excludeFile}" ];
           postHook = "echo post";
           startAt = [ ]; # Do not run automatically
+        };
+
+        localMount = {
+          paths = dataDir;
+          repo = localRepoMount;
+          encryption.mode = "none";
+          startAt = [ ];
         };
 
         remote = {
@@ -99,14 +114,28 @@ in {
           environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
         };
 
+        sleepInhibited = {
+          inhibitsSleep = true;
+          # Blocks indefinitely while "backing up" so that we can try to suspend the local system while it's hung
+          dumpCommand = pkgs.writeScript "sleepInhibited" ''
+            cat /dev/zero
+          '';
+          repo = remoteRepo;
+          encryption.mode = "none";
+          startAt = [ ];
+          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+        };
+
       };
     };
 
     server = { ... }: {
       services.openssh = {
         enable = true;
-        passwordAuthentication = false;
-        challengeResponseAuthentication = false;
+        settings = {
+          PasswordAuthentication = false;
+          KbdInteractiveAuthentication = false;
+        };
       };
 
       services.borgbackup.repos.repo1 = {
@@ -164,6 +193,17 @@ in {
             "cat /mnt/borg/${dataDir}/${keepFile}"
         )
 
+    with subtest("localMount"):
+        # the file system for the repo should not be already mounted
+        client.fail("mount | grep ${localRepoMount}")
+        # ensure trying to write to the mountpoint before the fs is mounted fails
+        client.succeed("chattr +i ${localRepoMount}")
+        borg = "borg"
+        client.systemctl("start --wait borgbackup-job-localMount")
+        client.fail("systemctl is-failed borgbackup-job-localMount")
+        # Make sure exactly one archive has been created
+        assert int(client.succeed("{} list '${localRepoMount}' | wc -l".format(borg))) > 0
+
     with subtest("remote"):
         borg = "BORG_RSH='ssh -oStrictHostKeyChecking=no -i /root/id_ed25519' borg"
         server.wait_for_unit("sshd.service")
@@ -204,5 +244,13 @@ in {
         client.wait_for_unit("network.target")
         client.systemctl("start --wait borgbackup-job-commandFail")
         client.succeed("systemctl is-failed borgbackup-job-commandFail")
+
+    with subtest("sleepInhibited"):
+        server.wait_for_unit("sshd.service")
+        client.wait_for_unit("network.target")
+        client.fail("systemd-inhibit --list | grep -q borgbackup")
+        client.systemctl("start borgbackup-job-sleepInhibited")
+        client.wait_until_succeeds("systemd-inhibit --list | grep -q borgbackup")
+        client.systemctl("stop borgbackup-job-sleepInhibited")
   '';
 })

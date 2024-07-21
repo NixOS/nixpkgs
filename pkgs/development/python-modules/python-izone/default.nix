@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, netifaces
-, pytest-aio
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiohttp,
+  netifaces,
+  pytest-aio,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "python-izone";
-  version = "1.1.8";
+  version = "1.2.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,29 +21,26 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Swamp-Ig";
     repo = "pizone";
-    rev = "v${version}";
-    sha256 = "sha256-/qPWSTO0PV4lEgwWpgcoBnbUtDUrEVItb4NF9TV2QJU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0rj+tKn2pbFe+nczTMGLwIwmc4jCznGGF4/IMjlEvQg=";
   };
+
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     aiohttp
     netifaces
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aio
     pytest-asyncio
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # Test are blocking
-    "tests/test_fullstack.py"
-  ];
+  doCheck = false; # most tests access network
 
-  pythonImportsCheck = [
-    "pizone"
-  ];
+  pythonImportsCheck = [ "pizone" ];
 
   meta = with lib; {
     description = "Python interface to the iZone airconditioner controller";

@@ -1,64 +1,44 @@
-{ mkDerivation, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg, freeglut
+{ stdenv, SDL2_image_2_6, SDL2_ttf, SDL2_net, fpc, haskell, ffmpeg_4, libglut
 , lib, fetchurl, cmake, pkg-config, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
-, qtbase, qttools
+, qtbase, qttools, wrapQtAppsHook
 , llvm
 , withServer ? true
 }:
 
 let
-  # gameServer/hedgewars-server.cabal depends on network < 3
-  ghc = ghcWithPackages (pkgs: with pkgs; [
-          SHA bytestring entropy hslogger network_2_6_3_1 pkgs.zlib random
+  ghc = haskell.packages.ghc94.ghcWithPackages (pkgs: with pkgs; [
+          SHA bytestring entropy hslogger network pkgs.zlib random
           regex-tdfa sandi utf8-string vector
         ]);
-
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "hedgewars";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "https://www.hedgewars.org/download/releases/hedgewars-src-${version}.tar.bz2";
-    sha256 = "0nqm9w02m0xkndlsj6ys3wr0ik8zc14zgilq7k6fwjrf3zk385i1";
+    sha256 = "sha256-IB/l5FvYyls9gbGOwGvWu8n6fCxjvwGQBeL4C+W88hI=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config qttools ];
+  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [
-    SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image
+    SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image_2_6
     fpc lua5_1
     llvm # hard-requirement on aarch64, for some reason not strictly necessary on x86-64
-    ffmpeg freeglut physfs
+    ffmpeg_4 libglut physfs
     qtbase
   ] ++ lib.optional withServer ghc;
-
-  postPatch = ''
-    substituteInPlace gameServer/CMakeLists.txt \
-      --replace mask evaluate
-
-    # compile with fpc >= 3.2.0
-    # https://github.com/archlinux/svntogit-community/blob/75a1b3900fb3dd553d5114bbc8474d85fd6abb02/trunk/PKGBUILD#L26
-    sed -i 's/procedure ShiftWorld(Dir: LongInt); inline;/procedure ShiftWorld(Dir: LongInt);/' hedgewars/uWorld.pas
-  '';
 
   cmakeFlags = [
     "-DNOVERSIONINFOUPDATE=ON"
     "-DNOSERVER=${if withServer then "OFF" else "ON"}"
   ];
 
-
-  # hslogger brings network-3 and network-bsd which conflict with
-  # network-2.6.3.1
-  preConfigure = ''
-    substituteInPlace gameServer/CMakeLists.txt \
-      --replace "haskell_flags}" \
-        "haskell_flags} -package network-2.6.3.1 -hide-package network-bsd"
-  '';
-
   NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
     SDL2.out
-    SDL2_image
+    SDL2_image_2_6
     SDL2_mixer
     SDL2_net
     SDL2_ttf
@@ -71,13 +51,13 @@ mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL libGLU freeglut physfs ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL libGLU libglut physfs ]}"
   ];
 
   meta = with lib; {
     description = "Turn-based strategy artillery game similar to Worms";
-    homepage = "http://hedgewars.org/";
-    license = licenses.gpl2;
+    homepage = "https://hedgewars.org/";
+    license = licenses.gpl2Plus;
     longDescription = ''
        Each player controls a team of several hedgehogs. During the course of
        the game, players take turns with one of their hedgehogs. They then use
@@ -102,6 +82,7 @@ mkDerivation rec {
        hedgehog or hedgehogs after a player's or CPU turn is shown only when
        all movement on the battlefield has ceased).'';
     maintainers = with maintainers; [ kragniz fpletz ];
-    inherit (fpc.meta) platforms;
+    broken = stdenv.isDarwin;
+    platforms = platforms.linux;
   };
 }

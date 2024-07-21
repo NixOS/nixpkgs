@@ -8,6 +8,7 @@
 , vala
 , glib
 , libgee
+, libhandy
 , granite
 , gexiv2
 , gnome-settings-daemon
@@ -24,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "6.1.0";
+  version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rwneQ1bqpWDyTHULMtGqhPdpSDa4ObnVortmL0E+gHA=";
+    sha256 = "sha256-iq1QXC6eQ2w5j9RCxhTc0dApMfiDGcVuj8nocEFLFNk=";
   };
 
   nativeBuildInputs = [
@@ -53,14 +54,13 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
     switchboard
     wingpanel
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

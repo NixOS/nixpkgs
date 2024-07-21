@@ -37,7 +37,7 @@ in
             default = "";
             description = ''
               Global configuration that should be added to the global directory
-              of <literal>pdnsd.conf</literal>.
+              of `pdnsd.conf`.
             '';
           };
 
@@ -46,7 +46,7 @@ in
             default = "";
             description = ''
               Server configuration that should be added to the server directory
-              of <literal>pdnsd.conf</literal>.
+              of `pdnsd.conf`.
             '';
           };
 
@@ -55,7 +55,7 @@ in
             default = "";
             description = ''
               Extra configuration directives that should be added to
-              <literal>pdnsd.conf</literal>.
+              `pdnsd.conf`.
             '';
           };
         };

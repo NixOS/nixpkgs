@@ -79,16 +79,11 @@ in {
         '';
       };
 
-      package = mkOption {
-        default = pkgs.jenkins;
-        defaultText = literalExpression "pkgs.jenkins";
-        type = types.package;
-        description = "Jenkins package to use.";
-      };
+      package = mkPackageOption pkgs "jenkins" { };
 
       packages = mkOption {
-        default = [ pkgs.stdenv pkgs.git pkgs.jdk11 config.programs.ssh.package pkgs.nix ];
-        defaultText = literalExpression "[ pkgs.stdenv pkgs.git pkgs.jdk11 config.programs.ssh.package pkgs.nix ]";
+        default = [ pkgs.stdenv pkgs.git pkgs.jdk17 config.programs.ssh.package pkgs.nix ];
+        defaultText = literalExpression "[ pkgs.stdenv pkgs.git pkgs.jdk17 config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
         description = ''
           Packages to add to PATH for the jenkins process.
@@ -101,9 +96,9 @@ in {
         description = ''
           Additional environment variables to be passed to the jenkins process.
           As a base environment, jenkins receives NIX_PATH from
-          <option>environment.sessionVariables</option>, NIX_REMOTE is set to
+          {option}`environment.sessionVariables`, NIX_REMOTE is set to
           "daemon" and JENKINS_HOME is set to the value of
-          <option>services.jenkins.home</option>.
+          {option}`services.jenkins.home`.
           This option has precedence and can be used to override those
           mentioned variables.
         '';
@@ -117,8 +112,8 @@ in {
           remove and replace any previously installed plugins. If you
           have manually-installed plugins that you want to keep while
           using this module, set this option to
-          <literal>null</literal>. You can generate this set with a
-          tool such as <literal>jenkinsPlugins2nix</literal>.
+          `null`. You can generate this set with a
+          tool such as `jenkinsPlugins2nix`.
         '';
         example = literalExpression ''
           import path/to/jenkinsPlugins2nix-generated-plugins.nix { inherit (pkgs) fetchurl stdenv; }
@@ -150,8 +145,8 @@ in {
           Whether to make the CLI available.
 
           More info about the CLI available at
-          <link xlink:href="https://www.jenkins.io/doc/book/managing/cli">
-          https://www.jenkins.io/doc/book/managing/cli</link> .
+          [
+          https://www.jenkins.io/doc/book/managing/cli](https://www.jenkins.io/doc/book/managing/cli) .
         '';
       };
     };
@@ -210,9 +205,7 @@ in {
 
       preStart =
         let replacePlugins =
-              if cfg.plugins == null
-              then ""
-              else
+              optionalString (cfg.plugins != null) (
                 let pluginCmds = lib.attrsets.mapAttrsToList
                       (n: v: "cp ${v} ${cfg.home}/plugins/${n}.jpi")
                       cfg.plugins;
@@ -220,7 +213,7 @@ in {
                   rm -r ${cfg.home}/plugins || true
                   mkdir -p ${cfg.home}/plugins
                   ${lib.strings.concatStringsSep "\n" pluginCmds}
-                '';
+                '');
         in ''
           rm -rf ${cfg.home}/war
           ${replacePlugins}
@@ -228,7 +221,7 @@ in {
 
       # For reference: https://wiki.jenkins.io/display/JENKINS/JenkinsLinuxStartupScript
       script = ''
-        ${pkgs.jdk11}/bin/java ${concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
+        ${pkgs.jdk17}/bin/java ${concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \
                                                   -Djava.awt.headless=true \
@@ -243,6 +236,9 @@ in {
 
       serviceConfig = {
         User = cfg.user;
+        StateDirectory = mkIf (hasPrefix "/var/lib/jenkins" cfg.home) "jenkins";
+        # For (possible) socket use
+        RuntimeDirectory = "jenkins";
       };
     };
   };

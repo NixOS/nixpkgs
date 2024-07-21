@@ -1,40 +1,38 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pythonOlder
-, pytz
-, requests
-, setuptools-scm
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  filelock,
+  lxml,
+  pythonOlder,
+  pytz,
+  requests,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "snscrape";
-  version = "unstable-2021-08-30";
+  version = "0.7.0.20230622";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "JustAnotherArchivist";
     repo = pname;
-    rev = "c76f1637ce1d7a154af83495b67ead2559cd5715";
-    sha256 = "01x4961fxj1p98y6fcyxw5sv8fa87x41fdx9p31is12bdkmqxi6v";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9xAUMr1SWFePEvIz6DFEexk9Txex3u8wPNfMAdxEUCA=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     beautifulsoup4
+    filelock
     lxml
     requests
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    pytz
-  ];
+  ] ++ requests.optional-dependencies.socks ++ lib.optionals (pythonOlder "3.9") [ pytz ];
 
   # There are no tests; make sure the executable works.
   checkPhase = ''
@@ -45,8 +43,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "snscrape" ];
 
   meta = with lib; {
+    description = "Social networking service scraper";
+    mainProgram = "snscrape";
     homepage = "https://github.com/JustAnotherArchivist/snscrape";
-    description = "A social networking service scraper in Python";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ivan ];
   };

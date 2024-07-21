@@ -44,8 +44,7 @@ in
           default = "";
           description = ''
             Contents of the /etc/exports file.  See
-            <citerefentry><refentrytitle>exports</refentrytitle>
-            <manvolnum>5</manvolnum></citerefentry> for the format.
+            {manpage}`exports(5)` for the format.
           '';
         };
 
@@ -54,9 +53,8 @@ in
           default = null;
           description = ''
             Hostname or address on which NFS requests will be accepted.
-            Default is all.  See the <option>-H</option> option in
-            <citerefentry><refentrytitle>nfsd</refentrytitle>
-            <manvolnum>8</manvolnum></citerefentry>.
+            Default is all.  See the {option}`-H` option in
+            {manpage}`nfsd(8)`.
           '';
         };
 
@@ -89,7 +87,7 @@ in
           example = 4001;
           description = ''
             Use a fixed port for the NFS lock manager kernel module
-            (<literal>lockd/nlockmgr</literal>).  This is useful if the
+            (`lockd/nlockmgr`).  This is useful if the
             NFS server is behind a firewall.
           '';
         };
@@ -99,7 +97,7 @@ in
           default = null;
           example = 4000;
           description = ''
-            Use a fixed port for <command>rpc.statd</command>. This is
+            Use a fixed port for {command}`rpc.statd`. This is
             useful if the NFS server is behind a firewall.
           '';
         };
@@ -114,25 +112,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    services.nfs.extraConfig = ''
-      [nfsd]
-      threads=${toString cfg.nproc}
-      ${optionalString (cfg.hostName != null) "host=${cfg.hostName}"}
-      ${cfg.extraNfsdConfig}
-
-      [mountd]
-      ${optionalString (cfg.mountdPort != null) "port=${toString cfg.mountdPort}"}
-
-      [statd]
-      ${optionalString (cfg.statdPort != null) "port=${toString cfg.statdPort}"}
-
-      [lockd]
-      ${optionalString (cfg.lockdPort != null) ''
-        port=${toString cfg.lockdPort}
-        udp-port=${toString cfg.lockdPort}
-      ''}
-    '';
 
     services.rpcbind.enable = true;
 

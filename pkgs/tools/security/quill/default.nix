@@ -1,14 +1,14 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, Security, libiconv, pkg-config, protobuf, which, buildPackages }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, Security, libiconv, pkg-config, protobuf, buildPackages }:
 
 rustPlatform.buildRustPackage rec {
   pname = "quill";
-  version = "0.2.7";
+  version = "0.2.17";
 
   src = fetchFromGitHub {
     owner = "dfinity";
     repo = "quill";
     rev = "v${version}";
-    sha256 = "sha256-3OlsCRpxRDKlfC0sa9MlFCupyRbDuqJQzDb9SQob1O0=";
+    sha256 = "sha256-0DHTtnQU26l4DXUVDeHF+hkavlVY7rQykXxgWGSUc/k=";
   };
 
   ic = fetchFromGitHub {
@@ -27,10 +27,17 @@ rustPlatform.buildRustPackage rec {
     export IC_NNS_COMMON_PROTO_INCLUDES=${ic}/rs/nns/common/proto
     export PROTOC=${buildPackages.protobuf}/bin/protoc
     export OPENSSL_DIR=${openssl.dev}
-    export OPENSSL_LIB_DIR=${openssl.out}/lib
+    export OPENSSL_LIB_DIR=${lib.getLib openssl}/lib
   '';
 
-  cargoSha256 = "sha256-YxuBABGaZ+ti31seEYR6bB+OMgrSvl1lZyu4bqdxPIk=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "derive_more-0.99.8-alpha.0" = "sha256-tEsfYC9oCAsDjinCsUDgRg3q6ruvayuA1lRmsEP9cys=";
+      "dfn_candid-0.8.0" = "sha256-7LXTwxSA9pTjFynMRzNRXie4x5u8BSLpFaOzpRsgrKA=";
+      "once_cell-1.4.0-alpha.0" = "sha256-5g26ZizSY5egH/4yU5glzBxpWzdvgKtDsckBpAUBatw=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config protobuf ];
   buildInputs = [ openssl ]
@@ -39,7 +46,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/dfinity/quill";
     changelog = "https://github.com/dfinity/quill/releases/tag/v${version}";
-    description = "Minimalistic ledger and governance toolkit for cold wallets on the Internet Computer.";
+    description = "Minimalistic ledger and governance toolkit for cold wallets on the Internet Computer";
+    mainProgram = "quill";
     license = licenses.asl20;
     maintainers = with maintainers; [ imalison ];
   };

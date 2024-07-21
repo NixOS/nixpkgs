@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.airsonic;
+  opt = options.services.airsonic;
 in {
   options = {
 
@@ -38,14 +39,16 @@ in {
         default = "127.0.0.1";
         description = ''
           The host name or IP address on which to bind Airsonic.
-          Only relevant if you have multiple network interfaces and want
-          to make Airsonic available on only one of them. The default value
-          will bind Airsonic to all available network interfaces.
+          The default value is appropriate for first launch, when the
+          default credentials are easy to guess. It is also appropriate
+          if you intend to use the virtualhost option in the service
+          module. In other cases, you may want to change this to a
+          specific IP or 0.0.0.0 to listen on all interfaces.
         '';
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 4040;
         description = ''
           The port on which Airsonic will listen for
@@ -78,19 +81,16 @@ in {
         description = ''
           List of paths to transcoder executables that should be accessible
           from Airsonic. Symlinks will be created to each executable inside
-          ${cfg.home}/transcoders.
+          ''${config.${opt.home}}/transcoders.
         '';
       };
 
-      jre = mkOption {
-        type = types.package;
-        default = pkgs.jre8;
-        defaultText = literalExpression "pkgs.jre8";
-        description = ''
-          JRE package to use.
-
+      jre = mkPackageOption pkgs "jre8" {
+        extraDescription = ''
+          ::: {.note}
           Airsonic only supports Java 8, airsonic-advanced requires at least
           Java 11.
+          :::
         '';
       };
 

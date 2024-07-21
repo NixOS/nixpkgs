@@ -1,9 +1,13 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.script;
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    concatStringsSep
+    ;
   configFile = pkgs.writeText "script-exporter.yaml" (builtins.toJSON cfg.settings);
 in
 {
@@ -41,7 +45,7 @@ in
         All settings expressed as an Nix attrset.
 
         Check the official documentation for the corresponding YAML
-        settings that can all be used here: <link xlink:href="https://github.com/adhocteam/script_exporter#sample-configuration" />
+        settings that can all be used here: <https://github.com/adhocteam/script_exporter#sample-configuration>
       '';
     };
   };

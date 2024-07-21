@@ -1,18 +1,38 @@
-{ lib, fetchFromGitHub, buildPythonPackage, cython, slurm }:
+{
+  lib,
+  pythonOlder,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  cython,
+  slurm,
+}:
 
 buildPythonPackage rec {
   pname = "pyslurm";
-  version = "19-05-0";
+  version = "23.11.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     repo = "pyslurm";
     owner = "PySlurm";
-    rev = version;
-    sha256 = "1lfb4q81y96syz5an1lzscfcvmfvlkf4cfl3i5zllw9r3gbarl2r";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Qi0XftneKj7hdDiLY2hoRONRrPv49mfQlvlNkudH54Y=";
   };
 
-  buildInputs = [ cython slurm ];
-  setupPyBuildFlags = [ "--slurm-lib=${slurm}/lib" "--slurm-inc=${slurm.dev}/include" ];
+  nativeBuildInputs = [ setuptools ];
+
+  buildInputs = [
+    cython
+    slurm
+  ];
+
+  env = {
+    SLURM_LIB_DIR = "${lib.getLib slurm}/lib";
+    SLURM_INCLUDE_DIR = "${lib.getDev slurm}/include";
+  };
 
   # Test cases need /etc/slurm/slurm.conf and require a working slurm installation
   doCheck = false;
@@ -23,6 +43,5 @@ buildPythonPackage rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ bhipple ];
     platforms = platforms.linux;
-    broken = true;  # still needs slurm-19.05, but nixpkgs has slurm-20+ now
   };
 }

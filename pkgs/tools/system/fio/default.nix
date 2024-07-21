@@ -4,19 +4,23 @@
 
 stdenv.mkDerivation rec {
   pname = "fio";
-  version = "3.28";
+  version = "3.37";
 
   src = fetchFromGitHub {
     owner  = "axboe";
     repo   = "fio";
     rev    = "fio-${version}";
-    sha256 = "sha256-8F31tyZ4/Qk14uwkg0DRPMdSaZGRVnI1dUDOITWhYAA=";
+    sha256 = "sha256-dKHTxVglH10aV44RuSeIFATn83DVdmCYtuaiS3b0+zo=";
   };
 
   buildInputs = [ python3 zlib ]
     ++ lib.optional (!stdenv.isDarwin) libaio;
 
-  nativeBuildInputs = [ makeWrapper ];
+  # ./configure does not support autoconf-style --build=/--host=.
+  # We use $CC instead.
+  configurePlatforms = [ ];
+
+  nativeBuildInputs = [ makeWrapper python3.pkgs.wrapPython ];
 
   strictDeps = true;
 
@@ -29,15 +33,20 @@ stdenv.mkDerivation rec {
     substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
   '';
 
-  postInstall = lib.optionalString withGnuplot ''
-    wrapProgram $out/bin/fio2gnuplot \
-      --prefix PATH : ${lib.makeBinPath [ gnuplot ]}
+  pythonPath = [ python3.pkgs.six ];
+
+  makeWrapperArgs = lib.optionals withGnuplot [
+    "--prefix PATH : ${lib.makeBinPath [ gnuplot ]}"
+  ];
+
+  postInstall = ''
+    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
   '';
 
   meta = with lib; {
     description = "Flexible IO Tester - an IO benchmark tool";
     homepage = "https://git.kernel.dk/cgit/fio/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

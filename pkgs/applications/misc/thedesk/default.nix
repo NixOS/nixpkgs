@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "thedesk";
-  version = "22.3.1";
+  version = "24.2.1";
 
   src = fetchurl {
     url = "https://github.com/cutls/TheDesk/releases/download/v${version}/${pname}_${version}_amd64.deb";
-    sha256 = "sha256-5KB88zMgwfObgmcMTe6R+oG48qLHrMht6vM1EvI+QFY=";
+    sha256 = "sha256-AdjygNnQ3qQB03cGcQ5EB0cY3XXWLrzfCqw/U8tq1Yo=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
     mv usr $out
     mv opt $out
 
+    # binary is not used and probably vulnerable to CVE(s)
+    rm $out/opt/TheDesk/thedesk
+
     substituteInPlace $out/share/applications/thedesk.desktop \
       --replace '/opt/TheDesk' $out/bin
 
@@ -43,8 +46,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Mastodon/Misskey Client for PC";
     homepage = "https://thedesk.top";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "thedesk";
   };
 }

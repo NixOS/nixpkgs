@@ -8,11 +8,10 @@ let
   desktopItem = makeDesktopItem {
     desktopName = "World of Goo";
     genericName = "World of Goo";
-    categories = "Game;";
+    categories = [ "Game" ];
     exec = "WorldOfGoo.bin.${arch}";
     icon = "2dboy-worldofgoo";
     name = "worldofgoo";
-    type = "Application";
   };
 
 in
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
   helpMsg = ''
     We cannot download the full version automatically, as you require a license.
     Once you have bought a license, you need to add your downloaded version to the nix store.
-    You can do this by using "nix-prefetch-url file://\$PWD/${pname}.Linux${version}.sh"
+    You can do this by using "nix-prefetch-url file://\$PWD/${pname}.Linux.${version}.sh"
     in the directory where you saved it.
   '';
 
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
   sourceRoot = pname;
-  phases = [ "unpackPhase installPhase" ];
 
   libPath = lib.makeLibraryPath [ stdenv.cc.cc.lib stdenv.cc.libc SDL2 SDL2_mixer
     libogg libvorbis ];
@@ -62,15 +60,15 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A physics based puzzle game";
+    description = "Physics based puzzle game";
     longDescription = ''
       World of Goo is a physics based puzzle / construction game. The millions of Goo
       Balls who live in the beautiful World of Goo don't know that they are in a
       game, or that they are extremely delicious.
     '';
-    homepage = "http://worldofgoo.com";
+    homepage = "https://worldofgoo.com";
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = with maintainers; [ jcumming maxeaubrey ];
+    maintainers = with maintainers; [ jcumming ];
   };
 }

@@ -3,7 +3,7 @@
 # of applications.
 #
 # What Nix does, simplifying a bit, is that it extracts an AppImage and starts
-# it via buildFHSUserEnv - this is totally fine for majority of apps, but makes
+# it via buildFHSEnv - this is totally fine for majority of apps, but makes
 # it by-design *impossible* to launch SUID wrappers [^1]; in case of pCloud,
 # it's fusermount.
 # (so pCloud starts, but silently fails to mount the FUSE drive.)
@@ -15,32 +15,45 @@
 # ^1 https://github.com/NixOS/nixpkgs/issues/69338
 
 {
- # Build dependencies
- appimageTools, autoPatchelfHook, fetchzip, lib, stdenv
+  # Build dependencies
+  appimageTools
+, autoPatchelfHook
+, fetchzip
+, lib
+, stdenv
 
- # Runtime dependencies;
- # A few additional ones (e.g. Node) are already shipped together with the
- # AppImage, so we don't have to duplicate them here.
-, alsa-lib, dbus-glib, fuse, gnome, gsettings-desktop-schemas, gtk3, libdbusmenu-gtk2, libXdamage, nss, udev
+  # Runtime dependencies;
+  # A few additional ones (e.g. Node) are already shipped together with the
+  # AppImage, so we don't have to duplicate them here.
+, alsa-lib
+, dbus-glib
+, fuse
+, gsettings-desktop-schemas
+, gtk3
+, libdbusmenu-gtk2
+, libXdamage
+, nss
+, udev
 }:
 
 let
   pname = "pcloud";
-  version = "1.9.7";
-  code = "XZ0FAtXZNxFJbda6KhLejU9tKAg4N0TEqx3V";
+  version = "1.14.6";
+  code = "XZQDbs0Z4ET1VL0SIUuzr5ewR9LYuf6ssLRk";
 
-  # Archive link's code thanks to: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pcloud-drive
+  # Archive link's codes: https://www.pcloud.com/release-notes/linux.html
   src = fetchzip {
-    url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${pname}-${version}.zip";
-    hash = "sha256-6eMRFuZOLcoZd2hGw7QV+kAmzE5lK8uK6ZpGs4n7/zw=";
+    url = "https://api.pcloud.com/getpubzip?code=${code}&filename=pcloud-${version}.zip";
+    hash = "sha256-3HUVIDxeq7svzeWyZrxlE4TjZ8lOwT8bYgyRFRzGnmU=";
   };
 
   appimageContents = appimageTools.extractType2 {
-    name = "${pname}-${version}";
+    inherit pname version;
     src = "${src}/pcloud";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   src = appimageContents;
@@ -104,8 +117,10 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Secure and simple to use cloud storage for your files; pCloud Drive, Electron Edition";
     homepage = "https://www.pcloud.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ patryk27 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "pcloud";
   };
 }

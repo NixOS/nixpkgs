@@ -5,14 +5,24 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
-  version = "4.0.3";
+  version = "4.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laramies";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-Ckouhe/Uq6Dv9p/LRpPQkiKuYrwrl/Z7KkYYamDHav8=";
+    repo = "theharvester";
+    rev = "refs/tags/${version}";
+    hash = "sha256-B2pZBrWZqbtvcO0pnM57GFhrryYilLCBTMEmsKvyU/I=";
   };
+
+  postPatch = ''
+    # Requirements are pinned
+    sed -i 's/==.*//' requirements/base.txt
+  '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiodns
@@ -27,9 +37,11 @@ python3.pkgs.buildPythonApplication rec {
     fastapi
     lxml
     netaddr
-    orjson
+    ujson
+    playwright
     plotly
     pyppeteer
+    python-dateutil
     pyyaml
     requests
     retrying
@@ -40,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     uvloop
   ];
 
-  checkInputs = with  python3.pkgs; [
+  nativeCheckInputs = with  python3.pkgs; [
     pytest
     pytest-asyncio
   ];
@@ -61,7 +73,9 @@ python3.pkgs.buildPythonApplication rec {
       gathers emails, names, subdomains, IPs, and URLs using multiple public data sources.
     '';
     homepage = "https://github.com/laramies/theHarvester";
-    maintainers = with maintainers; [ c0bw3b treemo ];
+    changelog = "https://github.com/laramies/theHarvester/releases/tag/${version}";
     license = licenses.gpl2Only;
+    maintainers = with maintainers; [ c0bw3b fab treemo ];
+    mainProgram = "theHarvester";
   };
 }

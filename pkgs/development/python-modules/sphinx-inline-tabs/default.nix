@@ -1,24 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-inline-tabs";
-  version = "2021.08.17.beta10";
-  format = "flit";
+  version = "2023.04.21";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pradyunsg";
     repo = "sphinx-inline-tabs";
     rev = version;
-    sha256 = "sha256-T3OqK0eXNiBs2zQURCSPLc8aIyf2an32UyDh4qSmxQ4=";
+    hash = "sha256-1oZheHDNOQU0vWL3YClQrJe94WyUJ72bCAF1UKtjJ0w=";
   };
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  nativeBuildInputs = [ flit-core ];
+
+  propagatedBuildInputs = [ sphinx ];
 
   # no tests, see https://github.com/pradyunsg/sphinx-inline-tabs/issues/6
   doCheck = false;

@@ -1,67 +1,61 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
 , pkg-config
-, autoconf
-, automake111x
-, libtool
-
-, glib
-, gtk2
+, wrapGAppsHook3
 , gst_all_1
-, gnome2
-, gnome-icon-theme
 , libnotify
-, libxml2
-, libunique
-, intltool
-, gst_plugins ? with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly ]
-, wrapGAppsHook
+, libayatana-appindicator
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.4";
   pname = "alarm-clock-applet";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
-    owner = "joh";
+    owner = pname;
     repo = "alarm-clock";
     rev = version;
-    sha256 = "18blvgy8hmw3jidz7xrv9yiiilnzcj65m6wxhw58nrnbcqbpydwn";
+    hash = "sha256-10hkWWEsAUJnGeu35bR5d0RFKd9CKDZI7WGMzmEM3rI=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    intltool
-    automake111x
-    autoconf
-    libtool
-
-    gnome2.gnome-common
-
-    wrapGAppsHook
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/alarm-clock-applet/alarm-clock/commit/6a11003099660dfae0e3d5800f49880d3a26f5ec.patch";
+      hash = "sha256-NP1PlEw5AFWZgywvppIs2e+5EfMSPbU4Pq2tIfwODrQ=";
+    })
+    (fetchpatch {
+      url = "https://github.com/alarm-clock-applet/alarm-clock/commit/cbcf22fac5b45ab251ade2e7e993f422f33f926e.patch";
+      hash = "sha256-xKaaNfXsv9Ckwy73r1n93kOWIZ01fU5GDqYSQCch1Kc=";
+    })
   ];
 
-  preConfigure = "./autogen.sh";
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
-    glib
-    gtk2
     gst_all_1.gstreamer
-    gnome2.GConf
-    gnome-icon-theme
+    gst_all_1.gst-plugins-base
     libnotify
-    libxml2
-    libunique
-  ] ++ gst_plugins;
+    libayatana-appindicator
+  ];
 
-  propagatedUserEnvPkgs = [ gnome2.GConf.out ];
-
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    # gconf is already deprecated
+    "-DENABLE_GCONF_MIGRATION=OFF"
+  ];
 
   meta = with lib; {
-    homepage = "http://alarm-clock.pseudoberries.com/";
-    description = "A fully-featured alarm clock for your GNOME panel or equivalent";
-    license = licenses.gpl2;
+    description = "Fully-featured alarm clock with an indicator";
+    homepage = "https://alarm-clock-applet.github.io";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ aleksana ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.rasendubi ];
+    mainProgram = "alarm-clock-applet";
   };
 }

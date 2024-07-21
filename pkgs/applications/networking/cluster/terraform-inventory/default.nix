@@ -1,26 +1,30 @@
-{ lib, buildGoPackage, fetchFromGitHub}:
+{ lib, buildGoModule, fetchFromGitHub, testers, terraform-inventory }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "terraform-inventory";
-  version = "0.7-pre";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/adammck/terraform-inventory";
-
-  subPackages = [ "./" ];
+  version = "0.10";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "adammck";
     repo = "terraform-inventory";
-    sha256 = "0wwyi2nfyn3wfpmvj8aabn0cjba0lpr5nw3rgd6qdywy7sc3rmb1";
+    rev = "v${version}";
+    sha256 = "sha256-gkSDxcBoYmCBzkO8y1WKcRtZdfl8w5qVix0zbyb4Myo=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-pj9XLzaGU1PuNnpTL/7XaKJZUymX+i8hFMroZtHIqTc=";
+
+  ldflags = [ "-s" "-w" "-X main.build_version=${version}" ];
+
+  doCheck = false;
+
+  passthru.tests.version = testers.testVersion {
+    package = terraform-inventory;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/adammck/terraform-inventory";
     description = "Terraform state to ansible inventory adapter";
+    mainProgram = "terraform-inventory";
     license = licenses.mit;
     maintainers = with maintainers; [ htr ];
   };

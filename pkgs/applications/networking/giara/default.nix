@@ -5,18 +5,19 @@
 , pkg-config
 , ninja
 , python3
-, wrapGAppsHook
-, gtk3
+, wrapGAppsHook4
+, gtk4
 , gdk-pixbuf
 , webkitgtk
-, gtksourceview4
-, libhandy
+, gtksourceview5
 , glib-networking
+, libadwaita
+, appstream
+, blueprint-compiler
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "giara";
-  version = "0.3";
+  version = "1.1.0";
 
   format = "other";
 
@@ -25,24 +26,26 @@ python3.pkgs.buildPythonApplication rec {
     owner = "World";
     repo = pname;
     rev = version;
-    sha256 = "004qmkfrgd37axv0b6hfh6v7nx4pvy987k5yv4bmlmkj9sbqm6f9";
+    hash = "sha256-FTy0ElcoTGXG9eV85pUrF35qKDKOfYIovPtjLfTJVOg=";
   };
 
   nativeBuildInputs = [
+    appstream
     meson
     gobject-introspection
     pkg-config
     ninja
-    wrapGAppsHook
+    wrapGAppsHook4
+    blueprint-compiler
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     gdk-pixbuf
     webkitgtk
-    gtksourceview4
-    libhandy
+    gtksourceview5
     glib-networking
+    libadwaita
   ];
 
   pythonPath = with python3.pkgs; [
@@ -55,14 +58,20 @@ python3.pkgs.buildPythonApplication rec {
     beautifulsoup4
   ];
 
-  # Fix setup-hooks https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
+  postPatch = ''
+    substituteInPlace meson_post_install.py \
+      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
+    # blueprint-compiler expects "profile" to be a string.
+    substituteInPlace data/ui/headerbar.blp \
+      --replace "item { custom: profile; }" 'item { custom: "profile"; }'
+  '';
 
   meta = with lib; {
-    description = "A Reddit app, built with Python, GTK and Handy; Created with mobile Linux in mind";
+    description = "Reddit app, built with Python, GTK and Handy; Created with mobile Linux in mind";
     maintainers = with maintainers; [ dasj19 ];
     homepage = "https://gitlab.gnome.org/World/giara";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "giara";
   };
 }

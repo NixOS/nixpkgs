@@ -3,6 +3,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "i3-wk-switch";
   version = "2020-03-18";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "tmfink";
@@ -23,6 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "XMonad-like workspace switching for i3 and sway";
+    mainProgram = "i3-wk-switch";
     maintainers = with maintainers; [ synthetica ];
     platforms = platforms.linux;
     license = licenses.mit;

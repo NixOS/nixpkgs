@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-cov
-, pytest-asyncio
-, pytest-timeout
-, responses
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-cov,
+  pytest-asyncio,
+  pytest-timeout,
+  responses,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pyvera";
-  version = "0.3.14";
+  version = "0.3.15";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pavoni";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CuXsyHlRw5zqDrQfMT4BzHsmox8MLRKxFKwR5M0XoEM=";
+    hash = "sha256-1+xIqOogRUt+blX7AZSKIiU8lpR4AzKIIW/smCSft94=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
     pytest-cov

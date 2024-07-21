@@ -15,7 +15,7 @@ stdenv.mkDerivation (common // {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  buildFlags = [
+  makeFlags = kernel.makeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
@@ -41,8 +41,11 @@ stdenv.mkDerivation (common // {
     runHook postInstall
   '';
 
+  enableParallelBuilding = true;
+
   meta = common.meta // {
-    description = "An entirely open source Linux driver that allows you to manage your Razer peripherals on GNU/Linux";
+    description = "Entirely open source Linux driver that allows you to manage your Razer peripherals on GNU/Linux";
+    mainProgram = "razer_mount";
     broken = kernel.kernelOlder "4.19";
   };
 })

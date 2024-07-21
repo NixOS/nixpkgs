@@ -1,7 +1,5 @@
 { lib, stdenv, requireFile, unzip, xorg }:
 
-assert stdenv.hostPlatform.system == "i686-linux";
-
 stdenv.mkDerivation rec {
   pname = "sun-java-wtk";
   version = "2.5.2_01";
@@ -21,6 +19,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://java.sun.com/products/sjwtoolkit/download.html";
     description = "Sun Java Wireless Toolkit 2.5.2_01 for CLDC";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+    platforms = [ "i686-linux" ];
   };
 }

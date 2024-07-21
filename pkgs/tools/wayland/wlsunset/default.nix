@@ -5,15 +5,19 @@
 
 stdenv.mkDerivation rec {
   pname = "wlsunset";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = pname;
     rev = version;
-    sha256 = "0hhsddh3rs066rbsjksr8kcwg8lvglbvs67dq0r5wx5c1xcwb51w";
+    sha256 = "sha256-U/yROKkU9pOBLIIIsmkltF64tt5ZR97EAxxGgrFYwNg=";
   };
 
+  strictDeps = true;
+  depsBuildBuild = [
+    pkg-config
+  ];
   nativeBuildInputs = [ meson pkg-config ninja wayland-scanner scdoc ];
   buildInputs = [ wayland wayland-protocols ];
 
@@ -26,7 +30,8 @@ stdenv.mkDerivation rec {
     homepage = "https://sr.ht/~kennylevinsen/wlsunset/";
     changelog = "https://git.sr.ht/~kennylevinsen/wlsunset/refs/${version}";
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
+    mainProgram = "wlsunset";
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl,  openssl }:
+{ lib, stdenv, fetchurl,  openssl, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "popa3d";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1g48cd74sqhl496wmljhq44iyfpghaz363a1ip8nyhpjz7d57f03";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl libxcrypt ];
 
   patches = [
     ./fix-mail-spool-path.patch
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.openwall.com/popa3d/";
     description = "Tiny POP3 daemon with security as the primary goal";
+    mainProgram = "popa3d";
     platforms = lib.platforms.linux;
   };
 }

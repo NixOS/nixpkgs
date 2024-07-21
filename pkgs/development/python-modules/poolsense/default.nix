@@ -1,16 +1,18 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "poolsense";
   version = "0.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WCyuhk77QNJAiuzccrb2u0mfc81LYrYSSq9atgO0LdE=";
+    hash = "sha256-WCyuhk77QNJAiuzccrb2u0mfc81LYrYSSq9atgO0LdE=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

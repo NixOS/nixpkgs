@@ -26,19 +26,22 @@ in
           The SpamAssassin local.cf config
 
           If you are using this configuration:
-            add_header all Status _YESNO_, score=_SCORE_ required=_REQD_ tests=_TESTS_ autolearn=_AUTOLEARN_ version=_VERSION_
+
+              add_header all Status _YESNO_, score=_SCORE_ required=_REQD_ tests=_TESTS_ autolearn=_AUTOLEARN_ version=_VERSION_
 
           Then you can Use this sieve filter:
-            require ["fileinto", "reject", "envelope"];
 
-            if header :contains "X-Spam-Flag" "YES" {
-              fileinto "spam";
-            }
+              require ["fileinto", "reject", "envelope"];
+
+              if header :contains "X-Spam-Flag" "YES" {
+                fileinto "spam";
+              }
 
           Or this procmail filter:
-            :0:
-            * ^X-Spam-Flag: YES
-            /var/vpopmail/domains/lastlog.de/js/.maildir/.spam/new
+
+              :0:
+              * ^X-Spam-Flag: YES
+              /var/vpopmail/domains/lastlog.de/js/.maildir/.spam/new
 
           To filter your messages based on the additional mail headers added by spamassassin.
         '';
@@ -74,9 +77,9 @@ in
           loadplugin Mail::SpamAssassin::Plugin::Check
           #loadplugin Mail::SpamAssassin::Plugin::DCC
           loadplugin Mail::SpamAssassin::Plugin::DKIM
+          loadplugin Mail::SpamAssassin::Plugin::DMARC
           loadplugin Mail::SpamAssassin::Plugin::DNSEval
           loadplugin Mail::SpamAssassin::Plugin::FreeMail
-          loadplugin Mail::SpamAssassin::Plugin::Hashcash
           loadplugin Mail::SpamAssassin::Plugin::HeaderEval
           loadplugin Mail::SpamAssassin::Plugin::HTMLEval
           loadplugin Mail::SpamAssassin::Plugin::HTTPSMismatch
@@ -135,7 +138,7 @@ in
         User = "spamd";
         Group = "spamd";
         StateDirectory = "spamassassin";
-        ExecStartPost = "+${pkgs.systemd}/bin/systemctl -q --no-block try-reload-or-restart spamd.service";
+        ExecStartPost = "+${config.systemd.package}/bin/systemctl -q --no-block try-reload-or-restart spamd.service";
       };
 
       script = ''

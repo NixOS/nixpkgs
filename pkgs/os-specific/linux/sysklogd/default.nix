@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./systemd.patch ./union-wait.patch ./fix-includes-for-musl.patch ];
 
-  NIX_CFLAGS_COMPILE = "-DSYSV";
+  env.NIX_CFLAGS_COMPILE = "-DSYSV";
 
   installFlags = [ "BINDIR=$(out)/sbin" "MANDIR=$(out)/share/man" "INSTALL=install" ];
 
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p $out/share/man/man5/ $out/share/man/man8/ $out/sbin";
 
   meta = with lib; {
-    description = "A system logging daemon";
+    description = "System logging daemon";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

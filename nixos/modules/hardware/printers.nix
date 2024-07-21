@@ -2,18 +2,23 @@
 with lib;
 let
   cfg = config.hardware.printers;
-  ppdOptionsString = options: optionalString (options != {})
-    (concatStringsSep " "
-      (mapAttrsToList (name: value: "-o '${name}'='${value}'") options)
-    );
-  ensurePrinter = p: ''
-    ${pkgs.cups}/bin/lpadmin -p '${p.name}' -E \
-      ${optionalString (p.location != null) "-L '${p.location}'"} \
-      ${optionalString (p.description != null) "-D '${p.description}'"} \
-      -v '${p.deviceUri}' \
-      -m '${p.model}' \
-      ${ppdOptionsString p.ppdOptions}
+
+  ensurePrinter = p: let
+    args = cli.toGNUCommandLineShell {} ({
+      p = p.name;
+      v = p.deviceUri;
+      m = p.model;
+    } // optionalAttrs (p.location != null) {
+      L = p.location;
+    } // optionalAttrs (p.description != null) {
+      D = p.description;
+    } // optionalAttrs (p.ppdOptions != {}) {
+      o = mapAttrsToList (name: value: "${name}=${value}") p.ppdOptions;
+    });
+  in ''
+    ${pkgs.cups}/bin/lpadmin ${args} -E
   '';
+
   ensureDefaultPrinter = name: ''
     ${pkgs.cups}/bin/lpadmin -d '${name}'
   '';
@@ -39,8 +44,8 @@ in {
           Will regularly ensure that the given CUPS printers are configured as declared here.
           If a printer's options are manually changed afterwards, they will be overwritten eventually.
           This option will never delete any printer, even if removed from this list.
-          You can check existing printers with <command>lpstat -s</command>
-          and remove printers with <command>lpadmin -x &lt;printer-name&gt;</command>.
+          You can check existing printers with {command}`lpstat -s`
+          and remove printers with {command}`lpadmin -x <printer-name>`.
           Printers not listed here can still be manually configured.
         '';
         default = [];
@@ -78,7 +83,7 @@ in {
               '';
               description = ''
                 How to reach the printer.
-                <command>lpinfo -v</command> shows a list of supported device URIs and schemes.
+                {command}`lpinfo -v` shows a list of supported device URIs and schemes.
               '';
             };
             model = mkOption {
@@ -88,7 +93,7 @@ in {
               '';
               description = ''
                 Location of the ppd driver file for the printer.
-                <command>lpinfo -m</command> shows a list of supported models.
+                {command}`lpinfo -m` shows a list of supported models.
               '';
             };
             ppdOptions = mkOption {
@@ -100,7 +105,7 @@ in {
               default = {};
               description = ''
                 Sets PPD options for the printer.
-                <command>lpoptions [-p printername] -l</command> shows suported PPD options for the given printer.
+                {command}`lpoptions [-p printername] -l` shows supported PPD options for the given printer.
               '';
             };
           };
@@ -110,21 +115,26 @@ in {
   };
 
   config = mkIf (cfg.ensurePrinters != [] && config.services.printing.enable) {
-    systemd.services.ensure-printers = let
-      cupsUnit = if config.services.printing.startWhenNeeded then "cups.socket" else "cups.service";
-    in {
+    systemd.services.ensure-printers = {
       description = "Ensure NixOS-configured CUPS printers";
       wantedBy = [ "multi-user.target" ];
-      requires = [ cupsUnit ];
-      after = [ cupsUnit ];
+      wants = [ "cups.service" ];
+      after = [ "cups.service" ];
 
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
       };
 
-      script = concatMapStringsSep "\n" ensurePrinter cfg.ensurePrinters
-        + optionalString (cfg.ensureDefaultPrinter != null) (ensureDefaultPrinter cfg.ensureDefaultPrinter);
+      script = concatStringsSep "\n" [
+        (concatMapStrings ensurePrinter cfg.ensurePrinters)
+        (optionalString (cfg.ensureDefaultPrinter != null)
+          (ensureDefaultPrinter cfg.ensureDefaultPrinter))
+        # Note: if cupsd is "stateless" the service can't be stopped,
+        # otherwise the configuration will be wiped on the next start.
+        (optionalString (with config.services.printing; startWhenNeeded && !stateless)
+          "systemctl stop cups.service")
+      ];
     };
   };
 }

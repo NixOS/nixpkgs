@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, boost
+, boost179 # probably needs to match the one from ndn-cxx
 , fetchFromGitHub
 , libpcap
 , ndn-cxx
@@ -10,19 +10,19 @@
 , systemd
 , wafHook
 , websocketpp
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , withWebSocket ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "nfd";
-  version = "0.7.1";
+  version = "22.12";
 
   src = fetchFromGitHub {
     owner = "named-data";
     repo = lib.toUpper pname;
     rev = "NFD-${version}";
-    sha256 = "1l9bchj8c68r6qw4vr1kc96jgxl0vpqa2vjkvy1xmhz92sivr6gi";
+    hash = "sha256-epY5qtET7rsKL3KIKvxfa+wF+AGZbYs+zRhy8SnIffk=";
     fetchSubmodules = true;
   };
 
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
 
   wafConfigureFlags = [
-    "--boost-includes=${boost.dev}/include"
-    "--boost-libs=${boost.out}/lib"
+    "--boost-includes=${boost179.dev}/include"
+    "--boost-libs=${boost179.out}/lib"
     "--with-tests"
   ] ++ lib.optional (!withWebSocket) "--without-websocket";
 
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://named-data.net/";
-    description = "Named Data Neworking (NDN) Forwarding Daemon";
+    description = "Named Data Networking (NDN) Forwarding Daemon";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.bertof ];
+    maintainers = with maintainers; [ bertof ];
   };
 }

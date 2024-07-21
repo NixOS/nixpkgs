@@ -1,70 +1,40 @@
-{ buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pytestCheckHook
-, brotli
-, cairosvg
-, fonttools
-, pydyf
-, pyphen
-, cffi
-, cssselect
-, lxml
-, html5lib
-, tinycss
-, zopfli
-, glib
-, harfbuzz
-, pango
-, fontconfig
-, lib
-, stdenv
-, ghostscript
-, isPy3k
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cairosvg,
+  cffi,
+  cssselect2,
+  fetchPypi,
+  flit-core,
+  fontconfig,
+  fonttools,
+  ghostscript,
+  glib,
+  harfbuzz,
+  html5lib,
+  pango,
+  pillow,
+  pydyf,
+  pyphen,
+  pytestCheckHook,
+  pythonOlder,
+  substituteAll,
+  tinycss2,
 }:
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "53.4";
-  disabled = !isPy3k;
+  version = "62.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    sha256 = "sha256-EMyxfVXHMJa98e3T7+WMuFWwfkwwfZutTryaPxP/RYA=";
+    hash = "sha256-oIrEAOEZGdmW12vsqjMWDXwaxVuhYGKMQs51hldMGlE=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--isort --flake8 --cov --no-cov-on-fail" ""
-  '';
-
-  disabledTests = [
-    # needs the Ahem font (fails on macOS)
-    "test_font_stretch"
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-    ghostscript
-  ];
-
-  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
-
-  propagatedBuildInputs = [
-    brotli
-    cairosvg
-    cffi
-    cssselect
-    fonttools
-    html5lib
-    lxml
-    pydyf
-    pyphen
-    tinycss
-    zopfli
-  ];
 
   patches = [
     (substituteAll {
@@ -78,10 +48,55 @@ buildPythonPackage rec {
     })
   ];
 
+  nativeBuildInputs = [ flit-core ];
+
+  propagatedBuildInputs = [
+    cffi
+    cssselect2
+    fonttools
+    html5lib
+    pillow
+    pydyf
+    pyphen
+    tinycss2
+  ] ++ fonttools.optional-dependencies.woff;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    ghostscript
+  ];
+
+  disabledTests = [
+    # needs the Ahem font (fails on macOS)
+    "test_font_stretch"
+    # sensitive to sandbox environments
+    "test_tab_size"
+    "test_tabulation_character"
+    "test_linear_gradients_5"
+    "test_linear_gradients_12"
+  ];
+
+  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+
+  # Set env variable explicitly for Darwin, but allow overriding when invoking directly
+  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}" ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--isort --flake8 --cov --no-cov-on-fail" ""
+  '';
+
+  preCheck = ''
+    # Fontconfig wants to create a cache.
+    export HOME=$TMPDIR
+  '';
+
+  pythonImportsCheck = [ "weasyprint" ];
+
   meta = with lib; {
-    homepage = "https://weasyprint.org/";
     description = "Converts web documents to PDF";
+    mainProgram = "weasyprint";
+    homepage = "https://weasyprint.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

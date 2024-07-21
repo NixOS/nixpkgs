@@ -1,30 +1,47 @@
-{ lib, buildPythonPackage, fetchPypi
-, google-auth, google-auth-httplib2, google-api-core
-, httplib2, six, uritemplate, oauth2client, setuptools }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-auth,
+  google-auth-httplib2,
+  google-api-core,
+  httplib2,
+  uritemplate,
+  oauth2client,
+  setuptools,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "2.25.0";
+  version = "2.135.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dNgF7xC4sfWL04U53T0D+vEYj2TuPKQorAQtU59fVcc=";
+    hash = "sha256-tVKigSPtlUkwNWmNuA6O14yRBqi0IuY6F1FQubVbcE4=";
   };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    google-auth
+    google-auth-httplib2
+    google-api-core
+    httplib2
+    uritemplate
+    oauth2client
+  ];
 
   # No tests included in archive
   doCheck = false;
 
-  propagatedBuildInputs = [
-    google-auth google-auth-httplib2 google-api-core
-    httplib2 six uritemplate oauth2client setuptools
-  ];
-
-  pythonImportsCheck = [
-    "googleapiclient"
-  ];
+  pythonImportsCheck = [ "googleapiclient" ];
 
   meta = with lib; {
-    description = "The official Python client library for Google's discovery based APIs";
+    description = "Official Python client library for Google's discovery based APIs";
     longDescription = ''
       These client libraries are officially supported by Google. However, the
       libraries are considered complete and are in maintenance mode. This means

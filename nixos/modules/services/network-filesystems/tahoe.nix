@@ -18,7 +18,7 @@ in
             };
             tub.port = mkOption {
               default = 3458;
-              type = types.int;
+              type = types.port;
               description = ''
                 The port on which the introducer will listen.
               '';
@@ -32,14 +32,7 @@ in
                 If specified, the port should be included.
               '';
             };
-            package = mkOption {
-              default = pkgs.tahoelafs;
-              defaultText = literalExpression "pkgs.tahoelafs";
-              type = types.package;
-              description = ''
-                The package to use for the Tahoe LAFS daemon.
-              '';
-            };
+            package = mkPackageOption pkgs "tahoelafs" { };
           };
         });
         description = ''
@@ -58,7 +51,7 @@ in
             };
             tub.port = mkOption {
               default = 3457;
-              type = types.int;
+              type = types.port;
               description = ''
                 The port on which the tub will listen.
 
@@ -80,7 +73,7 @@ in
             };
             web.port = mkOption {
               default = 3456;
-              type = types.int;
+              type = types.port;
               description = ''
                 The port on which the Web server will listen.
 
@@ -176,14 +169,7 @@ in
                 URL of the accounts server.
               '';
             };
-            package = mkOption {
-              default = pkgs.tahoelafs;
-              defaultText = literalExpression "pkgs.tahoelafs";
-              type = types.package;
-              description = ''
-                The package to use for the Tahoe LAFS daemon.
-              '';
-            };
+            package = mkPackageOption pkgs "tahoelafs" { };
           };
         });
         description = ''

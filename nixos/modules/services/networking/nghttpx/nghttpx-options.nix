@@ -45,7 +45,7 @@
       description = ''
         TLS certificate and key paths. Note that this does not enable
         TLS for a frontend listener, to do so, a frontend
-        specification must set <literal>params.tls</literal> to true.
+        specification must set `params.tls` to true.
       '';
       example = {
         key = "/etc/ssl/keys/server.key";
@@ -132,7 +132,7 @@
       type        = lib.types.int;
       default     = 0;
       description = ''
-        Set maximum number of open files (RLIMIT_NOFILE) to &lt;N&gt;. If 0
+        Set maximum number of open files (RLIMIT_NOFILE) to \<N\>. If 0
         is given, nghttpx does not set the limit.
 
         Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--rlimit-nofile

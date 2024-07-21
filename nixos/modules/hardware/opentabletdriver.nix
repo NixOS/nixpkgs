@@ -26,14 +26,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.opentabletdriver;
-        defaultText = literalExpression "pkgs.opentabletdriver";
-        description = ''
-          OpenTabletDriver derivation to use.
-        '';
-      };
+      package = mkPackageOption pkgs "opentabletdriver" { };
 
       daemon = {
         enable = mkOption {
@@ -61,7 +54,7 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${cfg.package}/bin/otd-daemon -c ${cfg.package}/lib/OpenTabletDriver/Configurations";
+        ExecStart = "${cfg.package}/bin/otd-daemon";
         Restart = "on-failure";
       };
     };

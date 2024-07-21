@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage    = "https://knightos.org/";
     description = "Converts image formats supported by stb_image to the KnightOS image format";
+    mainProgram = "kimg";
     license     = licenses.mit;
     maintainers = with maintainers; [ siraben ];
     platforms   = platforms.all;

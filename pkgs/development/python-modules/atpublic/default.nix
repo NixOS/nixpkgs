@@ -1,41 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, sybil
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  hatchling,
+  sybil,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "atpublic";
-  version = "2.3";
-  format = "setuptools";
+  version = "4.1.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d6b9167fc3e09a2de2d2adcfc9a1b48d84eab70753c97de3800362e1703e3367";
+    hash = "sha256-0cjNkxr3Rh9tGLxgYzg+hlTZ6e8Z1Y7m3AHoUVu/Vd8=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  checkInputs = [
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     sybil
   ];
 
+  pytestFlagsArray = [
+    # TypeError: FixtureManager.getfixtureclosure() missing 1 required positional argument: 'ignore_args'
+    "--ignore=docs/using.rst"
+  ];
+
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=public" ""
+    sed -i '/cov=public/d' pyproject.toml
   '';
 
-  pythonImportsCheck = [
-    "public"
-  ];
+  pythonImportsCheck = [ "public" ];
 
   meta = with lib; {
     description = "Python decorator and function which populates a module's __all__ and globals";

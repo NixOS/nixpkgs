@@ -1,44 +1,37 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , gettext
 , fetchurl
-, evolution-data-server
+, evolution-data-server-gtk4
 , pkg-config
 , libxslt
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_42
-, python3
-, gtk3
+, desktop-file-utils
+, gtk4
 , glib
-, cheese
-, libchamplain
-, clutter-gtk
-, geocode-glib
-, gnome-desktop
+, libportal-gtk4
 , gnome-online-accounts
-, wrapGAppsHook
+, qrencode
+, wrapGAppsHook4
 , folks
-, libgdata
 , libxml2
 , gnome
 , vala
 , meson
 , ninja
-, libhandy
+, libadwaita
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "41.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Y+MUm10UdbeiaYAFu191DzyApzVxcWDjnfjP3+v8zfA=";
+    hash = "sha256-cK606DWhx3+bzH5XotzCN22TvbYXVxYYJXRF9WxjcN8=";
   };
-
-  propagatedUserEnvPkgs = [
-    evolution-data-server
-  ];
 
   nativeBuildInputs = [
     meson
@@ -47,34 +40,24 @@ stdenv.mkDerivation rec {
     vala
     gettext
     libxslt
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_42
-    python3
-    wrapGAppsHook
+    desktop-file-utils
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     glib
-    evolution-data-server
+    libportal-gtk4
+    evolution-data-server-gtk4
     gsettings-desktop-schemas
     folks
-    libgdata # required by some dependency transitively
-    gnome-desktop
-    libhandy
+    libadwaita
     libxml2
     gnome-online-accounts
-    cheese
-    gnome.adwaita-icon-theme
-    libchamplain
-    clutter-gtk
-    geocode-glib
+    qrencode
   ];
-
-  postPatch = ''
-    chmod +x build-aux/meson_post_install.py
-    patchShebangs build-aux/meson_post_install.py
-  '';
 
   doCheck = true;
 
@@ -86,8 +69,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Contacts";
+    homepage = "https://apps.gnome.org/Contacts/";
     description = "GNOME’s integrated address book";
+    mainProgram = "gnome-contacts";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , glib
 , flex
@@ -16,17 +17,31 @@
 , cairo
 , gnome
 , substituteAll
+, buildPackages
+, gobject-introspection-unwrapped
 , nixStoreDir ? builtins.storeDir
 , x11Support ? true
+, testers
+, propagateFullGlib ? true
 }:
 
 # now that gobject-introspection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
 
-stdenv.mkDerivation rec {
+let
+  pythonModules = pp: [
+    pp.mako
+    pp.markdown
+    pp.setuptools
+  ];
+
+  # https://discourse.gnome.org/t/dealing-with-glib-and-gobject-introspection-circular-dependency/18701
+  glib' = glib.override { withIntrospection = false; };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.70.0";
+  version = "1.80.1";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -34,8 +49,8 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0jpwraip7pwl9bf9s59am3r7074p34fasvfb5ym1fb8hwc34jawh";
+    url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
+    hash = "sha256-od98Qk4VvaGrY5wA6QUbmt9c6hqeUS+KYDtTzRmbxtg=";
   };
 
   patches = [
@@ -55,6 +70,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     meson
     ninja
@@ -64,28 +81,41 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_45
-    python3
-    setupHook # move .gir files
-  ];
+    # Build definition checks for the Python modules needed at runtime by importing them.
+    (buildPackages.python3.withPackages pythonModules)
+    finalAttrs.setupHook # move .gir files
+    # can't use canExecute, we need prebuilt when cross
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ gobject-introspection-unwrapped ];
 
   buildInputs = [
-    python3
+    (python3.withPackages pythonModules)
   ];
 
-  checkInputs = lib.optionals stdenv.isDarwin [
+  nativeCheckInputs = lib.optionals stdenv.isDarwin [
     cctools # for otool
   ];
 
   propagatedBuildInputs = [
     libffi
-    glib
+    (if propagateFullGlib then glib else glib')
   ];
 
   mesonFlags = [
     "--datadir=${placeholder "dev"}/share"
-    "-Ddoctool=disabled"
     "-Dcairo=disabled"
-    "-Dgtk_doc=true"
+    "-Dgtk_doc=${lib.boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-Dgi_cross_ldd_wrapper=${substituteAll {
+      name = "g-ir-scanner-lddwrapper";
+      isExecutable = true;
+      src = ./wrappers/g-ir-scanner-lddwrapper.sh;
+      inherit (buildPackages) bash;
+      buildlddtree = "${buildPackages.pax-utils}/bin/lddtree";
+    }}"
+    "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
+    # can't use canExecute, we need prebuilt when cross
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dgi_cross_use_prebuilt_gi=true"
   ];
 
   doCheck = !stdenv.isAarch64;
@@ -94,6 +124,14 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/pull/98316#issuecomment-695785692
   postConfigure = ''
     patchShebangs tools/*
+  '';
+
+  postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    cp -r ${buildPackages.gobject-introspection-unwrapped.devdoc} $devdoc
+    # these are uncompiled c and header files which aren't installed when cross-compiling because
+    # code that installs them is in tests/meson.build which is only run when not cross-compiling
+    # pygobject3 needs them
+    cp -r ${buildPackages.gobject-introspection-unwrapped.dev}/share/gobject-introspection-1.0/tests $dev/share/gobject-introspection-1.0/tests
   '';
 
   preCheck = ''
@@ -113,16 +151,19 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gobject-introspection";
       versionPolicy = "odd-unstable";
     };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
-    description = "A middleware layer between C libraries and language bindings";
+    description = "Middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
-    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 ]);
+    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 artturin ]);
+    pkgConfigModules = [ "gobject-introspection-1.0" ];
     platforms = platforms.unix;
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     license = with licenses; [ gpl2 lgpl2 ];
 
     longDescription = ''
@@ -133,4 +174,4 @@ stdenv.mkDerivation rec {
       automatically provide bindings to call into the C library.
     '';
   };
-}
+})

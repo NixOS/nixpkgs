@@ -1,15 +1,39 @@
-{ lib, stdenv, itstool, fetchurl, gdk-pixbuf, adwaita-icon-theme
-, telepathy-glib, gjs, meson, ninja, gettext, telepathy-idle, libxml2, desktop-file-utils
-, pkg-config, gtk4, gtk3, glib, libsecret, libsoup, webkitgtk, gobject-introspection, appstream-glib
-, gnome, wrapGAppsHook4, telepathy-logger, gspell, gsettings-desktop-schemas }:
+{ stdenv
+, lib
+, itstool
+, fetchurl
+, gdk-pixbuf
+, telepathy-glib
+, gjs
+, meson
+, ninja
+, gettext
+, telepathy-idle
+, libxml2
+, desktop-file-utils
+, pkg-config
+, gtk4
+, tracker
+, libadwaita
+, gtk3
+, glib
+, libsecret
+, libsoup_3
+, webkitgtk_4_1
+, gobject-introspection
+, gnome
+, wrapGAppsHook4
+, gspell
+, gsettings-desktop-schemas
+}:
 
 stdenv.mkDerivation rec {
   pname = "polari";
-  version = "41.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "o7BfgWYDcMZ8lCtvRLKYx7eIFv6zjJJuwiEr3iLqQOs=";
+    hash = "sha256-0rFwnjeRiSlPU9TvFfA/i8u76MUvD0FeYvfV8Aw2CjE=";
   };
 
   patches = [
@@ -19,16 +43,36 @@ stdenv.mkDerivation rec {
     ./make-thumbnailer-wrappable.patch
   ];
 
-  propagatedUserEnvPkgs = [ telepathy-idle telepathy-logger ];
+  propagatedUserEnvPkgs = [
+    telepathy-idle
+  ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config itstool gettext wrapGAppsHook4 libxml2
-    desktop-file-utils gobject-introspection appstream-glib
+    meson
+    ninja
+    pkg-config
+    itstool
+    gettext
+    wrapGAppsHook4
+    libxml2
+    desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
-    gtk4 gtk3 glib adwaita-icon-theme gsettings-desktop-schemas
-    telepathy-glib telepathy-logger gjs gspell gdk-pixbuf libsecret libsoup webkitgtk
+    gtk4
+    tracker
+    libadwaita
+    gtk3 # for thumbnailer
+    glib
+    gsettings-desktop-schemas
+    telepathy-glib
+    gjs
+    gspell
+    gdk-pixbuf
+    libsecret
+    libsoup_3
+    webkitgtk_4_1 # for thumbnailer
   ];
 
   postFixup = ''
@@ -43,10 +87,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Polari";
+    homepage = "https://apps.gnome.org/Polari/";
     description = "IRC chat client designed to integrate with the GNOME desktop";
+    mainProgram = "polari";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

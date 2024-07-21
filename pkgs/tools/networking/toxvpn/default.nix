@@ -26,12 +26,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = lib.optional stdenv.isLinux [ "-DSYSTEMD=1" ];
+  cmakeFlags = lib.optionals stdenv.isLinux [ "-DSYSTEMD=1" ];
 
   postInstall = "$out/bin/toxvpn -h";
 
   meta = with lib; {
-    description = "A powerful tool that allows one to make tunneled point to point connections over Tox";
+    description = "Powerful tool that allows one to make tunneled point to point connections over Tox";
     homepage = "https://github.com/cleverca22/toxvpn";
     license = licenses.gpl3;
     maintainers = with maintainers; [ cleverca22 obadz toonn ];

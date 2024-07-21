@@ -36,11 +36,49 @@
 , experimentalSpatialSvcSupport ? false # Spatial scalable video coding
 , experimentalFpMbStatsSupport ? false
 , experimentalEmulateHardwareSupport ? false
+
+# for passthru.tests
+, ffmpeg
+, gst_all_1
 }:
 
 let
   inherit (stdenv) is64bit isMips isDarwin isCygwin;
   inherit (lib) enableFeature optional optionals;
+
+  # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
+  # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure
+  # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14
+  darwinVersion =
+    /**/ if stdenv.hostPlatform.osxMinVersion == "10.10" then "14"
+    else if stdenv.hostPlatform.osxMinVersion == "10.9"  then "13"
+    else if stdenv.hostPlatform.osxMinVersion == "10.8"  then "12"
+    else if stdenv.hostPlatform.osxMinVersion == "10.7"  then "11"
+    else if stdenv.hostPlatform.osxMinVersion == "10.6"  then "10"
+    else if stdenv.hostPlatform.osxMinVersion == "10.5"  then "9"
+    else "8";
+
+  cpu =
+    /**/ if stdenv.hostPlatform.isArmv7 then "armv7"
+    else if stdenv.hostPlatform.isAarch64 then "arm64"
+    else if stdenv.hostPlatform.isx86_32 then "x86"
+    else stdenv.hostPlatform.parsed.cpu.name;
+
+  kernel =
+    # Build system doesn't understand BSD, so pretend to be Linux.
+    /**/ if stdenv.isBSD then "linux"
+    else if stdenv.isDarwin then "darwin${darwinVersion}"
+    else stdenv.hostPlatform.parsed.kernel.name;
+
+  isGeneric =
+    /**/ (stdenv.hostPlatform.isPower && stdenv.hostPlatform.isLittleEndian)
+    || stdenv.hostPlatform.parsed.cpu.name == "armv6l"
+    || stdenv.hostPlatform.isRiscV;
+
+  target =
+    /**/ if (stdenv.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) then
+      (if isGeneric then "generic-gnu" else "${cpu}-${kernel}-gcc")
+    else null;
 in
 
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
@@ -56,13 +94,13 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   pname = "libvpx";
-  version = "1.11.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00f1jrclai2b6ys78dpsg6r1mvcyxlna93vxcz8zjyia24c2pjsb";
+    hash = "sha256-Pfg7g4y/dqn2VKDQU1LnTJQSj1Tont9/8Je6ShDb2GQ=";
   };
 
   postPatch = ''
@@ -144,21 +182,9 @@ stdenv.mkDerivation rec {
     (enableFeature (experimentalSpatialSvcSupport ||
                     experimentalFpMbStatsSupport ||
                     experimentalEmulateHardwareSupport) "experimental")
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
-    # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure
-    # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14
-    "--force-target=${stdenv.hostPlatform.parsed.cpu.name}-${stdenv.hostPlatform.parsed.kernel.name}${
-            if stdenv.hostPlatform.isDarwin then
-              if      stdenv.hostPlatform.osxMinVersion == "10.10" then "14"
-              else if stdenv.hostPlatform.osxMinVersion == "10.9"  then "13"
-              else if stdenv.hostPlatform.osxMinVersion == "10.8"  then "12"
-              else if stdenv.hostPlatform.osxMinVersion == "10.7"  then "11"
-              else if stdenv.hostPlatform.osxMinVersion == "10.6"  then "10"
-              else if stdenv.hostPlatform.osxMinVersion == "10.5"  then "9"
-              else "8"
-            else ""}-gcc"
-    (if stdenv.hostPlatform.isCygwin then "--enable-static-msvcrt" else "")
+  ] ++ optionals (target != null) [
+    "--target=${target}"
+    (lib.optionalString stdenv.hostPlatform.isCygwin "--enable-static-msvcrt")
   ] # Experimental features
     ++ optional experimentalSpatialSvcSupport "--enable-spatial-svc"
     ++ optional experimentalFpMbStatsSupport "--enable-fp-mb-stats"
@@ -176,6 +202,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''moveToOutput bin "$bin" '';
+
+  passthru.tests = {
+    inherit (gst_all_1) gst-plugins-good;
+    ffmpeg = ffmpeg.override { withVpx = true; };
+  };
 
   meta = with lib; {
     description = "WebM VP8/VP9 codec SDK";

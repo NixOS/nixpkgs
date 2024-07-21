@@ -1,0 +1,24 @@
+diff --git a/src/src/gstvideowriter.cpp b/src/src/gstvideowriter.cpp
+index c96c8b0..fcc11da 100644
+--- a/src/src/gstvideowriter.cpp
++++ b/src/src/gstvideowriter.cpp
+@@ -282,6 +282,7 @@ void GstVideoWriter::loadAppSrcCaps()
+ 
+ QString GstVideoWriter::libPath(const QString &strlib)
+ {
++    return strlib;
+     QDir  dir;
+     QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+     dir.setPath(path);
+diff --git a/src/src/mainwindow.cpp b/src/src/mainwindow.cpp
+index d3c6c24..6d313a6 100644
+--- a/src/src/mainwindow.cpp
++++ b/src/src/mainwindow.cpp
+@@ -784,6 +784,7 @@ void CMainWindow::slotPopupSettingsDialog()
+ 
+ QString CMainWindow::libPath(const QString &strlib)
+ {
++    return strlib;
+     QDir  dir;
+     QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+     dir.setPath(path);

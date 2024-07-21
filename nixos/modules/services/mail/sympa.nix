@@ -88,7 +88,7 @@ in
       example = "cs";
       description = ''
         Default Sympa language.
-        See <link xlink:href='https://github.com/sympa-community/sympa/tree/sympa-6.2/po/sympa' />
+        See <https://github.com/sympa-community/sympa/tree/sympa-6.2/po/sympa>
         for available options.
       '';
     };
@@ -107,8 +107,8 @@ in
       default = null;
       example = "lists.example.org";
       description = ''
-        Main domain to be used in <filename>sympa.conf</filename>.
-        If <literal>null</literal>, one of the <option>services.sympa.domains</option> is chosen for you.
+        Main domain to be used in {file}`sympa.conf`.
+        If `null`, one of the {option}`services.sympa.domains` is chosen for you.
       '';
     };
 
@@ -120,7 +120,7 @@ in
             default = null;
             example = "archive.example.org";
             description = ''
-              Domain part of the web interface URL (no web interface for this domain if <literal>null</literal>).
+              Domain part of the web interface URL (no web interface for this domain if `null`).
               DNS record of type A (or AAAA or CNAME) has to exist with this value.
             '';
           };
@@ -137,8 +137,8 @@ in
               default_max_list_members = 3;
             };
             description = ''
-              The <filename>robot.conf</filename> configuration file as key value set.
-              See <link xlink:href='https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html' />
+              The {file}`robot.conf` configuration file as key value set.
+              See <https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html>
               for list of configuration parameters.
             '';
           };
@@ -181,20 +181,20 @@ in
         description = ''
           Database host address.
 
-          For MySQL, use <literal>localhost</literal> to connect using Unix domain socket.
+          For MySQL, use `localhost` to connect using Unix domain socket.
 
-          For PostgreSQL, use path to directory (e.g. <filename>/run/postgresql</filename>)
+          For PostgreSQL, use path to directory (e.g. {file}`/run/postgresql`)
           to connect using Unix domain socket located in this directory.
 
-          Use <literal>null</literal> to fall back on Sympa default, or when using
-          <option>services.sympa.database.createLocally</option>.
+          Use `null` to fall back on Sympa default, or when using
+          {option}`services.sympa.database.createLocally`.
         '';
       };
 
       port = mkOption {
         type = nullOr port;
         default = null;
-        description = "Database port. Use <literal>null</literal> for default port.";
+        description = "Database port. Use `null` for default port.";
       };
 
       name = mkOption {
@@ -218,7 +218,7 @@ in
         default = null;
         example = "/run/keys/sympa-dbpassword";
         description = ''
-          A file containing the password for <option>services.sympa.database.user</option>.
+          A file containing the password for {option}`services.sympa.database.name`.
         '';
       };
 
@@ -242,7 +242,7 @@ in
         description = ''
           The webserver used for the Sympa web interface. Set it to `none` if you want to configure it yourself.
           Further nginx configuration can be done by adapting
-          <option>services.nginx.virtualHosts.<replaceable>name</replaceable></option>.
+          {option}`services.nginx.virtualHosts.«name»`.
         '';
       };
 
@@ -267,11 +267,11 @@ in
         type = enum [ "postfix" "none" ];
         default = "postfix";
         description = ''
-          Mail transfer agent (MTA) integration. Use <literal>none</literal> if you want to configure it yourself.
+          Mail transfer agent (MTA) integration. Use `none` if you want to configure it yourself.
 
-          The <literal>postfix</literal> integration sets up local Postfix instance that will pass incoming
+          The `postfix` integration sets up local Postfix instance that will pass incoming
           messages from configured domains to Sympa. You still need to configure at least outgoing message
-          handling using e.g. <option>services.postfix.relayHost</option>.
+          handling using e.g. {option}`services.postfix.relayHost`.
         '';
       };
     };
@@ -286,8 +286,8 @@ in
         }
       '';
       description = ''
-        The <filename>sympa.conf</filename> configuration file as key value set.
-        See <link xlink:href='https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html' />
+        The {file}`sympa.conf` configuration file as key value set.
+        See <https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html>
         for list of configuration parameters.
       '';
     };
@@ -321,7 +321,7 @@ in
           };
         }
       '';
-      description = "Set of files to be linked in <filename>${dataDir}</filename>.";
+      description = "Set of files to be linked in {file}`${dataDir}`.";
     };
   };
 
@@ -342,6 +342,7 @@ in
 
       db_type = cfg.database.type;
       db_name = cfg.database.name;
+      db_user = cfg.database.name;
     }
     // (optionalAttrs (cfg.database.host != null) {
       db_host = cfg.database.host;
@@ -354,9 +355,6 @@ in
     })
     // (optionalAttrs (cfg.database.port != null) {
       db_port = cfg.database.port;
-    })
-    // (optionalAttrs (cfg.database.user != null) {
-      db_user = cfg.database.user;
     })
     // (optionalAttrs (cfg.mta.type == "postfix") {
       sendmail_aliases = "${dataDir}/sympa_transport";
@@ -393,7 +391,7 @@ in
     users.groups.${group} = {};
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      { assertion = cfg.database.createLocally -> cfg.database.user == user && cfg.database.name == cfg.database.user;
         message = "services.sympa.database.user must be set to ${user} if services.sympa.database.createLocally is set to true";
       }
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
@@ -437,7 +435,7 @@ in
 
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
-      wants = sympaSubServices;
+      wants = sympaSubServices ++ [ "network-online.target" ];
       before = sympaSubServices;
       serviceConfig = sympaServiceConfig "sympa_msg";
 
@@ -579,7 +577,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };

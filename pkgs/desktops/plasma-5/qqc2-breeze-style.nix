@@ -1,5 +1,4 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , kconfig
 , kconfigwidgets
@@ -12,7 +11,7 @@
 }:
 
 mkDerivation {
-  name = "qqc2-breeze-style";
+  pname = "qqc2-breeze-style";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig

@@ -1,30 +1,47 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  orjson,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pydeconz";
-  version = "85";
-  disabled = pythonOlder "3.7";
+  version = "116";
+  pyproject = true;
+
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "deconz";
-    rev = "v${version}";
-    sha256 = "sha256-6GTMG3BfHcfLMoyabFbhsJFVDHmEICuzf32603+jyZ4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XtcAs+xKSTJcQN0mCj6ewkT7owvA7nlZ8PhWfL9NZh8=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=pydeconz --cov-report term-missing" "" \
+      --replace-fail "setuptools==" "setuptools>=" \
+      --replace-fail "wheel==" "wheel>="
+  '';
+
+  build-system = [
+    setuptools
   ];
 
-  checkInputs = [
+  dependencies = [
+    aiohttp
+    orjson
+  ];
+
+  nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
     pytestCheckHook
@@ -35,7 +52,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library wrapping the Deconz REST API";
     homepage = "https://github.com/Kane610/deconz";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/Kane610/deconz/releases/tag/v${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pydeconz";
   };
 }

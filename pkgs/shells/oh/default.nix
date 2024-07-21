@@ -2,20 +2,21 @@
 
 buildGoModule rec {
   pname = "oh";
-  version = "0.8.0";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "michaelmacinnis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sdpk77i5mfamkdqldybl9znzz92hqgi4xvby5j28m0a5gw46kj0";
+    sha256 = "sha256-ryIh6MRIOVZPm2USpJC69Z/upIXGUHgcd17eZBA9Edc=";
   };
 
-  vendorSha256 = "12vlvh37hvi8c1i9arppm5wj4v9c98s7myxra10q6qpdqssgc8a0";
+  vendorHash = "sha256-Qma5Vk0JO/tTrZanvTCE40LmjeCfBup3U3N7gyhfp44=";
 
   meta = with lib; {
     homepage = "https://github.com/michaelmacinnis/oh";
-    description = "A new Unix shell";
+    description = "New Unix shell";
+    mainProgram = "oh";
     license = licenses.mit;
   };
 

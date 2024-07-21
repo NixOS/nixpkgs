@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libXi, xorgproto, autoconf, automake, libtool, m4, xlibsWrapper, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, libXi, xorgproto, autoconf, automake, libtool, m4, pkg-config, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "xinput_calibrator";
@@ -13,14 +13,15 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh --with-gui=X11";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ xorgproto libXi autoconf automake libtool m4 xlibsWrapper ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+  buildInputs = [ xorgproto libXi libtool m4 xorg.libX11 xorg.libXext ];
 
   meta = {
     homepage = "https://github.com/tias/xinput_calibrator";
-    description = "A generic touchscreen calibration program for X.Org";
+    description = "Generic touchscreen calibration program for X.Org";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.flosse ];
     platforms = lib.platforms.linux;
+    mainProgram = "xinput_calibrator";
   };
 }

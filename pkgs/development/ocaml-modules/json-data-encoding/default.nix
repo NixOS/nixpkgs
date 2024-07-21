@@ -1,27 +1,20 @@
-{ lib, fetchFromGitLab, buildDunePackage, uri, crowbar, alcotest }:
+{ lib, fetchFromGitLab, buildDunePackage, hex, uri }:
 
 buildDunePackage rec {
   pname = "json-data-encoding";
-  version = "0.10";
+  version = "1.0.1";
   minimalOCamlVersion = "4.10";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
-    repo = "json-data-encoding";
-    rev = "${version}";
-    sha256 = "0m0xx382wr44wz7gxf7mpfjx2w287pvqhg2lfvzmclfq3y5iy6mx";
+    repo = "data-encoding";
+    rev = "v${version}";
+    hash = "sha256-KoA4xX4tNyi6bX5kso/Wof1LA7431EXJ34eD5X4jnd8=";
   };
-  useDune2 = true;
 
   propagatedBuildInputs = [
+    hex
     uri
   ];
-
-  checkInputs = [
-    crowbar
-    alcotest
-  ];
-
-  doCheck = true;
 
   meta = {
     homepage = "https://gitlab.com/nomadic-labs/json-data-encoding";

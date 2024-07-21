@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "nine";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,5 +19,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/nandoflorestan/nine";
     license = licenses.free;
   };
-
 }

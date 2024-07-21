@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "lvmsync";
   version = (import ./gemset.nix).${pname}.version;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontUnpack = true;
 
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Optimised synchronisation of LVM snapshots over a network";
+    mainProgram = "lvmsync";
     homepage = "https://theshed.hezmatt.org/lvmsync/";
     license = licenses.gpl3;
     platforms = platforms.all;

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, bash, perl }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, perl
+}:
 
 stdenv.mkDerivation rec {
   pname = "gecode";
@@ -9,9 +14,20 @@ stdenv.mkDerivation rec {
     sha256 = "0k45jas6p3cyldgyir1314ja3174sayn2h2ly3z9b4dl3368pk77";
   };
 
-  nativeBuildInputs = [ bash perl ];
+  patches = [
+    (import ./fix-const-weights-clang-patch.nix fetchpatch)
+  ];
+
+  postPatch = ''
+    substituteInPlace gecode/flatzinc/lexer.yy.cpp \
+      --replace "register " ""
+  '';
+
+  nativeBuildInputs = [ perl ];
 
   preConfigure = "patchShebangs configure";
+
+  env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++14";
 
   meta = with lib; {
     license = licenses.mit;

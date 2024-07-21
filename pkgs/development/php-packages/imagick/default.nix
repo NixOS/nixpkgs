@@ -1,10 +1,16 @@
-{ buildPecl, lib, imagemagick, pkg-config, pcre2 }:
+{
+  buildPecl,
+  lib,
+  imagemagick,
+  pkg-config,
+  pcre2,
+}:
 
 buildPecl {
   pname = "imagick";
 
-  version = "3.6.0";
-  sha256 = "sha256-Till8tcN1ZpA55V9VuWQ5zHK0maen4ng/KFZ10jSlH4=";
+  version = "3.7.0";
+  sha256 = "sha256-WjZDVBCQKdIkvLsuguFbJIvptkEif0XmNCXAZTF5LT4=";
 
   configureFlags = [ "--with-imagick=${imagemagick.dev}" ];
   nativeBuildInputs = [ pkg-config ];

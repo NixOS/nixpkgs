@@ -1,38 +1,32 @@
-{ lib
-, anytree
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, poetry-core
-, pythonOlder
+{
+  lib,
+  anytree,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyebus";
-  version = "1.2.4";
+  version = "1.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "i+p40s9SXey1lfXWW+PiXsA1kUF4o6Rk7QLmQ2ljN6g=";
+    hash = "sha256-6ooOSJAIi8vYmCjDHnbMGQJfPqPmzA5thDSg+iM7T+8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    anytree
-  ];
+  propagatedBuildInputs = [ anytree ];
 
   # https://github.com/c0fec0de/pyebus/issues/3
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyebus"
-  ];
+  pythonImportsCheck = [ "pyebus" ];
 
   meta = with lib; {
     description = "Pythonic Interface to EBUS Daemon (ebusd)";

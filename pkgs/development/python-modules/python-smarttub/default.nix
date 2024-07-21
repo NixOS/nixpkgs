@@ -1,19 +1,20 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, inflection
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  inflection,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-smarttub";
-  version = "0.0.28";
+  version = "0.0.37";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mdz";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-dAwOi1hhjGhBGKEp5u3qW5WL1GLHBFac0drIc1Zk6ok=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Dy7Nsq3qhVWb9W6ledD+Gq3fMQ/qLsxGmTBB+AQ5IZc=";
   };
 
   propagatedBuildInputs = [
@@ -32,15 +33,18 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "smarttub"
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pyjwt~=2.1.0" "pyjwt>=2.1.0"
+  '';
+
+  pythonImportsCheck = [ "smarttub" ];
 
   meta = with lib; {
     description = "Python API for SmartTub enabled hot tubs";

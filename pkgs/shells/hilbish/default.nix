@@ -1,20 +1,20 @@
-{ lib, buildGoModule, fetchFromGitHub, readline }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "hilbish";
-  version = "0.7.1";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "Rosettea";
     repo = "Hilbish";
     rev = "v${version}";
-    sha256 = "sha256-YQNLv6/4I5WM/xhlWIjThgO23tN+ZCyJVZVatnIUllc=";
+    hash = "sha256-iqQhgge+m22gIIGlwwmAoYTxfMAs/sKrKjoQzyedil4=";
     fetchSubmodules = true;
   };
 
-  vendorSha256 = "sha256-xzB6sqBnDuvqTFMmLcXdSj6UFWYzA54PxUBKrFKhyQk=";
+  subPackages = [ "." ];
 
-  buildInputs = [ readline ];
+  vendorHash = "sha256-jf+S1On3Cib20Uepsm8WeRwEyuRKzSPFfsT2YVkx4fs=";
 
   ldflags = [
     "-s"
@@ -26,21 +26,17 @@ buildGoModule rec {
     mkdir -p "$out/share/hilbish"
 
     cp .hilbishrc.lua $out/share/hilbish/
-    cp -r docs -t $out/share/hilbish
+    cp -r docs -t $out/share/hilbish/
     cp -r libs -t $out/share/hilbish/
-    cp preload.lua $out/share/hilbish/
-
-    # segfaults and it's already been generated upstream
-    # we copy the docs over with the above cp command
-    rm $out/bin/docgen
+    cp -r nature $out/share/hilbish/
   '';
 
   meta = with lib; {
-    description = "An interactive Unix-like shell written in Go";
+    description = "Interactive Unix-like shell written in Go";
+    mainProgram = "hilbish";
     changelog = "https://github.com/Rosettea/Hilbish/releases/tag/v${version}";
     homepage = "https://github.com/Rosettea/Hilbish";
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
     license = licenses.mit;
-    platforms = platforms.linux; # only officially supported on Linux
   };
 }

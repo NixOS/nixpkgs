@@ -1,37 +1,61 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, curl
+, bash
 , python3
+, installShellFiles
+, gawk
+, curl
 }:
+
 stdenv.mkDerivation rec {
   pname = "amazon-ec2-utils";
-  version = "1.3";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
-    owner = "aws";
+    owner = "amazonlinux";
     repo = "amazon-ec2-utils";
-    rev = version;
-    hash = "sha256:04dpxaaca144a74r6d93q4lp0d5l32v07rldj7v2v1c6s9nsf4mv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-plTBh2LAXkYVSxN0IZJQuPr7QxD7+OAqHl/Zl8JPCmg=";
   };
 
+  outputs = [ "out" "man" ];
+
+  strictDeps = true;
+
   buildInputs = [
+    bash
     python3
   ];
 
-  propagatedBuildInputs = [
-    curl
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
   installPhase = ''
-    mkdir -p $out/bin/
+    install -Dm755 -t $out/bin/ ebsnvme-id
+    install -Dm755 -t $out/bin/ ec2-metadata
+    install -Dm755 -t $out/bin/ ec2nvme-nsid
+    install -Dm755 -t $out/bin/ ec2udev-vbd
 
-    cp ebsnvme-id $out/bin/
-    cp ec2-metadata $out/bin/
-    cp ec2udev-vbd $out/bin/
-    cp ec2udev-vcpu $out/bin/
+    install -Dm644 -t $out/lib/udev/rules.d/ 51-ec2-hvm-devices.rules
+    install -Dm644 -t $out/lib/udev/rules.d/ 51-ec2-xen-vbd-devices.rules
+    install -Dm644 -t $out/lib/udev/rules.d/ 53-ec2-read-ahead-kb.rules
+    install -Dm644 -t $out/lib/udev/rules.d/ 70-ec2-nvme-devices.rules
+    install -Dm644 -t $out/lib/udev/rules.d/ 60-cdrom_id.rules
 
-    chmod +x $out/bin/*
+    installManPage doc/*.8
+  '';
+
+  postFixup = ''
+    for i in $out/etc/udev/rules.d/*.rules $out/lib/udev/rules.d/*.rules ; do
+      substituteInPlace "$i" \
+        --replace '/usr/sbin' "$out/bin" \
+        --replace '/bin/awk' '${gawk}/bin/awk'
+    done
+
+    substituteInPlace "$out/bin/ec2-metadata" \
+      --replace 'curl' '${curl}/bin/curl'
   '';
 
   doInstallCheck = true;
@@ -45,9 +69,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/aws/amazon-ec2-utils";
+    changelog = "https://github.com/amazonlinux/amazon-ec2-utils/releases/tag/v${version}";
     description = "Contains a set of utilities and settings for Linux deployments in EC2";
+    homepage = "https://github.com/amazonlinux/amazon-ec2-utils";
     license = licenses.mit;
-    maintainers = with maintainers; [ ketzacoatl ];
+    maintainers = with maintainers; [ ketzacoatl thefloweringash anthonyroussel ];
   };
 }

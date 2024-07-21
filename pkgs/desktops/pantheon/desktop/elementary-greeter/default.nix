@@ -15,77 +15,29 @@
 , libgee
 , libhandy
 , gnome-settings-daemon
+, mesa
 , mutter
 , elementary-icon-theme
 , wingpanel-with-indicators
 , elementary-gtk-theme
-, elementary-settings-daemon
 , nixos-artwork
 , lightdm
 , gdk-pixbuf
-, clutter-gtk
 , dbus
 , accountsservice
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "6.0.1";
-
-  repoName = "greeter";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "greeter";
     rev = version;
-    sha256 = "1f606ds56sp1c58q8dblfpaq9pwwkqw9i4gkwksw45m2xkwlbflq";
+    sha256 = "sha256-m/xuaMCAPoqhl/M547mdafBPBu3UhHmVmBIUKQoS5L8=";
   };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-
-    xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
-      path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
-      name = "io.elementary.greeter.desktop";
-    }];
-  };
-
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-    vala
-    wrapGAppsHook
-  ];
-
-  buildInputs = [
-    accountsservice
-    clutter-gtk # else we get could not generate cargs for mutter-clutter-2
-    elementary-gtk-theme
-    elementary-icon-theme
-    elementary-settings-daemon
-    gnome-settings-daemon
-    gdk-pixbuf
-    granite
-    gtk3
-    libgee
-    libhandy
-    lightdm
-    mutter
-    wingpanel-with-indicators
-  ];
-
-  mesonFlags = [
-    # A hook does this but after wrapGAppsHook so the files never get wrapped.
-    "--sbindir=${placeholder "out"}/bin"
-    # baked into the program for discovery of the greeter configuration
-    "--sysconfdir=/etc"
-    "-Dgsd-dir=${gnome-settings-daemon}/libexec/" # trailing slash is needed
-  ];
 
   patches = [
     ./sysconfdir-install.patch
@@ -96,19 +48,53 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    vala
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    accountsservice
+    elementary-icon-theme
+    gnome-settings-daemon
+    gdk-pixbuf
+    granite
+    gtk3
+    libgee
+    libhandy
+    lightdm
+    mesa # for libEGL
+    mutter
+  ];
+
+  mesonFlags = [
+    # A hook does this but after wrapGAppsHook3 so the files never get wrapped.
+    "--sbindir=${placeholder "out"}/bin"
+    # baked into the program for discovery of the greeter configuration
+    "--sysconfdir=/etc"
+    "-Dgsd-dir=${gnome-settings-daemon}/libexec/" # trailing slash is needed
+  ];
+
   preFixup = ''
     gappsWrapperArgs+=(
       # dbus-launch needed in path
       --prefix PATH : "${dbus}/bin"
 
-      # for `wingpanel -g`
+      # for `io.elementary.wingpanel -g`
       --prefix PATH : "${wingpanel-with-indicators}/bin"
 
       # for the compositor
       --prefix PATH : "$out/bin"
 
-      # the theme is hardcoded
+      # the GTK theme is hardcoded
       --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+
+      # the icon theme is hardcoded
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     )
   '';
 
@@ -121,6 +107,15 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/xgreeters/io.elementary.greeter.desktop \
       --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
+      path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
+      name = "io.elementary.greeter.desktop";
+    }];
+  };
 
   meta = with lib; {
     description = "LightDM Greeter for Pantheon";

@@ -6,15 +6,16 @@
 , libxkbcommon
 , libGL
 , ninja
-, libX11 }:
+, libX11
+}:
 
 stdenv.mkDerivation rec {
   pname = "libwpe";
-  version = "1.10.1";
+  version = "1.16.0";
 
   src = fetchurl {
-    url = "https://wpewebkit.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-oyez/88jVtvoFIwdtLvcU1nX5xY9F39nVRqDk7FErfA=";
+    url = "https://wpewebkit.org/releases/libwpe-${version}.tar.xz";
+    sha256 = "sha256-x/OjxrPQBnkNSG3HzO2ittLjKd4H8zvEffxT8A8zSyo=";
   };
 
   nativeBuildInputs = [

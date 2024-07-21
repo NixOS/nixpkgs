@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, freeglut, libGL, libGLU }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libglut, libGL, libGLU }:
 
 stdenv.mkDerivation rec {
   pname = "hdaps-gl";
@@ -11,13 +11,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ freeglut libGL libGLU ];
+  buildInputs = [ libglut libGL libGLU ];
 
   meta = with lib; {
     description = "GL-based laptop model that rotates in real-time via hdaps";
     homepage = "https://github.com/linux-thinkpad/hdaps-gl";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.symphorien ];
+    mainProgram = "hdaps-gl";
   };
 }

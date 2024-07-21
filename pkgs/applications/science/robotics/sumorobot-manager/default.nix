@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     dos2unix $out/opt/sumorobot-manager/main.py
     makeQtWrapper $out/opt/sumorobot-manager/main.py $out/bin/sumorobot-manager \
-      --run "cd $out/opt/sumorobot-manager"
+      --chdir "$out/opt/sumorobot-manager"
   '';
 
   preFixup = ''
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Desktop App for managing SumoRobots";
+    mainProgram = "sumorobot-manager";
     homepage = "https://www.robokoding.com/kits/sumorobot/sumomanager/";
     license = licenses.mit;
     maintainers = with maintainers; [ abbradar ];

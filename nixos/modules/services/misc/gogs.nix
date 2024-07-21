@@ -1,20 +1,21 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.gogs;
+  opt = options.services.gogs;
   configFile = pkgs.writeText "app.ini" ''
-    APP_NAME = ${cfg.appName}
+    BRAND_NAME = ${cfg.appName}
     RUN_USER = ${cfg.user}
     RUN_MODE = prod
 
     [database]
-    DB_TYPE = ${cfg.database.type}
+    TYPE = ${cfg.database.type}
     HOST = ${cfg.database.host}:${toString cfg.database.port}
     NAME = ${cfg.database.name}
     USER = ${cfg.database.user}
-    PASSWD = #dbpass#
+    PASSWORD = #dbpass#
     PATH = ${cfg.database.path}
 
     [repository]
@@ -24,7 +25,7 @@ let
     DOMAIN = ${cfg.domain}
     HTTP_ADDR = ${cfg.httpAddress}
     HTTP_PORT = ${toString cfg.httpPort}
-    ROOT_URL = ${cfg.rootUrl}
+    EXTERNAL_URL = ${cfg.rootUrl}
 
     [session]
     COOKIE_NAME = session
@@ -89,7 +90,7 @@ in
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 3306;
           description = "Database host port.";
         };
@@ -110,9 +111,9 @@ in
           type = types.str;
           default = "";
           description = ''
-            The password corresponding to <option>database.user</option>.
+            The password corresponding to {option}`database.user`.
             Warning: this is stored in cleartext in the Nix store!
-            Use <option>database.passwordFile</option> instead.
+            Use {option}`database.passwordFile` instead.
           '';
         };
 
@@ -122,13 +123,14 @@ in
           example = "/run/keys/gogs-dbpassword";
           description = ''
             A file containing the password corresponding to
-            <option>database.user</option>.
+            {option}`database.user`.
           '';
         };
 
         path = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/data/gogs.db";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/gogs.db"'';
           description = "Path to the sqlite3 database file.";
         };
       };
@@ -142,6 +144,7 @@ in
       repositoryRoot = mkOption {
         type = types.str;
         default = "${cfg.stateDir}/repositories";
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
         description = "Path to the git repositories.";
       };
 
@@ -164,7 +167,7 @@ in
       };
 
       httpPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
         description = "HTTP listen port.";
       };
@@ -214,7 +217,6 @@ in
           sed -e "s,#secretkey#,$KEY,g" \
               -e "s,#dbpass#,$DBPASS,g" \
               -i ${runConfig}
-          chmod 440 ${runConfig} ${secretKey}
         ''}
 
         mkdir -p ${cfg.repositoryRoot}
@@ -236,6 +238,7 @@ in
         WorkingDirectory = cfg.stateDir;
         ExecStart = "${pkgs.gogs}/bin/gogs web";
         Restart = "always";
+        UMask = "0027";
       };
 
       environment = {

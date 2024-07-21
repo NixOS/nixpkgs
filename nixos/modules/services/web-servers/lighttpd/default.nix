@@ -10,7 +10,7 @@ let
 
   # List of known lighttpd modules, ordered by how the lighttpd documentation
   # recommends them being imported:
-  # http://redmine.lighttpd.net/projects/1/wiki/Server_modulesDetails
+  # https://redmine.lighttpd.net/projects/1/wiki/Server_modulesDetails
   #
   # Some modules are always imported and should not appear in the config:
   # disallowedModules = [ "mod_indexfile" "mod_dirlisting" "mod_staticfile" ];
@@ -64,7 +64,7 @@ let
   ];
 
   maybeModuleString = moduleName:
-    if elem moduleName cfg.enableModules then ''"${moduleName}"'' else "";
+    optionalString (elem moduleName cfg.enableModules) ''"${moduleName}"'';
 
   modulesIncludeString = concatStringsSep ",\n"
     (filter (x: x != "") (map maybeModuleString allKnownModules));
@@ -84,8 +84,8 @@ let
       # server.modules += () entries in each sub-service extraConfig snippet,
       # read this:
       #
-      #   http://redmine.lighttpd.net/projects/1/wiki/Server_modulesDetails
-      #   http://redmine.lighttpd.net/issues/2337
+      #   https://redmine.lighttpd.net/projects/1/wiki/Server_modulesDetails
+      #   https://redmine.lighttpd.net/issues/2337
       #
       # Basically, lighttpd doesn't want to load (or even silently ignore) a
       # module for a second time, and there is no way to check if a module has
@@ -106,15 +106,15 @@ let
       static-file.exclude-extensions = ( ".fcgi", ".php", ".rb", "~", ".inc" )
       index-file.names = ( "index.html" )
 
-      ${if cfg.mod_userdir then ''
+      ${optionalString cfg.mod_userdir ''
         userdir.path = "public_html"
-      '' else ""}
+      ''}
 
-      ${if cfg.mod_status then ''
+      ${optionalString cfg.mod_status ''
         status.status-url = "/server-status"
         status.statistics-url = "/server-statistics"
         status.config-url = "/server-config"
-      '' else ""}
+      ''}
 
       ${cfg.extraConfig}
     '';
@@ -135,14 +135,7 @@ in
         '';
       };
 
-      package = mkOption {
-        default = pkgs.lighttpd;
-        defaultText = "pkgs.lighttpd";
-        type = types.package;
-        description = ''
-          lighttpd package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "lighttpd" { };
 
       port = mkOption {
         default = 80;
@@ -177,7 +170,7 @@ in
           List of lighttpd modules to enable. Sub-services take care of
           enabling modules as needed, so this option is mainly for when you
           want to add custom stuff to
-          <option>services.lighttpd.extraConfig</option> that depends on a
+          {option}`services.lighttpd.extraConfig` that depends on a
           certain module.
         '';
       };
@@ -189,7 +182,7 @@ in
           Whether to include the list of mime types bundled with lighttpd
           (upstream). If you disable this, no mime types will be added by
           NixOS and you will have to add your own mime types in
-          <option>services.lighttpd.extraConfig</option>.
+          {option}`services.lighttpd.extraConfig`.
         '';
       };
 
@@ -218,7 +211,7 @@ in
         description = ''
           These configuration lines will be appended to the generated lighttpd
           config file. Note that this mechanism does not work when the manual
-          <option>configText</option> option is used.
+          {option}`configText` option is used.
         '';
       };
 
@@ -253,6 +246,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${cfg.package}/sbin/lighttpd -D -f ${configFile}";
+      serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR1 $MAINPID";
       # SIGINT => graceful shutdown
       serviceConfig.KillSignal = "SIGINT";
     };

@@ -1,8 +1,5 @@
 { lib, stdenv, fetchFromGitHub }:
 
-# To make use of this derivation, use
-# `programs.zsh.promptInit = "source ${pkgs.zsh-powerlevel9k}/share/zsh-powerlevel9k/powerlevel9k.zsh-theme";`
-
 stdenv.mkDerivation {
   pname = "powerlevel9k";
   version = "2017-11-10";
@@ -13,13 +10,18 @@ stdenv.mkDerivation {
     sha256 = "0v1dqg9hvycdkcvklg2njff97xwr8rah0nyldv4xm39r77f4yfvq";
   };
 
+  strictDeps = true;
   installPhase= ''
     install -D powerlevel9k.zsh-theme --target-directory=$out/share/zsh-powerlevel9k
     install -D functions/* --target-directory=$out/share/zsh-powerlevel9k/functions
   '';
 
   meta = {
-    description = "A beautiful theme for zsh";
+    description = "Beautiful theme for zsh";
+    longDescription = ''
+      To make use of this derivation, use
+      `programs.zsh.promptInit = "source ''${pkgs.zsh-powerlevel9k}/share/zsh-powerlevel9k/powerlevel9k.zsh-theme";`
+    '';
     homepage = "https://github.com/bhilburn/powerlevel9k";
     license = lib.licenses.mit;
 

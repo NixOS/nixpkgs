@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Our Own Terminal Emulation Library";
+    mainProgram = "rote-config";
     longDescription = ''
       ROTE is a simple C library for VT102 terminal emulation. It allows the
       programmer to set up virtual 'screens' and send them data. The virtual
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
       ncurses as well so that you may render the virtual screen to the real
       screen when you need to.
     '';
-    homepage = "http://rote.sourceforge.net/";
+    homepage = "https://rote.sourceforge.net/";
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

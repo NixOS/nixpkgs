@@ -1,22 +1,40 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, pyasn1
-, pyasn1-modules
-, cxxfilt
-, msgpack
-, pycparser
+{
+  lib,
+  buildPythonPackage,
+  cxxfilt,
+  fetchPypi,
+  msgpack,
+  pyasn1,
+  pyasn1-modules,
+  pycparser,
+  pyqt5,
+  pyqtwebengine,
+  pythonOlder,
+  withGui ? false,
+  wrapQtAppsHook,
 }:
+
 buildPythonPackage rec {
   pname = "vivisect";
-  version = "1.0.5";
-  disabled = isPy3k;
+  version = "1.1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f629dc0143656b06b64e2da1772deda67d37a3e048e74bd728de4a4f24bf877b";
+    hash = "sha256-URRBEZelw4s43zqtb/GrLxIksvrqHbqQWntT9jVonhU=";
   };
+
+  pythonRelaxDeps = [
+    "cxxfilt"
+    "pyasn1"
+    "pyasn1-modules"
+  ];
+
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ];
 
   propagatedBuildInputs = [
     pyasn1
@@ -24,23 +42,27 @@ buildPythonPackage rec {
     cxxfilt
     msgpack
     pycparser
+  ] ++ lib.optionals (withGui) passthru.optional-dependencies.gui;
+
+  passthru.optional-dependencies.gui = [
+    pyqt5
+    pyqtwebengine
   ];
 
-  preBuild = ''
-    sed "s@==.*'@'@" -i setup.py
+  postFixup = ''
+    wrapQtApp $out/bin/vivbin
   '';
 
   # requires another repo for test files
   doCheck = false;
 
-  pythonImportsCheck = [
-    "vivisect"
-  ];
+  pythonImportsCheck = [ "vivisect" ];
 
   meta = with lib; {
-    description = "Pure python disassembler, debugger, emulator, and static analysis framework";
+    description = "Python disassembler, debugger, emulator, and static analysis framework";
     homepage = "https://github.com/vivisect/vivisect";
+    changelog = "https://github.com/vivisect/vivisect/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

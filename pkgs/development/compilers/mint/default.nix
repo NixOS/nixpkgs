@@ -1,19 +1,15 @@
 { lib, fetchFromGitHub, crystal, openssl }:
 
 crystal.buildCrystalPackage rec {
-  version = "0.14.0";
+  version = "0.19.0";
   pname = "mint";
 
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";
     rev = version;
-    sha256 = "1mf9d0jpdb21hkzaqvwyx2171dv3hr50zhl07p85wpf0d3n5wml8";
+    hash = "sha256-s/ehv8Z71nWnxpajO7eR4MxoHppqkdleFluv+e5Vv6I=";
   };
-
-  postPatch = ''
-    export HOME=$TMP
-  '';
 
   format = "shards";
 
@@ -24,12 +20,16 @@ crystal.buildCrystalPackage rec {
 
   buildInputs = [ openssl ];
 
+  preConfigure = ''
+    export HOME=$(mktemp -d)
+  '';
+
   meta = with lib; {
-    description = "A refreshing language for the front-end web";
-    homepage = "https://mint-lang.com/";
+    description = "Refreshing language for the front-end web";
+    mainProgram = "mint";
+    homepage = "https://www.mint-lang.com/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ manveru ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
     broken = lib.versionOlder crystal.version "1.0";
   };
 }

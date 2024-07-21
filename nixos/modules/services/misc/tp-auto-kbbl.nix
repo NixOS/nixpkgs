@@ -9,20 +9,15 @@ in {
 
   options = {
     services.tp-auto-kbbl = {
-      enable = mkEnableOption "Auto toggle keyboard back-lighting on Thinkpads (and maybe other laptops) for Linux";
+      enable = mkEnableOption "auto toggle keyboard back-lighting on Thinkpads (and maybe other laptops) for Linux";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.tp-auto-kbbl;
-        defaultText = literalExpression "pkgs.tp-auto-kbbl";
-        description = "Package providing <command>tp-auto-kbbl</command>.";
-      };
+      package = mkPackageOption pkgs "tp-auto-kbbl" { };
 
       arguments = mkOption {
         type = types.listOf types.str;
         default = [ ];
         description = ''
-          List of arguments appended to <literal>./tp-auto-kbbl --device [device] [arguments]</literal>
+          List of arguments appended to `./tp-auto-kbbl --device [device] [arguments]`
         '';
       };
 

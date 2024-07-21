@@ -1,27 +1,65 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, boost17x, ceres-solver, eigen,
+{ lib, fetchFromGitHub, cmake, boost179, ceres-solver, eigen,
   freeimage, glog, libGLU, glew, qtbase,
-  cudaSupport ? false, cudatoolkit ? null }:
+  flann,
+  cgal,
+  gmp,
+  mpfr,
+  autoAddDriverRunpath,
+  config,
+  stdenv,
+  qt5,
+  xorg,
+  cudaSupport ? config.cudaSupport,
+  cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities,
+  cudaPackages
+}:
 
-assert !cudaSupport || cudatoolkit != null;
+assert cudaSupport -> cudaPackages != { };
 
-let boost_static = boost17x.override { enableStatic = true; };
+let
+  boost_static = boost179.override { enableStatic = true; };
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+
+  # TODO: migrate to redist packages
+  inherit (cudaPackages) cudatoolkit;
 in
-mkDerivation rec {
-  version = "3.6";
+stdenv'.mkDerivation rec {
+  version = "3.9.1";
   pname = "colmap";
   src = fetchFromGitHub {
      owner = "colmap";
      repo = "colmap";
      rev = version;
-     sha256 = "1kfivdmhpmdxjjf30rr57y2iy7xmdpg4h8aw3qgacv8ckfpgda3n";
+     hash = "sha256-Xb4JOttCMERwPYs5DyGKHw+f9Wik1/rdJQKbgVuygH8=";
   };
+
+  cmakeFlags = lib.optionals cudaSupport [
+    (lib.cmakeBool "CUDA_ENABLED" true)
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES"
+      (lib.strings.concatStringsSep ";"
+        (map cudaPackages.cudaFlags.dropDot
+          cudaCapabilities)))
+  ];
 
   buildInputs = [
     boost_static ceres-solver eigen
     freeimage glog libGLU glew qtbase
-  ] ++ lib.optional cudaSupport cudatoolkit;
+    flann
+    cgal
+    gmp
+    mpfr
+    xorg.libSM
+  ] ++ lib.optionals cudaSupport [
+    cudatoolkit
+    cudaPackages.cuda_cudart.static
+  ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    qt5.wrapQtAppsHook
+  ] ++ lib.optionals cudaSupport [
+    autoAddDriverRunpath
+  ];
 
   meta = with lib; {
     description = "COLMAP - Structure-From-Motion and Multi-View Stereo pipeline";
@@ -30,7 +68,7 @@ mkDerivation rec {
        with a graphical and command-line interface.
     '';
     homepage = "https://colmap.github.io/index.html";
-    license = licenses.bsd2;
+    license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lebastr ];
   };

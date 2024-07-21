@@ -1,24 +1,41 @@
-{ lib, mkXfceDerivation, automakeAddFlags, exo, gtk3, libnotify
-, libxfce4ui, libxfce4util, upower, xfconf, xfce4-panel }:
+{ lib
+, mkXfceDerivation
+, gtk3
+, libnotify
+, libxfce4ui
+, libxfce4util
+, upower
+, xfconf
+, xfce4-panel
+}:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-power-manager";
-  version = "4.16.0";
+  version = "4.18.4";
 
-  sha256 = "sha256-Qk++1db+agiU99p+QW8/WNnNqFVejV/BcnmgvfoB3OU=";
+  sha256 = "sha256-aybY+B8VC/XS6FO3XRpYuJd9Atr9Tc/Uo45q9fh3YLE=";
 
-  nativeBuildInputs = [ automakeAddFlags exo ];
-  buildInputs = [ gtk3 libnotify libxfce4ui libxfce4util upower xfconf xfce4-panel ];
+  buildInputs = [
+    gtk3
+    libnotify
+    libxfce4ui
+    libxfce4util
+    upower
+    xfconf
+    xfce4-panel
+  ];
 
+  # using /run/current-system/sw/bin instead of nix store path prevents polkit permission errors on
+  # rebuild.  See https://github.com/NixOS/nixpkgs/issues/77485
   postPatch = ''
-    substituteInPlace configure.ac.in --replace gio-2.0 gio-unix-2.0
-    automakeAddFlags src/Makefile.am xfce4_power_manager_CFLAGS GIO_CFLAGS
-    automakeAddFlags settings/Makefile.am xfce4_power_manager_settings_CFLAGS GIO_CFLAGS
+    substituteInPlace src/org.xfce.power.policy.in2 --replace-fail "@sbindir@" "/run/current-system/sw/bin"
+    substituteInPlace common/xfpm-brightness.c --replace-fail "SBINDIR" "\"/run/current-system/sw/bin\""
+    substituteInPlace src/xfpm-suspend.c --replace-fail "SBINDIR" "\"/run/current-system/sw/bin\""
   '';
 
   meta = with lib; {
-    description = "A power manager for the Xfce Desktop Environment";
+    description = "Power manager for the Xfce Desktop Environment";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

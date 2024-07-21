@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchFromGitHub
 , libtool, pkg-config, automake, autoconf, intltool
 , glib, gobject-introspection, gtk2, gtk-doc
 , clutter, clutter-gtk
@@ -8,9 +8,11 @@ stdenv.mkDerivation rec {
   pname = "libmx";
   version = "1.4.7";
 
-  src = fetchurl {
-    url = "https://github.com/clutter-project/mx/archive/${version}.tar.gz";
-    sha256 = "8a7514ea33c1dec7251d0141e24a702e7701dc9f00348cbcf1816925b7f74dbc";
+  src = fetchFromGitHub {
+    owner = "clutter-project";
+    repo = "mx";
+    rev = version;
+    sha256 = "sha256-+heIPSkg3d22xsU48UOTJ9FPLXC7zLivcnabQOM9aEk=";
   };
 
   # remove the following superfluous checks
@@ -31,11 +33,9 @@ stdenv.mkDerivation rec {
 
   configureScript = "sh autogen.sh";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config automake autoconf intltool gobject-introspection ];
   buildInputs = [
-    automake autoconf libtool
-    intltool
-    gobject-introspection glib
+    libtool
     gtk2 gtk-doc clutter clutter-gtk
   ];
 
@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.clutter-project.org/";
-    description = "A Clutter-based toolkit";
+    description = "Clutter-based toolkit";
+    mainProgram = "mx-create-image-cache";
     longDescription =
       ''Mx is a widget toolkit using Clutter that provides a set of standard
         interface elements, including buttons, progress bars, scroll bars and
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
         feature is the possibility setting style properties from a CSS format
         file.'';
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
   };
 }

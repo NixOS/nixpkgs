@@ -1,55 +1,40 @@
-{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtscript, qtsensors, qtwebengine, qtwebkit, openssl, xkeyboard_config, patchelfUnstable, wrapQtAppsHook }:
+{ stdenv
+, fetchurl
+, lib
+, callPackage
+, qt6Packages
+}:
 
-stdenv.mkDerivation rec {
-  pname = "p4v";
-  version = "2020.1.1966006";
-
-  src = fetchurl {
-    url = "https://cdist2.perforce.com/perforce/r20.1/bin.linux26x86_64/p4v.tgz";
-    sha256 = "0zc70d7jgdrd2jli338n1h05hgb7jmmv8hvq205wh78vvllrlv10";
+let
+  # Upstream replaces minor versions, so use archived URLs.
+  srcs = rec {
+    x86_64-linux = fetchurl {
+      url = "https://web.archive.org/web/20240612193642id_/https://ftp.perforce.com/perforce/r24.2/bin.linux26x86_64/p4v.tgz";
+      sha256 = "sha256-HA99fHcmgli/vVnr0M8ZJEsaZ2ZLzpG3M8S77oDYJyE=";
+    };
+    aarch64-darwin = fetchurl {
+      url = "https://web.archive.org/web/20240612194532id_/https://ftp.perforce.com/perforce/r24.2/bin.macosx12u/P4V.dmg";
+      sha256 = "sha256-PS7gfDdWspyL//YWLkrsGi5wh6SIeAry2yef1/V0d6o=";
+    };
+    # this is universal
+    x86_64-darwin = aarch64-darwin;
   };
 
-  dontBuild = true;
-  nativeBuildInputs = [ patchelfUnstable wrapQtAppsHook ];
+  mkDerivation =
+    if stdenv.isDarwin then callPackage ./darwin.nix { }
+    else qt6Packages.callPackage ./linux.nix { };
+in mkDerivation {
+  pname = "p4v";
+  version = "2024.2/2606884";
 
-  ldLibraryPath = lib.makeLibraryPath [
-      stdenv.cc.cc.lib
-      qtbase
-      qtmultimedia
-      qtscript
-      qtsensors
-      qtwebengine
-      qtwebkit
-      openssl
-  ];
-
-  dontWrapQtApps = true;
-  installPhase = ''
-    mkdir $out
-    cp -r bin $out
-    mkdir -p $out/lib
-    cp -r lib/P4VResources $out/lib
-
-    for f in $out/bin/*.bin ; do
-      patchelf --set-rpath $ldLibraryPath --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $f
-      # combining this with above breaks rpath (patchelf bug?)
-      patchelf --add-needed libstdc++.so $f \
-               --clear-symbol-version _ZNSt20bad_array_new_lengthD1Ev \
-               --clear-symbol-version _ZTVSt20bad_array_new_length \
-               --clear-symbol-version _ZTISt20bad_array_new_length \
-               $f
-      wrapQtApp $f \
-        --suffix QT_XKB_CONFIG_ROOT : ${xkeyboard_config}/share/X11/xkb
-    done
-  '';
-
-  dontFixup = true;
+  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   meta = {
-    description = "Perforce Visual Client";
+    description = "Perforce Helix Visual Client";
     homepage = "https://www.perforce.com";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfreeRedistributable;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ nathyong nioncode ];
+    platforms = builtins.attrNames srcs;
+    maintainers = with lib.maintainers; [ impl nathyong nioncode ];
   };
 }

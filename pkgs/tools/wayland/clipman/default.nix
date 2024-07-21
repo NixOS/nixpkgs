@@ -3,35 +3,40 @@
 , lib
 , wl-clipboard
 , makeWrapper
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "clipman";
-  version = "1.6.1";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
-    owner = "yory8";
+    owner = "chmouel";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aZvtgeaS3xxl5/A/Pwlbu0sI7bw2MONbEIK42IDcMy0=";
+    sha256 = "sha256-kuW74iUVLfIUWf3gaKM7IuMU1nfpU9SbSsfeZDbYGhY=";
   };
 
-  vendorSha256 = "sha256-Z/sVCJz/igPDdeczC6pemLub6X6z4ZGlBwBmRsEnXKI=";
+  vendorHash = "sha256-I1RWyjyOfppGi+Z5nvAei5zEvl0eQctcH8NP0MYSTbg=";
+
+  outputs = [ "out" "man" ];
 
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   postInstall = ''
     wrapProgram $out/bin/clipman \
       --prefix PATH : ${lib.makeBinPath [ wl-clipboard ]}
+    installManPage docs/*.1
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/yory8/clipman";
-    description = "A simple clipboard manager for Wayland";
+    homepage = "https://github.com/chmouel/clipman";
+    description = "Simple clipboard manager for Wayland";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ma27 ];
     platforms = platforms.linux;
+    mainProgram = "clipman";
   };
 }

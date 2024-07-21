@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openseachest";
-  version = "21.06.21";
+  version = "23.12";
 
   src = fetchFromGitHub {
     owner = "Seagate";
     repo = "openSeaChest";
     rev = "v${version}";
-    sha256 = "09xay3frk0yh48ww650dsjp0rx0w1m3ab3rpz5k1jizppv4kk9fi";
+    hash = "sha256-2snxruIC/93+yI7g/9cCXcms8FaoXnoyWq9py8GTwrs=";
     fetchSubmodules = true;
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A collection of command line diagnostic tools for storage devices";
+    description = "Collection of command line diagnostic tools for storage devices";
     homepage = "https://github.com/Seagate/openSeaChest";
     license = licenses.mpl20;
     maintainers = with maintainers; [ justinas ];

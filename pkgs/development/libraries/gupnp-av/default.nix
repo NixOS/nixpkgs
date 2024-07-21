@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp-av";
-  version = "0.14.0";
+  version = "0.14.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "IK7VRvyILnij8YagyLzlyEHMOkS36lKCmPvcgllvsVY=";
+    sha256 = "t5zgzEsMZtnFS8Ihg6EOVwmgAR0q8nICWUjvyrM6Pk8=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=deprecated-declarations"
+  ];
+
   mesonFlags = [
     "-Dgtk_doc=true"
   ];
@@ -56,8 +60,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://gupnp.org/";
-    description = "A collection of helpers for building AV (audio/video) applications using GUPnP";
+    description = "Collection of helpers for building AV (audio/video) applications using GUPnP";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

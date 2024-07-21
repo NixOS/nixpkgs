@@ -9,7 +9,9 @@ in
 {
   options = {
     services.radarr = {
-      enable = mkEnableOption "Radarr";
+      enable = mkEnableOption "Radarr, a UsetNet/BitTorrent movie downloader";
+
+      package = mkPackageOption pkgs "radarr" { };
 
       dataDir = mkOption {
         type = types.str;
@@ -38,9 +40,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-radarr".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
 
     systemd.services.radarr = {
       description = "Radarr";
@@ -51,7 +54,7 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.radarr}/bin/Radarr -nobrowser -data='${cfg.dataDir}'";
+        ExecStart = "${cfg.package}/bin/Radarr -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };

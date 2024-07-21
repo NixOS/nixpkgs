@@ -2,15 +2,8 @@
 let cfg = config.services.victoriametrics; in
 {
   options.services.victoriametrics = with lib; {
-    enable = mkEnableOption "victoriametrics";
-    package = mkOption {
-      type = types.package;
-      default = pkgs.victoriametrics;
-      defaultText = literalExpression "pkgs.victoriametrics";
-      description = ''
-        The VictoriaMetrics distribution to use.
-      '';
-    };
+    enable = mkEnableOption "VictoriaMetrics, a time series database, long-term remote storage for Prometheus";
+    package = mkPackageOption pkgs "victoriametrics" { };
     listenAddress = mkOption {
       default = ":8428";
       type = types.str;
@@ -29,9 +22,9 @@ let cfg = config.services.victoriametrics; in
       type = types.listOf types.str;
       default = [];
       description = ''
-        Extra options to pass to VictoriaMetrics. See the README: <link
-        xlink:href="https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/README.md" />
-        or <command>victoriametrics -help</command> for more
+        Extra options to pass to VictoriaMetrics. See the README:
+        <https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/README.md>
+        or {command}`victoriametrics -help` for more
         information.
       '';
     };

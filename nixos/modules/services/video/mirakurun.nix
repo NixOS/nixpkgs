@@ -30,7 +30,7 @@ in
           type = with types; nullOr port;
           default = 40772;
           description = ''
-            Port to listen on. If <literal>null</literal>, it won't listen on
+            Port to listen on. If `null`, it won't listen on
             any port.
           '';
         };
@@ -41,13 +41,11 @@ in
           description = ''
             Open ports in the firewall for Mirakurun.
 
-            <warning>
-              <para>
-                Exposing Mirakurun to the open internet is generally advised
-                against. Only use it inside a trusted local network, or
-                consider putting it behind a VPN if you want remote access.
-              </para>
-            </warning>
+            ::: {.warning}
+            Exposing Mirakurun to the open internet is generally advised
+            against. Only use it inside a trusted local network, or
+            consider putting it behind a VPN if you want remote access.
+            :::
           '';
         };
 
@@ -55,7 +53,7 @@ in
           type = with types; nullOr path;
           default = "/var/run/mirakurun/mirakurun.sock";
           description = ''
-            Path to unix socket to listen on. If <literal>null</literal>, it
+            Path to unix socket to listen on. If `null`, it
             won't listen on any unix sockets.
           '';
         };
@@ -82,7 +80,7 @@ in
             Options for server.yml.
 
             Documentation:
-            <link xlink:href="https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md"/>
+            <https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md>
           '';
         };
 
@@ -103,7 +101,7 @@ in
             automatically be generated at runtime.
 
             Documentation:
-            <link xlink:href="https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md"/>
+            <https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md>
           '';
         };
 
@@ -124,7 +122,7 @@ in
             will automatically be generated at runtime.
 
             Documentation:
-            <link xlink:href="https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md"/>
+            <https://github.com/Chinachu/Mirakurun/blob/master/doc/Configuration.md>
           '';
         };
       };
@@ -156,6 +154,9 @@ in
         description = "Mirakurun user";
         group = "video";
         isSystemUser = true;
+
+        # NPM insists on creating ~/.npm
+        home = "/var/cache/mirakurun";
       };
 
       services.mirakurun.serverSettings = {
@@ -164,18 +165,20 @@ in
         port = mkIf (cfg.port != null) cfg.port;
       };
 
-      systemd.tmpfiles.rules = [
-        "d '/etc/mirakurun' - ${username} ${groupname} - -"
-      ];
+      systemd.tmpfiles.settings."10-mirakurun"."/etc/mirakurun".d = {
+        user = username;
+        group = groupname;
+      };
 
       systemd.services.mirakurun = {
         description = mirakurun.meta.description;
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig = {
-          ExecStart = "${mirakurun}/bin/mirakurun-start";
+          ExecStart = "${mirakurun}/bin/mirakurun start";
           User = username;
           Group = groupname;
+          CacheDirectory = "mirakurun";
           RuntimeDirectory="mirakurun";
           StateDirectory="mirakurun";
           Nice = -10;
@@ -189,6 +192,7 @@ in
           CHANNELS_CONFIG_PATH = "/etc/mirakurun/channels.yml";
           SERVICES_DB_PATH = "/var/lib/mirakurun/services.json";
           PROGRAMS_DB_PATH = "/var/lib/mirakurun/programs.json";
+          LOGO_DATA_DIR_PATH = "/var/lib/mirakurun/logos";
           NODE_ENV = "production";
         };
 

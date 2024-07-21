@@ -1,6 +1,7 @@
 { lib
 , fetchpatch
 , fetchFromGitHub
+, fetchPypi
 , python3
 }:
 
@@ -19,6 +20,10 @@ let
           rev = "v${version}";
           sha256 = "0k4bdlwjna6f1k19jki4xqgckrinkkw8b9wihzymr1l04rwd05nw";
         };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
+          super.six
+          super.requests.optional-dependencies.socks
+        ];
         doCheck = false;
       });
     };
@@ -41,7 +46,7 @@ buildPythonPackage rec {
     future
   ];
 
-  checkInputs = with py.pkgs; [
+  nativeCheckInputs = with py.pkgs; [
     mock
     pytest
     coverage
@@ -81,7 +86,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Twitter client for the console";
+    description = "Twitter client for the console";
+    mainProgram = "turses";
     homepage = "https://github.com/louipc/turses";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];

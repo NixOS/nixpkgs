@@ -1,7 +1,7 @@
 {
   # general
   lib
-, resholvePackage
+, resholve
 , bash
 , doCheck ? true
 , doInstallCheck ? true
@@ -32,7 +32,7 @@ let
     '';
 
 in
-resholvePackage rec {
+resholve.mkDerivation rec {
   # bashup.events doesn't version yet but it has two variants with
   # differing features/performance characteristics:
   # - branch master: a variant for bash 3.2+
@@ -49,7 +49,7 @@ resholvePackage rec {
   '';
 
   inherit doCheck;
-  checkInputs = [ bash ];
+  nativeCheckInputs = [ bash ];
 
   checkPhase = ''
     runHook preCheck
@@ -68,7 +68,7 @@ resholvePackage rec {
   };
 
   inherit doInstallCheck;
-  installCheckInputs = [ bash ];
+  nativeInstallCheckInputs = [ bash ];
   installCheckPhase = ''
     runHook preInstallCheck
     ${installCheck "${bash}/bin/bash"}
@@ -77,7 +77,8 @@ resholvePackage rec {
 
   meta = with lib; {
     inherit branch;
-    description = "An event listener/callback API for creating extensible bash programs";
+    description = "Event listener/callback API for creating extensible bash programs";
+    mainProgram = "bashup.events";
     homepage = "https://github.com/bashup/events";
     license = licenses.cc0;
     maintainers = with maintainers; [ abathur ];

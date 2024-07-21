@@ -75,9 +75,9 @@ in
         description = ''
           Event handlers.
 
-          <note><para>
-            Handler can be a single command.
-          </para></note>
+          ::: {.note}
+          Handler can be a single command.
+          :::
         '';
         default = {};
         example = {

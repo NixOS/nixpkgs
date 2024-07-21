@@ -61,6 +61,35 @@ let
         };
       };
 
+      authrpc = {
+        enable = lib.mkEnableOption "Go Ethereum Auth RPC API";
+        address = mkOption {
+          type = types.str;
+          default = "127.0.0.1";
+          description = "Listen address of Go Ethereum Auth RPC API.";
+        };
+
+        port = mkOption {
+          type = types.port;
+          default = 8551;
+          description = "Port number of Go Ethereum Auth RPC API.";
+        };
+
+        vhosts = mkOption {
+          type = types.nullOr (types.listOf types.str);
+          default = ["localhost"];
+          description = "List of virtual hostnames from which to accept requests.";
+          example = ["localhost" "geth.example.org"];
+        };
+
+        jwtsecret = mkOption {
+          type = types.str;
+          default = "";
+          description = "Path to a JWT secret for authenticated RPC endpoint.";
+          example = "/var/run/geth/jwtsecret";
+        };
+      };
+
       metrics = {
         enable = lib.mkEnableOption "Go Ethereum prometheus metrics";
         address = mkOption {
@@ -106,12 +135,7 @@ let
         default = [];
       };
 
-      package = mkOption {
-        default = pkgs.go-ethereum.geth;
-        defaultText = literalExpression "pkgs.go-ethereum.geth";
-        type = types.package;
-        description = "Package to use as Go Ethereum node.";
-      };
+      package = mkPackageOption pkgs [ "go-ethereum" "geth" ] { };
     };
   };
 in
@@ -136,7 +160,10 @@ in
       cfg.package
     ]) eachGeth);
 
-    systemd.services = mapAttrs' (gethName: cfg: (
+    systemd.services = mapAttrs' (gethName: cfg: let
+      stateDir = "goethereum/${gethName}/${if (cfg.network == null) then "mainnet" else cfg.network}";
+      dataDir = "/var/lib/${stateDir}";
+    in (
       nameValuePair "geth-${gethName}" (mkIf cfg.enable {
       description = "Go Ethereum node (${gethName})";
       wantedBy = [ "multi-user.target" ];
@@ -145,7 +172,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         Restart = "always";
-        StateDirectory = "goethereum/${gethName}/${if (cfg.network == null) then "mainnet" else cfg.network}";
+        StateDirectory = stateDir;
 
         # Hardening measures
         PrivateTmp = "true";
@@ -164,13 +191,15 @@ in
           --gcmode ${cfg.gcmode} \
           --port ${toString cfg.port} \
           --maxpeers ${toString cfg.maxpeers} \
-          ${if cfg.http.enable then ''--http --http.addr ${cfg.http.address} --http.port ${toString cfg.http.port}'' else ""} \
+          ${optionalString cfg.http.enable ''--http --http.addr ${cfg.http.address} --http.port ${toString cfg.http.port}''} \
           ${optionalString (cfg.http.apis != null) ''--http.api ${lib.concatStringsSep "," cfg.http.apis}''} \
-          ${if cfg.websocket.enable then ''--ws --ws.addr ${cfg.websocket.address} --ws.port ${toString cfg.websocket.port}'' else ""} \
+          ${optionalString cfg.websocket.enable ''--ws --ws.addr ${cfg.websocket.address} --ws.port ${toString cfg.websocket.port}''} \
           ${optionalString (cfg.websocket.apis != null) ''--ws.api ${lib.concatStringsSep "," cfg.websocket.apis}''} \
           ${optionalString cfg.metrics.enable ''--metrics --metrics.addr ${cfg.metrics.address} --metrics.port ${toString cfg.metrics.port}''} \
+          --authrpc.addr ${cfg.authrpc.address} --authrpc.port ${toString cfg.authrpc.port} --authrpc.vhosts ${lib.concatStringsSep "," cfg.authrpc.vhosts} \
+          ${if (cfg.authrpc.jwtsecret != "") then ''--authrpc.jwtsecret ${cfg.authrpc.jwtsecret}'' else ''--authrpc.jwtsecret ${dataDir}/geth/jwtsecret''} \
           ${lib.escapeShellArgs cfg.extraArgs} \
-          --datadir /var/lib/goethereum/${gethName}/${if (cfg.network == null) then "mainnet" else cfg.network}
+          --datadir ${dataDir}
       '';
     }))) eachGeth;
 

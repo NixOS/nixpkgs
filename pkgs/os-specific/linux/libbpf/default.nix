@@ -1,31 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, libelf, zlib
-, fetchpatch
-}:
+{ fetchFromGitHub
+, elfutils
+, pkg-config
+, stdenv
+, zlib
+, lib
 
-with builtins;
+# for passthru.tests
+, knot-dns
+, nixosTests
+, systemd
+, tracee
+}:
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "0.6.0";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
-    owner  = "libbpf";
-    repo   = "libbpf";
-    rev    = "v${version}";
-    sha256 = "sha256-p9wUDC7r6+ElbheNkTkZW4eMNAvPbvpUyQjTjCE34ck=";
+    owner = "libbpf";
+    repo = "libbpf";
+    rev = "v${version}";
+    sha256 = "sha256-lcIOgghlBKrDCBDdO0hryjt8KADQd6aroQMun3ein2o=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libelf zlib ];
+  buildInputs = [ elfutils zlib ];
 
-  sourceRoot = "source/src";
   enableParallelBuilding = true;
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" "-C src" ];
+
+  passthru.tests = {
+    inherit knot-dns tracee;
+    bpf = nixosTests.bpf;
+    systemd = systemd.override { withLibBPF = true; };
+  };
 
   postInstall = ''
     # install linux's libbpf-compatible linux/btf.h
-    install -Dm444 ../include/uapi/linux/btf.h -t $out/include/linux
+    install -Dm444 include/uapi/linux/*.h -t $out/include/linux
   '';
 
   # FIXME: Multi-output requires some fixes to the way the pkg-config file is
@@ -35,10 +47,10 @@ stdenv.mkDerivation rec {
   # outputs = [ "out" "dev" ];
 
   meta = with lib; {
-    description = "Upstream mirror of libbpf";
-    homepage    = "https://github.com/libbpf/libbpf";
-    license     = with licenses; [ lgpl21 /* or */ bsd2 ];
+    description = "Library for loading eBPF programs and reading and manipulating eBPF objects from user-space";
+    homepage = "https://github.com/libbpf/libbpf";
+    license = with licenses; [ lgpl21 /* or */ bsd2 ];
     maintainers = with maintainers; [ thoughtpolice vcunat saschagrunert martinetd ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

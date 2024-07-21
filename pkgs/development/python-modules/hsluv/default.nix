@@ -1,25 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hsluv";
-  version = "5.0.2";
+  version = "5.0.4";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "hsluv";
     repo = "hsluv-python";
     rev = "v${version}";
-    sha256 = "0r0w8ycjwfg3pmzjghzrs0lkam93fzvgiqvrwh3nl9jnqlpw7v7j";
+    hash = "sha256-bjivmPTU3Gp3pcC0ru4GSZANdhPqS1QSTMeiPGN8GCI=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "hsluv" ];
 

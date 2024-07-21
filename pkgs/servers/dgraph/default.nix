@@ -1,30 +1,37 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, jemalloc, nodejs }:
 
 buildGoModule rec {
   pname = "dgraph";
-  version = "20.07.3";
+  version = "24.0.0";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "dgraph";
     rev = "v${version}";
-    sha256 = "sha256-yuKXcxewt64T0ToDPid37WUEhwLu+yt4tjhDQobj/Ls=";
+    sha256 = "sha256-vKn1dTP1SOQs9oCPw0R5956D6mR5UuW9GbqGilxeV3c=";
   };
 
-  vendorSha256 = "sha256-2Ub0qdEaVSHHE5K0bNSXJFukGeSSXNpIBoUldF8jGpI=";
+  vendorHash = "sha256-/Wpnj99yHyEc7uPBo00k6lJawX5HqqVwEHavyH3luaY=";
 
   doCheck = false;
 
+  ldflags = [
+    "-X github.com/dgraph-io/dgraph/x.dgraphVersion=${version}-oss"
+  ];
+
+  tags = [
+    "oss"
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
 
-  # see licensing
-  buildPhase = ''
-    make oss BUILD_VERSION=${version}
-  '';
+  # todo those dependencies are required in the makefile, but verify how they are used
+  # actually
+  buildInputs = [ jemalloc nodejs ];
 
-  installPhase = ''
-    install dgraph/dgraph -Dt $out/bin
+  subPackages = [ "dgraph" ];
 
+  postInstall = ''
     for shell in bash zsh; do
       $out/bin/dgraph completion $shell > dgraph.$shell
       installShellCompletion dgraph.$shell
@@ -37,6 +44,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ sigma ];
     # Apache 2.0 because we use only build "oss"
     license = licenses.asl20;
-    platforms = platforms.unix;
+    mainProgram = "dgraph";
   };
 }

@@ -1,30 +1,38 @@
-{ lib, buildPythonPackage, fetchFromGitHub, django, pytest, pytest-django }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  pytest,
+  pytest-django,
+  python,
+}:
 
 buildPythonPackage rec {
   pname = "django-picklefield";
-  version = "3.0.1";
+  version = "3.2.0";
+  format = "setuptools";
 
   # The PyPi source doesn't contain tests
   src = fetchFromGitHub {
     owner = "gintas";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ni7bc86k0ra4pc8zv451pzlpkhs1nyil1sq9jdb4m2mib87b5fk";
+    sha256 = "sha256-UMMbJoSHWcdumZOFPhKNUjThGzU/8nhP2J8YsDjgbHo=";
   };
 
   propagatedBuildInputs = [ django ];
 
-  checkInputs = [ pytest pytest-django ];
-
   checkPhase = ''
-    PYTHONPATH="$(pwd):$PYTHONPATH" \
-    DJANGO_SETTINGS_MODULE=tests.settings \
-      pytest tests/tests.py
+    runHook preCheck
+    ${python.interpreter} -m django test --settings=tests.settings
+    runHook postCheck
   '';
 
-  meta = {
-    description = "A pickled object field for Django";
+  meta = with lib; {
+    description = "Pickled object field for Django";
     homepage = "https://github.com/gintas/django-picklefield";
-    license = lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

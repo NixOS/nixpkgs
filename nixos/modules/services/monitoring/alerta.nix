@@ -24,7 +24,7 @@ in
     enable = mkEnableOption "alerta";
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 5000;
       description = "Port of Alerta";
     };
@@ -79,9 +79,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.logDir}' - alerta alerta - -"
-    ];
+    systemd.tmpfiles.settings."10-alerta".${cfg.logDir}.d = {
+      user = "alerta";
+      group = "alerta";
+    };
 
     systemd.services.alerta = {
       description = "Alerta Monitoring System";

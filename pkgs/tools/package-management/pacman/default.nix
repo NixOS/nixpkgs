@@ -1,41 +1,134 @@
-{ stdenv, lib, fetchurl, pkg-config, m4, perl, libarchive, openssl, zlib, bzip2,
-xz, curl, runtimeShell }:
+{ lib
+, stdenv
+, fetchFromGitLab
+, asciidoc
+, binutils
+, coreutils
+, curl
+, gpgme
+, installShellFiles
+, libarchive
+, makeWrapper
+, meson
+, ninja
+, openssl
+, perl
+, pkg-config
+, zlib
 
-stdenv.mkDerivation rec {
+# Compression tools in scripts/libmakepkg/util/compress.sh.in
+, gzip
+, bzip2
+, xz
+, zstd
+, lrzip
+, lzop
+, ncompress
+, lz4
+, lzip
+
+# pacman-key runtime dependencies
+, gawk
+, gettext
+, gnugrep
+, gnupg
+
+# Tells pacman where to find ALPM hooks provided by packages.
+# This path is very likely to be used in an Arch-like root.
+, sysHookDir ? "/usr/share/libalpm/hooks/"
+}:
+
+stdenv.mkDerivation (final: {
   pname = "pacman";
-  version = "5.2.2";
+  version = "7.0.0";
 
-  src = fetchurl {
-    url = "https://sources.archlinux.org/other/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1829jcc300fxidr3cahx5kpnxkpg500daqgn2782hg5m5ygil85v";
+  src = fetchFromGitLab {
+    domain = "gitlab.archlinux.org";
+    owner = "pacman";
+    repo = "pacman";
+    rev = "v${final.version}";
+    hash = "sha256-ejOBxN2HjV4dZwFA7zvPz3JUJa0xiJ/jZ+evEQYG1Mc=";
   };
 
-  enableParallelBuilding = true;
+  strictDeps = true;
 
-  configureFlags = [
-    # trying to build docs fails with a2x errors, unable to fix through asciidoc
-    "--disable-doc"
-
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--with-scriptlet-shell=${runtimeShell}"
+  nativeBuildInputs = [
+    asciidoc
+    gettext
+    installShellFiles
+    libarchive
+    makeWrapper
+    meson
+    ninja
+    pkg-config
   ];
 
-  installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
+  buildInputs = [
+    curl
+    gpgme
+    libarchive
+    openssl
+    perl
+    zlib
+  ];
 
-  nativeBuildInputs = [ pkg-config m4 ];
-  buildInputs = [ curl perl libarchive openssl zlib bzip2 xz ];
+  patches = [
+    ./dont-create-empty-dirs.patch
+  ];
 
-  postFixup = ''
-    substituteInPlace $out/bin/repo-add \
+  postPatch = let compressionTools = [
+    gzip
+    bzip2
+    xz
+    zstd
+    lrzip
+    lzop
+    ncompress
+    lz4
+    lzip
+  ]; in ''
+    echo 'export PATH=${lib.makeBinPath compressionTools}:$PATH' >> scripts/libmakepkg/util/compress.sh.in
+    substituteInPlace meson.build \
+      --replace "install_dir : SYSCONFDIR" "install_dir : '$out/etc'" \
+      --replace "join_paths(DATAROOTDIR, 'libalpm/hooks/')" "'${sysHookDir}'" \
+      --replace "join_paths(PREFIX, DATAROOTDIR, get_option('keyringdir'))" "'\$KEYRING_IMPORT_DIR'" \
+      --replace "join_paths(SYSCONFDIR, 'makepkg.conf.d/')" "'$out/etc/makepkg.conf.d/'"
+    substituteInPlace doc/meson.build \
+      --replace "/bin/true" "${coreutils}/bin/true"
+    substituteInPlace scripts/repo-add.sh.in \
       --replace bsdtar "${libarchive}/bin/bsdtar"
+    substituteInPlace scripts/pacman-key.sh.in \
+      --replace "local KEYRING_IMPORT_DIR='@keyringdir@'" "" \
+      --subst-var-by keyringdir '\$KEYRING_IMPORT_DIR'
+  '';
+
+  mesonFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ];
+
+  postInstall = ''
+    installShellCompletion --bash scripts/pacman --zsh scripts/_pacman
+    wrapProgram $out/bin/makepkg \
+      --prefix PATH : ${lib.makeBinPath [ binutils ]}
+    wrapProgram $out/bin/pacman-key \
+      --prefix PATH : ${lib.makeBinPath [
+        "${placeholder "out"}"
+        coreutils
+        gawk
+        gettext
+        gnugrep
+        gnupg
+      ]}
   '';
 
   meta = with lib; {
-    description = "A simple library-based package manager";
-    homepage = "https://www.archlinux.org/pacman/";
-    license = licenses.gpl2;
+    description = "Simple library-based package manager";
+    homepage = "https://archlinux.org/pacman/";
+    changelog = "https://gitlab.archlinux.org/pacman/pacman/-/raw/v${final.version}/NEWS";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mt-caret ];
+    mainProgram = "pacman";
+    maintainers = with maintainers; [ samlukeyes123 ];
   };
-}
+})

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fonttosfnt, mkfontdir }:
+{ lib, stdenv, fetchFromGitHub, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "cherry";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "13zkxwp6r6kcxv4x459vwscr0n0sik4a3kcz5xnmlpvcdnbxi586";
   };
 
-  nativeBuildInputs = [ fonttosfnt mkfontdir ];
+  nativeBuildInputs = [ xorg.fonttosfnt xorg.mkfontdir ];
 
   buildPhase = ''
     patchShebangs make.sh
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "cherry font";
     homepage = "https://github.com/turquoise-hexagon/cherry";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

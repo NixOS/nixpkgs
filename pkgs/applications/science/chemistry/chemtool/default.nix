@@ -5,7 +5,7 @@
 , libX11
 , gtk2
 , fig2dev
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -17,12 +17,18 @@ stdenv.mkDerivation rec {
     sha256 = "hhYaBGE4azNKX/sXzfCUpJGUGIRngnL0V0mBNRTdr8s=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
   buildInputs = [
     libX11
     gtk2
     fig2dev
   ];
+
+  # Workaround build on -fno-common toolchains like upstream gcc-10.
+  # Otherwise built fails as:
+  #   ld: inout.o:/build/chemtool-1.6.14/ct1.h:279: multiple definition of
+  #     `outtype'; draw.o:/build/chemtool-1.6.14/ct1.h:279: first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ fig2dev ]}")
@@ -46,5 +52,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

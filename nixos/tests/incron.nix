@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
   name = "incron";
   meta.maintainers = [ lib.maintainers.aanderse ];
 
-  machine =
+  nodes.machine =
     { ... }:
     { services.incron.enable = true;
       services.incron.extraPackages = [ pkgs.coreutils ];
@@ -13,9 +13,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       '';
 
       # ensure the directory to be monitored exists before incron is started
-      system.activationScripts.incronTest = ''
-        mkdir /test
-      '';
+      systemd.tmpfiles.settings.incron-test = {
+        "/test".d = { };
+      };
     };
 
   testScript = ''

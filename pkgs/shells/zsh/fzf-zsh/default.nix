@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1irjmxhcg1fm4g8p3psjqk7sz5qhj5kw73pyhv91njvpdhn9l26z";
   };
 
+  strictDeps = true;
   postPatch = ''
     substituteInPlace fzf-zsh.plugin.zsh \
       --replace \
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wyntau/fzf-zsh";
     description = "wrap fzf to use in oh-my-zsh";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

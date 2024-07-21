@@ -11,13 +11,29 @@ let
     extraCertificateFiles = cfg.certificateFiles;
     extraCertificateStrings = cfg.certificates;
   };
-  caBundle = "${cacertPackage}/etc/ssl/certs/ca-bundle.crt";
+  caBundleName = if cfg.useCompatibleBundle then "ca-no-trust-rules-bundle.crt" else "ca-bundle.crt";
+  caBundle = "${cacertPackage}/etc/ssl/certs/${caBundleName}";
 
 in
 
 {
 
   options = {
+    security.pki.installCACerts = mkEnableOption "installing CA certificates to the system" // {
+      default = true;
+      internal = true;
+    };
+
+    security.pki.useCompatibleBundle = mkEnableOption ''usage of a compatibility bundle.
+
+      Such a bundle consists exclusively of `BEGIN CERTIFICATE` and no `BEGIN TRUSTED CERTIFICATE`,
+      which is an OpenSSL specific PEM format.
+
+      It is known to be incompatible with certain software stacks.
+
+      Nevertheless, enabling this will strip all additional trust rules provided by the
+      certificates themselves. This can have security consequences depending on your usecases
+    '';
 
     security.pki.certificateFiles = mkOption {
       type = types.listOf types.path;
@@ -26,9 +42,9 @@ in
       description = ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
-        <filename>/etc/ssl/certs/ca-certificates.crt</filename>, which is
+        {file}`/etc/ssl/certs/ca-certificates.crt`, which is
         used by many programs that use OpenSSL, such as
-        <command>curl</command> and <command>git</command>.
+        {command}`curl` and {command}`git`.
       '';
     };
 
@@ -63,14 +79,14 @@ in
       description = ''
         A list of blacklisted CA certificate names that won't be imported from
         the Mozilla Trust Store into
-        <filename>/etc/ssl/certs/ca-certificates.crt</filename>. Use the
+        {file}`/etc/ssl/certs/ca-certificates.crt`. Use the
         names from that file.
       '';
     };
 
   };
 
-  config = {
+  config = mkIf cfg.installCACerts {
 
     # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
     environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;

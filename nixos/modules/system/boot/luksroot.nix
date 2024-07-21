@@ -1,10 +1,13 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, utils, pkgs, ... }:
 
 with lib;
 
 let
   luks = config.boot.initrd.luks;
+  clevis = config.boot.initrd.clevis;
+  systemd = config.boot.initrd.systemd;
   kernelPackages = config.boot.kernelPackages;
+  defaultPrio = (mkOptionDefault {}).priority;
 
   commonFunctions = ''
     die() {
@@ -129,7 +132,7 @@ let
     ''}
 
     # Disable all input echo for the whole stage. We could use read -s
-    # instead but that would ocasionally leak characters between read
+    # instead but that would occasionally leak characters between read
     # invocations.
     stty -echo
   '';
@@ -147,6 +150,7 @@ let
            + optionalString dev.bypassWorkqueues " --perf-no_read_workqueue --perf-no_write_workqueue"
            + optionalString (dev.header != null) " --header=${dev.header}";
     cschange = "cryptsetup luksChangeKey ${dev.device} ${optionalString (dev.header != null) "--header=${dev.header}"}";
+    fido2luksCredentials = dev.fido2.credentials ++ optional (dev.fido2.credential != null) dev.fido2.credential;
   in ''
     # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
     # if on a USB drive.
@@ -155,6 +159,20 @@ let
     ${optionalString (dev.header != null) ''
       wait_target "header" ${dev.header} || die "${dev.header} is unavailable"
     ''}
+
+    try_empty_passphrase() {
+        ${if dev.tryEmptyPassphrase then ''
+             echo "Trying empty passphrase!"
+             echo "" | ${csopen}
+             cs_status=$?
+             if [ $cs_status -eq 0 ]; then
+                 return 0
+             else
+                 return 1
+             fi
+        '' else "return 1"}
+    }
+
 
     do_open_passphrase() {
         local passphrase
@@ -210,13 +228,27 @@ let
             ${csopen} --key-file=${dev.keyFile} \
               ${optionalString (dev.keyFileSize != null) "--keyfile-size=${toString dev.keyFileSize}"} \
               ${optionalString (dev.keyFileOffset != null) "--keyfile-offset=${toString dev.keyFileOffset}"}
+            cs_status=$?
+            if [ $cs_status -ne 0 ]; then
+              echo "Key File ${dev.keyFile} failed!"
+              if ! try_empty_passphrase; then
+                ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
+                echo " - failing back to interactive password prompt"
+                do_open_passphrase
+              fi
+            fi
         else
-            ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
-            echo " - failing back to interactive password prompt"
-            do_open_passphrase
+            # If the key file never shows up we should also try the empty passphrase
+            if ! try_empty_passphrase; then
+               ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
+               echo " - failing back to interactive password prompt"
+               do_open_passphrase
+            fi
         fi
         '' else ''
-        do_open_passphrase
+           if ! try_empty_passphrase; then
+              do_open_passphrase
+           fi
         ''}
     }
 
@@ -321,6 +353,12 @@ let
 
         new_response="$(ykchalresp -${toString dev.yubikey.slot} -x $new_challenge 2>/dev/null)"
 
+        if [ -z "$new_response" ]; then
+            echo "Warning: Unable to generate new challenge response, current challenge persists!"
+            umount /crypt-storage
+            return
+        fi
+
         if [ ! -z "$k_user" ]; then
             new_k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response | rbtohex)"
         else
@@ -416,7 +454,7 @@ let
     }
     ''}
 
-    ${optionalString (luks.fido2Support && (dev.fido2.credential != null)) ''
+    ${optionalString (luks.fido2Support && fido2luksCredentials != []) ''
 
     open_with_hardware() {
       local passsphrase
@@ -432,7 +470,7 @@ let
           echo "Please move your mouse to create needed randomness."
         ''}
           echo "Waiting for your FIDO2 device..."
-          fido2luks open ${dev.device} ${dev.name} ${dev.fido2.credential} --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
+          fido2luks open${optionalString dev.allowDiscards " --allow-discards"} ${dev.device} ${dev.name} "${builtins.concatStringsSep "," fido2luksCredentials}" --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
         if [ $? -ne 0 ]; then
           echo "No FIDO2 key found, falling back to normal open procedure"
           open_normally
@@ -443,7 +481,7 @@ let
     # commands to run right before we mount our device
     ${dev.preOpenCommands}
 
-    ${if (luks.yubikeySupport && (dev.yubikey != null)) || (luks.gpgSupport && (dev.gpgCard != null)) || (luks.fido2Support && (dev.fido2.credential != null)) then ''
+    ${if (luks.yubikeySupport && (dev.yubikey != null)) || (luks.gpgSupport && (dev.gpgCard != null)) || (luks.fido2Support && fido2luksCredentials != []) then ''
     open_with_hardware
     '' else ''
     open_normally
@@ -474,6 +512,19 @@ let
   preLVM = filterAttrs (n: v: v.preLVM) luks.devices;
   postLVM = filterAttrs (n: v: !v.preLVM) luks.devices;
 
+
+  stage1Crypttab = pkgs.writeText "initrd-crypttab" (lib.concatLines (lib.mapAttrsToList (n: v: let
+    opts = v.crypttabExtraOpts
+      ++ optional v.allowDiscards "discard"
+      ++ optionals v.bypassWorkqueues [ "no-read-workqueue" "no-write-workqueue" ]
+      ++ optional (v.header != null) "header=${v.header}"
+      ++ optional (v.keyFileOffset != null) "keyfile-offset=${toString v.keyFileOffset}"
+      ++ optional (v.keyFileSize != null) "keyfile-size=${toString v.keyFileSize}"
+      ++ optional (v.keyFileTimeout != null) "keyfile-timeout=${builtins.toString v.keyFileTimeout}s"
+      ++ optional (v.tryEmptyPassphrase) "try-empty-password=true"
+    ;
+  in "${n} ${v.device} ${if v.keyFile == null then "-" else v.keyFile} ${lib.concatStringsSep "," opts}") luks.devices));
+
 in
 {
   imports = [
@@ -488,7 +539,7 @@ in
       description = ''
         Unless enabled, encryption keys can be easily recovered by an attacker with physical
         access to any machine with PCMCIA, ExpressCard, ThunderBolt or FireWire port.
-        More information is available at <link xlink:href="http://en.wikipedia.org/wiki/DMA_attack"/>.
+        More information is available at <https://en.wikipedia.org/wiki/DMA_attack>.
 
         This option blacklists FireWire drivers, but doesn't remove them. You can manually
         load the drivers if you need to use a FireWire device, but don't forget to unload them!
@@ -528,8 +579,8 @@ in
         Useful for mounting a number of devices that use the same
         passphrase without retyping it several times.
 
-        Such setup can be useful if you use <command>cryptsetup
-        luksSuspend</command>. Different LUKS devices will still have
+        Such setup can be useful if you use {command}`cryptsetup luksSuspend`.
+        Different LUKS devices will still have
         different master keys even when using the same passphrase.
       '';
     };
@@ -541,18 +592,18 @@ in
         The encrypted disk that should be opened before the root
         filesystem is mounted. Both LVM-over-LUKS and LUKS-over-LVM
         setups are supported. The unencrypted devices can be accessed as
-        <filename>/dev/mapper/<replaceable>name</replaceable></filename>.
+        {file}`/dev/mapper/«name»`.
       '';
 
       type = with types; attrsOf (submodule (
-        { name, ... }: { options = {
+        { config, name, ... }: { options = {
 
           name = mkOption {
             visible = false;
             default = name;
             example = "luksroot";
             type = types.str;
-            description = "Name of the unencrypted device in <filename>/dev/mapper</filename>.";
+            description = "Name of the unencrypted device in {file}`/dev/mapper`.";
           };
 
           device = mkOption {
@@ -582,6 +633,25 @@ in
             '';
           };
 
+          tryEmptyPassphrase = mkOption {
+            default = false;
+            type = types.bool;
+            description = ''
+              If keyFile fails then try an empty passphrase first before
+              prompting for password.
+            '';
+          };
+
+          keyFileTimeout = mkOption {
+            default = null;
+            example = 5;
+            type = types.nullOr types.int;
+            description = ''
+              The amount of time in seconds for a keyFile to appear before
+              timing out and trying passwords.
+            '';
+          };
+
           keyFileSize = mkOption {
             default = null;
             example = 4096;
@@ -590,8 +660,8 @@ in
               The size of the key file. Use this if only the beginning of the
               key file should be used as a key (often the case if a raw device
               or partition is used as key file). If not specified, the whole
-              <literal>keyFile</literal> will be used decryption, instead of just
-              the first <literal>keyFileSize</literal> bytes.
+              `keyFile` will be used decryption, instead of just
+              the first `keyFileSize` bytes.
             '';
           };
 
@@ -601,10 +671,10 @@ in
             type = types.nullOr types.int;
             description = ''
               The offset of the key file. Use this in combination with
-              <literal>keyFileSize</literal> to use part of a file as key file
+              `keyFileSize` to use part of a file as key file
               (often the case if a raw device or partition is used as a key file).
               If not specified, the key begins at the first byte of
-              <literal>keyFile</literal>.
+              `keyFile`.
             '';
           };
 
@@ -633,7 +703,7 @@ in
             description = ''
               Whether to bypass dm-crypt's internal read and write workqueues.
               Enabling this should improve performance on SSDs; see
-              <link xlink:href="https://wiki.archlinux.org/index.php/Dm-crypt/Specialties#Disable_workqueue_for_increased_solid_state_drive_(SSD)_performance">here</link>
+              [here](https://wiki.archlinux.org/index.php/Dm-crypt/Specialties#Disable_workqueue_for_increased_solid_state_drive_(SSD)_performance)
               for more information. Needs Linux 5.9 or later.
             '';
           };
@@ -684,6 +754,17 @@ in
               description = "The FIDO2 credential ID.";
             };
 
+            credentials = mkOption {
+              default = [];
+              example = [ "f1d00200d8dc783f7fb1e10ace8da27f8312d72692abfca2f7e4960a73f48e82e1f7571f6ebfcee9fb434f9886ccc8fcc52a6614d8d2" ];
+              type = types.listOf types.str;
+              description = ''
+                List of FIDO2 credential IDs.
+
+                Use this if you have multiple FIDO2 keys you want to use for the same luks device.
+              '';
+            };
+
             gracePeriod = mkOption {
               default = 10;
               type = types.int;
@@ -696,7 +777,7 @@ in
               description = ''
                 Defines whatever to use an empty string as a default salt.
 
-                Enable only when your device is PIN protected, such as <link xlink:href="https://trezor.io/">Trezor</link>.
+                Enable only when your device is PIN protected, such as [Trezor](https://trezor.io/).
               '';
             };
           };
@@ -788,7 +869,7 @@ in
             '';
             description = ''
               Commands that should be run right before we try to mount our LUKS device.
-              This can be useful, if the keys needed to open the drive is on another partion.
+              This can be useful, if the keys needed to open the drive is on another partition.
             '';
           };
 
@@ -802,6 +883,31 @@ in
               Commands that should be run right after we have mounted our LUKS device.
             '';
           };
+
+          crypttabExtraOpts = mkOption {
+            type = with types; listOf singleLineStr;
+            default = [];
+            example = [ "_netdev" ];
+            visible = false;
+            description = ''
+              Only used with systemd stage 1.
+
+              Extra options to append to the last column of the generated crypttab file.
+            '';
+          };
+        };
+
+        config = mkIf (clevis.enable && (hasAttr name clevis.devices)) {
+          preOpenCommands = mkIf (!systemd.enable) ''
+            mkdir -p /clevis-${name}
+            mount -t ramfs none /clevis-${name}
+            clevis decrypt < /etc/clevis/${name}.jwe > /clevis-${name}/decrypted
+          '';
+          keyFile = "/clevis-${name}/decrypted";
+          fallbackToPassword = !systemd.enable;
+          postOpenCommands = mkIf (!systemd.enable) ''
+            umount /clevis-${name}
+          '';
         };
       }));
     };
@@ -853,6 +959,39 @@ in
                       -> versionAtLeast kernelPackages.kernel.version "5.9";
           message = "boot.initrd.luks.devices.<name>.bypassWorkqueues is not supported for kernels older than 5.9";
         }
+
+        { assertion = !config.boot.initrd.systemd.enable -> all (x: x.keyFileTimeout == null) (attrValues luks.devices);
+          message = "boot.initrd.luks.devices.<name>.keyFileTimeout is only supported for systemd initrd";
+        }
+
+        { assertion = config.boot.initrd.systemd.enable -> all (dev: !dev.fallbackToPassword) (attrValues luks.devices);
+          message = "boot.initrd.luks.devices.<name>.fallbackToPassword is implied by systemd stage 1.";
+        }
+        { assertion = config.boot.initrd.systemd.enable -> all (dev: dev.preLVM) (attrValues luks.devices);
+          message = "boot.initrd.luks.devices.<name>.preLVM is not used by systemd stage 1.";
+        }
+        { assertion = config.boot.initrd.systemd.enable -> options.boot.initrd.luks.reusePassphrases.highestPrio == defaultPrio;
+          message = "boot.initrd.luks.reusePassphrases has no effect with systemd stage 1.";
+        }
+        { assertion = config.boot.initrd.systemd.enable -> all (dev: dev.preOpenCommands == "" && dev.postOpenCommands == "") (attrValues luks.devices);
+          message = "boot.initrd.luks.devices.<name>.preOpenCommands and postOpenCommands is not supported by systemd stage 1. Please bind a service to cryptsetup.target or cryptsetup-pre.target instead.";
+        }
+        # TODO
+        { assertion = config.boot.initrd.systemd.enable -> !luks.gpgSupport;
+          message = "systemd stage 1 does not support GPG smartcards yet.";
+        }
+        { assertion = config.boot.initrd.systemd.enable -> !luks.fido2Support;
+          message = ''
+            systemd stage 1 does not support configuring FIDO2 unlocking through `boot.initrd.luks.fido2Support`.
+            Use systemd-cryptenroll(1) to configure FIDO2 support, and set
+            `boot.initrd.luks.devices.''${DEVICE}.crypttabExtraOpts` as appropriate per crypttab(5)
+            (e.g. `fido2-device=auto`).
+          '';
+        }
+        # TODO
+        { assertion = config.boot.initrd.systemd.enable -> !luks.yubikeySupport;
+          message = "systemd stage 1 does not support Yubikeys yet.";
+        }
       ];
 
     # actually, sbp2 driver is the one enabling the DMA attack, but this needs to be tested
@@ -864,10 +1003,17 @@ in
       ++ luks.cryptoModules
       # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
       # remove once 'modprobe --show-depends xts' shows ecb as a dependency
-      ++ (if builtins.elem "xts" luks.cryptoModules then ["ecb"] else []);
+      ++ (optional (builtins.elem "xts" luks.cryptoModules) "ecb");
 
     # copy the cryptsetup binary and it's dependencies
-    boot.initrd.extraUtilsCommands = ''
+    boot.initrd.extraUtilsCommands = let
+      pbkdf2-sha512 = pkgs.runCommandCC "pbkdf2-sha512" { buildInputs = [ pkgs.openssl ]; } ''
+        mkdir -p "$out/bin"
+        cc -O3 -lcrypto ${./pbkdf2-sha512.c} -o "$out/bin/pbkdf2-sha512"
+        strip -s "$out/bin/pbkdf2-sha512"
+      '';
+    in
+    mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
       copy_bin_and_libs ${askPass}/bin/cryptsetup-askpass
       sed -i s,/bin/sh,$out/bin/sh, $out/bin/cryptsetup-askpass
@@ -877,9 +1023,7 @@ in
         copy_bin_and_libs ${pkgs.yubikey-personalization}/bin/ykinfo
         copy_bin_and_libs ${pkgs.openssl.bin}/bin/openssl
 
-        cc -O3 -I${pkgs.openssl.dev}/include -L${pkgs.openssl.out}/lib ${./pbkdf2-sha512.c} -o pbkdf2-sha512 -lcrypto
-        strip -s pbkdf2-sha512
-        copy_bin_and_libs pbkdf2-sha512
+        copy_bin_and_libs ${pbkdf2-sha512}/bin/pbkdf2-sha512
 
         mkdir -p $out/etc/ssl
         cp -pdv ${pkgs.openssl.out}/etc/ssl/openssl.cnf $out/etc/ssl
@@ -903,19 +1047,18 @@ in
         copy_bin_and_libs ${pkgs.gnupg}/libexec/scdaemon
 
         ${concatMapStringsSep "\n" (x:
-          if x.gpgCard != null then
+          optionalString (x.gpgCard != null)
             ''
               mkdir -p $out/secrets/gpg-keys/${x.device}
               cp -a ${x.gpgCard.encryptedPass} $out/secrets/gpg-keys/${x.device}/cryptkey.gpg
               cp -a ${x.gpgCard.publicKey} $out/secrets/gpg-keys/${x.device}/pubkey.asc
             ''
-          else ""
           ) (attrValues luks.devices)
         }
       ''}
     '';
 
-    boot.initrd.extraUtilsCommandsTest = ''
+    boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
       $out/bin/cryptsetup --version
       ${optionalString luks.yubikeySupport ''
         $out/bin/ykchalresp -V
@@ -932,9 +1075,57 @@ in
       ''}
     '';
 
-    boot.initrd.preFailCommands = postCommands;
-    boot.initrd.preLVMCommands = commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand preLVM) + postCommands;
-    boot.initrd.postDeviceCommands = commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand postLVM) + postCommands;
+    boot.initrd.systemd = {
+      contents."/etc/crypttab".source = stage1Crypttab;
+
+      extraBin.systemd-cryptsetup = "${config.boot.initrd.systemd.package}/bin/systemd-cryptsetup";
+
+      additionalUpstreamUnits = [
+        "cryptsetup-pre.target"
+        "cryptsetup.target"
+        "remote-cryptsetup.target"
+      ];
+      storePaths = [
+        "${config.boot.initrd.systemd.package}/bin/systemd-cryptsetup"
+        "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-cryptsetup-generator"
+      ];
+
+    };
+    # We do this because we need the udev rules from the package
+    boot.initrd.services.lvm.enable = true;
+
+    boot.initrd.preFailCommands = mkIf (!config.boot.initrd.systemd.enable) postCommands;
+    boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand preLVM) + postCommands);
+    boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand postLVM) + postCommands);
+
+    boot.initrd.systemd.services = let devicesWithClevis = filterAttrs (device: _: (hasAttr device clevis.devices)) luks.devices; in
+      mkIf (clevis.enable && systemd.enable) (
+        (mapAttrs'
+          (name: _: nameValuePair "cryptsetup-clevis-${name}" {
+            wantedBy = [ "systemd-cryptsetup@${utils.escapeSystemdPath name}.service" ];
+            before = [
+              "systemd-cryptsetup@${utils.escapeSystemdPath name}.service"
+              "initrd-switch-root.target"
+              "shutdown.target"
+            ];
+            wants = [ "systemd-udev-settle.service" ] ++ optional clevis.useTang "network-online.target";
+            after = [ "systemd-modules-load.service" "systemd-udev-settle.service" ] ++ optional clevis.useTang "network-online.target";
+            script = ''
+              mkdir -p /clevis-${name}
+              mount -t ramfs none /clevis-${name}
+              umask 277
+              clevis decrypt < /etc/clevis/${name}.jwe > /clevis-${name}/decrypted
+            '';
+            conflicts = [ "initrd-switch-root.target" "shutdown.target" ];
+            unitConfig.DefaultDependencies = "no";
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStop = "${config.boot.initrd.systemd.package.util-linux}/bin/umount /clevis-${name}";
+            };
+          })
+          devicesWithClevis)
+      );
 
     environment.systemPackages = [ pkgs.cryptsetup ];
   };

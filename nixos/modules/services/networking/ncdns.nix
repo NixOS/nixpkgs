@@ -52,13 +52,13 @@ in
 
       enable = mkEnableOption ''
         ncdns, a Go daemon to bridge Namecoin to DNS.
-        To resolve .bit domains set <literal>services.namecoind.enable = true;</literal>
+        To resolve .bit domains set `services.namecoind.enable = true;`
         and an RPC username/password
       '';
 
       address = mkOption {
         type = types.str;
-        default = "127.0.0.1";
+        default = "[::1]";
         description = ''
           The IP address the ncdns resolver will bind to.  Leave this unchanged
           if you do not wish to directly expose the resolver.
@@ -82,12 +82,12 @@ in
           The hostname of this ncdns instance, which defaults to the machine
           hostname. If specified, ncdns lists the hostname as an NS record at
           the zone apex:
-          <programlisting>
+          ```
           bit. IN NS ns1.example.com.
-          </programlisting>
-          If unset ncdns will generate an internal psuedo-hostname under the
+          ```
+          If unset ncdns will generate an internal pseudo-hostname under the
           zone, which will resolve to the value of
-          <option>services.ncdns.identity.address</option>.
+          {option}`services.ncdns.identity.address`.
           If you are only using ncdns locally you can ignore this.
         '';
       };
@@ -107,7 +107,7 @@ in
         default = "127.127.127.127";
         description = ''
           The IP address the hostname specified in
-          <option>services.ncdns.identity.hostname</option> should resolve to.
+          {option}`services.ncdns.identity.hostname` should resolve to.
           If you are only using ncdns locally you can ignore this.
         '';
       };
@@ -115,8 +115,8 @@ in
       dnssec.enable = mkEnableOption ''
         DNSSEC support in ncdns. This will generate KSK and ZSK keypairs
         (unless provided via the options
-        <option>services.ncdns.dnssec.publicKey</option>,
-        <option>services.ncdns.dnssec.privateKey</option> etc.) and add a trust
+        {option}`services.ncdns.dnssec.publicKey`,
+        {option}`services.ncdns.dnssec.privateKey` etc.) and add a trust
         anchor to recursive resolvers
       '';
 
@@ -125,11 +125,11 @@ in
         default = defaultFiles.public;
         description = ''
           Path to the file containing the KSK public key.
-          The key can be generated using the <literal>dnssec-keygen</literal>
-          command, provided by the package <package>bind</package> as follows:
-          <programlisting>
+          The key can be generated using the `dnssec-keygen`
+          command, provided by the package `bind` as follows:
+          ```
           $ dnssec-keygen -a RSASHA256 -3 -b 2048 -f KSK bit
-          </programlisting>
+          ```
         '';
       };
 
@@ -146,11 +146,11 @@ in
         default = defaultFiles.zonePublic;
         description = ''
           Path to the file containing the ZSK public key.
-          The key can be generated using the <literal>dnssec-keygen</literal>
-          command, provided by the package <package>bind</package> as follows:
-          <programlisting>
+          The key can be generated using the `dnssec-keygen`
+          command, provided by the package `bind` as follows:
+          ```
           $ dnssec-keygen -a RSASHA256 -3 -b 2048 bit
-          </programlisting>
+          ```
         '';
       };
 
@@ -179,8 +179,8 @@ in
         description = ''
           ncdns settings. Use this option to configure ncds
           settings not exposed in a NixOS option or to bypass one.
-          See the example ncdns.conf file at <link xlink:href="
-          https://git.io/JfX7g"/> for the available options.
+          See the example ncdns.conf file at <https://github.com/namecoin/ncdns/blob/master/_doc/ncdns.conf.example>
+          for the available options.
         '';
       };
 
@@ -190,7 +190,7 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Resolve <literal>.bit</literal> top-level domains using ncdns and namecoin.
+        Resolve `.bit` top-level domains using ncdns and namecoin.
       '';
     };
 
@@ -202,7 +202,7 @@ in
   config = mkIf cfg.enable {
 
     services.pdns-recursor = mkIf cfgs.pdns-recursor.resolveNamecoin {
-      forwardZonesRecurse.bit = "127.0.0.1:${toString cfg.port}";
+      forwardZonesRecurse.bit = "${cfg.address}:${toString cfg.port}";
       luaConfig =
         if cfg.dnssec.enable
           then ''readTrustAnchorsFromFile("${cfg.dnssec.keys.public}")''

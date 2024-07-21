@@ -2,20 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "yices";
-  # We never want X.Y.${odd} versions as they are moving development tags.
-  version = "2.6.2";
+  version = "2.6.5";
 
   src = fetchFromGitHub {
     owner  = "SRI-CSL";
     repo   = "yices2";
     rev    = "Yices-${version}";
-    sha256 = "1jx3854zxvfhxrdshbipxfgyq1yxb9ll9agjc2n0cj4vxkjyh9mn";
+    hash = "sha256-/sKyHkFW5I5kojNIRPEKojzTvfRZiyVIN5VlBIbAV7k=";
   };
 
-  patches = [
-    # musl las no ldconfig, create symlinks explicitly
-    ./linux-no-ldconfig.patch
-  ];
   postPatch = "patchShebangs tests/regress/check.sh";
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -30,8 +25,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A high-performance theorem prover and SMT solver";
-    homepage    = "http://yices.csl.sri.com";
+    description = "High-performance theorem prover and SMT solver";
+    homepage    = "https://yices.csl.sri.com";
     license     = licenses.gpl3;
     platforms   = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ thoughtpolice ];

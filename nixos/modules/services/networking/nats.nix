@@ -76,8 +76,8 @@ in {
         '';
         description = ''
           Declarative NATS configuration. See the
-          <link xlink:href="https://docs.nats.io/nats-server/configuration">
-          NATS documentation</link> for a list of options.
+          [
+          NATS documentation](https://docs.nats.io/nats-server/configuration) for a list of options.
         '';
       };
     };
@@ -137,7 +137,7 @@ in {
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+          SystemCallFilter = [ "@system-service" "~@privileged" ];
           UMask = "0077";
         }
       ];

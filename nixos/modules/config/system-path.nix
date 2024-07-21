@@ -41,12 +41,16 @@ let
       pkgs.zstd
     ];
 
-    defaultPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
-      [ pkgs.nano
-        pkgs.perl
-        pkgs.rsync
-        pkgs.strace
-      ];
+  defaultPackageNames =
+    [ "perl"
+      "rsync"
+      "strace"
+    ];
+  defaultPackages =
+    map
+      (n: let pkg = pkgs.${n}; in setPrio ((pkg.meta.priority or 5) + 3) pkg)
+      defaultPackageNames;
+  defaultPackagesText = "[ ${concatMapStringsSep " " (n: "pkgs.${n}") defaultPackageNames } ]";
 
 in
 
@@ -66,27 +70,27 @@ in
           automatically updated every time you rebuild the system
           configuration.  (The latter is the main difference with
           installing them in the default profile,
-          <filename>/nix/var/nix/profiles/default</filename>.
+          {file}`/nix/var/nix/profiles/default`.
         '';
       };
 
       defaultPackages = mkOption {
         type = types.listOf types.package;
         default = defaultPackages;
+        defaultText = literalMD ''
+          these packages, with their `meta.priority` numerically increased
+          (thus lowering their installation priority):
+
+              ${defaultPackagesText}
+        '';
         example = [];
         description = ''
           Set of default packages that aren't strictly necessary
           for a running system, entries can be removed for a more
           minimal NixOS installation.
 
-          Note: If <package>pkgs.nano</package> is removed from this list,
-          make sure another editor is installed and the
-          <literal>EDITOR</literal> environment variable is set to it.
-          Environment variables can be set using
-          <option>environment.variables</option>.
-
           Like with systemPackages, packages are installed to
-          <filename>/run/current-system/sw</filename>. They are
+          {file}`/run/current-system/sw`. They are
           automatically available to all users, and are
           automatically updated every time you rebuild the system
           configuration.
@@ -99,14 +103,20 @@ in
         # to work.
         default = [];
         example = ["/"];
-        description = "List of directories to be symlinked in <filename>/run/current-system/sw</filename>.";
+        description = "List of directories to be symlinked in {file}`/run/current-system/sw`.";
       };
 
       extraOutputsToInstall = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        example = [ "doc" "info" "devdoc" ];
-        description = "List of additional package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
+        example = [ "dev" "info" ];
+        description = ''
+          Entries listed here will be appended to the `meta.outputsToInstall` attribute for each package in `environment.systemPackages`, and the files from the corresponding derivation outputs symlinked into {file}`/run/current-system/sw`.
+
+          For example, this can be used to install the `dev` and `info` outputs for all packages in the system environment, if they are available.
+
+          To use specific outputs instead of configuring them globally, select the corresponding attribute on the package derivation, e.g. `libxml2.dev` or `coreutils.info`.
+        '';
       };
 
       extraSetup = mkOption {
@@ -143,10 +153,8 @@ in
         "/sbin"
         "/share/emacs"
         "/share/hunspell"
-        "/share/nano"
         "/share/org"
         "/share/themes"
-        "/share/vim-plugins"
         "/share/vulkan"
         "/share/kservices5"
         "/share/kservicetypes5"

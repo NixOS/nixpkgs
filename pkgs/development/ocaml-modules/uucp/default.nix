@@ -2,14 +2,14 @@
 
 let
   pname = "uucp";
-  version = "14.0.0";
+  version = "15.1.0";
   webpage = "https://erratique.ch/software/${pname}";
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
   doCheck = true;
 in
 
-if !(lib.versionAtLeast ocaml.version minimumOCamlVersion)
-then builtins.throw "${pname} needs at least OCaml ${minimumOCamlVersion}"
+if lib.versionOlder ocaml.version minimalOCamlVersion
+then builtins.throw "${pname} needs at least OCaml ${minimalOCamlVersion}"
 else
 
 stdenv.mkDerivation {
@@ -18,12 +18,15 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256:1yx9nih3d9prb9zizq8fzmmqylf24a6yifhf81h33znrj5xn1mpj";
+    hash = "sha256-qR5LiAZHt4oD3ak0x17GqbYXNaJmJxFk/WGoxT+yWYc=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg uutf uunf ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg uutf uunf uucd ];
 
   propagatedBuildInputs = [ uchar ];
+
+  strictDeps = true;
 
   buildPhase = ''
     runHook preBuild
@@ -42,7 +45,7 @@ stdenv.mkDerivation {
   checkInputs = [ uucd ];
 
   meta = with lib; {
-    description = "An OCaml library providing efficient access to a selection of character properties of the Unicode character database";
+    description = "OCaml library providing efficient access to a selection of character properties of the Unicode character database";
     homepage = webpage;
     inherit (ocaml.meta) platforms;
     license = licenses.bsd3;

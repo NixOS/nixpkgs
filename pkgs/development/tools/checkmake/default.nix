@@ -1,46 +1,58 @@
-{ buildGoPackage, fetchFromGitHub, git, pandoc, lib }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, pandoc
+, go
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "checkmake";
-  version = "0.1.0-2020.11.30";
-
-  goPackagePath = "github.com/mrtazz/checkmake";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "mrtazz";
     repo = pname;
-    rev = "575315c9924da41534a9d0ce91c3f0d19bb53ffc";
-    sha256 = "121rsl9mh3wwadgf8ggi2xnb050pak6ma68b2sw5j8clmxbrqli3";
+    rev = version;
+    hash = "sha256-Ql8XSQA/w7wT9GbmYOM2vG15GVqj9LxOGIu8Wqp9Wao=";
   };
 
-  nativeBuildInputs = [ pandoc ];
+  vendorHash = null;
 
-  preBuild =
-    let
-      buildVars = {
-        version = version;
-        buildTime = "N/A";
-        builder = "nix";
-        goversion = "$(go version | egrep -o 'go[0-9]+[.][^ ]*')";
-      };
-      buildVarsFlags = lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "-X main.${k}=${v}") buildVars);
-    in
-    ''
-      buildFlagsArray+=("-ldflags=${buildVarsFlags}")
-    '';
+  nativeBuildInputs = [
+    installShellFiles
+    pandoc
+  ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+    "-X=main.buildTime=1970-01-01T00:00:00Z"
+    "-X=main.builder=nixpkgs"
+    "-X=main.goversion=go${go.version}"
+  ];
+
+  postPatch = ''
+    substituteInPlace man/man1/checkmake.1.md \
+      --replace REPLACE_DATE 1970-01-01T00:00:00Z
+  '';
+
+  postBuild = ''
+    pandoc man/man1/checkmake.1.md -st man -o man/man1/checkmake.1
+  '';
 
   postInstall = ''
-    pandoc -s -t man -o checkmake.1 go/src/${goPackagePath}/man/man1/checkmake.1.md
-    mkdir -p $out/share/man/man1
-    mv checkmake.1 $out/share/man/man1/checkmake.1
+    installManPage man/man1/checkmake.1
   '';
 
   meta = with lib; {
     description = "Experimental tool for linting and checking Makefiles";
+    mainProgram = "checkmake";
     homepage = "https://github.com/mrtazz/checkmake";
+    changelog = "https://github.com/mrtazz/checkmake/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ vidbina ];
-    platforms = platforms.linux;
     longDescription = ''
       checkmake is an experimental tool for linting and checking
       Makefiles. It may not do what you want it to.

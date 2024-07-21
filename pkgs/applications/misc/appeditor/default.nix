@@ -11,18 +11,18 @@
 , glib
 , gtk3
 , libgee
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "appeditor";
-  version = "1.1.1";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "donadigo";
     repo = "appeditor";
     rev = version;
-    sha256 = "14ycw1b6v2sa4vljpnx2lpx4w89mparsxk6s8w3yx4dqjglcg5bp";
+    sha256 = "sha256-A0YasHw5osGrgUPiUPuRBnv1MR/Pth6jVHGEx/klOGY=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     vala
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -48,9 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

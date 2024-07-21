@@ -1,29 +1,42 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pbr
-, oslo-config
-, oslo-log
-, oslo-serialization
-, oslo-utils
-, prettytable
-, requests
-, simplejson
-, Babel
-, osc-lib
-, python-keystoneclient
-, debtcollector
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  installShellFiles,
+  pbr,
+  openstackdocstheme,
+  oslo-config,
+  oslo-log,
+  oslo-serialization,
+  oslo-utils,
+  prettytable,
+  requests,
+  simplejson,
+  sphinx,
+  sphinxcontrib-programoutput,
+  babel,
+  osc-lib,
+  python-keystoneclient,
+  debtcollector,
+  callPackage,
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-manilaclient";
-  version = "3.0.0";
+  version = "4.9.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d90af35c5beccc53fa6b0f5a3c4b330a065e86924c33c42b017f18943ab2b05";
+    hash = "sha256-TebykdG0fkeC+5Vs9eiwuJpXam41gg8gR4F2poYKDhI=";
   };
+
+  nativeBuildInputs = [
+    installShellFiles
+    openstackdocstheme
+    sphinx
+    sphinxcontrib-programoutput
+  ];
 
   propagatedBuildInputs = [
     pbr
@@ -34,11 +47,17 @@ buildPythonApplication rec {
     prettytable
     requests
     simplejson
-    Babel
+    babel
     osc-lib
     python-keystoneclient
     debtcollector
   ];
+
+  postInstall = ''
+    export PATH=$out/bin:$PATH
+    sphinx-build -a -E -d doc/build/doctrees -b man doc/source doc/build/man
+    installManPage doc/build/man/python-manilaclient.1
+  '';
 
   # Checks moved to 'passthru.tests' to workaround infinite recursion
   doCheck = false;
@@ -51,6 +70,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Client library for OpenStack Manila API";
+    mainProgram = "manila";
     homepage = "https://github.com/openstack/python-manilaclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

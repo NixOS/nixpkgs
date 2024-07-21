@@ -1,28 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "toolz";
-  version = "0.11.1";
+  version = "0.12.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1grz3zvw5ixwqqlbv0n7j11mlcxb66cirh5i9x9zw8kqy0hpk967";
+    hash = "sha256-7Mo0JmSJPxd6E9rA5rQcvYrCWjWOXyFTFtQ+IQAiT00=";
   };
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    nosetests toolz/tests
-  '';
+  disabledTests = [
+    # https://github.com/pytoolz/toolz/issues/577
+    "test_inspect_wrapped_property"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/pytoolz/toolz";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
   };
 }

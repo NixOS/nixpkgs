@@ -2,18 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "oidentd";
-  version = "2.5.0";
+  version = "3.1.0";
   nativeBuildInputs = [ bison flex ];
 
   src = fetchurl {
     url = "https://files.janikrabe.com/pub/oidentd/releases/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1d5mqlknfywbx2bgj7ap7x6qzvz257hhqcqhy6zk45dqpsirdn7a";
+    sha256 = "sha256-yyvcnabxNkcIMOiZBjvoOm/pEjrGXFt4W4SG5lprkbc=";
   };
 
   meta = with lib; {
     description = "Configurable Ident protocol server";
+    mainProgram = "oidentd";
     homepage = "https://oidentd.janikrabe.com/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 }

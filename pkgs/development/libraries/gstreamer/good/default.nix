@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, substituteAll
 , meson
 , nasm
 , ninja
@@ -9,12 +10,15 @@
 , orc
 , bzip2
 , gettext
+, libGL
 , libv4l
 , libdv
 , libavc1394
 , libiec61883
 , libvpx
+, libdrm
 , speex
+, opencore-amr
 , flac
 , taglib
 , libshout
@@ -22,40 +26,60 @@
 , gdk-pixbuf
 , aalib
 , libcaca
-, libsoup
+, libsoup_3
 , libpulseaudio
 , libintl
+, libxml2
 , Cocoa
 , lame
 , mpg123
 , twolame
 , gtkSupport ? false, gtk3
 , qt5Support ? false, qt5
+, qt6Support ? false, qt6
 , raspiCameraSupport ? false, libraspberrypi
 , enableJack ? true, libjack2
-, libXdamage
-, libXext
-, libXfixes
+, enableX11 ? stdenv.isLinux, xorg
 , ncurses
+, enableWayland ? stdenv.isLinux
 , wayland
 , wayland-protocols
-, xorg
 , libgudev
 , wavpack
+, glib
+, openssl
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
-assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
+# MMAL is not supported on aarch64, see:
+# https://github.com/raspberrypi/userland/issues/688
+assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.18.4";
+  version = "1.24.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1c1rpq709cy8maaykyn1n0kckj9c6fl3mhvixkk6xmdwkcx0xrdn";
+    hash = "sha256-FQ+RTmHcBWALaLiMoQPHzCJxMBWOOJ6p6hWfQFCi67A=";
   };
+
+  patches = [
+    # Reenable dynamic loading of libsoup on Darwin and use a different approach to do it.
+    ./souploader-darwin.diff
+    # dlopen libsoup_3 with an absolute path
+    (substituteAll {
+      src = ./souploader.diff;
+      nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
+    })
+  ];
+
+  strictDeps = true;
+
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     pkg-config
@@ -64,7 +88,18 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     nasm
-  ] ++ lib.optionals stdenv.isLinux [
+    orc
+    libshout
+    glib
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
+  ] ++ lib.optionals qt5Support (with qt5; [
+    qtbase
+    qttools
+  ]) ++ lib.optionals qt6Support (with qt6; [
+    qtbase
+    qttools
+  ]) ++ lib.optionals enableWayland [
     wayland-protocols
   ];
 
@@ -75,27 +110,31 @@ stdenv.mkDerivation rec {
     libdv
     libvpx
     speex
+    opencore-amr
     flac
     taglib
     cairo
     gdk-pixbuf
     aalib
     libcaca
-    libsoup
+    libsoup_3
     libshout
+    libxml2
     lame
     mpg123
     twolame
     libintl
-    libXdamage
-    libXext
-    libXfixes
     ncurses
-    xorg.libXfixes
-    xorg.libXdamage
     wavpack
+    openssl
   ] ++ lib.optionals raspiCameraSupport [
     libraspberrypi
+  ] ++ lib.optionals enableX11 [
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXdamage
+    xorg.libXtst
+    xorg.libXi
   ] ++ lib.optionals gtkSupport [
     # for gtksink
     gtk3
@@ -104,14 +143,21 @@ stdenv.mkDerivation rec {
     qtdeclarative
     qtwayland
     qtx11extras
+  ]) ++ lib.optionals qt6Support (with qt6; [
+    qtbase
+    qtdeclarative
+    qtwayland
   ]) ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ] ++ lib.optionals stdenv.isLinux [
+    libdrm
+    libGL
     libv4l
     libpulseaudio
     libavc1394
     libiec61883
     libgudev
+  ] ++ lib.optionals enableWayland [
     wayland
   ] ++ lib.optionals enableJack [
     libjack2
@@ -119,12 +165,16 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
     "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
+    (lib.mesonEnable "doc" enableDocumentation)
   ] ++ lib.optionals (!qt5Support) [
     "-Dqt5=disabled"
+  ] ++ lib.optionals (!qt6Support) [
+    "-Dqt6=disabled"
   ] ++ lib.optionals (!gtkSupport) [
     "-Dgtk3=disabled"
+  ] ++ lib.optionals (!enableX11) [
+    "-Dximagesrc=disabled" # Linux-only
   ] ++ lib.optionals (!enableJack) [
     "-Djack=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [
@@ -134,10 +184,11 @@ stdenv.mkDerivation rec {
     "-Dpulse=disabled" # TODO check if we can keep this enabled
     "-Dv4l2-gudev=disabled" # Linux-only
     "-Dv4l2=disabled" # Linux-only
-    "-Dximagesrc=disabled" # Linux-only
-  ] ++ lib.optionals (!raspiCameraSupport) [
+  ] ++ (if raspiCameraSupport then [
+    "-Drpi-lib-dir=${libraspberrypi}/lib"
+  ] else [
     "-Drpicamsrc=disabled"
-  ];
+  ]);
 
   postPatch = ''
     patchShebangs \
@@ -153,7 +204,7 @@ stdenv.mkDerivation rec {
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
   doCheck = false;
 
-  # must be explicitely set since 5590e365
+  # must be explicitly set since 5590e365
   dontWrapQtApps = true;
 
   meta = with lib; {

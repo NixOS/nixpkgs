@@ -1,33 +1,49 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "0.20.0";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
-    rev = version;
-    sha256 = "014blvrv0kk4gzga86mbk7gd5dl1szajfi972da3lrfznck1w24n";
+    rev = "v${version}";
+    hash = "sha256-/uG1xjhxnIkS3rq7Tv1q1v8X7p1baDB8OiSEV9OLyfo=";
   };
 
-  cargoSha256 = "sha256-Vrd5DIfhUSb3BONaUG8RypmVF+HWrlM0TodlWjOLa/c=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "packet-builder-0.7.0" = "sha256-KxNrnLZ/z3JJ3E1pCTJF9tNXI7XYNRc6ooTUz3avpjw=";
+    };
+  };
+
+  checkFlags = [
+    # failing in upstream CI
+    "--skip=tests::cases::ui::layout_under_50_width_under_50_height"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
   doCheck = !stdenv.isDarwin;
 
-  # FIXME: remove when the linked-hash-map dependency is bumped upstream
-  cargoPatches = [
-    (fetchpatch {
-      url = "https://github.com/imsnif/bandwhich/pull/222/commits/be06905de2c4fb91afc22d50bf3cfe5a1e8003f5.patch";
-      sha256 = "sha256-FyZ7jUXK7ebXq7q/lvRSe7YdPnpYWKZE3WrSKLMjJeA=";
-    })
-  ];
+  preConfigure = ''
+    export BANDWHICH_GEN_DIR=_shell-files
+    mkdir -p $BANDWHICH_GEN_DIR
+  '';
+
+  postInstall = ''
+    installManPage $BANDWHICH_GEN_DIR/bandwhich.1
+
+    installShellCompletion $BANDWHICH_GEN_DIR/bandwhich.{bash,fish} \
+      --zsh $BANDWHICH_GEN_DIR/_bandwhich
+  '';
 
   meta = with lib; {
-    description = "A CLI utility for displaying current network utilization";
+    description = "CLI utility for displaying current network utilization";
     longDescription = ''
       bandwhich sniffs a given network interface and records IP packet size, cross
       referencing it with the /proc filesystem on linux or lsof on MacOS. It is
@@ -36,8 +52,10 @@ rustPlatform.buildRustPackage rec {
       the background using reverse DNS on a best effort basis.
     '';
     homepage = "https://github.com/imsnif/bandwhich";
+    changelog = "https://github.com/imsnif/bandwhich/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ma27 SuperSandro2000 ];
+    maintainers = with maintainers; [ Br1ght0ne figsoda ];
     platforms = platforms.unix;
+    mainProgram = "bandwhich";
   };
 }

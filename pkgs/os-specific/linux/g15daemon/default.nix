@@ -1,14 +1,10 @@
 { stdenv
 , lib
-, fetchFromGitHub
 , fetchurl
-, fetchpatch
-, patchelf
-, freetype
 , libusb-compat-0_1
 }:
 let
-  license = lib.licenses.gpl2;
+  license = lib.licenses.gpl2Plus;
   maintainers = with lib.maintainers; [ peterhoeg ];
 
   g15src = { pname, version, sha256 }: fetchurl {
@@ -49,7 +45,7 @@ let
     enableParallelBuilding = true;
 
     meta = {
-      description = "A small graphics library optimised for drawing on an LCD";
+      description = "Small graphics library optimised for drawing on an LCD";
       inherit license maintainers;
     };
   };
@@ -79,10 +75,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libg15 libg15render ];
 
+  # Workaround build failure on -fno-common toolchains like upstream gcc-10:
+  #  ld: g15_plugins.o:/build/g15daemon-1.9.5.3/g15daemon/./g15daemon.h:218:
+  #   multiple definition of `lcdlist_mutex'; utility_funcs.o:g15daemon.h:218: first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
+
   enableParallelBuilding = true;
 
   meta = {
-    description = "A daemon that makes it possible to use the Logitech keyboard G-Buttons and draw on various Logitech LCDs";
+    description = "Daemon that makes it possible to use the Logitech keyboard G-Buttons and draw on various Logitech LCDs";
+    mainProgram = "g15daemon";
     inherit license maintainers;
   };
 }

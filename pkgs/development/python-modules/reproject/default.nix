@@ -1,50 +1,82 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, numpy
-, astropy
-, astropy-healpix
-, astropy-helpers
-, astropy-extension-helpers
-, scipy
-, pytest
-, pytest-astropy
-, setuptools-scm
-, cython
+{
+  lib,
+  astropy,
+  astropy-extension-helpers,
+  astropy-healpix,
+  buildPythonPackage,
+  cloudpickle,
+  cython,
+  dask,
+  fetchPypi,
+  fsspec,
+  numpy,
+  pytest-astropy,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools-scm,
+  zarr,
 }:
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.7.1";
+  version = "0.13.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jsc3ad518vyys5987fr1achq8qvnz8rm80zp5an9qxlwr4zmh4m";
+    hash = "sha256-Y+Ne7ZUgCieWcC4zqfrqPzmr/kGUdFroGfIPKWACaPY=";
   };
 
-  patches = [ (fetchpatch {
-      # Can be removed in next release after 0.7.1
-      # See https://github.com/astropy/reproject/issues/246
-      url = "https://github.com/astropy/reproject/pull/243.patch";
-      sha256 = "0dq3ii39hsrks0b9v306dlqf07dx0hqad8rwajmzw6rfda9m3c2a";
-    })
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "cython==" "cython>=" \
+      --replace "numpy>=2.0.0rc1" "numpy"
+  '';
+
+  nativeBuildInputs = [
+    astropy-extension-helpers
+    cython
+    numpy
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [ numpy astropy astropy-healpix astropy-helpers scipy ];
-  nativeBuildInputs = [ astropy-helpers cython astropy-extension-helpers setuptools-scm ];
-  checkInputs = [ pytest pytest-astropy ];
+  propagatedBuildInputs = [
+    astropy
+    astropy-healpix
+    cloudpickle
+    dask
+    fsspec
+    numpy
+    scipy
+    zarr
+  ] ++ dask.optional-dependencies.array;
 
-  # Tests must be run in the build directory
-  checkPhase = ''
-    cd build/lib*
-    pytest
-  '';
+  nativeCheckInputs = [
+    pytest-astropy
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "build/lib*"
+    # Avoid failure due to user warning: Distutils was imported before Setuptools
+    "-p no:warnings"
+    # Uses network
+    "--ignore build/lib*/reproject/interpolation/"
+    # prevent "'filterwarnings' not found in `markers` configuration option" error
+    "-o 'markers=filterwarnings'"
+  ];
+
+  pythonImportsCheck = [ "reproject" ];
 
   meta = with lib; {
     description = "Reproject astronomical images";
+    downloadPage = "https://github.com/astropy/reproject";
     homepage = "https://reproject.readthedocs.io";
+    changelog = "https://github.com/astropy/reproject/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.smaret ];
+    maintainers = with maintainers; [ smaret ];
   };
 }

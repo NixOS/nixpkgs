@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , writeText
-, fetchurl
+, fetchFromGitHub
 , buildcatrust
 , blacklist ? []
 , extraCertificateFiles ? []
@@ -20,22 +20,24 @@ let
   blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" blacklist);
   extraCertificatesBundle = writeText "cacert-extra-certificates-bundle.crt" (lib.concatStringsSep "\n\n" extraCertificateStrings);
 
-  srcVersion = "3.71";
+  srcVersion = "3.101";
   version = if nssOverride != null then nssOverride.version else srcVersion;
   meta = with lib; {
     homepage = "https://curl.haxx.se/docs/caextract.html";
-    description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
+    description = "Bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = platforms.all;
-    maintainers = with maintainers; [ andir fpletz lukegb ];
+    maintainers = with maintainers; [ fpletz lukegb ];
     license = licenses.mpl20;
   };
   certdata = stdenv.mkDerivation {
     pname = "nss-cacert-certdata";
     inherit version;
 
-    src = if nssOverride != null then nssOverride.src else fetchurl {
-      url = "mirror://mozilla/security/nss/releases/NSS_${lib.replaceStrings ["."] ["_"] version}_RTM/src/nss-${version}.tar.gz";
-      sha256 = "0ly2l3dv6z5hlxs72h5x6796ni3x1bq60saavaf42ddgv4ax7b4r";
+    src = if nssOverride != null then nssOverride.src else fetchFromGitHub {
+      owner = "nss-dev";
+      repo = "nss";
+      rev = "NSS_${lib.replaceStrings ["."] ["_"] version}_RTM";
+      hash = "sha256-lO+81zYBBFwqcjh4cd/fpiznHZ9rTJpfDW/yF8phYts=";
     };
 
     dontBuild = true;
@@ -44,7 +46,7 @@ let
       runHook preInstall
 
       mkdir $out
-      cp nss/lib/ckfw/builtins/certdata.txt $out
+      cp lib/ckfw/builtins/certdata.txt $out
 
       runHook postInstall
     '';
@@ -69,12 +71,16 @@ stdenv.mkDerivation rec {
       --ca_bundle_input "${extraCertificatesBundle}" ${lib.escapeShellArgs (map (arg: "${arg}") extraCertificateFiles)} \
       --blocklist "${blocklist}" \
       --ca_bundle_output ca-bundle.crt \
+      --ca_standard_bundle_output ca-no-trust-rules-bundle.crt \
       --ca_unpacked_output unbundled \
       --p11kit_output ca-bundle.trust.p11-kit
   '';
 
   installPhase = ''
     install -D -t "$out/etc/ssl/certs" ca-bundle.crt
+
+    # install standard PEM compatible bundle
+    install -D -t "$out/etc/ssl/certs" ca-no-trust-rules-bundle.crt
 
     # install p11-kit specific output to p11kit output
     install -D -t "$p11kit/etc/ssl/trust-source" ca-bundle.trust.p11-kit

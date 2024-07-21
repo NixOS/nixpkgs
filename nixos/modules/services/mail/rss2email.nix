@@ -35,15 +35,15 @@ in {
         description = ''
           The configuration to give rss2email.
 
-          Default will use system-wide <literal>sendmail</literal> to send the
+          Default will use system-wide `sendmail` to send the
           email. This is rss2email's default when running
-          <literal>r2e new</literal>.
+          `r2e new`.
 
           This set contains key-value associations that will be set in the
-          <literal>[DEFAULT]</literal> block along with the
-          <literal>to</literal> parameter.
+          `[DEFAULT]` block along with the
+          `to` parameter.
 
-          See <literal>man r2e</literal> for more information on which
+          See `man r2e` for more information on which
           parameters are accepted.
         '';
       };
@@ -63,9 +63,9 @@ in {
               description = ''
                 Email address to which to send feed items.
 
-                If <literal>null</literal>, this will not be set in the
+                If `null`, this will not be set in the
                 configuration file, and rss2email will make it default to
-                <literal>rss2email.to</literal>.
+                `rss2email.to`.
               '';
             };
           };
@@ -95,9 +95,11 @@ in {
 
     services.rss2email.config.to = cfg.to;
 
-    systemd.tmpfiles.rules = [
-      "d /var/rss2email 0700 rss2email rss2email - -"
-    ];
+    systemd.tmpfiles.settings."10-rss2email"."/var/rss2email".d = {
+      user = "rss2email";
+      group = "rss2email";
+      mode = "0700";
+    };
 
     systemd.services.rss2email = let
       conf = pkgs.writeText "rss2email.cfg" (lib.generators.toINI {} ({
@@ -110,7 +112,6 @@ in {
     in
     {
       preStart = ''
-        cp ${conf} /var/rss2email/conf.cfg
         if [ ! -f /var/rss2email/db.json ]; then
           echo '{"version":2,"feeds":[]}' > /var/rss2email/db.json
         fi
@@ -118,7 +119,7 @@ in {
       path = [ pkgs.system-sendmail ];
       serviceConfig = {
         ExecStart =
-          "${pkgs.rss2email}/bin/r2e -c /var/rss2email/conf.cfg -d /var/rss2email/db.json run";
+          "${pkgs.rss2email}/bin/r2e -c ${conf} -d /var/rss2email/db.json run";
         User = "rss2email";
       };
     };

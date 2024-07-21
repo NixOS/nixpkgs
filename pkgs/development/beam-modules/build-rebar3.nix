@@ -16,8 +16,6 @@
 , ...
 }@attrs:
 
-with lib;
-
 let
   debugInfoFlag = lib.optionalString (enableDebugInfo || erlang.debugInfo) "debug-info";
 
@@ -30,7 +28,7 @@ let
     buildInputs = [ drv ];
   };
 
-  customPhases = filterAttrs
+  customPhases = lib.filterAttrs
     (_: v: v != null)
     { inherit setupHook configurePhase buildPhase installPhase; };
 
@@ -40,7 +38,7 @@ let
     inherit version;
 
     buildInputs = buildInputs ++ [ erlang rebar3 openssl libyaml ];
-    propagatedBuildInputs = unique beamDeps;
+    propagatedBuildInputs = lib.unique beamDeps;
 
     inherit src;
 
@@ -85,4 +83,4 @@ let
     };
   } // customPhases);
 in
-fix pkg
+lib.fix pkg

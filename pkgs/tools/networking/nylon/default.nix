@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.linux;
+    mainProgram = "nylon";
   };
 }

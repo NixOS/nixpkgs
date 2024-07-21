@@ -20,7 +20,7 @@ in {
         type = types.str;
         default = "gotify-server";
         description = ''
-          The name of the directory below <filename>/var/lib</filename> where
+          The name of the directory below {file}`/var/lib` where
           gotify stores its runtime data.
         '';
       };

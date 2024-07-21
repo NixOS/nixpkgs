@@ -1,6 +1,13 @@
-{ lib, stdenv
-, cmake, fetchFromGitHub, extra-cmake-modules
-, qtbase, wrapQtAppsHook, ki18n, kdelibs4support, krunner
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, extra-cmake-modules
+, qtbase
+, wrapQtAppsHook
+, ki18n
+, kdelibs4support
+, krunner
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +38,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DLOCATION_CONFIG=share/config" ];
 
   meta = with lib; {
-    description = "A little krunner plugin (Plasma 5) to retrieve unicode symbols, or any other string, based on a corresponding keyword";
+    description = "Little krunner plugin (Plasma 5) to retrieve unicode symbols, or any other string, based on a corresponding keyword";
     homepage = "https://github.com/domschrei/krunner-symbols";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hqurve ];

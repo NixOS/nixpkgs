@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "imgurbash2";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "ram-on";
     repo = "imgurbash2";
     rev = version;
-    sha256 = "10zs6p17psl1vq5vpkfkf9nrlmibk6v1ds3yxbf1rip1zaqlwxg6";
+    sha256 = "sha256-7J3LquzcYX0wBR6kshz7VuPv/TftTzKFdWcgsML2DnI=";
   };
 
   installPhase = ''
@@ -22,10 +22,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A shell script that uploads images to imgur";
+    description = "Shell script that uploads images to imgur";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
     homepage = "https://github.com/ram-on/imgurbash2";
+    mainProgram = "imgurbash2";
   };
 }

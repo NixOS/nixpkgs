@@ -1,32 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, cffi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  cffi,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "xattr";
-  version = "0.9.7";
+  version = "1.1.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b0bbca828e04ef2d484a6522ae7b3a7ccad5e43fa1c6f54d78e24bb870f49d44";
+    hash = "sha256-/svzsFBD7TSHooGQ3sPkxNh5svzsDjC6/Y7F1LYENjA=";
   };
 
-  propagatedBuildInputs = [ cffi ];
+  nativeBuildInputs = [
+    cffi
+    setuptools
+  ];
 
   # https://github.com/xattr/xattr/issues/43
   doCheck = false;
 
+  propagatedBuildInputs = [ cffi ];
+
   postBuild = ''
-    ${python.interpreter} -m compileall -f xattr
+    ${python.pythonOnBuildForHost.interpreter} -m compileall -f xattr
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/xattr/xattr";
-    description = "Python wrapper for extended filesystem attributes";
-    license = licenses.mit;
-  };
+  pythonImportsCheck = [ "xattr" ];
 
+  meta = with lib; {
+    description = "Python wrapper for extended filesystem attributes";
+    mainProgram = "xattr";
+    homepage = "https://github.com/xattr/xattr";
+    changelog = "https://github.com/xattr/xattr/blob/v${version}/CHANGES.txt";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
+  };
 }

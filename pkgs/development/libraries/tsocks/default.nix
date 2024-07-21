@@ -27,9 +27,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Transparent SOCKS v4 proxying library";
-    homepage = "http://tsocks.sourceforge.net/";
+    mainProgram = "tsocks";
+    homepage = "https://tsocks.sourceforge.net/";
     license = lib.licenses.gpl2;
-    maintainers = with maintainers; [ edwtjo phreedom ];
+    maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

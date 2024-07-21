@@ -1,15 +1,32 @@
-{ lib, stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkg-config, file, networkmanager, libsecret
-, gtk3, withGnome ? true, gnome, kmod, libnma }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  substituteAll,
+  openvpn,
+  gettext,
+  libxml2,
+  pkg-config,
+  file,
+  networkmanager,
+  libsecret,
+  glib,
+  gtk3,
+  gtk4,
+  withGnome ? true,
+  gnome,
+  kmod,
+  libnma,
+  libnma-gtk4,
+}:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "NetworkManager-openvpn";
-  version = "1.8.16";
-in stdenv.mkDerivation {
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  version = "1.12.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "iSDeCceuXx9SDIP4REVduPrsMUJzUCaP4t2VuGD5H7U=";
+    url = "mirror://gnome/sources/NetworkManager-openvpn/${lib.versions.majorMinor finalAttrs.version}/NetworkManager-openvpn-${finalAttrs.version}.tar.xz";
+    sha256 = "kD/UwK69KqescMnYwr7Y35ImVdItdkUUQDVmrom36IY=";
   };
 
   patches = [
@@ -19,28 +36,48 @@ in stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ openvpn networkmanager ]
-    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
+  nativeBuildInputs = [
+    gettext
+    pkg-config
+    file
+    libxml2
+  ];
 
-  nativeBuildInputs = [ intltool pkg-config file libxml2 ];
+  buildInputs =
+    [
+      openvpn
+      networkmanager
+      glib
+    ]
+    ++ lib.optionals withGnome [
+      gtk3
+      gtk4
+      libsecret
+      libnma
+      libnma-gtk4
+    ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
+    "--with-gtk4=${if withGnome then "yes" else "no"}"
     "--localstatedir=/" # needed for the management socket under /run/NetworkManager
     "--enable-absolute-paths"
   ];
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "NetworkManager-openvpn";
       attrPath = "networkmanager-openvpn";
       versionPolicy = "odd-unstable";
     };
+    networkManagerPlugin = "VPN/nm-openvpn-service.name";
   };
 
-  meta = with lib; {
+  meta = {
     description = "NetworkManager's OpenVPN plugin";
+    homepage = "https://gitlab.gnome.org/GNOME/NetworkManager-openvpn";
+    changelog = "https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/-/blob/main/NEWS";
     inherit (networkmanager.meta) maintainers platforms;
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

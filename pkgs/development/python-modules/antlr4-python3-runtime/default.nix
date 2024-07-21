@@ -1,21 +1,44 @@
-{ lib, buildPythonPackage, isPy3k, python
-, antlr4
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  python,
+  antlr4,
 }:
 
 buildPythonPackage rec {
   pname = "antlr4-python3-runtime";
   inherit (antlr4.runtime.cpp) version src;
-  disabled = !isPy3k;
 
-  sourceRoot = "source/runtime/Python3";
+  format = "pyproject";
 
+  disabled = python.pythonOlder "3.6";
+
+  sourceRoot = "${src.name}/runtime/Python3";
+
+  nativeBuildInputs = [ setuptools ];
+
+  postPatch = ''
+    substituteInPlace tests/TestIntervalSet.py \
+      --replace "assertEquals" "assertEqual"
+  '';
+
+  # We use an asterisk because this expression is used also for old antlr
+  # versions, where there the tests directory is `test` and not `tests`.
+  # See e.g in package `baserow`.
   checkPhase = ''
-    cd test
-    ${python.interpreter} ctest.py
+    runHook preCheck
+
+    pushd tests
+    ${python.interpreter} run.py
+    popd
+
+    runHook postCheck
   '';
 
   meta = with lib; {
     description = "Runtime for ANTLR";
+    mainProgram = "pygrun";
     homepage = "https://www.antlr.org/";
     license = licenses.bsd3;
   };

@@ -1,55 +1,61 @@
-{ lib, fetchPypi, buildPythonPackage, service-identity, requests, six
-, mock, twisted, incremental, pep8, httpbin
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+
+  # build-system
+  incremental,
+  setuptools,
+
+  # dependenices
+  attrs,
+  hyperlink,
+  requests,
+  twisted,
+
+  # tests
+  httpbin,
 }:
 
 buildPythonPackage rec {
   pname = "treq";
-  version = "21.5.0";
+  version = "23.11.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02ea86383fc4b57539c45a965eaa1e9fd28302cdf382d21da8430050c97be9b8";
+    hash = "sha256-CRT/kp/RYyzhZ5cjUmD4vBnSD/fEWcHeq9ZbjGjL6sU=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    six
+  nativeBuildInputs = [
     incremental
-    service-identity
-    twisted
-  ]
-    # twisted [tls] requirements (we should find a way to list "extras")
-    ++ twisted.extras.tls;
-
-  checkInputs = [
-    pep8
-    mock
-    httpbin
+    setuptools
   ];
 
-  postPatch = ''
-    rm -fv src/treq/test/test_treq_integration.py
-  '';
+  propagatedBuildInputs = [
+    attrs
+    hyperlink
+    incremental
+    requests
+    twisted
+  ] ++ twisted.optional-dependencies.tls;
 
-  # XXX tox tries to install coverage despite it is installed
-  #postBuild = ''
-  #  # build documentation and install in $out
-  #  tox -e docs
-  #  mkdir -pv $out/docs
-  #  cp -rv docs/* $out/docs/
-  #'';
+  nativeCheckInputs = [
+    httpbin
+    twisted
+  ];
 
   checkPhase = ''
-    pep8 --ignore=E902 treq
-    trial treq
-  '';
+    runHook preCheck
 
-  # Failing tests https://github.com/twisted/treq/issues/208
-  doCheck = false;
+    trial treq
+
+    runHook postCheck
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/twisted/treq";
-    description = "A requests-like API built on top of twisted.web's Agent";
+    description = "Requests-like API built on top of twisted.web's Agent";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

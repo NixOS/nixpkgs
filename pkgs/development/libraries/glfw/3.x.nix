@@ -1,49 +1,59 @@
 { stdenv, lib, fetchFromGitHub, cmake
 , libGL, libXrandr, libXinerama, libXcursor, libX11, libXi, libXext
-, Cocoa, Kernel, fixDarwinDylibNames
-, waylandSupport ? false, extra-cmake-modules, wayland
-, wayland-protocols, libxkbcommon
+, Carbon, Cocoa, Kernel, fixDarwinDylibNames
+, extra-cmake-modules, wayland
+, wayland-scanner, wayland-protocols, libxkbcommon
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.3.5";
+  version = "3.4";
   pname = "glfw";
 
   src = fetchFromGitHub {
     owner = "glfw";
     repo = "GLFW";
     rev = version;
-    sha256 = "sha256-1KkzYclOLGqiV1/8BsJ3e+pXMQ6a+sjLwZ7mjSuxxbA=";
+    sha256 = "sha256-FcnQPDeNHgov1Z07gjFze0VMz2diOrpbKZCsI96ngz0=";
   };
 
-  # Fix freezing on Wayland (https://github.com/glfw/glfw/pull/1711)
-  # and linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
-  patches = if waylandSupport then ./wayland.patch else ./x11.patch;
+  # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
+  patches = ./x11.patch;
 
   propagatedBuildInputs = [ libGL ];
 
-  nativeBuildInputs = [ cmake ]
+  nativeBuildInputs = [ cmake extra-cmake-modules ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames
-    ++ lib.optional waylandSupport extra-cmake-modules;
+    ++ lib.optionals stdenv.isLinux [ wayland-scanner ];
 
   buildInputs =
-    if waylandSupport
-    then [ wayland wayland-protocols libxkbcommon ]
-    else [ libX11 libXrandr libXinerama libXcursor libXi libXext ]
-         ++ lib.optionals stdenv.isDarwin [ Cocoa Kernel ];
+    lib.optionals stdenv.isDarwin [ Carbon Cocoa Kernel ]
+    ++ lib.optionals stdenv.isLinux [
+      wayland
+      wayland-protocols
+      libxkbcommon
+      libX11
+      libXrandr
+      libXinerama
+      libXcursor
+      libXi
+      libXext
+    ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin && !stdenv.hostPlatform.isWindows) [
     "-DCMAKE_C_FLAGS=-D_GLFW_GLX_LIBRARY='\"${lib.getLib libGL}/lib/libGL.so.1\"'"
-  ] ++ lib.optionals waylandSupport [
-    "-DGLFW_USE_WAYLAND=ON"
     "-DCMAKE_C_FLAGS=-D_GLFW_EGL_LIBRARY='\"${lib.getLib libGL}/lib/libEGL.so.1\"'"
   ];
 
-  postPatch = lib.optionalString waylandSupport ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace src/wl_init.c \
       --replace "libxkbcommon.so.0" "${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0"
+  '';
+
+  # glfw may dlopen libwayland-client.so:
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf ''${!outputLib}/lib/libglfw.so --add-rpath ${lib.getLib wayland}/lib
   '';
 
   meta = with lib; {
@@ -51,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.glfw.org/";
     license = licenses.zlib;
     maintainers = with maintainers; [ marcweber twey ];
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

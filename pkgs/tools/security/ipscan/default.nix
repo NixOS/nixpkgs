@@ -1,23 +1,33 @@
-{ lib, stdenv, fetchurl, jdk, jre, swt, makeWrapper, xorg, dpkg }:
+{ lib
+, stdenv
+, fetchurl
+, jdk
+, jre
+, swt
+, makeWrapper
+, xorg
+, dpkg
+}:
 
 stdenv.mkDerivation rec {
   pname = "ipscan";
-  version = "3.7.6";
+  version = "3.9.1";
 
   src = fetchurl {
-    url = "https://github.com/angryip/ipscan/releases/download/${version}/ipscan_${version}_all.deb";
-    sha256 = "sha256-IjbuCCwcAOlCM2XbM5qBGjaGn8xNNDjoyJmCzP5JF/Q=";
+    url = "https://github.com/angryip/ipscan/releases/download/${version}/ipscan_${version}_amd64.deb";
+    hash = "sha256-UPkUwZV3NIeVfL3yYvqOhm4X5xW+40GOlZGy8WGhYmk=";
   };
 
   sourceRoot = ".";
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $src .";
 
   nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [ jdk ];
 
   installPhase = ''
     mkdir -p $out/share
-    cp usr/lib/ipscan/ipscan-any-${version}.jar $out/share/${pname}-${version}.jar
+    cp usr/lib/ipscan/ipscan-linux64-${version}.jar $out/share/${pname}-${version}.jar
 
     makeWrapper ${jre}/bin/java $out/bin/ipscan \
       --prefix LD_LIBRARY_PATH : "$out/lib/:${lib.makeLibraryPath [ swt xorg.libXtst ]}" \
@@ -32,10 +42,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Fast and friendly network scanner";
+    description = "Angry IP Scanner - fast and friendly network scanner";
+    mainProgram = "ipscan";
     homepage = "https://angryip.org";
-    license = licenses.gpl2;
+    downloadPage = "https://github.com/angryip/ipscan/releases/tag/${version}";
+    changelog = "https://github.com/angryip/ipscan/blob/${version}/CHANGELOG";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ kylesferrazza ];
+    maintainers = with maintainers; [ kylesferrazza totoroot ];
   };
 }

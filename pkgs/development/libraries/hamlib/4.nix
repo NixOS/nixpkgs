@@ -5,7 +5,7 @@
 , swig
 , gd
 , ncurses
-, python3
+, python311
 , libxml2
 , tcl
 , libusb-compat-0_1
@@ -17,14 +17,16 @@
 , tclBindings ? true
 , perlBindings ? true
 }:
-
+let
+  python3 = python311; # needs distutils and imp
+in
 stdenv.mkDerivation rec {
   pname = "hamlib";
-  version = "4.4";
+  version = "4.5.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-i/AQewcfUvCFh/OOLe6KeEjeE0NDWzJvj2bZXh+KJIc=";
+    sha256 = "sha256-YByJ8y7SJelSet49ZNDQXSMgLAWuIf+nflnXDuRZf80=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
     command line interface or in a text-oriented interactive interface.
     '';
     license = with licenses; [ gpl2Plus lgpl2Plus ];
-    homepage = "http://hamlib.sourceforge.net";
+    homepage = "https://hamlib.sourceforge.net";
     maintainers = with maintainers; [ relrod ];
     platforms = with platforms; unix;
   };

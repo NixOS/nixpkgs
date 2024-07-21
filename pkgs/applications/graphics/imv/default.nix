@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchFromGitHub
+, fetchFromSourcehut
 , asciidoc
 , cmocka
 , docbook_xsl
@@ -11,15 +11,17 @@
 , icu
 , pango
 , inih
-, withWindowSystem ? "all"
+, withWindowSystem ? null
 , xorg
 , libxkbcommon
 , libGLU
 , wayland
-, withBackends ? [ "freeimage" "libtiff" "libjpeg" "libpng" "librsvg" "libnsgif" "libheif" ]
+# "libnsgif" is disabled until https://todo.sr.ht/~exec64/imv/55 is solved
+, withBackends ? [ "libjxl" "libtiff" "libjpeg" "libpng" "librsvg" "libheif" ]
 , freeimage
 , libtiff
 , libjpeg_turbo
+, libjxl
 , libpng
 , librsvg
 , netsurf
@@ -27,6 +29,12 @@
 }:
 
 let
+  # default value of withWindowSystem
+  withWindowSystem' =
+         if withWindowSystem != null then withWindowSystem
+    else if stdenv.isLinux then "all"
+    else "x11";
+
   windowSystems = {
     all = windowSystems.x11 ++ windowSystems.wayland;
     x11 = [ libGLU xorg.libxcb xorg.libX11 ];
@@ -34,7 +42,7 @@ let
   };
 
   backends = {
-    inherit freeimage libtiff libpng librsvg libheif;
+    inherit freeimage libtiff libpng librsvg libheif libjxl;
     libjpeg = libjpeg_turbo;
     inherit (netsurf) libnsgif;
   };
@@ -47,7 +55,7 @@ let
 in
 
 # check that given window system is valid
-assert lib.assertOneOf "withWindowSystem" withWindowSystem
+assert lib.assertOneOf "withWindowSystem" withWindowSystem'
   (builtins.attrNames windowSystems);
 # check that every given backend is valid
 assert builtins.all
@@ -56,24 +64,26 @@ assert builtins.all
 
 stdenv.mkDerivation rec {
   pname = "imv";
-  version = "4.3.0";
+  version = "4.5.0";
+  outputs = [ "out" "man" ];
 
-  src = fetchFromGitHub {
-    owner = "eXeC64";
+  src = fetchFromSourcehut {
+    owner = "~exec64";
     repo = "imv";
     rev = "v${version}";
-    sha256 = "sha256-HP9W9US9e3YAXwCqiHV8NVqrO20SfQKcW3a6+r1XrIs=";
+    sha256 = "sha256-aJ2EXgsS0WUTxMqC1Q+uOWLG8BeuwAyXPmJB/9/NCCU=";
   };
 
   mesonFlags = [
-    "-Dwindows=${withWindowSystem}"
+    "-Dwindows=${withWindowSystem'}"
     "-Dtest=enabled"
     "-Dman=enabled"
   ] ++ backendFlags;
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     asciidoc
-    cmocka
     docbook_xsl
     libxslt
     meson
@@ -82,11 +92,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cmocka
     icu
     libxkbcommon
     pango
     inih
-  ] ++ windowSystems."${withWindowSystem}"
+  ] ++ windowSystems."${withWindowSystem'}"
     ++ builtins.map (b: backends."${b}") withBackends;
 
   postInstall = ''
@@ -95,7 +106,7 @@ stdenv.mkDerivation rec {
     install -Dm644 ../files/imv.desktop $out/share/applications/
   '';
 
-  postFixup = lib.optionalString (withWindowSystem == "all") ''
+  postFixup = lib.optionalString (withWindowSystem' == "all") ''
     # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
     # so we have to fix those to the binaries we installed into the /nix/store
 
@@ -107,10 +118,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A command line image viewer for tiling window managers";
-    homepage = "https://github.com/eXeC64/imv";
+    description = "Command line image viewer for tiling window managers";
+    homepage = "https://sr.ht/~exec64/imv/";
     license = licenses.mit;
     maintainers = with maintainers; [ rnhmjoj markus1189 ];
     platforms = platforms.all;
+    badPlatforms = platforms.darwin;
   };
 }

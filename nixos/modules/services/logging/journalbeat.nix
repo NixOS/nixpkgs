@@ -5,13 +5,9 @@ with lib;
 let
   cfg = config.services.journalbeat;
 
-  lt6 = builtins.compareVersions cfg.package.version "6" < 0;
-
   journalbeatYml = pkgs.writeText "journalbeat.yml" ''
     name: ${cfg.name}
     tags: ${builtins.toJSON cfg.tags}
-
-    ${optionalString lt6 "journalbeat.cursor_state_file: /var/lib/${cfg.stateDir}/cursor-state"}
 
     ${cfg.extraConfig}
   '';
@@ -24,14 +20,7 @@ in
 
       enable = mkEnableOption "journalbeat";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.journalbeat;
-        defaultText = literalExpression "pkgs.journalbeat";
-        description = ''
-          The journalbeat package to use
-        '';
-      };
+      package = mkPackageOption pkgs "journalbeat" { };
 
       name = mkOption {
         type = types.str;
@@ -49,7 +38,7 @@ in
         type = types.str;
         default = "journalbeat";
         description = ''
-          Directory below <literal>/var/lib/</literal> to store journalbeat's
+          Directory below `/var/lib/` to store journalbeat's
           own logs and other data. This directory will be created automatically
           using systemd's StateDirectory mechanism.
         '';
@@ -57,17 +46,7 @@ in
 
       extraConfig = mkOption {
         type = types.lines;
-        default = optionalString lt6 ''
-          journalbeat:
-            seek_position: cursor
-            cursor_seek_fallback: tail
-            write_cursor_state: true
-            cursor_flush_period: 5s
-            clean_field_names: true
-            convert_to_numbers: false
-            move_metadata_to_field: journal
-            default_type: journal
-        '';
+        default = "";
         description = "Any other configuration options you want to add";
       };
 

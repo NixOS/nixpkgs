@@ -22,7 +22,7 @@ in
 
           Note that this greeter starts only the default X session.
           You can configure the default X session using
-          <xref linkend="opt-services.xserver.displayManager.defaultSession"/>.
+          [](#opt-services.displayManager.defaultSession).
         '';
       };
 
@@ -61,7 +61,7 @@ in
 
     services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
 
-    nixpkgs.config.lightdm-tiny-greeter.conf =
+    services.xserver.displayManager.lightdm.greeter =
     let
       configHeader = ''
         #include <gtk/gtk.h>
@@ -69,13 +69,11 @@ in
         static const char *pass_text = "${cfg.label.pass}";
         static const char *session = "${dmcfg.defaultSession}";
       '';
+      config = optionalString (cfg.extraConfig != "") (configHeader + cfg.extraConfig);
+      package = pkgs.lightdm-tiny-greeter.override { conf = config; };
     in
-      optionalString (cfg.extraConfig != "")
-        (configHeader + cfg.extraConfig);
-
-    services.xserver.displayManager.lightdm.greeter =
       mkDefault {
-        package = pkgs.lightdm-tiny-greeter.xgreeters;
+        package = package.xgreeters;
         name = "lightdm-tiny-greeter";
       };
 
@@ -83,7 +81,7 @@ in
       {
         assertion = dmcfg.defaultSession != null;
         message = ''
-          Please set: services.xserver.displayManager.defaultSession
+          Please set: services.displayManager.defaultSession
         '';
       }
     ];

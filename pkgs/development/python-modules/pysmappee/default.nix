@@ -1,25 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cachetools
-, paho-mqtt
-, pytz
-, requests
-, requests_oauthlib
-, schedule
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cachetools,
+  fetchFromGitHub,
+  paho-mqtt,
+  pythonOlder,
+  pytz,
+  requests,
+  requests-oauthlib,
+  schedule,
 }:
 
 buildPythonPackage rec {
   pname = "pysmappee";
   version = "0.2.29";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "smappee";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ffi55FZsZUKDcS4qV46NpRK3VP6axzrL2BO+hYW7J9E=";
+    hash = "sha256-Ffi55FZsZUKDcS4qV46NpRK3VP6axzrL2BO+hYW7J9E=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +30,7 @@ buildPythonPackage rec {
     paho-mqtt
     pytz
     requests
-    requests_oauthlib
+    requests-oauthlib
     schedule
   ];
 

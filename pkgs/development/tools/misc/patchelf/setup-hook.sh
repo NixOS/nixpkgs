@@ -8,7 +8,7 @@ patchELF() {
     local dir="$1"
     [ -e "$dir" ] || return 0
 
-    header "shrinking RPATHs of ELF executables and libraries in $dir"
+    echo "shrinking RPATHs of ELF executables and libraries in $dir"
 
     local i
     while IFS= read -r -d $'\0' i; do
@@ -17,6 +17,4 @@ patchELF() {
         echo "shrinking $i"
         patchelf --shrink-rpath "$i" || true
     done < <(find "$dir" -type f -print0)
-
-    stopNest
 }

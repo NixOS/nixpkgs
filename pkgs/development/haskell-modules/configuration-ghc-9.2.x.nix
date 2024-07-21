@@ -2,6 +2,11 @@
 
 with haskellLib;
 
+let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
+  inherit (pkgs) lib;
+in
+
 self: super: {
 
   llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
@@ -35,183 +40,99 @@ self: super: {
   rts = null;
   stm = null;
   template-haskell = null;
-  terminfo = null;
+  # GHC only builds terminfo if it is a native compiler
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
-  xhtml = null;
+  # GHC only bundles the xhtml library if haddock is enabled, check if this is
+  # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_3_0_0;
 
-  # Workaround for https://gitlab.haskell.org/ghc/ghc/-/issues/20594
-  tf-random = overrideCabal {
-    doHaddock = !pkgs.stdenv.isAarch64;
-  } super.tf-random;
+  # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
+  Cabal-syntax = self.Cabal-syntax_3_6_0_0;
+  # These core package only exist for GHC >= 9.4. The best we can do is feign
+  # their existence to callPackages, but their is no shim for lower GHC versions.
+  system-cxx-std-lib = null;
 
-  aeson = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/aeson-1.5.6.0.patch";
-    sha256 = "07rk7f0lhgilxvbg2grpl1p5x25wjf9m7a0wqmi2jr0q61p9a0nl";
-    # The revision information is newer than that included in the patch
-    excludes = ["*.cabal"];
-  }) (doJailbreak super.aeson);
-
-  basement = overrideCabal (drv: {
-    # This is inside a conditional block so `doJailbreak` doesn't work
-    postPatch = "sed -i -e 's,<4.16,<4.17,' basement.cabal";
-  }) (appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/basement-0.0.12.patch";
-    sha256 = "0c8n2krz827cv87p3vb1vpl3v0k255aysjx9lq44gz3z1dhxd64z";
-  }) super.basement);
-
-  # Tests fail because of typechecking changes
-  conduit = dontCheck super.conduit;
-
-  cryptonite = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/cryptonite-0.29.patch";
-    sha256 = "1g48lrmqgd88hqvfq3klz7lsrpwrir2v1931myrhh6dy0d9pqj09";
-  }) super.cryptonite;
-
-  # cabal-install needs more recent versions of Cabal
-  cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_2_0;
+  # weeder >= 2.5 requires GHC 9.4
+  weeder = doDistribute self.weeder_2_4_1;
+  # Allow dhall 1.42.*
+  weeder_2_4_1 = doJailbreak (super.weeder_2_4_1.override {
+    # weeder < 2.6 only supports algebraic-graphs < 0.7
+    # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
+    algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
   });
 
-  doctest = dontCheck (doJailbreak super.doctest_0_18_2);
 
-  # Tests fail in GHC 9.2
-  extra = dontCheck super.extra;
-
-  # Jailbreaks & Version Updates
-  assoc = doJailbreak super.assoc;
-  async = doJailbreak super.async;
-  attoparsec = super.attoparsec_0_14_2;
-  base64-bytestring = doJailbreak super.base64-bytestring;
-  base-compat = self.base-compat_0_12_1;
-  base-compat-batteries = self.base-compat-batteries_0_12_1;
-  binary-instances = doJailbreak super.binary-instances;
-  binary-orphans = super.binary-orphans_1_0_2;
-  ChasingBottoms = doJailbreak super.ChasingBottoms;
-  constraints = doJailbreak super.constraints;
-  cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";}) super.cpphs;
-  cryptohash-md5 = doJailbreak super.cryptohash-md5;
-  cryptohash-sha1 = doJailbreak super.cryptohash-sha1;
-  data-fix = doJailbreak super.data-fix;
-  dec = doJailbreak super.dec;
-  ed25519 = doJailbreak super.ed25519;
-  genvalidity = self.genvalidity_1_0_0_1;
-  genvalidity-property = self.genvalidity-property_1_0_0_0;
-  genvalidity-hspec = self.genvalidity-hspec_1_0_0_0;
-  ghc-byteorder = doJailbreak super.ghc-byteorder;
-  ghc-lib = self.ghc-lib_9_2_1_20211101;
-  ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
-  hackage-security = doJailbreak super.hackage-security;
-  hashable = super.hashable_1_4_0_1;
-  hashable-time = doJailbreak super.hashable-time_0_3;
-  hedgehog = doJailbreak super.hedgehog;
-  HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
-  integer-logarithms = overrideCabal (drv: { postPatch = "sed -i -e 's, <1.1, <1.3,' integer-logarithms.cabal"; }) (doJailbreak super.integer-logarithms);
-  indexed-traversable = doJailbreak super.indexed-traversable;
-  indexed-traversable-instances = doJailbreak super.indexed-traversable-instances;
-  lifted-async = doJailbreak super.lifted-async;
-  lukko = doJailbreak super.lukko;
-  network = super.network_3_1_2_5;
-  ormolu = self.ormolu_0_4_0_0;
-  OneTuple = super.OneTuple_0_3_1;
-  parallel = doJailbreak super.parallel;
-  path = doJailbreak super.path_0_9_1;
-  polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
-  primitive = doJailbreak super.primitive;
-  quickcheck-instances = super.quickcheck-instances_0_3_27;
-  regex-posix = doJailbreak super.regex-posix;
-  resolv = doJailbreak super.resolv;
-  semialign = super.semialign_1_2_0_1;
-  singleton-bool = doJailbreak super.singleton-bool;
-  scientific = doJailbreak super.scientific;
-  shelly = doJailbreak super.shelly;
-  split = doJailbreak super.split;
-  splitmix = doJailbreak super.splitmix;
-  tar = doJailbreak super.tar;
-  tasty-hedgehog = doJailbreak super.tasty-hedgehog;
-  tasty-hspec = doJailbreak super.tasty-hspec;
-  th-desugar = self.th-desugar_1_13;
-  these = doJailbreak super.these;
-  time-compat = doJailbreak super.time-compat_1_9_6_1;
-  type-equality = doJailbreak super.type-equality;
-  unordered-containers = doJailbreak super.unordered-containers;
-  vector = doJailbreak (dontCheck super.vector);
-  vector-binary-instances = doJailbreak super.vector-binary-instances;
-  # Upper bound on `hashable` is too restrictive
-  witherable = doJailbreak super.witherable;
-  zlib = doJailbreak super.zlib;
-
-  hpack = overrideCabal (drv: {
-    # Cabal 3.6 seems to preserve comments when reading, which makes this test fail
-    # 2021-10-10: 9.2.1 is not yet supported (also no issue)
-    testFlags = [
-      "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
-    ] ++ drv.testFlags or [];
-  }) (doJailbreak super.hpack);
-
-  validity = pkgs.lib.pipe super.validity_0_12_0_0 [
-    # head.hackage patch
-    (appendPatch (pkgs.fetchpatch {
-      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/9110e6972b5daf085e19cad41f97920d3ddac499/patches/validity-0.12.0.0.patch";
-      sha256 = "0hzns596dxvyn8irgi7aflx76wak1qi13chkkvl0055pkgykm08f";
-    }))
-    # head.hackage ignores test suite
-    dontCheck
+  haskell-language-server = lib.pipe super.haskell-language-server [
+    (disableCabalFlag "fourmolu")
+    (disableCabalFlag "ormolu")
+    (disableCabalFlag "stylishHaskell")
+    (d: d.override {
+      ormolu = null;
+      fourmolu = null;
+    })
   ];
 
-  # lens >= 5.1 supports 9.2.1
-  lens = super.lens_5_1;
+  # For GHC < 9.4, some packages need data-array-byte as an extra dependency
+  hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
+  primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
+  primitive-unlifted = super.primitive-unlifted_0_1_3_1;
+  # Too strict lower bound on base
+  primitive-addr = doJailbreak super.primitive-addr;
 
-  # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
-  alex = dontCheck super.alex;
+  # Jailbreaks & Version Updates
+  hashable-time = doJailbreak super.hashable-time;
 
-  # Apply patches from head.hackage.
-  language-haskell-extract = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
-    sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
-  }) (doJailbreak super.language-haskell-extract);
+  # Depends on utf8-light which isn't maintained / doesn't support base >= 4.16
+  # https://github.com/haskell-infra/hackage-trustees/issues/347
+  # https://mail.haskell.org/pipermail/haskell-cafe/2022-October/135613.html
+  language-javascript_0_7_0_0 = dontCheck super.language-javascript_0_7_0_0;
 
-  haskell-src-meta = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/haskell-src-meta-0.8.7.patch";
-    sha256 = "013k8hpxac226j47cdzgdf9a1j91kmm0cvv7n8zwlajbj3y9bzjp";
-  }) (doJailbreak super.haskell-src-meta);
+  # Needs to match ghc version
+  ghc-tags = doDistribute self.ghc-tags_1_5;
 
-  # Tests depend on `parseTime` which is no longer available
-  hourglass = dontCheck super.hourglass;
+  # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
+  hlint = enableCabalFlag "ghc-lib" super.hlint;
 
-  # 1.2.1 introduced support for GHC 9.2.1, stackage has 1.2.0
-  # The test suite indirectly depends on random, which leads to infinite recursion
-  random = dontCheck super.random_1_2_1;
+  # 0.2.2.3 requires Cabal >= 3.8
+  shake-cabal = doDistribute self.shake-cabal_0_2_2_2;
 
-  # 0.16.0 introduced support for GHC 9.0.x, stackage has 0.15.0
-  memory = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/memory-0.16.0.patch";
-    sha256 = "1kjganx729a6xfgfnrb3z7q6mvnidl042zrsd9n5n5a3i76nl5nl";
-  }) (overrideCabal {
-    editedCabalFile = null;
-    revision = null;
-  } super.memory_0_16_0);
+  # https://github.com/sjakobi/bsb-http-chunked/issues/38
+  bsb-http-chunked = dontCheck super.bsb-http-chunked;
 
-  # GHC 9.0.x doesn't like `import Spec (main)` in Main.hs
-  # https://github.com/snoyberg/mono-traversable/issues/192
-  mono-traversable = dontCheck super.mono-traversable;
+  # https://github.com/NixOS/cabal2nix/issues/554
+  # https://github.com/clash-lang/clash-compiler/blob/f0f6275e19b8c672f042026c478484c5fd45191d/README.md#ghc-compatibility
+  clash-prelude = dontDistribute (markBroken super.clash-prelude);
 
-  # Disable tests pending resolution of
-  # https://github.com/Soostone/retry/issues/71
-  retry = dontCheck super.retry;
+  # Too strict upper bound on bytestring, relevant for GHC 9.2.6 specifically
+  # https://github.com/protolude/protolude/issues/127#issuecomment-1428807874
+  protolude = doJailbreak super.protolude;
 
-  # Upper bound on `hashable` is too restrictive
-  semigroupoids = overrideCabal (drv: { postPatch = "sed -i -e 's,hashable >= 1.2.7.0  && < 1.4,hashable >= 1.2.7.0  \\&\\& < 1.5,' semigroupoids.cabal";}) super.semigroupoids;
+  # https://github.com/fpco/inline-c/pull/131
+  inline-c-cpp =
+    (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
+    super.inline-c-cpp;
 
-  # Tests have a circular dependency on quickcheck-instances
-  text-short = dontCheck super.text-short_0_1_4;
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = super.ghc-exactprint_1_5_0;
 
-  # hlint 3.3 needs a ghc-lib-parser newer than the one from stackage
-  hlint = super.hlint_3_3_4.overrideScope (self: super: {
-    ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
-  });
+  # Requires GHC < 9.4
+  ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+
+  # Packages which need compat library for GHC < 9.6
+  inherit
+    (lib.mapAttrs
+      (_: addBuildDepends [ self.foldable1-classes-compat ])
+      super)
+    indexed-traversable
+    OneTuple
+    these
+  ;
+  base-compat-batteries = addBuildDepends [
+    self.foldable1-classes-compat
+    self.OneTuple
+  ] super.base-compat-batteries;
 }

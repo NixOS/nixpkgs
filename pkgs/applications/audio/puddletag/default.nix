@@ -1,40 +1,83 @@
-{ lib, fetchFromGitHub, python3Packages, wrapQtAppsHook, chromaprint }:
+{ lib
+, fetchFromGitHub
+, fetchurl
+, python3
+, qtbase
+, qtwayland
+, wrapQtAppsHook
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "puddletag";
-  version = "2.0.1";
+  version = "2.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "keithgg";
+    owner = "puddletag";
     repo = "puddletag";
-    rev = version;
-    sha256 = "sha256-9l8Pc77MX5zFkOqU00HFS8//3Bzd2OMnVV1brmWsNAQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-oScT8YcQoDf2qZ+J7xKm22Sbfym3tkVUrWT5D2LU5e8=";
   };
 
-  sourceRoot = "source/source";
+  patches = [
+    (fetchurl {
+      url = "https://github.com/puddletag/puddletag/commit/54074824adb05da42c03d7adfbba94d8e24982f0.patch";
+      hash = "sha256-DkgaFWgp2m2bRuhdXhHW+nxV/2GaCgeRNdwLMYAkcYQ=";
+      name = "fix_for_pyparsing_3_1_2.patch";
+    })
+  ];
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  pythonRelaxDeps = true;
 
-  propagatedBuildInputs = [ chromaprint ] ++ (with python3Packages; [
+  pythonRemoveDeps = [
+    "chromaprint"
+    "pyqt5-qt5"
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace share/pixmaps share/icons
+  '';
+
+  buildInputs = [
+    qtbase
+    qtwayland
+  ];
+
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     configobj
+    levenshtein
+    lxml
     mutagen
+    pyacoustid
     pyparsing
     pyqt5
-  ]);
+    rapidfuzz
+    unidecode
+  ];
 
+  # the file should be executable but it isn't so our wrapper doesn't run
   preFixup = ''
+    chmod 555 $out/bin/puddletag
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   doCheck = false; # there are no tests
 
+  dontWrapQtApps = true; # to avoid double-wrapping
+
   dontStrip = true; # we are not generating any binaries
 
   meta = with lib; {
-    description = "An audio tag editor similar to the Windows program, Mp3tag";
+    description = "Audio tag editor similar to the Windows program, Mp3tag";
+    mainProgram = "puddletag";
     homepage = "https://docs.puddletag.net";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ peterhoeg dschrempf ];
     platforms = platforms.linux;
   };
 }

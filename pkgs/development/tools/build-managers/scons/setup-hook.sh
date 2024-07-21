@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2206
+
 sconsBuildPhase() {
     runHook preBuild
 
@@ -15,7 +17,7 @@ sconsBuildPhase() {
       $buildFlags ${buildFlagsArray[@]}
     )
 
-    echoCmd 'build flags' "${flagsArray[@]}"
+    echoCmd 'scons build flags' "${flagsArray[@]}"
     scons "${flagsArray[@]}"
 
     runHook postBuild
@@ -33,12 +35,13 @@ sconsInstallPhase() {
     fi
 
     local flagsArray=(
+        ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
         $sconsFlags ${sconsFlagsArray[@]}
         $installFlags ${installFlagsArray[@]}
         ${installTargets:-install}
     )
 
-    echoCmd 'install flags' "${flagsArray[@]}"
+    echoCmd 'scons install flags' "${flagsArray[@]}"
     scons "${flagsArray[@]}"
 
     runHook postInstall
@@ -49,9 +52,9 @@ sconsCheckPhase() {
 
     if [ -z "${checkTarget:-}" ]; then
         if scons -n check >/dev/null 2>&1; then
-            checkTarget=check
+            checkTarget="check"
         elif scons -n test >/dev/null 2>&1; then
-            checkTarget=test
+            checkTarget="test"
         fi
     fi
 
@@ -64,21 +67,21 @@ sconsCheckPhase() {
             ${checkFlagsArray[@]}
         )
 
-        echoCmd 'check flags' "${flagsArray[@]}"
+        echoCmd 'scons check flags' "${flagsArray[@]}"
         scons "${flagsArray[@]}"
     fi
 
     runHook postCheck
 }
 
-if [ -z "${buildPhase-}" ]; then
+if [ -z "${dontUseSconsBuild-}" ] && [ -z "${buildPhase-}" ]; then
     buildPhase=sconsBuildPhase
 fi
 
-if [ -z "${dontUseSconsInstall-}" -a -z "${installPhase-}" ]; then
-    installPhase=sconsInstallPhase
+if [ -z "${dontUseSconsCheck-}" ] && [ -z "${checkPhase-}" ]; then
+    checkPhase=sconsCheckPhase
 fi
 
-if [ -z "${checkPhase-}" ]; then
-    checkPhase=sconsCheckPhase
+if [ -z "${dontUseSconsInstall-}" ] && [ -z "${installPhase-}" ]; then
+    installPhase=sconsInstallPhase
 fi

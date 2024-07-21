@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchgit
+, fetchzip
 , autoreconfHook
 , pkg-config
 , glib
@@ -12,14 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ofono";
-  version = "1.33";
+  version = "2.3";
 
   outputs = [ "out" "dev" ];
 
-  src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/network/ofono/ofono.git";
-    rev = version;
-    sha256 = "sha256-UTFP69yv1epVrqBoRKCRcR2WiKBG01sLTzrsh/Nude4=";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/snapshot/ofono-${version}.tar.gz";
+    sha256 = "sha256-rX3ngXoW7YISyytpRPLX/lGmQa5LPtFxeA2XdtU1gV0=";
   };
 
   patches = [
@@ -58,9 +57,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Infrastructure for building mobile telephony (GSM/UMTS) applications";
-    homepage = "https://01.org/ofono";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ jtojnar ];
+    homepage = "https://git.kernel.org/pub/scm/network/ofono/ofono.git";
+    changelog = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/plain/ChangeLog?h=${version}";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "ofonod";
   };
 }

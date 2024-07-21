@@ -9,44 +9,37 @@
 , fontconfig
 , gd
 , gts
-, libdevil
 , libjpeg
 , libpng
 , libtool
 , pango
 , bash
 , bison
-, fetchpatch
 , xorg
 , ApplicationServices
+, Foundation
 , python3
 , withXorg ? true
+
+# for passthru.tests
+, exiv2
+, fltk
+, graphicsmagick
 }:
 
 let
   inherit (lib) optional optionals optionalString;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "graphviz";
-  version = "2.49.3";
+  version = "10.0.1";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
-    # use rev as tags have disappeared before
-    rev = "3425dae078262591d04fec107ec71ab010651852";
-    sha256 = "1qvyjly7r1ihacdvxq0r59l4csr09sc05palpshzqsiz2wb1izk0";
+    rev = version;
+    hash = "sha256-KAqJUVqPld3F2FHlUlfbw848GPXXOmyRQkab8jlH1NM=";
   };
-
-  patches = [
-    # Fix cross.
-    # https://gitlab.com/graphviz/graphviz/-/merge_requests/2281
-    # Remove when version > 2.49.3.
-    (fetchpatch {
-      url = "https://gitlab.com/graphviz/graphviz/-/commit/0cdb89acbb0caf5baf3d04a8821c9d0dfe065ea8.patch";
-      sha256 = "130mqlxzhzaz3vp4ccaq7z7fd9q6vjxmimz70g8y818igsbb13rf";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -63,46 +56,53 @@ stdenv.mkDerivation {
     fontconfig
     gd
     gts
-    libdevil
     pango
     bash
   ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])
-  ++ optionals stdenv.isDarwin [ ApplicationServices ];
+  ++ optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   hardeningDisable = [ "fortify" ];
 
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ] ++ lib.optional (xorg == null) "--without-x";
+  ] ++ optional (xorg == null) "--without-x";
 
   enableParallelBuilding = true;
 
-  CPPFLAGS = lib.optionalString (withXorg && stdenv.isDarwin)
+  CPPFLAGS = optionalString (withXorg && stdenv.isDarwin)
     "-I${cairo.dev}/include/cairo";
-
-  # ''
-  #   substituteInPlace rtest/rtest.sh \
-  #     --replace "/bin/ksh" "${mksh}/bin/mksh"
-  # '';
 
   doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
 
-  postPatch = ''
-    for f in $(find . -name Makefile.in); do
-      substituteInPlace $f --replace "-lstdc++" "-lc++"
-    done
-  '';
+  preAutoreconf = ''
+    # components under this directory require a tool `CompileXIB` to build
+    # and there's no official way to disable this on darwin.
+    substituteInPlace Makefile.am --replace-fail 'SUBDIRS += macosx' ""
 
-  preAutoreconf = "./autogen.sh";
+    ./autogen.sh
+  '';
 
   postFixup = optionalString withXorg ''
-    substituteInPlace $out/bin/dotty --replace '`which lefty`' $out/bin/lefty
     substituteInPlace $out/bin/vimdot \
-      --replace /usr/bin/vi '$(command -v vi)' \
-      --replace /usr/bin/vim '$(command -v vim)' \
+      --replace '"/usr/bin/vi"' '"$(command -v vi)"' \
+      --replace '"/usr/bin/vim"' '"$(command -v vim)"' \
       --replace /usr/bin/vimdot $out/bin/vimdot \
   '';
+
+  passthru.tests = {
+    inherit (python3.pkgs)
+      graphviz
+      pydot
+      pygraphviz
+      xdot
+    ;
+    inherit
+      exiv2
+      fltk
+      graphicsmagick
+    ;
+  };
 
   meta = with lib; {
     homepage = "https://graphviz.org";

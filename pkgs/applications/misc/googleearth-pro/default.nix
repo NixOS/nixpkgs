@@ -35,11 +35,11 @@ let
 in
 mkDerivation rec {
   pname = "googleearth-pro";
-  version = "7.3.4.8248";
+  version = "7.3.6.9796";
 
   src = fetchurl {
     url = "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-pro-stable/google-earth-pro-stable_${version}-r0_${arch}.deb";
-    sha256 = "1pbapi267snlrjari5k93y6kbrjsqhqxgkxxqaqv4r25az00dx6d";
+    sha256 = "sha256-Wv2jPGN7LC5T32WdX3W1BfGYrcXTNWTI1Wv+PmD0gNM=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
@@ -71,16 +71,17 @@ mkDerivation rec {
 
   unpackPhase = ''
     # deb file contains a setuid binary, so 'dpkg -x' doesn't work here
-    dpkg --fsys-tarfile ${src} | tar --extract
+    mkdir deb
+    dpkg --fsys-tarfile $src | tar --extract -C deb
   '';
 
   installPhase =''
     runHook preInstall
 
     mkdir $out
-    mv usr/* $out/
-    rmdir usr
-    mv * $out/
+    mv deb/usr/* $out/
+    rmdir deb/usr
+    mv deb/* $out/
     rm $out/bin/google-earth-pro $out/opt/google/earth/pro/googleearth
 
     # patch and link googleearth binary
@@ -113,11 +114,12 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A world sphere viewer";
+    description = "World sphere viewer";
     homepage = "https://www.google.com/earth/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ friedelino shamilton ];
+    maintainers = with maintainers; [ shamilton xddxdd ];
     platforms = platforms.linux;
-    knownVulnerabilities = [ "Includes vulnerable bundled libraries." ];
+    knownVulnerabilities = [ "Includes vulnerable versions of bundled libraries: openssl, ffmpeg, gdal, and proj." ];
   };
 }

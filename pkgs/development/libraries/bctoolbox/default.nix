@@ -1,16 +1,28 @@
 { bcunit
 , cmake
+, bc-decaf
 , fetchFromGitLab
-, mbedtls
-, lib, stdenv
+, mbedtls_2
+, lib
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "bctoolbox";
-  version = "5.0.55";
+  version = "5.2.109";
 
-  nativeBuildInputs = [ cmake bcunit ];
-  buildInputs = [ mbedtls ];
+  nativeBuildInputs = [
+    cmake
+  ];
+  buildInputs = [
+    # Made by BC
+    bcunit
+
+    # Vendored by BC
+    bc-decaf
+
+    mbedtls_2
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -18,16 +30,17 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-fZ+8XBTZ6/wNd8odzg20dAXtbjRudI6Nw0hKC9bopGo=";
+    hash = "sha256-OwwSGzMFwR2ajUUgAy7ea/Q2pWxn3DO72W7ukcjBJnU=";
   };
 
   # Do not build static libraries
-  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
+  cmakeFlags = [ "-DENABLE_STATIC=NO" "-DENABLE_STRICT=NO" ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
+  strictDeps = true;
 
   meta = with lib; {
     description = "Utilities library for Linphone";
+    mainProgram = "bctoolbox_tester";
     homepage = "https://gitlab.linphone.org/BC/public/bctoolbox";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ raskin jluttine ];

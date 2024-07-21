@@ -1,26 +1,35 @@
 diff --git a/src/pikepdf/_methods.py b/src/pikepdf/_methods.py
-index 9db6b49..4020bcf 100644
+index da40043f..4f566f01 100644
 --- a/src/pikepdf/_methods.py
 +++ b/src/pikepdf/_methods.py
-@@ -204,7 +204,7 @@ def _mudraw(buffer, fmt) -> bytes:
+@@ -74,7 +74,7 @@ def _mudraw(buffer, fmt) -> bytes:
          tmp_in.flush()
  
          proc = run(
--            ['mudraw', '-F', fmt, '-o', '-', tmp_in.name],
-+            ['@mudraw@', '-F', fmt, '-o', '-', tmp_in.name],
+-            ['mutool', 'draw', '-F', fmt, '-o', '-', tmp_in.name],
++            ['@mutool@', 'draw', '-F', fmt, '-o', '-', tmp_in.name],
              capture_output=True,
              check=True,
          )
 diff --git a/src/pikepdf/jbig2.py b/src/pikepdf/jbig2.py
-index 80cc910..64f6d31 100644
+index 901f3b6f..45551820 100644
 --- a/src/pikepdf/jbig2.py
 +++ b/src/pikepdf/jbig2.py
-@@ -25,7 +25,7 @@ def extract_jbig2(
-         global_path = Path(tmpdir) / "global"
-         output_path = Path(tmpdir) / "outfile"
+@@ -72,7 +72,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
+             output_path = Path(tmpdir) / "outfile"
  
--        args = ["jbig2dec", "-e", "-o", os.fspath(output_path)]
-+        args = ["@jbig2dec@", "-e", "-o", os.fspath(output_path)]
- 
-         # Get the raw stream, because we can't decode im_obj - that is why we are here
-         # (Strictly speaking we should remove any non-JBIG2 filters if double encoded)
+             args = [
+-                "jbig2dec",
++                "@jbig2dec@",
+                 "--embedded",
+                 "--format",
+                 "png",
+@@ -101,7 +101,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
+     def _version(self) -> Version:
+         try:
+             proc = self._run(
+-                ['jbig2dec', '--version'],
++                ['@jbig2dec@', '--version'],
+                 stdout=PIPE,
+                 check=True,
+                 encoding='ascii',

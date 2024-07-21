@@ -1,4 +1,4 @@
-{ rustPlatform, fetchFromGitHub, rust, lib, stdenv }:
+{ rustPlatform, fetchFromGitHub, lib, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustc-demangle";
@@ -11,15 +11,20 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-elxclyuLmr3N66s+pR4/6OU98k1oXI2wKVJtzWPY8FI=";
   };
 
-  cargoPatches = [
+  cargoLock = {
     # generated using `cargo generate-lockfile` since repo is missing lockfile
-    ./add-Cargo.lock.patch
-  ];
-  cargoSha256 = "sha256-1tW5TOap5MstxTXAFij3IB8TIpI+FryEX9TXlVXjRl4=";
-  cargoBuildFlags = "-p rustc-demangle-capi";
+    lockFile = ./Cargo.lock;
+  };
+
+  cargoBuildFlags = [ "-p" "rustc-demangle-capi" ];
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
+
   postInstall = ''
     mkdir -p $out/lib
-    cp target/${rust.toRustTargetSpec stdenv.hostPlatform}/release/librustc_demangle.so $out/lib
+    cp target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc_demangle.so $out/lib
     cp -R crates/capi/include $out
   '';
 

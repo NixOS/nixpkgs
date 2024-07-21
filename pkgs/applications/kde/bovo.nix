@@ -6,8 +6,9 @@
 mkDerivation {
   pname = "bovo";
   meta = with lib; {
-    homepage = "https://kde.org/applications/en/games/org.kde.bovo";
+    homepage = "https://apps.kde.org/bovo/";
     description = "Five in a row application";
+    mainProgram = "bovo";
     longDescription = ''
       Bovo is a Gomoku (from Japanese 五目並べ - lit. "five points") like game for two players,
       where the opponents alternate in placing their respective pictogram on the game board.

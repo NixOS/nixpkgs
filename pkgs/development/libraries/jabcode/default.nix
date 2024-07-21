@@ -16,12 +16,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jabcode-${subproject}";
-  version = "unstable-2020-05-13";
+  version = "unstable-2022-06-17";
   src = fetchFromGitHub {
     repo = "jabcode";
     owner = "jabcode";
-    rev = "a7c25d4f248078f257b014e31c791bfcfcd083e1";
-    sha256 = "1c4cv9b0d7r4bxzkwzdv9h651ziq822iya6fbyizm57n1nzdkk4s";
+    rev = "ee0e4c88b9f3c1da46d6f679ee8b69c547907c20";
+    hash = "sha256-GjRkDWefQFdT4i9hRcQhYsY4beMUIXxy38I5lsQytyA=";
   };
 
   nativeBuildInputs =
@@ -40,11 +40,12 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "A high-capacity 2D color bar code (${subproject})";
+    description = "High-capacity 2D color bar code (${subproject})";
     longDescription = "JAB Code (Just Another Bar Code) is a high-capacity 2D color bar code, which can encode more data than traditional black/white (QR) codes. This is the ${subproject} part.";
     homepage = "https://jabcode.org/";
     license = licenses.lgpl21;
     maintainers = [ maintainers.xaverdh ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jabcode.x86_64-darwin
   };
 }

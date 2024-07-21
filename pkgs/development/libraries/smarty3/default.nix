@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "smarty3";
-  version = "3.1.39";
+  version = "3.1.48";
 
   src = fetchFromGitHub {
     owner = "smarty-php";
     repo = "smarty";
     rev = "v${version}";
-    sha256 = "0n5hmnw66gxqikp6frgfd9ywsvr2azyg5nl7ix89digqlzcljkbg";
+    hash = "sha256-QGhccIJ7BZTWGF+n8rmB1RCVyJKID95NW6Yb2VvqqGQ=";
   };
 
   installPhase = ''

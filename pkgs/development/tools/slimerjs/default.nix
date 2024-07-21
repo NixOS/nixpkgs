@@ -1,34 +1,37 @@
-{lib, stdenv, fetchFromGitHub, zip, unzip, firefox, bash}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="slimerjs";
-    version="1.0.0";
-    name="${baseName}-${version}";
+{ lib
+, bash
+, fetchFromGitHub
+, firefox
+, strip-nondeterminism
+, stdenv
+, unzip
+, zip
+}:
+
+stdenv.mkDerivation rec {
+  pname = "slimerjs";
+  version = "1.0.0";
+
+  src = fetchFromGitHub {
     owner = "laurentj";
-    repo = baseName;
-    sha256="1w4sfrv520isbs7r1rlzl5y3idrpad7znw9fc92yz40jlwz7sxs4";
+    repo = "slimerjs";
+    sha256 = "sha256-RHd9PqcSkO9FYi5x+09TN7c4fKGf5pCPXjoCUXZ2mvA=";
     rev = version;
   };
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
+
   buildInputs = [ zip ];
-  nativeBuildInputs = [ unzip ];
-  #src = fetchurl {
-  #  inherit (s) url sha256;
-  #};
-  #src = fetchgit {
-  #  inherit (s) url sha256 rev;
-  #};
-  src = fetchFromGitHub {
-    inherit (s) owner repo rev sha256;
-  };
+  nativeBuildInputs = [
+    strip-nondeterminism
+    unzip
+  ];
+
   preConfigure = ''
     test -d src && cd src
     test -f omni.ja || zip omni.ja -r */
   '';
+
   installPhase = ''
+    strip-nondeterminism --type zip omni.ja
     mkdir -p "$out"/{bin,share/doc/slimerjs,lib/slimerjs}
     cp LICENSE README* "$out/share/doc/slimerjs"
     cp -r * "$out/lib/slimerjs"
@@ -38,11 +41,12 @@ stdenv.mkDerivation {
     chmod a+x "$out/bin/slimerjs"
     sed -e 's@MaxVersion=[3456][0-9][.]@MaxVersion=99.@' -i "$out/lib/slimerjs/application.ini"
   '';
-  meta = {
-    inherit (s) version;
+
+  meta = with lib; {
     description = "Gecko-based programmatically-driven browser";
-    license = lib.licenses.mpl20 ;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
+    mainProgram = "slimerjs";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
   };
 }

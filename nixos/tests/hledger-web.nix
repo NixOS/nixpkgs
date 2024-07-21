@@ -19,7 +19,7 @@ rec {
         host = "127.0.0.1";
         port = 5000;
         enable = true;
-        capabilities.manage = true;
+        allow = "edit";
       };
       networking.firewall.allowedTCPPorts = [ config.services.hledger-web.port ];
       systemd.services.hledger-web.preStart = ''

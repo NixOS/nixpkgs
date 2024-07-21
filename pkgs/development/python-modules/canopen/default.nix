@@ -1,39 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, can
-, canmatrix
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  can,
+  canmatrix,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "canopen";
-  version = "1.2.1";
+  version = "2.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18d01d56ff0023795cb336cafd4810a76cf402b98b42139b201fa8c5d4ba8c06";
+    hash = "sha256-eSCEqTwTjVsqQG3dLU61ziCPA72P2mD4GtK7jVbGuCc=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     can
     canmatrix
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "canopen" ];
 
   meta = with lib; {
-    homepage = "https://github.com/christiansandberg/canopen/";
     description = "CANopen stack implementation";
+    homepage = "https://github.com/christiansandberg/canopen/";
+    changelog = "https://github.com/christiansandberg/canopen/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ sorki ];
   };

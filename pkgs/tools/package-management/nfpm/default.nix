@@ -1,26 +1,45 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, buildPackages
+}:
 
 buildGoModule rec {
   pname = "nfpm";
-  version = "2.10.0";
+  version = "2.38.0";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZLlTcybBoLfiSWb0DKn+U+S/LbekZvTRyDV6b1q9FDU=";
+    hash = "sha256-enDzYXhqtQ3lNn8OFkffHpdxan0GsQvfE7ghGBTsQXo=";
   };
 
-  vendorSha256 = "sha256-uGpMOKqNgGOtgLU9ztg3GmR4FYBaldgZf6BZWxn08W8=";
-
-  doCheck = false;
+  vendorHash = "sha256-LJM9F9NTAMvDwsaRvjnZyjKSI0AjZvVM4srOYuGLA7w=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall =
+    let emulator = stdenv.hostPlatform.emulator buildPackages;
+    in ''
+      ${emulator} $out/bin/nfpm man > nfpm.1
+      installManPage ./nfpm.1
+      installShellCompletion --cmd nfpm \
+        --bash <(${emulator} $out/bin/nfpm completion bash) \
+        --fish <(${emulator} $out/bin/nfpm completion fish) \
+        --zsh  <(${emulator} $out/bin/nfpm completion zsh)
+    '';
+
   meta = with lib; {
-    description = "A simple deb and rpm packager written in Go";
+    description = "Simple deb and rpm packager written in Go";
     homepage = "https://github.com/goreleaser/nfpm";
-    maintainers = [ maintainers.marsam ];
-    license = licenses.mit;
+    changelog = "https://github.com/goreleaser/nfpm/releases/tag/v${version}";
+    maintainers = with maintainers; [ techknowlogick caarlos0 ];
+    license = with licenses; [ mit ];
+    mainProgram = "nfpm";
   };
 }

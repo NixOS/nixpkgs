@@ -8,19 +8,20 @@
 , readline
 , openssl
 , python3Packages
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "1.19";
+  version = "2.17";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-sMET4ouZ33SZRnkqJBadVvIDYMCOi7pib6d1zt1EJ8k=";
+    hash = "sha256-o/Q8vUtB4Yiz1x+/6+8LUKUQNtiAmwcdh++/tTUN4mM=";
   };
 
-  outputs = [ "out" "man" ]
+  outputs = [ "out" "man" "doc" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
 
   nativeBuildInputs = [
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  checkInputs = [ openssl ];
+  nativeCheckInputs = [ openssl ];
 
   # wrapPython wraps the scripts in $test. They pull in gobject-introspection,
   # which doesn't cross-compile.
@@ -59,15 +60,16 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     mkdir -p iwd/ell
     ln -s ${ell.src}/ell/useful.h iwd/ell/useful.h
+    ln -s ${ell.src}/ell/asn1-private.h iwd/ell/asn1-private.h
     patchShebangs .
   '';
 
   doCheck = true;
 
   postInstall = ''
-    mkdir -p $out/share
-    cp -a doc $out/share/
-    cp -a README AUTHORS TODO $out/share/doc/
+    mkdir -p $doc/share/doc
+    cp -a doc $doc/share/doc/iwd
+    cp -a README AUTHORS TODO $doc/share/doc/iwd
   '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p $test/bin
     cp -a test/* $test/bin/
@@ -79,18 +81,23 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/share/dbus-1/system-services/net.connman.ead.service \
-      --replace /bin/false ${coreutils}/bin/false
+      --replace-fail /bin/false ${coreutils}/bin/false
     substituteInPlace $out/share/dbus-1/system-services/net.connman.iwd.service \
-      --replace /bin/false ${coreutils}/bin/false
+      --replace-fail /bin/false ${coreutils}/bin/false
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
+  };
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill fpletz maxeaubrey ];
+    maintainers = with maintainers; [ dtzWill fpletz ];
   };
 }

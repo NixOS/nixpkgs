@@ -18,7 +18,7 @@ let
     in
     lib.concatStrings (lib.mapAttrsToList toArg args);
 
-  isPathType = x: lib.strings.isCoercibleToString x && builtins.substring 0 1 (toString x) == "/";
+  isPathType = x: lib.types.path.check x;
 
 in
 {
@@ -125,21 +125,26 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services.self-deploy = {
-      wantedBy = [ "multi-user.target" ];
+    systemd.services.self-deploy = rec {
+      inherit (cfg) startAt;
+
+      serviceConfig.Type = "oneshot";
 
       requires = lib.mkIf (!(isPathType cfg.repository)) [ "network-online.target" ];
 
-      environment.GIT_SSH_COMMAND = lib.mkIf (!(isNull cfg.sshKeyFile))
+      after = requires;
+
+      environment.GIT_SSH_COMMAND = lib.mkIf (cfg.sshKeyFile != null)
         "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshKeyFile}";
 
       restartIfChanged = false;
 
       path = with pkgs; [
         git
+        gnutar
+        gzip
         nix
-        systemd
-      ];
+      ] ++ lib.optionals (cfg.switchCommand == "boot") [ systemd ];
 
       script = ''
         if [ ! -e ${repositoryDirectory} ]; then

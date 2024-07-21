@@ -3,7 +3,7 @@
 , substituteAll
 , python3Packages
 , gst_all_1
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gtk3
 , libwnck
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1jk6khwgdv3nmagdgp5ivz3156pl0ljhf7b6i4b52w1h5ywsg9ah";
   };
 
-  nativeBuildInputs = [ gobject-introspection python3Packages.distutils_extra intltool wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection python3Packages.distutils-extra intltool wrapGAppsHook3 ];
   buildInputs = [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -39,9 +39,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [ pygobject3 pyxdg pycairo dbus-python xlib ];
-
-  # workaround https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   patches = [
     # Fix paths
@@ -56,10 +53,11 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A screencasting program created with design in mind";
+    description = "Screencasting program created with design in mind";
     homepage = "https://github.com/niknah/kazam";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
+    mainProgram = "kazam";
   };
 }

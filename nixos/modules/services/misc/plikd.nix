@@ -11,7 +11,7 @@ in
 {
   options = {
     services.plikd = {
-      enable = mkEnableOption "the plikd server";
+      enable = mkEnableOption "plikd, a temporary file upload system";
 
       openFirewall = mkOption {
         type = types.bool;
@@ -23,7 +23,7 @@ in
         type = format.type;
         default = {};
         description = ''
-          Configuration for plikd, see <link xlink:href="https://github.com/root-gg/plik/blob/master/server/plikd.cfg"/>
+          Configuration for plikd, see <https://github.com/root-gg/plik/blob/master/server/plikd.cfg>
           for supported values.
         '';
       };

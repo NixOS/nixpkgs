@@ -2,18 +2,16 @@
 
 buildGoModule rec {
   pname = "gotify-cli";
-  version = "2.2.0";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "gotify";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "0hgh1i8rdmf12qmk66cgksv8hz5qzkfbfb6cfmrkhbq765xkm4ir";
+    sha256 = "sha256-Hzdd9T8RcLxHG+vHb4KuKqW4SwcWDrVc6DZ0QUpH2Xc=";
   };
 
-  vendorSha256 = "1l47s0h0v4cgqcsm5008cknvfa4vnv6f7n43d8ga0xq5ikqqzmja";
-
-  doCheck = false;
+  vendorHash = "sha256-+G0LWlPiDcYmEou4gpoIU/OAjzQ3VSHftM1ViG9lhYM=";
 
   postInstall = ''
     mv $out/bin/cli $out/bin/gotify
@@ -26,7 +24,8 @@ buildGoModule rec {
   meta = with lib; {
     license = licenses.mit;
     homepage = "https://github.com/gotify/cli";
-    description = "A command line interface for pushing messages to gotify/server";
-    maintainers = with maintainers; [ ma27 ];
+    description = "Command line interface for pushing messages to gotify/server";
+    maintainers = with maintainers; [ ];
+    mainProgram = "gotify";
   };
 }

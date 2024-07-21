@@ -48,7 +48,7 @@ in {
 
       hostname = mkOption {
         type = types.nullOr types.str;
-        description = "DNS name or IP address that will be used for the stream directory lookups or possibily the playlist generation if a Host header is not provided.";
+        description = "DNS name or IP address that will be used for the stream directory lookups or possibly the playlist generation if a Host header is not provided.";
         default = config.networking.domain;
         defaultText = literalExpression "config.networking.domain";
       };
@@ -74,7 +74,7 @@ in {
 
       listen = {
         port = mkOption {
-          type = types.int;
+          type = types.port;
           description = "TCP port that will be used to accept client connections.";
           default = 8000;
         };

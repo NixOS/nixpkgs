@@ -1,46 +1,79 @@
-{ lib, fetchFromGitHub, gobject-introspection, gtk3, gtksourceview3, webkitgtk, wrapGAppsHook, python3Packages }:
+{ lib
+, fetchFromGitHub
+, gobject-introspection
+, gtk3
+, gtksourceview4
+, webkitgtk
+, wrapGAppsHook3
+, python3Packages
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
-  version = "1.3.2";
+  version = "1.6.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
-    rev = version;
-    sha256 = "1sx2rib0la3mifvh84ia3jnnq4qw9jxc13vxyidsdkp6x82nbvcg";
+    repo = "skytemple";
+    rev = "refs/tags/${version}";
+    hash = "sha256-yfXu1sboKi8STPiX5FUD9q+1U9GfhOyEKDRvU9rgdfI=";
   };
 
+  build-system = with python3Packages; [ setuptools ];
+
   buildInputs = [
-    gobject-introspection
     gtk3
-    gtksourceview3
-    # webkitgkt is used for rendering interactive statistics graph which
+    gtksourceview4
+    # webkitgtk is used for rendering interactive statistics graph which
     # can be seen by opening a ROM, entering Pokemon section, selecting
     # any Pokemon, and clicking Stats and Moves tab.
     webkitgtk
   ];
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
-  propagatedBuildInputs = with python3Packages; [
+
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
+
+  pythonRelaxDeps = [
+    "skytemple-files"
+    "skytemple-ssb-debugger"
+  ];
+
+  dependencies = with python3Packages; [
+    cairosvg
     natsort
+    ndspy
     packaging
     pycairo
     pygal
+    psutil
+    gbulb
     pypresence
+    sentry-sdk
     setuptools
     skytemple-dtef
     skytemple-eventserver
     skytemple-files
     skytemple-icons
     skytemple-ssb-debugger
-  ];
+    tilequant
+    wheel
+  ] ++ skytemple-files.optional-dependencies.spritecollab;
 
   doCheck = false; # there are no tests
+
+  postInstall = ''
+    install -Dm444 org.skytemple.SkyTemple.desktop -t $out/share/applications
+    install -Dm444 installer/skytemple.ico $out/share/icons/hicolor/256x256/apps/org.skytemple.SkyTemple.ico
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/skytemple";
     description = "ROM hacking tool for Pokémon Mystery Dungeon Explorers of Sky";
+    mainProgram = "skytemple";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix marius851000 ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

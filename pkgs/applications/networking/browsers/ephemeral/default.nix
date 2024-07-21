@@ -14,7 +14,7 @@
 , pkg-config
 , python3
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib-networking
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     vala
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -56,13 +56,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    description = "The always-incognito web browser";
+    description = "Always-incognito web browser";
     homepage = "https://github.com/cassidyjames/ephemeral";
     maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;

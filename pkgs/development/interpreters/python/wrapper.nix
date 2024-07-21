@@ -1,4 +1,4 @@
-{ lib, stdenv, buildEnv, makeWrapper
+{ lib, stdenv, buildEnv, makeBinaryWrapper
 
 # manually pased
 , python
@@ -27,7 +27,7 @@ let
     inherit ignoreCollisions;
     extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeBinaryWrapper ];
 
     postBuild = ''
       if [ -L "$out/bin" ]; then
@@ -42,7 +42,7 @@ let
             if [ -f "$prg" ]; then
               rm -f "$out/bin/$prg"
               if [ -x "$prg" ]; then
-                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set NIX_PYTHONPREFIX "$out" --set NIX_PYTHONEXECUTABLE ${pythonExecutable} --set NIX_PYTHONPATH ${pythonPath} ${if permitUserSite then "" else ''--set PYTHONNOUSERSITE "true"''} ${lib.concatStringsSep " " makeWrapperArgs}
+                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set NIX_PYTHONPREFIX "$out" --set NIX_PYTHONEXECUTABLE ${pythonExecutable} --set NIX_PYTHONPATH ${pythonPath} ${lib.optionalString (!permitUserSite) ''--set PYTHONNOUSERSITE "true"''} ${lib.concatStringsSep " " makeWrapperArgs}
               fi
             fi
           done

@@ -1,28 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, filelock
-, idna
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-file
-, responses
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  filelock,
+  idna,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-file,
+  responses,
+  setuptools,
+  setuptools-scm,
+  syrupy,
 }:
 
 buildPythonPackage rec {
-  pname   = "tldextract";
-  version = "3.1.2";
-  disabled = pythonOlder "3.6";
+  pname = "tldextract";
+  version = "5.1.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-0gNMNVhlH32P2t6oP7aBBQstZi3GegDZUDJtyQIClEQ=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "john-kurkowski";
+    repo = "tldextract";
+    rev = "refs/tags/${version}";
+    hash = "sha256-rieDDSCit9UcMpCMs2X3+cCS41Wbrp4WWVMzKj/jwEM=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     filelock
@@ -31,15 +41,12 @@ buildPythonPackage rec {
     requests-file
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
     responses
+    syrupy
   ];
-
-  postPatch = ''
-    substituteInPlace pytest.ini --replace " --pylint" ""
-  '';
 
   pythonImportsCheck = [ "tldextract" ];
 
@@ -50,7 +57,9 @@ buildPythonPackage rec {
       from the registered domain and subdomains of a URL.
     '';
     homepage = "https://github.com/john-kurkowski/tldextract";
+    changelog = "https://github.com/john-kurkowski/tldextract/blob/${version}/CHANGELOG.md";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "tldextract";
   };
 }

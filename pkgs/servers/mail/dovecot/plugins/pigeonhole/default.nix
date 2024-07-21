@@ -3,11 +3,11 @@ let
   dovecotMajorMinor = lib.versions.majorMinor dovecot.version;
 in stdenv.mkDerivation rec {
   pname = "dovecot-pigeonhole";
-  version = "0.5.17.1";
+  version = "0.5.21";
 
   src = fetchurl {
     url = "https://pigeonhole.dovecot.org/releases/${dovecotMajorMinor}/dovecot-${dovecotMajorMinor}-pigeonhole-${version}.tar.gz";
-    sha256 = "04j5z3y8yyci4ni9j9i7cy0zg1qj2sm9zfarmjcvs9vydpga7i1w";
+    hash = "sha256-HKcdJlkHZxIFinIDAojxULKwdrAwZFNHHFJhSY097Sc=";
   };
 
   buildInputs = [ dovecot openssl ];
@@ -30,10 +30,10 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://pigeonhole.dovecot.org/";
-    description = "A sieve plugin for the Dovecot IMAP server";
+    homepage = "https://pigeonhole.dovecot.org/";
+    description = "Sieve plugin for the Dovecot IMAP server";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ globin ajs124 ];
+    maintainers = with maintainers; [ globin ] ++ teams.helsinki-systems.members;
     platforms = platforms.unix;
   };
 }

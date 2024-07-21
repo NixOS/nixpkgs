@@ -14,28 +14,9 @@ let
 
   # Add filecontents from files of useTheseDefaultConfFiles to confFiles, do not override
   defaultConfFiles = subtractLists (attrNames cfg.confFiles) cfg.useTheseDefaultConfFiles;
-  allConfFiles =
-    cfg.confFiles //
-    builtins.listToAttrs (map (x: { name = x;
-                                    value = builtins.readFile (cfg.package + "/etc/asterisk/" + x); })
-                              defaultConfFiles);
-
-  asteriskEtc = pkgs.stdenv.mkDerivation
-  ((mapAttrs' (name: value: nameValuePair
-        # Fudge the names to make bash happy
-        ((replaceChars ["."] ["_"] name) + "_")
-        (value)
-      ) allConfFiles) //
-  {
-    confFilesString = concatStringsSep " " (
-      attrNames allConfFiles
-    );
-
-    name = "asterisk-etc";
-
+  allConfFiles = {
     # Default asterisk.conf file
-    # (Notice that astetcdir will be set to the path of this derivation)
-    asteriskConf = ''
+    "asterisk.conf".text = ''
       [directories]
       astetcdir => /etc/asterisk
       astmoddir => ${cfg.package}/lib/asterisk/modules
@@ -48,43 +29,28 @@ let
       astrundir => /run/asterisk
       astlogdir => /var/log/asterisk
       astsbindir => ${cfg.package}/sbin
+      ${cfg.extraConfig}
     '';
-    extraConf = cfg.extraConfig;
 
     # Loading all modules by default is considered sensible by the authors of
     # "Asterisk: The Definitive Guide". Secure sites will likely want to
     # specify their own "modules.conf" in the confFiles option.
-    modulesConf = ''
+    "modules.conf".text = ''
       [modules]
       autoload=yes
     '';
 
     # Use syslog for logging so logs can be viewed with journalctl
-    loggerConf = ''
+    "logger.conf".text = ''
       [general]
 
       [logfiles]
       syslog.local0 => notice,warning,error
     '';
+  } //
+    mapAttrs (name: text: { inherit text; }) cfg.confFiles //
+    listToAttrs (map (x: nameValuePair x { source = cfg.package + "/etc/asterisk/" + x; }) defaultConfFiles);
 
-    buildCommand = ''
-      mkdir -p "$out"
-
-      # Create asterisk.conf, pointing astetcdir to the path of this derivation
-      echo "$asteriskConf" | sed "s|@out@|$out|g" > "$out"/asterisk.conf
-      echo "$extraConf" >> "$out"/asterisk.conf
-
-      echo "$modulesConf" > "$out"/modules.conf
-
-      echo "$loggerConf" > "$out"/logger.conf
-
-      # Config files specified in confFiles option override all other files
-      for i in $confFilesString; do
-        conf=$(echo "$i"_ | sed 's/\./_/g')
-        echo "''${!conf}" > "$out"/"$i"
-      done
-    '';
-  });
 in
 
 {
@@ -108,7 +74,7 @@ in
         '';
         description = ''
           Extra configuration options appended to the default
-          <literal>asterisk.conf</literal> file.
+          `asterisk.conf` file.
         '';
       };
 
@@ -163,17 +129,17 @@ in
         '';
         description = ''
           Sets the content of config files (typically ending with
-          <literal>.conf</literal>) in the Asterisk configuration directory.
+          `.conf`) in the Asterisk configuration directory.
 
-          Note that if you want to change <literal>asterisk.conf</literal>, it
-          is preferable to use the <option>services.asterisk.extraConfig</option>
-          option over this option. If <literal>"asterisk.conf"</literal> is
-          specified with the <option>confFiles</option> option (not recommended),
-          you must be prepared to set your own <literal>astetcdir</literal>
+          Note that if you want to change `asterisk.conf`, it
+          is preferable to use the {option}`services.asterisk.extraConfig`
+          option over this option. If `"asterisk.conf"` is
+          specified with the {option}`confFiles` option (not recommended),
+          you must be prepared to set your own `astetcdir`
           path.
 
           See
-          <link xlink:href="http://www.asterisk.org/community/documentation"/>
+          <https://www.asterisk.org/community/documentation/>
           for more examples of what is possible here.
         '';
       };
@@ -184,7 +150,7 @@ in
         example = [ "sip.conf" "dundi.conf" ];
         description = ''Sets these config files to the default content. The default value for
           this option contains all necesscary files to avoid errors at startup.
-          This does not override settings via <option>services.asterisk.confFiles</option>.
+          This does not override settings via {option}`services.asterisk.confFiles`.
         '';
       };
 
@@ -197,19 +163,16 @@ in
           Additional command line arguments to pass to Asterisk.
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.asterisk;
-        defaultText = literalExpression "pkgs.asterisk";
-        description = "The Asterisk package to use.";
-      };
+      package = mkPackageOption pkgs "asterisk" { };
     };
   };
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc.asterisk.source = asteriskEtc;
+    environment.etc = mapAttrs' (name: value:
+      nameValuePair "asterisk/${name}" value
+    ) allConfFiles;
 
     users.users.asterisk =
       { name = asteriskUser;

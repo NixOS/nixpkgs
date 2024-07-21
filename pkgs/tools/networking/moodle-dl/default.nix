@@ -1,34 +1,41 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchFromGitHub, gitUpdater }:
 
 python3Packages.buildPythonApplication rec {
   pname = "moodle-dl";
-  version = "2.1.2.5";
+  version = "2.3.11";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "1gc4037dwyi48h4vi0bam23rr7pfyn6jrz334radz0r6rk94y8lz";
+  src = fetchFromGitHub {
+    owner = "C0D3D3V";
+    repo = "Moodle-DL";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Rts7J4MdMo1TqUOYF1MDjwCIP66gHzxw/szIYcKZYrg=";
   };
 
-  # nixpkgs (and the GitHub upstream for readchar) are missing 2.0.1
-  postPatch = ''
-    substituteInPlace setup.py --replace 'readchar>=2.0.1' 'readchar>=2.0.0'
-  '';
-
   propagatedBuildInputs = with python3Packages; [
-    sentry-sdk
-    colorama
-    readchar
-    youtube-dl
+    aiodns
+    aiofiles
+    aiohttp
     certifi
+    colorama
+    colorlog
     html2text
+    readchar
     requests
-    slixmpp
+    sentry-sdk
+    xmpppy
+    yt-dlp
   ];
+
+  # upstream has no tests
+  doCheck = false;
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/C0D3D3V/Moodle-Downloader-2";
     maintainers = [ maintainers.kmein ];
-    description = "A Moodle downloader that downloads course content fast from Moodle";
+    description = "Moodle downloader that downloads course content fast from Moodle";
+    mainProgram = "moodle-dl";
     license = licenses.gpl3Plus;
   };
 }

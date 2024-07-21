@@ -1,7 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, perl, cdrkit, xz, openssl, gnu-efi, mtools
+{ stdenv, lib, fetchFromGitHub, unstableGitUpdater, buildPackages
+, gnu-efi, mtools, openssl, perl, xorriso, xz
 , syslinux ? null
 , embedScript ? null
 , additionalTargets ? {}
+, additionalOptions ? []
 }:
 
 let
@@ -9,6 +11,7 @@ let
     "bin-x86_64-efi/ipxe.efi" = null;
     "bin-x86_64-efi/ipxe.efirom" = null;
     "bin-x86_64-efi/ipxe.usb" = "ipxe-efi.usb";
+    "bin-x86_64-efi/snp.efi" = null;
   } // lib.optionalAttrs stdenv.hostPlatform.isx86 {
     "bin/ipxe.dsk" = null;
     "bin/ipxe.usb" = null;
@@ -19,36 +22,43 @@ let
     "bin-arm32-efi/ipxe.efi" = null;
     "bin-arm32-efi/ipxe.efirom" = null;
     "bin-arm32-efi/ipxe.usb" = "ipxe-efi.usb";
+    "bin-arm32-efi/snp.efi" = null;
   } // lib.optionalAttrs stdenv.isAarch64 {
     "bin-arm64-efi/ipxe.efi" = null;
     "bin-arm64-efi/ipxe.efirom" = null;
     "bin-arm64-efi/ipxe.usb" = "ipxe-efi.usb";
+    "bin-arm64-efi/snp.efi" = null;
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "ipxe";
-  version = "1.21.1";
+  version = "1.21.1-unstable-2024-06-27";
 
-  nativeBuildInputs = [ perl cdrkit xz openssl gnu-efi mtools ] ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
+  nativeBuildInputs = [ gnu-efi mtools openssl perl xorriso xz ] ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "v${version}";
-    sha256 = "1pkf1n1c0rdlzfls8fvjvi1sd9xjd9ijqlyz3wigr70ijcv6x8i9";
+    rev = "b66e27d9b29a172a097c737ab4d378d60fe01b05";
+    hash = "sha256-TKZ4WjNV2oZIYNefch7E7m1JpeoC/d7O1kofoNv8G40=";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    substituteInPlace src/util/genfsimg --replace "	syslinux " "	true "
+  ''; # calling syslinux on a FAT image isn't going to work
 
   # not possible due to assembler code
   hardeningDisable = [ "pic" "stackprotector" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
-    ] ++ lib.optionals stdenv.hostPlatform.isx86 [
-      "ISOLINUX_BIN_LIST=${syslinux}/share/syslinux/isolinux.bin"
-      "LDLINUX_C32=${syslinux}/share/syslinux/ldlinux.c32"
+      "CROSS=${stdenv.cc.targetPrefix}"
     ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
 
 
@@ -57,13 +67,15 @@ stdenv.mkDerivation rec {
     "IMAGE_TRUST_CMD"
     "DOWNLOAD_PROTO_HTTP"
     "DOWNLOAD_PROTO_HTTPS"
-  ];
+  ] ++ additionalOptions;
 
   configurePhase = ''
     runHook preConfigure
     for opt in ${lib.escapeShellArgs enabledOptions}; do echo "#define $opt" >> src/config/general.h; done
-    sed -i '/cp \''${ISOLINUX_BIN}/s/$/ --no-preserve=mode/' src/util/geniso
     substituteInPlace src/Makefile.housekeeping --replace '/bin/echo' echo
+  '' + lib.optionalString stdenv.hostPlatform.isx86 ''
+    substituteInPlace src/util/genfsimg --replace /usr/lib/syslinux ${syslinux}/share/syslinux
+  '' + ''
     runHook postConfigure
   '';
 
@@ -89,11 +101,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
+
   meta = with lib;
     { description = "Network boot firmware";
       homepage = "https://ipxe.org/";
       license = licenses.gpl2Only;
-      maintainers = with maintainers; [ ehmry ];
       platforms = platforms.linux;
     };
 }

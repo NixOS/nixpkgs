@@ -1,12 +1,21 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, SDL2, SDL2_image, SDL2_mixer, SDL2_net }:
+{ lib
+, stdenv
+, fetchurl
+, makeDesktopItem
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_net
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "rocksndiamonds";
-  version = "4.1.1.0";
+  version = "4.3.8.2";
 
   src = fetchurl {
-    url = "https://www.artsoft.org/RELEASES/unix/${pname}/rocksndiamonds-${version}.tar.gz";
-    sha256 = "1k0m6l5g886d9mwwh6q0gw75qsb85mpf8i0rglh047app56nsk72";
+    url = "https://www.artsoft.org/RELEASES/linux/${pname}/${pname}-${version}-linux.tar.gz";
+    hash = "sha256-e/aYjjnEM6MP14FGX+N92U9fRNEjIaDfE1znl6A+4As=";
   };
 
   desktopItem = makeDesktopItem {
@@ -16,14 +25,14 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "Rocks'n'Diamonds";
     genericName = "Tile-based puzzle";
-    categories = "Game;LogicGame;";
+    categories = [ "Game" "LogicGame" ];
   };
 
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net ];
+  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net zlib ];
 
   preBuild = ''
     dataDir="$out/share/rocksndiamonds"
-    makeFlags+="RO_GAME_DIR=$dataDir"
+    makeFlags+="BASE_PATH=$dataDir"
   '';
 
   installPhase = ''
@@ -33,15 +42,16 @@ stdenv.mkDerivation rec {
     cp rocksndiamonds $out/bin/
     ln -s ${desktopItem}/share/applications/* $appDir/
     ln -s $dataDir/graphics/gfx_classic/RocksIcon32x32.png $iconDir/rocksndiamonds.png
-    cp -r docs graphics levels music sounds $dataDir
+    cp -r conf docs graphics levels music sounds $dataDir
   '';
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Scrolling tile-based arcade style puzzle game";
+    mainProgram = "rocksndiamonds";
     homepage = "https://www.artsoft.org/rocksndiamonds/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ orivej ];
   };

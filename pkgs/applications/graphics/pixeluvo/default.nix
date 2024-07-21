@@ -47,9 +47,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Beautifully Designed Image and Photo Editor for Windows and Linux";
+    description = "Beautifully Designed Image and Photo Editor for Windows and Linux";
     homepage = "http://www.pixeluvo.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
+    platforms = [ "x86_64-linux" ];
+    maintainers = [ ];
+    mainProgram = "pixeluvo";
   };
 }

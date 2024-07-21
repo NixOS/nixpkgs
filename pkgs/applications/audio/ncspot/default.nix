@@ -1,45 +1,79 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, ncurses, openssl, libiconv
-, withALSA ? true, alsa-lib ? null
-, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null
-, withMPRIS ? false, dbus ? null
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, ncurses
+, openssl
+, Cocoa
+, withALSA ? false, alsa-lib
+, withClipboard ? true, libxcb, python3
+, withCover ? false, ueberzug
+, withPulseAudio ? true, libpulseaudio
+, withPortAudio ? false, portaudio
+, withMPRIS ? true, withNotify ? true, dbus
+, withCrossterm ? true
+, nix-update-script
+, testers
+, ncspot
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
-  version = "0.9.3";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     rev = "v${version}";
-    sha256 = "sha256-k4EGyQjjJCvUhp56OjYl63n+giI05GiIS2++I1SVhCg=";
+    hash = "sha256-Lt2IuoiXYgSVPi4u8y16u9m5ya4HdpQme6snvNJrwso=";
   };
 
-  cargoSha256 = "sha256-YsjInqmkPnAwqgRBDiwcLH0DDqCF0NElrn+WO2v+ATM=";
+  cargoHash = "sha256-JJTnaq0JLWHQxAbDpzDRPi5B+ePlQNlDOAsugPah7j4=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optional withClipboard python3;
 
-  buildInputs = [ ncurses openssl ]
-    ++ lib.optional stdenv.isDarwin libiconv
+  buildInputs = [ ncurses ]
+    ++ lib.optional stdenv.isLinux openssl
     ++ lib.optional withALSA alsa-lib
+    ++ lib.optional withClipboard libxcb
+    ++ lib.optional withCover ueberzug
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
-    ++ lib.optional withMPRIS dbus;
+    ++ lib.optional (withMPRIS || withNotify) dbus
+    ++ lib.optional stdenv.isDarwin Cocoa;
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DNCURSES_UNCTRL_H_incl";
 
   buildNoDefaultFeatures = true;
+
   buildFeatures = [ "cursive/pancurses-backend" ]
     ++ lib.optional withALSA "alsa_backend"
+    ++ lib.optional withClipboard "share_clipboard"
+    ++ lib.optional withCover "cover"
     ++ lib.optional withPulseAudio "pulseaudio_backend"
     ++ lib.optional withPortAudio "portaudio_backend"
-    ++ lib.optional withMPRIS "mpris";
+    ++ lib.optional withMPRIS "mpris"
+    ++ lib.optional withCrossterm "crossterm_backend"
+    ++ lib.optional withNotify "notify";
 
-  doCheck = false;
+  postInstall = ''
+    install -D --mode=444 $src/misc/ncspot.desktop $out/share/applications/${pname}.desktop
+    install -D --mode=444 $src/images/logo.svg $out/share/icons/hicolor/scalable/apps/${pname}.png
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = ncspot; };
+  };
 
   meta = with lib; {
     description = "Cross-platform ncurses Spotify client written in Rust, inspired by ncmpc and the likes";
     homepage = "https://github.com/hrkfdn/ncspot";
+    changelog = "https://github.com/hrkfdn/ncspot/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ liff ];
+    mainProgram = "ncspot";
   };
 }

@@ -7,28 +7,38 @@
 , zbar
 , secp256k1
 , enableQt ? true
-# for updater.nix
-, writeScript
-, common-updater-scripts
-, bash
-, coreutils
-, curl
-, gnugrep
-, gnupg
-, gnused
-, nix
+, callPackage
+, qtwayland
+, fetchPypi
 }:
 
 let
-  version = "4.1.5";
+  version = "4.5.5";
+
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      # Pin ledger-bitcoin to 0.2.1
+      ledger-bitcoin = super.ledger-bitcoin.overridePythonAttrs (oldAttrs: rec {
+        version = "0.2.1";
+        format = "pyproject";
+        src = fetchPypi {
+          pname = "ledger_bitcoin";
+          inherit version;
+          hash = "sha256-AWl/q2MzzspNIo6yf30S92PgM/Ygsb+1lJsg7Asztso=";
+        };
+      });
+    };
+  };
 
   libsecp256k1_name =
-    if stdenv.isLinux then "libsecp256k1.so.0"
-    else if stdenv.isDarwin then "libsecp256k1.0.dylib"
+    if stdenv.isLinux then "libsecp256k1.so.{v}"
+    else if stdenv.isDarwin then "libsecp256k1.{v}.dylib"
     else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
     if stdenv.isLinux then "libzbar.so.0"
+    else if stdenv.isDarwin then "libzbar.0.dylib"
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   # Not provided in official source releases, which are what upstream signs.
@@ -36,51 +46,34 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "1ps8yaps5kfd7yv7bpdvssbwm6f5qivxcvhwn17cpddc2760a7nk";
+    sha256 = "sha256-CbhI/q+zjk9odxuvdzpogi046FqkedJooiQwS+WAkJ8=";
 
-    extraPostFetch = ''
+    postFetch = ''
       mv $out ./all
-      mv ./all/electrum/tests $out
+      mv ./all/tests $out
     '';
-  };
-
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      aiorpcx = super.aiorpcx.overridePythonAttrs (oldAttrs: rec {
-        version = "0.18.7";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1rswrspv27x33xa5bnhrkjqzhv0sknv5kd7pl1vidw9d2z4rx2l0";
-        };
-      });
-    };
   };
 
 in
 
-python3.pkgs.buildPythonApplication {
+python.pkgs.buildPythonApplication {
   pname = "electrum";
   inherit version;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "188r4zji985z8pm9b942xhmvv174yndk6jxagxl7ljk03wl2wiwi";
+    sha256 = "1jiagz9avkbd158pcip7p4wz0pdsxi94ndvg5p8afvshb32aqwav";
   };
 
   postUnpack = ''
     # can't symlink, tests get confused
-    cp -ar ${tests} $sourceRoot/electrum/tests
-  '';
-
-  prePatch = ''
-    substituteInPlace contrib/requirements/requirements.txt \
-      --replace "dnspython>=2.0,<2.1" "dnspython>=2.0"
+    cp -ar ${tests} $sourceRoot/tests
   '';
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
+  buildInputs = lib.optional (stdenv.isLinux && enableQt) qtwayland;
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx
@@ -95,19 +88,33 @@ python3.pkgs.buildPythonApplication {
     pysocks
     qrcode
     requests
-    tlslite-ng
+    certifi
+    jsonpatch
     # plugins
-    btchip
+    btchip-python
+    ledger-bitcoin
     ckcc-protocol
     keepkey
     trezor
+    bitbox02
+    cbor2
+    pyserial
   ] ++ lib.optionals enableQt [
     pyqt5
     qdarkstyle
   ];
 
-  preBuild = ''
-    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
+  checkInputs = with python.pkgs; lib.optionals enableQt [
+    pyqt6
+  ];
+
+  postPatch = ''
+    # make compatible with protobuf4 by easing dependencies ...
+    substituteInPlace ./contrib/requirements/requirements.txt \
+      --replace "protobuf>=3.20,<4" "protobuf>=3.20"
+    # ... and regenerating the paymentrequest_pb2.py file
+    protoc --python_out=. electrum/paymentrequest.proto
+
     substituteInPlace ./electrum/ecc_fast.py \
       --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
   '' + (if enableQt then ''
@@ -118,52 +125,29 @@ python3.pkgs.buildPythonApplication {
   '');
 
   postInstall = lib.optionalString stdenv.isLinux ''
-    # Despite setting usr_share above, these files are installed under
-    # $out/nix ...
-    mv $out/${python3.sitePackages}/nix/store"/"*/share $out
-    rm -rf $out/${python3.sitePackages}/nix
-
     substituteInPlace $out/share/applications/electrum.desktop \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum %u"' \
                 "Exec=$out/bin/electrum %u" \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum --testnet %u"' \
                 "Exec=$out/bin/electrum --testnet %u"
-
   '';
 
   postFixup = lib.optionalString enableQt ''
     wrapQtApp $out/bin/electrum
   '';
 
-  checkInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  nativeCheckInputs = with python.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
-  pytestFlagsArray = [ "electrum/tests" ];
-
-  disabledTests = [
-    "test_loop"  # test tries to bind 127.0.0.1 causing permission error
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   postCheck = ''
     $out/bin/electrum help >/dev/null
   '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
-  };
+  passthru.updateScript = callPackage ./update.nix { };
 
   meta = with lib; {
-    description = "A lightweight Bitcoin wallet";
+    description = "Lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from
       mnemonic seeds (in addition to other, more advanced, wallet options)
@@ -175,6 +159,7 @@ python3.pkgs.buildPythonApplication {
     changelog = "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ joachifm np prusnak ];
+    maintainers = with maintainers; [ joachifm np prusnak chewblacka ];
+    mainProgram = "electrum";
   };
 }

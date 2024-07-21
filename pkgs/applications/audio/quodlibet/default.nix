@@ -1,71 +1,161 @@
-{ lib, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome, gtk3, gdk-pixbuf, librsvg,
-  tag ? "", xvfb-run, dbus, glibcLocales, glib, glib-networking, gobject-introspection, hicolor-icon-theme,
-  gst_all_1, withGstPlugins ? true,
-  xineBackend ? false, xine-lib,
-  withDbusPython ? false, withPyInotify ? false, withMusicBrainzNgs ? false, withPahoMqtt ? false,
-  webkitgtk ? null,
-  keybinder3 ? null, gtksourceview ? null, libmodplug ? null, kakasi ? null, libappindicator-gtk3 ? null }:
+{ lib
+, fetchFromGitHub
+, tag ? ""
 
-let optionals = lib.optionals; in
+  # build time
+, gettext
+, gobject-introspection
+, wrapGAppsHook3
+
+  # runtime
+, adwaita-icon-theme
+, gdk-pixbuf
+, glib
+, glib-networking
+, gtk3
+, gtksourceview
+, kakasi
+, keybinder3
+, libappindicator-gtk3
+, libmodplug
+, librsvg
+, libsoup
+, webkitgtk
+
+  # optional features
+, withDbusPython ? false
+, withMusicBrainzNgs ? false
+, withPahoMqtt ? false
+, withPyInotify ? false
+, withPypresence ? false
+, withSoco ? false
+
+  # backends
+, withGstPlugins ? withGstreamerBackend
+, withGstreamerBackend ? true
+, gst_all_1
+, withXineBackend ? true
+, xine-lib
+
+  # tests
+, dbus
+, glibcLocales
+, hicolor-icon-theme
+, python3
+, xvfb-run
+}:
+
 python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";
-  version = "4.4.0";
+  version = "4.6.0";
+  format = "pyproject";
 
-  src = fetchurl {
-    url = "https://github.com/quodlibet/quodlibet/releases/download/release-${version}/quodlibet-${version}.tar.gz";
-    sha256 = "sha256-oDMY0nZ+SVlVF2PQqH+tl3OHr3EmCP5XJxQXaiS782c=";
+  outputs = [ "out" "doc" ];
+
+  src = fetchFromGitHub {
+    owner = "quodlibet";
+    repo = "quodlibet";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-dkO/CFN7Dk72xhtmcSDcwUciOPMeEjQS2mch+jSfiII=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gettext ];
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    wrapGAppsHook3
+  ] ++ (with python3.pkgs; [
+    sphinx-rtd-theme
+    sphinxHook
+    setuptools
+  ]);
 
-  checkInputs = [ gdk-pixbuf hicolor-icon-theme ] ++ (with python3.pkgs; [ pytest pytest-xdist polib xvfb-run dbus.daemon glibcLocales ]);
+  buildInputs = [
+    adwaita-icon-theme
+    gdk-pixbuf
+    glib
+    glib-networking
+    gtk3
+    gtksourceview
+    kakasi
+    keybinder3
+    libappindicator-gtk3
+    libmodplug
+    libsoup
+    webkitgtk
+  ] ++ lib.optionals (withXineBackend) [
+    xine-lib
+  ] ++ lib.optionals (withGstreamerBackend) (with gst_all_1; [
+    gst-plugins-base
+    gstreamer
+  ] ++ lib.optionals (withGstPlugins) [
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-ugly
+  ]);
 
-  buildInputs = [ gnome.adwaita-icon-theme libsoup glib glib-networking gtk3 webkitgtk gdk-pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobject-introspection ]
-    ++ (if xineBackend then [ xine-lib ] else with gst_all_1;
-    [ gstreamer gst-plugins-base ] ++ optionals withGstPlugins [ gst-plugins-good gst-plugins-ugly gst-plugins-bad ]);
+  propagatedBuildInputs = with python3.pkgs; [
+    feedparser
+    gst-python
+    mutagen
+    pycairo
+    pygobject3
+  ]
+  ++ lib.optionals withDbusPython [ dbus-python ]
+  ++ lib.optionals withMusicBrainzNgs [ musicbrainzngs ]
+  ++ lib.optionals withPahoMqtt [ paho-mqtt ]
+  ++ lib.optionals withPyInotify [ pyinotify ]
+  ++ lib.optionals withPypresence [ pypresence ]
+  ++ lib.optionals withSoco [ soco ];
 
-  propagatedBuildInputs = with python3.pkgs; [ pygobject3 pycairo mutagen gst-python feedparser ]
-      ++ optionals withDbusPython [ dbus-python ]
-      ++ optionals withPyInotify [ pyinotify ]
-      ++ optionals withMusicBrainzNgs [ musicbrainzngs ]
-      ++ optionals withPahoMqtt [ paho-mqtt ];
+  nativeCheckInputs = [
+    dbus
+    gdk-pixbuf
+    glibcLocales
+    hicolor-icon-theme
+    xvfb-run
+  ] ++ (with python3.pkgs; [
+    polib
+    pytest
+    pytest-xdist
+  ]);
 
-  LC_ALL = "en_US.UTF-8";
-
-  pytestFlags = lib.optionals (xineBackend || !withGstPlugins) [
-    "--ignore=tests/plugin/test_replaygain.py"
-  ] ++ [
-    # requires networking
-    "--ignore=tests/test_browsers_iradio.py"
-    # the default theme doesn't have the required icons
-    "--ignore=tests/plugin/test_trayicon.py"
+  pytestFlags = [
+    # missing translation strings in potfiles
+    "--deselect=tests/test_po.py::TPOTFILESIN::test_missing"
+    # require networking
+    "--deselect=tests/plugin/test_covers.py::test_live_cover_download"
+    "--deselect=tests/test_browsers_iradio.py::TInternetRadio::test_click_add_station"
     # upstream does actually not enforce source code linting
     "--ignore=tests/quality"
-    # build failure on Arch Linux
-    # https://github.com/NixOS/nixpkgs/pull/77796#issuecomment-575841355
-    "--ignore=tests/test_operon.py"
+  ] ++ lib.optionals (withXineBackend || !withGstPlugins) [
+    "--ignore=tests/plugin/test_replaygain.py"
   ];
+
+  env.LC_ALL = "en_US.UTF-8";
+
+  preCheck = ''
+    export GDK_PIXBUF_MODULE_FILE=${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+    export HOME=$(mktemp -d)
+    export XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_ICON_DIRS:$XDG_DATA_DIRS"
+  '';
 
   checkPhase = ''
     runHook preCheck
-    # otherwise tests can't find the app icons; instead of creating index.theme from scratch
-    # I re-used the one from hicolor-icon-theme which seems to work
-    cp "${hicolor-icon-theme}/share/icons/hicolor/index.theme" quodlibet/images/hicolor
-    env XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_ICON_DIRS:$XDG_DATA_DIRS" \
-      GDK_PIXBUF_MODULE_FILE=${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
-      HOME=$(mktemp -d) \
-      xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-        --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-        py.test $pytestFlags
+
+    xvfb-run -s '-screen 0 1920x1080x24' \
+      dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf \
+      pytest $pytestFlags
+
     runHook postCheck
   '';
 
-  preFixup = lib.optionalString (kakasi != null) "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
+  preFixup = lib.optionalString (kakasi != null) ''
+    gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)
+  '';
 
   meta = with lib; {
     description = "GTK-based audio player written in Python, using the Mutagen tagging library";
-    license = licenses.gpl2Plus;
-
     longDescription = ''
       Quod Libet is a GTK-based audio player written in Python, using
       the Mutagen tagging library. It's designed around the idea that
@@ -79,8 +169,8 @@ python3.pkgs.buildPythonApplication rec {
       player, like Unicode support, tag editing, Replay Gain, podcasts
       & internet radio, and all major audio formats.
     '';
-
+    homepage = "https://quodlibet.readthedocs.io/en/latest";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ coroa pbogdan ];
-    homepage = "https://quodlibet.readthedocs.io/en/latest/";
   };
 }

@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xdg-launch";
-  version = "1.10";
+  version = "1.12";
 
   postPatch = ''
     # fix gettext configuration
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "bbidulock";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WY1TAPnXAn5GOaP9aMHar761m1MkKm4vavLlWELWUu8=";
+    sha256 = "sha256-S/0Wn1T5MSOPN6QXkzfmygHL6XTAnnMJr5Z3fBzsHEw=";
   };
 
   preConfigure = "./autogen.sh";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/bbidulock/xdg-launch";
-    description = "A command line XDG compliant launcher and tools";
+    description = "Command line XDG compliant launcher and tools";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.ck3d ];

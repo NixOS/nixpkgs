@@ -1,28 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, python-dateutil
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  backports-zoneinfo,
+  python-dateutil,
+  pytz,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "4.0.9";
+  version = "5.0.13";
   pname = "icalendar";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cc73fa9c848744843046228cb66ea86cd8c18d73a51b140f7c003f760b84a997";
+  src = fetchFromGitHub {
+    owner = "collective";
+    repo = "icalendar";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2gpWfLXR4HThw23AWxY2rY9oiK6CF3Qiad8DWHCs4Qk=";
   };
 
-  buildInputs = [ setuptools ];
-  propagatedBuildInputs = [ python-dateutil pytz ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    python-dateutil
+    pytz
+  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [ "src/icalendar" ];
 
   meta = with lib; {
-    description = "A parser/generator of iCalendar files";
-    homepage = "https://icalendar.readthedocs.org/";
+    changelog = "https://github.com/collective/icalendar/blob/v${version}/CHANGES.rst";
+    description = "Parser/generator of iCalendar files";
+    mainProgram = "icalendar";
+    homepage = "https://github.com/collective/icalendar";
     license = licenses.bsd2;
     maintainers = with maintainers; [ olcai ];
   };
-
 }

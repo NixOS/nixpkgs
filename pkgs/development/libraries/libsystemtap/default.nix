@@ -1,19 +1,22 @@
-{lib, stdenv, fetchgit, gettext, python2, elfutils}:
+{ lib, stdenv, fetchgit
+, gettext
+, python3
+, elfutils
+}:
 
 stdenv.mkDerivation {
   pname = "libsystemtap";
-  version = "3.2";
+  version = "5.1";
 
   src = fetchgit {
     url = "git://sourceware.org/git/systemtap.git";
-    rev = "4051c70c9318c837981384cbb23f3e9eb1bd0892";
-    sha256 = "0sd8n3j3rishks3gyqj2jyqhps7hmlfjyz8i0w8v98cczhhh04rq";
-    fetchSubmodules = false;
+    rev = "release-5.1";
+    hash = "sha256-3rhDllsgYGfh1gb5frUrlkzdz57A6lcvBELtgvb5Q7M=";
   };
 
   dontBuild = true;
 
-  nativeBuildInputs = [ gettext python2 elfutils ];
+  nativeBuildInputs = [ gettext python3 elfutils ];
 
   installPhase = ''
     mkdir -p $out/include

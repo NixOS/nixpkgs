@@ -1,47 +1,62 @@
 { lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
 , installShellFiles
+, darwin
+, pandoc
+, testers
+, lsd
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "0.20.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
-    owner = "Peltoche";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-r/Rllu+tgKqz+vkxA8BSN+3V0lUUd6dEATfickQp4+s=";
+    owner = "lsd-rs";
+    repo = "lsd";
+    rev = "v${version}";
+    hash = "sha256-ZMaI0Q/xmYJHWvU4Tha+XVV55zKLukrqkROfBzu/JsQ=";
   };
 
-  cargoSha256 = "sha256-O8P29eYlHgmmAADZ/DgTBmj0ZOa+4u/Oee+TMF+/4Ro=";
+  cargoPatches = [
+    # fix cargo lock file
+    (fetchpatch {
+      url = "https://github.com/lsd-rs/lsd/pull/1021/commits/7593fd7ea0985e273c82b6e80e66a801772024de.patch";
+      hash = "sha256-ykKLVSM6FbL4Jt5Zk7LuPKcYw/wrpiwU8vhuGz8Pbi0=";
+    })
+  ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  cargoHash = "sha256-TDHHY5F4lVrKd7r0QfrfUV2xzT6HMA/PtOIStMryaBA=";
+
+  nativeBuildInputs = [ installShellFiles pandoc ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+
   postInstall = ''
-    installShellCompletion $releaseDir/build/lsd-*/out/{_lsd,lsd.{bash,fish}}
+    pandoc --standalone --to man doc/lsd.md -o lsd.1
+    installManPage lsd.1
+
+    installShellCompletion --cmd lsd \
+      --bash $releaseDir/build/lsd-*/out/lsd.bash \
+      --fish $releaseDir/build/lsd-*/out/lsd.fish \
+      --zsh $releaseDir/build/lsd-*/out/_lsd
   '';
 
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    testFile=$(mktemp /tmp/lsd-test.XXXX)
-    echo 'abc' > $testFile
-    $out/bin/lsd --classic --blocks "size,name" -l $testFile | grep "4 B $testFile"
-    $out/bin/lsd --version | grep "${version}"
-    rm $testFile
-
-    runHook postInstallCheck
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = lsd;
+  };
 
   meta = with lib; {
-    homepage = "https://github.com/Peltoche/lsd";
-    description = "The next gen ls command";
+    homepage = "https://github.com/lsd-rs/lsd";
+    description = "Next gen ls command";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne marsam zowoq SuperSandro2000 ];
+    maintainers = with maintainers; [ zowoq SuperSandro2000 ];
+    mainProgram = "lsd";
   };
 }

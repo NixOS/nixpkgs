@@ -1,28 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy38
-, kerberos
-, mock
-, pytest
-, requests
-, requests_ntlm
-, six
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  mock,
+  pytestCheckHook,
+  requests,
+  requests-ntlm,
+  six,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pywinrm";
-  version = "0.4.2";
-  disabled = isPy38;
+  version = "0.4.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e7865ec5e46e7fedb859c656cfaba4fcf669de7c042b5a7d8a759544636bcfb7";
+    hash = "sha256-mVZ0v1rGSyViycVlQEcxCeUw02veEMJi1aUpYSGtVWU=";
   };
 
-  checkInputs = [ mock pytest ];
-  propagatedBuildInputs = [ requests requests_ntlm six kerberos xmltodict ];
+  propagatedBuildInputs = [
+    requests
+    requests-ntlm
+    six
+    xmltodict
+  ];
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "winrm" ];
+
+  pytestFlagsArray = [ "winrm/tests/" ];
 
   meta = with lib; {
     description = "Python library for Windows Remote Management";
@@ -32,6 +47,5 @@ buildPythonPackage rec {
       elasticdog
       kamadorueda
     ];
-    platforms = platforms.all;
   };
 }

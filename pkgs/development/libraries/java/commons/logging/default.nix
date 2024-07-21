@@ -1,11 +1,12 @@
 {lib, stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "commons-logging-1.2";
+stdenv.mkDerivation rec {
+  pname = "commons-logging";
+  version = "1.3.1";
 
   src = fetchurl {
-    url    = "mirror://apache/commons/logging/binaries/commons-logging-1.2-bin.tar.gz";
-    sha256 = "1gc70pmcv0x6ibl89jglmr22f8zpr63iaifi49nrq399qw2qhx9z";
+    url    = "mirror://apache/commons/logging/binaries/commons-logging-${version}-bin.tar.gz";
+    sha256 = "sha256-mM85vfWDc88fNwwflvnRvoh/tb+jDH3o+96RZa9Sp7w=";
   };
 
   installPhase = ''
@@ -15,7 +16,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Wrapper around a variety of logging API implementations";
-    homepage = "http://commons.apache.org/proper/commons-logging";
+    homepage = "https://commons.apache.org/proper/commons-logging";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };

@@ -1,45 +1,44 @@
-{ lib
-, buildGoPackage
-, fetchFromGitHub
-, makeWrapper
-}:
+{ lib, buildGoModule, fetchFromGitHub, makeBinaryWrapper }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "docker-slim";
-  version = "1.37.3";
-
-  goPackagePath = "github.com/docker-slim/docker-slim";
+  version = "1.40.11";
 
   src = fetchFromGitHub {
-    owner = "docker-slim";
-    repo = "docker-slim";
+    owner = "slimtoolkit";
+    repo = "slim";
     rev = version;
-    sha256 = "sha256-jzwQ3nrhLDiQXcVkPiXrRAmpLQOD8ILBnoCEUiEbxzw=";
+    hash = "sha256-X+1euWp4W53axbiBpL82bUPfod/JNhGVGWgOqKyhz6A=";
   };
 
-  subPackages = [ "cmd/docker-slim" "cmd/docker-slim-sensor" ];
+  vendorHash = null;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  subPackages = [ "cmd/slim" "cmd/slim-sensor" ];
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
+  preBuild = ''
+    go generate ./...
+  '';
 
   ldflags = [
-    "-s" "-w"
-    "-X ${goPackagePath}/pkg/version.appVersionTag=${version}"
-    "-X ${goPackagePath}/pkg/version.appVersionRev=${src.rev}"
+    "-s"
+    "-w"
+    "-X github.com/slimtoolkit/slim/pkg/version.appVersionTag=${version}"
+    "-X github.com/slimtoolkit/slim/pkg/version.appVersionRev=${src.rev}"
   ];
 
   # docker-slim tries to create its state dir next to the binary (inside the nix
   # store), so we set it to use the working directory at the time of invocation
   postInstall = ''
-    wrapProgram "$out/bin/docker-slim" --add-flags '--state-path "$(pwd)"'
+    wrapProgram "$out/bin/slim" --add-flags '--state-path "$(pwd)"'
   '';
 
   meta = with lib; {
     description = "Minify and secure Docker containers";
-    homepage = "https://dockersl.im/";
-    changelog = "https://github.com/docker-slim/docker-slim/raw/${version}/CHANGELOG.md";
+    homepage = "https://slimtoolkit.org/";
+    changelog = "https://github.com/slimtoolkit/slim/raw/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne marsam mbrgm ];
+    maintainers = with maintainers; [ Br1ght0ne mbrgm ];
   };
 }

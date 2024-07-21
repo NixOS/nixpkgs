@@ -1,32 +1,44 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, sqlalchemy
-, snowflake-connector-python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  snowflake-connector-python,
+  sqlalchemy,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
-  version = "1.3.2";
+  version = "1.5.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "51d9d923ebbfefe392582f6e3d0faa83f52e5eb6f190607820e055318dd2d2f8";
+    hash = "sha256-eRkew/6/syvP/s1m8qfdVhvVcTRepLzL9BzB+1wGgv8=";
   };
 
   propagatedBuildInputs = [
-    sqlalchemy
+    six
     snowflake-connector-python
+    sqlalchemy
   ];
 
   # Pypi does not include tests
   doCheck = false;
+
   pythonImportsCheck = [ "snowflake.sqlalchemy" ];
 
   meta = with lib; {
+    changelog = "https://github.com/snowflakedb/snowflake-sqlalchemy/blob/v${version}/DESCRIPTION.md";
     description = "Snowflake SQLAlchemy Dialect";
-    homepage = "https://www.snowflake.net/";
+    homepage = "https://github.com/snowflakedb/snowflake-sqlalchemy";
     license = licenses.asl20;
     maintainers = [ ];
+
+    # https://github.com/snowflakedb/snowflake-sqlalchemy/issues/380
+    broken = versionAtLeast sqlalchemy.version "2";
   };
 }

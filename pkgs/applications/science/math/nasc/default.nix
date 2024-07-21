@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
 , pkg-config
-, fetchpatch
 , python3
 , meson
 , ninja
@@ -16,7 +15,7 @@
 , libqalculate
 , intltool
 , gnuplot
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
     gtk3
     gtksourceview
     libgee
-    pantheon.elementary-icon-theme
     pantheon.granite
     webkitgtk
     # We add libqalculate's runtime dependencies because nasc has it as a modified subproject.
@@ -62,12 +60,12 @@ stdenv.mkDerivation rec {
     substituteInPlace subprojects/libqalculate/libqalculate/Calculator-plot.cc \
       --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
       --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
+    substituteInPlace subprojects/libqalculate/libqalculate/meson.build \
+      --replace "link_with: 'libqalculate_lib_static'" "link_with: libqalculate_lib_static"
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -3,11 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libsigsegv-2.13";
+  pname = "libsigsegv";
+  version = "2.14";
 
   src = fetchurl {
-    url = "mirror://gnu/libsigsegv/${name}.tar.gz";
-    sha256 = "sha256-vnjuQXawX3x1/wMpjYSHTbkPS2ydVQPw2hIms6PEgRk=";
+    url = "mirror://gnu/libsigsegv/libsigsegv-${version}.tar.gz";
+    sha256 = "sha256-zaw5QYAzZM+BqQhJm+t5wgDq1gtrW0DK0ST9HgbKopU=";
   };
 
   patches = if enableSigbusFix then [ ./sigbus_fix.patch ] else null;

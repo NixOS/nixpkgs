@@ -33,7 +33,7 @@ in
     maintainers = [ rnhmjoj ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     services.nginx.enable = true;
     services.nginx.virtualHosts."example.com" = {
       addSSL = true;
@@ -77,27 +77,32 @@ in
     networking.proxy.httpsProxy = "http://localhost:8118";
   };
 
+  nodes.machine_socks4  = { ... }: { services.privoxy = { enable = true; settings.forward-socks4  = "/ 127.0.0.1:9050 ."; }; };
+  nodes.machine_socks4a = { ... }: { services.privoxy = { enable = true; settings.forward-socks4a = "/ 127.0.0.1:9050 ."; }; };
+  nodes.machine_socks5  = { ... }: { services.privoxy = { enable = true; settings.forward-socks5  = "/ 127.0.0.1:9050 ."; }; };
+  nodes.machine_socks5t = { ... }: { services.privoxy = { enable = true; settings.forward-socks5t = "/ 127.0.0.1:9050 ."; }; };
+
   testScript =
     ''
       with subtest("Privoxy is running"):
           machine.wait_for_unit("privoxy")
-          machine.wait_for_open_port("8118")
+          machine.wait_for_open_port(8118)
           machine.succeed("curl -f http://config.privoxy.org")
 
       with subtest("Privoxy can filter http requests"):
-          machine.wait_for_open_port("80")
+          machine.wait_for_open_port(80)
           assert "great day" in machine.succeed(
               "curl -sfL http://example.com/how-are-you? | tee /dev/stderr"
           )
 
       with subtest("Privoxy can filter https requests"):
-          machine.wait_for_open_port("443")
+          machine.wait_for_open_port(443)
           assert "great day" in machine.succeed(
               "curl -sfL https://example.com/how-are-you? | tee /dev/stderr"
           )
 
       with subtest("Blocks are working"):
-          machine.wait_for_open_port("443")
+          machine.wait_for_open_port(443)
           machine.fail("curl -f https://example.com/ads 1>&2")
           machine.succeed("curl -f https://example.com/PRIVOXY-FORCE/ads 1>&2")
 
@@ -109,5 +114,13 @@ in
           machine.systemctl("start systemd-tmpfiles-clean")
           # ...and count again
           machine.succeed("test $(ls /run/privoxy/certs | wc -l) -eq 0")
+
+      with subtest("Privoxy supports socks upstream proxies"):
+          for m in [machine_socks4, machine_socks4a, machine_socks5, machine_socks5t]:
+              m.wait_for_unit("privoxy")
+              m.wait_for_open_port(8118)
+              # We expect a 503 error because the dummy upstream proxy is not reachable.
+              # In issue #265654, instead privoxy segfaulted causing curl to exit with "Empty reply from server".
+              m.succeed("http_proxy=http://localhost:8118 curl -v http://does-not-exist/ 2>&1 | grep 'HTTP/1.1 503'")
     '';
 })

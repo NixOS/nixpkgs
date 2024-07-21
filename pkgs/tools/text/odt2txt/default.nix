@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Simple .odt to .txt converter";
+    mainProgram = "odt2txt";
     homepage = "https://github.com/dstosberg/odt2txt";
     platforms = lib.platforms.all;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
 }

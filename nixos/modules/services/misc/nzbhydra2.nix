@@ -7,7 +7,7 @@ let cfg = config.services.nzbhydra2;
 in {
   options = {
     services.nzbhydra2 = {
-      enable = mkEnableOption "NZBHydra2";
+      enable = mkEnableOption "NZBHydra2, Usenet meta search";
 
       dataDir = mkOption {
         type = types.str;
@@ -18,16 +18,10 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description =
-          "Open ports in the firewall for the NZBHydra2 web interface.";
+        description = "Open ports in the firewall for the NZBHydra2 web interface.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.nzbhydra2;
-        defaultText = literalExpression "pkgs.nzbhydra2";
-        description = "NZBHydra2 package to use.";
-      };
+      package = mkPackageOption pkgs "nzbhydra2" { };
     };
   };
 

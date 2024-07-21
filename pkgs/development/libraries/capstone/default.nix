@@ -1,43 +1,37 @@
-{ lib, stdenv, fetchurl, pkg-config }:
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, fixDarwinDylibNames
+}:
 
 stdenv.mkDerivation rec {
   pname = "capstone";
-  version = "4.0.2";
+  version = "5.0.1";
 
-  src = fetchurl {
-    url    = "https://github.com/aquynh/capstone/archive/${version}.tar.gz";
-    sha256 = "0sjjbqps48az4map0kmai7j7dak3gy0xcq0sgx8fg09g0acdg0bw";
+  src = fetchFromGitHub {
+    owner = "capstone-engine";
+    repo = "capstone";
+    rev = version;
+    sha256 = "sha256-kKmL5sae9ruWGu1gas1mel9qM52qQOD+zLj8cRE3isg=";
   };
 
-  # replace faulty macos detection
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i 's/^IS_APPLE := .*$/IS_APPLE := 1/' Makefile
-  '';
-
-  configurePhase = "patchShebangs make.sh ";
-  buildPhase = "PREFIX=$out ./make.sh";
-
-  doCheck = true;
-  checkPhase = ''
-    # first remove fuzzing steps from check target
-    substituteInPlace Makefile --replace "fuzztest fuzzallcorp" ""
-    make check
-  '';
-
-  installPhase = (lib.optionalString stdenv.isDarwin "HOMEBREW_CAPSTONE=1 ")
-    + "PREFIX=$out ./make.sh install";
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   nativeBuildInputs = [
-    pkg-config
+    cmake
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
 
-  enableParallelBuilding = true;
+  doCheck = true;
 
   meta = {
     description = "Advanced disassembly library";
     homepage    = "http://www.capstone-engine.org";
     license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ris ];
+    mainProgram = "cstool";
+    platforms   = lib.platforms.unix;
   };
 }

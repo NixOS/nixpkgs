@@ -78,13 +78,13 @@ let
 in
 mkDerivation rec {
   pname = "cantata";
-  version = "2.4.2";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "CDrummond";
     repo = "cantata";
     rev = "v${version}";
-    sha256 = "15qfx9bpfdplxxs08inwf2j8kvf7g5cln5sv1wj1l2l41vbf1mjr";
+    sha256 = "sha256-UaZEKZvCA50WsdQSSJQQ11KTK6rM4ouCHDX7pn3NlQw=";
   };
 
   patches = [
@@ -110,7 +110,8 @@ mkDerivation rec {
   cmakeFlags = lib.flatten (map (e: map (f: fstat e.enable f) e.names) options);
 
   meta = with lib; {
-    description = "A graphical client for MPD";
+    description = "Graphical client for MPD";
+    mainProgram = "cantata";
     homepage = "https://github.com/cdrummond/cantata";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ peterhoeg ];

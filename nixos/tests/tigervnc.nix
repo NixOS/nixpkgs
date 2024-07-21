@@ -7,7 +7,7 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 makeTest {
   name = "tigervnc";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ lheckemann ];
+    maintainers = [ ];
   };
 
   nodes = {
@@ -38,16 +38,18 @@ makeTest {
     server.succeed("Xvnc -geometry 720x576 :1 -PasswordFile vncpasswd >&2 &")
     server.wait_until_succeeds("nc -z localhost 5901", timeout=10)
     server.succeed("DISPLAY=:1 xwininfo -root | grep 720x576")
-    server.execute("DISPLAY=:1 display -size 360x200 -font sans -gravity south label:'HELLO VNC WORLD' >&2 &")
+    server.execute("DISPLAY=:1 display -size 360x200 -font sans -gravity south label:'HELLO VNC' >&2 &")
 
     client.wait_for_x()
     client.execute("vncviewer server:1 -PasswordFile vncpasswd >&2 &")
     client.wait_for_window(r"VNC")
     client.screenshot("screenshot")
     text = client.get_screen_text()
+
     # Displayed text
-    assert 'HELLO VNC WORLD' in text
+    assert 'HELLO VNC' in text
     # Client window title
-    assert 'TigerVNC' in text
+    # get_screen_text can't get correct string from screenshot
+    # assert 'TigerVNC' in text
   '';
 }

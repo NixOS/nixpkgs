@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , paf
 , cohttp-lwt
 , domain-name
@@ -13,6 +12,7 @@
 , tcpip
 , uri
 , lwt
+, astring
 }:
 
 buildDunePackage {
@@ -21,9 +21,9 @@ buildDunePackage {
   inherit (paf)
     version
     src
-    useDune2
-    minimumOCamlVersion
-  ;
+    ;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     paf
@@ -43,9 +43,12 @@ buildDunePackage {
     tcpip
     uri
     lwt
+    astring
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = paf.meta // {
-    description = "A CoHTTP client with its HTTP/AF implementation";
+    description = "CoHTTP client with its HTTP/AF implementation";
   };
 }

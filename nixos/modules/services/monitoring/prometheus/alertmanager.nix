@@ -6,10 +6,12 @@ let
   cfg = config.services.prometheus.alertmanager;
   mkConfigFile = pkgs.writeText "alertmanager.yml" (builtins.toJSON cfg.configuration);
 
-  checkedConfig = file: pkgs.runCommand "checked-config" { buildInputs = [ cfg.package ]; } ''
-    ln -s ${file} $out
-    amtool check-config $out
-  '';
+  checkedConfig = file:
+    if cfg.checkConfig then
+      pkgs.runCommand "checked-config" { nativeBuildInputs = [ cfg.package ]; } ''
+        ln -s ${file} $out
+        amtool check-config $out
+      '' else file;
 
   alertmanagerYml = let
     yml = if cfg.configText != null then
@@ -34,7 +36,7 @@ in {
     (mkRemovedOptionModule [ "services" "prometheus" "alertmanager" "group" ] "The alertmanager service is now using systemd's DynamicUser mechanism which obviates a group setting.")
     (mkRemovedOptionModule [ "services" "prometheus" "alertmanagerURL" ] ''
       Due to incompatibility, the alertmanagerURL option has been removed,
-      please use 'services.prometheus2.alertmanagers' instead.
+      please use 'services.prometheus.alertmanagers' instead.
     '')
   ];
 
@@ -42,14 +44,7 @@ in {
     services.prometheus.alertmanager = {
       enable = mkEnableOption "Prometheus Alertmanager";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.prometheus-alertmanager;
-        defaultText = literalExpression "pkgs.alertmanager";
-        description = ''
-          Package that should be used for alertmanager.
-        '';
-      };
+      package = mkPackageOption pkgs "prometheus-alertmanager" { };
 
       configuration = mkOption {
         type = types.nullOr types.attrs;
@@ -67,6 +62,20 @@ in {
           defines the text that is written to alertmanager.yml. If null, the
           contents of alertmanager.yml is generated from the structured config
           options.
+        '';
+      };
+
+      checkConfig = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Check configuration with `amtool check-config`. The call to `amtool` is
+          subject to sandboxing by Nix.
+
+          If you use credentials stored in external files
+          (`environmentFile`, etc),
+          they will not be visible to `amtool`
+          and it will report errors, despite a correct configuration.
         '';
       };
 
@@ -107,7 +116,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 9093;
         description = ''
           Port to listen on for the web interface and API.
@@ -146,7 +155,7 @@ in {
           File to load as environment file. Environment variables
           from this file will be interpolated into the config file
           using envsubst with this syntax:
-          <literal>$ENVIRONMENT ''${VARIABLE}</literal>
+          `$ENVIRONMENT ''${VARIABLE}`
         '';
       };
     };
@@ -165,21 +174,64 @@ in {
 
       systemd.services.alertmanager = {
         wantedBy = [ "multi-user.target" ];
+        wants    = [ "network-online.target" ];
         after    = [ "network-online.target" ];
         preStart = ''
            ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/tmp/alert-manager-substituted.yaml" \
                                                     -i "${alertmanagerYml}"
         '';
         serviceConfig = {
-          Restart  = "always";
-          StateDirectory = "alertmanager";
-          DynamicUser = true; # implies PrivateTmp
-          EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-          WorkingDirectory = "/tmp";
           ExecStart = "${cfg.package}/bin/alertmanager" +
             optionalString (length cmdlineArgs != 0) (" \\\n  " +
               concatStringsSep " \\\n  " cmdlineArgs);
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+
+          EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+
+          CapabilityBoundingSet = [ "" ];
+          DeviceAllow = [ "" ];
+          DynamicUser = true;
+          NoNewPrivileges = true;
+
+          MemoryDenyWriteExecute = true;
+
+          LockPersonality = true;
+
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          ProtectHome = "tmpfs";
+
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateIPC = true;
+
+          ProcSubset = "pid";
+
+          ProtectHostname = true;
+          ProtectClock = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+
+          Restart  = "always";
+
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+
+          StateDirectory = "alertmanager";
+          SystemCallFilter = [
+            "@system-service"
+            "~@cpu-emulation"
+            "~@privileged"
+            "~@reboot"
+            "~@setuid"
+            "~@swap"
+          ];
+
+          WorkingDirectory = "/tmp";
         };
       };
     })

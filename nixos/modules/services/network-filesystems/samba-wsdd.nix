@@ -9,15 +9,8 @@ in {
   options = {
     services.samba-wsdd = {
       enable = mkEnableOption ''
-        Enable Web Services Dynamic Discovery host daemon. This enables (Samba) hosts, like your local NAS device,
-        to be found by Web Service Discovery Clients like Windows.
-        <note>
-          <para>If you use the firewall consider adding the following:</para>
-          <programlisting>
-            networking.firewall.allowedTCPPorts = [ 5357 ];
-            networking.firewall.allowedUDPPorts = [ 3702 ];
-          </programlisting>
-        </note>
+        Web Services Dynamic Discovery host daemon. This enables (Samba) hosts, like your local NAS device,
+        to be found by Web Service Discovery Clients like Windows
       '';
       interface = mkOption {
         type = types.nullOr types.str;
@@ -30,6 +23,13 @@ in {
         default = null;
         example = 2;
         description = "Hop limit for multicast packets (default = 1).";
+      };
+      openFirewall = mkOption {
+        description = ''
+          Whether to open the required firewall ports in the firewall.
+        '';
+        default = false;
+        type = lib.types.bool;
       };
       workgroup = mkOption {
         type = types.nullOr types.str;
@@ -119,6 +119,11 @@ in {
         SystemCallArchitectures = "native";
         SystemCallFilter = "~@cpu-emulation @debug @mount @obsolete @privileged @resources";
       };
+    };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ 5357 ];
+      allowedUDPPorts = [ 3702 ];
     };
   };
 }

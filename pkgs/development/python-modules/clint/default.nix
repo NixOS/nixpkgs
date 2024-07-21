@@ -1,33 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, mock
-, blessings
-, nose
-, nose_progressive
-, pillow
-, args
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
+  args,
 }:
 
 buildPythonPackage rec {
   pname = "clint";
   version = "0.5.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1an5lkkqk1zha47198p42ji3m94xmzx1a03dn7866m87n4r4q8h5";
+    hash = "sha256-BSJMMrEHVWPQsW0AFfqvnaQ6ohTkohQOUfCHieekxao=";
   };
 
-  LC_ALL="en_US.UTF-8";
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    ${python.interpreter} test_clint.py
-  '';
+  dependencies = [ args ];
 
-  buildInputs = [ mock nose nose_progressive pkgs.glibcLocales ];
-  propagatedBuildInputs = [ pillow blessings args ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "clint" ];
 
   meta = with lib; {
     homepage = "https://github.com/kennethreitz/clint";
@@ -35,5 +31,4 @@ buildPythonPackage rec {
     license = licenses.isc;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

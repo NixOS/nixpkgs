@@ -5,9 +5,9 @@ with lib;
 let
 
   xcfg = config.services.xserver;
-  dmcfg = xcfg.displayManager;
+  dmcfg = config.services.displayManager;
   xEnv = config.systemd.services.display-manager.environment;
-  cfg = dmcfg.lightdm;
+  cfg = xcfg.displayManager.lightdm;
   sessionData = dmcfg.sessionData;
 
   setSessionScript = pkgs.callPackage ./account-service-util.nix { };
@@ -26,13 +26,13 @@ let
       else additionalArgs="-logfile /var/log/X.$display.log"
       fi
 
-      exec ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} $additionalArgs "$@"
+      exec ${xcfg.displayManager.xserverBin} ${toString xcfg.displayManager.xserverArgs} $additionalArgs "$@"
     '';
 
   usersConf = writeText "users.conf"
     ''
       [UserList]
-      minimum-uid=500
+      minimum-uid=1000
       hidden-users=${concatStringsSep " " dmcfg.hiddenUsers}
       hidden-shells=/run/current-system/sw/bin/nologin
     '';
@@ -58,10 +58,10 @@ let
         autologin-user-timeout = ${toString cfg.autoLogin.timeout}
         autologin-session = ${sessionData.autologinSession}
       ''}
-      ${optionalString (dmcfg.setupCommands != "") ''
+      ${optionalString (xcfg.displayManager.setupCommands != "") ''
         display-setup-script=${pkgs.writeScript "lightdm-display-setup" ''
           #!${pkgs.bash}/bin/bash
-          ${dmcfg.setupCommands}
+          ${xcfg.displayManager.setupCommands}
         ''}
       ''}
       ${cfg.extraSeatDefaults}
@@ -81,17 +81,18 @@ in
     ./lightdm-greeters/mini.nix
     ./lightdm-greeters/enso-os.nix
     ./lightdm-greeters/pantheon.nix
+    ./lightdm-greeters/lomiri.nix
     ./lightdm-greeters/tiny.nix
+    ./lightdm-greeters/slick.nix
+    ./lightdm-greeters/mobile.nix
     (mkRenamedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "enable" ] [
       "services"
-      "xserver"
       "displayManager"
       "autoLogin"
       "enable"
     ])
     (mkRenamedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "user" ] [
      "services"
-     "xserver"
      "displayManager"
      "autoLogin"
      "user"
@@ -185,7 +186,7 @@ in
       }
       { assertion = dmcfg.autoLogin.enable -> sessionData.autologinSession != null;
         message = ''
-          LightDM auto-login requires that services.xserver.displayManager.defaultSession is set.
+          LightDM auto-login requires that services.displayManager.defaultSession is set.
         '';
       }
       { assertion = !cfg.greeter.enable -> (dmcfg.autoLogin.enable && cfg.autoLogin.timeout == 0);
@@ -201,12 +202,12 @@ in
 
     # Set default session in session chooser to a specified values – basically ignore session history.
     # Auto-login is already covered by a config value.
-    services.xserver.displayManager.job.preStart = optionalString (!dmcfg.autoLogin.enable && dmcfg.defaultSession != null) ''
+    services.displayManager.preStart = optionalString (!dmcfg.autoLogin.enable && dmcfg.defaultSession != null) ''
       ${setSessionScript}/bin/set-session ${dmcfg.defaultSession}
     '';
 
     # setSessionScript needs session-files in XDG_DATA_DIRS
-    services.xserver.displayManager.job.environment.XDG_DATA_DIRS = "${dmcfg.sessionData.desktops}/share/";
+    services.displayManager.environment.XDG_DATA_DIRS = "${dmcfg.sessionData.desktops}/share/";
 
     # setSessionScript wants AccountsService
     systemd.services.display-manager.wants = [
@@ -214,7 +215,7 @@ in
     ];
 
     # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
-    services.xserver.displayManager.job.execCmd = ''
+    services.displayManager.execCmd = ''
       export PATH=${lightdm}/sbin:$PATH
       exec ${lightdm}/sbin/lightdm
     '';
@@ -267,6 +268,8 @@ in
     # Enable the accounts daemon to find lightdm's dbus interface
     environment.systemPackages = [ lightdm ];
 
+    security.polkit.enable = true;
+
     security.pam.services.lightdm.text = ''
         auth      substack      login
         account   include       login
@@ -285,7 +288,7 @@ in
 
         session  required       pam_succeed_if.so audit quiet_success user = lightdm
         session  required       pam_env.so conffile=/etc/pam/environment readenv=0
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+        session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so
     '';
@@ -298,7 +301,7 @@ in
 
         account   sufficient    pam_unix.so
 
-        password  requisite     pam_unix.so nullok sha512
+        password  requisite     pam_unix.so nullok yescrypt
 
         session   optional      pam_keyinit.so revoke
         session   include       login
@@ -308,7 +311,6 @@ in
       home = "/var/lib/lightdm";
       group = "lightdm";
       uid = config.ids.uids.lightdm;
-      shell = pkgs.bash;
     };
 
     systemd.tmpfiles.rules = [

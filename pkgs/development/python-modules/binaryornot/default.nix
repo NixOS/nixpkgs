@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, chardet, hypothesis }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  chardet,
+  hypothesis,
+}:
 
 buildPythonPackage rec {
   pname = "binaryornot";
   version = "0.4.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ chardet ];
 
-  checkInputs = [ hypothesis ];
+  nativeCheckInputs = [ hypothesis ];
 
   meta = with lib; {
     homepage = "https://github.com/audreyr/binaryornot";

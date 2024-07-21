@@ -25,8 +25,8 @@ in
       default = false;
       description = ''
         Enables reverse proxy support. This will allow Convos to automatically
-        pick up the <literal>X-Forwarded-For</literal> and
-        <literal>X-Request-Base</literal> HTTP headers set in your reverse proxy
+        pick up the `X-Forwarded-For` and
+        `X-Request-Base` HTTP headers set in your reverse proxy
         web server. Note that enabling this option without a reverse proxy in
         front will be a security issue.
       '';

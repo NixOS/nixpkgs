@@ -8,15 +8,16 @@ stdenv.mkDerivation rec {
     url = "http://ftp.gnome.org/pub/GNOME/sources/pinpoint/0.1/${pname}-${version}.tar.xz";
     sha256 = "1jp8chr9vjlpb5lybwp5cg6g90ak5jdzz9baiqkbg0anlg8ps82s";
   };
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ autoconf automake clutter clutter-gst gdk-pixbuf
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+  buildInputs = [ clutter clutter-gst gdk-pixbuf
                   cairo clutter-gtk ];
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/action/show/Apps/Pinpoint";
-    description = "A tool for making hackers do excellent presentations";
+    homepage = "https://gitlab.gnome.org/Archive/pinpoint";
+    description = "Tool for making hackers do excellent presentations";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];
+    mainProgram = "pinpoint";
   };
 }

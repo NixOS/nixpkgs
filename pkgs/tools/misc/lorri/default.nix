@@ -12,10 +12,11 @@
 
 let
   # Run `eval $(nix-build -A lorri.updater)` after updating the revision!
-  version = "1.5.0";
-  gitRev = "f4b6a135e2efb18b3a679e3946d4d070a1c45a2c";
-  sha256 = "0irgzw7vwhvm97nmylj44x2dnd8pwf47gvlgw7fj58fj67a0l8fr";
-  cargoSha256 = "18l7yxciqcvagsg9lykilfhr104a4qqdydjkjysxgd197xalxgzr";
+  # It will copy some required files if necessary.
+  # Also don’t forget to run `nix-build -A lorri.tests`
+  version = "1.7.0";
+  sha256 = "sha256-pGNhhEBHyWhTaW24dHrxAvpb/qr5RPbHXRwDZx6Rf74=";
+  cargoSha256 = "sha256-ENZATiBhoO+N6NpSknOWpvsatkaYb4mS/E63XNRXfMU=";
 
 in (rustPlatform.buildRustPackage rec {
   pname = "lorri";
@@ -24,7 +25,7 @@ in (rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
-    rev = gitRev;
+    rev = version;
     inherit sha256;
   };
 
@@ -63,8 +64,9 @@ in (rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Your project's nix-env";
-    homepage = "https://github.com/target/lorri";
+    homepage = "https://github.com/nix-community/lorri";
     license = licenses.asl20;
-    maintainers = with maintainers; [ grahamc Profpatsch ];
+    maintainers = with maintainers; [ grahamc Profpatsch nyarly ];
+    mainProgram = "lorri";
   };
 })

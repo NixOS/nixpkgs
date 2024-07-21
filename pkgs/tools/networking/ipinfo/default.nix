@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "ipinfo";
-  version = "2.1.1";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "cli";
-    rev = "${pname}-${version}";
-    sha256 = "15pwx94n4qi02r3ppqkpnkikpnbqmr8rrn9gmkbjy2vbdi147qwl";
+    rev = "refs/tags/${pname}-${version}";
+    hash = "sha256-sdQdCP2NotrdeqYrSd9c6sExFeuX54I4fxJfEyULPuk=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   # Tests require network access
   doCheck = false;
@@ -22,6 +22,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Command Line Interface for the IPinfo API";
     homepage = "https://github.com/ipinfo/cli";
+    changelog = "https://github.com/ipinfo/cli/releases/tag/ipinfo-${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

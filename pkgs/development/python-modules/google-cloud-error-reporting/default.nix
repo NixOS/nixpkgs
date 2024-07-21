@@ -1,36 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-cloud-logging
-, google-cloud-testutils
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-logging,
+  google-cloud-testutils,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
-  version = "1.4.1";
+  version = "1.11.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4a72a65586178daaacf6bbc4b718db0765b99a719fce88a95c2be4f82689b7c1";
+    hash = "sha256-+oeVT/ag00BEObbqzkC/EazEwnrWvRURnz3gnCBbn4k=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'google-cloud-logging>=1.14.0, <2.4' 'google-cloud-logging>=1.14.0'
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    google-api-core
     google-cloud-logging
-    libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytestCheckHook
@@ -38,9 +43,11 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # require credentials
+    # Tests require credentials
     "test_report_error_event"
     "test_report_exception"
+    # Import is already tested
+    "test_namespace_package_compat"
   ];
 
   preCheck = ''
@@ -48,10 +55,16 @@ buildPythonPackage rec {
     rm -r google
   '';
 
+  pythonImportsCheck = [
+    "google.cloud.error_reporting"
+    "google.cloud.errorreporting_v1beta1"
+  ];
+
   meta = with lib; {
     description = "Stackdriver Error Reporting API client library";
     homepage = "https://github.com/googleapis/python-error-reporting";
+    changelog = "https://github.com/googleapis/python-error-reporting/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "db38fc290b710e8e9e9d442da2fb627d41e13b3ee80326c15cc2595ba00ea036";
   };
 
-  buildInputs = [ intltool util-linux ];
+  nativeBuildInputs = [ intltool util-linux ];
+  buildInputs = [ util-linux ];
 
   configureFlags = [
     "--with-media-dir=${mediaDir}"
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://bazaar.launchpad.net/~fourmond/pmount/main/files";
     description = "Mount removable devices as normal user";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 }

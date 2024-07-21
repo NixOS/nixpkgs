@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  pkg = pkgs.sane-backends.override {
+  pkg = config.hardware.sane.backends-package.override {
     scanSnapDriversUnfree = config.hardware.sane.drivers.scanSnap.enable;
     scanSnapDriversPackage = config.hardware.sane.drivers.scanSnap.package;
   };
@@ -28,8 +28,8 @@ let
   };
 
   env = {
-    SANE_CONFIG_DIR = config.hardware.sane.configDir;
-    LD_LIBRARY_PATH = [ "${saneConfig}/lib/sane" ];
+    SANE_CONFIG_DIR = "/etc/sane-config";
+    LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
   backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
@@ -51,10 +51,17 @@ in
       description = ''
         Enable support for SANE scanners.
 
-        <note><para>
-          Users in the "scanner" group will gain access to the scanner, or the "lp" group if it's also a printer.
-        </para></note>
+        ::: {.note}
+        Users in the "scanner" group will gain access to the scanner, or the "lp" group if it's also a printer.
+        :::
       '';
+    };
+
+    hardware.sane.backends-package = mkOption {
+      type = types.package;
+      default = pkgs.sane-backends;
+      defaultText = literalExpression "pkgs.sane-backends";
+      description = "Backends driver package to use.";
     };
 
     hardware.sane.snapshot = mkOption {
@@ -69,11 +76,13 @@ in
       description = ''
         Packages providing extra SANE backends to enable.
 
-        <note><para>
-          The example contains the package for HP scanners.
-        </para></note>
+        ::: {.note}
+        The example contains the package for HP scanners, and the package for
+        Apple AirScan and Microsoft WSD support (supports many
+        vendors/devices).
+        :::
       '';
-      example = literalExpression "[ pkgs.hplipWithPlugin ]";
+      example = literalExpression "[ pkgs.hplipWithPlugin pkgs.sane-airscan ]";
     };
 
     hardware.sane.disabledDefaultBackends = mkOption {
@@ -82,7 +91,7 @@ in
       example = [ "v4l" ];
       description = ''
         Names of backends which are enabled by default but should be disabled.
-        See <literal>$SANE_CONFIG_DIR/dll.conf</literal> for the list of possible names.
+        See `$SANE_CONFIG_DIR/dll.conf` for the list of possible names.
       '';
     };
 
@@ -112,15 +121,21 @@ in
       '';
     };
 
-    hardware.sane.drivers.scanSnap.package = mkOption {
-      type = types.package;
-      default = pkgs.sane-drivers.epjitsu;
-      defaultText = literalExpression "pkgs.sane-drivers.epjitsu";
-      description = ''
-        Epjitsu driver package to use. Useful if you want to extract the driver files yourself.
+    hardware.sane.drivers.scanSnap.package = mkPackageOption pkgs [ "sane-drivers" "epjitsu" ] {
+      extraDescription = ''
+        Useful if you want to extract the driver files yourself.
 
-        The process is described in the <literal>/etc/sane.d/epjitsu.conf</literal> file in
-        the <literal>sane-backends</literal> package.
+        The process is described in the {file}`/etc/sane.d/epjitsu.conf` file in
+        the `sane-backends` package.
+      '';
+    };
+
+    hardware.sane.openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Open ports needed for discovery of scanners on the local network, e.g.
+        needed for Canon scanners (BJNP protocol).
       '';
     };
 
@@ -130,8 +145,8 @@ in
       description = ''
         Enable saned network daemon for remote connection to scanners.
 
-        saned would be runned from <literal>scanner</literal> user; to allow
-        access to hardware that doesn't have <literal>scanner</literal> group
+        saned would be run from `scanner` user; to allow
+        access to hardware that doesn't have `scanner` group
         you should add needed groups to this user.
       '';
     };
@@ -156,9 +171,12 @@ in
 
       environment.systemPackages = backends;
       environment.sessionVariables = env;
+      environment.etc."sane-config".source = config.hardware.sane.configDir;
+      environment.etc."sane-libs".source = "${saneConfig}/lib/sane";
       services.udev.packages = backends;
 
       users.groups.scanner.gid = config.ids.gids.scanner;
+      networking.firewall.allowedUDPPorts = mkIf config.hardware.sane.openFirewall [ 8612 ];
     })
 
     (mkIf config.services.saned.enable {

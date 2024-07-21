@@ -7,6 +7,7 @@
 , pkg-config
 , python3
 , fontconfig
+, installShellFiles
 , openssl
 , libGL
 , libX11
@@ -21,21 +22,24 @@
 , CoreGraphics
 , Cocoa
 , Foundation
+, System
 , libiconv
+, UserNotifications
+, nixosTests
+, runCommand
+, vulkan-loader
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20211204-082213-a66c61ee9";
-
-  outputs = [ "out" "terminfo" ];
+  version = "20240203-110809-5046fc22";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-QKtnOpAW4exDQEFSN0b04hA6TYuC+/C5nIYHCNzfuso=";
+    hash = "sha256-Az+HlnK/lRJpUSGm5UKyma1l2PaBKNCGFiaYnLECMX8=";
   };
 
   postPatch = ''
@@ -45,12 +49,18 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-qSThjV6oBD6joDM0Eppo7z0SL8GHV5SaCaAwXmUIT3I=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "xcb-imdkit-0.3.0" = "sha256-fTpJ6uNhjmCWv7dZqVgYuS2Uic36XNYTbqlaly5QBjI=";
+    };
+  };
 
   nativeBuildInputs = [
+    installShellFiles
+    ncurses # tic for terminfo
     pkg-config
     python3
-    ncurses # tic for terminfo
   ] ++ lib.optional stdenv.isDarwin perl;
 
   buildInputs = [
@@ -71,25 +81,36 @@ rustPlatform.buildRustPackage rec {
     CoreGraphics
     Foundation
     libiconv
+    System
+    UserNotifications
   ];
 
-  postInstall = ''
-    # terminfo
-    mkdir -p $terminfo/share/terminfo/w $out/nix-support
-    tic -x -o $terminfo/share/terminfo termwiz/data/wezterm.terminfo
-    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  buildFeatures = [ "distro-defaults" ];
 
-    # desktop icon
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework System";
+
+  postInstall = ''
+    mkdir -p $out/nix-support
+    echo "${passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
+
     install -Dm644 assets/icon/terminal.png $out/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
     install -Dm644 assets/wezterm.desktop $out/share/applications/org.wezfurlong.wezterm.desktop
     install -Dm644 assets/wezterm.appdata.xml $out/share/metainfo/org.wezfurlong.wezterm.appdata.xml
 
-    # helper scripts
     install -Dm644 assets/shell-integration/wezterm.sh -t $out/etc/profile.d
+    installShellCompletion --cmd wezterm \
+      --bash assets/shell-completion/bash \
+      --fish assets/shell-completion/fish \
+      --zsh assets/shell-completion/zsh
+
+    install -Dm644 assets/wezterm-nautilus.py -t $out/share/nautilus-python/extensions
   '';
 
   preFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --add-needed "${libGL}/lib/libEGL.so.1" $out/bin/wezterm-gui
+    patchelf \
+      --add-needed "${libGL}/lib/libEGL.so.1" \
+      --add-needed "${vulkan-loader}/lib/libvulkan.so.1" \
+      $out/bin/wezterm-gui
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
     OUT_APP="$out/Applications/WezTerm.app"
@@ -99,13 +120,26 @@ rustPlatform.buildRustPackage rec {
     ln -s $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
   '';
 
+  passthru = {
+    tests = {
+      all-terminfo = nixosTests.allTerminfo;
+      # the test is commented out in nixos/tests/terminal-emulators.nix
+      #terminal-emulators = nixosTests.terminal-emulators.wezterm;
+    };
+    terminfo = runCommand "wezterm-terminfo"
+      {
+        nativeBuildInputs = [ ncurses ];
+      } ''
+      mkdir -p $out/share/terminfo $out/nix-support
+      tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
+    '';
+  };
+
   meta = with lib; {
-    description = "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
+    description = "GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezfurlong.org/wezterm";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.unix;
-    # Fails on missing UserNotifications framework while linking
-    broken = stdenv.isDarwin;
+    mainProgram = "wezterm";
+    maintainers = with maintainers; [ SuperSandro2000 mimame ];
   };
 }

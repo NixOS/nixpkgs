@@ -25,8 +25,8 @@ in {
         port = 3456;
       };
       description = ''
-        Parameters passed to <literal>--listen</literal> command.
-        Refer to <link xlink:href="https://tiddlywiki.com/#WebServer"/>
+        Parameters passed to `--listen` command.
+        Refer to <https://tiddlywiki.com/#WebServer>
         for details on supported values.
       '';
     };

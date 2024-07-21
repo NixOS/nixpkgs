@@ -44,12 +44,11 @@ in {
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/lorri daemon";
         PrivateTmp = true;
-        ProtectSystem = "strict";
-        ProtectHome = "read-only";
+        ProtectSystem = "full";
         Restart = "on-failure";
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ cfg.package pkgs.direnv ];
   };
 }

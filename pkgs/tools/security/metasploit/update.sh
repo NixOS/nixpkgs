@@ -13,5 +13,8 @@ bundler install
 bundix
 sed -i '/[ ]*dependencies =/d' gemset.nix
 
+# Hacks
+sed -i 's/nokogiri = {/nokogiri = {\n    dependencies = ["mini_portile2" "racc"];/g' gemset.nix
+
 cd "../../../../"
 nix-update metasploit --version "$latest"

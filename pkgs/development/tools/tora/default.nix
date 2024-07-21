@@ -40,9 +40,7 @@ mkDerivation {
   ];
 
   # these libraries are only searched for at runtime so we need to force-link them
-  NIX_LDFLAGS = "-lgvc -lmysqlclient -lecpg -lssl";
-
-  NIX_CFLAGS_COMPILE = "-L${libmysqlclient}/lib/mysql -I${libmysqlclient}/include/mysql";
+  NIX_LDFLAGS = "-lgvc -lmysqlclient -lecpg -lssl -L${libmysqlclient}/lib/mariadb";
 
   qtWrapperArgs = [
     ''--prefix PATH : ${lib.getBin graphviz}/bin''
@@ -50,6 +48,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Tora SQL tool";
+    mainProgram = "tora";
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
     license = licenses.asl20;

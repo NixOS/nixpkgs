@@ -7,7 +7,7 @@ let
 in
   {
     options.services.etesync-dav = {
-      enable = mkEnableOption "etesync-dav";
+      enable = mkEnableOption "etesync-dav, end-to-end encrypted sync for contacts, calendars and tasks";
 
       host = mkOption {
         type = types.str;
@@ -59,6 +59,7 @@ in
 
       systemd.services.etesync-dav = {
         description = "etesync-dav - A CalDAV and CardDAV adapter for EteSync";
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         path = [ pkgs.etesync-dav ];

@@ -1,77 +1,35 @@
-{ lib, stdenv, python3, fetchFromGitHub, git, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, git
+, pkg-config
+, xcbuild
+, python3
+, zlib
+}:
 
-# Note:
-# Conan has specific dependency demands; check
-#     https://github.com/conan-io/conan/blob/master/conans/requirements.txt
-#     https://github.com/conan-io/conan/blob/master/conans/requirements_server.txt
-# on the release branch/commit we're packaging.
-#
-# Two approaches are used here to deal with that:
-# Pinning the specific versions it wants in `newPython`,
-# and using `substituteInPlace conans/requirements.txt ...`
-# in `postPatch` to allow newer versions when we know
-# (e.g. from changelogs) that they are compatible.
-
-let newPython = python3.override {
-  packageOverrides = self: super: {
-    node-semver = super.node-semver.overridePythonAttrs (oldAttrs: rec {
-      version = "0.6.1";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
-      };
-    });
-    # https://github.com/conan-io/conan/issues/8876
-    pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
-      version = "1.7.1";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96";
-      };
-      disabledTests = [
-        "test_ec_verify_should_return_false_if_signature_invalid"
-      ];
-    });
-    # conan needs jinja2<3
-    jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
-      version = "2.11.3";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6";
-      };
-    });
-    # old jinja2 needs old markupsafe
-    markupsafe = super.markupsafe.overridePythonAttrs (oldAttrs: rec {
-      version = "1.1.1";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b";
-      };
-    });
-  };
-};
-
-in newPython.pkgs.buildPythonApplication rec {
-  version = "1.40.0";
+python3.pkgs.buildPythonApplication rec {
   pname = "conan";
+  version = "2.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
-    rev = version;
-    sha256 = "1sb4w4wahasrwxkag1g79f135601sca6iafv4r4836f2vi48ka2d";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4GCLmPEoCX1Cw+H6Bo1KA4+9GX35HgONAmMF/WNX6ag=";
   };
 
-  propagatedBuildInputs = with newPython.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     bottle
     colorama
     python-dateutil
-    deprecation
     distro
     fasteners
-    future
     jinja2
-    node-semver
     patch-ng
     pluginbase
     pygments
@@ -79,29 +37,83 @@ in newPython.pkgs.buildPythonApplication rec {
     pylint # Not in `requirements.txt` but used in hooks, see https://github.com/conan-io/conan/pull/6152
     pyyaml
     requests
-    six
     tqdm
     urllib3
-  ] ++ lib.optionals stdenv.isDarwin [ idna cryptography pyopenssl ];
+  ] ++ lib.optionals stdenv.isDarwin [
+    idna
+    cryptography
+    pyopenssl
+  ];
 
-  checkInputs = [
-    pkg-config
+  nativeCheckInputs = [
     git
-  ] ++ (with newPython.pkgs; [
-    codecov
+    pkg-config
+    zlib
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    xcbuild.xcrun
+  ] ++ (with python3.pkgs; [
     mock
-    nose
     parameterized
+    pytest-xdist
+    pytestCheckHook
     webtest
   ]);
 
-  # TODO: reenable tests now that we fetch tests w/ the source from GitHub.
-  # Not enabled right now due to time constraints/failing tests that I didn't have time to track down
-  doCheck = false;
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "conan"
+  ];
+
+  pytestFlagsArray = [
+    "-n"
+    "$NIX_BUILD_CORES"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "TestFTP"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Rejects paths containing nix
+    "test_conditional_os"
+    # Requires Apple Clang
+    "test_detect_default_compilers"
+    "test_detect_default_in_mac_os_using_gcc_as_default"
+    # Incompatible with darwin.xattr and xcbuild from nixpkgs
+    "test_dot_files"
+    "test_xcrun"
+    "test_xcrun_in_required_by_tool_requires"
+    "test_xcrun_in_tool_requires"
+  ];
+
+  disabledTestPaths = [
+    # Requires cmake, meson, autotools, apt-get, etc.
+    "test/functional/command/new_test.py"
+    "test/functional/command/test_install_deploy.py"
+    "test/functional/graph/test_transitive_build_scripts.py"
+    "test/functional/layout/test_editable_cmake.py"
+    "test/functional/layout/test_editable_cmake_components.py"
+    "test/functional/layout/test_in_subfolder.py"
+    "test/functional/layout/test_source_folder.py"
+    "test/functional/test_local_recipes_index.py"
+    "test/functional/test_profile_detect_api.py"
+    "test/functional/toolchains/"
+    "test/functional/tools/scm/test_git.py"
+    "test/functional/tools/system/package_manager_test.py"
+    "test/functional/tools_versions_test.py"
+    "test/functional/util/test_cmd_args_to_string.py"
+    "test/integration/command/runner_test.py"
+    "test/integration/command/user_test.py"
+    "test/integration/command_v2/list_test.py"
+    "test/performance/test_large_graph.py"
+    "test/unittests/tools/env/test_env_files.py"
+  ];
 
   meta = with lib; {
-    homepage = "https://conan.io";
     description = "Decentralized and portable C/C++ package manager";
+    mainProgram = "conan";
+    homepage = "https://conan.io";
+    changelog = "https://github.com/conan-io/conan/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ HaoZeke ];
   };

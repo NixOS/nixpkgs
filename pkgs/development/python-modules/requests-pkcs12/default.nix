@@ -1,19 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyopenssl
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyopenssl,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "requests-pkcs12";
-  version = "1.13";
+  version = "1.25";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "m-click";
     repo = "requests_pkcs12";
     rev = version;
-    sha256 = "0mc9zpa0d9gijf56mxmsxy4qdcm200ixhnm6i3y5xc2yfv9r6xqy";
+    hash = "sha256-ukS0vxG2Rd71GsF1lmpsDSM2JovwqhXsaAnZdF8WGQo=";
   };
 
   propagatedBuildInputs = [
@@ -23,6 +28,7 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "requests_pkcs12" ];
 
   meta = with lib; {

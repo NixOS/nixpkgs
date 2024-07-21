@@ -1,7 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
   cfg = config.services.zabbixProxy;
+  opt = options.services.zabbixProxy;
   pgsql = config.services.postgresql;
   mysql = config.services.mysql;
 
@@ -61,7 +62,7 @@ in
         default = with pkgs; [ nettools nmap traceroute ];
         defaultText = literalExpression "[ nettools nmap traceroute ]";
         description = ''
-          Packages to be added to the Zabbix <envar>PATH</envar>.
+          Packages to be added to the Zabbix {env}`PATH`.
           Typically used to add executables for scripts, but can be anything.
         '';
       };
@@ -101,8 +102,13 @@ in
         };
 
         port = mkOption {
-          type = types.int;
-          default = if cfg.database.type == "mysql" then mysql.port else pgsql.port;
+          type = types.port;
+          default = if cfg.database.type == "mysql" then mysql.port else pgsql.settings.port;
+          defaultText = literalExpression ''
+            if config.${opt.database.type} == "mysql"
+            then config.${options.services.mysql.port}
+            else config.services.postgresql.settings.port
+          '';
           description = "Database host port.";
         };
 
@@ -125,7 +131,7 @@ in
           example = "/run/keys/zabbix-dbpassword";
           description = ''
             A file containing the password corresponding to
-            <option>database.user</option>.
+            {option}`database.user`.
           '';
         };
 
@@ -175,7 +181,7 @@ in
         default = {};
         description = ''
           Zabbix Proxy configuration. Refer to
-          <link xlink:href="https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_proxy"/>
+          <https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_proxy>
           for details on supported values.
         '';
         example = {
@@ -197,7 +203,7 @@ in
       { assertion = !config.services.zabbixServer.enable;
         message = "Please choose one of services.zabbixServer or services.zabbixProxy.";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      { assertion = cfg.database.createLocally -> cfg.database.user == user && cfg.database.name == cfg.database.user;
         message = "services.zabbixProxy.database.user must be set to ${user} if services.zabbixProxy.database.createLocally is set true";
       }
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
@@ -246,7 +252,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -293,10 +299,7 @@ in
         fi
       '' + optionalString (cfg.database.passwordFile != null) ''
         # create a copy of the supplied password file in a format zabbix can consume
-        touch ${passwordFile}
-        chmod 0600 ${passwordFile}
-        echo -n "DBPassword = " > ${passwordFile}
-        cat ${cfg.database.passwordFile} >> ${passwordFile}
+        install -m 0600 <(echo "DBPassword = $(cat ${cfg.database.passwordFile})") ${passwordFile}
       '';
 
       serviceConfig = {

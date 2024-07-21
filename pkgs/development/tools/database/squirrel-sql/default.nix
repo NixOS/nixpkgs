@@ -6,11 +6,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "squirrel-sql";
-  version = "4.2.0";
+  version = "4.7.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/squirrel-sql/1-stable/${version}-plainzip/squirrelsql-${version}-standard.zip";
-    sha256 = "sha256-pNcmIey50nWZghoXVGnm0EFzGoqBpAaJ2lhYvVzjWto=";
+    sha256 = "sha256-Y7eG2otbLjtXvs3mRXWL8jJywuhBQ9i/MfWJXvkxnuU=";
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];
@@ -63,14 +63,16 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "SQuirreL SQL";
     genericName = "SQL Client";
-    categories = "Development;";
+    categories = [ "Development" ];
     icon = "squirrel-sql";
   };
 
   meta = with lib; {
     description = "Universal SQL Client";
+    mainProgram = "squirrel-sql";
     homepage = "http://squirrel-sql.sourceforge.net/";
-    license = licenses.lgpl21;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ khumba ];
   };

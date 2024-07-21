@@ -1,33 +1,50 @@
-{ lib
-, buildPythonPackage
-, marisa-trie
-, pythonOlder
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  marisa-trie,
+  pythonOlder,
+  fetchPypi,
+  pytestCheckHook,
+  language-data,
+  setuptools,
+  setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "langcodes";
-  version = "3.2.1";
-  disabled = pythonOlder "3.3";
+  version = "3.4.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "779a6da5036f87b6b56c180b2782ab111ddd6aa9157670a9b918402b0e07cd93";
+    hash = "sha256-rlp30aAdDR6RhUpnGJCJK3zpq7YBq3Mn/FyHT4meGXk=";
   };
 
-  propagatedBuildInputs = [ marisa-trie ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
-  checkInputs = [ nose ];
+  propagatedBuildInputs = [
+    language-data
+    marisa-trie
+    setuptools # pkg_resources import in language_data/util.py
+  ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # AssertionError: assert 'Unknown language [aqk]' == 'Aninka'
+    "test_updated_iana"
+  ];
+
+  pythonImportsCheck = [ "langcodes" ];
 
   meta = with lib; {
-    description = "A toolkit for working with and comparing the standardized codes for languages, such as ‘en’ for English or ‘es’ for Spanish";
-    homepage =  "https://github.com/LuminosoInsight/langcodes";
+    description = "Python toolkit for working with and comparing the standardized codes for languages";
+    homepage = "https://github.com/georgkrause/langcodes";
     license = licenses.mit;
-    maintainers = with maintainers; [ ixxie ];
   };
 }

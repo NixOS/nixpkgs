@@ -6,10 +6,11 @@
 , symlinkJoin
 
 , cudaSupport
-, cudatoolkit
-, cudnn
+, cudaPackages ? {}
 }:
 let
+  inherit (cudaPackages) cudatoolkit cudnn;
+
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
@@ -26,7 +27,13 @@ in stdenv.mkDerivation {
   pname = "libtorch-test";
   version = libtorch-bin.version;
 
-  src = ./.;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [
+      ./CMakeLists.txt
+      ./test.cpp
+    ];
+  };
 
   nativeBuildInputs = [ cmake ];
 

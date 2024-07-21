@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     wrapQtAppsHook
     python3Packages.setuptools
     python3Packages.rfc3987
-    python3Packages.JPype1
+    python3Packages.jpype1
     python3Packages.pyqt5
   ];
 
@@ -40,6 +40,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "http://www.obdasystems.com/eddy";
     description = "Graphical editor for the specification and visualization of Graphol ontologies";
+    mainProgram = "eddy";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ koslambrou ];

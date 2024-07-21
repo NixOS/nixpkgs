@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bedops";
-  version = "2.4.40";
+  version = "2.4.41";
 
   src = fetchFromGitHub {
     owner = "bedops";
     repo = "bedops";
     rev = "v${version}";
-    sha256 = "sha256-rJVl3KbzGblyQZ7FtJXeEv/wjQJmzYGNjzhvkoMoBWY=";
+    sha256 = "sha256-VJBoi1+tHA4oOVOsClUfimB+mOV5ZSQsDcDq3vAZwBA=";
   };
 
   buildInputs = [ zlib bzip2 jansson ];
@@ -18,7 +18,20 @@ stdenv.mkDerivation rec {
     # We use nixpkgs versions of these libraries
     rm -r third-party
     sed -i '/^LIBS/d' system.mk/*
-    sed -i 's|^LIBRARIES.*$|LIBRARIES = -lbz2 -lz -ljansson|' */*/*/*/Makefile
+    sed -i 's|^LIBRARIES.*$|LIBRARIES = -lbz2 -lz -ljansson|' */*/*/*/Makefile*
+
+    # `make support` installs above libraries
+    substituteInPlace system.mk/* \
+      --replace ": support" ":"
+
+    # Variable name is different in this makefile
+    substituteInPlace applications/bed/sort-bed/src/Makefile.darwin \
+      --replace "DIST_DIR" "BINDIR"
+
+    # `mkdir -p $BINDIR` is missing
+    substituteInPlace applications/bed/sort-bed/src/Makefile.darwin \
+      --replace 'mkdir -p ''${OBJ_DIR}' 'mkdir -p ''${OBJ_DIR} ''${BINDIR}'
+
     substituteInPlace applications/bed/starch/src/Makefile --replace '$(LIBRARIES)' ""
 
     # Function name is different in nixpkgs provided libraries
@@ -27,7 +40,7 @@ stdenv.mkDerivation rec {
     done
 
     # Don't force static
-    for f in */*/*/*/Makefile ; do
+    for f in */*/*/*/Makefile* ; do
       substituteInPlace $f --replace '-static' ""
     done
   '';
@@ -46,6 +59,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ jbedo ];
     platforms = platforms.x86_64;
-    broken = stdenv.isDarwin;
   };
 }

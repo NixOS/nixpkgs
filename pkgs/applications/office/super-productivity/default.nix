@@ -1,21 +1,17 @@
-{ stdenv , lib , fetchurl , appimageTools , makeWrapper , electron_11 }:
+{ stdenv , lib , fetchurl , appimageTools , makeWrapper , electron }:
 
-let
-  electron = electron_11;
-in
 stdenv.mkDerivation rec {
   pname = "super-productivity";
-  version = "7.6.0";
+  version = "8.0.10";
 
   src = fetchurl {
     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-${version}.AppImage";
-    sha256 = "f02a451a44f48a8e85a0c1269625d89fb1e0b8a75b7e217d96352064e6464ae5";
+    sha256 = "sha256-YJx5ygHx0ZYPmw3xFGjPRx8nR20D+XR9SMxE2ymuWes=";
     name = "${pname}-${version}.AppImage";
   };
 
   appimageContents = appimageTools.extractType2 {
-    name = "${pname}-${version}";
-    inherit src;
+    inherit pname version src;
   };
 
   dontUnpack = true;
@@ -41,8 +37,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
+      --add-flags $out/share/${pname}/resources/app.asar
   '';
 
   meta = with lib; {
@@ -51,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ offline ];
+    mainProgram = "super-productivity";
   };
 }

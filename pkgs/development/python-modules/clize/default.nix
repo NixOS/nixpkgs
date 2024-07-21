@@ -1,41 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, sigtools
-, six
-, attrs
-, od
-, docutils
-, repeated_test
-, pygments
-, unittest2
-, pytestCheckHook
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  docutils,
+  fetchPypi,
+  od,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  python-dateutil,
+  repeated-test,
+  setuptools-scm,
+  sigtools,
 }:
 
 buildPythonPackage rec {
   pname = "clize";
-  version = "4.2.1";
+  version = "5.0.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3177a028e4169d8865c79af82bdd441b24311d4bd9c0ae8803641882d340a51d";
+    hash = "sha256-BH9aRHNgJxirG4VnKn4VMDOHF41agcJ13EKd+sHstRA=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    python-dateutil
-    pygments
-    repeated_test
-    unittest2
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     attrs
     docutils
     od
     sigtools
-    six
+  ];
+
+  passthru.optional-dependencies = {
+    datetime = [ python-dateutil ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    python-dateutil
+    pygments
+    repeated-test
   ];
 
   pythonImportsCheck = [ "clize" ];

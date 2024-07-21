@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "navi";
-  version = "2.18.0";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
     owner = "denisidoro";
     repo = "navi";
     rev = "v${version}";
-    sha256 = "sha256-JG0MZrvpx+cAFcZJK05GUI10PG53UmxjJjveAZA7k/M=";
+    sha256 = "sha256-pqBTrHBvsuosyQqCnSiI3+pOe2J6XeIQ8dai+kTVFjc=";
   };
 
-  cargoSha256 = "sha256-S2DBzeir6+JS1jfVxCQ68v4Rl7UBpghbtE+wdu341xw=";
+  cargoHash = "sha256-dx13p+kEyqhyaF8ejJLWsgW3IpEvS9nlIHhjxOpp4d8=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -29,10 +29,11 @@ rustPlatform.buildRustPackage rec {
    ];
 
   meta = with lib; {
-    description = "An interactive cheatsheet tool for the command-line and application launchers";
+    description = "Interactive cheatsheet tool for the command-line and application launchers";
     homepage = "https://github.com/denisidoro/navi";
     license = licenses.asl20;
     platforms = platforms.unix;
+    mainProgram = "navi";
     maintainers = with maintainers; [ cust0dian ];
   };
 }

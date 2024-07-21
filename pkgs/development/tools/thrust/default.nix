@@ -38,7 +38,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Chromium-based cross-platform / cross-language application framework";
+    mainProgram = "thrust_shell";
     homepage = "https://github.com/breach/thrust";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = [ maintainers.osener ];
     platforms = [ "x86_64-linux" ];

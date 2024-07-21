@@ -1,18 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, ncurses, pcre2 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, ncurses
+, pcre2
+, sqlite
+}:
 
 stdenv.mkDerivation rec {
   pname = "fdupes";
-  version = "2.1.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "adrianlopezroche";
-    repo  = "fdupes";
-    rev   = "v${version}";
-    sha256 = "1c5hv7vkfxsii1qafhsynzp9zkwim47xkpk27sy64qdsjnhysdak";
+    repo = "fdupes";
+    rev = "v${version}";
+    hash = "sha256-VPaNDKUgaJRF75cxksK0nZNFarqhat7n8ztIdBoxHI8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ncurses pcre2 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    ncurses
+    pcre2
+    sqlite
+  ];
 
   meta = with lib; {
     description = "Identifies duplicate files residing within specified directories";
@@ -25,5 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.maggesi ];
+    mainProgram = "fdupes";
   };
 }

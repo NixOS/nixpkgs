@@ -5,21 +5,23 @@
 
 buildGoModule rec {
   pname = "natscli";
-  version = "0.0.28";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "nats-io";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-w0a2BzfRKf55hFgdaDLsR2YeC5Jqa2uynlRN2oGPX8g=";
+    repo = "natscli";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-c2bFFbHKjKwkzX2Br1CC2aMh1Tz0NPVWCfPSFbu/XnU=";
   };
 
-  vendorSha256 = "sha256-kt6KflivmsG6prxWXtODcXSP2sNn4daH8ruZMxYLk3g=";
+  vendorHash = "sha256-ltTQWAS6OG485oj6GEpgQnnuCUunSqUtgq1/OPcjKmQ=";
 
   meta = with lib; {
     description = "NATS Command Line Interface";
     homepage = "https://github.com/nats-io/natscli";
+    changelog = "https://github.com/nats-io/natscli/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "nats";
   };
 }

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ];
 
   meta = {
-    homepage = "http://rig.sourceforge.net/";
+    homepage = "https://rig.sourceforge.net/";
     description = "Random identity generator";
     longDescription = ''
       RIG (Random Identity Generator) is a free replacement for a shareware
@@ -26,8 +26,9 @@ stdenv.mkDerivation rec {
       if the Web site/BBS/person you are giving the information to tries to
       cross-check the city, state, zip, or area code, it will check out.
     '';
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ tomberek ];
     platforms = with lib.platforms; all;
+    mainProgram = "rig";
   };
 }

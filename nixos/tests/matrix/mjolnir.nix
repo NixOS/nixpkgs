@@ -38,26 +38,32 @@ import ../make-test-python.nix (
       homeserver = { pkgs, ... }: {
         services.matrix-synapse = {
           enable = true;
-          database_type = "sqlite3";
-          tls_certificate_path = "${cert}";
-          tls_private_key_path = "${key}";
-          enable_registration = true;
-          registration_shared_secret = "supersecret-registration";
+          settings = {
+            database.name = "sqlite3";
+            tls_certificate_path = "${cert}";
+            tls_private_key_path = "${key}";
+            enable_registration = true;
+            enable_registration_without_verification = true;
+            registration_shared_secret = "supersecret-registration";
 
-          listeners = [
-            # The default but tls=false
-            {
-              "bind_address" = "";
-              "port" = 8448;
-              "resources" = [
-                { "compress" = true; "names" = [ "client" "webclient" ]; }
-                { "compress" = false; "names" = [ "federation" ]; }
+            listeners = [ {
+              # The default but tls=false
+              bind_addresses = [
+                "0.0.0.0"
               ];
-              "tls" = false;
-              "type" = "http";
-              "x_forwarded" = false;
-            }
-          ];
+              port = 8448;
+              resources = [ {
+                compress = true;
+                names = [ "client" ];
+              } {
+                compress = false;
+                names = [ "federation" ];
+              } ];
+              tls = false;
+              type = "http";
+              x_forwarded = false;
+            } ];
+          };
         };
 
         networking.firewall.allowedTCPPorts = [ 8448 ];
@@ -92,6 +98,8 @@ import ../make-test-python.nix (
             enable = true;
             username = "mjolnir";
             passwordFile = pkgs.writeText "password.txt" "mjolnir-password";
+            # otherwise mjolnir tries to connect to ::1, which is not listened by pantalaimon
+            options.listenAddress = "127.0.0.1";
           };
           managementRoom = "#moderators:homeserver";
         };
@@ -100,7 +108,10 @@ import ../make-test-python.nix (
       client = { pkgs, ... }: {
         environment.systemPackages = [
           (pkgs.writers.writePython3Bin "create_management_room_and_invite_mjolnir"
-            { libraries = [ pkgs.python3Packages.matrix-nio ]; } ''
+            { libraries = with pkgs.python3Packages; [
+                matrix-nio
+              ] ++ matrix-nio.optional-dependencies.e2e;
+            } ''
             import asyncio
 
             from nio import (

@@ -1,33 +1,39 @@
-{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, icu, dotnetCorePackages, openssl, nixosTests }:
+{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, icu, dotnet-runtime, openssl, nixosTests, zlib }:
 
 let
+  pname = "prowlarr";
+
+  unsupported = throw "Unsupported system ${stdenv.hostPlatform.system} for ${pname}";
+
   os =
     if stdenv.isDarwin then
       "osx"
     else if stdenv.isLinux then
       "linux"
     else
-      throw "Not supported on ${stdenv.hostPlatform.system}.";
+      unsupported;
 
   arch = {
-    x86_64-linux = "x64";
+    aarch64-darwin = "arm64";
     aarch64-linux = "arm64";
     x86_64-darwin = "x64";
-  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    x86_64-linux = "x64";
+  }.${stdenv.hostPlatform.system} or unsupported;
 
   hash = {
-    x64-linux_hash = "sha256-S3ktqBapIi6YIjDOIMziCzecS86hR2LIUey3SLNuWgg=";
-    arm64-linux_hash = "sha256-lxPglw3whyMQ+v7GpKMygxqINDoczKmh7KpGAuzuQwM=";
-    x64-osx_hash = "sha256-EUg3eC5QwGgCSi9qAPs6s8wenSXEmLvLHUTlvoLWAtc=";
-  }."${arch}-${os}_hash";
+    aarch64-darwin = "sha256-LmRF4hXVbjYj/4v4SKwBm5lRFUuHv11h3tmWo2vOskQ=";
+    aarch64-linux = "sha256-fj0E1lcCLJs4jQwQQBmbh6uts0axubhxDz7kn1Qzuk4=";
+    x86_64-darwin = "sha256-1P+R9MBaWsLYVST+WlyI7TH+1ZmB90J9P2IP2WVZEvE=";
+    x86_64-linux = "sha256-V0MNjLswcxtyU7kl7Gn5474SGSAfwUVHbJcsYVE4WfY=";
+  }.${stdenv.hostPlatform.system} or unsupported;
 
 in stdenv.mkDerivation rec {
-  pname = "prowlarr";
-  version = "0.1.2.1060";
+  inherit pname;
+  version = "1.20.1.4603";
 
   src = fetchurl {
-    url = "https://github.com/Prowlarr/Prowlarr/releases/download/v${version}/Prowlarr.develop.${version}.${os}-core-${arch}.tar.gz";
-    sha256 = hash;
+    url = "https://github.com/Prowlarr/Prowlarr/releases/download/v${version}/Prowlarr.master.${version}.${os}-core-${arch}.tar.gz";
+    inherit hash;
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,10 +44,10 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/${pname}-${version}}
     cp -r * $out/share/${pname}-${version}/.
 
-    makeWrapper "${dotnetCorePackages.runtime_3_1}/bin/dotnet" $out/bin/Prowlarr \
+    makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Prowlarr \
       --add-flags "$out/share/${pname}-${version}/Prowlarr.dll" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        curl sqlite libmediainfo mono openssl icu ]}
+        curl sqlite libmediainfo mono openssl icu zlib ]}
 
     runHook postInstall
   '';
@@ -52,10 +58,17 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "An indexer manager/proxy built on the popular arr .net/reactjs base stack";
+    description = "Indexer manager/proxy built on the popular arr .net/reactjs base stack";
     homepage = "https://wiki.servarr.com/prowlarr";
+    changelog = "https://github.com/Prowlarr/Prowlarr/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jdreaver ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    mainProgram = "Prowlarr";
+    platforms = [
+      "aarch64-darwin"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
   };
 }

@@ -25,13 +25,13 @@ perlPackages.buildPerlModule {
       desktopName = "Frozen Bubble";
       genericName = "Frozen Bubble";
       comment = "Arcade/reflex colour matching game";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 
   meta = {
     description = "Puzzle with Bubbles";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ puckipedia ];
   };
 }

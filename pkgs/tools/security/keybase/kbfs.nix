@@ -1,22 +1,20 @@
-{ lib, buildGoPackage, fetchFromGitHub, keybase }:
+{ lib, buildGoModule, keybase }:
 
-buildGoPackage {
+buildGoModule {
   pname = "kbfs";
 
-  inherit (keybase) src version;
+  inherit (keybase) src version vendorHash;
 
-  goPackagePath = "github.com/keybase/client";
-  subPackages = [ "go/kbfs/kbfsfuse" "go/kbfs/redirector" "go/kbfs/kbfsgit/git-remote-keybase" ];
-
-  dontRenameImports = true;
+  modRoot = "go";
+  subPackages = [ "kbfs/kbfsfuse" "kbfs/redirector" "kbfs/kbfsgit/git-remote-keybase" ];
 
   tags = [ "production" ];
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://keybase.io/docs/kbfs";
-    description = "The Keybase filesystem";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ avaq rvolosatovs bennofs np ];
+    description = "Keybase filesystem";
+    maintainers = with maintainers; [ avaq rvolosatovs bennofs np shofius ];
     license = licenses.bsd3;
   };
 }

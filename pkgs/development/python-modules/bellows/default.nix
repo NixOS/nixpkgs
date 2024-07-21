@@ -1,59 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, click-log
-, dataclasses
-, pure-pcapy3
-, pyserial-asyncio
-, voluptuous
-, zigpy
-, asynctest
-, pythonOlder
-, pytestCheckHook
-, pytest-asyncio
-, pytest-timeout
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  click,
+  click-log,
+  fetchFromGitHub,
+  pure-pcapy3,
+  pyserial-asyncio,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  voluptuous,
+  zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "bellows";
-  version = "0.29.0";
-  format = "setuptools";
+  version = "0.39.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "bellows";
-    rev = version;
-    sha256 = "sha256-coIrI3C6Wnn8Of/IHAlvZgkcBBf9OBQt5Ir6YOXCf0c=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-e7DGAA2/6tc2+iH/14y/QT7k9a7pgrE5bplTPL3xm2Q=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
     click-log
     pure-pcapy3
     pyserial-asyncio
     voluptuous
     zigpy
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-timeout
-  ]  ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
   ];
 
-  pythonImportsCheck = [
-    "bellows"
-  ];
+  pythonImportsCheck = [ "bellows" ];
 
   meta = with lib; {
     description = "Python module to implement EZSP for EmberZNet devices";
     homepage = "https://github.com/zigpy/bellows";
+    changelog = "https://github.com/zigpy/bellows/releases/tag/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu mvnetbiz ];
+    maintainers = with maintainers; [ mvnetbiz ];
+    mainProgram = "bellows";
   };
 }

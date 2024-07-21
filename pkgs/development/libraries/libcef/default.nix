@@ -26,9 +26,14 @@
 , at-spi2-core
 , cups
 , libxshmfence
+, obs-studio
 }:
 
 let
+  gl_rpath = lib.makeLibraryPath [
+    stdenv.cc.cc.lib
+  ];
+
   rpath = lib.makeLibraryPath [
     glib
     nss
@@ -59,27 +64,22 @@ let
     "aarch64-linux" = {
       platformStr = "linuxarm64";
       projectArch = "arm64";
-      sha256 = "1j93qawh9h6k2ic70i10npppv5f9dch961lc1wxwsi68daq8r081";
-    };
-    "i686-linux" = {
-      platformStr = "linux32";
-      projectArch = "x86";
-      sha256 = "0ki4zr8ih06kirgbpxbinv4baw3qvacx208q6qy1cvpfh6ll4fwb";
     };
     "x86_64-linux" = {
       platformStr = "linux64";
       projectArch = "x86_64";
-      sha256 = "1ja711x9fdlf21qw1k9xn3lvjc5zsfgnjga1w1r8sysam73jk7xj";
     };
   };
+  platforms."aarch64-linux".sha256 = "16sbfk599h96wcsmpbxlwsvq0n1pssmm8dpwmjsqfrn1464dvs68";
+  platforms."x86_64-linux".sha256 = "1wa4nv28saz96kar9svdarfz6c4rnbcqz0rqxzl9zclnhfzhqdiw";
 
-  platformInfo = builtins.getAttr stdenv.targetPlatform.system platforms;
+  platformInfo = platforms.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation rec {
   pname = "cef-binary";
-  version = "90.6.7";
-  gitRevision = "19ba721";
-  chromiumVersion = "90.0.4430.212";
+  version = "121.3.13";
+  gitRevision = "5c4a81b";
+  chromiumVersion = "121.0.6167.184";
 
   src = fetchurl {
     url = "https://cef-builds.spotifycdn.com/cef_binary_${version}+g${gitRevision}+chromium-${chromiumVersion}_${platformInfo.platformStr}_minimal.tar.bz2";
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = "-DPROJECT_ARCH=${platformInfo.projectArch}";
+  cmakeFlags = [ "-DPROJECT_ARCH=${platformInfo.projectArch}" ];
   makeFlags = [ "libcef_dll_wrapper" ];
   dontStrip = true;
   dontPatchELF = true;
@@ -96,17 +96,30 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/ $out/share/cef/
     cp libcef_dll_wrapper/libcef_dll_wrapper.a $out/lib/
     cp ../Release/libcef.so $out/lib/
+    cp ../Release/libEGL.so $out/lib/
+    cp ../Release/libGLESv2.so $out/lib/
     patchelf --set-rpath "${rpath}" $out/lib/libcef.so
+    patchelf --set-rpath "${gl_rpath}" $out/lib/libEGL.so
+    patchelf --set-rpath "${gl_rpath}" $out/lib/libGLESv2.so
     cp ../Release/*.bin $out/share/cef/
     cp -r ../Resources/* $out/share/cef/
     cp -r ../include $out/
   '';
 
+  passthru.tests = {
+    inherit obs-studio; # frequently breaks on CEF updates
+  };
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Simple framework for embedding Chromium-based browsers in other applications";
     homepage = "https://cef-builds.spotifycdn.com/index.html";
     maintainers = with maintainers; [ puffnfresh ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     license = licenses.bsd3;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

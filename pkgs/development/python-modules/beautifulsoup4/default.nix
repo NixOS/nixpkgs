@@ -1,39 +1,78 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, html5lib
-, lxml
-, pytestCheckHook
-, pythonOlder
-, soupsieve
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  chardet,
+  hatchling,
+  html5lib,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  soupsieve,
+  sphinxHook,
+
+  # for passthru.tests
+  html-sanitizer,
+  markdownify,
+  mechanicalsoup,
+  nbconvert,
+  subliminal,
+  wagtail,
 }:
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
-  version = "4.10.0";
+  version = "4.12.3";
+  pyproject = true;
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wjrSPFIdgYlVpBUaZ9gVgDGdS/VI09SfQiOuBB/5iJE=";
+    hash = "sha256-dOPRko7cBw0hdIGFxG4/szSQ8i9So63e6a7g9Pd4EFE=";
   };
 
+  nativeBuildInputs = [
+    hatchling
+    sphinxHook
+  ];
+
   propagatedBuildInputs = [
-    html5lib
-    lxml
+    chardet
     soupsieve
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    html5lib = [ html5lib ];
+    lxml = [ lxml ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [ "bs4" ];
 
+  passthru.tests = {
+    inherit
+      html-sanitizer
+      markdownify
+      mechanicalsoup
+      nbconvert
+      subliminal
+      wagtail
+      ;
+  };
+
   meta = with lib; {
-    homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
+    changelog = "https://git.launchpad.net/beautifulsoup/tree/CHANGELOG?h=${version}";
     description = "HTML and XML parser";
+    homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
   };

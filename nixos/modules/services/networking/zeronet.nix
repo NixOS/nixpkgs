@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) generators literalExpression mkEnableOption mkIf mkOption recursiveUpdate types;
+  inherit (lib) generators literalExpression mkEnableOption mkPackageOption
+                mkIf mkOption recursiveUpdate types;
   cfg = config.services.zeronet;
   dataDir = "/var/lib/zeronet";
   configFile = pkgs.writeText "zeronet.conf" (generators.toINI {} (recursiveUpdate defaultSettings cfg.settings));
@@ -19,14 +20,16 @@ in with lib; {
   options.services.zeronet = {
     enable = mkEnableOption "zeronet";
 
+    package = mkPackageOption pkgs "zeronet" { };
+
     settings = mkOption {
       type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
       default = {};
       example = literalExpression "{ global.tor = enable; }";
 
       description = ''
-        <filename>zeronet.conf</filename> configuration. Refer to
-        <link xlink:href="https://zeronet.readthedocs.io/en/latest/faq/#is-it-possible-to-use-a-configuration-file"/>
+        {file}`zeronet.conf` configuration. Refer to
+        <https://zeronet.readthedocs.io/en/latest/faq/#is-it-possible-to-use-a-configuration-file>
         for details on supported values;
       '';
     };
@@ -72,7 +75,7 @@ in with lib; {
 
     systemd.services.zeronet = {
       description = "zeronet";
-      after = [ "network.target" (optionalString cfg.tor "tor.service") ];
+      after = [ "network.target" ] ++ optional cfg.tor "tor.service";
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
@@ -80,7 +83,7 @@ in with lib; {
         DynamicUser = true;
         StateDirectory = "zeronet";
         SupplementaryGroups = mkIf cfg.tor [ "tor" ];
-        ExecStart = "${pkgs.zeronet}/bin/zeronet --config_file ${configFile}";
+        ExecStart = "${cfg.package}/bin/zeronet --config_file ${configFile}";
       };
     };
   };
@@ -90,5 +93,5 @@ in with lib; {
     (mkRemovedOptionModule [ "services" "zeronet" "logDir" ] "Zeronet will log by default in /var/lib/zeronet")
   ];
 
-  meta.maintainers = with maintainers; [ chiiruno ];
+  meta.maintainers = with maintainers; [ Madouura ];
 }

@@ -11,12 +11,12 @@
 , freetype
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zaz";
   version = "1.0.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/zaz/zaz-${finalAttrs.version}.tar.gz";
     sha256 = "1r3bmwny05zzmdalxm5ah2rray0nnsg1w00r30p47q6x2lpwj8ml";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    SDL.dev
+    (lib.getDev SDL)
     SDL_image
     mesa
     libtheora
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Fix SDL include problems
-  NIX_CFLAGS_COMPILE="-I${SDL.dev}/include/SDL -I${SDL_image}/include/SDL";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL}/include/SDL -I${SDL_image}/include/SDL";
   # Fix linking errors
   makeFlags = [
     "ZAZ_LIBS+=-lSDL"
@@ -48,11 +48,12 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
-    homepage = "http://zaz.sourceforge.net/";
+    broken = stdenv.isDarwin;
+    description = "Puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
+    homepage = "https://zaz.sourceforge.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    mainProgram = "zaz";
   };
-}
-
+})

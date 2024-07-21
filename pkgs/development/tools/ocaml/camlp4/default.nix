@@ -1,6 +1,6 @@
 { lib, stdenv, fetchzip, which, ocaml, ocamlbuild }:
 
-if lib.versionAtLeast ocaml.version "4.14"
+if lib.versionAtLeast ocaml.version "4.15"
 then throw "camlp4 is not available for OCaml ${ocaml.version}"
 else
 
@@ -41,6 +41,9 @@ let param = {
   "4.13" = {
      version = "4.13+1";
      sha256 = "0fzxa1zdhk74mlxpin7p90flks6sp4gkc0mfclmj9zak15rii55n"; };
+  "4.14" = {
+     version = "4.14+1";
+     sha256 = "sha256-cPN3GioZT/Zt6uzbjGUPEGVJcPQdsAnCkU/AQoPfvuo="; };
   }.${ocaml.meta.branch};
 in
 
@@ -53,7 +56,12 @@ stdenv.mkDerivation rec {
     inherit (param) sha256;
   };
 
-  buildInputs = [ which ocaml ocamlbuild ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ which ocaml ocamlbuild ];
+
+  # build fails otherwise
+  enableParallelBuilding = false;
 
   dontAddPrefix = true;
 
@@ -82,7 +90,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = with lib; {
-    description = "A software system for writing extensible parsers for programming languages";
+    description = "Software system for writing extensible parsers for programming languages";
     homepage = "https://github.com/ocaml/camlp4";
     platforms = ocaml.meta.platforms or [];
   };

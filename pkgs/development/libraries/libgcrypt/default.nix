@@ -1,14 +1,25 @@
-{ lib, stdenv, fetchurl, gettext, libgpg-error, enableCapabilities ? false, libcap, buildPackages }:
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, libgpg-error
+, enableCapabilities ? false, libcap
+, buildPackages
+# for passthru.tests
+, gnupg
+, libotr
+, rsyslog
+}:
 
 assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "libgcrypt";
-  version = "1.9.4";
+  version = "1.10.3";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
-    sha256 = "1xxabjv45zlxyryiwhmbfblsx41kl267wsb78bny6m14ly1rr17a";
+    hash = "sha256-iwhwiXrFrGfe1Wjc+t9Flpz6imvrD9YK8qnq3Coycqo=";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -28,7 +39,9 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   configureFlags = [ "--with-libgpg-error-prefix=${libgpg-error.dev}" ]
-      ++ lib.optional (stdenv.hostPlatform.isMusl || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--disable-asm"; # for darwin see https://dev.gnupg.org/T5157
+      ++ lib.optional (stdenv.hostPlatform.isMusl || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--disable-asm" # for darwin see https://dev.gnupg.org/T5157
+      # Fix undefined reference errors with version script under LLVM.
+      ++ lib.optional (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") "LDFLAGS=-Wl,--undefined-version";
 
   # Necessary to generate correct assembly when compiling for aarch32 on
   # aarch64
@@ -38,6 +51,8 @@ stdenv.mkDerivation rec {
     sed -i configure \
         -e 's/NOEXECSTACK_FLAGS=$/NOEXECSTACK_FLAGS="-Wa,--noexecstack"/'
   '';
+
+  enableParallelBuilding = true;
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
@@ -55,14 +70,18 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  enableParallelChecking = true;
+
+  passthru.tests = {
+    inherit gnupg libotr rsyslog;
+  };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/libgcrypt/";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${pname}.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
     description = "General-purpose cryptographic library";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ vrthra ];
-    repositories.git = "git://git.gnupg.org/libgcrypt.git";
+    maintainers = with maintainers; [ ];
   };
 }

@@ -21,8 +21,7 @@ in with lib; {
         How often we run hydron import and possibly fetch tags. Runs by default every week.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`systemd.time(7)`.
       '';
     };
 
@@ -94,7 +93,7 @@ in with lib; {
       ensureDatabases = [ "hydron" ];
       ensureUsers = [
         { name = "hydron";
-          ensurePermissions = { "DATABASE hydron" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -161,5 +160,5 @@ in with lib; {
     (mkRenamedOptionModule [ "services" "hydron" "baseDir" ] [ "services" "hydron" "dataDir" ])
   ];
 
-  meta.maintainers = with maintainers; [ chiiruno ];
+  meta.maintainers = with maintainers; [ Madouura ];
 }

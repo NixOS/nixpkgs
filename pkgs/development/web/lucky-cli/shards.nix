@@ -1,20 +1,22 @@
 {
   ameba = {
-    owner = "crystal-ameba";
-    repo = "ameba";
-    rev = "v0.14.2";
-    sha256 = "1l1q1icpzg1zvhfj8948w36j7ikaj7w816677zi29vi6y2d1dmf2";
+    url = "https://github.com/crystal-ameba/ameba.git";
+    rev = "v1.5.0";
+    sha256 = "1idivsbpmi40aqvs82fsv37nrgikirprxrj3ls9chsb876fq9p2d";
   };
-  future = {
-    owner = "crystal-community";
-    repo = "future.cr";
-    rev = "v0.1.0";
-    sha256 = "1p88mfn1ab5hz4r81vjfm1vn9rww0lbbii8lyzfx9pkxanh9rp98";
+  lucky_task = {
+    url = "https://github.com/luckyframework/lucky_task.git";
+    rev = "v0.3.0";
+    sha256 = "0lp2wv01wdcfr3h43n3dqgaymvypy0i6kbffb4mg4l30lijgpfb6";
   };
-  teeplate = {
-    owner = "luckyframework";
-    repo = "teeplate";
-    rev = "v0.8.2";
-    sha256 = "1v7njslcpir52nnyd30mfnxvqmb7ycqnlq80qnx6myw20iy9dcww";
+  lucky_template = {
+    url = "https://github.com/luckyframework/lucky_template.git";
+    rev = "v0.2.0";
+    sha256 = "1xix82d0xanq4xkcv83hm56nj5f2rsbrqhk70j5zr37d3kydfypl";
+  };
+  nox = {
+    url = "https://github.com/crystal-loot/nox.git";
+    rev = "v0.2.2";
+    sha256 = "1dfq0aknrxwp9wc0glri4w5j8pfbc6b1xrsxkahci109p6dhcna5";
   };
 }

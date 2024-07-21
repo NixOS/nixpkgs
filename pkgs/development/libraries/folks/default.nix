@@ -1,30 +1,21 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , pkg-config
 , meson
 , ninja
 , glib
 , gnome
-, nspr
 , gettext
 , gobject-introspection
 , vala
 , sqlite
-, libxml2
 , dbus-glib
-, libsoup
-, nss
 , dbus
 , libgee
-, evolution-data-server
-, libgdata
-, libsecret
-, db
+, evolution-data-server-gtk4
 , python3
 , readline
-, gtk3
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
@@ -34,52 +25,38 @@
 
 # TODO: enable more folks backends
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "folks";
-  version = "0.15.3";
+  version = "0.15.9";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Idc3+vCT9L4GVHPucMogiFuaLDaFlB26JMIjn9PFRKU=";
+    url = "mirror://gnome/sources/folks/${lib.versions.majorMinor finalAttrs.version}/folks-${finalAttrs.version}.tar.xz";
+    hash = "sha256-IxGzc1XDUfM/Fj/cOUh0oioKBoLDGUk9bYpuQgcRQV8=";
   };
-
-  patches = [
-    # Fix build with evolution-data-server ≥ 3.41
-    # https://gitlab.gnome.org/GNOME/folks/-/merge_requests/52
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/folks/-/commit/62d588b0c609de17df5b4d1ebfbc67c456267efc.patch";
-      sha256 = "TDL/5kvVwHnvDMuKDdPLQmpmE1FTZhY+7HG8NxKqt5w=";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
     gobject-introspection
-    gtk3
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
     meson
     ninja
     pkg-config
-    python3
     vala
+  ] ++ lib.optionals telepathySupport [
+    python3
   ];
 
   buildInputs = [
-    db
     dbus-glib
-    evolution-data-server
-    libgdata # required for some backends transitively
-    libsecret
-    libsoup
-    libxml2
-    nspr
-    nss
+    evolution-data-server-gtk4 # UI part not needed, using gtk4 version to reduce system closure.
     readline
-  ] ++ lib.optional telepathySupport telepathy-glib;
+  ] ++ lib.optionals telepathySupport [
+    telepathy-glib
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -87,7 +64,7 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     (python3.withPackages (pp: with pp; [
       python-dbusmock
@@ -101,40 +78,39 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddocs=true"
     "-Dtelepathy_backend=${lib.boolToString telepathySupport}"
-    # For some reason, the tests are getting stuck on 31/32,
-    # even though the one missing test finishes just fine on next run,
-    # when tests are permuted differently. And another test that
-    # previously passed will be stuck instead.
-    "-Dtests=false"
+    "-Dtests=${lib.boolToString (finalAttrs.doCheck && stdenv.isLinux)}"
   ];
 
+  # backends/eds/lib/libfolks-eds.so.26.0.0.p/edsf-persona-store.c:10697:4:
+  # error: call to undeclared function 'folks_persona_store_set_is_user_set_default';
+  # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
+
+  # Checks last re-enabled in https://github.com/NixOS/nixpkgs/pull/279843, but timeouts in tests still
+  # occur inconsistently
   doCheck = false;
 
-  # Prevents e-d-s add-contacts-stress-test from timing out
-  checkPhase = ''
-    runHook preCheck
-    meson test --timeout-multiplier 4
-    runHook postCheck
-  '';
+  mesonCheckFlags = [
+    # Prevents e-d-s add-contacts-stress-test from timing out
+    "--timeout-multiplier" "4"
+  ];
 
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
+  postPatch = lib.optionalString telepathySupport ''
     patchShebangs tests/tools/manager-file.py
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "folks";
       versionPolicy = "none";
     };
   };
 
   meta = with lib; {
-    description = "A library that aggregates people from multiple sources to create metacontacts";
-    homepage = "https://wiki.gnome.org/Projects/Folks";
-    license = licenses.lgpl2Plus;
+    description = "Library that aggregates people from multiple sources to create metacontacts";
+    homepage = "https://gitlab.gnome.org/GNOME/folks";
+    license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
+    platforms = platforms.unix;
   };
-}
+})

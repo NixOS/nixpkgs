@@ -1,57 +1,80 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, asn1crypto
-, azure-storage-blob
-, boto3
-, certifi
-, cffi
-, fetchPypi
-, future
-, idna
-, ijson
-, oscrypto
-, pyarrow
-, pyasn1-modules
-, pycryptodomex
-, pyjwt
-, pyopenssl
-, pytz
-, requests
-, six
-, urllib3
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  certifi,
+  cffi,
+  charset-normalizer,
+  cython,
+  fetchPypi,
+  filelock,
+  idna,
+  keyring,
+  oscrypto,
+  packaging,
+  pandas,
+  platformdirs,
+  pyarrow,
+  pycryptodomex,
+  pyjwt,
+  pyopenssl,
+  pythonOlder,
+  pytz,
+  requests,
+  setuptools,
+  sortedcontainers,
+  tomlkit,
+  typing-extensions,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.7.0";
-  disabled = pythonOlder "3.6";
+  version = "3.11.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "cf8624539b18f5752756b3029622c08e9113f6a861a9f4689133d483a0ffd73b";
+    pname = "snowflake_connector_python";
+    inherit version;
+    hash = "sha256-MWnAFKA+X1hVESYF45OJelUuVYlTxp8loC4zsZmIZNA=";
   };
 
-  propagatedBuildInputs = [
-    azure-storage-blob
+  build-system = [
+    cython
+    setuptools
+    wheel
+  ];
+
+
+  dependencies = [
     asn1crypto
-    boto3
     certifi
     cffi
-    future
+    charset-normalizer
+    filelock
     idna
-    ijson
     oscrypto
+    packaging
+    platformdirs
     pycryptodomex
     pyjwt
     pyopenssl
     pytz
     requests
-    six
-    pyarrow
-    pyasn1-modules
-    urllib3
+    sortedcontainers
+    tomlkit
+    typing-extensions
   ];
+
+  passthru.optional-dependencies = {
+    pandas = [
+      pandas
+      pyarrow
+    ];
+    secure-local-storage = [ keyring ];
+  };
 
   # Tests require encrypted secrets, see
   # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
@@ -64,7 +87,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Snowflake Connector for Python";
-    homepage = "https://www.snowflake.com/";
+    homepage = "https://github.com/snowflakedb/snowflake-connector-python";
+    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/v${version}/DESCRIPTION.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

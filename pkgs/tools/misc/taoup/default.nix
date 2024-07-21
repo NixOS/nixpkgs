@@ -4,13 +4,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "taoup";
-  version = "1.1.14";
+  version = "1.21";
 
   src = fetchFromGitHub {
     owner = "globalcitizen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gs6f66fg1l504riw481nvyw7cchbr3qjks4mkj2qb3s9147ad8j";
+    hash = "sha256-UHo3c+DQn77CJONy/QXM55rpIdhVkJbhR82tqmUltPQ=";
   };
 
   buildInputs = [ rubyEnv bash ncurses ];
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib/taoup}
 
     cp taoup $out/lib/taoup
@@ -51,10 +53,12 @@ stdenv.mkDerivation rec {
 
     cp taoup-fortune $out/bin
     chmod +x $out/bin/taoup-fortune
+
+    runHook postInstall
   '';
 
   meta = {
-    description = "The Tao of Unix Programming (Ruby-powered ANSI colored fortunes)";
+    description = "Tao of Unix Programming (Ruby-powered ANSI colored fortunes)";
     homepage = "https://github.com/globalcitizen/taoup";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.zakame ];

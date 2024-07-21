@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = [ mopidy pythonPackages.py-sonic ];
 
-  checkInputs = with pythonPackages; [ pytestCheckHook ];
+  nativeCheckInputs = with pythonPackages; [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://www.mopidy.com/";

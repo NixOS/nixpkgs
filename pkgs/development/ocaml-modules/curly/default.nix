@@ -1,22 +1,23 @@
 { stdenv, lib, buildDunePackage, fetchurl, ocaml
-, result, alcotest, cohttp-lwt-unix, odoc, curl, cacert
+, result, alcotest, cohttp-lwt-unix, curl, cacert
 }:
 
 buildDunePackage rec {
   pname = "curly";
-  version = "0.2.0";
+  version = "0.3.0";
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.03";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/rgrinberg/curly/releases/download/${version}/curly-${version}.tbz";
-    sha256 = "07vqdrklar0d5i83ip7sjw2c1v18a9m3anw07vmi5ay29pxzal6k";
+    hash = "sha256-Qn/PKBNOcMt3dk2f7uJD8x0yo4RHobXSjTQck7fcXTw=";
   };
 
   propagatedBuildInputs = [ result ];
-  checkInputs = [ alcotest cohttp-lwt-unix cacert ];
+  nativeCheckInputs = [ cacert ];
+  checkInputs = [ alcotest cohttp-lwt-unix ];
   # test dependencies are only available for >= 4.08
   # https://github.com/mirage/ca-certs/issues/16
   doCheck = lib.versionAtLeast ocaml.version "4.08"

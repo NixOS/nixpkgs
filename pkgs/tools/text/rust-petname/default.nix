@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-petname";
-  version = "1.1.2";
+  version = "2.0.2";
 
   src = fetchCrate {
     inherit version;
     crateName = "petname";
-    sha256 = "sha256-DfRWGwnWVJBcbW7aPEzgPd+gfldP+ypZlk8FcPZzp8g=";
+    hash = "sha256-KP+GdGlwLHcKE8nAmFr2wHbt5RD9Ptpiz1X5HgJ6BgU=";
   };
 
-  cargoSha256 = "sha256-tCVJX8NcbT+6t2kDeCMfcSDaq3O89ycj08bxTmp3JHs=";
+  cargoHash = "sha256-R1Xahr9R4G8Tr2cGRJ2oydVaLohPz2VM6tnbtE8Hysk=";
 
   meta = with lib; {
     description = "Generate human readable random names";

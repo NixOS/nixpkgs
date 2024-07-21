@@ -1,21 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "colorlog";
-  version = "6.6.0";
+  version = "6.8.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-NE9zIEAJ5Mg8W2vrALPEXccPza48gNuRngpBcdAG/eg=";
+    hash = "sha256-Pj4HmkH+taG2T5eLXqT0YECpTxHw6Lu4Jh49u+ymTUQ=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [ "colorlog" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Log formatting with colors";

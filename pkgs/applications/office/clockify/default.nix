@@ -1,47 +1,32 @@
-{ stdenv, lib, fetchurl, dpkg, makeWrapper, electron }:
+{ lib
+, appimageTools
+, fetchurl }:
 
-stdenv.mkDerivation rec {
+appimageTools.wrapType2 rec {
   pname = "clockify";
-  version = "2.0.3";
+  version = "2.1.17.1354";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20211118160803/https://clockify-resources.s3.eu-central-1.amazonaws.com/downloads/Clockify_Setup.deb";
-    sha256 = "sha256-eVZ3OqM1eoWfST7Qu9o8VmLm8ntD+ETf/0aes6RY4Y8=";
+    url = "https://web.archive.org/web/20240406052908/https://clockify.me/downloads/Clockify_Setup.AppImage";
+    hash = "sha256-G5VOAf6PrjHUsnk7IlXdqJ2D941cnggjuHkkgrOaVaA=";
   };
 
-  nativeBuildInputs = [
-    dpkg
-    makeWrapper
-  ];
+  extraInstallCommands =
+    let appimageContents = appimageTools.extract { inherit pname version src; };
+    in ''
+      install -Dm 444 ${appimageContents}/clockify.desktop -t $out/share/applications
+      install -Dm 444 ${appimageContents}/clockify.png -t $out/share/pixmaps
 
-  dontBuild = true;
-  dontConfigure = true;
-
-  unpackPhase = ''
-    dpkg-deb -x ${src} ./
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mv usr $out
-    mv opt $out
-
-    substituteInPlace $out/share/applications/clockify.desktop \
-      --replace "/opt/Clockify" $out/bin
-
-    makeWrapper ${electron}/bin/electron $out/bin/clockify \
-      --add-flags $out/opt/Clockify/resources/app.asar
-
-    runHook postInstall
-  '';
+      substituteInPlace $out/share/applications/clockify.desktop \
+        --replace 'Exec=AppRun' 'Exec=${pname}'
+    '';
 
   meta = with lib; {
     description = "Free time tracker and timesheet app that lets you track work hours across projects";
     homepage = "https://clockify.me";
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
+    mainProgram = "clockify";
     platforms = [ "x86_64-linux" ];
-
   };
 }

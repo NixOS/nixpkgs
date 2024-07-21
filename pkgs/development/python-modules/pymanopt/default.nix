@@ -1,32 +1,50 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, numpy
-, scipy
-, autograd
-, nose2
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  numpy,
+  scipy,
+  torch,
+  autograd,
+  matplotlib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pymanopt";
-  version = "0.2.5";
+  version = "2.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "0zk775v281375sangc5qkwrkb8yc9wx1g8b1917s4s8wszzkp8k6";
+    rev = "refs/tags/${version}";
+    hash = "sha256-pDFRYhswcuAHG9pcqvzXIy3Ivhxe5R5Ric7AFRh7MK4=";
   };
 
-  propagatedBuildInputs = [ numpy scipy ];
-  checkInputs = [ nose2 autograd ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    torch
+  ];
+  nativeCheckInputs = [
+    autograd
+    matplotlib
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    # nose2 doesn't properly support excludes
-    rm tests/test_{problem,tensorflow,theano}.py
-
-    nose2 tests -v
+  preCheck = ''
+    substituteInPlace "tests/conftest.py" \
+      --replace "import tensorflow as tf" ""
+    substituteInPlace "tests/conftest.py" \
+      --replace "tf.random.set_seed(seed)" ""
   '';
+
+  disabledTestPaths = [
+    "tests/test_examples.py"
+    "tests/backends/test_tensorflow.py"
+    "tests/test_problem.py"
+  ];
 
   pythonImportsCheck = [ "pymanopt" ];
 
@@ -35,5 +53,6 @@ buildPythonPackage rec {
     homepage = "https://www.pymanopt.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ yl3dy ];
+    broken = lib.versionAtLeast scipy.version "1.10.0";
   };
 }

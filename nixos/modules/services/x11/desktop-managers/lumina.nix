@@ -10,6 +10,10 @@ let
 in
 
 {
+  meta = {
+    maintainers = teams.lumina.members;
+  };
+
   options = {
 
     services.xserver.desktopManager.lumina.enable = mkOption {
@@ -23,7 +27,7 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.displayManager.sessionPackages = [
+    services.displayManager.sessionPackages = [
       pkgs.lumina.lumina
     ];
 
@@ -37,12 +41,6 @@ in
       # FIXME: modules should link subdirs of `/share` rather than relying on this
       "/share"
     ];
-
-    security.wrappers.lumina-checkpass-wrapped = {
-      source = "${pkgs.lumina.lumina}/bin/lumina-checkpass";
-      owner = "root";
-      group = "root";
-    };
 
   };
 }

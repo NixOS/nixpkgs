@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   pname = "CUnit";
   version = "2.1-3";
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [autoconf automake libtool];
+  nativeBuildInputs = [ autoreconfHook autoconf automake ];
+  buildInputs = [libtool];
 
   src = fetchurl {
     url = "mirror://sourceforge/cunit/CUnit/${version}/${pname}-${version}.tar.bz2";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A Unit Testing Framework for C";
+    description = "Unit Testing Framework for C";
 
     longDescription = ''
       CUnit is a lightweight system for writing, administering, and running
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       with a flexible variety of user interfaces.
     '';
 
-    homepage = "http://cunit.sourceforge.net/";
+    homepage = "https://cunit.sourceforge.net/";
 
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.unix;

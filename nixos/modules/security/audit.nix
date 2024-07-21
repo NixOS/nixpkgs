@@ -57,7 +57,7 @@ in {
         type        = types.enum [ false true "lock" ];
         default     = false;
         description = ''
-          Whether to enable the Linux audit system. The special `lock' value can be used to
+          Whether to enable the Linux audit system. The special `lock` value can be used to
           enable auditing and prevent disabling it until a restart. Be careful about locking
           this, as it will prevent you from changing your audit configuration until you
           restart. If possible, test your configuration using build-vm beforehand.

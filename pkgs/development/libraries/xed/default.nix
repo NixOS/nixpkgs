@@ -1,45 +1,49 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages, llvmPackages }:
 
 let
   # mbuild is a custom build system used only to build xed
   mbuild = python3Packages.buildPythonPackage rec {
     pname = "mbuild";
-    version = "0.2496-dev";
+    version = "2022.07.28";
 
     src = fetchFromGitHub {
       owner = "intelxed";
       repo = "mbuild";
-      rev = "3e8eb33aada4153c21c4261b35e5f51f6e2019e8";
-      sha256 = "0yamgzkzw4v6x1a857psw9f7i62ydgd0zaqrf33dbdg8hfd2mq3q";
+      rev = "v${version}";
+      sha256 = "sha256-nVHHiaPbf+b+RntjUGjLLGS53e6c+seXIBx7AcTtiWU=";
     };
   };
 
 in stdenv.mkDerivation rec {
   pname = "xed";
-  version = "12.0.1";
+  version = "2024.02.22";
 
   src = fetchFromGitHub {
     owner = "intelxed";
     repo = "xed";
-    rev = version;
-    sha256 = "07zfff8zf29c2n0wal87hiqfq3cwcjn80zz78mz0nyjfj09nd39f";
+    rev = "v${version}";
+    sha256 = "sha256-LF4iJ1/Z3OifCiir/kU3ufZqtiRLeaJeAwuBqP2BCF4=";
   };
 
-  nativeBuildInputs = [ mbuild ];
+  nativeBuildInputs = [ mbuild ] ++ lib.optionals stdenv.isDarwin [ llvmPackages.bintools ];
 
   buildPhase = ''
     patchShebangs mfile.py
 
     # this will build, test and install
     ./mfile.py test --prefix $out
+    ./mfile.py examples
+    mkdir -p $out/bin
+    cp ./obj/wkit/examples/obj/xed $out/bin/
   '';
 
   dontInstall = true; # already installed during buildPhase
 
   meta = with lib; {
+    broken = stdenv.isAarch64;
     description = "Intel X86 Encoder Decoder (Intel XED)";
     homepage    = "https://intelxed.github.io/";
-    license     = licenses.apsl20;
+    license     = licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ arturcygan ];
   };

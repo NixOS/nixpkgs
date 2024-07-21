@@ -1,122 +1,121 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, makeWrapper
-, which
+, gitMinimal
+, cacert
+, yarn
+, makeBinaryWrapper
 , nodejs
-, mkYarnPackage
-, fetchYarnDeps
-, python2
+, python311
 , nixosTests
-, buildGoModule
 }:
 
 let
-  pinData = lib.importJSON ./pin.json;
-
-  # we need a different version than the one already available in nixpkgs
-  esbuild-hedgedoc = buildGoModule rec {
-    pname = "esbuild";
-    version = "0.12.27";
-
-    src = fetchFromGitHub {
-      owner = "evanw";
-      repo = "esbuild";
-      rev = "v${version}";
-      sha256 = "sha256-UclUTfm6fxoYEEdEEmO/j+WLZLe8SFzt7+Tej4bR0RU=";
-    };
-
-    vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
-  };
-in
-
-mkYarnPackage rec {
-  pname = "hedgedoc";
-  inherit (pinData) version;
+  version = "1.9.9";
 
   src = fetchFromGitHub {
-    owner  = "hedgedoc";
-    repo   = "hedgedoc";
-    rev    = version;
-    sha256 = pinData.srcHash;
+    owner = "hedgedoc";
+    repo = "hedgedoc";
+    rev = version;
+    hash = "sha256-6eKTgEZ+YLoSmPQWBS95fJ+ioIxeTVlT+moqslByPPw=";
   };
 
-  nativeBuildInputs = [ which makeWrapper ];
-  extraBuildInputs = [ python2 esbuild-hedgedoc ];
+  # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
+  offlineCache = stdenv.mkDerivation {
+    name = "hedgedoc-${version}-offline-cache";
+    inherit src;
 
-  offlineCache = fetchYarnDeps {
-    inherit yarnLock;
-    sha256 = pinData.yarnHash;
+    nativeBuildInputs = [
+      cacert # needed for git
+      gitMinimal # needed to download git dependencies
+      nodejs # needed for npm to download git dependencies
+      yarn
+    ];
+
+    buildPhase = ''
+      export HOME=$(mktemp -d)
+      yarn config set enableTelemetry 0
+      yarn config set cacheFolder $out
+      yarn config set --json supportedArchitectures.os '[ "linux" ]'
+      yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
+      yarn
+    '';
+
+    outputHashMode = "recursive";
+    outputHash = "sha256-Ga+tl4oZlum43tdfez1oWGMHZAfyePGl47S+9NRRvW8=";
   };
 
-  # FIXME(@Ma27) on the bump to 1.9.0 I had to patch this file manually:
-  # I replaced `midi "https://github.com/paulrosen/MIDI.js.git#abcjs"` with
-  # `midi "git+https://github.com/paulrosen/MIDI.js.git#abcjs"` on all occurrences.
-  #
-  # Without this change `yarn` attempted to download the code directly from GitHub, with
-  # the `git+`-prefix it actually uses the `midi.js` version from the offline cache
-  # created by `yarn2nix`. On future bumps this may be necessary as well!
-  yarnLock = ./yarn.lock;
-  packageJSON = ./package.json;
+in stdenv.mkDerivation {
+  pname = "hedgedoc";
+  inherit version src;
 
-  postConfigure = ''
-    rm deps/HedgeDoc/node_modules
-    cp -R "$node_modules" deps/HedgeDoc
-    chmod -R u+w deps/HedgeDoc
-  '';
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    yarn
+    python311 # needed for sqlite node-gyp
+  ];
+
+  buildInputs = [
+    nodejs
+  ];
+
+  dontConfigure = true;
 
   buildPhase = ''
     runHook preBuild
 
-    cd deps/HedgeDoc
+    export HOME=$(mktemp -d)
+    yarn config set enableTelemetry 0
+    yarn config set cacheFolder ${offlineCache}
 
-    pushd node_modules/sqlite3
+    # This will fail but create the sqlite3 files we can patch
+    yarn --immutable-cache || :
+
+    # Ensure we don't download any node things
+    sed -i 's:--fallback-to-build:--build-from-source --nodedir=${nodejs}/include/node:g' node_modules/sqlite3/package.json
     export CPPFLAGS="-I${nodejs}/include/node"
-    npm run install --build-from-source --nodedir=${nodejs}/include/node
-    popd
 
-    pushd node_modules/esbuild
-    rm bin/esbuild
-    ln -s ${lib.getBin esbuild-hedgedoc}/bin/esbuild bin/
-    popd
+    # Perform the actual install
+    yarn --immutable-cache
+    yarn run build
 
-    npm run build
-
+    # Delete scripts that are not useful for NixOS
+    rm bin/{heroku,setup}
     patchShebangs bin/*
 
     runHook postBuild
   '';
 
-  dontInstall = true;
+  installPhase = ''
+    runHook preInstall
 
-  distPhase = ''
-    runHook preDist
+    mkdir -p $out/share/hedgedoc
+    cp -r {app.js,bin,lib,locales,node_modules,package.json,public} $out/share/hedgedoc
 
-    mkdir -p $out
-    cp -R {app.js,bin,lib,locales,node_modules,package.json,public} $out
+    for bin in $out/share/hedgedoc/bin/*; do
+      makeWrapper $bin $out/bin/$(basename $bin) \
+        --set NODE_ENV production \
+        --set NODE_PATH "$out/share/hedgedoc/lib/node_modules"
+    done
+    makeWrapper ${nodejs}/bin/node $out/bin/hedgedoc \
+      --add-flags $out/share/hedgedoc/app.js \
+      --set NODE_ENV production \
+      --set NODE_PATH "$out/share/hedgedoc/lib/node_modules"
 
-    cat > $out/bin/hedgedoc <<EOF
-      #!${stdenv.shell}/bin/sh
-      ${nodejs}/bin/node $out/app.js
-    EOF
-    chmod +x $out/bin/hedgedoc
-    wrapProgram $out/bin/hedgedoc \
-      --set NODE_PATH "$out/lib/node_modules"
-
-    runHook postDist
+    runHook postInstall
   '';
 
   passthru = {
-    updateScript = ./update.sh;
+    inherit offlineCache;
     tests = { inherit (nixosTests) hedgedoc; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Realtime collaborative markdown notes on all platforms";
-    license = licenses.agpl3;
+    license = lib.licenses.agpl3Only;
     homepage = "https://hedgedoc.org";
-    maintainers = with maintainers; [ willibutz ma27 globin ];
-    platforms = platforms.linux;
+    mainProgram = "hedgedoc";
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    platforms = lib.platforms.linux;
   };
 }

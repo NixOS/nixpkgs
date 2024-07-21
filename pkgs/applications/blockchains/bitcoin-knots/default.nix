@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch2
 , autoreconfHook
 , pkg-config
 , util-linux
@@ -23,41 +24,49 @@
 , withWallet ? true
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin-knots" else "bitcoind-knots";
-  version = "22.0.knots20211108";
+  version = "26.1.knots20240325";
 
   src = fetchurl {
-    url = "https://bitcoinknots.org/files/22.x/${version}/guix/bitcoin-${version}.tar.gz";
-    sha256 = "04sqbx4sp3bzwbl8z53nz96n3s0590h327ih0mbgyvfvl3b8pj4i";
+    url = "https://bitcoinknots.org/files/26.x/${version}/bitcoin-${version}.tar.gz";
+    hash = "sha256-PqpePDna2gpCzF2K43N4h6cV5Y9w/e5ZcUvaNEaFaIk=";
   };
+
+  patches = [
+    # upnp: add compatibility for miniupnpc 2.2.8
+    (fetchpatch2 {
+      url = "https://github.com/bitcoinknots/bitcoin/commit/643014424359a4783cf9c73bee3346ac2f04e713.patch?full_index=1";
+      hash = "sha256-FdLoNH3+ZZTbqrwRvhbAeJuGz4SgnIvoWUBzRxjfzs8=";
+    })
+  ];
 
   nativeBuildInputs =
     [ autoreconfHook pkg-config ]
-    ++ optionals stdenv.isLinux [ util-linux ]
-    ++ optionals stdenv.isDarwin [ hexdump ]
-    ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
-    ++ optionals withGui [ wrapQtAppsHook ];
+    ++ lib.optionals stdenv.isLinux [ util-linux ]
+    ++ lib.optionals stdenv.isDarwin [ hexdump ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
+    ++ lib.optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
-    ++ optionals withWallet [ db48 sqlite ]
-    ++ optionals withGui [ qrencode qtbase qttools ];
+    ++ lib.optionals withWallet [ sqlite ]
+    ++ lib.optionals (withWallet && !stdenv.isDarwin) [ db48 ]
+    ++ lib.optionals withGui [ qrencode qtbase qttools ];
 
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
     "--disable-bench"
-  ] ++ optionals (!doCheck) [
+  ] ++ lib.optionals (!doCheck) [
     "--disable-tests"
     "--disable-gui-tests"
-  ] ++ optionals (!withWallet) [
+  ] ++ lib.optionals (!withWallet) [
     "--disable-wallet"
-  ] ++ optionals withGui [
+  ] ++ lib.optionals withGui [
     "--with-gui=qt5"
     "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   doCheck = true;
 
@@ -65,16 +74,12 @@ stdenv.mkDerivation rec {
     [ "LC_ALL=en_US.UTF-8" ]
     # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
     # See also https://github.com/NixOS/nixpkgs/issues/24256
-    ++ optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
+    ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    smoke-test = nixosTests.bitcoind-knots;
-  };
-
-  meta = {
-    description = "A derivative of Bitcoin Core with a collection of improvements";
+  meta = with lib; {
+    description = "Derivative of Bitcoin Core with a collection of improvements";
     homepage = "https://bitcoinknots.org/";
     maintainers = with maintainers; [ prusnak mmahut ];
     license = licenses.mit;

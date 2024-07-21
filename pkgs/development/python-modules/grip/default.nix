@@ -1,49 +1,64 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-# Python bits:
-, buildPythonPackage
-, pytest
-, responses
-, docopt
-, flask
-, markdown
-, path-and-address
-, pygments
-, requests
-, tabulate
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  # Python bits:
+  buildPythonPackage,
+  pytest,
+  responses,
+  docopt,
+  flask,
+  markdown,
+  path-and-address,
+  pygments,
+  requests,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "grip";
-  version = "4.5.2";
+  version = "4.6.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "joeyespo";
     repo = "grip";
     rev = "v${version}";
-    sha256 = "0hphplnyi903jx7ghfxplg1qlj2kpcav1frr2js7p45pbh5ib9rm";
+    hash = "sha256-CHL2dy0H/i0pLo653F7aUHFvZHTeZA6jC/rwn1KrEW4=";
   };
 
   patches = [
-    # Render "front matter", used in our RFC template and elsewhere
+    # https://github.com/NixOS/nixpkgs/issues/288478
     (fetchpatch {
-      url = "https://github.com/joeyespo/grip/pull/249.patch";
-      sha256 = "07za5iymfv647dfrvi6hhj54a96hgjyarys51zbi08c51shqyzpg";
+      name = "set-default-encoding.patch";
+      url = "https://github.com/joeyespo/grip/commit/2784eb2c1515f1cdb1554d049d48b3bff0f42085.patch";
+      hash = "sha256-veVJKJtt8mP1jmseRD7pNR3JgIxX1alYHyQok/rBpiQ=";
     })
   ];
 
-  checkInputs = [ pytest responses ];
+  nativeCheckInputs = [
+    pytest
+    responses
+  ];
 
-  propagatedBuildInputs = [ docopt flask markdown path-and-address pygments requests tabulate ];
+  propagatedBuildInputs = [
+    docopt
+    flask
+    markdown
+    path-and-address
+    pygments
+    requests
+    tabulate
+  ];
 
   checkPhase = ''
-      export PATH="$PATH:$out/bin"
-      py.test -xm "not assumption"
+    export PATH="$PATH:$out/bin"
+    py.test -xm "not assumption"
   '';
 
   meta = with lib; {
     description = "Preview GitHub Markdown files like Readme locally before committing them";
+    mainProgram = "grip";
     homepage = "https://github.com/joeyespo/grip";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];

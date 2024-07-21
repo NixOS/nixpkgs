@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out)" ];
 
   meta = with lib; {
-    description = "A lightweight overlay bar for the X Window System";
+    description = "Lightweight overlay bar for the X Window System";
     longDescription = ''
       A lightweight configurable overlay volume/backlight/progress/anything bar
       for the X Window System (and Wayland compositors with XWayland). Each
@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ florentc ];
+    mainProgram = "xob";
   };
 }

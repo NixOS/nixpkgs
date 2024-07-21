@@ -62,8 +62,8 @@ let
         example = false;
         description = ''
           Whether the service's sockets and storage directory is restricted to
-          be only available via the mail system. If <literal>null</literal> is
-          given it uses the postfix default <literal>true</literal>.
+          be only available via the mail system. If `null` is
+          given it uses the postfix default `true`.
         '';
       };
 
@@ -78,8 +78,8 @@ let
         example = true;
         description = ''
           Whether the service is chrooted to have only access to the
-          <option>services.postfix.queueDir</option> and the closure of
-          store paths specified by the <option>program</option> option.
+          {option}`services.postfix.queueDir` and the closure of
+          store paths specified by the {option}`program` option.
         '';
       };
 
@@ -88,7 +88,7 @@ let
         example = 60;
         description = ''
           Automatically wake up the service after the specified number of
-          seconds. If <literal>0</literal> is given, never wake the service
+          seconds. If `0` is given, never wake the service
           up.
         '';
       };
@@ -97,10 +97,10 @@ let
         type = types.bool;
         example = false;
         description = ''
-          If set to <literal>false</literal> the component will only be woken
+          If set to `false` the component will only be woken
           up if it is used. This is equivalent to postfix' notion of adding a
           question mark behind the wakeup time in
-          <filename>master.cf</filename>
+          {file}`master.cf`
         '';
       };
 
@@ -109,9 +109,9 @@ let
         example = 1;
         description = ''
           The maximum number of processes to spawn for this service. If the
-          value is <literal>0</literal> it doesn't have any limit. If
-          <literal>null</literal> is given it uses the postfix default of
-          <literal>100</literal>.
+          value is `0` it doesn't have any limit. If
+          `null` is given it uses the postfix default of
+          `100`.
         '';
       };
 
@@ -121,7 +121,7 @@ let
         example = "smtpd";
         description = ''
           A program name specifying a Postfix service/daemon process.
-          By default it's the attribute <option>name</option>.
+          By default it's the attribute {option}`name`.
         '';
       };
 
@@ -130,7 +130,7 @@ let
         default = [];
         example = [ "-o" "smtp_helo_timeout=5" ];
         description = ''
-          Arguments to pass to the <option>command</option>. There is no shell
+          Arguments to pass to the {option}`command`. There is no shell
           processing involved and shell syntax is passed verbatim to the
           process.
         '';
@@ -141,7 +141,7 @@ let
         default = [];
         internal = true;
         description = ''
-          The raw configuration line for the <filename>master.cf</filename>.
+          The raw configuration line for the {file}`master.cf`.
         '';
       };
     };
@@ -234,12 +234,12 @@ let
 
   headerChecks = concatStringsSep "\n" (map (x: "${x.pattern} ${x.action}") cfg.headerChecks) + cfg.extraHeaderChecks;
 
-  aliases = let seperator = if cfg.aliasMapType == "hash" then ":" else ""; in
+  aliases = let separator = optionalString (cfg.aliasMapType == "hash") ":"; in
     optionalString (cfg.postmasterAlias != "") ''
-      postmaster${seperator} ${cfg.postmasterAlias}
+      postmaster${separator} ${cfg.postmasterAlias}
     ''
     + optionalString (cfg.rootAlias != "") ''
-      root${seperator} ${cfg.rootAlias}
+      root${separator} ${cfg.rootAlias}
     ''
     + cfg.extraAliases
   ;
@@ -355,125 +355,125 @@ in
       setgidGroup = mkOption {
         type = types.str;
         default = "postdrop";
-        description = "
+        description = ''
           How to call postfix setgid group (for postdrop). Should
           be uniquely used group.
-        ";
+        '';
       };
 
       networks = mkOption {
         type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["192.168.0.1/24"];
-        description = "
+        description = ''
           Net masks for trusted - allowed to relay mail to third parties -
           hosts. Leave empty to use mynetworks_style configuration or use
           default (localhost-only).
-        ";
+        '';
       };
 
       networksStyle = mkOption {
         type = types.str;
         default = "";
-        description = "
+        description = ''
           Name of standard way of trusted network specification to use,
           leave blank if you specify it explicitly or if you want to use
           default (localhost-only).
-        ";
+        '';
       };
 
       hostname = mkOption {
         type = types.str;
         default = "";
-        description ="
+        description = ''
           Hostname to use. Leave blank to use just the hostname of machine.
           It should be FQDN.
-        ";
+        '';
       };
 
       domain = mkOption {
         type = types.str;
         default = "";
-        description ="
+        description = ''
           Domain to use. Leave blank to use hostname minus first component.
-        ";
+        '';
       };
 
       origin = mkOption {
         type = types.str;
         default = "";
-        description ="
+        description = ''
           Origin to use in outgoing e-mail. Leave blank to use hostname.
-        ";
+        '';
       };
 
       destination = mkOption {
         type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["localhost"];
-        description = "
+        description = ''
           Full (!) list of domains we deliver locally. Leave blank for
           acceptable Postfix default.
-        ";
+        '';
       };
 
       relayDomains = mkOption {
         type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["localdomain"];
-        description = "
+        description = ''
           List of domains we agree to relay to. Default is empty.
-        ";
+        '';
       };
 
       relayHost = mkOption {
         type = types.str;
         default = "";
-        description = "
+        description = ''
           Mail relay for outbound mail.
-        ";
+        '';
       };
 
       relayPort = mkOption {
         type = types.int;
         default = 25;
-        description = "
+        description = ''
           SMTP port for relay mail relay.
-        ";
+        '';
       };
 
       lookupMX = mkOption {
         type = types.bool;
         default = false;
-        description = "
+        description = ''
           Whether relay specified is just domain whose MX must be used.
-        ";
+        '';
       };
 
       postmasterAlias = mkOption {
         type = types.str;
         default = "root";
-        description = "
+        description = ''
           Who should receive postmaster e-mail. Multiple values can be added by
           separating values with comma.
-        ";
+        '';
       };
 
       rootAlias = mkOption {
         type = types.str;
         default = "";
-        description = "
+        description = ''
           Who should receive root e-mail. Blank for no redirection.
           Multiple values can be added by separating values with comma.
-        ";
+        '';
       };
 
       extraAliases = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = ''
           Additional entries to put verbatim into aliases file, cf. man-page aliases(8).
-        ";
+        '';
       };
 
       aliasMapType = mkOption {
@@ -497,9 +497,9 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = ''
           Extra lines to be added verbatim to the main.cf configuration file.
-        ";
+        '';
       };
 
       tlsTrustedAuthorities = mkOption {
@@ -527,33 +527,32 @@ in
         type = types.str;
         default = "";
         example = "+";
-        description = "
+        description = ''
           Delimiter for address extension: so mail to user+test can be handled by ~user/.forward+test
-        ";
+        '';
       };
 
       canonical = mkOption {
         type = types.lines;
         default = "";
         description = ''
-          Entries for the <citerefentry><refentrytitle>canonical</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> table.
+          Entries for the {manpage}`canonical(5)` table.
         '';
       };
 
       virtual = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = ''
           Entries for the virtual alias map, cf. man-page virtual(5).
-        ";
+        '';
       };
 
       virtualMapType = mkOption {
         type = types.enum ["hash" "regexp" "pcre"];
         default = "hash";
         description = ''
-          What type of virtual alias map file to use. Use <literal>"regexp"</literal> for regular expressions.
+          What type of virtual alias map file to use. Use `"regexp"` for regular expressions.
         '';
       };
 
@@ -562,8 +561,8 @@ in
         default = null;
         description = ''
           List of accepted local users. Specify a bare username, an
-          <literal>"@domain.tld"</literal> wild-card, or a complete
-          <literal>"user@domain.tld"</literal> address. If set, these names end
+          `"@domain.tld"` wild-card, or a complete
+          `"user@domain.tld"` address. If set, these names end
           up in the local recipient map -- see the local(8) man-page -- and
           effectively replace the system user database lookup that's otherwise
           used by default.
@@ -573,9 +572,9 @@ in
       transport = mkOption {
         default = "";
         type = types.lines;
-        description = "
+        description = ''
           Entries for the transport map, cf. man-page transport(8).
-        ";
+        '';
       };
 
       dnsBlacklists = mkOption {
@@ -602,7 +601,7 @@ in
         description = ''
           An attribute set of service options, which correspond to the service
           definitions usually done within the Postfix
-          <filename>master.cf</filename> file.
+          {file}`master.cf` file.
         '';
       };
 
@@ -723,23 +722,11 @@ in
         { ${setgidGroup}.gid = config.ids.gids.postdrop;
         };
 
-      systemd.services.postfix =
-        { description = "Postfix mail server";
-
-          wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
-          path = [ pkgs.postfix ];
-
-          serviceConfig = {
-            Type = "forking";
-            Restart = "always";
-            PIDFile = "/var/lib/postfix/queue/pid/master.pid";
-            ExecStart = "${pkgs.postfix}/bin/postfix start";
-            ExecStop = "${pkgs.postfix}/bin/postfix stop";
-            ExecReload = "${pkgs.postfix}/bin/postfix reload";
-          };
-
-          preStart = ''
+      systemd.services.postfix-setup =
+        { description = "Setup for Postfix mail server";
+          serviceConfig.RemainAfterExit = true;
+          serviceConfig.Type = "oneshot";
+          script = ''
             # Backwards compatibility
             if [ ! -d /var/lib/postfix ] && [ -d /var/postfix ]; then
               mkdir -p /var/lib
@@ -760,7 +747,7 @@ in
 
             ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
               ln -sf ${from} /var/lib/postfix/conf/${to}
-              ${pkgs.postfix}/bin/postalias /var/lib/postfix/conf/${to}
+              ${pkgs.postfix}/bin/postalias -o -p /var/lib/postfix/conf/${to}
             '') cfg.aliasFiles)}
             ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
               ln -sf ${from} /var/lib/postfix/conf/${to}
@@ -775,6 +762,37 @@ in
             #Finally delegate to postfix checking remain directories in /var/lib/postfix and set permissions on them
             ${pkgs.postfix}/bin/postfix set-permissions config_directory=/var/lib/postfix/conf
           '';
+        };
+
+      systemd.services.postfix =
+        { description = "Postfix mail server";
+
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" "postfix-setup.service" ];
+          requires = [ "postfix-setup.service" ];
+          path = [ pkgs.postfix ];
+
+          serviceConfig = {
+            Type = "forking";
+            Restart = "always";
+            PIDFile = "/var/lib/postfix/queue/pid/master.pid";
+            ExecStart = "${pkgs.postfix}/bin/postfix start";
+            ExecStop = "${pkgs.postfix}/bin/postfix stop";
+            ExecReload = "${pkgs.postfix}/bin/postfix reload";
+
+            # Hardening
+            PrivateTmp = true;
+            PrivateDevices = true;
+            ProtectSystem = "full";
+            CapabilityBoundingSet = [ "~CAP_NET_ADMIN CAP_SYS_ADMIN CAP_SYS_BOOT CAP_SYS_MODULE" ];
+            MemoryDenyWriteExecute = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectControlGroups = true;
+            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" "AF_UNIX" ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+          };
         };
 
       services.postfix.config = (mapAttrs (_: v: mkDefault v) {
@@ -804,7 +822,7 @@ in
       // optionalAttrs (cfg.relayHost != "") { relayhost = if cfg.lookupMX
                                                            then "${cfg.relayHost}:${toString cfg.relayPort}"
                                                            else "[${cfg.relayHost}]:${toString cfg.relayPort}"; }
-      // optionalAttrs config.networking.enableIPv6 { inet_protocols = mkDefault "all"; }
+      // optionalAttrs (!config.networking.enableIPv6) { inet_protocols = mkDefault "ipv4"; }
       // optionalAttrs (cfg.networks != null) { mynetworks = cfg.networks; }
       // optionalAttrs (cfg.networksStyle != "") { mynetworks_style = cfg.networksStyle; }
       // optionalAttrs (cfg.hostname != "") { myhostname = cfg.hostname; }

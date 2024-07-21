@@ -1,40 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-nspkg
-, azure-mgmt-core
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-keyvault";
-  version = "9.3.0";
+  version = "10.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "54156422e618b686d52232a7989594b240bd18afd0fa381e12e4772ed4ab5ea8";
+    hash = "sha256-GDtBZM8YaLjqfv6qmO2tfSpOFKm9l3woGLErdRUM0qI=";
   };
 
   propagatedBuildInputs = [
-    msrest
-    msrestazure
     azure-common
     azure-mgmt-core
-    azure-mgmt-nspkg
+    isodate
   ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
 
   meta = with lib; {
     description = "This is the Microsoft Azure Key Vault Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-keyvault_${version}/sdk/keyvault/azure-mgmt-keyvault/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer maxwilson ];
+    maintainers = with maintainers; [
+      maxwilson
+    ];
   };
 }

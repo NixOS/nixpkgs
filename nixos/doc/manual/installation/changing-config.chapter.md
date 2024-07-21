@@ -13,7 +13,7 @@ booting, and try to realise the configuration in the running system
 (e.g., by restarting system services).
 
 ::: {.warning}
-This command doesn\'t start/stop [user services](#opt-systemd.user.services)
+This command doesn't start/stop [user services](#opt-systemd.user.services)
 automatically. `nixos-rebuild` only runs a `daemon-reload` for each user with running
 user services.
 :::
@@ -51,9 +51,17 @@ GRUB 2 boot screen by giving it a different *profile name*, e.g.
 ```
 
 which causes the new configuration (and previous ones created using
-`-p test`) to show up in the GRUB submenu "NixOS - Profile \'test\'".
+`-p test`) to show up in the GRUB submenu "NixOS - Profile 'test'".
 This can be useful to separate test configurations from "stable"
 configurations.
+
+A repl, or read-eval-print loop, is also available. You can inspect your configuration and use the Nix language with
+
+```ShellSession
+# nixos-rebuild repl
+```
+
+Your configuration is loaded into the `config` variable. Use tab for autocompletion, use the `:r` command to reload the configuration files. See `:?` or [`nix repl` in the Nix manual](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-repl.html) to learn more.
 
 Finally, you can do
 
@@ -79,7 +87,9 @@ set `mutableUsers = false`. Another way is to temporarily add the
 following to your configuration:
 
 ```nix
-users.users.your-user.initialHashedPassword = "test";
+{
+  users.users.your-user.initialHashedPassword = "test";
+}
 ```
 
 *Important:* delete the \$hostname.qcow2 file if you have started the
@@ -89,7 +99,7 @@ guest. For instance, the following will forward host port 2222 to guest
 port 22 (SSH):
 
 ```ShellSession
-$ QEMU_NET_OPTS="hostfwd=tcp::2222-:22" ./result/bin/run-*-vm
+$ QEMU_NET_OPTS="hostfwd=tcp:127.0.0.1:2222-:22" ./result/bin/run-*-vm
 ```
 
 allowing you to log in via SSH (assuming you have set the appropriate
@@ -98,3 +108,8 @@ passwords or SSH authorized keys):
 ```ShellSession
 $ ssh -p 2222 localhost
 ```
+
+Such port forwardings connect via the VM's virtual network interface.
+Thus they cannot connect to ports that are only bound to the VM's
+loopback interface (`127.0.0.1`), and the VM's NixOS firewall
+must be configured to allow these connections.

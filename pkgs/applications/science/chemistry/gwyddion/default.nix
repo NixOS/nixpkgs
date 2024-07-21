@@ -1,51 +1,32 @@
 { lib, stdenv, fetchurl, gtk2, pkg-config, fftw, file,
-  pythonSupport ? false, pythonPackages ? null,
-  gnome2 ? null,
-  openexrSupport ? true, openexr ? null,
-  libzipSupport ? true, libzip ? null,
-  libxml2Support ? true, libxml2 ? null,
-  libwebpSupport ? true, libwebp ? null,
+  gnome2,
+  openexrSupport ? true, openexr,
+  libzipSupport ? true, libzip,
+  libxml2Support ? true, libxml2,
+  libwebpSupport ? true, libwebp,
   # libXmu is not used if libunique is.
-  libXmuSupport ? false, xorg ? null,
-  libxsltSupport ? true, libxslt ? null,
-  fitsSupport ? true, cfitsio ? null,
-  zlibSupport ? true, zlib ? null,
-  libuniqueSupport ? true, libunique ? null,
-  libpngSupport ? true, libpng ? null,
-  openglSupport ? !stdenv.isDarwin
+  libXmuSupport ? false, xorg,
+  libxsltSupport ? true, libxslt,
+  fitsSupport ? true, cfitsio,
+  zlibSupport ? true, zlib,
+  libuniqueSupport ? true, libunique,
+  libpngSupport ? true, libpng,
+  openglSupport ? !stdenv.isDarwin, libGL
 }:
-
-assert openexrSupport -> openexr != null;
-assert libzipSupport -> libzip != null;
-assert libxml2Support -> libxml2 != null;
-assert libwebpSupport -> libwebp != null;
-assert libXmuSupport -> xorg != null;
-assert libxsltSupport -> libxslt != null;
-assert fitsSupport -> cfitsio != null;
-assert zlibSupport -> zlib != null;
-assert libuniqueSupport -> libunique != null;
-assert libpngSupport -> libpng != null;
-assert openglSupport -> gnome2 != null;
-assert pythonSupport -> (pythonPackages != null && gnome2 != null);
-
-let
-    inherit (pythonPackages) pygtk pygobject2 python;
-
-in
 
 stdenv.mkDerivation rec {
   pname = "gwyddion";
-   version = "2.60";
+   version = "2.66";
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
-    sha256 = "sha256-38PIardlOzDrVKWvV4AiQlecTYmwYegtzRya713Au/Y=";
+    sha256 = "sha256-N3vtzSsNjRM6MpaG2p9fkYB/8dR5N/mZEZXx6GN5LVI=";
   };
 
   nativeBuildInputs = [ pkg-config file ];
 
   buildInputs = with lib;
     [ gtk2 fftw ] ++
-    optional openglSupport gnome2.gtkglext ++
+    optionals openglSupport [ gnome2.gtkglext libGL ] ++
     optional openexrSupport openexr ++
     optional libXmuSupport xorg.libXmu ++
     optional fitsSupport cfitsio ++
@@ -56,9 +37,6 @@ stdenv.mkDerivation rec {
     optional zlibSupport zlib ++
     optional libuniqueSupport libunique ++
     optional libzipSupport libzip;
-
-  propagatedBuildInputs = with lib;
-    optionals pythonSupport [ pygtk pygobject2 python gnome2.gtksourceview ];
 
   # This patch corrects problems with python support, but should apply cleanly
   # regardless of whether python support is enabled, and have no effects if
@@ -81,6 +59,8 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux ++ darwin;
-    maintainers = [ lib.maintainers.cge ];
+    maintainers = [ ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

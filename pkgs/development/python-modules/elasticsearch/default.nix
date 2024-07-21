@@ -1,34 +1,50 @@
-{ buildPythonPackage
-, fetchPypi
-, urllib3, requests
-, nosexcover, mock
-, lib
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  certifi,
+  elastic-transport,
+  fetchPypi,
+  pythonOlder,
+  requests,
+  urllib3,
 }:
 
-buildPythonPackage (rec {
+buildPythonPackage rec {
   pname = "elasticsearch";
-  # In 7.14.0, the package was intentionally made incompatible with
-  # the OSS version of elasticsearch - don't update past 7.13.x until
-  # there's a clear path forward. See
-  # https://github.com/elastic/elasticsearch-py/issues/1639 for more
-  # info.
-  version = "7.16.0";
+  version = "8.14.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d7f8665715ad80e3e99e42388bcc49c1b06162f72acfa1f8febe2baf5570b0ed";
+    hash = "sha256-qiSQAp3Zb0AVszPBgnqiH9bApNIjsA37D+kzuNCaURs=";
   };
+
+  nativeBuildInputs = [ elastic-transport ];
+
+  propagatedBuildInputs = [
+    urllib3
+    certifi
+  ];
+
+  passthru.optional-dependencies = {
+    requests = [ requests ];
+    async = [ aiohttp ];
+  };
+
+  pythonImportsCheck = [ "elasticsearch" ];
 
   # Check is disabled because running them destroy the content of the local cluster!
   # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
   doCheck = false;
-  propagatedBuildInputs = [ urllib3 requests ];
-  buildInputs = [ nosexcover mock ];
 
   meta = with lib; {
     description = "Official low-level client for Elasticsearch";
     homepage = "https://github.com/elasticsearch/elasticsearch-py";
+    changelog = "https://github.com/elastic/elasticsearch-py/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ desiderius ];
   };
-})
+}

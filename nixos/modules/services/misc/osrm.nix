@@ -21,7 +21,7 @@ in
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 5000;
       description = "Port on which the web server will run.";
     };

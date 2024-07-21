@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-data.tar.xz";
-    sha256 = "1c9zrddmjxvvacismld6fbwbw9vrdbq6g6d3424p8w5p6xg5wlwy";
+    sha256 = "sgDkhVj4goB5EOPGhlZ7ajliSNnUGAROz94JCwV3LX0=";
   };
 
   installPhase = ''
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free, open-source game of ancient warfare -- data files";
+    description = "Free, open-source game of ancient warfare -- data files";
     homepage = "https://play0ad.com/";
     license = licenses.cc-by-sa-30;
     maintainers = with maintainers; [ chvp ];

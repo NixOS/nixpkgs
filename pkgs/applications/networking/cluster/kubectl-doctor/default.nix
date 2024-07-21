@@ -1,17 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "kubectl-doctor";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "emirozer";
     repo = pname;
     rev = version;
-    sha256 = "0x784jbcwd34vzdnhg2yldh5ivkxvs2qlbsvaammbxkn04ch1ijz";
+    sha256 = "sha256-yp5OfSDxIASiCgISUVNxfe3dsLukgIoHARVPALIaQfY=";
   };
 
-  vendorSha256 = "04xq5kp1m7c98gb4fd0dni258vpfnhv535gl2qllfcp2mvk3mn55";
+  patches = [
+    (fetchpatch {
+      # https://github.com/emirozer/kubectl-doctor/pull/21
+      name = "go-1.19-client-go-0.25.patch";
+      url = "https://github.com/emirozer/kubectl-doctor/commit/a987ef58063e305409034af280d688a11682dbb9.patch";
+      sha256 = "sha256-NQd/WxUfYwBDowhnoUWaOV8k7msiOhff3Bjux+a9R9E=";
+    })
+  ];
+
+  vendorHash = "sha256-qhffg/s1RZFNW0nHLbJ89yqLzdC72ARXdbSfMLJK2pQ=";
 
   postInstall = ''
     mv $out/bin/{cmd,kubectl-doctor}
@@ -19,6 +28,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "kubectl cluster triage plugin for k8s";
+    mainProgram = "kubectl-doctor";
     homepage = "https://github.com/emirozer/kubectl-doctor";
     changelog = "https://github.com/emirozer/kubectl-doctor/releases/tag/v${version}";
     license = licenses.asl20;

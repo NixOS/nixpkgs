@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, pkg-config, lvtk, lv2, fftw, lv2-cpp-tools, gtkmm2 }:
+{ lib, stdenv, fetchzip, pkg-config, lv2, fftw, lv2-cpp-tools, gtkmm2 }:
 
 stdenv.mkDerivation rec {
   pname = "vocproc";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://hyperglitch.com/dev/VocProc";
-    description = "An LV2 plugin for pitch shifting (with or without formant correction), vocoding, automatic pitch correction and harmonizing of singing voice (harmonizer)";
+    description = "LV2 plugin for pitch shifting (with or without formant correction), vocoding, automatic pitch correction and harmonizing of singing voice (harmonizer)";
     license = licenses.gpl2;
     maintainers = [ maintainers.michalrus ];
     platforms = platforms.linux;

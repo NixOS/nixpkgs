@@ -1,41 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytz
-, tzlocal
-, clickhouse-cityhash
-, zstd
-, lz4
-, freezegun
-, mock
-, nose
-, pytestCheckHook
-, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  clickhouse-cityhash,
+  cython,
+  fetchFromGitHub,
+  freezegun,
+  lz4,
+  mock,
+  nose,
+  pytestCheckHook,
+  pytest-xdist,
+  pytz,
+  setuptools,
+  tzlocal,
+  zstd,
 }:
 
 buildPythonPackage rec {
   pname = "clickhouse-driver";
-  version = "0.2.2";
+  version = "0.2.7";
+  format = "setuptools";
 
   # pypi source doesn't contain tests
   src = fetchFromGitHub {
     owner = "mymarilyn";
     repo = "clickhouse-driver";
     rev = version;
-    sha256 = "0sx4jbadx9frzhqnj8b9w9l508x1r7j7b9883h7xq93lf00rxkfz";
+    hash = "sha256-l0YHWY25PMHgZG/sAZjtGhwmcxWdA8k96zlm9hbKcek=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    cython
     setuptools
-    pytz
-    tzlocal
-    clickhouse-cityhash
-    zstd
-    lz4
   ];
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    clickhouse-cityhash
+    lz4
+    pytz
+    tzlocal
+    zstd
+  ];
+
+  nativeCheckInputs = [
     freezegun
     mock
     nose
@@ -56,8 +63,6 @@ buildPythonPackage rec {
 
   # some test in test_buffered_reader.py doesn't seem to return
   disabledTestPaths = [ "tests/test_buffered_reader.py" ];
-
-  pytestFlagsArray = [ "-n" "$NIX_BUILD_CORES" ];
 
   # most tests require `clickhouse`
   # TODO: enable tests after `clickhouse` unbroken

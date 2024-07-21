@@ -1,22 +1,18 @@
 { lib, stdenv
 , fetchurl
-, Carbon ? null
-, libjpeg ? null
-, libpng ? null
+, Carbon
+, libjpeg
+, libpng
 , withJpegSupport ? true # support jpeg output
 , withPngSupport ? true # support png output
 }:
 
-assert withJpegSupport -> libjpeg != null;
-assert withPngSupport -> libpng != null;
-assert stdenv.isDarwin -> Carbon != null;
-
 stdenv.mkDerivation rec {
   pname = "tachyon";
-  version = "0.99b6";
+  version = "0.99.5";
   src = fetchurl {
     url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/${pname}-${version}.tar.gz";
-    sha256 = "15wv2748ngk2iid798a774sjxhhijq7kjm32yl897x54fsfazp7l";
+    sha256 = "sha256-CSA8ECMRFJ9d9cw2dAn5bHJXQmZtGcJNtbqZTVqBpvU=";
   };
   buildInputs = lib.optionals stdenv.isDarwin [
     Carbon
@@ -41,6 +37,7 @@ stdenv.mkDerivation rec {
          # see https://github.com/NixOS/nixpkgs/pull/117465
          if stdenv.hostPlatform.system == "aarch64-linux"  then "linux-arm"     else
          if stdenv.hostPlatform.system == "armv7l-linux"   then "linux-arm"     else
+         if stdenv.hostPlatform.system == "aarch64-darwin" then "macosx"        else
          if stdenv.hostPlatform.system == "x86_64-darwin"  then "macosx-thr"    else
          if stdenv.hostPlatform.system == "i686-darwin"    then "macosx-64-thr" else
          if stdenv.hostPlatform.system == "i686-cygwin"    then "win32"         else
@@ -72,7 +69,8 @@ stdenv.mkDerivation rec {
     cp -r scenes "$out/share/tachyon/scenes"
   '';
   meta = {
-    description = "A Parallel / Multiprocessor Ray Tracing System";
+    description = "Parallel / Multiprocessor Ray Tracing System";
+    mainProgram = "tachyon";
     license = lib.licenses.bsd3;
     maintainers = [lib.maintainers.raskin];
     platforms = with lib.platforms; linux ++ cygwin ++ darwin;

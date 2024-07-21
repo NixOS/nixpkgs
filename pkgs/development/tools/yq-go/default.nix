@@ -2,30 +2,28 @@
 
 buildGoModule rec {
   pname = "yq-go";
-  version = "4.16.1";
+  version = "4.44.2";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
     rev = "v${version}";
-    sha256 = "sha256-4o38f5ltTH6ea0na919GnJMao8w5rgkDWMp2mkoKwcY=";
+    hash = "sha256-l5/D2yCbf4CB4bUB/wIN/MW4u2D8pv7N6bL5q5DoDMs=";
   };
 
-  vendorSha256 = "sha256-PCDM1VbqUcAVXzCPWDZtCRLpRIu43sF1lGazAG2HZJ0=";
-
-  doCheck = false;
+  vendorHash = "sha256-HiRdz6fDu0Q0mAi2E5Ec0Hst8mhJEfvNuoDXJ5Ak+js=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    for shell in bash fish zsh; do
-      $out/bin/yq shell-completion $shell > yq.$shell
-      installShellCompletion yq.$shell
-    done
+    installShellCompletion --cmd yq \
+      --bash <($out/bin/yq shell-completion bash) \
+      --fish <($out/bin/yq shell-completion fish) \
+      --zsh <($out/bin/yq shell-completion zsh)
   '';
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" {} ''
+    simple = runCommand "${pname}-test" { } ''
       echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
       [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
     '';
@@ -34,8 +32,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Portable command-line YAML processor";
     homepage = "https://mikefarah.gitbook.io/yq/";
-    license = [ licenses.mit ];
-    maintainers = [ maintainers.lewo ];
+    changelog = "https://github.com/mikefarah/yq/raw/v${version}/release_notes.txt";
     mainProgram = "yq";
+    license = [ licenses.mit ];
+    maintainers = with maintainers; [ lewo SuperSandro2000 ];
   };
 }

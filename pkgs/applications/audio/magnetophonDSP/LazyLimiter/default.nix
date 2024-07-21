@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faust2jaqt faust2lv2 ];
 
+  dontWrapQtApps = true;
+
   buildPhase = ''
     faust2jaqt -vec -time -t 99999 LazyLimiter.dsp
     faust2lv2 -vec -time -t 99999  -gui LazyLimiter.dsp
@@ -19,13 +21,15 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp LazyLimiter $out/bin/
+    for f in $(find . -executable -type f); do
+      cp $f $out/bin/
+    done
     mkdir -p $out/lib/lv2
     cp -r LazyLimiter.lv2/ $out/lib/lv2
   '';
 
   meta = {
-    description = "A fast yet clean lookahead limiter for jack and lv2";
+    description = "Fast yet clean lookahead limiter for jack and lv2";
     homepage = "https://magnetophon.github.io/LazyLimiter/";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.magnetophon ];

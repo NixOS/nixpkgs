@@ -2,27 +2,29 @@
 , lib
 , fetchFromGitHub
 , perl
+, which
 , boost
 , rdkafka
 , jansson
 , curl
 , avro-c
-, avro-cpp }:
+, avro-cpp
+, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "libserdes";
-  version = "6.2.0";
+  version = "7.6.1";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "194ras18xw5fcnjgg1isnb24ydx9040ndciniwcbdb7w7wd901gc";
+    hash = "sha256-rg4SWa9nIDT6JrnnCDwdiFE1cvpUn0HWHn+bPkXMHQ4=";
   };
 
   outputs = [ "dev" "out" ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl which ];
 
   buildInputs = [ boost rdkafka jansson curl avro-c avro-cpp ];
 
@@ -51,8 +53,10 @@ stdenv.mkDerivation rec {
     chmod -x ''${!outputInclude}/include/libserdes/*.h
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
-    description = "A schema-based serializer/deserializer C/C++ library with support for Avro and the Confluent Platform Schema Registry";
+    description = "Schema-based serializer/deserializer C/C++ library with support for Avro and the Confluent Platform Schema Registry";
     homepage = "https://github.com/confluentinc/libserdes";
     license = licenses.asl20;
     maintainers = with maintainers; [ liff ];

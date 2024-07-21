@@ -1,24 +1,25 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , rpmextract
 , patchelf
 , makeWrapper
 , openssl
+, libxcrypt-legacy
 }:
 
 stdenv.mkDerivation rec {
   pname = "snowsql";
-  majorVersion = "1.2";
-  version = "${majorVersion}.9";
+  version = "1.3.0";
 
   src = fetchurl {
-    url = "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/${majorVersion}/linux_x86_64/snowflake-snowsql-${version}-1.x86_64.rpm";
-    sha256 = "1k9dyr4vyqivpg054kbvs0jdwhbqbmlp9lsyxgazdsviw8ch70c8";
+    url = "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/${lib.versions.majorMinor version}/linux_x86_64/snowflake-snowsql-${version}-1.x86_64.rpm";
+    sha256 = "sha256-KKCCj+pIwWhuzOuxljQ8Y11mAwD/GONspbXuPAMBdhE=";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
 
-  libPath = lib.makeLibraryPath [ openssl ];
+  libPath = lib.makeLibraryPath [ openssl libxcrypt-legacy ];
 
   buildCommand = ''
     mkdir -p $out/bin/
@@ -39,8 +40,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Command line client for the Snowflake database";
     homepage = "https://www.snowflake.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ andehen ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "snowsql";
   };
 }

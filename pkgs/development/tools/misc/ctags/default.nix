@@ -1,12 +1,12 @@
 { lib, stdenv, fetchsvn, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "ctags-${revision}";
-  revision = "816";
+  pname = "ctags";
+  version = "816";
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/ctags/code/trunk";
-    rev = revision;
+    rev = version;
     sha256 = "0jmbkrmscbl64j71qffcc39x005jrmphx8kirs1g2ws44wil39hf";
   };
 
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A tool for fast source code browsing (exuberant ctags)";
+    description = "Tool for fast source code browsing (exuberant ctags)";
+    mainProgram = "ctags";
     longDescription = ''
       Ctags generates an index (or tag) file of language objects found
       in source files that allows these items to be quickly and easily
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
       alternatively, the index entry created for that object).  Many
       programming languages are supported.
     '';
-    homepage = "http://ctags.sourceforge.net/";
+    homepage = "https://ctags.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
 

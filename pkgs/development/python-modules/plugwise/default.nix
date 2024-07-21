@@ -1,35 +1,52 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, crcmod
-, defusedxml
-, fetchFromGitHub
-, jsonpickle
-, munch
-, mypy
-, pyserial
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pytz
-, semver
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  crcmod,
+  defusedxml,
+  fetchFromGitHub,
+  freezegun,
+  jsonpickle,
+  munch,
+  pyserial,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  semver,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "0.15.2";
-  format = "setuptools";
+  version = "0.38.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "plugwise";
     repo = "python-plugwise";
-    rev = "v${version}";
-    sha256 = "sha256-VmLQ3L9FTHgdRPYmMg7ZoUApLEGKd5NANrSofhP1OQY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DFHKycFWtR8moLyGaiDVqnrlg+ydgR8/UVgkUpzqAuY=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # setuptools
+    sed -i -e "s/~=[0-9.]*//" pyproject.toml
+    # wheel
+    sed -i -e "s/~=[0-9.]*//" pyproject.toml
+  '';
+
+  build-system = [
+    setuptools
+    wheel
+  ];
+
+  dependencies = [
     aiohttp
     async-timeout
     crcmod
@@ -37,13 +54,12 @@ buildPythonPackage rec {
     munch
     pyserial
     python-dateutil
-    pytz
     semver
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    freezegun
     jsonpickle
-    mypy
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
@@ -55,11 +71,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for Plugwise Smiles, Stretch and USB stick";
-    longDescription = ''
-      XKNX is an asynchronous Python library for reading and writing KNX/IP
-      packets. It provides support for KNX/IP routing and tunneling devices.
-    '';
     homepage = "https://github.com/plugwise/python-plugwise";
+    changelog = "https://github.com/plugwise/python-plugwise/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

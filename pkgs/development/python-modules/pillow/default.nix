@@ -1,29 +1,77 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPyPy, isPy3k
-, defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
-, libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  isPyPy,
+  defusedxml,
+  olefile,
+  freetype,
+  libjpeg,
+  zlib,
+  libtiff,
+  libwebp,
+  libxcrypt,
+  tcl,
+  lcms2,
+  tk,
+  libX11,
+  libxcb,
+  openjpeg,
+  libimagequant,
+  numpy,
+  pytestCheckHook,
+  setuptools,
+  # for passthru.tests
+  imageio,
+  matplotlib,
+  pilkit,
+  pydicom,
+  reportlab,
+  sage,
 }@args:
 
-import ./generic.nix (rec {
-  pname = "Pillow";
-  version = "8.3.2";
+import ./generic.nix (
+  rec {
+    pname = "pillow";
+    version = "10.3.0";
+    format = "pyproject";
 
-  disabled = !isPy3k;
+    disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1361y215ydmdh4il1vay5831aqivmpwgzjqrphqjdiq0ipnz7qyx";
-  };
+    src = fetchPypi {
+      pname = "pillow";
+      inherit version;
+      hash = "sha256-nSRV+/RMkUhAx5PomqgtDhdjoUJToAB0NxmuWUaBSy0=";
+    };
 
-  meta = with lib; {
-    homepage = "https://python-pillow.org/";
-    description = "The friendly PIL fork (Python Imaging Library)";
-    longDescription = ''
-      The Python Imaging Library (PIL) adds image processing
-      capabilities to your Python interpreter.  This library
-      supports many file formats, and provides powerful image
-      processing and graphics capabilities.
-    '';
-    license = licenses.hpnd;
-    maintainers = with maintainers; [ goibhniu prikhi SuperSandro2000 ];
-  };
-} // args )
+    passthru.tests = {
+      inherit
+        imageio
+        matplotlib
+        pilkit
+        pydicom
+        reportlab
+        sage
+        ;
+    };
+
+    meta = with lib; {
+      homepage = "https://python-pillow.org/";
+      description = "Friendly PIL fork (Python Imaging Library)";
+      longDescription = ''
+        The Python Imaging Library (PIL) adds image processing
+        capabilities to your Python interpreter.  This library
+        supports many file formats, and provides powerful image
+        processing and graphics capabilities.
+      '';
+      license = licenses.hpnd;
+      maintainers = with maintainers; [
+        goibhniu
+        prikhi
+      ];
+    };
+  }
+  // args
+)

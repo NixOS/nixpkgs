@@ -1,20 +1,23 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, requests
-, requests-toolbelt
-, pyparsing
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  requests,
+  requests-toolbelt,
+  pyparsing,
 }:
 
 buildPythonPackage rec {
   pname = "cloudscraper";
-  version = "1.2.58";
-  disabled = !isPy3k;
+  version = "1.2.71";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wnzv2k8cm8q1x18r4zg8pcnpm4gsdp82hywwjimp2v2qll918nx";
+    hash = "sha256-QpxuiqaRbVutXIperFDz6lPJrCJhb2yyGxjcxxUX0NM=";
   };
 
   propagatedBuildInputs = [
@@ -30,8 +33,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cloudscraper" ];
 
   meta = with lib; {
-    description = "A Python module to bypass Cloudflare's anti-bot page";
+    description = "Python module to bypass Cloudflare's anti-bot page";
     homepage = "https://github.com/venomous/cloudscraper";
+    changelog = "https://github.com/VeNoMouS/cloudscraper/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kini ];
   };

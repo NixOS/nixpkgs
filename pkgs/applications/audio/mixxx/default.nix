@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , mkDerivation
-, fetchurl
 , fetchFromGitHub
 , chromaprint
 , cmake
@@ -9,10 +8,13 @@
 , ffmpeg
 , fftw
 , flac
+, gbenchmark
 , glibcLocales
+, gtest
 , hidapi
 , lame
 , libebur128
+, libdjinterop
 , libGLU
 , libid3tag
 , libkeyfinder
@@ -27,6 +29,7 @@
 , libxcb
 , lilv
 , lv2
+, microsoft-gsl
 , mp4v2
 , opusfile
 , pcre
@@ -49,20 +52,23 @@
 , upower
 , vamp-plugin-sdk
 , wavpack
+, wrapGAppsHook3
 }:
 
 mkDerivation rec {
   pname = "mixxx";
-  version = "2.3.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    sha256 = "sha256-6M1qaRyRYWTIKqclewuD+RUVDdxVbBHcfpw2qYgO6BA=";
+    hash = "sha256-BOdXgA+z3sFE4ngAEhSbp1gDbsti1STJY2Yy6Hp+zTE=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];
+
+  dontWrapGApps = true;
 
   buildInputs = [
     chromaprint
@@ -70,12 +76,15 @@ mkDerivation rec {
     ffmpeg
     fftw
     flac
+    gbenchmark
     glibcLocales
+    gtest
     hidapi
     lame
     libebur128
     libGLU
     libid3tag
+    libdjinterop
     libkeyfinder
     libmad
     libmodplug
@@ -88,6 +97,7 @@ mkDerivation rec {
     libxcb
     lilv
     lv2
+    microsoft-gsl
     mp4v2
     opusfile
     pcre
@@ -111,13 +121,13 @@ mkDerivation rec {
     wavpack
   ];
 
-  qtWrapperArgs = [
-    "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
-  ];
+  preFixup=''
+    qtWrapperArgs+=(--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive ''${gappsWrapperArgs[@]})
+  '';
 
   # mixxx installs udev rules to DATADIR instead of SYSCONFDIR
   # let's disable this and install udev rules manually via postInstall
-  # see https://github.com/mixxxdj/mixxx/blob/2.3.1/CMakeLists.txt#L1381-L1392
+  # see https://github.com/mixxxdj/mixxx/blob/2.3.5/CMakeLists.txt#L1381-L1392
   cmakeFlags = [
     "-DINSTALL_USER_UDEV_RULES=OFF"
   ];
@@ -135,8 +145,9 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://mixxx.org";
     description = "Digital DJ mixing software";
+    mainProgram = "mixxx";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu bfortz ];
+    maintainers = with maintainers; [ goibhniu bfortz benley ];
     platforms = platforms.linux;
   };
 }

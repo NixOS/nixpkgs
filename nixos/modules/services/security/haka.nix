@@ -57,14 +57,7 @@ in
 
       enable = mkEnableOption "Haka";
 
-      package = mkOption {
-        default = pkgs.haka;
-        defaultText = literalExpression "pkgs.haka";
-        type = types.package;
-        description = "
-          Which Haka derivation to use.
-        ";
-      };
+      package = mkPackageOption pkgs "haka" { };
 
       configFile = mkOption {
         default = "empty.lua";

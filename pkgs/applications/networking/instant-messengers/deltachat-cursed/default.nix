@@ -1,53 +1,53 @@
 { lib
 , python3
 , fetchFromGitHub
-, wrapGAppsHook
-, gobject-introspection
-, libnotify
+, testers
+, deltachat-cursed
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "deltachat-cursed";
-  version = "0.3.0";
+  version = "0.9.0";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adbenitez";
     repo = "deltachat-cursed";
     rev = "v${version}";
-    sha256 = "0zzzrzc8yxw6ffwfirbrr5ahbidbvlwdvgdg82zjsdjjbarxph8c";
+    hash = "sha256-z4JKe5soR4FdIn8hugxtnxQr/9V8m8a7QRzE1liIexc=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.setuptools-scm
-    wrapGAppsHook
+  build-system = with python3.pythonOnBuildForHost.pkgs; [
+    setuptools
+    setuptools-scm
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  buildInputs = [
-    gobject-introspection
-    libnotify
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    deltachat
+  dependencies = with python3.pkgs; [
+    appdirs
+    deltachat2
+    emoji
     notify-py
-    pygobject3
+    setuptools # for pkg_resources
     urwid-readline
   ];
 
-  dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
   doCheck = false; # no tests implemented
+
+  passthru.tests = {
+    version = testers.testVersion rec {
+      package = deltachat-cursed;
+      command = ''
+        HOME="$TEMP" ${lib.getExe package} --version
+      '';
+    };
+  };
 
   meta = with lib; {
     description = "Lightweight Delta Chat client";
     homepage = "https://github.com/adbenitez/deltachat-cursed";
     license = licenses.gpl3Plus;
+    mainProgram = "curseddelta";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

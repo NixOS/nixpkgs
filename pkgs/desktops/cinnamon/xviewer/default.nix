@@ -1,68 +1,72 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, autoreconfHook
 , cinnamon-desktop
-, file
+, docbook_xsl
+, exempi
 , gdk-pixbuf
 , glib
 , gobject-introspection
-, gtk-doc
 , gtk3
-, intltool
+, gtk-doc
 , itstool
 , lcms2
 , libexif
 , libjpeg
 , libpeas
-, libtool
+, librsvg
 , libxml2
+, meson
+, ninja
 , pkg-config
-, shared-mime-info
-, wrapGAppsHook
-, xapps
+, python3
+, wrapGAppsHook3
+, xapp
 , yelp-tools
 }:
 
 stdenv.mkDerivation rec {
   pname = "xviewer";
-  version = "3.2.2";
+  version = "3.4.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-FFRms4yh7TQ/O3ee7igeIslimSWLhue3BE1xCrJ3NQ4=";
+    sha256 = "sha256-J6KDkGPbcRBofsJVmd+1IEapSfSd3ftjz0AggvBI8ck=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
-    autoreconfHook
     cinnamon-desktop
+    docbook_xsl
     gdk-pixbuf
     gobject-introspection
     gtk-doc
-    intltool
     itstool
-    libtool
+    meson
+    ninja
     pkg-config
+    python3
+    wrapGAppsHook3
     yelp-tools
   ];
 
   buildInputs = [
+    exempi
     glib
     gtk3
+    lcms2
     libexif
     libjpeg
     libpeas
+    librsvg
     libxml2
-    shared-mime-info
-    xapps
-    lcms2
+    xapp
   ];
 
   meta = with lib; {
-    description = "A generic image viewer from Linux Mint";
+    description = "Generic image viewer from Linux Mint";
+    mainProgram = "xviewer";
     homepage = "https://github.com/linuxmint/xviewer";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

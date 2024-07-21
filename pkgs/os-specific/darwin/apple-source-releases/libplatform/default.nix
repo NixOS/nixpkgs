@@ -1,9 +1,10 @@
-{ appleDerivation', stdenvNoCC }:
+{ lib, appleDerivation', stdenvNoCC }:
 
-appleDerivation' stdenvNoCC {
+appleDerivation' stdenvNoCC (finalAttrs: {
   installPhase = ''
     mkdir $out
     cp -r include $out/include
+    test -d private && cp -r private/* $out/include
   '';
 
   appleHeaders = ''
@@ -27,6 +28,12 @@ appleDerivation' stdenvNoCC {
     platform/introspection_private.h
     platform/string.h
     setjmp.h
-    ucontext.h
-  '';
-}
+  '' + (
+    if lib.versionAtLeast finalAttrs.version "254.40.4" then ''
+      string_x86.h
+      ucontext.h
+    '' else ''
+      ucontext.h
+    ''
+  );
+})

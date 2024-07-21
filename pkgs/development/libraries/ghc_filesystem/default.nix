@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "filesystem";
-  version = "1.5.6";
+  version = "1.5.12";
 
   src = fetchFromGitHub {
     owner = "gulrak";
     repo = "filesystem";
     rev = "v${version}";
-    hash = "sha256-qnBZ9aCrCPOgxymjbzrRs0gssijo8MJOMiy7QWWMb5c=";
+    hash = "sha256-j4RE5Ach7C7Kef4+H9AHSXa2L8OVyJljDwBduKcC4eE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     description = "header-only single-file C++ std::filesystem compatible helper library";
     homepage = "https://github.com/gulrak/filesystem";
     license = licenses.mit;
-    maintainers = with maintainers; [ lourkeur ];
+    maintainers = with maintainers; [ bbjubjub ];
   };
 }

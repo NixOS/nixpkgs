@@ -1,47 +1,69 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, matplotlib
-, mock
-, numpy
-, pillow
-, cython
-, pytest-cov
-, pytest
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  matplotlib,
+  numpy,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
-  pname = "word_cloud";
-  version = "1.8.1";
+  pname = "wordcloud";
+  version = "1.9.3";
 
-  # tests are not included in pypi tarball
-  src = fetchFromGitHub {
-    owner = "amueller";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-4EFQfv+Jn9EngUAyDoJP0yv9zr9Tnbrdwq1YzDacB9Q=";
+  pyproject = true;
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-qapzjWPtZ0pA8Mwxrbg/TKX8GV8Dpq/24BDR9YB9HFg=";
   };
 
-  nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [ matplotlib numpy pillow ];
-
-  # Tests require extra dependencies
-  checkInputs = [ mock pytest pytest-cov ];
-
-  checkPhase = ''
-    PATH=$out/bin:$PATH pytest test
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov --cov-report xml --tb=short" ""
   '';
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/amueller/word_cloud/pull/616
-      url = "https://github.com/amueller/word_cloud/commit/858a8ac4b5b08494c1d25d9e0b35dd995151a1e5.patch";
-      sha256 = "sha256-+aDTMPtOibVwjPrRLxel0y4JFD5ERB2bmJi4zRf/asg=";
-    })
+  nativeBuildInputs = [ cython ];
+
+  dependencies = [
+    matplotlib
+    numpy
+    pillow
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    cd test
+  '';
+
+  pythonImportsCheck = [ "wordcloud" ];
+
+  disabledTests = [
+    # Don't tests CLI
+    "test_cli_as_executable"
+    # OSError: invalid ppem value
+    "test_recolor_too_small"
+    "test_coloring_black_works"
   ];
 
   meta = with lib; {
-    description = "A little word cloud generator in Python";
+    description = "Word cloud generator in Python";
+    mainProgram = "wordcloud_cli";
     homepage = "https://github.com/amueller/word_cloud";
+    changelog = "https://github.com/amueller/word_cloud/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jm2dev ];
   };

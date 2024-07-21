@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license     = licenses.gpl3;
     maintainers = with maintainers; [ raskin obadz ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
+    mainProgram = "tcpflow";
   };
 }

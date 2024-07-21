@@ -1,32 +1,61 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, buildPackages
+, testers
+, goreleaser
+}:
 buildGoModule rec {
   pname = "goreleaser";
-  version = "1.1.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rk2n1c2ia8kwqvbfnhsf3jbbi1qzndniq7cxs8iy9drn4adl7gv";
+    hash = "sha256-A/k7oubfpOPDq6hHM/gmm6CrDPrdEpYv9jW5dzRJyaQ=";
   };
 
-  vendorSha256 = "1hm5ya240vpfmgc8y6qv4gp4gbcqydk7hg05fwr7nzc2apj5fv6a";
+  vendorHash = "sha256-igl/h8T7ZBntDanIWpsyJmR5X6h6VaKmSj0NScQJ9Wo=";
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.version=${version}"
-    "-X main.builtBy=nixpkgs"
-  ];
+  ldflags =
+    [ "-s" "-w" "-X main.version=${version}" "-X main.builtBy=nixpkgs" ];
 
   # tests expect the source files to be a build repo
   doCheck = false;
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall =
+    let emulator = stdenv.hostPlatform.emulator buildPackages;
+    in ''
+      ${emulator} $out/bin/goreleaser man > goreleaser.1
+      installManPage ./goreleaser.1
+      installShellCompletion --cmd goreleaser \
+        --bash <(${emulator} $out/bin/goreleaser completion bash) \
+        --fish <(${emulator} $out/bin/goreleaser completion fish) \
+        --zsh  <(${emulator} $out/bin/goreleaser completion zsh)
+    '';
+
+  passthru.tests.version = testers.testVersion {
+    package = goreleaser;
+    command = "goreleaser -v";
+    inherit version;
+  };
+
   meta = with lib; {
     description = "Deliver Go binaries as fast and easily as possible";
     homepage = "https://goreleaser.com";
-    maintainers = with maintainers; [ c0deaddict endocrimes sarcasticadmin ];
+    maintainers = with maintainers; [
+      c0deaddict
+      sarcasticadmin
+      techknowlogick
+      developer-guy
+      caarlos0
+    ];
     license = licenses.mit;
+    mainProgram = "goreleaser";
   };
 }

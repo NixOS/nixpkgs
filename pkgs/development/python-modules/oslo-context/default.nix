@@ -1,12 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, debtcollector, oslotest, stestr, pbr }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  debtcollector,
+  oslotest,
+  stestr,
+  pbr,
+}:
 
 buildPythonPackage rec {
   pname = "oslo.context";
-  version = "3.4.0";
+  version = "5.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "970f96361c5de9a5dc86d48a648289d77118180ca13ba5eeb307137736ffa953";
+    hash = "sha256-6uAxeymSjxk030xguGD+hiUkfLKXxcxi/vjrWCexL6w=";
   };
 
   postPatch = ''
@@ -20,7 +28,7 @@ buildPythonPackage rec {
     pbr
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     oslotest
     stestr
   ];

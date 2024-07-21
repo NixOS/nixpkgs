@@ -21,7 +21,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "urn-${optionalString (extraLibraries != []) "with-libraries-"}${version}";
+  pname = "urn${optionalString (extraLibraries != []) "-with-libraries"}";
+  inherit version;
 
   src = fetchFromGitLab {
     owner = "urn";
@@ -51,6 +52,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://urn-lang.com";
     description = "Yet another Lisp variant which compiles to Lua";
+    mainProgram = "urn";
     license = licenses.bsd3;
     maintainers = with maintainers; [ CrazedProgrammer ];
     platforms = platforms.all;

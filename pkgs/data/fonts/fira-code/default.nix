@@ -1,19 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip, useVariableFont ? true }:
 
-let
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "fira-code";
   version = "6.2";
-in fetchzip {
-  name = "fira-code-${version}";
 
-  url = "https://github.com/tonsky/FiraCode/releases/download/${version}/Fira_Code_v${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/tonsky/FiraCode/releases/download/${finalAttrs.version}/Fira_Code_v${finalAttrs.version}.zip";
+    stripRoot = false;
+    hash = "sha256-UHOwZL9WpCHk6vZaqI/XfkZogKgycs5lWg1p0XdQt0A=";
+  };
 
   # only extract the variable font because everything else is a duplicate
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile '*-VF.ttf' -d $out/share/fonts/truetype
-  '';
+  installPhase = ''
+    runHook preInstall
 
-  sha256 = "0l02ivxz3jbk0rhgaq83cqarqxr07xgp7n27l0fh8fbgxwi52djl";
+    install -Dm644 -t $out/share/fonts/truetype ${if useVariableFont then "variable_ttf/*-VF.ttf" else "ttf/*.ttf"}
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/tonsky/FiraCode";
@@ -27,4 +31,4 @@ in fetchzip {
     maintainers = [ maintainers.rycee ];
     platforms = platforms.all;
   };
-}
+})

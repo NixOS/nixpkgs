@@ -1,31 +1,39 @@
-{ lib, stdenv, fetchFromGitHub
-, readline, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, readline
+, cmake
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname   = "abc-verifier";
-  version = "2021.11.12";
+  version = "unstable-2023-10-13";
 
   src = fetchFromGitHub {
     owner = "yosyshq";
     repo  = "abc";
-    rev   = "f6fa2ddcfc89099726d60386befba874c7ac1e0d";
-    hash  = "sha256-0rvMPZ+kL0m/GjlCLx3eXYQ0osQ2wQiS3+csqPl3U9s=";
+    rev   = "896e5e7dedf9b9b1459fa019f1fa8aa8101fdf43";
+    hash  = "sha256-ou+E2lvDEOxXRXNygE/TyVi7quqk+CJHRI+HDI0xljE=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ readline ];
 
-  installPhase = "mkdir -p $out/bin && mv abc $out/bin";
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 'abc' "$out/bin/abc"
+    runHook postInstall
+  '';
 
   # needed by yosys
-  passthru.rev = src.rev;
+  passthru.rev = finalAttrs.src.rev;
 
   meta = with lib; {
-    description = "A tool for squential logic synthesis and formal verification";
+    description = "Tool for squential logic synthesis and formal verification";
     homepage    = "https://people.eecs.berkeley.edu/~alanmi/abc";
     license     = licenses.mit;
+    maintainers = with maintainers; [ thoughtpolice Luflosi ];
+    mainProgram = "abc";
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
   };
-}
+})

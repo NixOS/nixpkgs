@@ -1,55 +1,67 @@
-{ lib
-, buildPythonPackage
-, python-dateutil
-, fetchFromGitHub
-, fetchpatch
-, mock
-, msgpack
-, nose
-, pandas
-, pytestCheckHook
-, pytz
-, requests
-, requests-mock
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  msgpack,
+  pandas,
+  pytestCheckHook,
+  python-dateutil,
+  pytz,
+  requests,
+  requests-mock,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "influxdb";
-  version = "5.3.0";
+  version = "5.3.2";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "influxdata";
-    repo = "influxdb-python";
-    rev = "v${version}";
-    sha256 = "1jfkf53jcf8lcq98qc0bw5d1d0yp3558mh8l2dqc9jlsm0smigjs";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-WMZH9gQ3Et2G6a7hLrTM+7tUFUZ7yZEKSKqMdMEQiXA=";
   };
 
-  propagatedBuildInputs = [
-    requests
+  patches = [
+    # https://github.com/influxdata/influxdb-python/pull/835
+    ./remove-nose.patch
+  ];
+
+  postPatch = ''
+    for f in influxdb/tests/dataframe_client_test.py influxdb/tests/influxdb08/dataframe_client_test.py; do
+      substituteInPlace "$f" \
+        --replace-fail "pandas.util.testing" "pandas.testing"
+    done
+
+    for f in influxdb/tests/influxdb08/client_test.py influxdb/tests/client_test.py; do
+      substituteInPlace "$f" \
+        --replace-fail "assertRaisesRegexp" "assertRaisesRegex"
+    done
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    msgpack
     python-dateutil
     pytz
+    requests
     six
-    msgpack
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    mock
+    pandas
     pytestCheckHook
     requests-mock
-    mock
-    nose
-    pandas
-  ];
-
-  patches = [
-    (fetchpatch {
-      # Relaxes msgpack pinning
-      url = "https://github.com/influxdata/influxdb-python/commit/cc41e290f690c4eb67f75c98fa9f027bdb6eb16b.patch";
-      sha256 = "1fb9qrq1kp24pixjwvzhdy67z3h0wnj92aj0jw0a25fd0rdxdvg4";
-    })
   ];
 
   disabledTests = [
+    "socket"
     # Tests cause FutureWarning due to use of 'record' instead of 'records' in pandas.
     #   https://github.com/influxdata/influxdb-python/pull/845
     # Also type mismatches in assertEqual on DataFrame:
@@ -57,8 +69,16 @@ buildPythonPackage rec {
     #   b'foo[30 chars]_one="1",column_two=1i 0\nfoo,tag_one=red,tag_[46 chars]00\n'
     "test_write_points_from_dataframe_with_nan_json"
     "test_write_points_from_dataframe_with_tags_and_nan_json"
+    "test_write_points_from_dataframe_with_numeric_precision"
     # Reponse is not empty but `s = '孝'` and the JSON decoder chokes on that
     "test_query_with_empty_result"
+    # Pandas API changes cause it to no longer infer datetimes in the expected manner
+    "test_multiquery_into_dataframe"
+    "test_multiquery_into_dataframe_dropna"
+    # FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+    "test_write_points_from_dataframe_with_tag_escaped"
+    # AssertionError: 2 != 1 : <class 'influxdb.tests.helper_test.TestSeriesHelper.testWarnBulkSizeNoEffect.<locals>.WarnBulkSizeNoEffect'> call should have generated one warning.
+    "testWarnBulkSizeNoEffect"
   ];
 
   pythonImportsCheck = [ "influxdb" ];
@@ -66,6 +86,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for InfluxDB";
     homepage = "https://github.com/influxdb/influxdb-python";
+    changelog = "https://github.com/influxdata/influxdb-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

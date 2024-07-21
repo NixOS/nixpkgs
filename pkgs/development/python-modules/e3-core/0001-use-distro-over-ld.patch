@@ -1,0 +1,42 @@
+From 189681bbfb703a7026ca7bbb3b21ef554807b144 Mon Sep 17 00:00:00 2001
+From: tali auster <taliauster@gmail.com>
+Date: Wed, 15 Nov 2023 12:15:34 -0700
+Subject: [PATCH] use distro over ld
+
+The `ld` module (linux distribution) was renamed to `distro`, presumably
+so as not to subsume binutils name.
+
+---
+ setup.py              | 2 +-
+ src/e3/os/platform.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index c32f46f..de1ada6 100644
+--- a/setup.py
++++ b/setup.py
+@@ -25,7 +25,7 @@ for p in ("darwin", "linux", "linux2", "win32"):
+     platform_string = ":sys_platform=='%s'" % p
+     extras_require[platform_string] = ["psutil"]
+     if p in ("linux", "linux2"):
+-        extras_require[platform_string].append("ld")
++        extras_require[platform_string].append("distro")
+ 
+ # Get e3 version from the VERSION file.
+ version_file = os.path.join(os.path.dirname(__file__), "VERSION")
+diff --git a/src/e3/os/platform.py b/src/e3/os/platform.py
+index 2d4e174..a9d12d3 100644
+--- a/src/e3/os/platform.py
++++ b/src/e3/os/platform.py
+@@ -78,7 +78,7 @@ class SystemInfo:
+ 
+         # Fetch linux distribution info on linux OS
+         if cls.uname.system == "Linux":  # linux-only
+-            import ld
++            import distro as ld
+ 
+             cls.ld_info = {
+                 "name": ld.name(),
+-- 
+2.40.1
+

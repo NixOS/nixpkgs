@@ -1,48 +1,65 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, jmespath
-, docutils
-, ordereddict
-, simplejson
-, mock
-, nose
-, urllib3
+{
+  lib,
+  awscrt,
+  buildPythonPackage,
+  fetchPypi,
+  jmespath,
+  jsonschema,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.21.54"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.34.129"; # N.B: if you change this, change boto3 and awscli to a matching version
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RhJ7OjhdDsc9GZS4lYsjt54GE+EsSGNxoQDfmStyobk=";
+    hash = "sha256-fFbiWvYRLWnF0UoVtC92unaHaHq8RjqWrF7coZwKnC0=";
   };
 
+  pythonRelaxDeps = [ "urllib3" ];
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    python-dateutil
     jmespath
-    docutils
-    ordereddict
-    simplejson
+    python-dateutil
     urllib3
   ];
 
-  checkInputs = [ mock nose ];
+  nativeCheckInputs = [
+    jsonschema
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    nosetests -v
-  '';
+  disabledTestPaths = [
+    # Integration tests require networking
+    "tests/integration"
 
-  # Network access
-  doCheck = false;
+    # Disable slow tests (only run unit tests)
+    "tests/functional"
+  ];
 
   pythonImportsCheck = [ "botocore" ];
 
+  passthru.optional-dependencies = {
+    crt = [ awscrt ];
+  };
+
   meta = with lib; {
+    description = "Low-level interface to a growing number of Amazon Web Services";
     homepage = "https://github.com/boto/botocore";
+    changelog = "https://github.com/boto/botocore/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    description = "A low-level interface to a growing number of Amazon Web Services";
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }

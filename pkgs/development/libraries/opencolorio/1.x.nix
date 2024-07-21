@@ -26,18 +26,24 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DUSE_EXTERNAL_LCMS=ON"
     "-DUSE_EXTERNAL_TINYXML=ON"
-    # External libyamlcpp 0.6.* not compatible: https://github.com/imageworks/OpenColorIO/issues/517
+    # External yaml-cpp 0.6.* not compatible: https://github.com/imageworks/OpenColorIO/issues/517
     "-DUSE_EXTERNAL_YAML=OFF"
   ] ++ lib.optional stdenv.isDarwin "-DOCIO_USE_BOOST_PTR=ON"
-    ++ lib.optional (!stdenv.hostPlatform.isx86) "-DOCIO_USE_SSE=OFF";
+    ++ lib.optional (!stdenv.hostPlatform.isx86) "-DOCIO_USE_SSE=OFF"
+    ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "-DCMAKE_OSX_ARCHITECTURES=arm64";
 
   postInstall = ''
-    mkdir -p $bin/bin; mv $out/bin $bin/
+    moveToOutput bin "$bin"
+    moveToOutput cmake "$dev"
+    mv $out/OpenColorIOConfig.cmake $dev/cmake/
+
+    substituteInPlace "$dev/cmake/OpenColorIO-release.cmake" \
+      --replace "$out/bin" "$bin/bin"
   '';
 
   meta = with lib; {
     homepage = "https://opencolorio.org";
-    description = "A color management framework for visual effects and animation";
+    description = "Color management framework for visual effects and animation";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.unix;

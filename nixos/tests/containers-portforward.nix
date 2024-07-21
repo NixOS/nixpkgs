@@ -8,10 +8,10 @@ in
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-portforward";
   meta = {
-    maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ianwookim ];
+    maintainers = with lib.maintainers; [ aristid aszlig kampfschlaefer ianwookim ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;

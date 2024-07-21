@@ -1,53 +1,93 @@
-{ lib
-, buildPythonPackage
-, dotmap
-, fetchPypi
-, pexpect
-, protobuf
-, pygatt
-, pypubsub
-, pyqrcode
-, pyserial
-, pythonOlder
-, tabulate
-, timeago
+{
+  lib,
+  bleak,
+  buildPythonPackage,
+  dotmap,
+  fetchFromGitHub,
+  packaging,
+  pexpect,
+  protobuf,
+  pygatt,
+  pypubsub,
+  pyqrcode,
+  pyserial,
+  pytap2,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools,
+  tabulate,
+  timeago,
 }:
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "1.2.44";
-  format = "setuptools";
+  version = "2.3.11";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f99e076dde0db86a5ba734b48257ffc7355a2b4729cea1ff5cd7638ca93dbd90";
+  src = fetchFromGitHub {
+    owner = "meshtastic";
+    repo = "Meshtastic-python";
+    rev = "refs/tags/${version}";
+    hash = "sha256-s56apVx7+EXkdw3FUjyGKGFjP+IVbO0/VDB4urXEtXQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    bleak
     dotmap
+    packaging
     pexpect
     protobuf
     pygatt
     pypubsub
     pyqrcode
     pyserial
+    pyyaml
+    requests
+    setuptools
     tabulate
     timeago
   ];
 
-  # Project only provides PyPI releases which don't contain the tests
-  # https://github.com/meshtastic/Meshtastic-python/issues/86
-  doCheck = false;
+  passthru.optional-dependencies = {
+    tunnel = [ pytap2 ];
+  };
 
-  pythonImportsCheck = [
-    "meshtastic"
+  nativeCheckInputs = [
+    pytap2
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export PATH="$PATH:$out/bin";
+  '';
+
+  pythonImportsCheck = [ "meshtastic" ];
+
+  disabledTests = [
+    # TypeError
+    "test_main_info_with_seriallog_output_txt"
+    "test_main_info_with_seriallog_stdout"
+    "test_main_info_with_tcp_interfa"
+    "test_main_info"
+    "test_main_no_proto"
+    "test_main_support"
+    "test_MeshInterface"
+    "test_message_to_json_shows_all"
+    "test_SerialInterface_single_port"
+    "test_support_info"
+    "test_TCPInterface"
   ];
 
   meta = with lib; {
     description = "Python API for talking to Meshtastic devices";
-    homepage = "https://meshtastic.github.io/Meshtastic-python/";
+    homepage = "https://github.com/meshtastic/Meshtastic-python";
+    changelog = "https://github.com/meshtastic/python/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

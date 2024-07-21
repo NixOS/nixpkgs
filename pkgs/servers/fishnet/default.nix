@@ -1,26 +1,25 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
 , fetchurl
 }:
 
 let
-  nnueFile = "nn-6762d36ad265.nnue";
+  nnueFile = "nn-5af11540bbfe.nnue";
   nnue = fetchurl {
     url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
-    sha256 = "0727dsxfpns9fkyir95fybibqmigk5h45k154b2c5rk5s9md6qk7";
+    hash = "sha256-WvEVQLv+/LVOOMXdAAyrS0ad+nWZodVb5dJyLCCokps=";
   };
 in
 rustPlatform.buildRustPackage rec {
   pname = "fishnet";
-  version = "2.4.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
-    owner = "niklasf";
+    owner = "lichess-org";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1Gl2vJFn9yVYH62yBJefAOBX/jJaFAdSZj2Lj3imcps=";
+    hash = "sha256-q73oGQYSWx1aFy9IvbGpecOoc0wLEY2IzJH9GufnvCs=";
     fetchSubmodules = true;
   };
 
@@ -29,13 +28,19 @@ rustPlatform.buildRustPackage rec {
     cp -v '${nnue}' 'Fairy-Stockfish/src/${nnueFile}'
   '';
 
-  cargoSha256 = "sha256-/s7Yyi2FUh+EDvgaHLgZ/FA6kk2FQrZr3L3B76fqTuc=";
+  # Copying again bacause the file is deleted during build.
+  postBuild = ''
+    cp -v '${nnue}' 'Stockfish/src/${nnueFile}'
+  '';
+
+  cargoHash = "sha256-NO3u2ZXSiDQnZ/FFZLOtTnQoGMyN9pSI4sqGIXtjEcI=";
 
   meta = with lib; {
     description = "Distributed Stockfish analysis for lichess.org";
-    homepage = "https://github.com/niklasf/fishnet";
+    homepage = "https://github.com/lichess-org/fishnet";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tu-maurice ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    mainProgram = "fishnet";
   };
 }

@@ -1,42 +1,48 @@
-{ buildPythonPackage
-, fetchPypi
-, python
-, lib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20210626.3";
+  version = "20240713.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "043s52b7srqwwmj7rh783arqryilmv3m8dmmg9bn5sjgfi004jn4";
+    hash = "sha256-KW44LUGgCE+KB3tE9ecYqOansjFN6F4A7TRCoKwOsRs=";
   };
 
-  postPatch = ''
-    # this test has issues with an import statement
-    # rm tests/tags.py
-    sed -i '/from .tags import/d' tests/__init__.py
+  nativeBuildInputs = [ setuptools ];
 
-    # this assertion errors without obvious reason
-    sed -i '/self.assertEqual(csv0, str(r4))/d' tests/caching.py
+  nativeCheckInputs = [ pytestCheckHook ];
 
-    # some sql tests fail against sqlite engine
-    sed -i '/from .sql import/d' tests/__init__.py
-  '';
+  pytestFlagsArray = [
+    "tests/*.py"
+    # these tests already seem to be broken on the upstream
+    "--deselect=tests/nosql.py::TestFields::testRun"
+    "--deselect=tests/nosql.py::TestSelect::testGroupByAndDistinct"
+    "--deselect=tests/nosql.py::TestExpressions::testOps"
+    "--deselect=tests/nosql.py::TestExpressions::testRun"
+    "--deselect=tests/nosql.py::TestImportExportUuidFields::testRun"
+    "--deselect=tests/nosql.py::TestConnection::testRun"
+    "--deselect=tests/validation.py::TestValidateAndInsert::testRun"
+    "--deselect=tests/validation.py::TestValidateUpdateInsert::testRun"
+    "--deselect=tests/validators.py::TestValidators::test_IS_IN_DB"
+  ];
 
   pythonImportsCheck = [ "pydal" ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest tests
-    runHook postCheck
-  '';
-
-  meta = {
-    description = "A pure Python Database Abstraction Layer";
+  meta = with lib; {
+    description = "Python Database Abstraction Layer";
     homepage = "https://github.com/web2py/pydal";
-    license = with lib.licenses; [ bsd3 ] ;
-    maintainers = with lib.maintainers; [ wamserma ];
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ wamserma ];
   };
 }

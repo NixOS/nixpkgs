@@ -1,16 +1,22 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
 
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.07")
+  "rresult is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-rresult-${version}";
-  version = "0.6.0";
+  pname = "ocaml${ocaml.version}-rresult";
+  version = "0.7.0";
   src = fetchurl {
     url = "https://erratique.ch/software/rresult/releases/rresult-${version}.tbz";
-    sha256 = "1k69a3gvrk7f2cshwjzvk7818f0bwxhacgd14wxy6d4gmrggci86";
+    sha256 = "sha256-Eap/W4NGDmBDHjFU4+MsBx1G4VHqV2DPJDd4Bb+XVUA=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg ];
 
   propagatedBuildInputs = [ result ];
+
+  strictDeps = true;
 
   inherit (topkg) buildPhase installPhase;
 

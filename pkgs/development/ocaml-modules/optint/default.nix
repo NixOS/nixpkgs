@@ -1,15 +1,13 @@
 { lib, buildDunePackage, fetchurl }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.07";
-  version = "0.1.0";
+  minimalOCamlVersion = "4.07";
+  version = "0.3.0";
   pname = "optint";
   src = fetchurl {
-    url = "https://github.com/mirage/optint/releases/download/v${version}/optint-v${version}.tbz";
-    sha256 = "27847660223c16cc7eaf8fcd9d5589a0b802114330a2529578f8007d3b01185d";
+    url = "https://github.com/mirage/optint/releases/download/v${version}/optint-${version}.tbz";
+    sha256 = "sha256-KVz/LBNLA4WxO6gdUAXZ+EG6QNSlAq7RDJl/I57xFHs=";
   };
-
-  useDune2 = true;
 
   meta = {
     homepage = "https://github.com/mirage/optint";

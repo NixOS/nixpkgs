@@ -9,6 +9,7 @@
 , glib
 , pkg-config
 , cyrus_sasl
+, pulseaudioSupport ? stdenv.isLinux
 , libpulseaudio
 , libgcrypt
 , gtk3
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-vnc";
-  version = "1.3.0";
+  version = "1.3.1";
 
   outputs = [ "out" "bin" "man" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "X6qlgjuMvowLC6HkVsTnDEsa5mhcn+gaQoLZjPAKIR0=";
+    sha256 = "USdjrE4FWdAVi2aCyl3Ro71jPwgvXkNJ1xWOa1+A8c4=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +52,13 @@ stdenv.mkDerivation rec {
     glib
     libgcrypt
     cyrus_sasl
-    libpulseaudio
     gtk3
+  ] ++ lib.optionals pulseaudioSupport [
+    libpulseaudio
+  ];
+
+  mesonFlags = lib.optionals (!pulseaudioSupport) [
+    "-Dpulseaudio=disabled"
   ];
 
   passthru = {
@@ -64,9 +70,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GTK VNC widget";
-    homepage = "https://wiki.gnome.org/Projects/gtk-vnc";
+    homepage = "https://gitlab.gnome.org/GNOME/gtk-vnc";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ raskin offline ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "gvnccapture";
   };
 }

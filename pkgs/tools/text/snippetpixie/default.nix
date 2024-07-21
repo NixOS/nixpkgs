@@ -5,7 +5,7 @@
 , ninja
 , vala
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , appstream
 , desktop-file-utils
 , python3
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ninja
     vala
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     appstream
     desktop-file-utils
     python3
@@ -56,8 +56,6 @@ stdenv.mkDerivation rec {
     json-glib
     xorg.libXtst
     pantheon.granite
-    pantheon.elementary-gtk-theme
-    pantheon.elementary-icon-theme
   ];
 
   doCheck = true;
@@ -68,9 +66,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

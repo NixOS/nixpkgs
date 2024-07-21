@@ -7,6 +7,7 @@
 , openssl
 , pkg-config
 , slang
+, libxcrypt
 , autoreconfHook
 }:
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-ssl-headers=${openssl.dev}/include/openssl" ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ bzip2 zlib newt newt openssl slang ];
+  buildInputs = [ bzip2 zlib newt newt openssl slang libxcrypt ];
 
   patches = [
     ./gentoos-zlib.patch
@@ -41,8 +42,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Opensource disk backup software";
-    homepage = "http://www.partimage.org";
-    license = lib.licenses.gpl2;
+    homepage = "https://www.partimage.org";
+    license = lib.licenses.gpl2Plus;
     maintainers = [lib.maintainers.marcweber];
     platforms = lib.platforms.linux;
   };

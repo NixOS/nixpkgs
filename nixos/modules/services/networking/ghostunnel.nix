@@ -9,6 +9,7 @@ let
     mapAttrs'
     mkDefault
     mkEnableOption
+    mkPackageOption
     mkIf
     mkOption
     nameValuePair
@@ -40,9 +41,9 @@ let
           description = ''
             Path to keystore (combined PEM with cert/key, or PKCS12 keystore).
 
-            NB: storepass is not supported because it would expose credentials via <code>/proc/*/cmdline</code>.
+            NB: storepass is not supported because it would expose credentials via `/proc/*/cmdline`.
 
-            Specify this or <code>cert</code> and <code>key</code>.
+            Specify this or `cert` and `key`.
           '';
           type = types.nullOr types.str;
           default = null;
@@ -52,7 +53,7 @@ let
           description = ''
             Path to certificate (PEM with certificate chain).
 
-            Not required if <code>keystore</code> is set.
+            Not required if `keystore` is set.
           '';
           type = types.nullOr types.str;
           default = null;
@@ -62,7 +63,7 @@ let
           description = ''
             Path to certificate private key (PEM with private key).
 
-            Not required if <code>keystore</code> is set.
+            Not required if `keystore` is set.
           '';
           type = types.nullOr types.str;
           default = null;
@@ -70,7 +71,7 @@ let
 
         cacert = mkOption {
           description = ''
-            Path to CA bundle file (PEM/X509). Uses system trust store if <code>null</code>.
+            Path to CA bundle file (PEM/X509). Uses system trust store if `null`.
           '';
           type = types.nullOr types.str;
         };
@@ -124,7 +125,7 @@ let
         };
 
         extraArguments = mkOption {
-          description = "Extra arguments to pass to <code>ghostunnel server</code>";
+          description = "Extra arguments to pass to `ghostunnel server`";
           type = types.separatedString " ";
           default = "";
         };
@@ -215,12 +216,7 @@ in
   options = {
     services.ghostunnel.enable = mkEnableOption "ghostunnel";
 
-    services.ghostunnel.package = mkOption {
-      description = "The ghostunnel package to use.";
-      type = types.package;
-      default = pkgs.ghostunnel;
-      defaultText = literalExpression "pkgs.ghostunnel";
-    };
+    services.ghostunnel.package = mkPackageOption pkgs "ghostunnel" { };
 
     services.ghostunnel.servers = mkOption {
       description = ''

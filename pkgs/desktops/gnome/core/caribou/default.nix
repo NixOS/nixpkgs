@@ -1,6 +1,6 @@
 { fetchurl, lib, stdenv, pkg-config, gnome, glib, gtk3, clutter, dbus, python3, libxml2
 , libxklavier, libXtst, gtk2, intltool, libxslt, at-spi2-core, autoreconfHook
-, wrapGAppsHook, libgee, vala }:
+, wrapGAppsHook3, libgee, vala }:
 
 let
   pname = "caribou";
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config intltool libxslt libxml2 autoreconfHook wrapGAppsHook vala ];
+  nativeBuildInputs = [ pkg-config intltool libxslt libxml2 autoreconfHook wrapGAppsHook3 vala ];
 
   buildInputs = [
     glib gtk3 clutter at-spi2-core dbus pythonEnv python3.pkgs.pygobject3
@@ -60,10 +60,11 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "An input assistive technology intended for switch and pointer users";
-    homepage = "https://wiki.gnome.org/Projects/Caribou";
+    description = "Input assistive technology intended for switch and pointer users";
+    mainProgram = "caribou-preferences";
+    homepage = "https://gitlab.gnome.org/Archive/caribou";
     license = licenses.lgpl21;
-    maintainers = teams.gnome.members;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

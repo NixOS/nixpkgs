@@ -5,16 +5,17 @@ let
 in
 stdenv.mkDerivation {
   pname = "rtw88";
-  version = "unstable-2021-04-19";
+  version = "unstable-2023-07-23";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw88";
-    rev = "0f3cc6a5973bc386d9cb542fc85a6ba027edff5d";
-    hash = "sha256-PRzWXC1lre8gt1GfVdnaG836f5YK57P9a8tG20yef0w=";
+    rev = "9b6fe04a741a6b0a1edc5ca134927784bff033a5";
+    hash = "sha256-OzaIy+WTrljwAhC73wEIRUXrkz1NrGNJAS3zofQyV6E=";
   };
 
-  makeFlags = [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags ++ [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   enableParallelBuilding = true;
 
@@ -29,12 +30,12 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "The newest Realtek rtlwifi codes";
+    description = "Backport of the latest Realtek RTW88 driver from wireless-next for older kernels";
     homepage = "https://github.com/lwfinger/rtw88";
     license = with licenses; [ bsd3 gpl2Only ];
-    maintainers = with maintainers; [ tvorog ];
+    maintainers = with maintainers; [ tvorog atila ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.14" || kernel.kernelAtLeast "5.14";
+    broken = kernel.kernelOlder "4.20";
     priority = -1;
   };
 }

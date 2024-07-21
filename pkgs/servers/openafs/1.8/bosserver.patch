@@ -1,17 +1,14 @@
-diff -u openafs-1.8.0/src/bozo/bosserver.c /tmp/buffer-content-13110-gd
---- openafs-1.8.0/src/bozo/bosserver.c
-+++ #<buffer bosserver.c>
-@@ -244,24 +244,6 @@
+diff --git a/src/bozo/bosserver.c b/src/bozo/bosserver.c
+index 371cb638e4..e4d58c3562 100644
+--- a/src/bozo/bosserver.c
++++ b/src/bozo/bosserver.c
+@@ -246,20 +246,6 @@ MakeDir(const char *adir)
  static int
  CreateDirs(const char *coredir)
  {
--    if ((!strncmp
--	 (AFSDIR_USR_DIRPATH, AFSDIR_CLIENT_ETC_DIRPATH,
--	  strlen(AFSDIR_USR_DIRPATH)))
--	||
--	(!strncmp
+-    if (!strncmp
 -	 (AFSDIR_USR_DIRPATH, AFSDIR_SERVER_BIN_DIRPATH,
--	  strlen(AFSDIR_USR_DIRPATH)))) {
+-	  strlen(AFSDIR_USR_DIRPATH))) {
 -	if (MakeDir(AFSDIR_USR_DIRPATH))
 -	    return errno;
 -    }
@@ -26,5 +23,3 @@ diff -u openafs-1.8.0/src/bozo/bosserver.c /tmp/buffer-content-13110-gd
      if (MakeDir(AFSDIR_SERVER_ETC_DIRPATH))
  	return errno;
      if (MakeDir(AFSDIR_SERVER_LOCAL_DIRPATH))
-
-Diff finished.  Fri Jun 29 15:45:46 2018

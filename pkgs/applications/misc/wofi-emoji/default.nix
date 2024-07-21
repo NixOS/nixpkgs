@@ -1,30 +1,45 @@
-{ stdenv, lib, fetchFromGitHub, jq }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  jq,
+  wofi,
+  wtype,
+  wl-clipboard,
+}:
 
 let
-  emojiJSON = fetchFromGitHub {
-    owner = "github";
-    repo = "gemoji";
-    sha256 = "sha256-Tn0vba129LPlX+MRcCBA9qp2MU1ek1jYzVCqoNxCL/w=";
-    rev = "v4.0.0.rc2";
+  emojiJSON = fetchurl {
+    url = "https://raw.githubusercontent.com/muan/emojilib/v3.0.11/dist/emoji-en-US.json";
+    hash = "sha256-WHqCSNgDzc6ZASdVrwPvsU4MtBcYLKDp2D2Hykrq1sI=";
   };
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "wofi-emoji";
-  version = "unstable-2021-05-24";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "dln";
-    repo = pname;
-    rev = "bfe35c1198667489023109f6843217b968a35183";
-    sha256 = "sha256-wMIjTUCVn4uF0cpBkPfs76NRvwS0WhGGJRy9vvtmVWQ=";
+    owner = "Zeioth";
+    repo = "wofi-emoji";
+    rev = "v${version}";
+    hash = "sha256-wLZK7RcDxxlYuu27WNj+SoRoBiCqk9whp4Fyg0SOoPA=";
   };
 
   nativeBuildInputs = [ jq ];
+  buildInputs = [
+    wofi
+    wtype
+    wl-clipboard
+  ];
 
   postPatch = ''
-    cp "${emojiJSON}/db/emoji.json" .
     substituteInPlace build.sh \
-      --replace 'curl https://raw.githubusercontent.com/github/gemoji/master/db/emoji.json' 'cat emoji.json'
+      --replace 'curl ${emojiJSON.url}' 'cat ${emojiJSON}'
+    substituteInPlace wofi-emoji \
+      --replace 'wofi' '${wofi}/bin/wofi' \
+      --replace 'wtype' '${wtype}/bin/wtype' \
+      --replace 'wl-copy' '${wl-clipboard}/bin/wl-copy'
   '';
 
   buildPhase = ''
@@ -44,11 +59,12 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple emoji selector for Wayland using wofi and wl-clipboard";
-    homepage = "https://github.com/dln/wofi-emoji";
-    license = licenses.mit;
-    maintainers = [ maintainers.ymarkus ];
-    platforms = platforms.all;
+    homepage = "https://github.com/Zeioth/wofi-emoji";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ johnrtitor ymarkus ];
+    platforms = lib.platforms.all;
+    mainProgram = "wofi-emoji";
   };
 }

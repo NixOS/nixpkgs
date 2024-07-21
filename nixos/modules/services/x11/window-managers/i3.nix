@@ -4,6 +4,10 @@ with lib;
 
 let
   cfg = config.services.xserver.windowManager.i3;
+  updateSessionEnvironmentScript = ''
+    systemctl --user import-environment PATH DISPLAY XAUTHORITY DESKTOP_SESSION XDG_CONFIG_DIRS XDG_DATA_DIRS XDG_RUNTIME_DIR XDG_SESSION_ID DBUS_SESSION_BUS_ADDRESS || true
+    dbus-update-activation-environment --systemd --all || true
+  '';
 in
 
 {
@@ -19,6 +23,15 @@ in
       '';
     };
 
+    updateSessionEnvironment = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to run dbus-update-activation-environment and systemctl import-environment before session start.
+        Required for xdg portals to function properly.
+      '';
+    };
+
     extraSessionCommands = mkOption {
       default     = "";
       type        = types.lines;
@@ -27,15 +40,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type        = types.package;
-      default     = pkgs.i3;
-      defaultText = literalExpression "pkgs.i3";
-      example     = literalExpression "pkgs.i3-gaps";
-      description = ''
-        i3 package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "i3" { };
 
     extraPackages = mkOption {
       type = with types; listOf package;
@@ -59,6 +64,8 @@ in
       start = ''
         ${cfg.extraSessionCommands}
 
+        ${lib.optionalString cfg.updateSessionEnvironment updateSessionEnvironmentScript}
+
         ${cfg.package}/bin/i3 ${optionalString (cfg.configFile != null)
           "-c /etc/i3/config"
         } &
@@ -73,6 +80,6 @@ in
 
   imports = [
     (mkRemovedOptionModule [ "services" "xserver" "windowManager" "i3-gaps" "enable" ]
-      "Use services.xserver.windowManager.i3.enable and set services.xserver.windowManager.i3.package to pkgs.i3-gaps to use i3-gaps.")
+      "i3-gaps was merged into i3. Use services.xserver.windowManager.i3.enable instead.")
   ];
 }

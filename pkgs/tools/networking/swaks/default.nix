@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "swaks";
-  version = "20201014.0";
+  version = "20240103.0";
 
   src = fetchurl {
     url = "https://www.jetmore.org/john/code/swaks/files/${pname}-${version}.tar.gz";
-    sha256 = "0c2sx4nrh4whsqzj6m5ay8d7yqan3aqgg436p8jb25bs91ykn2pv";
+    sha256 = "sha256-DlMbTRZAWIAucmaxT03BiXCZ0Jb5MIIN4vm16wjc2+g=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -18,13 +18,14 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/swaks --set PERL5LIB \
       "${with perlPackages; makePerlPath [
-        NetSSLeay AuthenSASL NetDNS IOSocketInet6
+        NetSSLeay AuthenSASL NetDNS IOSocketINET6
       ]}"
   '';
 
   meta = with lib; {
     homepage = "http://www.jetmore.org/john/code/swaks/";
-    description = "A featureful, flexible, scriptable, transaction-oriented SMTP test tool";
+    description = "Featureful, flexible, scriptable, transaction-oriented SMTP test tool";
+    mainProgram = "swaks";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [];
     platforms = platforms.all;

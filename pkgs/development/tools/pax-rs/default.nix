@@ -1,12 +1,11 @@
 { lib, fetchFromGitHub, fetchurl, rustPlatform, runCommand } :
-with rustPlatform;
 
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "pax-rs";
   version = "0.4.0";
 
   meta = with lib; {
-    description = "The fastest JavaScript bundler in the galaxy";
+    description = "Fastest JavaScript bundler in the galaxy";
     longDescription = ''
       The fastest JavaScript bundler in the galaxy. Fully supports ECMAScript module syntax (import/export) in addition to CommonJS require(<string>).
     '';

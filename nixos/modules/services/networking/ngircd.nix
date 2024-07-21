@@ -28,14 +28,7 @@ in {
         type = types.lines;
       };
 
-      package = mkOption {
-        description = "The ngircd package.";
-
-        type = types.package;
-
-        default = pkgs.ngircd;
-        defaultText = literalExpression "pkgs.ngircd";
-      };
+      package = mkPackageOption pkgs "ngircd" { };
     };
   };
 

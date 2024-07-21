@@ -33,14 +33,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "gnome-desktop-testing";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "GNOME test runner for installed tests";
-    homepage = "https://wiki.gnome.org/Initiatives/GnomeGoals/InstalledTests";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-desktop-testing";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.jtojnar ];

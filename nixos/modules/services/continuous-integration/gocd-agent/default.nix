@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.gocd-agent;
+  opt = options.services.gocd-agent;
 in {
   options = {
     services.gocd-agent = {
@@ -98,6 +99,15 @@ in {
           "-Dcruise.console.publish.interval=10"
           "-Djava.security.egd=file:/dev/./urandom"
         ];
+        defaultText = literalExpression ''
+          [
+            "-Xms''${config.${opt.initialJavaHeapSize}}"
+            "-Xmx''${config.${opt.maxJavaHeapMemory}}"
+            "-Djava.io.tmpdir=/tmp"
+            "-Dcruise.console.publish.interval=10"
+            "-Djava.security.egd=file:/dev/./urandom"
+          ]
+        '';
         description = ''
           Specifies startup command line arguments to pass to Go.CD agent
           java process.
@@ -129,7 +139,7 @@ in {
         description = ''
           Additional environment variables to be passed to the Go.CD agent process.
           As a base environment, Go.CD agent receives NIX_PATH from
-          <option>environment.sessionVariables</option>, NIX_REMOTE is set to
+          {option}`environment.sessionVariables`, NIX_REMOTE is set to
           "daemon".
         '';
       };

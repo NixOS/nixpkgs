@@ -17,7 +17,7 @@ let
 
 in {
   options.services.confd = {
-    enable = mkEnableOption "confd service";
+    enable = mkEnableOption "confd, a service to manage local application configuration files using templates and data from etcd/consul/redis/zookeeper";
 
     backend = mkOption {
       description = "Confd config storage backend to use.";
@@ -61,12 +61,7 @@ in {
       type = types.path;
     };
 
-    package = mkOption {
-      description = "Confd package to use.";
-      default = pkgs.confd;
-      defaultText = literalExpression "pkgs.confd";
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "confd" { };
   };
 
   config = mkIf cfg.enable {

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.17.3.0";
+  version = "0.18.3.3";
 
   src = fetchFromGitHub {
-    owner  = "monero-project";
-    repo   = "monero-gui";
-    rev    = "v${version}";
-    sha256 = "0rc1p0k16icgfhc7yvkvb8p6570zz0cvigs648l05fcm3mf787rp";
+    owner = "monero-project";
+    repo = "monero-gui";
+    rev = "v${version}";
+    hash = "sha256-6qadBm4bPui11OVY1tLFcHsfswXWBFiJvutIsF6EfX8=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     icon = "monero";
     desktopName = "Monero";
     genericName = "Wallet";
-    categories  = "Network;Utility;";
+    categories  = [ "Network" "Utility" ];
   };
 
   postInstall = ''
@@ -88,8 +88,8 @@ stdenv.mkDerivation rec {
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
       install -Dm644 \
-        -t $out/share/icons/hicolor/$size/apps/monero.png \
-        $src/images/appicons/$size.png
+        $src/images/appicons/$size.png \
+        $out/share/icons/hicolor/$size/apps/monero.png
     done;
   '';
 
@@ -99,5 +99,6 @@ stdenv.mkDerivation rec {
     license      = licenses.bsd3;
     platforms    = platforms.all;
     maintainers  = with maintainers; [ rnhmjoj ];
+    mainProgram  = "monero-wallet-gui";
   };
 }

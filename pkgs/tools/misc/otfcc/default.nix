@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ./move-makefiles.patch
   ];
 
-  buildFlags = lib.optional stdenv.isAarch64 [ "config=release_arm" ];
+  buildFlags = lib.optionals stdenv.isAarch64 [ "config=release_arm" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/caryll/otfcc";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jfrankenau ttuegel ];
+    maintainers = with maintainers; [ ttuegel ];
   };
 
 }

@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ felixsinger ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    mainProgram = "iotools";
   };
 }

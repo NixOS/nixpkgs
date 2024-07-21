@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
+  azure-mgmt-nspkg,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-rdbms";
-  version = "10.0.0";
+  version = "10.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "bdc479b3bbcac423943d63e746a81dd5fc80b46a4dbb4393e760016e3fa4f74a";
+    hash = "sha256-qH1AHIdshHNM3UiIr1UeShRhtLMo2YFq9gy4rFl58DU=";
   };
 
   propagatedBuildInputs = [
@@ -24,9 +26,7 @@ buildPythonPackage rec {
     azure-mgmt-core
     msrest
     msrestazure
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
-  ];
+  ] ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
 
   # has no tests
   doCheck = false;

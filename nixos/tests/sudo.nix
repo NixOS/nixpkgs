@@ -2,17 +2,13 @@
 
 let
   password = "helloworld";
-
 in
-  import ./make-test-python.nix ({ pkgs, ...} : {
+  import ./make-test-python.nix ({ lib, pkgs, ...} : {
     name = "sudo";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ lschuermann ];
-    };
+    meta.maintainers = pkgs.sudo.meta.maintainers;
 
     nodes.machine =
       { lib, ... }:
-      with lib;
       {
         users.groups = { foobar = {}; barfoo = {}; baz = { gid = 1337; }; };
         users.users = {
@@ -25,8 +21,13 @@ in
         };
 
         security.sudo = {
-          enable = true;
+          # Explicitly _not_ defining 'enable = true;' here, to check that sudo is enabled by default
+
           wheelNeedsPassword = false;
+
+          extraConfig = ''
+            Defaults lecture="never"
+          '';
 
           extraRules = [
             # SUDOERS SYNTAX CHECK (Test whether the module produces a valid output;
@@ -73,7 +74,7 @@ in
             machine.fail('su - test1 -c "sudo -n -u root true"')
 
         with subtest("users in group 'foobar' should be able to use sudo with password"):
-            machine.succeed("sudo -u test2 echo ${password} | sudo -S -u root true")
+            machine.succeed('su - test2 -c "echo ${password} | sudo -S -u root true"')
 
         with subtest("users in group 'barfoo' should be able to use sudo without password"):
             machine.succeed("sudo -u test3 sudo -n -u root true")

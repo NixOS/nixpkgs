@@ -1,7 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, buildPackages
+, pkgsBuildBuild
+, pkgsBuildHost
 , cmake
 , glib
 , icu
@@ -13,14 +14,14 @@
 , python3
 , tzdata
 , fixDarwinDylibNames
-, introspectionSupport ? stdenv.buildPlatform == stdenv.hostPlatform
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable pkgsBuildHost
 , gobject-introspection
 , vala
 }:
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.10";
+  version = "3.0.18";
 
   outputs = [ "out" "dev" ]; # "devdoc" ];
 
@@ -28,30 +29,34 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "sha256-fLmEJlkZLYLcKZqZwitf8rH261QDPTJZf/+/+FMsGIg=";
+    sha256 = "sha256-32FNnCybXO67Vtg1LM6miJUaK+r0mlfjxgLQg1LD8Es=";
   };
+
+  strictDeps = true;
+
+  depsBuildBuild = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # provides ical-glib-src-generator that runs during build
+    libical
+  ];
 
   nativeBuildInputs = [
     cmake
     ninja
     perl
     pkg-config
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
     # Docs building fails:
     # https://github.com/NixOS/nixpkgs/pull/67204
     # previously with https://github.com/NixOS/nixpkgs/pull/61657#issuecomment-495579489
     # gtk-doc docbook_xsl docbook_xml_dtd_43 # for docs
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # provides ical-glib-src-generator that runs during build
-    libical
-  ] ++ lib.optionals introspectionSupport [
-    gobject-introspection
-    vala
   ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
-  installCheckInputs = [
+  nativeInstallCheckInputs = [
     # running libical-glib tests
-    (python3.withPackages (pkgs: with pkgs; [
+    (python3.pythonOnBuildForHost.withPackages (pkgs: with pkgs; [
       pygobject3
     ]))
   ];
@@ -64,11 +69,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_GTK_DOC=False"
-  ] ++ lib.optionals introspectionSupport [
-    "-DGOBJECT_INTROSPECTION=True"
-    "-DICAL_GLIB_VAPI=True"
+    "-DGOBJECT_INTROSPECTION=${if withIntrospection then "True" else "False"}"
+    "-DICAL_GLIB_VAPI=${if withIntrospection then "True" else "False"}"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev buildPackages.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
+    "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev pkgsBuildBuild.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
   ];
 
   patches = [
@@ -77,9 +81,18 @@ stdenv.mkDerivation rec {
     ./respect-env-tzdir.patch
   ];
 
+  postPatch = ''
+    # Fix typo in test env setup
+    # https://github.com/libical/libical/commit/03c02ced21494413920744a400c638b0cb5d493f
+    substituteInPlace src/test/libical-glib/CMakeLists.txt \
+      --replace-fail "''${CMAKE_BINARY_DIR}/src/libical-glib;\$ENV{GI_TYPELIB_PATH}" "''${CMAKE_BINARY_DIR}/src/libical-glib:\$ENV{GI_TYPELIB_PATH}" \
+      --replace-fail "''${LIBRARY_OUTPUT_PATH};\$ENV{LD_LIBRARY_PATH}" "''${LIBRARY_OUTPUT_PATH}:\$ENV{LD_LIBRARY_PATH}"
+  '';
+
   # Using install check so we do not have to manually set
   # LD_LIBRARY_PATH and GI_TYPELIB_PATH variables
-  doInstallCheck = true;
+  # Musl does not support TZDIR.
+  doInstallCheck = !stdenv.hostPlatform.isMusl;
   enableParallelChecking = false;
   preInstallCheck = if stdenv.isDarwin then ''
     for testexe in $(find ./src/test -maxdepth 1 -type f -executable); do
@@ -99,7 +112,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/libical/libical";
-    description = "An Open Source implementation of the iCalendar protocols";
+    description = "Open Source implementation of the iCalendar protocols";
+    changelog = "https://github.com/libical/libical/raw/v${version}/ReleaseNotes.txt";
     license = licenses.mpl20;
     platforms = platforms.unix;
   };

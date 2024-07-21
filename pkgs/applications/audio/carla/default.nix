@@ -1,27 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, alsa-lib, file, fluidsynth, jack2,
-  liblo, libpulseaudio, libsndfile, pkg-config, python3Packages,
-  which, withFrontend ? true,
-  withQt ? true, qtbase ? null, wrapQtAppsHook ? null,
-  withGtk2 ? true, gtk2 ? null,
-  withGtk3 ? true, gtk3 ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, file
+, fluidsynth
+, jack2
+, liblo
+, libpulseaudio
+, libsndfile
+, pkg-config
+, python3Packages
+, which
+, gtk2 ? null
+, gtk3 ? null
+, qtbase ? null
+, withFrontend ? true
+, withGtk2 ? true
+, withGtk3 ? true
+, withQt ? true
+, wrapQtAppsHook ? null
+}:
 
-with lib;
-
-assert withFrontend -> python3Packages ? pyqt5;
 assert withQt -> qtbase != null;
 assert withQt -> wrapQtAppsHook != null;
-assert withGtk2 -> gtk2 != null;
-assert withGtk3 -> gtk3 != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "carla";
-  version = "2.4.0";
+  version = "2.5.8";
 
   src = fetchFromGitHub {
     owner = "falkTX";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-WxhG9X6jVcu10bl5p0f61+SYZmJw4W7DYvezbpAlNjg=";
+    repo = "carla";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-H15T/z/IRfgWdqToTzq2eJ7q3n9Kj44IZXsd4uaipuU=";
   };
 
   nativeBuildInputs = [
@@ -30,15 +41,15 @@ stdenv.mkDerivation rec {
 
   pythonPath = with python3Packages; [
     rdflib pyliblo
-  ] ++ optional withFrontend pyqt5;
+  ] ++ lib.optional withFrontend pyqt5;
 
   buildInputs = [
     file liblo alsa-lib fluidsynth jack2 libpulseaudio libsndfile
-  ] ++ optional withQt qtbase
-    ++ optional withGtk2 gtk2
-    ++ optional withGtk3 gtk3;
+  ] ++ lib.optional withQt qtbase
+    ++ lib.optional withGtk2 gtk2
+    ++ lib.optional withGtk3 gtk3;
 
-  propagatedBuildInputs = pythonPath;
+  propagatedBuildInputs = finalAttrs.pythonPath;
 
   enableParallelBuilding = true;
 
@@ -50,6 +61,10 @@ stdenv.mkDerivation rec {
         filename="$(basename -- "$file")"
         substituteInPlace "$file" --replace '--with-appname="$0"' "--with-appname=\"$filename\""
     done
+  '' + lib.optionalString withGtk2 ''
+    # Will try to dlopen() libgtk-x11-2.0 at runtime when using the bridge.
+    substituteInPlace source/bridges-ui/Makefile \
+        --replace '$(CXX) $(OBJS_GTK2)' '$(CXX) $(OBJS_GTK2) -lgtk-x11-2.0'
   '';
 
   dontWrapQtApps = true;
@@ -62,7 +77,6 @@ stdenv.mkDerivation rec {
       patchPythonScript "$f"
     done
     patchPythonScript "$out/share/carla/carla_settings.py"
-    patchPythonScript "$out/share/carla/carla_database.py"
 
     for program in $out/bin/*; do
       wrapQtApp "$program" \
@@ -78,8 +92,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://kxstudio.sf.net/carla";
-    description = "An audio plugin host";
+    homepage = "https://kx.studio/Applications:Carla";
+    description = "Audio plugin host";
     longDescription = ''
       It currently supports LADSPA (including LRDF), DSSI, LV2, VST2/3
       and AU plugin formats, plus GIG, SF2 and SFZ file support.
@@ -90,4 +104,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.minijackson ];
     platforms = platforms.linux;
   };
-}
+})

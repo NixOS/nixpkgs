@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , rustPlatform
 , autoPatchelfHook
@@ -35,7 +36,7 @@ let
   ];
 
 in rustPlatform.buildRustPackage rec {
-  pname = "Ajour";
+  pname = "ajour";
   version = "1.3.2";
 
   src = fetchFromGitHub {
@@ -45,7 +46,12 @@ in rustPlatform.buildRustPackage rec {
     sha256 = "sha256-oVaNLclU0EVNtxAASE8plXcC+clkwhBeb9pz1vXufV0=";
   };
 
-  cargoSha256 = "sha256-Q+wYBLsZN8YQtUJfrxmjImbnWRPmngJPB8sDG65LuJY=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "iced-0.3.0" = "sha256-cPQ0qqcdCMx2agSpAKSvVDBEoF/vUffGg1UkX85KmfY=";
+    };
+  };
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -64,6 +70,12 @@ in rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
+  postInstall = ''
+    mkdir -p $out/share
+    cp -r resources/logo $out/share/icons
+    install -Dm444 resources/linux/ajour.desktop -t $out/share/applications
+  '';
+
   fixupPhase = ''
     patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}:$(patchelf --print-rpath $out/bin/ajour)" $out/bin/ajour
     wrapProgram $out/bin/ajour --prefix PATH ":" ${lib.makeBinPath [ zenity kdialog ]}
@@ -71,6 +83,7 @@ in rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "World of Warcraft addon manager written in Rust";
+    mainProgram = "ajour";
     longDescription = ''
       Ajour is a World of Warcraft addon manager written in Rust with a
       strong focus on performance and simplicity. The project is
@@ -79,6 +92,7 @@ in rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/casperstorm/ajour";
     changelog = "https://github.com/casperstorm/ajour/blob/master/CHANGELOG.md";
     license = licenses.mit;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ hexa ];
   };
 }

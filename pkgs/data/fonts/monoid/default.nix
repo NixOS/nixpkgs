@@ -2,26 +2,27 @@
 
 stdenv.mkDerivation {
   pname = "monoid";
-  version = "2018-06-03";
+  version = "2020-10-26";
 
   src = fetchFromGitHub {
     owner = "larsenwork";
     repo = "monoid";
-    rev = "a331c7c5f402c449f623e0d0895bd2fd8dc30ccf";
-    sha256 = "sha256-RV6lxv5CjywTMcuPMj6rdjLKrap7zLJ7niaNeF//U1Y=";
+    rev = "0673c8d6728df093faee9f183b6dfa62939df8c0";
+    sha256 = "sha256-u2jwVOC9QM2JHsdAVBuEpqqdiBAVs+IWnpp48A5Xk28=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/larsenwork/monoid/pull/233/commits/f84f2ed61301ee84dadd16351314394f22ebed2f.patch";
-      sha256 = "sha256-CxfFHlR7TB64pvrfzVfUDkPwuRO2UdGOhXwW98c+oQU=";
-    })
-  ];
 
   nativeBuildInputs = [
     (python3.withPackages (pp: with pp; [
       fontforge
     ]))
+  ];
+
+  patches = [
+    # port to python 3
+    (fetchpatch {
+      url = "https://salsa.debian.org/fonts-team/fonts-monoid/-/raw/master/debian/patches/0002-fontbuilder.py-Fix-FTBFS-with-non-int-bearing-value.patch";
+      hash = "sha256-IG3KXvOFZfi8dhVuKDYo0onl6ruEe24aFHBgSoMKf9c=";
+    })
   ];
 
   buildPhase = ''
@@ -47,3 +48,4 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.romildo ];
   };
 }
+

@@ -6,7 +6,7 @@
 (require 'semaphore-promise)
 (require 'url)
 (require 'json)
-(require 'cl)
+(require 'cl-lib)
 (require 'subr-x)
 (require 'seq)
 
@@ -77,7 +77,7 @@ return Promise to resolve in that process."
 
 (defun parse-previous-archive (filename)
   (let ((idx (make-hash-table :test 'equal)))
-    (loop for desc in
+    (cl-loop for desc in
           (let ((json-object-type 'hash-table)
                 (json-array-type 'list)
                 (json-key-type 'symbol))
@@ -103,6 +103,10 @@ return Promise to resolve in that process."
                                                   (url-hexify-string repo)
                                                   "/repository/archive.tar.gz?ref="
                                                   commit)))
+            ("sourcehut" (list "nix-prefetch-url"
+                               "--unpack" (concat "https://git.sr.ht/~" repo "/archive/" commit ".tar.gz")))
+            ("codeberg" (list "nix-prefetch-url"
+                              "--unpack" (concat "https://codeberg.org/" repo "/archive/" commit ".tar.gz")))
             ("bitbucket" (list "nix-prefetch-hg"
                                (concat "https://bitbucket.com/" repo) commit))
             ("hg"        (list "nix-prefetch-hg"
@@ -162,7 +166,7 @@ return Promise to resolve in that process."
 
 (defun recipe-info (recipe-index ename)
   (if-let (desc (gethash ename recipe-index))
-      (destructuring-bind (rcp-commit . rcp-sha256) desc
+      (cl-destructuring-bind (rcp-commit . rcp-sha256) desc
         `((commit . ,rcp-commit)
           (sha256 . ,rcp-sha256)))
     `((error . "No recipe info"))))
@@ -200,7 +204,7 @@ return Promise to resolve in that process."
                   (seq-let [recipe-index unstable-sha stable-sha] res
                     (append `((ename   . ,ename))
                             (if-let (desc (gethash ename recipe-index))
-                                (destructuring-bind (rcp-commit . rcp-sha256) desc
+                                (cl-destructuring-bind (rcp-commit . rcp-sha256) desc
                                   (append `((commit . ,rcp-commit)
                                             (sha256 . ,rcp-sha256))
                                           (when (not unstable-aprops)
@@ -210,7 +214,9 @@ return Promise to resolve in that process."
                             `((fetcher . ,fetcher))
                             (if (or (equal "github" fetcher)
                                     (equal "bitbucket" fetcher)
-                                    (equal "gitlab" fetcher))
+                                    (equal "gitlab" fetcher)
+                                    (equal "sourcehut" fetcher)
+                                    (equal "codeberg" fetcher))
                                 `((repo . ,repo))
                               `((url . ,url)))
                             (when unstable-aprops `((unstable . ,(source-info entry unstable-archive unstable-sha))))
@@ -251,10 +257,9 @@ return Promise to resolve in that process."
       url (lambda (status)
             (funcall resolve (condition-case err
                                  (progn
-                                   (goto-char (point-min))
-                                   (search-forward "\n\n")
+                                   (url-http-parse-headers)
+                                   (goto-char url-http-end-of-headers)
                                    (message (buffer-substring (point-min) (point)))
-                                   (delete-region (point-min) (point))
                                    (funcall parser))
                                (funcall reject err))))))))
 

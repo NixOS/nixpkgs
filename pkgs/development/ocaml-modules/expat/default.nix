@@ -1,24 +1,31 @@
 { stdenv, lib, fetchFromGitHub, expat, ocaml, findlib, ounit }:
 
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.02")
+  "ocaml_expat is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-expat-${version}";
-  version = "1.1.0";
+  pname = "ocaml${ocaml.version}-expat";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "ocaml-expat";
     rev = "v${version}";
-    sha256 = "07wm9663z744ya6z2lhiz5hbmc76kkipg04j9vw9dqpd1y1f2x3q";
+    hash = "sha256-eDA6MUcztaI+fpunWBdanNnPo9Y5gvbj/ViVcxYYEBg=";
   };
 
   prePatch = ''
     substituteInPlace Makefile --replace "gcc" "\$(CC)"
   '';
 
-  buildInputs = [ ocaml findlib expat ounit ];
+  nativeBuildInputs = [ ocaml findlib ];
+  buildInputs = [ expat ];
 
-  doCheck = !lib.versionAtLeast ocaml.version "4.06";
+  strictDeps = true;
+
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkTarget = "testall";
+  checkInputs = [ ounit ];
 
   createFindlibDestdir = true;
 

@@ -1,21 +1,37 @@
-{ lib, stdenv, buildPecl, php, valgrind, pcre2 }:
+{
+  lib,
+  stdenv,
+  buildPecl,
+  php,
+  valgrind,
+  pcre2,
+  fetchFromGitHub,
+}:
 
+let
+  version = "5.1.2";
+in
 buildPecl {
+  inherit version;
   pname = "swoole";
 
-  version = "4.8.3";
-  sha256 = "sha256-Oa/SnmmMc/KZXyP/qX9BT7V1xPa4EWJa/GUNngpA4pw=";
+  src = fetchFromGitHub {
+    owner = "swoole";
+    repo = "swoole-src";
+    rev = "v${version}";
+    hash = "sha256-WTsntvauiooj081mOoFcK6CVpnCCR/cEQtJbsOIJ/wo=";
+  };
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];
-  internalDeps = lib.optionals (lib.versionOlder php.version "7.4") [ php.extensions.hash ];
 
-  doCheck = true;
-  checkTarget = "tests";
+  # tests require internet access
+  doCheck = false;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/swoole/swoole-src/releases/tag/v${version}";
     description = "Coroutine-based concurrency library for PHP";
-    license = licenses.asl20;
-    homepage = "https://www.swoole.co.uk/";
-    maintainers = teams.php.members;
+    homepage = "https://www.swoole.com";
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.php.members;
   };
 }

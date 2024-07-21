@@ -6,15 +6,21 @@
 
 mkDerivation rec {
   pname = "minitube";
-  version = "3.9.2";
+  version = "3.9.3";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-MIzfo17eAvpWO2HNq9z+D9XiOKTRiUHvaOdxI1EK1f0=";
+    hash = "sha256-ROqROQsV8ddrxYT5mMdkf6rCgCoGr1jpxQ1ohcoEaQs=";
     rev = version;
     repo = "minitube";
     owner = "flaviotordini";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Taken from FreeBSD; already merged upstream in the media submodule
+    # (https://github.com/flaviotordini/media/commit/f6b7020f273e1fc06e6e204fab37a7c8edaa857a)
+    ./lib_media_src_mpv_mpvwidget.patch
+  ];
 
   nativeBuildInputs = [ qmake qttools ];
 
@@ -33,5 +39,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
+    mainProgram = "minitube";
   };
 }

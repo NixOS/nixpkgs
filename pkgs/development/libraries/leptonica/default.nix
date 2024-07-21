@@ -4,18 +4,18 @@
 
 stdenv.mkDerivation rec {
   pname = "leptonica";
-  version = "1.81.1";
+  version = "1.84.1";
 
   src = fetchurl {
-    url = "http://www.leptonica.org/source/${pname}-${version}.tar.gz";
-    sha256 = "sha256-D06zFem93deX9MVf3qTh9F/Kfjs1ii/Gk/2VfOLEPKk=";
+    url = "https://github.com/DanBloomberg/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-Kz4SVLHMo4HnfIGbWcqZd0/0NTAgm5rrUR4dRliKZPY=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ giflib libjpeg libpng libtiff libwebp openjpeg zlib ];
   enableParallelBuilding = true;
 
-  checkInputs = [ which gnuplot ];
+  nativeCheckInputs = [ which gnuplot ];
 
   # Fails on pngio_reg for unknown reason
   doCheck = false; # !stdenv.isDarwin;

@@ -1,24 +1,35 @@
-{ stdenv, lib, buildPackages, fetchurl, attr, perl, runtimeShell
+{ stdenv, lib, buildPackages, fetchurl, attr, runtimeShell
 , usePam ? !isStatic, pam ? null
 , isStatic ? stdenv.hostPlatform.isStatic
+
+# passthru.tests
+, bind
+, chrony
+, htop
+, libgcrypt
+, libvirt
+, ntp
+, qemu
+, squid
+, tor
+, uwsgi
 }:
 
 assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
-  version = "2.49";
+  version = "2.69";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
-    sha256 = "sha256-6YvE2TZFCC7Hh3MLD9GnErOIgkZcUFd33hfDOIMe4YE=";
+    sha256 = "sha256-8xH489rYRpnQVm0db37JQ6kpiyj3FMrjyTHf1XSS1+s=";
   };
 
   outputs = [ "out" "dev" "lib" "man" "doc" ]
     ++ lib.optional usePam "pam";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl ];
 
   buildInputs = lib.optional usePam pam;
 
@@ -29,9 +40,12 @@ stdenv.mkDerivation rec {
     "PAM_CAP=${if usePam then "yes" else "no"}"
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
-  ] ++ lib.optional isStatic "SHARED=no";
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ] ++ lib.optionals isStatic [ "SHARED=no" "LIBCSTATIC=yes" ];
 
-  prePatch = ''
+  postPatch = ''
+    patchShebangs ./progs/mkcapshdoc.sh
+
     # use full path to bash
     substituteInPlace progs/capsh.c --replace "/bin/bash" "${runtimeShell}"
 
@@ -54,6 +68,20 @@ stdenv.mkDerivation rec {
     mkdir -p "$pam/lib/security"
     mv "$lib"/lib/security "$pam/lib"
   '';
+
+  passthru.tests = {
+    inherit
+      bind
+      chrony
+      htop
+      libgcrypt
+      libvirt
+      ntp
+      qemu
+      squid
+      tor
+      uwsgi;
+  };
 
   meta = {
     description = "Library for working with POSIX capabilities";

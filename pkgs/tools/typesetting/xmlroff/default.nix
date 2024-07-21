@@ -4,7 +4,6 @@
 , libxml2
 , libxslt
 , pango
-, pangoxsl
 , perl
 , pkg-config
 , popt
@@ -26,12 +25,11 @@ stdenv.mkDerivation rec {
     libxml2
     libxslt
     pango
-    pangoxsl
     gtk2
     popt
   ];
 
-  sourceRoot = "source/xmlroff/";
+  sourceRoot = "${src.name}/xmlroff";
 
   enableParallelBuilding = true;
 
@@ -51,5 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "http://xmlroff.org/";
     platforms = platforms.unix;
     license = licenses.bsd3;
+    mainProgram = "xmlroff";
   };
 }

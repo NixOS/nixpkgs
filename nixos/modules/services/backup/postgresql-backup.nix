@@ -17,8 +17,8 @@ let
 
       compressCmd = getAttr cfg.compression {
         "none" = "cat";
-        "gzip" = "${pkgs.gzip}/bin/gzip -c";
-        "zstd" = "${pkgs.zstd}/bin/zstd -c";
+        "gzip" = "${pkgs.gzip}/bin/gzip -c -${toString cfg.compressionLevel} --rsyncable";
+        "zstd" = "${pkgs.zstd}/bin/zstd -c -${toString cfg.compressionLevel} --rsyncable";
       };
 
       mkSqlPath = prefix: suffix: "${cfg.location}/${db}${prefix}.sql${suffix}";
@@ -77,7 +77,7 @@ in {
         default = "*-*-* 01:15:00";
         type = with types; either (listOf str) str;
         description = ''
-          This option defines (see <literal>systemd.time</literal> for format) when the
+          This option defines (see `systemd.time` for format) when the
           databases should be dumped.
           The default is to update at 01:15 (at night) every day.
         '';
@@ -90,7 +90,7 @@ in {
         description = ''
           Backup all databases using pg_dumpall.
           This option is mutual exclusive to
-          <literal>services.postgresqlBackup.databases</literal>.
+          `services.postgresqlBackup.databases`.
           The resulting backup dump will have the name all.sql.gz.
           This option is the default if no databases are specified.
         '';
@@ -117,7 +117,7 @@ in {
         default = "-C";
         description = ''
           Command line options for pg_dump. This options is not used
-          if <literal>config.services.postgresqlBackup.backupAll</literal> is enabled.
+          if `config.services.postgresqlBackup.backupAll` is enabled.
           Note that config.services.postgresqlBackup.backupAll is also active,
           when no databases where specified.
         '';
@@ -130,16 +130,33 @@ in {
           The type of compression to use on the generated database dump.
         '';
       };
+
+      compressionLevel = mkOption {
+        type = types.ints.between 1 19;
+        default = 6;
+        description = ''
+          The compression level used when compression is enabled.
+          gzip accepts levels 1 to 9. zstd accepts levels 1 to 19.
+        '';
+      };
     };
 
   };
 
   config = mkMerge [
     {
-      assertions = [{
-        assertion = cfg.backupAll -> cfg.databases == [];
-        message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
-      }];
+      assertions = [
+        {
+          assertion = cfg.backupAll -> cfg.databases == [];
+          message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
+        }
+        {
+          assertion = cfg.compression == "none" ||
+            (cfg.compression == "gzip" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 9) ||
+            (cfg.compression == "zstd" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 19);
+          message = "config.services.postgresqlBackup.compressionLevel must be set between 1 and 9 for gzip and 1 and 19 for zstd";
+        }
+      ];
     }
     (mkIf cfg.enable {
       systemd.tmpfiles.rules = [
@@ -161,4 +178,5 @@ in {
     })
   ];
 
+  meta.maintainers = with lib.maintainers; [ Scrumplex ];
 }

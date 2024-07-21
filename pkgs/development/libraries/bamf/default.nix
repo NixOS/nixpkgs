@@ -1,9 +1,8 @@
-{ lib, stdenv
-, pantheon
-, autoconf
-, automake
-, libtool
-, gnome
+{ stdenv
+, lib
+, autoreconfHook
+, gitUpdater
+, gnome-common
 , which
 , fetchgit
 , libgtop
@@ -18,35 +17,33 @@
 , xorgserver
 , dbus
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "bamf";
-  version = "0.5.5";
+  version = "0.5.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchgit {
     url = "https://git.launchpad.net/~unity-team/bamf";
-    rev = "${version}+21.10.20210710-0ubuntu1";
-    sha256 = "0iwz5z5cz9r56pmfjvjd2kcjlk416dw6g38svs33ynssjgsqbdm0";
+    rev = version;
+    sha256 = "7U+2GcuDjPU8quZjkd8bLADGlG++tl6wSo0mUQkjAXQ=";
   };
 
   nativeBuildInputs = [
     (python3.withPackages (ps: with ps; [ lxml ])) # Tests
-    autoconf
-    automake
+    autoreconfHook
     dbus
     docbook_xsl
-    gnome.gnome-common
+    gnome-common
     gobject-introspection
     gtk-doc
-    libtool
     pkg-config
     vala
     which
-    wrapGAppsHook
+    wrapGAppsHook3
     xorgserver
   ];
 
@@ -69,21 +66,21 @@ stdenv.mkDerivation rec {
     "--enable-headless-tests"
   ];
 
-  # fix paths
+  # Fix paths
   makeFlags = [
     "INTROSPECTION_GIRDIR=${placeholder "dev"}/share/gir-1.0/"
     "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
   ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
   # TODO: Requires /etc/machine-id
   doCheck = false;
 
-  # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+  # Ignore deprecation errors
+  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = ".ubuntu.*";
+  };
 
   meta = with lib; {
     description = "Application matching framework";

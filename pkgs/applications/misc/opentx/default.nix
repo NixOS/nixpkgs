@@ -1,26 +1,23 @@
 { lib, mkDerivation, fetchFromGitHub
 , cmake, gcc-arm-embedded, python3Packages
-, qtbase, qtmultimedia, qttranslations, SDL, gtest
+, qtbase, qtmultimedia, qttools, SDL, gtest
 , dfu-util, avrdude
 }:
 
 mkDerivation rec {
   pname = "opentx";
-  version = "2.3.14";
+  version = "2.3.15";
 
   src = fetchFromGitHub {
     owner = "opentx";
     repo = "opentx";
-    # 2.3.14 release tag points to the commit before the one that updates the
-    # version number.
-    # rev = "release/${version}";
-    rev = "1e09791a1e2fe2a0ca9835019d634a4c6a4fa3bf";
-    sha256 = "0mhzp1j6nmqvkjxg8lv8xa637m1lavdsak30mdlq0g25dhwg6k92";
+    rev = "release/${version}";
+    sha256 = "sha256-F3zykJhKuIpLQSTjn7mcdjEmgRAlwCZpkTaKQR9ve3g=";
   };
 
-  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];
+  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow qttools ];
 
-  buildInputs = [ qtbase qtmultimedia qttranslations SDL ];
+  buildInputs = [ qtbase qtmultimedia SDL ];
 
   postPatch = ''
     sed -i companion/src/burnconfigdialog.cpp \
@@ -30,10 +27,12 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DGTEST_ROOT=${gtest.src}/googletest"
-    "-DQT_TRANSLATIONS_DIR=${qttranslations}/translations"
     # XXX I would prefer to include these here, though we will need to file a bug upstream to get that changed.
     #"-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     #"-DAVRDUDE_PATH=${avrdude}/bin/avrdude"
+
+    # file RPATH_CHANGE could not write new RPATH
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   meta = with lib; {

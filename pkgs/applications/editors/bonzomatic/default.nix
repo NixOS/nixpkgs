@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bonzomatic";
-  version = "2021-03-07";
+  version = "2023-06-15";
 
   src = fetchFromGitHub {
     owner = "Gargaj";
     repo = pname;
     rev = version;
-    sha256 = "0gbh7kj7irq2hyvlzjgbs9fcns9kamz7g5p6msv12iw75z9yi330";
+    sha256 = "sha256-hwK3C+p1hRwnuY2/vBrA0QsJGIcJatqq+U5/hzVCXEg=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.unlicense;
     maintainers = [ maintainers.ilian ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    mainProgram = "bonzomatic";
   };
 }

@@ -1,50 +1,61 @@
-{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb1, avahi-compat, glib, libredirect }:
+{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, libusb1, avahi-compat, glib, libredirect, nixosTests }:
 let
   myPatchElf = file: with lib; ''
     patchelf --set-interpreter \
-      ${stdenv.glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
+      ${stdenv.cc.libc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
       ${file}
   '';
+  system = stdenv.hostPlatform.system;
 
 in
 stdenv.mkDerivation rec {
   pname = "brscan5";
-  version = "1.2.7-0";
+  version = "1.3.1-0";
   src = {
     "i686-linux" = fetchurl {
       url = "https://download.brother.com/welcome/dlf104034/${pname}-${version}.i386.deb";
-      sha256 = "647d06f629c22408d25be7c0bf49a4b1c7280bf78a27aa2cde6c3e3fa8b6807a";
+      hash = "sha256-BgS64vwsKESJBDz9H2MDwcGiresROSNFP1b+7+zlE5c=";
     };
     "x86_64-linux" = fetchurl {
       url = "https://download.brother.com/welcome/dlf104033/${pname}-${version}.amd64.deb";
-      sha256 = "867bd88ab0d90f8e9391dc8127385095127e533cb6bd2d5d13449df602b165ae";
+      hash = "sha256-0UMbXMBlyiZI90WG5FWEP2mIZEBsxXd11dtgtyuSDnY=";
     };
-  }."${stdenv.hostPlatform.system}";
+  }."${system}" or (throw "Unsupported system: ${system}");
 
   unpackPhase = ''
     ar x $src
     tar xfv data.tar.xz
   '';
 
-  nativeBuildInputs = [ makeWrapper patchelf coreutils ];
+  nativeBuildInputs = [ makeWrapper patchelf ];
   buildInputs = [ libusb1 avahi-compat stdenv.cc.cc glib ];
   dontBuild = true;
 
-  postPatch = ''
-    ${myPatchElf "opt/brother/scanner/brscan5/brsaneconfig5"}
-    ${myPatchElf "opt/brother/scanner/brscan5/brscan_cnetconfig"}
-    ${myPatchElf "opt/brother/scanner/brscan5/brscan_gnetconfig"}
+  postPatch =
+    let
+      # Download .deb for both amd64 and i386, then unpack like unpackPhase
+      # to get the offset, run:
+      # strings -n 10 --radix=d opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 | grep "/opt/brother/scanner/brscan5/models"
+      patchOffsetBytes =
+        if system == "x86_64-linux" then 86592
+        else if system == "i686-linux" then 79236
+        else throw "Unsupported system: ${system}";
+    in
+    ''
+      ${myPatchElf "opt/brother/scanner/brscan5/brsaneconfig5"}
+      ${myPatchElf "opt/brother/scanner/brscan5/brscan_cnetconfig"}
+      ${myPatchElf "opt/brother/scanner/brscan5/brscan_gnetconfig"}
 
-    for a in opt/brother/scanner/brscan5/*.so.* opt/brother/scanner/brscan5/brscan_[cg]netconfig; do
-      if ! test -L $a; then
-        patchelf --set-rpath ${lib.makeLibraryPath buildInputs} $a
-      fi
-    done
+      for file in opt/brother/scanner/brscan5/*.so.* opt/brother/scanner/brscan5/brscan_[cg]netconfig; do
+        if ! test -L $file; then
+          patchelf --set-rpath ${lib.makeLibraryPath buildInputs} $file
+        fi
+      done
 
-    # driver is hardcoded to look in /opt/brother/scanner/brscan5/models for model metadata.
-    # patch it to look in /etc/opt/brother/scanner/models instead, so nixos environment.etc can make it available
-    printf '/etc/opt/brother/scanner/models\x00' | dd of=opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 bs=1 seek=84632 conv=notrunc
-  '';
+      # driver is hardcoded to look in /opt/brother/scanner/brscan5/models for model metadata.
+      # patch it to look in /etc/opt/brother/scanner/models instead, so nixos environment.etc can make it available
+      printf '/etc/opt/brother/scanner/models\x00' | dd of=opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 bs=1 seek=${toString patchOffsetBytes} conv=notrunc
+    '';
 
   installPhase = with lib; ''
     runHook preInstall
@@ -88,10 +99,13 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
+  passthru.tests = { inherit (nixosTests) brscan5; };
+
   meta = {
     description = "Brother brscan5 sane backend driver";
     homepage = "https://www.brother.com";
     platforms = [ "i686-linux" "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ mattchrist ];
   };

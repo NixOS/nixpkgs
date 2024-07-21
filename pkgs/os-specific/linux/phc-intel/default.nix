@@ -44,9 +44,8 @@ in stdenv.mkDerivation rec {
       while noticably reducing fan noise. This driver works only on supported
       Intel architectures.
     '';
-    homepage = "http://www.linux-phc.org/";
-    downloadPage = "http://www.linux-phc.org/forum/viewtopic.php?f=7&t=267";
-    license = licenses.gpl2;
+    homepage = "https://github.com/danielw86dev/phc-intel-dkms";
+    license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
     broken = lib.versionAtLeast kernel.version "4.18";
   };

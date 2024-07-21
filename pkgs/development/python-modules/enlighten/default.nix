@@ -1,36 +1,52 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, blessed
-, prefixed
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  blessed,
+  prefixed,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "enlighten";
-  version = "1.10.1";
+  version = "1.12.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3391916586364aedced5d6926482b48745e4948f822de096d32258ba238ea984";
+    hash = "sha256-dfPZK0ng715FT8Gg853Aq49tmUbL5TTbPe0wECF9W18=";
   };
 
   propagatedBuildInputs = [
     blessed
     prefixed
   ];
-  checkInputs = [ pytestCheckHook ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "enlighten" ];
+
   disabledTests =
-    # https://github.com/Rockhopper-Technologies/enlighten/issues/44
-    lib.optional stdenv.isDarwin "test_autorefresh"
-    ;
+    [
+      # AssertionError: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'> is not...
+      "test_init"
+      # AssertionError: Invalid format specifier (deprecated since prefixed 0.4.0)
+      "test_floats_prefixed"
+      "test_subcounter_prefixed"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # https://github.com/Rockhopper-Technologies/enlighten/issues/44
+      "test_autorefresh"
+    ];
 
   meta = with lib; {
     description = "Enlighten Progress Bar for Python Console Apps";
     homepage = "https://github.com/Rockhopper-Technologies/enlighten";
+    changelog = "https://github.com/Rockhopper-Technologies/enlighten/releases/tag/${version}";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ veprbl ];
   };

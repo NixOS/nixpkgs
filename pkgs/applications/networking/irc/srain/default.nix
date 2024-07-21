@@ -4,8 +4,9 @@
 , pkg-config
 , gtk3
 , libconfig
-, libsoup
+, libsoup_3
 , libsecret
+, libayatana-appindicator
 , openssl
 , gettext
 , glib
@@ -15,18 +16,18 @@
 , python3Packages
 , meson
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "srain";
-  version = "1.3.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "SrainApp";
     repo = "srain";
     rev = version;
-    sha256 = "14s0h5wgvlkdylnjis2fa7m835142jzw0d0yqjnir1wqnwmq1rld";
+    hash = "sha256-mhnlHnF23+VZvSPNuTYYUVcA6Md4y2AGqEuJphY1/IY=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     appstream-glib
-    wrapGAppsHook
+    wrapGAppsHook3
     python3Packages.sphinx
   ];
 
@@ -45,14 +46,16 @@ stdenv.mkDerivation rec {
     glib-networking
     dbus-glib
     libconfig
-    libsoup
+    libsoup_3
     libsecret
+    libayatana-appindicator
     openssl
   ];
 
   meta = with lib; {
     description = "Modern IRC client written in GTK";
-    homepage = "https://srain.im";
+    mainProgram = "srain";
+    homepage = "https://srain.silverrainz.me";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rewine ];

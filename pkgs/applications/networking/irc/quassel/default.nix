@@ -5,8 +5,8 @@
 , static ? false # link statically
 
 , lib, stdenv, fetchFromGitHub, cmake, makeWrapper, dconf
-, mkDerivation, qtbase, qtscript
-, phonon, libdbusmenu, qca-qt5
+, mkDerivation, qtbase, boost, zlib, qtscript
+, phonon, libdbusmenu, qca-qt5, openldap
 
 , withKDE ? true # enable KDE integration
 , extra-cmake-modules
@@ -33,27 +33,21 @@ let
 
 in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
   pname = "quassel${tag}";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "quassel";
     repo = "quassel";
     rev = version;
-    sha256 = "0z8p7iv90yrrjbh31cyxhpr6hsynfmi23rlayn7p2f6ki5az7yc3";
+    sha256 = "sha256-eulhNcyCmy9ryietOhT2yVJeJH+MMZRbTUo2XuTy9qU=";
   };
 
-  patches = [
-    # fixes build with Qt 5.14
-    # source: https://github.com/quassel/quassel/pull/518/commits/8a46d983fc99204711cdff1e4c542e272fef45b9
-    ./0001-common-Disable-enum-type-stream-operators-for-Qt-5.1.patch
-  ];
-
   # Prevent ``undefined reference to `qt_version_tag''' in SSL check
-  NIX_CFLAGS_COMPILE = "-DQT_NO_VERSION_TAGGING=1";
+  env.NIX_CFLAGS_COMPILE = "-DQT_NO_VERSION_TAGGING=1";
 
   nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ qtbase ]
-    ++ lib.optionals buildCore [qtscript qca-qt5]
+  buildInputs = [ qtbase boost zlib ]
+    ++ lib.optionals buildCore [qtscript qca-qt5 openldap]
     ++ lib.optionals buildClient [libdbusmenu phonon]
     ++ lib.optionals (buildClient && withKDE) [
       extra-cmake-modules kconfigwidgets kcoreaddons
@@ -68,6 +62,7 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
     ++ edf static "STATIC"
     ++ edf monolithic "WANT_MONO"
     ++ edf enableDaemon "WANT_CORE"
+    ++ edf enableDaemon "WITH_LDAP"
     ++ edf client "WANT_QTCLIENT"
     ++ edf withKDE "WITH_KDE";
 
@@ -84,7 +79,7 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
 
   meta = with lib; {
     homepage = "https://quassel-irc.org/";
-    description = "Qt/KDE distributed IRC client suppporting a remote daemon";
+    description = "Qt/KDE distributed IRC client supporting a remote daemon";
     longDescription = ''
       Quassel IRC is a cross-platform, distributed IRC client,
       meaning that one (or multiple) client(s) can attach to
@@ -93,8 +88,7 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
       as WeeChat, but graphical (based on Qt4/KDE4 or Qt5/KF5).
     '';
     license = licenses.gpl3;
-    maintainers = with maintainers; [ phreedom ttuegel ];
-    repositories.git = "https://github.com/quassel/quassel.git";
+    maintainers = with maintainers; [ ttuegel ];
     inherit (qtbase.meta) platforms;
   };
 }

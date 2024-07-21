@@ -1,32 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, pytestCheckHook
-, filelock
-, execnet
-, pytest
-, pytest-forked
-, psutil
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  filelock,
+  execnet,
+  pytest,
+  psutil,
+  setproctitle,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "2.4.0";
-  disabled = pythonOlder "3.6";
+  version = "3.6.1";
+  disabled = pythonOlder "3.7";
+
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "89b330316f7fc475f999c81b577c2b926c9569f3d397ae432c0c2e2496d61ff9";
+    pname = "pytest_xdist";
+    inherit version;
+    hash = "sha256-6tFWpNsjHux2lzf1dmjvWKIISjSy5VxKj6INhhEHMA0=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  buildInputs = [
-    pytest
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
-  checkInputs = [ pytestCheckHook filelock ];
-  propagatedBuildInputs = [ execnet pytest-forked psutil ];
+
+  buildInputs = [ pytest ];
+
+  dependencies = [ execnet ];
+
+  nativeCheckInputs = [
+    filelock
+    pytestCheckHook
+  ];
+
+  optional-dependencies = {
+    psutil = [ psutil ];
+    setproctitle = [ setproctitle ];
+  };
+
+  pytestFlagsArray = [
+    # pytest can already use xdist at this point
+    "--numprocesses=$NIX_BUILD_CORES"
+  ];
 
   # access file system
   disabledTests = [
@@ -36,9 +58,16 @@ buildPythonPackage rec {
     "test_rsync_report"
     "test_init_rsync_roots"
     "test_rsyncignore"
+    # flakey
+    "test_internal_errors_propagate_to_controller"
+    # https://github.com/pytest-dev/pytest-xdist/issues/985
+    "test_workqueue_ordered_by_size"
   ];
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
+    changelog = "https://github.com/pytest-dev/pytest-xdist/blob/v${version}/CHANGELOG.rst";
     description = "Pytest xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = licenses.mit;

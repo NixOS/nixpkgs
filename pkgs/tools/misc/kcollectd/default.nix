@@ -18,12 +18,12 @@
 
 mkDerivation rec {
   pname = "kcollectd";
-  version = "0.12.0";
+  version = "0.12.1";
   src = fetchFromGitLab {
     owner = "aerusso";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Ihd4Ps4t9+sNB3joO3vTxDR/25t7Ecl6yvHQ15QiUdY=";
+    hash = "sha256-bUVL5eRQ5UkSZo562pnyEcj0fVoSC5WHRq4BfN67jEM=";
   };
 
   nativeBuildInputs = [
@@ -47,10 +47,11 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A graphical frontend to collectd";
+    description = "Graphical frontend to collectd";
     homepage = "https://www.antonioerusso.com/projects/kcollectd/";
     maintainers = [ maintainers.symphorien ];
     license = [ lib.licenses.gpl3Plus ];
     platforms = lib.platforms.linux;
+    mainProgram = "kcollectd";
   };
 }

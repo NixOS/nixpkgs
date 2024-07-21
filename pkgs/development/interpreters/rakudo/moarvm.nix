@@ -1,14 +1,22 @@
-{ lib, stdenv, fetchurl, perl
-, CoreServices, ApplicationServices }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, CoreServices
+, ApplicationServices
+}:
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2021.10";
+  version = "2024.06";
 
-  src = fetchurl {
-    url = "https://moarvm.org/releases/MoarVM-${version}.tar.gz";
-    sha256 = "sha256-fzSHpw6Ld74OTi8SsUxJ9qAdA3jglAyGlYyQFsSVrXU=";
-   };
+  src = fetchFromGitHub {
+    owner = "moarvm";
+    repo = "moarvm";
+    rev = version;
+    hash = "sha256-y+xtJ4YbzPr1168tu+148Co7Ke/iC68aOQBwTINlp2Y=";
+    fetchSubmodules = true;
+  };
 
   postPatch = ''
     patchShebangs .
@@ -18,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace '/usr/bin/arch' "$(type -P true)" \
       --replace '/usr/' '/nope/'
     substituteInPlace 3rdparty/dyncall/configure \
-      --replace '`sw_vers -productVersion`' '"$MACOSX_DEPLOYMENT_TARGET"'
+      --replace '`sw_vers -productVersion`' '"11.0"'
   '';
 
   buildInputs = [ perl ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
@@ -28,9 +36,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
-    homepage    = "https://moarvm.org";
-    license     = licenses.artistic2;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
+    homepage = "https://moarvm.org";
+    license = licenses.artistic2;
+    maintainers = with maintainers; [ thoughtpolice sgo ];
+    mainProgram = "moar";
+    platforms = platforms.unix;
   };
 }

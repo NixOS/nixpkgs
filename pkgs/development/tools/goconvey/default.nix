@@ -1,25 +1,31 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "goconvey";
-  version = "1.6.3";
+  version = "1.8.1-unstable-2024-03-06";
 
-  goPackagePath = "github.com/smartystreets/goconvey";
   excludedPackages = "web/server/watch/integration_testing";
-
-  goDeps = ./deps.nix;
 
   src = fetchFromGitHub {
     owner = "smartystreets";
     repo = "goconvey";
-    rev = version;
-    sha256 = "1ph18rkl3ns3fgin5i4j54w5a69grrmf3apcsmnpdn1wlrbs3dxh";
+    rev = "a50310f1e3e53e63e2d23eb904f853aa388a5988";
+    hash = "sha256-w5eX/n6Wu2gYgCIhgtjqH3lNckWIDaN4r80cJW3JqFo=";
   };
+
+  vendorHash = "sha256-P4J/CZY95ks08DC+gSqG+eanL3zoiaoz1d9/ZvBoc9Q=";
+
+  ldflags = [ "-s" "-w" ];
+
+  checkFlags = [
+    "-short"
+  ];
 
   meta = {
     description = "Go testing in the browser. Integrates with `go test`. Write behavioral tests in Go";
+    mainProgram = "goconvey";
     homepage = "https://github.com/smartystreets/goconvey";
-    maintainers = with lib.maintainers; [ vdemeester ];
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vdemeester ];
   };
 }

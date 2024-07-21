@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -8,30 +9,22 @@
 , gobject-introspection
 , gst-plugins-base
 , gst-plugins-bad
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
-  version = "1.18.4";
+  version = "1.24.3";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "153c78klvzlmi86d0gmdf7w9crv11rkd4y82b14a0wdr83gbhsx4";
+    hash = "sha256-YmKOzKeLj1tRxZpNYCxl6SBf/FDDyDzWH6sfY0i2NWU=";
   };
 
   outputs = [
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
-  ];
-
-  patches = [
-    # To use split outputs, we need this so double prefix won't be used in the
-    # pkg-config files. Hopefully, this won't be needed on the next release,
-    # _if_
-    # https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server/merge_requests/1
-    # will be merged. For the current release, this merge request won't apply.
-    ./fix_pkgconfig_includedir.patch
   ];
 
   nativeBuildInputs = [
@@ -41,9 +34,8 @@ stdenv.mkDerivation rec {
     gobject-introspection
     pkg-config
     python3
-
-    # documentation
-    # TODO add hotdoc here
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
@@ -53,9 +45,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   postPatch = ''

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "objconv";
-  version = "2.52";
+  version = "2.54";
 
   src = fetchurl {
     # Versioned archive of objconv sources maintained by orivej.
     url = "https://archive.org/download/objconv/${pname}-${version}.zip";
-    sha256 = "0r117r7yvqvvdgwgwxpkyzi6p5nm0xb6p67wvkmvggm9fdyl3z8v";
+    sha256 = "sha256-SDwnpPHc2NyctxKROrhjCDXs36WGj8js5blaQkUibWE=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -31,9 +31,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Object and executable file converter, modifier and disassembler";
+    mainProgram = "objconv";
     homepage = "https://www.agner.org/optimize/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ orivej vrthra ];
+    maintainers = with maintainers; [ orivej ];
     platforms = platforms.unix;
   };
 }

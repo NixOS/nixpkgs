@@ -6,56 +6,58 @@
 , pkg-config
 , fribidi
 , harfbuzz
-, libunistring
 , libwebp
 , mpg123
-, openssl
-, pcre
 , SDL2
+, the-foundation
 , AppKit
 , zip
-, zlib
+, enableTUI ? false, ncurses, sealcurses
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lagrange";
-  version = "1.9.2";
+  version = "1.17.6";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
-    rev = "v${version}";
-    sha256 = "sha256-ZiG3KSEk4l9FFxfftQNb1UHQV//SlK8thp5Tr8ek5v4=";
-    fetchSubmodules = true;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ZF2HMfEI0LpvJrnB9MN8sQQDyBl/mRsI7pt6lfN4wdU=";
   };
-
-  postPatch = ''
-    rm -r lib/fribidi lib/harfbuzz
-  '';
 
   nativeBuildInputs = [ cmake pkg-config zip ];
 
-  buildInputs = [ fribidi harfbuzz libunistring libwebp mpg123 openssl pcre SDL2 zlib ]
+  buildInputs = [ the-foundation ]
+    ++ lib.optionals (!enableTUI) [ fribidi harfbuzz libwebp mpg123 SDL2 ]
+    ++ lib.optionals enableTUI [ ncurses sealcurses ]
     ++ lib.optional stdenv.isDarwin AppKit;
 
-  hardeningDisable = lib.optional (!stdenv.cc.isClang) "format";
+  cmakeFlags = lib.optionals enableTUI [
+    "-DENABLE_TUI=YES"
+    "-DENABLE_MPG123=NO"
+    "-DENABLE_WEBP=NO"
+    "-DENABLE_FRIBIDI=NO"
+    "-DENABLE_HARFBUZZ=NO"
+    "-DENABLE_POPUP_MENUS=NO"
+    "-DENABLE_IDLE_SLEEP=NO"
+    "-DCMAKE_INSTALL_DATADIR=${placeholder "out"}/share"
+  ];
 
-  installPhase = lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString (stdenv.isDarwin && !enableTUI) ''
     mkdir -p $out/Applications
     mv Lagrange.app $out/Applications
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    description = "A Beautiful Gemini Client";
+    description = "Beautiful Gemini Client";
     homepage = "https://gmi.skyjake.fi/lagrange/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
   };
-}
+})

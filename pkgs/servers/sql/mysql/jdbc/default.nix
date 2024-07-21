@@ -1,28 +1,34 @@
-{ lib, stdenv, fetchurl, ant, unzip }:
+{ lib, stdenv, fetchurl, ant, unzip, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "mysql-connector-java";
-  version = "5.1.49";
+  version = "9.0.0";
 
   src = fetchurl {
-    url = "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${version}.zip";
-    sha256 = "1bm4mm4xka4pq2rwxx3k8xlcpa1vjcglr3pf4ls2i4hamww047yk";
+    url = "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-${version}.zip";
+    hash = "sha256-3Czzu7hheuF0FYF8+GtjkxXSXfxTaqHrPa/+69I8Wfg=";
   };
 
   installPhase = ''
     mkdir -p $out/share/java
-    cp mysql-connector-java-*-bin.jar $out/share/java/mysql-connector-java.jar
+    cp mysql-connector-j-*.jar $out/share/java/mysql-connector-j.jar
   '';
 
   nativeBuildInputs = [ unzip ];
 
   buildInputs = [ ant ];
 
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/mysql/mysql-connector-j.git";
+  };
+
   meta = with lib; {
     description = "MySQL Connector/J";
-    homepage = "https://dev.mysql.com/doc/connector-j/8.0/en/";
+    homepage = "https://dev.mysql.com/doc/connector-j/en/";
+    changelog = "https://dev.mysql.com/doc/relnotes/connector-j/en/";
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

@@ -14,6 +14,7 @@ let
   mirrorsFile =
     buildPackages.stdenvNoCC.mkDerivation ({
       name = "mirrors-list";
+      strictDeps = true;
       builder = ./write-mirror-list.sh;
       preferLocalBuild = true;
     } // mirrors);
@@ -45,11 +46,20 @@ in
   urls ? []
 
 , # Additional curl options needed for the download to succeed.
+  # Warning: Each space (no matter the escaping) will start a new argument.
+  # If you wish to pass arguments with spaces, use `curlOptsList`
   curlOpts ? ""
+
+, # Additional curl options needed for the download to succeed.
+  curlOptsList ? []
 
 , # Name of the file.  If empty, use the basename of `url' (or of the
   # first element of `urls').
   name ? ""
+
+  # for versioned downloads optionally take pname + version.
+, pname ? ""
+, version ? ""
 
 , # SRI hash.
   hash ? ""
@@ -57,7 +67,6 @@ in
 , # Legacy ways of specifying the hash.
   outputHash ? ""
 , outputHashAlgo ? ""
-, md5 ? ""
 , sha1 ? ""
 , sha256 ? ""
 , sha512 ? ""
@@ -95,9 +104,10 @@ in
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that by default
 , preferLocalBuild ? true
-}:
 
-assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
+  # Additional packages needed as part of a fetch
+, nativeBuildInputs ? [ ]
+}:
 
 let
   urls_ =
@@ -110,9 +120,13 @@ let
     else throw "fetchurl requires either `url` or `urls` to be set";
 
   hash_ =
+    if with lib.lists; length (filter (s: s != "") [ hash outputHash sha1 sha256 sha512 ]) > 1
+    then throw "multiple hashes passed to fetchurl" else
+
     if hash != "" then { outputHashAlgo = null; outputHash = hash; }
-    else if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
-    else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }
+    else if outputHash != "" then
+      if outputHashAlgo != "" then { inherit outputHashAlgo outputHash; }
+      else throw "fetchurl was passed outputHash without outputHashAlgo"
     else if sha512 != "" then { outputHashAlgo = "sha512"; outputHash = sha512; }
     else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
     else if sha1   != "" then { outputHashAlgo = "sha1";   outputHash = sha1; }
@@ -120,15 +134,26 @@ let
     else throw "fetchurl requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
 in
 
-stdenvNoCC.mkDerivation {
-  name =
-    if showURLs then "urls"
-    else if name != "" then name
-    else baseNameOf (toString (builtins.head urls_));
+assert (lib.isList curlOpts) -> lib.warn ''
+    fetchurl for ${toString (builtins.head urls_)}: curlOpts is a list (${lib.generators.toPretty { multiline = false; } curlOpts}), which is not supported anymore.
+    - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
+      curlOpts = ${lib.strings.escapeNixString (toString curlOpts)};
+    - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
+      curlOptsList = [ ${lib.concatMapStringsSep " " lib.strings.escapeNixString curlOpts} ];'' true;
 
+stdenvNoCC.mkDerivation ((
+  if (pname != "" && version != "") then
+    { inherit pname version; }
+  else
+    { name =
+      if showURLs then "urls"
+      else if name != "" then name
+      else baseNameOf (toString (builtins.head urls_));
+    }
+) // {
   builder = ./builder.sh;
 
-  nativeBuildInputs = [ curl ];
+  nativeBuildInputs = [ curl ] ++ nativeBuildInputs;
 
   urls = urls_;
 
@@ -139,13 +164,15 @@ stdenvNoCC.mkDerivation {
   # New-style output content requirements.
   inherit (hash_) outputHashAlgo outputHash;
 
-  SSL_CERT_FILE = if hash_.outputHash == ""
+  SSL_CERT_FILE = if (hash_.outputHash == "" || hash_.outputHash == lib.fakeSha256 || hash_.outputHash == lib.fakeSha512 || hash_.outputHash == lib.fakeHash)
                   then "${cacert}/etc/ssl/certs/ca-bundle.crt"
                   else "/no-cert-file.crt";
 
   outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
-  inherit curlOpts showURLs mirrorsFile postFetch downloadToTemp executable;
+  inherit curlOpts;
+  curlOptsList = lib.escapeShellArgs curlOptsList;
+  inherit showURLs mirrorsFile postFetch downloadToTemp executable;
 
   impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
 
@@ -159,5 +186,5 @@ stdenvNoCC.mkDerivation {
   '';
 
   inherit meta;
-  inherit passthru;
-}
+  passthru = { inherit url; } // passthru;
+})

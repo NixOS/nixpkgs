@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "uri-${version}";
+  pname = "uri";
   version = "1.1.0";
 
   src = fetchFromGitHub {
@@ -11,7 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "148361pixrm94q6v04k13s1msa04bx9yc3djb0lxpa7dlw19vhcd";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=parentheses";
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-Wno-error=parentheses"
+    # Needed with GCC 12
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=nonnull"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    # Needed with Clang 16
+    "-Wno-error=deprecated-builtins"
+  ]);
 
   nativeBuildInputs = [ cmake doxygen ];
 

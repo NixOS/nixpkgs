@@ -1,8 +1,8 @@
 { lib
-, python3
+, python310
 , fetchFromGitHub
 , gdk-pixbuf
-, gnome
+, adwaita-icon-theme
 , gpsbabel
 , glib-networking
 , glibcLocales
@@ -12,12 +12,12 @@
 , sqlite
 , tzdata
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 }:
 
 let
-  python = python3.override {
+  python = python310.override {
     packageOverrides = (self: super: {
       matplotlib = super.matplotlib.override {
         enableGtk3 = true;
@@ -26,17 +26,17 @@ let
   };
 in python.pkgs.buildPythonApplication rec {
   pname = "pytrainer";
-  version = "2.0.2";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "pytrainer";
     repo = "pytrainer";
     rev = "v${version}";
-    sha256 = "sha256-i3QC6ct7tS8B0QQjtVqPcd03LLIxo6djQe4YX35syzk=";
+    hash = "sha256-t61vHVTKN5KsjrgbhzljB7UZdRask7qfYISd+++QbV0=";
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    sqlalchemy-migrate
+    sqlalchemy
     python-dateutil
     matplotlib
     lxml
@@ -47,7 +47,7 @@ in python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -55,7 +55,7 @@ in python.pkgs.buildPythonApplication rec {
     gtk3
     webkitgtk
     glib-networking
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gdk-pixbuf
   ];
 
@@ -63,7 +63,7 @@ in python.pkgs.buildPythonApplication rec {
     "--prefix" "PATH" ":" (lib.makeBinPath [ perl gpsbabel ])
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     perl
     xvfb-run
@@ -72,17 +72,25 @@ in python.pkgs.buildPythonApplication rec {
     psycopg2
   ]);
 
+  postPatch = ''
+    substituteInPlace pytrainer/platform.py \
+        --replace 'sys.prefix' "\"$out\""
+  '';
+
   checkPhase = ''
-    env HOME=$TEMPDIR TZDIR=${tzdata}/share/zoneinfo \
+    env \
+      HOME=$TEMPDIR \
+      TZDIR=${tzdata}/share/zoneinfo \
       TZ=Europe/Kaliningrad \
-      LC_ALL=en_US.UTF-8 \
+      LC_TIME=C \
       xvfb-run -s '-screen 0 800x600x24' \
-      ${python3.interpreter} setup.py test
+      ${python.interpreter} setup.py test
   '';
 
   meta = with lib; {
     homepage = "https://github.com/pytrainer/pytrainer";
     description = "Application for logging and graphing sporting excursions";
+    mainProgram = "pytrainer";
     maintainers = with maintainers; [ rycee dotlambda ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

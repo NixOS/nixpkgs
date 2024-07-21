@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "uftp";
-  version = "5.0";
+  version = "5.0.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/uftp-multicast/source-tar/uftp-${version}.tar.gz";
-    sha256 = "1q08schd765fsm9647ac4ic2x70ys2x48mqz97mibdi4bbm72bsn";
+    sha256 = "sha256-y4ZowZsfELxjoW/6iT4gXcPshjYQN9R32AAyYOvEAIA=";
   };
 
   buildInputs = [ openssl ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Encrypted UDP based FTP with multicast";
-    homepage = "http://uftp-multicast.sourceforge.net/";
+    homepage = "https://uftp-multicast.sourceforge.net/";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.fadenb ];
     platforms = with lib.platforms; linux ++ darwin;

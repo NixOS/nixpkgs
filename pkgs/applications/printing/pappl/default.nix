@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pappl";
-  version = "1.0.3";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-B3g6R0/li+5D4odFG21qj+SR3K4PFnzzxIGCwbk1buo=";
+    sha256 = "sha256-d7QD6Kz4tBVHGFPBYcvRSzW+EtsNgpfweFvCx3ovfWE=";
   };
 
   outputs = [ "out" "dev" ];
@@ -54,9 +54,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C-based framework/library for developing CUPS Printer Applications";
+    mainProgram = "pappl-makeresheader";
     homepage = "https://github.com/michaelrsweet/pappl";
     license = licenses.asl20;
     platforms = platforms.linux; # should also work for darwin, but requires additional work
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
   };
 }

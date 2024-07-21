@@ -4,8 +4,8 @@ with lib;
 
 let
 
-  inInitrd = any (fs: fs == "btrfs") config.boot.initrd.supportedFilesystems;
-  inSystem = any (fs: fs == "btrfs") config.boot.supportedFilesystems;
+  inInitrd = config.boot.initrd.supportedFilesystems.btrfs or false;
+  inSystem = config.boot.supportedFilesystems.btrfs or false;
 
   cfgScrub = config.services.btrfs.autoScrub;
 
@@ -25,7 +25,7 @@ in
         type = types.listOf types.path;
         example = [ "/" ];
         description = ''
-          List of paths to btrfs filesystems to regularily call <command>btrfs scrub</command> on.
+          List of paths to btrfs filesystems to regularly call {command}`btrfs scrub` on.
           Defaults to all mount points with btrfs filesystems.
           If you mount a filesystem multiple times or additionally mount subvolumes,
           you need to manually specify this list to avoid scrubbing multiple times.
@@ -39,11 +39,9 @@ in
         description = ''
           Systemd calendar expression for when to scrub btrfs filesystems.
           The recommended period is a month but could be less
-          (<citerefentry><refentrytitle>btrfs-scrub</refentrytitle>
-          <manvolnum>8</manvolnum></citerefentry>).
+          ({manpage}`btrfs-scrub(8)`).
           See
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>
+          {manpage}`systemd.time(7)`
           for more information on the syntax.
         '';
       };
@@ -54,34 +52,37 @@ in
   config = mkMerge [
     (mkIf enableBtrfs {
       system.fsPackages = [ pkgs.btrfs-progs ];
+    })
 
-      boot.initrd.kernelModules = mkIf inInitrd [ "btrfs" ];
-      boot.initrd.availableKernelModules = mkIf inInitrd (
+    (mkIf inInitrd {
+      boot.initrd.kernelModules = [ "btrfs" ];
+      boot.initrd.availableKernelModules =
         [ "crc32c" ]
         ++ optionals (config.boot.kernelPackages.kernel.kernelAtLeast "5.5") [
           # Needed for mounting filesystems with new checksums
           "xxhash_generic"
           "blake2b_generic"
           "sha256_generic" # Should be baked into our kernel, just to be sure
-        ]
-      );
+        ];
 
-      boot.initrd.extraUtilsCommands = mkIf inInitrd
+      boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable)
       ''
         copy_bin_and_libs ${pkgs.btrfs-progs}/bin/btrfs
         ln -sv btrfs $out/bin/btrfsck
         ln -sv btrfsck $out/bin/fsck.btrfs
       '';
 
-      boot.initrd.extraUtilsCommandsTest = mkIf inInitrd
+      boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable)
       ''
         $out/bin/btrfs --version
       '';
 
-      boot.initrd.postDeviceCommands = mkIf inInitrd
+      boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable)
       ''
         btrfs device scan
       '';
+
+      boot.initrd.systemd.initrdBin = [ pkgs.btrfs-progs ];
     })
 
     (mkIf enableAutoScrub {

@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchurl }:
-let
-  version = "15.04.6";
-in
-stdenv.mkDerivation {
-  pname = "curaengine";
-  inherit version;
+{ lib, stdenv, fetchFromGitHub }:
 
-  src = fetchurl {
-    url = "https://github.com/Ultimaker/CuraEngine/archive/${version}.tar.gz";
-    sha256 = "1cd4dikzvqyj5g80rqwymvh4nwm76vsf78clb37kj6q0fig3qbjg";
+stdenv.mkDerivation rec {
+  pname = "curaengine";
+  version = "15.04.6";
+
+  src = fetchFromGitHub {
+    owner = "Ultimaker";
+    repo = "CuraEngine";
+    rev = version;
+    sha256 = "sha256-8V21TRSqCN+hkTlz51d5A5oK5JOwEtx+ROt8cfJBL/0=";
   };
 
   postPatch = ''
@@ -22,8 +22,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Engine for processing 3D models into 3D printing instructions";
+    mainProgram = "CuraEngine";
     homepage = "https://github.com/Ultimaker/CuraEngine";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     platforms = platforms.linux;
   };
 }

@@ -3,63 +3,89 @@
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
-, llvmPackages
 , openssl
 , protobuf
 , rdkafka
 , oniguruma
 , zstd
+, rust-jemalloc-sys
+, rust-jemalloc-sys-unprefixed
 , Security
 , libiconv
 , coreutils
 , CoreServices
+, SystemConfiguration
 , tzdata
-  # kafka is optional but one of the most used features
-, enableKafka ? true
-  # TODO investigate adding "api" "api-client" "vrl-cli" and various "vendor-*"
+, cmake
+, perl
+, git
+  # nix has a problem with the `?` in the feature list
+  # enabling kafka will produce a vector with no features at all
+, enableKafka ? false
+  # TODO investigate adding various "vendor-*"
   # "disk-buffer" is using leveldb TODO: investigate how useful
   # it would be, perhaps only for massive scale?
-, features ? ([ "sinks" "sources" "transforms" ]
+, features ? ([ "api" "api-client" "enrichment-tables" "sinks" "sources" "sources-dnstap" "transforms" "component-validation-runner" ]
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
-    ++ lib.optionals enableKafka [ "rdkafka-plain" "rdkafka/dynamic_linking" ]
-    ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+    ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
+    ++ lib.optional stdenv.hostPlatform.isUnix "unix")
+, nixosTests
+, nix-update-script
 }:
 
 let
   pname = "vector";
-  version = "0.18.1";
+  version = "0.39.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "timberio";
+    owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OD7lYoTlQNdrWT1f+BAp6zI0N+9W2LOHNNgpvAMXKDM=";
+    hash = "sha256-S6yzh8ISIh6xzw5DwQaoZdpfmDHE9gfjlEtxIZerSak=";
   };
 
-  cargoSha256 = "sha256-BqnXXTNE1TmrF7pSOCQpnHHve0lCb9W6MbJXk2QHAOs=";
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "greptime-proto-0.1.0" = "sha256-Q8xr6qN6SAGGK0W96WuNRdQ5/8iNlruqzhXD6xq3Ua8=";
+      "greptimedb-client-0.1.0" = "sha256-evL8Q2Ikct9s0r4DWTgSP/8g4XTishuJHmwRoCfQFbU=";
+      "heim-0.1.0-rc.1" = "sha256-TFgLR5zb/oqceVOH4mIOvFFY/HMOLSo8VI5Eh9KP60E=";
+      "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
+      "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
+      "tokio-util-0.7.8" = "sha256-HCvtfohOoa1ZjD4s7QLDbIV4fe/MVBKtgM1QQX7gGKQ=";
+      "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
+    };
+  };
+
+  nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
+  buildInputs =
+    [ oniguruma openssl protobuf rdkafka zstd ]
+    ++ lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ]
+    ++ lib.optionals stdenv.isDarwin [ rust-jemalloc-sys Security libiconv coreutils CoreServices SystemConfiguration ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
   RUSTONIG_SYSTEM_LIBONIG = true;
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   TZDIR = "${tzdata}/share/zoneinfo";
+
+  # needed to dynamically link rdkafka
+  CARGO_FEATURE_DYNAMIC_LINKING=1;
+
+  CARGO_PROFILE_RELEASE_LTO = "fat";
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
   buildNoDefaultFeatures = true;
   buildFeatures = features;
 
   # TODO investigate compilation failure for tests
-  # dev dependency includes httpmock which depends on iashc which depends on curl-sys with http2 feature enabled
-  # compilation fails because of a missing http2 include
-  doCheck = !stdenv.isDarwin;
+  # there are about 100 tests failing (out of 1100) for version 0.22.0
+  doCheck = false;
 
   checkFlags = [
     # tries to make a network access
@@ -70,8 +96,10 @@ rustPlatform.buildRustPackage {
 
     # flaky on linux-x86_64
     "--skip=sources::socket::test::tcp_with_tls_intermediate_ca"
-
     "--skip=sources::host_metrics::cgroups::tests::generates_cgroups_metrics"
+    "--skip=sources::aws_kinesis_firehose::tests::aws_kinesis_firehose_forwards_events"
+    "--skip=sources::aws_kinesis_firehose::tests::aws_kinesis_firehose_forwards_events_gzip_request"
+    "--skip=sources::aws_kinesis_firehose::tests::handles_acknowledgement_failure"
   ];
 
   # recent overhauls of DNS support in 0.9 mean that we try to resolve
@@ -88,18 +116,20 @@ rustPlatform.buildRustPackage {
   postPatch = ''
     substituteInPlace ./src/dns.rs \
       --replace "#[tokio::test]" ""
-
-    ${lib.optionalString (!builtins.elem "transforms-geoip" features) ''
-        substituteInPlace ./Cargo.toml --replace '"transforms-geoip",' ""
-    ''}
   '';
 
-  passthru = { inherit features; };
+  passthru = {
+    inherit features;
+    tests = { inherit (nixosTests) vector; };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
-    description = "A high-performance logs, metrics, and events router";
-    homepage = "https://github.com/timberio/vector";
-    license = with licenses; [ asl20 ];
+    description = "High-performance observability data pipeline";
+    homepage = "https://github.com/vectordotdev/vector";
+    license = licenses.mpl20;
     maintainers = with maintainers; [ thoughtpolice happysalada ];
+    platforms = with platforms; all;
+    mainProgram = "vector";
   };
 }

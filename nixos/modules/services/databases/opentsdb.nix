@@ -15,22 +15,9 @@ in {
 
     services.opentsdb = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to run OpenTSDB.
-        '';
-      };
+      enable = mkEnableOption "OpenTSDB";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.opentsdb;
-        defaultText = literalExpression "pkgs.opentsdb";
-        description = ''
-          OpenTSDB package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "opentsdb" { };
 
       user = mkOption {
         type = types.str;
@@ -49,7 +36,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 4242;
         description = ''
           Which port OpenTSDB listens on.

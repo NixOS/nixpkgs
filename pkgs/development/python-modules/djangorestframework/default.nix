@@ -1,23 +1,71 @@
-{ lib, buildPythonPackage, fetchFromGitHub, django, isPy27 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  django,
+  pytz,
+
+  # tests
+  coreapi,
+  coreschema,
+  django-guardian,
+  inflection,
+  psycopg2,
+  pytestCheckHook,
+  pytest-django,
+  pyyaml,
+}:
 
 buildPythonPackage rec {
-  version = "3.12.4";
   pname = "djangorestframework";
-  disabled = isPy27;
+  version = "3.15.1";
+  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "django-rest-framework";
     rev = version;
-    sha256 = "sha256-FjMRfVyLmm5J9uOUTLZpO3Pvge3RoYnqIRvzMng7wZo=";
+    hash = "sha256-G914NvxRmKGkxrozoWNUIoI74YkYRbeNcQwIG4iSeXU=";
   };
 
-  # Test settings are missing
-  doCheck = false;
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ django ];
+  dependencies = [
+    django
+    pytz
+  ];
+
+  nativeCheckInputs = [
+    pytest-django
+    pytestCheckHook
+
+    # optional tests
+    coreapi
+    coreschema
+    django-guardian
+    inflection
+    psycopg2
+    pyyaml
+  ];
+
+  disabledTests = [
+    # https://github.com/encode/django-rest-framework/issues/9422
+    "test_urlpatterns"
+  ];
+
+  pythonImportsCheck = [ "rest_framework" ];
 
   meta = with lib; {
+    changelog = "https://github.com/encode/django-rest-framework/releases/tag/3.15.1";
     description = "Web APIs for Django, made easy";
     homepage = "https://www.django-rest-framework.org/";
     maintainers = with maintainers; [ desiderius ];

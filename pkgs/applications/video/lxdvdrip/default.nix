@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "lxdvdrip";
-  version = "1.76";
+  version = "1.77";
 
   src = fetchurl {
     url = "mirror://sourceforge/lxdvdrip/lxdvdrip-${version}.tgz";
-    sha256 = "0vgslc7dapfrbgslnaicc8bggdccyrvcgjv1dwi19qswhh7jkzj6";
+    hash = "sha256-OzHrscftsCmJvSw7bb/Z2WDP322VCuQDY58dW2OqxB8=";
   };
 
-  prePatch = ''
+  postPatch = ''
     sed -i -e s,/usr/local,$out, -e s,/etc,$out/etc,g Makefile
-    sed -i -e s,/usr/local,$out, buffer/Makefile
+    sed -i -e s,/usr/local,$out, mbuffer/Makefile
     makeFlags="$makeFlags PREFIX=$out"
   '';
 
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdvdread ];
 
   meta = {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Command line tool to make a copy from a video DVD for private use";
     homepage = "https://sourceforge.net/projects/lxdvdrip";
     license = lib.licenses.gpl2;

@@ -54,13 +54,11 @@ in
         default = null;
         description = ''
           Template for arguments to be passed to
-          <citerefentry><refentrytitle>login</refentrytitle>
-          <manvolnum>1</manvolnum></citerefentry>.
+          {manpage}`login(1)`.
 
-          See <citerefentry><refentrytitle>agetty</refentrytitle>
-          <manvolnum>1</manvolnum></citerefentry> for details,
+          See {manpage}`agetty(1)` for details,
           including security considerations.  If unspecified, agetty
-          will not be invoked with a <option>--login-options</option>
+          will not be invoked with a {option}`--login-options`
           option.
         '';
         example = "-h darkstar -- \\u";
@@ -103,7 +101,8 @@ in
   config = {
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
-    services.getty.greetingLine = mkDefault ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>'';
+    services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
+    services.getty.helpLine = mkIf (config.documentation.nixos.enable && config.documentation.doc.enable) "\nRun 'nixos-help' for the NixOS manual.";
 
     systemd.services."getty@" =
       { serviceConfig.ExecStart = [
@@ -147,7 +146,7 @@ in
         enable = mkDefault config.boot.isContainer;
       };
 
-    environment.etc.issue =
+    environment.etc.issue = mkDefault
       { # Friendly greeting on the virtual consoles.
         source = pkgs.writeText "issue" ''
 
@@ -159,4 +158,5 @@ in
 
   };
 
+  meta.maintainers = with maintainers; [ RossComputerGuy ];
 }

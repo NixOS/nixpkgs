@@ -1,23 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, coverage
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  coverage,
+  toml,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-cov";
-  version = "2.12.1";
+  version = "5.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mzl06m8qcgsac1r2krixrkqdwq0nqk8asrpkcj2ddr7qawfw716";
+    hash = "sha256-WDe1jp9uvTNbD4Bg7szmm2YkFbFtxQOIOgL0Xf6xSFc=";
   };
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ coverage toml ];
+  propagatedBuildInputs = [
+    coverage
+    toml
+    tomli
+  ];
 
   # xdist related tests fail with the following error
   # OSError: [Errno 13] Permission denied: 'py/_code'

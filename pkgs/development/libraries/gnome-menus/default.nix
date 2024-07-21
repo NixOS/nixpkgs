@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
   ];
 
-  nativeBuildInputs = [ pkg-config gettext ];
-  buildInputs = [ glib gobject-introspection ];
+  nativeBuildInputs = [ pkg-config gettext gobject-introspection ];
+  buildInputs = [ glib ];
 
   passthru = {
     updateScript = gnome.updateScript {

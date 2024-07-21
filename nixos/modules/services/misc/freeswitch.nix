@@ -23,10 +23,10 @@ in {
         default = false;
         type = types.bool;
         description = ''
-          Issue the <literal>reloadxml</literal> command to FreeSWITCH when configuration directory changes (instead of restart).
-          See <link xlink:href="https://freeswitch.org/confluence/display/FREESWITCH/Reloading">FreeSWITCH documentation</link> for more info.
-          The configuration directory is exposed at <filename>/etc/freeswitch</filename>.
-          See also <literal>systemd.services.*.restartIfChanged</literal>.
+          Issue the `reloadxml` command to FreeSWITCH when configuration directory changes (instead of restart).
+          See [FreeSWITCH documentation](https://freeswitch.org/confluence/display/FREESWITCH/Reloading) for more info.
+          The configuration directory is exposed at {file}`/etc/freeswitch`.
+          See also `systemd.services.*.restartIfChanged`.
         '';
       };
       configTemplate = mkOption {
@@ -36,7 +36,7 @@ in {
         example = literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/minimal"'';
         description = ''
           Configuration template to use.
-          See available templates in <link xlink:href="https://github.com/signalwire/freeswitch/tree/master/conf">FreeSWITCH repository</link>.
+          See available templates in [FreeSWITCH repository](https://github.com/signalwire/freeswitch/tree/master/conf).
           You can also set your own configuration directory.
         '';
       };
@@ -54,18 +54,11 @@ in {
         description = ''
           Override file in FreeSWITCH config template directory.
           Each top-level attribute denotes a file path in the configuration directory, its value is the file path.
-          See <link xlink:href="https://freeswitch.org/confluence/display/FREESWITCH/Default+Configuration">FreeSWITCH documentation</link> for more info.
-          Also check available templates in <link xlink:href="https://github.com/signalwire/freeswitch/tree/master/conf">FreeSWITCH repository</link>.
+          See [FreeSWITCH documentation](https://freeswitch.org/confluence/display/FREESWITCH/Default+Configuration) for more info.
+          Also check available templates in [FreeSWITCH repository](https://github.com/signalwire/freeswitch/tree/master/conf).
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.freeswitch;
-        defaultText = literalExpression "pkgs.freeswitch";
-        description = ''
-          FreeSWITCH package.
-        '';
-      };
+      package = mkPackageOption pkgs "freeswitch" { };
     };
   };
   config = mkIf cfg.enable {

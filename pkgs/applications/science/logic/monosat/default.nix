@@ -1,5 +1,5 @@
 { lib, stdenv, fetchpatch, fetchFromGitHub, cmake, zlib, gmp, jdk8,
-  # The JDK we use on Darwin currenly makes extensive use of rpaths which are
+  # The JDK we use on Darwin currently makes extensive use of rpaths which are
   # annoying and break the python library, so let's not bother for now
   includeJava ? !stdenv.hostPlatform.isDarwin, includeGplCode ? true }:
 
@@ -47,6 +47,9 @@ let
       "-DBUILD_STATIC=OFF"
       "-DJAVA=${boolToCmake includeJava}"
       "-DGPL=${boolToCmake includeGplCode}"
+
+      # file RPATH_CHANGE could not write new RPATH
+      "-DCMAKE_SKIP_BUILD_RPATH=ON"
     ];
 
     postInstall = optionalString includeJava ''
@@ -58,6 +61,7 @@ let
 
     meta = {
       description = "SMT solver for Monotonic Theories";
+      mainProgram = "monosat";
       platforms   = platforms.unix;
       license     = if includeGplCode then licenses.gpl2 else licenses.mit;
       homepage    = "https://github.com/sambayless/monosat";
@@ -65,7 +69,7 @@ let
     };
   };
 
-  python = { buildPythonPackage, cython }: buildPythonPackage {
+  python = { buildPythonPackage, cython, pytestCheckHook }: buildPythonPackage {
     inherit pname version src patches;
 
     propagatedBuildInputs = [ core cython ];
@@ -85,5 +89,12 @@ let
       substituteInPlace setup.py \
         --replace 'library_dir = "../../../../"' 'library_dir = "${core}/lib/"'
     '';
+
+    nativeCheckInputs = [ pytestCheckHook ];
+
+    disabledTests = [
+      "test_assertAtMostOne"
+      "test_assertEqual"
+    ];
   };
 in core

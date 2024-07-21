@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, netcat
 
 # Optional packages
-, systemd ? null, ejabberd ? null, mysql ? null, postgresql ? null, subversion ? null
+, systemd ? null, ejabberd ? null, mariadb ? null, postgresql ? null, subversion ? null
 , mongodb ? null, mongodb-tools ? null, influxdb ? null, supervisor ? null, docker ? null
 , nginx ? null, s6-rc ? null, xinetd ? null
 
@@ -26,7 +26,7 @@
 , getopt
 }:
 
-assert enableMySQLDatabase -> mysql != null;
+assert enableMySQLDatabase -> mariadb != null;
 assert enablePostgreSQLDatabase -> postgresql != null;
 assert enableSubversionRepository -> subversion != null;
 assert enableEjabberdDump -> ejabberd != null;
@@ -40,10 +40,10 @@ assert enableXinetdService -> xinetd != null;
 
 stdenv.mkDerivation rec {
   pname = "dysnomia";
-  version = "0.10.1";
+  version = "0.10.2";
   src = fetchurl {
     url = "https://github.com/svanderburg/dysnomia/releases/download/dysnomia-${version}/dysnomia-${version}.tar.gz";
-    sha256 = "0w9601g8zpaxrmynx6mh8zz85ldpb8psp7cc6ls8v3srjpj1l5n3";
+    sha256 = "08ijqbijs2h584dvsb3z858ha385fqd5jfxc51lks9lxxv0sfkr4";
   };
 
   configureFlags = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ getopt netcat ]
     ++ lib.optional stdenv.isLinux systemd
     ++ lib.optional enableEjabberdDump ejabberd
-    ++ lib.optional enableMySQLDatabase mysql.out
+    ++ lib.optional enableMySQLDatabase mariadb.out
     ++ lib.optional enablePostgreSQLDatabase postgresql
     ++ lib.optional enableSubversionRepository subversion
     ++ lib.optionals enableMongoDatabase [ mongodb mongodb-tools ]

@@ -1,31 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyramid
-, simplejson
-, six
-, venusian
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pyramid,
+  pytestCheckHook,
+  pytest-cache,
+  webtest,
+  marshmallow,
+  colander,
 }:
 
 buildPythonPackage rec {
   pname = "cornice";
-  version = "6.0.0";
+  version = "6.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "532485ed53cae81ef476aaf4cc7c2e0208749ad1959119c46efefdeea5546eba";
+  src = fetchFromGitHub {
+    owner = "Cornices";
+    repo = "cornice";
+    rev = version;
+    hash = "sha256-jAf8unDPpr/ZAWkb9LhOW4URjwcRnaYVUKmfnYBStTg=";
   };
 
-  propagatedBuildInputs = [ pyramid simplejson six venusian ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  # tests not packaged with pypi release
-  doCheck = false;
+  dependencies = [ pyramid ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cache
+    webtest
+    marshmallow
+    colander
+  ];
   pythonImportsCheck = [ "cornice" ];
 
   meta = with lib; {
     homepage = "https://github.com/mozilla-services/cornice";
     description = "Build Web Services with Pyramid";
     license = licenses.mpl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

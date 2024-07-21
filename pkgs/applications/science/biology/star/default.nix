@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "star";
-  version = "2.7.9a";
+  version = "2.7.10b";
 
   src = fetchFromGitHub {
     repo = "STAR";
     owner = "alexdobin";
     rev = version;
-    sha256 = "sha256-p1yaIbSGu8K5AkqJj0BAzuoWsXr25eCNoQmLXYQeg4E=";
+    sha256 = "sha256-58Y4lzqXwBhRlXcionUg2IhAg5znNUuyr/FsuNZd+5Q=";
   };
 
-  sourceRoot = "source/source";
+  sourceRoot = "${src.name}/source";
 
   postPatch = ''
     substituteInPlace Makefile --replace "/bin/rm" "rm"

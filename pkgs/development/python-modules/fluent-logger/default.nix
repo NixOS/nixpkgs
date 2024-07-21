@@ -1,23 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, msgpack }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  msgpack,
+
+  # tests
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "fluent-logger";
-  version = "0.10.0";
+  version = "0.11.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "678bda90c513ff0393964b64544ce41ef25669d2089ce6c3b63d9a18554b9bfa";
+  src = fetchFromGitHub {
+    owner = "fluent";
+    repo = "fluent-logger-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-i6S5S2ZUwC5gQPdVjefUXrKj43iLIqxd8tdXbMBJNnA=";
   };
 
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "msgpack<1.0.0" "msgpack"
-  '';
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ msgpack ];
+  dependencies = [ msgpack ];
 
-  # Tests fail because absent in package
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [
     "fluent"
     "fluent.event"
@@ -26,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A structured logger for Fluentd (Python)";
+    description = "Structured logger for Fluentd (Python)";
     homepage = "https://github.com/fluent/fluent-logger-python";
     license = licenses.asl20;
   };

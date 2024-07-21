@@ -6,7 +6,7 @@ let
   cfg = config.services.monetdb;
 
 in {
-  meta.maintainers = with maintainers; [ StillerHarpo primeos ];
+  meta.maintainers = with maintainers; [ StillerHarpo ];
 
   ###### interface
   options = {
@@ -14,12 +14,7 @@ in {
 
       enable = mkEnableOption "the MonetDB database server";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.monetdb;
-        defaultText = literalExpression "pkgs.monetdb";
-        description = "MonetDB package to use.";
-      };
+      package = mkPackageOption pkgs "monetdb" { };
 
       user = mkOption {
         type = types.str;

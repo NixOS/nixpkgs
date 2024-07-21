@@ -79,8 +79,9 @@ stdenv.mkDerivation rec {
     ''; # */
 
   meta = {
-    homepage = "http://ant.apache.org/";
-    description = "A Java-based build tool";
+    homepage = "https://ant.apache.org/";
+    description = "Java-based build tool";
+    mainProgram = "ant";
 
     longDescription = ''
       Apache Ant is a Java-based build tool.  In theory, it is kind of like
@@ -103,6 +104,7 @@ stdenv.mkDerivation rec {
       by an object that implements a particular Task interface.
     '';
 
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.all;

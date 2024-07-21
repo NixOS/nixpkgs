@@ -2,18 +2,20 @@
 
 buildGoModule rec {
   pname = "mani";
-  version = "0.10.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "alajmo";
     repo = "mani";
     rev = "v${version}";
-    sha256 = "sha256-9rcgPeYFHdIN73K0zGPEHqFFLFkVYkNYRXJ+0/Zo4zI=";
+    sha256 = "sha256-TqxoU2g4ZegJGHrnNO+ivPu209NDFcLnxpHGj8pOA4E=";
   };
 
-  vendorSha256 = "sha256-ZivzDfjx2djzS0Xm3GISK3zpB5fUUMgy2o4Ti1Z9wMM=";
+  vendorHash = "sha256-mFan09oJ+BPVJHAxoROj282WJ+4e7TD0ZqeQH1kDabQ=";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
+
+  ldflags = [ "-s" "-w" "-X github.com/alajmo/mani/cmd.version=${version}" ];
 
   postInstall = ''
     installShellCompletion --cmd mani \
@@ -32,6 +34,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "CLI tool to help you manage multiple repositories";
+    mainProgram = "mani";
     longDescription = ''
       mani is a CLI tool that helps you manage multiple repositories. It's useful
       when you are working with microservices, multi-project systems, many

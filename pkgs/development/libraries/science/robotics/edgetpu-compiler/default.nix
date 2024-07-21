@@ -49,8 +49,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A command line tool that compiles a TensorFlow Lite model into an Edge TPU compatible file.";
+    description = "Command line tool that compiles a TensorFlow Lite model into an Edge TPU compatible file";
+    mainProgram = "edgetpu_compiler";
     homepage = "https://coral.ai/docs/edgetpu/compiler";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ cpcloud ];
     platforms = [ "x86_64-linux" ];

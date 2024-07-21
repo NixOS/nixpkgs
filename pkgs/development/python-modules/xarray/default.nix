@@ -1,34 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, numpy
-, pandas
-, setuptools
-, isPy3k
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flaky,
+  numpy,
+  packaging,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "0.20.1";
-  disabled = !isPy3k;
+  version = "2024.6.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9c0bffd8b55fdef277f8f6c817153eb51fa4e58653a7ad92eaed9984164b7bdb";
+    hash = "sha256-C5HgvE3AKWlHlHZA/jHsboZ84ljS98vBC+30ptaDQMc=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ numpy pandas setuptools ];
-  checkInputs = [ pytestCheckHook ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    packaging
+    pandas
+  ];
+
+  nativeCheckInputs = [
+    flaky
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # ModuleNotFoundError: No module named 'xarray.datatree_'
+    "--ignore xarray/tests/datatree"
+  ];
 
   pythonImportsCheck = [ "xarray" ];
 
-  meta = {
+  meta = with lib; {
     description = "N-D labeled arrays and datasets in Python";
     homepage = "https://github.com/pydata/xarray";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fridh ];
+    license = licenses.asl20;
   };
 }

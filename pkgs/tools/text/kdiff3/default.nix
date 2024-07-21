@@ -1,27 +1,42 @@
-{
-  mkDerivation, lib, fetchurl,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
-  kcrash, kconfig, kinit, kparts, kiconthemes
+{ stdenv
+, lib
+, fetchurl
+, extra-cmake-modules
+, kdoctools
+, wrapQtAppsHook
+, boost
+, kcrash
+, kconfig
+, kinit
+, kparts
+, kiconthemes
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kdiff3";
-  version = "1.8.5";
+  version = "1.11.2";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-vJL30E6xI/nFbb4wR69nv3FSQPqZSHrB0czypF4IVME=";
+    url = "mirror://kde/stable/kdiff3/kdiff3-${finalAttrs.version}.tar.xz";
+    hash = "sha256-kYU3dcP6qVIkaOwSPNbedGYqy21RFkdZlqyk3Cw778g=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
 
-  propagatedBuildInputs = [ kconfig kcrash kinit kparts kiconthemes ];
+  buildInputs = [ boost kconfig kcrash kinit kparts kiconthemes ];
+
+  cmakeFlags = [ "-Wno-dev" ];
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    ln -s "$out/Applications/KDE/kdiff3.app/Contents/MacOS" "$out/bin"
+  '';
 
   meta = with lib; {
+    description = "Compares and merges 2 or 3 files or directories";
+    mainProgram = "kdiff3";
     homepage = "https://invent.kde.org/sdk/kdiff3";
     license = licenses.gpl2Plus;
-    description = "Compares and merges 2 or 3 files or directories";
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = with platforms; linux;
+    platforms = with platforms; linux ++ darwin;
   };
-}
+})

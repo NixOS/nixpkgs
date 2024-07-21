@@ -1,38 +1,85 @@
-{ lib, stdenv, fetchgit, cmake, boost, miniupnpc_2, openssl, unbound
-, readline, libsodium, rapidjson, fetchurl
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, boost
+, libsodium
+, openssl
+, rapidjson
+, readline
+, unbound
+, zeromq
+, darwin
 }:
 
-with lib;
-
 let
-  randomwowVersion = "1.1.7";
-  randomwow = fetchurl {
-    url = "https://github.com/wownero/RandomWOW/archive/${randomwowVersion}.tar.gz";
-    sha256 = "1xp76zf01hnhnk6rjvqjav9n9pnvxzxlzqa5rc574d1c2qczfy3q";
+  # submodules
+  miniupnp = fetchFromGitHub {
+    owner = "miniupnp";
+    repo = "miniupnp";
+    rev = "miniupnpc_2_2_1";
+    hash = "sha256-opd0hcZV+pjC3Mae3Yf6AR5fj6xVwGm9LuU5zEPxBKc=";
+  };
+  supercop = fetchFromGitHub {
+    owner = "monero-project";
+    repo = "supercop";
+    rev = "633500ad8c8759995049ccd022107d1fa8a1bbc9";
+    hash = "sha256-26UmESotSWnQ21VbAYEappLpkEMyl0jiuCaezRYd/sE=";
+  };
+  randomwow = fetchFromGitHub {
+    owner = "wownero-project";
+    repo = "RandomWOW";
+    rev = "607bad48f3687c2490d90f8c55efa2dcd7cbc195";
+    hash = "sha256-CJv96TbPv1k/C7MQWEntE6khIRX1iIEiF9wEdsQGiFQ=";
   };
 in
-
 stdenv.mkDerivation rec {
   pname = "wownero";
-  version = "0.8.0.1";
+  version = "0.11.0.1";
 
-  src = fetchgit {
-    url = "https://git.wownero.com/wownero/wownero.git";
+  src = fetchFromGitHub {
+    owner = "wownero-project";
+    repo = "wownero";
     rev = "v${version}";
-    sha256 = "15443xv6q1nw4627ajk6k4ghhahvh82lb4gyb8nvq753p2v838g3";
     fetchSubmodules = false;
+    hash = "sha256-zmGsSbPpVwL0AhCQkdMKORruM5kYrrLe/BYfMphph8c=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  patches = [
+    # Fix gcc-13 build due to missing <cstdint> neaders
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://git.wownero.com/wownero/wownero/commit/f983ac77805a494ea4a05a00398c553e1359aefd.patch";
+      hash = "sha256-9acQ4bHAKFR+lMgrpQyBmb+9YZYi1ywHoo1jBcIgmGs=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+  ];
 
   buildInputs = [
-    boost miniupnpc_2 openssl unbound rapidjson readline libsodium
+    boost
+    libsodium
+    openssl
+    rapidjson
+    readline
+    unbound
+    zeromq
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.IOKit
   ];
 
   postUnpack = ''
-    rm -r $sourceRoot/external/RandomWOW
-    unpackFile ${randomwow}
-    mv RandomWOW-${randomwowVersion} $sourceRoot/external/RandomWOW
+    rm -r $sourceRoot/external/miniupnp
+    ln -s ${miniupnp} $sourceRoot/external/miniupnp
+
+    rm -r $sourceRoot/external/randomwow
+    ln -s ${randomwow} $sourceRoot/external/randomwow
+
+    rm -r $sourceRoot/external/supercop
+    ln -s ${supercop} $sourceRoot/external/supercop
   '';
 
   cmakeFlags = [
@@ -40,7 +87,7 @@ stdenv.mkDerivation rec {
     "-DMANUAL_SUBMODULES=ON"
   ];
 
-  meta = {
+  meta = with lib; {
     description = ''
       A privacy-centric memecoin that was fairly launched on April 1, 2018 with
       no pre-mine, stealth-mine or ICO
@@ -52,9 +99,9 @@ stdenv.mkDerivation rec {
       signatures using different participants for the same tx outputs on
       opposing forks.
     '';
-    homepage    = "https://wownero.org/";
-    license     = licenses.bsd3;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ fuwa ];
+    homepage = "https://wownero.org/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 }

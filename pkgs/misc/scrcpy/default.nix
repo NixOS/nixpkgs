@@ -1,19 +1,27 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, makeWrapper
 , meson
 , ninja
 , pkg-config
+, runtimeShell
+, installShellFiles
 
-, platform-tools
+, android-tools
 , ffmpeg
 , libusb1
 , SDL2
 }:
 
 let
-  version = "1.21";
+  version = "2.5";
   prebuilt_server = fetchurl {
+    name = "scrcpy-server";
+    inherit version;
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "sha256-28zKtSPuJnluVeozZSZJ5LevSY7a6ap15NTXhpwKuEg=";
+    hash = "sha256-FIixEF1q/1NIc6Jr9hDNKuoG7oZ916TZxrssCROW6xU=";
   };
 in
 stdenv.mkDerivation rec {
@@ -22,45 +30,50 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Genymobile";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-9MzOaQj+lR1F+E/yoxbL/HMOOuKOU82zkPVq7x6AH3c=";
+    repo = "scrcpy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VdZZ23tlWYvDgETfce7kYy/kdwDGBEBzB6UfplorAbE=";
   };
 
-  # postPatch:
-  #   screen.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
+  #   display.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
   #   This can happen when running on non-NixOS because then scrcpy seems to have a hard time using the host OpenGL-supporting hardware.
   #   It would be better to fix the OpenGL problem, but that seems much more intrusive.
   postPatch = ''
-    substituteInPlace app/src/screen.c \
+    substituteInPlace app/src/display.c \
       --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
   '';
 
-  nativeBuildInputs = [ makeWrapper meson ninja pkg-config ];
+  nativeBuildInputs = [ makeWrapper meson ninja pkg-config installShellFiles ];
 
-  buildInputs = [ ffmpeg SDL2 ] ++ lib.optionals stdenv.isLinux [
-    libusb1
-  ];
+  buildInputs = [ ffmpeg SDL2 libusb1 ];
 
   # Manually install the server jar to prevent Meson from "fixing" it
   preConfigure = ''
     echo -n > server/meson.build
   '';
 
-  mesonFlags = [ "-Doverride_server_path=${prebuilt_server}" ];
   postInstall = ''
     mkdir -p "$out/share/scrcpy"
     ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
 
     # runtime dep on `adb` to push the server
-    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platform-tools}/bin"
+    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${android-tools}/bin"
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace $out/share/applications/scrcpy-console.desktop \
+      --replace "/bin/bash" "${runtimeShell}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Display and control Android devices over USB or TCP/IP";
     homepage = "https://github.com/Genymobile/scrcpy";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ deltaevo lukeadams msfjarvis ];
+    changelog = "https://github.com/Genymobile/scrcpy/releases/tag/v${version}";
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode # server
+    ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ deltaevo ryand56 ];
+    mainProgram = "scrcpy";
   };
 }

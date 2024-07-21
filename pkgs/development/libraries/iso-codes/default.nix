@@ -1,27 +1,29 @@
-{lib, stdenv, fetchurl, gettext, python3}:
+{ lib, stdenv, fetchurl, gettext, python3, testers }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iso-codes";
-  version = "4.6.0";
+  version = "4.16.0";
 
   src = fetchurl {
-    url = "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/${pname}-${version}/${pname}-${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Ivd5538QpTFXP2r6ca/g12IZ0ZW1nduu0z4kiSb9Mxs=";
+    url = with finalAttrs; "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v${version}/${pname}-v${version}.tar.gz";
+    sha256 = "sha256-fJkPw5oFl1vtsBdeP/Cfw4MEiBX2i0Yqu/BVqAMuZsw=";
   };
 
-  patchPhase = ''
-    for i in `find . -name \*.py`
-    do
-        sed -i -e "s|#!/usr/bin/env python|#!${python3}/bin/python|" $i
-    done
-  '';
-
   nativeBuildInputs = [ gettext python3 ];
+
+  enableParallelBuilding = true;
+
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://salsa.debian.org/iso-codes-team/iso-codes";
     description = "Various ISO codes packaged as XML files";
     license = licenses.lgpl21;
     platforms = platforms.all;
+    pkgConfigModules = [ "iso-codes" ];
   };
-}
+})

@@ -7,26 +7,27 @@ let
   testData = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json_test_data";
-    rev = "v3.0.0";
-    sha256 = "O6p2PFB7c2KE9VqWvmTaFywbW1hSzAP5V42EuemX+ls=";
+    rev = "v3.1.0";
+    hash = "sha256-bG34W63ew7haLnC82A3lS7bviPDnApLipaBjJAjLcVk=";
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "nlohmann_json";
-  version = "3.10.2";
+  version = "3.11.3";
 
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
-    rev = "v${version}";
-    sha256 = "/OFNfukrIyfJmD0ko174aud9T6ZOesHANJjyfk4q/Vs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7F0Jon+1oWL7uqet5i1IgHX0fUw/+z0QwEcA3zs5xHg=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBuildTests=${if doCheck then "ON" else "OFF"}"
+    "-DJSON_BuildTests=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
+    "-DJSON_FastTests=ON"
     "-DJSON_MultipleHeaders=ON"
-  ] ++ lib.optional doCheck "-DJSON_TestDataDirectory=${testData}";
+  ] ++ lib.optional finalAttrs.finalPackage.doCheck "-DJSON_TestDataDirectory=${testData}";
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
@@ -44,4 +45,4 @@ in stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
   };
-}
+})

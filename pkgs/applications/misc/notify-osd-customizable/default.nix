@@ -2,7 +2,7 @@
 , dbus-glib
 , fetchurl
 , glib
-, gnome
+, gnome-common
 , libnotify
 , libtool
 , libwnck
@@ -24,11 +24,10 @@ in stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh --libexecdir=$(out)/bin";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper libtool ];
   buildInputs = [
-    glib libwnck libnotify dbus-glib makeWrapper
-    gsettings-desktop-schemas gnome.gnome-common
-    libtool
+    glib libwnck libnotify dbus-glib
+    gsettings-desktop-schemas gnome-common
   ];
 
   configureFlags = [ "--libexecdir=$(out)/bin" ];
@@ -40,6 +39,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Daemon that displays passive pop-up notifications";
+    mainProgram = "notify-osd";
     homepage = "https://launchpad.net/notify-osd";
     license = licenses.gpl3;
     maintainers = [ maintainers.imalison ];

@@ -41,69 +41,69 @@ in
       serverName = mkOption {
         default = "hades.arpa";
         type = types.str;
-        description = "
+        description = ''
           IRCD server name.
-        ";
+        '';
       };
 
       sid = mkOption {
         default = "0NL";
         type = types.str;
-        description = "
+        description = ''
           IRCD server unique ID in a net of servers.
-        ";
+        '';
       };
 
       description = mkOption {
         default = "Hybrid-7 IRC server.";
         type = types.str;
-        description = "
+        description = ''
           IRCD server description.
-        ";
+        '';
       };
 
       rsaKey = mkOption {
         default = null;
         example = literalExpression "/root/certificates/irc.key";
         type = types.nullOr types.path;
-        description = "
+        description = ''
           IRCD server RSA key.
-        ";
+        '';
       };
 
       certificate = mkOption {
         default = null;
         example = literalExpression "/root/certificates/irc.pem";
         type = types.nullOr types.path;
-        description = "
+        description = ''
           IRCD server SSL certificate. There are some limitations - read manual.
-        ";
+        '';
       };
 
       adminEmail = mkOption {
         default = "<bit-bucket@example.com>";
         type = types.str;
         example = "<name@domain.tld>";
-        description = "
+        description = ''
           IRCD server administrator e-mail.
-        ";
+        '';
       };
 
       extraIPs = mkOption {
         default = [];
         example = ["127.0.0.1"];
         type = types.listOf types.str;
-        description = "
+        description = ''
           Extra IP's to bind.
-        ";
+        '';
       };
 
       extraPort = mkOption {
         default = "7117";
         type = types.str;
-        description = "
+        description = ''
           Extra port to avoid filtering.
-        ";
+        '';
       };
 
     };
@@ -125,7 +125,8 @@ in
 
     systemd.services.ircd-hybrid = {
       description = "IRCD Hybrid server";
-      after = [ "started networking" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       script = "${ircdService}/bin/control start";
     };

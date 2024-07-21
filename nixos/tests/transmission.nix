@@ -1,10 +1,10 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, transmission, ... }: {
   name = "transmission";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ coconnor ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
 
     networking.firewall.allowedTCPPorts = [ 9091 ];
@@ -12,6 +12,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     security.apparmor.enable = true;
 
     services.transmission.enable = true;
+    services.transmission.package = transmission;
   };
 
   testScript =

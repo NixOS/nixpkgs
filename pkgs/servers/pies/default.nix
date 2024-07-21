@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv }:
+{ fetchurl, lib, stdenv, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "pies";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "12r7rjjyibjdj08dvwbp0iflfpzl4s0zhn6cr6zj3hwf9gbzgl1g";
   };
 
+  buildInputs = [ libxcrypt ];
+
   configureFlags = ["--sysconfdir=/etc"];
 
   hardeningDisable = [ "format" ];
@@ -16,7 +18,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "A program invocation and execution supervisor";
+    description = "Program invocation and execution supervisor";
 
     longDescription =
       '' The name Pies (pronounced "p-yes") stands for Program Invocation and

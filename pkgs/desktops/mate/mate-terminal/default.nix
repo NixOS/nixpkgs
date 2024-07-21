@@ -1,19 +1,33 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, mate-desktop, dconf, vte, pcre2, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, libxml2
+, mate-desktop
+, dconf
+, vte
+, pcre2
+, wrapGAppsHook3
+, mateUpdateScript
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-terminal";
-  version = "1.26.0";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "08mgxbviik2dwwnbclp0518wlag2fhcr6c2yadgcbhwiq4aff9vp";
+    sha256 = "8TXrGp4q4ieY7LLcGRT9tM/XdOa7ZcAVK+N8xslGnpI=";
   };
 
   nativeBuildInputs = [
     gettext
     itstool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -26,7 +40,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  passthru.tests.test = nixosTests.terminal-emulators.mate-terminal;
 
   meta = with lib; {
     description = "MATE desktop terminal emulator";

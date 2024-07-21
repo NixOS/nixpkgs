@@ -12,16 +12,19 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-OjL3wEoh4fT2nKqb7lMefP5B0vYyUaTRj09OXPEVfW4=";
+    hash = "sha256-OjL3wEoh4fT2nKqb7lMefP5B0vYyUaTRj09OXPEVfW4=";
   };
 
-  cargoSha256 = "sha256-CL6VXe7heyBbGX0qI4uaD7g7DLiFbykSfOcWemnEe8U=";
+  cargoPatches = [ ./cargo-lock.patch ];
+
+  cargoHash = "sha256-cwk8yFt8JrYkYlNUW9n/bgMUA6jyOpG0TSh5C+eERLY=";
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ openssl ];
 
   meta = with lib; {
-    description = "A simple CLI client for installing and maintaining linux GOG games";
+    description = "Simple CLI client for installing and maintaining linux GOG games";
+    mainProgram = "wyvern";
     homepage = "https://git.sr.ht/~nicohman/wyvern";
     license = licenses.gpl3;
     maintainers = with maintainers; [ _0x4A6F ];

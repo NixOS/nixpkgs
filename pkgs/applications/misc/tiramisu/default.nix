@@ -1,19 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, vala }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "tiramisu";
-  version = "unstable-2021-05-20";
+  # FIXME: once a newer release in upstream is available
+  version = "2.0-unstable-2023-03-29";
 
   src = fetchFromGitHub {
     owner = "Sweets";
     repo = "tiramisu";
-    rev = "e53833d0b5b0ae41ceb7dc434d8e25818fe62291";
-    sha256 = "sha256-F4oaTOAQQfOkEXeBVbGH+0CHc9v9Ac08GyzHliOdAfc=";
+    # FIXME: use the current HEAD commit as upstream has no releases since 2021
+    rev = "5dddd83abd695bfa15640047a97a08ff0a8d9f9b";
+    hash = "sha256-owYk/YFwJbqO6/dbGKPE8SnmmH4KvH+o6uWptqQtpfI=";
   };
 
   buildInputs = [ glib ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config vala ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -27,6 +29,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Sweets/tiramisu";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wishfort36 fortuneteller2k ];
+    maintainers = with maintainers; [ wishfort36 moni ];
+    mainProgram = "tiramisu";
   };
 }

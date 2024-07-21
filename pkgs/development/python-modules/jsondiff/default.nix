@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "jsondiff";
-  version = "1.3.0";
+  version = "2.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5122bf4708a031b02db029366184a87c5d0ddd5a327a5884ee6cf0193e599d71";
+    hash = "sha256-J5WETvB17IorjThcTVn16kiwjnGA/OPLJ4e+DbALH7Q=";
   };
 
   postPatch = ''
@@ -21,6 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Diff JSON and JSON-like structures in Python";
+    mainProgram = "jdiff";
     homepage = "https://github.com/ZoomerAnalytics/jsondiff";
     license = lib.licenses.mit;
   };

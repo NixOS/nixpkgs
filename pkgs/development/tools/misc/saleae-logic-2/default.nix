@@ -1,10 +1,10 @@
-{ lib, fetchurl, makeDesktopItem, appimageTools, gtk3 }:
+{ lib, fetchurl, makeDesktopItem, appimageTools }:
 let
   name = "saleae-logic-2";
-  version = "2.3.39";
+  version = "2.4.13";
   src = fetchurl {
-    url = "https://downloads.saleae.com/logic2/Logic-${version}-master.AppImage";
-    sha256 = "1p31i8xillc5vrl2nli74b7p7cv2yz2qafp2gnyjfn0nbx5ij52g";
+    url = "https://downloads.saleae.com/logic2/Logic-${version}-linux-x64.AppImage";
+    hash = "sha256-0GIZQKQDY3arDUlxjQKWOHDB3j76xVwkx5H+8q+d0Rc=";
   };
   desktopItem = makeDesktopItem {
     inherit name;
@@ -13,7 +13,7 @@ let
     comment = "Software for Saleae logic analyzers";
     desktopName = "Saleae Logic";
     genericName = "Logic analyzer";
-    categories = "Development";
+    categories = [ "Development" ];
   };
 in
 appimageTools.wrapType2 {
@@ -25,15 +25,11 @@ appimageTools.wrapType2 {
     in
       ''
         mkdir -p $out/etc/udev/rules.d
-        cp ${appimageContents}/resources/linux/99-SaleaeLogic.rules $out/etc/udev/rules.d/
+        cp ${appimageContents}/resources/linux-x64/99-SaleaeLogic.rules $out/etc/udev/rules.d/
         mkdir -p $out/share/pixmaps
         ln -s ${desktopItem}/share/applications $out/share/
         cp ${appimageContents}/usr/share/icons/hicolor/256x256/apps/Logic.png $out/share/pixmaps/Logic.png
       '';
-
-  profile = ''
-    export XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}''${XDG_DATA_DIRS:+:"''$XDG_DATA_DIRS"}"
-  '';
 
   extraPkgs = pkgs: with pkgs; [
     wget
@@ -63,6 +59,7 @@ appimageTools.wrapType2 {
     alsa-lib
     at-spi2-core
     cups
+    libxcrypt-legacy
   ];
 
   meta = with lib; {
@@ -70,6 +67,6 @@ appimageTools.wrapType2 {
     description = "Software for Saleae logic analyzers";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.j-hui ];
+    maintainers = with maintainers; [ j-hui newam ];
   };
 }

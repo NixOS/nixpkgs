@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
   cfg = config.services.ergo;
+  opt = options.services.ergo;
 
-  inherit (lib) mkEnableOption mkIf mkOption optionalString types;
+  inherit (lib) literalExpression mkEnableOption mkIf mkOption optionalString types;
 
   configFile = pkgs.writeText "ergo.conf" (''
 ergo {
@@ -66,13 +67,13 @@ in {
         ip = mkOption {
           type = types.str;
           default = "0.0.0.0";
-          description = "IP address that the Ergo node API should listen on if <option>api.keyHash</option> is defined.";
+          description = "IP address that the Ergo node API should listen on if {option}`api.keyHash` is defined.";
           };
 
         port = mkOption {
           type = types.port;
           default = 9052;
-          description = "Listen port for the API endpoint if <option>api.keyHash</option> is defined.";
+          description = "Listen port for the API endpoint if {option}`api.keyHash` is defined.";
         };
        };
       };
@@ -92,6 +93,7 @@ in {
       group = mkOption {
         type = types.str;
         default = cfg.user;
+        defaultText = literalExpression "config.${opt.user}";
         description = "The group as which to run the Ergo node.";
       };
 
@@ -112,6 +114,7 @@ in {
     systemd.services.ergo = {
       description = "ergo server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
         User = cfg.user;

@@ -9,16 +9,16 @@ manifest = {
 
 in rustPlatform.buildRustPackage rec {
   pname = "bukubrow-host";
-  version = "5.0.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "SamHH";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1a3gqxj6d1shv3w0v9m8x2xr0bvcynchy778yqalxkc3x4vr0nbn";
+    sha256 = "sha256-xz5Agsm+ATQXXgpPGN4EQ00i1t8qUlrviNHauVdCu4U=";
   };
 
-  cargoSha256 = "0z6i9wzz5gy9rs8cxfmwg4mpfajv0xvj4nn6jfl7f1rw6k457jc9";
+  cargoSha256 = "sha256-mH76ODPKlKDEK9ckThPnL5Ar7p1l1gNd7zXfesLZlBM=";
 
   buildInputs = [ sqlite ];
 
@@ -39,10 +39,11 @@ in rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A WebExtension for Buku, a command-line bookmark manager";
+    description = "WebExtension for Buku, a command-line bookmark manager";
     homepage = "https://github.com/SamHH/bukubrow-host";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = [ ];
+    mainProgram = "bukubrow";
   };
 }
 

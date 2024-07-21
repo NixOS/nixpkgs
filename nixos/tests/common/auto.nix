@@ -1,52 +1,39 @@
 { config, lib, ... }:
 
-with lib;
-
 let
-
   dmcfg = config.services.xserver.displayManager;
   cfg = config.test-support.displayManager.auto;
-
 in
-
 {
 
   ###### interface
 
   options = {
-
     test-support.displayManager.auto = {
-
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
         description = ''
           Whether to enable the fake "auto" display manager, which
           automatically logs in the user specified in the
-          <option>user</option> option.  This is mostly useful for
+          {option}`user` option.  This is mostly useful for
           automated tests.
         '';
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "root";
         description = "The user account to login automatically.";
       };
-
     };
-
   };
-
 
   ###### implementation
 
-  config = mkIf cfg.enable {
-
-    services.xserver.displayManager = {
-      lightdm.enable = true;
-      autoLogin = {
-        enable = true;
-        user = cfg.user;
-      };
+  config = lib.mkIf cfg.enable {
+    services.xserver.displayManager.lightdm.enable = true;
+    services.displayManager.autoLogin = {
+      enable = true;
+      user = cfg.user;
     };
 
     # lightdm by default doesn't allow auto login for root, which is
@@ -62,7 +49,5 @@ in
 
         session  include   lightdm
     '';
-
   };
-
 }

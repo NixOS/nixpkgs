@@ -1,20 +1,26 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "gau";
-  version = "2.0.6";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "lc";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-d9Cfd2KD+ymGnzOjlVQkSm3XBamoJIUKQLnRZzSDBtk=";
+    repo = "gau";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1sF33uat6nwtTaXbZzO8YF4jewyQJ6HvI2l/zyTrJsg=";
   };
 
-  vendorSha256 = "sha256-u5ketxHPwZN2mV0uTgwJbY+ImusGZ9GTTmFAGvdH5yA=";
+  vendorHash = "sha256-nhsGhuX5AJMHg+zQUt1G1TwVgMCxnuJ2T3uBrx7bJNs=";
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   meta = with lib; {
     description = "Tool to fetch known URLs";
@@ -25,5 +31,6 @@ buildGoModule rec {
     homepage = "https://github.com/lc/gau";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "gau";
   };
 }

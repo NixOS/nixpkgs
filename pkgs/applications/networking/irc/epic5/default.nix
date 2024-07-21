@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, ncurses, libiconv, tcl, coreutils, fetchpatch }:
+{ lib, stdenv, fetchurl, openssl, ncurses, libiconv, tcl, coreutils, fetchpatch, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "epic5";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   # Darwin needs libiconv, tcl; while Linux build don't
-  buildInputs = [ openssl ncurses ]
+  buildInputs = [ openssl ncurses libxcrypt ]
     ++ lib.optionals stdenv.isDarwin [ libiconv tcl ];
 
   patches = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://epicsol.org";
-    description = "A IRC client that offers a great ircII interface";
+    description = "IRC client that offers a great ircII interface";
     license = licenses.bsd3;
     maintainers = [];
   };

@@ -6,16 +6,16 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "fflas-ffpack";
-  version = "2.4.3";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "linbox-team";
     repo = pname;
-    rev = version;
-    sha256 = "1ynbjd72qrwp0b4kpn0p5d7gddpvj8dlb5fwdxajr5pvkvi3if74";
+    rev = "v${version}";
+    sha256 = "sha256-Eztc2jUyKRVUiZkYEh+IFHkDuPIy+Gx3ZW/MsuOVaMc=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     gmpxx
   ];
 
@@ -24,13 +24,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ lib.optionals doCheck checkInputs;
+  ] ++ lib.optionals doCheck nativeCheckInputs;
 
   buildInputs = [ givaro blas lapack ];
 
   configureFlags = [
     "--with-blas-libs=-lcblas"
     "--with-lapack-libs=-llapacke"
+    "--without-archnative"
   ] ++ lib.optionals stdenv.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
     # for now we need to be careful to disable *all* relevant versions of an instruction set explicitly (https://github.com/linbox-team/fflas-ffpack/issues/284)
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Finite Field Linear Algebra Subroutines";
+    mainProgram = "fflas-ffpack-config";
     license = licenses.lgpl21Plus;
     maintainers = teams.sage.members;
     platforms = platforms.unix;

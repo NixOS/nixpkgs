@@ -7,9 +7,9 @@
 , autoreconfHook
 , guile
 , flex
-, gtk2
+, gtk3
 , glib
-, gtkextra
+, gtksheet
 , gettext
 , gawk
 , shared-mime-info
@@ -19,19 +19,20 @@
 
 stdenv.mkDerivation rec {
   pname = "lepton-eda";
-  version = "1.9.16-20210731";
+  version = "1.9.18-20220529";
 
   src = fetchurl {
     url = "https://github.com/lepton-eda/lepton-eda/releases/download/${version}/lepton-eda-${builtins.head (lib.splitString "-" version)}.tar.gz";
-    sha256 = "sha256-xdJ11M4RXNF6ePZD6Y+/DUdO21AFLbydZcq9nWg0+Yk=";
+    hash = "sha256-X9yNuosNR1Jf3gYWQZeOnKdxzJLld29Sn9XYsPGWYYI=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper texinfo autoreconfHook ];
 
-  propagatedBuildInputs = [ guile flex gtk2 glib gtkextra gettext gawk shared-mime-info groff libstroke ];
+  propagatedBuildInputs = [ guile flex gtk3 glib gtksheet gettext gawk shared-mime-info groff libstroke ];
 
   configureFlags = [
     "--disable-update-xdg-database"
+    "--with-gtk3"
   ];
 
   CFLAGS = [

@@ -3,7 +3,7 @@
 , fetchurl
 , perlPackages
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , cairo
 , dblatex
 , gnumake
@@ -11,6 +11,7 @@
 , graphicsmagick
 , gsettings-desktop-schemas
 , gtk3
+, hicolor-icon-theme
 , libnotify
 , librsvg
 , libxslt
@@ -22,40 +23,46 @@
 , poppler
 , auto-multiple-choice
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "auto-multiple-choice";
-  version = "1.5.2";
+  version = "1.6.0";
   src = fetchurl {
-    url = "https://download.auto-multiple-choice.net/${pname}_${version}_precomp.tar.gz";
-    sha256 = "sha256-AjonJOooSe53Fww3QU6Dft95ojNqWrTuPul3nkIbctM=";
+    url = "https://download.auto-multiple-choice.net/${pname}_${version}_dist.tar.gz";
+    # before 1.6.0, the URL pattern used "precomp" instead of "dist".    ^^^^
+    sha256 = "sha256-I9Xw1BN8ZSQhi5F1R3axHBKE6tnaCNk8k5tts6LoMjY=";
   };
-  tlType = "run";
 
   # There's only the Makefile
   dontConfigure = true;
 
   makeFlags = [
     "PERLPATH=${perl}/bin/perl"
-    # We *need* to pass DESTDIR, as the Makefile ignores PREFIX.
-    "DESTDIR=$(out)"
-    # Relative paths.
-    "BINDIR=/bin"
-    "PERLDIR=/share/perl5"
-    "MODSDIR=/lib/"
-    "TEXDIR=/tex/latex/" # what texlive.combine expects
-    "TEXDOCDIR=/share/doc/texmf/" # TODO where to put this?
-    "MAN1DIR=/share/man/man1"
-    "DESKTOPDIR=/share/applications"
-    "METAINFODIR=/share/metainfo"
-    "ICONSDIR=/share/auto-multiple-choice/icons"
-    "APPICONDIR=/share/icons/hicolor"
-    "LOCALEDIR=/share/locale"
-    "MODELSDIR=/share/auto-multiple-choice/models"
-    "DOCDIR=/share/doc/auto-multiple-choice"
-    "SHARED_MIMEINFO_DIR=/share/mime/packages"
-    "LANG_GTKSOURCEVIEW_DIR=/share/gtksourceview-4/language-specs"
+    # We *need* to set DESTDIR as empty and use absolute paths below,
+    # because the Makefile ignores PREFIX and MODSDIR is required to
+    # be an absolute path to not trigger "portable distribution" check
+    # in auto-multiple-choice.in.
+    "DESTDIR="
+    # Set variables from Makefile.conf to absolute paths
+    "BINDIR=${placeholder "out"}/bin"
+    "PERLDIR=${placeholder "out"}/share/perl5"
+    "MODSDIR=${placeholder "out"}/lib"
+    "TEXDIR=${placeholder "out"}/tex/latex/" # what texlive.combine expects
+    "TEXDOCDIR=${placeholder "out"}/share/doc/texmf/" # TODO where to put this?
+    "MAN1DIR=${placeholder "out"}/share/man/man1"
+    "DESKTOPDIR=${placeholder "out"}/share/applications"
+    "METAINFODIR=${placeholder "out"}/share/metainfo"
+    "ICONSDIR=${placeholder "out"}/share/auto-multiple-choice/icons"
+    "CSSDIR=${placeholder "out"}/share/auto-multiple-choice/gtk"
+    "APPICONDIR=${placeholder "out"}/share/icons/hicolor"
+    "LOCALEDIR=${placeholder "out"}/share/locale"
+    "MODELSDIR=${placeholder "out"}/share/auto-multiple-choice/models"
+    "DOCDIR=${placeholder "out"}/share/doc/auto-multiple-choice"
+    "SHARED_MIMEINFO_DIR=${placeholder "out"}/share/mime/packages"
+    "LANG_GTKSOURCEVIEW_DIR=${placeholder "out"}/share/gtksourceview-4/language-specs"
     # Pretend to be redhat so `install` doesn't try to chown/chgrp.
     "SYSTEM_TYPE=rpm"
+    "GCC=${stdenv.cc.targetPrefix}cc"
+    "GCC_PP=${stdenv.cc.targetPrefix}c++"
   ];
 
   preFixup = ''
@@ -65,7 +72,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/auto-multiple-choice \
     ''${makeWrapperArgs[@]} \
-    --prefix PERL5LIB : "${with perlPackages; makePerlPath [
+    --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [
       ArchiveZip
       DBDSQLite
       Cairo
@@ -75,20 +82,23 @@ stdenv.mkDerivation rec {
       GlibObjectIntrospection
       Gtk3
       LocaleGettext
+      OpenOfficeOODoc
       PerlMagick
       TextCSV
       XMLParser
       XMLSimple
       XMLWriter
     ]}:"$out/share/perl5 \
-    --prefix XDG_DATA_DIRS : "$out/share" \
-    --set TEXINPUTS ":.:$out/share/texmf/tex/latex/AMC"
+    --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
+    --prefix PATH : "$out/bin" \
+    --set TEXINPUTS ":.:$out/tex/latex"
   '';
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -96,10 +106,10 @@ stdenv.mkDerivation rec {
     cairo.dev
     dblatex
     gnumake
-    gobject-introspection
     graphicsmagick
     gsettings-desktop-schemas
     gtk3
+    hicolor-icon-theme
     libnotify
     librsvg
     libxslt
@@ -125,8 +135,14 @@ stdenv.mkDerivation rec {
     XMLWriter
   ]);
 
+  passthru = {
+    tlType = "run";
+    pkgs = [ finalAttrs.finalPackage ];
+  };
+
   meta = with lib; {
-    description = "Create and manage multiple choice questionnaires with automated marking.";
+    description = "Create and manage multiple choice questionnaires with automated marking";
+    mainProgram = "auto-multiple-choice";
     longDescription = ''
       Create, manage and mark multiple-choice questionnaires.
       auto-multiple-choice features automated or manual formatting with
@@ -144,10 +160,7 @@ stdenv.mkDerivation rec {
         auto-multiple-choice
         (texlive.combine {
           inherit (pkgs.texlive) scheme-full;
-          extra =
-            {
-              pkgs = [ auto-multiple-choice ];
-            };
+          inherit auto-multiple-choice;
         })
       ];
       </screen>
@@ -160,4 +173,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.thblt ];
     platforms = platforms.all;
   };
-}
+})

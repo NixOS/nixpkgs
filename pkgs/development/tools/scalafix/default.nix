@@ -1,43 +1,57 @@
-{ lib, stdenv, jdk, jre, coursier, makeWrapper }:
+{
+  lib,
+  stdenv,
+  jre,
+  coursier,
+  makeWrapper,
+  installShellFiles,
+  setJavaClassPath,
+  testers,
+}:
+stdenv.mkDerivation (
+  finalAttrs: {
+    pname = "scalafix";
+    version = "0.12.0";
+    deps = stdenv.mkDerivation {
+      name = "${finalAttrs.pname}-deps-${finalAttrs.version}";
+      buildCommand = ''
+        export COURSIER_CACHE=$(pwd)
+        ${coursier}/bin/cs fetch ch.epfl.scala:scalafix-cli_2.13.13:${finalAttrs.version} > deps
+        mkdir -p $out/share/java
+        cp $(< deps) $out/share/java/
+      '';
+      outputHashMode = "recursive";
+      outputHash = "sha256-HMTnr3awTIAgLSl4eF36U1kv162ajJxC5MreSk2TfUE=";
+    };
 
-let
-  baseName = "scalafix";
-  version = "0.9.0";
-  deps = stdenv.mkDerivation {
-    name = "${baseName}-deps-${version}";
-    buildCommand = ''
-      export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/cs fetch ch.epfl.scala:scalafix-cli_2.12.7:${version} > deps
-      mkdir -p $out/share/java
-      cp $(< deps) $out/share/java/
+    nativeBuildInputs = [makeWrapper installShellFiles setJavaClassPath];
+    buildInputs = [finalAttrs.deps];
+
+    dontUnpack = true;
+
+    installPhase = ''
+      makeWrapper ${jre}/bin/java $out/bin/${finalAttrs.pname} \
+        --add-flags "-cp $CLASSPATH scalafix.cli.Cli"
+
+      installShellCompletion --cmd ${finalAttrs.pname} \
+        --bash <($out/bin/${finalAttrs.pname} --bash) \
+        --zsh  <($out/bin/${finalAttrs.pname} --zsh)
     '';
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash     = "19j260prx7k010nxyvc1m9jj1ncxr73m2cym7if39360v5dc05c0";
-  };
-in
-stdenv.mkDerivation {
-  pname = baseName;
-  inherit version;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk deps ];
+    passthru.tests = {
+      testVersion = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        version = "${finalAttrs.version}";
+      };
+    };
 
-  dontUnpack = true;
-
-  installPhase = ''
-    makeWrapper ${jre}/bin/java $out/bin/${baseName} \
-      --add-flags "-cp $CLASSPATH scalafix.cli.Cli"
-  '';
-
-  installCheckPhase = ''
-    $out/bin/${baseName} --version | grep -q "${version}"
-  '';
-
-  meta = with lib; {
-    description = "Refactoring and linting tool for Scala";
-    homepage = "https://scalacenter.github.io/scalafix/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.tomahna ];
-  };
-}
+    meta = with lib; {
+      description = "Refactoring and linting tool for Scala";
+      mainProgram = "scalafix";
+      homepage = "https://scalacenter.github.io/scalafix/";
+      license = licenses.bsd3;
+      maintainers = [maintainers.tomahna];
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    };
+  }
+)

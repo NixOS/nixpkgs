@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.18";
+  version = "1.4.0";
   pname = "smenu";
 
   src = fetchFromGitHub {
     owner = "p-gen";
     repo = "smenu";
     rev = "v${version}";
-    sha256 = "sha256-8ALY3dsUEJxGsDnYTOxNAmJbwmmZIV8GuHjNg0vPFUQ=";
+    sha256 = "sha256-pAbtTqDIdDWReeaRK7UHXh/PS5f44/PRWaICluH02ec=";
   };
 
   buildInputs = [ ncurses ];
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
       your selection will be sent to standard output.
     '';
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ matthiasbeyer SuperSandro2000 ];
+    maintainers = with maintainers; [ matthiasbeyer ];
     platforms = platforms.unix;
+    mainProgram = "smenu";
   };
 }

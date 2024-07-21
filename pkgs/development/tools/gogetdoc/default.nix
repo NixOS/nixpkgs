@@ -8,11 +8,9 @@ buildGoModule rec {
   version = "2019-02-28";
   rev = "b37376c5da6aeb900611837098f40f81972e63e4";
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
-
-  excludedPackages = "\\(testdata\\)";
 
   src = fetchFromGitHub {
     inherit rev;
@@ -24,6 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Gets documentation for items in Go source code";
+    mainProgram = "gogetdoc";
     homepage = "https://github.com/zmb3/gogetdoc";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kalbasit ];

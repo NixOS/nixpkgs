@@ -1,70 +1,62 @@
-{ stdenv, lib, python3
+{ lib
+, python3Packages
 , fetchFromGitHub
-, fetchPypi
+, fetchpatch
+, installShellFiles
 , git
 , spdx-license-list-data
-, version, src
+, substituteAll
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
-        version = "0.8.0";
-        src = fetchFromGitHub {
-          owner = "Tinche";
-          repo = "aiofiles";
-          rev = "v${version}";
-          sha256 = "0mr9pzji4vqyf2yzh8yxz5q7fm8mgmkimx1xh49wh625m72pxcap";
-        };
-      });
 
-      asgiref = super.asgiref.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.1";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = "asgiref";
-          rev = version;
-          sha256 = "0440321alpqb1cdsmfzmiiy8rpq0ic0wvraalzk39cgrl7mghw39";
-        };
-      });
-
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "8.0.3";
-        src = fetchFromGitHub {
-          owner = "pallets";
-          repo = "click";
-          rev = version;
-          sha256 = "0pxvxgfhqjgsjbgfnilqjki1l24r0rdfd98cl77i71yqdd2f497g";
-        };
-      });
-
-      starlette = super.starlette.overridePythonAttrs (oldAttrs: rec {
-        version = "0.17.0";
-        src = fetchFromGitHub {
-          owner = "encode";
-          repo = "starlette";
-          rev = version;
-          sha256 = "1g76qpvqzivmwll5ir4bf45jx5kilnkadvy6b7qjisvr402i3qmw";
-        };
-        disabledTestPaths = [];
-      });
-
-      uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {
-        version = "0.16.0";
-        src = fetchFromGitHub {
-          owner = "encode";
-          repo = "uvicorn";
-          rev = version;
-          sha256 = "14jih6j4q2qp5c9rgl798i5p51b4y6zkkj434q2l1naw0csphk4s";
-        };
-      });
-    };
-  };
-in
-with python.pkgs; buildPythonApplication rec {
+with python3Packages; buildPythonApplication rec {
   pname = "platformio";
-  inherit version src;
+  version = "6.1.11";
+  pyproject = true;
+
+  # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
+  src = fetchFromGitHub {
+    owner = "platformio";
+    repo = "platformio-core";
+    rev = "v${version}";
+    hash = "sha256-NR4UyAt8q5sUGtz1Sy6E8Of7y9WrH9xpcAWzLBeDQmo=";
+  };
+
+  outputs = [ "out" "udev" ];
+
+  patches = [
+    (substituteAll {
+      src = ./interpreter.patch;
+      interpreter = (python3Packages.python.withPackages (_: propagatedBuildInputs)).interpreter;
+    })
+    (substituteAll {
+      src = ./use-local-spdx-license-list.patch;
+      spdx_license_list_data = spdx-license-list-data.json;
+    })
+    ./missing-udev-rules-nixos.patch
+    (fetchpatch {
+      # restore PYTHONPATH when calling scons
+      # https://github.com/platformio/platformio-core/commit/097de2be98af533578671baa903a3ae825d90b94
+      url = "https://github.com/platformio/platformio-core/commit/097de2be98af533578671baa903a3ae825d90b94.patch";
+      hash = "sha256-yq+/QHCkhAkFND11MbKFiiWT3oF1cHhgWj5JkYjwuY0=";
+      revert = true;
+    })
+  ];
+
+  postPatch = ''
+    # Disable update checks at runtime
+    substituteInPlace platformio/maintenance.py --replace-fail '    check_platformio_upgrade()' ""
+
+    # Remove filterwarnings which fails on new deprecations in Python 3.12 for 3.14
+    rm tox.ini
+  '';
+
+  nativeBuildInputs = [
+    installShellFiles
+    setuptools
+  ];
+
+  pythonRelaxDeps = true;
 
   propagatedBuildInputs = [
     aiofiles
@@ -80,22 +72,73 @@ with python.pkgs; buildPythonApplication rec {
     pyserial
     requests
     semantic-version
+    setuptools
+    spdx-license-list-data.json
     starlette
     tabulate
     uvicorn
     wsproto
     zeroconf
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    chardet
   ];
 
-  HOME = "/tmp";
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export PATH=$PATH:$out/bin
+  '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsondiff
     pytestCheckHook
-    tox
   ];
 
-  pytestFlagsArray = (map (e: "--deselect tests/${e}") [
+  # Install udev rules into a separate output so all of platformio-core is not a dependency if
+  # you want to use the udev rules on NixOS but not install platformio in your system packages.
+  postInstall = ''
+    mkdir -p $udev/lib/udev/rules.d
+    cp platformio/assets/system/99-platformio-udev.rules $udev/lib/udev/rules.d/99-platformio-udev.rules
+
+    installShellCompletion --cmd platformio \
+      --bash <(_PLATFORMIO_COMPLETE=bash_source $out/bin/platformio) \
+      --zsh <(_PLATFORMIO_COMPLETE=zsh_source $out/bin/platformio) \
+      --fish <(_PLATFORMIO_COMPLETE=fish_source $out/bin/platformio)
+
+    installShellCompletion --cmd pio \
+      --bash <(_PIO_COMPLETE=bash_source $out/bin/pio) \
+      --zsh <(_PIO_COMPLETE=zsh_source $out/bin/pio) \
+      --fish <(_PIO_COMPLETE=fish_source $out/bin/pio)
+  '';
+
+  disabledTestPaths = [
+    "tests/commands/pkg/test_install.py"
+    "tests/commands/pkg/test_list.py"
+    "tests/commands/pkg/test_outdated.py"
+    "tests/commands/pkg/test_search.py"
+    "tests/commands/pkg/test_show.py"
+    "tests/commands/pkg/test_uninstall.py"
+    "tests/commands/pkg/test_update.py"
+    "tests/commands/test_boards.py"
+    "tests/commands/test_check.py"
+    "tests/commands/test_platform.py"
+    "tests/commands/test_run.py"
+    "tests/commands/test_test.py"
+    "tests/misc/test_maintenance.py"
+    # requires internet connection
+    "tests/misc/ino2cpp/test_ino2cpp.py"
+  ];
+
+  disabledTests = [
+    # requires internet connection
+    "test_api_cache"
+    "test_ping_internet_ips"
+  ];
+
+  pytestFlagsArray = [
+    "tests"
+  ] ++ (map (e: "--deselect tests/${e}") [
+    "commands/pkg/test_exec.py::test_pkg_specified"
+    "commands/pkg/test_exec.py::test_unrecognized_options"
     "commands/test_ci.py::test_ci_boards"
     "commands/test_ci.py::test_ci_build_dir"
     "commands/test_ci.py::test_ci_keep_build_dir"
@@ -105,6 +148,7 @@ with python.pkgs; buildPythonApplication rec {
     "commands/test_init.py::test_init_duplicated_boards"
     "commands/test_init.py::test_init_enable_auto_uploading"
     "commands/test_init.py::test_init_ide_atom"
+    "commands/test_init.py::test_init_ide_clion"
     "commands/test_init.py::test_init_ide_eclipse"
     "commands/test_init.py::test_init_ide_vscode"
     "commands/test_init.py::test_init_incorrect_board"
@@ -133,9 +177,6 @@ with python.pkgs; buildPythonApplication rec {
     "commands/test_lib_complex.py::test_lib_show"
     "commands/test_lib_complex.py::test_lib_stats"
     "commands/test_lib_complex.py::test_search"
-    "commands/test_test.py::test_local_env"
-    "commands/test_test.py::test_multiple_env_build"
-    "commands/test_test.py::test_setup_teardown_are_compilable"
     "package/test_manager.py::test_download"
     "package/test_manager.py::test_install_force"
     "package/test_manager.py::test_install_from_registry"
@@ -152,36 +193,19 @@ with python.pkgs; buildPythonApplication rec {
     "test_misc.py::test_ping_internet_ips"
     "test_misc.py::test_platformio_cli"
     "test_pkgmanifest.py::test_packages"
-  ]) ++ (map (e: "--ignore=tests/${e}") [
-    "commands/test_boards.py"
-    "commands/test_check.py"
-    "commands/test_platform.py"
-    "commands/test_update.py"
-    "test_maintenance.py"
-    "test_ino2cpp.py"
-  ]) ++ [
-    "tests"
-  ];
+  ]);
 
-  patches = [
-    ./fix-searchpath.patch
-    ./use-local-spdx-license-list.patch
-    ./missing-udev-rules-nixos.patch
-  ];
-
-  postPatch = ''
-    substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
-      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
-
-    substituteInPlace setup.py \
-      --replace "zeroconf==0.28.*" "zeroconf"
-  '';
+  passthru = {
+    python = python3Packages.python;
+  };
 
   meta = with lib; {
-    broken = stdenv.isAarch64;
-    description = "An open source ecosystem for IoT development";
-    homepage = "http://platformio.org";
+    changelog = "https://github.com/platformio/platformio-core/releases/tag/v${version}";
+    description = "Open source ecosystem for IoT development";
+    downloadPage = "https://github.com/platformio/platformio-core";
+    homepage = "https://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
+    mainProgram = "platformio";
   };
 }

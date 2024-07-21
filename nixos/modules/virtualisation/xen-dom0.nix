@@ -22,13 +22,12 @@ in
       mkOption {
         default = false;
         type = types.bool;
-        description =
-          ''
+        description = ''
             Setting this option enables the Xen hypervisor, a
             virtualisation technology that allows multiple virtual
-            machines, known as <emphasis>domains</emphasis>, to run
+            machines, known as *domains*, to run
             concurrently on the physical machine.  NixOS runs as the
-            privileged <emphasis>Domain 0</emphasis>.  This option
+            privileged *Domain 0*.  This option
             requires a reboot to take effect.
           '';
       };
@@ -99,7 +98,7 @@ in
           default = 16;
           description = ''
             Subnet mask of the bridge interface, specified as the number of
-            bits in the prefix (<literal>24</literal>).
+            bits in the prefix (`24`).
             A DHCP server will provide IP addresses for the whole, remaining
             subnet.
           '';
@@ -109,7 +108,7 @@ in
           type = types.bool;
           default = false;
           description = ''
-            If set to <literal>true</literal>, the DNS queries from the
+            If set to `true`, the DNS queries from the
             hosts connected to the bridge will be forwarded to the DNS
             servers specified in /etc/resolv.conf .
             '';
@@ -450,5 +449,4 @@ in
     };
 
   };
-
 }

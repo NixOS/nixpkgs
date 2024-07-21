@@ -60,7 +60,7 @@ in {
       description = ''
         Port to be used for indexing DHT nodes.
         This port should be added to
-        <option>networking.firewall.allowedTCPPorts</option>.
+        {option}`networking.firewall.allowedTCPPorts`.
       '';
     };
 
@@ -118,23 +118,21 @@ in {
       '';
       description = ''
         The credentials to access the web interface, in case authentication is
-        enabled, in the format <literal>username:hash</literal>. If unset no
+        enabled, in the format `username:hash`. If unset no
         authentication will be required.
 
         Usernames must start with a lowercase ([a-z]) ASCII character, might
         contain non-consecutive underscores except at the end, and consists of
         small-case a-z characters and digits 0-9.  The
-        <command>htpasswd</command> tool from the <package>apacheHttpd
-        </package> package may be used to generate the hash: <command>htpasswd
-        -bnBC 12 username password</command>
+        {command}`htpasswd` tool from the `apacheHttpd`
+        package may be used to generate the hash:
+        {command}`htpasswd -bnBC 12 username password`
 
-        <warning>
-        <para>
-          The hashes will be stored world-readable in the nix store.
-          Consider using the <literal>credentialsFile</literal> option if you
-          don't want this.
-        </para>
-        </warning>
+        ::: {.warning}
+        The hashes will be stored world-readable in the nix store.
+        Consider using the `credentialsFile` option if you
+        don't want this.
+        :::
       '';
     };
 
@@ -145,14 +143,14 @@ in {
         The path to the file holding the credentials to access the web
         interface. If unset no authentication will be required.
 
-        The file must constain user names and password hashes in the format
-        <literal>username:hash </literal>, one for each line.  Usernames must
+        The file must contain user names and password hashes in the format
+        `username:hash`, one for each line.  Usernames must
         start with a lowecase ([a-z]) ASCII character, might contain
         non-consecutive underscores except at the end, and consists of
         small-case a-z characters and digits 0-9.
-        The <command>htpasswd</command> tool from the <package>apacheHttpd
-        </package> package may be used to generate the hash:
-        <command>htpasswd -bnBC 12 username password</command>
+        The {command}`htpasswd` tool from the `apacheHttpd`
+        package may be used to generate the hash:
+        {command}`htpasswd -bnBC 12 username password`
       '';
     };
 

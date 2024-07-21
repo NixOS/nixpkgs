@@ -31,11 +31,9 @@ in stdenv.mkDerivation {
     sha256 = "0vdksf6lcgmizqr5mqp0bbci259k0dj7gpmhx32md41jlmw5skaw";
   };
 
+  nativeBuildInputs = [ autoconf automake pkg-config ];
   buildInputs = [
-    autoconf
-    automake
     libtool
-    pkg-config
     glib
     libdaemon
     pandoc
@@ -53,7 +51,7 @@ in stdenv.mkDerivation {
   configureFlags = [ "--enable-gmodule" "--with-standard-modules=all" ];
 
   meta = with lib; {
-    description = "A cron like daemon for mpd";
+    description = "Cron like daemon for mpd";
     homepage    = "http://alip.github.io/mpdcron/";
     license     = licenses.gpl2Plus;
     platforms   = platforms.unix;

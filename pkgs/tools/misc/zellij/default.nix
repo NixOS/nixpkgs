@@ -3,28 +3,34 @@
 , rustPlatform
 , stdenv
 , installShellFiles
+, perl
 , pkg-config
 , libiconv
 , openssl
+, DiskArbitration
+, Foundation
+, mandown
 , zellij
-, testVersion
+, testers
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zellij";
-  version = "0.22.1";
+  version = "0.40.1";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     rev = "v${version}";
-    sha256 = "sha256-BOUZ26XeBwWZezSS38Dek1Zgu7TyTqMkCb7UHLZBkrI=";
+    hash = "sha256-n8cwsCeKWzTw/psvLL3chBr8EcwGoeKB8JeiLSLna1k=";
   };
 
-  cargoSha256 = "sha256-oDFq6+RZ6ubBAnEq2l21EhJlUiKAQtaoO6U1UjY4RPY=";
+  cargoHash = "sha256-TyIQaovmpiu7USURA//+IQWNT95rrVk0x9TRspXYUNk=";
 
   nativeBuildInputs = [
+    mandown
     installShellFiles
+    perl
     pkg-config
   ];
 
@@ -32,6 +38,8 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     libiconv
+    DiskArbitration
+    Foundation
   ];
 
   preCheck = ''
@@ -39,19 +47,23 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
+    mandown docs/MANPAGE.md > zellij.1
+    installManPage zellij.1
+
     installShellCompletion --cmd $pname \
       --bash <($out/bin/zellij setup --generate-completion bash) \
       --fish <($out/bin/zellij setup --generate-completion fish) \
       --zsh <($out/bin/zellij setup --generate-completion zsh)
   '';
 
-  passthru.tests.version = testVersion { package = zellij; };
+  passthru.tests.version = testers.testVersion { package = zellij; };
 
   meta = with lib; {
-    description = "A terminal workspace with batteries included";
+    description = "Terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
-    changelog = "https://github.com/zellij-org/zellij/blob/v${version}/Changelog.md";
+    changelog = "https://github.com/zellij-org/zellij/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ therealansh _0x4A6F ];
+    maintainers = with maintainers; [ therealansh _0x4A6F abbe pyrox0 ];
+    mainProgram = "zellij";
   };
 }

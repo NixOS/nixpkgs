@@ -1,48 +1,84 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
-
 , meson
 , ninja
 , pkg-config
 , gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , gsettings-desktop-schemas
 , makeWrapper
-
 , dbus
 , glib
 , dconf
 , libX11
-, libXtst # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
+, libxml2
+, libXtst
 , libXi
 , libXext
-
-, gnome # To pass updateScript
+, gnome
+, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.42.0";
+  version = "2.52.0";
+
+  outputs = [ "out" "dev" ];
+  separateDebugInfo = true;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "11p3lvmbm0hfck3p5xwxxycln8x0cf7l68jjz6an2g7sjh7a2pab";
+    hash = "sha256-CsP8gyDI0B+hR8Jyun+gOAY4nGsD08QG0II+MONf9as=";
   };
 
-  outputs = [ "out" "dev" ];
+  nativeBuildInputs = [
+    glib
+    meson
+    ninja
+    pkg-config
+    makeWrapper
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ];
 
-  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection makeWrapper ];
-  # libXext is a transitive dependency of libXi
-  buildInputs = [ libX11 libXtst libXi libXext ];
+  buildInputs = [
+    libX11
+    libxml2
+    # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
+    libXtst
+    libXi
+    # libXext is a transitive dependency of libXi
+    libXext
+  ] ++ lib.optionals systemdSupport [
+    # libsystemd is a needed for dbus-broker support
+    systemd
+  ];
+
   # In atspi-2.pc dbus-1 glib-2.0
-  propagatedBuildInputs = [ dbus glib ];
+  # In atk.pc gobject-2.0
+  propagatedBuildInputs = [
+    dbus
+    glib
+  ];
 
-  doCheck = false; # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
+  # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
+  doCheck = false;
 
-  # Provide dbus-daemon fallback when it is not already running when
-  # at-spi2-bus-launcher is executed. This allows us to avoid
-  # including the entire dbus closure in libraries linked with
-  # the at-spi2-core libraries.
-  mesonFlags = [ "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon" ];
+  mesonFlags = [
+    # Provide dbus-daemon fallback when it is not already running when
+    # at-spi2-bus-launcher is executed. This allows us to avoid
+    # including the entire dbus closure in libraries linked with
+    # the at-spi2-core libraries.
+    "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon"
+  ] ++ lib.optionals systemdSupport [
+    # Same as the above, but for dbus-broker
+    "-Ddbus_broker=/run/current-system/sw/bin/dbus-broker-launch"
+  ] ++ lib.optionals (!systemdSupport) [
+    "-Duse_systemd=false"
+  ];
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -62,7 +98,7 @@ stdenv.mkDerivation rec {
     description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
     homepage = "https://gitlab.gnome.org/GNOME/at-spi2-core";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
     platforms = platforms.unix;
   };
 }

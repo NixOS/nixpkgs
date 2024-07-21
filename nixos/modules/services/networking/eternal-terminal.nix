@@ -20,7 +20,7 @@ in
 
       port = mkOption {
         default = 2022;
-        type = types.int;
+        type = types.port;
         description = ''
           The port the server should listen on. Will use the server's default (2022) if not specified.
 
@@ -90,6 +90,6 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ pingiun ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

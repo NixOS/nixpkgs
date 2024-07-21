@@ -11,7 +11,7 @@ in {
   options = {
     services.lirc = {
 
-      enable = mkEnableOption "LIRC daemon";
+      enable = mkEnableOption "the LIRC daemon, to receive and send infrared signals";
 
       options = mkOption {
         type = types.lines;
@@ -19,12 +19,12 @@ in {
           [lircd]
           nodaemon = False
         '';
-        description = "LIRC default options descriped in man:lircd(8) (<filename>lirc_options.conf</filename>)";
+        description = "LIRC default options described in man:lircd(8) ({file}`lirc_options.conf`)";
       };
 
       configs = mkOption {
         type = types.listOf types.lines;
-        description = "Configurations for lircd to load, see man:lircd.conf(5) for details (<filename>lircd.conf</filename>)";
+        description = "Configurations for lircd to load, see man:lircd.conf(5) for details ({file}`lircd.conf`)";
       };
 
       extraArguments = mkOption {

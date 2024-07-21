@@ -6,7 +6,7 @@ set -eu -o pipefail
 version="$(curl https://download.jitsi.org/stable/ | \
     pup 'a[href] text{}' | \
     awk -F'[_-]' '/jicofo/ {printf $2"-"$3"\n"}' | \
-    sort -u | \
+    sort -Vu | \
     tail -n 1)"
 
 update-source-version jicofo "$version"

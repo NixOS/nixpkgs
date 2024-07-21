@@ -38,7 +38,7 @@ in {
       default = 22067;
       description = ''
         Port to listen on for relay traffic. This port should be added to
-        <literal>networking.firewall.allowedTCPPorts</literal>.
+        `networking.firewall.allowedTCPPorts`.
       '';
     };
 
@@ -56,7 +56,7 @@ in {
       default = 22070;
       description = ''
         Port to listen on for serving the relay status API. This port should be
-        added to <literal>networking.firewall.allowedTCPPorts</literal>.
+        added to `networking.firewall.allowedTCPPorts`.
       '';
     };
 

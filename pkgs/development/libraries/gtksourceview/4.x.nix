@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch2
 , meson
 , ninja
 , pkg-config
@@ -19,17 +20,20 @@
 , dbus
 , xvfb-run
 , shared-mime-info
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "4.8.2";
+  version = "4.8.4";
 
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1k1pava84ywgq62xl5bz8y3zm7z2kz6kkgp423c0y02jrgjyfbc4";
+    sha256 = "fsnRj7KD0fhKOj7/O3pysJoQycAGWXs/uru1lYQgqH0=";
   };
 
   patches = [
@@ -37,6 +41,19 @@ stdenv.mkDerivation rec {
     # but not from its own datadr (it assumes it will be in XDG_DATA_DIRS).
     # Since this is not generally true with Nix, let’s add $out/share unconditionally.
     ./4.x-nix_share_path.patch
+
+    # nix.lang: Add Nix syntax highlighting
+    # https://gitlab.gnome.org/GNOME/gtksourceview/-/merge_requests/303
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gtksourceview/-/commit/685b3bd08869c2aefe33fad696a7f5f2dc831016.patch";
+      hash = "sha256-yeYXJ2l/QS857C4UXOnMFyh0JsptA0TQt0lfD7wN5ic=";
+    })
+
+    # nix.lang: fix section name
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gtksourceview/-/commit/1dbbb01da98140e0b2d5d0c6c2df29247650ed83.patch";
+      hash = "sha256-6HxLKQyI5DDvmKhmldQlwVPV62RfFa2gwWbcHA2cICs=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -65,19 +82,28 @@ stdenv.mkDerivation rec {
     shared-mime-info
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     dbus
   ];
 
-  doCheck = stdenv.isLinux;
+  postPatch = ''
+    # https://gitlab.gnome.org/GNOME/gtksourceview/-/merge_requests/295
+    # build: drop unnecessary vapigen check
+    substituteInPlace meson.build \
+      --replace "if generate_vapi" "if false"
+  '';
+
+  # Broken by PCRE 2 bump in GLib.
+  # https://gitlab.gnome.org/GNOME/gtksourceview/-/issues/283
+  doCheck = false;
 
   checkPhase = ''
     runHook preCheck
 
     XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --no-rebuild --print-errorlogs
 
     runHook postCheck
@@ -92,11 +118,14 @@ stdenv.mkDerivation rec {
     };
   };
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Source code editing widget for GTK";
-    homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
+    homepage = "https://gitlab.gnome.org/GNOME/gtksourceview";
+    pkgConfigModules = [ "gtksourceview-4" ];
     platforms = platforms.unix;
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
   };
-}
+})

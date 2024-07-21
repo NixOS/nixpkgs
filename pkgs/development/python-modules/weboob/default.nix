@@ -1,56 +1,47 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, Babel
-, cssselect
-, python-dateutil
-, feedparser
-, futures ? null
-, gdata
-, gnupg
-, google-api-python-client
-, html2text
-, libyaml
-, lxml
-, mechanize
-, nose
-, pdfminer
-, pillow
-, prettytable
-, pyqt5
-, pyyaml
-, requests
-, simplejson
-, termcolor
-, unidecode
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  cssselect,
+  feedparser,
+  fetchPypi,
+  gdata,
+  gnupg,
+  google-api-python-client,
+  html2text,
+  libyaml,
+  lxml,
+  mechanize,
+  nose,
+  pdfminer-six,
+  pillow,
+  prettytable,
+  pyqt5,
+  python-dateutil,
+  pythonOlder,
+  pyyaml,
+  requests,
+  simplejson,
+  termcolor,
+  unidecode,
 }:
 
 buildPythonPackage rec {
   pname = "weboob";
   version = "2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1c69vzf8sg8471lcaafpz9iw2q3rfj5hmcpqrs2k59fkgbvy32zw";
   };
 
-  postPatch = ''
-    # Disable doctests that require networking:
-    sed -i -n -e '/^ *def \+pagination *(.*: *$/ {
-      p; n; p; /"""\|'\'\'\'''/!b
-
-      :loop
-      n; /^ *\(>>>\|\.\.\.\)/ { h; bloop }
-      x; /^ *\(>>>\|\.\.\.\)/bloop; x
-      p; /"""\|'\'\'\'''/b
-      bloop
-    }; p' weboob/browser/browsers.py weboob/browser/pages.py
-  '';
-
-  checkInputs = [ nose ];
-
   nativeBuildInputs = [ pyqt5 ];
 
   propagatedBuildInputs = [
-    Babel
+    babel
     cssselect
     python-dateutil
     feedparser
@@ -61,7 +52,7 @@ buildPythonPackage rec {
     libyaml
     lxml
     mechanize
-    pdfminer
+    pdfminer-six
     pillow
     prettytable
     pyqt5
@@ -70,15 +61,31 @@ buildPythonPackage rec {
     simplejson
     termcolor
     unidecode
-  ] ++ lib.optionals isPy27 [ futures ];
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "with-doctest = 1" "" \
+      --replace "with-coverage = 1" "" \
+      --replace "weboob.browser.filters.standard," "" \
+      --replace "weboob.browser.tests.filters," "" \
+      --replace "weboob.tools.application.formatters.json," "" \
+      --replace "weboob.tools.application.formatters.table," "" \
+      --replace "weboob.tools.capabilities.bank.transactions," ""
+  '';
+
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     nosetests
   '';
 
-  meta = {
+  pythonImportsCheck = [ "weboob" ];
+
+  meta = with lib; {
+    description = "Collection of applications and APIs to interact with websites";
     homepage = "http://weboob.org";
-    description = "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
-    license = lib.licenses.agpl3;
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ ];
   };
 }

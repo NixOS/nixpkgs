@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Measure JVM application stalls and GC pauses";
     homepage    = "https://www.azul.com/jhiccup/";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license     = lib.licenses.cc0;
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ thoughtpolice ];

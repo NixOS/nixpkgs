@@ -1,16 +1,16 @@
 { lib, stdenv, fetchurl
 , ncurses
 , libX11, xorgproto, buildEnv
+, useX11 ? stdenv.hostPlatform.isx86
 }:
 
 let
-   useX11 = stdenv.hostPlatform.isx86;
    x11deps = [ libX11 xorgproto ];
    inherit (lib) optionals;
 
-   baseOcamlBranch  = "4.07";
+   baseOcamlBranch  = "4.14";
    baseOcamlVersion = "${baseOcamlBranch}.1";
-   metaocamlPatch   = "107";
+   metaocamlPatch   = "114";
 in
 
 stdenv.mkDerivation rec {
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://caml.inria.fr/pub/distrib/ocaml-${baseOcamlBranch}/ocaml-${baseOcamlVersion}.tar.gz";
-    sha256 = "1x4sln131mcspisr22qc304590rvg720rbl7g2i4xiymgvhkpm1a";
+    sha256 = "sha256-GDl53JwJyw9YCiMraFMaCbAlqmKLjY1ydEnxRv1vX+4=";
   };
 
   metaocaml = fetchurl {
-    url = "http://okmij.org/ftp/ML/ber-metaocaml-107.tar.gz";
-    sha256 = "0xy6n0yj1f53pk612zfmn49pn04bd75qa40xgmr0w0lzx6dqsfmm";
+    url = "http://okmij.org/ftp/ML/ber-metaocaml-${metaocamlPatch}.tar.gz";
+    sha256 = "sha256-vvq3xI4jSAsrXcDk97TPbFDYgO9NcQeN/yBcUbcb/y0=";
   };
 
   x11env = buildEnv { name = "x11env"; paths = x11deps; };
@@ -32,11 +32,7 @@ stdenv.mkDerivation rec {
   x11inc = "${x11env}/include";
 
   prefixKey = "-prefix ";
-  configureFlags = optionals useX11
-    [ "-x11lib" x11lib
-      "-x11include" x11inc
-      "-flambda"
-    ];
+  configureFlags = optionals useX11 [ "--enable-flambda" ];
 
   dontStrip = true;
   buildInputs = [ ncurses ] ++ optionals useX11 x11deps;
@@ -80,7 +76,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description     = "Multi-Stage Programming extension for OCaml";
-    homepage        = "http://okmij.org/ftp/ML/MetaOCaml.html";
+    homepage        = "https://okmij.org/ftp/ML/MetaOCaml.html";
     license         = with licenses; [ /* compiler */ qpl /* library */ lgpl2 ];
     maintainers     = with maintainers; [ thoughtpolice ];
 

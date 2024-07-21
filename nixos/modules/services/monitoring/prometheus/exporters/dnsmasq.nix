@@ -1,9 +1,13 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.dnsmasq;
+  inherit (lib)
+    mkOption
+    types
+    concatStringsSep
+    escapeShellArg
+    ;
 in
 {
   port = 9153;
@@ -20,7 +24,7 @@ in
       default = "/var/lib/misc/dnsmasq.leases";
       example = "/var/lib/dnsmasq/dnsmasq.leases";
       description = ''
-        Path to the <literal>dnsmasq.leases</literal> file.
+        Path to the `dnsmasq.leases` file.
       '';
     };
   };

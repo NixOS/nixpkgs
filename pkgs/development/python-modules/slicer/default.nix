@@ -1,24 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytestCheckHook
-, pandas
-, pytorch
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  dos2unix,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  pandas,
+  torch,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "slicer";
-  version = "0.0.7";
-  disabled = isPy27;
+  version = "0.0.8";
+  pyproject = true;
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f5d5f7b45f98d155b9c0ba6554fa9770c6b26d5793a3e77a1030fb56910ebeec";
+    hash = "sha256-LnVTr3PwwMLTVfSvzD7Pl8byFW/PRZOVXD9Wz2xNbrc=";
   };
 
-  checkInputs = [ pytestCheckHook pandas pytorch scipy ];
+  prePatch = ''
+    dos2unix slicer/*
+  '';
+
+  nativeBuildInputs = [ dos2unix ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pandas
+    torch
+    scipy
+  ];
 
   meta = with lib; {
     description = "Wraps tensor-like objects and provides a uniform slicing interface via __getitem__";

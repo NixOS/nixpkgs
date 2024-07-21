@@ -17,22 +17,14 @@ in
         Erlang computations.
       '';
     };
-    package = mkOption {
-      type = types.package;
-      default = pkgs.erlang;
-      defaultText = literalExpression "pkgs.erlang";
-      description = ''
-        The Erlang package to use to get epmd binary. That way you can re-use
-        an Erlang runtime that is already installed for other purposes.
-      '';
-    };
+    package = mkPackageOption pkgs "erlang" { };
     listenStream = mkOption
       {
         type = types.str;
         default = "[::]:4369";
         description = ''
           the listenStream used by the systemd socket.
-          see https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream= for more informations.
+          see https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream= for more information.
           use this to change the port epmd will run on.
           if not defined, epmd will use "[::]:4369"
         '';

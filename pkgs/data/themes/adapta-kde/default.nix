@@ -13,14 +13,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  # Make this a fixed-output derivation
-  outputHashMode = "recursive";
-  outputHashAlgo = "sha256";
-  ouputHash = "0rxhk8sp81vb2mngqr7kn9vlqyliq9aqj2d25igcr01v5axbxbzb";
-
   meta = {
-    description = "A port of the Adapta theme for Plasma";
-    homepage = "https://git.io/adapta-kde";
+    description = "Port of the Adapta theme for Plasma";
+    homepage = "https://github.com/PapirusDevelopmentTeam/adapta-kde";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.tadfisher ];
     platforms = lib.platforms.all;

@@ -15,7 +15,7 @@ let
     inherit system pkgs;
   };
 
-  interactiveDriver = (testing.makeTest { inherit nodes; testScript = "start_all(); join_all();"; }).driverInteractive;
+  interactiveDriver = (testing.makeTest { inherit nodes; name = "network"; testScript = "start_all(); join_all();"; }).test.driverInteractive;
 in
 
 
@@ -25,4 +25,7 @@ pkgs.runCommand "nixos-build-vms" { nativeBuildInputs = [ pkgs.makeWrapper ]; } 
   ln -s ${interactiveDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
   wrapProgram $out/bin/nixos-test-driver \
     --add-flags "--interactive"
+  wrapProgram $out/bin/nixos-run-vms \
+     --set testScript "${pkgs.writeText "start-all" "start_all(); join_all();"}" \
+     --add-flags "--no-interactive"
 ''

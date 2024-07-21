@@ -1,45 +1,96 @@
-{ lib, python3Packages }:
+{ lib
+, fetchFromGitHub
+, python3
+, runtimeShell
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "snakemake";
-  version = "6.10.0";
+  version = "8.14.0";
+  format = "setuptools";
 
-  propagatedBuildInputs = with python3Packages; [
+  src = fetchFromGitHub {
+    owner = "snakemake";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6oguN4u4OUDXpDsbueSBNwtWgLCaKmgq3w/d/MsMh7Y=";
+    # https://github.com/python-versioneer/python-versioneer/issues/217
+    postFetch = ''
+      sed -i "$out"/snakemake/_version.py -e 's#git_refnames = ".*"#git_refnames = " (tag: v${version})"#'
+    '';
+  };
+
+  postPatch = ''
+    patchShebangs --build tests/
+    patchShebangs --host snakemake/executors/jobscript.sh
+    substituteInPlace snakemake/shell.py \
+      --replace "/bin/sh" "${runtimeShell}"
+  '';
+
+  propagatedBuildInputs = with python3.pkgs; [
     appdirs
     configargparse
     connection-pool
     datrie
     docutils
-    filelock
-    GitPython
+    gitpython
+    humanfriendly
+    immutables
     jinja2
     jsonschema
     nbformat
-    networkx
     psutil
     pulp
-    pygraphviz
     pyyaml
-    ratelimiter
     requests
+    reretry
     smart-open
+    snakemake-interface-executor-plugins
+    snakemake-interface-common
+    snakemake-interface-storage-plugins
+    snakemake-interface-report-plugins
     stopit
     tabulate
+    throttler
     toposort
     wrapt
+    yte
   ];
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "199a86c8d1fcfdb88c4271a1507b0ab371a15bc407f2dad9b0ab8c43438adff8";
-  };
+  # See
+  # https://github.com/snakemake/snakemake/blob/main/.github/workflows/main.yml#L99
+  # for the current basic test suite. Slurm, Tibanna and Tes require extra
+  # setup.
 
-  doCheck = false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json
+  nativeCheckInputs = with python3.pkgs; [
+    numpy
+    pandas
+    pytestCheckHook
+    requests-mock
+    snakemake-executor-plugin-cluster-generic
+  ];
+
+  disabledTestPaths = [
+    "tests/test_conda_python_3_7_script/test_script.py"
+  ];
+
+  disabledTests = [
+    "test_deploy_sources"
+  ];
+
+  pythonImportsCheck = [
+    "snakemake"
+  ];
+
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
 
   meta = with lib; {
     homepage = "https://snakemake.github.io";
     license = licenses.mit;
     description = "Python-based execution environment for make-like workflows";
+    mainProgram = "snakemake";
     longDescription = ''
       Snakemake is a workflow management system that aims to reduce the complexity of
       creating workflows by providing a fast and comfortable execution environment,

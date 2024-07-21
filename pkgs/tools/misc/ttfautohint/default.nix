@@ -23,12 +23,18 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ ''--with-qt=${if enableGUI then "${qtbase}/lib" else "no"}'' ];
 
+  # workaround https://github.com/NixOS/nixpkgs/issues/155458
+  preBuild = lib.optionalString stdenv.cc.isClang ''
+    rm version
+  '';
+
   enableParallelBuilding = true;
 
   dontWrapQtApps = true;
 
   meta = with lib; {
-    description = "An automatic hinter for TrueType fonts";
+    description = "Automatic hinter for TrueType fonts";
+    mainProgram = "ttfautohint";
     longDescription = ''
       A library and two programs which take a TrueType font as the
       input, remove its bytecode instructions (if any), and return a

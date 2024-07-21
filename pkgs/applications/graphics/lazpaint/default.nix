@@ -1,30 +1,30 @@
 { lib, stdenv, fetchFromGitHub, lazarus, fpc, pango, cairo, glib
-, atk, gtk2, libX11, gdk-pixbuf, busybox, python3, makeWrapper }:
-
-with stdenv;
+, atk, gtk2, libX11, gdk-pixbuf, busybox, python3
+, makeWrapper
+}:
 
 let
   bgrabitmap = fetchFromGitHub {
     owner = "bgrabitmap";
     repo = "bgrabitmap";
-    rev = "v11.2.5";
-    sha256 = "0w5pdihsxn039kalkf4cx23j69hz5r09qmhd358h2n74irv1r3x1";
+    rev = "2814b069d55f726b9f3b4774d85d00dd72be9c05";
+    hash = "sha256-YibwdhlgjgI30gqYsKchgDPlOSpBiDBDJNlUDFMygGs=";
   };
   bgracontrols = fetchFromGitHub {
     owner = "bgrabitmap";
     repo = "bgracontrols";
-    rev = "v7.0";
-    sha256 = "0qz3cscrc9jvhrix1hbmzhdxv6mxk0mz9azr46canflsydda8fjy";
+    rev = "v8.0";
+    hash = "sha256-5L05eGVN+xncd0/0XLFN6EL2ux4aAOsiU0BMoy0dKgg=";
   };
 in stdenv.mkDerivation rec {
   pname = "lazpaint";
-  version = "7.1.5";
+  version = "7.2.2-unstable-2024-01-20";
 
   src = fetchFromGitHub {
     owner = "bgrabitmap";
     repo = "lazpaint";
-    rev = "v${version}";
-    sha256 = "0bpk3rlqzbxvgrxmrzs0hcrgwhsqnpjqv1kdd9cp09knimmksvy5";
+    rev = "fe54c2e2561c51218a5a2755842ce3fc2e0ebb35";
+    hash = "sha256-LaOTJiS+COJUlyJiN9H2kEKwv5lbJqOHsUXOnb+IQFA=";
   };
 
   nativeBuildInputs = [ lazarus fpc makeWrapper ];
@@ -32,6 +32,10 @@ in stdenv.mkDerivation rec {
   buildInputs = [ pango cairo glib atk gtk2 libX11 gdk-pixbuf ];
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+
+  preConfigure = ''
+    patchShebangs configure
+  '';
 
   buildPhase = ''
     cp -r --no-preserve=mode ${bgrabitmap} bgrabitmap
@@ -45,24 +49,19 @@ in stdenv.mkDerivation rec {
       lazpaint/lazpaint.lpi
   '';
 
-  installPhase = ''
-    # Reuse existing install script
-    cd lazpaint/release/debian
-    substituteInPlace makedeb.sh --replace "rm -rf" "ls"
-    patchShebangs ./makedeb.sh
-    PATH=$PATH:${busybox}/bin ./makedeb.sh
-    cp -r staging/usr $out
-
+  postBuild = ''
     # Python is needed for scripts
-    makeWrapper $out/share/lazpaint/lazpaint $out/bin/lazpaint \
+    wrapProgram $out/bin/lazpaint \
       --prefix PATH : ${lib.makeBinPath [ python3 ]}
   '';
 
   meta = with lib; {
     description = "Image editor like PaintBrush or Paint.Net";
-    homepage = "https://sourceforge.net/projects/lazpaint/";
+    homepage = "https://lazpaint.github.io";
+    downloadPage = "https://github.com/bgrabitmap/lazpaint/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
+    mainProgram = "lazpaint";
   };
 }

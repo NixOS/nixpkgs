@@ -1,27 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, dovecot, libtool, xapian, icu64 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, sqlite, pkg-config, dovecot, xapian, icu }:
+
 stdenv.mkDerivation rec {
-  pname = "fts-xapian";
-  version = "1.4.14";
+  pname = "dovecot-fts-xapian";
+  version = "1.7.14";
 
   src = fetchFromGitHub {
     owner = "grosjo";
     repo = "fts-xapian";
     rev = version;
-    sha256 = "sha256-Banyg10AiM1Jw6Zfl4Dcpc0/6Km48lLVuQ3xRLylE7k=";
+    hash = "sha256-cLOkXA4kQ15M5TheXy9qZq2je05iY9jwf3tHw20l1Pw=";
   };
 
-  buildInputs = [ dovecot xapian icu64 ];
+  buildInputs = [ xapian icu sqlite ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   preConfigure = ''
     export PANDOC=false
-    autoreconf -vi
   '';
 
   configureFlags = [
     "--with-dovecot=${dovecot}/lib/dovecot"
-    "--without-dovecot-install-dirs"
     "--with-moduledir=$(out)/lib/dovecot"
   ];
 
@@ -32,5 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ julm symphorien ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/dovecot_fts_xapian.x86_64-darwin
   };
 }

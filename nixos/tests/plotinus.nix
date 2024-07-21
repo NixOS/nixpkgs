@@ -4,12 +4,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = pkgs.plotinus.meta.maintainers;
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
       programs.plotinus.enable = true;
-      environment.systemPackages = [ pkgs.gnome.gnome-calculator pkgs.xdotool ];
+      environment.systemPackages = [ pkgs.gnome-calculator pkgs.xdotool ];
     };
 
   testScript = ''

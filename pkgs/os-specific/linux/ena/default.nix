@@ -1,33 +1,41 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
-  version = "2.5.0";
+  version = "2.12.0";
   name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "ena_linux_${version}";
-    sha256 = "sha256-uOf/1624UtjaZtrk7XyQpeUGdTNVDnzZJZMgU86i+SM=";
+    hash = "sha256-Z/eeIUY7Yl2l/IqK3Z2nxPhn+JLvP976IZ9ZXPBqoSo=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags;
 
   # linux 3.12
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
+  patches = [
+    # Use kernel version checks instead of API feature detection
+    # See https://github.com/NixOS/nixpkgs/pull/310680
+    ./override-features-api-detection.patch
+  ];
 
   configurePhase = ''
     runHook preConfigure
     cd kernel/linux/ena
+    export ENA_PHC_INCLUDE=1
     substituteInPlace Makefile --replace '/lib/modules/$(BUILD_KERNEL)' ${kernel.dev}/lib/modules/${kernel.modDirVersion}
     runHook postConfigure
   '';
 
   installPhase = ''
     runHook preInstall
-    strip -S ena.ko
+    $STRIP -S ena.ko
     dest=$out/lib/modules/${kernel.modDirVersion}/misc
     mkdir -p $dest
     cp ena.ko $dest/
@@ -39,8 +47,7 @@ stdenv.mkDerivation rec {
     description = "Amazon Elastic Network Adapter (ENA) driver for Linux";
     homepage = "https://github.com/amzn/amzn-drivers";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.eelco ];
+    maintainers = with maintainers; [ eelco sielicki ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.5" || kernel.kernelAtLeast "5.15";
   };
 }

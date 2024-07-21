@@ -96,10 +96,8 @@ let
     };
   } cfg.extraConfig;
 
-  configFile = pkgs.runCommandLocal "config.toml" {
-    nativeBuildInputs = [ pkgs.remarshal ];
-  } ''
-    remarshal -if json -of toml \
+  configFile = pkgs.runCommandLocal "config.toml" { } ''
+    ${pkgs.buildPackages.remarshal}/bin/remarshal -if json -of toml \
       < ${pkgs.writeText "config.json" (builtins.toJSON configOptions)} \
       > $out
   '';
@@ -118,12 +116,7 @@ in
         type = types.bool;
       };
 
-      package = mkOption {
-        default = pkgs.influxdb;
-        defaultText = literalExpression "pkgs.influxdb";
-        description = "Which influxdb derivation to use";
-        type = types.package;
-      };
+      package = mkPackageOption pkgs "influxdb" { };
 
       user = mkOption {
         default = "influxdb";
@@ -168,6 +161,7 @@ in
         ExecStart = ''${cfg.package}/bin/influxd -config "${configFile}"'';
         User = cfg.user;
         Group = cfg.group;
+        Restart = "on-failure";
       };
       postStart =
         let

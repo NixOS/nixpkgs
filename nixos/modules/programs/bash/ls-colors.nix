@@ -1,18 +1,16 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   enable = config.programs.bash.enableLsColors;
 in
 {
   options = {
-    programs.bash.enableLsColors = mkEnableOption "extra colors in directory listings" // {
+    programs.bash.enableLsColors = lib.mkEnableOption "extra colors in directory listings" // {
       default = true;
     };
   };
 
-  config = mkIf enable {
+  config = lib.mkIf enable {
     programs.bash.promptPluginInit = ''
       eval "$(${pkgs.coreutils}/bin/dircolors -b)"
     '';

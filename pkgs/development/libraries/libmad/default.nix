@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoconf }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoconf
+
+# for passthru.tests
+, audacity
+, mpd
+, normalize
+, ocamlPackages
+, streamripper
+, vlc
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmad";
@@ -8,6 +21,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/mad/${pname}-${version}.tar.gz";
     sha256 = "14460zhacxhswnzb36qfpd1f2wbk10qvksvm6wyq5hpvdgnw7ymv";
   };
+
+  outputs = [ "out" "dev" ];
 
   patches = [
     (fetchpatch {
@@ -53,9 +68,14 @@ stdenv.mkDerivation rec {
 
   preConfigure = "autoconf";
 
+  passthru.tests = {
+    inherit audacity mpd normalize streamripper vlc;
+    ocaml-mad = ocamlPackages.mad;
+  };
+
   meta = with lib; {
     homepage    = "https://sourceforge.net/projects/mad/";
-    description = "A high-quality, fixed-point MPEG audio decoder supporting MPEG-1 and MPEG-2";
+    description = "High-quality, fixed-point MPEG audio decoder supporting MPEG-1 and MPEG-2";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

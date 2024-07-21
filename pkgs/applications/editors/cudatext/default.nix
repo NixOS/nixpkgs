@@ -31,27 +31,28 @@ let
     (name: spec:
       fetchFromGitHub {
         repo = name;
-        inherit (spec) owner rev sha256;
+        inherit (spec) owner rev hash;
       }
     )
     (lib.importJSON ./deps.json);
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.150.0";
+  version = "1.202.1";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    sha256 = "sha256-6XG4v2S7InKA6OVrV+q1lT/CzNxmzVQfmAAo2cqbqBY=";
+    hash = "sha256-ZFMO986D4RtrTnLFdcL0a2BNjcsB+9pIolylblku7j4=";
   };
+
+  patches = [ ./proc_globdata.patch ];
 
   postPatch = ''
     substituteInPlace app/proc_globdata.pas \
-      --replace "/usr/share/cudatext" "$out/share/cudatext" \
-      --replace "libpython3.so" "${python3}/lib/libpython${python3.pythonVersion}.so" \
-      --replace "AllowProgramUpdates:= true;" "AllowProgramUpdates:= false;"
+      --subst-var out \
+      --subst-var-by python3 ${python3}
   '';
 
   nativeBuildInputs = [ lazarus fpc ]
@@ -66,8 +67,12 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: dep: ''
-    cp -r --no-preserve=mode ${dep} ${name}
+    cp -r ${dep} ${name}
   '') deps) + ''
+    # See https://wiki.freepascal.org/CudaText#How_to_compile_CudaText
+    substituteInPlace ATSynEdit/atsynedit/atsynedit_package.lpk \
+      --replace GTK2_IME_CODE _GTK2_IME_CODE
+
     lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --ws=${widgetset} \
       bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
       EncConv/encconv/encconv_package.lpk \
@@ -83,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -Dm755 app/cudatext $out/bin/cudatext
+    install -Dm755 app/cudatext -t $out/bin
 
     install -dm755 $out/share/cudatext
     cp -r app/{data,py,settings_default} $out/share/cudatext
@@ -99,6 +104,8 @@ stdenv.mkDerivation rec {
     fi
   '') additionalLexers;
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Cross-platform code editor";
     longDescription = ''
@@ -111,5 +118,6 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;
+    mainProgram = "cudatext";
   };
 }

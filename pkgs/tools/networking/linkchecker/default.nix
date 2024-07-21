@@ -1,54 +1,61 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages, gettext }:
+{ lib
+, fetchFromGitHub
+, python3
+, gettext
+}:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "linkchecker";
-  version = "10.0.1";
+  version = "10.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v" + version;
-    sha256 = "sha256-OOssHbX9nTCURpMKIy+95ZTvahuUAabLUhPnRp3xpN4=";
+    owner = "linkchecker";
+    repo = "linkchecker";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-z7Qp74cai8GfsxB4n9dSCWQepp0/4PimFiRJQBaVSoo=";
   };
 
   nativeBuildInputs = [ gettext ];
 
-  propagatedBuildInputs = [
-    configargparse
+  build-system = with python3.pkgs; [
+    hatchling
+    hatch-vcs
+    polib # translations
+  ];
+
+  dependencies = with python3.pkgs; [
     argcomplete
     beautifulsoup4
-    pyopenssl
     dnspython
-    pyxdg
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = with python3.pkgs; [
+    pyopenssl
     parameterized
-    pytest
+    pytestCheckHook
   ];
 
-  postPatch = ''
-    sed -i 's/^requests.*$/requests>=2.2/' requirements.txt
-    sed -i "s/'request.*'/'requests >= 2.2'/" setup.py
-  '';
+  disabledTests = [
+    "TestLoginUrl"
+    "test_timeit2" # flakey, and depends sleep being precise to the milisecond
+    "test_internet" # uses network, fails on Darwin (not sure why it doesn't fail on linux)
+  ];
 
-  # test_timeit2 is flakey, and depends sleep being precise to the milisecond
-  checkPhase = ''
-    ${lib.optionalString stdenv.isDarwin ''
-      # network tests fails on darwin
-      rm tests/test_network.py tests/checker/test_http*.py tests/checker/test_content_allows_robots.py tests/checker/test_noproxy.py
-    ''}
-      pytest --ignore=tests/checker/{test_telnet,telnetserver}.py \
-        -k 'not TestLoginUrl and not test_timeit2'
-  '';
+  disabledTestPaths = [
+    "tests/checker/telnetserver.py"
+    "tests/checker/test_telnet.py"
+  ];
 
-  meta = {
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
     description = "Check websites for broken links";
+    mainProgram = "linkchecker";
     homepage = "https://linkcheck.github.io/linkchecker/";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ peterhoeg tweber ];
+    changelog = "https://github.com/linkchecker/linkchecker/releases/tag/v${version}";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ peterhoeg tweber ];
   };
 }

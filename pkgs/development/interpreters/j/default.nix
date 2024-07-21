@@ -1,82 +1,87 @@
-{ lib, stdenv, fetchFromGitHub, readline, libedit, bc
-, avxSupport ? stdenv.hostPlatform.avxSupport
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, gmp
+, avx2Support ? stdenv.hostPlatform.avx2Support
 }:
 
 stdenv.mkDerivation rec {
   pname = "j";
-  version = "902";
-  jtype = "release-b";
+  version = "9.5.1";
+
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
-    rev = "j${version}-${jtype}";
-    sha256 = "0j67vgikqflwjqacsdicasvyv1k54s2c8vjgwmf0ix7l41p4xqz0";
-    name = "jsource";
+    rev = "${version}";
+    hash = "sha256-QRQhE8138+zaGQOdq9xUOrifkVIprzbJWbmMK+WhEOU=";
   };
 
-  buildInputs = [ readline libedit bc ];
-  bits = if stdenv.is64bit then "64" else "32";
-  platform =
-    if (stdenv.isAarch32 || stdenv.isAarch64) then "raspberry" else
-    if stdenv.isLinux then "linux" else
-    if stdenv.isDarwin then "darwin" else
-    "unknown";
-  variant = if stdenv.isx86_64 && avxSupport then "avx" else "";
+  nativeBuildInputs = [ which ];
+  buildInputs = [ gmp ];
 
-  j64x="j${bits}${variant}";
+  patches = [
+    ./fix-install-path.patch
+  ];
 
-  doCheck = true;
+  enableParallelBuilding = true;
 
-  # Causes build failure due to warning
-  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
+  dontConfigure = true;
 
-  # Causes build failure due to warning
-  # https://github.com/jsoftware/jsource/issues/16
-  NIX_CFLAGS_COMPILE = "-Wno-error=return-local-addr";
+  # Emulate jplatform64.sh configuration variables
+  jplatform =
+    if stdenv.isDarwin then "darwin"
+    else if stdenv.hostPlatform.isAarch then "raspberry"
+    else if stdenv.isLinux then "linux"
+    else "unsupported";
+
+  j64x =
+    if stdenv.is32bit then "j32"
+    else if stdenv.isx86_64 then
+      if stdenv.isLinux && avx2Support then "j64avx2" else "j64"
+    else if stdenv.isAarch64 then
+      if stdenv.isDarwin then "j64arm" else "j64"
+    else "unsupported";
+
+  env.NIX_LDFLAGS = "-lgmp";
 
   buildPhase = ''
-    export SOURCE_DIR=$(pwd)
-    export HOME=$TMPDIR
-    export JLIB=$SOURCE_DIR/jlibrary
-
-    echo $OUT_DIR
-
-    cd make2
-
-    patchShebangs .
-    sed -i $JLIB/bin/profile.ijs -e "s@'/usr/share/j/.*'@'$out/share/j'@;"
-
-    j64x="${j64x}" ./build_all.sh
-
-    cp $SOURCE_DIR/bin/${platform}/j${bits}*/* "$JLIB/bin"
-  '';
-
-  checkPhase = ''
-
-    echo 'i. 5' | $JLIB/bin/jconsole | fgrep "0 1 2 3 4"
-
-    # Now run the real tests
-    cd $SOURCE_DIR/test
-    for f in *.ijs
-    do
-      echo $f
-      $JLIB/bin/jconsole < $f > /dev/null || echo FAIL && echo PASS
-    done
+    runHook preBuild
+    MAKEFLAGS+=" ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}" \
+      jplatform=${jplatform} j64x=${j64x} make2/build_all.sh
+    cp -v bin/${jplatform}/${j64x}/* jlibrary/bin/
+    runHook postBuild
   '';
 
   installPhase = ''
-    mkdir -p "$out"
+    runHook preInstall
+    mkdir -p $out/share/j
+    cp -r jlibrary/{addons,system} $out/share/j/
+    cp -r jlibrary/bin $out/
+    runHook postInstall
+  '';
 
-    mkdir -p "$out/share/j"
-    cp -r $JLIB/{addons,system} "$out/share/j"
-    cp -r $JLIB/bin "$out"
+  doInstallCheck = false; # The "gregex" test fails due to not finding PCRE2
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+    HOME="$TMPDIR" $out/bin/jconsole -lib $out/bin/libj* script/testga.ijs
+    runHook postInstallCheck
   '';
 
   meta = with lib; {
+    homepage = "https://jsoftware.com/";
     description = "J programming language, an ASCII-based APL successor";
-    maintainers = with maintainers; [ raskin synthetica ];
-    platforms = with platforms; linux ++ darwin;
-    license = licenses.gpl3Plus;
-    homepage = "http://jsoftware.com/";
+    longDescription = ''
+      J is a high-level, general-purpose programming language that is
+      particularly suited to the mathematical, statistical, and logical analysis
+      of data. It is a powerful tool for developing algorithms and exploring
+      problems that are not already well understood.
+    '';
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ raskin synthetica AndersonTorres ];
+    broken = stdenv.isDarwin;
+    platforms = platforms.all;
+    mainProgram = "jconsole";
   };
 }

@@ -1,23 +1,38 @@
-{ buildPythonPackage, fetchPypi, lib, cryptography }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cryptography,
+  flit-core,
+}:
 
 buildPythonPackage rec {
-  pname = "cryptography_vectors";
-  # The test vectors must have the same version as the cryptography package:
-  version = cryptography.version;
+  pname = "cryptography-vectors";
+  # The test vectors must have the same version as the cryptography package
+  inherit (cryptography) version;
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1wl0ynh3lzhc6q59g8mybvijmnp195x7fjxlb3h3sgcraw14312c";
+    pname = "cryptography_vectors";
+    inherit version;
+    hash = "sha256-UFzV47DLMtoVJvBwQrf8OKS2w1ZxDLc9K192sDejjtE=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   # No tests included
   doCheck = false;
 
+  pythonImportsCheck = [ "cryptography_vectors" ];
+
   meta = with lib; {
     description = "Test vectors for the cryptography package";
     homepage = "https://cryptography.io/en/latest/development/test-vectors/";
-    # Source: https://github.com/pyca/cryptography/tree/master/vectors;
-    license = with licenses; [ asl20 bsd3 ];
-    maintainers = with maintainers; [ primeos ];
+    downloadPage = "https://github.com/pyca/cryptography/tree/master/vectors";
+    license = with licenses; [
+      asl20
+      bsd3
+    ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

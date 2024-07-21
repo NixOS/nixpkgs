@@ -1,27 +1,33 @@
-{ lib, stdenv, fetchurl, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext }:
+{ lib, stdenv, fetchgit, autoreconfHook, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext, nixosTests, zlib }:
 
-let version = "1.3.0"; in
-
-stdenv.mkDerivation {
+let
   pname = "minidlna";
-  inherit version;
+  version = "1.3.3";
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/minidlna/minidlna/${version}/minidlna-${version}.tar.gz";
-    sha256 = "0qrw5ny82p5ybccw4pp9jma8nwl28z927v0j2561m0289imv1na7";
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/${pname}/git";
+    rev = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-InsSguoGi1Gp8R/bd4/c16xqRuk0bRsgw7wvcbokgKo=";
   };
 
   preConfigure = ''
     export makeFlags="INSTALLPREFIX=$out"
   '';
 
-  buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext ];
+  nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext zlib ];
 
   postInstall = ''
     mkdir -p $out/share/man/man{5,8}
     cp minidlna.conf.5 $out/share/man/man5
     cp minidlnad.8 $out/share/man/man8
   '';
+
+  passthru.tests = { inherit (nixosTests) minidlna; };
 
   meta = with lib; {
     description = "Media server software";
@@ -30,7 +36,8 @@ stdenv.mkDerivation {
       compliant with DLNA/UPnP-AV clients.
     '';
     homepage = "https://sourceforge.net/projects/minidlna/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
+    mainProgram = "minidlnad";
   };
 }

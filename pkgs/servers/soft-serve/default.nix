@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, git }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, nixosTests, git, bash }:
 
 buildGoModule rec {
   pname = "soft-serve";
-  version = "0.1.2";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "soft-serve";
     rev = "v${version}";
-    sha256 = "sha256-sRlEF1ee+oBnYOGSN6rDOvNr3OnfAqV+1Wx5XOyIylw=";
+    hash = "sha256-sPsyZpmk0DJoM2Qn+hvv/FZZkogyi1fa7eEW68Vwf+g=";
   };
 
-  vendorSha256 = "sha256-FukkmuBTPPhY0UTe3r1iU3nbGoMsPTcRKTLBd+VMGUk=";
+  vendorHash = "sha256-1Fy/DwCnWg8VNonRSAnm4M9EHwMUBhBxcWBoMqHPuHQ=";
 
   doCheck = false;
 
@@ -20,13 +20,19 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
+    # Soft-serve generates git-hooks at run-time.
+    # The scripts require git and bash inside the path.
     wrapProgram $out/bin/soft \
-      --prefix PATH : "${lib.makeBinPath [ git ]}"
+      --prefix PATH : "${lib.makeBinPath [ git bash ]}"
   '';
 
+  passthru.tests = nixosTests.soft-serve;
+
   meta = with lib; {
-    description = "A tasty, self-hosted Git server for the command line";
+    description = "Tasty, self-hosted Git server for the command line";
     homepage = "https://github.com/charmbracelet/soft-serve";
+    changelog = "https://github.com/charmbracelet/soft-serve/releases/tag/v${version}";
+    mainProgram = "soft";
     license = licenses.mit;
     maintainers = with maintainers; [ penguwin ];
   };

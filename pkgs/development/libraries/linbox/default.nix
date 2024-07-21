@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , givaro
 , pkg-config
@@ -14,14 +15,21 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "linbox";
-  version = "1.6.3"; # TODO: Check postPatch script on update
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "linbox-team";
     repo = pname;
     rev = "v${version}";
-    sha256 = "10j6dspbsq7d2l4q3y0c1l1xwmaqqba2fxg59q5bhgk9h5d7q571";
+    sha256 = "sha256-mW84a98KPLqcHMjX3LIYTmVe0ngUdz6RJLpoDaAqKU8=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/linbox-team/linbox/commit/4be26e9ef0eaf36a9909e5008940e8bf7dc625b6.patch";
+      sha256 = "PX0Tik7blXOV2vHUq92xMxaADkNoNGiax4qrjQyGK6U=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -35,23 +43,9 @@ stdenv.mkDerivation rec {
     fflas-ffpack
   ];
 
-  patches = [
-    # Remove inappropriate `const &` qualifiers on data members that can be
-    # modified via member functions.
-    # See also: https://github.com/linbox-team/linbox/pull/256
-    ./patches/linbox-pr256-part2.patch # TODO: Remove on 1.7.0 update
-  ];
-
-  postPatch = ''
-    # Remove @LINBOXSAGE_LIBS@ that is actually undefined.
-    # See also: https://github.com/linbox-team/linbox/pull/249
-    # TODO: Remove on 1.7.0 update
-    find . -type f -exec sed -e 's/@LINBOXSAGE_LIBS@//' -i {} \;
-  '';
-
   configureFlags = [
     "--with-blas-libs=-lblas"
-    "--disable-optimization"
+    "--without-archnative"
   ] ++ lib.optionals stdenv.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
     "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
@@ -66,12 +60,16 @@ stdenv.mkDerivation rec {
     "--enable-sage"
   ];
 
+  # https://github.com/linbox-team/linbox/issues/304
+  hardeningDisable = [ "fortify3" ];
+
   doCheck = true;
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "C++ library for exact, high-performance linear algebra";
+    mainProgram = "linbox-config";
     license = licenses.lgpl21Plus;
     maintainers = teams.sage.members;
     platforms = platforms.unix;

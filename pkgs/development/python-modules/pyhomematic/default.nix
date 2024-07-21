@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "pyhomematic";
-  version = "0.1.76";
+  version = "0.1.78";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea2496c920451ded4561e3758c8f77157fc00c40d1f75d8163e399fd3e0d795a";
+    hash = "sha256-uB9aDa1urIwL2DBdBwPi0sHWPW7SUZ3EaAjuMLSOudc=";
   };
 
   checkPhase = ''

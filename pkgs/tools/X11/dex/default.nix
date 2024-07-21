@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, sphinx
+}:
 
 stdenv.mkDerivation rec {
   pname = "dex";
@@ -11,14 +16,18 @@ stdenv.mkDerivation rec {
     sha256 = "03aapcywnz4kl548cygpi25m8adwbmqlmwgxa66v4156ax9dqs86";
   };
 
-  propagatedBuildInputs = [ python3 ];
-  nativeBuildInputs = [ python3.pkgs.sphinx ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ sphinx ];
+  buildInputs = [ python3 ];
   makeFlags = [ "PREFIX=$(out)" "VERSION=$(version)" ];
 
   meta = with lib; {
-    description = "A program to generate and execute DesktopEntry files of the Application type";
+    description = "Program to generate and execute DesktopEntry files of the Application type";
     homepage = "https://github.com/jceb/dex";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ nickcao ];
+    mainProgram = "dex";
   };
 }

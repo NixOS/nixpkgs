@@ -1,0 +1,62 @@
+PATH
+  remote: .
+  specs:
+    flatito (0.1.1)
+      colorize
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ast (2.4.2)
+    colorize (1.1.0)
+    json (2.7.1)
+    language_server-protocol (3.17.0.3)
+    minitest (5.22.3)
+    parallel (1.24.0)
+    parser (3.3.0.5)
+      ast (~> 2.4.1)
+      racc
+    racc (1.7.3)
+    rainbow (3.1.1)
+    rake (13.1.0)
+    regexp_parser (2.9.0)
+    rexml (3.2.6)
+    rubocop (1.62.1)
+      json (~> 2.3)
+      language_server-protocol (>= 3.17.0)
+      parallel (~> 1.10)
+      parser (>= 3.3.0.2)
+      rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.8, < 3.0)
+      rexml (>= 3.2.5, < 4.0)
+      rubocop-ast (>= 1.31.1, < 2.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 2.4.0, < 3.0)
+    rubocop-ast (1.31.2)
+      parser (>= 3.3.0.4)
+    rubocop-minitest (0.35.0)
+      rubocop (>= 1.61, < 2.0)
+      rubocop-ast (>= 1.31.1, < 2.0)
+    rubocop-performance (1.20.2)
+      rubocop (>= 1.48.1, < 2.0)
+      rubocop-ast (>= 1.30.0, < 2.0)
+    rubocop-rake (0.6.0)
+      rubocop (~> 1.0)
+    ruby-progressbar (1.13.0)
+    unicode-display_width (2.5.0)
+
+PLATFORMS
+  arm64-darwin-22
+  ruby
+
+DEPENDENCIES
+  flatito!
+  minitest (~> 5.22)
+  rake (~> 13.0)
+  rubocop (~> 1.62)
+  rubocop-minitest (~> 0.35)
+  rubocop-performance (~> 1.11)
+  rubocop-rake (~> 0.6)
+
+BUNDLED WITH
+   2.5.6

@@ -11,16 +11,15 @@ buildGoModule rec {
     sha256 = "0whijr2r2j5bvfy8jgmpxsa0zvwk5kfjlpnkw4za5k35q7bjffls";
   };
 
-  vendorSha256 = "0whqrms5mc7v14p2h1jfvkawm30xaylivijlsghrsaq468qcgg15";
-
-  doCheck = false;
+  vendorHash = null;
 
   subPackages = [ "." ];
 
   meta = with lib; {
-    description = "A kafka command line browser";
+    description = "Kafka command line browser";
     homepage = "https://github.com/cswank/kcli";
     license = licenses.mit;
     maintainers = with maintainers; [ cswank ];
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.goModules --check
   };
 }

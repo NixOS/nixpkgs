@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libucl";
-  version = "0.8.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = pname;
     rev = version;
-    sha256 = "1h52ldxankyhbbm1qbqz1f2q0j03c1b4mig7343bs3mc6fpm18gf";
+    sha256 = "sha256-esNEVBa660rl3Oo2SLaLrFThFkjbqtZ1r0tjMq3h6cM=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

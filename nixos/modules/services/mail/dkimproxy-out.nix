@@ -14,8 +14,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description =
-          ''
+        description = ''
             Whether to enable dkimproxy_out.
 
             Note that a key will be auto-generated, and can be found in
@@ -44,8 +43,7 @@ in
       selector = mkOption {
         type = types.str;
         example = "selector1";
-        description =
-          ''
+        description = ''
             The selector to use for DKIM key identification.
 
             For example, if 'selector1' is used here, then for each domain
@@ -58,8 +56,7 @@ in
       keySize = mkOption {
         type = types.int;
         default = 2048;
-        description =
-          ''
+        description = ''
             Size of the RSA key to use to sign outgoing emails. Note that the
             maximum mandatorily verified as per RFC6376 is 2048.
           '';

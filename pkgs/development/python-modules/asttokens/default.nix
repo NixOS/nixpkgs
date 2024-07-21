@@ -1,37 +1,40 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, six
-, astroid
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  six,
+  astroid,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "asttokens";
-  version = "2.0.5";
+  version = "2.4.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mlTBFPAsepSA1WVQkyVGo/H+cdigLxvHzNDuPuNc9NU=";
+    hash = "sha256-sDhpcYuppusCfhNL/fafOKI21oHIPBYNUQdorxElS6A=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    six
+  propagatedBuildInputs = [ six ];
+
+  nativeCheckInputs = [
     astroid
-  ];
-
-  checkInputs = [
     pytestCheckHook
   ];
 
   disabledTests = [
     # Test is currently failing on Hydra, works locally
     "test_slices"
+  ];
+
+  disabledTestPaths = [
+    # incompatible with astroid 2.11.0, pins <= 2.5.3
+    "tests/test_astroid.py"
   ];
 
   pythonImportsCheck = [ "asttokens" ];

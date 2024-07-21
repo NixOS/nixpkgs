@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, makeWrapper
 , sage-env
 , blas
 , lapack
@@ -14,11 +13,9 @@
 , gmp
 , gfan
 , python3
-, flintqs
 , eclib
 , ntl
 , ecm
-, pynac
 , pythonEnv
 }:
 
@@ -29,14 +26,12 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 # executable sage. No tests are run yet and no documentation is built.
 
 let
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     pythonEnv # for patchShebangs
-    makeWrapper
-    pkg-config
     blas lapack
     singular
     three
-    pynac
     giac
     gap
     pari
@@ -44,7 +39,6 @@ let
     gfan
     maxima
     eclib
-    flintqs
     ntl
     ecm
   ];
@@ -75,7 +69,7 @@ let
       []
     );
 
-  allInputs = lib.remove null (buildInputs ++ pythonEnv.extraLibs);
+  allInputs = lib.remove null (nativeBuildInputs ++ buildInputs ++ pythonEnv.extraLibs);
   transitiveDeps = lib.unique (builtins.concatLists (map transitiveClosure allInputs ));
   # fix differences between spkg and sage names
   # (could patch sage instead, but this is more lightweight and also works for packages depending on sage)
@@ -83,7 +77,7 @@ let
     "zope.interface"
     "node_three"
   ] [
-    "zope_interface"
+    "zope-interface"
     "threejs"
   ];
   # spkg names (this_is_a_package-version) of all transitive deps
@@ -94,7 +88,7 @@ stdenv.mkDerivation rec {
   pname = "sage-with-env";
   src = sage-env.lib.src;
 
-  inherit buildInputs;
+  inherit nativeBuildInputs buildInputs;
 
   configurePhase = "#do nothing";
 
@@ -125,6 +119,10 @@ stdenv.mkDerivation rec {
     # the scripts in src/bin will find the actual sage source files using environment variables set in `sage-env`
     cp -r src/bin "$out/bin"
     cp -r build/bin "$out/build/bin"
+
+    # sage assumes the existence of sage-src-env-config.in means it's being executed in-tree. in this case, it
+    # adds SAGE_SRC/bin to PATH, breaking our wrappers
+    rm "$out/bin"/*.in "$out/build/bin"/*.in
 
     cp -f '${sage-env}/sage-env' "$out/bin/sage-env"
     substituteInPlace "$out/bin/sage-env" \

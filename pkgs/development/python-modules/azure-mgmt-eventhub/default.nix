@@ -1,22 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-eventhub";
-  version = "10.0.0";
+  version = "11.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0856574ef4b73bbbc62834051061e2081400aba7e3715e10ef5181d639e86a0b";
+    hash = "sha256-FxB9ToXd6PZ1eUrMWDAtbOmKclTuA/QdP72WsG7za5Y=";
   };
 
   propagatedBuildInputs = [
@@ -24,8 +27,6 @@ buildPythonPackage rec {
     msrestazure
     azure-common
     azure-mgmt-core
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
   ];
 
   # has no tests

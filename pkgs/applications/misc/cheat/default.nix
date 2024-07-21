@@ -3,13 +3,13 @@
 
 buildGoModule rec {
   pname = "cheat";
-  version = "4.2.3";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "cheat";
     repo = "cheat";
     rev = version;
-    sha256 = "sha256-F0p309rY0PeeOU1K9Had6qI6DCHgzauuuTjMfWoZYBQ=";
+    sha256 = "sha256-GUU6VWfTmNS6ny12HnMr3uQmS7HI86Oupcmqx0MVAvE=";
   };
 
   subPackages = [ "cmd/cheat" ];
@@ -21,7 +21,7 @@ buildGoModule rec {
     installShellCompletion scripts/cheat.{bash,fish,zsh}
   '';
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -30,5 +30,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ mic92 ];
     license = with licenses; [ gpl3 mit ];
     inherit (src.meta) homepage;
+    mainProgram = "cheat";
   };
 }

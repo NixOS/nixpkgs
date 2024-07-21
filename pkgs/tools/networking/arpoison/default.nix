@@ -23,8 +23,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "UNIX arp cache update utility";
     homepage = "http://www.arpoison.net/";
-    license = with licenses; [ gpl2 ];
+    license = with licenses; [ gpl2Only ];
     maintainers = [ maintainers.michalrus ];
     platforms = platforms.unix;
+    mainProgram = "arpoison";
   };
 }

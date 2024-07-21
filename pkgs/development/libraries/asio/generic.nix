@@ -2,8 +2,6 @@
 , version, sha256, ...
 }:
 
-with lib;
-
 stdenv.mkDerivation {
   pname = "asio";
   inherit version;
@@ -17,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ openssl ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://asio.sourceforge.net/";
     description = "Cross-platform C++ library for network and low-level I/O programming";
     license = licenses.boost;

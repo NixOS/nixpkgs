@@ -7,23 +7,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "code-minimap";
-  version = "0.6.2";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nUEmlKqCskPEQCOS2NC6jF4yVDarJeb3p+BKZq/2qvw=";
+    sha256 = "sha256-d9qcSSiRv1I7NYuLrra5ShIUXT2HVeHGD0WPb+dnQCc=";
   };
 
-  cargoSha256 = "sha256-yjjoQYYWK9/9fOP5ICnhpuF/07SyCszB9GCDr0GJ0v0=";
+  cargoHash = "sha256-5/UgEzkJw9XDgtS1jKyWh5ijTp3L+UQLuE5CXcyIgTs=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
-    description = "A high performance code minimap render";
+    description = "High performance code minimap render";
     homepage = "https://github.com/wfxr/code-minimap";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ bsima ];
+    mainProgram = "code-minimap";
   };
 }

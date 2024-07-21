@@ -1,23 +1,33 @@
-{ lib
-, bitlist
-, buildPythonPackage
-, fe25519
-, fetchPypi
-, fountains
-, nose
-, parts
-, pytestCheckHook
+{
+  lib,
+  bitlist,
+  buildPythonPackage,
+  fe25519,
+  fetchPypi,
+  fountains,
+  parts,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "ge25519";
-  version = "1.0.0";
-  format = "setuptools";
+  version = "1.5.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-f7xvZ92zRO3GLSdfgEyhkWVwAFT2TvKHy6+iF+k43bI=";
+    hash = "sha256-VKDPiSdufWwrNcZSRTByFU4YGoJrm48TDm1nt4VyclA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     fe25519
@@ -26,20 +36,14 @@ buildPythonPackage rec {
     fountains
   ];
 
-  checkInputs = [
-    nose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "bitlist~=0.5.1" "bitlist>=0.5.1" \
-      --replace "parts~=1.1.2" "parts>=1.1.2"
+    substituteInPlace pyproject.toml \
+      --replace "--doctest-modules --ignore=docs --cov=ge25519 --cov-report term-missing" ""
   '';
 
-  pythonImportsCheck = [
-    "ge25519"
-  ];
+  pythonImportsCheck = [ "ge25519" ];
 
   meta = with lib; {
     description = "Python implementation of Ed25519 group elements and operations";

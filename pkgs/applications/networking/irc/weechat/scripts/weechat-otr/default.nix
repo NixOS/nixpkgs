@@ -24,6 +24,9 @@ let
 
     buildInputs = [ gmp ];
 
+    # Tests are relying on old Python 2 modules.
+    doCheck = false;
+
     preConfigure = ''
       sed -i 's,/usr/include,/no-such-dir,' configure
       sed -i "s!,'/usr/include/'!!" setup.py
@@ -66,5 +69,9 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ oxzi ];
     description = "WeeChat script for Off-the-Record messaging";
+    knownVulnerabilities = [
+      "There is no upstream release since 2018-03."
+      "Utilizes deprecated and vulnerable pycrypto library with Debian patches from 2020-04."
+    ];
   };
 }

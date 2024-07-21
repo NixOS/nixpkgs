@@ -1,30 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, six
-, webob
+{
+  lib,
+  blinker,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  pythonOlder,
+  webob,
 }:
 
 buildPythonPackage rec {
   pname = "bugsnag";
-  version = "4.1.1";
+  version = "4.7.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cdbdb3e02ef0c0655bb55be8b05ec1cb830b5ec629923ccb24bfd71dede3d1c3";
+    hash = "sha256-mECP4X1KfzAKVlNUB6ZEi5hE2bUoxEUnkIho/DZG6HM=";
   };
 
-  propagatedBuildInputs = [ six webob ];
+  propagatedBuildInputs = [ webob ];
 
-  # no tests
+  passthru.optional-dependencies = {
+    flask = [
+      blinker
+      flask
+    ];
+  };
+
+  pythonImportsCheck = [ "bugsnag" ];
+
+  # Module ha no tests
   doCheck = false;
 
   meta = with lib; {
-    description = "Automatic error monitoring for django, flask, etc.";
-    homepage = "https://www.bugsnag.com";
+    description = "Automatic error monitoring for Python applications";
+    homepage = "https://github.com/bugsnag/bugsnag-python";
+    changelog = "https://github.com/bugsnag/bugsnag-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
   };
 }

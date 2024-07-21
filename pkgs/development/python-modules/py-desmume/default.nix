@@ -1,44 +1,66 @@
-{ lib, buildPythonPackage, fetchFromGitHub, GitPython
-, libpcap, meson, ninja, pillow, pkg-config, pygobject3, SDL2
-, alsa-lib, soundtouch, openal
+{
+  lib,
+  alsa-lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gitpython,
+  libpcap,
+  meson,
+  ninja,
+  openal,
+  pillow,
+  pkg-config,
+  pygobject3,
+  pythonOlder,
+  SDL2,
+  soundtouch,
 }:
 
-let
-  desmume = fetchFromGitHub {
-    owner = "SkyTemple";
-    repo = "desmume";
-    rev = "8e7af8ada883b7e91344985236f7c7c04ee795d7";
-    sha256 = "0svmv2rch9q347gbpbws4agymas8n014gh1ssaf91wx7jwn53842";
-  };
-in
 buildPythonPackage rec {
   pname = "py-desmume";
-  version = "0.0.3.post2";
+  version = "0.0.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
-    rev = version;
-    sha256 = "1chsg70k8kqnlasn88b04ww3yl0lay1bjxvz6lhp6s2cvsxv03x1";
+    rev = "refs/tags/${version}";
+    hash = "sha256-AgUdILCqpmuVI3uMSdGl+lIfUVXnIo/egm/48FMRF3M=";
+    fetchSubmodules = true;
   };
 
-  postPatch = ''
-    cp -R --no-preserve=mode ${desmume} __build_desmume
-  '';
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
-  buildInputs = [ GitPython libpcap SDL2 alsa-lib soundtouch openal ];
-  nativeBuildInputs = [ meson ninja pkg-config ];
-  propagatedBuildInputs = [ pillow pygobject3 ];
+  buildInputs = [
+    alsa-lib
+    gitpython
+    libpcap
+    openal
+    SDL2
+    soundtouch
+  ];
+
+  propagatedBuildInputs = [
+    pillow
+    pygobject3
+  ];
 
   hardeningDisable = [ "format" ];
 
   doCheck = false; # there are no tests
+
   pythonImportsCheck = [ "desmume" ];
 
   meta = with lib; {
-    homepage = "https://github.com/SkyTemple/py-desmume";
     description = "Python library to interface with DeSmuME, the Nintendo DS emulator";
+    homepage = "https://github.com/SkyTemple/py-desmume";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

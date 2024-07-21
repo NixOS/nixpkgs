@@ -5,13 +5,14 @@ stdenv.mkDerivation rec {
   version = "2.17";
 
   src = fetchurl {
-    url = "ftp://metalab.unc.edu/pub/Linux/games/bsd-games-${version}.tar.gz";
-    sha256 = "0q7zdyyfvn15y0w4g54kq3gza89h61py727m8slmw73cxx594vq6";
+    url = "mirror://ibiblioPubLinux/games/${pname}-${version}.tar.gz";
+    hash = "sha256-Bm+SSu9sHF6pRvWI428wMCH138CTlEc48CXY7bxv/2A=";
   };
 
   buildInputs = [ ncurses openssl flex bison ];
 
   patches = [
+    # Remove UTMPX support on Makefrag file
     (fetchurl {
       url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/dm-noutmpx.patch";
       sha256 = "1k3qp3jj0dksjr4dnppv6dvkwslrgk9c7p2n9vipqildpxgqp7w2";

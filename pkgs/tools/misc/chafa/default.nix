@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.0";
+  version = "1.14.1";
   pname = "chafa";
 
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
     rev = version;
-    sha256 = "sha256-8ENPmcl0KVxoBu8FGOGk+y8XsONWW0YW32MHAKBUiPE=";
+    sha256 = "sha256-25GVRZGrYcQ+uo+S45HvX4jrdHKnYuSkXHQUr9NHdyY=";
   };
 
   nativeBuildInputs = [ autoconf
@@ -31,12 +31,16 @@ stdenv.mkDerivation rec {
   patches = [ ./xmlcatalog_patch.patch ];
 
   preConfigure = ''
-    ./autogen.sh
+    substituteInPlace ./autogen.sh --replace pkg-config '$PKG_CONFIG'
+    NOCONFIGURE=1 ./autogen.sh
   '';
 
   configureFlags = [ "--enable-man"
                      "--with-xml-catalog=${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml"
                    ];
+
+  # https://github.com/NixOS/nixpkgs/pull/240893#issuecomment-1635347507
+  NIX_LDFLAGS = [ "-lwebp" ];
 
   meta = with lib; {
     description = "Terminal graphics for the 21st century";
@@ -44,5 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.mog ];
+    mainProgram = "chafa";
   };
 }

@@ -11,23 +11,26 @@
 , ncurses
 , openssl
 , perl
+, runtimeShell
 , autoconf
 , openjdk11 ? null # javacSupport
 , unixODBC ? null # odbcSupport
 , libGL ? null
 , libGLU ? null
 , wxGTK ? null
-, wxmac ? null
 , xorg ? null
+, exdoc ? null
 , parallelBuild ? false
 , systemd
 , wxSupport ? true
-, systemdSupport ? stdenv.isLinux # systemd support in epmd
+, exdocSupport ? false
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd # systemd support in epmd
   # updateScript deps
 , writeScript
 , common-updater-scripts
 , coreutils
 , git
+, wrapGAppsHook3
 }:
 { baseName ? "erlang"
 , version
@@ -44,7 +47,7 @@
 , odbcSupport ? false
 , odbcPackages ? [ unixODBC ]
 , opensslPackage ? openssl
-, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
+, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 wrapGAppsHook3 ]
 , preUnpack ? ""
 , postUnpack ? ""
 , patches ? [ ]
@@ -72,15 +75,16 @@
 }:
 
 assert wxSupport -> (if stdenv.isDarwin
-then wxmac != null
+then wxGTK != null
 else libGL != null && libGLU != null && wxGTK != null && xorg != null);
 
 assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk11 != null;
+assert exdocSupport -> exdoc != null;
 
 let
   inherit (lib) optional optionals optionalAttrs optionalString;
-  wxPackages2 = if stdenv.isDarwin then [ wxmac ] else wxPackages;
+  wxPackages2 = if stdenv.isDarwin then [ wxGTK ] else wxPackages;
 
 in
 stdenv.mkDerivation ({
@@ -112,10 +116,26 @@ stdenv.mkDerivation ({
     patchShebangs make
 
     ${postPatch}
+  '' + optionalString (lib.versionOlder "25" version) ''
+    substituteInPlace lib/os_mon/src/disksup.erl \
+      --replace-fail '"sh ' '"${runtimeShell} '
   '';
 
+  # For OTP 27+ we need ex_doc to build the documentation
+  # When exdocSupport is enabled, grab the raw ex_doc executable from the exdoc
+  # derivation. Next, patch the first line to use the escript that will be
+  # built during the build phase of this derivation. Finally, building the
+  # documentation requires the erlang-logo.png asset.
   preConfigure = ''
     ./otp_build autoconf
+  '' + optionalString exdocSupport ''
+    mkdir -p $out/bin
+    cp ${exdoc}/bin/.ex_doc-wrapped $out/bin/ex_doc
+    sed -i "1 s:^.*$:#!$out/bin/escript:" $out/bin/ex_doc
+    export EX_DOC=$out/bin/ex_doc
+
+    mkdir -p $out/lib/erlang/system/doc/assets
+    cp $src/system/doc/assets/erlang-logo.png $out/lib/erlang/system/doc/assets
   '';
 
   configureFlags = [ "--with-ssl=${lib.getOutput "out" opensslPackage}" ]
@@ -129,6 +149,8 @@ stdenv.mkDerivation ({
     ++ optional wxSupport "--enable-wx"
     ++ optional systemdSupport "--enable-systemd"
     ++ optional stdenv.isDarwin "--enable-darwin-64bit"
+    # make[3]: *** [yecc.beam] Segmentation fault: 11
+    ++ optional (stdenv.isDarwin && stdenv.isx86_64) "--disable-jit"
     ++ configureFlags;
 
   # install-docs will generate and install manpages and html docs
@@ -154,10 +176,10 @@ stdenv.mkDerivation ({
         #!${stdenv.shell}
         set -ox errexit
         PATH=${lib.makeBinPath [ common-updater-scripts coreutils git gnused ]}
-        latest=$(list-git-tags https://github.com/erlang/otp.git | sed -n 's/^OTP-${major}/${major}/p' | sort -V | tail -1)
+        latest=$(list-git-tags --url=https://github.com/erlang/otp.git | sed -n 's/^OTP-${major}/${major}/p' | sort -V | tail -1)
         if [ "$latest" != "${version}" ]; then
           nixpkgs="$(git rev-parse --show-toplevel)"
-          nix_file="$nixpkgs/pkgs/development/interpreters/erlang/R${major}.nix"
+          nix_file="$nixpkgs/pkgs/development/interpreters/erlang/${major}.nix"
           update-source-version ${baseName}R${major} "$latest" --version-key=version --print-changes --file="$nix_file"
         else
           echo "${baseName}R${major} is already up-to-date"

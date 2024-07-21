@@ -1,18 +1,24 @@
 { fetchurl, lib, stdenv, pkg-config, intltool, glib, gtk3, lasem
-, libgsf, libxml2, libxslt, cairo, pango, librsvg, gnome }:
+, libgsf, libxml2, libxslt, cairo, pango, librsvg, gnome
+, autoreconfHook
+, gtk-doc
+}:
 
 stdenv.mkDerivation rec {
   pname = "goffice";
-  version = "0.10.50";
+  version = "0.10.57";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "LFw93HsIs0UkCMgbEhxfASpzSYHXXkRN68yxxY5cv9w=";
+    hash = "sha256-Zr/X4x0vZ1bVpiw2cDg8u6ArPLTBBClQGSqAG3Kjyas=";
   };
 
-  nativeBuildInputs = [ pkg-config intltool ];
+  nativeBuildInputs = [
+    pkg-config intltool autoreconfHook gtk-doc
+    glib  # for glib-genmarshal
+  ];
 
   propagatedBuildInputs = [
     glib gtk3 libxml2 cairo pango libgsf lasem
@@ -21,7 +27,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxslt librsvg ];
 
   enableParallelBuilding = true;
-  doCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -31,7 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A Glib/GTK set of document centric objects and utilities";
+    description = "Glib/GTK set of document centric objects and utilities";
 
     longDescription = ''
       There are common operations for document centric applications that are

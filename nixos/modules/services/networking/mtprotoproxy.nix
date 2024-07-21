@@ -40,7 +40,7 @@ in
       enable = mkEnableOption "mtprotoproxy";
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3256;
         description = ''
           TCP port to accept mtproto connections on.

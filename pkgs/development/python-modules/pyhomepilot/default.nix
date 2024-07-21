@@ -1,13 +1,15 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyhomepilot";
   version = "0.0.3";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -17,9 +19,7 @@ buildPythonPackage rec {
     sha256 = "00gmqx8cwsd15iccnlr8ypgqrdg6nw9ha518cfk7pyp8vhw1ziwy";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;

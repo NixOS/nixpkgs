@@ -8,20 +8,20 @@
 
 stdenv.mkDerivation rec {
   pname = "librelp";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "rsyslog";
     repo = "librelp";
     rev = "v${version}";
-    sha256 = "sha256-aJLsUtik5aXfsdi+8QoDgbi4VUZ8gV3YPA6kIY6wzs4=";
+    sha256 = "sha256-VJlvFiOsIyiu0kBU8NkObtt9j2ElrSzJtvE8wtSlOus=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ gnutls zlib openssl ];
 
   meta = with lib; {
-    description = "A reliable logging library";
+    description = "Reliable logging library";
     homepage = "https://www.librelp.com/";
     license = licenses.gpl2;
     platforms = platforms.linux;

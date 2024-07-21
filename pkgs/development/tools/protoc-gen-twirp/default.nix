@@ -1,26 +1,29 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "protoc-gen-twirp";
-  version = "8.1.1";
+  version = "8.1.3";
 
   src = fetchFromGitHub {
     owner = "twitchtv";
     repo = "twirp";
     rev = "v${version}";
-    sha256 = "sha256-PnL7jgxAx/Xk/wajtQ+Q1G9KLes2NVANF2YmBcGFqe0=";
+    sha256 = "sha256-p3gHVHGBHakOOQnJAuMK7vZumNXN15mOABuEHUG0wNs=";
   };
 
-  goPackagePath = "github.com/twitchtv/twirp";
+  postPatch = ''
+    go mod init github.com/twitchtv/twirp
+  '';
+
+  vendorHash = null;
 
   subPackages = [
     "protoc-gen-twirp"
   ];
 
-  doCheck = true;
-
   meta = with lib; {
-    description = "A simple RPC framework with protobuf service definitions";
+    description = "Simple RPC framework with protobuf service definitions";
+    mainProgram = "protoc-gen-twirp";
     homepage = "https://github.com/twitchtv/twirp";
     license = licenses.asl20;
     maintainers = with maintainers; [ jojosch ];

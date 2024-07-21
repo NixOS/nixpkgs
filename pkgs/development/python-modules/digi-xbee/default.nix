@@ -1,16 +1,27 @@
-{ buildPythonPackage, fetchPypi, isPy27, pyserial, srp, lib }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  pyserial,
+  srp,
+  lib,
+}:
 
 buildPythonPackage rec {
   pname = "digi-xbee";
-  version = "1.4.0";
+  version = "1.4.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "664737d1aab453ea40b9745f1ee1e88920acff1cce2e07c42e7f5aa64a16e6aa";
+    sha256 = "3b10e749431f406d80c189d872f4673b8d3cd510f7b411f817780a0e72499cd2";
   };
 
-  propagatedBuildInputs = [ pyserial srp ];
+  propagatedBuildInputs = [
+    pyserial
+    srp
+  ];
 
   # Upstream doesn't contain unit tests, only functional tests which require specific hardware
   doCheck = false;

@@ -1,63 +1,141 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland-scanner
-, libGL, wayland, wayland-protocols, libinput, libxkbcommon, pixman
-, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
-, libpng, ffmpeg, xcbutilrenderutil, seatd
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, wayland-scanner
+, libGL
+, wayland
+, wayland-protocols
+, libinput
+, libxkbcommon
+, pixman
+, libcap
+, mesa
+, xorg
+, libpng
+, ffmpeg_4
+, ffmpeg
+, hwdata
+, seatd
+, vulkan-loader
+, glslang
+, libliftoff
+, libdisplay-info
+, nixosTests
 
-, enableXWayland ? true, xwayland ? null
+, enableXWayland ? true
+, xwayland ? null
 }:
 
-stdenv.mkDerivation rec {
-  pname = "wlroots";
-  version = "0.14.1";
+let
+  generic = { version, hash, extraBuildInputs ? [ ], extraNativeBuildInputs ? [ ], patches ? [ ], postPatch ? "" }:
+    stdenv.mkDerivation (finalAttrs: {
+      pname = "wlroots";
+      inherit version;
 
-  src = fetchFromGitHub {
-    owner = "swaywm";
-    repo = "wlroots";
-    rev = version;
-    sha256 = "1sshp3lvlkl1i670kxhwsb4xzxl8raz6769kqvgmxzcb63ns9ay1";
-  };
+      inherit enableXWayland;
 
-  # $out for the library and $examples for the example programs (in examples):
-  outputs = [ "out" "examples" ];
+      src = fetchFromGitLab {
+        domain = "gitlab.freedesktop.org";
+        owner = "wlroots";
+        repo = "wlroots";
+        rev = finalAttrs.version;
+        inherit hash;
+      };
 
-  depsBuildBuild = [ pkg-config ];
+      inherit patches postPatch;
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
+      # $out for the library and $examples for the example programs (in examples):
+      outputs = [ "out" "examples" ];
 
-  buildInputs = [
-    libGL wayland wayland-protocols libinput libxkbcommon pixman
-    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
-    libpng ffmpeg xcbutilrenderutil seatd
-  ]
-    ++ lib.optional enableXWayland xwayland
-  ;
+      strictDeps = true;
+      depsBuildBuild = [ pkg-config ];
 
-  mesonFlags =
-    lib.optional (!enableXWayland) "-Dxwayland=disabled"
-  ;
+      nativeBuildInputs = [ meson ninja pkg-config wayland-scanner glslang ]
+        ++ extraNativeBuildInputs;
 
-  postFixup = ''
-    # Install ALL example programs to $examples:
-    # screencopy dmabuf-capture input-inhibitor layer-shell idle-inhibit idle
-    # screenshot output-layout multi-pointer rotation tablet touch pointer
-    # simple
-    mkdir -p $examples/bin
-    cd ./examples
-    for binary in $(find . -executable -type f -printf '%P\n' | grep -vE '\.so'); do
-      cp "$binary" "$examples/bin/wlroots-$binary"
-    done
-  '';
+      buildInputs = [
+        libGL
+        libcap
+        libinput
+        libpng
+        libxkbcommon
+        mesa
+        pixman
+        seatd
+        vulkan-loader
+        wayland
+        wayland-protocols
+        xorg.libX11
+        xorg.xcbutilerrors
+        xorg.xcbutilimage
+        xorg.xcbutilrenderutil
+        xorg.xcbutilwm
+      ]
+      ++ lib.optional finalAttrs.enableXWayland xwayland
+      ++ extraBuildInputs;
 
-  meta = with lib; {
-    description = "A modular Wayland compositor library";
-    longDescription = ''
-      Pluggable, composable, unopinionated modules for building a Wayland
-      compositor; or about 50,000 lines of code you were going to write anyway.
+      mesonFlags =
+        lib.optional (!finalAttrs.enableXWayland) "-Dxwayland=disabled"
+      ;
+
+      postFixup = ''
+        # Install ALL example programs to $examples:
+        # screencopy dmabuf-capture input-inhibitor layer-shell idle-inhibit idle
+        # screenshot output-layout multi-pointer rotation tablet touch pointer
+        # simple
+        mkdir -p $examples/bin
+        cd ./examples
+        for binary in $(find . -executable -type f -printf '%P\n' | grep -vE '\.so'); do
+          cp "$binary" "$examples/bin/wlroots-$binary"
+        done
+      '';
+
+      # Test via TinyWL (the "minimum viable product" Wayland compositor based on wlroots):
+      passthru.tests.tinywl = nixosTests.tinywl;
+
+      meta = {
+        description = "Modular Wayland compositor library";
+        longDescription = ''
+          Pluggable, composable, unopinionated modules for building a Wayland
+          compositor; or about 50,000 lines of code you were going to write anyway.
+        '';
+        inherit (finalAttrs.src.meta) homepage;
+        changelog = "https://gitlab.freedesktop.org/wlroots/wlroots/-/tags/${version}";
+        license = lib.licenses.mit;
+        platforms = lib.platforms.linux;
+        maintainers = with lib.maintainers; [ primeos synthetica rewine ];
+      };
+    });
+
+in
+rec {
+  wlroots_0_16 = generic {
+    version = "0.16.2";
+    hash = "sha256-JeDDYinio14BOl6CbzAPnJDOnrk4vgGNMN++rcy2ItQ=";
+    postPatch = ''
+      substituteInPlace backend/drm/meson.build \
+        --replace /usr/share/hwdata/ ${hwdata}/share/hwdata/
     '';
-    inherit (src.meta) homepage;
-    changelog = "https://github.com/swaywm/wlroots/releases/tag/${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos synthetica ];
+    extraBuildInputs = [
+      ffmpeg_4
+    ];
   };
+
+  wlroots_0_17 = generic {
+    version = "0.17.4";
+    hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
+    extraNativeBuildInputs = [
+      hwdata
+    ];
+    extraBuildInputs = [
+      ffmpeg
+      libliftoff
+      libdisplay-info
+    ];
+  };
+
+  wlroots = wlroots_0_17;
 }

@@ -109,13 +109,7 @@ in
 {
   options = {
     services.logcheck = {
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Enable the logcheck cron job.
-        '';
-      };
+      enable = mkEnableOption "logcheck cron job, to mail anomalies in the system logfiles to the administrator";
 
       user = mkOption {
         default = "logcheck";
@@ -226,10 +220,16 @@ in
       logcheck = {};
     };
 
-    system.activationScripts.logcheck = ''
-      mkdir -m 700 -p /var/{lib,lock}/logcheck
-      chown ${cfg.user} /var/{lib,lock}/logcheck
-    '';
+    systemd.tmpfiles.settings.logcheck = {
+      "/var/lib/logcheck".d = {
+        mode = "700";
+        inherit (cfg) user;
+      };
+      "/var/lock/logcheck".d = {
+        mode = "700";
+        inherit (cfg) user;
+      };
+    };
 
     services.cron.systemCronJobs =
         let withTime = name: {timeArgs, ...}: timeArgs != null;

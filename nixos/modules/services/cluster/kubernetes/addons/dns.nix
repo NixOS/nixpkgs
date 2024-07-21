@@ -1,9 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 
 with lib;
 
 let
-  version = "1.7.1";
+  version = "1.10.1";
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
@@ -23,6 +23,10 @@ in {
           take 3 (splitString "." config.services.kubernetes.apiserver.serviceClusterIpRange
         ))
       ) + ".254";
+      defaultText = literalMD ''
+        The `x.y.z.254` IP of
+        `config.${options.services.kubernetes.apiserver.serviceClusterIpRange}`.
+      '';
       type = types.str;
     };
 
@@ -44,7 +48,7 @@ in {
 
         Setting reconcile mode to EnsureExists makes it possible to tailor DNS behavior by editing the coredns ConfigMap.
 
-        See: <link xlink:href="https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/addon-manager/README.md"/>.
+        See: <https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/addon-manager/README.md>.
       '';
       default = "Reconcile";
       type = types.enum [ "Reconcile" "EnsureExists" ];
@@ -55,9 +59,9 @@ in {
       type = types.attrs;
       default = {
         imageName = "coredns/coredns";
-        imageDigest = "sha256:4a6e0769130686518325b21b0c1d0688b54e7c79244d48e1b15634e98e40c6ef";
+        imageDigest = "sha256:a0ead06651cf580044aeb0a0feba63591858fb2e43ade8c9dea45a6a89ae7e5e";
         finalImageTag = version;
-        sha256 = "02r440xcdsgi137k5lmmvp0z5w5fmk8g9mysq5pnysq1wl8sj6mw";
+        sha256 = "0wg696920smmal7552a2zdhfncndn5kfammfa8bk8l7dz9bhk0y1";
       };
     };
 
@@ -65,7 +69,7 @@ in {
       description = ''
         Custom coredns corefile configuration.
 
-        See: <link xlink:href="https://coredns.io/manual/toc/#configuration"/>.
+        See: <https://coredns.io/manual/toc/#configuration>.
       '';
       type = types.str;
       default = ''
@@ -131,6 +135,11 @@ in {
             apiGroups = [ "" ];
             resources = [ "nodes" ];
             verbs = [ "get" ];
+          }
+          {
+            apiGroups = [ "discovery.k8s.io" ];
+            resources = [ "endpointslices" ];
+            verbs = [ "list" "watch" ];
           }
         ];
       };
@@ -359,4 +368,6 @@ in {
 
     services.kubernetes.kubelet.clusterDns = mkDefault cfg.clusterIp;
   };
+
+  meta.buildDocsInSandbox = false;
 }

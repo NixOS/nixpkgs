@@ -1,6 +1,6 @@
 # This module defines a system-wide environment that will be
 # initialised by pam_env (that is, not only in shells).
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -25,15 +25,14 @@ in
         colon characters.
 
         Note, due to limitations in the PAM format values may not
-        contain the <literal>"</literal> character.
+        contain the `"` character.
 
         Also, these variables are merged into
-        <xref linkend="opt-environment.variables"/> and it is
+        [](#opt-environment.variables) and it is
         therefore not possible to use PAM style variables such as
-        <code>@{HOME}</code>.
+        `@{HOME}`.
       '';
-      type = with types; attrsOf (either str (listOf str));
-      apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
+      inherit (options.environment.variables) type apply;
     };
 
     environment.profileRelativeSessionVariables = mkOption {
@@ -45,20 +44,17 @@ in
         login process.
 
         Variable substitution is available as described in
-        <citerefentry>
-          <refentrytitle>pam_env.conf</refentrytitle>
-          <manvolnum>5</manvolnum>
-        </citerefentry>.
+        {manpage}`pam_env.conf(5)`.
 
         Each attribute maps to a list of relative paths. Each relative
         path is appended to the each profile of
-        <option>environment.profiles</option> to form the content of
+        {option}`environment.profiles` to form the content of
         the corresponding environment variable.
 
         Also, these variables are merged into
-        <xref linkend="opt-environment.profileRelativeEnvVars"/> and it is
+        [](#opt-environment.profileRelativeEnvVars) and it is
         therefore not possible to use PAM style variables such as
-        <code>@{HOME}</code>.
+        `@{HOME}`.
       '';
     };
 

@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./buf_rect.patch ./fix_build_with_gcc-5.patch];
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs =
-    [ pkg-config SDL SDL_image libjack2
+    [ SDL SDL_image libjack2
     ];
 
   meta = with lib; {
@@ -22,5 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.nico202 ];
+    mainProgram = "meterbridge";
   };
 }

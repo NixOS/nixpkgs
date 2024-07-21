@@ -8,16 +8,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sirula";
-  version = "unstable-2021-10-12";
+  version = "1.0.0-unstable-2023-09-02";
 
   src = fetchFromGitHub {
     owner = "DorianRudolph";
-    repo = "sirula";
-    rev = "b300cabde03ec4d8c28ed84e318166b675fb4a77";
-    sha256 = "0pxdgjpqaf1bq1y1flafg0ksk8548rif6pfbw0lp31p655pq95c8";
+    repo = pname;
+    rev = "b15efe85ef1fe50849a33e5919d53d05f4f66090";
+    hash = "sha256-S0WbqY49nKaBUMWfgDKZxFLJuk7uFcnTfV8s86V0Zxs=";
   };
 
-  cargoSha256 = "175rl09jmnj8pd5isyp2chnn66vdz1c16fgqhnjsxvbcasmn8vdj";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "osstrtools-0.2.2" = "sha256-Co4pcikfN4vtIVK7ZsRGCWMAhMJWNNVZe/AdN1nMlmQ=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -27,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     description = "Simple app launcher for wayland written in rust";
     homepage = "https://github.com/DorianRudolph/sirula";
     license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ twitchyliquid64 ];
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }

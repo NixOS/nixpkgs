@@ -5,28 +5,34 @@
 , gnome-themes-extra
 , gtk-engine-murrine
 , sassc
-, tweaks ? [ ] # can be "solid" "compact" "black" "primary"
+, border-radius ? null # Suggested: 2 < value < 16
+, tweaks ? [ ] # can be "solid" "compact" "black" "primary" "macos" "submenu" "nord|dracula"
+, withWallpapers ? false
 }:
 
 let
-  validTweaks = [ "solid" "compact" "black" "primary" ];
-  unknownTweaks = lib.subtractLists validTweaks tweaks;
+  pname = "orchis-theme";
+
+  validTweaks = [ "solid" "compact" "black" "primary" "macos" "submenu" "nord" "dracula" ];
+
+  nordXorDracula = with builtins; lib.assertMsg (!(elem "nord" tweaks) || !(elem "dracula" tweaks)) ''
+    ${pname}: dracula and nord cannot be mixed. Tweaks ${toString tweaks}
+  '';
 in
-assert lib.assertMsg (unknownTweaks == [ ]) ''
-  You entered wrong tweaks: ${toString unknownTweaks}
-  Valid tweaks are: ${toString validTweaks}
-'';
+
+assert nordXorDracula;
+lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
 
 stdenvNoCC.mkDerivation
 rec {
-  pname = "orchis-theme";
-  version = "2021-12-13";
+  inherit pname;
+  version = "2024-05-30";
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
-    sha256 = "sha256-PN2ucGMDzRv4v86X1zVIs9+GkbMWuja2WaSQLFvJYd0=";
+    hash = "sha256-Dpdt7acRodtR4EE4STIiYHidehZwFGoYS8Oh6DgpXOI=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
@@ -41,12 +47,18 @@ rec {
 
   installPhase = ''
     runHook preInstall
-    bash install.sh -d $out/share/themes -t all ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks}
+    bash install.sh -d $out/share/themes -t all \
+      ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
+      ${lib.optionalString (border-radius != null) ("--round " + builtins.toString border-radius + "px")}
+    ${lib.optionalString withWallpapers ''
+      mkdir -p $out/share/backgrounds
+      cp src/wallpaper/{1080p,2k,4k}.jpg $out/share/backgrounds
+    ''}
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A Material Design theme for GNOME/GTK based desktop environments.";
+    description = "Material Design theme for GNOME/GTK based desktop environments";
     homepage = "https://github.com/vinceliuice/Orchis-theme";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Wrapper script for i3lock-color";
+    mainProgram = "multilockscreen";
     longDescription = ''
       multilockscreen is a wrapper script for i3lock-color.
       It allows you to cache background images for i3lock-color with a variety of different effects and adds a stylish indicator.

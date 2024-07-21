@@ -3,35 +3,44 @@
 stdenv.mkDerivation rec {
 
   pname = "deskew";
-  version = "1.25";
+  version = "1.30";
 
   src = fetchFromGitHub {
     owner = "galfar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zjjj66qhgqkmfxl3q7p78dv4xl4ci918pgl4d5259pqdj1bfgc8";
+    hash = "sha256-xghVOEMkQ/mXpOzJqMaT3SII7xneMNoFqRlqjtzmDnA=";
   };
 
   nativeBuildInputs = [ fpc ];
   buildInputs = [ libtiff ];
 
   buildPhase = ''
-    rm -r Bin # Remove pre-compiled binary
-    mkdir Bin
-    chmod +x compile.sh
-    ./compile.sh
+    runHook preBuild
+    patchShebangs ./Scripts
+
+    # Deskew insists on using dlopen to load libtiff, we insist it links against it.
+    sed -i -e 's/{$DEFINE DYNAMIC_DLL_LOADING}//' Imaging/LibTiff/LibTiffDynLib.pas
+    sed -i -e 's/if LibTiffDynLib\.LoadTiffLibrary then//' Imaging/LibTiff/ImagingTiffLib.pas
+    # Make sure libtiff is in the RPATH, so that Nix can find and track the runtime dependency
+    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${lib.getLib libtiff}/lib"
+    pushd Scripts && ./compile.sh && popd
+    runHook postBuild
   '';
 
   installPhase = ''
-    install -Dt $out/bin Bin/*
+    runHook preInstall
+    install -Dt $out/bin Bin/deskew
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A command line tool for deskewing scanned text documents";
-    homepage = "https://bitbucket.org/galfar/app-deskew/overview";
-    license = licenses.mit;
+    description = "Command line tool for deskewing scanned text documents";
+    homepage = "https://galfar.vevb.net/deskew";
+    license = with licenses; [ mit mpl11 ];
     maintainers = with maintainers; [ryantm];
     platforms = platforms.all;
+    mainProgram = "deskew";
   };
 
 }

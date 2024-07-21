@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, readline }:
 
 let
-  patchPrefix = "https://github.com/samuelgrf/kjv/commit/";
+  patchPrefix = "https://web.archive.org/web/20220422205751/https://github.com/samuelgrf/kjv/commit/";
 
   add-apocrypha = fetchpatch {
     url = patchPrefix + "0856fa0d37b45de0d6b47d163b5ea9a0b7f2c061.patch";
@@ -32,10 +32,10 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    description = "The Bible, King James Version";
+    description = "Bible, King James Version";
     homepage = "https://github.com/bontibon/kjv";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ jtobin samuelgrf ];
+    maintainers = with maintainers; [ jtobin cafkafk ];
     mainProgram = "kjv";
   };
 }

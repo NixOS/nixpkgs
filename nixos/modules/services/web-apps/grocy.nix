@@ -8,6 +8,8 @@ in {
   options.services.grocy = {
     enable = mkEnableOption "grocy";
 
+    package = mkPackageOption pkgs "grocy" { };
+
     hostName = mkOption {
       type = types.str;
       description = ''
@@ -48,7 +50,7 @@ in {
       type = types.str;
       default = "/var/lib/grocy";
       description = ''
-        Home directory of the <literal>grocy</literal> user which contains
+        Home directory of the `grocy` user which contains
         the application's state.
       '';
     };
@@ -115,9 +117,9 @@ in {
       user = "grocy";
       group = "nginx";
 
-      # PHP 7.4 is the only version which is supported/tested by upstream:
-      # https://github.com/grocy/grocy/blob/v3.0.0/README.md#how-to-install
-      phpPackage = pkgs.php74;
+      # PHP 8.1 and 8.2 are the only version which are supported/tested by upstream:
+      # https://github.com/grocy/grocy/blob/v4.0.2/README.md#platform-support
+      phpPackage = pkgs.php82;
 
       inherit (cfg.phpfpm) settings;
 
@@ -130,10 +132,20 @@ in {
       };
     };
 
+    # After an update of grocy, the viewcache needs to be deleted. Otherwise grocy will not work
+    # https://github.com/grocy/grocy#how-to-update
+    systemd.services.grocy-setup = {
+      wantedBy = [ "multi-user.target" ];
+      before = [ "phpfpm-grocy.service" ];
+      script = ''
+        rm -rf ${cfg.dataDir}/viewcache/*
+      '';
+    };
+
     services.nginx = {
       enable = true;
       virtualHosts."${cfg.hostName}" = mkMerge [
-        { root = "${pkgs.grocy}/public";
+        { root = "${cfg.package}/public";
           locations."/".extraConfig = ''
             rewrite ^ /index.php;
           '';
@@ -166,7 +178,7 @@ in {
   };
 
   meta = {
-    maintainers = with maintainers; [ ma27 ];
-    doc = ./grocy.xml;
+    maintainers = with maintainers; [ n0emis ];
+    doc = ./grocy.md;
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rt";
-  version = "5.0.1";
+  version = "5.0.5";
 
   src = fetchFromGitHub {
     repo = pname;
     rev = "${pname}-${version}";
     owner = "bestpractical";
-    sha256 = "1qqh6w094x7dljz001va802v4s6mixs9lkhs2cs47lf5ph3vwq2q";
+    hash = "sha256-4E6xEk1sIiNBKJT4jD+SNK8Fs+hX8EuTv+jD1U1g6qY=";
   };
 
   patches = [
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    makeWrapper
   ];
 
   buildInputs = [
-    makeWrapper
     perl
     (buildEnv {
       name = "rt-perl-deps";
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
         GD
         GDGraph
         GnuPGInterface
-        GraphViz
+        GraphViz2
         HTMLFormatExternal
         HTMLFormatTextWithLinks
         HTMLFormatTextWithLinksAndTables
@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
         MozillaCA
         NetCIDR
         NetIP
+        ParallelForkManager
         PathDispatcher
         PerlIOeol
         Plack
@@ -119,8 +120,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    substituteInPlace configure.ac \
-      --replace "rt-3.9.EXPORTED" "rt-${version}"
+    echo rt-${version} > .tag
   '';
   preConfigure = ''
     configureFlags="$configureFlags --with-web-user=$UID"

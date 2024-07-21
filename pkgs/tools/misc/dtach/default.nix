@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://dtach.sourceforge.net/";
-    description = "A program that emulates the detach feature of screen";
+    homepage = "https://dtach.sourceforge.net/";
+    description = "Program that emulates the detach feature of screen";
 
     longDescription = ''
       dtach is a tiny program that emulates the detach feature of
@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    mainProgram = "dtach";
   };
 }

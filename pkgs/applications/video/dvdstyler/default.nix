@@ -3,24 +3,27 @@
 , fetchurl
 , bison
 , cdrtools
-, docbook5
+, docbook_xml_dtd_412
+, docbook-xsl-nons
 , dvdauthor
 , dvdplusrwtools
-, ffmpeg
+, ffmpeg_4
 , flex
 , fontconfig
 , gettext
+, glib
+, gobject-introspection
 , libexif
-, makeWrapper
+, libjpeg
 , pkg-config
-, wxGTK30
+, wrapGAppsHook3
+, wxGTK32
 , wxSVG
 , xine-ui
 , xmlto
 , zip
 
 , dvdisasterSupport ? true, dvdisaster ? null
-, thumbnailSupport ? true, libgnomeui ? null
 , udevSupport ? true, udev ? null
 , dbusSupport ? true, dbus ? null
 }:
@@ -29,55 +32,66 @@ let
   inherit (lib) optionals makeBinPath;
 in stdenv.mkDerivation rec {
   pname = "dvdstyler";
-  version = "3.1.2";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/dvdstyler/dvdstyler/${version}/DVDStyler-${version}.tar.bz2";
-    sha256 = "03lsblqficcadlzkbyk8agh5rqcfz6y6dqvy9y866wqng3163zq4";
+    sha256 = "sha256-C7M0hzn0yTCXRUuBTss6WPa6zo8DD0Fhmp/ur7R0dVg=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
+  patches = [
+    # https://sourceforge.net/p/dvdstyler/DVDStyler/ci/679fa8dc6ac7657775eda9d7b0ed9da9d069aeec/
+    ./wxgtk32.patch
   ];
-  buildInputs = [
+
+  nativeBuildInputs = [
     bison
-    cdrtools
-    docbook5
-    dvdauthor
-    dvdplusrwtools
-    ffmpeg
+    docbook_xml_dtd_412
+    docbook-xsl-nons
     flex
-    fontconfig
     gettext
-    libexif
-    makeWrapper
-    wxSVG
-    wxGTK30
-    xine-ui
+    gobject-introspection
+    pkg-config
+    wrapGAppsHook3
     xmlto
     zip
+  ];
+  buildInputs = [
+    cdrtools
+    dvdauthor
+    dvdplusrwtools
+    ffmpeg_4
+    fontconfig
+    glib
+    libexif
+    libjpeg
+    wxSVG
+    wxGTK32
+    xine-ui
  ]
   ++ optionals dvdisasterSupport [ dvdisaster ]
   ++ optionals udevSupport [ udev ]
-  ++ optionals dbusSupport [ dbus ]
-  ++ optionals thumbnailSupport [ libgnomeui ];
-
-
-  postInstall = let
-    binPath = makeBinPath [
-      cdrtools
-      dvdauthor
-      dvdplusrwtools
-    ]; in
-    ''
-       wrapProgram $out/bin/dvdstyler --prefix PATH ":" "${binPath}"
-    '';
+  ++ optionals dbusSupport [ dbus ];
 
   enableParallelBuilding = true;
 
+  preFixup = let
+    binPath = makeBinPath ([
+      cdrtools
+      dvdauthor
+      dvdplusrwtools
+    ] ++ optionals dvdisasterSupport [ dvdisaster ]);
+    in
+    ''
+      gappsWrapperArgs+=(
+        --prefix PATH : "${binPath}"
+      )
+   '';
+
+
   meta = with lib; {
     homepage = "https://www.dvdstyler.org/";
-    description = "A DVD authoring software";
+    description = "DVD authoring software";
     longDescription = ''
       DVDStyler is a cross-platform free DVD authoring application for the
       creation of professional-looking DVDs. It allows not only burning of video
@@ -112,5 +126,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; linux;
+    mainProgram = "dvdstyler";
   };
 }

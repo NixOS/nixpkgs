@@ -40,14 +40,17 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace postlicyd/policy_tokens.sh \
                       --replace /bin/bash ${bash}/bin/bash;
+
+    substituteInPlace postlicyd/*_tokens.sh \
+      --replace "unsigned int" "size_t"
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=nonnull-compare -Wno-error=format-truncation";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=nonnull-compare -Wno-error=format-truncation";
 
   makeFlags = [ "DESTDIR=$(out)" "prefix=" ];
 
   meta = {
-    description = "A collection of postfix-related tools";
+    description = "Collection of postfix-related tools";
     license = with lib.licenses; [ bsd3 ];
     homepage = "https://github.com/Fruneau/pfixtools";
     platforms = lib.platforms.linux;

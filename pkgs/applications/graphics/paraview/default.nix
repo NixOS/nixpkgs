@@ -1,32 +1,32 @@
 { lib, stdenv, fetchFromGitLab, fetchurl
-, boost, cmake, ffmpeg, qtbase, qtx11extras
+, boost, cmake, ffmpeg, wrapQtAppsHook, qtbase, qtx11extras
 , qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper
-, mkDerivation, ninja, mpi, python3, tbb, libGLU, libGL
+, ninja, mpi, python3, tbb, libGLU, libGL
 , withDocs ? true
 }:
 
 let
-  version = "5.9.1";
+  version = "5.12.0";
 
   docFiles = [
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewTutorial-${version}.pdf";
       name = "Tutorial.pdf";
-      sha256 = "1knpirjbz3rv8p8n03p39vv8vi5imvxakjsssqgly09g0cnsikkw";
+      hash = "sha256-ETA799peqP9RAjcqPBwVb8egKfQJAuIXNgso+k8o50Q=";
     })
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewGettingStarted-${version}.pdf";
       name = "GettingStarted.pdf";
-      sha256 = "14xhlvg7s7d5amqf4qfyamx2a6b66zf4cmlfm3s7iw3jq01x1lx6";
+      hash = "sha256-ptPQA8By8Hj0qI5WRtw3ZhklelXeYeJwVaUdfd6msJM=";
     })
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewCatalystGuide-${version}.pdf";
       name = "CatalystGuide.pdf";
-      sha256 = "133vcfrbg2nh15igl51ns6gnfn1is20vq6j0rg37wha697pmcr4a";
+      hash = "sha256-imRW70lGQX7Gy0AavIHQMVhnn9E2FPpiCdCKt7Jje4w=";
     })
   ];
 
-in mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "paraview";
   inherit version;
 
@@ -35,7 +35,7 @@ in mkDerivation rec {
     owner = "paraview";
     repo = "paraview";
     rev = "v${version}";
-    sha256 = "0pzic95br0vr785jnpxqmfxcljw3wk7bhm2xy0jfmwm1dh2b7xac";
+    hash = "sha256-PAD48IlOU39TosjfTiDz7IjEeYEP/7F75M+8dYBIUxI=";
     fetchSubmodules = true;
   };
 
@@ -44,15 +44,7 @@ in mkDerivation rec {
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
   '';
 
-  # During build, binaries are called that rely on freshly built
-  # libraries.  These reside in build/lib, and are not found by
-  # default.
-  preBuild = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib:$PWD/VTK/ThirdParty/vtkm/vtk-m/lib
-  '';
-
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DPARAVIEW_ENABLE_FFMPEG=ON"
     "-DPARAVIEW_ENABLE_GDAL=ON"
     "-DPARAVIEW_ENABLE_MOTIONFX=ON"
@@ -75,6 +67,7 @@ in mkDerivation rec {
     makeWrapper
     ninja
     gfortran
+    wrapQtAppsHook
   ];
 
   buildInputs = [

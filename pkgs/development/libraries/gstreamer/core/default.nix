@@ -4,7 +4,6 @@
 , ninja
 , pkg-config
 , gettext
-, gobject-introspection
 , bison
 , flex
 , python3
@@ -12,35 +11,40 @@
 , makeWrapper
 , libcap
 , libunwind
-, darwin
 , elfutils # for libdw
 , bash-completion
 , lib
+, Cocoa
 , CoreServices
+, gobject-introspection
+, rustc
+, testers
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.18.4";
+  version = "1.24.3";
 
   outputs = [
+    "bin"
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs, see:
-    # - https://github.com/NixOS/nixpkgs/pull/98767
-    # - https://github.com/NixOS/nixpkgs/issues/98769#issuecomment-702296551
   ];
-  outputBin = "dev";
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1igv9l4hm21kp1jmlwlagzs7ly1vaxv1sbda29q8247372dwkvls";
+    hash = "sha256-EiXvSjKfrhytxexyfaskmtVn6AcoeUk1Yc65HtNKpBQ=";
   };
 
-  patches = [
-    ./fix_pkgconfig_includedir.patch
+  depsBuildBuild = [
+    pkg-config
   ];
 
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
@@ -51,11 +55,13 @@ stdenv.mkDerivation rec {
     python3
     makeWrapper
     glib
-    gobject-introspection
     bash-completion
-
-    # documentation
-    # TODO add hotdoc here
+    gobject-introspection
+    rustc
+  ] ++ lib.optionals stdenv.isLinux [
+    libcap # for setcap binary
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
@@ -63,8 +69,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     libcap
     libunwind
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
   ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
     CoreServices
   ];
 
@@ -75,9 +83,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
+    (lib.mesonEnable "doc" enableDocumentation)
   ] ++ lib.optionals stdenv.isDarwin [
     # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
     "-Dlibunwind=disabled"
@@ -90,27 +96,33 @@ stdenv.mkDerivation rec {
       gst/parse/gen_grammar.py.in \
       gst/parse/gen_lex.py.in \
       libs/gst/helpers/ptp_helper_post_install.sh \
-      scripts/extract-release-date-from-doap-file.py
+      scripts/extract-release-date-from-doap-file.py \
+      docs/gst-plugins-doc-cache-generator.py
   '';
 
   postInstall = ''
-    for prog in "$dev/bin/"*; do
+    for prog in "$bin/bin/"*; do
         # We can't use --suffix here due to quoting so we craft the export command by hand
         wrapProgram "$prog" --run 'export GST_PLUGIN_SYSTEM_PATH_1_0=$GST_PLUGIN_SYSTEM_PATH_1_0''${GST_PLUGIN_SYSTEM_PATH_1_0:+:}$(unset _tmp; for profile in $NIX_PROFILES; do _tmp="$profile/lib/gstreamer-1.0''${_tmp:+:}$_tmp"; done; printf '%s' "$_tmp")'
     done
   '';
 
   preFixup = ''
-    moveToOutput "share/bash-completion" "$dev"
+    moveToOutput "share/bash-completion" "$bin"
   '';
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib ;{
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = with lib; {
     description = "Open source multimedia framework";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
+    pkgConfigModules = [
+      "gstreamer-controller-1.0"
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ ttuegel matthewbauer ];
   };
-}
+})

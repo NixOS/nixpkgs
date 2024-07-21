@@ -1,19 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, docutils, pybtex, six }:
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  fetchPypi,
+  pybtex,
+  pytestCheckHook,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
-  version = "1.0.1";
   pname = "pybtex-docutils";
+  version = "1.0.3";
+  format = "setuptools";
 
-  doCheck = false;
-  buildInputs = [ docutils pybtex six ];
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d53aa0c31dc94d61fd30ea3f06c749e6f510f9ff0e78cb2765a9300f173d8626";
+    hash = "sha256-On69+StZPgDowcU4qpogvKXZLYQjESRxWsyWTVHZPGs=";
   };
 
+  buildInputs = [
+    docutils
+    pybtex
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pybtex_docutils" ];
+
   meta = with lib; {
-    description = "A docutils backend for pybtex";
+    description = "Docutils backend for pybtex";
     homepage = "https://github.com/mcmtroffaes/pybtex-docutils";
     license = licenses.mit;
   };

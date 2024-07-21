@@ -1,40 +1,49 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, cmake
 , libxml2
 , libpeas
 , glib
 , gtk3
 , gtksourceview4
 , gspell
-, xapps
+, xapp
 , pkg-config
+, python3
 , meson
 , ninja
-, wrapGAppsHook
+, versionCheckHook
+, wrapGAppsHook3
 , intltool
-, itstool }:
+, itstool
+}:
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.0.2";
+  version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    sha256 = "sha256-VIudVgENibOz8RK0oK80U74wy592q3vKEnl3zuS7oSI=";
+    sha256 = "sha256-FG8SlMyhee0W88Pt3oW1tsFyy/KeCOE+QlDbE6hzjcg=";
   };
+
+  patches = [
+    # We patch gobject-introspection and meson to store absolute paths to libraries in typelibs
+    # but that requires the install_dir is an absolute path.
+    ./correct-gir-lib-path.patch
+  ];
 
   nativeBuildInputs = [
     meson
-    cmake
     pkg-config
     intltool
     itstool
     ninja
-    wrapGAppsHook
+    python3
+    versionCheckHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -44,28 +53,18 @@ stdenv.mkDerivation rec {
     gtksourceview4
     libpeas
     gspell
-    xapps
+    xapp
   ];
 
-  postInstall = ''
-    glib-compile-schemas $out/share/glib-2.0/schemas
-  '';
-
   doInstallCheck = true;
-  installCheckPhase = ''
-    if [[ "$($out/bin/xed --version)" == "xed - Version ${version}" ]] ; then
-      echo "${pname} smoke test passed"
-    else
-      echo "${pname} smoke test failed"
-      return 1
-    fi
-  '';
+  versionCheckProgram = "${placeholder "out"}/bin/xed";
 
   meta = with lib; {
     description = "Light weight text editor from Linux Mint";
     homepage = "https://github.com/linuxmint/xed";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice ];
+    maintainers = with maintainers; [ tu-maurice bobby285271 ];
+    mainProgram = "xed";
   };
 }

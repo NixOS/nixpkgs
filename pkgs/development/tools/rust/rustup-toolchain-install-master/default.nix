@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{ lib
 , rustPlatform
-, pkg-config
-, openssl
+, fetchFromGitHub
 , runCommand
+, stdenv
 , patchelf
 , zlib
+, pkg-config
+, openssl
+, xz
 , Security
 }:
 
@@ -19,6 +20,10 @@ rustPlatform.buildRustPackage rec {
     repo = pname;
     rev = "v${version}";
     hash = "sha256-J25ER/g8Kylw/oTIEl4Gl8i1xmhR+4JM5M5EHpl1ras=";
+  };
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
   };
 
   patches =
@@ -41,14 +46,19 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
+    xz
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ];
 
-  cargoSha256 = "n7t8Ap9hdhrjmtKjfdyozf26J7yhu57pedm19CunLF4=";
+  # update Cargo.lock to work with openssl 3
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
   meta = with lib; {
     description = "Install a rustc master toolchain usable from rustup";
+    mainProgram = "rustup-toolchain-install-master";
     homepage = "https://github.com/kennytm/rustup-toolchain-install-master";
     license = licenses.mit;
     maintainers = with maintainers; [ davidtwco ];

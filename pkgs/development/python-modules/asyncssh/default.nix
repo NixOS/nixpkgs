@@ -1,50 +1,62 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cryptography
-, bcrypt
-, gssapi
-, fido2
-, libnacl
-, libsodium
-, nettle
-, python-pkcs11
-, pyopenssl
-, openssl
-, openssh
-, pytestCheckHook
+{
+  lib,
+  bcrypt,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  fido2,
+  gssapi,
+  libnacl,
+  libsodium,
+  nettle,
+  openssh,
+  openssl,
+  pyopenssl,
+  pytestCheckHook,
+  python-pkcs11,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.8.1";
-  format = "setuptools";
+  version = "2.14.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0648eba58d72653755f28e26c9bd83147d9652c1f2f5e87fbf5a87d7f8fbf83a";
+    hash = "sha256-6Va/iYjQega6MwX2YE4mH0ygFMSiMvCHPxx2kvvjz8I=";
   };
 
-  propagatedBuildInputs = [
-    bcrypt
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
-    fido2
-    gssapi
-    libnacl
-    libsodium
     nettle
-    python-pkcs11
-    pyopenssl
+    typing-extensions
   ];
 
-  checkInputs = [
+  buildInputs = [ libsodium ];
+
+  optional-dependencies = {
+    bcrypt = [ bcrypt ];
+    fido2 = [ fido2 ];
+    gssapi = [ gssapi ];
+    libnacl = [ libnacl ];
+    pkcs11 = [ python-pkcs11 ];
+    pyOpenSSL = [ pyopenssl ];
+  };
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     openssh
     openssl
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   patches = [
     # Reverts https://github.com/ronf/asyncssh/commit/4b3dec994b3aa821dba4db507030b569c3a32730
@@ -66,15 +78,16 @@ buildPythonPackage rec {
     "TestSKAuthCTAP2"
     # Requires network access
     "test_connect_timeout_exceeded"
+    # Fails in the sandbox
+    "test_forward_remote"
   ];
 
-  pythonImportsCheck = [
-    "asyncssh"
-  ];
+  pythonImportsCheck = [ "asyncssh" ];
 
   meta = with lib; {
     description = "Asynchronous SSHv2 Python client and server library";
     homepage = "https://asyncssh.readthedocs.io/";
+    changelog = "https://github.com/ronf/asyncssh/blob/v${version}/docs/changes.rst";
     license = licenses.epl20;
     maintainers = with maintainers; [ ];
   };

@@ -1,54 +1,91 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, Mako
-, pytest
-, numpy
-, cffi
-, pytools
-, decorator
-, appdirs
-, six
-, opencl-headers
-, ocl-icd
-, pybind11
-, mesa_drivers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  cmake,
+  scikit-build-core,
+  pathspec,
+  ninja,
+  nanobind,
+
+  # dependencies
+  appdirs,
+  cffi,
+  darwin,
+  decorator,
+  mako,
+  numpy,
+  ocl-icd,
+  oldest-supported-numpy,
+  opencl-headers,
+  platformdirs,
+  pybind11,
+  pytestCheckHook,
+  pytools,
+  six,
 }:
 
 let
-  os-specific-buildInputs =
-    if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
-in buildPythonPackage rec {
+  os-specific-buildInputs = if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
+in
+buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2021.2.10";
+  version = "2024.2.6";
+  format = "pyproject";
 
-  checkInputs = [ pytest ];
-  buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
-
-  propagatedBuildInputs = [ numpy cffi pytools decorator appdirs six Mako ];
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "75a1f202741bace9606a8680bbbfac69bf8a73d4e7511fb1a6ce3e48185996ae";
+  src = fetchFromGitHub {
+    owner = "inducer";
+    repo = "pyopencl";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nP7ZAGeRXrjqDRWlc2SDP1hk1fseGeu9Zx0lOp9Pchs=";
   };
 
-  # py.test is not needed during runtime, so remove it from `install_requires`
-  postPatch = ''
-    substituteInPlace setup.py --replace "pytest>=2" ""
-  '';
+  nativeBuildInputs = [
+    cmake
+    nanobind
+    ninja
+    numpy
+    oldest-supported-numpy
+    pathspec
+    scikit-build-core
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  buildInputs = [
+    opencl-headers
+    pybind11
+  ] ++ os-specific-buildInputs;
+
+  propagatedBuildInputs = [
+    appdirs
+    cffi
+    decorator
+    mako
+    numpy
+    platformdirs
+    pytools
+    six
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preBuild = ''
     export HOME=$(mktemp -d)
+    rm -rf pyopencl
   '';
 
   # gcc: error: pygpu_language_opencl.cpp: No such file or directory
   doCheck = false;
 
+  pythonImportsCheck = [ "pyopencl" ];
+
   meta = with lib; {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
     license = licenses.mit;
-    maintainers = [ maintainers.fridh ];
   };
 }

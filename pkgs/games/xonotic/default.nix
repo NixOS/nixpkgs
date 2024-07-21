@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommand, makeDesktopItem
 , xonotic-data, copyDesktopItems
 , # required for both
-  unzip, libjpeg, zlib, libvorbis, curl
+  unzip, libjpeg, zlib, libvorbis, curl, freetype, libpng, libtheora
 , # glx
   libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, alsa-lib
 , # sdl
@@ -16,7 +16,7 @@
 
 let
   pname = "xonotic";
-  version = "0.8.2";
+  version = "0.8.6";
   name = "${pname}-${version}";
   variant =
     if withSDL && withGLX then
@@ -41,7 +41,7 @@ let
     '';
     homepage = "https://www.xonotic.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ astsmtl zalakain petabyteboy ];
+    maintainers = with lib.maintainers; [ astsmtl zalakain ];
     platforms = lib.platforms.linux;
   };
 
@@ -50,9 +50,9 @@ let
     exec = "xonotic";
     comment = meta.description;
     desktopName = "Xonotic";
-    categories = "Game;Shooter;";
+    categories = [ "Game" "Shooter" ];
     icon = "xonotic";
-    startupNotify = "false";
+    startupNotify = false;
   };
 
   xonotic-unwrapped = stdenv.mkDerivation rec {
@@ -61,13 +61,13 @@ let
 
     src = fetchurl {
       url = "https://dl.xonotic.org/xonotic-${version}-source.zip";
-      sha256 = "0axxw04fyz6jlfqd0kp7hdrqa0li31sx1pbipf2j5qp9wvqicsay";
+      hash = "sha256-i5KseBz/SuicEhoj6s197AWiqr7azMI6GdGglYtAEqg=";
     };
 
     nativeBuildInputs = [ unzip ];
     buildInputs = [ libjpeg zlib libvorbis curl gmp ]
-      ++ lib.optional withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsa-lib.dev ]
-      ++ lib.optional withSDL [ SDL2.dev ];
+      ++ lib.optionals withGLX [ libX11 libGLU libGL libXpm libXext libXxf86vm alsa-lib ]
+      ++ lib.optionals withSDL [ SDL2 ];
 
     sourceRoot = "Xonotic/source/darkplaces";
 
@@ -83,24 +83,31 @@ let
     '';
 
     buildPhase = (lib.optionalString withDedicated ''
-      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES sv-${target}
+      make -j $NIX_BUILD_CORES sv-${target}
     '' + lib.optionalString withGLX ''
-      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES cl-${target}
+      make -j $NIX_BUILD_CORES cl-${target}
     '' + lib.optionalString withSDL ''
-      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES sdl-${target}
+      make -j $NIX_BUILD_CORES sdl-${target}
     '') + ''
       pushd ../d0_blind_id
-      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES
+      make -j $NIX_BUILD_CORES
       popd
     '';
 
     enableParallelBuilding = true;
 
     installPhase = (''
-      for size in 16x16 24x24 32x32 48x48 64x64 72x72 96x96 128x128 192x192 256x256 512x512 1024x1024 scalable; do
-        install -Dm644 ../../misc/logos/xonotic_icon.svg \
-          $out/share/icons/hicolor/$size/xonotic.svg
+      install -Dm644 ../../misc/logos/xonotic_icon.svg \
+        $out/share/icons/hicolor/scalable/apps/xonotic.svg
+      pushd ../../misc/logos/icons_png
+      for img in *.png; do
+        size=''${img#xonotic_}
+        size=''${size%.png}
+        dimensions="''${size}x''${size}"
+        install -Dm644 $img \
+          $out/share/icons/hicolor/$dimensions/apps/xonotic.png
       done
+      popd
     '' + lib.optionalString withDedicated ''
       install -Dm755 darkplaces-dedicated "$out/bin/xonotic-dedicated"
     '' + lib.optionalString withGLX ''
@@ -121,14 +128,22 @@ let
       patchelf \
           --add-needed ${curl.out}/lib/libcurl.so \
           --add-needed ${libvorbis}/lib/libvorbisfile.so \
+          --add-needed ${libvorbis}/lib/libvorbisenc.so \
           --add-needed ${libvorbis}/lib/libvorbis.so \
           --add-needed ${libGL.out}/lib/libGL.so \
+          --add-needed ${freetype}/lib/libfreetype.so \
+          --add-needed ${libpng}/lib/libpng.so \
+          --add-needed ${libtheora}/lib/libtheora.so \
           $out/bin/xonotic-glx
     '' + lib.optionalString withSDL ''
       patchelf \
           --add-needed ${curl.out}/lib/libcurl.so \
           --add-needed ${libvorbis}/lib/libvorbisfile.so \
+          --add-needed ${libvorbis}/lib/libvorbisenc.so \
           --add-needed ${libvorbis}/lib/libvorbis.so \
+          --add-needed ${freetype}/lib/libfreetype.so \
+          --add-needed ${libpng}/lib/libpng.so \
+          --add-needed ${libtheora}/lib/libtheora.so \
           $out/bin/xonotic-sdl
     '';
   };
@@ -137,8 +152,8 @@ in rec {
   xonotic-data = fetchzip {
     name = "xonotic-data";
     url = "https://dl.xonotic.org/xonotic-${version}.zip";
-    sha256 = "15caj11v9hhr7w55w3rs1rspblzr9lg1crqivbn9pyyq0rif8cpl";
-    extraPostFetch = ''
+    hash = "sha256-Lhjpyk7idmfQAVn4YUb7diGyyKZQBfwNXxk2zMOqiZQ=";
+    postFetch = ''
       cd $out
       rm -rf $(ls | grep -v "^data$" | grep -v "^key_0.d0pk$")
     '';

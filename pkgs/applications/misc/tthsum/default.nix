@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
-    description = "An md5sum-alike program that works with Tiger/THEX hashes";
+    broken = stdenv.isDarwin;
+    description = "Md5sum-alike program that works with Tiger/THEX hashes";
     longDescription = ''
       tthsum generates or checks TTH checksums (root of the THEX hash
       tree). The Merkle Hash Tree, invented by Ralph Merkle, is a hash
@@ -37,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;
+    mainProgram = "tthsum";
   };
 }

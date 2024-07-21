@@ -8,18 +8,17 @@
 , gtkmm2
 , gerbv
 , librsvg
-, bash
 }:
 
 stdenv.mkDerivation rec {
   pname = "pcb2gcode";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "pcb2gcode";
     repo = "pcb2gcode";
     rev = "v${version}";
-    sha256 = "sha256-3VQlYtSi6yWWNuxTlBzvBtkM5hAss47xat+sEW+P79E=";
+    hash = "sha256-c5YabBqZn6ilIkF3lifTsYyLZMsZN21jDj1hNu0PRAc=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -41,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pcb2gcode/pcb2gcode";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kritnich ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

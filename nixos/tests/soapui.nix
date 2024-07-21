@@ -1,10 +1,10 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "soapui";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ asbachb ];
+    maintainers = [ ];
   };
 
-  machine = { config, pkgs, ... }: {
+  nodes.machine = { config, pkgs, ... }: {
     imports = [
       ./common/x11.nix
     ];

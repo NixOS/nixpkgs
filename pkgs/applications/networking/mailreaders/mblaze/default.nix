@@ -1,20 +1,28 @@
 { coreutils, fetchFromGitHub, fetchpatch, file, gawk, gnugrep, gnused
-, installShellFiles, less, lib, libiconv, makeWrapper, nano, stdenv, ruby
+, installShellFiles, lib, libiconv, makeWrapper, stdenv, ruby
 }:
 
 stdenv.mkDerivation rec {
   pname = "mblaze";
-  version = "1.1";
+  version = "1.2";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
-  buildInputs = [ ruby ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ libiconv ruby ];
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "mblaze";
     rev = "v${version}";
-    sha256 = "sha256-Ho2Qoxs93ig4yYUOaoqdYnLA8Y4+7CfRM0dju89JOa4=";
+    sha256 = "sha256-LCyw3xGsYjsbExueRHVRqoJYluji9MmZq5zGclvSSDk=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "LFS64.patch";
+      url = "https://github.com/leahneukirchen/mblaze/commit/1babebc12c3ea8d3395f00c9607e863866c190fc.patch";
+      hash = "sha256-0zTMM9Ay4mo7ATqCQRJPiR7Z53MsMLeup7Fa7lsdWo8=";
+    })
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

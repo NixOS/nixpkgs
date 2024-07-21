@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "magic-vlsi";
-  version = "8.3.109";
+  version = "8.3.486";
 
   src = fetchurl {
     url    = "http://opencircuitdesign.com/magic/archive/magic-${version}.tgz";
-    sha256 = "sha256-ZK4OF5XwjW1OJmOVUFqLklfpM10eIwCILygqIyjRbEQ=";
+    sha256 = "sha256-RLAA97roY41imjxehEFzF+peLmrS+rTQkVua+8dxKDY=";
   };
 
   nativeBuildInputs = [ python3 ];
@@ -44,17 +44,12 @@ stdenv.mkDerivation rec {
     patchShebangs scripts/*
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
-
-  patches = [
-    ./0001-strip-bin-prefix.patch
-    ./0002-fix-format-security.patch
-  ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
 
   meta = with lib; {
     description = "VLSI layout tool written in Tcl";
     homepage    = "http://opencircuitdesign.com/magic/";
     license     = licenses.mit;
-    maintainers = with maintainers; [ anna328p thoughtpolice AndersonTorres ];
+    maintainers = with maintainers; [ thoughtpolice AndersonTorres ];
   };
 }

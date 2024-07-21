@@ -17,16 +17,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  makeFlags = [ "AR:=$(AR)" ];
+
   nativeBuildInputs = [ gettext ];
 
   hardeningDisable = [ "format" ];
 
   configureFlags = [ "--program-transform-name=s/^l//" ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
+
   meta = with lib; {
     homepage = "https://ohse.de/uwe/software/lrzsz.html";
     description = "Communication package providing the XMODEM, YMODEM ZMODEM file transfer protocols";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

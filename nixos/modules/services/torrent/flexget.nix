@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.flexget;
-  pkg = pkgs.flexget;
+  pkg = cfg.package;
   ymlFile = pkgs.writeText "flexget.yml" ''
     ${cfg.config}
 
@@ -14,7 +14,9 @@ let
 in {
   options = {
     services.flexget = {
-      enable = mkEnableOption "Run FlexGet Daemon";
+      enable = mkEnableOption "FlexGet daemon";
+
+      package = mkPackageOption pkgs "flexget" {};
 
       user = mkOption {
         default = "deluge";
@@ -34,7 +36,7 @@ in {
         default = "10m";
         example = "1h";
         type = types.str;
-        description = "When to perform a <command>flexget</command> run. See <command>man 7 systemd.time</command> for the format.";
+        description = "When to perform a {command}`flexget` run. See {command}`man 7 systemd.time` for the format.";
       };
 
       systemScheduler = mkOption {
@@ -62,7 +64,6 @@ in {
         path = [ pkg ];
         serviceConfig = {
           User = cfg.user;
-          Environment = "TZ=${config.time.timeZone}";
           ExecStartPre = "${pkgs.coreutils}/bin/install -m644 ${ymlFile} ${configFile}";
           ExecStart = "${pkg}/bin/flexget -c ${configFile} daemon start";
           ExecStop = "${pkg}/bin/flexget -c ${configFile} daemon stop";

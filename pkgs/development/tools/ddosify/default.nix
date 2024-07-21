@@ -1,31 +1,41 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "ddosify";
-  version = "0.6.0";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-RA+WmlSrNwkysuvAXjCoKZ528nt0tTZ5OHkqCETMskE=";
+    owner = "ddosify";
+    repo = "ddosify";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5K/qXtdlDC09dEjRwYvoh9SapGLNmvywDMiNdwZDDTQ=";
   };
 
-  vendorSha256 = "sha256-TY8shTb77uFm8/yCvlIncAfq7brWgnH/63W+hj1rvqg=";
+  vendorHash = "sha256-Wg4JzA2aEwNBsDrkauFUb9AS38ITLBGex9QHzDcdpoM=";
 
-  # triggers a different set of tests that seems to be interactive and fail (no url target defined)
   ldflags = [
-    "-s -w"
-    "-X main.GitVersion=${version}"
+    "-s"
+    "-w"
+    "-X=main.GitVersion=${version}"
+    "-X=main.GitCommit=unknown"
+    "-X=main.BuildDate=unknown"
   ];
 
+  # TestCreateHammerMultipartPayload error occurred - Get "https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
+  doCheck = false;
+
   doInstallCheck = true;
+
   installCheckPhase = ''
     $out/bin/ddosify -version | grep ${version} > /dev/null
   '';
 
   meta = with lib; {
     description = "High-performance load testing tool, written in Golang";
+    mainProgram = "ddosify";
     homepage = "https://ddosify.com/";
     changelog = "https://github.com/ddosify/ddosify/releases/tag/v${version}";
     license = licenses.agpl3Plus;

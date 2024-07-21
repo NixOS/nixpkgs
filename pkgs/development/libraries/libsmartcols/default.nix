@@ -1,16 +1,16 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python3, gtk-doc}:
 
 stdenv.mkDerivation rec {
-  name = "libsmartcols";
-  version = "v2.36.1";
+  pname = "libsmartcols";
+  version = "2.39.3";
 
   nativeBuildInputs = [ autoreconfHook pkg-config python3 gtk-doc ];
 
   src = fetchFromGitHub {
     owner = "karelzak";
     repo = "util-linux";
-    rev = version;
-    sha256 = "0z7nv054pqhlihqiw0vk3h40j0cxk1yxf8zzh0ddmvk6834cnyxs";
+    rev = "v${version}";
+    sha256 = "sha256-X39os2iHqSrrYP6HVHPOkuTfc6vNB3pmsOP3VjW50fI=";
   };
 
   configureFlags = [ "--disable-all-programs" "--enable-libsmartcols" ];

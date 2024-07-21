@@ -1,16 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ghp-import";
-  version = "2.0.2";
+  version = "2.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lHs3cfEb6FDIUsZLVhxgD93feUurNjBghUwe560F4HE=";
+    hash = "sha256-nFNcTGEZPC34hxIiVn1/1+UBTYNfl9x7dDkGniQT00M=";
   };
 
   propagatedBuildInputs = [ python-dateutil ];
@@ -22,6 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Copy your docs directly to the gh-pages branch";
+    mainProgram = "ghp-import";
     homepage = "https://github.com/c-w/ghp-import";
     license = licenses.asl20;
     maintainers = with maintainers; [ veehaitch ];

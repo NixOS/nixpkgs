@@ -41,16 +41,14 @@ in {
         };
         description = ''
           Configuration for rsyncd. See
-          <citerefentry><refentrytitle>rsyncd.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          {manpage}`rsyncd.conf(5)`.
         '';
       };
 
       socketActivated = mkOption {
         default = false;
         type = types.bool;
-        description =
-          "If enabled Rsync will be socket-activated rather than run persistently.";
+        description = "If enabled Rsync will be socket-activated rather than run persistently.";
       };
 
     };
@@ -79,7 +77,7 @@ in {
     in {
       services.rsync = {
         enable = !cfg.socketActivated;
-        aliases = [ "rsyncd" ];
+        aliases = [ "rsyncd.service" ];
 
         description = "fast remote file copy program daemon";
         after = [ "network.target" ];

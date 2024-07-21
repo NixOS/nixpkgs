@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, decorator
-, future
-, lxml
-, matplotlib
-, numpy
-, requests
-, scipy
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  decorator,
+  future,
+  lxml,
+  matplotlib,
+  numpy,
+  requests,
+  scipy,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "obspy";
   version = "1.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

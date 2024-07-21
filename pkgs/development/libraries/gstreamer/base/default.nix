@@ -5,9 +5,9 @@
 , meson
 , ninja
 , gettext
-, gobject-introspection
 , python3
 , gstreamer
+, graphene
 , orc
 , pango
 , libtheora
@@ -19,41 +19,48 @@
 , libvisual
 , tremor # provides 'virbisidec'
 , libGL
+, gobject-introspection
 , enableX11 ? stdenv.isLinux
-, libXv
 , libXext
+, libXi
+, libXv
+, libdrm
 , enableWayland ? stdenv.isLinux
 , wayland
 , wayland-protocols
 , enableAlsa ? stdenv.isLinux
 , alsa-lib
-# Enabling Cocoa seems to currently not work, giving compile
-# errors. Suspected is that a newer version than clang
-# is needed than 5.0 but it is not clear.
-, enableCocoa ? false
+# TODO: fix once x86_64-darwin sdk updated
+, enableCocoa ? (stdenv.isDarwin && stdenv.isAarch64)
 , Cocoa
 , OpenGL
 , enableGl ? (enableX11 || enableWayland || enableCocoa)
 , enableCdparanoia ? (!stdenv.isDarwin)
 , cdparanoia
 , glib
+, testers
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, hotdoc
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.18.4";
+  version = "1.24.3";
 
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "08w3ivbc6n4vdds2ap6q7l8zdk9if8417nznyqidf0adm0lk5r99";
+    hash = "sha256-8QlDl+qnky8G5X67sHWqM6osduS3VjChawLI1K9Ggy4=";
   };
 
-  patches = [
-    ./fix_pkgconfig_includedir.patch
+  strictDeps = true;
+  depsBuildBuild = [
+    pkg-config
   ];
-
   nativeBuildInputs = [
     meson
     ninja
@@ -62,13 +69,16 @@ stdenv.mkDerivation rec {
     gettext
     orc
     glib
+    gstreamer
     gobject-introspection
-
-    # docs
-    # TODO add hotdoc here
-  ] ++ lib.optional enableWayland wayland;
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
+  ] ++ lib.optionals enableWayland [
+    wayland
+  ];
 
   buildInputs = [
+    graphene
     orc
     libtheora
     libintl
@@ -77,18 +87,19 @@ stdenv.mkDerivation rec {
     libpng
     libjpeg
     tremor
+    pango
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    libdrm
     libGL
-  ] ++ lib.optional (!stdenv.isDarwin) [
     libvisual
   ] ++ lib.optionals stdenv.isDarwin [
-    pango
     OpenGL
   ] ++ lib.optionals enableAlsa [
     alsa-lib
   ] ++ lib.optionals enableX11 [
     libXext
+    libXi
     libXv
-    pango
   ] ++ lib.optionals enableWayland [
     wayland
     wayland-protocols
@@ -97,16 +108,16 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     gstreamer
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    libdrm
   ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-    "-Dgl-graphene=disabled" # not packaged in nixpkgs as of writing
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
+    (lib.mesonEnable "doc" enableDocumentation)
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
     "-Dtests=disabled"
   ]
   ++ lib.optional (!enableX11) "-Dx11=disabled"
@@ -115,12 +126,13 @@ stdenv.mkDerivation rec {
   ++ lib.optional (!enableAlsa) "-Dalsa=disabled"
   ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
   ++ lib.optionals stdenv.isDarwin [
+    "-Ddrm=disabled"
     "-Dlibvisual=disabled"
   ];
 
   postPatch = ''
     patchShebangs \
-      common/scangobj-merge.py \
+      scripts/meson-pkg-config-file-fixup.py \
       scripts/extract-release-date-from-doap-file.py
   '';
 
@@ -147,11 +159,19 @@ stdenv.mkDerivation rec {
     waylandEnabled = enableWayland;
   };
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Base GStreamer plug-ins and helper libraries";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
+    pkgConfigModules = [
+      "gstreamer-audio-1.0"
+      "gstreamer-base-1.0"
+      "gstreamer-net-1.0"
+      "gstreamer-video-1.0"
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ matthewbauer ];
   };
-}
+})

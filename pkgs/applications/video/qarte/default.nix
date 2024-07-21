@@ -1,15 +1,15 @@
 { mkDerivation, lib, fetchbzr, python3, rtmpdump }:
 
 let
-  pythonEnv = python3.withPackages (ps: with ps; [ pyqt5_with_qtmultimedia ]);
+  pythonEnv = python3.withPackages (ps: with ps; [ m3u8 pyqt5-multimedia ]);
 in mkDerivation {
   pname = "qarte";
-  version = "4.12.0";
+  version = "5.5.0";
 
   src = fetchbzr {
-    url = "http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/qarte-4";
-    rev = "56";
-    sha256 = "0cq9dg04grl45xw43gi9wsb0vm8c4bcvh813h5lm4ry8b94lfx2i";
+    url = "http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/qarte-5";
+    rev = "88";
+    sha256 = "sha256-+Ixe4bWKubH/XBESwmP2NWS8bH0jq611c3MZn7W87Jw=";
   };
 
   buildInputs = [ pythonEnv ];
@@ -38,9 +38,10 @@ in mkDerivation {
 
   meta = with lib; {
     homepage = "https://launchpad.net/qarte";
-    description = "A recorder for Arte TV Guide and Arte Concert";
+    description = "Recorder for Arte TV Guide and Arte Concert";
     license = licenses.gpl3;
     maintainers = with maintainers; [ vbgl ];
     platforms = platforms.linux;
+    mainProgram = "qarte";
   };
 }

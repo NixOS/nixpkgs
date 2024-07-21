@@ -11,7 +11,7 @@
 , xorg
 # To define a the gnuradio.pkgs scope
 , newScope
-# For Emulating wrapGAppsHook
+# For Emulating wrapGAppsHook3
 , gsettings-desktop-schemas
 , glib
 , hicolor-icon-theme
@@ -28,6 +28,27 @@
 , extraPackages ? []
 # For Adding additional python packaages
 , extraPythonPackages ? []
+, soapysdr # For it's passthru.searchPath
+# soapysdr plugins we add by default. Ideally, we should have a
+# soapysdrPackages = soapysdr.pkgs attribute set, but until now this wasn't
+# crucial.
+, soapyairspy
+, soapyaudio
+, soapybladerf
+, soapyhackrf
+, soapyremote
+, soapyrtlsdr
+, soapyuhd
+# For adding / changing soapysdr packages, like soapsdr-with-plugins does
+, extraSoapySdrPackages ? [
+  soapyairspy
+  soapyaudio
+  soapybladerf
+  soapyhackrf
+  soapyremote
+  soapyrtlsdr
+  soapyuhd
+]
 # Allow to add whatever you want to the wrapper
 , extraMakeWrapperArgs ? []
 }:
@@ -37,29 +58,31 @@ let
   # may wish to wrap GR without python support.
   pythonPkgs = extraPythonPackages
     ++ [ (unwrapped.python.pkgs.toPythonModule unwrapped) ]
+    ++ unwrapped.passthru.uhd.pythonPath
+    ++ lib.optionals (unwrapped.passthru.uhd.pythonPath != []) [
+      (unwrapped.python.pkgs.toPythonModule unwrapped.passthru.uhd)
+    ]
     # Add the extraPackages as python modules as well
     ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
     ++ lib.flatten (lib.mapAttrsToList (
       feat: info: (
-        if unwrapped.hasFeature feat then
-          (if builtins.hasAttr "pythonRuntime" info then info.pythonRuntime else [])
-        else
-          []
+        lib.optionals ((unwrapped.hasFeature feat) && (builtins.hasAttr "pythonRuntime" info)) info.pythonRuntime
       )
-      ) unwrapped.featuresInfo)
+    ) unwrapped.featuresInfo)
   ;
   pythonEnv = unwrapped.python.withPackages(ps: pythonPkgs);
 
-  name = (lib.appendToName "wrapped" unwrapped).name;
+  pname = unwrapped.pname + "-wrapped";
+  inherit (unwrapped) version;
   makeWrapperArgs = builtins.concatStringsSep " " ([
   ]
-    # Emulating wrapGAppsHook & wrapQtAppsHook working together
+    # Emulating wrapGAppsHook3 & wrapQtAppsHook working together
     ++ lib.optionals (
       (unwrapped.hasFeature "gnuradio-companion")
       || (unwrapped.hasFeature "gr-qtgui")
       ) [
       "--prefix" "XDG_DATA_DIRS" ":" "$out/share"
-      "--prefix" "XDG_DATA_DIRS" ":" "$out/share/gsettings-schemas/${name}"
+      "--prefix" "XDG_DATA_DIRS" ":" "$out/share/gsettings-schemas/${pname}"
       "--prefix" "XDG_DATA_DIRS" ":" "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
       "--prefix" "XDG_DATA_DIRS" ":" "${hicolor-icon-theme}/share"
       # Needs to run `gsettings` on startup, see:
@@ -72,6 +95,7 @@ let
       "--prefix" "XDG_DATA_DIRS" ":" "${unwrapped.gtk}/share"
       "--prefix" "XDG_DATA_DIRS" ":" "${unwrapped.gtk}/share/gsettings-schemas/${unwrapped.gtk.name}"
       "--prefix" "GI_TYPELIB_PATH" ":" "${lib.makeSearchPath "lib/girepository-1.0" [
+        (lib.getLib glib)
         unwrapped.gtk
         gsettings-desktop-schemas
         atk
@@ -89,6 +113,10 @@ let
     ++ lib.optionals (extraPackages != []) [
       "--prefix" "GRC_BLOCKS_PATH" ":" "${lib.makeSearchPath "share/gnuradio/grc/blocks" extraPackages}"
     ]
+    ++ lib.optionals (extraSoapySdrPackages != []) [
+      "--prefix" "SOAPY_SDR_PLUGIN_PATH" ":" "${lib.makeSearchPath
+      soapysdr.passthru.searchPath extraSoapySdrPackages}"
+    ]
     ++ lib.optionals (unwrapped.hasFeature "gr-qtgui")
       # 3.7 builds with qt4
       (if lib.versionAtLeast unwrapped.versionAttr.major "3.8" then
@@ -97,19 +125,21 @@ let
           "${
             lib.makeSearchPath
             unwrapped.qt.qtbase.qtPluginPrefix
-            (builtins.map lib.getBin [
+            (builtins.map lib.getBin ([
               unwrapped.qt.qtbase
+            ] ++ lib.optionals stdenv.isLinux [
               unwrapped.qt.qtwayland
-            ])
+            ]))
           }"
           "--prefix" "QML2_IMPORT_PATH" ":"
           "${
             lib.makeSearchPath
             unwrapped.qt.qtbase.qtQmlPrefix
-            (builtins.map lib.getBin [
+            (builtins.map lib.getBin ([
               unwrapped.qt.qtbase
+            ] ++ lib.optionals stdenv.isLinux [
               unwrapped.qt.qtwayland
-            ])
+            ]))
           }"
         ]
       else
@@ -135,9 +165,9 @@ let
   };
   self = if doWrap then
     stdenv.mkDerivation {
-      inherit name passthru;
+      inherit pname version passthru;
+      nativeBuildInputs = [ makeWrapper ];
       buildInputs = [
-        makeWrapper
         xorg.lndir
       ];
       buildCommand = ''

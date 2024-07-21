@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_topn";
-  version = "2.4.0";
+  version = "2.6.0";
 
   buildInputs = [ postgresql ];
 
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
     owner  = "citusdata";
     repo   = "postgresql-topn";
     rev    = "refs/tags/v${version}";
-    sha256 = "1appxriw7h29kyhv3h6b338g5m2nz70q3mxasy4mjimqhbz1zyqs";
+    sha256 = "sha256-kq3P+a9NWLKN/CsISGHfInbeL4ex4KIeDhTKyyN7FVE=";
   };
 
   installPhase = ''
     mkdir -p $out/{lib,share/postgresql/extension}
 
-    cp *.so      $out/lib
+    cp *${postgresql.dlSuffix} $out/lib
     cp *.sql     $out/share/postgresql/extension
     cp *.control $out/share/postgresql/extension
   '';

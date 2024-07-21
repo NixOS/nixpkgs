@@ -3,7 +3,8 @@
 , ... }:
 
 tcl.mkTclDerivation {
-  name = "tk-${tcl.version}";
+  pname = "tk";
+  version = tcl.version;
 
   inherit src patches;
 
@@ -20,6 +21,10 @@ tcl.mkTclDerivation {
     for file in $(find library/demos/. -type f ! -name "*.*"); do
       substituteInPlace $file --replace "exec wish" "exec $out/bin/wish"
     done
+  ''
+  + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") ''
+    substituteInPlace unix/configure* \
+      --replace " -framework UniformTypeIdentifiers" ""
   '';
 
   postInstall = ''
@@ -37,9 +42,15 @@ tcl.mkTclDerivation {
     ++ lib.optional enableAqua "--enable-aqua";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional enableAqua (with darwin.apple_sdk.frameworks; [ Cocoa ]);
+  buildInputs = [ ];
 
-  propagatedBuildInputs = [ libXft ];
+  propagatedBuildInputs = [
+    libXft
+  ] ++ lib.optionals enableAqua ([
+    darwin.apple_sdk.frameworks.Cocoa
+  ] ++ lib.optionals (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") [
+    darwin.apple_sdk.frameworks.UniformTypeIdentifiers
+  ]);
 
   enableParallelBuilding = true;
 
@@ -54,10 +65,10 @@ tcl.mkTclDerivation {
   };
 
   meta = with lib; {
-    description = "A widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
+    description = "Widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
     homepage = "https://www.tcl.tk/";
     license = licenses.tcltk;
     platforms = platforms.all;
-    maintainers = with maintainers; [ lovek323 vrthra ];
+    maintainers = with maintainers; [ ];
   };
 }

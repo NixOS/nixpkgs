@@ -23,8 +23,7 @@ in
         type = timezone;
         example = "America/New_York";
         description = ''
-          The time zone used when displaying times and dates. See <link
-          xlink:href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"/>
+          The time zone used when displaying times and dates. See <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>
           for a comprehensive list of possible values for this setting.
 
           If null, the timezone will default to UTC and can be set imperatively
@@ -46,7 +45,7 @@ in
         type = types.float;
         description = ''
           Your current latitude, between
-          <literal>-90.0</literal> and <literal>90.0</literal>. Must be provided
+          `-90.0` and `90.0`. Must be provided
           along with longitude.
         '';
       };
@@ -55,7 +54,7 @@ in
         type = types.float;
         description = ''
           Your current longitude, between
-          between <literal>-180.0</literal> and <literal>180.0</literal>. Must be
+          between `-180.0` and `180.0`. Must be
           provided along with latitude.
         '';
       };
@@ -65,7 +64,7 @@ in
         default = "manual";
         description = ''
           The location provider to use for determining your location. If set to
-          <literal>manual</literal> you must also provide latitude/longitude.
+          `manual` you must also provide latitude/longitude.
         '';
       };
 

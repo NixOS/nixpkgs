@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3, git }:
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, python3, git }:
 
 stdenv.mkDerivation rec {
   pname = "directx-shader-compiler";
-  version = "1.6.2106";
+  version = "1.8.2405";
 
   # Put headers in dev, there are lot of them which aren't necessary for
   # using the compiler binary.
@@ -12,20 +12,13 @@ stdenv.mkDerivation rec {
     owner = "microsoft";
     repo = "DirectXShaderCompiler";
     rev = "v${version}";
-    sha256 = "6kQgAESYiQ06LkiGTfDBYwd/ORLSm1W+BcO+OUp4yXY=";
-    # We rely on the side effect of leaving the .git directory here for the
-    # version-grabbing functionality of the build system.
+    hash = "sha256-p1sQcKWSQo0VU1JwB7J0eqT85CzNWxAMqC4HZ95NySg=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake git python3 ];
+  nativeBuildInputs = [ cmake git ninja python3 ];
 
-  configurePhase = ''
-    # Requires some additional flags to cmake from a file in the repo
-    additionalCMakeFlags=$(< utils/cmake-predefined-config-params)
-    cmakeFlags="$additionalCMakeFlags''${cmakeFlags:+ $cmakeFlags}"
-    cmakeConfigurePhase
-  '';
+  cmakeFlags = [ "-C../cmake/caches/PredefinedParams.cmake" ];
 
   # The default install target installs heaps of LLVM stuff.
   #
@@ -41,10 +34,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A compiler to compile HLSL programs into DXIL and SPIR-V";
+    description = "Compiler to compile HLSL programs into DXIL and SPIR-V";
     homepage = "https://github.com/microsoft/DirectXShaderCompiler";
     platforms = with platforms; linux ++ darwin;
     license = licenses.ncsa;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [ expipiplus1 Flakebi ];
   };
 }

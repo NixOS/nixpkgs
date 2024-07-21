@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, vte, gtk, pcre2 }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, vte, gtk, pcre2, nixosTests }:
 
 stdenv.mkDerivation {
   pname = "stupidterm";
@@ -26,11 +26,14 @@ stdenv.mkDerivation {
       --replace "Exec=st" "Exec=$out/bin/stupidterm"
   '';
 
+  passthru.tests.test = nixosTests.terminal-emulators.stupidterm;
+
   meta = with lib; {
     description = "Simple wrapper around the VTE terminal emulator widget for GTK";
     homepage = "https://github.com/esmil/stupidterm";
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.etu ];
     platforms = platforms.linux;
+    mainProgram = "stupidterm";
   };
 }

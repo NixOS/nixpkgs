@@ -15,7 +15,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  doCheck = true;
+  # error: no viable conversion from ...
+  doCheck = !stdenv.isDarwin;
+
+  patches = [
+    # error: ISO C++17 does not allow 'register' storage class specifier
+    ./remove-register.patch
+  ];
 
   meta = with lib; {
     homepage = "https://lemon.cs.elte.hu/trac/lemon";
@@ -23,6 +29,5 @@ stdenv.mkDerivation rec {
     license = licenses.boost;
     maintainers = with maintainers; [ trepetti ];
     platforms = platforms.all;
-    broken = stdenv.isAarch64 || stdenv.isDarwin;
   };
 }

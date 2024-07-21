@@ -3,9 +3,10 @@
 { baseName ? "lfe"
 , version
 , maximumOTPVersion
-, sha256 ? null
+, sha256 ? ""
+, hash ? ""
 , rev ? version
-, src ? fetchFromGitHub { inherit rev sha256; owner = "rvirding"; repo = "lfe"; }
+, src ? fetchFromGitHub { inherit hash rev sha256; owner = "lfe"; repo = "lfe"; }
 , patches ? []
 }:
 
@@ -18,13 +19,9 @@ let
 
   proper = buildHex {
     name = "proper";
-    version = "1.1.1-beta";
+    version = "1.4.0";
 
-    sha256  = "0hnkhs761yjynw9382w8wm4j3x0r7lllzavaq2kh9n7qy3zc1rdx";
-
-    configurePhase = ''
-      ${erlang}/bin/escript write_compile_flags include/compile_flags.hrl
-    '';
+    sha256  = "sha256-GChYQhhb0z772pfRNKXLWgiEOE2zYRn+4OPPpIhWjLs=";
   };
 
 in
@@ -37,7 +34,7 @@ buildRebar3 {
 
   inherit src version;
 
-  buildInputs = [ erlang makeWrapper ];
+  nativeBuildInputs = [ makeWrapper erlang ];
   beamDeps    = [ proper ];
   patches     = [ ./fix-rebar-config.patch ./dedup-ebins.patch ] ++ patches;
   doCheck     = true;
@@ -76,14 +73,14 @@ buildRebar3 {
   '';
 
   meta = with lib; {
-    description     = "The best of Erlang and of Lisp; at the same time!";
+    description     = "Best of Erlang and of Lisp; at the same time!";
     longDescription = ''
       LFE, Lisp Flavoured Erlang, is a lisp syntax front-end to the Erlang
       compiler. Code produced with it is compatible with "normal" Erlang
       code. An LFE evaluator and shell is also included.
     '';
 
-    homepage     = "http://lfe.io";
+    homepage     = "https://lfe.io";
     downloadPage = "https://github.com/rvirding/lfe/releases";
 
     license      = licenses.asl20;

@@ -55,7 +55,7 @@ in
       Declarative instance config.
 
       Note: to use pantalaimon interactively, e.g. for a Matrix client which does not
-      support End-to-end encryption (like <literal>fractal</literal>), refer to the home-manager module.
+      support End-to-end encryption (like `fractal`), refer to the home-manager module.
     '';
   };
 

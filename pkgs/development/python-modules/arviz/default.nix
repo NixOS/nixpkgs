@@ -1,92 +1,121 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bokeh
-, emcee
-, matplotlib
-, netcdf4
-, numba
-, numpy
-, pandas
-, pytest
-, scipy
-, setuptools
-, tensorflow-probability
-, xarray
-#, h5py (used by disabled tests)
-#, pymc3 (broken)
-#, pyro-ppl (broken)
-#, pystan (not packaged)
-#, numpyro (not packaged)
+{
+  lib,
+  buildPythonPackage,
+  dm-tree,
+  fetchFromGitHub,
+  emcee,
+  h5netcdf,
+  matplotlib,
+  netcdf4,
+  numba,
+  numpy,
+  pandas,
+  setuptools,
+  cloudpickle,
+  pytestCheckHook,
+  scipy,
+  packaging,
+  pythonOlder,
+  typing-extensions,
+  xarray,
+  xarray-einstats,
+  zarr,
+  ffmpeg,
+  h5py,
+  jaxlib,
+  torchvision,
+  jax,
+  # , pymc3 (circular dependency)
+  pyro-ppl,
+  #, pystan (not packaged)
+  numpyro,
+  bokeh,
 }:
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.11.4";
+  version = "0.18.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
-    rev = "v${version}";
-    sha256 = "0vindadyxhxhrhbalys6kzrda2d4qpqbqbsbwfprp8pxkldgk548";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SZRqSqChQBSA9/jBXN2ds9hh6TI3qZksHai1j2oVsq0=";
   };
 
-  propagatedBuildInputs = [
-    # needed to install
+  build-system = [
+    packaging
+    setuptools
+  ];
+
+  dependencies = [
+    dm-tree
+    h5netcdf
     matplotlib
     netcdf4
-    pandas
-    xarray
-    # needed to import
-    setuptools
-    # not needed to import, but used by many functions
-    # and is listed as a dependency in the documentation
     numpy
+    pandas
     scipy
+    typing-extensions
+    xarray
+    xarray-einstats
   ];
 
-  checkInputs = [
-    bokeh
+  nativeCheckInputs = [
+    cloudpickle
     emcee
+    ffmpeg
+    h5py
+    jax
+    jaxlib
     numba
-    pytest
-    tensorflow-probability
-    #h5py (used by disabled tests)
-    #pymc3 (broken)
-    #pyro-ppl (broken)
-    #pystan (not packaged)
-    #numpyro (not packaged)
+    numpyro
+    # pymc3 (circular dependency)
+    pyro-ppl
+    # pystan (not packaged)
+    pytestCheckHook
+    torchvision
+    zarr
+    bokeh
   ];
 
-  # check requires pymc3 and pyro-ppl, which are currently broken, and pystan
-  # and numpyro, which are not yet packaged, some checks also need to make
-  # directories and do not have permission to do so. So we can only check part
-  # of the package
-  # Additionally, there are some failures with the plots test, which revolve
-  # around attempting to output .mp4 files through an interface that only wants
-  # to output .html files.
-  # The following test have been disabled as a result: data_cmdstanpy,
-  # data_numpyro, data_pyro, data_pystan, and plots.
-  checkPhase = ''
-    cd arviz/tests/
-    export HOME=$TMPDIR
-    pytest \
-      base_tests/test_data.py \
-      base_tests/test_diagnostics.py \
-      base_tests/test_plot_utils.py \
-      base_tests/test_rcparams.py \
-      base_tests/test_stats.py \
-      base_tests/test_stats_utils.py \
-      base_tests/test_utils.py \
-      external_tests/test_data_cmdstan.py \
-      external_tests/test_data_emcee.py \
-      external_tests/test_data_tfp.py
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
 
+  pytestFlagsArray = [ "arviz/tests/base_tests/" ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_plot_ppc_transposed"
+    "test_plot_separation"
+    "test_plot_trace_legend"
+    "test_cov"
+    # countourpy is not available at the moment
+    "test_plot_kde"
+    "test_plot_kde_2d"
+    "test_plot_pair"
+    # Array mismatch
+    "test_plot_ts"
+    # The following two tests fail in a common venv-based setup.
+    # An issue has been opened upstream: https://github.com/arviz-devs/arviz/issues/2282
+    "test_plot_ppc_discrete"
+    "test_plot_ppc_discrete_save_animation"
+    # Assertion error
+    "test_data_zarr"
+    "test_plot_forest"
+  ];
+
+  pythonImportsCheck = [ "arviz" ];
+
   meta = with lib; {
-    description = "ArviZ is a Python package for exploratory analysis of Bayesian models";
+    description = "Library for exploratory analysis of Bayesian models";
     homepage = "https://arviz-devs.github.io/arviz/";
+    changelog = "https://github.com/arviz-devs/arviz/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = [ maintainers.omnipotententity ];
+    maintainers = with maintainers; [ omnipotententity ];
   };
 }

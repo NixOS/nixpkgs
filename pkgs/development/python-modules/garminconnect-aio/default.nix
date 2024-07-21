@@ -1,20 +1,25 @@
-{ lib
-, aiohttp
-, brotlipy
-, buildPythonPackage
-, fetchFromGitHub
-, yarl
+{
+  lib,
+  aiohttp,
+  brotlipy,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "garminconnect-aio";
   version = "0.1.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect-aio";
     rev = version;
-    sha256 = "0s2gpy5hciv9akqqhxy0d2ywp6jp9mmdngx34q7fq3xn668kcrhr";
+    hash = "sha256-GWY2kTG2D+wOJqM/22pNV5rLvWjAd4jxVGlHBou/T2g=";
   };
 
   propagatedBuildInputs = [

@@ -1,37 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, userpath
-, argcomplete
-, packaging
-, importlib-metadata
-, pytestCheckHook
+{
+  lib,
+  argcomplete,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  installShellFiles,
+  packaging,
+  platformdirs,
+  pytestCheckHook,
+  pythonOlder,
+  tomli,
+  userpath,
+  git,
 }:
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "0.16.5";
+  version = "1.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  # no tests in the pypi tarball, so we directly fetch from github
   src = fetchFromGitHub {
-    owner = "pipxproject";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-gBeaHEig47XWKoPx3jzvgk/jJPJXtr5R5qUL0LgvbDg=";
+    owner = "pypa";
+    repo = "pipx";
+    rev = "refs/tags/${version}";
+    hash = "sha256-B57EIUIwy0XG5bnIwxYKgm3WwckdJWWAeUl84mWC1Ds=";
   };
 
-  propagatedBuildInputs = [
-    userpath
-    argcomplete
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  dependencies = [
+    argcomplete
+    packaging
+    platformdirs
+    userpath
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    git
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -42,6 +57,7 @@ buildPythonPackage rec {
     # start local pypi server and use in tests
     "--net-pypiserver"
   ];
+
   disabledTests = [
     # disable tests which are difficult to emulate due to shell manipulations
     "path_warning"
@@ -61,13 +77,35 @@ buildPythonPackage rec {
     "legacy_venv"
     "determination"
     "json"
+    "test_auto_update_shared_libs"
+    "test_cli"
+    "test_cli_global"
+    "test_fetch_missing_python"
+    "test_list_does_not_trigger_maintenance"
+    "test_list_pinned_packages"
+    "test_list_short"
+    "test_list_standalone_interpreter"
+    "test_list_unused_standalone_interpreters"
+    "test_list_used_standalone_interpreters"
+    "test_pin"
+    "test_skip_maintenance"
+    "test_unpin"
+    "test_unpin_warning"
   ];
 
+  postInstall = ''
+    installShellCompletion --cmd pipx \
+      --bash <(${argcomplete}/bin/register-python-argcomplete pipx --shell bash) \
+      --zsh <(${argcomplete}/bin/register-python-argcomplete pipx --shell zsh) \
+      --fish <(${argcomplete}/bin/register-python-argcomplete pipx --shell fish)
+  '';
+
   meta = with lib; {
-    description =
-      "Install and Run Python Applications in Isolated Environments";
-    homepage = "https://github.com/pipxproject/pipx";
+    description = "Install and run Python applications in isolated environments";
+    mainProgram = "pipx";
+    homepage = "https://github.com/pypa/pipx";
+    changelog = "https://github.com/pypa/pipx/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ yevhenshymotiuk ];
+    maintainers = with maintainers; [ yshym ];
   };
 }

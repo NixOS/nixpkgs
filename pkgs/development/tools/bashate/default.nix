@@ -1,5 +1,5 @@
 { lib
-, Babel
+, babel
 , buildPythonApplication
 , fetchPypi
 , fixtures
@@ -8,34 +8,37 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, testtools
 }:
 
 buildPythonApplication rec {
   pname = "bashate";
-  version = "2.1.0";
+  version = "2.1.1";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0df143639715dc2fb6cf9aa6907e4a372d6f0a43afeffc55c5fb3ecfe3523c8";
+    hash = "sha256-S6tul3+DBacgU1+Pk/H7QsUh/LxKbCs9PXZx9C8iH0w=";
   };
 
   propagatedBuildInputs = [
-    Babel
+    babel
     pbr
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fixtures
     mock
     pytestCheckHook
+    testtools
   ];
 
   pythonImportsCheck = [ "bashate" ];
 
   meta = with lib; {
     description = "Style enforcement for bash programs";
+    mainProgram = "bashate";
     homepage = "https://opendev.org/openstack/bashate";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

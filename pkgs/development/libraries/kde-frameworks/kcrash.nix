@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kcrash";
+  pname = "kcrash";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kcoreaddons kwindowsystem qtx11extras ];
   propagatedBuildInputs = [ qtbase ];

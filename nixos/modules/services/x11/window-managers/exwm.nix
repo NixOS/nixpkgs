@@ -51,7 +51,7 @@ in
         description = ''
           Extra packages available to Emacs. The value must be a
           function which receives the attrset defined in
-          <varname>emacs.pkgs</varname> as the sole argument.
+          {var}`emacs.pkgs` as the sole argument.
         '';
       };
     };

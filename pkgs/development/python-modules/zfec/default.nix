@@ -1,34 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyutil
-, setuptoolsTrial
-, twisted
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  pyutil,
+  setuptools,
+  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "zfec";
-  version = "1.5.5";
+  version = "1.5.7.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6033b2f3cc3edacf3f7eeed5f258c1ebf8a1d7e5e35b623db352512ce564e5ca";
+    hash = "sha256-EGmFchj4ur5AhEOXEnIIA6Ef6RsU8gvHepak5vThER8=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ pyutil ];
 
-  checkInputs = [ setuptoolsTrial twisted ];
+  nativeCheckInputs = [
+    hypothesis
+    twisted
+  ];
 
-  # argparse is in the stdlib but zfec doesn't know that.
-  postPatch = ''
-    sed -i -e '/argparse/d' setup.py
+  checkPhase = ''
+    trial zfec
   '';
 
   pythonImportsCheck = [ "zfec" ];
 
   meta = with lib; {
     homepage = "https://github.com/tahoe-lafs/zfec";
-    description = "Zfec, a fast erasure codec which can be used with the command-line, C, Python, or Haskell";
+    description = "Fast erasure codec which can be used with the command-line, C, Python, or Haskell";
     longDescription = ''
       Fast, portable, programmable erasure coding a.k.a. "forward
       error correction": the generation of redundant blocks of
@@ -40,5 +47,4 @@ buildPythonPackage rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ prusnak ];
   };
-
 }

@@ -43,7 +43,7 @@ in
       };
 
       unit = mkOption {
-        description = "Celcius or Fahrenheit";
+        description = "Celsius or Fahrenheit";
         type = types.enum [ "C" "F" ];
         default = "C";
       };

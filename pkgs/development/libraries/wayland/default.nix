@@ -1,16 +1,16 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
-, substituteAll
 , meson
 , pkg-config
 , ninja
 , wayland-scanner
 , expat
 , libxml2
-, withLibraries ? stdenv.isLinux
+, withLibraries ? stdenv.isLinux || stdenv.isDarwin
+, withTests ? stdenv.isLinux
 , libffi
+, epoll-shim
 , withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
 , graphviz-nox
 , doxygen
@@ -20,45 +20,46 @@
 , docbook_xsl
 , docbook_xml_dtd_45
 , docbook_xml_dtd_42
+, testers
 }:
 
 # Documentation is only built when building libraries.
 assert withDocumentation -> withLibraries;
 
+# Tests are only built when building libraries.
+assert withTests -> withLibraries;
+
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wayland";
-  version = "1.19.0";
+  version = "1.22.0";
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "05bd2vphyx8qwa1mhsj1zdaiv4m4v94wrlssrn0lad8d601dkk5s";
+    url = with finalAttrs; "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
+    hash = "sha256-FUCvHqaYpHHC2OnSiDMsfg/TYMjx0Sk267fny8JCWEI=";
   };
 
   patches = [
-    # Picked from upstream 'main' branch for Darwin support.
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/wayland/wayland/-/commit/f452e41264387dee4fd737cbf1af58b34b53941b.patch";
-      sha256 = "00mk32a01vgn31sm3wk4p8mfwvqv3xv02rxvdj1ygnzgb1ac62r7";
-    })
-    (substituteAll {
-      src = ./0001-add-placeholder-for-nm.patch;
-      nm = "${stdenv.cc.targetPrefix}nm";
-    })
+    ./darwin.patch
   ];
 
   postPatch = lib.optionalString withDocumentation ''
     patchShebangs doc/doxygen/gen-doxygen.py
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+    # delete line containing os-wrappers-test, disables
+    # the building of os-wrappers-test
+    sed -i '/os-wrappers-test/d' tests/meson.build
   '';
 
   outputs = [ "out" "bin" "dev" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
   separateDebugInfo = true;
 
   mesonFlags = [
-    "-Dlibraries=${lib.boolToString withLibraries}"
     "-Ddocumentation=${lib.boolToString withDocumentation}"
+    "-Dlibraries=${lib.boolToString withLibraries}"
+    "-Dtests=${lib.boolToString withTests}"
   ];
 
   depsBuildBuild = [
@@ -86,6 +87,8 @@ stdenv.mkDerivation rec {
     libxml2
   ] ++ lib.optionals withLibraries [
     libffi
+  ] ++ lib.optionals (withLibraries && !stdenv.hostPlatform.isLinux) [
+    epoll-shim
   ] ++ lib.optionals withDocumentation [
     docbook_xsl
     docbook_xml_dtd_45
@@ -100,12 +103,20 @@ stdenv.mkDerivation rec {
 
     Name: Wayland Scanner
     Description: Wayland scanner
-    Version: ${version}
+    Version: ${finalAttrs.version}
     EOF
   '';
 
+  passthru = {
+    inherit withLibraries;
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = with lib; {
     description = "Core Wayland window system code and protocol";
+    mainProgram = "wayland-scanner";
     longDescription = ''
       Wayland is a project to define a protocol for a compositor to talk to its
       clients as well as a library implementation of the protocol.
@@ -116,11 +127,16 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wayland.freedesktop.org/";
     license = licenses.mit; # Expat version
-    platforms = if withLibraries then platforms.linux else platforms.unix;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos codyopel qyliss ];
-    # big sur doesn't support gcc stdenv and wayland doesn't build with clang
-    broken = stdenv.isDarwin;
+    pkgConfigModules = [
+      "wayland-scanner"
+    ] ++ lib.optionals withLibraries [
+      "wayland-client"
+      "wayland-cursor"
+      "wayland-egl"
+      "wayland-egl-backend"
+      "wayland-server"
+    ];
   };
-
-  passthru.version = version;
-}
+})

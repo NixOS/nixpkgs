@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , minizip
 , python3
 , zlib
@@ -9,26 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libxlsxwriter";
-  version = "1.1.4";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "jmcnamara";
     repo = "libxlsxwriter";
     rev = "RELEASE_${version}";
-    sha256 = "sha256-Ef1CipwUEJW/VYx/q98lN0PSxj8c3DbIuql8qU6mTRs=";
+    hash = "sha256-bJ0NMbK9c21YYdcg/TW3ePSDVi5hly6lSW7wXFskI8M=";
   };
-
-  patches = [
-    # https://github.com/jmcnamara/libxlsxwriter/pull/357
-    (fetchpatch {
-      url = "https://github.com/jmcnamara/libxlsxwriter/commit/723629976ede5e6ec9b03ef970381fed06ef95f0.patch";
-      sha256 = "14aw698b5svvbhvadc2vr71isck3k02zdv8xjsa7c33n8331h20g";
-    })
-  ];
-
-  nativeBuildInputs = [
-    python3.pkgs.pytest
-  ];
 
   buildInputs = [
     minizip
@@ -40,7 +27,14 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_MINIZIP=1"
   ];
 
+  # TEST 428/429 worksheet:worksheet_table15 *** buffer overflow detected ***: terminated
+  hardeningDisable = [ "fortify3" ];
+
   doCheck = true;
+
+  nativeCheckInputs = [
+    python3.pkgs.pytest
+  ];
 
   checkTarget = "test";
 

@@ -7,6 +7,9 @@ with lib;
   ###### interface
 
   options = {
+    boot.modprobeConfig.enable = mkEnableOption "modprobe config. This is useful for systems like containers which do not require a kernel" // {
+      default = true;
+    };
 
     boot.blacklistedKernelModules = mkOption {
       type = types.listOf types.str;
@@ -26,10 +29,9 @@ with lib;
         '';
       description = ''
         Any additional configuration to be appended to the generated
-        <filename>modprobe.conf</filename>.  This is typically used to
+        {file}`modprobe.conf`.  This is typically used to
         specify module options.  See
-        <citerefentry><refentrytitle>modprobe.d</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        {manpage}`modprobe.d(5)` for details.
       '';
       type = types.lines;
     };
@@ -39,7 +41,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf config.boot.modprobeConfig.enable {
 
     environment.etc."modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
 
@@ -51,6 +53,8 @@ with lib;
         ${config.boot.extraModprobeConfig}
       '';
     environment.etc."modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
+
+    environment.etc."modprobe.d/systemd.conf".source = "${config.systemd.package}/lib/modprobe.d/systemd.conf";
 
     environment.systemPackages = [ pkgs.kmod ];
 

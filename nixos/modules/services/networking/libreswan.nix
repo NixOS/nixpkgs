@@ -14,8 +14,8 @@ let
     nonchars = filter (x : !(elem x.value chars))
                (imap0 (i: v: {ind = i; value = v;}) (stringToCharacters str));
   in
-    if length nonchars == 0 then ""
-    else substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str;
+    lib.optionalString (nonchars != [ ])
+      (substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str);
   indent = str: concatStrings (concatMap (s: ["  " (trim [" " "\t"] s) "\n"]) (splitString "\n" str));
   configText = indent (toString cfg.configSetup);
   connectionText = concatStrings (mapAttrsToList (n: v:
@@ -96,9 +96,9 @@ in
         description = ''
           A set of policies to apply to the IPsec connections.
 
-          <note><para>
-            The policy name must match the one of connection it needs to apply to.
-          </para></note>
+          ::: {.note}
+          The policy name must match the one of connection it needs to apply to.
+          :::
         '';
       };
 
@@ -106,9 +106,9 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Whether to disable send and accept redirects for all nework interfaces.
-          See the Libreswan <link xlink:href="https://libreswan.org/wiki/FAQ#Why_is_it_recommended_to_disable_send_redirects_in_.2Fproc.2Fsys.2Fnet_.3F">
-          FAQ</link> page for why this is recommended.
+          Whether to disable send and accept redirects for all network interfaces.
+          See the Libreswan [
+          FAQ](https://libreswan.org/wiki/FAQ#Why_is_it_recommended_to_disable_send_redirects_in_.2Fproc.2Fsys.2Fnet_.3F) page for why this is recommended.
         '';
       };
 
@@ -133,9 +133,6 @@ in
       "ipsec.d/01-nixos.conf".source = configFile;
     } // policyFiles;
 
-    # Create NSS database directory
-    systemd.tmpfiles.rules = [ "d /var/lib/ipsec/nss 755 root root -" ];
-
     systemd.services.ipsec = {
       description = "Internet Key Exchange (IKE) Protocol Daemon for IPsec";
       wantedBy = [ "multi-user.target" ];
@@ -153,6 +150,10 @@ in
         echo 0 | tee /proc/sys/net/ipv4/conf/*/send_redirects
         echo 0 | tee /proc/sys/net/ipv{4,6}/conf/*/accept_redirects
       '';
+      serviceConfig = {
+        StateDirectory = "ipsec/nss";
+        StateDirectoryMode = 0700;
+      };
     };
 
   };

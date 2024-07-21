@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , letsencrypt
 , logs
 , fmt
@@ -11,12 +10,12 @@
 
 buildDunePackage {
   pname = "letsencrypt-dns";
+  duneVersion = "3";
+  minimalOCamlVersion = "4.08";
 
   inherit (letsencrypt)
     version
     src
-    useDune2
-    minimumOCamlVersion
     ;
 
   propagatedBuildInputs = [
@@ -30,6 +29,6 @@ buildDunePackage {
   ];
 
   meta = letsencrypt.meta // {
-    description = "A DNS solver for the ACME implementation in OCaml";
+    description = "DNS solver for the ACME implementation in OCaml";
   };
 }

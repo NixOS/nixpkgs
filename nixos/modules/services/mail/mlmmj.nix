@@ -88,8 +88,7 @@ in
         default = "20min";
         description = ''
           Time interval between mlmmj-maintd runs, see
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry> for format information.
+          {manpage}`systemd.time(7)` for format information.
         '';
       };
 
@@ -144,13 +143,13 @@ in
 
     environment.systemPackages = [ pkgs.mlmmj ];
 
-    system.activationScripts.mlmmj = ''
-          ${pkgs.coreutils}/bin/mkdir -p ${stateDir} ${spoolDir}/${cfg.listDomain}
-          ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
-          ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
-          ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
-          ${pkgs.postfix}/bin/postmap /etc/postfix/transport
-      '';
+    systemd.tmpfiles.settings."10-mlmmj" = {
+      ${stateDir}.d = { };
+      "${spoolDir}/${cfg.listDomain}".d = { };
+      ${spoolDir}.Z = {
+        inherit (cfg) user group;
+      };
+    };
 
     systemd.services.mlmmj-maintd = {
       description = "mlmmj maintenance daemon";
@@ -159,6 +158,11 @@ in
         Group = cfg.group;
         ExecStart = "${pkgs.mlmmj}/bin/mlmmj-maintd -F -d ${spoolDir}/${cfg.listDomain}";
       };
+      preStart = ''
+        ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
+        ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
+        ${pkgs.postfix}/bin/postmap /etc/postfix/transport
+      '';
     };
 
     systemd.timers.mlmmj-maintd = {

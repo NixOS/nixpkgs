@@ -6,6 +6,7 @@
 , libevdev
 , libinput
 , libxkbcommon
+, xcbutilwm
 , makeWrapper
 , mesa
 , meson
@@ -24,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "1.8.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = pname;
     rev = version;
-    hash = "sha256-YaLGRlvppTUCSHFlt3sEfHgN3pYHuc5oGt3dt0DDw3I=";
+    hash = "sha256-GAANZIEUtuONPBpk0E3fErgOZtm3wB+gWJNwfO6VOTo=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     libevdev
     libinput
     libxkbcommon
+    xcbutilwm
     mesa # for libEGL headers
     pango
     pixman
@@ -69,6 +71,8 @@ stdenv.mkDerivation rec {
 
     # Patch cagebreak to read its default configuration from $out/share/cagebreak
     sed -i "s|/etc/xdg/cagebreak|$out/share/cagebreak|" meson.build cagebreak.c
+    substituteInPlace meson.build \
+      --replace "/usr/share/licenses" "$out/share/licenses"
   '';
 
   postFixup = lib.optionalString withXwayland ''
@@ -78,10 +82,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/project-repo/cagebreak";
-    description = "A Wayland tiling compositor inspired by ratpoison";
+    description = "Wayland tiling compositor inspired by ratpoison";
     license = licenses.mit;
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.linux;
+    changelog = "https://github.com/project-repo/cagebreak/blob/${version}/Changelog.md";
+    mainProgram = "cagebreak";
   };
 
   passthru.tests.basic = nixosTests.cagebreak;

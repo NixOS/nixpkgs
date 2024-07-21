@@ -8,11 +8,7 @@ let
 in {
   options = {
     services.cadvisor = {
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = "Whether to enable cadvisor service.";
-      };
+      enable = mkEnableOption "Cadvisor service";
 
       listenAddress = mkOption {
         default = "127.0.0.1";
@@ -22,7 +18,7 @@ in {
 
       port = mkOption {
         default = 8080;
-        type = types.int;
+        type = types.port;
         description = "Cadvisor listening port";
       };
 
@@ -58,9 +54,9 @@ in {
           Cadvisor storage driver password.
 
           Warning: this password is stored in the world-readable Nix store. It's
-          recommended to use the <option>storageDriverPasswordFile</option> option
+          recommended to use the {option}`storageDriverPasswordFile` option
           since that gives you control over the security of the password.
-          <option>storageDriverPasswordFile</option> also takes precedence over <option>storageDriverPassword</option>.
+          {option}`storageDriverPasswordFile` also takes precedence over {option}`storageDriverPassword`.
         '';
       };
 
@@ -69,13 +65,13 @@ in {
         description = ''
           File that contains the cadvisor storage driver password.
 
-          <option>storageDriverPasswordFile</option> takes precedence over <option>storageDriverPassword</option>
+          {option}`storageDriverPasswordFile` takes precedence over {option}`storageDriverPassword`
 
-          Warning: when <option>storageDriverPassword</option> is non-empty this defaults to a file in the
-          world-readable Nix store that contains the value of <option>storageDriverPassword</option>.
+          Warning: when {option}`storageDriverPassword` is non-empty this defaults to a file in the
+          world-readable Nix store that contains the value of {option}`storageDriverPassword`.
 
           It's recommended to override this with a path not in the Nix store.
-          Tip: use <link xlink:href='https://nixos.org/nixops/manual/#idm140737318306400'>nixops key management</link>
+          Tip: use [nixops key management](https://nixos.org/nixops/manual/#idm140737318306400)
         '';
       };
 
@@ -91,7 +87,7 @@ in {
         description = ''
           Additional cadvisor options.
 
-          See <link xlink:href='https://github.com/google/cadvisor/blob/master/docs/runtime_options.md'/> for available options.
+          See <https://github.com/google/cadvisor/blob/master/docs/runtime_options.md> for available options.
         '';
       };
     };
@@ -127,7 +123,7 @@ in {
             ${escapeShellArgs cfg.extraOptions} \
             ${optionalString (cfg.storageDriver != null) ''
               -storage_driver "${cfg.storageDriver}" \
-              -storage_driver_user "${cfg.storageDriverHost}" \
+              -storage_driver_host "${cfg.storageDriverHost}" \
               -storage_driver_db "${cfg.storageDriverDb}" \
               -storage_driver_user "${cfg.storageDriverUser}" \
               -storage_driver_password "$(cat "${cfg.storageDriverPasswordFile}")" \

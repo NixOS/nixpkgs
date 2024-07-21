@@ -1,53 +1,24 @@
-{ bcg729
-, bctoolbox
-, bcunit
+{ lib
+, bc-soci
 , belcard
 , belle-sip
-, belr
-, bzrtp
-, cairo
 , cmake
-, cyrus_sasl
 , doxygen
 , fetchFromGitLab
-, ffmpeg
-, gdk-pixbuf
-, glib
-, graphviz
-, gtk2
-, intltool
-, libexosip
-, libmatroska
-, libnotify
-, libosip
-, libsoup
-, libupnp
-, libX11
+, jsoncpp
 , libxml2
 , lime
-, makeWrapper
-, mbedtls
 , mediastreamer
-, openldap
-, ortp
-, pango
-, pkg-config
 , python3
-, readline
-, soci
-, boost
-, speex
 , sqlite
-, lib, stdenv
-, udev
+, stdenv
 , xercesc
-, xsd
-, zlib
+, zxing-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "liblinphone";
-  version = "4.5.17";
+  version = "5.2.98";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -55,62 +26,48 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ryyT4bG3lnE72ydvCAoiT3IeHY4mZwX9nCqaTRC1wyc=";
+    hash = "sha256-kQZePMa7MTaSJLEObM8khfSFYLqhlgTcVyKfTPLwKYU=";
   };
 
-  # Do not build static libraries
-  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
+  patches = [
+    # zxing-cpp 2.0+ requires C++ 17
+    # Manual backport as upstream ran formatters in the meantime
+    ./backport-cpp17.patch
+  ];
 
-  # TODO: Not sure if all these inputs are actually needed. Most of them were
-  # defined when liblinphone and linphone-desktop weren't separated yet, so some
-  # of them might not be needed for liblinphone alone.
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace "jsoncpp_object" "jsoncpp" \
+      --replace "jsoncpp_static" "jsoncpp"
+  '';
+
+  cmakeFlags = [
+    "-DENABLE_STATIC=NO" # Do not build static libraries
+    "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
+    "-DENABLE_STRICT=NO" # Do not build with -Werror
+  ];
+
   buildInputs = [
-    (python3.withPackages (ps: [ ps.pystache ps.six ]))
-    bcg729
-    bctoolbox
+    # Made by BC
     belcard
     belle-sip
-    belr
-    bzrtp
-    cairo
-    cyrus_sasl
-    ffmpeg
-    gdk-pixbuf
-    glib
-    gtk2
-    libX11
-    libexosip
-    libmatroska
-    libnotify
-    libosip
-    libsoup
-    libupnp
-    libxml2
     lime
-    mbedtls
     mediastreamer
-    openldap
-    ortp
-    pango
-    readline
-    soci
-    boost
-    speex
+
+    # Vendored by BC
+    bc-soci
+
+    jsoncpp
+    libxml2
+    (python3.withPackages (ps: [ ps.pystache ps.six ]))
     sqlite
-    udev
     xercesc
-    xsd
-    zlib
+    zxing-cpp
   ];
 
   nativeBuildInputs = [
-    bcunit
     cmake
     doxygen
-    graphviz
-    intltool
-    makeWrapper
-    pkg-config
   ];
 
   strictDeps = true;

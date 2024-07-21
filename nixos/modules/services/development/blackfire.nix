@@ -11,7 +11,7 @@ let
 in {
   meta = {
     maintainers = pkgs.blackfire.meta.maintainers;
-    doc = ./blackfire.xml;
+    doc = ./blackfire.md;
   };
 
   options = {

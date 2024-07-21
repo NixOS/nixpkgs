@@ -1,24 +1,29 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cmarkgfm";
-  version = "0.6.0";
+  version = "2024.1.14";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ec2bf8d5799c4b5bbfbae30a4a1dfcb06512f2e17e9ee60ba7e1d390318582fc";
+    hash = "sha256-ogjBcm4SujhRJc7yxtN1xBxd6kzCZzp3r3ErHb8HTpA=";
   };
 
   propagatedNativeBuildInputs = [ cffi ];
 
   propagatedBuildInputs = [ cffi ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cmarkgfm" ];
 

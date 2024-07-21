@@ -37,12 +37,7 @@ in
   options.services.certmgr = {
     enable = mkEnableOption "certmgr";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.certmgr;
-      defaultText = literalExpression "pkgs.certmgr";
-      description = "Which certmgr package to use in the service.";
-    };
+    package = mkPackageOption pkgs "certmgr" { };
 
     defaultRemote = mkOption {
       type = types.str;
@@ -118,7 +113,7 @@ in
           service = mkOption {
             type = nullOr str;
             default = null;
-            description = "The service on which to perform &lt;action&gt; after fetching.";
+            description = "The service on which to perform \<action\> after fetching.";
           };
 
           action = mkOption {
@@ -151,7 +146,7 @@ in
     }));
       description = ''
         Certificate specs as described by:
-        <link xlink:href="https://github.com/cloudflare/certmgr#certificate-specs" />
+        <https://github.com/cloudflare/certmgr#certificate-specs>
         These will be added to the Nix store, so they will be world readable.
       '';
     };
@@ -161,9 +156,9 @@ in
       type = types.enum [ "circus" "command" "dummy" "openrc" "systemd" "sysv" ];
       description = ''
         This specifies the service manager to use for restarting or reloading services.
-        See: <link xlink:href="https://github.com/cloudflare/certmgr#certmgryaml" />.
+        See: <https://github.com/cloudflare/certmgr#certmgryaml>.
         For how to use the "command" service manager in particular,
-        see: <link xlink:href="https://github.com/cloudflare/certmgr#command-svcmgr-and-how-to-use-it" />.
+        see: <https://github.com/cloudflare/certmgr#command-svcmgr-and-how-to-use-it>.
       '';
     };
 
@@ -187,6 +182,7 @@ in
     systemd.services.certmgr = {
       description = "certmgr";
       path = mkIf (cfg.svcManager == "command") [ pkgs.bash ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       inherit preStart;

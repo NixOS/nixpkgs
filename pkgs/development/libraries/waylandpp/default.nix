@@ -1,6 +1,8 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
+, makeFontsConf
 , pkg-config
 , pugixml
 , wayland
@@ -8,22 +10,32 @@
 , libffi
 , buildPackages
 , docSupport ? true
-, doxygen ? null
+, doxygen
+, graphviz
 }:
 
-assert docSupport -> doxygen != null;
-
-with lib;
 stdenv.mkDerivation rec {
   pname = "waylandpp";
-  version = "0.2.8";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "NilsBrause";
     repo = pname;
     rev = version;
-    sha256 = "1kxiqab48p0n97pwg8c2zx56wqq32m3rcq7qd2pjj33ipcanb3qq";
+    hash = "sha256-Dw2RnLLyhykikHps1in+euHksO+ERbATbfmbUFOJklg=";
   };
+
+  patches = [
+    # Pull fixes for gcc-13 compatibility:
+    #   https://github.com/NilsBrause/waylandpp/pull/71
+    # Without the change `kodi` fails to find `uint32_t` in `waylandpp`
+    # headers.
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/NilsBrause/waylandpp/commit/3c441910aa25f57df2a4db55f75f5d99cea86620.patch";
+      hash = "sha256-bxHMP09zCwUKD0M63C1FqQySAN9hr+7t/DyFDRwdtCo=";
+    })
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_DATADIR=${placeholder "dev"}"
@@ -31,15 +43,24 @@ stdenv.mkDerivation rec {
     "-DWAYLAND_SCANNERPP=${buildPackages.waylandpp}/bin/wayland-scanner++"
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ] ++ optional docSupport doxygen;
+  # Complains about not being able to find the fontconfig config file otherwise
+  FONTCONFIG_FILE = lib.optional docSupport (makeFontsConf { fontDirectories = [ ]; });
+
+  nativeBuildInputs = [ cmake pkg-config ] ++ lib.optionals docSupport [ doxygen graphviz ];
   buildInputs = [ pugixml wayland libGL libffi ];
 
-  outputs = [ "bin" "dev" "lib" "out" ] ++ optionals docSupport [ "doc" "devman" ];
+  outputs = [ "bin" "dev" "lib" "out" ] ++ lib.optionals docSupport [ "doc" "devman" ];
+
+  # Resolves the warning "Fontconfig error: No writable cache directories"
+  preBuild = ''
+    export XDG_CACHE_HOME="$(mktemp -d)"
+  '';
 
   meta = with lib; {
     description = "Wayland C++ binding";
+    mainProgram = "wayland-scanner++";
     homepage = "https://github.com/NilsBrause/waylandpp/";
-    license = with licenses; [ bsd2 hpnd ];
-    maintainers = with maintainers; [ minijackson ];
+    license = with lib.licenses; [ bsd2 hpnd ];
+    maintainers = with lib.maintainers; [ minijackson ];
   };
 }

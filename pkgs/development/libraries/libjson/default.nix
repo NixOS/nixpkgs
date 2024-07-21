@@ -10,11 +10,12 @@ stdenv.mkDerivation rec {
   patches = [ ./install-fix.patch ];
   nativeBuildInputs = [ unzip ];
   makeFlags = [ "prefix=$(out)" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++11" ];
   preInstall = "mkdir -p $out/lib";
 
   meta = with lib; {
     homepage = "http://libjson.sourceforge.net/";
-    description = "A JSON reader and writer";
+    description = "JSON reader and writer";
     longDescription = ''
       A JSON reader and writer which is super-efficient and
       usually runs circles around other JSON libraries.

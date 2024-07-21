@@ -1,37 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pyopenssl
-, pytestCheckHook
-, service-identity
-, twisted
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  mock,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
+  twisted,
+  txi2p-tahoe,
+  txtorcon,
+  versioneer,
 }:
 
 buildPythonPackage rec {
   pname = "foolscap";
-  version = "21.7.0";
+  version = "23.3.0";
+
+  pyproject = true;
+  build-system = [
+    setuptools
+    versioneer
+  ];
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6dGFU4YNk1joXXZi2c2L84JtUbTs1ICgXfv0/EU2P4Q=";
+    hash = "sha256-Vu7oXC1brsgBwr2q59TAgx8j1AFRbi5mjRNIWZTbkUU=";
   };
 
-  propagatedBuildInputs = [
-    mock
+  postPatch = ''
+    # Remove vendorized versioneer.py
+    rm versioneer.py
+  '';
+
+  dependencies = [
+    six
     twisted
     pyopenssl
-    service-identity
-  ];
+  ] ++ twisted.optional-dependencies.tls;
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    i2p = [ txi2p-tahoe ];
+    tor = [ txtorcon ];
+  };
+
+  nativeCheckInputs = [
+    mock
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # Not all dependencies are present
-    "src/foolscap/test/test_connection.py"
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [ "foolscap" ];
 

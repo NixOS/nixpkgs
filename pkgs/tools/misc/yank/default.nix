@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yank";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "mptre";
     repo = "yank";
     rev = "v${version}";
-    sha256 = "1izygx7f1z35li74i2cwca0p28c3v8fbr7w72dwpiqdaiwywa8xc";
+    sha256 = "sha256-sZiZki2Zl0Tfmls5KrLGxT94Bdf9TA9EwoaLoFOX9B4=";
   };
 
   installFlags = [ "PREFIX=$(out)" ];
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.dochang ];
     platforms = platforms.unix;
+    mainProgram = "yank";
   };
 
 }

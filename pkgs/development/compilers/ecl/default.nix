@@ -1,45 +1,53 @@
-{lib, stdenv, fetchurl, fetchpatch
-, libtool, autoconf, automake
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libtool
+, autoconf
+, automake
 , texinfo
-, gmp, mpfr, libffi, makeWrapper
+, gmp
+, mpfr
+, libffi
+, makeWrapper
 , noUnicode ? false
 , gcc
 , threadSupport ? true
-, useBoehmgc ? false, boehmgc
+, useBoehmgc ? false
+, boehmgc
 }:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="ecl";
-    version="21.2.1";
-    name="${baseName}-${version}";
-    url="https://common-lisp.net/project/ecl/static/files/release/${name}.tgz";
-    sha256="000906nnq25177bgsfndiw3iqqgrjc9spk10hzk653sbz3f7anmi";
+
+stdenv.mkDerivation rec {
+  pname = "ecl";
+  version = "24.5.10";
+
+  src = fetchurl {
+    url = "https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
+    hash = "sha256-5Opluxhh4OSVOGv6i8ZzvQFOltPPnZHpA4+RQ1y+Yis=";
   };
+
   nativeBuildInputs = [
-    libtool autoconf automake texinfo makeWrapper
+    libtool
+    autoconf
+    automake
+    texinfo
+    makeWrapper
   ];
   propagatedBuildInputs = [
-    libffi gmp mpfr gcc
+    libffi
+    gmp
+    mpfr
+    gcc
     # replaces ecl's own gc which other packages can depend on, thus propagated
   ] ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
   ];
-in
-stdenv.mkDerivation {
-  inherit (s) version;
-  pname = s.baseName;
-  inherit nativeBuildInputs propagatedBuildInputs;
-
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
 
   patches = [
     # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1
     (fetchpatch {
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/write_error.patch?h=9.2";
+      url = "https://raw.githubusercontent.com/sagemath/sage/9.2/build/pkgs/ecl/patches/write_error.patch";
       sha256 = "0hfxacpgn4919hg0mn4wf4m8r7y592r4gw7aqfnva7sckxi6w089";
     })
   ];
@@ -57,6 +65,11 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
+  # ECL’s ‘make check’ only works after install, making it a de-facto
+  # installCheck.
+  doInstallCheck = true;
+  installCheckTarget = "check";
+
   postInstall = ''
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
     wrapProgram "$out/bin/ecl" --prefix PATH ':' "${
@@ -70,9 +83,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
-    license = licenses.mit ;
-    maintainers = [ maintainers.raskin ];
+    license = licenses.mit;
+    mainProgram = "ecl";
+    maintainers = lib.teams.lisp.members;
     platforms = platforms.unix;
-    changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${s.version}/CHANGELOG";
+    changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";
   };
 }

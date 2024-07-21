@@ -1,102 +1,119 @@
 { lib
+, buildNpmPackage
 , copyDesktopItems
 , electron
+, buildGoModule
 , esbuild
 , fetchFromGitHub
-, fetchpatch
+, jq
+, deltachat-rpc-server
 , libdeltachat
 , makeDesktopItem
 , makeWrapper
-, nodePackages
+, noto-fonts-color-emoji
 , pkg-config
-, rustPlatform
+, python3
+, roboto
+, sqlcipher
 , stdenv
 , CoreServices
+, testers
+, deltachat-desktop
 }:
 
 let
-  libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.60.0";
-    src = fetchFromGitHub {
-      owner = "deltachat";
-      repo = "deltachat-core-rust";
-      rev = version;
-      sha256 = "1agm5xyaib4ynmw4mhgmkhh4lnxs91wv0q9i1zfihv2vkckfm2s2";
-    };
-    cargoDeps = rustPlatform.fetchCargoTarball {
-      inherit src;
-      name = "${old.pname}-${version}";
-      sha256 = "09d3mw2hb1gmqg7smaqwnfm7izw40znl0h1dz7s2imms2cnkjws1";
-    };
-    patches = [
-      # https://github.com/deltachat/deltachat-core-rust/pull/2589
-      (fetchpatch {
-        url = "https://github.com/deltachat/deltachat-core-rust/commit/408467e85d04fbbfd6bed5908d84d9e995943487.patch";
-        sha256 = "1j2ywaazglgl6370js34acrg0wrh0b7krqg05dfjf65n527lzn59";
-      })
-      ./no-static-lib.patch
-      # https://github.com/deltachat/deltachat-core-rust/pull/2660
-      (fetchpatch {
-        url = "https://github.com/deltachat/deltachat-core-rust/commit/8fb5e038a97d8ae68564c885d61b93127a68366d.patch";
-        sha256 = "088pzfrrkgfi4646dc72404s3kykcpni7hgkppalwlzg0p4is41x";
-      })
-    ];
-  });
-  electronExec = if stdenv.isDarwin then
-    "${electron}/Applications/Electron.app/Contents/MacOS/Electron"
-  else
-    "${electron}/bin/electron";
-in nodePackages.deltachat-desktop.override rec {
+  esbuild' = esbuild.override {
+    buildGoModule = args: buildGoModule (args // rec {
+      version = "0.19.8";
+      src = fetchFromGitHub {
+        owner = "evanw";
+        repo = "esbuild";
+        rev = "v${version}";
+        hash = "sha256-f13YbgHFQk71g7twwQ2nSOGA0RG0YYM01opv6txRMuw=";
+      };
+      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+    });
+  };
+in
+buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.22.2";
+  version = "1.46.1";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    sha256 = "0in6w2vl4ypgjb9gfhyh77vg05ni5p3z24lah7wvvhywcpv1jp2n";
+    hash = "sha256-90/Wmh0h75i3kvqj3Wo+A3KlKW8LLDWfPza2gDrDY6E=";
   };
 
+  npmDepsHash = "sha256-UzWxMd+DYH5A8Zo1rzi8oIsoKbmzsVbGpr3uWtc02rY=";
+
+  postPatch = ''
+    test \
+      $(jq -r '.packages."node_modules/@deltachat/jsonrpc-client".version' package-lock.json) \
+      = $(pkg-config --modversion deltachat) \
+      || (echo "error: libdeltachat version does not match jsonrpc-client" && exit 1)
+  '';
+
   nativeBuildInputs = [
-    esbuild
+    jq
     makeWrapper
     pkg-config
+    python3
   ] ++ lib.optionals stdenv.isLinux [
     copyDesktopItems
   ];
 
   buildInputs = [
-    libdeltachat'
+    deltachat-rpc-server
+    libdeltachat
   ] ++ lib.optionals stdenv.isDarwin [
     CoreServices
   ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-  USE_SYSTEM_LIBDELTACHAT = "true";
-  VERSION_INFO_GIT_REF = src.rev;
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    ESBUILD_BINARY_PATH = "${esbuild'}/bin/esbuild";
+    USE_SYSTEM_LIBDELTACHAT = "true";
+    VERSION_INFO_GIT_REF = src.rev;
+  };
 
-  postInstall = let
-    keep = lib.concatMapStringsSep " " (file: "! -name ${file}") [
-      "_locales" "build" "html-dist" "images" "index.js"
-      "node_modules" "themes" "tsc-dist"
-    ];
-  in ''
-    rm -r node_modules/deltachat-node/{deltachat-core-rust,prebuilds,src}
+  preBuild = ''
+    rm node_modules/@deltachat/stdio-rpc-server-*/deltachat-rpc-server
+    ln -s ${lib.getExe deltachat-rpc-server} node_modules/@deltachat/stdio-rpc-server-linux-*
+  '';
 
-    patchShebangs node_modules/sass/sass.js
+  npmBuildScript = "build4production";
 
-    npm run build
+  installPhase = ''
+    runHook preInstall
 
     npm prune --production
 
-    find . -mindepth 1 -maxdepth 1 ${keep} -print0 | xargs -0 rm -r
+    mkdir -p $out/lib/node_modules/deltachat-desktop
+    cp -r . $out/lib/node_modules/deltachat-desktop
 
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    ln -s $out/lib/node_modules/deltachat-desktop/build/icon.png \
+    awk '!/^#/ && NF' build/packageignore_list \
+      | xargs -I {} sh -c "rm -rf $out/lib/node_modules/deltachat-desktop/{}" || true
+
+    # required for electron to import index.js as a module
+    cp package.json $out/lib/node_modules/deltachat-desktop
+
+    install -D build/icon.png \
       $out/share/icons/hicolor/scalable/apps/deltachat.png
 
-    makeWrapper ${electronExec} $out/bin/deltachat \
+    ln -sf ${noto-fonts-color-emoji}/share/fonts/noto/NotoColorEmoji.ttf \
+      $out/lib/node_modules/deltachat-desktop/html-dist/fonts/noto/emoji
+    for font in $out/lib/node_modules/deltachat-desktop/html-dist/fonts/Roboto-*.ttf; do
+      ln -sf ${roboto}/share/fonts/truetype/$(basename $font) \
+        $out/lib/node_modules/deltachat-desktop/html-dist/fonts
+    done
+
+    makeWrapper ${lib.getExe electron} $out/bin/deltachat \
+      --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
+
+    runHook postInstall
   '';
 
   desktopItems = lib.singleton (makeDesktopItem {
@@ -106,19 +123,28 @@ in nodePackages.deltachat-desktop.override rec {
     desktopName = "Delta Chat";
     genericName = "Delta Chat";
     comment = meta.description;
-    categories = "Network;InstantMessaging;Chat;";
-    extraEntries = ''
-      StartupWMClass=DeltaChat
-      MimeType=x-scheme-handler/openpgp4fpr;x-scheme-handler/mailto;
-    '';
+    categories = [ "Network" "InstantMessaging" "Chat" ];
+    startupWMClass = "DeltaChat";
+    mimeTypes = [
+      "x-scheme-handler/openpgp4fpr"
+      "x-scheme-handler/dcaccount"
+      "x-scheme-handler/dclogin"
+      "x-scheme-handler/mailto"
+    ];
   });
 
-  passthru.updateScript = ./update.sh;
+  passthru.tests = {
+    version = testers.testVersion {
+      package = deltachat-desktop;
+    };
+  };
 
   meta = with lib; {
     description = "Email-based instant messaging for Desktop";
     homepage = "https://github.com/deltachat/deltachat-desktop";
+    changelog = "https://github.com/deltachat/deltachat-desktop/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
+    mainProgram = "deltachat";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

@@ -1,36 +1,37 @@
-diff --git a/bin/internal/shared.sh b/bin/internal/shared.sh
-index be9320210e..6eb50aae95 100644
---- a/bin/internal/shared.sh
-+++ b/bin/internal/shared.sh
-@@ -218,8 +218,6 @@ function shared::execute() {
-   # FLUTTER_TOOL_ARGS="--enable-asserts $FLUTTER_TOOL_ARGS"
-   # FLUTTER_TOOL_ARGS="$FLUTTER_TOOL_ARGS --observe=65432"
+diff --git a/packages/flutter_tools/lib/src/runner/flutter_command.dart b/packages/flutter_tools/lib/src/runner/flutter_command.dart
+index b7e624b4e2..edfdde118b 100644
+--- a/packages/flutter_tools/lib/src/runner/flutter_command.dart
++++ b/packages/flutter_tools/lib/src/runner/flutter_command.dart
+@@ -1554,7 +1554,7 @@ Run 'flutter -h' (or 'flutter <command> -h') for available flutter commands and
  
--  upgrade_flutter 7< "$PROG_NAME"
--
-   BIN_NAME="$(basename "$PROG_NAME")"
-   case "$BIN_NAME" in
-     flutter*)
+     // Populate the cache. We call this before pub get below so that the
+     // sky_engine package is available in the flutter cache for pub to find.
+-    if (shouldUpdateCache) {
++    if (false) {
+       // First always update universal artifacts, as some of these (e.g.
+       // ios-deploy on macOS) are required to determine `requiredArtifacts`.
+       final bool offline;
 diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-index 550a75bc65..c98a4591cc 100644
+index 5d6d78639f..90a4dfa555 100644
 --- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
 +++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-@@ -244,7 +244,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+@@ -297,7 +297,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
            globals.flutterUsage.suppressAnalytics = true;
          }
  
 -        globals.flutterVersion.ensureVersionFile();
-         final bool machineFlag = topLevelResults['machine'] as bool;
+         final bool machineFlag = topLevelResults[FlutterGlobalOptions.kMachineFlag] as bool? ?? false;
          final bool ci = await globals.botDetector.isRunningOnBot;
          final bool redirectedCompletion = !globals.stdio.hasTerminal &&
-@@ -253,10 +252,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
-         final bool versionCheckFlag = topLevelResults['version-check'] as bool;
-         final bool explicitVersionCheckPassed = topLevelResults.wasParsed('version-check') && versionCheckFlag;
+@@ -306,11 +305,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+         final bool versionCheckFlag = topLevelResults[FlutterGlobalOptions.kVersionCheckFlag] as bool? ?? false;
+         final bool explicitVersionCheckPassed = topLevelResults.wasParsed(FlutterGlobalOptions.kVersionCheckFlag) && versionCheckFlag;
  
 -        if (topLevelResults.command?.name != 'upgrade' &&
 -            (explicitVersionCheckPassed || (versionCheckFlag && !isMachine))) {
 -          await globals.flutterVersion.checkFlutterVersionFreshness();
 -        }
- 
+-
          // See if the user specified a specific device.
-         globals.deviceManager.specifiedDeviceId = topLevelResults['device-id'] as String;
+         final String? specifiedDeviceId = topLevelResults[FlutterGlobalOptions.kDeviceIdOption] as String?;
+         if (specifiedDeviceId != null) {

@@ -1,100 +1,122 @@
-{ fetchFromGitHub
+{ stdenv
+, lib
+, fetchFromGitHub
+, substituteAll
+, cairo
 , cinnamon-desktop
+, dbus
+, desktop-file-utils
+, egl-wayland
 , glib
-, file
-, gnome
-, gnome-doc-utils
-, fetchpatch
 , gobject-introspection
+, graphene
 , gtk3
-, intltool
 , json-glib
+, libcanberra
+, libdrm
+, libgnomekbd
+, libgudev
 , libinput
 , libstartup_notification
-, libXtst
+, libwacom
+, libxcvt
+, libXdamage
 , libxkbcommon
+, libXtst
+, mesa
+, meson
+, ninja
+, pipewire
 , pkg-config
-, lib
-, stdenv
+, python3
 , udev
-, xorg
-, wrapGAppsHook
-, pango
-, cairo
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_43
-, docbook_xml_dtd_42
-, docbook_xml_dtd_412
-, autoconf
-, automake
-, gettext
-, libtool
+, wayland
+, wayland-protocols
+, wrapGAppsHook3
+, xorgserver
+, xwayland
+, zenity
 }:
-
-# it's a frankensteins monster with some cinnamon sparkles added on top of it
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "5.2.0";
+  version = "6.2.0";
+
+  outputs = [ "out" "dev" "man" ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-WAp0HbfRtwsPjJX1kPBqUStqLaudQPZ8E+h4jmggmw8=";
+    hash = "sha256-k8hUYA4/OzL2TB8s5DJpa2nFXV2U9eY09TLkqBDq9WE=";
   };
 
-  buildInputs = [
-    gtk3
-    glib
-    pango
-    cairo
-    json-glib
-    cinnamon-desktop
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libxkbfile
-    xorg.xkeyboardconfig
-
-    libxkbcommon
-    gnome.zenity
-    libinput
-    libstartup_notification
-    libXtst
-    udev
-    gobject-introspection
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit zenity;
+    })
   ];
 
   nativeBuildInputs = [
-    autoconf
-    automake
-    gettext
-    libtool
-    wrapGAppsHook
+    desktop-file-utils
+    mesa # needed for gbm
+    meson
+    ninja
     pkg-config
-    intltool
-
-    gnome-doc-utils
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_43
-    docbook_xml_dtd_42
-    docbook_xml_dtd_412
+    python3
+    wrapGAppsHook3
+    xorgserver # for cvt command
+    gobject-introspection
   ];
 
-  preConfigure = ''
-    NOCONFIGURE=1 ./autogen.sh
+  buildInputs = [
+    cairo
+    cinnamon-desktop
+    dbus
+    egl-wayland
+    glib
+    gtk3
+    libcanberra
+    libdrm
+    libgnomekbd
+    libgudev
+    libinput
+    libstartup_notification
+    libwacom
+    libxcvt
+    libXdamage
+    libxkbcommon
+    pipewire
+    udev
+    wayland
+    wayland-protocols
+    xwayland
+  ];
+
+  propagatedBuildInputs = [
+    # required for pkg-config to detect muffin-clutter
+    json-glib
+    libXtst
+    graphene
+  ];
+
+  mesonFlags = [
+    # Based on Mint's debian/rules.
+    "-Degl_device=true"
+    "-Dwayland_eglstream=true"
+    "-Dxwayland_path=${lib.getExe xwayland}"
+  ];
+
+  postPatch = ''
+    patchShebangs src/backends/native/gen-default-modes.py
   '';
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/muffin";
-    description = "The window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
-    license = licenses.gpl2;
+    description = "Window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
+    mainProgram = "muffin";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
   };

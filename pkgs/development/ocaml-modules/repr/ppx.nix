@@ -1,9 +1,9 @@
-{ lib, buildDunePackage, ppx_deriving, ppxlib, repr, alcotest, hex }:
+{ buildDunePackage, ppx_deriving, ppxlib, repr, alcotest, hex }:
 
 buildDunePackage {
   pname = "ppx_repr";
 
-  inherit (repr) src version useDune2;
+  inherit (repr) src version;
 
   propagatedBuildInputs = [
     ppx_deriving

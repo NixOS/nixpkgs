@@ -1,33 +1,80 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, flask-limiter
-, markupsafe
-, decorator
-, itsdangerous
-, raven
-, six
-, brotlipy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  brotlicffi,
+  decorator,
+  flasgger,
+  flask,
+  greenlet,
+  six,
+  werkzeug,
+
+  # optional-dependencies
+  gunicorn,
+  gevent,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "httpbin";
-  version = "0.7.0";
+  version = "0.10.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yldvf3585zcwj4vxvfm4yr9wwlz3pa2mx2pazqz8x8mr687gcyb";
+    hash = "sha256-YyFIaYJhyGhOotK2JM3qhFtAKx/pFzbonfiGQIxjF6k=";
   };
 
-  propagatedBuildInputs = [ brotlipy flask flask-limiter markupsafe decorator itsdangerous raven six ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  # No tests
-  doCheck = false;
+  pythonRelaxDeps = [ "greenlet" ];
+
+  propagatedBuildInputs = [
+    brotlicffi
+    decorator
+    flask
+    flasgger
+    greenlet
+    six
+    werkzeug
+  ];
+
+  passthru.optional-dependencies = {
+    mainapp = [
+      gunicorn
+      gevent
+    ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # Tests seems to be outdated
+    "test_anything"
+    "test_get"
+    "test_redirect_n_equals_to_1"
+    "test_redirect_n_higher_than_1"
+    "test_redirect_to_post"
+    "test_relative_redirect_n_equals_to_1"
+    "test_relative_redirect_n_higher_than_1"
+  ];
+
+  pythonImportsCheck = [ "httpbin" ];
 
   meta = with lib; {
-    homepage = "https://github.com/kennethreitz/httpbin";
-    description = "HTTP Request & Response Service";
+    description = "HTTP Request and Response Service";
+    homepage = "https://github.com/psf/httpbin";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

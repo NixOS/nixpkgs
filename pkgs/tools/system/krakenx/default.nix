@@ -1,10 +1,10 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname = "krakenx";
   version = "0.0.3";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "1khw1rxra5hn7hwp16i6kgj89znq8vjsyly3r2dxx2z2bddil000";
   };
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Python script to control NZXT cooler Kraken X52/X62/X72";
     homepage = "https://github.com/KsenijaS/krakenx";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.willibutz ];
     platforms = platforms.linux;
   };

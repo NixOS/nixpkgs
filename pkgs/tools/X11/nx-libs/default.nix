@@ -1,5 +1,5 @@
 { lib, stdenv, autoconf, automake, fetchFromGitHub, fetchpatch
-, libgcc, libjpeg_turbo
+, libjpeg_turbo
 , libpng, libtool, libxml2, pkg-config, which, xorg
 , libtirpc
 }:
@@ -23,19 +23,25 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool pkg-config which
     xorg.gccmakedep xorg.imake ];
-  buildInputs = [ libgcc libjpeg_turbo libpng libxml2 xorg.fontutil
+  buildInputs = [ libjpeg_turbo libpng libxml2 xorg.fontutil
     xorg.libXcomposite xorg.libXdamage xorg.libXdmcp xorg.libXext xorg.libXfont2
     xorg.libXinerama xorg.libXpm xorg.libXrandr xorg.libXtst xorg.pixman
     xorg.xkbcomp xorg.xkeyboardconfig libtirpc
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
   postPatch = ''
     patchShebangs .
     find . -type f -name Makefile -exec sed -i 's|^\(SHELL:=\)/bin/bash$|\1${stdenv.shell}|g' {} \;
     ln -s libNX_X11.so.6.3.0
+  '';
+
+  preConfigure = ''
+    # binutils 2.37 fix
+    # https://github.com/ArcticaProject/nx-libs/issues/1003
+    substituteInPlace nx-X11/config/cf/Imake.tmpl --replace "clq" "cq"
   '';
 
   PREFIX=""; # Don't install to $out/usr/local
@@ -50,7 +56,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "NX X server based on Xnest";
     homepage = "https://github.com/ArcticaProject/nx-libs";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };

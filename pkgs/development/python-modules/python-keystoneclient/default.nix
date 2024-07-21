@@ -1,24 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, keystoneauth1
-, openssl
-, oslo-config
-, oslo-serialization
-, pbr
-, requests-mock
-, stestr
-, testresources
-, testscenarios
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  keystoneauth1,
+  openssl,
+  oslo-config,
+  oslo-serialization,
+  pbr,
+  pythonOlder,
+  requests-mock,
+  stestr,
+  testresources,
+  testscenarios,
 }:
 
 buildPythonPackage rec {
   pname = "python-keystoneclient";
-  version = "4.3.0";
+  version = "5.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fd09b7790ce53c20dc94318ec4d76e1cf71908aed59baeb4c7a61c17afd3aad5";
+    hash = "sha256-srS9vp2vews1O4gHZy7u0B+H3QO0+LQtDQYbCbiTH0E=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +33,7 @@ buildPythonPackage rec {
     pbr
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     openssl
     requests-mock
     stestr

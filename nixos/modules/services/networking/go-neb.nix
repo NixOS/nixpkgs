@@ -9,7 +9,7 @@ let
   configFile = settingsFormat.generate "config.yaml" cfg.config;
 in {
   options.services.go-neb = {
-    enable = mkEnableOption "Extensible matrix bot written in Go";
+    enable = mkEnableOption "an extensible matrix bot written in Go";
 
     bindAddress = mkOption {
       type = types.str;
@@ -23,9 +23,9 @@ in {
       example = "/run/keys/go-neb.env";
       description = ''
         Environment variables from this file will be interpolated into the
-        final config file using envsubst with this syntax: <literal>$ENVIRONMENT</literal>
-        or <literal>''${VARIABLE}</literal>.
-        The file should contain lines formatted as <literal>SECRET_VAR=SECRET_VALUE</literal>.
+        final config file using envsubst with this syntax: `$ENVIRONMENT`
+        or `''${VARIABLE}`.
+        The file should contain lines formatted as `SECRET_VAR=SECRET_VALUE`.
         This is useful to avoid putting secrets into the nix store.
       '';
     };
@@ -38,8 +38,8 @@ in {
     config = mkOption {
       inherit (settingsFormat) type;
       description = ''
-        Your <filename>config.yaml</filename> as a Nix attribute set.
-        See <link xlink:href="https://github.com/matrix-org/go-neb/blob/master/config.sample.yaml">config.sample.yaml</link>
+        Your {file}`config.yaml` as a Nix attribute set.
+        See [config.sample.yaml](https://github.com/matrix-org/go-neb/blob/master/config.sample.yaml)
         for possible options.
       '';
     };
@@ -60,13 +60,12 @@ in {
 
       serviceConfig = {
         ExecStartPre = lib.optional (cfg.secretFile != null)
-          (pkgs.writeShellScript "pre-start" ''
+          ("+" + pkgs.writeShellScript "pre-start" ''
             umask 077
             export $(xargs < ${cfg.secretFile})
             ${pkgs.envsubst}/bin/envsubst -i "${configFile}" > ${finalConfigFile}
             chown go-neb ${finalConfigFile}
           '');
-        PermissionsStartOnly = true;
         RuntimeDirectory = "go-neb";
         ExecStart = "${pkgs.go-neb}/bin/go-neb";
         User = "go-neb";

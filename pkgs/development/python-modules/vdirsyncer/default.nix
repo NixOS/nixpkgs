@@ -1,30 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, click
-, click-log
-, click-threading
-, requests-toolbelt
-, requests
-, requests_oauthlib # required for google oauth sync
-, atomicwrites
-, hypothesis
-, pytestCheckHook
-, pytest-localserver
-, pytest-subtesthack
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  click,
+  click-log,
+  click-threading,
+  requests-toolbelt,
+  requests,
+  atomicwrites,
+  hypothesis,
+  pytestCheckHook,
+  pytest-subtesthack,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  aiostream,
+  aiohttp-oauthlib,
+  aiohttp,
+  pytest-asyncio,
+  trustme,
+  aioresponses,
+  vdirsyncer,
+  testers,
 }:
 
 buildPythonPackage rec {
-  version = "0.18.0";
   pname = "vdirsyncer";
+  version = "0.19.2";
+  format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-J7w+1R93STX7ujkpFcjI1M9jmuUaRLZ0aGtJoQJfwgE=";
+    hash = "sha256-/QWM7quCk0WaBGbNmw5Ks7OUYsbgiaDwrDfDB0INgro=";
   };
+
+  postPatch = ''
+    sed -i -e '/--cov/d' -e '/--no-cov/d' pyproject.toml
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
+
+  pythonRelaxDeps = [ "aiostream" ];
 
   propagatedBuildInputs = [
     atomicwrites
@@ -32,24 +55,20 @@ buildPythonPackage rec {
     click-log
     click-threading
     requests
-    requests_oauthlib # required for google oauth sync
     requests-toolbelt
+    aiostream
+    aiohttp
+    aiohttp-oauthlib
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
-    pytest-localserver
     pytest-subtesthack
+    pytest-asyncio
+    trustme
+    aioresponses
   ];
-
-  postPatch = ''
-    sed -i -e '/--cov/d' -e '/--no-cov/d' setup.cfg
-  '';
 
   preCheck = ''
     export DETERMINISTIC_TESTS=true
@@ -61,10 +80,14 @@ buildPythonPackage rec {
     "test_verbosity"
   ];
 
+  passthru.tests.version = testers.testVersion { package = vdirsyncer; };
+
   meta = with lib; {
-    homepage = "https://github.com/pimutils/vdirsyncer";
     description = "Synchronize calendars and contacts";
-    license = licenses.mit;
-    maintainers = with maintainers; [ loewenheim ];
+    homepage = "https://github.com/pimutils/vdirsyncer";
+    changelog = "https://github.com/pimutils/vdirsyncer/blob/v${version}/CHANGELOG.rst";
+    license = licenses.bsd3;
+    maintainers = [ ];
+    mainProgram = "vdirsyncer";
   };
 }

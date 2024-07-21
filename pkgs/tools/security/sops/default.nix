@@ -1,25 +1,30 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
 
 buildGoModule rec {
   pname = "sops";
-  version = "3.7.1";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
-    owner = "mozilla";
+    owner = "getsops";
     repo = pname;
-    sha256 = "0z3jcyl245yjszzjf2h6l1dwa092vxzvfmnivmwi6jvpsdcv33h1";
+    rev = "v${version}";
+    hash = "sha256-Q1e3iRIne9/bCLxKdhzP3vt3oxuHJAuG273HdeHZ3so=";
   };
 
-  vendorSha256 = "1mnwgsbpi56ql0lbpn7dkaps96x9b1lmhlk5cd6d40da7xj616n7";
+  vendorHash = "sha256-3vzKQZTg38/UGVJ/M1jLALCgor7wztsLKVuMqY3adtI=";
 
-  doCheck = false;
+  subPackages = [ "cmd/sops" ];
+
+  ldflags = [ "-s" "-w" "-X github.com/getsops/sops/v3/version.Version=${version}" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    homepage = "https://github.com/mozilla/sops";
-    description = "Mozilla sops (Secrets OPerationS) is an editor of encrypted files";
-    changelog = "https://github.com/mozilla/sops/raw/v${version}/CHANGELOG.rst";
-    maintainers = [ maintainers.marsam ];
+    homepage = "https://getsops.io/";
+    description = "Simple and flexible tool for managing secrets";
+    changelog = "https://github.com/getsops/sops/blob/v${version}/CHANGELOG.rst";
+    mainProgram = "sops";
+    maintainers = with maintainers; [ Scrumplex mic92 ];
     license = licenses.mpl20;
   };
 }

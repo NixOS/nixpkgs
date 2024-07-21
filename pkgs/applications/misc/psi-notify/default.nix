@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "psi-notify";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "cdown";
     repo = pname;
     rev = version;
-    sha256 = "0hn37plim1smmlrjjmz8kybyms8pz3wxcgf8vmqjrsqi6bfcym7g";
+    sha256 = "sha256-GhGiSI5r0Ki6+MYNa5jCDyYZEW5R9LDNZ/S8K+6L0jo=";
   };
 
   buildInputs = [ systemd libnotify ];
@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cdown/psi-notify";
     platforms = platforms.linux;
     maintainers = with maintainers; [ eduarrrd ];
+    mainProgram = "psi-notify";
   };
 }

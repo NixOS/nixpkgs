@@ -2,15 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "unshield";
-  version = "1.4.3";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "twogood";
     repo = "unshield";
     rev = version;
-    sha256 = "19wn22vszhci8dfcixx5rliz7phx3lv5ablvhjlclvj75k2vsdqd";
+    sha256 = "1p2inn93svm83kr5p0j1al0rx47f1zykmagxsblgy04gi942iza3";
   };
-
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib openssl ];
@@ -19,6 +18,7 @@ stdenv.mkDerivation rec {
     description = "Tool and library to extract CAB files from InstallShield installers";
     homepage = "https://github.com/twogood/unshield";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "unshield";
   };
 }

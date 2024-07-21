@@ -42,8 +42,8 @@ in
       description = ''
         Caching rules that overrule the origin's caching policy.
 
-        Consult the <link xlink:href="${getManualUrl "cache.config"}">upstream
-        documentation</link> for more details.
+        Consult the [upstream
+        documentation](${getManualUrl "cache.config"}) for more details.
       '';
     };
 
@@ -54,15 +54,15 @@ in
       description = ''
         Partition the cache according to origin server or domain
 
-        Consult the <link xlink:href="${getManualUrl "hosting.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "hosting.config"}) for more details.
       '';
     };
 
     ipAllow = mkOption {
       type = types.nullOr yaml.type;
       default = lib.importJSON ./ip_allow.json;
-      defaultText = literalDocBook "upstream defaults";
+      defaultText = literalMD "upstream defaults";
       example = literalExpression ''
         {
           ip_allow = [{
@@ -77,21 +77,21 @@ in
         Control client access to Traffic Server and Traffic Server connections
         to upstream servers.
 
-        Consult the <link xlink:href="${getManualUrl "ip_allow.yaml"}">upstream
-        documentation</link> for more details.
+        Consult the [upstream
+        documentation](${getManualUrl "ip_allow.yaml"}) for more details.
       '';
     };
 
     logging = mkOption {
       type = types.nullOr yaml.type;
       default = lib.importJSON ./logging.json;
-      defaultText = literalDocBook "upstream defaults";
+      defaultText = literalMD "upstream defaults";
       example = { };
       description = ''
         Configure logs.
 
-        Consult the <link xlink:href="${getManualUrl "logging.yaml"}">upstream
-        documentation</link> for more details.
+        Consult the [upstream
+        documentation](${getManualUrl "logging.yaml"}) for more details.
       '';
     };
 
@@ -104,8 +104,8 @@ in
       description = ''
         Identify the parent proxies used in an cache hierarchy.
 
-        Consult the <link xlink:href="${getManualUrl "parent.config"}">upstream
-        documentation</link> for more details.
+        Consult the [upstream
+        documentation](${getManualUrl "parent.config"}) for more details.
       '';
     };
 
@@ -116,8 +116,8 @@ in
         Controls run-time loadable plugins available to Traffic Server, as
         well as their configuration.
 
-        Consult the <link xlink:href="${getManualUrl "plugin.config"}">upstream
-        documentation</link> for more details.
+        Consult the [upstream
+        documentation](${getManualUrl "plugin.config"}) for more details.
       '';
 
       type = with types;
@@ -151,8 +151,8 @@ in
       description = ''
         List of configurable variables used by Traffic Server.
 
-        Consult the <link xlink:href="${getManualUrl "records.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "records.config"}) for more details.
       '';
     };
 
@@ -163,8 +163,8 @@ in
       description = ''
         URL remapping rules used by Traffic Server.
 
-        Consult the <link xlink:href="${getManualUrl "remap.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "remap.config"}) for more details.
       '';
     };
 
@@ -179,8 +179,8 @@ in
         Specify the DNS server that Traffic Server should use under specific
         conditions.
 
-        Consult the <link xlink:href="${getManualUrl "splitdns.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "splitdns.config"}) for more details.
       '';
     };
 
@@ -191,8 +191,8 @@ in
       description = ''
         Configure SSL server certificates to terminate the SSL sessions.
 
-        Consult the <link xlink:href="${getManualUrl "ssl_multicert.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "ssl_multicert.config"}) for more details.
       '';
     };
 
@@ -211,8 +211,8 @@ in
         Configure aspects of TLS connection handling for both inbound and
         outbound connections.
 
-        Consult the <link xlink:href="${getManualUrl "sni.yaml"}">upstream
-        documentation</link> for more details.
+        Consult the [upstream
+        documentation](${getManualUrl "sni.yaml"}) for more details.
       '';
     };
 
@@ -223,8 +223,8 @@ in
       description = ''
         List all the storage that make up the Traffic Server cache.
 
-        Consult the <link xlink:href="${getManualUrl "storage.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "storage.config"}) for more details.
       '';
     };
 
@@ -235,8 +235,8 @@ in
         Specify the next hop proxies used in an cache hierarchy and the
         algorithms used to select the next proxy.
 
-        Consult the <link xlink:href="${getManualUrl "strategies.yaml"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "strategies.yaml"}) for more details.
       '';
     };
 
@@ -248,8 +248,8 @@ in
         Manage cache space more efficiently and restrict disk usage by
         creating cache volumes of different sizes.
 
-        Consult the <link xlink:href="${getManualUrl "volume.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "volume.config"}) for more details.
       '';
     };
   };

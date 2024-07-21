@@ -7,7 +7,9 @@ with pkgs.lib;
 let
   matomoTest = package:
   makeTest {
-    machine = { config, pkgs, ... }: {
+    name = "matomo";
+
+    nodes.machine = { config, pkgs, ... }: {
       services.matomo = {
         package = package;
         enable = true;
@@ -39,10 +41,14 @@ let
 in {
   matomo = matomoTest pkgs.matomo // {
     name = "matomo";
-    meta.maintainers = with maintainers; [ florianjacob kiwi mmilata ];
+    meta.maintainers = with maintainers; [ florianjacob mmilata twey boozedog ];
   };
   matomo-beta = matomoTest pkgs.matomo-beta // {
     name = "matomo-beta";
-    meta.maintainers = with maintainers; [ florianjacob kiwi mmilata ];
+    meta.maintainers = with maintainers; [ florianjacob mmilata twey boozedog ];
+  };
+  matomo_5 = matomoTest pkgs.matomo_5 // {
+    name = "matomo-5";
+    meta.maintainers = with maintainers; [ florianjacob mmilata twey boozedog ] ++ lib.teams.flyingcircus.members;
   };
 }

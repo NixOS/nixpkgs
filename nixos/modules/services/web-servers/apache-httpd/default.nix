@@ -18,7 +18,7 @@ let
     sed -i $out/bin/apachectl -e 's|$HTTPD -t|$HTTPD -t -f /etc/httpd/httpd.conf|'
   '';
 
-  php = cfg.phpPackage.override { apacheHttpd = pkg; };
+  php = cfg.phpPackage.override { apxs2Support = true; apacheHttpd = pkg; };
 
   phpModuleName = let
     majorVersion = lib.versions.major (lib.getVersion php);
@@ -154,7 +154,7 @@ let
       sslServerKey = if useACME then "${sslCertDir}/key.pem" else hostOpts.sslServerKey;
       sslServerChain = if useACME then "${sslCertDir}/chain.pem" else hostOpts.sslServerChain;
 
-      acmeChallenge = optionalString useACME ''
+      acmeChallenge = optionalString (useACME && hostOpts.acmeRoot != null) ''
         Alias /.well-known/acme-challenge/ "${hostOpts.acmeRoot}/.well-known/acme-challenge/"
         <Directory "${hostOpts.acmeRoot}">
             AllowOverride None
@@ -168,7 +168,7 @@ let
         <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listen}>
             ServerName ${hostOpts.hostName}
             ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
-            ServerAdmin ${adminAddr}
+            ${optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
             <IfModule mod_ssl.c>
                 SSLEngine off
             </IfModule>
@@ -187,7 +187,7 @@ let
         <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listenSSL}>
             ServerName ${hostOpts.hostName}
             ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
-            ServerAdmin ${adminAddr}
+            ${optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
             SSLEngine on
             SSLCertificateFile ${sslServerCert}
             SSLCertificateKeyFile ${sslServerKey}
@@ -370,6 +370,8 @@ let
       cat ${php.phpIni} > $out
       echo "$options" >> $out
     '';
+
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
 in
 
 
@@ -404,14 +406,7 @@ in
 
       enable = mkEnableOption "the Apache HTTP Server";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.apacheHttpd;
-        defaultText = literalExpression "pkgs.apacheHttpd";
-        description = ''
-          Overridable attribute of the Apache HTTP Server package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "apacheHttpd" { };
 
       configFile = mkOption {
         type = types.path;
@@ -430,7 +425,7 @@ in
         description = ''
           Configuration lines appended to the generated Apache
           configuration file. Note that this mechanism will not work
-          when <option>configFile</option> is overridden.
+          when {option}`configFile` is overridden.
         '';
       };
 
@@ -440,21 +435,22 @@ in
         example = literalExpression ''
           [
             "proxy_connect"
-            { name = "jk"; path = "''${pkgs.tomcat_connectors}/modules/mod_jk.so"; }
+            { name = "jk"; path = "''${pkgs.apacheHttpdPackages.mod_jk}/modules/mod_jk.so"; }
           ]
         '';
         description = ''
           Additional Apache modules to be used. These can be
           specified as a string in the case of modules distributed
           with Apache, or as an attribute set specifying the
-          <varname>name</varname> and <varname>path</varname> of the
+          {var}`name` and {var}`path` of the
           module.
         '';
       };
 
       adminAddr = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         example = "admin@example.org";
+        default = null;
         description = "E-mail address of the server administrator.";
       };
 
@@ -464,7 +460,7 @@ in
         example = "combined";
         description = ''
           Log format for log files. Possible values are: combined, common, referer, agent, none.
-          See <link xlink:href="https://httpd.apache.org/docs/2.4/logs.html"/> for more details.
+          See <https://httpd.apache.org/docs/2.4/logs.html> for more details.
         '';
       };
 
@@ -473,9 +469,9 @@ in
         default = true;
         description = ''
           If enabled, each virtual host gets its own
-          <filename>access.log</filename> and
-          <filename>error.log</filename>, namely suffixed by the
-          <option>hostName</option> of the virtual host.
+          {file}`access.log` and
+          {file}`error.log`, namely suffixed by the
+          {option}`hostName` of the virtual host.
         '';
       };
 
@@ -486,10 +482,10 @@ in
           User account under which httpd children processes run.
 
           If you require the main httpd process to run as
-          <literal>root</literal> add the following configuration:
-          <programlisting>
+          `root` add the following configuration:
+          ```
           systemd.services.httpd.serviceConfig.User = lib.mkForce "root";
-          </programlisting>
+          ```
         '';
       };
 
@@ -542,32 +538,13 @@ in
         '';
       };
 
-      enableMellon = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the mod_auth_mellon module.";
-      };
+      enableMellon = mkEnableOption "the mod_auth_mellon module";
 
-      enablePHP = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the PHP module.";
-      };
+      enablePHP = mkEnableOption "the PHP module";
 
-      phpPackage = mkOption {
-        type = types.package;
-        default = pkgs.php;
-        defaultText = literalExpression "pkgs.php";
-        description = ''
-          Overridable attribute of the PHP package to use.
-        '';
-      };
+      phpPackage = mkPackageOption pkgs "php" { };
 
-      enablePerl = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the Perl module (mod_perl).";
-      };
+      enablePerl = mkEnableOption "the Perl module (mod_perl)";
 
       phpOptions = mkOption {
         type = types.lines;
@@ -577,7 +554,7 @@ in
             date.timezone = "CET"
           '';
         description = ''
-          Options appended to the PHP configuration file <filename>php.ini</filename>.
+          Options appended to the PHP configuration file {file}`php.ini`.
         '';
       };
 
@@ -585,14 +562,13 @@ in
         type = types.enum [ "event" "prefork" "worker" ];
         default = "event";
         example = "worker";
-        description =
-          ''
+        description = ''
             Multi-processing module to be used by Apache. Available
-            modules are <literal>prefork</literal> (handles each
-            request in a separate child process), <literal>worker</literal>
+            modules are `prefork` (handles each
+            request in a separate child process), `worker`
             (hybrid approach that starts a number of child processes
-            each running a number of threads) and <literal>event</literal>
-            (the default; a recent variant of <literal>worker</literal>
+            each running a number of threads) and `event`
+            (the default; a recent variant of `worker`
             that handles persistent connections more efficiently).
           '';
       };
@@ -657,7 +633,18 @@ in
           `services.httpd.virtualHosts.<name>.useACMEHost` are mutually exclusive.
         '';
       }
-    ];
+      {
+        assertion = cfg.enablePHP -> php.ztsSupport;
+        message = ''
+          The php package provided by `services.httpd.phpPackage` is not built with zts support. Please
+          ensure the php has zts support by settings `services.httpd.phpPackage = php.override { ztsSupport = true; }`
+        '';
+      }
+    ] ++ map (name: mkCertOwnershipAssertion {
+      inherit (cfg) group user;
+      cert = config.security.acme.certs.${name};
+      groups = config.users.groups;
+    }) dependentCertNames;
 
     warnings =
       mapAttrsToList (name: hostOpts: ''
@@ -677,9 +664,16 @@ in
     };
 
     security.acme.certs = let
-      acmePairs = map (hostOpts: nameValuePair hostOpts.hostName {
+      acmePairs = map (hostOpts: let
+        hasRoot = hostOpts.acmeRoot != null;
+      in nameValuePair hostOpts.hostName {
         group = mkDefault cfg.group;
-        webroot = hostOpts.acmeRoot;
+        # if acmeRoot is null inherit config.security.acme
+        # Since config.security.acme.certs.<cert>.webroot's own default value
+        # should take precedence set priority higher than mkOptionDefault
+        webroot = mkOverride (if hasRoot then 1000 else 2000) hostOpts.acmeRoot;
+        # Also nudge dnsProvider to null in case it is inherited
+        dnsProvider = mkOverride (if hasRoot then 1000 else 2000) null;
         extraDomainNames = hostOpts.serverAliases;
         # Use the vhost-specific email address if provided, otherwise let
         # security.acme.email or security.acme.certs.<cert>.email be used.
@@ -697,20 +691,15 @@ in
 
     services.logrotate = optionalAttrs (cfg.logFormat != "none") {
       enable = mkDefault true;
-      paths.httpd = {
-        path = "${cfg.logDir}/*.log";
-        user = cfg.user;
-        group = cfg.group;
+      settings.httpd = {
+        files = "${cfg.logDir}/*.log";
+        su = "${cfg.user} ${cfg.group}";
         frequency = "daily";
-        keep = 28;
-        extraConfig = ''
-          sharedscripts
-          compress
-          delaycompress
-          postrotate
-            systemctl reload httpd.service > /dev/null 2>/dev/null || true
-          endscript
-        '';
+        rotate = 28;
+        sharedscripts = true;
+        compress = true;
+        delaycompress = true;
+        postrotate = "systemctl reload httpd.service > /dev/null 2>/dev/null || true";
       };
     };
 

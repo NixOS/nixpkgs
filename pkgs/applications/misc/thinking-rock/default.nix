@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Task management system";
+    mainProgram = "thinkingrock";
     homepage = "http://www.thinkingrock.com.au/";
     license = licenses.cddl;
     platforms = platforms.unix;

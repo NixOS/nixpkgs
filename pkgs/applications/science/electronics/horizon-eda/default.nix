@@ -1,61 +1,32 @@
 { stdenv
 , boost
+, callPackage
 , coreutils
-, cppzmq
-, curl
-, libepoxy
-, fetchFromGitHub
-, glm
-, gtkmm3
-, lib
-, libgit2
-, librsvg
-, libuuid
-, libzip
-, opencascade
-, pkg-config
-, podofo
+, libspnav
 , python3
-, sqlite
-, wrapGAppsHook
-, zeromq
+, wrapGAppsHook3
 }:
 
+let
+  base = callPackage ./base.nix { };
+in
 stdenv.mkDerivation rec {
-  pname = "horizon-eda";
-  version = "2.1.0";
+  inherit (base) pname version src meta CASROOT;
 
-  src = fetchFromGitHub {
-    owner = "horizon-eda";
-    repo = "horizon";
-    rev = "v${version}";
-    sha256 = "sha256-3JNkwKkr/fdz/2UFAHwhn03PHqX9YFOMf3Q7kkbTZYk=";
+  # provide base for python module
+  passthru = {
+    inherit base;
   };
 
-  buildInputs = [
-    cppzmq
-    curl
-    libepoxy
-    glm
-    gtkmm3
-    libgit2
-    librsvg
-    libuuid
-    libzip
-    opencascade
-    podofo
-    python3
-    sqlite
-    zeromq
+  buildInputs = base.buildInputs ++ [
+    libspnav
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = base.nativeBuildInputs ++ [
     boost.dev
-    pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
+    python3
   ];
-
-  CASROOT = opencascade;
 
   installFlags = [
     "INSTALL=${coreutils}/bin/install"
@@ -64,12 +35,4 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-
-  meta = with lib; {
-    description = "A free EDA software to develop printed circuit boards";
-    homepage = "https://horizon-eda.org";
-    maintainers = with maintainers; [ guserav ];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-  };
 }

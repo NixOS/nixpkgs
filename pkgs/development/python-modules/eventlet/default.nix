@@ -1,33 +1,54 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, dnspython
-, greenlet
-, monotonic
-, six
-, nose
-, pyopenssl
-, iana-etc
-, libredirect
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  dnspython,
+  greenlet,
+  isPyPy,
+  six,
+
+  # tests
+  iana-etc,
+  pytestCheckHook,
+  libredirect,
 }:
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.32.0";
+  version = "0.35.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2f0bb8ed0dc0ab21d683975d5d8ab3c054d588ce61def9faf7a465ee363e839b";
+  src = fetchFromGitHub {
+    owner = "eventlet";
+    repo = "eventlet";
+    rev = "v${version}";
+    hash = "sha256-jMbCxqIn9f9+16rFwpQdkBHj6NwTNkQxnSVV4qQ1fjM=";
   };
 
-  propagatedBuildInputs = [ dnspython greenlet pyopenssl six ]
-    ++ lib.optional (pythonOlder "3.5") monotonic;
+  nativeBuildInputs = [
+    hatch-vcs
+    hatchling
+  ];
 
-  checkInputs = [ nose ];
+  propagatedBuildInputs = [
+    dnspython
+    greenlet
+    six
+  ];
 
-  doCheck = !stdenv.isDarwin;
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # libredirect is not available on darwin
+  # tests hang on pypy indefinitely
+  doCheck = !stdenv.isDarwin && !isPyPy;
 
   preCheck = lib.optionalString doCheck ''
     echo "nameserver 127.0.0.1" > resolv.conf
@@ -37,23 +58,21 @@ buildPythonPackage rec {
     export EVENTLET_IMPORT_VERSION_ONLY=0
   '';
 
-  checkPhase = ''
-    runHook preCheck
+  disabledTests = [
+    # AssertionError: Expected single line "pass" in stdout
+    "test_fork_after_monkey_patch"
+    # Tests requires network access
+    "test_getaddrinfo"
+    "test_hosts_no_network"
+  ];
 
-    # test_fork-after_monkey_patch fails on aarch64 on hydra only
-    #   AssertionError: Expected single line "pass" in stdout
-    nosetests --exclude test_getaddrinfo --exclude test_hosts_no_network --exclude test_fork_after_monkey_patch
-
-    runHook postCheck
-  '';
-
-  # unfortunately, it needs /etc/protocol to be present to not fail
-  # pythonImportsCheck = [ "eventlet" ];
+  pythonImportsCheck = [ "eventlet" ];
 
   meta = with lib; {
+    changelog = "https://github.com/eventlet/eventlet/blob/v${version}/NEWS";
+    description = "Concurrent networking library for Python";
     homepage = "https://github.com/eventlet/eventlet/";
-    description = "A concurrent networking library for Python";
-    maintainers = with maintainers; [ SuperSandro2000 ];
     license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

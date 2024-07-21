@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-Kv4BsFB08rkGRkePFIkjjuhK1TnLPS4m+PUlgKG5cTQ=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -32,8 +32,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Open source Confluence alternative for internal & external docs built with Golang + EmberJS";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ ma27 elseym ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ ];
+    mainProgram = "documize";
     homepage = "https://www.documize.com/";
   };
 }

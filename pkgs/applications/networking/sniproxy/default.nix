@@ -2,24 +2,25 @@
 
 stdenv.mkDerivation rec {
   pname = "sniproxy";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "dlundquist";
     repo = "sniproxy";
     rev = version;
-    sha256 = "0isgl2lyq8vz5kkxpgyh1sgjlb6sqqybakr64w2mfh29k5ls8xzm";
+    sha256 = "sha256-htM9CrzaGnn1dnsWQ+0V6N65Og7rsFob3BlSc4UGfFU=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ gettext libev pcre udns ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/dlundquist/sniproxy";
     description = "Transparent TLS and HTTP layer 4 proxy with SNI support";
     license = licenses.bsd2;
-    maintainers = [ maintainers.womfoo ];
+    maintainers = with maintainers; [ womfoo raitobezarius ];
     platforms = platforms.linux;
+    mainProgram = "sniproxy";
   };
 
 }

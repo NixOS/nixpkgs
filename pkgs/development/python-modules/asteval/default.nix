@@ -1,38 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "0.9.25";
-  disabled = pythonOlder "3.6";
+  version = "1.0.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "newville";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-Jy+4NifItCGI1Jj25VakwoJcrpZw0Ng4cArf2M31WGs=";
+    owner = "lmfit";
+    repo = "asteval";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Ee7EAcSfLmo9ijm4oa3nEVPoz1pgLx4ozbSXBW3kRPw=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=asteval --cov-report html" ""
+  '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "asteval" ];
 
+  disabledTests = [
+    # AssertionError: 'ImportError' != None
+    "test_set_default_nodehandler"
+  ];
+
   meta = with lib; {
     description = "AST evaluator of Python expression using ast module";
-    homepage = "https://github.com/newville/asteval";
+    homepage = "https://github.com/lmfit/asteval";
+    changelog = "https://github.com/lmfit/asteval/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

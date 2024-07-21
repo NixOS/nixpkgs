@@ -1,42 +1,51 @@
-{lib, stdenv, fetchurl, java, makeWrapper}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="apache-jena-fuseki";
-    version = "4.3.1";
-    name="${baseName}-${version}";
-    url="https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-${version}.tar.gz";
-    sha256 = "1r0vfa7d55lzw22yfx46mxxmz8x8pkr666vggqw2m1rzzj52z9nx";
+{ lib
+, stdenv
+, fetchurl
+, java
+, coreutils
+, which
+, makeWrapper
+  # For the test
+, pkgs
+}:
+
+stdenv.mkDerivation rec {
+  pname = "apache-jena-fuseki";
+  version = "4.9.0";
+  src = fetchurl {
+    url = "mirror://apache/jena/binaries/apache-jena-fuseki-${version}.tar.gz";
+    hash = "sha256-t25Q0lb+ecR12cDD1p6eZnzLxW0kZpPOFGvo5YK7AlI=";
   };
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
   ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
   installPhase = ''
     cp -r . "$out"
     chmod +x $out/fuseki
     ln -s "$out"/{fuseki-backup,fuseki-server,fuseki} "$out/bin"
     for i in "$out"/bin/*; do
+      # It is necessary to set the default $FUSEKI_BASE directory to a writable location
+      # By default it points to $FUSEKI_HOME/run which is in the nix store
       wrapProgram "$i" \
-        --prefix "PATH" : "${java}/bin/" \
+        --prefix "PATH" : "${java}/bin/:${coreutils}/bin:${which}/bin" \
         --set-default "FUSEKI_HOME" "$out" \
+        --run "if [ -z \"\$FUSEKI_BASE\" ]; then export FUSEKI_BASE=\"\$HOME/.local/fuseki\" ; mkdir -p \"\$HOME/.local/fuseki\" ; fi" \
         ;
     done
   '';
-  meta = {
-    inherit (s) version;
+  passthru = {
+    tests = {
+      basic-test = pkgs.callPackage ./fuseki-test.nix { };
+    };
+  };
+  meta = with lib; {
     description = "SPARQL server";
-    license = lib.licenses.asl20;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
-    homepage = "http://jena.apache.org";
-    downloadPage = "http://archive.apache.org/dist/jena/binaries/";
-    downloadURLRegexp = "apache-jena-fuseki-.*[.]tar[.]gz\$";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode binaryNativeCode ];
+    homepage = "https://jena.apache.org";
+    downloadPage = "https://archive.apache.org/dist/jena/binaries/";
+    mainProgram = "fuseki";
   };
 }

@@ -1,39 +1,43 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, lib
-
-# pythonPackages
-, pylint
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pylint,
+  pytestCheckHook,
+  pythonOlder,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "pylint-plugin-utils";
-  version = "0.6";
-  disabled = !isPy3k;
+  version = "0.8.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
-    rev = version;
-    sha256 = "1zapmbczxs1phrwbd0yvpfxhljd2pyv4pi9rwggaq38lcnc325s7";
+    repo = "pylint-plugin-utils";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xuPU1txfB+6+zJjtlfvNA950S5n7/PWPPFn1F3RtvCc=";
   };
 
+  nativeBuildInputs = [ poetry-core ];
+
   propagatedBuildInputs = [
-    pylint toml
+    pylint
+    toml
   ];
 
-  checkPhase = ''
-    python tests.py
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pylint_plugin_utils" ];
 
   meta = with lib; {
     description = "Utilities and helpers for writing Pylint plugins";
     homepage = "https://github.com/PyCQA/pylint-plugin-utils";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

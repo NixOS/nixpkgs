@@ -18,9 +18,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Virtual machine designed for extremely compact low-level audiovisual programs";
-    homepage = "http://www.pelulamu.net/ibniz/";
+    homepage = "https://github.com/viznut/IBNIZ";
     license = licenses.zlib;
     platforms = platforms.linux;
     maintainers = [ maintainers.dezgeg ];
+    mainProgram = "ibniz";
   };
 }

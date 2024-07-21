@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vampire";
-  version = "4.5.1";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "vprover";
     repo = "vampire";
-    rev = version;
-    sha256 = "0q9gqyq96amdnhxgwjyv0r2sxakikp3jvmizgj2h0spfz643p8db";
+    rev = "v${version}";
+    sha256 = "0z71nxjak3ibp842r8iv37w1x3cbkrmjs88lpvxqb4sgrbyk38zd";
   };
 
   buildInputs = [ z3 zlib ];
@@ -19,22 +19,20 @@ stdenv.mkDerivation rec {
     # https://github.com/vprover/vampire/pull/54
     (fetchpatch {
       name = "fix-apple-cygwin-defines.patch";
-      url = "https://github.com/vprover/vampire/pull/54.patch";
+      url = "https://github.com/vprover/vampire/commit/b4bddd3bcac6a7688742da75c369b7b3213f6d1c.patch";
       sha256 = "0i6nrc50wlg1dqxq38lkpx4rmfb3lf7s8f95l4jkvqp0nxa20cza";
     })
     # https://github.com/vprover/vampire/pull/55
     (fetchpatch {
       name = "fix-wait-any.patch";
-      url = "https://github.com/vprover/vampire/pull/55.patch";
+      url = "https://github.com/vprover/vampire/commit/6da10eabb333aec54cdf13833ea33cb851159543.patch";
       sha256 = "1pwfpwpl23bqsgkmmvw6bnniyvp5j9v8l3z9s9pllfabnfcrcz9l";
     })
-    # https://github.com/vprover/vampire/pull/56
-    (fetchpatch {
-      name = "fenv.patch";
-      url = "https://github.com/vprover/vampire/pull/56.patch";
-      sha256 = "0xl3jcyqmk146mg3qj5hdd0pbja6wbq3250zmfhbxqrjh40mm40g";
-    })
   ];
+
+  postPatch = ''
+    patch -p1 -i ${../avy/minisat-fenv.patch} -d Minisat || true
+  '';
 
   enableParallelBuilding = true;
 
@@ -48,9 +46,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://vprover.github.io/";
-    description = "The Vampire Theorem Prover";
+    description = "Vampire Theorem Prover";
+    mainProgram = "vampire";
     platforms = platforms.unix;
-    license = licenses.unfree;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ gebner ];
   };
 }

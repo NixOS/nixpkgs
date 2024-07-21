@@ -1,38 +1,40 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
-, qtbase
+, asio
 , obs-studio
-, asio_1_10
+, qtbase
 , websocketpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "obs-websocket";
-  version = "4.9.1";
+  version = "4.9.1-compat";
 
   src = fetchFromGitHub {
-    owner = "Palakis";
+    owner = "obsproject";
     repo = "obs-websocket";
     rev = version;
-    sha256 = "sha256-XCiSNWTiA/u+3IbYlhIc5bCjKjLHDRVjYIG5MEoYnr0=";
+    sha256 = "sha256-cHsJxoQjwbWLxiHgIa3Es0mu62vyLCAd1wULeZqZsJM=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ qtbase obs-studio asio_1_10 websocketpp ];
+  buildInputs = [ asio obs-studio qtbase websocketpp ];
 
   dontWrapQtApps = true;
 
-  cmakeFlags = [
-    "-DLIBOBS_INCLUDE_DIR=${obs-studio.src}/libobs"
-  ];
+  postInstall = ''
+    mkdir $out/lib $out/share
+    mv $out/obs-plugins/64bit $out/lib/obs-plugins
+    rm -rf $out/obs-plugins
+    mv $out/data $out/share/obs
+  '';
 
   meta = with lib; {
-    description = "Remote-control OBS Studio through WebSockets";
-    homepage = "https://github.com/Palakis/obs-websocket";
-    maintainers = with maintainers; [ erdnaxe ];
+    description = "Legacy websocket 4.9.1 protocol support for OBS Studio 28 or above";
+    homepage = "https://github.com/obsproject/obs-websocket";
+    maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

@@ -15,12 +15,13 @@ buildGoModule rec {
     "-s" "-w" "-X main.version=${version}" "-X main.commitHash=${src.rev}" "-X main.date=19700101T000000"
   ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     description = "CLI to render Go template text files";
+    mainProgram = "renderizer";
     inherit (src.meta) homepage;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = [];
   };
 }

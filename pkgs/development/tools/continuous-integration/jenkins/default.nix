@@ -1,14 +1,14 @@
 { lib, stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused
-, makeWrapper, nix, nixfmt, openjdk, writeScript, nixosTests, jq, cacert, curl
-}:
+, makeWrapper, nix, nixfmt-classic, openjdk, writeScript, nixosTests, jq, cacert
+, curl }:
 
 stdenv.mkDerivation rec {
   pname = "jenkins";
-  version = "2.319.1";
+  version = "2.452.3";
 
   src = fetchurl {
-    url = "http://mirrors.jenkins.io/war-stable/${version}/jenkins.war";
-    sha256 = "0qm562v7jwc9mjpbn1f808kg97axy1mraq3s5h679niffn588jvy";
+    url = "https://get.jenkins.io/war-stable/${version}/jenkins.war";
+    hash = "sha256-Rf0rh3+XCaUrmE2cfW9DW8Bfat7mEpHSLTC18ej9jFk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) jenkins; };
+    tests = { inherit (nixosTests) jenkins jenkins-cli; };
 
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
           gnused
           jq
           nix
-          nixfmt
+          nixfmt-classic
         ]
       }
 
@@ -51,11 +51,10 @@ stdenv.mkDerivation rec {
 
       version="$(jq -r .version <<<$core_json)"
       sha256="$(jq -r .sha256 <<<$core_json)"
-      hash="$(nix-hash --type sha256 --to-base32 "$sha256")"
-      url="$(jq -r .url <<<$core_json)"
+      hash="$(nix hash to-sri --type sha256 "$sha256")"
 
       if [ ! "$oldVersion" = "$version" ]; then
-        update-source-version jenkins "$version" "$hash" "$url"
+        update-source-version jenkins "$version" "$hash"
         nixpkgs="$(git rev-parse --show-toplevel)"
         default_nix="$nixpkgs/pkgs/development/tools/continuous-integration/jenkins/default.nix"
         nixfmt "$default_nix"
@@ -66,10 +65,14 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "An extendable open source continuous integration server";
-    homepage = "https://jenkins-ci.org";
+    description = "Extendable open source continuous integration server";
+    homepage = "https://jenkins.io/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
+    maintainers = with maintainers;
+      [ coconnor earldouglas nequissimus ] ++ teams.helsinki-systems.members;
+    changelog = "https://www.jenkins.io/changelog-stable/#v${version}";
+    mainProgram = "jenkins-cli";
     platforms = platforms.all;
-    maintainers = with maintainers; [ coconnor fpletz earldouglas nequissimus ];
   };
 }

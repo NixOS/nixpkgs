@@ -11,24 +11,19 @@
 , libgee
 , desktop-file-utils
 , geoclue2
-, wrapGAppsHook
+, granite
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-geoclue2";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0hx3sky0vd2vshkscy3w5x3s18gd45cfqh510xhbmvc0sa32q9gd";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-DvE0/bR4mVfqCw/c/1h75M8DfCiNPZ2h6Jl6ySk1qxs=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +32,12 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     geoclue2
+    granite
     gtk3
     libgee
   ];
@@ -50,6 +46,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Pantheon Geoclue2 Agent";

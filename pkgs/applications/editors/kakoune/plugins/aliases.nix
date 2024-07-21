@@ -1,8 +1,8 @@
 # Deprecated aliases - for backward compatibility
 
-lib: overriden:
+lib: overridden:
 
-with overriden;
+with overridden;
 
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
@@ -21,7 +21,7 @@ let
 
   # Make sure that we are not shadowing something from
   # all-packages.nix.
-  checkInPkgs = n: alias: if builtins.hasAttr n overriden
+  checkInPkgs = n: alias: if builtins.hasAttr n overridden
                           then throw "Alias ${n} is still in kakounePlugins"
                           else alias;
 
@@ -39,6 +39,7 @@ in
 mapAliases ({
   kak-auto-pairs         = auto-pairs-kak; # backwards compat, added 2021-01-04
   kak-buffers            = kakoune-buffers; # backwards compat, added 2021-01-04
+  kak-byline             = byline-kak; # backwards compat, added 2023-10-22
   kak-fzf                = fzf-kak; # backwards compat, added 2021-01-04
   kak-powerline          = powerline-kak; # backwards compat, added 2021-01-04
   kak-prelude            = prelude-kak; # backwards compat, added 2021-01-04

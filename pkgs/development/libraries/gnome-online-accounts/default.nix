@@ -1,53 +1,51 @@
-{ lib, stdenv
-, fetchFromGitLab
+{ stdenv
+, lib
+, fetchurl
 , pkg-config
 , vala
 , glib
 , meson
 , ninja
-, python3
 , libxslt
-, gtk3
-, webkitgtk
+, gtk4
+, enableBackend ? stdenv.isLinux
 , json-glib
-, librest
+, libadwaita
+, librest_1_0
+, libxml2
 , libsecret
 , gtk-doc
 , gobject-introspection
 , gettext
-, icu
 , glib-networking
-, libsoup
+, libsoup_3
 , docbook-xsl-nons
 , docbook_xml_dtd_412
 , gnome
-, gcr
+, gcr_4
 , libkrb5
 , gvfs
 , dbus
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts";
-  version = "3.40.1";
+  version = "3.50.3";
 
-  # https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues/87
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "gnome-online-accounts";
-    rev = version;
-    sha256 = "sha256-q4bLGOOGoGH/Et3hu7/372tjNMouX9ePTanIo0c4Jbw=";
+  outputs = [ "out" "dev" ] ++ lib.optionals enableBackend [ "man" "devdoc" ];
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-online-accounts/${lib.versions.majorMinor finalAttrs.version}/gnome-online-accounts-${finalAttrs.version}.tar.xz";
+    hash = "sha256-5xSmfRccVxRDYet07oKhexXQqCIo/xiM+ScE9WJsopQ=";
   };
-
-  outputs = [ "out" "man" "dev" "devdoc" ];
 
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.
-    "-Dgtk_doc=true"
-    "-Dman=true"
-    "-Dmedia_server=true"
+    "-Dgoabackend=${lib.boolToString enableBackend}"
+    "-Dgtk_doc=${lib.boolToString enableBackend}"
+    "-Dman=${lib.boolToString enableBackend}"
+    "-Dwebdav=true"
   ];
 
   nativeBuildInputs = [
@@ -61,45 +59,39 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gcr
+    gcr_4
     glib
     glib-networking
-    gtk3
+    gtk4
+    libadwaita
     gvfs # OwnCloud, Google Drive
-    icu
     json-glib
     libkrb5
-    librest
+    librest_1_0
+    libxml2
     libsecret
-    libsoup
-    webkitgtk
+    libsoup_3
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
+  separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {
       versionPolicy = "odd-unstable";
-      packageName = pname;
+      packageName = "gnome-online-accounts";
     };
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/GnomeOnlineAccounts";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-online-accounts";
     description = "Single sign-on framework for GNOME";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
   };
-}
+})

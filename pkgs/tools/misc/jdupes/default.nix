@@ -1,19 +1,22 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitea, libjodycode }:
 
 stdenv.mkDerivation rec {
   pname = "jdupes";
-  version = "1.20.2";
+  version = "1.27.3";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "jbruchon";
     repo  = "jdupes";
     rev   = "v${version}";
-    sha256 = "sha256-3hKO+hNwYiJZ9Wn53vM7DHZmtvDhtgtSbW7bCMCT7s0=";
+    hash = "sha256-hR5nl8G7TYVm4ol/jgo7iOb4dLr2MovgjKSXCD2UwMg=";
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The testdir
     # directories have such files and will be removed.
-    extraPostFetch = "rm -r $out/testdir";
+    postFetch = "rm -r $out/testdir";
   };
+
+  buildInputs = [ libjodycode ];
 
   dontConfigure = true;
 
@@ -31,11 +34,11 @@ stdenv.mkDerivation rec {
   doCheck = false; # broken Makefile, the above also removes tests
 
   postInstall = ''
-    install -Dm444 -t $out/share/doc/jdupes CHANGES LICENSE README.md
+    install -Dm444 -t $out/share/doc/jdupes CHANGES.txt LICENSE.txt README.md
   '';
 
   meta = with lib; {
-    description = "A powerful duplicate file finder and an enhanced fork of 'fdupes'";
+    description = "Powerful duplicate file finder and an enhanced fork of 'fdupes'";
     longDescription = ''
       jdupes is a program for identifying and taking actions upon
       duplicate files. This fork known as 'jdupes' is heavily modified
@@ -43,6 +46,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/jbruchon/jdupes";
     license = licenses.mit;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "jdupes";
   };
 }

@@ -1,29 +1,31 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, impacket
-, ldap3
-, pyyaml
-, samba
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  samba,
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "enum4linux-ng";
-  version = "1.1.0";
+  version = "1.3.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cddmp";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0fk6hzmvxb5y3nb41qr6dssxhdahkh5nxhbx480x42fhnqpssir5";
+    repo = "enum4linux-ng";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VpNYgdgvsQG5UcxoyyLCj5ijJdIKKhCSqnHTvTgD4lA=";
   };
 
-  propagatedBuildInputs = [
-    impacket
-    ldap3
-    pyyaml
-    samba
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies =
+    [ samba ]
+    ++ (with python3.pkgs; [
+      impacket
+      ldap3
+      pyyaml
+    ]);
 
   # It's only a script and not a Python module. Project has no tests
   doCheck = false;
@@ -35,7 +37,9 @@ buildPythonApplication rec {
       enumerating information from Windows and Samba systems.
     '';
     homepage = "https://github.com/cddmp/enum4linux-ng";
+    changelog = "https://github.com/cddmp/enum4linux-ng/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "enum4linux-ng";
   };
 }

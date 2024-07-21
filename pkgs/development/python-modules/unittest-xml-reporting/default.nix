@@ -1,23 +1,49 @@
-{lib, fetchPypi, buildPythonPackage, isPy27, six}:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "unittest-xml-reporting";
-  version = "3.0.4";
-  disabled = isPy27;
+  version = "3.2.0";
+  pyproject = true;
 
-  propagatedBuildInputs = [six];
+  disabled = pythonOlder "3.7";
 
-  # The tarball from Pypi doesn't actually contain the unit tests
-  doCheck = false;
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "984cebba69e889401bfe3adb9088ca376b3a1f923f0590d005126c1bffd1a695";
+  src = fetchFromGitHub {
+    owner = "xmlrunner";
+    repo = "unittest-xml-reporting";
+    rev = "refs/tags/${version}";
+    hash = "sha256-lOJ/+8CVJUXdIaZLLF5PpPkG0DzlNgo46kRZ1Xy7Ju0=";
   };
+
+  build-system = [ setuptools ];
+
+  dependencies = [ lxml ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.11") [
+      # AttributeError: 'tuple' object has no attribute 'shortDescription'
+      "test_basic_unittest_constructs"
+      "test_unexpected_success"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [ "test_xmlrunner_hold_traceback" ];
+
+  pythonImportsCheck = [ "xmlrunner" ];
+
   meta = with lib; {
-    homepage = "https://github.com/xmlrunner/unittest-xml-reporting/tree/master/";
-    description = "A unittest runner that can save test results to XML files";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ rprospero ];
+    description = "Unittest-based test runner with Ant/JUnit like XML reporting";
+    homepage = "https://github.com/xmlrunner/unittest-xml-reporting";
+    changelog = "https://github.com/xmlrunner/unittest-xml-reporting/releases/tag/${version}";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ rprospero ];
   };
 }

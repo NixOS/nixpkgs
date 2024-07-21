@@ -6,7 +6,7 @@
 , libarchive
 , pv
 , squashfsTools
-, buildFHSUserEnv
+, buildFHSEnv
 , pkgs
 }:
 
@@ -26,10 +26,11 @@ rec {
     ];
   };
 
-  extract = args@{ name ? "${args.pname}-${args.version}", src, ... }: pkgs.runCommand "${name}-extracted" {
+  extract = args@{ name ? "${args.pname}-${args.version}", postExtract ? "", src, ... }: pkgs.runCommand "${name}-extracted" {
       buildInputs = [ appimage-exec ];
     } ''
       appimage-exec.sh -x $out ${src}
+      ${postExtract}
     '';
 
   # for compatibility, deprecated
@@ -37,37 +38,51 @@ rec {
   extractType2 = extract;
   wrapType1 = wrapType2;
 
-  wrapAppImage = args@{ name ? "${args.pname}-${args.version}", src, extraPkgs, ... }: buildFHSUserEnv
+  wrapAppImage = args@{
+    src,
+    extraPkgs ? pkgs: [ ],
+    meta ? {},
+    ...
+  }: buildFHSEnv
     (defaultFhsEnvArgs // {
-      inherit name;
-
       targetPkgs = pkgs: [ appimage-exec ]
         ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
       runScript = "appimage-exec.sh -w ${src} --";
-    } // (removeAttrs args ([ "pname" "version" ] ++ (builtins.attrNames (builtins.functionArgs wrapAppImage)))));
 
-  wrapType2 = args@{ name ? "${args.pname}-${args.version}", src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
+      meta = {
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      } // meta;
+    } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
+
+  wrapType2 = args@{ src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
     (args // {
-      inherit name extraPkgs;
-      src = extract { inherit name src; };
+      inherit extraPkgs;
+      src = extract (lib.filterAttrs (key: value: builtins.elem key [ "name" "pname" "version" "src" ]) args);
+
+      # passthru src to make nix-update work
+      # hack to keep the origin position (unsafeGetAttrPos)
+      passthru = lib.pipe args [
+        lib.attrNames
+        (lib.remove "src")
+        (removeAttrs args)
+      ] // args.passthru or { };
     });
 
   defaultFhsEnvArgs = {
-    name = "appimage-env";
-
     # Most of the packages were taken from the Steam chroot
     targetPkgs = pkgs: with pkgs; [
       gtk3
       bashInteractive
-      gnome.zenity
-      python2
+      zenity
       xorg.xrandr
       which
       perl
       xdg-utils
       iana-etc
       krb5
+      gsettings-desktop-schemas
+      hicolor-icon-theme # dont show a gtk warning about hicolor not being installed
     ];
 
     # list of libraries expected in an appimage environment:
@@ -104,9 +119,8 @@ rec {
       xorg.libXi
       xorg.libSM
       xorg.libICE
-      gnome2.GConf
       freetype
-      (curl.override { gnutlsSupport = true; opensslSupport = false; })
+      curlWithGnuTls
       nspr
       nss
       fontconfig
@@ -123,7 +137,6 @@ rec {
       atk
       at-spi2-atk
       libudev0-shim
-      networkmanager098
 
       xorg.libXt
       xorg.libXmu
@@ -146,13 +159,16 @@ rec {
       wayland
       mesa
       libxkbcommon
+      vulkan-loader
 
       flac
-      freeglut
+      libglut
       libjpeg
       libpng12
+      libpulseaudio
       libsamplerate
       libmikmod
+      libthai
       libtheora
       libtiff
       pixman
@@ -180,11 +196,15 @@ rec {
       fribidi
       p11-kit
 
+      gmp
+
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage
       libtool.lib # for Synfigstudio
       xorg.libxshmfence # for apple-music-electron
       at-spi2-core
+      pciutils # for FreeCAD
+      pipewire # immersed-vr wayland support
     ];
   };
 }

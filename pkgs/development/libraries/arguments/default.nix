@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "arguments";
-  name  = "${pname}-2015-11-30";
+  version = "unstable-2015-11-30";
 
   owner = "BIC-MNI";
 
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Library for argument handling for MINC programs";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = licenses.free;
+    license   = licenses.gpl2Plus;
   };
 }

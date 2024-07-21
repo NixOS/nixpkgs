@@ -20,7 +20,7 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Whether to enable the <command>at</command> daemon, a command scheduler.
+        Whether to enable the {command}`at` daemon, a command scheduler.
       '';
     };
 
@@ -28,10 +28,10 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Whether to make <filename>/var/spool/at{jobs,spool}</filename>
+        Whether to make {file}`/var/spool/at{jobs,spool}`
         writeable by everyone (and sticky).  This is normally not
-        needed since the <command>at</command> commands are
-        setuid/setgid <literal>atd</literal>.
+        needed since the {command}`at` commands are
+        setuid/setgid `atd`.
      '';
     };
 

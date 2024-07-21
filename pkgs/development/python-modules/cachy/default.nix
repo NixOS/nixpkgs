@@ -1,12 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi
-, redis
-, memcached
-, msgpack
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  redis,
+  python-memcached,
+  msgpack,
 }:
 
 buildPythonPackage rec {
   pname = "cachy";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     redis
-    memcached
+    python-memcached
     msgpack
   ];
 

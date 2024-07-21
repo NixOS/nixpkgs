@@ -1,44 +1,58 @@
-{ lib, stdenv, fetchFromGitHub, wxGTK, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, wrapGAppsHook3
+, makeWrapper
+, wxGTK
+, Cocoa
+, unstableGitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
-  version = "1.0.1";
+  version = "0-unstable-2024-06-29";
 
   src = fetchFromGitHub {
-    owner  = "aardappel";
-    repo   = "treesheets";
-    rev    = "v${version}";
-    sha256 = "0krsj7i5yr76imf83krz2lmlmpbsvpwqg2d4r0jwxiydjfyj4qr4";
+    owner = "aardappel";
+    repo = "treesheets";
+    rev = "0d3eff693f23929e8b53317b08df9da2d610994f";
+    hash = "sha256-c5HMxFxDD439kKguW8Mwkjmnavh2MSSiODTgrnZcbjo=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ wxGTK ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    wrapGAppsHook3
+    makeWrapper
+  ];
 
-  preConfigure = "cd src";
+  buildInputs = [
+    wxGTK
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+  ];
 
-  postInstall = ''
-    mkdir "$out/share" -p
-    cp -av ../TS "$out/share/libexec"
+  env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
 
-    mkdir "$out/bin" -p
-    makeWrapper "$out/share/libexec/treesheets" "$out/bin/treesheets"
-
-    mkdir "$out/share/doc" -p
-
-    for f in readme.html docs examples
-    do
-      mv -v "$out/share/libexec/$f" "$out/share/doc"
-      ln -sv "$out/share/doc/$f" "$out/share/libexec/$f"
-    done
-
-    mkdir "$out/share/applications" -p
-    mv -v "$out/share/libexec/treesheets.desktop" "$out/share/applications"
-    substituteInPlace "$out/share/applications/treesheets.desktop" \
-      --replace "Icon=images/treesheets.svg" "Icon=$out/share/libexec/images/treesheets.svg"
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    shopt -s extglob
+    mkdir -p $out/{share/treesheets,bin}
+    mv $out/!(share) $out/share/treesheets
+    makeWrapper $out/{share/treesheets,bin}/treesheets \
+      --chdir $out/share/treesheets
   '';
+
+  passthru = {
+    updateScript = unstableGitUpdater {
+      hardcodeZeroVersion = true;
+    };
+  };
 
   meta = with lib; {
     description = "Free Form Data Organizer";
+    mainProgram = "treesheets";
 
     longDescription = ''
       The ultimate replacement for spreadsheets, mind mappers, outliners,
@@ -49,9 +63,9 @@ stdenv.mkDerivation rec {
       planning, requirements gathering, presentation of information, etc.
     '';
 
-    homepage    = "http://strlen.com/treesheets/";
-    maintainers = with maintainers; [ obadz avery ];
-    platforms   = platforms.linux;
-    license     = licenses.zlib;
+    homepage = "https://strlen.com/treesheets/";
+    maintainers = with maintainers; [ obadz ];
+    platforms = platforms.unix;
+    license = licenses.zlib;
   };
 }

@@ -1,19 +1,70 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pytest, pytest-metadata, setuptools-scm }:
-
-buildPythonPackage rec {
+{
+  lib,
+  buildNpmPackage,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  hatch-vcs,
+  hatchling,
+  jinja2,
+  pytest,
+  pytest-metadata,
+}:
+let
   pname = "pytest-html";
-  version = "3.1.1";
-  disabled = pythonOlder "3.6";
+  version = "4.1.1";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "3ee1cf319c913d19fe53aeb0bc400e7b0bc2dbeb477553733db1dad12eb75ee3";
+    pname = "pytest_html";
+    inherit version;
+    hash = "sha256-cKAeiuWAD0oHS1akyxAlyPT5sDi7pf4x48mOuZZobwc=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ pytest-metadata ];
+  web-assets = buildNpmPackage {
+    pname = "${pname}-web-assets";
+    inherit version src;
+
+    npmDepsHash = "sha256-aRod+SzVSb4bqEJzthfl/mH+DpbIe+j2+dNtrrhO2xU=";
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm644 src/pytest_html/resources/{app.js,style.css} -t $out/lib
+
+      runHook postInstall
+    '';
+  };
+in
+
+buildPythonPackage {
+  inherit pname version src;
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
+
+  nativeBuildInputs = [
+    hatch-vcs
+    hatchling
+  ];
+  buildInputs = [
+    pytest
+    web-assets
+  ];
+  propagatedBuildInputs = [
+    jinja2
+    pytest-metadata
+  ];
+
+  env.HATCH_BUILD_NO_HOOKS = true;
+
+  preBuild = ''
+    install -Dm644 ${web-assets}/lib/{app.js,style.css} -t src/pytest_html/resources
+  '';
+
+  # tests require network access
+  doCheck = false;
+
+  pythonImportsCheck = [ "pytest_html" ];
 
   meta = with lib; {
     description = "Plugin for generating HTML reports";

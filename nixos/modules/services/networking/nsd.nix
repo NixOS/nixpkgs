@@ -81,7 +81,6 @@ let
       zonesdir: "${stateDir}"
 
       # the list of dynamically added zones.
-      database:     "${stateDir}/var/nsd.db"
       pidfile:      "${pidFile}"
       xfrdfile:     "${stateDir}/var/xfrd.state"
       xfrdir:       "${stateDir}/tmp"
@@ -112,6 +111,7 @@ let
       ${maybeString "version: " cfg.version}
       xfrd-reload-timeout: ${toString cfg.xfrdReloadTimeout}
       zonefiles-check:     ${yesOrNo  cfg.zonefilesCheck}
+      zonefiles-write:     ${toString cfg.zonefilesWrite}
 
       ${maybeString "rrl-ipv4-prefix-length: " cfg.ratelimit.ipv4PrefixLength}
       ${maybeString "rrl-ipv6-prefix-length: " cfg.ratelimit.ipv6PrefixLength}
@@ -137,8 +137,8 @@ let
   '';
 
   yesOrNo = b: if b then "yes" else "no";
-  maybeString = prefix: x: if x == null then "" else ''${prefix} "${x}"'';
-  maybeToString = prefix: x: if x == null then "" else ''${prefix} ${toString x}'';
+  maybeString = prefix: x: optionalString (x != null) ''${prefix} "${x}"'';
+  maybeToString = prefix: x: optionalString (x != null) ''${prefix} ${toString x}'';
   forEach = pre: l: concatMapStrings (x: pre + x + "\n") l;
 
 
@@ -152,9 +152,7 @@ let
   copyKeys = concatStrings (mapAttrsToList (keyName: keyOptions: ''
     secret=$(cat "${keyOptions.keyFile}")
     dest="${stateDir}/private/${keyName}"
-    echo "  secret: \"$secret\"" > "$dest"
-    chown ${username}:${username} "$dest"
-    chmod 0400 "$dest"
+    install -m 0400 -o "${username}" -g "${username}" <(echo "  secret: \"$secret\"") "$dest"
   '') cfg.keys);
 
 
@@ -173,6 +171,7 @@ let
       ${maybeToString "min-retry-time:   " zone.minRetrySecs}
 
       allow-axfr-fallback: ${yesOrNo       zone.allowAXFRFallback}
+      multi-master-check: ${yesOrNo        zone.multiMasterCheck}
     ${forEach     "  allow-notify: "       zone.allowNotify}
     ${forEach     "  request-xfr: "        zone.requestXFR}
 
@@ -194,19 +193,8 @@ let
                        zone.children
       );
 
-  # fighting infinite recursion
-  zoneOptions = zoneOptionsRaw // childConfig zoneOptions1 true;
-  zoneOptions1 = zoneOptionsRaw // childConfig zoneOptions2 false;
-  zoneOptions2 = zoneOptionsRaw // childConfig zoneOptions3 false;
-  zoneOptions3 = zoneOptionsRaw // childConfig zoneOptions4 false;
-  zoneOptions4 = zoneOptionsRaw // childConfig zoneOptions5 false;
-  zoneOptions5 = zoneOptionsRaw // childConfig zoneOptions6 false;
-  zoneOptions6 = zoneOptionsRaw // childConfig null         false;
-
-  childConfig = x: v: { options.children = { type = types.attrsOf x; visible = v; }; };
-
   # options are ordered alphanumerically
-  zoneOptionsRaw = types.submodule {
+  zoneOptions = types.submodule {
     options = {
 
       allowAXFRFallback = mkOption {
@@ -226,26 +214,33 @@ let
                   ];
         description = ''
           Listed primary servers are allowed to notify this secondary server.
-          <screen><![CDATA[
-          Format: <ip> <key-name | NOKEY | BLOCKED>
 
-          <ip> either a plain IPv4/IPv6 address or range. Valid patters for ranges:
-          * 10.0.0.0/24            # via subnet size
-          * 10.0.0.0&255.255.255.0 # via subnet mask
-          * 10.0.0.1-10.0.0.254    # via range
+          Format: `<ip> <key-name | NOKEY | BLOCKED>`
+
+          `<ip>` either a plain IPv4/IPv6 address or range.
+          Valid patters for ranges:
+          * `10.0.0.0/24`: via subnet size
+          * `10.0.0.0&255.255.255.0`: via subnet mask
+          * `10.0.0.1-10.0.0.254`: via range
 
           A optional port number could be added with a '@':
-          * 2001:1234::1@1234
+          * `2001:1234::1@1234`
 
-          <key-name | NOKEY | BLOCKED>
-          * <key-name> will use the specified TSIG key
-          * NOKEY      no TSIG signature is required
-          * BLOCKED    notifies from non-listed or blocked IPs will be ignored
-          * ]]></screen>
+          `<key-name | NOKEY | BLOCKED>`
+          * `<key-name>` will use the specified TSIG key
+          * `NOKEY` no TSIG signature is required
+          * `BLOCKED`notifies from non-listed or blocked IPs will be ignored
         '';
       };
 
       children = mkOption {
+        # TODO: This relies on the fact that `types.anything` doesn't set any
+        # values of its own to any defaults, because in the above zoneConfigs',
+        # values from children override ones from parents, but only if the
+        # attributes are defined. Because of this, we can't replace the element
+        # type here with `zoneConfigs`, since that would set all the attributes
+        # to default values, breaking the parent inheriting function.
+        type = types.attrsOf types.anything;
         default = {};
         description = ''
           Children zones inherit all options of their parents. Attributes
@@ -343,6 +338,15 @@ let
         '';
       };
 
+      multiMasterCheck = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If enabled, checks all masters for the last zone version.
+          It uses the higher version from all configured masters.
+          Useful if you have multiple masters that have different version numbers served.
+        '';
+      };
 
       notify = mkOption {
         type = types.listOf types.str;
@@ -351,15 +355,14 @@ let
         description = ''
           This primary server will notify all given secondary servers about
           zone changes.
-          <screen><![CDATA[
-          Format: <ip> <key-name | NOKEY>
 
-          <ip> a plain IPv4/IPv6 address with on optional port number (ip@port)
+          Format: `<ip> <key-name | NOKEY>`
 
-          <key-name | NOKEY>
-          * <key-name> sign notifies with the specified key
-          * NOKEY      don't sign notifies
-          ]]></screen>
+          `<ip>` a plain IPv4/IPv6 address with on optional port number (ip@port)
+
+          `<key-name | NOKEY>`
+          - `<key-name>` sign notifies with the specified key
+          - `NOKEY` don't sign notifies
         '';
       };
 
@@ -376,7 +379,7 @@ let
         default = null;
         example = "2000::1@1234";
         description = ''
-          This address will be used for zone-transfere requests if configured
+          This address will be used for zone-transfer requests if configured
           as a secondary server or notifications in case of a primary server.
           Supply either a plain IPv4 or IPv6 address with an optional port
           number (ip@port).
@@ -389,7 +392,7 @@ let
         example = [ "192.0.2.0/24 NOKEY" "192.0.2.0/24 my_tsig_key_name" ];
         description = ''
           Allow these IPs and TSIG to transfer zones, addr TSIG|NOKEY|BLOCKED
-          address range 192.0.2.0/24, 1.2.3.4&amp;255.255.0.0, 3.0.2.20-3.0.2.40
+          address range 192.0.2.0/24, 1.2.3.4&255.255.0.0, 3.0.2.20-3.0.2.40
         '';
       };
 
@@ -397,7 +400,7 @@ let
         type = types.listOf types.str;
         default = [];
         description = ''
-          Format: <code>[AXFR|UDP] &lt;ip-address&gt; &lt;key-name | NOKEY&gt;</code>
+          Format: `[AXFR|UDP] <ip-address> <key-name | NOKEY>`
         '';
       };
 
@@ -452,9 +455,7 @@ let
   dnssecTools = pkgs.bind.override { enablePython = true; };
 
   signZones = optionalString dnssec ''
-    mkdir -p ${stateDir}/dnssec
-    chown ${username}:${username} ${stateDir}/dnssec
-    chmod 0600 ${stateDir}/dnssec
+    install -m 0600 -o "${username}" -g "${username}" -d "${stateDir}/dnssec"
 
     ${concatStrings (mapAttrsToList signZone dnssecZones)}
   '';
@@ -593,7 +594,7 @@ in
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 53;
       description = ''
         Port the service should bind do.
@@ -696,6 +697,17 @@ in
       default = true;
       description = ''
         Whether to check mtime of all zone files on start and sighup.
+      '';
+    };
+
+    zonefilesWrite = mkOption {
+      type = types.int;
+      default = 0;
+      description = ''
+        Write changed secondary zones to their zonefile every N seconds.
+        If the zone (pattern) configuration has "" zonefile, it is not written.
+        Zones that have received zone transfer updates are written to their zonefile.
+        0 disables writing to zone files.
       '';
     };
 
@@ -830,7 +842,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8952;
         description = ''
           Port number for remote control operations (uses TLS over TCP).
@@ -945,19 +957,15 @@ in
         rm -Rf "${stateDir}/private/"
         rm -Rf "${stateDir}/tmp/"
 
-        mkdir -m 0700 -p "${stateDir}/private"
-        mkdir -m 0700 -p "${stateDir}/tmp"
-        mkdir -m 0700 -p "${stateDir}/var"
+        install -dm 0700 -o "${username}" -g "${username}" "${stateDir}/private"
+        install -dm 0700 -o "${username}" -g "${username}" "${stateDir}/tmp"
+        install -dm 0700 -o "${username}" -g "${username}" "${stateDir}/var"
 
         cat > "${stateDir}/don't touch anything in here" << EOF
         Everything in this directory except NSD's state in var and dnssec
         is automatically generated and will be purged and redeployed by
         the nsd.service pre-start script.
         EOF
-
-        chown ${username}:${username} -R "${stateDir}/private"
-        chown ${username}:${username} -R "${stateDir}/tmp"
-        chown ${username}:${username} -R "${stateDir}/var"
 
         rm -rf "${stateDir}/zones"
         cp -rL "${nsdEnv}/zones" "${stateDir}/zones"

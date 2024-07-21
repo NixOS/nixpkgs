@@ -12,10 +12,8 @@ in {
         default = false;
         description = ''
           If set, all the required runtime store paths for this service are
-          bind-mounted into a <literal>tmpfs</literal>-based <citerefentry>
-            <refentrytitle>chroot</refentrytitle>
-            <manvolnum>2</manvolnum>
-          </citerefentry>.
+          bind-mounted into a `tmpfs`-based
+          {manpage}`chroot(2)`.
         '';
       };
 
@@ -26,12 +24,13 @@ in {
           Whether to include the full closure of the systemd unit file into the
           chroot, instead of just the dependencies for the executables.
 
-          <warning><para>While it may be tempting to just enable this option to
+          ::: {.warning}
+          While it may be tempting to just enable this option to
           make things work quickly, please be aware that this might add paths
           to the closure of the chroot that you didn't anticipate. It's better
-          to use <option>confinement.packages</option> to <emphasis
-          role="strong">explicitly</emphasis> add additional store paths to the
-          chroot.</para></warning>
+          to use {option}`confinement.packages` to **explicitly** add additional store paths to the
+          chroot.
+          :::
         '';
       };
 
@@ -39,7 +38,7 @@ in {
         type = types.listOf (types.either types.str types.package);
         default = [];
         description = let
-          mkScOption = optName: "<option>serviceConfig.${optName}</option>";
+          mkScOption = optName: "{option}`serviceConfig.${optName}`";
         in ''
           Additional packages or strings with context to add to the closure of
           the chroot. By default, this includes all the packages from the
@@ -48,12 +47,14 @@ in {
             "ExecStopPost"
           ]} and ${mkScOption "ExecStart"} options. If you want to have all the
           dependencies of this systemd unit, you can use
-          <option>confinement.fullUnit</option>.
+          {option}`confinement.fullUnit`.
 
-          <note><para>The store paths listed in <option>path</option> are
-          <emphasis role="strong">not</emphasis> included in the closure as
+          ::: {.note}
+          The store paths listed in {option}`path` are
+          **not** included in the closure as
           well as paths from other options except those listed
-          above.</para></note>
+          above.
+          :::
         '';
       };
 
@@ -63,15 +64,12 @@ in {
         defaultText = lib.literalExpression "config.environment.binsh";
         example = lib.literalExpression ''"''${pkgs.dash}/bin/dash"'';
         description = ''
-          The program to make available as <filename>/bin/sh</filename> inside
-          the chroot. If this is set to <literal>null</literal>, no
-          <filename>/bin/sh</filename> is provided at all.
+          The program to make available as {file}`/bin/sh` inside
+          the chroot. If this is set to `null`, no
+          {file}`/bin/sh` is provided at all.
 
           This is useful for some applications, which for example use the
-          <citerefentry>
-            <refentrytitle>system</refentrytitle>
-            <manvolnum>3</manvolnum>
-          </citerefentry> library function to execute commands.
+          {manpage}`system(3)` library function to execute commands.
         '';
       };
 
@@ -79,32 +77,40 @@ in {
         type = types.enum [ "full-apivfs" "chroot-only" ];
         default = "full-apivfs";
         description = ''
-          The value <literal>full-apivfs</literal> (the default) sets up
-          private <filename class="directory">/dev</filename>, <filename
-          class="directory">/proc</filename>, <filename
-          class="directory">/sys</filename> and <filename
-          class="directory">/tmp</filename> file systems in a separate user
-          name space.
+          The value `full-apivfs` (the default) sets up
+          private {file}`/dev`, {file}`/proc`,
+          {file}`/sys`, {file}`/tmp` and {file}`/var/tmp` file systems
+          in a separate user name space.
 
-          If this is set to <literal>chroot-only</literal>, only the file
-          system name space is set up along with the call to <citerefentry>
-            <refentrytitle>chroot</refentrytitle>
-            <manvolnum>2</manvolnum>
-          </citerefentry>.
+          If this is set to `chroot-only`, only the file
+          system name space is set up along with the call to
+          {manpage}`chroot(2)`.
 
-          <note><para>This doesn't cover network namespaces and is solely for
-          file system level isolation.</para></note>
+          In all cases, unless `serviceConfig.PrivateTmp=true` is set,
+          both {file}`/tmp` and {file}`/var/tmp` paths are added to `InaccessiblePaths=`.
+          This is to overcome options like `DynamicUser=true`
+          implying `PrivateTmp=true` without letting it being turned off.
+          Beware however that giving processes the `CAP_SYS_ADMIN` and `@mount` privileges
+          can let them undo the effects of `InaccessiblePaths=`.
+
+          ::: {.note}
+          This doesn't cover network namespaces and is solely for
+          file system level isolation.
+          :::
         '';
       };
 
       config = let
-        rootName = "${mkPathSafeName name}-chroot";
         inherit (config.confinement) binSh fullUnit;
         wantsAPIVFS = lib.mkDefault (config.confinement.mode == "full-apivfs");
       in lib.mkIf config.confinement.enable {
         serviceConfig = {
-          RootDirectory = "/var/empty";
-          TemporaryFileSystem = "/";
+          ReadOnlyPaths = [ "+/" ];
+          RuntimeDirectory = [ "confinement/${mkPathSafeName name}" ];
+          RootDirectory = "/run/confinement/${mkPathSafeName name}";
+          InaccessiblePaths = [
+            "-+/run/confinement/${mkPathSafeName name}"
+          ];
           PrivateMounts = lib.mkDefault true;
 
           # https://github.com/NixOS/nixpkgs/issues/14645 is a future attempt
@@ -153,16 +159,6 @@ in {
               + " Please either define a separate service or find a way to run"
               + " commands other than ExecStart within the chroot.";
     }
-    { assertion = !cfg.serviceConfig.DynamicUser or false;
-      message = "${whatOpt "DynamicUser"}. Please create a dedicated user via"
-              + " the 'users.users' option instead as this combination is"
-              + " currently not supported.";
-    }
-    { assertion = cfg.serviceConfig ? ProtectSystem -> cfg.serviceConfig.ProtectSystem == false;
-      message = "${whatOpt "ProtectSystem"}. ProtectSystem is not compatible"
-              + " with service confinement as it fails to remount /usr within"
-              + " our chroot. Please disable the option.";
-    }
   ]) config.systemd.services);
 
   config.systemd.packages = lib.concatLists (lib.mapAttrsToList (name: cfg: let
@@ -175,8 +171,8 @@ in {
       serviceName = "${name}.service";
       excludedPath = rootPaths;
     } ''
-      mkdir -p "$out/lib/systemd/system"
-      serviceFile="$out/lib/systemd/system/$serviceName"
+      mkdir -p "$out/lib/systemd/system/$serviceName.d"
+      serviceFile="$out/lib/systemd/system/$serviceName.d/confinement.conf"
 
       echo '[Service]' > "$serviceFile"
 
@@ -186,6 +182,13 @@ in {
         binsh=${lib.escapeShellArg cfg.confinement.binSh}
         realprog="$(readlink -e "$binsh")"
         echo "BindReadOnlyPaths=$realprog:/bin/sh" >> "$serviceFile"
+      ''}
+
+      # If DynamicUser= is enabled, PrivateTmp=true is implied (and cannot be turned off).
+      # so disable them unless PrivateTmp=true is explicitely set.
+      ${lib.optionalString (!cfg.serviceConfig.PrivateTmp) ''
+        echo "InaccessiblePaths=-+/tmp" >> "$serviceFile"
+        echo "InaccessiblePaths=-+/var/tmp" >> "$serviceFile"
       ''}
 
       while read storePath; do

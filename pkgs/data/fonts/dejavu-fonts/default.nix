@@ -4,7 +4,7 @@ let
   version = "2.37";
 
   meta = {
-    description = "A typeface family based on the Bitstream Vera fonts";
+    description = "Typeface family based on the Bitstream Vera fonts";
     longDescription = ''
       The DejaVu fonts are TrueType fonts based on the BitStream Vera fonts,
       providing more styles and with greater coverage of Unicode.
@@ -12,7 +12,7 @@ let
       This package includes DejaVu Sans, DejaVu Serif, DejaVu Sans Mono, and
       the TeX Gyre DejaVu Math font.
     '';
-    homepage = "http://dejavu-fonts.org/wiki/Main_Page";
+    homepage = "https://dejavu-fonts.github.io/";
 
     # Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved.
     # Copyright (c) 2006 by Tavmjong Bah. All Rights Reserved.

@@ -1,42 +1,69 @@
-{ lib, stdenv, autoconf, automake, libtool, wrapGAppsHook, fetchFromGitHub, pkg-config
-, intltool, gtk3, json-glib, curl, glib, autoconf-archive, appstream-glib, fetchpatch }:
-
+{ lib
+, stdenv
+, appstream-glib
+, curl
+, desktop-file-utils
+, fetchFromGitHub
+, geoip
+, gettext
+, glib
+, glib-networking
+, gtk3
+, json-glib
+, libappindicator
+, libmrss
+, libproxy
+, libsoup_3
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+}:
 
 stdenv.mkDerivation rec {
   pname = "transmission-remote-gtk";
-  version = "1.4.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "transmission-remote-gtk";
     repo = "transmission-remote-gtk";
-    rev = version;
-    sha256 = "1pipc1f94jdppv597mqmcj2kw2rdvaqcbl512v7z8vir76p1a7gk";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/syZI/5LhuYLvXrNknnpbGHEH0z5iHeye2YRNJFWZJ0=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/transmission-remote-gtk/transmission-remote-gtk/commit/0f5cc8a9942e220ea0f7d0b17db4a78d094e3b65.patch";
-      sha256 = "195rsjpbc0gzmr9bycvq4mra7abp3hd9by3a5vvcmxsh5ipikycf";
-    })
-  ];
-
-  preConfigure = "./autogen.sh";
-
-  nativeBuildInputs= [
-    autoconf automake libtool wrapGAppsHook
-    pkg-config intltool autoconf-archive
+  nativeBuildInputs = [
     appstream-glib
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook3
   ];
 
-  buildInputs = [ gtk3 json-glib curl glib ];
+  buildInputs = [
+    curl
+    geoip
+    gettext
+    glib
+    gtk3
+    json-glib
+    libappindicator
+    libmrss
+    libproxy
+    libsoup_3
+    # For TLS support.
+    glib-networking
+  ];
 
-  doCheck = false; # fails with style validation error
+  doCheck = false; # Requires network access
 
   meta = with lib; {
     description = "GTK remote control for the Transmission BitTorrent client";
-    homepage = "https://github.com/ajf8/transmission-remote-gtk";
+    mainProgram = "transmission-remote-gtk";
+    homepage = "https://github.com/transmission-remote-gtk/transmission-remote-gtk";
+    changelog = "https://github.com/transmission-remote-gtk/transmission-remote-gtk/releases/tag/${version}";
     license = licenses.gpl2;
-    maintainers = [ maintainers.ehmry ];
+    maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;
   };
 }

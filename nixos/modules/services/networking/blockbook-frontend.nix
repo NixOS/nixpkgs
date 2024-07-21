@@ -10,14 +10,9 @@ let
 
     options = {
 
-      enable = mkEnableOption "blockbook-frontend application.";
+      enable = mkEnableOption "blockbook-frontend application";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.blockbook;
-        defaultText = literalExpression "pkgs.blockbook";
-        description = "Which blockbook package to use.";
-      };
+      package = mkPackageOption pkgs "blockbook" { };
 
       user = mkOption {
         type = types.str;
@@ -37,7 +32,7 @@ let
         example = "/etc/secrets/blockbook-frontend-${name}/certFile";
         description = ''
           To enable SSL, specify path to the name of certificate files without extension.
-          Expecting <filename>certFile.crt</filename> and <filename>certFile.key</filename>.
+          Expecting {file}`certFile.crt` and {file}`certFile.key`.
         '';
       };
 
@@ -52,7 +47,7 @@ let
         type = types.str;
         default = "Bitcoin";
         description = ''
-          See <link xlink:href="https://github.com/trezor/blockbook/blob/master/bchain/coins/blockchain.go#L61"/>
+          See <https://github.com/trezor/blockbook/blob/master/bchain/coins/blockchain.go#L61>
           for current of coins supported in master (Note: may differ from release).
         '';
       };
@@ -63,7 +58,7 @@ let
         defaultText = literalExpression ''"''${package}/share/css/"'';
         example = literalExpression ''"''${dataDir}/static/css/"'';
         description = ''
-          Location of the dir with <filename>main.css</filename> CSS file.
+          Location of the dir with {file}`main.css` CSS file.
           By default, the one shipped with the package is used.
         '';
       };
@@ -83,19 +78,19 @@ let
       internal = mkOption {
         type = types.nullOr types.str;
         default = ":9030";
-        description = "Internal http server binding <literal>[address]:port</literal>.";
+        description = "Internal http server binding `[address]:port`.";
       };
 
       messageQueueBinding = mkOption {
         type = types.str;
         default = "tcp://127.0.0.1:38330";
-        description = "Message Queue Binding <literal>address:port</literal>.";
+        description = "Message Queue Binding `address:port`.";
       };
 
       public = mkOption {
         type = types.nullOr types.str;
         default = ":9130";
-        description = "Public http server binding <literal>[address]:port</literal>.";
+        description = "Public http server binding `[address]:port`.";
       };
 
       rpc = {
@@ -123,7 +118,7 @@ let
           description = ''
             RPC password for JSON-RPC connections.
             Warning: this is stored in cleartext in the Nix store!!!
-            Use <literal>configFile</literal> or <literal>passwordFile</literal> if needed.
+            Use `configFile` or `passwordFile` if needed.
           '';
         };
 
@@ -132,7 +127,7 @@ let
           default = null;
           description = ''
             File containing password of the RPC user.
-            Note: This options is ignored when <literal>configFile</literal> is used.
+            Note: This options is ignored when `configFile` is used.
           '';
         };
       };
@@ -172,9 +167,9 @@ let
           "block_addresses_to_keep" = 300;
         }'';
         description = ''
-          Additional configurations to be appended to <filename>coin.conf</filename>.
+          Additional configurations to be appended to {file}`coin.conf`.
           Overrides any already defined configuration options.
-          See <link xlink:href="https://github.com/trezor/blockbook/tree/master/configs/coins"/>
+          See <https://github.com/trezor/blockbook/tree/master/configs/coins>
           for current configuration options supported in master (Note: may differ from release).
         '';
       };

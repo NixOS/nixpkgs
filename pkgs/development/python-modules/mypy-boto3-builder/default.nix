@@ -1,60 +1,69 @@
-{ lib
-, black
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, isort
-, jinja2
-, md-toc
-, mdformat
-, poetry-core
-, pyparsing
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  black,
+  boto3,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  isort,
+  jinja2,
+  md-toc,
+  mdformat,
+  newversion,
+  pip,
+  poetry-core,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "5.5.0";
-  format = "pyproject";
+  version = "7.25.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
-    owner = "vemel";
+    owner = "youtype";
     repo = "mypy_boto3_builder";
-    rev = version;
-    sha256 = "sha256-cFe8d6w28VFTNyj/ABWHkFQDfnM4aTrNZ+WUw5g8H5I=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-uLatx9/nLIoB+CY/QrddBxaaa4TeAzVNu/Nl9wWUTz4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     black
     boto3
+    cryptography
     isort
     jinja2
     md-toc
     mdformat
+    newversion
+    pip
     pyparsing
+    setuptools
+    typing-extensions
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  disabledTests = [
-    # Should be fixed with 5.x
-    "test_get_types"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "mypy_boto3_builder" ];
 
+  disabledTests = [
+    # Tests require network access
+    "TestBotocoreChangelogChangelog"
+  ];
+
   meta = with lib; {
     description = "Type annotations builder for boto3";
-    homepage = "https://vemel.github.io/mypy_boto3_builder/";
+    mainProgram = "mypy_boto3_builder";
+    homepage = "https://github.com/youtype/mypy_boto3_builder";
+    changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

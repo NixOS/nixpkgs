@@ -19,8 +19,8 @@ let
     welcometext="${cfg.welcometext}"
     port=${toString cfg.port}
 
-    ${if cfg.hostName == "" then "" else "host="+cfg.hostName}
-    ${if cfg.password == "" then "" else "serverpassword="+cfg.password}
+    ${optionalString (cfg.hostName != "") "host=${cfg.hostName}"}
+    ${optionalString (cfg.password != "") "serverpassword=${cfg.password}"}
 
     bandwidth=${toString cfg.bandwidth}
     users=${toString cfg.users}
@@ -32,15 +32,17 @@ let
     bonjour=${boolToString cfg.bonjour}
     sendversion=${boolToString cfg.sendVersion}
 
-    ${if cfg.registerName     == "" then "" else "registerName="+cfg.registerName}
-    ${if cfg.registerPassword == "" then "" else "registerPassword="+cfg.registerPassword}
-    ${if cfg.registerUrl      == "" then "" else "registerUrl="+cfg.registerUrl}
-    ${if cfg.registerHostname == "" then "" else "registerHostname="+cfg.registerHostname}
+    ${optionalString (cfg.registerName != "") "registerName=${cfg.registerName}"}
+    ${optionalString (cfg.registerPassword != "") "registerPassword=${cfg.registerPassword}"}
+    ${optionalString (cfg.registerUrl != "") "registerUrl=${cfg.registerUrl}"}
+    ${optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
 
     certrequired=${boolToString cfg.clientCertRequired}
-    ${if cfg.sslCert == "" then "" else "sslCert="+cfg.sslCert}
-    ${if cfg.sslKey  == "" then "" else "sslKey="+cfg.sslKey}
-    ${if cfg.sslCa   == "" then "" else "sslCA="+cfg.sslCa}
+    ${optionalString (cfg.sslCert != "") "sslCert=${cfg.sslCert}"}
+    ${optionalString (cfg.sslKey != "") "sslKey=${cfg.sslKey}"}
+    ${optionalString (cfg.sslCa != "") "sslCA=${cfg.sslCa}"}
+
+    ${optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
 
     ${cfg.extraConfig}
   '';
@@ -59,13 +61,21 @@ in
         description = "If enabled, start the Murmur Mumble server.";
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open ports in the firewall for the Murmur Mumble server.
+        '';
+      };
+
       autobanAttempts = mkOption {
         type = types.int;
         default = 10;
         description = ''
           Number of attempts a client is allowed to make in
-          <literal>autobanTimeframe</literal> seconds, before being
-          banned for <literal>autobanTime</literal>.
+          `autobanTimeframe` seconds, before being
+          banned for `autobanTime`.
         '';
       };
 
@@ -109,12 +119,7 @@ in
         description = "Host to bind to. Defaults binding on all addresses.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.murmur;
-        defaultText = literalExpression "pkgs.murmur";
-        description = "Overridable attribute of the murmur package to use.";
-      };
+      package = mkPackageOption pkgs "murmur" { };
 
       password = mkOption {
         type = types.str;
@@ -254,27 +259,31 @@ in
         default = null;
         example = "/var/lib/murmur/murmurd.env";
         description = ''
-          Environment file as defined in <citerefentry>
-          <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-          </citerefentry>.
+          Environment file as defined in {manpage}`systemd.exec(5)`.
 
           Secrets may be passed to the service without adding them to the world-readable
           Nix store, by specifying placeholder variables as the option value in Nix and
           setting these variables accordingly in the environment file.
 
-          <programlisting>
+          ```
             # snippet of murmur-related config
             services.murmur.password = "$MURMURD_PASSWORD";
-          </programlisting>
+          ```
 
-          <programlisting>
+          ```
             # content of the environment file
             MURMURD_PASSWORD=verysecretpassword
-          </programlisting>
+          ```
 
           Note that this file needs to be available on the host on which
-          <literal>murmur</literal> is running.
+          `murmur` is running.
         '';
+      };
+
+      dbus = mkOption {
+        type = types.enum [ null "session" "system" ];
+        default = null;
+        description = "Enable D-Bus remote control. Set to the bus you want Murmur to connect to.";
       };
     };
   };
@@ -291,10 +300,15 @@ in
       gid             = config.ids.gids.murmur;
     };
 
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
+      allowedUDPPorts = [ cfg.port ];
+    };
+
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy    = [ "multi-user.target" ];
-      after       = [ "network-online.target "];
+      after       = [ "network.target" ];
       preStart    = ''
         ${pkgs.envsubst}/bin/envsubst \
           -o /run/murmur/murmurd.ini \
@@ -306,13 +320,90 @@ in
         Type = if forking then "forking" else "simple";
         PIDFile = mkIf forking "/run/murmur/murmurd.pid";
         EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStart = "${cfg.package}/bin/murmurd -ini /run/murmur/murmurd.ini";
+        ExecStart = "${cfg.package}/bin/mumble-server -ini /run/murmur/murmurd.ini";
         Restart = "always";
         RuntimeDirectory = "murmur";
         RuntimeDirectoryMode = "0700";
         User = "murmur";
         Group = "murmur";
+
+        # service hardening
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "full";
+        RestrictAddressFamilies = "~AF_PACKET AF_NETLINK";
+        RestrictNamespaces = true;
+        RestrictSUIDSGID = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service";
       };
     };
+
+    # currently not included in upstream package, addition requested at
+    # https://github.com/mumble-voip/mumble/issues/6078
+    services.dbus.packages = mkIf (cfg.dbus == "system") [(pkgs.writeTextFile {
+      name = "murmur-dbus-policy";
+      text = ''
+        <!DOCTYPE busconfig PUBLIC
+          "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+          "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+        <busconfig>
+          <policy user="murmur">
+            <allow own="net.sourceforge.mumble.murmur"/>
+          </policy>
+
+          <policy context="default">
+            <allow send_destination="net.sourceforge.mumble.murmur"/>
+            <allow receive_sender="net.sourceforge.mumble.murmur"/>
+          </policy>
+        </busconfig>
+      '';
+      destination = "/share/dbus-1/system.d/murmur.conf";
+    })];
+
+    security.apparmor.policies."bin.mumble-server".profile = ''
+      include <tunables/global>
+
+      ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
+        include <abstractions/base>
+        include <abstractions/nameservice>
+        include <abstractions/ssl_certs>
+        include "${pkgs.apparmorRulesFromClosure { name = "mumble-server"; } cfg.package}"
+        pix ${cfg.package}/bin/.mumble-server-wrapped,
+
+        r ${config.environment.etc."os-release".source},
+        r ${config.environment.etc."lsb-release".source},
+        owner rwk /var/lib/murmur/murmur.sqlite,
+        owner rw /var/lib/murmur/murmur.sqlite-journal,
+        owner r /var/lib/murmur/,
+        r /run/murmur/murmurd.pid,
+        r /run/murmur/murmurd.ini,
+        r ${configFile},
+      '' + optionalString (cfg.logFile != null) ''
+        rw ${cfg.logFile},
+      '' + optionalString (cfg.sslCert != "") ''
+        r ${cfg.sslCert},
+      '' + optionalString (cfg.sslKey != "") ''
+        r ${cfg.sslKey},
+      '' + optionalString (cfg.sslCa != "") ''
+        r ${cfg.sslCa},
+      '' + optionalString (cfg.dbus != null) ''
+        dbus bus=${cfg.dbus}
+      '' + ''
+      }
+    '';
   };
 }

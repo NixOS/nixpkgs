@@ -1,30 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-nspkg
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
+  azure-mgmt-nspkg,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-trafficmanager";
-  version = "0.51.0";
+  version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "fc8ae77022cfe52fda4379a2f31e0b857574d536e41291a7b569b5c0f4104186";
+    hash = "sha256-Nb8ZAr8VidYm41lx5aqgCeiECUZytHm3mM0buNTy/fk=";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
-  ];
+    azure-mgmt-core
+  ] ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
 
   # has no tests
   doCheck = false;

@@ -7,7 +7,7 @@ let
   cfg = config.services.syslogd;
 
   syslogConf = pkgs.writeText "syslog.conf" ''
-    ${if (cfg.tty != "") then "kern.warning;*.err;authpriv.none /dev/${cfg.tty}" else ""}
+    ${optionalString (cfg.tty != "") "kern.warning;*.err;authpriv.none /dev/${cfg.tty}"}
     ${cfg.defaultConfig}
     ${cfg.extraConfig}
   '';
@@ -58,9 +58,9 @@ in
         type = types.lines;
         default = defaultConf;
         description = ''
-          The default <filename>syslog.conf</filename> file configures a
+          The default {file}`syslog.conf` file configures a
           fairly standard setup of log files, which can be extended by
-          means of <varname>extraConfig</varname>.
+          means of {var}`extraConfig`.
         '';
       };
 
@@ -77,8 +77,8 @@ in
         default = "";
         example = "news.* -/var/log/news";
         description = ''
-          Additional text appended to <filename>syslog.conf</filename>,
-          i.e. the contents of <varname>defaultConfig</varname>.
+          Additional text appended to {file}`syslog.conf`,
+          i.e. the contents of {var}`defaultConfig`.
         '';
       };
 
@@ -87,7 +87,7 @@ in
         default = [ ];
         example = [ "-m 0" ];
         description = ''
-          Additional parameters passed to <command>syslogd</command>.
+          Additional parameters passed to {command}`syslogd`.
         '';
       };
 

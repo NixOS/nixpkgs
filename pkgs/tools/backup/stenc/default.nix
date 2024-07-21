@@ -1,33 +1,37 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 , autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "stenc";
-  version = "1.0.8";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "scsitape";
     repo = "stenc";
     rev = version;
-    sha256 = "0dsmvr1xpwkcd9yawv4c4vna67yag7jb8jcgn2amywz7nkpzmyxd";
+    sha256 = "GcCRVkv+1mREq3MhMRn5fICthwI4WRQJSP6InuzxP1Q=";
   };
+
+  postPatch = ''
+    # Fix gcc-13 build by pulling missing header. UPstream also fixed it
+    # in next major version, but there are many other patch dependencies.
+    # TODO: remove on next major version update
+    sed -e '1i #include <cstdint>' -i src/scsiencrypt.h
+  '';
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  passthru.updateScript = genericUpdater {
-    inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "SCSI Tape Encryption Manager";
+    mainProgram = "stenc";
     homepage = "https://github.com/scsitape/stenc";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ woffs ];
     platforms = lib.platforms.linux;
   };

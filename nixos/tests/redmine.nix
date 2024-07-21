@@ -9,7 +9,7 @@ with pkgs.lib;
 let
   redmineTest = { name, type }: makeTest {
     name = "redmine-${name}";
-    machine = { config, pkgs, ... }: {
+    nodes.machine = { config, pkgs, ... }: {
       services.redmine = {
         enable = true;
         package = pkgs.redmine;
@@ -39,6 +39,7 @@ let
     meta.maintainers = [ maintainers.aanderse ];
   };
 in {
+  sqlite3 = redmineTest { name = "sqlite3"; type = "sqlite3"; };
   mysql = redmineTest { name = "mysql"; type = "mysql2"; };
   pgsql = redmineTest { name = "pgsql"; type = "postgresql"; };
 }

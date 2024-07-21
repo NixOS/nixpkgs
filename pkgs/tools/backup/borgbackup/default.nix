@@ -2,93 +2,92 @@
 , stdenv
 , acl
 , e2fsprogs
+, fetchFromGitHub
 , libb2
 , lz4
 , openssh
 , openssl
 , python3
+, xxHash
 , zstd
+, installShellFiles
 , nixosTests
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3;
+in
+python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.17";
+  version = "1.4.0";
+  pyproject = true;
 
-  src = python3.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "0x0ncy0b0bmf586hbdgrif3gjmkdw760vfnfxndr493v07y29fbs";
+  src = fetchFromGitHub {
+    owner = "borgbackup";
+    repo = "borg";
+    rev = "refs/tags/${version}";
+    hash = "sha256-n1hCM7Sp0t2bOJEzErEd1PS/Xc7c+KDmJ4PjQuuF140=";
   };
 
   postPatch = ''
     # sandbox does not support setuid/setgid/sticky bits
     substituteInPlace src/borg/testsuite/archiver.py \
-      --replace "0o4755" "0o0755"
+      --replace-fail "0o4755" "0o0755"
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python.pkgs; [
+    cython
     setuptools-scm
-    # For building documentation:
-    sphinx
-    guzzle_sphinx_theme
+    pkgconfig
   ];
+
+  nativeBuildInputs = with python.pkgs; [
+    # docs
+    sphinxHook
+    guzzle-sphinx-theme
+
+    # shell completions
+    installShellFiles
+  ];
+
+  sphinxBuilders = [ "singlehtml" "man" ];
 
   buildInputs = [
     libb2
     lz4
+    xxHash
     zstd
     openssl
   ] ++ lib.optionals stdenv.isLinux [
     acl
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    cython
-    llfuse
+  dependencies = with python.pkgs; [
+    msgpack
     packaging
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    pyfuse3
+    (if stdenv.isLinux then pyfuse3 else llfuse)
   ];
-
-  preConfigure = ''
-    export BORG_OPENSSL_PREFIX="${openssl.dev}"
-    export BORG_LZ4_PREFIX="${lz4.dev}"
-    export BORG_LIBB2_PREFIX="${libb2}"
-    export BORG_LIBZSTD_PREFIX="${zstd.dev}"
-  '';
 
   makeWrapperArgs = [
     ''--prefix PATH ':' "${openssh}/bin"''
   ];
 
   postInstall = ''
-    make -C docs singlehtml
-    mkdir -p $out/share/doc/borg
-    cp -R docs/_build/singlehtml $out/share/doc/borg/html
-
-    make -C docs man
-    mkdir -p $out/share/man
-    cp -R docs/_build/man $out/share/man/man1
-
-    mkdir -p $out/share/bash-completion/completions
-    cp scripts/shell_completions/bash/borg $out/share/bash-completion/completions/
-
-    mkdir -p $out/share/fish/vendor_completions.d
-    cp scripts/shell_completions/fish/borg.fish $out/share/fish/vendor_completions.d/
-
-    mkdir -p $out/share/zsh/site-functions
-    cp scripts/shell_completions/zsh/_borg $out/share/zsh/site-functions/
+    installShellCompletion --cmd borg \
+      --bash scripts/shell_completions/bash/borg \
+      --fish scripts/shell_completions/fish/borg.fish \
+      --zsh scripts/shell_completions/zsh/_borg
   '';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     e2fsprogs
+    py
     pytest-benchmark
     pytest-xdist
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
-    "--numprocesses" "auto"
     "--benchmark-skip"
     "--pyargs" "borg.testsuite"
   ];
@@ -100,12 +99,15 @@ python3.pkgs.buildPythonApplication rec {
     "test_fuse_mount_hardlinks"
     "test_fuse_mount_options"
     "test_fuse_versions_view"
+    "test_migrate_lock_alive"
     "test_readonly_mount"
     # Error: Permission denied while trying to write to /var/{,tmp}
     "test_get_cache_dir"
     "test_get_keys_dir"
     "test_get_security_dir"
     "test_get_config_dir"
+    # https://github.com/borgbackup/borg/issues/6573
+    "test_basic_functionality"
   ];
 
   preCheck = ''
@@ -116,13 +118,17 @@ python3.pkgs.buildPythonApplication rec {
     inherit (nixosTests) borgbackup;
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "doc" "man" ];
+
+  disabled = python.pythonOlder "3.9";
 
   meta = with lib; {
+    changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ flokli dotlambda globin ];
+    mainProgram = "borg";
+    maintainers = with maintainers; [ dotlambda globin ];
   };
 }

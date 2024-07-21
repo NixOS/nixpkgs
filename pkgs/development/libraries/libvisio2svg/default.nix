@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libxml2 freetype librevenge libvisio libwmf libemf2svg ];
 
+  cmakeFlags = [
+    # file RPATH_CHANGE could not write new RPATH
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
+
   meta = with lib; {
     description = "Library and tools to convert Microsoft Visio documents (VSS and VSD) to SVG";
     homepage = "https://github.com/kakwa/libvisio2svg";

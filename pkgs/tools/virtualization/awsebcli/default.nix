@@ -1,97 +1,102 @@
-{ lib, python3, glibcLocales }:
+{ lib, python3, fetchFromGitHub, glibcLocales, git }:
+
 let
+  changeVersion = overrideFunc: version: hash: overrideFunc (oldAttrs: rec {
+    inherit version;
+    src = oldAttrs.src.override {
+      inherit version hash;
+    };
+  });
 
   localPython = python3.override {
+    self = localPython;
     packageOverrides = self: super: {
-      cement = super.cement.overridePythonAttrs (oldAttrs: rec {
-        version = "2.8.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1li2whjzfhbpg6fjb6r1r92fb3967p1xv6hqs3j787865h2ysrc7";
-        };
-      });
-
-      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.7";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0avqkn6362v7k2kg3afb35g4sfdvixjgy890clip4q174p9whhz0";
-        };
-      });
-
-      pathspec = super.pathspec.overridePythonAttrs (oldAttrs: rec {
-        name = "${oldAttrs.pname}-${version}";
-        version = "0.5.5";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "72c495d1bbe76674219e307f6d1c6062f2e1b0b483a5e4886435127d0df3d0d3";
-        };
-      });
-
-      requests = super.requests.overridePythonAttrs (oldAttrs: rec {
-        version = "2.9.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0zsqrzlybf25xscgi7ja4s48y2abf9wvjkn47wh984qgs1fq2xy5";
-        };
-      });
-
-      semantic-version = super.semantic-version.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0p5n3d6blgkncxdz00yxqav0cis87fisdkirjm0ljjh7rdfx7aiv";
-        };
-      });
-
-      tabulate = super.tabulate.overridePythonAttrs (oldAttrs: rec {
-        version = "0.7.5";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "03l1r7ddd1a0j2snv1yd0hlnghjad3fg1an1jr8936ksv75slwch";
-        };
-      });
+      cement =
+        changeVersion super.cement.overridePythonAttrs "2.10.14"
+          "sha256-NC4n21SmYW3RiS7QuzWXoifO4z3C2FVgQm3xf8qQcFg=";
     };
   };
-in with localPython.pkgs; buildPythonApplication rec {
-  pname = "awsebcli";
-  version = "3.12.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "128dgxyz2bgl3r4jdkbmjs280004bm0dwzln7p6ly3yjs2x37jl6";
+in
+
+localPython.pkgs.buildPythonApplication rec {
+  pname = "awsebcli";
+  version = "3.20.10";
+  format = "setuptools";
+
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "aws-elastic-beanstalk-cli";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4JZx0iTMyrPHbuS3zlhpiWnenAQO5eSBJbPHUizLhYo=";
   };
+
+  postPatch = ''
+    # https://github.com/aws/aws-elastic-beanstalk-cli/pull/469
+    substituteInPlace setup.py --replace "scripts=['bin/eb']," ""
+  '';
+
+  nativeBuildInputs = with localPython.pkgs; [
+  ];
 
   buildInputs = [
     glibcLocales
   ];
 
-  LC_ALL = "en_US.UTF-8";
-
-  checkInputs = [
-    pytest mock nose pathspec colorama requests docutils
+  propagatedBuildInputs = with localPython.pkgs; [
+    blessed
+    botocore
+    cement
+    colorama
+    pathspec
+    pyyaml
+    future
+    requests
+    semantic-version
+    setuptools
+    tabulate
+    termcolor
+    websocket-client
   ];
 
-  doCheck = false;
-
-  propagatedBuildInputs = [
-    # FIXME: Add optional docker dependency, which requires requests >= 2.14.2.
-    # Otherwise, awsebcli will try to install it using pip when using some
-    # commands (like "eb local run").
-    blessed botocore cement colorama dockerpty docopt pathspec pyyaml
-    requests semantic-version setuptools tabulate termcolor websocket-client
+  pythonRelaxDeps = [
+    "botocore"
+    "colorama"
+    "pathspec"
+    "PyYAML"
+    "six"
+    "termcolor"
   ];
 
-  postInstall = ''
-    mkdir -p $out/share/bash-completion/completions
-    mv $out/bin/eb_completion.bash $out/share/bash-completion/completions/
-  '';
+  nativeCheckInputs = with localPython.pkgs; [
+    pytestCheckHook
+    pytest-socket
+    mock
+    git
+  ];
+
+  pytestFlagsArray = [
+    "tests/unit"
+  ];
+
+  disabledTests = [
+    # Needs docker installed to run.
+    "test_local_run"
+    "test_local_run__with_arguments"
+
+    # Needs access to the user's ~/.ssh directory.
+    "test_generate_and_upload_keypair__exit_code_0"
+    "test_generate_and_upload_keypair__exit_code_1"
+    "test_generate_and_upload_keypair__exit_code_is_other_than_1_and_0"
+    "test_generate_and_upload_keypair__ssh_keygen_not_present"
+  ];
 
   meta = with lib; {
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
-    description = "A command line interface for Elastic Beanstalk";
-    maintainers = with maintainers; [ eqyiel ];
+    description = "Command line interface for Elastic Beanstalk";
+    changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
+    maintainers = with maintainers; [ eqyiel kirillrdy ];
     license = licenses.asl20;
-    broken = true;
+    mainProgram = "eb";
   };
 }

@@ -1,21 +1,21 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, xmltodict
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pymediaroom";
-  version = "0.6.4.1";
+  version = "0.6.5.4";
+  format = "setuptools";
   disabled = pythonOlder "3.5";
 
-  src = fetchFromGitHub {
-    owner = "dgomes";
-    repo = pname;
-    rev = version;
-    sha256 = "1klf2dxd8rlq3n4b9m03lzwcsasn9vi6m3hzrjqhqnprhrnp0xmy";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-CZh2knpLT7xt5s6+kTQ4Mq9LcpKgWvgdFCkPtMucJTM=";
   };
 
   propagatedBuildInputs = [

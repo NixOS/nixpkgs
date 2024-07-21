@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jpexs";
-  version = "11.3.0";
+  version = "18.4.1";
 
   src = fetchzip {
-    url = "${meta.homepage}/releases/download/version${version}/ffdec_${version}.zip";
-    sha256 = "0d1xmq21vdpn0glwfzr00s62ic8jynmgmgxl0m1834xqf3ma0ihv";
+    url = "https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version${version}/ffdec_${version}.zip";
+    sha256 = "sha256-aaEL3xJZkFw78zo3IyauWJM9kOo0rJTUSKmWsv9xQZ8=";
     stripRoot = false;
   };
 
@@ -36,20 +36,20 @@ stdenv.mkDerivation rec {
     desktopName = "JPEXS Free Flash Decompiler";
     genericName = "Flash Decompiler";
     comment = meta.description;
-    categories = "Development;Java;";
-    extraEntries = ''
-      StartupWMClass=com-jpexs-decompiler-flash-gui-Main
-    '';
+    categories = [ "Development" "Java" ];
+    startupWMClass = "com-jpexs-decompiler-flash-gui-Main";
   };
 
   meta = with lib; {
     description = "Flash SWF decompiler and editor";
+    mainProgram = "ffdec";
     longDescription = ''
       Open-source Flash SWF decompiler and editor. Extract resources,
       convert SWF to FLA, edit ActionScript, replace images, sounds,
       texts or fonts.
     '';
     homepage = "https://github.com/jindrapetrik/jpexs-decompiler";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
     platforms = jdk8.meta.platforms;
     maintainers = [ ];

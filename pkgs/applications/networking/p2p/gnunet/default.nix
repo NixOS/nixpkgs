@@ -3,15 +3,15 @@
 , makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
 , libpulseaudio, libopus, libogg, jansson, libsodium
 
-, postgresqlSupport ? false, postgresql }:
+, postgresqlSupport ? true, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.15.3";
+  version = "0.21.2";
 
   src = fetchurl {
-    url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1iZpqPQeB46qIgznejL08/gB4wmTV66McFSY/nOITsU=";
+    url = "mirror://gnu/gnunet/gnunet-${version}.tar.gz";
+    hash = "sha256-jCNRJo6bi6KtKIuLM3zjmfecGOP/2WCAP07V3n3an6E=";
   };
 
   enableParallelBuilding = true;
@@ -34,10 +34,6 @@ stdenv.mkDerivation rec {
     # builds.
     find . \( -iname \*test\*.c -or -name \*.conf \) | \
       xargs sed -ie "s|/tmp|$TMPDIR|g"
-
-    sed -ie 's|@LDFLAGS@|@LDFLAGS@ $(Z_LIBS)|g' \
-      src/regex/Makefile.in \
-      src/fs/Makefile.in
   '';
 
   # unfortunately, there's still a few failures with impure tests
@@ -68,7 +64,8 @@ stdenv.mkDerivation rec {
 
     homepage = "https://gnunet.org/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ pstn vrthra ];
-    platforms = platforms.gnu ++ platforms.linux;
+    maintainers = with maintainers; [ pstn ];
+    platforms = platforms.unix;
+    changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${version}";
   };
 }

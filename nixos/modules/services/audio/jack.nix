@@ -20,16 +20,11 @@ in {
           JACK Audio Connection Kit. You need to add yourself to the "jackaudio" group
         '';
 
-        package = mkOption {
+        package = mkPackageOption pkgs "jack2" {
+          example = "jack1";
+        } // {
           # until jack1 promiscuous mode is fixed
           internal = true;
-          type = types.package;
-          default = pkgs.jack2;
-          defaultText = literalExpression "pkgs.jack2";
-          example = literalExpression "pkgs.jack1";
-          description = ''
-            The JACK package to use.
-          '';
         };
 
         extraOptions = mkOption {
@@ -127,7 +122,7 @@ in {
   config = mkMerge [
 
     (mkIf pcmPlugin {
-      sound.extraConfig = ''
+      environment.etc."alsa/conf.d/98-jack.conf".text = ''
         pcm_type.jack {
           libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;
           ${lib.optionalString enable32BitAlsaPlugins
@@ -144,7 +139,7 @@ in {
     (mkIf loopback {
       boot.kernelModules = [ "snd-aloop" ];
       boot.kernelParams = [ "snd-aloop.index=${toString cfg.loopback.index}" ];
-      sound.extraConfig = cfg.loopback.config;
+      environment.etc."alsa/conf.d/99-jack-loopback.conf".text = cfg.loopback.config;
     })
 
     (mkIf cfg.jackd.enable {
@@ -225,7 +220,7 @@ in {
         description = "JACK Audio system service user";
         isSystemUser = true;
       };
-      # http://jackaudio.org/faq/linux_rt_config.html
+      # https://jackaudio.org/faq/linux_rt_config.html
       security.pam.loginLimits = [
         { domain = "@jackaudio"; type = "-"; item = "rtprio"; value = "99"; }
         { domain = "@jackaudio"; type = "-"; item = "memlock"; value = "unlimited"; }

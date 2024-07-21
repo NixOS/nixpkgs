@@ -1,73 +1,87 @@
-{ stdenv, lib, fetchFromGitHub
-, python3Packages
-, fehSupport ? false, feh
-, imagemagickSupport ? true, imagemagick
-, intltool
-, gtk3
+{ lib
+, fetchFromGitHub
 , gexiv2
-, libnotify
 , gobject-introspection
+, gtk3
 , hicolor-icon-theme
+, intltool
+, libnotify
 , librsvg
-, wrapGAppsHook
-, makeWrapper
+, python3
+, runtimeShell
+, wrapGAppsHook3
+, fehSupport ? false
+, feh
+, imagemagickSupport ? true
+, imagemagick
+, appindicatorSupport ? true
+, libayatana-appindicator
 }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "variety";
-  version = "0.8.5";
+  version = "0.8.12";
 
   src = fetchFromGitHub {
     owner = "varietywalls";
     repo = "variety";
-    rev = version;
-    sha256 = "sha256-6dLz4KXavXwnk5GizBH46d2EHMHPjRo0WnnUuVMtI1M=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-FjnhV7vzRPVDCgUNK8CHo3arKXuwe+3xH/5AxCVgeIY=";
   };
 
-  nativeBuildInputs = [ makeWrapper intltool wrapGAppsHook ];
+  nativeBuildInputs = [
+    intltool
+    wrapGAppsHook3
+    gobject-introspection
+  ];
 
-  buildInputs = [ distutils_extra ];
+  buildInputs = [
+    gexiv2
+    gtk3
+    hicolor-icon-theme
+    libnotify
+    librsvg
+  ]
+  ++ lib.optional appindicatorSupport libayatana-appindicator;
 
-  doCheck = false;
-
-  postInstall = ''
-    wrapProgram $out/bin/variety --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
-  '';
-
-  prePatch = ''
-    substituteInPlace variety_lib/varietyconfig.py \
-      --replace "__variety_data_directory__ = \"../data\"" "__variety_data_directory__ = \"$out/share/variety\""
-    substituteInPlace data/scripts/set_wallpaper \
-      --replace /bin/bash ${stdenv.shell}
-    substituteInPlace data/scripts/get_wallpaper \
-      --replace /bin/bash ${stdenv.shell}
-  '';
-
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     configobj
     dbus-python
-    gexiv2
-    gobject-introspection
-    gtk3
-    hicolor-icon-theme
+    distutils-extra
     httplib2
-    libnotify
-    librsvg
     lxml
     pillow
     pycairo
     pygobject3
     requests
     setuptools
-  ] ++ lib.optional fehSupport feh
-    ++ lib.optional imagemagickSupport imagemagick;
+  ]
+  ++ lib.optional fehSupport feh
+  ++ lib.optional imagemagickSupport imagemagick;
+
+  doCheck = false;
+
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  prePatch = ''
+    substituteInPlace variety_lib/varietyconfig.py \
+      --replace "__variety_data_directory__ = \"../data\"" \
+                "__variety_data_directory__ = \"$out/share/variety\""
+    substituteInPlace variety/VarietyWindow.py \
+      --replace '[script,' '["${runtimeShell}", script,' \
+      --replace 'check_output(script)' 'check_output(["${runtimeShell}", script])'
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/varietywalls/variety";
-    description = "A wallpaper manager for Linux systems";
+    description = "Wallpaper manager for Linux systems";
+    mainProgram = "variety";
     longDescription = ''
       Variety is a wallpaper manager for Linux systems. It supports numerous
       desktops and wallpaper sources, including local files and online services:
@@ -80,8 +94,7 @@ buildPythonApplication rec {
       Variety also includes a range of image effects, such as oil painting and
       blur, as well as options to layer quotes and a clock onto the background.
     '';
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ p3psi AndersonTorres zfnmxt ];
-    platforms = with platforms; linux;
   };
 }

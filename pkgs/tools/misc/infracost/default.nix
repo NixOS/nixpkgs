@@ -1,35 +1,37 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, terraform }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "infracost";
-  version = "0.9.8";
+  version = "0.10.38";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-8XS30fRxHPady/snr3gfo8Ryiw9O7EeDezcYYZjod1w=";
+    sha256 = "sha256-cnZ7ASYm1IhlqskWMEWzaAG6XKEex7P3akjmYUjHSzc=";
   };
-  vendorSha256 = "sha256-8r7v3526kY+rFHkl1+KEwNbFrSnXPlpZD6kiK4ea+Zg=";
+  vendorHash = "sha256-bLSj4/+7h0uHdR956VL4iLqRddKV5Ac+FIL1zJxPCW8=";
 
   ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
 
-  # Install completions post-install
+  subPackages = [ "cmd/infracost" ];
+
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ terraform ];
-  # Short only runs the unit-tests tagged short
-  checkFlags = [ "-v" "-short" ];
-  checkPhase = ''
-    runHook preCheck
+  preCheck = ''
+    # Feed in all tests for testing
+    # This is because subPackages above limits what is built to just what we
+    # want but also limits the tests
+    unset subPackages
 
-    # Remove tests that require networking
-    rm cmd/infracost/{breakdown_test,diff_test}.go
-    # ldflags are required for some of the version testing
-    go test ./... $checkFlags ''${ldflags:+-ldflags="$ldflags"}
-
-    runHook postCheck
+    # remove tests that require networking
+    rm cmd/infracost/{breakdown,comment,diff,hcl,run,upload}_test.go
+    rm cmd/infracost/comment_{azure_repos,bitbucket,github,gitlab}_test.go
   '';
+
+  checkFlags = [
+    "-short"
+  ];
 
   postInstall = ''
     export INFRACOST_SKIP_UPDATE_CHECK=true
@@ -60,6 +62,7 @@ buildGoModule rec {
       compare different deployment options upfront.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ davegallant jk ];
+    maintainers = with maintainers; [ davegallant jk kashw2 ];
+    mainProgram = "infracost";
   };
 }

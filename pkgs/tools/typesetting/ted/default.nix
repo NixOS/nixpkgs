@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ zlib pcre xorg.xlibsWrapper xorg.libXpm libjpeg libtiff libpng gtk2 libpaper ];
+  buildInputs = [ zlib pcre xorg.libX11 xorg.libICE xorg.libSM xorg.libXpm libjpeg libtiff libpng gtk2 libpaper ];
 
   meta = with lib; {
     description = "An easy rich text processor";
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       Acrobat PDF converter.
     '';
     homepage    = "https://nllgg.nl/Ted/";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     platforms   = platforms.all;
     broken      = stdenv.isDarwin;
     maintainers = with maintainers; [ obadz ];

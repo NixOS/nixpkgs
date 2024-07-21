@@ -1,5 +1,5 @@
-{ lib, stdenv
-, fetchpatch
+{ stdenv
+, lib
 , substituteAll
 , fetchurl
 , meson
@@ -12,7 +12,6 @@
 , glib
 , libnotify
 , libgnomekbd
-, lcms2
 , libpulseaudio
 , alsa-lib
 , libcanberra-gtk3
@@ -30,31 +29,27 @@
 , modemmanager
 , networkmanager
 , gnome-desktop
-, geocode-glib
+, geocode-glib_2
 , docbook_xsl
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3
 , tzdata
-, nss
-, gcr
+, gcr_4
 , gnome-session-ctl
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "41.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "5spjYfvR3qst4aHjkNTxQWfPR7HFR9u4tlpdielmOIQ=";
+    hash = "sha256-C5oPZPoYqOfgm0yVo/dU+gM8LNvS3DVwHwYYVywcs9c=";
   };
 
   patches = [
     # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/202
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/commit/aae1e774dd9de22fe3520cf9eb2bfbf7216f5eb0.patch";
-      sha256 = "O4m0rOW8Zrgu3Q0p0OA8b951VC0FjYbOUk9MLzB9icI=";
-    })
+    ./add-gnome-session-ctl-option.patch
 
     (substituteAll {
       src = ./fix-paths.patch;
@@ -71,7 +66,7 @@ stdenv.mkDerivation rec {
     libxml2
     libxslt
     docbook_xsl
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
   ];
 
@@ -84,21 +79,19 @@ stdenv.mkDerivation rec {
     libnotify
     libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
     gnome-desktop
-    lcms2
     libpulseaudio
     alsa-lib
     libcanberra-gtk3
     upower
     colord
     libgweather
-    nss
     polkit
-    geocode-glib
+    geocode-glib_2
     geoclue2
     systemd
     libgudev
     libwacom
-    gcr
+    gcr_4
   ];
 
   mesonFlags = [
@@ -108,11 +101,11 @@ stdenv.mkDerivation rec {
 
   # Default for release buildtype but passed manually because
   # we're using plain
-  NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
+  env.NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
 
   postPatch = ''
-    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl meson_post_install.py; do
+    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl; do
       chmod +x $f
       patchShebangs $f
     done

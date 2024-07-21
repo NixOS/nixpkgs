@@ -1,33 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-mock,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "restrictedpython";
-  version = "5.2";
-  format = "setuptools";
+  version = "7.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "RestrictedPython";
     inherit version;
-    sha256 = "sha256-Y02h9sXBIqJi9DOwg+49F6mgOfjxs3eFl++0dGHNNhs=";
+    hash = "sha256-h1rrUcE51440zvhgXcZTCbRJFoBg3QhVGh/p7bR8uaU=";
   };
 
-  checkInputs = [
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ];
 
-  pythonImportsCheck = [
-    "RestrictedPython"
-  ];
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [ "test_compile__compile_restricted_exec__5" ];
+
+  pythonImportsCheck = [ "RestrictedPython" ];
 
   meta = with lib; {
     description = "Restricted execution environment for Python to run untrusted code";
     homepage = "https://github.com/zopefoundation/RestrictedPython";
+    changelog = "https://github.com/zopefoundation/RestrictedPython/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
     maintainers = with maintainers; [ juaningan ];
   };

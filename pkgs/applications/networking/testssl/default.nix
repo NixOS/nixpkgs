@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "testssl.sh";
-  version = "3.0.6";
+  version = "3.0.9";
 
   src = fetchFromGitHub {
     owner = "drwetter";
     repo = pname;
     rev = "v${version}";
-    sha256 = "016qpsb4dv9qb3ab3hmvk4vzf4ipr3xgmzv2cx46pxxsj0gnigd8";
+    sha256 = "sha256-MZNQ7oOJD/vjOwDiPOZr3k+Mn0XXVdkP7cC/0mnWLic=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://testssl.sh/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ etu ];
+    mainProgram = "testssl.sh";
   };
 }

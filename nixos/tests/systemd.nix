@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "systemd";
 
-  machine = { lib, ... }: {
+  nodes.machine = { config, lib, ... }: {
     imports = [ common/user-account.nix common/x11.nix ];
 
     virtualisation.emptyDiskImages = [ 512 512 ];
@@ -31,9 +31,25 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       umount /tmp/shared
     '';
 
+    systemd.services.oncalendar-test = {
+      description = "calendar test";
+      # Japan does not have DST which makes the test a little bit simpler
+      startAt = "Wed 10:00 Asia/Tokyo";
+      script = "true";
+    };
+
+    systemd.services.testDependency1 = {
+      description = "Test Dependency 1";
+      wantedBy = [ config.systemd.services."testservice1".name ];
+      serviceConfig.Type = "oneshot";
+      script = ''
+        true
+      '';
+    };
+
     systemd.services.testservice1 = {
       description = "Test Service 1";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ config.systemd.targets.multi-user.name ];
       serviceConfig.Type = "oneshot";
       script = ''
         if [ "$XXX_SYSTEM" = foo ]; then
@@ -69,17 +85,27 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     # wait for user services
     machine.wait_for_unit("default.target", "alice")
 
+    with subtest("systemctl edit suggests --runtime"):
+        # --runtime is suggested when using `systemctl edit`
+        ret, out = machine.execute("systemctl edit testservice1.service 2>&1")
+        assert ret == 1
+        assert out.rstrip("\n") == "The unit-directory '/etc/systemd/system' is read-only on NixOS, so it's not possible to edit system-units directly. Use 'systemctl edit --runtime' instead."
+        # editing w/o `--runtime` is possible for user-services, however
+        # it's not possible because we're not in a tty when grepping
+        # (i.e. hacky way to ensure that the error from above doesn't appear here).
+        _, out = machine.execute("systemctl --user edit testservice2.service 2>&1")
+        assert out.rstrip("\n") == "Cannot edit units if not on a tty."
+
+    # Regression test for https://github.com/NixOS/nixpkgs/issues/105049
+    with subtest("systemd reads timezone database in /etc/zoneinfo"):
+        timer = machine.succeed("TZ=UTC systemctl show --property=TimersCalendar oncalendar-test.timer")
+        assert re.search("next_elapse=Wed ....-..-.. 01:00:00 UTC", timer), f"got {timer.strip()}"
+
     # Regression test for https://github.com/NixOS/nixpkgs/issues/35415
     with subtest("configuration files are recognized by systemd"):
         machine.succeed("test -e /system_conf_read")
         machine.succeed("test -e /home/alice/user_conf_read")
         machine.succeed("test -z $(ls -1 /var/log/journal)")
-
-    # Regression test for https://github.com/NixOS/nixpkgs/issues/50273
-    with subtest("DynamicUser actually allocates a user"):
-        assert "iamatest" in machine.succeed(
-            "systemd-run --pty --property=Type=oneshot --property=DynamicUser=yes --property=User=iamatest whoami"
-        )
 
     with subtest("regression test for https://bugs.freedesktop.org/show_bug.cgi?id=77507"):
         retcode, output = machine.execute("systemctl status testservice1.service")
@@ -163,7 +189,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     # Do some IP traffic
     output_ping = machine.succeed(
-        "systemd-run --wait -- /run/wrappers/bin/ping -c 1 127.0.0.1 2>&1"
+        "systemd-run --wait -- ping -c 1 127.0.0.1 2>&1"
     )
 
     with subtest("systemd reports accounting data on system.slice"):
@@ -180,5 +206,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     with subtest("systemd per-unit accounting works"):
         assert "IP traffic received: 84B" in output_ping
         assert "IP traffic sent: 84B" in output_ping
+
+    with subtest("systemd environment is properly set"):
+        machine.systemctl("daemon-reexec")  # Rewrites /proc/1/environ
+        machine.succeed("grep -q TZDIR=/etc/zoneinfo /proc/1/environ")
   '';
 })

@@ -19,7 +19,7 @@ let
   ]));
 
 in stdenv.mkDerivation rec {
-  pname = "screenFetch";
+  pname = "screenfetch";
   version = "3.9.1";
 
   src = fetchFromGitHub {
@@ -58,5 +58,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/KittyKatt/screenFetch";
     maintainers = with maintainers; [ relrod ];
     platforms = platforms.all;
+    mainProgram = "screenfetch";
   };
 }

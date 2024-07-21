@@ -1,44 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sqlalchemy
-, aiocontextvars
-, aiopg
-, pythonOlder
-, pytestCheckHook
-, pymysql
-, asyncpg
-, aiomysql
-, aiosqlite
+{
+  lib,
+  aiomysql,
+  aiopg,
+  aiosqlite,
+  asyncmy,
+  asyncpg,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "databases";
-  version = "0.5.3";
+  version = "0.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-67ykx7HKGgRvJ+GRVEI/e2+x51kfHHFjh/iI4tY+6aE=";
+    repo = "databases";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Zf9QqBgDhWAnHdNvzjXtri5rdT00BOjc4YTNzJALldM=";
   };
 
-  propagatedBuildInputs = [
-    aiopg
-    aiomysql
-    aiosqlite
-    asyncpg
-    pymysql
-    sqlalchemy
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    aiocontextvars
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  propagatedBuildInputs = [ sqlalchemy ];
+
+  passthru.optional-dependencies = {
+    postgresql = [ asyncpg ];
+    asyncpg = [ asyncpg ];
+    aiopg = [ aiopg ];
+    mysql = [ aiomysql ];
+    aiomysql = [ aiomysql ];
+    asyncmy = [ asyncmy ];
+    sqlite = [ aiosqlite ];
+    aiosqlite = [ aiosqlite ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # circular dependency on starlette
@@ -48,14 +52,13 @@ buildPythonPackage rec {
     "tests/test_connection_options.py"
   ];
 
-  pythonImportsCheck = [
-    "databases"
-  ];
+  pythonImportsCheck = [ "databases" ];
 
   meta = with lib; {
     description = "Async database support for Python";
     homepage = "https://github.com/encode/databases";
+    changelog = "https://github.com/encode/databases/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

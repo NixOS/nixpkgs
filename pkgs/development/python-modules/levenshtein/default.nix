@@ -1,45 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, rapidfuzz
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cmake,
+  cython,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  rapidfuzz,
+  rapidfuzz-cpp,
+  scikit-build,
 }:
 
 buildPythonPackage rec {
   pname = "levenshtein";
-  version = "0.16.0";
-  format = "setuptools";
+  version = "0.25.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "Levenshtein";
-    rev = "v${version}";
-    sha256 = "agshUVkkqogj4FbonFd/rrGisMOomS62NND66YKZvjg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ye2XQL/ZQPlA4dy3tlr03WyGhfl7SaOXMt10cWHnW5o=";
+    fetchSubmodules = true; # # for vendored `rapidfuzz-cpp`
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "rapidfuzz >= 1.8.2, < 1.9" "rapidfuzz"
-  '';
-
-  propagatedBuildInputs = [
-    rapidfuzz
+  nativeBuildInputs = [
+    cmake
+    cython
+    scikit-build
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dontUseCmakeConfigure = true;
 
-  pythonImportsCheck = [
-    "Levenshtein"
-  ];
+  buildInputs = [ rapidfuzz-cpp ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.cc.isClang && stdenv.isDarwin) [
+      "-fno-lto" # work around https://github.com/NixOS/nixpkgs/issues/19098
+    ]
+  );
+
+  dependencies = [ rapidfuzz ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "Levenshtein" ];
 
   meta = with lib; {
     description = "Functions for fast computation of Levenshtein distance and string similarity";
     homepage = "https://github.com/maxbachmann/Levenshtein";
+    changelog = "https://github.com/maxbachmann/Levenshtein/blob/${src.rev}/HISTORY.md";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fab ];
   };

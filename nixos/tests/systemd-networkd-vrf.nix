@@ -1,5 +1,26 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: let
   inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
+
+  mkNode = vlan: id: {
+    virtualisation.vlans = [ vlan ];
+    networking = {
+      useDHCP = false;
+      useNetworkd = true;
+    };
+
+    systemd.network = {
+      enable = true;
+
+      networks."10-eth${toString vlan}" = {
+        matchConfig.Name = "eth${toString vlan}";
+        linkConfig.RequiredForOnline = "no";
+        networkConfig = {
+          Address = "192.168.${toString vlan}.${toString id}/24";
+          IPForward = "yes";
+        };
+      };
+    };
+  };
 in {
   name = "systemd-networkd-vrf";
   meta.maintainers = with lib.maintainers; [ ma27 ];
@@ -38,14 +59,14 @@ in {
           matchConfig.Name = "vrf1";
           networkConfig.IPForward = "yes";
           routes = [
-            { routeConfig = { Destination = "192.168.1.2"; Metric = 100; }; }
+            { Destination = "192.168.1.2"; Metric = 100; }
           ];
         };
         networks."10-vrf2" = {
           matchConfig.Name = "vrf2";
           networkConfig.IPForward = "yes";
           routes = [
-            { routeConfig = { Destination = "192.168.2.3"; Metric = 100; }; }
+            { Destination = "192.168.2.3"; Metric = 100; }
           ];
         };
 
@@ -54,7 +75,7 @@ in {
           linkConfig.RequiredForOnline = "no";
           networkConfig = {
             VRF = "vrf1";
-            Address = "192.168.1.1";
+            Address = "192.168.1.1/24";
             IPForward = "yes";
           };
         };
@@ -63,93 +84,38 @@ in {
           linkConfig.RequiredForOnline = "no";
           networkConfig = {
             VRF = "vrf2";
-            Address = "192.168.2.1";
+            Address = "192.168.2.1/24";
             IPForward = "yes";
           };
         };
       };
     };
 
-    node1 = { pkgs, ... }: {
-      virtualisation.vlans = [ 1 ];
-      networking = {
-        useDHCP = false;
-        useNetworkd = true;
-      };
+    node1 = lib.mkMerge [
+      (mkNode 1 2)
+      {
+        services.openssh.enable = true;
+        users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
+      }
+    ];
 
-      services.openssh.enable = true;
-      users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
-
-      systemd.network = {
-        enable = true;
-
-        networks."10-eth1" = {
-          matchConfig.Name = "eth1";
-          linkConfig.RequiredForOnline = "no";
-          networkConfig = {
-            Address = "192.168.1.2";
-            IPForward = "yes";
-          };
-        };
-      };
-    };
-
-    node2 = { pkgs, ... }: {
-      virtualisation.vlans = [ 2 ];
-      networking = {
-        useDHCP = false;
-        useNetworkd = true;
-      };
-
-      systemd.network = {
-        enable = true;
-
-        networks."10-eth2" = {
-          matchConfig.Name = "eth2";
-          linkConfig.RequiredForOnline = "no";
-          networkConfig = {
-            Address = "192.168.2.3";
-            IPForward = "yes";
-          };
-        };
-      };
-    };
-
-    node3 = { pkgs, ... }: {
-      virtualisation.vlans = [ 2 ];
-      networking = {
-        useDHCP = false;
-        useNetworkd = true;
-      };
-
-      systemd.network = {
-        enable = true;
-
-        networks."10-eth2" = {
-          matchConfig.Name = "eth2";
-          linkConfig.RequiredForOnline = "no";
-          networkConfig = {
-            Address = "192.168.2.4";
-            IPForward = "yes";
-          };
-        };
-      };
-    };
+    node2 = mkNode 2 3;
+    node3 = mkNode 2 4;
   };
 
   testScript = ''
-    def compare_tables(expected, actual):
-        assert (
-            expected == actual
-        ), """
-        Routing tables don't match!
-        Expected:
-          {}
-        Actual:
-          {}
-        """.format(
-            expected, actual
-        )
+    import json
+
+    def compare(raw_json, to_compare):
+        data = json.loads(raw_json)
+        assert len(raw_json) >= len(to_compare)
+        for i, row in enumerate(to_compare):
+            actual = data[i]
+            assert len(row.keys()) > 0
+            for key, value in row.items():
+                assert value == actual[key], f"""
+                  In entry {i}, value {key}: got: {actual[key]}, expected {value}
+                """
 
 
     start_all()
@@ -159,36 +125,31 @@ in {
     node2.wait_for_unit("network.target")
     node3.wait_for_unit("network.target")
 
-    # NOTE: please keep in mind that the trailing whitespaces in the following strings
-    # are intentional as the output is compared against the raw `iproute2`-output.
-    client_ipv4_table = """
-    192.168.1.2 dev vrf1 proto static metric 100 
-    192.168.2.3 dev vrf2 proto static metric 100
-    """.strip()
-    vrf1_table = """
-    broadcast 192.168.1.0 dev eth1 proto kernel scope link src 192.168.1.1 
-    192.168.1.0/24 dev eth1 proto kernel scope link src 192.168.1.1 
-    local 192.168.1.1 dev eth1 proto kernel scope host src 192.168.1.1 
-    broadcast 192.168.1.255 dev eth1 proto kernel scope link src 192.168.1.1
-    """.strip()
-    vrf2_table = """
-    broadcast 192.168.2.0 dev eth2 proto kernel scope link src 192.168.2.1 
-    192.168.2.0/24 dev eth2 proto kernel scope link src 192.168.2.1 
-    local 192.168.2.1 dev eth2 proto kernel scope host src 192.168.2.1 
-    broadcast 192.168.2.255 dev eth2 proto kernel scope link src 192.168.2.1
-    """.strip()
-
     # Check that networkd properly configures the main routing table
     # and the routing tables for the VRF.
     with subtest("check vrf routing tables"):
-        compare_tables(
-            client_ipv4_table, client.succeed("ip -4 route list | head -n2").strip()
+        compare(
+            client.succeed("ip --json -4 route list"),
+            [
+                {"dst": "192.168.1.2", "dev": "vrf1", "metric": 100},
+                {"dst": "192.168.2.3", "dev": "vrf2", "metric": 100}
+            ]
         )
-        compare_tables(
-            vrf1_table, client.succeed("ip -4 route list table 23 | head -n4").strip()
+        compare(
+            client.succeed("ip --json -4 route list table 23"),
+            [
+                {"dst": "192.168.1.0/24", "dev": "eth1", "prefsrc": "192.168.1.1"},
+                {"type": "local", "dst": "192.168.1.1", "dev": "eth1", "prefsrc": "192.168.1.1"},
+                {"type": "broadcast", "dev": "eth1", "prefsrc": "192.168.1.1", "dst": "192.168.1.255"}
+            ]
         )
-        compare_tables(
-            vrf2_table, client.succeed("ip -4 route list table 42 | head -n4").strip()
+        compare(
+            client.succeed("ip --json -4 route list table 42"),
+            [
+                {"dst": "192.168.2.0/24", "dev": "eth2", "prefsrc": "192.168.2.1"},
+                {"type": "local", "dst": "192.168.2.1", "dev": "eth2", "prefsrc": "192.168.2.1"},
+                {"type": "broadcast", "dev": "eth2", "prefsrc": "192.168.2.1", "dst": "192.168.2.255"}
+            ]
         )
 
     # Ensure that other nodes are reachable via ICMP through the VRF.

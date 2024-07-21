@@ -1,28 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, setuptools-scm, tempora, pytest-black, pytest-cov }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools-scm,
+  tempora,
+}:
 
 buildPythonPackage rec {
   pname = "portend";
-  version = "2.7.2";
+  version = "3.2.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3fbc0df9e4970b661e4d7386a91fc7bcf34ebeaf0333ce15d819d515a71ba8b2";
+    hash = "sha256-UlCjUsGclZ12fKyHi4Kdk+XcdiWlFDOZoqANxmKP+3I=";
   };
-
-  postPatch = ''
-    substituteInPlace pytest.ini --replace "--flake8" ""
-  '';
 
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ tempora ];
 
-  checkInputs = [ pytest pytest-black pytest-cov ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    py.test --deselect=test_portend.py::TestChecker::test_check_port_listening
-  '';
+  pythonImportsCheck = [ "portend" ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

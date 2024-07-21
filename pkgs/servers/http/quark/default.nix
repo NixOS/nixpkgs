@@ -18,6 +18,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Extremely small and simple HTTP GET/HEAD-only web server for static content";
+    mainProgram = "quark";
     homepage = "http://tools.suckless.org/quark";
     license = licenses.isc;
     maintainers = with maintainers; [ sikmir ];

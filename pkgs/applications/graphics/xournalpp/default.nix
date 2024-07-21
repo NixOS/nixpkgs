@@ -3,12 +3,15 @@
 
 , cmake
 , gettext
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 
+, alsa-lib
+, binutils
 , glib
 , gsettings-desktop-schemas
 , gtk3
+, gtksourceview4
 , librsvg
 , libsndfile
 , libxml2
@@ -23,20 +26,30 @@
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
-  version = "1.1.0";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-FIIpWgWvq1uo/lIQXpOkUTZ6YJPtOtxKF8VjXSgqrlE=";
+    repo = "xournalpp";
+    rev = "v${version}";
+    sha256 = "sha256-8UAAX/kixqiY9zEYs5eva0G2K2vlfnYd1yyVHMSfSeY=";
   };
 
-  nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook ];
+  postPatch = ''
+    substituteInPlace src/util/Stacktrace.cpp \
+      --replace-fail "addr2line" "${binutils}/bin/addr2line"
+  '';
+
+  nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook3 ];
+
   buildInputs =
-    [ glib
+    lib.optionals stdenv.isLinux [
+      alsa-lib
+    ] ++ [
+      glib
       gsettings-desktop-schemas
       gtk3
+      gtksourceview4
       librsvg
       libsndfile
       libxml2
@@ -48,15 +61,15 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional withLua lua;
 
-  buildFlags = "translations";
-
-  hardeningDisable = [ "format" ];
+  buildFlags = [ "translations" ];
 
   meta = with lib; {
     description = "Xournal++ is a handwriting Notetaking software with PDF annotation support";
     homepage    = "https://xournalpp.github.io/";
+    changelog   = "https://github.com/xournalpp/xournalpp/blob/v${version}/CHANGELOG.md";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ andrew-d sikmir ];
-    platforms   = platforms.linux;
+    maintainers = with maintainers; [ sikmir ];
+    platforms   = platforms.unix;
+    mainProgram = "xournalpp";
   };
 }

@@ -1,68 +1,69 @@
-{ lib
-, buildPythonPackage
-, click
-, click-completion
-, factory_boy
-, faker
-, fetchPypi
-, inquirer
-, notify-py
-, pbr
-, pendulum
-, ptable
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, twine
-, validate-email
+{
+  lib,
+  buildPythonPackage,
+  click,
+  click-completion,
+  factory-boy,
+  faker,
+  fetchPypi,
+  inquirer,
+  notify-py,
+  pbr,
+  pendulum,
+  prettytable,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  twine,
+  validate-email,
 }:
 
 buildPythonPackage rec {
   pname = "toggl-cli";
-  version = "2.4.2";
-  format = "setuptools";
+  version = "2.4.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "togglCli";
     inherit version;
-    sha256 = "1wgh231r16jyvaj1ch1pajvl9szflb4srs505pfdwdlqvz7rzww8";
+    hash = "sha256-P4pv6LMPIWXD04IQw01yo3z3voeV4OmsBOCSJgcrZ6g=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace-fail "==" ">="
+    substituteInPlace pytest.ini \
+      --replace ' --cov toggl -m "not premium"' ""
+  '';
+
+  build-system = [
     pbr
+    setuptools
     twine
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     click-completion
     inquirer
     notify-py
     pbr
     pendulum
-    ptable
+    prettytable
     requests
     validate-email
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     faker
-    factory_boy
+    factory-boy
   ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "notify-py==0.3.1" "notify-py>=0.3.1" \
-      --replace "click==7.1.2" "click>=7.1.2" \
-      --replace "pbr==5.5.1" "pbr>=5.5.1"
-    substituteInPlace pytest.ini \
-      --replace ' --cov toggl -m "not premium"' ""
-  '';
 
   preCheck = ''
     export TOGGL_API_TOKEN=your_api_token
@@ -73,19 +74,22 @@ buildPythonPackage rec {
   disabledTests = [
     "integration"
     "premium"
+    "test_basic_usage"
+    "test_now"
     "test_parsing"
     "test_type_check"
-    "test_now"
   ];
 
-  pythonImportsCheck = [
-    "toggl"
-  ];
+  pythonImportsCheck = [ "toggl" ];
+
+  # updates to a bogus tag
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
     homepage = "https://toggl.uhlir.dev/";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];
+    mainProgram = "toggl";
   };
 }

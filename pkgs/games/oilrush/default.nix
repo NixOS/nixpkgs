@@ -14,8 +14,7 @@ stdenv.mkDerivation {
     fetchurl { inherit url sha256; };
   shell = stdenv.shell;
   arch = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
-         else if stdenv.hostPlatform.system == "i686-linux" then "x86"
-         else "";
+         else lib.optionalString (stdenv.hostPlatform.system == "i686-linux") "x86";
   unpackPhase = ''
     mkdir oilrush
     cd oilrush
@@ -62,7 +61,7 @@ stdenv.mkDerivation {
     chmod +x "$out/bin/oilrush"
   '';
   meta = {
-    description = "A naval strategy game";
+    description = "Naval strategy game";
     longDescription = ''
       Oil Rush is a real-time naval strategy game based on group control. It
       combines the strategic challenge of a classical RTS with the sheer fun

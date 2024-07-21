@@ -14,7 +14,7 @@ let
     name = "mopidy-with-extensions-${mopidy.version}";
     paths = closePropagation cfg.extensionPackages;
     pathsToLink = [ "/${mopidyPackages.python.sitePackages}" ];
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
     postBuild = ''
       makeWrapper ${mopidy}/bin/mopidy $out/bin/mopidy \
         --prefix PYTHONPATH : $out/${mopidyPackages.python.sitePackages}
@@ -70,13 +70,15 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - mopidy mopidy - -"
-    ];
+    systemd.tmpfiles.settings."10-mopidy".${cfg.dataDir}.d = {
+      user = "mopidy";
+      group = "mopidy";
+    };
 
     systemd.services.mopidy = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "sound.target" ];
+      after = [ "network-online.target" "sound.target" ];
+      wants = [ "network-online.target" ];
       description = "mopidy music player daemon";
       serviceConfig = {
         ExecStart = "${mopidyEnv}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)}";

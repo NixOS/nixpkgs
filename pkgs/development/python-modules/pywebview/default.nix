@@ -1,36 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-resources
-, pyqtwebengine
-, pytest
-, pythonOlder
-, qt5
-, xvfb-run
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  bottle,
+  importlib-resources,
+  proxy-tools,
+  pygobject3,
+  pyqtwebengine,
+  pytest,
+  pythonOlder,
+  qt5,
+  qtpy,
+  six,
+  xvfb-run,
 }:
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "3.4";
+  version = "5.0.5";
+  pyproject = true;
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "r0x0r";
     repo = "pywebview";
-    rev = version;
-    sha256 = "sha256-3JHwtw8oReolEl4k8cdt7GCVGNkfWWJN6EnZYHxzDO8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Mep4r5OujsefXFQA09OospqnzgQ3xn8HHdZFKNo3oM4=";
   };
 
   nativeBuildInputs = [
+    setuptools-scm
     qt5.wrapQtAppsHook
   ];
 
   propagatedBuildInputs = [
+    bottle
     pyqtwebengine
+    proxy-tools
+    six
   ] ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pygobject3
     pytest
+    qtpy
     xvfb-run
   ];
 
@@ -52,9 +67,11 @@ buildPythonPackage rec {
     popd
   '';
 
+  pythonImportsCheck = [ "webview" ];
+
   meta = with lib; {
-    homepage = "https://github.com/r0x0r/pywebview";
     description = "Lightweight cross-platform wrapper around a webview";
+    homepage = "https://github.com/r0x0r/pywebview";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jojosch ];
   };

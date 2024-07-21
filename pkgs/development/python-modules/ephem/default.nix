@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "ephem";
-  version = "4.1";
+  version = "4.1.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c076794a511a34b5b91871c1cf6374dbc323ec69fca3f50eb718f20b171259d6";
+    hash = "sha256-DGSoqkAVdMdZQgRbmvcNFlbhTFNmFRwMu0AMvu3CNio=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     pytest
   ];

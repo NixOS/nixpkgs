@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , xxd
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mamba";
-  version = "2.2";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "Mamba";
     rev = "v${version}";
-    sha256 = "1885qxyfkpslzk0aaaaws0x73b10h9nbr04jkk7xhkya25gf280m";
+    hash = "sha256-S1+nGnB1LHIUgYves0qtWh+QXYKjtKWICpOo38b3zbY=";
     fetchSubmodules = true;
   };
 

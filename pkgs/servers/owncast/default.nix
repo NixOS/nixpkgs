@@ -1,41 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, bash, which, ffmpeg, makeWrapper, coreutils, ... }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+, bash
+, which
+, ffmpeg
+, makeBinaryWrapper
+}:
 
-buildGoModule rec {
+let
+  version = "0.1.3";
+in buildGoModule {
   pname = "owncast";
-  version = "0.0.10";
-
+  inherit version;
   src = fetchFromGitHub {
     owner = "owncast";
     repo = "owncast";
     rev = "v${version}";
-    sha256 = "sha256-OcolQ4KnZbSgS1dpphbCML40jlheKAxbac7rjRul6Oc=";
+    hash = "sha256-VoItAV/8hzrqj4bIgMum9Drr/kAafH63vXw3GO6nSOc=";
   };
-
-  vendorSha256 = "sha256-NARHYeOVT7sxfL1BdJc/CPCgHNZzjWE7kACJvrEC71Y=";
+  vendorHash = "sha256-JitvKfCLSravW5WRE0QllJTrRPLaaBg1GxJi3kmtiIU=";
 
   propagatedBuildInputs = [ ffmpeg ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
-  preInstall = ''
-    mkdir -p $out
-    cp -r $src/{static,webroot} $out
-  '';
-
-  postInstall = let
-
-    setupScript = ''
-      [ ! -d "$PWD/webroot" ] && (
-        ${coreutils}/bin/cp --no-preserve=mode -r "${placeholder "out"}/webroot" "$PWD"
-      )
-
-      [ ! -d "$PWD/static" ] && (
-        ${coreutils}/bin/ln -s "${placeholder "out"}/static" "$PWD"
-      )
-    '';
-  in ''
+  postInstall = ''
     wrapProgram $out/bin/owncast \
-      --run '${setupScript}' \
       --prefix PATH : ${lib.makeBinPath [ bash which ffmpeg ]}
   '';
 
@@ -45,7 +36,7 @@ buildGoModule rec {
     runHook postCheck
   '';
 
-  passthru.tests.owncast = nixosTests.testOwncast;
+  passthru.tests.owncast = nixosTests.owncast;
 
   meta = with lib; {
     description = "self-hosted video live streaming solution";
@@ -53,6 +44,7 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ MayNiklas ];
+    mainProgram = "owncast";
   };
 
 }

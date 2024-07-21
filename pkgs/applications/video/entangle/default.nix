@@ -1,14 +1,15 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, cmake
+, fetchpatch
+, itstool
 , libxml2
 , meson
 , ninja
 , perl
 , python3
 , pkgconf
-, wrapGAppsHook
+, wrapGAppsHook3
 , at-spi2-core
 , dbus
 , elfutils
@@ -32,6 +33,7 @@
 , libxkbcommon
 , orc
 , pcre
+, pcre2
 , udev
 , util-linux
 , xorg
@@ -49,16 +51,26 @@ stdenv.mkDerivation rec {
     sha256 = "hz2WSDOjriQSavFlDT+35x1X5MeInq80ZrSP1WR/td0=";
   };
 
+  patches = [
+    # Fix build with meson 0.61, can be removed on next update
+    # https://gitlab.com/entangle/entangle/-/issues/67
+    (fetchpatch {
+      url = "https://gitlab.com/entangle/entangle/-/commit/54795d275a93e94331a614c8712740fcedbdd4f0.patch";
+      sha256 = "iEgqGjKa0xwSdctwvNdEV361l9nx+bz53xn3fuDgtzY=";
+    })
+  ];
+
   nativeBuildInputs = [
-    cmake
-    glib.dev
-    libxml2.bin # for xmllint
+    itstool
+    glib
+    libxml2 # for xmllint
     meson
     ninja
     perl # for pod2man and build scripts
     python3 # for build scripts
     pkgconf
-    wrapGAppsHook
+    wrapGAppsHook3
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -68,7 +80,6 @@ stdenv.mkDerivation rec {
     elfutils
     gexiv2
     glib
-    gobject-introspection
     gst-plugins-base
     gstreamer
     gtk3
@@ -84,7 +95,8 @@ stdenv.mkDerivation rec {
     libunwind
     libxkbcommon
     orc
-    pcre
+    pcre # required by libselinux before we USE_PCRE2
+    pcre2 # required by glib-2.0
     udev
     util-linux
     zstd
@@ -92,8 +104,6 @@ stdenv.mkDerivation rec {
     libXdmcp
     libXtst
   ]);
-
-  dontUseCmakeConfigure = true;
 
   # Disable building of doc/reference since it requires network connection to render XML to HTML
   # Patch build script shebangs
@@ -123,5 +133,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ ShamrockLee ];
+    mainProgram = "entangle";
   };
 }

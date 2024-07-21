@@ -7,32 +7,34 @@
 , gtk3
 , gobject-introspection
 , libnotify
-, wrapGAppsHook
+, makeBinaryWrapper
+, wrapGAppsHook3
 , vte
+, nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "terminator";
-  version = "2.1.1";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "gnome-terminator";
     repo = "terminator";
-    rev = "v${version}";
-    sha256 = "1pfrzna30xv9yri6dsny1j5k35417m4hsg97c455vssywyl9w4jr";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0468d/sAM/UOiaSspwWaOGogoE8/Idth0G4CMCXWFFo=";
   };
 
   nativeBuildInputs = [
     file
     intltool
     gobject-introspection
-    wrapGAppsHook
+    makeBinaryWrapper
+    wrapGAppsHook3
     python3.pkgs.pytest-runner
   ];
 
   buildInputs = [
     gtk3
-    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
     keybinder3
     libnotify
     python3
@@ -49,18 +51,24 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     patchShebangs tests po
-    # dbus-python is correctly passed in propagatedBuildInputs, but for some reason setup.py complains.
-    # The wrapped terminator has the correct path added, so ignore this.
-    substituteInPlace setup.py --replace "'dbus-python'," ""
   '';
 
   doCheck = false;
 
   dontWrapGApps = true;
 
+  # HACK: 'wrapPythonPrograms' will add things to the $PATH in the wrapper. This bleeds into the
+  # terminal session produced by terminator. To avoid this, we force wrapPythonPrograms to only
+  # use gappsWrapperArgs by redefining wrapProgram to ignore its arguments and only apply the
+  # wrapper arguments we want it to use.
+  # TODO: Adjust wrapPythonPrograms to respect an argument that tells it to leave $PATH alone.
   preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    wrapProgram() {
+      wrapProgramBinary "$1" "''${gappsWrapperArgs[@]}"
+    }
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.terminator;
 
   meta = with lib; {
     description = "Terminal emulator with support for tiling and tabs";
@@ -70,6 +78,7 @@ python3.pkgs.buildPythonApplication rec {
       quadkonsole, etc. in that the main focus is arranging terminals in grids
       (tabs is the most common default method, which Terminator also supports).
     '';
+    changelog = "https://github.com/gnome-terminator/terminator/releases/tag/v${version}";
     homepage = "https://github.com/gnome-terminator/terminator";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bjornfor ];

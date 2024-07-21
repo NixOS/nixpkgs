@@ -1,43 +1,49 @@
 { appimageTools
 , fetchurl
 , lib
-, gsettings-desktop-schemas
-, gtk3
-, libxkbfile
-, udev
-, wooting-udev-rules
+, makeWrapper
 }:
+
 let
   pname = "wootility";
-  version = "3.5.12";
-in
-appimageTools.wrapType2 rec {
-  name = "${pname}-${version}";
-
+  version = "4.6.20";
   src = fetchurl {
-    url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-linux-latest/wootility-${version}.AppImage";
-    sha256 = "13bhckk25fzq9r9cdsg3yqjd4kn47asqdx8kw0in8iky4ri41vnc";
+    url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-lekker-linux-latest/wootility-lekker-${version}.AppImage";
+    sha256 = "sha256-JodmF3TThPpXXx1eOnYmYAJ4x5Ylcf35bw3R++5/Buk=";
   };
+in
+
+appimageTools.wrapType2 {
+  inherit pname version src;
+
+  extraInstallCommands =
+    let contents = appimageTools.extract { inherit pname version src; };
+    in ''
+      source "${makeWrapper}/nix-support/setup-hook"
+      wrapProgram $out/bin/wootility \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+
+      install -Dm444 ${contents}/wootility-lekker.desktop -t $out/share/applications
+      install -Dm444 ${contents}/wootility-lekker.png -t $out/share/pixmaps
+      substituteInPlace $out/share/applications/wootility-lekker.desktop \
+        --replace-fail 'Exec=AppRun' 'Exec=wootility' \
+        --replace-warn 'Name=wootility-lekker' 'Name=Wootility'
+    '';
 
   profile = ''
     export LC_ALL=C.UTF-8
-    export XDG_DATA_DIRS="${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS"
   '';
 
-  multiPkgs = extraPkgs;
-  extraPkgs =
-    pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ ([
-      udev
-      wooting-udev-rules
-      libxkbfile
-    ]);
-  extraInstallCommands = "mv $out/bin/{${name},${pname}}";
+  extraPkgs = pkgs: with pkgs; ([
+    xorg.libxkbfile
+  ]);
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wooting.io/wootility";
-    description = "A customization and management software for Wooting keyboards";
-    platforms = [ "x86_64-linux" ];
-    license = "unknown";
-    maintainers = with maintainers; [ davidtwco ];
+    description = "Customization and management software for Wooting keyboards";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ davidtwco sodiboo ];
+    mainProgram = "wootility";
   };
 }

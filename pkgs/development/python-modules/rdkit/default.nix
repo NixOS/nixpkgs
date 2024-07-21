@@ -1,47 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchzip
-, cmake
-, boost
-, catch2
-, inchi
-, cairo
-, eigen
-, python
-, rapidjson
-, maeparser
-, coordgenlibs
-, numpy
-, pandas
-, pillow
-, git
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  comic-neue,
+  boost,
+  catch2_3,
+  inchi,
+  cairo,
+  eigen,
+  python,
+  rapidjson,
+  maeparser,
+  coordgenlibs,
+  numpy,
+  pandas,
+  pillow,
+  memorymappingHook,
 }:
 let
   external = {
-    avalon = fetchzip {
-      url = "http://sourceforge.net/projects/avalontoolkit/files/AvalonToolkit_1.2/AvalonToolkit_1.2.0.source.tar";
-      sha256 = "0nhxfxckb5a5qs0g148f55yarhncqjgjzcvdskkv9rxi2nrs7160";
-      stripRoot = false;
+    avalon = fetchFromGitHub {
+      owner = "rdkit";
+      repo = "ava-formake";
+      rev = "AvalonToolkit_2.0.5-pre.3";
+      hash = "sha256-2MuFZgRIHXnkV7Nc1da4fa7wDx57VHUtwLthrmjk+5o=";
     };
     yaehmop = fetchFromGitHub {
       owner = "greglandrum";
       repo = "yaehmop";
-      rev = "1b13b52e2738a77715b1bad876e3b4e93f2b5269";
-      sha256 = "1jp7wz8win4mgwxkaz2gnrgsaaqgln04n2lwgfr96isdv1klf62d";
+      rev = "v2023.03.1";
+      hash = "sha256-K9//cDN69U4sLETfIZq9NUaBE3RXOReH53qfiCzutqM=";
     };
-    freesasa = fetchFromGitHub
-      {
-        owner = "mittinatten";
-        repo = "freesasa";
-        rev = "2.0.3";
-        sha256 = "0x686zm9fpyg5647fdgxnxgbwav99nc6ymh4bmkr2063yyda4kzc";
-      };
+    freesasa = fetchFromGitHub {
+      owner = "mittinatten";
+      repo = "freesasa";
+      rev = "2.0.3";
+      hash = "sha256-7E+imvfDAJFnXQRWb5hNaSu+Xrf9NXeIKc9fl+o3yHQ=";
+    };
   };
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2020.09.5";
+  version = "2023.09.5";
+  pyproject = false;
 
   src =
     let
@@ -51,36 +54,37 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      sha256 = "1ycbjia223d0w9xiwk36x2vkdidsx198rzkfyxz48cbax9vvklzq";
+      hash = "sha256-ZYNAHNBHQPx8rBJSvEWFEpdSpYyXcoqJ+nBA7tpHwQs=";
     };
 
   unpackPhase = ''
-    mkdir -p source/External/AvalonTools/avalon source/External/YAeHMOP/yaehmop source/External/FreeSASA/freesasa
-    cp -r ${src}/* source
-    cp -r ${external.avalon}/SourceDistribution/* source/External/AvalonTools/avalon
-    cp -r ${external.yaehmop}/* source/External/YAeHMOP/yaehmop
-    cp -r ${external.freesasa}/* source/External/FreeSASA/freesasa
+    cp -r $src/* .
+    find . -type d -exec chmod +w {} +
 
-    find source -type d -exec chmod 755 {} +
-    cp source/External/FreeSASA/freesasa2.c source/External/FreeSASA/freesasa/src
-    ln -s ${rapidjson} source/External/rapidjson-1.1.0
+    mkdir External/AvalonTools/avalon
+    # In buildPhase, CMake patches the file in this directory
+    # see https://github.com/rdkit/rdkit/pull/5928
+    cp -r ${external.avalon}/* External/AvalonTools/avalon
+
+    mkdir External/YAeHMOP/yaehmop
+    ln -s ${external.yaehmop}/* External/YAeHMOP/yaehmop
+
+    mkdir -p External/FreeSASA/freesasa
+    cp -r ${external.freesasa}/* External/FreeSASA/freesasa
+    chmod +w External/FreeSASA/freesasa/src
+    cp External/FreeSASA/freesasa2.c External/FreeSASA/freesasa/src
+
+    ln -s ${rapidjson} External/rapidjson-1.1.0
+    ln -s ${comic-neue}/share/fonts/truetype/ComicNeue-Regular.ttf Data/Fonts/
   '';
 
-  sourceRoot = "source";
-
-  nativeBuildInputs = [
-    cmake
-    git # required by freesasa
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     boost
-    catch2
-    inchi
-    eigen
     cairo
-    rapidjson
-  ];
+    catch2_3
+  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memorymappingHook ];
 
   propagatedBuildInputs = [
     numpy
@@ -95,10 +99,6 @@ buildPythonPackage rec {
   dontUseSetuptoolsCheck = true;
 
   preConfigure = ''
-    # Don't want this contacting the git remote during the build
-    substituteInPlace External/YAeHMOP/CMakeLists.txt --replace \
-      'GIT_TAG master' 'DOWNLOAD_COMMAND true'
-
     # Since we can't expand with bash in cmakeFlags
     cmakeFlags="$cmakeFlags -DPYTHON_NUMPY_INCLUDE_PATH=$(${python}/bin/python -c 'import numpy; print(numpy.get_include())')"
     cmakeFlags="$cmakeFlags -DFREESASA_DIR=$PWD/External/FreeSASA/freesasa"
@@ -107,7 +107,6 @@ buildPythonPackage rec {
   '';
 
   cmakeFlags = [
-    "-DCATCH_DIR=${catch2}/include/catch2"
     "-DINCHI_LIBRARY=${inchi}/lib/libinchi.so"
     "-DINCHI_LIBRARIES=${inchi}/lib/libinchi.so"
     "-DINCHI_INCLUDE_DIR=${inchi}/include/inchi"
@@ -133,25 +132,30 @@ buildPythonPackage rec {
     "-DBOOST_ROOT=${boost}"
     "-DBoost_NO_SYSTEM_PATHS=ON"
     "-DBoost_NO_BOOST_CMAKE=TRUE"
+    "-DCMAKE_SKIP_BUILD_RPATH=ON" # fails to find libs in pythonImportsCheckPhase otherwise
   ];
 
   checkPhase = ''
     export QT_QPA_PLATFORM='offscreen'
     export RDBASE=$(realpath ..)
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
     (cd $RDBASE/rdkit/Chem && python $RDBASE/rdkit/TestRunner.py test_list.py)
   '';
 
   pythonImportsCheck = [
-     "rdkit"
-     "rdkit.Chem"
-     "rdkit.Chem.AllChem"
+    "rdkit"
+    "rdkit.Chem"
+    "rdkit.Chem.AllChem"
   ];
 
   meta = with lib; {
     description = "Open source toolkit for cheminformatics";
-    maintainers = [ maintainers.rmcgibbo ];
+    maintainers = with maintainers; [
+      rmcgibbo
+      natsukium
+    ];
     license = licenses.bsd3;
     homepage = "https://www.rdkit.org";
+    changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.rev}";
   };
 }

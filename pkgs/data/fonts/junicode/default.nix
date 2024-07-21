@@ -1,27 +1,50 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchzip, texlive, callPackage }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "junicode";
-  version = "1.003";
-in
-fetchFromGitHub {
-  name = "${pname}-${version}";
+  version = "2.208";
 
-  owner = "psb1558";
-  repo = "Junicode-font";
-  rev = "55d816d91a5e19795d9b66edec478379ee2b9ddb";
+  src = fetchzip {
+    url = "https://github.com/psb1558/Junicode-font/releases/download/v${version}/Junicode_${version}.zip";
+    hash = "sha256-uzPzZ6b/CxdcoXSsxf2Cfs9/MpcGn7pQfdwL37pbvXg=";
+  };
 
-  postFetch = ''
-    local out_ttf=$out/share/fonts/junicode-ttf
-    mkdir -p $out_ttf
-    tar -f $downloadedFile -C $out_ttf --wildcards -x '*.ttf' --strip=2
+  outputs = [ "out" "doc" "tex" ];
+
+  patches = [ ./tex-font-path.patch ];
+
+  postPatch = ''
+    substituteInPlace TeX/junicode.sty \
+      --replace '@@@opentype_path@@@' "$out/share/fonts/opentype/" \
+      --replace '@@@truetype_path@@@' "$out/share/fonts/truetype/"
+    substituteInPlace TeX/junicodevf.sty \
+      --replace '@@@truetype_path@@@' "$out/share/fonts/truetype/"
   '';
 
-  sha256 = "1v334gljmidh58kmrarz5pf348b0ac7vh25f1xs3gyvn78khh5nw";
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm 444 -t $out/share/fonts/truetype TTF/*.ttf VAR/*.ttf
+    install -Dm 444 -t $out/share/fonts/opentype OTF/*.otf
+    install -Dm 444 -t $out/share/fonts/woff2 WOFF2/*.woff2
+
+    install -Dm 444 -t $doc/share/doc/${pname}-${version} docs/*.pdf
+
+    install -Dm 444 -t $tex/tex/latex/junicode TeX/junicode.sty
+    install -Dm 444 -t $tex/tex/latex/junicodevf TeX/junicodevf.{sty,lua}
+
+    runHook postInstall
+  '';
+
+  passthru = {
+    tlDeps = with texlive; [ xkeyval fontspec ];
+
+    tests = callPackage ./tests.nix { };
+  };
 
   meta = {
     homepage = "https://github.com/psb1558/Junicode-font";
-    description = "A Unicode font for medievalists";
+    description = "Unicode font for medievalists";
     maintainers = with lib.maintainers; [ ivan-timokhin ];
     license = lib.licenses.ofl;
   };

@@ -1,40 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, dataclasses
-, kafka-python
-, cython
-, zlib
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  gssapi,
+  kafka-python,
+  lz4,
+  packaging,
+  python-snappy,
+  pythonOlder,
+  setuptools,
+  zlib,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "aiokafka";
-  version = "0.7.2";
-  disabled = pythonOlder "3.6";
+  version = "0.10.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-D+91k4zVg28qPbWIrvyXi6WtDs1jeJt9jFGsrSBA3cs=";
+    repo = "aiokafka";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-G9Q77nWUUW+hG/wm9z/S8gea4U1wHZdj7WdK2LsKBos=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
+    setuptools
   ];
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    async-timeout
     kafka-python
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
+    packaging
   ];
 
-  # checks require running kafka server
+  optional-dependencies = {
+    snappy = [ python-snappy ];
+    lz4 = [ lz4 ];
+    zstd = [ zstandard ];
+    gssapi = [ gssapi ];
+  };
+
+  # Checks require running Kafka server
   doCheck = false;
 
   pythonImportsCheck = [ "aiokafka" ];
@@ -42,7 +57,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Kafka integration with asyncio";
     homepage = "https://aiokafka.readthedocs.org";
+    changelog = "https://github.com/aio-libs/aiokafka/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

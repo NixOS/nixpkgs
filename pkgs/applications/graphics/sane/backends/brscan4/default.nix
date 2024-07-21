@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb-compat-0_1 }:
+{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, libusb-compat-0_1 }:
 let
   myPatchElf = file: with lib; ''
     patchelf --set-interpreter \
-      ${stdenv.glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
+      ${stdenv.cc.libc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
       ${file}
   '';
 
@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
       url = "https://download.brother.com/welcome/dlf006645/${pname}-${version}.amd64.deb";
       sha256 = "sha256-Gpr5456MCNpyam3g2qPo7S3aEZFMaUGR8bu7YmRY8xk=";
     };
-  }."${stdenv.hostPlatform.system}";
+  }."${stdenv.hostPlatform.system}" or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   unpackPhase = ''
     ar x $src
     tar xfvz data.tar.gz
   '';
 
-  nativeBuildInputs = [ makeWrapper patchelf coreutils udevRules ];
+  nativeBuildInputs = [ makeWrapper patchelf udevRules ];
   buildInputs = [ libusb-compat-0_1 ];
   dontBuild = true;
 
@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
     description = "Brother brscan4 sane backend driver";
     homepage = "http://www.brother.com";
     platforms = [ "i686-linux" "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ jraygauthier ];
   };

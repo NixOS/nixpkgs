@@ -1,10 +1,11 @@
-{ lib, python3Packages }:
+{ stdenv, lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname = "piston-cli";
   version = "1.4.3";
+  format = "pyproject";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "qvDGVJcaMXUajdUQWl4W1dost8k0PsS9XX/o8uQrtfY=";
   };
@@ -15,10 +16,22 @@ python3Packages.buildPythonApplication rec {
     $out/bin/piston --help > /dev/null
   '';
 
+  nativeBuildInputs = with python3Packages; [
+    poetry-core
+  ];
+
+  pythonRelaxDeps = [
+    "rich"
+    "more-itertools"
+    "PyYAML"
+  ];
+
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Piston api tool";
     homepage = "https://github.com/Shivansh-007/piston-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ ethancedwards8 ];
+    mainProgram = "piston";
   };
 }

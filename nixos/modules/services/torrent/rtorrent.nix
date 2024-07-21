@@ -1,12 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 
 with lib;
 
 let
 
   cfg = config.services.rtorrent;
+  opt = options.services.rtorrent;
 
 in {
+  meta.maintainers = with lib.maintainers; [ thiagokokada ];
+
   options.services.rtorrent = {
     enable = mkEnableOption "rtorrent";
 
@@ -18,9 +21,19 @@ in {
       '';
     };
 
+    dataPermissions = mkOption {
+      type = types.str;
+      default = "0750";
+      example = "0755";
+      description = ''
+        Unix Permissions in octal on the rtorrent directory.
+      '';
+    };
+
     downloadDir = mkOption {
       type = types.str;
       default = "${cfg.dataDir}/download";
+      defaultText = literalExpression ''"''${config.${opt.dataDir}}/download"'';
       description = ''
         Where to put downloaded files.
       '';
@@ -42,14 +55,7 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.rtorrent;
-      defaultText = literalExpression "pkgs.rtorrent";
-      description = ''
-        The rtorrent package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "rtorrent" { };
 
     port = mkOption {
       type = types.port;
@@ -63,7 +69,7 @@ in {
       type = types.bool;
       default = false;
       description = ''
-        Whether to open the firewall for the port in <option>services.rtorrent.port</option>.
+        Whether to open the firewall for the port in {option}`services.rtorrent.port`.
       '';
     };
 
@@ -80,7 +86,7 @@ in {
       type = types.lines;
       default = "";
       description = ''
-        The content of <filename>rtorrent.rc</filename>. The <link xlink:href="https://rtorrent-docs.readthedocs.io/en/latest/cookbook.html#modernized-configuration-template">modernized configuration template</link> with the values specified in this module will be prepended using mkBefore. You can use mkForce to overwrite the config completly.
+        The content of {file}`rtorrent.rc`. The [modernized configuration template](https://rtorrent-docs.readthedocs.io/en/latest/cookbook.html#modernized-configuration-template) with the values specified in this module will be prepended using mkBefore. You can use mkForce to overwrite the config completely.
       '';
     };
   };
@@ -176,7 +182,7 @@ in {
 
       # XMLRPC
       scgi_local = (cfg.rpcsock)
-      schedule = scgi_group,0,0,"execute.nothrow=chown,\":rtorrent\",(cfg.rpcsock)"
+      schedule = scgi_group,0,0,"execute.nothrow=chown,\":${cfg.group}\",(cfg.rpcsock)"
       schedule = scgi_permission,0,0,"execute.nothrow=chmod,\"g+w,o=\",(cfg.rpcsock)"
     '';
 
@@ -198,12 +204,36 @@ in {
             ExecStartPre=''${pkgs.bash}/bin/bash -c "if test -e ${cfg.dataDir}/session/rtorrent.lock && test -z $(${pkgs.procps}/bin/pidof rtorrent); then rm -f ${cfg.dataDir}/session/rtorrent.lock; fi"'';
             ExecStart="${cfg.package}/bin/rtorrent -n -o system.daemon.set=true -o import=${rtorrentConfigFile}";
             RuntimeDirectory = "rtorrent";
-            RuntimeDirectoryMode = 755;
+            RuntimeDirectoryMode = 750;
+
+            CapabilityBoundingSet = [ "" ];
+            LockPersonality = true;
+            NoNewPrivileges = true;
+            PrivateDevices = true;
+            PrivateTmp = true;
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            # If the default user is changed, there is a good chance that they
+            # want to store data in e.g.: $HOME directory
+            # Relax hardening in this case
+            ProtectHome = lib.mkIf (cfg.user == "rtorrent") true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectProc = "invisible";
+            ProtectSystem = "full";
+            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter = [ "@system-service" "~@privileged" ];
           };
         };
       };
 
-      tmpfiles.rules = [ "d '${cfg.dataDir}' 0750 ${cfg.user} ${cfg.group} -" ];
+      tmpfiles.rules = [ "d '${cfg.dataDir}' ${cfg.dataPermissions} ${cfg.user} ${cfg.group} -" ];
     };
   };
 }

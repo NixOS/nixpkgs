@@ -1,29 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "suds";
-  version = "0.4";
-  disabled = isPy3k;
+  version = "1.1.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1w4s9051iv90c0gs73k80c3d51y2wbx1xgfdgg2hk7mv4gjlllnm";
+    hash = "sha256-HVz6dBFxk7JEpCM/JGxIPZ9BGYtEjF8UqLrRHE9knys=";
   };
 
-  patches = [ ./suds-0.4-CVE-2013-2217.patch ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
-    # Broken for security issues:
-    # - https://github.com/NixOS/nixpkgs/issues/19678
-    # - https://lwn.net/Vulnerabilities/559200/
-    broken = true;
-    description = "Lightweight SOAP client";
-    homepage = "https://fedorahosted.org/suds";
-    license = licenses.lgpl3Plus;
+  nativeCheckInputs = [
+    pytestCheckHook
+    six
+  ];
+
+  pythonImportsCheck = [ "suds" ];
+
+  meta = {
+    changelog = "https://github.com/suds-community/suds/blob/v${version}/CHANGELOG.md";
+    description = "Lightweight SOAP python client for consuming Web Services";
+    homepage = "https://github.com/suds-community/suds";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ wrmilling ];
   };
-
 }

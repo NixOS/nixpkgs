@@ -1,6 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, bzip2, expat, libedit, lmdb, openssl
-, darwin, libiconv, Security
+, bzip2, expat, libedit, lmdb, openssl, libxcrypt
 , python3 # for tests only
 , cpp11 ? false
 }:
@@ -23,24 +22,16 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zeroc-ice";
-  version = "3.7.6";
+  version = "3.7.10";
 
   src = fetchFromGitHub {
     owner = "zeroc-ice";
     repo = "ice";
     rev = "v${version}";
-    sha256 = "0zc8gmlzl2f38m1fj6pv2vm8ka7fkszd6hx2lb8gfv65vn3m4sk4";
+    hash = "sha256-l3cKsR8HSdtFGw1S12xueQOu/U9ABlOxQQtbHBj2izs=";
   };
 
-  buildInputs = [ zeroc_mcpp bzip2 expat libedit lmdb openssl ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.cctools libiconv Security ];
-
-  NIX_CFLAGS_COMPILE = "-Wno-error=class-memaccess -Wno-error=deprecated-copy";
-
-  prePatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Make.rules.Darwin \
-        --replace xcrun ""
-  '';
+  buildInputs = [ zeroc_mcpp bzip2 expat libedit lmdb openssl libxcrypt ];
 
   preBuild = ''
     makeFlagsArray+=(
@@ -58,11 +49,14 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "bin" "dev" ];
 
   doCheck = true;
-  checkInputs = with python3.pkgs; [ passlib ];
+  nativeCheckInputs = with python3.pkgs; [ passlib ];
   checkPhase = with lib; let
     # these tests require network access so we need to skip them.
     brokenTests = map escapeRegex [
       "Ice/udp" "Glacier2" "IceGrid/simple" "IceStorm" "IceDiscovery/simple"
+
+      # FIXME: certificate expired, remove for next release?
+      "IceSSL/configuration"
     ];
     # matches CONFIGS flag in makeFlagsArray
     configFlag = optionalString cpp11 "--config=cpp11-shared";
@@ -80,9 +74,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.zeroc.com/ice.html";
-    description = "The internet communications engine";
+    description = "Internet communications engine";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
+    broken = stdenv.isDarwin;
   };
 }

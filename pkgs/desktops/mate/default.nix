@@ -1,23 +1,20 @@
-{ pkgs, newScope }:
+{ pkgs, lib }:
 
 let
-  callPackage = newScope self;
-
-  self = rec {
+  packages = self: with self; {
 
     # Update script tailored to mate packages from git repository
-    mateUpdateScript = { pname, version, odd-unstable ? true, url ? "https://pub.mate-desktop.org/releases" }:
-      pkgs.genericUpdater {
-        inherit pname version odd-unstable;
-        attrPath = "mate.${pname}";
-        versionLister = "${pkgs.common-updater-scripts}/bin/list-archive-two-level-versions ${url}";
+    mateUpdateScript = { pname, odd-unstable ? true, rev-prefix ? "v", url ? null }:
+      pkgs.gitUpdater {
+        inherit odd-unstable rev-prefix;
+        url = if url == null then "https://git.mate-desktop.org/${pname}" else url;
       };
 
     atril = callPackage ./atril { };
     caja = callPackage ./caja { };
     caja-dropbox = callPackage ./caja-dropbox { };
     caja-extensions = callPackage ./caja-extensions { };
-    caja-with-extensions = callPackage ./caja-with-extensions { };
+    caja-with-extensions = callPackage ./caja/with-extensions.nix { };
     engrampa = callPackage ./engrampa { };
     eom = callPackage ./eom { };
     libmatekbd = callPackage ./libmatekbd { };
@@ -30,6 +27,7 @@ let
     mate-common = callPackage ./mate-common { };
     mate-control-center = callPackage ./mate-control-center { };
     mate-desktop = callPackage ./mate-desktop { };
+    mate-gsettings-overrides = callPackage ./mate-gsettings-overrides { };
     mate-icon-theme = callPackage ./mate-icon-theme { };
     mate-icon-theme-faenza = callPackage ./mate-icon-theme-faenza { };
     mate-indicator-applet = callPackage ./mate-indicator-applet { };
@@ -38,11 +36,13 @@ let
     mate-netbook = callPackage ./mate-netbook { };
     mate-notification-daemon = callPackage ./mate-notification-daemon { };
     mate-panel = callPackage ./mate-panel { };
+    mate-panel-with-applets = callPackage ./mate-panel/with-applets.nix { };
     mate-polkit = callPackage ./mate-polkit { };
     mate-power-manager = callPackage ./mate-power-manager { };
     mate-sensors-applet = callPackage ./mate-sensors-applet { };
     mate-session-manager = callPackage ./mate-session-manager { };
     mate-settings-daemon = callPackage ./mate-settings-daemon { };
+    mate-settings-daemon-wrapped = callPackage ./mate-settings-daemon/wrapped.nix { };
     mate-screensaver = callPackage ./mate-screensaver { };
     mate-system-monitor = callPackage ./mate-system-monitor { };
     mate-terminal = callPackage ./mate-terminal { };
@@ -51,12 +51,13 @@ let
     mate-user-guide = callPackage ./mate-user-guide { };
     mate-user-share = callPackage ./mate-user-share { };
     mate-utils = callPackage ./mate-utils { };
+    mate-wayland-session = callPackage ./mate-wayland-session { };
     mozo = callPackage ./mozo { };
-    pluma = callPackage ./pluma { inherit (pkgs.gnome) adwaita-icon-theme; };
+    pluma = callPackage ./pluma { };
     python-caja = callPackage ./python-caja { };
 
+    # Caja and mate-panel are managed in NixOS module.
     basePackages = [
-      caja
       libmatekbd
       libmatemixer
       libmateweather
@@ -67,16 +68,16 @@ let
       mate-icon-theme
       mate-menus
       mate-notification-daemon
-      mate-panel
       mate-polkit
       mate-session-manager
       mate-settings-daemon
+      mate-settings-daemon-wrapped
       mate-themes
     ];
 
     extraPackages = [
       atril
-      caja-extensions
+      caja-extensions # for caja-sendto
       engrampa
       eom
       mate-applets
@@ -87,7 +88,6 @@ let
       mate-netbook
       mate-power-manager
       mate-screensaver
-      mate-sensors-applet
       mate-system-monitor
       mate-terminal
       mate-user-guide
@@ -97,6 +97,20 @@ let
       pluma
     ];
 
+    cajaExtensions = [
+      caja-extensions
+    ];
+
+    panelApplets = [
+      mate-applets
+      mate-indicator-applet
+      mate-netbook
+      mate-notification-daemon
+      mate-media
+      mate-power-manager
+      mate-sensors-applet
+      mate-utils
+    ];
   };
 
-in self
+in lib.makeScope pkgs.newScope packages

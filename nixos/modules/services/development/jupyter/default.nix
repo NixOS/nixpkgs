@@ -34,17 +34,10 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      # NOTE: We don't use top-level jupyter because we don't
-      # want to pass in JUPYTER_PATH but use .environment instead,
-      # saving a rebuild.
-      default = pkgs.python3.pkgs.notebook;
-      defaultText = literalExpression "pkgs.python3.pkgs.notebook";
-      description = ''
-        Jupyter package to use.
-      '';
-    };
+    # NOTE: We don't use top-level jupyter because we don't
+    # want to pass in JUPYTER_PATH but use .environment instead,
+    # saving a rebuild.
+    package = mkPackageOption pkgs [ "python3" "pkgs" "notebook" ] { };
 
     command = mkOption {
       type = types.str;
@@ -57,7 +50,7 @@ in {
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 8888;
       description = ''
         Port number Jupyter will be listening on.
@@ -119,7 +112,7 @@ in {
 
     kernels = mkOption {
       type = types.nullOr (types.attrsOf(types.submodule (import ./kernel-options.nix {
-        inherit lib;
+        inherit lib pkgs;
       })));
 
       default = null;
@@ -143,16 +136,20 @@ in {
             language = "python";
             logo32 = "''${env.sitePackages}/ipykernel/resources/logo-32x32.png";
             logo64 = "''${env.sitePackages}/ipykernel/resources/logo-64x64.png";
+            extraPaths = {
+              "cool.txt" = pkgs.writeText "cool" "cool content";
+            };
           };
         }
       '';
-      description = "Declarative kernel config
+      description = ''
+        Declarative kernel config.
 
-      Kernels can be declared in any language that supports and has the required
-      dependencies to communicate with a jupyter server.
-      In python's case, it means that ipykernel package must always be included in
-      the list of packages of the targeted environment.
-      ";
+        Kernels can be declared in any language that supports and has the required
+        dependencies to communicate with a jupyter server.
+        In python's case, it means that ipykernel package must always be included in
+        the list of packages of the targeted environment.
+      '';
     };
   };
 
@@ -194,6 +191,7 @@ in {
         extraGroups = [ cfg.group ];
         home = "/var/lib/jupyter";
         createHome = true;
+        isSystemUser = true;
         useDefaultShell = true; # needed so that the user can start a terminal.
       };
     })

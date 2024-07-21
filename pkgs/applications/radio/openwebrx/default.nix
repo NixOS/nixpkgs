@@ -1,6 +1,7 @@
 { stdenv, lib, buildPythonPackage, buildPythonApplication, fetchFromGitHub
 , pkg-config, cmake, setuptools
-, rtl-sdr, soapysdr-with-plugins, csdr, direwolf
+, libsamplerate, fftwFloat
+, rtl-sdr, soapysdr-with-plugins, csdr, pycsdr, pydigiham, direwolf, sox, wsjtx, codecserver
 }:
 
 let
@@ -20,21 +21,21 @@ let
 
     meta = with lib; {
       homepage = "https://github.com/jketterl/js8py";
-      description = "A library to decode the output of the js8 binary of JS8Call";
+      description = "Library to decode the output of the js8 binary of JS8Call";
       license = licenses.gpl3Only;
-      maintainers = with maintainers; [ astro ];
+      maintainers = teams.c3d2.members;
     };
   };
 
   owrx_connector = stdenv.mkDerivation rec {
     pname = "owrx_connector";
-    version = "0.5.0";
+    version = "0.6.0";
 
     src = fetchFromGitHub {
       owner = "jketterl";
       repo = pname;
       rev = version;
-      sha256 = "0gz4nf2frrkx1mpjfjpz2j919fkc99g5lxd8lhva3lgqyisvf4yj";
+      sha256 = "sha256-1H0TJ8QN3b6Lof5TWvyokhCeN+dN7ITwzRvEo2X8OWc=";
     };
 
     nativeBuildInputs = [
@@ -43,38 +44,45 @@ let
     ];
 
     buildInputs = [
+      libsamplerate fftwFloat
+      csdr
       rtl-sdr
       soapysdr-with-plugins
     ];
 
     meta = with lib; {
       homepage = "https://github.com/jketterl/owrx_connector";
-      description = "A set of connectors that are used by OpenWebRX to interface with SDR hardware";
+      description = "Set of connectors that are used by OpenWebRX to interface with SDR hardware";
       license = licenses.gpl3Only;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ astro ];
+      maintainers = teams.c3d2.members;
     };
   };
 
 in
 buildPythonApplication rec {
   pname = "openwebrx";
-  version = "1.1.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = pname;
     rev = version;
-    sha256 = "0maxs07yx235xknvkbmhi2zds3vfkd66l6wz6kspz3jzl4c0v1f9";
+    hash = "sha256-i3Znp5Sxs/KtJazHh2v9/2P+3cEocWB5wIpF7E4pK9s=";
   };
 
   propagatedBuildInputs = [
     setuptools
     csdr
+    pycsdr
+    pydigiham
     js8py
     soapysdr-with-plugins
     owrx_connector
     direwolf
+    sox
+    wsjtx
+    codecserver
   ];
 
   pythonImportsCheck = [ "csdr" "owrx" "test" ];
@@ -85,8 +93,9 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/jketterl/openwebrx";
-    description = "A simple DSP library and command-line tool for Software Defined Radio";
+    description = "Simple DSP library and command-line tool for Software Defined Radio";
+    mainProgram = "openwebrx";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ astro ];
+    maintainers = teams.c3d2.members;
   };
 }

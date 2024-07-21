@@ -1,38 +1,73 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python,
-  django, django_compat, django_nose
+{
+  lib,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  buildPythonPackage,
+  nix-update-script,
+
+  # build-system
+  flit-gettext,
+  flit-scm,
+  nodejs,
+  npmHooks,
+
+  # dependencies
+  django,
+
+  # tests
+  pytest-django,
+  pytestCheckHook,
 }:
+
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "2.1.10";
+  version = "3.5.4";
+  pyproject = true;
 
-  # the pypi packages don't include everything required for the tests
   src = fetchFromGitHub {
-    owner = "arteria";
+    owner = "django-hijack";
     repo = "django-hijack";
-    rev = "v${version}";
-    sha256 = "01fwkjdzvw0yx2spwi7zc1yy64ndq1y72bfmk7kxnq5x803m2ak6";
+    rev = "refs/tags/${version}";
+    hash = "sha256-d8rKn4Hab7y/e/VLhVfr3A3TUhoDtjP7RhCj+o6IbyE=";
   };
 
-  checkInputs = [ django_nose ];
-  propagatedBuildInputs = [ django django_compat ];
+  postPatch = ''
+    sed -i "/addopts/d" pyproject.toml
 
-  checkPhase = ''
-    runHook preCheck
-
-    # we have to do a little bit of tinkering to convince the tests to run against the installed package, not the
-    # source directory
-    mkdir testbase
-    pushd testbase
-    mv ../runtests.py .
-    ${python.interpreter} runtests.py hijack
-    popd
-
-    runHook postCheck
+  # missing integrity hashes for yocto-queue, yargs-parser
+    cp ${./package-lock.json} package-lock.json
   '';
+
+  npmDeps = fetchNpmDeps {
+    inherit src postPatch;
+    hash = "sha256-npAFpdqGdttE4facBimS/y2SqwnCvOHJhd60SPR/IaA=";
+  };
+
+  build-system = [
+    flit-gettext
+    flit-scm
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+
+  dependencies = [ django ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-django
+  ];
+
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=hijack.tests.test_app.settings
+  '';
+
+  # needed for npmDeps update
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Allows superusers to hijack (=login as) and work on behalf of another user";
-    homepage = "https://github.com/arteria/django-hijack";
+    homepage = "https://github.com/django-hijack/django-hijack";
+    changelog = "https://github.com/django-hijack/django-hijack/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];
   };

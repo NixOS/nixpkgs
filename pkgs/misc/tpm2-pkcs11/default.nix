@@ -1,39 +1,45 @@
 { stdenv, lib, fetchFromGitHub, substituteAll
 , pkg-config, autoreconfHook, autoconf-archive, makeWrapper, patchelf
-, tpm2-tss, tpm2-tools, opensc, openssl, sqlite, python37, glibc, libyaml
+, tpm2-tss, tpm2-tools, opensc, openssl, sqlite, python3, glibc, libyaml
 , abrmdSupport ? true, tpm2-abrmd ? null
+, fapiSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-pkcs11";
-  version = "1.7.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Z9w6mIFen8Lf1l59XrMtR/Je2BZZycsOLxKS0VS4r4c=";
+    sha256 = "sha256-SoHtgZRIYNJg4/w1MIocZAM26mkrM+UOQ+RKCh6nwCk=";
   };
 
-  patches = lib.singleton (
-    substituteAll {
-      src = ./0001-configure-ac-version.patch;
-      VERSION = version;
-    });
+  patches = [
+    ./version.patch
+    ./graceful-fapi-fail.patch
+  ];
 
   # The preConfigure phase doesn't seem to be working here
   # ./bootstrap MUST be executed as the first step, before all
   # of the autoreconfHook stuff
   postPatch = ''
+    echo ${version} > VERSION
     ./bootstrap
   '';
+
+  configureFlags = lib.optionals (!fapiSupport) [
+    # Note: this will be renamed to with-fapi in next release.
+    "--enable-fapi=no"
+  ];
 
   nativeBuildInputs = [
     pkg-config autoreconfHook autoconf-archive makeWrapper patchelf
   ];
   buildInputs = [
     tpm2-tss tpm2-tools opensc openssl sqlite libyaml
-    (python37.withPackages (ps: [ ps.pyyaml ps.cryptography ps.pyasn1-modules ]))
+    (python3.withPackages (ps: with ps; [ packaging pyyaml cryptography pyasn1-modules tpm2-pytss ]))
   ];
 
   outputs = [ "out" "bin" "dev" ];
@@ -70,10 +76,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A PKCS#11 interface for TPM2 hardware";
+    description = "PKCS#11 interface for TPM2 hardware";
     homepage = "https://github.com/tpm2-software/tpm2-pkcs11";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "tpm2_ptool";
   };
 }

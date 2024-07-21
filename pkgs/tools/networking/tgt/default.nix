@@ -1,16 +1,16 @@
 { stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl
-, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux
+, docbook_xsl, coreutils, lsof, makeWrapper, sg3_utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "tgt";
-  version = "1.0.80";
+  version = "1.0.92";
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5qBqCHbkL6yw/iT2AtSumw8V0bV74TEyYMRgcPHW2lg=";
+    sha256 = "sha256-Axx9D4BIg68R9bDDNyIGw8n91Jg1YJ/zN1rE6aeMZcs=";
   };
 
   nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
@@ -22,6 +22,16 @@ stdenv.mkDerivation rec {
     "SD_NOTIFY=1"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=maybe-uninitialized"
+  ];
+
+  hardeningDisable = lib.optionals stdenv.isAarch64 [
+    # error: 'read' writing 1 byte into a region of size 0 overflows the destination
+    "fortify3"
+  ];
+
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
   ];
@@ -29,8 +39,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i 's|/usr/bin/||' doc/Makefile
     sed -i 's|/usr/include/libaio.h|${libaio}/include/libaio.h|' usr/Makefile
-    sed -i 's|/usr/include/sys/|${stdenv.glibc.dev}/include/sys/|' usr/Makefile
-    sed -i 's|/usr/include/linux/|${stdenv.glibc.dev}/include/linux/|' usr/Makefile
+    sed -i 's|/usr/include/sys/|${stdenv.cc.libc.dev}/include/sys/|' usr/Makefile
+    sed -i 's|/usr/include/linux/|${stdenv.cc.libc.dev}/include/linux/|' usr/Makefile
   '';
 
   postInstall = ''
@@ -51,8 +61,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "iSCSI Target daemon with RDMA support";
-    homepage = "http://stgt.sourceforge.net/";
-    license = licenses.gpl2;
+    homepage = "https://github.com/fujita/tgt";
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ johnazoidberg ];
   };

@@ -1,8 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
+, nixosTests
   # required
 , libiconv
 , libupnp
@@ -64,14 +66,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gerbera";
-  version = "1.9.2";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${version}";
-    sha256 = "sha256-uLHiGuBXYafpY1/Q4qWFt1CTHKW7vqq0o/zqIEbEZqs=";
+    sha256 = "sha256-j5J0u0zIjHY2kP5P8IzN2h+QQSCwsel/iTspad6V48s=";
   };
+
+  patches = [
+    # Can be removed on the next bump, see:
+    # https://github.com/gerbera/gerbera/pull/2840.
+    (fetchpatch {
+      name = "gerbera-fmt10.patch";
+      url = "https://github.com/gerbera/gerbera/commit/37957aac0aea776e6f843af2358916f81056a405.patch";
+      hash = "sha256-U7dyFGEbelVZeHYX/4fLOC0k+9pUKZ8qP/LIVXWCMcU=";
+    })
+  ];
 
   postPatch = lib.optionalString enableMysql ''
     substituteInPlace cmake/FindMySQL.cmake \
@@ -96,6 +108,8 @@ stdenv.mkDerivation rec {
     zlib
   ] ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
 
+  passthru.tests = { inherit (nixosTests) mediatomb; };
+
   meta = with lib; {
     homepage = "https://docs.gerbera.io/";
     description = "UPnP Media Server for 2020";
@@ -107,5 +121,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ardumont ];
     platforms = platforms.linux;
+    mainProgram = "gerbera";
   };
 }

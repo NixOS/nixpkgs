@@ -20,7 +20,7 @@ let
   '';
   backupDatabaseScript = db: ''
     dest="${cfg.location}/${db}.gz"
-    if ${mariadb}/bin/mysqldump ${if cfg.singleTransaction then "--single-transaction" else ""} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
+    if ${mariadb}/bin/mysqldump ${optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
     else
@@ -113,9 +113,10 @@ in
         };
       };
       services.mysql-backup = {
-        description = "Mysql backup service";
+        description = "MySQL backup service";
         enable = true;
         serviceConfig = {
+          Type = "oneshot";
           User = cfg.user;
         };
         script = backupScript;

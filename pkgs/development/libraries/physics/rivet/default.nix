@@ -1,25 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
+{ lib, stdenv, fetchurl, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texliveBasic, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "rivet";
-  version = "3.1.5";
+  version = "3.1.10";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    hash = "sha256-YhcXW3gab7z3EJd3qGePeplVEapV4a5WKIc151hQXZo=";
+    hash = "sha256-RYuODfHec46ZctJLJg6qCH3xLJnU/p3uU3fUfqakmRk=";
   };
 
-  patches = [
-    # Fixes build
-    (fetchpatch {
-      name = "rivet-3.1.5-namespace-fix.patch";
-      url = "https://gitlab.com/hepcedar/rivet/-/commit/17a99b38b52e65a4a3fd6289124bd9dd874c30bf.diff";
-      sha256 = "sha256-OknqghpMMB5nRHeeRc2ddxybhnkVGRB1x8jfOjrkyms=";
-    })
-  ];
-
-  latex = texlive.combine { inherit (texlive)
-    scheme-basic
+  latex = texliveBasic.withPackages (ps: with ps; [
     collection-pstricks
     collection-fontsrecommended
     l3kernel
@@ -33,7 +23,7 @@ stdenv.mkDerivation rec {
     xcolor
     xkeyval
     xstring
-    ;};
+  ]);
 
   nativeBuildInputs = [ rsync makeWrapper ];
   buildInputs = [ hepmc imagemagick python3 latex python3.pkgs.yoda ];
@@ -60,7 +50,8 @@ stdenv.mkDerivation rec {
       --replace '"less"' '"${less}/bin/less"'
     substituteInPlace bin/rivet-mkhtml \
       --replace '"make-plots"' \"$out/bin/make-plots\" \
-      --replace '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\"
+      --replace '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\" \
+      --replace 'ch_cmd = [sys.executable, os.path.join(os.path.dirname(__file__),' 'ch_cmd = [('
   '';
 
   configureFlags = [
@@ -81,7 +72,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A framework for comparison of experimental measurements from high-energy particle colliders to theory predictions";
+    description = "Framework for comparison of experimental measurements from high-energy particle colliders to theory predictions";
     license     = licenses.gpl3;
     homepage    = "https://rivet.hepforge.org";
     platforms   = platforms.unix;

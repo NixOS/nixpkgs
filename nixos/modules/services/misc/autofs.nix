@@ -47,7 +47,7 @@ in
           '''
         '';
         description = ''
-          Contents of <literal>/etc/auto.master</literal> file. See <command>auto.master(5)</command> and <command>autofs(5)</command>.
+          Contents of `/etc/auto.master` file. See {command}`auto.master(5)` and {command}`autofs(5)`.
         '';
       };
 
@@ -74,7 +74,7 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.kernelModules = [ "autofs4" ];
+    boot.kernelModules = [ "autofs" ];
 
     systemd.services.autofs =
       { description = "Automounts filesystems on demand";

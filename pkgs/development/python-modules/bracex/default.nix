@@ -1,15 +1,26 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  pytestCheckHook,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "bracex";
-  version = "2.2.1";
+  version = "2.4";
+  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c8d1296e00ad9a91030ccb4c291f9e4dc7c054f12c707ba3c5ff3e9a81bcd21";
+    hash = "sha256-on6vHfQs9WH+1Yt6jz/fEp0eoWqB4frdHReYm8Y4S+s=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeBuildInputs = [ hatchling ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bracex" ];
 
@@ -17,6 +28,6 @@ buildPythonPackage rec {
     description = "Bash style brace expansion for Python";
     homepage = "https://github.com/facelessuser/bracex";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

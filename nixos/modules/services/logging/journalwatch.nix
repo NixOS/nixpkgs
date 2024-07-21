@@ -56,6 +56,8 @@ in {
         '';
       };
 
+      package = mkPackageOption pkgs "journalwatch" { };
+
       priority = mkOption {
         type = types.int;
         default = 6;
@@ -64,7 +66,7 @@ in {
           A value between 7 ("debug"), and 0 ("emerg"). Defaults to 6 ("info").
           If you don't care about anything with "info" priority, you can reduce
           this to e.g. 5 ("notice") to considerably reduce the amount of
-          messages without needing many <option>filterBlocks</option>.
+          messages without needing many {option}`filterBlocks`.
         '';
       };
 
@@ -102,7 +104,7 @@ in {
         description = ''
           Extra lines to be added verbatim to the journalwatch/config configuration file.
           You can add any commandline argument to the config, without the '--'.
-          See <literal>journalwatch --help</literal> for all arguments and their description.
+          See `journalwatch --help` for all arguments and their description.
           '';
       };
 
@@ -113,11 +115,11 @@ in {
               type = types.str;
               example = "SYSLOG_IDENTIFIER = systemd";
               description = ''
-                Syntax: <literal>field = value</literal>
-                Specifies the log entry <literal>field</literal> this block should apply to.
-                If the <literal>field</literal> of a message matches this <literal>value</literal>,
-                this patternBlock's <option>filters</option> are applied.
-                If <literal>value</literal> starts and ends with a slash, it is interpreted as
+                Syntax: `field = value`
+                Specifies the log entry `field` this block should apply to.
+                If the `field` of a message matches this `value`,
+                this patternBlock's {option}`filters` are applied.
+                If `value` starts and ends with a slash, it is interpreted as
                 an extended python regular expression, if not, it's an exact match.
                 The journal fields are explained in systemd.journal-fields(7).
               '';
@@ -130,7 +132,7 @@ in {
                 (Reached target|Stopped target) .*
               '';
               description = ''
-                The filters to apply on all messages which satisfy <option>match</option>.
+                The filters to apply on all messages which satisfy {option}`match`.
                 Any of those messages that match any specified filter will be removed from journalwatch's output.
                 Each filter is an extended Python regular expression.
                 You can specify multiple filters and separate them by newlines.
@@ -239,8 +241,8 @@ in {
         Type = "oneshot";
         # requires a relative directory name to create beneath /var/lib
         StateDirectory = user;
-        StateDirectoryMode = 0750;
-        ExecStart = "${pkgs.python3Packages.journalwatch}/bin/journalwatch mail";
+        StateDirectoryMode = "0750";
+        ExecStart = "${getExe cfg.package} mail";
         # lowest CPU and IO priority, but both still in best-effort class to prevent starvation
         Nice=19;
         IOSchedulingPriority=7;

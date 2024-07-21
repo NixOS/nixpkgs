@@ -1,22 +1,43 @@
-{ lib, buildGoPackage, fetchFromGitHub}:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+, withSpeech ? !stdenv.isDarwin
+, makeWrapper
+, espeak-ng
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "mob";
-  version = "2.1.0";
-  goPackagePath = "github.com/remotemobprogramming/mob";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "remotemobprogramming";
-    repo = pname;
-    sha256 = "sha256-K8ID8cetzCaMc/PVRNMyIhrshtEUiD6U/jI4e0TcOO4=";
+    repo = "mob";
+    rev = "v${version}";
+    hash = "sha256-CUD4gcQrLzYsD6zX6I4C59lHGKOaE5ggjbIVyznBNEg=";
   };
 
+  vendorHash = null;
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  ldflags = [ "-s" "-w" ];
+
+  doCheck = false;
+
+  preFixup = lib.optionalString withSpeech ''
+    wrapProgram $out/bin/mob \
+      --set MOB_VOICE_COMMAND "${lib.getBin espeak-ng}/bin/espeak"
+  '';
+
   meta = with lib; {
-    description = "Tool for swift git handover";
+    description = "Tool for smooth git handover";
+    mainProgram = "mob";
     homepage = "https://github.com/remotemobprogramming/mob";
     license = licenses.mit;
-    maintainers = [ maintainers.ericdallo ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ ericdallo ];
   };
 }

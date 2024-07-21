@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     zstandard
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
@@ -36,5 +36,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Neo23x0/log4shell-detector";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "log4shell-detector";
   };
 }

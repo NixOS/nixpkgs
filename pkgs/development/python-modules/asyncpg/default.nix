@@ -1,30 +1,55 @@
-{ lib, isPy3k, fetchPypi, buildPythonPackage
-, uvloop, postgresql }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  async-timeout,
+  uvloop,
+  postgresql,
+  pythonOlder,
+  pytest-xdist,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "asyncpg";
-  version = "0.24.0";
-  disabled = !isPy3k;
+  version = "0.29.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3S+gY8M0SCNIfZ3cy0CALwJiLd+L+KbMU4he56LBwMY=";
+    hash = "sha256-0cSeH0T/+v2aVeGpsQFZCFnYgdY56ikiUW9dnFEtNU4=";
   };
 
-  checkInputs = [
+  # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
+  doCheck = postgresql.doCheck;
+
+  # required for compatibility with Python versions older than 3.11
+  # see https://github.com/MagicStack/asyncpg/blob/v0.29.0/asyncpg/_asyncio_compat.py#L13
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ async-timeout ];
+
+  nativeCheckInputs = [
     uvloop
     postgresql
+    pytest-xdist
+    pytestCheckHook
   ];
+
+  preCheck = ''
+    rm -rf asyncpg/
+  '';
 
   pythonImportsCheck = [ "asyncpg" ];
 
   meta = with lib; {
+    description = "Asyncio PosgtreSQL driver";
     homepage = "https://github.com/MagicStack/asyncpg";
-    description = "An asyncio PosgtreSQL driver";
+    changelog = "https://github.com/MagicStack/asyncpg/releases/tag/v${version}";
     longDescription = ''
       Asyncpg is a database interface library designed specifically for
       PostgreSQL and Python/asyncio. asyncpg is an efficient, clean
-      implementation of PostgreSQL server binary protocol for use with Python’s
+      implementation of PostgreSQL server binary protocol for use with Python's
       asyncio framework.
     '';
     license = licenses.asl20;

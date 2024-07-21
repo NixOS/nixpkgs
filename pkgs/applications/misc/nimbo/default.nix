@@ -1,24 +1,50 @@
-{ lib, setuptools, boto3, requests, click, pyyaml, pydantic
-, buildPythonApplication, pythonOlder, installShellFiles, fetchFromGitHub
-, awscli }:
+{ lib
+, python3
+, fetchFromGitHub
+, installShellFiles
+, awscli
+}:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "nimbo";
-  version = "0.2.4";
-  disabled = pythonOlder "3.6";
+  version = "0.3.0";
+  disabled = python3.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nimbo-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fs28s9ynfxrb4rzba6cmik0kl0q0vkpb4zdappsq62jqf960k24";
+    sha256 = "YC5T02Sw22Uczufbyts8l99oCQW4lPq0gPMRXCoKsvw=";
   };
+
+  # Rich + Colorama are added in `propagatedBuildInputs`
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "awscli>=1.19<2.0" "" \
+      --replace "colorama==0.4.3" "" \
+      --replace "rich>=10.1.0" ""
+  '';
+
   nativeBuildInputs = [ installShellFiles ];
-  propagatedBuildInputs = [ setuptools boto3 awscli requests click pyyaml pydantic ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    setuptools
+    boto3
+    requests
+    click
+    pyyaml
+    pydantic
+    rich
+    colorama
+  ];
 
   # nimbo tests require an AWS instance
   doCheck = false;
   pythonImportsCheck = [ "nimbo" ];
+
+  makeWrapperArgs = [
+    "--prefix" "PATH" ":" (lib.makeBinPath [ awscli ])
+  ];
 
   postInstall = ''
     installShellCompletion --cmd nimbo \
@@ -31,6 +57,6 @@ buildPythonApplication rec {
     description = "Run machine learning jobs on AWS with a single command";
     homepage = "https://github.com/nimbo-sh/nimbo";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ alex-eyre noreferences ];
+    maintainers = with maintainers; [ noreferences ];
   };
 }

@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rosegarden";
-  version = "20.12";
+  version = "22.12.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/rosegarden/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-iGaEr8WFipV4I00fhFGI2xMBFPf784IIxNXs2hUTHFs=";
+    sha256 = "sha256-fqeif37lxJeBcI+cYVpRkZuJImSlmeZO3yzSNzPZkgY=";
   };
 
   postPhase = ''
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.rosegardenmusic.com/";
     description = "Music composition and editing environment";
+    mainProgram = "rosegarden";
     longDescription = ''
       Rosegarden is a music composition and editing environment based around
       a MIDI sequencer that features a rich understanding of music notation

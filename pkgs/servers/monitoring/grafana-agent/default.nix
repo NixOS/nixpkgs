@@ -1,46 +1,115 @@
-{ lib, buildGoModule, fetchFromGitHub, systemd }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchYarnDeps
+, fixup-yarn-lock
+, grafana-agent
+, nix-update-script
+, nixosTests
+, nodejs
+, stdenv
+, systemd
+, testers
+, yarn
+}:
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.21.2";
+  version = "0.41.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "grafana";
     repo = "agent";
-    sha256 = "sha256-s++21feD3L2HuVYFjWhNIOGTjjX+lXwURc4PqbwFnhI=";
+    rev = "v${version}";
+    hash = "sha256-A/h8Mwtor4VUT7e7TsNiE/0OOXCSq38GAf9j7c8ZDKk=";
   };
 
-  vendorSha256 = "sha256-kxLtbElzfimC/ZefUyTlfQiUZo4y0f1riajRm5shVdU=";
+  vendorHash = "sha256-W29GZoZfgjdSwGiFz4udGA9gXgmM0xIDEGld7ZE1ycQ=";
+  proxyVendor = true; # darwin/linux hash mismatch
 
-  patches = [
-    # https://github.com/grafana/agent/issues/731
-    ./skip_test_requiring_network.patch
+  frontendYarnOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/internal/web/ui/yarn.lock";
+    hash = "sha256-WqbIg18qUNcs9O2wh7DAzwXKb60iEuPL8zFCIgScqI0=";
+  };
+
+  ldflags = let
+    prefix = "github.com/grafana/agent/internal/build";
+  in [
+    "-s" "-w"
+    # https://github.com/grafana/agent/blob/v0.41.0/Makefile#L132-L137
+    "-X ${prefix}.Version=${version}"
+    "-X ${prefix}.Branch=v${version}"
+    "-X ${prefix}.Revision=v${version}"
+    "-X ${prefix}.BuildUser=nix"
+    "-X ${prefix}.BuildDate=1980-01-01T00:00:00Z"
   ];
+
+  nativeBuildInputs = [ fixup-yarn-lock nodejs yarn ];
+
+  tags = [
+    "builtinassets"
+    "nonetwork"
+    "nodocker"
+    "promtail_journal_enabled"
+  ];
+
+  subPackages = [
+    "cmd/grafana-agent"
+    "cmd/grafana-agentctl"
+    "internal/web/ui"
+  ];
+
+  preBuild = ''
+    export HOME="$TMPDIR"
+
+    pushd internal/web/ui
+    fixup-yarn-lock yarn.lock
+    yarn config --offline set yarn-offline-mirror $frontendYarnOfflineCache
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules
+    yarn --offline run build
+    popd
+  '';
+
+  # do not pass preBuild to go-modules.drv, as it would otherwise fail to build.
+  # but even if it would work, it simply isn't needed in that scope.
+  overrideModAttrs = (_: {
+    preBuild = null;
+  });
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
-  NIX_CFLAGS_COMPILE = [ "-I${lib.getDev systemd}/include" ];
-
-  # tries to access /sys: https://github.com/grafana/agent/issues/333
-  preBuild = ''
-    rm pkg/integrations/node_exporter/node_exporter_test.go
-  '';
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isLinux [ "-I${lib.getDev systemd}/include" ]);
 
   # go-systemd uses libsystemd under the hood, which does dlopen(libsystemd) at
   # runtime.
   # Add to RUNPATH so it can be found.
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     patchelf \
-      --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/agent)" \
-      $out/bin/agent
+      --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/grafana-agent)" \
+      $out/bin/grafana-agent
   '';
 
-  meta = with lib; {
-    description = "A lightweight subset of Prometheus and more, optimized for Grafana Cloud";
-    license = licenses.asl20;
+  passthru = {
+    tests = {
+      inherit (nixosTests) grafana-agent;
+      version = testers.testVersion {
+        inherit version;
+        command = "${lib.getExe grafana-agent} --version";
+        package = grafana-agent;
+      };
+    };
+    updateScript = nix-update-script { };
+    # alias for nix-update to be able to find and update this attribute
+    offlineCache = frontendYarnOfflineCache;
+  };
+
+  meta = {
+    description = "Lightweight subset of Prometheus and more, optimized for Grafana Cloud";
+    license = lib.licenses.asl20;
     homepage = "https://grafana.com/products/cloud";
-    maintainers = with maintainers; [ flokli ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/grafana/agent/blob/${src.rev}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [ flokli emilylange ];
+    mainProgram = "grafana-agent";
   };
 }

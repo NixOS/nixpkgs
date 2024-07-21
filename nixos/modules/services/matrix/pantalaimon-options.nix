@@ -7,7 +7,7 @@ with lib;
       type = types.path;
       default = "/var/lib/pantalaimon-${name}";
       description = ''
-        The directory where <literal>pantalaimon</literal> should store its state such as the database file.
+        The directory where `pantalaimon` should store its state such as the database file.
       '';
     };
 
@@ -23,7 +23,7 @@ with lib;
       type = types.str;
       example = "https://matrix.org";
       description = ''
-        The URI of the homeserver that the <literal>pantalaimon</literal> proxy should
+        The URI of the homeserver that the `pantalaimon` proxy should
         forward requests to, without the matrix API path but including
         the http(s) schema.
       '';
@@ -62,7 +62,7 @@ with lib;
       default = { };
       description = ''
         Extra configuration options. See
-        <link xlink:href="https://github.com/matrix-org/pantalaimon/blob/master/docs/man/pantalaimon.5.md">pantalaimon(5)</link>
+        [pantalaimon(5)](https://github.com/matrix-org/pantalaimon/blob/master/docs/man/pantalaimon.5.md)
         for available options.
       '';
     };

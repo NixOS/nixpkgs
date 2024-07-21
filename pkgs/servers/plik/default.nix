@@ -1,16 +1,17 @@
 { lib, fetchurl, makeWrapper, runCommand, callPackage }:
 
 let
-  version = "1.3.1";
+  version = "1.3.7";
 
-  programs = callPackage ./programs.nix {};
+  programs = callPackage ./programs.nix { };
 
   webapp = fetchurl {
     url = "https://github.com/root-gg/plik/releases/download/${version}/plik-${version}-linux-amd64.tar.gz";
-    sha256 = "KN6cp29KKdGamYnfL3jYltx0EDx6syDPfV0jShOk7Zw=";
+    hash = "sha256-Uj3I/ohgMr/Ud5xAZiBjsIW8bSdUeXXv9NYKLu8Aym8=";
   };
 
-in {
+in
+{
 
   inherit (programs) plik plikd-unwrapped;
 
@@ -20,6 +21,6 @@ in {
     mv plik-*/webapp/dist $out/libexec/plikd/webapp
     cp ${programs.plikd-unwrapped}/bin/plikd $out/libexec/plikd/bin/plikd
     makeWrapper $out/libexec/plikd/bin/plikd $out/bin/plikd \
-      --run "cd $out/libexec/plikd/bin"
+      --chdir "$out/libexec/plikd/bin"
   '';
 }

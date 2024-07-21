@@ -28,14 +28,15 @@ copyDesktopItems() {
         return
     fi
 
+    applications="${!outputBin}/share/applications"
     for desktopItem in $desktopItems; do
         if [[ -f "$desktopItem" ]]; then
-            echo "Copying '$desktopItem' into '$out/share/applications'"
-            install -D -m 444 -t "$out"/share/applications "$desktopItem"
+            echo "Copying '$desktopItem' into '${applications}'"
+            install -D -m 444 -t "${applications}" "$desktopItem"
         else
             for f in "$desktopItem"/share/applications/*.desktop; do
-                echo "Copying '$f' into '$out/share/applications'"
-                install -D -m 444 -t "$out"/share/applications "$f"
+                echo "Copying '$f' into '${applications}'"
+                install -D -m 444 -t "${applications}" "$f"
             done
         fi
     done

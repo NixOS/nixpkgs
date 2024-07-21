@@ -8,7 +8,7 @@ in
 {
   options = {
     services.distccd = {
-      enable = mkEnableOption "distccd";
+      enable = mkEnableOption "distccd, a distributed C/C++ compiler";
 
       allowedClients = mkOption {
         type = types.listOf types.str;
@@ -66,14 +66,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.distcc;
-        defaultText = literalExpression "pkgs.distcc";
-        description = ''
-          The distcc package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "distcc" { };
 
       port = mkOption {
         type = types.port;

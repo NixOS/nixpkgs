@@ -1,14 +1,15 @@
-{stdenv, lib, fetchFromGitLab, autoconf, automake, libtool}:
+{ stdenv, lib, fetchFromGitea, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "soundtouch";
-  version = "2.2";
+  version = "2.3.3";
 
-  src = fetchFromGitLab {
-    owner = pname;
-    repo = pname;
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "soundtouch";
+    repo = "soundtouch";
     rev = version;
-    sha256 = "12i6yg8vvqwyk412lxl2krbfby6hnxld8qxy0k4m5xp4g94jiq4p";
+    hash = "sha256-imeeTj+3gXxoGTuC/13+BAplwcnQ0wRJdSVt7MPlBxc=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
@@ -18,10 +19,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A program and library for changing the tempo, pitch and playback rate of audio";
+    description = "Program and library for changing the tempo, pitch and playback rate of audio";
     homepage = "https://www.surina.net/soundtouch/";
     license = licenses.lgpl21Plus;
-    platforms = platforms.all;
     maintainers = with maintainers; [ orivej ];
+    mainProgram = "soundstretch";
+    platforms = platforms.all;
   };
 }

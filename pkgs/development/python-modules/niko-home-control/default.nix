@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nclib
-, netaddr
-, netifaces
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nclib,
+  netaddr,
+  netifaces,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "niko-home-control";
-  version = "0.2.2";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "NoUseFreak";
     repo = pname;
     rev = version;
-    sha256 = "0ah02dfnnbk98grvd180fp9rak5gpi58xiql1yyzig5pcbjidvk3";
+    sha256 = "sha256-n/uQAX2LgxeGTRF56+G5vm5wbeTQQQODV4EKaPgKw1k=";
   };
 
   propagatedBuildInputs = [
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nikohomecontrol"
-  ];
+  pythonImportsCheck = [ "nikohomecontrol" ];
 
   meta = with lib; {
     description = "Python SDK for Niko Home Control";

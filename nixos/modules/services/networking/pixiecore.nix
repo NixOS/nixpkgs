@@ -6,7 +6,7 @@ let
   cfg = config.services.pixiecore;
 in
 {
-  meta.maintainers = with maintainers; [ bbigras danderson ];
+  meta.maintainers = with maintainers; [ bbigras ];
 
   options = {
     services.pixiecore = {
@@ -16,14 +16,14 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Open ports (67, 69 UDP and 4011, 'port', 'statusPort' TCP) in the firewall for Pixiecore.
+          Open ports (67, 69, 4011 UDP and 'port', 'statusPort' TCP) in the firewall for Pixiecore.
         '';
       };
 
       mode = mkOption {
         description = "Which mode to use";
         default = "boot";
-        type = types.enum [ "api" "boot" ];
+        type = types.enum [ "api" "boot" "quick" ];
       };
 
       debug = mkOption {
@@ -36,6 +36,12 @@ in
         type = types.bool;
         default = false;
         description = "Handle DHCP traffic without binding to the DHCP server port";
+      };
+
+      quick = mkOption {
+        description = "Which quick option to use";
+        default = "xyz";
+        type = types.enum [ "arch" "centos" "coreos" "debian" "fedora" "ubuntu" "xyz" ];
       };
 
       kernel = mkOption {
@@ -76,8 +82,8 @@ in
 
       apiServer = mkOption {
         type = types.str;
-        example = "localhost:8080";
-        description = "host:port to connect to the API. Ignored unless mode is set to 'api'";
+        example = "http://localhost:8080";
+        description = "URI to connect to the API. Ignored unless mode is set to 'api'";
       };
 
       extraArguments = mkOption {
@@ -97,8 +103,8 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 4011 cfg.port cfg.statusPort ];
-      allowedUDPPorts = [ 67 69 ];
+      allowedTCPPorts = [ cfg.port cfg.statusPort ];
+      allowedUDPPorts = [ 67 69 4011 ];
     };
 
     systemd.services.pixiecore = {
@@ -117,6 +123,8 @@ in
               then [ "boot" cfg.kernel ]
                    ++ optional (cfg.initrd != "") cfg.initrd
                    ++ optionals (cfg.cmdLine != "") [ "--cmdline" cfg.cmdLine ]
+              else if cfg.mode == "quick"
+              then [ "quick" cfg.quick ]
               else [ "api" cfg.apiServer ];
           in
             ''

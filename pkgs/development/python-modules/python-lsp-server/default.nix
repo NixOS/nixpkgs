@@ -1,107 +1,144 @@
-{ lib
-, autopep8
-, buildPythonPackage
-, fetchFromGitHub
-, flake8
-, flaky
-, jedi
-, matplotlib
-, mccabe
-, numpy
-, pandas
-, pluggy
-, pycodestyle
-, pydocstyle
-, pyflakes
-, pylint
-, pyqt5
-, pytestCheckHook
-, python-lsp-jsonrpc
-, pythonOlder
-, rope
-, setuptools
-, ujson
-, yapf
-, withAutopep8 ? true
-, withFlake8 ? true
-, withMccabe ? true
-, withPycodestyle ? true
-, withPydocstyle ? true
-, withPyflakes ? true
-, withPylint ? true
-, withRope ? true
-, withYapf ? true
+{
+  lib,
+  stdenv,
+  autopep8,
+  buildPythonPackage,
+  docstring-to-markdown,
+  fetchFromGitHub,
+  flake8,
+  flaky,
+  importlib-metadata,
+  jedi,
+  matplotlib,
+  mccabe,
+  numpy,
+  pandas,
+  pluggy,
+  pycodestyle,
+  pydocstyle,
+  pyflakes,
+  pylint,
+  pytestCheckHook,
+  python-lsp-jsonrpc,
+  pythonOlder,
+  rope,
+  setuptools,
+  setuptools-scm,
+  toml,
+  ujson,
+  websockets,
+  whatthepatch,
+  yapf,
 }:
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.2.4";
-  disabled = pythonOlder "3.6";
+  version = "1.11.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0c1g46hpzjhqbjcmv6xm3by3jprcjhzjslqzrp95hdkbykvrgs5x";
+    repo = "python-lsp-server";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0DFcnGlyDOK0Lxpr++xV6klhFF9b1fihH5FY/tblr+E=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
-      --replace "--cov pylsp --cov test" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
+      --replace-fail "--cov pylsp --cov test" ""
   '';
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "autopep8"
+    "flake8"
+    "mccabe"
+    "pycodestyle"
+    "pydocstyle"
+    "pyflakes"
+  ];
+
+  nativeBuildInputs = [ setuptools-scm ];
+
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
+    docstring-to-markdown
     jedi
     pluggy
     python-lsp-jsonrpc
-    setuptools
+    setuptools # `pkg_resources`imported in pylsp/config/config.py
     ujson
-  ] ++ lib.optional withAutopep8 autopep8
-  ++ lib.optional withFlake8 flake8
-  ++ lib.optional withMccabe mccabe
-  ++ lib.optional withPycodestyle pycodestyle
-  ++ lib.optional withPydocstyle pydocstyle
-  ++ lib.optional withPyflakes pyflakes
-  ++ lib.optional withPylint pylint
-  ++ lib.optional withRope rope
-  ++ lib.optional withYapf yapf;
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  checkInputs = [
-    flaky
-    matplotlib
-    numpy
-    pandas
-    pyqt5
-    pytestCheckHook
-  ];
+  passthru.optional-dependencies = {
+    all = [
+      autopep8
+      flake8
+      mccabe
+      pycodestyle
+      pydocstyle
+      pyflakes
+      pylint
+      rope
+      toml
+      whatthepatch
+      yapf
+    ];
+    autopep8 = [ autopep8 ];
+    flake8 = [ flake8 ];
+    mccabe = [ mccabe ];
+    pycodestyle = [ pycodestyle ];
+    pydocstyle = [ pydocstyle ];
+    pyflakes = [ pyflakes ];
+    pylint = [ pylint ];
+    rope = [ rope ];
+    yapf = [
+      whatthepatch
+      yapf
+    ];
+    websockets = [ websockets ];
+  };
 
-  disabledTests = [
-    # pytlint output changed
-    "test_lint_free_pylint"
-  ] ++ lib.optional (!withPycodestyle) "test_workspace_loads_pycodestyle_config";
+  nativeCheckInputs =
+    [
+      flaky
+      matplotlib
+      numpy
+      pandas
+      pytestCheckHook
+    ]
+    ++ passthru.optional-dependencies.all;
 
-  disabledTestPaths = lib.optional (!withAutopep8) "test/plugins/test_autopep8_format.py"
-    ++ lib.optional (!withRope) "test/plugins/test_completion.py"
-    ++ lib.optional (!withFlake8) "test/plugins/test_flake8_lint.py"
-    ++ lib.optional (!withMccabe) "test/plugins/test_mccabe_lint.py"
-    ++ lib.optional (!withPycodestyle) "test/plugins/test_pycodestyle_lint.py"
-    ++ lib.optional (!withPydocstyle) "test/plugins/test_pydocstyle_lint.py"
-    ++ lib.optional (!withPyflakes) "test/plugins/test_pyflakes_lint.py"
-    ++ lib.optional (!withPylint) "test/plugins/test_pylint_lint.py"
-    ++ lib.optional (!withRope) "test/plugins/test_rope_rename.py"
-    ++ lib.optional (!withYapf) "test/plugins/test_yapf_format.py";
+  disabledTests =
+    [
+      # Don't run lint tests
+      "test_pydocstyle"
+      # https://github.com/python-lsp/python-lsp-server/issues/243
+      "test_numpy_completions"
+      "test_workspace_loads_pycodestyle_config"
+      "test_autoimport_code_actions_and_completions_for_notebook_document"
+      # avoid dependencies on many Qt things just to run one singular test
+      "test_pyqt_completion"
+    ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
 
-  pythonImportsCheck = [ "pylsp" ];
+  pythonImportsCheck = [
+    "pylsp"
+    "pylsp.python_lsp"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the Language Server Protocol";
     homepage = "https://github.com/python-lsp/python-lsp-server";
+    changelog = "https://github.com/python-lsp/python-lsp-server/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pylsp";
   };
 }

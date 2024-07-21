@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpkg";
-  version = "0.14.0";
+  version = "0.16.0";
 
   outputs = [ "out" "doc" "man" ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bpkg-${version}.tar.gz";
-    sha256 = "sha256-4WTFm0NYZOujxQ3PR9MyjXEJ4ql4qZ9OM5BePuHIK1M=";
+    hash = "sha256-sxzVidVL8dpoH82IevcwjcIWj4LQzliGv9zasTYqeok=";
   };
 
   strictDeps = true;
@@ -27,12 +27,13 @@ stdenv.mkDerivation rec {
     build2
   ];
   buildInputs = [
+    build2
     libbpkg
     libbutl
     libodb
     libodb-sqlite
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     git
     openssl
   ];
@@ -48,8 +49,13 @@ stdenv.mkDerivation rec {
     "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}"
   ];
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -add_rpath '${lib.getLib build2}/lib' "''${!outputBin}/bin/bpkg"
+  '';
+
   meta = with lib; {
     description = "build2 package dependency manager";
+    mainProgram = "bpkg";
     # https://build2.org/bpkg/doc/bpkg.xhtml
     longDescription = ''
       The build2 package dependency manager is used to manipulate build

@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libtool, pam, libHX, libxml2, pcre, perl, openssl, cryptsetup, util-linux }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libtool, pam, libHX, libxml2, pcre2, perl, openssl, cryptsetup, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "pam_mount";
-  version = "2.17";
+  version = "2.20";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pam-mount/pam_mount/${pname}-${version}.tar.xz";
-    sha256 = "1q2n6a2ah6nghdn8i6ad2wj247njwb5nx48cggxknaa6lqxylidy";
+    url = "https://inai.de/files/pam_mount/${pname}-${version}.tar.xz";
+    hash = "sha256-VCYgekhWgPjhdkukBbs4w5pODIMGvIJxkQ8bgZozbO0=";
   };
 
   patches = [
@@ -18,9 +18,22 @@ stdenv.mkDerivation rec {
       --replace @@NIX_UTILLINUX@@ ${util-linux}/bin
   '';
 
-  nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    libtool
+    perl
+    pkg-config
+  ];
 
-  buildInputs = [ pam libHX util-linux libxml2 pcre perl openssl cryptsetup ];
+  buildInputs = [
+    cryptsetup
+    libHX
+    libxml2
+    openssl
+    pam
+    pcre2
+    util-linux
+  ];
 
   enableParallelBuilding = true;
 
@@ -39,8 +52,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "PAM module to mount volumes for a user session";
     homepage = "https://pam-mount.sourceforge.net/";
-    license = with licenses; [ gpl2 gpl3 lgpl21 lgpl3 ];
-    maintainers = with maintainers; [ tstrobel ];
+    license = with licenses; [ gpl2Plus gpl3 lgpl21 lgpl3 ];
+    maintainers = with maintainers; [ netali ];
     platforms = platforms.linux;
   };
 }

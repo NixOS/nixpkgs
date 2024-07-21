@@ -29,12 +29,13 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = lib.optional (!useNcurses) "pancurses-backend";
 
   meta = with lib; {
-    description = "A visual hex viewer for the terminal";
+    description = "Visual hex viewer for the terminal";
     longDescription = ''
       XXV is a terminal hex viewer with a text user interface, written in 100% safe Rust.
     '';
     homepage    = "https://chrisvest.github.io/xxv/";
     license     = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ lilyball ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "xxv";
   };
 }

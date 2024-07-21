@@ -1,40 +1,28 @@
-{ mkDerivation, fetchFromGitHub, makeWrapper, lib, php }:
-let
+{
+  fetchFromGitHub,
+  lib,
+  php,
+}:
+
+php.buildComposerProject (finalAttrs: {
   pname = "php-parallel-lint";
-  version = "1.0.0";
-in
-mkDerivation {
-  inherit pname version;
+  version = "1.4.0";
 
   src = fetchFromGitHub {
-    owner = "JakubOnderka";
+    owner = "php-parallel-lint";
     repo = "PHP-Parallel-Lint";
-    rev = "v${version}";
-    sha256 = "16nv8yyk2z3l213dg067l6di4pigg5rd8yswr5xgd18jwbys2vnw";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-g5e/yfvfq55MQDux3JRDvhaYEay68Q4u1VfIwDRgv7I=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    php.packages.composer
-    php.packages.box
-  ];
+  composerLock = ./composer.lock;
+  vendorHash = "sha256-NZLGeX1i+E621UGYeWn5tKufDbCLv4iD1VXJcnhfleY=";
 
-  buildPhase = ''
-    composer dump-autoload
-    box build
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    install -D parallel-lint.phar $out/libexec/php-parallel-lint/php-parallel-lint.phar
-    makeWrapper ${php}/bin/php $out/bin/php-parallel-lint \
-      --add-flags "$out/libexec/php-parallel-lint/php-parallel-lint.phar"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Tool to check syntax of PHP files faster than serial check with fancier output";
-    license = licenses.bsd2;
-    homepage = "https://github.com/JakubOnderka/PHP-Parallel-Lint";
-    maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
+    homepage = "https://github.com/php-parallel-lint/PHP-Parallel-Lint";
+    license = lib.licenses.bsd2;
+    mainProgram = "parallel-lint";
+    maintainers = lib.teams.php.members;
   };
-}
+})

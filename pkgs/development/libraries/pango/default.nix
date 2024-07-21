@@ -17,24 +17,21 @@
 , glib
 , python3
 , x11Support? !stdenv.isDarwin, libXft
-, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
-, gobject-introspection
-, withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages, gobject-introspection
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
-  version = "1.48.10";
+  version = "1.52.2";
 
-  outputs = [ "bin" "out" "dev" ]
-    ++ lib.optionals withDocs [ "devdoc" ];
+  outputs = [ "bin" "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "IeH1eYvN/adeq8QoBRSwiWq1b2VtTn5mAwuaJTXs3Jg=";
+    url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-0Adq/gEIKBS4U97smfk0ns5fLOg5CLjlj/c2tB94qWs=";
   };
-
-  strictDeps = !withIntrospection;
 
   depsBuildBuild = [
     pkg-config
@@ -44,11 +41,10 @@ stdenv.mkDerivation rec {
     meson ninja
     glib # for glib-mkenum
     pkg-config
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ] ++ lib.optionals withDocs [
-    gi-docgen
     python3
+  ] ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -71,10 +67,9 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString withDocs}"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
-  ] ++ lib.optionals (!x11Support) [
-    "-Dxft=disabled" # only works with x11
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "xft" x11Support)
   ];
 
   # Fontconfig error: Cannot load default config file
@@ -82,25 +77,36 @@ stdenv.mkDerivation rec {
     fontDirectories = [ freefont_ttf ];
   };
 
+  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+  # it should be a build-time dep for build
+  # TODO: send upstream
+  postPatch = ''
+    substituteInPlace docs/meson.build \
+      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+  '';
+
   doCheck = false; # test-font: FAIL
 
-  postInstall = lib.optionalString withDocs ''
-    # So that devhelp can find this.
-    # https://gitlab.gnome.org/GNOME/pango/merge_requests/293/diffs#note_1058448
-    mkdir -p "$devdoc/share/devhelp"
-    mv "$out/share/doc/pango/reference" "$devdoc/share/devhelp/books"
-    rmdir -p --ignore-fail-on-non-empty "$out/share/doc/pango"
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      versionPolicy = "odd-unstable";
+      packageName = finalAttrs.pname;
+      # 1.90 is alpha for API 2.
+      freeze = "1.90.0";
+    };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
   meta = with lib; {
-    description = "A library for laying out and rendering of text, with an emphasis on internationalization";
+    description = "Library for laying out and rendering of text, with an emphasis on internationalization";
 
     longDescription = ''
       Pango is a library for laying out and rendering of text, with an
@@ -114,6 +120,15 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
 
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
+
+    pkgConfigModules = [
+      "pango"
+      "pangocairo"
+      "pangofc"
+      "pangoft2"
+      "pangoot"
+      "pangoxft"
+    ];
   };
-}
+})

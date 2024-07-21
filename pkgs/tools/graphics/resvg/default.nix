@@ -1,27 +1,34 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, libiconv }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "resvg";
-  version = "0.19.0";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15q88ix5800wmqq6nbmnw0gxk0sx1k9iqv1fvy5kcbgcj65acvwx";
+    hash = "sha256-GAP/jCWtaMVmsLGD8EosspfzemrDAIAdts1tAz+zNik=";
   };
 
-  cargoSha256 = "0dlap5db8wvghaqzqbm7q3k38xvncdikq0y9gc55w5hzic63khbx";
+  cargoHash = "sha256-mRj5Hz8jY0NZSUJXFCvLswQE7H3+fkouZbNtWLP47FE=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  cargoBuildFlags = [
+    "--package=resvg"
+    "--package=resvg-capi"
+    "--package=usvg"
+  ];
 
-  doCheck = false;
+  postInstall = ''
+    install -Dm644 -t $out/include crates/c-api/*.h
+  '';
 
   meta = with lib; {
-    description = "An SVG rendering library";
+    description = "SVG rendering library";
     homepage = "https://github.com/RazrFalcon/resvg";
-    changelog = "https://github.com/RazrFalcon/resvg/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/RazrFalcon/resvg/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
+    mainProgram = "resvg";
   };
 }

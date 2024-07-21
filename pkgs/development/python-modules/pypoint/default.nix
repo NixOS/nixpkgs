@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, authlib
-, httpx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  authlib,
+  httpx,
 }:
 
 buildPythonPackage rec {
   pname = "pypoint";
-  version = "2.2.1";
+  version = "2.3.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pypoint";
     rev = "v${version}";
-    sha256 = "sha256-Or7A/Br6BgiCF6OHRtN5TAt++Tu1RLS9mYRgD7Aljts=";
+    hash = "sha256-tQ5rQs6ECn9O9dVXKWhmy9BBpOzgqSmwpmbIRbJn2CQ=";
   };
 
   propagatedBuildInputs = [
@@ -25,9 +26,7 @@ buildPythonPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pypoint"
-  ];
+  pythonImportsCheck = [ "pypoint" ];
 
   meta = with lib; {
     description = "Python module for communicating with Minut Point";

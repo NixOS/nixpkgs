@@ -45,15 +45,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gcr
-    glib
-    libsoup
-    libxml2
     openssl
     p11-kit
     uhttpmock
   ];
 
   propagatedBuildInputs = [
+    glib
+    libsoup
+    libxml2
     gnome-online-accounts
     json-glib
   ];
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GData API library";
-    homepage = "https://wiki.gnome.org/Projects/libgdata";
+    homepage = "https://gitlab.gnome.org/GNOME/libgdata";
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;

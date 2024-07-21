@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, cohttp-lwt
+{ buildDunePackage, cohttp-lwt
 , conduit-lwt-unix, conduit-lwt, ppx_sexp_conv
 , cmdliner, fmt, logs, magic-mime
 , ounit
@@ -9,12 +9,17 @@ buildDunePackage {
   pname = "cohttp-lwt-unix";
   inherit (cohttp-lwt) version src;
 
-  useDune2 = true;
+  duneVersion = "3";
 
   buildInputs = [ cmdliner ppx_sexp_conv ];
 
   propagatedBuildInputs = [
-    cohttp-lwt conduit-lwt conduit-lwt-unix fmt logs magic-mime
+    cohttp-lwt
+    conduit-lwt
+    conduit-lwt-unix
+    fmt
+    logs
+    magic-mime
   ];
 
   # TODO(@sternenseemann): fail for unknown reason

@@ -65,7 +65,7 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          If set, <command>mpd</command> is socket-activated; that
+          If set, {command}`mpd` is socket-activated; that
           is, instead of having it permanently running as a daemon,
           systemd will start it on the first incoming connection.
         '';
@@ -102,7 +102,7 @@ in {
           Extra directives added to to the end of MPD's configuration file,
           mpd.conf. Basic configuration like file location and uid/gid
           is added automatically to the beginning of the file. For available
-          options see <literal>man 5 mpd.conf</literal>'.
+          options see {manpage}`mpd.conf(5)`.
         '';
       };
 
@@ -137,12 +137,12 @@ in {
           example = "any";
           description = ''
             The address for the daemon to listen on.
-            Use <literal>any</literal> to listen on all addresses.
+            Use `any` to listen on all addresses.
           '';
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 6600;
           description = ''
             This setting is the TCP port that is desired for the daemon to get assigned
@@ -157,7 +157,7 @@ in {
         default = "${cfg.dataDir}/tag_cache";
         defaultText = literalExpression ''"''${dataDir}/tag_cache"'';
         description = ''
-          The path to MPD's database. If set to <literal>null</literal> the
+          The path to MPD's database. If set to `null` the
           parameter is omitted from the configuration.
         '';
       };
@@ -209,62 +209,43 @@ in {
 
   config = mkIf cfg.enable {
 
+    # install mpd units
+    systemd.packages = [ pkgs.mpd ];
+
     systemd.sockets.mpd = mkIf cfg.startWhenNeeded {
-      description = "Music Player Daemon Socket";
       wantedBy = [ "sockets.target" ];
       listenStreams = [
+        ""  # Note: this is needed to override the upstream unit
         (if pkgs.lib.hasPrefix "/" cfg.network.listenAddress
           then cfg.network.listenAddress
           else "${optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}")
       ];
-      socketConfig = {
-        Backlog = 5;
-        KeepAlive = true;
-        PassCredentials = true;
-      };
     };
 
     systemd.services.mpd = {
-      after = [ "network.target" "sound.target" ];
-      description = "Music Player Daemon";
       wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
 
-      serviceConfig = mkMerge [
+      preStart =
+        ''
+          set -euo pipefail
+          install -m 600 ${mpdConf} /run/mpd/mpd.conf
+        '' + optionalString (cfg.credentials != [])
+        (concatStringsSep "\n"
+          (imap0
+            (i: c: ''${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf'')
+            cfg.credentials));
+
+      serviceConfig =
         {
           User = "${cfg.user}";
-          ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon /run/mpd/mpd.conf";
-          ExecStartPre = pkgs.writeShellScript "mpd-start-pre" (''
-            set -euo pipefail
-            install -m 600 ${mpdConf} /run/mpd/mpd.conf
-          '' + optionalString (cfg.credentials != [])
-            (concatStringsSep "\n"
-              (imap0
-                (i: c: ''${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf'')
-                cfg.credentials))
-          );
+          # Note: the first "" overrides the ExecStart from the upstream unit
+          ExecStart = [ "" "${pkgs.mpd}/bin/mpd --systemd /run/mpd/mpd.conf" ];
           RuntimeDirectory = "mpd";
-          Type = "notify";
-          LimitRTPRIO = 50;
-          LimitRTTIME = "infinity";
-          ProtectSystem = true;
-          NoNewPrivileges = true;
-          ProtectKernelTunables = true;
-          ProtectControlGroups = true;
-          ProtectKernelModules = true;
-          RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_NETLINK";
-          RestrictNamespaces = true;
-          Restart = "always";
-        }
-        (mkIf (cfg.dataDir == "/var/lib/${name}") {
-          StateDirectory = [ name ];
-        })
-        (mkIf (cfg.playlistDirectory == "/var/lib/${name}/playlists") {
-          StateDirectory = [ name "${name}/playlists" ];
-        })
-        (mkIf (cfg.musicDirectory == "/var/lib/${name}/music") {
-          StateDirectory = [ name "${name}/music" ];
-        })
-      ];
+          StateDirectory = []
+            ++ optionals (cfg.dataDir == "/var/lib/${name}") [ name ]
+            ++ optionals (cfg.playlistDirectory == "/var/lib/${name}/playlists") [ name "${name}/playlists" ]
+            ++ optionals (cfg.musicDirectory == "/var/lib/${name}/music")        [ name "${name}/music" ];
+        };
     };
 
     users.users = optionalAttrs (cfg.user == name) {

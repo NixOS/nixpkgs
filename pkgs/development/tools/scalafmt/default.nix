@@ -1,8 +1,8 @@
-{ lib, stdenv, jdk, jre, coursier, makeWrapper }:
+{ lib, stdenv, jre, coursier, makeWrapper, setJavaClassPath }:
 
 let
   baseName = "scalafmt";
-  version = "3.2.1";
+  version = "3.7.17";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -12,16 +12,15 @@ let
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash     = "v1IODq88Wpjm7IxSKmD9Nub3r4XNP+jNT0A6ApX3Cas=";
+    outputHash = "sha256-8gK+fOnqwPFBbSWltNKInzXRJQ3WZxPlLqpvuTxF4fk=";
   };
 in
 stdenv.mkDerivation {
   pname = baseName;
   inherit version;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk deps ];
+  nativeBuildInputs = [ makeWrapper setJavaClassPath ];
+  buildInputs = [ deps ];
 
   dontUnpack = true;
 
@@ -43,5 +42,6 @@ stdenv.mkDerivation {
     homepage = "http://scalameta.org/scalafmt";
     license = licenses.asl20;
     maintainers = [ maintainers.markus1189 ];
+    mainProgram = "scalafmt";
   };
 }

@@ -2,19 +2,19 @@
 
 buildGoModule rec {
   pname = "termshark";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "gcla";
     repo = "termshark";
     rev = "v${version}";
-    sha256 = "sha256-ekIxKBnqGTIXncvSTItBL43WN5mdX5dxROWHXUtH3o8=";
+    sha256 = "sha256-qq7BDGprRkWKRMJiVnqPeTwtHd3tea9dPE8RIPL2YVI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ wireshark-cli ];
 
-  vendorSha256 = "sha256-16JPVgo3heJMjOHNOP13kyhRveQjF9h9kRznhSZM+ik=";
+  vendorHash = "sha256-C9XOiNjo+TZ+erdnypRhhfpbuBhB3yEqNpbtwjEv14g=";
 
   doCheck = false;
 
@@ -28,8 +28,9 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://termshark.io/";
-    description = "A terminal UI for wireshark-cli, inspired by Wireshark";
+    description = "Terminal UI for wireshark-cli, inspired by Wireshark";
+    mainProgram = "termshark";
     license = licenses.mit;
-    maintainers = with maintainers; [ winpat elseym ];
+    maintainers = with maintainers; [ winpat ];
   };
 }

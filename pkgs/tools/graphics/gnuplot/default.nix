@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, pkg-config, texinfo
 , cairo, gd, libcerf, pango, readline, zlib
-, withTeXLive ? false, texlive
+, withTeXLive ? false, texliveSmall
 , withLua ? false, lua
 , withCaca ? false, libcaca
 , libX11 ? null
@@ -8,7 +8,7 @@
 , libXpm ? null
 , libXaw ? null
 , aquaterm ? false
-, withWxGTK ? false, wxGTK ? null
+, withWxGTK ? false, wxGTK32, Cocoa
 , fontconfig ? null
 , gnused ? null
 , coreutils ? null
@@ -21,23 +21,24 @@ let
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
-  version = "5.4.2";
+  version = "6.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-5Xx14TGBM5UdMqg7zcSv8X/tKHIsTnHyMFz8KuHK57o=";
+    sha256 = "sha256-6FpmDBoqGAj/JPfmmYH/y6xmpFydz3EbZWELJupxN5o=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config texinfo ] ++ lib.optional withQt qttools;
 
   buildInputs =
     [ cairo gd libcerf pango readline zlib ]
-    ++ lib.optional withTeXLive (texlive.combine { inherit (texlive) scheme-small; })
+    ++ lib.optional withTeXLive texliveSmall
     ++ lib.optional withLua lua
     ++ lib.optional withCaca libcaca
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
     ++ lib.optionals withQt [ qtbase qtsvg ]
-    ++ lib.optional withWxGTK wxGTK;
+    ++ lib.optional withWxGTK wxGTK32
+    ++ lib.optional (withWxGTK && stdenv.isDarwin) Cocoa;
 
   postPatch = ''
     # lrelease is in qttools, not in qtbase.
@@ -52,19 +53,30 @@ in
 
   CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
 
+  # we'll wrap things ourselves
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
+
+  # binary wrappers don't support --run
   postInstall = lib.optionalString withX ''
-    wrapProgram $out/bin/gnuplot \
-       --prefix PATH : '${gnused}/bin' \
-       --prefix PATH : '${coreutils}/bin' \
-       --prefix PATH : '${fontconfig.bin}/bin' \
+    wrapProgramShell $out/bin/gnuplot \
+       --prefix PATH : '${lib.makeBinPath [ gnused coreutils fontconfig.bin ]}' \
+       "''${gappsWrapperArgs[@]}" \
+       "''${qtWrapperArgs[@]}" \
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'
   '';
+
+  # When cross-compiling, don't build docs and demos.
+  # Inspiration taken from https://sourceforge.net/p/gnuplot/gnuplot-main/merge-requests/10/
+  makeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-C src"
+  ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "http://www.gnuplot.info/";
-    description = "A portable command-line driven graphing utility for many platforms";
+    description = "Portable command-line driven graphing utility for many platforms";
     platforms = platforms.linux ++ platforms.darwin;
     license = {
       # Essentially a BSD license with one modifaction:
@@ -76,5 +88,6 @@ in
       url = "https://sourceforge.net/p/gnuplot/gnuplot-main/ci/master/tree/Copyright";
     };
     maintainers = with maintainers; [ lovek323 ];
+    mainProgram = "gnuplot";
   };
 }

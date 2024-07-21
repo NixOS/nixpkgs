@@ -1,32 +1,56 @@
-{ lib, buildPythonPackage, fetchPypi, cloudpickle, ipykernel, wurlitzer,
-  jupyter-client, pyzmq }:
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  cloudpickle,
+  fetchPypi,
+  ipykernel,
+  ipython,
+  jupyter-client,
+  packaging,
+  pythonOlder,
+  pyxdg,
+  pyzmq,
+  wurlitzer,
+}:
 
 buildPythonPackage rec {
   pname = "spyder-kernels";
-  version = "2.2.0";
+  version = "2.5.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "6b19ea224f183dbff8ff0031bee35ae6b5b3a6eef4aa84cfab04e3bc3e304b91";
+    pname = "spyder_kernels";
+    inherit version;
+    hash = "sha256-cfJSkA4CsDlIIMxwSfie1yUkP2/M9kC3bdMpIDxBOWA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cloudpickle
     ipykernel
-    wurlitzer
+    ipython
     jupyter-client
+    packaging
+    pyxdg
     pyzmq
+    wurlitzer
   ];
 
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "spyder_kernels" ];
+
+  meta = {
     description = "Jupyter kernels for Spyder's console";
     homepage = "https://docs.spyder-ide.org/current/ipythonconsole.html";
     downloadPage = "https://github.com/spyder-ide/spyder-kernels/releases";
-    changelog = "https://github.com/spyder-ide/spyder-kernels/blob/master/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    changelog = "https://github.com/spyder-ide/spyder-kernels/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gebner ];
   };
 }

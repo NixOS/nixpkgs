@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, pony, whoosh }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pony,
+  whoosh,
+}:
 
 buildPythonPackage rec {
   pname = "ponywhoosh";
   version = "1.7.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

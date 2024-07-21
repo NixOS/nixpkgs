@@ -66,7 +66,7 @@ let
 in
 
 let result = stdenv.mkDerivation rec {
-  pname = if installjdk then "oraclejdk" else "oraclejre";
+  pname = if installjdk then "oraclejdk" else "oraclejre" + lib.optionalString pluginSupport "-with-plugin";
   version = "${productVersion}u${patchVersion}";
 
   src =
@@ -80,7 +80,7 @@ let result = stdenv.mkDerivation rec {
     in requireFile {
       name = "jdk-${productVersion}u${patchVersion}-${platformName}.tar.gz";
       url = "http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html";
-      sha256 = sha256.${stdenv.hostPlatform.system};
+      sha256 = sha256.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
   nativeBuildInputs = [ file makeWrapper ]

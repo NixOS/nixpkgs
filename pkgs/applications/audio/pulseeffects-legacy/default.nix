@@ -7,7 +7,7 @@
 , python3
 , libxml2
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 , gst_all_1
 , pulseaudio
 , gtk3
@@ -45,13 +45,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "4.8.4";
+  version = "4.8.7";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "19sndxvszafbd1l2033g2irpx2jrwi5bpbx8r35047wi0z7djiag";
+    sha256 = "sha256-ldvcA8aTHOgaascH6MF4CzmJ8I2rYOiR0eAkCZzvK/M=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
     itstool
     python3
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -106,10 +106,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
+    mainProgram = "pulseeffects";
     homepage = "https://github.com/wwmm/pulseeffects";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
-    badPlatforms = [ "aarch64-linux" ];
   };
 }

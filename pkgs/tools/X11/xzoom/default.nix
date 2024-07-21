@@ -1,7 +1,6 @@
 { lib, stdenv, fetchurl, libX11, libXext, libXt, imake, gccmakedep}:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "xzoom";
   version = "0.3";
   patch = "24";
@@ -29,9 +28,10 @@ stdenv.mkDerivation rec {
   installTargets = [ "install" "install.man" ];
 
   meta = {
-    description = "An X11 screen zoom tool";
+    description = "X11 screen zoom tool";
     license = lib.licenses.free ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
+    mainProgram = "xzoom";
   };
 }

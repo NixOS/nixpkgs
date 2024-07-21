@@ -15,12 +15,13 @@ stdenv.mkDerivation rec {
     sed -i 's@/usr/bin/install@install@g' Makefile
     sed -i 's@/bin/rm@rm@g' Makefile
     sed -i 's@/usr/lib/ladspa@$(out)/lib/ladspa@g' Makefile
+    sed -i 's@g++@$(CXX)@g' Makefile
   '';
 
   preInstall="mkdir -p $out/lib/ladspa";
 
   meta = {
-    description = "A set of ambisonics ladspa plugins";
+    description = "Set of ambisonics ladspa plugins";
     longDescription = ''
       Mono and stereo to B-format panning, horizontal rotator, square, hexagon and cube decoders.
     '';

@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, pkg-config, doxygen, qt48Full, libharu
+{ lib, stdenv, fetchFromGitHub, cmake, boost, pkg-config, doxygen, qtbase, libharu
 , pango, fcgi, firebird, libmysqlclient, postgresql, graphicsmagick, glew, openssl
-, pcre, harfbuzz
+, pcre, harfbuzz, icu
 }:
 
 let
@@ -19,11 +19,12 @@ let
 
       nativeBuildInputs = [ cmake pkg-config ];
       buildInputs = [
-        boost doxygen qt48Full libharu
+        boost doxygen qtbase libharu
         pango fcgi firebird libmysqlclient postgresql graphicsmagick glew
-        openssl pcre harfbuzz
+        openssl pcre harfbuzz icu
       ];
 
+      dontWrapQtApps = true;
       cmakeFlags = [
         "-DWT_CPP_11_MODE=-std=c++11"
         "--no-warn-unused-cli"
@@ -40,17 +41,12 @@ let
         description = "C++ library for developing web applications";
         platforms = platforms.linux;
         license = licenses.gpl2;
-        maintainers = with maintainers; [ juliendehos willibutz ];
+        maintainers = with maintainers; [ juliendehos ];
       };
     };
 in {
-  wt3 = generic {
-    version = "3.5.0";
-    sha256 = "1xcwzldbval5zrf7f3n2gkpscagg51cw2jp6p3q1yh6bi59haida";
-  };
-
   wt4 = generic {
-    version = "4.5.0";
-    sha256 = "16svzdma2mc2ggnpy5z7m1ggzhd5nrccmmj8xnc7bd1dd3486xwv";
+    version = "4.10.4";
+    sha256 = "sha256-O2waUKGTw8kZw+6qBMqG9tNN92aGL+WCrcPOGAG7HO0=";
   };
 }

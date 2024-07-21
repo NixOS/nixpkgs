@@ -1,31 +1,38 @@
-{ buildPythonPackage
-, chardet
-, colorama
-, fetchFromGitHub
-, future
-, isPy27
-, lib
-, mock
-, netaddr
-, pycurl
-, pyparsing
-, pytest
-, pytestCheckHook
-, setuptools
-, six
-, stdenv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  chardet,
+  colorama,
+  fetchFromGitHub,
+  netaddr,
+  pycurl,
+  pyparsing,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "wfuzz";
   version = "3.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "xmendez";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1izasczm2zwknwzxbfzqhlf4zp02jvb54ha1hfk4rlwiz0rr1kj4";
+    hash = "sha256-RM6QM/iR00ymg0FBUtaWAtxPHIX4u9U/t5N/UT/T6sc=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pyparsing>=2.4*" "pyparsing>=2.4"
+  '';
 
   propagatedBuildInputs = [
     chardet
@@ -33,25 +40,30 @@ buildPythonPackage rec {
     six
     setuptools
     pyparsing
-  ] ++ lib.optionals isPy27 [
-    mock
-    future
-  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
-    colorama
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     netaddr
     pytest
     pytestCheckHook
-  ] ++ lib.optionals isPy27 [
-    mock
   ];
 
-  preCheck = "export HOME=$(mktemp -d)";
-  # The skipped tests are requiring a local web server
-  pytestFlagsArray = [ "tests/test_{moduleman,filterintro,reqresp,api,clparser}.py" ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTestPaths = [
+    # The tests are requiring a local web server
+    "tests/test_acceptance.py"
+    "tests/acceptance/test_saved_filter.py"
+  ];
+
   pythonImportsCheck = [ "wfuzz" ];
+
+  postInstall = ''
+    mkdir -p $out/share/wordlists/wfuzz
+    cp -R -T "wordlist" "$out/share/wordlists/wfuzz"
+  '';
 
   meta = with lib; {
     description = "Web content fuzzer to facilitate web applications assessments";

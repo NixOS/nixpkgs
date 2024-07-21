@@ -1,25 +1,25 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, callPackage, sqlcipher, nodejs-14_x, python3, yarn, fixup_yarn_lock, CoreServices, fetchYarnDeps }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, rust, sqlcipher, nodejs, python3, yarn, fixup-yarn-lock, CoreServices, fetchYarnDeps, removeReferencesTo }:
 
 let
   pinData = lib.importJSON ./pin.json;
 
 in rustPlatform.buildRustPackage rec {
   pname = "seshat-node";
-  inherit (pinData) version;
+  inherit (pinData) version cargoHash;
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "seshat";
     rev = version;
-    sha256 = pinData.srcHash;
+    hash = pinData.srcHash;
   };
 
-  sourceRoot = "source/seshat-node/native";
+  sourceRoot = "${src.name}/seshat-node/native";
 
-  nativeBuildInputs = [ nodejs-14_x python3 yarn ];
+  nativeBuildInputs = [ nodejs python3 yarn fixup-yarn-lock ];
   buildInputs = [ sqlcipher ] ++ lib.optional stdenv.isDarwin CoreServices;
 
-  npm_config_nodedir = nodejs-14_x;
+  npm_config_nodedir = nodejs;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/seshat-node/yarn.lock";
@@ -27,26 +27,30 @@ in rustPlatform.buildRustPackage rec {
   };
 
   buildPhase = ''
+    runHook preBuild
     cd ..
     chmod u+w . ./yarn.lock
     export HOME=$PWD/tmp
     mkdir -p $HOME
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-    ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCache
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
-    node_modules/.bin/neon build --release
+    node_modules/.bin/neon build --release -- --target ${rust.toRustTargetSpec stdenv.hostPlatform} -Z unstable-options --out-dir target/release
+    runHook postBuild
   '';
 
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
     shopt -s extglob
     rm -rf native/!(index.node)
-    rm -rf node_modules
-    rm -rf $HOME
+    rm -rf node_modules $HOME
     cp -r . $out
+    ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $out/native/index.node
+    runHook postInstall
   '';
 
-  cargoSha256 = pinData.cargoHash;
+  disallowedReferences = [ stdenv.cc.cc ];
 }

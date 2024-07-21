@@ -7,7 +7,6 @@
 , perl
 , perlPackages
 , util-linux
-, asciidoc
 , asciidoctor
 , mbuffer
 , makeWrapper
@@ -19,14 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "btrbk";
-  version = "0.31.3";
+  version = "0.32.6";
 
   src = fetchurl {
     url = "https://digint.ch/download/btrbk/releases/${pname}-${version}.tar.xz";
-    sha256 = "1lx7vnf386nsik8mxrrfyx1h7mkqk5zs26sy0s0lynfxcm4lkxb2";
+    sha256 = "AuKsZHyRhGMgLL5ge7lVV6T3/SNwaRJDM8VNpbK7t2s=";
   };
 
-  nativeBuildInputs = [ asciidoc asciidoctor makeWrapper ];
+  nativeBuildInputs = [ asciidoctor makeWrapper ];
 
   buildInputs = with perlPackages; [ perl DateCalc ];
 
@@ -54,18 +53,18 @@ stdenv.mkDerivation rec {
       --prefix PATH ':' "${lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
   '';
 
-  passthru.tests.btrbk = nixosTests.btrbk;
+  passthru.tests = {
+    inherit (nixosTests) btrbk btrbk-no-timer btrbk-section-order btrbk-doas;
+  };
 
   passthru.updateScript = genericUpdater {
-    inherit pname version;
     versionLister = writeShellScript "btrbk-versionLister" ''
-      echo "# Versions for $1:" >> "$2"
       ${curl}/bin/curl -s https://digint.ch/download/btrbk/releases/ | ${perl}/bin/perl -lne 'print $1 if /btrbk-([0-9.]*)\.tar/'
     '';
   };
 
   meta = with lib; {
-    description = "A backup tool for btrfs subvolumes";
+    description = "Backup tool for btrfs subvolumes";
     homepage = "https://digint.ch/btrbk";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

@@ -17,6 +17,10 @@ end_of_line = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 
+# We want readFile .version to return the version without a newline.
+[.version]
+insert_final_newline = false
+
 # see https://nixos.org/nixpkgs/manual/#chap-conventions
 
 # Match json/lockfiles/markdown/nix/perl/python/ruby/shell/docbook files, set indent to spaces
@@ -55,23 +59,31 @@ trim_trailing_whitespace = unset
 [*.lock]
 indent_size = unset
 
+# Although Markdown/CommonMark allows using two trailing spaces to denote
+# a hard line break, we do not use that feature in nixpkgs since
+# it forces the surrounding paragraph to become a <literallayout> which
+# does not wrap reasonably.
+# Instead of a hard line break, start a new paragraph by inserting a blank line.
+[*.md]
+trim_trailing_whitespace = true
+
+# binaries
+[*.nib]
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+charset = unset
+
 [eggs.nix]
 trim_trailing_whitespace = unset
 
 [nixos/modules/services/networking/ircd-hybrid/*.{conf,in}]
 trim_trailing_whitespace = unset
 
-[nixos/tests/systemd-networkd-vrf.nix]
-trim_trailing_whitespace = unset
-
 [pkgs/build-support/dotnetenv/Wrapper/**]
 end_of_line = unset
 indent_style = unset
 insert_final_newline = unset
-trim_trailing_whitespace = unset
-
-[pkgs/build-support/upstream-updater/**]
-indent_style = unset
 trim_trailing_whitespace = unset
 
 [pkgs/development/compilers/elm/registry.dat]
@@ -82,15 +94,25 @@ insert_final_newline = unset
 indent_style = unset
 trim_trailing_whitespace = unset
 
+[pkgs/misc/documentation-highlighter/**]
+insert_final_newline = unset
+
 [pkgs/servers/dict/wordnet_structures.py]
 trim_trailing_whitespace = unset
 
 [pkgs/tools/misc/timidity/timidity.cfg]
 trim_trailing_whitespace = unset
 
-[pkgs/tools/security/enpass/data.json]
+[pkgs/tools/virtualization/ovftool/*.ova]
+end_of_line = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
+charset = unset
 
-[pkgs/top-level/emscripten-packages.nix]
-trim_trailing_whitespace = unset
+[lib/tests/*.plist]
+indent_style = tab
+insert_final_newline = unset
+
+[pkgs/kde/generated/**]
+insert_final_newline = unset
+end_of_line = unset

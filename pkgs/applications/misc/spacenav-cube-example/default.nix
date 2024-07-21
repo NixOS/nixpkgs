@@ -2,11 +2,9 @@
 
 stdenv.mkDerivation {
   pname = "spacenav-cube-example";
-  version = libspnav.version;
+  inherit (libspnav) version src;
 
-  src = libspnav.src;
-
-  sourceRoot = "source/examples/cube";
+  sourceRoot = "${libspnav.src.name}/examples/cube";
 
   buildInputs = [ libX11 mesa_glu libspnav ];
 
@@ -20,10 +18,11 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "http://spacenav.sourceforge.net/";
-    description = "An example application to test the spacenavd driver";
+    homepage = "https://spacenav.sourceforge.net/";
+    description = "Example application to test the spacenavd driver";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ sohalt ];
+    mainProgram = "spacenav-cube-example";
   };
 }

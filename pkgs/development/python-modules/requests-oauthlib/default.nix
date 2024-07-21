@@ -1,25 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, oauthlib
-, pytestCheckHook
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  oauthlib,
+  pytestCheckHook,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
   pname = "requests-oauthlib";
-  version = "1.3.0";
+  version = "2.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0smaxs5ixng4z0k6dsgmm6s972ka3p6a2ykdpnl23mqzlw0ic9ml";
+    hash = "sha256-s9/669iE2M13hJQ2lgOp57WNKREb9rQb3C3NhyA69Ok=";
   };
 
-  propagatedBuildInputs = [ oauthlib requests ];
+  propagatedBuildInputs = [
+    oauthlib
+    requests
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     requests-mock
@@ -31,6 +36,9 @@ buildPythonPackage rec {
     "test_content_type_override"
     "test_url_is_native_str"
   ];
+
+  # Requires selenium and chrome
+  disabledTestPaths = [ "tests/examples/test_native_spa_pkce_auth0.py" ];
 
   pythonImportsCheck = [ "requests_oauthlib" ];
 

@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
-
   cfg = config.virtualisation.waydroid;
+  kCfg = config.lib.kernelConfig;
   kernelPackages = config.boot.kernelPackages;
   waydroidGbinderConf = pkgs.writeText "waydroid.conf" ''
     [Protocol]
@@ -22,19 +20,19 @@ in
 {
 
   options.virtualisation.waydroid = {
-    enable = mkEnableOption "Waydroid";
+    enable = lib.mkEnableOption "Waydroid";
   };
 
-  config = mkIf cfg.enable {
-    assertions = singleton {
-      assertion = versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.18";
+  config = lib.mkIf cfg.enable {
+    assertions = lib.singleton {
+      assertion = lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.18";
       message = "Waydroid needs user namespace support to work properly";
     };
 
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isEnabled "ANDROID_BINDER_IPC")
-      (isEnabled "ANDROID_BINDERFS")
-      (isEnabled "ASHMEM")
+    system.requiredKernelConfig = [
+      (kCfg.isEnabled "ANDROID_BINDER_IPC")
+      (kCfg.isEnabled "ANDROID_BINDERFS")
+      (kCfg.isEnabled "MEMFD_CREATE")
     ];
 
     /* NOTE: we always enable this flag even if CONFIG_PSI_DEFAULT_DISABLED is not on
@@ -56,18 +54,16 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      path = with pkgs; [ getent iptables iproute kmod nftables util-linux which ];
-
-      unitConfig = {
-        ConditionPathExists = "/var/lib/waydroid/lxc/waydroid";
-      };
-
       serviceConfig = {
-        ExecStart = "${pkgs.waydroid}/bin/waydroid container start";
+        ExecStart = "${pkgs.waydroid}/bin/waydroid -w container start";
         ExecStop = "${pkgs.waydroid}/bin/waydroid container stop";
         ExecStopPost = "${pkgs.waydroid}/bin/waydroid session stop";
       };
     };
+
+    systemd.tmpfiles.rules = [
+      "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
+    ];
   };
 
 }

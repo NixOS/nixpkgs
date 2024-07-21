@@ -4,30 +4,33 @@
 , fetchurl
 , gettext
 , glib
-, gtk3
+, gtk4
 , json-glib
 , itstool
-, libdazzle
+, libadwaita
+, libdex
+, libpanel
+, libunwind
 , libxml2
-, meson, ninja
-, pango
+, meson
+, ninja
 , pkg-config
 , polkit
 , shared-mime-info
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook4
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.42.1";
+  version = "46.0";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "F5a4FATudf0eus9URkrXr/6/YvKFHu9STZ+OrAxKIAE=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    hash = "sha256-c6p+deurPk4JRqBacj335u5CSeO56ITbo1UAq6Kh0XY=";
   };
 
   nativeBuildInputs = [
@@ -39,34 +42,36 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     shared-mime-info
-    wrapGAppsHook
-    gnome.adwaita-icon-theme
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    gtk3
+    gtk4
     json-glib
-    pango
     polkit
     systemd
-    libdazzle
+    libadwaita
+    libdex
+    libpanel
+    libunwind
   ];
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"
+    # In a separate libsysprof-capture package
+    "-Dinstall-static=false"
   ];
 
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "odd-unstable";
     };
   };
 
   meta = with lib; {
     description = "System-wide profiler for Linux";
-    homepage = "https://wiki.gnome.org/Apps/Sysprof";
+    homepage = "https://gitlab.gnome.org/GNOME/sysprof";
     longDescription = ''
       Sysprof is a sampling CPU profiler for Linux that uses the perf_event_open
       system call to profile the entire system, not just a single
@@ -74,7 +79,7 @@ stdenv.mkDerivation rec {
       do not need to be recompiled.  In fact they don't even have to
       be restarted.
     '';
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };

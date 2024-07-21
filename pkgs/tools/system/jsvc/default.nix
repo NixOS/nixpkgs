@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jsvc";
-  version = "1.2.4";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "https://downloads.apache.org//commons/daemon/source/commons-daemon-${version}-src.tar.gz";
-    sha256 = "1nrr6ggy6h20r9zyv14vx6vc9p1w6l8fl9fn6i8dx2hrq6kk2bjw";
+    sha256 = "sha256-AFnx6AqmOfAsfh/4ALV9xiA2pbP0sX1h5dPj/9JCj+4=";
   };
 
   buildInputs = [ commonsDaemon ];
@@ -32,9 +32,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage    = "https://commons.apache.org/proper/commons-daemon";
-    description = "JSVC is part of the Apache Commons Daemon software, a set of utilities and Java support classes for running Java applications as server processes.";
+    description = "Part of the Apache Commons Daemon software, a set of utilities and Java support classes for running Java applications as server processes";
     maintainers = with lib.maintainers; [ rsynnest ];
     license     = lib.licenses.asl20;
     platforms = with lib.platforms; unix;
+    mainProgram = "jsvc";
   };
 }

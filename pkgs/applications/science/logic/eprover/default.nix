@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, which }:
+{ lib, stdenv, fetchurl, which, enableHO ? false }:
 
 stdenv.mkDerivation rec {
   pname = "eprover";
-  version = "2.6";
+  version = "3.1";
 
   src = fetchurl {
     url = "https://wwwlehre.dhbw-stuttgart.de/~sschulz/WORK/E_DOWNLOAD/V_${version}/E.tgz";
-    sha256 = "sha256-qh896qIpFR5g1gdWAwGkbNJLBqUQCeCpuoYHHkDXPt0=";
+    hash = "sha256-+E2z7JAkiNXhZrWRXFbhI5f9NmB0Q4eixab4GlAFqYY=";
   };
 
   buildInputs = [ which ];
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--exec-prefix=$(out)"
     "--man-prefix=$(out)/share/man"
+  ] ++ lib.optionals enableHO [
+    "--enable-ho"
   ];
 
   meta = with lib; {

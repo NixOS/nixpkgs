@@ -1,49 +1,41 @@
-{ lib, clangStdenv, stdenvNoCC, cmake, fetchFromGitHub, dotnetCorePackages, buildDotnetModule }:
+{ lib, clangStdenv, stdenv, cmake, autoPatchelfHook, fetchFromGitHub, dotnetCorePackages, buildDotnetModule, netcoredbg, testers }:
 let
   pname = "netcoredbg";
-  version = "1.2.0-825";
+  build = "1018";
+  release = "3.0.0";
+  version = "${release}-${build}";
+  hash = "sha256-9Rd0of1psQTVLaTOCPWsYgvIXN7apZKDQNxuZGj4vXw=";
 
-  # according to CMakeLists.txt, this should be 3.1 even when building for .NET 5
-  coreclr-version = "3.1.19";
+  coreclr-version = "v7.0.14";
   coreclr-src = fetchFromGitHub {
     owner = "dotnet";
-    repo = "coreclr";
-    rev = "v${coreclr-version}";
-    sha256 = "o1KafmXqNjX9axr6sSxPKrfUX0e+b/4ANiVQt4T2ybw=";
+    repo = "runtime";
+    rev = coreclr-version;
+    sha256 = "sha256-n7ySUTB4XOXxeeVomySdZIYepdp0PNNGW9pU/2wwVGM=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = pname;
     rev = version;
-    sha256 = "JQhDI1+bVbOIFNkXixZnFB/5+dzqCbInR0zJvykcFCg=";
+    inherit hash;
   };
 
-  unmanaged = clangStdenv.mkDerivation rec {
+  unmanaged = clangStdenv.mkDerivation {
     inherit src pname version;
 
-    nativeBuildInputs = [ cmake ];
-
-    # Building the "unmanaged part" still involves compiling C# code.
-    preBuild = ''
-      export HOME=$(mktemp -d)
-      export DOTNET_CLI_TELEMETRY_OPTOUT=1
-      export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
-    '';
+    nativeBuildInputs = [ cmake dotnet-sdk ];
 
     hardeningDisable = [ "strictoverflow" ];
 
     preConfigure = ''
-      dotnetVersion="$(${dotnet-sdk}/bin/dotnet --list-runtimes | grep -Po '^Microsoft.NETCore.App \K.*?(?= )')"
-      cmakeFlagsArray+=(
-        "-DDBGSHIM_RUNTIME_DIR=${dotnet-sdk}/shared/Microsoft.NETCore.App/$dotnetVersion"
-      )
+      export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
     '';
 
     cmakeFlags = [
-      "-DCORECLR_DIR=${coreclr-src}"
+      "-DCORECLR_DIR=${coreclr-src}/src/coreclr"
       "-DDOTNET_DIR=${dotnet-sdk}"
       "-DBUILD_MANAGED=0"
     ];
@@ -55,24 +47,46 @@ let
     projectFile = "src/managed/ManagedPart.csproj";
     nugetDeps = ./deps.nix;
 
+    # include platform-specific dbgshim binary in nugetDeps
+    dotnetFlags = [ "-p:UseDbgShimDependency=true" ];
     executables = [ ];
+
+    # this passes RID down to dotnet build command
+    # and forces dotnet to include binary dependencies in the output (libdbgshim)
+    selfContainedBuild = true;
   };
 in
-stdenvNoCC.mkDerivation {
+stdenv.mkDerivation {
   inherit pname version;
+  # managed brings external binaries (libdbgshim.*)
+  # include source here so that autoPatchelfHook can do it's job
+  src = managed;
 
-  buildCommand = ''
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  buildInputs = lib.optionals stdenv.isLinux [ stdenv.cc.cc.lib ];
+  installPhase = ''
     mkdir -p $out/share/netcoredbg $out/bin
     cp ${unmanaged}/* $out/share/netcoredbg
-    cp ${managed}/lib/netcoredbg/* $out/share/netcoredbg
-    ln -s $out/share/netcoredbg/netcoredbg $out/bin/netcoredbg
+    cp ./lib/netcoredbg/* $out/share/netcoredbg
+    # darwin won't work unless we link all files
+    ln -s $out/share/netcoredbg/* "$out/bin/"
   '';
+
+  passthru = {
+    inherit (managed) fetch-deps;
+    tests.version = testers.testVersion {
+      package = netcoredbg;
+      command = "netcoredbg --version";
+      version = "NET Core debugger ${release}";
+    };
+  };
 
   meta = with lib; {
     description = "Managed code debugger with MI interface for CoreCLR";
     homepage = "https://github.com/Samsung/netcoredbg";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.leo60228 ];
+    mainProgram = "netcoredbg";
+    maintainers = with maintainers; [ leo60228 konradmalik ];
   };
 }

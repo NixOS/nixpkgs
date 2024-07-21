@@ -1,18 +1,24 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , python3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "boofuzz";
-  version = "0.4.0";
+  version = "0.4.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jtpereyda";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "4WtTZ2S2rC2XXN0HbiEht9NW0JXcPnpp66AH67F88yk=";
+    repo = "boofuzz";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ffZVFmfDAJ+Qn3hbeHY/CvYgpDLxB+jaYOiYyZqZ7mo=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     attrs
@@ -28,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     tornado
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     mock
     netifaces
     pytest-bdd
@@ -36,9 +42,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # Tests require socket access
-    "test_raw_l2"
-    "test_raw_l3"
+    "TestNetworkMonitor"
+    "TestNoResponseFailure"
+    "TestProcessMonitor"
+    "TestSocketConnection"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_time_repeater"
   ];
 
   pythonImportsCheck = [
@@ -47,7 +56,9 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Network protocol fuzzing tool";
+    mainProgram = "boo";
     homepage = "https://github.com/jtpereyda/boofuzz";
+    changelog = "https://github.com/jtpereyda/boofuzz/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ fab ];
   };

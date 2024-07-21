@@ -2,7 +2,6 @@
 let
   pname = "fspy";
   version = "1.0.3";
-  name = "${pname}-v${version}";
 
   src = fetchurl {
     url = "https://github.com/stuffmatic/fSpy/releases/download/v${version}/${pname}-${version}-x86_64.AppImage";
@@ -10,16 +9,13 @@ let
   };
 
 in appimageTools.wrapType2 {
-  inherit name src;
-
-  extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
-  '';
+  inherit pname version src;
 
   meta = with lib; {
-    description = "A cross platform app for quick and easy still image camera matching";
+    description = "Cross platform app for quick and easy still image camera matching";
     license = licenses.gpl3;
     homepage = "https://fspy.io/";
+    knownVulnerabilities = [ "Vendors Electron 2.0 (end-of-life)" ];
     maintainers = with maintainers; [ polygon ];
     platforms = platforms.linux;
     mainProgram = "fspy";

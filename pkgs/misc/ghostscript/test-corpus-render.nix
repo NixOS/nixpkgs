@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation {
   pname = "ghostscript-test-corpus-render";
-  version = "unstable-2020-02-19";
+  version = "unstable-2023-05-19";
 
   src = fetchgit {
     url = "git://git.ghostscript.com/tests.git";
-    rev = "efdd224340d9a407ed3ec22afa1cb127c8fee73c";
-    sha256 = "1v1iqz897zzrwa8ng22zcf3y61ab5798jdwidgv10w1r9mjrl7ax";
+    rev = "f7d5087d3d6c236707842dcd428818c6cb8fb041";
+    hash = "sha256-xHOEo1ZJG1GCcEKqaXLDpfRRQxpbSy0bzicKju9hG40=";
   };
 
   dontConfigure = true;

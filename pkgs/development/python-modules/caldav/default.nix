@@ -1,57 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, icalendar
-, lxml
-, mock
-, nose
-, pytz
-, requests
-, six
-, tzlocal
-, vobject
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  icalendar,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  python,
+  pytz,
+  recurring-ical-events,
+  requests,
+  setuptools,
+  toPythonModule,
+  tzlocal,
+  vobject,
+  xandikos,
 }:
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "0.8.0";
+  version = "1.3.9";
+
+  pyproject = true;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "11q3svns3a2ywfci739krxbh67cx691qja772wq22606blyygyjy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-R9zXwD0sZE4bg6MTHWWCWWlZ5wH0H6g650zA7AboAo8=";
   };
 
-  nativeBuildInputs = lib.optionals (pythonOlder "3.5") [ mock ];
-  propagatedBuildInputs = [ six requests vobject lxml ]
-    ++ lib.optionals (pythonOlder "3.6") [ pytz tzlocal ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    vobject
+    lxml
+    requests
     icalendar
-    nose
+    recurring-ical-events
+    pytz
     tzlocal
   ];
 
-  checkPhase = ''
-    nosetests tests
-  '';
-
-  # xandikos and radicale is only a optional test dependency, not available for python3
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace ", 'xandikos'" "" \
-      --replace ", 'radicale'" ""
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
+  ];
 
   pythonImportsCheck = [ "caldav" ];
 
   meta = with lib; {
-    description = "This project is a CalDAV (RFC4791) client library for Python.";
+    description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
+    changelog = "https://github.com/python-caldav/caldav/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marenz ];
-    #broken = true; # requires radicale which is not packaged yet
+    maintainers = with maintainers; [
+      marenz
+      dotlambda
+    ];
   };
 }

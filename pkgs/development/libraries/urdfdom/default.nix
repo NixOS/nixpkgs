@@ -1,33 +1,28 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, validatePkgConfig
-, tinyxml, boost, urdfdom-headers, console-bridge }:
+, tinyxml-2, console-bridge, urdfdom-headers }:
 
 stdenv.mkDerivation rec {
   pname = "urdfdom";
-  version = "1.0.4";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "ros";
     repo = pname;
     rev = version;
-    sha256 = "0wambq06d7dvja25zcv4agc055q9rmf3xkrnxy8lsf4nic7ra2rr";
+    hash = "sha256-t1ff5aRHE7LuQdCXuooWPDUgPWjyYyQmQUB1RJmte1w=";
   };
 
   patches = [
-    # Fix CMake saying console-bridge 1.0 is incompatible
-    (fetchpatch {
-      url = "https://github.com/ros/urdfdom/commit/6faba176d41cf39114785a3e029013f941ed5a0e.patch";
-      sha256 = "1pn9hcg5wkkc7y28sbkxvffqxgvazzsp3g1xmz6h055v4f9ikjbs";
-    })
     # Fix CMake relative install dir assumptions (https://github.com/ros/urdfdom/pull/142)
     (fetchpatch {
-      url = "https://github.com/ros/urdfdom/commit/707c97c3d1f739ba0ab6e93e1bf7cd01d68a8c07.patch";
-      sha256 = "10bv7sv7gfy6lj8z5bkw7v291y12fbrrxsiqxqjxg4i65rfg92ng";
+      url = "https://github.com/ros/urdfdom/commit/61a7e35cd5abece97259e76aed8504052b2f5b53.patch";
+      hash = "sha256-b3bEbbaSUDkwTEHJ8gVPEb+AR/zuWwLqiAW5g1T1dPU=";
     })
   ];
 
   nativeBuildInputs = [ cmake pkg-config validatePkgConfig ];
-  buildInputs = [ tinyxml boost ];
-  propagatedBuildInputs = [ urdfdom-headers console-bridge ];
+  buildInputs = [ tinyxml-2 console-bridge ];
+  propagatedBuildInputs = [ urdfdom-headers ];
 
   meta = with lib; {
     description = "Provides core data structures and a simple XML parser for populating the class data structures from an URDF file";

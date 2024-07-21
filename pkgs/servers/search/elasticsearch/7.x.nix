@@ -16,11 +16,12 @@ let
   info = splitString "-" stdenv.hostPlatform.system;
   arch = elemAt info 0;
   plat = elemAt info 1;
-  shas =
+  hashes =
     {
-      x86_64-linux  = "1s16l95wc589cr69pfbgmkn9rkvxn6sd6jlbiqpm6p6iyxiaxd6c";
-      x86_64-darwin = "05h7pvq4pb816wgcymnfklp3w6sv54x6138v2infw5219dnk8pfs";
-      aarch64-linux = "0q4xnjzhlx1b2lkikca88qh9glfxaifsm419k2bxxlrfrx31zlkq";
+      x86_64-linux   = "sha512-OiWGRxaCdRxXuxE/W04v87ytzOeUEcHRjF5nyRkdqSbZSnLXUyKOYQ4fKmk4til0VBOaKZYId20XyPiu/XTXNw==";
+      x86_64-darwin  = "sha512-V/vKYL96+M1lp7ZJlvuneRBePWZmucUANfUrFPMuq+fnUP4nN69RStLWcgwgt65EspFMBwKVyQbak4swV8rWxw==";
+      aarch64-linux  = "sha512-fNgVRaIIGx01reNHOnGKhMOG1aYU7gC8HLpIESSbM3+9xO1q9IHIaL/ObI/w2RYj/lD22d7PAdX5N6Hd1pVSAA==";
+      aarch64-darwin = "sha512-DgexeyoxZ1YTPw9HjSUAM6eC8XtzIw7MY1WUVsIa8zl5j3RpCp25s3oI12BWefjYYCTjdtFDMsnoFSqZBabLig==";
     };
 in
 stdenv.mkDerivation rec {
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${pname}-${version}-${plat}-${arch}.tar.gz";
-    sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
+    hash = hashes.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
   patches = [ ./es-home-6.x.patch ];
@@ -44,7 +45,8 @@ stdenv.mkDerivation rec {
       "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/*\""
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
 
   buildInputs = [ jre_headless util-linux zlib ];
 
@@ -70,7 +72,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
-    license = licenses.elastic;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
+    license = licenses.elastic20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ apeschar basvandijk ];
   };

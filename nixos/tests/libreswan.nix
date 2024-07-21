@@ -3,7 +3,7 @@
 # Eve can eavesdrop the plaintext traffic between Alice and Bob, but once they
 # enable the secure tunnel Eve's spying becomes ineffective.
 
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
 
@@ -89,7 +89,7 @@ in
           """
           Sends a message as Alice to Bob
           """
-          bob.execute("nc -lu ::0 1234 >/tmp/msg >&2 &")
+          bob.execute("nc -lu ::0 1234 >/tmp/msg &")
           alice.sleep(1)
           alice.succeed(f"echo '{msg}' | nc -uw 0 bob 1234")
           bob.succeed(f"grep '{msg}' /tmp/msg")
@@ -100,13 +100,15 @@ in
           Starts eavesdropping on Alice and Bob
           """
           match = "src host alice and dst host bob"
-          eve.execute(f"tcpdump -i br0 -c 1 -Avv {match} >/tmp/log >&2 &")
+          eve.execute(f"tcpdump -i br0 -c 1 -Avv {match} >/tmp/log &")
 
 
       start_all()
 
       with subtest("Network is up"):
           alice.wait_until_succeeds("ping -c1 bob")
+          alice.succeed("systemctl restart ipsec")
+          bob.succeed("systemctl restart ipsec")
 
       with subtest("Eve can eavesdrop cleartext traffic"):
           eavesdrop()
@@ -117,11 +119,11 @@ in
       with subtest("Libreswan is ready"):
           alice.wait_for_unit("ipsec")
           bob.wait_for_unit("ipsec")
-          alice.succeed("ipsec verify 1>&2")
+          alice.succeed("ipsec checkconfig")
 
       with subtest("Alice and Bob can start the tunnel"):
-          alice.execute("ipsec auto --start tunnel >&2 &")
-          bob.succeed("ipsec auto --start tunnel")
+          alice.execute("ipsec start tunnel >&2 &")
+          bob.succeed("ipsec start tunnel")
           # apparently this is needed to "wake" the tunnel
           bob.execute("ping -c1 alice")
 
@@ -131,4 +133,4 @@ in
           eve.sleep(1)
           eve.fail("grep rhubarb /tmp/log")
     '';
-})
+}

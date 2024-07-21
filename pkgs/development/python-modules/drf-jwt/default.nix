@@ -1,25 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyjwt
-, djangorestframework
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyjwt,
+  djangorestframework,
 }:
 
 buildPythonPackage rec {
   pname = "drf-jwt";
-  version = "1.19.1";
+  version = "1.19.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Styria-Digital";
     repo = "django-rest-framework-jwt";
     rev = version;
-    sha256 = "sha256-++8rFXVsA5WMTt+aC4di3Rpa0BAW285/qM087i9uQ0g=";
+    hash = "sha256-bbkk78uYTG+JTzY3AyOmEVtVSgout/TETfr5N5fUto4=";
   };
 
   propagatedBuildInputs = [
     pyjwt
     djangorestframework
-  ];
+  ] ++ pyjwt.optional-dependencies.crypto;
 
   # requires setting up a django instance
   doCheck = false;

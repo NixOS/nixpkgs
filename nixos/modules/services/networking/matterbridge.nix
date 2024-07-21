@@ -64,8 +64,8 @@ in
         '';
         description = ''
           WARNING: THIS IS INSECURE, as your password will end up in
-          <filename>/nix/store</filename>, thus publicly readable. Use
-          <literal>services.matterbridge.configPath</literal> instead.
+          {file}`/nix/store`, thus publicly readable. Use
+          `services.matterbridge.configPath` instead.
 
           The matterbridge configuration file in the TOML file format.
         '';

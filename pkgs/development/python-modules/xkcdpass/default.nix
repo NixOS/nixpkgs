@@ -1,24 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, installShellFiles
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  installShellFiles,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xkcdpass";
-  version = "1.19.3";
+  version = "1.19.9";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c5a2e948746da6fe504e8404284f457d8e98da6df5047c6bb3f71b18882e9d2a";
+    hash = "sha256-qU+HG9qHBmjlxl64QpbpOWADYt8swDa5HFyjgVvSktc=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ pytestCheckHook ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "xkcdpass" ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+    # https://github.com/redacted/XKCD-password-generator/issues/138
+    "test_entropy_printout_valid_input"
+  ];
 
   postInstall = ''
     installManPage *.?
@@ -27,8 +41,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generate secure multiword passwords/passphrases, inspired by XKCD";
-    homepage = "https://pypi.python.org/pypi/xkcdpass/";
+    homepage = "https://github.com/redacted/XKCD-password-generator";
     license = licenses.bsd3;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "xkcdpass";
   };
 }

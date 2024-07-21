@@ -6,25 +6,30 @@
 , glib
 , gtk3
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , python
 }:
 
 buildPythonPackage rec {
   pname = "pick-colour-picker";
-  version = "unstable-2021-01-19";
+  version = "unstable-2022-05-08";
 
   src = fetchFromGitHub {
     owner = "stuartlangridge";
     repo = "ColourPicker";
-    rev = "dec8f144918aa7964aaf86a346161beb7e997f09";
-    sha256 = "hW2rarfchZ3M0JVfz5RbJRvMhv2PpyLNEMyMAp2gC+o=";
-    fetchSubmodules = false;
+    rev = "e3e4c2bcec5d7285425582b92bb564c74be2cf77";
+    hash = "sha256-vW8mZiB3JFQtbOCWauhJGfZMlGsA/nNcljNNPtJtgGw=";
   };
+
+  postPatch = ''
+    sed "s|sys\.prefix|'\.'|g" -i setup.py
+    sed "s|os.environ.get(\"SNAP\")|'$out'|g" -i pick/__main__.py
+    sed "s|os.environ.get('SNAP'), \"usr\"|'$out'|g" -i pick/__main__.py
+  '';
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   pythonPath = [
@@ -37,25 +42,12 @@ buildPythonPackage rec {
     gtk3
   ];
 
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  # this must be false, otherwise the gobject-introspection hook doesn't run
-  strictDeps = false;
-
-  preDistPhases = [ "fixupIconPath" ];
-
-  fixupIconPath = ''
-    pickLoc="$out/${python.sitePackages}/pick"
-    shareLoc=$(echo "$out/${python.sitePackages}/nix/store/"*)
-    mv "$shareLoc/share" "$out/share"
-
-    sed "s|os.environ.get('SNAP'), \"usr\"|'$out'|g" -i "$pickLoc/__main__.py"
-    '';
-
   meta = with lib; {
     homepage = "https://kryogenix.org/code/pick/";
     license = licenses.mit;
     platforms = platforms.linux;
-    description = "A colour picker that remembers where you picked colours from";
+    description = "Colour picker that remembers where you picked colours from";
+    mainProgram = "pick-colour-picker";
     maintainers = [ maintainers.mkg20001 ];
 
     longDescription = ''

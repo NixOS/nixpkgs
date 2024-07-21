@@ -1,27 +1,40 @@
-{ fetchFromGitHub, python, lib }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-with python.pkgs;
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "gitless";
-  version = "0.8.8";
+  version = "0.9.17";
+  format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "sdg-mit";
-    repo = "gitless";
-    rev = "v${version}";
-    sha256 = "1q6y38f8ap6q1livvfy0pfnjr0l8b68hyhc9r5v87fmdyl7y7y8g";
+    owner = "goldstar611";
+    repo = pname;
+    rev = version;
+    hash = "sha256-XDB1i2b1reMCM6i1uK3IzTnsoLXO7jldYtNlYUo1AoQ=";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ sh pygit2 clint ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    pygit2
+    argcomplete
+  ];
+
+  pythonRelaxDeps = [ "pygit2" ];
 
   doCheck = false;
 
+  pythonImportsCheck = [
+    "gitless"
+  ];
+
   meta = with lib; {
+    description = "Version control system built on top of Git";
     homepage = "https://gitless.com/";
-    description = "A version control system built on top of Git";
-    license = licenses.gpl2;
+    license = licenses.mit;
+    maintainers = with maintainers; [ cransom ];
     platforms = platforms.all;
-    maintainers = [ maintainers.cransom ];
+    mainProgram = "gl";
   };
 }
-

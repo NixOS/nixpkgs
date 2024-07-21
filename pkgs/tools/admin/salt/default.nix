@@ -1,39 +1,50 @@
 { lib
+, stdenv
 , python3
+, fetchPypi
 , openssl
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
 , extraInputs ? []
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-      # Incompatible with pyzmq 22
-      pyzmq = super.pyzmq.overridePythonAttrs (oldAttrs: rec {
-        version = "21.0.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "CYwTxhmJE8KgaQI1+nTS5JFhdV9mtmO+rsiWUVVMx5w=";
-        };
-      });
-   };
-  };
-in
-py.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3004";
+  version = "3007.1";
+  format = "setuptools";
 
-  src = py.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "PVNWG8huAU3KLsPcmBB5vgTVXqBHiQyr3iXlsQv6WxM=";
+    hash = "sha256-uTOsTLPksRGLRtraVcnMa9xvD5S0ySh3rsRLJcaijJo=";
   };
 
-  propagatedBuildInputs = with py.pkgs; [
+  patches = [
+    ./fix-libcrypto-loading.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace "salt/utils/rsax931.py" \
+      --subst-var-by "libcrypto" "${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}"
+    substituteInPlace requirements/base.txt \
+      --replace contextvars ""
+
+    # Don't require optional dependencies on Darwin, let's use
+    # `extraInputs` like on any other platform
+    echo -n > "requirements/darwin.txt"
+
+    # Remove windows-only requirement
+    substituteInPlace "requirements/zeromq.txt" \
+      --replace 'pyzmq==25.0.2 ; sys_platform == "win32"' ""
+  '';
+
+  propagatedBuildInputs = with python3.pkgs; [
     distro
     jinja2
+    jmespath
+    looseversion
     markupsafe
     msgpack
+    packaging
     psutil
     pycryptodomex
     pyyaml
@@ -42,14 +53,8 @@ py.pkgs.buildPythonApplication rec {
     tornado
   ] ++ extraInputs;
 
-  patches = [ ./fix-libcrypto-loading.patch ];
-
-  postPatch = ''
-    substituteInPlace "salt/utils/rsax931.py" \
-      --subst-var-by "libcrypto" "${openssl.out}/lib/libcrypto.so"
-    substituteInPlace requirements/base.txt \
-      --replace contextvars ""
-  '';
+  # Don't use fixed dependencies on Darwin
+  USE_STATIC_REQUIREMENTS = "0";
 
   # The tests fail due to socket path length limits at the very least;
   # possibly there are more issues but I didn't leave the test suite running

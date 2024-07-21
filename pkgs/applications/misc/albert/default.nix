@@ -1,45 +1,96 @@
-{ mkDerivation, lib, fetchFromGitHub, makeWrapper, qtbase,
-  qtdeclarative, qtsvg, qtx11extras, muparser, cmake, python3,
-  qtcharts }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libqalculate,
+  muparser,
+  libarchive,
+  python3Packages,
+  qtbase,
+  qtscxml,
+  qtsvg,
+  qtdeclarative,
+  qtwayland,
+  qt5compat,
+  qttools,
+  wrapQtAppsHook,
+  nix-update-script,
+  pkg-config,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.17.2";
+  version = "0.24.3";
 
   src = fetchFromGitHub {
-    owner  = "albertlauncher";
-    repo   = "albert";
-    rev    = "v${version}";
-    sha256 = "0lpp8rqx5b6rwdpcdldfdlw5327harr378wnfbc6rp3ajmlb4p7w";
+    owner = "albertlauncher";
+    repo = "albert";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-9vR6G/9FSy1mqZCo19Mf0RuvW63DbnhEzp/h0p6eXqs=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ qtbase qtdeclarative qtsvg qtx11extras muparser python3 qtcharts ];
-
-  # We don't have virtualbox sdk so disable plugin
-  cmakeFlags = [ "-DBUILD_VIRTUALBOX=OFF" "-DCMAKE_INSTALL_LIBDIR=libs" ];
+  buildInputs =
+    [
+      libqalculate
+      libarchive
+      muparser
+      qtbase
+      qtscxml
+      qtsvg
+      qtdeclarative
+      qtwayland
+      qt5compat
+      qttools
+    ]
+    ++ (with python3Packages; [
+      python
+      pybind11
+    ]);
 
   postPatch = ''
-    sed -i "/QStringList dirs = {/a    \"$out/libs\"," \
-      src/app/main.cpp
+    find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;
+
+    # WARN: This is necessary for albert to detect the package libraries.
+    # Please check if the file below has changed upstream before updating.
+    sed -i src/app/qtpluginprovider.cpp \
+      -e "/QStringList install_paths;/a    install_paths << QFileInfo(\"$out/lib\").canonicalFilePath();"
   '';
 
-  preBuild = ''
-    mkdir -p "$out/"
-    ln -s "$PWD/lib" "$out/lib"
+  postFixup = ''
+    for i in $out/{bin/.albert-wrapped,lib/albert/plugins/*.so}; do
+      patchelf $i --add-rpath $out/lib/albert
+    done
   '';
 
-  postBuild = ''
-    rm "$out/lib"
-  '';
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
-    homepage    = "https://albertlauncher.github.io/";
-    description = "Desktop agnostic launcher";
-    license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ericsagnes synthetica ];
-    platforms   = platforms.linux;
+    description = "Fast and flexible keyboard launcher";
+    longDescription = ''
+      Albert is a desktop agnostic launcher. Its goals are usability and beauty,
+      performance and extensibility. It is written in C++ and based on the Qt
+      framework.
+    '';
+    homepage = "https://albertlauncher.github.io";
+    changelog = "https://github.com/albertlauncher/albert/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    # See: https://github.com/NixOS/nixpkgs/issues/279226
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+      ericsagnes
+      synthetica
+      eljamm
+    ];
+    mainProgram = "albert";
+    platforms = platforms.linux;
   };
-}
+})

@@ -26,6 +26,7 @@ stdenv_32bit.mkDerivation rec {
     description = "Porting Windows Dynamic Link Libraries to Linux";
     platforms = platforms.linux;
     maintainers = [ maintainers.eleanor ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
+    mainProgram = "mpclient";
   };
 }

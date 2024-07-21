@@ -49,24 +49,15 @@ let
   };
 in {
   options.services.datadog-agent = {
-    enable = mkOption {
-      description = ''
-        Whether to enable the datadog-agent v7 monitoring service
-      '';
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption "Datadog-agent v7 monitoring service";
 
-    package = mkOption {
-      default = pkgs.datadog-agent;
-      defaultText = literalExpression "pkgs.datadog-agent";
-      description = ''
-        Which DataDog v7 agent package to use. Note that the provided
-        package is expected to have an overridable `pythonPackages`-attribute
-        which configures the Python environment with the Datadog
-        checks.
+    package = mkPackageOption pkgs "datadog-agent" {
+      extraDescription = ''
+        ::: {.note}
+        The provided package is expected to have an overridable `pythonPackages`-attribute
+        which configures the Python environment with the Datadog checks.
+        :::
       '';
-      type = types.package;
     };
 
     apiKeyFile = mkOption {
@@ -147,7 +138,7 @@ in {
       type = types.attrs;
       description = ''
         Extra configuration options that will be merged into the
-        main config file <filename>datadog.yaml</filename>.
+        main config file {file}`datadog.yaml`.
       '';
      };
 
@@ -157,6 +148,18 @@ in {
       '';
       default = false;
       type = types.bool;
+    };
+
+    processAgentPackage = mkOption {
+      default = pkgs.datadog-process-agent;
+      defaultText = literalExpression "pkgs.datadog-process-agent";
+      description = ''
+        Which DataDog v7 agent package to use. Note that the provided
+        package is expected to have an overridable `pythonPackages`-attribute
+        which configures the Python environment with the Datadog
+        checks.
+      '';
+      type = types.package;
     };
 
     enableTraceAgent = mkOption {
@@ -241,7 +244,7 @@ in {
 
     systemd.services = let
       makeService = attrs: recursiveUpdate {
-        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.iproute2 ];
+        path = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute2 ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "datadog";
@@ -276,7 +279,7 @@ in {
         path = [ ];
         script = ''
           export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
-          ${pkgs.datadog-process-agent}/bin/process-agent --config /etc/datadog-agent/datadog.yaml
+          ${cfg.processAgentPackage}/bin/process-agent --config /etc/datadog-agent/datadog.yaml
         '';
       });
 

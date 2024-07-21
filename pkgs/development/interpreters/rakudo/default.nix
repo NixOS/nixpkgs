@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, perl, icu, zlib, gmp, lib, nqp, removeReferencesTo }:
+{ stdenv, fetchFromGitHub, perl, icu, zlib, gmp, lib, nqp, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
-  version = "2021.10";
+  version = "2024.06";
 
-  src = fetchurl {
-    url    = "https://rakudo.org/dl/rakudo/rakudo-${version}.tar.gz";
-    sha256 = "sha256-sXTHU3Mo77Xj90JF55+nFZtwExuExZeRbPWmXCrKJKE=";
+  src = fetchFromGitHub {
+    owner = "rakudo";
+    repo = "rakudo";
+    rev = version;
+    hash = "sha256-6XWfM7KJB+lMf/YFLaQ71DMa8owZtjjuMEyWY++CJnM=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ removeReferencesTo ];
@@ -25,9 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Raku implementation on top of Moar virtual machine";
-    homepage    = "https://rakudo.org";
-    license     = licenses.artistic2;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
+    homepage = "https://rakudo.org";
+    license = licenses.artistic2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice sgo ];
   };
 }

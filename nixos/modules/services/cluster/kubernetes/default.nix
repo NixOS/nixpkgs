@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.kubernetes;
+  opt = options.services.kubernetes;
 
   defaultContainerdSettings = {
     version = 2;
@@ -25,10 +26,7 @@ let
 
       containerd.runtimes.runc = {
         runtime_type = "io.containerd.runc.v2";
-      };
-
-      containerd.runtimes."io.containerd.runc.v2".options = {
-        SystemdCgroup = true;
+        options.SystemdCgroup = true;
       };
     };
   };
@@ -63,13 +61,13 @@ let
   etcdEndpoints = ["https://${cfg.masterAddress}:2379"];
 
   mkCert = { name, CN, hosts ? [], fields ? {}, action ? "",
-             privateKeyOwner ? "kubernetes" }: rec {
+             privateKeyOwner ? "kubernetes", privateKeyGroup ? "kubernetes" }: rec {
     inherit name caCert CN hosts fields action;
     cert = secret name;
     key = secret "${name}-key";
     privateKeyOptions = {
       owner = privateKeyOwner;
-      group = "nogroup";
+      group = privateKeyGroup;
       mode = "0600";
       path = key;
     };
@@ -87,6 +85,7 @@ let
       description = "${prefix} certificate authority file used to connect to kube-apiserver.";
       type = types.nullOr types.path;
       default = cfg.caFile;
+      defaultText = literalExpression "config.${opt.caFile}";
     };
 
     certFile = mkOption {
@@ -104,6 +103,7 @@ let
 in {
 
   imports = [
+    (mkRemovedOptionModule [ "services" "kubernetes" "addons" "dashboard" ] "Removed due to it being an outdated version")
     (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
   ];
 
@@ -122,12 +122,7 @@ in {
       type = types.listOf (types.enum ["master" "node"]);
     };
 
-    package = mkOption {
-      description = "Kubernetes package to use.";
-      type = types.package;
-      default = pkgs.kubernetes;
-      defaultText = literalExpression "pkgs.kubernetes";
-    };
+    package = mkPackageOption pkgs "kubernetes" { };
 
     kubeconfig = mkKubeConfigOptions "Default kubeconfig";
 
@@ -196,6 +191,9 @@ in {
       description = "Default location for kubernetes secrets. Not a store location.";
       type = types.path;
       default = cfg.dataDir + "/secrets";
+      defaultText = literalExpression ''
+        config.${opt.dataDir} + "/secrets"
+      '';
     };
   };
 
@@ -263,7 +261,7 @@ in {
           name = "service-account";
           CN = "system:service-account-signer";
           action = ''
-            systemctl reload \
+            systemctl restart \
               kube-apiserver.service \
               kube-controller-manager.service
           '';
@@ -287,7 +285,7 @@ in {
       systemd.tmpfiles.rules = [
         "d /opt/cni/bin 0755 root root -"
         "d /run/kubernetes 0755 kubernetes kubernetes -"
-        "d /var/lib/kubernetes 0755 kubernetes kubernetes -"
+        "d ${cfg.dataDir} 0755 kubernetes kubernetes -"
       ];
 
       users.users.kubernetes = {
@@ -296,6 +294,7 @@ in {
         group = "kubernetes";
         home = cfg.dataDir;
         createHome = true;
+        homeMode = "755";
       };
       users.groups.kubernetes.gid = config.ids.gids.kubernetes;
 
@@ -307,4 +306,6 @@ in {
                           else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
     })
   ];
+
+  meta.buildDocsInSandbox = false;
 }

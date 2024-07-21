@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.proxy;
 in
 {
@@ -31,6 +32,7 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
@@ -46,7 +48,7 @@ in
     verbosity = mkOption {
       description = ''
         Optional glog verbosity level for logging statements. See
-        <link xlink:href="https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md"/>
+        <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
       '';
       default = null;
       type = nullOr int;
@@ -95,4 +97,6 @@ in
 
     services.kubernetes.proxy.kubeconfig.server = mkDefault top.apiserverAddress;
   };
+
+  meta.buildDocsInSandbox = false;
 }

@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Utility program to test the PAM facility";
-    homepage = "http://pamtester.sourceforge.net/";
+    mainProgram = "pamtester";
+    homepage = "https://pamtester.sourceforge.net/";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

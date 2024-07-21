@@ -1,61 +1,64 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , substituteAll
+, dconf
 , gettext
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , gnome
 , accountsservice
 , fontconfig
 , gdm
 , geoclue2
-, geocode-glib
+, geocode-glib_2
 , glib
 , gnome-desktop
-, gnome-online-accounts
-, gtk3
+, gtk4
 , libgweather
 , json-glib
 , krb5
 , libpwquality
-, librest
 , libsecret
 , networkmanager
 , pango
 , polkit
-, webkitgtk
+, webkitgtk_6_0
 , systemd
-, libnma
+, libadwaita
+, libnma-gtk4
 , tzdata
-, libgnomekbd
+, gnome-tecla
 , gsettings-desktop-schemas
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-initial-setup";
-  version = "41.2";
+  version = "46.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "GTr79qMILaCjKncU8ejVKo20Vycpde0vNlQ2SjM5Gz8=";
+    url = "mirror://gnome/sources/gnome-initial-setup/${lib.versions.major finalAttrs.version}/gnome-initial-setup-${finalAttrs.version}.tar.xz";
+    hash = "sha256-o/AQgp9NTI1J+Dqxz6uCG2GyeA6eC15Wicfv8/hE7T4=";
   };
 
   patches = [
     (substituteAll {
       src = ./0001-fix-paths.patch;
-      inherit tzdata libgnomekbd;
+      inherit tzdata;
+      tecla = gnome-tecla;
     })
   ];
 
   nativeBuildInputs = [
+    dconf
     gettext
     meson
     ninja
     pkg-config
     systemd
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -63,27 +66,25 @@ stdenv.mkDerivation rec {
     fontconfig
     gdm
     geoclue2
-    geocode-glib
+    geocode-glib_2
     glib
     gnome-desktop
-    gnome-online-accounts
     gsettings-desktop-schemas
-    gtk3
+    gtk4
     json-glib
     krb5
     libgweather
-    libnma
+    libadwaita
+    libnma-gtk4
     libpwquality
-    librest
     libsecret
     networkmanager
     pango
     polkit
-    webkitgtk
+    webkitgtk_6_0
   ];
 
   mesonFlags = [
-    "-Dcheese=disabled"
     "-Dibus=disabled"
     "-Dparental_controls=disabled"
     "-Dvendor-conf-file=${./vendor.conf}"
@@ -91,8 +92,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-initial-setup";
+      attrPath = "gnome.gnome-initial-setup";
     };
   };
 
@@ -103,4 +104,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };
-}
+})

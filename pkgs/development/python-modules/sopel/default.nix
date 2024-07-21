@@ -1,25 +1,39 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy
-, dnspython
-, geoip2
-, ipython
-, praw
-, pyenchant
-, pygeoip
-, pytestCheckHook
-, pytz
-, sqlalchemy
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchPypi,
+  geoip2,
+  ipython,
+  isPyPy,
+  praw,
+  pyenchant,
+  pygeoip,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  sqlalchemy,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "7.1.6";
-  disabled = isPyPy;
+  version = "8.0.0";
+  format = "setuptools";
+
+  disabled = isPyPy || pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ebd3b2aa9230835f8a68ea7f5a10324ddf35d70d89a9c92c8cba81c558565efb";
+    hash = "sha256-juLJp0Et5qMZwBZzw0e4tKg1cBYqAsH8KUzqNoIP70U=";
   };
+
+  patches = [
+    # https://github.com/sopel-irc/sopel/issues/2401
+    # https://github.com/sopel-irc/sopel/commit/596adc44330939519784389cbb927435305ef758.patch
+    # rewrite the patch because there are too many patches needed to apply the above patch.
+    ./python311-support.patch
+  ];
 
   propagatedBuildInputs = [
     dnspython
@@ -33,14 +47,14 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  # remove once https://github.com/sopel-irc/sopel/pull/1653 lands
+  nativeCheckInputs = [ pytestCheckHook ];
+
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "praw>=4.0.0,<6.0.0" "praw" \
-      --replace "sqlalchemy<1.4" "sqlalchemy"
+      --replace "sqlalchemy<1.4" "sqlalchemy" \
+      --replace "xmltodict==0.12" "xmltodict>=0.12"
   '';
-
-  checkInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export TESTDIR=$(mktemp -d)
@@ -56,7 +70,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple and extensible IRC bot";
-    homepage = "http://sopel.chat";
+    homepage = "https://sopel.chat";
     license = licenses.efl20;
     maintainers = with maintainers; [ mog ];
   };

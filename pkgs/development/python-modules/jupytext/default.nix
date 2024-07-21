@@ -1,68 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, GitPython
-, jupyter-client
-, jupyter-packaging
-, jupyterlab
-, markdown-it-py
-, mdit-py-plugins
-, nbformat
-, notebook
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, toml
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-jupyter-builder,
+  hatchling,
+  jupyter-client,
+  markdown-it-py,
+  mdit-py-plugins,
+  nbformat,
+  notebook,
+  packaging,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.13.3";
-  format = "pyproject";
+  version = "1.16.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "mwouts";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-HzWAEy7z3qi+lSD3yVBGYclfvKTkG1fTsG29NlKPgQw=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-HrrJkEYd2fR3/3/uyeMAP6GsyJ88FroBtz95/XbwGpg=";
   };
 
-  buildInputs = [
-    jupyter-packaging
-    jupyterlab
+  build-system = [
+    hatch-jupyter-builder
+    hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     markdown-it-py
     mdit-py-plugins
     nbformat
+    packaging
     pyyaml
-    toml
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  checkInputs = [
-    GitPython
+  nativeCheckInputs = [
     jupyter-client
     notebook
+    pytest-xdist
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # https://github.com/mwouts/jupytext/pull/885
-    substituteInPlace setup.py \
-      --replace "markdown-it-py~=1.0" "markdown-it-py>=1.0.0,<3.0.0"
-  '';
 
   preCheck = ''
     # Tests that use a Jupyter notebook require $HOME to be writable
     export HOME=$(mktemp -d);
+    export PATH=$out/bin:$PATH;
   '';
 
-  pytestFlagsArray = [
-    # Pre-commit tests expect the source directory to be a Git repository
-    "--ignore-glob='tests/test_pre_commit_*.py'"
+  disabledTestPaths = [ "tests/external" ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # requires access to trash
+    "test_load_save_rename"
   ];
 
   pythonImportsCheck = [
@@ -73,7 +71,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";
     homepage = "https://github.com/mwouts/jupytext";
+    changelog = "https://github.com/mwouts/jupytext/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.jupyter.members;
+    mainProgram = "jupytext";
   };
 }

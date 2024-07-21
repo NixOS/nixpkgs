@@ -1,17 +1,27 @@
-{ lib, stdenv, fetchgit, autoreconfHook, libdrm, libX11, libGL, mesa, pkg-config }:
+{ lib, stdenv, fetchFromGitLab, meson, ninja, libdrm, libX11, libGL, mesa, pkg-config, gst_all_1 }:
 
 stdenv.mkDerivation {
   pname = "kmscube";
-  version = "unstable-2018-06-17";
+  version = "unstable-2023-09-25";
 
-  src = fetchgit {
-    url = "git://anongit.freedesktop.org/mesa/kmscube";
-    rev = "9dcce71e603616ee7a54707e932f962cdf8fb20a";
-    sha256 = "1q5b5yvyfj3127385mp1bfmcbnpnbdswdk8gspp7g4541xk4k933";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "mesa";
+    repo = "kmscube";
+    rev = "96d63eb59e34c647cda1cbb489265f8c536ae055";
+    hash = "sha256-kpnn4JBNvwatrcCF/RGk/fQ7qiKD26iLBr9ovDmAKBo=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libdrm libX11 libGL mesa ];
+  nativeBuildInputs = [ meson pkg-config ninja ];
+  buildInputs = [
+    libdrm
+    libX11
+    libGL
+    mesa
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+  ]);
 
   meta = with lib; {
     description = "Example OpenGL app using KMS/GBM";

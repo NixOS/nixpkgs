@@ -2,48 +2,65 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, pkg-config
-, openssl
 , installShellFiles
-, libiconv
+, cmake
+, git
+, nixosTests
 , Security
+, Foundation
+, Cocoa
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.0.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "starship";
-    repo = pname;
+    repo = "starship";
     rev = "v${version}";
-    sha256 = "sha256-KU9IbvQ6qPbSoHVRN/g7iETV47Y4wMMESzpRHMQ0Uxw=";
+    hash = "sha256-3IO9hHuhzJsCHU/6BA5ylEKQI2ik6ZiRul/iO/vzii4=";
   };
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles cmake ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security Foundation Cocoa ];
 
-  buildFeatures = lib.optional (!stdenv.isDarwin) "notify-rust";
+  NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
 
-  postInstall = ''
-    for shell in bash fish zsh; do
-      STARSHIP_CACHE=$TMPDIR $out/bin/starship completions $shell > starship.$shell
-      installShellCompletion starship.$shell
-    done
+  # tries to access HOME only in aarch64-darwin environment when building mac-notification-sys
+  preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    export HOME=$TMPDIR
   '';
 
-  cargoSha256 = "sha256-IzTRvvQ1uHS2WY2Cf8VQOq423PjwXYNW4bub0ZyvTIE=";
+  postInstall = ''
+    installShellCompletion --cmd starship \
+      --bash <($out/bin/starship completions bash) \
+      --fish <($out/bin/starship completions fish) \
+      --zsh <($out/bin/starship completions zsh)
+
+    presetdir=$out/share/starship/presets/
+    mkdir -p $presetdir
+    cp docs/public/presets/toml/*.toml $presetdir
+  '';
+
+  cargoHash = "sha256-zX04gX40dFYsK+R6gafHNtDevzrWiGufMwrGfhqYVG0=";
+
+  nativeCheckInputs = [ git ];
 
   preCheck = ''
     HOME=$TMPDIR
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) starship;
+  };
+
   meta = with lib; {
-    description = "A minimal, blazing fast, and extremely customizable prompt for any shell";
+    description = "Minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
     license = licenses.isc;
-    maintainers = with maintainers; [ bbigras davidtwco Br1ght0ne Frostman marsam ];
+    maintainers = with maintainers; [ danth davidtwco Br1ght0ne Frostman ];
+    mainProgram = "starship";
   };
 }

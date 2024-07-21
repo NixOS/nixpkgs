@@ -2,6 +2,6 @@
 
 qtModule {
   pname = "qtquickcontrols2";
-  qtInputs = [ qtdeclarative ];
+  propagatedBuildInputs = [ qtdeclarative ];
   outputs = [ "out" "dev" "bin" ];
 }

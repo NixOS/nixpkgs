@@ -1,18 +1,21 @@
-# NixOS module for Buildbot continous integration server.
+# NixOS module for Buildbot continuous integration server.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.buildbot-master;
+  opt = options.services.buildbot-master;
 
-  python = cfg.package.pythonModule;
+  package = pkgs.python3.pkgs.toPythonModule cfg.package;
+  python = package.pythonModule;
 
-  escapeStr = s: escape ["'"] s;
+  escapeStr = escape [ "'" ];
 
   defaultMasterCfg = pkgs.writeText "master.cfg" ''
     from buildbot.plugins import *
+    ${cfg.extraImports}
     factory = util.BuildFactory()
     c = BuildmasterConfig = dict(
      workers       = [${concatStringsSep "," cfg.workers}],
@@ -26,6 +29,7 @@ let
      schedulers    = [ ${concatStringsSep "," cfg.schedulers} ],
      builders      = [ ${concatStringsSep "," cfg.builders} ],
      services      = [ ${concatStringsSep "," cfg.reporters} ],
+     configurators = [ ${concatStringsSep "," cfg.configurators} ],
     )
     for step in [ ${concatStringsSep "," cfg.factorySteps} ]:
       factory.addStep(step)
@@ -63,7 +67,7 @@ in {
         description = "Factory Steps";
         default = [];
         example = [
-          "steps.Git(repourl='git://github.com/buildbot/pyflakes.git', mode='incremental')"
+          "steps.Git(repourl='https://github.com/buildbot/pyflakes.git', mode='incremental')"
           "steps.ShellCommand(command=['trial', 'pyflakes'])"
         ];
       };
@@ -73,7 +77,16 @@ in {
         description = "List of Change Sources.";
         default = [];
         example = [
-          "changes.GitPoller('git://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
+          "changes.GitPoller('https://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
+        ];
+      };
+
+      configurators = mkOption {
+        type = types.listOf types.str;
+        description = "Configurator Steps, see https://docs.buildbot.net/latest/manual/configuration/configurators.html";
+        default = [];
+        example = [
+          "util.JanitorConfigurator(logHorizon=timedelta(weeks=4), hour=12, dayOfWeek=6)"
         ];
       };
 
@@ -89,11 +102,18 @@ in {
         default = "c['buildbotNetUsageData'] = None";
       };
 
+      extraImports = mkOption {
+        type = types.str;
+        description = "Extra python imports to prepend to master.cfg";
+        default = "";
+        example = "from buildbot.process.project import Project";
+      };
+
       masterCfg = mkOption {
         type = types.path;
         description = "Optionally pass master.cfg path. Other options in this configuration will be ignored.";
         default = defaultMasterCfg;
-        defaultText = literalDocBook ''generated configuration file'';
+        defaultText = literalMD ''generated configuration file'';
         example = "/etc/nixos/buildbot/master.cfg";
       };
 
@@ -152,6 +172,7 @@ in {
 
       buildbotDir = mkOption {
         default = "${cfg.home}/master";
+        defaultText = literalExpression ''"''${config.${opt.home}}/master"'';
         type = types.path;
         description = "Specifies the Buildbot directory.";
       };
@@ -168,7 +189,7 @@ in {
           This port should be visible to the outside world, and you’ll need to tell
           your worker admins about your choice.
           If put in (single) quotes, this can also be used as a connection string,
-          as defined in the <link xlink:href="https://twistedmatrix.com/documents/current/core/howto/endpoints.html">ConnectionStrings guide</link>.
+          as defined in the [ConnectionStrings guide](https://twistedmatrix.com/documents/current/core/howto/endpoints.html).
         '';
       };
 
@@ -204,16 +225,12 @@ in {
 
       port = mkOption {
         default = 8010;
-        type = types.int;
+        type = types.port;
         description = "Specifies port number on which the buildbot HTTP interface listens.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.python3Packages.buildbot-full;
-        defaultText = literalExpression "pkgs.python3Packages.buildbot-full";
-        description = "Package to use for buildbot.";
-        example = literalExpression "pkgs.python3Packages.buildbot";
+      package = mkPackageOption pkgs "buildbot-full" {
+        example = "buildbot";
       };
 
       packages = mkOption {
@@ -243,19 +260,17 @@ in {
         description = "Buildbot User.";
         isNormalUser = true;
         createHome = true;
-        home = cfg.home;
-        group = cfg.group;
-        extraGroups = cfg.extraGroups;
+        inherit (cfg) home group extraGroups;
         useDefaultShell = true;
       };
     };
 
     systemd.services.buildbot-master = {
       description = "Buildbot Continuous Integration Server.";
-      after = [ "network-online.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages ++ cfg.pythonPackages python.pkgs;
-      environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ cfg.package ])}/${python.sitePackages}";
+      environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ package ])}/${python.sitePackages}";
 
       preStart = ''
         mkdir -vp "${cfg.buildbotDir}"
@@ -271,7 +286,13 @@ in {
         Group = cfg.group;
         WorkingDirectory = cfg.home;
         # NOTE: call twistd directly with stdout logging for systemd
-        ExecStart = "${python.pkgs.twisted}/bin/twistd -o --nodaemon --pidfile= --logfile - --python ${tacFile}";
+        ExecStart = "${python.pkgs.twisted}/bin/twistd -o --nodaemon --pidfile= --logfile - --python ${cfg.buildbotDir}/buildbot.tac";
+        # To reload on upgrade, set the following in your configuration:
+        # systemd.services.buildbot-master.reloadIfChanged = true;
+        ExecReload = [
+          "${pkgs.coreutils}/bin/ln -sf ${tacFile} ${cfg.buildbotDir}/buildbot.tac"
+          "${pkgs.coreutils}/bin/kill -HUP $MAINPID"
+        ];
       };
     };
   };
@@ -284,5 +305,5 @@ in {
     '')
   ];
 
-  meta.maintainers = with lib.maintainers; [ mic92 lopsided98 ];
+  meta.maintainers = lib.teams.buildbot.members;
 }

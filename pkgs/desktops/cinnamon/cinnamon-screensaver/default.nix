@@ -15,31 +15,31 @@
 , libgnomekbd
 , gnome
 , libtool
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , python3
 , pam
-, accountsservice
 , cairo
-, xapps
+, xapp
+, xdotool
 , xorg
 , iso-flags-png-320x420
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "5.2.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-weQ5sw5SY89JFIxamCeLiSLy8xCXGg0Yxj/5Ca5r+6o=";
+    hash = "sha256-hXgDTQnOlskzyOogvk7BQ9iJ3oXRtgUUX5bXtgD+gFo=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     intltool
     dbus # for meson.build
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     libtool
     meson
     ninja
+    gobject-introspection
   ];
 
   buildInputs = [
     # from meson.build
-    gobject-introspection
     gtk3
     glib
 
@@ -60,10 +60,15 @@ stdenv.mkDerivation rec {
     xorg.libX11
     xorg.libXrandr
 
-    (python3.withPackages (pp: with pp; [ pygobject3 setproctitle xapp pycairo ]))
-    xapps
+    (python3.withPackages (pp: with pp; [
+      pygobject3
+      setproctitle
+      python3.pkgs.xapp # The scope prefix is required
+      pycairo
+    ]))
+    xapp
+    xdotool
     pam
-    accountsservice
     cairo
     cinnamon-desktop
     cinnamon-common
@@ -74,11 +79,6 @@ stdenv.mkDerivation rec {
     iso-flags-png-320x420
   ];
 
-  mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
-  ];
-
   postPatch = ''
     # cscreensaver hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
@@ -87,13 +87,18 @@ stdenv.mkDerivation rec {
       -e s,/usr/share/cinnamon-screensaver,$out/share,g \
       -e s,/usr/share/iso-flag-png,${iso-flags-png-320x420}/share/iso-flags-png,g \
       {} +
+  '';
 
-    sed "s|/usr/share/locale|/run/current-system/sw/share/locale|g" -i ./src/cinnamon-screensaver-main.py
+  preFixup = ''
+    # https://github.com/NixOS/nixpkgs/issues/101881
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
+    )
   '';
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-screensaver";
-    description = "The Cinnamon screen locker and screensaver program";
+    description = "Cinnamon screen locker and screensaver program";
     license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

@@ -1,24 +1,32 @@
-{ lib
-, aio-geojson-client
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pytz
+{
+  lib,
+  aio-geojson-client,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytz,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-quakes";
-  version = "0.13";
+  version = "0.16";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-quakes";
-    rev = "v${version}";
-    sha256 = "sha256-M1QleYVPqLFjxBmOlNJdydxDTk0JJf+GYVtOTC3YUTA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8OpmA3yHjUY+N5Obri4RWeuJiW916xGSWUYUgdpmjkw=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aio-geojson-client
@@ -26,8 +34,10 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
-    aresponses
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
     pytestCheckHook
   ];
@@ -36,7 +46,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for accessing the GeoNet NZ Quakes GeoJSON feeds";
-    homepage = "https://github.com/exxamalte/pythonaio-geojson-geonetnz-quakes";
+    homepage = "https://github.com/exxamalte/python-aio-geojson-geonetnz-quakes";
+    changelog = "https://github.com/exxamalte/python-aio-geojson-geonetnz-quakes/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

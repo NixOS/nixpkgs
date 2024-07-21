@@ -1,39 +1,50 @@
-{ lib
-, asyncstdlib
-, attrs
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, httpx
-, netifaces
-, pytest-asyncio
-, pytestCheckHook
-, pytest-httpx
-, pytest-timeout
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  asyncstdlib,
+  attrs,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  ftfy,
+  httpx,
+  netifaces,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-httpx,
+  pytest-timeout,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.10.9";
-  disabled = pythonOlder "3.6";
+  version = "0.11.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "scarface-4711";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-Y0sFRKnKZAdP95EyE3h1g92AJeT0Xkshjjwfv/vnfW8=";
+    owner = "ol-iver";
+    repo = "denonavr";
+    rev = "refs/tags/${version}";
+    hash = "sha256-VxoRK1qeGrIunsiCzeZJUHxW/sxk+PFpntInL+G/yI8=";
   };
+
+  pythonRelaxDeps = [ "defusedxml" ];
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     asyncstdlib
     attrs
     defusedxml
+    ftfy
     httpx
     netifaces
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     pytest-httpx
@@ -44,7 +55,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Automation Library for Denon AVR receivers";
-    homepage = "https://github.com/scarface-4711/denonavr";
+    homepage = "https://github.com/ol-iver/denonavr";
+    changelog = "https://github.com/ol-iver/denonavr/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ colemickens ];
   };

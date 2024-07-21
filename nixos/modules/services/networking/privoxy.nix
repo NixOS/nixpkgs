@@ -12,7 +12,7 @@ let
     else "${name} ${toString val}\n";
 
   configType = with types;
-    let atom = oneOf [ int bool string path ];
+    let atom = oneOf [ int bool str path ];
     in attrsOf (either atom (listOf atom))
     // { description = ''
           privoxy configuration type. The format consists of an attribute
@@ -73,15 +73,15 @@ in
         and re-encrypting the requests using a per-domain generated certificate.
 
         To issue per-domain certificates, Privoxy must be provided with a CA
-        certificate, using the <literal>ca-cert-file</literal>,
-        <literal>ca-key-file</literal> settings.
+        certificate, using the `ca-cert-file`,
+        `ca-key-file` settings.
 
-        <warning><para>
-          The CA certificate must also be added to the system trust roots,
-          otherwise browsers will reject all Privoxy certificates as invalid.
-          You can do so by using the option
-          <option>security.pki.certificateFiles</option>.
-        </para></warning>
+        ::: {.warning}
+        The CA certificate must also be added to the system trust roots,
+        otherwise browsers will reject all Privoxy certificates as invalid.
+        You can do so by using the option
+        {option}`security.pki.certificateFiles`.
+        :::
       '';
     };
 
@@ -90,7 +90,7 @@ in
       default = "10d";
       example = "12h";
       description = ''
-        If <literal>inspectHttps</literal> is enabled, the time generated HTTPS
+        If `inspectHttps` is enabled, the time generated HTTPS
         certificates will be stored in a temporary directory for reuse. Once
         the lifetime has expired the directory will cleared and the certificate
         will have to be generated again, on-demand.
@@ -98,8 +98,10 @@ in
         Depending on the traffic, you may want to reduce the lifetime to limit
         the disk usage, since Privoxy itself never deletes the certificates.
 
-        <note><para>The format is that of the <literal>tmpfiles.d(5)</literal>
-        Age parameter.</para></note>
+        ::: {.note}
+        The format is that of the `tmpfiles.d(5)`
+        Age parameter.
+        :::
       '';
     };
 
@@ -107,7 +109,7 @@ in
       type = types.lines;
       default = "";
       description = ''
-        Actions to be included in a <literal>user.action</literal> file. This
+        Actions to be included in a `user.action` file. This
         will have a higher priority and can be used to override all other
         actions.
       '';
@@ -117,7 +119,7 @@ in
       type = types.lines;
       default = "";
       description = ''
-        Filters to be included in a <literal>user.filter</literal> file. This
+        Filters to be included in a `user.filter` file. This
         will have a higher priority and can be used to override all other
         filters definitions.
       '';
@@ -182,12 +184,12 @@ in
       description = ''
         This option is mapped to the main Privoxy configuration file.
         Check out the Privoxy user manual at
-        <link xlink:href="https://www.privoxy.org/user-manual/config.html"/>
+        <https://www.privoxy.org/user-manual/config.html>
         for available settings and documentation.
 
-        <note><para>
-          Repeated settings can be represented by using a list.
-        </para></note>
+        ::: {.note}
+        Repeated settings can be represented by using a list.
+        :::
       '';
     };
 

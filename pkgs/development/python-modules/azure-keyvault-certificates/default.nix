@@ -1,39 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, azure-core
-, msrest
-, msrestazure
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  azure-core,
+  isodate,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-keyvault-certificates";
-  version = "4.3.0";
+  version = "4.8.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "4e0a9bae9fd4c222617fbce6b31f97e2e0622774479de3c387239cbfbb828d87";
+    hash = "sha256-xWEnPkQCwlEUhzSGyYv6GyxHiGIp1BAOh9rxAO4Edyg=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     azure-common
     azure-core
-    msrest
-    msrestazure
+    isodate
+    typing-extensions
   ];
 
   pythonNamespaces = [ "azure.keyvault" ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "azure.keyvault.certificates" ];
 
   meta = with lib; {
     description = "Microsoft Azure Key Vault Certificates Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/keyvault/azure-keyvault-certificates";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-keyvault-certificates_${version}/sdk/keyvault/azure-keyvault-certificates/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
   };
 }

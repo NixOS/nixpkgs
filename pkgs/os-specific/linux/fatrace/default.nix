@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fatrace";
-  version = "0.16.3";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = pname;
     rev = version;
-    sha256 = "sha256-w7leZPdmiTc+avihP203e6GLvbRzbCtNOJdF8MM2v68=";
+    sha256 = "sha256-MRHM+hyuRevK4L3u6dGw1S3O7w+BJBsprJVcSz6Q9xg=";
   };
 
   buildInputs = [ python3 which ];

@@ -1,38 +1,45 @@
-{ lib, buildPythonPackage, fetchgit, poetry-core, pytestCheckHook, pytest-benchmark, pytest-mypy, pillow }:
+{
+  lib,
+  buildPythonPackage,
+  fetchgit,
+  pillow,
+  poetry-core,
+  pytest-benchmark,
+  pytestCheckHook,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "pixelmatch";
-  version = "0.2.2";
+  version = "0.2.3";
   format = "pyproject";
 
-  # test fixtures are stored in LFS
+  disabled = pythonOlder "3.6";
+
+  # Test fixtures are stored in LFS
   src = fetchgit {
     url = "https://github.com/whtsky/pixelmatch-py";
     rev = "v${version}";
-    sha256 = "1dsix507dxqik9wvgzscvf2pifbg7gx74krrsalqbfcmm7d1i7xl";
+    hash = "sha256-/zRQhwz+HjT0Hs4CunsqHxHWEtoIH9qMBowRb0Pps6Y=";
     fetchLFS = true;
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-benchmark
-    pytest-mypy
+  nativeCheckInputs = [
     pillow
+    pytest-benchmark
+    pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--mypy"
-    "--benchmark-disable"
-  ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
+
+  pythonImportsCheck = [ "pixelmatch" ];
 
   meta = with lib; {
-    description = "A pixel-level image comparison library.";
+    description = "Pixel-level image comparison library";
     homepage = "https://github.com/whtsky/pixelmatch-py";
     license = licenses.isc;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

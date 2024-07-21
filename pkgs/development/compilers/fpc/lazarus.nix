@@ -9,12 +9,12 @@
 #  1. the build date is embedded in the binary through `$I %DATE%` - we should dump that
 
 let
-  version = "2.0.12";
+  version = "3.2-0";
 
   # as of 2.0.10 a suffix is being added. That may or may not disappear and then
   # come back, so just leave this here.
   majorMinorPatch = v:
-    builtins.concatStringsSep "." (lib.take 3 (lib.splitVersion v));
+    builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion v));
 
   overrides = writeText "revision.inc" (lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v:
     "const ${k} = '${v}';") {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${majorMinorPatch version}/lazarus-${version}.tar.gz";
-    sha256 = "sha256-umzvf4I6LSgWYimYLvySYDnUIxPEDiL+DGd2wT0AFbI=";
+    sha256 = "69f43f0a10b9e09deea5f35094c73b84464b82d3f40d8a2fcfcb5a5ab03c6edf";
   };
 
   postPatch = ''
@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
     stdenv.cc gdk-pixbuf
   ]
   ++ lib.optionals withQt [ libqt5pas qtbase ];
+
+  # Disable parallel build, errors:
+  #  Fatal: (1018) Compilation aborted
+  enableParallelBuilding = false;
 
   nativeBuildInputs = [
     makeWrapper
@@ -83,7 +87,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     mkdir -p $out/share "$out/lazarus"
     tar xf ${fpc.src} --strip-components=1 -C $out/share -m
-    substituteInPlace ide/include/unix/lazbaseconf.inc \
+    substituteInPlace ide/packages/ideconfig/include/unix/lazbaseconf.inc \
       --replace '/usr/fpcsrc' "$out/share/fpcsrc"
   '';
 

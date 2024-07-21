@@ -12,9 +12,11 @@ stdenv.mkDerivation {
     sha256 = "133rd2kvr2q2wmwpx82bb93qbi8wm8qp1vlmbhgc7aslz0j4cqqv";
   };
 
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
+
   buildInputs =
-    [ autoreconfHook xorgproto libX11 libXext pixman
-      pkg-config utilmacros xorgserver
+    [ xorgproto libX11 libXext pixman
+      utilmacros xorgserver
     ];
 
   hardeningDisable = [ "fortify" ];
@@ -23,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://cgit.freedesktop.org/xorg/driver/xf86-video-nested";
-    description = "A driver to run Xorg on top of Xorg or something else";
+    description = "Driver to run Xorg on top of Xorg or something else";
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
     license = licenses.mit;

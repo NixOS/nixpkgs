@@ -36,12 +36,13 @@ plugins: let
     $CC -shared -fPIC ${source} -o "$out/lib/libvapoursynth-nix-plugins${ext}"
   '';
 
-  ext = stdenv.targetPlatform.extensions.sharedLibrary;
+  ext = stdenv.hostPlatform.extensions.sharedLibrary;
 in
 runCommand "${vapoursynth.name}-with-plugins" {
   nativeBuildInputs = [ makeWrapper ];
   passthru = {
     inherit python3;
+    inherit (vapoursynth) src version;
     withPlugins = plugins': withPlugins (plugins ++ plugins');
   };
 } ''

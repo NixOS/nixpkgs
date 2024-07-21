@@ -1,45 +1,59 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, cbor2
-, fetchFromGitHub
-, pycryptodomex
-, pytestCheckHook
-, pytest-vcr
-, pytest-asyncio
-, requests
-, six
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  busypie,
+  cbor2,
+  fetchFromGitHub,
+  pycryptodomex,
+  pytestCheckHook,
+  pytest-vcr,
+  pytest-asyncio,
+  requests,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "5.4.0";
+  version = "8.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "pubnub";
     repo = "python";
-    rev = "v${version}";
-    sha256 = "sha256-FyDsTqDQTI/Xxu4Sl4eHqwmgwN+ip+8WKGJs/h/kl2Y=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GKJv/GJ/h/LVbEa8Wz7iXc8J38UTTlNa0/08+p5sYCA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     cbor2
     pycryptodomex
     requests
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    busypie
     pytest-asyncio
-    pytestCheckHook
     pytest-vcr
+    pytestCheckHook
   ];
 
-  # Some tests don't pass with recent releases of twisted
   disabledTestPaths = [
+    # Tests require network access
     "tests/integrational"
-    "tests/manual/asyncio"
+    "tests/manual"
+    "tests/functional/push"
+  ];
+
+  disabledTests = [
+    "test_subscribe"
+    "test_handshaking"
   ];
 
   pythonImportsCheck = [ "pubnub" ];
@@ -47,6 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python-based APIs for PubNub";
     homepage = "https://github.com/pubnub/python";
+    changelog = "https://github.com/pubnub/python/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -9,43 +9,39 @@
 , vala
 , desktop-file-utils
 , gtk3
-, libxml2
 , granite
 , libhandy
 , libnotify
 , vte
 , libgee
-, elementary-icon-theme
-, appstream
 , pcre2
-, wrapGAppsHook
+, wrapGAppsHook3
+, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "6.0.1";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "terminal";
     rev = version;
-    sha256 = "sha256-4q7YQ4LxuiM/TRae1cc3ncmw7QwE1soC2Sh+GZ+Gpq0=";
+    sha256 = "sha256-k+xowr9HmOUgNkn25uj+oV7AtG9EZfgFDop0Z+H7b3Q=";
   };
 
   nativeBuildInputs = [
-    appstream
     desktop-file-utils
-    libxml2
     meson
     ninja
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
+    xvfb-run
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee
@@ -55,18 +51,13 @@ stdenv.mkDerivation rec {
     vte
   ];
 
-  # See https://github.com/elementary/terminal/commit/914d4b0e2d0a137f12276d748ae07072b95eff80
-  mesonFlags = [ "-Dubuntu-bionic-patched-vte=false" ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -76,7 +67,7 @@ stdenv.mkDerivation rec {
       smart copy/paste, and little to no configuration.
     '';
     homepage = "https://github.com/elementary/terminal";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.terminal";

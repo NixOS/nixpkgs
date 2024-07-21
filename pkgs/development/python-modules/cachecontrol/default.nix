@@ -1,49 +1,61 @@
-{ lib
-, buildPythonPackage
-, cherrypy
-, fetchFromGitHub
-, lockfile
-, mock
-, msgpack
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  cherrypy,
+  fetchFromGitHub,
+  flit-core,
+  filelock,
+  mock,
+  msgpack,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "cachecontrol";
-  version = "0.12.10";
-  format = "setuptools";
+  version = "0.14.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "ionrock";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-mgvL0q10UbPHY1H3tJprke5p8qNl3HNYoeLAERZTcTs=";
+    repo = "cachecontrol";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-myyqiUGna+5S2GJGnwZTOfLh49NhjfHAvpUB49dQbgY=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     msgpack
     requests
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    filecache = [ filelock ];
+    redis = [ redis ];
+  };
+
+  nativeCheckInputs = [
     cherrypy
     mock
-    lockfile
     pytestCheckHook
-  ];
+    requests
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "cachecontrol"
-  ];
+  pythonImportsCheck = [ "cachecontrol" ];
 
   meta = with lib; {
     description = "Httplib2 caching for requests";
+    mainProgram = "doesitcache";
     homepage = "https://github.com/ionrock/cachecontrol";
+    changelog = "https://github.com/psf/cachecontrol/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

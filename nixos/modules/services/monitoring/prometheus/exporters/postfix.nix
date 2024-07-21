@@ -1,9 +1,15 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.postfix;
+  inherit (lib)
+    mkOption
+    types
+    mkIf
+    escapeShellArg
+    concatStringsSep
+    optional
+    ;
 in
 {
   port = 9154;
@@ -13,8 +19,8 @@ in
       description = ''
         Group under which the postfix exporter shall be run.
         It should match the group that is allowed to access the
-        <literal>showq</literal> socket in the <literal>queue/public/</literal> directory.
-        Defaults to <literal>services.postfix.setgidGroup</literal> when postfix is enabled.
+        `showq` socket in the `queue/public/` directory.
+        Defaults to `services.postfix.setgidGroup` when postfix is enabled.
       '';
     };
     telemetryPath = mkOption {
@@ -61,7 +67,7 @@ in
         default = null;
         description = ''
           Name of the postfix systemd slice.
-          This overrides the <option>systemd.unit</option>.
+          This overrides the {option}`systemd.unit`.
         '';
       };
       journalPath = mkOption {
@@ -74,11 +80,13 @@ in
     };
   };
   serviceOpts = {
+    after = mkIf cfg.systemd.enable [ cfg.systemd.unit ];
     serviceConfig = {
       DynamicUser = false;
       # By default, each prometheus exporter only gets AF_INET & AF_INET6,
       # but AF_UNIX is needed to read from the `showq`-socket.
       RestrictAddressFamilies = [ "AF_UNIX" ];
+      SupplementaryGroups = mkIf cfg.systemd.enable [ "systemd-journal" ];
       ExecStart = ''
         ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

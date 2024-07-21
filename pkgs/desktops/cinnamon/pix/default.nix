@@ -1,72 +1,105 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, autoreconfHook
-, cinnamon-desktop
-, file
-, gdk-pixbuf
-, glib
-, gobject-introspection
-, gtk-doc
-, gtk3
-, intltool
-, itstool
-, libtool
-, libxml2
 , pkg-config
-, shared-mime-info
-, wrapGAppsHook
-, xapps
-, yelp-tools
+, meson
+, ninja
+, brasero
+, colord
+, exiv2
+, libheif
+, libjpeg
+, libjxl
+, libtiff
+, gst_all_1
+, libraw
 , libsecret
-, webkitgtk
-, libwebp
+, glib
+, gtk3
+, gsettings-desktop-schemas
 , librsvg
-, json-glib
-, gnome
-, clutter
+, libwebp
+, libX11
+, lcms2
+, bison
+, flex
+, wrapGAppsHook3
+, shared-mime-info
+, python3
+, desktop-file-utils
+, itstool
+, xapp
 }:
 
 stdenv.mkDerivation rec {
   pname = "pix";
-  version = "2.8.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-m508pkbiSVuIaEx7EznOd5QTkpM66TBbpM5HRkjKRQA=";
+    sha256 = "sha256-Ra+5hXSNPRc2LvTeEYwg1xSnIYgrpfvTrpPwzuTXhdU=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
-    autoreconfHook
-    cinnamon-desktop
-    gdk-pixbuf
-    gnome.gnome-common
-    gobject-introspection
-    gtk-doc
-    intltool
+    bison
+    desktop-file-utils
+    flex
     itstool
-    libtool
+    meson
+    ninja
     pkg-config
-    yelp-tools
+    python3
+    wrapGAppsHook3
   ];
 
   buildInputs = [
+    brasero
+    colord
+    exiv2
     glib
+    gsettings-desktop-schemas
+    gst_all_1.gst-plugins-base
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
     gtk3
-    xapps
-    libsecret
-    webkitgtk
-    libwebp
+    lcms2
+    libheif
+    libjpeg
+    libjxl
+    libraw
     librsvg
-    json-glib
-    clutter
+    libsecret
+    libtiff
+    libwebp
+    libX11
+    xapp
   ];
 
+  postPatch = ''
+    chmod +x pix/make-pix-h.py
+
+    patchShebangs data/gschemas/make-enums.py \
+      pix/make-pix-h.py \
+      po/make-potfiles-in.py \
+      postinstall.py \
+      pix/make-authors-tab.py
+  '';
+
+  # Avoid direct dependency on webkit2gtk-4.0
+  # https://fedoraproject.org/wiki/Changes/Remove_webkit2gtk-4.0_API_Version
+  mesonFlags = [ "-Dwebservices=false" ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+  '';
+
   meta = with lib; {
-    description = "A generic image viewer from Linux Mint";
+    description = "Generic image viewer from Linux Mint";
+    mainProgram = "pix";
     homepage = "https://github.com/linuxmint/pix";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

@@ -1,31 +1,34 @@
 { lib, stdenv, fetchurl
-, zlibSupport ? true, zlib ? null
-, sslSupport ? true, openssl ? null
-, idnSupport ? true, libidn ? null
+, zlibSupport ? true, zlib
+, sslSupport ? true, openssl
+, idnSupport ? true, libidn
 }:
 
-assert zlibSupport -> zlib != null;
-assert sslSupport -> openssl != null;
-assert idnSupport -> libidn != null;
-
-with lib;
 
 stdenv.mkDerivation rec{
   pname = "gloox";
-  version = "1.0.24";
+  version = "1.0.28";
 
   src = fetchurl {
     url = "https://camaya.net/download/gloox-${version}.tar.bz2";
-    sha256 = "1jgrd07qr9jvbb5hcmhrqz4w4lvwc51m30jls1fgxf1f5az6455f";
+    sha256 = "sha256-WRvRLCSe3gtQoe9rmawN6O+cG6T9Lhhvl6dAIVzFlmw=";
   };
 
-  buildInputs = [ ]
-    ++ optional zlibSupport zlib
-    ++ optional sslSupport openssl
-    ++ optional idnSupport libidn;
+  # needed since gcc12
+  postPatch = ''
+    sed '1i#include <ctime>' -i \
+      src/tests/{tag/tag_perf.cpp,zlib/zlib_perf.cpp} \
+      src/examples/*.cpp
+  '';
 
-  meta = {
-    description = "A portable high-level Jabber/XMPP library for C++";
+  buildInputs = [ ]
+    ++ lib.optional zlibSupport zlib
+    ++ lib.optional sslSupport openssl
+    ++ lib.optional idnSupport libidn;
+
+  meta = with lib; {
+    description = "Portable high-level Jabber/XMPP library for C++";
+    mainProgram = "gloox-config";
     homepage = "http://camaya.net/gloox";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];

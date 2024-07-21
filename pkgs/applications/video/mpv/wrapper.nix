@@ -1,23 +1,29 @@
 # Arguments that this derivation gets when it is created with `callPackage`
 { stdenv
+, buildEnv
 , lib
 , makeWrapper
+, mpvScripts
 , symlinkJoin
+, writeTextDir
 , yt-dlp
+# the unwrapped mpv derivation
+, mpv
 }:
 
-# the unwrapped mpv derivation - 1st argument to `wrapMpv`
-mpv:
-
 let
-  # arguments to the function (exposed as `wrapMpv` in all-packages.nix)
+  # arguments to the function (exposed as `mpv-unwrapped.wrapper` in top-level)
   wrapper = {
+    mpv,
     extraMakeWrapperArgs ? [],
     youtubeSupport ? true,
-    # a set of derivations (probably from `mpvScripts`) where each is
-    # expected to have a `scriptName` passthru attribute that points to the
-    # name of the script that would reside in the script's derivation's
+    # a set of derivations (probably from `mpvScripts`) where each is expected
+    # to have a `scriptName` passthru attribute that points to the name of the
+    # script that would reside in the script's derivation's
     # `$out/share/mpv/scripts/`.
+    #
+    # A script can optionally also provide `passthru.extraWrapperArgs`
+    # attribute.
     scripts ? [],
     extraUmpvWrapperArgs ? []
   }:
@@ -32,7 +38,7 @@ let
     # All arguments besides the input and output binaries (${mpv}/bin/mpv and
     # $out/bin/mpv). These are used by the darwin specific makeWrapper call
     # used to wrap $out/Applications/mpv.app/Contents/MacOS/mpv as well.
-    mostMakeWrapperArgs = lib.strings.escapeShellArgs ([ "--argv0" "'$0'"
+    mostMakeWrapperArgs = lib.strings.escapeShellArgs ([ "--inherit-argv0"
       # These are always needed (TODO: Explain why)
       "--prefix" "LUA_CPATH" ";" "${mpv.luaEnv}/lib/lua/${mpv.lua.luaversion}/?.so"
       "--prefix" "LUA_PATH" ";" "${mpv.luaEnv}/share/lua/${mpv.lua.luaversion}/?.lua"
@@ -49,11 +55,13 @@ let
           # attribute of the script derivation from the `scripts`
           "--script=${script}/share/mpv/scripts/${script.scriptName}"
         ]
+        # scripts can also set the `extraWrapperArgs` passthru
+        ++ (script.extraWrapperArgs or [])
       ) scripts
     )) ++ extraMakeWrapperArgs)
     ;
     umpvWrapperArgs = lib.strings.escapeShellArgs ([
-      "--argv0" "'$0'"
+      "--inherit-argv0"
       "--set" "MPV" "${placeholder "out"}/bin/mpv"
     ] ++ extraUmpvWrapperArgs)
     ;
@@ -64,9 +72,23 @@ let
       # TODO: don't link all mpv outputs and convert package to mpv-unwrapped?
       paths = [ mpv.all ];
 
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
       passthru.unwrapped = mpv;
+
+      passthru.tests.mpv-scripts-should-not-collide = buildEnv {
+        name = "mpv-scripts-env";
+        paths = lib.pipe mpvScripts [
+          # filters "override" "overrideDerivation" "recurseForDerivations"
+          (lib.filterAttrs (key: script: lib.isDerivation script))
+          # replaces unfree and meta.broken scripts with decent placeholders
+          (lib.mapAttrsToList (key: script:
+            if (builtins.tryEval script.outPath).success
+            then script
+            else writeTextDir "share/mpv/scripts/${script.scriptName}" "placeholder of ${script.name}"
+          ))
+        ];
+      };
 
       postBuild = ''
         # wrapProgram can't operate on symlinks

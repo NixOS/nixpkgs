@@ -23,7 +23,7 @@ in {
       port = mkOption {
         description = "Grafana port.";
         default = 3000;
-        type = types.int;
+        type = types.port;
       };
 
     };
@@ -36,7 +36,7 @@ in {
     port = mkOption {
       description = "Listening port.";
       default = 8686;
-      type = types.int;
+      type = types.port;
     };
 
     templateDir = mkOption {
@@ -60,7 +60,7 @@ in {
           "-templates ${cfg.templateDir}"
         ];
       in {
-        ExecStart = "${pkgs.grafana_reporter}/bin/grafana-reporter ${args}";
+        ExecStart = "${pkgs.grafana-reporter}/bin/grafana-reporter ${args}";
       };
     };
   };

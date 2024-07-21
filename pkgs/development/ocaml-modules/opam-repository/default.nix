@@ -3,7 +3,7 @@
 buildDunePackage rec {
   pname = "opam-repository";
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   useDune2 = true;
 
@@ -15,8 +15,9 @@ buildDunePackage rec {
       --replace "SUBSTITUTE_NIXOS_CURL_PATH" "\"${curl}/bin/curl\""
   '';
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ curl ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ unzip curl ];
   propagatedBuildInputs = [ opam-format ];
 
   meta = opam-format.meta // {

@@ -1,14 +1,26 @@
-{ lib, fetchPypi, buildPythonPackage, dnspython, pyasn1 }:
+{
+  stdenv,
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonAtLeast,
+  dnspython,
+  pyasn1,
+}:
 
 buildPythonPackage rec {
   pname = "sleekxmpp";
   version = "1.3.3";
+  format = "setuptools";
 
-  propagatedBuildInputs = [ dnspython pyasn1 ];
+  disabled = pythonAtLeast "3.10"; # Deprecated in favor of Slixmpp
 
-  patches = [
-    ./dnspython-ip6.patch
+  propagatedBuildInputs = [
+    dnspython
+    pyasn1
   ];
+
+  patches = [ ./dnspython-ip6.patch ];
 
   src = fetchPypi {
     inherit pname version;
@@ -16,9 +28,9 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "XMPP library for Python";
     license = licenses.mit;
     homepage = "http://sleekxmpp.com/";
   };
-
 }

@@ -1,37 +1,35 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, curl
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, curl, sqlite
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-index";
-  version = "0.1.2";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
-    owner = "bennofs";
+    owner = "nix-community";
     repo = "nix-index";
     rev = "v${version}";
-    sha256 = "05fqfwz34n4ijw7ydw2n6bh4bv64rhks85cn720sy5r7bmhfmfa8";
+    hash = "sha256-r3Vg9ox953HdUp5Csxd2DYUyBe9u61fmA94PpcAZRqo=";
   };
 
-  cargoSha256 = "161lz96a52s53rhhkxxhcg41bsmh8w6rv6nl8gwqmg3biszy7hah";
+  cargoHash = "sha256-c1Ivsj9of/cjEKU0lo4I9BfIUQZ3pPf2QF9fAlZTQn0=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl curl ]
+  buildInputs = [ openssl curl sqlite ]
     ++ lib.optional stdenv.isDarwin Security;
 
-  doCheck = !stdenv.isDarwin;
-
   postInstall = ''
-    mkdir -p $out/etc/profile.d
-    cp ./command-not-found.sh $out/etc/profile.d/command-not-found.sh
-    substituteInPlace $out/etc/profile.d/command-not-found.sh \
-      --replace "@out@" "$out"
+    substituteInPlace command-not-found.sh \
+      --subst-var out
+    install -Dm555 command-not-found.sh -t $out/etc/profile.d
   '';
 
   meta = with lib; {
-    description = "A files database for nixpkgs";
-    homepage = "https://github.com/bennofs/nix-index";
+    description = "Files database for nixpkgs";
+    homepage = "https://github.com/nix-community/nix-index";
+    changelog = "https://github.com/nix-community/nix-index/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ bennofs ncfavier ];
+    maintainers = with maintainers; [ bennofs figsoda ncfavier ];
   };
 }

@@ -14,7 +14,7 @@ in
           example = [ "--debug" ];
           description = ''
             Additional command-line arguments to pass to
-            <command>imwheel</command>.
+            {command}`imwheel`.
           '';
         };
 
@@ -37,8 +37,8 @@ in
             Window class translation rules.
             /etc/X11/imwheelrc is generated based on this config
             which means this config is global for all users.
-            See <link xlink:href="http://imwheel.sourceforge.net/imwheel.1.html">offical man pages</link>
-            for more informations.
+            See [official man pages](https://imwheel.sourceforge.net/imwheel.1.html)
+            for more information.
           '';
         };
       };

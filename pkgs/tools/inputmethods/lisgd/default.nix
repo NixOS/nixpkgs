@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lisgd";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "lisgd";
     rev = version;
-    sha256 = "sha256-yE2CUv1XDvo8fW0bLS1O2oxgDUu4drCO3jFpxPgAYKU=";
+    hash = "sha256-ljRZpBo4lW2cYZYxKKMrXanE0YaHSFwcdyECK0czdWY=";
   };
 
   inherit patches;
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bind gestures via libinput touch events";
+    mainProgram = "lisgd";
     homepage = "https://git.sr.ht/~mil/lisgd";
     license = licenses.mit;
     platforms = platforms.linux;

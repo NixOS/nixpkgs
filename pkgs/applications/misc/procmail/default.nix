@@ -1,20 +1,21 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, fetchpatch, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "procmail";
-  version = "3.22";
+  version = "3.24";
 
   src = fetchurl {
-    url = "ftp://ftp.fu-berlin.de/pub/unix/mail/procmail/procmail-${version}.tar.gz";
-    sha256 = "05z1c803n5cppkcq99vkyd5myff904lf9sdgynfqngfk9nrpaz08";
+    url = "https://github.com/BuGlessRB/procmail/archive/refs/tags/v${version}.tar.gz";
+    sha256 = "UU6kMzOXg+ld+TIeeUdx5Ih7mCOsVf2yRpcCz2m9OYk=";
   };
 
   patches = [
-    ./CVE-2014-3618.patch
-    (fetchurl {
-      url = "https://sources.debian.org/data/main/p/procmail/3.22-26/debian/patches/30";
-      sha256 = "11zmz1bj0v9pay3ldmyyg7473b80h89gycrhndsgg9q50yhcqaaq";
-      name = "CVE-2017-16844";
+    # Fix clang-16 and gcc-14 build failures:
+    #   https://github.com/BuGlessRB/procmail/pull/7
+    (fetchpatch {
+      name = "clang-16.patch";
+      url = "https://github.com/BuGlessRB/procmail/commit/8cfd570fd14c8fb9983859767ab1851bfd064b64.patch";
+      hash = "sha256-CaQeDKwF0hNOrxioBj7EzkCdJdsq44KwkfA9s8xK88g=";
     })
   ];
 
@@ -29,11 +30,22 @@ stdenv.mkDerivation rec {
     sed -e "3i\
     .PHONY: install
     " -i Makefile
+  '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace src/Makefile.0 \
+      --replace-fail '@./_autotst' '@${stdenv.hostPlatform.emulator buildPackages} ./_autotst'
+    sed -e '3i\
+    _autotst() { ${stdenv.hostPlatform.emulator buildPackages} ./_autotst "$@"; } \
+    _locktst() { ${stdenv.hostPlatform.emulator buildPackages} ./_locktst "$@"; } \
+    ' -i src/autoconf
   '';
+
+  # default target is binaries + manpages; manpages don't cross compile without more work.
+  makeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ "bins" ];
+  installTargets = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ "install.bin" ];
 
   meta = with lib; {
     description = "Mail processing and filtering utility";
-    homepage = "http://www.procmail.org/";
+    homepage = "https://github.com/BuGlessRB/procmail/";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ gebner ];

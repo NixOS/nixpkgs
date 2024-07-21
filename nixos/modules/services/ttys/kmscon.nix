@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-  inherit (lib) mkOption types mkIf;
+  inherit (lib) mapAttrs mkIf mkOption optional optionals types;
 
   cfg = config.services.kmscon;
 
@@ -24,6 +24,25 @@ in {
 
       hwRender = mkOption {
         description = "Whether to use 3D hardware acceleration to render the console.";
+        type = types.bool;
+        default = false;
+      };
+
+      fonts = mkOption {
+        description = "Fonts used by kmscon, in order of priority.";
+        default = null;
+        example = lib.literalExpression ''[ { name = "Source Code Pro"; package = pkgs.source-code-pro; } ]'';
+        type = with types;
+          let fontType = submodule {
+                options = {
+                  name = mkOption { type = str; description = "Font name, as used by fontconfig."; };
+                  package = mkOption { type = package; description = "Package providing the font."; };
+                };
+          }; in nullOr (nonEmptyListOf fontType);
+      };
+
+      useXkbConfig = mkOption {
+        description = "Configure keymap from xserver keyboard settings.";
         type = types.bool;
         default = false;
       };
@@ -54,44 +73,45 @@ in {
   };
 
   config = mkIf cfg.enable {
-    # Largely copied from unit provided with kmscon source
-    systemd.units."kmsconvt@.service".text = ''
-      [Unit]
-      Description=KMS System Console on %I
-      Documentation=man:kmscon(1)
-      After=systemd-user-sessions.service
-      After=plymouth-quit-wait.service
-      After=systemd-logind.service
-      After=systemd-vconsole-setup.service
-      Requires=systemd-logind.service
-      Before=getty.target
-      Conflicts=getty@%i.service
-      OnFailure=getty@%i.service
-      IgnoreOnIsolate=yes
-      ConditionPathExists=/dev/tty0
+    systemd.packages = [ pkgs.kmscon ];
 
-      [Service]
-      ExecStart=
-      ExecStart=${pkgs.kmscon}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
-      UtmpIdentifier=%I
-      TTYPath=/dev/%I
-      TTYReset=yes
-      TTYVHangup=yes
-      TTYVTDisallocate=yes
+    systemd.services."kmsconvt@" = {
+      after = [ "systemd-logind.service" "systemd-vconsole-setup.service" ];
+      requires = [ "systemd-logind.service" ];
 
-      X-RestartIfChanged=false
-    '';
+      serviceConfig.ExecStart = [
+        ""
+        ''
+          ${pkgs.kmscon}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
+        ''
+      ];
+
+      restartIfChanged = false;
+      aliases = [ "autovt@.service" ];
+    };
 
     systemd.suppressedSystemUnits = [ "autovt@.service" ];
-    systemd.units."kmsconvt@.service".aliases = [ "autovt@.service" ];
 
     systemd.services.systemd-vconsole-setup.enable = false;
+    systemd.services.reload-systemd-vconsole-setup.enable = false;
 
-    services.kmscon.extraConfig = mkIf cfg.hwRender ''
-      drm
-      hwaccel
-    '';
+    services.kmscon.extraConfig =
+      let
+        xkb = optionals cfg.useXkbConfig
+          (lib.mapAttrsToList (n: v: "xkb-${n}=${v}") (
+            lib.filterAttrs
+              (n: v: builtins.elem n ["layout" "model" "options" "variant"] && v != "")
+              config.services.xserver.xkb
+          ));
+        render = optionals cfg.hwRender [ "drm" "hwaccel" ];
+        fonts = optional (cfg.fonts != null) "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
+      in lib.concatStringsSep "\n" (xkb ++ render ++ fonts);
 
-    hardware.opengl.enable = mkIf cfg.hwRender true;
+    hardware.graphics.enable = mkIf cfg.hwRender true;
+
+    fonts = mkIf (cfg.fonts != null) {
+      fontconfig.enable = true;
+      packages = map (f: f.package) cfg.fonts;
+    };
   };
 }

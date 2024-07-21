@@ -1,37 +1,35 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi, patatt }:
 
 python3Packages.buildPythonApplication rec {
   pname = "b4";
-  version = "0.6.2";
+  version = "0.14.0";
+  pyproject = true;
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "1j904dy9cwxl85k2ngc498q5cdnqwsmw3jibjr1m55w8aqdck68z";
+    hash = "sha256-KaMo0aZhwv9F4aya5ViTBwPxK6RLPZgfRJ9g6O48SUk=";
   };
-
-  preConfigure = ''
-    substituteInPlace setup.py \
-      --replace 'requests~=2.24.0' 'requests~=2.25' \
-      --replace 'dnspython~=2.0.0' 'dnspython~=2.1'
-  '';
 
   # tests make dns requests and fails
   doCheck = false;
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     requests
     dnspython
     dkimpy
-
-    # These may be required in the future for other patch attestation features
-    #pycryptodomex~=3.9.9
-    #PyNaCl
+    patatt
+    git-filter-repo
   ];
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/utils/b4/b4.git/about";
     license = licenses.gpl2Only;
-    description = "A helper utility to work with patches made available via a public-inbox archive";
-    maintainers = with maintainers; [ jb55 ];
+    description = "Helper utility to work with patches made available via a public-inbox archive";
+    mainProgram = "b4";
+    maintainers = with maintainers; [ jb55 qyliss mfrw ];
   };
 }

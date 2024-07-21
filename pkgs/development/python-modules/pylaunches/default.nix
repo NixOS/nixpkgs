@@ -1,51 +1,51 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pytest-asyncio,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pylaunches";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
-    repo = pname;
-    rev = version;
-    sha256 = "0mczxkwczyh9kva4xzpmnawy0hjha1fdrwj6igip9w5z1q48zs49";
+    repo = "pylaunches";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NewzzZuiXwaWU59bu+M2QcSfydL1khvw/YJkbZ58W2Q=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  postPatch = ''
+    # Upstream doesn't set version in the repo
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0"' 'version = "${version}"'
+  '';
 
-  checkInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [ aiohttp ];
+
+  nativeCheckInputs = [
     aresponses
     pytestCheckHook
     pytest-asyncio
   ];
 
-  postPatch = ''
-    # Upstream doesn't set version in the repo
-    substituteInPlace setup.py \
-      --replace 'version="main",' 'version="${version}",' \
-      --replace ', "pytest-runner"' ""
-  '';
-
-  pythonImportsCheck = [
-    "pylaunches"
-  ];
+  pythonImportsCheck = [ "pylaunches" ];
 
   meta = with lib; {
     description = "Python module to get information about upcoming space launches";
     homepage = "https://github.com/ludeeus/pylaunches";
+    changelog = "https://github.com/ludeeus/pylaunches/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

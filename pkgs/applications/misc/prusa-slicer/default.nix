@@ -1,22 +1,92 @@
-{ stdenv, lib, fetchFromGitHub, cmake, copyDesktopItems, makeDesktopItem, pkg-config, wrapGAppsHook
-, boost, cereal, cgal_5, curl, dbus, eigen, expat, glew, glib, gmp, gtest, gtk3, hicolor-icon-theme
-, ilmbase, libpng, mpfr, nlopt, openvdb, pcre, qhull, systemd, tbb, wxGTK31-gtk3, xorg
+{ stdenv
+, lib
+, binutils
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wrapGAppsHook3
+, boost
+, cereal
+, cgal
+, curl
+, darwin
+, dbus
+, eigen
+, expat
+, glew
+, glib
+, gmp
+, gtk3
+, hicolor-icon-theme
+, ilmbase
+, libpng
+, mpfr
+, nanosvg
+, nlopt
+, opencascade-occt_7_6
+, openvdb
+, pcre
+, qhull
+, tbb_2021_11
+, wxGTK32
+, xorg
+, libbgcode
+, heatshrink
+, catch2
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+, wxGTK-override ? null
 }:
-stdenv.mkDerivation rec {
+let
+  opencascade-occt = opencascade-occt_7_6;
+  wxGTK-prusa = wxGTK32.overrideAttrs (old: rec {
+    pname = "wxwidgets-prusa3d-patched";
+    version = "3.2.0";
+    configureFlags = old.configureFlags ++ [ "--disable-glcanvasegl" ];
+    patches = [ ./wxWidgets-Makefile.in-fix.patch ];
+    src = fetchFromGitHub {
+      owner = "prusa3d";
+      repo = "wxWidgets";
+      rev = "78aa2dc0ea7ce99dc19adc1140f74c3e2e3f3a26";
+      hash = "sha256-rYvmNmvv48JSKVT4ph9AS+JdstnLSRmcpWz1IdgBzQo=";
+      fetchSubmodules = true;
+    };
+  });
+  nanosvg-fltk = nanosvg.overrideAttrs (old: rec {
+    pname = "nanosvg-fltk";
+    version = "unstable-2022-12-22";
+
+    src = fetchFromGitHub {
+      owner = "fltk";
+      repo = "nanosvg";
+      rev = "abcd277ea45e9098bed752cf9c6875b533c0892f";
+      hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
+    };
+  });
+  openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_11; };
+  wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.3.3";
+  version = "2.7.4";
+
+  src = fetchFromGitHub {
+    owner = "prusa3d";
+    repo = "PrusaSlicer";
+    hash = "sha256-g2I2l6i/8p8werDs4mDI/lGeDQsma4WSB9vT6OB2LGg=";
+    rev = "version_${finalAttrs.version}";
+  };
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
+    binutils
     boost
     cereal
-    cgal_5
+    cgal
     curl
     dbus
     eigen
@@ -29,17 +99,25 @@ stdenv.mkDerivation rec {
     ilmbase
     libpng
     mpfr
+    nanosvg-fltk
     nlopt
-    openvdb
+    opencascade-occt
+    openvdb_tbb_2021_8
     pcre
-    systemd
-    tbb
-    wxGTK31-gtk3
+    qhull
+    tbb_2021_11
+    wxGTK-override'
     xorg.libX11
-  ] ++ checkInputs;
+    libbgcode
+    heatshrink
+    catch2
+  ] ++ lib.optionals withSystemd [
+    systemd
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.CoreWLAN
+  ];
 
-  doCheck = true;
-  checkInputs = [ gtest ];
+  separateDebugInfo = true;
 
   # The build system uses custom logic - defined in
   # cmake/modules/FindNLopt.cmake in the package source - for finding the nlopt
@@ -47,33 +125,37 @@ stdenv.mkDerivation rec {
   # additionally need to set the path via the NLOPT environment variable.
   NLOPT = nlopt;
 
-  # Disable compiler warnings that clutter the build log.
-  # It seems to be a known issue for Eigen:
-  # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
-  NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes";
-
   # prusa-slicer uses dlopen on `libudev.so` at runtime
-  NIX_LDFLAGS = "-ludev";
+  NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";
 
   prePatch = ''
-    # In nix ioctls.h isn't available from the standard kernel-headers package
-    # like in other distributions. The copy in glibc seems to be identical to the
-    # one in the kernel though, so we use that one instead.
-    sed -i 's|"/usr/include/asm-generic/ioctls.h"|<asm-generic/ioctls.h>|g' src/libslic3r/GCodeSender.cpp
-
     # Since version 2.5.0 of nlopt we need to link to libnlopt, as libnlopt_cxx
     # now seems to be integrated into the main lib.
     sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake
+
+    # Disable slic3r_jobs_tests.cpp as the test fails sometimes
+    sed -i 's|slic3r_jobs_tests.cpp||g' tests/slic3rutils/CMakeLists.txt
+
+    # prusa-slicer expects the OCCTWrapper shared library in the same folder as
+    # the executable when loading STEP files. We force the loader to find it in
+    # the usual locations (i.e. LD_LIBRARY_PATH) instead. See the manpage
+    # dlopen(3) for context.
+    if [ -f "src/libslic3r/Format/STEP.cpp" ]; then
+      substituteInPlace src/libslic3r/Format/STEP.cpp \
+        --replace 'libpath /= "OCCTWrapper.so";' 'libpath = "OCCTWrapper.so";'
+    fi
+    # https://github.com/prusa3d/PrusaSlicer/issues/9581
+    if [ -f "cmake/modules/FindEXPAT.cmake" ]; then
+      rm cmake/modules/FindEXPAT.cmake
+    fi
+
+    # Fix resources folder location on macOS
+    substituteInPlace src/PrusaSlicer.cpp \
+      --replace "#ifdef __APPLE__" "#if 0"
   '';
 
-  src = fetchFromGitHub {
-    owner = "prusa3d";
-    repo = "PrusaSlicer";
-    sha256 = "0w0synqi3iz9aigsgv6x1c6sg123fasbx19h4w3ic1l48r8qmpwm";
-    rev = "version_${version}";
-  };
-
   cmakeFlags = [
+    "-DSLIC3R_STATIC=0"
     "-DSLIC3R_FHS=1"
     "-DSLIC3R_GTK=3"
   ];
@@ -81,36 +163,39 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ln -s "$out/bin/prusa-slicer" "$out/bin/prusa-gcodeviewer"
 
+    mkdir -p "$out/lib"
+    mv -v $out/bin/*.* $out/lib/
+
     mkdir -p "$out/share/pixmaps/"
     ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer.png" "$out/share/pixmaps/PrusaSlicer.png"
     ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer-gcodeviewer_192px.png" "$out/share/pixmaps/PrusaSlicer-gcodeviewer.png"
   '';
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "PrusaSlicer";
-      exec = "prusa-slicer";
-      icon = "PrusaSlicer";
-      comment = "G-code generator for 3D printers";
-      desktopName = "PrusaSlicer";
-      genericName = "3D printer tool";
-      categories = "Development;";
-    })
-    (makeDesktopItem {
-      name = "PrusaSlicer G-code Viewer";
-      exec = "prusa-gcodeviewer";
-      icon = "PrusaSlicer-gcodeviewer";
-      comment = "G-code viewer for 3D printers";
-      desktopName = "PrusaSlicer G-code Viewer";
-      genericName = "G-code Viewer";
-      categories = "Development;";
-    })
-  ];
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "$out/lib"
+    )
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    ctest \
+      --force-new-ctest-process \
+      -E 'libslic3r_tests|sla_print_tests'
+
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "G-code generator for 3D printer";
     homepage = "https://github.com/prusa3d/PrusaSlicer";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ moredread tweber ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ moredread tweber tmarkus ];
+    platforms = platforms.unix;
+  } // lib.optionalAttrs (stdenv.isDarwin) {
+    mainProgram = "PrusaSlicer";
   };
-}
+})

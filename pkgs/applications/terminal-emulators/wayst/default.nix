@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , pkg-config
+, nixosTests
 , freetype
 , fontconfig
 , libGL
@@ -21,26 +22,23 @@ let
   desktopItem = makeDesktopItem {
     desktopName = "Wayst";
     name = "wayst";
+    genericName = "Terminal";
     exec = "wayst";
     icon = "wayst";
-    terminal = "false";
-    categories = "System;TerminalEmulator";
+    categories = [ "System" "TerminalEmulator" ];
+    keywords = [ "wayst" "terminal" ];
     comment = "A simple terminal emulator";
-    extraEntries = ''
-      GenericName=Terminal
-      Keywords=wayst;terminal;
-    '';
   };
 in
 stdenv.mkDerivation rec {
   pname = "wayst";
-  version = "unstable-2021-04-05";
+  version = "unstable-2023-07-16";
 
   src = fetchFromGitHub {
     owner = "91861";
     repo = pname;
-    rev = "e72ca78ef72c7b1e92473a98d435a3c85d7eab98";
-    hash = "sha256-UXAVSfVpk/8KSg4oMw2tVWImD6HqJ7gEioR2MqhUUoQ=";
+    rev = "f8b218eec1af706fd5ae287f5073e6422eb8b6d8";
+    hash = "sha256-tA2R6Snk5nqWkPXSbs7wmovWkT97xafdK0e/pKBUIUg=";
   };
 
   makeFlags = [ "INSTALL_DIR=\${out}/bin" ];
@@ -58,11 +56,7 @@ stdenv.mkDerivation rec {
     utf8proc
     wayland
   ];
-
-  # This patch forces the Makefile to use utf8proc
-  # The makefile relies on ldconfig to find the utf8proc libraries
-  # which is not possible on nixpkgs
-  patches = [ ./utf8proc.patch ];
+  enableParallelBuilding = true;
 
   postPatch = ''
     substituteInPlace src/settings.c \
@@ -81,8 +75,10 @@ stdenv.mkDerivation rec {
     install -D icons/wayst.svg $out/share/icons/hicolor/scalable/apps/wayst.svg
   '';
 
+  passthru.tests.test = nixosTests.terminal-emulators.wayst;
+
   meta = with lib; {
-    description = "A simple terminal emulator";
+    description = "Simple terminal emulator";
     mainProgram = "wayst";
     homepage = "https://github.com/91861/wayst";
     license = licenses.mit;

@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ SDL SDL_image SDL_ttf SDL_gfx ];
 
-  NIX_CFLAGS_COMPILE = toString (makeSDLFlags [ SDL SDL_image SDL_ttf SDL_gfx ]);
+  env.NIX_CFLAGS_COMPILE = toString (makeSDLFlags [ SDL SDL_image SDL_ttf SDL_gfx ]);
 
   patches = [
     ./parse.patch # Fixes compilation error by avoiding redundant definitions.
@@ -26,10 +26,11 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A slide show presentation tool";
+    description = "Slide show presentation tool";
 
     platforms = platforms.unix;
     license  = licenses.gpl3;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
+    mainProgram = "xsw";
   };
 }

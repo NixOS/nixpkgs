@@ -1,35 +1,56 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, coreutils
-, pbr
-, prettytable
-, keystoneauth1
-, requests
-, warlock
-, oslo-utils
-, oslo-i18n
-, wrapt
-, pyopenssl
-, stestr
-, testscenarios
-, ddt
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  coreutils,
+  setuptools,
+  pbr,
+  prettytable,
+  keystoneauth1,
+  requests,
+  warlock,
+  oslo-utils,
+  oslo-i18n,
+  wrapt,
+  pyopenssl,
+  pythonOlder,
+  stestr,
+  testscenarios,
+  ddt,
+  requests-mock,
+  writeText,
 }:
-
-buildPythonApplication rec {
+let
   pname = "python-glanceclient";
-  version = "3.5.0";
+  version = "4.6.0";
+
+  disabledTests = [
+    "test_http_chunked_response"
+    "test_v1_download_has_no_stray_output_to_stdout"
+    "test_v2_requests_valid_cert_verification"
+    "test_download_has_no_stray_output_to_stdout"
+    "test_v2_download_has_no_stray_output_to_stdout"
+    "test_v2_requests_valid_cert_verification_no_compression"
+    "test_log_request_id_once"
+  ];
+in
+buildPythonPackage {
+  inherit pname version;
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "417b9d814b43e62df4351f26a0d5569b801e9f99f7758bd8c82ef994c3629356";
+    hash = "sha256-gJm4TzxtIjvkpOlbN82MPbY0JmDdiwlEMGGxZvTR+Po=";
   };
 
   postPatch = ''
     substituteInPlace glanceclient/tests/unit/v1/test_shell.py \
-      --replace "/bin/echo" "${coreutils}/bin/echo"
+      --replace-fail "/bin/echo" "${lib.getExe' coreutils "echo"}"
   '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pbr
@@ -43,7 +64,7 @@ buildPythonApplication rec {
     pyopenssl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     testscenarios
     ddt
@@ -51,7 +72,9 @@ buildPythonApplication rec {
   ];
 
   checkPhase = ''
-    stestr run
+    runHook preCheck
+    stestr run -e ${writeText "disabled-tests" (lib.concatStringsSep "\n" disabledTests)}
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "glanceclient" ];

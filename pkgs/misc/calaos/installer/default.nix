@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "calaos_installer";
-  version = "3.5";
+  version = "3.11";
 
   src = fetchFromGitHub {
     owner = "calaos";
     repo = "calaos_installer";
     rev = "v${version}";
-    sha256 = "hx7XVF2iueKFR67U0EvSK1vYZnJBnuOpUOkSjx7h1XY=";
+    sha256 = "sha256-e/f58VtGmKukdv4rIrGljXhA9d/xUycM5V6I1FT5qeY=";
   };
 
   nativeBuildInputs = [ qmake qttools ];
@@ -26,6 +26,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Calaos Installer, a tool to create calaos configuration";
+    mainProgram = "calaos_installer";
     homepage = "https://www.calaos.fr/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

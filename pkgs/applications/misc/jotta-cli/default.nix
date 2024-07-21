@@ -5,10 +5,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jotta-cli";
-  version = "0.12.51202";
+  version = "0.15.107955";
   src = fetchzip {
       url = "https://repo.jotta.us/archives/linux/${arch}/jotta-cli-${version}_linux_${arch}.tar.gz";
-      sha256 = "sha256-B7Rn/0hFVUsEK2Wo8KbqAnzOwQmMKkAssfmaN3dPAUY=";
+      sha256 = "sha256-qCG3yi0ACmqOnn+gaCN8GedciUobpOww50Kz5AdknqU=";
       stripRoot = false;
     };
 
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     homepage     = "https://www.jottacloud.com/";
     downloadPage = "https://repo.jotta.us/archives/linux/";
     maintainers  = with maintainers; [ evenbrenden ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license      = licenses.unfree;
     platforms    = [ "x86_64-linux" ];
   };

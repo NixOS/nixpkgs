@@ -1,28 +1,36 @@
-{ lib, fetchPypi, buildPythonPackage, aenum, isPy3k, pythonOlder, enum34, python }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  aenum,
+  pythonOlder,
+  python,
+}:
 
 buildPythonPackage rec {
-    pname = "dbf";
-    version = "0.99.1";
+  pname = "dbf";
+  version = "0.99.9";
+  format = "setuptools";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "4ed598a3866dfe7761b8099cf53ab44cb6ed5e4a7dbffb0da8c67a4af8d62fc5";
-    };
+  disabled = pythonOlder "3.7";
 
-    propagatedBuildInputs = [ aenum ] ++ lib.optional (pythonOlder "3.4") enum34;
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-MFEi1U0RNvrfDtV4HpvPgKTCibAh76z7Gnmj32IubYw=";
+  };
 
-    doCheck = !isPy3k;
-    # tests are not yet ported.
-    # https://groups.google.com/forum/#!topic/python-dbase/96rx2xmCG4w
+  propagatedBuildInputs = [ aenum ];
 
-    checkPhase = ''
-      ${python.interpreter} dbf/test.py
-    '';
+  checkPhase = ''
+    ${python.interpreter} -m dbf.test
+  '';
 
-    meta = with lib; {
-      description = "Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files";
-      homepage    = "https://pypi.python.org/pypi/dbf";
-      license     = licenses.bsd2;
-      maintainers = with maintainers; [ vrthra ];
-    };
+  pythonImportsCheck = [ "dbf" ];
+
+  meta = with lib; {
+    description = "Module for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files";
+    homepage = "https://github.com/ethanfurman/dbf";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ ];
+  };
 }

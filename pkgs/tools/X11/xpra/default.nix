@@ -1,16 +1,44 @@
 { lib
 , fetchurl
-, fetchpatch
-, substituteAll, python3, pkg-config, runCommand, writeText
-, xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk, pandoc
-, wrapGAppsHook, xorgserver, getopt, xauth, util-linux, which
-, ffmpeg, x264, libvpx, libwebp, x265, librsvg
+, substituteAll
+, pkg-config
+, runCommand
+, writeText
+, wrapGAppsHook3
+, withNvenc ? false
+, atk
+, cairo
+, cudatoolkit
+, ffmpeg
+, gdk-pixbuf
+, getopt
+, glib
+, gobject-introspection
+, gst_all_1
+, gtk3
+, libappindicator
 , libfakeXinerama
-, gst_all_1, pulseaudio, gobject-introspection
-, withNvenc ? false, cudatoolkit, nv-codec-headers-10, nvidia_x11 ? null
-, pam }:
-
-with lib;
+, librsvg
+, libvpx
+, libwebp
+, lz4
+, nv-codec-headers-10
+, nvidia_x11 ? null
+, pam
+, pandoc
+, pango
+, pulseaudio
+, python3
+, stdenv
+, util-linux
+, which
+, x264
+, x265
+, xauth
+, xdg-utils
+, xorg
+, xorgserver
+}:
 
 let
   inherit (python3.pkgs) cython buildPythonApplication;
@@ -21,8 +49,6 @@ let
       ./0002-Constant-DPI.patch
       # https://github.com/Xpra-org/xpra/issues/349
       ./0003-fix-pointer-limits.patch
-      # patch provided by Xpra upstream
-      ./0005-support-for-30-bit-depth-in-dummy-driver.patch
     ];
   });
 
@@ -44,11 +70,11 @@ let
   '';
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.2";
+  version = "4.4.6";
 
   src = fetchurl {
-    url = "https://xpra.org/src/${pname}-${version}.tar.gz";
-    hash = "sha256-KkQw4FJeH4G5jZ4GdP3aXZ3zxu4GALbiOI6POKJW6fk=";
+    url = "https://xpra.org/src/${pname}-${version}.tar.xz";
+    hash = "sha256-BWf3nypfSrYCzpJ0OfBkecoHGbG1lEgu5jLZhfkIejQ=";
   };
 
   patches = [
@@ -57,49 +83,90 @@ in buildPythonApplication rec {
       inherit libfakeXinerama;
     })
     ./fix-41106.patch  # https://github.com/NixOS/nixpkgs/issues/41106
-    # Xorg won't start without. Remove on next version!
-    (fetchpatch {
-      url = "https://github.com/Xpra-org/xpra/commit/f9f242abad69363dfa558e1f6f7956ae99164b67.patch";
-      sha256 = "sha256-TOP9RuXPuqxyKY/7LSSrCWnAmJstEE+D5EwjMiVmchM=";
-    })
+    ./fix-122159.patch # https://github.com/NixOS/nixpkgs/issues/122159
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace '/usr/include/security' '${pam}/include/security'
+  # Note: xposix is renamed to posix in v5.
+  postPatch = lib.optionalString stdenv.isLinux ''
+    substituteInPlace xpra/platform/xposix/features.py \
+      --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
   '';
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook pandoc ]
-    ++ lib.optional withNvenc cudatoolkit;
-  buildInputs = with xorg; [
-    libX11 xorgproto libXrender libXi
-    libXtst libXfixes libXcomposite libXdamage
-    libXrandr libxkbfile
-    ] ++ [
-    cython
-    librsvg
+  INCLUDE_DIRS = "${pam}/include";
 
-    pango cairo gdk-pixbuf atk.out gtk3 glib
-
-    ffmpeg libvpx x264 libwebp x265
-
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-libav
-
-    pam
+  nativeBuildInputs = [
     gobject-introspection
-  ] ++ lib.optional withNvenc nvencHeaders;
-  propagatedBuildInputs = with python3.pkgs; [
-    pillow rencode pycrypto cryptography pycups lz4 dbus-python
-    netifaces numpy pygobject3 pycairo gst-python pam
-    pyopengl paramiko opencv4 python-uinput pyxdg
-    ipaddress idna pyinotify
-  ] ++ lib.optionals withNvenc (with python3.pkgs; [pynvml pycuda]);
+    pkg-config
+    wrapGAppsHook3
+    pandoc
+  ] ++ lib.optional withNvenc cudatoolkit;
 
-    # error: 'import_cairo' defined but not used
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
+  buildInputs = with xorg; [
+    libX11
+    libXcomposite
+    libXdamage
+    libXfixes
+    libXi
+    libxkbfile
+    libXrandr
+    libXrender
+    libXres
+    libXtst
+    xorgproto
+  ] ++ (with gst_all_1; [
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ]) ++ [
+    atk.out
+    cairo
+    cython
+    ffmpeg
+    gdk-pixbuf
+    glib
+    gtk3
+    libappindicator
+    librsvg
+    libvpx
+    libwebp
+    lz4
+    pam
+    pango
+    x264
+    x265
+  ] ++ lib.optional withNvenc nvencHeaders;
+
+  propagatedBuildInputs = with python3.pkgs; ([
+    cryptography
+    dbus-python
+    gst-python
+    idna
+    lz4
+    netifaces
+    numpy
+    opencv4
+    pam
+    paramiko
+    pillow
+    pycairo
+    pycrypto
+    pycups
+    pygobject3
+    pyinotify
+    pyopengl
+    python-uinput
+    pyxdg
+    rencode
+    invoke
+  ] ++ lib.optionals withNvenc [
+    pycuda
+    pynvml
+  ]);
+
+  # error: 'import_cairo' defined but not used
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
   setupPyBuildFlags = [
     "--with-Xdummy"
@@ -112,12 +179,14 @@ in buildPythonApplication rec {
   ] ++ lib.optional withNvenc "--with-nvenc";
 
   dontWrapGApps = true;
+
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
       --set XPRA_INSTALL_PREFIX "$out"
       --set XPRA_COMMAND "$out/bin/xpra"
       --set XPRA_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb"
+      --set XORG_CONFIG_PREFIX ""
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
       --prefix PATH : ${lib.makeBinPath [ getopt xorgserver xauth which util-linux pulseaudio ]}
   '' + lib.optionalString withNvenc ''
@@ -126,9 +195,15 @@ in buildPythonApplication rec {
     )
   '';
 
-  # append module paths to xorg.conf
   postInstall = ''
+    # append module paths to xorg.conf
     cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
+    cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
+
+    # make application icon visible to desktop environemnts
+    icon_dir="$out/share/icons/hicolor/64x64/apps"
+    mkdir -p "$icon_dir"
+    ln -sr "$out/share/icons/xpra.png" "$icon_dir"
   '';
 
   doCheck = false;
@@ -140,13 +215,13 @@ in buildPythonApplication rec {
     updateScript = ./update.sh;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://xpra.org/";
     downloadPage = "https://xpra.org/src/";
-    downloadURLRegexp = "xpra-.*[.]tar[.][gx]z$";
     description = "Persistent remote applications for X";
+    changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
     platforms = platforms.linux;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ tstrobel offline numinit mvnetbiz ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ offline numinit mvnetbiz ];
   };
 }

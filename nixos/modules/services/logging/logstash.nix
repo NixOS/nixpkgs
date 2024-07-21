@@ -54,12 +54,7 @@ in
         description = "Enable logstash.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.logstash;
-        defaultText = literalExpression "pkgs.logstash";
-        description = "Logstash package to use.";
-      };
+      package = mkPackageOption pkgs "logstash" { };
 
       plugins = mkOption {
         type = types.listOf types.path;
@@ -109,7 +104,7 @@ in
           '''
             # Read from journal
             pipe {
-              command => "''${pkgs.systemd}/bin/journalctl -f -o json"
+              command => "''${config.systemd.package}/bin/journalctl -f -o json"
               type => "syslog" codec => json {}
             }
           '''
@@ -123,7 +118,7 @@ in
         example = ''
           if [type] == "syslog" {
             # Keep only relevant systemd fields
-            # http://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html
+            # https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html
             prune {
               whitelist_names => [
                 "type", "@timestamp", "@version",

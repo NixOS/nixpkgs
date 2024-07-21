@@ -16,11 +16,11 @@ let
     lib.concatMapStrings (s: if lib.isList s then "-" else s)
       (builtins.split "[^a-zA-Z0-9_.\\-]+" name);
 
-  # Function to build "zfs allow" commands for the filesystems we've
-  # delegated permissions to. It also checks if the target dataset
-  # exists before delegating permissions, if it doesn't exist we
-  # delegate it to the parent dataset. This should solve the case of
-  # provisoning new datasets.
+  # Function to build "zfs allow" commands for the filesystems we've delegated
+  # permissions to. It also checks if the target dataset exists before
+  # delegating permissions, if it doesn't exist we delegate it to the parent
+  # dataset (if it exists). This should solve the case of provisoning new
+  # datasets.
   buildAllowCommand = permissions: dataset: (
     "-+${pkgs.writeShellScript "zfs-allow-${dataset}" ''
       # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
@@ -38,15 +38,17 @@ let
           (concatStringsSep "," permissions)
           dataset
         ]}
-      else
-        ${lib.escapeShellArgs [
-          "/run/booted-system/sw/bin/zfs"
-          "allow"
-          cfg.user
-          (concatStringsSep "," permissions)
-          # Remove the last part of the path
-          (builtins.dirOf dataset)
-        ]}
+      ${lib.optionalString ((builtins.dirOf dataset) != ".") ''
+        else
+          ${lib.escapeShellArgs [
+            "/run/booted-system/sw/bin/zfs"
+            "allow"
+            cfg.user
+            (concatStringsSep "," permissions)
+            # Remove the last part of the path
+            (builtins.dirOf dataset)
+          ]}
+      ''}
       fi
     ''}"
   );
@@ -67,14 +69,14 @@ let
         (concatStringsSep "," permissions)
         dataset
       ]}
-      ${lib.escapeShellArgs [
+      ${lib.optionalString ((builtins.dirOf dataset) != ".") (lib.escapeShellArgs [
         "/run/booted-system/sw/bin/zfs"
         "unallow"
         cfg.user
         (concatStringsSep "," permissions)
         # Remove the last part of the path
         (builtins.dirOf dataset)
-      ]}
+      ])}
     ''}"
   );
 in
@@ -85,6 +87,8 @@ in
   options.services.syncoid = {
     enable = mkEnableOption "Syncoid ZFS synchronization service";
 
+    package = lib.mkPackageOption pkgs "sanoid" {};
+
     interval = mkOption {
       type = types.str;
       default = "hourly";
@@ -93,8 +97,7 @@ in
         Run syncoid at this interval. The default is to run hourly.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`systemd.time(7)`.
       '';
     };
 
@@ -120,9 +123,7 @@ in
     };
 
     sshKey = mkOption {
-      type = types.nullOr types.path;
-      # Prevent key from being copied to store
-      apply = mapNullable toString;
+      type = with types; nullOr (coercedTo path toString str);
       default = null;
       description = ''
         SSH private key file to use to login to the remote system. Can be
@@ -133,11 +134,11 @@ in
     localSourceAllow = mkOption {
       type = types.listOf types.str;
       # Permissions snapshot and destroy are in case --no-sync-snap is not used
-      default = [ "bookmark" "hold" "send" "snapshot" "destroy" ];
+      default = [ "bookmark" "hold" "send" "snapshot" "destroy" "mount" ];
       description = ''
-        Permissions granted for the <option>services.syncoid.user</option> user
+        Permissions granted for the {option}`services.syncoid.user` user
         for local source datasets. See
-        <link xlink:href="https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html"/>
+        <https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html>
         for available permissions.
       '';
     };
@@ -147,12 +148,12 @@ in
       default = [ "change-key" "compression" "create" "mount" "mountpoint" "receive" "rollback" ];
       example = [ "create" "mount" "receive" "rollback" ];
       description = ''
-        Permissions granted for the <option>services.syncoid.user</option> user
+        Permissions granted for the {option}`services.syncoid.user` user
         for local target datasets. See
-        <link xlink:href="https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html"/>
+        <https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html>
         for available permissions.
-        Make sure to include the <literal>change-key</literal> permission if you send raw encrypted datasets,
-        the <literal>compression</literal> permission if you send raw compressed datasets, and so on.
+        Make sure to include the `change-key` permission if you send raw encrypted datasets,
+        the `compression` permission if you send raw compressed datasets, and so on.
         For remote target datasets you'll have to set your remote user permissions by yourself.
       '';
     };
@@ -164,7 +165,7 @@ in
       description = ''
         Arguments to add to every syncoid command, unless disabled for that
         command. See
-        <link xlink:href="https://github.com/jimsalterjrs/sanoid/#syncoid-command-line-options"/>
+        <https://github.com/jimsalterjrs/sanoid/#syncoid-command-line-options>
         for available options.
       '';
     };
@@ -194,43 +195,41 @@ in
             example = "user@server:pool/dataset";
             description = ''
               Target ZFS dataset. Can be either local
-              (<replaceable>pool/dataset</replaceable>) or remote
-              (<replaceable>user@server:pool/dataset</replaceable>).
+              («pool/dataset») or remote
+              («user@server:pool/dataset»).
             '';
           };
 
           recursive = mkEnableOption ''the transfer of child datasets'';
 
           sshKey = mkOption {
-            type = types.nullOr types.path;
-            # Prevent key from being copied to store
-            apply = mapNullable toString;
+            type = with types; nullOr (coercedTo path toString str);
             description = ''
               SSH private key file to use to login to the remote system.
-              Defaults to <option>services.syncoid.sshKey</option> option.
+              Defaults to {option}`services.syncoid.sshKey` option.
             '';
           };
 
           localSourceAllow = mkOption {
             type = types.listOf types.str;
             description = ''
-              Permissions granted for the <option>services.syncoid.user</option> user
+              Permissions granted for the {option}`services.syncoid.user` user
               for local source datasets. See
-              <link xlink:href="https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html"/>
+              <https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html>
               for available permissions.
-              Defaults to <option>services.syncoid.localSourceAllow</option> option.
+              Defaults to {option}`services.syncoid.localSourceAllow` option.
             '';
           };
 
           localTargetAllow = mkOption {
             type = types.listOf types.str;
             description = ''
-              Permissions granted for the <option>services.syncoid.user</option> user
+              Permissions granted for the {option}`services.syncoid.user` user
               for local target datasets. See
-              <link xlink:href="https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html"/>
+              <https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html>
               for available permissions.
-              Make sure to include the <literal>change-key</literal> permission if you send raw encrypted datasets,
-              the <literal>compression</literal> permission if you send raw compressed datasets, and so on.
+              Make sure to include the `change-key` permission if you send raw encrypted datasets,
+              the `compression` permission if you send raw compressed datasets, and so on.
               For remote target datasets you'll have to set your remote user permissions by yourself.
             '';
           };
@@ -330,7 +329,7 @@ in
               ExecStopPost =
                 (map (buildUnallowCommand c.localSourceAllow) (localDatasetName c.source)) ++
                 (map (buildUnallowCommand c.localTargetAllow) (localDatasetName c.target));
-              ExecStart = lib.escapeShellArgs ([ "${pkgs.sanoid}/bin/syncoid" ]
+              ExecStart = lib.escapeShellArgs ([ "${cfg.package}/bin/syncoid" ]
                 ++ optionals c.useCommonArgs cfg.commonArgs
                 ++ optional c.recursive "-r"
                 ++ optionals (c.sshKey != null) [ "--sshkey" c.sshKey ]
@@ -366,7 +365,7 @@ in
               PrivateDevices = true;
               PrivateMounts = true;
               PrivateNetwork = mkDefault false;
-              PrivateUsers = true;
+              PrivateUsers = false; # Enabling this breaks on zfs-2.2.0
               ProtectClock = true;
               ProtectControlGroups = true;
               ProtectHome = true;

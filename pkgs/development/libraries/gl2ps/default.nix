@@ -1,11 +1,13 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , cmake
 , zlib
+, libpng
 , libGL
 , libGLU
-, libpng
-, freeglut
+, libglut
+, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -23,17 +25,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     zlib
+    libpng
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     libGL
     libGLU
-    libpng
-    freeglut
+    libglut
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.OpenGL
   ];
 
   meta = with lib; {
     homepage = "http://geuz.org/gl2ps";
-    description = "An OpenGL to PostScript printing library";
+    description = "OpenGL to PostScript printing library";
     platforms = platforms.all;
     license = licenses.lgpl2;
-    maintainers = with maintainers; [raskin twhitehead];
+    maintainers = with maintainers; [ raskin twhitehead ];
   };
 }

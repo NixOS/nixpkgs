@@ -1,6 +1,7 @@
 { stdenv, lib, buildPackages, fetchurl, fetchFromGitLab
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableMinimal ? false
+, enableAppletSymlinks ? true
 # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
 # nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
 , useMusl ? stdenv.hostPlatform.libc == "musl", musl
@@ -49,14 +50,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "busybox";
-  version = "1.34.1";
+  version = "1.36.1";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
     url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "0jfm9fik7nv4w21zqdg830pddgkdjmplmna9yjn9ck1lwn4vsps1";
+    sha256 = "sha256-uMwkyVdNgJ5yecO+NJeVxdXOtv3xnKcJ+AzeUOR94xQ=";
   };
 
   hardeningDisable = [ "format" "pie" ]
@@ -64,7 +65,19 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./busybox-in-store.patch
+    (fetchurl {
+      name = "CVE-2022-28391.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/busybox/0001-libbb-sockaddr2str-ensure-only-printable-characters-.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
+      sha256 = "sha256-yviw1GV+t9tbHbY7YNxEqPi7xEreiXVqbeRyf8c6Awo=";
+    })
+    (fetchurl {
+      name = "CVE-2022-28391.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/busybox/0002-nslookup-sanitize-all-printed-strings-with-printable.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
+      sha256 = "sha256-vl1wPbsHtXY9naajjnTicQ7Uj3N+EQ8pRNnrdsiow+w=";
+    })
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
+
+  separateDebugInfo = true;
 
   postPatch = "patchShebangs .";
 
@@ -93,6 +106,11 @@ stdenv.mkDerivation rec {
       CONFIG_STATIC y
     ''}
 
+    ${lib.optionalString (!enableAppletSymlinks) ''
+      CONFIG_INSTALL_APPLET_DONT y
+      CONFIG_INSTALL_APPLET_SYMLINKS n
+    ''}
+
     # Use the external mount.cifs program.
     CONFIG_FEATURE_MOUNT_CIFS n
     CONFIG_FEATURE_MOUNT_HELPERS y
@@ -102,6 +120,10 @@ stdenv.mkDerivation rec {
 
     # Bump from 4KB, much faster I/O
     CONFIG_FEATURE_COPYBUF_KB 64
+
+    # Doesn't build with current kernel headers.
+    # https://bugs.busybox.net/show_bug.cgi?id=15934
+    CONFIG_TC n
 
     # Set the path for the udhcpc script
     CONFIG_UDHCPC_DEFAULT_SCRIPT "${outDispatchPath}"
@@ -119,6 +141,8 @@ stdenv.mkDerivation rec {
   postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
     makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
   '';
+
+  makeFlags = [ "SKIP_STRIP=y" ];
 
   postInstall = ''
     sed -e '
@@ -139,12 +163,14 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tries to access the net
 
+  passthru.shellPath = "/bin/ash";
+
   meta = with lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ TethysSvensson qyliss ];
     platforms = platforms.linux;
-    priority = 10;
+    priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
   };
 }

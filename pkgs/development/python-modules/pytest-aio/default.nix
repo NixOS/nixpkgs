@@ -1,42 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pytest-mypy
-, pytestCheckHook
-, pythonOlder
-, types-setuptools
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  curio,
+  fetchFromGitHub,
+  hypothesis,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  poetry-core,
+  sniffio,
+  trio,
+  trio-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-aio";
-  version = "1.4.1";
-  format = "setuptools";
+  version = "1.8.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ZPG6k+ZNi6FQftIVwr/Lux5rJlo284V/mjtYepNScdQ=";
+  src = fetchFromGitHub {
+    owner = "klen";
+    repo = "pytest-aio";
+    rev = "refs/tags/${version}";
+    hash = "sha256-MexIL9yFTzhkJ/61GgYoT54MWV8B0c1/CWkN5FVTvnw=";
   };
 
-  buildInputs = [
-    pytest
+  build-system = [ poetry-core ];
+
+  buildInputs = [ pytest ];
+
+  dependencies = [
+    anyio
+    curio
+    hypothesis
+    sniffio
+    trio
+    trio-asyncio
   ];
 
-  checkInputs = [
-    pytest-mypy
-    pytestCheckHook
-    types-setuptools
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pytest_aio"
-  ];
+  pythonImportsCheck = [ "pytest_aio" ];
 
   meta = with lib; {
-    homepage = "https://github.com/klen/pytest-aio";
     description = "Pytest plugin for aiohttp support";
+    homepage = "https://github.com/klen/pytest-aio";
+    changelog = "https://github.com/klen/pytest-aio/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

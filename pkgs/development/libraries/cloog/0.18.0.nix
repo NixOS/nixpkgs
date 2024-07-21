@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv, gmp, isl }:
 
 stdenv.mkDerivation rec {
-  name = "cloog-0.18.0";
+  pname = "cloog";
+  version = "0.18.0";
 
   src = fetchurl {
-    url = "http://www.bastoul.net/cloog/pages/download/count.php3?url=./${name}.tar.gz";
+    url = "http://www.bastoul.net/cloog/pages/download/count.php3?url=./cloog-${version}.tar.gz";
     sha256 = "1c4aa8dde7886be9cbe0f9069c334843b21028f61d344a2d685f88cb1dcf2228";
   };
 
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library that generates loops for scanning polyhedra";
+    mainProgram = "cloog";
 
     longDescription = ''
       CLooG is a free software library to generate code for scanning

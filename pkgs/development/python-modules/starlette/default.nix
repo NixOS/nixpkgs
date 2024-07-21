@@ -1,86 +1,81 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, aiofiles
-, anyio
-, contextlib2
-, graphene
-, itsdangerous
-, jinja2
-, python-multipart
-, pyyaml
-, requests
-, aiosqlite
-, databases
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, trio
-, typing-extensions
-, ApplicationServices
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  anyio,
+  typing-extensions,
+
+  # optional dependencies
+  itsdangerous,
+  jinja2,
+  python-multipart,
+  pyyaml,
+  httpx,
+
+  # tests
+  pytestCheckHook,
+  pythonOlder,
+  trio,
+
+  # reverse dependencies
+  fastapi,
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.16.0";
-  disabled = pythonOlder "3.6";
+  version = "0.37.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-/NYhRRZdi6I7CtLCohAqK4prsSUayOxa6sBKIJhPv+w=";
+    repo = "starlette";
+    rev = "refs/tags/${version}";
+    hash = "sha256-GiCN1sfhLu9i19d2OcLZrlY8E64DFrFh+ITRSvLaxdE=";
   };
 
-  postPatch = ''
-    # remove coverage arguments to pytest
-    sed -i '/--cov/d' setup.cfg
-  '';
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    aiofiles
-    anyio
-    graphene
+  dependencies = [ anyio ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+
+  optional-dependencies.full = [
     itsdangerous
     jinja2
     python-multipart
     pyyaml
-    requests
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    contextlib2
-  ] ++ lib.optional stdenv.isDarwin [
-    ApplicationServices
+    httpx
   ];
 
-  checkInputs = [
-    aiosqlite
-    databases
-    pytest-asyncio
+  nativeCheckInputs = [
     pytestCheckHook
     trio
     typing-extensions
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTestPaths = [
-    # fails to import graphql, but integrated graphql support is about to
-    # be removed in 0.15, see https://github.com/encode/starlette/pull/1135.
-    "tests/test_graphql.py"
-  ];
-
-  disabledTests = [
-    # asserts fail due to inclusion of br in Accept-Encoding
-    "test_websocket_headers"
-    "test_request_headers"
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+    "-W"
+    "ignore::trio.TrioDeprecationWarning"
   ];
 
   pythonImportsCheck = [ "starlette" ];
 
+  passthru.tests = {
+    inherit fastapi;
+  };
+
   meta = with lib; {
+    changelog = "https://www.starlette.io/release-notes/#${lib.replaceStrings [ "." ] [ "" ] version}";
+    downloadPage = "https://github.com/encode/starlette";
     homepage = "https://www.starlette.io/";
-    description = "The little ASGI framework that shines";
+    description = "Little ASGI framework that shines";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];
   };

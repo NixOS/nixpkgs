@@ -1,56 +1,104 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, numpy
-, scikit-learn
-, pytestCheckHook
-, pytorch
-, torchvision
-, tqdm
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  config,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  numpy,
+  scikit-learn,
+  torch,
+  tqdm,
+
+  # optional-dependencies
+  faiss,
+  tensorboard,
+
+  # tests
+  cudaSupport ? config.cudaSupport,
+  pytestCheckHook,
+  torchvision
 }:
 
 buildPythonPackage rec {
-  pname   = "pytorch-metric-learning";
-  version = "0.9.99";
+  pname = "pytorch-metric-learning";
+  version = "2.5.0";
+  pyproject = true;
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "KevinMusgrave";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1ahs2b7q3hxi6yv4g2fjy7mvl899h56dvlpc2r9301440qsgkdzr";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1y7VCnzgwFOMeMloVdYyszNhf/zZlBJUjuF4qgA5c0A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     numpy
-    pytorch
+    torch
     scikit-learn
-    torchvision
     tqdm
   ];
+
+  optional-dependencies = {
+    with-hooks = [
+      # TODO: record-keeper
+      faiss
+      tensorboard
+    ];
+    with-hooks-cpu = [
+      # TODO: record-keeper
+      faiss
+      tensorboard
+    ];
+  };
 
   preCheck = ''
     export HOME=$TMP
     export TEST_DEVICE=cpu
     export TEST_DTYPES=float32,float64  # half-precision tests fail on CPU
   '';
+
   # package only requires `unittest`, but use `pytest` to exclude tests
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    torchvision
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
   disabledTests = [
-    # requires FAISS (not in Nixpkgs)
-    "test_accuracy_calculator_and_faiss"
-    "test_global_embedding_space_tester"
-    "test_with_same_parent_label_tester"
-    # require network access:
-    "test_get_nearest_neighbors"
+    # network access
     "test_tuplestoweights_sampler"
-    "test_untrained_indexer"
     "test_metric_loss_only"
-    "test_pca"
-    # flaky
-    "test_distributed_classifier_loss_and_miner"
+    "test_add_to_indexer"
+    "test_get_nearest_neighbors"
+    "test_list_of_text"
+    "test_untrained_indexer"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # AttributeError: module 'torch.distributed' has no attribute 'init_process_group'
+    "test_single_proc"
+  ] ++ lib.optionals cudaSupport [
+    # crashes with SIGBART
+    "test_accuracy_calculator_and_faiss_with_torch_and_numpy"
+    "test_accuracy_calculator_large_k"
+    "test_custom_knn"
+    "test_global_embedding_space_tester"
+    "test_global_two_stream_embedding_space_tester"
+    "test_index_type"
+    "test_k_warning"
+    "test_many_tied_distances"
+    "test_query_within_reference"
+    "test_tied_distances"
+    "test_with_same_parent_label_tester"
   ];
 
   meta = {

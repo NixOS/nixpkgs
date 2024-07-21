@@ -20,8 +20,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An alerting dashboard for Graphite";
+    description = "Alerting dashboard for Graphite";
+    mainProgram = "seyren";
     homepage = "https://github.com/scobal/seyren";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = [ maintainers.offline ];
     platforms = platforms.all;

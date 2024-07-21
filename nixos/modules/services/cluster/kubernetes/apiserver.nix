@@ -1,9 +1,10 @@
-  { config, lib, pkgs, ... }:
+  { config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.apiserver;
 
   isRBACEnabled = elem "RBAC" cfg.authorizationMode;
@@ -17,7 +18,8 @@ in
   imports = [
     (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "admissionControl" ] [ "services" "kubernetes" "apiserver" "enableAdmissionPlugins" ])
     (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "address" ] ["services" "kubernetes" "apiserver" "bindAddress"])
-    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "port" ] ["services" "kubernetes" "apiserver" "insecurePort"])
+    (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "insecureBindAddress" ] "")
+    (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "insecurePort" ] "")
     (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "publicAddress" ] "")
     (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "servers" ] [ "services" "kubernetes" "apiserver" "etcd" "servers" ])
     (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "keyFile" ] [ "services" "kubernetes" "apiserver" "etcd" "keyFile" ])
@@ -47,7 +49,7 @@ in
     authorizationMode = mkOption {
       description = ''
         Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/Webhook/RBAC/Node). See
-        <link xlink:href="https://kubernetes.io/docs/reference/access-authn-authz/authorization/"/>
+        <https://kubernetes.io/docs/reference/access-authn-authz/authorization/>
       '';
       default = ["RBAC" "Node"]; # Enabling RBAC by default, although kubernetes default is AllowAllow
       type = listOf (enum ["AlwaysAllow" "AlwaysDeny" "ABAC" "Webhook" "RBAC" "Node"]);
@@ -56,7 +58,7 @@ in
     authorizationPolicy = mkOption {
       description = ''
         Kubernetes apiserver authorization policy file. See
-        <link xlink:href="https://kubernetes.io/docs/reference/access-authn-authz/authorization/"/>
+        <https://kubernetes.io/docs/reference/access-authn-authz/authorization/>
       '';
       default = [];
       type = listOf attrs;
@@ -65,7 +67,7 @@ in
     basicAuthFile = mkOption {
       description = ''
         Kubernetes apiserver basic authentication file. See
-        <link xlink:href="https://kubernetes.io/docs/reference/access-authn-authz/authentication"/>
+        <https://kubernetes.io/docs/reference/access-authn-authz/authentication>
       '';
       default = null;
       type = nullOr path;
@@ -84,13 +86,14 @@ in
     clientCaFile = mkOption {
       description = "Kubernetes apiserver CA file for client auth.";
       default = top.caFile;
+      defaultText = literalExpression "config.${otop.caFile}";
       type = nullOr path;
     };
 
     disableAdmissionPlugins = mkOption {
       description = ''
         Kubernetes admission control plugins to disable. See
-        <link xlink:href="https://kubernetes.io/docs/admin/admission-controllers/"/>
+        <https://kubernetes.io/docs/admin/admission-controllers/>
       '';
       default = [];
       type = listOf str;
@@ -101,7 +104,7 @@ in
     enableAdmissionPlugins = mkOption {
       description = ''
         Kubernetes admission control plugins to enable. See
-        <link xlink:href="https://kubernetes.io/docs/admin/admission-controllers/"/>
+        <https://kubernetes.io/docs/admin/admission-controllers/>
       '';
       default = [
         "NamespaceLifecycle" "LimitRanger" "ServiceAccount"
@@ -138,6 +141,7 @@ in
       caFile = mkOption {
         description = "Etcd ca file.";
         default = top.caFile;
+        defaultText = literalExpression "config.${otop.caFile}";
         type = types.nullOr types.path;
       };
     };
@@ -157,24 +161,14 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
-    };
-
-    insecureBindAddress = mkOption {
-      description = "The IP address on which to serve the --insecure-port.";
-      default = "127.0.0.1";
-      type = str;
-    };
-
-    insecurePort = mkOption {
-      description = "Kubernetes apiserver insecure listening port. (0 = disabled)";
-      default = 0;
-      type = int;
     };
 
     kubeletClientCaFile = mkOption {
       description = "Path to a cert file for connecting to kubelet.";
       default = top.caFile;
+      defaultText = literalExpression "config.${otop.caFile}";
       type = nullOr path;
     };
 
@@ -211,7 +205,7 @@ in
     runtimeConfig = mkOption {
       description = ''
         Api runtime configuration. See
-        <link xlink:href="https://kubernetes.io/docs/tasks/administer-cluster/cluster-management/"/>
+        <https://kubernetes.io/docs/tasks/administer-cluster/cluster-management/>
       '';
       default = "authentication.k8s.io/v1beta1=true";
       example = "api/all=false,api/v1=true";
@@ -292,7 +286,7 @@ in
     tokenAuthFile = mkOption {
       description = ''
         Kubernetes apiserver token authentication file. See
-        <link xlink:href="https://kubernetes.io/docs/reference/access-authn-authz/authentication"/>
+        <https://kubernetes.io/docs/reference/access-authn-authz/authentication>
       '';
       default = null;
       type = nullOr path;
@@ -301,7 +295,7 @@ in
     verbosity = mkOption {
       description = ''
         Optional glog verbosity level for logging statements. See
-        <link xlink:href="https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md"/>
+        <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
       '';
       default = null;
       type = nullOr int;
@@ -310,7 +304,7 @@ in
     webhookConfig = mkOption {
       description = ''
         Kubernetes apiserver Webhook config file. It uses the kubeconfig file format.
-        See <link xlink:href="https://kubernetes.io/docs/reference/access-authn-authz/webhook/"/>
+        See <https://kubernetes.io/docs/reference/access-authn-authz/webhook/>
       '';
       default = null;
       type = nullOr path;
@@ -371,8 +365,6 @@ in
                 "--proxy-client-cert-file=${cfg.proxyClientCertFile}"} \
               ${optionalString (cfg.proxyClientKeyFile != null)
                 "--proxy-client-key-file=${cfg.proxyClientKeyFile}"} \
-              --insecure-bind-address=${cfg.insecureBindAddress} \
-              --insecure-port=${toString cfg.insecurePort} \
               ${optionalString (cfg.runtimeConfig != "")
                 "--runtime-config=${cfg.runtimeConfig}"} \
               --secure-port=${toString cfg.securePort} \
@@ -491,4 +483,5 @@ in
 
   ];
 
+  meta.buildDocsInSandbox = false;
 }

@@ -1,10 +1,16 @@
-{ lib, fetchPypi, buildPythonPackage, ... }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  ...
+}:
 buildPythonPackage rec {
   pname = "pygtrie";
-  version = "2.4.2";
+  version = "2.5.0";
+  format = "setuptools";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "43205559d28863358dbbf25045029f58e2ab357317a59b11f11ade278ac64692";
+    hash = "sha256-IDUUrYJutAPasdLi3dA04NFTS75NvgITuwWT9mvrpOI=";
   };
   meta = {
     homepage = "https://github.com/mina86/pygtrie";

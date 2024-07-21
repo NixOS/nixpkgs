@@ -1,17 +1,20 @@
-{ stdenv, lib, R, libcxx, xvfb-run, util-linux, Cocoa, Foundation, gettext, gfortran }:
+{ stdenv, lib, R, libcxx, xvfb-run, util-linux, Cocoa, Foundation, gettext, gfortran, libiconv }:
 
 { name, buildInputs ? [], requireX ? false, ... } @ attrs:
 
 stdenv.mkDerivation ({
   buildInputs = buildInputs ++ [R gettext] ++
                 lib.optionals requireX [util-linux xvfb-run] ++
-                lib.optionals stdenv.isDarwin [Cocoa Foundation gfortran];
+                lib.optionals stdenv.isDarwin [Cocoa Foundation gfortran libiconv];
 
-  NIX_CFLAGS_COMPILE =
+  env.NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+
+  enableParallelBuilding = true;
 
   configurePhase = ''
     runHook preConfigure
+    export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
     export R_LIBS_SITE="$R_LIBS_SITE''${R_LIBS_SITE:+:}$out/library"
     runHook postConfigure
   '';

@@ -1,90 +1,147 @@
-{ lib, stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
-, freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
-, leveldb, postgresql, hiredis, libiconv, OpenGL, OpenAL ? openal, Carbon, Cocoa
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, cmake
+, irrlichtmt
+, coreutils
+, libpng
+, bzip2
+, curl
+, libogg
+, jsoncpp
+, libjpeg
+, libGLU
+, openal
+, libvorbis
+, sqlite
+, lua5_1
+, luajit
+, freetype
+, gettext
+, doxygen
+, ncurses
+, graphviz
+, xorg
+, gmp
+, libspatialindex
+, leveldb
+, postgresql
+, hiredis
+, libiconv
+, zlib
+, libXrandr
+, libX11
+, ninja
+, prometheus-cpp
+, mesa
+, OpenGL
+, OpenAL ? openal
+, Carbon
+, Cocoa
+, withTouchSupport ? false
+, buildClient ? true
+, buildServer ? true
 }:
 
-with lib;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "minetest";
+  version = "5.8.0";
 
-let
-  boolToCMake = b: if b then "ON" else "OFF";
-
-  generic = { version, rev ? version, sha256, dataRev ? version, dataSha256, buildClient ? true, buildServer ? false }: let
-    sources = {
-      src = fetchFromGitHub {
-        owner = "minetest";
-        repo = "minetest";
-        inherit rev sha256;
-      };
-      data = fetchFromGitHub {
-        owner = "minetest";
-        repo = "minetest_game";
-        rev = dataRev;
-        sha256 = dataSha256;
-      };
-    };
-  in stdenv.mkDerivation {
-    pname = "minetest";
-    inherit version;
-
-    src = sources.src;
-
-    cmakeFlags = [
-      "-DBUILD_CLIENT=${boolToCMake buildClient}"
-      "-DBUILD_SERVER=${boolToCMake buildServer}"
-      "-DENABLE_FREETYPE=1"
-      "-DENABLE_GETTEXT=1"
-      "-DENABLE_SYSTEM_JSONCPP=1"
-      "-DIRRLICHT_INCLUDE_DIR=${irrlicht}/include/irrlicht"
-    ] ++ optionals buildClient [
-      "-DOpenGL_GL_PREFERENCE=GLVND"
-    ];
-
-    NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
-
-    nativeBuildInputs = [ cmake doxygen graphviz ];
-
-    buildInputs = [
-      irrlicht luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
-      gmp libspatialindex
-    ] ++ optionals stdenv.isDarwin [
-      libiconv OpenGL OpenAL Carbon Cocoa
-    ] ++ optionals buildClient [
-      libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
-    ] ++ optionals buildServer [
-      leveldb postgresql hiredis
-    ];
-
-    postInstall = ''
-      mkdir -pv $out/share/minetest/games/minetest_game/
-      cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
-    '';
-
-    meta = with lib; {
-      homepage = "http://minetest.net/";
-      description = "Infinite-world block sandbox game";
-      license = licenses.lgpl21Plus;
-      platforms = platforms.linux ++ platforms.darwin;
-      maintainers = with maintainers; [ pyrolagus fpletz ];
-    };
+  src = fetchFromGitHub {
+    owner = "minetest";
+    repo = "minetest";
+    rev = finalAttrs.version;
+    hash = "sha256-Oct8nQORSH8PjYs+gHU9QrKObMfapjAlGvycj+AJnOs=";
   };
 
-  v4 = {
-    version = "0.4.17.1";
-    sha256 = "19sfblgh9mchkgw32n7gdvm7a8a9jxsl9cdlgmxn9bk9m939a2sg";
-    dataSha256 = "1g8iw2pya32ifljbdx6z6rpcinmzm81i9minhi2bi1d500ailn7s";
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_CLIENT" buildClient)
+    (lib.cmakeBool "BUILD_SERVER" buildServer)
+    (lib.cmakeBool "ENABLE_PROMETHEUS" buildServer)
+    (lib.cmakeBool "ENABLE_TOUCH" withTouchSupport)
+    # Ensure we use system libraries
+    (lib.cmakeBool "ENABLE_SYSTEM_GMP" true)
+    (lib.cmakeBool "ENABLE_SYSTEM_JSONCPP" true)
+    # Updates are handled by nix anyway
+    (lib.cmakeBool "ENABLE_UPDATE_CHECKER" false)
+    # ...but make it clear that this is a nix package
+    (lib.cmakeFeature "VERSION_EXTRA" "NixOS")
+
+    # Remove when https://github.com/NixOS/nixpkgs/issues/144170 is fixed
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_DATADIR" "share")
+    (lib.cmakeFeature "CMAKE_INSTALL_DOCDIR" "share/doc/minetest")
+    (lib.cmakeFeature "CMAKE_INSTALL_MANDIR" "share/man")
+    (lib.cmakeFeature "CMAKE_INSTALL_LOCALEDIR" "share/locale")
+
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    graphviz
+    ninja
+  ];
+
+  buildInputs = [
+    irrlichtmt
+    jsoncpp
+    gettext
+    freetype
+    sqlite
+    curl
+    bzip2
+    ncurses
+    gmp
+    libspatialindex
+  ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform luajit) luajit
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    mesa # for <KHR/khrplatform.h>
+    libiconv
+    OpenGL
+    OpenAL
+    Carbon
+    Cocoa
+  ] ++ lib.optionals buildClient [
+    libpng
+    libjpeg
+    libGLU
+    openal
+    libogg
+    libvorbis
+  ] ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin) [
+    xorg.libX11
+  ] ++ lib.optionals buildServer [
+    leveldb
+    postgresql
+    hiredis
+    prometheus-cpp
+  ];
+
+  postPatch = ''
+    substituteInPlace src/filesys.cpp --replace "/bin/rm" "${coreutils}/bin/rm"
+  '' + lib.optionalString stdenv.isDarwin ''
+    sed -i '/pagezero_size/d;/fixup_bundle/d' src/CMakeLists.txt
+  '';
+
+  postInstall = lib.optionalString stdenv.isLinux ''
+    patchShebangs $out
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/minetest.app $out/Applications
+  '';
+
+  passthru.updateScript = gitUpdater {
+    allowedVersions = "\\.";
+    ignoredVersions = "-android$";
   };
 
-  v5 = {
-    version = "5.4.1";
-    sha256 = "062ilb7s377q3hwfhl8q06vvcw2raydz5ljzlzwy2dmyzmdcndb8";
-    dataSha256 = "0i45lbnikvgj9kxdp0yphpjjwjcgp4ibn49xkj78j5ic1s9n8jd4";
+  meta = with lib; {
+    homepage = "https://minetest.net/";
+    description = "Infinite-world block sandbox game";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ pyrolagus fpletz fgaz ];
   };
-
-in {
-  minetestclient_4 = generic (v4 // { buildClient = true; buildServer = false; });
-  minetestserver_4 = generic (v4 // { buildClient = false; buildServer = true; });
-
-  minetestclient_5 = generic (v5 // { buildClient = true; buildServer = false; });
-  minetestserver_5 = generic (v5 // { buildClient = false; buildServer = true; });
-}
+})

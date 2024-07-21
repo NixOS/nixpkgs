@@ -1,55 +1,32 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, olm, libsignal-ffi }:
 
-python3.pkgs.buildPythonPackage rec {
+buildGoModule rec {
   pname = "mautrix-signal";
-  version = "unstable-2021-11-12";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "2e57810e964c1701df2e69273c2f8cebbe021464";
-    sha256 = "sha256-xgn01nbY3LR4G1Yk2MgUhq116/wEhG+5vLH6HKqZE+8=";
+    rev = "v${version}";
+    hash = "sha256-JybQhVej82aWcsGLKS/tCBUuy9rARSe4d+ivYEZ0ve4=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    CommonMark
-    aiohttp
-    asyncpg
-    attrs
-    mautrix
-    phonenumbers
-    pillow
-    prometheus-client
-    pycryptodome
-    python-olm
-    python_magic
-    qrcode
-    ruamel-yaml
-    unpaddedbase64
-    yarl
+  buildInputs = [
+    olm
+    # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
+    # see https://github.com/mautrix/signal/issues/401
+    libsignal-ffi
   ];
+
+  vendorHash = "sha256-LHq/CH53/Jzh49qXdoqXURqTVbSitczw3yH3KU2BMpc=";
 
   doCheck = false;
 
-  postInstall = ''
-    mkdir -p $out/bin
-
-    # Make a little wrapper for running mautrix-signal with its dependencies
-    echo "$mautrixSignalScript" > $out/bin/mautrix-signal
-    echo "#!/bin/sh
-      exec python -m mautrix_signal \"\$@\"
-    " > $out/bin/mautrix-signal
-    chmod +x $out/bin/mautrix-signal
-    wrapProgram $out/bin/mautrix-signal \
-      --set PATH ${python3}/bin \
-      --set PYTHONPATH "$PYTHONPATH"
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/mautrix/signal";
-    description = "A Matrix-Signal puppeting bridge";
+    description = "Matrix-Signal puppeting bridge";
     license = licenses.agpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [ expipiplus1 niklaskorz ma27 ];
+    mainProgram = "mautrix-signal";
   };
 }

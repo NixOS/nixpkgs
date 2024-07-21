@@ -33,11 +33,11 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A tool to synchronise files between a PC and an Android devices using ADB (Android Debug Bridge)";
+    description = "Tool to synchronise files between a PC and an Android devices using ADB (Android Debug Bridge)";
     homepage = "https://github.com/google/adb-sync";
     license = licenses.asl20;
     platforms = platforms.unix;
     hydraPlatforms = [];
-    maintainers = with maintainers; [ scolobb ma27 ];
+    maintainers = with maintainers; [ scolobb ];
   };
 }

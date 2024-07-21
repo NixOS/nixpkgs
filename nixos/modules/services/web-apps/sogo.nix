@@ -49,7 +49,7 @@ in {
         Replacement-filepath mapping for sogo.conf.
         Every key is replaced with the contents of the file specified as value.
 
-        In the example, every occurence of LDAP_BINDPW will be replaced with the text of the
+        In the example, every occurrence of LDAP_BINDPW will be replaced with the text of the
         specified file.
       '';
       type = attrsOf str;
@@ -232,8 +232,8 @@ in {
         proxy_connect_timeout 90;
         proxy_send_timeout 90;
         proxy_read_timeout 90;
-        proxy_buffer_size 4k;
-        proxy_buffers 4 32k;
+        proxy_buffer_size 64k;
+        proxy_buffers 8 64k;
         proxy_busy_buffers_size 64k;
         proxy_temp_file_write_size 64k;
         client_max_body_size 50m;

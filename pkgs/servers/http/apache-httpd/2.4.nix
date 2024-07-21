@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
+{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
+, modTlsSupport ? false, rustls-ffi, Foundation
 , http2Support ? true, nghttp2
 , ldapSupport ? true, openldap
 , libxml2Support ? true, libxml2
@@ -11,20 +12,24 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
-  version = "2.4.51";
+  version = "2.4.62";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "20e01d81fecf077690a4439e3969a9b22a09a8d43c525356e863407741b838f4";
+    hash = "sha256-Z0GI579EztgtqNtSLalGhJ4iCA1z0WyT9/TfieJXKew=";
   };
 
   # FIXME: -dev depends on -doc
   outputs = [ "out" "dev" "man" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
 
-  buildInputs = [ perl ] ++
+  nativeBuildInputs = [ which ];
+
+  buildInputs = [ perl libxcrypt ] ++
     lib.optional brotliSupport brotli ++
     lib.optional sslSupport openssl ++
+    lib.optional modTlsSupport rustls-ffi ++
+    lib.optional (modTlsSupport && stdenv.isDarwin) Foundation ++
     lib.optional ldapSupport openldap ++    # there is no --with-ldap flag
     lib.optional libxml2Support libxml2 ++
     lib.optional http2Support nghttp2 ++
@@ -42,7 +47,7 @@ stdenv.mkDerivation rec {
     "--with-apr=${apr.dev}"
     "--with-apr-util=${aprutil.dev}"
     "--with-z=${zlib.dev}"
-    "--with-pcre=${pcre.dev}"
+    "--with-pcre=${pcre2.dev}/bin/pcre2-config"
     "--disable-maintainer-mode"
     "--disable-debugger-mode"
     "--enable-mods-shared=all"
@@ -53,6 +58,7 @@ stdenv.mkDerivation rec {
     "--includedir=${placeholder "dev"}/include"
     (lib.enableFeature proxySupport "proxy")
     (lib.enableFeature sslSupport "ssl")
+    (lib.enableFeature modTlsSupport "tls")
     (lib.withFeatureAs libxml2Support "libxml2" "${libxml2.dev}/include/libxml2")
     "--docdir=$(doc)/share/doc"
 

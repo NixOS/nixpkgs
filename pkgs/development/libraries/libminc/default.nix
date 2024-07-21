@@ -1,16 +1,14 @@
 { lib, stdenv, fetchFromGitHub, cmake, zlib, netcdf, nifticlib, hdf5 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname   = "libminc";
-  version = "unstable-2020-07-17";
-
-  owner = "BIC-MNI";
+  version = "2.4.06";
 
   src = fetchFromGitHub {
-    inherit owner;
-    repo   = pname;
-    rev    = "ffb5fb234a852ea7e8da8bb2b3b49f67acbe56ca";
-    sha256 = "0yr4ksghpvxh9zg0a4p7hvln3qirsi08plvjp5kxx2qiyj96zsdm";
+    owner = "BIC-MNI";
+    repo = "libminc";
+    rev = "refs/tags/release-${finalAttrs.version}";
+    hash = "sha256-HTt3y0AFM9pkEkWPb9cDmvUz4iBQWfpX7wLF9Vlg8hc=";
   };
 
   postPatch = ''
@@ -18,21 +16,26 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib nifticlib ];
-  propagatedBuildInputs = [ netcdf hdf5 ];
+  buildInputs = [
+    zlib
+    nifticlib
+  ];
+  propagatedBuildInputs = [
+    netcdf
+    hdf5
+  ];
 
   cmakeFlags = [
     "-DLIBMINC_MINC1_SUPPORT=ON"
     "-DLIBMINC_BUILD_SHARED_LIBS=ON"
+    "-DLIBMINC_USE_NIFTI=ON"
     "-DLIBMINC_USE_SYSTEM_NIFTI=ON"
   ];
 
   doCheck = !stdenv.isDarwin;
-  checkPhase = ''
-    export LD_LIBRARY_PATH="$(pwd)"  # see #22060
-    ctest -j1 -E 'ezminc_rw_test' --output-on-failure
     # -j1: see https://github.com/BIC-MNI/libminc/issues/110
-    # ezminc_rw_test: can't find libminc_io.so.5.2.0
+  checkPhase = ''
+    ctest -j1 --output-on-failure
   '';
 
   meta = with lib; {
@@ -42,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.free;
   };
-}
+})

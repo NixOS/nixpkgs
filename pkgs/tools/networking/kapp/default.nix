@@ -1,21 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kapp }:
+
 buildGoModule rec {
   pname = "kapp";
-  version = "0.42.0";
+  version = "0.63.1";
 
   src = fetchFromGitHub {
-    owner = "vmware-tanzu";
-    repo = "carvel-kapp";
+    owner = "carvel-dev";
+    repo = "kapp";
     rev = "v${version}";
-    sha256 = "sha256-unjfUecfvuobhvsSGSqMAs19ncOLkaJZ2uJv5uVcHr0=";
+    hash = "sha256-6i09V4Y2rFoChXo5roxVUFf84qCu2X9i5NtlYtw4RhE=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/kapp" ];
 
+  CGO_ENABLED = 0;
+
   ldflags = [
-    "-X github.com/k14s/kapp/pkg/kapp/version.Version=${version}"
+    "-X carvel.dev/kapp/pkg/kapp/version.Version=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -27,10 +30,15 @@ buildGoModule rec {
     done
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = kapp;
+  };
+
   meta = with lib; {
     description = "CLI tool that encourages Kubernetes users to manage bulk resources with an application abstraction for grouping";
-    homepage = "https://get-kapp.io";
+    homepage = "https://carvel.dev/kapp/";
     license = licenses.asl20;
     maintainers = with maintainers; [ brodes ];
+    mainProgram = "kapp";
   };
 }

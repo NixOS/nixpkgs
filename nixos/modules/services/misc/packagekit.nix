@@ -35,14 +35,14 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "packagekit" "backend" ] "The only backend that doesn't blow up is `test_nop`.")
+    (mkRemovedOptionModule [ "services" "packagekit" "backend" ] "Always set to test_nop, Nix backend is broken see #177946.")
   ];
 
   options.services.packagekit = {
     enable = mkEnableOption ''
-      PackageKit provides a cross-platform D-Bus abstraction layer for
+      PackageKit, a cross-platform D-Bus abstraction layer for
       installing software. Software utilizing PackageKit can install
-      software regardless of the package manager.
+      software regardless of the package manager
     '';
 
     settings = mkOption {
@@ -61,6 +61,8 @@ in
   config = mkIf cfg.enable {
 
     services.dbus.packages = with pkgs; [ packagekit ];
+
+    environment.systemPackages = with pkgs; [ packagekit ];
 
     systemd.packages = with pkgs; [ packagekit ];
 

@@ -5,8 +5,7 @@
 , gcc
 , cabal-install
 , runCommand
-, lib
-, stdenv
+, fetchpatch
 
 , ghc
 , happy
@@ -26,10 +25,16 @@ runCommand "configured-ghcjs-src" {
     happy
     alex
     cabal-install
-  ] ++ lib.optionals stdenv.isDarwin [
-    gcc # https://github.com/ghcjs/ghcjs/issues/663
+    gcc
   ];
+
   inherit ghcjsSrc;
+
+  ctimePatch = fetchpatch {
+    name = "ghcjs-base-ctime-64-bit.patch";
+    url = "https://github.com/ghcjs/ghcjs/commit/b7711fbca7c3f43a61f1dba526e6f2a2656ef44c.patch";
+    hash = "sha256-zZ3l8/5gbIGtvu0s2Xl92fEDhkhJ2c2w+5Ql5qkvr3s=";
+  };
 } ''
   export HOME=$(pwd)
   mkdir $HOME/.cabal
@@ -37,6 +42,8 @@ runCommand "configured-ghcjs-src" {
   cp -r "$ghcjsSrc" "$out"
   chmod -R +w "$out"
   cd "$out"
+
+  patch -p1 -i "$ctimePatch"
 
   # TODO: Find a better way to avoid impure version numbers
   sed -i 's/RELEASE=NO/RELEASE=YES/' ghc/configure.ac

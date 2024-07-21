@@ -1,15 +1,25 @@
-{ lib, fetchPypi, buildPythonPackage, scrapy, six }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  scrapy,
+  six,
+}:
 
 buildPythonPackage rec {
   pname = "scrapy-splash";
-  version = "0.8.0";
+  version = "0.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a7c17735415151ae01f07b03c7624e7276a343779b3c5f4546f655f6133df42f";
+    hash = "sha256-7PEwJk3AjgxGHIYH7K13dGimStAd7bJinA+BvV/NcpU=";
   };
 
-  propagatedBuildInputs = [ scrapy six ];
+  propagatedBuildInputs = [
+    scrapy
+    six
+  ];
 
   # no tests
   doCheck = false;

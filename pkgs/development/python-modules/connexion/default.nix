@@ -1,75 +1,99 @@
-{ lib
-, aiohttp
-, aiohttp-jinja2
-, aiohttp-remotes
-, aiohttp-swagger
-, buildPythonPackage
-, clickclick
-, decorator
-, fetchFromGitHub
-, fetchpatch
-, flask
-, inflection
-, jsonschema
-, openapi-spec-validator
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, swagger-ui-bundle
-, testfixtures
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  asgiref,
+  httpx,
+  inflection,
+  jsonschema,
+  jinja2,
+  python-multipart,
+  pyyaml,
+  requests,
+  starlette,
+  typing-extensions,
+  werkzeug,
+
+  # optional-dependencies
+  a2wsgi,
+  flask,
+  swagger-ui-bundle,
+  uvicorn,
+
+  # tests
+  pytest-aiohttp,
+  pytestCheckHook,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.9.0";
+  version = "3.1.0";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "zalando";
+    owner = "spec-first";
     repo = pname;
-    rev = version;
-    sha256 = "13smcg2w24zr2sv1968g9p9m6f18nqx688c96qdlmldnszgzf5ik";
+    rev = "refs/tags/${version}";
+    hash = "sha256-rngQDU9kXw/Z+Al0SCVnWN8xnphueTtZ0+xPBR5MbEM=";
   };
 
+  nativeBuildInputs = [ poetry-core ];
+
   propagatedBuildInputs = [
-    aiohttp
-    aiohttp-jinja2
-    aiohttp-swagger
-    clickclick
-    flask
+    asgiref
+    httpx
     inflection
     jsonschema
-    openapi-spec-validator
+    jinja2
+    python-multipart
     pyyaml
     requests
-    swagger-ui-bundle
+    starlette
+    typing-extensions
+    werkzeug
   ];
 
-  checkInputs = [
-    aiohttp-remotes
-    decorator
+  passthru.optional-dependencies = {
+    flask = [
+      a2wsgi
+      flask
+    ];
+    swagger-ui = [ swagger-ui-bundle ];
+    uvicorn = [ uvicorn ];
+  };
+
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
     testfixtures
-  ];
-
-  patches = [
-    # No minor release for later versions, https://github.com/zalando/connexion/pull/1402
-    (fetchpatch {
-      name = "allow-later-flask-and-werkzeug-releases.patch";
-      url = "https://github.com/zalando/connexion/commit/4a225d554d915fca17829652b7cb8fe119e14b37.patch";
-      sha256 = "0dys6ymvicpqa3p8269m4yv6nfp58prq3fk1gcx1z61h9kv84g1k";
-    })
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [ "connexion" ];
 
+  disabledTests = [
+    # AssertionError
+    "test_headers"
+    # waiter.acquire() deadlock
+    "test_cors_server_error"
+    "test_get_bad_default_response"
+    "test_schema_response"
+    "test_writeonly"
+  ];
+
   meta = with lib; {
     description = "Swagger/OpenAPI First framework on top of Flask";
-    homepage = "https://github.com/zalando/connexion/";
+    mainProgram = "connexion";
+    homepage = "https://github.com/spec-first/connexion";
+    changelog = "https://github.com/spec-first/connexion/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

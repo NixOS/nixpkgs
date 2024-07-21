@@ -1,29 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pkginfo";
-  version = "1.8.2";
+  version = "1.11.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VC4NC2dQ4uIcIBeYA+QKtQWY2AZtUQl6Djgsup6wK/8=";
+    hash = "sha256-Lg3KHPTI45ZE7tMkCOqZZu4V4NMkxiuomaOTs8a0Z6o=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pkginfo"
-  ];
+  pythonImportsCheck = [ "pkginfo" ];
 
   meta = with lib; {
     description = "Query metadatdata from sdists, bdists or installed packages";
+    mainProgram = "pkginfo";
     homepage = "https://pythonhosted.org/pkginfo/";
     longDescription = ''
       This package provides an API for querying the distutils metadata

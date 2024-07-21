@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex bison ];
 
-  NIX_CFLAGS_COMPILE = "-Os -g -Wall";
+  env.NIX_CFLAGS_COMPILE = "-Os -g -Wall";
 
   NIX_LDFLAGS = [ "-lpthread" ];
 
@@ -24,14 +24,15 @@ stdenv.mkDerivation rec {
   installFlags = [ "destdir=$(out)" "manprefix=/share" ];
 
   meta = with lib; {
-    description = "A tool to inject machine checks into x86 kernel for testing";
+    description = "Tool to inject machine checks into x86 kernel for testing";
+    mainProgram = "mce-inject";
     longDescription = ''
       mce-inject allows to inject machine check errors on the software level
       into a running Linux kernel. This is intended for validation of the
       kernel machine check handler.
     '';
     homepage = "https://github.com/andikleen/mce-inject/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ arkivm ];
     platforms = platforms.linux;
   };

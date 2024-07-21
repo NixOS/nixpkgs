@@ -1,8 +1,0 @@
-url http://ck.kolivas.org/apps/lrzip/
-version_link '[.]tar[.]bz2$'
-
-do_overwrite () {
-  ensure_hash
-  set_var_value version "$CURRENT_VERSION"
-  set_var_value sha256 "$CURRENT_HASH"
-}

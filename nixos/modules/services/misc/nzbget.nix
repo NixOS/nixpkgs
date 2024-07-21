@@ -25,7 +25,7 @@ in
 
   options = {
     services.nzbget = {
-      enable = mkEnableOption "NZBGet";
+      enable = mkEnableOption "NZBGet, for downloading files from news servers";
 
       user = mkOption {
         type = types.str;
@@ -44,7 +44,7 @@ in
         default = {};
         description = ''
           NZBGet configuration, passed via command line using switch -o. Refer to
-          <link xlink:href="https://github.com/nzbget/nzbget/blob/master/nzbget.conf"/>
+          <https://github.com/nzbget/nzbget/blob/master/nzbget.conf>
           for details on supported values.
         '';
         example = {

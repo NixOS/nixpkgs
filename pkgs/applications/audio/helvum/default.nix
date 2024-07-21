@@ -1,47 +1,65 @@
 { lib
-, fetchFromGitLab
-, makeDesktopItem
-, copyDesktopItems
-, rustPlatform
-, pkg-config
+, cargo
 , clang
-, libclang
+, desktop-file-utils
+, fetchFromGitLab
 , glib
 , gtk4
+, libadwaita
+, meson
+, ninja
 , pipewire
+, pkg-config
+, rustPlatform
+, rustc
+, stdenv
+, wrapGAppsHook4
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "helvum";
-  version = "0.3.1";
+  version = "0.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = "ryuukyu";
+    owner = "pipewire";
     repo = pname;
     rev = version;
-    sha256 = "sha256-f6+6Qicg5J6oWcafG4DF0HovTmF4r6yfw6p/3dJHmB4=";
+    hash = "sha256-9vlzLPpyZ9qtCEbCDvYhWDcV+8T63ukdos1l2U6fD+E=";
   };
 
-  cargoSha256 = "sha256-zGa6nAmOOrpiMr865J06Ez3L6lPL0j18/lW8lw1jPyU=";
-
-  nativeBuildInputs = [ clang copyDesktopItems pkg-config ];
-  buildInputs = [ glib gtk4 pipewire ];
-
-  LIBCLANG_PATH = "${libclang.lib}/lib";
-
-  desktopItems = makeDesktopItem {
-    name = "Helvum";
-    exec = pname;
-    desktopName = "Helvum";
-    genericName = "Helvum";
-    categories = "AudioVideo;";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-Xebm3XlsO6kBoMnxJsOk/3SO7avVoaGqi2CVWBRzr88=";
   };
+
+  nativeBuildInputs = [
+    clang
+    meson
+    ninja
+    pkg-config
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    rustPlatform.bindgenHook
+    wrapGAppsHook4
+  ];
+
+  buildInputs = [
+    desktop-file-utils
+    glib
+    gtk4
+    libadwaita
+    pipewire
+  ];
 
   meta = with lib; {
-    description = "A GTK patchbay for pipewire";
-    homepage = "https://gitlab.freedesktop.org/ryuukyu/helvum";
+    description = "GTK patchbay for pipewire";
+    homepage = "https://gitlab.freedesktop.org/pipewire/helvum";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fufexan ];
+    platforms = platforms.linux;
+    mainProgram = "helvum";
   };
 }

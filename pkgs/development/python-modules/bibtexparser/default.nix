@@ -1,33 +1,38 @@
-{ lib
-, buildPythonPackage, fetchFromGitHub
-, future, pyparsing
-, glibcLocales, nose, unittest2
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bibtexparser";
-  version = "1.1.0";
+  version = "1.4.1";
+  format = "setuptools";
 
-  # PyPI tarball does not ship tests
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "sciunto-org";
     repo = "python-${pname}";
-    rev = "v${version}";
-    sha256 = "1yj3hqnmkjh0sjjhmlm4097mmz98kna8rn0dd9g8zaw9g1a35h8c";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-YMkLSx7L2srLINZa6Ec0rPoxE2SdMv6CnI4BpHgHuzM=";
   };
 
-  propagatedBuildInputs = [ future pyparsing ];
+  propagatedBuildInputs = [ pyparsing ];
 
-  checkInputs = [ nose unittest2 glibcLocales ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    LC_ALL="en_US.UTF-8" nosetests
-  '';
+  pythonImportsCheck = [ "bibtexparser" ];
 
-  meta = {
-    description = "Bibtex parser for python 2.7 and 3.3 and newer";
+  meta = with lib; {
+    description = "Bibtex parser for Python";
     homepage = "https://github.com/sciunto-org/python-bibtexparser";
-    license = with lib.licenses; [ gpl3 bsd3 ];
-    maintainers = with lib.maintainers; [ fridh ];
+    license = with licenses; [
+      lgpl3Only # or
+      bsd3
+    ];
   };
 }

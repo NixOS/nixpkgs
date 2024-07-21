@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     icon = "xbill";
     desktopName = "XBill";
     comment     = "Get rid of those Wingdows viruses!";
-    categories  = "Game;ArcadeGame;";
+    categories  = [ "Game" "ArcadeGame" ];
   }) ];
 
   postInstall = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv; {
     description = "Protect a computer network from getting infected";
     homepage = "http://www.xbill.org/";
-    license = lib.licenses.gpl1;
+    license = lib.licenses.gpl1Only;
     maintainers = with lib.maintainers; [ aw ];
     longDescription = ''
       Ever get the feeling that nothing is going right? You're a sysadmin,
@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
       Wingdows [TM], a virus cleverly designed to resemble a popular
       operating system.
     '';
+    mainProgram = "xbill";
   };
 }

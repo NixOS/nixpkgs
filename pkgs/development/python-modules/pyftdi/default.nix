@@ -1,26 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pythonOlder
-, pyusb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pythonOlder,
+  pyusb,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyftdi";
-  version = "0.53.3";
-  disabled = pythonOlder "3.5";
+  version = "0.55.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "eblot";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-t4rFsuhcpYdgmQeog+DRFxHk0wpMc+aukQi981vH/44=";
+    repo = "pyftdi";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-InJJnbAPYlV071EkEWECJC79HLZ6SWo2VP7PqMgOGow=";
   };
 
-  propagatedBuildInputs = [ pyusb pyserial ];
+  build-system = [ setuptools ];
 
-  # tests requires access to the serial port
+  dependencies = [
+    pyserial
+    pyusb
+  ];
+
+  # Tests require access to the serial port
   doCheck = false;
 
   pythonImportsCheck = [ "pyftdi" ];

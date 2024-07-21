@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fastjet-contrib";
-  version = "1.046";
+  version = "1.053";
 
   src = fetchurl {
-    url = "http://fastjet.hepforge.org/contrib/downloads/fjcontrib-${version}.tar.gz";
-    sha256 = "sha256-cgavrH/rIHXZn7sDa7NRPTKy2sOvMDQQJjmGNUeT7s8=";
+    url = "https://fastjet.hepforge.org/contrib/downloads/fjcontrib-${version}.tar.gz";
+    sha256 = "sha256-sSokjgsUOTTJnjt8jdgyZRIvbGwJUzwqA99E9e/x5vo=";
   };
 
   buildInputs = [ fastjet ];
@@ -15,8 +15,13 @@ stdenv.mkDerivation rec {
     for f in Makefile.in */Makefile; do
       substituteInPlace "$f" --replace "CXX=g++" ""
     done
-    patchShebangs ./configure ./utils/check.sh ./utils/install-sh
+    patchShebangs ./utils/check.sh ./utils/install-sh
   '';
+
+  # Written in shell manually, does not support autoconf-style
+  # --build=/--host= options:
+  #   Error: --build=x86_64-unknown-linux-gnu: unrecognised argument
+  configurePlatforms = [ ];
 
   enableParallelBuilding = true;
 
@@ -33,7 +38,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Third party extensions for FastJet";
     homepage = "http://fastjet.fr/";
-    license = licenses.gpl2;
+    changelog = "https://phab.hepforge.org/source/fastjetsvn/browse/contrib/tags/${version}/NEWS?as=source&blame=off";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ veprbl ];
     platforms = platforms.unix;
   };

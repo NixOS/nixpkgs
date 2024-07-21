@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner  = "uTox";
     repo   = "uTox";
     rev    = "v${version}";
-    sha256 = "sha256-DxnolxUTn+CL6TbZHKLHOUMTHhtTSWufzzOTRpKjOwc=";
+    hash = "sha256-DxnolxUTn+CL6TbZHKLHOUMTHhtTSWufzzOTRpKjOwc=";
     fetchSubmodules = true;
   };
 
@@ -31,10 +31,11 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-  checkInputs = [ check ];
+  nativeCheckInputs = [ check ];
 
   meta = with lib; {
     description = "Lightweight Tox client";
+    mainProgram = "utox";
     homepage = "https://github.com/uTox/uTox";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];

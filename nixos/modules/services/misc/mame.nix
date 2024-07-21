@@ -34,7 +34,7 @@ in
         type = types.str;
         description = ''
           IP address of the guest system. The same you set inside guest OS under
-          MAME. Should be on the same subnet as <option>services.mame.hostAddr</option>.
+          MAME. Should be on the same subnet as {option}`services.mame.hostAddr`.
         '';
         example = "192.168.31.155";
       };

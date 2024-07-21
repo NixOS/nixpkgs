@@ -13,6 +13,8 @@ let
   enableDHCP = config.networking.dhcpcd.enable &&
         (config.networking.useDHCP || any (i: i.useDHCP == true) interfaces);
 
+  enableNTPService = (config.services.ntp.enable || config.services.ntpd-rs.enable || config.services.openntpd.enable || config.services.chrony.enable);
+
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
   ignoredInterfaces =
@@ -32,6 +34,13 @@ let
   allowInterfaces = arrayAppendOrNull cfg.allowInterfaces
     (if !config.networking.useDHCP && enableDHCP then
       map (i: i.name) (filter (i: i.useDHCP == true) interfaces) else null);
+
+  staticIPv6Addresses = map (i: i.name) (filter (i: i.ipv6.addresses != [ ]) interfaces);
+
+  noIPv6rs = concatStringsSep "\n" (map (name: ''
+    interface ${name}
+    noipv6rs
+  '') staticIPv6Addresses);
 
   # Config file adapted from the one that ships with dhcpcd.
   dhcpcdConf = pkgs.writeText "dhcpcd.conf"
@@ -74,23 +83,30 @@ let
         noipv6
       ''}
 
+      ${optionalString (config.networking.enableIPv6 && cfg.IPv6rs == null && staticIPv6Addresses != [ ]) noIPv6rs}
+      ${optionalString (config.networking.enableIPv6 && cfg.IPv6rs == false) ''
+        noipv6rs
+      ''}
+
       ${cfg.extraConfig}
     '';
 
-  exitHook = pkgs.writeText "dhcpcd.exit-hook"
-    ''
+  exitHook = pkgs.writeText "dhcpcd.exit-hook" ''
+    ${optionalString enableNTPService ''
       if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
-          # Restart ntpd.  We need to restart it to make sure that it
-          # will actually do something: if ntpd cannot resolve the
-          # server hostnames in its config file, then it will never do
-          # anything ever again ("couldn't resolve ..., giving up on
-          # it"), so we silently lose time synchronisation. This also
-          # applies to openntpd.
-          /run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service || true
+        # Restart ntpd. We need to restart it to make sure that it will actually do something:
+        # if ntpd cannot resolve the server hostnames in its config file, then it will never do
+        # anything ever again ("couldn't resolve ..., giving up on it"), so we silently lose
+        # time synchronisation. This also applies to openntpd.
+        ${optionalString config.services.ntp.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service || true"}
+        ${optionalString config.services.ntpd-rs.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd-rs.service || true"}
+        ${optionalString config.services.openntpd.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart openntpd.service || true"}
+        ${optionalString config.services.chrony.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart chronyd.service || true"}
       fi
+    ''}
 
-      ${cfg.runHook}
-    '';
+    ${cfg.runHook}
+  '';
 
 in
 
@@ -151,6 +167,16 @@ in
       '';
     };
 
+    networking.dhcpcd.IPv6rs = mkOption {
+      type = types.nullOr types.bool;
+      default = null;
+      description = ''
+        Force enable or disable solicitation and receipt of IPv6 Router Advertisements.
+        This is required, for example, when using a static unique local IPv6 address (ULA)
+        and global IPv6 address auto-configuration with SLAAC.
+      '';
+    };
+
     networking.dhcpcd.runHook = mkOption {
       type = types.lines;
       default = "";
@@ -183,6 +209,22 @@ in
 
   config = mkIf enableDHCP {
 
+    assertions = [ {
+      # dhcpcd doesn't start properly with malloc ∉ [ libc scudo ]
+      # see https://github.com/NixOS/nixpkgs/issues/151696
+      assertion =
+        dhcpcd.enablePrivSep
+          -> elem config.environment.memoryAllocator.provider [ "libc" "scudo" ];
+      message = ''
+        dhcpcd with privilege separation is incompatible with chosen system malloc.
+          Currently only the `libc` and `scudo` allocators are known to work.
+          To disable dhcpcd's privilege separation, overlay Nixpkgs and override dhcpcd
+          to set `enablePrivSep = false`.
+      '';
+    } ];
+
+    environment.etc."dhcpcd.conf".source = dhcpcdConf;
+
     systemd.services.dhcpcd = let
       cfgN = config.networking;
       hasDefaultGatewaySet = (cfgN.defaultGateway != null && cfgN.defaultGateway.address != "")
@@ -194,29 +236,38 @@ in
         wants = [ "network.target" ];
         before = [ "network-online.target" ];
 
-        restartTriggers = [ exitHook ];
+        restartTriggers = optional (enableNTPService || cfg.runHook != "") [ exitHook ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
         # dhcpcd.  So do a "systemctl restart" instead.
         stopIfChanged = false;
 
-        path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
+        path = [ dhcpcd pkgs.nettools config.networking.resolvconf.package ];
 
         unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
         serviceConfig =
           { Type = "forking";
-            PIDFile = "/run/dhcpcd.pid";
+            PIDFile = "/run/dhcpcd/pid";
+            RuntimeDirectory = "dhcpcd";
             ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
           };
       };
 
+    users.users.dhcpcd = {
+      isSystemUser = true;
+      group = "dhcpcd";
+    };
+    users.groups.dhcpcd = {};
+
     environment.systemPackages = [ dhcpcd ];
 
-    environment.etc."dhcpcd.exit-hook".source = exitHook;
+    environment.etc."dhcpcd.exit-hook" = mkIf (enableNTPService || cfg.runHook != "") {
+      source = exitHook;
+    };
 
     powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable
       ''

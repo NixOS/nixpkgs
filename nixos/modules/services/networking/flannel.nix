@@ -16,12 +16,7 @@ in {
   options.services.flannel = {
     enable = mkEnableOption "flannel";
 
-    package = mkOption {
-      description = "Package to use for flannel";
-      type = types.package;
-      default = pkgs.flannel;
-      defaultText = literalExpression "pkgs.flannel";
-    };
+    package = mkPackageOption pkgs "flannel" { };
 
     publicIp = mkOption {
       description = ''
@@ -92,10 +87,8 @@ in {
         Needed when running with Kubernetes as backend as this cannot be auto-detected";
       '';
       type = types.nullOr types.str;
-      default = with config.networking; (hostName + optionalString (domain != null) ".${domain}");
-      defaultText = literalExpression ''
-        with config.networking; (hostName + optionalString (domain != null) ".''${domain}")
-      '';
+      default = config.networking.fqdnOrHostName;
+      defaultText = literalExpression "config.networking.fqdnOrHostName";
       example = "node1.example.com";
     };
 
@@ -155,10 +148,11 @@ in {
         FLANNELD_ETCD_KEYFILE = cfg.etcd.keyFile;
         FLANNELD_ETCD_CERTFILE = cfg.etcd.certFile;
         FLANNELD_ETCD_CAFILE = cfg.etcd.caFile;
-        ETCDCTL_CERT_FILE = cfg.etcd.certFile;
-        ETCDCTL_KEY_FILE = cfg.etcd.keyFile;
-        ETCDCTL_CA_FILE = cfg.etcd.caFile;
-        ETCDCTL_PEERS = concatStringsSep "," cfg.etcd.endpoints;
+        ETCDCTL_CERT = cfg.etcd.certFile;
+        ETCDCTL_KEY = cfg.etcd.keyFile;
+        ETCDCTL_CACERT = cfg.etcd.caFile;
+        ETCDCTL_ENDPOINTS = concatStringsSep "," cfg.etcd.endpoints;
+        ETCDCTL_API = "3";
       } // optionalAttrs (cfg.storageBackend == "kubernetes") {
         FLANNELD_KUBE_SUBNET_MGR = "true";
         FLANNELD_KUBECONFIG_FILE = cfg.kubeconfig;
@@ -167,7 +161,7 @@ in {
       path = [ pkgs.iptables ];
       preStart = optionalString (cfg.storageBackend == "etcd") ''
         echo "setting network configuration"
-        until ${pkgs.etcd}/bin/etcdctl set /coreos.com/network/config '${builtins.toJSON networkConfig}'
+        until ${pkgs.etcd}/bin/etcdctl put /coreos.com/network/config '${builtins.toJSON networkConfig}'
         do
           echo "setting network configuration, retry"
           sleep 1

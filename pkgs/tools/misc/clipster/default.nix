@@ -1,20 +1,21 @@
 {fetchFromGitHub , lib, stdenv, python3, gtk3, libwnck,
- gobject-introspection, wrapGAppsHook }:
+ gobject-introspection, wrapGAppsHook3 }:
 
 stdenv.mkDerivation  rec {
   pname = "clipster";
-  version = "2.0.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "mrichar1";
     repo = "clipster";
     rev = version;
-    sha256 = "0582r8840dk4k4jj1zq6kmyh7z9drcng099bj7f4wvr468nb9z1p";
+    sha256 = "sha256-MLLkFsBBQtb7RFQN+uoEmuCn5bnbkYsqoyWGZtTCI2U=";
   };
 
   pythonEnv = python3.withPackages(ps: with ps; [ pygobject3 ]);
 
-  buildInputs =  [ pythonEnv gtk3 libwnck gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection ];
+  buildInputs =  [ pythonEnv gtk3 libwnck wrapGAppsHook3 ];
 
   installPhase = ''
     sed -i 's/python/python3/g' clipster
@@ -42,9 +43,10 @@ stdenv.mkDerivation  rec {
       - Option to ignore clipboard updates form certain applications. (filter_classes)
       - Ability to delete items in clipboard history.
     '';
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     homepage = "https://github.com/mrichar1/clipster";
     platforms = platforms.linux;
     maintainers = [ maintainers.magnetophon ];
+    mainProgram = "clipster";
   };
 }

@@ -4,13 +4,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ fgaz ];
   };
 
-  machine = { config, pkgs, ... }: {
+  nodes.machine = { config, pkgs, ... }: {
     imports = [
       ./common/x11.nix
     ];
 
     services.xserver.enable = true;
-    sound.enable = true;
     environment.systemPackages = [ pkgs.pt2-clone ];
   };
 

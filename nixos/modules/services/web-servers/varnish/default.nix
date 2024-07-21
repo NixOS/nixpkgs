@@ -15,55 +15,48 @@ in
 
       enableConfigCheck = mkEnableOption "checking the config during build time" // { default = true; };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.varnish;
-        defaultText = literalExpression "pkgs.varnish";
-        description = ''
-          The package to use
-        '';
-      };
+      package = mkPackageOption pkgs "varnish" { };
 
       http_address = mkOption {
         type = types.str;
         default = "*:6081";
-        description = "
+        description = ''
           HTTP listen address and port.
-        ";
+        '';
       };
 
       config = mkOption {
         type = types.lines;
-        description = "
+        description = ''
           Verbatim default.vcl configuration.
-        ";
+        '';
       };
 
       stateDir = mkOption {
         type = types.path;
         default = "/var/spool/varnish/${config.networking.hostName}";
         defaultText = literalExpression ''"/var/spool/varnish/''${config.networking.hostName}"'';
-        description = "
+        description = ''
           Directory holding all state for Varnish to run.
-        ";
+        '';
       };
 
       extraModules = mkOption {
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.varnishPackages.geoip ]";
-        description = "
+        description = ''
           Varnish modules (except 'std').
-        ";
+        '';
       };
 
       extraCommandLine = mkOption {
         type = types.str;
         default = "";
         example = "-s malloc,256M";
-        description = "
+        description = ''
           Command line switches for varnishd (run 'varnishd -?' to get list of options)
-        ";
+        '';
       };
     };
 
@@ -99,7 +92,7 @@ in
     environment.systemPackages = [ cfg.package ];
 
     # check .vcl syntax at compile time (e.g. before nixops deployment)
-    system.extraDependencies = mkIf cfg.enableConfigCheck [
+    system.checks = mkIf cfg.enableConfigCheck [
       (pkgs.runCommand "check-varnish-syntax" {} ''
         ${cfg.package}/bin/varnishd -C ${commandLine} 2> $out || (cat $out; exit 1)
       '')

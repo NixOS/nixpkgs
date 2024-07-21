@@ -1,40 +1,32 @@
-{ buildPythonPackage
-, enum34
-, fetchFromGitHub
-, flit-core
-, isPy27
-, lib
-, pathlib
-, pyyaml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pyyaml,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "confuse";
-  version = "1.5.0";
-  format = "flit";
+  version = "1.7.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1kvilxhjifvz6ra64jadf9jiwphrah5rcb9ryq0v7w1dywgn4qp7";
+    hash = "sha256-zdH5DNXnuAfYTuaG9EIKiXL2EbLSfzYjPSkC3G06bU8=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    pyyaml
-  ] ++ lib.optionals isPy27 [
-    enum34
-    pathlib
-  ] ;
+  propagatedBuildInputs = [ pyyaml ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "confuse" ];
 

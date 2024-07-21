@@ -1,62 +1,84 @@
-{ lib, stdenv, fetchFromGitHub, sqlite, pkg-config, autoreconfHook, pmccabe
-, xapian, glib, gmime3, texinfo, emacs, guile
-, gtk3, webkitgtk, libsoup, icu
-, makeWrapper
-, withMug ? false
-, batchSize ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, glibcLocales
+, meson
+, ninja
+, pkg-config
+, python3
+, cld2
+, coreutils
+, emacs
+, glib
+, gmime3
+, texinfo
+, xapian
+}:
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.6.10";
+  version = "1.12.5";
+
+  outputs = [ "out" "mu4e" ];
 
   src = fetchFromGitHub {
-    owner  = "djcb";
-    repo   = "mu";
-    rev    = version;
-    sha256 = "1uJB8QdR0JgWlogb1cdUicz+LLtYQpAvYJjwcRjXt+E=";
+    owner = "djcb";
+    repo = "mu";
+    rev = "v${version}";
+    hash = "sha256-dQeXL+CcysmlV6VYSuZtWGSgIhoqP6Y20Qora4l0iP8=";
   };
 
-  postPatch = lib.optionalString (batchSize != null) ''
-    sed -i lib/mu-store.cc --regexp-extended \
-      -e 's@(constexpr auto BatchSize).*@\1 = ${toString batchSize};@'
+  postPatch = ''
+    substituteInPlace lib/utils/mu-utils-file.cc \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+    substituteInPlace lib/tests/bench-indexer.cc \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+    substituteInPlace lib/mu-maildir.cc \
+      --replace-fail "/bin/mv" "${coreutils}/bin/mv"
+    patchShebangs build-aux/date.py
   '';
 
-  buildInputs = [
-    sqlite xapian glib gmime3 texinfo emacs libsoup icu
-  ]
-    # Workaround for https://github.com/djcb/mu/issues/1641
-    ++ lib.optional (!stdenv.isDarwin) guile
-    ++ lib.optionals withMug [ gtk3 webkitgtk ];
-
-  nativeBuildInputs = [ pkg-config autoreconfHook pmccabe makeWrapper ];
-
-  enableParallelBuilding = true;
-
-  preBuild = ''
-    # Fix mu4e-builddir (set it to $out)
-    substituteInPlace mu4e/mu4e-meta.el.in \
-      --replace "@abs_top_builddir@" "$out"
-  '';
-
-  # Make sure included scripts can find their dependencies & optionally install mug
   postInstall = ''
-    wrapProgram "$out/bin/mu" \
-      --prefix LD_LIBRARY_PATH : "$out/lib" \
-      --prefix GUILE_LOAD_PATH : "$out/share/guile/site/2.2"
-  '' + lib.optionalString withMug ''
-    for f in mug ; do
-      install -m755 toys/$f/$f $out/bin/$f
-    done
+    rm --verbose $mu4e/share/emacs/site-lisp/mu4e/*.elc
   '';
+
+  # move only the mu4e info manual
+  # this has to be after preFixup otherwise the info manual may be moved back by _multioutDocs()
+  # we manually move the mu4e info manual instead of setting
+  # outputInfo to mu4e because we do not want to move the mu-guile
+  # info manual (if it exists)
+  postFixup = ''
+    moveToOutput share/info/mu4e.info.gz $mu4e
+    install-info $mu4e/share/info/mu4e.info.gz $mu4e/share/info/dir
+    if [[ -a ''${!outputInfo}/share/info/mu-guile.info.gz ]]; then
+      install-info --delete $mu4e/share/info/mu4e.info.gz ''${!outputInfo}/share/info/dir
+    else
+      rm --verbose --recursive ''${!outputInfo}/share/info
+    fi
+  '';
+
+  buildInputs = [ cld2 emacs glib gmime3 texinfo xapian ];
+
+  mesonFlags = [
+    "-Dguile=disabled"
+    "-Dreadline=disabled"
+    "-Dlispdir=${placeholder "mu4e"}/share/emacs/site-lisp"
+  ];
+
+  nativeBuildInputs = [ pkg-config meson ninja python3 glibcLocales ];
 
   doCheck = true;
 
+  # Tests need a UTF-8 aware locale configured
+  env.LANG = "C.UTF-8";
+
   meta = with lib; {
-    description = "A collection of utilties for indexing and searching Maildirs";
+    description = "Collection of utilities for indexing and searching Maildirs";
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
-    changelog = "https://github.com/djcb/mu/releases/tag/${version}";
+    changelog = "https://github.com/djcb/mu/releases/tag/v${version}";
     maintainers = with maintainers; [ antono chvp peterhoeg ];
-    platforms = platforms.mesaPlatforms;
+    mainProgram = "mu";
+    platforms = platforms.unix;
   };
 }

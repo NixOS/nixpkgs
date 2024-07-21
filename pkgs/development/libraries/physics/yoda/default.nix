@@ -1,25 +1,48 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, root, makeWrapper, zlib, withRootSupport ? false }:
+{ lib
+, stdenv
+, fetchurl
+, python
+, root
+, makeWrapper
+, zlib
+, withRootSupport ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "1.9.3";
+  version = "1.9.10";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    hash = "sha256-XRUYL7gAoNX/ykdD+CwpXsYu5yzz5GJbZNAIP/+gR98=";
+    hash = "sha256-CnCO6dcElF0zh8xDexX/3fOCxw/lurOe0r2/g8LCjG8=";
   };
 
-  nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];
-  buildInputs = [ python ]
-    ++ (with python.pkgs; [ numpy matplotlib ])
-    ++ lib.optional withRootSupport root;
-  propagatedBuildInputs = [ zlib ];
+  nativeBuildInputs = with python.pkgs; [
+    cython
+    makeWrapper
+  ];
+
+  buildInputs = [
+    python
+  ] ++ (with python.pkgs; [
+    numpy
+    matplotlib
+  ]) ++ lib.optionals withRootSupport [
+    root
+  ];
+
+  propagatedBuildInputs = [
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
   postPatch = ''
     touch pyext/yoda/*.{pyx,pxd}
     patchShebangs .
+
+    substituteInPlace pyext/yoda/plotting/script_generator.py \
+      --replace '/usr/bin/env python' '${python.interpreter}'
   '';
 
   postInstall = ''
@@ -31,13 +54,15 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   doInstallCheck = true;
+
   installCheckTarget = "check";
 
-  meta = {
+  meta = with lib; {
     description = "Provides small set of data analysis (specifically histogramming) classes";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     homepage = "https://yoda.hepforge.org";
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ veprbl ];
+    changelog = "https://gitlab.com/hepcedar/yoda/-/blob/yoda-${version}/ChangeLog";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }

@@ -1,8 +1,8 @@
-{ mkDerivation, extra-cmake-modules, qtbase, qtquickcontrols2, qttranslations, qtgraphicaleffects }:
+{ mkDerivation, extra-cmake-modules, qtbase, qtquickcontrols2, qtgraphicaleffects, qttools }:
 
 mkDerivation {
-  name = "kirigami2";
-  nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qtbase qtquickcontrols2 qttranslations qtgraphicaleffects ];
+  pname = "kirigami2";
+  nativeBuildInputs = [ extra-cmake-modules qttools ];
+  buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
   outputs = [ "out" "dev" ];
 }

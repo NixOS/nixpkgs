@@ -1,16 +1,16 @@
-{ lib, buildDunePackage, fetchFromGitHub, zlib, dune-configurator, zarith, ncurses }:
+{ lib, buildDunePackage, fetchFromGitHub, zlib, dune-configurator, zarith }:
 
 buildDunePackage rec {
   pname = "cryptokit";
-  version = "1.16.1";
+  version = "1.19";
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "xavierleroy";
     repo = "cryptokit";
     rev = "release${lib.replaceStrings ["."] [""] version}";
-    sha256 = "sha256-eDIzi16Al/mXCNos/lVqjZWCtdP9SllXnRfm4GBWMfA=";
+    hash = "sha256-8RRAPFgL2pqKotc1I3fIB9q2cNi46SP8pt+0rZM+QUc=";
   };
 
   # dont do autotools configuration, but do trigger findlib's preConfigure hook
@@ -19,14 +19,14 @@ buildDunePackage rec {
     runHook postConfigure
   '';
 
-  buildInputs = [ dune-configurator ncurses ];
+  buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ zarith zlib ];
 
   doCheck = true;
 
   meta = {
     homepage = "http://pauillac.inria.fr/~xleroy/software.html";
-    description = "A library of cryptographic primitives for OCaml";
+    description = "Library of cryptographic primitives for OCaml";
     license = lib.licenses.lgpl2Only;
     maintainers = [
       lib.maintainers.maggesi

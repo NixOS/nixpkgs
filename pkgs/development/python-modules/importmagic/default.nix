@@ -1,12 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "importmagic";
   version = "0.1.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,12 +18,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  doCheck = false;  # missing json file from tarball
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "importmagic" ];
 
   meta = with lib; {
     description = "Python Import Magic - automagically add, remove and manage imports";
     homepage = "https://github.com/alecthomas/importmagic";
     license = licenses.bsd0;
+    maintainers = with maintainers; [ onny ];
   };
-
 }

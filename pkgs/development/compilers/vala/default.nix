@@ -1,42 +1,23 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
-, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll
+{ stdenv, lib, fetchurl, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
+, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll, vala, gobject-introspection
 }:
 
 let
   generic = lib.makeOverridable ({
-    version, sha256,
+    version, hash,
     extraNativeBuildInputs ? [],
     extraBuildInputs ? [],
     withGraphviz ? false
   }:
   let
-    # Patches from the openembedded-core project to build vala without graphviz
-    # support. We need to apply an additional patch to allow building when the
-    # header file isn't available at all, but that patch (./gvc-compat.patch)
-    # can be shared between all versions of Vala so far.
+    # Build vala (valadoc) without graphviz support. Inspired from the openembedded-core project.
+    # https://github.com/openembedded/openembedded-core/blob/a5440d4288e09d3e/meta/recipes-devtools/vala/vala/disable-graphviz.patch
     graphvizPatch =
-      let
-        fp = { commit, sha256 }: fetchpatch {
-          url = "https://github.com/openembedded/openembedded-core/raw/${commit}/meta/recipes-devtools/vala/vala/disable-graphviz.patch";
-          inherit sha256;
-        };
-
-      in {
-
-        # NOTE: the openembedded-core project doesn't have a patch for 0.40.12
-        # We've fixed the single merge conflict in the following patch.
-        #     0.40.12: https://github.com/openembedded/openembedded-core/raw/8553c52f174af4c8c433c543f806f5ed5c1ec48c/meta/recipes-devtools/vala/vala/disable-graphviz.patch
-        "0.40" = ./disable-graphviz-0.40.12.patch;
-
-        "0.48" = ./disable-graphviz-0.46.1.patch;
-
-        "0.52" = ./disable-graphviz-0.46.1.patch;
-
-        "0.54" = ./disable-graphviz-0.46.1.patch;
-
+      {
+        "0.56" = ./disable-graphviz-0.56.8.patch;
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
-    disableGraphviz = lib.versionAtLeast version "0.38" && !withGraphviz;
+    disableGraphviz = !withGraphviz;
 
   in stdenv.mkDerivation rec {
     pname = "vala";
@@ -49,7 +30,7 @@ let
 
     src = fetchurl {
       url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      inherit sha256;
+      inherit hash;
     };
 
     postPatch = ''
@@ -59,21 +40,24 @@ let
     # If we're disabling graphviz, apply the patches and corresponding
     # configure flag. We also need to override the path to the valac compiler
     # so that it can be used to regenerate documentation.
-    patches        = lib.optionals disableGraphviz [ graphvizPatch ./gvc-compat.patch ];
+    patches        = lib.optionals disableGraphviz [ graphvizPatch ];
     configureFlags = lib.optional  disableGraphviz "--disable-graphviz";
-    preBuild       = lib.optionalString disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
+    # when cross-compiling ./compiler/valac is valac for host
+    # so add the build vala in nativeBuildInputs
+    preBuild       = lib.optionalString (disableGraphviz && (stdenv.buildPlatform == stdenv.hostPlatform)) "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
 
     outputs = [ "out" "devdoc" ];
 
     nativeBuildInputs = [
-      pkg-config flex bison libxslt
-    ] ++ lib.optional (stdenv.isDarwin && (lib.versionAtLeast version "0.38")) expat
+      pkg-config flex bison libxslt gobject-introspection
+    ] ++ lib.optional (stdenv.isDarwin) expat
       ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
+      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ vala ]
       ++ extraNativeBuildInputs;
 
     buildInputs = [
       glib libiconv libintl
-    ] ++ lib.optional (lib.versionAtLeast version "0.38" && withGraphviz) graphviz
+    ] ++ lib.optional (withGraphviz) graphviz
       ++ extraBuildInputs;
 
     enableParallelBuilding = true;
@@ -82,7 +66,10 @@ let
 
     passthru = {
       updateScript = gnome.updateScript {
-        attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
+        attrPath =
+          let
+            roundUpToEven = num: num + lib.mod num 2;
+          in "${pname}_${lib.versions.major version}_${builtins.toString (roundUpToEven (lib.toInt (lib.versions.minor version)))}";
         packageName = pname;
         freeze = true;
       };
@@ -90,33 +77,18 @@ let
 
     meta = with lib; {
       description = "Compiler for GObject type system";
-      homepage = "https://wiki.gnome.org/Projects/Vala";
+      homepage = "https://vala.dev";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono jtojnar maxeaubrey ] ++ teams.pantheon.members;
+      maintainers = with maintainers; [ antono jtojnar ] ++ teams.pantheon.members;
     };
   });
 
 in rec {
-  vala_0_40 = generic {
-    version = "0.40.25";
-    sha256 = "1pxpack8rrmywlf47v440hc6rv3vi8q9c6niwqnwikxvb2pwf3w7";
+  vala_0_56 = generic {
+    version = "0.56.17";
+    hash = "sha256-JhAMTk7wBJxhknXxQNl89WWIPQDHVDyCvM5aQmk07Wo=";
   };
 
-  vala_0_48 = generic {
-    version = "0.48.20";
-    sha256 = "sha256-RrHIF/dIUfvMOV/E+eoRlQLPh7kzPMllbhzczAvTN24=";
-  };
-
-  vala_0_52 = generic {
-    version = "0.52.8";
-    sha256 = "sha256-d3t9HLVnFewyJUXQEw5/9Y2eem0b2WtuKX6eYOgRh5M=";
-  };
-
-  vala_0_54 = generic {
-    version = "0.54.2";
-    sha256 = "iE3nRTF9TVbk6M7emT3I8E1Qz8o2z2DS8vJ4wwwrExE=";
-  };
-
-  vala = vala_0_54;
+  vala = vala_0_56;
 }

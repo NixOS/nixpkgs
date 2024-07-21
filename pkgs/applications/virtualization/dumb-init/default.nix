@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aRh0xfmp+ToXIYjYaducTpZUHndZ5HlFZpFhzJ3yKgs=";
   };
 
-  buildInputs = [ glibc.static ];
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+    substituteInPlace Makefile --replace "-static" ""
+  '';
+
+  buildInputs = lib.optional (stdenv.hostPlatform.isGnu && stdenv.hostPlatform.isStatic) glibc.static;
 
   installPhase = ''
     runHook preInstall
@@ -22,10 +26,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A minimal init system for Linux containers";
+    description = "Minimal init system for Linux containers";
     homepage = "https://github.com/Yelp/dumb-init";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = platforms.unix;
+    mainProgram = "dumb-init";
   };
 }

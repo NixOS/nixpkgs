@@ -11,10 +11,10 @@ in {
 
     # the upstream package runs as root, but doesn't seem to be strictly
     # necessary for basic functionality
-    runAsRoot = mkEnableOption "Whether to run as root.";
+    runAsRoot = mkEnableOption "running as root";
 
     autoRetirement = mkEnableOption ''
-      Whether to automatically retire the host upon OS shutdown.
+      retiring the host upon OS shutdown
     '';
 
     apiKeyFile = mkOption {
@@ -24,7 +24,7 @@ in {
         Path to file containing the Mackerel API key. The file should contain a
         single line of the following form:
 
-        <literallayout>apikey = "EXAMPLE_API_KEY"</literallayout>
+        `apikey = "EXAMPLE_API_KEY"`
       '';
     };
 
@@ -33,7 +33,7 @@ in {
         Options for mackerel-agent.conf.
 
         Documentation:
-        <link xlink:href="https://mackerel.io/docs/entry/spec/agent"/>
+        <https://mackerel.io/docs/entry/spec/agent>
       '';
 
       default = {};
@@ -59,7 +59,7 @@ in {
         };
 
         options.diagnostic =
-          mkEnableOption "Collect memory usage for the agent itself";
+          mkEnableOption "collecting memory usage for the agent itself";
       };
     };
   };
@@ -81,9 +81,10 @@ in {
       include = mkDefault "/etc/mackerel-agent/conf.d/*.conf";
     };
 
-    # upstream service file in https://git.io/JUt4Q
+    # upstream service file in https://github.com/mackerelio/mackerel-agent/blob/master/packaging/rpm/src/mackerel-agent.service
     systemd.services.mackerel-agent = {
       description = "mackerel.io agent";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = {

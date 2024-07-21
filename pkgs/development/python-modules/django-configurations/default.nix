@@ -1,29 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django-discover-runner
-, mock
-, dj-database-url
-, dj-email-url
-, dj-search-url
-, django-cache-url
-, six
-, django
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  dj-database-url,
+  dj-email-url,
+  dj-search-url,
+  django,
+  django-cache-url,
+  fetchPypi,
+  importlib-metadata,
+  mock,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
-  version = "2.2";
   pname = "django-configurations";
+  version = "2.5.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9e3bcea1355ac50a4c9f854f751d214cb17e5f8adf18405a4488d0a1e8945915";
+    hash = "sha256-blCDdX4rvfm7eFBWdTa5apNRX2sXUD10ko/2KNsuDpQ=";
   };
 
   buildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ six ];
-  checkInputs = [ django-discover-runner mock dj-database-url dj-email-url dj-search-url django-cache-url ];
+
+  propagatedBuildInputs = [ django ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+
+  nativeCheckInputs = [
+    mock
+    dj-database-url
+    dj-email-url
+    dj-search-url
+    django-cache-url
+  ];
 
   checkPhase = ''
     export PYTHONPATH=.:$PYTHONPATH
@@ -35,10 +47,13 @@ buildPythonPackage rec {
   # django.core.exceptions.ImproperlyConfigured: django-configurations settings importer wasn't correctly installed
   doCheck = false;
 
+  pythonImportsCheck = [ "configurations" ];
+
   meta = with lib; {
+    description = "Helper for organizing Django settings";
+    mainProgram = "django-cadmin";
     homepage = "https://django-configurations.readthedocs.io/";
-    description = "A helper for organizing Django settings";
     license = licenses.bsd0;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

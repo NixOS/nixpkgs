@@ -1,12 +1,23 @@
-{ lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3 }:
+{ lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3
+, enableVmaf ? true, libvmaf
+, gitUpdater
 
+# for passthru.tests
+, ffmpeg
+, libavif
+, libheif
+}:
+
+let
+  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+in
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.2.0";
+  version = "3.9.0";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    sha256 = "0fmnbzpl481i7kchx4hbvb507r5pfgyrzfrlrs7jk3bicycm75qv";
+    hash = "sha256-ON/BWCO2k7fADW3ZANKjnRE8SrQZpjdyUF1N0fD/xnc=";
     stripRoot = false;
   };
 
@@ -15,6 +26,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     yasm perl cmake pkg-config python3
   ];
+
+  propagatedBuildInputs = lib.optional enableVmaf libvmaf;
 
   preConfigure = ''
     # build uses `git describe` to set the build version
@@ -32,11 +45,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DENABLE_TESTS=OFF"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # CPU detection isn't supported on Darwin and breaks the aarch64-darwin build:
-    "-DCONFIG_RUNTIME_CPU_DETECT=0"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-DAS_EXECUTABLE=${stdenv.cc.targetPrefix}as"
+  ] ++ lib.optionals enableVmaf [
+    "-DCONFIG_TUNE_VMAF=1"
+  ] ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
+    "-DCMAKE_ASM_COMPILER=${stdenv.cc.targetPrefix}as"
   ] ++ lib.optionals stdenv.isAarch32 [
     # armv7l-hf-multiplatform does not support NEON
     # see lib/systems/platform.nix
@@ -45,9 +57,23 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     moveToOutput lib/libaom.a "$static"
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+    ln -s $static $out
   '';
 
   outputs = [ "out" "bin" "dev" "static" ];
+
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://aomedia.googlesource.com/aom";
+      rev-prefix = "v";
+      ignoredVersions = "(alpha|beta|rc).*";
+    };
+    tests = {
+      inherit libavif libheif;
+      ffmpeg = ffmpeg.override { withAom = true; };
+    };
+  };
 
   meta = with lib; {
     description = "Alliance for Open Media AV1 codec library";
@@ -58,8 +84,9 @@ stdenv.mkDerivation rec {
     '';
     homepage    = "https://aomedia.org/av1-features/get-started/";
     changelog   = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
-    maintainers = with maintainers; [ primeos kiloreux ];
+    maintainers = with maintainers; [ primeos kiloreux dandellion ];
     platforms   = platforms.all;
+    outputsToInstall = [ "bin" ];
     license = licenses.bsd2;
   };
 }

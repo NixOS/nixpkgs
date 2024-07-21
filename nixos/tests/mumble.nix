@@ -15,11 +15,12 @@ in
 {
   name = "mumble";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ thoughtpolice eelco ];
+    maintainers = [ thoughtpolice ];
   };
 
   nodes = {
     server = { config, ... }: {
+      security.apparmor.enable = true;
       services.murmur.enable = true;
       services.murmur.registerName = "NixOS tests";
       services.murmur.password = "$MURMURD_PASSWORD";
@@ -81,5 +82,8 @@ in
     server.sleep(5)  # wait to get screenshot
     client1.screenshot("screen1")
     client2.screenshot("screen2")
+
+    # check if apparmor denied anything
+    server.fail('journalctl -b --no-pager --grep "^audit: .*apparmor=\\"DENIED\\""')
   '';
 })

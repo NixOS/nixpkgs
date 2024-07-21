@@ -1,20 +1,21 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pip
-, setuptools
-, wheel
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pip,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "zc-buildout";
-  version = "3.0.0b2";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "buildout";
     repo = "buildout";
     rev = version;
-    sha256 = "01sj09xx5kmkzynhq1xd8ahn6xqybfi8lrqjqr5lr45aaxjk2pid";
+    sha256 = "J/ymUCFhl7EviHMEYSUCTky0ULRT8aL4gNCGxrbqJi0=";
   };
 
   propagatedBuildInputs = [
@@ -28,10 +29,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "zc.buildout" ];
 
   meta = with lib; {
-    description = "A software build and configuration system";
+    description = "Software build and configuration system";
+    mainProgram = "buildout";
     downloadPage = "https://github.com/buildout/buildout";
     homepage = "https://www.buildout.org";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ gotcha ];
   };
 }

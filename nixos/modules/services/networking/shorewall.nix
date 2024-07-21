@@ -10,13 +10,12 @@ in {
         default     = false;
         description = ''
           Whether to enable Shorewall IPv4 Firewall.
-          <warning>
-            <para>
-            Enabling this service WILL disable the existing NixOS
-            firewall! Default firewall rules provided by packages are not
-            considered at the moment.
-            </para>
-          </warning>
+
+          ::: {.warning}
+          Enabling this service WILL disable the existing NixOS
+          firewall! Default firewall rules provided by packages are not
+          considered at the moment.
+          :::
         '';
       };
       package = lib.mkOption {

@@ -1,29 +1,61 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, markupsafe
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  babel,
+  hatchling,
+  setuptools,
+
+  # dependencies
+  markupsafe,
+
+  # optional-dependencies
+  email-validator,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "2.3.3";
-  pname = "WTForms";
+  pname = "wtforms";
+  version = "3.1.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "81195de0ac94fbc8368abbaf9197b88c4f3ffd6c2719b5bf5fc9da744f3d829c";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "wtforms";
+    repo = "wtforms";
+    rev = "refs/tags/${version}";
+    hash = "sha256-L6DmB7iVpJR775oRxuEkCKWlUJnmw8VPZTr2dZbqeEc=";
   };
+
+  nativeBuildInputs = [
+    babel
+    hatchling
+    setuptools
+  ];
 
   propagatedBuildInputs = [ markupsafe ];
 
-  # Django tests are broken "django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet."
-  doCheck = false;
+  passthru.optional-dependencies = {
+    email = [ email-validator ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  pythonImportsCheck = [ "wtforms" ];
 
   meta = with lib; {
-    description = "A flexible forms validation and rendering library for Python";
+    description = "Flexible forms validation and rendering library for Python";
     homepage = "https://github.com/wtforms/wtforms";
     changelog = "https://github.com/wtforms/wtforms/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = [ maintainers.bhipple ];
+    maintainers = with maintainers; [ bhipple ];
   };
-
 }

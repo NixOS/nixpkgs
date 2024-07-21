@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     perl
-    makeWrapper
   ] ++ (with perlPackages; [
     FileRemove
     DigestSHA1
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Mutt support for notmuch";
+    mainProgram = "notmuch-mutt";
     homepage    = "https://notmuchmail.org/";
     license     = with licenses; gpl3;
     maintainers = with maintainers; [ peterhoeg ];

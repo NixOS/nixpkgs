@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isAarch64 zlib;
 
   meta = {
-    homepage = "http://irrlicht.sourceforge.net/";
+    homepage = "https://irrlicht.sourceforge.io/";
     license = lib.licenses.zlib;
     description = "Open source high performance realtime 3D engine written in C++";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

@@ -1,24 +1,51 @@
-{ lib, fetchPypi, buildPythonPackage, genshi, lxml, python_magic }:
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  genshi,
+  lxml,
+  pyyaml,
+  python-magic,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "relatorio";
-  version = "0.10.0";
+  version = "0.10.2";
+
+  disabled = pythonOlder "3.5";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6b9390eab696bdf569639ff58794fb9ef8ff19f94feea5b505a6ba06d0cfd026";
+    hash = "sha256-zgCOmcR9FWj0lpi78U0G1CKR5kyNyr541HusIrBpF/Q=";
   };
 
   propagatedBuildInputs = [
     genshi
     lxml
-    python_magic
   ];
+
+  passthru.optional-dependencies = {
+    chart = [
+      # pycha
+      pyyaml
+    ];
+    fodt = [ python-magic ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.fodt;
+
+  pythonImportsCheck = [ "relatorio" ];
 
   meta = {
     homepage = "https://relatorio.tryton.org/";
-    description = "A templating library able to output odt and pdf files";
+    changelog = "https://hg.tryton.org/relatorio/file/${version}/CHANGELOG";
+    description = "Templating library able to output odt and pdf files";
+    mainProgram = "relatorio-render";
     maintainers = with lib.maintainers; [ johbo ];
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl2Plus;
   };
 }

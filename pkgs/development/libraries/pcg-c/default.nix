@@ -1,7 +1,5 @@
 { lib, stdenv, fetchzip }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   version = "0.94";
   pname = "pcg-c";
@@ -23,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A family of better random number generators";
+    description = "Family of better random number generators";
     homepage = "https://www.pcg-random.org/";
     license = lib.licenses.asl20;
     longDescription = ''
@@ -31,9 +29,8 @@ stdenv.mkDerivation rec {
       algorithms for random number generation. Unlike many general-purpose RNGs,
       they are also hard to predict.
     '';
-    platforms = platforms.unix;
-    maintainers = [ maintainers.linus ];
-    repositories.git = "git://github.com/imneme/pcg-c.git";
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.linus ];
     broken = stdenv.isi686; # https://github.com/imneme/pcg-c/issues/11
   };
 }

@@ -23,7 +23,7 @@ in
           which will make Xorg reconfigure the device ?
 
           If you're not satisfied by the default behaviour you can override
-          <option>environment.etc."X11/xorg.conf.d/70-wacom.conf"</option> in
+          {option}`environment.etc."X11/xorg.conf.d/70-wacom.conf"` in
           configuration.nix easily.
         '';
       };

@@ -46,7 +46,7 @@ in
         default = null;
         description = ''
           A set describing default parameters for babeld interfaces.
-          See <citerefentry><refentrytitle>babeld</refentrytitle><manvolnum>8</manvolnum></citerefentry> for options.
+          See {manpage}`babeld(8)` for options.
         '';
         type = types.nullOr (types.attrsOf types.unspecified);
         example =
@@ -60,7 +60,7 @@ in
         default = {};
         description = ''
           A set describing babeld interfaces.
-          See <citerefentry><refentrytitle>babeld</refentrytitle><manvolnum>8</manvolnum></citerefentry> for options.
+          See {manpage}`babeld(8)` for options.
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
         example =
@@ -77,7 +77,7 @@ in
         type = types.lines;
         description = ''
           Options that will be copied to babeld.conf.
-          See <citerefentry><refentrytitle>babeld</refentrytitle><manvolnum>8</manvolnum></citerefentry> for details.
+          See {manpage}`babeld(8)` for details.
         '';
       };
     };

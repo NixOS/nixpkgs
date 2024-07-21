@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchFromGitHub
 , cmake
@@ -6,33 +7,35 @@
 , boost
 , python3
 , fcitx5
+, zstd
 }:
 
 let
+  tableVer = "20240108";
   table = fetchurl {
-    url = "https://download.fcitx-im.org/data/table.tar.gz";
-    sha256 = "1dw7mgbaidv3vqy0sh8dbfv8631d2zwv5mlb7npf69a1f8y0b5k1";
+    url = "https://download.fcitx-im.org/data/table-${tableVer}.tar.gz";
+    hash = "sha256-cpxZbYaQfecnx00Pw/0kHEBsXevStMt07v4CI4funa4=";
   };
-  arpaVer = "20140820";
+  arpaVer = "20230712";
   arpa = fetchurl {
-    url = "https://download.fcitx-im.org/data/lm_sc.3gm.arpa-${arpaVer}.tar.bz2";
-    sha256 = "0bqy3l7mif0yygjrcm65qallszgn17mvgyxhvz7a54zaamyan6vm";
+    url = "https://download.fcitx-im.org/data/lm_sc.arpa-${arpaVer}.tar.xz";
+    hash = "sha256-ut1iwWxjc3h6D9qPCc1FLRL2DVhohW9lHO7PGge6ujI=";
   };
-  dictVer = "20211021";
+  dictVer = "20240416";
   dict = fetchurl {
-    url = "https://download.fcitx-im.org/data/dict.utf8-${dictVer}.tar.xz";
-    sha256 = "sha256-MAWX5vf3n3iEgP1mXeige/6QInBItafjn0D0OmKpgd8=";
+    url = "https://download.fcitx-im.org/data/dict-${dictVer}.tar.zst";
+    hash = "sha256-nCYsv6MGy0w7BVmRt+IrRT4PJn8gzrXZ2eX4++Ty02c=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "libime";
-  version = "1.0.10";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
     rev = version;
-    sha256 = "sha256-dHlya2vC3ugslP0K2oIHadcZQTmzt+tzNMkLy8V5M1Q=";
+    hash = "sha256-uT0V1CXPaF2FctsndxVszS7Qske6vObbOA4aOnmbdQY=";
     fetchSubmodules = true;
   };
 
@@ -49,12 +52,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    zstd
     boost
     fcitx5
   ];
 
   meta = with lib; {
-    description = "A library to support generic input method implementation";
+    description = "Library to support generic input method implementation";
     homepage = "https://github.com/fcitx/libime";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ poscat ];

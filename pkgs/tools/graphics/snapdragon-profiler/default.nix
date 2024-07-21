@@ -10,7 +10,6 @@
 , gtk-sharp-2_0
 , gtk2
 , libcxx
-, libcxxabi
 , coreutils
 , requireFile
 , archive ? requireFile {
@@ -27,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "snapdragon-profiler";
-  version = "v2021.2";
+  version = "2021.2";
 
   src = archive;
 
@@ -42,7 +41,6 @@ stdenv.mkDerivation rec {
     gtk-sharp-2_0
     gtk2
     libcxx
-    libcxxabi
   ];
 
   installPhase = ''
@@ -54,10 +52,10 @@ stdenv.mkDerivation rec {
     cp -r * $out/lib/snapdragon-profiler
     makeWrapper "${mono}/bin/mono" $out/bin/snapdragon-profiler \
       --add-flags "$out/lib/snapdragon-profiler/SnapdragonProfiler.exe" \
-      --suffix PATH : ${lib.makeBinPath [ jre androidenv.androidPkgs_9_0.platform-tools coreutils ]} \
+      --suffix PATH : ${lib.makeBinPath [ jre androidenv.androidPkgs.platform-tools coreutils ]} \
       --prefix MONO_GAC_PREFIX : ${gtk-sharp-2_0} \
       --suffix LD_LIBRARY_PATH : $(echo $NIX_LDFLAGS | sed 's/ -L/:/g;s/ -rpath /:/g;s/-rpath //') \
-      --run "cd $out/lib/snapdragon-profiler" # Fixes themes not loading correctly
+      --chdir "$out/lib/snapdragon-profiler" # Fixes themes not loading correctly
 
     wrestool -x -t 14 SnapdragonProfiler.exe > snapdragon-profiler.ico
     icotool -x -i 1 -o $out/share/icons/hicolor/16x16/apps/snapdragon-profiler.png snapdragon-profiler.ico
@@ -70,12 +68,10 @@ stdenv.mkDerivation rec {
   desktopItems = [(makeDesktopItem {
     name = pname;
     desktopName = "Snapdragon Profiler";
-    exec = "$out/bin/snapdragon-profiler";
+    exec = "snapdragon-profiler";
     icon = "snapdragon-profiler";
-    type = "Application";
     comment = meta.description;
-    categories = "Development;Debugger;Graphics;3DGraphics";
-    terminal = "false";
+    categories = [ "Development" "Debugger" "Graphics" "3DGraphics" ];
   })];
 
   dontStrip = true; # Always needed on Mono
@@ -85,7 +81,7 @@ stdenv.mkDerivation rec {
     homepage = "https://developer.qualcomm.com/software/snapdragon-profiler";
     description = "An profiler for Android devices running Snapdragon chips";
     license = licenses.unfree;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

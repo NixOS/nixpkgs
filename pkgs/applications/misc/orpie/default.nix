@@ -4,8 +4,6 @@ ocamlPackages.buildDunePackage rec {
   pname = "orpie";
   version = "1.6.1";
 
-  useDune2 = true;
-
   src = fetchFromGitHub {
     owner = "pelzlpj";
     repo = pname;
@@ -19,11 +17,12 @@ ocamlPackages.buildDunePackage rec {
     substituteInPlace src/orpie/install.ml.in --replace '@prefix@' $out
   '';
 
-  buildInputs = with ocamlPackages; [ curses camlp5 num gsl ];
+  nativeBuildInputs = [ ocamlPackages.camlp5 ];
+  buildInputs = with ocamlPackages; [ curses num gsl ];
 
   meta = {
     inherit (src.meta) homepage;
-    description = "A Curses-based RPN calculator";
+    description = "Curses-based RPN calculator";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ obadz ];
   };

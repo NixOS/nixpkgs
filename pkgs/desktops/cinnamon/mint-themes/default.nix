@@ -1,27 +1,24 @@
 { fetchFromGitHub
 , lib
-, stdenv
+, stdenvNoCC
 , python3
-, sassc
-, sass
+, python3Packages
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mint-themes";
-  version = "1.8.8";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
-    # they don't exactly do tags, it's just a named commit
-    rev = "a833fba6917043bf410dee4364c9a36af1ce4c83";
-    hash = "sha256-8abjjD0XoApvqB8SNlWsqIEp7ozgiERGS0kWglw2DWA=";
+    rev = version;
+    hash = "sha256-mkcIhZRaOUom1Rurz/IO646FSF50efLN6xfesPdyVHc=";
   };
 
   nativeBuildInputs = [
     python3
-    sassc
-    sass
+    python3Packages.libsass
   ];
 
   preBuild = ''
@@ -29,8 +26,10 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     mv usr/share $out
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "erfa";
-  version = "2.0.0";
+  version = "2.0.1";
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   src = fetchFromGitHub {
     owner = "liberfa";
     repo = "erfa";
     rev = "v${version}";
-    sha256 = "sha256-xBE8mWwmvlu0v3Up5y6J8jMhToMSACdKeQzPJoG8LWk=";
+    sha256 = "sha256-NtHYgiN5mo3kWC2H+5TUDbU1nFrwuhNyOIhg2jZbssM=";
   };
 
   configureFlags = [ "--enable-shared" ];

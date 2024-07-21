@@ -17,14 +17,19 @@ in {
         }
       '';
       type = types.lines;
-      description = "Verbatim Corefile to use. See <link xlink:href=\"https://coredns.io/manual/toc/#configuration\"/> for details.";
+      description = ''
+        Verbatim Corefile to use.
+        See <https://coredns.io/manual/toc/#configuration> for details.
+      '';
     };
 
-    package = mkOption {
-      default = pkgs.coredns;
-      defaultText = literalExpression "pkgs.coredns";
-      type = types.package;
-      description = "Coredns package to use.";
+    package = mkPackageOption pkgs "coredns" { };
+
+    extraArgs = mkOption {
+      default = [];
+      example = [ "-dns.port=53" ];
+      type = types.listOf types.str;
+      description = "Extra arguments to pass to coredns.";
     };
   };
 
@@ -41,7 +46,7 @@ in {
         AmbientCapabilities = "cap_net_bind_service";
         NoNewPrivileges = true;
         DynamicUser = true;
-        ExecStart = "${getBin cfg.package}/bin/coredns -conf=${configFile}";
+        ExecStart = "${getBin cfg.package}/bin/coredns -conf=${configFile} ${lib.escapeShellArgs cfg.extraArgs}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR1 $MAINPID";
         Restart = "on-failure";
       };

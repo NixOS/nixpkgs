@@ -1,26 +1,64 @@
 { lib
-, stdenv
-, fetchzip
+, fetchFromGitHub
+, fetchYarnDeps
+, mkYarnPackage
+, baseUrl ? null
+, writeShellScriptBin
 }:
 
-stdenv.mkDerivation rec {
+mkYarnPackage rec {
   pname = "synapse-admin";
-  version = "0.8.3";
-
-  src = fetchzip {
-    url = "https://github.com/Awesome-Technologies/synapse-admin/releases/download/${version}/synapse-admin-${version}.tar.gz";
-    hash = "sha256-LAdMxzUffnykiDHvQYu9uNxK4428Q9CxQY2q02AcUco=";
+  version = "0.10.0";
+  src = fetchFromGitHub {
+    owner = "Awesome-Technologies";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-3MC5PCEwYfZzJy9AW9nHTpvU49Lk6wbYC4Rcv9J9MEg=";
   };
 
-  installPhase = ''
-    cp -r . $out
+  yarnLock = ./yarn.lock;
+  packageJSON = ./package.json;
+
+  offlineCache = fetchYarnDeps {
+    inherit yarnLock;
+    hash = "sha256-vpCwPL1B+hbIaVSHtlkGjPAteu9BFNNmCTE66CSyFkg=";
+  };
+
+  nativeBuildInputs = [
+    (writeShellScriptBin "git" "echo ${version}")
+  ];
+
+  NODE_ENV = "production";
+  ${if baseUrl != null then "REACT_APP_SERVER" else null} = baseUrl;
+
+  # error:0308010C:digital envelope routines::unsupported
+  NODE_OPTIONS = "--openssl-legacy-provider";
+
+  buildPhase = ''
+    runHook preBuild
+
+    export HOME=$(mktemp -d)
+    yarn --offline run build
+
+    runHook postBuild
   '';
+
+  distPhase = ''
+    runHook preDist
+
+    cp -r deps/synapse-admin/dist $out
+
+    runHook postDist
+  '';
+
+  dontFixup = true;
+  dontInstall = true;
 
   meta = with lib; {
     description = "Admin UI for Synapse Homeservers";
     homepage = "https://github.com/Awesome-Technologies/synapse-admin";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [ mkg20001 ma27 ];
   };
 }

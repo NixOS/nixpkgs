@@ -1,22 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, unzip, cmake, libGLU, libGL }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, unzip
+, cmake
+, darwin
+, libGLU
+, libGL
+}:
 
 stdenv.mkDerivation rec {
-  name    = "${pname}-${date}";
-  pname   = "vrpn";
-  date    = "2016-08-27";
+  pname = "vrpn";
+  version = "07.35";
 
   src = fetchFromGitHub {
-    owner  = "vrpn";
-    repo   = "vrpn";
-    rev    = "9fa0ab3676a43527301c9efd3637f80220eb9462";
-    sha256 = "032q295d68w34rk5q8nfqdd29s55n00bfik84y7xzkjrpspaprlh";
+    owner = "vrpn";
+    repo = "vrpn";
+    rev = "version_${version}";
+    hash = "sha256-vvlwhm5XHWD4Nh1hwY427pe36RQaqTDJiEtkCxHeCig=";
   };
 
-  nativeBuildInputs = [ cmake unzip ];
-  buildInputs = [ libGLU libGL ];
+  nativeBuildInputs = [
+    cmake
+    unzip
+  ];
 
-  doCheck = false; # FIXME: test failure
-  checkTarget = "test";
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreFoundation
+    darwin.apple_sdk.frameworks.GLUT
+    darwin.apple_sdk.frameworks.IOKit
+    darwin.apple_sdk.frameworks.OpenGL
+  ] ++ lib.optionals stdenv.isLinux [
+    libGLU
+    libGL
+  ];
 
   meta = with lib; {
     description = "Virtual Reality Peripheral Network";
@@ -27,9 +43,9 @@ stdenv.mkDerivation rec {
       set of physical devices (tracker, etc.) used in a virtual-reality
       (VR) system.
     '';
-    homepage    = "https://github.com/vrpn/vrpn";
-    license     = licenses.boost; # see https://github.com/vrpn/vrpn/wiki/License
-    platforms   = platforms.linux;
+    homepage = "https://github.com/vrpn/vrpn";
+    license = licenses.boost; # see https://github.com/vrpn/vrpn/wiki/License
+    platforms = platforms.darwin ++ platforms.linux;
     maintainers = with maintainers; [ ludo ];
   };
 }

@@ -3,29 +3,28 @@
 , rustPlatform
 , fetchFromGitHub
 , llvmPackages
-, rocksdb_6_23
+, rocksdb_7_10
 , Security
 }:
 
 let
-  rocksdb = rocksdb_6_23;
+  rocksdb = rocksdb_7_10;
 in
 rustPlatform.buildRustPackage rec {
   pname = "electrs";
-  version = "0.9.3";
+  version = "0.10.5";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-sTQ/dX1uXJkEmrNZ47qjBlrexO50y0NGNhw71rHc9bw=";
+    hash = "sha256-tAHN5HWI9XsiCQzqLNtiib9wMskjfogc44+b4Bsjpog=";
   };
 
-  cargoHash = "sha256-1ZQt8LaqgxNxFfgCVCK0GVwbcVfX3v9iz7tHvzgyI0g=";
+  cargoHash = "sha256-M0DIKt41K3BcP43+fBhv3HbRcIh8U9nhQYA/sm+bNow=";
 
   # needed for librocksdb-sys
-  nativeBuildInputs = [ llvmPackages.clang ];
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   # link rocksdb dynamically
   ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
@@ -33,10 +32,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
-    description = "An efficient re-implementation of Electrum Server in Rust";
+    description = "Efficient re-implementation of Electrum Server in Rust";
     homepage = "https://github.com/romanz/electrs";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
+    mainProgram = "electrs";
   };
 }

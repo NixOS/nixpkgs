@@ -6,7 +6,9 @@ let cfg = config.services.vector;
 in
 {
   options.services.vector = {
-    enable = mkEnableOption "Vector";
+    enable = mkEnableOption "Vector, a high-performance observability data pipeline";
+
+    package = mkPackageOption pkgs "vector" { };
 
     journaldAccess = mkOption {
       type = types.bool;
@@ -26,13 +28,9 @@ in
   };
 
   config = mkIf cfg.enable {
+    # for cli usage
+    environment.systemPackages = [ pkgs.vector ];
 
-    users.groups.vector = { };
-    users.users.vector = {
-      description = "Vector service user";
-      group = "vector";
-      isSystemUser = true;
-    };
     systemd.services.vector = {
       description = "Vector event and log aggregator";
       wantedBy = [ "multi-user.target" ];
@@ -43,22 +41,27 @@ in
           format = pkgs.formats.toml { };
           conf = format.generate "vector.toml" cfg.settings;
           validateConfig = file:
-            pkgs.runCommand "validate-vector-conf" { } ''
-              ${pkgs.vector}/bin/vector validate --no-environment "${file}"
+          pkgs.runCommand "validate-vector-conf" {
+            nativeBuildInputs = [ pkgs.vector ];
+          } ''
+              vector validate --no-environment "${file}"
               ln -s "${file}" "$out"
             '';
         in
         {
-          ExecStart = "${pkgs.vector}/bin/vector --config ${validateConfig conf}";
-          User = "vector";
-          Group = "vector";
-          Restart = "no";
+          ExecStart = "${getExe cfg.package} --config ${validateConfig conf}";
+          DynamicUser = true;
+          Restart = "always";
           StateDirectory = "vector";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           AmbientCapabilities = "CAP_NET_BIND_SERVICE";
           # This group is required for accessing journald.
           SupplementaryGroups = mkIf cfg.journaldAccess "systemd-journal";
         };
+      unitConfig = {
+        StartLimitIntervalSec = 10;
+        StartLimitBurst = 5;
+      };
     };
   };
 }

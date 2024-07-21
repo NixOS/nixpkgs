@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , gettext
 , libtool
@@ -16,24 +15,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.17.1";
+  version = "0.9.19";
   pname = "pdf2djvu";
 
   src = fetchFromGitHub {
     owner = "jwilk";
     repo = "pdf2djvu";
     rev = version;
-    sha256 = "1igabfy3fd7qndihmkfk9incc15pjxpxh2cn5pfw5fxfwrpjrarn";
+    sha256 = "sha256-j4mYdmLZ56qTA1KbWBjBvyTyLaeuIITKYsALRIO7lj0=";
   };
-
-  patches = [
-    # Not included in 0.9.17.1, but will be in the next version.
-    (fetchpatch {
-      name = "no-poppler-splash.patch";
-      url = "https://github.com/jwilk/pdf2djvu/commit/2ec7eee57a47bbfd296badaa03dc20bf71b50201.patch";
-      sha256 = "03kap7k2j29r16qgl781cxpswzg3r2yn513cqycgl0vax2xj3gly";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
@@ -62,10 +52,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Required by Poppler on darwin
+  # https://github.com/jwilk/pdf2djvu/commit/373e065faf2f0d868a3700788d20a96e9528bb12
+  CXXFLAGS = "-std=c++17";
+
   meta = with lib; {
     description = "Creates djvu files from PDF files";
     homepage = "https://jwilk.net/software/pdf2djvu";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ pSub ];
+    mainProgram = "pdf2djvu";
   };
 }

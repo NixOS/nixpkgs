@@ -1,5 +1,5 @@
 {
-  mkDerivation, fetchpatch,
+  mkDerivation,
   extra-cmake-modules,
   attica, karchive, kcompletion, kconfig, kcoreaddons, ki18n, kiconthemes,
   kio, kitemviews, kpackage, kservice, ktextwidgets, kwidgetsaddons, kxmlgui, qtbase,
@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "knewstuff";
+  pname = "knewstuff";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     karchive kcompletion kconfig kcoreaddons ki18n kiconthemes kio kitemviews

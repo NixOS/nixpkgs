@@ -4,12 +4,12 @@ Advanced users may wish to install NixOS using an existing PXE or iPXE
 setup.
 
 These instructions assume that you have an existing PXE or iPXE
-infrastructure and simply want to add the NixOS installer as another
-option. To build the necessary files from a recent version of nixpkgs,
+infrastructure and want to add the NixOS installer as another
+option. To build the necessary files from your current version of nixpkgs,
 you can run:
 
 ```ShellSession
-nix-build -A netboot.x86_64-linux nixos/release.nix
+nix-build -A netboot.x86_64-linux '<nixpkgs/nixos/release.nix>'
 ```
 
 This will create a `result` directory containing: \* `bzImage` -- the

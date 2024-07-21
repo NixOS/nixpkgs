@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform, libX11, libXinerama }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, libX11
+, libXinerama
+}:
 
 let
   rpathLibs = [ libXinerama libX11 ];
@@ -6,33 +11,36 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "leftwm";
-  version = "0.2.9";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "leftwm";
     repo = "leftwm";
-    rev = version;
-    sha256 = "sha256:0w4afhrp2cxz0nmpvalyaxz1dpywajjj2wschw8dpkvgxqs64gd5";
+    rev = "refs/tags/${version}";
+    hash = "sha256-wn5DurPWFwSUtc5naEL4lBSQpKWTJkugpN9mKx+Ed2Y=";
   };
 
-  cargoSha256 = "sha256:0r0smpv50gim2naaa0qf6yhvqvsa2f40rkgiryi686y69m5ii7mv";
+  cargoHash = "sha256-TylRxdpAVuGtZ3Lm8je6FZ0JUwetBi6mOGRoT2M3Jyk=";
 
   buildInputs = rpathLibs;
 
   postInstall = ''
-    for p in $out/bin/leftwm*; do
+    for p in $out/bin/left*; do
       patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $p
     done
+
+    install -D -m 0555 leftwm/doc/leftwm.1 $out/share/man/man1/leftwm.1
   '';
 
   dontPatchELF = true;
 
-  meta = with lib; {
-    description = "A tiling window manager for the adventurer";
+  meta = {
+    description = "Tiling window manager for the adventurer";
     homepage = "https://github.com/leftwm/leftwm";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mschneider ];
-    changelog = "https://github.com/leftwm/leftwm/blob/${version}/CHANGELOG";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ yanganto ];
+    changelog = "https://github.com/leftwm/leftwm/blob/${version}/CHANGELOG.md";
+    mainProgram = "leftwm";
   };
 }

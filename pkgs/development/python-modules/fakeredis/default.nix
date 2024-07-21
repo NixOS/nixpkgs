@@ -1,60 +1,69 @@
-{ lib
-, aioredis
-, async_generator
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, lupa
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, redis
-, six
-, sortedcontainers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  jsonpath-ng,
+  lupa,
+  poetry-core,
+  pybloom-live,
+  pyprobables,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  sortedcontainers,
 }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "1.7.0";
-  format = "setuptools";
+  version = "2.23.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-yb0S5DAzbL0+GJ+uDpHrmZl7k+dtv91u1n+jUtxoTHE=";
+  src = fetchFromGitHub {
+    owner = "dsoftwareinc";
+    repo = "fakeredis-py";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-U+jLxI2Ly+LvC/0eGXdaAa6iqDFfu5n8X0UrTWFRhhE=";
   };
 
-  propagatedBuildInputs = [
-    aioredis
-    lupa
+  build-system = [ poetry-core ];
+
+  dependencies = [
     redis
-    six
     sortedcontainers
   ];
 
-  checkInputs = [
-    async_generator
+  nativeCheckInputs = [
     hypothesis
     pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # AttributeError: 'AsyncGenerator' object has no attribute XXXX
-    "test/test_aioredis2.py"
-  ];
+  passthru.optional-dependencies = {
+    lua = [ lupa ];
+    json = [ jsonpath-ng ];
+    bf = [ pyprobables ];
+    cf = [ pyprobables ];
+    probabilistic = [ pyprobables ];
+  };
 
-  pythonImportsCheck = [
-    "fakeredis"
+  pythonImportsCheck = [ "fakeredis" ];
+
+  disabledTests = [
+    # AssertionError
+    "test_command"
   ];
 
   meta = with lib; {
     description = "Fake implementation of Redis API";
-    homepage = "https://github.com/jamesls/fakeredis";
-    license = with licenses; [ mit ];
+    homepage = "https://github.com/dsoftwareinc/fakeredis-py";
+    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/v${version}";
+    license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };
 }

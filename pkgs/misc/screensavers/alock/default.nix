@@ -1,14 +1,15 @@
-{ lib, stdenv, fetchgit, pkg-config, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, gitUpdater, pkg-config, autoreconfHook
 , libX11, pam, libgcrypt, libXrender, imlib2 }:
 
 stdenv.mkDerivation rec {
-  date = "20170720";
-  name = "alock-${date}";
+  pname = "alock";
+  version = "2.5.1";
 
-  src = fetchgit {
-    url = "https://github.com/Arkq/alock";
-    rev = "2035e1d4a2293432f5503e82d10f899232eb0f38";
-    sha256 = "1by954fjn0ryqda89zlmq3gclakg3gz7zy1wjrbgw4lzsk538va6";
+  src = fetchFromGitHub {
+    owner = "Arkq";
+    repo = "alock";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xfPhsXZrTlEqea75SvacDfjM9o21MTudrqfNN9xtdcg=";
   };
 
   PAM_DEFAULT_SERVICE = "login";
@@ -20,18 +21,24 @@ stdenv.mkDerivation rec {
     "--enable-imlib2"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
-    autoreconfHook libX11
+    libX11
     pam libgcrypt libXrender imlib2
   ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "\\.";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/Arkq/alock";
     description = "Simple screen lock application for X server";
+    mainProgram = "alock";
     longDescription = ''
       alock locks the X server until the user enters a password
-      via the keyboard. If the authentification was successful
+      via the keyboard. If the authentication was successful
       the X server is unlocked and the user can continue to work.
 
       alock does not provide any fancy animations like xlock or

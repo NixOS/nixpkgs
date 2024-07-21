@@ -1,20 +1,29 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, efl, gst_all_1, pcre, mesa, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, efl
+, gst_all_1
+, wrapGAppsHook3
+, directoryListingUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "rage";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "04fdk23bbgvni212zrfy4ndg7vmshbsjgicrhckdvhay87pk9i75";
+    sha256 = "03yal7ajh57x2jhmygc6msf3gzvqkpmzkqzj6dnam5sim8cq9rbw";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    mesa.dev
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -24,14 +33,16 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-libav
-    pcre
   ];
 
-  meta = {
-    description = "Video + Audio player along the lines of mplayer";
+  passthru.updateScript = directoryListingUpdater { };
+
+  meta = with lib; {
+    description = "Video and audio player along the lines of mplayer";
+    mainProgram = "rage";
     homepage = "https://enlightenment.org/";
-    maintainers = with lib.maintainers; [ matejc ftrvxmtrx romildo ];
-    platforms = lib.platforms.linux;
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

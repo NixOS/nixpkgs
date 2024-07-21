@@ -1,42 +1,125 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, configobj
-, patiencediff
-, six
-, fastimport
-, dulwich
-, launchpadlib
-, testtools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cargo,
+  configobj,
+  cython,
+  dulwich,
+  fastbencode,
+  fastimport,
+  pygithub,
+  libiconv,
+  merge3,
+  patiencediff,
+  pyyaml,
+  tzlocal,
+  urllib3,
+  breezy,
+  launchpadlib,
+  testtools,
+  pythonOlder,
+  installShellFiles,
+  rustPlatform,
+  rustc,
+  setuptools-gettext,
+  setuptools-rust,
+  testers,
 }:
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.2.1";
+  version = "3.3.7";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-4LJo6xoooq8EUoDDfQIa4y1/8XX0ybmfM6rX2wsp2Fw=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "breezy-team";
+    repo = "breezy";
+    rev = "brz-${version}";
+    hash = "sha256-NSfMUyx6a/vb1vTNn/fFfNktrFdB2N940m0TR6EhB9k=";
   };
 
-  propagatedBuildInputs = [ configobj patiencediff six fastimport dulwich launchpadlib ];
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
-  checkInputs = [ testtools ];
-
-  # There is a conflict with their `lazy_import` and plugin tests
-  doCheck = false;
-
-  # symlink for bazaar compatibility
-  postInstall = ''
-    ln -s "$out/bin/brz" "$out/bin/bzr"
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  pythonImportsCheck = [ "breezy" ];
+  nativeBuildInputs = [
+    cython
+    installShellFiles
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    setuptools-gettext
+    setuptools-rust
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
+  propagatedBuildInputs =
+    [
+      configobj
+      dulwich
+      fastbencode
+      merge3
+      patiencediff
+      pyyaml
+      tzlocal
+      urllib3
+    ]
+    ++ passthru.optional-dependencies.launchpad
+    ++ passthru.optional-dependencies.fastimport
+    ++ passthru.optional-dependencies.github;
+
+  nativeCheckInputs = [ testtools ];
+
+  # multiple failures on sandbox
+  doCheck = false;
+
+  checkPhase = ''
+    runHook preCheck
+
+    HOME=$TMPDIR $out/bin/brz --no-plugins selftest
+
+    runHook postCheck
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/brz --prefix PYTHONPATH : "$PYTHONPATH"
+
+    # symlink for bazaar compatibility
+    ln -s "$out/bin/brz" "$out/bin/bzr"
+
+    installShellCompletion --cmd brz --bash contrib/bash/brz
+  '';
+
+  pythonImportsCheck = [
+    "breezy"
+    "breezy.bzr.rio"
+  ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = breezy;
+      command = "HOME=$TMPDIR brz --version";
+    };
+    optional-dependencies = {
+      launchpad = [ launchpadlib ];
+      fastimport = [ fastimport ];
+      github = [ pygithub ];
+    };
+  };
 
   meta = with lib; {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.marsam ];
+    changelog = "https://github.com/breezy-team/breezy/blob/${src.rev}/doc/en/release-notes/brz-${versions.majorMinor version}.txt";
+    license = licenses.gpl2Only;
+    maintainers = [ ];
+    mainProgram = "brz";
   };
 }

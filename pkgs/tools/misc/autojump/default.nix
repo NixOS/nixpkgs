@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, bash }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "autojump";
@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "1rgpsh70manr2dydna9da4x7p8ahii7dgdgwir5fka340n1wrcws";
   };
 
-  buildInputs = [ python3 bash ];
+  buildInputs = [ python3 ];
+  nativeBuildInputs = [ python3 ];
   dontBuild = true;
+  strictDeps = true;
 
   installPhase = ''
     python ./install.py -d "$out" -p "" -z "$out/share/zsh/site-functions/"
@@ -24,7 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A `cd' command that learns";
+    description = "`cd' command that learns";
+    mainProgram = "autojump";
     longDescription = ''
       One of the most used shell commands is “cd”.  A quick survey
       among my friends revealed that between 10 and 20% of all

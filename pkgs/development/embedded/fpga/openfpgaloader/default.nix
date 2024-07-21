@@ -1,36 +1,47 @@
-{ stdenv
-, lib
+{
+  cmake
 , fetchFromGitHub
-, cmake
-, pkg-config
+, hidapi
+, lib
 , libftdi1
 , libusb1
+, pkg-config
+, stdenv
 , udev
+, zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openfpgaloader";
-  version = "0.6.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "trabucayre";
     repo = "openFPGALoader";
-    rev = "v${version}";
-    sha256 = "sha256-gPRBHy7WVra4IlGvzrhNqbEbOQtYtUC+zQ+SnJTMvRA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-iJSTiOcW15q3mWmMhe5wmO11cu2xfAI9zCsoB33ujWQ=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
+    hidapi
     libftdi1
     libusb1
+    zlib
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform udev) [
     udev
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Universal utility for programming FPGAs";
+    mainProgram = "openFPGALoader";
     homepage = "https://github.com/trabucayre/openFPGALoader";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ danderson ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
   };
-}
+})

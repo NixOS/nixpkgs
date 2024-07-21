@@ -1,78 +1,119 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pydantic
-, starlette
-, pytestCheckHook
-, pytest-asyncio
-, aiosqlite
-, databases
-, flask
-, httpx
-, passlib
-, peewee
-, python-jose
-, sqlalchemy
-, trio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  pdm-backend,
+
+  # dependencies
+  fastapi-cli,
+  starlette,
+  pydantic,
+  typing-extensions,
+
+  # tests
+  dirty-equals,
+  flask,
+  passlib,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-jose,
+  sqlalchemy,
+  trio,
+
+  # optional-dependencies
+  httpx,
+  jinja2,
+  python-multipart,
+  itsdangerous,
+  pyyaml,
+  ujson,
+  orjson,
+  email-validator,
+  uvicorn,
+  pydantic-settings,
+  pydantic-extra-types,
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.70.0";
-  format = "flit";
+  version = "0.111.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
-    rev = version;
-    sha256 = "sha256-mLI+w9PeewnwUMuUnXj6J2r/3shinjlwXMnhNcQlhrM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-DQYjK1dZuL7cF6quyNkgdd/GYmWm7k6YlF7YEjObQlI=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "starlette ==" "starlette >="
-  '';
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "anyio"
+    "starlette"
+  ];
+
+  dependencies = [
+    fastapi-cli
     starlette
     pydantic
+    typing-extensions
   ];
 
-  checkInputs = [
-    aiosqlite
-    databases
+  optional-dependencies.all =
+    [
+      httpx
+      jinja2
+      python-multipart
+      itsdangerous
+      pyyaml
+      ujson
+      orjson
+      email-validator
+      uvicorn
+    ]
+    ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
+      pydantic-settings
+      pydantic-extra-types
+    ]
+    ++ uvicorn.optional-dependencies.standard;
+
+  nativeCheckInputs = [
+    dirty-equals
     flask
-    httpx
     passlib
-    peewee
-    python-jose
     pytestCheckHook
     pytest-asyncio
-    sqlalchemy
+    python-jose
     trio
-  ];
-
-  # disabled tests require orjson which requires rust nightly
-
-  # ignoring deprecation warnings to avoid test failure from
-  # tests/test_tutorial/test_testing/test_tutorial001.py
+    sqlalchemy
+  ] ++ optional-dependencies.all ++ python-jose.optional-dependencies.cryptography;
 
   pytestFlagsArray = [
-    "--ignore=tests/test_default_response_class.py"
+    # ignoring deprecation warnings to avoid test failure from
+    # tests/test_tutorial/test_testing/test_tutorial001.py
     "-W ignore::DeprecationWarning"
   ];
 
-  disabledTests = [
-    "test_get_custom_response"
-
-    # Failed: DID NOT RAISE <class 'starlette.websockets.WebSocketDisconnect'>
-    "test_websocket_invalid_data"
-    "test_websocket_no_credentials"
+  disabledTestPaths = [
+    # Don't test docs and examples
+    "docs_src"
+    # databases is incompatible with SQLAlchemy 2.0
+    "tests/test_tutorial/test_async_sql_databases"
+    "tests/test_tutorial/test_sql_databases"
   ];
 
+  pythonImportsCheck = [ "fastapi" ];
+
   meta = with lib; {
+    changelog = "https://github.com/tiangolo/fastapi/releases/tag/${version}";
+    description = "Web framework for building APIs";
     homepage = "https://github.com/tiangolo/fastapi";
-    description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

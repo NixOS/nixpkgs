@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, unzip, makeDesktopItem, nwjs, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
+{lib, stdenv, fetchurl, unzip, makeDesktopItem, nwjs, wrapGAppsHook3, gsettings-desktop-schemas, gtk3 }:
 
 let
   pname = "betaflight-configurator";
@@ -13,17 +13,23 @@ let
 in
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "10.7.1";
+  version = "10.10.0";
   src = fetchurl {
-    url = "https://github.com/betaflight/${pname}/releases/download/${version}/${pname}_${version}_linux64.zip";
-    sha256 = "sha256-mMjy7Ve7wEmPxkAmux0WahUgJ86ylnWZP4smDZeBs8Q=";
+    url = "https://github.com/betaflight/${pname}/releases/download/${version}/${pname}_${version}_linux64-portable.zip";
+    sha256 = "sha256-UB5Vr5wyCUZbOaQNckJQ1tAXwh8VSLNI1IgTiJzxV08=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook unzip ];
+  # remove large unneeded files
+  postUnpack = ''
+    find -name "lib*.so" -delete
+  '';
+
+  nativeBuildInputs = [ wrapGAppsHook3 unzip ];
 
   buildInputs = [ gsettings-desktop-schemas gtk3 ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin \
              $out/opt/${pname}
 
@@ -32,16 +38,19 @@ stdenv.mkDerivation rec {
     cp -r ${desktopItem}/share/applications $out/share/
 
     makeWrapper ${nwjs}/bin/nw $out/bin/${pname} --add-flags $out/opt/${pname}
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "The Betaflight flight control system configuration tool";
+    description = "Betaflight flight control system configuration tool";
+    mainProgram = "betaflight-configurator";
     longDescription = ''
       A crossplatform configuration tool for the Betaflight flight control system.
       Various types of aircraft are supported by the tool and by Betaflight, e.g.
       quadcopters, hexacopters, octocopters and fixed-wing aircraft.
     '';
     homepage    = "https://github.com/betaflight/betaflight/wiki";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.gpl3;
     maintainers = with maintainers; [ wucke13 ];
     platforms   = platforms.linux;

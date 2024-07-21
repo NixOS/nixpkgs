@@ -1,37 +1,41 @@
-{ lib
-, buildPythonPackage
-, cachetools
-, cytoolz
-, fetchPypi
-, jellyfish
-, joblib
-, matplotlib
-, networkx
-, numpy
-, pyemd
-, pyphen
-, pytestCheckHook
-, pythonOlder
-, requests
-, scikit-learn
-, scipy
-, spacy
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  cachetools,
+  cytoolz,
+  fetchPypi,
+  floret,
+  jellyfish,
+  joblib,
+  matplotlib,
+  networkx,
+  numpy,
+  pyemd,
+  pyphen,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  scikit-learn,
+  scipy,
+  spacy,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "textacy";
-  version = "0.11.0";
+  version = "0.13.0";
   disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-d/tyTCewoERA15iBv4H2LORFzgco15fnnN1sneeGuF4=";
+    hash = "sha256-a+AkSMCPx9fE7fhSiQBuOaSlPvdHIB/yS2dcZS9AxoY=";
   };
 
   propagatedBuildInputs = [
     cachetools
     cytoolz
+    floret
     jellyfish
     joblib
     matplotlib
@@ -46,9 +50,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
     # Almost all tests have to deal with downloading a dataset, only test pure tests
@@ -65,6 +67,5 @@ buildPythonPackage rec {
     description = "Higher-level text processing, built on spaCy";
     homepage = "https://textacy.readthedocs.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rvl ];
   };
 }

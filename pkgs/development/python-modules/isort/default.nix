@@ -1,28 +1,33 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, colorama
-, hypothesis
-, poetry-core
-, pylama
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  colorama,
+  hypothesis,
+  poetry-core,
+  setuptools,
+  pylama,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "isort";
-  version = "5.9.3";
+  version = "5.13.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
-    rev = version;
-    sha256 = "sha256-JbRZ/3Xz35tGoCNnQesR08Sjoz3yimxZyxhhOXGvmXw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/1iKYmtNRw9u59zzJDwV7b9+EPxFJDHvhjTioGt5LLU=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     colorama
     hypothesis
     pylama
@@ -52,6 +57,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_run" # doesn't like paths in /build
+    "test_fuzz_show_unified_diff" # flakey
     "test_pyi_formatting_issue_942"
     "test_requirements_finder"
     "test_pipfile_finder"
@@ -67,12 +73,15 @@ buildPythonPackage rec {
     "test_value_assignment_list"
     # profiles not available
     "test_isort_supports_shared_profiles_issue_970"
+    # https://github.com/PyCQA/isort/issues/2234
+    "test_isort_should_warn_on_empty_custom_config_issue_1433"
   ];
 
   meta = with lib; {
-    description = "A Python utility / library to sort Python imports";
+    description = "Python utility / library to sort Python imports";
     homepage = "https://github.com/PyCQA/isort";
     license = licenses.mit;
     maintainers = with maintainers; [ couchemar ];
+    mainProgram = "isort";
   };
 }

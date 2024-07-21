@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ ... }:
 {
   name = "snapper";
 
-  machine = { pkgs, lib, ... }: {
+  nodes.machine = { pkgs, lib, ... }: {
     boot.initrd.postDeviceCommands = ''
       ${pkgs.btrfs-progs}/bin/mkfs.btrfs -f -L aux /dev/vdb
     '';
@@ -15,11 +15,13 @@ import ./make-test-python.nix ({ ... }:
         fsType = "btrfs";
       };
     };
-    services.snapper.configs.home.subvolume = "/home";
+    services.snapper.configs.home.SUBVOLUME = "/home";
     services.snapper.filters = "/nix";
   };
 
-  testScript = ''
+  testScript = { nodes, ... }: let
+    inherit (nodes.machine.services.snapper) snapshotRootOnBoot;
+  in ''
     machine.succeed("btrfs subvolume create /home/.snapshots")
     machine.succeed("snapper -c home list")
     machine.succeed("snapper -c home create --description empty")
@@ -31,5 +33,6 @@ import ./make-test-python.nix ({ ... }:
     machine.succeed("snapper -c home delete 2")
     machine.succeed("systemctl --wait start snapper-timeline.service")
     machine.succeed("systemctl --wait start snapper-cleanup.service")
+    machine.${if snapshotRootOnBoot then "succeed" else "fail"}("systemctl cat snapper-boot.service")
   '';
 })

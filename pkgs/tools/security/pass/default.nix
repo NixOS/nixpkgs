@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchurl, buildEnv
 , coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
-, which, procps , qrencode , makeWrapper, pass, symlinkJoin
+, which, openssh, procps, qrencode, makeWrapper, pass
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin , dmenuSupport ? (x11Support || waylandSupport)
@@ -10,8 +10,6 @@
 # For backwards-compatibility
 , tombPluginSupport ? false
 }:
-
-with lib;
 
 assert x11Support -> xclip != null;
 assert waylandSupport -> wl-clipboard != null;
@@ -31,9 +29,10 @@ let
       selected = [ pass ] ++ extensions passExtensions
         ++ lib.optional tombPluginSupport passExtensions.tomb;
     in buildEnv {
-      name = "pass-extensions-env";
+      name = "pass-env";
       paths = selected;
-      buildInputs = [ makeWrapper ] ++ concatMap (x: x.buildInputs) selected;
+      nativeBuildInputs = [ makeWrapper ];
+      buildInputs = lib.concatMap (x: x.buildInputs) selected;
 
       postBuild = ''
         files=$(find $out/bin/ -type f -exec readlink -f {} \;)
@@ -51,6 +50,7 @@ let
         wrapProgram $out/bin/pass \
           --set SYSTEM_EXTENSION_DIR "$out/lib/password-store/extensions"
       '';
+      meta.mainProgram = "pass";
     };
 in
 
@@ -72,12 +72,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" "WITH_ALLCOMP=yes" ];
 
-  postInstall = ''
-    # Install Emacs Mode. NOTE: We can't install the necessary
-    # dependencies (s.el) here. The user has to do this themselves.
-    mkdir -p "$out/share/emacs/site-lisp"
-    cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
-  '' + optionalString dmenuSupport ''
+  postInstall = lib.optionalString dmenuSupport ''
     cp "contrib/dmenu/passmenu" "$out/bin/"
   '';
 
@@ -91,8 +86,9 @@ stdenv.mkDerivation rec {
     gnused
     tree
     which
-    qrencode
+    openssh
     procps
+    qrencode
   ] ++ optional stdenv.isDarwin openssl
     ++ optional x11Support xclip
     ++ optional waylandSupport wl-clipboard
@@ -142,7 +138,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   doInstallCheck = true;
-  installCheckInputs = [ git ];
+  nativeInstallCheckInputs = [ git ];
   installCheckTarget = "test";
 
   passthru = {
@@ -154,6 +150,7 @@ stdenv.mkDerivation rec {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage    = "https://www.passwordstore.org/";
     license     = licenses.gpl2Plus;
+    mainProgram = "pass";
     maintainers = with maintainers; [ lovek323 fpletz tadfisher globin ma27 ];
     platforms   = platforms.unix;
 

@@ -2,32 +2,31 @@
 
 let
   pname = "buttercup-desktop";
-  version = "2.13.0";
-  name = "${pname}-${version}";
+  version = "2.27.0";
   src = fetchurl {
     url = "https://github.com/buttercup/buttercup-desktop/releases/download/v${version}/Buttercup-linux-x86_64.AppImage";
-    sha256 = "sha256-JXXJZyd/fp2463WyxIB+pKcNzGUFfCouPE6iTx2lhME=";
+    sha256 = "sha256-zpb5c3qGfBoRX9V1lVRX8607hBEHgjR8ZWJizfYNgUM=";
   };
-  appimageContents = appimageTools.extractType2 { inherit name src; };
+  appimageContents = appimageTools.extractType2 { inherit pname src version; };
 
 in appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname src version;
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libsecret ];
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/buttercup-desktop
     install -m 444 -D ${appimageContents}/buttercup.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/buttercup.desktop \
-      --replace 'Exec=AppRun' 'Exec=buttercup-desktop'
+      --replace 'Exec=AppRun' 'Exec=${pname}'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
   meta = with lib; {
     description = "Cross-Platform Passwords & Secrets Vault";
+    mainProgram = "buttercup-desktop";
     homepage = "https://buttercup.pw";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libbde";
-  version = "20210605";
+  version = "20221031";
 
   src = fetchurl {
     url = "https://github.com/libyal/libbde/releases/download/${version}/${pname}-alpha-${version}.tar.gz";
-    sha256 = "0dk5h7gvp2fgg21n7k600mnayg4g4pc0lm7317k43j1q0p4hkfng";
+    sha256 = "sha256-uMbwofboePCFWlxEOdRbZK7uZuj0MZC/qusWuu0Bm7g=";
   };
 
   buildInputs = [ fuse ncurses python3 ];

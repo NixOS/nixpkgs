@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, automake, autoconf, pkg-config, gtk3 }:
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, pkg-config, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "gsimplecal";
-  version = "2.2";
+  version = "2.5.1";
 
-  src = fetchurl {
-    url = "https://github.com/dmedvinsky/gsimplecal/archive/v${version}.tar.gz";
-    sha256 = "sha256-f19cnTX83LZT2d01B1EdWSaHcfHqpFPTo5glYkAokq8=";
+  src = fetchFromGitHub {
+    owner = "dmedvinsky";
+    repo = "gsimplecal";
+    rev = "v${version}";
+    sha256 = "sha256-Q8vK+rIRr+Tzwq0Xw5a1pYoLkSwF6PEdqc3/Dk01++o=";
   };
 
   postPatch = ''
@@ -15,8 +17,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ automake autoconf gtk3 ];
+  nativeBuildInputs = [ pkg-config automake autoconf ];
+  buildInputs = [ gtk3 ];
 
   preConfigure = "./autogen.sh";
 
@@ -38,5 +40,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.romildo ];
     platforms = lib.platforms.linux;
+    mainProgram = "gsimplecal";
   };
 }

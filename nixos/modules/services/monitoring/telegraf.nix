@@ -13,12 +13,7 @@ in {
     services.telegraf = {
       enable = mkEnableOption "telegraf server";
 
-      package = mkOption {
-        default = pkgs.telegraf;
-        defaultText = literalExpression "pkgs.telegraf";
-        description = "Which telegraf derivation to use";
-        type = types.package;
-      };
+      package = mkPackageOption pkgs "telegraf" { };
 
       environmentFiles = mkOption {
         type = types.listOf types.path;
@@ -27,7 +22,7 @@ in {
         description = ''
           File to load as environment file. Environment variables from this file
           will be interpolated into the config file using envsubst with this
-          syntax: <literal>$ENVIRONMENT</literal> or <literal>''${VARIABLE}</literal>.
+          syntax: `$ENVIRONMENT` or `''${VARIABLE}`.
           This is useful to avoid putting secrets into the nix store.
         '';
       };
@@ -53,6 +48,10 @@ in {
 
   ###### implementation
   config = mkIf config.services.telegraf.enable {
+    services.telegraf.extraConfig = {
+      inputs = {};
+      outputs = {};
+    };
     systemd.services.telegraf = let
       finalConfigFile = if config.services.telegraf.environmentFiles == []
                         then configFile
@@ -60,7 +59,9 @@ in {
     in {
       description = "Telegraf Agent";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
+      path = lib.optional (config.services.telegraf.extraConfig.inputs ? procstat) pkgs.procps;
       serviceConfig = {
         EnvironmentFile = config.services.telegraf.environmentFiles;
         ExecStartPre = lib.optional (config.services.telegraf.environmentFiles != [])

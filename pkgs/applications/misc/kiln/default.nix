@@ -1,30 +1,30 @@
-{ lib, buildGoModule, fetchFromSourcehut, scdoc }:
+{ lib, buildGoModule, fetchFromSourcehut, scdoc, installShellFiles }:
 
 buildGoModule rec {
   pname = "kiln";
-  version = "0.2.1";
+  version = "0.4.1";
 
   src = fetchFromSourcehut {
     owner = "~adnano";
-    repo = pname;
+    repo = "kiln";
     rev = version;
-    hash = "sha256-c6ed62Nn++qw+U/DCiYeGwF77YsBxexWKZ7UQ3LE4fI=";
+    hash = "sha256-BbKd+0Dmo6RaoS0N7rQmSGJasuJb6dl43GZ7LdMBy/o=";
   };
 
-  nativeBuildInputs = [ scdoc ];
+  nativeBuildInputs = [ scdoc installShellFiles ];
 
-  vendorSha256 = "sha256-bMpzebwbVHAbBtw0uuGyWd4wnM9z6tlsEQN4S/iucgk=";
+  vendorHash = "sha256-3s1+/RxOTNVFX9FnS94jLVGSr5IjZC/XucmnkxHhk5Q=";
 
-  installPhase = ''
-    runHook preInstall
-    make PREFIX=$out install
-    runHook postInstall
+  postInstall = ''
+    scdoc < docs/kiln.1.scd > docs/kiln.1
+    installManPage docs/kiln.1
   '';
 
   meta = with lib; {
-    description = "A simple static site generator for Gemini";
-    homepage = "https://git.sr.ht/~adnano/kiln";
+    description = "Simple static site generator for Gemini";
+    homepage = "https://kiln.adnano.co/";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];
+    mainProgram = "kiln";
   };
 }

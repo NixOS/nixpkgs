@@ -1,26 +1,30 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, go-jsonnet }:
 
 buildGoModule rec {
   pname = "go-jsonnet";
-  version = "0.17.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = "go-jsonnet";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1rprs8l15nbrx4dw4pdg81c5l22zhj80pl4zwqgsm4113wyyvc98";
+    hash = "sha256-P69tguBrFF/CSCOfHjCfBT5710oJdhZDh3kMCbc32eE=";
   };
 
-  vendorSha256 = "0nsm4gsbbn8myz4yfi6m7qc3iizhdambsr18iks0clkdn3mi2jn1";
+  vendorHash = "sha256-j1fTOUpLx34TgzW94A/BctLrg9XoTtb3cBizhVJoEEI=";
 
-  doCheck = false;
+  subPackages = [ "cmd/jsonnet*" ];
 
-  subPackages = [ "cmd/jsonnet" "cmd/jsonnetfmt" ];
+  passthru.tests.version = testers.testVersion {
+    package = go-jsonnet;
+    version = "v${version}";
+  };
 
   meta = with lib; {
-    description = "An implementation of Jsonnet in pure Go";
+    description = "Implementation of Jsonnet in pure Go";
     homepage = "https://github.com/google/go-jsonnet";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nshalman ];
+    maintainers = with maintainers; [ nshalman aaronjheng ];
+    mainProgram = "jsonnet";
   };
 }

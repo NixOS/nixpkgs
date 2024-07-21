@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "CLooG-PPL, the Chunky Loop Generator";
+    mainProgram = "cloog";
 
     longDescription = ''
       CLooG is a free software library to generate code for scanning

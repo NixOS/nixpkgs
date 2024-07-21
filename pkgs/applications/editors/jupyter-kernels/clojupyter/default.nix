@@ -8,8 +8,11 @@
 , imagemagick
 }:
 
-# To test:
-# $(nix-build --no-out-link -E 'with import <nixpkgs> {}; jupyter.override { definitions = { clojure = clojupyter.definition; }; }')/bin/jupyter-notebook
+# Jupyter console:
+# nix run --impure --expr 'with import <nixpkgs> {}; jupyter-console.withSingleKernel clojupyter.definition'
+
+# Jupyter notebook:
+# nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions.clojure = clojupyter.definition; }'
 
 let
   cljdeps = import ./deps.nix { inherit pkgs; };
@@ -20,11 +23,12 @@ let
   '';
 
   pname = "clojupyter";
-  version = "0.3.2";
+  version = "0.3.3";
 
   meta = with lib; {
-    description = "A Jupyter kernel for Clojure";
+    description = "Jupyter kernel for Clojure";
     homepage = "https://github.com/clojupyter/clojupyter";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];  # deps from maven
     license = licenses.mit;
     maintainers = with maintainers; [ thomasjm ];
     platforms = jre.meta.platforms;
@@ -36,8 +40,8 @@ let
     src = fetchFromGitHub {
       owner = "clojupyter";
       repo = "clojupyter";
-      rev = "0.3.2";
-      sha256 = "1wphc7h74qlm9bcv5f95qhq1rq9gmcm5hvjblb01vffx996vr6jz";
+      rev = version;
+      sha256 = "sha256-BCzcPnLSonm+ELFU4JIIzLPlVnP0VzlrRSGxOd/LFow=";
     };
 
     buildInputs = [ imagemagick ];

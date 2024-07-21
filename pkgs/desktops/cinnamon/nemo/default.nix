@@ -1,5 +1,4 @@
 { fetchFromGitHub
-, fetchpatch
 , glib
 , gobject-introspection
 , meson
@@ -7,14 +6,15 @@
 , pkg-config
 , lib
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , gtk3
-, libnotify
 , gvfs
 , cinnamon-desktop
-, xapps
+, xapp
 , libexif
+, json-glib
+, gtk-layer-shell
 , exempi
 , intltool
 , shared-mime-info
@@ -24,48 +24,70 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "5.2.0";
-
-  # TODO: add plugins support (see https://github.com/NixOS/nixpkgs/issues/78327)
+  version = "6.2.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-ehcqRlI1d/KWNas36dz+hb7KU1H8wtQHTpg2fz1XdXU=";
+    sha256 = "sha256-mlu/bC1+2rhEQvqIAcTBgYii8t4ELsLc1x0ApcBqx6o=";
   };
+
+  patches = [
+    # Load extensions from NEMO_EXTENSION_DIR environment variable
+    # https://github.com/NixOS/nixpkgs/issues/78327
+    ./load-extensions-from-env.patch
+  ];
 
   outputs = [ "out" "dev" ];
 
   buildInputs = [
     glib
     gtk3
-    libnotify
     cinnamon-desktop
     libxml2
-    xapps
+    xapp
     libexif
     exempi
     gvfs
-    gobject-introspection
     libgsf
+    json-glib
+    gtk-layer-shell
   ];
 
   nativeBuildInputs = [
     meson
     pkg-config
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     shared-mime-info
+    gobject-introspection
   ];
 
   mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
+    # enabled by default in Mint packaging (see debian/rules)
+    "-Dgtk_layer_shell=true"
   ];
+
+  postInstall = ''
+    # This fixes open as root and handles nemo-with-extensions well.
+    # https://github.com/NixOS/nixpkgs/issues/297570
+    substituteInPlace $out/share/polkit-1/actions/org.nemo.root.policy \
+      --replace-fail "$out/bin/nemo" "/run/current-system/sw/bin/nemo"
+  '';
+
+  preFixup = ''
+    # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${xapp}/share"
+    )
+  '';
+
+  # Taken from libnemo-extension.pc.
+  passthru.extensiondir = "lib/nemo/extensions-3.0";
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/nemo";
@@ -73,6 +95,7 @@ stdenv.mkDerivation rec {
     license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
+    mainProgram = "nemo";
   };
 }
 

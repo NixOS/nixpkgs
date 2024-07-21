@@ -1,27 +1,38 @@
-{ buildPythonPackage, lib, fetchPypi, glibcLocales, isPy3k, contextvars
-, pythonOlder, pytest, curio
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  glibcLocales,
+  isPy3k,
+  pytestCheckHook,
+  curio,
 }:
 
 buildPythonPackage rec {
   pname = "sniffio";
-  version = "1.2.0";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c4666eecec1d3f50960c6bdf61ab7bc350648da6c126e3cf6898d8cd4ddcd3de";
-  };
+  version = "1.3.1";
+  pyproject = true;
 
   disabled = !isPy3k;
 
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-9DJO3GcKD0l1CoG4lfNcOtuEPMpG8FMPefwbq7I3idw=";
+  };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
   buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [ contextvars ];
-
-  checkInputs = [ pytest curio ];
-
-  checkPhase = ''
-    pytest
-  '';
+  nativeCheckInputs = [
+    curio
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/python-trio/sniffio";

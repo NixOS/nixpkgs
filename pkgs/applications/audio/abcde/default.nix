@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, which, vorbis-tools, id3v2, eyeD3
+{ lib, stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, which, vorbis-tools, id3v2, eyed3
 , lame, flac, glyr
 , perlPackages
 , makeWrapper }:
@@ -30,7 +30,7 @@ in
 
     nativeBuildInputs = [ makeWrapper ];
 
-    buildInputs = with perlPackages; [ perl MusicBrainz MusicBrainzDiscID ];
+    buildInputs = with perlPackages; [ perl MusicBrainz MusicBrainzDiscID IOSocketSSL ];
 
     installFlags = [ "sysconfdir=$(out)/etc" ];
 
@@ -40,7 +40,7 @@ in
           --prefix PERL5LIB : "$PERL5LIB" \
           --prefix PATH ":" ${lib.makeBinPath [
             "$out" which libcdio-paranoia cddiscid wget
-            vorbis-tools id3v2 eyeD3 lame flac glyr
+            vorbis-tools id3v2 eyed3 lame flac glyr
           ]}
       done
     '';

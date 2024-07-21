@@ -1,16 +1,17 @@
 { lib, stdenv, fetchFromGitHub, which
 , boost, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf
-, glew, zlib, icu, pkg-config, cairo, libvpx }:
+, glew, zlib, icu, pkg-config, cairo, libvpx, glm
+}:
 
 stdenv.mkDerivation {
   pname = "anura-engine";
-  version = "unstable-2021-11-23";
+  version = "unstable-2023-02-27";
 
   src = fetchFromGitHub {
     owner = "anura-engine";
     repo = "anura";
-    rev = "816425df31624066e2815e26a25b1c5d3d355cb4";
-    sha256 = "1k7fnfgz003gcbyygv4aakhkkz3w3z9nyz7dlwz01xa6122zqyir";
+    rev = "65d85b6646099db1d5cd25d31321bb434a3f94f1";
+    sha256 = "sha256-hb4Sn7uI+eXLaGb4zkEy4w+ByQJ6FqkoMUYFsyiFCeE=";
     fetchSubmodules = true;
   };
 
@@ -29,7 +30,10 @@ stdenv.mkDerivation {
     icu
     cairo
     libvpx
+    glm
   ];
+
+  env.CXXFLAGS = "-DGLM_ENABLE_EXPERIMENTAL -Wno-error=deprecated-declarations";
 
   enableParallelBuilding = true;
 

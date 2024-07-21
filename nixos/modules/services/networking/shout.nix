@@ -30,7 +30,7 @@ in {
       default = false;
       description = ''
         Make your shout instance private. You will need to configure user
-        accounts by adding entries in <filename>${shoutHome}/users</filename>.
+        accounts by adding entries in {file}`${shoutHome}/users`.
       '';
     };
 
@@ -50,10 +50,10 @@ in {
       type = types.nullOr types.lines;
       default = null;
       description = ''
-        Contents of Shout's <filename>config.js</filename> file.
+        Contents of Shout's {file}`config.js` file.
 
         Used for backward compatibility, recommended way is now to use
-        the <literal>config</literal> option.
+        the `config` option.
 
         Documentation: http://shout-irc.com/docs/server/configuration.html
       '';
@@ -71,7 +71,7 @@ in {
         };
       };
       description = ''
-        Shout <filename>config.js</filename> contents as attribute set (will be
+        Shout {file}`config.js` contents as attribute set (will be
         converted to JSON to generate the configuration file).
 
         The options defined here will be merged to the default configuration file.

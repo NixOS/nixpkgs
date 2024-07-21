@@ -2,13 +2,16 @@
   bazel
 , bazelTest
 , bazel-examples
-, gccStdenv
+, stdenv
+, darwin
+, extraBazelArgs ? ""
 , lib
 , runLocal
 , runtimeShell
 , writeScript
 , writeText
 , distDir
+, Foundation ? null
 }:
 
 let
@@ -16,9 +19,10 @@ let
   toolsBazel = writeScript "bazel" ''
     #! ${runtimeShell}
 
-    export CXX='${gccStdenv.cc}/bin/g++'
-    export LD='${gccStdenv.cc}/bin/ld'
-    export CC='${gccStdenv.cc}/bin/gcc'
+    export CXX='${stdenv.cc}/bin/clang++'
+    export LD='${darwin.cctools}/bin/ld'
+    export LIBTOOL='${darwin.cctools}/bin/libtool'
+    export CC='${stdenv.cc}/bin/clang'
 
     # XXX: hack for macosX, this flags disable bazel usage of xcode
     # See: https://github.com/bazelbuild/bazel/issues/4231
@@ -31,20 +35,27 @@ let
     cp -r ${bazel-examples}/cpp-tutorial/stage3 $out
     find $out -type d -exec chmod 755 {} \;
   ''
-  + (lib.optionalString gccStdenv.isDarwin ''
+  + (lib.optionalString stdenv.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
   ''));
 
   testBazel = bazelTest {
-    name = "bazel-test-cpp";
+    name = "${bazel.pname}-test-cpp";
     inherit workspaceDir;
     bazelPkg = bazel;
     bazelScript = ''
-      ${bazel}/bin/bazel \
-        build --verbose_failures \
+      ${bazel}/bin/bazel build //... \
+        --verbose_failures \
         --distdir=${distDir} \
-          //...
+        --curses=no \
+        ${extraBazelArgs} \
+    '' + lib.optionalString (stdenv.isDarwin) ''
+        --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
+        --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++ \
+    '' + lib.optionalString (stdenv.isDarwin && Foundation != null) ''
+        --linkopt=-Wl,-F${Foundation}/Library/Frameworks \
+        --linkopt=-L${darwin.libobjc}/lib \
     '';
   };
 

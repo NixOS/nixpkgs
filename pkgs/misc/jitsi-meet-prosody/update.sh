@@ -6,7 +6,7 @@ set -eu -o pipefail
 version="$(curl https://download.jitsi.org/stable/ | \
     pup 'a[href] text{}' | \
     awk -F'[_-]' '/jitsi-meet-prosody/ {printf $4"\n"}' | \
-    sort -u | \
+    sort -Vu | \
     tail -n 1)"
 
 update-source-version jitsi-meet-prosody "$version"

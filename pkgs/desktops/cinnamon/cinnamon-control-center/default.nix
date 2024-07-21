@@ -3,24 +3,23 @@
 , fetchFromGitHub
 , pkg-config
 , glib
+, glib-networking
 , gettext
 , cinnamon-desktop
 , gtk3
 , libnotify
 , libxml2
-, gnome-online-accounts
-, cinnamon-settings-daemon
 , colord
 , polkit
 , libxkbfile
 , cinnamon-menus
-, dbus-glib
 , libgnomekbd
 , libxklavier
 , networkmanager
+, libgudev
 , libwacom
 , gnome
-, wrapGAppsHook
+, wrapGAppsHook3
 , tzdata
 , glibc
 , libnma
@@ -31,34 +30,34 @@
 , ninja
 , cinnamon-translations
 , python3
+, upower
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "5.2.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-j7+2uLcHr7bO7i8OGqkw3ifawZULNyihhJ+h2D5gx/k=";
+    hash = "sha256-Blod69RzPTE3DztRo0PK0MKCE+vq0HWrcJcC/1e8eRI=";
   };
 
   buildInputs = [
     gtk3
     glib
+    glib-networking
     cinnamon-desktop
     libnotify
     cinnamon-menus
     libxml2
-    dbus-glib
     polkit
     libgnomekbd
     libxklavier
     colord
-    cinnamon-settings-daemon
+    libgudev
     libwacom
-    gnome-online-accounts
     tzdata
     networkmanager
     libnma
@@ -66,6 +65,7 @@ stdenv.mkDerivation rec {
     xorg.libXxf86misc
     xorg.libxkbfile
     gdk-pixbuf
+    upower
   ];
 
   /* ./panels/datetime/test-timezone.c:4:#define TZ_DIR "/usr/share/zoneinfo/"
@@ -80,39 +80,24 @@ stdenv.mkDerivation rec {
     patchShebangs meson_install_schemas.py
   '';
 
-  # it needs to have access to that file, otherwise we can't run tests after build
-
-  preBuild = ''
-    mkdir -p $out/share/cinnamon-control-center/
-    ln -s $PWD/panels/datetime $out/share/cinnamon-control-center/
-  '';
-
   mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
-
-  preInstall = ''
-    rm -r $out
-  '';
-
-  # the only test is wacom-calibrator and it seems to need an xserver and prob more services aswell
-  doCheck = false;
 
   nativeBuildInputs = [
     pkg-config
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     python3
   ];
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-control-center";
-    description = "A collection of configuration plugins used in cinnamon-settings";
+    description = "Collection of configuration plugins used in cinnamon-settings";
+    mainProgram = "cinnamon-control-center";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

@@ -23,14 +23,7 @@ in {
     services.prometheus.pushgateway = {
       enable = mkEnableOption "Prometheus Pushgateway";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.prometheus-pushgateway;
-        defaultText = literalExpression "pkgs.prometheus-pushgateway";
-        description = ''
-          Package that should be used for the prometheus pushgateway.
-        '';
-      };
+      package = mkPackageOption pkgs "prometheus-pushgateway" { };
 
       web.listen-address = mkOption {
         type = types.nullOr types.str;
@@ -38,7 +31,7 @@ in {
         description = ''
           Address to listen on for the web interface, API and telemetry.
 
-          <literal>null</literal> will default to <literal>:9091</literal>.
+          `null` will default to `:9091`.
         '';
       };
 
@@ -48,7 +41,7 @@ in {
         description = ''
           Path under which to expose metrics.
 
-          <literal>null</literal> will default to <literal>/metrics</literal>.
+          `null` will default to `/metrics`.
         '';
       };
 
@@ -67,7 +60,7 @@ in {
           Prefix for the internal routes of web endpoints.
 
           Defaults to the path of
-          <option>services.prometheus.pushgateway.web.external-url</option>.
+          {option}`services.prometheus.pushgateway.web.external-url`.
         '';
       };
 
@@ -78,7 +71,7 @@ in {
         description = ''
           The minimum interval at which to write out the persistence file.
 
-          <literal>null</literal> will default to <literal>5m</literal>.
+          `null` will default to `5m`.
         '';
       };
 
@@ -88,7 +81,7 @@ in {
         description = ''
           Only log messages with the given severity or above.
 
-          <literal>null</literal> will default to <literal>info</literal>.
+          `null` will default to `info`.
         '';
       };
 
@@ -99,7 +92,7 @@ in {
         description = ''
           Set the log target and format.
 
-          <literal>null</literal> will default to <literal>logger:stderr</literal>.
+          `null` will default to `logger:stderr`.
         '';
       };
 
@@ -118,10 +111,10 @@ in {
           Whether to persist metrics to a file.
 
           When enabled metrics will be saved to a file called
-          <literal>metrics</literal> in the directory
-          <literal>/var/lib/pushgateway</literal>. The directory below
-          <literal>/var/lib</literal> can be set using
-          <option>services.prometheus.pushgateway.stateDir</option>.
+          `metrics` in the directory
+          `/var/lib/pushgateway`. The directory below
+          `/var/lib` can be set using
+          {option}`services.prometheus.pushgateway.stateDir`.
         '';
       };
 
@@ -129,11 +122,11 @@ in {
         type = types.str;
         default = "pushgateway";
         description = ''
-          Directory below <literal>/var/lib</literal> to store metrics.
+          Directory below `/var/lib` to store metrics.
 
           This directory will be created automatically using systemd's
           StateDirectory mechanism when
-          <option>services.prometheus.pushgateway.persistMetrics</option>
+          {option}`services.prometheus.pushgateway.persistMetrics`
           is enabled.
         '';
       };
@@ -154,12 +147,52 @@ in {
       wantedBy = [ "multi-user.target" ];
       after    = [ "network.target" ];
       serviceConfig = {
-        Restart  = "always";
-        DynamicUser = true;
         ExecStart = "${cfg.package}/bin/pushgateway" +
           optionalString (length cmdlineArgs != 0) (" \\\n  " +
             concatStringsSep " \\\n  " cmdlineArgs);
+
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [ "" ];
+        DynamicUser = true;
+        NoNewPrivileges = true;
+
+        MemoryDenyWriteExecute = true;
+
+        LockPersonality = true;
+
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ProtectHome = "tmpfs";
+
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateIPC = true;
+
+        ProcSubset = "pid";
+
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+
+        Restart  = "always";
+
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+
         StateDirectory = if cfg.persistMetrics then cfg.stateDir else null;
+        SystemCallFilter = [
+          "@system-service"
+          "~@cpu-emulation"
+          "~@privileged"
+          "~@reboot"
+          "~@setuid"
+          "~@swap"
+        ];
       };
     };
   };

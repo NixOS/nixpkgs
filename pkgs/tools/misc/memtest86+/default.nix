@@ -1,31 +1,36 @@
-{ lib, stdenv, fetchgit }:
+{ lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "memtest86+";
-  version = "5.01-coreboot-002";
+  version = "7.00";
 
-  src = fetchgit {
-    url = "https://review.coreboot.org/memtest86plus.git";
-    rev = "v002";
-    sha256 = "0cwx20yja24bfknqh1rjb5rl2c0kwnppzsisg1dibbak0l8mxchk";
+  src = fetchFromGitHub {
+    owner = "memtest86plus";
+    repo = "memtest86plus";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-DVYiE9yi20IR2AZs8bya1h9vK4si7nKdg9Nqef4WTrw=";
   };
 
-  NIX_CFLAGS_COMPILE = "-I. -std=gnu90";
+  # Binaries are booted directly by BIOS/UEFI or bootloader
+  # and should not be patched/stripped
+  dontPatchELF = true;
+  dontStrip = true;
 
-  hardeningDisable = [ "all" ];
+  passthru.efi = "${finalAttrs.finalPackage}/memtest.efi";
 
-  buildFlags = [ "memtest.bin" ];
-
-  doCheck = false; # fails
+  preBuild = ''
+    cd ${if stdenv.isi686 then "build32" else "build64"}
+  '';
 
   installPhase = ''
-    install -Dm0444 -t $out/ memtest.bin
+    install -Dm0444 -t $out/ memtest.bin memtest.efi
   '';
 
   meta = {
-    homepage = "http://www.memtest.org/";
-    description = "A tool to detect memory errors";
-    license = lib.licenses.gpl2;
+    homepage = "https://www.memtest.org/";
+    description = "Tool to detect memory errors";
+    license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = [ lib.maintainers.LunNova ];
   };
-}
+})

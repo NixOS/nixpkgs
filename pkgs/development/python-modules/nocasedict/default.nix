@@ -1,26 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest7CheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "nocasedict";
-  version = "1.0.2";
+  version = "2.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "86e2dae49e34de7c31b65b486c8f9aa58b66dc2e8ee9b34c390c6c58885c85a0";
+    hash = "sha256-HJImx/WoqXrVHcsK4xV6cg4/fLnEVo0i6joF4/hWWKk=";
   };
 
-  checkInputs = [
-    pytest
-  ];
+  propagatedBuildInputs = [ six ];
 
-  pythonImportsCheck = [
-    "nocasedict"
-  ];
+  nativeCheckInputs = [ pytest7CheckHook ];
+
+  pythonImportsCheck = [ "nocasedict" ];
 
   meta = with lib; {
-    description = "A case-insensitive ordered dictionary for Python";
+    description = "Case-insensitive ordered dictionary for Python";
     homepage = "https://github.com/pywbem/nocasedict";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ freezeboy ];

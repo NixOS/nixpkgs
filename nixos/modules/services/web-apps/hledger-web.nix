@@ -7,7 +7,7 @@ in {
 
     enable = mkEnableOption "hledger-web service";
 
-    serveApi = mkEnableOption "Serve only the JSON web API, without the web UI.";
+    serveApi = mkEnableOption "serving only the JSON web API, without the web UI";
 
     host = mkOption {
       type = types.str;
@@ -26,28 +26,17 @@ in {
       '';
     };
 
-    capabilities = {
-      view = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Enable the view capability.
-        '';
-      };
-      add = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the add capability.
-        '';
-      };
-      manage = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the manage capability.
-        '';
-      };
+    allow = mkOption {
+      type = types.enum [ "view" "add" "edit" "sandstorm" ];
+      default = "view";
+      description = ''
+        User's access level for changing data.
+
+        * view: view only permission.
+        * add: view and add permissions.
+        * edit: view, add, and edit permissions.
+        * sandstorm: permissions from the `X-Sandstorm-Permissions` request header.
+      '';
     };
 
     stateDir = mkOption {
@@ -65,7 +54,7 @@ in {
       type = types.listOf types.str;
       default = [ ".hledger.journal" ];
       description = ''
-        Paths to journal files relative to <option>services.hledger-web.stateDir</option>.
+        Paths to journal files relative to {option}`services.hledger-web.stateDir`.
       '';
     };
 
@@ -89,6 +78,11 @@ in {
 
   };
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "hledger-web" "capabilities" ]
+      "This option has been replaced by new option `services.hledger-web.allow`.")
+  ];
+
   config = mkIf cfg.enable {
 
     users.users.hledger = {
@@ -102,16 +96,11 @@ in {
     users.groups.hledger = {};
 
     systemd.services.hledger-web = let
-      capabilityString = with cfg.capabilities; concatStringsSep "," (
-        (optional view "view")
-        ++ (optional add "add")
-        ++ (optional manage "manage")
-      );
       serverArgs = with cfg; escapeShellArgs ([
         "--serve"
         "--host=${host}"
         "--port=${toString port}"
-        "--capabilities=${capabilityString}"
+        "--allow=${allow}"
         (optionalString (cfg.baseUrl != null) "--base-url=${cfg.baseUrl}")
         (optionalString (cfg.serveApi) "--serve-api")
       ] ++ (map (f: "--file=${stateDir}/${f}") cfg.journalFiles)

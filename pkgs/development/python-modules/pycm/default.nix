@@ -1,32 +1,57 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, matplotlib, numpy, pytestCheckHook, seaborn }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  seaborn,
+}:
 
 buildPythonPackage rec {
   pname = "pycm";
-  version = "3.3";
+  version = "4.0";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
-    owner  = "sepandhaghighi";
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "0i3qpb20mnc22qny1ar3yvxb1dac7njwi8bvi5sy5kywz10c5dkw";
+    owner = "sepandhaghighi";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GyH06G7bArFBTzV/Sx/KmoJvcoed0sswW7qGqsSULHo=";
   };
 
-  # remove a trivial dependency on the author's `art` Python ASCII art library
+  propagatedBuildInputs = [
+    matplotlib
+    numpy
+    seaborn
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # Minor tolerance issues with Python 3.12; should be fixed in next release
+    # (see https://github.com/sepandhaghighi/pycm/pull/528)
+    "verified_test"
+    "function_test"
+  ];
+
   postPatch = ''
+    # Remove a trivial dependency on the author's `art` Python ASCII art library
     rm pycm/__main__.py
-    rm Otherfiles/notebook_check.py  # also depends on python3Packages.notebook
-    substituteInPlace setup.py --replace '=get_requires()' '=[]'
+    # Also depends on python3Packages.notebook
+    rm Otherfiles/notebook_check.py
+    substituteInPlace setup.py \
+      --replace-fail '=get_requires()' '=[]'
   '';
 
-  checkInputs = [ pytestCheckHook ];
-  disabledTests = [ "pycm.pycm_compare.Compare" ];  # output formatting error
-  propagatedBuildInputs = [ matplotlib numpy seaborn ];
+  pythonImportsCheck = [ "pycm" ];
 
   meta = with lib; {
     description = "Multiclass confusion matrix library";
-    homepage = "https://pycm.ir";
+    homepage = "https://pycm.io";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

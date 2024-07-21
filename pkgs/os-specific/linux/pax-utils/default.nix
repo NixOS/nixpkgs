@@ -1,19 +1,45 @@
-{ stdenv, lib, fetchurl, bash }:
+{ stdenv
+, lib
+, fetchgit
+, buildPackages
+, docbook_xml_dtd_44
+, docbook_xsl
+, withLibcap ? stdenv.isLinux, libcap
+, pkg-config
+, meson
+, ninja
+, xmlto
+, python3
+
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "pax-utils";
-  version = "1.3.3";
+  version = "1.3.7";
 
-  src = fetchurl {
-    url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
-    sha256 = "sha256-7sp/vZi8Zr6tSncADCAl2fF+qCAbhCRYgkBs4AubaxQ=";
+  src = fetchgit {
+    url = "https://anongit.gentoo.org/git/proj/pax-utils.git";
+    rev = "v${version}";
+    hash = "sha256-WyNng+UtfRz1+Eu4gwXLxUvBAg+m3mdrc8GdEPYRKVE=";
   };
 
   strictDeps = true;
 
-  buildInputs = [ bash ];
+  mesonFlags = [
+    (lib.mesonEnable "use_libcap" withLibcap)
+  ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ docbook_xml_dtd_44 docbook_xsl meson ninja pkg-config xmlto ];
+  buildInputs = lib.optionals withLibcap [ libcap ];
+  # Needed for lddtree
+  propagatedBuildInputs = [ (python3.withPackages (p: with p; [ pyelftools ])) ];
+
+  passthru.updateScript = gitUpdater {
+    url = "https://anongit.gentoo.org/git/proj/pax-utils.git";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "ELF utils that can check files for security relevant properties";

@@ -10,12 +10,12 @@
 , tinyxml
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tecnoballz";
   version = "0.93.1";
 
   src = fetchurl {
-    url = "https://linux.tlk.fr/games/TecnoballZ/download/tecnoballz-${version}.tgz";
+    url = "https://linux.tlk.fr/games/TecnoballZ/download/tecnoballz-${finalAttrs.version}.tgz";
     sha256 = "sha256-WRW76e+/eXE/KwuyOjzTPFQnKwNznbIrUrz14fnvgug=";
   };
 
@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://linux.tlk.fr/games/TecnoballZ/";
     downloadPage = "https://linux.tlk.fr/games/TecnoballZ/download/";
-    description = "A brick breaker game with a sophisticated system of weapons and bonuses";
+    description = "Brick breaker game with a sophisticated system of weapons and bonuses";
+    mainProgram = "tecnoballz";
     longDescription = ''
       A exciting Brick Breaker with 50 levels of game and 11 special levels,
       distributed on the 2 modes of game to give the player a sophisticated
@@ -64,5 +65,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
-}
+})

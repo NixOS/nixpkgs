@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, tcl, tcllib, runtimeShell }:
+{ lib, fetchurl, tcl, tcllib, runtimeShell }:
 
 tcl.mkTclDerivation rec {
   pname = "tcl2048";
@@ -19,9 +19,10 @@ tcl.mkTclDerivation rec {
 
   meta = {
     homepage = "https://github.com/dbohdan/2048.tcl";
-    description = "The game of 2048 implemented in Tcl";
+    description = "Game of 2048 implemented in Tcl";
     license = lib.licenses.mit;
-    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ dbohdan ];
+    mainProgram = "2048";
+    platforms = lib.platforms.all;
   };
 }

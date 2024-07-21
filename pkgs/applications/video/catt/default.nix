@@ -1,69 +1,69 @@
 { lib
-, fetchFromGitHub
+, fetchPypi
+, fetchpatch
 , python3
 }:
 
 let
-  py = python3.override {
+  python = python3.override {
     packageOverrides = self: super: {
-      # Upstream is pinning releases incl. dependencies of their dependencies
-      zeroconf = super.zeroconf.overridePythonAttrs (oldAttrs: rec {
-        version = "0.31.0";
-        src = fetchFromGitHub {
-          owner = "jstasiak";
-          repo = "python-zeroconf";
-          rev = version;
-          sha256 = "158dqay74zvnz6kmpvip4ml0kw59nf2aaajwgaamx0zc8ci1p5pj";
-        };
-      });
+      pychromecast = super.pychromecast.overridePythonAttrs (_: rec {
+        version = "13.1.0";
 
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "7.1.2";
-        src = oldAttrs.src.override {
+        src = fetchPypi {
+          pname = "PyChromecast";
           inherit version;
-          sha256 = "06kbzd6sjfkqan3miwj9wqyddfxc2b6hi7p5s4dvqjb3gif2bdfj";
+          hash = "sha256-COYai1S9IRnTyasewBNtPYVjqpfgo7V4QViLm+YMJnY=";
         };
-      });
 
-      PyChromecast = super.PyChromecast.overridePythonAttrs (oldAttrs: rec {
-        version = "9.2.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "02ig2wf2yyrnnl88r2n13s1naskwsifwgx3syifmcxygflsmjd3d";
-        };
+        postPatch = "";
       });
     };
   };
 in
-with py.pkgs;
 
-buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "catt";
-  version = "0.12.2";
-
-  disabled = python3.pythonOlder "3.4";
+  version = "0.12.11";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BOETKTkcbLOu5SubiejswU7D47qWS13QZ7rU9x3jf5Y=";
+    hash = "sha256-0bqYYfWwF7yYoAbjZPhi/f4CLcL89imWGYaMi5Bwhtc=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    (fetchpatch {
+      # set explicit build-system
+      url = "https://github.com/skorokithakis/catt/commit/08e7870a239e85badd30982556adc2aa8a8e4fc1.patch";
+      hash = "sha256-QH5uN3zQNVPP6Th2LHdDBF53WxwMhoyhhQUAZOeHh4k=";
+    })
+  ];
+
+  nativeBuildInputs = with python.pkgs; [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = with python.pkgs; [
     click
     ifaddr
-    PyChromecast
+    pychromecast
+    protobuf
     requests
-    youtube-dl
+    yt-dlp
   ];
 
   doCheck = false; # attempts to access various URLs
 
-  pythonImportsCheck = [ "catt" ];
+  pythonImportsCheck = [
+    "catt"
+  ];
 
   meta = with lib; {
     description = "Tool to send media from online sources to Chromecast devices";
     homepage = "https://github.com/skorokithakis/catt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "catt";
   };
 }

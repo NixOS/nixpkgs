@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.neo4j;
+  opt = options.services.neo4j;
   certDirOpt = options.services.neo4j.directories.certificates;
   isDefaultPathOption = opt: isOption opt && opt.type == types.path && opt.highestPrio >= 1500;
 
@@ -34,68 +35,64 @@ let
 
   serverConfig = pkgs.writeText "neo4j.conf" ''
     # General
-    dbms.allow_upgrade=${boolToString cfg.allowUpgrade}
-    dbms.connectors.default_listen_address=${cfg.defaultListenAddress}
-    dbms.read_only=${boolToString cfg.readOnly}
+    server.default_listen_address=${cfg.defaultListenAddress}
+    server.databases.default_to_read_only=${boolToString cfg.readOnly}
     ${optionalString (cfg.workerCount > 0) ''
       dbms.threads.worker_count=${toString cfg.workerCount}
     ''}
 
-    # Directories
-    dbms.directories.certificates=${cfg.directories.certificates}
-    dbms.directories.data=${cfg.directories.data}
-    dbms.directories.logs=${cfg.directories.home}/logs
-    dbms.directories.plugins=${cfg.directories.plugins}
+    # Directories (readonly)
+    # dbms.directories.certificates=${cfg.directories.certificates}
+    server.directories.plugins=${cfg.directories.plugins}
+    server.directories.lib=${cfg.package}/share/neo4j/lib
     ${optionalString (cfg.constrainLoadCsv) ''
-      dbms.directories.import=${cfg.directories.imports}
-    ''}
+      server.directories.import=${cfg.directories.imports}
+   ''}
+
+    # Directories (read and write)
+    server.directories.data=${cfg.directories.data}
+    server.directories.logs=${cfg.directories.home}/logs
+    server.directories.run=${cfg.directories.home}/run
 
     # HTTP Connector
     ${optionalString (cfg.http.enable) ''
-      dbms.connector.http.enabled=${boolToString cfg.http.enable}
-      dbms.connector.http.listen_address=${cfg.http.listenAddress}
-    ''}
-    ${optionalString (!cfg.http.enable) ''
-      # It is not possible to disable the HTTP connector. To fully prevent
-      # clients from connecting to HTTP, block the HTTP port (7474 by default)
-      # via firewall. listen_address is set to the loopback interface to
-      # prevent remote clients from connecting.
-      dbms.connector.http.listen_address=127.0.0.1
+      server.http.enabled=${boolToString cfg.http.enable}
+      server.http.listen_address=${cfg.http.listenAddress}
+      server.http.advertised_address=${cfg.http.listenAddress}
     ''}
 
     # HTTPS Connector
-    dbms.connector.https.enabled=${boolToString cfg.https.enable}
-    dbms.connector.https.listen_address=${cfg.https.listenAddress}
-    https.ssl_policy=${cfg.https.sslPolicy}
+    server.https.enabled=${boolToString cfg.https.enable}
+    server.https.listen_address=${cfg.https.listenAddress}
+    server.https.advertised_address=${cfg.https.listenAddress}
 
     # BOLT Connector
-    dbms.connector.bolt.enabled=${boolToString cfg.bolt.enable}
-    dbms.connector.bolt.listen_address=${cfg.bolt.listenAddress}
-    bolt.ssl_policy=${cfg.bolt.sslPolicy}
-    dbms.connector.bolt.tls_level=${cfg.bolt.tlsLevel}
-
-    # neo4j-shell
-    dbms.shell.enabled=${boolToString cfg.shell.enable}
+    server.bolt.enabled=${boolToString cfg.bolt.enable}
+    server.bolt.listen_address=${cfg.bolt.listenAddress}
+    server.bolt.advertised_address=${cfg.bolt.listenAddress}
+    server.bolt.tls_level=${cfg.bolt.tlsLevel}
 
     # SSL Policies
     ${concatStringsSep "\n" sslPolicies}
 
     # Default retention policy from neo4j.conf
-    dbms.tx_log.rotation.retention_policy=1 days
+    db.tx_log.rotation.retention_policy=1 days
 
     # Default JVM parameters from neo4j.conf
-    dbms.jvm.additional=-XX:+UseG1GC
-    dbms.jvm.additional=-XX:-OmitStackTraceInFastThrow
-    dbms.jvm.additional=-XX:+AlwaysPreTouch
-    dbms.jvm.additional=-XX:+UnlockExperimentalVMOptions
-    dbms.jvm.additional=-XX:+TrustFinalNonStaticFields
-    dbms.jvm.additional=-XX:+DisableExplicitGC
-    dbms.jvm.additional=-Djdk.tls.ephemeralDHKeySize=2048
-    dbms.jvm.additional=-Djdk.tls.rejectClientInitiatedRenegotiation=true
-    dbms.jvm.additional=-Dunsupported.dbms.udc.source=tarball
+    server.jvm.additional=-XX:+UseG1GC
+    server.jvm.additional=-XX:-OmitStackTraceInFastThrow
+    server.jvm.additional=-XX:+AlwaysPreTouch
+    server.jvm.additional=-XX:+UnlockExperimentalVMOptions
+    server.jvm.additional=-XX:+TrustFinalNonStaticFields
+    server.jvm.additional=-XX:+DisableExplicitGC
+    server.jvm.additional=-Djdk.tls.ephemeralDHKeySize=2048
+    server.jvm.additional=-Djdk.tls.rejectClientInitiatedRenegotiation=true
+    server.jvm.additional=-Dunsupported.dbms.udc.source=tarball
 
-    # Usage Data Collector
-    dbms.udc.enabled=${boolToString cfg.udc.enable}
+    #server.memory.off_heap.transaction_max_size=12000m
+    #server.memory.heap.max_size=12000m
+    #server.memory.pagecache.size=4g
+    #server.tx_state.max_off_heap_memory=8000m
 
     # Extra Configuration
     ${cfg.extraServerConfig}
@@ -113,6 +110,8 @@ in {
     (mkRemovedOptionModule [ "services" "neo4j" "port" ] "Use services.neo4j.http.listenAddress instead.")
     (mkRemovedOptionModule [ "services" "neo4j" "boltPort" ] "Use services.neo4j.bolt.listenAddress instead.")
     (mkRemovedOptionModule [ "services" "neo4j" "httpsPort" ] "Use services.neo4j.https.listenAddress instead.")
+    (mkRemovedOptionModule [ "services" "neo4j" "shell" "enabled" ] "shell.enabled was removed upstream")
+    (mkRemovedOptionModule [ "services" "neo4j" "udc" "enabled" ] "udc.enabled was removed upstream")
   ];
 
   ###### interface
@@ -127,26 +126,17 @@ in {
       '';
     };
 
-    allowUpgrade = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Allow upgrade of Neo4j database files from an older version.
-      '';
-    };
-
     constrainLoadCsv = mkOption {
       type = types.bool;
       default = true;
       description = ''
         Sets the root directory for file URLs used with the Cypher
-        <literal>LOAD CSV</literal> clause to be that defined by
-        <option>directories.imports</option>. It restricts
+        `LOAD CSV` clause to be that defined by
+        {option}`directories.imports`. It restricts
         access to only those files within that directory and its
         subdirectories.
-        </para>
-        <para>
-        Setting this option to <literal>false</literal> introduces
+
+        Setting this option to `false` introduces
         possible security problems.
       '';
     };
@@ -157,12 +147,11 @@ in {
       description = ''
         Default network interface to listen for incoming connections. To
         listen for connections on all interfaces, use "0.0.0.0".
-        </para>
-        <para>
+
         Specifies the default IP address and address part of connector
-        specific <option>listenAddress</option> options. To bind specific
+        specific {option}`listenAddress` options. To bind specific
         connectors to a specific network interfaces, specify the entire
-        <option>listenAddress</option> option for that connector.
+        {option}`listenAddress` option for that connector.
       '';
     };
 
@@ -171,19 +160,12 @@ in {
       default = "";
       description = ''
         Extra configuration for Neo4j Community server. Refer to the
-        <link xlink:href="https://neo4j.com/docs/operations-manual/current/reference/configuration-settings/">complete reference</link>
+        [complete reference](https://neo4j.com/docs/operations-manual/current/reference/configuration-settings/)
         of Neo4j configuration settings.
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.neo4j;
-      defaultText = literalExpression "pkgs.neo4j";
-      description = ''
-        Neo4j package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "neo4j" { };
 
     readOnly = mkOption {
       type = types.bool;
@@ -198,7 +180,7 @@ in {
       default = 0;
       description = ''
         Number of Neo4j worker threads, where the default of
-        <literal>0</literal> indicates a worker count equal to the number of
+        `0` indicates a worker count equal to the number of
         available processors.
       '';
     };
@@ -209,7 +191,7 @@ in {
         default = true;
         description = ''
           Enable the BOLT connector for Neo4j. Setting this option to
-          <literal>false</literal> will stop Neo4j from listening for incoming
+          `false` will stop Neo4j from listening for incoming
           connections on the BOLT port (7687 by default).
         '';
       };
@@ -219,7 +201,7 @@ in {
         default = ":7687";
         description = ''
           Neo4j listen address for BOLT traffic. The listen address is
-          expressed in the format <literal>&lt;ip-address&gt;:&lt;port-number&gt;</literal>.
+          expressed in the format `<ip-address>:<port-number>`.
         '';
       };
 
@@ -228,18 +210,16 @@ in {
         default = "legacy";
         description = ''
           Neo4j SSL policy for BOLT traffic.
-          </para>
-          <para>
+
           The legacy policy is a special policy which is not defined in
           the policy configuration section, but rather derives from
-          <option>directories.certificates</option> and
-          associated files (by default: <filename>neo4j.key</filename> and
-          <filename>neo4j.cert</filename>). Its use will be deprecated.
-          </para>
-          <para>
+          {option}`directories.certificates` and
+          associated files (by default: {file}`neo4j.key` and
+          {file}`neo4j.cert`). Its use will be deprecated.
+
           Note: This connector must be configured to support/require
           SSL/TLS for the legacy policy to actually be utilized. See
-          <option>bolt.tlsLevel</option>.
+          {option}`bolt.tlsLevel`.
         '';
       };
 
@@ -256,21 +236,20 @@ in {
       certificates = mkOption {
         type = types.path;
         default = "${cfg.directories.home}/certificates";
+        defaultText = literalExpression ''"''${config.${opt.directories.home}}/certificates"'';
         description = ''
           Directory for storing certificates to be used by Neo4j for
           TLS connections.
-          </para>
-          <para>
+
           When setting this directory to something other than its default,
           ensure the directory's existence, and that read/write permissions are
-          given to the Neo4j daemon user <literal>neo4j</literal>.
-          </para>
-          <para>
+          given to the Neo4j daemon user `neo4j`.
+
           Note that changing this directory from its default will prevent
           the directory structure required for each SSL policy from being
           automatically generated. A policy's directory structure as defined by
-          its <option>baseDirectory</option>,<option>revokedDir</option> and
-          <option>trustedDir</option> must then be setup manually. The
+          its {option}`baseDirectory`,{option}`revokedDir` and
+          {option}`trustedDir` must then be setup manually. The
           existence of these directories is mandatory, as well as the presence
           of the certificate file and the private key. Ensure the correct
           permissions are set on these directories and files.
@@ -280,14 +259,14 @@ in {
       data = mkOption {
         type = types.path;
         default = "${cfg.directories.home}/data";
+        defaultText = literalExpression ''"''${config.${opt.directories.home}}/data"'';
         description = ''
           Path of the data directory. You must not configure more than one
           Neo4j installation to use the same data directory.
-          </para>
-          <para>
+
           When setting this directory to something other than its default,
           ensure the directory's existence, and that read/write permissions are
-          given to the Neo4j daemon user <literal>neo4j</literal>.
+          given to the Neo4j daemon user `neo4j`.
         '';
       };
 
@@ -297,39 +276,39 @@ in {
         description = ''
           Path of the Neo4j home directory. Other default directories are
           subdirectories of this path. This directory will be created if
-          non-existent, and its ownership will be <command>chown</command> to
-          the Neo4j daemon user <literal>neo4j</literal>.
+          non-existent, and its ownership will be {command}`chown` to
+          the Neo4j daemon user `neo4j`.
         '';
       };
 
       imports = mkOption {
         type = types.path;
         default = "${cfg.directories.home}/import";
+        defaultText = literalExpression ''"''${config.${opt.directories.home}}/import"'';
         description = ''
           The root directory for file URLs used with the Cypher
-          <literal>LOAD CSV</literal> clause. Only meaningful when
-          <option>constrainLoadCvs</option> is set to
-          <literal>true</literal>.
-          </para>
-          <para>
+          `LOAD CSV` clause. Only meaningful when
+          {option}`constrainLoadCvs` is set to
+          `true`.
+
           When setting this directory to something other than its default,
           ensure the directory's existence, and that read permission is
-          given to the Neo4j daemon user <literal>neo4j</literal>.
+          given to the Neo4j daemon user `neo4j`.
         '';
       };
 
       plugins = mkOption {
         type = types.path;
         default = "${cfg.directories.home}/plugins";
+        defaultText = literalExpression ''"''${config.${opt.directories.home}}/plugins"'';
         description = ''
           Path of the database plugin directory. Compiled Java JAR files that
           contain database procedures will be loaded if they are placed in
           this directory.
-          </para>
-          <para>
+
           When setting this directory to something other than its default,
           ensure the directory's existence, and that read permission is
-          given to the Neo4j daemon user <literal>neo4j</literal>.
+          given to the Neo4j daemon user `neo4j`.
         '';
       };
     };
@@ -339,12 +318,9 @@ in {
         type = types.bool;
         default = true;
         description = ''
-          The HTTP connector is required for Neo4j, and cannot be disabled.
-          Setting this option to <literal>false</literal> will force the HTTP
-          connector's <option>listenAddress</option> to the loopback
-          interface to prevent connection of remote clients. To prevent all
-          clients from connecting, block the HTTP port (7474 by default) by
-          firewall.
+          Enable the HTTP connector for Neo4j. Setting this option to
+          `false` will stop Neo4j from listening for incoming
+          connections on the HTTPS port (7474 by default).
         '';
       };
 
@@ -353,7 +329,7 @@ in {
         default = ":7474";
         description = ''
           Neo4j listen address for HTTP traffic. The listen address is
-          expressed in the format <literal>&lt;ip-address&gt;:&lt;port-number&gt;</literal>.
+          expressed in the format `<ip-address>:<port-number>`.
         '';
       };
     };
@@ -364,7 +340,7 @@ in {
         default = true;
         description = ''
           Enable the HTTPS connector for Neo4j. Setting this option to
-          <literal>false</literal> will stop Neo4j from listening for incoming
+          `false` will stop Neo4j from listening for incoming
           connections on the HTTPS port (7473 by default).
         '';
       };
@@ -374,7 +350,7 @@ in {
         default = ":7473";
         description = ''
           Neo4j listen address for HTTPS traffic. The listen address is
-          expressed in the format <literal>&lt;ip-address&gt;:&lt;port-number&gt;</literal>.
+          expressed in the format `<ip-address>:<port-number>`.
         '';
       };
 
@@ -383,13 +359,12 @@ in {
         default = "legacy";
         description = ''
           Neo4j SSL policy for HTTPS traffic.
-          </para>
-          <para>
+
           The legacy policy is a special policy which is not defined in the
           policy configuration section, but rather derives from
-          <option>directories.certificates</option> and
-          associated files (by default: <filename>neo4j.key</filename> and
-          <filename>neo4j.cert</filename>). Its use will be deprecated.
+          {option}`directories.certificates` and
+          associated files (by default: {file}`neo4j.key` and
+          {file}`neo4j.cert`). Its use will be deprecated.
         '';
       };
     };
@@ -400,7 +375,7 @@ in {
         default = false;
         description = ''
           Enable a remote shell server which Neo4j Shell clients can log in to.
-          Only applicable to <command>neo4j-shell</command>.
+          Only applicable to {command}`neo4j-shell`.
         '';
       };
     };
@@ -417,13 +392,11 @@ in {
               certificate. Only performed when both objects cannot be found for
               this policy. It is recommended to turn this off again after keys
               have been generated.
-              </para>
-              <para>
+
               The public certificate is required to be duplicated to the
               directory holding trusted certificates as defined by the
-              <option>trustedDir</option> option.
-              </para>
-              <para>
+              {option}`trustedDir` option.
+
               Keys should in general be generated and distributed offline by a
               trusted certificate authority and not by utilizing this mode.
             '';
@@ -432,17 +405,17 @@ in {
           baseDirectory = mkOption {
             type = types.path;
             default = "${cfg.directories.certificates}/${name}";
+            defaultText = literalExpression ''"''${config.${opt.directories.certificates}}/''${name}"'';
             description = ''
               The mandatory base directory for cryptographic objects of this
               policy. This path is only automatically generated when this
-              option as well as <option>directories.certificates</option> are
+              option as well as {option}`directories.certificates` are
               left at their default. Ensure read/write permissions are given
-              to the Neo4j daemon user <literal>neo4j</literal>.
-              </para>
-              <para>
+              to the Neo4j daemon user `neo4j`.
+
               It is also possible to override each individual
               configuration with absolute paths. See the
-              <option>privateKey</option> and <option>publicCertificate</option>
+              {option}`privateKey` and {option}`publicCertificate`
               policy options.
             '';
           };
@@ -469,7 +442,7 @@ in {
             default = "private.key";
             description = ''
               The name of private PKCS #8 key file for this policy to be found
-              in the <option>baseDirectory</option>, or the absolute path to
+              in the {option}`baseDirectory`, or the absolute path to
               the key file. It is mandatory that a key can be found or generated.
             '';
           };
@@ -479,29 +452,29 @@ in {
             default = "public.crt";
             description = ''
               The name of public X.509 certificate (chain) file in PEM format
-              for this policy to be found in the <option>baseDirectory</option>,
+              for this policy to be found in the {option}`baseDirectory`,
               or the absolute path to the certificate file. It is mandatory
               that a certificate can be found or generated.
-              </para>
-              <para>
+
               The public certificate is required to be duplicated to the
               directory holding trusted certificates as defined by the
-              <option>trustedDir</option> option.
+              {option}`trustedDir` option.
             '';
           };
 
           revokedDir = mkOption {
             type = types.path;
             default = "${config.baseDirectory}/revoked";
+            defaultText = literalExpression ''"''${config.${options.baseDirectory}}/revoked"'';
             description = ''
               Path to directory of CRLs (Certificate Revocation Lists) in
               PEM format. Must be an absolute path. The existence of this
               directory is mandatory and will need to be created manually when:
               setting this option to something other than its default; setting
-              either this policy's <option>baseDirectory</option> or
-              <option>directories.certificates</option> to something other than
+              either this policy's {option}`baseDirectory` or
+              {option}`directories.certificates` to something other than
               their default. Ensure read/write permissions are given to the
-              Neo4j daemon user <literal>neo4j</literal>.
+              Neo4j daemon user `neo4j`.
             '';
           };
 
@@ -528,19 +501,19 @@ in {
           trustedDir = mkOption {
             type = types.path;
             default = "${config.baseDirectory}/trusted";
+            defaultText = literalExpression ''"''${config.${options.baseDirectory}}/trusted"'';
             description = ''
               Path to directory of X.509 certificates in PEM format for
               trusted parties. Must be an absolute path. The existence of this
               directory is mandatory and will need to be created manually when:
               setting this option to something other than its default; setting
-              either this policy's <option>baseDirectory</option> or
-              <option>directories.certificates</option> to something other than
+              either this policy's {option}`baseDirectory` or
+              {option}`directories.certificates` to something other than
               their default. Ensure read/write permissions are given to the
-              Neo4j daemon user <literal>neo4j</literal>.
-              </para>
-              <para>
+              Neo4j daemon user `neo4j`.
+
               The public certificate as defined by
-              <option>publicCertificate</option> is required to be duplicated
+              {option}`publicCertificate` is required to be duplicated
               to this directory.
             '';
           };
@@ -570,22 +543,9 @@ in {
         of this set defines a policy, with the attribute name defining the name
         of the policy and its namespace. Refer to the operations manual section
         on Neo4j's
-        <link xlink:href="https://neo4j.com/docs/operations-manual/current/security/ssl-framework/">SSL Framework</link>
+        [SSL Framework](https://neo4j.com/docs/operations-manual/current/security/ssl-framework/)
         for further details.
       '';
-    };
-
-    udc = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the Usage Data Collector which Neo4j uses to collect usage
-          data. Refer to the operations manual section on the
-          <link xlink:href="https://neo4j.com/docs/operations-manual/current/configuration/usage-data-collector/">Usage Data Collector</link>
-          for more information.
-        '';
-      };
     };
 
   };
@@ -619,7 +579,7 @@ in {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         environment = {
-          NEO4J_HOME = "${cfg.package}/share/neo4j";
+          NEO4J_HOME = "${cfg.directories.home}";
           NEO4J_CONF = "${cfg.directories.home}/conf";
         };
         serviceConfig = {

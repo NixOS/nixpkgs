@@ -1,5 +1,5 @@
-{ config, lib, stdenv, fetchFromGitHub, runCommand, ncurses, pkg-config
-, libiconv, CoreAudio, AudioUnit
+{ config, lib, stdenv, fetchFromGitHub, ncurses, pkg-config
+, libiconv, CoreAudio, AudioUnit, VideoToolbox
 
 , alsaSupport ? stdenv.isLinux, alsa-lib ? null
 # simple fallback for everyone else
@@ -8,19 +8,19 @@
 , samplerateSupport ? jackSupport, libsamplerate ? null
 , ossSupport ? false, alsa-oss ? null
 , pulseaudioSupport ? config.pulseaudio or false, libpulseaudio ? null
+, sndioSupport ? false, sndio ? null
 , mprisSupport ? stdenv.isLinux, systemd ? null
 
 # TODO: add these
 #, artsSupport
 #, roarSupport
-#, sndioSupport
 #, sunSupport
 #, waveoutSupport
 
 , cddbSupport ? true, libcddb ? null
 , cdioSupport ? true, libcdio ? null, libcdio-paranoia ? null
 , cueSupport ? true, libcue ? null
-, discidSupport ? (!stdenv.isDarwin), libdiscid ? null
+, discidSupport ? false, libdiscid ? null
 , ffmpegSupport ? true, ffmpeg ? null
 , flacSupport ? true, flac ? null
 , madSupport ? true, libmad ? null
@@ -38,8 +38,6 @@
 # not in nixpkgs
 #, vtxSupport ? true, libayemu ? null
 }:
-
-with lib;
 
 assert samplerateSupport -> jackSupport;
 
@@ -61,11 +59,11 @@ let
     (mkFlag samplerateSupport "CONFIG_SAMPLERATE=y" libsamplerate)
     (mkFlag ossSupport        "CONFIG_OSS=y"        alsa-oss)
     (mkFlag pulseaudioSupport "CONFIG_PULSE=y"      libpulseaudio)
+    (mkFlag sndioSupport      "CONFIG_SNDIO=y"      sndio)
     (mkFlag mprisSupport      "CONFIG_MPRIS=y"      systemd)
 
     #(mkFlag artsSupport      "CONFIG_ARTS=y")
     #(mkFlag roarSupport      "CONFIG_ROAR=y")
-    #(mkFlag sndioSupport     "CONFIG_SNDIO=y")
     #(mkFlag sunSupport       "CONFIG_SUN=y")
     #(mkFlag waveoutSupport   "CONFIG_WAVEOUT=y")
 
@@ -90,39 +88,30 @@ let
 
     #(mkFlag vtxSupport    "CONFIG_VTX=y"     libayemu)
   ];
-
-  clangGCC = runCommand "clang-gcc" {} ''
-    #! ${stdenv.shell}
-    mkdir -p $out/bin
-    ln -s ${stdenv.cc}/bin/clang $out/bin/gcc
-    ln -s ${stdenv.cc}/bin/clang++ $out/bin/g++
-  '';
-
 in
 
 stdenv.mkDerivation rec {
   pname = "cmus";
-  version = "2.9.1";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner  = "cmus";
     repo   = "cmus";
     rev    = "v${version}";
-    sha256 = "sha256-HEiEnEWf/MzhPO19VKTLYzhylpEvyzy1Jxs6EW2NU34=";
+    hash   = "sha256-kUJC+ORLkYD57mPL/1p5VCm9yiNzVdOZhxp7sVP6oMw=";
   };
-
-  patches = [ ./option-debugging.patch ];
-
-  configurePhase = "./configure " + concatStringsSep " " ([
-    "prefix=$out"
-    "CONFIG_WAV=y"
-  ] ++ concatMap (a: a.flags) opts);
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ]
-    ++ lib.optional stdenv.cc.isClang clangGCC
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio AudioUnit ]
-    ++ flatten (concatMap (a: a.deps) opts);
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio AudioUnit VideoToolbox ]
+    ++ lib.flatten (lib.concatMap (a: a.deps) opts);
+
+  prefixKey = "prefix=";
+
+  configureFlags = [
+    "CONFIG_WAV=y"
+    "HOSTCC=${stdenv.cc.targetPrefix}cc"
+  ] ++ lib.concatMap (a: a.flags) opts;
 
   makeFlags = [ "LD=$(CC)" ];
 

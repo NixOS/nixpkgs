@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchgit, autoreconfHook, gawk, trousers, cryptsetup, openssl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gawk, trousers, cryptsetup, openssl }:
 
 stdenv.mkDerivation {
   pname = "tpm-luks";
   version = "unstable-2015-07-11";
 
-  src = fetchgit {
-    url = "https://github.com/momiji/tpm-luks";
+  src = fetchFromGitHub {
+    owner = "momiji";
+    repo = "tpm-luks";
     rev = "c9c5b7fdddbcdac1cd4d2ea6baddd0617cc88ffa";
-    sha256 = "1ms2v57f13r9km6mvf9rha5ndmlmjvrz3mcikai6nzhpj0nrjz0w";
+    sha256 = "sha256-HHyZLZAXfmuimpHV8fOWldZmi4I5uV1NnSmP4E7ZQtc=";
   };
 
   patches = [
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "LUKS key storage in TPM NVRAM";
     homepage = "https://github.com/shpedoikal/tpm-luks/";
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = [ ];
     license = with licenses; [ gpl2Only ];
     platforms = platforms.linux;
   };

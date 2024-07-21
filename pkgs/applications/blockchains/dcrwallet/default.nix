@@ -2,25 +2,31 @@
 
 buildGoModule rec {
   pname = "dcrwallet";
-  version = "1.6.0";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrwallet";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-WUfmv+laOwR/fc4osAFzPKqHQR+wOtSdLEsysICnuvg=";
+    rev = "release-v${version}";
+    hash = "sha256-sRwGpOVydfZjgo7W+4RsHC4JElPyilbV5xhcHxPh2Wc=";
   };
 
-  vendorSha256 = "sha256-9IRNlULvARIZu6dWaKrvx6fiDJ80SBLINhK/9tW9k/0=";
-
-  doCheck = false;
+  vendorHash = "sha256-lVVIS3FL8XwthCpzRKdw59NVtHVxXQ0ouD7jYQzOecM=";
 
   subPackages = [ "." ];
 
+  checkFlags = [
+    # Test fails with:
+    # 'x509_test.go:201: server did not report bad certificate error;
+    # instead errored with [...] tls: unknown certificate authority (*url.Error)'
+    "-skip=^TestUntrustedClientCert$"
+  ];
+
   meta = {
     homepage = "https://decred.org";
-    description = "A secure Decred wallet daemon written in Go (golang)";
+    description = "Secure Decred wallet daemon written in Go (golang)";
     license = with lib.licenses; [ isc ];
     maintainers = with lib.maintainers; [ juaningan ];
+    mainProgram = "dcrwallet";
   };
 }

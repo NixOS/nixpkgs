@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "terminal-colors";
-  version = "3.0.1";
+  version = "3.0.2";
   outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "eikenb";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hekt77/FhSTMEARVuck49/Q1dIuqkwbOYmgGD1IItyc=";
+    hash = "sha256-KRoP/Reo5nDKJYG9zVTVpoYL7soAGMNk46vDoaLfnv4=";
   };
 
   buildInputs = [ python3 ];
@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/eikenb/terminal-colors";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kaction ];
+    mainProgram = "terminal-colors";
   };
 }

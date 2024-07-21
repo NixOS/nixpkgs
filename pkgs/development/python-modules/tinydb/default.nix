@@ -1,36 +1,35 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pycodestyle
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pycodestyle,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "tinydb";
-  version = "4.5.2";
+  version = "4.8.0";
   disabled = pythonOlder "3.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "msiemens";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0gyc9rk1adw4gynwnv4kfas0hxv1cql0sm5b3fsms39088ha894l";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sdWcpkjC8LtOI1k0Wyk4vLXBcwYe1vuQON9J7P8JPxA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace "--cov-append --cov-report term --cov tinydb" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pycodestyle
     pyyaml

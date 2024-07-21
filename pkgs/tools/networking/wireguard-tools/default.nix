@@ -7,6 +7,7 @@
 , makeWrapper
 , openresolv
 , procps
+, bash
 , wireguard-go
 }:
 
@@ -21,9 +22,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ bash ];
 
   makeFlags = [
     "DESTDIR=$(out)"
@@ -38,11 +41,16 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '' + lib.optionalString stdenv.isLinux ''
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${lib.makeBinPath [ procps iproute2 iptables openresolv ]}
+      # Which firewall and resolvconf implementations to use should be determined by the
+      # environment, we provide the "default" ones as fallback.
+      wrapProgram $f \
+        --prefix PATH : ${lib.makeBinPath [ procps iproute2 ]} \
+        --suffix PATH : ${lib.makeBinPath [ iptables openresolv ]}
     done
   '' + lib.optionalString stdenv.isDarwin ''
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${wireguard-go}/bin
+      wrapProgram $f \
+        --prefix PATH : ${lib.makeBinPath [ wireguard-go ]}
     done
   '';
 
@@ -62,8 +70,9 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://git.zx2c4.com/wireguard-tools/refs/";
     homepage = "https://www.wireguard.com/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ elseym ericsagnes zx2c4 globin ma27 d-xo ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ ericsagnes zx2c4 globin ma27 d-xo ];
+    mainProgram = "wg";
     platforms = platforms.unix;
   };
 }

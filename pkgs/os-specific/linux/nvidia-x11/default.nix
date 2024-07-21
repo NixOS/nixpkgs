@@ -1,11 +1,9 @@
-{ lib, callPackage, fetchpatch, fetchurl, stdenv, pkgsi686Linux }:
+{ lib, callPackage, fetchFromGitHub, fetchurl, fetchpatch, stdenv, pkgsi686Linux }:
 
 let
   generic = args: let
     imported = import ./generic.nix args;
-  in if ((!lib.versionOlder args.version "391")
-    && stdenv.hostPlatform.system != "x86_64-linux") then null
-  else callPackage imported {
+  in callPackage imported {
     lib32 = (pkgsi686Linux.callPackage imported {
       libsOnly = true;
       kernel = null;
@@ -14,62 +12,166 @@ let
 
   kernel = callPackage # a hacky way of extracting parameters from callPackage
     ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
+
+  selectHighestVersion = a: b: if lib.versionOlder a.version b.version
+    then b
+    else a;
+
+  # https://forums.developer.nvidia.com/t/linux-6-7-3-545-29-06-550-40-07-error-modpost-gpl-incompatible-module-nvidia-ko-uses-gpl-only-symbol-rcu-read-lock/280908/19
+  rcu_patch = fetchpatch {
+    url = "https://github.com/gentoo/gentoo/raw/c64caf53/x11-drivers/nvidia-drivers/files/nvidia-drivers-470.223.02-gpl-pfn_valid.patch";
+    hash = "sha256-eZiQQp2S/asE7MfGvfe6dA/kdCvek9SYa/FFGp24dVg=";
+  };
 in
 rec {
+  mkDriver = generic;
+
+  # Official Unix Drivers - https://www.nvidia.com/en-us/drivers/unix/
+  # Branch/Maturity data - http://people.freedesktop.org/~aplattner/nvidia-versions.txt
+
   # Policy: use the highest stable version as the default (on our master).
-  stable = if stdenv.hostPlatform.system == "x86_64-linux"
-    then generic {
-      version = "495.44";
-      sha256_64bit = "0j4agxfdswadxkd9hz9j5cq4q3jmhwdnvqclxxkhl5jvh5knm1zi";
-      settingsSha256 = "0v8gqbhjsjjsc83cqacikj9bvs10bq6i34ca8l07zvsf8hfr2ziz";
-      persistencedSha256 = "19rv7vskv61q4gh59nyrfyqyqi565wzjbcfddp8wfvng4dcy18ld";
-    }
-    else legacy_390;
+  stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else latest;
 
-  # see https://www.nvidia.com/en-us/drivers/unix/ "Production branch"
-  production = legacy_470;
-
-  beta = generic {
-    version = "495.29.05";
-    sha256_64bit = "sha256-9yVLl9QAxpJQR5ZJb059j2TpOx4xxCeGCk8hmhhvEl4=";
-    settingsSha256 = "sha256-dcEI+3bxSTwVbHcR6IgvIUFt4vWtK5T4NMGVhmmeVJ0=";
-    persistencedSha256 = "sha256-OT/hOXEPatc6pAKrxDe0jsmaDFCtVXAbdW4elKe6xE8=";
+  production = generic {
+    version = "550.100";
+    sha256_64bit = "sha256-imtfsoe/EfUFZzR4S9pkwQZKCcKqefayJewPtW0jgC0=";
+    sha256_aarch64 = "sha256-AWHdMtCci8i7maNjVapOT6kyVuFaP81jJyTRLjEyMzo=";
+    openSha256 = "sha256-3g0f88xGMTB0mx4kVan3ipLtnJFFIKi58ss/1lqC3Sw=";
+    settingsSha256 = "sha256-cDxhzZCDLtXOas5OlodNYGIuscpKmIGyvhC/kAQaxLc=";
+    persistencedSha256 = "sha256-gXHBR2+1+YZE2heRArfrZpEF3rO7R92ChuQN+ISpil8=";
   };
+
+  latest = selectHighestVersion production (generic {
+    version = "555.58.02";
+    sha256_64bit = "sha256-xctt4TPRlOJ6r5S54h5W6PT6/3Zy2R4ASNFPu8TSHKM=";
+    sha256_aarch64 = "sha256-wb20isMrRg8PeQBU96lWJzBMkjfySAUaqt4EgZnhyF8=";
+    openSha256 = "sha256-8hyRiGB+m2hL3c9MDA/Pon+Xl6E788MZ50WrrAGUVuY=";
+    settingsSha256 = "sha256-ZpuVZybW6CFN/gz9rx+UJvQ715FZnAOYfHn5jt5Z2C8=";
+    persistencedSha256 = "sha256-a1D7ZZmcKFWfPjjH1REqPM5j/YLWKnbkP9qfRyIyxAw=";
+  });
+
+  beta = selectHighestVersion latest (generic {
+    version = "555.52.04";
+    sha256_64bit = "sha256-nVOubb7zKulXhux9AruUTVBQwccFFuYGWrU1ZiakRAI=";
+    sha256_aarch64 = "sha256-Kt60kTTO3mli66De2d1CAoE3wr0yUbBe7eqCIrYHcWk=";
+    openSha256 = "sha256-wDimW8/rJlmwr1zQz8+b1uvxxxbOf3Bpk060lfLKuy0=";
+    settingsSha256 = "sha256-PMh5efbSEq7iqEMBr2+VGQYkBG73TGUh6FuDHZhmwHk=";
+    persistencedSha256 = "sha256-KAYIvPjUVilQQcD04h163MHmKcQrn2a8oaXujL2Bxro=";
+  });
 
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "455.46.04";
-    persistencedVersion = "455.45.01";
-    settingsVersion = "455.45.01";
-    sha256_64bit = "1iv42w3x1vc00bgn6y4w1hnfsvnh6bvj3vcrq8hw47760sqwa4xa";
-    settingsSha256 = "09v86y2c8xas9ql0bqr7vrjxx3if6javccwjzyly11dzffm02h7g";
-    persistencedSha256 = "13s4b73il0lq2hs81q03176n16mng737bfsp3bxnxgnrv3whrayz";
-    url = "https://developer.nvidia.com/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
+    version = "550.40.65";
+    persistencedVersion = "550.54.14";
+    settingsVersion = "550.54.14";
+    sha256_64bit = "sha256-du86GHMBxzUkrP+nDzModBdxH3d1TueLPH5KeYSNKYU=";
+    openSha256 = "sha256-REBOh5bW7vUXa0sIGWddahPd1SR3GwBN4nmpv+m4Tak=";
+    settingsSha256 = "sha256-m2rNASJp0i0Ez2OuqL+JpgEF0Yd8sYVCyrOoo/ln2a4=";
+    persistencedSha256 = "sha256-XaPN8jVTjdag9frLPgBtqvO/goB5zxeGzaTU0CdL6C4=";
+    url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
+  };
+
+  # data center driver compatible with current default cudaPackages
+  dc = dc_520;
+  dc_520 = generic rec {
+    version = "520.61.05";
+    url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
+    sha256_64bit = "sha256-EPYWZwOur/6iN/otDMrNDpNXr1mzu8cIqQl8lXhQlzU==";
+    fabricmanagerSha256 = "sha256-o8Kbmkg7qczKQclaGvEyXNzEOWq9ZpQZn9syeffnEiE==";
+    useSettings = false;
+    usePersistenced = false;
+    useFabricmanager = true;
+
+    patches = [ rcu_patch ];
+
+    broken = kernel.kernelAtLeast "6.5";
+  };
+
+  dc_535 = generic rec {
+    version = "535.154.05";
+    url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
+    sha256_64bit = "sha256-fpUGXKprgt6SYRDxSCemGXLrEsIA6GOinp+0eGbqqJg=";
+    persistencedSha256 = "sha256-d0Q3Lk80JqkS1B54Mahu2yY/WocOqFFbZVBh+ToGhaE=";
+    fabricmanagerSha256 = "sha256-/HQfV7YA3MYVmre/sz897PF6tc6MaMiS/h7Q10m2p/o=";
+    useSettings = false;
+    usePersistenced = true;
+    useFabricmanager = true;
+
+    patches = [ rcu_patch ];
   };
 
   # Update note:
   # If you add a legacy driver here, also update `top-level/linux-kernels.nix`,
   # adding to the `nvidia_x11_legacy*` entries.
 
+  # Last one without the bug reported here:
+  # https://bbs.archlinux.org/viewtopic.php?pid=2155426#p2155426
+  legacy_535 = generic {
+    version = "535.154.05";
+    sha256_64bit = "sha256-fpUGXKprgt6SYRDxSCemGXLrEsIA6GOinp+0eGbqqJg=";
+    sha256_aarch64 = "sha256-G0/GiObf/BZMkzzET8HQjdIcvCSqB1uhsinro2HLK9k=";
+    openSha256 = "sha256-wvRdHguGLxS0mR06P5Qi++pDJBCF8pJ8hr4T8O6TJIo=";
+    settingsSha256 = "sha256-9wqoDEWY4I7weWW05F4igj1Gj9wjHsREFMztfEmqm10=";
+    persistencedSha256 = "sha256-d0Q3Lk80JqkS1B54Mahu2yY/WocOqFFbZVBh+ToGhaE=";
+
+    patches = [ rcu_patch ];
+  };
+
   # Last one supporting Kepler architecture
   legacy_470 = generic {
-      version = "470.86";
-      sha256_64bit = "sha256:0krwcxc0j19vjnk8sv6mx1lin2rm8hcfhc2hg266846jvcws1dsg";
-      settingsSha256 = "sha256:1lnj5hwmfkzs664fxlhljqy323394s1i7qzlpsjyrpm07sa93bky";
-      persistencedSha256 = "sha256:0apj764zc81ayb8nm9bf7cdicfinarv0gfijy2dxynbwz2xdlyvq";
+    version = "470.256.02";
+    sha256_64bit = "sha256-1kUYYt62lbsER/O3zWJo9z6BFowQ4sEFl/8/oBNJsd4=";
+    sha256_aarch64 = "sha256-e+QvE+S3Fv3JRqC9ZyxTSiCu8gJdZXSz10gF/EN6DY0=";
+    settingsSha256 = "sha256-kftQ4JB0iSlE8r/Ze/+UMnwLzn0nfQtqYXBj+t6Aguk=";
+    persistencedSha256 = "sha256-iYoSib9VEdwjOPBP1+Hx5wCIMhW8q8cCHu9PULWfnyQ=";
   };
 
   # Last one supporting x86
   legacy_390 = generic {
-    version = "390.143";
-    sha256_32bit = "AelrdTTeo/3+ZdXK0iniZDB8gJUkeZQtNoRm25z+bQY=";
-    sha256_64bit = "tyKqcPM71ErK8ZZHLPtxmgrWzv6tfEmxBRveCSwTlO8=";
-    settingsSha256 = "EJPXZbxZS1CMENAYk9dCAIsHsRTXJpj473+JLuhGkWI=";
-    persistencedSha256 = "FtlPF3jCNr18NnImTmr8zJsaK9wbj/aWZ9LwoLr5SeE=";
+    version = "390.157";
+    sha256_32bit = "sha256-VdZeCkU5qct5YgDF8Qgv4mP7CVHeqvlqnP/rioD3B5k=";
+    sha256_64bit = "sha256-W+u8puj+1da52BBw+541HxjtxTSVJVPL3HHo/QubMoo=";
+    settingsSha256 = "sha256-uJZO4ak/w/yeTQ9QdXJSiaURDLkevlI81de0q4PpFpw=";
+    persistencedSha256 = "sha256-NuqUQbVt80gYTXgIcu0crAORfsj9BCRooyH3Gp1y1ns=";
+
+    broken = kernel.kernelAtLeast "6.2";
+
+    # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
+    # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
+    # and https://bbs.archlinux.org/viewtopic.php?pid=2083699#p2083699
+    postInstall = ''
+      mv $out/lib/tls/* $out/lib
+      rmdir $out/lib/tls
+    '';
   };
 
-  legacy_340 = generic {
+  legacy_340 = let
+    # Source corresponding to https://aur.archlinux.org/packages/nvidia-340xx-dkms
+    aurPatches = fetchFromGitHub {
+      owner = "archlinux-jerry";
+      repo = "nvidia-340xx";
+      rev = "7616dfed253aa93ca7d2e05caf6f7f332c439c90";
+      hash = "sha256-1qlYc17aEbLD4W8XXn1qKryBk2ltT6cVIv5zAs0jXZo=";
+    };
+    patchset = [
+      "0001-kernel-5.7.patch"
+      "0002-kernel-5.8.patch"
+      "0003-kernel-5.9.patch"
+      "0004-kernel-5.10.patch"
+      "0005-kernel-5.11.patch"
+      "0006-kernel-5.14.patch"
+      "0007-kernel-5.15.patch"
+      "0008-kernel-5.16.patch"
+      "0009-kernel-5.17.patch"
+      "0010-kernel-5.18.patch"
+      "0011-kernel-6.0.patch"
+      "0012-kernel-6.2.patch"
+      "0013-kernel-6.3.patch"
+      "0014-kernel-6.5.patch"
+      "0015-kernel-6.6.patch"
+    ];
+  in generic {
     version = "340.108";
     sha256_32bit = "1jkwa1phf0x4sgw8pvr9d6krmmr3wkgwyygrxhdazwyr2bbalci0";
     sha256_64bit = "06xp6c0sa7v1b82gf0pq0i5p0vdhmm3v964v0ypw36y0nzqx8wf6";
@@ -77,6 +179,15 @@ rec {
     persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
     useGLVND = false;
 
-    patches = [ ./vm_operations_struct-fault.patch ];
+    broken = kernel.kernelAtLeast "6.7";
+    patches = map (patch: "${aurPatches}/${patch}") patchset;
+
+    # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
+    # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
+    # and https://bbs.archlinux.org/viewtopic.php?pid=2083699#p2083699
+    postInstall = ''
+      mv $out/lib/tls/* $out/lib
+      rmdir $out/lib/tls
+    '';
   };
 }

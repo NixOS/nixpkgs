@@ -1,9 +1,21 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.mail;
+  inherit (lib)
+    mkOption
+    types
+    mapAttrs'
+    nameValuePair
+    toLower
+    filterAttrs
+    escapeShellArg
+    literalExpression
+    mkIf
+    concatStringsSep
+    ;
+
+  configFile = if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configFile);
 
   configurationFile = pkgs.writeText "prometheus-mail-exporter.conf" (builtins.toJSON (
     # removes the _module attribute, null values and converts attrNames to lowercase
@@ -31,7 +43,7 @@ let
       '';
     };
     port = mkOption {
-      type = types.int;
+      type = types.port;
       example = 587;
       description = ''
         Port to use for SMTP.
@@ -113,14 +125,13 @@ let
       description = ''
         List of servers that should be probed.
 
-        <emphasis>Note:</emphasis> if your mailserver has <citerefentry>
-        <refentrytitle>rspamd</refentrytitle><manvolnum>8</manvolnum></citerefentry> configured,
+        *Note:* if your mailserver has {manpage}`rspamd(8)` configured,
         it can happen that emails from this exporter are marked as spam.
 
         It's possible to work around the issue with a config like this:
-        <programlisting>
+        ```
         {
-          <link linkend="opt-services.rspamd.locals._name_.text">services.rspamd.locals."multimap.conf".text</link> = '''
+          services.rspamd.locals."multimap.conf".text = '''
             ALLOWLIST_PROMETHEUS {
               filter = "email:domain:tld";
               type = "from";
@@ -129,7 +140,7 @@ let
             }
           ''';
         }
-        </programlisting>
+        ```
       '';
     };
   };
@@ -137,6 +148,13 @@ in
 {
   port = 9225;
   extraOpts = {
+    environmentFile = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        File containing env-vars to be substituted into the exporter's config.
+      '';
+    };
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -162,13 +180,19 @@ in
   serviceOpts = {
     serviceConfig = {
       DynamicUser = false;
+      EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+      RuntimeDirectory = "prometheus-mail-exporter";
+      ExecStartPre = [
+        "${pkgs.writeShellScript "subst-secrets-mail-exporter" ''
+          umask 0077
+          ${pkgs.envsubst}/bin/envsubst -i ${configFile} -o ''${RUNTIME_DIRECTORY}/mail-exporter.json
+        ''}"
+      ];
       ExecStart = ''
         ${pkgs.prometheus-mail-exporter}/bin/mailexporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
-          --config.file ${
-            if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configFile)
-          } \
+          --config.file ''${RUNTIME_DIRECTORY}/mail-exporter.json \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };

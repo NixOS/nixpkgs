@@ -1,230 +1,268 @@
-{ lib, stdenv, system ? builtins.currentSystem, ovftoolBundles ? {}
-, requireFile, buildFHSUserEnv, patchelf, autoPatchelfHook, makeWrapper, nix, unzip
-, glibc, c-ares, openssl_1_0_2, curl, expat, icu60, xercesc, zlib
+{ autoPatchelfHook
+, c-ares
+, darwin
+, expat
+, fetchurl
+, glibc
+, icu60
+, lib
+, libiconv
+, libredirect
+, libxcrypt-legacy
+, libxml2
+, makeWrapper
+, stdenv
+, unzip
+, xercesc
+, zlib
 }:
 
 let
-  version = "4.4.1-16812187";
 
-  # FHS environment required to unpack ovftool on x86.
-  ovftoolX86Unpacker = buildFHSUserEnv rec {
-    name = "ovftool-unpacker";
-    targetPkgs = pkgs: [ pkgs.bash ];
-    multiPkgs = targetPkgs;
-    runScript = "bash";
-  };
-
-  # unpackPhase for i686 and x86_64 ovftool self-extracting bundles.
-  ovftoolX86UnpackPhase = ''
-    runHook preUnpack
-
-    # This is a self-extracting shell script and needs a FHS environment to run.
-    # In reality, it could be doing anything, which is bad for reproducibility.
-    # Our postUnpack uses nix-hash to verify the hash to prevent problems.
-    #
-    # Note that the Arch PKGBUILD at
-    # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=vmware-ovftool
-    # appears to use xvfb-run - this hasn't been proven necessary so far.
-    #
-    cp ${ovftoolSource} ./ovftool.bundle
-    chmod +x ./ovftool.bundle
-    ${ovftoolX86Unpacker}/bin/ovftool-unpacker ./ovftool.bundle -x ovftool
-    rm ovftool.bundle
-
-    local extracted=ovftool/vmware-ovftool/
-    if [ -d "$extracted" ]; then
-      # Move the directory we care about to ovftool/
-      mv "$extracted" .
-      rm -r ovftool
-      mv "$(basename -- "$extracted")" ovftool
-      echo "ovftool extracted successfully" >&2
-    else
-      echo "Could not find $extracted - are you sure this is ovftool?" >&2
-      rm -r ovftool
-      exit 1
-    fi
-
-    runHook postUnpack
-  '';
-
-  # unpackPhase for aarch64 .zip.
-  ovftoolAarch64UnpackPhase = ''
-    runHook preUnpack
-
-    unzip ${ovftoolSource}
-
-    local extracted=ovftool/
-    if [ -d "$extracted" ]; then
-      echo "ovftool extracted successfully" >&2
-    else
-      echo "Could not find $extracted - are you sure this is ovftool?" >&2
-      exit 1
-    fi
-
-    runHook postUnpack
-  '';
-
-  # When the version is bumped, postUnpackHash will change
-  # for all these supported systems. Update it from the printed error on build.
-  #
-  # This is just a sanity check, since ovftool is a self-extracting bundle
-  # that could be doing absolutely anything on 2/3 of the supported platforms.
-  ovftoolSystems = {
-    "i686-linux" = {
-      filename = "VMware-ovftool-${version}-lin.i386.bundle";
-      sha256 = "0gx78g3s77mmpir7jbiskna10i6262ihal1ywivlb6xxxxbhqzwj";
-      unpackPhase = ovftoolX86UnpackPhase;
-      postUnpackHash = "1k8rp8ywhs0cl9aad37v1p0493bdvkxrsvwg5pgv2bhvjs4hqk7n";
+  ovftoolSystems =
+    let
+      baseUrl = "https://vdc-download.vmware.com/vmwb-repository/dcr-public";
+    in
+    {
+      "i686-linux" = rec {
+        name = "VMware-ovftool-${version}-lin.i386.zip";
+        # As of 2024-02-20 the "Zip of OVF Tool for 32-bit Linux" download link
+        # on the v4.6.2 page links to v4.6.0.
+        version = "4.6.0-21452615";
+        url = "${baseUrl}/7254abb2-434d-4f5d-83e2-9311ced9752e/57e666a2-874c-48fe-b1d2-4b6381f7fe97/${name}";
+        hash = "sha256-qEOr/3SW643G5ZQQNJTelZbUxB8HmxPd5uD+Gqsoxz0=";
+      };
+      "x86_64-linux" = rec {
+        name = "VMware-ovftool-${version}-lin.x86_64.zip";
+        version = "4.6.2-22220919";
+        url = "${baseUrl}/8a93ce23-4f88-4ae8-b067-ae174291e98f/c609234d-59f2-4758-a113-0ec5bbe4b120/${name}";
+        hash = "sha256-3B1cUDldoTqLsbSARj2abM65nv+Ot0z/Fa35/klJXEY=";
+      };
+      "x86_64-darwin" = rec {
+        name = "VMware-ovftool-${version}-mac.x64.zip";
+        version = "4.6.2-22220919";
+        url = "${baseUrl}/91091b23-280a-487a-a048-0c2594303c92/dc666e23-104f-4b9b-be11-6d88dcf3ab98/${name}";
+        hash = "sha256-AZufZ0wxt5DYjnpahDfy36W8i7kjIfEkW6MoELSx11k=";
+      };
     };
-    "x86_64-linux" = {
-      filename = "VMware-ovftool-${version}-lin.x86_64.bundle";
-      sha256 = "1kp2bp4d9i8y7q25yqff2bn62mh292lws7b66lyn8ka9b35kvnzc";
-      unpackPhase = ovftoolX86UnpackPhase;
-      postUnpackHash = "0zvyakwi4iishqxxisihgh91bmdsfvj5vchm2c192hia03a143py";
-    };
-    "aarch64-linux" = {
-      filename = "VMware-ovftool-${version}-lin.aarch64.zip";
-      sha256 = "0all8bwv5p5adnzqvrly6nzmxmfpywvlbfr0finr4n100yv0v1xy";
-      unpackPhase = ovftoolAarch64UnpackPhase;
-      postUnpackHash = "16vyyzrmryi8b7mrd6nxnhywvvj2pw0ban4qfiqfahw763fn6971";
-    };
-  };
 
-  ovftoolSystem = if builtins.hasAttr system ovftoolSystems then
-                    ovftoolSystems.${system}
-                  else throw "System '${system}' is unsupported by ovftool";
+  ovftoolSystem = ovftoolSystems.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
-  ovftoolSource = if builtins.hasAttr system ovftoolBundles then
-                    ovftoolBundles.${system}
-                  else
-                    requireFile {
-                      name = ovftoolSystem.filename;
-                      url = "https://my.vmware.com/group/vmware/downloads/get-download?downloadGroup=OVFTOOL441";
-                      sha256 = ovftoolSystem.sha256;
-                    };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ovftool";
-  inherit version;
+  inherit (ovftoolSystem) version;
 
-  src = ovftoolSource;
+  src = fetchurl {
+    inherit (ovftoolSystem) name url hash;
+  };
 
   buildInputs = [
-    glibc
-
-    # This is insecure, but we don't really have a way around it
-    # since ovftool depends on it. In theory we could ship their OpenSSL
-    # build... but that makes the reliance on an insecure library less obvious.
-    openssl_1_0_2
-
     c-ares
-    (curl.override { openssl = openssl_1_0_2; })
     expat
     icu60
+    libiconv
+    libxcrypt-legacy
     xercesc
     zlib
+  ] ++ lib.optionals stdenv.isLinux [
+    glibc
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.Libsystem
+    libxml2
   ];
 
-  nativeBuildInputs = [ nix patchelf autoPatchelfHook makeWrapper unzip ];
+  nativeBuildInputs = [ unzip makeWrapper ]
+  ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  sourceRoot = ".";
-
-  unpackPhase = ovftoolSystem.unpackPhase;
-
-  postUnpackHash = ovftoolSystem.postUnpackHash;
-
-  # Expects a directory named 'ovftool'. Validates the postUnpackHash in
-  # ovftoolSystem.
   postUnpack = ''
-    if [ -d ovftool ]; then
-      # Ensure we're in the staging directory
-      cd ovftool
-    fi
-
-    # Verify the hash with nix-hash before proceeding to ensure reproducibility.
-    local ovftool_hash
-    ovftool_hash="$(nix-hash --type sha256 --base32 .)"
-    if [ "$ovftool_hash" != "$postUnpackHash" ]; then
-      echo "Expected hash: $postUnpackHash" >&2
-      echo "Actual hash:   $ovftool_hash" >&2
-      echo "Could not verify post-unpack hash!" >&2
-      exit 1
+    # The linux package wraps ovftool.bin with ovftool. Wrapping
+    # below in installPhase.
+    # Rename to ovftool on install for all systems to ovftool
+    if [[ -f ovftool.bin ]]; then
+      mv -v ovftool.bin ovftool
     fi
   '';
 
-  # Expects a directory named 'ovftool' containing the ovftool install.
-  # Based on https://aur.archlinux.org/packages/vmware-ovftool/
-  # with the addition of a libexec directory and a Nix-style binary wrapper.
   installPhase = ''
     runHook preInstall
 
-    if [ -d ovftool ]; then
-      # Ensure we're in the staging directory
-      cd ovftool
-    fi
+    # Based on https://aur.archlinux.org/packages/vmware-ovftool/
+    # with the addition of a libexec directory and a Nix-style binary wrapper.
 
-    # libraries
-    install -m 755 -d "$out/lib/$pname"
+    # Almost all libs in the package appear to be VMware proprietary except for
+    # libgoogleurl and libcurl. The rest of the libraries that the installer
+    # extracts are omitted here, and provided in buildInputs. Since libcurl
+    # depends on VMware's OpenSSL, both libs are still used.
+    # FIXME: Replace libgoogleurl? Possibly from Chromium?
+    # FIXME: Tell VMware to use a modern version of OpenSSL. As of ovftool
+    # v4.6.2 ovftool uses openssl-1.0.2zh which in seems to be the extended
+    # support LTS release: https://www.openssl.org/support/contracts.html
 
-    # These all appear to be VMWare proprietary except for libgoogleurl.
-    # The rest of the libraries that the installer extracts are omitted here,
-    # and provided in buildInputs.
-    #
-    # FIXME: can we replace libgoogleurl? Possibly from Chromium?
-    #
-    install -m 644 -t "$out/lib/$pname" \
+    # Install all libs that are not patched in preFixup.
+    # Darwin dylibs are under `lib` in the zip.
+    install -m 755 -d "$out/lib"
+    install -m 644 -t "$out/lib" \
+  '' + lib.optionalString stdenv.isLinux ''
+      libcrypto.so.1.0.2 \
+      libcurl.so.4 \
       libgoogleurl.so.59 \
+      libssl.so.1.0.2 \
       libssoclient.so \
-      libvim-types.so libvmacore.so libvmomi.so
+      libvim-types.so \
+      libvmacore.so \
+      libvmomi.so
+  '' + lib.optionalString stdenv.isDarwin ''
+      lib/libcrypto.1.0.2.dylib \
+      lib/libcurl.4.dylib \
+      lib/libgoogleurl.59.0.30.45.2.dylib \
+      lib/libssl.1.0.2.dylib \
+      lib/libssoclient.dylib \
+      lib/libvim-types.dylib \
+      lib/libvmacore.dylib \
+      lib/libvmomi.dylib
+    '' + ''
+    # Install libexec binaries
+    # ovftool expects to be run relative to certain directories, namely `env`.
+    # Place the binary and those dirs in libexec.
+    install -m 755 -d "$out/libexec"
+    install -m 755 -t "$out/libexec" ovftool
+    [ -f ovftool.bin ] && install -m 755 -t "$out/libexec" ovftool.bin
+    install -m 644 -t "$out/libexec" icudt44l.dat
 
-    # ovftool specifically wants 1.0.2 but our libcrypto is named 1.0.0
-    ln -s "${openssl_1_0_2.out}/lib/libcrypto.so" \
-      "$out/lib/$pname/libcrypto.so.1.0.2"
-    ln -s "${openssl_1_0_2.out}/lib/libssl.so" \
-      "$out/lib/$pname/libssl.so.1.0.2"
-
-    # libexec
-    install -m 755 -d "$out/libexec/$pname"
-    install -m 755 -t "$out/libexec/$pname" ovftool.bin
-    install -m 644 -t "$out/libexec/$pname" icudt44l.dat
-
-    # libexec resources
+    # Install other libexec resources that need to be relative to the `ovftool`
+    # binary.
     for subdir in "certs" "env" "env/en" "schemas/DMTF" "schemas/vmware"; do
-      install -m 755 -d "$out/libexec/$pname/$subdir"
-      install -m 644 -t "$out/libexec/$pname/$subdir" "$subdir"/*.*
+      install -m 755 -d "$out/libexec/$subdir"
+      install -m 644 -t "$out/libexec/$subdir" "$subdir"/*.*
     done
 
-    # EULA/OSS files
-    install -m 755 -d "$out/share/licenses/$pname"
-    install -m 644 -t "$out/share/licenses/$pname" \
-      "vmware.eula" "vmware-eula.rtf" "open_source_licenses.txt"
+    # Install EULA/OSS files
+    install -m 755 -d "$out/share/licenses"
+    install -m 644 -t "$out/share/licenses" \
+      "vmware.eula" \
+      "vmware-eula.rtf" \
+      "open_source_licenses.txt"
 
-    # documentation files
-    install -m 755 -d "$out/share/doc/$pname"
-    install -m 644 -t "$out/share/doc/$pname" "README.txt"
+    # Install Docs
+    install -m 755 -d "$out/share/doc"
+    install -m 644 -t "$out/share/doc" "README.txt"
 
-    # binary wrapper; note that LC_CTYPE is defaulted to en_US.UTF-8 by
-    # VMWare's wrapper script. We use C.UTF-8 instead.
+    # Install final executable
     install -m 755 -d "$out/bin"
-    makeWrapper "$out/libexec/$pname/ovftool.bin" "$out/bin/ovftool" \
-      --set-default LC_CTYPE C.UTF-8 \
+    makeWrapper "$out/libexec/ovftool" "$out/bin/ovftool" \
+  '' + lib.optionalString stdenv.isLinux ''
       --prefix LD_LIBRARY_PATH : "$out/lib"
-
+  '' + lib.optionalString stdenv.isDarwin ''
+      --prefix DYLD_LIBRARY_PATH : "$out/lib"
+  '' + ''
     runHook postInstall
   '';
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     addAutoPatchelfSearchPath "$out/lib"
+  '' + lib.optionalString stdenv.isDarwin ''
+    change_args=()
+
+    # Change relative @loader_path dylibs to absolute paths.
+    for lib in $out/lib/*.dylib; do
+      libname=$(basename $lib)
+      change_args+=(-change "@loader_path/lib/$libname" "$out/lib/$libname")
+    done
+
+    # Patches for ovftool binary
+    change_args+=(-change /usr/lib/libSystem.B.dylib ${darwin.Libsystem}/lib/libSystem.B.dylib)
+    change_args+=(-change /usr/lib/libc++.1.dylib ${stdenv.cc.libcxx}/lib/libc++.1.dylib)
+    change_args+=(-change /usr/lib/libiconv.2.dylib ${libiconv}/lib/libiconv.2.dylib)
+    change_args+=(-change /usr/lib/libxml2.2.dylib ${libxml2}/lib/libxml2.2.dylib)
+    change_args+=(-change /usr/lib/libz.1.dylib ${zlib}/lib/libz.1.dylib)
+    change_args+=(-change @loader_path/lib/libcares.2.dylib ${c-ares}/lib/libcares.2.dylib)
+    change_args+=(-change @loader_path/lib/libexpat.dylib ${expat}/lib/libexpat.dylib)
+    change_args+=(-change @loader_path/lib/libicudata.60.2.dylib ${icu60}/lib/libicudata.60.2.dylib)
+    change_args+=(-change @loader_path/lib/libicuuc.60.2.dylib ${icu60}/lib/libicuuc.60.2.dylib)
+    change_args+=(-change @loader_path/lib/libxerces-c-3.2.dylib ${xercesc}/lib/libxerces-c-3.2.dylib)
+
+    # Patch binary
+    install_name_tool "''${change_args[@]}" "$out/libexec/ovftool"
+
+    # Additional patches for ovftool dylibs
+    change_args+=(-change /usr/lib/libresolv.9.dylib ${darwin.Libsystem}/lib/libresolv.9.dylib)
+    change_args+=(-change @loader_path/libcares.2.dylib ${c-ares}/lib/libcares.2.dylib)
+    change_args+=(-change @loader_path/libexpat.dylib ${expat}/lib/libexpat.dylib)
+    change_args+=(-change @loader_path/libicudata.60.2.dylib ${icu60}/lib/libicudata.60.2.dylib)
+    change_args+=(-change @loader_path/libicuuc.60.2.dylib ${icu60}/lib/libicuuc.60.2.dylib)
+    change_args+=(-change @loader_path/libxerces-c-3.2.dylib ${xercesc}/lib/libxerces-c-3.2.dylib)
+
+    # Add new abolute paths for other libs to all libs
+    for lib in $out/lib/*.dylib; do
+      libname=$(basename $lib)
+      change_args+=(-change "@loader_path/$libname" "$out/lib/$libname")
+    done
+
+    # Patch all libs
+    for lib in $out/lib/*.dylib; do
+      libname=$(basename $lib)
+      install_name_tool -id "$libname" "$lib"
+      install_name_tool "''${change_args[@]}" "$lib"
+    done
   '';
 
-  dontBuild = true;
-  dontPatch = true;
-  dontConfigure = true;
+  # These paths are need for install check tests
+  propagatedSandboxProfile = lib.optionalString stdenv.isDarwin ''
+    (allow file-read* (subpath "/usr/share/locale"))
+    (allow file-read* (subpath "/var/db/timezone"))
+    (allow file-read* (subpath "/System/Library/TextEncodings"))
+  '';
+
+  doInstallCheck = true;
+
+  postInstallCheck = lib.optionalString stdenv.isDarwin ''
+    export HOME=$TMPDIR
+    # Construct a dummy /etc/passwd file - ovftool attempts to determine the
+    # user's "real" home using this
+    DUMMY_PASSWD="$(realpath $HOME/dummy-passwd)"
+    cat > $DUMMY_PASSWD <<EOF
+    $(whoami)::$(id -u):$(id -g)::$HOME:$SHELL
+    EOF
+    export DYLD_INSERT_LIBRARIES="${libredirect}/lib/libredirect.dylib"
+    export NIX_REDIRECTS="/etc/passwd=$DUMMY_PASSWD"
+  '' + ''
+    mkdir -p ovftool-check && cd ovftool-check
+
+    ovftool_with_args="$out/bin/ovftool --X:logToConsole"
+
+    # `installCheckPhase.ova` is a NixOS 22.11 image (doesn't actually matter)
+    # with a 1 MiB root disk that's all zero. Make sure that it converts
+    # properly.
+
+    $ovftool_with_args --schemaValidate ${./installCheckPhase.ova}
+    $ovftool_with_args --sourceType=OVA --targetType=OVF ${./installCheckPhase.ova} nixos.ovf
+
+    # Test that the output files are there
+    test -f nixos.ovf
+    test -f nixos.mf
+    test -f nixos-disk1.vmdk
+
+    $ovftool_with_args --schemaValidate nixos.ovf
+  '';
 
   meta = with lib; {
-    description = "VMWare tools for working with OVF, OVA, and VMX images";
+    description = "VMware tools for working with OVF, OVA, and VMX images";
+    homepage = "https://developer.vmware.com/web/tool/ovf-tool/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ numinit ];
+    maintainers = with maintainers; [ numinit thanegill ];
     platforms = builtins.attrNames ovftoolSystems;
+    mainProgram = "ovftool";
+    knownVulnerabilities = [
+      "The bundled version of openssl 1.0.2zh in ovftool has open vulnerabilities."
+      "CVE-2024-0727"
+      "CVE-2023-5678"
+      "CVE-2023-3817"
+      "CVE-2009-3767"
+      "CVE-2009-3766"
+      "CVE-2009-3765"
+      "CVE-2009-1390"
+    ];
   };
 }

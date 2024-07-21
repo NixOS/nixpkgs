@@ -27,7 +27,7 @@ let
         ${optionalString srv.unlisted "type        = UNLISTED"}
         ${optionalString (srv.flags != "") "flags = ${srv.flags}"}
         socket_type = ${if srv.protocol == "udp" then "dgram" else "stream"}
-        ${if srv.port != 0 then "port        = ${toString srv.port}" else ""}
+        ${optionalString (srv.port != 0) "port        = ${toString srv.port}"}
         wait        = ${if srv.protocol == "udp" then "yes" else "no"}
         user        = ${srv.user}
         server      = ${srv.server}
@@ -73,12 +73,11 @@ in
           protocol = mkOption {
             type = types.str;
             default = "tcp";
-            description =
-              "Protocol of the service.  Usually <literal>tcp</literal> or <literal>udp</literal>.";
+            description = "Protocol of the service.  Usually `tcp` or `udp`.";
           };
 
           port = mkOption {
-            type = types.int;
+            type = types.port;
             default = 0;
             example = 123;
             description = "Port number of the service.";
@@ -113,7 +112,7 @@ in
             default = false;
             description = ''
               Whether this server is listed in
-              <filename>/etc/services</filename>.  If so, the port
+              {file}`/etc/services`.  If so, the port
               number can be omitted.
             '';
           };

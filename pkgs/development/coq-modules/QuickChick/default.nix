@@ -1,11 +1,13 @@
 { lib, mkCoqDerivation, coq, ssreflect, coq-ext-lib, simple-io, version ? null }:
 
 let recent = lib.versions.isGe "8.7" coq.coq-version; in
-mkCoqDerivation {
+(mkCoqDerivation {
   pname = "QuickChick";
   owner = "QuickChick";
   inherit version;
   defaultVersion = with lib; with versions; lib.switch [ coq.coq-version ssreflect.version ] [
+      { cases = [ (range "8.15" "8.19") pred.true  ]; out = "2.0.2"; }
+      { cases = [ (range "8.13" "8.17") pred.true  ]; out = "1.6.5"; }
       { cases = [ "8.13" pred.true  ]; out = "1.5.0"; }
       { cases = [ "8.12" pred.true  ]; out = "1.4.0"; }
       { cases = [ "8.11" pred.true  ]; out = "1.3.2"; }
@@ -16,6 +18,11 @@ mkCoqDerivation {
       { cases = [ "8.6"  pred.true  ];  out = "20171102"; }
       { cases = [ "8.5"  pred.true  ];  out = "20170512"; }
     ] null;
+  release."2.0.2".sha256    = "sha256-xxKkwDRjB8nUiXNhein1Ppn0DP5FZ13J90xUPAnQBbs=";
+  release."2.0.1".sha256    = "sha256-gJc+9Or6tbqE00920Il4pnEvokRoiADX6CxP/Q0QZaY=";
+  release."1.6.5".sha256    = "sha256-rcFyRDH8UbB9KVk10P5qjtPkWs04p78VNHkCq4mXr3U=";
+  release."1.6.4".sha256    = "sha256-C1060wPSU33yZAFLxGmZlAMXASnx98qz3oSLO8DO+mM=";
+  release."1.6.2".sha256    = "0g5q9zw3xd4zndihq96nxkq4w3dh05418wzlwdk1nnn3b6vbx6z0";
   release."1.5.0".sha256    = "1lq8x86vd3vqqh2yq6hvyagpnhfq5wmk5pg2z0xq7b7dcw7hyfkw";
   release."1.4.0".sha256    = "068p48pm5yxjc3yv8qwzp25bp9kddvxj81l31mjkyx3sdrsw3kyc";
   release."1.3.2".sha256    = "0lciwaqv288dh2f13xk2x0lrn6zyrkqy6g4yy927wwzag2gklfrs";
@@ -34,10 +41,9 @@ mkCoqDerivation {
     "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
 
   mlPlugin = true;
-  extraBuildInputs = lib.optional recent coq.ocamlPackages.num;
+  nativeBuildInputs = lib.optional recent coq.ocamlPackages.ocamlbuild;
   propagatedBuildInputs = [ ssreflect ]
-    ++ lib.optionals recent [ coq-ext-lib simple-io ]
-    ++ lib.optional recent coq.ocamlPackages.ocamlbuild;
+    ++ lib.optionals recent [ coq-ext-lib simple-io ];
   extraInstallFlags = [ "-f Makefile.coq" ];
 
   enableParallelBuilding = false;
@@ -46,4 +52,11 @@ mkCoqDerivation {
     description = "Randomized property-based testing plugin for Coq; a clone of Haskell QuickCheck";
     maintainers = with maintainers; [ jwiegley ];
   };
-}
+}).overrideAttrs (o:
+  let after_1_6 = lib.versions.isGe "1.6" o.version || o.version == "dev";
+  in {
+    nativeBuildInputs = o.nativeBuildInputs
+    ++ lib.optional after_1_6 coq.ocamlPackages.cppo;
+    propagatedBuildInputs = o.propagatedBuildInputs
+    ++ lib.optionals after_1_6 (with coq.ocamlPackages; [ findlib zarith ]);
+})

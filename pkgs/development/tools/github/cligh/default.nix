@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonApplication, pyxdg, PyGithub }:
+{ lib, fetchFromGitHub, buildPythonApplication, pyxdg, pygithub }:
 
 buildPythonApplication rec {
   pname = "cligh";
@@ -13,11 +13,12 @@ buildPythonApplication rec {
     sha256 = "0d1fd78rzl2n75xpmy1gnxh1shvcs4qm0j4qqszqvfriwkg2flxn";
   };
 
-  propagatedBuildInputs = [ pyxdg PyGithub ];
+  propagatedBuildInputs = [ pyxdg pygithub ];
 
   meta = with lib; {
     homepage = "http://the-brannons.com/software/cligh.html";
-    description = "A simple command-line interface to the facilities of Github";
+    description = "Simple command-line interface to the facilities of Github";
+    mainProgram = "cligh";
     longDescription = ''
         Cligh is a simple command-line interface to the facilities of GitHub.
         It is written by Christopher Brannon chris@the-brannons.com. The

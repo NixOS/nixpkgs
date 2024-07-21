@@ -1,35 +1,68 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, wxGTK31
-, meson
-, ninja
+, cmake
+, darwin
+, makeWrapper
+, shared-mime-info
+, boost
+, wxGTK32
 }:
 
-stdenv.mkDerivation {
-  pname = "wxFormBuilder";
-  version = "unstable-2020-08-18";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "wxformbuilder";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "wxFormBuilder";
     repo = "wxFormBuilder";
-    rev = "d053665cc33a79dd935b518b5e7aea6baf493c92";
-    sha256 = "sha256-hTO7Fyp5ZWpq2CfIYEXB85oOkNrqr6Njfh8h0t9B6wU=";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    leaveDotGit = true;
+    postFetch = ''
+      substituteInPlace $out/.git-properties \
+        --replace-fail "\$Format:%h\$" "$(git -C $out rev-parse --short HEAD)" \
+        --replace-fail "\$Format:%(describe)\$" "$(git -C $out rev-parse --short HEAD)"
+      rm -rf $out/.git
+    '';
+    hash = "sha256-e0oYyUv8EjGDVj/TWx2jGaj22YyFJf1xa6lredV1J0Y=";
   };
 
+  postPatch = ''
+    substituteInPlace third_party/tinyxml2/cmake/tinyxml2.pc.in \
+      --replace-fail '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+    sed -i '/fixup_bundle/d' cmake/macros.cmake
+  '';
+
   nativeBuildInputs = [
-    ninja
-    meson
+    cmake
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.sigtool
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
+    shared-mime-info
   ];
 
   buildInputs = [
-    wxGTK31
+    boost
+    wxGTK32
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
   ];
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv $out/wxFormBuilder.app $out/Applications
+    makeWrapper $out/Applications/wxFormBuilder.app/Contents/MacOS/wxFormBuilder $out/bin/wxformbuilder
+  '';
 
   meta = with lib; {
     description = "RAD tool for wxWidgets GUI design";
     homepage = "https://github.com/wxFormBuilder/wxFormBuilder";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ matthuszagh ];
+    license = licenses.gpl2Only;
+    mainProgram = "wxformbuilder";
+    maintainers = with maintainers; [ matthuszagh wegank ];
+    platforms = platforms.unix;
   };
-}
+})

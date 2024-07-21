@@ -7,11 +7,14 @@
 mkDerivation {
   pname = "ksmtp";
   meta = {
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ kcoreaddons kio kmime ];
   propagatedBuildInputs = [ cyrus_sasl ];
-  patches = [ ./0001-Use-KDE_INSTALL_TARGETS_DEFAULT_ARGS-when-installing.patch ];
+  postInstall = ''
+    # added as an include directory by cmake files and fails to compile if it's missing
+    mkdir -p "$out/include/KF5"
+  '';
 }

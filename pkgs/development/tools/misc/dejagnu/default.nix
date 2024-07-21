@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, expect, makeWrapper }:
+{ fetchurl, lib, stdenv, expect, makeWrapper, updateAutotoolsGnuConfigScriptsHook }:
 
 stdenv.mkDerivation rec {
   pname = "dejagnu";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qx2cv6qkxbiqg87jh217jb62hk3s7dmcs4cz1llm2wmsynfznl7";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook makeWrapper ];
   buildInputs = [ expect ];
 
   # dejagnu-1.6.3 can't successfully run tests in source tree:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
   configureScript = "../configure";
 
-  doCheck = true;
+  doCheck = !(with stdenv; isDarwin && isAarch64);
 
   # Note: The test-suite *requires* /dev/pts among the `build-chroot-dirs' of
   # the build daemon when building in a chroot.  See
@@ -36,8 +36,11 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram "$out/bin/runtest" \
-      --prefix PATH ":" "${expect}/bin"
+    # 'runtest' and 'dejagnu' look up 'expect' in their 'bin' path
+    # first. We avoid use of 'wrapProgram' here because  wrapping
+    # of shell scripts does not preserve argv[0] for schell scripts:
+    #   https://sourceware.org/PR30052#c5
+    ln -s ${expect}/bin/expect $out/bin/expect
   '';
 
   meta = with lib; {
@@ -58,6 +61,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,26 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-xprocess
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-xprocess,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cachelib";
-  version = "0.3.0";
+  version = "0.13.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-ssyHNlrSrG8YHRS131jJtmgl6eMTNdet1Hf0nTxL8sM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8jg+zfdIATvu/GSFvqHl4cNMu+s2IFWC22vPZ7Q3WYI=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-xprocess
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # requires set up local server
+    "tests/test_dynamodb_cache.py"
+    "tests/test_mongodb_cache.py"
   ];
 
   pythonImportsCheck = [ "cachelib" ];

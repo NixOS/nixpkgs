@@ -1,22 +1,27 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-fetchFromGitHub rec {
-  name = "cabin-1.005";
+stdenvNoCC.mkDerivation rec {
+  pname = "cabin";
+  version = "1.005";
 
-  owner = "impallari";
-  repo = "Cabin";
-  rev = "982839c790e9dc57c343972aa34c51ed3b3677fd";
+  src = fetchFromGitHub {
+    owner = "impallari";
+    repo = "Cabin";
+    rev = "982839c790e9dc57c343972aa34c51ed3b3677fd";
+    hash = "sha256-9l4QcwCot340Bq41ER68HSZGQ9h0opyzgG3DG/fVZ5s=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     install -m444 -Dt $out/share/fonts/opentype fonts/OTF/*.otf
-    install -m444 -Dt $out/share/doc/${name}    README.md FONTLOG.txt
+    install -m444 -Dt $out/share/doc/${pname}-${version} README.md FONTLOG.txt
+
+    runHook postInstall
   '';
 
-  sha256 = "1bl7h217m695jn4rbniialfk573aa44fslp2rjxnhkicakpcm44h";
-
   meta = with lib; {
-    description = "A humanist sans with 4 weights and true italics";
+    description = "Humanist sans with 4 weights and true italics";
     longDescription = ''
       The Cabin font family is a humanist sans with 4 weights and true italics,
       inspired by Edward Johnston’s and Eric Gill’s typefaces, with a touch of

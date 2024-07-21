@@ -5,17 +5,18 @@
 , enableDdc ? true, ddcutil
 , enableDpms ? true, libXext
 , enableGamma ? true, libdrm, libXrandr, wayland
-, enableScreen ? true }:
+, enableScreen ? true
+, enableYoctolight ? true }:
 
 stdenv.mkDerivation rec {
   pname = "clightd";
-  version = "5.4";
+  version = "5.8";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clightd";
     rev = version;
-    sha256 = "sha256-ppaxfnZB3+aOzvc/wk1f8D2mFYngQspEOl9XArNMdBE=";
+    hash = "sha256-Lmno/TJVCQVNzfpKNZzuDf2OM6w6rbz+zJTr3zVo/CM=";
   };
 
   # dbus-1.pc has datadir=/etc
@@ -33,10 +34,11 @@ stdenv.mkDerivation rec {
       "-DDBUS_CONFIG_DIR=${placeholder "out"}/etc/dbus-1/system.d"
       # systemd.pc has prefix=${systemd.out}
       "-DMODULE_LOAD_DIR=${placeholder "out"}/lib/modules-load.d"
-    ] ++ optional enableDdc    "-DENABLE_DDC=1"
-      ++ optional enableDpms   "-DENABLE_DPMS=1"
-      ++ optional enableGamma  "-DENABLE_GAMMA=1"
-      ++ optional enableScreen "-DENABLE_SCREEN=1";
+    ] ++ optional enableDdc        "-DENABLE_DDC=1"
+      ++ optional enableDpms       "-DENABLE_DPMS=1"
+      ++ optional enableGamma      "-DENABLE_GAMMA=1"
+      ++ optional enableScreen     "-DENABLE_SCREEN=1"
+      ++ optional enableYoctolight "-DENABLE_YOCTOLIGHT=1";
 
   nativeBuildInputs = [
     dbus
@@ -68,6 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux bus interface that changes screen brightness/temperature";
+    mainProgram = "clightd";
     homepage = "https://github.com/FedeDP/Clightd";
     platforms = platforms.linux;
     license = licenses.gpl3;

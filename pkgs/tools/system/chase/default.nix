@@ -12,8 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
-  makeFlags = [ "-e" ];
-  makeFlagsArray="LIBS=-lgc";
+  makeFlags = [ "-e" "LIBS=-lgc" ];
 
   meta = with lib ; {
     description = "Follow a symlink and print out its target file";
@@ -24,5 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.polyrod ];
     platforms = platforms.all;
+    mainProgram = "chase";
   };
 }

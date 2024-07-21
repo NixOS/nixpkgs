@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tdrop";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "noctuid";
     repo = "tdrop";
     rev = version;
-    sha256 = "sha256-1umHwzpv4J8rZ0c0q+2dPsEk4vhFB4UerwI8ctIJUZg=";
+    sha256 = "sha256-fHvGXaZL7MMvTnkap341B79PDDo2lOVPPcOH4AX/zXo=";
   };
 
   dontBuild = true;
@@ -34,10 +34,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   meta = with lib; {
-    description = "A Glorified WM-Independent Dropdown Creator";
+    description = "Glorified WM-Independent Dropdown Creator";
+    mainProgram = "tdrop";
     homepage = "https://github.com/noctuid/tdrop";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wedens ];
+    maintainers = with maintainers; [ ];
   };
 }

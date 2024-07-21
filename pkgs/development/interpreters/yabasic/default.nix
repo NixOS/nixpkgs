@@ -8,13 +8,13 @@
 , ncurses
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yabasic";
-  version = "2.90.1";
+  version = "2.90.4";
 
   src = fetchurl {
-    url = "http://www.yabasic.de/download/${pname}-${version}.tar.gz";
-    hash = "sha256-9LqiwS3Udql3YZoufo3spVpE46me3McI8L08TpNJpJo=";
+    url = "http://www.yabasic.de/download/yabasic-${finalAttrs.version}.tar.gz";
+    hash = "sha256-td54SC1LnO3z07m3BsVDpiAsmokzB4xn4dbVdfeYH8M=";
   };
 
   buildInputs = [
@@ -25,9 +25,10 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://2484.de/yabasic/";
     description = "Yet another BASIC";
+    mainProgram = "yabasic";
     longDescription = ''
       Yabasic is a traditional basic-interpreter. It comes with goto and various
       loops and allows to define subroutines and libraries. It does simple
@@ -36,8 +37,9 @@ stdenv.mkDerivation rec {
       and has a comprehensive documentation; it is small, simple, open-source
       and free.
    '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.all;
+    changelog = "https://2484.de/yabasic/whatsnew.html";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.all;
   };
-}
+})

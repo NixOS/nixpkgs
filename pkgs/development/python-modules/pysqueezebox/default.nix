@@ -1,22 +1,46 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, aiohttp }:
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "pysqueezebox";
-  version = "0.5.5";
+  version = "0.7.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "93e6a3824b560d4ea2b2e5f0a67fdf3b309b6194fbf9927e44fc0d12c7fdc6c0";
+  src = fetchFromGitHub {
+    owner = "rajlaud";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WnL9Va3uaWlUHVBtit4v+XdYOFmPpxG91mAHEGwI+7c=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
+  propagatedBuildInputs = [ aiohttp ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
   ];
 
-  # No tests in the Pypi distribution
-  doCheck = false;
   pythonImportsCheck = [ "pysqueezebox" ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: 'has_calls' is not a valid assertion. Use a spec for the mock if 'has_calls' is meant to be an attribute.
+    "test_verified_pause"
+  ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/test_integration.py"
+  ];
 
   meta = with lib; {
     description = "Asynchronous library to control Logitech Media Server";

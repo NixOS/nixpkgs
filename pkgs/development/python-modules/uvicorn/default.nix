@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, asgiref
-, click
-, colorama
-, h11
-, httptools
-, python-dotenv
-, pyyaml
-, typing-extensions
-, uvloop
-, watchgod
-, websockets
-, wsproto
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  click,
+  h11,
+  httptools,
+  python-dotenv,
+  pyyaml,
+  typing-extensions,
+  uvloop,
+  watchfiles,
+  websockets,
+  hatchling,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.14.0";
-  disabled = pythonOlder "3.6";
+  version = "0.29.0";
+  disabled = pythonOlder "3.8";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
-    rev = version;
-    sha256 = "164x92k3rs47ihkmwq5av396576dxp4rzv6557pwgc1ign2ikqy1";
+    repo = "uvicorn";
+    rev = "refs/tags/${version}";
+    hash = "sha256-D0FdZxaDB+9N/7p73GF8qw0UwbXTQrKc1WOgy9UltxA=";
   };
 
   outputs = [
@@ -34,20 +35,20 @@ buildPythonPackage rec {
     "testsout"
   ];
 
-  propagatedBuildInputs = [
-    asgiref
+  build-system = [ hatchling ];
+
+  dependencies = [
     click
-    colorama
     h11
+  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+
+  passthru.optional-dependencies.standard = [
     httptools
     python-dotenv
     pyyaml
     uvloop
-    watchgod
+    watchfiles
     websockets
-    wsproto
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
   postInstall = ''
@@ -55,9 +56,7 @@ buildPythonPackage rec {
     cp -R tests $testsout/tests
   '';
 
-  pythonImportsCheck = [
-    "uvicorn"
-  ];
+  pythonImportsCheck = [ "uvicorn" ];
 
   # check in passthru.tests.pytest to escape infinite recursion with httpx/httpcore
   doCheck = false;
@@ -68,7 +67,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://www.uvicorn.org/";
-    description = "The lightning-fast ASGI server";
+    changelog = "https://github.com/encode/uvicorn/blob/${src.rev}/CHANGELOG.md";
+    description = "Lightning-fast ASGI server";
+    mainProgram = "uvicorn";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];
   };

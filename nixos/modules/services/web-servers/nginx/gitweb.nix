@@ -42,7 +42,7 @@ in
       default = "nginx";
       type = types.str;
       description = ''
-        Group that the CGI process will belong to. (Set to <literal>config.services.gitolite.group</literal> if you are using gitolite.)
+        Group that the CGI process will belong to. (Set to `config.services.gitolite.group` if you are using gitolite.)
       '';
     };
 
@@ -79,7 +79,7 @@ in
         };
         locations."${cfg.location}/" = {
           extraConfig = ''
-            include ${pkgs.nginx}/conf/fastcgi_params;
+            include ${config.services.nginx.package}/conf/fastcgi_params;
             fastcgi_param GITWEB_CONFIG ${gitwebConfig.gitwebConfigFile};
             fastcgi_pass unix:/run/gitweb/gitweb.sock;
           '';

@@ -3,14 +3,14 @@
 let
   pythonPackages = python3Packages;
 in pythonPackages.buildPythonApplication rec {
-  version = "2.1.0";
+  version = "2.3.1";
   pname = "nvpy";
 
   src = fetchFromGitHub {
     owner = "cpbotha";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "02njvybd8yaqdnc5ghwrm8225z57gg4w7rhmx3w5jqzh16ld4mhh";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-guNdLu/bCk89o5M3gQU7J0W4h7eZdLHM0FG5IAPLE7c=";
   };
 
 
@@ -33,9 +33,10 @@ in pythonPackages.buildPythonApplication rec {
   '';
 
   meta = with pkgs.lib; {
-    description = "A simplenote-syncing note-taking tool inspired by Notational Velocity";
+    description = "Simplenote-syncing note-taking tool inspired by Notational Velocity";
     homepage = "https://github.com/cpbotha/nvpy";
     platforms = platforms.linux;
     license = licenses.bsd3;
+    mainProgram = "nvpy";
   };
 }

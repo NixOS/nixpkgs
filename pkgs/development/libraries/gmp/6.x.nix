@@ -12,12 +12,12 @@
 let inherit (lib) optional; in
 
 let self = stdenv.mkDerivation rec {
-  pname = "gmp";
-  version = "6.2.1";
+  pname = "gmp${lib.optionalString cxx "-with-cxx"}";
+  version = "6.3.0";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
     urls = [ "mirror://gnu/gmp/gmp-${version}.tar.bz2" "ftp://ftp.gmplib.org/pub/gmp-${version}/gmp-${version}.tar.bz2" ];
-    sha256 = "0z2ddfiwgi0xbf65z4fg4hqqzlhv0cc6hdcswf3c6n21xdmk5sga";
+    hash = "sha256-rCghGnz7YJuuLiyNYFjWbI/pZDT3QM9v4uR7AA0cIMs=";
   };
 
   #outputs TODO: split $cxx due to libstdc++ dependency
@@ -26,6 +26,7 @@ let self = stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "info" ];
   passthru.static = self.out;
 
+  strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ m4 ];
 
@@ -58,7 +59,10 @@ let self = stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gmplib.org/";
     description = "GNU multiple precision arithmetic library";
-    license = licenses.gpl3Plus;
+    license = with licenses; [
+      lgpl3Only
+      gpl2Only
+    ];
 
     longDescription =
       '' GMP is a free library for arbitrary precision arithmetic, operating
@@ -83,7 +87,7 @@ let self = stdenv.mkDerivation rec {
       '';
 
     platforms = platforms.all;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
   };
 };
   in self

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -7,6 +7,7 @@ let
   name = "sickbeard";
 
   cfg = config.services.sickbeard;
+  opt = options.services.sickbeard;
   sickbeard = cfg.package;
 
 in
@@ -21,13 +22,10 @@ in
         default = false;
         description = "Whether to enable the sickbeard server.";
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.sickbeard;
-        defaultText = literalExpression "pkgs.sickbeard";
-        example = literalExpression "pkgs.sickrage";
-        description =''
-          Enable <literal>pkgs.sickrage</literal> or <literal>pkgs.sickgear</literal>
+      package = mkPackageOption pkgs "sickbeard" {
+        example = "sickrage";
+        extraDescription = ''
+          Enable `pkgs.sickrage` or `pkgs.sickgear`
           as an alternative to SickBeard
         '';
       };
@@ -39,6 +37,7 @@ in
       configFile = mkOption {
         type = types.path;
         default = "${cfg.dataDir}/config.ini";
+        defaultText = literalExpression ''"''${config.${opt.dataDir}}/config.ini"'';
         description = "Path to config file.";
       };
       port = mkOption {

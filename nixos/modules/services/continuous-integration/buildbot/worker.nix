@@ -1,13 +1,15 @@
 # NixOS module for Buildbot Worker.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.buildbot-worker;
+  opt = options.services.buildbot-worker;
 
-  python = cfg.package.pythonModule;
+  package = pkgs.python3.pkgs.toPythonModule cfg.package;
+  python = package.pythonModule;
 
   tacFile = pkgs.writeText "aur-buildbot-worker.tac" ''
     import os
@@ -77,6 +79,7 @@ in {
 
       buildbotDir = mkOption {
         default = "${cfg.home}/worker";
+        defaultText = literalExpression ''"''${config.${opt.home}}/worker"'';
         type = types.path;
         description = "Specifies the Buildbot directory.";
       };
@@ -119,19 +122,13 @@ in {
       keepalive = mkOption {
         default = 600;
         type = types.int;
-        description = "
+        description = ''
           This is a number that indicates how frequently keepalive messages should be sent
           from the worker to the buildmaster, expressed in seconds.
-        ";
+        '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.python3Packages.buildbot-worker;
-        defaultText = literalExpression "pkgs.python3Packages.buildbot-worker";
-        description = "Package to use for buildbot worker.";
-        example = literalExpression "pkgs.python2Packages.buildbot-worker";
-      };
+      package = mkPackageOption pkgs "buildbot-worker" { };
 
       packages = mkOption {
         default = with pkgs; [ git ];
@@ -166,7 +163,7 @@ in {
       after = [ "network.target" "buildbot-master.service" ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages;
-      environment.PYTHONPATH = "${python.withPackages (p: [ cfg.package ])}/${python.sitePackages}";
+      environment.PYTHONPATH = "${python.withPackages (p: [ package ])}/${python.sitePackages}";
 
       preStart = ''
         mkdir -vp "${cfg.buildbotDir}/info"
@@ -191,6 +188,6 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = lib.teams.buildbot.members;
 
 }

@@ -1,33 +1,42 @@
-{ lib, stdenv
-, fetchgit
-, unstableGitUpdater
+{ lib
+, stdenv
+, fetchzip
 , callPackage
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qbe";
-  version = "unstable-2021-11-22";
+  version = "1.2";
 
-  src = fetchgit {
-    url = "git://c9x.me/qbe.git";
-    rev = "bf153b359e9ce3ebef9bca899eb7ed5bd9045c11";
-    sha256 = "sha256-13Mvq4VWZxlye/kncJibCnfSECx4PeHMYLuX0xMkN3A=";
+  src = fetchzip {
+    url = "https://c9x.me/compile/release/qbe-${finalAttrs.version}.tar.xz";
+    hash = "sha256-UgtJnZF/YtD54OBy9HzGRAEHx5tC9Wo2YcUidGwrv+s=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   doCheck = true;
 
+  enableParallelBuilding = true;
+
+  patches = [
+    # Use "${TMPDIR:-/tmp}" instead of the latter directly
+    # see <https://lists.sr.ht/~mpu/qbe/patches/49613>
+    ./001-dont-hardcode-tmp.patch
+  ];
+
   passthru = {
-    tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
-    updateScript = unstableGitUpdater { };
+    tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
   };
 
   meta = with lib; {
     homepage = "https://c9x.me/compile/";
-    description = "A small compiler backend written in C";
+    description = "Small compiler backend written in C";
     maintainers = with maintainers; [ fgaz ];
     license = licenses.mit;
     platforms = platforms.all;
+    mainProgram = "qbe";
   };
-}
+})

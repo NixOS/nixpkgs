@@ -1,13 +1,22 @@
 diff --git a/tests/cli/test_run.py b/tests/cli/test_run.py
-index 459aa82..c6e434e 100644
+index 1452cfd..0a21c09 100644
 --- a/tests/cli/test_run.py
 +++ b/tests/cli/test_run.py
-@@ -180,7 +180,7 @@ def test_main_multiple_autohide_options(capsys, options):
-         assert str(e.value) == "2"
+@@ -240,7 +240,7 @@ def test_main_multiple_autohide_options(
+ 
      captured = capsys.readouterr()
-     lines = captured.err.strip('\n')
+     lines = captured.err.strip("\n")
 -    lines = lines.split("pytest: ", 1)[1]
 +    lines = lines.split("__main__.py: ", 1)[1]
-     expected = ("error: argument {}: not allowed "
-                 "with argument {}".format(options[1], options[0]))
+     expected = f"error: argument {options[1]}: not allowed with argument {options[0]}"
      assert lines == expected
+ 
+@@ -277,7 +277,7 @@ def test_main_multiple_notify_options(
+ 
+     captured = capsys.readouterr()
+     lines = captured.err.strip("\n")
+-    lines = lines.split("pytest: ", 1)[1]
++    lines = lines.split("__main__.py: ", 1)[1]
+     expected = f"error: argument {options[1]}: not allowed with argument {options[0]}"
+     assert lines == expected
+ 

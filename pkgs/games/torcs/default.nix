@@ -1,4 +1,4 @@
-{ fetchpatch, fetchurl, lib, stdenv, libGLU, freeglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
+{ fetchpatch, fetchurl, lib, stdenv, libGLU, libglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
 libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, libvorbis,
 libpng, zlib, makeWrapper }:
 
@@ -30,19 +30,24 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postInstall = ''
+    install -D -m644 Ticon.png $out/share/pixmaps/torcs.png
+    install -D -m644 torcs.desktop $out/share/applications/torcs.desktop
+  '';
+
   postPatch = ''
     sed -i -e s,/bin/bash,`type -P bash`, src/linux/torcs.in
   '';
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ libGLU freeglut libX11 plib openal freealut libXrandr xorgproto
+  buildInputs = [ libGLU libglut libX11 plib openal freealut libXrandr xorgproto
     libXext libSM libICE libXi libXt libXrender libXxf86vm libpng zlib libvorbis ];
 
   installTargets = "install datainstall";
 
   meta = {
     description = "Car racing game";
-    homepage = "http://torcs.sourceforge.net/";
+    homepage = "https://torcs.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [viric];
     platforms = lib.platforms.linux;

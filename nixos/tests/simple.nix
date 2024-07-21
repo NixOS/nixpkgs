@@ -1,10 +1,10 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "simple";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [ ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
   };
 

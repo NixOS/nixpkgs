@@ -6,17 +6,20 @@
 , pkg-config
 , libuuid
 , openssl
+, libossp_uuid
+, freeswitch
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "libks";
-  version = "1.7.0";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wvl8kzi1fx7pg58r5x1lw4gwkvrkljqajsn72yq6sbsd3iqn8wr";
+    sha256 = "sha256-cSBtNOJfau+7wQ5iUs4hnqSMoo8XYN9opwPfox2ke+E=";
   };
 
   patches = [
@@ -33,16 +36,21 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libuuid
-    openssl
-  ];
+  buildInputs = [ openssl ]
+    ++ lib.optional stdenv.isLinux libuuid
+    ++ lib.optional stdenv.isDarwin libossp_uuid;
+
+  passthru = {
+    tests.freeswitch = freeswitch;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Foundational support for signalwire C products";
     homepage = "https://github.com/signalwire/libks";
     maintainers = with lib.maintainers; [ misuzu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.mit;
   };
 }

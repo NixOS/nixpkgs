@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wmutils-core";
-  version = "1.5";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "wmutils";
     repo = "core";
     rev = "v${version}";
-    sha256 = "XPVH7vXlpmUsvNyGKMxLSZnWLnH/J5nGkXizcVqDwzM=";
+    sha256 = "sha256-OKAvJovGu9rMxEe5g4kdL7Foj41kl3zUYIJa04jf0dI=";
   };
 
   buildInputs = [ libxcb xcbutil xcb-util-cursor ];

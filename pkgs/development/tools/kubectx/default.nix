@@ -2,20 +2,24 @@
 
 buildGoModule rec {
   pname = "kubectx";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WY0zFt76mvdzk/s2Rzqys8n+DVw6qg7V6Y8JncOUVCM=";
+    hash = "sha256-HVmtUhdMjbkyMpTgbsr5Mm286F9Q7zbc5rOxi7OBZEg=";
   };
 
-  vendorSha256 = "sha256-4sQaqC0BOsDfWH3cHy2EMQNMq6qiAcbV+RwxCdcSxsg=";
-
-  doCheck = false;
+  vendorHash = "sha256-3xetjviMuH+Nev12DB2WN2Wnmw1biIDAckUSGVRHQwM=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   postInstall = ''
     installShellCompletion completion/*
@@ -26,6 +30,5 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://github.com/ahmetb/kubectx";
     maintainers = with maintainers; [ jlesquembre ];
-    platforms = with platforms; unix;
   };
 }

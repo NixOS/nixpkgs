@@ -8,16 +8,16 @@
 , pulseaudioFull
 , glibmm
 , gtkmm3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "paprefs";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchurl {
     url = "https://freedesktop.org/software/pulseaudio/paprefs/paprefs-${version}.tar.xz";
-    sha256 = "189z5p20hk0xv9vwvym293503j4pwl03xqk9hl7cl6dwgv0l7wkf";
+    sha256 = "sha256-s/IeQNw5NtFeP/yRD7DAfBS4jowodxW0VqlIwXY49jM=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "PulseAudio Preferences";
+    mainProgram = "paprefs";
 
     longDescription = ''
       PulseAudio Preferences (paprefs) is a simple GTK based configuration

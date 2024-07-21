@@ -35,11 +35,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://mcabber.com/";
     description = "Small Jabber console client";
+    mainProgram = "mcabber";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;
-    updateWalker = true;
     downloadPage = "http://mcabber.com/files/";
-    downloadURLRegexp = "mcabber-[0-9.]+[.]tar[.][a-z0-9]+$";
   };
 }

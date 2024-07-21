@@ -18,7 +18,7 @@ mkDerivation {
   enableParallelBuilding = false;
 
   meta = with lib; {
-    description = "A graphical tool for rapidly creating graphs and diagrams using PGF/TikZ";
+    description = "Graphical tool for rapidly creating graphs and diagrams using PGF/TikZ";
     longDescription = ''
       TikZiT is a simple GUI editor for graphs and string diagrams.
       Its native file format is a subset of PGF/TikZ, which means TikZiT files
@@ -29,5 +29,6 @@ mkDerivation {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.iblech maintainers.mgttlinger ];
+    mainProgram = "tikzit";
   };
 }

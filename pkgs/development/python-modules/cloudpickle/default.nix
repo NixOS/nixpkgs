@@ -1,28 +1,50 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pytest, mock }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  flit-core,
+
+  # tests
+  psutil,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "cloudpickle";
-  version = "1.6.0";
-  disabled = isPy27; # abandoned upstream
+  version = "3.0.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9bc994f9e9447593bd0a45371f0e7ac7333710fcf64a4eb9834bf149f4ef2f32";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "cloudpipe";
+    repo = "cloudpickle";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UeKVwzT0m4fhEVnG7TvQsFR99JsmwwoXmr+rWnTCeJU=";
   };
 
-  buildInputs = [ pytest mock ];
+  nativeBuildInputs = [ flit-core ];
 
-  # See README for tests invocation
-  checkPhase = ''
-    PYTHONPATH=$PYTHONPATH:'.:tests' py.test
-  '';
+  nativeCheckInputs = [
+    psutil
+    pytestCheckHook
+  ];
 
-  # TypeError: cannot serialize '_io.FileIO' object
-  doCheck = false;
+  pythonImportsCheck = [ "cloudpickle" ];
+
+  disabledTestPaths = [
+    # ModuleNotFoundError: No module named 'psutil'
+    "tests/cloudpickle_test.py"
+  ];
 
   meta = with lib; {
+    changelog = "https://github.com/cloudpipe/cloudpickle/blob/v${version}/CHANGES.md";
     description = "Extended pickling support for Python objects";
     homepage = "https://github.com/cloudpipe/cloudpickle";
     license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ ];
   };
 }

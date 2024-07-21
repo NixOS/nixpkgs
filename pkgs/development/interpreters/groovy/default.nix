@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "groovy";
-  version = "3.0.7";
+  version = "4.0.22";
 
   src = fetchurl {
-    url = "http://dl.bintray.com/groovy/maven/apache-groovy-binary-${version}.zip";
-    sha256 = "1xdpjqx7qaq0syw448b32q36g12pgh1hn6knyqi3k5isp0f09qmr";
+    url = "mirror://apache/groovy/${version}/distribution/apache-groovy-binary-${version}.zip";
+    sha256 = "sha256-2Ro93+NThx1MJlbT0KBcgovD/zbp1J29vsE9zZjwWHc=";
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     mkdir -p $out/share/doc/groovy
     rm bin/*.bat
-    mv {bin,conf,grooid,indy,lib} $out
+    mv {bin,conf,grooid,lib} $out
     mv {licenses,LICENSE,NOTICE} $out/share/doc/groovy
 
     sed -i 's#which#${which}/bin/which#g' $out/bin/startGroovy
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An agile dynamic language for the Java Platform";
+    description = "Agile dynamic language for the Java Platform";
     homepage = "http://groovy-lang.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ pSub ];

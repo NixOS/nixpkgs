@@ -1,35 +1,67 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, which }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, glib
+, which
+, bison
+, nixosTests
+, libnl
+, linuxHeaders
+, gnutls
+}:
 
 stdenv.mkDerivation rec {
   pname = "nbd";
-  version = "3.21";
+  version = "3.25";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nbd/nbd-${version}.tar.xz";
-    sha256 = "sha256-52iK852Rczu80tsIBixE/lA9AE5RUodAE5xEr/amvvk=";
+    url = "https://github.com/NetworkBlockDevice/nbd/releases/download/nbd-${version}/nbd-${version}.tar.xz";
+    hash = "sha256-9cj9D8tXsckmWU0OV/NWQy7ghni+8dQNCI8IMPDL3Qo=";
   };
 
-  buildInputs = [ glib ]
-    ++ lib.optional (stdenv ? glibc) stdenv.glibc.linuxHeaders;
+  patches = [
+    # fix port setting from nbdtab
+    # https://github.com/NetworkBlockDevice/nbd/pull/154
+    (fetchpatch {
+      url = "https://github.com/NetworkBlockDevice/nbd/commit/915444bc0b8a931d32dfb755542f4bd1d37f1449.patch";
+      hash = "sha256-6z+c2cXhY92WPDqRO6AJ5BBf1N38yTgOE1foduIr5Dg=";
+    })
+  ];
 
-  nativeBuildInputs = [ pkg-config which ];
+  nativeBuildInputs = [
+    pkg-config
+    which
+    bison
+  ];
 
-  postInstall = ''
-    mkdir -p "$out/share/doc/nbd-${version}"
-    cp README.md "$out/share/doc/nbd-${version}/"
-  '';
+  buildInputs = [
+    glib
+    gnutls
+  ] ++ lib.optionals stdenv.isLinux [
+    libnl
+    linuxHeaders
+  ];
 
-  doCheck = true;
+  configureFlags = [
+    "--sysconfdir=/etc"
+  ];
 
-  # Glib calls `clock_gettime', which is in librt. Linking that library
-  # here ensures that a proper rpath is added to the executable so that
-  # it can be loaded at run-time.
-  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lrt -lpthread";
+  # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
+
+  doCheck = !stdenv.isDarwin;
+
+  passthru.tests = {
+    test = nixosTests.nbd;
+  };
 
   meta = {
-    homepage = "http://nbd.sourceforge.net";
+    homepage = "https://nbd.sourceforge.io/";
     description = "Map arbitrary files as block devices over the network";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

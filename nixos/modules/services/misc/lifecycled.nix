@@ -25,7 +25,7 @@ in
 
   options = {
     services.lifecycled = {
-      enable = mkEnableOption "lifecycled";
+      enable = mkEnableOption "lifecycled, a daemon for responding to AWS AutoScaling Lifecycle Hooks";
 
       queueCleaner = {
         enable = mkEnableOption "lifecycled-queue-cleaner";
@@ -37,8 +37,8 @@ in
             How often to trigger the queue cleaner.
 
             NOTE: This string should be a valid value for a systemd
-            timer's <literal>OnCalendar</literal> configuration. See
-            <citerefentry><refentrytitle>systemd.timer</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+            timer's `OnCalendar` configuration. See
+            {manpage}`systemd.timer(5)`
             for more information.
           '';
         };

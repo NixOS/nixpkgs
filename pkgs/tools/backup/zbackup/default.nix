@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , cmake, protobufc
 , libunwind, lzo, openssl, protobuf, zlib
 }:
@@ -20,11 +20,16 @@ stdenv.mkDerivation rec {
     ./protobuf-api-change.patch
   ];
 
+  # zbackup uses dynamic exception specifications which are not
+  # allowed in C++17
+  env.NIX_CFLAGS_COMPILE = toString [ "--std=c++14" ];
+
   buildInputs = [ zlib openssl protobuf lzo libunwind ];
   nativeBuildInputs = [ cmake protobufc ];
 
   meta = {
-    description = "A versatile deduplicating backup tool";
+    description = "Versatile deduplicating backup tool";
+    mainProgram = "zbackup";
     homepage = "http://zbackup.org/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;

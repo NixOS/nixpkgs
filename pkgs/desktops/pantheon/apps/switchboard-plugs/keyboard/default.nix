@@ -23,28 +23,25 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "2.6.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Bl0T+8upTdBnLs03UIimcAg0LO40KwuMZRNSM+y/3Hc=";
+    sha256 = "sha256-4LfS2F8pLbZw+HhnEVmZqbEaNCM96q+lqnf4sUBDVJI=";
   };
 
   patches = [
-    ./0001-Remove-Install-Unlisted-Engines-function.patch
+    # This will try to install packages with apt.
+    # https://github.com/elementary/switchboard-plug-keyboard/issues/324
+    ./hide-install-unlisted-engines-button.patch
+
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit ibus onboard;
+      inherit ibus onboard libgnomekbd;
     })
   ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
 
   nativeBuildInputs = [
     libxml2
@@ -61,11 +58,14 @@ stdenv.mkDerivation rec {
     gtk3
     ibus
     libgee
-    libgnomekbd
     libhandy
     libxklavier
     switchboard
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Switchboard Keyboard Plug";

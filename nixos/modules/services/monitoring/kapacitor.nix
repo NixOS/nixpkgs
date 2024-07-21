@@ -66,7 +66,7 @@ in
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 9092;
       description = "Port of Kapacitor";
     };
@@ -160,9 +160,9 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.kapacitor ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-kapacitor".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+    };
 
     systemd.services.kapacitor = {
       description = "Kapacitor Real-Time Stream Processing Engine";

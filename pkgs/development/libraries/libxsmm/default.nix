@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, gfortran, gnused
+{ lib, stdenv, fetchFromGitHub, gfortran
 , python3, util-linux, which
 
 , enableStatic ? stdenv.hostPlatform.isStatic
@@ -15,10 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PpMiD/PeQ0pe5hqFG6VFHWpR8y3wnO2z1dJfHHeItlQ=";
   };
 
+  outputs = [ "out" "dev" "doc" ];
   nativeBuildInputs = [
-    coreutils
     gfortran
-    gnused
     python3
     util-linux
     which
@@ -36,12 +35,21 @@ stdenv.mkDerivation rec {
     "STATIC=${static}"
   ];
 
+  postInstall = ''
+    mkdir -p $dev/lib/pkgconfig
+    mv $out/lib/*.pc $dev/lib/pkgconfig
+
+    moveToOutput "share/libxsmm" "$doc"
+  '';
+
   prePatch = ''
     patchShebangs .
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Library targeting Intel Architecture for specialized dense and sparse matrix operations, and deep learning primitives";
+    mainProgram = "libxsmm_gemm_generator";
     license = licenses.bsd3;
     homepage = "https://github.com/hfp/libxsmm";
     platforms = platforms.linux;

@@ -7,20 +7,11 @@
 , zbar
 , secp256k1
 , enableQt ? true
-# for updater.nix
-, writeScript
-, common-updater-scripts
-, bash
-, coreutils
-, curl
-, gnugrep
-, gnupg
-, gnused
-, nix
+, qtwayland
 }:
 
 let
-  version = "4.0.9.3";
+  version = "4.2.2.1";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -29,6 +20,7 @@ let
 
   libzbar_name =
     if stdenv.isLinux then "libzbar.so.0"
+    else if stdenv.isDarwin then "libzbar.0.dylib"
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   # Not provided in official source releases, which are what upstream signs.
@@ -36,25 +28,12 @@ let
     owner = "pooler";
     repo = "electrum-ltc";
     rev = version;
-    sha256 = "sha256-oZjQnrnj8nCaQjrIz8bWNt6Ib8Wu2ZMXHEPfCCy2fjk=";
+    sha256 = "sha256-qu72LIV07pgHqvKv+Kcw9ZmNk6IBz+4/vdJELlT5tE4=";
 
-    extraPostFetch = ''
+    postFetch = ''
       mv $out ./all
       mv ./all/electrum_ltc/tests $out
     '';
-  };
-
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      aiorpcx = super.aiorpcx.overridePythonAttrs (oldAttrs: rec {
-        version = "0.18.7";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1rswrspv27x33xa5bnhrkjqzhv0sknv5kd7pl1vidw9d2z4rx2l0";
-        };
-      });
-    };
   };
 
 in
@@ -65,7 +44,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://electrum-ltc.org/download/Electrum-LTC-${version}.tar.gz";
-    sha256 = "sha256-+oox0BGqkvj0OGOKJF8tUoKdsZFeffNb6rTF8E8mo08=";
+    sha256 = "sha256-7F28cve+HD5JDK5igfkGD/NvTCfA33g+DmQJ5mwPM9Q=";
   };
 
   postUnpack = ''
@@ -73,14 +52,9 @@ python3.pkgs.buildPythonApplication {
     cp -ar ${tests} $sourceRoot/electrum_ltc/tests
   '';
 
-  prePatch = ''
-    substituteInPlace contrib/requirements/requirements.txt \
-      --replace "dnspython>=2.0,<2.1" "dnspython>=2.0"
-  '';
-
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx
@@ -92,13 +66,13 @@ python3.pkgs.buildPythonApplication {
     matplotlib
     pbkdf2
     protobuf
-    py_scrypt
+    py-scrypt
     pysocks
     qrcode
     requests
-    tlslite-ng
+    certifi
     # plugins
-    btchip
+    btchip-python
     ckcc-protocol
     keepkey
     trezor
@@ -106,6 +80,26 @@ python3.pkgs.buildPythonApplication {
     pyqt5
     qdarkstyle
   ];
+
+  patches = [
+    # electrum-ltc attempts to pin to aiorpcX < 0.23, but nixpkgs
+    # has moved to newer versions.
+    #
+    # electrum-ltc hasn't been updated in some time, so we replicate
+    # the patch from electrum (BTC) and alter it to be usable with
+    # electrum-ltc.
+    #
+    # Similar to the BTC patch, we need to overwrite the symlink
+    # at electrum_ltc/electrum-ltc with the patched run_electrum
+    # in postPatch.
+    ./ltc-aiorpcX-version-bump.patch
+  ];
+
+  postPatch = ''
+    # copy the patched `/run_electrum` over `/electrum/electrum`
+    # so the aiorpcx compatibility patch is used
+    cp run_electrum electrum_ltc/electrum-ltc
+  '';
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
@@ -136,7 +130,8 @@ python3.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum-ltc
   '';
 
-  checkInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  buildInputs = lib.optional stdenv.isLinux qtwayland;
 
   pytestFlagsArray = [ "electrum_ltc/tests" ];
 
@@ -149,23 +144,9 @@ python3.pkgs.buildPythonApplication {
     $out/bin/electrum-ltc help >/dev/null
   '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
-  };
-
   meta = with lib; {
     description = "Lightweight Litecoin Client";
+    mainProgram = "electrum-ltc";
     longDescription = ''
       Electrum-LTC is a simple, but powerful Litecoin wallet. A unique secret
       phrase (or “seed”) leaves intruders stranded and your peace of mind
@@ -175,6 +156,6 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://electrum-ltc.org/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ lourkeur ];
+    maintainers = with maintainers; [ bbjubjub ];
   };
 }

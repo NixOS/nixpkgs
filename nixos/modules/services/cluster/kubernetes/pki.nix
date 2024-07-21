@@ -116,7 +116,7 @@ in
     etcClusterAdminKubeconfig = mkOption {
       description = ''
         Symlink a kubeconfig with cluster-admin privileges to environment path
-        (/etc/&lt;path&gt;).
+        (/etc/\<path\>).
       '';
       default = null;
       type = nullOr str;
@@ -174,9 +174,8 @@ in
       '')
       (optionalString cfg.genCfsslAPIToken ''
         if [ ! -f "${cfsslAPITokenPath}" ]; then
-          head -c ${toString (cfsslAPITokenLength / 2)} /dev/urandom | od -An -t x | tr -d ' ' >"${cfsslAPITokenPath}"
+          install -o cfssl -m 400 <(head -c ${toString (cfsslAPITokenLength / 2)} /dev/urandom | od -An -t x | tr -d ' ') "${cfsslAPITokenPath}"
         fi
-        chown cfssl "${cfsslAPITokenPath}" && chmod 400 "${cfsslAPITokenPath}"
       '')]);
 
     systemd.services.kube-certmgr-bootstrap = {
@@ -193,8 +192,9 @@ in
         mkdir -p "$(dirname "${certmgrAPITokenPath}")"
         if [ -f "${cfsslAPITokenPath}" ]; then
           ln -fs "${cfsslAPITokenPath}" "${certmgrAPITokenPath}"
-        else
-          touch "${certmgrAPITokenPath}" && chmod 600 "${certmgrAPITokenPath}"
+        elif [ ! -f "${certmgrAPITokenPath}" ]; then
+          # Don't remove the token if it already exists
+          install -m 600 /dev/null "${certmgrAPITokenPath}"
         fi
       ''
       (optionalString (cfg.pkiTrustOnBootstrap) ''
@@ -212,7 +212,7 @@ in
 
     services.certmgr = {
       enable = true;
-      package = pkgs.certmgr-selfsigned;
+      package = pkgs.certmgr;
       svcManager = "command";
       specs =
         let
@@ -220,7 +220,6 @@ in
             inherit (cert) action;
             authority = {
               inherit remote;
-              file.path = cert.caCert;
               root_ca = cert.caCert;
               profile = "default";
               auth_key_file = certmgrAPITokenPath;
@@ -266,11 +265,11 @@ in
           in
           ''
             export KUBECONFIG=${clusterAdminKubeconfig}
-            ${kubectl}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
+            ${top.package}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
           '';
         })]);
 
-      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (!isNull cfg.etcClusterAdminKubeconfig)
+      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (cfg.etcClusterAdminKubeconfig != null)
         clusterAdminKubeconfig;
 
       environment.systemPackages = mkIf (top.kubelet.enable || top.proxy.enable) [
@@ -297,8 +296,7 @@ in
           exit 1
         fi
 
-        echo $token > ${certmgrAPITokenPath}
-        chmod 600 ${certmgrAPITokenPath}
+        install -m 0600 <(echo $token) ${certmgrAPITokenPath}
 
         echo "Restarting certmgr..." >&1
         systemctl restart certmgr
@@ -323,7 +321,7 @@ in
           systemctl restart flannel
         ''}
 
-        echo "Node joined succesfully"
+        echo "Node joined successfully"
       '')];
 
       # isolate etcd on loopback at the master node
@@ -401,4 +399,6 @@ in
         };
       };
     });
+
+  meta.buildDocsInSandbox = false;
 }

@@ -1,20 +1,33 @@
-{ lib, stdenv, fetchurl, pkg-config, alsa-lib, audiofile, gtk2, libxml2 }:
+{ lib, stdenv, fetchurl, pkg-config, alsa-lib, audiofile, gtk2, libxml2, copyDesktopItems, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  name = "soundmodem";
+  pname = "soundmodem";
   version = "0.20";
 
   src = fetchurl {
-    url = "https://archive.org/download/${name}-${version}/${name}-${version}.tar.gz";
+    url = "https://archive.org/download/soundmodem-${version}/soundmodem-${version}.tar.gz";
     sha256 = "156l3wjnh5rcisxb42kcmlf74swf679v4xnj09zy5j74rd4h721z";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    copyDesktopItems
+  ];
   buildInputs = [ alsa-lib audiofile gtk2 libxml2 ];
 
   patches = [ ./matFix.patch ];
 
   doCheck = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "SoundmodemConfig";
+      exec = "soundmodemconfig";
+      desktopName = "SoundModemConfig";
+      comment = "Audio based modem for ham radio supporting ax.25";
+      categories = [ "Audio" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Audio based modem for ham radio supporting ax.25";
@@ -28,7 +41,7 @@ stdenv.mkDerivation rec {
     '';
     #homepage = "http://gna.org/projects/soundmodem"; # official, but "Connection refused"
     homepage = "http://soundmodem.vk4msl.id.au/";
-    downloadPage = "https://archive.org/download/${name}-${version}/${name}-${version}.tar.gz";
+    downloadPage = "https://archive.org/download/${pname}-${version}/${pname}-${version}.tar.gz";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ymarkus ];
     platforms = platforms.all;

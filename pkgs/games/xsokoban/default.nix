@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 xorgproto libXpm libXt ];
 
-  NIX_CFLAGS_COMPILE = "-I${libXpm.dev}/include/X11";
+  env.NIX_CFLAGS_COMPILE = "-I${libXpm.dev}/include/X11";
 
   hardeningDisable = [ "format" ];
 
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "X sokoban";
+    mainProgram = "xsokoban";
     license = licenses.publicDomain;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

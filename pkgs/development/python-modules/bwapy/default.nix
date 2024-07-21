@@ -1,16 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, bwa
-, cffi
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  pythonOlder,
+  fetchPypi,
+  bwa,
+  cffi,
+  zlib,
 }:
 
 buildPythonPackage rec {
   pname = "bwapy";
   version = "0.1.4";
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
+
+  # uses the removed imp module
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,7 +30,10 @@ buildPythonPackage rec {
       --replace 'setuptools>=49.2.0' 'setuptools'
   '';
 
-  buildInputs = [ zlib bwa ];
+  buildInputs = [
+    zlib
+    bwa
+  ];
 
   propagatedBuildInputs = [ cffi ];
 
@@ -34,8 +42,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "bwapy" ];
 
   meta = with lib; {
-    homepage = "https://github.com/ACEnglish/acebinf";
+    homepage = "https://github.com/ACEnglish/bwapy";
     description = "Python bindings to bwa mem aligner";
+    mainProgram = "bwamempy";
     license = licenses.mpl20;
     maintainers = with maintainers; [ ris ];
   };

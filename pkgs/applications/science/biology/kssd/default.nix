@@ -1,25 +1,57 @@
-{ lib, stdenv, fetchurl, zlib, automake, autoconf, libtool }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, zlib
+, kssd
+, runCommand
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kssd";
-  version = "1.1";
+  version = "2.21";
 
-  src = fetchurl {
-    url = "https://github.com/yhg926/public_${pname}/archive/v${version}.tar.gz";
-    sha256 = "1x3v31cxnww4w5zn15vy0bwk53llsa0f97ma6qbw89h152d2mx5x";
+  src = fetchFromGitHub {
+    owner = "yhg926";
+    repo = "public_kssd";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-D/s1jL2oKE0rSdRMVljskYFsw5UPOv1L95Of+K+e17w=";
   };
 
-  buildInputs = [ zlib automake autoconf libtool ];
+  patches = [
+    # https://github.com/yhg926/public_kssd/pull/11
+    (fetchpatch {
+      name = "allocate-enough-memory.patch";
+      url = "https://github.com/yhg926/public_kssd/commit/b1e66bbcc04687bc3201301cd742a0b26a87cb5d.patch";
+      hash = "sha256-yFyJetpsGKeu+H6Oxrmn5ea4ESVtblb3YJDja4JEAEM=";
+    })
+  ];
+
+  buildInputs = [ zlib ];
 
   installPhase = ''
-      install -vD kssd $out/bin/kssd
+    runHook preInstall
+
+    install -vD kssd $out/bin/kssd
+
+    runHook postInstall
   '';
+
+  passthru.tests = {
+    simple = runCommand "${finalAttrs.pname}-test" { } ''
+      mkdir $out
+      ${lib.getExe kssd} dist -L ${kssd.src}/shuf_file/L3K10.shuf -r ${kssd.src}/test_fna/seqs1 -o $out/reference
+      ${lib.getExe kssd} dist -L ${kssd.src}/shuf_file/L3K10.shuf -o $out/query ${kssd.src}/test_fna/seqs2
+      ${lib.getExe kssd} dist -r $out/reference -o $out/distout $out/query
+    '';
+  };
 
   meta = with lib; {
     description = "K-mer substring space decomposition";
     license     = licenses.asl20;
     homepage    = "https://github.com/yhg926/public_kssd";
     maintainers = with maintainers; [ unode ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
+    mainProgram = "kssd";
   };
-}
+})

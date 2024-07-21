@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "minisign";
-  version = "0.9";
+  version = "0.11";
 
   src = fetchFromGitHub {
     repo = "minisign";
     owner = "jedisct1";
     rev = version;
-    sha256 = "0qx3hnkwx6ij0hgp5vc74x36qfc4h5wgzr70fqqhmv3zb8q9f2vn";
+    sha256 = "sha256-sczGs6du797WUkfr3JiTI/bUHp7vKEeZtJdCryFcYu8=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libsodium ];
 
   meta = with lib; {
-    description = "A simple tool for signing files and verifying signatures";
+    description = "Simple tool for signing files and verifying signatures";
     longDescription = ''
       minisign uses public key cryptography to help facilitate secure (but not
       necessarily private) file transfer, e.g., of software artefacts. minisign
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ joachifm ];
     platforms = platforms.unix;
+    mainProgram = "minisign";
   };
 }

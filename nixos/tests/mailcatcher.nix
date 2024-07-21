@@ -4,13 +4,18 @@ import ./make-test-python.nix ({ lib, ... }:
   name = "mailcatcher";
   meta.maintainers = [ lib.maintainers.aanderse ];
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     {
       services.mailcatcher.enable = true;
 
-      services.ssmtp.enable = true;
-      services.ssmtp.hostName = "localhost:1025";
+      programs.msmtp = {
+        enable = true;
+        accounts.default = {
+          host = "localhost";
+          port = 1025;
+        };
+      };
 
       environment.systemPackages = [ pkgs.mailutils ];
     };
@@ -19,7 +24,7 @@ import ./make-test-python.nix ({ lib, ... }:
     start_all()
 
     machine.wait_for_unit("mailcatcher.service")
-    machine.wait_for_open_port("1025")
+    machine.wait_for_open_port(1025)
     machine.succeed(
         'echo "this is the body of the email" | mail -s "subject" root@example.org'
     )

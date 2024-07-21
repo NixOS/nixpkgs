@@ -1,24 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  more-itertools,
+  setuptools-scm,
+  pydantic,
+  pytestCheckHook,
+  typeguard,
 }:
 
 buildPythonPackage rec {
   pname = "inflect";
-  version = "5.3.0";
+  version = "7.2.1";
   disabled = isPy27;
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "41a23f6788962e9775e40e2ecfb1d6455d02de315022afeedd3c5dc070019d73";
+    hash = "sha256-p85eI9Z5hzTyVsGtntUhhrjsJ28QsYzj0+yxnCHrbLY=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [
+    more-itertools
+    pydantic
+    typeguard
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # https://errors.pydantic.dev/2.5/v/string_too_short
+    "inflect.engine.compare"
+  ];
 
   pythonImportsCheck = [ "inflect" ];
 

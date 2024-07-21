@@ -2,21 +2,26 @@
 
 buildGoModule rec {
   pname = "protoc-gen-twirp_php";
-  version = "0.8.0";
+  version = "0.11.0";
 
   # fetchFromGitHub currently not possible, because go.mod and go.sum are export-ignored
   src = fetchgit {
     url = "https://github.com/twirphp/twirp.git";
     rev = "v${version}";
-    sha256 = "sha256-TaHfyYoWsA/g5xZFxIMNwE1w6Dd9Cq5bp1gpQudYLs0=";
+    hash = "sha256-LUFwmxlbZVTlEyp82lm3ylh6KYtVlviYK13pxj4MH0M=";
   };
 
-  vendorSha256 = "sha256-z3Yp+Yy03g2DAvWUZXaOxQWONjnYUl69eTpYIDPhsqc=";
+  vendorHash = "sha256-BPvKRIYvIxen0m8C9geFC4gIq4VH8mmdI0ZLMnlBB/I=";
 
   subPackages = [ "protoc-gen-twirp_php" ];
 
+  ldflags = [
+    "-X main.version=${version}"
+  ];
+
   meta = with lib; {
     description = "PHP port of Twitch's Twirp RPC framework";
+    mainProgram = "protoc-gen-twirp_php";
     homepage = "https://github.com/twirphp/twirp";
     license = licenses.mit;
     maintainers = with maintainers; [ jojosch ];

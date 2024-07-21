@@ -20,7 +20,7 @@ in
 {
   options = {
     services.salt.master = {
-      enable = mkEnableOption "Salt master service";
+      enable = mkEnableOption "Salt configuration management system master service";
       configuration = mkOption {
         type = types.attrs;
         default = {};

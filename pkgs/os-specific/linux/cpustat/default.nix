@@ -1,26 +1,36 @@
-{ stdenv, lib, fetchurl, ncurses }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "cpustat";
-  version = "0.02.09";
+  version = "0.02.21";
 
-  src = fetchurl {
-    url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "12xahv65yrhs5r830clkl1qnwg3dnrk5qn3zsznzbv1iy2f3cj7y";
+  src = fetchFromGitHub {
+    owner = "ColinIanKing";
+    repo ="cpustat";
+    rev = "refs/tags/V${version}";
+    hash = "sha256-Rxoj2pnQ/tEUzcsFT1F+rU960b4Th3hqZU2YR6YGwZQ=";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [
+    ncurses
+  ];
 
   installFlags = [
     "BINDIR=${placeholder "out"}/bin"
     "MANDIR=${placeholder "out"}/share/man/man8"
+    "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
   meta = with lib; {
     description = "CPU usage monitoring tool";
-    homepage = "https://kernel.ubuntu.com/~cking/cpustat/";
-    license = licenses.gpl2;
+    homepage = "https://github.com/ColinIanKing/cpustat";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "cpustat";
   };
 }

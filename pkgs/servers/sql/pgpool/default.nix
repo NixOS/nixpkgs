@@ -1,36 +1,53 @@
-{ lib, stdenv, fetchurl, postgresql, openssl, pam ? null, libmemcached ? null }:
+{ lib
+, stdenv
+, fetchurl
+, postgresql
+, openssl
+, libxcrypt
+, withPam ? stdenv.isLinux
+, pam
+}:
 
 stdenv.mkDerivation rec {
   pname = "pgpool-II";
-  version = "4.0.6";
+  version = "4.5.2";
 
   src = fetchurl {
-    name = "${pname}-${version}.tar.gz";
-    url = "http://www.pgpool.net/download.php?f=${pname}-${version}.tar.gz";
-    sha256 = "0blmbqczyrgzykby2z3xzmhzd8kgij9izxv50n5cjn5azf7dn8g5";
+    url = "https://www.pgpool.net/mediawiki/download.php?f=pgpool-II-${version}.tar.gz";
+    name = "pgpool-II-${version}.tar.gz";
+    hash = "sha256-SArCPwHNfWyFayk4a/F6hIcS+0tAV9TIq9XIv4Gb3wY=";
   };
 
-  patches = [ ./pgpool.patch ];
-
-  buildInputs = [ postgresql openssl pam libmemcached ];
+  buildInputs = [
+    postgresql
+    openssl
+    libxcrypt
+  ] ++ lib.optional withPam pam;
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-openssl"
-  ] ++ lib.optional (pam != null) "--with-pam"
-    ++ lib.optional (libmemcached != null) "--with-memcached=${libmemcached}";
+  ] ++ lib.optional withPam "--with-pam";
 
   installFlags = [
     "sysconfdir=\${out}/etc"
   ];
 
+  patches = lib.optionals (stdenv.isDarwin) [
+    # Build checks for strlcpy being available in the system, but doesn't
+    # actually exclude its own copy from being built
+    ./darwin-strlcpy.patch
+  ];
+
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://pgpool.net/mediawiki/index.php";
-    description = "A middleware that works between postgresql servers and postgresql clients";
+    homepage = "https://www.pgpool.net/mediawiki/index.php/Main_Page";
+    description = "Middleware that works between PostgreSQL servers and PostgreSQL clients";
+    changelog = "https://www.pgpool.net/docs/latest/en/html/release-${builtins.replaceStrings ["."] ["-"] version}.html";
     license = licenses.free;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
   };
 }

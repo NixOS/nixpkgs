@@ -16,15 +16,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gssdp";
-  version = "1.4.0.1";
+  version = "1.4.1";
 
   outputs = [ "out" "dev" ]
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "hnaEnVf7giuHKIVtut6/OGf4nuR6DsR6IARdAR9DFYI=";
+    sha256 = "VySWVDV9PVGxQDFRaaJMBnHeeqUsb3XIxcmr1Ao1JSk=";
   };
+
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
@@ -47,10 +53,10 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
     "-Dsniffer=false"
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
-  doCheck = true;
+  # Bail out! GLib-GIO-FATAL-CRITICAL: g_inet_address_to_string: assertion 'G_IS_INET_ADDRESS (address)' failed
+  doCheck = !stdenv.isDarwin;
 
   postFixup = lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
     # Move developer documentation to devdoc output.
@@ -64,6 +70,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
+      freeze = true;
     };
 
     tests = {

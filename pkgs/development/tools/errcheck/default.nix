@@ -2,22 +2,24 @@
 
 buildGoModule rec {
   pname = "errcheck";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "kisielk";
     repo = "errcheck";
     rev = "v${version}";
-    sha256 = "sha256-Przf2c2jFNdkUq7IOUD7ChXHiSayAz4xTsNzajycYZ0=";
+    hash = "sha256-hl1EbAO4okfTahl+1WDsFuVgm6Ba98Ji0hxqVe7jGbk=";
   };
 
-  vendorSha256 = "sha256-rluaBdW+w2zPThELlBwX/6LXDgc2aIk/ucbrsrABpVc=";
+  vendorHash = "sha256-rO2FoFksN3OdKXwlJBuISs6FmCtepc4FDLdOa5AHvC4=";
+
+  subPackages = [ "." ];
 
   meta = with lib; {
-    description = "Program for checking for unchecked errors in go programs";
+    description = "Checks for unchecked errors in go programs";
+    mainProgram = "errcheck";
     homepage = "https://github.com/kisielk/errcheck";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

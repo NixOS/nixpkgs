@@ -1,31 +1,34 @@
-{ lib, stdenv
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, gmt
-, numpy
-, netcdf4
-, pandas
-, packaging
-, xarray
-, pytest-mpl
-, ipython
-, ghostscript
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  gmt,
+  numpy,
+  netcdf4,
+  pandas,
+  packaging,
+  xarray,
+  pytest-mpl,
+  ipython,
+  ghostscript,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pygmt";
-  version = "0.5.0";
+  version = "0.11.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "pygmt";
-    rev = "v${version}";
-    sha256 = "1mazljxwh162df971cvv7cwnqr300r17qfs7k09s6yd6hajyhz49";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DbewB/lP44bpNSQ4ht7n0coS2Ml7qmEU4CP91p5YtZg=";
   };
 
   postPatch = ''
@@ -34,19 +37,36 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ numpy netcdf4 pandas packaging xarray ];
 
-  doCheck = false; # the *entire* test suite requires network access
-  checkInputs = [ pytestCheckHook pytest-mpl ghostscript ipython ];
+  propagatedBuildInputs = [
+    numpy
+    netcdf4
+    pandas
+    packaging
+    xarray
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mpl
+    ghostscript
+    ipython
+  ];
+
+  # The *entire* test suite requires network access
+  doCheck = false;
+
   postBuild = ''
     export HOME=$TMP
   '';
+
   pythonImportsCheck = [ "pygmt" ];
 
   meta = with lib; {
-    description = "A Python interface for the Generic Mapping Tools";
+    description = "Python interface for the Generic Mapping Tools";
     homepage = "https://github.com/GenericMappingTools/pygmt";
     license = licenses.bsd3;
+    changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/v${version}";
     # pygmt.exceptions.GMTCLibNotFoundError: Error loading the GMT shared library '/nix/store/r3xnnqgl89vrnq0kzxx0bmjwzks45mz8-gmt-6.1.1/lib/libgmt.dylib'
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ sikmir ];

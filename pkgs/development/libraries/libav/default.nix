@@ -17,7 +17,7 @@
 
 assert faacSupport -> enableUnfree;
 
-let inherit (lib) optional hasPrefix enableFeature; in
+let inherit (lib) optional optionals hasPrefix enableFeature; in
 
 /* ToDo:
     - more deps, inspiration: https://packages.ubuntu.com/raring/libav-tools
@@ -77,7 +77,7 @@ let
       (enableFeature vaapiSupport "vaapi")
       (enableFeature vdpauSupport "vdpau")
       (enableFeature freetypeSupport "libfreetype")
-    ] ++ optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
     ];
@@ -123,7 +123,7 @@ let
 
     meta = with lib; {
       homepage = "https://libav.org/";
-      description = "A complete, cross-platform solution to record, convert and stream audio and video (fork of ffmpeg)";
+      description = "Complete, cross-platform solution to record, convert and stream audio and video (fork of ffmpeg)";
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;
       platforms = with platforms; linux ++ darwin;

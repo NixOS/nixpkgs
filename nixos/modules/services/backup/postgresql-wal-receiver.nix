@@ -5,12 +5,8 @@ with lib;
 let
   receiverSubmodule = {
     options = {
-      postgresqlPackage = mkOption {
-        type = types.package;
-        example = literalExpression "pkgs.postgresql_11";
-        description = ''
-          PostgreSQL package to use.
-        '';
+      postgresqlPackage = mkPackageOption pkgs "postgresql" {
+        example = "postgresql_15";
       };
 
       directory = mkOption {
@@ -37,15 +33,15 @@ let
         default = "";
         example = "some_slot_name";
         description = ''
-          Require <command>pg_receivewal</command> to use an existing replication slot (see
-          <link xlink:href="https://www.postgresql.org/docs/current/warm-standby.html#STREAMING-REPLICATION-SLOTS">Section 26.2.6 of the PostgreSQL manual</link>).
-          When this option is used, <command>pg_receivewal</command> will report a flush position to the server,
+          Require {command}`pg_receivewal` to use an existing replication slot (see
+          [Section 26.2.6 of the PostgreSQL manual](https://www.postgresql.org/docs/current/warm-standby.html#STREAMING-REPLICATION-SLOTS)).
+          When this option is used, {command}`pg_receivewal` will report a flush position to the server,
           indicating when each segment has been synchronized to disk so that the server can remove that segment if it is not otherwise needed.
 
-          When the replication client of <command>pg_receivewal</command> is configured on the server as a synchronous standby,
+          When the replication client of {command}`pg_receivewal` is configured on the server as a synchronous standby,
           then using a replication slot will report the flush position to the server, but only when a WAL file is closed.
           Therefore, that configuration will cause transactions on the primary to wait for a long time and effectively not work satisfactorily.
-          The option <option>synchronous</option> must be specified in addition to make this work correctly.
+          The option {option}`synchronous` must be specified in addition to make this work correctly.
         '';
       };
 
@@ -54,9 +50,9 @@ let
         default = false;
         description = ''
           Flush the WAL data to disk immediately after it has been received.
-          Also send a status packet back to the server immediately after flushing, regardless of <option>statusInterval</option>.
+          Also send a status packet back to the server immediately after flushing, regardless of {option}`statusInterval`.
 
-          This option should be specified if the replication client of <command>pg_receivewal</command> is configured on the server as a synchronous standby,
+          This option should be specified if the replication client of {command}`pg_receivewal` is configured on the server as a synchronous standby,
           to ensure that timely feedback is sent to the server.
         '';
       };
@@ -66,8 +62,8 @@ let
         default = 0;
         description = ''
           Enables gzip compression of write-ahead logs, and specifies the compression level
-          (<literal>0</literal> through <literal>9</literal>, <literal>0</literal> being no compression and <literal>9</literal> being best compression).
-          The suffix <literal>.gz</literal> will automatically be added to all filenames.
+          (`0` through `9`, `0` being no compression and `9` being best compression).
+          The suffix `.gz` will automatically be added to all filenames.
 
           This option requires PostgreSQL >= 10.
         '';
@@ -78,9 +74,9 @@ let
         example = "postgresql://user@somehost";
         description = ''
           Specifies parameters used to connect to the server, as a connection string.
-          See <link xlink:href="https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING">Section 34.1.1 of the PostgreSQL manual</link> for more information.
+          See [Section 34.1.1 of the PostgreSQL manual](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING) for more information.
 
-          Because <command>pg_receivewal</command> doesn't connect to any particular database in the cluster,
+          Because {command}`pg_receivewal` doesn't connect to any particular database in the cluster,
           database name in the connection string will be ignored.
         '';
       };
@@ -94,7 +90,7 @@ let
           ]
         '';
         description = ''
-          A list of extra arguments to pass to the <command>pg_receivewal</command> command.
+          A list of extra arguments to pass to the {command}`pg_receivewal` command.
         '';
       };
 
@@ -109,7 +105,7 @@ let
         '';
         description = ''
           Environment variables passed to the service.
-          Usable parameters are listed in <link xlink:href="https://www.postgresql.org/docs/current/libpq-envars.html">Section 34.14 of the PostgreSQL manual</link>.
+          Usable parameters are listed in [Section 34.14 of the PostgreSQL manual](https://www.postgresql.org/docs/current/libpq-envars.html).
         '';
       };
     };
@@ -124,7 +120,7 @@ in {
         example = literalExpression ''
           {
             main = {
-              postgresqlPackage = pkgs.postgresql_11;
+              postgresqlPackage = pkgs.postgresql_15;
               directory = /mnt/pg_wal/main/;
               slot = "main_wal_receiver";
               connection = "postgresql://user@somehost";
@@ -133,8 +129,8 @@ in {
         '';
         description = ''
           PostgreSQL WAL receivers.
-          Stream write-ahead logs from a PostgreSQL server using <command>pg_receivewal</command> (formerly <command>pg_receivexlog</command>).
-          See <link xlink:href="https://www.postgresql.org/docs/current/app-pgreceivewal.html">the man page</link> for more information.
+          Stream write-ahead logs from a PostgreSQL server using {command}`pg_receivewal` (formerly {command}`pg_receivexlog`).
+          See [the man page](https://www.postgresql.org/docs/current/app-pgreceivewal.html) for more information.
         '';
       };
     };

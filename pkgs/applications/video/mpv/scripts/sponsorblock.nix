@@ -1,18 +1,23 @@
-{ lib, stdenvNoCC, fetchFromGitHub, fetchpatch, python3 }:
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  nix-update-script,
+}:
 
 # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.sponsorblock ]; }`
-stdenvNoCC.mkDerivation {
+buildLua {
   pname = "mpv_sponsorblock";
-  version = "unstable-2020-07-05";
+  version = "0-unstable-2023-01-30";
 
   src = fetchFromGitHub {
     owner = "po5";
     repo = "mpv_sponsorblock";
-    rev = "f71e49e0531350339134502e095721fdc66eac20";
-    sha256 = "1fr4cagzs26ygxyk8dxqvjw4n85fzv6is6cb1jhr2qnsjg6pa0p8";
+    rev = "7785c1477103f2fafabfd65fdcf28ef26e6d7f0d";
+    sha256 = "sha256-iUXaTWWFEdxhxClu2NYbQcThlvYty3A2dEYGooeAVAQ=";
   };
-
-  dontBuild = true;
 
   patches = [
     # Use XDG_DATA_HOME and XDG_CACHE_HOME if defined for UID and DB
@@ -30,22 +35,18 @@ stdenvNoCC.mkDerivation {
 
   postPatch = ''
     substituteInPlace sponsorblock.lua \
-      --replace "python3" "${python3}/bin/python3" \
-      --replace 'mp.find_config_file("scripts")' "\"$out/share/mpv/scripts\""
+      --replace-fail "python3" "${lib.getExe python3}" \
+      --replace-fail 'mp.find_config_file("scripts")' "\"$out/share/mpv/scripts\""
   '';
 
-  installPhase = ''
-    mkdir -p $out/share/mpv/scripts
-    cp -r sponsorblock.lua sponsorblock_shared $out/share/mpv/scripts/
-  '';
+  extraScripts = [ "sponsorblock_shared" ];
 
-  passthru.scriptName = "sponsorblock.lua";
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = with lib; {
-    description = "mpv script to skip sponsored segments of YouTube videos";
+    description = "Script for mpv to skip sponsored segments of YouTube videos";
     homepage = "https://github.com/po5/mpv_sponsorblock";
     license = licenses.gpl3;
-    platforms = platforms.all;
     maintainers = with maintainers; [ pacien ];
   };
 }

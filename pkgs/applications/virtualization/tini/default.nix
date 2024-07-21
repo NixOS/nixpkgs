@@ -13,14 +13,15 @@ stdenv.mkDerivation rec {
 
   postPatch = "sed -i /tini-static/d CMakeLists.txt";
 
-  NIX_CFLAGS_COMPILE = "-DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37";
+  env.NIX_CFLAGS_COMPILE = "-DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37";
 
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "A tiny but valid init for containers";
+    description = "Tiny but valid init for containers";
     homepage = "https://github.com/krallin/tini";
     license = licenses.mit;
     platforms = platforms.linux;
+    mainProgram = "tini";
   };
 }

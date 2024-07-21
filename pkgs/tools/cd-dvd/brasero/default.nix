@@ -1,10 +1,10 @@
 { stdenv, lib, fetchurl, pkg-config, gtk3, itstool, gst_all_1, libxml2, libnotify
 , libcanberra-gtk3, intltool, dvdauthor, libburn, libisofs
-, vcdimager, wrapGAppsHook, hicolor-icon-theme }:
+, vcdimager, wrapGAppsHook3, hicolor-icon-theme }:
 
 let
   major = "3.12";
-  minor = "2";
+  minor = "3";
   binpath = lib.makeBinPath [ dvdauthor vcdimager ];
 
 in stdenv.mkDerivation rec {
@@ -13,10 +13,10 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/brasero/${major}/${pname}-${version}.tar.xz";
-    sha256 = "0h90y674j26rvjahb8cc0w79zx477rb6zaqcj26wzvq8kmpic8k8";
+    hash = "sha256-h3SerjOhQSB9GwC+IzttgEWYLtMkntS5ja4fOpdf6hU=";
   };
 
-  nativeBuildInputs = [ pkg-config itstool intltool wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config itstool intltool wrapGAppsHook3 ];
 
   buildInputs = [ gtk3 libxml2 libnotify libcanberra-gtk3 libburn libisofs
                   hicolor-icon-theme
@@ -40,10 +40,11 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Gnome CD/DVD Burner";
-    homepage = "https://wiki.gnome.org/Apps/Brasero";
+    description = "Gnome CD/DVD Burner";
+    homepage = "https://gitlab.gnome.org/GNOME/brasero";
     maintainers = [ maintainers.bdimcheff ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    mainProgram = "brasero";
   };
 }

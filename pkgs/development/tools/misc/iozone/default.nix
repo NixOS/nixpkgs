@@ -14,16 +14,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "iozone";
-  version = "3.490";
+  version = "3.506";
 
   src = fetchurl {
     url = "http://www.iozone.org/src/current/iozone${lib.replaceStrings ["."] ["_"] version}.tar";
-    sha256 = "1vagmm2k2bzlpahl2a2arpfmk3cd5nzhxi842a8mdag2b8iv9bay";
+    hash = "sha256-EUzlwHGHO5ose6bnPQXV735mVkOSrL/NwLMmHbEPy+c=";
   };
 
   license = fetchurl {
     url = "http://www.iozone.org/docs/Iozone_License.txt";
-    sha256 = "1309sl1rqm8p9gll3z8zfygr2pmbcvzw5byf5ba8y12avk735zrv";
+    hash = "sha256-O/8yztxKBI/UKs6vwv9mq16Rn3cf/UHpSxdVnAPVCYw=";
   };
 
   preBuild = "pushd src/current";

@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
 , fuse
@@ -12,16 +11,16 @@
 
 buildGoModule rec {
   pname = "gocryptfs";
-  version = "2.2.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qERtX9UcdMolbffzPiVQlblirzJ5baOmHonJIO8ang0=";
+    sha256 = "sha256-lStaMj2f8lQZx2E42o4ikPmFQzydlN3PFKwFvUx37SI=";
   };
 
-  vendorSha256 = "sha256-yJ7RYwhArgmGlFmSplrX1hiLkc7FkS1qQCUcRlbnNWQ=";
+  vendorHash = "sha256-ir7FR7ndbPhzUOCVPrYO0SEe03wDFIP74I4X6HJxtE8=";
 
   nativeBuildInputs = [
     makeWrapper

@@ -7,19 +7,14 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ danderson ];
+    maintainers = with maintainers; [ ];
   };
 
   options = {
     services.pppd = {
       enable = mkEnableOption "pppd";
 
-      package = mkOption {
-        default = pkgs.ppp;
-        defaultText = literalExpression "pkgs.ppp";
-        type = types.package;
-        description = "pppd package to use.";
-      };
+      package = mkPackageOption pkgs "ppp" { };
 
       peers = mkOption {
         default = {};

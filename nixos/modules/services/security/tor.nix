@@ -1,14 +1,15 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with builtins;
 with lib;
 
 let
   cfg = config.services.tor;
+  opt = options.services.tor;
   stateDir = "/var/lib/tor";
   runDir = "/run/tor";
   descriptionGeneric = option: ''
-    See <link xlink:href="https://2019.www.torproject.org/docs/tor-manual.html.en#${option}">torrc manual</link>.
+    See [torrc manual](https://2019.www.torproject.org/docs/tor-manual.html.en#${option}).
   '';
   bindsPrivilegedPort =
     any (p0:
@@ -29,22 +30,22 @@ let
   optionBool = optionName: mkOption {
     type = with types; nullOr bool;
     default = null;
-    description = descriptionGeneric optionName;
+    description = (descriptionGeneric optionName);
   };
   optionInt = optionName: mkOption {
     type = with types; nullOr int;
     default = null;
-    description = descriptionGeneric optionName;
+    description = (descriptionGeneric optionName);
   };
   optionString = optionName: mkOption {
     type = with types; nullOr str;
     default = null;
-    description = descriptionGeneric optionName;
+    description = (descriptionGeneric optionName);
   };
   optionStrings = optionName: mkOption {
     type = with types; listOf str;
     default = [];
-    description = descriptionGeneric optionName;
+    description = (descriptionGeneric optionName);
   };
   optionAddress = mkOption {
     type = with types; nullOr str;
@@ -68,7 +69,7 @@ let
   optionPorts = optionName: mkOption {
     type = with types; listOf port;
     default = [];
-    description = descriptionGeneric optionName;
+    description = (descriptionGeneric optionName);
   };
   optionIsolablePort = with types; oneOf [
     port (enum ["auto"])
@@ -88,7 +89,7 @@ let
   optionIsolablePorts = optionName: mkOption {
     default = [];
     type = with types; either optionIsolablePort (listOf optionIsolablePort);
-    description = descriptionGeneric optionName;
+    description = (descriptionGeneric optionName);
   };
   isolateFlags = [
     "IsolateClientAddr"
@@ -143,17 +144,17 @@ let
         };
       }))
     ]))];
-    description = descriptionGeneric optionName;
+    description = (descriptionGeneric optionName);
   };
-  optionBandwith = optionName: mkOption {
+  optionBandwidth = optionName: mkOption {
     type = with types; nullOr (either int str);
     default = null;
-    description = descriptionGeneric optionName;
+    description = (descriptionGeneric optionName);
   };
   optionPath = optionName: mkOption {
     type = with types; nullOr path;
     default = null;
-    description = descriptionGeneric optionName;
+    description = (descriptionGeneric optionName);
   };
 
   mkValueString = k: v:
@@ -204,7 +205,7 @@ in
     (mkRemovedOptionModule [ "services" "tor" "client" "transparentProxy" "isolationOptions" ] "Use services.tor.settings.TransPort instead.")
     (mkRemovedOptionModule [ "services" "tor" "client" "transparentProxy" "listenAddress" ] "Use services.tor.settings.TransPort instead.")
     (mkRenamedOptionModule [ "services" "tor" "controlPort" ] [ "services" "tor" "settings" "ControlPort" ])
-    (mkRemovedOptionModule [ "services" "tor" "extraConfig" ] "Plese use services.tor.settings instead.")
+    (mkRemovedOptionModule [ "services" "tor" "extraConfig" ] "Please use services.tor.settings instead.")
     (mkRenamedOptionModule [ "services" "tor" "hiddenServices" ] [ "services" "tor" "relay" "onionServices" ])
     (mkRenamedOptionModule [ "services" "tor" "relay" "accountingMax" ] [ "services" "tor" "settings" "AccountingMax" ])
     (mkRenamedOptionModule [ "services" "tor" "relay" "accountingStart" ] [ "services" "tor" "settings" "AccountingStart" ])
@@ -229,19 +230,14 @@ in
 
       openFirewall = mkEnableOption "opening of the relay port(s) in the firewall";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.tor;
-        defaultText = literalExpression "pkgs.tor";
-        description = "Tor package to use.";
-      };
+      package = mkPackageOption pkgs "tor" { };
 
       enableGeoIP = mkEnableOption ''use of GeoIP databases.
         Disabling this will disable by-country statistics for bridges and relays
         and some client and third-party software functionality'' // { default = true; };
 
       controlSocket.enable = mkEnableOption ''control socket,
-        created in <literal>${runDir}/control</literal>'';
+        created in `${runDir}/control`'';
 
       client = {
         enable = mkEnableOption ''the routing of application connections.
@@ -261,7 +257,7 @@ in
         };
 
         onionServices = mkOption {
-          description = descriptionGeneric "HiddenServiceDir";
+          description = (descriptionGeneric "HiddenServiceDir");
           default = {};
           example = {
             "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" = {
@@ -273,8 +269,11 @@ in
               description = ''
                 Clients' authorizations for a v3 onion service,
                 as a list of files containing each one private key, in the format:
-                <screen>descriptor:x25519:&lt;base32-private-key&gt;</screen>
-              '' + descriptionGeneric "_client_authorization";
+                ```
+                descriptor:x25519:<base32-private-key>
+                ```
+                ${descriptionGeneric "_client_authorization"}
+              '';
               type = with types; listOf path;
               default = [];
               example = ["/run/keys/tor/alice.prv.x25519"];
@@ -284,151 +283,109 @@ in
       };
 
       relay = {
-        enable = mkEnableOption ''relaying of Tor traffic for others.
+        enable = mkEnableOption "tor relaying" // {
+          description = ''
+            Whether to enable relaying of Tor traffic for others.
 
-          See <link xlink:href="https://www.torproject.org/docs/tor-doc-relay" />
-          for details.
+            See <https://www.torproject.org/docs/tor-doc-relay>
+            for details.
 
-          Setting this to true requires setting
-          <option>services.tor.relay.role</option>
-          and
-          <option>services.tor.settings.ORPort</option>
-          options'';
+            Setting this to true requires setting
+            {option}`services.tor.relay.role`
+            and
+            {option}`services.tor.settings.ORPort`
+            options.
+          '';
+        };
 
         role = mkOption {
           type = types.enum [ "exit" "relay" "bridge" "private-bridge" ];
           description = ''
             Your role in Tor network. There're several options:
 
-            <variablelist>
-            <varlistentry>
-              <term><literal>exit</literal></term>
-              <listitem>
-                <para>
-                  An exit relay. This allows Tor users to access regular
-                  Internet services through your public IP.
-                </para>
+            - `exit`:
+              An exit relay. This allows Tor users to access regular
+              Internet services through your public IP.
 
-                <important><para>
-                  Running an exit relay may expose you to abuse
-                  complaints. See
-                  <link xlink:href="https://www.torproject.org/faq.html.en#ExitPolicies"/>
-                  for more info.
-                </para></important>
+              You can specify which services Tor users may access via
+              your exit relay using {option}`settings.ExitPolicy` option.
 
-                <para>
-                  You can specify which services Tor users may access via
-                  your exit relay using <option>settings.ExitPolicy</option> option.
-                </para>
-              </listitem>
-            </varlistentry>
+            - `relay`:
+              Regular relay. This allows Tor users to relay onion
+              traffic to other Tor nodes, but not to public
+              Internet.
 
-            <varlistentry>
-              <term><literal>relay</literal></term>
-              <listitem>
-                <para>
-                  Regular relay. This allows Tor users to relay onion
-                  traffic to other Tor nodes, but not to public
-                  Internet.
-                </para>
+              See
+              <https://www.torproject.org/docs/tor-doc-relay.html.en>
+              for more info.
 
-                <important><para>
-                  Note that some misconfigured and/or disrespectful
-                  towards privacy sites will block you even if your
-                  relay is not an exit relay. That is, just being listed
-                  in a public relay directory can have unwanted
-                  consequences.
+            - `bridge`:
+              Regular bridge. Works like a regular relay, but
+              doesn't list you in the public relay directory and
+              hides your Tor node behind obfs4proxy.
 
-                  Which means you might not want to use
-                  this role if you browse public Internet from the same
-                  network as your relay, unless you want to write
-                  e-mails to those sites (you should!).
-                </para></important>
+              Using this option will make Tor advertise your bridge
+              to users through various mechanisms like
+              <https://bridges.torproject.org/>, though.
 
-                <para>
-                  See
-                  <link xlink:href="https://www.torproject.org/docs/tor-doc-relay.html.en" />
-                  for more info.
-                </para>
-              </listitem>
-            </varlistentry>
+              See <https://www.torproject.org/docs/bridges.html.en>
+              for more info.
 
-            <varlistentry>
-              <term><literal>bridge</literal></term>
-              <listitem>
-                <para>
-                  Regular bridge. Works like a regular relay, but
-                  doesn't list you in the public relay directory and
-                  hides your Tor node behind obfs4proxy.
-                </para>
+            - `private-bridge`:
+              Private bridge. Works like regular bridge, but does
+              not advertise your node in any way.
 
-                <para>
-                  Using this option will make Tor advertise your bridge
-                  to users through various mechanisms like
-                  <link xlink:href="https://bridges.torproject.org/" />, though.
-                </para>
+              Using this role means that you won't contribute to Tor
+              network in any way unless you advertise your node
+              yourself in some way.
 
-                <important>
-                  <para>
-                    WARNING: THE FOLLOWING PARAGRAPH IS NOT LEGAL ADVICE.
-                    Consult with your lawyer when in doubt.
-                  </para>
+              Use this if you want to run a private bridge, for
+              example because you'll give out your bridge addr
+              manually to your friends.
 
-                  <para>
-                    This role should be safe to use in most situations
-                    (unless the act of forwarding traffic for others is
-                    a punishable offence under your local laws, which
-                    would be pretty insane as it would make ISP illegal).
-                  </para>
-                </important>
+              Switching to this role after measurable time in
+              "bridge" role is pretty useless as some Tor users
+              would have learned about your node already. In the
+              latter case you can still change
+              {option}`port` option.
 
-                <para>
-                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en" />
-                  for more info.
-                </para>
-              </listitem>
-            </varlistentry>
+              See <https://www.torproject.org/docs/bridges.html.en>
+              for more info.
 
-            <varlistentry>
-              <term><literal>private-bridge</literal></term>
-              <listitem>
-                <para>
-                  Private bridge. Works like regular bridge, but does
-                  not advertise your node in any way.
-                </para>
+            ::: {.important}
+            Running an exit relay may expose you to abuse
+            complaints. See
+            <https://www.torproject.org/faq.html.en#ExitPolicies>
+            for more info.
+            :::
 
-                <para>
-                  Using this role means that you won't contribute to Tor
-                  network in any way unless you advertise your node
-                  yourself in some way.
-                </para>
+            ::: {.important}
+            Note that some misconfigured and/or disrespectful
+            towards privacy sites will block you even if your
+            relay is not an exit relay. That is, just being listed
+            in a public relay directory can have unwanted
+            consequences.
 
-                <para>
-                  Use this if you want to run a private bridge, for
-                  example because you'll give out your bridge addr
-                  manually to your friends.
-                </para>
+            Which means you might not want to use
+            this role if you browse public Internet from the same
+            network as your relay, unless you want to write
+            e-mails to those sites (you should!).
+            :::
 
-                <para>
-                  Switching to this role after measurable time in
-                  "bridge" role is pretty useless as some Tor users
-                  would have learned about your node already. In the
-                  latter case you can still change
-                  <option>port</option> option.
-                </para>
+            ::: {.important}
+            WARNING: THE FOLLOWING PARAGRAPH IS NOT LEGAL ADVICE.
+            Consult with your lawyer when in doubt.
 
-                <para>
-                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en" />
-                  for more info.
-                </para>
-              </listitem>
-            </varlistentry>
-            </variablelist>
+            The `bridge` role should be safe to use in most situations
+            (unless the act of forwarding traffic for others is
+            a punishable offence under your local laws, which
+            would be pretty insane as it would make ISP illegal).
+            :::
           '';
         };
 
         onionServices = mkOption {
-          description = descriptionGeneric "HiddenServiceDir";
+          description = (descriptionGeneric "HiddenServiceDir");
           default = {};
           example = {
             "example.org/www" = {
@@ -443,9 +400,9 @@ in
               type = types.path;
               description = ''
                 Path where to store the data files of the hidden service.
-                If the <option>secretKey</option> is null
-                this defaults to <literal>${stateDir}/onion/$onion</literal>,
-                otherwise to <literal>${runDir}/onion/$onion</literal>.
+                If the {option}`secretKey` is null
+                this defaults to `${stateDir}/onion/$onion`,
+                otherwise to `${runDir}/onion/$onion`.
               '';
             };
             options.secretKey = mkOption {
@@ -454,22 +411,22 @@ in
               example = "/run/keys/tor/onion/expyuzz4wqqyqhjn/hs_ed25519_secret_key";
               description = ''
                 Secret key of the onion service.
-                If null, Tor reuses any preexisting secret key (in <option>path</option>)
+                If null, Tor reuses any preexisting secret key (in {option}`path`)
                 or generates a new one.
                 The associated public key and hostname are deterministically regenerated
                 from this file if they do not exist.
               '';
             };
             options.authorizeClient = mkOption {
-              description = descriptionGeneric "HiddenServiceAuthorizeClient";
+              description = (descriptionGeneric "HiddenServiceAuthorizeClient");
               default = null;
               type = types.nullOr (types.submodule ({...}: {
                 options = {
                   authType = mkOption {
                     type = types.enum [ "basic" "stealth" ];
                     description = ''
-                      Either <literal>"basic"</literal> for a general-purpose authorization protocol
-                      or <literal>"stealth"</literal> for a less scalable protocol
+                      Either `"basic"` for a general-purpose authorization protocol
+                      or `"stealth"` for a less scalable protocol
                       that also hides service activity from unauthorized clients.
                     '';
                   };
@@ -477,9 +434,9 @@ in
                     type = with types; nonEmptyListOf (strMatching "[A-Za-z0-9+-_]+");
                     description = ''
                       Only clients that are listed here are authorized to access the hidden service.
-                      Generated authorization data can be found in <filename>${stateDir}/onion/$name/hostname</filename>.
+                      Generated authorization data can be found in {file}`${stateDir}/onion/$name/hostname`.
                       Clients need to put this authorization data in their configuration file using
-                      <xref linkend="opt-services.tor.settings.HidServAuth"/>.
+                      [](#opt-services.tor.settings.HidServAuth).
                     '';
                   };
                 };
@@ -489,14 +446,17 @@ in
               description = ''
                 Authorized clients for a v3 onion service,
                 as a list of public key, in the format:
-                <screen>descriptor:x25519:&lt;base32-public-key&gt;</screen>
-              '' + descriptionGeneric "_client_authorization";
+                ```
+                descriptor:x25519:<base32-public-key>
+                ```
+                ${descriptionGeneric "_client_authorization"}
+              '';
               type = with types; listOf str;
               default = [];
               example = ["descriptor:x25519:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"];
             };
             options.map = mkOption {
-              description = descriptionGeneric "HiddenServicePort";
+              description = (descriptionGeneric "HiddenServicePort");
               type = with types; listOf (oneOf [
                 port (submodule ({...}: {
                   options = {
@@ -517,14 +477,15 @@ in
               apply = map (v: if isInt v then {port=v; target=null;} else v);
             };
             options.version = mkOption {
-              description = descriptionGeneric "HiddenServiceVersion";
+              description = (descriptionGeneric "HiddenServiceVersion");
               type = with types; nullOr (enum [2 3]);
               default = null;
             };
             options.settings = mkOption {
               description = ''
                 Settings of the onion service.
-              '' + descriptionGeneric "_hidden_service_options";
+                ${descriptionGeneric "_hidden_service_options"}
+              '';
               default = {};
               type = types.submodule {
                 freeformType = with types;
@@ -534,18 +495,18 @@ in
                 options.HiddenServiceAllowUnknownPorts = optionBool "HiddenServiceAllowUnknownPorts";
                 options.HiddenServiceDirGroupReadable = optionBool "HiddenServiceDirGroupReadable";
                 options.HiddenServiceExportCircuitID = mkOption {
-                  description = descriptionGeneric "HiddenServiceExportCircuitID";
+                  description = (descriptionGeneric "HiddenServiceExportCircuitID");
                   type = with types; nullOr (enum ["haproxy"]);
                   default = null;
                 };
                 options.HiddenServiceMaxStreams = mkOption {
-                  description = descriptionGeneric "HiddenServiceMaxStreams";
+                  description = (descriptionGeneric "HiddenServiceMaxStreams");
                   type = with types; nullOr (ints.between 0 65535);
                   default = null;
                 };
                 options.HiddenServiceMaxStreamsCloseCircuit = optionBool "HiddenServiceMaxStreamsCloseCircuit";
                 options.HiddenServiceNumIntroductionPoints = mkOption {
-                  description = descriptionGeneric "HiddenServiceNumIntroductionPoints";
+                  description = (descriptionGeneric "HiddenServiceNumIntroductionPoints");
                   type = with types; nullOr (ints.between 0 20);
                   default = null;
                 };
@@ -569,7 +530,7 @@ in
 
       settings = mkOption {
         description = ''
-          See <link xlink:href="https://2019.www.torproject.org/docs/tor-manual.html.en">torrc manual</link>
+          See [torrc manual](https://2019.www.torproject.org/docs/tor-manual.html.en)
           for documentation.
         '';
         default = {};
@@ -580,7 +541,7 @@ in
             };
           options.Address = optionString "Address";
           options.AssumeReachable = optionBool "AssumeReachable";
-          options.AccountingMax = optionBandwith "AccountingMax";
+          options.AccountingMax = optionBandwidth "AccountingMax";
           options.AccountingStart = optionString "AccountingStart";
           options.AuthDirHasIPv6Connectivity = optionBool "AuthDirHasIPv6Connectivity";
           options.AuthDirListBadExits = optionBool "AuthDirListBadExits";
@@ -593,8 +554,8 @@ in
             default = [".onion" ".exit"];
             example = [".onion"];
           };
-          options.BandwidthBurst = optionBandwith "BandwidthBurst";
-          options.BandwidthRate = optionBandwith "BandwidthRate";
+          options.BandwidthBurst = optionBandwidth "BandwidthBurst";
+          options.BandwidthRate = optionBandwidth "BandwidthRate";
           options.BridgeAuthoritativeDir = optionBool "BridgeAuthoritativeDir";
           options.BridgeRecordUsageByCountry = optionBool "BridgeRecordUsageByCountry";
           options.BridgeRelay = optionBool "BridgeRelay" // { default = false; };
@@ -604,7 +565,7 @@ in
           options.ClientAutoIPv6ORPort = optionBool "ClientAutoIPv6ORPort";
           options.ClientDNSRejectInternalAddresses = optionBool "ClientDNSRejectInternalAddresses";
           options.ClientOnionAuthDir = mkOption {
-            description = descriptionGeneric "ClientOnionAuthDir";
+            description = (descriptionGeneric "ClientOnionAuthDir");
             default = null;
             type = with types; nullOr path;
           };
@@ -617,7 +578,7 @@ in
           options.ConstrainedSockets = optionBool "ConstrainedSockets";
           options.ContactInfo = optionString "ContactInfo";
           options.ControlPort = mkOption rec {
-            description = descriptionGeneric "ControlPort";
+            description = (descriptionGeneric "ControlPort");
             default = [];
             example = [{port = 9051;}];
             type = with types; oneOf [port (enum ["auto"]) (listOf (oneOf [
@@ -652,7 +613,7 @@ in
           options.DormantTimeoutDisabledByIdleStreams = optionBool "DormantTimeoutDisabledByIdleStreams";
           options.DirCache = optionBool "DirCache";
           options.DirPolicy = mkOption {
-            description = descriptionGeneric "DirPolicy";
+            description = (descriptionGeneric "DirPolicy");
             type = with types; listOf str;
             default = [];
             example = ["accept *:*"];
@@ -679,7 +640,7 @@ in
           options.ExitPortStatistics = optionBool "ExitPortStatistics";
           options.ExitRelay = optionBool "ExitRelay"; # default is null and like "auto"
           options.ExtORPort = mkOption {
-            description = descriptionGeneric "ExtORPort";
+            description = (descriptionGeneric "ExtORPort");
             default = null;
             type = with types; nullOr (oneOf [
               port (enum ["auto"]) (submodule ({...}: {
@@ -708,7 +669,7 @@ in
           options.GeoIPv6File = optionPath "GeoIPv6File";
           options.GuardfractionFile = optionPath "GuardfractionFile";
           options.HidServAuth = mkOption {
-            description = descriptionGeneric "HidServAuth";
+            description = (descriptionGeneric "HidServAuth");
             default = [];
             type = with types; listOf (oneOf [
               (submodule {
@@ -743,7 +704,7 @@ in
           options.LogMessageDomains = optionBool "LogMessageDomains";
           options.LongLivedPorts = optionPorts "LongLivedPorts";
           options.MainloopStats = optionBool "MainloopStats";
-          options.MaxAdvertisedBandwidth = optionBandwith "MaxAdvertisedBandwidth";
+          options.MaxAdvertisedBandwidth = optionBandwidth "MaxAdvertisedBandwidth";
           options.MaxCircuitDirtiness = optionInt "MaxCircuitDirtiness";
           options.MaxClientCircuitsPending = optionInt "MaxClientCircuitsPending";
           options.NATDPort = optionIsolablePorts "NATDPort";
@@ -753,21 +714,21 @@ in
           options.OfflineMasterKey = optionBool "OfflineMasterKey";
           options.OptimisticData = optionBool "OptimisticData"; # default is null and like "auto"
           options.PaddingStatistics = optionBool "PaddingStatistics";
-          options.PerConnBWBurst = optionBandwith "PerConnBWBurst";
-          options.PerConnBWRate = optionBandwith "PerConnBWRate";
+          options.PerConnBWBurst = optionBandwidth "PerConnBWBurst";
+          options.PerConnBWRate = optionBandwidth "PerConnBWRate";
           options.PidFile = optionPath "PidFile";
           options.ProtocolWarnings = optionBool "ProtocolWarnings";
           options.PublishHidServDescriptors = optionBool "PublishHidServDescriptors";
           options.PublishServerDescriptor = mkOption {
-            description = descriptionGeneric "PublishServerDescriptor";
+            description = (descriptionGeneric "PublishServerDescriptor");
             type = with types; nullOr (enum [false true 0 1 "0" "1" "v3" "bridge"]);
             default = null;
           };
           options.ReducedExitPolicy = optionBool "ReducedExitPolicy";
           options.RefuseUnknownExits = optionBool "RefuseUnknownExits"; # default is null and like "auto"
           options.RejectPlaintextPorts = optionPorts "RejectPlaintextPorts";
-          options.RelayBandwidthBurst = optionBandwith "RelayBandwidthBurst";
-          options.RelayBandwidthRate = optionBandwith "RelayBandwidthRate";
+          options.RelayBandwidthBurst = optionBandwidth "RelayBandwidthBurst";
+          options.RelayBandwidthRate = optionBandwidth "RelayBandwidthRate";
           #options.RunAsDaemon
           options.Sandbox = optionBool "Sandbox";
           options.ServerDNSAllowBrokenConfig = optionBool "ServerDNSAllowBrokenConfig";
@@ -777,7 +738,7 @@ in
           options.ServerDNSResolvConfFile = optionPath "ServerDNSResolvConfFile";
           options.ServerDNSSearchDomains = optionBool "ServerDNSSearchDomains";
           options.ServerTransportPlugin = mkOption {
-            description = descriptionGeneric "ServerTransportPlugin";
+            description = (descriptionGeneric "ServerTransportPlugin");
             default = null;
             type = with types; nullOr (submodule ({...}: {
               options = {
@@ -793,19 +754,29 @@ in
               };
             }));
           };
+          options.ShutdownWaitLength = mkOption {
+            type = types.int;
+            default = 30;
+            description = (descriptionGeneric "ShutdownWaitLength");
+          };
           options.SocksPolicy = optionStrings "SocksPolicy" // {
             example = ["accept *:*"];
           };
           options.SOCKSPort = mkOption {
-            description = descriptionGeneric "SOCKSPort";
-            default = if cfg.settings.HiddenServiceNonAnonymousMode == true then [{port = 0;}] else [];
+            description = (descriptionGeneric "SOCKSPort");
+            default = lib.optionals cfg.settings.HiddenServiceNonAnonymousMode [{port = 0;}];
+            defaultText = literalExpression ''
+              if config.${opt.settings}.HiddenServiceNonAnonymousMode == true
+              then [ { port = 0; } ]
+              else [ ]
+            '';
             example = [{port = 9090;}];
             type = types.listOf (optionSOCKSPort true);
           };
           options.TestingTorNetwork = optionBool "TestingTorNetwork";
           options.TransPort = optionIsolablePorts "TransPort";
           options.TransProxyType = mkOption {
-            description = descriptionGeneric "TransProxyType";
+            description = (descriptionGeneric "TransProxyType");
             type = with types; nullOr (enum ["default" "TPROXY" "ipfw" "pf-divert"]);
             default = null;
           };
@@ -840,13 +811,13 @@ in
         always create a container/VM with a separate Tor daemon instance.
       '' ++
       flatten (mapAttrsToList (n: o:
-        optional (o.settings.HiddenServiceVersion == 2) [
+        optionals (o.settings.HiddenServiceVersion == 2) [
           (optional (o.settings.HiddenServiceExportCircuitID != null) ''
             HiddenServiceExportCircuitID is used in the HiddenService: ${n}
             but this option is only for v3 hidden services.
           '')
         ] ++
-        optional (o.settings.HiddenServiceVersion != 2) [
+        optionals (o.settings.HiddenServiceVersion != 2) [
           (optional (o.settings.HiddenServiceAuthorizeClient != null) ''
             HiddenServiceAuthorizeClient is used in the HiddenService: ${n}
             but this option is only for v2 hidden services.
@@ -883,7 +854,7 @@ in
           BridgeRelay = true;
           ExtORPort.port = mkDefault "auto";
           ServerTransportPlugin.transports = mkDefault ["obfs4"];
-          ServerTransportPlugin.exec = mkDefault "${pkgs.obfs4}/bin/obfs4proxy managed";
+          ServerTransportPlugin.exec = mkDefault "${lib.getExe pkgs.obfs4} managed";
         } // optionalAttrs (cfg.relay.role == "private-bridge") {
           ExtraInfoStatistics = false;
           PublishServerDescriptor = false;
@@ -898,6 +869,11 @@ in
         DirPort = mkForce [];
         ORPort = mkForce [];
         PublishServerDescriptor = mkForce false;
+      })
+      (mkIf (!cfg.client.enable) {
+        # Make sure application connections via SOCKS are disabled
+        # when services.tor.client.enable is false
+        SOCKSPort = mkForce [ 0 ];
       })
       (mkIf cfg.client.enable (
         { SOCKSPort = [ cfg.client.socksListenAddress ];
@@ -916,8 +892,7 @@ in
       allowedTCPPorts =
         concatMap (o:
           if isInt o && o > 0 then [o]
-          else if o ? "port" && isInt o.port && o.port > 0 then [o.port]
-          else []
+          else optionals (o ? "port" && isInt o.port && o.port > 0) [o.port]
         ) (flatten [
           cfg.settings.ORPort
           cfg.settings.DirPort
@@ -951,7 +926,7 @@ in
               '') onion.authorizedClients ++
               optional (onion.secretKey != null) ''
                 install -d -o tor -g tor -m 0700 ${escapeShellArg onion.path}
-                key="$(cut -f1 -d: ${escapeShellArg onion.secretKey})"
+                key="$(cut -f1 -d: ${escapeShellArg onion.secretKey} | head -1)"
                 case "$key" in
                  ("== ed25519v"*"-secret")
                   install -o tor -g tor -m 0400 ${escapeShellArg onion.secretKey} ${escapeShellArg onion.path}/hs_ed25519_secret_key;;
@@ -971,7 +946,7 @@ in
         ExecStart = "${cfg.package}/bin/tor -f ${torrc}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         KillSignal = "SIGINT";
-        TimeoutSec = 30;
+        TimeoutSec = cfg.settings.ShutdownWaitLength + 30; # Wait a bit longer than ShutdownWaitLength before actually timing out
         Restart = "on-failure";
         LimitNOFILE = 32768;
         RuntimeDirectory = [
@@ -997,7 +972,11 @@ in
         #InaccessiblePaths = [ "-+${runDir}/root" ];
         UMask = "0066";
         BindPaths = [ stateDir ];
-        BindReadOnlyPaths = [ storeDir "/etc" ];
+        BindReadOnlyPaths = [ storeDir "/etc" ] ++
+          optionals config.services.resolved.enable [
+            "/run/systemd/resolve/stub-resolv.conf"
+            "/run/systemd/resolve/resolv.conf"
+          ];
         AmbientCapabilities   = [""] ++ lib.optional bindsPrivilegedPort "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = [""] ++ lib.optional bindsPrivilegedPort "CAP_NET_BIND_SERVICE";
         # ProtectClock= adds DeviceAllow=char-rtc r

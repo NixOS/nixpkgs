@@ -1,12 +1,13 @@
-{ lib, stdenv, fetchurl, zlib, gmp, ecm }:
+{ lib, stdenv, fetchsvn, zlib, gmp, ecm }:
 
 stdenv.mkDerivation rec {
   pname = "msieve";
-  version = "1.53";
+  version = "1056";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/msieve/msieve/Msieve%20v${version}/msieve${lib.replaceStrings ["."] [""] version}_src.tar.gz";
-    sha256 = "1d1vv7j4rh3nnxsmvafi73qy7lw7n3akjlm5pjl3m936yapvmz65";
+  src = fetchsvn {
+    url = "svn://svn.code.sf.net/p/msieve/code/trunk";
+    rev = version;
+    hash = "sha256-6ErVn4pYPMG5VFjOQURLsHNpN0pGdp55+rjY8988onU=";
   };
 
   buildInputs = [ zlib gmp ecm ];
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A C library implementing a suite of algorithms to factor large integers";
+    description = "C library implementing a suite of algorithms to factor large integers";
+    mainProgram = "msieve";
     license = lib.licenses.publicDomain;
     homepage = "http://msieve.sourceforge.net/";
     maintainers = [ lib.maintainers.roconnor ];

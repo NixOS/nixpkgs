@@ -1,9 +1,20 @@
 # This file provides a top-level function that will be used by both nixpkgs and nixos
 # to generate mod directories for use at runtime by factorio.
 { lib, stdenv }:
-with lib;
+let
+  inherit (lib)
+    flatten
+    head
+    optionals
+    optionalString
+    removeSuffix
+    replaceStrings
+    splitString
+    unique
+    ;
+in
 {
-  mkModDirDrv = mods: # a list of mod derivations
+  mkModDirDrv = mods: modsDatFile: # a list of mod derivations
     let
       recursiveDeps = modDrv: [modDrv] ++ map recursiveDeps modDrv.deps;
       modDrvs = unique (flatten (map recursiveDeps mods));
@@ -18,7 +29,9 @@ with lib;
           # NB: there will only ever be a single zip file in each mod derivation's output dir
           ln -s $modDrv/*.zip $out
         done
-      '';
+      '' + (optionalString (modsDatFile != null) ''
+       cp ${modsDatFile} $out/mod-settings.dat
+      '');
     };
 
     modDrv = { allRecommendedMods, allOptionalMods }:

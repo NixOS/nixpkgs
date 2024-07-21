@@ -1,36 +1,35 @@
-{ lib, stdenv, fetchurl, ucl, zlib, perl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, nix-update-script
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "upx";
-  version = "3.96";
-  src = fetchurl {
-    url = "https://github.com/upx/upx/releases/download/v${version}/${pname}-${version}-src.tar.xz";
-    sha256 = "051pk5jk8fcfg5mpgzj43z5p4cn7jy5jbyshyn78dwjqr7slsxs7";
+  version = "4.2.4";
+  src = fetchFromGitHub {
+    owner = "upx";
+    repo = "upx";
+    rev = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-r36BD5f/sQSz3GjvreOptc7atIaaBZKpU+7qm+BKLss=";
   };
 
-  buildInputs = [ ucl zlib perl ];
+  nativeBuildInputs = [ cmake ];
 
-  preConfigure = ''
-    export UPX_UCLDIR=${ucl}
-  '';
-
-  makeFlags = [
-    "-C" "src"
-    "CHECK_WHITESPACE=true"
-
-    # Disable blanket -Werror. Triggers failues on minor gcc-11 warnings.
-    "CXXFLAGS_WERROR="
-  ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp src/upx.out $out/bin/upx
-  '';
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  };
 
   meta = with lib; {
     homepage = "https://upx.github.io/";
-    description = "The Ultimate Packer for eXecutables";
+    description = "Ultimate Packer for eXecutables";
+    changelog = "https://github.com/upx/upx/blob/${finalAttrs.src.rev}/NEWS";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    mainProgram = "upx";
   };
-}
+})

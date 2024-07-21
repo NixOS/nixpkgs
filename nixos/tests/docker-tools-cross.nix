@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 let
 
   remoteSystem =
-    if pkgs.system == "aarch64-linux"
+    if pkgs.stdenv.hostPlatform.system == "aarch64-linux"
     then "x86_64-linux"
     else "aarch64-linux";
 
@@ -18,13 +18,17 @@ let
 
     # NOTE: Since this file can't control where the test will be _run_ we don't
     #       cross-compile _to_ a different system but _from_ a different system
-    crossSystem = pkgs.system;
+    crossSystem = pkgs.stdenv.hostPlatform.system;
   };
 
   hello1 = remoteCrossPkgs.dockerTools.buildImage {
     name = "hello1";
     tag = "latest";
-    contents = remoteCrossPkgs.hello;
+    copyToRoot = remoteCrossPkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ remoteCrossPkgs.hello ];
+    };
   };
 
   hello2 = remoteCrossPkgs.dockerTools.buildLayeredImage {

@@ -1,15 +1,15 @@
-{ lib, python3 }:
+{ lib, python3, fetchPypi }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "distgen";
-  version = "1.5";
+  version = "1.17";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "08f9rw5irgv0gw7jizk5f9csn0yhrdnb84k40px1zbypsylvr5c5";
+    hash = "sha256-Md6R1thUtPQ7BFZsWmTDuNdD7UHMMFlEVksIJZAyjk4=";
   };
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest
     mock
   ];
@@ -25,6 +25,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Templating system/generator for distributions";
+    mainProgram = "dg";
     license = licenses.gpl2Plus;
     homepage = "https://distgen.readthedocs.io/";
     maintainers = with maintainers; [ bachp ];

@@ -25,11 +25,10 @@ in stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = "Ballerburg";
       desktopName = "Ballerburg SDL";
-      type = "Application";
       exec = "_NET_WM_ICON=ballerburg ballerburg";
       comment = meta.description;
       icon = "ballerburg";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 
@@ -45,6 +44,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Classic cannon combat game";
+    mainProgram = "ballerburg";
     longDescription = ''
       Two castles, separated by a mountain, try to defeat each other with their cannonballs,
       either by killing the opponent's king or by weakening the opponent enough so that the king capitulates.'';

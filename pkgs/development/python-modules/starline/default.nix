@@ -1,9 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, aiohttp
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  fetchpatch,
+  setuptools,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -12,20 +14,32 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
+  pyproject = true;
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1753f5fcd2a6976aed775afb03f8392159f040c673917cc0c634510d95c13cb9";
+    hash = "sha256-F1P1/NKml2rtd1r7A/g5IVnwQMZzkXzAxjRRDZXBPLk=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    requests
+  patches = [
+    # https://github.com/Anonym-tsk/starline/pull/5
+    (fetchpatch {
+      url = "https://github.com/Anonym-tsk/starline/commit/4e6cdf8e05c5fb8509ee384e77b39a2495587160.patch";
+      hash = "sha256-y9b6ePH3IEgmt3ALHQGwH102rlm4KfmH4oIoIC93cWU=";
+    })
   ];
+
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [ requests ];
 
   # no tests implemented
   doCheck = false;
 
   pythonImportsCheck = [ "starline" ];
+
+  # https://github.com/Anonym-tsk/starline/issues/4
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "Unofficial python library for StarLine API";

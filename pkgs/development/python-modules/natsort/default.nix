@@ -1,46 +1,53 @@
-{ lib
-, buildPythonPackage
-, fastnumbers
-, fetchPypi
-, glibcLocales
-, hypothesis
-, PyICU
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fastnumbers,
+  fetchPypi,
+  glibcLocales,
+  hypothesis,
+  pyicu,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "natsort";
-  version = "7.1.1";
+  version = "8.4.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00c603a42365830c4722a2eb7663a25919551217ec09a243d3399fa8dd4ac403";
+    hash = "sha256-RTEsSg5VB1k9oZPe3QSrsUaSU7YB7K9jRFrYDwoepYE=";
   };
 
   propagatedBuildInputs = [
     fastnumbers
-    PyICU
+    pyicu
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     hypothesis
     pytest-mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "natsort"
+  disabledTests = [
+    # timing sensitive test
+    # hypothesis.errors.DeadlineExceeded: Test took 524.23ms, which exceeds the deadline of 200.00ms
+    "test_string_component_transform_factory"
   ];
+
+  pythonImportsCheck = [ "natsort" ];
 
   meta = with lib; {
     description = "Natural sorting for Python";
+    mainProgram = "natsort";
     homepage = "https://github.com/SethMMorton/natsort";
+    changelog = "https://github.com/SethMMorton/natsort/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

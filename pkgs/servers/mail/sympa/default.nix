@@ -61,13 +61,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sympa";
-  version = "6.2.66";
+  version = "6.2.72";
 
   src = fetchFromGitHub {
     owner = "sympa-community";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rD6sYsEsAyu+4Vy2wMtWCtlzXoLeZgeu9hkoxOvwiP4=";
+    sha256 = "sha256-8G6MxpqVa3E5J/68E7tljcXF4w7OmNkI0nJwsgxJE28=";
   };
 
   configureFlags = [
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source mailing list manager";
     homepage = "https://www.sympa.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sorki mmilata ];
     platforms = platforms.all;
   };

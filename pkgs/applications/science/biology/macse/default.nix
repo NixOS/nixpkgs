@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Multiple alignment of coding sequences";
+    mainProgram = "macse";
     homepage = "https://bioweb.supagro.inra.fr/macse/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.all;

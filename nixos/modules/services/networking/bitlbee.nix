@@ -60,15 +60,15 @@ in
         type = types.str;
         default = "127.0.0.1";
         description = ''
-          The interface the BitlBee deamon will be listening to.  If `127.0.0.1',
-          only clients on the local host can connect to it; if `0.0.0.0', clients
+          The interface the BitlBee daemon will be listening to.  If `127.0.0.1`,
+          only clients on the local host can connect to it; if `0.0.0.0`, clients
           can access it from any network interface.
         '';
       };
 
       portNumber = mkOption {
         default = 6667;
-        type = types.int;
+        type = types.port;
         description = ''
           Number of the port BitlBee will be listening to.
         '';
@@ -174,6 +174,7 @@ in
         serviceConfig = {
           DynamicUser = true;
           StateDirectory = "bitlbee";
+          ReadWritePaths = [ cfg.configDir ];
           ExecStart = "${bitlbeePkg}/sbin/bitlbee -F -n -c ${bitlbeeConfig}";
         };
       };

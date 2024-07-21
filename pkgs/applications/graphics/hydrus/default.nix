@@ -1,108 +1,166 @@
 { lib
 , fetchFromGitHub
 , wrapQtAppsHook
-, miniupnpc_2
+, miniupnpc
 , ffmpeg
 , enableSwftools ? false
 , swftools
 , python3Packages
+, pythonOlder
+, qtbase
+, qtcharts
+, makeDesktopItem
+, copyDesktopItems
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "464";
+  version = "581";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
-    rev = "v${version}";
-    sha256 = "sha256-ZAndODbl6cH0H1rA3Bhn3AlfIuba0LjxWxusGPDYvlA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Q/EdqwIMCjeDtFAPlYd04NMpEgC6xUDGK5LwxDCiI9Y=";
   };
 
   nativeBuildInputs = [
     wrapQtAppsHook
+    python3Packages.mkdocs-material
+    copyDesktopItems
   ];
+
+  buildInputs = [
+    qtbase
+    qtcharts
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "hydrus-client";
+      exec = "hydrus-client";
+      desktopName = "Hydrus Client";
+      icon = "hydrus-client";
+      comment = meta.description;
+      terminal = false;
+      type = "Application";
+      categories = [ "FileTools" "Utility" ];
+    })
+  ];
+
 
   propagatedBuildInputs = with python3Packages; [
     beautifulsoup4
+    cbor2
     chardet
     cloudscraper
+    dateparser
     html5lib
     lxml
     lz4
-    nose
     numpy
     opencv4
+    olefile
     pillow
+    pillow-heif
     psutil
-    pylzma
+    psd-tools
+    pympler
     pyopenssl
-    pyside2
+    pyqt6
+    pyqt6-charts
     pysocks
-    pythonPackages.mpv
+    python-dateutil
+    python3Packages.mpv
     pyyaml
     qtpy
     requests
+    show-in-file-manager
     send2trash
     service-identity
-    six
     twisted
   ];
 
-  checkInputs = with python3Packages; [ nose mock httmock ];
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = with python3Packages; [
+    nose
+    mock
+    httmock
+  ];
 
   # most tests are failing, presumably because we are not using test.py
   checkPhase = ''
+    runHook preCheck
+
     nosetests $src/hydrus/test  \
-    -e TestClientAPI \
-    -e TestClientConstants \
-    -e TestClientDaemons \
-    -e TestClientData \
-    -e TestClientDB \
-    -e TestClientDBDuplicates \
-    -e TestClientDBTags \
-    -e TestClientImageHandling \
-    -e TestClientImportOptions \
-    -e TestClientListBoxes \
-    -e TestClientMigration \
-    -e TestClientNetworking \
-    -e TestClientTags \
-    -e TestClientThreading \
-    -e TestDialogs \
-    -e TestFunctions \
-    -e TestHydrusNetwork \
-    -e TestHydrusNATPunch \
-    -e TestHydrusSerialisable \
-    -e TestHydrusServer \
-    -e TestHydrusSessions \
-    -e TestServer \
+      -e TestClientAPI \
+      -e TestClientConstants \
+      -e TestClientDaemons \
+      -e TestClientData \
+      -e TestClientDB \
+      -e TestClientDBDuplicates \
+      -e TestClientDBTags \
+      -e TestClientImageHandling \
+      -e TestClientImportOptions \
+      -e TestClientListBoxes \
+      -e TestClientMigration \
+      -e TestClientNetworking \
+      -e TestClientTags \
+      -e TestClientThreading \
+      -e TestDialogs \
+      -e TestFunctions \
+      -e TestHydrusNetwork \
+      -e TestHydrusNATPunch \
+      -e TestHydrusSerialisable \
+      -e TestHydrusServer \
+      -e TestHydrusSessions \
+      -e TestServer \
+      -e TestClientMetadataMigration \
+      -e TestClientFileStorage \
+
+    runHook postCheck
   '';
 
   outputs = [ "out" "doc" ];
 
   installPhase = ''
+    runHook preInstall
+
     # Move the hydrus module and related directories
     mkdir -p $out/${python3Packages.python.sitePackages}
-    mv {hydrus,static} $out/${python3Packages.python.sitePackages}
-    mv help $out/doc/
+    mv {hydrus,static,db} $out/${python3Packages.python.sitePackages}
+    # Fix random files being marked with execute permissions
+    chmod -x $out/${python3Packages.python.sitePackages}/static/*.{png,svg,ico}
+    # Build docs
+    mkdocs build -d help
+    mkdir -p $doc/share/doc
+    mv help $doc/share/doc/hydrus
 
     # install the hydrus binaries
     mkdir -p $out/bin
-    install -m0755 server.py $out/bin/hydrus-server
-    install -m0755 client.py $out/bin/hydrus-client
+    install -m0755 hydrus_server.py $out/bin/hydrus-server
+    install -m0755 hydrus_client.py $out/bin/hydrus-client
+
+    # desktop item
+    mkdir -p "$out/share/icons/hicolor/scalable/apps"
+    ln -s "$doc/share/doc/hydrus/assets/hydrus-white.svg" "$out/share/icons/hicolor/scalable/apps/hydrus-client.svg"
   '' + lib.optionalString enableSwftools ''
     mkdir -p $out/${python3Packages.python.sitePackages}/bin
     # swfrender seems to have to be called sfwrender_linux
     # not sure if it can be loaded through PATH, but this is simpler
     # $out/python3Packages.python.sitePackages/bin is correct NOT .../hydrus/bin
     ln -s ${swftools}/bin/swfrender $out/${python3Packages.python.sitePackages}/bin/swfrender_linux
+  '' + ''
+    runHook postInstall
   '';
 
   dontWrapQtApps = true;
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg miniupnpc_2 ]})
+    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg miniupnpc ]})
   '';
 
   meta = with lib; {

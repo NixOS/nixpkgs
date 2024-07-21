@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcmis";
-  version = "0.5.2";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "tdf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0s6prfh55hn11vrs72ph1gs01v0vngly81pvyjm5v1sgwymdxx57";
+    sha256 = "sha256-HXiyQKjOlQXWABY10XrOiYxPqfpmUJC3a6xD98LIHDw=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config docbook2x ];
@@ -25,8 +25,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ client library for the CMIS interface";
-    homepage = "https://sourceforge.net/projects/libcmis/";
+    homepage = "https://github.com/tdf/libcmis";
     license = licenses.gpl2;
+    mainProgram = "cmis-client";
     platforms = platforms.unix;
   };
 }

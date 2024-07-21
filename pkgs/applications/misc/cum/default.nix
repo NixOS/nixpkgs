@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 with python3Packages;
 
@@ -28,9 +28,10 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "comic updater, mangafied";
+    mainProgram = "cum";
     homepage = "https://github.com/Hamuko/cum";
     license = licenses.asl20;
-    maintainers = with maintainers; [ tadeokondrak ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

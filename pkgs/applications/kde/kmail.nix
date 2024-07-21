@@ -33,6 +33,7 @@
 , kservice
 , ktextwidgets
 , ktnef
+, kuserfeedback
 , kwallet
 , kwidgetsaddons
 , kwindowsystem
@@ -55,7 +56,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kmail2/";
     description = "Mail client";
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
@@ -85,6 +86,7 @@ mkDerivation {
     kservice
     ktextwidgets
     ktnef
+    kuserfeedback
     kwidgetsaddons
     kwindowsystem
     kxmlgui

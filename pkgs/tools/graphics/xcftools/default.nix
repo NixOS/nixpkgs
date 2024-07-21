@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libpng, perl, gettext }:
+{lib, stdenv, fetchpatch, fetchurl, libpng, perl, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "xcftools";
@@ -11,7 +11,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpng perl gettext ];
 
-  patchPhase = ''
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-5086.CVE-2019-5087.patch";
+      url = "https://github.com/gladk/xcftools/commit/59c38e3e45b9112c2bcb4392bccf56e297854f8a.patch";
+      sha256 = "sha256-a1Biv6viXzTSaLDzinOyu0HdDTUPsKITsdKu9B9Y8GE=";
+    })
+  ];
+
+  postPatch = ''
     # Required if building with libpng-1.6, innocuous otherwise
     substituteInPlace xcf2png.c         \
       --replace png_voidp_NULL NULL     \
@@ -35,7 +43,7 @@ stdenv.mkDerivation rec {
       These tools work independently of the Gimp engine and do not
       require the Gimp to even be installed.
     '';
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 }

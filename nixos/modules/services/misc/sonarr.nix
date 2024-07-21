@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
@@ -35,6 +35,8 @@ in
         default = "sonarr";
         description = "Group under which Sonaar runs.";
       };
+
+      package = mkPackageOption pkgs "sonarr" { };
     };
   };
 
@@ -52,7 +54,11 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.sonarr}/bin/NzbDrone -nobrowser -data='${cfg.dataDir}'";
+        ExecStart = utils.escapeSystemdExecArgs [
+          (lib.getExe cfg.package)
+          "-nobrowser"
+          "-data=${cfg.dataDir}"
+        ];
         Restart = "on-failure";
       };
     };

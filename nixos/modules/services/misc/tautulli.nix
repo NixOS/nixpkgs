@@ -27,9 +27,15 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8181;
         description = "TCP port where Tautulli listens.";
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Open ports in the firewall for Tautulli.";
       };
 
       user = mkOption {
@@ -44,14 +50,7 @@ in
         description = "Group under which Tautulli runs.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.tautulli;
-        defaultText = literalExpression "pkgs.tautulli";
-        description = ''
-          The Tautulli package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "tautulli" { };
     };
   };
 
@@ -73,6 +72,8 @@ in
         Restart = "on-failure";
       };
     };
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     users.users = mkIf (cfg.user == "plexpy") {
       plexpy = { group = cfg.group; uid = config.ids.uids.plexpy; };

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, pkg-config
+{ lib, stdenv, fetchurl, fetchpatch2, openssl, pkg-config
 , withPerl ? false, perl
 , withPython ? false, python3
 , withTcl ? false, tcl
@@ -9,8 +9,6 @@
 , withDebug ? false
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "znc";
   version = "1.8.2";
@@ -20,15 +18,23 @@ stdenv.mkDerivation rec {
     sha256 = "03fyi0j44zcanj1rsdx93hkdskwfvhbywjiwd17f9q1a7yp8l8zz";
   };
 
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2024-39844.patch";
+      url = "https://github.com/znc/znc/commit/8cbf8d628174ddf23da680f3f117dc54da0eb06e.patch";
+      hash = "sha256-JeKirXReiCiNDUS9XodI0oHASg2mPDvQYtV6P4L0mHM=";
+    })
+  ];
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ optional withPerl perl
-    ++ optional withPython python3
-    ++ optional withTcl tcl
-    ++ optional withCyrus cyrus_sasl
-    ++ optional withUnicode icu
-    ++ optional withZlib zlib;
+    ++ lib.optional withPerl perl
+    ++ lib.optional withPython python3
+    ++ lib.optional withTcl tcl
+    ++ lib.optional withCyrus cyrus_sasl
+    ++ lib.optional withUnicode icu
+    ++ lib.optional withZlib zlib;
 
   configureFlags = [
     (lib.enableFeature withPerl "perl")
@@ -36,8 +42,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature withTcl "tcl")
     (lib.withFeatureAs withTcl "tcl" "${tcl}/lib")
     (lib.enableFeature withCyrus "cyrus")
-  ] ++ optional (!withIPv6) [ "--disable-ipv6" ]
-    ++ optional withDebug [ "--enable-debug" ];
+  ] ++ lib.optionals (!withIPv6) [ "--disable-ipv6" ]
+    ++ lib.optionals withDebug [ "--enable-debug" ];
 
   enableParallelBuilding = true;
 

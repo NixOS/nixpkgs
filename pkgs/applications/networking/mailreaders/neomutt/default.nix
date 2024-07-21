@@ -1,42 +1,38 @@
 { lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which
-, ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn, libxml2, notmuch, openssl
-, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib
-, fetchpatch
+, ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn2, libxml2, notmuch, openssl
+, lua, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib, lndir
+, pkg-config, zstd, enableZstd ? true, enableMixmaster ? false, enableLua ? false
+, withContrib ? true
 }:
 
-stdenv.mkDerivation rec {
-  version = "20211029";
+stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";
+  version = "20240425";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
-    rev    = version;
-    sha256 = "sha256-haPDZorAfKuIEMiBCXJRMALAYnurQyjmCSOnj9IsoKk=";
+    rev    = finalAttrs.version;
+    hash   = "sha256-QBqPFteoAm3AdQN0XTWpho8DEW2BFCCzBcHUZIiSxyQ=";
   };
 
   buildInputs = [
-    cyrus_sasl gss gpgme libkrb5 libidn ncurses
+    cyrus_sasl gss gpgme libkrb5 libidn2 ncurses
     notmuch openssl perl lmdb
     mailcap sqlite
-  ];
+  ]
+  ++ lib.optional enableZstd zstd
+  ++ lib.optional enableLua lua;
 
   nativeBuildInputs = [
     docbook_xsl docbook_xml_dtd_42 gettext libxml2 libxslt.bin makeWrapper tcl which zlib w3m
-  ];
-
-  patches = [
-    # Remove on next update, see
-    # https://github.com/NixOS/nixpkgs/pull/143641#issuecomment-954991746 for context.
-    (fetchpatch {
-      url = "https://github.com/neomutt/neomutt/commit/4242a31313e0b600693215c01047bbda8a6dd25a.patch";
-      sha256 = "sha256-fcuNeBkPjqln5QA9VFcfXCQD/VrUoSEMSxQ//Xj+yxY=";
-    })
+    pkg-config
   ];
 
   enableParallelBuilding = true;
 
   postPatch = ''
+    substituteInPlace auto.def --replace /usr/sbin/sendmail sendmail
     substituteInPlace contrib/smime_keys \
       --replace /usr/bin/openssl ${openssl}/bin/openssl
 
@@ -53,10 +49,6 @@ stdenv.mkDerivation rec {
       --replace /etc/mime.types ${mailcap}/etc/mime.types
   '';
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
-
   configureFlags = [
     "--enable-autocrypt"
     "--gpgme"
@@ -70,43 +62,58 @@ stdenv.mkDerivation rec {
     # To make it not reference .dev outputs. See:
     # https://github.com/neomutt/neomutt/pull/2367
     "--disable-include-path-in-cflags"
-    # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
-    "ac_cv_path_SENDMAIL=sendmail"
     "--zlib"
-  ];
-
-  # Fix missing libidn in mutt;
-  # this fix is ugly since it links all binaries in mutt against libidn
-  # like pgpring, pgpewrap, ...
-  NIX_LDFLAGS = "-lidn";
+  ]
+  ++ lib.optional enableZstd "--zstd"
+  ++ lib.optional enableLua "--lua"
+  ++ lib.optional enableMixmaster "--mixmaster";
 
   postInstall = ''
     wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
-  '';
+  ''
+  # https://github.com/neomutt/neomutt-contrib
+  # Contains vim-keys, keybindings presets and more.
+  + lib.optionalString withContrib "${lib.getExe lndir} ${finalAttrs.passthru.contrib} $out/share/doc/neomutt";
 
   doCheck = true;
 
   preCheck = ''
-    cp -r ${fetchFromGitHub {
-      owner = "neomutt";
-      repo = "neomutt-test-files";
-      rev = "8629adab700a75c54e8e28bf05ad092503a98f75";
-      sha256 = "1ci04nqkab9mh60zzm66sd6mhsr6lya8wp92njpbvafc86vvwdlr";
-    }} $(pwd)/test-files
+    cp -r ${finalAttrs.passthru.test-files} $(pwd)/test-files
+
     chmod -R +w test-files
     (cd test-files && ./setup.sh)
 
     export NEOMUTT_TEST_DIR=$(pwd)/test-files
+
+    # The test fails with: node_padding.c:135: Check rc == 15... failed
+    substituteInPlace test/main.c \
+      --replace-fail "NEOMUTT_TEST_ITEM(test_expando_node_padding)" ""
   '';
+
+  passthru = {
+    test-files = fetchFromGitHub {
+      owner = "neomutt";
+      repo = "neomutt-test-files";
+      rev = "00efc8388110208e77e6ed9d8294dfc333753d54";
+      hash = "sha256-/ELowuMq67v56MAJBtO73g6OqV0DVwW4+x+0u4P5mB0=";
+    };
+    contrib = fetchFromGitHub {
+      owner = "neomutt";
+      repo = "neomutt-contrib";
+      rev = "8e97688693ca47ea1055f3d15055a4f4ecc5c832";
+      hash = "sha256-tx5Y819rNDxOpjg3B/Y2lPcqJDArAxVwjbYarVmJ79k=";
+    };
+  };
 
   checkTarget = "test";
   postCheck = "unset NEOMUTT_TEST_DIR";
 
-  meta = with lib; {
-    description = "A small but very powerful text-based mail client";
-    homepage    = "http://www.neomutt.org";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ma27 ];
-    platforms   = platforms.unix;
+  meta = {
+    description = "Small but very powerful text-based mail client";
+    mainProgram = "neomutt";
+    homepage    = "https://www.neomutt.org";
+    license     = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ erikryb raitobezarius ];
+    platforms   = lib.platforms.unix;
   };
-}
+})

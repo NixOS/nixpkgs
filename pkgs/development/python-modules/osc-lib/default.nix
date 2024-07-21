@@ -1,28 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cliff
-, oslo-i18n
-, oslo-utils
-, openstacksdk
-, pbr
-, requests-mock
-, simplejson
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cliff,
+  oslo-i18n,
+  oslo-utils,
+  openstacksdk,
+  pbr,
+  requests-mock,
+  simplejson,
+  stestr,
 }:
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "2.4.2";
+  version = "2.8.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d6b530e3e50646840a6a5ef134e00f285cc4a04232c163f28585226ed40cc968";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "osc-lib";
+    rev = version;
+    hash = "sha256-ijL/m9BTAgDUjqy77nkl3rDppeUPBycmEqlL6uMruIA=";
   };
 
-  nativeBuildInputs = [
-    pbr
-  ];
+  # fake version to make pbr.packaging happy and not reject it...
+  PBR_VERSION = version;
+
+  nativeBuildInputs = [ pbr ];
 
   propagatedBuildInputs = [
     cliff
@@ -32,13 +37,19 @@ buildPythonPackage rec {
     simplejson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     requests-mock
     stestr
   ];
 
   checkPhase = ''
-    stestr run
+    # tests parse cli output which slightly changed
+    stestr run -e <(echo "
+      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_filtering_option_to_parser
+      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_option_to_parser_for_create
+      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_option_to_parser_for_set
+      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_option_to_parser_for_unset
+    ")
   '';
 
   pythonImportsCheck = [ "osc_lib" ];

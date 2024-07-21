@@ -1,17 +1,17 @@
-{ lib, fetchFromGitHub, rustPlatform, openssl, pkg-config}:
+{ lib, fetchFromGitHub, rustPlatform, openssl, pkg-config, stdenv}:
 
 rustPlatform.buildRustPackage rec {
   pname = "gotify-desktop";
-  version = "1.2.0";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = pname;
     rev = version;
-    sha256 = "sha256-QQpZeXFv8BqFOQ+7ANWmtsgNlMakAL2ML4rlG2cFZJE=";
+    sha256 = "sha256-ISK1sI7NkXJBtuCkl5g8ffrGv5dYgzmpsmPTZmDAaMI=";
   };
 
-  cargoSha256 = "sha256-zcSAsI/yGGJer7SPKDKZ6NQ3UgTdBcDighS6VTNITMo=";
+  cargoHash = "sha256-QK2rzC9l+CiDv1+0NzR2x5B/5BYiY8KkLC2jxBdjXMU=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -22,5 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/desbma/gotify-desktop";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bryanasdev000 genofire ];
+    broken = stdenv.isDarwin;
+    mainProgram = "gotify-desktop";
   };
 }

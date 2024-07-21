@@ -54,20 +54,15 @@ in {
   options = {
 
     services.redis = {
-      package = mkOption {
-        type = types.package;
-        default = pkgs.redis;
-        defaultText = literalExpression "pkgs.redis";
-        description = "Which Redis derivation to use.";
-      };
+      package = mkPackageOption pkgs "redis" { };
 
       vmOverCommit = mkEnableOption ''
-        setting of vm.overcommit_memory to 1
-        (Suggested for Background Saving: http://redis.io/topics/faq)
-      '';
+        set `vm.overcommit_memory` sysctl to 1
+        (Suggested for Background Saving: <https://redis.io/docs/get-started/faq/>)
+      '' // { default = true; };
 
       servers = mkOption {
-        type = with types; attrsOf (submodule ({config, name, ...}@args: {
+        type = with types; attrsOf (submodule ({ config, name, ... }: {
           options = {
             enable = mkEnableOption ''
               Redis server.
@@ -75,20 +70,26 @@ in {
               Note that the NixOS module for Redis disables kernel support
               for Transparent Huge Pages (THP),
               because this features causes major performance problems for Redis,
-              e.g. (https://redis.io/topics/latency).
+              e.g. (https://redis.io/topics/latency)
             '';
 
             user = mkOption {
               type = types.str;
               default = redisName name;
-              defaultText = "\"redis\" or \"redis-\${name}\" if name != \"\"";
+              defaultText = literalExpression ''
+                if name == "" then "redis" else "redis-''${name}"
+              '';
               description = "The username and groupname for redis-server.";
             };
 
             port = mkOption {
               type = types.port;
-              default = 6379;
-              description = "The port for Redis to listen to.";
+              default = if name == "" then 6379 else 0;
+              defaultText = literalExpression ''if name == "" then 6379 else 0'';
+              description = ''
+                The TCP port to accept connections.
+                If port 0 is specified Redis will not listen on a TCP socket.
+              '';
             };
 
             openFirewall = mkOption {
@@ -99,13 +100,19 @@ in {
               '';
             };
 
+            extraParams = mkOption {
+              type = with types; listOf str;
+              default = [];
+              description = "Extra parameters to append to redis-server invocation";
+              example = [ "--sentinel" ];
+            };
+
             bind = mkOption {
               type = with types; nullOr str;
-              default = if name == "" then "127.0.0.1" else null;
-              defaultText = "127.0.0.1 or null if name != \"\"";
+              default = "127.0.0.1";
               description = ''
                 The IP interface to bind to.
-                <literal>null</literal> means "all interfaces".
+                `null` means "all interfaces".
               '';
               example = "192.0.2.1";
             };
@@ -113,7 +120,9 @@ in {
             unixSocket = mkOption {
               type = with types; nullOr path;
               default = "/run/${redisName name}/redis.sock";
-              defaultText = "\"/run/redis/redis.sock\" or \"/run/redis-\${name}/redis.sock\" if name != \"\"";
+              defaultText = literalExpression ''
+                if name == "" then "/run/redis/redis.sock" else "/run/redis-''${name}/redis.sock"
+              '';
               description = "The path to the socket to bind to.";
             };
 
@@ -159,7 +168,11 @@ in {
             save = mkOption {
               type = with types; listOf (listOf int);
               default = [ [900 1] [300 10] [60 10000] ];
-              description = "The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.";
+              description = ''
+                The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.
+
+                If set to the empty list (`[]`) then RDB persistence will be disabled (useful if you are using AOF or don't want any persistence).
+              '';
             };
 
             slaveOf = mkOption {
@@ -241,7 +254,7 @@ in {
               default = {};
               description = ''
                 Redis configuration. Refer to
-                <link xlink:href="https://redis.io/topics/config"/>
+                <https://redis.io/topics/config>
                 for details on supported values.
               '';
               example = literalExpression ''
@@ -253,23 +266,23 @@ in {
           };
           config.settings = mkMerge [
             {
-              port = if config.bind == null then 0 else config.port;
+              inherit (config) port logfile databases maxclients appendOnly;
               daemonize = false;
               supervised = "systemd";
               loglevel = config.logLevel;
-              logfile = config.logfile;
               syslog-enabled = config.syslog;
-              databases = config.databases;
-              maxclients = config.maxclients;
-              save = map (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}") config.save;
+              save = if config.save == []
+                then ''""'' # Disable saving with `save = ""`
+                else map
+                  (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}")
+                  config.save;
               dbfilename = "dump.rdb";
               dir = "/var/lib/${redisName name}";
-              appendOnly = config.appendOnly;
               appendfsync = config.appendFsync;
               slowlog-log-slower-than = config.slowLogLogSlowerThan;
               slowlog-max-len = config.slowLogMaxLen;
             }
-            (mkIf (config.bind != null) { bind = config.bind; })
+            (mkIf (config.bind != null) { inherit (config) bind; })
             (mkIf (config.unixSocket != null) {
               unixsocket = config.unixSocket;
               unixsocketperm = toString config.unixSocketPerm;
@@ -279,7 +292,7 @@ in {
             (mkIf (config.requirePass != null) { requirepass = config.requirePass; })
           ];
         }));
-        description = "Configuration of multiple <literal>redis-server</literal> instances.";
+        description = "Configuration of multiple `redis-server` instances.";
         default = {};
       };
     };
@@ -299,10 +312,9 @@ in {
       '';
     }) enabledServers);
 
-    boot.kernel.sysctl = mkMerge [
-      { "vm.nr_hugepages" = "0"; }
-      ( mkIf cfg.vmOverCommit { "vm.overcommit_memory" = "1"; } )
-    ];
+    boot.kernel.sysctl = mkIf cfg.vmOverCommit {
+      "vm.overcommit_memory" = "1";
+    };
 
     networking.firewall.allowedTCPPorts = concatMap (conf:
       optional conf.openFirewall conf.port
@@ -325,16 +337,26 @@ in {
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/redis-server /run/${redisName name}/redis.conf";
-        ExecStartPre = [("+"+pkgs.writeShellScript "${redisName name}-credentials" (''
-            install -o '${conf.user}' -m 600 ${redisConfig conf.settings} /run/${redisName name}/redis.conf
-          '' + optionalString (conf.requirePassFile != null) ''
+        ExecStart = "${cfg.package}/bin/${cfg.package.serverBin or "redis-server"} /var/lib/${redisName name}/redis.conf ${escapeShellArgs conf.extraParams}";
+        ExecStartPre = "+"+pkgs.writeShellScript "${redisName name}-prep-conf" (let
+          redisConfVar = "/var/lib/${redisName name}/redis.conf";
+          redisConfRun = "/run/${redisName name}/nixos.conf";
+          redisConfStore = redisConfig conf.settings;
+        in ''
+          touch "${redisConfVar}" "${redisConfRun}"
+          chown '${conf.user}' "${redisConfVar}" "${redisConfRun}"
+          chmod 0600 "${redisConfVar}" "${redisConfRun}"
+          if [ ! -s ${redisConfVar} ]; then
+            echo 'include "${redisConfRun}"' > "${redisConfVar}"
+          fi
+          echo 'include "${redisConfStore}"' > "${redisConfRun}"
+          ${optionalString (conf.requirePassFile != null) ''
             {
-              printf requirePass' '
+              echo -n "requirepass "
               cat ${escapeShellArg conf.requirePassFile}
-            } >>/run/${redisName name}/redis.conf
-          '')
-        )];
+            } >> "${redisConfRun}"
+          ''}
+        '');
         Type = "notify";
         # User and group
         User = conf.user;
@@ -365,12 +387,11 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies =
-          optionals (conf.bind != null) ["AF_INET" "AF_INET6"] ++
-          optional (conf.unixSocket != null) "AF_UNIX";
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
         RestrictNamespaces = true;
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        # we need to disable MemoryDenyWriteExecute for keydb
+        MemoryDenyWriteExecute = cfg.package.pname != "keydb";
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         PrivateMounts = true;

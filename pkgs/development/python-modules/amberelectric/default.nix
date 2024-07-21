@@ -1,31 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "amberelectric";
-  version = "1.0.3";
-  format = "setuptools";
+  version = "1.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hsbk2v7j1nsa083j28jb7b3rv76flan0g9wav97qccp1gjds5b0";
+    hash = "sha256-gxpFKIrGHpwjPdF0nnyruwCYf3bhrubdtXNx2+wEiZU=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     urllib3
     python-dateutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

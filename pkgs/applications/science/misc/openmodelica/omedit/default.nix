@@ -8,6 +8,7 @@
 , binutils
 , wrapQtAppsHook
 , openmodelica
+, openscenegraph
 , mkOpenModelicaDerivation
 }:
 with openmodelica;
@@ -19,7 +20,7 @@ mkOpenModelicaDerivation rec {
 
   nativeBuildInputs = [ jre8 qmake qtbase qttools wrapQtAppsHook ];
 
-  buildInputs = [ qtwebkit qtxmlpatterns binutils ];
+  buildInputs = [ qtwebkit openscenegraph qtxmlpatterns binutils ];
 
   postPatch = ''
     sed -i ''$(find -name qmake.m4) -e '/^\s*LRELEASE=/ s|LRELEASE=.*$|LRELEASE=${lib.getDev qttools}/bin/lrelease|'
@@ -29,7 +30,7 @@ mkOpenModelicaDerivation rec {
   QMAKESPEC = "linux-clang";
 
   meta = with lib; {
-    description = "A Modelica connection editor for OpenModelica";
+    description = "Modelica connection editor for OpenModelica";
     homepage = "https://openmodelica.org";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ balodja smironov ];

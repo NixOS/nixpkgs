@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "go-chromecast";
-  version = "0.2.10";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "vishen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8216YaDgjy9Fp94Y5SQwEQpAP4NwvEhsJHe6xpQLAk8=";
+    hash = "sha256-Kzo8iWj4mtnX1Jxm2sLsnmEOmpzScxWHZ/sLYYm3vQI=";
   };
 
-  vendorSha256 = "sha256-idxElk4Sy7SE9G1OMRw8YH4o8orBa80qhBXPA+ar620=";
+  vendorHash = "sha256-cEUlCR/xtPJJSWplV1COwV6UfzSmVArF4V0pJRk+/Og=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" "-X main.date=unknown" ];
 
@@ -19,6 +19,7 @@ buildGoModule rec {
     homepage = "https://github.com/vishen/go-chromecast";
     description = "CLI for Google Chromecast, Home devices and Cast Groups";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "go-chromecast";
   };
 }

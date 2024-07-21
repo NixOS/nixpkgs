@@ -5,19 +5,23 @@
 
 buildGoModule rec {
   pname = "pprof";
-  version = "unstable-2021-09-30";
+  version = "0-unstable-2024-07-10";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "pprof";
-    rev = "7fe48b4c820be13151ae35ce5a5e3f54f1b53eef";
-    sha256 = "05nr3igdigs1586qplwfm17hfw0v81jy745g6vayq7cbplljfjb1";
+    rev = "f6c9dda6c6da638264f96f1097bce50fd82b4927";
+    hash = "sha256-jxPl3e9aYRWyR7vkz+15aZiG331WnrNkMW8vwbcldfY=";
   };
 
-  vendorSha256 = "0yl8y3m2ia3cwxhmg1km8358a0225khimv6hcvras8r2glm69h3f";
+  postPatch = ''
+    rm -rf browsertests   # somewhat independent module to ignore.
+  '';
+
+  vendorHash = "sha256-oOjkjVb3OIGMwz3/85KTewXISpBZM3o1BfFG9aysFbo=";
 
   meta = with lib; {
-    description = "A tool for visualization and analysis of profiling data";
+    description = "Tool for visualization and analysis of profiling data";
     homepage = "https://github.com/google/pprof";
     license = licenses.asl20;
     longDescription = ''
@@ -40,5 +44,7 @@ buildGoModule rec {
 
       This is not an official Google product.
     '';
+    mainProgram = "pprof";
+    maintainers = with maintainers; [ hzeller ];
   };
 }

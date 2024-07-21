@@ -16,7 +16,7 @@ in
 
       listen = {
         port = mkOption {
-          type = types.int;
+          type = types.port;
           description = "TCP port that will be used to accept client connections.";
           default = 11300;
         };

@@ -16,6 +16,10 @@ let
 in
 
 {
+  meta = {
+    maintainers = teams.enlightenment.members;
+  };
+
   imports = [
     (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "e19" "enable" ] [ "services" "xserver" "desktopManager" "enlightenment" "enable" ])
   ];
@@ -36,6 +40,7 @@ in
       enlightenment.econnman
       enlightenment.efl
       enlightenment.enlightenment
+      enlightenment.ecrire
       enlightenment.ephoto
       enlightenment.rage
       enlightenment.terminology
@@ -49,7 +54,7 @@ in
       "/share/locale"
     ];
 
-    services.xserver.displayManager.sessionPackages = [ pkgs.enlightenment.enlightenment ];
+    services.displayManager.sessionPackages = [ pkgs.enlightenment.enlightenment ];
 
     services.xserver.displayManager.sessionCommands = ''
       if test "$XDG_CURRENT_DESKTOP" = "Enlightenment"; then
@@ -58,7 +63,7 @@ in
         # make available for D-BUS user services
         #export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}:${config.system.path}/share:${e.efl}/share
 
-        # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+        # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
         ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
       fi
     '';
@@ -85,12 +90,13 @@ in
         };
     };
 
-    environment.etc."X11/xkb".source = xcfg.xkbDir;
+    environment.etc."X11/xkb".source = xcfg.xkb.dir;
 
-    fonts.fonts = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
+    fonts.packages = [ pkgs.dejavu_fonts ];
 
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
+    services.libinput.enable = mkDefault true;
 
     services.dbus.packages = [ e.efl ];
 

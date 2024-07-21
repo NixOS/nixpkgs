@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "leo-editor";
-  version = "6.5";
+  version = "6.7.8";
 
   src = fetchFromGitHub {
     owner = "leo-editor";
     repo = "leo-editor";
     rev = version;
-    sha256 = "sha256-f237oXhnu6OtGVhIFDswFwfjcLgYWvLNRtVW4SChFzU=";
+    sha256 = "sha256-cawcfEz9QpsjfgJzG5oA5TY2EpT8hLDw5QIjwdKPW6Y=";
   };
 
   dontBuild = true;
@@ -24,11 +24,9 @@ mkDerivation rec {
     comment = meta.description;
     desktopName = "Leo";
     genericName = "Text Editor";
-    categories = lib.concatStringsSep ";" [
-      "Application" "Development" "IDE"
-    ];
-    startupNotify = "false";
-    mimeType = lib.concatStringsSep ";" [
+    categories = [ "Application" "Development" "IDE" ];
+    startupNotify = false;
+    mimeTypes = [
       "text/plain" "text/asp" "text/x-c" "text/x-script.elisp" "text/x-fortran"
       "text/html" "application/inf" "text/x-java-source" "application/x-javascript"
       "application/javascript" "text/ecmascript" "application/x-ksh" "text/x-script.ksh"
@@ -62,7 +60,7 @@ mkDerivation rec {
     description = "A powerful folding editor";
     longDescription = "Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers.";
     license = licenses.mit;
-    maintainers = with maintainers; [ leonardoce ];
+    maintainers = with maintainers; [ leonardoce kashw2 ];
     mainProgram = "leo";
   };
 }

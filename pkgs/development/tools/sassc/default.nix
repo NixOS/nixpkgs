@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jcs3+orRqKt9C3c2FTdeaj4H2rBP74lW3HF8CHSm7lQ=";
   };
 
-  preConfigure = ''
+  postPatch = ''
     export SASSC_VERSION=${version}
   '';
 
@@ -20,9 +20,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libsass ];
 
   meta = with lib; {
-    description = "A front-end for libsass";
+    description = "Front-end for libsass";
     homepage = "https://github.com/sass/sassc/";
     license = licenses.mit;
+    mainProgram = "sassc";
     maintainers = with maintainers; [ codyopel pjones ];
     platforms = platforms.unix;
   };

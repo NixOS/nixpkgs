@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "regex";
-  version = "2021.11.10";
+  version = "2024.5.15";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-80HuLfCZm/33qV5EgHXv/g2yEqWTh94acGkOSssD1MY=";
+    hash = "sha256-0+4C2eX0gsyDCRNKke6qy90iYboRGw/vN0jutJE+aiw=";
   };
 
-  # Sources for different Python releases are located in same folder
   checkPhase = ''
-    rm -r ${if !isPy27 then "regex_2" else "regex_3"}
     ${python.interpreter} -m unittest
   '';
 

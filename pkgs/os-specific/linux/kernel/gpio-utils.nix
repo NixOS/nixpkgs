@@ -2,10 +2,9 @@
 
 with lib;
 
-assert versionAtLeast linux.version "4.6";
-
 stdenv.mkDerivation {
-  name = "gpio-utils-${linux.version}";
+  pname = "gpio-utils";
+  version = linux.version;
 
   inherit (linux) src makeFlags;
 
@@ -20,6 +19,6 @@ stdenv.mkDerivation {
     description = "Linux tools to inspect the gpiochip interface";
     maintainers = with maintainers; [ kwohlfahrt ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

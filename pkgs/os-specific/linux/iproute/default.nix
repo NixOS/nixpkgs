@@ -1,37 +1,40 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
 , buildPackages, bison, flex, pkg-config
-, db, iptables, libelf, libmnl
+, db, iptables, elfutils, libmnl
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.14.0";
+  version = "6.9.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1m4ifnxq7lxnm95l5354z8dk3xj6w9isxmbz53266drgln2sf3r1";
+    hash = "sha256-L2Q9CeoRpKKgQ8kuK0abX3MijL8kGugGdgKW7Q7EE9A=";
   };
 
-  patches = [
-    # To avoid ./configure failing due to invalid arguments:
-    (fetchpatch { # configure: restore backward compatibility
-      url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/patch/?id=a3272b93725a406bc98b67373da67a4bdf6fcdb0";
-      sha256 = "0hyagh2lf6rrfss4z7ca8q3ydya6gg7vfhh25slhpgcn6lnk0xbv";
-    })
-  ];
-
-  preConfigure = ''
-    # Don't try to create /var/lib/arpd:
-    sed -e '/ARPDDIR/d' -i Makefile
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "CC := gcc" "CC ?= $CC"
   '';
 
   outputs = [ "out" "dev" ];
+
+  configureFlags = [
+    "--color" "auto"
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
     "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
     "HDRDIR=$(dev)/include/iproute2"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "SHARED_LIBS=n"
+    # all build .so plugins:
+    "TC_CONFIG_NO_XT=y"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "HOSTCC=$(CC_FOR_BUILD)"
   ];
 
   buildFlags = [
@@ -44,15 +47,23 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [ bison flex pkg-config ];
-  buildInputs = [ db iptables libelf libmnl ];
+  buildInputs = [ db iptables libmnl ]
+    # needed to uploaded bpf programs
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ elfutils ];
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git";
+    rev-prefix = "v";
+  };
+
   meta = with lib; {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
-    description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
+    description = "Collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ primeos eelco fpletz globin ];
   };
 }

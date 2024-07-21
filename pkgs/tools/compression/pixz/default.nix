@@ -18,10 +18,8 @@ stdenv.mkDerivation rec {
   pname = "pixz";
   version = "1.0.7";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
   buildInputs = [
-    autoconf
-    automake
     libtool
     asciidoc
     libxslt
@@ -45,9 +43,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A parallel compressor/decompressor for xz format";
+    description = "Parallel compressor/decompressor for xz format";
     license = licenses.bsd2;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;
+    mainProgram = "pixz";
   };
 }

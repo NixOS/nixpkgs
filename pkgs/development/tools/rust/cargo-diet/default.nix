@@ -2,22 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-diet";
-  version = "1.2.3";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "the-lean-crate";
-    repo = pname;
+    repo = "cargo-diet";
     rev = "v${version}";
-    sha256 = "sha256-R40cggAdNbd8/+fG87PYHIbmgIsrhEwQ9ocB4p22bL4=";
+    hash = "sha256-SuJ1H/2YfSVVigdgLUd9veMClI7ZT7xkkyQ4PfXoQdQ=";
   };
 
-  cargoSha256 = "sha256-lgCP5P7X9B4sTND+p8repZB63c64o1QuozJoz6KQXiE=";
+  cargoHash = "sha256-MASftcn3WmB3M6bvmtnK3nlroE8nq9zdkleSEgzA5lk=";
 
   meta = with lib; {
     description = "Help computing optimal include directives for your Cargo.toml manifest";
+    mainProgram = "cargo-diet";
     homepage = "https://github.com/the-lean-crate/cargo-diet";
     changelog = "https://github.com/the-lean-crate/cargo-diet/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

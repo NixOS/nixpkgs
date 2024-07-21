@@ -35,6 +35,15 @@ in
         ExecStartPre = testCommand;
         Restart = "on-failure";
         RestartSec = 120;
+
+        # If a worker goes OOM, don't kill the main process. It needs to
+        # report the failure and it's unlikely to be part of the problem.
+        OOMPolicy = "continue";
+
+        # Work around excessive stack use by libstdc++ regex
+        # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86164
+        # A 256 MiB stack allows between 400 KiB and 1.5 MiB file to be matched by ".*".
+        LimitSTACK = 256 * 1024 * 1024;
       };
     };
 
@@ -67,7 +76,7 @@ in
 
     # Trusted user allows simplified configuration and better performance
     # when operating in a cluster.
-    nix.trustedUsers = [ config.systemd.services.hercules-ci-agent.serviceConfig.User ];
+    nix.settings.trusted-users = [ config.systemd.services.hercules-ci-agent.serviceConfig.User ];
     services.hercules-ci-agent = {
       settings = {
         nixUserIsTrusted = true;

@@ -2,21 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shellharden";
-  version = "4.1.3";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "anordal";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04pgmkaqjb1lmlwjjipcrqh9qcyjjkr39vi3h5fl9sr71c8g7dnd";
+    sha256 = "sha256-aBX3RXfDhlXVMV8aPO0pu3527nDoYrUDUbH6crWO/W8=";
   };
 
-  cargoSha256 = "0bjqgw49msl288yfa7bl31bfa9kdy4zh1q3j0lyw4vvkv2r14pf5";
+  cargoHash = "sha256-/t5dsDOokuUC0ZG8hPzsUoAvteLHWby6eKZNtnL/XUw=";
 
   postPatch = "patchShebangs moduletests/run";
 
   meta = with lib; {
-    description = "The corrective bash syntax highlighter";
+    description = "Corrective bash syntax highlighter";
+    mainProgram = "shellharden";
     longDescription = ''
       Shellharden is a syntax highlighter and a tool to semi-automate the
       rewriting of scripts to ShellCheck conformance, mainly focused on quoting.

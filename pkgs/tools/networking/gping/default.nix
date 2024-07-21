@@ -2,36 +2,46 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
+, installShellFiles
 , libiconv
+, Security
+, iputils
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gping";
-  version = "1.2.6";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
     rev = "gping-v${version}";
-    sha256 = "sha256-Sxmwuf+iTBTlpfMFCEUp6JyEaoHgmLIKB/gws2KY/xc=";
+    hash = "sha256-hCqjbJt0dHuvFsWEF/WgLEPY2xws71wFGdhzThYOOvA=";
   };
 
-  cargoSha256 = "sha256-xEASs6r5zxYJXS+at6aX5n0whGp5qwuNwq6Jh0GM+/4=";
+  cargoHash = "sha256-3jpQ8ANg9WYK1Q5Hph6fK442e5f9dsLQbTMBEwTaENc=";
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/orf/gping/commit/b843beb9617e4b7b98d4f6d3942067cad59c9d60.patch";
-      sha256 = "sha256-9DIeeweCuGqymvUj4EBct82XVevkFSbHWaV76ExjGbs=";
-    })
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = lib.optionals stdenv.isLinux [ iputils ];
+
+  postInstall = ''
+    installManPage gping.1
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/gping --version | grep "${version}"
+  '';
 
   meta = with lib; {
     description = "Ping, but with a graph";
     homepage = "https://github.com/orf/gping";
+    changelog = "https://github.com/orf/gping/releases/tag/gping-v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ andrew-d ];
+    maintainers = with maintainers; [ cafkafk ];
+    mainProgram = "gping";
   };
 }

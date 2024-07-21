@@ -19,7 +19,7 @@ in
   options.hardware.logitech = {
 
     lcd = {
-      enable = mkEnableOption "Logitech LCD Devices";
+      enable = mkEnableOption "support for Logitech LCD Devices";
 
       startWhenNeeded = mkOption {
         type = types.bool;
@@ -34,15 +34,14 @@ in
         default = [ "0a07" "c222" "c225" "c227" "c251" ];
         description = ''
           List of USB device ids supported by g15daemon.
-          </para>
-          <para>
+
           You most likely do not need to change this.
         '';
       };
     };
 
     wireless = {
-      enable = mkEnableOption "Logitech Wireless Devices";
+      enable = mkEnableOption "support for Logitech Wireless Devices";
 
       enableGraphical = mkOption {
         type = types.bool;

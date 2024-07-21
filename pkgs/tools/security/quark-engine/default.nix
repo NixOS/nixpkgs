@@ -1,23 +1,26 @@
-{ lib
-, fetchFromGitHub
-, gitMinimal
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  gitMinimal,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
-  version = "21.10.2";
-
-  disabled = python3.pythonOlder "3.6";
+  version = "24.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0992wsy3plxpcqmq8cnnl0by1vkmkfb4lq2vb5rsj89wj900ci2n";
+    owner = "quark-engine";
+    repo = "quark-engine";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Tk+pp6Bvc+fcrFp78UQCPLA/svMJIJ4FQlJ6D9jkMqg=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+
+  dependencies = with python3.pkgs; [
     androguard
     click
     colorama
@@ -27,9 +30,13 @@ python3.pkgs.buildPythonApplication rec {
     plotly
     prettytable
     prompt-toolkit
+    r2pipe
     rzpipe
+    setuptools
     tqdm
   ];
+
+  pythonRelaxDeps = [ "r2pipe" ];
 
   # Project has no tests
   doCheck = false;
@@ -39,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Android malware (analysis and scoring) system";
     homepage = "https://quark-engine.readthedocs.io/";
+    changelog = "https://github.com/quark-engine/quark-engine/releases/tag/v${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

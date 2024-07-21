@@ -1,30 +1,40 @@
-diff --git a/src/rebar_plugins.erl b/src/rebar_plugins.erl
-index f2d22233..c61fa553 100644
---- a/src/rebar_plugins.erl
-+++ b/src/rebar_plugins.erl
-@@ -106,31 +106,9 @@ handle_plugins(Profile, Plugins, State, Upgrade) ->
+diff --git a/apps/rebar/src/rebar_plugins.erl b/apps/rebar/src/rebar_plugins.erl
+index cd5f377c..469be42e 100644
+--- a/apps/rebar/src/rebar_plugins.erl
++++ b/apps/rebar/src/rebar_plugins.erl
+@@ -108,41 +108,9 @@ handle_plugins(Profile, Plugins, State, Upgrade) ->
      State3 = rebar_state:set(State2, deps_dir, DepsDir),
      rebar_state:lock(State3, Locks).
  
--handle_plugin(Profile, Plugin, State, Upgrade) ->
-+handle_plugin(_Profile, Plugin, State, _Upgrade) ->
+-handle_plugin(Profile, Plugin, State, SrcPlugins, Upgrade) ->
++handle_plugin(_Profile, Plugin, State, _SrcPlugins, _Upgrade) ->
      try
--        {Apps, State2} = rebar_prv_install_deps:handle_deps_as_profile(Profile, State, [Plugin], Upgrade),
--        {no_cycle, Sorted} = rebar_prv_install_deps:find_cycles(Apps),
+-        %% Inject top-level src plugins as project apps, so that they get skipped
+-        %% by the installation as already seen
+-        ProjectApps = rebar_state:project_apps(State),
+-        State0 = rebar_state:project_apps(State, SrcPlugins),
+-        %% We however have to pick the deps of top-level apps and promote them
+-        %% directly to make sure they are installed if they were not also at the top level
+-        TopDeps = top_level_deps(State, SrcPlugins),
+-        %% Install the plugins
+-        {Apps, State1} = rebar_prv_install_deps:handle_deps_as_profile(Profile, State0, [Plugin|TopDeps], Upgrade),
+-        {no_cycle, Sorted} = rebar_prv_install_deps:find_cycles(SrcPlugins++Apps),
 -        ToBuild = rebar_prv_install_deps:cull_compile(Sorted, []),
+-        %% Return things to normal
+-        State2 = rebar_state:project_apps(State1, ProjectApps),
 -
 -        %% Add already built plugin deps to the code path
 -        ToBuildPaths = [rebar_app_info:ebin_dir(A) || A <- ToBuild],
--        PreBuiltPaths = [Ebin || A <- Apps,
+-        PreBuiltPaths = [Ebin || A <- Sorted,
 -                                 Ebin <- [rebar_app_info:ebin_dir(A)],
 -                                 not lists:member(Ebin, ToBuildPaths)],
 -        code:add_pathsa(PreBuiltPaths),
 -
 -        %% Build plugin and its deps
--        build_plugins(ToBuild, Apps, State2),
+-        build_plugins(ToBuild, Sorted, State2),
 -
 -        %% Add newly built deps and plugin to code path
--        State3 = rebar_state:update_all_plugin_deps(State2, Apps),
+-        State3 = rebar_state:update_all_plugin_deps(State2, Sorted),
 -        NewCodePaths = [rebar_app_info:ebin_dir(A) || A <- ToBuild],
 -
 -        %% Store plugin code paths so we can remove them when compiling project apps
@@ -36,7 +46,7 @@ index f2d22233..c61fa553 100644
      catch
          ?WITH_STACKTRACE(C,T,S)
              ?DEBUG("~p ~p ~p", [C, T, S]),
-@@ -138,15 +116,6 @@ handle_plugin(Profile, Plugin, State, Upgrade) ->
+@@ -150,15 +118,6 @@ handle_plugin(Profile, Plugin, State, SrcPlugins, Upgrade) ->
              {[], State}
      end.
  
@@ -52,3 +62,19 @@ index f2d22233..c61fa553 100644
  plugin_providers({Plugin, _, _, _}) when is_atom(Plugin) ->
      validate_plugin(Plugin);
  plugin_providers({Plugin, _, _}) when is_atom(Plugin) ->
+@@ -251,15 +210,6 @@ prepare_plugin(AppInfo) ->
+         false -> rebar_app_info:valid(Relocated, undefined) % force revalidation
+     end.
+ 
+-top_level_deps(State, Apps) ->
+-    CurrentProfiles = rebar_state:current_profiles(State),
+-    Keys = lists:append([[{plugins, P}, {deps, P}] || P <- CurrentProfiles]),
+-    RawDeps = lists:foldl(fun(App, Acc) ->
+-        %% Only support the profiles we would with regular plugins?
+-        lists:append([rebar_app_info:get(App, Key, []) || Key <- Keys]) ++ Acc
+-    end, [], Apps),
+-    rebar_utils:tup_dedup(RawDeps).
+-
+ needs_rebuild(AppInfo) ->
+     %% if source files are newer than built files then the code was edited
+     %% and can't be considered valid -- force a rebuild.

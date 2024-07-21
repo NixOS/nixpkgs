@@ -6,21 +6,24 @@ let
 in
 stdenv.mkDerivation rec {
   name = "ocaml-${pname}-${version}";
-  version = "14.0.0";
+  version = "15.1.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256:0fc737v5gj3339jx4x9xr096lxrpwvp6vaiylhavcvsglcwbgm30";
+    hash = "sha256-HIANZ5SDJcytlpw/W9Ae2eFTutrutJj2PgJCfByobfI=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg ];
+
+  strictDeps = true;
 
   inherit (topkg) buildPhase installPhase;
 
   propagatedBuildInputs = [ xmlm ];
 
   meta = with lib; {
-    description = "An OCaml module to decode the data of the Unicode character database from its XML representation";
+    description = "OCaml module to decode the data of the Unicode character database from its XML representation";
     homepage = webpage;
     inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.vbgl ];

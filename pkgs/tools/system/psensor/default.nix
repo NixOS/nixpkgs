@@ -1,5 +1,16 @@
-{ stdenv, lib, fetchurl, pkg-config, lm_sensors, libgtop, libatasmart, gtk3
-, libnotify, udisks2, libXNVCtrl, wrapGAppsHook
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, lm_sensors
+, libgtop
+, libatasmart
+, gtk3
+, libnotify
+, udisks2
+, libXNVCtrl
+, wrapGAppsHook3
+, libappindicator
 }:
 
 stdenv.mkDerivation rec {
@@ -12,14 +23,20 @@ stdenv.mkDerivation rec {
     sha256 = "1ark901va79gfq5p8h8dqypjgm3f8crmj37520q3slwz2rfphkq8";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
 
   buildInputs = [
-    lm_sensors libgtop libatasmart gtk3 libnotify udisks2
+    lm_sensors
+    libgtop
+    libatasmart
+    gtk3
+    libnotify
+    udisks2
+    libappindicator
   ];
 
   preConfigure = ''
-    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libXNVCtrl}/include"
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libXNVCtrl}/include -Wno-error"
     NIX_LDFLAGS="$NIX_LDFLAGS -L${libXNVCtrl}/lib"
   '';
 
@@ -28,6 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wpitchoune.net/psensor/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "psensor";
   };
 }

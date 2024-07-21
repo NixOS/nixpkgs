@@ -40,12 +40,7 @@ stdenv.mkDerivation {
   buildInputs = cursesDeps ++ optionals tiles tilesDeps;
 
   postPatch = ''
-    patchShebangs .
-
-    # Locale patch required for Darwin builds, see:
-    # https://github.com/NixOS/nixpkgs/pull/74064#issuecomment-560083970
-    sed -i src/translations.cpp \
-        -e 's@#elif (defined(__linux__) || (defined(MACOSX) && !defined(TILES)))@#elif 1@'
+    patchShebangs lang/compile_mo.sh
   '';
 
   makeFlags = [
@@ -58,7 +53,7 @@ stdenv.mkDerivation {
   ] ++ optionals stdenv.isDarwin [
     "NATIVE=osx"
     "CLANG=1"
-    "OSX_MIN=${stdenv.targetPlatform.darwinMinVersion}"
+    "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
   postInstall = optionalString tiles
@@ -68,6 +63,7 @@ stdenv.mkDerivation {
   );
 
   dontStrip = debug;
+  enableParallelBuilding = true;
 
   passthru = {
     isTiles = tiles;
@@ -75,7 +71,8 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "A free, post apocalyptic, zombie infested rogue-like";
+    description = "Free, post apocalyptic, zombie infested rogue-like";
+    mainProgram = "cataclysm-tiles";
     longDescription = ''
       Cataclysm: Dark Days Ahead is a roguelike set in a post-apocalyptic world.
       Surviving is difficult: you have been thrown, ill-equipped, into a

@@ -1,44 +1,51 @@
 { lib
 , buildPythonApplication
 , fetchPypi
-, poetry-core
-, gobject-introspection
-, pango
-, gtksourceview4
-, wrapGAppsHook
-, makeDesktopItem
 , copyDesktopItems
+, gobject-introspection
+, poetry-core
+, wrapGAppsHook3
+, gtksourceview4
+, pango
 , gaphas
 , generic
+, jedi
 , pycairo
 , pygobject3
-, python
 , tinycss2
+, gtk3
+, librsvg
+, makeDesktopItem
+, python
 }:
 
 buildPythonApplication rec {
   pname = "gaphor";
-  version = "2.6.5";
+  version = "2.8.2";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IFsbWx5lblKsnEibVihM6ZPRoydXC+JM1gdZEUUTKxw=";
+    hash = "sha256-+qqsSLjdY2I19fxdfkOEQ9DhTTHccUDll4O5yqtLiz0=";
   };
 
   nativeBuildInputs = [
-    poetry-core copyDesktopItems gobject-introspection wrapGAppsHook
+    copyDesktopItems
+    gobject-introspection
+    poetry-core
+    wrapGAppsHook3
   ];
 
-  # Setting gobject-introspection on booth nativeBuildInputs and
-  # buildInputs because of #56943. This recognizes pango, avoiding
-  # a "ValueError: Namespace PangoCairo not available".
-  buildInputs = [ gobject-introspection gtksourceview4 pango ];
+  buildInputs = [
+    gtksourceview4
+    pango
+  ];
 
   propagatedBuildInputs = [
     gaphas
     generic
+    jedi
     pycairo
     pygobject3
     tinycss2
@@ -52,13 +59,24 @@ buildPythonApplication rec {
     desktopName = "Gaphor";
   };
 
+  # Disable automatic wrapGAppsHook3 to prevent double wrapping
+  dontWrapGApps = true;
+
   postInstall = ''
     install -Dm644 $out/${python.sitePackages}/gaphor/ui/icons/hicolor/scalable/apps/org.gaphor.Gaphor.svg $out/share/pixmaps/gaphor.svg
   '';
 
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}" \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+    )
+  '';
+
   meta = with lib; {
     description = "Simple modeling tool written in Python";
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     homepage = "https://github.com/gaphor/gaphor";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];

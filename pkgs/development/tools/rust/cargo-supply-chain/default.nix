@@ -1,23 +1,33 @@
-{ lib, rustPlatform, fetchCrate, stdenv, Security }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-supply-chain";
-  version = "0.2.0";
+  version = "0.3.3";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-zjDZJOUjnEQ03rmo5CdSY1emE6YohOPlf7SKuvNLuV0=";
+  src = fetchFromGitHub {
+    owner = "rust-secure-code";
+    repo = "cargo-supply-chain";
+    rev = "v${version}";
+    hash = "sha256-KjeYB9TFbuJ2KPaObeM0ADs5F8uJJ6/czMPQjBUgIk8=";
   };
 
-  cargoSha256 = "sha256-xSJ5rx8k+my0NeGYHZyvDzbM7uMdbViT7Ou9a9JACfs=";
+  cargoHash = "sha256-Fx1C4X0dQqePqLa+X+4ZDrIMFKBQ6J50nBApYXcGbFM=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   meta = with lib; {
     description = "Gather author, contributor and publisher data on crates in your dependency graph";
+    mainProgram = "cargo-supply-chain";
     homepage = "https://github.com/rust-secure-code/cargo-supply-chain";
-    changelog = "https://github.com/rust-secure-code/cargo-supply-chain/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/rust-secure-code/cargo-supply-chain/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit zlib ]; # any of three
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

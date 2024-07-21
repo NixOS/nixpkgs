@@ -1,26 +1,31 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkg-config, ocb-stubblr }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, ctypes-foreign, result, SDL2, pkg-config
+, AudioToolbox, Cocoa, CoreAudio, CoreVideo, ForceFeedback }:
 
-if !lib.versionAtLeast ocaml.version "4.03"
+if lib.versionOlder ocaml.version "4.03"
 then throw "tsdl is not available for OCaml ${ocaml.version}"
 else
 
 let
   pname = "tsdl";
-  version = "0.9.7";
+  version = "1.0.0";
   webpage = "https://erratique.ch/software/${pname}";
 in
 
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+  pname = "ocaml${ocaml.version}-${pname}";
+  inherit version;
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "1zwv0ixkigh1gzk5n49rwvz2f2m62jdkkqg40j7dclg4gri7691f";
+    hash = "sha256-XdgzCj9Uqplt/8Jk8rSFaQf8zu+9SZa8b9ZIlW/gjyE=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
-  propagatedBuildInputs = [ SDL2 ctypes ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg ];
+  propagatedBuildInputs = [ SDL2 ctypes ctypes-foreign ]
+    ++ lib.optionals stdenv.isDarwin [ AudioToolbox Cocoa CoreAudio CoreVideo ForceFeedback ];
 
   preConfigure = ''
     # The following is done to avoid an additional dependency (ncurses)
@@ -37,6 +42,6 @@ stdenv.mkDerivation {
     homepage = webpage;
     description = "Thin bindings to the cross-platform SDL library";
     license = licenses.isc;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }

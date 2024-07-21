@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, help2man
 , installShellFiles
 , pkg-config
 , bzip2
@@ -12,37 +11,41 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ouch";
-  version = "0.3.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "ouch-org";
-    repo = pname;
+    repo = "ouch";
     rev = version;
-    sha256 = "sha256-I9CgkYxcK+Ih9UlcYBa8QAZZsPvzPUK5ZUYKPxzgs38=";
+    hash = "sha256-WO1fetu39fcLGcrbzFh+toHpnyxWuDVHtmjuH203hzQ=";
   };
 
-  cargoSha256 = "sha256-jEprWtIl5LihD9fOMYHGGlk0+h4woUlwUWNfSkd2t10=";
+  cargoHash = "sha256-OdAu7fStTJCF1JGJG9TRE1Qosy6yjKsWq01MYpbXZcg=";
 
-  nativeBuildInputs = [ help2man installShellFiles pkg-config ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = [ bzip2 xz zlib zstd ];
 
   buildFeatures = [ "zstd/pkg-config" ];
 
-  postInstall = ''
-    help2man $out/bin/ouch > ouch.1
-    installManPage ouch.1
-
-    completions=($releaseDir/build/ouch-*/out/completions)
-    installShellCompletion $completions/ouch.{bash,fish} --zsh $completions/_ouch
+  preCheck = ''
+    substituteInPlace tests/ui.rs \
+      --replace 'format!(r"/private{path}")' 'path.to_string()'
   '';
 
-  GEN_COMPLETIONS = 1;
+  postInstall = ''
+    installManPage artifacts/*.1
+    installShellCompletion artifacts/ouch.{bash,fish} --zsh artifacts/_ouch
+  '';
+
+  env.OUCH_ARTIFACTS_FOLDER = "artifacts";
 
   meta = with lib; {
-    description = "A command-line utility for easily compressing and decompressing files and directories";
+    description = "Command-line utility for easily compressing and decompressing files and directories";
     homepage = "https://github.com/ouch-org/ouch";
+    changelog = "https://github.com/ouch-org/ouch/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda psibi ];
+    mainProgram = "ouch";
   };
 }

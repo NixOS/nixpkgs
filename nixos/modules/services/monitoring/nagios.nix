@@ -88,34 +88,34 @@ in
 
   options = {
     services.nagios = {
-      enable = mkEnableOption "<link xlink:href='http://www.nagios.org/'>Nagios</link> to monitor your system or network.";
+      enable = mkEnableOption ''[Nagios](https://www.nagios.org/) to monitor your system or network.'';
 
       objectDefs = mkOption {
-        description = "
+        description = ''
           A list of Nagios object configuration files that must define
           the hosts, host groups, services and contacts for the
           network that you want Nagios to monitor.
-        ";
+        '';
         type = types.listOf types.path;
         example = literalExpression "[ ./objects.cfg ]";
       };
 
       plugins = mkOption {
         type = types.listOf types.package;
-        default = with pkgs; [ monitoring-plugins ssmtp mailutils ];
-        defaultText = literalExpression "[pkgs.monitoring-plugins pkgs.ssmtp pkgs.mailutils]";
-        description = "
-          Packages to be added to the Nagios <envar>PATH</envar>.
+        default = with pkgs; [ monitoring-plugins msmtp mailutils ];
+        defaultText = literalExpression "[pkgs.monitoring-plugins pkgs.msmtp pkgs.mailutils]";
+        description = ''
+          Packages to be added to the Nagios {env}`PATH`.
           Typically used to add plugins, but can be anything.
-        ";
+        '';
       };
 
       mainConfigFile = mkOption {
         type = types.nullOr types.package;
         default = null;
-        description = "
+        description = ''
           If non-null, overrides the main configuration file of Nagios.
-        ";
+        '';
       };
 
       extraConfig = mkOption {
@@ -139,19 +139,19 @@ in
         type = types.package;
         default = nagiosCGICfgFile;
         defaultText = literalExpression "nagiosCGICfgFile";
-        description = "
+        description = ''
           Derivation for the configuration file of Nagios CGI scripts
           that can be used in web servers for running the Nagios web interface.
-        ";
+        '';
       };
 
       enableWebInterface = mkOption {
         type = types.bool;
         default = false;
-        description = "
+        description = ''
           Whether to enable the Nagios web interface.  You should also
-          enable Apache (<option>services.httpd.enable</option>).
-        ";
+          enable Apache ({option}`services.httpd.enable`).
+        '';
       };
 
       virtualHost = mkOption {
@@ -165,8 +165,8 @@ in
           }
         '';
         description = ''
-          Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
-          See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+          Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
+          See [](#opt-services.httpd.virtualHosts) for further information.
         '';
       };
     };

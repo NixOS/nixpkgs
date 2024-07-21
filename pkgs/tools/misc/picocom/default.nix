@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --replace '.picocom_history' '.cache/picocom_history'
 
     substituteInPlace picocom.c \
-      --replace '"rz -vv"' '"${lrzsz}/bin/rz -vv"' \
+      --replace '"rz -vv -E"' '"${lrzsz}/bin/rz -vv -E"' \
       --replace '"sz -vv"' '"${lrzsz}/bin/sz -vv"'
   '';
 
@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/npat-efault/picocom/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    mainProgram = "picocom";
   };
 }

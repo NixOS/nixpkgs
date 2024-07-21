@@ -1,31 +1,53 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
+, fetchpatch
 , python3Packages
 , dnsmasq
+, gawk
 , getent
+, gobject-introspection
+, gtk3
 , kmod
 , lxc
 , iproute2
 , iptables
-, nftables
 , util-linux
-, which
-, xclip
+, wrapGAppsHook3
+, wl-clipboard
+, runtimeShell
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.2.0";
+  version = "1.4.2";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "03d87sh443kn0j2mpih1g909khkx3wgb04h605f9jhd0znskkbmw";
+    sha256 = "sha256-/dFvhiK3nCOOmAtrYkQEB8Ge8Rf1ea5cDO7puTwS5bI=";
   };
 
+  patches = [
+    # https://github.com/waydroid/waydroid/pull/1218
+    (fetchpatch {
+      url = "https://github.com/waydroid/waydroid/commit/595e0e5b309a79fedaa07d90b9073ddcb156314c.patch";
+      hash = "sha256-A+rUmJbFFhMZ5WpT+QBCTEcn82wJuvmi8Wbcsio41Nk=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    gtk3
+  ];
+
   propagatedBuildInputs = with python3Packages; [
+    dbus-python
     gbinder-python
     pyclip
     pygobject3
@@ -35,44 +57,39 @@ python3Packages.buildPythonApplication rec {
   dontUsePipInstall = true;
   dontUseSetuptoolsCheck = true;
   dontWrapPythonPrograms = true;
+  dontWrapGApps = true;
 
   installPhase = ''
-    mkdir -p $out/${python3Packages.python.sitePackages}
+    make install PREFIX=$out USE_SYSTEMD=0
+  '';
 
-    cp -ra tools $out/${python3Packages.python.sitePackages}/tools
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
 
-    cp -ra data $out/${python3Packages.python.sitePackages}/data
-    wrapProgram $out/${python3Packages.python.sitePackages}/data/scripts/waydroid-net.sh \
-       --prefix PATH ":" ${lib.makeBinPath [ dnsmasq getent iproute2 iptables nftables ]}
+    patchShebangs --host $out/lib/waydroid/data/scripts
+    wrapProgram $out/lib/waydroid/data/scripts/waydroid-net.sh \
+      --prefix PATH ":" ${lib.makeBinPath [ dnsmasq getent iproute2 iptables ]}
 
-    mkdir -p $out/share/waydroid/gbinder.d
-    cp gbinder/anbox.conf $out/share/waydroid/gbinder.d/anbox.conf
-
-    mkdir -p $out/share/applications
-    ln -s $out/${python3Packages.python.sitePackages}/data/Waydroid.desktop $out/share/applications/Waydroid.desktop
-
-    mkdir $out/bin
-    cp -a waydroid.py $out/${python3Packages.python.sitePackages}/waydroid.py
-    ln -s $out/${python3Packages.python.sitePackages}/waydroid.py $out/bin/waydroid
-
-    wrapPythonProgramsIn $out/${python3Packages.python.sitePackages} "${lib.concatStringsSep " " [
+    wrapPythonProgramsIn $out/lib/waydroid/ "${lib.concatStringsSep " " ([
       "$out"
-      python3Packages.gbinder-python
-      python3Packages.pygobject3
-      python3Packages.pyclip
+    ] ++ propagatedBuildInputs ++ [
+      gawk
       kmod
       lxc
       util-linux
-      which
-      xclip
-    ]}"
+      wl-clipboard
+    ])}"
+
+    substituteInPlace $out/lib/waydroid/tools/helpers/*.py \
+      --replace '"sh"' '"${runtimeShell}"'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Waydroid is a container-based approach to boot a full Android system on a regular GNU/Linux system like Ubuntu";
+    mainProgram = "waydroid";
     homepage = "https://github.com/waydroid/waydroid";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mcaju ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mcaju ];
   };
 }

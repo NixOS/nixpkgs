@@ -5,26 +5,12 @@ with lib;
 let
   cfg = config.services.node-red;
   defaultUser = "node-red";
-  finalPackage = if cfg.withNpmAndGcc then node-red_withNpmAndGcc else cfg.package;
-  node-red_withNpmAndGcc = pkgs.runCommand "node-red" {
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-  }
-  ''
-    mkdir -p $out/bin
-    makeWrapper ${pkgs.nodePackages.node-red}/bin/node-red $out/bin/node-red \
-      --set PATH '${lib.makeBinPath [ pkgs.nodePackages.npm pkgs.gcc ]}:$PATH' \
-  '';
 in
 {
   options.services.node-red = {
     enable = mkEnableOption "the Node-RED service";
 
-    package = mkOption {
-      default = pkgs.nodePackages.node-red;
-      defaultText = literalExpression "pkgs.nodePackages.node-red";
-      type = types.package;
-      description = "Node-RED package to use.";
-    };
+    package = mkPackageOption pkgs [ "nodePackages" "node-red" ] { };
 
     openFirewall = mkOption {
       type = types.bool;
@@ -49,8 +35,7 @@ in
       defaultText = literalExpression ''"''${package}/lib/node_modules/node-red/settings.js"'';
       description = ''
         Path to the JavaScript configuration file.
-        See <link
-        xlink:href="https://github.com/node-red/node-red/blob/master/packages/node_modules/node-red/settings.js"/>
+        See <https://github.com/node-red/node-red/blob/master/packages/node_modules/node-red/settings.js>
         for a configuration example.
       '';
     };
@@ -133,11 +118,12 @@ in
       environment = {
         HOME = cfg.userDir;
       };
+      path = lib.optionals cfg.withNpmAndGcc [ pkgs.nodePackages.npm pkgs.gcc ];
       serviceConfig = mkMerge [
         {
           User = cfg.user;
           Group = cfg.group;
-          ExecStart = "${finalPackage}/bin/node-red ${pkgs.lib.optionalString cfg.safe "--safe"} --settings ${cfg.configFile} --port ${toString cfg.port} --userDir ${cfg.userDir} ${concatStringsSep " " (mapAttrsToList (name: value: "-D ${name}=${value}") cfg.define)}";
+          ExecStart = "${cfg.package}/bin/node-red ${pkgs.lib.optionalString cfg.safe "--safe"} --settings ${cfg.configFile} --port ${toString cfg.port} --userDir ${cfg.userDir} ${concatStringsSep " " (mapAttrsToList (name: value: "-D ${name}=${value}") cfg.define)}";
           PrivateTmp = true;
           Restart = "always";
           WorkingDirectory = cfg.userDir;

@@ -62,13 +62,21 @@ let
   ]
   ++ nativeBuildInputs;
 
+  passthru' = {
+    updateScript = [
+      ../../../../maintainers/scripts/update-octave-packages
+      (builtins.unsafeGetAttrPos "pname" octave.pkgs.${attrs.pname}).file
+    ];
+  }
+  // passthru;
+
   # This step is required because when
   # a = { test = [ "a" "b" ]; }; b = { test = [ "c" "d" ]; };
   # (a // b).test = [ "c" "d" ];
   # This used to mean that if a package defined extra nativeBuildInputs, it
   # would override the ones for building an Octave package (the hook and Octave
   # itself, causing everything to fail.
-  attrs' = builtins.removeAttrs attrs [ "nativeBuildInputs" ];
+  attrs' = builtins.removeAttrs attrs [ "nativeBuildInputs" "passthru" ];
 
 in stdenv.mkDerivation ({
   packageName = "${fullLibName}";
@@ -120,6 +128,8 @@ in stdenv.mkDerivation ({
   # We don't install here, because that's handled when we build the environment
   # together with Octave.
   dontInstall = true;
+
+  passthru = passthru';
 
   inherit meta;
 } // attrs')

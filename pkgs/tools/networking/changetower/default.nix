@@ -11,15 +11,16 @@ buildGoModule rec {
     owner = "Dc4ts";
     repo = "ChangeTower";
     rev = "v${version}";
-    sha256 = "058ccn6d5f7w268hfqh85bz1xj6ysgfrmyj0b4asjiskq7728v9z";
+    hash = "sha256-P20kzsFTR6kVWUD6mt3T3sge/ioIYgeREfy40oxlDBU=";
   };
 
-  vendorSha256 = "0hagskhwrdsl6s6hn27jriysbxhaz0pqq1h43j7v0ggnwd2s03bq";
+  vendorHash = "sha256-eA2gReP2PbCPHAQGjC/4CvalfczyCAuNNlS3zOHUT0E=";
 
   meta = with lib; {
     description = "Tools to watch for webppage changes";
     homepage = "https://github.com/Dc4ts/ChangeTower";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "ChangeTower";
   };
 }

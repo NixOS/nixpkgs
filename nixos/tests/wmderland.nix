@@ -4,10 +4,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     maintainers = [ takagiy ];
   };
 
-  machine = { lib, ... }: {
+  nodes.machine = { lib, ... }: {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
     test-support.displayManager.auto.user = "alice";
-    services.xserver.displayManager.defaultSession = lib.mkForce "none+wmderland";
+    services.displayManager.defaultSession = lib.mkForce "none+wmderland";
     services.xserver.windowManager.wmderland.enable = true;
 
     systemd.services.setupWmderlandConfig = {

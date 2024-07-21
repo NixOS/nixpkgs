@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "ssh-to-pgp";
-  version = "1.0.1";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "ssh-to-pgp";
     rev = version;
-    sha256 = "sha256-5Wg0ItAkAb0zlhzcuDT9o0XIIbG9kqk4mIYb6hSJlsI=";
+    sha256 = "sha256-EynI4YQ6yjhMIOSoMM7WgLwI//5moFgdhFLX82J+bSA=";
   };
 
-  vendorSha256 = "sha256-OMWiJ1n8ynvIGcmotjuGGsRuAidYgVo5Y5JjrAw8fpc=";
+  vendorHash = "sha256-ww1CDDGo2r8h0ePvU8PS2owzE1vLTz2m7Z9thsQle7s=";
 
-  checkInputs = [ gnupg ];
+  nativeCheckInputs = [ gnupg ];
   checkPhase = ''
     HOME=$TMPDIR go test .
   '';
@@ -22,6 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Convert ssh private keys to PGP";
+    mainProgram = "ssh-to-pgp";
     homepage = "https://github.com/Mic92/ssh-to-pgp";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];

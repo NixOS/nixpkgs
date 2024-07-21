@@ -14,6 +14,15 @@ let
 
 in
 {
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "rabbitmq" "cookie" ] ''
+      This option wrote the Erlang cookie to the store, while it should be kept secret.
+      Please remove it from your NixOS configuration and deploy a cookie securely instead.
+      The renamed `unsafeCookie` must ONLY be used in isolated non-production environments such as NixOS VM tests.
+    '')
+  ];
+
   ###### interface
   options = {
     services.rabbitmq = {
@@ -26,14 +35,7 @@ in
         '';
       };
 
-      package = mkOption {
-        default = pkgs.rabbitmq-server;
-        type = types.package;
-        defaultText = literalExpression "pkgs.rabbitmq-server";
-        description = ''
-          Which rabbitmq package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "rabbitmq-server" { };
 
       listenAddress = mkOption {
         default = "127.0.0.1";
@@ -42,8 +44,8 @@ in
           IP address on which RabbitMQ will listen for AMQP
           connections.  Set to the empty string to listen on all
           interfaces.  Note that RabbitMQ creates a user named
-          <literal>guest</literal> with password
-          <literal>guest</literal> by default, so you should delete
+          `guest` with password
+          `guest` by default, so you should delete
           this user if you intend to allow external access.
 
           Together with 'port' setting it's mostly an alias for
@@ -69,13 +71,18 @@ in
         '';
       };
 
-      cookie = mkOption {
+      unsafeCookie = mkOption {
         default = "";
         type = types.str;
         description = ''
           Erlang cookie is a string of arbitrary length which must
           be the same for several nodes to be allowed to communicate.
           Leave empty to generate automatically.
+
+          Setting the cookie via this option exposes the cookie to the store, which
+          is not recommended for security reasons.
+          Only use this option in an isolated non-production environment such as
+          NixOS VM tests.
         '';
       };
 
@@ -91,12 +98,12 @@ in
         description = ''
           Configuration options in RabbitMQ's new config file format,
           which is a simple key-value format that can not express nested
-          data structures. This is known as the <literal>rabbitmq.conf</literal> file,
+          data structures. This is known as the `rabbitmq.conf` file,
           although outside NixOS that filename may have Erlang syntax, particularly
           prior to RabbitMQ 3.7.0.
 
           If you do need to express nested data structures, you can use
-          <literal>config</literal> option. Configuration from <literal>config</literal>
+          `config` option. Configuration from `config`
           will be merged into these options by RabbitMQ at runtime to
           form the final configuration.
 
@@ -110,12 +117,12 @@ in
         type = types.str;
         description = ''
           Verbatim advanced configuration file contents using the Erlang syntax.
-          This is also known as the <literal>advanced.config</literal> file or the old config format.
+          This is also known as the `advanced.config` file or the old config format.
 
-          <literal>configItems</literal> is preferred whenever possible. However, nested
-          data structures can only be expressed properly using the <literal>config</literal> option.
+          `configItems` is preferred whenever possible. However, nested
+          data structures can only be expressed properly using the `config` option.
 
-          The contents of this option will be merged into the <literal>configItems</literal>
+          The contents of this option will be merged into the `configItems`
           by RabbitMQ at runtime to form the final configuration.
 
           See the second table on https://www.rabbitmq.com/configure.html#config-items
@@ -216,9 +223,8 @@ in
       };
 
       preStart = ''
-        ${optionalString (cfg.cookie != "") ''
-            echo -n ${cfg.cookie} > ${cfg.dataDir}/.erlang.cookie
-            chmod 600 ${cfg.dataDir}/.erlang.cookie
+        ${optionalString (cfg.unsafeCookie != "") ''
+          install -m 600 <(echo -n ${cfg.unsafeCookie}) ${cfg.dataDir}/.erlang.cookie
         ''}
       '';
     };

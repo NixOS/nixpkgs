@@ -19,7 +19,7 @@ let
         description = "tuple of" + concatMapStrings (t: " (${t.description})") ts;
       };
       level = ints.unsigned;
-      special = enum [ "level auto" "level full-speed" "level disengage" ];
+      special = enum [ "level auto" "level full-speed" "level disengaged" ];
     in
       tuple [ (either level special) level level ];
 
@@ -31,14 +31,14 @@ let
         type = types.enum [ "hwmon" "atasmart" "tpacpi" "nvml" ];
         description = ''
           The ${name} type, can be
-          <literal>hwmon</literal> for standard ${name}s,
+          `hwmon` for standard ${name}s,
 
-          <literal>atasmart</literal> to read the temperature via
+          `atasmart` to read the temperature via
           S.M.A.R.T (requires smartSupport to be enabled),
 
-          <literal>tpacpi</literal> for the legacy thinkpac_acpi driver, or
+          `tpacpi` for the legacy thinkpac_acpi driver, or
 
-          <literal>nvml</literal> for the (proprietary) nVidia driver.
+          `nvml` for the (proprietary) nVidia driver.
         '';
       };
       query = mkOption {
@@ -48,10 +48,10 @@ let
           a fullpath to the temperature file (single ${name}) or a fullpath
           to a driver directory (multiple ${name}s).
 
-          <note><para>
-            When multiple ${name}s match, the query can be restricted using the
-            <option>name</option> or <option>indices</option> options.
-          </para></note>
+          ::: {.note}
+          When multiple ${name}s match, the query can be restricted using the
+          {option}`name` or {option}`indices` options.
+          :::
         '';
       };
       indices = mkOption {
@@ -60,7 +60,9 @@ let
         description = ''
           A list of ${name}s to pick in case multiple ${name}s match the query.
 
-          <note><para>Indices start from 0.</para></note>
+          ::: {.note}
+          Indices start from 0.
+          :::
         '';
       };
     } // optionalAttrs (name == "sensor") {
@@ -81,18 +83,18 @@ let
     // { "${type}" = query; };
 
   syntaxNote = name: ''
-    <note><para>
-      This section slightly departs from the thinkfan.conf syntax.
-      The type and path must be specified like this:
-      <literal>
-        type = "tpacpi";
-        query = "/proc/acpi/ibm/${name}";
-      </literal>
-      instead of a single declaration like:
-      <literal>
-        - tpacpi: /proc/acpi/ibm/${name}
-      </literal>
-    </para></note>
+    ::: {.note}
+    This section slightly departs from the thinkfan.conf syntax.
+    The type and path must be specified like this:
+    ```
+      type = "tpacpi";
+      query = "/proc/acpi/ibm/${name}";
+    ```
+    instead of a single declaration like:
+    ```
+      - tpacpi: /proc/acpi/ibm/${name}
+    ```
+    :::
   '';
 
 in {
@@ -107,10 +109,10 @@ in {
         description = ''
           Whether to enable thinkfan, a fan control program.
 
-          <note><para>
-            This module targets IBM/Lenovo thinkpads by default, for
-            other hardware you will have configure it more carefully.
-          </para></note>
+          ::: {.note}
+          This module targets IBM/Lenovo thinkpads by default, for
+          other hardware you will have configure it more carefully.
+          :::
         '';
         relatedPackages = [ "thinkfan" ];
       };
@@ -133,7 +135,9 @@ in {
         ];
         description = ''
           List of temperature sensors thinkfan will monitor.
-        '' + syntaxNote "thermal";
+
+          ${syntaxNote "thermal"}
+        '';
       };
 
       fans = mkOption {
@@ -145,7 +149,9 @@ in {
         ];
         description = ''
           List of fans thinkfan will control.
-        '' + syntaxNote "fan";
+
+          ${syntaxNote "fan"}
+        '';
       };
 
       levels = mkOption {
@@ -164,7 +170,7 @@ in {
 
           LEVEL is the fan level to use: it can be an integer (0-7 with thinkpad_acpi),
           "level auto" (to keep the default firmware behavior), "level full-speed" or
-          "level disengage" (to run the fan as fast as possible).
+          "level disengaged" (to run the fan as fast as possible).
           LOW is the temperature at which to step down to the previous level.
           HIGH is the temperature at which to step up to the next level.
           All numbers are integers.
@@ -187,9 +193,9 @@ in {
         description = ''
           Thinkfan settings. Use this option to configure thinkfan
           settings not exposed in a NixOS option or to bypass one.
-          Before changing this, read the <literal>thinkfan.conf(5)</literal>
+          Before changing this, read the `thinkfan.conf(5)`
           manpage and take a look at the example config file at
-          <link xlink:href="https://github.com/vmatare/thinkfan/blob/master/examples/thinkfan.yaml"/>
+          <https://github.com/vmatare/thinkfan/blob/master/examples/thinkfan.yaml>
         '';
       };
 
@@ -211,6 +217,13 @@ in {
 
     systemd.services = {
       thinkfan.environment.THINKFAN_ARGS = escapeShellArgs ([ "-c" configFile ] ++ cfg.extraArgs);
+      thinkfan.serviceConfig = {
+        Restart = "on-failure";
+        RestartSec = "30s";
+
+        # Hardening
+        PrivateNetwork = true;
+      };
 
       # must be added manually, see issue #81138
       thinkfan.wantedBy = [ "multi-user.target" ];

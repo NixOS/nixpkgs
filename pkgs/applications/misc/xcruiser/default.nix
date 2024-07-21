@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gccmakedep, imake, libXt, libXaw, libXpm, libXext }:
+{ lib, stdenv, fetchurl, gccmakedep, imake, libXt, libXaw, libXpm, libXext, copyDesktopItems, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "xcruiser";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1r8whva38xizqdh7jmn6wcmfmsndc67pkw22wzfzr6rq0vf6hywi";
   };
 
-  nativeBuildInputs = [ gccmakedep imake ];
+  nativeBuildInputs = [ gccmakedep imake copyDesktopItems ];
   buildInputs = [ libXt libXaw libXpm libXext ];
 
   makeFlags = [
@@ -19,6 +19,16 @@ stdenv.mkDerivation rec {
     "XAPPLOADDIR=${placeholder "out"}/etc/X11/app-defaults"
   ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "XCruiser";
+      exec = "xcruiser";
+      desktopName = "XCruiser";
+      comment = "filesystem visualization utility";
+      categories = [ "Utility" ];
+    })
+  ];
+
   meta = with lib; {
     description = "Filesystem visualization utility";
     longDescription = ''
@@ -26,9 +36,10 @@ stdenv.mkDerivation rec {
       It constructs a virtually 3-D formed universe from a directory
       tree and allows you to "cruise" within a visualized filesystem.
     '';
-    homepage = "http://xcruiser.sourceforge.net/";
+    homepage = "https://xcruiser.sourceforge.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ehmry ];
     platforms = with platforms; linux;
+    mainProgram = "xcruiser";
   };
 }

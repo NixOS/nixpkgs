@@ -1,38 +1,43 @@
-{ enableSystemd ? stdenv.isLinux
-, fetchFromGitHub
-, lib
-, python3
+{ lib
 , stdenv
+, fetchFromGitHub
+, python3
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform python3.pkgs.systemd
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-facebook";
-  version = "0.3.2";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "facebook";
     rev = "v${version}";
-    sha256 = "1n7gshm2nir6vgjkj36lq9m2bclkgy0y236xi8zvdlvfcb2m596f";
+    hash = "sha256-8uleN7L3fgNqqRjva3kJU7fLPJZpO6b0J4z0RxZ9B64=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
-    CommonMark
+    commonmark
     aiohttp
     asyncpg
+    commonmark
     mautrix
     paho-mqtt
     pillow
     prometheus-client
     pycryptodome
     python-olm
-    python_magic
+    python-magic
     ruamel-yaml
     unpaddedbase64
     yarl
+    zstandard
   ] ++ lib.optional enableSystemd systemd;
 
-  doCheck = false;
+  postPatch = ''
+    # Drop version limiting so that every dependency update doesn't break this package.
+    sed -i -e 's/,<.*//' requirements.txt
+  '';
 
   postInstall = ''
     mkdir -p $out/bin
@@ -44,11 +49,16 @@ python3.pkgs.buildPythonPackage rec {
     chmod +x $out/bin/mautrix-facebook
   '';
 
+  checkPhase = ''
+    $out/bin/mautrix-facebook --help
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/mautrix/facebook";
-    description = "A Matrix-Facebook Messenger puppeting bridge";
+    changelog = "https://github.com/mautrix/facebook/releases/tag/v${version}";
+    description = "Matrix-Facebook Messenger puppeting bridge";
     license = licenses.agpl3Plus;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ kevincox ];
+    mainProgram = "mautrix-facebook";
   };
 }

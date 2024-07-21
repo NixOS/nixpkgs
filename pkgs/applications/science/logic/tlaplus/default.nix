@@ -1,16 +1,15 @@
-{ lib, stdenv, fetchurl, makeWrapper, adoptopenjdk-bin, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   pname = "tlaplus";
-  version = "1.7.1";
+  version = "1.7.3";
 
   src = fetchurl {
     url = "https://github.com/tlaplus/tlaplus/releases/download/v${version}/tla2tools.jar";
-    sha256 = "d532ba31aafe17afba1130f92410d9257454ff7393d1eb2fe032f0c07f352da5";
+    sha256 = "sha256-5P8V6oH05voSXAgwBDclSxdxdMalrfaNpElkar4IUZ0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ adoptopenjdk-bin ];
 
   dontUnpack = true;
   installPhase = ''
@@ -28,10 +27,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An algorithm specification language with model checking tools";
+    description = "Algorithm specification language with model checking tools";
     homepage    = "http://lamport.azurewebsites.net/tla/tla.html";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license     = lib.licenses.mit;
     platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ florentc thoughtpolice ];
+    maintainers = with lib.maintainers; [ florentc thoughtpolice mgregson ];
   };
 }

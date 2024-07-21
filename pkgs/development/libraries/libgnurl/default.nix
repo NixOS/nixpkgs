@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A fork of libcurl used by GNUnet";
+    description = "Fork of libcurl used by GNUnet";
     homepage    = "https://gnunet.org/en/gnurl.html";
-    maintainers = with maintainers; [ vrthra ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
     license = licenses.curl;
   };
 }

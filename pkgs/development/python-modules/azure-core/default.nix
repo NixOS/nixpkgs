@@ -1,48 +1,60 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, aiodns
-, aiohttp
-, flask
-, mock
-, msrest
-, pytest
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
-, requests
-, six
-, trio
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  aiodns,
+  aiohttp,
+  flask,
+  mock,
+  pytest,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
+  requests,
+  setuptools,
+  six,
+  trio,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
-  version = "1.20.1";
+  version = "1.30.2";
   pname = "azure-core";
-  disabled = isPy27;
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "21d06311c9c373e394ed9f9db035306773334a0181932e265889eca34d778d17";
+    hash = "sha256-oU3CEO/NYIghqkctn7jo0DXSm2iZOBkUe8KQqKwiRHI=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     requests
     six
+    typing-extensions
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    aio = [ aiohttp ];
+  };
+
+  nativeCheckInputs = [
     aiodns
-    aiohttp
     flask
     mock
-    msrest
     pytest
     pytest-trio
     pytest-asyncio
     pytestCheckHook
     trio
-    typing-extensions
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   # test server needs to be available
   preCheck = ''
@@ -50,8 +62,21 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [ "tests/" ];
+
   # disable tests which touch network
-  disabledTests = [ "aiohttp" "multipart_send" "response" "request" "timeout" ];
+  disabledTests = [
+    "aiohttp"
+    "multipart_send"
+    "response"
+    "request"
+    "timeout"
+    "test_sync_transport_short_read_download_stream"
+    "test_aio_transport_short_read_download_stream"
+    # disable 8 tests failing on some darwin machines with errors:
+    # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
+    # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'
+  ] ++ lib.optionals stdenv.isDarwin [ "location_polling_fail" ];
+
   disabledTestPaths = [
     # requires testing modules which aren't published, and likely to create cyclic dependencies
     "tests/test_connection_string_parsing.py"
@@ -60,12 +85,20 @@ buildPythonPackage rec {
     "tests/test_streaming.py"
     # testserver tests require being in a very specific working directory to make it work
     "tests/testserver_tests/"
+    # requires missing pytest plugin
+    "tests/async_tests/test_rest_asyncio_transport.py"
+    # needs msrest, which cannot be included in nativeCheckInputs due to circular dependency new in msrest 0.7.1
+    # azure-core needs msrest which needs azure-core
+    "tests/test_polling.py"
+    "tests/async_tests/test_base_polling_async.py"
+    "tests/async_tests/test_polling_async.py"
   ];
 
   meta = with lib; {
     description = "Microsoft Azure Core Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/core/azure-core";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-core_${version}/sdk/core/azure-core/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
   };
 }

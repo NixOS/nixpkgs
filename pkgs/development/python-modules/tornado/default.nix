@@ -1,29 +1,76 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+
+  # for passthru.tests
+  distributed,
+  jupyter-server,
+  jupyterlab,
+  matplotlib,
+  mitmproxy,
+  pytest-tornado,
+  pytest-tornasync,
+  pyzmq,
+  sockjs-tornado,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "tornado";
-  version = "6.1";
+  version = "6.4.1";
+  pyproject = true;
 
-  # We specify the name of the test files to prevent
-  # https://github.com/NixOS/nixpkgs/issues/14634
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover *_test.py
-  '';
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "33c6e81d7bd55b468d2e793517c909b139960b6c790a60b7991b9b6b76fb9791";
+  src = fetchFromGitHub {
+    owner = "tornadoweb";
+    repo = "tornado";
+    rev = "v${version}";
+    hash = "sha256-vWiTLKL5gzrf3J6T3u8I1HHg5Ww0sf5ybSbZX6G3UXM=";
   };
+
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # additional tests that have extra dependencies, run slowly, or produce more output than a simple pass/fail
+    # https://github.com/tornadoweb/tornado/blob/v6.2.0/maint/test/README
+    "maint/test"
+
+    # AttributeError: 'TestIOStreamWebMixin' object has no attribute 'io_loop'
+    "tornado/test/iostream_test.py"
+  ];
+
+  disabledTests = [
+    # Exception: did not get expected log message
+    "test_unix_socket_bad_request"
+  ];
+
+  pythonImportsCheck = [ "tornado" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = {
-    description = "A web framework and asynchronous networking library";
+  passthru.tests = {
+    inherit
+      distributed
+      jupyter-server
+      jupyterlab
+      matplotlib
+      mitmproxy
+      pytest-tornado
+      pytest-tornasync
+      pyzmq
+      sockjs-tornado
+      urllib3
+      ;
+  };
+
+  meta = with lib; {
+    description = "Web framework and asynchronous networking library";
     homepage = "https://www.tornadoweb.org/";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -14,6 +14,15 @@ let
         '';
       };
 
+      filter = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "*rpi*.dtb";
+        description = ''
+          Only apply to .dtb files matching glob expression.
+        '';
+      };
+
       dtsFile = mkOption {
         type = types.nullOr types.path;
         description = ''
@@ -36,14 +45,11 @@ let
           /plugin/;
           / {
                   compatible = "raspberrypi";
-                  fragment@0 {
-                          target-path = "/soc";
-                          __overlay__ {
-                                  pps {
-                                          compatible = "pps-gpio";
-                                          status = "okay";
-                                  };
-                          };
+          };
+          &{/soc} {
+                  pps {
+                          compatible = "pps-gpio";
+                          status = "okay";
                   };
           };
         '';
@@ -59,51 +65,33 @@ let
     };
   };
 
-  # this requires kernel package
-  dtbsWithSymbols = pkgs.stdenv.mkDerivation {
-    name = "dtbs-with-symbols";
-    inherit (cfg.kernelPackage) src nativeBuildInputs depsBuildBuild;
-    patches = map (patch: patch.patch) cfg.kernelPackage.kernelPatches;
-    buildPhase = ''
-      patchShebangs scripts/*
-      substituteInPlace scripts/Makefile.lib \
-        --replace 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget))' 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget)) -@'
-      make ${pkgs.stdenv.hostPlatform.linux-kernel.baseConfig} ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
-      make dtbs ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
-    '';
-    installPhase = ''
-      make dtbs_install INSTALL_DTBS_PATH=$out/dtbs  ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
-    '';
-  };
-
-  filterDTBs = src: if isNull cfg.filter
-    then "${src}/dtbs"
+  filterDTBs = src: if cfg.filter == null
+    then src
     else
       pkgs.runCommand "dtbs-filtered" {} ''
         mkdir -p $out
-        cd ${src}/dtbs
+        cd ${src}
         find . -type f -name '${cfg.filter}' -print0 \
           | xargs -0 cp -v --no-preserve=mode --target-directory $out --parents
       '';
 
-  # Compile single Device Tree overlay source
-  # file (.dts) into its compiled variant (.dtbo)
-  compileDTS = name: f: pkgs.callPackage({ dtc }: pkgs.stdenv.mkDerivation {
-    name = "${name}-dtbo";
-
-    nativeBuildInputs = [ dtc ];
-
-    buildCommand = ''
-      dtc -I dts ${f} -O dtb -@ -o $out
-    '';
-  }) {};
+  filteredDTBs = filterDTBs cfg.dtbSource;
 
   # Fill in `dtboFile` for each overlay if not set already.
   # Existence of one of these is guarded by assertion below
   withDTBOs = xs: flip map xs (o: o // { dtboFile =
-    if isNull o.dtboFile then
-      if !isNull o.dtsFile then compileDTS o.name o.dtsFile
-      else compileDTS o.name (pkgs.writeText "dts" o.dtsText)
+    let
+      includePaths = ["${getDev cfg.kernelPackage}/lib/modules/${cfg.kernelPackage.modDirVersion}/source/scripts/dtc/include-prefixes"] ++ cfg.dtboBuildExtraIncludePaths;
+      extraPreprocessorFlags = cfg.dtboBuildExtraPreprocessorFlags;
+    in
+    if o.dtboFile == null then
+      let
+        dtsFile = if o.dtsFile == null then (pkgs.writeText "dts" o.dtsText) else o.dtsFile;
+      in
+      pkgs.deviceTree.compileDTS {
+        name = "${o.name}-dtbo";
+        inherit includePaths extraPreprocessorFlags dtsFile;
+      }
     else o.dtboFile; } );
 
 in
@@ -129,7 +117,39 @@ in
           example = literalExpression "pkgs.linux_latest";
           type = types.path;
           description = ''
-            Kernel package containing the base device-tree (.dtb) to boot. Uses
+            Kernel package where device tree include directory is from. Also used as default source of dtb package to apply overlays to
+          '';
+        };
+
+        dtboBuildExtraPreprocessorFlags = mkOption {
+          default = [];
+          example = literalExpression "[ \"-DMY_DTB_DEFINE\" ]";
+          type = types.listOf types.str;
+          description = ''
+            Additional flags to pass to the preprocessor during dtbo compilations
+          '';
+        };
+
+        dtboBuildExtraIncludePaths = mkOption {
+          default = [];
+          example = literalExpression ''
+            [
+              ./my_custom_include_dir_1
+              ./custom_include_dir_2
+            ]
+          '';
+          type = types.listOf types.path;
+          description = ''
+            Additional include paths that will be passed to the preprocessor when creating the final .dts to compile into .dtbo
+          '';
+        };
+
+        dtbSource = mkOption {
+          default = "${cfg.kernelPackage}/dtbs";
+          defaultText = literalExpression "\${cfg.kernelPackage}/dtbs";
+          type = types.path;
+          description = ''
+            Path to dtb directory that overlays and other processing will be applied to. Uses
             device trees bundled with the Linux kernel by default.
           '';
         };
@@ -167,6 +187,7 @@ in
           '';
           type = types.listOf (types.coercedTo types.path (path: {
             name = baseNameOf path;
+            filter = null;
             dtboFile = path;
           }) overlayType);
           description = ''
@@ -188,7 +209,7 @@ in
   config = mkIf (cfg.enable) {
 
     assertions = let
-      invalidOverlay = o: isNull o.dtsFile && isNull o.dtsText && isNull o.dtboFile;
+      invalidOverlay = o: (o.dtsFile == null) && (o.dtsText == null) && (o.dtboFile == null);
     in lib.singleton {
       assertion = lib.all (o: !invalidOverlay o) cfg.overlays;
       message = ''
@@ -199,7 +220,7 @@ in
     };
 
     hardware.deviceTree.package = if (cfg.overlays != [])
-      then pkgs.deviceTree.applyOverlays (filterDTBs dtbsWithSymbols) (withDTBOs cfg.overlays)
-      else (filterDTBs cfg.kernelPackage);
+      then pkgs.deviceTree.applyOverlays filteredDTBs (withDTBOs cfg.overlays)
+      else filteredDTBs;
   };
 }

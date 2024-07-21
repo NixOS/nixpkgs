@@ -1,23 +1,57 @@
-{ lib, buildPythonPackage, fetchFromGitHub, mock, pytestCheckHook, invoke }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  invoke,
+  mock,
+  pytest7CheckHook,
+  pythonOlder,
+  setuptools,
+  sphinx-rtd-theme,
+  typing-extensions,
+}:
 
 buildPythonPackage rec {
   pname = "pydash";
-  version = "4.9.3";
+  version = "8.0.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dgilland";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-BAyiSnILvujUOFOAkiXSgyozs2Q809pYihHwa+6BHcQ=";
+    repo = "pydash";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4zNljz0U/iQd2DMC43qkdOY/mwtPlizgLmoaB7BVmxw=";
   };
 
-  patches = [ ./0001-Only-build-unit-tests.patch ];
+  postPatch = ''
+    sed -i "/--cov/d" pyproject.toml
+    sed -i "/--no-cov/d" pyproject.toml
+  '';
 
-  checkInputs = [ mock pytestCheckHook invoke ];
+  build-system = [ setuptools ];
+
+  dependencies = [ typing-extensions ];
+
+  nativeCheckInputs = [
+    invoke
+    mock
+    pytest7CheckHook
+    sphinx-rtd-theme
+  ];
+
+  pythonImportsCheck = [ "pydash" ];
+
+  disabledTestPaths = [
+    # Disable mypy testing
+    "tests/pytest_mypy_testing/"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/dgilland/pydash";
-    description = "The kitchen sink of Python utility libraries for doing \"stuff\" in a functional way. Based on the Lo-Dash Javascript library.";
+    description = "Python utility libraries for doing stuff in a functional way";
+    homepage = "https://pydash.readthedocs.io";
+    changelog = "https://github.com/dgilland/pydash/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
   };

@@ -6,10 +6,10 @@
 }:
 
 let
-  name    = "distcc";
+  pname = "distcc";
   version = "2021-03-11";
   distcc = stdenv.mkDerivation {
-    name = "${name}-${version}";
+    inherit pname version;
     src = fetchFromGitHub {
       owner = "distcc";
       repo = "distcc";
@@ -17,8 +17,11 @@ let
       sha256 = "0zjba1090awxkmgifr9jnjkxf41zhzc4f6mrnbayn3v6s77ca9x4";
     };
 
-  nativeBuildInputs = [ pkg-config ];
-    buildInputs = [popt avahi pkg-config python3 gtk3 autoconf automake which procps libiberty_static];
+    nativeBuildInputs = [
+      pkg-config autoconf automake which
+      (python3.withPackages (p: [ p.setuptools ]))
+    ];
+    buildInputs = [ popt avahi gtk3 procps libiberty_static ];
     preConfigure =
     ''
       export CPATH=$(ls -d ${gcc.cc}/lib/gcc/*/${gcc.cc.version}/plugin/include)
@@ -26,11 +29,11 @@ let
       configureFlagsArray=( CFLAGS="-O2 -fno-strict-aliasing"
                             CXXFLAGS="-O2 -fno-strict-aliasing"
           --mandir=$out/share/man
-                            ${if sysconfDir == "" then "" else "--sysconfdir=${sysconfDir}"}
-                            ${if static then "LDFLAGS=-static" else ""}
-                            --with${if static == true || popt == null then "" else "out"}-included-popt
-                            --with${if avahi != null then "" else "out"}-avahi
-                            --with${if gtk3 != null then "" else "out"}-gtk
+                            ${lib.optionalString (sysconfDir != "") "--sysconfdir=${sysconfDir}"}
+                            ${lib.optionalString static "LDFLAGS=-static"}
+                            ${lib.withFeature (static == true || popt == null) "included-popt"}
+                            ${lib.withFeature (avahi != null) "avahi"}
+                            ${lib.withFeature (gtk3 != null) "gtk"}
                             --without-gnome
                             --enable-rfc2553
                             --disable-Werror   # a must on gcc 4.6
@@ -72,7 +75,7 @@ let
     };
 
     meta = {
-      description = "A fast, free distributed C/C++ compiler";
+      description = "Fast, free distributed C/C++ compiler";
       homepage = "http://distcc.org";
       license = "GPL";
 

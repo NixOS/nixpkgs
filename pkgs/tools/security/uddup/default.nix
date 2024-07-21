@@ -1,13 +1,12 @@
 { lib
-, buildPythonApplication
-, colorama
 , fetchFromGitHub
-, pytestCheckHook
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "uddup";
   version = "0.9.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rotemreiss";
@@ -16,18 +15,21 @@ buildPythonApplication rec {
     sha256 = "1f5dm3772hiik9irnyvbs7wygcafbwi7czw3b47cwhb90b8fi5hg";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     colorama
   ];
 
-  checkInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "uddup" ];
+  pythonImportsCheck = [
+    "uddup"
+  ];
 
   meta = with lib; {
     description = "Tool for de-duplication URLs";
+    mainProgram = "uddup";
     homepage = "https://github.com/rotemreiss/uddup";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

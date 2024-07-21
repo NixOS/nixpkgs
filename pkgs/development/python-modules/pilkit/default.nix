@@ -1,36 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pillow
-, nose_progressive
-, nose
-, mock
-, blessings
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pilkit";
-  version = "2.0";
+  version = "3.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ddb30c2f0198a147e56b151476c3bb9fe045fbfd5b0a0fa2a3148dba62d1559f";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "matthewwithanm";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-NmD9PFCkz3lz4AnGoQUpkt35q0zvDVm+kx7lVDFBcHk=";
   };
 
-  preConfigure = ''
-    substituteInPlace setup.py --replace 'nose==1.2.1' 'nose'
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [ pillow ];
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace " --cov --cov-report term-missing:skip-covered" ""
+    substituteInPlace pilkit/processors/resize.py \
+      --replace "Image.ANTIALIAS" "Image.Resampling.LANCZOS"
   '';
 
-  # tests fail, see https://github.com/matthewwithanm/pilkit/issues/9
-  doCheck = false;
-
-  buildInputs = [ pillow nose_progressive nose mock blessings ];
+  pythonImportsCheck = [ "pilkit" ];
 
   meta = with lib; {
+    description = "Collection of utilities and processors for the Python Imaging Library";
     homepage = "https://github.com/matthewwithanm/pilkit/";
-    description = "A collection of utilities and processors for the Python Imaging Libary";
-    license = licenses.bsd0;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

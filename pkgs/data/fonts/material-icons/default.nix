@@ -1,20 +1,32 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub, nix-update-script }:
 
-let
-  version = "3.0.1";
-in fetchFromGitHub {
-  name = "material-icons-${version}";
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "material-icons";
+  version = "4.0.0";
 
-  owner  = "google";
-  repo   = "material-design-icons";
-  rev    = version;
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "material-design-icons";
+    rev = finalAttrs.version;
+    hash = "sha256-wX7UejIYUxXOnrH2WZYku9ljv4ZAlvgk8EEJJHOCCjE=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  dontConfigure = true;
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
-    cp iconfont/*.ttf $out/share/fonts/truetype
+    cp font/*.ttf $out/share/fonts/truetype
+
+    mkdir -p $out/share/fonts/opentype
+    cp font/*.otf $out/share/fonts/opentype
+
+    runHook postInstall
   '';
-  sha256 = "1syy6v941lb8nqxhdf7mfx28v05lwrfnq53r3c1ym13x05l9kchp";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "System status icons by Google, featuring material design";
@@ -23,4 +35,4 @@ in fetchFromGitHub {
     platforms = platforms.all;
     maintainers = with maintainers; [ mpcsh ];
   };
-}
+})

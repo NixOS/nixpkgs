@@ -66,11 +66,12 @@ let
     };
     yamerl = builder {
       name = "yamerl";
-      version = "0.8.1";
-      src = fetchHex {
-        pkg = "yamerl";
-        version = "0.8.1";
-        sha256 = "sha256-lssw+dZDRP7Q74qS6fFvIH3mwE3/9PNmdSynn1vOsj8=";
+      version = "git";
+      src = fetchFromGitHub {
+        owner = "erlang-ls";
+        repo = "yamerl";
+        rev = "9a9f7a2e84554992f2e8e08a8060bfe97776a5b7";
+        sha256 = "1gb44v27paxwxm443m5f554wiziqi2kd300hgjjdg6fyvy3mvhss";
       };
       beamDeps = [ ];
     };
@@ -114,16 +115,6 @@ let
       };
       beamDeps = [ katana_code ];
     };
-    ranch = builder {
-      name = "ranch";
-      version = "2.0.0";
-      src = fetchHex {
-        pkg = "ranch";
-        version = "2.0.0";
-        sha256 = "sha256-wgpIQMfWYjwZgS06fIKLLxvRU+8PEky2nFT+UdikKuA=";
-      };
-      beamDeps = [ ];
-    };
     jsx = builder {
       name = "jsx";
       version = "3.0.0";
@@ -134,14 +125,24 @@ let
       };
       beamDeps = [ ];
     };
-    erlfmt = builder {
-      name = "erlfmt";
+    gradualizer = builder {
+      name = "gradualizer";
       version = "git";
       src = fetchFromGitHub {
-        owner = "whatsapp";
-        repo = "erlfmt";
-        rev = "2e93fc4a646111357642b0179a2a63151868d890";
-        sha256 = "0n7kygycn05aqdp5dyj192mja89l4nxv2wg16qg2c0bmw9s7j2mr";
+        owner = "josefs";
+        repo = "gradualizer";
+        rev = "3021d29d82741399d131e3be38d2a8db79d146d4";
+        sha256 = "052f8x9x93yy00pbkl1745ffnwj3blcm39j12i4k166y1zbnwy00";
+      };
+      beamDeps = [ ];
+    };
+    erlfmt = builder {
+      name = "erlfmt";
+      version = "1.3.0";
+      src = fetchHex {
+        pkg = "erlfmt";
+        version = "1.3.0";
+        sha256 = "sha256-KoSqHrovT8190x1cV+neK8JwXdoY2kVT8n33EUz6oFI=";
       };
       beamDeps = [ ];
     };
@@ -157,11 +158,11 @@ let
     };
     elvis_core = builder {
       name = "elvis_core";
-      version = "1.1.1";
+      version = "1.3.1";
       src = fetchHex {
         pkg = "elvis_core";
-        version = "1.1.1";
-        sha256 = "sha256-ORyVuqSfJxjX+0mLzwgEbd/CAs8Kq2Oy5DknFIXJ3EI=";
+        version = "1.3.1";
+        sha256 = "sha256-eoiQv4GFoyUs1OvYJv5fita5MCTt+IV26yeunl3BnWk=";
       };
       beamDeps = [ katana_code zipper ];
     };

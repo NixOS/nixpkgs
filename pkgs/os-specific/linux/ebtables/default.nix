@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     "LOCALSTATEDIR=/var"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preInstall = "mkdir -p $out/etc/sysconfig";
 
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A filtering tool for Linux-based bridging firewalls";
+    description = "Filtering tool for Linux-based bridging firewalls";
     homepage = "http://ebtables.sourceforge.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

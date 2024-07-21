@@ -41,11 +41,15 @@ in {
       wantedBy = [ "multi-user.target" ];
       stopIfChanged = false;
 
+      preStart = ''
+        ${lib.getExe pkgs.promtail} -config.file=${prettyJSON cfg.configuration} -check-syntax
+      '';
+
       serviceConfig = {
         Restart = "on-failure";
         TimeoutStopSec = 10;
 
-        ExecStart = "${pkgs.grafana-loki}/bin/promtail -config.file=${prettyJSON cfg.configuration} ${escapeShellArgs cfg.extraFlags}";
+        ExecStart = "${pkgs.promtail}/bin/promtail -config.file=${prettyJSON cfg.configuration} ${escapeShellArgs cfg.extraFlags}";
 
         ProtectSystem = "strict";
         ProtectHome = true;

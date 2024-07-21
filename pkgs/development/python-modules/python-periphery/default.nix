@@ -1,12 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "python-periphery";
-  version = "2.3.0";
+  version = "2.4.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8a8ec019d9b330a6a6f69a7de61d14b4c98b102d76359047c5ce0263e12246a6";
+    hash = "sha256-YdRh1zaYKm92boeHIKsQpoFR4ujBCGYA2TiaxH5A6Io=";
   };
 
   # Some tests require physical probing and additional physical setup

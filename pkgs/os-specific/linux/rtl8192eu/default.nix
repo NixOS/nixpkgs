@@ -4,22 +4,22 @@ with lib;
 
 let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtl8192eu";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "rtl8192eu";
-  version = "${kernel.version}-4.4.1.20211023";
+  version = "${kernel.version}-4.4.1.20240507";
 
   src = fetchFromGitHub {
     owner = "Mange";
     repo = "rtl8192eu-linux-driver";
-    rev = "744bbe52976e51895fce2c1d4075f97a98dca2b2";
-    sha256 = "1ayb3fljvpljwcgi47h8vj2d2w5imqyjxc7mvmfrvmilzg5d5cj7";
+    rev = "27410641da6926eb1ac565068ff89d35f7496328";
+    sha256 = "sha256-/BztTE3yKw35Oo7KkzHMtD+8qpJNXWiSwR3YjrotR0I=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies ++ [ bc ];
 
-  makeFlags = [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags = kernel.makeFlags ++ [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   enableParallelBuilding = true;
 

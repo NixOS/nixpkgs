@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "sogo";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ajs124 das_j ];
+    maintainers = [];
   };
 
   nodes = {

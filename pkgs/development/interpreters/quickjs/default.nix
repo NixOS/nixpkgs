@@ -1,21 +1,23 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , texinfo
 }:
 
 stdenv.mkDerivation rec {
   pname = "quickjs";
-  version = "2021-03-27";
+  version = "2024-01-13";
 
-  src = fetchFromGitHub {
-    owner = "bellard";
-    repo = pname;
-    rev = "b5e62895c619d4ffc75c9d822c8d85f1ece77e5b";
-    hash = "sha256-VMaxVVQuJ3DAwYrC14uJqlRBg0//ugYvtyhOXsTUbCA=";
+  src = fetchurl {
+    url = "https://bellard.org/quickjs/quickjs-${version}.tar.xz";
+    hash = "sha256-PEv4+JW/pUvrSGyNEhgRJ3Hs/FrDvhA2hR70FWghLgM=";
   };
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace "CONFIG_LTO=y" ""
+  '';
+
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
@@ -45,15 +47,16 @@ stdenv.mkDerivation rec {
     temp=$(mktemp).js
     echo "console.log('Output from compiled program');" > "$temp"
     set -o verbose
-    out=$(mktemp) && qjsc         "$temp" -o "$out" && "$out" | grep -q "Output from compiled program"
-    out=$(mktemp) && qjsc   -flto "$temp" -o "$out" && "$out" | grep -q "Output from compiled program"
+    out=$(mktemp) && qjsc         -o "$out" "$temp" && "$out" | grep -q "Output from compiled program"
+    out=$(mktemp) && qjsc   -flto -o "$out" "$temp" && "$out" | grep -q "Output from compiled program"
   '';
 
   meta = with lib; {
-    description = "A small and embeddable Javascript engine";
+    description = "Small and embeddable Javascript engine";
     homepage = "https://bellard.org/quickjs/";
     maintainers = with maintainers; [ stesie AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.mit;
+    mainProgram = "qjs";
   };
 }

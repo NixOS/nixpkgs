@@ -2,14 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libtins";
-  version = "4.3";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09ah1a7ska7xiki7625mn1d8i96il3hxbkc39ba8fn1a5383kmqa";
+    sha256 = "sha256-zL4C2Cgs9Y3NebL8MPQBO5j8Bm6xhl8ZggQBPJLRn0o=";
   };
+
+  patches = [
+    # Required for gtest 1.13+, see also upstream report at:
+    # https://github.com/mfontanini/libtins/issues/529
+    ./0001-force-cpp-14.patch
+  ];
 
   postPatch = ''
     rm -rf googletest
@@ -30,10 +36,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD${placeholder "out"}/lib
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD${placeholder "out"}/lib
-  '';
   checkTarget = "tests test";
 
   meta = with lib; {

@@ -9,7 +9,7 @@ let
     icon = "qtel";
     desktopName = name;
     genericName = "EchoLink Client";
-    categories = "HamRadio;Qt;Network;";
+    categories = [ "HamRadio" "Qt" "Network" ];
   };
 
 in stdenv.mkDerivation rec {

@@ -1,8 +1,7 @@
-{ lib, buildDunePackage, caqti, logs, lwt }:
+{ buildDunePackage, caqti, logs, lwt }:
 
 buildDunePackage {
   pname = "caqti-lwt";
-  useDune2 = true;
   inherit (caqti) version src;
 
   propagatedBuildInputs = [ caqti logs lwt ];

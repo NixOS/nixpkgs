@@ -9,12 +9,13 @@ stdenv.mkDerivation rec {
   };
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
-  buildInputs = [ glib pkg-config gtk2 hamlib ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ glib gtk2 hamlib ];
 
   meta = with lib; {
-    description = "An amateur radio logging program";
+    description = "Amateur radio logging program";
     longDescription =
       '' Xlog is an amateur radio logging program.
          It supports cabrillo, ADIF, trlog (format also used by tlf),
@@ -27,5 +28,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.mafo ];
     license = licenses.gpl3;
     platforms = platforms.unix;
+    mainProgram = "xlog";
   };
 }

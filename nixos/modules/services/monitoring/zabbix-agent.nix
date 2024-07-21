@@ -3,7 +3,7 @@
 let
   cfg = config.services.zabbixAgent;
 
-  inherit (lib) mkDefault mkEnableOption mkIf mkMerge mkOption;
+  inherit (lib) mkDefault mkEnableOption mkPackageOption mkIf mkMerge mkOption;
   inherit (lib) attrValues concatMapStringsSep literalExpression optionalString types;
   inherit (lib.generators) toKeyValue;
 
@@ -31,12 +31,7 @@ in
     services.zabbixAgent = {
       enable = mkEnableOption "the Zabbix Agent";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.zabbix.agent;
-        defaultText = literalExpression "pkgs.zabbix.agent";
-        description = "The Zabbix package to use.";
-      };
+      package = mkPackageOption pkgs [ "zabbix" "agent" ] { };
 
       extraPackages = mkOption {
         type = types.listOf types.package;
@@ -44,7 +39,7 @@ in
         defaultText = literalExpression "with pkgs; [ nettools ]";
         example = literalExpression "with pkgs; [ nettools mysql ]";
         description = ''
-          Packages to be added to the Zabbix <envar>PATH</envar>.
+          Packages to be added to the Zabbix {env}`PATH`.
           Typically used to add executables for scripts, but can be anything.
         '';
       };
@@ -107,7 +102,7 @@ in
         default = {};
         description = ''
           Zabbix Agent configuration. Refer to
-          <link xlink:href="https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_agentd"/>
+          <https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_agentd>
           for details on supported values.
         '';
         example = {

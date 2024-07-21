@@ -34,7 +34,8 @@ with lib;
     ];
 
     # for $out/bin/install-printer-driver
-    services.packagekit.enable = true;
+    # TODO: Enable once #177946 is resolved
+    # services.packagekit.enable = true;
 
   };
 

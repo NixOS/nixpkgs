@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cutee }:
+{ lib, stdenv, fetchurl, fetchpatch, cutee }:
 
 stdenv.mkDerivation rec {
   pname = "mimetic";
@@ -11,11 +11,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cutee ];
 
-  patches = lib.optional stdenv.isAarch64 ./narrowing.patch;
+  patches = [
+    # Fix build with gcc11
+    (fetchpatch {
+      url = "https://github.com/tat/mimetic/commit/bf84940f9021950c80846e6b1a5f8b0b55991b00.patch";
+      sha256 = "sha256-1JW9zPg67BgNsdIjK/jp9j7QMg50eRMz5FsDsbbzBlI=";
+    })
+  ] ++ lib.optional stdenv.isAarch64 ./narrowing.patch;
 
   meta = with lib; {
     description = "MIME handling library";
-    homepage    = "http://www.codesink.org/mimetic_mime_library.html";
+    homepage    = "https://www.codesink.org/mimetic_mime_library.html";
     license     = licenses.mit;
     maintainers = with maintainers; [ leenaars];
     platforms = platforms.linux;

@@ -1,52 +1,62 @@
-{ lib
-, buildPythonPackage
-, eigen
-, nlopt
-, ipopt
-, boost
-, pagmo2
-, numpy
-, cloudpickle
-, ipyparallel
-, numba
-, python
+{
+  lib,
+  stdenv,
+  toPythonModule,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  eigen,
+  ipopt,
+  nlopt,
+  pagmo2,
+  python,
+  cloudpickle,
+  ipyparallel,
+  numba,
+  numpy,
+  pybind11,
 }:
 
-let
-  propagatedBuildInputs = [ numpy cloudpickle ipyparallel numba ];
+toPythonModule (
+  stdenv.mkDerivation rec {
+    pname = "pygmo";
+    version = "2.19.6";
 
-  pagmo2WithPython = pagmo2.overrideAttrs (oldAttrs: {
-    cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DPAGMO_BUILD_PYGMO=yes"
-      "-DPAGMO_BUILD_PAGMO=no"
-      "-DPagmo_DIR=${pagmo2}"
+    src = fetchFromGitHub {
+      owner = "esa";
+      repo = "pygmo2";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-umXK8LGJJ6Xj6UbJ5k/DM/nYayjl+jBXtjar5/dWqFM=";
+    };
+
+    cmakeFlags = [ "-DPYGMO_INSTALL_PATH=${placeholder "out"}/${python.sitePackages}" ];
+
+    nativeBuildInputs = [ cmake ];
+
+    propagatedBuildInputs = [
+      cloudpickle
+      ipyparallel
+      numba
+      numpy
+      python
     ];
-    buildInputs = [ eigen nlopt ipopt boost pagmo2 ] ++ propagatedBuildInputs;
-    postInstall = ''
-      mv wheel $out
-    '';
-  });
 
-in buildPythonPackage {
-  pname = "pygmo";
-  version = pagmo2WithPython.version;
+    buildInputs = [
+      boost
+      eigen
+      ipopt
+      nlopt
+      pagmo2
+      pybind11
+    ];
 
-  inherit propagatedBuildInputs;
+    doCheck = true;
 
-  src = pagmo2WithPython;
-
-  preBuild = ''
-    mv ${python.sitePackages}/pygmo wheel
-    cd wheel
-  '';
-
-  # dont do tests
-  doCheck = false;
-
-  meta = with lib; {
-    description = "Parallel optimisation for Python";
-    homepage = "https://esa.github.io/pagmo2/";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.costrouc ];
-  };
-}
+    meta = with lib; {
+      description = "Parallel optimisation for Python";
+      homepage = "https://github.com/esa/pygmo2";
+      license = licenses.gpl3Plus;
+      maintainers = [ ];
+    };
+  }
+)

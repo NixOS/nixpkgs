@@ -1,4 +1,13 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, Security }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, stdenv
+, curl
+, openssl
+, darwin
+, libgit2
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dephell";
@@ -8,19 +17,41 @@ rustPlatform.buildRustPackage rec {
     owner = "mimoo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1v3psrkjhgbkq9lm3698ac77qgk090jbly4r187nryj0vcmf9s1l";
+    hash = "sha256-NOjkKttA+mwPCpl4uiRIYD58DlMomVFpwnM9KGfWd+w=";
   };
 
-  cargoSha256 = "0fwj782dbyj3ps16hxmq61drf8714863jb0d3mhivn3zlqawyyil";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals stdenv.isDarwin [
+    curl
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    curl
+    darwin.apple_sdk.frameworks.Security
+    libgit2
+  ];
+
+  # update Cargo.lock to work with openssl 3
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
+
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
 
   meta = with lib; {
-    description = "A tool to analyze the third-party dependencies imported by a rust crate or rust workspace";
+    description = "Tool to analyze the third-party dependencies imported by a rust crate or rust workspace";
+    mainProgram = "cargo-dephell";
     homepage = "https://github.com/mimoo/cargo-dephell";
     license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

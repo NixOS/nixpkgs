@@ -1,20 +1,36 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, udev }:
+{ stdenv, lib, fetchurl, autoPatchelfHook, udev, libusb1 }:
 let
-  arch = if stdenv.isx86_64  then "x86_64"
-    else if stdenv.isi686    then "i686"
+  arch =
+    if stdenv.isx86_64 then "x86_64"
+    else if stdenv.isi686 then "i686"
+    else if stdenv.isAarch64 then "aarch64"
     else throw "unsupported architecture";
-in stdenv.mkDerivation rec {
-  name = "sdrplay";
+
   version = "3.07.1";
 
-  src = fetchurl {
-    url = "https://www.sdrplay.com/software/SDRplay_RSP_API-Linux-${version}.run";
-    sha256 = "1a25c7rsdkcjxr7ffvx2lwj7fxdbslg9qhr8ghaq1r53rcrqgzmf";
+  srcs = rec {
+    aarch64 = {
+      url = "https://www.sdrplay.com/software/SDRplay_RSP_API-ARM64-${version}.run";
+      hash = "sha256-GJPFW6W8Ke4mnczcSLFYfioOMGCfFn2/EIA07VnmVGY=";
+    };
+
+    x86_64 = {
+      url = "https://www.sdrplay.com/software/SDRplay_RSP_API-Linux-${version}.run";
+      sha256 = "1a25c7rsdkcjxr7ffvx2lwj7fxdbslg9qhr8ghaq1r53rcrqgzmf";
+    };
+
+    i686 = x86_64;
   };
+in
+stdenv.mkDerivation rec {
+  pname = "sdrplay";
+  inherit version;
+
+  src = fetchurl srcs."${arch}";
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [ udev stdenv.cc.cc.lib ];
+  buildInputs = [ libusb1 udev stdenv.cc.cc.lib ];
 
   unpackPhase = ''
     sh "$src" --noexec --target source
@@ -44,8 +60,10 @@ in stdenv.mkDerivation rec {
       https://www.sdrplay.com/docs/SDRplay_API_Specification_v${lib.concatStringsSep "." (lib.take 2 (builtins.splitVersion version))}.pdf
     '';
     homepage = "https://www.sdrplay.com/downloads/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = [ maintainers.pmenke ];
+    maintainers = with maintainers; [ pmenke zaninime ];
     platforms = platforms.linux;
+    mainProgram = "sdrplay_apiService";
   };
 }

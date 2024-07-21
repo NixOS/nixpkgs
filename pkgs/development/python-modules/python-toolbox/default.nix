@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, isPy27
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  isPy27,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "1hpls1hwisdjx1g15cq052bdn9fvh43r120llws8bvgvj9ivnaha";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     docutils
     pytestCheckHook
   ];

@@ -1,59 +1,85 @@
 { sage-src
 , env-locations
-, perl
+, python
 , buildPythonPackage
-, arb
+, m4
+, perl
+, pkg-config
+, sage-setup
+, setuptools
+, gd
+, iml
+, libpng
+, readline
 , blas
-, lapack
+, boost
 , brial
 , cliquer
-, cypari2
-, cysignals
-, cython
-, lisp-compiler
 , eclib
 , ecm
-, flint
-, gd
+, fflas-ffpack
+, flint3
+, gap
 , giac
 , givaro
 , glpk
 , gsl
-, iml
-, jinja2
+, lapack
 , lcalc
-, lrcalc
-, gap
+, libbraiding
+, libhomfly
+, libmpc
 , linbox
+, lisp-compiler
+, lrcalc
 , m4ri
 , m4rie
-, memory-allocator
-, libmpc
 , mpfi
+, mpfr
 , ntl
-, numpy
 , pari
-, pkgconfig # the python module, not the pkg-config alias
-, pkg-config
 , planarity
 , ppl
-, pynac
-, python
-, ratpoints
-, readline
 , rankwidth
-, symmetrica
-, zn_poly
-, fflas-ffpack
-, boost
+, ratpoints
 , singular
-, pip
-, jupyter_core
-, libhomfly
-, libbraiding
-, gmpy2
-, pplpy
 , sqlite
+, symmetrica
+, conway-polynomials
+, cvxopt
+, cypari2
+, cysignals
+, cython
+, fpylll
+, gmpy2
+, importlib-metadata
+, importlib-resources
+, ipykernel
+, ipython
+, ipywidgets
+, jinja2
+, jupyter-client
+, jupyter-core
+, lrcalc-python
+, matplotlib
+, memory-allocator
+, meson-python
+, mpmath
+, networkx
+, numpy
+, pexpect
+, pillow
+, pip
+, pkgconfig
+, pplpy
+, primecountpy
+, ptyprocess
+, requests
+, rpy2
+, scipy
+, sphinx
+, sympy
+, typing-extensions
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -67,69 +93,103 @@ buildPythonPackage rec {
   version = src.version;
   pname = "sagelib";
   src = sage-src;
+  pyproject = true;
 
   nativeBuildInputs = [
     iml
-    perl
-    jupyter_core
-    pkg-config
-    pip # needed to query installed packages
     lisp-compiler
+    m4
+    perl
+    pip # needed to query installed packages
+    pkg-config
+    sage-setup
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "networkx"
   ];
 
   buildInputs = [
     gd
-    readline
     iml
+    libpng
+    readline
   ];
 
   propagatedBuildInputs = [
-    cypari2
-    jinja2
-    numpy
-    pkgconfig
+    # native dependencies (TODO: determine which ones need to be propagated)
+    blas
     boost
-    arb
     brial
     cliquer
-    lisp-compiler
     eclib
     ecm
     fflas-ffpack
-    flint
+    flint3
+    gap
     giac
     givaro
     glpk
     gsl
+    lapack
     lcalc
-    gap
+    libbraiding
+    libhomfly
     libmpc
     linbox
+    lisp-compiler
     lrcalc
     m4ri
     m4rie
-    memory-allocator
     mpfi
+    mpfr
     ntl
-    blas
-    lapack
     pari
     planarity
     ppl
-    pynac
     rankwidth
     ratpoints
     singular
-    symmetrica
-    zn_poly
-    pip
-    cython
-    cysignals
-    libhomfly
-    libbraiding
-    gmpy2
-    pplpy
     sqlite
+    symmetrica
+
+    # from src/sage/setup.cfg and requirements.txt
+    conway-polynomials
+    cvxopt
+    cypari2
+    cysignals
+    cython
+    fpylll
+    gmpy2
+    importlib-metadata
+    importlib-resources
+    ipykernel
+    ipython
+    ipywidgets
+    jinja2
+    jupyter-client
+    jupyter-core
+    lrcalc-python
+    matplotlib
+    memory-allocator
+    meson-python
+    mpmath
+    networkx
+    numpy
+    pexpect
+    pillow
+    pip
+    pkgconfig
+    pplpy
+    primecountpy
+    ptyprocess
+    requests
+    rpy2
+    scipy
+    sphinx
+    sympy
+    typing-extensions
   ];
 
   preBuild = ''
@@ -148,7 +208,8 @@ buildPythonPackage rec {
     mkdir -p "$SAGE_SHARE/sage/ext/notebook-ipython"
     mkdir -p "var/lib/sage/installed"
 
-    # src/setup.py should not be used, see https://trac.sagemath.org/ticket/31377#comment:124
+    sed -i "/sage-conf/d" src/{setup.cfg,pyproject.toml,requirements.txt}
+
     cd build/pkgs/sagelib/src
   '';
 

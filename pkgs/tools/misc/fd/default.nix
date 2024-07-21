@@ -1,29 +1,45 @@
-{ lib, fetchFromGitHub, rustPlatform, installShellFiles }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, rust-jemalloc-sys, testers, fd }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "8.3.0";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "sha256-MSkQYsBZkQOFkOnjGY+VuifUZnzloSysAO/hsp+fy1A=";
+    hash = "sha256-9fL2XV3Vre2uo8Co3tlHYIvpNHNOh5TuvZggkWOxm5A=";
   };
 
-  cargoSha256 = "sha256-nwgAgyVaxs1ebu9ndUN3FlFiycyEbRgvUhZ8iGmrVhQ=";
+  cargoHash = "sha256-3TbsPfAn/GcGASc0RCcyAeUiD4RUtvTATdTYhKdBxvo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  preFixup = ''
-    installManPage doc/fd.1
+  buildInputs = [ rust-jemalloc-sys ];
 
-    installShellCompletion $releaseDir/build/fd-find-*/out/fd.{bash,fish}
+  # skip flaky test
+  checkFlags = [
+    "--skip=test_owner_current_group"
+    # Fails if the filesystem performs UTF-8 validation (such as ZFS with utf8only=on)
+    "--skip=test_exec_invalid_utf8"
+    "--skip=test_invalid_utf8"
+  ];
+
+  postInstall = ''
+    installManPage doc/fd.1
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd fd \
+      --bash <($out/bin/fd --gen-completions bash) \
+      --fish <($out/bin/fd --gen-completions fish)
     installShellCompletion --zsh contrib/completion/_fd
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = fd;
+  };
+
   meta = with lib; {
-    description = "A simple, fast and user-friendly alternative to find";
+    description = "Simple, fast and user-friendly alternative to find";
     longDescription = ''
       `fd` is a simple, fast and user-friendly alternative to `find`.
 
@@ -31,7 +47,9 @@ rustPlatform.buildRustPackage rec {
       it provides sensible (opinionated) defaults for 80% of the use cases.
     '';
     homepage = "https://github.com/sharkdp/fd";
+    changelog = "https://github.com/sharkdp/fd/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir globin ma27 zowoq ];
+    maintainers = with maintainers; [ dywedir figsoda globin ma27 zowoq ];
+    mainProgram = "fd";
   };
 }

@@ -4,8 +4,7 @@
 , gettext
 , itstool
 , python3
-, wrapGAppsHook
-, python3Packages
+, wrapGAppsHook3
 , gst_all_1
 , gtk3
 , gobject-introspection
@@ -17,17 +16,18 @@
 , meson
 , ninja
 , gsettings-desktop-schemas
+, hicolor-icon-theme
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pitivi";
-  version = "2021.05";
+  version = "2023.03";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "z1aTxGxCqw2hSi5Zv89LyIBgS0HpzTqo0uvcYIJ7dcc=";
+    sha256 = "PX1OFEeavqMPvF613BKgxwErxqW2huw6mQxo8YpBS/M=";
   };
 
   patches = [
@@ -44,17 +44,15 @@ python3Packages.buildPythonApplication rec {
     gettext
     itstool
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
     libpeas
     librsvg
-    gnome.gnome-desktop
     gsound
-    gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     libnotify
   ] ++ (with gst_all_1; [
@@ -68,25 +66,25 @@ python3Packages.buildPythonApplication rec {
     gst-devtools
   ]);
 
-  pythonPath = with python3Packages; [
+  pythonPath = with python3.pkgs; [
     pygobject3
     gst-python
-    pyxdg
     numpy
     pycairo
     matplotlib
-    dbus-python
+    librosa
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share"
+    )
+  '';
 
   postPatch = ''
     patchShebangs ./getenvvar.py
   '';
-
-  # Fixes error
-  #     Couldn’t recognize the image file format for file ".../share/pitivi/pixmaps/asset-proxied.svg"
-  # at startup, see https://github.com/NixOS/nixpkgs/issues/56943
-  # and https://github.com/NixOS/nixpkgs/issues/89691#issuecomment-714398705.
-  strictDeps = false;
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -104,7 +102,8 @@ python3Packages.buildPythonApplication rec {
       that can appeal to newbies and professionals alike.
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "pitivi";
   };
 }

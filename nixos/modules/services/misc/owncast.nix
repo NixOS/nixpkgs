@@ -5,7 +5,7 @@ in {
 
   options.services.owncast = {
 
-    enable = mkEnableOption "owncast";
+    enable = mkEnableOption "owncast, a video live streaming solution";
 
     dataDir = mkOption {
       type = types.str;

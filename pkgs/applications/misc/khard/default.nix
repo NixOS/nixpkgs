@@ -1,18 +1,22 @@
-{ lib, python3 }:
+{ lib, python3, fetchPypi, khard, testers }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.17.0";
+  version = "0.19.1";
   pname = "khard";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "062nv4xkfsjc11k9m52dh6xjn9z68a4a6x1s8z05wwv4jbp1lkhn";
+    hash = "sha256-WfMKDaPD2j6wT02+GO5HY5E7aF2Z7IQY/VdKiMSRxJA=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  nativeBuildInputs = [
-    python3.pkgs.setuptools-scm
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools-scm
+    sphinxHook
+    sphinx-autoapi
+    sphinx-autodoc-typehints
   ];
+
+  sphinxBuilders = [ "man" ];
 
   propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
@@ -33,10 +37,13 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "khard" ];
 
+  passthru.tests.version = testers.testVersion { package = khard; };
+
   meta = {
     homepage = "https://github.com/scheibler/khard";
     description = "Console carddav client";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+    mainProgram = "khard";
   };
 }

@@ -10,8 +10,6 @@
   libvirt,
   xenSupport ? true }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "libvmi";
   version = "0.12.0";
@@ -24,21 +22,21 @@ stdenv.mkDerivation rec {
     sha256 = "0wbi2nasb1gbci6cq23g6kq7i10rwi1y7r44rl03icr5prqjpdyv";
   };
 
-  buildInputs = [ glib libvirt json_c ] ++ (optional xenSupport xen);
+  buildInputs = [ glib libvirt json_c ] ++ (lib.optional xenSupport xen);
   nativeBuildInputs = [ autoreconfHook bison flex pkg-config ];
 
-  configureFlags = optional (!xenSupport) "--disable-xen";
+  configureFlags = lib.optional (!xenSupport) "--disable-xen";
 
   # libvmi uses dlopen() for the xen libraries, however autoPatchelfHook doesn't work here
-  postFixup = optionalString xenSupport ''
+  postFixup = lib.optionalString xenSupport ''
     libvmi="$out/lib/libvmi.so.${libVersion}"
     oldrpath=$(patchelf --print-rpath "$libvmi")
-    patchelf --set-rpath "$oldrpath:${makeLibraryPath [ xen ]}" "$libvmi"
+    patchelf --set-rpath "$oldrpath:${lib.makeLibraryPath [ xen ]}" "$libvmi"
   '';
 
   meta = with lib; {
     homepage = "https://libvmi.com/";
-    description = "A C library for virtual machine introspection";
+    description = "C library for virtual machine introspection";
     longDescription = ''
       LibVMI is a C library with Python bindings that makes it easy to monitor the low-level
       details of a running virtual machine by viewing its memory, trapping on hardware events,
@@ -46,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ gpl3 lgpl3 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ ];
   };
 }

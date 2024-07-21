@@ -1,15 +1,17 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
   pname = "dpkt";
-  version = "1.9.7.2";
+  version = "1.9.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "80f977667ebbad2b5c4f7b7f45ee8bea6622fb71723f68a9a8fe6274520c853b";
+    hash = "sha256-Q/hobkVdpQUoNf0e2iaJ1R3jZwqsl5mxsAz9IDkn7kU=";
   };
 
   # Project has no tests

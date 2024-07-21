@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, lua, cairo, librsvg, cmake, imagemagick, pkg-config, gdk-pixbuf
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, lua, cairo, librsvg, cmake, imagemagick, pkg-config, gdk-pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobject-introspection
 , which, dbus, nettools, git, doxygen
@@ -27,6 +28,21 @@ stdenv.mkDerivation rec {
     sha256 = "1i7ajmgbsax4lzpgnmkyv35x8vxqi0j84a14k6zys4blx94m9yjf";
   };
 
+  patches = [
+    # Pull upstream fix for -fno-common toolchain support:
+    #   https://github.com/awesomeWM/awesome/pull/3065
+    (fetchpatch {
+      name = "fno-common-prerequisite.patch";
+      url = "https://github.com/awesomeWM/awesome/commit/c5202a48708585cc33528065af8d1b1d28b1a6e0.patch";
+      sha256 = "0sv36xf0ibjcm63gn9k3bl039sqavb2b5i6d65il4bdclkc0n08b";
+    })
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/awesomeWM/awesome/commit/d256d9055095f27a33696e0aeda4ee20ed4fb1a0.patch";
+      sha256 = "1n3y4wnjra8blss7642jgpxnm9n92zhhjj541bb9i60m4b7bgfzz";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     doxygen
@@ -36,6 +52,7 @@ stdenv.mkDerivation rec {
     xmlto docbook_xml_dtd_45
     docbook_xsl findXMLCatalogs
     asciidoctor
+    gobject-introspection
   ];
 
   outputs = [ "out" "doc" ];
@@ -43,7 +60,7 @@ stdenv.mkDerivation rec {
   FONTCONFIG_FILE = toString fontsConf;
 
   propagatedUserEnvPkgs = [ hicolor-icon-theme ];
-  buildInputs = [ cairo librsvg dbus gdk-pixbuf gobject-introspection
+  buildInputs = [ cairo librsvg dbus gdk-pixbuf
                   git luaEnv libpthreadstubs libstartup_notification
                   libxdg_basedir lua nettools pango xcb-util-cursor
                   xorg.libXau xorg.libXdmcp xorg.libxcb xorg.libxshmfence

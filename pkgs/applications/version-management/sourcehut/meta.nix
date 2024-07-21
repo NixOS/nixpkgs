@@ -2,58 +2,66 @@
 , fetchFromSourcehut
 , buildPythonPackage
 , buildGoModule
-, pgpy
-, srht
-, redis
-, bcrypt
-, qrcode
-, stripe
-, zxcvbn
 , alembic
-, pystache
+, bcrypt
 , dnspython
-, sshpubkeys
-, weasyprint
+, qrcode
+, redis
+, srht
+, stripe
 , prometheus-client
+, zxcvbn
 , python
+, unzip
+, pip
+, pythonOlder
+, setuptools
 }:
 let
-  version = "0.53.14";
+  version = "0.69.8";
+  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.43"; };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "meta.sr.ht";
     rev = version;
-    sha256 = "sha256-/+r/XLDkcSTW647xPMh5bcJmR2xZNNH74AJ5jemna2k=";
+    hash = "sha256-K7p6cytkPYgUuYr7BVfU/+sVbSr2YEmreIDnTatUMyk=";
   };
 
-  buildApi = src: buildGoModule {
+  metasrht-api = buildGoModule ({
     inherit src version;
     pname = "metasrht-api";
-    vendorSha256 = "sha256-eZyDrr2VcNMxI++18qUy7LA1Q1YDlWCoRtl00L8lfR4=";
-  };
-
+    modRoot = "api";
+    vendorHash = "sha256-vIkUK1pigVU8vZL5xpHLeinOga5eXXHTuDkHxwUz6uM=";
+  } // gqlgen);
 in
 buildPythonPackage rec {
   pname = "metasrht";
   inherit version src;
+  pyproject = true;
 
-  nativeBuildInputs = srht.nativeBuildInputs;
+  disabled = pythonOlder "3.7";
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api" ""
+  '';
+
+  nativeBuildInputs = [
+    pip
+    setuptools
+  ];
 
   propagatedBuildInputs = [
-    pgpy
-    srht
-    redis
-    bcrypt
-    qrcode
-    stripe
-    zxcvbn
     alembic
-    pystache
-    sshpubkeys
-    weasyprint
-    prometheus-client
+    bcrypt
     dnspython
+    qrcode
+    redis
+    srht
+    stripe
+    prometheus-client
+    zxcvbn
   ];
 
   preBuild = ''
@@ -63,13 +71,15 @@ buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    cp ${buildApi "${src}/api/"}/bin/api $out/bin/metasrht-api
+    ln -s ${metasrht-api}/bin/api $out/bin/metasrht-api
   '';
+
+  pythonImportsCheck = [ "metasrht" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     description = "Account management service for the sr.ht network";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ eadwu ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ eadwu christoph-heiss ];
   };
 }

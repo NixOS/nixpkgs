@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, makeWrapper, coreutils }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "openresolv";
-  version = "3.12.0";
+  version = "3.13.2";
 
-  src = fetchurl {
-    url = "mirror://roy/openresolv/${pname}-${version}.tar.xz";
-    sha256 = "sha256-QrMFCOhXoihTXGMeqsk2hi2G7KaMFLXAvzh7oXa5G5c=";
+  src = fetchFromGitHub {
+    owner = "NetworkConfiguration";
+    repo = "openresolv";
+    rev = "v${version}";
+    sha256 = "sha256-rpfzAIzuiO+QTFhN+tHND+OQOyX/GUPvLLX3CSSwqA4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,10 +33,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A program to manage /etc/resolv.conf";
+    description = "Program to manage /etc/resolv.conf";
+    mainProgram = "resolvconf";
     homepage = "https://roy.marples.name/projects/openresolv";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 }

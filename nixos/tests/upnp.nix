@@ -5,7 +5,7 @@
 # this succeeds an external client will try to connect to the port
 # mapping.
 
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, useNftables, ... }:
 
 let
   internalRouterAddress = "192.168.3.1";
@@ -27,6 +27,7 @@ in
           networking.nat.enable = true;
           networking.nat.internalInterfaces = [ "eth2" ];
           networking.nat.externalInterface = "eth1";
+          networking.nftables.enable = useNftables;
           networking.firewall.enable = true;
           networking.firewall.trustedInterfaces = [ "eth2" ];
           networking.interfaces.eth1.ipv4.addresses = [
@@ -47,7 +48,7 @@ in
 
       client1 =
         { pkgs, nodes, ... }:
-        { environment.systemPackages = [ pkgs.miniupnpc_2 pkgs.netcat ];
+        { environment.systemPackages = [ pkgs.miniupnpc pkgs.netcat ];
           virtualisation.vlans = [ 2 ];
           networking.defaultGateway = internalRouterAddress;
           networking.interfaces.eth1.ipv4.addresses = [
@@ -65,7 +66,7 @@ in
 
       client2 =
         { pkgs, ... }:
-        { environment.systemPackages = [ pkgs.miniupnpc_2 ];
+        { environment.systemPackages = [ pkgs.miniupnpc ];
           virtualisation.vlans = [ 1 ];
           networking.interfaces.eth1.ipv4.addresses = [
             { address = externalClient2Address; prefixLength = 24; }
@@ -80,11 +81,13 @@ in
       start_all()
 
       # Wait for network and miniupnpd.
+      router.systemctl("start network-online.target")
       router.wait_for_unit("network-online.target")
       # $router.wait_for_unit("nat")
-      router.wait_for_unit("firewall.service")
+      router.wait_for_unit("${if useNftables then "nftables" else "firewall"}.service")
       router.wait_for_unit("miniupnpd")
 
+      client1.systemctl("start network-online.target")
       client1.wait_for_unit("network-online.target")
 
       client1.succeed("upnpc -a ${internalClient1Address} 9000 9000 TCP")

@@ -14,13 +14,13 @@ let
 
   bees = stdenv.mkDerivation rec {
     pname = "bees";
-    version = "0.7";
+    version = "0.10";
 
     src = fetchFromGitHub {
       owner = "Zygo";
       repo = "bees";
       rev = "v${version}";
-      sha256 = "sha256-hD6/pMRnQgPqL1M6QOuRka6ESJv9kjeKy+29nRMTY1o=";
+      hash = "sha256-f3P3BEd8uO6QOZ1/2hBzdcuOSggYvHxW3g9pGftKO8g=";
     };
 
     buildInputs = [
@@ -56,10 +56,10 @@ let
     meta = with lib; {
       homepage = "https://github.com/Zygo/bees";
       description = "Block-oriented BTRFS deduplication service";
+      longDescription = "Best-Effort Extent-Same: bees finds not just identical files, but also identical extents within files that differ";
       license = licenses.gpl3;
       platforms = platforms.linux;
       maintainers = with maintainers; [ chaduffy ];
-      longDescription = "Best-Effort Extent-Same: bees finds not just identical files, but also identical extents within files that differ";
     };
   };
 
@@ -75,8 +75,8 @@ in
   substituteAll ${./bees-service-wrapper} "$out"/bin/bees-service-wrapper
   chmod +x "$out"/bin/bees-service-wrapper
   ln -s ${bees}/bin/beesd "$out"/bin/beesd
-'').overrideAttrs (old: {
+'').overrideAttrs {
   passthru.tests = {
     smoke-test = nixosTests.bees;
   };
-})
+}

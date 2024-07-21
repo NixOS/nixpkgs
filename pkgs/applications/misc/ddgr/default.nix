@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, python3, installShellFiles }:
 
 stdenv.mkDerivation rec {
-  version = "1.9";
+  version = "2.2";
   pname = "ddgr";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "ddgr";
     rev = "v${version}";
-    sha256 = "0qbdq7k0mmvkjp6qzz88n7vf29liqn6y5w4y39ldqdc8hzw5sld7";
+    sha256 = "sha256-88cCQm3eViy0OwSyCTlnW7uuiFwz2/6Wz45QzxCgXxg=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ ceedubs markus1189 ];
     platforms = python3.meta.platforms;
+    mainProgram = "ddgr";
   };
 }

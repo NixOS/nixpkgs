@@ -1,18 +1,24 @@
-{ buildRubyGem, fetchFromGitHub, makeWrapper, lib, bundler, nix,
-  nix-prefetch-git }:
+{ buildRubyGem
+, fetchFromGitHub
+, makeWrapper
+, lib
+, bundler
+, nix
+, nix-prefetch-git
+}:
 
 buildRubyGem rec {
   inherit (bundler) ruby;
 
   name = "${gemName}-${version}";
   gemName = "bundix";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "bundix";
     rev = version;
-    sha256 = "sha256-iMp6Yj7TSWDqge3Lw855/igOWdTIuFH1LGeIN/cpq7U=";
+    sha256 = "sha256-QnNdseCSwQYhO/ybzWsflMEk68TMgPU3HqXJ7av3SHE=";
   };
 
   buildInputs = [ ruby bundler ];
@@ -35,9 +41,9 @@ buildRubyGem rec {
       The output is then usable by the bundlerEnv derivation to list all the
       dependencies of a ruby package.
     '';
-    homepage = "https://github.com/manveru/bundix";
-    license = "MIT";
-    maintainers = with lib.maintainers; [ manveru marsam zimbatm ];
+    homepage = "https://github.com/nix-community/bundix";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ manveru zimbatm ];
     platforms = lib.platforms.all;
   };
 }

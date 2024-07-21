@@ -9,13 +9,19 @@ stdenv.mkDerivation rec {
     sha256 = "1b01j7nmm3wd92ngvsmn2sbw43sl9fpx4xxmkrink68fz1rx0gbj";
   };
 
-  buildInputs = [ stdenv.cc.libc.static ];
   prePatch = ''
     substituteInPlace nbench1.h --replace '"NNET.DAT"' "\"$out/NNET.DAT\""
+    substituteInPlace sysspec.h --replace "malloc.h" "stdlib.h"
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace "-static" ""
   '';
-  preBuild = ''
-    makeFlagsArray=(CC=$CC)
-  '';
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isGnu [
+    stdenv.cc.libc.static
+  ];
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp nbench $out/bin
@@ -24,8 +30,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.math.utah.edu/~mayer/linux/bmark.html";
-    description = "A synthetic computing benchmark program";
-    platforms = platforms.linux;
+    description = "Synthetic computing benchmark program";
+    platforms = platforms.unix;
     maintainers = with lib.maintainers; [ bennofs ];
+    mainProgram = "nbench";
   };
 }

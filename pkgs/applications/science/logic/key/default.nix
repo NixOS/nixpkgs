@@ -1,62 +1,76 @@
 { lib, stdenv
 , fetchurl
-, unzip
 , jdk
-, ant
+, gradle_7
 , jre
 , makeWrapper
-, testVersion
+, makeDesktopItem
+, copyDesktopItems
+, testers
 , key
 }:
 
-# get this from the download URL when changing version
-let gitRevision = "7d3deab0763c88edee4f7a08e604661e0dbdd450";
+let
+  gradle = gradle_7;
 
 in stdenv.mkDerivation rec {
   pname = "key";
-  version = "2.6.3";
-
+  version = "2.10.0";
   src = fetchurl {
-    url = "https://formal.iti.kit.edu/key/releases/${version}/key-src-${version}_${gitRevision}.zip";
-    sha256 = "1dr5jmrqs0iy76wdsfiv5hx929i24yzm1xypzqqvx7afc7apyawy";
+    url = "https://www.key-project.org/dist/${version}/key-${version}-sources.tgz";
+    sha256 = "1f201cbcflqd1z6ysrkh3mff5agspw3v74ybdc3s2lfdyz3b858w";
   };
-
-  sourceRoot = "key";
+  sourceRoot = "key-${version}/key";
 
   nativeBuildInputs = [
-    unzip
     jdk
-    ant
+    gradle_7
     makeWrapper
+    copyDesktopItems
   ];
 
-  buildPhase = ''
-    ant -buildfile scripts/build.xml \
-      -Dgit.revision=${gitRevision} \
-      compileAll deployAll
-  '';
+  executable-name = "KeY";
 
-  postCheck = ''
-    ant -buildfile scripts/build.xml \
-      -Dgit.revision=${gitRevision} \
-      compileAllTests runAllTests test-deploy-all
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      name = "KeY";
+      exec = executable-name;
+      icon = "key";
+      comment = meta.description;
+      desktopName = "KeY";
+      genericName = "KeY";
+      categories = [ "Science" ];
+    })
+  ];
+
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
+
+  __darwinAllowLocalNetworking = true;
+
+  # tests are broken on darwin
+  doCheck = !stdenv.isDarwin;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
-    # Wrong version in the code. On next version change 2.5 to ${version}:
-    unzip deployment/key-2.5_${gitRevision}.zip -d $out/share/java
+    cp key.ui/build/libs/key-*-exe.jar $out/share/java/KeY.jar
     mkdir -p $out/bin
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    cp key.ui/src/main/resources/de/uka/ilkd/key/gui/images/key-color-icon-square.png $out/share/icons/hicolor/256x256/apps/key.png
     makeWrapper ${jre}/bin/java $out/bin/KeY \
       --add-flags "-cp $out/share/java/KeY.jar de.uka.ilkd.key.core.Main"
+
+    runHook postInstall
   '';
 
   passthru.tests.version =
-    testVersion {
+    testers.testVersion {
       package = key;
       command = "KeY --help";
-      # Wrong '2.5' version in the code. On next version change to ${version}
-      version = "2.5";
     };
 
   meta = with lib; {
@@ -71,7 +85,7 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = executable-name;
     platforms = platforms.all;
   };
 }
-

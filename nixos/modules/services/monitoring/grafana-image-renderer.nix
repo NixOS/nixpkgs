@@ -40,7 +40,7 @@ in {
               type = types.enum [ "error" "warning" "info" "debug" ];
               default = "info";
               description = ''
-                The log-level of the <filename>grafana-image-renderer.service</filename>-unit.
+                The log-level of the {file}`grafana-image-renderer.service`-unit.
               '';
             };
           };
@@ -63,24 +63,22 @@ in {
               default = "default";
               type = types.enum [ "default" "reusable" "clustered" ];
               description = ''
-                Rendering mode of <package>grafana-image-renderer</package>:
-                <itemizedlist>
-                <listitem><para><literal>default:</literal> Creates on browser-instance
-                  per rendering request.</para></listitem>
-                <listitem><para><literal>reusable:</literal> One browser instance
-                  will be started and reused for each rendering request.</para></listitem>
-                <listitem><para><literal>clustered:</literal> allows to precisely
+                Rendering mode of `grafana-image-renderer`:
+
+                - `default:` Creates on browser-instance
+                  per rendering request.
+                - `reusable:` One browser instance
+                  will be started and reused for each rendering request.
+                - `clustered:` allows to precisely
                   configure how many browser-instances are supposed to be used. The values
-                  for that mode can be declared in <literal>rendering.clustering</literal>.
-                  </para></listitem>
-                </itemizedlist>
+                  for that mode can be declared in `rendering.clustering`.
               '';
             };
             args = mkOption {
               type = types.listOf types.str;
               default = [ "--no-sandbox" ];
               description = ''
-                List of CLI flags passed to <package>chromium</package>.
+                List of CLI flags passed to `chromium`.
               '';
             };
           };
@@ -90,9 +88,9 @@ in {
       default = {};
 
       description = ''
-        Configuration attributes for <package>grafana-image-renderer</package>.
+        Configuration attributes for `grafana-image-renderer`.
 
-        See <link xlink:href="https://github.com/grafana/grafana-image-renderer/blob/ce1f81438e5f69c7fd7c73ce08bab624c4c92e25/default.json" />
+        See <https://github.com/grafana/grafana-image-renderer/blob/ce1f81438e5f69c7fd7c73ce08bab624c4c92e25/default.json>
         for supported values.
       '';
     };
@@ -108,9 +106,9 @@ in {
       }
     ];
 
-    services.grafana.extraOptions = mkIf cfg.provisionGrafana {
-      RENDERING_SERVER_URL = "http://localhost:${toString cfg.settings.service.port}/render";
-      RENDERING_CALLBACK_URL = "http://localhost:${toString config.services.grafana.port}";
+    services.grafana.settings.rendering = mkIf cfg.provisionGrafana {
+      server_url = "http://localhost:${toString cfg.settings.service.port}/render";
+      callback_url = "http://${config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
     };
 
     services.grafana-image-renderer.chromium = mkDefault pkgs.chromium;

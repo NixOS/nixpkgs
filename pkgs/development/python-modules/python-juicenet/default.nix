@@ -1,23 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-juicenet";
-  version = "1.0.2";
+  version = "1.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jesserockz";
     repo = "python-juicenet";
     rev = "v${version}";
-    sha256 = "04547pj51ds31yhyc7ng47v9giz16h2s3wgb6szc8ivhb5rclqz2";
+    hash = "sha256-5RKnVwOfEHzFZCiC8OUpS8exKrENK+I3Ok45HlKEvtU=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # no tests implemented
   doCheck = false;

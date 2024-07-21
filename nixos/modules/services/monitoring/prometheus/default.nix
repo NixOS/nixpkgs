@@ -3,11 +3,13 @@
 with lib;
 
 let
+  yaml = pkgs.formats.yaml { };
   cfg = config.services.prometheus;
+  checkConfigEnabled =
+    (lib.isBool cfg.checkConfig && cfg.checkConfig)
+      || cfg.checkConfig == "syntax-only";
 
   workingDir = "/var/lib/" + cfg.stateDir;
-
-  prometheusYmlOut = "${workingDir}/prometheus-substituted.yaml";
 
   triggerReload = pkgs.writeShellScriptBin "trigger-reload-prometheus" ''
     PATH="${makeBinPath (with pkgs; [ systemd ])}"
@@ -26,31 +28,25 @@ let
 
   # a wrapper that verifies that the configuration is valid
   promtoolCheck = what: name: file:
-    if cfg.checkConfig then
+    if checkConfigEnabled then
       pkgs.runCommandLocal
         "${name}-${replaceStrings [" "] [""] what}-checked"
-        { buildInputs = [ cfg.package ]; } ''
+        { nativeBuildInputs = [ cfg.package.cli ]; } ''
         ln -s ${file} $out
         promtool ${what} $out
       '' else file;
 
-  # Pretty-print JSON to a file
-  writePrettyJSON = name: x:
-    pkgs.runCommandLocal name { } ''
-      echo '${builtins.toJSON x}' | ${pkgs.jq}/bin/jq . > $out
-    '';
-
-  generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
+  generatedPrometheusYml = yaml.generate "prometheus.yml" promConfig;
 
   # This becomes the main config file for Prometheus
   promConfig = {
     global = filterValidPrometheus cfg.globalConfig;
-    rule_files = map (promtoolCheck "check rules" "rules") (cfg.ruleFiles ++ [
-      (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
-    ]);
     scrape_configs = filterValidPrometheus cfg.scrapeConfigs;
     remote_write = filterValidPrometheus cfg.remoteWrite;
     remote_read = filterValidPrometheus cfg.remoteRead;
+    rule_files = optionals (!(cfg.enableAgentMode)) (map (promtoolCheck "check rules" "rules") (cfg.ruleFiles ++ [
+      (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
+    ]));
     alerting = {
       inherit (cfg) alertmanagers;
     };
@@ -63,20 +59,25 @@ let
           pkgs.writeText "prometheus.yml" cfg.configText
         else generatedPrometheusYml;
     in
-    promtoolCheck "check config" "prometheus.yml" yml;
+    promtoolCheck "check config ${lib.optionalString (cfg.checkConfig == "syntax-only") "--syntax-only"}" "prometheus.yml" yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
-    "--storage.tsdb.path=${workingDir}/data/"
     "--config.file=${
       if cfg.enableReload
       then "/etc/prometheus/prometheus.yaml"
       else prometheusYml
     }"
     "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
-    "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
-    "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
-  ] ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
-    ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}";
+  ] ++ (
+    if (cfg.enableAgentMode) then [
+      "--enable-feature=agent"
+    ] else [
+       "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity }"
+       "--storage.tsdb.path=${workingDir}/data/"
+    ])
+    ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
+    ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}"
+    ++ optional (cfg.webConfigFile != null) "--web.config.file=${cfg.webConfigFile}";
 
   filterValidPrometheus = filterAttrsListRecursive (n: v: !(n == "_module" || v == null));
   filterAttrsListRecursive = pred: x:
@@ -102,14 +103,14 @@ let
 
   mkDefOpt = type: defaultStr: description: mkOpt type (description + ''
 
-    Defaults to <literal>${defaultStr}</literal> in prometheus
-    when set to <literal>null</literal>.
+    Defaults to ````${defaultStr}```` in prometheus
+    when set to `null`.
   '');
 
   mkOpt = type: description: mkOption {
     type = types.nullOr type;
     default = null;
-    inherit description;
+    description = description;
   };
 
   mkSdConfigModule = extraOptions: types.submodule {
@@ -179,6 +180,10 @@ let
         The labels to add to any time series or alerts when
         communicating with external systems (federation, remote
         storage, Alertmanager).
+      '';
+
+      query_log_file = mkOpt types.str ''
+        Path to the file prometheus should write its query log to.
       '';
     };
   };
@@ -251,6 +256,13 @@ let
 
   promTypes.scrape_config = types.submodule {
     options = {
+      authorization = mkOption {
+        type = types.nullOr types.attrs;
+        default = null;
+        description = ''
+          Sets the `Authorization` header on every scrape request with the configured credentials.
+        '';
+      };
       job_name = mkOption {
         type = types.str;
         description = ''
@@ -284,7 +296,7 @@ let
 
         If honor_labels is set to "false", label conflicts are
         resolved by renaming conflicting labels in the scraped data
-        to "exported_&lt;original-label&gt;" (for example
+        to "exported_\<original-label\>" (for example
         "exported_instance", "exported_job") and then attaching
         server-side labels. This is useful for use cases such as
         federation, where all labels specified in the target should
@@ -295,10 +307,10 @@ let
         honor_timestamps controls whether Prometheus respects the timestamps present
         in scraped data.
 
-        If honor_timestamps is set to <literal>true</literal>, the timestamps of the metrics exposed
+        If honor_timestamps is set to `true`, the timestamps of the metrics exposed
         by the target will be used.
 
-        If honor_timestamps is set to <literal>false</literal>, the timestamps of the metrics exposed
+        If honor_timestamps is set to `false`, the timestamps of the metrics exposed
         by the target will be ignored.
       '';
 
@@ -319,13 +331,13 @@ let
       bearer_token = mkOpt types.str ''
         Sets the `Authorization` header on every scrape request with
         the configured bearer token. It is mutually exclusive with
-        <option>bearer_token_file</option>.
+        {option}`bearer_token_file`.
       '';
 
       bearer_token_file = mkOpt types.str ''
         Sets the `Authorization` header on every scrape request with
         the bearer token read from the configured file. It is mutually
-        exclusive with <option>bearer_token</option>.
+        exclusive with {option}`bearer_token`.
       '';
 
       tls_config = mkOpt promTypes.tls_config ''
@@ -375,9 +387,8 @@ let
       gce_sd_configs = mkOpt (types.listOf promTypes.gce_sd_config) ''
         List of Google Compute Engine service discovery configurations.
 
-        See <link
-        xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#gce_sd_config">the
-        relevant Prometheus configuration docs</link> for more detail.
+        See [the relevant Prometheus configuration docs](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#gce_sd_config)
+        for more detail.
       '';
 
       hetzner_sd_configs = mkOpt (types.listOf promTypes.hetzner_sd_config) ''
@@ -530,7 +541,7 @@ let
         Refresh interval to re-read the instance list.
       '';
 
-      port = mkDefOpt types.int "80" ''
+      port = mkDefOpt types.port "80" ''
         The port to scrape metrics from. If using the public IP
         address, this must instead be specified in the relabeling
         rule.
@@ -588,7 +599,7 @@ let
 
     allow_stale = mkOpt types.bool ''
       Allow stale Consul results
-      (see <link xlink:href="https://www.consul.io/api/index.html#consistency-modes"/>).
+      (see <https://www.consul.io/api/index.html#consistency-modes>).
 
       Will reduce load on Consul.
     '';
@@ -602,7 +613,7 @@ let
   };
 
   promTypes.digitalocean_sd_config = mkSdConfigModule {
-    port = mkDefOpt types.int "80" ''
+    port = mkDefOpt types.port "80" ''
       The port to scrape metrics from.
     '';
 
@@ -619,7 +630,7 @@ let
       '';
     };
 
-    port = mkDefOpt types.int "80" ''
+    port = mkDefOpt types.port "80" ''
       The port to scrape metrics from, when `role` is nodes, and for discovered
       tasks and services that don't have published ports.
     '';
@@ -631,9 +642,9 @@ let
             type = types.str;
             description = ''
               Name of the filter. The available filters are listed in the upstream documentation:
-              Services: <link xlink:href="https://docs.docker.com/engine/api/v1.40/#operation/ServiceList"/>
-              Tasks: <link xlink:href="https://docs.docker.com/engine/api/v1.40/#operation/TaskList"/>
-              Nodes: <link xlink:href="https://docs.docker.com/engine/api/v1.40/#operation/NodeList"/>
+              Services: <https://docs.docker.com/engine/api/v1.40/#operation/ServiceList>
+              Tasks: <https://docs.docker.com/engine/api/v1.40/#operation/TaskList>
+              Nodes: <https://docs.docker.com/engine/api/v1.40/#operation/NodeList>
             '';
           };
           values = mkOption {
@@ -680,7 +691,7 @@ let
         The type of DNS query to perform. One of SRV, A, or AAAA.
       '';
 
-      port = mkOpt types.int ''
+      port = mkOpt types.port ''
         The port number used if the query type is not SRV.
       '';
 
@@ -704,12 +715,12 @@ let
 
       access_key = mkOpt types.str ''
         The AWS API key id. If blank, the environment variable
-        <literal>AWS_ACCESS_KEY_ID</literal> is used.
+        `AWS_ACCESS_KEY_ID` is used.
       '';
 
       secret_key = mkOpt types.str ''
         The AWS API key secret. If blank, the environment variable
-         <literal>AWS_SECRET_ACCESS_KEY</literal> is used.
+         `AWS_SECRET_ACCESS_KEY` is used.
       '';
 
       profile = mkOpt types.str ''
@@ -724,7 +735,7 @@ let
         Refresh interval to re-read the instance list.
       '';
 
-      port = mkDefOpt types.int "80" ''
+      port = mkDefOpt types.port "80" ''
         The port to scrape metrics from. If using the public IP
         address, this must instead be specified in the relabeling
         rule.
@@ -736,7 +747,7 @@ let
             name = mkOption {
               type = types.str;
               description = ''
-                See <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">this list</link>
+                See [this list](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html)
                 for the available filters.
               '';
             };
@@ -803,9 +814,7 @@ let
       filter = mkOpt types.str ''
         Filter can be used optionally to filter the instance list by other
         criteria Syntax of this filter string is described here in the filter
-        query parameter section: <link
-        xlink:href="https://cloud.google.com/compute/docs/reference/latest/instances/list"
-        />.
+        query parameter section: <https://cloud.google.com/compute/docs/reference/latest/instances/list>.
       '';
 
       refresh_interval = mkDefOpt types.str "60s" ''
@@ -821,7 +830,7 @@ let
         The tag separator used to separate concatenated GCE instance network tags.
 
         See the GCP documentation on network tags for more information:
-        <link xlink:href="https://cloud.google.com/vpc/docs/add-remove-network-tags" />
+        <https://cloud.google.com/vpc/docs/add-remove-network-tags>
       '';
     };
   };
@@ -831,11 +840,11 @@ let
       type = types.enum [ "robot" "hcloud" ];
       description = ''
         The Hetzner role of entities that should be discovered.
-        One of <literal>robot</literal> or <literal>hcloud</literal>.
+        One of `robot` or `hcloud`.
       '';
     };
 
-    port = mkDefOpt types.int "80" ''
+    port = mkDefOpt types.port "80" ''
       The port to scrape metrics from.
     '';
 
@@ -975,11 +984,11 @@ let
       '';
 
       access_key = mkOpt types.str ''
-        The AWS API keys. If blank, the environment variable <literal>AWS_ACCESS_KEY_ID</literal> is used.
+        The AWS API keys. If blank, the environment variable `AWS_ACCESS_KEY_ID` is used.
       '';
 
       secret_key = mkOpt types.str ''
-        The AWS API keys. If blank, the environment variable <literal>AWS_SECRET_ACCESS_KEY</literal> is used.
+        The AWS API keys. If blank, the environment variable `AWS_SECRET_ACCESS_KEY` is used.
       '';
 
       profile = mkOpt types.str ''
@@ -994,7 +1003,7 @@ let
         Refresh interval to re-read the instance list.
       '';
 
-      port = mkDefOpt types.int "80" ''
+      port = mkDefOpt types.port "80" ''
         The port to scrape metrics from. If using the public IP address, this must
         instead be specified in the relabeling rule.
       '';
@@ -1002,7 +1011,7 @@ let
   };
 
   promTypes.linode_sd_config = mkSdConfigModule {
-    port = mkDefOpt types.int "80" ''
+    port = mkDefOpt types.port "80" ''
       The port to scrape metrics from.
     '';
 
@@ -1029,14 +1038,14 @@ let
 
     auth_token = mkOpt types.str ''
       Optional authentication information for token-based authentication:
-      <link xlink:href="https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token" />
-      It is mutually exclusive with <literal>auth_token_file</literal> and other authentication mechanisms.
+      <https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token>
+      It is mutually exclusive with `auth_token_file` and other authentication mechanisms.
     '';
 
     auth_token_file = mkOpt types.str ''
       Optional authentication information for token-based authentication:
-      <link xlink:href="https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token" />
-      It is mutually exclusive with <literal>auth_token</literal> and other authentication mechanisms.
+      <https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token>
+      It is mutually exclusive with `auth_token` and other authentication mechanisms.
     '';
   };
 
@@ -1143,7 +1152,7 @@ let
           Refresh interval to re-read the instance list.
         '';
 
-        port = mkDefOpt types.int "80" ''
+        port = mkDefOpt types.port "80" ''
           The port to scrape metrics from. If using the public IP address, this must
           instead be specified in the relabeling rule.
         '';
@@ -1188,7 +1197,7 @@ let
       Refresh interval to re-read the resources list.
     '';
 
-    port = mkDefOpt types.int "80" ''
+    port = mkDefOpt types.port "80" ''
       The port to scrape metrics from.
     '';
   };
@@ -1226,7 +1235,7 @@ let
         '';
       };
 
-      port = mkDefOpt types.int "80" ''
+      port = mkDefOpt types.port "80" ''
         The port to scrape metrics from.
       '';
 
@@ -1292,17 +1301,17 @@ let
       endpoint = mkOption {
         type = types.str;
         description = ''
-          The Triton discovery endpoint (e.g. <literal>cmon.us-east-3b.triton.zone</literal>). This is
+          The Triton discovery endpoint (e.g. `cmon.us-east-3b.triton.zone`). This is
           often the same value as dns_suffix.
         '';
       };
 
       groups = mkOpt (types.listOf types.str) ''
-        A list of groups for which targets are retrieved, only supported when targeting the <literal>container</literal> role.
+        A list of groups for which targets are retrieved, only supported when targeting the `container` role.
         If omitted all containers owned by the requesting account are scraped.
       '';
 
-      port = mkDefOpt types.int "9163" ''
+      port = mkDefOpt types.port "9163" ''
         The port to use for discovery and metric scraping.
       '';
 
@@ -1408,7 +1417,7 @@ let
       '';
 
       action =
-        mkDefOpt (types.enum [ "replace" "keep" "drop" "hashmod" "labelmap" "labeldrop" "labelkeep" ]) "replace" ''
+        mkDefOpt (types.enum [ "replace" "lowercase" "uppercase" "keep" "drop" "hashmod" "labelmap" "labeldrop" "labelkeep" ]) "replace" ''
           Action to perform based on regex matching.
         '';
     };
@@ -1429,6 +1438,10 @@ let
       };
       remote_timeout = mkOpt types.str ''
         Timeout for requests to the remote write endpoint.
+      '';
+      headers = mkOpt (types.attrsOf types.str) ''
+        Custom HTTP headers to be sent along with each remote write request.
+        Be aware that headers that are set by Prometheus itself can't be overwritten.
       '';
       write_relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
         List of remote write relabel configurations.
@@ -1525,6 +1538,10 @@ let
       remote_timeout = mkOpt types.str ''
         Timeout for requests to the remote read endpoint.
       '';
+      headers = mkOpt (types.attrsOf types.str) ''
+        Custom HTTP headers to be sent along with each remote read request.
+        Be aware that headers that are set by Prometheus itself can't be overwritten.
+      '';
       read_recent = mkOpt types.bool ''
         Whether reads should be made for queries for time ranges that
         the local storage should have complete data for.
@@ -1556,26 +1573,15 @@ in
     (mkRenamedOptionModule [ "services" "prometheus2" ] [ "services" "prometheus" ])
     (mkRemovedOptionModule [ "services" "prometheus" "environmentFile" ]
       "It has been removed since it was causing issues (https://github.com/NixOS/nixpkgs/issues/126083) and Prometheus now has native support for secret files, i.e. `basic_auth.password_file` and `authorization.credentials_file`.")
+    (mkRemovedOptionModule [ "services" "prometheus" "alertmanagerTimeout" ]
+      "Deprecated upstream and no longer had any effect")
   ];
 
   options.services.prometheus = {
 
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Enable the Prometheus monitoring daemon.
-      '';
-    };
+    enable = mkEnableOption "Prometheus monitoring daemon";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.prometheus;
-      defaultText = literalExpression "pkgs.prometheus";
-      description = ''
-        The prometheus package that should be used.
-      '';
-    };
+    package = mkPackageOption pkgs "prometheus" { };
 
     port = mkOption {
       type = types.port;
@@ -1597,7 +1603,7 @@ in
       type = types.str;
       default = "prometheus2";
       description = ''
-        Directory below <literal>/var/lib</literal> to store Prometheus metrics data.
+        Directory below `/var/lib` to store Prometheus metrics data.
         This directory will be created automatically using systemd's StateDirectory mechanism.
       '';
     };
@@ -1617,11 +1623,13 @@ in
         Reload prometheus when configuration file changes (instead of restart).
 
         The following property holds: switching to a configuration
-        (<literal>switch-to-configuration</literal>) that changes the prometheus
-        configuration only finishes successully when prometheus has finished
+        (`switch-to-configuration`) that changes the prometheus
+        configuration only finishes successfully when prometheus has finished
         loading the new configuration.
       '';
     };
+
+    enableAgentMode = mkEnableOption "agent mode";
 
     configText = mkOption {
       type = types.nullOr types.lines;
@@ -1647,7 +1655,7 @@ in
       default = [ ];
       description = ''
         Parameters of the endpoints to query from.
-        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read">the official documentation</link> for more information.
+        See [the official documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read) for more information.
       '';
     };
 
@@ -1656,7 +1664,7 @@ in
       default = [ ];
       description = ''
         Parameters of the endpoints to send samples to.
-        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write">the official documentation</link> for more information.
+        See [the official documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write) for more information.
       '';
     };
 
@@ -1700,7 +1708,7 @@ in
       default = [ ];
       description = ''
         A list of alertmanagers to send alerts to.
-        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config">the official documentation</link> for more information.
+        See [the official documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config) for more information.
       '';
     };
 
@@ -1709,14 +1717,6 @@ in
       default = 10000;
       description = ''
         The capacity of the queue for pending alert manager notifications.
-      '';
-    };
-
-    alertmanagerTimeout = mkOption {
-      type = types.int;
-      default = 10;
-      description = ''
-        Alert manager HTTP API timeout (in seconds).
       '';
     };
 
@@ -1730,17 +1730,29 @@ in
       '';
     };
 
-    checkConfig = mkOption {
-      type = types.bool;
-      default = true;
+    webConfigFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
       description = ''
-        Check configuration with <literal>promtool
-        check</literal>. The call to <literal>promtool</literal> is
-        subject to sandboxing by Nix. When credentials are stored in
-        external files (<literal>password_file</literal>,
-        <literal>bearer_token_file</literal>, etc), they will not be
-        visible to <literal>promtool</literal> and it will report
-        errors, despite a correct configuration.
+        Specifies which file should be used as web.config.file and be passed on startup.
+        See https://prometheus.io/docs/prometheus/latest/configuration/https/ for valid options.
+      '';
+    };
+
+    checkConfig = mkOption {
+      type = with types; either bool (enum [ "syntax-only" ]);
+      default = true;
+      example = "syntax-only";
+      description = ''
+        Check configuration with `promtool check`. The call to `promtool` is
+        subject to sandboxing by Nix.
+
+        If you use credentials stored in external files
+        (`password_file`, `bearer_token_file`, etc),
+        they will not be visible to `promtool`
+        and it will report errors, despite a correct configuration.
+        To resolve this, you may set this option to `"syntax-only"`
+        in order to only syntax check the Prometheus configuration.
       '';
     };
 
@@ -1798,6 +1810,33 @@ in
         WorkingDirectory = workingDir;
         StateDirectory = cfg.stateDir;
         StateDirectoryMode = "0700";
+        # Hardening
+        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
+        DeviceAllow = [ "/dev/null rw" ];
+        DevicePolicy = "strict";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
       };
     };
     # prometheus-config-reload will activate after prometheus. However, what we

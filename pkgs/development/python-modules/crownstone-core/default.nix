@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyaes
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyaes,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "crownstone-core";
-  version = "3.1.0";
+  version = "3.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,20 +18,14 @@ buildPythonPackage rec {
     owner = "crownstone";
     repo = "crownstone-lib-python-core";
     rev = version;
-    sha256 = "sha256-ujS4ho9io7KcoK5w1SCn7UPFg1ho3dgW0HS5HfsYsuU=";
+    hash = "sha256-zrlCzx7N3aUcTUNa64jSzDdWgQneX+Hc5n8TTTcZ4ck=";
   };
 
-  propagatedBuildInputs = [
-    pyaes
-  ];
+  propagatedBuildInputs = [ pyaes ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "crownstone_core"
-  ];
+  pythonImportsCheck = [ "crownstone_core" ];
 
   meta = with lib; {
     description = "Python module with shared classes, util functions and definition of Crownstone";

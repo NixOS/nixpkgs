@@ -62,7 +62,7 @@ with lib;
         e.g., shared caches).  This attack vector is unproven.
 
         Disabling SMT is a supplement to the L1 data cache flushing mitigation
-        (see <xref linkend="opt-security.virtualisation.flushL1DataCache"/>)
+        (see [](#opt-security.virtualisation.flushL1DataCache))
         versus malicious VM guests (SMT could "bring back" previously flushed
         data).
       '';
@@ -86,31 +86,16 @@ with lib;
       description = ''
         Whether the hypervisor should flush the L1 data cache before
         entering guests.
-        See also <xref linkend="opt-security.allowSimultaneousMultithreading"/>.
+        See also [](#opt-security.allowSimultaneousMultithreading).
 
-        <variablelist>
-          <varlistentry>
-            <term><literal>null</literal></term>
-            <listitem><para>uses the kernel default</para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"never"</literal></term>
-            <listitem><para>disables L1 data cache flushing entirely.
-            May be appropriate if all guests are trusted.</para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"cond"</literal></term>
-            <listitem><para>flushes L1 data cache only for pre-determined
-            code paths.  May leak information about the host address space
-            layout.</para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"always"</literal></term>
-            <listitem><para>flushes L1 data cache every time the hypervisor
-            enters the guest.  May incur significant performance cost.
-            </para></listitem>
-          </varlistentry>
-        </variablelist>
+        - `null`: uses the kernel default
+        - `"never"`: disables L1 data cache flushing entirely.
+          May be appropriate if all guests are trusted.
+        - `"cond"`: flushes L1 data cache only for pre-determined
+          code paths.  May leak information about the host address space
+          layout.
+        - `"always"`: flushes L1 data cache every time the hypervisor
+          enters the guest.  May incur significant performance cost.
       '';
     };
   };
@@ -123,8 +108,8 @@ with lib;
       boot.kernel.sysctl."user.max_user_namespaces" = 0;
 
       assertions = [
-        { assertion = config.nix.useSandbox -> config.security.allowUserNamespaces;
-          message = "`nix.useSandbox = true` conflicts with `!security.allowUserNamespaces`.";
+        { assertion = config.nix.settings.sandbox -> config.security.allowUserNamespaces;
+          message = "`nix.settings.sandbox = true` conflicts with `!security.allowUserNamespaces`.";
         }
       ];
     })

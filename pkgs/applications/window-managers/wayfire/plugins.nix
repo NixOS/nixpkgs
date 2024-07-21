@@ -1,12 +1,16 @@
-{ newScope, wayfire }:
+{ lib, pkgs }:
 
-let
-  self = with self; {
-    inherit wayfire;
-
-    callPackage = newScope self;
-
+lib.makeScope pkgs.newScope (self:
+  let
+    inherit (self) callPackage;
+  in {
+    firedecor = callPackage ./firedecor.nix { };
+    focus-request = callPackage ./focus-request.nix { };
+    wayfire-plugins-extra = callPackage ./wayfire-plugins-extra.nix { };
+    wayfire-shadows = callPackage ./wayfire-shadows.nix { };
+    wcm = callPackage ./wcm.nix { };
     wf-shell = callPackage ./wf-shell.nix { };
-  };
-in
-self
+    windecor = callPackage ./windecor.nix { };
+    wwp-switcher = callPackage ./wwp-switcher.nix { };
+  }
+)

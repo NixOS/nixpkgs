@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sftpman";
-  version = "1.1.3";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "spantaleev";
     repo = pname;
     rev = version;
-    sha256 = "04awwwfw51fi1q18xdysp54jyhr0rhb4kfyrgv0vhhrlpwwyhnqy";
+    hash = "sha256-YxqN4+u0nYUWehbyRhjddIo2sythH3E0fiPSyrUlWhM=";
   };
 
   checkPhase = ''
@@ -21,5 +21,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ contrun ];
+    mainProgram = "sftpman";
   };
 }

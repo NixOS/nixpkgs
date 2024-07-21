@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.couchdb;
+  opt = options.services.couchdb;
   configFile = pkgs.writeText "couchdb.ini" (
     ''
       [couchdb]
@@ -33,22 +34,9 @@ in {
 
     services.couchdb = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to run CouchDB Server.
-        '';
-      };
+      enable = mkEnableOption "CouchDB Server";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.couchdb3;
-        defaultText = literalExpression "pkgs.couchdb3";
-        description = ''
-          CouchDB package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "couchdb3" { };
 
       adminUser = mkOption {
         type = types.str;
@@ -84,7 +72,7 @@ in {
         '';
       };
 
-      # couchdb options: http://docs.couchdb.org/en/latest/config/index.html
+      # couchdb options: https://docs.couchdb.org/en/latest/config/index.html
 
       databaseDir = mkOption {
         type = types.path;
@@ -127,7 +115,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 5984;
         description = ''
           Defined the port number to listen.
@@ -146,13 +134,14 @@ in {
         type = types.lines;
         default = "";
         description = ''
-          Extra configuration. Overrides any other cofiguration.
+          Extra configuration. Overrides any other configuration.
         '';
       };
 
       argsFile = mkOption {
         type = types.path;
         default = "${cfg.package}/etc/vm.args";
+        defaultText = literalExpression ''"config.${opt.package}/etc/vm.args"'';
         description = ''
           vm.args configuration. Overrides Couchdb's Erlang VM parameters file.
         '';
@@ -191,6 +180,11 @@ in {
 
       preStart = ''
         touch ${cfg.configFile}
+        if ! test -e ${cfg.databaseDir}/.erlang.cookie; then
+          touch ${cfg.databaseDir}/.erlang.cookie
+          chmod 600 ${cfg.databaseDir}/.erlang.cookie
+          dd if=/dev/random bs=16 count=1 | base64 > ${cfg.databaseDir}/.erlang.cookie
+        fi
       '';
 
       environment = {
@@ -202,6 +196,7 @@ in {
         ERL_FLAGS= ''-couch_ini ${cfg.package}/etc/default.ini ${configFile} ${pkgs.writeText "couchdb-extra.ini" cfg.extraConfig} ${cfg.configFile}'';
         # 5. the vm.args file
         COUCHDB_ARGS_FILE=''${cfg.argsFile}'';
+        HOME =''${cfg.databaseDir}'';
       };
 
       serviceConfig = {

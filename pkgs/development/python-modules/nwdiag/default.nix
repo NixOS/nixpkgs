@@ -1,28 +1,57 @@
-{ lib, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
-, blockdiag, setuptools
+{
+  lib,
+  blockdiag,
+  fetchFromGitHub,
+  buildPythonPackage,
+  nose,
+  pytestCheckHook,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nwdiag";
-  version = "2.0.0";
+  version = "3.0.0";
+  pyproject = true;
 
-  src = fetchurl {
-    url = "mirror://pypi/n/nwdiag/${pname}-${version}.tar.gz";
-    sha256 = "1qkl1lq7cblr6fra2rjw3zlcccragp8384hpm4n7dkc5c3yzmmsw";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "blockdiag";
+    repo = "nwdiag";
+    rev = "refs/tags/${version}";
+    hash = "sha256-uKrdkXpL5YBr953sRsHknYg+2/WwrZmyDf8BMA2+0tU=";
   };
 
-  buildInputs = [ pep8 nose unittest2 docutils ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ blockdiag setuptools ];
+  dependencies = [ blockdiag ];
 
-  # tests fail
-  doCheck = false;
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [ "src/nwdiag/tests/" ];
+
+  disabledTests = [
+    # AttributeError: 'TestRstDirectives' object has no attribute 'assertRegexpMatches'
+    "svg"
+    "noviewbox"
+  ];
+
+  pythonImportsCheck = [ "nwdiag" ];
 
   meta = with lib; {
     description = "Generate network-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
+    changelog = "https://github.com/blockdiag/nwdiag/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "rackdiag";
+    platforms = platforms.unix;
   };
 }

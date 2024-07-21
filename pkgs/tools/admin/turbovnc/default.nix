@@ -4,7 +4,10 @@
 , nixosTests
 
 # Dependencies
+, bzip2
 , cmake
+, freetype
+, libGL
 , libjpeg_turbo
 , makeWrapper
 , mesa # for built-in 3D software rendering using swrast
@@ -14,21 +17,25 @@
 , openssl
 , pam
 , perl
+, pkg-config
+, python3
 , which
 , xkbcomp
 , xkeyboard_config
 , xorg
+, xterm
+, zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "turbovnc";
-  version = "2.2.6";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "TurboVNC";
     repo = "turbovnc";
-    rev = version;
-    sha256 = "sha256-HSppHPBBkTf+88ZBaYG6JK4A/5lOBCxPFv6898TD7PE=";
+    rev = finalAttrs.version;
+    hash = "sha256-7dft5Wp9LvRy3FM/cZ5F6qUIesu7mzd/Ww8P3xsSvyI=";
   };
 
   # TODO:
@@ -36,7 +43,7 @@ stdenv.mkDerivation rec {
   #   * `-- FONT_ENCODINGS_DIRECTORY = /var/empty/share/X11/fonts/encodings`
   #     Maybe relevant what the tigervnc and tightvnc derivations
   #     do with their `fontDirectories`?
-  #   * `SERVER_MISC_CONFIG_PATH = /var/empty/lib64/xorg`
+  #   * `XORG_REGISTRY_PATH = /var/empty/lib64/xorg`
   #   * The thing about xorg `protocol.txt`
   # * Does SSH support require `openssh` on PATH?
   # * Add `enableClient ? true` flag that disables the client GUI
@@ -47,32 +54,56 @@ stdenv.mkDerivation rec {
     cmake
     makeWrapper
     openjdk_headless
+    pkg-config
+    python3
   ];
 
   buildInputs = [
+    bzip2
+    freetype
+    libGL # for -DTVNC_SYSTEMX11=1
     libjpeg_turbo
     openssl
     pam
     perl
+    zlib
   ] ++ (with xorg; [
+    libfontenc # for -DTVNC_SYSTEMX11=1
     libSM
     libX11
+    libXdamage # for -DTVNC_SYSTEMX11=1
+    libXdmcp # for -DTVNC_SYSTEMX11=1
     libXext
+    libXfont2 # for -DTVNC_SYSTEMX11=1
+    libxkbfile # for -DTVNC_SYSTEMX11=1
     libXi
+    mesa # for -DTVNC_SYSTEMX11=1
+    pixman # for -DTVNC_SYSTEMX11=1
     xorgproto
+    xtrans # for -DTVNC_SYSTEMX11=1
   ]);
+
+  postPatch = ''
+    substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "Xfont2" X11_Xfont2_LIB' 'set(X11_Xfont2_LIB ${xorg.libXfont2}/lib/libXfont2.so)  #'
+    substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "fontenc" X11_Fontenc_LIB' 'set(X11_Fontenc_LIB ${xorg.libfontenc}/lib/libfontenc.so)  #'
+    substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "pixman-1" X11_Pixman_LIB' 'set(X11_Pixman_LIB ${xorg.pixman}/lib/libpixman-1.so)  #'
+  '';
 
   cmakeFlags = [
     # For the 3D software rendering built into TurboVNC, pass the path
     # to the swrast dri driver in Mesa.
     # Can also be given at runtime to its `Xvnc` as:
     #   -dridir /nix/store/...-mesa-20.1.10-drivers/lib/dri/
-    "-DDRI_DRIVER_PATH=${mesa.drivers}/lib/dri"
+    "-DXORG_DRI_DRIVER_PATH=${mesa.driverLink}/lib/dri"
     # The build system doesn't find these files automatically.
     "-DTJPEG_JAR=${libjpeg_turbo.out}/share/java/turbojpeg.jar"
     "-DTJPEG_JNILIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so"
     "-DXKB_BASE_DIRECTORY=${xkeyboard_config}/share/X11/xkb"
     "-DXKB_BIN_DIRECTORY=${xkbcomp}/bin"
+    # use system libs
+    "-DTVNC_SYSTEMLIBS=1"
+    "-DTVNC_SYSTEMX11=1"
+    "-DTVNC_DLOPENSSL=0"
   ];
 
   postInstall = ''
@@ -85,15 +116,12 @@ stdenv.mkDerivation rec {
     # (This default is written by `vncserver` to `~/.vnc/xstartup.turbovnc`,
     # see https://github.com/TurboVNC/turbovnc/blob/ffdb57d9/unix/vncserver.in#L201.)
     # It checks for it using `which twm`.
+    # vncserver needs also needs `xauth` and we add in `xterm` for convenience
     wrapProgram $out/bin/vncserver \
-      --prefix PATH : ${lib.makeBinPath [ which xorg.twm ]}
+      --prefix PATH : ${lib.makeBinPath [ which xorg.twm xorg.xauth xterm ]}
 
     # Patch /usr/bin/perl
     patchShebangs $out/bin/vncserver
-
-    # vncserver needs `xauth`
-    wrapProgram $out/bin/vncserver \
-      --prefix PATH : ${lib.makeBinPath (with xorg; [ xauth ])}
 
     # The viewer is in Java and requires `JAVA_HOME` (which is a single
     # path, cannot be multiple separated paths).
@@ -111,5 +139,6 @@ stdenv.mkDerivation rec {
     description = "High-speed version of VNC derived from TightVNC";
     maintainers = with lib.maintainers; [ nh2 ];
     platforms = with lib.platforms; linux;
+    changelog = "https://github.com/TurboVNC/turbovnc/blob/${finalAttrs.version}/ChangeLog.md";
   };
-}
+})

@@ -10,10 +10,10 @@ buildGoModule rec {
 
     owner = "kubernetes";
     repo = "test-infra";
-    sha256 = "0mc3ynmbf3kidibdy8k3v3xjlvmxl8w7zm1z2m0skmhd0y4bpmk4";
+    hash = "sha256-ZNa7iAcN1qlBFT/UfziivW4q+9hjIt9WbHEOt6r1g1U=";
   };
 
-  vendorSha256 = "16fdc5r28andm8my4fxj0f1yygx6j2mvn92i6xdfhbcra0lvr4ql";
+  vendorHash = "sha256-FJO8KVCZLehaN1Eku6uQpj/vgwOyO+Irqs0qJHJhzZk=";
 
   doCheck = false;
 
@@ -52,7 +52,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A Kubernetes based CI/CD system";
+    description = "Kubernetes based CI/CD system";
     longDescription = ''
       Prow is a Kubernetes based CI/CD system. Jobs can be triggered by various
       types of events and report their status to many different services. In

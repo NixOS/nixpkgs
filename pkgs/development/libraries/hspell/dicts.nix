@@ -1,21 +1,21 @@
-{ stdenv, hspell }:
+{ lib, stdenv, hspell }:
 
 let
   dict = variant: a: stdenv.mkDerivation ({
-    inherit (hspell) src patchPhase nativeBuildInputs;
+    inherit (hspell) version src patches postPatch nativeBuildInputs;
     buildFlags = [ variant ];
 
     meta = hspell.meta // {
       broken = true;
       description = "${variant} Hebrew dictionary";
-    } // (if a ? meta then a.meta else {});
+    } // (lib.optionalAttrs (a ? meta) a.meta);
   } // (removeAttrs a ["meta"]));
 in
 {
   recurseForDerivations = true;
 
   aspell = dict "aspell" {
-    name = "aspell-dict-he-${hspell.version}";
+    pname = "aspell-dict-he";
 
     installPhase = ''
       mkdir -p $out/lib/aspell
@@ -23,7 +23,7 @@ in
   };
 
   myspell = dict "myspell" {
-    name = "myspell-dict-he-${hspell.version}";
+    pname = "myspell-dict-he";
 
     installPhase = ''
       mkdir -p $out/lib/myspell
@@ -31,7 +31,7 @@ in
   };
 
   hunspell = dict "hunspell" {
-    name = "hunspell-dict-he-${hspell.version}";
+    pname = "hunspell-dict-he";
 
     installPhase = ''
       mkdir -p $out/lib

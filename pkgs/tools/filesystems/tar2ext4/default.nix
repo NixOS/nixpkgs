@@ -2,21 +2,22 @@
 
 buildGoModule rec {
   pname = "tar2ext4";
-  version = "0.8.22";
+  version = "0.12.5";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "hcsshim";
     rev = "v${version}";
-    sha256 = "sha256-z8w/xzNEebnQJTO4H5PlU5W+69MY1wQwmuz5inXBl1k=";
+    sha256 = "sha256-BK70SPZdNptJ3MXMgkMkf6oLZEKeLCMKqOZrK1KP2YE=";
   };
 
-  sourceRoot = "source/cmd/tar2ext4";
-  vendorSha256 = null;
+  sourceRoot = "${src.name}/cmd/tar2ext4";
+  vendorHash = null;
 
   meta = with lib; {
     description = "Convert a tar archive to an ext4 image";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.mit;
+    mainProgram = "tar2ext4";
   };
 }

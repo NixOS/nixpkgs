@@ -1,23 +1,19 @@
 { lib, stdenv, appimageTools, desktop-file-utils, fetchurl }:
 
 let
-  version = "2020.10.111";
-  name = "p3x-onenote-${version}";
+  pname = "p3x-onenote";
+  version = "2023.4.117";
 
   plat = {
     aarch64-linux = "-arm64";
     armv7l-linux = "-armv7l";
-    i386-linux = "-i386";
-    i686-linux = "-i386";
     x86_64-linux = "";
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    aarch64-linux = "0a3c0w1312l6k2jvn7cn8priibnh8wg0184zjcli29f9ds1afl5s";
-    armv7l-linux = "172m2d94zzm8q61pvnjy01cl5fg11ad9hfh1han0gycnv3difniy";
-    i386-linux = "12m0i5sb15sbysp5fvhbj4k36950m7kpjr12n88r5fpkyh13ihsp";
-    i686-linux = "12m0i5sb15sbysp5fvhbj4k36950m7kpjr12n88r5fpkyh13ihsp";
-    x86_64-linux = "0bn48r55l5dh8zcf8ijh3z6hlyp3s6fvfyqc1csvnslm63dfkzcq";
+    aarch64-linux = "sha256-HFuxmMo0m4UOxEQVd32LGvbFsOS8jwCCCS6K/YJIIBE=";
+    armv7l-linux = "sha256-JMgYvqkaRw5sfjbKybAkk28KT12+c19dMir2DUN7Ub0=";
+    x86_64-linux = "sha256-hr/mPOrliP8Dej3DVE2+wYkb1J789WCkkY3xe9EcM44=";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {
@@ -26,18 +22,17 @@ let
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 in
 appimageTools.wrapType2 rec {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands = ''
     mkdir -p $out/share/pixmaps $out/share/licenses/p3x-onenote
     cp ${appimageContents}/p3x-onenote.png $out/share/pixmaps/
     cp ${appimageContents}/p3x-onenote.desktop $out
     cp ${appimageContents}/LICENSE.electron.txt $out/share/licenses/p3x-onenote/LICENSE
-    mv $out/bin/${name} $out/bin/p3x-onenote
 
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
       --set-key Exec --set-value $out/bin/p3x-onenote \
@@ -50,6 +45,7 @@ appimageTools.wrapType2 rec {
     description = "Linux Electron Onenote - A Linux compatible version of OneNote";
     license = licenses.mit;
     maintainers = with maintainers; [ tiagolobocastro ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
+    mainProgram = "p3x-onenote";
   };
 }

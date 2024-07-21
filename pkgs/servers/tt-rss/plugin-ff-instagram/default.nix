@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
       The name of the plugin in TT-RSS is 'ff_instagram'.
     '';
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     homepage = "https://github.com/wltb/ff_instagram";
     maintainers = with maintainers; [ das_j ];
     platforms = platforms.all;

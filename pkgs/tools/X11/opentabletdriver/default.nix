@@ -1,8 +1,6 @@
 { lib
 , buildDotnetModule
 , fetchFromGitHub
-, fetchurl
-, dotnetCorePackages
 , gtk3
 , libX11
 , libXrandr
@@ -13,30 +11,27 @@
 , copyDesktopItems
 , makeDesktopItem
 , nixosTests
-, wrapGAppsHook
-, dpkg
+, wrapGAppsHook3
+, jq
+, coreutils
 }:
 
 buildDotnetModule rec {
   pname = "OpenTabletDriver";
-  version = "0.5.3.3";
+  version = "0.6.4.0";
 
   src = fetchFromGitHub {
-    owner = "InfinityGhost";
+    owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     rev = "v${version}";
-    sha256 = "k4SoOMKAwHeYSQ80M8Af1DiiDSZIi3gS7lGr2ZrXrEI=";
+    hash = "sha256-zK+feU96JOXjmkTndM9VyUid3z+MZFxJGH+MXaB6kzk=";
   };
 
-  debPkg = fetchurl {
-    url = "https://github.com/InfinityGhost/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
-    sha256 = "0v03qiiz28k1yzgxf5qc1mdg2n7kjx6h8vpx9dxz342wwbgqg6ic";
-  };
+  patches = [
+    ./remove-git-from-generate-rules.patch
+  ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
-  dotnet-runtime = dotnetCorePackages.runtime_5_0;
-
-  dotnetInstallFlags = [ "--framework=net5" ];
+  dotnetInstallFlags = [ "--framework=net6.0" ];
 
   projectFile = [ "OpenTabletDriver.Console" "OpenTabletDriver.Daemon" "OpenTabletDriver.UX.Gtk" ];
   nugetDeps = ./deps.nix;
@@ -45,8 +40,9 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [
     copyDesktopItems
-    wrapGAppsHook
-    dpkg
+    wrapGAppsHook3
+    # Dependency of generate-rules.sh
+    jq
   ];
 
   runtimeDeps = [
@@ -59,18 +55,47 @@ buildDotnetModule rec {
     udev
   ];
 
-  postInstall = ''
+  buildInputs = runtimeDeps;
+
+  doCheck = true;
+  testProjectFile = "OpenTabletDriver.Tests/OpenTabletDriver.Tests.csproj";
+
+  disabledTests = [
+    # Require networking
+    "OpenTabletDriver.Tests.PluginRepositoryTest.ExpandRepositoryTarballFork"
+    "OpenTabletDriver.Tests.PluginRepositoryTest.ExpandRepositoryTarball"
+    # Require networking & unused in Linux build
+    "OpenTabletDriver.Tests.UpdaterTests.UpdaterBase_ProperlyChecks_Version_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_PreventsUpdate_WhenAlreadyUpToDate_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_AllowsReupdate_WhenInstallFailed_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_HasUpdateReturnsFalse_During_UpdateInstall_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_HasUpdateReturnsFalse_After_UpdateInstall_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_Prevents_ConcurrentAndConsecutive_Updates_Async"
+    "OpenTabletDriver.Tests.UpdaterTests.Updater_ProperlyBackups_BinAndAppDataDirectory_Async"
+    # Intended only to be run in continuous integration, unnecessary for functionality
+    "OpenTabletDriver.Tests.ConfigurationTest.Configurations_DeviceIdentifier_IsNotConflicting"
+    # Depends on processor load
+    "OpenTabletDriver.Tests.TimerTests.TimerAccuracy"
+    # Can't find Configurations directory
+    "OpenTabletDriver.Tests.ConfigurationTest.Configurations_Verify_Configs_With_Schema"
+  ];
+
+  preBuild = ''
+    patchShebangs generate-rules.sh
+  '';
+
+  postFixup = ''
     # Give a more "*nix" name to the binaries
     mv $out/bin/OpenTabletDriver.Console $out/bin/otd
     mv $out/bin/OpenTabletDriver.Daemon $out/bin/otd-daemon
     mv $out/bin/OpenTabletDriver.UX.Gtk $out/bin/otd-gui
 
-    cp -r ./OpenTabletDriver/Configurations $out/lib/${pname}
     install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/pixmaps
 
-    # TODO: Ideally this should be build from OpenTabletDriver/OpenTabletDriver-udev instead
-    dpkg-deb --fsys-tarfile ${debPkg} | tar xf - ./usr/lib/udev/rules.d/99-opentabletdriver.rules
-    install -Dm644 ./usr/lib/udev/rules.d/99-opentabletdriver.rules -t $out/lib/udev/rules.d
+    mkdir -p $out/lib/udev/rules.d
+    ./generate-rules.sh \
+      | sed 's@/usr/bin/env rm@${lib.getExe' coreutils "rm"}@' \
+      > $out/lib/udev/rules.d/70-opentabletdriver.rules
   '';
 
   desktopItems = [
@@ -80,12 +105,9 @@ buildDotnetModule rec {
       exec = "otd-gui";
       icon = "otd";
       comment = meta.description;
-      type = "Application";
-      categories = "Utility;";
+      categories = [ "Utility" ];
     })
   ];
-
-  dontWrapGApps = true;
 
   passthru = {
     updateScript = ./update.sh;
@@ -96,9 +118,10 @@ buildDotnetModule rec {
 
   meta = with lib; {
     description = "Open source, cross-platform, user-mode tablet driver";
-    homepage = "https://github.com/InfinityGhost/OpenTabletDriver";
+    homepage = "https://github.com/OpenTabletDriver/OpenTabletDriver";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ thiagokokada ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ gepbird thiagokokada ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    mainProgram = "otd";
   };
 }

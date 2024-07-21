@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wrapGAppsNoGuiHook, gobject-introspection
 , glib, systemd, udev, libevdev, gitMinimal, check, valgrind, swig, python3
 , json-glib, libunistring }:
 
 stdenv.mkDerivation rec {
   pname = "libratbag";
-  version = "0.16";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner  = "libratbag";
     repo   = "libratbag";
     rev    = "v${version}";
-    sha256 = "sha256-wJLG0Gxm1RWwW5SCGoa2QscU1VC0r93KZfEMNVg3Tko=";
+    sha256 = "sha256-TQ8DVj4yqq3IA0oGnLDz+QNTyNRmGqspEjkPeBmXNew=";
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config gitMinimal swig check valgrind
+    meson ninja pkg-config gitMinimal swig check valgrind wrapGAppsNoGuiHook gobject-introspection
   ];
 
   buildInputs = [

@@ -1,36 +1,35 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
   # C Inputs
-, blas
-, catch2
-, cmake
-, cython
-, fmt
-, muparserx
-, ninja
-, nlohmann_json
-, spdlog
+  blas,
+  catch2,
+  cmake,
+  cython,
+  fmt,
+  muparserx,
+  ninja,
+  nlohmann_json,
+  spdlog,
   # Python Inputs
-, cvxpy
-, numpy
-, pybind11
-, scikit-build
+  cvxpy,
+  numpy,
+  pybind11,
+  scikit-build,
   # Check Inputs
-, pytestCheckHook
-, ddt
-, fixtures
-, pytest-timeout
-, qiskit-terra
-, setuptools
-, testtools
+  pytestCheckHook,
+  ddt,
+  fixtures,
+  pytest-timeout,
+  qiskit-terra,
+  testtools,
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.9.1";
+  version = "0.13.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -38,8 +37,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit-aer";
-    rev = version;
-    sha256 = "sha256-SAJjU2zYz6UabOPV1KI2JB7CbJfUJcjbPKbo6iiCk/g=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xE5P4o6/I8Y/trK0e8GQ0oAOAyMvYWfzyuVvAoZExwk=";
   };
 
   postPatch = ''
@@ -55,22 +54,22 @@ buildPythonPackage rec {
     cmake
     ninja
     scikit-build
-    pybind11
   ];
 
   buildInputs = [
     blas
     catch2
+    nlohmann_json
     fmt
     muparserx
-    nlohmann_json
     spdlog
   ];
 
   propagatedBuildInputs = [
     cvxpy
-    cython  # generates some cython files at runtime that need to be cython-ized
+    cython # generates some cython files at runtime that need to be cython-ized
     numpy
+    pybind11
   ];
 
   preBuild = ''
@@ -80,17 +79,19 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   # *** Testing ***
-
   pythonImportsCheck = [
     "qiskit.providers.aer"
     "qiskit.providers.aer.backends.qasm_simulator"
     "qiskit.providers.aer.backends.controller_wrappers" # Checks C++ files built correctly. Only exists if built & moved to output
   ];
-  # Slow tests
+
   disabledTests = [
-    "test_clifford" # fails on cvxpy >= 1.1.15. https://github.com/Qiskit/qiskit-aer/pull/1318. Remove in future.
+    # these tests don't work with cvxpy >= 1.1.15
+    "test_clifford"
+    "test_approx_random"
     "test_snapshot" # TODO: these ~30 tests fail on setup due to pytest fixture issues?
     "test_initialize_2" # TODO: simulations appear incorrect, off by >10%.
+    "test_pauli_error_2q_gate_from_string_1qonly"
 
     # these fail for some builds. Haven't been able to reproduce error locally.
     "test_kraus_gate_noise"
@@ -112,16 +113,20 @@ buildPythonPackage rec {
     "_144"
     "test_sparse_output_probabilities"
     "test_reset_2_qubit"
+
+    # Fails with 0.10.4
+    "test_extended_stabilizer_sparse_output_probs"
   ];
-  checkInputs = [
+
+  nativeCheckInputs = [
     pytestCheckHook
     ddt
     fixtures
     pytest-timeout
     qiskit-terra
-    setuptools  # temporary workaround for pbr missing setuptools, see https://github.com/NixOS/nixpkgs/pull/132614
     testtools
   ];
+
   pytestFlagsArray = [
     "--timeout=30"
     "--durations=10"
@@ -136,9 +141,11 @@ buildPythonPackage rec {
     # Add qiskit-aer compiled files to cython include search
     pushd $HOME
   '';
+
   postCheck = "popd";
 
   meta = with lib; {
+    broken = true;
     description = "High performance simulators for Qiskit";
     homepage = "https://qiskit.org/aer";
     downloadPage = "https://github.com/QISKit/qiskit-aer/releases";

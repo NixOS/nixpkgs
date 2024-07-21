@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bmp3qf14509swpxin4j9f98n05pdilzapjm0jdzbv0dy3hn20ix";
   };
 
+  strictDeps = true;
   dontUnpack = true;
 
   installPhase = ''
@@ -18,8 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "The plugin manager for zsh";
-    homepage = "http://antigen.sharats.me";
+    description = "Plugin manager for zsh";
+    homepage = "https://antigen.sharats.me/";
     license = lib.licenses.mit;
   };
 }

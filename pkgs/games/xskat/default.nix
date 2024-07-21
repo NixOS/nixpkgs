@@ -8,9 +8,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 imake ];
 
   src = fetchurl {
-    url = "http://www.xskat.de/xskat-${version }.tar.gz";
+    url = "https://web.archive.org/web/20220331112433if_/https://www.xskat.de/xskat-${version}.tar.gz";
     sha256 = "8ba52797ccbd131dce69b96288f525b0d55dee5de4008733f7a5a51deb831c10";
   };
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-int";
 
   preInstall = ''
     sed -i Makefile \
@@ -22,9 +24,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Famous german card game";
+    mainProgram = "xskat";
     platforms = platforms.unix;
-    license = licenses.free;
+    license = licenses.xskat;
     longDescription = "Play the german card game Skat against the AI or over IRC.";
-    homepage = "http://www.xskat.de/";
+    homepage = "https://web.archive.org/web/20221003060115/https://www.xskat.de/xskat.html";
   };
 }

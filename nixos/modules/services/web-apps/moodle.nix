@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
+  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge mkOption types;
   inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionalString;
 
   cfg = config.services.moodle;
@@ -56,20 +56,17 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
 
-  phpExt = pkgs.php74.withExtensions
-        ({ enabled, all }: with all; [ iconv mbstring curl openssl tokenizer xmlrpc soap ctype zip gd simplexml dom  intl json sqlite3 pgsql pdo_sqlite pdo_pgsql pdo_odbc pdo_mysql pdo mysqli session zlib xmlreader fileinfo filter opcache ]);
+  phpExt = pkgs.php81.buildEnv {
+    extensions = { all, ... }: with all; [ iconv mbstring curl openssl tokenizer soap ctype zip gd simplexml dom intl sqlite3 pgsql pdo_sqlite pdo_pgsql pdo_odbc pdo_mysql pdo mysqli session zlib xmlreader fileinfo filter opcache exif sodium ];
+    extraConfig = "max_input_vars = 5000";
+  };
 in
 {
   # interface
   options.services.moodle = {
     enable = mkEnableOption "Moodle web application";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.moodle;
-      defaultText = literalExpression "pkgs.moodle";
-      description = "The Moodle package to use.";
-    };
+    package = mkPackageOption pkgs "moodle" { };
 
     initialPassword = mkOption {
       type = types.str;
@@ -94,7 +91,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         description = "Database host port.";
         default = {
           mysql = 3306;
@@ -121,7 +118,7 @@ in
         example = "/run/keys/moodle-dbpassword";
         description = ''
           A file containing the password corresponding to
-          <option>database.user</option>.
+          {option}`database.user`.
         '';
       };
 
@@ -153,8 +150,8 @@ in
         }
       '';
       description = ''
-        Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
-        See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+        Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
+        See [](#opt-services.httpd.virtualHosts) for further information.
       '';
     };
 
@@ -169,7 +166,7 @@ in
         "pm.max_requests" = 500;
       };
       description = ''
-        Options for the Moodle PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+        Options for the Moodle PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
     };
@@ -180,7 +177,7 @@ in
       description = ''
         Any additional text to be appended to the config.php
         configuration file. This is a PHP script. For configuration
-        details, see <link xlink:href="https://docs.moodle.org/37/en/Configuration_file"/>.
+        details, see <https://docs.moodle.org/37/en/Configuration_file>.
       '';
       example = ''
         $CFG->disableupdatenotifications = true;
@@ -192,7 +189,7 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      { assertion = cfg.database.createLocally -> cfg.database.user == user && cfg.database.user == cfg.database.name;
         message = "services.moodle.database.user must be set to ${user} if services.moodle.database.createLocally is set true";
       }
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
@@ -218,7 +215,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -230,6 +227,7 @@ in
       phpOptions = ''
         zend_extension = opcache.so
         opcache.enable = 1
+        max_input_vars = 5000
       '';
       settings = {
         "listen.owner" = config.services.httpd.user;
@@ -257,9 +255,10 @@ in
       } ];
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${stateDir}' 0750 ${user} ${group} - -"
-    ];
+    systemd.tmpfiles.settings."10-moodle".${stateDir}.d = {
+      inherit user group;
+      mode = "0750";
+    };
 
     systemd.services.moodle-init = {
       wantedBy = [ "multi-user.target" ];

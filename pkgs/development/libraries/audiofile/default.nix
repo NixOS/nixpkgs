@@ -11,7 +11,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "audiofile-0.3.6";
+  pname = "audiofile";
+  version = "0.3.6";
 
   buildInputs =
     lib.optionals stdenv.isLinux [
@@ -21,12 +22,14 @@ stdenv.mkDerivation rec {
     ];
 
   src = fetchurl {
-    url = "https://audiofile.68k.org/${name}.tar.gz";
+    url = "https://audiofile.68k.org/audiofile-${version}.tar.gz";
     sha256 = "0rb927zknk9kmhprd8rdr4azql4gn2dp75a36iazx2xhkbqhvind";
   };
 
-  # fix build with gcc9
-  NIX_CFLAGS_LINK = lib.optional (stdenv.system == "i686-linux") "-lgcc";
+  outputs = [ "out" "dev" "man" ];
+
+  # std::unary_function has been removed in c++17
+  makeFlags = [ "CXXFLAGS=-std=c++11" ];
 
   # Even when statically linking, libstdc++.la is put in dependency_libs here,
   # and hence libstdc++.so passed to the linker, just pass -lstdc++ and let the

@@ -5,12 +5,7 @@ with lib;
 let
   cfg = config.services.jibri;
 
-  # Copied from the jitsi-videobridge.nix file.
-  toHOCON = x:
-    if isAttrs x && x ? __hocon_envvar then ("\${" + x.__hocon_envvar + "}")
-    else if isAttrs x then "{${ concatStringsSep "," (mapAttrsToList (k: v: ''"${k}":${toHOCON v}'') x) }}"
-    else if isList x then "[${ concatMapStringsSep "," toHOCON x }]"
-    else builtins.toJSON x;
+  format = pkgs.formats.hocon { };
 
   # We're passing passwords in environment variables that have names generated
   # from an attribute name, which may not be a valid bash identifier.
@@ -38,13 +33,13 @@ let
         control-login = {
           domain = env.control.login.domain;
           username = env.control.login.username;
-          password.__hocon_envvar = toVarName "${name}_control";
+          password = format.lib.mkSubstitution (toVarName "${name}_control");
         };
 
         call-login = {
           domain = env.call.login.domain;
           username = env.call.login.username;
-          password.__hocon_envvar = toVarName "${name}_call";
+          password = format.lib.mkSubstitution (toVarName "${name}_call");
         };
 
         strip-from-room-domain = env.stripFromRoomDomain;
@@ -85,17 +80,17 @@ let
   };
   # Allow overriding leaves of the default config despite types.attrs not doing any merging.
   jibriConfig = recursiveUpdate defaultJibriConfig cfg.config;
-  configFile = pkgs.writeText "jibri.conf" (toHOCON { jibri = jibriConfig; });
+  configFile = format.generate "jibri.conf" { jibri = jibriConfig; };
 in
 {
   options.services.jibri = with types; {
-    enable = mkEnableOption "Jitsi BRoadcasting Infrastructure. Currently Jibri must be run on a host that is also running <option>services.jitsi-meet.enable</option>, so for most use cases it will be simpler to run <option>services.jitsi-meet.jibri.enable</option>";
+    enable = mkEnableOption "Jitsi BRoadcasting Infrastructure. Currently Jibri must be run on a host that is also running {option}`services.jitsi-meet.enable`, so for most use cases it will be simpler to run {option}`services.jitsi-meet.jibri.enable`";
     config = mkOption {
-      type = attrs;
+      type = format.type;
       default = { };
       description = ''
         Jibri configuration.
-        See <link xlink:href="https://github.com/jitsi/jibri/blob/master/src/main/resources/reference.conf" />
+        See <https://github.com/jitsi/jibri/blob/master/src/main/resources/reference.conf>
         for default configuration with comments.
       '';
     };
@@ -132,7 +127,7 @@ in
         pkgs.writeScript "finalize_recording.sh" ''''''
         #!/bin/sh
         RECORDINGS_DIR=$1
-        ${pkgs.rclone}/bin/rclone copy $RECORDINGS_DIR RCLONE_REMOTE:jibri-recordings/ -v --log-file=/var/log/jitsi/jibri/recording-upload.txt
+        ''${pkgs.rclone}/bin/rclone copy $RECORDINGS_DIR RCLONE_REMOTE:jibri-recordings/ -v --log-file=/var/log/jitsi/jibri/recording-upload.txt
         exit 0
         '''''';
       '';
@@ -378,7 +373,7 @@ in
         '')
         cfg.xmppEnvironments))
       + ''
-        ${pkgs.jre8_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
+        ${pkgs.jdk11_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
       '';
 
       environment.HOME = "/var/lib/jibri";
@@ -395,11 +390,11 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d /var/log/jitsi/jibri 755 jibri jibri"
-    ];
-
-
+    systemd.tmpfiles.settings."10-jibri"."/var/log/jitsi/jibri".d = {
+      user = "jibri";
+      group = "jibri";
+      mode = "755";
+    };
 
     # Configure Chromium to not show the "Chrome is being controlled by automatic test software" message.
     environment.etc."chromium/policies/managed/managed_policies.json".text = builtins.toJSON { CommandLineFlagSecurityWarningsEnabled = false; };

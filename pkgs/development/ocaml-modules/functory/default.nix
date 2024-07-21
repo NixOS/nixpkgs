@@ -1,7 +1,5 @@
 { lib, stdenv, fetchurl, ocaml, findlib }:
 
-assert lib.versionAtLeast (lib.getVersion ocaml) "3.11";
-
 let param =
   if lib.versionAtLeast ocaml.version "4.02" then {
     version = "0.6";
@@ -12,16 +10,21 @@ let param =
   };
 in
 
-stdenv.mkDerivation {
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "functory is not available for OCaml ${ocaml.version}"
 
-  name = "ocaml${ocaml.version}-functory-${param.version}";
+stdenv.mkDerivation {
+  pname = "ocaml${ocaml.version}-functory";
+  inherit (param) version;
 
   src = fetchurl {
     url = "https://www.lri.fr/~filliatr/functory/download/functory-${param.version}.tar.gz";
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
+
+  strictDeps = true;
 
   installTargets = [ "ocamlfind-install" ];
 
@@ -29,9 +32,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.lri.fr/~filliatr/functory/";
-    description = "A distributed computing library for Objective Caml which facilitates distributed execution of parallelizable computations in a seamless fashion";
+    description = "Distributed computing library for Objective Caml which facilitates distributed execution of parallelizable computations in a seamless fashion";
     license = licenses.lgpl21;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }

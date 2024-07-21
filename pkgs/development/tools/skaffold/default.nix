@@ -1,30 +1,37 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper }:
 
 buildGoModule rec {
   pname = "skaffold";
-  version = "1.35.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
-    sha256 = "sha256-8Ye2eR9eB7oyYOo46OraOxfLOG/XphWJkk+xPzDthPU=";
+    hash = "sha256-q57n5Jo682u/YK+5bgYqMufjPuPOPsBgJzxSl1fdqxA=";
   };
 
-  vendorSha256 = "sha256-jr4HEs2mTRPNAiV/OWUnjYyQ1uSUJfVOTNCRi/18tEo=";
+  vendorHash = null;
 
   subPackages = ["cmd/skaffold"];
 
-  ldflags = let t = "github.com/GoogleContainerTools/skaffold/pkg/skaffold"; in [
+  ldflags = let t = "github.com/GoogleContainerTools/skaffold/v2/pkg/skaffold"; in [
     "-s" "-w"
     "-X ${t}/version.version=v${version}"
     "-X ${t}/version.gitCommit=${src.rev}"
     "-X ${t}/version.buildDate=unknown"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/skaffold version | grep ${version} > /dev/null
+  '';
 
   postInstall = ''
+    wrapProgram $out/bin/skaffold --set SKAFFOLD_UPDATE_CHECK false
+
     installShellCompletion --cmd skaffold \
       --bash <($out/bin/skaffold completion bash) \
       --zsh <($out/bin/skaffold completion zsh)
@@ -34,6 +41,7 @@ buildGoModule rec {
     homepage = "https://skaffold.dev/";
     changelog = "https://github.com/GoogleContainerTools/skaffold/releases/tag/v${version}";
     description = "Easy and Repeatable Kubernetes Development";
+    mainProgram = "skaffold";
     longDescription = ''
       Skaffold is a command line tool that facilitates continuous development for Kubernetes applications.
       You can iterate on your application source code locally then deploy to local or remote Kubernetes clusters.

@@ -72,7 +72,7 @@ in
           If specified, Duo authentication is required only for users
           whose primary group or supplementary group list matches one
           of the space-separated pattern lists. Refer to
-          <link xlink:href="https://duo.com/docs/duounix"/> for details.
+          <https://duo.com/docs/duounix> for details.
         '';
       };
 
@@ -99,13 +99,13 @@ in
         type = types.bool;
         default = false;
         description = ''
-          If <literal>true</literal>, Duo Unix will automatically send
+          If `true`, Duo Unix will automatically send
           a push login request to the user’s phone, falling back on a
           phone call if push is unavailable. If
-          <literal>false</literal>, the user will be prompted to
+          `false`, the user will be prompted to
           choose an authentication method. When configured with
-          <literal>autopush = yes</literal>, we recommend setting
-          <literal>prompts = 1</literal>.
+          `autopush = yes`, we recommend setting
+          `prompts = 1`.
         '';
       };
 
@@ -113,7 +113,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Print the contents of <literal>/etc/motd</literal> to screen
+          Print the contents of `/etc/motd` to screen
           after a successful login.
         '';
       };
@@ -128,14 +128,14 @@ in
           display before denying access. Must be 1, 2, or 3. Default
           is 3.
 
-          For example, when <literal>prompts = 1</literal>, the user
+          For example, when `prompts = 1`, the user
           will have to successfully authenticate on the first prompt,
-          whereas if <literal>prompts = 2</literal>, if the user
+          whereas if `prompts = 2`, if the user
           enters incorrect information at the initial prompt, he/she
           will be prompted to authenticate again.
 
-          When configured with <literal>autopush = true</literal>, we
-          recommend setting <literal>prompts = 1</literal>.
+          When configured with `autopush = true`, we
+          recommend setting `prompts = 1`.
         '';
       };
 
@@ -144,7 +144,7 @@ in
         default = false;
         description = ''
           Look for factor selection or passcode in the
-          <literal>$DUO_PASSCODE</literal> environment variable before
+          `$DUO_PASSCODE` environment variable before
           prompting the user for input.
 
           When $DUO_PASSCODE is non-empty, it will override
@@ -161,7 +161,7 @@ in
           Duo Unix reports the IP address of the authorizing user, for
           the purposes of authorization and whitelisting. If Duo Unix
           cannot detect the IP address of the client, setting
-          <literal>fallbackLocalIP = yes</literal> will cause Duo Unix
+          `fallbackLocalIP = yes` will cause Duo Unix
           to send the IP address of the server it is running on.
 
           If you are using IP whitelisting, enabling this option could
@@ -193,10 +193,15 @@ in
         source = "${pkgs.duo-unix.out}/bin/login_duo";
       };
 
-    system.activationScripts = {
-      login_duo = mkIf cfg.ssh.enable ''
+    systemd.services.login-duo = lib.mkIf cfg.ssh.enable {
+      wantedBy = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      unitConfig.DefaultDependencies = false;
+      script = ''
         if test -f "${cfg.secretKeyFile}"; then
-          mkdir -m 0755 -p /etc/duo
+          mkdir -p /etc/duo
+          chmod 0755 /etc/duo
 
           umask 0077
           conf="$(mktemp)"
@@ -209,9 +214,17 @@ in
           mv -fT "$conf" /etc/duo/login_duo.conf
         fi
       '';
-      pam_duo = mkIf cfg.pam.enable ''
+    };
+
+    systemd.services.pam-duo = lib.mkIf cfg.ssh.enable {
+      wantedBy = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      unitConfig.DefaultDependencies = false;
+      script = ''
         if test -f "${cfg.secretKeyFile}"; then
-          mkdir -m 0755 -p /etc/duo
+          mkdir -p /etc/duo
+          chmod 0755 /etc/duo
 
           umask 0077
           conf="$(mktemp)"

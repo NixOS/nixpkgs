@@ -28,7 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Allow to update dependancies of the Tamriel-Data mod for morrowind";
+    mainProgram = "tr-patcher";
     homepage = "https://gitlab.com/bmwinger/tr-patcher";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
     maintainers = [ maintainers.marius851000 ];
     platforms = platforms.linux;

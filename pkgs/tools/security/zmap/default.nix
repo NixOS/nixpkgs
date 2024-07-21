@@ -1,28 +1,22 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, libjson, json_c, gengetopt, flex, byacc, gmp
-, libpcap
+, libpcap, libunistring, judy
 }:
 
 stdenv.mkDerivation rec {
   pname = "zmap";
-  version = "2.1.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yaahaiawkjk020hvsb8pndbrk8k10wxkfba1irp12a4sj6rywcs";
+    sha256 = "sha256-4BSHNR/snwLf0/UsiCM8xzXk59G5GtsxQKb1F2VVL9c=";
   };
 
-  patches = [
-    # fix build with json-c 0.14 https://github.com/zmap/zmap/pull/609
-    ./cmake-json-0.14-fix.patch
-  ];
-
   cmakeFlags = [ "-DRESPECT_INSTALL_PREFIX_CONFIG=ON" ];
-  dontUseCmakeBuildDir = true;
 
   nativeBuildInputs = [ cmake pkg-config gengetopt flex byacc ];
-  buildInputs = [ libjson json_c gmp libpcap ];
+  buildInputs = [ libjson json_c gmp libpcap libunistring judy ];
 
   outputs = [ "out" "man" ];
 

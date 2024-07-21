@@ -1,66 +1,87 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aniso8601
-, jsonschema
-, flask
-, werkzeug
-, pytz
-, faker
-, six
-, mock
-, blinker
-, pytest-flask
-, pytest-mock
-, pytest-benchmark
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aniso8601,
+  jsonschema,
+  flask,
+  importlib-resources,
+  werkzeug,
+  pytz,
+  faker,
+  mock,
+  blinker,
+  py,
+  pytest-flask,
+  pytest-mock,
+  pytest-benchmark,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "flask-restx";
-  version = "0.5.1";
+  version = "1.3.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {
     owner = "python-restx";
-    repo = pname;
-    rev = version;
-    sha256 = "18vrmknyxw6adn62pz3kr9kvazfgjgl4pgimdf8527fyyiwcqy15";
+    repo = "flask-restx";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CBReP/u96fsr28lMV1BfLjjdBMXEvsD03wvsxkIcteI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aniso8601
     flask
+    importlib-resources
     jsonschema
     pytz
-    six
     werkzeug
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     blinker
     faker
     mock
+    py
     pytest-benchmark
     pytest-flask
     pytest-mock
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--benchmark-disable"
-    "--deselect=tests/test_inputs.py::URLTest::test_check"
-    "--deselect=tests/test_inputs.py::EmailTest::test_valid_value_check"
-    "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
+  pytestFlagsArray =
+    [
+      "--benchmark-disable"
+      "--deselect=tests/test_inputs.py::URLTest::test_check"
+      "--deselect=tests/test_inputs.py::EmailTest::test_valid_value_check"
+      "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "--deselect=tests/test_inputs.py::EmailTest::test_invalid_values_check"
+    ];
+
+  disabledTests = [
+    # broken in werkzeug 2.3 upgrade
+    "test_media_types_method"
+    "test_media_types_q"
   ];
 
   pythonImportsCheck = [ "flask_restx" ];
 
   meta = with lib; {
-    homepage = "https://flask-restx.readthedocs.io/en/${version}/";
     description = "Fully featured framework for fast, easy and documented API development with Flask";
-    changelog = "https://github.com/python-restx/flask-restx/raw/${version}/CHANGELOG.rst";
+    homepage = "https://github.com/python-restx/flask-restx";
+    changelog = "https://github.com/python-restx/flask-restx/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

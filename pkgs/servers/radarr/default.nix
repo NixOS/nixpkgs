@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, icu, dotnetCorePackages, openssl, nixosTests }:
+{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, icu, dotnet-runtime, openssl, nixosTests, zlib }:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -6,17 +6,19 @@ let
     x86_64-linux = "x64";
     aarch64-linux = "arm64";
     x86_64-darwin = "x64";
+    aarch64-darwin = "arm64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-IwD7PFRz6mjEjUTbpqItorvFMB/hcMcRhHG8XQHv0iM=";
-    arm64-linux_hash = "sha256-9Ou08PI3HNQO6Da76ZMkzx1QlU+oaq9Tr+vqPT05xnw=";
-    x64-osx_hash = "sha256-Nfm9vWB+ii2ZST6I4I8Y2PuG2a1qY7rbki57y88Ft8A=";
+    x64-linux_hash = "sha256-MlnT16a2l209uqu9DuXLwqf4yiWBn9MggqVubzg0pM4=";
+    arm64-linux_hash = "sha256-2NkklAOjpDbAXid+rayiQ+jndLluIAMEiKz0MA1Hg0k=";
+    x64-osx_hash = "sha256-OzUZsXUwE7jF4h/rCvWAY5mh97z/cUbhh6MK0ozHC+A=";
+    arm64-osx_hash = "sha256-ggNqWCixkHxhiWTYfUx9qeZ9ocTyJEEgSZJqgGOnL+Q=";
   }."${arch}-${os}_hash";
 
 in stdenv.mkDerivation rec {
   pname = "radarr";
-  version = "3.2.2.5080";
+  version = "5.7.0.8882";
 
   src = fetchurl {
     url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.master.${version}.${os}-core-${arch}.tar.gz";
@@ -31,10 +33,10 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/${pname}-${version}}
     cp -r * $out/share/${pname}-${version}/.
 
-    makeWrapper "${dotnetCorePackages.runtime_3_1}/bin/dotnet" $out/bin/Radarr \
+    makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Radarr \
       --add-flags "$out/share/${pname}-${version}/Radarr.dll" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        curl sqlite libmediainfo mono openssl icu ]}
+        curl sqlite libmediainfo mono openssl icu zlib ]}
 
     runHook postInstall
   '';
@@ -45,10 +47,12 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A Usenet/BitTorrent movie downloader";
+    description = "Usenet/BitTorrent movie downloader";
     homepage = "https://radarr.video/";
+    changelog = "https://github.com/Radarr/Radarr/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ edwtjo purcell ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    mainProgram = "Radarr";
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

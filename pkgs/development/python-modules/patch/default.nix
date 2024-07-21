@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchzip
+{
+  lib,
+  buildPythonPackage,
+  fetchzip,
 }:
 
 buildPythonPackage rec {
   version = "1.16";
+  format = "setuptools";
   pname = "patch";
 
   src = fetchzip {
@@ -17,10 +19,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A library to parse and apply unified diffs";
+    description = "Library to parse and apply unified diffs";
     homepage = "https://github.com/techtonik/python-patch/";
     license = licenses.mit;
     maintainers = [ maintainers.igsha ];
   };
-
 }

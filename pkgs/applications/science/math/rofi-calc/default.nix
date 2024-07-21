@@ -7,25 +7,25 @@
 , glib
 , cairo
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-calc";
-  version = "2.0.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "NbWXMash0pK7Y9gOEBbL7zXjFytoeZBN9/wIbRTvQ8g=";
+    sha256 = "sha256-uXaI8dwTRtg8LnFxopgXr9x/vEl8ixzIGOsSQQkAkoQ=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

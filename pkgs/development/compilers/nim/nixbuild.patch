@@ -1,14 +1,3 @@
-commit 164ba50fc74b980f77047080b2ae1ea099ae9b27
-Author: Emery Hemingway <ehmry@posteo.net>
-Date:   Mon Sep 7 14:09:22 2020 +0200
-
-    Load libaries by absolute path on NixOS
-    
-    If "nixbuild" is defined then choose dynamic runtime libraries by
-    searching $NIX_LDFLAGS at compile-time.
-    
-    Fix #15194
-
 diff --git a/lib/pure/dynlib.nim b/lib/pure/dynlib.nim
 index f31ae94dd..debed9c07 100644
 --- a/lib/pure/dynlib.nim
@@ -17,7 +6,7 @@ index f31ae94dd..debed9c07 100644
  
  import strutils
  
-+when defined(nixbuild):
++when defined(nixbuild) and not defined(windows):
 +  import os
 +
  type
@@ -27,7 +16,7 @@ index f31ae94dd..debed9c07 100644
        libCandidates(prefix & middle & suffix, dest)
    else:
      add(dest, s)
-+  when defined(nixbuild):
++  when defined(nixbuild) and not defined(windows):
 +    # Nix doesn't have a global library directory so
 +    # load libraries using an absolute path if one
 +    # can be derived from NIX_LDFLAGS.
@@ -37,7 +26,7 @@ index f31ae94dd..debed9c07 100644
 +    # to enable this behavior by default.
 +    #
 +    var libDirs = split(getEnv("LD_LIBRARY_PATH"), ':')
-+    for flag in split(getEnv("NIX_LDFLAGS")):
++    for flag in split(replace(getEnv("NIX_LDFLAGS"), "\\ ", " ")):
 +      if flag.startsWith("-L"):
 +        libDirs.add(flag[2..flag.high])
 +    for lib in dest:

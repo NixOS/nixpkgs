@@ -51,7 +51,10 @@ let
   datasetOptions = rec {
     use_template = mkOption {
       description = "Names of the templates to use for this dataset.";
-      type = types.listOf (types.enum (attrNames cfg.templates));
+      type = types.listOf (types.str // {
+        check = (types.enum (attrNames cfg.templates)).check;
+        description = "configured template name";
+      });
       default = [ ];
     };
     useTemplate = use_template;
@@ -59,7 +62,7 @@ let
     recursive = mkOption {
       description = ''
         Whether to recursively snapshot dataset children.
-        You can also set this to <literal>"zfs"</literal> to handle datasets
+        You can also set this to `"zfs"` to handle datasets
         recursively in an atomic way without the possibility to
         override settings for child datasets.
       '';
@@ -111,6 +114,8 @@ in
   options.services.sanoid = {
     enable = mkEnableOption "Sanoid ZFS snapshotting service";
 
+    package = lib.mkPackageOption pkgs "sanoid" {};
+
     interval = mkOption {
       type = types.str;
       default = "hourly";
@@ -119,8 +124,7 @@ in
         Run sanoid at this interval. The default is to run hourly.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`systemd.time(7)`.
       '';
     };
 
@@ -128,8 +132,8 @@ in
       type = types.attrsOf (types.submodule ({ config, options, ... }: {
         freeformType = datasetSettingsType;
         options = commonOptions // datasetOptions;
-        config.use_template = mkAliasDefinitions (mkDefault options.useTemplate or { });
-        config.process_children_only = mkAliasDefinitions (mkDefault options.processChildrenOnly or { });
+        config.use_template = modules.mkAliasAndWrapDefsWithPriority id (options.useTemplate or { });
+        config.process_children_only = modules.mkAliasAndWrapDefsWithPriority id (options.processChildrenOnly or { });
       }));
       default = { };
       description = "Datasets to snapshot.";
@@ -148,7 +152,7 @@ in
       type = types.attrsOf datasetSettingsType;
       description = ''
         Free-form settings written directly to the config file. See
-        <link xlink:href="https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.defaults.conf"/>
+        <https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.defaults.conf>
         for allowed values.
       '';
     };
@@ -159,7 +163,7 @@ in
       example = [ "--verbose" "--readonly" "--debug" ];
       description = ''
         Extra arguments to pass to sanoid. See
-        <link xlink:href="https://github.com/jimsalterjrs/sanoid/#sanoid-command-line-options"/>
+        <https://github.com/jimsalterjrs/sanoid/#sanoid-command-line-options>
         for allowed options.
       '';
     };
@@ -179,7 +183,7 @@ in
         ExecStartPre = (map (buildAllowCommand "allow" [ "snapshot" "mount" "destroy" ]) datasets);
         ExecStopPost = (map (buildAllowCommand "unallow" [ "snapshot" "mount" "destroy" ]) datasets);
         ExecStart = lib.escapeShellArgs ([
-          "${pkgs.sanoid}/bin/sanoid"
+          "${cfg.package}/bin/sanoid"
           "--cron"
           "--configdir"
           (pkgs.writeTextDir "sanoid.conf" configFile)

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kyotocabinet";
-  version = "1.2.79";
+  version = "1.2.80";
 
   src = fetchurl {
     url = "https://dbmx.net/kyotocabinet/pkg/kyotocabinet-${version}.tar.gz";
-    sha256 = "079ymsahlrijswgwfr2la9yw5h57l752cprhp5dz31iamsj1vyv7";
+    sha256 = "sha256-TIXXNmaNgpIL/b25KsPWa32xEI8JWBp2ndkWCgLe80k=";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://dbmx.net/kyotocabinet";
-    description = "A library of routines for managing a database";
+    description = "Library of routines for managing a database";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
   };

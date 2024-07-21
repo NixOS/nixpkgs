@@ -1,59 +1,70 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, immutables
-, motor
-, msgpack
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, tomlkit
-, ujson
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  cbor2,
+  fetchFromGitHub,
+  exceptiongroup,
+  hatchling,
+  hatch-vcs,
+  hypothesis,
+  immutables,
+  motor,
+  msgpack,
+  orjson,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  tomlkit,
+  typing-extensions,
+  ujson,
 }:
 
 buildPythonPackage rec {
   pname = "cattrs";
-  version = "1.8.0";
+  version = "23.2.3";
   format = "pyproject";
 
-  # https://cattrs.readthedocs.io/en/latest/history.html#id33:
-  # "Python 2, 3.5 and 3.6 support removal. If you need it, use a version below 1.1.0."
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "Tinche";
+    owner = "python-attrs";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-CKAsvRKS8kmLcyPA753mh6d3S04ObzO7xLPpmlmxrxI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zWM5zmZr2EiJb/4Dc6KjDL89p0C1V0Dsz949byz5OVM=";
   };
 
   nativeBuildInputs = [
-    poetry-core
+    hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
-    attrs
-  ];
+  propagatedBuildInputs =
+    [ attrs ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      typing-extensions
+    ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    cbor2
     hypothesis
     immutables
     motor
     msgpack
+    orjson
+    pytest-xdist
     pytestCheckHook
     pyyaml
     tomlkit
+    typing-extensions
     ujson
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" ""
     substituteInPlace pyproject.toml \
-      --replace 'orjson = "^3.5.2"' ""
+      --replace "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" ""
     substituteInPlace tests/test_preconf.py \
       --replace "from orjson import dumps as orjson_dumps" "" \
       --replace "from orjson import loads as orjson_loads" ""
@@ -74,13 +85,16 @@ buildPythonPackage rec {
   disabledTests = [
     # orjson is not available as it requires Rust nightly features to compile its requirements
     "test_orjson"
+    # tomlkit is pinned to an older version and newer versions raise InvalidControlChar exception
+    "test_tomlkit"
   ];
 
   pythonImportsCheck = [ "cattr" ];
 
   meta = with lib; {
     description = "Python custom class converters for attrs";
-    homepage = "https://github.com/Tinche/cattrs";
+    homepage = "https://github.com/python-attrs/cattrs";
+    changelog = "https://github.com/python-attrs/cattrs/blob/${src.rev}/HISTORY.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

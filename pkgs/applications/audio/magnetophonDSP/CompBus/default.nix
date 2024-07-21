@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faust2jaqt faust2lv2 ];
 
+  dontWrapQtApps = true;
+
   buildPhase = ''
     for f in *.dsp;
     do
@@ -28,14 +30,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/lv2
     mv *.lv2/ $out/lib/lv2
     mkdir -p $out/bin
-    for f in $(find . -executable -type f);
-    do
+    for f in $(find . -executable -type f); do
       cp $f $out/bin/
     done
   '';
 
   meta = {
-    description = "A group of compressors mixed into a bus, sidechained from that mix bus. For jack and lv2";
+    description = "Group of compressors mixed into a bus, sidechained from that mix bus. For jack and lv2";
     homepage = "https://github.com/magnetophon/CompBus";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];

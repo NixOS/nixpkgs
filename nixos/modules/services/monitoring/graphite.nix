@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.graphite;
+  opt = options.services.graphite;
   writeTextOrNull = f: t: mapNullable (pkgs.writeTextDir f) t;
 
   dataDir = cfg.dataDir;
@@ -22,16 +23,6 @@ let
     optionalString (config.time.timeZone != null) "TIME_ZONE = '${config.time.timeZone}'\n"
     + cfg.web.extraConfig
   );
-
-  graphiteApiConfig = pkgs.writeText "graphite-api.yaml" ''
-    search_index: ${dataDir}/index
-    ${optionalString (config.time.timeZone != null) "time_zone: ${config.time.timeZone}"}
-    ${optionalString (cfg.api.finders != []) "finders:"}
-    ${concatMapStringsSep "\n" (f: "  - " + f.moduleName) cfg.api.finders}
-    ${optionalString (cfg.api.functions != []) "functions:"}
-    ${concatMapStringsSep "\n" (f: "  - " + f) cfg.api.functions}
-    ${cfg.api.extraConfig}
-  '';
 
   seyrenConfig = {
     SEYREN_URL = cfg.seyren.seyrenUrl;
@@ -71,6 +62,8 @@ let
 in {
 
   imports = [
+    (mkRemovedOptionModule ["services" "graphite" "api"] "")
+    (mkRemovedOptionModule ["services" "graphite" "beacon"] "")
     (mkRemovedOptionModule ["services" "graphite" "pager"] "")
   ];
 
@@ -101,7 +94,7 @@ in {
       port = mkOption {
         description = "Graphite web frontend port.";
         default = 8080;
-        type = types.int;
+        type = types.port;
       };
 
       extraConfig = mkOption {
@@ -109,83 +102,8 @@ in {
         default = "";
         description = ''
           Graphite webapp settings. See:
-          <link xlink:href="http://graphite.readthedocs.io/en/latest/config-local-settings.html"/>
+          <https://graphite.readthedocs.io/en/latest/config-local-settings.html>
         '';
-      };
-    };
-
-    api = {
-      enable = mkOption {
-        description = ''
-          Whether to enable graphite api. Graphite api is lightweight alternative
-          to graphite web, with api and without dashboard. It's advised to use
-          grafana as alternative dashboard and influxdb as alternative to
-          graphite carbon.
-
-          For more information visit
-          <link xlink:href="https://graphite-api.readthedocs.org/en/latest/"/>
-        '';
-        default = false;
-        type = types.bool;
-      };
-
-      finders = mkOption {
-        description = "List of finder plugins to load.";
-        default = [];
-        example = literalExpression "[ pkgs.python3Packages.influxgraph ]";
-        type = types.listOf types.package;
-      };
-
-      functions = mkOption {
-        description = "List of functions to load.";
-        default = [
-          "graphite_api.functions.SeriesFunctions"
-          "graphite_api.functions.PieFunctions"
-        ];
-        type = types.listOf types.str;
-      };
-
-      listenAddress = mkOption {
-        description = "Graphite web service listen address.";
-        default = "127.0.0.1";
-        type = types.str;
-      };
-
-      port = mkOption {
-        description = "Graphite api service port.";
-        default = 8080;
-        type = types.int;
-      };
-
-      package = mkOption {
-        description = "Package to use for graphite api.";
-        default = pkgs.python3Packages.graphite_api;
-        defaultText = literalExpression "pkgs.python3Packages.graphite_api";
-        type = types.package;
-      };
-
-      extraConfig = mkOption {
-        description = "Extra configuration for graphite api.";
-        default = ''
-          whisper:
-            directories:
-                - ${dataDir}/whisper
-        '';
-        example = ''
-          allowed_origins:
-            - dashboard.example.com
-          cheat_times: true
-          influxdb:
-            host: localhost
-            port: 8086
-            user: influxdb
-            pass: influxdb
-            db: metrics
-          cache:
-            CACHE_TYPE: 'filesystem'
-            CACHE_DIR: '/tmp/graphite-api-cache'
-        '';
-        type = types.lines;
       };
     };
 
@@ -236,14 +154,14 @@ in {
       };
 
       blacklist = mkOption {
-        description = "Any metrics received which match one of the experssions will be dropped.";
+        description = "Any metrics received which match one of the expressions will be dropped.";
         default = null;
         type = types.nullOr types.str;
         example = "^some\\.noisy\\.metric\\.prefix\\..*";
       };
 
       whitelist = mkOption {
-        description = "Only metrics received which match one of the experssions will be persisted.";
+        description = "Only metrics received which match one of the expressions will be persisted.";
         default = null;
         type = types.nullOr types.str;
         example = ".*";
@@ -307,17 +225,19 @@ in {
       port = mkOption {
         description = "Seyren listening port.";
         default = 8081;
-        type = types.int;
+        type = types.port;
       };
 
       seyrenUrl = mkOption {
         default = "http://localhost:${toString cfg.seyren.port}/";
+        defaultText = literalExpression ''"http://localhost:''${toString config.${opt.seyren.port}}/"'';
         description = "Host where seyren is accessible.";
         type = types.str;
       };
 
       graphiteUrl = mkOption {
         default = "http://${cfg.web.listenAddress}:${toString cfg.web.port}";
+        defaultText = literalExpression ''"http://''${config.${opt.web.listenAddress}}:''${toString config.${opt.web.port}}"'';
         description = "Host where graphite service runs.";
         type = types.str;
       };
@@ -333,7 +253,7 @@ in {
         default = {};
         description = ''
           Extra seyren configuration. See
-          <link xlink:href='https://github.com/scobal/seyren#config' />
+          <https://github.com/scobal/seyren#config>
         '';
         type = types.attrsOf types.str;
         example = literalExpression ''
@@ -342,16 +262,6 @@ in {
             GRAPHITE_PASSWORD = "pass";
           }
         '';
-      };
-    };
-
-    beacon = {
-      enable = mkEnableOption "graphite beacon";
-
-      config = mkOption {
-        description = "Graphite beacon configuration.";
-        default = {};
-        type = types.attrs;
       };
     };
   };
@@ -479,44 +389,6 @@ in {
       environment.systemPackages = [ pkgs.python3Packages.graphite-web ];
     }))
 
-    (mkIf cfg.api.enable {
-      systemd.services.graphiteApi = {
-        description = "Graphite Api Interface";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        environment = {
-          PYTHONPATH = let
-              aenv = pkgs.python3.buildEnv.override {
-                extraLibs = [ cfg.api.package pkgs.cairo pkgs.python3Packages.cffi ] ++ cfg.api.finders;
-              };
-            in "${aenv}/${pkgs.python3.sitePackages}";
-          GRAPHITE_API_CONFIG = graphiteApiConfig;
-          LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
-        };
-        serviceConfig = {
-          ExecStart = ''
-            ${pkgs.python3Packages.waitress}/bin/waitress-serve \
-            --host=${cfg.api.listenAddress} --port=${toString cfg.api.port} \
-            graphite_api.app:app
-          '';
-          User = "graphite";
-          Group = "graphite";
-          PermissionsStartOnly = true;
-        };
-        preStart = ''
-          if ! test -e ${dataDir}/db-created; then
-            mkdir -p ${dataDir}/cache/
-            chmod 0700 ${dataDir}/cache/
-
-            chown graphite:graphite ${cfg.dataDir}
-            chown -R graphite:graphite ${cfg.dataDir}/cache
-
-            touch ${dataDir}/db-created
-          fi
-        '';
-      };
-    })
-
     (mkIf cfg.seyren.enable {
       systemd.services.seyren = {
         description = "Graphite Alerting Dashboard";
@@ -540,25 +412,9 @@ in {
       services.mongodb.enable = mkDefault true;
     })
 
-    (mkIf cfg.beacon.enable {
-      systemd.services.graphite-beacon = {
-        description = "Grpahite Beacon Alerting Daemon";
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          ExecStart = ''
-            ${pkgs.python3Packages.graphite_beacon}/bin/graphite-beacon \
-              --config=${pkgs.writeText "graphite-beacon.json" (builtins.toJSON cfg.beacon.config)}
-          '';
-          User = "graphite";
-          Group = "graphite";
-        };
-      };
-    })
-
     (mkIf (
       cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay ||
-      cfg.web.enable || cfg.api.enable ||
-      cfg.seyren.enable || cfg.beacon.enable
+      cfg.web.enable || cfg.seyren.enable
      ) {
       users.users.graphite = {
         uid = config.ids.uids.graphite;

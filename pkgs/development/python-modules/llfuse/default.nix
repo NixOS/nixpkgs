@@ -1,35 +1,40 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, contextlib2
-, cython
-, fuse
-, pkg-config
-, pytestCheckHook
-, python
-, which
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cython,
+  fuse,
+  pkg-config,
+  pytestCheckHook,
+  python,
+  setuptools,
+  which,
 }:
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.4.1";
+  version = "1.5.0";
 
-  disabled = pythonOlder "3.5";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-llfuse";
     repo = "python-llfuse";
-    rev = "release-${version}";
-    sha256 = "1dcpdg6cpkmdbyg66fgrylj7dp9zqzg5bf23y6m6673ykgxlv480";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-6/iW5eHmX6ODVPLFkOo3bN9yW8ixqy2MHwQ2r9FA0iI=";
   };
 
-  nativeBuildInputs = [ cython pkg-config ];
+  nativeBuildInputs = [
+    cython
+    pkg-config
+    setuptools
+  ];
 
   buildInputs = [ fuse ];
-
-  propagatedBuildInputs = [ contextlib2 ];
 
   preConfigure = ''
     substituteInPlace setup.py \
@@ -37,12 +42,15 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} setup.py build_cython
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_cython
   '';
 
   # On Darwin, the test requires macFUSE to be installed outside of Nix.
   doCheck = !stdenv.isDarwin;
-  checkInputs = [ pytestCheckHook which ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    which
+  ];
 
   disabledTests = [
     "test_listdir" # accesses /usr/bin
@@ -51,8 +59,12 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for the low-level FUSE API";
     homepage = "https://github.com/python-llfuse/python-llfuse";
+    changelog = "https://github.com/python-llfuse/python-llfuse/raw/release-${version}/Changes.rst";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor dotlambda ];
+    maintainers = with maintainers; [
+      bjornfor
+      dotlambda
+    ];
   };
 }

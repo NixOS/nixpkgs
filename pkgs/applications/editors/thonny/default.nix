@@ -1,16 +1,16 @@
-{ lib, fetchFromGitHub, python3, makeDesktopItem, copyDesktopItems }:
+{ lib, fetchFromGitHub, python3, tk, makeDesktopItem, copyDesktopItems }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "3.3.14";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "13l8blq7y6p7a235x2lfiqml1bd4ba2brm3vfvs8wasjh3fvm9g5";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-f4wR5OPzWbtSqE+hSW2zD8u3pPl5nPTtGvf2LzOXjI4=";
   };
 
   nativeBuildInputs = [ copyDesktopItems ];
@@ -21,7 +21,7 @@ buildPythonApplication rec {
     icon = "thonny";
     desktopName = "Thonny";
     comment     = "Python IDE for beginners";
-    categories  = "Development;IDE";
+    categories  = [ "Development" "IDE" ];
   }) ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -34,6 +34,7 @@ buildPythonApplication rec {
     pyperclip
     asttokens
     send2trash
+    dbus-next
   ];
 
   preInstall = ''
@@ -63,6 +64,7 @@ buildPythonApplication rec {
     homepage = "https://www.thonny.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "thonny";
   };
 }

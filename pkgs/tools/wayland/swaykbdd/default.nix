@@ -2,15 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "swaykbdd";
-  version = "1.0";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swaykbdd";
     rev = "v${version}";
-    sha256 = "101mbf7pvm4ykmkh29g5xswrzdhdwq0rslzxqqfd5ksf1fphzgxd";
+    sha256 = "sha256-FtXmn5Lf0PhL99xGl/SHWNaE6vAMOF2Ok4xVJT2Bf/s=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ json_c ];
 
@@ -20,5 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ivankovnatsky ];
     platforms = platforms.linux;
+    mainProgram = "swaykbdd";
   };
 }

@@ -1,5 +1,7 @@
 { lib, stdenv, fetchurl
 , enableStatic ? stdenv.hostPlatform.isStatic
+, writeScript
+, testers
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -7,20 +9,28 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xz";
-  version = "5.2.5";
+  version = "5.6.2";
 
   src = fetchurl {
-    url = "https://tukaani.org/xz/xz-${version}.tar.bz2";
-    sha256 = "1ps2i8i212n0f4xpq6clp7h13q7m1y8slqvxha9i8d0bj0qgj5si";
+    url = with finalAttrs; "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.xz";
+    hash = "sha256-qds7s9ZOJIoPrpY/j7a6hRomuhgi5QTcDv0YqAxibK8=";
   };
 
+  strictDeps = true;
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   configureFlags = lib.optional enableStatic "--disable-shared";
 
+  enableParallelBuilding = true;
   doCheck = true;
+
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
+  postPatch = ''
+    substituteInPlace ./build-aux/config.guess --replace-fail /usr/bin/uname uname
+  '';
 
   preCheck = ''
     # Tests have a /bin/sh dependency...
@@ -32,10 +42,29 @@ stdenv.mkDerivation rec {
 
   postInstall = "rm -rf $out/share/doc";
 
-  meta = with lib; {
-    homepage = "https://tukaani.org/xz/";
-    description = "A general-purpose data compression software, successor of LZMA";
+  passthru = {
+    updateScript = writeScript "update-xz" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
 
+      set -eu -o pipefail
+
+      # Expect the text in format of '>xz-5.2.6.tar.xz</a>'
+      # We pick first match where a stable release goes first.
+      new_version="$(curl -s https://tukaani.org/xz/ |
+          pcregrep -o1 '>xz-([0-9.]+)[.]tar[.]xz</a>' |
+          head -n1)"
+      update-source-version ${finalAttrs.pname} "$new_version"
+    '';
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
+  meta = with lib; {
+    changelog = "https://github.com/tukaani-project/xz/releases/tag/v${finalAttrs.version}";
+    description = "General-purpose data compression software, successor of LZMA";
+    homepage = "https://tukaani.org/xz/";
     longDescription =
       '' XZ Utils is free general-purpose data compression software with high
          compression ratio.  XZ Utils were written for POSIX-like systems,
@@ -49,9 +78,9 @@ stdenv.mkDerivation rec {
          create 30 % smaller output than gzip and 15 % smaller output than
          bzip2.
       '';
-
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ sander ];
     platforms = platforms.all;
+    pkgConfigModules = [ "liblzma" ];
   };
-}
+})

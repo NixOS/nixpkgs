@@ -2,8 +2,8 @@
 
 grafanaPlugin rec {
   pname = "grafana-piechart-panel";
-  version = "1.6.2";
-  zipHash = "sha256-xKyVT092Ffgzl0BewQw5iZ14I/q6CviUR5t9BVM0bf0=";
+  version = "1.6.4";
+  zipHash = "sha256-bdAl3OmZgSNB+IxxlCb81abR+4dykKkRY3MpQUQyLks=";
   meta = with lib; {
     description = "Pie chart panel for Grafana";
     license = licenses.mit;

@@ -1,24 +1,67 @@
-{ lib, stdenv, fetchurl, gtk2, libsndfile, pkg-config, python3, wafHook }:
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+
+, pipewire
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "lv2";
-  version = "1.18.2";
+  version = "1.18.10";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://lv2plug.in/spec/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-TokfvHRMBYVb6136gugisUkX3Wbpj4K4Iw29HHqy4F4=";
+    url = "https://lv2plug.in/spec/${pname}-${version}.tar.xz";
+    hash = "sha256-eMUbzyG1Tli7Yymsy7Ta4Dsu15tSD5oB5zS9neUwlT8=";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook ];
-  buildInputs = [ gtk2 libsndfile python3 ];
+  strictDeps = true;
 
-  wafConfigureFlags = lib.optionals stdenv.isDarwin [ "--lv2dir=${placeholder "out"}/lib/lv2" ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
+
+  buildInputs = [ ];
+
+  mesonFlags = [
+    # install validators to $dev
+    "--bindir=${placeholder "dev"}/bin"
+
+    # These are just example plugins. They pull in outdated gtk-2
+    # dependency and many other things. Upstream would like to
+    # eventually move them of the project:
+    #   https://gitlab.com/lv2/lv2/-/issues/57#note_1096060029
+    "-Dplugins=disabled"
+    # Pulls in spell checkers among other things.
+    "-Dtests=disabled"
+    # Avoid heavyweight python dependencies.
+    "-Ddocs=disabled"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Dlv2dir=${placeholder "out"}/lib/lv2"
+  ];
+
+  passthru = {
+    tests = {
+      inherit pipewire;
+    };
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://gitlab.com/lv2/lv2.git";
+      rev-prefix = "v";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://lv2plug.in";
-    description = "A plugin standard for audio systems";
+    description = "Plugin standard for audio systems";
+    mainProgram = "lv2_validate";
     license = licenses.mit;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.unix;
   };
 }

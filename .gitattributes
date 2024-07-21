@@ -1,4 +1,6 @@
 **/deps.nix linguist-generated
+**/deps.json linguist-generated
+**/deps.toml linguist-generated
 **/node-packages.nix linguist-generated
 
 pkgs/applications/editors/emacs-modes/*-generated.nix linguist-generated

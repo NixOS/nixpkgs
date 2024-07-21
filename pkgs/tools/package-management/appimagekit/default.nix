@@ -12,12 +12,12 @@ let
     owner = "AppImage";
     repo = "AppImageKit";
     rev = "8bbf694455d00f48d835f56afaa1dabcd9178ba6";
-    sha256 = "sha256-pqg+joomC5CI9WdKP/h/XKPsruMgZEaIOjPLOqnNPZw=";
+    hash = "sha256-pqg+joomC5CI9WdKP/h/XKPsruMgZEaIOjPLOqnNPZw=";
     fetchSubmodules = true;
   };
 
   # squashfuse adapted to nix from cmake experession in "${appimagekit_src}/lib/libappimage/cmake/dependencies.cmake"
-  appimagekit_squashfuse = squashfuse.overrideAttrs (attrs: rec {
+  appimagekit_squashfuse = squashfuse.overrideAttrs rec {
     pname = "squashfuse";
     version = "unstable-2016-10-09";
 
@@ -36,6 +36,11 @@ let
     postPatch = ''
       cp -v ${appimagekit_src}/lib/libappimage/src/patches/squashfuse_dlopen.[hc] .
     '';
+
+    # Workaround build failure on -fno-common toolchains:
+    #   ld: libsquashfuse_ll.a(libfuseprivate_la-fuseprivate.o):(.bss+0x8):
+    #     multiple definition of `have_libloaded'; runtime.4.o:(.bss.have_libloaded+0x0): first defined here
+    env.NIX_CFLAGS_COMPILE = "-fcommon";
 
     preConfigure = ''
       sed -i "/PKG_CHECK_MODULES.*/,/,:./d" configure
@@ -56,7 +61,7 @@ let
       cp -v ./.libs/*.a $out/lib
       cp -v ./*.h $out/include
     '';
-  });
+  };
 
 in stdenv.mkDerivation rec {
   pname = "appimagekit";
@@ -91,6 +96,7 @@ in stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_LIBARCHIVE=ON"
     "-DUSE_SYSTEM_GTEST=ON"
     "-DUSE_SYSTEM_MKSQUASHFS=ON"
+    "-DTOOLS_PREFIX=${stdenv.cc.targetPrefix}"
   ];
 
   postInstall = ''
@@ -103,7 +109,7 @@ in stdenv.mkDerivation rec {
       --unset SOURCE_DATE_EPOCH
   '';
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
 
   # for debugging
   passthru = {
@@ -111,7 +117,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A tool to package desktop applications as AppImages";
+    description = "Tool to package desktop applications as AppImages";
     longDescription = ''
       AppImageKit is an implementation of the AppImage format that
       provides tools such as appimagetool and appimaged for handling

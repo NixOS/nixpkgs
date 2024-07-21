@@ -1,4 +1,4 @@
-{ lib, fetchurl, perlPackages, wrapGAppsHook,
+{ lib, fetchurl, perlPackages, wrapGAppsHook3,
   # libs
   librsvg, sane-backends, sane-frontends,
   # runtime dependencies
@@ -10,14 +10,19 @@ with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.12.4";
+  version = "2.13.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gscan2pdf/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-UrBt0QkSk7IP4mZYFoxFNJQ1Qmcb53CemvlYfsxjZ/s=";
+    url = "mirror://sourceforge/gscan2pdf/gscan2pdf-${version}.tar.xz";
+    hash = "sha256-QAs6fsQDe9+nKM/OAVZUHB034K72jHsKoA2LY2JQa8Y=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  patches = [
+    # fixes an error with utf8 file names. See https://sourceforge.net/p/gscan2pdf/bugs/400
+    ./image-utf8-fix.patch
+  ];
+
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs =
     [ librsvg sane-backends sane-frontends ] ++
@@ -85,7 +90,7 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" "man" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     imagemagick
     libtiff
     djvulibre
@@ -111,23 +116,27 @@ perlPackages.buildPerlPackage rec {
     # # Looks like you failed 1 test of 1.
     # t/169_import_scan.t ........................... Dubious, test returned 1 (wstat 256, 0x100)
     rm t/169_import_scan.t
-    # t/1604_import_multipage_DjVu.t ................ Dubious, test returned 255 (wstat 65280, 0xff00)
-    rm t/1604_import_multipage_DjVu.t
 
-    # Disable a test which passes but reports an incorrect status
-    # t/0601_Dialog_Scan.t .......................... All 14 subtests passed
-    # t/0601_Dialog_Scan.t                        (Wstat: 139 Tests: 14 Failed: 0)
-    #   Non-zero wait status: 139
-    rm t/0601_Dialog_Scan.t
+    # Disable a test failing because of a warning interfering with the pinned output
+    # t/3722_user_defined.t ......................... 1/2
+    #   Failed test 'user_defined caught error injected in queue'
+    #   at t/3722_user_defined.t line 41.
+    #          got: 'error
+    # WARNING: The convert command is deprecated in IMv7, use "magick" instead of "convert" or "magick convert"'
+    #     expected: 'error'
+    # Looks like you failed 1 test of 2.
+    rm t/3722_user_defined.t
 
+    export XDG_CACHE_HOME="$(mktemp -d)"
     xvfb-run -s '-screen 0 800x600x24' \
       make test
   '';
 
   meta = {
-    description = "A GUI to produce PDFs or DjVus from scanned documents";
-    homepage = "http://gscan2pdf.sourceforge.net/";
+    description = "GUI to produce PDFs or DjVus from scanned documents";
+    homepage = "https://gscan2pdf.sourceforge.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pacien ];
+    mainProgram = "gscan2pdf";
   };
 }

@@ -2,22 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vivid";
-  version = "0.7.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2rdNjpJrBuj6toLFzFJScNh6od5qUhkSaZF+NbPBlQA=";
+    hash = "sha256-mxBBfezaMM2dfiXK/s+Htr+i5GJP1xVSXzkmYxEuwNs=";
   };
 
-  cargoSha256 = "sha256-1aox1eiF3hu5guBjRcM3qb6mHJOutI+yargW7X4cFfg=";
+  cargoHash = "sha256-B1PYLUtBcx35NkU/NR+CmM8bF0hfJWmu11vsovFwR+c=";
 
   meta = with lib; {
-    description = "A generator for LS_COLORS with support for multiple color themes";
+    description = "Generator for LS_COLORS with support for multiple color themes";
     homepage = "https://github.com/sharkdp/vivid";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.dtzWill ];
     platforms = platforms.unix;
+    mainProgram = "vivid";
   };
 }

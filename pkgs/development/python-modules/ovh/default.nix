@@ -1,24 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "ovh";
-  version = "0.5.0";
+  version = "1.1.2";
+  format = "setuptools";
 
-  # Needs yanc
-  doCheck = false;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f74d190c4bff0953d76124cb8ed319a8a999138720e42957f0db481ef4746ae8";
+    hash = "sha256-Yarx6ymS/Vr4Gbpa3Qgmbp7eLgAkUeOhYGpMNn3aoE8=";
   };
 
-  meta = {
+  propagatedBuildInputs = [ requests ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "ovh" ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_config_from_files"
+    "test_config_from_given_config_file"
+    "test_config_from_invalid_ini_file"
+    "test_config_from_only_one_file"
+    "test_endpoints"
+  ];
+
+  meta = with lib; {
     description = "Thin wrapper around OVH's APIs";
     homepage = "https://github.com/ovh/python-ovh";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.makefu ];
+    changelog = "https://github.com/ovh/python-ovh/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ makefu ];
   };
 }

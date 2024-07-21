@@ -1,16 +1,16 @@
 {lib, stdenv, fetchurl, unzip, makeDesktopItem, copyDesktopItems, nwjs
-, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
+, wrapGAppsHook3, gsettings-desktop-schemas, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "emuflight-configurator";
-  version = "0.4.0";
+  version = "0.4.3";
 
   src = fetchurl {
     url = "https://github.com/emuflight/EmuConfigurator/releases/download/${version}/emuflight-configurator_${version}_linux64.zip";
-    sha256 = "sha256-s5AE+r9Fw6S7IG2cDW2T7vctcYIAY8al7eCFIDjD5oI=";
+    sha256 = "sha256-7NcN1wF3BUClJBVm13VnV80N/+a2jAEIRqB/x9+GDEg=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook unzip copyDesktopItems ];
+  nativeBuildInputs = [ wrapGAppsHook3 unzip copyDesktopItems ];
 
   buildInputs = [ gsettings-desktop-schemas gtk3 ];
 
@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The Emuflight flight control system configuration tool";
+    description = "Emuflight flight control system configuration tool";
+    mainProgram = "emuflight-configurator";
     longDescription = ''
       A crossplatform configuration tool for the Emuflight flight control system.
       Various types of aircraft are supported by the tool and by Emuflight, e.g.
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
       The application allows you to configure the Emuflight software running on any supported Emuflight target.
     '';
     homepage    = "https://github.com/emuflight/EmuConfigurator";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.gpl3Only;
     maintainers = with maintainers; [ beezow ];
     platforms   = platforms.linux;

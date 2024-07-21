@@ -1,43 +1,59 @@
 { lib
-, pkgs
-, python3
+, callPackage
+, python3Packages
 , fetchFromGitHub
-, fetchpatch
+, installShellFiles
 , platformio
 , esptool
 , git
+, inetutils
+, stdenv
 }:
 
 let
-  python = python3.override {
+  python = python3Packages.python.override {
     packageOverrides = self: super: {
-      esphome-dashboard = pkgs.callPackage ./dashboard.nix {};
+      esphome-dashboard = self.callPackage ./dashboard.nix { };
     };
   };
 in
-with python.pkgs; buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2021.12.1";
-  format = "setuptools";
+  version = "2024.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-sxGlvbWlHrAVjCIKx4WsnmKQN4iOVfX+vnkntqceHDA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bQGsLt8+WPaQfQ9ReKGrIS1O071LkpAxJerfHO3E0Oc=";
   };
 
-  patches = [
-    # fix missing write permissions on src files before modifing them
-    ./fix-src-permissions.patch
+  nativeBuildInputs = with python.pkgs; [
+    setuptools
+    argcomplete
+    installShellFiles
+  ];
+
+  pythonRelaxDeps = true;
+
+  pythonRemoveDeps = [
+    "esptool"
+    "platformio"
   ];
 
   postPatch = ''
-    # remove all version pinning (E.g tornado==5.1.1 -> tornado)
-    sed -i -e "s/==[0-9.]*//" requirements.txt
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==" "setuptools>="
 
     # drop coverage testing
-    sed -i '/--cov/d' pytest.ini
+    sed -i '/--cov/d' pyproject.toml
+
+    # ensure component dependencies are available
+    cat requirements_optional.txt >> requirements.txt
+    # relax strict runtime version check
+    substituteInPlace esphome/components/font/__init__.py \
+      --replace-fail "10.2.0" "${python.pkgs.pillow.version}"
   '';
 
   # Remove esptool and platformio from requirements
@@ -49,19 +65,27 @@ with python.pkgs; buildPythonApplication rec {
   # They have validation functions like:
   # - validate_cryptography_installed
   # - validate_pillow_installed
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python.pkgs; [
     aioesphomeapi
+    argcomplete
+    cairosvg
     click
     colorama
     cryptography
     esphome-dashboard
-    ifaddr
+    icmplib
     kconfiglib
+    packaging
     paho-mqtt
     pillow
+    platformio
     protobuf
+    pyparsing
     pyserial
+    python-magic
     pyyaml
+    requests
+    ruamel-yaml
     tornado
     tzdata
     tzlocal
@@ -69,44 +93,56 @@ with python.pkgs; buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    # platformio is used in esphomeyaml/platformio_api.py
-    # esptool is used in esphomeyaml/__main__.py
-    # git is used in esphomeyaml/writer.py
-    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git ]}"
+    # platformio is used in esphome/platformio_api.py
+    # esptool is used in esphome/__main__.py
+    # git is used in esphome/writer.py
+    # inetutils is used in esphome/dashboard/status/ping.py
+    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git inetutils ]}"
+    "--prefix PYTHONPATH : ${python.pkgs.makePythonPath propagatedBuildInputs}" # will show better error messages
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
 
-  checkInputs = [
+  # Needed for tests
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = with python3Packages; [
     hypothesis
     mock
     pytest-asyncio
     pytest-mock
-    pytest-sugar
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # requires hypothesis 5.49, we have 6.x
-    # ImportError: cannot import name 'ip_addresses' from 'hypothesis.provisional'
-    "tests/unit_tests/test_core.py"
-    "tests/unit_tests/test_helpers.py"
   ];
 
   postCheck = ''
     $out/bin/esphome --help > /dev/null
   '';
 
+  postInstall =
+    let
+      argcomplete = lib.getExe' python3Packages.argcomplete "register-python-argcomplete";
+    in
+    ''
+      installShellCompletion --cmd esphome \
+        --bash <(${argcomplete} --shell bash esphome) \
+        --zsh <(${argcomplete} --shell zsh esphome) \
+        --fish <(${argcomplete} --shell fish esphome)
+    '';
+
   passthru = {
-    dashboard = esphome-dashboard;
+    dashboard = python.pkgs.esphome-dashboard;
+    updateScript = callPackage ./update.nix { };
   };
 
   meta = with lib; {
+    changelog = "https://github.com/esphome/esphome/releases/tag/${version}";
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
     license = with licenses; [
       mit # The C++/runtime codebase of the ESPHome project (file extensions .c, .cpp, .h, .hpp, .tcc, .ino)
       gpl3Only # The python codebase and all other parts of this codebase
     ];
-    maintainers = with maintainers; [ globin elseym hexa ];
+    maintainers = with maintainers; [ globin hexa ];
+    mainProgram = "esphome";
   };
 }

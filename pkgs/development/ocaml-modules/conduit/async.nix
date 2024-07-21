@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, async, async_ssl, ppx_sexp_conv, ppx_here, uri, conduit
+{ buildDunePackage, async, async_ssl ? null, ppx_sexp_conv, ppx_here, uri, conduit
 , core, ipaddr, ipaddr-sexp, sexplib
 }:
 
@@ -7,8 +7,6 @@ buildDunePackage {
   inherit (conduit)
     version
     src
-    minimumOCamlVersion
-    useDune2
     ;
 
   buildInputs = [ ppx_sexp_conv ppx_here ];
@@ -25,6 +23,6 @@ buildDunePackage {
   ];
 
   meta = conduit.meta // {
-    description = "A network connection establishment library for Async";
+    description = "Network connection establishment library for Async";
   };
 }

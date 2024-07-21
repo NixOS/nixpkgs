@@ -12,8 +12,9 @@ mkDerivation {
   meta = with lib; {
     homepage = "https://apps.kde.org/k3b/";
     description = "Disk burning application";
+    mainProgram = "k3b";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ sander phreedom ];
+    maintainers = with maintainers; [ sander ];
     platforms = platforms.linux;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];

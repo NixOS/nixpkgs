@@ -9,26 +9,46 @@
 , enableJpeg8 ? false # whether to build libjpeg with v8 compatibility
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
+
+# for passthru.tests
+, dvgrab
+, epeg
+, freeimage
+, gd
+, graphicsmagick
+, imagemagick
+, imlib2
+, jhead
+, libjxl
+, mjpegtools
+, opencv
+, python3
+, vips
+, testers
 }:
 
 assert !(enableJpeg7 && enableJpeg8);  # pick only one or none, not both
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "libjpeg-turbo";
-  version = "2.1.0";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
-    rev = version;
-    sha256 = "sha256-Ma3Q/zMJPjsQmoaYJtVbHJOx65AfGLWJYi2iRFm3l5s=";
+    rev = finalAttrs.version;
+    hash = "sha256-w2wJaVf4sjJ9pPPqc9R4TE6Q6Yl0U6+fI5KLpQKwEXI=";
   };
 
-  # This is needed by freeimage
-  patches = [ ./0001-Compile-transupp.c-as-part-of-the-library.patch ]
-    ++ lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
-    ./mingw-boolean.patch;
+  patches = [
+    # This is needed by freeimage
+    ./0001-Compile-transupp.c-as-part-of-the-library.patch
+  ] ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
+    ./0002-Make-exported-symbols-in-transupp.c-weak.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    ./mingw-boolean.patch
+  ];
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
 
@@ -61,11 +81,30 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckTarget = "test";
 
+  passthru.tests = {
+    inherit
+      dvgrab
+      epeg
+      freeimage
+      gd
+      graphicsmagick
+      imagemagick
+      imlib2
+      jhead
+      libjxl
+      mjpegtools
+      opencv
+      vips;
+    inherit (python3.pkgs) pillow imread pyturbojpeg;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
     homepage = "https://libjpeg-turbo.org/";
-    description = "A faster (using SIMD) libjpeg implementation";
+    description = "Faster (using SIMD) libjpeg implementation";
     license = licenses.ijg; # and some parts under other BSD-style licenses
+    pkgConfigModules = [ "libjpeg" "libturbojpeg" ];
     maintainers = with maintainers; [ vcunat colemickens kamadorueda ];
     platforms = platforms.all;
   };
-}
+})

@@ -1,8 +1,8 @@
-{ lib, buildFHSUserEnv, arduino-core-unwrapped, withGui ? false, withTeensyduino ? false }:
+{ lib, buildFHSEnv, arduino-core-unwrapped, withGui ? false, withTeensyduino ? false }:
 let
   arduino-unwrapped = arduino-core-unwrapped.override { inherit withGui withTeensyduino; };
 in
-buildFHSUserEnv {
+buildFHSEnv {
   name = "arduino";
 
   targetPkgs =
@@ -14,7 +14,6 @@ buildFHSUserEnv {
         pyserial
       ]))
     ]);
-  multiPkgs = null;
 
   extraInstallCommands = ''
     ${lib.optionalString withGui ''

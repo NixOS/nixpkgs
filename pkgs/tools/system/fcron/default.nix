@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcron";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "http://fcron.free.fr/archives/${pname}-${version}.src.tar.gz";
-    sha256 = "0q5b1fdq1rpsd4lj7v717x47pmn62hhm13394g0yxqi614xd7sls";
+    sha256 = "sha256-81naoIpj3ft/4vlkuz9cUiRMJao2+SJaPMVNNvRoEQY=";
   };
 
   buildInputs = [ perl ];
@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description="A command scheduler with extended capabilities over cron and anacron";
+    description="Command scheduler with extended capabilities over cron and anacron";
     homepage = "http://fcron.free.fr";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
 }

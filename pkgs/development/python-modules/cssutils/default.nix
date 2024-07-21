@@ -1,61 +1,56 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools-scm
-, toml
-, importlib-metadata
-, cssselect
-, lxml
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools-scm,
+  more-itertools,
+  cssselect,
+  jaraco-test,
+  lxml,
+  mock,
+  pytestCheckHook,
+  importlib-resources,
 }:
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "2.3.0";
+  version = "2.11.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-stOxYEfKroLlxZADaTW6+htiHPRcLziIWvS+SDjw/QA=";
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "cssutils";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-U9myMfKz1HpYVJXp85izRBpm2wjLHYZj8bUVt3ROTEg=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-    toml
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  dependencies = [ more-itertools ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cssselect
+    jaraco-test
     lxml
     mock
     pytestCheckHook
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   disabledTests = [
     # access network
-    "test_parseUrl"
     "encutils"
     "website.logging"
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    # AttributeError: module 'importlib.resources' has no attribute 'files'
-    "test_parseFile"
-    "test_parseString"
-    "test_combine"
   ];
 
   pythonImportsCheck = [ "cssutils" ];
 
   meta = with lib; {
-    description = "A CSS Cascading Style Sheets library for Python";
+    description = "CSS Cascading Style Sheets library for Python";
     homepage = "https://github.com/jaraco/cssutils";
-    changelog = "https://github.com/jaraco/cssutils/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/jaraco/cssutils/blob/${src.rev}/NEWS.rst";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
   };

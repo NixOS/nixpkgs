@@ -3,8 +3,7 @@
 with lib;
 
 let
-
-  eachBitcoind = config.services.bitcoind;
+  eachBitcoind = filterAttrs (bitcoindName: cfg: cfg.enable) config.services.bitcoind;
 
   rpcUserOpts = { name, ... }: {
     options = {
@@ -20,10 +19,10 @@ let
         example = "f7efda5c189b999524f151318c0c86$d5b51b3beffbc02b724e5d095828e0bc8b2456e9ac8757ae3211a5d9b16a22ae";
         description = ''
           Password HMAC-SHA-256 for JSON-RPC connections. Must be a string of the
-          format &lt;SALT-HEX&gt;$&lt;HMAC-HEX&gt;.
+          format \<SALT-HEX\>$\<HMAC-HEX\>.
 
           Tool (Python script) for HMAC generation is available here:
-          <link xlink:href="https://github.com/bitcoin/bitcoin/blob/master/share/rpcauth/rpcauth.py"/>
+          <https://github.com/bitcoin/bitcoin/blob/master/share/rpcauth/rpcauth.py>
         '';
       };
     };
@@ -37,12 +36,7 @@ let
 
       enable = mkEnableOption "Bitcoin daemon";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.bitcoind;
-        defaultText = literalExpression "pkgs.bitcoind";
-        description = "The package providing bitcoin binaries.";
-      };
+      package = mkPackageOption pkgs "bitcoind" { };
 
       configFile = mkOption {
         type = types.nullOr types.path;
@@ -59,7 +53,7 @@ let
           rpcthreads=16
           logips=1
         '';
-        description = "Additional configurations to be appended to <filename>bitcoin.conf</filename>.";
+        description = "Additional configurations to be appended to {file}`bitcoin.conf`.";
       };
 
       dataDir = mkOption {
@@ -95,7 +89,7 @@ let
             }
           '';
           type = types.attrsOf (types.submodule rpcUserOpts);
-          description = "RPC user information for JSON-RPC connnections.";
+          description = "RPC user information for JSON-RPC connections.";
         };
       };
 
@@ -204,7 +198,8 @@ in
         '';
       in {
         description = "Bitcoin daemon";
-        after = [ "network.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = cfg.user;

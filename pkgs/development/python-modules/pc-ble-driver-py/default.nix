@@ -1,30 +1,32 @@
-{ lib
-, boost
-, buildPythonPackage
-, cmake
-, cryptography
-, fetchFromGitHub
-, git
-, pc-ble-driver
-, pythonAtLeast
-, pythonOlder
-, scikit-build
-, setuptools
-, swig
-, wrapt
+{
+  lib,
+  boost,
+  buildPythonPackage,
+  cmake,
+  cryptography,
+  fetchFromGitHub,
+  git,
+  pc-ble-driver,
+  pythonAtLeast,
+  pythonOlder,
+  scikit-build,
+  setuptools,
+  swig,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "pc-ble-driver-py";
-  version = "0.16.1";
+  version = "0.17.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.10";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = "pc-ble-driver-py";
-    rev = "v${version}";
-    sha256 = "0q2zag77drcjkjm0cbvy2sf6fq2a4yl5li1zv1xfwmy53ami9b5l";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-brC33ar2Jq3R2xdrklvVsQKf6pcnKwD25PO4TIvXgTg=";
   };
 
   nativeBuildInputs = [
@@ -50,15 +52,14 @@ buildPythonPackage rec {
   # doCheck tries to write to the global python directory to install things
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pc_ble_driver_py"
-  ];
+  pythonImportsCheck = [ "pc_ble_driver_py" ];
 
   meta = with lib; {
     description = "Bluetooth Low Energy nRF5 SoftDevice serialization";
     homepage = "https://github.com/NordicSemiconductor/pc-ble-driver-py";
+    changelog = "https://github.com/NordicSemiconductor/pc-ble-driver-py/releases/tag/v${version}";
     license = licenses.unfreeRedistributable;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ gebner ];
+    platforms = platforms.unix;
   };
 }

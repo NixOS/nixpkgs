@@ -30,14 +30,16 @@ in bundlerApp {
     then ./full
     else ./basic;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/jekyll --prefix PATH : ${rubyWrapper}/bin
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
-    description = "A blog-aware, static site generator, written in Ruby";
+    description = "Blog-aware, static site generator, written in Ruby";
     longDescription = ''
       Jekyll is a simple, blog-aware, static site generator, written in Ruby.
       Think of it like a file-based CMS, without all the complexity. Jekyll
@@ -51,5 +53,6 @@ in bundlerApp {
     license     = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms   = platforms.unix;
+    mainProgram = "jekyll";
   };
 }

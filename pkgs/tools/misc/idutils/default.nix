@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, emacs, gnulib, autoconf, bison, automake, gettext, gperf, texinfo, perl, rsync, gawk}:
+{ fetchurl, lib, stdenv, emacs, gnulib, autoconf, bison, automake, gettext, gperf, texinfo, perl, rsync, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "idutils";
@@ -16,8 +16,13 @@ stdenv.mkDerivation rec {
     ./bootstrap --force --gnulib-srcdir=${gnulib} --skip-po --bootstrap-sync --no-git
     '';
 
-  buildInputs = lib.optional stdenv.isLinux emacs;
-  nativeBuildInputs = [ gnulib autoconf bison automake gettext gperf texinfo perl rsync gawk ];
+  buildInputs = lib.optionals stdenv.isLinux [
+    emacs
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
+
+  nativeBuildInputs = [ gnulib autoconf bison automake gettext gperf texinfo perl rsync ];
 
   doCheck = !stdenv.isDarwin;
 

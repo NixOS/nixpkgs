@@ -1,17 +1,27 @@
-{lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, cctools
+, autoSignDarwinBinariesHook
+, fixDarwinDylibNames
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "liquid-dsp";
-  version = "20170307";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "jgaeddert";
     repo = "liquid-dsp";
-    rev = "8c1978fa4f5662b8849fe712be716958f29cec0e";
-    sha256 = "0zpxvdsrw0vzzp3iaag3wh4z8ygl7fkswgjppp2fz2zhhqh93k2w";
+    rev = "v${version}";
+    sha256 = "sha256-3UKAwhYaYZ42+d+wiW/AB6x5TSOel8d++d3HeZqAg/8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  configureFlags = lib.optionals stdenv.isDarwin [ "LIBTOOL=${cctools}/bin/libtool" ];
+
+  nativeBuildInputs = [ autoreconfHook ]
+    ++ lib.optionals stdenv.isDarwin [ cctools autoSignDarwinBinariesHook fixDarwinDylibNames ];
 
   meta = {
     homepage = "https://liquidsdr.org/";
@@ -19,5 +29,4 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-
 }

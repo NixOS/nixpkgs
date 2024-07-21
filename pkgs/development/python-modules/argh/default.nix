@@ -1,34 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, py
-, mock
-, glibcLocales
-, iocapture
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  iocapture,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "argh";
-  version = "0.26.2";
+  version = "0.31.3";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e9535b8c84dc9571a48999094fda7f33e63c3f1b74f3e5f3ac0105a58405bb65";
+    hash = "sha256-8wAj2L4Uyl7msbPuq4KRUde72kZK4H3E3VNHkZxYkvk=";
   };
 
-  checkInputs = [ pytest py mock glibcLocales iocapture ];
+  nativeBuildInputs = [ flit-core ];
 
-  checkPhase = ''
-    export LANG="en_US.UTF-8"
-    py.test
-  '';
+  nativeCheckInputs = [
+    iocapture
+    mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "argh" ];
 
   meta = with lib; {
-    homepage = "https://github.com/neithere/argh/";
-    description = "An unobtrusive argparse wrapper with natural syntax";
-    license = licenses.lgpl2;
+    changelog = "https://github.com/neithere/argh/blob/v${version}/CHANGES";
+    homepage = "https://github.com/neithere/argh";
+    description = "Unobtrusive argparse wrapper with natural syntax";
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

@@ -6,14 +6,6 @@
 , glib
 , pango
 , gtk2
-, GConf ? null
-, libglade ? null
-, libgtkhtml ? null
-, gtkhtml ? null
-, libgnomecanvas ? null
-, libgnomeui ? null
-, libgnomeprint ? null
-, libgnomeprintui ? null
 , libxml2
 , monoDLLFixer
 , autoconf
@@ -54,13 +46,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoconf automake libtool which ];
 
   buildInputs = [
-    mono glib pango gtk2 GConf libglade libgnomecanvas
-    libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
+    mono glib pango gtk2
+    libxml2
   ];
 
   preConfigure = ''
     ./bootstrap-${lib.versions.majorMinor version}
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-error=int-conversion"
+  ]);
 
   dontStrip = true;
 
@@ -73,7 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Graphical User Interface Toolkit for mono and .Net";
     homepage = "https://www.mono-project.com/docs/gui/gtksharp";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.gpl2;
   };
 }

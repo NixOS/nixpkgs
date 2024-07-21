@@ -1,16 +1,19 @@
-{ mkDerivation, ansi-wl-pprint, base, fetchgit, lib, process, QuickCheck
+{ mkDerivation, base, fetchFromGitHub, lib, prettyprinter
+, prettyprinter-ansi-terminal, process, QuickCheck, text
 , transformers, transformers-compat
 }:
 mkDerivation {
   pname = "hercules-ci-optparse-applicative";
-  version = "0.16.1.0";
-  src = fetchgit {
-    url = "https://github.com/hercules-ci/optparse-applicative.git";
-    sha256 = "05vchaw2rf46hh2128qjpky686iy5hff964mbdhcyiz612jjflyp";
-    rev = "9e2968c09a7c5b29d04578dc68d81ce5aec0591e";
+  version = "0.18.1.0";
+  src = fetchFromGitHub {
+    owner = "hercules-ci";
+    repo = "optparse-applicative";
+    sha256 = "1cgxc80zfgzk4rrhspnlj7790jb0ddq7ybj7qjan5xmjjir90763";
+    rev = "a123939663ba1cd0f1750343f1c6b9864ac21207";
   };
   libraryHaskellDepends = [
-    ansi-wl-pprint base process transformers transformers-compat
+    base prettyprinter prettyprinter-ansi-terminal process text
+    transformers transformers-compat
   ];
   testHaskellDepends = [ base QuickCheck ];
   homepage = "https://github.com/hercules-ci/optparse-applicative";

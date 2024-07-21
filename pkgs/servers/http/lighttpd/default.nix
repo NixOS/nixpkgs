@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchurl, pkg-config, pcre, libxml2, zlib, bzip2, which, file
+{ lib, stdenv, buildPackages, fetchurl, pkg-config, pcre2, libxml2, zlib, bzip2, which, file
 , openssl
 , enableDbi ? false, libdbi
 , enableMagnet ? false, lua5_1
@@ -7,29 +7,30 @@
 , enablePam ? false, linux-pam
 , enableSasl ? false, cyrus_sasl
 , enableWebDAV ? false, sqlite, libuuid
-, enableExtendedAttrs ? false, attr
+, enableExtendedAttrs ? false
 , perl
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
-  version = "1.4.59";
+  version = "1.4.75";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
-    sha256 = "sha256-+5U9snPa7wjttuICVWyuij0H7tYIHJa9mQPblX0QhNU=";
+    sha256 = "sha256-i3IcqTnTEq+qbvMdy9avtRYe04Wsgo5vzNTFt2vhidY=";
   };
+
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs tests
-    # Linux sandbox has an empty hostname and not /etc/hosts, which fails some tests
-    sed -ire '/[$]self->{HOSTNAME} *=/i     if(length($name)==0) { $name = "127.0.0.1" }' tests/LightyTest.pm
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcre pcre.dev libxml2 zlib bzip2 which file openssl ]
+  buildInputs = [ pcre2 pcre2.dev libxml2 zlib bzip2 which file openssl ]
              ++ lib.optional enableDbi libdbi
              ++ lib.optional enableMagnet lua5_1
              ++ lib.optional enableMysql libmysqlclient
@@ -51,11 +52,11 @@ stdenv.mkDerivation rec {
                 ++ lib.optional enableExtendedAttrs "--with-attr";
 
   preConfigure = ''
-    export PATH=$PATH:${pcre.dev}/bin
+    export PATH=$PATH:${pcre2.dev}/bin
     sed -i "s:/usr/bin/file:${file}/bin/file:g" configure
   '';
 
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
   doCheck = true;
 
   postInstall = ''
@@ -67,11 +68,16 @@ stdenv.mkDerivation rec {
     rm "$out/share/lighttpd/doc/config/vhosts.d/Makefile"*
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) lighttpd;
+  };
+
   meta = with lib; {
     description = "Lightweight high-performance web server";
     homepage = "http://www.lighttpd.net/";
     license = lib.licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor brecht ];
+    mainProgram = "lighttpd";
   };
 }

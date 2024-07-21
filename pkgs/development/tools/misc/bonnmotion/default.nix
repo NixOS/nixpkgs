@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A mobility scenario generation and analysis tool";
+    description = "Mobility scenario generation and analysis tool";
+    mainProgram = "bm";
     longDescription = ''
       BonnMotion is a Java software which creates and analyzes mobility
       scenarios and is most commonly used as a tool for the investigation of
@@ -44,6 +45,10 @@ stdenv.mkDerivation rec {
       COOJA, MiXiM, and ONE.
     '';
     homepage = "https://sys.cs.uos.de/bonnmotion/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependency jars
+    ];
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ oxzi ];
   };

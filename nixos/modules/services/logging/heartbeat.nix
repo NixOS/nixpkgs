@@ -18,7 +18,11 @@ in
 
     services.heartbeat = {
 
-      enable = mkEnableOption "heartbeat";
+      enable = mkEnableOption "heartbeat, uptime monitoring";
+
+      package = mkPackageOption pkgs "heartbeat" {
+        example = "heartbeat7";
+      };
 
       name = mkOption {
         type = types.str;
@@ -67,7 +71,7 @@ in
       serviceConfig = {
         User = "nobody";
         AmbientCapabilities = "cap_net_raw";
-        ExecStart = "${pkgs.heartbeat}/bin/heartbeat -c \"${heartbeatYml}\" -path.data \"${cfg.stateDir}/data\" -path.logs \"${cfg.stateDir}/logs\"";
+        ExecStart = "${cfg.package}/bin/heartbeat -c \"${heartbeatYml}\" -path.data \"${cfg.stateDir}/data\" -path.logs \"${cfg.stateDir}/logs\"";
       };
     };
   };

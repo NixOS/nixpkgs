@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xwallpaper";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "stoeckmann";
     repo = "xwallpaper";
     rev = "v${version}";
-    sha256 = "sha256-O4VynpP3VJY/p6+NLUuKetwoMfbp93aXTiRoQJkgW+c=";
+    sha256 = "sha256-onxneLmXs1rYwpTzcnn+rbDboWVoEQgtGMHx/bMPRa8=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook installShellFiles ];
@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/stoeckmann/xwallpaper";
     description = "Utility for setting wallpapers in X";
     license = licenses.isc;
-    maintainers = with maintainers; [ ivar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "xwallpaper";
   };
 }

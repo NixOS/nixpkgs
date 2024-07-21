@@ -15,7 +15,7 @@ in
       default = "/var/lib/weechat";
     };
     sessionName = mkOption {
-      description = "Name of the `screen' session for weechat.";
+      description = "Name of the `screen` session for weechat.";
       default = "weechat-screen";
       type = types.str;
     };
@@ -59,5 +59,5 @@ in
       };
   };
 
-  meta.doc = ./weechat.xml;
+  meta.doc = ./weechat.md;
 }

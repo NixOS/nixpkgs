@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
   };
 }

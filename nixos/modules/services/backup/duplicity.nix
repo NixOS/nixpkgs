@@ -29,8 +29,7 @@ in
       example = [ "/home" ];
       description = ''
         List of paths to include into the backups. See the FILE SELECTION
-        section in <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry> for details on the syntax.
+        section in {manpage}`duplicity(1)` for details on the syntax.
       '';
     };
 
@@ -39,8 +38,29 @@ in
       default = [ ];
       description = ''
         List of paths to exclude from backups. See the FILE SELECTION section in
-        <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry> for details on the syntax.
+        {manpage}`duplicity(1)` for details on the syntax.
+      '';
+    };
+
+    includeFileList = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = /path/to/fileList.txt;
+      description = ''
+        File containing newline-separated list of paths to include into the
+        backups. See the FILE SELECTION section in {manpage}`duplicity(1)` for
+        details on the syntax.
+      '';
+    };
+
+    excludeFileList = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = /path/to/fileList.txt;
+      description = ''
+        File containing newline-separated list of paths to exclude into the
+        backups. See the FILE SELECTION section in {manpage}`duplicity(1)` for
+        details on the syntax.
       '';
     };
 
@@ -49,8 +69,7 @@ in
       example = "s3://host:port/prefix";
       description = ''
         Target url to backup to. See the URL FORMAT section in
-        <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry> for supported urls.
+        {manpage}`duplicity(1)` for supported urls.
       '';
     };
 
@@ -60,13 +79,12 @@ in
       description = ''
         Path of a file containing secrets (gpg passphrase, access key...) in
         the format of EnvironmentFile as described by
-        <citerefentry><refentrytitle>systemd.exec</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry>. For example:
-        <programlisting>
-        PASSPHRASE=<replaceable>...</replaceable>
-        AWS_ACCESS_KEY_ID=<replaceable>...</replaceable>
-        AWS_SECRET_ACCESS_KEY=<replaceable>...</replaceable>
-        </programlisting>
+        {manpage}`systemd.exec(5)`. For example:
+        ```
+        PASSPHRASE=«...»
+        AWS_ACCESS_KEY_ID=«...»
+        AWS_SECRET_ACCESS_KEY=«...»
+        ```
       '';
     };
 
@@ -75,8 +93,7 @@ in
       default = "daily";
       description = ''
         Run duplicity with the given frequency (see
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry> for the format).
+        {manpage}`systemd.time(7)` for the format).
         If null, do not run automatically.
       '';
     };
@@ -87,8 +104,7 @@ in
       example = [ "--backend-retry-delay" "100" ];
       description = ''
         Extra command-line flags passed to duplicity. See
-        <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry>.
+        {manpage}`duplicity(1)`.
       '';
     };
 
@@ -97,9 +113,9 @@ in
       default = "never";
       example = "1M";
       description = ''
-        If <literal>"never"</literal> (the default) always do incremental
+        If `"never"` (the default) always do incremental
         backups (the first backup will be a full backup, of course).  If
-        <literal>"always"</literal> always do full backups.  Otherwise, this
+        `"always"` always do full backups.  Otherwise, this
         must be a string representing a duration. Full backups will be made
         when the latest full backup is older than this duration. If this is not
         the case, an incremental backup is performed.
@@ -160,6 +176,8 @@ in
             ${lib.optionalString (cfg.cleanup.maxIncr != null) "${dup} remove-all-inc-of-but-n-full ${toString cfg.cleanup.maxIncr} ${target} --force ${extra}"}
             exec ${dup} ${if cfg.fullIfOlderThan == "always" then "full" else "incr"} ${lib.escapeShellArgs (
               [ cfg.root cfg.targetUrl ]
+              ++ lib.optionals (cfg.includeFileList != null) [ "--include-filelist" cfg.includeFileList ]
+              ++ lib.optionals (cfg.excludeFileList != null) [ "--exclude-filelist" cfg.excludeFileList ]
               ++ concatMap (p: [ "--include" p ]) cfg.include
               ++ concatMap (p: [ "--exclude" p ]) cfg.exclude
               ++ (lib.optionals (cfg.fullIfOlderThan != "never" && cfg.fullIfOlderThan != "always") [ "--full-if-older-than" cfg.fullIfOlderThan ])

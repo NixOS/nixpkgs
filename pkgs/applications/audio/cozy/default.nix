@@ -1,57 +1,41 @@
-{ lib, fetchFromGitHub
-, ninja
+{ lib
+, python3Packages
+, fetchFromGitHub
 , meson
+, ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , appstream-glib
 , desktop-file-utils
-, gtk3
-, gst_all_1
 , gobject-introspection
-, libhandy
-, libdazzle
-, python3Packages
-, cairo
-, gettext
-, gnome
-, pantheon
+, libadwaita
+, gst_all_1
 }:
 
 python3Packages.buildPythonApplication rec {
-
-  format = "other"; # no setup.py
-
   pname = "cozy";
-  version = "1.1.2";
-
-  # Temporary fix
-  # See https://github.com/NixOS/nixpkgs/issues/57029
-  # and https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
+  version = "1.3.0";
+  pyproject = false; # built with meson
 
   src = fetchFromGitHub {
     owner = "geigi";
-    repo = pname;
+    repo = "cozy";
     rev = version;
-    sha256 = "sha256-QENn8mFMk06/Uj8QJo0mJQ7frJNcv5RVNJwDB+H/LkI=";
+    hash = "sha256-oMgdz2dny0u1XV13aHu5s8/pcAz8z/SAOf4hbCDsdjw";
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config
-    wrapGAppsHook
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook4
     appstream-glib
     desktop-file-utils
     gobject-introspection
   ];
 
   buildInputs = [
-    gtk3
-    cairo
-    gettext
-    gnome.adwaita-icon-theme
-    libdazzle
-    libhandy
-    pantheon.granite
+    libadwaita
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-good
@@ -61,32 +45,30 @@ python3Packages.buildPythonApplication rec {
   ]);
 
   propagatedBuildInputs = with python3Packages; [
-    apsw
-    cairo
-    dbus-python
     distro
-    gst-python
-    magic
     mutagen
-    packaging
     peewee
     pygobject3
     pytz
     requests
   ];
 
-  postPatch = ''
-    patchShebangs meson/*.py
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  postInstall = ''
+  postFixup = ''
     ln -s $out/bin/com.github.geigi.cozy $out/bin/cozy
   '';
 
   meta = with lib; {
-    description = "A modern audio book player for Linux using GTK 3";
+    description = "Modern audio book player for Linux";
     homepage = "https://cozy.geigi.de/";
-    maintainers = [ maintainers.makefu ];
-    license = licenses.gpl3;
+    maintainers = with maintainers; [ makefu aleksana ];
+    license = licenses.gpl3Plus;
+    mainProgram = "com.github.geigi.cozy";
+    platforms = platforms.linux;
   };
 }

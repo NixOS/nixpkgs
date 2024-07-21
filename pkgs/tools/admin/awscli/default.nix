@@ -1,79 +1,90 @@
 { lib
 , python3
+, fetchPypi
 , groff
 , less
+, nix-update-script
+, testers
+, awscli
 }:
+
 let
-  py = python3.override {
-    packageOverrides = self: super: {
-      # TODO: https://github.com/aws/aws-cli/pull/5712
-      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.3";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "189n8hpijy14jfan4ha9f5n06mnl33cxz7ay92wjqgkr639s0vg9";
-        };
-      });
+  self = python3.pkgs.buildPythonApplication rec {
+    pname = "awscli";
+    # N.B: if you change this, change botocore and boto3 to a matching version too
+    # check e.g. https://github.com/aws/aws-cli/blob/1.33.21/setup.py
+    version = "1.33.11";
+    pyproject = true;
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-Q8qtGChOnscOm7m3s7bWwUFmrUwMua9N6uz1Lyc8QIY=";
+    };
+
+    pythonRelaxDeps = [
+      # botocore must not be relaxed
+      "colorama"
+      "docutils"
+      "rsa"
+    ];
+
+    build-system = [
+      python3.pkgs.setuptools
+    ];
+
+    propagatedBuildInputs = with python3.pkgs; [
+      botocore
+      s3transfer
+      colorama
+      docutils
+      rsa
+      pyyaml
+      groff
+      less
+    ];
+
+    postInstall = ''
+      mkdir -p $out/share/bash-completion/completions
+      echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/awscli
+
+      mkdir -p $out/share/zsh/site-functions
+      mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
+
+      rm $out/bin/aws.cmd
+    '';
+
+    doInstallCheck = true;
+
+    installCheckPhase = ''
+      runHook preInstallCheck
+
+      $out/bin/aws --version | grep "${python3.pkgs.botocore.version}"
+      $out/bin/aws --version | grep "${version}"
+
+      runHook postInstallCheck
+    '';
+
+    passthru = {
+      python = python3; # for aws_shell
+      updateScript = nix-update-script {
+        extraArgs = [ "--version=skip" ];
+      };
+      tests.version = testers.testVersion {
+        package = awscli;
+        command = "aws --version";
+        inherit version;
+      };
+    };
+
+    meta = with lib; {
+      homepage = "https://aws.amazon.com/cli/";
+      changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
+      description = "Unified tool to manage your AWS services";
+      license = licenses.asl20;
+      mainProgram = "aws";
+      maintainers = with maintainers; [ anthonyroussel ];
     };
   };
-
 in
-with py.pkgs; buildPythonApplication rec {
-  pname = "awscli";
-  version = "1.20.54"; # N.B: if you change this, change botocore and boto3 to a matching version too
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-stnuPobBKIpKA4iTKGTO5kmMEl7grFdZNryz40S599M=";
-  };
-
-  # https://github.com/aws/aws-cli/issues/4837
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "docutils>=0.10,<0.16" "docutils>=0.10"
-  '';
-
-  propagatedBuildInputs = [
-    botocore
-    bcdoc
-    s3transfer
-    six
-    colorama
-    docutils
-    rsa
-    pyyaml
-    groff
-    less
-  ];
-
-  postInstall = ''
-    mkdir -p $out/share/bash-completion/completions
-    echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/awscli
-
-    mkdir -p $out/share/zsh/site-functions
-    mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
-
-    rm $out/bin/aws.cmd
-  '';
-
-  passthru = {
-    python = py; # for aws_shell
-  };
-
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out/bin/aws --version | grep "${py.pkgs.botocore.version}"
-    $out/bin/aws --version | grep "${version}"
-
-    runHook postInstallCheck
-  '';
-
-  meta = with lib; {
-    homepage = "https://aws.amazon.com/cli/";
-    description = "Unified tool to manage your AWS services";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ muflax ];
-  };
-}
+assert self ? pythonRelaxDeps -> !(lib.elem "botocore" self.pythonRelaxDeps);
+self

@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/sieve-connect \
       --prefix PERL5LIB : "${with perlPackages; makePerlPath [
-        AuthenSASL Socket6 IOSocketInet6 IOSocketSSL NetSSLeay NetDNS
+        AuthenSASL Socket6 IOSocketINET6 IOSocketSSL NetSSLeay NetDNS
         TermReadKey TermReadLineGnu ]}"
   '';
 
   meta = with lib; {
-    description = "A client for the MANAGESIEVE Protocol";
+    description = "Client for the MANAGESIEVE Protocol";
     longDescription = ''
       This is sieve-connect. A client for the ManageSieve protocol,
       as specifed in RFC 5804. Historically, this was MANAGESIEVE as
@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ das_j ];
+    mainProgram = "sieve-connect";
   };
 }

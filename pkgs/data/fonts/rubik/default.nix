@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  sourceRoot = "./";
+  sourceRoot = ".";
 
   unpackCmd = ''
     ttfName=$(basename $(stripHash $curSrc))
@@ -80,7 +80,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://fonts.google.com/specimen/Rubik";
-    description = "Rubik Font - is a 5 weight Roman + Italic family.";
+    description = "Rubik Font - is a 5 weight Roman + Italic family";
     longDescription = ''
       The Rubik Fonts project was initiated as part of the Chrome CubeLab
       project.
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
       spacing and other design details.
 
       Cyrillic was initially designed by Philipp and Sebastian, and then revised and
-      expanded by Cyreal Fonts Team (Alexei Vanyashin and Nikita Kanarev). Exising
+      expanded by Cyreal Fonts Team (Alexei Vanyashin and Nikita Kanarev). Existing
       glyphs were improved, and glyph set was expanded to GF Cyrillic Plus.
     '';
     platforms = platforms.all;

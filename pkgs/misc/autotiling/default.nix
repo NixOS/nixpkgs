@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "autotiling";
-  version = "1.6";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1hjlvg7095s322gb43r9g7mqlsy3pj13l827jpnbn5x0918rq9rr";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-k+UiAGMB/fJiE+C737yGdyTpER1ciZrMkZezkcn/4yk=";
   };
 
   propagatedBuildInputs = [ i3ipc importlib-metadata ];
@@ -20,6 +20,7 @@ buildPythonApplication rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ artturin ];
+    mainProgram = "autotiling";
   };
 }
 

@@ -25,7 +25,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  ntpFlags = "-c ${configFile} -u ntp:ntp ${toString cfg.extraFlags}";
+  ntpFlags = [ "-c" "${configFile}" "-u" "ntp:ntp" ] ++ cfg.extraFlags;
 
 in
 
@@ -43,9 +43,8 @@ in
         description = ''
           Whether to synchronise your machine's time using ntpd, as a peer in
           the NTP network.
-          </para>
-          <para>
-          Disables <literal>systemd.timesyncd</literal> if enabled.
+
+          Disables `systemd.timesyncd` if enabled.
         '';
       };
 
@@ -53,12 +52,11 @@ in
         type = types.listOf types.str;
         description = ''
           The restriction flags to be set by default.
-          </para>
-          <para>
+
           The default flags prevent external hosts from using ntpd as a DDoS
           reflector, setting system time, and querying OS/ntpd version. As
           recommended in section 6.5.1.1.3, answer "No" of
-          http://support.ntp.org/bin/view/Support/AccessRestrictions
+          https://support.ntp.org/Support/AccessRestrictions
         '';
         default = [ "limited" "kod" "nomodify" "notrap" "noquery" "nopeer" ];
       };
@@ -67,8 +65,7 @@ in
         type = types.listOf types.str;
         description = ''
           The restriction flags to be set on source.
-          </para>
-          <para>
+
           The default flags allow peers to be added by ntpd from configured
           pool(s), but not by other means.
         '';
@@ -91,7 +88,7 @@ in
           fudge 127.127.1.0 stratum 10
         '';
         description = ''
-          Additional text appended to <filename>ntp.conf</filename>.
+          Additional text appended to {file}`ntp.conf`.
         '';
       };
 
@@ -140,7 +137,7 @@ in
           '';
 
         serviceConfig = {
-          ExecStart = "@${ntp}/bin/ntpd ntpd -g ${ntpFlags}";
+          ExecStart = "@${ntp}/bin/ntpd ntpd -g ${builtins.toString ntpFlags}";
           Type = "forking";
         };
       };

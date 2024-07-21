@@ -1,7 +1,5 @@
 { buildDunePackage
-, lib
 , fetchFromGitHub
-, ocaml
 , hpack
 , angstrom
 , faraday
@@ -28,10 +26,7 @@ buildDunePackage rec {
   inherit (hpack)
     version
     src
-    useDune2
     ;
-
-  minimumOCamlVersion = "4.06";
 
   propagatedBuildInputs = [
     angstrom
@@ -42,8 +37,7 @@ buildDunePackage rec {
     httpaf
   ];
 
-  # Tests fail with 4.06
-  doCheck = lib.versionAtLeast ocaml.version "4.07";
+  doCheck = true;
   preCheck = ''
     ln -s "${http2-frame-test-case}" lib_test/http2-frame-test-case
   '';
@@ -54,6 +48,6 @@ buildDunePackage rec {
   ];
 
   meta = hpack.meta // {
-    description = "A high-performance, memory-efficient, and scalable HTTP/2 library for OCaml";
+    description = "High-performance, memory-efficient, and scalable HTTP/2 library for OCaml";
   };
 }

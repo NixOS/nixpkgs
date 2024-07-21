@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docopt
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docopt,
+  requests,
 }:
 
 buildPythonPackage rec {
   version = "2.0.10";
+  format = "setuptools";
   pname = "mailchimp";
 
   src = fetchPypi {
@@ -21,9 +23,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A CLI client and Python API library for the MailChimp email platform";
+    description = "CLI client and Python API library for the MailChimp email platform";
     homepage = "http://apidocs.mailchimp.com/api/2.0/";
     license = licenses.mit;
   };
-
 }

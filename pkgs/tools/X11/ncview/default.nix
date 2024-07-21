@@ -1,25 +1,46 @@
-{ lib, stdenv, fetchurl
-, netcdf, xlibsWrapper, xorg, udunits, expat
+{ lib
+, stdenv
+, fetchurl
+, expat
+, libpng
+, udunits
+, netcdf
+, xorg
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncview";
-  version = "2.1.8";
-
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "2.1.9";
 
   src = fetchurl {
-    url    = "ftp://cirrus.ucsd.edu/pub/ncview/ncview-2.1.8.tar.gz";
-    sha256 = "1gliziyxil2fcz85hj6z0jq33avrxdcjs74d500lhxwvgd8drfp8";
+    url = "https://cirrus.ucsd.edu/~pierce/ncview/ncview-${finalAttrs.version}.tar.gz";
+    hash = "sha256-4jF6wJSvYvCtz2hCHXBlgglDaq40RkCVnsiXWmRYka8=";
   };
 
-  buildInputs = [ netcdf xlibsWrapper xorg.libXaw udunits expat ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    netcdf
+  ];
+
+  buildInputs = [
+    expat
+    libpng
+    netcdf
+    udunits
+    xorg.libICE
+    xorg.libSM
+    xorg.libX11
+    xorg.libXaw
+    xorg.libXt
+  ];
 
   meta = with lib; {
     description = "Visual browser for netCDF format files";
-    homepage    = "http://meteora.ucsd.edu/~pierce/ncview_home_page.html";
-    license = licenses.gpl3;
+    homepage = "http://meteora.ucsd.edu/~pierce/ncview_home_page.html";
+    license = licenses.gpl3Plus;
+    mainProgram = "ncview";
     maintainers = with maintainers; [ jmettes ];
+    platforms = platforms.all;
   };
-}
+})

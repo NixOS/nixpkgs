@@ -1,22 +1,28 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "shopify-themekit";
-  version = "1.0.3";
-
-  goPackagePath = "github.com/Shopify/themekit/";
-
-  goDeps = ./shopify-themekit_deps.nix;
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "themekit";
     rev = "v${version}";
-    sha256 = "1780h33mf2h2lv6mr4xx3shfvsabr7w138yb59vvdgvjng9wjkg0";
+    sha256 = "sha256-A/t6yQW2xRFZYuYRyNN/0v4zdivch3tiv65a7TdHm2c=";
   };
 
+  vendorHash = "sha256-o928qjp7+/U1W03esYTwVEfQ4A3TmPnmgmh4oWpqJoo=";
+
+  ldflags = [ "-s" "-w" ];
+
+  postInstall = ''
+    # Keep `theme` only
+    rm -f $out/bin/{cmd,tkrelease}
+  '';
+
   meta = with lib; {
-    description = "A command line tool for shopify themes";
+    description = "Command line tool for shopify themes";
+    mainProgram = "theme";
     homepage = "https://shopify.github.io/themekit/";
     license = licenses.mit;
     maintainers = with maintainers; [ _1000101 ];

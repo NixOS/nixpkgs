@@ -1,17 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, testers }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfyaml";
-  version = "0.7.3";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "pantoniou";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-RxaeDtsdPtcTYJ7qMVmBCm1TsMI7YsXCz2w/Bq2RmaA=";
+    repo = "libfyaml";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Id5pdFzjA9q67okfESO3LZH8jIz93mVgIEEuBbPjuGI=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  outputs = [ "bin" "dev" "out" "man" ];
+
+  configureFlags = [ "--disable-network" ];
 
   doCheck = true;
 
@@ -19,11 +23,17 @@ stdenv.mkDerivation rec {
     patchShebangs test
   '';
 
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
-    homepage = "https://github.com/pantoniou/libfyaml";
     description = "Fully feature complete YAML parser and emitter, supporting the latest YAML spec and passing the full YAML testsuite";
+    homepage = "https://github.com/pantoniou/libfyaml";
+    changelog = "https://github.com/pantoniou/libfyaml/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
+    pkgConfigModules = [ "libfyaml" ];
     platforms = platforms.all;
   };
-}
+})

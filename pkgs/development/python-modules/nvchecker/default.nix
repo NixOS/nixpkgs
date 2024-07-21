@@ -1,40 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
-, packaging
-, toml
-, structlog
-, appdirs
-, pytest-asyncio
-, flaky
-, tornado
-, pycurl
-, aiohttp
-, pytest-httpbin
-, docutils
-, installShellFiles
+{
+  lib,
+  platformdirs,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  flaky,
+  installShellFiles,
+  pycurl,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  structlog,
+  tomli,
+  tornado,
+  awesomeversion,
+  packaging,
+  lxml,
 }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.5";
+  version = "2.14.1";
+  pyproject = true;
 
-  # Tests not included in PyPI tarball
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "lilydjwg";
-    repo = pname;
+    repo = "nvchecker";
     rev = "v${version}";
-    sha256 = "0jzmpra87dlj88d20ihnva9fj81wqbbd9qbzsjwwvzdx062136mg";
+    hash = "sha256-V2lTGeaiwUsh8IONbZ5GQrqevJMhjeuFLTDF8UdWg8Q=";
   };
 
-  nativeBuildInputs = [ installShellFiles docutils ];
-  propagatedBuildInputs = [ setuptools packaging toml structlog appdirs tornado pycurl aiohttp ];
-  checkInputs = [ pytestCheckHook pytest-asyncio flaky pytest-httpbin ];
+  nativeBuildInputs = [
+    setuptools
+    docutils
+    installShellFiles
+  ];
 
-  disabled = pythonOlder "3.7";
+  propagatedBuildInputs = [
+    structlog
+    platformdirs
+    tornado
+    pycurl
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    flaky
+    pytest-asyncio
+    pytest-httpbin
+    pytestCheckHook
+  ];
 
   postBuild = ''
     patchShebangs docs/myrst2man.py
@@ -45,12 +65,22 @@ buildPythonPackage rec {
     installManPage docs/_build/man/nvchecker.1
   '';
 
+  pythonImportsCheck = [ "nvchecker" ];
+
   pytestFlagsArray = [ "-m 'not needs_net'" ];
 
+  optional-dependencies = {
+    # vercmp = [ pyalpm ];
+    awesomeversion = [ awesomeversion ];
+    pypi = [ packaging ];
+    htmlparser = [ lxml ];
+  };
+
   meta = with lib; {
-    homepage = "https://github.com/lilydjwg/nvchecker";
     description = "New version checker for software";
+    homepage = "https://github.com/lilydjwg/nvchecker";
+    changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

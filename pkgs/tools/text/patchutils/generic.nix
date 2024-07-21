@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ] ++ extraBuildInputs;
   hardeningDisable = [ "format" ];
 
+  # tests fail when building in parallel
+  enableParallelBuilding = false;
+
   postInstall = ''
     for bin in $out/bin/{splitdiff,rediff,editdiff,dehtmldiff}; do
       wrapProgram "$bin" \

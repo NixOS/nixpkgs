@@ -5,25 +5,26 @@
 
 buildGoModule rec {
   pname = "go-audit";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02iwjzaz2ks0zmwijaijwzc3gn9mhn7xpx369ylgaz68arlapfjg";
+    sha256 = "sha256-Li/bMgl/wj9bHpXW5gwWvb7BvyBPzeLCP979J2kyRCM=";
   };
 
-  vendorSha256 = "11kb7xm82s0d8d06b2jknwn3dfh4i0a1dv0740y47vk62sf6f05i";
+  vendorHash = "sha256-JHimXGsUMAQqCutREsmtgDIf6Vda+it0IL3AfS86omU=";
 
   # Tests need network access
   doCheck = false;
 
   meta = with lib; {
-    description = "An alternative to the auditd daemon";
+    description = "Alternative to the auditd daemon";
     homepage = "https://github.com/slackhq/go-audit";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;
+    mainProgram = "go-audit";
   };
 }

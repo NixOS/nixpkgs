@@ -3,6 +3,7 @@
 , rsync
 , python3
 , fetchFromGitHub
+, nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -37,11 +38,14 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
+  passthru.tests.lxd-image-server = nixosTests.lxd-image-server;
+
   meta = with lib; {
     description = "Creates and manages a simplestreams lxd image server on top of nginx";
     homepage = "https://github.com/Avature/lxd-image-server";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ mkg20001 ];
+    mainProgram = "lxd-image-server";
   };
 }

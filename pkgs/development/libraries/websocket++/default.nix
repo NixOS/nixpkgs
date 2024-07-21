@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "websocket++";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "zaphoyd";
     repo = "websocketpp";
     rev = version;
-    sha256 = "12ffczcrryh74c1xssww35ic6yiy2l2xgdd30lshiq9wnzl2brgy";
+    sha256 = "sha256-9fIwouthv2GcmBe/UPvV7Xn9P2o0Kmn2hCI4jCh0hPM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "C++/Boost Asio based websocket client/server library";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ andir ];
+    maintainers = with maintainers; [ revol-xut ];
   };
 }

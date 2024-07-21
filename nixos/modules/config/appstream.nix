@@ -8,7 +8,7 @@ with lib;
       default = true;
       description = ''
         Whether to install files to support the
-        <link xlink:href="https://www.freedesktop.org/software/appstream/docs/index.html">AppStream metadata specification</link>.
+        [AppStream metadata specification](https://www.freedesktop.org/software/appstream/docs/index.html).
       '';
     };
   };

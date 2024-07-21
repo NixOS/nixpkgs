@@ -32,11 +32,16 @@ stdenv.mkDerivation rec {
     gupnp
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=int-conversion"
+  ]);
+
   meta = with lib; {
     description = "Library of utility functions that are used by the higher level dLeyna";
     homepage = "https://github.com/phako/dleyna-core";
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.lgpl21Only;
   };
 }

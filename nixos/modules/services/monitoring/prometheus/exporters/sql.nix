@@ -1,7 +1,13 @@
-{ config, lib, pkgs, options }:
-with lib;
+{ config, lib, pkgs, options, ... }:
 let
   cfg = config.services.prometheus.exporters.sql;
+  inherit (lib)
+    mkOption
+    types
+    mapAttrs
+    mapAttrsToList
+    concatStringsSep
+    ;
   cfgOptions = {
     options = with types; {
       jobs = mkOption {
@@ -17,7 +23,7 @@ let
         type = str;
         description = ''
           How often to run this job, specified in
-          <link xlink:href="https://golang.org/pkg/time/#ParseDuration">Go duration</link> format.
+          [Go duration](https://golang.org/pkg/time/#ParseDuration) format.
         '';
       };
       connections = mkOption {

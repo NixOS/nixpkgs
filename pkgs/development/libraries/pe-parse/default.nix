@@ -1,28 +1,34 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "pe-parse";
-  version = "1.2.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "pe-parse";
     rev = "v${version}";
-    sha256 = "1jvfjaiwddczjlx4xdhpbgwvvpycab7ix35lwp3wfy44hs6qpjqv";
+    hash = "sha256-XegSZWRoQg6NEWuTSFI1RMvN3GbpLDrZrloPU2XdK2M=";
   };
 
   nativeBuildInputs = [ cmake ];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-error=deprecated-declarations"
+  ]);
+
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/dump-pe ../test/assets/example.exe
+    $out/bin/dump-pe ../tests/assets/example.exe
   '';
 
   meta = with lib; {
-    description = "A principled, lightweight parser for Windows portable executable files";
+    description = "Principled, lightweight parser for Windows portable executable files";
     homepage = "https://github.com/trailofbits/pe-parse";
+    changelog = "https://github.com/trailofbits/pe-parse/releases/tag/v${version}";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ arturcygan ];
+    mainProgram = "dump-pe";
+    platforms = platforms.unix;
   };
 }

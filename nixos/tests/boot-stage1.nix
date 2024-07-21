@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "boot-stage1";
 
-  machine = { config, pkgs, lib, ... }: {
+  nodes.machine = { config, pkgs, lib, ... }: {
     boot.extraModulePackages = let
       compileKernelModule = name: source: pkgs.runCommandCC name rec {
         inherit source;
@@ -32,6 +32,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 10, 0)
         #include <linux/sched/signal.h>
         #endif
+
+        MODULE_LICENSE("GPL");
 
         struct task_struct *canaryTask;
 
@@ -105,8 +107,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         '';
       };
 
-      copyCanaries = with lib; concatMapStrings (canary: ''
-        ${optionalString (canary ? child) ''
+      copyCanaries = lib.concatMapStrings (canary: ''
+        ${lib.optionalString (canary ? child) ''
           copy_bin_and_libs "${canary.child}/bin/${canary.child.name}"
         ''}
         copy_bin_and_libs "${canary}/bin/${canary.name}"
@@ -130,7 +132,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         '';
       })
 
-      # This canary process mimicks a storage daemon, which we do NOT want to be
+      # This canary process mimics a storage daemon, which we do NOT want to be
       # killed before going into stage 2. For more on root storage daemons, see:
       # https://www.freedesktop.org/wiki/Software/systemd/RootStorageDaemons/
       (mkCmdlineCanary {

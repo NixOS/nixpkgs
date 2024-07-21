@@ -34,12 +34,13 @@ mkDerivation {
   ];
 
   qtWrapperArgs = [
-    "--prefix GST_PLUGIN_PATH : ${lib.makeSearchPath "lib/gstreamer-1.0" gst}"
+    "--prefix GST_PLUGIN_PATH : ${lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gst}"
   ];
 
   meta = {
     homepage = "https://apps.kde.org/kamoso/";
-    description = "A simple and friendly program to use your camera";
+    description = "Simple and friendly program to use your camera";
+    mainProgram = "kamoso";
     license = with lib.licenses; [ lgpl21Only gpl3Only ];
   };
 }

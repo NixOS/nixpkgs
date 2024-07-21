@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "grpcurl";
-  version = "1.8.5";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "fullstorydev";
     repo = "grpcurl";
     rev = "v${version}";
-    sha256 = "sha256-73gp3UQk7D3aWK2jtMpiY4tiVhvHkTqZipoynosd3ec=";
+    sha256 = "sha256-OVlFOZD4+ZXRKl0Q0Dh5Etij/zeB1jTGoY8n13AyLa4=";
   };
 
   subPackages = [ "cmd/grpcurl" ];
 
-  vendorSha256 = "sha256-dHh8zHtU/r6AscInfNfVFd5psys2b6D1FS02lSoiGto=";
+  vendorHash = "sha256-KsPrJC4hGrGEny8wVWE1EG00qn+b1Rrvh4qK27VzgLU=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/fullstorydev/grpcurl";
     license = licenses.mit;
     maintainers = with maintainers; [ knl ];
+    mainProgram = "grpcurl";
   };
 }

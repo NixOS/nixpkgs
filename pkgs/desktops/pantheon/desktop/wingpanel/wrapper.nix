@@ -1,5 +1,5 @@
 { lib
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , stdenv
 , xorg
@@ -17,7 +17,8 @@ let
     else indicators ++ (lib.optionals useDefaultIndicators wingpanelIndicators);
 in
 stdenv.mkDerivation rec {
-  name = "${wingpanel.name}-with-indicators";
+  pname = "${wingpanel.pname}-with-indicators";
+  inherit (wingpanel) version;
 
   src = null;
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     glib
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = lib.forEach selectedIndicators (x: x.buildInputs)

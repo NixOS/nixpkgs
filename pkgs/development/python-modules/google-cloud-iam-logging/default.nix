@@ -1,30 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, grpc-google-iam-v1
-, mock
-, proto-plus
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-iam-logging";
-  version = "1.0.0";
+  version = "1.3.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ac688593279c48d7863f0a90457202ff9b235e3ee8862498e8a5b8f867cc137";
+    hash = "sha256-ZxNJV7jMqaMaN4Obt5sToUBmcXsfQHJPkNYnt8K+jf4=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-api-core
     grpc-google-iam-v1
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     pytest-asyncio
@@ -37,7 +47,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "IAM Service Logging client library";
-    homepage = "https://github.com/googleapis/python-iam-logging";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-iam-logging";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-iam-logging-v${version}/packages/google-cloud-iam-logging/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

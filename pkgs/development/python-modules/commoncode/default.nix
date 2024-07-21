@@ -1,68 +1,86 @@
-{ lib
-, stdenv
-, attrs
-, beautifulsoup4
-, buildPythonPackage
-, click
-, fetchPypi
-, intbitset
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, requests
-, saneyaml
-, setuptools-scm
-, text-unidecode
-, typing
+{
+  lib,
+  stdenv,
+  attrs,
+  beautifulsoup4,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  requests,
+  saneyaml,
+  setuptools-scm,
+  text-unidecode,
 }:
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "30.0.0";
+  version = "31.2.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-6SeU4u6pfDuGCgCYAO5fdbWBxW9XN3WvM8j6DwUlFwM=";
+  src = fetchFromGitHub {
+    owner = "nexB";
+    repo = "commoncode";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4ZgyNlMj1i1fRru4wgDOyP3qzbne8D2eH/tFI60kgrE=";
   };
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     attrs
     beautifulsoup4
     click
-    intbitset
     requests
     saneyaml
     text-unidecode
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
   ];
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # expected result is tailored towards the quirks of upstream's
-    # CI environment on darwin
-    "test_searchable_paths"
+
+  preCheck = ''
+    # prevent readout of /etc/os-release during tests
+    sed -i "s/is_on_ubuntu_22()/lambda _: False/" src/commoncode/system.py
+  '';
+
+  disabledTests =
+    [
+      # chinese character translates different into latin
+      "test_safe_path_posix_style_chinese_char"
+      # OSError: [Errno 84] Invalid or incomplete multibyte or wide character
+      "test_os_walk_can_walk_non_utf8_path_from_unicode_path"
+      "test_resource_iter_can_walk_non_utf8_path_from_unicode_path"
+      "test_walk_can_walk_non_utf8_path_from_unicode_path"
+      "test_resource_iter_can_walk_non_utf8_path_from_unicode_path_with_dirs"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # expected result is tailored towards the quirks of upstream's
+      # CI environment on darwin
+      "test_searchable_paths"
+    ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
+    # https://github.com/nexB/commoncode/issues/36
+    "src/commoncode/fetch.py"
   ];
 
-  pythonImportsCheck = [
-    "commoncode"
-  ];
+  pythonImportsCheck = [ "commoncode" ];
 
   meta = with lib; {
-    description = "A set of common utilities, originally split from ScanCode";
+    description = "Set of common utilities, originally split from ScanCode";
     homepage = "https://github.com/nexB/commoncode";
+    changelog = "https://github.com/nexB/commoncode/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = with maintainers; [ ];
   };
 }

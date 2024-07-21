@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "signify";
-  version = "30";
+  version = "32";
 
   src = fetchFromGitHub {
     owner = "aperezdc";
     repo = "signify";
     rev = "v${version}";
-    sha256 = "02xh6x6rszkvk3rf6zai7n3ivchmw0d8mwllpinjxc7k6sd415c3";
+    sha256 = "sha256-y2A+Szt451CmaWOc2Y2vBSwSgziJsSnTjNClbdyxG2U=";
   };
 
   doCheck = true;
@@ -16,12 +16,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libbsd ];
 
-  preInstall = ''
-    export PREFIX=$out
+  postPatch = ''
+    substituteInPlace Makefile --replace "shell pkg-config" "shell $PKG_CONFIG"
   '';
+
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     description = "OpenBSD signing tool";
+    mainProgram = "signify";
     longDescription = ''
       OpenBSDs signing tool, which uses the Ed25519 public key signature system
       for fast signing and verification of messages using small public keys.

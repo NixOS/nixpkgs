@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0khm9gh5pczfcihr0pbicaicc4v9kjm5ip2alvkhmbb3ga6njkcm";
   };
 
+  # pcre-config isn't on PATH when cross-building
+  PCRE_CONFIG = "${pcre.dev}/bin/pcre-config";
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ pcre ];
 
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "SWIG, an interface compiler that connects C/C++ code to higher-level languages";
-    homepage = "http://swig.org/";
+    homepage = "https://swig.org/";
     # Different types of licenses available: http://www.swig.org/Release/LICENSE .
     license = licenses.gpl3Plus;
     platforms = with platforms; linux ++ darwin;

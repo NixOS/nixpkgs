@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "ANSI HTML Adapter";
+    mainProgram = "aha";
     longDescription = ''
       aha takes ANSI SGR-coloured input and produces W3C-conformant HTML code.
     '';

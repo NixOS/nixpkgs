@@ -45,6 +45,10 @@ in
     # get the command line client on system path to make some use of the service
     environment.systemPackages = [ pkgs.dict ];
 
+    environment.etc."dict.conf".text = ''
+      server localhost
+    '';
+
     users.users.dictd =
       { group = "dictd";
         description = "DICT.org dictd server";
@@ -58,6 +62,9 @@ in
       description = "DICT.org Dictionary Server";
       wantedBy = [ "multi-user.target" ];
       environment = { LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive"; };
+      # Work around the fact that dictd doesn't handle SIGTERM; it terminates
+      # with code 143 instead of exiting with code 0.
+      serviceConfig.SuccessExitStatus = [ 143 ];
       serviceConfig.Type = "forking";
       script = "${pkgs.dict}/sbin/dictd -s -c ${dictdb}/share/dictd/dictd.conf --locale en_US.UTF-8";
     };

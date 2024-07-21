@@ -1,14 +1,21 @@
-{lib, stdenv, fetchFromGitLab, autoconf, automake, gettext, ncurses}:
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoconf
+, automake
+, gettext
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "psmisc";
-  version = "23.4";
+  version = "23.7";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-s7omgtsNooYqhr4JUTZ6WCtPaZVC1ujJGz6KxUBWIs8=";
+    hash = "sha256-49YpdIh0DxLHfxos4sw1HUkV0XQBqmm4M9b0T4eN2xI=";
   };
 
   nativeBuildInputs = [ autoconf automake gettext ];
@@ -25,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/psmisc/psmisc";
-    description = "A set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";
+    description = "Set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ryantm ];

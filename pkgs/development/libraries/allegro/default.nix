@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
     ./encoding.patch
   ];
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     texinfo6_5 libXext xorgproto libX11 libXpm libXt libXcursor
-    alsa-lib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
+    alsa-lib zlib libpng libvorbis libXxf86dga libXxf86misc
     libXxf86vm openal libGLU libGL
   ];
 
@@ -28,9 +29,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
 
   meta = with lib; {
-    description = "A game programming library";
+    description = "Game programming library";
     homepage = "https://liballeg.org/";
-    license = licenses.free; # giftware
+    license = licenses.giftware;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
   };

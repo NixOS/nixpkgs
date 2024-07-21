@@ -1,8 +1,7 @@
-{ lib, buildDunePackage, caqti, postgresql }:
+{ buildDunePackage, caqti, postgresql }:
 
 buildDunePackage {
   pname = "caqti-driver-postgresql";
-  useDune2 = true;
   inherit (caqti) version src;
 
   propagatedBuildInputs = [ caqti postgresql ];

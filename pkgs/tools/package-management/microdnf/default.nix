@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "microdnf";
-  version = "3.8.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ip1XcE8fPXhdgVaR4VPH+ElP6JbnK4JekZuWyT5ot/M=";
+    sha256 = "sha256-R7jOeH6pw/THLXxLezp2AmE8lUBagKMRJ0XfXgdLi2E=";
   };
 
   nativeBuildInputs = [ pkg-config cmake gettext help2man ];
@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ rb2k ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "microdnf";
   };
 }

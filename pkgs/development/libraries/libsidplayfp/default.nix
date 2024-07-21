@@ -1,68 +1,88 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
+, makeFontsConf
 , nix-update-script
+, testers
 , autoreconfHook
-, pkg-config
-, perl
-, unittest-cpp
-, xa
-, libgcrypt
-, libexsid
 , docSupport ? true
 , doxygen
 , graphviz
+, libexsid
+, libgcrypt
+, perl
+, pkg-config
+, unittest-cpp
+, xa
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "2.3.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-Cu5mZzsqAO4X4Y8QAn851zIFPVPwxj5pB+jvA62L108=";
+    hash = "sha256-qZharhEZ16q3Vd2PwVsKQaP/b6bT/okwEPKKwvRl5D8=";
   };
 
-  patches = [
-    # Fixes test failure on x86_64-darwin
-    # Drop when fix for https://github.com/libsidplayfp/libsidplayfp/issues/39 in a release (>2.3.1)
-    (fetchpatch {
-      url = "https://github.com/libsidplayfp/libsidplayfp/commit/337020a91caa0113de4f4374e0dc770e4056d2c7.patch";
-      sha256 = "0sd7bqic8k945f05d8sk9mshf5d90ykd7f5p6m0n6v3jjhpwmqlq";
-    })
+  outputs = [
+    "out"
+  ] ++ lib.optionals docSupport [
+    "doc"
   ];
 
   postPatch = ''
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config perl xa ]
-    ++ lib.optionals docSupport [ doxygen graphviz ];
+  strictDeps = true;
 
-  buildInputs = [ libgcrypt libexsid ];
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+    pkg-config
+    xa
+  ] ++ lib.optionals docSupport [
+    doxygen
+    graphviz
+  ];
 
-  doCheck = true;
+  buildInputs = [
+    libexsid
+    libgcrypt
+  ];
 
-  checkInputs = [ unittest-cpp ];
+  checkInputs = [
+    unittest-cpp
+  ];
 
   enableParallelBuilding = true;
 
-  installTargets = [ "install" ]
-    ++ lib.optionals docSupport [ "doc" ];
-
-  outputs = [ "out" ]
-    ++ lib.optionals docSupport [ "doc" ];
-
   configureFlags = [
-    "--enable-hardsid"
-    "--with-gcrypt"
-    "--with-exsid"
-  ]
-  ++ lib.optional doCheck "--enable-tests";
+    (lib.strings.enableFeature true "hardsid")
+    (lib.strings.withFeature true "gcrypt")
+    (lib.strings.withFeature true "exsid")
+    (lib.strings.enableFeature finalAttrs.finalPackage.doCheck "tests")
+  ];
+
+  # Make Doxygen happy with the setup, reduce log noise
+  FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf { fontDirectories = [ ]; });
+
+  preBuild = ''
+    # Reduce noise from fontconfig during doc building
+    export XDG_CACHE_HOME=$TMPDIR
+  '';
+
+  buildFlags = [
+    "all"
+  ] ++ lib.optionals docSupport [
+    "doc"
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postInstall = lib.optionalString docSupport ''
     mkdir -p $doc/share/doc/libsidplayfp
@@ -70,13 +90,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    description = "A library to play Commodore 64 music derived from libsidplay2";
+    description = "Library to play Commodore 64 music derived from libsidplay2";
     longDescription = ''
       libsidplayfp is a C64 music player library which integrates
       the reSID SID chip emulation into a cycle-based emulator
@@ -87,5 +106,9 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ ramkromberg OPNA2608 ];
     platforms = platforms.all;
+    pkgConfigModules = [
+      "libsidplayfp"
+      "libstilview"
+    ];
   };
-}
+})

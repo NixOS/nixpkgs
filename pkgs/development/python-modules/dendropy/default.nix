@@ -1,23 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dendropy";
   version = "4.5.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jeetsukumaran";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FP0+fJkkFtSysPxoHXjyMgF8pPin7aRyzmHe9bH8LlM=";
+    hash = "sha256-FP0+fJkkFtSysPxoHXjyMgF8pPin7aRyzmHe9bH8LlM=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # FileNotFoundError: [Errno 2] No such file or directory: 'paup'
@@ -27,6 +30,8 @@ buildPythonPackage rec {
     "test_group1"
     # AssertionError: 6 != 5
     "test_by_num_lineages"
+    # AttributeError: module 'collections' has no attribute 'Iterable'
+    "test_findall_multiple"
   ];
 
   pythonImportsCheck = [ "dendropy" ];

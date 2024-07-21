@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.vbgl ];
-    homepage = "http://getdata.sourceforge.net/";
+    homepage = "https://getdata.sourceforge.net/";
   };
 }

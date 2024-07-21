@@ -1,27 +1,22 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
+, nixosTests
 
 , cmake
-, gzip
 , installShellFiles
 , makeWrapper
 , ncurses
 , pkg-config
 , python3
+, scdoc
 
 , expat
 , fontconfig
 , freetype
 , libGL
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libXxf86vm
-, libxcb
+, xorg
 , libxkbcommon
 , wayland
 , xdg-utils
@@ -40,39 +35,39 @@ let
     expat
     fontconfig
     freetype
-    libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libXxf86vm
-    libxcb
   ] ++ lib.optionals stdenv.isLinux [
+    libGL
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXxf86vm
+    xorg.libxcb
     libxkbcommon
     wayland
   ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.9.0";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-kgZEbOGmO+uRKaWR+oQBiGkBzDSuCznUyWNUoMICHhk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MrlzAZWLgfwIoTdxY+fjWbrv7tygAjnxXebiEgwOM9A=";
   };
 
-  cargoSha256 = "sha256-JqnYMDkagWNGliUxi5eqJN92ULsvT7Fwmah8um1xaRw=";
+  cargoHash = "sha256-7HPTELRlmyjj7CXNbgqrzxW548BgbxybWi+tT3rOCX0=";
 
   nativeBuildInputs = [
     cmake
-    gzip
     installShellFiles
     makeWrapper
     ncurses
     pkg-config
     python3
+    scdoc
   ];
 
   buildInputs = rpathLibs
@@ -88,18 +83,12 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "terminfo" ];
 
-  patches = [
-    # Handle PTY EIO error for Rust 1.55+
-    (fetchpatch {
-      url = "https://github.com/alacritty/alacritty/commit/58985a4dcbe464230b5d2566ee68e2d34a1788c8.patch";
-      sha256 = "sha256-Z6589yRrQtpx3/vNqkMiGgGsLysd/QyfaX7trqX+k5c=";
-    })
-  ];
-
-  postPatch = ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace alacritty/src/config/ui_config.rs \
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
+
+  checkFlags = [ "--skip=term::test::mock_term" ]; # broken on aarch64
 
   postInstall = (
     if stdenv.isDarwin then ''
@@ -108,26 +97,28 @@ rustPlatform.buildRustPackage rec {
       ln -s $out/bin $out/Applications/Alacritty.app/Contents/MacOS
     '' else ''
       install -D extra/linux/Alacritty.desktop -t $out/share/applications/
-      install -D extra/linux/io.alacritty.Alacritty.appdata.xml -t $out/share/appdata/
+      install -D extra/linux/org.alacritty.Alacritty.appdata.xml -t $out/share/appdata/
       install -D extra/logo/compat/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
 
       # patchelf generates an ELF that binutils' "strip" doesn't like:
       #    strip: not enough room for program headers, try linking with -N
       # As a workaround, strip manually before running patchelf.
-      strip -S $out/bin/alacritty
+      $STRIP -S $out/bin/alacritty
 
-      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+      patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
     ''
   ) + ''
-
     installShellCompletion --zsh extra/completions/_alacritty
     installShellCompletion --bash extra/completions/alacritty.bash
     installShellCompletion --fish extra/completions/alacritty.fish
 
     install -dm 755 "$out/share/man/man1"
-    gzip -c extra/alacritty.man > "$out/share/man/man1/alacritty.1.gz"
+    install -dm 755 "$out/share/man/man5"
 
-    install -Dm 644 alacritty.yml $out/share/doc/alacritty.yml
+    scdoc < extra/man/alacritty.1.scd | gzip -c > $out/share/man/man1/alacritty.1.gz
+    scdoc < extra/man/alacritty-msg.1.scd | gzip -c > $out/share/man/man1/alacritty-msg.1.gz
+    scdoc < extra/man/alacritty.5.scd | gzip -c > $out/share/man/man5/alacritty.5.gz
+    scdoc < extra/man/alacritty-bindings.5.scd | gzip -c > $out/share/man/man5/alacritty-bindings.5.gz
 
     install -dm 755 "$terminfo/share/terminfo/a/"
     tic -xe alacritty,alacritty-direct -o "$terminfo/share/terminfo" extra/alacritty.info
@@ -137,11 +128,14 @@ rustPlatform.buildRustPackage rec {
 
   dontPatchELF = true;
 
+  passthru.tests.test = nixosTests.terminal-emulators.alacritty;
+
   meta = with lib; {
-    description = "A cross-platform, GPU-accelerated terminal emulator";
+    description = "Cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne mic92 ma27 ];
+    mainProgram = "alacritty";
+    maintainers = with maintainers; [ Br1ght0ne mic92 ];
     platforms = platforms.unix;
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
   };

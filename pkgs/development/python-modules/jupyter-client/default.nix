@@ -1,43 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, entrypoints
-, jupyter_core
-, nest-asyncio
-, python-dateutil
-, pyzmq
-, tornado
-, traitlets
-, isPyPy
-, py
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jupyter-core,
+  hatchling,
+  python-dateutil,
+  pyzmq,
+  tornado,
+  traitlets,
+  pythonOlder,
+  importlib-metadata,
 }:
 
 buildPythonPackage rec {
-  pname = "jupyter_client";
-  version = "7.0.6";
+  pname = "jupyter-client";
+  version = "8.6.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "8b6e06000eb9399775e0a55c52df6c1be4766666209c22f90c2691ded0e338dc";
+    pname = "jupyter_client";
+    inherit version;
+    hash = "sha256-K9oU1V7lulhVKoxTrkPSFa2YaIU0iSE/N9oGDO1U2N8=";
   };
 
-  propagatedBuildInputs = [
-    entrypoints
-    jupyter_core
-    nest-asyncio
+  build-system = [ hatchling ];
+
+  dependencies = [
+    jupyter-core
     python-dateutil
     pyzmq
     tornado
     traitlets
-  ] ++ lib.optional isPyPy py;
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+
+  pythonImportsCheck = [ "jupyter_client" ];
 
   # Circular dependency with ipykernel
   doCheck = false;
 
   meta = {
     description = "Jupyter protocol implementation and client libraries";
-    homepage = "https://jupyter.org/";
+    homepage = "https://github.com/jupyter/jupyter_client";
+    changelog = "https://github.com/jupyter/jupyter_client/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = lib.teams.jupyter.members;
   };
 }

@@ -1,281 +1,239 @@
-{ lib, fetchurl, fetchFromGitHub, fetchpatch, callPackage
+{ lib
+, config
+, stdenv
+, aws-sdk-cpp
+, boehmgc
+, callPackage
+, fetchFromGitHub
+, fetchpatch
+, fetchpatch2
+, runCommand
+, overrideSDK
+, Security
+
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
-, boehmgc
-, Security
 }:
-
 let
+  boehmgc-nix_2_3 = boehmgc.override { enableLargeConfig = true; };
 
-common =
-  { lib, stdenv, perl, curl, bzip2, sqlite, openssl ? null, xz
-  , bash, coreutils, util-linuxMinimal, gzip, gnutar
-  , pkg-config, boehmgc, libsodium, brotli, boost, editline, nlohmann_json
-  , autoreconfHook, autoconf-archive, bison, flex
-  , jq, libarchive, libcpuid
-  , lowdown, mdbook
-  # Used by tests
-  , gtest
-  , busybox-sandbox-shell
-  , storeDir
-  , stateDir
-  , confDir
-  , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
-  , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
-  , enableStatic ? stdenv.hostPlatform.isStatic
-  , enableDocumentation ? lib.versionOlder version "2.4pre" ||
-                          stdenv.hostPlatform == stdenv.buildPlatform
-  , pname, version, suffix ? "", src
-  , patches ? [ ]
-  }:
-  let
-     sh = busybox-sandbox-shell;
-     nix = stdenv.mkDerivation rec {
-      inherit pname version src patches;
-
-      is24 = lib.versionAtLeast version "2.4pre";
-      is25 = lib.versionAtLeast version "2.5pre";
-
-      VERSION_SUFFIX = suffix;
-
-      outputs =
-        [ "out" "dev" ]
-        ++ lib.optionals enableDocumentation [ "man" "doc" ];
-
-      hardeningEnable = [ "pie" ];
-
-      nativeBuildInputs =
-        [ pkg-config ]
-        ++ lib.optionals stdenv.isLinux [ util-linuxMinimal ]
-        ++ lib.optionals (is24 && enableDocumentation) [
-          (lib.getBin lowdown) mdbook
-        ]
-        ++ lib.optionals is24
-          [ autoreconfHook
-            autoconf-archive
-            bison flex
-            jq
-           ];
-
-      buildInputs =
-        [ curl libsodium openssl sqlite xz bzip2
-          brotli boost editline
-        ]
-        ++ lib.optionals stdenv.isDarwin [ Security ]
-        ++ lib.optionals is24 [ libarchive gtest lowdown ]
-        ++ lib.optional (is24 && stdenv.isx86_64) libcpuid
-        ++ lib.optional withLibseccomp libseccomp
-        ++ lib.optional withAWS
-            ((aws-sdk-cpp.override {
-              apis = ["s3" "transfer"];
-              customMemoryManagement = false;
-            }).overrideDerivation (args: {
-              patches = args.patches or [] ++ [
-                ./aws-sdk-cpp-TransferManager-ContentEncoding.patch
-              ];
-            }));
-
-      propagatedBuildInputs = [ boehmgc ];
-
-      NIX_LDFLAGS = lib.optionals (!is24) [
-        # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
-        (lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto")
-        # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
-        (lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic")
-      ];
-
-      preConfigure =
-        # Copy libboost_context so we don't get all of Boost in our closure.
-        # https://github.com/NixOS/nixpkgs/issues/45462
-        lib.optionalString (!enableStatic) ''
-          mkdir -p $out/lib
-          cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
-          rm -f $out/lib/*.a
-          ${lib.optionalString stdenv.isLinux ''
-            chmod u+w $out/lib/*.so.*
-            patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
-          ''}
-        '' +
-        # On all versions before c9f51e87057652db0013289a95deffba495b35e7, which
-        # removes config.nix entirely and is not present in 2.3.x, we need to
-        # patch around an issue where the Nix configure step pulls in the build
-        # system's bash and other utilities when cross-compiling.
-        lib.optionalString (
-          stdenv.buildPlatform != stdenv.hostPlatform && !is24
-        ) ''
-          mkdir tmp/
-          substitute corepkgs/config.nix.in tmp/config.nix.in \
-            --subst-var-by bash ${bash}/bin/bash \
-            --subst-var-by coreutils ${coreutils}/bin \
-            --subst-var-by bzip2 ${bzip2}/bin/bzip2 \
-            --subst-var-by gzip ${gzip}/bin/gzip \
-            --subst-var-by xz ${xz}/bin/xz \
-            --subst-var-by tar ${gnutar}/bin/tar \
-            --subst-var-by tr ${coreutils}/bin/tr
-          mv tmp/config.nix.in corepkgs/config.nix.in
-          '';
-
-      configureFlags =
-        [ "--with-store-dir=${storeDir}"
-          "--localstatedir=${stateDir}"
-          "--sysconfdir=${confDir}"
-          "--enable-gc"
-        ]
-        ++ lib.optional (!enableDocumentation) "--disable-doc-gen"
-        ++ lib.optionals (!is24) [
-          # option was removed in 2.4
-          "--disable-init-state"
-        ]
-        ++ lib.optionals stdenv.isLinux [
-          "--with-sandbox-shell=${sh}/bin/busybox"
-        ]
-        ++ lib.optional (
-            stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system
-        ) "--with-system=${stdenv.hostPlatform.nix.system}"
-           # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
-        ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
-
-      makeFlags = [ "profiledir=$(out)/etc/profile.d" ]
-        ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0";
-
-      installFlags = [ "sysconfdir=$(out)/etc" ];
-
-      doInstallCheck = true; # not cross
-
-      # socket path becomes too long otherwise
-      preInstallCheck = lib.optionalString stdenv.isDarwin ''
-        export TMPDIR=$NIX_BUILD_TOP
-      ''
-      # See https://github.com/NixOS/nix/issues/5687
-      + lib.optionalString (is25 && stdenv.isDarwin) ''
-        echo "exit 99" > tests/gc-non-blocking.sh
-      '';
-
-      separateDebugInfo = stdenv.isLinux && (is24 -> !enableStatic);
-
-      enableParallelBuilding = true;
-
-      meta = with lib; {
-        description = "Powerful package manager that makes package management reliable and reproducible";
-        longDescription = ''
-          Nix is a powerful package manager for Linux and other Unix systems that
-          makes package management reliable and reproducible. It provides atomic
-          upgrades and rollbacks, side-by-side installation of multiple versions of
-          a package, multi-user package management and easy setup of build
-          environments.
-        '';
-        homepage = "https://nixos.org/";
-        license = licenses.lgpl2Plus;
-        maintainers = with maintainers; [ eelco lovesegfault ];
-        platforms = platforms.unix;
-        outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
-      };
-
-      passthru = {
-        perl-bindings = perl.pkgs.toPerlModule (stdenv.mkDerivation {
-          pname = "nix-perl";
-          inherit version;
-
-          inherit src;
-
-          postUnpack = "sourceRoot=$sourceRoot/perl";
-
-          # This is not cross-compile safe, don't have time to fix right now
-          # but noting for future travellers.
-          nativeBuildInputs =
-            [ perl pkg-config curl nix libsodium boost autoreconfHook autoconf-archive nlohmann_json ];
-
-          configureFlags =
-            [ "--with-dbi=${perl.pkgs.DBI}/${perl.libPrefix}"
-              "--with-dbd-sqlite=${perl.pkgs.DBDSQLite}/${perl.libPrefix}"
-            ];
-
-          preConfigure = "export NIX_STATE_DIR=$TMPDIR";
-
-          preBuild = "unset NIX_INDENT_MAKE";
-        });
-        inherit boehmgc;
-      };
-    };
-  in nix;
-
-  boehmgc_nix = boehmgc.override {
-    enableLargeConfig = true;
-  };
-
-  boehmgc_nixUnstable = boehmgc_nix.overrideAttrs (drv: {
-    patches = (drv.patches or []) ++ [
+  boehmgc-nix = boehmgc-nix_2_3.overrideAttrs (drv: {
+    patches = (drv.patches or [ ]) ++ [
       # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
-      (fetchpatch {
-        url = "https://github.com/hercules-ci/nix/raw/5c58d84a76d96f269e3ff1e72c9c9ba5f68576af/boehmgc-coroutine-sp-fallback.diff";
-        sha256 = "sha256-JvnWVTlkltmQUs/0qApv/LPZ690UX1/2hEP+LYRwKbI=";
-      })
+      ./patches/boehmgc-coroutine-sp-fallback.patch
     ];
   });
 
-  # master: https://github.com/NixOS/nix/pull/5536
-  # 2.4: https://github.com/NixOS/nix/pull/5537
-  installNlohmannJsonPatch = fetchpatch {
-    url = "https://github.com/NixOS/nix/pull/5536.diff";
-    sha256 = "sha256-SPnam4xNIjbMgnq6IP1AaM1V62X0yZNo4DEVmI8sHOo=";
+  # old nix fails to build with newer aws-sdk-cpp and the patch doesn't apply
+  aws-sdk-cpp-old-nix = (aws-sdk-cpp.override {
+    apis = [ "s3" "transfer" ];
+    customMemoryManagement = false;
+  }).overrideAttrs (args: rec {
+    # intentionally overriding postPatch
+    version = "1.9.294";
+
+    src = fetchFromGitHub {
+      owner = "aws";
+      repo = "aws-sdk-cpp";
+      rev = version;
+      hash = "sha256-Z1eRKW+8nVD53GkNyYlZjCcT74MqFqqRMeMc33eIQ9g=";
+    };
+    postPatch = ''
+      # Avoid blanket -Werror to evade build failures on less
+      # tested compilers.
+      substituteInPlace cmake/compiler_settings.cmake \
+        --replace '"-Werror"' ' '
+
+      # Missing includes for GCC11
+      sed '5i#include <thread>' -i \
+        aws-cpp-sdk-cloudfront-integration-tests/CloudfrontOperationTest.cpp \
+        aws-cpp-sdk-cognitoidentity-integration-tests/IdentityPoolOperationTest.cpp \
+        aws-cpp-sdk-dynamodb-integration-tests/TableOperationTest.cpp \
+        aws-cpp-sdk-elasticfilesystem-integration-tests/ElasticFileSystemTest.cpp \
+        aws-cpp-sdk-lambda-integration-tests/FunctionTest.cpp \
+        aws-cpp-sdk-mediastore-data-integration-tests/MediaStoreDataTest.cpp \
+        aws-cpp-sdk-queues/source/sqs/SQSQueue.cpp \
+        aws-cpp-sdk-redshift-integration-tests/RedshiftClientTest.cpp \
+        aws-cpp-sdk-s3-crt-integration-tests/BucketAndObjectOperationTest.cpp \
+        aws-cpp-sdk-s3-integration-tests/BucketAndObjectOperationTest.cpp \
+        aws-cpp-sdk-s3control-integration-tests/S3ControlTest.cpp \
+        aws-cpp-sdk-sqs-integration-tests/QueueOperationTest.cpp \
+        aws-cpp-sdk-transfer-tests/TransferTests.cpp
+      # Flaky on Hydra
+      rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
+      # Includes aws-c-auth private headers, so only works with submodule build
+      rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
+      # TestRandomURLMultiThreaded fails
+      rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
+    '' + lib.optionalString aws-sdk-cpp.stdenv.isi686 ''
+      # EPSILON is exceeded
+      rm aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
+    '';
+
+    patches = (args.patches or [ ]) ++ [ ./patches/aws-sdk-cpp-TransferManager-ContentEncoding.patch ];
+
+    # only a stripped down version is build which takes a lot less resources to build
+    requiredSystemFeatures = [ ];
+  });
+
+  aws-sdk-cpp-nix = (aws-sdk-cpp.override {
+    apis = [ "s3" "transfer" ];
+    customMemoryManagement = false;
+  }).overrideAttrs {
+    # only a stripped down version is build which takes a lot less resources to build
+    requiredSystemFeatures = [ ];
   };
 
-in rec {
 
-  nix = nixStable;
+  common = args:
+    callPackage
+      (import ./common.nix ({ inherit lib fetchFromGitHub; } // args))
+      {
+        inherit Security storeDir stateDir confDir;
+        boehmgc = boehmgc-nix;
+        aws-sdk-cpp = if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
+      };
 
-  nixStable = nix_2_4;
+  # https://github.com/NixOS/nix/pull/7585
+  patch-monitorfdhup = fetchpatch2 {
+    name = "nix-7585-monitor-fd-hup.patch";
+    url = "https://github.com/NixOS/nix/commit/1df3d62c769dc68c279e89f68fdd3723ed3bcb5a.patch";
+    hash = "sha256-f+F0fUO+bqyPXjt+IXJtISVr589hdc3y+Cdrxznb+Nk=";
+  };
 
-  nix_2_3 = callPackage common (rec {
-    pname = "nix";
-    version = "2.3.16";
-    src = fetchurl {
-      url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
-    };
+  # Intentionally does not support overrideAttrs etc
+  # Use only for tests that are about the package relation to `pkgs` and/or NixOS.
+  addTestsShallowly = tests: pkg: pkg // {
+    tests = pkg.tests // tests;
+    # In case someone reads the wrong attribute
+    passthru.tests = pkg.tests // tests;
+  };
 
-    boehmgc = boehmgc_nix;
+  addFallbackPathsCheck = pkg: addTestsShallowly
+    { nix-fallback-paths =
+        runCommand "test-nix-fallback-paths-version-equals-nix-stable" {
+          paths = lib.concatStringsSep "\n" (builtins.attrValues (import ../../../../nixos/modules/installer/tools/nix-fallback-paths.nix));
+        } ''
+          if [[ "" != $(grep -v 'nix-${pkg.version}$' <<< "$paths") ]]; then
+            echo "nix-fallback-paths not up to date with nixVersions.stable (nix-${pkg.version})"
+            echo "The following paths are not up to date:"
+            grep -v 'nix-${pkg.version}$' <<< "$paths"
+            echo
+            echo "Fix it by running in nixpkgs:"
+            echo
+            echo "curl https://releases.nixos.org/nix/nix-${pkg.version}/fallback-paths.nix >nixos/modules/installer/tools/nix-fallback-paths.nix"
+            echo
+            exit 1
+          else
+            echo "nix-fallback-paths versions up to date"
+            touch $out
+          fi
+        '';
+    }
+    pkg;
 
-    inherit storeDir stateDir confDir;
-  });
+in lib.makeExtensible (self: ({
+  nix_2_3 = ((common {
+    version = "2.3.18";
+    hash = "sha256-jBz2Ub65eFYG+aWgSI3AJYvLSghio77fWQiIW1svA9U=";
+    patches = [
+      patch-monitorfdhup
+    ];
+    self_attribute_name = "nix_2_3";
+    maintainers = with lib.maintainers; [ flokli ];
+  }).override { boehmgc = boehmgc-nix_2_3; }).overrideAttrs {
+    # https://github.com/NixOS/nix/issues/10222
+    # spurious test/add.sh failures
+    enableParallelChecking = false;
+  };
 
-  nix_2_4 = callPackage common (rec {
-    pname = "nix";
-    version = "2.4";
+  nix_2_18 = common {
+    version = "2.18.5";
+    hash = "sha256-xEcYQuJz6DjdYfS6GxIYcn8U+3Hgopne3CvqrNoGguQ=";
+    self_attribute_name = "nix_2_18";
+  };
 
+  nix_2_19 = common {
+    version = "2.19.6";
+    hash = "sha256-XT5xiwOLgXf+TdyOjbJVOl992wu9mBO25WXHoyli/Tk=";
+    self_attribute_name = "nix_2_19";
+  };
+
+  nix_2_20 = common {
+    version = "2.20.8";
+    hash = "sha256-M2tkMtjKi8LDdNLsKi3IvD8oY/i3rtarjMpvhybS3WY=";
+    self_attribute_name = "nix_2_20";
+  };
+
+  nix_2_21 = common {
+    version = "2.21.4";
+    hash = "sha256-c6nVZ0pSrfhFX3eVKqayS+ioqyAGp3zG9ZPO5rkXFRQ=";
+    self_attribute_name = "nix_2_21";
+  };
+
+  nix_2_22 = common {
+    version = "2.22.3";
+    hash = "sha256-l04csH5rTWsK7eXPWVxJBUVRPMZXllFoSkYFTq/i8WU=";
+    self_attribute_name = "nix_2_22";
+  };
+
+  nix_2_23 = common {
+    version = "2.23.3";
+    hash = "sha256-lAoLGVIhRFrfgv7wcyduEkyc83QKrtsfsq4of+WrBeg=";
+    self_attribute_name = "nix_2_23";
+  };
+
+  git = (common rec {
+    version = "2.24.0";
+    suffix = "pre20240717_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = version;
-      sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
+      rev = "464e5925cb21150e3c94f31224efabd3c1e74237";
+      hash = "sha256-C9pE0ghVURE3nLZmmgTG6CnGvWQ84g2lcyN7KKGCfN8=";
     };
-
-    boehmgc = boehmgc_nixUnstable;
-
-    patches = [ installNlohmannJsonPatch ];
-
-    inherit storeDir stateDir confDir;
+    self_attribute_name = "git";
+  }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+    # Fix the following error with the default x86_64-darwin SDK:
+    #
+    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
+    #
+    # Despite the use of the 10.13 deployment target here, the aligned
+    # allocation function Clang uses with this setting actually works
+    # all the way back to 10.6.
+    stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
   });
 
-  nixUnstable = lib.lowPrio (callPackage common rec {
-    pname = "nix";
-    version = "2.5${suffix}";
-    suffix = "pre20211206_${lib.substring 0 7 src.rev}";
+  latest = self.nix_2_23;
 
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "d1aaa7ef71713b6693ad3ddf8704ce62bab82095";
-      sha256 = "sha256-zdMODMLdJ0smEEzNMOoIzBxt9QWVzgMvr+pwxkhtD4g=";
-    };
+  # The minimum Nix version supported by Nixpkgs
+  # Note that some functionality *might* have been backported into this Nix version,
+  # making this package an inaccurate representation of what features are available
+  # in the actual lowest minver.nix *patch* version.
+  minimum =
+    let
+      minver = import ../../../../lib/minver.nix;
+      major = lib.versions.major minver;
+      minor = lib.versions.minor minver;
+      attribute = "nix_${major}_${minor}";
+      nix = self.${attribute};
+    in
+    if ! self ? ${attribute} then
+      throw "The minimum supported Nix version is ${minver} (declared in lib/minver.nix), but pkgs.nixVersions.${attribute} does not exist."
+    else
+      nix;
 
-    boehmgc = boehmgc_nixUnstable;
-
-    patches = [ installNlohmannJsonPatch ];
-
-    inherit storeDir stateDir confDir;
-
-  });
-
-}
+  stable = addFallbackPathsCheck self.nix_2_18;
+} // lib.optionalAttrs config.allowAliases (
+  lib.listToAttrs (map (
+    minor:
+    let
+      attr = "nix_2_${toString minor}";
+    in
+    lib.nameValuePair attr (throw "${attr} has been removed")
+  ) (lib.range 4 17))
+  // {
+    unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
+  }
+)))

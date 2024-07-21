@@ -1,48 +1,39 @@
 { lib, buildDunePackage, fetchurl
-, bisect_ppx, ppx_cstruct, pkg-config
-, rresult, cstruct, cstruct-lwt, mirage-net, mirage-clock
-, mirage-random, mirage-stack, mirage-protocols, mirage-time
-, ipaddr, macaddr, macaddr-cstruct, mirage-profile, fmt
+, pkg-config
+, cstruct, cstruct-lwt, mirage-net, mirage-clock
+, mirage-random, mirage-time
+, macaddr, macaddr-cstruct, fmt
 , lwt, lwt-dllist, logs, duration, randomconv, ethernet
 , alcotest, mirage-flow, mirage-vnetif, pcap-format
 , mirage-clock-unix, arp, ipaddr-cstruct, mirage-random-test
-, lru
+, lru, metrics
 , withFreestanding ? false
 , ocaml-freestanding
 }:
 
 buildDunePackage rec {
   pname = "tcpip";
-  version = "6.2.0";
-
-  useDune2 = true;
+  version = "8.0.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "d0f6e643ce04da808d5f977c5ab2422cdb4f67e7abdc46dd6776ceada7151e1b";
+    url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    hash = "sha256-NrTBVr4WcCukxteBotqLoUYrIjcNFVcOERYFbL8CUjM=";
   };
 
   nativeBuildInputs = [
-    bisect_ppx
-    ppx_cstruct
     pkg-config
   ];
 
   propagatedBuildInputs = [
-    rresult
     cstruct
     cstruct-lwt
     mirage-net
     mirage-clock
     mirage-random
-    mirage-random-test
-    mirage-stack
-    mirage-protocols
     mirage-time
-    ipaddr
+    ipaddr-cstruct
     macaddr
     macaddr-cstruct
-    mirage-profile
     fmt
     lwt
     lwt-dllist
@@ -51,6 +42,9 @@ buildDunePackage rec {
     randomconv
     ethernet
     lru
+    metrics
+    arp
+    mirage-flow
   ] ++ lib.optionals withFreestanding [
     ocaml-freestanding
   ];
@@ -58,13 +52,13 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [
     alcotest
+    mirage-random-test
     mirage-flow
     mirage-vnetif
     pcap-format
     mirage-clock-unix
-    arp
-    ipaddr-cstruct
   ];
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "OCaml TCP/IP networking stack, used in MirageOS";

@@ -11,13 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "0vvdwzw3fq74lwgmy6xxkk01sd68fzhsw84c750lm1dma22xhjci";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ readline ];
 
   doCheck = true;
 
   meta = with lib; {
-    description = "A minimal POSIX shell";
+    description = "Minimal POSIX shell";
+    mainProgram = "mrsh";
     homepage = "https://mrsh.sh";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];

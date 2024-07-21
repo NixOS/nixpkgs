@@ -15,26 +15,42 @@ let
     (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
   # Run the tests for each platform.  You can run a test by doing
-  # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
-  # ‘nix-build tests/login.nix -A result’.
+  # e.g. ‘nix-build release.nix -A tests.login.x86_64-linux’,
+  # or equivalently, ‘nix-build tests/login.nix’.
+  # See also nixosTests in pkgs/top-level/all-packages.nix
   allTestsForSystem = system:
     import ./tests/all-tests.nix {
       inherit system;
       pkgs = import ./.. { inherit system; };
-      callTest = t: {
-        ${system} = hydraJob t.test;
+      callTest = config: {
+        ${system} = hydraJob config.test;
+      };
+    } // {
+      # for typechecking of the scripts and evaluation of
+      # the nodes, without running VMs.
+      allDrivers =
+        import ./tests/all-tests.nix {
+        inherit system;
+        pkgs = import ./.. { inherit system; };
+        callTest = config: {
+          ${system} = hydraJob config.driver;
+        };
       };
     };
+
   allTests =
     foldAttrs recursiveUpdate {} (map allTestsForSystem supportedSystems);
 
   pkgs = import ./.. { system = "x86_64-linux"; };
 
 
-  versionModule =
-    { system.nixos.versionSuffix = versionSuffix;
-      system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
-    };
+  versionModule = { config, ... }: {
+    system.nixos.versionSuffix = versionSuffix;
+    system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
+
+    # At creation time we do not have state yet, so just default to latest.
+    system.stateVersion = config.system.nixos.version;
+  };
 
   makeModules = module: rest: [ configuration versionModule module rest ];
 
@@ -107,7 +123,7 @@ let
       build = configEvaled.config.system.build;
       kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.linux-kernel.target;
     in
-      pkgs.symlinkJoin {
+      configEvaled.pkgs.symlinkJoin {
         name = "netboot";
         paths = [
           build.netbootRamdisk
@@ -130,13 +146,19 @@ in rec {
   manualHTML = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualHTML);
   manual = manualHTML; # TODO(@oxij): remove eventually
   manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
-  manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
-  manualGeneratedSources = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.generatedSources);
+  nixos-configuration-reference-manpage = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.nixos-configuration-reference-manpage);
   options = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
+
+  kexec = forMatchingSystems supportedSystems (system: (import lib/eval-config.nix {
+    inherit system;
+    modules = [
+      ./modules/installer/netboot/netboot-minimal.nix
+    ];
+  }).config.system.build.kexecTree);
 
   netboot = forMatchingSystems supportedSystems (system: makeNetboot {
     module = ./modules/installer/netboot/netboot-minimal.nix;
@@ -149,23 +171,37 @@ in rec {
     inherit system;
   });
 
-  iso_plasma5 = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-plasma5.nix;
+  iso_plasma5 = forMatchingSystems supportedSystems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix;
     type = "plasma5";
     inherit system;
   });
 
-  iso_gnome = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-gnome.nix;
+  iso_plasma6 = forMatchingSystems supportedSystems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma6.nix;
+    type = "plasma6";
+    inherit system;
+  });
+
+  iso_gnome = forMatchingSystems supportedSystems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix;
     type = "gnome";
     inherit system;
   });
 
-  # A variant with a more recent (but possibly less stable) kernel
-  # that might support more hardware.
+  # A variant with a more recent (but possibly less stable) kernel that might support more hardware.
+  # This variant keeps zfs support enabled, hoping it will build and work.
   iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
+    inherit system;
+  });
+
+  # A variant with a more recent (but possibly less stable) kernel that might support more hardware.
+  # ZFS support disabled since it is unlikely to support the latest kernel.
+  iso_minimal_new_kernel_no_zfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel-no-zfs.nix;
+    type = "minimal-new-kernel-no-zfs";
     inherit system;
   });
 
@@ -186,6 +222,14 @@ in rec {
     inherit system;
   });
 
+  sd_image_new_kernel_no_zfs = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = {
+        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-new-kernel-no-zfs-installer.nix;
+      }.${system};
+    type = "minimal-new-kernel-no-zfs";
+    inherit system;
+  });
+
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forMatchingSystems [ "x86_64-linux" ] (system:
 
@@ -201,6 +245,29 @@ in rec {
 
   );
 
+  # KVM image for proxmox in VMA format
+  proxmoxImage = forMatchingSystems [ "x86_64-linux" ] (system:
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [
+        ./modules/virtualisation/proxmox-image.nix
+      ];
+    }).config.system.build.VMA)
+  );
+
+  # LXC tarball for proxmox
+  proxmoxLXC = forMatchingSystems [ "x86_64-linux" ] (system:
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [
+        ./modules/virtualisation/proxmox-lxc.nix
+      ];
+    }).config.system.build.tarball)
+  );
 
   # A disk image that can be imported to Amazon EC2 and registered as an AMI
   amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
@@ -252,7 +319,7 @@ in rec {
   );
 
   # An image that can be imported into lxd and used for container creation
-  lxdImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+  lxdContainerImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
     with import ./.. { inherit system; };
 
@@ -261,14 +328,13 @@ in rec {
       modules =
         [ configuration
           versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
+          ./maintainers/scripts/lxd/lxd-container-image.nix
         ];
     }).config.system.build.tarball)
 
   );
 
-  # Metadata for the lxd image
-  lxdMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+  lxdContainerImageSquashfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
     with import ./.. { inherit system; };
 
@@ -277,7 +343,55 @@ in rec {
       modules =
         [ configuration
           versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
+          ./maintainers/scripts/lxd/lxd-container-image.nix
+        ];
+    }).config.system.build.squashfs)
+
+  );
+
+  # Metadata for the lxd image
+  lxdContainerMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-container-image.nix
+        ];
+    }).config.system.build.metadata)
+
+  );
+
+  # An image that can be imported into lxd and used for container creation
+  lxdVirtualMachineImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-virtual-machine-image.nix
+        ];
+    }).config.system.build.qemuImage)
+
+  );
+
+  # Metadata for the lxd image
+  lxdVirtualMachineImageMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-virtual-machine-image.nix
         ];
     }).config.system.build.metadata)
 
@@ -290,7 +404,7 @@ in rec {
         modules = singleton ({ ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
-            system.stateVersion = mkDefault "18.03";
+            system.stateVersion = mkDefault lib.trivial.release;
           });
       }).config.system.build.toplevel;
       preferLocalBuild = true;
@@ -298,38 +412,11 @@ in rec {
     "mkdir $out; ln -s $toplevel $out/dummy");
 
 
-  # Provide a tarball that can be unpacked into an SD card, and easily
-  # boot that system from uboot (like for the sheevaplug).
-  # The pc variant helps preparing the expression for the system tarball
-  # in a machine faster than the sheevpalug
-  /*
-  system_tarball_pc = forAllSystems (system: makeSystemTarball {
-    module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
-    inherit system;
-  });
-  */
-
   # Provide container tarball for lxc, libvirt-lxc, docker-lxc, ...
   containerTarball = forAllSystems (system: makeSystemTarball {
     module = ./modules/virtualisation/lxc-container.nix;
     inherit system;
   });
-
-  /*
-  system_tarball_fuloong2f =
-    assert builtins.currentSystem == "mips64-linux";
-    makeSystemTarball {
-      module = ./modules/installer/cd-dvd/system-tarball-fuloong2f.nix;
-      system = "mips64-linux";
-    };
-
-  system_tarball_sheevaplug =
-    assert builtins.currentSystem == "armv5tel-linux";
-    makeSystemTarball {
-      module = ./modules/installer/cd-dvd/system-tarball-sheevaplug.nix;
-      system = "armv5tel-linux";
-    };
-  */
 
   tests = allTests;
 
@@ -354,7 +441,7 @@ in rec {
 
     kde = makeClosure ({ ... }:
       { services.xserver.enable = true;
-        services.xserver.displayManager.sddm.enable = true;
+        services.displayManager.sddm.enable = true;
         services.xserver.desktopManager.plasma5.enable = true;
       });
 
@@ -372,6 +459,12 @@ in rec {
     pantheon = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.desktopManager.pantheon.enable = true;
+      });
+
+    deepin = makeClosure ({ ... }:
+      { services.xserver.enable = true;
+        services.xserver.displayManager.lightdm.enable = true;
+        services.xserver.desktopManager.deepin.enable = true;
       });
 
     # Linux/Apache/PostgreSQL/PHP stack.

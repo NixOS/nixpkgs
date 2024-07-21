@@ -1,24 +1,37 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, requests
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  requests,
+  urllib3,
+  google-auth,
 }:
 
 buildPythonPackage rec {
   pname = "pyfcm";
-  version = "1.4.7";
+  version = "2.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "olucurious";
     repo = "pyfcm";
-    rev = version;
-    sha256 = "0aj10yvjsc04j15zbn403i83j7ra5yg35pi3ywkyakk8n1s0s3qg";
+    rev = "refs/tags/${version}";
+    hash = "sha256-lpSbb0DDXLHne062s7g27zRpvTuOHiqQkqGOtWvuWdI=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    requests
+    urllib3
+    google-auth
+  ];
 
   # pyfcm's unit testing suite requires network access
   doCheck = false;
+
+  pythonImportsCheck = [ "pyfcm" ];
 
   meta = with lib; {
     description = "Python client for FCM - Firebase Cloud Messaging (Android, iOS and Web)";

@@ -3,68 +3,93 @@
 , fetchFromGitHub
 , substituteAll
 , pkgsi686Linux
-, libnotify
+, dbus
 , meson
 , ninja
 , pkg-config
 , wine
-, boost
 , libxcb
 , nix-update-script
 }:
 
 let
+  # Derived from subprojects/asio.wrap
+  asio = fetchFromGitHub {
+    owner = "chriskohlhoff";
+    repo = "asio";
+    rev = "refs/tags/asio-1-28-2";
+    hash = "sha256-8Sw0LuAqZFw+dxlsTstlwz5oaz3+ZnKBuvSdLW6/DKQ=";
+  };
+
   # Derived from subprojects/bitsery.wrap
   bitsery = fetchFromGitHub {
     owner = "fraillt";
     repo = "bitsery";
-    rev = "c0fc083c9de805e5825d7553507569febf6a6f93";
-    sha256 = "sha256-VwzVtxt+E/SVcxqIJw8BKPO2q7bu/hkhY+nB7FHrZpY=";
+    rev = "refs/tags/v5.2.3";
+    hash = "sha256-rmfcIYCrANycFuLtibQ5wOPwpMVhpTMpdGsUfpR3YsM=";
+  };
+
+  # Derived from subprojects/clap.wrap
+  clap = fetchFromGitHub {
+    owner = "free-audio";
+    repo = "clap";
+    rev = "refs/tags/1.1.9";
+    hash = "sha256-z2P0U2NkDK1/5oDV35jn/pTXCcspuM1y2RgZyYVVO3w=";
   };
 
   # Derived from subprojects/function2.wrap
   function2 = fetchFromGitHub {
     owner = "Naios";
     repo = "function2";
-    rev = "02ca99831de59c7c3a4b834789260253cace0ced";
-    sha256 = "sha256-wrt+fCcM6YD4ZRZYvqqB+fNakCNmltdPZKlNkPLtgMs=";
+    rev = "refs/tags/4.2.3";
+    hash = "sha256-+fzntJn1fRifOgJhh5yiv+sWR9pyaeeEi2c1+lqX3X8=";
+  };
+
+  # Derived from subprojects/ghc_filesystem.wrap
+  ghc_filesystem = fetchFromGitHub {
+    owner = "gulrak";
+    repo = "filesystem";
+    rev = "refs/tags/v1.5.14";
+    hash = "sha256-XZ0IxyNIAs2tegktOGQevkLPbWHam/AOFT+M6wAWPFg=";
   };
 
   # Derived from subprojects/tomlplusplus.wrap
   tomlplusplus = fetchFromGitHub {
     owner = "marzer";
     repo = "tomlplusplus";
-    rev = "47216c8a73d77e7431ec536fb3e251aed06cc420";
-    sha256 = "sha256-cwAzWu5j3ch/56a6JmEoKCsxVNTk6tiZswNdNT6qzX0=";
+    rev = "refs/tags/v3.4.0";
+    hash = "sha256-h5tbO0Rv2tZezY58yUbyRVpsfRjY3i+5TPkkxr6La8M=";
   };
 
   # Derived from vst3.wrap
   vst3 = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = "vst3sdk";
-    rev = "v3.7.3_build_20-patched";
+    rev = "refs/tags/v3.7.7_build_19-patched";
     fetchSubmodules = true;
-    sha256 = "sha256-m2y7No7BNbIjLNgdAqIAEr6UuAZZ/wwM2+iPWKK17gQ=";
+    hash = "sha256-LsPHPoAL21XOKmF1Wl/tvLJGzjaCLjaDAcUtDvXdXSU=";
   };
-in multiStdenv.mkDerivation rec {
+in
+multiStdenv.mkDerivation (finalAttrs: {
   pname = "yabridge";
-  version = "3.7.0";
+  version = "5.1.0";
 
   # NOTE: Also update yabridgectl's cargoHash when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-dz7kScNrVUsjokJntzUCJzDIboqi3vQI+RpXl0UFmUQ=";
+    repo = "yabridge";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-vnSdGedpiit8nym26i1QFiNnATk0Bymm7e5Ha2H41/M=";
   };
 
   # Unpack subproject sources
   postUnpack = ''(
     cd "$sourceRoot/subprojects"
+    cp -R --no-preserve=mode,ownership ${asio} asio
     cp -R --no-preserve=mode,ownership ${bitsery} bitsery
-    cp packagefiles/bitsery/* bitsery
+    cp -R --no-preserve=mode,ownership ${clap} clap
     cp -R --no-preserve=mode,ownership ${function2} function2
-    cp packagefiles/function2/* function2
+    cp -R --no-preserve=mode,ownership ${ghc_filesystem} ghc_filesystem
     cp -R --no-preserve=mode,ownership ${tomlplusplus} tomlplusplus
     cp -R --no-preserve=mode,ownership ${vst3} vst3
   )'';
@@ -73,14 +98,25 @@ in multiStdenv.mkDerivation rec {
     # Hard code bitbridge & runtime dependencies
     (substituteAll {
       src = ./hardcode-dependencies.patch;
-      boost32 = pkgsi686Linux.boost;
+      libdbus = dbus.lib;
       libxcb32 = pkgsi686Linux.xorg.libxcb;
-      inherit libnotify wine;
+      inherit wine;
     })
+
+    # Patch the chainloader to search for libyabridge through NIX_PROFILES
+    ./libyabridge-from-nix-profiles.patch
   ];
 
   postPatch = ''
     patchShebangs .
+    (
+      cd subprojects
+      cp packagefiles/asio/* asio
+      cp packagefiles/bitsery/* bitsery
+      cp packagefiles/clap/* clap
+      cp packagefiles/function2/* function2
+      cp packagefiles/ghc_filesystem/* ghc_filesystem
+    )
   '';
 
   nativeBuildInputs = [
@@ -91,54 +127,43 @@ in multiStdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
     libxcb
+    dbus
   ];
-
-  # Meson is no longer able to pick up Boost automatically.
-  # https://github.com/NixOS/nixpkgs/issues/86131
-  BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-  BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
 
   mesonFlags = [
     "--cross-file" "cross-wine.conf"
-    "-Dwith-bitbridge=true"
+    "-Dbitbridge=true"
 
     # Requires CMake and is unnecessary
-    "-Dtomlplusplus:GENERATE_CMAKE_CONFIG=disabled"
-
-    # tomlplusplus examples and tests don't build with winegcc
-    "-Dtomlplusplus:BUILD_EXAMPLES=disabled"
-    "-Dtomlplusplus:BUILD_TESTS=disabled"
+    "-Dtomlplusplus:generate_cmake_config=false"
   ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/bin" "$out/lib"
-    cp yabridge-group*.exe{,.so} "$out/bin"
-    cp yabridge-host*.exe{,.so} "$out/bin"
-    cp libyabridge-vst2.so "$out/lib"
-    cp libyabridge-vst3.so "$out/lib"
+    cp yabridge-host{,-32}.exe{,.so} "$out/bin"
+    cp libyabridge{,-chainloader}-{vst2,vst3,clap}.so "$out/lib"
     runHook postInstall
   '';
 
   # Hard code wine path in wrapper scripts generated by winegcc
   postFixup = ''
-    for exe in "$out"/bin/*.exe; do
-      substituteInPlace "$exe" \
-        --replace 'WINELOADER="wine"' 'WINELOADER="${wine}/bin/wine"'
-    done
+    substituteInPlace "$out/bin/yabridge-host-32.exe" \
+      --replace 'WINELOADER="wine"' 'WINELOADER="${wine}/bin/wine"'
+
+    substituteInPlace "$out/bin/yabridge-host.exe" \
+      --replace 'WINELOADER="wine"' 'WINELOADER="${wine}/bin/wine64"'
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "Yet Another VST bridge, run Windows VST2 plugins under Linux";
+    description = "Modern and transparent way to use Windows VST2 and VST3 plugins on Linux";
     homepage = "https://github.com/robbert-vdh/yabridge";
+    changelog = "https://github.com/robbert-vdh/yabridge/blob/${finalAttrs.version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

@@ -2,16 +2,21 @@
 
 buildGoModule rec {
   pname = "senpai";
-  version = "unstable-2021-11-29";
+  version = "0.3.0";
 
   src = fetchFromSourcehut {
-    owner = "~taiite";
+    owner = "~delthas";
     repo = "senpai";
-    rev = "3904c9190d94f273c0ae9937d3161b9fe4adf856";
-    sha256 = "sha256-4ZhJuAxcoGjRO5xVqzlmaUvipnyiFMuJ1A3n8vlhYxU=";
+    rev = "v${version}";
+    sha256 = "sha256-A5kBrJJi+RcSpB0bi2heKzNl5LjdeT9h2Pc9kKXDg1A=";
   };
 
-  vendorSha256 = "sha256-xkJh7k8GZmoZqE0HgbFp2xMJQOVDkPEXOZEl6bJZz1A=";
+  vendorHash = "sha256-kKYee1QJX7N101MTikHUbX+AqZ2NhM4soE4JAAOdAPI=";
+
+  patches = [
+    # fix build failures, submitted upstream https://lists.sr.ht/~delthas/senpai-dev/patches/48581
+    ./bump-go-version.patch
+  ];
 
   subPackages = [
     "cmd/senpai"
@@ -30,8 +35,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Your everyday IRC student";
-    homepage = "https://ellidri.org/senpai";
+    mainProgram = "senpai";
+    homepage = "https://sr.ht/~taiite/senpai/";
+    changelog = "https://git.sr.ht/~delthas/senpai/refs/v${version}";
     license = licenses.isc;
-    maintainers = with maintainers; [ malvo ];
+    maintainers = with maintainers; [ malte-v ];
   };
 }

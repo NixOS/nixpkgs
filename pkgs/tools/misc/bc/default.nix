@@ -1,5 +1,13 @@
-{ lib, stdenv, autoreconfHook, buildPackages
-, fetchurl, flex, readline, ed, texinfo
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  buildPackages,
+  fetchurl,
+  flex,
+  readline,
+  ed,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,16 +26,23 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     # Tools
-    autoreconfHook ed flex texinfo
+    autoreconfHook
+    ed
+    flex
+    texinfo
     # Libraries for build
-    buildPackages.readline buildPackages.ncurses
+    buildPackages.readline
+    buildPackages.ncurses
   ];
-  buildInputs = [ readline flex ];
+  buildInputs = [
+    readline
+    flex
+  ];
 
   doCheck = true; # not cross
 
   # Hack to make sure we never to the relaxation `$PATH` and hooks support for
-  # compatability. This will be replaced with something clearer in a future
+  # compatibility. This will be replaced with something clearer in a future
   # masss-rebuild.
   strictDeps = true;
 
@@ -36,5 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/bc/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
+    mainProgram = "bc";
   };
 }

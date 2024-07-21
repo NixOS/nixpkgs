@@ -12,35 +12,31 @@
 , lapack
 , libxml2
 , libxslt
+, llvmPackages
 , pkg-config
+, plfit
 , python3
 , sourceHighlight
-, suitesparse
 , xmlto
 }:
 
-stdenv.mkDerivation rec {
+assert (blas.isILP64 == lapack.isILP64 &&
+        blas.isILP64 == arpack.isILP64 &&
+        !blas.isILP64);
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
-  version = "0.9.5";
+  version = "0.10.13";
 
   src = fetchFromGitHub {
     owner = "igraph";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-R5v1nbfYyIOzdw7LmkGQE4yVxpTVs6YF62jkfFrA1z8=";
+    repo = "igraph";
+    rev = finalAttrs.version;
+    hash = "sha256-c5yZI5AfaO/NFyy88efu1COb+T2r1LpHhUTfilw2H1U=";
   };
 
-  # Normally, igraph wants us to call bootstrap.sh, which will call
-  # tools/getversion.sh. Instead, we're going to put the version directly
-  # where igraph wants, and then let autoreconfHook do the rest of the
-  # bootstrap. ~ C.
   postPatch = ''
-    echo "${version}" > IGRAPH_VERSION
-  '' + lib.optionalString stdenv.isAarch64 ''
-    # https://github.com/igraph/igraph/issues/1694
-    substituteInPlace tests/CMakeLists.txt \
-      --replace "igraph_scg_grouping3" "" \
-      --replace "igraph_scg_semiprojectors2" ""
+    echo "${finalAttrs.version}" > IGRAPH_VERSION
   '';
 
   outputs = [ "out" "dev" "doc" ];
@@ -65,7 +61,9 @@ stdenv.mkDerivation rec {
     gmp
     lapack
     libxml2
-    suitesparse
+    plfit
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
   ];
 
   cmakeFlags = [
@@ -73,10 +71,11 @@ stdenv.mkDerivation rec {
     "-DIGRAPH_USE_INTERNAL_LAPACK=OFF"
     "-DIGRAPH_USE_INTERNAL_ARPACK=OFF"
     "-DIGRAPH_USE_INTERNAL_GLPK=OFF"
-    "-DIGRAPH_USE_INTERNAL_CXSPARSE=OFF"
     "-DIGRAPH_USE_INTERNAL_GMP=OFF"
+    "-DIGRAPH_USE_INTERNAL_PLFIT=OFF"
     "-DIGRAPH_GLPK_SUPPORT=ON"
     "-DIGRAPH_GRAPHML_SUPPORT=ON"
+    "-DIGRAPH_OPENMP_SUPPORT=ON"
     "-DIGRAPH_ENABLE_LTO=AUTO"
     "-DIGRAPH_ENABLE_TLS=ON"
     "-DBUILD_SHARED_LIBS=ON"
@@ -84,27 +83,28 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  # needed to find libigraph, and liblas on darwin
-  preCheck = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [ blas ]}:$PWD/src"
-  '' else ''
-    export LD_LIBRARY_PATH="$PWD/src"
-  '';
-
   postInstall = ''
     mkdir -p "$out/share"
     cp -r doc "$out/share"
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/igraph/igraph-targets.cmake \
+      --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
+  '' + lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
   '';
 
+  passthru.tests = {
+    python = python3.pkgs.igraph;
+  };
+
   meta = with lib; {
-    description = "The network analysis package";
+    description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
+    changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
   };
-}
+})

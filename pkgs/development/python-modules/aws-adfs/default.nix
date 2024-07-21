@@ -1,31 +1,47 @@
-{ lib
-, botocore
-, buildPythonPackage
-, click
-, configparser
-, fetchPypi
-, fido2
-, glibcLocales
-, isPy27
-, lxml
-, mock
-, pyopenssl
-, pytestCheckHook
-, requests
-, requests-kerberos
+{
+  lib,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  click,
+  configparser,
+  fetchFromGitHub,
+  fido2,
+  lxml,
+  poetry-core,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-kerberos,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "aws-adfs";
-  version = "1.24.5";
-  disabled = isPy27;
+  version = "2.11.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6a78bd31477ea9988166215ae86abcbfe1413bee20373ecdf0dd170b7290db55";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "venth";
+    repo = "aws-adfs";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZzQ92VBa8CApd0WkfPrUZsEZICK2fhwmt45P2sx2mK0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    poetry-core
+  ];
+
+  pythonRelaxDeps = [
+    "configparser"
+    "requests-kerberos"
+  ];
+
+  dependencies = [
+    boto3
     botocore
     click
     configparser
@@ -36,31 +52,23 @@ buildPythonPackage rec {
     requests-kerberos
   ];
 
-  checkInputs = [
-    glibcLocales
-    mock
+  nativeCheckInputs = [
     pytestCheckHook
+    toml
   ];
 
-  # Relax version constraint
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'coverage < 4' 'coverage' \
-      --replace 'fido2>=0.8.1,<0.9.0' 'fido2>=0.8.1,<1.0.0'
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
-
-  # Test suite writes files to $HOME/.aws/, or /homeless-shelter if unset
-  HOME = ".";
-
-  # Required for python3 tests, along with glibcLocales
-  LC_ALL = "en_US.UTF-8";
 
   pythonImportsCheck = [ "aws_adfs" ];
 
   meta = with lib; {
-    description = "Command line tool to ease aws cli authentication against ADFS";
+    description = "Command line tool to ease AWS CLI authentication against ADFS";
     homepage = "https://github.com/venth/aws-adfs";
+    changelog = "https://github.com/venth/aws-adfs/releases/tag/v${version}";
     license = licenses.psfl;
-    maintainers = [ maintainers.bhipple ];
+    maintainers = with maintainers; [ bhipple ];
+    mainProgram = "aws-adfs";
   };
 }

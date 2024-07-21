@@ -21,6 +21,13 @@ stdenv.mkDerivation rec {
     "-DUSE_XSDK_DEFAULTS=true"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=implicit-int"
+    ];
+  };
+
   patches = [
     ./add-superlu-lib-as-dependency-for-the-unit-tests.patch
   ];
@@ -31,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://crd-legacy.lbl.gov/~xiaoye/SuperLU/";
     license = "http://crd-legacy.lbl.gov/~xiaoye/SuperLU/License.txt";
-    description = "A library for the solution of large, sparse, nonsymmetric systems of linear equations";
+    description = "Library for the solution of large, sparse, nonsymmetric systems of linear equations";
     platforms = lib.platforms.unix;
   };
 }

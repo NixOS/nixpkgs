@@ -106,7 +106,7 @@ in {
       extraDefaults = mkOption {
         type = types.lines;
         default = "";
-        description = "Extra config for <literal>&lt;Defaults&gt;</literal> section.";
+        description = "Extra config for `<Defaults>` section.";
       };
 
       extraConfig = mkOption {
@@ -127,7 +127,7 @@ in {
 
       fileSystems = mkOption {
         description = ''
-          These options will create the <literal>&lt;FileSystem&gt;</literal> sections of config file.
+          These options will create the `<FileSystem>` sections of config file.
         '';
         default = { orangefs = {}; };
         example = literalExpression ''
@@ -158,7 +158,7 @@ in {
             extraConfig = mkOption {
               type = types.lines;
               default = "";
-              description = "Extra config for <literal>&lt;FileSystem&gt;</literal> section.";
+              description = "Extra config for `<FileSystem>` section.";
             };
 
             troveSyncMeta = mkOption {
@@ -176,7 +176,7 @@ in {
             extraStorageHints = mkOption {
               type = types.lines;
               default = "";
-              description = "Extra config for <literal>&lt;StorageHints&gt;</literal> section.";
+              description = "Extra config for `<StorageHints>` section.";
             };
           };
         }));
@@ -192,7 +192,7 @@ in {
     # orangefs daemon will run as user
     users.users.orangefs = {
       isSystemUser = true;
-      group = "orangfs";
+      group = "orangefs";
     };
     users.groups.orangefs = {};
 
@@ -209,7 +209,7 @@ in {
       after = [ "network-online.target" ];
 
       serviceConfig = {
-        # Run as "simple" in forground mode.
+        # Run as "simple" in foreground mode.
         # This is more reliable
         ExecStart = ''
           ${pkgs.orangefs}/bin/pvfs2-server -d \

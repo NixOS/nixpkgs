@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
         bin = "source/macos/fasmg";
         asm = "source/macos/fasmg.asm";
       };
-    }.${system} or (throw "Unsopported system: ${system}");
+    }.${system} or (throw "Unsupported system: ${system}");
 
   in ''
     chmod +x ${path.bin}
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "x86(-64) macro assembler to binary, MZ, PE, COFF, and ELF";
+    mainProgram = "fasmg";
     homepage = "https://flatassembler.net";
     license = licenses.bsd3;
     maintainers = with maintainers; [ orivej luc65r ];

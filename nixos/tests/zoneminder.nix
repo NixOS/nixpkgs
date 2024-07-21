@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ lib, ...}:
   name = "zoneminder";
   meta.maintainers = with lib.maintainers; [ danielfullmer ];
 
-  machine = { ... }:
+  nodes.machine = { ... }:
   {
     services.zoneminder = {
       enable = true;

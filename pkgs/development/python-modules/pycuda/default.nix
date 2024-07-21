@@ -1,36 +1,38 @@
-{ buildPythonPackage
-, addOpenGLRunpath
-, fetchPypi
-, fetchFromGitHub
-, Mako
-, boost
-, numpy
-, pytools
-, pytest
-, decorator
-, appdirs
-, six
-, cudatoolkit
-, python
-, mkDerivation
-, lib
+{
+  buildPythonPackage,
+  addOpenGLRunpath,
+  fetchPypi,
+  fetchFromGitHub,
+  mako,
+  boost,
+  numpy,
+  pytools,
+  pytest,
+  decorator,
+  appdirs,
+  six,
+  cudaPackages,
+  python,
+  mkDerivation,
+  lib,
 }:
 let
-  compyte = import ./compyte.nix {
-    inherit mkDerivation fetchFromGitHub;
-  };
+  compyte = import ./compyte.nix { inherit mkDerivation fetchFromGitHub; };
+
+  inherit (cudaPackages) cudatoolkit;
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2021.1";
+  version = "2024.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab87312d0fc349d9c17294a087bb9615cffcf966ad7b115f5b051008a48dd6ed";
+    hash = "sha256-1Q0j/2NxSCz/fUuVPvQKuByd8DjsthRIT5/VNHMnMn4=";
   };
 
   preConfigure = with lib.versions; ''
-    ${python.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
+    ${python.pythonOnBuildForHost.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
                           --boost-lib-dir=${boost}/lib \
                           --no-use-shipped-boost \
                           --boost-python-libname=boost_python${major python.version}${minor python.version} \
@@ -55,9 +57,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  nativeBuildInputs = [
-    addOpenGLRunpath
-  ];
+  nativeBuildInputs = [ addOpenGLRunpath ];
 
   propagatedBuildInputs = [
     numpy
@@ -69,14 +69,13 @@ buildPythonPackage rec {
     cudatoolkit
     compyte
     python
-    Mako
+    mako
   ];
 
   meta = with lib; {
     homepage = "https://github.com/inducer/pycuda/";
-    description = "CUDA integration for Python.";
+    description = "CUDA integration for Python";
     license = licenses.mit;
     maintainers = with maintainers; [ artuuge ];
   };
-
 }

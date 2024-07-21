@@ -1,9 +1,9 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchurl
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "zd1211-firmware";
   version = "1.5";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/lib/firmware/zd1211
-    cp * $out/lib/firmware/zd1211
+    cp zd1211* $out/lib/firmware/zd1211
 
     runHook postInstall
   '';
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Firmware for the ZyDAS ZD1211(b) 802.11a/b/g USB WLAN chip";
     homepage = "https://sourceforge.net/projects/zd1211/";
-    license = "GPL";
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 }

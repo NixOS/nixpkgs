@@ -1,45 +1,65 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, spglib
-, numpy
-, scipy
-, matplotlib
-, ase
-, netcdf4
-, pytest
-, pythonOlder
-, cython
-, cmake
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  spglib,
+  numpy,
+  scipy,
+  matplotlib,
+  ase,
+  netcdf4,
+  pythonOlder,
+  cython,
+  cmake,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "20.7.1";
-  pname = "BoltzTraP2";
+  pname = "boltztrap2";
+  version = "24.1.1";
+
+  pyproject = true;
+  build-system = [ setuptools ];
+
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "41caa32e5778323471d87033f23537f6178a7aea64fba894c7f2b2579b51f7ed";
+    pname = "BoltzTraP2";
+    inherit version;
+    hash = "sha256-kgv4lPBxcBmRKihaTwPRz8bHTWAWUOGZADtJUb3y+C4=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "USE_CYTHON = False" "USE_CYTHON = True"
+  '';
 
   dontUseCmakeConfigure = true;
 
-  nativeBuildInputs = [ cmake cython ];
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ spglib numpy scipy matplotlib ase netcdf4 ];
+  nativeBuildInputs = [
+    cmake
+    cython
+  ];
+
+  dependencies = [
+    spglib
+    numpy
+    scipy
+    matplotlib
+    ase
+    netcdf4
+  ];
 
   # pypi release does no include files for tests
   doCheck = false;
 
-  checkPhase = ''
-    py.test
-  '';
+  pythonImportsCheck = [ "BoltzTraP2" ];
 
   meta = with lib; {
-    homepage = "http://www.boltztrap.org/";
     description = "Band-structure interpolator and transport coefficient calculator";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.costrouc ];
+    mainProgram = "btp2";
+    homepage = "http://www.boltztrap.org/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ];
   };
 }

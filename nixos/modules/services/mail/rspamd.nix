@@ -5,6 +5,7 @@ with lib;
 let
 
   cfg = config.services.rspamd;
+  opt = options.services.rspamd;
   postfixCfg = config.services.postfix;
 
   bindSocketOpts = {options, config, ... }: {
@@ -63,9 +64,9 @@ let
           "normal" "controller" "fuzzy" "rspamd_proxy" "lua" "proxy"
         ]);
         description = ''
-          The type of this worker. The type <literal>proxy</literal> is
+          The type of this worker. The type `proxy` is
           deprecated and only kept for backwards compatibility and should be
-          replaced with <literal>rspamd_proxy</literal>.
+          replaced with `rspamd_proxy`.
         '';
         apply = let
             from = "services.rspamd.workers.\"${name}\".type";
@@ -214,7 +215,7 @@ let
       text = v.extraConfig;
     })
     (filterAttrs (n: v: v.extraConfig != "") cfg.workers))
-    // (if cfg.extraConfig == "" then {} else {
+    // (lib.optionalAttrs (cfg.extraConfig != "") {
       "extra-config.inc".text = cfg.extraConfig;
     });
 in
@@ -238,7 +239,7 @@ in
         type = with types; attrsOf (submodule (configFileModule "locals"));
         default = {};
         description = ''
-          Local configuration files, written into <filename>/etc/rspamd/local.d/{name}</filename>.
+          Local configuration files, written into {file}`/etc/rspamd/local.d/{name}`.
         '';
         example = literalExpression ''
           { "redis.conf".source = "/nix/store/.../etc/dir/redis.conf";
@@ -251,7 +252,7 @@ in
         type = with types; attrsOf (submodule (configFileModule "overrides"));
         default = {};
         description = ''
-          Overridden configuration files, written into <filename>/etc/rspamd/override.d/{name}</filename>.
+          Overridden configuration files, written into {file}`/etc/rspamd/override.d/{name}`.
         '';
         example = literalExpression ''
           { "redis.conf".source = "/nix/store/.../etc/dir/redis.conf";
@@ -264,7 +265,7 @@ in
         default = null;
         type = types.nullOr types.path;
         description = ''
-          Path of file to link to <filename>/etc/rspamd/rspamd.local.lua</filename> for local
+          Path of file to link to {file}`/etc/rspamd/rspamd.local.lua` for local
           rules written in Lua
         '';
       };
@@ -285,8 +286,8 @@ in
               bindSockets = [{
                 socket = "/run/rspamd/rspamd.sock";
                 mode = "0660";
-                owner = "${cfg.user}";
-                group = "${cfg.group}";
+                owner = "''${config.${opt.user}}";
+                group = "''${config.${opt.group}}";
               }];
             };
             controller = {

@@ -5,28 +5,41 @@
 , glib-networking
 , gst_all_1
 , gtkmm3
-, libappindicator-gtk3
+, libayatana-appindicator
+, libcanberra
+, libepoxy
+, libpsl
+, libdatrie
+, libdeflate
+, libselinux
+, libsepol
+, libsysprof-capture
+, libthai
+, libxkbcommon
+, sqlite
 , pcre
+, pcre2
 , pkg-config
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
+, xorg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "whatsapp-for-linux";
-  version = "1.3.1";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "eneshecan";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-TX6fMuhe6VHbhWJSsPM0iOV4CuCfULD5McJyHuTW4lI=";
+    repo = "whatsapp-for-linux";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hUIyn6BhAPoszBTHKa4qSj6IRa+8cUS0Gis/qjDDnyk=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -36,16 +49,31 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gtkmm3
-    libappindicator-gtk3
+    libayatana-appindicator
+    libcanberra
+    libdatrie
+    libdeflate
+    libepoxy
+    libpsl
+    libselinux
+    libsepol
+    libsysprof-capture
+    libthai
+    libxkbcommon
     pcre
+    pcre2
+    sqlite
     webkitgtk
+    xorg.libXdmcp
+    xorg.libXtst
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/eneshecan/whatsapp-for-linux";
     description = "Whatsapp desktop messaging app";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bartuka ];
+    mainProgram = "whatsapp-for-linux";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ bartuka ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

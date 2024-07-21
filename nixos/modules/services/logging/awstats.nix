@@ -29,9 +29,9 @@ let
           The log file to be scanned.
 
           For mail, set this to
-          <literal>
+          ```
           journalctl $OLD_CURSOR -u postfix.service | ''${pkgs.perl}/bin/perl ''${pkgs.awstats.out}/share/awstats/tools/maillogconvert.pl standard |
-          </literal>
+          ```
         '';
       };
 
@@ -42,9 +42,9 @@ let
           The log format being used.
 
           For mail, set this to
-          <literal>
+          ```
           %time2 %email %email_r %host %host_r %method %url %code %bytesd
-          </literal>
+          ```
         '';
       };
 
@@ -95,7 +95,7 @@ in
   ];
 
   options.services.awstats = {
-    enable = mkEnableOption "awstats";
+    enable = mkEnableOption "awstats, a real-time logfile analyzer";
 
     dataDir = mkOption {
       type = types.path;
@@ -123,9 +123,7 @@ in
       example = "hourly";
       description = ''
         Specification of the time at which awstats will get updated.
-        (in the format described by <citerefentry>
-          <refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>)
+        (in the format described by {manpage}`systemd.time(7)`)
       '';
     };
   };

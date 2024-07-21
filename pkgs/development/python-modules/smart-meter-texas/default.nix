@@ -1,32 +1,37 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, asn1
-, python-dateutil
-, tenacity
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiohttp,
+  asn1,
+  python-dateutil,
+  setuptools,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "smart-meter-texas";
-  version = "0.4.7";
+  version = "0.5.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "grahamwetzler";
     repo = "smart-meter-texas";
-    rev = "v${version}";
-    sha256 = "1hfvv3kpkc7i9mn58bjgvwjj0mi2syr8fv4r8bwbhq5sailma27j";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dHWcYrBtmKdEIU45rMy4KvoPX88hnRpd4KBlbJaNvgI=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     asn1
     python-dateutil

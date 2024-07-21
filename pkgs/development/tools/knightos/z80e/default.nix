@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage    = "https://knightos.org/";
-    description = "A Z80 calculator emulator and debugger";
+    description = "Z80 calculator emulator and debugger";
     license     = licenses.mit;
     maintainers = with maintainers; [ siraben ];
     platforms   = platforms.unix;

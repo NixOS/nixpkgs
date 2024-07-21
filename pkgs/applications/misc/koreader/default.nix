@@ -1,24 +1,36 @@
 { lib, stdenv
 , fetchurl
 , makeWrapper
+, fetchFromGitHub
 , dpkg
 , glib
 , gnutar
 , gtk3-x11
 , luajit
 , sdcv
-, SDL2
-, noto-fonts
-, nerdfonts }:
-let font-droid = nerdfonts.override { fonts = [ "DroidSansMono" ]; };
-in stdenv.mkDerivation rec {
+, SDL2 }:
+let
+  luajit_lua52 = luajit.override { enable52Compat = true; };
+in
+stdenv.mkDerivation rec {
   pname = "koreader";
-  version = "2021.11";
+  version = "2024.04";
 
-  src = fetchurl {
-    url =
-      "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-    sha256 = "sha256-5DNC0MlLB+2JBV2TADSvO40rPlvsPehfv+YE/45P2MA=";
+
+  src = if stdenv.isAarch64 then fetchurl {
+    url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-arm64.deb";
+    hash = "sha256-FwwB9slKOiYQ3eud2tiqov6yGNxmIicIe6nFpsH28Vk=";
+  } else fetchurl {
+    url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
+    hash = "sha256-hqJRZDZqzPNLK/8Bb+Oay70JqKAMKB0Epbbzeu5npLw=";
+  };
+
+  src_repo = fetchFromGitHub {
+    repo = "koreader";
+    owner = "koreader";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-gHn1xqBc7M9wkek1Ja1gry8TKIuUxQP8T45x3z2S4uc=";
   };
 
   sourceRoot = ".";
@@ -27,7 +39,7 @@ in stdenv.mkDerivation rec {
     glib
     gnutar
     gtk3-x11
-    luajit
+    luajit_lua52
     sdcv
     SDL2
   ];
@@ -39,24 +51,24 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -R usr/* $out/
-    ln -sf ${luajit}/bin/luajit $out/lib/koreader/luajit
+    ln -sf ${luajit_lua52}/bin/luajit $out/lib/koreader/luajit
     ln -sf ${sdcv}/bin/sdcv $out/lib/koreader/sdcv
     ln -sf ${gnutar}/bin/tar $out/lib/koreader/tar
-    find $out -xtype l -delete
-    for i in ${noto-fonts}/share/fonts/truetype/noto/*; do
-        ln -s "$i" $out/lib/koreader/fonts/noto/
-    done
-    ln -s "${font-droid}/share/fonts/opentype/NerdFonts/Droid Sans Mono Nerd Font Complete Mono.otf" $out/lib/koreader/fonts/droid/DroidSansMono.ttf
+    find ${src_repo}/resources/fonts -type d -execdir cp -r '{}' $out/lib/koreader/fonts \;
+    find $out -xtype l -print -delete
     wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [ gtk3-x11 SDL2 glib ]
+      lib.makeLibraryPath [ gtk3-x11 SDL2 glib stdenv.cc.cc.lib ]
     }
   '';
 
   meta = with lib; {
     homepage = "https://github.com/koreader/koreader";
+    changelog = "https://github.com/koreader/koreader/releases/tag/v${version}";
     description =
       "An ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
-    platforms = intersectLists platforms.x86_64 platforms.linux;
+    mainProgram = "koreader";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ contrun neonfuz];
   };

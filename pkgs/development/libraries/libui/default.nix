@@ -1,13 +1,12 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtk3, Cocoa }:
 
 let
-  shortName = "libui";
-  version   = "4.1a";
   backend   = if stdenv.isDarwin then "darwin" else "unix";
 in
 
-stdenv.mkDerivation {
-  name = "${shortName}-${version}";
+stdenv.mkDerivation rec {
+  pname = "libui";
+  version   = "4.1a";
   src  = fetchFromGitHub {
     owner  = "andlabs";
     repo   = "libui";
@@ -27,22 +26,22 @@ stdenv.mkDerivation {
     mkdir -p $out/{include,lib}
     mkdir -p $out/lib/pkgconfig
   '' + lib.optionalString stdenv.isLinux ''
-    mv ./out/${shortName}.so.0 $out/lib/
-    ln -s $out/lib/${shortName}.so.0 $out/lib/${shortName}.so
+    mv ./out/libui.so.0 $out/lib/
+    ln -s $out/lib/libui.so.0 $out/lib/libui.so
   '' + lib.optionalString stdenv.isDarwin ''
-    mv ./out/${shortName}.A.dylib $out/lib/
-    ln -s $out/lib/${shortName}.A.dylib $out/lib/${shortName}.dylib
+    mv ./out/libui.A.dylib $out/lib/
+    ln -s $out/lib/libui.A.dylib $out/lib/libui.dylib
   '' + ''
     cp $src/ui.h $out/include
     cp $src/ui_${backend}.h $out/include
 
-    cp ${./libui.pc} $out/lib/pkgconfig/${shortName}.pc
-    substituteInPlace $out/lib/pkgconfig/${shortName}.pc \
+    cp ${./libui.pc} $out/lib/pkgconfig/libui.pc
+    substituteInPlace $out/lib/pkgconfig/libui.pc \
       --subst-var-by out $out \
       --subst-var-by version "${version}"
   '';
   postInstall = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -id $out/lib/${shortName}.A.dylib $out/lib/${shortName}.A.dylib
+    install_name_tool -id $out/lib/libui.A.dylib $out/lib/libui.A.dylib
   '';
 
   meta = with lib; {

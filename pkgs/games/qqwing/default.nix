@@ -21,15 +21,17 @@ stdenv.mkDerivation rec {
       --replace "sudo " ""
   '';
 
-  buildInputs = [ perl autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ perl libtool ];
 
   makeFlags = [ "prefix=$(out)" "tgz" ];
 
   meta = with lib; {
     homepage = "https://qqwing.com";
     description = "Sudoku generating and solving software";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    mainProgram = "qqwing";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ];
   };
 }

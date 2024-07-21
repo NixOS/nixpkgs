@@ -1,64 +1,89 @@
-{ lib, stdenv, pkgs, python3, fetchpatch, glibcLocales }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, glibcLocales
+, installShellFiles
+, python3
+}:
 
-with python3.pkgs; buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "khal";
-  version = "0.10.4";
+  version = "0.11.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3fdb980a9a61c0206d7a82b16f77b408a4f341a2b866b9c9fcf6a641850d129f";
+  src = fetchFromGitHub {
+    owner = "pimutils";
+    repo = "khal";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-YP2kQ/qXPDwvFvlHf+A2Ymvk49dmt5tAnTaOhrOV92M=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    glibcLocales
+    installShellFiles
+  ] ++ (with python3.pkgs; [
+    setuptools-scm
+    sphinx
+    sphinxcontrib-newsfeed
+  ]);
+
+  propagatedBuildInputs = with python3.pkgs;[
     atomicwrites
     click
     click-log
     configobj
-    python-dateutil
+    freezegun
     icalendar
     lxml
-    pkgs.vdirsyncer
+    pkginfo
+    vdirsyncer
+    python-dateutil
     pytz
     pyxdg
     requests-toolbelt
     tzlocal
     urwid
-    pkginfo
+  ];
+
+  nativeCheckInputs = with python3.pkgs;[
     freezegun
-  ];
-  nativeBuildInputs = [ setuptools-scm sphinx sphinxcontrib_newsfeed ];
-  checkInputs = [
-    glibcLocales
+    hypothesis
+    packaging
     pytestCheckHook
+    vdirsyncer
   ];
-  LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
-    # zsh completion
-    install -D misc/__khal $out/share/zsh/site-functions/__khal
+    # shell completions
+    installShellCompletion --cmd khal \
+      --bash <(_KHAL_COMPLETE=bash_source $out/bin/khal) \
+      --zsh <(_KHAL_COMPLETE=zsh_source $out/bin/khal) \
+      --fish <(_KHAL_COMPLETE=fish_source $out/bin/khal)
 
     # man page
-    PATH="${python3.withPackages (ps: with ps; [ sphinx sphinxcontrib_newsfeed ])}/bin:$PATH" \
+    PATH="${python3.withPackages (ps: with ps; [ sphinx sphinxcontrib-newsfeed ])}/bin:$PATH" \
     make -C doc man
-    install -Dm755 doc/build/man/khal.1 -t $out/share/man/man1
+    installManPage doc/build/man/khal.1
 
-    # desktop
+    # .desktop file
     install -Dm755 misc/khal.desktop -t $out/share/applications
   '';
 
   doCheck = !stdenv.isAarch64;
 
-  disabledTests = [
-    # This test is failing due to https://github.com/pimutils/khal/issues/1065
-    "test_print_ics_command"
+  LC_ALL = "en_US.UTF-8";
 
-    # Mocking breaks in this testcase
-    "test_import_from_stdin"
+  disabledTests = [
+    # timing based
+    "test_etag"
+    "test_bogota"
+    "test_event_no_dst"
   ];
 
   meta = with lib; {
-    homepage = "http://lostpackets.de/khal/";
     description = "CLI calendar application";
+    homepage = "http://lostpackets.de/khal/";
+    changelog = "https://github.com/pimutils/khal/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
   };

@@ -1,51 +1,75 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, colorful
-, tomlkit
-, git
-, requests
+{
+  lib,
+  buildPythonPackage,
+  colorful,
+  fetchFromGitHub,
+  git,
+  httpx,
+  lxml,
+  packaging,
+  poetry-core,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  semver,
+  shtab,
+  rich,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "21.11.0";
-  format = "pyproject";
+  version = "24.3.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-uP4M1ShhKsvqnUixc3JUJVpNQOwYn8Gm2uWVcXhFKLg=";
+    repo = "pontos";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DXZDXipYBClqSdlTJsaPWaKr3qTiJ3osm3hHPp/MPow=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     colorful
+    httpx
+    lxml
+    packaging
+    python-dateutil
+    semver
+    shtab
+    rich
     tomlkit
-    requests
-  ];
+  ] ++ httpx.optional-dependencies.http2;
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytestCheckHook
   ];
 
   disabledTests = [
+    "PrepareTestCase"
     # Signing fails
     "test_find_no_signing_key"
     "test_find_signing_key"
     "test_find_unreleased_information"
     # CLI test fails
     "test_missing_cmd"
+    "test_update_file_changed"
+    # Network access
+    "test_fail_sign_on_upload_fail"
+    "test_successfully_sign"
+    # calls git log, but our fetcher removes .git
+    "test_git_error"
+    # Tests require git executable
+    "test_github_action_output"
+    "test_initial_release"
+    # Tests are out-dated
+    "test_getting_version_without_version_config"
+    "test_verify_version_does_not_match"
   ];
 
   pythonImportsCheck = [ "pontos" ];
@@ -53,6 +77,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
+    changelog = "https://github.com/greenbone/pontos/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

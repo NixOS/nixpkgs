@@ -153,7 +153,8 @@ let
     '';
 
     meta = with lib; {
-      description = "A simulation game in which the player strives to run a successful transport system";
+      description = "Simulation game in which the player strives to run a successful transport system";
+      mainProgram = "simutrans";
       longDescription = ''
         Simutrans is a cross-platform simulation game in which the
         player strives to run a successful transport system by
@@ -163,7 +164,7 @@ let
 
       homepage = "http://www.simutrans.com/";
       license = with licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ kkallio vcunat phile314 ];
+      maintainers = with maintainers; [ ];
       platforms = with platforms; linux; # TODO: ++ darwin;
     };
   };

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, vte, gtk3, ncurses, pcre2, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, vte, gtk3, ncurses, pcre2, wrapGAppsHook3, nixosTests }:
 
 let
 
@@ -53,11 +53,14 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ vte-ng gtk3 ncurses pcre2 ];
 
-  nativeBuildInputs = [ wrapGAppsHook pkg-config ];
+  nativeBuildInputs = [ wrapGAppsHook3 pkg-config ];
 
   outputs = [ "out" "terminfo" ];
 
-  passthru = { inherit vte-ng; };
+  passthru = {
+    inherit vte-ng;
+    tests = nixosTests.terminal-emulators.termite;
+  };
 
   postInstall = ''
     mkdir -p $terminfo/share
@@ -68,10 +71,11 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple VTE-based terminal";
+    description = "Simple VTE-based terminal";
     license = licenses.lgpl2Plus;
     homepage = "https://github.com/thestinger/termite/";
     maintainers = with maintainers; [ koral ];
     platforms = platforms.all;
+    mainProgram = "termite";
   };
 }

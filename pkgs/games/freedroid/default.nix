@@ -38,11 +38,12 @@ stdenv.mkDerivation rec {
     icon = pname;
     desktopName = "Freedroid Classic";
     comment     = "A clone of the classic game 'Paradroid' on Commodore 64";
-    categories  = "Game;ArcadeGame;";
+    categories  = [ "Game" "ArcadeGame" ];
   }) ];
 
   meta = with lib; {
-    description = "A clone of the classic game 'Paradroid' on Commodore 64";
+    description = "Clone of the classic game 'Paradroid' on Commodore 64";
+    mainProgram = "freedroid";
     homepage    = "https://github.com/ReinhardPrix/FreedroidClassic";
     license     = licenses.gpl2Only;
     maintainers = with maintainers; [ iblech ];

@@ -7,14 +7,9 @@ let
 in {
   options = {
     services.whitebophir = {
-      enable = mkEnableOption "whitebophir, an online collaborative whiteboard server (persistent state will be maintained under <filename>/var/lib/whitebophir</filename>)";
+      enable = mkEnableOption "whitebophir, an online collaborative whiteboard server (persistent state will be maintained under {file}`/var/lib/whitebophir`)";
 
-      package = mkOption {
-        default = pkgs.whitebophir;
-        defaultText = literalExpression "pkgs.whitebophir";
-        type = types.package;
-        description = "Whitebophir package to use.";
-      };
+      package = mkPackageOption pkgs "whitebophir" { };
 
       listenAddress = mkOption {
         type = types.str;

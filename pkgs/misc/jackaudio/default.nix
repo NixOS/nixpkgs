@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, python3Packages, makeWrapper
-, bash, libsamplerate, libsndfile, readline, eigen, celt
+{ lib, stdenv, fetchFromGitHub, fetchpatch2, pkg-config, python3Packages, makeWrapper
+, libsamplerate, libsndfile, readline, eigen, celt
 , wafHook
 # Darwin Dependencies
 , aften, AudioUnit, CoreAudio, libobjc, Accelerate
@@ -10,9 +10,10 @@
 
 # Extra options
 , prefix ? ""
+
+, testers
 }:
 
-with lib;
 let
   inherit (python3Packages) python dbus-python;
   shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
@@ -25,51 +26,66 @@ let
   optAlsaLib = if libOnly then null else shouldUsePkg alsa-lib;
   optLibopus = shouldUsePkg libopus;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "${prefix}jack2";
-  version = "1.9.19";
+  version = "1.9.22";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
-    rev = "v${version}";
-    sha256 = "01s8i64qczxqawgrzrw19asaqmcspf5l2h3203xzg56wnnhhzcw7";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Cslfys5fcZDy0oee9/nM5Bd1+Cg4s/ayXjJJOSQCL4E=";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];
   buildInputs = [ libsamplerate libsndfile readline eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     aften AudioUnit CoreAudio Accelerate libobjc
   ];
 
-  prePatch = ''
-    substituteInPlace svnversion_regenerate.sh \
-        --replace /bin/bash ${bash}/bin/bash
+  patches = [
+    (fetchpatch2 {
+      # Python 3.12 support
+      name = "jack2-waf2.0.26.patch";
+      url = "https://github.com/jackaudio/jack2/commit/250420381b1a6974798939ad7104ab1a4b9a9994.patch";
+      hash = "sha256-M/H72lLTeddefqth4BSkEfySZRYMIzLErb7nIgVN0u8=";
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs --build svnversion_regenerate.sh
   '';
 
-  PKGCONFIG = "${stdenv.cc.targetPrefix}pkg-config";
-
-  dontAddWafCrossFlags = "true";
   wafConfigureFlags = [
     "--classic"
     "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
-  ] ++ optional (optDbus != null) "--dbus"
-    ++ optional (optLibffado != null) "--firewire"
-    ++ optional (optAlsaLib != null) "--alsa";
+  ] ++ lib.optional (optDbus != null) "--dbus"
+    ++ lib.optional (optLibffado != null) "--firewire"
+    ++ lib.optional (optAlsaLib != null) "--alsa";
 
   postInstall = (if libOnly then ''
     rm -rf $out/{bin,share}
     rm -rf $out/lib/{jack,libjacknet*,libjackserver*}
-  '' else ''
+  '' else lib.optionalString (optDbus != null) ''
     wrapProgram $out/bin/jack_control --set PYTHONPATH $PYTHONPATH
   '');
 
-  meta = {
+  postFixup = ''
+    substituteInPlace "$dev/lib/pkgconfig/jack.pc" \
+      --replace "$out/include" "$dev/include"
+  '';
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = with lib; {
     description = "JACK audio connection kit, version 2 with jackdbus";
     homepage = "https://jackaudio.org";
     license = licenses.gpl2Plus;
+    pkgConfigModules = [ "jack" ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ goibhniu ];
   };
-}
+})

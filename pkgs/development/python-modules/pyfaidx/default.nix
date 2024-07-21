@@ -1,24 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  importlib-metadata,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pyfaidx";
-  version = "0.6.2";
+  version = "0.8.1.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d1258f8d053cba0c90fe329254e8ec59eb28b535b48d9d06e8c7f1d74b8e4531";
+    hash = "sha256-bwSCNSYZ8sxWADyiIyG9sNB2S2VnlbweQGKx+psIaGs=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [ importlib-metadata ];
+
+  nativeCheckInputs = [
+    glibcLocales
+    numpy
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'data/genes.fasta.gz'
+    "tests/test_Fasta_bgzip.py"
+  ];
+
+  pythonImportsCheck = [ "pyfaidx" ];
 
   meta = with lib; {
-    homepage = "https://github.com/mdshw5/pyfaidx";
     description = "Python classes for indexing, retrieval, and in-place modification of FASTA files using a samtools compatible index";
+    homepage = "https://github.com/mdshw5/pyfaidx";
+    changelog = "https://github.com/mdshw5/pyfaidx/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.jbedo ];
+    maintainers = with maintainers; [ jbedo ];
+    mainProgram = "faidx";
   };
 }

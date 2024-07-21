@@ -7,20 +7,19 @@ let
 
   cfg = config.services.activemq;
 
-  activemqBroker = stdenv.mkDerivation {
-    name = "activemq-broker";
-    phases = [ "installPhase" ];
-    buildInputs = [ jdk ];
-    installPhase = ''
-      mkdir -p $out/lib
-      source ${activemq}/lib/classpath.env
-      export CLASSPATH
-      ln -s "${./ActiveMQBroker.java}" ActiveMQBroker.java
-      javac -d $out/lib ActiveMQBroker.java
-    '';
-  };
+  activemqBroker = runCommand "activemq-broker"
+    {
+      nativeBuildInputs = [ jdk ];
+    } ''
+    mkdir -p $out/lib
+    source ${activemq}/lib/classpath.env
+    export CLASSPATH
+    ln -s "${./ActiveMQBroker.java}" ActiveMQBroker.java
+    javac -d $out/lib ActiveMQBroker.java
+  '';
 
-in {
+in
+{
 
   options = {
     services.activemq = {
@@ -48,7 +47,7 @@ in {
           The URI that is passed along to the BrokerFactory to
           set up the configuration of the ActiveMQ broker service.
           You should not need to change this. For custom configuration,
-          set the <literal>configurationDir</literal> instead, and create
+          set the `configurationDir` instead, and create
           an activemq.xml configuration file in it.
         '';
       };
@@ -58,7 +57,7 @@ in {
         description = ''
           The base directory where ActiveMQ stores its persistent data and logs.
           This will be overridden if you set "activemq.base" and "activemq.data"
-          in the <literal>javaProperties</literal> option. You can also override
+          in the `javaProperties` option. You can also override
           this in activemq.xml.
         '';
       };

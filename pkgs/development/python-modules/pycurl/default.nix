@@ -1,24 +1,26 @@
-{ lib
-, buildPythonPackage
-, isPyPy
-, fetchPypi
-, pythonOlder
-, curl
-, openssl
-, bottle
-, pytestCheckHook
-, nose
-, flaky
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  isPyPy,
+  fetchPypi,
+  pythonOlder,
+  curl,
+  openssl,
+  bottle,
+  pytestCheckHook,
+  flaky,
 }:
 
 buildPythonPackage rec {
   pname = "pycurl";
-  version = "7.44.1";
+  version = "7.45.3";
+  format = "setuptools";
   disabled = isPyPy || (pythonOlder "3.5"); # https://github.com/pycurl/pycurl/issues/208
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5bcef4d988b74b99653602101e17d8401338d596b9234d263c728a0c3df003e8";
+    hash = "sha256-jCRxr5B5rXmOFkXsCw09QiPbaHN50X3TanBjdEn4HWs=";
   };
 
   preConfigure = ''
@@ -28,17 +30,16 @@ buildPythonPackage rec {
 
   buildInputs = [
     curl
-    openssl.out
+    openssl
   ];
 
-  nativeBuildInputs = [
-    curl
-  ];
+  nativeBuildInputs = [ curl ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     bottle
     pytestCheckHook
-    nose
     flaky
   ];
 
@@ -51,34 +52,43 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  disabledTests = [
-    # libcurl stopped passing the reason phrase from the HTTP status line
-    # https://github.com/pycurl/pycurl/issues/679
-    "test_failonerror"
-    "test_failonerror_status_line_invalid_utf8_python3"
-    # bottle>=0.12.17 escapes utf8 properly, so these test don't work anymore
-    # https://github.com/pycurl/pycurl/issues/669
-    "test_getinfo_content_type_invalid_utf8_python3"
-    "test_getinfo_cookie_invalid_utf8_python3"
-    "test_getinfo_raw_content_type_invalid_utf8"
-    "test_getinfo_raw_cookie_invalid_utf8"
-    # tests that require network access
-    "test_keyfunction"
-    "test_keyfunction_bogus_return"
-    # OSError: tests/fake-curl/libcurl/with_openssl.so: cannot open shared object file: No such file or directory
-    "test_libcurl_ssl_openssl"
-    # OSError: tests/fake-curl/libcurl/with_nss.so: cannot open shared object file: No such file or directory
-    "test_libcurl_ssl_nss"
-    # OSError: tests/fake-curl/libcurl/with_gnutls.so: cannot open shared object file: No such file or directory
-    "test_libcurl_ssl_gnutls"
-    # AssertionError: assert 'crypto' in ['curl']
-    "test_ssl_in_static_libs"
-  ];
+  disabledTests =
+    [
+      # tests that require network access
+      "test_keyfunction"
+      "test_keyfunction_bogus_return"
+      # OSError: tests/fake-curl/libcurl/with_openssl.so: cannot open shared object file: No such file or directory
+      "test_libcurl_ssl_openssl"
+      # OSError: tests/fake-curl/libcurl/with_nss.so: cannot open shared object file: No such file or directory
+      "test_libcurl_ssl_nss"
+      # OSError: tests/fake-curl/libcurl/with_gnutls.so: cannot open shared object file: No such file or directory
+      "test_libcurl_ssl_gnutls"
+      # AssertionError: assert 'crypto' in ['curl']
+      "test_ssl_in_static_libs"
+      # tests that require curl with http3Support
+      "test_http_version_3"
+      # https://github.com/pycurl/pycurl/issues/819
+      "test_multi_socket_select"
+      # https://github.com/pycurl/pycurl/issues/729
+      "test_easy_pause_unpause"
+      "test_multi_socket_action"
+      # https://github.com/pycurl/pycurl/issues/822
+      "test_request_with_verifypeer"
+      # https://github.com/pycurl/pycurl/issues/836
+      "test_proxy_tlsauth"
+    ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      # Fatal Python error: Segmentation fault
+      "cadata_test"
+    ];
 
   meta = with lib; {
-    homepage = "http://pycurl.sourceforge.net/";
-    description = "Python wrapper for libcurl";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [];
+    homepage = "http://pycurl.io/";
+    description = "Python Interface To The cURL library";
+    license = with licenses; [
+      lgpl2Only
+      mit
+    ];
+    maintainers = with maintainers; [ ];
   };
 }

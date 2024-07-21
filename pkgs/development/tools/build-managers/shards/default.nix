@@ -5,7 +5,7 @@
 
 let
   generic =
-    { version, sha256 }:
+    { version, hash }:
 
     crystal.buildCrystalPackage {
       pname = "shards";
@@ -15,7 +15,7 @@ let
         owner = "crystal-lang";
         repo = "shards";
         rev = "v${version}";
-        inherit sha256;
+        inherit hash;
       };
 
       # we cannot use `make` or `shards` here as it would introduce a cyclical dependency
@@ -28,6 +28,7 @@ let
 
       meta = with lib; {
         description = "Dependency manager for the Crystal language";
+        mainProgram = "shards";
         license = licenses.asl20;
         maintainers = with maintainers; [ peterhoeg ];
         inherit (crystal.meta) homepage platforms;
@@ -36,16 +37,10 @@ let
 
 in
 rec {
-
-  shards_0_15 = generic {
-    version = "0.15.0";
-    sha256 = "sha256-/C6whh5RbTBkFWqpn0GqyVe0opbrklm8xPv5MIG99VU=";
+  shards_0_17 = generic {
+    version = "0.17.4";
+    hash = "sha256-DAFKmr57fW2CWiexbP4Mvoqfh9ALpYEZv3NFK4Z4Zo4=";
   };
 
-  shards_0_16 = generic {
-    version = "0.16.0";
-    sha256 = "sha256-go8sL4djIDGNwb7FsCcATONnMYahHY8qJUDyUiPLRUY=";
-  };
-
-  shards = shards_0_16;
+  shards = shards_0_17;
 }

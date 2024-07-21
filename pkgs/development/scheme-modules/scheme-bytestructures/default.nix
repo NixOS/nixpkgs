@@ -8,26 +8,28 @@
 
 stdenv.mkDerivation rec {
   pname = "scheme-bytestructures";
-  version = "1.0.10";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "TaylanUB";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04oDvwvzTRzAVyywbcCm3Ug3p3xNbxjI7nOKYakEZZI=";
+    sha256 = "sha256-7FK1dXD1Qz6fFYjNUtHMaDGaezHLVaDvdgOboNNw0Lc=";
   };
 
-  postConfigure = ''
-    sed -i '/moddir\s*=/s%=.*%=''${out}/share/guile/site%' Makefile;
-    sed -i '/godir\s*=/s%=.*%=''${out}/share/guile/ccache%' Makefile;
-  '';
-
+  strictDeps = true;
   nativeBuildInputs = [
-    autoreconfHook pkg-config
+    autoreconfHook guile pkg-config
   ];
   buildInputs = [
     guile
   ];
+
+  doCheck = true;
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
+
+  # In procedure bytevector-u8-ref: Argument 2 out of range
+  dontStrip = stdenv.isDarwin;
 
   meta = with lib; {
     description = "Structured access to bytevector contents";

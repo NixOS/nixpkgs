@@ -1,39 +1,37 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitLab
-, nix-update-script
+, gitUpdater
 , pkg-config
 , itstool
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , meson
 , librsvg
 , libxml2
 , desktop-file-utils
-, pysolfc
 , guile
 , libcanberra-gtk3
 , ninja
-, appstream-glib
 , yelp-tools
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aisleriot";
-  version = "3.22.20";
+  version = "3.22.33";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-5xFwlhT9qjtvNDQ8kfGd2BeK2KcJDzpfsEC8z4Ei3ns=";
+    repo = "aisleriot";
+    rev = finalAttrs.version;
+    sha256 = "sha256-HylhDBgkAJrrs/r42v3aDNR8mBJaqnJHyY7T3QW1eWg=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     meson
     ninja
-    appstream-glib
     pkg-config
     itstool
     libxml2
@@ -46,7 +44,6 @@ stdenv.mkDerivation rec {
     librsvg
     guile
     libcanberra-gtk3
-    pysolfc
   ];
 
   prePatch = ''
@@ -61,16 +58,16 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "gnome.${pname}";
+    updateScript = gitUpdater {
     };
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Aisleriot";
-    description = "A collection of patience games written in guile scheme";
+    homepage = "https://gitlab.gnome.org/GNOME/aisleriot";
+    description = "Collection of patience games written in guile scheme";
+    mainProgram = "sol";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-}
+})

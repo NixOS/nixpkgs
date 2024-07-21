@@ -1,50 +1,96 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, CommonMark
-, colorama
-, dataclasses
-, poetry-core
-, pygments
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  markdown-it-py,
+  pygments,
+  typing-extensions,
+
+  # optional-dependencies
+  ipywidgets,
+
+  # tests
+  attrs,
+  pytestCheckHook,
+  setuptools,
+
+  # for passthru.tests
+  enrich,
+  httpie,
+  rich-rst,
+  textual,
 }:
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "10.12.0";
+  version = "13.7.1";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "willmcgugan";
+    owner = "Textualize";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1qq4k0pxq3r0463z4h65i9rb8cvilpnqmparklj5y5qk6svz0y2n";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7LvmPrCpHfPEfJ1r8IFnQhYkBstvtIrWYhGwcchlc0s=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
-    CommonMark
-    colorama
+    markdown-it-py
     pygments
-    typing-extensions
-  ] ++ lib.optional (pythonOlder "3.7") [
-    dataclasses
+  ] ++ lib.optionals (pythonOlder "3.9") [ typing-extensions ];
+
+  passthru.optional-dependencies = {
+    jupyter = [ ipywidgets ];
+  };
+
+  nativeCheckInputs = [
+    attrs
+    pytestCheckHook
+    setuptools
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  disabledTests = [
+    # pygments 2.16 compat
+    # https://github.com/Textualize/rich/issues/3088
+    "test_card_render"
+    "test_markdown_render"
+    "test_markdown_render"
+    "test_python_render"
+    "test_python_render_simple"
+    "test_python_render_simple_passing_lexer_instance"
+    "test_python_render_indent_guides"
+    "test_option_no_wrap"
+    "test_syntax_highlight_ranges"
   ];
 
   pythonImportsCheck = [ "rich" ];
 
+  passthru.tests = {
+    inherit
+      enrich
+      httpie
+      rich-rst
+      textual
+      ;
+  };
+
   meta = with lib; {
     description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
-    homepage = "https://github.com/willmcgugan/rich";
+    homepage = "https://github.com/Textualize/rich";
+    changelog = "https://github.com/Textualize/rich/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    maintainers = with maintainers; [
+      ris
+      joelkoen
+    ];
   };
 }

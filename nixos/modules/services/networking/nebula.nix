@@ -10,6 +10,15 @@ let
   format = pkgs.formats.yaml {};
 
   nameToId = netName: "nebula-${netName}";
+
+  resolveFinalPort = netCfg:
+    if netCfg.listen.port == null then
+      if (netCfg.isLighthouse || netCfg.isRelay) then
+        4242
+      else
+        0
+    else
+      netCfg.listen.port;
 in
 {
   # Interface
@@ -27,12 +36,7 @@ in
               description = "Enable or disable this network.";
             };
 
-            package = mkOption {
-              type = types.package;
-              default = pkgs.nebula;
-              defaultText = literalExpression "pkgs.nebula";
-              description = "Nebula derivation to use.";
-            };
+            package = mkPackageOption pkgs "nebula" { };
 
             ca = mkOption {
               type = types.path;
@@ -47,8 +51,8 @@ in
             };
 
             key = mkOption {
-              type = types.path;
-              description = "Path to the host key.";
+              type = types.oneOf [types.nonEmptyStr types.path];
+              description = "Path or reference to the host key.";
               example = "/etc/nebula/host.key";
             };
 
@@ -68,12 +72,27 @@ in
               description = "Whether this node is a lighthouse.";
             };
 
+            isRelay = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Whether this node is a relay.";
+            };
+
             lighthouses = mkOption {
               type = types.listOf types.str;
               default = [];
               description = ''
                 List of IPs of lighthouse hosts this node should report to and query from. This should be empty on lighthouse
                 nodes. The IPs should be the lighthouse's Nebula IPs, not their external IPs.
+              '';
+              example = [ "192.168.100.1" ];
+            };
+
+            relays = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              description = ''
+                List of IPs of relays that this node should allow traffic from.
               '';
               example = [ "192.168.100.1" ];
             };
@@ -85,8 +104,15 @@ in
             };
 
             listen.port = mkOption {
-              type = types.port;
-              default = 4242;
+              type = types.nullOr types.port;
+              default = null;
+              defaultText = lib.literalExpression ''
+                if (config.services.nebula.networks.''${name}.isLighthouse ||
+                    config.services.nebula.networks.''${name}.isRelay) then
+                  4242
+                else
+                  0;
+              '';
               description = "Port number to listen on.";
             };
 
@@ -123,7 +149,7 @@ in
               default = {};
               description = ''
                 Nebula configuration. Refer to
-                <link xlink:href="https://github.com/slackhq/nebula/blob/master/examples/config.yml"/>
+                <https://github.com/slackhq/nebula/blob/master/examples/config.yml>
                 for details on supported values.
               '';
               example = literalExpression ''
@@ -157,9 +183,14 @@ in
             am_lighthouse = netCfg.isLighthouse;
             hosts = netCfg.lighthouses;
           };
+          relay = {
+            am_relay = netCfg.isRelay;
+            relays = netCfg.relays;
+            use_relays = true;
+          };
           listen = {
             host = netCfg.listen.host;
-            port = netCfg.listen.port;
+            port = resolveFinalPort netCfg;
           };
           tun = {
             disabled = netCfg.tun.disable;
@@ -170,38 +201,63 @@ in
             outbound = netCfg.firewall.outbound;
           };
         } netCfg.settings;
-        configFile = format.generate "nebula-config-${netName}.yml" settings;
+        configFile = format.generate "nebula-config-${netName}.yml" (
+          warnIf
+            ((settings.lighthouse.am_lighthouse || settings.relay.am_relay) && settings.listen.port == 0)
+            ''
+              Nebula network '${netName}' is configured as a lighthouse or relay, and its port is ${builtins.toString settings.listen.port}.
+              You will likely experience connectivity issues: https://nebula.defined.net/docs/config/listen/#listenport
+            ''
+            settings
+          );
         in
         {
-          # Create systemd service for Nebula.
+          # Create the systemd service for Nebula.
           "nebula@${netName}" = {
             description = "Nebula VPN service for ${netName}";
             wants = [ "basic.target" ];
             after = [ "basic.target" "network.target" ];
             before = [ "sshd.service" ];
             wantedBy = [ "multi-user.target" ];
-            serviceConfig = mkMerge [
-              {
-                Type = "simple";
-                Restart = "always";
-                ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
-              }
-              # The service needs to launch as root to access the tun device, if it's enabled.
-              (mkIf netCfg.tun.disable {
-                User = networkId;
-                Group = networkId;
-              })
-            ];
+            serviceConfig = {
+              Type = "notify";
+              Restart = "always";
+              ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
+              UMask = "0027";
+              CapabilityBoundingSet = "CAP_NET_ADMIN";
+              AmbientCapabilities = "CAP_NET_ADMIN";
+              LockPersonality = true;
+              NoNewPrivileges = true;
+              PrivateDevices = false; # needs access to /dev/net/tun (below)
+              DeviceAllow = "/dev/net/tun rw";
+              DevicePolicy = "closed";
+              PrivateTmp = true;
+              PrivateUsers = false; # CapabilityBoundingSet needs to apply to the host namespace
+              ProtectClock = true;
+              ProtectControlGroups = true;
+              ProtectHome = true;
+              ProtectHostname = true;
+              ProtectKernelLogs = true;
+              ProtectKernelModules = true;
+              ProtectKernelTunables = true;
+              ProtectProc = "invisible";
+              ProtectSystem = true;
+              RestrictNamespaces = true;
+              RestrictSUIDSGID = true;
+              User = networkId;
+              Group = networkId;
+            };
+            unitConfig.StartLimitIntervalSec = 0; # ensure Restart=always is always honoured (networks can go down for arbitrarily long)
           };
         }) enabledNetworks);
 
     # Open the chosen ports for UDP.
     networking.firewall.allowedUDPPorts =
-      unique (mapAttrsToList (netName: netCfg: netCfg.listen.port) enabledNetworks);
+      unique (filter (port: port > 0) (mapAttrsToList (netName: netCfg: resolveFinalPort netCfg) enabledNetworks));
 
     # Create the service users and groups.
     users.users = mkMerge (mapAttrsToList (netName: netCfg:
-      mkIf netCfg.tun.disable {
+      {
         ${nameToId netName} = {
           group = nameToId netName;
           description = "Nebula service user for network ${netName}";
@@ -209,9 +265,10 @@ in
         };
       }) enabledNetworks);
 
-    users.groups = mkMerge (mapAttrsToList (netName: netCfg:
-      mkIf netCfg.tun.disable {
-        ${nameToId netName} = {};
-      }) enabledNetworks);
+    users.groups = mkMerge (mapAttrsToList (netName: netCfg: {
+      ${nameToId netName} = {};
+    }) enabledNetworks);
   };
+
+  meta.maintainers = [ numinit ];
 }

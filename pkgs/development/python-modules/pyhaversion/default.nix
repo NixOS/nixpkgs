@@ -1,48 +1,55 @@
-{ lib
-, aiohttp
-, aresponses
-, awesomeversion
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  aresponses,
+  awesomeversion,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyhaversion";
-  version = "21.11.1";
-  format = "setuptools";
+  version = "24.6.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-wh6NJRDgOrEHYEN3QlC4lOZHPnPeiPCJFF1xLoixQ14=";
+    repo = "pyhaversion";
+    rev = "refs/tags/${version}";
+    hash = "sha256-UZ9236mERoz3WG9MfeN1ALKc8OjqpcbbIhiEsRYzn4I=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # Upstream doesn't set a version for the tagged releases
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0"' 'version = "${version}"'
+  '';
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     awesomeversion
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # Upstream doesn't set a version for the tagged releases
-    substituteInPlace setup.py \
-      --replace "main" ${version}
-  '';
+  pythonImportsCheck = [ "pyhaversion" ];
 
-
-  pythonImportsCheck = [
-    "pyhaversion"
+  disabledTests = [
+    # Error fetching version information from HaVersionSource.SUPERVISOR Server disconnected
+    "test_stable_version"
+    "test_etag"
   ];
 
   meta = with lib; {

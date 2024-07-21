@@ -10,15 +10,16 @@
 , libwpe
 , libxkbcommon
 , libGL
-, libX11 }:
+, libX11
+ }:
 
 stdenv.mkDerivation rec {
   pname = "wpebackend-fdo";
-  version = "1.10.0";
+  version = "1.14.2";
 
   src = fetchurl {
-    url = "https://wpewebkit.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-uJ39NQCk3scREyzXv/clmeZ9VqQZ0ABzDhS7mVR1Ccw=";
+    url = "https://wpewebkit.org/releases/wpebackend-fdo-${version}.tar.xz";
+    sha256 = "k8l2aumGTurq7isKdPIsvKCN9CwaG9tVsIbyUo44DTg=";
   };
 
   depsBuildBuild = [

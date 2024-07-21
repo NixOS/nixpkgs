@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , substituteAll
 , meson
@@ -8,23 +9,23 @@
 , glib
 , gettext
 , makeWrapper
-, python3
 , gnutls
 , p11-kit
 , libproxy
 , gnome
 , gsettings-desktop-schemas
+, bash
 }:
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
-  version = "2.70.0";
+  version = "2.80.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0dbg1na239mbavn4hknkax5sns9q2dbdnqw9wcpmhv58mzkhid36";
+    hash = "sha256-2PTxqrITF5rjNRYXtZ2rXea8yeeFAh7uF4mY69S7Os8=";
   };
 
   patches = [
@@ -34,12 +35,15 @@ stdenv.mkDerivation rec {
     })
 
     ./installed-tests-path.patch
+
+    # pkcs11 tests provide a relative path that gnutls of course isn't able to
+    # load, resulting in test failures
+    # https://gitlab.gnome.org/GNOME/glib-networking/-/blob/2.78.1/tls/tests/certificate.c#L926
+    # https://gitlab.gnome.org/GNOME/glib-networking/-/blob/2.78.1/tls/tests/connection.c#L3380
+    ./disable-pkcs11-tests.patch
   ];
 
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-  '';
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -47,7 +51,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     makeWrapper
-    python3 # for install_script
+    glib # for gio-querymodules
   ];
 
   buildInputs = [
@@ -56,6 +60,7 @@ stdenv.mkDerivation rec {
     p11-kit
     libproxy
     gsettings-desktop-schemas
+    bash # installed-tests shebangs
   ];
 
   doCheck = false; # tests need to access the certificates (among other things)

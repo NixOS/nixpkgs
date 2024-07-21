@@ -1,80 +1,89 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
-, atomicwrites
-, attrs
-, hypothesis
-, iniconfig
-, more-itertools
-, packaging
-, pathlib2
-, pluggy
-, py
-, pygments
-, setuptools
-, setuptools-scm
-, six
-, toml
-, wcwidth
-, writeText
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  pythonOlder,
+  fetchPypi,
+  writeText,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  attrs,
+  exceptiongroup,
+  iniconfig,
+  packaging,
+  pluggy,
+  tomli,
+
+  # optional-dependencies
+  argcomplete,
+  hypothesis,
+  mock,
+  pygments,
+  requests,
+  xmlschema,
 }:
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "6.2.5";
-  disabled = !isPy3k;
+  version = "8.2.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "131b36680866a76e6781d13f101efb86cf674ebb9762eb70d3082b6f29889e89";
+    hash = "sha256-3ku4EE4gGTnM3GiLJ6iae+IHmyLivSsH+Aa2unEReXc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pluggy>=0.12,<1.0.0a1" "pluggy>=0.23,<2.0"
-  '';
-
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [
-    atomicwrites
-    attrs
-    iniconfig
-    more-itertools
-    packaging
-    pluggy
-    py
-    setuptools
-    six
-    toml
-    wcwidth
-  ] ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
-
-  checkInputs = [
-    hypothesis
-    pygments
+  patches = [
+    # https://github.com/pytest-dev/pytest/issues/12424
+    # https://github.com/pytest-dev/pytest/pull/12436
+    ./8.2.2-unittest-testcase-regression.patch
   ];
 
-  doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
+  outputs = [
+    "out"
+    "testout"
+  ];
 
-  preCheck = ''
-    # don't test bash builtins
-    rm testing/test_argcomplete.py
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs =
+    [
+      iniconfig
+      packaging
+      pluggy
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      tomli
+    ];
+
+  passthru.optional-dependencies = {
+    testing = [
+      argcomplete
+      attrs
+      hypothesis
+      mock
+      pygments
+      requests
+      setuptools
+      xmlschema
+    ];
+  };
+
+  postInstall = ''
+    mkdir $testout
+    cp -R testing $testout/testing
   '';
 
-  # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
-  # test_missing_required_plugins will emit deprecation warning which is treated as error
-  checkPhase = ''
-    runHook preCheck
-    $out/bin/py.test -x testing/ \
-      --ignore=testing/test_junitxml.py \
-      -k "not test_collect_pyargs_with_testpaths and not test_missing_required_plugins"
-
-    # tests leave behind unreproducible pytest binaries in the output directory, remove:
-    find $out/lib -name "*-pytest-${version}.pyc" -delete
-    # specifically testing/test_assertion.py and testing/test_assertrewrite.py leave behind those:
-    find $out/lib -name "*opt-2.pyc" -delete
-
-    runHook postCheck
-  '';
+  doCheck = false;
+  passthru.tests.pytest = callPackage ./tests.nix { };
 
   # Remove .pytest_cache when using py.test in a Nix build
   setupHook = writeText "pytest-hook" ''
@@ -91,21 +100,24 @@ buildPythonPackage rec {
     # - files are not needed after tests are finished
     pytestRemoveBytecodePhase () {
         # suffix is defined at:
-        #    https://github.com/pytest-dev/pytest/blob/6.2.5/src/_pytest/assertion/rewrite.py#L51-L53
+        #    https://github.com/pytest-dev/pytest/blob/7.2.1/src/_pytest/assertion/rewrite.py#L51-L53
         find $out -name "*-pytest-*.py[co]" -delete
     }
     preDistPhases+=" pytestRemoveBytecodePhase"
   '';
 
-  pythonImportsCheck = [
-    "pytest"
-  ];
+  pythonImportsCheck = [ "pytest" ];
 
   meta = with lib; {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    maintainers = with maintainers; [
+      domenkozar
+      lovek323
+      madjar
+      lsix
+    ];
     license = licenses.mit;
   };
 }

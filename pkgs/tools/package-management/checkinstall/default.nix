@@ -1,6 +1,4 @@
-{lib, stdenv, fetchurl, gettext}:
-
-assert stdenv.isLinux && stdenv ? glibc;
+{lib, stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "checkinstall";
@@ -36,6 +34,11 @@ stdenv.mkDerivation rec {
 
     # Fix BuildRoot handling in RPM builds.
     ./set-buildroot.patch
+
+    (fetchurl {
+      url = "https://salsa.debian.org/debian/checkinstall/-/raw/7175ae9de0e45f42fdd7f185ab9a12043d5efeeb/debian/patches/0016-Define-_STAT_VER-_MKNOD_VER-locally-dropped-in-glibc.patch";
+      hash = "sha256-InodEfvVMuN708yjXPrVXb+q8aUcyFhCLx35PHls0Eo=";
+    })
   ]
 
   ++ lib.optional (stdenv.hostPlatform.system == "x86_64-linux")
@@ -54,7 +57,7 @@ stdenv.mkDerivation rec {
     substituteInPlace checkinstallrc-dist --replace /usr/local $out
 
     substituteInPlace installwatch/create-localdecls \
-      --replace /usr/include/unistd.h ${stdenv.glibc.dev}/include/unistd.h
+      --replace /usr/include/unistd.h ${stdenv.cc.libc.dev}/include/unistd.h
   '';
 
   postInstall =
@@ -67,10 +70,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://checkinstall.izto.org/";
-    description = "A tool for automatically generating Slackware, RPM or Debian packages when doing `make install'";
+    description = "Tool for automatically generating Slackware, RPM or Debian packages when doing `make install'";
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     knownVulnerabilities = [
       "CVE-2020-25031"
     ];

@@ -1,12 +1,10 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 {
 
-  options.programs.browserpass.enable = mkEnableOption "Browserpass native messaging host";
+  options.programs.browserpass.enable = lib.mkEnableOption "Browserpass native messaging host";
 
-  config = mkIf config.programs.browserpass.enable {
+  config = lib.mkIf config.programs.browserpass.enable {
     environment.etc = let
       appId = "com.github.browserpass.native.json";
       source = part: "${pkgs.browserpass}/lib/browserpass/${part}/${appId}";
@@ -27,6 +25,6 @@ with lib;
       "opt/brave/native-messaging-hosts/${appId}".source = source "hosts/chromium";
       "opt/brave/policies/managed/${appId}".source = source "policies/chromium";
     };
-    nixpkgs.config.firefox.enableBrowserpass = true;
+    programs.firefox.nativeMessagingHosts.packages = [ pkgs.browserpass ];
   };
 }

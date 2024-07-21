@@ -1,33 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, funcsigs
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
-, testfixtures
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
   pname = "logfury";
   version = "1.0.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EwpdrOq5rVNJJCUt33BIKqLJZmKzo4JafTCYHQO3aiY=";
+    hash = "sha256-EwpdrOq5rVNJJCUt33BIKqLJZmKzo4JafTCYHQO3aiY=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    funcsigs
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     testfixtures
   ];
@@ -37,9 +32,7 @@ buildPythonPackage rec {
       --replace "'setuptools_scm<6.0'" "'setuptools_scm'"
   '';
 
-  pythonImportsCheck = [
-    "logfury"
-  ];
+  pythonImportsCheck = [ "logfury" ];
 
   meta = with lib; {
     description = "Python module that allows for responsible, low-boilerplate logging of method calls";

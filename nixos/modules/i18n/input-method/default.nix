@@ -4,6 +4,8 @@ with lib;
 let
   cfg = config.i18n.inputMethod;
 
+  allowedTypes = types.enum [ "ibus" "fcitx5" "nabi" "uim" "hime" "kime" ];
+
   gtk2_cache = pkgs.runCommand "gtk2-immodule.cache"
     { preferLocalBuild = true;
       allowSubstitutes = false;
@@ -28,10 +30,23 @@ in
 {
   options.i18n = {
     inputMethod = {
+      enable = mkEnableOption "an additional input method type" // {
+        default = cfg.enabled != null;
+        defaultText = literalMD "`true` if the deprecated option `enabled` is set, false otherwise";
+      };
+
       enabled = mkOption {
-        type    = types.nullOr (types.enum [ "ibus" "fcitx" "fcitx5" "nabi" "uim" "hime" "kime" ]);
+        type    = types.nullOr allowedTypes;
         default = null;
-        example = "fcitx";
+        example = "fcitx5";
+        description = "Deprecated - use `type` and `enable = true` instead";
+      };
+
+      type = mkOption {
+        type    = types.nullOr allowedTypes;
+        default = cfg.enabled;
+        defaultText = literalMD "The value of the deprecated option `enabled`, defaulting to null";
+        example = "fcitx5";
         description = ''
           Select the enabled input method. Input methods is a software to input symbols that are not available on standard input devices.
 
@@ -39,15 +54,12 @@ in
 
           Currently the following input methods are available in NixOS:
 
-          <itemizedlist>
-          <listitem><para>ibus: The intelligent input bus, extra input engines can be added using <literal>i18n.inputMethod.ibus.engines</literal>.</para></listitem>
-          <listitem><para>fcitx: A customizable lightweight input method, extra input engines can be added using <literal>i18n.inputMethod.fcitx.engines</literal>.</para></listitem>
-          <listitem><para>fcitx5: The next generation of fcitx, addons (including engines, dictionaries, skins) can be added using <literal>i18n.inputMethod.fcitx5.addons</literal>.</para></listitem>
-          <listitem><para>nabi: A Korean input method based on XIM. Nabi doesn't support Qt 5.</para></listitem>
-          <listitem><para>uim: The universal input method, is a library with a XIM bridge. uim mainly support Chinese, Japanese and Korean.</para></listitem>
-          <listitem><para>hime: An extremely easy-to-use input method framework.</para></listitem>
-          <listitem><para>kime: Koream IME.</para></listitem>
-          </itemizedlist>
+          - ibus: The intelligent input bus, extra input engines can be added using `i18n.inputMethod.ibus.engines`.
+          - fcitx5: The next generation of fcitx, addons (including engines, dictionaries, skins) can be added using `i18n.inputMethod.fcitx5.addons`.
+          - nabi: A Korean input method based on XIM. Nabi doesn't support Qt 5.
+          - uim: The universal input method, is a library with a XIM bridge. uim mainly support Chinese, Japanese and Korean.
+          - hime: An extremely easy-to-use input method framework.
+          - kime: Koream IME.
         '';
       };
 
@@ -62,13 +74,14 @@ in
     };
   };
 
-  config = mkIf (cfg.enabled != null) {
+  config = mkIf cfg.enable {
+    warnings = optional (cfg.enabled != null) "i18n.inputMethod.enabled will be removed in a future release. Please use .type, and .enable = true instead";
     environment.systemPackages = [ cfg.package gtk2_cache gtk3_cache ];
   };
 
   meta = {
     maintainers = with lib.maintainers; [ ericsagnes ];
-    doc = ./default.xml;
+    doc = ./default.md;
   };
 
 }

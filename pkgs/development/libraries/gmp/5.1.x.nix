@@ -22,7 +22,11 @@ let self = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ m4 ];
 
-  patches = if stdenv.isDarwin then [ ./need-size-t.patch ] else null;
+  patches = [
+    ./5.1.3-CVE-2021-43618.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    ./need-size-t.patch
+  ];
 
   configureFlags = [
     "--with-pic"
@@ -76,6 +80,8 @@ let self = stdenv.mkDerivation rec {
 
     platforms = platforms.all;
     badPlatforms = [ "x86_64-darwin" ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 };
   in self

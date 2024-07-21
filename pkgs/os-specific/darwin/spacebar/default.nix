@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spacebar";
-  version = "1.2.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "cmacrae";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0f5ddn3sx13rwwh0nfl784160s8ml3m5593d5fz2b1996aznzrsx";
+    sha256 = "sha256-4LiG43kPZtsm7SQ/28RaGMpYsDshCaGvc1mouPG3jFM=";
   };
 
   buildInputs = [ Carbon Cocoa ScriptingBridge SkyLight ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A minimal status bar for macOS";
+    description = "Minimal status bar for macOS";
     homepage = "https://github.com/cmacrae/spacebar";
     platforms = platforms.darwin;
     maintainers = [ maintainers.cmacrae ];

@@ -1,62 +1,94 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, django
-, factory_boy
-, glibcLocales
-, mock
-, pygments
-, pytest
-, pytest-cov
-, pytest-django
-, python-dateutil
-, shortuuid
-, six
-, tox
-, typing ? null
-, vobject
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  aiosmtpd,
+  django,
+  looseversion,
+
+  # tests
+  factory-boy,
+  mock,
+  pip,
+  pygments,
+  pytestCheckHook,
+  pytest-django,
+  shortuuid,
+  vobject,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "3.1.3";
+  version = "3.2.3";
+  pyproject = true;
 
-  src = fetchFromGitHub {
+   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "03mhikhh49z8bxajbjf1j790b9c9vl4zf4f86iwz7g0zrd7jqlvm";
+    rev = "refs/tags/${version}";
+    hash = "sha256-A2+5FBv0IhTJPkwgd7je+B9Ac64UHJEa3HRBbWr2FxM=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  patches = [
+    (fetchpatch2 {
+      # Replace dead asyncore, smtp implementation with aiosmtpd
+      name = "django-extensions-aiosmtpd.patch";
+      url = "https://github.com/django-extensions/django-extensions/commit/37d56c4a4704c823ac6a4ef7c3de4c0232ceee64.patch";
+      hash = "sha256-49UeJQKO0epwY/7tqoiHgOXdgPcB/JBIZaCn3ulaHTg=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "--cov=django_extensions --cov-report html --cov-report term" ""
+
+    substituteInPlace django_extensions/management/commands/pipchecker.py \
+      --replace-fail "from distutils.version" "from looseversion"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    aiosmtpd
+    django
+    looseversion
+  ];
+
   __darwinAllowLocalNetworking = true;
 
-  propagatedBuildInputs = [ six ]
-    ++ lib.optional (pythonOlder "3.5") typing;
-
-  checkInputs = [
-    django
-    factory_boy
-    glibcLocales
+  nativeCheckInputs = [
+    factory-boy
     mock
+    pip
     pygments # not explicitly declared in setup.py, but some tests require it
-    pytest
-    pytest-cov
     pytest-django
-    python-dateutil
+    pytestCheckHook
     shortuuid
-    tox
     vobject
     werkzeug
   ];
 
-  # remove tests that need network access
-  checkPhase = ''
-    rm tests/management/commands/test_pipchecker.py
-    DJANGO_SETTINGS_MODULE=tests.testapp.settings \
-      pytest django_extensions tests
-  '';
+  disabledTests = [
+    # Mismatch in expectation of exception message
+    "test_installed_apps_no_resolve_conflicts_function"
+  ];
+
+  disabledTestPaths = [
+    # requires network access
+    "tests/management/commands/test_pipchecker.py"
+    # django.db.utils.OperationalError: no such table: django_extensions_permmodel
+    "tests/test_dumpscript.py"
+  ];
 
   meta = with lib; {
-    description = "A collection of custom extensions for the Django Framework";
+    description = "Collection of custom extensions for the Django Framework";
     homepage = "https://github.com/django-extensions/django-extensions";
     license = licenses.mit;
   };

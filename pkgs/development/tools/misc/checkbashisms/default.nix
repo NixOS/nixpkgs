@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, perl, installShellFiles }:
 stdenv.mkDerivation rec {
-  version = "2.21.1";
+  version = "2.22.1";
   pname = "checkbashisms";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
-    hash = "sha256-1ZbIiUrFd38uMVLy7YayLLm5RrmcovsA++JTb8PbTFI=";
+    hash = "sha256-Nd1eYCnSe+NblujG44uKpvunkaITcdrC3g+M3uX+M9U=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://sourceforge.net/projects/checkbaskisms/";
     description = "Check shell scripts for non-portable syntax";
+    mainProgram = "checkbashisms";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ kaction ];
     platforms = lib.platforms.unix;

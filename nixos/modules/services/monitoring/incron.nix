@@ -20,7 +20,7 @@ in
         description = ''
           Whether to enable the incron daemon.
 
-          Note that commands run under incrontab only support common Nix profiles for the <envar>PATH</envar> provided variable.
+          Note that commands run under incrontab only support common Nix profiles for the {env}`PATH` provided variable.
         '';
       };
 
@@ -31,8 +31,8 @@ in
           Users allowed to use incrontab.
 
           If empty then no user will be allowed to have their own incrontab.
-          If <literal>null</literal> then will defer to <option>deny</option>.
-          If both <option>allow</option> and <option>deny</option> are null
+          If `null` then will defer to {option}`deny`.
+          If both {option}`allow` and {option}`deny` are null
           then all users will be allowed to have their own incrontab.
         '';
       };

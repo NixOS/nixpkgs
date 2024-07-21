@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "log4j-scan";
-  version = "unstable-2021-12-14";
+  version = "unstable-2021-12-18";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "fullhunt";
     repo = pname;
-    rev = "7be0f1c02ce3494469dc73a177e6f0c96f0016d9";
-    sha256 = "sha256-HazxK0wJ8xeFauD2xOxmOwWw1nEpQh+QdcBVZNaUgrM=";
+    rev = "070fbd00f0945645bd5e0daa199a554ef3884b95";
+    sha256 = "sha256-ORSc4KHyAMjuA7QHReDh6SYY5yZRunBBN1+lkCayqL4=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Scanner for finding hosts which are vulnerable for log4j";
+    mainProgram = "log4j-scan";
     homepage = "https://github.com/fullhunt/log4j-scan";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

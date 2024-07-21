@@ -1,29 +1,33 @@
-{ pkgs, nodejs, lib, python3Packages, fetchFromGitHub }:
-let
-  nodeEnv = import ./node-env.nix {
-    inherit (pkgs) stdenv lib python2 runCommand writeTextFile;
-    inherit pkgs nodejs;
-    libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
-  };
-  nodePackages = import ./node-packages.nix {
-    inherit (pkgs) fetchurl nix-gitignore stdenv lib fetchgit;
-    inherit nodeEnv;
-  };
+{ pkgs, nodejs, lib, python3Packages, fetchFromGitHub, nixosTests, fetchNpmDeps, npmHooks }:
 
-  nodeDependencies = (nodePackages.shell.override (old: {
-  })).nodeDependencies;
-in
-with python3Packages; buildPythonApplication rec {
+with python3Packages;
 
+buildPythonApplication rec {
   pname = "isso";
-  version = "0.12.5";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "posativ";
     repo = pname;
-    rev = version;
-    sha256 = "12ccfba2kwbfm9h4zhlxrcigi98akbdm4qi89iglr4z53ygzpay5";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-kZNf7Rlb1DZtQe4dK1B283OkzQQcCX+pbvZzfL65gsA=";
   };
+
+  npmDeps = fetchNpmDeps {
+    inherit src;
+    hash = "sha256-RBpuhFI0hdi8bB48Pks9Ac/UdcQ/DJw+WFnNj5f7IYE=";
+  };
+
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  postPatch = ''
+    # Remove when https://github.com/posativ/isso/pull/973 is available.
+    substituteInPlace isso/tests/test_comments.py \
+      --replace "self.client.delete_cookie('localhost.local', '1')" "self.client.delete_cookie(key='1', domain='localhost')"
+  '';
 
   propagatedBuildInputs = [
     itsdangerous
@@ -37,24 +41,35 @@ with python3Packages; buildPythonApplication rec {
 
   nativeBuildInputs = [
     cffi
+    sphinxHook
+    sphinx
     nodejs
+    npmHooks.npmConfigHook
   ];
 
+  NODE_PATH = "$npmDeps";
+
   preBuild = ''
-    ln -s ${nodeDependencies}/lib/node_modules ./node_modules
-    export PATH="${nodeDependencies}/bin:$PATH"
+    ln -s ${npmDeps}/node_modules ./node_modules
+    export PATH="${npmDeps}/bin:$PATH"
 
     make js
   '';
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [
+    pytest
+    pytest-cov
+  ];
 
   checkPhase = ''
-    ${python.interpreter} setup.py nosetests
+    pytest
   '';
 
+  passthru.tests = { inherit (nixosTests) isso; };
+
   meta = with lib; {
-    description = "A commenting server similar to Disqus";
+    description = "Commenting server similar to Disqus";
+    mainProgram = "isso";
     homepage = "https://posativ.org/isso/";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];

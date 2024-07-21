@@ -21,8 +21,7 @@ in
           action = mkOption {
             type = types.enum [ "bounce" "drop" "pass" ];
             default = "drop";
-            description =
-              ''
+            description = ''
                 Action to take when a virus is detected.
 
                 Note that viruses often spoof sender addresses, so bouncing is
@@ -34,8 +33,7 @@ in
             type = types.str;
             default = "";
             example = "X-Virus-Scanned: ClamAV using ClamSMTP";
-            description =
-              ''
+            description = ''
                 A header to add to scanned messages. See clamsmtpd.conf(5) for
                 more details. Empty means no header.
               '';
@@ -44,8 +42,7 @@ in
           keepAlives = mkOption {
             type = types.int;
             default = 0;
-            description =
-              ''
+            description = ''
                 Number of seconds to wait between each NOOP sent to the sending
                 server. 0 to disable.
 
@@ -57,8 +54,7 @@ in
           listen = mkOption {
             type = types.str;
             example = "127.0.0.1:10025";
-            description =
-              ''
+            description = ''
                 Address to wait for incoming SMTP connections on. See
                 clamsmtpd.conf(5) for more details.
               '';
@@ -67,8 +63,7 @@ in
           quarantine = mkOption {
             type = types.bool;
             default = false;
-            description =
-              ''
+            description = ''
                 Whether to quarantine files that contain viruses by leaving them
                 in the temporary directory.
               '';
@@ -82,8 +77,7 @@ in
 
           outAddress = mkOption {
             type = types.str;
-            description =
-              ''
+            description = ''
                 Address of the SMTP server to send email to once it has been
                 scanned.
               '';
@@ -92,8 +86,7 @@ in
           tempDirectory = mkOption {
             type = types.str;
             default = "/tmp";
-            description =
-              ''
+            description = ''
                 Temporary directory that needs to be accessible to both clamd
                 and clamsmtpd.
               '';
@@ -114,8 +107,7 @@ in
           virusAction = mkOption {
             type = with types; nullOr path;
             default = null;
-            description =
-              ''
+            description = ''
                 Command to run when a virus is found. Please see VIRUS ACTION in
                 clamsmtpd(8) for a discussion of this option and its safe use.
               '';
@@ -124,8 +116,7 @@ in
           xClient = mkOption {
             type = types.bool;
             default = false;
-            description =
-              ''
+            description = ''
                 Send the XCLIENT command to the receiving server, for forwarding
                 client addresses and connection information if the receiving
                 server supports this feature.

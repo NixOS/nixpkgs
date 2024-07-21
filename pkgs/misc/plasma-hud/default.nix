@@ -1,41 +1,54 @@
-{ lib, python3, fetchFromGitHub, rofi, gobject-introspection }:
+{ wrapGAppsHook3
+, lib
+, python3Packages
+, fetchFromGitHub
+, rofi
+, gobject-introspection
+}:
 
-python3.pkgs.buildPythonApplication rec{
+python3Packages.buildPythonApplication rec {
   pname = "plasma-hud";
   version = "19.10.1";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "Zren";
-    repo = pname;
+    repo = "plasma-hud";
     rev = version;
-    sha256 = "19vlc156jfdamw7q1pc78fmlf0h3sff5ar3di9j316vbb60js16l";
+    hash = "sha256-1AQtgVlrmzBkim1kVZzTAwJHq0OH3YAPr6o5aUpgdKc=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    rofi
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
+
+  propagatedBuildInputs = (with python3Packages; [
     dbus-python
+    pygobject3
     setproctitle
     xlib
-    pygobject3
-    gobject-introspection
-  ];
-  format = "other";
+  ]) ++ [ rofi ];
+
   postPatch = ''
     sed -i "s:/usr/lib/plasma-hud:$out/bin:" etc/xdg/autostart/plasma-hud.desktop
   '';
 
   installPhase = ''
-    patchShebangs $out/bin/plasma-hud
-    mkdir -p $out/bin $out/etc/xdg/autostart
-    cp -r $src/usr/lib/plasma-hud/plasma-hud $out/bin/plasma-hud
-    cp -r $src/etc $out/etc
+    runHook preInstall
+
+    install -Dm555 usr/lib/plasma-hud/plasma-hud -t $out/bin
+    cp -r etc -t $out
+
+    runHook postInstall
   '';
 
-  meta = with lib;{
-    license = licenses.gpl2Only;
+  meta = {
+    license = lib.licenses.gpl2Only;
     homepage = "https://github.com/Zren/plasma-hud";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     description = "Run menubar commands, much like the Unity 7 Heads-Up Display (HUD)";
-    maintainers = with maintainers; [ pasqui23 ];
+    maintainers = with lib.maintainers; [ pasqui23 ];
+    mainProgram = "plasma-hud";
   };
 }

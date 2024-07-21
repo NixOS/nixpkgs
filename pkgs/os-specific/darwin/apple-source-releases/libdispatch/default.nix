@@ -13,7 +13,7 @@ appleDerivation' stdenvNoCC {
     cp -r dispatch/*.h $out/include/dispatch
     cp -r os/object*.h  $out/include/os
 
-    # gcc compatability. Source: https://stackoverflow.com/a/28014302/3714556
+    # gcc compatibility. Source: https://stackoverflow.com/a/28014302/3714556
     substituteInPlace $out/include/dispatch/object.h \
       --replace 'typedef void (^dispatch_block_t)(void);' \
                 '#ifdef __clang__

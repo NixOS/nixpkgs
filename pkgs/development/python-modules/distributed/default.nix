@@ -1,59 +1,84 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, click
-, cloudpickle
-, dask
-, msgpack
-, psutil
-, sortedcontainers
-, tblib
-, toolz
-, tornado
-, zict
-, pyyaml
-, mpi4py
-, bokeh
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  click,
+  cloudpickle,
+  dask,
+  fetchFromGitHub,
+  jinja2,
+  locket,
+  msgpack,
+  packaging,
+  psutil,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  sortedcontainers,
+  tblib,
+  toolz,
+  tornado,
+  urllib3,
+  versioneer,
+  zict,
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2021.10.0";
-  disabled = pythonOlder "3.6";
+  version = "2024.7.1";
+  pyproject = true;
 
-  # get full repository need conftest.py to run tests
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0kfq7lwv2n2wiws4v2rj36wx56jvkp2fl6zxg04p2lc3vcgha9za";
+  disabled = pythonOlder "3.9";
+
+  src = fetchFromGitHub {
+    owner = "dask";
+    repo = "distributed";
+    rev = "refs/tags/${version}";
+    hash = "sha256-1VLYOUPo2esFltcoI6B/HMGyuyRq4vvkE55C8acdbG8=";
   };
 
-  propagatedBuildInputs = [
-    bokeh
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "versioneer[toml]==" "versioneer[toml]>=" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+    versioneer
+  ] ++ versioneer.optional-dependencies.toml;
+
+  pythonRelaxDeps = [ "dask" ];
+
+  dependencies = [
     click
     cloudpickle
     dask
-    mpi4py
+    jinja2
+    locket
     msgpack
+    packaging
     psutil
     pyyaml
     sortedcontainers
     tblib
     toolz
     tornado
+    urllib3
     zict
   ];
 
-  # when tested random tests would fail and not repeatably
+  # When tested random tests would fail and not repeatably
   doCheck = false;
 
   pythonImportsCheck = [ "distributed" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed computation in Python";
     homepage = "https://distributed.readthedocs.io/";
-    license = licenses.bsd3;
-    platforms = platforms.x86; # fails on aarch64
-    maintainers = with maintainers; [ teh costrouc ];
+    changelog = "https://github.com/dask/distributed/blob/${version}/docs/source/changelog.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

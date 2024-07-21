@@ -1,11 +1,11 @@
-{ fetchgit
-, lib
-, makeDesktopItem
+{ lib
 , node_webkit
 , pkgs
-, runCommand
+, copyDesktopItems
+, makeDesktopItem
 , stdenv
 , writeShellScript
+, wrapGAppsHook3
 }:
 
 let
@@ -20,15 +20,15 @@ let
     elem;
 
   # this must be updated anytime this package is updated.
-  onlykeyPkg = "onlykey-git://github.com/trustcrypto/OnlyKey-App.git#v${version}";
+  onlykeyPkg = "onlykey-git+https://github.com/trustcrypto/OnlyKey-App.git#v${version}";
 
   # define a shortcut to get to onlykey.
   onlykey = self."${onlykeyPkg}";
 
-  super = (import ./onlykey.nix {
+  super = import ./onlykey.nix {
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
-  });
+  };
 
   self = super // {
     "${onlykeyPkg}" = super."${onlykeyPkg}".override (attrs: {
@@ -48,16 +48,27 @@ let
   script = writeShellScript "${onlykey.packageName}-starter-${onlykey.version}" ''
     ${node_webkit}/bin/nw ${onlykey}/lib/node_modules/${onlykey.packageName}/build
   '';
-
-  desktop = makeDesktopItem {
-    name = onlykey.packageName;
-    exec = script;
-    icon = "${onlykey}/lib/node_modules/${onlykey.packageName}/resources/onlykey_logo_128.png";
-    desktopName = onlykey.packageName;
-    genericName = onlykey.packageName;
-  };
 in
-runCommand "${onlykey.packageName}-${onlykey.version}" { } ''
-  mkdir -p $out/bin
-  ln -s ${script} $out/bin/onlykey
-''
+stdenv.mkDerivation {
+  pname = "${onlykey.packageName}";
+  inherit (onlykey) version;
+  dontUnpack = true;
+  nativeBuildInputs = [ wrapGAppsHook3 copyDesktopItems ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = onlykey.packageName;
+      exec = script;
+      icon = "${onlykey}/lib/node_modules/${onlykey.packageName}/resources/onlykey_logo_128.png";
+      desktopName = onlykey.packageName;
+      genericName = onlykey.packageName;
+    })
+  ];
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    ln -s ${script} $out/bin/onlykey
+
+    runHook postInstall
+  '';
+}

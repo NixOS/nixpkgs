@@ -11,7 +11,7 @@ in
   options.system = {
 
     nixos.label = mkOption {
-      type = types.str;
+      type = types.strMatching "[a-zA-Z0-9:_\\.-]*";
       description = ''
         NixOS version name to be used in the names of generated
         outputs and boot labels.
@@ -19,23 +19,27 @@ in
         If you ever wanted to influence the labels in your GRUB menu,
         this is the option for you.
 
-        The default is <option>system.nixos.tags</option> separated by
-        "-" + "-" + <envar>NIXOS_LABEL_VERSION</envar> environment
-        variable (defaults to the value of
-        <option>system.nixos.version</option>).
+        It can only contain letters, numbers and the following symbols:
+        `:`, `_`, `.` and `-`.
 
-        Can be overriden by setting <envar>NIXOS_LABEL</envar>.
+        The default is {option}`system.nixos.tags` separated by
+        "-" + "-" + {env}`NIXOS_LABEL_VERSION` environment
+        variable (defaults to the value of
+        {option}`system.nixos.version`).
+
+        Can be overridden by setting {env}`NIXOS_LABEL`.
 
         Useful for not loosing track of configurations built from different
         nixos branches/revisions, e.g.:
 
-        <screen>
+        ```
         #!/bin/sh
         today=`date +%Y%m%d`
         branch=`(cd nixpkgs ; git branch 2>/dev/null | sed -n '/^\* / { s|^\* ||; p; }')`
         revision=`(cd nixpkgs ; git rev-parse HEAD)`
         export NIXOS_LABEL_VERSION="$today.$branch-''${revision:0:7}"
-        nixos-rebuild switch</screen>
+        nixos-rebuild switch
+        ```
       '';
     };
 
@@ -45,17 +49,17 @@ in
       example = [ "with-xen" ];
       description = ''
         Strings to prefix to the default
-        <option>system.nixos.label</option>.
+        {option}`system.nixos.label`.
 
         Useful for not loosing track of configurations built with
         different options, e.g.:
 
-        <screen>
+        ```
         {
           system.nixos.tags = [ "with-xen" ];
           virtualisation.xen.enable = true;
         }
-        </screen>
+        ```
       '';
     };
 

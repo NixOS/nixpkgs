@@ -1,30 +1,52 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, pycodestyle, isort }:
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  setuptools,
+  fetchPypi,
+  typing-extensions,
+  pytest7CheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.10.2";
+  version = "1.11.3";
+  pyproject = true;
+
+  # distutils usage: https://github.com/search?q=repo%3Aapache%2Favro%20distutils&type=code
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "381b990cc4c4444743c3297348ffd46e0c3a5d7a17e15b2f4a9042f6e955c31a";
+    hash = "sha256-M5O7UTn5zweR0gV1bOHjmltYWGr1sVPWo7WhmWEOnRc=";
   };
 
-  patchPhase = ''
-    # this test requires network access
-    sed -i 's/test_server_with_path/noop/' avro/test/test_ipc.py
-  '' + (lib.optionalString isPy3k ''
-    # these files require twisted, which is not python3 compatible
-    rm avro/txipc.py
-    rm avro/test/txsample*
-  '');
+  postPatch = lib.optionalString (!pythonOlder "3.12") ''
+    substituteInPlace avro/test/test_tether_word_count.py \
+      --replace-fail 'distutils' 'setuptools._distutils'
+  '';
 
-  nativeBuildInputs = [ pycodestyle ];
-  propagatedBuildInputs = [ isort ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [ pytest7CheckHook ];
+
+  disabledTests = [
+    # Requires network access
+    "test_server_with_path"
+    # AssertionError: 'reader type: null not compatible with writer type: int'
+    "test_schema_compatibility_type_mismatch"
+  ];
+
+  pythonImportsCheck = [ "avro" ];
 
   meta = with lib; {
-    description = "A serialization and RPC framework";
-    homepage = "https://pypi.python.org/pypi/avro/";
+    description = "Python serialization and RPC framework";
+    mainProgram = "avro";
+    homepage = "https://github.com/apache/avro";
+    changelog = "https://github.com/apache/avro/releases/tag/release-${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.zimbatm ];
+    maintainers = with maintainers; [ zimbatm ];
   };
 }

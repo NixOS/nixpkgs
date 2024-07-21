@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, boost, ganv, glibmm, gtkmm2, libjack2, lilv
-, lv2, makeWrapper, pkg-config, python3, raul, serd, sord, sratom
+, lv2, pkg-config, python3, raul, serd, sord, sratom
 , wafHook
 , suil
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation  rec {
   '';
 
   meta = with lib; {
-    description = "A modular audio processing system using JACK and LV2 or LADSPA plugins";
+    description = "Modular audio processing system using JACK and LV2 or LADSPA plugins";
     homepage = "http://drobilla.net/software/ingen";
     license = licenses.agpl3Plus;
     maintainers = [ maintainers.goibhniu ];

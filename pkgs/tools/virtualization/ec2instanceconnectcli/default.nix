@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ec2instanceconnectcli";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VaCyCnEhSx1I3bNo57p0IXf92+tO1tT7KSUXzO1IyIU=";
+    hash = "sha256-/U59a6od0JI27VHX+Bvue/7tQy+iwU+g8yt9/GgdoH4=";
   };
 
   propagatedBuildInputs = [ boto3 cryptography ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Command Line Interface for AWS EC2 Instance Connect";
     homepage = "https://github.com/aws/aws-ec2-instance-connect-cli";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ yurrriq ];
   };
 }

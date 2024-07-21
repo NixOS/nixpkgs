@@ -1,28 +1,70 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, sphinx, setuptools-lint, xlib, evdev }:
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-lint,
+  sphinx,
+
+  # dependencies
+  xlib,
+  evdev,
+  darwin,
+  six,
+
+  # tests
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "pynput";
-  version = "1.7.5";
+  version = "1.7.6";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e6b7926dd162a883ff16f38e01720a930bbf2509146c9f1cdcecddd25288fb6e";
+  src = fetchFromGitHub {
+    owner = "moses-palmer";
+    repo = "pynput";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gRq4LS9NvPL98N0Jk09Z0GfoHS09o3zM284BEWS+NW4=";
   };
 
-  nativeBuildInputs = [ sphinx ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'sphinx >=1.3.1'" ""
+  '';
 
-  propagatedBuildInputs = [ setuptools-lint xlib ]
-  ++ lib.optionals stdenv.isLinux [
-    evdev
+  nativeBuildInputs = [
+    setuptools
+    setuptools-lint
+    sphinx
   ];
 
-  doCheck = false;
+  propagatedBuildInputs =
+    [ six ]
+    ++ lib.optionals stdenv.isLinux [
+      evdev
+      xlib
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        ApplicationServices
+        Quartz
+      ]
+    );
+
+  doCheck = false; # requires running X server
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
-    description = "A library to control and monitor input devices";
+    broken = stdenv.isDarwin;
+    description = "Library to control and monitor input devices";
     homepage = "https://github.com/moses-palmer/pynput";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ nickhu ];
   };
 }
-

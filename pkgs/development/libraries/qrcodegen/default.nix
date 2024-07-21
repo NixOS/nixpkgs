@@ -1,34 +1,52 @@
-{ lib, stdenv, fetchFromGitHub }:
-stdenv.mkDerivation rec {
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "qrcodegen";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "nayuki";
     repo = "QR-Code-generator";
-    rev = "v${version}";
-    sha256 = "sha256-WH6O3YE/+NNznzl52TXZYL+6O25GmKSnaFqDDhRl4As=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-aci5SFBRNRrSub4XVJ2luHNZ2pAUegjgQ6pD9kpkaTY=";
   };
 
-  preBuild = "cd c";
-  installPhase = ''
-    mkdir -p $out/lib $out/include/qrcodegen
-    cp libqrcodegen.a $out/lib
-    cp qrcodegen.h $out/include/qrcodegen/
+  sourceRoot = "${finalAttrs.src.name}/c";
+
+  nativeBuildInputs = lib.optionals stdenv.cc.isClang [
+    stdenv.cc.cc.libllvm.out
+  ];
+
+  makeFlags = lib.optionals stdenv.cc.isClang [ "AR=llvm-ar" ];
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    ./qrcodegen-test
+
+    runHook postCheck
   '';
 
-  meta = with lib;
-    {
-      description = "qrcode generator library in multiple languages";
+  installPhase = ''
+    runHook preInstall
 
-      longDescription = ''
-        This project aims to be the best, clearest library for generating QR Codes. My primary goals are flexible options and absolute correctness. Secondary goals are compact implementation size and good documentation comments.
-      '';
+    install -Dt $out/lib/ libqrcodegen.a
+    install -Dt $out/include/qrcodegen/ qrcodegen.h
 
-      homepage = "https://github.com/nayuki/QR-Code-generator";
+    runHook postInstall
+  '';
 
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ mcbeth ];
-    };
-}
+  meta = {
+    homepage = "https://www.nayuki.io/page/qr-code-generator-library";
+    description = "High-quality QR Code generator library in many languages";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
+  };
+})
+# TODO: build the other languages
+# TODO: multiple outputs

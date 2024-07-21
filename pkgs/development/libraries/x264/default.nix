@@ -1,35 +1,40 @@
-{ stdenv, lib, fetchFromGitLab, nasm
+{ stdenv
+, lib
+, fetchFromGitLab
+, nasm
 , enableShared ? !stdenv.hostPlatform.isStatic
- }:
+}:
 
 stdenv.mkDerivation rec {
   pname = "x264";
-  version = "unstable-2021-06-13";
+  version = "0-unstable-2023-10-01";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
-    rev = "5db6aa6cab1b146e07b60cc1736a01f21da01154";
-    sha256 = "0swyrkz6nvajivxvrr08py0jrfcsjvpxw78xm1k5gd9xbdrxvknh";
+    rev = "31e19f92f00c7003fa115047ce50978bc98c3a0d";
+    hash = "sha256-7/FaaDFmoVhg82BIhP3RbFq4iKGNnhviOPxl3/8PWCM=";
   };
 
-  # Upstream ./configure greps for (-mcpu|-march|-mfpu) in CFLAGS, which in nix
-  # is put in the cc wrapper anyway.
-  patches = [ ./disable-arm-neon-default.patch ];
+  patches = [
+    # Upstream ./configure greps for (-mcpu|-march|-mfpu) in CFLAGS, which in nix
+    # is put in the cc wrapper anyway.
+    ./disable-arm-neon-default.patch
+  ];
 
-  postPatch = ''
-    patchShebangs .
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace '$(if $(STRIP), $(STRIP) -x $@)' '$(if $(STRIP), $(STRIP) -S $@)'
   '';
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "lib" "dev" ];
 
-  preConfigure = lib.optionalString (stdenv.buildPlatform.isx86_64 || stdenv.hostPlatform.isi686) ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isx86 ''
     # `AS' is set to the binutils assembler, but we need nasm
     unset AS
-  '' + lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) ''
+  '' + lib.optionalString stdenv.hostPlatform.isAarch ''
     export AS=$CC
   '';
 
@@ -37,13 +42,20 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!stdenv.isi686) "--enable-pic"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--cross-prefix=${stdenv.cc.targetPrefix}";
 
+  makeFlags = [
+    "BASHCOMPLETIONSDIR=$(out)/share/bash-completion/completions"
+    "install-bashcompletion"
+    "install-lib-shared"
+  ];
+
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isx86 nasm;
 
   meta = with lib; {
     description = "Library for encoding H264/AVC video streams";
-    homepage    = "http://www.videolan.org/developers/x264.html";
-    license     = licenses.gpl2;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ spwhitt tadeokondrak ];
+    mainProgram = "x264";
+    homepage = "http://www.videolan.org/developers/x264.html";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with maintainers; [ ];
   };
 }

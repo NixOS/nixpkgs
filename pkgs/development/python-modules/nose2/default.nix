@@ -1,34 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, six
-, pythonOlder
-, coverage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # optional-dependencies
+  coverage,
+
+  # tests
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "nose2";
-  version = "0.10.0";
+  version = "0.15.1";
+  pyproject = true;
 
-  # Requires mock 2.0.0 if python < 3.6, but NixPkgs has mock 3.0.5.
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "886ba617a96de0130c54b24479bd5c2d74d5c940d40f3809c3a275511a0c4a60";
+    hash = "sha256-NncPUZ31vs08v+C+5Ku/v5ufa0604DNh0oK378/E8N8=";
   };
 
-  propagatedBuildInputs = [ six coverage ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
+  passthru.optional-dependencies = {
+    coverage = [ coverage ];
+  };
+
+  pythonImportsCheck = [ "nose2" ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    unittestCheckHook
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   meta = with lib; {
-    description = "nose2 is the next generation of nicer testing for Python";
+    changelog = "https://github.com/nose-devs/nose2/blob/${version}/docs/changelog.rst";
+    description = "Test runner for Python";
+    mainProgram = "nose2";
     homepage = "https://github.com/nose-devs/nose2";
     license = licenses.bsd0;
+    maintainers = with maintainers; [ ];
   };
-
 }

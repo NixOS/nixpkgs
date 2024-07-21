@@ -1,11 +1,10 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  plasma-framework
+{ mkDerivation
+, extra-cmake-modules
+, plasma-framework
 }:
 
 mkDerivation {
-  name = "plasma-nano";
+  pname = "plasma-nano";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     plasma-framework

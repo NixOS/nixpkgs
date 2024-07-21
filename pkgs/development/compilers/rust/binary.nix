@@ -1,4 +1,5 @@
-{ lib, stdenv, makeWrapper, bash, curl, darwin, zlib
+{ lib, stdenv, makeWrapper, wrapRustc, bash, curl, darwin, zlib
+, autoPatchelfHook, gcc
 , version
 , src
 , platform
@@ -18,20 +19,24 @@ let
 in
 
 rec {
-  rustc = stdenv.mkDerivation {
-    name = "rustc-${versionType}-${version}";
+  rustc-unwrapped = stdenv.mkDerivation {
+    pname = "rustc-${versionType}";
 
     inherit version;
     inherit src;
 
     meta = with lib; {
-      homepage = "http://www.rust-lang.org/";
-      description = "A safe, concurrent, practical language";
+      homepage = "https://www.rust-lang.org/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      description = "Safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
 
+    nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
     buildInputs = [ bash ]
+      ++ lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) gcc.cc.lib
+      ++ lib.optional (!stdenv.isDarwin) zlib
       ++ lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
@@ -42,24 +47,6 @@ rec {
       ./install.sh --prefix=$out \
         --components=${installComponents}
 
-      ${optionalString (stdenv.isLinux && bootstrapping) (''
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/rustc"
-        '' + optionalString (lib.versionAtLeast version "1.46")
-        # rustc bootstrap needs libz starting from 1.46
-        ''
-          ln -s ${zlib}/lib/libz.so.1 $out/lib/libz.so.1
-          ln -s ${zlib}/lib/libz.so $out/lib/libz.so
-        '' + ''
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/rustdoc"
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/cargo"
-      '')}
-
       # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
       # (or similar) here. It causes strange effects where rustc loads
       # the wrong libraries in a bootstrap-build causing failures that
@@ -67,24 +54,36 @@ rec {
       # https://github.com/rust-lang/rust/issues/34722#issuecomment-232164943
     '';
 
+    # The strip tool in cctools 973.0.1 and up appears to break rlibs in the
+    # binaries. The lib.rmeta object inside the ar archive should contain an
+    # .rmeta section, but it is removed. Luckily, this doesn't appear to be an
+    # issue for Rust builds produced by Nix.
+    dontStrip = true;
+
     setupHooks = ./setup-hook.sh;
   };
 
+  rustc = wrapRustc rustc-unwrapped;
+
   cargo = stdenv.mkDerivation {
-    name = "cargo-${versionType}-${version}";
+    pname = "cargo-${versionType}";
 
     inherit version;
     inherit src;
 
     meta = with lib; {
-      homepage = "http://www.rust-lang.org/";
-      description = "A safe, concurrent, practical language";
+      homepage = "https://doc.rust-lang.org/cargo/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      description = "Rust package manager";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ bash ] ++ lib.optional stdenv.isDarwin Security;
+    nativeBuildInputs = [ makeWrapper ]
+      ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+    buildInputs = [ bash ]
+      ++ lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) gcc.cc.lib
+      ++ lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
       patchShebangs .
@@ -94,12 +93,6 @@ rec {
       patchShebangs ./install.sh
       ./install.sh --prefix=$out \
         --components=cargo
-
-      ${optionalString (stdenv.isLinux && bootstrapping) ''
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/cargo"
-      ''}
 
       wrapProgram "$out/bin/cargo" \
         --suffix PATH : "${rustc}/bin"

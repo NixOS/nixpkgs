@@ -1,7 +1,8 @@
 { fetchurl, lib, stdenv }:
 
 let
-  version = "0.24.5";
+  version = "1.7.0";
+  # nixpkgs-update: no auto update
 
   suffix = {
     x86_64-linux = "x86_64";
@@ -12,7 +13,7 @@ let
 
   dlbin = sha256: fetchurl {
     url = "${baseurl}/v${version}/firecracker-v${version}-${suffix}.tgz";
-    sha256 = sha256."${stdenv.hostPlatform.system}";
+    sha256 = sha256."${stdenv.hostPlatform.system}"or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
 
 in
@@ -22,15 +23,15 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   src = dlbin {
-    x86_64-linux = "sha256-drcm2kz2csuJqr8Oqs0r1BrxgPHOyuwC2S+99MhbMjA=";
-    aarch64-linux = "sha256-x8RoBmgY3HRUOLw8YzEwQfQuT83zGfBHHWu88b4i05o=";
+    x86_64-linux = "sha256-Vb0+bVmf3RCONuUvmu4jGfBsGKkPL6SbZOk/3wb1/1M=";
+    aarch64-linux = "sha256-PLoQA4a6qulxSns/ZRSgn6EtHr46/hstNhP1pAHt9VA=";
   };
 
   dontConfigure = true;
 
   buildPhase = ''
-    mv release-v${version}/firecracker-v${version}-${suffix} firecracker
-    mv release-v${version}/jailer-v${version}-${suffix} jailer
+    mv release-v${version}-${suffix}/firecracker-v${version}-${suffix} firecracker
+    mv release-v${version}-${suffix}/jailer-v${version}-${suffix} jailer
     chmod +x firecracker jailer
   '';
 
@@ -49,8 +50,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Secure, fast, minimal micro-container virtualization";
     homepage = "http://firecracker-microvm.io";
+    changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${version}";
+    mainProgram = "firecracker";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ thoughtpolice endocrimes ];
+    maintainers = with maintainers; [ thoughtpolice qjoly ];
   };
 }

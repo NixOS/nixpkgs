@@ -5,20 +5,16 @@
 
 buildGoModule rec {
   pname = "gosh";
-  # https://github.com/redcode-labs/GoSH/issues/4
-  version = "2020523-${lib.strings.substring 0 7 rev}";
-  rev = "7ccb068279cded1121eacc5a962c14b2064a1859";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "redcode-labs";
     repo = "GoSH";
-    inherit rev;
-    sha256 = "143ig0lqnkpnydhl8gnfzhg613x4wc38ibdbikkqwfyijlr6sgzd";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-h4WqaN2okAeaU/+0fs8zLYDtyQLuLkCDdGrkGz8rdhg=";
   };
 
-  vendorSha256 = "06j6cj4m0w6n9vl7sxlxpsgk77k941npq9767rdzzgy2srfqlskq";
-
-  runVend = true;
+  vendorHash = "sha256-ITz6nkhttG6bsIZLsp03rcbEBHUQ7pFl4H6FOHTXIU4=";
 
   subPackages = [ "." ];
 
@@ -26,6 +22,7 @@ buildGoModule rec {
     description = "Reverse/bind shell generator";
     homepage = "https://github.com/redcode-labs/GoSH";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab ] ++ teams.redcodelabs.members;
+    mainProgram = "GoSH";
   };
 }

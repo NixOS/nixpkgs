@@ -12,9 +12,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ mpfr readline ];
 
   meta = with lib; {
-    description = "A command line calculator";
-    homepage = "http://w-calc.sourceforge.net";
+    description = "Command line calculator";
+    homepage = "https://w-calc.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.all;
+    mainProgram = "wcalc";
   };
 }

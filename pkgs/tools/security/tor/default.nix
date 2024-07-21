@@ -30,11 +30,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.6.8";
+  version = "0.4.8.12";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "0sj7qn6d6js6gk4vjfkc7p9g021czbfaq00yfq3mn5ycnhvimkhm";
+    sha256 = "sha256-ynzHNdmON0e1jy88wU+ATdeJ+g+zM6hNy2vXCtu4yHQ=";
   };
 
   outputs = [ "out" "geoip" ];
@@ -45,9 +45,18 @@ stdenv.mkDerivation rec {
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
-  # cross compiles correctly but needs the following
-  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    "--disable-tool-name-check";
+  configureFlags =
+    # allow inclusion of GPL-licensed code (needed for Proof of Work defense for onion services)
+    # for more details see
+    # https://gitlab.torproject.org/tpo/onion-services/onion-support/-/wikis/Documentation/PoW-FAQ#compiling-c-tor-with-the-pow-defense
+    [ "--enable-gpl" ]
+    ++
+    # cross compiles correctly but needs the following
+    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ]
+    ++
+    # sandbox is broken on aarch64-linux https://gitlab.torproject.org/tpo/core/tor/-/issues/40599
+    lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "--disable-seccomp" ]
+  ;
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
@@ -61,14 +70,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # disable tests on aarch64-darwin, the following tests fail there:
-  # oom/circbuf: [forking]
-  #   FAIL src/test/test_oom.c:187: assert(c1->marked_for_close)
-  #   [circbuf FAILED]
-  # oom/streambuf: [forking]
-  #   FAIL src/test/test_oom.c:287: assert(x_ OP_GE 500 - 5): 0 vs 495
-  #   [streambuf FAILED]
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+  # disable tests on linux aarch32
+  # https://gitlab.torproject.org/tpo/core/tor/-/issues/40912
+  doCheck = !(stdenv.isLinux && stdenv.isAarch32);
 
   postInstall = ''
     mkdir -p $geoip/share/tor
@@ -97,7 +101,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.torproject.org/";
-    repositories.git = "https://git.torproject.org/git/tor";
     description = "Anonymizing overlay network";
 
     longDescription = ''
@@ -110,10 +113,10 @@ stdenv.mkDerivation rec {
       the TCP protocol.
     '';
 
-    license = licenses.bsd3;
+    license = with licenses; [ bsd3 gpl3Only ];
 
     maintainers = with maintainers;
-      [ phreedom thoughtpolice joachifm prusnak ];
+      [ thoughtpolice joachifm prusnak ];
     platforms = platforms.unix;
   };
 }

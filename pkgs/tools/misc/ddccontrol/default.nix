@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , intltool
 , libxml2
@@ -12,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddccontrol";
-  version = "0.5.2";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol";
-    rev = "0.5.2";
-    sha256 = "sha256-kul0sjbwbCwadvrccG3KwL/fKWACFUg74QGvgfWE4FQ=";
+    rev = version;
+    sha256 = "sha256-100SITpGbui/gRhFjVZxn6lZRB0najtGHd18oUpByJo=";
   };
 
   nativeBuildInputs = [
@@ -34,15 +35,26 @@ stdenv.mkDerivation rec {
     ddccontrol-db
   ];
 
+  patches = [
+    # Upstream commit, fixed the version number in v1.0.0
+    (fetchpatch {
+      url = "https://github.com/ddccontrol/ddccontrol/commit/fc8c5b5d0f2b64b08b95f4a7d8f47f2fd8ceec34.patch";
+      hash = "sha256-SB1BaolTNCUYgj38nMg1uLUqOHvnwCr8T3cnfu/7rjI=";
+    })
+  ];
+
   configureFlags = [
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
   ];
 
   prePatch = ''
-    oldPath="\$""{datadir}/ddccontrol-db"
-    newPath="${ddccontrol-db}/share/ddccontrol-db"
-    sed -i -e "s|$oldPath|$newPath|" configure.ac
-    sed -i -e "s/chmod 4711/chmod 0711/" src/ddcpci/Makefile*
+    substituteInPlace configure.ac              \
+      --replace                                 \
+      "\$""{datadir}/ddccontrol-db"             \
+      "${ddccontrol-db}/share/ddccontrol-db"
+
+    substituteInPlace src/ddcpci/Makefile.am    \
+       --replace "chmod 4711" "chmod 0711"
   '';
 
   preConfigure = ''
@@ -50,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A program used to control monitor parameters by software";
+    description = "Program used to control monitor parameters by software";
     homepage = "https://github.com/ddccontrol/ddccontrol";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

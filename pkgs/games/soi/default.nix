@@ -16,10 +16,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DEIGEN_INCLUDE_DIR=${eigen2}/include/eigen2"
+    "-DLUABIND_LIBRARY=${luabind}/lib/libluabind09.a"
   ];
 
   meta = with lib; {
-    description = "A physics-based puzzle game";
+    description = "Physics-based puzzle game";
+    mainProgram = "soi";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.free;

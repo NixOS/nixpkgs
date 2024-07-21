@@ -1,4 +1,4 @@
-{ wrapGAppsHook
+{ wrapGAppsHook3
 , glib
 , lib
 , stdenv
@@ -19,7 +19,8 @@ let
   testingName = lib.optionalString (testName != null) "${testName}-";
 in
 stdenv.mkDerivation rec {
-  name = "${testingName}${switchboard.name}-with-plugs";
+  pname = "${testingName}${switchboard.pname}-with-plugs";
+  inherit (switchboard) version;
 
   src = null;
 
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     glib
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = lib.forEach selectedPlugs (x: x.buildInputs)

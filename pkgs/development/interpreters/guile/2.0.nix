@@ -42,7 +42,6 @@ builder rec {
 
   nativeBuildInputs = [
     makeWrapper
-    gawk
     pkg-config
   ];
   buildInputs = [
@@ -121,7 +120,7 @@ builder rec {
   + ''
     sed -i "$out/lib/pkgconfig/guile"-*.pc    \
         -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
-            s|^Cflags:\(.*\)$|Cflags: -I${libunistring}/include \1|g ;
+            s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;
             s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
             s|includedir=$out|includedir=$dev|g
             "
@@ -133,6 +132,12 @@ builder rec {
   doInstallCheck = doCheck;
 
   setupHook = ./setup-hook-2.0.sh;
+
+  passthru = rec {
+    effectiveVersion = lib.versions.majorMinor version;
+    siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
+    siteDir = "share/guile/site/${effectiveVersion}";
+  };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/guile/";
@@ -147,7 +152,7 @@ builder rec {
         processing.
       '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ludo lovek323 vrthra ];
+    maintainers = with maintainers; [ ludo ];
     platforms = platforms.all;
   };
 }

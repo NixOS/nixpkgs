@@ -1,17 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, beautifulsoup4
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "schiene";
-  version = "0.23";
+  version = "0.26";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "014aaxmk7yxyml1xgfk3zqallyb5zi04m0v7jgqjkbjqq4n4j3ck";
+    hash = "sha256-sCaVrHqQZwAZDXIjh4Rg9ZT/EQSbrOPdSyT8oofCsmA=";
   };
 
   propagatedBuildInputs = [
@@ -19,7 +24,7 @@ buildPythonPackage rec {
     beautifulsoup4
   ];
 
-  # tests are not present
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "schiene" ];

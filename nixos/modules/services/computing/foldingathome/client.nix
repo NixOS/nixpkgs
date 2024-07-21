@@ -18,16 +18,9 @@ in
     '')
   ];
   options.services.foldingathome = {
-    enable = mkEnableOption "Enable the Folding@home client";
+    enable = mkEnableOption "Folding@home client";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.fahclient;
-      defaultText = literalExpression "pkgs.fahclient";
-      description = ''
-        Which Folding@home client to use.
-      '';
-    };
+    package = mkPackageOption pkgs "fahclient" { };
 
     user = mkOption {
       type = types.nullOr types.str;
@@ -63,7 +56,7 @@ in
       default = [];
       description = ''
         Extra startup options for the FAHClient. Run
-        <literal>FAHClient --help</literal> to find all the available options.
+        `fah-client --help` to find all the available options.
       '';
     };
   };
@@ -74,7 +67,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = ''
-        exec ${cfg.package}/bin/FAHClient ${lib.escapeShellArgs args}
+        exec ${lib.getExe cfg.package} ${lib.escapeShellArgs args}
       '';
       serviceConfig = {
         DynamicUser = true;

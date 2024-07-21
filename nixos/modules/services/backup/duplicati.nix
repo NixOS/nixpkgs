@@ -10,11 +10,27 @@ in
     services.duplicati = {
       enable = mkEnableOption "Duplicati";
 
+      package = mkPackageOption pkgs "duplicati" { };
+
       port = mkOption {
         default = 8200;
-        type = types.int;
+        type = types.port;
         description = ''
           Port serving the web interface
+        '';
+      };
+
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/duplicati";
+        description = ''
+          The directory where Duplicati stores its data files.
+
+          ::: {.note}
+          If left as the default value this directory will automatically be created
+          before the Duplicati server starts, otherwise you are responsible for ensuring
+          the directory exists with appropriate ownership and permissions.
+          :::
         '';
       };
 
@@ -39,26 +55,29 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.duplicati ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.duplicati = {
       description = "Duplicati backup";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        User = cfg.user;
-        Group = "duplicati";
-        StateDirectory = "duplicati";
-        ExecStart = "${pkgs.duplicati}/bin/duplicati-server --webservice-interface=${cfg.interface} --webservice-port=${toString cfg.port} --server-datafolder=/var/lib/duplicati";
-        Restart = "on-failure";
-      };
+      serviceConfig = mkMerge [
+        {
+          User = cfg.user;
+          Group = "duplicati";
+          ExecStart = "${cfg.package}/bin/duplicati-server --webservice-interface=${cfg.interface} --webservice-port=${toString cfg.port} --server-datafolder=${cfg.dataDir}";
+          Restart = "on-failure";
+        }
+        (mkIf (cfg.dataDir == "/var/lib/duplicati") {
+          StateDirectory = "duplicati";
+        })
+      ];
     };
 
     users.users = lib.optionalAttrs (cfg.user == "duplicati") {
       duplicati = {
         uid = config.ids.uids.duplicati;
-        home = "/var/lib/duplicati";
-        createHome = true;
+        home = cfg.dataDir;
         group = "duplicati";
       };
     };
@@ -66,4 +85,3 @@ in
 
   };
 }
-

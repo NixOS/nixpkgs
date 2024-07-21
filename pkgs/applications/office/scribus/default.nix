@@ -1,52 +1,88 @@
-{ lib, stdenv, fetchurl, pkg-config, freetype, lcms, libtiff, libxml2
-, libart_lgpl, qt4, python2, cups, fontconfig, libjpeg
-, zlib, libpng, xorg, cairo, podofo, hunspell, boost, cmake, imagemagick, ghostscript }:
+{ boost
+, cairo
+, cmake
+, cups
+, fetchurl
+, fontconfig
+, freetype
+, harfbuzzFull
+, hunspell
+, lcms2
+, libjpeg
+, libtiff
+, libxml2
+, pixman
+, pkg-config
+, podofo
+, poppler
+, poppler_data
+, python3
+, lib
+, stdenv
+, qt5
+}:
 
 let
-  icon = fetchurl {
-    url = "https://gist.githubusercontent.com/ejpcmac/a74b762026c9bc4000be624c3d085517/raw/18edc497c5cb6fdeef1c8aede37a0ee68413f9d3/scribus-icon-centered.svg";
-    sha256 = "0hq3i7c2l50445an9glhhg47kj26y16svfajc6naqn307ph9vzc3";
-  };
-
-  pythonEnv = python2.withPackages(ps: [ps.tkinter ps.pillow]);
-in stdenv.mkDerivation rec {
+  pythonEnv = python3.withPackages (
+    ps: [
+      ps.pillow
+      ps.tkinter
+    ]
+  );
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "scribus";
-  version = "1.4.8";
+
+  version = "1.6.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0bq433myw6h1siqlsakxv6ghb002rp3mfz5k12bg68s0k6skn992";
+    url = "mirror://sourceforge/scribus/scribus-devel/scribus-${finalAttrs.version}.tar.xz";
+    hash = "sha256-fv+bH0fjcuVrs2nx2+GP5JEBeJtea8/beJDgNGtkE4M=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = with xorg;
-    [ freetype lcms libtiff libxml2 libart_lgpl qt4
-      pythonEnv cups fontconfig
-      libjpeg zlib libpng podofo hunspell cairo
-      boost # for internal 2geom library
-      libXaw libXext libX11 libXtst libXi libXinerama
-      libpthreadstubs libXau libXdmcp
-      imagemagick # To build the icon
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt5.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    boost
+    cairo
+    cups
+    fontconfig
+    freetype
+    harfbuzzFull
+    hunspell
+    lcms2
+    libjpeg
+    libtiff
+    libxml2
+    pixman
+    podofo
+    poppler
+    poppler_data
+    pythonEnv
+    qt5.qtbase
+    qt5.qtimageformats
+    qt5.qttools
+  ];
+
+  meta = with lib; {
+    maintainers = with maintainers; [
+      arthsmn
     ];
-
-  postPatch = ''
-    substituteInPlace scribus/util_ghostscript.cpp \
-      --replace 'QString gsName("gs");' \
-                'QString gsName("${ghostscript}/bin/gs");'
-  '';
-
-  postInstall = ''
-    for i in 16 24 48 64 96 128 256 512; do
-      mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
-      convert -background none -resize ''${i}x''${i} ${icon} $out/share/icons/hicolor/''${i}x''${i}/apps/scribus.png
-    done
-  '';
-
-  meta = {
-    maintainers = [ lib.maintainers.marcweber ];
-    platforms = lib.platforms.linux;
-    description = "Desktop Publishing (DTP) and Layout program for Linux";
+    description = "Desktop Publishing (DTP) and Layout program";
+    mainProgram = "scribus";
     homepage = "https://www.scribus.net";
-    license = lib.licenses.gpl2;
+    # There are a lot of licenses...
+    # https://github.com/scribusproject/scribus/blob/20508d69ca4fc7030477db8dee79fd1e012b52d2/COPYING#L15-L19
+    license = with licenses; [
+      bsd3
+      gpl2Plus
+      mit
+      publicDomain
+    ];
+    broken = stdenv.isDarwin;
   };
-}
+})

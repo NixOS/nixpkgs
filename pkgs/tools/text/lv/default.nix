@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Powerful multi-lingual file viewer / grep";
     homepage = "https://web.archive.org/web/20160310122517/www.ff.iij4u.or.jp/~nrt/lv/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ kayhide ];
   };

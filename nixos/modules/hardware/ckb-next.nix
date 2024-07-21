@@ -24,14 +24,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.ckb-next;
-        defaultText = literalExpression "pkgs.ckb-next";
-        description = ''
-          The package implementing the Corsair keyboard/mouse driver.
-        '';
-      };
+      package = mkPackageOption pkgs "ckb-next" { };
     };
 
     config = mkIf cfg.enable {
@@ -48,6 +41,6 @@ in
     };
 
     meta = {
-      maintainers = with lib.maintainers; [ kierdavis ];
+      maintainers = with lib.maintainers; [ ];
     };
   }

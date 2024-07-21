@@ -1,8 +1,39 @@
-{ config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
-, libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
-, libiconv, ijs, lcms2, fetchpatch, callPackage, bash, buildPackages
-, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups
-, x11Support ? cupsSupport, xlibsWrapper # with CUPS, X11 only adds very little
+{ config
+, stdenv
+, lib
+, fetchurl
+, pkg-config
+, zlib
+, expat
+, openssl
+, autoconf
+, libjpeg
+, libpng
+, libtiff
+, freetype
+, fontconfig
+, libpaper
+, jbig2dec
+, libiconv
+, ijs
+, lcms2
+, callPackage
+, bash
+, buildPackages
+, openjpeg
+, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin)
+, cups
+, x11Support ? cupsSupport
+, xorg # with CUPS, X11 only adds very little
+, dynamicDrivers ? true
+
+# for passthru.tests
+, graphicsmagick
+, imagemagick
+, libspectre
+, lilypond
+, pstoedit
+, python3
 }:
 
 let
@@ -12,11 +43,11 @@ let
     srcs = [
       (fetchurl {
         url = "mirror://sourceforge/gs-fonts/ghostscript-fonts-std-8.11.tar.gz";
-        sha256 = "00f4l10xd826kak51wsmaz69szzm2wp8a41jasr4jblz25bg7dhf";
+        hash = "sha256-DrbzVhGfLkmyVjIQhS4X9X+dzFdV81Cmmkag1kGgxAE=";
       })
       (fetchurl {
         url = "mirror://gnu/ghostscript/gnu-gs-fonts-other-6.0.tar.gz";
-        sha256 = "1cxaah3r52qq152bbkiyj2f7dx1rf38vsihlhjmrvzlr8v6cqil1";
+        hash = "sha256-gUbMzEaZ/p2rhBRGvdFwOfR2nJA+zrVECRiLkgdUqrM=";
       })
       # ... add other fonts here
     ];
@@ -29,29 +60,20 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "ghostscript";
-  version = "9.53.3";
+  pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
+  version = "10.03.1";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${lib.versions.minor version}${lib.versions.patch version}/${pname}-${version}.tar.xz";
-    sha512 = "2vif3vgxa5wma16yxvhhkymk4p309y5204yykarq94r5rk890556d2lj5w7acnaa2ymkym6y0zd4vq9sy9ca2346igg2c6dxqkjr0zb";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${lib.replaceStrings ["."] [""] version}/ghostscript-${version}.tar.xz";
+    hash = "sha256-FXIS7clrjMxAlHXc4uSYM/tEJ/FQxFUlje2WMsEGq+4=";
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/41ef9a0bc36b9db7115fbe9623f989bfb47bbade.patch";
-      sha256 = "1qpc6q1fpxshqc0mqgg36kng47kgljk50bmr8p7wn21jgfkh7m8w";
-    })
-    (fetchpatch {
-      url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=a9bd3dec9fde";
-      name = "CVE-2021-3781.patch";
-      sha256 = "FvbH7cb3ZDCbNRz9DF0kDmLdF7OWNYk90wv44pimU58=";
-    })
     ./urw-font-files.patch
     ./doc-no-ref.diff
   ];
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [ "out" "man" "doc" "fonts" ];
 
   enableParallelBuilding = true;
 
@@ -65,9 +87,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib expat openssl
     libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
-    libiconv ijs lcms2 bash
+    libiconv ijs lcms2 bash openjpeg
   ]
-  ++ lib.optional x11Support xlibsWrapper
+  ++ lib.optionals x11Support [ xorg.libICE xorg.libX11 xorg.libXext xorg.libXt ]
   ++ lib.optional cupsSupport cups
   ;
 
@@ -76,8 +98,7 @@ stdenv.mkDerivation rec {
     export CCAUX=$CC_FOR_BUILD
     ${lib.optionalString cupsSupport ''export CUPSCONFIG="${cups.dev}/bin/cups-config"''}
 
-    # requires in-tree (heavily patched) openjpeg
-    rm -rf jpeg libpng zlib jasper expat tiff lcms2mt jbig2dec freetype cups/libs ijs
+    rm -rf jpeg libpng zlib jasper expat tiff lcms2mt jbig2dec freetype cups/libs ijs openjpeg
 
     sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@; s@INCLUDE=/usr/include@INCLUDE=/no-such-path@" -i base/unix-aux.mak
     sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib.dev}/include@" -i configure.ac
@@ -87,10 +108,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-system-libtiff"
+    "--without-tesseract"
+  ] ++ lib.optionals dynamicDrivers [
     "--enable-dynamic"
-  ]
-  ++ lib.optional x11Support "--with-x"
-  ++ lib.optionals cupsSupport [
+    "--disable-hidden-visibility"
+  ] ++ lib.optionals x11Support [
+    "--with-x"
+  ] ++ lib.optionals cupsSupport [
     "--enable-cups"
   ];
 
@@ -98,7 +122,10 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   # don't build/install statically linked bin/gs
-  buildFlags = [ "so" ];
+  buildFlags = [ "so" ]
+    # without -headerpad, the following error occurs on Darwin when compiling with X11 support (as of 10.02.0)
+    # error: install_name_tool: changing install names or rpaths can't be redone for: [...]libgs.dylib.10 (the program must be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
+    ++ lib.optional (x11Support && stdenv.isDarwin) "LDFLAGS=-headerpad_max_install_names";
   installTargets = [ "soinstall" ];
 
   postInstall = ''
@@ -106,7 +133,9 @@ stdenv.mkDerivation rec {
 
     cp -r Resource "$out/share/ghostscript/${version}"
 
-    ln -s "${fonts}" "$out/share/ghostscript/fonts"
+    mkdir -p $fonts/share/fonts
+    cp -rv ${fonts}/* "$fonts/share/fonts/"
+    ln -s "$fonts/share/fonts" "$out/share/ghostscript/fonts"
   '' + lib.optionalString stdenv.isDarwin ''
     for file in $out/lib/*.dylib* ; do
       install_name_tool -id "$file" $file
@@ -117,6 +146,7 @@ stdenv.mkDerivation rec {
   dylib_version = lib.versions.majorMinor version;
   preFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
+    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gsx
   '';
 
   # validate dynamic linkage
@@ -125,6 +155,7 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     $out/bin/gs --version
+    $out/bin/gsx --version
     pushd examples
     for f in *.{ps,eps,pdf}; do
       echo "Rendering $f"
@@ -142,7 +173,11 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  passthru.tests.test-corpus-render = callPackage ./test-corpus-render.nix {};
+  passthru.tests = {
+    test-corpus-render = callPackage ./test-corpus-render.nix {};
+    inherit graphicsmagick imagemagick libspectre lilypond pstoedit;
+    inherit (python3.pkgs) matplotlib;
+  };
 
   meta = {
     homepage = "https://www.ghostscript.com/";
@@ -155,7 +190,7 @@ stdenv.mkDerivation rec {
       operations in the PostScript language, and (iii) a wide variety
       of output drivers for various file formats and printers.
     '';
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.viric ];
     mainProgram = "gs";

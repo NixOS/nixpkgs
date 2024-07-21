@@ -1,33 +1,52 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , aspell
+, groff
 , pkg-config
 , glib
 , hunspell
 , hspell
 , nuspell
 , unittest-cpp
+
+, withHspell ? true
+, withAspell ? true
+, withHunspell ? true
+, withNuspell ? true
+, withAppleSpell ? stdenv.isDarwin
+
+, Cocoa
 }:
+
+assert withAppleSpell -> stdenv.isDarwin;
 
 stdenv.mkDerivation rec {
   pname = "enchant";
-  version = "2.3.1";
+  version = "2.6.9";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-e0sa/PLNi/ppHe6mGIQE0zfyMXS7w5ucKt0r80Bzbpw=";
+    hash = "sha256-2aWhDcmzikOzoPoix27W67fgnrU1r/YpVK/NvUDv/2s=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
+    groff
     pkg-config
   ];
 
   buildInputs = [
     glib
+  ] ++ lib.optionals withHunspell [
     hunspell
+  ] ++ lib.optionals withNuspell [
     nuspell
+  ] ++ lib.optionals withAppleSpell [
+    Cocoa
   ];
 
   checkInputs = [
@@ -35,8 +54,9 @@ stdenv.mkDerivation rec {
   ];
 
   # libtool puts these to .la files
-  propagatedBuildInputs = [
+  propagatedBuildInputs = lib.optionals withHspell [
     hspell
+  ] ++ lib.optionals withAspell [
     aspell
   ];
 
@@ -46,6 +66,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-relocatable" # needed for tests
+    (lib.withFeature withAspell "aspell")
+    (lib.withFeature withHspell "hspell")
+    (lib.withFeature withHunspell "hunspell")
+    (lib.withFeature withNuspell "nuspell")
+    (lib.withFeature withAppleSpell "applespell")
   ];
 
   meta = with lib; {

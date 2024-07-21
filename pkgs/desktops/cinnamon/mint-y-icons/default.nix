@@ -1,26 +1,25 @@
 { fetchFromGitHub
 , lib
-, stdenv
-, gnome
+, stdenvNoCC
+, adwaita-icon-theme
 , gnome-icon-theme
 , hicolor-icon-theme
 , gtk3
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mint-y-icons";
-  version = "1.5.8";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
-    # they don't exactly do tags, it's just a named commit
-    rev = "9489bd161e9503d071227dd36057386a34cfc0a3";
-    hash = "sha256-53yTCWNSJjCpVvrxLfsiaCPNDEZWxJgGVAmVNMNql2M=";
+    rev = version;
+    hash = "sha256-SJ6h1All5bub+Yue8zUrAYdlNf005MAdnl+pkOelods=";
   };
 
   propagatedBuildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gnome-icon-theme
     hicolor-icon-theme
   ];
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/mint-y-icons";
-    description = "The Mint-Y icon theme";
+    description = "Mint-Y icon theme";
     license = licenses.gpl3; # from debian/copyright
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

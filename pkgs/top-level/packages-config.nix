@@ -8,8 +8,8 @@
   # purposes of the index.
   packageOverrides = super: with super; lib.mapAttrs (_: set: recurseIntoAttrs set) {
     inherit (super)
+      agdaPackages
       apacheHttpdPackages
-      atomPackages
       fdbPackages
       fusePackages
       gns3Packages
@@ -18,20 +18,27 @@
       nodePackages
       nodePackages_latest
       platformioPackages
-      quicklispPackagesClisp
-      quicklispPackagesSBCL
       rPackages
       roundcubePlugins
-      sconsPackages
       sourceHanPackages
       steamPackages
       ut2004Packages
-      zabbix40
       zabbix50
+      zabbix60
       zeroadPackages
     ;
 
-    # This is an alias which we disallow by default; explicitly allow it
-    emacs27Packages = emacs27.pkgs;
+    # Make sure haskell.compiler is included, so alternative GHC versions show up,
+    # but don't add haskell.packages.* since they contain the same packages (at
+    # least by name) as haskellPackages.
+    haskell = super.haskell // {
+      compiler = recurseIntoAttrs super.haskell.compiler;
+    };
+
+    # minimal-bootstrap packages aren't used for anything but bootstrapping our
+    # stdenv. They should not be used for any other purpose and therefore not
+    # show up in search results or repository tracking services that consume our
+    # packages.json https://github.com/NixOS/nixpkgs/issues/244966
+    minimal-bootstrap = { };
   };
 }

@@ -1,21 +1,35 @@
 { lib
 , python3Packages
+, fetchPypi
 , onlykey-cli
 }:
 
 let
+  bech32 = with python3Packages; buildPythonPackage rec {
+    pname = "bech32";
+    version = "1.2.0";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "sha256-fW24IUYDvXhx/PpsCCbvaLhbCr2Q+iHChanF4h0r2Jk=";
+    };
+  };
+
   # onlykey requires a patched version of libagent
   lib-agent = with python3Packages; libagent.overridePythonAttrs (oa: rec{
-    version = "1.0.2";
+    version = "1.0.6";
     src = fetchPypi {
       inherit version;
       pname = "lib-agent";
-      sha256 = "sha256-NAimivO3m4UUPM4JgLWGq2FbXOaXdQEL/DqZAcy+kEw=";
+      sha256 = "sha256-IrJizIHDIPHo4tVduUat7u31zHo3Nt8gcMOyUUqkNu0=";
     };
     propagatedBuildInputs = oa.propagatedBuildInputs or [ ] ++ [
-      pynacl
+      bech32
+      cryptography
+      cython
       docutils
       pycryptodome
+      pynacl
       wheel
     ];
 
@@ -26,20 +40,20 @@ let
     meta = oa.meta // {
       description = "Using OnlyKey as hardware SSH and GPG agent";
       homepage = "https://github.com/trustcrypto/onlykey-agent/tree/ledger";
-      maintainers = with maintainers; [ kalbasit ];
+      maintainers = with lib.maintainers; [ kalbasit ];
     };
   });
 in
 python3Packages.buildPythonApplication rec {
   pname = "onlykey-agent";
-  version = "1.1.11";
+  version = "1.1.15";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YH/cqQOVy5s6dTp2JwxM3s4xRTXgwhOr00whtHAwZZI=";
+    hash = "sha256-SbGb7CjcD7cFPvASZtip56B4uxRiFKZBvbsf6sb8fds=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ lib-agent onlykey-cli ];
+  propagatedBuildInputs = with python3Packages; [ lib-agent onlykey-cli setuptools ];
 
   # move the python library into the sitePackages.
   postInstall = ''
@@ -53,7 +67,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "onlykey_agent" ];
 
   meta = with lib; {
-    description = " The OnlyKey agent is essentially middleware that lets you use OnlyKey as a hardware SSH/GPG device.";
+    description = "Middleware that lets you use OnlyKey as a hardware SSH/GPG device";
     homepage = "https://github.com/trustcrypto/onlykey-agent";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ kalbasit ];

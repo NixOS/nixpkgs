@@ -1,6 +1,8 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config
+{ lib, stdenv, fetchFromGitHub, pkg-config
 , libXtst, libvorbis, hunspell, lzo, xz, bzip2, libiconv
 , qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake
+, wrapQtAppsHook
+, wrapGAppsHook3
 , withCC ? true, opencc
 , withEpwing ? true, libeb
 , withExtraTiff ? true, libtiff
@@ -8,29 +10,29 @@
 , withMultimedia ? true
 , withZim ? true, zstd }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "goldendict";
-  version = "2021-03-09";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "goldendict";
     repo = pname;
-    rev = "b2e673961d28ca5eb920a909091252d3321f09d6";
-    sha256 = "sha256-+AAamnICq0/B54ggFpgF/Uupm1a4YiEYgHXrhIK4M0E=";
+    rev = version;
+    hash = "sha256-80o8y+mbzpyMQYUGHYs/zgQT23nLVCs7Jcr8FbbXn8M=";
   };
 
   patches = [
     ./0001-dont-check-for-updates.patch
-  ] ++ lib.optionals stdenv.isDarwin [
     ./0001-dont-use-maclibs.patch
   ];
 
   postPatch = ''
     substituteInPlace goldendict.pro \
-      --replace "hunspell-1.6.1" "hunspell-${lib.versions.majorMinor hunspell.version}"
+      --replace "hunspell-1.6.1" "hunspell-${lib.versions.majorMinor hunspell.version}" \
+      --replace "opencc.2" "opencc"
   '';
 
-  nativeBuildInputs = [ pkg-config qmake ];
+  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook wrapGAppsHook3 ];
   buildInputs = [
     qtbase qtsvg qtwebkit qttools
     libvorbis hunspell xz lzo
@@ -60,8 +62,9 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://goldendict.org/";
-    description = "A feature-rich dictionary lookup program";
+    description = "Feature-rich dictionary lookup program";
     platforms = with platforms; linux ++ darwin;
+    mainProgram = "goldendict";
     maintainers = with maintainers; [ gebner astsmtl sikmir ];
     license = licenses.gpl3Plus;
   };

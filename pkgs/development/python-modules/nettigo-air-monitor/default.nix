@@ -1,55 +1,63 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, dacite
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-error-for-skips
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  aqipy-atmotech,
+  buildPythonPackage,
+  dacite,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-error-for-skips,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  syrupy,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
-  version = "1.2.1";
-  format = "setuptools";
+  version = "3.2.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bieniu";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-hKEXTzJMSVBRDiqrN90/fETEhirwSWLdgRULRvlQjbY=";
+    repo = "nettigo-air-monitor";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2INL6ZXi7f4HD0ilhQLSivk8TfYh3qRSPRsCCtCLAP8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
+    aqipy-atmotech
     dacite
+    tenacity
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
+    syrupy
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-    substituteInPlace setup.cfg \
-      --replace "--cov --cov-report term-missing " ""
-  '';
-
-  pythonImportsCheck = [
-    "nettigo_air_monitor"
+  disabledTests = [
+    # stuck in epoll
+    "test_retry_fail"
+    "test_retry_success"
   ];
+
+  pythonImportsCheck = [ "nettigo_air_monitor" ];
 
   meta = with lib; {
     description = "Python module to get air quality data from Nettigo Air Monitor devices";
     homepage = "https://github.com/bieniu/nettigo-air-monitor";
+    changelog = "https://github.com/bieniu/nettigo-air-monitor/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

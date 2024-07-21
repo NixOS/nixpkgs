@@ -6,28 +6,34 @@ cargoSetupPostUnpackHook() {
     # it writable. If we're using a tarball, the unpackFile hook already handles
     # this for us automatically.
     if [ -z $cargoVendorDir ]; then
-        unpackFile "$cargoDeps"
-        export cargoDepsCopy=$(stripHash $cargoDeps)
+        if [ -d "$cargoDeps" ]; then
+            local dest=$(stripHash "$cargoDeps")
+            cp -Lr --reflink=auto -- "$cargoDeps" "$dest"
+            chmod -R +644 -- "$dest"
+        else
+            unpackFile "$cargoDeps"
+        fi
+        export cargoDepsCopy="$(realpath "$(stripHash $cargoDeps)")"
     else
-      cargoDepsCopy="$sourceRoot/${cargoRoot:+$cargoRoot/}${cargoVendorDir}"
+        cargoDepsCopy="$(realpath "$(pwd)/$sourceRoot/${cargoRoot:+$cargoRoot/}${cargoVendorDir}")"
     fi
 
     if [ ! -d .cargo ]; then
         mkdir .cargo
     fi
 
-    config="$(pwd)/$cargoDepsCopy/.cargo/config";
+    config="$cargoDepsCopy/.cargo/config";
     if [[ ! -e $config ]]; then
       config=@defaultConfig@
     fi;
 
     tmp_config=$(mktemp)
     substitute $config $tmp_config \
-      --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
+      --subst-var-by vendor "$cargoDepsCopy"
     cat ${tmp_config} >> .cargo/config
 
     cat >> .cargo/config <<'EOF'
-    @rustTarget@
+    @cargoConfig@
 EOF
 
     echo "Finished cargoSetupPostUnpackHook"
@@ -39,8 +45,8 @@ EOF
 cargoSetupPostPatchHook() {
     echo "Executing cargoSetupPostPatchHook"
 
-    cargoDepsLockfile="$NIX_BUILD_TOP/$cargoDepsCopy/Cargo.lock"
-    srcLockfile="$NIX_BUILD_TOP/$sourceRoot/${cargoRoot:+$cargoRoot/}/Cargo.lock"
+    cargoDepsLockfile="$cargoDepsCopy/Cargo.lock"
+    srcLockfile="$(pwd)/${cargoRoot:+$cargoRoot/}Cargo.lock"
 
     echo "Validating consistency between $srcLockfile and $cargoDepsLockfile"
     if ! @diff@ $srcLockfile $cargoDepsLockfile; then
@@ -59,14 +65,15 @@ cargoSetupPostPatchHook() {
       fi
 
       echo
-      echo "ERROR: cargoSha256 is out of date"
+      echo "ERROR: cargoHash or cargoSha256 is out of date"
       echo
       echo "Cargo.lock is not the same in $cargoDepsCopy"
       echo
       echo "To fix the issue:"
-      echo '1. Use "0000000000000000000000000000000000000000000000000000" as the cargoSha256 value'
-      echo "2. Build the derivation and wait for it to fail with a hash mismatch"
-      echo "3. Copy the 'got: sha256:' value back into the cargoSha256 field"
+      echo '1. Set cargoHash/cargoSha256 to an empty string: `cargoHash = "";`'
+      echo '2. Build the derivation and wait for it to fail with a hash mismatch'
+      echo '3. Copy the "got: sha256-..." value back into the cargoHash field'
+      echo '   You should have: cargoHash = "sha256-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX=";'
       echo
 
       exit 1

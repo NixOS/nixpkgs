@@ -9,7 +9,9 @@ in
 {
   options = {
     services.prowlarr = {
-      enable = mkEnableOption "Prowlarr";
+      enable = mkEnableOption "Prowlarr, an indexer manager/proxy for Torrent trackers and Usenet indexers";
+
+      package = mkPackageOption pkgs "prowlarr" { };
 
       openFirewall = mkOption {
         type = types.bool;
@@ -29,7 +31,7 @@ in
         Type = "simple";
         DynamicUser = true;
         StateDirectory = "prowlarr";
-        ExecStart = "${pkgs.prowlarr}/bin/Prowlarr -nobrowser -data=/var/lib/prowlarr";
+        ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
         Restart = "on-failure";
       };
     };

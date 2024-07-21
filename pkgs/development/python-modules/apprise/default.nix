@@ -1,28 +1,73 @@
-{ lib, buildPythonPackage, fetchPypi, installShellFiles
-, Babel, requests, requests_oauthlib, six, click, markdown, pyyaml, cryptography
-, pytest-runner, coverage, flake8, mock, pytestCheckHook, pytest-cov, tox, gntp, sleekxmpp
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  click,
+  cryptography,
+  fetchPypi,
+  gntp,
+  installShellFiles,
+  markdown,
+  paho-mqtt,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  requests-oauthlib,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "0.9.6";
+  version = "1.8.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Fe0GIIGXydKP2DzWnnJ7SCgIeaTGEa/Wta6l0N7zl/g=";
+    hash = "sha256-6PWM6/6ho09WnLTGiAmjF1voDsBvCi7Ec1IrkgIyEsU=";
   };
 
-  nativeBuildInputs = [ Babel installShellFiles ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = [
-    cryptography requests requests_oauthlib six click markdown pyyaml
+  build-system = [
+    babel
+    setuptools
   ];
 
-  checkInputs = [
-    pytest-runner coverage flake8 mock pytestCheckHook pytest-cov tox gntp sleekxmpp
+  dependencies = [
+    click
+    cryptography
+    markdown
+    pyyaml
+    requests
+    requests-oauthlib
   ];
 
-  disabledTests = [ "test_apprise_cli_nux_env"  ];
+  nativeCheckInputs = [
+    gntp
+    paho-mqtt
+    pytest-mock
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_apprise_cli_nux_env"
+    # Nondeterministic. Fails with `assert 0 == 1`
+    "test_notify_emoji_general"
+    "test_plugin_mqtt_general"
+    # Nondeterministic. Fails with `AssertionError`
+    "test_plugin_xbmc_kodi_urls"
+  ];
+
+  disabledTestPaths = [
+    # AttributeError: module 'apprise.plugins' has no attribute 'NotifyBulkSMS'
+    "test/test_plugin_bulksms.py"
+  ];
 
   postInstall = ''
     installManPage packaging/man/apprise.1
@@ -31,9 +76,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "apprise" ];
 
   meta = with lib; {
+    description = "Push Notifications that work with just about every platform";
     homepage = "https://github.com/caronc/apprise";
-    description = "Push Notifications that work with just about every platform!";
-    license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ getchoo ];
+    mainProgram = "apprise";
   };
 }

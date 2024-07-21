@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = [ "-levent" "-ltirpc" ];
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
 
   configureFlags = [ "--with-libevent" ];
 
@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     homepage = "https://monkey.org/~marius/pages/?page=trickle";
     platforms = lib.platforms.linux;
+    mainProgram = "trickle";
   };
 }

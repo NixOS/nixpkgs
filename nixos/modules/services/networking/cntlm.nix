@@ -91,13 +91,13 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = "Additional config appended to the end of the generated <filename>cntlm.conf</filename>.";
+      description = "Additional config appended to the end of the generated {file}`cntlm.conf`.";
     };
 
     configText = mkOption {
        type = types.lines;
        default = "";
-       description = "Verbatim contents of <filename>cntlm.conf</filename>.";
+       description = "Verbatim contents of {file}`cntlm.conf`.";
     };
 
   };

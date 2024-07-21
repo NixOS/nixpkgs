@@ -1,5 +1,21 @@
-with import ../../.. { };
-with vmTools;
+let
+  pkgs = import ../../.. { };
+
+  inherit (pkgs)
+    hello
+    patchelf
+    pcmanfm
+    stdenv
+    ;
+
+  inherit (pkgs.vmTools)
+    buildRPM
+    diskImages
+    makeImageTestScript
+    runInLinuxImage
+    runInLinuxVM
+    ;
+in
 
 {
 
@@ -9,20 +25,23 @@ with vmTools;
 
   buildHelloInVM = runInLinuxVM hello;
 
-  buildPanInVM = runInLinuxVM pan;
+  buildPcmanrmInVM = runInLinuxVM (pcmanfm.overrideAttrs (old: {
+    # goes out-of-memory with many cores
+    enableParallelBuilding = false;
+  }));
 
-
-  testRPMImage = makeImageTestScript diskImages.fedora16x86_64;
+  testRPMImage = makeImageTestScript diskImages.fedora27x86_64;
 
 
   buildPatchelfRPM = buildRPM {
     name = "patchelf-rpm";
     src = patchelf.src;
-    diskImage = diskImages.fedora16x86_64;
+    diskImage = diskImages.fedora27x86_64;
+    diskImageFormat = "qcow2";
   };
 
 
-  testUbuntuImage = makeImageTestScript diskImages.ubuntu810i386;
+  testUbuntuImage = makeImageTestScript diskImages.ubuntu1804i386;
 
 
   buildInDebian = runInLinuxImage (stdenv.mkDerivation {

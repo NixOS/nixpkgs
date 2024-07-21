@@ -1,33 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, boto3
-, cryptography
-, eventlet
-, greenlet
-, iana-etc
-, libredirect
-, lxml
-, mock
-, netifaces
-, pastedeploy
-, pbr
-, pyeclib
-, requests
-, setuptools
-, six
-, stestr
-, swiftclient
-, xattr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  boto3,
+  cryptography,
+  eventlet,
+  greenlet,
+  iana-etc,
+  installShellFiles,
+  libredirect,
+  lxml,
+  mock,
+  netifaces,
+  pastedeploy,
+  pbr,
+  pyeclib,
+  requests,
+  setuptools,
+  six,
+  stestr,
+  swiftclient,
+  xattr,
 }:
 
 buildPythonPackage rec {
   pname = "swift";
-  version = "2.28.0";
+  version = "2.33.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "79a216498a842226f71e9dfbbce4dba4a5718cda9b2be92b6e0aa21df977f70d";
+    hash = "sha256-4TlJcquK8MC9zQfLKmb88B5xHje1kbPD2jSLiR+N8hs=";
   };
 
   postPatch = ''
@@ -35,7 +38,10 @@ buildPythonPackage rec {
     rm test/functional/s3api/{__init__.py,s3_test_client.py}
   '';
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [
+    installShellFiles
+    pbr
+  ];
 
   propagatedBuildInputs = [
     cryptography
@@ -51,7 +57,11 @@ buildPythonPackage rec {
     xattr
   ];
 
-  checkInputs = [
+  postInstall = ''
+    installManPage doc/manpages/*
+  '';
+
+  nativeCheckInputs = [
     boto3
     mock
     stestr

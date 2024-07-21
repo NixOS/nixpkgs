@@ -4,23 +4,24 @@
 }:
 buildGoModule rec {
   pname = "nar-serve";
-  version = "0.4.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nar-serve";
     rev = "v${version}";
-    hash = "sha256-h/pzKRXgcGTpr1YUKppDa+iTLKak/PGhbYa8ZczWj1U=";
+    hash = "sha256-cSOYHYJJEGzFtkD4mjTmYBiM9CaWKt64xgV/JeNHpfM=";
   };
 
-  vendorSha256 = "sha256-eW+cul/5qJocpKV/6azxj7HTmkezDw6dNubPtAOP5HU=";
+  vendorHash = "sha256-RpjLs4+9abbbysYAlPDUXBLe1cz4Lp+QmR1yv+LpYwQ=";
 
   doCheck = false;
 
   meta = with lib; {
     description = "Serve NAR file contents via HTTP";
+    mainProgram = "nar-serve";
     homepage = "https://github.com/numtide/nar-serve";
     license = licenses.mit;
-    maintainers = with maintainers; [ rizary ];
+    maintainers = with maintainers; [ rizary zimbatm ];
   };
 }

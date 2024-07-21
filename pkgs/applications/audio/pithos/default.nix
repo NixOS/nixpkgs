@@ -1,16 +1,16 @@
-{ lib, fetchFromGitHub, meson, ninja, pkg-config, appstream-glib
-, wrapGAppsHook, pythonPackages, gtk3, gnome, gobject-introspection
+{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, appstream-glib
+, wrapGAppsHook3, pythonPackages, gtk3, adwaita-icon-theme, gobject-introspection
 , libnotify, libsecret, gst_all_1 }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "pithos";
-  version = "1.5.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo  = pname;
-    rev = version;
-    sha256 = "10nnm55ql86x1qfmq6dx9a1igf7myjxibmvyhd7fyv06vdhfifgy";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3j6IoMi30BQ8WHK4BxbsW+/3XZx7rBFd47EBENa2GiQ=";
   };
 
   format = "other";
@@ -20,15 +20,21 @@ pythonPackages.buildPythonApplication rec {
     patchShebangs meson_post_install.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config appstream-glib wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config appstream-glib wrapGAppsHook3 ];
+
+  propagatedNativeBuildInputs = [
+    gobject-introspection
+  ];
 
   propagatedBuildInputs =
-    [ gtk3 gobject-introspection libnotify libsecret gnome.adwaita-icon-theme ] ++
+    [ gtk3 gobject-introspection libnotify libsecret adwaita-icon-theme ] ++
     (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad ]) ++
     (with pythonPackages; [ pygobject3 pylast ]);
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Pandora Internet Radio player for GNOME";
+    mainProgram = "pithos";
     homepage = "https://pithos.github.io/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ obadz ];

@@ -41,7 +41,7 @@ if !buildTests then ''
   fi
   if [ -e target/lib ]; then
     find target/lib/ -type f \! -name '*.rlib' \
-      -a \! -name '*${stdenv.hostPlatform.extensions.sharedLibrary}' \
+      -a \! -name '*${stdenv.hostPlatform.extensions.library}' \
       -a \! -name '*.d' \
       -executable \
       -print0 | xargs --no-run-if-empty --null install --target $out/tests;

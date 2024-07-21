@@ -1,31 +1,27 @@
-{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "nginx_exporter";
-  version = "0.9.0";
-
-  goPackagePath = "github.com/nginxinc/nginx-prometheus-exporter";
-
-  ldflags = [
-    "-X main.version=${version}"
-  ];
+  version = "1.2.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "nginxinc";
     repo = "nginx-prometheus-exporter";
-    sha256 = "04y5vpj2kv2ygdzxy3crpnx4mhpkm1ns2995kxgvjlhnyck7a5rf";
+    rev = "v${version}";
+    sha256 = "sha256-VzgcAyXR9TKpK6CJzKoqN5EgO9rWnZBhwv5Km/k8cK0=";
   };
 
-  doCheck = true;
+  vendorHash = "sha256-HoRE9hvnyPkLpwc+FfUmithd5UDEJ0TnoDfcifa/0o0=";
+
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) nginx; };
 
   meta = with lib; {
     description = "NGINX Prometheus Exporter for NGINX and NGINX Plus";
+    mainProgram = "nginx-prometheus-exporter";
     homepage = "https://github.com/nginxinc/nginx-prometheus-exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz willibutz globin ];
-    platforms = platforms.unix;
   };
 }

@@ -4,7 +4,7 @@ let
 
   inherit (builtins) toFile;
   inherit (lib) concatMapStringsSep concatStringsSep mapAttrsToList
-                mkIf mkEnableOption mkOption types literalExpression;
+                mkIf mkEnableOption mkOption types literalExpression optionalString;
 
   cfg = config.services.strongswan;
 
@@ -34,8 +34,8 @@ let
 
   strongswanConf = {setup, connections, ca, secretsFile, managePlugins, enabledPlugins}: toFile "strongswan.conf" ''
     charon {
-      ${if managePlugins then "load_modular = no" else ""}
-      ${if managePlugins then ("load = " + (concatStringsSep " " enabledPlugins)) else ""}
+      ${optionalString managePlugins "load_modular = no"}
+      ${optionalString managePlugins ("load = " + (concatStringsSep " " enabledPlugins))}
       plugins {
         stroke {
           secrets_file = ${secretsFile}
@@ -60,7 +60,7 @@ in
       description = ''
         A list of paths to IPSec secret files. These
         files will be included into the main ipsec.secrets file with
-        the <literal>include</literal> directive. It is safer if these
+        the `include` directive. It is safer if these
         paths are absolute.
       '';
     };
@@ -71,7 +71,7 @@ in
       example = { cachecrls = "yes"; strictcrlpolicy = "yes"; };
       description = ''
         A set of options for the ‘config setup’ section of the
-        <filename>ipsec.conf</filename> file. Defines general
+        {file}`ipsec.conf` file. Defines general
         configuration parameters.
       '';
     };
@@ -96,7 +96,7 @@ in
       '';
       description = ''
         A set of connections and their options for the ‘conn xxx’
-        sections of the <filename>ipsec.conf</filename> file.
+        sections of the {file}`ipsec.conf` file.
       '';
     };
 
@@ -112,7 +112,7 @@ in
       };
       description = ''
         A set of CAs (certification authorities) and their options for
-        the ‘ca xxx’ sections of the <filename>ipsec.conf</filename>
+        the ‘ca xxx’ sections of the {file}`ipsec.conf`
         file.
       '';
     };
@@ -123,7 +123,7 @@ in
       description = ''
         If set to true, this option will disable automatic plugin loading and
         then tell strongSwan to enable the plugins specified in the
-        <option>enabledPlugins</option> option.
+        {option}`enabledPlugins` option.
       '';
     };
 
@@ -132,7 +132,7 @@ in
       default = [];
       description = ''
         A list of additional plugins to enable if
-        <option>managePlugins</option> is true.
+        {option}`managePlugins` is true.
       '';
     };
   };
@@ -153,6 +153,7 @@ in
       description = "strongSwan IPSec Service";
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ kmod iproute2 iptables util-linux ]; # XXX Linux
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       environment = {
         STRONGSWAN_CONF = strongswanConf { inherit setup connections ca secretsFile managePlugins enabledPlugins; };

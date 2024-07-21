@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "progressbar";
   version = "2.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

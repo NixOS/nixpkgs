@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0g5a7a680b05x27apz0y1ldl5csxpp152wqi42s107jymbp0s20j";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [
-    glib libwnck libnotify dbus-glib makeWrapper
+    glib libwnck libnotify dbus-glib
     gsettings-desktop-schemas
   ];
 
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Daemon that displays passive pop-up notifications";
+    mainProgram = "notify-osd";
     homepage = "https://launchpad.net/notify-osd";
     license = licenses.gpl3;
     maintainers = [ maintainers.bodil ];

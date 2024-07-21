@@ -13,6 +13,7 @@
 , elementary-default-settings
 , gnome-settings-daemon
 , runtimeShell
+, systemd
 , writeText
 , meson
 , ninja
@@ -28,7 +29,7 @@ let
   # Upstream relies on /etc/skel to initiate a new users home directory with plank's dockitems.
   #
   # That is not possible within nixos, but we can achieve this easily with a simple script that copies
-  # them. We then use a xdg autostart and initalize it during the "EarlyInitialization" phase of a gnome session
+  # them. We then use a xdg autostart and initialize it during the "EarlyInitialization" phase of a gnome session
   # which is most appropriate for installing files into $HOME.
   #
 
@@ -71,7 +72,7 @@ let
     export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
 
     # Start pantheon session. Keep in sync with upstream
-    exec ${gnome-session}/bin/gnome-session --builtin --session=pantheon "$@"
+    exec ${gnome-session}/bin/gnome-session --session=pantheon "$@"
   '';
 
   # Absolute path patched version of the upstream xsession
@@ -80,7 +81,7 @@ let
     Name=Pantheon
     Comment=This session provides elementary experience
     Exec=@out@/libexec/pantheon
-    TryExec=${wingpanel}/bin/wingpanel
+    TryExec=${wingpanel}/bin/io.elementary.wingpanel
     Icon=
     DesktopNames=Pantheon
     Type=Application
@@ -90,15 +91,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
-  version = "6.0.0";
-
-  repoName = "session-settings";
+  version = "6.0.0-unstable-2024-03-29";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
-    rev = version;
-    sha256 = "1faglpa7q3a4335gnd074a3lnsdspyjdnskgy4bfnf6xmwjx7kjx";
+    repo = "session-settings";
+    # For systemd managed gnome-session support.
+    # https://github.com/NixOS/nixpkgs/issues/228946
+    # nixpkgs-update: no auto update
+    rev = "53bf57e5b32936befc3003a0f99c5b3a69349c76";
+    sha256 = "sha256-TX9V6gZiuPEKSHQoSD4+5QptuqEvuErCJ8OF2KFRf9k=";
   };
 
   nativeBuildInputs = [
@@ -113,6 +115,7 @@ stdenv.mkDerivation rec {
     gnome-settings-daemon
     onboard
     orca
+    systemd
   ];
 
   mesonFlags = [
@@ -141,9 +144,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
 
     providedSessions = [
       "pantheon"

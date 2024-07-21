@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     ./update_hack.patch
   ];
 
-  checkInputs = [ python3Packages.pytestCheckHook ];
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   # disable test that fail (networking, etc)
   disabledTests = [
@@ -39,7 +39,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/jkwill87/mnamer";
-    description = "An intelligent and highly configurable media organization utility";
+    description = "Intelligent and highly configurable media organization utility";
+    mainProgram = "mnamer";
     license = licenses.mit;
     maintainers = with maintainers; [ urlordjames ];
   };

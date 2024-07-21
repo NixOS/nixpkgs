@@ -36,7 +36,7 @@ in
         listen on ::1
       '';
       description = ''
-        Additional text appended to <filename>openntpd.conf</filename>.
+        Additional text appended to {file}`openntpd.conf`.
       '';
     };
 

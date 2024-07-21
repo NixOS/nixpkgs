@@ -1,18 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook, boost, libGL
+{ lib, stdenv, fetchFromGitHub
+, fetchpatch
+, cmake, pkg-config, wrapQtAppsHook, boost, libGL
 , qtbase, python3 }:
 
 stdenv.mkDerivation rec {
 
   pname = "nano-wallet";
-  version = "21.3";
+  version = "25.1";
 
   src = fetchFromGitHub {
     owner = "nanocurrency";
     repo = "nano-node";
     rev = "V${version}";
-    sha256 = "0f6chl5vrzdr4w8g3nivfxk3qm6m11js401998afnhz0xaysm4pm";
     fetchSubmodules = true;
+    hash = "sha256-YvYEXHC8kxviZLQwINs+pS61wITSfqfrrPmlR+zNRoE=";
   };
+
+  patches = [
+    # Fix gcc-13 build failure due to missing <cstdint> includes.
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/facebook/rocksdb/commit/88edfbfb5e1cac228f7cc31fbec24bb637fe54b1.patch";
+      stripLen = 1;
+      extraPrefix = "submodules/rocksdb/";
+      hash = "sha256-HhlIYyPzIZFuyzHTUPz3bXgXiaFSQ8pVrLLMzegjTgE=";
+    })
+  ];
 
   cmakeFlags = let
     options = {
@@ -34,11 +47,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildPhase = ''
-    runHook preBuild
-    make nano_wallet
-    runHook postBuild
-  '';
+  makeFlags = [ "nano_wallet" ];
 
   checkPhase = ''
     runHook preCheck

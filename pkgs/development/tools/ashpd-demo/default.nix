@@ -2,10 +2,11 @@
 , lib
 , fetchFromGitHub
 , nix-update-script
+, cargo
 , meson
 , ninja
-, python3
 , rustPlatform
+, rustc
 , pkg-config
 , glib
 , libshumate
@@ -20,36 +21,31 @@
 , desktop-file-utils
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ashpd-demo";
-  version = "0.0.1-alpha";
+  version = "0.4.1";
 
-  src =
-    let
-      share = fetchFromGitHub {
-        owner = "bilelmoussaoui";
-        repo = "ashpd";
-        rev = version;
-        sha256 = "Lf3Wj4VTDyJ5a1bJTEI6R6aaeEHZ+4hO+BsD98sKb/s=";
-      };
-    in
-    "${share}/ashpd-demo";
+  src = fetchFromGitHub {
+    owner = "bilelmoussaoui";
+    repo = "ashpd";
+    rev = "${finalAttrs.version}-demo";
+    hash = "sha256-fIyJEUcyTcjTbBycjuJb99wALQelMT7Zq6PHKcL2F80=";
+  };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-npqC8lu7acAggJyR4iDkcQZYMNNnseV2pB3+j4G/nIk=";
+    src = "${finalAttrs.src}/ashpd-demo";
+    hash = "sha256-ldflCBErM9w3eO2DwWfYTrdO7lowZtqfj7Fft6Crl1w=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook4
+    rustPlatform.bindgenHook
     desktop-file-utils
     glib # for glib-compile-schemas
   ];
@@ -65,29 +61,16 @@ stdenv.mkDerivation rec {
     libshumate
   ];
 
-  # libspa-sys requires this for bindgen
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-  # <spa-0.2/spa/utils/defs.h> included by libspa-sys requires <stdbool.h>
-  BINDGEN_EXTRA_CLANG_ARGS = "-I${llvmPackages.libclang.lib}/lib/clang/${lib.getVersion llvmPackages.clang}/include -I${glibc.dev}/include";
-
   postPatch = ''
-    patchShebangs build-aux/meson_post_install.py
-    # https://github.com/bilelmoussaoui/ashpd/pull/32
-    substituteInPlace build-aux/meson_post_install.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
+    cd ashpd-demo
   '';
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
 
   meta = with lib; {
     description = "Tool for playing with XDG desktop portals";
+    mainProgram = "ashpd-demo";
     homepage = "https://github.com/bilelmoussaoui/ashpd/tree/master/ashpd-demo";
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };
-}
+})

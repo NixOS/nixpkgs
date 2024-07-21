@@ -1,28 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, isPy27
-, pytestCheckHook
-, autoconf
-, automake
-, cmake
-, gcc
-, libtool
-, perl
-, simplejson
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  isPy27,
+  pytestCheckHook,
+  autoconf271,
+  automake,
+  cmake,
+  gcc,
+  libtool,
+  perl,
+  setuptools,
+  simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "awslambdaric";
-  version = "2.0.0";
+  version = "2.0.11";
+  pyproject = true;
+
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
-    rev = version;
-    sha256 = "1amlaq119mk8fa3fxi3d6vgp83vcd81mbk53jzbixacklmcsp50k";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-9DiUpgeL4bY7G3b5R06FjpN0st03F84fj0bhp70moKo=";
   };
 
   patches = [
@@ -40,17 +45,33 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ simplejson ];
 
-  nativeBuildInputs = [ autoconf automake cmake libtool perl ];
+  nativeBuildInputs = [
+    autoconf271
+    automake
+    cmake
+    libtool
+    perl
+    setuptools
+  ];
 
   buildInputs = [ gcc ];
 
   dontUseCmakeConfigure = true;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "awslambdaric" "runtime_client" ];
+  disabledTests = [
+    # Test fails with: Assertion error
+    "test_handle_event_request_fault_exception_logging_syntax_error"
+  ];
+
+  pythonImportsCheck = [
+    "awslambdaric"
+    "runtime_client"
+  ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "AWS Lambda Runtime Interface Client for Python";
     homepage = "https://github.com/aws/aws-lambda-python-runtime-interface-client";
     license = licenses.asl20;

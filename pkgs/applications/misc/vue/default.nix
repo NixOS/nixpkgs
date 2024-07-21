@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     description = "Visual Understanding Environment - mind mapping software";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = with lib.platforms; linux;
-    license = lib.licenses.free; # Apache License fork, actually
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.ecl20;
+    mainProgram = "vue";
   };
 }

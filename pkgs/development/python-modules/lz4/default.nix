@@ -1,41 +1,67 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, isPy3k
-, pkgconfig
-, psutil
-, pytest
-, pytest-cov
-, pytest-runner
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkgconfig,
+  psutil,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
-  pname = "python-lz4";
-  version = "3.1.3";
+  pname = "lz4";
+  version = "4.3.3";
+  pyproject = true;
 
-  # get full repository inorder to run tests
+  disabled = pythonOlder "3.5";
+
+  # get full repository in order to run tests
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "009c4rbyj4cjb8fznccfpr5wrzdmi56wq990yjh22n0z2qqylmkf";
+    owner = "python-lz4";
+    repo = "python-lz4";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZvGUkb9DoheYY2/sejUhxgh2lS5eoBrFCXR4E0IcFcs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm pkgconfig pytest-runner ];
-  checkInputs = [ pytest pytest-cov psutil ];
-  propagatedBuildInputs = lib.optionals (!isPy3k) [ future ];
-
-  # give a hint to setuptools-scm on package version
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="v${version}"
+  postPatch = ''
+    sed -i '/pytest-cov/d' setup.py
   '';
 
-  meta = {
-     description = "LZ4 Bindings for Python";
-     homepage = "https://github.com/python-lz4/python-lz4";
-     license = lib.licenses.bsd3;
-     maintainers = with lib.maintainers; [ costrouc ];
+  build-system = [
+    pkgconfig
+    setuptools-scm
+    setuptools
+  ];
+
+  pythonImportsCheck = [
+    "lz4"
+    "lz4.block"
+    "lz4.frame"
+    "lz4.stream"
+  ];
+
+  nativeCheckInputs = [
+    psutil
+    pytestCheckHook
+  ];
+
+  # for lz4.steam
+  env.PYLZ4_EXPERIMENTAL = true;
+
+  # prevent local lz4 directory from getting imported as it lacks native extensions
+  preCheck = ''
+    rm -r lz4
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+  '';
+
+  meta = with lib; {
+    description = "LZ4 Bindings for Python";
+    homepage = "https://github.com/python-lz4/python-lz4";
+    changelog = "https://github.com/python-lz4/python-lz4/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

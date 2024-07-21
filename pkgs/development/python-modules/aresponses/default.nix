@@ -1,45 +1,43 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pytest
-, pytest-asyncio
-, pytest-cov
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aresponses";
-  version = "2.1.4";
+  version = "2.1.6";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CircleUp";
     repo = pname;
     rev = version;
-    sha256 = "sha256-crMiMZ2IDuYDFt8Bixg3NRhlUa2tqmfzd7ZeHM+2Iu4=";
+    hash = "sha256-Ui9ZpWaVBfCbDlZH3EgHX32FIZtyTHnc/UXqtoEyFcw=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   buildInputs = [
     pytest
     pytest-asyncio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
   ];
 
-  # Disable tests which requires network access
   disabledTests = [
+    # Disable tests which requires network access
     "test_foo"
     "test_passthrough"
   ];

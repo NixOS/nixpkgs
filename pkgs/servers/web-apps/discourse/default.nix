@@ -1,23 +1,62 @@
-{ stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript
-, fetchFromGitHub, bundlerEnv, callPackage
+{ stdenv
+, pkgs
+, makeWrapper
+, runCommand
+, lib
+, writeShellScript
+, fetchFromGitHub
+, bundlerEnv
+, callPackage
 
-, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk, nettools
-, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
-, libpsl, redis, postgresql, which, brotli, procps, rsync, icu
-, nodePackages, nodejs-16_x
+, ruby_3_2
+, replace
+, gzip
+, gnutar
+, git
+, cacert
+, util-linux
+, gawk
+, nettools
+, imagemagick
+, optipng
+, pngquant
+, libjpeg
+, jpegoptim
+, gifsicle
+, jhead
+, oxipng
+, libpsl
+, redis
+, postgresql
+, which
+, brotli
+, procps
+, rsync
+, icu
+, fetchYarnDeps
+, yarn
+, fixup-yarn-lock
+, nodePackages
+, nodejs_18
+, jq
+, moreutils
+, terser
+, uglify-js
 
 , plugins ? []
 }@args:
 
 let
-  version = "2.8.0.beta9";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-cTedMbf0N50ysRQqA9Fm1WQmI5J5hsqDSi2JZIa49jg=";
+    sha256 = "sha256-bwYMLkBtdfgfAX8vKpsFRg5tpBtoaURKGF0rs/CtJ2U=";
   };
+
+  ruby = ruby_3_2;
 
   runtimeDeps = [
     # For backups, themes and assets
@@ -27,6 +66,7 @@ let
     gnutar
     git
     brotli
+    nodejs_18
 
     # Misc required system utils
     which
@@ -38,6 +78,7 @@ let
     # Image optimization
     imagemagick
     optipng
+    oxipng
     pngquant
     libjpeg
     jpegoptim
@@ -99,7 +140,7 @@ let
         ${lib.concatStrings (lib.mapAttrsToList (name: value: "--set ${name} '${value}' ") runtimeEnv)} \
         --prefix PATH : ${lib.makeBinPath runtimeDeps} \
         --set RAKEOPT '-f ${discourse}/share/discourse/Rakefile' \
-        --run 'cd ${discourse}/share/discourse'
+        --chdir '${discourse}/share/discourse'
   '';
 
   rubyEnv = bundlerEnv {
@@ -123,9 +164,9 @@ let
                 cd ../..
 
                 mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
-                ln -s "${nodejs-16_x.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
+                ln -s "${nodejs_18.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-                ln -s ${nodejs-16_x.libv8}/include vendor/v8/include
+                ln -s ${nodejs_18.libv8}/include vendor/v8/include
 
                 mkdir -p ext/libv8-node
                 echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -147,7 +188,7 @@ let
             # available for aarch64. It has to be called
             # libpsl.x86_64.so or it isn't found.
             postPatch = ''
-              cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
+              cp $(readlink -f ${lib.getLib libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
             '';
           };
         };
@@ -161,12 +202,28 @@ let
     pname = "discourse-assets";
     inherit version src;
 
+    yarnDevOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/yarn.lock";
+      hash = "sha256-0s8c2V8Wl3f5kL1OIn2ps6hL7CUQD5+LJm+9LYHc+W0=";
+    };
+
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/app/assets/javascripts/yarn-ember5.lock";
+      hash = "sha256-ZBXvNdHHV92kSAswe6KA+OqaY5smf7ZKTTOiY8g78D0=";
+    };
+
     nativeBuildInputs = runtimeDeps ++ [
       postgresql
       redis
-      nodePackages.uglify-js
-      nodePackages.terser
+      uglify-js
+      terser
+      yarn
+      jq
+      moreutils
+      fixup-yarn-lock
     ];
+
+    outputs = [ "out" "javascripts" ];
 
     patches = [
       # Use the Ruby API version in the plugin gem path, to match the
@@ -177,13 +234,49 @@ let
       # defaults to the plugin's directory and isn't writable at the
       # time of asset generation
       ./auto_generated_path.patch
+
+      # Fix the rake command used to recursively execute itself in the
+      # assets precompilation task.
+      ./assets_rake_command.patch
+
+      # Little does he know, so he decided there is no need to generate the
+      # theme-transpiler over and over again. Which at the same time allows the removal
+      # of javascript devDependencies from the runtime environment.
+      ./prebuild-theme-transpiler.patch
     ];
+
+    env.RAILS_ENV = "production";
 
     # We have to set up an environment that is close enough to
     # production ready or the assets:precompile task refuses to
     # run. This means that Redis and PostgreSQL has to be running and
     # database migrations performed.
     preBuild = ''
+      # Yarn wants a real home directory to write cache, config, etc to
+      export HOME=$NIX_BUILD_TOP/fake_home
+
+      yarn_install() {
+        local offlineCache=$1 yarnLock=$2
+
+        # Make yarn install packages from our offline cache, not the registry
+        yarn config --offline set yarn-offline-mirror $offlineCache
+
+        # Fixup "resolved"-entries in yarn.lock to match our offline cache
+        fixup-yarn-lock $yarnLock
+
+        # Install while ignoring hook scripts
+        yarn --offline --ignore-scripts --cwd $(dirname $yarnLock) install
+      }
+
+      # Install devDependencies for generating the theme-transpiler executed as
+      # dependent task assets:precompile:theme_transpiler before db:migrate
+      yarn_install $yarnDevOfflineCache yarn.lock
+
+      # Install the runtime dependencies
+      yarn_install $yarnOfflineCache app/assets/javascripts/yarn-ember5.lock
+      # Patch before running postinstall hook script
+      patchShebangs --build app/assets/javascripts
+      yarn --offline --cwd app/assets/javascripts run postinstall
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
       redis-server >/dev/null &
@@ -202,16 +295,10 @@ let
       psql 'discourse' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
       psql 'discourse' -tAc "CREATE EXTENSION IF NOT EXISTS hstore"
 
-      # Create a temporary home dir to stop bundler from complaining
-      mkdir $NIX_BUILD_TOP/tmp_home
-      export HOME=$NIX_BUILD_TOP/tmp_home
-
       ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} plugins/${p.pluginName or ""}") plugins}
 
-      export RAILS_ENV=production
-
       bundle exec rake db:migrate >/dev/null
-      rm -r tmp/*
+      chmod -R +w tmp
     '';
 
     buildPhase = ''
@@ -226,6 +313,10 @@ let
       runHook preInstall
 
       mv public/assets $out
+
+      rm -r app/assets/javascripts/plugins
+      mv app/assets/javascripts $javascripts
+      ln -sf /run/discourse/assets/javascripts/plugins $javascripts/plugins
 
       runHook postInstall
     '';
@@ -264,6 +355,11 @@ let
 
       # Make sure the notification email setting applies
       ./notification_email.patch
+
+      # Little does he know, so he decided there is no need to generate the
+      # theme-transpiler over and over again. Which at the same time allows the removal
+      # of javascript devDependencies from the runtime environment.
+      ./prebuild-theme-transpiler.patch
     ];
 
     postPatch = ''
@@ -271,7 +367,10 @@ let
       # path, not their relative state directory path. This gets rid of
       # warnings and means we don't have to link back to lib from the
       # state directory.
-      find config -type f -execdir sed -Ei "s,(\.\./)+(lib|app)/,$out/share/discourse/\2/," {} \;
+      find config -type f -name "*.rb" -execdir \
+        sed -Ei "s,(\.\./)+(lib|app)/,$out/share/discourse/\2/," {} \;
+      find config -maxdepth 1 -type f -name "*.rb" -execdir \
+        sed -Ei "s,require_relative (\"|')([[:alnum:]].*)(\"|'),require_relative '$out/share/discourse/config/\2'," {} \;
     '';
 
     buildPhase = ''
@@ -292,9 +391,10 @@ let
       ln -sf /var/log/discourse $out/share/discourse/log
       ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
-      ln -sf /run/discourse/assets/javascripts/plugins $out/share/discourse/app/assets/javascripts/plugins
       ln -sf /run/discourse/public $out/share/discourse/public
       ln -sf ${assets} $out/share/discourse/public.dist/assets
+      rm -r $out/share/discourse/app/assets/javascripts
+      ln -sf ${assets.javascripts} $out/share/discourse/app/assets/javascripts
       ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}") plugins}
 
       runHook postInstall
@@ -309,11 +409,18 @@ let
     };
 
     passthru = {
-      inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin;
+      inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin assets;
+      inherit (pkgs)
+        discourseAllPlugins
+      ;
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = import ../../../../nixos/tests/discourse.nix { package = pkgs.discourse.override args; };
+      tests = import ../../../../nixos/tests/discourse.nix {
+        inherit (stdenv) system;
+        inherit pkgs;
+        package = pkgs.discourse.override args;
+      };
     };
   };
 in discourse

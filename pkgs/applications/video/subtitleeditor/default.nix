@@ -1,17 +1,17 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, intltool, file,
   desktop-file-utils, enchant, gtk3, gtkmm3, gst_all_1, hicolor-icon-theme,
-  libsigcxx, libxmlxx, xdg-utils, isocodes, wrapGAppsHook
+  libsigcxx, libxmlxx, xdg-utils, isocodes, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "subtitleeditor";
-  version = "0.54.0";
+  version = "unstable-2019-11-30";
 
   src = fetchFromGitHub {
     owner = "kitone";
     repo = "subtitleeditor";
-    rev = version;
-    sha256 = "0vxcscc9m6gymgj173ahk2g9hlk9588z5fdaavmkpyriqdlhwm11";
+    rev = "4c215f4cff4483c44361a2f1d45efc4c6670787f";
+    sha256 = "sha256-1Q1nd3GJ6iDGQv4SM2S1ehVW6kPdbqTn8KTtTb0obiQ=";
   };
 
   nativeBuildInputs =  [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     pkg-config
     intltool
     file
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs =  [
@@ -59,5 +59,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.plcplc ];
+    mainProgram = "subtitleeditor";
   };
 }

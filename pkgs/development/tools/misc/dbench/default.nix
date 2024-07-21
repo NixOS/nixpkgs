@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf rpcsvc-proto ];
   buildInputs = [ popt zlib libtirpc ];
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
   patches = [
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Filesystem benchmark tool based on load patterns";
+    mainProgram = "dbench";
     homepage = "https://dbench.samba.org/";
     license = licenses.gpl3;
     platforms = platforms.linux;

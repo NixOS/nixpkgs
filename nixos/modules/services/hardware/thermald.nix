@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.thermald;
-in {
+in
+{
   ###### interface
   options = {
     services.thermald = {
@@ -18,18 +19,25 @@ in {
         '';
       };
 
+     ignoreCpuidCheck = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to ignore the cpuid check to allow running on unsupported platforms";
+      };
+
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "the thermald manual configuration file.";
+        description = ''
+          The thermald manual configuration file.
+
+          Leave unspecified to run with the `--adaptive` flag instead which will have thermald use your computer's DPTF adaptive tables.
+
+          See `man thermald` for more information.
+        '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.thermald;
-        defaultText = literalExpression "pkgs.thermald";
-        description = "Which thermald package to use.";
-      };
+      package = mkPackageOption pkgs "thermald" { };
     };
   };
 
@@ -41,13 +49,14 @@ in {
       description = "Thermal Daemon Service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
+        PrivateNetwork = true;
         ExecStart = ''
           ${cfg.package}/sbin/thermald \
             --no-daemon \
             ${optionalString cfg.debug "--loglevel=debug"} \
-            ${optionalString (cfg.configFile != null) "--config-file ${cfg.configFile}"} \
-            --dbus-enable \
-            --adaptive
+            ${optionalString cfg.ignoreCpuidCheck "--ignore-cpuid-check"} \
+            ${if cfg.configFile != null then "--config-file ${cfg.configFile}" else "--adaptive"} \
+            --dbus-enable
         '';
       };
     };

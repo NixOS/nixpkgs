@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
 }:
 
 buildPythonPackage rec {
   pname = "pid";
   version = "3.0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,5 +25,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/trbs/pid/";
     license = licenses.asl20;
   };
-
 }

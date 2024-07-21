@@ -27,7 +27,7 @@ in
   options = {
 
     services.mailhog = {
-      enable = mkEnableOption "MailHog";
+      enable = mkEnableOption "MailHog, web and API based SMTP testing";
 
       storage = mkOption {
         type = types.enum [ "maildir" "memory" ];

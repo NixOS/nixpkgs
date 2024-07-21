@@ -1,23 +1,45 @@
 { lib, mkCoqDerivation, which, coq, version ? null }:
 
-with builtins; with lib; let
+let
   elpi = coq.ocamlPackages.elpi.override (lib.switch coq.coq-version [
     { case = "8.11"; out = { version = "1.11.4"; };}
     { case = "8.12"; out = { version = "1.12.0"; };}
     { case = "8.13"; out = { version = "1.13.7"; };}
     { case = "8.14"; out = { version = "1.13.7"; };}
-  ] {});
-in mkCoqDerivation {
+    { case = "8.15"; out = { version = "1.15.0"; };}
+    { case = "8.16"; out = { version = "1.17.0"; };}
+    { case = "8.17"; out = { version = "1.17.0"; };}
+    { case = "8.18"; out = { version = "1.18.1"; };}
+    { case = "8.20"; out = { version = "1.19.2"; };}
+  ] {} );
+in (mkCoqDerivation {
   pname = "elpi";
   repo  = "coq-elpi";
   owner = "LPCIC";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
+    { case = "8.20"; out = "2.2.0"; }
+    { case = "8.19"; out = "2.0.1"; }
+    { case = "8.18"; out = "2.0.0"; }
+    { case = "8.17"; out = "1.18.0"; }
+    { case = "8.16"; out = "1.15.6"; }
+    { case = "8.15"; out = "1.14.0"; }
     { case = "8.14"; out = "1.11.2"; }
     { case = "8.13"; out = "1.11.1"; }
     { case = "8.12"; out = "1.8.3_8.12"; }
     { case = "8.11"; out = "1.6.3_8.11"; }
   ] null;
+  release."2.2.0".sha256      = "sha256-rADEoqTXM7/TyYkUKsmCFfj6fjpWdnZEOK++5oLfC/I=";
+  release."2.0.1".sha256      = "sha256-cuoPsEJ+JRLVc9Golt2rJj4P7lKltTrrmQijjoViooc=";
+  release."2.0.0".sha256      = "sha256-A/cH324M21k3SZ7+YWXtaYEbu6dZQq3K0cb1RMKjbsM=";
+  release."1.19.0".sha256     = "sha256-kGoo61nJxeG/BqV+iQaV3iinwPStND+7+fYMxFkiKrQ=";
+  release."1.18.0".sha256     = "sha256-2fCOlhqi4YkiL5n8SYHuc3pLH+DArf9zuMH7IhpBc2Y=";
+  release."1.17.0".sha256     = "sha256-J8GatRKFU0ekNCG3V5dBI+FXypeHcLgC5QJYGYzFiEM=";
+  release."1.15.6".sha256     = "sha256-qc0q01tW8NVm83801HHOBHe/7H1/F2WGDbKO6nCXfno=";
+  release."1.15.1".sha256     = "sha256-NT2RlcIsFB9AvBhMxil4ZZIgx+KusMqDflj2HgQxsZg=";
+  release."1.14.0".sha256     = "sha256:1v2p5dlpviwzky2i14cj7gcgf8cr0j54bdm9fl5iz1ckx60j6nvp";
+  release."1.13.0".sha256     = "1j7s7dlnjbw222gnbrsjgmjck1yrx7h6hwm8zikcyxi0zys17w7n";
+  release."1.12.1".sha256     = "sha256-4mO6/co7NcIQSGIQJyoO8lNWXr6dqz+bIYPO/G0cPkY=";
   release."1.11.2".sha256     = "0qk5cfh15y2zrja7267629dybd3irvxk1raz7z8qfir25a81ckd4";
   release."1.11.1".sha256     = "10j076vc2hdcbm15m6s7b6xdzibgfcbzlkgjnlkr2vv9k13qf8kc";
   release."1.10.1".sha256     = "1zsyx26dvj7pznfd2msl2w7zbw51q1nsdw0bdvdha6dga7ijf7xk";
@@ -44,13 +66,20 @@ in mkCoqDerivation {
   release."1.6.0".sha256      = "0kf99i43mlf750fr7fric764mm495a53mg5kahnbp6zcjcxxrm0b";
   releaseRev = v: "v${v}";
 
-  nativeBuildInputs = [ which ];
+  buildFlags = [ "OCAMLWARN=" ];
+
   mlPlugin = true;
-  extraBuildInputs = [ elpi ];
+  useDuneifVersion = v: lib.versions.isGe "2.2.0" v || v == "dev";
+  propagatedBuildInputs = [ coq.ocamlPackages.findlib elpi ];
 
   meta = {
-    description = "Coq plugin embedding ELPI.";
-    maintainers = [ maintainers.cohencyril ];
-    license = licenses.lgpl21Plus;
+    description = "Coq plugin embedding ELPI";
+    maintainers = [ lib.maintainers.cohencyril ];
+    license = lib.licenses.lgpl21Plus;
   };
-}
+}).overrideAttrs (o:
+  lib.optionalAttrs (o.version != null
+    && (o.version == "dev" || lib.versions.isGe "2.2.0" o.version))
+  {
+    propagatedBuildInputs = o.propagatedBuildInputs ++ [ coq.ocamlPackages.ppx_optcomp ];
+  })

@@ -1,36 +1,56 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pcre
-, pkg-config
-, protobufc
-, withCrypto ? true, openssl
-, enableCuckoo ? true, jansson
-, enableDex ? true
-, enableDotNet ? true
-, enableMacho ? true
-, enableMagic ? true, file
-, enableStatic ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pcre,
+  pkg-config,
+  protobufc,
+  withCrypto ? true,
+  openssl,
+  enableCuckoo ? true,
+  jansson,
+  enableDex ? true,
+  enableDotNet ? true,
+  enableMacho ? true,
+  enableMagic ? true,
+  file,
+  enableStatic ? false,
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.1.3";
   pname = "yara";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
-    rev = "v${version}";
-    sha256 = "sha256-7t2KksI3l+wFHqUSw2L4FXepMTJfTow/cTFYA47YBqY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AecHsUBtBleUkWuYMQ4Tx/PY8cs9j7JwqncBziJD0hA=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  patches = [
+    (fetchpatch {
+      name = "LFS64.patch";
+      url = "https://github.com/VirusTotal/yara/commit/833a580430abe0fbc9bc17a21fb95bf36dacf367.patch";
+      hash = "sha256-EmwyDsxaNd9zfpAOu6ZB9kzg04qB7LAD7UJB3eAuKd8=";
+    })
+  ];
 
-  buildInputs = [ pcre protobufc ]
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs =
+    [
+      pcre
+      protobufc
+    ]
     ++ lib.optionals withCrypto [ openssl ]
     ++ lib.optionals enableMagic [ file ]
-    ++ lib.optionals enableCuckoo [ jansson ]
-  ;
+    ++ lib.optionals enableCuckoo [ jansson ];
 
   preConfigure = "./bootstrap.sh";
 
@@ -47,10 +67,12 @@ stdenv.mkDerivation rec {
   doCheck = enableStatic;
 
   meta = with lib; {
-    description = "The pattern matching swiss knife for malware researchers";
+    description = "Tool to perform pattern matching for malware-related tasks";
     homepage = "http://Virustotal.github.io/yara/";
+    changelog = "https://github.com/VirusTotal/yara/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "yara";
     platforms = platforms.all;
   };
 }

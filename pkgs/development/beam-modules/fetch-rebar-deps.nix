@@ -7,19 +7,18 @@
 , meta ? { }
 }:
 
-with lib;
-
 stdenv.mkDerivation ({
   pname = "rebar-deps-${name}";
   inherit version;
 
   dontUnpack = true;
   dontConfigure = true;
-  dontBuild = true;
   dontFixup = true;
 
-  prePhases = ''
-    cp ${src} .
+  buildPhase = ''
+    cp -r ${src} src
+    chmod -R u+w src
+    cd src
     HOME='.' DEBUG=1 ${rebar3}/bin/rebar3 get-deps
   '';
 

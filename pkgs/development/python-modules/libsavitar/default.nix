@@ -1,15 +1,23 @@
-{ lib, buildPythonPackage, python, pythonOlder, fetchFromGitHub, cmake, sip_4 }:
+{
+  lib,
+  buildPythonPackage,
+  python,
+  pythonOlder,
+  fetchFromGitHub,
+  cmake,
+  sip4,
+}:
 
 buildPythonPackage rec {
   pname = "libsavitar";
-  version = "4.10.0";
+  version = "4.12.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libSavitar";
     rev = version;
-    sha256 = "1zyzsrdm5aazv12h7ga35amfryrbxdsmx3abvh27hixyh9f92fdp";
+    hash = "sha256-MAA1WtGED6lvU6N4BE6wwY1aYaFrCq/gkmQFz3VWqNA=";
   };
 
   postPatch = ''
@@ -18,7 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [ sip_4 ];
+  propagatedBuildInputs = [ sip4 ];
 
   disabled = pythonOlder "3.4.0";
 
@@ -27,6 +35,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/Ultimaker/libSavitar";
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar orivej gebner ];
+    maintainers = with maintainers; [
+      abbradar
+      orivej
+      gebner
+    ];
   };
 }

@@ -1,28 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, bitlist
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  wheel,
+  bitlist,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fountains";
-  version = "1.1.1";
+  version = "2.2.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fbf4e2cb11d60d3bafca5bb7c01c254d08a5541ed7ddfe00ef975eb173fb75a4";
+    hash = "sha256-MhOQ4pemxmjfp7Uy5hLA8i8BBI5QbvD4EjEcKMM/u3I=";
   };
 
-  propagatedBuildInputs = [
-    bitlist
+  nativeBuildInputs = [
+    setuptools
+    wheel
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "bitlist~=0.5.1" "bitlist>=0.5.1"
-  '';
+  propagatedBuildInputs = [ bitlist ];
 
-  # Project has no test
+  # Module has no test
   doCheck = false;
 
   pythonImportsCheck = [ "fountains" ];

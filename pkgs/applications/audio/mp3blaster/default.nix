@@ -26,14 +26,14 @@ stdenv.mkDerivation rec {
     libvorbis
   ] ++ lib.optional stdenv.isDarwin SDL;
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-Wno-narrowing"
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-reserved-user-defined-literal"
   ]);
 
   meta = with lib; {
-    description = "An audio player for the text console";
+    description = "Audio player for the text console";
     homepage = "http://www.mp3blaster.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ earldouglas ];

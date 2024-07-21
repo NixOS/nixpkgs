@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     maintainers = [ nequissimus ];
   };
 
-  machine = { pkgs, ... }:
+  nodes.machine = { pkgs, ... }:
     {
       boot.kernelPackages = pkgs.linuxPackages;
       environment.etc.plainFile.text = ''

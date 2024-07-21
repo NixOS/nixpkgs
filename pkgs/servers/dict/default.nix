@@ -19,10 +19,13 @@ stdenv.mkDerivation rec {
   patchPhase = "patch -p0 < ${./buildfix.diff}";
 
   configureFlags = [
-    "--enable-dictorg"
     "--datadir=/run/current-system/sw/share/dictd"
     "--sysconfdir=/etc"
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-error=implicit-function-declaration"
+  ]);
 
   postInstall = ''
     install -Dm444 -t $out/share/doc/${pname} NEWS README
@@ -31,8 +34,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Dict protocol server and client";
     homepage = "http://www.dict.org";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
   };
 }

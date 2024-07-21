@@ -3,7 +3,7 @@
 , symlinkJoin
 , fetchurl
 , fetchzip
-, sconsPackages
+, scons
 , zlib
 , libiconv
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     chmod -R u+w $out/share/nsis
   '';
 
-  nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
+  nativeBuildInputs = [ scons ];
   buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   CPPPATH = symlinkJoin {
@@ -65,10 +65,12 @@ stdenv.mkDerivation rec {
   installTargets = [ "install-compiler" ];
 
   meta = with lib; {
-    description = "A free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
+    description = "Free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
     homepage = "https://nsis.sourceforge.io/";
     license = licenses.zlib;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pombeirp ];
+    mainProgram = "makensis";
+    broken = stdenv.isDarwin;
   };
 }

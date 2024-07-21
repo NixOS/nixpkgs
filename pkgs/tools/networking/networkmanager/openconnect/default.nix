@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , substituteAll
 , glib
@@ -6,39 +7,33 @@
 , openconnect
 , intltool
 , pkg-config
-, autoreconfHook
 , networkmanager
 , gcr
 , libsecret
 , file
 , gtk3
+, webkitgtk_4_1
+, libnma
+, libnma-gtk4
+, gtk4
 , withGnome ? true
 , gnome
 , kmod
-, fetchpatch
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "NetworkManager-openconnect";
-  version = "1.2.6";
-in stdenv.mkDerivation {
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  version = "1.2.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0nlp290nkawc4wqm978n4vhzg3xdqi8kpjjx19l855vab41rh44m";
+    url = "mirror://gnome/sources/NetworkManager-openconnect/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "hEtr9k7K25e0pox3bbiapebuflm9JLAYAihAaGMTZGQ=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       inherit kmod openconnect;
-    })
-
-    # Don't use etc/dbus-1/system.d
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/NetworkManager-openconnect/merge_requests/9.patch";
-      sha256 = "0yd2dmq6gq6y4czr7dqdgaiqvw2vyv2gikznpfdxyfn2v1pcrk9m";
     })
   ];
 
@@ -47,8 +42,12 @@ in stdenv.mkDerivation {
     libxml2
     openconnect
     networkmanager
+    webkitgtk_4_1 # required, for SSO
   ] ++ lib.optionals withGnome [
     gtk3
+    libnma
+    libnma-gtk4
+    gtk4
     gcr
     libsecret
   ];
@@ -61,8 +60,8 @@ in stdenv.mkDerivation {
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
+    "--with-gtk4=${if withGnome then "yes" else "no"}"
     "--enable-absolute-paths"
-    "--without-libnm-glib"
   ];
 
   passthru = {
@@ -71,6 +70,7 @@ in stdenv.mkDerivation {
       attrPath = "networkmanager-openconnect";
       versionPolicy = "odd-unstable";
     };
+    networkManagerPlugin = "VPN/nm-openconnect-service.name";
   };
 
   meta = with lib; {

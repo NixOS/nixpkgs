@@ -2,25 +2,26 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, coreutils
+, nix
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-common";
-  version = "0.6.17";
+  version = "0.9.23";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+FzTEpotxco4+9gLVUL+rkCWoMjRCorKQ47JINHsnNA=";
+    hash = "sha256-VN+fy1vWx8ubcsFYOW2STXFNDbmZKcjmCkv5qw2Sp2Y=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
+  ] ++ lib.optionals stdenv.hostPlatform.isRiscV [
+    "-DCMAKE_C_FLAGS=-fasynchronous-unwind-tables"
   ];
 
   # aws-c-common misuses cmake modules, so we need
@@ -41,6 +42,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "AWS SDK for C common core";

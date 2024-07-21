@@ -1,16 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  anyio,
 }:
 
 buildPythonPackage rec {
   pname = "watchgod";
-  version = "0.7";
+  version = "0.8.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0aagm0n5fkpzdsfgl0r21gkz5qaicgq3f4rqz2fdvsgbn1i0s528";
+    hash = "sha256-yxH/ZmV777qU2CjjtiLV+3byL72hN281Xz5uUel9lFA=";
   };
+
+  propagatedBuildInputs = [ anyio ];
 
   # no tests in release
   doCheck = false;
@@ -19,9 +24,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple, modern file watching and code reload in python";
+    mainProgram = "watchgod";
     homepage = "https://github.com/samuelcolvin/watchgod";
     license = licenses.mit;
     maintainers = with maintainers; [ globin ];
   };
-
 }

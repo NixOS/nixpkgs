@@ -5,7 +5,7 @@
 , pkg-config
 , portaudio
 , SDL2
-, ffmpeg
+, ffmpeg_4
 , udev
 , libusb1
 , libv4l
@@ -21,7 +21,7 @@
 # can be turned off if used as a library
 , useGtk ? true
 , gtk3 ? null
-, wrapGAppsHook ? null
+, wrapGAppsHook3 ? null
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
@@ -39,14 +39,14 @@ stdenv.mkDerivation rec {
     intltool
     pkg-config
   ]
-    ++ lib.optionals (useGtk) [ wrapGAppsHook ]
+    ++ lib.optionals (useGtk) [ wrapGAppsHook3 ]
     ++ lib.optionals (useQt) [ wrapQtAppsHook ]
   ;
 
   buildInputs = [
     SDL2
     alsa-lib
-    ffmpeg
+    ffmpeg_4
     libusb1
     libv4l
     portaudio
@@ -69,8 +69,9 @@ stdenv.mkDerivation rec {
   ;
 
   meta = with lib; {
-    description = "A simple interface for devices supported by the linux UVC driver";
-    homepage = "http://guvcview.sourceforge.net";
+    description = "Simple interface for devices supported by the linux UVC driver";
+    mainProgram = "guvcview";
+    homepage = "https://guvcview.sourceforge.net";
     maintainers = [ maintainers.coconnor ];
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -1,25 +1,59 @@
-{ lib, stdenv, fetchFromGitHub, cmake, SDL2, SDL2_mixer, libpng }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  SDL2,
+  SDL2_mixer,
+  libpng,
+  darwin,
+  libicns,
+  imagemagick,
+}:
 
 stdenv.mkDerivation rec {
   pname = "augustus";
-  version = "3.1.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "Keriew";
     repo = "augustus";
     rev = "v${version}";
-    sha256 = "1axm4x3ca5r08sv1b4q8y9c15mkwqd3rnc8k09a2fn3plbk2p2j4";
+    sha256 = "sha256-UWJmxirRJJqvL4ZSjBvFepeKVvL77+WMp4YdZuFNEkg=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL2 SDL2_mixer libpng ];
+  patches = [ ./darwin-fixes.patch ];
+
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.sigtool
+      libicns
+      imagemagick
+    ];
+
+  buildInputs = [
+    SDL2
+    SDL2_mixer
+    libpng
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+
+  installPhase = lib.optionalString stdenv.isDarwin ''
+    runHook preInstall
+    mkdir -p $out/Applications
+    cp -r augustus.app $out/Applications/
+    runHook postInstall
+  '';
 
   meta = with lib; {
-    description = "An open source re-implementation of Caesar III. Fork of Julius incorporating gameplay changes";
+    description = "Open source re-implementation of Caesar III. Fork of Julius incorporating gameplay changes";
+    mainProgram = "augustus";
     homepage = "https://github.com/Keriew/augustus";
     license = licenses.agpl3Only;
-    platforms = platforms.all;
-    broken = stdenv.isDarwin;
-    maintainers = with maintainers; [ Thra11 ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+      Thra11
+      matteopacini
+    ];
   };
 }

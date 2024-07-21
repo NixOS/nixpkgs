@@ -1,15 +1,18 @@
 { lib, stdenv, fetchurl
 , cmake, docbook_xml_dtd_45, docbook_xsl, doxygen, graphviz-nox, pkg-config, qttools, wrapQtAppsHook
-, alsa-lib, fluidsynth, qtbase, qtsvg, libpulseaudio
+, alsa-lib, fluidsynth, libpulseaudio, qtbase, qtsvg, sonivox, qt5compat ? null
 }:
 
+let
+  isQt6 = lib.versions.major qtbase.version == "6";
+in
 stdenv.mkDerivation rec {
   pname = "drumstick";
-  version = "2.4.1";
+  version = "2.9.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumstick/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-nmqgS08ZBQ2vBEDtoriNbYLaNQA1DWeDhbRo70rBOP0=";
+    hash = "sha256-p0N8EeCtVEPCGzPwiRxPdI1XT5XQ5pcKYEDJXbYYTrM=";
   };
 
   patches = [
@@ -27,18 +30,19 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsa-lib fluidsynth libpulseaudio qtbase qtsvg
-  ];
+    alsa-lib fluidsynth libpulseaudio qtbase qtsvg sonivox
+  ] ++ lib.optionals isQt6 [ qt5compat ];
 
   cmakeFlags = [
-    "-DUSE_DBUS=ON"
+    (lib.cmakeBool "USE_DBUS" true)
+    (lib.cmakeBool "USE_QT5" (!isQt6))
   ];
 
   meta = with lib; {
-    maintainers = [];
-    description = "MIDI libraries for Qt5/C++";
-    homepage = "http://drumstick.sourceforge.net/";
+    description = "MIDI libraries for Qt/C++";
+    homepage = "https://drumstick.sourceforge.io/";
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ wegank ];
     platforms = platforms.linux;
   };
 }

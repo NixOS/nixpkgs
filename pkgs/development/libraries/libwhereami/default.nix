@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "puppetlabs";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Library to report hypervisor information from inside a VM";
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];
-    platforms = with platforms; [ "i686-linux" "x86_64-linux" "x86_64-darwin" ]; # fails on aarch64
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ]; # fails on aarch64
   };
 
 }

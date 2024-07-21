@@ -42,7 +42,7 @@ in
           type = types.nullOr types.str;
 
           description = ''
-            The script to use when manually locking the computer with <command>xautolock -locknow</command>.
+            The script to use when manually locking the computer with {command}`xautolock -locknow`.
           '';
         };
 
@@ -71,7 +71,7 @@ in
           type = types.nullOr types.str;
 
           description = ''
-            The script to use when nothing has happend for as long as <option>killtime</option>
+            The script to use when nothing has happened for as long as {option}`killtime`
           '';
         };
 
@@ -80,7 +80,7 @@ in
           type = types.int;
 
           description = ''
-            Minutes xautolock waits until it executes the script specified in <option>killer</option>
+            Minutes xautolock waits until it executes the script specified in {option}`killer`
             (Has to be at least 10 minutes)
           '';
         };
@@ -91,7 +91,7 @@ in
           example = [ "-detectsleep" ];
           description = ''
             Additional command-line arguments to pass to
-            <command>xautolock</command>.
+            {command}`xautolock`.
           '';
         };
       };

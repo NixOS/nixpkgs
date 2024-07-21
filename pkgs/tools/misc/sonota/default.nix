@@ -48,7 +48,8 @@ in buildPythonApplication rec {
   meta = with lib; {
     description = "Flash Itead Sonoff devices with custom firmware via original OTA mechanism";
     homepage = src.meta.homepage;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "sonota";
   };
 }

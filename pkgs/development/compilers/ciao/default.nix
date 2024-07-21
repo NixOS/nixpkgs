@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ciao";
-  version = "1.20.0";
+  version = "1.23.0-m1";
   src = fetchFromGitHub {
     owner = "ciao-lang";
     repo = "ciao";
     rev = "v${version}";
-    sha256 = "sha256-Xp0ZQRi7mOO2WN/2hO6zgobDG3S0BEV+SgsaduBZ30U=";
+    sha256 = "sha256-JMHln0nYveEEfEr4AMyrEL9KlCDiqV53BWRNMUL8nN0=";
   };
 
   configurePhase = ''
@@ -24,9 +24,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://ciao-lang.org/";
-    description = "A general purpose, multi-paradigm programming language in the Prolog family";
+    description = "General purpose, multi-paradigm programming language in the Prolog family";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ suhr ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/ciao.x86_64-darwin
   };
 }

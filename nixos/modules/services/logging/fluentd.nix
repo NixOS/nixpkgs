@@ -12,11 +12,7 @@ in {
   options = {
 
     services.fluentd = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable fluentd.";
-      };
+      enable = mkEnableOption "fluentd, a data/log collector";
 
       config = mkOption {
         type = types.lines;
@@ -24,12 +20,7 @@ in {
         description = "Fluentd config.";
       };
 
-      package = mkOption {
-        type = types.path;
-        default = pkgs.fluentd;
-        defaultText = literalExpression "pkgs.fluentd";
-        description = "The fluentd package to use.";
-      };
+      package = mkPackageOption pkgs "fluentd" { };
 
       plugins = mkOption {
         type = types.listOf types.path;

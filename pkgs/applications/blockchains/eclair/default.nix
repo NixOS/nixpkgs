@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "eclair";
-  version = "0.6.2";
-  revision = "6817d6f";
+  version = "0.8.0";
+  revision = "0077471";
 
   src = fetchzip {
     url = "https://github.com/ACINQ/eclair/releases/download/v${version}/eclair-node-${version}-${revision}-bin.zip";
-    sha256 = "038r9mblm2r8mkxnv65k29r7xj22dff5gmvzv9xiy5zf9i45mmk8";
+    hash = "sha256-jkXdt1aQRVgItfFPuyh45uXjUFgJtKng/17Po5i7ang=";
   };
 
   propagatedBuildInputs = [ jq openjdk11 ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A scala implementation of the Lightning Network";
+    description = "Scala implementation of the Lightning Network";
     homepage = "https://github.com/ACINQ/eclair";
     license = licenses.asl20;
     maintainers = with maintainers; [ prusnak ];

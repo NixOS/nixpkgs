@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ Unit Testing Easy Environment";
-    homepage    = "http://www.codesink.org/cutee_unit_testing.html";
+    mainProgram = "cutee";
+    homepage    = "https://www.codesink.org/cutee_unit_testing.html";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ leenaars];
     platforms = platforms.linux;

@@ -1,46 +1,63 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pytestCheckHook , pytest-cov , numba
-, numpy
-, scikit-learn
-, scipy
-, matplotlib
-, seaborn
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  autograd,
+  numba,
+  numpy,
+  scikit-learn,
+  scipy,
+  matplotlib,
+  seaborn,
 }:
 
 buildPythonPackage rec {
   pname = "hyppo";
-  version = "0.2.2";
+  version = "0.4.0";
+  pyproject = true;
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "neurodata";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1wrzrppyjq0pc03bn6qcslxzcnwn7fr2z5lm71gfpli5k05i26nr";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QRE3oSxTEobTQ/7DzCAUOdjzIZmWUn9bgPmJWj6JuZg=";
   };
 
+  # some of the doctests (4/21) are broken, e.g. unbound variables, nondeterministic with insufficient tolerance, etc.
+  # (note upstream's .circleci/config.yml only tests test_*.py files despite their pytest.ini adding --doctest-modules)
+  postPatch = ''
+    substituteInPlace pytest.ini --replace-fail "addopts = --doctest-modules" ""
+  '';
+
+  build-system = [ setuptools ];
+
   propagatedBuildInputs = [
+    autograd
     numba
     numpy
     scikit-learn
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook pytest-cov matplotlib seaborn ];
-  disabledTestPaths = [
-    "docs"
-    "benchmarks"
-    "examples"
+  nativeCheckInputs = [
+    pytestCheckHook
+    matplotlib
+    seaborn
+  ];
+  pytestFlagsArray = [
+    "hyppo"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/neurodata/hyppo";
-    description = "Indepedence testing in Python";
-    license = licenses.asl20;
+    description = "Python package for multivariate hypothesis testing";
+    changelog = "https://github.com/neurodata/hyppo/releases/tag/v${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };
 }

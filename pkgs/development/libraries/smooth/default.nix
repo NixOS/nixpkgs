@@ -3,20 +3,28 @@
 , fetchFromGitHub
 , pkg-config
 
-, gtk3
+, bzip2
 , curl
+, fribidi
+, gtk3
+, iconv
+, libcpuid
+, libjpeg
+, libpng
+, libwebp
 , libxml2
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "smooth";
-  version = "0.9.8";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "enzo1982";
     repo = "smooth";
     rev = "v${version}";
-    sha256 = "sha256-4092Od/wCWe4br80Ry6mr8GpUIUeeF6sk3unELdfQJU=";
+    sha256 = "sha256-J2Do1iAbE1GBC8co/4nxOzeGJQiPRc+21fgMDpzKX+A=";
   };
 
   nativeBuildInputs = [
@@ -25,16 +33,26 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=$(out)"
+    "config=systemlibbz2,systemlibcpuid,systemlibcurl,systemlibfribidi,systemlibiconv,systemlibjpeg,systemlibpng,systemlibwebp,systemlibxml2,systemzlib"
   ];
 
   buildInputs = [
-    gtk3
+    bzip2
     curl
+    fribidi
+    gtk3
+    iconv
+    libcpuid
+    libjpeg
+    libpng
+    libwebp
     libxml2
+    zlib
   ];
 
   meta = with lib; {
-    description = "The smooth Class Library";
+    description = "Smooth Class Library";
+    mainProgram = "smooth-translator";
     license = licenses.artistic2;
     homepage = "http://www.smooth-project.org/";
     maintainers = with maintainers; [ shamilton ];

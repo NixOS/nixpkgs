@@ -1,67 +1,65 @@
-{ lib
-, aiohttp
-, aresponses
-, asynctest
-, backoff
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pytz
-, types-pytz
-, voluptuous
-, websockets
+{
+  lib,
+  aiohttp,
+  aresponses,
+  backoff,
+  beautifulsoup4,
+  buildPythonPackage,
+  certifi,
+  docutils,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  types-pytz,
+  voluptuous,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "2021.12.1";
-  format = "pyproject";
+  version = "2024.01.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-HWOQAcjsW7iE/AuqOQvdZkubpg53AktReNJxbxHdMFs=";
+    repo = "simplisafe-python";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ewbR2FI0t2F8HF0ZL5omsclB9OPAjHygGLPtSkVlvgM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
     backoff
+    beautifulsoup4
+    certifi
     docutils
     pytz
-    types-pytz
     voluptuous
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
-    asynctest
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
+    types-pytz
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'docutils = "<0.18"' 'docutils = "*"'
-  '';
 
   disabledTests = [
     # simplipy/api.py:253: InvalidCredentialsError
     "test_request_error_failed_retry"
     "test_update_error"
+    # ClientConnectorError: Cannot connect to host auth.simplisafe.com:443 ssl:default [Temporary failure in name resolution]
+    "test_client_async_from_refresh_token_unknown_error"
   ];
 
   disabledTestPaths = [
@@ -69,13 +67,12 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "simplipy"
-  ];
+  pythonImportsCheck = [ "simplipy" ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
+    changelog = "https://github.com/bachya/simplisafe-python/releases/tag/${version}";
     description = "Python library the SimpliSafe API";
     homepage = "https://simplisafe-python.readthedocs.io/";
     license = with licenses; [ mit ];

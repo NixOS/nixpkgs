@@ -2,17 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "akvcam";
-  version = "1.2.2";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "webcamoid";
     repo = "akvcam";
     rev = version;
-    sha256 = "1f0vjia2d7zj3y5c63lx1r537bdjx6821yxy29ilbrvsbjq2szj8";
+    sha256 = "sha256-8jQxBvWRE9Bsh0oz76gO7o+ROm6Z5QGAIe3WERIouUw=";
   };
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
-  makeFlags = [
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags ++ [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 

@@ -1,48 +1,66 @@
-{ lib
-, fetchurl
-, buildPythonPackage
-, pkg-config
-, python
-, dbus-python
-, enlightenment
+{
+  lib,
+  fetchurl,
+  buildPythonPackage,
+  pkg-config,
+  python,
+  dbus-python,
+  packaging,
+  enlightenment,
+  directoryListingUpdater,
 }:
 
 # Should be bumped along with EFL!
 
 buildPythonPackage rec {
   pname = "python-efl";
-  version = "1.25.0";
+  version = "1.26.1";
+  format = "setuptools";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/bindings/python/${pname}-${version}.tar.xz";
-    sha256 = "0bk161xwlz4dlv56r68xwkm8snzfifaxd1j7w2wcyyk4fgvnvq4r";
+    hash = "sha256-3Ns5fhIHihnpDYDnxvPP00WIZL/o1UWLzgNott4GKNc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ enlightenment.efl ];
 
-  propagatedBuildInputs = [ dbus-python ];
+  propagatedBuildInputs = [
+    dbus-python
+    packaging
+  ];
 
   preConfigure = ''
     NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl evas) $NIX_CFLAGS_COMPILE"
   '';
 
   preBuild = ''
-    ${python.interpreter} setup.py build_ext
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext
   '';
 
   installPhase = ''
-    ${python.interpreter} setup.py install --prefix=$out
+    ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=$out --single-version-externally-managed
   '';
 
   doCheck = false;
 
+  passthru.updateScript = directoryListingUpdater { };
+
   meta = with lib; {
-    description = "Python bindings for EFL and Elementary";
-    homepage = "https://phab.enlightenment.org/w/projects/python_bindings_for_efl/";
+    description = "Python bindings for Enlightenment Foundation Libraries";
+    homepage = "https://github.com/DaveMDS/python-efl";
     platforms = platforms.linux;
-    license = with licenses; [ gpl3 lgpl3 ];
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    license = with licenses; [
+      gpl3
+      lgpl3
+    ];
+    maintainers =
+      with maintainers;
+      [
+        matejc
+        ftrvxmtrx
+      ]
+      ++ teams.enlightenment.members;
   };
 }

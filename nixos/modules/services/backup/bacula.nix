@@ -4,10 +4,34 @@
 # TODO: test configuration when building nixexpr (use -t parameter)
 # TODO: support sqlite3 (it's deprecate?) and mysql
 
-with lib;
 
 let
+  inherit (lib)
+    concatStringsSep
+    literalExpression
+    mapAttrsToList
+    mkIf
+    mkOption
+    optional
+    optionalString
+    types
+    ;
   libDir = "/var/lib/bacula";
+
+  yes_no = bool: if bool then "yes" else "no";
+  tls_conf = tls_cfg: optionalString tls_cfg.enable (
+    concatStringsSep
+      "\n"
+      (
+      ["TLS Enable = yes;"]
+      ++ optional (tls_cfg.require != null) "TLS Require = ${yes_no tls_cfg.require};"
+      ++ optional (tls_cfg.certificate != null) ''TLS Certificate = "${tls_cfg.certificate}";''
+      ++ [''TLS Key = "${tls_cfg.key}";'']
+      ++ optional (tls_cfg.verifyPeer != null) "TLS Verify Peer = ${yes_no tls_cfg.verifyPeer};"
+      ++ optional (tls_cfg.allowedCN != [ ]) "TLS Allowed CN = ${concatStringsSep " " (tls_cfg.allowedCN)};"
+      ++ optional (tls_cfg.caCertificateFile != null) ''TLS CA Certificate File = "${tls_cfg.caCertificateFile}";''
+      )
+  );
 
   fd_cfg = config.services.bacula-fd;
   fd_conf = pkgs.writeText "bacula-fd.conf"
@@ -15,16 +39,18 @@ let
       Client {
         Name = "${fd_cfg.name}";
         FDPort = ${toString fd_cfg.port};
-        WorkingDirectory = "${libDir}";
-        Pid Directory = "/run";
+        WorkingDirectory = ${libDir};
+        Pid Directory = /run;
         ${fd_cfg.extraClientConfig}
+        ${tls_conf fd_cfg.tls}
       }
 
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Director {
         Name = "${name}";
-        Password = "${value.password}";
-        Monitor = "${value.monitor}";
+        Password = ${value.password};
+        Monitor = ${value.monitor};
+        ${tls_conf value.tls}
       }
       '') fd_cfg.director)}
 
@@ -41,17 +67,18 @@ let
       Storage {
         Name = "${sd_cfg.name}";
         SDPort = ${toString sd_cfg.port};
-        WorkingDirectory = "${libDir}";
-        Pid Directory = "/run";
+        WorkingDirectory = ${libDir};
+        Pid Directory = /run;
         ${sd_cfg.extraStorageConfig}
+        ${tls_conf sd_cfg.tls}
       }
 
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Autochanger {
         Name = "${name}";
         Device = ${concatStringsSep ", " (map (a: "\"${a}\"") value.devices)};
-        Changer Device =  "${value.changerDevice}";
-        Changer Command = "${value.changerCommand}";
+        Changer Device =  ${value.changerDevice};
+        Changer Command = ${value.changerCommand};
         ${value.extraAutochangerConfig}
       }
       '') sd_cfg.autochanger)}
@@ -59,8 +86,8 @@ let
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Device {
         Name = "${name}";
-        Archive Device = "${value.archiveDevice}";
-        Media Type = "${value.mediaType}";
+        Archive Device = ${value.archiveDevice};
+        Media Type = ${value.mediaType};
         ${value.extraDeviceConfig}
       }
       '') sd_cfg.device)}
@@ -68,8 +95,9 @@ let
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Director {
         Name = "${name}";
-        Password = "${value.password}";
-        Monitor = "${value.monitor}";
+        Password = ${value.password};
+        Monitor = ${value.monitor};
+        ${tls_conf value.tls}
       }
       '') sd_cfg.director)}
 
@@ -85,18 +113,19 @@ let
     ''
     Director {
       Name = "${dir_cfg.name}";
-      Password = "${dir_cfg.password}";
+      Password = ${dir_cfg.password};
       DirPort = ${toString dir_cfg.port};
-      Working Directory = "${libDir}";
-      Pid Directory = "/run/";
-      QueryFile = "${pkgs.bacula}/etc/query.sql";
+      Working Directory = ${libDir};
+      Pid Directory = /run/;
+      QueryFile = ${pkgs.bacula}/etc/query.sql;
+      ${tls_conf dir_cfg.tls}
       ${dir_cfg.extraDirectorConfig}
     }
 
     Catalog {
-      Name = "PostgreSQL";
-      dbname = "bacula";
-      user = "bacula";
+      Name = PostgreSQL;
+      dbname = bacula;
+      user = bacula;
     }
 
     Messages {
@@ -108,7 +137,93 @@ let
     ${dir_cfg.extraConfig}
     '';
 
-  directorOptions = {...}:
+  linkOption = name: destination: "[${name}](#opt-${builtins.replaceStrings [ "<" ">"] ["_" "_"] destination})";
+  tlsLink = destination: submodulePath: linkOption "${submodulePath}.${destination}" "${submodulePath}.${destination}";
+
+  tlsOptions = submodulePath: {...}:
+  {
+    options = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Specifies if TLS should be enabled.
+          If this set to `false` TLS will be completely disabled, even if ${tlsLink "tls.require" submodulePath} is true.
+        '';
+      };
+      require = mkOption {
+        type = types.nullOr types.bool;
+        default = null;
+        description = ''
+          Require TLS or TLS-PSK encryption.
+          This directive is ignored unless one of ${tlsLink "tls.enable" submodulePath} is true or TLS PSK Enable is set to `yes`.
+          If TLS is not required while TLS or TLS-PSK are enabled, then the Bacula component
+          will connect with other components either with or without TLS or TLS-PSK
+
+          If ${tlsLink "tls.enable" submodulePath} or TLS-PSK is enabled and TLS is required, then the Bacula
+          component will refuse any connection request that does not use TLS.
+        '';
+      };
+      certificate = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          The full path to the PEM encoded TLS certificate.
+          It will be used as either a client or server certificate,
+          depending on the connection direction.
+          This directive is required in a server context, but it may
+          not be specified in a client context if ${tlsLink "tls.verifyPeer" submodulePath} is
+          `false` in the corresponding server context.
+        '';
+      };
+      key = mkOption {
+        type = types.path;
+        description = ''
+          The path of a PEM encoded TLS private key.
+          It must correspond to the TLS certificate.
+        '';
+      };
+      verifyPeer = mkOption {
+        type = types.nullOr types.bool;
+        default = null;
+        description = ''
+          Verify peer certificate.
+          Instructs server to request and verify the client's X.509 certificate.
+          Any client certificate signed by a known-CA will be accepted.
+          Additionally, the client's X509 certificate Common Name must meet the value of the Address directive.
+          If ${tlsLink "tls.allowedCN" submodulePath} is used,
+          the client's x509 certificate Common Name must also correspond to
+          one of the CN specified in the ${tlsLink "tls.allowedCN" submodulePath} directive.
+          This directive is valid only for a server and not in client context.
+
+          Standard from Bacula is `true`.
+        '';
+      };
+      allowedCN = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = ''
+          Common name attribute of allowed peer certificates.
+          This directive is valid for a server and in a client context.
+          If this directive is specified, the peer certificate will be verified against this list.
+          In the case this directive is configured on a server side, the allowed
+          CN list will not be checked if ${tlsLink "tls.verifyPeer" submodulePath} is false.
+        '';
+      };
+      caCertificateFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          The path specifying a PEM encoded TLS CA certificate(s).
+          Multiple certificates are permitted in the file.
+          One of TLS CA Certificate File or TLS CA Certificate Dir are required in a server context, unless
+          ${tlsLink "tls.verifyPeer" submodulePath} is false, and are always required in a client context.
+        '';
+      };
+    };
+  };
+
+  directorOptions = submodulePath:{...}:
   {
     options = {
       password = mkOption {
@@ -136,14 +251,21 @@ let
         default = "no";
         example = "yes";
         description = ''
-          If Monitor is set to <literal>no</literal>, this director will have
+          If Monitor is set to `no`, this director will have
           full access to this Storage daemon. If Monitor is set to
-          <literal>yes</literal>, this director will only be able to fetch the
+          `yes`, this director will only be able to fetch the
           current status of this Storage daemon.
 
           Please note that if this director is being used by a Monitor, we
           highly recommend to set this directive to yes to avoid serious
           security problems.
+        '';
+      };
+
+      tls = mkOption {
+        type = types.submodule (tlsOptions "${submodulePath}.director.<name>");
+        description = ''
+          TLS Options for the Director in this Configuration.
         '';
       };
     };
@@ -161,8 +283,8 @@ let
           should be specified if you have an autochanger or if you have a
           standard tape drive and want to use the Alert Command (see below).
           For example, on Linux systems, for an Archive Device name of
-          <literal>/dev/nst0</literal>, you would specify
-          <literal>/dev/sg0</literal> for the Changer Device name.  Depending
+          `/dev/nst0`, you would specify
+          `/dev/sg0` for the Changer Device name.  Depending
           on your exact configuration, and the number of autochangers or the
           type of autochanger, what you specify here can vary. This directive
           is optional. See the Using AutochangersAutochangersChapter chapter of
@@ -181,7 +303,7 @@ let
           different Changer Command in each Device resource. Most frequently,
           you will specify the Bacula supplied mtx-changer script as follows:
 
-          <literal>"/path/mtx-changer %c %o %S %a %d"</literal>
+          `"/path/mtx-changer %c %o %S %a %d"`
 
           and you will install the mtx on your system (found in the depkgs
           release). An example of this command is in the default bacula-sd.conf
@@ -223,9 +345,9 @@ let
           The specified name-string gives the system file name of the storage
           device managed by this storage daemon. This will usually be the
           device file name of a removable storage device (tape drive), for
-          example <literal>/dev/nst0</literal> or
-          <literal>/dev/rmt/0mbn</literal>. For a DVD-writer, it will be for
-          example <literal>/dev/hdc</literal>. It may also be a directory name
+          example `/dev/nst0` or
+          `/dev/rmt/0mbn`. For a DVD-writer, it will be for
+          example `/dev/hdc`. It may also be a directory name
           if you are archiving to disk storage. In this case, you must supply
           the full absolute path to the directory. When specifying a tape
           device, it is preferable that the "non-rewind" variant of the device
@@ -238,7 +360,7 @@ let
         type = types.str;
         description = ''
           The specified name-string names the type of media supported by this
-          device, for example, <literal>DLT7000</literal>. Media type names are
+          device, for example, `DLT7000`. Media type names are
           arbitrary in that you set them to anything you want, but they must be
           known to the volume database to keep track of which storage daemons
           can read which volumes. In general, each different storage type
@@ -255,9 +377,9 @@ let
           Storage daemon, but it is with multiple Storage daemons, especially
           if they have incompatible media.
 
-          For example, if you specify a Media Type of <literal>DDS-4</literal>
+          For example, if you specify a Media Type of `DDS-4`
           then during the restore, Bacula will be able to choose any Storage
-          Daemon that handles <literal>DDS-4</literal>. If you have an
+          Daemon that handles `DDS-4`. If you have an
           autochanger, you might want to name the Media Type in a way that is
           unique to the autochanger, unless you wish to possibly use the
           Volumes in other drives. You should also ensure to have unique Media
@@ -314,7 +436,7 @@ in {
 
       port = mkOption {
         default = 9102;
-        type = types.int;
+        type = types.port;
         description = ''
           This specifies the port number on which the Client listens for
           Director connections. It must agree with the FDPort specified in
@@ -327,8 +449,18 @@ in {
         description = ''
           This option defines director resources in Bacula File Daemon.
         '';
-        type = with types; attrsOf (submodule directorOptions);
+        type = types.attrsOf (types.submodule (directorOptions "services.bacula-fd"));
       };
+
+
+      tls = mkOption {
+        type = types.submodule (tlsOptions "services.bacula-fd");
+        default = { };
+        description = ''
+          TLS Options for the File Daemon.
+          Important notice: The backup won't be encrypted.
+        '';
+       };
 
       extraClientConfig = mkOption {
         default = "";
@@ -374,7 +506,7 @@ in {
 
       port = mkOption {
         default = 9103;
-        type = types.int;
+        type = types.port;
         description = ''
           Specifies port number on which the Storage daemon listens for
           Director connections.
@@ -386,7 +518,7 @@ in {
         description = ''
           This option defines Director resources in Bacula Storage Daemon.
         '';
-        type = with types; attrsOf (submodule directorOptions);
+        type = types.attrsOf (types.submodule (directorOptions "services.bacula-sd"));
       };
 
       device = mkOption {
@@ -394,7 +526,7 @@ in {
         description = ''
           This option defines Device resources in Bacula Storage Daemon.
         '';
-        type = with types; attrsOf (submodule deviceOptions);
+        type = types.attrsOf (types.submodule deviceOptions);
       };
 
       autochanger = mkOption {
@@ -402,7 +534,7 @@ in {
         description = ''
           This option defines Autochanger resources in Bacula Storage Daemon.
         '';
-        type = with types; attrsOf (submodule autochangerOptions);
+        type = types.attrsOf (types.submodule autochangerOptions);
       };
 
       extraStorageConfig = mkOption {
@@ -427,6 +559,14 @@ in {
           console = all
         '';
       };
+      tls = mkOption {
+        type = types.submodule (tlsOptions "services.bacula-sd");
+        default = { };
+        description = ''
+          TLS Options for the Storage Daemon.
+          Important notice: The backup won't be encrypted.
+        '';
+       };
 
     };
 
@@ -451,7 +591,7 @@ in {
 
       port = mkOption {
         default = 9101;
-        type = types.int;
+        type = types.port;
         description = ''
           Specify the port (a positive integer) on which the Director daemon
           will listen for Bacula Console connections. This same port number
@@ -503,6 +643,15 @@ in {
           TODO
         '';
       };
+
+      tls = mkOption {
+        type = types.submodule (tlsOptions "services.bacula-dir");
+        default = { };
+        description = ''
+          TLS Options for the Director.
+          Important notice: The backup won't be encrypted.
+        '';
+       };
     };
   };
 
@@ -533,7 +682,7 @@ in {
       };
     };
 
-    services.postgresql.enable = dir_cfg.enable == true;
+    services.postgresql.enable = lib.mkIf dir_cfg.enable true;
 
     systemd.services.bacula-dir = mkIf dir_cfg.enable {
       after = [ "network.target" "postgresql.service" ];

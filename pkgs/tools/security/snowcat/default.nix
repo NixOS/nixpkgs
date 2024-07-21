@@ -10,14 +10,15 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-EulQYGOMIh952e4Xp13hT/HMW3qP1QXYtt5PEej1VTY=";
   };
-  vendorSha256 = "sha256-D6ipwGMxT0B3uYUzg6Oo2TYnsOVBY0mYO5lC7vtVPc0=";
+  vendorHash = "sha256-D6ipwGMxT0B3uYUzg6Oo2TYnsOVBY0mYO5lC7vtVPc0=";
 
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://github.com/praetorian-inc/snowcat";
     changelog = "https://github.com/praetorian-inc/snowcat/releases/tag/v${version}";
-    description = "A tool to audit the istio service mesh";
+    description = "Tool to audit the istio service mesh";
+    mainProgram = "snowcat";
     longDescription = ''
       Snowcat gathers and analyzes the configuration of an Istio cluster and
       audits it for potential violations of security best practices.

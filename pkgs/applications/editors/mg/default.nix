@@ -2,14 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "mg";
-  version = "6.9";
+  version = "7.3";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = "mg";
     rev = "mg-${version}";
-    sha256 = "1w49yb9v1657rv1w5w7rc9ih1d2vzv6ym3mzhf2wgmh04pdm6hid";
+    sha256 = "sha256-88FrXN7h5uRLY8YMKSzUjBF4n18DEiiiDyoYr+7qXdQ=";
   };
+
+  postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace configure --replace "./conftest" "echo"
+  '';
 
   enableParallelBuilding = true;
 
@@ -27,6 +31,7 @@ stdenv.mkDerivation rec {
     description = "Micro GNU/emacs, a portable version of the mg maintained by the OpenBSD team";
     homepage = "https://man.openbsd.org/OpenBSD-current/man1/mg.1";
     license = licenses.publicDomain;
+    mainProgram = "mg";
     platforms = platforms.all;
   };
 }

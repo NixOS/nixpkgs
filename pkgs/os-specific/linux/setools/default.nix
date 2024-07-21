@@ -8,21 +8,21 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "setools";
-  version = "4.4.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "SELinuxProject";
     repo = pname;
-    rev = version;
-    sha256 = "1qvd5j6zwq4fmlahg45swjplhif2z89x7s6pnp07gvcp2fbqdsh5";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/6dOzSz2Do4d6TSS50fuak0CysoQ532zJ0bJ532BUCE=";
   };
 
   nativeBuildInputs = [ cython ];
   buildInputs = [ libsepol ];
-  propagatedBuildInputs = [ enum34 libselinux networkx ]
+  propagatedBuildInputs = [ enum34 libselinux networkx setuptools ]
     ++ optionals withGraphics [ pyqt5 ];
 
-  checkInputs = [ tox checkpolicy ];
+  nativeCheckInputs = [ tox checkpolicy ];
   preCheck = ''
     export CHECKPOLICY=${checkpolicy}/bin/checkpolicy
   '';
@@ -36,7 +36,7 @@ buildPythonApplication rec {
   meta = {
     description = "SELinux Policy Analysis Tools";
     homepage = "https://github.com/SELinuxProject/setools";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 }

@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, pythonPackages, wrapGAppsNoGuiHook
 , gst_all_1, glib-networking, gobject-introspection
 }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy";
-  version = "3.2.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
-    rev = "v${version}";
-    sha256 = "1l1rya48ykiq156spm8pfsm6li8apz66ppz7gs4s91fv7g7l5x2f";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-2OFav2HaQq/RphmZxLyL1n3suwzt1Y/d4h33EdbStjk=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsNoGuiHook ];
 
   buildInputs = with gst_all_1; [
     glib-networking
@@ -21,6 +21,7 @@ pythonPackages.buildPythonApplication rec {
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
+    gst-plugins-rs
   ];
 
   propagatedBuildInputs = [
@@ -35,15 +36,17 @@ pythonPackages.buildPythonApplication rec {
     ] ++ lib.optional (!stdenv.isDarwin) dbus-python
   );
 
+  propagatedNativeBuildInputs = [
+    gobject-introspection
+  ];
+
   # There are no tests
   doCheck = false;
 
   meta = with lib; {
     homepage = "https://www.mopidy.com/";
-    description = ''
-      An extensible music server that plays music from local disk, Spotify,
-      SoundCloud, and more
-    '';
+    description = "Extensible music server that plays music from local disk, Spotify, SoundCloud, and more";
+    mainProgram = "mopidy";
     license = licenses.asl20;
     maintainers = [ maintainers.fpletz ];
     hydraPlatforms = [];

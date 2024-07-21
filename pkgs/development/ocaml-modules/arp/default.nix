@@ -1,22 +1,35 @@
-{ lib, buildDunePackage, fetchurl
-, cstruct, ipaddr, macaddr, logs, lwt, duration
-, mirage-time, mirage-protocols, mirage-profile
-, alcotest, ethernet, fmt, mirage-vnetif, mirage-random
-, mirage-random-test, mirage-clock-unix, mirage-time-unix
+{ lib
+, stdenv
+, buildDunePackage
+, fetchurl
+, cstruct
+, duration
+, ethernet
+, ipaddr
+, logs
+, lwt
+, macaddr
+, mirage-time
+, alcotest
+, mirage-clock-unix
+, mirage-flow
+, mirage-random
+, mirage-random-test
+, mirage-time-unix
+, mirage-vnetif
 , bisect_ppx
 }:
 
 buildDunePackage rec {
   pname = "arp";
-  version = "2.3.2";
+  version = "3.1.1";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "1s09ibj9v6pp2ckn96wxmn3mjifcj97asls5xc4zg75pflk0grgz";
+    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    hash = "sha256-6jPFiene6jAPtivCugtVfP3+6k9A5gBoWzpoxoaPBvE=";
   };
 
-  minimumOCamlVersion = "4.06";
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
   nativeBuildInputs = [
     bisect_ppx
@@ -25,21 +38,20 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     cstruct
     duration
+    ethernet
     ipaddr
     logs
     lwt
     macaddr
-    mirage-profile
-    mirage-protocols
     mirage-time
   ];
 
-  doCheck = true;
+  ## NOTE: As of 18 april 2023 and ARP version 3.0.0, tests fail on Darwin.
+  doCheck = ! stdenv.isDarwin;
   checkInputs = [
     alcotest
-    ethernet
     mirage-clock-unix
-    mirage-profile
+    mirage-flow
     mirage-random
     mirage-random-test
     mirage-time-unix

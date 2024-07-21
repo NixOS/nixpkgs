@@ -2,50 +2,56 @@
 
 buildGoModule rec {
   pname = "protonmail-bridge";
-  version = "1.8.10";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-bridge";
-    rev = "br-${version}";
-    sha256 = "sha256-T6pFfGKG4VNcZ6EYEU5A5V91PlZZDylTNSNbah/pwS4=";
+    rev = "v${version}";
+    hash = "sha256-3nEf9maHDd2LmRpgRqvFOub2DQNvjP3iEBRUlpvo8yg=";
   };
 
-  vendorSha256 = "sha256-hRGedgdQlky9UBqsVTSbgAgii1skF/MA21ZQ0+goaM4=";
+  vendorHash = "sha256-c8KNdENF0wRQ0Ssv6mgnZkY4BOcEoY7r80/hd7XJ5yo=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libsecret ];
 
-  buildPhase = ''
-    runHook preBuild
-
+  preBuild = ''
     patchShebangs ./utils/
-    make BUILD_TIME= -j$NIX_BUILD_CORES build-nogui
-
-    runHook postBuild
+    (cd ./utils/ && ./credits.sh bridge)
   '';
 
-  installPhase = ''
-    runHook preInstall
+  ldflags =
+    let constants = "github.com/ProtonMail/proton-bridge/v3/internal/constants"; in
+    [
+      "-X ${constants}.Version=${version}"
+      "-X ${constants}.Revision=${src.rev}"
+      "-X ${constants}.buildTime=unknown"
+      "-X ${constants}.FullAppName=ProtonMailBridge" # Should be "Proton Mail Bridge", but quoting doesn't seems to work in nix's ldflags
+    ];
 
-    install -Dm555 proton-bridge $out/bin/protonmail-bridge
+  subPackages = [
+    "cmd/Desktop-Bridge"
+  ];
 
-    runHook postInstall
+  postInstall = ''
+    mv $out/bin/Desktop-Bridge $out/bin/protonmail-bridge # The cli is named like that in other distro packages
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/ProtonMail/proton-bridge";
-    changelog = "https://github.com/ProtonMail/proton-bridge/blob/master/Changelog.md";
-    downloadPage = "https://github.com/ProtonMail/proton-bridge/releases";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lightdiscord ];
+  meta = {
+    changelog = "https://github.com/ProtonMail/proton-bridge/blob/${src.rev}/Changelog.md";
     description = "Use your ProtonMail account with your local e-mail client";
+    downloadPage = "https://github.com/ProtonMail/proton-bridge/releases";
+    homepage = "https://github.com/ProtonMail/proton-bridge";
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       An application that runs on your computer in the background and seamlessly encrypts
       and decrypts your mail as it enters and leaves your computer.
 
-      To work, gnome-keyring service must be enabled.
+      To work, use secret-service freedesktop.org API (e.g. Gnome keyring) or pass.
     '';
+    mainProgram = "protonmail-bridge";
+    maintainers = with lib.maintainers; [ mrfreezeex daniel-fahey ];
   };
 }

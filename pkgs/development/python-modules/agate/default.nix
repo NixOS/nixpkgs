@@ -1,73 +1,64 @@
-{ lib
-, Babel
-, buildPythonPackage
-, cssselect
-, fetchFromGitHub
-, glibcLocales
-, isodate
-, leather
-, lxml
-, nose
-, parsedatetime
-, PyICU
-, python-slugify
-, pytimeparse
-, pythonOlder
-, pytz
-, six
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  cssselect,
+  fetchFromGitHub,
+  glibcLocales,
+  isodate,
+  leather,
+  lxml,
+  parsedatetime,
+  pyicu,
+  pytestCheckHook,
+  python-slugify,
+  pythonOlder,
+  pytimeparse,
+  pytz,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "agate";
-  version = "1.6.3";
-  format = "setuptools";
+  version = "1.9.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wireservice";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-tuUoLvztCYHIPJTBgw1eByM0zfaHDyc+h7SWsxutKos=";
+    repo = "agate";
+    rev = "refs/tags/${version}";
+    hash = "sha256-I7jvZA/m06kUuUcfglySaroDbJ5wbgiF2lb84EFPmpw=";
   };
 
-  propagatedBuildInputs = [
-    Babel
+  build-system = [ setuptools ];
+
+  dependencies = [
+    babel
     isodate
     leather
     parsedatetime
     python-slugify
     pytimeparse
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cssselect
     glibcLocales
     lxml
-    nose
-    PyICU
+    pyicu
+    pytestCheckHook
     pytz
   ];
 
-  postPatch = ''
-    # No Python 2 support, thus constraint is not needed
-    substituteInPlace setup.py \
-      --replace "'parsedatetime>=2.1,!=2.5,!=2.6'," "'parsedatetime>=2.1',"
-  '';
-
-  checkPhase = ''
-    LC_ALL="en_US.UTF-8" nosetests tests
-  '';
-
-  pythonImportsCheck = [
-    "agate"
-  ];
+  pythonImportsCheck = [ "agate" ];
 
   meta = with lib; {
     description = "Python data analysis library that is optimized for humans instead of machines";
     homepage = "https://github.com/wireservice/agate";
+    changelog = "https://github.com/wireservice/agate/blob/${version}/CHANGELOG.rst";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,36 +1,43 @@
-{ lib, stdenv, fetchFromSourcehut
-, SDL, stb, libGLU, libGL, openal, libvorbis, freealut }:
+{ lib
+, stdenv
+, fetchFromSourcehut
+, glfw
+, libGL
+, libGLU
+, libsndfile
+, openal
+, zig_0_11
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blackshades";
-  version = "1.3.1";
+  version = "2.5.1";
 
   src = fetchFromSourcehut {
     owner = "~cnx";
-    repo = pname;
-    rev = version;
-    sha256 = "0yzp74ynkcp6hh5m4zmvrgx5gwm186hq7p3m7qkww54qdyijb3rv";
+    repo = "blackshades";
+    rev = finalAttrs.version;
+    fetchSubmodules = true;
+    hash = "sha256-qdpXpuXHr9w2XMfgOVveWv3JoqdJHVB8TCqZdyaw/DM=";
   };
 
-  buildInputs = [ SDL stb libGLU libGL openal libvorbis freealut ];
+  nativeBuildInputs = [ zig_0_11.hook ];
 
-  postPatch = ''
-    sed -i -e s,Data/,$out/share/$pname/,g \
-      -e s,Data:,$out/share/$pname/,g \
-      src/*.cpp
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin $out/share
-    cp build/blackshades $out/bin
-    cp -R Data $out/share/$pname
-  '';
+  buildInputs = [
+    glfw
+    libGLU
+    libGL
+    libsndfile
+    openal
+  ];
 
   meta = {
     homepage = "https://sr.ht/~cnx/blackshades";
-    description = "A psychic bodyguard FPS";
+    description = "Psychic bodyguard FPS";
+    changelog = "https://git.sr.ht/~cnx/blackshades/refs/${finalAttrs.version}";
+    mainProgram = "blackshades";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ McSinyx viric ];
-    platforms = with lib.platforms; linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

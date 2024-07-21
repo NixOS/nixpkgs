@@ -1,35 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  faker,
+  fetchFromGitHub,
+  mock,
+  six,
+  pytestCheckHook,
+  python-memcached,
+  pythonOlder,
+  zstd,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "pymemcache";
-  version = "3.5.0";
+  version = "4.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pinterest";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-O2qmcLWCUSc1f32irelIZOOuOziOUQXFGcuQJBXPvvM=";
+    hash = "sha256-WgtHhp7lE6StoOBfSy9+v3ODe/+zUC7lGrc2S4M68+M=";
   };
 
-  checkInputs = [
-    future
+  propagatedBuildInputs = [ six ];
+
+  nativeCheckInputs = [
+    faker
     mock
     pytestCheckHook
+    python-memcached
+    zstd
   ];
 
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
   '';
 
-  disabledTests = [
-    # python-memcached is not available (last release in 2017)
-    "TestClientSocketConnect"
+  disabledTests = lib.optionals stdenv.is32bit [
+    # test_compressed_complex is broken on 32-bit platforms
+    # this can be removed on the next version bump
+    # see also https://github.com/pinterest/pymemcache/pull/480
+    "test_compressed_complex"
   ];
 
   pythonImportsCheck = [ "pymemcache" ];

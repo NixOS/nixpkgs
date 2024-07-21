@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "venstarcolortouch";
-  version = "0.15";
+  version = "0.19";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7JUqXHk/yL+/EvfQoGLaKmPPy4DkljT9olqK0a/Nmkk=";
+    hash = "sha256-QjcoF46GrBH7ExGQno8xDgtOSGNxhAP+NycJb22hL+E=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "venstarcolortouch" ];
 
   meta = with lib; {

@@ -1,34 +1,46 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "dasel";
-  version = "1.22.1";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "TomWright";
     repo = "dasel";
     rev = "v${version}";
-    sha256 = "091s3hyz9p892garanm9zmkbsn6hn3bnnrz7h3dqsyi58806d5yr";
+    hash = "sha256-vq4lRCsqD2hmQw0yH84Wji5LeJ/aiMGJJIyCDvATA+I=";
   };
 
-  vendorSha256 = "1psyx8nqzpx3p1ya9y3q9h0hhfx4iqmix089b2h6bp9lgqbj5zn8";
+  vendorHash = "sha256-edyFs5oURklkqsTF7JA1in3XteSBx/6YEVu4MjIcGN4=";
 
   ldflags = [
-    "-s" "-w" "-X github.com/tomwright/dasel/internal.Version=${version}"
+    "-s" "-w" "-X github.com/tomwright/dasel/v2/internal.Version=${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd dasel \
+      --bash <($out/bin/dasel completion bash) \
+      --fish <($out/bin/dasel completion fish) \
+      --zsh <($out/bin/dasel completion zsh)
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
-    if [[ "$("$out/bin/${pname}" --version)" == "${pname} version ${version}" ]]; then
-      echo "" | $out/bin/dasel put object -p yaml -t string -t int "my.favourites" colour=red number=3 | grep -q red
-      echo '${pname} smoke check passed'
+    runHook preInstallCheck
+    if [[ $($out/bin/dasel --version) == "dasel version ${version}" ]]; then
+      echo '{ "my": { "favourites": { "colour": "blue" } } }' \
+        | $out/bin/dasel put -t json -r json -t string -v "red" "my.favourites.colour" \
+        | grep "red"
     else
-      echo '${pname} smoke check failed'
       return 1
     fi
+    runHook postInstallCheck
   '';
 
   meta = with lib; {
@@ -40,7 +52,7 @@ buildGoModule rec {
     homepage = "https://github.com/TomWright/dasel";
     changelog = "https://github.com/TomWright/dasel/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    platforms = platforms.unix;
+    mainProgram = "dasel";
     maintainers = with maintainers; [ _0x4A6F ];
   };
 }

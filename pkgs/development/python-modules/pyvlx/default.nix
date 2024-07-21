@@ -1,24 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pyyaml
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  typing-extensions,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "pyvlx";
-  version = "0.2.19";
+  version = "0.2.23";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Julius2342";
-    repo = pname;
-    rev = version;
-    sha256 = "031gp3sjagvmgdhfpdqlawva425ja1n3bmxk6jyn4zx54szj9zwf";
+    repo = "pyvlx";
+    rev = "refs/tags/${version}";
+    hash = "sha256-J+oJQHsULrJQNdZqYsl2hufNubMwV1KtG10jZH0jbU4=";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [
+    pyyaml
+    typing-extensions
+    zeroconf
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyvlx" ];
 
@@ -29,7 +44,9 @@ buildPythonPackage rec {
       devices, e.g. Velux Windows.
     '';
     homepage = "https://github.com/Julius2342/pyvlx";
+    changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${version}";
     license = with licenses; [ lgpl2Only ];
     maintainers = with maintainers; [ fab ];
+    broken = stdenv.isDarwin;
   };
 }

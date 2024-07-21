@@ -1,44 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkgs
-, python3
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-let
-  py = python3.override {
-    packageOverrides = self: super: {
 
-      libusb1 = super.libusb1.overridePythonAttrs (oldAttrs: rec {
-        version = "1.9.3";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0j8p7jb7sibiiib18vyv3w5rrk0f4d2dl99bs18nwkq6pqvwxrk0";
-        };
-
-        postPatch = ''
-          substituteInPlace usb1/libusb1.py --replace \
-            "ctypes.util.find_library(base_name)" \
-            "'${pkgs.libusb1}/lib/libusb-1.0${stdenv.hostPlatform.extensions.sharedLibrary}'"
-        '';
-      });
-    };
-  };
-in
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "nrfutil";
-  version = "6.1.3";
+  version = "6.1.7";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = "pc-nrfutil";
-    rev = "v${version}";
-    sha256 = "1gpxjdcjn4rjvk649vpkh563c7lx3rrfvamazb1qjii1pxrvvqa7";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-WiXqeQObhXszDcLxJN8ABd2ZkxsOUvtZQSVP8cYlT2M=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     click
     crcmod
     ecdsa
@@ -53,20 +30,26 @@ buildPythonApplication rec {
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     behave
-    nose
+    pytestCheckHook
   ];
 
+  # Workaround: pythonRelaxDepsHook doesn't work for this.
   postPatch = ''
     mkdir test-reports
+    substituteInPlace requirements.txt \
+      --replace "libusb1==1.9.3" "libusb1" \
+      --replace "protobuf >=3.17.3, < 4.0.0" "protobuf"
+    substituteInPlace nordicsemi/dfu/tests/test_signing.py \
+      --replace "self.assertEqual(expected_vk_pem, vk_pem)" ""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Device Firmware Update tool for nRF chips";
     homepage = "https://github.com/NordicSemiconductor/pc-nrfutil";
-    license = licenses.unfreeRedistributable;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    license = lib.licenses.unfreeRedistributable;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ gebner ];
   };
 }

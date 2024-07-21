@@ -16,9 +16,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "dev" "py" ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config gettext swig ];
+  strictDeps = true;
 
-  buildInputs = [ autoreconfHook glib cryptsetup nss util-linux gpgme ncurses ];
+  nativeBuildInputs = [ autoreconfHook gettext gpgme pkg-config swig ];
+
+  buildInputs = [ glib cryptsetup nss util-linux ncurses ];
 
   configureFlags = [
     "--with-gpgme-prefix=${gpgme.dev}"
@@ -37,7 +39,8 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails 1 out of 1 tests, needs `certutil`
 
   meta = with lib; {
-    description = "A library for manipulating storage volume encryption keys and storing them separately from volumes to handle forgotten passphrases, and the associated command-line tool";
+    description = "Library for manipulating storage volume encryption keys and storing them separately from volumes to handle forgotten passphrases, and the associated command-line tool";
+    mainProgram = "volume_key";
     homepage = "https://pagure.io/volume_key/";
     license = licenses.gpl2;
     maintainers = with maintainers; [];

@@ -1,30 +1,34 @@
+diff --git a/googlemock/CMakeLists.txt b/googlemock/CMakeLists.txt
+index 428bd9f8..04b84539 100644
 --- a/googlemock/CMakeLists.txt
 +++ b/googlemock/CMakeLists.txt
-@@ -106,10 +106,10 @@
- if (DEFINED CMAKE_VERSION AND NOT "${CMAKE_VERSION}" VERSION_LESS "2.8.11")
-   target_include_directories(gmock SYSTEM INTERFACE
-     "$<BUILD_INTERFACE:${gmock_build_include_dirs}>"
--    "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>")
-+    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
-   target_include_directories(gmock_main SYSTEM INTERFACE
-     "$<BUILD_INTERFACE:${gmock_build_include_dirs}>"
--    "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>")
-+    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
- endif()
+@@ -104,10 +104,10 @@ endif()
+ string(REPLACE ";" "$<SEMICOLON>" dirs "${gmock_build_include_dirs}")
+ target_include_directories(gmock SYSTEM INTERFACE
+   "$<BUILD_INTERFACE:${dirs}>"
+-  "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>")
++  "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+ target_include_directories(gmock_main SYSTEM INTERFACE
+   "$<BUILD_INTERFACE:${dirs}>"
+-  "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>")
++  "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
  
  ########################################################################
+ #
+diff --git a/googletest/CMakeLists.txt b/googletest/CMakeLists.txt
+index 51a67c91..fb09e978 100644
 --- a/googletest/CMakeLists.txt
 +++ b/googletest/CMakeLists.txt
-@@ -126,10 +126,10 @@
- if (DEFINED CMAKE_VERSION AND NOT "${CMAKE_VERSION}" VERSION_LESS "2.8.11")
-   target_include_directories(gtest SYSTEM INTERFACE
-     "$<BUILD_INTERFACE:${gtest_build_include_dirs}>"
--    "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>")
-+    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
-   target_include_directories(gtest_main SYSTEM INTERFACE
-     "$<BUILD_INTERFACE:${gtest_build_include_dirs}>"
--    "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>")
-+    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+@@ -143,10 +143,10 @@ set_target_properties(gtest_main PROPERTIES VERSION ${GOOGLETEST_VERSION})
+ string(REPLACE ";" "$<SEMICOLON>" dirs "${gtest_build_include_dirs}")
+ target_include_directories(gtest SYSTEM INTERFACE
+   "$<BUILD_INTERFACE:${dirs}>"
+-  "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>")
++  "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+ target_include_directories(gtest_main SYSTEM INTERFACE
+   "$<BUILD_INTERFACE:${dirs}>"
+-  "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>")
++  "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+ if(CMAKE_SYSTEM_NAME MATCHES "QNX")
+   target_link_libraries(gtest PUBLIC regex)
  endif()
- target_link_libraries(gtest_main PUBLIC gtest)
- 

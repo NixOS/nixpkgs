@@ -1,13 +1,20 @@
-{ airspy
+{ lib
+, stdenv
+, airspy
+, airspyhf
+, aptdec
 , boost
 , cm256cc
 , cmake
 , codec2
+, dab_lib
+, dsdcc
+, faad2
 , fetchFromGitHub
 , fftwFloat
 , glew
 , hackrf
-, lib
+, hidapi
 , ffmpeg
 , libiio
 , libopus
@@ -15,81 +22,113 @@
 , libusb1
 , limesuite
 , libbladeRF
-, mkDerivation
-, ocl-icd
-, opencv3
+, mbelib
+, ninja
+, opencv4
 , pkg-config
 , qtcharts
+, qtdeclarative
+, qtgamepad
+, qtgraphicaleffects
 , qtlocation
 , qtmultimedia
+, qtquickcontrols
+, qtquickcontrols2
 , qtserialport
 , qtspeech
+, qttools
 , qtwebsockets
+, qtwebengine
 , rtl-sdr
 , serialdv
+, sdrplay
+, sgp4
 , soapysdr-with-plugins
 , uhd
+, wrapQtAppsHook
+, zlib
+, withSDRplay ? false
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sdrangel";
-  version = "6.17.2";
+  version = "7.21.4";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
-    rev = "v${version}";
-    sha256 = "sha256-sMD2JTJJlssMdXCUHdFYjEqGknhGGuG4szfnvFFN7t4=";
-    fetchSubmodules = false;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-GINgI4u87Ns4/5aUWpeJaokb+3Liwjjibr02NGcF10c=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     airspy
+    airspyhf
+    aptdec
     boost
     cm256cc
     codec2
+    dab_lib
+    dsdcc
+    faad2
     ffmpeg
     fftwFloat
     glew
     hackrf
+    hidapi
     libbladeRF
     libiio
     libopus
     libpulseaudio
     libusb1
     limesuite
-    opencv3
+    mbelib
+    opencv4
     qtcharts
+    qtdeclarative
+    qtgamepad
+    qtgraphicaleffects
     qtlocation
     qtmultimedia
+    qtquickcontrols
+    qtquickcontrols2
     qtserialport
     qtspeech
+    qttools
     qtwebsockets
+    qtwebengine
     rtl-sdr
     serialdv
+    sgp4
     soapysdr-with-plugins
     uhd
-  ];
+    zlib
+  ]
+  ++ lib.optionals withSDRplay [ sdrplay ];
 
   cmakeFlags = [
-    "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"
-    "-DLIMESUITE_INCLUDE_DIR:PATH=${limesuite}/include"
-    "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite.so"
+    "-DAPT_DIR=${aptdec}"
+    "-DDAB_DIR=${dab_lib}"
+    "-DSGP4_DIR=${sgp4}"
     "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
+    "-Wno-dev"
   ];
 
-  LD_LIBRARY_PATH = "${ocl-icd}/lib";
-
-  meta = with lib; {
+  meta = {
     description = "Software defined radio (SDR) software";
+    homepage = "https://github.com/f4exb/sdrangel";
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       SDRangel is an Open Source Qt5 / OpenGL 3.0+ SDR and signal analyzer frontend to various hardware.
     '';
-    homepage = "https://github.com/f4exb/sdrangel";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ alkeryn ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ alkeryn Tungsten842 ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -1,20 +1,25 @@
-{ lib
-, fetchFromGitLab
-, buildPythonPackage
-, pillow
-, setuptools-scm
-, setuptools-scm-git-archive
-, tesseract
-, cuneiform
-, isPy3k
-, substituteAll
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  buildPythonPackage,
+  pillow,
+  tesseract,
+  cuneiform,
+  isPy3k,
+  substituteAll,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
+  withTesseractSupport ? true,
+  withCuneiformSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 buildPythonPackage rec {
   pname = "pyocr";
-  version = "0.7.2";
+  version = "0.8.5";
   disabled = !isPy3k;
+  format = "pyproject";
 
   # Don't fetch from PYPI because it doesn't contain tests.
   src = fetchFromGitLab {
@@ -23,28 +28,38 @@ buildPythonPackage rec {
     owner = "OpenPaperwork";
     repo = "pyocr";
     rev = version;
-    sha256 = "09ab86bmizpv94w3mdvdqkjyyvk1vafw3jqhkiw5xx7p180xn3il";
+    hash = "sha256-gE0+qbHCwpDdxXFY+4rjVU2FbUSfSVrvrVMcWUk+9FU=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./paths.patch;
-      inherit cuneiform tesseract;
-    })
-  ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  buildInputs = [ setuptools-scm setuptools-scm-git-archive ];
+  patches =
+    [ ]
+    ++ (lib.optional withTesseractSupport (substituteAll {
+      src = ./paths-tesseract.patch;
+      inherit tesseract;
+      tesseractLibraryLocation = "${tesseract}/lib/libtesseract${stdenv.hostPlatform.extensions.sharedLibrary}";
+    }))
+    ++ (lib.optional stdenv.hostPlatform.isLinux (substituteAll {
+      src = ./paths-cuneiform.patch;
+      inherit cuneiform;
+    }));
 
   propagatedBuildInputs = [ pillow ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A Python wrapper for Tesseract and Cuneiform";
+    changelog = "https://gitlab.gnome.org/World/OpenPaperwork/pyocr/-/blob/${version}/ChangeLog";
+    description = "Python wrapper for Tesseract and Cuneiform";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [
+      symphorien
+      tomodachi94
+    ];
   };
 }

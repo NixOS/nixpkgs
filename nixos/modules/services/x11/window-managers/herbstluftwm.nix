@@ -11,14 +11,7 @@ in
     services.xserver.windowManager.herbstluftwm = {
       enable = mkEnableOption "herbstluftwm";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.herbstluftwm;
-        defaultText = literalExpression "pkgs.herbstluftwm";
-        description = ''
-          Herbstluftwm package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "herbstluftwm" { };
 
       configFile = mkOption {
         default     = null;
@@ -40,7 +33,10 @@ in
             (cfg.configFile != null)
             ''-c "${cfg.configFile}"''
             ;
-        in "${cfg.package}/bin/herbstluftwm ${configFileClause}";
+        in ''
+          ${cfg.package}/bin/herbstluftwm ${configFileClause} &
+          waitPID=$!
+        '';
     };
     environment.systemPackages = [ cfg.package ];
   };

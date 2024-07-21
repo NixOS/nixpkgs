@@ -11,7 +11,9 @@ python3.pkgs.buildPythonApplication {
     sha256 = "1cips4pvrqga8q1ibs23vjrf8dwan860x8jvjmc52h6qvvvv60yl";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ six wxPython_4_0 ];
+  patches = [ ./wxpython.patch ];
+
+  propagatedBuildInputs = with python3.pkgs; [ six wxpython ];
 
   postInstall = ''
     mv $out/bin/loxodo.py $out/bin/loxodo
@@ -20,7 +22,7 @@ python3.pkgs.buildPythonApplication {
     [Desktop Entry]
     Type=Application
     Exec=$out/bin/loxodo
-    Icon=$out/lib/${python3.libPrefix}/site-packages/resources/loxodo-icon.png
+    Icon=$out/${python3.sitePackages}/resources/loxodo-icon.png
     Name=Loxodo
     GenericName=Password Vault
     Categories=Application;Other;
@@ -30,7 +32,8 @@ python3.pkgs.buildPythonApplication {
   doCheck = false;  # Tests are interactive.
 
   meta = with lib; {
-    description = "A Password Safe V3 compatible password vault";
+    description = "Password Safe V3 compatible password vault";
+    mainProgram = "loxodo";
     homepage = "https://www.christoph-sommer.de/loxodo/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

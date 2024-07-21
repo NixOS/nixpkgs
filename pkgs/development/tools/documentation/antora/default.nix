@@ -1,24 +1,34 @@
-{ lib, nodePackages }:
+{ lib, buildNpmPackage, fetchFromGitLab }:
 
-let
-  linkNodeDeps = ({ pkg, deps, name ? "" }:
-    let
-      targetModule = if name != "" then name else lib.getName pkg;
-    in nodePackages.${pkg}.override (oldAttrs: {
-      postInstall = ''
-        mkdir -p $out/lib/node_modules/${targetModule}/node_modules
-        ${lib.concatStringsSep "\n" (map (dep: ''
-          ln -s ${nodePackages.${dep}}/lib/node_modules/${lib.getName dep} \
-            $out/lib/node_modules/${targetModule}/node_modules/${lib.getName dep}
-        '') deps
-        )}
-      '';
-    })
-);
-in linkNodeDeps {
- pkg = "@antora/cli";
- name = "@antora/cli";
- deps = [
-   "@antora/site-generator-default"
- ];
+buildNpmPackage rec {
+  pname = "antora";
+  version = "3.1.9";
+
+  src = fetchFromGitLab {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-hkavYC2LO8NRIRwHNWIJLRDkVnhAB4Di3IqL8uGt+U8=";
+  };
+
+  npmDepsHash = "sha256-ngreuitwUcIDVF6vW7fZA1OaVxr9fv7s0IjCErXlcxg=";
+
+  # This is to stop tests from being ran, as some of them fail due to trying to query remote repositories
+  postPatch = ''
+    substituteInPlace package.json --replace \
+      '"_mocha"' '""'
+  '';
+
+  postInstall = ''
+    mkdir -p $out/bin
+    ln -s $out/lib/node_modules/antora-build/packages/cli/bin/antora $out/bin/antora
+  '';
+
+  meta = with lib; {
+    description = "Modular documentation site generator. Designed for users of Asciidoctor";
+    mainProgram = "antora";
+    homepage = "https://antora.org";
+    license = licenses.mpl20;
+    maintainers = [ maintainers.ehllie ];
+  };
 }

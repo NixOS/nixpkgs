@@ -7,12 +7,18 @@
   nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
+let
+  release-lib = import ./release-lib.nix {
+    inherit supportedSystems nixpkgsArgs;
+  };
+
+  inherit (release-lib) all linux darwin mapTestOn unix;
+in
 
 {
 
   tarball = import ./make-tarball.nix {
-    inherit nixpkgs supportedSystems;
+    inherit nixpkgs;
     officialRelease = false;
   };
 
@@ -30,23 +36,19 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   bind = linux;
   bsdiff = all;
   bzip2 = all;
-  classpath = linux;
   cmake = all;
   coreutils = all;
   cpio = all;
   cron = linux;
   cups = linux;
   dbus = linux;
-  dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
   emacs = linux;
-  enscript = all;
   file = all;
   findutils = all;
   flex = all;
   gcc = all;
-  gcj = linux;
   glibc = linux;
   glibcLocales = linux;
   gnugrep = all;
@@ -58,10 +60,7 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   gnused = all;
   gnutar = all;
   gnutls = linux;
-  gogoclient = linux;
-  grub = linux;
   grub2 = linux;
-  gsl = linux;
   guile = linux;  # tests fail on Cygwin
   gzip = all;
   hddtemp = linux;
@@ -73,11 +72,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   idutils = all;
   inetutils = linux;
   iputils = linux;
-  jnettop = linux;
-  jwhois = linux;
-  kbd = linux;
-  keen4 = ["i686-linux"];
-  kvm = linux;
   qemu = linux;
   qemu_kvm = linux;
   lapack-reference = linux;
@@ -97,17 +91,11 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   man = linux;
   man-pages = linux;
   mc = all;
-  mcabber = linux;
-  mcron = linux;
   mdadm = linux;
-  mesa = mesaPlatforms;
-  midori = linux;
+  mesa = linux;
   mingetty = linux;
-  mk = linux;
   mktemp = all;
-  mono = linux;
   monotone = linux;
-  mpg321 = linux;
   mutt = linux;
   mysql = linux;
   # netcat broken on darwin
@@ -122,36 +110,29 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   openssh = linux;
   openssl = all;
   pan = linux;
-  par2cmdline = all;
   pciutils = linux;
-  pdf2xml = all;
   perl = all;
   pkg-config = all;
   pmccabe = linux;
   procps = linux;
-  python = unix; # Cygwin builds fail
+  python3 = unix; # Cygwin builds fail
   readline = all;
   rlwrap = all;
-  rpm = linux;
   rpcbind = linux;
   rsync = linux;
   screen = linux ++ darwin;
   scrot = linux;
   sdparm = linux;
-  sharutils = all;
-  sloccount = unix; # Cygwin builds fail
   smartmontools = all;
   sqlite = unix; # Cygwin builds fail
   squid = linux;
-  ssmtp = linux;
+  msmtp = linux;
   stdenv = all;
   strace = linux;
   su = linux;
   sudo = linux;
   sysklogd = linux;
   syslinux = ["i686-linux"];
-  sysvinit = linux;
-  sysvtools = linux;
   tcl = linux;
   tcpdump = linux;
   texinfo = all;
@@ -166,12 +147,10 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   webkitgtk = linux;
   wget = all;
   which = all;
-  wireshark = linux;
   wirelesstools = linux;
   wpa_supplicant = linux;
   xfsprogs = linux;
   xkeyboard_config = linux;
-  zile = linux;
   zip = all;
-
+  tests-stdenv-gcc-stageCompare = all;
 } ))

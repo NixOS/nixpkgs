@@ -1,46 +1,26 @@
 { config, pkgs, lib }:
 
-lib.makeScope pkgs.newScope (self: with self; {
+# NOTE: New packages should generally go to top-level instead of here!
+lib.makeScope pkgs.newScope (self:
+let
+  inherit (self) callPackage;
+in
+{
   updateScript = callPackage ./update.nix { };
 
-  /* Remove packages of packagesToRemove from packages, based on their names
-
-     Type:
-       removePackagesByName :: [package] -> [package] -> [package]
-
-     Example:
-       removePackagesByName [ nautilus file-roller ] [ file-roller totem ]
-       => [ nautilus ]
-  */
-  removePackagesByName = packages: packagesToRemove:
-    let
-      namesToRemove = map lib.getName packagesToRemove;
-    in
-      lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
+  # Temporary helper until gdk-pixbuf supports multiple cache files.
+  # This will go away, do not use outside Nixpkgs.
+  _gdkPixbufCacheBuilder_DO_NOT_USE = callPackage ./gdk-pixbuf-cache-builder.nix { };
 
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
-  libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
+  libchamplain = pkgs.libchamplain.override { inherit (self) libsoup; };
 
 # ISO installer
 # installerIso = callPackage ./installer.nix {};
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
-  adwaita-icon-theme = callPackage ./core/adwaita-icon-theme { };
-
-  baobab = callPackage ./core/baobab { };
-
   caribou = callPackage ./core/caribou { };
-
-  dconf-editor = callPackage ./core/dconf-editor { };
-
-  empathy = callPackage ./core/empathy { };
-
-  epiphany = callPackage ./core/epiphany { };
-
-  evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
-
-  evolution-data-server = callPackage ./core/evolution-data-server { };
 
   gdm = callPackage ./core/gdm { };
 
@@ -48,27 +28,13 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
 
+  gnome-bluetooth_1_0 = callPackage ./core/gnome-bluetooth/1.0 { };
+
   gnome-color-manager = callPackage ./core/gnome-color-manager { };
 
   gnome-contacts = callPackage ./core/gnome-contacts { };
 
   gnome-control-center = callPackage ./core/gnome-control-center { };
-
-  gnome-calculator = callPackage ./core/gnome-calculator { };
-
-  gnome-common = callPackage ./core/gnome-common { };
-
-  gnome-desktop = callPackage ./core/gnome-desktop { };
-
-  gnome-dictionary = callPackage ./core/gnome-dictionary { };
-
-  gnome-disk-utility = callPackage ./core/gnome-disk-utility { };
-
-  gnome-font-viewer = callPackage ./core/gnome-font-viewer { };
-
-  gnome-keyring = callPackage ./core/gnome-keyring { };
-
-  libgnome-keyring = callPackage ./core/libgnome-keyring { };
 
   gnome-initial-setup = callPackage ./core/gnome-initial-setup { };
 
@@ -84,35 +50,19 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-shell-extensions = callPackage ./core/gnome-shell-extensions { };
 
-  gnome-screenshot = callPackage ./core/gnome-screenshot { };
-
   gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
 
-  # Using 3.38 to match Mutter used in Pantheon
-  gnome-settings-daemon338 = callPackage ./core/gnome-settings-daemon/3.38 { };
+  # Using 43 to match Mutter used in Pantheon
+  gnome-settings-daemon43 = callPackage ./core/gnome-settings-daemon/43 { };
 
   gnome-software = callPackage ./core/gnome-software { };
 
-  gnome-system-monitor = callPackage ./core/gnome-system-monitor { };
-
-  gnome-terminal = callPackage ./core/gnome-terminal { };
-
-  gnome-themes-extra = callPackage ./core/gnome-themes-extra { };
-
-  gnome-user-share = callPackage ./core/gnome-user-share { };
-
-  gucharmap = callPackage ./core/gucharmap { };
-
   gvfs = pkgs.gvfs.override { gnomeSupport = true; };
-
-  eog = callPackage ./core/eog { };
 
   mutter = callPackage ./core/mutter { };
 
-  # Needed for elementary's gala and greeter until support for higher versions is provided
-  mutter338 = callPackage ./core/mutter/3.38 { };
-
-  nautilus = callPackage ./core/nautilus { };
+  # Needed for elementary's gala, wingpanel and greeter until support for higher versions is provided
+  mutter43 = callPackage ./core/mutter/43 { };
 
   networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
     withGnome = true;
@@ -138,44 +88,15 @@ lib.makeScope pkgs.newScope (self: with self; {
     withGnome = true;
   };
 
-  rygel = callPackage ./core/rygel { };
-
-  simple-scan = callPackage ./core/simple-scan { };
-
-  sushi = callPackage ./core/sushi { };
-
-  totem = callPackage ./core/totem { };
-
-  yelp = callPackage ./core/yelp { };
-
-  yelp-xsl = callPackage ./core/yelp-xsl { };
-
-  zenity = callPackage ./core/zenity { };
-
+  nixos-gsettings-overrides = callPackage ./nixos/gsettings-overrides { };
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
-  accerciser = callPackage ./apps/accerciser { };
-
-  cheese = callPackage ./apps/cheese { };
-
-  file-roller = callPackage ./apps/file-roller { };
-
-  gedit = callPackage ./apps/gedit { };
-
-  ghex = callPackage ./apps/ghex { };
-
-  gnome-books = callPackage ./apps/gnome-books { };
-
   gnome-boxes = callPackage ./apps/gnome-boxes { };
-
-  gnome-calendar = callPackage ./apps/gnome-calendar { };
 
   gnome-characters = callPackage ./apps/gnome-characters { };
 
   gnome-clocks = callPackage ./apps/gnome-clocks { };
-
-  gnome-documents = callPackage ./apps/gnome-documents { };
 
   gnome-logs = callPackage ./apps/gnome-logs { };
 
@@ -191,23 +112,11 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-sound-recorder = callPackage ./apps/gnome-sound-recorder { };
 
-  gnome-todo = callPackage ./apps/gnome-todo {};
-
   gnome-weather = callPackage ./apps/gnome-weather { };
 
   polari = callPackage ./apps/polari { };
 
-  seahorse = callPackage ./apps/seahorse { };
-
   vinagre = callPackage ./apps/vinagre { };
-
-#### Dev http://ftp.gnome.org/pub/GNOME/devtools/
-
-  anjuta = callPackage ./devtools/anjuta { };
-
-  devhelp = callPackage ./devtools/devhelp { };
-
-  gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
 
 #### Games
 
@@ -251,118 +160,67 @@ lib.makeScope pkgs.newScope (self: with self; {
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
-  geary = callPackage ./misc/geary { };
-
-  gitg = callPackage ./misc/gitg { };
-
-  libgnome-games-support = callPackage ./misc/libgnome-games-support { };
-
   gnome-applets = callPackage ./misc/gnome-applets { };
 
   gnome-flashback = callPackage ./misc/gnome-flashback { };
 
-  gnome-panel = callPackage ./misc/gnome-panel {
-    autoreconfHook = pkgs.autoreconfHook269;
-  };
+  gnome-panel = callPackage ./misc/gnome-panel { };
 
-  gnome-tweaks = callPackage ./misc/gnome-tweaks { };
-
-  gpaste = callPackage ./misc/gpaste { };
+  gnome-panel-with-modules = callPackage ./misc/gnome-panel/wrapper.nix { };
 
   metacity = callPackage ./misc/metacity { };
 
-  nautilus-python = callPackage ./misc/nautilus-python { };
+  gtkhtml = callPackage ./misc/gtkhtml { enchant = pkgs.enchant2; };
+}) // lib.optionalAttrs config.allowAliases {
+#### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
+  libgnome-keyring = lib.warn "The ‘gnome.libgnome-keyring’ was moved to top-level. Please use ‘pkgs.libgnome-keyring’ directly." pkgs.libgnome-keyring; # Added on 2024-06-22.
 
-  gtkhtml = callPackage ./misc/gtkhtml { enchant = pkgs.enchant1; };
+  gedit = throw "The ‘gnome.gedit’ alias was removed. Please use ‘pkgs.gedit’ directly."; # converted to throw on 2023-12-27
+  gnome-todo = throw "The ‘gnome.gnome-todo’ alias was removed. Please use ‘pkgs.endeavour’ directly."; # converted to throw on 2023-12-27
 
-  pomodoro = callPackage ./misc/pomodoro { };
+  accerciser = lib.warn "The ‘gnome.accerciser’ was moved to top-level. Please use ‘pkgs.accerciser’ directly." pkgs.accerciser; # Added on 2024-06-22.
+  adwaita-icon-theme = lib.warn "The ‘gnome.adwaita-icon-theme’ was moved to top-level. Please use ‘pkgs.adwaita-icon-theme’ directly." pkgs.adwaita-icon-theme; # Added on 2024-06-22.
+  baobab = lib.warn "The ‘gnome.baobab’ was moved to top-level. Please use ‘pkgs.baobab’ directly." pkgs.baobab; # Added on 2024-06-22.
+  cheese = lib.warn "The ‘gnome.cheese’ was moved to top-level. Please use ‘pkgs.cheese’ directly." pkgs.cheese; # Added on 2024-06-22.
+  dconf-editor = lib.warn "The ‘gnome.dconf-editor’ was moved to top-level. Please use ‘pkgs.dconf-editor’ directly." pkgs.dconf-editor; # Added on 2024-06-22.
+  devhelp = lib.warn "The ‘gnome.devhelp’ was moved to top-level. Please use ‘pkgs.devhelp’ directly." pkgs.devhelp; # Added on 2024-06-22.
+  eog = lib.warn "The ‘gnome.eog’ was moved to top-level. Please use ‘pkgs.eog’ directly." pkgs.eog; # Added on 2024-06-22.
+  epiphany = lib.warn "The ‘gnome.epiphany’ was moved to top-level. Please use ‘pkgs.epiphany’ directly." pkgs.epiphany; # Added on 2024-06-22.
+  evince = lib.warn "The ‘gnome.evince’ was moved to top-level. Please use ‘pkgs.evince’ directly." pkgs.evince; # Added on 2024-06-13.
+  evolution-data-server = lib.warn "The ‘gnome.evolution-data-server’ was moved to top-level. Please use ‘pkgs.evolution-data-server’ directly." pkgs.evolution-data-server; # Added on 2024-06-13.
+  file-roller = lib.warn "The ‘gnome.file-roller’ was moved to top-level. Please use ‘pkgs.file-roller’ directly." pkgs.file-roller; # Added on 2024-06-13.
+  geary = lib.warn "The ‘gnome.geary’ was moved to top-level. Please use ‘pkgs.geary’ directly." pkgs.geary; # Added on 2024-06-22.
+  ghex = lib.warn "The ‘gnome.ghex’ was moved to top-level. Please use ‘pkgs.ghex’ directly." pkgs.ghex; # Added on 2024-06-22.
+  gitg = lib.warn "The ‘gnome.gitg’ was moved to top-level. Please use ‘pkgs.gitg’ directly." pkgs.gitg; # Added on 2024-06-22.
+  gnome-autoar = lib.warn "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly." pkgs.gnome-autoar; # Added on 2024-06-13.
+  gnome-common = lib.warn "The ‘gnome.gnome-common’ was moved to top-level. Please use ‘pkgs.gnome-common’ directly." pkgs.gnome-common; # Added on 2024-06-22.
+  gnome-calculator = lib.warn "The ‘gnome.gnome-calculator’ was moved to top-level. Please use ‘pkgs.gnome-calculator’ directly." pkgs.gnome-calculator; # Added on 2024-06-22.
+  gnome-calendar = lib.warn "The ‘gnome.gnome-calendar’ was moved to top-level. Please use ‘pkgs.gnome-calendar’ directly." pkgs.gnome-calendar; # Added on 2024-06-22.
+  gnome-dictionary = lib.warn "The ‘gnome.gnome-dictionary’ was moved to top-level. Please use ‘pkgs.gnome-dictionary’ directly." pkgs.gnome-dictionary; # Added on 2024-06-22.
+  gnome-disk-utility = lib.warn "The ‘gnome.gnome-disk-utility’ was moved to top-level. Please use ‘pkgs.gnome-disk-utility’ directly." pkgs.gnome-disk-utility; # Added on 2024-06-22.
+  gnome-font-viewer = lib.warn "The ‘gnome.gnome-font-viewer’ was moved to top-level. Please use ‘pkgs.gnome-font-viewer’ directly." pkgs.gnome-font-viewer; # Added on 2024-06-22.
+  gnome-keyring = lib.warn "The ‘gnome.gnome-keyring’ was moved to top-level. Please use ‘pkgs.gnome-keyring’ directly." pkgs.gnome-keyring; # Added on 2024-06-22.
+  gnome-packagekit = lib.warn "The ‘gnome.gnome-packagekit’ was moved to top-level. Please use ‘pkgs.gnome-packagekit’ directly." pkgs.gnome-packagekit; # Added on 2024-06-22.
+  gnome-screenshot = lib.warn "The ‘gnome.gnome-screenshot’ was moved to top-level. Please use ‘pkgs.gnome-screenshot’ directly." pkgs.gnome-screenshot; # Added on 2024-06-22.
+  gnome-system-monitor = lib.warn "The ‘gnome.gnome-system-monitor’ was moved to top-level. Please use ‘pkgs.gnome-system-monitor’ directly." pkgs.gnome-system-monitor; # Added on 2024-06-22.
+  gnome-terminal = lib.warn "The ‘gnome.gnome-terminal’ was moved to top-level. Please use ‘pkgs.gnome-terminal’ directly." pkgs.gnome-terminal; # Added on 2024-06-13.
+  gnome-themes-extra = lib.warn "The ‘gnome.gnome-themes-extra’ was moved to top-level. Please use ‘pkgs.gnome-themes-extra’ directly." pkgs.gnome-themes-extra; # Added on 2024-06-22.
+  gnome-tweaks = lib.warn "The ‘gnome.gnome-tweaks’ was moved to top-level. Please use ‘pkgs.gnome-tweaks’ directly." pkgs.gnome-tweaks; # Added on 2024-06-22.
+  gnome-user-share = lib.warn "The ‘gnome.gnome-user-share’ was moved to top-level. Please use ‘pkgs.gnome-user-share’ directly." pkgs.gnome-user-share; # Added on 2024-06-13.
+  gpaste = lib.warn "The ‘gnome.gpaste’ was moved to top-level. Please use ‘pkgs.gpaste’ directly." pkgs.gpaste; # Added on 2024-06-22.
+  gucharmap = lib.warn "The ‘gnome.gucharmap’ was moved to top-level. Please use ‘pkgs.gucharmap’ directly." pkgs.gucharmap; # Added on 2024-06-22.
+  nautilus = lib.warn "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly." pkgs.nautilus; # Added on 2024-06-13.
+  nautilus-python = lib.warn "The ‘gnome.nautilus-python’ was moved to top-level. Please use ‘pkgs.nautilus-python’ directly." pkgs.nautilus-python; # Added on 2024-06-13.
+  pomodoro = lib.warn "The ‘gnome.pomodoro’ was moved to top-level. Please use ‘pkgs.gnome-pomodoro’ directly." pkgs.gnome-pomodoro; # Added on 2024-06-22.
+  rygel = lib.warn "The ‘gnome.rygel’ was moved to top-level. Please use ‘pkgs.rygel’ directly." pkgs.rygel; # Added on 2024-06-22.
+  seahorse = lib.warn "The ‘gnome.seahorse’ was moved to top-level. Please use ‘pkgs.seahorse’ directly." pkgs.seahorse; # Added on 2024-06-22.
+  simple-scan = lib.warn "The ‘gnome.simple-scan’ was moved to top-level. Please use ‘pkgs.simple-scan’ directly." pkgs.simple-scan; # Added on 2024-06-22.
+  sushi = lib.warn "The ‘gnome.sushi’ was moved to top-level. Please use ‘pkgs.sushi’ directly." pkgs.sushi; # Added on 2024-06-22.
+  totem = lib.warn "The ‘gnome.totem’ was moved to top-level. Please use ‘pkgs.totem’ directly." pkgs.totem; # Added on 2024-06-22.
+  yelp = lib.warn "The ‘gnome.yelp’ was moved to top-level. Please use ‘pkgs.yelp’ directly." pkgs.yelp; # Added on 2024-06-22.
+  yelp-xsl = lib.warn "The ‘gnome.yelp-xsl’ was moved to top-level. Please use ‘pkgs.yelp-xsl’ directly." pkgs.yelp-xsl; # Added on 2024-06-22.
+  zenity = lib.warn "The ‘gnome.zenity’ was moved to top-level. Please use ‘pkgs.zenity’ directly." pkgs.zenity; # Added on 2024-06-22.
 
-  gnome-autoar = callPackage ./misc/gnome-autoar { };
-
-  gnome-packagekit = callPackage ./misc/gnome-packagekit { };
-} // lib.optionalAttrs (config.allowAliases or true) {
-#### Legacy aliases
-
-  bijiben = gnome-notes; # added 2018-09-26
-  evolution_data_server = evolution-data-server; # added 2018-02-25
-  geocode_glib = pkgs.geocode-glib; # added 2018-02-25
-  glib_networking = pkgs.glib-networking; # added 2018-02-25
-  gnome_common = gnome-common; # added 2018-02-25
-  gnome_control_center = gnome-control-center; # added 2018-02-25
-  gnome_desktop = gnome-desktop; # added 2018-02-25
-  gnome_keyring = gnome-keyring; # added 2018-02-25
-  gnome_online_accounts = gnome-online-accounts; # added 2018-02-25
-  gnome_session = gnome-session; # added 2018-02-25
-  gnome_settings_daemon = gnome-settings-daemon; # added 2018-02-25
-  gnome_shell = gnome-shell; # added 2018-02-25
-  gnome_terminal = gnome-terminal; # added 2018-02-25
-  gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
-  gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
-  gnome-tweak-tool = gnome-tweaks; # added 2018-03-21
-  gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
-  libgames-support = libgnome-games-support; # added 2018-03-14
-  libgnome_keyring = libgnome-keyring; # added 2018-02-25
-  inherit (pkgs) rarian; # added 2018-04-25
-  networkmanager_fortisslvpn = networkmanager-fortisslvpn; # added 2018-02-25
-  networkmanager_iodine = networkmanager-iodine; # added 2018-02-25
-  networkmanager_l2tp = networkmanager-l2tp; # added 2018-02-25
-  networkmanager_openconnect = networkmanager-openconnect; # added 2018-02-25
-  networkmanager_openvpn = networkmanager-openvpn; # added 2018-02-25
-  networkmanager_vpnc = networkmanager-vpnc; # added 2018-02-25
-  yelp_xsl = yelp-xsl; # added 2018-02-25
-  yelp_tools = yelp-tools; # added 2018-02-25
-
-  # added 2019-02-08
-  inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
-      libgtop libgudev libhttpseverywhere librsvg libsecret gdk-pixbuf gtksourceview gtksourceviewmm gtksourceview4
-      easytag meld orca rhythmbox shotwell gnome-usage
-      clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 gnome-menus gdl;
-  inherit (pkgs) gsettings-desktop-schemas; # added 2019-04-16
-  inherit (pkgs) gnome-video-effects; # added 2019-08-19
-  inherit (pkgs) gnome-online-accounts grilo grilo-plugins tracker tracker-miners gnome-photos; # added 2019-08-23
-  inherit (pkgs) glib-networking; # added 2019-09-02
-  inherit (pkgs) nemiver; # added 2019-09-09
-
-  defaultIconTheme = adwaita-icon-theme;
-  gtk = gtk3;
-  gtkmm = gtkmm3;
-  rest = librest;
-
-  pidgin-im-gnome-shell-extension = pkgs.gnomeExtensions.pidgin-im-integration; # added 2019-08-01
-
-  # added 2019-08-25
-  corePackages = throw "gnome.corePackages is removed since 2019-08-25: please use `services.gnome.core-shell.enable`";
-  optionalPackages = throw "gnome.optionalPackages is removed since 2019-08-25: please use `services.gnome.core-utilities.enable`";
-  gamesPackages = throw "gnome.gamesPackages is removed since 2019-08-25: please use `services.gnome.games.enable`";
-
-  nautilus-sendto = throw "nautilus-sendto is removed since 2019-09-17: abandoned upstream";
-
-  inherit (pkgs) vala; # added 2019-10-10
-
-  inherit (pkgs) gnome-user-docs; # added 2019-11-20
-
-  inherit (pkgs) gjs; # added 2019-01-05
-
-  inherit (pkgs) yelp-tools; # added 2019-11-20
-
-  inherit (pkgs) dconf; # added 2019-11-30
-
-  inherit (pkgs) networkmanagerapplet; # added 2019-12-12
-
-  inherit (pkgs) glade; # added 2020-05-15
-
-  vino = throw "vino is deprecated, use gnome-remote-desktop instead."; # added 2020-03-13
-
-  gnome-screensaver = throw "gnome-screensaver is deprecated. If you are using GNOME Flashback, it now has a built-in lock screen. If you are using it elsewhere, you can try xscreenlock or other alternatives."; # added 2020-03-19
-
-  maintainers = lib.teams.gnome.members;
-
-  mutter328 = throw "Removed as Pantheon is upgraded to mutter338.";
-
-  mutter334 = throw "Removed as Pantheon is upgraded to mutter338.";
-
-  gnome-getting-started-docs = throw "Removed in favour of gnome-tour.";
-
-  # Added 2021-05-07
-  gnome3 = self // { recurseForDerivations = false; };
-})
+#### Removals
+  anjuta = throw "`anjuta` was removed after not being maintained upstream and losing control of its official domain."; # 2024-01-16
+}

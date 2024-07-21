@@ -2,17 +2,16 @@
 
 let
   pname = "via";
-  version = "1.3.1";
-  name = "${pname}-${version}";
-  nameExecutable = pname;
+  version = "3.0.0";
   src = fetchurl {
     url = "https://github.com/the-via/releases/releases/download/v${version}/via-${version}-linux.AppImage";
     name = "via-${version}-linux.AppImage";
-    sha256 = "d2cd73d280a265149fedb24161ec7c575523596c4d30898ad6b5875e09b3f34a";
+    sha256 = "sha256-+uTvmrqHK7L5VA/lUHCZZeRYPUrcVA+vjG7venxuHhs=";
   };
-  appimageContents = appimageTools.extractType2 { inherit name src; };
-in appimageTools.wrapType2 {
-  inherit name src;
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+in
+appimageTools.wrapType2 {
+  inherit pname version src;
 
   profile = ''
     # Skip prompt to add udev rule.
@@ -21,9 +20,8 @@ in appimageTools.wrapType2 {
   '';
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
-    install -m 444 -D ${appimageContents}/via.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/via.desktop \
+    install -m 444 -D ${appimageContents}/via-nativia.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/via-nativia.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
     cp -r ${appimageContents}/usr/share/icons $out/share
 
@@ -34,8 +32,9 @@ in appimageTools.wrapType2 {
   meta = with lib; {
     description = "Yet another keyboard configurator";
     homepage = "https://caniusevia.com/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ angustrau ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ emilytrau ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "via";
   };
 }

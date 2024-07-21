@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   enableParallelBuilding = true;
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       icon = "sauerbraten";
       desktopName = "Sauerbraten";
       comment = "FPS that uses an improved version of the Cube engine";
-      categories = "Application;Game;ActionGame;";
+      categories = [ "Application" "Game" "ActionGame" ];
     })
   ];
 
@@ -56,16 +56,17 @@ stdenv.mkDerivation rec {
     ln -s $out/share/sauerbraten/cube.png $out/share/icon/sauerbraten.png
 
     makeWrapper $out/share/sauerbraten/sauer_server $out/bin/sauerbraten_server \
-      --run "cd $out/share/sauerbraten"
+      --chdir "$out/share/sauerbraten"
     makeWrapper $out/share/sauerbraten/sauer_client $out/bin/sauerbraten_client \
-      --run "cd $out/share/sauerbraten" \
+      --chdir "$out/share/sauerbraten" \
       --add-flags "-q\''${HOME}/.config/sauerbraten"
 
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A free multiplayer & singleplayer first person shooter, the successor of the Cube FPS";
+    description = "Free multiplayer & singleplayer first person shooter, the successor of the Cube FPS";
+    homepage = "http://sauerbraten.org";
     maintainers = with maintainers; [ raskin ajs124 ];
     mainProgram = "sauerbraten_client";
     hydraPlatforms =

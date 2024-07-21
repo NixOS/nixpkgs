@@ -1,27 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
+  zipp,
 }:
 
 buildPythonPackage rec {
   pname = "catalogue";
-  version = "2.0.6";
+  version = "2.0.10";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0idjhx2s8cy6ppd18k1zy246d97gdd6i217m5q26fwa47xh3asik";
+    hash = "sha256-T1baqUCRPT8J1YnBkcdOWm1Rdis6njfdU7dDev1s2hU=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     typing-extensions
+    zipp
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "catalogue" ];
 
@@ -30,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/catalogue";
     changelog = "https://github.com/explosion/catalogue/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
   };
 }

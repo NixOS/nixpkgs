@@ -44,10 +44,10 @@ in
         default = {};
         description = ''
           Attribute set of additional plugins that will be symlinked to the
-          <filename>plugin</filename> subdirectory.
+          {file}`plugin` subdirectory.
 
           Please note that you still need to add the plugins to the config
-          file (or with <literal>!load</literal>) using their attribute name.
+          file (or with `!load`) using their attribute name.
         '';
         example = literalExpression ''
           let
@@ -70,7 +70,7 @@ in
         description = ''
           Extra Python packages available to supybot plugins. The
           value must be a function which receives the attrset defined
-          in <varname>python3Packages</varname> as the sole argument.
+          in {var}`python3Packages` as the sole argument.
         '';
         example = literalExpression "p: [ p.lxml p.requests ]";
       };

@@ -1,38 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, nose
-, nibabel
-, pydicom
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nibabel,
+  pydicom,
+  pylibjpeg-libjpeg,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dcmstack";
-  version = "0.8";
+  version = "0.9";
+  pyproject = true;
 
-  disabled = pythonAtLeast "3.8";
-  # https://github.com/moloney/dcmstack/issues/67
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "moloney";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1n24pp3rqz7ss1z6276fxynnppraxadbl3b9p8ijrcqnpzbzih7p";
+    repo = "dcmstack";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GVzih9H2m2ZGSuZMRuaDG78b95PI3j0WQw5M3l4KNCs=";
   };
 
-  propagatedBuildInputs = [ nibabel pydicom ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ nose ];
-  checkPhase = ''
-    runHook preCheck
-    nosetests
-    runHook postCheck
-  '';
+  dependencies = [
+    nibabel
+    pydicom
+    pylibjpeg-libjpeg
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "dcmstack" ];
+
+  disabledTestPaths = [
+    # AttributeError: 'TestNitoolCli' object has no attribute 'out_dir'
+    "test/test_cli.py"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/moloney/dcmstack";
     description = "DICOM to Nifti conversion preserving metadata";
+    homepage = "https://github.com/moloney/dcmstack";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

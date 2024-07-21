@@ -9,7 +9,7 @@ in
 {
   options = {
     services.jackett = {
-      enable = mkEnableOption "Jackett";
+      enable = mkEnableOption "Jackett, API support for your favorite torrent trackers";
 
       dataDir = mkOption {
         type = types.str;
@@ -35,12 +35,7 @@ in
         description = "Group under which Jackett runs.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.jackett;
-        defaultText = literalExpression "pkgs.jackett";
-        description = "Jackett package to use.";
-      };
+      package = mkPackageOption pkgs "jackett" { };
     };
   };
 

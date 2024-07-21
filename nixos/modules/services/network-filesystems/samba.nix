@@ -39,7 +39,7 @@ let
   daemonService = appName: args:
     { description = "Samba Service Daemon ${appName}";
 
-      after = [ (mkIf (cfg.enableNmbd && "${appName}" == "smbd") "samba-nmbd.service") ];
+      after = [ (mkIf (cfg.enableNmbd && "${appName}" == "smbd") "samba-nmbd.service") "network.target" ];
       requiredBy = [ "samba.target" ];
       partOf = [ "samba.target" ];
 
@@ -55,6 +55,7 @@ let
         PIDFile = "/run/${appName}.pid";
         Type = "notify";
         NotifyAccess = "all"; #may not do anything...
+        Slice = "system-samba.slice";
       };
       unitConfig.RequiresMountsFor = "/var/lib/samba";
 
@@ -84,12 +85,11 @@ in
           Whether to enable Samba, which provides file and print
           services to Windows clients through the SMB/CIFS protocol.
 
-          <note>
-            <para>If you use the firewall consider adding the following:</para>
-          <programlisting>
-            services.samba.openFirewall = true;
-          </programlisting>
-          </note>
+          ::: {.note}
+          If you use the firewall consider adding the following:
+
+              services.samba.openFirewall = true;
+          :::
         '';
       };
 
@@ -121,14 +121,8 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.samba;
-        defaultText = literalExpression "pkgs.samba";
-        example = literalExpression "pkgs.samba4Full";
-        description = ''
-          Defines which package should be used for the samba server.
-        '';
+      package = mkPackageOption pkgs "samba" {
+        example = "samba4Full";
       };
 
       invalidUsers = mkOption {
@@ -161,7 +155,7 @@ in
       };
 
       securityType = mkOption {
-        type = types.str;
+        type = types.enum [ "auto" "user" "domain" "ads" ];
         default = "user";
         description = "Samba security type";
       };
@@ -180,7 +174,7 @@ in
         default = {};
         description = ''
           A set describing shared resources.
-          See <command>man smb.conf</command> for options.
+          See {command}`man smb.conf` for options.
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
         example = literalExpression ''
@@ -208,14 +202,10 @@ in
               message   = "If samba.nsswins is enabled, then samba.enableWinbindd must also be enabled";
             }
           ];
-        # Always provide a smb.conf to shut up programs like smbclient and smbspool.
-        environment.etc."samba/smb.conf".source = mkOptionDefault (
-          if cfg.enable then configFile
-          else pkgs.writeText "smb-dummy.conf" "# Samba is disabled."
-        );
       }
 
       (mkIf cfg.enable {
+        environment.etc."samba/smb.conf".source = configFile;
 
         system.nssModules = optional cfg.nsswins samba;
         system.nssDatabases.hosts = optional cfg.nsswins "wins";
@@ -224,8 +214,14 @@ in
           targets.samba = {
             description = "Samba Server";
             after = [ "network.target" ];
+            wants = [ "network-online.target" ];
             wantedBy = [ "multi-user.target" ];
           };
+
+          slices.system-samba = {
+            description = "Samba slice";
+          };
+
           # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
           # for correct use with systemd
           services = {

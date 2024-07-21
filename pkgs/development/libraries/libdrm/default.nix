@@ -1,33 +1,47 @@
 { stdenv, lib, fetchurl, pkg-config, meson, ninja, docutils
-, libpthreadstubs, libpciaccess
-, withValgrind ? valgrind-light.meta.available, valgrind-light
+, libpthreadstubs
+, withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess, libpciaccess
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.108";
+  version = "2.4.121";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "186nwf7qnzh805iz8k3djq3pd1m79mgfnjsbw7yn6rskpj699mx1";
+    hash = "sha256-kJCEpQXXY4iH9ZC3B5Gzu9kGnHEMlI9dHxzm0IDN/Ks=";
   };
 
   outputs = [ "out" "dev" "bin" ];
 
   nativeBuildInputs = [ pkg-config meson ninja docutils ];
-  buildInputs = [ libpthreadstubs libpciaccess ]
+  buildInputs = [ libpthreadstubs ]
+    ++ lib.optional withIntel libpciaccess
     ++ lib.optional withValgrind valgrind-light;
 
-  patches = [ ./cross-build-nm-path.patch ];
-
   mesonFlags = [
-    "-Dnm-path=${stdenv.cc.targetPrefix}nm"
     "-Dinstall-test-programs=true"
-    "-Domap=true"
-  ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
-    "-Dtegra=true"
-    "-Detnaviv=true"
+    "-Dcairo-tests=disabled"
+    (lib.mesonEnable "intel" withIntel)
+    (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "valgrind" withValgrind)
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch [
+    "-Dtegra=enabled"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    "-Detnaviv=disabled"
   ];
+
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://gitlab.freedesktop.org/mesa/drm.git";
+      rev-prefix = "libdrm-";
+      # Skip versions like libdrm-2_0_2 that happen to go last when
+      # sorted.
+      ignoredVersions = "_";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/mesa/drm";
@@ -46,7 +60,7 @@ stdenv.mkDerivation rec {
       the Mesa drivers, the X drivers, libva and similar projects.
     '';
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = lib.subtractLists platforms.darwin platforms.unix;
     maintainers = with maintainers; [ primeos ];
   };
 }

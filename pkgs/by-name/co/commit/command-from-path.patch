@@ -1,0 +1,30 @@
+diff --git a/src/welcome.js b/src/welcome.js
+index 27cc7dc..c6772c3 100644
+--- a/src/welcome.js
++++ b/src/welcome.js
+@@ -55,24 +55,7 @@ export default function Welcome({ application }) {
+ }
+ 
+ function getCommand() {
+-  const FLATPAK_ID = GLib.getenv("FLATPAK_ID");
+-
+-  if (FLATPAK_ID) {
+-    return `flatpak run ${FLATPAK_ID}`;
+-  }
+-
+-  const { programInvocationName } = system;
+-  // re.sonny.Commit
+-  if (programInvocationName === GLib.path_get_basename(programInvocationName)) {
+-    return programInvocationName;
+-  }
+-
+-  // ./re.sonny.commit
+-  // /home/sonny/re.sonny.Commit
+-  return GLib.canonicalize_filename(
+-    programInvocationName,
+-    GLib.get_current_dir(),
+-  );
++  return "re.sonny.Commit";
+ }
+ 
+ function getRange(key) {

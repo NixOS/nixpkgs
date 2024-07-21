@@ -5,8 +5,9 @@ in
 buildGoModule rec {
   pname = "gitlab-workhorse";
 
-  version = "14.5.2";
+  version = "17.2.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = data.owner;
     repo = data.repo;
@@ -14,17 +15,18 @@ buildGoModule rec {
     sha256 = data.repo_hash;
   };
 
-  sourceRoot = "source/workhorse";
+  sourceRoot = "${src.name}/workhorse";
 
-  vendorSha256 = "sha256-yLZY9FFUS4nJl4TkE6MwICCEwtPTXFc5zuj4FgiIy74=";
+  vendorHash = "sha256-ZWpuJTlGCsjjURa8iYTaGMKulx99uyYJ+dr2cL9hiwo=";
   buildInputs = [ git ];
   ldflags = [ "-X main.Version=${version}" ];
   doCheck = false;
+  prodyVendor = true;
 
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin talyz ];
+    maintainers = teams.gitlab.members;
     license = licenses.mit;
   };
 }

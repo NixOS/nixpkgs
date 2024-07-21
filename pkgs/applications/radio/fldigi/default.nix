@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , hamlib
-, fltk14
+, fltk13
 , libjpeg
 , libpng
 , portaudio
@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fldigi";
-  version = "4.1.20";
+  version = "4.2.05";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0f64pqijl3jlfmv00hkdxvn1wy5yy3zl33p6vf3fn1b91w590c2h";
+    hash = "sha256-rBGJ+63Szhy37LQw0LpE2/lLyP5lwK7hsz/uq453iHY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -31,13 +31,17 @@ stdenv.mkDerivation rec {
     libXinerama
     gettext
     hamlib
-    fltk14
+    fltk13
     libjpeg
     libpng
     portaudio
     libsndfile
     libsamplerate
   ] ++ lib.optionals (stdenv.isLinux) [ libpulseaudio alsa-lib udev ];
+
+  env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++14";
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Digital modem program";

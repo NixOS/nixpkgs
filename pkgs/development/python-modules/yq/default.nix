@@ -1,21 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, argcomplete
-, pyyaml
-, xmltodict
-, jq
-, pytestCheckHook
+{
+  lib,
+  argcomplete,
+  buildPythonPackage,
+  fetchPypi,
+  jq,
+  pytestCheckHook,
+  pyyaml,
+  setuptools-scm,
+  substituteAll,
+  tomlkit,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "yq";
-  version = "2.13.0";
+  version = "3.4.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/RMf2x9WcWrY1EzZ6q99OyLTm6iGHqZKQJzD9K4mPbg=";
+    hash = "sha256-ulhqGm8wz3BbL5IgZxLfIoHNMgKAIQ57e4Cty48lbjs=";
   };
 
   patches = [
@@ -25,34 +29,29 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace test/test.py \
-      --replace "expect_exit_codes={0} if sys.stdin.isatty() else {2}" "expect_exit_codes={0}"
-  '';
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
-    pyyaml
-    xmltodict
     argcomplete
+    pyyaml
+    tomlkit
+    xmltodict
   ];
 
-  checkInputs = [
-   pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "test/test.py" ];
 
   pythonImportsCheck = [ "yq" ];
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    echo '{"hello":{"foo":"bar"}}' | $out/bin/yq -y . | grep 'foo: bar'
-  '';
-
   meta = with lib; {
-    description = "Command-line YAML processor - jq wrapper for YAML documents";
+    description = "Command-line YAML/XML/TOML processor - jq wrapper for YAML, XML, TOML documents";
     homepage = "https://github.com/kislyuk/yq";
     license = licenses.asl20;
-    maintainers = with maintainers; [ womfoo SuperSandro2000 ];
+    maintainers = with maintainers; [
+      womfoo
+      SuperSandro2000
+    ];
+    mainProgram = "yq";
   };
 }

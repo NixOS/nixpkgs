@@ -2,42 +2,49 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
+, which
+, zip
+, libicns
+, botan3
 , capstone
 , jansson
-, lua5_3
-, wxGTK31
+, libunistring
+, wxGTK32
+, lua53Packages
+, perlPackages
+, gtk3
 , Carbon
 , Cocoa
 , IOKit
-, libicns
-, wxmac
 }:
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.3.92";
+  version = "0.61.1";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yZvJlomUpJwDJOBVSl49lU+JE1YMMs/BSzHepXoFlIY=";
+    hash = "sha256-/m4s5BW33I9g9hi5j3Vtui271w8Jv91+rQrI3qpO5Og=";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile.osx --replace 'iconutil -c icns -o $@ $(ICONSET)' \
-      'png2icns $@ $(ICONSET)/icon_16x16.png $(ICONSET)/icon_32x32.png $(ICONSET)/icon_128x128.png $(ICONSET)/icon_256x256.png $(ICONSET)/icon_512x512.png'
-  '';
-
-  nativeBuildInputs = [ pkg-config ]
+  nativeBuildInputs = [ pkg-config which zip ]
     ++ lib.optionals stdenv.isDarwin [ libicns ];
 
-  buildInputs = [ capstone jansson lua5_3 ]
-    ++ lib.optionals (!stdenv.isDarwin) [ wxGTK31 ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit wxmac ];
+  buildInputs = [ botan3 capstone jansson libunistring wxGTK32 ]
+    ++ (with lua53Packages; [ lua busted ])
+    ++ (with perlPackages; [ perl TemplateToolkit ])
+    ++ lib.optionals stdenv.isLinux [ gtk3 ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit ];
 
-  makeFlags = [ "prefix=$(out)" ]
-    ++ lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ];
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "BOTAN_PKG=botan-3"
+    "CXXSTD=-std=c++20"
+  ] ++ lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Reverse Engineers' Hex Editor";
@@ -46,8 +53,10 @@ stdenv.mkDerivation rec {
       engineering, and everything else.
     '';
     homepage = "https://github.com/solemnwarning/rehex";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ markus1189 SuperSandro2000 ];
+    changelog = "https://github.com/solemnwarning/rehex/raw/${version}/CHANGES.txt";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ markus1189 wegank ];
     platforms = platforms.all;
+    mainProgram = "rehex";
   };
 }

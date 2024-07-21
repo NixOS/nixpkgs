@@ -1,21 +1,28 @@
-{ fetchFromGitLab, installShellFiles, lib, python3, stdenv }:
+{ fetchFromGitLab
+, installShellFiles
+, lib
+, python3
+, stdenv
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvd";
-  version = "0.1.2";
+  version = "0.2.3";
 
   src = fetchFromGitLab {
     owner = "khumba";
-    repo = pname;
-    # There is a 0.1.2 release but no tag yet
-    # https://gitlab.com/khumba/nvd/-/issues/7
-    rev = "13d3ab1255e0de03693cecb7da9764c9afd5d472";
-    sha256 = "1537s7j0m0hkahf0s1ai7bm94xj9fz6b9x78py0dn3cgnl9bfzla";
+    repo = "nvd";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-TmaXsyJLRkmIN9D77jOXd8fLj7kYPCBLg0AHIImAtgA=";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [
+    python3
+  ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -24,11 +31,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nix/NixOS package version diff tool";
     homepage = "https://gitlab.com/khumba/nvd";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ khumba ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    mainProgram = "nvd";
+    maintainers = with lib.maintainers; [ khumba ];
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -2,20 +2,21 @@
 
 buildGoModule rec {
   pname = "imgcrypt";
-  version = "1.1.1";
+  version = "1.1.10";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "177fs3p2xzwjsffcxqqllx6wi6ghfyqbvfgn95v3q7a2993yqk4k";
+    hash = "sha256-81jfoWHYYenGQFcQI9kk8uPnv6FcyOtcJjpo1ykdtOI=";
   };
+
+  vendorHash = null;
 
   ldflags = [
     "-X github.com/containerd/containerd/version.Version=${version}"
   ];
 
-  vendorSha256 = null;
   subPackages = [ "cmd/ctd-decoder" "cmd/ctr" ];
 
   postFixup = ''

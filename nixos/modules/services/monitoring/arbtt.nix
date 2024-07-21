@@ -7,22 +7,9 @@ let
 in {
   options = {
     services.arbtt = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the arbtt statistics capture service.
-        '';
-      };
+      enable = mkEnableOption "Arbtt statistics capture service";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.haskellPackages.arbtt;
-        defaultText = literalExpression "pkgs.haskellPackages.arbtt";
-        description = ''
-          The package to use for the arbtt binaries.
-        '';
-      };
+      package = mkPackageOption pkgs [ "haskellPackages" "arbtt" ] { };
 
       logFile = mkOption {
         type = types.str;
@@ -58,5 +45,5 @@ in {
     };
   };
 
-  meta.maintainers = [ maintainers.michaelpj ];
+  meta.maintainers = [ ];
 }

@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     owner = "puppetlabs";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  postPatch = ''
+    sed -i -e '/add_subdirectory(tests)/d' lib/CMakeLists.txt
+  '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
 
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A C++ port of the Typesafe Config library";
+    description = "C++ port of the Typesafe Config library";
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];
     platforms = platforms.unix;

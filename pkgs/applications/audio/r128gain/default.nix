@@ -1,8 +1,7 @@
 { lib
 , fetchFromGitHub
-, genericUpdater
+, gitUpdater
 , substituteAll
-, common-updater-scripts
 , ffmpeg
 , python3Packages
 , sox
@@ -27,21 +26,17 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [ crcmod ffmpeg-python mutagen tqdm ];
-  checkInputs = with python3Packages; [ requests sox ];
+  nativeCheckInputs = with python3Packages; [ requests sox ];
 
   # Testing downloads media files for testing, which requires the
   # sandbox to be disabled.
   doCheck = false;
 
-  passthru = {
-    updateScript = genericUpdater {
-      inherit pname version;
-      versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
-    };
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Fast audio loudness scanner & tagger (ReplayGain v2 / R128)";
+    mainProgram = "r128gain";
     homepage = "https://github.com/desbma/r128gain";
     license = licenses.lgpl2Plus;
     maintainers = [ maintainers.AluisioASG ];

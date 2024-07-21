@@ -1,22 +1,20 @@
 { appimageTools, lib, fetchurl }:
 let
   pname = "neo4j-desktop";
-  version = "1.4.7";
-  name = "${pname}-${version}";
+  version = "1.5.9";
 
   src = fetchurl {
-    url = "https://s3-eu-west-1.amazonaws.com/dist.neo4j.org/${pname}/linux-offline/${name}-x86_64.AppImage";
-    hash = "sha256-oEcSW7UIeiGY2fCPJQ5EtDBRtd73Q04HaSk+7ObLKJc=";
+    url = "https://s3-eu-west-1.amazonaws.com/dist.neo4j.org/${pname}/linux-offline/${pname}-${version}-x86_64.AppImage";
+    hash = "sha256-04I1p5wtndIflHqS5qQVf3s8F9ORJ+oy4wi/5PQbnWk=";
   };
 
-  appimageContents = appimageTools.extract { inherit name src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
 
-  extraPkgs = pkgs: with pkgs; [ libsecret ];
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
@@ -24,10 +22,11 @@ in appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "A GUI front-end for Neo4j";
+    description = "GUI front-end for Neo4j";
     homepage = "https://neo4j.com/";
     license = licenses.unfree;
     maintainers = [ maintainers.bobvanderlinden ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "neo4j-desktop";
   };
 }

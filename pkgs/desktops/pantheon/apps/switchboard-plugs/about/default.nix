@@ -1,39 +1,43 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, substituteAll
 , meson
 , ninja
 , pkg-config
 , vala
 , libgee
 , libgtop
+, libgudev
 , libhandy
 , granite
 , gtk3
 , switchboard
+, udisks2
 , fwupd
 , appstream
-, nixos-artwork
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "6.0.1";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0c075ac7iqz4hqbp2ph0cwyhiq0jn6c1g1jjfhygjbssv3vvd268";
+    sha256 = "sha256-MJybc2yAchU6qMqkoRz45QdhR7bj/UFk2nyxcBivsHI=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Add support for AppStream 1.0
+    # https://github.com/elementary/switchboard-plug-about/pull/275
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-about/commit/72d7da13da2824812908276751fd3024db2dd0f8.patch";
+      hash = "sha256-R7oW3mL77/JNqxuMiqxtdMlHWMJgGRQBBzVeRiqx8PY=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -49,17 +53,20 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     libgtop
+    libgudev
     libhandy
     switchboard
+    udisks2
   ];
 
-  patches = [
-    # Use NixOS's default wallpaper
-    (substituteAll {
-      src = ./fix-background-path.patch;
-      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
-    })
+  mesonFlags = [
+    # Does not play nice with the nix-snowflake logo
+    "-Dwallpaper=false"
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Switchboard About Plug";

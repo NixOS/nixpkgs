@@ -1,43 +1,67 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, six
-, scipy
-, smart-open
-, scikit-learn, testfixtures, unittest2
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  fetchpatch,
+  mock,
+  numpy,
+  scipy,
+  smart-open,
+  testfixtures,
+  pyemd,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "4.1.2";
-  disabled = !isPy3k;
+  version = "4.3.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1932c257de4eccbb64cc40d46e8577a25f5f47b94b96019a969fb36150f11d15";
+    hash = "sha256-maxq9v/UBoLnAVXtn5Lsv0OE1Z+1CvEg00PqXuGzCKs=";
   };
 
-  propagatedBuildInputs = [ smart-open numpy six scipy ];
+  patches = [
+    # https://github.com/piskvorky/gensim/pull/3524
+    # Import deprecated scipy.linalg.triu from numpy.triu. remove on next update
+    (fetchpatch {
+      name = "scipi-linalg-triu-fix.patch";
+      url = "https://github.com/piskvorky/gensim/commit/ad68ee3f105fc37cf8db333bfb837fe889ff74ac.patch";
+      hash = "sha256-Ij6HvVD8M2amzcjihu5bo8Lk0iCPl3iIq0lcOnI6G2s=";
+    })
+  ];
 
-  checkInputs = [ scikit-learn testfixtures unittest2 ];
+  nativeBuildInputs = [ cython ];
 
-  # Two tests fail.
-  #
-  # ERROR: testAddMorphemesToEmbeddings (gensim.test.test_varembed_wrapper.TestVarembed)
-  # ImportError: Could not import morfessor.
-  # This package is not in nix
-  #
-  # ERROR: testWmdistance (gensim.test.test_fasttext_wrapper.TestFastText)
-  # ImportError: Please install pyemd Python package to compute WMD.
-  # This package is not in nix
+  propagatedBuildInputs = [
+    smart-open
+    numpy
+    scipy
+  ];
+
+  nativeCheckInputs = [
+    mock
+    pyemd
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "gensim" ];
+
+  # Test setup takes several minutes
   doCheck = false;
 
-  meta = {
+  pytestFlagsArray = [ "gensim/test" ];
+
+  meta = with lib; {
     description = "Topic-modelling library";
     homepage = "https://radimrehurek.com/gensim/";
-    license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ jyp ];
+    changelog = "https://github.com/RaRe-Technologies/gensim/blob/${version}/CHANGELOG.md";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ jyp ];
   };
 }

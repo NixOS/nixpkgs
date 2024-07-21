@@ -33,10 +33,15 @@ stdenv.mkDerivation {
     sourceRoot="$sourceRoot/tools/build"
   '';
 
-  patches = [
-    # Upstream defaults to gcc on darwin, but we use clang.
-    ./darwin-default-toolset.patch
-  ];
+  patches = useBoost.boostBuildPatches or [];
+
+  # Upstream defaults to gcc on darwin, but we use clang.
+  postPatch = ''
+    substituteInPlace src/build-system.jam \
+    --replace "default-toolset = darwin" "default-toolset = clang-darwin"
+  '' + lib.optionalString (useBoost ? version && lib.versionAtLeast useBoost.version "1.82") ''
+    patchShebangs --build src/engine/build.sh
+  '';
 
   nativeBuildInputs = [
     bison
@@ -51,7 +56,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    ./b2 install --prefix="$out"
+    ./b2 ${lib.optionalString (stdenv.cc.isClang) "toolset=clang "}install --prefix="$out"
 
     # older versions of b2 created this symlink,
     # which we want to support building via useBoost.

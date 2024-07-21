@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Eelco Dolstra <eelco.dolstra@logicblox.com>
+Date: Mon, 11 May 2015 15:39:38 +0200
+Subject: [PATCH] Get rid of a useless message in user sessions
+
+Namely lots of variants of
+
+  Unit nix-var-nix-db.mount is bound to inactive unit dev-disk-by\x2dlabel-nixos.device. Stopping, too.
+
+in containers.
+---
+ src/core/manager.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/core/manager.c b/src/core/manager.c
+index e61ebee253..22cc5cc843 100644
+--- a/src/core/manager.c
++++ b/src/core/manager.c
+@@ -1562,7 +1562,8 @@ static unsigned manager_dispatch_stop_when_bound_queue(Manager *m) {
+                 if (!unit_is_bound_by_inactive(u, &culprit))
+                         continue;
+ 
+-                log_unit_debug(u, "Unit is stopped because bound to inactive unit %s.", culprit->id);
++                if (u->type != UNIT_MOUNT || detect_container() <= 0)
++                        log_unit_debug(u, "Unit is stopped because bound to inactive unit %s.", culprit->id);
+ 
+                 /* If stopping a unit fails continuously we might enter a stop loop here, hence stop acting on the
+                  * service being unnecessary after a while. */

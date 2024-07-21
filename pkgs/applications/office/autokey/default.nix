@@ -1,31 +1,32 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gtksourceview3
 , libappindicator-gtk3
 , libnotify
+, zenity
+, wmctrl
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "autokey";
-  version = "0.95.10";
+  version = "0.96.0";
 
   src = fetchFromGitHub {
     owner = "autokey";
     repo = "autokey";
     rev = "v${version}";
-    sha256 = "0f0cqfnb49wwdy7zl2f2ypcnd5pc8r8n7z7ssxkq20d4xfxlgamr";
+    hash = "sha256-d1WJLqkdC7QgzuYdnxYhajD3DtCpgceWCAxGrk0KKew=";
   };
 
   # Tests appear to be broken with import errors within the project structure
   doCheck = false;
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
   buildInputs = [
-    gobject-introspection
     gtksourceview3
     libappindicator-gtk3
     libnotify
@@ -36,21 +37,23 @@ python3Packages.buildPythonApplication rec {
     pyinotify
     xlib
     pygobject3
+    packaging
   ];
 
-  dontWrapGapps = true;
+  runtimeDeps = [
+    zenity
+    wmctrl
+  ];
 
-  pythonPath = with python3Packages; requiredPythonModules [ dbus-python xlib pygobject3 ];
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${ lib.makeBinPath runtimeDeps })
+  '';
 
   postInstall = ''
-    rm $out/bin/autokey-qt
-    buildPythonPath "$out $pythonPath"
-    makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}"
-      # for autokey-shell ModuleNotFoundError: No module named 'autokey'
-      --prefix "PYTHONPATH" ":" "$out/lib/${python3Packages.python.libPrefix}/site-packages"
-      --prefix "PYTHONPATH" ":" "$program_PYTHONPATH"
-    )
+    # remove Qt version which we currently do not support
+    rm $out/bin/autokey-qt $out/share/applications/autokey-qt.desktop
   '';
 
   meta = {

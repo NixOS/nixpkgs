@@ -1,41 +1,51 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config
-, dpdk, libbpf, libconfig, libpcap, numactl, openssl, zlib, libbsd, libelf, jansson
-}: let
-  dpdk_19_11 = dpdk.overrideAttrs (old: rec {
-    version = "19.11";
-    src = fetchurl {
-      url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-      sha256 = "sha256-RnEzlohDZ3uxwna7dKNFiqfAAswh4pXFHjvWVJexEqs=";
-    };
-    mesonFlags = old.mesonFlags ++ [
-      "-Denable_docs=false"
-    ];
-  });
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, dpdk
+, libbpf
+, libconfig
+, libpcap
+, numactl
+, openssl
+, zlib
+, zstd
+, libbsd
+, elfutils
+, jansson
+, libnl
+}:
 
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "odp-dpdk";
-  version = "1.30.1.0_DPDK_19.11";
+  version = "1.44.0.0_DPDK_22.11";
 
-  src = fetchurl {
-    url = "https://git.linaro.org/lng/odp-dpdk.git/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-R3PsqQiHlHPzIYYWTVEC7Ikg3KR5I0jWGgftDA9Jj1o=";
+  src = fetchFromGitHub {
+    owner = "OpenDataPlane";
+    repo = "odp-dpdk";
+    rev = "v${version}";
+    hash = "sha256-hYtQ7kKB08BImkTYXqtnv1Ny1SUPCs6GX7WOYks8iKA=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
+
   buildInputs = [
-    dpdk_19_11
+    dpdk
     libconfig
     libpcap
     numactl
     openssl
     zlib
+    zstd
     libbsd
-    libelf
+    elfutils
     jansson
     libbpf
+    libnl
   ];
 
   # binaries will segfault otherwise
@@ -47,7 +57,7 @@ in stdenv.mkDerivation rec {
     description = "Open Data Plane optimized for DPDK";
     homepage = "https://www.opendataplane.org";
     license = licenses.bsd3;
-    platforms =  platforms.linux;
+    platforms = platforms.linux;
     maintainers = [ maintainers.abuibrahim ];
   };
 }

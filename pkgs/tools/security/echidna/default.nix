@@ -1,62 +1,109 @@
-{ lib
-, fetchpatch
-, fetchFromGitHub
-# Haskell deps
-, mkDerivation, aeson, ansi-terminal, base, base16-bytestring, binary, brick
-, bytestring, cborg, containers, data-dword, data-has, deepseq, directory
-, exceptions, filepath, hashable, hevm, hpack, lens, lens-aeson, megaparsec
-, MonadRandom, mtl, optparse-applicative, process, random, stm, tasty
-, tasty-hunit, tasty-quickcheck, temporary, text, transformers , unix, unliftio
-, unliftio-core, unordered-containers, vector, vector-instances, vty
-, wl-pprint-annotated, word8, yaml , extra, ListLike, semver
+{
+  lib,
+  fetchpatch,
+  mkDerivation,
+  fetchFromGitHub,
+  haskellPackages,
+  slither-analyzer,
 }:
+
 mkDerivation rec {
   pname = "echidna";
-  version = "1.7.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     rev = "v${version}";
-    sha256 = "sha256-eFhL8Zn8204JRrF69ibPtd7VpFW63i1iVXoGwXHlqps=";
+    sha256 = "sha256-NJ2G6EkexYE4P3GD7PZ+lLEs1dqnoqIB2zfAOD5SQ8M=";
   };
 
   patches = [
+    # Support cross platform vty 6.x with vty-crossplatform
+    # https://github.com/crytic/echidna/pull/1290
     (fetchpatch {
-      name = "update-hevm-to-0.47.0.patch";
-      url = "https://github.com/crytic/echidna/commit/25dfdad93d0e0dd822f22a1c1e63a0ecf2b22a23.patch";
-      sha256 = "sha256-dj3Ie+Z4zE1fgROE/KuWZXaH9knsXJi1ai3gu5zyw/E=";
+      url = "https://github.com/crytic/echidna/commit/2913b027d7e793390ed489ef6a47d23ec9b3c800.patch";
+      hash = "sha256-5CGD9nDbDUTG869xUybWYSvGRsrm7JP7n0WMBNYfayw=";
     })
   ];
 
-  isLibrary = true;
   isExecutable = true;
-  libraryHaskellDepends = [
-    aeson ansi-terminal base base16-bytestring binary brick bytestring cborg
-    containers data-dword data-has deepseq directory exceptions filepath
-    hashable hevm lens lens-aeson megaparsec MonadRandom mtl
-    optparse-applicative process random stm temporary text transformers unix
-    unliftio unliftio-core unordered-containers vector vector-instances vty
-    wl-pprint-annotated word8 yaml extra ListLike semver
+
+  libraryToolDepends = with haskellPackages; [ haskellPackages.hpack ];
+
+  executableHaskellDepends = with haskellPackages; [
+    # package.yaml - dependencies
+    base
+    aeson
+    async
+    base16-bytestring
+    binary
+    bytestring
+    code-page
+    containers
+    data-bword
+    data-dword
+    deepseq
+    extra
+    directory
+    exceptions
+    filepath
+    hashable
+    hevm
+    html-entities
+    ListLike
+    MonadRandom
+    mtl
+    optparse-applicative
+    optics
+    optics-core
+    process
+    random
+    rosezipper
+    semver
+    split
+    text
+    transformers
+    time
+    unliftio
+    utf8-string
+    vector
+    with-utf8
+    word-wrap
+    yaml
+    http-conduit
+    html-conduit
+    warp
+    wai-extra
+    xml-conduit
+    strip-ansi-escape
+    # package.yaml - dependencies when "!os(windows)"
+    brick
+    unix
+    vty
   ];
-  libraryToolDepends = [ hpack ];
-  executableHaskellDepends = libraryHaskellDepends;
-  testHaskellDepends = [
-    tasty tasty-hunit tasty-quickcheck
-  ];
+
+  # Note: there is also a runtime dependency of slither-analyzer. So, let's include it.
+  executableSystemDepends = [ slither-analyzer ];
+
   preConfigure = ''
     hpack
-    # re-enable dynamic build for Linux
-    sed -i -e 's/os(linux)/false/' echidna.cabal
   '';
+
   shellHook = "hpack";
+
   doHaddock = false;
+
   # tests depend on a specific version of solc
   doCheck = false;
 
   description = "Ethereum smart contract fuzzer";
   homepage = "https://github.com/crytic/echidna";
   license = lib.licenses.agpl3Plus;
-  maintainers = with lib.maintainers; [ arturcygan ];
+  maintainers = with lib.maintainers; [
+    arturcygan
+    hellwolf
+  ];
   platforms = lib.platforms.unix;
+  mainProgram = "echidna-test";
 }

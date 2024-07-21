@@ -1,33 +1,32 @@
-{ lib
-, aiofiles
-, aioftp
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pytest-asyncio
-, pytest-localserver
-, pytest-socket
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, tqdm
+{
+  lib,
+  aiofiles,
+  aioftp,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-asyncio,
+  pytest-localserver,
+  pytest-socket,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "parfive";
-  version = "1.5.0";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f36128e8a93f3494ce3de8af883eeba4bd651ab228682810a46ec4b7897a84b3";
+    hash = "sha256-zWy0GSQhMHMM9B1M9vKE6/UPGnHObJUI4EZ+yY8X3I4=";
   };
 
-  buildInputs = [
-    setuptools-scm
-  ];
+  buildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     aioftp
@@ -35,7 +34,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiofiles
     pytest-asyncio
     pytest-localserver
@@ -50,14 +49,13 @@ buildPythonPackage rec {
     "test_ftp_http"
   ];
 
-  pythonImportsCheck = [
-    "parfive"
-  ];
+  pythonImportsCheck = [ "parfive" ];
 
   meta = with lib; {
-    description = "A HTTP and FTP parallel file downloader";
+    description = "HTTP and FTP parallel file downloader";
+    mainProgram = "parfive";
     homepage = "https://parfive.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,21 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
 , curl
 , libimobiledevice
 , libirecovery
 , libzip
 , libusbmuxd
-, IOKit
 }:
 
 stdenv.mkDerivation rec {
   pname = "idevicerestore";
-  version = "1.0.0";
+  version = "1.0.0+date=2023-05-23";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = version;
-    sha256 = "1w7ywp77xc6v4hifi3j9ywrj447vv7fkwg2w26w0lq95f3bkblqr";
+    rev = "609f7f058487596597e8e742088119fdd46729df";
+    hash = "sha256-VXtXAitPC1+pxZlkGBg+u6yYhyM/jVpSgDO/6dXh5V4=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +35,11 @@ stdenv.mkDerivation rec {
     # Not listing other dependencies specified in
     # https://github.com/libimobiledevice/idevicerestore/blob/8a882038b2b1e022fbd19eaf8bea51006a373c06/README#L20
     # because they are inherited `libimobiledevice`.
-  ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
+  ];
+
+  preAutoreconf = ''
+    export RELEASE_VERSION=${version}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/idevicerestore";
@@ -52,8 +59,8 @@ stdenv.mkDerivation rec {
       This will download and restore a device to the latest firmware available.
     '';
     license = licenses.lgpl21Plus;
-    # configure.ac suggests it should work for mingw as well but not tried yet
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ nh2 ];
+    mainProgram = "idevicerestore";
   };
 }

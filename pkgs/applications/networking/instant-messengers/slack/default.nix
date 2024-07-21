@@ -4,7 +4,7 @@
 , dpkg
 , undmg
 , makeWrapper
-, nodePackages
+, asar
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -18,7 +18,6 @@
 , freetype
 , gdk-pixbuf
 , glib
-, gnome2
 , gtk3
 , libGL
 , libappindicator-gtk3
@@ -35,56 +34,59 @@
 , pango
 , pipewire
 , systemd
+, wayland
 , xdg-utils
 , xorg
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
+  throwSystem = throw "slack does not support system: ${system}";
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.22.0";
-  x86_64-darwin-sha256 = "094p9vyv56m5qfp9jh2205ijfqcp0dr6bkmiv0wxihy2rg20b5zp";
+  x86_64-darwin-version = "4.38.121";
+  x86_64-darwin-sha256 = "1w0s6j8z8961sv4y00jxpy5gjlj0dswyxs15c7isb26ii11nn1i2";
 
-  x86_64-linux-version = "4.22.0";
-  x86_64-linux-sha256 = "0k84glxp653lxgfv5b65zvvysax7fr3lhsjgq76safk7g7cjc86i";
+  x86_64-linux-version = "4.38.125";
+  x86_64-linux-sha256 = "sha256-BJeFXZ8STbMCmGvYRoFsfsyIpGukQkuwv0m2NzE+89c=";
 
-  aarch64-darwin-version = "4.22.0";
-  aarch64-darwin-sha256 = "1z2pcgva9ixjx702c1535b4k0xr9fdnfzi5m08xgvabk9x66hqx4";
+  aarch64-darwin-version = "4.38.121";
+  aarch64-darwin-sha256 = "161z947p7a2d7584hybl77chab8y027cqpph2hd2s4b5k6bchkj5";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
-    aarch64-darwin = aarch64-darwin-version;
     x86_64-linux = x86_64-linux-version;
+    aarch64-darwin =  aarch64-darwin-version;
   }.${system} or throwSystem;
 
-  src =
-    let
-      base = "https://downloads.slack-edge.com";
-    in
-      {
-        x86_64-darwin = fetchurl {
-          url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-          sha256 = x86_64-darwin-sha256;
-        };
-        aarch64-darwin = fetchurl {
-          url = "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
-          sha256 = aarch64-darwin-sha256;
-        };
-        x86_64-linux = fetchurl {
-          url = "${base}/releases/linux/${version}/prod/x64/slack-desktop-${version}-amd64.deb";
-          sha256 = x86_64-linux-sha256;
-        };
-      }.${system} or throwSystem;
+
+  src = let
+    base = "https://downloads.slack-edge.com";
+  in {
+    x86_64-darwin = fetchurl {
+      url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
+      sha256 = x86_64-darwin-sha256;
+    };
+    x86_64-linux = fetchurl {
+      url = "${base}/releases/linux/${version}/prod/x64/slack-desktop-${version}-amd64.deb";
+      sha256 = x86_64-linux-sha256;
+    };
+    aarch64-darwin = fetchurl {
+      url = "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
+      sha256 = aarch64-darwin-sha256;
+    };
+  }.${system} or throwSystem;
 
   meta = with lib; {
     description = "Desktop client for Slack";
     homepage = "https://slack.com";
+    changelog = "https://slack.com/release-notes";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ mmahut ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin"];
+    maintainers = with maintainers; [ mmahut teutat3s ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
+    mainProgram = "slack";
   };
 
   linux = stdenv.mkDerivation rec {
@@ -106,7 +108,6 @@ let
       freetype
       gdk-pixbuf
       glib
-      gnome2.GConf
       gtk3
       libGL
       libappindicator-gtk3
@@ -123,6 +124,7 @@ let
       pipewire
       stdenv.cc.cc
       systemd
+      wayland
       xorg.libX11
       xorg.libXScrnSaver
       xorg.libXcomposite
@@ -142,7 +144,7 @@ let
       gtk3 # needed for GSETTINGS_SCHEMAS_PATH
     ];
 
-    nativeBuildInputs = [ dpkg makeWrapper nodePackages.asar ];
+    nativeBuildInputs = [ dpkg makeWrapper asar ];
 
     dontUnpack = true;
     dontBuild = true;
@@ -166,17 +168,24 @@ let
         patchelf --set-rpath ${rpath}:$out/lib/slack $file || true
       done
 
-      # Replace the broken bin/slack symlink with a startup wrapper
+      # Replace the broken bin/slack symlink with a startup wrapper.
+      # Make xdg-open overrideable at runtime.
       rm $out/bin/slack
       makeWrapper $out/lib/slack/slack $out/bin/slack \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-        --prefix PATH : ${lib.makeBinPath [xdg-utils]}
+        --suffix PATH : ${lib.makeBinPath [xdg-utils]} \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer}}"
 
       # Fix the desktop link
       substituteInPlace $out/share/applications/slack.desktop \
         --replace /usr/bin/ $out/bin/ \
-        --replace /usr/share/ $out/share/
-
+        --replace /usr/share/pixmaps/slack.png slack \
+        --replace bin/slack "bin/slack -s"
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Prevent Un-blacklist pipewire integration to enable screen sharing on wayland.
+      # https://github.com/flathub/com.slack.Slack/issues/101#issuecomment-1807073763
+      sed -i -e 's/,"WebRTCPipeWireCapturer"/,"LebRTCPipeWireCapturer"/' $out/lib/slack/resources/app.asar
+    '' + ''
       runHook postInstall
     '';
   };
@@ -194,7 +203,6 @@ let
       runHook preInstall
       mkdir -p $out/Applications/Slack.app
       cp -R . $out/Applications/Slack.app
-      /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
       runHook postInstall
     '';
   };

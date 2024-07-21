@@ -1,27 +1,25 @@
 { lib, stdenv, config, fetchurl, fetchpatch, pkg-config, audiofile, libcap, libiconv
-, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, libGLSupported ? lib.meta.availableOn stdenv.hostPlatform libGL
 , openglSupport ? libGLSupported, libGL, libGLU
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
 , libXext, libICE, libXrandr
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid && lib.meta.availableOn stdenv.hostPlatform libpulseaudio, libpulseaudio
 , OpenGL, GLUT, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL2 expression too
 
-with lib;
-
 let
   extraPropagatedBuildInputs = [ ]
-    ++ optionals x11Support [ libXext libICE libXrandr ]
-    ++ optionals (openglSupport && stdenv.isLinux) [ libGL libGLU ]
-    ++ optionals (openglSupport && stdenv.isDarwin) [ OpenGL GLUT ]
-    ++ optional alsaSupport alsa-lib
-    ++ optional pulseaudioSupport libpulseaudio
-    ++ optional stdenv.isDarwin Cocoa;
-  rpath = makeLibraryPath extraPropagatedBuildInputs;
+    ++ lib.optionals x11Support [ libXext libICE libXrandr ]
+    ++ lib.optionals (openglSupport && stdenv.isLinux) [ libGL libGLU ]
+    ++ lib.optionals (openglSupport && stdenv.isDarwin) [ OpenGL GLUT ]
+    ++ lib.optional alsaSupport alsa-lib
+    ++ lib.optional pulseaudioSupport libpulseaudio
+    ++ lib.optional stdenv.isDarwin Cocoa;
+  rpath = lib.makeLibraryPath extraPropagatedBuildInputs;
 in
 
 stdenv.mkDerivation rec {
@@ -33,20 +31,17 @@ stdenv.mkDerivation rec {
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
-  # make: *** No rule to make target 'build/*.lo', needed by 'build/libSDL.la'.  Stop.
-  postPatch = "patchShebangs ./configure";
-
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
   nativeBuildInputs = [ pkg-config ]
-    ++ optional stdenv.isLinux libcap;
+    ++ lib.optional stdenv.isLinux libcap;
 
   propagatedBuildInputs = [ libiconv ] ++ extraPropagatedBuildInputs;
 
   buildInputs = [ ]
-    ++ optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
-    ++ optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
+    ++ lib.optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
 
   configureFlags = [
     "--disable-oss"
@@ -58,9 +53,9 @@ stdenv.mkDerivation rec {
   #   SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
   #
   # Please try revert the change that introduced this comment when updating SDL.
-  ] ++ optional stdenv.isDarwin "--disable-x11-shared"
-    ++ optional (!x11Support) "--without-x"
-    ++ optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib";
+  ] ++ lib.optional stdenv.isDarwin "--disable-x11-shared"
+    ++ lib.optional (!x11Support) "--without-x"
+    ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib";
 
   patches = [
     ./find-headers.patch
@@ -91,7 +86,7 @@ stdenv.mkDerivation rec {
     # Ticket: https://bugs.freedesktop.org/show_bug.cgi?id=27222
     (fetchpatch {
       name = "SDL_SetGamma.patch";
-      url = "https://src.fedoraproject.org/cgit/rpms/SDL.git/plain/SDL-1.2.15-x11-Bypass-SetGammaRamp-when-changing-gamma.patch?id=04a3a7b1bd88c2d5502292fad27e0e02d084698d";
+      url = "https://src.fedoraproject.org/rpms/SDL/raw/7a07323e5cec08bea6f390526f86a1ce5341596d/f/SDL-1.2.15-x11-Bypass-SetGammaRamp-when-changing-gamma.patch";
       sha256 = "0x52s4328kilyq43i7psqkqg7chsfwh0aawr50j566nzd7j51dlv";
     })
     # Fix a build failure on OS X Mavericks
@@ -103,6 +98,11 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/libsdl-org/SDL-1.2/commit/7933032ad4d57c24f2230db29f67eb7d21bb5654.patch";
       sha256 = "1by16firaxyr0hjvn35whsgcmq6bl0nwhnpjf75grjzsw9qvwyia";
+    })
+    (fetchpatch {
+      name = "CVE-2022-34568.patch";
+      url = "https://github.com/libsdl-org/SDL-1.2/commit/d7e00208738a0bc6af302723fe64908ac35b777b.patch";
+      sha256 = "sha256-fuxXsqZW94/C8CKu9LakppCU4zHupj66O2MngQ4BO9o=";
     })
   ];
 
@@ -126,7 +126,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A cross-platform multimedia library";
+    description = "Cross-platform multimedia library";
+    mainProgram = "sdl-config";
     homepage    = "http://www.libsdl.org/";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

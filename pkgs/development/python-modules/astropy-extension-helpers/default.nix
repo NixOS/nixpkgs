@@ -1,31 +1,68 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  findutils,
+  pytestCheckHook,
+  pythonOlder,
+  pip,
+  setuptools,
+  setuptools-scm,
+  tomli,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "extension-helpers";
-  version = "0.1";
-  format = "pyproject";
+  version = "1.1.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10iqjzmya2h4sk765dlm1pbqypwlqyh8rw59a5m9i63d3klnz2mc";
+    hash = "sha256-SUYMeKP40fjOwXRHn16FrURZSMzEFgM8WqPm3fLFAik=";
   };
 
-  patches = [ ./permissions.patch ];
-
-  checkInputs = [ pytestCheckHook ];
-
-  pythonImportsCheck = [
-    "extension_helpers"
+  patches = [
+    # Not needed to allow this package to build, but meant for it's dependent
+    # packages, like astropy. See explanation at:
+    # https://github.com/astropy/extension-helpers/pull/59
+    (fetchpatch {
+      url = "https://github.com/astropy/extension-helpers/commit/796f3e7831298df2d26b6d994b13fd57061a56d1.patch";
+      hash = "sha256-NnqK9HQq1hQ66RUJf9gTCuLyA0BVqVtL292mSXJ9860=";
+    })
   ];
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
+
+  propagatedBuildInputs = [ tomli ];
+
+  nativeCheckInputs = [
+    findutils
+    pip
+    pytestCheckHook
+  ];
+
+  # avoid import mismatch errors, as conftest.py is copied to build dir
+  pytestFlagsArray = [ "extension_helpers" ];
+
+  disabledTests = [
+    # https://github.com/astropy/extension-helpers/issues/43
+    "test_write_if_different"
+  ];
+
+  pythonImportsCheck = [ "extension_helpers" ];
 
   meta = with lib; {
     description = "Utilities for building and installing packages in the Astropy ecosystem";
     homepage = "https://github.com/astropy/extension-helpers";
     license = licenses.bsd3;
-    maintainers = [ maintainers.rmcgibbo ];
+    maintainers = with maintainers; [ rmcgibbo ];
   };
 }

@@ -1,19 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
 let
-
-  addToXDGDirs = p: ''
-    if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
-      export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
-    fi
-
-    if [ -d "${p}/lib/girepository-1.0" ]; then
-      export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
-      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
-    fi
-  '';
 
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.mate;
@@ -31,6 +20,22 @@ in
       };
 
       debug = mkEnableOption "mate-session debug messages";
+
+      extraPanelApplets = mkOption {
+        default = [ ];
+        example = literalExpression "with pkgs.mate; [ mate-applets ]";
+        type = types.listOf types.package;
+        description = "Extra applets to add to mate-panel.";
+      };
+
+      extraCajaExtensions = mkOption {
+        default = [ ];
+        example = lib.literalExpression "with pkgs.mate; [ caja-extensions ]";
+        type = types.listOf types.package;
+        description = "Extra extensions to add to caja.";
+      };
+
+      enableWaylandSession = mkEnableOption "MATE Wayland session";
     };
 
     environment.mate.excludePackages = mkOption {
@@ -42,70 +47,64 @@ in
 
   };
 
-  config = mkIf cfg.enable {
-
-    services.xserver.displayManager.sessionPackages = [
-      pkgs.mate.mate-session-manager
-    ];
-
-    services.xserver.displayManager.sessionCommands = ''
-      if test "$XDG_CURRENT_DESKTOP" = "MATE"; then
-          export XDG_MENU_PREFIX=mate-
-
-          # Let caja find extensions
-          export CAJA_EXTENSION_DIRS=$CAJA_EXTENSION_DIRS''${CAJA_EXTENSION_DIRS:+:}${config.system.path}/lib/caja/extensions-2.0
-
-          # Let caja extensions find gsettings schemas
-          ${concatMapStrings (p: ''
-          if [ -d "${p}/lib/caja/extensions-2.0" ]; then
-              ${addToXDGDirs p}
-          fi
-          '') config.environment.systemPackages}
-
-          # Add mate-control-center paths to some XDG variables because its schemas are needed by mate-settings-daemon, and mate-settings-daemon is a dependency for mate-control-center (that is, they are mutually recursive)
-          ${addToXDGDirs pkgs.mate.mate-control-center}
-      fi
-    '';
-
-    # Let mate-panel find applets
-    environment.sessionVariables."MATE_PANEL_APPLETS_DIR" = "${config.system.path}/share/mate-panel/applets";
-    environment.sessionVariables."MATE_PANEL_EXTRA_MODULES" = "${config.system.path}/lib/mate-panel/applets";
-
-    # Debugging
-    environment.sessionVariables.MATE_SESSION_DEBUG = mkIf cfg.debug "1";
-
-    environment.systemPackages =
-      pkgs.mate.basePackages ++
-      (pkgs.gnome.removePackagesByName
-        pkgs.mate.extraPackages
-        config.environment.mate.excludePackages) ++
-      [
-        pkgs.desktop-file-utils
-        pkgs.glib
-        pkgs.gtk3.out
-        pkgs.shared-mime-info
-        pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
-        pkgs.mate.mate-settings-daemon
-        pkgs.yelp # for 'Contents' in 'Help' menus
+  config = mkMerge [
+    (mkIf (cfg.enable || cfg.enableWaylandSession) {
+      services.displayManager.sessionPackages = [
+        pkgs.mate.mate-session-manager
       ];
 
-    programs.dconf.enable = true;
-    # Shell integration for VTE terminals
-    programs.bash.vteIntegration = mkDefault true;
-    programs.zsh.vteIntegration = mkDefault true;
+      # Debugging
+      environment.sessionVariables.MATE_SESSION_DEBUG = mkIf cfg.debug "1";
 
-    # Mate uses this for printing
-    programs.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+      environment.systemPackages = utils.removePackagesByName
+        (pkgs.mate.basePackages ++
+        pkgs.mate.extraPackages ++
+        [
+          (pkgs.mate.caja-with-extensions.override {
+            extensions = cfg.extraCajaExtensions;
+          })
+          (pkgs.mate.mate-panel-with-applets.override {
+            applets = cfg.extraPanelApplets;
+          })
+          pkgs.desktop-file-utils
+          pkgs.glib
+          pkgs.gtk3.out
+          pkgs.shared-mime-info
+          pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+          pkgs.yelp # for 'Contents' in 'Help' menus
+        ])
+        config.environment.mate.excludePackages;
 
-    services.gnome.at-spi2-core.enable = true;
-    services.gnome.gnome-keyring.enable = true;
-    services.udev.packages = [ pkgs.mate.mate-settings-daemon ];
-    services.gvfs.enable = true;
-    services.upower.enable = config.powerManagement.enable;
+      programs.dconf.enable = true;
+      # Shell integration for VTE terminals
+      programs.bash.vteIntegration = mkDefault true;
+      programs.zsh.vteIntegration = mkDefault true;
 
-    security.pam.services.mate-screensaver.unixAuth = true;
+      # Mate uses this for printing
+      programs.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
 
-    environment.pathsToLink = [ "/share" ];
-  };
+      services.gnome.at-spi2-core.enable = true;
+      services.gnome.glib-networking.enable = true;
+      services.gnome.gnome-keyring.enable = true;
+      services.udev.packages = [ pkgs.mate.mate-settings-daemon ];
+      services.gvfs.enable = true;
+      services.upower.enable = config.powerManagement.enable;
+      services.libinput.enable = mkDefault true;
 
+      security.pam.services.mate-screensaver.unixAuth = true;
+
+      xdg.portal.configPackages = mkDefault [ pkgs.mate.mate-desktop ];
+
+      environment.pathsToLink = [ "/share" ];
+    })
+    (mkIf cfg.enableWaylandSession {
+      programs.wayfire.enable = true;
+      programs.wayfire.plugins = [ pkgs.wayfirePlugins.firedecor ];
+
+      environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${pkgs.mate.mate-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
+
+      environment.systemPackages = [ pkgs.mate.mate-wayland-session ];
+      services.displayManager.sessionPackages = [ pkgs.mate.mate-wayland-session ];
+    })
+  ];
 }

@@ -2,19 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "stdman";
-  version = "2020.11.17";
+  version = "2024.07.05";
 
   src = fetchFromGitHub {
     owner = "jeaye";
     repo = "stdman";
     rev = version;
-    sha256 = "sha256-pzAVuXSuUfwI7gQpFqmH/+klSUH3KipZup2TgZs8XsY=";
+    sha256 = "sha256-/yJqKwJHonnBkP6/yQQJT3yPyYO6/nFAf4XFrgl3L0A=";
   };
 
   outputDevdoc = "out";
 
   preConfigure = "
-    patchShebangs ./configure
     patchShebangs ./do_install
   ";
 

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lcms2";
-  version = "2.12";
+  version = "2.16";
 
   src = fetchurl {
     url = "mirror://sourceforge/lcms/${pname}-${version}.tar.gz";
-    sha256 = "sha256-GGY5hehkEARVrD5QdiXEOMNxA1TYXly7fNQEPhH+EPU=";
+    hash = "sha256-2HPTSti5tM6gEGMfGmIo0gh0deTcXnY+uBrMI9nUWlE=";
   };
 
   outputs = [ "bin" "dev" "out" ];

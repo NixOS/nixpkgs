@@ -1,26 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, protobuf }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, protobuf
+, isStatic ? stdenv.hostPlatform.isStatic
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "protoc-gen-grpc-web";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc-web";
-    rev = version;
-    sha256 = "sha256-piKpaylzuanhGR+7BzApplv8e/CWPoR9tG3vHrF7WXw=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-yqiSuqan4vynE3AS8OnYdzA+3AVlVFTBkxTuJe17114=";
   };
 
-  sourceRoot = "source/javascript/net/grpc/web/generator";
+  sourceRoot = "${finalAttrs.src.name}/javascript/net/grpc/web/generator";
 
+  enableParallelBuilding = true;
   strictDeps = true;
   nativeBuildInputs = [ protobuf ];
   buildInputs = [ protobuf ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "STATIC=${if isStatic then "yes" else "no"}"
+  ];
 
   doCheck = true;
-  checkInputs = [ protobuf ];
+  nativeCheckInputs = [ protobuf ];
   checkPhase = ''
     runHook preCheck
 
@@ -28,7 +37,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$CHECK_TMPDIR"
 
     protoc \
-      --proto_path="${src}/packages/grpc-web/test/protos" \
+      --proto_path="$src/packages/grpc-web/test/protos" \
       --plugin="./protoc-gen-grpc-web" \
       --grpc-web_out="import_style=commonjs,mode=grpcwebtext:$CHECK_TMPDIR" \
       echo.proto
@@ -41,10 +50,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/grpc/grpc-web";
-    changelog = "https://github.com/grpc/grpc-web/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/grpc/grpc-web/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "gRPC web support for Google's protocol buffers";
+    mainProgram = "protoc-gen-grpc-web";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
     platforms = platforms.unix;
   };
-}
+})

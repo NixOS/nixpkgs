@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "2.7";
 
   src = fetchurl {
-    url = "mirror://gnu/gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
     hash = "sha256-Pue50cvjzZ+19iJxfae7VQbxpto7MPgS4jhLh7zk2lA=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/marst/";
-    description = "An Algol-60-to-C translator";
+    description = "Algol-60-to-C translator";
     longDescription = ''
       MARST is an Algol-to-C translator. It automatically translates programs
       written on the algorithmic language Algol 60 to the C programming

@@ -1,31 +1,35 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , kwindowsystem
 , liblxqt
 , libqtxdg
 , lxqt-build-tools
-, lxqtUpdateScript
 , qtbase
+, qtsvg
 , qttools
-, qtx11extras
+, qtwayland
+, wrapQtAppsHook
+, gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qps";
-  version = "2.4.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "11mbzn4syfghb3zvdrw2011njagcw206ng6c8l9z9h3zlhmhcd57";
+    hash = "sha256-Jit1CdFZyhKOjNytTBH9T4NqqmhxoifXGgPUyVdzJ+4=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -33,17 +37,18 @@ mkDerivation rec {
     liblxqt
     libqtxdg
     qtbase
-    qttools
-    qtx11extras
+    qtsvg
+    qtwayland
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/qps";
     description = "Qt based process manager";
+    mainProgram = "qps";
     license = licenses.gpl2Plus;
     platforms = with platforms; linux; # does not build on darwin
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

@@ -1,26 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "2.0.0";
   pname = "azure-mgmt-appconfiguration";
-  disabled = isPy27;
+  version = "3.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "97e990ec6a5a3acafc7fc1add8ff1a160ebb2052792931352fd7cf1d90f1f956";
+    hash = "sha256-FJhuVgqNjdRIegP4vUISrAtHvvVle5VQFVITPm4HLEw=";
     extension = "zip";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     azure-common
     azure-mgmt-core
-    msrest
-    msrestazure
+    isodate
   ];
 
   # no tests included
@@ -28,12 +35,16 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "azure.mgmt" ];
 
-  pythonImportsCheck = [ "azure.common" "azure.mgmt.appconfiguration" ];
+  pythonImportsCheck = [
+    "azure.common"
+    "azure.mgmt.appconfiguration"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure App Configuration Management Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/appconfiguration/azure-mgmt-appconfiguration";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-mgmt-appconfiguration_${version}/sdk/appconfiguration/azure-mgmt-appconfiguration";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
   };
 }

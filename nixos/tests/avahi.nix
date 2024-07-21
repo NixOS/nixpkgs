@@ -9,14 +9,14 @@
 import ./make-test-python.nix {
   name = "avahi";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [ ];
   };
 
   nodes = let
     cfg = { ... }: {
       services.avahi = {
         enable = true;
-        nssmdns = true;
+        nssmdns4 = true;
         publish.addresses = true;
         publish.domain = true;
         publish.enable = true;
@@ -59,7 +59,7 @@ import ./make-test-python.nix {
     two.succeed("test `wc -l < out` -gt 0")
 
     # More DNS-SD.
-    one.execute('avahi-publish -s "This is a test" _test._tcp 123 one=1 &')
+    one.execute('avahi-publish -s "This is a test" _test._tcp 123 one=1 >&2 &')
     one.sleep(5)
     two.succeed("avahi-browse -r -t _test._tcp | tee out >&2")
     two.succeed("test `wc -l < out` -gt 0")

@@ -1,37 +1,34 @@
 { lib, stdenv, fetchFromGitHub }:
+
 stdenv.mkDerivation rec {
   pname = "jitterentropy";
-  version = "2.2.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "jitterentropy-library";
     rev = "v${version}";
-    sha256 = "0n2l1fxr7bynnarpwdjifb2fvlsq8w5wmfh31yk5nrc756cjlgyw";
+    hash = "sha256-USc9e/GyajJe58/Z201AO3Y+t3IPOOdJAaifEwvgm2Q=";
   };
-  patches = [
-    # Can be removed when upgrading beyond 2.2.0
-    ./reproducible-manpages.patch
-  ];
+
+  outputs = [ "out" "dev" ];
 
   enableParallelBuilding = true;
+  hardeningDisable = [ "fortify" ]; # avoid warnings
 
-  preInstall = ''
-    mkdir -p $out/include
-    substituteInPlace Makefile \
-      --replace "install -m 0755 -s" \
-                'install -m 0755 -s --strip-program $(STRIP)'
-  '';
-
+  # prevent jitterentropy from builtin strip to allow controlling this from the derivation's
+  # settings. Also fixes a strange issue, where this strip may fail when cross-compiling.
   installFlags = [
-    "PREFIX=$(out)"
+    "INSTALL_STRIP=install"
+    "PREFIX=${placeholder "out"}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Provides a noise source using the CPU execution timing jitter";
     homepage = "https://github.com/smuellerDD/jitterentropy-library";
-    license = with lib.licenses; [ gpl2 bsd3 ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ johnazoidberg ];
+    changelog = "https://github.com/smuellerDD/jitterentropy-library/raw/v${version}/CHANGES.md";
+    license = with licenses; [ bsd3 /* OR */ gpl2Only ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ johnazoidberg c0bw3b ];
   };
 }

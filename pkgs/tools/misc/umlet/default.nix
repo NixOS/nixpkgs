@@ -1,14 +1,16 @@
 { lib, stdenv, fetchurl, jre, unzip, runtimeShell }:
 
-stdenv.mkDerivation rec {
-  major = "14";
-  minor = "3";
-  version = "${major}.${minor}.0";
+stdenv.mkDerivation {
   pname = "umlet";
+  version = "15.1.0";
 
   src = fetchurl {
-    url = "http://www.umlet.com/umlet_${major}_${minor}/umlet-standalone-${version}.zip";
-    sha256 = "0jfyxjxsjx29xhs3fl0f574nyncmk9j5jp8zlgd401mcaznn9c7l";
+    # NOTE: The download URL breaks consistency - sometimes w/ patch versions
+    # and sometimes w/o. Furthermore, for 15.1.0 they moved everything to the
+    # new /download subfolder.
+    # As releases are very rarely, just modify it by hand..
+    url = "https://www.umlet.com/download/umlet_15_1/umlet-standalone-15.1.zip";
+    hash = "sha256-M6oVWbOmPBTygS+TFkY9PWucFfYLD33suNUuWpFLMIo=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -43,9 +45,11 @@ stdenv.mkDerivation rec {
       UMLet runs stand-alone or as Eclipse plug-in on Windows, macOS and
       Linux.
     '';
-    homepage = "http://www.umlet.com";
+    homepage = "https://www.umlet.com";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
     maintainers = with maintainers; [ oxzi ];
     platforms = platforms.all;
+    mainProgram = "umlet";
   };
 }

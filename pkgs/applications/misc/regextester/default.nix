@@ -11,18 +11,19 @@
 , ninja
 , gobject-introspection
 , gsettings-desktop-schemas
+, desktop-file-utils
 , pantheon
-, wrapGAppsHook }:
+, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "regextester";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "artemanufrij";
     repo = "regextester";
     rev = version;
-    sha256 = "1xwwv1hccni1mrbl58f7ly4qfq6738vn24bcbl2q346633cd7kx3";
+    hash = "sha256-5+gU8DeB99w2h/4vMal2eHkR0305dmRYiY6fsLZzlnc=";
   };
 
   nativeBuildInputs = [
@@ -33,11 +34,11 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
+    desktop-file-utils
   ];
 
   buildInputs = [
-    pantheon.elementary-icon-theme
     pantheon.granite
     glib
     libgee
@@ -50,7 +51,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A desktop application to test regular expressions interactively";
+    description = "Desktop application to test regular expressions interactively";
+    mainProgram = "com.github.artemanufrij.regextester";
     homepage = "https://github.com/artemanufrij/regextester";
     maintainers = with maintainers; [ samdroid-apps ];
     platforms = platforms.linux;

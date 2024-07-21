@@ -1,14 +1,14 @@
-{ fetchFromGitHub, lib, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which }:
+{ fetchFromGitHub, lib, stdenv, makeWrapper, unzip, libxml2, gmp, m4, uthash, which, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "z88dk";
-  version = "2.1";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "z88dk";
     repo = "z88dk";
     rev = "v${version}";
-    sha256 = "sha256-NgO8rbM31IX4nrJRU0p1DUafHPagMQepKLLoOLuGlT8=";
+    hash = "sha256-CHTORgK6FYIO6n+cvTUX4huY2Ek5FuHrs40QN5NZX44=";
     fetchSubmodules = true;
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.hostPlatform.system != "aarch64-linux";
 
   #_FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = "-O";
+  env.NIX_CFLAGS_COMPILE = "-O";
 
   short_rev = builtins.substring 0 7 src.rev;
   makeFlags = [
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     "git_count=0"
   ];
 
-  nativeBuildInputs = [ which makeWrapper unzip ];
-  buildInputs = [ libxml2 m4 uthash ];
+  nativeBuildInputs = [ which makeWrapper unzip pkg-config ];
+  buildInputs = [ libxml2 m4 uthash gmp ];
 
   preInstall = ''
     mkdir -p $out/{bin,share}

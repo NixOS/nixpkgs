@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchurl, makeWrapper, writeText
-, autoconf, ncurses, graphviz, doxygen
+{ lib, stdenv, fetchurl, writeText
+, graphviz, doxygen
 , ocamlPackages, ltl2ba, coq, why3
-, gdk-pixbuf, wrapGAppsHook
+, gdk-pixbuf, wrapGAppsHook3
 }:
 
 let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
   runtimeDeps = with ocamlPackages; [
     apron.dev
+    bigarray-compat
     biniou
     camlzip
     easy-format
@@ -15,14 +16,19 @@ let
     mlgmpidl
     num
     ocamlgraph
+    ppx_deriving
+    ppx_deriving_yojson
+    ppx_import
     stdlib-shims
-    why3
+    why3.dev
     re
+    result
     seq
     sexplib
     sexplib0
     parsexp
     base
+    unionFind
     yojson
     zarith
   ];
@@ -31,28 +37,43 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "24.0";
-  slang   = "Chromium";
+  version = "29.0";
+  slang   = "Copper";
 
   src = fetchurl {
-    url    = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "sha256:0x1xgip50jdz1phsb9rzwf2ra8lshn1hmd9g967xia402wrg3sjf";
+    url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    hash = "sha256-0vuzuND/g5RYcunm+iWOk0pwY2DmmNrjtNX5ca3fdJM=";
   };
 
-  preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";
+  preConfigure = ''
+    substituteInPlace src/dune --replace " bytes " " "
+  '';
 
-  nativeBuildInputs = [ autoconf wrapGAppsHook ];
+  postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
+
+  strictDeps = true;
+
+  nativeBuildInputs = [ wrapGAppsHook3 ] ++ (with ocamlPackages; [ ocaml findlib dune_3 menhir ]);
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib ltl2ba ocamlgraph ocamlgraph_gtk yojson menhirLib camlzip
-    lablgtk coq graphviz zarith apron why3 mlgmpidl doxygen
+    dune-site dune-configurator
+    ltl2ba ocamlgraph yojson menhirLib camlzip
+    lablgtk3 lablgtk3-sourceview3 coq graphviz zarith apron why3 mlgmpidl doxygen
+    ppx_deriving ppx_import ppx_deriving_yaml ppx_deriving_yojson
     gdk-pixbuf
+    unionFind
   ];
 
-  enableParallelBuilding = true;
+  buildPhase = ''
+    runHook preBuild
+    dune build -j$NIX_BUILD_CORES --release @install
+    runHook postBuild
+  '';
+
+  installFlags = [ "PREFIX=$(out)" ];
 
   preFixup = ''
-     gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath})
+     gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath}:$out/lib/)
   '';
 
   # Allow loading of external Frama-C plugins
@@ -78,7 +99,7 @@ stdenv.mkDerivation rec {
 
 
   meta = {
-    description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
+    description = "Extensible and collaborative platform dedicated to source-code analysis of C software";
     homepage    = "http://frama-c.com/";
     license     = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ thoughtpolice amiddelk ];

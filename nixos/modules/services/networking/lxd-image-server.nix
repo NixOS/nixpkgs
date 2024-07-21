@@ -25,7 +25,7 @@ in
         description = ''
           Configuration for lxd-image-server.
 
-          Example see <link xlink:href="https://github.com/Avature/lxd-image-server/blob/master/config.toml"/>.
+          Example see <https://github.com/Avature/lxd-image-server/blob/master/config.toml>.
         '';
         default = {};
       };
@@ -51,18 +51,14 @@ in
 
       environment.etc."lxd-image-server/config.toml".source = format.generate "config.toml" cfg.settings;
 
-      services.logrotate.paths.lxd-image-server = {
-        path = "/var/log/lxd-image-server/lxd-image-server.log";
+      services.logrotate.settings.lxd-image-server = {
+        files = "/var/log/lxd-image-server/lxd-image-server.log";
         frequency = "daily";
-        keep = 21;
-        extraConfig = ''
-          create 755 lxd-image-server ${cfg.group}
-          missingok
-          compress
-          delaycompress
-          copytruncate
-          notifempty
-        '';
+        rotate = 21;
+        create = "755 lxd-image-server ${cfg.group}";
+        compress = true;
+        delaycompress = true;
+        copytruncate = true;
       };
 
       systemd.tmpfiles.rules = [
@@ -91,7 +87,7 @@ in
         };
       };
     })
-    # this is seperate so it can be enabled on mirrored hosts
+    # this is separate so it can be enabled on mirrored hosts
     (mkIf (cfg.nginx.enable) {
       # https://github.com/Avature/lxd-image-server/blob/master/resources/nginx/includes/lxd-image-server.pkg.conf
       services.nginx.virtualHosts = {

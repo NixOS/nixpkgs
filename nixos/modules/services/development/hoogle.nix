@@ -33,7 +33,7 @@ in {
         The Haskell packages to generate documentation for.
 
         The option value is a function that takes the package set specified in
-        the <varname>haskellPackages</varname> option as its sole parameter and
+        the {var}`haskellPackages` option as its sole parameter and
         returns a list of packages.
       '';
     };
@@ -56,6 +56,16 @@ in {
       description = "Set the host to bind on.";
       default = "127.0.0.1";
     };
+
+    extraOptions = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "--no-security-headers" ];
+      description = ''
+        Additional command-line arguments to pass to
+        {command}`hoogle server`
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -66,7 +76,10 @@ in {
 
       serviceConfig = {
         Restart = "always";
-        ExecStart = ''${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home} --host ${cfg.host}'';
+        ExecStart = ''
+          ${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home} --host ${cfg.host} \
+            ${concatStringsSep " " cfg.extraOptions}
+        '';
 
         DynamicUser = true;
 

@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, python3, python3Packages
-, gnome, gtk3, wrapGAppsHook, gtksourceview3, snapper
+, adwaita-icon-theme, gtk3, wrapGAppsHook3, gtksourceview3, snapper
 , gobject-introspection
 }:
 
@@ -14,12 +14,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "13j4spbi9pxg69zifzai8ifk4207sn0vwh6vjqryi0snd5sylh7h";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
   buildInputs = [
     python3
-    gobject-introspection
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   doCheck = false; # it doesn't have any tests
@@ -35,6 +34,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Graphical interface for snapper";
+    mainProgram = "snapper-gui";
     longDescription = ''
       A graphical user interface for the tool snapper for Linux filesystem
       snapshot management. It can compare snapshots and revert differences between snapshots.

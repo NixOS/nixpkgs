@@ -1,17 +1,41 @@
-{ lib, stdenv, fetchurl, meson, ninja, glib, json-glib, pkg-config, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43, gnome }:
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, glib
+, json-glib
+, pkg-config
+, gobject-introspection
+, vala
+, gi-docgen
+, gnome
+}:
+
 stdenv.mkDerivation rec {
   pname = "jsonrpc-glib";
-  version = "3.40.0";
+  version = "3.44.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_43 ];
-  buildInputs = [ glib json-glib ];
-
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "wuPRYlfHJmzTkBiE4iN1V1v2Go4fZ1lsiODYeucNDvQ=";
+    sha256 = "aUBqAlDQzFF1QIyufsqAwMa/rvxK4YMLNUwEM7zVzgY=";
   };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gi-docgen
+  ];
+
+  buildInputs = [
+    glib
+    json-glib
+  ];
 
   mesonFlags = [
     "-Denable_gtk_doc=true"
@@ -21,6 +45,11 @@ stdenv.mkDerivation rec {
   # https://gitlab.gnome.org/GNOME/jsonrpc-glib/issues/2
   doCheck = false;
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -29,7 +58,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A library to communicate using the JSON-RPC 2.0 specification";
+    description = "Library to communicate using the JSON-RPC 2.0 specification";
     homepage = "https://gitlab.gnome.org/GNOME/jsonrpc-glib";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
   cfg = config.services.wasabibackend;
+  opt = options.services.wasabibackend;
 
-  inherit (lib) mkEnableOption mkIf mkOption optionalAttrs optionalString types;
+  inherit (lib) literalExpression mkEnableOption mkIf mkOption optionalAttrs optionalString types;
 
   confOptions = {
       BitcoinRpcConnectionString = "${cfg.rpc.user}:${cfg.rpc.password}";
@@ -84,7 +85,7 @@ in {
         password = mkOption {
           type = types.str;
           default = "password";
-          description = "RPC password for the bitcoin endpoint. Warning: this is stored in cleartext in the Nix store! Use <literal>configFile</literal> or <literal>passwordFile</literal> if needed.";
+          description = "RPC password for the bitcoin endpoint. Warning: this is stored in cleartext in the Nix store! Use `configFile` or `passwordFile` if needed.";
         };
 
         passwordFile = mkOption {
@@ -103,6 +104,7 @@ in {
       group = mkOption {
         type = types.str;
         default = cfg.user;
+        defaultText = literalExpression "config.${opt.user}";
         description = "The group as which to run the wasabibackend node.";
       };
     };
@@ -117,6 +119,7 @@ in {
     systemd.services.wasabibackend = {
       description = "wasabibackend server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       environment = {
         DOTNET_PRINT_TELEMETRY_MESSAGE = "false";

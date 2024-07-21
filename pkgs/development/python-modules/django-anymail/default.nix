@@ -1,47 +1,62 @@
 {
-    lib,
-    buildPythonPackage,
-    fetchFromGitHub,
-    six,
-    requests,
-    django,
-    boto3,
-    python,
-    mock,
+  lib,
+  boto3,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  hatchling,
+  mock,
+  python,
+  pythonOlder,
+  requests,
+  responses,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "django-anymail";
-  version = "8.4";
+  version = "11.0.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "anymail";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "08ac24hrafkk1jg3milfjky3qni1cz5qggp1rgzq9r7ina4akjma";
+    repo = "django-anymail";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tCGohY/vwdKKOqhFGLJqX+kyl0n3XUJToJMErICGjEw=";
   };
 
+  nativeBuildInputs = [ hatchling ];
+
   propagatedBuildInputs = [
-    six
-    requests
     django
-    boto3
+    requests
+    urllib3
   ];
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [
+    mock
+    responses
+  ] ++ passthru.optional-dependencies.amazon-ses;
+
+  passthru.optional-dependencies = {
+    amazon-ses = [ boto3 ];
+  };
+
   checkPhase = ''
-    substituteInPlace setup.py --replace "tests_require=[" "tests_require=[], #"
-    export CONTINUOUS_INTEGRATION=1
-    export ANYMAIL_SKIP_TESTS="sparkpost"
-    ${python.interpreter} setup.py test
+    runHook preCheck
+    CONTINUOUS_INTEGRATION=1 ${python.interpreter} runtests.py
+    runHook postCheck
   '';
 
-  # this package allows multiple email backends
-  # sparkpost is missing because it's not packaged yet
+  pythonImportsCheck = [ "anymail" ];
+
   meta = with lib; {
     description = "Django email backends and webhooks for Mailgun";
     homepage = "https://github.com/anymail/django-anymail";
+    changelog = "https://github.com/anymail/django-anymail/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ onny ];
   };
 }

@@ -1,25 +1,32 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "wuzz";
-  version = "0.2.0";
-  rev = "v${version}";
-
-  goPackagePath = "https://github.com/asciimoo/wuzz";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
-    repo = "wuzz";
-    inherit rev;
-    sha256 = "1fcr5jr0vn5w60bn08lkh2mi0hdarwp361h94in03139j7hhqrfs";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-H0soiKOytchfcFx17az0pGoFbA+hhXLxGJVdaARvnDc=";
   };
 
-  goDeps = ./deps.nix;
+  patches = [
+    # go 1.19 support
+    # https://github.com/asciimoo/wuzz/pull/146
+    (fetchpatch {
+      url = "https://github.com/asciimoo/wuzz/commit/bb4c4fff794f160920df1d3b87541b28f071862c.patch";
+      hash = "sha256-nbgwmST36nB5ia3mgZvkwAVqJfznvFnNyzdoyo51kLg=";
+    })
+  ];
+
+  vendorHash = "sha256-oIm6DWSs6ZDKi6joxydguSXxqtGyKP21cmWtz8MkeIQ=";
 
   meta = with lib; {
     homepage = "https://github.com/asciimoo/wuzz";
     description = "Interactive cli tool for HTTP inspection";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ pradeepchhetri ];
+    mainProgram = "wuzz";
   };
 }

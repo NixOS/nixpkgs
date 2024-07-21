@@ -1,8 +1,8 @@
 diff --git a/app/models/site_setting.rb b/app/models/site_setting.rb
-index 89a5e923fc..b60754f50a 100644
+index a6641f967a..a45353504a 100644
 --- a/app/models/site_setting.rb
 +++ b/app/models/site_setting.rb
-@@ -26,6 +26,8 @@ class SiteSetting < ActiveRecord::Base
+@@ -21,6 +21,8 @@ class SiteSetting < ActiveRecord::Base
      end
    end
  

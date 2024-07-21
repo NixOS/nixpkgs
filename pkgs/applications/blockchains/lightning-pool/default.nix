@@ -5,18 +5,20 @@
 
 buildGoModule rec {
   pname = "lightning-pool";
-  version = "0.5.1-alpha";
+  version = "0.6.4-beta";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "pool";
     rev = "v${version}";
-    sha256 = "147s0p4arfxl2akzm267p8zfy6hgssym5rwxv78kp8i39mfinpkn";
+    hash = "sha256-lSc/zOZ5VpmaZ7jrlGvSaczrgOtAMS9tDUxcMoFdBmQ=";
   };
 
-  vendorSha256 = "0zd3bwqi0hnk0562x9hd62cwjw1xj386m83jagg41kzz0cpcr7zl";
+  vendorHash = "sha256-DD27zUW524qe9yLaVPEzw/c4sSzlH89HMw0PdtNYEhg=";
 
   subPackages = [ "cmd/pool" "cmd/poold" ];
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Lightning Pool Client";

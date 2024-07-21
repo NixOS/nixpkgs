@@ -21,7 +21,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8080;
         description = "Port to bind to for HTTP, set to 0 to disable HTTP.";
       };
@@ -35,6 +35,7 @@ in {
     systemd.services."domoticz" = {
       description = pkgDesc;
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
         DynamicUser = true;

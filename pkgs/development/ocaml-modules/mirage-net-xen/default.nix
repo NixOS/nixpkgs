@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , netchannel
 , ppx_sexp_conv
 , lwt
@@ -17,10 +16,10 @@ buildDunePackage {
   inherit (netchannel)
     src
     version
-    useDune2
-    minimumOCamlVersion
     meta
     ;
+
+  duneVersion = "3";
 
   nativeBuildInputs = [
     ppx_sexp_conv

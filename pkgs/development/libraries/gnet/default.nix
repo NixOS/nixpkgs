@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "1cy78kglzi235md964ikvm0rg801bx0yk9ya8zavndjnaarzqq87";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ autoconf automake glib libtool ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+  buildInputs = [ glib libtool ];
 
   preConfigure = "./autogen.sh";
 
   meta = with lib; {
-    description = "A network library, written in C, object-oriented, and built upon GLib";
+    description = "Network library, written in C, object-oriented, and built upon GLib";
     homepage = "https://developer.gnome.org/gnet/";
     license = licenses.lgpl2;
     platforms = platforms.linux;

@@ -1,23 +1,25 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "matterircd";
-  version = "0.25.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "42wim";
     repo = "matterircd";
     rev = "v${version}";
-    sha256 = "sha256-AuY6tAZ1WlUkiKcbDcXBDh2OdKwWllx2xJxPCbqQguM=";
+    sha256 = "sha256-qA07i31fGLLIfWoCBW1f5nvf4AWEIkSXZh22F6rRnpM=";
   };
 
-  goPackagePath = "github.com/42wim/matterircd";
+  vendorHash = null;
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
     description = "Minimal IRC server bridge to Mattermost";
+    mainProgram = "matterircd";
+    homepage = "https://github.com/42wim/matterircd";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
   };
 }

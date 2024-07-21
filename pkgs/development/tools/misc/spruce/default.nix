@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "spruce";
-  version = "1.29.0";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "geofffranks";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HjJWiBYd1YFDZ+XOFcU2Df6bmKFBwVQ6YbiZv1IVN3A=";
+    hash = "sha256-7BZl3GPEuXdZptbkChlmdUkxfIkA3B3IdPFO46zejQ4=";
   };
 
-  deleteVendor = true;
-  vendorSha256 = "sha256-67PGSW3wV8i3mAt3rCuWbFmeOe+QhHXn2rTUmeN6YMA=";
+  vendorHash = null;
 
   meta = with lib; {
-    description = "A BOSH template merge tool";
+    description = "BOSH template merge tool";
+    mainProgram = "spruce";
     homepage = "https://github.com/geofffranks/spruce";
     license = licenses.mit;
     maintainers = with maintainers; [ risson ];

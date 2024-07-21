@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Show progress of open files and file systems";
+    mainProgram = "ftop";
     homepage = "https://code.google.com/archive/p/ftop/";
     license = licenses.gpl3Plus;
     longDescription = ''

@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, kernel, kmod, looking-glass-client }:
+{ lib, stdenv, kernel, looking-glass-client }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kvmfr";
   version = looking-glass-client.version;
 
   src = looking-glass-client.src;
-  sourceRoot = "source/module";
+  sourceRoot = "${looking-glass-client.src.name}/module";
   hardeningDisable = [ "pic" "format" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

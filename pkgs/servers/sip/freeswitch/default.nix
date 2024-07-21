@@ -1,12 +1,27 @@
-{ fetchFromGitHub, stdenv, lib, pkg-config, autoreconfHook
-, ncurses, gnutls, readline
-, openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
-, ldns, libedit, yasm, which, libsndfile, libtiff
-
+{ fetchFromGitHub
+, stdenv
+, lib
+, pkg-config
+, autoreconfHook
+, ncurses
+, gnutls
+, readline
+, openssl
+, perl
+, sqlite
+, libjpeg
+, speex
+, pcre
+, libuuid
+, ldns
+, libedit
+, yasm
+, which
+, libsndfile
+, libtiff
+, libxcrypt
 , callPackage
-
 , SystemConfiguration
-
 , modules ? null
 , nixosTests
 }:
@@ -88,12 +103,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.7";
+  version = "1.10.11";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0npdvidvsi4dhwswdwilff4p3x04qmz7hgs9sdadiy2w83qb6alf";
+    hash = "sha256-LzGqrXzPED3PoCDnrwUmmSQsvlAucYo2gTkwFausM7A=";
   };
 
   postPatch = ''
@@ -116,14 +131,18 @@ stdenv.mkDerivation rec {
     openssl ncurses gnutls readline libjpeg
     sqlite pcre speex ldns libedit
     libsndfile libtiff
-    libuuid
+    libuuid libxcrypt
   ]
   ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
   ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  # Using c++14 because of build error
+  # gsm_at.h:94:32: error: ISO C++17 does not allow dynamic exception specifications
+  CXXFLAGS = "-std=c++14";
 
   CFLAGS = "-D_ANSI_SOURCE";
 
@@ -147,7 +166,8 @@ stdenv.mkDerivation rec {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = "https://freeswitch.org/";
     license = lib.licenses.mpl11;
-    maintainers = with lib.maintainers; [ misuzu ];
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     platforms = with lib.platforms; unix;
+    broken = stdenv.isDarwin;
   };
 }

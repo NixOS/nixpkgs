@@ -1,11 +1,9 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , shared-mime-info
 , libpthreadstubs
 , libXcursor
 , libXdmcp
-, qtbase
 , qtquickcontrols2
 , qtx11extras
 , karchive
@@ -17,7 +15,7 @@
 }:
 
 mkDerivation {
-  name = "sddm-kcm";
+  pname = "sddm-kcm";
   nativeBuildInputs = [ extra-cmake-modules shared-mime-info ];
   buildInputs = [
     libpthreadstubs

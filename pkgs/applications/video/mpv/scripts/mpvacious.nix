@@ -1,38 +1,46 @@
-{ lib, stdenvNoCC, fetchFromGitHub, curl, xclip }:
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  gitUpdater,
+  curl,
+  wl-clipboard,
+  xclip,
+}:
 
-stdenvNoCC.mkDerivation rec {
+buildLua rec {
   pname = "mpvacious";
-  version = "0.14";
+  version = "0.36";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "mpvacious";
     rev = "v${version}";
-    sha256 = "0r031hh3hpim9dli15m9q4cwka4ljvwg0hdgyp36r1n097q44r5f";
+    sha256 = "sha256-j8K9coa8kyA7AgRQaBXJJmeTpNtfDKkOGnAP9Up7biA=";
   };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   postPatch = ''
-    substituteInPlace subs2srs.lua \
-      --replace "'curl'" "'${curl}/bin/curl'" \
-      --replace "xclip" "${xclip}/bin/xclip"
+    substituteInPlace utils/forvo.lua \
+      --replace-fail "'curl" "'${lib.getExe curl}"
+    substituteInPlace platform/nix.lua \
+      --replace-fail "'curl" "'${lib.getExe curl}" \
+      --replace-fail "'wl-copy" "'${lib.getExe' wl-clipboard "wl-copy"}" \
+      --replace-fail "'xclip" "'${lib.getExe xclip}"
   '';
-
-  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/mpv/scripts
-    cp subs2srs.lua $out/share/mpv/scripts
+    make PREFIX=$out/share/mpv install
     runHook postInstall
   '';
 
-  passthru.scriptName = "subs2srs.lua";
+  passthru.scriptName = "mpvacious";
 
   meta = with lib; {
     description = "Adds mpv keybindings to create Anki cards from movies and TV shows";
     homepage = "https://github.com/Ajatt-Tools/mpvacious";
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
     maintainers = with maintainers; [ kmicklas ];
   };
 }

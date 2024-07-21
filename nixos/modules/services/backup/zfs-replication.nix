@@ -9,16 +9,16 @@ let
 in {
   options = {
     services.zfs.autoReplication = {
-      enable = mkEnableOption "ZFS snapshot replication.";
+      enable = mkEnableOption "ZFS snapshot replication";
 
       followDelete = mkOption {
-        description = "Remove remote snapshots that don't have a local correspondant.";
+        description = "Remove remote snapshots that don't have a local correspondent.";
         default = true;
         type = types.bool;
       };
 
       host = mkOption {
-        description = "Remote host where snapshots should be sent. <literal>lz4</literal> is expected to be installed on this host.";
+        description = "Remote host where snapshots should be sent. `lz4` is expected to be installed on this host.";
         example = "example.com";
         type = types.str;
       };
@@ -30,7 +30,7 @@ in {
       };
 
       localFilesystem = mkOption {
-        description = "Local ZFS fileystem from which snapshots should be sent.  Defaults to the attribute name.";
+        description = "Local ZFS filesystem from which snapshots should be sent.  Defaults to the attribute name.";
         example = "pool/file/path";
         type = types.str;
       };

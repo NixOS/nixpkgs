@@ -3,9 +3,14 @@
 , bzip2
 , cmake
 , expat
+, freetype
 , irrlicht
+, libICE
 , libGL
 , libGLU
+, libSM
+, libX11
+, libXext
 , libXxf86vm
 , libjpeg
 , libpng
@@ -13,7 +18,6 @@
 , openal
 , pkg-config
 , sqlite
-, xlibsWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -39,18 +43,24 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    # has to go before others to override transitive libpng-1.6
+    libpng
+
     bzip2
     expat
+    freetype
     irrlicht
+    libICE
     libGL
     libGLU
+    libSM
+    libX11
+    libXext
     libXxf86vm
     libjpeg
-    libpng
     libvorbis
     openal
     sqlite
-    xlibsWrapper
   ];
 
   meta = with lib; {

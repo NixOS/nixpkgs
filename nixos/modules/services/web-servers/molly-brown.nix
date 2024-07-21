@@ -40,17 +40,17 @@ in {
         permissions allowing it to read such keys.
 
         As an example:
-        <programlisting>
+        ```
         systemd.services.molly-brown.serviceConfig.SupplementaryGroups =
           [ config.security.acme.certs."example.com".group ];
-        </programlisting>
+        ```
       '';
     };
 
     keyPath = mkOption {
       type = types.path;
       example = "/var/lib/acme/example.com/key.pem";
-      description = "Path to TLS key. See <option>CertPath</option>.";
+      description = "Path to TLS key. See {option}`CertPath`.";
     };
 
     docBase = mkOption {
@@ -64,7 +64,7 @@ in {
       default = { };
       description = ''
         molly-brown configuration. Refer to
-        <link xlink:href="https://tildegit.org/solderpunk/molly-brown/src/branch/master/example.conf"/>
+        <https://tildegit.org/solderpunk/molly-brown/src/branch/master/example.conf>
         for details on supported values.
       '';
     };

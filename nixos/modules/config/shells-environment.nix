@@ -42,8 +42,10 @@ in
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = with types; attrsOf (either str (listOf str));
-      apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
+      type = with types; attrsOf (oneOf [ (listOf (oneOf [ int str path ])) int str path ]);
+      apply = let
+        toStr = v: if isPath v then "${v}" else toString v;
+      in mapAttrs (n: v: if isList v then concatMapStringsSep ":" toStr v else toStr v);
     };
 
     environment.profiles = mkOption {
@@ -60,7 +62,7 @@ in
       description = ''
         Attribute set of environment variable.  Each attribute maps to a list
         of relative paths.  Each relative path is appended to the each profile
-        of <option>environment.profiles</option> to form the content of the
+        of {option}`environment.profiles` to form the content of the
         corresponding environment variable.
       '';
     };
@@ -113,7 +115,7 @@ in
         An attribute set that maps aliases (the top level attribute names in
         this option) to command strings or directly to build outputs. The
         aliases are added to all users' shells.
-        Aliases mapped to <code>null</code> are ignored.
+        Aliases mapped to `null` are ignored.
       '';
       type = with types; attrsOf (nullOr (either str path));
     };
@@ -142,7 +144,7 @@ in
       visible = false;
       description = ''
         The shell executable that is linked system-wide to
-        <literal>/bin/sh</literal>. Please note that NixOS assumes all
+        `/bin/sh`. Please note that NixOS assumes all
         over the place that shell to be Bash, so override the default
         setting only if you know exactly what you're doing.
       '';
@@ -153,7 +155,7 @@ in
       example = literalExpression "[ pkgs.bashInteractive pkgs.zsh ]";
       description = ''
         A list of permissible login shells for user accounts.
-        No need to mention <literal>/bin/sh</literal>
+        No need to mention `/bin/sh`
         here, it is placed into this list implicitly.
       '';
       type = types.listOf (types.either types.shellPackage types.path);
@@ -214,7 +216,8 @@ in
       ''
         # Create the required /bin/sh symlink; otherwise lots of things
         # (notably the system() function) won't work.
-        mkdir -m 0755 -p /bin
+        mkdir -p /bin
+        chmod 0755 /bin
         ln -sfn "${cfg.binsh}" /bin/.sh.tmp
         mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
       '';

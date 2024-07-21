@@ -13,7 +13,7 @@ let
       "kramdoc"
     ];
 
-    # buildInputs = [ makeWrapper ];
+    # nativeBuildInputs = [ makeWrapper ];
 
     # postBuild = ''
     #     wrapProgram "$out/bin/asciidoctor-epub3" \
@@ -25,11 +25,12 @@ let
     # };
 
     meta = with lib; {
-      description = "A kramdown extension for converting Markdown documents to AsciiDoc";
+      description = "Kramdown extension for converting Markdown documents to AsciiDoc";
       homepage = "https://asciidoctor.org/";
       license = licenses.mit;
       maintainers = with maintainers; [ ];
       platforms = platforms.unix;
+      mainProgram = "kramdoc";
     };
   };
 in

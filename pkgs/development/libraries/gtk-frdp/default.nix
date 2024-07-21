@@ -8,20 +8,21 @@
 , gobject-introspection
 , glib
 , gtk3
-, freerdp
+, freerdp3
+, fuse3
 , unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-frdp";
-  version = "unstable-2021-10-01";
+  version = "3.37.1-unstable-2024-03-01";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = "9c15c1202ed66fe20334e33d798cc5ebd39917f0";
-    sha256 = "2YOLpyd26qWQKvneH4ww2DS8h/ZNYDmfbYIjQDvDMko=";
+    rev = "11e9fcbee8ca5ec70456dd5b616b2560d7f73adc";
+    sha256 = "2e/bAZFRTbBU4ZfgMFHiN9JwVm4qXSRtirPvbC3oT5s=";
   };
 
   nativeBuildInputs = [
@@ -35,16 +36,20 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    freerdp
+    freerdp3
+    fuse3
   ];
 
   passthru = {
     updateScript = unstableGitUpdater {
-      # The updater tries src.url by default, which does not exist for fetchFromGitHub (fetchurl).
-      url = "${meta.homepage}.git";
-      branch = "gtk-frdp-0-1";
+      tagPrefix = "v";
     };
   };
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-DTARGET_OS_IPHONE=0"
+    "-DTARGET_OS_WATCH=0"
+  ]);
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gtk-frdp";

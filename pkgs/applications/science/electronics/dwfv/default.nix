@@ -6,13 +6,14 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "0xxgwbbbzaldbl04k5ksk61wa6i4f9mc84q04ljg438z0k8q6cr7";
+    hash = "sha256-JzOD0QQfDfIkJQATxGpyJBrFg5l6lkkAXY2qv9bir3c=";
   };
 
   cargoSha256 = "1z51yx3psdxdzmwny0rzlch5hjx2pssll73q79qij2bc7wgyjscy";
 
   meta = with lib; {
-    description = "A simple digital waveform viewer with vi-like key bindings";
+    description = "Simple digital waveform viewer with vi-like key bindings";
+    mainProgram = "dwfv";
     homepage = "https://github.com/psurply/dwfv";
     license = licenses.mit;
     maintainers = with maintainers; [ newam ];

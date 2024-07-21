@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "viddy";
-  version = "0.3.4";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "sachaos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-V/x969wi5u5ND9QgJfc4vtI2t1G1ETlATzeqnpHMncc=";
+    hash = "sha256-iF5b5e3HPT3GJLRDxz9wN1U5rO9Ey51Cpw4p2zjffTI=";
   };
 
-  vendorSha256 = "sha256-iSgFDTNeRPpCMxNqj2LhYV+6/eskGa58e+rT0Nhg+pE=";
+  vendorHash = "sha256-/lx2D2FIByRnK/097M4SQKRlmqtPTvbFo1dwbThJ5Fs=";
 
   ldflags = [
     "-s"
@@ -21,9 +21,10 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A modern watch command";
+    description = "Modern watch command";
     homepage = "https://github.com/sachaos/viddy";
     license = licenses.mit;
     maintainers = with maintainers; [ j-hui ];
+    mainProgram = "viddy";
   };
 }

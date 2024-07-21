@@ -1,35 +1,33 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub
-, jre, makeWrapper, bash, gnused }:
+{
+  bash
+, fetchurl
+, gnused
+, jre
+, lib
+, makeBinaryWrapper
+, stdenv
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "confluent-platform";
-  version = "5.3.0";
-  scalaVersion = "2.12";
+  version = "7.6.0";
 
   src = fetchurl {
-    url = "http://packages.confluent.io/archive/${lib.versions.majorMinor version}/confluent-${version}-${scalaVersion}.tar.gz";
-    sha256 = "14cilq63fib5yvj40504aj6wssi7xw4f7c2jadlzdmdxzh4ixqmp";
+    url = "https://packages.confluent.io/archive/${lib.versions.majorMinor finalAttrs.version}/confluent-${finalAttrs.version}.tar.gz";
+    hash = "sha256-bHT8VWSUqxiM/g7opRXZmEOAs2d61dWBTtuwwlzPgBc=";
   };
 
-  confluentCli = fetchFromGitHub {
-    owner = "confluentinc";
-    repo = "confluent-cli";
-    rev = "v${version}";
-    sha256 = "18yvp56b8l074qfkgr4afirgd43g8b023n9ija6dnk6p6dib1f4j";
-  };
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre bash ];
+  buildInputs = [
+    bash
+    jre
+  ];
 
   installPhase = ''
-    cp -R $confluentCli confluent-cli
-    chmod -R +w confluent-cli
-
-    (
-      export CONFLUENT_HOME=$PWD
-      cd confluent-cli
-      make install
-    )
+    runHook preInstall
 
     mkdir -p $out
     cp -R bin etc share src $out
@@ -50,13 +48,15 @@ stdenv.mkDerivation rec {
         --set KAFKA_LOG_DIR "/tmp/apache-kafka-logs" \
         --prefix PATH : "${jre}/bin:${bash}/bin:${gnused}/bin"
     done
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://www.confluent.io/";
+  meta = {
     description = "Confluent event streaming platform based on Apache Kafka";
-    license = licenses.asl20;
-    maintainers = [ maintainers.offline ];
-    platforms = platforms.unix;
+    homepage = "https://www.confluent.io/";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ zoedsoupe autophagy ];
+    platforms = lib.platforms.unix;
   };
-}
+})

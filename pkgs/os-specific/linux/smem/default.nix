@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python }:
+{ lib, stdenv, fetchurl, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "smem";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "19ibv1byxf2b68186ysrgrhy5shkc5mc69abark1h18yigp3j34m";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
   makeFlags = [ "smemcap" ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.selenic.com/smem/";
-    description = "A memory usage reporting tool that takes shared memory into account";
+    description = "Memory usage reporting tool that takes shared memory into account";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.eelco ];
     license = lib.licenses.gpl2Plus;

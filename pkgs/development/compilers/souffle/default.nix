@@ -1,63 +1,63 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, perl, ncurses, zlib, sqlite, libffi
-, autoreconfHook, mcpp, bison, flex, doxygen, graphviz
-, makeWrapper
+{ lib, stdenv, fetchFromGitHub
+, bash-completion, perl, ncurses, zlib, sqlite, libffi
+, mcpp, cmake, bison, flex, doxygen, graphviz
+, makeWrapper, python3, callPackage
 }:
 
 
 let
-  toolsPath = lib.makeBinPath [ mcpp ];
+  toolsPath = lib.makeBinPath [ mcpp python3 ];
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
-  version = "2.0.2";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
-    sha256 = "1fa6yssgndrln8qbbw2j7j199glxp63irfrz1c2y424rq82mm2r5";
+    sha256 = "sha256-U3/1iNOLFzuXiBsVDAc5AXnK4F982Uifp18jjFNUv2o=";
   };
 
   patches = [
-    # Pull pending unstream inclusion fix for ncurses-6.3:
-    #  https://github.com/souffle-lang/souffle/pull/2134
-    (fetchpatch {
-      name = "ncurses-6.3.patch";
-      url = "https://github.com/souffle-lang/souffle/commit/9e4bdf86d051ef2e1b1a1be64aff7e498fd5dd20.patch";
-      sha256 = "0jw1b6qfdf49dx2qlzn1b2yzrgpnkil4w9y3as1m28w8ws7iphpa";
-    })
+    ./threads.patch
+    ./includes.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook bison flex mcpp doxygen graphviz makeWrapper perl ];
-  buildInputs = [ ncurses zlib sqlite libffi ];
+  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
 
+  nativeBuildInputs = [ bison cmake flex mcpp doxygen graphviz makeWrapper perl ];
+  buildInputs = [ bash-completion ncurses zlib sqlite libffi python3 ];
   # these propagated inputs are needed for the compiled Souffle mode to work,
   # since generated compiler code uses them. TODO: maybe write a g++ wrapper
   # that adds these so we can keep the propagated inputs clean?
   propagatedBuildInputs = [ ncurses zlib sqlite libffi ];
 
-  # see 565a8e73e80a1bedbb6cc037209c39d631fc393f and parent commits upstream for
-  # Wno-error fixes
-  postPatch = ''
-    substituteInPlace ./src/Makefile.am \
-      --replace '-Werror' '-Werror -Wno-error=deprecated -Wno-error=other'
+  cmakeFlags = [ "-DSOUFFLE_GIT=OFF" ];
 
-    substituteInPlace configure.ac \
-      --replace "m4_esyscmd([git describe --tags --always | tr -d '\n'])" "${version}"
-  '';
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
+  };
 
   postInstall = ''
     wrapProgram "$out/bin/souffle" --prefix PATH : "${toolsPath}"
   '';
 
+  postFixup = ''
+    substituteInPlace "$out/bin/souffle-compile.py" \
+        --replace "-IPLACEHOLDER_FOR_INCLUDES_THAT_ARE_SET_BY_NIXPKGS" \
+                  "-I${ncurses.dev}/include -I${zlib.dev}/include -I${sqlite.dev}/include -I${libffi.dev}/include -I$out/include"
+  '';
+
   outputs = [ "out" ];
 
+  passthru.tests = callPackage ./tests.nix { };
+
   meta = with lib; {
-    description = "A translator of declarative Datalog programs into the C++ language";
+    description = "Translator of declarative Datalog programs into the C++ language";
     homepage    = "https://souffle-lang.github.io/";
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice copumpkin wchresta ];
+    maintainers = with maintainers; [ thoughtpolice copumpkin wchresta markusscherer ];
     license     = licenses.upl;
   };
 }

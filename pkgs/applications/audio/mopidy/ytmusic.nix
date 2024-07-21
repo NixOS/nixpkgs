@@ -1,25 +1,47 @@
-{ lib, python3Packages, mopidy }:
+{ lib
+, python3
+, fetchFromGitHub
+, mopidy
+}:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3;
+in python.pkgs.buildPythonApplication rec {
   pname = "mopidy-ytmusic";
-  version = "0.3.2";
+  version = "0.3.9";
+  pyproject = true;
 
-  src = python3Packages.fetchPypi {
-    inherit version;
-    pname = "Mopidy-YTMusic";
-    sha256 = "sha256-BZtW+qHsTnOMj+jdAFI8ZMwGxJc9lNosgPJZGbt4JgU=";
+  src = fetchFromGitHub {
+    owner = "jmcdo29";
+    repo = "mopidy-ytmusic";
+    rev = "v${version}";
+    hash = "sha256-2o4fDtaIxRDvIiAGV/9qK/00BmYXasBUwW03fxFcDAU=";
   };
 
-  propagatedBuildInputs = [
-    mopidy
-    python3Packages.ytmusicapi
-    python3Packages.pytube
+  postPatch = ''
+    # only setup.py has up to date dependencies
+    rm pyproject.toml
+  '';
+
+  nativeBuildInputs = with python.pkgs; [
+    setuptools
   ];
 
+  propagatedBuildInputs = [
+    (mopidy.override { pythonPackages = python.pkgs; })
+    python.pkgs.ytmusicapi
+    python.pkgs.pytube
+  ];
+
+  pythonImportsCheck = [ "mopidy_ytmusic" ];
+
+  # has no tests
   doCheck = false;
 
   meta = with lib; {
+    changelog = "https://github.com/jmcdo29/mopidy-ytmusic/releases/tag/${src.rev}";
     description = "Mopidy extension for playing music from YouTube Music";
+    homepage = "https://github.com/jmcdo29/mopidy-ytmusic";
     license = licenses.asl20;
     maintainers = [ maintainers.nickhu ];
   };

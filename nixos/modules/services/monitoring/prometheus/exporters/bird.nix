@@ -1,9 +1,13 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.bird;
+  inherit (lib)
+    mkOption
+    types
+    concatStringsSep
+    singleton
+    ;
 in
 {
   port = 9324;
@@ -17,7 +21,7 @@ in
     };
     birdSocket = mkOption {
       type = types.path;
-      default = "/var/run/bird.ctl";
+      default = "/run/bird/bird.ctl";
       description = ''
         Path to BIRD2 (or BIRD1 v4) socket.
       '';

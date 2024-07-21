@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "abbaye-des-morts";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "nevat";
     repo = "abbayedesmorts-gpl";
     rev = "v${version}";
-    sha256 = "1pwqf7r9bqb2p3xrw9i7y8pgr1401fy3mnnqpb1qkhmdl3gqi9hb";
+    sha256 = "sha256-/RAtOL51o3/5pDgqPLJMTtDFY9BpIowM5MpJ88+v/Zs=";
   };
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer ];
@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://locomalito.com/abbaye_des_morts.php";
-    description = "A retro arcade video game";
+    description = "Retro arcade video game";
+    mainProgram = "abbayev2";
     license = licenses.gpl3;
     maintainers = [ maintainers.marius851000 ];
   };

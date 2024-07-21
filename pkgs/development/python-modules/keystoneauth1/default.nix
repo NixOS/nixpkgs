@@ -1,34 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, betamax
-, hacking
-, iso8601
-, lxml
-, oauthlib
-, os-service-types
-, oslo-config
-, oslo-utils
-, pbr
-, pycodestyle
-, pyyaml
-, requests
-, requests-kerberos
-, requests-mock
-, six
-, stestr
-, stevedore
-, testresources
-, testtools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  betamax,
+  hacking,
+  iso8601,
+  lxml,
+  oauthlib,
+  os-service-types,
+  oslo-config,
+  oslo-utils,
+  pbr,
+  pycodestyle,
+  pyyaml,
+  requests,
+  requests-kerberos,
+  requests-mock,
+  setuptools,
+  six,
+  stestr,
+  stevedore,
+  testresources,
+  testtools,
 }:
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "4.4.0";
+  version = "5.6.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "34662a6be67ab29424aabe6f99a8d7eb6b88d293109a07e60fea123ebffb314f";
+    hash = "sha256-7LfzR1nr4QPbNyqwlTwLghkp3dSX8zKqaz72yqz/7Yg=";
   };
 
   postPatch = ''
@@ -36,6 +39,8 @@ buildPythonPackage rec {
     # so instead of removing them one by one remove everything
     rm test-requirements.txt
   '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     betamax
@@ -50,7 +55,7 @@ buildPythonPackage rec {
     stevedore
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hacking
     oslo-config
     oslo-utils
@@ -62,8 +67,11 @@ buildPythonPackage rec {
     testtools
   ];
 
+  # test_keystoneauth_betamax_fixture is incompatible with urllib3 2.0.0
+  # https://bugs.launchpad.net/keystoneauth/+bug/2020112
   checkPhase = ''
-    stestr run
+    stestr run \
+      -E "keystoneauth1.tests.unit.test_betamax_fixture.TestBetamaxFixture.test_keystoneauth_betamax_fixture"
   '';
 
   pythonImportsCheck = [ "keystoneauth1" ];

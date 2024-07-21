@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg   = config.services.terraria;
+  opt   = options.services.terraria;
   worldSizeMap = { small = 1; medium = 2; large = 3; };
   valFlag = name: val: optionalString (val != null) "-${name} \"${escape ["\\" "\""] (toString val)}\"";
   boolFlag = name: val: optionalString val "-${name}";
@@ -18,15 +19,28 @@ let
     (boolFlag "secure" cfg.secure)
     (boolFlag "noupnp" cfg.noUPnP)
   ];
-  stopScript = pkgs.writeScript "terraria-stop" ''
-    #!${pkgs.runtimeShell}
 
+  tmuxCmd = "${lib.getExe pkgs.tmux} -S ${lib.escapeShellArg cfg.dataDir}/terraria.sock";
+
+  stopScript = pkgs.writeShellScript "terraria-stop" ''
     if ! [ -d "/proc/$1" ]; then
       exit 0
     fi
 
-    ${getBin pkgs.tmux}/bin/tmux -S ${cfg.dataDir}/terraria.sock send-keys Enter exit Enter
-    ${getBin pkgs.coreutils}/bin/tail --pid="$1" -f /dev/null
+    lastline=$(${tmuxCmd} capture-pane -p | grep . | tail -n1)
+
+    # If the service is not configured to auto-start a world, it will show the world selection prompt
+    # If the last non-empty line on-screen starts with "Choose World", we know the prompt is open
+    if [[ "$lastline" =~ ^'Choose World' ]]; then
+      # In this case, nothing needs to be saved, so we can kill the process
+      ${tmuxCmd} kill-session
+    else
+      # Otherwise, we send the `exit` command
+      ${tmuxCmd} send-keys Enter exit Enter
+    fi
+
+    # Wait for the process to stop
+    tail --pid="$1" -f /dev/null
   '';
 in
 {
@@ -36,8 +50,8 @@ in
         type        = types.bool;
         default     = false;
         description = ''
-          If enabled, starts a Terraria server. The server can be connected to via <literal>tmux -S ${cfg.dataDir}/terraria.sock attach</literal>
-          for administration by users who are a part of the <literal>terraria</literal> group (use <literal>C-b d</literal> shortcut to detach again).
+          If enabled, starts a Terraria server. The server can be connected to via `tmux -S ''${config.${opt.dataDir}}/terraria.sock attach`
+          for administration by users who are a part of the `terraria` group (use `C-b d` shortcut to detach again).
         '';
       };
 
@@ -61,7 +75,7 @@ in
         type        = types.nullOr types.str;
         default     = null;
         description = ''
-          Sets the server password. Leave <literal>null</literal> for no password.
+          Sets the server password. Leave `null` for no password.
         '';
       };
 
@@ -77,9 +91,9 @@ in
         type        = types.nullOr types.path;
         default     = null;
         description = ''
-          The path to the world file (<literal>.wld</literal>) which should be loaded.
+          The path to the world file (`.wld`) which should be loaded.
           If no world exists at this path, one will be created with the size
-          specified by <literal>autoCreatedWorldSize</literal>.
+          specified by `autoCreatedWorldSize`.
         '';
       };
 
@@ -87,7 +101,7 @@ in
         type        = types.enum [ "small" "medium" "large" ];
         default     = "medium";
         description = ''
-          Specifies the size of the auto-created world if <literal>worldPath</literal> does not
+          Specifies the size of the auto-created world if `worldPath` does not
           point to an existing world.
         '';
       };
@@ -115,7 +129,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Wheter to open ports in the firewall";
+        description = "Whether to open ports in the firewall";
       };
 
       dataDir = mkOption {
@@ -130,6 +144,7 @@ in
   config = mkIf cfg.enable {
     users.users.terraria = {
       description = "Terraria server service user";
+      group       = "terraria";
       home        = cfg.dataDir;
       createHome  = true;
       uid         = config.ids.uids.terraria;
@@ -137,7 +152,6 @@ in
 
     users.groups.terraria = {
       gid = config.ids.gids.terraria;
-      members = [ "terraria" ];
     };
 
     systemd.services.terraria = {
@@ -147,16 +161,13 @@ in
 
       serviceConfig = {
         User    = "terraria";
+        Group = "terraria";
         Type = "forking";
         GuessMainPID = true;
-        ExecStart = "${getBin pkgs.tmux}/bin/tmux -S ${cfg.dataDir}/terraria.sock new -d ${pkgs.terraria-server}/bin/TerrariaServer ${concatStringsSep " " flags}";
+        UMask = 007;
+        ExecStart = "${tmuxCmd} new -d ${pkgs.terraria-server}/bin/TerrariaServer ${concatStringsSep " " flags}";
         ExecStop = "${stopScript} $MAINPID";
       };
-
-      postStart = ''
-        ${pkgs.coreutils}/bin/chmod 660 ${cfg.dataDir}/terraria.sock
-        ${pkgs.coreutils}/bin/chgrp terraria ${cfg.dataDir}/terraria.sock
-      '';
     };
 
     networking.firewall = mkIf cfg.openFirewall {

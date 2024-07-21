@@ -1,53 +1,73 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, packaging
-, setuptools-scm
-, shapely
-, sqlalchemy
-, psycopg2
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  setuptools,
+  setuptools-scm,
+  shapely,
+  sqlalchemy,
+  alembic,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
-  pname = "GeoAlchemy2";
-  version = "0.9.4";
-  format = "setuptools";
+  pname = "geoalchemy2";
+  version = "0.15.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b0e56d4a945bdc0f8fa9edd50ecc912889ea68e0e3558a19160dcb0d5b1b65fc";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "geoalchemy";
+    repo = "geoalchemy2";
+    rev = "refs/tags/${version}";
+    hash = "sha256-c5PvkQdfKajQha2nAtqYq7aHCgP/n41ekE04Rl2Pnr0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    packaging
-    shapely
+  dependencies = [
     sqlalchemy
+    packaging
   ];
 
-  checkInputs = [
-    psycopg2
+  nativeCheckInputs = [
+    alembic
     pytestCheckHook
-  ];
+  ] ++ optional-dependencies.shapely;
 
   disabledTestPaths = [
-    # tests require live postgis database
+    # tests require live databases
     "tests/gallery/test_decipher_raster.py"
     "tests/gallery/test_length_at_insert.py"
+    "tests/gallery/test_insert_raster.py"
+    "tests/gallery/test_orm_mapped_v2.py"
+    "tests/gallery/test_specific_compilation.py"
     "tests/gallery/test_summarystatsagg.py"
     "tests/gallery/test_type_decorator.py"
     "tests/test_functional.py"
+    "tests/test_functional_postgresql.py"
+    "tests/test_functional_mysql.py"
+    "tests/test_alembic_migrations.py"
+    "tests/test_pickle.py"
   ];
+
+  pythonImportsCheck = [ "geoalchemy2" ];
+
+  optional-dependencies = {
+    shapely = [ shapely ];
+  };
 
   meta = with lib; {
     description = "Toolkit for working with spatial databases";
-    homepage =  "http://geoalchemy.org/";
+    homepage = "https://geoalchemy-2.readthedocs.io/";
+    changelog = "https://github.com/geoalchemy/geoalchemy2/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
-
 }

@@ -1,59 +1,41 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, defusedxml
-, fetchFromGitHub
-, importlib-resources
-, mock
-, pyasn1
-, pymongo
-, pyopenssl
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, requests
-, responses
-, six
-, substituteAll
-, xmlschema
-, xmlsec
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  defusedxml,
+  fetchFromGitHub,
+  paste,
+  poetry-core,
+  pyasn1,
+  pymongo,
+  pyopenssl,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  repoze-who,
+  requests,
+  responses,
+  setuptools,
+  substituteAll,
+  xmlschema,
+  xmlsec,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
   pname = "pysaml2";
-  version = "7.1.0";
-  format = "setuptools";
+  version = "7.5.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "IdentityPython";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-3Yl6j6KAlw7QQYnwU7+naY6D97IqX766zguekKAuic8=";
+    repo = "pysaml2";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-M/tdKGu6K38TeBZc8/dt376bHhPB0svHB3iis/se0DY=";
   };
-
-  propagatedBuildInputs = [
-    cryptography
-    python-dateutil
-    defusedxml
-    pyopenssl
-    pytz
-    requests
-    six
-    xmlschema
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
-
-  checkInputs = [
-    mock
-    pyasn1
-    pymongo
-    pytestCheckHook
-    responses
-  ];
 
   patches = [
     (substituteAll {
@@ -63,9 +45,41 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    # fix failing tests on systems with 32bit time_t
+    # Fix failing tests on systems with 32bit time_t
     sed -i 's/2999\(-.*T\)/2029\1/g' tests/*.xml
   '';
+
+  pythonRelaxDeps = [ "xmlschema" ];
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    cryptography
+    defusedxml
+    pyopenssl
+    python-dateutil
+    pytz
+    requests
+    setuptools
+    xmlschema
+  ];
+
+  passthru.optional-dependencies = {
+    s2repoze = [
+      paste
+      repoze-who
+      zope-interface
+    ];
+  };
+
+  nativeCheckInputs = [
+    pyasn1
+    pymongo
+    pytestCheckHook
+    responses
+  ];
 
   disabledTests = [
     # Disabled tests try to access the network
@@ -75,13 +89,12 @@ buildPythonPackage rec {
     "test_conf_syslog"
   ];
 
-  pythonImportsCheck = [
-    "saml2"
-  ];
+  pythonImportsCheck = [ "saml2" ];
 
   meta = with lib; {
     description = "Python implementation of SAML Version 2 Standard";
     homepage = "https://github.com/IdentityPython/pysaml2";
+    changelog = "https://github.com/IdentityPython/pysaml2/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

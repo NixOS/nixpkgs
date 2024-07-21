@@ -8,5 +8,6 @@
   "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false,
-  "version": "7.2.2"
+  "version": "7.2.2",
+  "npmDepsHash": "sha256-IzEO7TFqIZUkhNGf0pnHbK/WFexF27RPD9lkYvmFmDw="
 }

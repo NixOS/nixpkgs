@@ -1,14 +1,12 @@
 { lib, stdenv, callPackage, vimUtils, buildEnv, makeWrapper }:
 
 let
-  macvim = callPackage ./macvim.nix { inherit stdenv; };
-
   makeCustomizable = macvim: macvim // {
     # configure expects the same args as vimUtils.vimrcFile.
     # This is the same as the value given to neovim.override { configure = … }
-    # or the value of vim_configurable.customize { vimrcConfig = … }
+    # or the value of vim-full.customize { vimrcConfig = … }
     #
-    # Note: Like neovim and vim_configurable, configuring macvim disables the
+    # Note: Like neovim and vim-full, configuring macvim disables the
     # sourcing of the user's vimrc. Use `customRC = "source $HOME/.vim/vimrc"`
     # if you want to preserve that behavior.
     configure = let
@@ -62,5 +60,4 @@ let
     override = f: makeCustomizable (macvim.override f);
     overrideAttrs = f: makeCustomizable (macvim.overrideAttrs f);
   };
-in
-  makeCustomizable macvim
+in { inherit makeCustomizable; }

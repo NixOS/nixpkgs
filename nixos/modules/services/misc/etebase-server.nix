@@ -5,9 +5,6 @@ with lib;
 let
   cfg = config.services.etebase-server;
 
-  pythonEnv = pkgs.python3.withPackages (ps: with ps;
-    [ etebase-server daphne ]);
-
   iniFmt = pkgs.formats.ini {};
 
   configIni = iniFmt.generate "etebase-server.ini" cfg.settings;
@@ -40,10 +37,17 @@ in
           Whether to enable the Etebase server.
 
           Once enabled you need to create an admin user by invoking the
-          shell command <literal>etebase-server createsuperuser</literal> with
-          the user specified by the <literal>user</literal> option or a superuser.
+          shell command `etebase-server createsuperuser` with
+          the user specified by the `user` option or a superuser.
           Then you can login and create accounts on your-etebase-server.com/admin
         '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.etebase-server;
+        defaultText = literalExpression "pkgs.python3.pkgs.etebase-server";
+        description = "etebase-server package to use.";
       };
 
       dataDir = mkOption {
@@ -134,9 +138,9 @@ in
         };
         default = {};
         description = ''
-          Configuration for <package>etebase-server</package>. Refer to
-          <link xlink:href="https://github.com/etesync/server/blob/master/etebase-server.ini.example" />
-          and <link xlink:href="https://github.com/etesync/server/wiki" />
+          Configuration for `etebase-server`. Refer to
+          <https://github.com/etesync/server/blob/master/etebase-server.ini.example>
+          and <https://github.com/etesync/server/wiki>
           for details on supported values.
         '';
         example = {
@@ -162,22 +166,25 @@ in
 
     environment.systemPackages = with pkgs; [
       (runCommand "etebase-server" {
-        buildInputs = [ makeWrapper ];
+        nativeBuildInputs = [ makeWrapper ];
       } ''
-        makeWrapper ${pythonEnv}/bin/etebase-server \
+        makeWrapper ${cfg.package}/bin/etebase-server \
           $out/bin/etebase-server \
-          --run "cd ${cfg.dataDir}" \
+          --chdir ${escapeShellArg cfg.dataDir} \
           --prefix ETEBASE_EASY_CONFIG_PATH : "${configIni}"
       '')
     ];
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+    ] ++ lib.optionals (cfg.unixSocket != null) [
+      "d '${builtins.dirOf cfg.unixSocket}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
     ];
 
     systemd.services.etebase-server = {
       description = "An Etebase (EteSync 2.0) server";
       after = [ "network.target" "systemd-tmpfiles-setup.service" ];
+      path = [ cfg.package ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = cfg.user;
@@ -185,26 +192,27 @@ in
         WorkingDirectory = cfg.dataDir;
       };
       environment = {
-        PYTHONPATH = "${pythonEnv}/${pkgs.python3.sitePackages}";
         ETEBASE_EASY_CONFIG_PATH = configIni;
+        PYTHONPATH = cfg.package.pythonPath;
       };
       preStart = ''
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
-        if [[ $(cat "$versionFile" 2>/dev/null) != ${pkgs.etebase-server} ]]; then
-          ${pythonEnv}/bin/etebase-server migrate --no-input
-          ${pythonEnv}/bin/etebase-server collectstatic --no-input --clear
-          echo ${pkgs.etebase-server} > "$versionFile"
+        if [[ $(cat "$versionFile" 2>/dev/null) != ${cfg.package} ]]; then
+          etebase-server migrate --no-input
+          etebase-server collectstatic --no-input --clear
+          echo ${cfg.package} > "$versionFile"
         fi
       '';
       script =
         let
+          python = cfg.package.python;
           networking = if cfg.unixSocket != null
-          then "-u ${cfg.unixSocket}"
-          else "-b 0.0.0.0 -p ${toString cfg.port}";
+          then "--uds ${cfg.unixSocket}"
+          else "--host 0.0.0.0 --port ${toString cfg.port}";
         in ''
-          cd "${pythonEnv}/lib/etebase-server";
-          ${pythonEnv}/bin/daphne ${networking} \
+          ${python.pkgs.uvicorn}/bin/uvicorn ${networking} \
+            --app-dir ${cfg.package}/${cfg.package.python.sitePackages} \
             etebase_server.asgi:application
         '';
     };

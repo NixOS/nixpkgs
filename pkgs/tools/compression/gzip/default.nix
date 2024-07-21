@@ -1,7 +1,9 @@
 { lib, stdenv
 , fetchurl
+, makeWrapper
+, updateAutotoolsGnuConfigScriptsHook
 , xz
-, writeText
+, runtimeShellPackage
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -11,20 +13,28 @@
 
 stdenv.mkDerivation rec {
   pname = "gzip";
-  version = "1.11";
+  version = "1.13";
 
   src = fetchurl {
     url = "mirror://gnu/gzip/${pname}-${version}.tar.xz";
-    sha256 = "01vrly90rvc98af6rcmrb3gwv1l6pylasvsdka23dffwizb9b6lv";
+    hash = "sha256-dFTraTXbF8ZlVXbC4bD6vv04tNCTbg+H9IzQYs6RoFc=";
   };
 
   outputs = [ "out" "man" "info" ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ xz.bin ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook makeWrapper ];
+  buildInputs = [ runtimeShellPackage ];
 
-  makeFlags = [ "SHELL=/bin/sh" "GREP=grep" ];
+  makeFlags = [
+    "SHELL=/bin/sh"
+    "GREP=grep"
+    # gzip 1.12 doesn't build `zless` unless it can find `less`, but we
+    # can avoid having `less` as a build input if we just override these.
+    "ZLESS_MAN=zless.1"
+    "ZLESS_PROG=zless"
+  ];
 
   # Many gzip executables are shell scripts that depend upon other gzip
   # executables being in $PATH.  Rather than try to re-write all the
@@ -33,12 +43,13 @@ stdenv.mkDerivation rec {
   preFixup = ''
     sed -i '1{;/#!\/bin\/sh/aPATH="'$out'/bin:$PATH"
     }' $out/bin/*
-  '';
-
-  # set GZIP env variable to "-n" to stop gzip from adding timestamps
+  ''
+  # run gzip with "-n" when $GZIP_NO_TIMESTAMPS (set by stdenv's setup.sh) is set to stop gzip from adding timestamps
   # to archive headers: https://github.com/NixOS/nixpkgs/issues/86348
-  setupHook = writeText "setup-hook" ''
-    export GZIP="-n"
+  # if changing so that there's no longer a .gzip-wrapped then update copy in make-bootstrap-tools.nix
+  + ''
+    wrapProgram $out/bin/gzip \
+      --add-flags "\''${GZIP_NO_TIMESTAMPS:+-n}"
   '';
 
   meta = {
@@ -60,5 +71,7 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
 
     license = lib.licenses.gpl3Plus;
+
+    mainProgram = "gzip";
   };
 }

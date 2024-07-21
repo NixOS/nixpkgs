@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , libbladeRF, soapysdr
+, libobjc, IOKit, Security
 } :
 
 let
@@ -17,7 +18,8 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libbladeRF soapysdr ];
+  buildInputs = [ libbladeRF soapysdr ]
+    ++ lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
@@ -27,6 +29,6 @@ in stdenv.mkDerivation {
     description = "SoapySDR plugin for BladeRF devices";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

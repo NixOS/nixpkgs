@@ -1,27 +1,59 @@
-{ lib, stdenv, fetchFromGitHub, cmake, cmocka }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, cmocka
 
-stdenv.mkDerivation rec {
+# for passthru.tests
+, libfido2
+, mysql80
+, openssh
+, systemd
+}:
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcbor";
-  version = "0.8.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "PJK";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "01dv4vxcmbvpphqy16vqiwh25wx11x630js5wfnx7cryarsh9ld7";
+    repo = "libcbor";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-N1xYkZw/6lX/nX/TE6/pVuEFgSyDiUJ50msK42NrKwI=";
   };
 
+  outputs = [ "out" "dev" ];
+
+  strictDeps = true;
   nativeBuildInputs = [ cmake ];
-  checkInputs = [ cmocka ];
 
-  doCheck = false; # needs "-DWITH_TESTS=ON", but fails w/compilation error
+  buildInputs = [
+    cmocka # cmake expects cmocka module
+  ];
 
-  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" "-DBUILD_SHARED_LIBS=on" ];
+  cmakeFlags = lib.optional finalAttrs.finalPackage.doCheck "-DWITH_TESTS=ON"
+    ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=ON";
+
+  # Tests are restricted while pkgsStatic.cmocka is broken. Tracked at:
+  # https://github.com/NixOS/nixpkgs/issues/213623
+  doCheck = !stdenv.hostPlatform.isStatic
+    && stdenv.hostPlatform == stdenv.buildPlatform;
+
+  nativeCheckInputs = [ cmocka ];
+
+  passthru.tests = {
+    inherit libfido2 mysql80;
+    openssh = (openssh.override { withFIDO = true; });
+    systemd = (systemd.override {
+      withFido2 = true;
+      withCryptsetup = true;
+    });
+  };
 
   meta = with lib; {
     description = "CBOR protocol implementation for C and others";
     homepage = "https://github.com/PJK/libcbor";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ ];
   };
-}
+})

@@ -19,7 +19,9 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "State-of-the-art MaxSAT and Pseudo-Boolean solver";
+    mainProgram = "open-wbo";
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;
     license = licenses.mit;

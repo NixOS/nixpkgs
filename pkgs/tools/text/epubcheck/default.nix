@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "epubcheck";
-  version = "4.2.6";
+  version = "5.1.0";
 
   src = fetchzip {
     url = "https://github.com/w3c/epubcheck/releases/download/v${version}/epubcheck-${version}.zip";
-    sha256 = "sha256-f4r0ODKvZrl+YBcP2T9Z+zEuCyvQm9W7GNiLTr4p278=";
+    sha256 = "sha256-gskQ02lGka3nBHSDXO3TpKSQzaoaJUQY9AvWG7L+1YM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/w3c/epubcheck";
     description = "Validation tool for EPUB";
+    mainProgram = "epubcheck";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = with licenses; [ asl20 bsd3 mpl10 w3c ];
     platforms = platforms.all;
     maintainers = with maintainers; [ eadwu ];

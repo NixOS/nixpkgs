@@ -1,86 +1,129 @@
-{ lib, stdenv, config, fetchurl, pkg-config
+{ lib
+, stdenv
+, config
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, openglSupport ? libGLSupported, libGL
-, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
-, x11Support ? !stdenv.targetPlatform.isWindows && !stdenv.hostPlatform.isAndroid
-, libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor
-, libXinerama, libXext, libXxf86vm, libXrandr
+, openglSupport ? libGLSupported
+, libGL
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, alsa-lib
+, x11Support ? !stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isAndroid
+, libX11
+, xorgproto
+, libICE
+, libXi
+, libXScrnSaver
+, libXcursor
+, libXinerama
+, libXext
+, libXxf86vm
+, libXrandr
 , waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
-, wayland, wayland-protocols, libxkbcommon
-, dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, dbus
-, udevSupport ? false, udev
-, ibusSupport ? false, ibus
-, fcitxSupport ? false, fcitx
+, wayland
+, wayland-protocols
+, wayland-scanner
+, drmSupport ? false
+, libdrm
+, mesa
+, libxkbcommon
+, dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, dbus
+, udevSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, udev
+, ibusSupport ? false
+, ibus
+, libdecorSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, libdecor
+, pipewireSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, pipewire # NOTE: must be built with SDL2 without pipewire support
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , libpulseaudio
-, AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
-, audiofile, libiconv
-, withStatic ? false
+, AudioUnit
+, Cocoa
+, CoreAudio
+, CoreServices
+, ForceFeedback
+, OpenGL
+, audiofile
+, libiconv
+, withStatic ? stdenv.hostPlatform.isMinGW
+  # passthru.tests
+, testers
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL expression too
 
-with lib;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.0.14";
+  version = "2.30.4";
 
-  src = fetchurl {
-    url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "1g1jahknv5r4yhh1xq5sf0md20ybdw1zh1i15lry26sq39bmn8fq";
+  src = fetchFromGitHub {
+    owner = "libsdl-org";
+    repo = "SDL";
+    rev = "release-${finalAttrs.version}";
+    hash = "sha256-RhqbmS+mPVlXlo4/jrqPqtyGzvfaPTozlUEeAjHUBoA=";
   };
-  dontDisableStatic = withStatic;
+  dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
-  patches = [ ./find-headers.patch ];
+  patches = [
+    # `sdl2-config --cflags` from Nixpkgs returns include path to just SDL2.
+    # On a normal distro this is enough for includes from all SDL2* packages to work,
+    # but on NixOS they're spread across different paths.
+    # This patch + the setup-hook will ensure that `sdl2-config --cflags` works correctly.
+    ./find-headers.patch
+  ];
 
-  # Fix with mesa 19.2: https://bugzilla.libsdl.org/show_bug.cgi?id=4797
   postPatch = ''
-    substituteInPlace include/SDL_opengl_glext.h \
-      --replace "typedef ptrdiff_t GLsizeiptr;" "typedef signed long int khronos_ssize_t; typedef khronos_ssize_t GLsizeiptr;" \
-      --replace "typedef ptrdiff_t GLintptr;" "typedef signed long int khronos_intptr_t; typedef khronos_intptr_t GLintptr;"
-
+    # Fix running wayland-scanner for the build platform when cross-compiling.
+    # See comment here: https://github.com/libsdl-org/SDL/issues/4860#issuecomment-1119003545
     substituteInPlace configure \
-      --replace 'WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`' 'WAYLAND_SCANNER=`pkg-config --variable=wayland_scanner wayland-scanner`'
+      --replace '$(WAYLAND_SCANNER)' 'wayland-scanner'
   '';
+
+  strictDeps = true;
 
   depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ pkg-config ] ++ optionals waylandSupport [ wayland ];
-
-  propagatedBuildInputs = dlopenPropagatedBuildInputs;
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals waylandSupport [ wayland wayland-scanner ];
 
   dlopenPropagatedBuildInputs = [ ]
     # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
-    ++ optional openglSupport libGL
+    ++ lib.optional (openglSupport && !stdenv.isDarwin) libGL
     # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
-    ++ optionals x11Support [ libX11 xorgproto ];
+    ++ lib.optionals x11Support [ libX11 ];
 
-  dlopenBuildInputs = [ ]
-    ++ optionals  alsaSupport [ alsa-lib audiofile ]
-    ++ optional  dbusSupport dbus
-    ++ optional  pulseaudioSupport libpulseaudio
-    ++ optional  udevSupport udev
-    ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
-    ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ];
+  propagatedBuildInputs = lib.optionals x11Support [ xorgproto ]
+    ++ finalAttrs.dlopenPropagatedBuildInputs;
+
+  dlopenBuildInputs = lib.optionals alsaSupport [ alsa-lib audiofile ]
+    ++ lib.optional dbusSupport dbus
+    ++ lib.optional libdecorSupport libdecor
+    ++ lib.optional pipewireSupport pipewire
+    ++ lib.optional pulseaudioSupport libpulseaudio
+    ++ lib.optional udevSupport udev
+    ++ lib.optionals waylandSupport [ wayland libxkbcommon ]
+    ++ lib.optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ]
+    ++ lib.optionals drmSupport [ libdrm mesa ];
 
   buildInputs = [ libiconv ]
-    ++ dlopenBuildInputs
-    ++ optional  ibusSupport ibus
-    ++ optional  fcitxSupport fcitx
-    ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
+    ++ finalAttrs.dlopenBuildInputs
+    ++ lib.optional ibusSupport ibus
+    ++ lib.optionals waylandSupport [ wayland-protocols ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   enableParallelBuilding = true;
 
   configureFlags = [
     "--disable-oss"
-  ] ++ optional (!x11Support) "--without-x"
-    ++ optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
-    ++ optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
-    ++ optional stdenv.isDarwin "--disable-sdltest";
+  ] ++ lib.optional (!x11Support) "--without-x"
+  ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
+  ++ lib.optional stdenv.hostPlatform.isWindows "--disable-video-opengles"
+  ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
   # We remove libtool .la files when static libs are requested,
   # because they make the builds of downstream libs like `SDL_tff`
@@ -113,25 +156,36 @@ stdenv.mkDerivation rec {
   #
   # You can grep SDL sources with `grep -rE 'SDL_(NAME|.*_SYM)'` to
   # list the symbols used in this way.
-  postFixup = let
-    rpath = makeLibraryPath (dlopenPropagatedBuildInputs ++ dlopenBuildInputs);
-  in optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
-    for lib in $out/lib/*.so* ; do
-      if ! [[ -L "$lib" ]]; then
-        patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
-      fi
-    done
-  '';
+  postFixup =
+    let
+      rpath = lib.makeLibraryPath (finalAttrs.dlopenPropagatedBuildInputs ++ finalAttrs.dlopenBuildInputs);
+    in
+    lib.optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
+      for lib in $out/lib/*.so* ; do
+        if ! [[ -L "$lib" ]]; then
+          patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
+        fi
+      done
+    '';
 
   setupHook = ./setup-hook.sh;
 
-  passthru = { inherit openglSupport; };
+  passthru = {
+    inherit openglSupport;
+    updateScript = nix-update-script { extraArgs = [ "--version-regex" "release-(.*)" ]; };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
-    description = "A cross-platform multimedia library";
+    description = "Cross-platform multimedia library";
+    mainProgram = "sdl2-config";
     homepage = "http://www.libsdl.org/";
+    changelog = "https://github.com/libsdl-org/SDL/releases/tag/release-${finalAttrs.version}";
     license = licenses.zlib;
     platforms = platforms.all;
     maintainers = with maintainers; [ cpages ];
+    pkgConfigModules = [ "sdl2" ];
   };
-}
+})

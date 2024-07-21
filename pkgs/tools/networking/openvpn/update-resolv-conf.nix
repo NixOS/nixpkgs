@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     description = "Script to update your /etc/resolv.conf with DNS settings that come from the received push dhcp-options";
     homepage = "https://github.com/masterkorp/openvpn-update-resolv-conf/";
     maintainers = with maintainers; [ abbradar ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
   };
 }

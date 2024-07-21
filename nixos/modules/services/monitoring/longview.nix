@@ -30,7 +30,7 @@ in {
           are found at https://manager.linode.com/longview/.
 
           Warning: this secret is stored in the world-readable Nix store!
-          Use <option>apiKeyFile</option> instead.
+          Use {option}`apiKeyFile` instead.
         '';
       };
 
@@ -43,7 +43,7 @@ in {
           To get this, look in Longview settings which
           are found at https://manager.linode.com/longview/.
 
-          <option>apiKeyFile</option> takes precedence over <option>apiKey</option>.
+          {option}`apiKeyFile` takes precedence over {option}`apiKey`.
         '';
       };
 
@@ -84,9 +84,9 @@ in {
         type = types.str;
         default = "";
         description = ''
-          The password corresponding to <option>mysqlUser</option>.
+          The password corresponding to {option}`mysqlUser`.
           Warning: this is stored in cleartext in the Nix store!
-          Use <option>mysqlPasswordFile</option> instead.
+          Use {option}`mysqlPasswordFile` instead.
         '';
       };
 
@@ -95,7 +95,7 @@ in {
         default = null;
         example = "/run/keys/dbpassword";
         description = ''
-          A file containing the password corresponding to <option>mysqlUser</option>.
+          A file containing the password corresponding to {option}`mysqlUser`.
         '';
       };
 

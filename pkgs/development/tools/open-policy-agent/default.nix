@@ -1,22 +1,36 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 
 , enableWasmEval ? false
 }:
 
+assert enableWasmEval && stdenv.isDarwin -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
+
 buildGoModule rec {
   pname = "open-policy-agent";
-  version = "0.35.0";
+  version = "0.66.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
-    sha256 = "sha256-IiYEDvTHb25xolE/IfpFgcJArxU6c89P5oNgt1T2VXA=";
+    hash = "sha256-fx7k6KvL0uy2NXLDLpCnN1ux9MGEO1CbX6TdLweVzag=";
   };
-  vendorSha256 = null;
+
+  patches = [
+    # fix tests in 1.22.5
+    # https://github.com/open-policy-agent/opa/pull/6845
+    (fetchpatch {
+      url = "https://github.com/open-policy-agent/opa/commit/956358516c23b1f33f6667961e20aca65b91355b.patch";
+      hash = "sha256-1nfMwJwbYfdLg9j4ppP1IWdDeFq6vhXcDKr6uprP53U=";
+    })
+  ];
+
+  vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,16 +45,21 @@ buildGoModule rec {
         + "`opa build` does not need this feature.")
       "opa_wasm");
 
+  checkFlags = lib.optionals (!enableWasmEval) [
+    "-skip=TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
+  ];
+
   preCheck = ''
     # Feed in all but the e2e tests for testing
     # This is because subPackages above limits what is built to just what we
     # want but also limits the tests
+    # Also avoid wasm tests on darwin due to wasmtime-go build issues
     getGoDirs() {
-      go list ./... | grep -v e2e
+      go list ./... | grep -v -e e2e ${lib.optionalString stdenv.isDarwin "-e wasm"}
     }
-
-    # Remove test case that fails on < go1.17
-    rm test/cases/testdata/cryptox509parsecertificates/test-cryptox509parsecertificates-0123.yaml
+  '' + lib.optionalString stdenv.isDarwin ''
+    # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
+    rm server/server_test.go
   '';
 
   postInstall = ''
@@ -66,6 +85,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    mainProgram = "opa";
     homepage = "https://www.openpolicyagent.org";
     changelog = "https://github.com/open-policy-agent/opa/blob/v${version}/CHANGELOG.md";
     description = "General-purpose policy engine";

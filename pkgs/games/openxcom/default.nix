@@ -1,27 +1,55 @@
-{lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, zlib, openssl, libyamlcpp, boost
-, SDL, SDL_image, SDL_mixer, SDL_gfx }:
+{ boost
+, cmake
+, fetchFromGitHub
+, lib
+, libGLU
+, libGL
+, openssl
+, pkg-config
+, SDL
+, SDL_image
+, SDL_mixer
+, SDL_gfx
+, stdenv
+, yaml-cpp
+, zlib
+}:
 
-let version = "1.0.0.2019.10.18"; in
 stdenv.mkDerivation {
   pname = "openxcom";
-  inherit version;
+  version = "1.0.0.2024.02.28";
+
   src = fetchFromGitHub {
     owner = "OpenXcom";
     repo = "OpenXcom";
-    rev = "f9853b2cb8c8f741ac58707487ef493416d890a3";
-    sha256 = "0kbfawj5wsp1mwfcm5mwpkq6s3d13pailjm5w268gqpxjksziyq0";
+    rev = "e2c5a1b45c33957ce7e206207c5fb752c1e79ae1";
+    hash = "sha256-2G2dSvoDdacdYsXS51h3aGLCCjbHwcvD4CNnQIH/J6A=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL SDL_gfx SDL_image SDL_mixer boost libyamlcpp libGLU libGL openssl zlib ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    boost
+    libGL
+    libGLU
+    SDL
+    SDL_gfx
+    SDL_image
+    SDL_mixer
+    yaml-cpp
+    openssl
+    zlib
+  ];
 
   meta = {
     description = "Open source clone of UFO: Enemy Unknown";
+    mainProgram = "openxcom";
     homepage = "https://openxcom.org";
-    repositories.git = "https://github.com/SupSuper/OpenXcom.git";
-    maintainers = [ lib.maintainers.cpages ];
-    platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
-
 }

@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchurl, meson, ninja, gettext, mateUpdateScript }:
+{ lib
+, stdenvNoCC
+, fetchurl
+, meson
+, ninja
+, gettext
+, mateUpdateScript
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mate-backgrounds";
-  version = "1.26.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0379hngy3ap1r5kmqvmzs9r710k2c9nal2ps3hq765df4ir15j8d";
+    sha256 = "UNGv0CSGvQesIqWmtu+jAxFI8NSKguSI2QmtVwA6aUM=";
   };
 
   nativeBuildInputs = [
@@ -15,7 +22,7 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Background images and data for MATE";

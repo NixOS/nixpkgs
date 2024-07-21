@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , bison
 , pam
+, libxcrypt
 
 , withPAM ? true
 , withTimestamp ? true
@@ -10,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "doas";
-  version = "6.8.1";
+  version = "6.8.2";
 
   src = fetchFromGitHub {
     owner = "Duncaen";
     repo = "OpenDoas";
     rev = "v${version}";
-    sha256 = "sha256-F0FVVspGDZmzxy4nsb/wsEoCw4eHscymea7tIKrWzD0=";
+    sha256 = "9uOQ2Ta5HzEpbCz2vbqZEEksPuIjL8lvmfmynfqxMeM=";
   };
 
   # otherwise confuses ./configure
@@ -33,17 +34,26 @@ stdenv.mkDerivation rec {
     ./0001-add-NixOS-specific-dirs-to-safe-PATH.patch
   ];
 
+  # ./configure script does not understand `--disable-shared`
+  dontAddStaticConfigureFlags = true;
+
   postPatch = ''
     sed -i '/\(chown\|chmod\)/d' GNUmakefile
+  '' + lib.optionalString (withPAM && stdenv.hostPlatform.isStatic) ''
+    sed -i 's/-lpam/-lpam -laudit/' configure
   '';
 
-  buildInputs = [ bison pam ];
+  nativeBuildInputs = [ bison ];
+  buildInputs = [ ]
+    ++ lib.optional withPAM pam
+    ++ lib.optional (!withPAM) libxcrypt;
 
   meta = with lib; {
     description = "Executes the given command as another user";
+    mainProgram = "doas";
     homepage = "https://github.com/Duncaen/OpenDoas";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cole-h cstrahan ];
+    maintainers = with maintainers; [ cole-h ];
   };
 }

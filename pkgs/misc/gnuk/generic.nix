@@ -10,9 +10,9 @@
 }:
 
 stdenv.mkDerivation {
-  name = "gnuk-${version}-${device}";
+  pname = "gnuk-${device}";
 
-  inherit src;
+  inherit version src;
 
   nativeBuildInputs = [ gcc-arm-embedded binutils-arm-embedded makeWrapper ];
   buildInputs = with python3Packages; [ python pyusb colorama ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.fsij.org/doc-gnuk/";
-    description = "An implementation of USB cryptographic token for gpg";
+    description = "Implementation of USB cryptographic token for gpg";
     license = licenses.gpl3;
     platforms = with platforms; linux;
   };

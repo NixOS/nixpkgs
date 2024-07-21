@@ -1,25 +1,26 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-
-# pythonPackages
-, click
-, pytest
-, pytest-cov
-, pytest-runner
-, pyyaml
-, six
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "cfn-flip";
-  version = "1.2.2";
+  version = "1.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-cfn-template-flip";
     rev = version;
-    sha256 = "05fk725a1i3zl3idik2hxl3w6k1ln0j33j3jdq1gvy1sfyc79ifm";
+    hash = "sha256-lfhTR3+D1FvblhQGF83AB8+I8WDPBTmo+q22ksgDgt4=";
   };
 
   propagatedBuildInputs = [
@@ -28,23 +29,23 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
-    pytest
-    pytest-cov
-    pytest-runner
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  postPatch = ''
+    sed -i "/--cov/d" tox.ini
+  '';
+
+  disabledTests = [
+    # TypeError: load() missing 1 required positional argument: 'Loader'
+    "test_flip_to_yaml_with_longhand_functions"
+    "test_yaml_no_ordered_dict"
   ];
 
-  checkPhase = ''
-    py.test \
-      --cov=cfn_clean \
-      --cov=cfn_flip \
-      --cov=cfn_tools \
-      --cov-report term-missing \
-      --cov-report html
-  '';
+  pythonImportsCheck = [ "cfn_flip" ];
 
   meta = with lib; {
     description = "Tool for converting AWS CloudFormation templates between JSON and YAML formats";
+    mainProgram = "cfn-flip";
     homepage = "https://github.com/awslabs/aws-cfn-template-flip";
     license = licenses.asl20;
     maintainers = with maintainers; [

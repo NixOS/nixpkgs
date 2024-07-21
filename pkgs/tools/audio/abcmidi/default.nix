@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "abcMIDI";
-  version = "2021.12.10";
+  version = "2024.06.18";
 
   src = fetchzip {
     url = "https://ifdo.ca/~seymour/runabc/${pname}-${version}.zip";
-    hash = "sha256-Jvj7gOrIT0IXihPkPDH9n80bg4xllvPTKxIWA3wX5B0=";
+    hash = "sha256-QxIbA/rQ4Sk4XFZ1XR3CAOt3L3xwxFFrDQK8B22egwY=";
   };
 
   meta = with lib; {
-    homepage = "http://abc.sourceforge.net/abcMIDI/";
+    homepage = "https://abc.sourceforge.net/abcMIDI/";
     downloadPage = "https://ifdo.ca/~seymour/runabc/top.html";
     license = licenses.gpl2Plus;
     description = "Utilities for converting between abc and MIDI";

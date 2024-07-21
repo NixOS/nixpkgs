@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchurl, automake, autoconf, intltool, pkg-config, gtk3, vte, wrapGAppsHook
-, libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, intltool, pkg-config, gtk3, vte, wrapGAppsHook3
+, libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs, nixosTests
+, pcre2
 }:
 
-let version = "0.3.2"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "lxterminal";
-  inherit version;
+  version = "0.4.0";
 
-  src = fetchurl {
-    url = "https://github.com/lxde/lxterminal/archive/${version}.tar.gz";
-    sha256 = "1iafqmccsm3nnzwp6pb2c04iniqqnscj83bq1rvf58ppzk0bvih3";
+  src = fetchFromGitHub {
+    owner = "lxde";
+    repo = "lxterminal";
+    rev = version;
+    sha256 = "sha256-bCF/V6yFe4vKqVMOtNlwYyw/ickj1LFuFn4IyypwIg0=";
   };
 
   configureFlags = [
@@ -19,11 +20,11 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    automake autoconf intltool pkg-config wrapGAppsHook
+    automake autoconf intltool pkg-config wrapGAppsHook3
     libxslt docbook_xml_dtd_412 docbook_xsl libxml2 findXMLCatalogs
   ];
 
-  buildInputs = [ gtk3 vte ];
+  buildInputs = [ gtk3 vte pcre2 ];
 
   patches = [
     ./respect-xml-catalog-files-var.patch
@@ -35,8 +36,10 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
+  passthru.tests.test = nixosTests.terminal-emulators.lxterminal;
+
   meta = {
-    description = "The standard terminal emulator of LXDE";
+    description = "Standard terminal emulator of LXDE";
     longDescription = ''
       LXTerminal is the standard terminal emulator of LXDE. The terminal is a
       desktop-independent VTE-based terminal emulator for LXDE without any
@@ -44,7 +47,8 @@ stdenv.mkDerivation {
     '';
     homepage = "https://wiki.lxde.org/en/LXTerminal";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.velovix ];
+    maintainers = [ lib.maintainers.pbsds ];
     platforms = lib.platforms.linux;
+    mainProgram = "lxterminal";
   };
 }

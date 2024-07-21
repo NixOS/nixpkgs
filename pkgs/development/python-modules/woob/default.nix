@@ -1,82 +1,93 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, Babel
-, colorama
-, cssselect
-, python-dateutil
-, feedparser
-, gdata
-, gnupg
-, google-api-python-client
-, html2text
-, libyaml
-, lxml
-, mechanize
-, nose
-, pdfminer
-, pillow
-, prettytable
-, pyqt5
-, pyyaml
-, requests
-, simplejson
-, termcolor
-, unidecode
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  fetchFromGitLab,
+  fetchpatch,
+  html2text,
+  lxml,
+  packaging,
+  pillow,
+  prettytable,
+  pycountry,
+  pytestCheckHook,
+  python-dateutil,
+  python-jose,
+  pythonOlder,
+  pyyaml,
+  requests,
+  rich,
+  setuptools,
+  testers,
+  unidecode,
+  woob,
 }:
 
 buildPythonPackage rec {
   pname = "woob";
-  version = "3.0";
-  disabled = isPy27;
+  version = "3.6";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "09hpxy5zhn2b8li0xjf3zd7s46lawb0315p5mdcsci3bj3s4v1j7";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitLab {
+    owner = "woob";
+    repo = "woob";
+    rev = version;
+    hash = "sha256-M9AjV954H1w64YGCVxDEGGSnoEbmocG3zwltob6IW04=";
   };
 
   patches = [
-    # Disable doctests that require networking:
-    ./no-test-requiring-network.patch
+    (fetchpatch {
+      name = "no-deprecated-pkg_resources.patch";
+      url = "https://gitlab.com/woob/woob/-/commit/3283c4c1a935cc71acea98b2d8c88bc4bf28f643.patch";
+      hash = "sha256-3bRuv93ivKRxbGr52coO023DlxHZWwUeInXTPqQAeL8=";
+    })
   ];
 
-  checkInputs = [ nose ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  nativeBuildInputs = [ pyqt5 ];
+  pythonRelaxDeps = [ "packaging" ];
 
   propagatedBuildInputs = [
-    Babel
-    colorama
-    cssselect
+    babel
     python-dateutil
-    feedparser
-    gdata
-    gnupg
-    google-api-python-client
+    python-jose
     html2text
-    libyaml
     lxml
-    mechanize
-    pdfminer
+    packaging
     pillow
     prettytable
-    pyqt5
+    pycountry
     pyyaml
     requests
-    simplejson
-    termcolor
+    rich
     unidecode
   ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # require networking
+    "test_ciphers"
+    "test_verify"
+  ];
+
+  pythonImportsCheck = [ "woob" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = woob;
+    version = "v${version}";
+  };
 
   meta = with lib; {
+    changelog = "https://gitlab.com/woob/woob/-/blob/${src.rev}/ChangeLog";
+    description = "Collection of applications and APIs to interact with websites";
+    mainProgram = "woob";
     homepage = "https://woob.tech";
-    description = "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
     license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.DamienCassou ];
- };
+    maintainers = with maintainers; [ DamienCassou ];
+  };
 }

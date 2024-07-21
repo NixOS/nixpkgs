@@ -14,12 +14,7 @@ in
   options.services.botamusique = {
     enable = mkEnableOption "botamusique, a bot to play audio streams on mumble";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.botamusique;
-      defaultText = literalExpression "pkgs.botamusique";
-      description = "The botamusique package to use.";
-    };
+    package = mkPackageOption pkgs "botamusique" { };
 
     settings = mkOption {
       type = with types; submodule {
@@ -53,8 +48,8 @@ in
       };
       default = {};
       description = ''
-        Your <filename>configuration.ini</filename> as a Nix attribute set. Look up
-        possible options in the <link xlink:href="https://github.com/azlux/botamusique/blob/master/configuration.example.ini">configuration.example.ini</link>.
+        Your {file}`configuration.ini` as a Nix attribute set. Look up
+        possible options in the [configuration.example.ini](https://github.com/azlux/botamusique/blob/master/configuration.example.ini).
       '';
     };
   };
@@ -103,9 +98,8 @@ in
         StateDirectory = "botamusique";
         SystemCallArchitectures = "native";
         SystemCallFilter = [
-          "@system-service"
+          "@system-service @resources"
           "~@privileged"
-          "~@resources"
         ];
         UMask = "0077";
         WorkingDirectory = "/var/lib/botamusique";

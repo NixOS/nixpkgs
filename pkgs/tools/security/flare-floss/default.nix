@@ -1,46 +1,72 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "1.7.0";
+  version = "3.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "fireeye";
+    owner = "mandiant";
     repo = "flare-floss";
-    rev = "v${version}";
-    sha256 = "GMOA1+qM2A/Qw33kOTIINEvjsfqjWQWBXHNemh3IK8w=";
+    rev = "refs/tags/v${version}";
+    fetchSubmodules = true; # for tests
+    hash = "sha256-a20q7kavWwCsfnAW02+IY0jKERMxkJ+2nid/CwQxC9E=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pyyaml
-    simplejson
-    tabulate
-    vivisect
-    plugnplay
-    viv-utils
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "==" ">="
+
+    substituteInPlace floss/main.py \
+      --replace 'sigs_path = os.path.join(get_default_root(), "sigs")' 'sigs_path = "'"$out"'/share/flare-floss/sigs"'
+  '';
+
+  build-system = with python3.pkgs; [
+    setuptools
+    setuptools-scm
   ];
 
-  checkInputs = with python3.pkgs; [
+  dependencies =
+    with python3.pkgs;
+    [
+      binary2strings
+      halo
+      networkx
+      pefile
+      pydantic
+      rich
+      tabulate
+      tqdm
+      viv-utils
+      vivisect
+    ]
+    ++ viv-utils.optional-dependencies.flirt;
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytest-sugar
     pytestCheckHook
+    pyyaml
   ];
 
-  disabledTests = [
-    # test data is in a submodule
-    "test_main"
-  ];
+  postInstall = ''
+    mkdir -p $out/share/flare-floss/
+    cp -r floss/sigs $out/share/flare-floss/
+  '';
 
-  pythonImportsCheck = [
-    "floss"
-    "floss.plugins"
-  ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "Automatically extract obfuscated strings from malware";
-    homepage = "https://github.com/fireeye/flare-floss";
+    homepage = "https://github.com/mandiant/flare-floss";
+    changelog = "https://github.com/mandiant/flare-floss/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    mainProgram = "floss";
+    maintainers = with maintainers; [ fab ];
   };
 }

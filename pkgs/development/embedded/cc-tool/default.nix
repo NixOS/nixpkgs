@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command line tool for the Texas Instruments CC Debugger";
+    mainProgram = "cc-tool";
     longDescription = ''
       cc-tool provides support for Texas Instruments CC Debugger
     '';

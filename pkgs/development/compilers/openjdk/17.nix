@@ -1,19 +1,22 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, bash, pkg-config, autoconf, cpio
-, file, which, unzip, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib
+{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitHub, bash, pkg-config, autoconf, cpio
+, file, which, unzip, zip, perl, cups, freetype, harfbuzz, alsa-lib, libjpeg, giflib
 , libpng, zlib, lcms2, libX11, libICE, libXrender, libXext, libXt, libXtst
 , libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk17-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
 let
   version = {
     feature = "17";
-    interim = ".0.1";
-    build = "12";
+    interim = ".0.11";
+    build = "9";
   };
+
+  # when building a headless jdk, also bootstrap it with a headless jdk
+  openjdk-bootstrap = openjdk17-bootstrap.override { gtkSupport = !headless; };
 
   openjdk = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";
@@ -23,14 +26,14 @@ let
       owner = "openjdk";
       repo = "jdk${version.feature}u";
       rev = "jdk-${version.feature}${version.interim}+${version.build}";
-      sha256 = "1l1jgbz8q7zq66npfg88r0l5xga427vrz35iys09j44b6qllrldd";
+      sha256 = "sha256-aO4iSc9MklW/4q9U86WEfiiWnlq6iZSbxzq2fbsqd0A=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
-      cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
+      cpio file which zip perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk17-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -40,7 +43,8 @@ let
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
       ./increase-javadoc-heap-jdk13.patch
-      ./ignore-LegalNoticeFilePlugin.patch
+      ./ignore-LegalNoticeFilePlugin-jdk17.patch
+      ./fix-library-path-jdk17.patch
 
       # -Wformat etc. are stricter in newer gccs, per
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
@@ -49,6 +53,21 @@ let
       (fetchurl {
         url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
         sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
+      })
+
+      # Patch borrowed from Alpine to fix build errors with musl libc and recent gcc.
+      # This is applied anywhere to prevent patchrot.
+      (fetchurl {
+        url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=41e78a067953e0b13d062d632bae6c4f8028d91c";
+        sha256 = "sha256-LzmSew51+DyqqGyyMw2fbXeBluCiCYsS1nCjt9hX6zo=";
+      })
+
+      # Fix build for gnumake-4.4.1:
+      #   https://github.com/openjdk/jdk/pull/12992
+      (fetchpatch {
+        name = "gnumake-4.4.1";
+        url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
+        hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
       })
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk13.patch
@@ -59,26 +78,32 @@ let
       patchShebangs --build configure
     '';
 
+    # JDK's build system attempts to specifically detect
+    # and special-case WSL, and we don't want it to do that,
+    # so pass the correct platform names explicitly
+    configurePlatforms = ["build" "host"];
+
     configureFlags = [
-      "--with-boot-jdk=${openjdk17-bootstrap.home}"
+      "--with-boot-jdk=${openjdk-bootstrap.home}"
       "--with-version-build=${version.build}"
       "--with-version-opt=nixos"
       "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
+      "--with-freetype=system"
+      "--with-harfbuzz=system"
       "--with-libjpeg=system"
       "--with-giflib=system"
       "--with-libpng=system"
       "--with-zlib=system"
       "--with-lcms=system"
       "--with-stdc++lib=dynamic"
-    ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
-      ++ lib.optional headless "--enable-headless-only"
+    ] ++ lib.optional headless "--enable-headless-only"
       ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
     separateDebugInfo = true;
 
-    NIX_CFLAGS_COMPILE = "-Wno-error";
+    env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
@@ -139,12 +164,12 @@ let
     postFixup = ''
       # Build the set of output library directories to rpath against
       LIBDIRS=""
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort -u | tr '\n' ':'):$LIBDIRS"
       done
       # Add the local library paths to remove dependencies on the bootstrap
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         OUTPUTDIR=$(eval echo \$$output)
         BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
@@ -155,9 +180,10 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk17-bootstrap ];
+    disallowedReferences = [ openjdk-bootstrap ];
 
-    meta = import ./meta.nix lib;
+    pos = builtins.unsafeGetAttrPos "feature" version;
+    meta = import ./meta.nix lib version.feature;
 
     passthru = {
       architecture = "";

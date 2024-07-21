@@ -1,54 +1,46 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, pkg-config
-, qmake
-, qttools
-, gstreamer
-, libX11
-, pulseaudio
-, qtbase
-, qtmultimedia
-, qtx11extras
-
+{ fetchFromGitHub
+, gst_all_1
+, gst-plugins-bad
 , gst-plugins-base
 , gst-plugins-good
-, gst-plugins-bad
 , gst-plugins-ugly
+, gstreamer
+, lib
+, libX11
+, pipewire
+, pkg-config
+, pulseaudio
+, qt6
+, stdenv
+, wayland
 }:
-mkDerivation rec {
 
+stdenv.mkDerivation rec {
   pname = "vokoscreen-ng";
-  version = "3.0.8";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "vkohaupt";
     repo = "vokoscreenNG";
     rev = version;
-    sha256 = "1302663hyp2xxhaavhfky24a2p9gz23i3rykmrc6c1n23h24snri";
+    hash = "sha256-Y6+R18Gf3ShqhsmZ4Okx02fSOOyilS6iKU5FW9wpxvY=";
   };
-
-  patches = [
-    # Adaptation of previously used https://github.com/City-busz/vokoscreenNG/commit/0a3784095ecca582f7eb09551ceb34c309d83637 patch
-    # used for 3.0.5 but incompatible at least since 3.0.8. The issue is addressed here https://github.com/vkohaupt/vokoscreenNG/issues/139
-    ./linux-support-installation-target.patch
-  ];
 
   qmakeFlags = [ "src/vokoscreenNG.pro" ];
 
-  nativeBuildInputs = [ qttools pkg-config qmake ];
+  nativeBuildInputs = [ qt6.qttools pkg-config qt6.qmake qt6.wrapQtAppsHook ];
   buildInputs = [
-    gstreamer
+    gst_all_1.gstreamer
     libX11
     pulseaudio
-    qtbase
-    qtmultimedia
-    qtx11extras
-
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
+    qt6.qtbase
+    qt6.qtmultimedia
+    wayland
+    pipewire
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
   ];
 
   postPatch = ''
@@ -57,14 +49,20 @@ mkDerivation rec {
   '';
 
   postInstall = ''
+    mkdir -p $out/bin $out/share/applications $out/share/icons
+    cp ./vokoscreenNG $out/bin/
+    cp ./src/applications/vokoscreenNG.desktop $out/share/applications/
+    cp ./src/applications/vokoscreenNG.png $out/share/icons/
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+    wrapQtApp $out/bin/vokoscreenNG
   '';
 
   meta = with lib; {
     description = "User friendly Open Source screencaster for Linux and Windows";
     license = licenses.gpl2Plus;
     homepage = "https://github.com/vkohaupt/vokoscreenNG";
-    maintainers = with maintainers; [ shamilton ];
+    maintainers = with maintainers; [ shamilton dietmarw ];
     platforms = platforms.linux;
+    mainProgram = "vokoscreenNG";
   };
 }

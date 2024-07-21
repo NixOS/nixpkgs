@@ -1,37 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, typing-extensions
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "asyncstdlib";
-  version = "3.10.2";
-  disabled = pythonOlder "3.7";
-  format = "flit";
+  version = "3.12.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "maxfischer2781";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-vjOhfEsAldTjROFUer1SgEX1KxnNM/WwtLsCB9ZV1WM=";
+    repo = "asyncstdlib";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5xbz56/s448PIOZ4DN6NFcYYWXaebaZA3ApGAIMZXH4=";
   };
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  build-system = [ flit-core ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "asyncstdlib" ];
 
   meta = with lib; {
     description = "Python library that extends the Python asyncio standard library";
     homepage = "https://asyncstdlib.readthedocs.io/";
+    changelog = "https://github.com/maxfischer2781/asyncstdlib/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

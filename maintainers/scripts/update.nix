@@ -1,3 +1,10 @@
+/*
+  To run:
+
+      nix-shell maintainers/scripts/update.nix
+
+  See https://nixos.org/manual/nixpkgs/unstable/#var-passthru-updateScript
+*/
 { package ? null
 , maintainer ? null
 , predicate ? null
@@ -6,9 +13,8 @@
 , include-overlays ? false
 , keep-going ? null
 , commit ? null
+, skip-prompt ? null
 }:
-
-# TODO: add assert statements
 
 let
   pkgs = import ./../../default.nix (
@@ -48,7 +54,17 @@ let
         let
           result = builtins.tryEval pathContent;
 
-          dedupResults = lst: nubOn ({ package, attrPath }: package.updateScript) (lib.concatLists lst);
+          somewhatUniqueRepresentant =
+            { package, attrPath }: {
+              inherit (package) updateScript;
+              # Some updaters use the same `updateScript` value for all packages.
+              # Also compare `meta.description`.
+              position = package.meta.position or null;
+              # We cannot always use `meta.position` since it might not be available
+              # or it might be shared among multiple packages.
+            };
+
+          dedupResults = lst: nubOn somewhatUniqueRepresentant (lib.concatLists lst);
         in
           if result.success then
             let
@@ -143,11 +159,11 @@ let
     to run all update scripts for all packages that lists \`garbas\` as a maintainer
     and have \`updateScript\` defined, or:
 
-        % nix-shell maintainers/scripts/update.nix --argstr package gnome.nautilus
+        % nix-shell maintainers/scripts/update.nix --argstr package nautilus
 
     to run update script for specific package, or
 
-        % nix-shell maintainers/scripts/update.nix --arg predicate '(path: pkg: builtins.isList pkg.updateScript && builtins.length pkg.updateScript >= 1 && (let script = builtins.head pkg.updateScript; in builtins.isAttrs script && script.name == "gnome-update-script"))'
+        % nix-shell maintainers/scripts/update.nix --arg predicate '(path: pkg: pkg.updateScript.name or null == "gnome-update-script")'
 
     to run update script for all packages matching given predicate, or
 
@@ -169,6 +185,10 @@ let
     that support it by adding
 
         --argstr commit true
+
+    to skip prompt:
+
+        --argstr skip-prompt true
   '';
 
   /* Transform a matched package into an object for update.py.
@@ -189,7 +209,8 @@ let
   optionalArgs =
     lib.optional (max-workers != null) "--max-workers=${max-workers}"
     ++ lib.optional (keep-going == "true") "--keep-going"
-    ++ lib.optional (commit == "true") "--commit";
+    ++ lib.optional (commit == "true") "--commit"
+    ++ lib.optional (skip-prompt == "true") "--skip-prompt";
 
   args = [ packagesJson ] ++ optionalArgs;
 

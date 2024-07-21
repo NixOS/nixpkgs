@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://eweb.sourceforge.net/";
-    description = "An Asciidoc-based literate programming tool, written in Python";
+    homepage = "https://eweb.sourceforge.net/";
+    description = "Asciidoc-based literate programming tool, written in Python";
+    mainProgram = "etangle.py";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.AndersonTorres ];

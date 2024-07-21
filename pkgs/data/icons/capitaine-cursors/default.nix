@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeFontsConf
+{ lib, stdenvNoCC, fetchFromGitHub, fetchpatch, makeFontsConf
 , inkscape, xcursorgen, bc }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "capitaine-cursors";
   version = "4";
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An x-cursor theme inspired by macOS and based on KDE Breeze";
+    description = "X-cursor theme inspired by macOS and based on KDE Breeze";
     homepage = "https://github.com/keeferrourke/capitaine-cursors";
     license = licenses.lgpl3;
     platforms = platforms.linux;

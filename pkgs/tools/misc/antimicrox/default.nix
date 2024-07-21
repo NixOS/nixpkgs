@@ -12,13 +12,13 @@
 
 mkDerivation rec {
   pname = "antimicrox";
-  version = "3.2.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "AntiMicroX";
     repo = pname;
     rev = version;
-    sha256 = "sha256-brG3DTpWRYmDemTeteuuNbF0JoDAXdcFwO12JC6/0/Q=";
+    sha256 = "sha256-zBIEuZdmcyA99YdwC6tn0I3Ori8VyBOw50ablb/Lmvs=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config itstool ];
@@ -36,8 +36,9 @@ mkDerivation rec {
   meta = with lib; {
     description = "GUI for mapping keyboard and mouse controls to a gamepad";
     inherit (src.meta) homepage;
-    maintainers = with maintainers; [ jb55 sbruder ];
+    maintainers = with maintainers; [ sbruder ];
     license = licenses.gpl3Plus;
     platforms = with platforms; linux;
+    mainProgram = "antimicrox";
   };
 }

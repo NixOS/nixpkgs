@@ -1,45 +1,73 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, matplotlib
-, pytestCheckHook
-, numpy
-, pandas
-, pythonOlder
-, scipy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  matplotlib,
+  pytest-xdist,
+  pytestCheckHook,
+  numpy,
+  pandas,
+  pythonOlder,
+  scipy,
+  statsmodels,
 }:
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.11.2";
-  format = "setuptools";
+  version = "0.13.2";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cf45e9286d40826864be0e3c066f98536982baf701a7caa386511792d61ff4f6";
+  src = fetchFromGitHub {
+    owner = "mwaskom";
+    repo = "seaborn";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aGIVcdG/XN999nYBHh3lJqGa3QVt0j8kmzaxdkULznY=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     matplotlib
     numpy
     pandas
-    scipy
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    stats = [
+      scipy
+      statsmodels
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
   ];
 
-  pythonImportsCheck= [
-    "seaborn"
-  ];
+  disabledTests =
+    [
+      # requires internet connection
+      "test_load_dataset_string_error"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+      # overly strict float tolerances
+      "TestDendrogram"
+    ];
 
-  meta = {
-    description = "Statisitical data visualization";
+  # All platforms should use Agg. Let's set it explicitly to avoid probing GUI
+  # backends (leads to crashes on macOS).
+  env.MPLBACKEND = "Agg";
+
+  pythonImportsCheck = [ "seaborn" ];
+
+  meta = with lib; {
+    description = "Statistical data visualization";
     homepage = "https://seaborn.pydata.org/";
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ fridh ];
+    changelog = "https://github.com/mwaskom/seaborn/blob/master/doc/whatsnew/${src.rev}.rst";
+    license = with licenses; [ bsd3 ];
   };
 }

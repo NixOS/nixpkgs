@@ -1,25 +1,27 @@
-{ lib
-, buildPythonPackage
-, dicttoxml
-, fetchFromGitHub
-, pythonOlder
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  dicttoxml2,
+  fetchFromGitHub,
+  pythonOlder,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pyialarm";
-  version = "1.9.0";
+  version = "2.2.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RyuzakiKK";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mvi8cd9uVFvG1Jc3OeuEwuLjbuMjPRrNRHFUVe3g/NM=";
+    hash = "sha256-rOdeYewjoFVbHdNPHN6ZC2g6X5yr84/JFE6tGSDIoRU=";
   };
 
   propagatedBuildInputs = [
-    dicttoxml
+    dicttoxml2
     xmltodict
   ];
 

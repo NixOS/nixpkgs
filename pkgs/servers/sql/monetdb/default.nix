@@ -1,15 +1,16 @@
-{ lib, stdenv, fetchurl, cmake, python3
-, bison, openssl, readline, bzip2
-}:
+{ lib, stdenv, fetchurl, cmake, python3, bison, openssl, readline, bzip2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "monetdb";
-  version = "11.41.11";
+  version = "11.49.11";
 
   src = fetchurl {
-    url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";
-    sha256 = "sha256-SiZvAvsl2NPa5AxeLtpvWwDhl7ZC0Z/6H/l1hCGpWzw=";
+    url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-tnGRNTx/SH7Yj8xvaFUxKr8af+7b8ZouU4PdmKEMkKk=";
   };
+
+  nativeBuildInputs = [ bison cmake python3 ];
+  buildInputs = [ openssl readline bzip2 ];
 
   postPatch = ''
     substituteInPlace cmake/monetdb-packages.cmake --replace \
@@ -18,17 +19,22 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    rm $out/bin/monetdb_mtest.sh
+    rm $out/bin/monetdb_mtest.sh \
+      $out/bin/mktest.py \
+      $out/bin/sqlsample.php \
+      $out/bin/sqllogictest.py \
+      $out/bin/Mz.py \
+      $out/bin/Mtest.py \
+      $out/bin/sqlsample.pl \
+      $out/bin/malsample.pl \
+      $out/bin/Mconvert.py
   '';
 
-  nativeBuildInputs = [ cmake python3 ];
-  buildInputs = [ bison openssl readline bzip2 ];
-
   meta = with lib; {
-    description = "An open source database system";
+    description = "Open source database system";
     homepage = "https://www.monetdb.org/";
     license = licenses.mpl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.StillerHarpo ];
   };
-}
+})

@@ -34,14 +34,20 @@ in mkDerivation rec {
     ln -s ${webClientTv} build/dependencies/web-client-tv-${webClientTvBuildId}.tar.xz
   '';
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RelWithDebInfo" "-DQTROOT=${qtbase}" ];
+  cmakeBuildType = "RelWithDebInfo";
+
+  cmakeFlags = [ "-DQTROOT=${qtbase}" ];
+
+  # plexmediaplayer currently segfaults under wayland
+  qtWrapperArgs = [ "--set" "QT_QPA_PLATFORM" "xcb" ];
 
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Streaming media player for Plex";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ b4dm4n ];
     homepage = "https://plex.tv";
+    mainProgram = "plexmediaplayer";
   };
 }

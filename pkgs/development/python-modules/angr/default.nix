@@ -1,60 +1,60 @@
-{ lib
-, ailment
-, archinfo
-, buildPythonPackage
-, cachetools
-, capstone
-, cffi
-, claripy
-, cle
-, cppheaderparser
-, dpkt
-, fetchFromGitHub
-, GitPython
-, itanium_demangler
-, mulpyplexer
-, nampa
-, networkx
-, progressbar2
-, protobuf
-, psutil
-, pycparser
-, pythonOlder
-, pyvex
-, sqlalchemy
-, rpyc
-, sortedcontainers
-, unicorn
+{
+  lib,
+  stdenv,
+  ailment,
+  archinfo,
+  buildPythonPackage,
+  cachetools,
+  capstone,
+  cffi,
+  claripy,
+  cle,
+  cppheaderparser,
+  dpkt,
+  fetchFromGitHub,
+  gitpython,
+  itanium-demangler,
+  mulpyplexer,
+  nampa,
+  networkx,
+  progressbar2,
+  protobuf,
+  psutil,
+  pycparser,
+  pyformlang,
+  pythonOlder,
+  pyvex,
+  rich,
+  rpyc,
+  setuptools,
+  sortedcontainers,
+  sqlalchemy,
+  sympy,
+  unicorn,
+  unique-log-filter,
 }:
-
-let
-  # Only the pinned release in setup.py works properly
-  unicorn' = unicorn.overridePythonAttrs (old: rec {
-    pname = "unicorn";
-    version = "1.0.2-rc4";
-    src =  fetchFromGitHub {
-      owner = "unicorn-engine";
-      repo = pname;
-      rev = version;
-      sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
-    };
-    doCheck = false;
-  });
-in
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.0.10730";
-  disabled = pythonOlder "3.6";
+  version = "9.2.110";
+  pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-vH5TL3l4KQh48iBXQDCH+SsB9z6fFKzHLZbtMds6JV0=";
+    owner = "angr";
+    repo = "angr";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-t0OgY8donh/axg3lgEENRxhx+qx9xNmV/oMBsy2DCa4=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "capstone" ];
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     ailment
     archinfo
     cachetools
@@ -64,28 +64,39 @@ buildPythonPackage rec {
     cle
     cppheaderparser
     dpkt
-    GitPython
-    itanium_demangler
+    gitpython
+    itanium-demangler
     mulpyplexer
     nampa
     networkx
     progressbar2
     protobuf
     psutil
-    sqlalchemy
     pycparser
+    pyformlang
     pyvex
-    sqlalchemy
+    rich
     rpyc
     sortedcontainers
-    unicorn'
+    sqlalchemy
+    sympy
+    unicorn
+    unique-log-filter
+  ];
+
+  passthru.optional-dependencies = {
+    AngrDB = [ sqlalchemy ];
+  };
+
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [
+    "--plat-name"
+    "linux"
   ];
 
   # Tests have additional requirements, e.g., pypcode and angr binaries
   # cle is executing the tests with the angr binaries
   doCheck = false;
 
-  # See http://angr.io/api-doc/
   pythonImportsCheck = [
     "angr"
     "claripy"

@@ -1,7 +1,7 @@
 { config, lib, stdenv, fetchFromGitHub, pkg-config, cmake
 
 # dependencies
-, glib, libXinerama
+, glib, libXinerama, catch2
 
 # optional features without extra dependencies
 , mpdSupport          ? true
@@ -15,14 +15,15 @@
                             , docbook_xsl ? null , docbook_xml_dtd_44 ? null
 
 , ncursesSupport      ? true      , ncurses       ? null
-, x11Support          ? true      , xlibsWrapper           ? null
+, x11Support          ? true      , freetype, xorg
+, waylandSupport      ? true      , pango, wayland, wayland-protocols, wayland-scanner
 , xdamageSupport      ? x11Support, libXdamage    ? null
 , doubleBufferSupport ? x11Support
 , imlib2Support       ? x11Support, imlib2        ? null
 
 , luaSupport          ? true      , lua           ? null
 , luaImlib2Support    ? luaSupport && imlib2Support
-, luaCairoSupport     ? luaSupport && x11Support, cairo ? null
+, luaCairoSupport     ? luaSupport && (x11Support || waylandSupport), cairo ? null
 , toluapp ? null
 
 , wirelessSupport     ? true      , wirelesstools ? null
@@ -43,7 +44,6 @@ assert docsSupport         -> docbook2x != null && libxslt != null
 
 assert ncursesSupport      -> ncurses != null;
 
-assert x11Support          -> xlibsWrapper != null;
 assert xdamageSupport      -> x11Support && libXdamage != null;
 assert imlib2Support       -> x11Support && imlib2     != null;
 assert luaSupport          -> lua != null;
@@ -52,7 +52,7 @@ assert luaImlib2Support    -> luaSupport && imlib2Support
 assert luaCairoSupport     -> luaSupport && toluapp != null
                                          && cairo   != null;
 assert luaCairoSupport || luaImlib2Support
-                           -> lua.luaversion == "5.3";
+                           -> lua.luaversion == "5.4";
 
 assert wirelessSupport     -> wirelesstools != null;
 assert nvidiaSupport       -> libXNVCtrl != null;
@@ -68,37 +68,45 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "conky";
-  version = "1.12.2";
+  version = "1.19.6";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "sha256-x6bR5E5LIvKWiVM15IEoUgGas/hcRp3F/O4MTOhVPb8=";
+    hash = "sha256-L8YSbdk+qQl17L4IRajFD/AEWRXb2w7xH9sM9qPGrQo=";
   };
 
-  postPatch = ''
-    sed -i -e '/include.*CheckIncludeFile)/i include(CheckIncludeFiles)' \
-      cmake/ConkyPlatformChecks.cmake
-  '' + optionalString docsSupport ''
-    # Drop examples, since they contain non-ASCII characters that break docbook2x :(
-    sed -i 's/ Example: .*$//' doc/config_settings.xml
-
+  postPatch = optionalString docsSupport ''
     substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
+
+    cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
+  '' + optionalString waylandSupport ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace 'COMMAND ''${Wayland_SCANNER}' 'COMMAND wayland-scanner'
   '';
 
-  NIX_LDFLAGS = "-lgcc_s";
+  env = {
+    # For some reason -Werror is on by default, causing the project to fail compilation.
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+    NIX_LDFLAGS = "-lgcc_s";
+  };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ glib libXinerama ]
+  nativeBuildInputs = [ cmake pkg-config ]
     ++ optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
+    ++ optional  waylandSupport     wayland-scanner
+    ++ optional  luaImlib2Support   toluapp
+    ++ optional  luaCairoSupport    toluapp
+    ;
+  buildInputs = [ glib libXinerama ]
     ++ optional  ncursesSupport     ncurses
-    ++ optional  x11Support         xlibsWrapper
+    ++ optionals x11Support         [ freetype xorg.libICE xorg.libX11 xorg.libXext xorg.libXft xorg.libSM ]
+    ++ optionals waylandSupport     [ pango wayland wayland-protocols ]
     ++ optional  xdamageSupport     libXdamage
     ++ optional  imlib2Support      imlib2
     ++ optional  luaSupport         lua
-    ++ optionals luaImlib2Support   [ toluapp imlib2 ]
-    ++ optionals luaCairoSupport    [ toluapp cairo ]
+    ++ optional  luaImlib2Support   imlib2
+    ++ optional  luaCairoSupport    cairo
     ++ optional  wirelessSupport    wirelesstools
     ++ optional  curlSupport        curl
     ++ optional  rssSupport         libxml2
@@ -119,6 +127,7 @@ stdenv.mkDerivation rec {
     ++ optional (!ncursesSupport)   "-DBUILD_NCURSES=OFF"
     ++ optional rssSupport          "-DBUILD_RSS=ON"
     ++ optional (!x11Support)       "-DBUILD_X11=OFF"
+    ++ optional waylandSupport      "-DBUILD_WAYLAND=ON"
     ++ optional xdamageSupport      "-DBUILD_XDAMAGE=ON"
     ++ optional doubleBufferSupport "-DBUILD_XDBE=ON"
     ++ optional weatherMetarSupport "-DBUILD_WEATHER_METAR=ON"
@@ -133,9 +142,13 @@ stdenv.mkDerivation rec {
   # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
   enableParallelBuilding = false;
 
+  doCheck = true;
+
   meta = with lib; {
-    homepage = "http://conky.sourceforge.net/";
+    homepage = "https://conky.cc";
+    changelog = "https://github.com/brndnmtthws/conky/releases/tag/v${version}";
     description = "Advanced, highly configurable system monitor based on torsmo";
+    mainProgram = "conky";
     maintainers = [ maintainers.guibert ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

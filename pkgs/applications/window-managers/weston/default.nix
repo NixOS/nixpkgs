@@ -1,51 +1,77 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, wayland-scanner
-, wayland, libGL, mesa, libxkbcommon, cairo, libxcb
-, libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
-, colord, lcms2, pipewire ? null
-, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
-, libwebp ? null, xwayland ? null, wayland-protocols
-# beware of null defaults, as the parameters *are* supplied by callPackage by default
+{ lib, stdenv, fetchurl
+, meson, ninja, pkg-config, python3, wayland-scanner
+, cairo, libGL, libdrm, libevdev, libinput, libxkbcommon, mesa, seatd, wayland
+, wayland-protocols, xcbutilcursor
+
+, demoSupport ? true
+, hdrSupport ? true, libdisplay-info
+, jpegSupport ? true, libjpeg
+, lcmsSupport ? true, lcms2
+, pangoSupport ? true, pango
+, pipewireSupport ? true, pipewire
+, rdpSupport ? true, freerdp
+, remotingSupport ? true, gst_all_1
+, vaapiSupport ? true, libva
+, vncSupport ? true, aml, neatvnc, pam
+, webpSupport ? true, libwebp
+, xwaylandSupport ? true, libXcursor, xwayland
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "9.0.0";
+  version = "13.0.3";
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "1zlql0xgiqc3pvgbpnnvj4xvpd91pwva8qf83xfb23if377ddxaw";
+    url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
+    hash = "sha256-J/aNluO5fZjare8TogI1ZSSST6OBQY+mcWuRNu8JkJM=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
+  postPatch = ''
+    # raise neatvnc version bound to 0.8.0
+    # https://gitlab.freedesktop.org/wayland/weston/-/issues/890
+    substituteInPlace libweston/backend-vnc/meson.build \
+      --replace-fail "'neatvnc', version: ['>= 0.7.0', '< 0.8.0']" "'neatvnc', version: ['>= 0.7.0', '<= 0.8.0']"
+  '';
+
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [
-    wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
-    mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
-    libwebp wayland-protocols
-    colord lcms2 pipewire
-  ];
+    cairo libGL libdrm libevdev libinput libxkbcommon mesa seatd wayland
+    wayland-protocols
+  ] ++ lib.optional hdrSupport libdisplay-info
+    ++ lib.optional jpegSupport libjpeg
+    ++ lib.optional lcmsSupport lcms2
+    ++ lib.optional pangoSupport pango
+    ++ lib.optional pipewireSupport pipewire
+    ++ lib.optional rdpSupport freerdp
+    ++ lib.optionals remotingSupport [ gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
+    ++ lib.optional vaapiSupport libva
+    ++ lib.optionals vncSupport [ aml neatvnc pam ]
+    ++ lib.optional webpSupport libwebp
+    ++ lib.optionals xwaylandSupport [ libXcursor xcbutilcursor xwayland ];
 
   mesonFlags= [
-    "-Dbackend-drm-screencast-vaapi=${boolToString (vaapi != null)}"
-    "-Dbackend-rdp=${boolToString (freerdp != null)}"
-    "-Dxwayland=${boolToString (xwayland != null)}" # Default is true!
-    "-Dremoting=false" # TODO
-    "-Dpipewire=${boolToString (pipewire != null)}"
-    "-Dimage-webp=${boolToString (libwebp != null)}"
-    "-Ddemo-clients=false"
-    "-Dsimple-clients="
-    "-Dtest-junit-xml=false"
-    # TODO:
-    #"--enable-clients"
-    #"--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
-  ] ++ optionals (xwayland != null) [
-    "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
+    (lib.mesonBool "backend-drm-screencast-vaapi" vaapiSupport)
+    (lib.mesonBool "backend-pipewire" pipewireSupport)
+    (lib.mesonBool "backend-rdp" rdpSupport)
+    (lib.mesonBool "backend-vnc" vncSupport)
+    (lib.mesonBool "color-management-lcms" lcmsSupport)
+    (lib.mesonBool "demo-clients" demoSupport)
+    (lib.mesonBool "image-jpeg" jpegSupport)
+    (lib.mesonBool "image-webp" webpSupport)
+    (lib.mesonBool "pipewire" pipewireSupport)
+    (lib.mesonBool "remoting" remotingSupport)
+    (lib.mesonOption "simple-clients" "")
+    (lib.mesonBool "test-junit-xml" false)
+    (lib.mesonBool "xwayland" xwaylandSupport)
+  ] ++ lib.optionals xwaylandSupport [
+    (lib.mesonOption "xwayland-path" (lib.getExe xwayland))
   ];
 
   passthru.providedSessions = [ "weston" ];
 
-  meta = {
-    description = "A lightweight and functional Wayland compositor";
+  meta = with lib; {
+    description = "Lightweight and functional Wayland compositor";
     longDescription = ''
       Weston is the reference implementation of a Wayland compositor, as well
       as a useful environment in and of itself.
@@ -59,6 +85,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.freedesktop.org/wayland/weston";
     license = licenses.mit; # Expat version
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    mainProgram = "weston";
+    maintainers = with maintainers; [ primeos qyliss ];
   };
 }

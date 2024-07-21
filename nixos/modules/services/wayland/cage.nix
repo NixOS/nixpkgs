@@ -23,6 +23,15 @@ in {
     example = ["-d"];
   };
 
+  options.services.cage.environment = mkOption {
+    type = types.attrsOf types.str;
+    default = {};
+    example = {
+      WLR_LIBINPUT_NO_DEVICES = "1";
+    };
+    description = "Additional environment variables to pass to Cage.";
+  };
+
   options.services.cage.program = mkOption {
     type = types.path;
     default = "${pkgs.xterm}/bin/xterm";
@@ -79,17 +88,20 @@ in {
         # Set up a full (custom) user session for the user, required by Cage.
         PAMName = "cage";
       };
+      environment = cfg.environment;
     };
+
+    security.polkit.enable = true;
 
     security.pam.services.cage.text = ''
       auth    required pam_unix.so nullok
       account required pam_unix.so
       session required pam_unix.so
       session required pam_env.so conffile=/etc/pam/environment readenv=0
-      session required ${pkgs.systemd}/lib/security/pam_systemd.so
+      session required ${config.systemd.package}/lib/security/pam_systemd.so
     '';
 
-    hardware.opengl.enable = mkDefault true;
+    hardware.graphics.enable = mkDefault true;
 
     systemd.targets.graphical.wants = [ "cage-tty1.service" ];
 

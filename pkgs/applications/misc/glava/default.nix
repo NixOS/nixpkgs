@@ -55,8 +55,6 @@ in
 
       substituteInPlace Makefile \
         --replace 'unknown' 'v${version}'
-
-      export CFLAGS="-march=native"
     '';
 
     makeFlags = optional (!enableGlfw) "DISABLE_GLFW=1";
@@ -82,6 +80,7 @@ in
       description = ''
         OpenGL audio spectrum visualizer
       '';
+      mainProgram = "glava";
       homepage = "https://github.com/wacossusca34/glava";
       platforms = platforms.linux;
       license = licenses.gpl3;

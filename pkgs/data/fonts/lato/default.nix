@@ -1,16 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip {
-  name = "lato-2.0";
+stdenvNoCC.mkDerivation {
+  pname = "lato";
+  version = "2.0";
 
-  url = "https://www.latofonts.com/download/Lato2OFL.zip";
+  src = fetchzip {
+    url = "https://www.latofonts.com/download/Lato2OFL.zip";
+    stripRoot = false;
+    hash = "sha256-n1TsqigCQIGqyGLGTjLtjHuBf/iCwRlnqh21IHfAuXI=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/lato
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 Lato2OFL/*.ttf -t $out/share/fonts/lato
+
+    runHook postInstall
   '';
-
-  sha256 = "1amwn6vcaggxrd2s4zw21s2pr47zmzdf2xfy4x9lxa2cd9bkhvg5";
 
   meta = with lib; {
     homepage = "https://www.latofonts.com/";

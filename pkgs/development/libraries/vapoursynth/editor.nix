@@ -37,7 +37,7 @@ let
       description = "Cross-platform editor for VapourSynth scripts";
       homepage = "https://github.com/YomikoR/VapourSynth-Editor";
       license = licenses.mit;
-      maintainers = with maintainers; [ tadeokondrak ];
+      maintainers = with maintainers; [ ];
       platforms = platforms.all;
     };
   };
@@ -45,7 +45,7 @@ let
   withPlugins = plugins: let
     vapoursynthWithPlugins = vapoursynth.withPlugins plugins;
   in runCommand "${unwrapped.name}-with-plugins" {
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
     passthru = { withPlugins = plugins': withPlugins (plugins ++ plugins'); };
   } ''
     mkdir -p $out/bin

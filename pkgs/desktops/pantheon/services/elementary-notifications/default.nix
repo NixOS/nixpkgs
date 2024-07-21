@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , pkg-config
@@ -11,21 +12,18 @@
 , libgee
 , libhandy
 , libcanberra-gtk3
-, python3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-notifications";
-  version = "6.0.0";
-
-  repoName = "notifications";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "notifications";
     rev = version;
-    sha256 = "0jfppafbc8jwhhnillylicz4zfds789d8b31ifsx0qijlxa7kji9";
+    sha256 = "sha256-of7Tw38yJAhHKICU3XxGwIOwqfUhrL7SGKqFd9Dps/I=";
   };
 
   nativeBuildInputs = [
@@ -33,9 +31,8 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -48,9 +45,14 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
+    # https://github.com/elementary/notifications/issues/222
+    substituteInPlace src/FdoActionGroup.vala \
+      --replace-fail "out VariantType" "out unowned VariantType"
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "GTK notification server for Pantheon";

@@ -1,16 +1,19 @@
 { lib, stdenv, fetchurl, popt }:
 
 stdenv.mkDerivation rec {
-  name = "libdv-1.0.0";
+  pname = "libdv";
+  version = "1.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libdv/${name}.tar.gz";
+    url = "mirror://sourceforge/libdv/libdv-${version}.tar.gz";
     sha256 = "1fl96f2xh2slkv1i1ix7kqk576a0ak1d33cylm0mbhm96d0761d3";
   };
 
-  # This fixes an undefined symbol: _sched_setscheduler error on compile.
-  # See the apple docs: http://cl.ly/2HeF bottom of the "Finding Imported Symbols" section
-  LDFLAGS = lib.optionalString stdenv.isDarwin "-undefined dynamic_lookup";
+  # Disable priority scheduling on Darwin because it doesn’t support sched_setscheduler.
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace encodedv/dvconnect.c \
+      --replace '#ifdef _SC_PRIORITY_SCHEDULING' '#if 0'
+  '';
 
   configureFlags = [
     "--disable-asm"

@@ -37,7 +37,7 @@ in {
         }
       '';
       description = ''
-        Configuration for CoreRAD, see <link xlink:href="https://github.com/mdlayher/corerad/blob/main/internal/config/reference.toml"/>
+        Configuration for CoreRAD, see <https://github.com/mdlayher/corerad/blob/main/internal/config/reference.toml>
         for supported values. Ignored if configFile is set.
       '';
     };
@@ -48,12 +48,7 @@ in {
       description = "Path to CoreRAD TOML configuration file.";
     };
 
-    package = mkOption {
-      default = pkgs.corerad;
-      defaultText = literalExpression "pkgs.corerad";
-      type = types.package;
-      description = "CoreRAD package to use.";
-    };
+    package = mkPackageOption pkgs "corerad" { };
   };
 
   config = mkIf cfg.enable {

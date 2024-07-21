@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pillow }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
+}:
 
 buildPythonPackage rec {
   pname = "aafigure";
   version = "0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "ASCII art to image converter";
+    mainProgram = "aafigure";
     homepage = "https://launchpad.net/aafigure/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ bjornfor ];

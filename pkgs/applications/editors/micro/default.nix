@@ -1,33 +1,67 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, callPackage
+, wl-clipboard
+, xclip
+, makeWrapper
+, withXclip ? true
+, withWlclip ? true
+}:
+let
+  clipboardPkgs = if stdenv.isLinux then
+    lib.optional withXclip xclip ++
+    lib.optional withWlclip wl-clipboard
+    else [ ];
+in
 buildGoModule rec {
   pname = "micro";
-  version = "2.0.10";
+  version = "2.0.13";
 
   src = fetchFromGitHub {
     owner = "zyedidia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hVFmViwGXuYVAKaCkzK/LHjCi8AtLu0tsPpT61glxys=";
+    hash = "sha256-fe+7RkUwCveBk14bYzg5uLGOqTVVJsrqixBQhCS79hY=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  vendorHash = "sha256-ePhObvm3m/nT+7IyT0W6K+y+9UNkfd2kYjle2ffAd9Y=";
+
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   subPackages = [ "cmd/micro" ];
 
-  vendorSha256 = "sha256-YcAKl4keizkbgQLAZGiCG3CGpNTNad8EvOJEXLX2s0s=";
+  ldflags = let t = "github.com/zyedidia/micro/v2/internal"; in [
+    "-s"
+    "-w"
+    "-X ${t}/util.Version=${version}"
+    "-X ${t}/util.CommitHash=${src.rev}"
+  ];
 
-  ldflags = [ "-s" "-w" "-X github.com/zyedidia/micro/v2/internal/util.Version=${version}" "-X github.com/zyedidia/micro/v2/internal/util.CommitHash=${src.rev}" ];
+  preBuild = ''
+    GOOS= GOARCH= go generate ./runtime
+  '';
 
   postInstall = ''
     installManPage assets/packaging/micro.1
-    install -Dt $out/share/applications assets/packaging/micro.desktop
+    install -Dm444 -t $out/share/applications assets/packaging/micro.desktop
+    install -Dm644 assets/micro-logo-mark.svg $out/share/icons/hicolor/scalable/apps/micro.svg
   '';
+
+  postFixup = ''
+    wrapProgram "$out/bin/micro" \
+      --prefix PATH : "${lib.makeBinPath clipboardPkgs}"
+  '';
+
+  passthru.tests.expect = callPackage ./test-with-expect.nix { };
 
   meta = with lib; {
     homepage = "https://micro-editor.github.io";
     description = "Modern and intuitive terminal-based text editor";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "micro";
   };
 }

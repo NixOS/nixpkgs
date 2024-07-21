@@ -1,32 +1,53 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, nasm }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, ffmpeg-full
+, libaom
+, meson
+, nasm
+, ninja
+, testers
+, xxd
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvmaf";
-  version = "2.3.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "netflix";
     repo = "vmaf";
-    rev = "v${version}";
-    sha256 = "12mwl7vxc3xi0qar386mkhkpah9zzgjb74mzc2qqsgz9zzxp16dm";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-6mwU2so1YM2pyWkJbDHVl443GgWtQazbBv3gTMBq5NA=";
   };
 
-  sourceRoot = "source/libvmaf";
+  sourceRoot = "${finalAttrs.src.name}/libvmaf";
 
-  nativeBuildInputs = [ meson ninja nasm ];
+  nativeBuildInputs = [ meson ninja nasm xxd ];
 
   mesonFlags = [ "-Denable_avx512=true" ];
 
   outputs = [ "out" "dev" ];
   doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://github.com/Netflix/vmaf";
-    description = "Perceptual video quality assessment based on multi-method fusion (VMAF)";
-    changelog = "https://github.com/Netflix/vmaf/raw/v${version}/CHANGELOG.md";
-    platforms = platforms.unix;
-    license = licenses.bsd2Patent;
-    maintainers = [ maintainers.cfsmp3 maintainers.marsam ];
+  passthru.tests = {
+    inherit libaom ffmpeg-full;
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "libvmaf" ];
+    };
   };
 
-}
+  meta = with lib; {
+    description = "Perceptual video quality assessment based on multi-method fusion (VMAF)";
+    homepage = "https://github.com/Netflix/vmaf";
+    changelog = "https://github.com/Netflix/vmaf/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = licenses.bsd2Patent;
+    maintainers = [ maintainers.cfsmp3 ];
+    mainProgram = "vmaf";
+    platforms = platforms.unix;
+  };
+})

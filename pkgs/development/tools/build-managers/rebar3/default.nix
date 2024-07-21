@@ -3,7 +3,7 @@
   writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
 
 let
-  version = "3.17.0";
+  version = "3.23.0";
   owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "02sk3whrbprzlih4pgcsd6ngmassfjfmkz21gwvb7mq64pib40k6";
+      sha256 = "dLJ1ca7Tlx6Cfk/AyJ0HmAgH9+qRrto/m0GWWUeXNko=";
     };
 
     buildInputs = [ erlang ];
@@ -53,6 +53,7 @@ let
     meta = {
       homepage = "https://github.com/rebar/rebar3";
       description = "Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
+      mainProgram = "rebar3";
 
       longDescription = ''
         rebar is a self-contained Erlang script, so it's easy to distribute or
@@ -81,7 +82,7 @@ let
           (rebar3WithPlugins { globalPlugins = [rebar3-nix]; })
         ]
       }
-      latest=$(list-git-tags https://github.com/${owner}/${pname}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
+      latest=$(list-git-tags | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
       if [ "$latest" != "${version}" ]; then
         nixpkgs="$(git rev-parse --show-toplevel)"
         nix_path="$nixpkgs/pkgs/development/tools/build-managers/rebar3"
@@ -94,7 +95,11 @@ let
       fi
     '';
   };
-  rebar3WithPlugins = { plugins ? [ ], globalPlugins ? [ ] }:
+
+  # Alias rebar3 so we can use it as default parameter below
+  _rebar3 = rebar3;
+
+  rebar3WithPlugins = { plugins ? [ ], globalPlugins ? [ ], rebar3 ? _rebar3 }:
     let
       pluginLibDirs = map (p: "${p}/lib/erlang/lib") (lib.unique (plugins ++ globalPlugins));
       globalPluginNames = lib.unique (map (p: p.packageName) globalPlugins);

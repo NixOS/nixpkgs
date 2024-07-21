@@ -1,48 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pyserial-asyncio
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pyserial-asyncio-fast,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "elkm1-lib";
-  version = "1.0.0";
-  format = "pyproject";
+  version = "2.2.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "gwww";
     repo = "elkm1";
-    rev = version;
-    sha256 = "04xidix6l5d9rqfwp6cmj6wvais04nlvz5ynp0zwgyjp9sh2nhp6";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5YdmZO/8HimQ9Ft/K/I6xu0Av2SjUBp3+poBe7aVUpM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    async-timeout
+    pyserial-asyncio-fast
   ];
 
-  propagatedBuildInputs = [
-    pyserial-asyncio
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  patches = [
-    # Switch to poetry-core, https://github.com/gwww/elkm1/pull/45
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/gwww/elkm1/commit/807a17268498298908bf82af4933b158b37c8f32.patch";
-      sha256 = "1539g8wsxppqj6dm6w81ps05frb8vrfaxahxn2cqs76zdhvly3p9";
-    })
   ];
 
   pythonImportsCheck = [ "elkm1_lib" ];
@@ -50,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for interacting with ElkM1 alarm/automation panel";
     homepage = "https://github.com/gwww/elkm1";
+    changelog = "https://github.com/gwww/elkm1/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

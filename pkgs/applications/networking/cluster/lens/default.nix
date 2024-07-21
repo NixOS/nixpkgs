@@ -1,42 +1,41 @@
-{ lib, fetchurl, appimageTools }:
+{ stdenv
+, callPackage
+, fetchurl
+, lib }:
 
 let
-  pname = "lens";
-  version = "5.2.6";
-  build = "${version}-latest.20211104.1";
-  name = "${pname}-${version}";
+
+  pname = "lens-desktop";
+  version = "2024.3.191333";
+
+  sources = {
+    x86_64-linux = {
+      url = "https://api.k8slens.dev/binaries/Lens-${version}-latest.x86_64.AppImage";
+      hash = "sha256-OywOjXzeW/5uyt50JrutiLgem9S1CrlwPFqfK6gUc7U=";
+    };
+    x86_64-darwin = {
+      url = "https://api.k8slens.dev/binaries/Lens-${version}-latest.dmg";
+      hash = "sha256-yf+WBcOdOM3XsfiXJThVws2r84vG2jwfNV1c+sq6A4s=";
+    };
+    aarch64-darwin = {
+      url = "https://api.k8slens.dev/binaries/Lens-${version}-latest-arm64.dmg";
+      hash = "sha256-hhd8MnwKWpvG7UebkeEoztS45SJVnpvvJ9Zy+y5swik=";
+    };
+  };
 
   src = fetchurl {
-    url = "https://api.k8slens.dev/binaries/Lens-${build}.x86_64.AppImage";
-    sha256 = "1lkxzgwrgafraimpnciv89fs6r399275vb73drxlg5z83acacf5z";
-    name="${pname}.AppImage";
+    inherit (sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")) url hash;
   };
-
-  appimageContents = appimageTools.extractType2 {
-    inherit name src;
-  };
-
-in appimageTools.wrapType2 {
-  inherit name src;
-
-  extraInstallCommands =
-    ''
-      mv $out/bin/${name} $out/bin/${pname}
-
-      install -m 444 -D ${appimageContents}/lens.desktop $out/share/applications/${pname}.desktop
-      install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/lens.png \
-         $out/share/icons/hicolor/512x512/apps/${pname}.png
-
-      substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Icon=lens' 'Icon=${pname}' \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
-    '';
 
   meta = with lib; {
-    description = "The Kubernetes IDE";
+    description = "Kubernetes IDE";
     homepage = "https://k8slens.dev/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dbirks ];
-    platforms = [ "x86_64-linux" ];
+    license = licenses.lens;
+    maintainers = with maintainers; [ dbirks RossComputerGuy starkca90 ];
+    platforms = builtins.attrNames sources;
   };
-}
+
+in if stdenv.isDarwin then
+  callPackage ./darwin.nix { inherit pname version src meta; }
+else
+  callPackage ./linux.nix { inherit pname version src meta; }

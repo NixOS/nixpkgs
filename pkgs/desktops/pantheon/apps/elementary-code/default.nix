@@ -2,48 +2,37 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, pkg-config
+, appstream
+, desktop-file-utils
 , meson
 , ninja
+, pkg-config
+, polkit
 , vala
-, python3
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, elementary-icon-theme
-, appstream
-, libpeas
+, wrapGAppsHook3
 , editorconfig-core-c
+, granite
+, gtk3
 , gtksourceview4
 , gtkspell3
+, libgee
+, libgit2-glib
+, libhandy
+, libpeas
 , libsoup
 , vte
-, webkitgtk
 , ctags
-, libgit2-glib
-, wrapGAppsHook
-, polkit
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "6.1.0";
-
-  repoName = "code";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "code";
     rev = version;
-    sha256 = "sha256-AXmMcPj2hf33G5v3TUg+eZwaKOdVlRvoVXglMJFHRjw=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-6lvn8c+JfbtZQf5dtViosVqtt/RWL6B/MvksXqmCfFs=";
   };
 
   nativeBuildInputs = [
@@ -53,15 +42,12 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     polkit # needed for ITS rules
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    ctags
     editorconfig-core-c
-    elementary-icon-theme
     granite
     gtk3
     gtksourceview4
@@ -72,11 +58,7 @@ stdenv.mkDerivation rec {
     libpeas
     libsoup
     vte
-    webkitgtk
   ];
-
-  # install script fails with UnicodeDecodeError because of printing a fancy elipsis character
-  LC_ALL = "C.UTF-8";
 
   # ctags needed in path by outline plugin
   preFixup = ''
@@ -85,10 +67,9 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Code editor designed for elementary OS";

@@ -1,18 +1,20 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, gnupg
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  gnupg,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pycoin";
-  version = "0.91.20210515";
+  version = "0.92.20230326";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d2231a8d11b2524c26472d08cf1b76569849ab44507495d0510165ae0af4858e";
+    hash = "sha256-DYXwATRHw1ay9swLuQOtB+5LcoBe4TtAKWzQgxESwN8=";
   };
 
   propagatedBuildInputs = [ setuptools ];
@@ -21,7 +23,7 @@ buildPythonPackage rec {
     substituteInPlace ./pycoin/cmds/tx.py --replace '"gpg"' '"${gnupg}/bin/gpg"'
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   dontUseSetuptoolsCheck = true;
 

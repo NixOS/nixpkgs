@@ -7,7 +7,7 @@
 , asio
 , nettle
 , gnutls
-, msgpack
+, msgpack-cxx
 , readline
 , libargon2
 , jsoncpp
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opendht";
-  version = "2.3.1";
+  version = "3.1.11";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
-    rev = version;
-    sha256 = "sha256-Os5PRYTZMVekQrbwNODWsHANTx6RSC5vzGJ5JoYtvtE=";
+    rev = "v${version}";
+    hash = "sha256-lJaQGkhpKfSSNVbP+NqommagtoWyi8CdauVxEhiI9Bc=";
   };
 
   nativeBuildInputs = [
@@ -37,9 +37,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     asio
+    fmt
     nettle
     gnutls
-    msgpack
+    msgpack-cxx
     readline
     libargon2
   ] ++ lib.optionals enableProxyServerAndClient [
@@ -47,7 +48,6 @@ stdenv.mkDerivation rec {
     restinio
     http-parser
     openssl
-    fmt
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ];
@@ -59,10 +59,17 @@ stdenv.mkDerivation rec {
     "-DOPENDHT_PUSH_NOTIFICATIONS=ON"
   ];
 
+  # https://github.com/savoirfairelinux/opendht/issues/612
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
+
   outputs = [ "out" "lib" "dev" "man" ];
 
   meta = with lib; {
-    description = "A C++11 Kademlia distributed hash table implementation";
+    description = "C++11 Kademlia distributed hash table implementation";
     homepage = "https://github.com/savoirfairelinux/opendht";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ taeer olynch thoughtpolice ];

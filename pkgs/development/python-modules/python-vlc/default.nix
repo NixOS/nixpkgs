@@ -1,33 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, libvlc
-, substituteAll
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  libvlc,
+  substituteAll,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-vlc";
-  version = "3.0.12118";
+  version = "3.0.20123";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Vm8vfDA/aACFHKzAFt8cbu7AlK1j4KSdh9udaYCU8fs=";
+    hash = "sha256-JE+7njkqAyaEH8qSbW0SoqNsVGmCGR9JPxSPoZ5msdQ=";
   };
 
   patches = [
     # Patch path for VLC
     (substituteAll {
       src = ./vlc-paths.patch;
-      libvlcPath="${libvlc}/lib/libvlc.so.5";
+      libvlcPath = "${libvlc}/lib/libvlc.so.5";
     })
   ];
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
-  doCheck = false; # no tests
+  # Module has no tests
+  doCheck = false;
 
   pythonImportsCheck = [ "vlc" ];
 

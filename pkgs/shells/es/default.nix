@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   pname = "es";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchurl {
     url = "https://github.com/wryun/es-shell/releases/download/v${version}/es-${version}.tar.gz";
-    sha256 = "1fplzxc6lncz2lv2fyr2ig23rgg5j96rm2bbl1rs28mik771zd5h";
+    sha256 = "sha256-ySZIK0IITpA+uHHuHrDO/Ana5vGt64QI3Z6TMDXE9d0=";
   };
 
   # The distribution tarball does not have a single top-level directory.
@@ -17,12 +17,15 @@ stdenv.mkDerivation rec {
     sourceRoot=.
   '';
 
-  buildInputs = [ readline bison ];
+  strictDeps = true;
+  nativeBuildInputs = [ bison ];
+  buildInputs = [ readline ];
 
   configureFlags = [ "--with-readline" ];
 
   meta = with lib; {
-    description = "An extensible shell with higher order functions";
+    description = "Extensible shell with higher order functions";
+    mainProgram = "es";
     longDescription =
       ''
         Es is an extensible shell. The language was derived

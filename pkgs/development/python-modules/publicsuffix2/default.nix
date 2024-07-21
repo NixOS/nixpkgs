@@ -1,26 +1,40 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests }:
-
-buildPythonPackage rec {
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+}:
+let
+  tagVersion = "2.2019-12-21";
+in
+buildPythonPackage {
   pname = "publicsuffix2";
-  version = "2.20191221";
+  # tags have dashes, while the library version does not
+  # see https://github.com/nexB/python-publicsuffix2/issues/12
+  version = lib.replaceStrings [ "-" ] [ "" ] tagVersion;
+  pyproject = true;
 
-  # Tests are missing in the sdist
-  # See: https://github.com/nexB/python-publicsuffix2/issues/12
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "python-publicsuffix2";
-    rev = "release-2.2019-12-21";
-    sha256 = "1dkvfvl0izq9hqzilnw8ipkbgjs9xyad9p21i3864hzinbh0wp9r";
+    rev = "release-${tagVersion}";
+    hash = "sha256-OV0O4LLxQ2LQiEHc1JTvScu35o2IWxo/hgn/COh2e7Y=";
   };
 
-  nativeBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  postPatch = ''
+    # only used to update the interal publicsuffix list
+    substituteInPlace setup.py \
+      --replace "'requests >= 2.7.0'," ""
+  '';
+
+  pythonImportsCheck = [ "publicsuffix2" ];
 
   meta = with lib; {
-    description = ''
-      Get a public suffix for a domain name using the Public Suffix
-      List. Forked from and using the same API as the publicsuffix package.
-    '';
-    homepage = "https://pypi.python.org/pypi/publicsuffix2/";
+    description = "Get a public suffix for a domain name using the Public Suffix List";
+    homepage = "https://github.com/nexB/python-publicsuffix2";
     license = licenses.mpl20;
+    maintainers = with maintainers; [ ];
   };
 }

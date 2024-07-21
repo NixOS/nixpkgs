@@ -8,13 +8,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jirafeau";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitLab {
     owner = "mojo42";
     repo = "Jirafeau";
     rev = version;
-    hash = "sha256-9v6rtxViXsolx5AKSp2HxcFyU1XJWFSiqzTBl+dQBD4=";
+    hash = "sha256-jJ2r8XTtAzawTVo2A2pDwy7Z6KHeyBkgXXaCPY0w/rg=";
   };
 
   installPhase = ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Website permitting upload of a file in a simple way and giving a unique link to it";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     homepage = "https://gitlab.com/mojo42/Jirafeau";
     platforms = platforms.all;
     maintainers = with maintainers; [ davidtwco ];

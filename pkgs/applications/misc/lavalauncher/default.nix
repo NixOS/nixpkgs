@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , scdoc
+, wayland-scanner
 , cairo
 , librsvg
 , libxkbcommon
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
     sha256 = "hobhZ6s9m2xCdAurdj0EF1BeS88j96133zu+2jb1FMM=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
   buildInputs = [
     cairo
     librsvg
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~leon_plickat/lavalauncher";
-    description = "A simple launcher panel for Wayland desktops";
+    description = "Simple launcher panel for Wayland desktops";
     longDescription = ''
       LavaLauncher is a simple launcher panel for Wayland desktops.
 
@@ -53,5 +55,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
+    mainProgram = "lavalauncher";
   };
 }

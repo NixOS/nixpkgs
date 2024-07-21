@@ -1,20 +1,25 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, six
-, numpy
-, scipy # optional, allows spline-related features (see patsy's docs)
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools,
+  six,
+  numpy,
+  scipy, # optional, allows spline-related features (see patsy's docs)
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "patsy";
-  version = "0.5.2";
+  version = "0.5.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5053de7804676aba62783dbb0f23a2b3d74e35e5bfa238b88b7cbf148a38b69d";
+    hash = "sha256-lcbUenIiU1+Ev/f2PXMD8uKXdHpZjbic9cZ/DAx9LNs=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     six
@@ -22,19 +27,14 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "patsy"
-  ];
+  pythonImportsCheck = [ "patsy" ];
 
   meta = {
-    description = "A Python package for describing statistical models";
+    description = "Python package for describing statistical models";
     homepage = "https://github.com/pydata/patsy";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ ilya-kolpakov ];
   };
 }
-

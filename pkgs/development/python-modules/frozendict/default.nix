@@ -1,50 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pytestCheckHook
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.0.7";  # 2.0.6 breaks canonicaljson
-  format = "setuptools";
+  version = "2.4.4";
+  pyproject = true;
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a68f609d1af67da80b45519fdcfca2d60249c0a8c96e68279c1b6ddd92128204";
+  src = fetchFromGitHub {
+    owner = "Marco-Sulla";
+    repo = "python-frozendict";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TgXhffUvx74fU2SgDV04R1yS9xGbiP/ksQ+3KGT5bdQ=";
   };
 
-  pythonImportsCheck = [
-    "frozendict"
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  preCheck = ''
-    rm -r frozendict
-    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+  # build C version if it exists
+  preBuild = ''
+    version_str=$(python -c 'import sys; print("_".join(map(str, sys.version_info[:2])))')
+    if test -f src/frozendict/c_src/$version_str/frozendictobject.c; then
+      export CIBUILDWHEEL=1
+      export FROZENDICT_PURE_PY=0
+    else
+      export CIBUILDWHEEL=0
+      export FROZENDICT_PURE_PY=1
+    fi
   '';
 
-  disabledTests = [
-    # TypeError: unsupported operand type(s) for |=: 'frozendict.frozendict' and 'dict'
-    "test_union"
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  disabledTestPaths = [
-    # unpackaged test dependency: coold
-    "test/test_coold.py"
-    "test/test_coold_subclass.py"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "frozendict" ];
 
   meta = with lib; {
-    homepage = "https://github.com/slezica/python-frozendict";
-    description = "An immutable dictionary";
-    license = licenses.mit;
+    description = "Module for immutable dictionary";
+    homepage = "https://github.com/Marco-Sulla/python-frozendict";
+    changelog = "https://github.com/Marco-Sulla/python-frozendict/releases/tag/v${version}";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ pbsds ];
   };
 }

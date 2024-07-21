@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -6,6 +6,7 @@ let
 
   gid = config.ids.gids.mediatomb;
   cfg = config.services.mediatomb;
+  opt = options.services.mediatomb;
   name = cfg.package.pname;
   pkg = cfg.package;
   optionYesNo = option: if option then "yes" else "no";
@@ -185,7 +186,7 @@ let
   defaultFirewallRules = {
     # udp 1900 port needs to be opened for SSDP (not configurable within
     # mediatomb/gerbera) cf.
-    # http://docs.gerbera.io/en/latest/run.html?highlight=udp%20port#network-setup
+    # https://docs.gerbera.io/en/latest/run.html?highlight=udp%20port#network-setup
     allowedUDPPorts = [ 1900 cfg.port ];
     allowedTCPPorts = [ cfg.port ];
   };
@@ -214,15 +215,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        example = literalExpression "pkgs.mediatomb";
-        default = pkgs.gerbera;
-        defaultText = literalExpression "pkgs.gerbera";
-        description = ''
-          Underlying package to be used with the module.
-        '';
-      };
+      package = mkPackageOption pkgs "gerbera" { };
 
       ps3Support = mkOption {
         type = types.bool;
@@ -261,6 +254,7 @@ in {
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/${name}";
+        defaultText = literalExpression ''"/var/lib/''${config.${opt.package}.pname}"'';
         description = ''
           The directory where Gerbera/Mediatomb stores its state, data, etc.
         '';
@@ -277,17 +271,17 @@ in {
       user = mkOption {
         type = types.str;
         default = "mediatomb";
-        description = "User account under which ${name} runs.";
+        description = "User account under which the service runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "mediatomb";
-        description = "Group account under which ${name} runs.";
+        description = "Group account under which the service runs.";
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 49152;
         description = ''
           The network port to listen on.
@@ -308,9 +302,9 @@ in {
         description = ''
           If false (the default), this is up to the user to declare the firewall rules.
           If true, this opens port 1900 (tcp and udp) and the port specified by
-          <option>sercvices.mediatomb.port</option>.
+          {option}`sercvices.mediatomb.port`.
 
-          If the option <option>services.mediatomb.interface</option> is set,
+          If the option {option}`services.mediatomb.interface` is set,
           the firewall rules opened are dedicated to that interface. Otherwise,
           those rules are opened globally.
         '';
@@ -340,11 +334,11 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Allow ${name} to create and use its own config file inside the <literal>dataDir</literal> as
-          configured by <option>services.mediatomb.dataDir</option>.
+          Allow the service to create and use its own config file inside the `dataDir` as
+          configured by {option}`services.mediatomb.dataDir`.
           Deactivated by default, the service then runs with the configuration generated from this module.
           Otherwise, when enabled, no service configuration is generated. Gerbera/Mediatomb then starts using
-          config.xml within the configured <literal>dataDir</literal>. It's up to the user to make a correct
+          config.xml within the configured `dataDir`. It's up to the user to make a correct
           configuration file.
         '';
       };
@@ -361,10 +355,14 @@ in {
     in mkIf cfg.enable {
     systemd.services.mediatomb = {
       description = "${cfg.serverName} media Server";
-      after = [ "network.target" ];
+      # Gerbera might fail if the network interface is not available on startup
+      # https://github.com/gerbera/gerbera/issues/1324
+      wants = [ "network-online.target" ];
+      after = [ "network.target" "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${binaryCommand} --port ${toString cfg.port} ${interfaceFlag} ${configFlag} --home ${cfg.dataDir}";
       serviceConfig.User = cfg.user;
+      serviceConfig.Group = cfg.group;
     };
 
     users.groups = optionalAttrs (cfg.group == "mediatomb") {

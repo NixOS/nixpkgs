@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, mkDerivation
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -8,31 +7,37 @@
 , qtbase
 , glib
 , perl
-, lxqtUpdateScript
+, wrapQtAppsHook
+, gitUpdater
+, version ? "2.0.0"
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-build-tools";
-  version = "0.10.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1hb04zgpalxv6da3myf1dxsbjix15dczzfq8a24g5dg2zfhwpx21";
+    hash = {
+      "0.13.0" = "sha256-4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
+      "2.0.0" = "sha256-ZFvnIumP03Mp+4OHPe1yMVsSYhMmYUY1idJGCAy5IhA=";
+    }."${version}";
   };
 
-  # Nix clang on darwin identifies as 'Clang', not 'AppleClang'
-  # Without this, dependants fail to link.
   postPatch = ''
+    # Nix clang on darwin identifies as 'Clang', not 'AppleClang'
+    # Without this, dependants fail to link.
     substituteInPlace cmake/modules/LXQtCompilerSettings.cmake \
-      --replace AppleClang Clang
+      --replace-fail AppleClang Clang
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
     setupHook
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -50,17 +55,17 @@ mkDerivation rec {
   # We're dependent on this macro doing add_definitions in most places
   # But we have the setup-hook to set the values.
   postInstall = ''
-    rm $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
-    cp ${./LXQtConfigVars.cmake} $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
+    cp ${./LXQtConfigVars.cmake} $out/share/cmake/lxqt${lib.optionalString (lib.versionAtLeast version "2.0.0") "2"}-build-tools/modules/LXQtConfigVars.cmake
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-build-tools";
     description = "Various packaging tools and scripts for LXQt applications";
+    mainProgram = "lxqt-transupdate";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

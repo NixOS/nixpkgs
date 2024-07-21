@@ -1,30 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, cffi
-, pkg-config
-, wayland
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  cffi,
+  pkg-config,
+  wayland,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pywayland";
-  version = "0.4.7";
+  version = "0.4.17";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0IMNOPTmY22JCHccIVuZxDhVr41cDcKNkx8bp+5h2CU=";
+    hash = "sha256-9/0ZAmOML3oVrAfzGj72iV08FgyiYBSByoKyxhojxlc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   propagatedNativeBuildInputs = [ cffi ];
   buildInputs = [ wayland ];
   propagatedBuildInputs = [ cffi ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postBuild = ''
-    ${python.interpreter} pywayland/ffi_build.py
+    ${python.pythonOnBuildForHost.interpreter} pywayland/ffi_build.py
   '';
 
   # Tests need this to create sockets
@@ -37,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/flacjacket/pywayland";
     description = "Python bindings to wayland using cffi";
+    mainProgram = "pywayland-scanner";
     license = licenses.ncsa;
     maintainers = with maintainers; [ chvp ];
   };

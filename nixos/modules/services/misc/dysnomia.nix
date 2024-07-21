@@ -114,7 +114,7 @@ in
       };
 
       components = mkOption {
-        description = "An atttribute set in which each key represents a container and each value an attribute set in which each key represents a component and each value a derivation constructing its initial state";
+        description = "An attribute set in which each key represents a container and each value an attribute set in which each key represents a component and each value a derivation constructing its initial state";
         default = {};
         type = types.attrsOf types.attrs;
       };
@@ -186,7 +186,7 @@ in
 
     dysnomia.properties = {
       hostname = config.networking.hostName;
-      inherit (config.nixpkgs.localSystem) system;
+      inherit (pkgs.stdenv.hostPlatform) system;
 
       supportedTypes = [
         "echo"
@@ -223,7 +223,7 @@ in
       ejabberdUser = config.services.ejabberd.user;
     }; }
     // lib.optionalAttrs (config.services.mysql.enable) { mysql-database = {
-        mysqlPort = config.services.mysql.port;
+        mysqlPort = config.services.mysql.settings.mysqld.port;
         mysqlSocket = "/run/mysqld/mysqld.sock";
       } // lib.optionalAttrs cfg.enableAuthentication {
         mysqlUsername = "root";

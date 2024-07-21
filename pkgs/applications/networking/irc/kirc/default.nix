@@ -5,22 +5,23 @@
 
 stdenv.mkDerivation rec {
   pname = "kirc";
-  version = "0.2.7";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "mcpcpc";
     repo = pname;
     rev = version;
-    hash = "sha256-iaqj4xB15DB3w/RaiCOMdAu8eONhTw1Dz0j5kykAHV4=";
+    hash = "sha256-SXPtSFjGPLgORG9OCSCEStzNzdGZFzCx72YOrW288MU=";
   };
 
   dontConfigure = true;
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    homepage = "http://kirc.io/";
+    homepage = "https://mcpcpc.github.io/kirc/";
     description = "Tiny IRC client written in C99";
+    mainProgram = "kirc";
     longDescription = ''
       kirc is a tiny open-source Internet Relay Chat (IRC) client designed with
       usability and cross-platform compatibility in mind.

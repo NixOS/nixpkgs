@@ -1,36 +1,46 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, awesomeversion
-, backoff
-, cachetools
-, poetry-core
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  aresponses,
+  awesomeversion,
+  backoff,
+  buildPythonPackage,
+  cachetools,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  typer,
+  yarl,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "wled";
-  version = "0.10.2";
-  disabled = pythonOlder "3.8";
-  format = "pyproject";
+  version = "0.18.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-wled";
-    rev = "v${version}";
-    sha256 = "sha256-tqR/edkBFseldSXGoekfRmw//h6Z/Xcg1W0HXJvLhtk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0BJgbyDhCPFlHxlEry7Rh/j0nv3D3kRhIqCSW+Irhqk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    # Upstream doesn't set a version for the pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "0.0.0" "${version}" \
+      --replace-fail "--cov" ""
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     awesomeversion
     backoff
@@ -38,24 +48,26 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    cli = [
+      typer
+      zeroconf
+    ];
+  };
+
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # Upstream doesn't set a version for the pyproject.toml
-    substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
-  '';
 
   pythonImportsCheck = [ "wled" ];
 
   meta = with lib; {
     description = "Asynchronous Python client for WLED";
     homepage = "https://github.com/frenck/python-wled";
+    changelog = "https://github.com/frenck/python-wled/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

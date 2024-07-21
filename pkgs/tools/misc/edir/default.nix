@@ -1,13 +1,22 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname = "edir";
-  version = "2.7.3";
+  version = "2.29";
+  format = "pyproject";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "06nsy9ikljc437368l38hsw75whacn3j6jwmdgg766q61pnifhkp";
+    hash = "sha256-5b86/M8xqzwWMCRtsH1qwmooyfOhORgXgctRjzQEmlU=";
   };
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    platformdirs
+  ];
 
   meta = with lib; {
     description = "Program to rename and remove files and directories using your editor";
@@ -15,5 +24,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ guyonvarch ];
     platforms = platforms.all;
+    mainProgram = "edir";
   };
 }

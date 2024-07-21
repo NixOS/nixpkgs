@@ -7,11 +7,11 @@
 
 buildPythonApplication rec {
   pname = "ffmpeg-normalize";
-  version = "1.22.4";
+  version = "1.26.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a20978538ae9a51bdbe5ef5aa0f87ede0f8efd2817ab240980de56eac36982e3";
+    hash = "sha256-OwREpfWaP0tdAjMGjGpVIAQn8rlTTjSfT+0t5g/2yjQ=";
   };
 
   propagatedBuildInputs = [ ffmpeg ffmpeg-progress-yield ];
@@ -25,5 +25,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/slhck/ffmpeg-normalize";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ prusnak ];
+    mainProgram = "ffmpeg-normalize";
   };
 }

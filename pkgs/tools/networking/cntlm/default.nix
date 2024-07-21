@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "NTLM/NTLMv2 authenticating HTTP proxy";
-    homepage = "http://cntlm.sourceforge.net/";
-    license = licenses.gpl2;
+    homepage = "https://cntlm.sourceforge.net/";
+    license = licenses.gpl2Only;
     maintainers =
       [
         maintainers.qknight
-        maintainers.markWot
         maintainers.carlosdagos
       ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "cntlm";
   };
 }

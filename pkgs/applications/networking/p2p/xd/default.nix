@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "XD";
-  version = "0.4.0";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "majestrate";
     repo = "XD";
     rev = "v${version}";
-    sha256 = "sha256-fXENoqhR04TYS/kAJUqsqa0+j+KyzdsMlXIZ2GMPMhc=";
+    sha256 = "sha256-k8Mm0tC7wiBmHFdCX38Rz7ccEFkdeArzGJVHTLQ7iWY=";
   };
 
-  vendorSha256 = "1wg3cym2rwrhjsqlgd38l8mdq5alccz808465117n3vyga9m35lq";
+  vendorHash = "sha256-ZD7PZJcY7qWHEQOk5I9IlMup0vbYYaRvVau5Go7ocno=";
 
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
 
   postInstall = ''
     ln -s $out/bin/XD $out/bin/XD-CLI

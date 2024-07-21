@@ -39,10 +39,10 @@ let
 
   hydra-package =
   let
-    makeWrapperArgs = concatStringsSep " " (mapAttrsToList (key: value: "--set \"${key}\" \"${value}\"") hydraEnv);
+    makeWrapperArgs = concatStringsSep " " (mapAttrsToList (key: value: "--set-default \"${key}\" \"${value}\"") hydraEnv);
   in pkgs.buildEnv rec {
     name = "hydra-env";
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     paths = [ cfg.package ];
 
     postBuild = ''
@@ -97,12 +97,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.hydra-unstable;
-        defaultText = literalExpression "pkgs.hydra-unstable";
-        description = "The Hydra package.";
-      };
+      package = mkPackageOption pkgs "hydra_unstable" { };
 
       hydraURL = mkOption {
         type = types.str;
@@ -116,13 +111,13 @@ in
         default = "*";
         example = "localhost";
         description = ''
-          The hostname or address to listen on or <literal>*</literal> to listen
+          The hostname or address to listen on or `*` to listen
           on all interfaces.
         '';
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
         description = ''
           TCP port the web server should listen to.
@@ -183,6 +178,24 @@ in
         description = "Whether to run the server in debug mode.";
       };
 
+      maxServers = mkOption {
+        type = types.int;
+        default = 25;
+        description = "Maximum number of starman workers to spawn.";
+      };
+
+      minSpareServers = mkOption {
+        type = types.int;
+        default = 4;
+        description = "Minimum number of spare starman workers to keep.";
+      };
+
+      maxSpareServers = mkOption {
+        type = types.int;
+        default = 5;
+        description = "Maximum number of spare starman workers to keep.";
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         description = "Extra lines for the Hydra configuration.";
@@ -229,6 +242,16 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.maxServers != 0 && cfg.maxSpareServers != 0 && cfg.minSpareServers != 0;
+        message = "services.hydra.{minSpareServers,maxSpareServers,minSpareServers} cannot be 0";
+      }
+      {
+        assertion = cfg.minSpareServers < cfg.maxSpareServers;
+        message = "services.hydra.minSpareServers cannot be bigger than servives.hydra.maxSpareServers";
+      }
+    ];
 
     users.groups.hydra = {
       gid = config.ids.gids.hydra;
@@ -258,14 +281,12 @@ in
         uid = config.ids.uids.hydra-www;
       };
 
-    nix.trustedUsers = [ "hydra-queue-runner" ];
-
     services.hydra.extraConfig =
       ''
         using_frontend_proxy = 1
         base_uri = ${cfg.hydraURL}
         notification_sender = ${cfg.notificationSender}
-        max_servers = 25
+        max_servers = ${toString cfg.maxServers}
         ${optionalString (cfg.logo != null) ''
           hydra_logo = ${cfg.logo}
         ''}
@@ -277,16 +298,21 @@ in
 
     environment.variables = hydraEnv;
 
-    nix.extraOptions = ''
-      keep-outputs = true
-      keep-derivations = true
+    nix.settings = mkMerge [
+      {
+        keep-outputs = true;
+        keep-derivations = true;
+        trusted-users = [ "hydra-queue-runner" ];
+      }
 
-
-    '' + optionalString (versionOlder (getVersion config.nix.package.out) "2.4pre") ''
-      # The default (`true') slows Nix down a lot since the build farm
-      # has so many GC roots.
-      gc-check-reachability = false
-    '';
+      (mkIf (versionOlder (getVersion config.nix.package.out) "2.4pre")
+        {
+          # The default (`true') slows Nix down a lot since the build farm
+          # has so many GC roots.
+          gc-check-reachability = false;
+        }
+      )
+    ];
 
     systemd.services.hydra-init =
       { wantedBy = [ "multi-user.target" ];
@@ -295,27 +321,32 @@ in
         environment = env // {
           HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-init";
         };
+        path = [ pkgs.util-linux ];
         preStart = ''
           mkdir -p ${baseDir}
-          chown hydra.hydra ${baseDir}
+          chown hydra:hydra ${baseDir}
           chmod 0750 ${baseDir}
 
           ln -sf ${hydraConf} ${baseDir}/hydra.conf
 
           mkdir -m 0700 -p ${baseDir}/www
-          chown hydra-www.hydra ${baseDir}/www
+          chown hydra-www:hydra ${baseDir}/www
 
           mkdir -m 0700 -p ${baseDir}/queue-runner
           mkdir -m 0750 -p ${baseDir}/build-logs
-          chown hydra-queue-runner.hydra ${baseDir}/queue-runner ${baseDir}/build-logs
+          mkdir -m 0750 -p ${baseDir}/runcommand-logs
+          chown hydra-queue-runner:hydra \
+            ${baseDir}/queue-runner \
+            ${baseDir}/build-logs \
+            ${baseDir}/runcommand-logs
 
           ${optionalString haveLocalDB ''
             if ! [ -e ${baseDir}/.db-created ]; then
-              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser hydra
-              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O hydra hydra
+              runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser hydra
+              runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -- -O hydra hydra
               touch ${baseDir}/.db-created
             fi
-            echo "create extension if not exists pg_trgm" | ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/psql hydra
+            echo "create extension if not exists pg_trgm" | runuser -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/psql hydra
           ''}
 
           if [ ! -e ${cfg.gcRootsDir} ]; then
@@ -335,7 +366,7 @@ in
             rmdir /nix/var/nix/gcroots/per-user/hydra-www/hydra-roots
           fi
 
-          chown hydra.hydra ${cfg.gcRootsDir}
+          chown hydra:hydra ${cfg.gcRootsDir}
           chmod 2775 ${cfg.gcRootsDir}
         '';
         serviceConfig.ExecStart = "${hydra-package}/bin/hydra-init";
@@ -356,8 +387,8 @@ in
         serviceConfig =
           { ExecStart =
               "@${hydra-package}/bin/hydra-server hydra-server -f -h '${cfg.listenHost}' "
-              + "-p ${toString cfg.port} --max_spare_servers 5 --max_servers 25 "
-              + "--max_requests 100 ${optionalString cfg.debugServer "-d"}";
+              + "-p ${toString cfg.port} --min_spare_servers ${toString cfg.minSpareServers} --max_spare_servers ${toString cfg.maxSpareServers} "
+              + "--max_servers ${toString cfg.maxServers} --max_requests 100 ${optionalString cfg.debugServer "-d"}";
             User = "hydra-www";
             PermissionsStartOnly = true;
             Restart = "always";
@@ -390,7 +421,8 @@ in
     systemd.services.hydra-evaluator =
       { wantedBy = [ "multi-user.target" ];
         requires = [ "hydra-init.service" ];
-        after = [ "hydra-init.service" "network.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "hydra-init.service" "network.target" "network-online.target" ];
         path = with pkgs; [ hydra-package nettools jq ];
         restartTriggers = [ hydraConf ];
         environment = env // {

@@ -1,60 +1,71 @@
-{ lib
-, astropy
-, buildPythonPackage
-, fetchPypi
-, importlib-resources
-, jmespath
-, jsonschema
-, numpy
-, packaging
-, pytest-astropy
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, semantic-version
-, setuptools-scm
+{
+  lib,
+  asdf-standard,
+  asdf-transform-schemas,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fsspec,
+  importlib-metadata,
+  jmespath,
+  lz4,
+  numpy,
+  packaging,
+  psutil,
+  pytest-remotedata,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  semantic-version,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.8.1";
-  disabled = pythonOlder "3.6";
-  format = "pyproject";
+  version = "3.2.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-bp3fME3FTa5vcj7qUoUEGqvuI2uwSpI13zDcFgWvbJw=";
+  disabled = pythonOlder "3.9";
+
+  src = fetchFromGitHub {
+    owner = "asdf-format";
+    repo = "asdf";
+    rev = "refs/tags/${version}";
+    hash = "sha256-r+cEv6g7fq3I/h2mlszzJRQcazy7qP9pg0hfYG/Sa9E=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    asdf-standard
+    asdf-transform-schemas
+    importlib-metadata
     jmespath
-    jsonschema
     numpy
     packaging
     pyyaml
     semantic-version
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
+    attrs
   ];
 
-  checkInputs = [
-    pytest-astropy
-    astropy
+  nativeCheckInputs = [
+    fsspec
+    lz4
+    psutil
+    pytest-remotedata
     pytestCheckHook
   ];
-
-  preCheck = ''
-    export PY_IGNORE_IMPORTMISMATCH=1
-  '';
 
   pythonImportsCheck = [ "asdf" ];
 
   meta = with lib; {
     description = "Python tools to handle ASDF files";
-    homepage = "https://github.com/spacetelescope/asdf";
+    homepage = "https://github.com/asdf-format/asdf";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

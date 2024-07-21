@@ -2,7 +2,7 @@
  autoconf, automake, libtool, pkg-config, zlib, libaio, libxml2, acl, sqlite,
  liburcu, liburing, attr, makeWrapper, coreutils, gnused, gnugrep, which,
  openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
- rsync, glibc, rpcsvc-proto, libtirpc, gperftools
+ rsync, getent, rpcsvc-proto, libtirpc, gperftools, nixosTests
 }:
 let
   # NOTE: On each glusterfs release, it should be checked if gluster added
@@ -14,9 +14,9 @@ let
   #       can help with finding new Python scripts.
 
   buildInputs = [
-    fuse bison flex openssl ncurses readline
-    autoconf automake libtool pkg-config zlib libaio libxml2
-    acl sqlite liburcu attr makeWrapper util-linux libtirpc gperftools
+    fuse openssl ncurses readline
+    zlib libaio libxml2
+    acl sqlite liburcu attr util-linux libtirpc gperftools
     liburing
     (python3.withPackages (pkgs: [
       pkgs.flask
@@ -42,7 +42,7 @@ let
     e2fsprogs # tune2fs
     findutils # find
     gawk # awk
-    glibc # getent
+    getent # getent
     gnugrep # grep
     gnused # sed
     lvm2 # lvs
@@ -55,24 +55,38 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "glusterfs";
-  version = "10.0";
+  version = "11.1";
 
   src = fetchFromGitHub {
     owner = "gluster";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-n6HdXs5kLbEI8Gaw2KBtO3i8hhadb+MsshUve/DOYg0=";
+    sha256 = "sha256-ZClMfozeFO3266fkuCSV04QwpZaYa8B0uq2lTPEN2rQ=";
   };
   inherit buildInputs propagatedBuildInputs;
+
+  patches = [
+    # Upstream invokes `openssl version -d` to derive the canonical system path
+    # for certificates, which resolves to a nix store path, so this patch
+    # statically sets the configure.ac value. There's probably a less-brittle
+    # way to do this! (this will likely fail on a version bump)
+    # References:
+    # - https://github.com/gluster/glusterfs/issues/3234
+    # - https://github.com/gluster/glusterfs/commit/a7dc43f533ad4b8ff68bf57704fefc614da65493
+    ./ssl_cert_path.patch
+  ];
 
   postPatch = ''
     sed -e '/chmod u+s/d' -i contrib/fuse-util/Makefile.am
     substituteInPlace libglusterfs/src/glusterfs/lvm-defaults.h \
-      --replace '/sbin/' '${lvm2}/bin/'
+      --replace-fail '/sbin/' '${lvm2}/bin/'
     substituteInPlace libglusterfs/src/glusterfs/compat.h \
-      --replace '/bin/umount' '${util-linux}/bin/umount'
+      --replace-fail '/bin/umount' '${util-linux}/bin/umount'
     substituteInPlace contrib/fuse-lib/mount-gluster-compat.h \
-      --replace '/bin/mount' '${util-linux}/bin/mount'
+      --replace-fail '/bin/mount' '${util-linux}/bin/mount'
+    # use local up to date m4 files to ensure the correct python version is detected
+    substituteInPlace autogen.sh \
+      --replace-fail '$ACLOCAL -I ./contrib/aclocal' '$ACLOCAL'
   '';
 
   # Note that the VERSION file is something that is present in release tarballs
@@ -85,6 +99,7 @@ in stdenv.mkDerivation rec {
   # but fails when the version is empty.
   # See upstream GlusterFS bug https://bugzilla.redhat.com/show_bug.cgi?id=1452705
   preConfigure = ''
+    patchShebangs build-aux/pkg-version
     echo "v${version}" > VERSION
     ./autogen.sh
     export PYTHON=${python3}/bin/python
@@ -94,7 +109,7 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  nativeBuildInputs = [ rpcsvc-proto ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config bison flex makeWrapper rpcsvc-proto ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
@@ -180,6 +195,10 @@ in stdenv.mkDerivation rec {
     # this gets falsely loaded as module by glusterfind
     rm -r $out/bin/conf.py
   '';
+
+  passthru.tests = {
+    glusterfs = nixosTests.glusterfs;
+  };
 
   meta = with lib; {
     description = "Distributed storage system";

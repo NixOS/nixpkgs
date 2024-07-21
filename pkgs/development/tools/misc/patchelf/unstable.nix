@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook, fetchFromGitHub }:
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-${version}";
-  version = "2021-11-16";
+  pname = "patchelf";
+  version = "0.18.0-unstable-2024-06-15";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "patchelf";
-    rev = "a174cf3006baf31e0e9eaa62bc9adead93af63f7";
-    sha256 = "sha256-cKZ4DE70R5XiIqfnIVAl2s7a1bJxaaPpuCmxs3pxFRU=";
+    rev = "a0f54334df36770b335c051e540ba40afcbf8378";
+    sha256 = "sha256-FSoxTcRZMGHNJh8dNtKOkcUtjhmhU6yQXcZZfUPLhQM=";
   };
 
   # Drop test that fails on musl (?)
@@ -24,10 +24,17 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
+  passthru = {
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/NixOS/patchelf.git";
+    };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/NixOS/patchelf";
     license = licenses.gpl3;
-    description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
+    description = "Small utility to modify the dynamic linker and RPATH of ELF executables";
+    mainProgram = "patchelf";
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
   };

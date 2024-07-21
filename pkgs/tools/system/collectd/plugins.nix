@@ -1,6 +1,5 @@
 { lib, stdenv
 , curl
-, darwin
 , hiredis
 , iptables
 , jdk
@@ -19,7 +18,6 @@
 , libsigrok
 , libvirt
 , libxml2
-, libapparmor, libcap_ng, numactl
 , lua
 , lvm2
 , lm_sensors
@@ -31,7 +29,7 @@
 , perl
 , postgresql
 , protobufc
-, python
+, python3
 , rabbitmq-c
 , rdkafka
 , riemann_c_client
@@ -41,8 +39,8 @@
 , xen
 , yajl
 , IOKit
-# Defaults to `null` for all supported plugins,
-# list of plugin names for a custom build
+# Defaults to `null` for all supported plugins (except xen, which is marked as
+# insecure), otherwise a list of plugin names for a custom build
 , enabledPlugins ? null
 , ...
 }:
@@ -102,7 +100,7 @@ let
     pinba.buildInputs = [ protobufc ];
     ping.buildInputs = [ liboping ];
     postgresql.buildInputs = [ postgresql ];
-    python.buildInputs = [ python ];
+    python.buildInputs = [ python3 ];
     redis.buildInputs = [ hiredis ];
     rrdcached.buildInputs = [ rrdtool libxml2 ];
     rrdtool.buildInputs = [ rrdtool libxml2 ];
@@ -136,7 +134,7 @@ let
   buildInputs =
     if enabledPlugins == null
     then builtins.concatMap pluginBuildInputs
-      (builtins.attrNames plugins)
+      (builtins.attrNames (builtins.removeAttrs plugins ["xencpu"]))
     else builtins.concatMap pluginBuildInputs enabledPlugins;
 in {
   inherit configureFlags buildInputs;

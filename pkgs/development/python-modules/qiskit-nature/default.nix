@@ -1,79 +1,79 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
   # Python Inputs
-, h5py
-, numpy
-, psutil
-, qiskit-terra
-, retworkx
-, scikit-learn
-, scipy
-, withPyscf ? false
-, pyscf
+  h5py,
+  numpy,
+  psutil,
+  qiskit-terra,
+  rustworkx,
+  scikit-learn,
+  scipy,
+  withPyscf ? false,
+  pyscf,
   # Check Inputs
-, pytestCheckHook
-, ddt
-, pylatexenc
+  pytestCheckHook,
+  ddt,
+  pylatexenc,
+  qiskit-aer,
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-nature";
-  version = "0.2.2";
+  version = "0.7.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "qiskit";
+    owner = "Qiskit";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-nQbvH911Gt4KddG23qwmiXfRJTWwVEsrzPvuTQfy4FY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-SVzg3McB885RMyAp90Kr6/iVKw3Su9ucTob2jBckBo0=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt --replace "h5py<3.3" "h5py"
-  '';
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     h5py
     numpy
     psutil
     qiskit-terra
-    retworkx
+    rustworkx
     scikit-learn
     scipy
   ] ++ lib.optional withPyscf pyscf;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ddt
     pylatexenc
+    qiskit-aer
   ];
 
   pythonImportsCheck = [ "qiskit_nature" ];
 
-  pytestFlagsArray = [
-    "--durations=10"
-  ] ++ lib.optionals (!withPyscf) [
-    "--ignore=test/algorithms/excited_state_solvers/test_excited_states_eigensolver.py"
-  ];
+  pytestFlagsArray = [ "--durations=10" ];
 
   disabledTests = [
-    # small math error < 0.05 (< 9e-6 %)
-    "test_vqe_uvccsd_factory"
-    # unsure of failure reason. Might be related to recent cvxpy update?
-    "test_two_qubit_reduction"
-  ] ++ lib.optionals (!withPyscf) [
-    "test_h2_bopes_sampler"
-    "test_potential_interface"
+    "test_two_qubit_reduction" # failure cause unclear
   ];
 
   meta = with lib; {
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
-    downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
+    downloadPage = "https://github.com/QISKit/qiskit-nature/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode # drivers/gaussiand/gauopen/*.so
+    ];
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

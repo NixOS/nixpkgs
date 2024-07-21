@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages, diffutils, ed }:
+{ lib, stdenv, fetchurl, buildPackages, diffutils, ed, lzip }:
 
 stdenv.mkDerivation rec {
   pname = "rcs";
-  version = "5.10.0";
+  version = "5.10.1";
 
   src = fetchurl {
-    url = "mirror://gnu/rcs/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Og2flYx60wPkdehjRlSXTtvm3rOkVEkfOFfcGIm6xcU";
+    url = "mirror://gnu/rcs/${pname}-${version}.tar.lz";
+    sha256 = "sha256-Q93+EHJKi4XiRo9kA7YABzcYbwHmDgvWL95p2EIjTMU=";
   };
 
   ac_cv_path_ED = "${ed}/bin/ed";
@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
     lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
       [ buildPackages.diffutils buildPackages.ed ];
 
-  NIX_CFLAGS_COMPILE = "-std=c99";
+  env.NIX_CFLAGS_COMPILE = "-std=c99";
 
   hardeningDisable = lib.optional stdenv.cc.isClang "format";
+
+  nativeBuildInputs = [ lzip ];
 
   meta = {
     homepage = "https://www.gnu.org/software/rcs/";

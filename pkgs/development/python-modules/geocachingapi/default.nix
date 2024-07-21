@@ -1,28 +1,29 @@
-{ lib
-, aiohttp
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, yarl
+{
+  lib,
+  aiohttp,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools-scm,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "geocachingapi";
-  version = "0.1.0";
+  version = "0.2.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Sholofly";
     repo = "geocachingapi-python";
-    rev = version;
-    sha256 = "1vdknsxd7rvw6g5lwxlxj97l9ic8cch8rdki3aczs6xzw5adxhcs";
+    rev = "refs/tags/${version}";
+    hash = "sha256-C4nj4KFEwsY5V5f0Q1x+9sD8Ihz5m7b3jg2pOyB/pDg=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     aiohttp

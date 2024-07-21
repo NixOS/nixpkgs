@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.rippled;
+  opt = options.services.rippled;
 
   b2i = val: if val then "1" else "0";
 
@@ -97,7 +98,7 @@ let
 
       port = mkOption {
         description = "Port where rippled listens.";
-        type = types.int;
+        type = types.port;
       };
 
       protocol = mkOption {
@@ -165,6 +166,7 @@ let
         description = "Location to store the database.";
         type = types.path;
         default = cfg.databasePath;
+        defaultText = literalExpression "config.${opt.databasePath}";
       };
 
       compression = mkOption {
@@ -177,6 +179,7 @@ let
         description = "Enable automatic purging of older ledger information.";
         type = types.nullOr (types.addCheck types.int (v: v > 256));
         default = cfg.ledgerHistory;
+        defaultText = literalExpression "config.${opt.ledgerHistory}";
       };
 
       advisoryDelete = mkOption {
@@ -204,14 +207,9 @@ in
 
   options = {
     services.rippled = {
-      enable = mkEnableOption "rippled";
+      enable = mkEnableOption "rippled, a decentralized cryptocurrency blockchain daemon implementing the XRP Ledger protocol in C++";
 
-      package = mkOption {
-        description = "Which rippled package to use.";
-        type = types.package;
-        default = pkgs.rippled;
-        defaultText = literalExpression "pkgs.rippled";
-      };
+      package = mkPackageOption pkgs "rippled" { };
 
       ports = mkOption {
         description = "Ports exposed by rippled";
@@ -398,6 +396,7 @@ in
       config = mkOption {
         internal = true;
         default = pkgs.writeText "rippled.conf" rippledCfg;
+        defaultText = literalMD "generated config file";
       };
     };
   };

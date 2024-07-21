@@ -1,6 +1,7 @@
-{ version, sha256 }:
+{ version, sha256, patches ? [] }:
 
-{ lib, stdenv, buildPackages, fetchurl, perl, xz, gettext
+{ lib, stdenv, buildPackages, fetchurl, perl, libintl, bash
+, updateAutotoolsGnuConfigScriptsHook, gnulib, gawk, freebsd, libiconv
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -12,13 +13,12 @@
 # files.
 
 let
+  inherit (lib) getDev getLib optional optionals optionalString;
   crossBuildTools = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 
-with lib;
-
 stdenv.mkDerivation {
-  name = "texinfo-${optionalString interactive "interactive-"}${version}";
+  pname = "texinfo${optionalString interactive "-interactive"}";
   inherit version;
 
   src = fetchurl {
@@ -26,46 +26,73 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  patches = optional crossBuildTools ./cross-tools-flags.patch;
+  patches = patches ++ optional crossBuildTools ./cross-tools-flags.patch;
+
+  postPatch = ''
+    patchShebangs tp/maintain
+  ''
+  # This patch is needed for IEEE-standard long doubles on
+  # powerpc64; it does not apply cleanly to texinfo 5.x or
+  # earlier.  It is merged upstream in texinfo 6.8.
+  + lib.optionalString (version == "6.7") ''
+    patch -p1 -d gnulib < ${gnulib.passthru.longdouble-redirect-patch}
+  '';
 
   # ncurses is required to build `makedoc'
   # this feature is introduced by the ./cross-tools-flags.patch
   NATIVE_TOOLS_CFLAGS = if crossBuildTools then "-I${getDev buildPackages.ncurses}/include" else null;
   NATIVE_TOOLS_LDFLAGS = if crossBuildTools then "-L${getLib buildPackages.ncurses}/lib" else null;
 
-  # We need a native compiler to build perl XS extensions
-  # when cross-compiling.
+  strictDeps = true;
+  enableParallelBuilding = true;
+
+  # A native compiler is needed to build tools needed at build time
   depsBuildBuild = [ buildPackages.stdenv.cc perl ];
 
-  buildInputs = [ xz.bin ]
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+  buildInputs = [ bash libintl ]
     ++ optionals stdenv.isSunOS [ libiconv gawk ]
-    ++ optionals stdenv.isDarwin [ gettext ]
     ++ optional interactive ncurses;
 
   configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
+    # Perl XS modules are difficult to cross-compile and texinfo has pure Perl
+    # fallbacks.
+    # Also prevent the buildPlatform's awk being used in the texindex script
+    ++ optionals crossBuildTools [ "--enable-perl-xs=no" "TI_AWK=${gawk}/bin/awk" ]
     ++ lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
   installTargets = [ "install" "install-tex" ];
 
-  checkInputs = [ procps ];
+  nativeCheckInputs = [ procps ]
+    ++ optionals stdenv.buildPlatform.isFreeBSD [ freebsd.locale ];
 
   doCheck = interactive
     && !stdenv.isDarwin
     && !stdenv.isSunOS; # flaky
 
-  checkFlagsArray = [
+  checkFlags = lib.optionals (!stdenv.hostPlatform.isMusl && lib.versionOlder version "7") [
     # Test is known to fail on various locales on texinfo-6.8:
     #   https://lists.gnu.org/r/bug-texinfo/2021-07/msg00012.html
     "XFAIL_TESTS=test_scripts/layout_formatting_fr_icons.sh"
   ];
 
-  meta = {
+  postFixup = optionalString crossBuildTools ''
+    for f in "$out"/bin/{pod2texi,texi2any}; do
+      substituteInPlace "$f" \
+        --replace ${buildPackages.perl}/bin/perl ${perl}/bin/perl
+    done
+  '';
+
+  meta = with lib; {
+    description = "GNU documentation system";
     homepage = "https://www.gnu.org/software/texinfo/";
-    description = "The GNU documentation system";
+    changelog = "https://git.savannah.gnu.org/cgit/texinfo.git/plain/NEWS";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ vrthra oxij ];
+    maintainers = with maintainers; [ oxij ];
+    # see comment above in patches section
+    broken = stdenv.hostPlatform.isPower64 && lib.strings.versionOlder version "6.0";
 
     longDescription = ''
       Texinfo is the official documentation format of the GNU project.

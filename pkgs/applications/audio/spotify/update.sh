@@ -20,7 +20,7 @@
 
 channel="${1:-stable}" # stable/candidate/edge
 nixpkgs="$(git rev-parse --show-toplevel)"
-spotify_nix="$nixpkgs/pkgs/applications/audio/spotify/default.nix"
+spotify_nix="$nixpkgs/pkgs/applications/audio/spotify/linux.nix"
 
 
 #
@@ -39,12 +39,11 @@ snap_info=($(
 # just for human consumption. Revision is just an integer that gets increased
 # by one every (stable or unstable) release.
 revision="${snap_info[0]}"
-sha512="${snap_info[1]}"
+# We need to escape the slashes
+hash="$(nix-hash --to-sri --type sha512 ${snap_info[1]} | sed 's|/|\\/|g')"
 upstream_version="${snap_info[2]}"
 last_updated="${snap_info[3]}"
-
 echo "Latest $channel release is $upstream_version from $last_updated."
-
 #
 # read the current spotify version from the currently *committed* nix expression
 #
@@ -70,7 +69,7 @@ echo "Updating from ${current_nix_version} to ${upstream_version}, released on $
 # search-and-replace revision, hash and version
 sed --regexp-extended \
   -e 's/rev\s*=\s*"[0-9]+"\s*;/rev = "'"${revision}"'";/' \
-  -e 's/sha512\s*=\s*"[^"]*"\s*;/sha512 = "'"${sha512}"'";/' \
+  -e 's/hash\s*=\s*"[^"]*"\s*;/hash = "'"${hash}"'";/' \
   -e 's/version\s*=\s*".*"\s*;/version = "'"${upstream_version}"'";/' \
   -i "$spotify_nix"
 
@@ -78,6 +77,7 @@ sed --regexp-extended \
 # try to build the updated version
 #
 
+export NIXPKGS_ALLOW_UNFREE=1
 if ! nix-build -A spotify "$nixpkgs"; then
   echo "The updated spotify failed to build."
   exit 1

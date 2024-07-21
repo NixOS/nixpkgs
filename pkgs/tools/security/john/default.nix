@@ -1,17 +1,43 @@
-{ lib, stdenv, fetchurl, openssl, nss, nspr, libkrb5, gmp, zlib, libpcap, re2
-, gcc, python3Packages, perl, perlPackages, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  nss,
+  nspr,
+  libkrb5,
+  gmp,
+  zlib,
+  libpcap,
+  re2,
+  gcc,
+  python3Packages,
+  perl,
+  perlPackages,
+  withOpenCL ? true,
+  opencl-headers,
+  ocl-icd,
+  substituteAll,
+  makeWrapper,
 }:
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "john";
-  version = "1.9.0-jumbo-1";
+  version = "rolling-2404";
 
-  src = fetchurl {
-    url = "http://www.openwall.com/john/k/${pname}-${version}.tar.xz";
-    sha256 = "0fvz3v41hnaiv1ggpxanfykyfjq79cwp9qcqqn63vic357w27lgm";
+  src = fetchFromGitHub {
+    owner = "openwall";
+    repo = "john";
+    rev = "f9fedd238b0b1d69181c1fef033b85c787e96e57";
+    hash = "sha256-zvoN+8Sx6qpVg2JeRLOIH1ehfl3tFTv7r5wQZ44Qsbc=";
   };
+
+  patches = lib.optionals withOpenCL [
+    (substituteAll {
+      src = ./opencl.patch;
+      ocl_icd = ocl-icd;
+    })
+  ];
 
   postPatch = ''
     sed -ri -e '
@@ -24,24 +50,61 @@ stdenv.mkDerivation rec {
     }' run/*.conf
   '';
 
-  preConfigure = ''
-    cd src
-    # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
-    # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
-    export AS=$CC
-    export LD=$CC
-  '';
+  preConfigure =
+    ''
+      cd src
+      # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
+      # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
+      export AS=$CC
+      export LD=$CC
+    ''
+    + lib.optionalString withOpenCL ''
+      python ./opencl_generate_dynamic_loader.py  # Update opencl_dynamic_loader.c
+    '';
   configureFlags = [
     "--disable-native-tests"
     "--with-systemwide"
   ];
 
-  buildInputs = [ openssl nss nspr libkrb5 gmp zlib libpcap re2 ];
-  nativeBuildInputs = [ gcc python3Packages.wrapPython perl makeWrapper ];
-  propagatedBuildInputs = (with python3Packages; [ dpkt scapy lxml ]) ++ # For pcap2john.py
-                          (with perlPackages; [ DigestMD4 DigestSHA1 GetoptLong # For pass_gen.pl
-                                                perlldap ]); # For sha-dump.pl
-                          # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
+  buildInputs =
+    [
+      openssl
+      nss
+      nspr
+      libkrb5
+      gmp
+      zlib
+      libpcap
+      re2
+    ]
+    ++ lib.optionals withOpenCL [
+      opencl-headers
+      ocl-icd
+    ];
+  nativeBuildInputs = [
+    gcc
+    python3Packages.wrapPython
+    perl
+    makeWrapper
+  ];
+  propagatedBuildInputs =
+    # For pcap2john.py
+    (with python3Packages; [
+      dpkt
+      scapy
+      lxml
+    ])
+    ++ (with perlPackages; [
+      # For pass_gen.pl
+      DigestMD4
+      DigestSHA1
+      GetoptLong
+      # For 7z2john.pl
+      CompressRawLzma
+      # For sha-dump.pl
+      perlldap
+    ]);
+  # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 
   # gcc -DAC_BUILT -Wall vncpcap2john.o memdbg.o -g    -lpcap -fopenmp -o ../run/vncpcap2john
   # gcc: error: memdbg.o: No such file or directory
@@ -66,11 +129,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "John the Ripper password cracker";
-    license = licenses.gpl2;
-    homepage = "https://github.com/magnumripper/JohnTheRipper/";
-    maintainers = with maintainers; [ offline matthewbauer ];
+    license = licenses.gpl2Plus;
+    homepage = "https://github.com/openwall/john/";
+    maintainers = with maintainers; [
+      offline
+      matthewbauer
+      cherrykitten
+    ];
     platforms = platforms.unix;
   };
 }

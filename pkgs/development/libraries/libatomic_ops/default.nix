@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libatomic_ops";
-  version = "7.6.12";
+  version = "7.8.2";
 
   src = fetchurl {
     urls = [
       "http://www.ivmaisoft.com/_bin/atomic_ops/libatomic_ops-${version}.tar.gz"
       "https://github.com/ivmai/libatomic_ops/releases/download/v${version}/libatomic_ops-${version}.tar.gz"
     ];
-    sha256 = "sha256-8KtWbiX84ItWDh/qtqPbAdtKOOW8aHgEM07zkgxUnz4=";
+    sha256 = "sha256-0wUgf+IH8rP7XLTAGdoStEzj/LxZPf1QgNhnsaJBm1E=";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A library for semi-portable access to hardware-provided atomic memory update operations";
+    description = "Library for semi-portable access to hardware-provided atomic memory update operations";
     license = lib.licenses.gpl2Plus ;
     maintainers = [lib.maintainers.raskin];
     platforms = with lib.platforms; unix ++ windows;

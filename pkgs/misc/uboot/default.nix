@@ -1,39 +1,60 @@
 { stdenv
 , lib
-, fetchurl
-, fetchpatch
-, fetchFromGitHub
 , bc
 , bison
 , dtc
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
 , flex
-, openssl
-, swig
+, gnutls
+, installShellFiles
+, libuuid
 , meson-tools
+, ncurses
+, openssl
+, rkbin
+, swig
+, which
+, python3
 , armTrustedFirmwareAllwinner
+, armTrustedFirmwareAllwinnerH6
 , armTrustedFirmwareAllwinnerH616
 , armTrustedFirmwareRK3328
 , armTrustedFirmwareRK3399
+, armTrustedFirmwareRK3588
 , armTrustedFirmwareS905
 , buildPackages
 }:
 
 let
-  defaultVersion = "2021.10";
+  defaultVersion = "2024.07";
   defaultSrc = fetchurl {
-    url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "1m0bvwv8r62s4wk4w3cmvs888dhv9gnfa98dczr4drk2jbhj7ryd";
+    url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
+    hash = "sha256-9ZHamrkO89az0XN2bQ3f+QxO1zMGgIl0hhF985DYPI8=";
   };
-  buildUBoot = {
+
+  # Dependencies for the tools need to be included as either native or cross,
+  # depending on which we're building
+  toolsDeps = [
+    ncurses # tools/kwboot
+    libuuid # tools/mkeficapsule
+    gnutls # tools/mkeficapsule
+    openssl # tools/mkimage
+  ];
+
+  buildUBoot = lib.makeOverridable ({
     version ? null
   , src ? null
   , filesToInstall
+  , pythonScriptsToInstall ? { }
   , installDir ? "$out"
   , defconfig
   , extraConfig ? ""
   , extraPatches ? []
   , extraMakeFlags ? []
   , extraMeta ? {}
+  , crossTools ? false
   , ... } @ args: stdenv.mkDerivation ({
     pname = "uboot-${defconfig}";
 
@@ -43,36 +64,40 @@ let
 
     patches = [
       ./0001-configs-rpi-allow-for-bigger-kernels.patch
-
-      # Make U-Boot forward some important settings from the firmware-provided FDT. Fixes booting on BCM2711C0 boards.
-      # See also: https://github.com/NixOS/nixpkgs/issues/135828
-      # Source: https://patchwork.ozlabs.org/project/uboot/patch/20210822143656.289891-1-sjoerd@collabora.com/
-      ./0001-rpi-Copy-properties-from-firmware-dtb-to-the-loaded-.patch
     ] ++ extraPatches;
 
     postPatch = ''
+      ${lib.concatMapStrings (script: ''
+        substituteInPlace ${script} \
+        --replace "#!/usr/bin/env python3" "#!${pythonScriptsToInstall.${script}}/bin/python3"
+      '') (builtins.attrNames pythonScriptsToInstall)}
       patchShebangs tools
-      patchShebangs arch/arm/mach-rockchip
+      patchShebangs scripts
     '';
 
     nativeBuildInputs = [
+      ncurses # tools/kwboot
       bc
       bison
-      dtc
       flex
-      openssl
+      installShellFiles
       (buildPackages.python3.withPackages (p: [
         p.libfdt
         p.setuptools # for pkg_resources
+        p.pyelftools
       ]))
       swig
-    ];
+      which # for scripts/dtc-version.sh
+    ] ++ lib.optionals (!crossTools) toolsDeps;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
+    buildInputs = lib.optionals crossTools toolsDeps;
 
     hardeningDisable = [ "all" ];
 
+    enableParallelBuilding = true;
+
     makeFlags = [
-      "DTC=dtc"
+      "DTC=${lib.getExe buildPackages.dtc}"
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
     ] ++ extraMakeFlags;
 
@@ -92,28 +117,25 @@ let
       runHook preInstall
 
       mkdir -p ${installDir}
-      cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
+      cp ${lib.concatStringsSep " " (filesToInstall ++ builtins.attrNames pythonScriptsToInstall)} ${installDir}
 
       mkdir -p "$out/nix-support"
       ${lib.concatMapStrings (file: ''
         echo "file binary-dist ${installDir}/${builtins.baseNameOf file}" >> "$out/nix-support/hydra-build-products"
-      '') filesToInstall}
+      '') (filesToInstall ++ builtins.attrNames pythonScriptsToInstall)}
 
       runHook postInstall
     '';
 
-    # make[2]: *** No rule to make target 'lib/efi_loader/helloworld.efi', needed by '__build'.  Stop.
-    enableParallelBuilding = false;
-
     dontStrip = true;
 
     meta = with lib; {
-      homepage = "http://www.denx.de/wiki/U-Boot/";
+      homepage = "https://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [ bartsch dezgeg lopsided98 ];
     } // extraMeta;
-  } // removeAttrs args [ "extraMeta" ]);
+  } // removeAttrs args [ "extraMeta" "pythonScriptsToInstall" ]));
 in {
   inherit buildUBoot;
 
@@ -123,7 +145,15 @@ in {
     hardeningDisable = [];
     dontStrip = false;
     extraMeta.platforms = lib.platforms.linux;
-    extraMakeFlags = [ "HOST_TOOLS_ALL=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
+
+    crossTools = true;
+    extraMakeFlags = [ "HOST_TOOLS_ALL=y" "NO_SDL=1" "cross_tools" ];
+
+    outputs = [ "out" "man" ];
+
+    postInstall = ''
+      installManPage doc/*.1
+    '';
     filesToInstall = [
       "tools/dumpimage"
       "tools/fdtgrep"
@@ -131,10 +161,20 @@ in {
       "tools/mkenvimage"
       "tools/mkimage"
     ];
+
+    pythonScriptsToInstall = {
+      "tools/efivar.py" = (python3.withPackages (ps: [ ps.pyopenssl ]));
+    };
   };
 
   ubootA20OlinuxinoLime = buildUBoot {
     defconfig = "A20-OLinuXino-Lime_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootA20OlinuxinoLime2EMMC = buildUBoot {
+    defconfig = "A20-OLinuXino-Lime2-eMMC_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
@@ -161,6 +201,7 @@ in {
     defconfig = "bananapi_m64_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -168,7 +209,7 @@ in {
   ubootClearfog = buildUBoot {
     defconfig = "clearfog_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot-spl.kwb"];
+    filesToInstall = ["u-boot-with-spl.kwb"];
   };
 
   ubootCubieboard2 = buildUBoot {
@@ -194,6 +235,47 @@ in {
     '';
   };
 
+  # Flashing instructions:
+  # dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=512 skip=1 seek=1
+  # dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=1 count=444
+  ubootLibreTechCC = let
+    firmwareImagePkg = fetchFromGitHub {
+      owner = "LibreELEC";
+      repo = "amlogic-boot-fip";
+      rev = "4369a138ca24c5ab932b8cbd1af4504570b709df";
+      sha256 = "sha256-mGRUwdh3nW4gBwWIYHJGjzkezHxABwcwk/1gVRis7Tc=";
+      meta.license = lib.licenses.unfreeRedistributableFirmware;
+    };
+  in
+  assert stdenv.buildPlatform.system == "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
+  buildUBoot {
+    defconfig = "libretech-cc_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+    postBuild = ''
+      # Copy binary files & tools from LibreELEC/amlogic-boot-fip, and u-boot build to working dir
+      mkdir $out tmp
+      cp ${firmwareImagePkg}/lepotato/{acs.bin,bl2.bin,bl21.bin,bl30.bin,bl301.bin,bl31.img} \
+         ${firmwareImagePkg}/lepotato/{acs_tool.py,aml_encrypt_gxl,blx_fix.sh} \
+         u-boot.bin tmp/
+      cd tmp
+      python3 acs_tool.py bl2.bin bl2_acs.bin acs.bin 0
+
+      bash -e blx_fix.sh bl2_acs.bin zero bl2_zero.bin bl21.bin bl21_zero.bin bl2_new.bin bl2
+      [ -f zero ] && rm zero
+
+      bash -e blx_fix.sh bl30.bin zero bl30_zero.bin bl301.bin bl301_zero.bin bl30_new.bin bl30
+      [ -f zero ] && rm zero
+
+      ./aml_encrypt_gxl --bl2sig --input bl2_new.bin --output bl2.n.bin.sig
+      ./aml_encrypt_gxl --bl3enc --input bl30_new.bin --output bl30_new.bin.enc
+      ./aml_encrypt_gxl --bl3enc --input bl31.img --output bl31.img.enc
+      ./aml_encrypt_gxl --bl3enc --input u-boot.bin --output bl33.bin.enc
+      ./aml_encrypt_gxl --bootmk --output $out/u-boot.gxl \
+        --bl2 bl2.n.bin.sig --bl30 bl30_new.bin.enc --bl31 bl31.img.enc --bl33 bl33.bin.enc
+    '';
+  };
+
   ubootNanoPCT4 = buildUBoot rec {
     rkbin = fetchFromGitHub {
       owner = "armbian";
@@ -214,6 +296,14 @@ in {
       ./tools/mkimage -n rk3399 -T rksd -d ${rkbin}/rk33/rk3399_ddr_800MHz_v1.24.bin idbloader.img
       cat ${rkbin}/rk33/rk3399_miniloader_v1.19.bin >> idbloader.img
     '';
+  };
+
+  ubootNanoPCT6 = buildUBoot {
+    defconfig = "nanopc-t6-rk3588_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
   };
 
   ubootNovena = buildUBoot {
@@ -274,6 +364,31 @@ in {
     filesToInstall = ["u-boot-dtb.bin"];
   };
 
+  ubootOlimexA64Olinuxino = buildUBoot {
+    defconfig = "a64-olinuxino-emmc_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootOlimexA64Teres1 = buildUBoot {
+    defconfig = "teres_i_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    # Using /dev/null here is upstream-specified way that disables the inclusion of crust-firmware as it's not yet packaged and without which the build will fail -- https://docs.u-boot.org/en/latest/board/allwinner/sunxi.html#building-the-crust-management-processor-firmware
+    SCP = "/dev/null";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootOrangePi5 = buildUBoot {
+    defconfig = "orangepi-5-rk3588s_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" "u-boot-rockchip-spi.bin" ];
+  };
+
   ubootOrangePiPc = buildUBoot {
     defconfig = "orangepi_pc_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -284,6 +399,7 @@ in {
     defconfig = "orangepi_zero_plus2_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -300,6 +416,24 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootOrangePiZero3 = buildUBoot {
+    defconfig = "orangepi_zero3_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    # According to https://linux-sunxi.org/H616 the H618 "is a minor update with a larger (1MB) L2 cache" (compared to the H616)
+    # but "does require extra support in U-Boot, TF-A and sunxi-fel. Support for that has been merged in mainline releases."
+    # But no extra support seems to be in TF-A.
+    BL31 = "${armTrustedFirmwareAllwinnerH616}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootOrangePi3 = buildUBoot {
+    defconfig = "orangepi_3_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinnerH6}/bl31.bin";
+    SCP = "/dev/null";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootPcduino3Nano = buildUBoot {
     defconfig = "Linksprite_pcDuino3_Nano_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -310,6 +444,7 @@ in {
     defconfig = "pine64_plus_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -317,6 +452,7 @@ in {
     defconfig = "pine64-lts_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -324,6 +460,7 @@ in {
     defconfig = "pinebook_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -350,6 +487,18 @@ in {
     defconfig = "qemu-riscv64_smode_defconfig";
     extraMeta.platforms = ["riscv64-linux"];
     filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootQemuX86 = buildUBoot {
+    defconfig = "qemu-x86_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
+    '';
+    extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
+    filesToInstall = [ "u-boot.rom" ];
   };
 
   ubootRaspberryPi = buildUBoot {
@@ -394,37 +543,46 @@ in {
     filesToInstall = ["u-boot.bin"];
   };
 
-  ubootRock64 = let
-    rkbin = fetchFromGitHub {
-      owner = "ayufan-rock64";
-      repo = "rkbin";
-      rev = "f79a708978232a2b6b06c2e4173c5314559e0d3a";
-      sha256 = "0h7xm4ck3p3380c6bqm5ixrkxwcx6z5vysqdwvfa7gcqx5d6x5zz";
-    };
-  in buildUBoot {
-    extraMakeFlags = [ "all" "u-boot.itb" ];
+  ubootRock4CPlus = buildUBoot {
+    defconfig = "rock-4c-plus-rk3399_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img" ];
+  };
+
+  ubootRock5ModelB = buildUBoot {
+    defconfig = "rock5b-rk3588_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" "u-boot-rockchip-spi.bin" ];
+  };
+
+  ubootRock64 = buildUBoot {
     defconfig = "rock64-rk3328_defconfig";
-    extraMeta = {
-      platforms = [ "aarch64-linux" ];
-      license = lib.licenses.unfreeRedistributableFirmware;
-    };
+    extraMeta.platforms = [ "aarch64-linux" ];
     BL31="${armTrustedFirmwareRK3328}/bl31.elf";
-    filesToInstall = [ "u-boot.itb" "idbloader.img"];
-    # Derive MAC address from cpuid
-    # Submitted upstream: https://patchwork.ozlabs.org/patch/1203686/
-    extraConfig = ''
-      CONFIG_MISC_INIT_R=y
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
+  };
+
+  # A special build with much lower memory frequency (666 vs 1600 MT/s) which
+  # makes ROCK64 V2 boards stable. This is necessary because the DDR3 routing
+  # on that revision is marginal and not uncoditionally stable at the specified
+  # frequency. If your ROCK64 is unstable you can try this u-boot variant to
+  # see if it works better for you. The only disadvantage is lowered memory
+  # bandwidth.
+  ubootRock64v2 = buildUBoot {
+    prePatch = ''
+      substituteInPlace arch/arm/dts/rk3328-rock64-u-boot.dtsi \
+        --replace rk3328-sdram-lpddr3-1600.dtsi rk3328-sdram-lpddr3-666.dtsi
     '';
-    # Close to being blob free, but the U-Boot TPL causes random memory
-    # corruption
-    postBuild = ''
-      ./tools/mkimage -n rk3328 -T rksd -d ${rkbin}/rk33/rk3328_ddr_786MHz_v1.13.bin idbloader.img
-      cat spl/u-boot-spl.bin >> idbloader.img
-    '';
+    defconfig = "rock64-rk3328_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31="${armTrustedFirmwareRK3328}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
   };
 
   ubootRockPro64 = buildUBoot {
-    extraMakeFlags = [ "all" "u-boot.itb" ];
     extraPatches = [
       # https://patchwork.ozlabs.org/project/uboot/list/?series=237654&archive=both&state=*
       (fetchpatch {
@@ -455,7 +613,16 @@ in {
     defconfig = "sopine_baseboard_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootTuringRK1 = buildUBoot {
+    defconfig = "turing-rk1-rk3588_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
   };
 
   ubootUtilite = buildUBoot {

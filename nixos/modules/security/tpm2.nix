@@ -3,7 +3,7 @@ let
   cfg = config.security.tpm2;
 
   # This snippet is taken from tpm2-tss/dist/tpm-udev.rules, but modified to allow custom user/groups
-  # The idea is that the tssUser is allowed to acess the TPM and kernel TPM resource manager, while
+  # The idea is that the tssUser is allowed to access the TPM and kernel TPM resource manager, while
   # the tssGroup is only allowed to access the kernel resource manager
   # Therefore, if either of the two are null, the respective part isn't generated
   udevRules = tssUser: tssGroup: ''
@@ -63,7 +63,7 @@ in {
     pkcs11 = {
       enable = lib.mkEnableOption ''
         TPM2 PKCS#11 tool and shared library in system path
-        (<literal>/run/current-system/sw/lib/libtpm2_pkcs11.so</literal>)
+        (`/run/current-system/sw/lib/libtpm2_pkcs11.so`)
       '';
 
       package = lib.mkOption {
@@ -79,18 +79,8 @@ in {
         description = ''
           Set common TCTI environment variables to the specified value.
           The variables are
-          <itemizedlist>
-            <listitem>
-              <para>
-                <literal>TPM2TOOLS_TCTI</literal>
-              </para>
-            </listitem>
-            <listitem>
-              <para>
-                <literal>TPM2_PKCS11_TCTI</literal>
-              </para>
-            </listitem>
-          </itemizedlist>
+          - `TPM2TOOLS_TCTI`
+          - `TPM2_PKCS11_TCTI`
         '';
         type = lib.types.bool;
         default = false;
@@ -110,8 +100,8 @@ in {
           Configuration part of the device TCTI, e.g. the path to the TPM device.
           Applies if interface is set to "device".
           The format is specified in the
-          <link xlink:href="https://github.com/tpm2-software/tpm2-tools/blob/master/man/common/tcti.md#tcti-options">
-          tpm2-tools repository</link>.
+          [
+          tpm2-tools repository](https://github.com/tpm2-software/tpm2-tools/blob/master/man/common/tcti.md#tcti-options).
         '';
         type = lib.types.str;
         default = "/dev/tpmrm0";
@@ -122,8 +112,8 @@ in {
           Configuration part of the tabrmd TCTI, like the D-Bus bus name.
           Applies if interface is set to "tabrmd".
           The format is specified in the
-          <link xlink:href="https://github.com/tpm2-software/tpm2-tools/blob/master/man/common/tcti.md#tcti-options">
-          tpm2-tools repository</link>.
+          [
+          tpm2-tools repository](https://github.com/tpm2-software/tpm2-tools/blob/master/man/common/tcti.md#tcti-options).
         '';
         type = lib.types.str;
         default = "bus_name=com.intel.tss2.Tabrmd";

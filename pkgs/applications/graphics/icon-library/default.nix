@@ -1,29 +1,53 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook
-, cargo, desktop-file-utils, meson, ninja, pkg-config, python3, rustc
-, dbus, gdk-pixbuf, glib, gtk3, gtksourceview4, libhandy
+{ lib
+, stdenv
+, fetchurl
+, wrapGAppsHook4
+, cargo
+, desktop-file-utils
+, meson
+, ninja
+, pkg-config
+, rustc
+, gdk-pixbuf
+, glib
+, gtk4
+, gtksourceview5
+, libadwaita
+, darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "icon-library";
-  version = "0.0.8";
+  version = "0.0.19";
 
   src = fetchurl {
-    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/fdf890706e0eef2458a5285e3bf65dd5/icon-library-${version}.tar.xz";
-    sha256 = "0807b56bgm8j1gpq4nf8x31gq9wqhcmpzpkqw6s4wissw3cb7q96";
+    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/7725604ce39be278abe7c47288085919/icon-library-${version}.tar.xz";
+    hash = "sha256-nWGTYoSa0/fxnD0Mb2132LkeB1oa/gj/oIXBbI+FDw8=";
   };
 
   nativeBuildInputs = [
-    cargo desktop-file-utils meson ninja pkg-config python3 rustc wrapGAppsHook
+    cargo
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    rustc
+    wrapGAppsHook4
   ];
-  buildInputs = [ dbus gdk-pixbuf glib gtk3 gtksourceview4 libhandy ];
-
-  postPatch = ''
-    patchShebangs build-aux/meson_post_install.py
-  '';
+  buildInputs = [
+    gdk-pixbuf
+    glib
+    gtk4
+    gtksourceview5
+    libadwaita
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Foundation
+  ];
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/design/icon-library";
     description = "Symbolic icons for your apps";
+    mainProgram = "icon-library";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

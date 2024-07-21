@@ -1,4 +1,4 @@
-{ lib, callPackage }:
+{ stdenv, lib, callPackage }:
 let
   common = arch: callPackage (
     { bison
@@ -8,38 +8,42 @@ let
     , flex
     , getopt
     , git
-    , gnat11
+    , gnat
+    , gcc
     , lib
     , perl
     , stdenvNoCC
     , zlib
+    , withAda ? true
     }:
 
-    stdenvNoCC.mkDerivation rec {
+    stdenvNoCC.mkDerivation (finalAttrs: {
       pname = "coreboot-toolchain-${arch}";
-      version = "4.15";
+      version = "24.05";
 
       src = fetchgit {
         url = "https://review.coreboot.org/coreboot";
-        rev = version;
-        sha256 = "1qsb2ca22h5f0iwc254qsfm7qcn8967ir8aybdxa1pakgmnfsyp9";
+        rev = finalAttrs.version;
+        hash = "sha256-jTfMFvl3sG3BIVVkpZ81BQ20Bs+2ESE6RMh0fW86rKE=";
         fetchSubmodules = false;
         leaveDotGit = true;
         postFetch = ''
-          patchShebangs $out/util/crossgcc/buildgcc
-          PATH=${lib.makeBinPath [ getopt ]}:$PATH $out/util/crossgcc/buildgcc -W > $out/.crossgcc_version
+          PATH=${lib.makeBinPath [ getopt ]}:$PATH ${stdenv.shell} $out/util/crossgcc/buildgcc -W > $out/.crossgcc_version
           rm -rf $out/.git
         '';
+        allowedRequisites = [ ];
       };
 
       nativeBuildInputs = [ bison curl git perl ];
-      buildInputs = [ flex gnat11 zlib ];
+      buildInputs = [ flex zlib (if withAda then gnat else gcc) ];
 
       enableParallelBuilding = true;
       dontConfigure = true;
       dontInstall = true;
 
       postPatch = ''
+        patchShebangs util/crossgcc/buildgcc
+
         mkdir -p util/crossgcc/tarballs
 
         ${lib.concatMapStringsSep "\n" (
@@ -59,14 +63,14 @@ let
         homepage = "https://www.coreboot.org";
         description = "coreboot toolchain for ${arch} targets";
         license = with licenses; [ bsd2 bsd3 gpl2 lgpl2Plus gpl3Plus ];
-        maintainers = with maintainers; [ felixsinger ];
+        maintainers = with maintainers; [ felixsinger jmbaur ];
         platforms = platforms.linux;
       };
-    }
+    })
   );
 in
 
-lib.listToAttrs (map (arch: lib.nameValuePair arch (common arch {})) [
+lib.listToAttrs (map (arch: lib.nameValuePair arch (common arch { })) [
   "i386"
   "x64"
   "arm"

@@ -1,38 +1,52 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "knockpy";
-  version = "5.2.0";
-  disabled = python3.pythonOlder "3.6";
+  version = "7.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "guelfoweb";
     repo = "knock";
-    rev = version;
-    sha256 = "sha256-QPOIpgJt+09zRvSavRxuVEN+GGk4Z1CYCXti37YaO7o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Xtv7K19OBS2iHFFoSasNcy9VLL15eQ8AD79wAEhxCHk=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = [
+    "beautifulsoup4"
+    "dnspython"
+    "pyopenssl"
+    "requests"
+    "tqdm"
+  ];
+
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     beautifulsoup4
-    colorama
-    matplotlib
-    networkx
-    pyqt5
+    dnspython
+    pyopenssl
     requests
+    tqdm
   ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "knockpy" ];
+  pythonImportsCheck = [ "knock" ];
 
   meta = with lib; {
     description = "Tool to scan subdomains";
     homepage = "https://github.com/guelfoweb/knock";
-    license = with licenses; [ gpl3Only ];
+    changelog = "https://github.com/guelfoweb/knock/releases/tag/${version}";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "knockpy";
   };
 }

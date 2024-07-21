@@ -1,0 +1,13 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index f01f824..e00d079 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -328,7 +328,7 @@ dependencies = [
+
+ [[package]]
+ name = "swayws"
+-version = "1.1.1"
++version = "1.2.0"
+ dependencies = [
+  "clap",
+  "env_logger",

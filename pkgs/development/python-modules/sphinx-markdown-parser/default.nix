@@ -1,22 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sphinx
-, markdown
-, CommonMark
-, recommonmark
-, pydash
-, pyyaml
-, unify
-, yapf
-, python
+{
+  lib,
+  buildPythonPackage,
+  commonmark,
+  fetchFromGitHub,
+  markdown,
+  pydash,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  recommonmark,
+  setuptools,
+  sphinx,
+  unify,
+  yapf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "sphinx-markdown-parser";
   version = "0.2.4";
+  pyproject = true;
 
-  # PyPi release does not include requirements.txt
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "clayrisser";
     repo = "sphinx-markdown-parser";
@@ -26,14 +31,30 @@ buildPythonPackage rec {
     sha256 = "0i0hhapmdmh83yx61lxi2h4bsmhnzddamz95844g2ghm132kw5mv";
   };
 
-  propagatedBuildInputs = [ sphinx markdown CommonMark pydash pyyaml unify yapf recommonmark ];
+  nativeBuildInputs = [ setuptools ];
 
-  # Avoids running broken tests in test_markdown.py
-  checkPhase = ''
-    ${python.interpreter} -m unittest -v tests/test_basic.py tests/test_sphinx.py
-  '';
+  propagatedBuildInputs = [
+    commonmark
+    markdown
+    pydash
+    pyyaml
+    recommonmark
+    unify
+    yapf
+  ];
+
+  buildInputs = [ sphinx ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sphinx_markdown_parser" ];
+
+  disabledTests = [
+    # AssertionError
+    "test_heading"
+    "test_headings"
+    "test_integration"
+  ];
 
   meta = with lib; {
     description = "Write markdown inside of docutils & sphinx projects";

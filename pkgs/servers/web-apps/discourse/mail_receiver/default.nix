@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0grifm5qyqazq63va3w26xjqnxwmfixhx0fx0zy7kd39378wwa6i";
   };
 
-  nativeBuildInputs = [ replace ];
-  buildInputs = [ ruby makeWrapper ];
+  nativeBuildInputs = [ replace makeWrapper ];
+  buildInputs = [ ruby ];
 
   dontBuild = true;
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ talyz ];
     license = licenses.mit;
-    description = "A helper program which receives incoming mail for Discourse";
+    description = "Helper program which receives incoming mail for Discourse";
   };
 
 }

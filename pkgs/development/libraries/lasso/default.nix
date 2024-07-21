@@ -1,22 +1,49 @@
-{ lib, stdenv, autoconf, automake, autoreconfHook, fetchurl, glib, gobject-introspection, gtk-doc, libtool, libxml2, libxslt, openssl, pkg-config, python27Packages, xmlsec, zlib }:
+{ lib, stdenv
+, autoreconfHook
+, fetchurl
+, glib
+, gobject-introspection
+, gtk-doc
+, libtool
+, libxml2
+, libxslt
+, openssl
+, pkg-config
+, python3
+, xmlsec
+, zlib
+}:
 
 stdenv.mkDerivation rec {
-
   pname = "lasso";
-  version = "2.7.0";
+  version = "2.8.2";
 
   src = fetchurl {
     url = "https://dev.entrouvert.org/lasso/lasso-${version}.tar.gz";
-    sha256 = "138x8pmj4k1pbah32z14rd8ylyx4lgz70s93m39vd17f8sjz50lj";
-
+    hash = "sha256-ahgxv9v49CTHUIq6R7BF1RNB7A/ekSLziwuGsJbvUz4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ autoconf automake glib gobject-introspection gtk-doc libtool libxml2 libxslt openssl python27Packages.six xmlsec zlib ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    python3
+    gobject-introspection
+  ];
+
+  buildInputs = [
+    glib
+    gtk-doc
+    libtool
+    libxml2
+    libxslt
+    openssl
+    python3.pkgs.six
+    xmlsec
+    zlib
+  ];
 
   configurePhase = ''
     ./configure --with-pkg-config=$PKG_CONFIG_PATH \
-                --disable-python \
                 --disable-perl \
                 --prefix=$out
   '';
@@ -24,9 +51,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://lasso.entrouvert.org/";
     description = "Liberty Alliance Single Sign-On library";
+    changelog = "https://git.entrouvert.org/entrouvert/lasso/raw/tag/v${version}/ChangeLog";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ womfoo ];
   };
-
 }

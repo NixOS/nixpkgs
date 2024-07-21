@@ -12,16 +12,21 @@
 , bzip2
 , xz
 , zstd
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "kbd";
-  version = "2.4.0";
+  version = "2.6.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kbd/${pname}-${version}.tar.xz";
-    sha256 = "17wvrqz2kk0w87idinhyvd31ih1dp7ldfl2yfx7ailygb0279w2m";
+    sha256 = "sha256-UZ+NCHrsyn4KM80IS++SwGbrGXMWZmU9zHDJ1xqkCSY=";
   };
+
+  # vlock is moved into its own output, since it depends on pam. This
+  # reduces closure size for most use cases.
+  outputs = [ "out" "vlock" "dev" ];
 
   configureFlags = [
     "--enable-optional-progs"
@@ -53,6 +58,12 @@ stdenv.mkDerivation rec {
         --replace 'bzip2 ' '${bzip2.bin}/bin/bzip2 ' \
         --replace 'xz '    '${xz.bin}/bin/xz ' \
         --replace 'zstd '  '${zstd.bin}/bin/zstd '
+
+      sed -i '
+        1i prefix:=$(vlock)
+        1i bindir := $(vlock)/bin' \
+        src/vlock/Makefile.in \
+        src/vlock/Makefile.am
     '';
 
   postInstall = ''
@@ -63,10 +74,19 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ check pam ];
+  NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isStatic "-laudit";
   nativeBuildInputs = [ autoreconfHook pkg-config flex ];
 
   passthru.tests = {
     inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
+  };
+  passthru = {
+    gzip = gzip;
+    updateScript = gitUpdater {
+       # No nicer place to find latest release.
+       url = "https://github.com/legionus/kbd.git";
+       rev-prefix = "v";
+    };
   };
 
   meta = with lib; {

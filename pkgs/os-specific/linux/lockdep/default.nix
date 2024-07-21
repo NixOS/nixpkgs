@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex bison ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: lockdep.o:/build/linux-5.0.21/tools/lib/lockdep/../../include/linux/rcu.h:5: multiple definition of
+  #     `rcu_scheduler_active'; common.o:/build/linux-5.0.21/tools/lib/lockdep/../../include/linux/rcu.h:5: first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
+
   buildPhase = ''
     make defconfig
     make headers_install
@@ -31,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkInputs = [ valgrind ];
+  nativeCheckInputs = [ valgrind ];
   checkPhase = ''
     # there are more /bin/bash references than just shebangs
     for f in lockdep run_tests.sh tests/*.sh; do
@@ -53,8 +59,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Userspace locking validation tool built on the Linux kernel";
+    mainProgram = "lockdep";
     homepage    = "https://kernel.org/";
-    license     = lib.licenses.gpl2;
+    license     = lib.licenses.gpl2Only;
     platforms   = lib.platforms.linux;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };

@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/homewsn/whsniff";
     description = "Packet sniffer for 802.15.4 wireless networks";
+    mainProgram = "whsniff";
     maintainers = with maintainers; [ snicket2100 ];
     platforms = platforms.linux;
     license = licenses.gpl2Only;

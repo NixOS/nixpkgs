@@ -1,41 +1,67 @@
-{ lib, stdenv, fetchFromGitHub, openssl, trousers, autoreconfHook, libtool, bison, flex }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, bison
+, flex
+, openldap
+, openssl
+, trousers
+, libcap
+}:
 
 stdenv.mkDerivation rec {
   pname = "opencryptoki";
-  version = "3.8.2";
+  version = "3.23.0";
 
   src = fetchFromGitHub {
     owner = "opencryptoki";
     repo = "opencryptoki";
     rev = "v${version}";
-    sha256 = "1rf7cmibmx636vzv7p54g212478a8wim2lfjf2861hfd0m96nv4l";
+    hash = "sha256-5FcvwGTzsL0lYrSYGlbSY89s6OKzg+2TRlwHlJjdzXo=";
   };
 
-  nativeBuildInputs = [ autoreconfHook libtool bison flex ];
-  buildInputs = [ openssl trousers ];
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+  ];
+
+  buildInputs = [
+    openldap
+    openssl
+    trousers
+    libcap
+  ];
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace "usermod" "true" \
-      --replace "groupadd" "true" \
-      --replace "chmod" "true" \
-      --replace "chgrp" "true"
-    substituteInPlace usr/lib/Makefile.am --replace "DESTDIR" "out"
+      --replace-fail "usermod" "true" \
+      --replace-fail "useradd" "true" \
+      --replace-fail "groupadd" "true" \
+      --replace-fail "chmod" "true" \
+      --replace-fail "chown" "true" \
+      --replace-fail "chgrp" "true"
   '';
 
   configureFlags = [
-    "--prefix=$(out)"
+    "--prefix="
     "--disable-ccatok"
     "--disable-icatok"
   ];
 
   enableParallelBuilding = true;
 
+  installFlags = [
+    "DESTDIR=${placeholder "out"}"
+  ];
+
   meta = with lib; {
+    changelog   = "https://github.com/opencryptoki/opencryptoki/blob/${src.rev}/ChangeLog";
     description = "PKCS#11 implementation for Linux";
     homepage    = "https://github.com/opencryptoki/opencryptoki";
     license     = licenses.cpl10;
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = [ ];
     platforms   = platforms.unix;
   };
 }

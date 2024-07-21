@@ -1,61 +1,77 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, anyio
-, h11
-, h2
-, pproxy
-, pytest-asyncio
-, pytestCheckHook
-, pytest-cov
-, sniffio
-, trio
-, trustme
-, uvicorn
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  hatchling,
+  hatch-fancy-pypi-readme,
+  h11,
+  h2,
+  pproxy,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytest-trio,
+  pytestCheckHook,
+  pythonOlder,
+  socksio,
+  trio,
+  # for passthru.tests
+  httpx,
+  httpx-socks,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.13.7";
-  disabled = pythonOlder "3.6";
+  version = "1.0.5";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-9hG9MqqEYMT2j7tXafToGYwHbJfp9/klNqZozHSbweE=";
+    repo = "httpcore";
+    rev = "refs/tags/${version}";
+    hash = "sha256-05jYLrBiPRg1qQEz8mRvYJKHFsfneh7z9yHIXuYYa5o=";
   };
 
-  propagatedBuildInputs = [
-    anyio
-    h11
-    h2
-    sniffio
+  nativeBuildInputs = [
+    hatchling
+    hatch-fancy-pypi-readme
   ];
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    certifi
+    h11
+  ];
+
+  passthru.optional-dependencies = {
+    asyncio = [ anyio ];
+    http2 = [ h2 ];
+    socks = [ socksio ];
+    trio = [ trio ];
+  };
+
+  nativeCheckInputs = [
     pproxy
     pytest-asyncio
+    pytest-httpbin
+    pytest-trio
     pytestCheckHook
-    pytest-cov
-    trio
-    trustme
-    uvicorn
-  ];
-
-  disabledTestPaths = [
-    # these tests fail during dns lookups: httpcore.ConnectError: [Errno -2] Name or service not known
-    "tests/test_threadsafety.py"
-    "tests/async_tests/"
-    "tests/sync_tests/test_interfaces.py"
-    "tests/sync_tests/test_retries.py"
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [ "httpcore" ];
 
+  __darwinAllowLocalNetworking = true;
+
+  passthru.tests = {
+    inherit httpx httpx-socks respx;
+  };
+
   meta = with lib; {
-    description = "A minimal low-level HTTP client";
+    changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
+    description = "Minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ris ];

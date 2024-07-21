@@ -26,12 +26,13 @@ stdenv.mkDerivation rec {
       desktopName = "Maelstrom";
       genericName = "Maelstrom";
       comment = "An arcade-style game resembling Asteroids";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 
   meta = with lib; {
-    description = "An arcade-style game resembling Asteroids";
+    description = "Arcade-style game resembling Asteroids";
+    mainProgram = "maelstrom";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ tmountain ];

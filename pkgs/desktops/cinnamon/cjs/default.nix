@@ -1,42 +1,30 @@
-{ dbus-glib
+{ stdenv
+, lib
 , fetchFromGitHub
 , gobject-introspection
 , pkg-config
-, lib
-, stdenv
-, wrapGAppsHook
-, python3
 , cairo
-, gnome
-, xapps
-, keybinder3
-, upower
-, callPackage
 , glib
-, libffi
-, gtk3
 , readline
-, spidermonkey_78
+, libsysprof-capture
+, spidermonkey_115
 , meson
-, sysprof
+, mesonEmulatorHook
 , dbus
-, xvfb-run
 , ninja
-, makeWrapper
 , which
 , libxml2
-, gtk4
 }:
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "5.2.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
     rev = version;
-    hash = "sha256-06sTk513qVMdznSHJzzB3XIPTcfjgxTB2o+ALqwPpHM=";
+    hash = "sha256-/74E10txRjwN9RkjVB8M0MPYakJ659yJWanc4DC09wg=";
   };
 
   outputs = [ "out" "dev" ];
@@ -45,35 +33,26 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    makeWrapper
     which # for locale detection
     libxml2 # for xml-stripblanks
+    dbus # for dbus-run-session
+    gobject-introspection
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
-    gtk4
-    gobject-introspection
     cairo
     readline
-    spidermonkey_78
-    dbus # for dbus-run-session
-  ];
-
-  checkInputs = [
-    xvfb-run
+    libsysprof-capture
+    spidermonkey_115
   ];
 
   propagatedBuildInputs = [
     glib
-
-    # bindings
-    gnome.caribou
-    keybinder3
-    upower
-    xapps
   ];
 
-  mesonFlags = [
+  mesonFlags = lib.optionals stdenv.hostPlatform.isMusl [
     "-Dprofiler=disabled"
   ];
 

@@ -1,34 +1,47 @@
-{ lib, stdenv, fetchFromGitHub, kernel, linuxHeaders }:
+{ lib, stdenv, fetchFromGitHub, kernel, linuxHeaders, pahole }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tuxedo-keyboard-${kernel.version}";
-  version = "3.0.8";
+  version = "3.2.14";
 
   src = fetchFromGitHub {
     owner = "tuxedocomputers";
     repo = "tuxedo-keyboard";
-    rev = "v${version}";
-    sha256 = "1rv3ns4n61v18cpnp36zi47jpnqhj410yzi8b307ghiyriapbijv";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-L3NsUUKA/snUcRWwlZidsBiTznhfulNldidEDDmNOkw=";
   };
 
-  buildInputs = [ linuxHeaders ];
+  buildInputs = [
+    pahole
+    linuxHeaders
+  ];
 
   makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}"
 
-    for module in clevo_acpi.ko clevo_wmi.ko tuxedo_keyboard.ko tuxedo_io/tuxedo_io.ko; do
+    for module in clevo_acpi.ko clevo_wmi.ko tuxedo_keyboard.ko tuxedo_io/tuxedo_io.ko uniwill_wmi.ko; do
         mv src/$module $out/lib/modules/${kernel.modDirVersion}
     done
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Full color keyboard driver for tuxedo computers laptops";
+  meta = {
+    broken = stdenv.isAarch64 || (lib.versionOlder kernel.version "5.5");
+    description = "Keyboard and hardware I/O driver for TUXEDO Computers laptops";
     homepage = "https://github.com/tuxedocomputers/tuxedo-keyboard/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    broken = stdenv.isAarch64;
-    maintainers = [ maintainers.blanky0230 ];
+    license = lib.licenses.gpl3Plus;
+    longDescription = ''
+      This driver provides support for Fn keys, brightness/color/mode for most TUXEDO
+      keyboards (except white backlight-only models).
+
+      Can be used with the "hardware.tuxedo-keyboard" NixOS module.
+    '';
+    maintainers = [ lib.maintainers.blanky0230 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

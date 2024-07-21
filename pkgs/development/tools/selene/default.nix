@@ -5,31 +5,37 @@
 , pkg-config
 , openssl
 , stdenv
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "selene";
-  version = "0.15.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "kampfkarren";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tA1exZ97N2tAagAljt+MOSGh6objOiqbZXUaBZ62Sls=";
+    sha256 = "sha256-NbVSFYv3nyEjSf0bFajcMaoWP2bS0EfJT8tDddjS7jg=";
   };
 
-  cargoSha256 = "sha256-4vCKiTWwnibNK6/S1GOYRurgm2Aq1e9o4rAmp0hqGeA=";
+  cargoHash = "sha256-e3oQUFtgdjqPiB2YpmqnFUG2scmYJhLSpUaw0W6RxIk=";
 
-  nativeBuildInputs = lib.optional robloxSupport pkg-config;
+  nativeBuildInputs = lib.optionals robloxSupport [
+    pkg-config
+  ];
 
-  buildInputs = lib.optional robloxSupport openssl
-    ++ lib.optional (robloxSupport && stdenv.isDarwin) Security;
+  buildInputs = lib.optionals robloxSupport [
+    openssl
+  ] ++ lib.optionals (robloxSupport && stdenv.isDarwin) [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   buildNoDefaultFeatures = !robloxSupport;
 
   meta = with lib; {
-    description = "A blazing-fast modern Lua linter written in Rust";
+    description = "Blazing-fast modern Lua linter written in Rust";
+    mainProgram = "selene";
     homepage = "https://github.com/kampfkarren/selene";
     changelog = "https://github.com/kampfkarren/selene/blob/${version}/CHANGELOG.md";
     license = licenses.mpl20;

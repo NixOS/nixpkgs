@@ -13,22 +13,20 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.13.0";
+  version = "1.15.13";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "gopasspw";
-    repo = pname;
+    repo = "gopass";
     rev = "v${version}";
-    sha256 = "sha256-MBpk84H3Ng/+rCjW2Scm/su0/5kgs7IzvFk/bFLNzXY=";
+    hash = "sha256-FoDb4+9x8waLWBk4d0TclpReu60vzNGE+8GQmKMmcMQ=";
   };
 
-  vendorSha256 = "sha256-HGc6jUp4WO5P5dwfa0r7+X78a8us9fWrf+/IOotZHqk=";
+  vendorHash = "sha256-Om4ne8oyZBr6a4dgBIvd0NZaDwmmC68pg8D+1UApzLw=";
 
   subPackages = [ "." ];
-
-  doCheck = false;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
 
@@ -42,9 +40,10 @@ buildGoModule rec {
 
   postInstall = ''
     installManPage gopass.1
-    installShellCompletion --zsh --name _gopass zsh.completion
-    installShellCompletion --bash --name gopass.bash bash.completion
-    installShellCompletion --fish --name gopass.fish fish.completion
+    installShellCompletion --cmd gopass \
+      --zsh zsh.completion \
+      --bash bash.completion \
+      --fish fish.completion
   '' + lib.optionalString passAlias ''
     ln -s $out/bin/gopass $out/bin/pass
   '';
@@ -54,13 +53,16 @@ buildGoModule rec {
       --prefix PATH : "${wrapperPath}" \
       --set GOPASS_NO_REMINDER true
   '';
+  passthru = {
+    inherit wrapperPath;
+  };
 
   meta = with lib; {
-    description = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go";
+    description = "Slightly more awesome Standard Unix Password Manager for Teams. Written in Go";
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
-    maintainers = with maintainers; [ andir rvolosatovs ];
-    changelog = "https://github.com/gopasspw/gopass/raw/v${version}/CHANGELOG.md";
+    maintainers = with maintainers; [ rvolosatovs sikmir ];
+    changelog = "https://github.com/gopasspw/gopass/blob/v${version}/CHANGELOG.md";
 
     longDescription = ''
       gopass is a rewrite of the pass password manager in Go with the aim of
@@ -71,5 +73,6 @@ buildGoModule rec {
       users. We go by the UNIX philosophy and try to do one thing and do it
       well, providing a stellar user experience and a sane, simple interface.
     '';
+    mainProgram = "gopass";
   };
 }

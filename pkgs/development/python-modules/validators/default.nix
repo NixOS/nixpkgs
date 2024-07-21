@@ -1,41 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, six
-, decorator
-, pytestCheckHook
-, isort
-, flake8
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "validators";
-  version = "0.18.2";
-  disabled = isPy27;
+  version = "0.28.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "37cd9a9213278538ad09b5b9f9134266e7c226ab1fede1d500e29e0a8fbb9ea6";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "python-validators";
+    repo = "validators";
+    rev = "refs/tags/${version}";
+    hash = "sha256-r3SQvt96y8e9odWxz0GjVKH3+Pa0Lqs+tbhryeGaZUU=";
   };
 
-  propagatedBuildInputs = [
-    six
-    decorator
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-    flake8
-    isort
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals isPy27 [ "url" ];
+  pythonImportsCheck = [ "validators" ];
 
   meta = with lib; {
-    description = "Python Data Validation for Humans™";
-    homepage = "https://github.com/kvesteri/validators";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    description = "Python Data Validation for Humans";
+    homepage = "https://github.com/python-validators/validators";
+    changelog = "https://github.com/python-validators/validators/blob/${version}/CHANGES.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

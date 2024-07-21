@@ -28,12 +28,12 @@ in
         description = ''
           Attrset that is converted and passed as config file. Available options
           can be found at
-          <link xlink:href="https://github.com/hacdias/webdav">here</link>.
+          [here](https://github.com/hacdias/webdav).
 
           This program supports reading username and password configuration
           from environment variables, so it's strongly recommended to store
           username and password in a separate
-          <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#EnvironmentFile=">EnvironmentFile</link>.
+          [EnvironmentFile](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#EnvironmentFile=).
           This prevents adding secrets to the world-readable Nix store.
         '';
         example = literalExpression ''
@@ -68,9 +68,7 @@ in
         type = types.nullOr types.path;
         default = null;
         description = ''
-          Environment file as defined in <citerefentry>
-          <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-          </citerefentry>.
+          Environment file as defined in {manpage}`systemd.exec(5)`.
         '';
       };
     };

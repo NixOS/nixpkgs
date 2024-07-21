@@ -3,7 +3,6 @@
 , fetchFromGitLab
 , pkg-config
 , autoreconfHook
-, qmake
 , rake
 , boost
 , cmark
@@ -26,6 +25,8 @@
 , pugixml
 , qtbase
 , qtmultimedia
+, qtwayland
+, utf8cpp
 , xdg-utils
 , zlib
 , withGUI ? true
@@ -33,7 +34,8 @@
 }:
 
 let
-  inherit (lib) enableFeature optional optionals optionalString;
+  inherit (lib)
+    enableFeature getDev getLib optionals optionalString;
 
   phase = name: args:
     ''
@@ -47,13 +49,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "63.0.0";
+  version = "86.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "0jniy2kkg4fkrgyw2k8jcpq872qzkrxkbpbc7ksadm2rdygsa3xh";
+    hash = "sha256-h9rVs4A7JihnCj15XUus9xMvShKWyYhJN/90v/fl0PE=";
   };
 
   nativeBuildInputs = [
@@ -65,10 +67,9 @@ stdenv.mkDerivation rec {
     pkg-config
     rake
   ]
-  ++ optional withGUI wrapQtAppsHook;
+  ++ optionals withGUI [ wrapQtAppsHook ];
 
-  # 1. qtbase and qtmultimedia are needed without the GUI
-  # 2. we have utf8cpp in nixpkgs but it doesn't find it
+  # qtbase and qtmultimedia are needed without the GUI
   buildInputs = [
     boost
     expat
@@ -85,11 +86,13 @@ stdenv.mkDerivation rec {
     pugixml
     qtbase
     qtmultimedia
+    utf8cpp
     xdg-utils
     zlib
   ]
-  ++ optional withGUI cmark
-  ++ optional stdenv.isDarwin libiconv;
+  ++ optionals withGUI [ cmark ]
+  ++ optionals stdenv.isLinux [ qtwayland ]
+  ++ optionals stdenv.isDarwin [ libiconv ];
 
   # autoupdate is not needed but it silences a ton of pointless warnings
   postPatch = ''
@@ -102,10 +105,13 @@ stdenv.mkDerivation rec {
     "--disable-precompiled-headers"
     "--disable-profiling"
     "--disable-static-qt"
+    "--disable-update-check"
     "--enable-optimization"
-    "--with-boost-libdir=${boost.out}/lib"
+    "--with-boost-libdir=${getLib boost}/lib"
     "--with-docbook-xsl-root=${docbook_xsl}/share/xml/docbook-xsl"
     "--with-gettext"
+    "--with-extra-includes=${getDev utf8cpp}/include/utf8cpp"
+    "--with-extra-libs=${getLib utf8cpp}/lib"
     (enableFeature withGUI "gui")
   ];
 
@@ -117,9 +123,6 @@ stdenv.mkDerivation rec {
 
   checkPhase = phase "Check" "tests:run_unit";
 
-  CXXFLAGS = optional stdenv.cc.isClang "-std=c++17";
-  LDFLAGS = optional stdenv.cc.isClang "-lc++fs";
-
   dontWrapQtApps = true;
 
   postFixup = optionalString withGUI ''
@@ -130,6 +133,7 @@ stdenv.mkDerivation rec {
     description = "Cross-platform tools for Matroska";
     homepage = "https://mkvtoolnix.download/";
     license = licenses.gpl2Only;
+    mainProgram = if withGUI then "mkvtoolnix-gui" else "mkvtoolnix";
     maintainers = with maintainers; [ codyopel rnhmjoj ];
     platforms = platforms.unix;
   };

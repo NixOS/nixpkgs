@@ -1,15 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi, click, google-auth, six }:
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  google-auth,
+  packaging,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "google-cloud-testutils";
-  version = "1.1.0";
+  version = "1.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3d79051b6ca170c2a4f159bf56ac3f66c1e5360486121e72c06fdaa3911154bf";
+    hash = "sha256-1oocIuKssoUA1p2dxhqFy+nJjJtp4phwQnHN/L88C8s=";
   };
 
-  propagatedBuildInputs = [ click google-auth six ];
+  propagatedBuildInputs = [
+    click
+    google-auth
+    packaging
+  ];
 
   # does not contain tests
   doCheck = false;
@@ -18,8 +33,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "System test utilities for google-cloud-python";
+    mainProgram = "lower-bound-checker";
     homepage = "https://github.com/googleapis/python-test-utils";
+    changelog = "https://github.com/googleapis/python-test-utils/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

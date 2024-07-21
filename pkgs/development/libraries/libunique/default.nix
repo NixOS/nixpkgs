@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   # Patches from Gentoo portage
   patches = [
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = "https://wiki.gnome.org/Attic/LibUnique";
-    description = "A library for writing single instance applications";
+    homepage = "https://gitlab.gnome.org/Archive/unique";
+    description = "Library for writing single instance applications";
     license = lib.licenses.lgpl21;
     platforms = with lib.platforms; linux ++ darwin;
   };

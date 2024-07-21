@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gphoto2";
-  version = "2.5.27";
+  version = "2.5.28";
 
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "gphoto2";
     rev = "v${version}";
-    sha256 = "sha256-zzlyA2IedyBZ4/TdSmrqbe2le8rFMQ6tY6jF5skJ7l4=";
+    sha256 = "sha256-t5EnM4WaDbOTPM+rJW+hQxBgNErnnZEN9lZvxTKoDhA=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A ready to use set of digital camera software applications";
+    description = "Ready to use set of digital camera software applications";
     longDescription = ''
 
       A set of command line utilities for manipulating over 1400 different
@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.jcumming ];
+    mainProgram = "gphoto2";
   };
 }

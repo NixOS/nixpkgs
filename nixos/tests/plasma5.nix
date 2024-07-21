@@ -6,15 +6,16 @@ import ./make-test-python.nix ({ pkgs, ...} :
     maintainers = [ ttuegel ];
   };
 
-  machine = { ... }:
+  nodes.machine = { ... }:
 
   {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
-    services.xserver.displayManager.sddm.enable = true;
-    services.xserver.displayManager.defaultSession = "plasma";
+    services.displayManager.sddm.enable = true;
+    services.displayManager.defaultSession = "plasma";
     services.xserver.desktopManager.plasma5.enable = true;
-    services.xserver.displayManager.autoLogin = {
+    environment.plasma5.excludePackages = [ pkgs.plasma5Packages.elisa ];
+    services.displayManager.autoLogin = {
       enable = true;
       user = "alice";
     };
@@ -22,13 +23,13 @@ import ./make-test-python.nix ({ pkgs, ...} :
   };
 
   testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
+    user = nodes.machine.users.users.alice;
     xdo = "${pkgs.xdotool}/bin/xdotool";
   in ''
     with subtest("Wait for login"):
         start_all()
-        machine.wait_for_file("${user.home}/.Xauthority")
-        machine.succeed("xauth merge ${user.home}/.Xauthority")
+        machine.wait_for_file("/tmp/xauth_*")
+        machine.succeed("xauth merge /tmp/xauth_*")
 
     with subtest("Check plasmashell started"):
         machine.wait_until_succeeds("pgrep plasmashell")
@@ -39,6 +40,11 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
     with subtest("Check that logging in has given the user ownership of devices"):
         machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
+
+    with subtest("Ensure Elisa is not installed"):
+        machine.fail("which elisa")
+
+    machine.succeed("su - ${user.name} -c 'xauth merge /tmp/xauth_*'")
 
     with subtest("Run Dolphin"):
         machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 dolphin >&2 &'")

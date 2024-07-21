@@ -15,9 +15,7 @@ let
     storage = {
       cache.blobdescriptor = blobCache;
       delete.enabled = cfg.enableDelete;
-    } // (if cfg.storagePath != null
-          then { filesystem.rootdirectory = cfg.storagePath; }
-          else {});
+    } // (optionalAttrs (cfg.storagePath != null) { filesystem.rootdirectory = cfg.storagePath; });
     http = {
       addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
       headers.X-Content-Type-Options = ["nosniff"];
@@ -43,11 +41,14 @@ let
     };
   };
 
-  configFile = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (recursiveUpdate registryConfig cfg.extraConfig));
-
+  configFile = cfg.configFile;
 in {
   options.services.dockerRegistry = {
     enable = mkEnableOption "Docker Registry";
+
+    package = mkPackageOption pkgs "docker-distribution" {
+      example = "gitlab-container-registry";
+    };
 
     listenAddress = mkOption {
       description = "Docker registry host or ip to bind to.";
@@ -59,6 +60,12 @@ in {
       description = "Docker registry port to bind to.";
       default = 5000;
       type = types.port;
+    };
+
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Opens the port used by the firewall.";
     };
 
     storagePath = mkOption {
@@ -98,6 +105,17 @@ in {
       type = types.attrs;
     };
 
+    configFile = lib.mkOption {
+      default = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (recursiveUpdate registryConfig cfg.extraConfig));
+      defaultText = literalExpression ''pkgs.writeText "docker-registry-config.yml" "# my custom docker-registry-config.yml ..."'';
+      description = ''
+       Path to CNCF distribution config file.
+
+       Setting this option will override any configuration applied by the extraConfig option.
+      '';
+      type =  types.path;
+    };
+
     enableGarbageCollect = mkEnableOption "garbage collect";
 
     garbageCollectDates = mkOption {
@@ -105,8 +123,7 @@ in {
       type = types.str;
       description = ''
         Specification (in the format described by
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>) of the time at
+        {manpage}`systemd.time(7)`) of the time at
         which the garbage collect will occur.
       '';
     };
@@ -118,7 +135,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       script = ''
-        ${pkgs.docker-distribution}/bin/registry serve ${configFile}
+        ${cfg.package}/bin/registry serve ${configFile}
       '';
 
       serviceConfig = {
@@ -137,7 +154,7 @@ in {
       serviceConfig.Type = "oneshot";
 
       script = ''
-        ${pkgs.docker-distribution}/bin/registry garbage-collect ${configFile}
+        ${cfg.package}/bin/registry garbage-collect ${configFile}
         /run/current-system/systemd/bin/systemctl restart docker-registry.service
       '';
 
@@ -145,15 +162,17 @@ in {
     };
 
     users.users.docker-registry =
-      (if cfg.storagePath != null
-      then {
+      (optionalAttrs (cfg.storagePath != null) {
         createHome = true;
         home = cfg.storagePath;
-      }
-      else {}) // {
+      }) // {
         group = "docker-registry";
         isSystemUser = true;
       };
     users.groups.docker-registry = {};
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
+    };
   };
 }

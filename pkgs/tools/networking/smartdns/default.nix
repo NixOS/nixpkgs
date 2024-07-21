@@ -1,33 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl, testers, smartdns }:
 
 stdenv.mkDerivation rec {
   pname = "smartdns";
-  version = "35";
+  version = "46";
 
   src = fetchFromGitHub {
     owner = "pymumu";
     repo = pname;
     rev = "Release${version}";
-    sha256 = "sha256-5822qe3mdn4wPO8fHW5AsgMA7xbJnMjZn9DbiMU3GX0=";
+    hash = "sha256-7JNP8vacYENBbbCxBtSpVu9j5vCBVBsQ/OeVPoRxlE4=";
   };
 
   buildInputs = [ openssl ];
-
-  # Force the systemd service file to be regenerated from it's template.  This
-  # file is erroneously added in version 35 and it has already been deleted from
-  # upstream's git repository.  So this "postPatch" phase can be deleted in next
-  # release.
-  postPatch = ''
-    rm -f systemd/smartdns.service
-  '';
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "SYSTEMDSYSTEMUNITDIR=${placeholder "out"}/lib/systemd/system"
     "RUNSTATEDIR=/run"
+    # by default it is the build time... weird... https://github.com/pymumu/smartdns/search?q=ver
+    "VER=${version}"
   ];
 
   installFlags = [ "SYSCONFDIR=${placeholder "out"}/etc" ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = smartdns;
+      command = "smartdns -v";
+    };
+  };
 
   meta = with lib; {
     description =
@@ -41,5 +42,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.lexuge ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "smartdns";
   };
 }

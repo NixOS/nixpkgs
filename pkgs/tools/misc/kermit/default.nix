@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses, glibc }:
+{ lib, stdenv, fetchurl, ncurses, libxcrypt }:
 
 stdenv.mkDerivation {
   pname = "kermit";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0487mh6s99ijqf1pfmbm302pa5i4pzmm8s439hdl1ffs5g8jqpqd";
   };
 
-  buildInputs = [ ncurses glibc ];
+  buildInputs = [ ncurses libxcrypt ];
 
   unpackPhase = ''
     mkdir -p src

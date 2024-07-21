@@ -1,19 +1,20 @@
-{ stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, rpiVersion, ... } @ args:
+{ stdenv, lib, buildPackages, fetchFromGitHub, fetchpatch, perl, buildLinux, rpiVersion, ... } @ args:
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
-  modDirVersion = "5.10.52";
-  tag = "1.20210805";
+  modDirVersion = "6.6.31";
+  tag = "stable_20240529";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
   inherit modDirVersion;
+  pname = "linux-rpi";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "linux";
     rev = tag;
-    sha256 = "1j71xblflslfi4c3zx2srw6fahnhp3bjx4yjfqrp39kzaa41ij0b";
+    hash = "sha256-UWUTeCpEN7dlFSQjog6S3HyEWCCnaqiUqV5KxCjYink=";
   };
 
   defconfig = {
@@ -23,28 +24,42 @@ lib.overrideDerivation (buildLinux (args // {
     "4" = "bcm2711_defconfig";
   }.${toString rpiVersion};
 
+  structuredExtraConfig = (args.structuredExtraConfig or {}) // (with lib.kernel; {
+    # Workaround https://github.com/raspberrypi/linux/issues/6198
+    # Needed because NixOS 24.05+ sets DRM_SIMPLEDRM=y which pulls in
+    # DRM_KMS_HELPER=y.
+    BACKLIGHT_CLASS_DEVICE = yes;
+  });
+
   features = {
     efiBootStub = false;
   } // (args.features or {});
 
-  extraConfig = ''
-    # ../drivers/gpu/drm/ast/ast_mode.c:851:18: error: initialization of 'void (*)(struct drm_crtc *, struct drm_atomic_state *)' from incompatible pointer type 'void (*)(struct drm_crtc *, struct drm_crtc_state *)' [-Werror=incompatible-pointer-types]
-    #   851 |  .atomic_flush = ast_crtc_helper_atomic_flush,
-    #       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # ../drivers/gpu/drm/ast/ast_mode.c:851:18: note: (near initialization for 'ast_crtc_helper_funcs.atomic_flush')
-    DRM_AST n
-    # ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'amdgpu_dm_atomic_commit_tail':
-    # ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:7757:4: error: implicit declaration of function 'is_hdr_metadata_different' [-Werror=implicit-function-declaration]
-    #  7757 |    is_hdr_metadata_different(old_con_state, new_con_state);
-    #       |    ^~~~~~~~~~~~~~~~~~~~~~~~~
-    DRM_AMDGPU n
-  '';
+  kernelPatches = (args.kernelPatches or []) ++ [
+    # Fix compilation errors due to incomplete patch backport.
+    # https://github.com/raspberrypi/linux/pull/6223
+    {
+      name = "gpio-pwm_-_pwm_apply_might_sleep.patch";
+      patch = fetchpatch {
+        url = "https://github.com/peat-psuwit/rpi-linux/commit/879f34b88c60dd59765caa30576cb5bfb8e73c56.patch";
+        hash = "sha256-HlOkM9EFmlzOebCGoj7lNV5hc0wMjhaBFFZvaRCI0lI=";
+      };
+    }
+
+    {
+      name = "ir-rx51_-_pwm_apply_might_sleep.patch";
+      patch = fetchpatch {
+        url = "https://github.com/peat-psuwit/rpi-linux/commit/23431052d2dce8084b72e399fce82b05d86b847f.patch";
+        hash = "sha256-UDX/BJCJG0WVndP/6PbPK+AZsfU3vVxDCrpn1kb1kqE=";
+      };
+    }
+  ];
 
   extraMeta = if (rpiVersion < 3) then {
-    platforms = with lib.platforms; [ arm ];
+    platforms = with lib.platforms; arm;
     hydraPlatforms = [];
   } else {
-    platforms = with lib.platforms; [ arm aarch64 ];
+    platforms = with lib.platforms; arm ++ aarch64;
     hydraPlatforms = [ "aarch64-linux" ];
   };
 } // (args.argsOverride or {}))) (oldAttrs: {
@@ -75,6 +90,7 @@ lib.overrideDerivation (buildLinux (args // {
   '' + lib.optionalString (lib.elem stdenv.hostPlatform.system ["armv7l-linux"]) ''
     copyDTB bcm2709-rpi-2-b.dtb bcm2836-rpi-2-b.dtb
   '' + lib.optionalString (lib.elem stdenv.hostPlatform.system ["armv7l-linux" "aarch64-linux"]) ''
+    copyDTB bcm2710-rpi-zero-2.dtb bcm2837-rpi-zero-2.dtb
     copyDTB bcm2710-rpi-3-b.dtb bcm2837-rpi-3-b.dtb
     copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-a-plus.dtb
     copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-b-plus.dtb

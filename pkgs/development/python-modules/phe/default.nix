@@ -1,29 +1,48 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, click, gmpy2, numpy } :
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPyPy,
+  isPy3k,
+  setuptools,
+  click,
+  gmpy2,
+  pytestCheckHook,
+  numpy,
+}:
 
-let
+buildPythonPackage rec {
   pname = "phe";
-  version = "1.4.0";
-in
+  version = "1.5.1";
+  pyproject = true;
 
-buildPythonPackage {
-  inherit pname version;
+  # https://github.com/data61/python-paillier/issues/51
+  disabled = isPyPy || !isPy3k;
 
-  # https://github.com/n1analytics/python-paillier/issues/51
-  disabled = isPyPy || ! isPy3k;
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0wzlk7d24kp0f5kpm0kvvc88mm42144f5cg9pcpb1dsfha75qy5m";
+  src = fetchFromGitHub {
+    owner = "data61";
+    repo = "python-paillier";
+    rev = "refs/tags/${version}";
+    hash = "sha256-P//4ZL4+2zcB5sWvujs2N0CHFz+EBLERWrPGLLHj6CY=";
   };
 
-  buildInputs = [ click gmpy2 numpy ];
+  build-system = [ setuptools ];
 
-  # 29/233 tests fail
-  doCheck = false;
+  dependencies = [
+    click
+    gmpy2 # optional, but major speed improvement
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    numpy
+  ];
 
   meta = with lib; {
-    description = "A library for Partially Homomorphic Encryption in Python";
-    homepage = "https://github.com/n1analytics/python-paillier";
+    description = "Library for Partially Homomorphic Encryption in Python";
+    mainProgram = "pheutil";
+    homepage = "https://github.com/data61/python-paillier";
     license = licenses.gpl3;
+    maintainers = with maintainers; [ tomasajt ];
   };
 }

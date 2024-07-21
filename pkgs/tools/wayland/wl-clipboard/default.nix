@@ -6,28 +6,41 @@
 , pkg-config
 , wayland
 , wayland-protocols
+, wayland-scanner
+, xdg-utils
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "wl-clipboard";
-  version = "2.0.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "bugaevc";
     repo = "wl-clipboard";
     rev = "v${version}";
-    sha256 = "0c4w87ipsw09aii34szj9p0xfy0m00wyjpll0gb0aqmwa60p0c5d";
+    hash = "sha256-BYRXqVpGt9FrEBYQpi2kHPSZyeMk9o1SXkxjjcduhiY=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-protocols ];
-  buildInputs = [ wayland ];
+  strictDeps = true;
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner makeWrapper ];
+  buildInputs = [ wayland wayland-protocols ];
+
+  mesonFlags = [
+    "-Dfishcompletiondir=share/fish/vendor_completions.d"
+  ];
+
+  # Fix for https://github.com/NixOS/nixpkgs/issues/251261
+  postInstall = lib.optionalString (!xdg-utils.meta.broken) ''
+    wrapProgram $out/bin/wl-copy \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/bugaevc/wl-clipboard";
     description = "Command-line copy/paste utilities for Wayland";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ dywedir kashw2 ];
+    platforms = platforms.unix;
   };
 }
-# TODO: is wayland-protocols a nativeBuildInput or a buildInput?

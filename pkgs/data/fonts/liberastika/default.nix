@@ -1,19 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "liberastika";
   version = "1.1.5";
-in fetchzip rec {
-  name = "liberastika-${version}";
 
-  url = "mirror://sourceforge/project/lib-ka/liberastika-ttf-${version}.zip";
+  src = fetchzip {
+    url = "mirror://sourceforge/project/lib-ka/liberastika-ttf-${version}.zip";
+    stripRoot = false;
+    hash = "sha256-woUpOmxhj6eEw7PKJ8EyRcs3ORj0gCZhxHP5a5dy5z0=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.ttf                           -d $out/share/fonts/truetype
-    unzip -j $downloadedFile AUTHORS ChangeLog COPYING README -d "$out/share/doc/${name}"
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+
+    runHook postInstall
   '';
-
-  sha256 = "1a9dvl1pzch2vh8sqyyn1d1wz4n624ffazl6hzlc3s5k5lzrb6jp";
 
   meta = with lib; {
     description = "Liberation Sans fork with improved cyrillic support";
@@ -21,7 +24,6 @@ in fetchzip rec {
 
     license = licenses.gpl2;
     platforms = platforms.all;
-    hydraPlatforms = [];
-    maintainers = [ maintainers.volth ];
+    maintainers = [ ];
   };
 }
