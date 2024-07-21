@@ -65,10 +65,10 @@
         "src": {
             "owner": "libretro",
             "repo": "beetle-pce-fast-libretro",
-            "rev": "9ebf08571e20e79db32be78a025a8b552e9a3795",
-            "hash": "sha256-iE81/8RMkCaJuFOMSfZzCC7BFOFBv/0cNpcJRuQC0ws="
+            "rev": "c68ee949ab5a572c0c6541d25b66e997174a09f6",
+            "hash": "sha256-6hGO1GGFMBJxhuGXeUulilSN5zAqYjls/b4pHnoyc0Y="
         },
-        "version": "unstable-2024-06-28"
+        "version": "unstable-2024-07-19"
     },
     "beetle-pcfx": {
         "fetcher": "fetchFromGitHub",
