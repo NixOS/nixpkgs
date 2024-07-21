@@ -3,6 +3,9 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
+  which,
+  unixtools,
+  cctools,
   ffmpeg,
   libjpeg,
   libpng,
@@ -20,13 +23,23 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-p0W+rKHH/iuGOcRjl6b4s6jQYkm7bqWCz849SDI/7fQ=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs =
+    [ pkg-config ]
+    ++ lib.optionals stdenv.isDarwin [
+      which
+      unixtools.xxd
+    ];
 
   buildInputs = [
     ffmpeg
     libjpeg
     libpng
   ];
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace libharvid/Makefile \
+      --replace-fail /usr/bin/libtool ${cctools}/bin/libtool
+  '';
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -48,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://x42.github.io/harvid";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.mitchmindtree ];
     mainProgram = "harvid";
   };
