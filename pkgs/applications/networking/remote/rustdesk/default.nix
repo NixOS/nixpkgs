@@ -114,7 +114,6 @@ rustPlatform.buildRustPackage rec {
     libopus
     libaom
     libxkbcommon
-    xdotool
     pam
     pango
     zlib
@@ -130,6 +129,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
+    xdotool
   ];
 
   # Add static ui resources and libsciter to same folder as binary so that it
@@ -139,7 +139,7 @@ rustPlatform.buildRustPackage rec {
 
     # .so needs to be next to the executable
     mv $out/bin/rustdesk $out/lib/rustdesk
-    ln -s ${libsciter}/lib/libsciter-gtk.so $out/lib/rustdesk
+    ${lib.optionalString stdenv.isLinux "ln -s ${libsciter}/lib/libsciter-gtk.so $out/lib/rustdesk"}
 
     makeWrapper $out/lib/rustdesk/rustdesk $out/bin/rustdesk \
       --chdir "$out/share"
@@ -149,7 +149,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm0644 $src/res/logo.svg $out/share/icons/hicolor/scalable/apps/rustdesk.svg
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     patchelf --add-rpath "${libayatana-appindicator}/lib" "$out/lib/rustdesk/rustdesk"
   '';
 
