@@ -27573,6 +27573,7 @@ with pkgs;
     withPasswordQuality = false;
     withVmspawn = false;
     withQrencode = false;
+    withLibarchive = false;
   };
   systemdLibs = systemdMinimal.override {
     pname = "systemd-minimal-libs";
