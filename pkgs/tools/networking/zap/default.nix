@@ -62,7 +62,7 @@ let
     # Copying config and adding version tag before first use to avoid permission
     # issues if zap tries to copy config on it's own.
     installPhase = ''
-      mkdir -p "$out/bin" "$out/share"
+      mkdir -p $out/{bin,share}
       cp -pR . "$out/share/${pname}/"
 
       cat >> "$out/bin/${pname}" << EOF
