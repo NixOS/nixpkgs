@@ -1,4 +1,4 @@
-{ lib, androidenv, buildPackages, pkgs, targetPackages
+{ lib, androidenv, buildPackages, pkgs, targetPackages, androidndkPkgs_23, config
 }:
 
 let
@@ -38,7 +38,7 @@ in
 
 {
   "21" = makeNdkPkgs "21.0.6113669" pkgs.llvmPackages_14; # "9"
-  "23b" = makeNdkPkgs "23.1.7779620" pkgs.llvmPackages_14; # "12"
+  "23" = makeNdkPkgs "23.1.7779620" pkgs.llvmPackages_14; # "12"
   # Versions below 24 use a version not available in nixpkgs/old version which could be removed in the near future so use 14 for them as this is only used to get the hardening flags.
   "24" = makeNdkPkgs "24.0.8215888" pkgs.llvmPackages_14;
   "25" = makeNdkPkgs "25.2.9519653" pkgs.llvmPackages_14;
