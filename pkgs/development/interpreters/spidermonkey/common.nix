@@ -14,6 +14,7 @@
 , pkg-config
 , python3
 , python39
+, python311
 , rustc
 , which
 , zip
@@ -31,6 +32,11 @@
 , libiconv
 }:
 
+let
+  pythonToUse = if lib.versionOlder version "91" then python39
+    else if lib.versionOlder version "102" then python311
+    else python3;
+in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "spidermonkey";
   inherit version;
@@ -79,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     perl
     pkg-config
     # 78 requires python up to 3.9
-    (if lib.versionOlder version "91" then python39 else python3)
+    pythonToUse
     rustc
     rustc.llvmPackages.llvm # for llvm-objdump
     which
@@ -155,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     export CXXFLAGS="-fpermissive"
   '' + ''
     export LIBXUL_DIST=$out
-    export PYTHON="${buildPackages.python3.interpreter}"
+    export PYTHON="${pythonToUse.interpreter}"
   '' + lib.optionalString (lib.versionAtLeast version "91") ''
     export M4=m4
     export AWK=awk
