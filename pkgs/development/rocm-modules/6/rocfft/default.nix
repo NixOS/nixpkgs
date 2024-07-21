@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft";
-  version = "6.0.2";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocFFT";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-6Gjsy14GeR08VqnNmFhu8EyYDnQ+VZRlg+u9MAAWfHc=";
+    hash = "sha256-wv1NRTdnAs5lOE/CjPY+Ddym+384NprxvVve+xgdUj8=";
   };
 
   nativeBuildInputs = [
