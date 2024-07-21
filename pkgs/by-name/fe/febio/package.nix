@@ -1,68 +1,66 @@
 {
   lib,
   stdenv,
+  overrideSDK,
   fetchFromGitHub,
+  fetchpatch2,
+  substituteAll,
   cmake,
-  boost,
-  eigen,
-  libxml2,
-  mpi,
-  python3,
+  ninja,
+  zlib,
+  darwin,
   mklSupport ? true,
   mkl,
-  substituteAll,
 }:
 
-stdenv.mkDerivation rec {
+let
+  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+in
+
+stdenv'.mkDerivation (finalAttrs: {
   pname = "FEBio";
-  version = "3.6";
+  version = "4.7";
 
   src = fetchFromGitHub {
     owner = "febiosoftware";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "187s4lyzr806xla3smq3lsvj3f6wxlhfkban89w0fnyfmfb8w9am";
+    repo = "FEBio";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RRdIOyXg4jYW76ABfJdMfVtCYMLYFdvyOI98nHXCof8=";
   };
 
   patches = [
+    # Fix library searching and installation
     (substituteAll {
-      src = ./fix-cmake.patch; # cannot find mkl libraries without this
+      src = ./fix-cmake.patch;
       so = stdenv.hostPlatform.extensions.sharedLibrary;
+    })
+
+    # Fixed missing header include for strcpy
+    # https://github.com/febiosoftware/FEBio/pull/92
+    (fetchpatch2 {
+      url = "https://github.com/febiosoftware/FEBio/commit/ad9e80e2aa8737828855458a703822f578db2fd3.patch?full_index=1";
+      hash = "sha256-/uLnJB/oAwLQnsZtJnUlaAEpyZVLG6o2riRwwMCH8rI=";
     })
   ];
 
-  cmakeFlags = lib.optional mklSupport "-DUSE_MKL=On" ++ lib.optional mklSupport "-DMKLROOT=${mkl}";
+  cmakeFlags = lib.optionals mklSupport [
+    (lib.cmakeBool "USE_MKL" true)
+    (lib.cmakeFeature "MKLROOT" "${mkl}")
+  ];
 
-  env.CXXFLAGS = lib.optionalString stdenv.isLinux "-include cstring";
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/include
-    cp -R lib bin $out/
-    cp -R ../FECore \
-      ../FEBioFluid \
-      ../FEBioLib \
-      ../FEBioMech \
-      ../FEBioMix \
-      ../FEBioOpt \
-      ../FEBioPlot \
-      ../FEBioXML \
-      ../NumCore \
-      $out/include
-
-    runHook postInstall
-  '';
-
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    boost
-    eigen
-    libxml2
-    mpi
-    python3
-    python3.pkgs.numpy
-  ] ++ lib.optional mklSupport mkl;
+  buildInputs =
+    [ zlib ]
+    ++ lib.optionals mklSupport [ mkl ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.CoreGraphics
+      darwin.apple_sdk.frameworks.CoreVideo
+      darwin.apple_sdk.frameworks.Accelerate
+    ];
 
   meta = {
     description = "FEBio Suite Solver";
@@ -71,4 +69,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
-}
+})
