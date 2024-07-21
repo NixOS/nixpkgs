@@ -77,15 +77,25 @@ let
             -j DNAT --to-destination ${fwd.destination}
 
           # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from other hosts behind NAT
-          ${iptables} -w -t nat -A nixos-nat-pre \
-            -d ${loopbackip} -p ${fwd.proto} \
-            --dport ${builtins.toString fwd.sourcePort} \
-            -j DNAT --to-destination ${fwd.destination}
-
-          ${iptables} -w -t nat -A nixos-nat-post \
-            -d ${destinationIP} -p ${fwd.proto} \
-            --dport ${destinationPorts} \
-            -j SNAT --to-source ${loopbackip}
+          ${concatMapStrings (range: ''
+            ${iptables} -w -t nat -A nixos-nat-pre \
+              -d ${loopbackip} -p ${fwd.proto} -s '${range}' \
+              --dport ${builtins.toString fwd.sourcePort} \
+              -j DNAT --to-destination ${fwd.destination}
+            ${iptables} -w -t nat -A nixos-nat-post \
+              -d ${destinationIP} -p ${fwd.proto} \
+              -s '${range}' --dport ${destinationPorts} \
+              -j SNAT --to-source ${loopbackip}
+          '') internalIPs}
+          ${concatMapStrings (iface: ''
+            ${iptables} -w -t nat -A nixos-nat-pre \
+              -d ${loopbackip} -p ${fwd.proto} -i '${iface}' \
+              --dport ${builtins.toString fwd.sourcePort} \
+              -j DNAT --to-destination ${fwd.destination}
+            ${iptables} -w -t nat -A nixos-nat-post \
+              -d ${destinationIP} -p ${fwd.proto} \
+              -i '${iface}' --dport ${destinationPorts} \
+              -j SNAT --to-source ${loopbackip}
         '') fwd.loopbackIPs}
     '') forwardPorts}
   '';
