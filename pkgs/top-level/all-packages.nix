@@ -25513,8 +25513,6 @@ with pkgs;
 
   kapowbang = callPackage ../servers/kapowbang { };
 
-  keycloak = callPackage ../servers/keycloak { };
-
   knot-dns = callPackage ../servers/dns/knot-dns { };
   knot-resolver = callPackage ../servers/dns/knot-resolver {
     systemd = systemdMinimal; # in closure already anyway
