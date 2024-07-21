@@ -11685,6 +11685,8 @@ self: super: with self; {
 
   pyarrow-hotfix = callPackage ../development/python-modules/pyarrow-hotfix { };
 
+  pyarrow-ops = callPackage ../development/python-modules/pyarrow-ops { };
+
   pyasn = callPackage ../development/python-modules/pyasn { };
 
   pyasn1 = callPackage ../development/python-modules/pyasn1 { };
