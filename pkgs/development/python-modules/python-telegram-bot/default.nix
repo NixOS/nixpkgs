@@ -5,6 +5,7 @@
   beautifulsoup4,
   buildPythonPackage,
   cachetools,
+  cffi,
   cryptography,
   fetchFromGitHub,
   flaky,
@@ -14,6 +15,7 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   pytz,
   setuptools,
@@ -37,13 +39,20 @@ buildPythonPackage rec {
   build-system = [ setuptools hatchling ];
 
   dependencies = [
-    aiolimiter
-    apscheduler
-    cachetools
-    cryptography
     httpx
-    pytz
-  ] ++ httpx.optional-dependencies.socks ++ httpx.optional-dependencies.http2;
+  ];
+
+  optional-dependencies = rec {
+    all = ext ++ http2 ++ passport ++ socks;
+    callback-data = [ cachetools ];
+    ext = callback-data ++ job-queue ++ rate-limiter ++ webhooks;
+    http2 = httpx.optional-dependencies.http2;
+    job-queue = [ apscheduler pytz ];
+    passport = [ cryptography ] ++ lib.optionals (pythonAtLeast "3.13") [ cffi ];
+    rate-limiter = [ aiolimiter ];
+    socks = httpx.optional-dependencies.socks;
+    webhooks = [ tornado ];
+  };
 
   nativeCheckInputs = [
     beautifulsoup4
@@ -52,8 +61,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytest-xdist
     pytestCheckHook
-    tornado
-  ];
+  ] ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "telegram" ];
 
