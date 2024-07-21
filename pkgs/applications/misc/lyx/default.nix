@@ -13,19 +13,13 @@
 }:
 
 mkDerivation rec {
-  version = "2.3.7-1";
+  version = "2.4.1";
   pname = "lyx";
 
   src = fetchurl {
-    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Ob6IZPuGs06IMQ5w+4Dl6eKWYB8IVs8WGqCUFxcY2O0=";
+    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.4.x/${pname}-${version}.tar.xz";
+    hash = "sha256-dN4ooH7zeqlHG8mWLbGCFSolMQx9H0f2drubxj2XE8U=";
   };
-
-  # Needed with GCC 12
-  postPatch = ''
-    sed '1i#include <iterator>' -i src/lyxfind.cpp
-    sed '1i#include <cstring>'  -i src/insets/InsetListings.cpp
-  '';
 
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
   nativeBuildInputs = [
