@@ -177,7 +177,55 @@ in
         ExecStart = "${lib.getExe ollamaPackage} serve";
         WorkingDirectory = cfg.home;
         StateDirectory = [ "ollama" ];
-        ReadWritePaths = [ cfg.models ];
+        ReadWritePaths = [
+          cfg.home
+          cfg.models
+        ];
+
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [
+          # CUDA
+          # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
+          "char-nvidiactl"
+          "char-nvidia-caps"
+          "char-nvidia-uvm"
+          # ROCm
+          "char-drm"
+          "char-kfd"
+        ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = false; # hides acceleration devices
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "all"; # /proc/meminfo
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        SupplementaryGroups = [ "render" ]; # for rocm to access /dev/dri/renderD* devices
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service @resources"
+          "~@privileged"
+        ];
+        UMask = "0077";
       };
       postStart = mkBefore ''
         set -x
