@@ -1,20 +1,30 @@
-{ lib, maven, fetchFromGitHub, jre, makeWrapper, nix-update-script }:
+{
+  fetchFromGitHub,
+  jre,
+  lib,
+  makeWrapper,
+  maven,
+  nix-update-script,
+}:
 
 maven.buildMavenPackage rec {
   pname = "h2";
-  version = "2.2.224";
+  version = "2.3.230";
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "h2database";
     repo = "h2database";
     rev = "refs/tags/version-${version}";
-    hash = "sha256-pS9jSiuInA0eULPOZK5cjwr9y5KDVY51blhZ9vs4z+g=";
+    hash = "sha256-zF33xqsTIXSdOSqBeX/uuEdi36btn6gS/fmbxcgsSpg=";
   };
 
   mvnParameters = "-f h2/pom.xml";
-  mvnHash = "sha256-kWRwaHb9+O07/jq8tgQnYpJa6zFsAMBCEnhT7HNKM4s=";
+  mvnHash = "sha256-ue1X0fswi3C9uqJ/cVCf/qd2XStMve1k1qA+IsREOGk=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -32,16 +42,22 @@ maven.buildMavenPackage rec {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "^version-([0-9.]+)$" ];
+    extraArgs = [
+      "--version-regex"
+      "^version-([0-9.]+)$"
+    ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Java SQL database";
     homepage = "https://h2database.com/html/main.html";
     changelog = "https://h2database.com/html/changelog.html";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [ mahe anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      mahe
+      anthonyroussel
+    ];
     mainProgram = "h2";
   };
 }
