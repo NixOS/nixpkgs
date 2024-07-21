@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     "VERSION=v${finalAttrs.version}"
   ];
 
+  enableParallelBuilding = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
