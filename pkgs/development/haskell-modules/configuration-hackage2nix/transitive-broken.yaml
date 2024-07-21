@@ -2770,8 +2770,6 @@ dont-distribute-packages:
  - morloc
  - morpheus-graphql
  - morphisms-functors-inventory
- - moto
- - moto-postgresql
  - motor
  - motor-diagrams
  - mp
