@@ -2242,7 +2242,6 @@ dont-distribute-packages:
  - hw-json-lens
  - hw-json-simple-cursor
  - hw-json-standard-cursor
- - hw-kafka-avro
  - hw-polysemy
  - hw-uri
  - hworker-ses
@@ -2492,7 +2491,6 @@ dont-distribute-packages:
  - lang
  - language-Modula2
  - language-ats
- - language-avro
  - language-boogie
  - language-ecmascript-analysis
  - language-eiffel
