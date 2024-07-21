@@ -22659,8 +22659,6 @@ with pkgs;
 
   libusbgx = callPackage ../development/libraries/libusbgx { };
 
-  libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
-
   libusbsio = callPackage ../development/libraries/libusbsio { };
 
   libucontext = callPackage ../development/libraries/libucontext { };
