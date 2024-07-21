@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchzip
-, makeWrapper
-, jre
-, nixosTests
-, callPackage
-, confFile ? null
-, plugins ? [ ]
-, extraFeatures ? [ ]
-, disabledFeatures ? [ ]
+{
+  stdenv,
+  lib,
+  fetchzip,
+  makeWrapper,
+  jre,
+  nixosTests,
+  callPackage,
+  confFile ? null,
+  plugins ? [ ],
+  extraFeatures ? [ ],
+  disabledFeatures ? [ ],
 }:
 
 let
@@ -25,7 +26,10 @@ in stdenv.mkDerivation rec {
     hash = "sha256-DYuK1W8dXI/UUB+9HzMnjiJdpJulS3QuIpmr3AA4OLo=";
   };
 
-  nativeBuildInputs = [ makeWrapper jre ];
+  nativeBuildInputs = [
+    jre
+    makeWrapper
+  ];
 
   patches = [
     # Make home.dir and config.dir configurable through the
@@ -78,13 +82,13 @@ in stdenv.mkDerivation rec {
     enabledPlugins = plugins;
   };
 
-  meta = with lib; {
-    homepage = "https://www.keycloak.org/";
+  meta = {
+    homepage = "https://www.keycloak.org";
     description = "Identity and access management for modern applications and services";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
     platforms = jre.meta.platforms;
-    maintainers = with maintainers; [ ngerstle talyz nickcao ];
+    maintainers = with lib.maintainers; [ ngerstle talyz nickcao ];
     mainProgram = "kc.sh";
   };
 
