@@ -148,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 
+  passthru.ldcBootstrap = ldcBootstrap;
   passthru.tests = let
     ldc = finalAttrs.finalPackage;
     helloWorld = stdenv.mkDerivation (finalAttrs: {
