@@ -7,7 +7,9 @@
   openssl,
   lua5_4,
   pcre2,
+  liblinear,
   libssh2,
+  zlib,
   withLua ? true,
 }:
 
@@ -29,7 +31,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (if withLua then "--with-liblua=${lua5_4}" else "--without-liblua")
-    "--with-liblinear=included"
     "--without-ndiff"
     "--without-zenmap"
   ];
@@ -47,9 +48,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     pcre2
+    liblinear
     libssh2
     libpcap
     openssl
+    zlib
   ];
 
   enableParallelBuilding = true;
