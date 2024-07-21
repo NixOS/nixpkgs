@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , ninja
-, llvm_17
+, llvm_18
 , curl
 , tzdata
 , libconfig
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    cmake ldcBootstrap lit lit.python llvm_17.dev makeWrapper ninja unzip
+    cmake ldcBootstrap lit lit.python llvm_18.dev makeWrapper ninja unzip
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
