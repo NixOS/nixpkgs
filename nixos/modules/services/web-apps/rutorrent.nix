@@ -295,7 +295,7 @@ in {
           '';
         };
 
-        services.rtorrent.rpcGroup = "nginx";
+        services.rtorrent.group = "nginx";
       })
     ]))
   ]);
