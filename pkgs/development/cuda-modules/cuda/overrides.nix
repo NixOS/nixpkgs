@@ -156,17 +156,20 @@ filterAndCreateOverrides {
     {
       cudaAtLeast,
       gmp,
+      openssl_1_1,
+      ncurses,
       lib,
     }:
     prevAttrs: {
       buildInputs =
         prevAttrs.buildInputs
         # x86_64 only needs gmp from 12.0 and on
-        ++ lib.lists.optionals (cudaAtLeast "12.0") [ gmp ];
+        ++ lib.lists.optionals (cudaAtLeast "12.0") [ gmp ]
+        ++ lib.lists.optionals (cudaAtLeast "12.5") [ openssl_1_1 ncurses ];
     };
 
   cuda_nvcc =
-    { backendStdenv, setupCudaHook }:
+    { lib, cudaOlder, backendStdenv, setupCudaHook }:
     prevAttrs: {
       # Merge "bin" and "dev" into "out" to avoid circular references
       outputs = builtins.filter (
@@ -195,9 +198,6 @@ filterAndCreateOverrides {
         + ''
           substituteInPlace bin/nvcc.profile \
             --replace-fail \
-              '$(TOP)/$(_NVVM_BRANCH_)' \
-              "''${!outputBin}/nvvm" \
-            --replace-fail \
               '$(TOP)/$(_TARGET_DIR_)/include' \
               "''${!outputDev}/include"
 
@@ -210,7 +210,13 @@ filterAndCreateOverrides {
           LIBRARIES =+ "-L''${!outputBin}/nvvm/lib"
           INCLUDES =+ "-I''${!outputBin}/nvvm/include"
           EOF
-        '';
+        ''
+        + (lib.optionalString (cudaOlder "12.5") ''
+          substituteInPlace bin/nvcc.profile \
+            --replace-fail \
+              '$(TOP)/$(_NVVM_BRANCH_)' \
+              "''${!outputBin}/nvvm" \
+        '');
 
       # NOTE(@connorbaker):
       # Though it might seem odd or counter-intuitive to add the setup hook to `propagatedBuildInputs` instead of
