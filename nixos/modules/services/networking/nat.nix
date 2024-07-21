@@ -20,7 +20,10 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Whether to enable Network Address Translation (NAT).
+        Whether to enable Network Address Translation (NAT). A
+        properly configured firewall or a trusted L2 on all network
+        interfaces is required to prevent unauthorized access to
+        the internal network.
       '';
     };
 
