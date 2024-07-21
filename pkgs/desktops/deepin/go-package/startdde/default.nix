@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildGoModule
 , fetchFromGitHub
 , gettext
@@ -19,13 +18,13 @@
 
 buildGoModule rec {
   pname = "startdde";
-  version = "6.0.13";
+  version = "6.0.14";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-sftPQq4cSyCTuvVtvjT8YJDLQOpSbmnXEVzFwFFaU4U=";
+    hash = "sha256-2aPQaH78+J18a/SXA2i+gQ5iypsjNhcYaORGN2qkz7c=";
   };
 
   vendorHash = "sha256-Y81p3yPQayXbvyUI7N6PvFDO3hSU3SL0AuUKxvZkZNE=";

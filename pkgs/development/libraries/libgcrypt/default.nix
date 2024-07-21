@@ -82,6 +82,6 @@ stdenv.mkDerivation rec {
     description = "General-purpose cryptographic library";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ ];
   };
 }

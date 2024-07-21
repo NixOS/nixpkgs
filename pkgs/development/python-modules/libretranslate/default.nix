@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   pytestCheckHook,
   hatchling,
   argostranslate,
@@ -43,7 +42,6 @@ buildPythonPackage rec {
 
   build-system = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;

@@ -108,6 +108,8 @@ let
 
     swift-format = callPackage ./swift-format { };
 
+    swiftpm2nix = callPackage ./swiftpm2nix { };
+
   };
 
 in self

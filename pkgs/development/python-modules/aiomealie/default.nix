@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aiomealie";
-  version = "0.4.0";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-mealie";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I1CA/YD2pNvBijSQgF/R8v5DfR/xyh0t/HGGiVE5UbY=";
+    hash = "sha256-ECymJLcEL2385jcel8lxIzf0zjNcdp1FZpXSBIUcvZc=";
   };
 
   postPatch = ''

@@ -27,6 +27,9 @@ home-assistant.python.pkgs.buildPythonPackage (
       mkdir $out
       cp -r ./custom_components/ $out/
 
+      # optionally copy sentences, if they exist
+      cp -r ./custom_sentences/ $out/ || true
+
       runHook postInstall
     '';
 

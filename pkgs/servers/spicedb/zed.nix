@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "zed";
-  version = "0.18.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "zed";
     rev = "v${version}";
-    hash = "sha256-+FXFHjGWKcIt3urDokk5PF24JPVs21RbQtpcYz2midM=";
+    hash = "sha256-vRU2svDkx6jQ0ZnyHKp4cwV4SS9a5WdrqP+pkSlZHb8=";
   };
 
-  vendorHash = "sha256-Z6j4w4/anfK0ln2MvgnwZFoe8BA5jVHG3g9m2TynmmE=";
+  vendorHash = "sha256-l3wu3IimmPQL4z7WOx+u9dO/AUKPV+lQkWMzphj2bbA=";
 
   ldflags = [
     "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'"

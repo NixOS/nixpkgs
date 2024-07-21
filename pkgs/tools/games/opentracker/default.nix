@@ -84,7 +84,7 @@ buildDotnetModule rec {
       binaryNativeCode
     ];
     license = licenses.mit;
-    maintainers = [maintainers.ivar];
+    maintainers = [ ];
     mainProgram = "OpenTracker";
     platforms = ["x86_64-linux"];
   };

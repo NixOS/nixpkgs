@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.5.11";
 
   src = fetchurl {
-    url = "https://www.efficios.com/files/babeltrace/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
+    url = "https://www.efficios.com/files/babeltrace/babeltrace-${finalAttrs.version}.tar.bz2";
     sha256 = "Z7Q6qu9clR+nrxpVfPcgGhH+iYdrfCK6CgPLwxbbWpw=";
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://git.efficios.com/babeltrace.git";
     rev-prefix = "v";
     # Versions 2.x are packaged independently as babeltrace2
-    ignoredVersions = "^[^1]";
+    allowedVersions = "^1\\.";
   };
 
   meta = {

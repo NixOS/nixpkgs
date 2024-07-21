@@ -156,17 +156,51 @@ in
     # List of AS instances
     machines = [scion01, scion02, scion03, scion04, scion05]
 
+    # Functions to avoid many for loops
+    def start(allow_reboot=False):
+        for i in machines:
+            i.start(allow_reboot=allow_reboot)
+
+    def wait_for_unit(service_name):
+        for i in machines:
+            i.wait_for_unit(service_name)
+
+    def succeed(command):
+        for i in machines:
+            i.succeed(command)
+
+    def reboot():
+        for i in machines:
+            i.reboot()
+
+    def crash():
+        for i in machines:
+            i.crash()
+
+    # Start all machines, allowing reboot for later
+    start(allow_reboot=True)
+
     # Wait for scion-control.service on all instances
-    for i in machines:
-        i.wait_for_unit("scion-control.service")
+    wait_for_unit("scion-control.service")
 
     # Execute pingAll command on all instances
-    for i in machines:
-        i.succeed("${pingAll} >&2")
+    succeed("${pingAll} >&2")
 
-    # Restart scion-dispatcher and ping again to test robustness
-    for i in machines:
-        i.succeed("systemctl restart scion-dispatcher >&2")
-        i.succeed("${pingAll} >&2")
+    # Restart all scion services and ping again to test robustness
+    succeed("systemctl restart scion-* >&2")
+    succeed("${pingAll} >&2")
+
+    # Reboot machines, wait for service, and ping again
+    reboot()
+    wait_for_unit("scion-control.service")
+    succeed("${pingAll} >&2")
+
+    # Crash, start, wait for service, and ping again
+    crash()
+    start()
+    wait_for_unit("scion-control.service")
+    succeed("pkill -9 scion-* >&2")
+    wait_for_unit("scion-control.service")
+    succeed("${pingAll} >&2")
   '';
 })

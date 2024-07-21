@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "regex-cli";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-Uo1y3L4l/Ik//NoBLsCqvQmC7ZGaSt0XzT1wDGCoU4U=";
+    hash = "sha256-lHjChrjjqO7pApj7OA8BM2XvmU3iS+kEMPYSfb/C61U=";
   };
 
-  cargoHash = "sha256-O0KAY9XeP+LFcvAwO5SbF5yMHU1KZ77UdkAGAcx1hHc=";
+  cargoHash = "sha256-5uxy2iAIUh60QjEPtkOP7A86ha4CY5+1QgzdIsEKPIs=";
 
   meta = with lib; {
     description = "Command line tool for debugging, ad hoc benchmarking and generating regular expressions";

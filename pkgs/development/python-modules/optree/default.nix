@@ -1,5 +1,4 @@
 {
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "optree";
-  version = "0.11.0";
+  version = "0.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "metaopt";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VnnnEoXkYJO+S7baH+JZvsW18Tk3TiY9+Cd230OlZWo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4GvB9Z7qnEjsUSl+x5wd8czV80F50MwJdlNdylUU0zY=";
   };
 
   dontUseCmakeConfigure = true;

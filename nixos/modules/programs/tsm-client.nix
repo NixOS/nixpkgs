@@ -4,7 +4,7 @@ let optionsGlobal = options; in
 let
 
   inherit (lib.attrsets) attrNames attrValues mapAttrsToList removeAttrs;
-  inherit (lib.lists) all allUnique concatLists elem isList map;
+  inherit (lib.lists) all allUnique concatLists concatMap elem isList map;
   inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) mkEnableOption mkOption mkPackageOption;
   inherit (lib.strings) concatLines match optionalString toLower;
@@ -22,7 +22,7 @@ let
   serverOptions = { name, config, ... }: {
     freeformType = attrsOf (either scalarType (listOf scalarType));
     # Client system-options file directives are explained here:
-    # https://www.ibm.com/docs/en/storage-protect/8.1.22?topic=commands-processing-options
+    # https://www.ibm.com/docs/en/storage-protect/8.1.23?topic=commands-processing-options
     options.servername = mkOption {
       type = servernameType;
       default = name;
@@ -231,7 +231,7 @@ let
     # Turn a key-value pair from the server options attrset
     # into zero (value==null), one (scalar value) or
     # more (value is list) configuration stanza lines.
-    if isList value then map (makeDsmSysLines key) value else  # recurse into list
+    if isList value then concatMap (makeDsmSysLines key) value else  # recurse into list
     if value == null then [ ] else  # skip `null` value
     [ ("  ${key}${
       if value == true then "" else  # just output key if value is `true`

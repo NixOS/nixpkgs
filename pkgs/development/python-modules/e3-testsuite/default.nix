@@ -4,7 +4,6 @@
   fetchFromGitHub,
   lib,
   setuptools,
-  stdenv,
 }:
 
 buildPythonPackage rec {

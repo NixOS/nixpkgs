@@ -50,9 +50,13 @@ let
     # Add dictionaries from all NIX_PROFILES
     "--run" (lib.escapeShellArg ''
       for PROFILE in $NIX_PROFILES; do
-          HDIR="$PROFILE/share/hunspell"
-          if [ -d "$HDIR" ]; then
-              export DICPATH=$DICPATH''${DICPATH:+:}$HDIR
+          HU_DIR="$PROFILE/share/hunspell"
+          HY_DIR="$PROFILE/share/hyphen"
+          if [ -d "$HU_DIR" ]; then
+              export DICPATH=$DICPATH''${DICPATH:+:}$HU_DIR
+          fi
+          if [ -d "$HY_DIR" ]; then
+              export DICPATH=$DICPATH''${DICPATH:+:}$HY_DIR
           fi
       done
     '')

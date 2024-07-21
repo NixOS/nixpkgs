@@ -27,7 +27,7 @@ in
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExpression "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
@@ -163,8 +163,8 @@ in
         libgnomekbd
 
         # theme
-        gnome.adwaita-icon-theme
-        gnome.gnome-themes-extra
+        adwaita-icon-theme
+        gnome-themes-extra
         gtk3.out
 
         # other
@@ -224,17 +224,16 @@ in
       # Default Fonts
       fonts.packages = with pkgs; [
         dejavu_fonts # Default monospace font in LMDE 6+
-        ubuntu_font_family # required for default theme
+        ubuntu-classic # required for default theme
       ];
     })
 
     (mkIf serviceCfg.apps.enable {
-      programs.geary.enable = mkDefault (notExcluded pkgs.gnome.geary);
-      programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome.gnome-disk-utility);
-      programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome.gnome-terminal);
-      programs.file-roller.enable = mkDefault (notExcluded pkgs.gnome.file-roller);
+      programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome-disk-utility);
+      programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
+      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
-      environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
+      environment.systemPackages = with pkgs // pkgs.cinnamon; utils.removePackagesByName [
         # cinnamon team apps
         bulky
         warpinator
@@ -247,7 +246,6 @@ in
         pix
 
         # external apps shipped with linux-mint
-        hexchat
         gnome-calculator
         gnome-calendar
         gnome-screenshot

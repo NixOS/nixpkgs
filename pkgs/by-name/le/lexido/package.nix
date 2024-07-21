@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "lexido";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "micr0-dev";
     repo = "lexido";
     rev = "v${version}";
-    hash = "sha256-nc6UvW16MmLsKt0oSb9nG64N7J3+5CveSwPnGOezhGY=";
+    hash = "sha256-zJP14dbC/Oz15CA3PRD0RfEYOrfulL2fWYHwFxhLKO4=";
   };
 
-  vendorHash = "sha256-h3ws9k7W4nNyS1WvZP29NJfJsBOe0D47ykd41C96Xi4=";
+  vendorHash = "sha256-H5qljaA77AQrUjFsVSWha5pzt4qS9XKagG4GoNRVn88=";
 
   ldflags = [
     "-s"

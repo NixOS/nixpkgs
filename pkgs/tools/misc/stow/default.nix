@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, perl
 , perlPackages
 }:
 
@@ -14,6 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-p7rGc9qiRs9U/7SKET6t0gSmFWMOdrU7X2TYGidbd7M=";
   };
 
+  nativeBuildInputs = [ perlPackages.perl ];
   buildInputs = with perlPackages; [ perl IOStringy TestOutput ];
 
   doCheck = true;

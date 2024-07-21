@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl
 , autoreconfHook, bison, glm, flex, wrapQtAppsHook, cmake, pkg-config
-, freeglut, ghostscriptX, imagemagick, fftw, eigen, libtirpc
-, boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
+, libglut, ghostscriptX, imagemagick, fftw, eigen, libtirpc
+, boehmgc, libGLU, libGL, ncurses, readline, gsl, libsigsegv
 , python3, qtbase, qtsvg, boost
 , zlib, perl, curl
 , texinfo
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     glm
   ] ++ lib.optionals stdenv.isLinux [
-    freeglut libGLU libGL mesa.osmesa
+    libglut libGLU libGL
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT Cocoa
   ]);

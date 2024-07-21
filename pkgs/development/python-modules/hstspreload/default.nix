@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "hstspreload";
-  version = "2024.6.1";
+  version = "2024.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "sethmlarson";
     repo = "hstspreload";
     rev = "refs/tags/${version}";
-    hash = "sha256-eeZR+UDQ6Cp1WTcz2duSTgQ+7vrF9T08aVT0mJk6ctA=";
+    hash = "sha256-WCmUYYPx8tJJ1Z3utjS8k6vePx/pZ6OZ+D0YjovqizQ=";
   };
 
   build-system = [ setuptools ];

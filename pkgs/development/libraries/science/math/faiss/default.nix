@@ -1,7 +1,7 @@
 { lib
 , config
 , fetchFromGitHub
-, symlinkJoin
+, fetchpatch2
 , stdenv
 , cmake
 , cudaPackages ? { }
@@ -9,7 +9,6 @@
 , pythonSupport ? true
 , pythonPackages
 , llvmPackages
-, boost
 , blas
 , swig
 , addOpenGLRunpath
@@ -29,24 +28,19 @@ let
   pname = "faiss";
   version = "1.7.4";
 
-  inherit (cudaPackages) cudaFlags backendStdenv;
-  inherit (cudaFlags) cudaCapabilities dropDot;
+  inherit (cudaPackages) flags backendStdenv;
 
   stdenv = if cudaSupport then backendStdenv else inputs.stdenv;
 
-  cudaJoined = symlinkJoin {
-    name = "cuda-packages-unsplit";
-    paths = with cudaPackages; [
-      cuda_cudart # cuda_runtime.h
-      libcublas
-      libcurand
-      cuda_cccl
-    ] ++ lib.optionals (cudaPackages ? cuda_profiler_api) [
-      cuda_profiler_api # cuda_profiler_api.h
-    ] ++ lib.optionals (!(cudaPackages ? cuda_profiler_api)) [
-      cuda_nvprof # cuda_profiler_api.h
-    ];
-  };
+  cudaComponents = with cudaPackages; [
+    cuda_cudart # cuda_runtime.h
+    libcublas
+    libcurand
+    cuda_cccl
+
+    # cuda_profiler_api.h
+    (cudaPackages.cuda_profiler_api or cudaPackages.cuda_nvprof)
+  ];
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -60,6 +54,15 @@ stdenv.mkDerivation {
     hash = "sha256-WSce9X6sLZmGM5F0ZkK54VqpIy8u1VB0e9/l78co29M=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      # Replace distutils with packaging for version checks
+      url = "https://github.com/facebookresearch/faiss/commit/c540e762ca0ecf8f43da0bfc215da148c5cf420e.patch";
+      includes = [ "faiss/python/loader.py" ];
+      hash = "sha256-yMHAXo0+oDXknSpv1fxUgil3R/WG1+vTLyxvwVR3VtE=";
+    })
+  ];
+
   buildInputs = [
     blas
     swig
@@ -69,12 +72,11 @@ stdenv.mkDerivation {
     pythonPackages.wheel
   ] ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
-  ] ++ lib.optionals cudaSupport [
-    cudaJoined
-  ];
+  ] ++ lib.optionals cudaSupport cudaComponents;
 
   propagatedBuildInputs = lib.optionals pythonSupport [
     pythonPackages.numpy
+    pythonPackages.packaging
   ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
@@ -93,8 +95,7 @@ stdenv.mkDerivation {
     "-DFAISS_ENABLE_PYTHON=${if pythonSupport then "ON" else "OFF"}"
     "-DFAISS_OPT_LEVEL=${optLevel}"
   ] ++ lib.optionals cudaSupport [
-    "-DCMAKE_CUDA_ARCHITECTURES=${builtins.concatStringsSep ";" (map dropDot cudaCapabilities)}"
-    "-DCUDAToolkit_INCLUDE_DIR=${cudaJoined}/include"
+    "-DCMAKE_CUDA_ARCHITECTURES=${flags.cmakeCudaArchitecturesString}"
   ];
 
   buildFlags = [

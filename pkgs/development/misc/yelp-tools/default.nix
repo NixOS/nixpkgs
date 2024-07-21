@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchurl
 , libxml2
 , libxslt
@@ -9,6 +8,7 @@
 , meson
 , ninja
 , python3
+, yelp-xsl
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     itstool # build script checks for its presence but I am not sure if anything uses it
-    gnome.yelp-xsl
+    yelp-xsl
   ];
 
   pythonPath = [

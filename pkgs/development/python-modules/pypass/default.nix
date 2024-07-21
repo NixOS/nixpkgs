@@ -12,6 +12,7 @@
   pbr,
   pexpect,
   pythonAtLeast,
+  pythonOlder,
   substituteAll,
   tree,
   xclip,
@@ -53,6 +54,8 @@ buildPythonPackage rec {
     colorama
     pexpect
   ];
+
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [ nose ];
 

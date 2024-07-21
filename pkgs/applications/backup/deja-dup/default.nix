@@ -18,18 +18,19 @@
 , libgpg-error
 , json-glib
 , duplicity
+, rclone
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deja-dup";
-  version = "45.2";
+  version = "46.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "deja-dup";
     rev = finalAttrs.version;
-    hash = "sha256-nscswpWX6UB1zuv6TXcT3YE1wkREJYDGQrEPryyUYUM=";
+    hash = "sha256-tKVY0wewBDx0AMzmTdko8vGg5bNGfYohgcSDg5Oky30=";
   };
 
   patches = [
@@ -61,8 +62,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dduplicity_command=${duplicity}/bin/duplicity"
+    "-Dduplicity_command=${lib.getExe duplicity}"
+    "-Drclone_command=${lib.getExe rclone}"
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Required by duplicity
+      --prefix PATH : "${lib.makeBinPath [ rclone ]}"
+    )
+  '';
 
   meta = with lib; {
     description = "Simple backup tool";

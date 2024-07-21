@@ -50,6 +50,8 @@ stdenvNoCC.mkDerivation rec {
     sed -i 's;\t@;\t;' Makefile
   '';
 
+  buildFlags = [ "BYPASS_SEQUENCE_CHECK=True" ];
+
   enableParallelBuilding = true;
 
   installPhase = ''

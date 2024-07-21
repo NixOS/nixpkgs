@@ -51,6 +51,7 @@ stdenv.mkDerivation (
       runtimeMode
       outName
       dart
+      swiftshader
       ;
     inherit altRuntimeMode;
 

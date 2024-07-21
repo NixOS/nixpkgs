@@ -84,8 +84,8 @@ in
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
 
-      gnome.gnome-themes-extra
-      gnome.adwaita-icon-theme
+      gnome-themes-extra
+      adwaita-icon-theme
       hicolor-icon-theme
       tango-icon-theme
       xfce4-icon-theme
@@ -165,6 +165,7 @@ in
     services.tumbler.enable = true;
     services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
     services.libinput.enable = mkDefault true; # used in xfce4-settings-manager
+    services.colord.enable = mkDefault true;
 
     # Enable default programs
     programs.dconf.enable = true;

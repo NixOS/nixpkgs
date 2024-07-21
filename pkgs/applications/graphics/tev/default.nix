@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, wrapGAppsHook3
-, libX11, libzip, glfw, libpng, xorg, gnome
+, libX11, libzip, glfw, libpng, xorg, zenity
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-+qCRHP0AbYOQBAE4zK2cmWPHZGWjjxC3DZPNm8sgBzs=";
+    hash = "sha256-+qCRHP0AbYOQBAE4zK2cmWPHZGWjjxC3DZPNm8sgBzs=";
   };
 
   nativeBuildInputs = [ cmake wrapGAppsHook3 ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/tev \
       "''${gappsWrapperArgs[@]}" \
-      --prefix PATH ":" "${gnome.zenity}/bin"
+      --prefix PATH ":" "${zenity}/bin"
   '';
 
   env.CXXFLAGS = "-include cstdint";

@@ -13,15 +13,25 @@
 , bison
 , autoPatchelfHook
 , testers
+, signify
+, overrideSDK
+, withSsh ? true, openssh
+# Default editor to use when neither VISUAL nor EDITOR are defined
+, defaultEditor ? null
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  stdenv' = if stdenv.isDarwin && stdenv.isx86_64
+    then overrideSDK stdenv "11.0"
+    else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   pname = "got";
-  version = "0.100";
+  version = "0.101";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${finalAttrs.version}.tar.gz";
-    hash = "sha256-/DqKIGf/aZ09aL/rB7te+AauHmJ+mOTrVEbkqT9WUBI=";
+    hash = "sha256-JQZBgscxoMv4Dki77s8tYo4r5BBG+ErsDYnY5/am3MA=";
   };
 
   nativeBuildInputs = [ pkg-config bison ]
@@ -37,7 +47,18 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure --replace-fail 'xdarwin' 'xhomebrew'
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (
+  lib.optionals (defaultEditor != null) [
+    ''-DGOT_DEFAULT_EDITOR="${lib.getExe defaultEditor}"''
+  ] ++ lib.optionals withSsh [
+    ''-DGOT_DIAL_PATH_SSH="${lib.getExe openssh}"''
+    ''-DGOT_TAG_PATH_SSH_KEYGEN="${lib.getExe' openssh "ssh-keygen"}"''
+  ] ++ lib.optionals stdenv.isLinux [
+    ''-DGOT_TAG_PATH_SIGNIFY="${lib.getExe signify}"''
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=int-conversion"
+  ] ++ lib.optionals stdenv.isDarwin [
     # error: conflicting types for 'strmode'
     "-DHAVE_STRMODE=1"
     # Undefined symbols for architecture arm64: "_bsd_getopt"

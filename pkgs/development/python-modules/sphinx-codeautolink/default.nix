@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-codeautolink";
-  version = "0.15.1";
+  version = "0.15.2";
   format = "pyproject";
 
   outputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "felix-hilden";
     repo = "sphinx-codeautolink";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BnGcLAM/KK8Ub+GmRY1oatUCyP4hvY2O1WTjLHBebpw=";
+    hash = "sha256-h1lteF5a3ga1VlhXCz2biydli3sg3ktPbz0O5n0eeFI=";
   };
 
   nativeBuildInputs = [

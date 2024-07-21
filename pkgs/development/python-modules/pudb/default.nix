@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pudb";
-  version = "2024.1";
+  version = "2024.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/J1ql2pZtZB2TIN57CAP7NR/qoQlm2Tv2M2GBmoK8zg=";
+    hash = "sha256-/19TleNqGaZfIvUi/WAn0no2q3g95FEbQckUhKthSXU=";
   };
 
   propagatedBuildInputs = [

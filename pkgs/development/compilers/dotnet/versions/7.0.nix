@@ -111,6 +111,7 @@ let
       (fetchNuGet { pname = "runtime.win-arm.Microsoft.NETCore.DotNetHostPolicy"; version = "7.0.20"; sha256 = "18sarln3kbkqc1ab9jnadcqqxs8iicf7jqldxzbjzhdpmf96vwna"; })
       (fetchNuGet { pname = "runtime.win-arm.Microsoft.NETCore.DotNetHostResolver"; version = "7.0.20"; sha256 = "1vh3ymhv33qysc4vj4gb3g1rgajy4jr4kxfjcsq2myn96aan84i1"; })
       (fetchNuGet { pname = "Microsoft.NETCore.App.Composite"; version = "7.0.20"; sha256 = "12w9hlq70ynkrgqbr555lnqmbf67iz3kaci2vi07zsn3mmak3z6j"; })
+      (fetchNuGet { pname = "Microsoft.DotNet.ILCompiler"; version = "7.0.20"; sha256 = "0c966243j6m22hy3n922rl64vi6y1l7ljn69bwydm5clyh7zvn0a"; })
       (fetchNuGet { pname = "runtime.linux-arm64.Microsoft.DotNet.ILCompiler"; version = "7.0.20"; sha256 = "11c31fzq4qfxcsz3p6vzdfnaqs29saf1dnmzq7l90p6ylwsblc7f"; })
       (fetchNuGet { pname = "runtime.linux-musl-arm64.Microsoft.DotNet.ILCompiler"; version = "7.0.20"; sha256 = "087q3p57snmvvzzqpxp3vwvi2q21kzlk8qh1w6axrcjdci31xmji"; })
       (fetchNuGet { pname = "runtime.linux-musl-x64.Microsoft.DotNet.ILCompiler"; version = "7.0.20"; sha256 = "1nc8m38jsqai934nn26f6dkl3c0r4sabssjiizcixdyypzlv3hcf"; })

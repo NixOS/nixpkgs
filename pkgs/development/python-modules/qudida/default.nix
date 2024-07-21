@@ -5,7 +5,6 @@
   numpy,
   opencv4,
   pythonOlder,
-  pythonRelaxDepsHook,
   scikit-learn,
   typing-extensions,
 }:
@@ -22,7 +21,6 @@ buildPythonPackage rec {
     hash = "sha256-2xmOKIerDJqgAj5WWvv/Qd+3azYfhf1eE/eA11uhjMg=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [ "opencv-python" ];
 

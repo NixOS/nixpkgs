@@ -1,20 +1,27 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
+  pythonOlder,
   fetchFromGitHub,
-  pytestCheckHook,
   black,
-  python-lsp-server,
-  setuptools,
-  tomli,
   fetchpatch,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  python-lsp-server,
+  tomli,
+
+  # checks
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-lsp-black";
   version = "2.0.0";
   pyproject = true;
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
@@ -38,22 +45,22 @@ buildPythonPackage rec {
       hash = "sha256-4u0VIS7eidVEiKRW2wc8lJVkJwhzJD/M+uuqmTtiZ7E=";
     });
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     black
     python-lsp-server
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "pylsp_black" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     homepage = "https://github.com/python-lsp/python-lsp-black";
     description = "Black plugin for the Python LSP Server";
-    changelog = "https://github.com/python-lsp/python-lsp-black/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    changelog = "https://github.com/python-lsp/python-lsp-black/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

@@ -10,7 +10,7 @@
   lxml,
   parsedatetime,
   pyicu,
-  pynose,
+  pytestCheckHook,
   python-slugify,
   pythonOlder,
   pytimeparse,
@@ -47,14 +47,10 @@ buildPythonPackage rec {
     cssselect
     glibcLocales
     lxml
-    pynose
     pyicu
+    pytestCheckHook
     pytz
   ];
-
-  checkPhase = ''
-    LC_ALL="en_US.UTF-8" nosetests tests
-  '';
 
   pythonImportsCheck = [ "agate" ];
 
@@ -63,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wireservice/agate";
     changelog = "https://github.com/wireservice/agate/blob/${version}/CHANGELOG.rst";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ ];
   };
 }

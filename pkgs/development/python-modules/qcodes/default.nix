@@ -19,6 +19,7 @@
   ipython,
   ipywidgets,
   jsonschema,
+  libcst,
   matplotlib,
   numpy,
   opentelemetry-api,
@@ -63,7 +64,7 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.45.0";
+  version = "0.46.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -72,7 +73,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "Qcodes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-H91CpvxGQW0X+m/jlqXMc1RdI9w62lt5jgYOxZ2iPQg=";
+    hash = "sha256-CeAX3sBE21v68KnCe8z28WTc7zMPA7usRRGh+dNijjo=";
   };
 
   build-system = [
@@ -132,6 +133,9 @@ buildPythonPackage rec {
       opencensus
       opencensus-ext-azure
     ];
+    refactor = [
+      libcst
+    ];
     zurichinstruments = [
       # zhinst-qcodes
     ];
@@ -140,6 +144,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     deepdiff
     hypothesis
+    libcst
     lxml
     pip
     pytest-asyncio

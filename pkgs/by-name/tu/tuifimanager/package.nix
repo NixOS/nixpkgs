@@ -3,7 +3,7 @@
 , python3
 , fetchFromGitHub
 , kdePackages
-, gnome
+, gnome-themes-extra
 , qt6
 , makeWrapper
 , x11Support ? stdenv.isLinux
@@ -19,14 +19,14 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tuifimanager";
-  version = "4.0.6";
+  version = "4.1.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "GiorgosXou";
     repo = "TUIFIManager";
     rev = "v.${version}";
-    hash = "sha256-pppPlpPA1UYjUCKvGCjUo9jFNyOOkk6aF7/v5sXIptI=";
+    hash = "sha256-kljodLSSjvGcjhD7IhAVAAGd6LoiM6IYwMXuSsIJ198=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
   postFixup = let
     # fix missing 'adwaita' warning missing with ncurses tui
     # see: https://github.com/NixOS/nixpkgs/issues/60918
-    theme = gnome.gnome-themes-extra;
+    theme = gnome-themes-extra;
   in
     lib.optionalString enableDragAndDrop ''
       wrapProgram $out/bin/tuifi \

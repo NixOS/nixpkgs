@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  pythonRelaxDepsHook,
   fetchFromGitHub,
   poetry-core,
   packaging,
@@ -26,7 +25,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "packaging" ];

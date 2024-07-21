@@ -9,7 +9,7 @@
 , openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk_4_1, harfbuzz
 , wayland
 # The themes here are soft dependencies; only icons are missing without them.
-, gnome
+, adwaita-icon-theme
 , withKf5Wallet ? stdenv.isLinux, libsForQt5
 , withLibsecret ? stdenv.isLinux
 , withVte ? true
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3 spice-protocol
     spice-gtk
     libepoxy at-spi2-core
-    openssl gnome.adwaita-icon-theme json-glib libsodium
+    openssl adwaita-icon-theme json-glib libsodium
     harfbuzz python3
     wayland
   ] ++ lib.optionals stdenv.isLinux [ fuse3 libappindicator-gtk3 libdbusmenu-gtk3 webkitgtk_4_1 ]

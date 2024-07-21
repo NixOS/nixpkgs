@@ -9,17 +9,17 @@
 
 stdenv.mkDerivation {
   pname = "ols";
-  version = "0-unstable-2024-06-13";
+  version = "0-unstable-2024-07-01";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
-    rev = "09f865e685f8ebddaf994e51baeabed795e7f849";
-    hash = "sha256-JdKmXMyRZCf6UYo5sKmiIaeZNgnbUm5ALP39tf6z36w=";
+    rev = "ee368d473146d33e89f9be9f754fd6d0ee08ecc6";
+    hash = "sha256-WowbFsec8oZVPTMDefQJYOb4GfH3xa40bN3P9AIjflE=";
   };
 
   postPatch = ''
-    patchShebangs build.sh
+    patchShebangs build.sh odinfmt.sh
   '';
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
 
-    ./build.sh
+    ./build.sh && ./odinfmt.sh
 
     runHook postBuild
   '';
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 ols -t $out/bin/
+    install -Dm755 ols odinfmt -t $out/bin/
     wrapProgram $out/bin/ols --set-default ODIN_ROOT ${odin}/share
 
     runHook postInstall

@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "Task manager with Todoist support designed for GNU/Linux";
     homepage = "https://github.com/alainm23/planify";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dtzWill ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "io.github.alainm23.planify";
   };

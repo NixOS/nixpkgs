@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-storage";
-  version = "21.2.0";
+  version = "21.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KHyYQLAb6TGBnUA9p+1SvWL9B3sFKd1HDm28T+3ksg0=";
+    hash = "sha256-UDp/+cMSVAkrBlZEX1cov9/aLQnUaoLpcBnqqaHs7GQ=";
   };
 
   build-system = [ setuptools ];
@@ -42,7 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-storage_${version}/sdk/storage/azure-mgmt-storage/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [
-      jonringer
       olcai
       maxwilson
     ];

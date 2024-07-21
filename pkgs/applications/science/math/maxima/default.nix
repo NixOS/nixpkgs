@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.46.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://sourceforge/maxima/maxima-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-c5Dwa0jaZckDPosvYpuXi5AFZFSlQCLbfecOIiWqiwc=";
   };
 

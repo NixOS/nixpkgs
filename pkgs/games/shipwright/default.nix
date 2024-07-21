@@ -22,7 +22,7 @@
 , libpulseaudio
 , libpng
 , imagemagick
-, gnome
+, zenity
 , makeWrapper
 , darwin
 , libicns
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXi
     libXext
     libpulseaudio
-    gnome.zenity
+    zenity
   ] ++ lib.optionals stdenv.isDarwin [
     IOSurface
     Metal
@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   fixupPhase = lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/lib/soh.elf --prefix PATH ":" ${lib.makeBinPath [ gnome.zenity ]}
+    wrapProgram $out/lib/soh.elf --prefix PATH ":" ${lib.makeBinPath [ zenity ]}
   '';
 
   desktopItems = [
@@ -188,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A PC port of Ocarina of Time with modern controls, widescreen, high-resolution, and more";
     mainProgram = "soh";
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ ivar j0lol matteopacini ];
+    maintainers = with lib.maintainers; [ j0lol matteopacini ];
     license = with lib.licenses; [
       # OTRExporter, OTRGui, ZAPDTR, libultraship
       mit

@@ -17,6 +17,7 @@
   libxml2,
   gsettings-desktop-schemas,
   gnome,
+  adwaita-icon-theme,
   wrapGAppsHook3,
   fetchpatch,
 }:
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
     opusfile
     flac
     gsettings-desktop-schemas
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   doCheck = false; # fails 1 out of 9 tests

@@ -5,7 +5,7 @@
   apricot-select,
   numba,
   numpy,
-  pynose,
+  nose,
   pytestCheckHook,
   pythonOlder,
   scikit-learn,
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pynose
+    nose
     pytestCheckHook
   ];
 

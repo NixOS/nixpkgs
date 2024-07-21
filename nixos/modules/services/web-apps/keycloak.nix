@@ -328,7 +328,7 @@ in
             };
 
             hostname = mkOption {
-              type = str;
+              type = nullOr str;
               example = "keycloak.example.com";
               description = ''
                 The hostname part of the public URL used as base for
@@ -476,6 +476,10 @@ in
           {
             assertion = createLocalPostgreSQL -> config.services.postgresql.settings.standard_conforming_strings or true;
             message = "Setting up a local PostgreSQL db for Keycloak requires `standard_conforming_strings` turned on to work reliably";
+          }
+          {
+            assertion = cfg.settings.hostname != null || ! cfg.settings.hostname-strict or true;
+            message = "Setting the Keycloak hostname is required, see `services.keycloak.settings.hostname`";
           }
           {
             assertion = cfg.settings.hostname-url or null == null;

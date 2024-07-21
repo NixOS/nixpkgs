@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
       having a black belt in shell scripting.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ afldcr Br1ght0ne moni ckie ];
+    maintainers = with maintainers; [ afldcr Br1ght0ne moni ];
     mainProgram = "polybar";
     platforms = platforms.linux;
   };

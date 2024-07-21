@@ -3,6 +3,8 @@
 , python3
 , fetchFromGitHub
 , installShellFiles
+, pipenv
+, runCommand
 }:
 
 with python3.pkgs;
@@ -24,14 +26,14 @@ let
 
 in buildPythonApplication rec {
   pname = "pipenv";
-  version = "2023.10.24";
+  version = "2024.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipenv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-b1EqCrgGygdG08zzastgcYGnXDKoEYNvm5xjDLzlAXo=";
+    hash = "sha256-IyjJrIEcKHm7TpZk26MYI///ZIB/7ploTBzvms1gDmI=";
   };
 
   env.LC_ALL = "en_US.UTF-8";
@@ -66,13 +68,28 @@ in buildPythonApplication rec {
   ];
 
   disabledTests = [
-    "test_convert_deps_to_pip"
+    # this test wants access to the internet
     "test_download_file"
   ];
 
   disabledTestPaths = [
+    # many of these tests want access to the internet
     "tests/integration"
   ];
+
+  passthru.tests = {
+    verify-venv-patch = runCommand "${pname}-test-verify-venv-patch" {} ''
+      export PIPENV_VENV_IN_PROJECT=1
+
+      # "pipenv install" should be able to create a venv
+      ${pipenv}/bin/pipenv install
+
+       # the venv exists
+      [ -d .venv ]
+
+      touch $out
+    '';
+  };
 
   postInstall = ''
     installShellCompletion --cmd pipenv \

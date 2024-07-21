@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tLDdVTrZlxGk+oYmeCm/4XLAPx6hzkztJP+lXtiDhb4=";
+    hash = "sha256-tLDdVTrZlxGk+oYmeCm/4XLAPx6hzkztJP+lXtiDhb4=";
   };
 
   # Tests access the internet

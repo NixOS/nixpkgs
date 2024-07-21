@@ -4,7 +4,6 @@
   fetchFromGitHub,
   nix-update-script,
   pythonOlder,
-  pythonRelaxDepsHook,
   # pyproject
   hatchling,
   hatch-requirements-txt,
@@ -58,7 +57,6 @@ buildPythonPackage rec {
     hatchling
     hatch-requirements-txt
     hatch-fancy-pypi-readme
-    pythonRelaxDepsHook
   ];
 
   dependencies = [

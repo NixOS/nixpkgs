@@ -4,6 +4,7 @@
   fetchFromGitHub,
   hatchling,
   lxml,
+  lxml-html-clean,
   beautifulsoup4,
   pytestCheckHook,
   pythonOlder,
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     lxml
+    lxml-html-clean
     beautifulsoup4
   ];
 

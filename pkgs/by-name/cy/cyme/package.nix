@@ -6,7 +6,6 @@
 , stdenv
 , darwin
 , libusb1
-, udev
 , nix-update-script
 , testers
 , cyme
@@ -14,21 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cyme";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
     rev = "v${version}";
-    hash = "sha256-HIOrdVChTfYX8AKqytWU+EudFDiqoVELb+yL3jsPQwM=";
+    hash = "sha256-iDwH4gSpt1XkwMBj0Ut26c9PpsHcxFrRE6VuBNhpIHk=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libudev-sys-0.1.4" = "sha256-7dUqPH8bQ/QSBIppxQbymwQ44Bvi1b6N2AMUylbyKK8=";
-    };
-  };
+  cargoHash = "sha256-bzOqk0nXhqq4WX9razPo1q6BkEl4VZ5QMPiNEwHO/eM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,11 +32,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libusb1
-  ] ++ lib.optionals stdenv.isLinux [
-    udev
   ];
 
-  checkFlags = lib.optionals stdenv.isDarwin [
+  checkFlags = [
+    # doctest that requires access outside sandbox
+    "--skip=udev::hwdb::get"
+  ] ++ lib.optionals stdenv.isDarwin [
     # system_profiler is not available in the sandbox
     "--skip=test_run"
   ];
@@ -56,6 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/tuna-f1sh/cyme";
+    changelog = "https://github.com/tuna-f1sh/cyme/releases/tag/${src.rev}";
     description = "Modern cross-platform lsusb";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ h7x4 ];

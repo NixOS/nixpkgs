@@ -23,12 +23,12 @@
 
   ###### implementation
   config = lib.mkIf config.services.gnome.rygel.enable {
-    environment.systemPackages = [ pkgs.gnome.rygel ];
+    environment.systemPackages = [ pkgs.rygel ];
 
-    services.dbus.packages = [ pkgs.gnome.rygel ];
+    services.dbus.packages = [ pkgs.rygel ];
 
-    systemd.packages = [ pkgs.gnome.rygel ];
+    systemd.packages = [ pkgs.rygel ];
 
-    environment.etc."rygel.conf".source = "${pkgs.gnome.rygel}/etc/rygel.conf";
+    environment.etc."rygel.conf".source = "${pkgs.rygel}/etc/rygel.conf";
   };
 }

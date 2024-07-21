@@ -1,5 +1,5 @@
 { lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curlWithGnuTls, alsa-lib
-, libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
+, libXfixes, atk, gtk3, libXrender, pango, adwaita-icon-theme, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , makeDesktopItem, openssl, wrapGAppsHook3, makeShellWrapper, at-spi2-atk, at-spi2-core, libuuid
@@ -11,24 +11,24 @@ with lib;
 
 let
   pname = "gitkraken";
-  version = "10.0.2";
+  version = "10.1.1";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      hash = "sha256-vqB+2W4c9ObmC5IfBy8oZQToURh4GYms6mzQeZeKJZU=";
+      hash = "sha256-+Bm6zEw9Q4FFgoXuSSQ9IFVVbyIenN5UN6VChqvESQI=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      hash = "sha256-60WB5P8rwnUFOhe9BW1sPyweuvwcXswoUUBo6V1VCxQ=";
+      hash = "sha256-6UjGiStMRr9fsNfJGMlhawR7PccMA9l9osAL4d/6ehc=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      hash = "sha256-XL5GWs+jhuUEiPlHQZ6MIfvDjhislBTCg+KssnB4s6g=";
+      hash = "sha256-FwI0GmarKneOuDyTgwOH1xSMy1wT/sbQ0XA3nUYqFmQ=";
     };
   };
 
@@ -107,7 +107,7 @@ let
     }) ];
 
     nativeBuildInputs = [ copyDesktopItems (wrapGAppsHook3.override { makeWrapper = makeShellWrapper; }) ];
-    buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
+    buildInputs = [ gtk3 adwaita-icon-theme ];
 
     # avoid double-wrapping
     dontWrapGApps = true;
@@ -161,13 +161,15 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ unzip ];
+    nativeBuildInputs = [ unzip makeWrapper ];
 
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/Applications/GitKraken.app
+      mkdir -p $out/Applications/GitKraken.app $out/bin
       cp -R . $out/Applications/GitKraken.app
+
+      makeWrapper $out/Applications/GitKraken.app/Contents/MacOS/GitKraken $out/bin/gitkraken
 
       runHook postInstall
     '';

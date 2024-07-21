@@ -46,8 +46,6 @@ in
           TRUNK_LINK_FAILURE_MODE = 0;
           NVSWITCH_FAILURE_MODE = 0;
           ABORT_CUDA_JOBS_ON_FM_EXIT = 1;
-          TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-          DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
         };
         defaultText = lib.literalExpression ''
           {
@@ -69,8 +67,6 @@ in
             TRUNK_LINK_FAILURE_MODE=0;
             NVSWITCH_FAILURE_MODE=0;
             ABORT_CUDA_JOBS_ON_FM_EXIT=1;
-            TOPOLOGY_FILE_PATH="''${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-            DATABASE_PATH="''${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
           }
         '';
         description = ''
@@ -100,7 +96,11 @@ in
         Enabling this fixes screen tearing when using Optimus via PRIME (see
         {option}`hardware.nvidia.prime.sync.enable`. This is not enabled
         by default because it is not officially supported by NVIDIA and would not
-        work with SLI
+        work with SLI.
+
+        Enabling this and using version 545 or newer of the proprietary NVIDIA
+        driver causes it to provide its own framebuffer device, which can cause
+        Wayland compositors to work when they otherwise wouldn't.
       '';
 
       prime.nvidiaBusId = lib.mkOption {
@@ -572,9 +572,10 @@ in
               "nvidia_drm"
             ];
 
-            # If requested enable modesetting via kernel parameter.
+            # If requested enable modesetting via kernel parameters.
             kernelParams =
               lib.optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
+              ++ lib.optional ((offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545") "nvidia-drm.fbdev=1"
               ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
               ++ lib.optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
               ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
@@ -628,7 +629,14 @@ in
                     TimeoutStartSec = 240;
                     ExecStart =
                       let
-                        nv-fab-conf = settingsFormat.generate "fabricmanager.conf" cfg.datacenter.settings;
+                        # Since these rely on the `nvidia_x11.fabricmanager` derivation, they're
+                        # unsuitable to be mentioned in the configuration defaults, but they _can_
+                        # be overridden in `cfg.datacenter.settings` if needed.
+                        fabricManagerConfDefaults = {
+                          TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+                          DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+                        };
+                        nv-fab-conf = settingsFormat.generate "fabricmanager.conf" (fabricManagerConfDefaults // cfg.datacenter.settings);
                       in
                       "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
                     LimitCORE = "infinity";

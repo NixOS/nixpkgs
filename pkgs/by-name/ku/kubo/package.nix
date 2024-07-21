@@ -59,6 +59,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "IPFS implementation in Go";
     homepage = "https://ipfs.io/";
+    changelog = "https://github.com/ipfs/kubo/releases/tag/${rev}";
     license = licenses.mit;
     platforms = platforms.unix;
     mainProgram = "ipfs";

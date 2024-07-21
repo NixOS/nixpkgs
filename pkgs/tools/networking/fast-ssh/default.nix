@@ -1,32 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fast-ssh";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "julien-r44";
     repo = "fast-ssh";
-    rev = "v${version}";
-    sha256 = "sha256-eHJdMe8RU6Meg/9+NCfIneD5BqNUc2yIiQ8Z5UqUBUI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Wn1kwuY1tRJVe9DJexyQ/h+Z1gNtluj78QpBYjeCbSE=";
   };
 
-  cargoSha256 = "sha256-sIQNoH3UWX3SwCFCPZEREIFR7C28ml4oGsrq6wuOAT0=";
-
-  patches = [
-    # Can be removed as soon as this is is merged: https://github.com/Julien-R44/fast-ssh/pull/22
-    (fetchpatch {
-      name = "fix-ambiguous-as_ref.patch";
-      url = "https://github.com/Julien-R44/fast-ssh/commit/c082a64a4b412380b2ab145c24161fdaa26175db.patch";
-      hash = "sha256-egkoJF+rQiuClNL8ltzmB7oHngbpOxO29rlwZ3nELOE=";
-    })
-  ];
+  cargoHash = "sha256-CJ3Xx5jaTD01Ai7YAY4vB7RB5lU1BIXq7530B6+KeX4=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

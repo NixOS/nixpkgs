@@ -37,7 +37,6 @@
   python,
   pythonAtLeast,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   scikit-image,
@@ -53,13 +52,13 @@
 
 let
   pname = "ray";
-  version = "2.30.0";
+  version = "2.32.0";
 in
 buildPythonPackage rec {
   inherit pname version;
   format = "wheel";
 
-  disabled = pythonOlder "3.10" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.10" || pythonAtLeast "3.13";
 
   src =
     let
@@ -77,7 +76,7 @@ buildPythonPackage rec {
       // binary-hash
     );
 
-  passthru.optional-dependencies = rec {
+  optional-dependencies = rec {
     data-deps = [
       pandas
       pyarrow
@@ -112,7 +111,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

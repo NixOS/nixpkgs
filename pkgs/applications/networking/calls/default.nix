@@ -34,7 +34,7 @@
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "46.0";
+  version = "46.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ZUVMK0Ex77EQKTGM0gBDHt8W9l4rHspihYduMcwMGho=";
+    hash = "sha256-J1wuhAXPCvLWzPqMU4alVFFpHoCAzX3wVOP3Bw0wW/o=";
   };
 
   outputs = [ "out" "devdoc" ];

@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
 
   # build-system
   poetry-core,
@@ -39,7 +38,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     huggingface-hub

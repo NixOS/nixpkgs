@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "walk";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = "walk";
     rev = "v${version}";
-    hash = "sha256-xs9K8WrckkpyzHnjYlzRsicMW+o7nTMYCIZVWOwx4PU=";
+    hash = "sha256-wGiRMNgp5NZVj8ILyQ2C/iqpjv4XgphRfWcF/CSMj48=";
   };
 
-  vendorHash = "sha256-p92H4JqklrV0c4vp9puAgDzBzMpwI40WPz9ix0e77l8=";
+  vendorHash = "sha256-MTM7zR5OYHbzAm07FTLvXVnESARg50/BZrB2bl+LtXM=";
 
   meta = with lib; {
     description = "Terminal file manager";

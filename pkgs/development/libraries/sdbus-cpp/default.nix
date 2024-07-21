@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       inherent design complexities and limitations.
     '';
     license = lib.licenses.lgpl2Only;
-    maintainers = [ lib.maintainers.ivar ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "sdbus-c++-xml2cpp";
   };

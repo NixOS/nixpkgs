@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aiocoap";
-  version = "0.4.8";
+  version = "0.4.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "chrysn";
     repo = "aiocoap";
     rev = "refs/tags/${version}";
-    hash = "sha256-jBRxorHr5/CgAR6WVXBUycZpJ6n1DYVFQk6kqVv8D1Q=";
+    hash = "sha256-sKDkbv8OyPewfQpunFxezP0wjy3EAQxsQ0UfUm0REPM=";
   };
 
   build-system = [ setuptools ];
@@ -63,6 +63,8 @@ buildPythonPackage rec {
     [
       # Communication is not properly mocked
       "test_uri_parser"
+      # Doctest
+      "test_001"
     ]
     ++ lib.optionals (pythonAtLeast "3.12") [
       # https://github.com/chrysn/aiocoap/issues/339

@@ -38,13 +38,13 @@ let
 in
 php.buildComposerProject (finalAttrs: {
   pname = "movim";
-  version = "0.24.1";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-Ai82d1VwtAlKmM8N/hazMWsn5F6HS4I1do3VkpLPlBo=";
+    hash = "sha256-VshDFHDCfemHS/TN5qEe8CGizZksf44xENSmvX44uAc=";
   };
 
   php = php.buildEnv ({
@@ -67,7 +67,7 @@ php.buildComposerProject (finalAttrs: {
   # pinned commonmark
   composerStrictValidation = false;
 
-  vendorHash = "sha256-1sQm+eRrs9m52CepPXahsOJhyLZ68+FIDNHyY33IoD4=";
+  vendorHash = "sha256-nxbsw0re/7zKhpWxtA8JAf7JL3RLghqaYsi4rkM6VZg=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;

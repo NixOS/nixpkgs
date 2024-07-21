@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "openMSX";
     repo = "openMSX";
     rev = "RELEASE_${builtins.replaceStrings ["."] ["_"] finalAttrs.version}";
-    sha256 = "sha256-5ULljLmEDGFp32rnrXKLfL6P3ad2STJUNngBuWlRCbc=";
+    hash = "sha256-5ULljLmEDGFp32rnrXKLfL6P3ad2STJUNngBuWlRCbc=";
     fetchSubmodules = true;
   };
 

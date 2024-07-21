@@ -35,7 +35,7 @@ in
   options.services.pretalx = {
     enable = lib.mkEnableOption "pretalx";
 
-    package = lib.mkPackageOptionMD pkgs "pretalx" {};
+    package = lib.mkPackageOption pkgs "pretalx" {};
 
     group = lib.mkOption {
       type = lib.types.str;

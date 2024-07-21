@@ -1,38 +1,48 @@
-{ lib
-, stdenv
-, mkDerivation
-, argp-standalone
-, dbus
-, dbus_cplusplus
-, desktop-file-utils
-, fetchurl
-, fetchpatch
-, glibmm
-, libavc1394
-, libconfig
-, libiec61883
-, libraw1394
-, libxmlxx3
-, pkg-config
-, python3
-, scons
-, which
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  argp-standalone,
+  dbus,
+  dbus_cplusplus,
+  desktop-file-utils,
+  fetchurl,
+  fetchpatch,
+  glibmm,
+  libavc1394,
+  libconfig,
+  libiec61883,
+  libraw1394,
+  libxmlxx3,
+  pkg-config,
+  python311,
+  scons,
+  which,
+  wrapQtAppsHook,
 }:
 
 let
-  python = python3.withPackages (pkgs: with pkgs; [ pyqt5 dbus-python ]);
+  python = python311.withPackages (
+    pkgs: with pkgs; [
+      pyqt5
+      dbus-python
+    ]
+  );
 in
 mkDerivation rec {
   pname = "ffado";
   version = "2.4.8";
 
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
+
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
-    hash = "sha256-f0x561ehKw6uMSri0RZip+v1JHZuhixtywl0PVU/N44=";
+    hash = "sha256-0iFXYyGctOoHCdc232Ud80/wV81tiS7ItiS0uLKyq2Y=";
   };
-
-  sourceRoot = "libffado-${version}/libffado";
 
   prePatch = ''
     substituteInPlace ./support/tools/ffado-diag.in \
@@ -51,15 +61,13 @@ mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "bin" "dev" ];
-
   nativeBuildInputs = [
     desktop-file-utils
-    scons
+    (scons.override { python3 = python311; })
     pkg-config
     which
     python
-    python3.pkgs.pyqt5
+    python.pkgs.pyqt5
     wrapQtAppsHook
   ];
 
@@ -71,7 +79,7 @@ mkDerivation rec {
     "WILL_DEAL_WITH_XDG_MYSELF=True"
     "BUILD_MIXER=True"
     "UDEVDIR=${placeholder "out"}/lib/udev/rules.d"
-    "PYPKGDIR=${placeholder "out"}/${python3.sitePackages}"
+    "PYPKGDIR=${placeholder "out"}/${python.sitePackages}"
     "BINDIR=${placeholder "bin"}/bin"
     "INCLUDEDIR=${placeholder "dev"}/include"
     "PYTHON_INTERPRETER=${python.interpreter}"
@@ -116,7 +124,10 @@ mkDerivation rec {
     homepage = "http://www.ffado.org";
     description = "FireWire audio drivers";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ goibhniu michojel ];
+    maintainers = with maintainers; [
+      goibhniu
+      michojel
+    ];
     platforms = platforms.linux;
   };
 }

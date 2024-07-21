@@ -57,23 +57,13 @@
   ]
   ++ lib.optionals guiSupport [ libX11 ]
   ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_cudart.dev
-    cuda_cudart.lib
-    cuda_cudart.static
-    cuda_nvcc.dev
-    libcublas.dev
-    libcublas.lib
-    libcublas.static
-    libcurand.dev
-    libcurand.lib
-    libcurand.static
-    libcusolver.dev
-    libcusolver.lib
-    libcusolver.static
-    cudnn.dev
-    cudnn.lib
-    cudnn.static
-    cuda_cccl.dev
+    cuda_cudart
+    cuda_nvcc
+    libcublas
+    libcurand
+    libcusolver
+    cudnn
+    cuda_cccl
   ]);
 
   passthru = {

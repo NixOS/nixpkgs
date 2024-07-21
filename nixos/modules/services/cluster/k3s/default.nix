@@ -17,6 +17,109 @@ let
       ]
       ++ config
     ) instruction;
+
+  manifestDir = "/var/lib/rancher/k3s/server/manifests";
+  chartDir = "/var/lib/rancher/k3s/server/static/charts";
+  imageDir = "/var/lib/rancher/k3s/agent/images";
+
+  manifestModule =
+    let
+      mkTarget =
+        name: if (lib.hasSuffix ".yaml" name || lib.hasSuffix ".yml" name) then name else name + ".yaml";
+    in
+    lib.types.submodule (
+      {
+        name,
+        config,
+        options,
+        ...
+      }:
+      {
+        options = {
+          enable = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "Whether this manifest file should be generated.";
+          };
+
+          target = lib.mkOption {
+            type = lib.types.nonEmptyStr;
+            example = lib.literalExpression "manifest.yaml";
+            description = ''
+              Name of the symlink (relative to {file}`${manifestDir}`).
+              Defaults to the attribute name.
+            '';
+          };
+
+          content = lib.mkOption {
+            type = with lib.types; nullOr (either attrs (listOf attrs));
+            default = null;
+            description = ''
+              Content of the manifest file. A single attribute set will
+              generate a single document YAML file. A list of attribute sets
+              will generate multiple documents separated by `---` in a single
+              YAML file.
+            '';
+          };
+
+          source = lib.mkOption {
+            type = lib.types.path;
+            example = lib.literalExpression "./manifests/app.yaml";
+            description = ''
+              Path of the source `.yaml` file.
+            '';
+          };
+        };
+
+        config = {
+          target = lib.mkDefault (mkTarget name);
+          source = lib.mkIf (config.content != null) (
+            let
+              name' = "k3s-manifest-" + builtins.baseNameOf name;
+              docName = "k3s-manifest-doc-" + builtins.baseNameOf name;
+              yamlDocSeparator = builtins.toFile "yaml-doc-separator" "\n---\n";
+              mkYaml = name: x: (pkgs.formats.yaml { }).generate name x;
+              mkSource =
+                value:
+                if builtins.isList value then
+                  pkgs.concatText name' (
+                    lib.concatMap (x: [
+                      yamlDocSeparator
+                      (mkYaml docName x)
+                    ]) value
+                  )
+                else
+                  mkYaml name' value;
+            in
+            lib.mkDerivedConfig options.content mkSource
+          );
+        };
+      }
+    );
+
+  enabledManifests = with builtins; filter (m: m.enable) (attrValues cfg.manifests);
+  linkManifestEntry = m: "${pkgs.coreutils-full}/bin/ln -sfn ${m.source} ${manifestDir}/${m.target}";
+  linkImageEntry = image: "${pkgs.coreutils-full}/bin/ln -sfn ${image} ${imageDir}/${image.name}";
+  linkChartEntry =
+    let
+      mkTarget = name: if (lib.hasSuffix ".tgz" name) then name else name + ".tgz";
+    in
+    name: value:
+    "${pkgs.coreutils-full}/bin/ln -sfn ${value} ${chartDir}/${mkTarget (builtins.baseNameOf name)}";
+
+  activateK3sContent = pkgs.writeShellScript "activate-k3s-content" ''
+    ${lib.optionalString (
+      builtins.length enabledManifests > 0
+    ) "${pkgs.coreutils-full}/bin/mkdir -p ${manifestDir}"}
+    ${lib.optionalString (cfg.charts != { }) "${pkgs.coreutils-full}/bin/mkdir -p ${chartDir}"}
+    ${lib.optionalString (
+      builtins.length cfg.images > 0
+    ) "${pkgs.coreutils-full}/bin/mkdir -p ${imageDir}"}
+
+    ${builtins.concatStringsSep "\n" (map linkManifestEntry enabledManifests)}
+    ${builtins.concatStringsSep "\n" (lib.mapAttrsToList linkChartEntry cfg.charts)}
+    ${builtins.concatStringsSep "\n" (map linkImageEntry cfg.images)}
+  '';
 in
 {
   imports = [ (removeOption [ "docker" ] "k3s docker option is no longer supported.") ];
@@ -103,9 +206,12 @@ in
 
     extraFlags = mkOption {
       description = "Extra flags to pass to the k3s command.";
-      type = types.str;
-      default = "";
-      example = "--no-deploy traefik --cluster-cidr 10.24.0.0/16";
+      type = with types; either str (listOf str);
+      default = [ ];
+      example = [
+        "--no-deploy traefik"
+        "--cluster-cidr 10.24.0.0/16"
+      ];
     };
 
     disableAgent = mkOption {
@@ -127,11 +233,148 @@ in
       default = null;
       description = "File path containing the k3s YAML config. This is useful when the config is generated (for example on boot).";
     };
+
+    manifests = mkOption {
+      type = types.attrsOf manifestModule;
+      default = { };
+      example = lib.literalExpression ''
+        deployment.source = ../manifests/deployment.yaml;
+        my-service = {
+          enable = false;
+          target = "app-service.yaml";
+          content = {
+            apiVersion = "v1";
+            kind = "Service";
+            metadata = {
+              name = "app-service";
+            };
+            spec = {
+              selector = {
+                "app.kubernetes.io/name" = "MyApp";
+              };
+              ports = [
+                {
+                  name = "name-of-service-port";
+                  protocol = "TCP";
+                  port = 80;
+                  targetPort = "http-web-svc";
+                }
+              ];
+            };
+          }
+        };
+
+        nginx.content = [
+          {
+            apiVersion = "v1";
+            kind = "Pod";
+            metadata = {
+              name = "nginx";
+              labels = {
+                "app.kubernetes.io/name" = "MyApp";
+              };
+            };
+            spec = {
+              containers = [
+                {
+                  name = "nginx";
+                  image = "nginx:1.14.2";
+                  ports = [
+                    {
+                      containerPort = 80;
+                      name = "http-web-svc";
+                    }
+                  ];
+                }
+              ];
+            };
+          }
+          {
+            apiVersion = "v1";
+            kind = "Service";
+            metadata = {
+              name = "nginx-service";
+            };
+            spec = {
+              selector = {
+                "app.kubernetes.io/name" = "MyApp";
+              };
+              ports = [
+                {
+                  name = "name-of-service-port";
+                  protocol = "TCP";
+                  port = 80;
+                  targetPort = "http-web-svc";
+                }
+              ];
+            };
+          }
+        ];
+      '';
+      description = ''
+        Auto-deploying manifests that are linked to {file}`${manifestDir}` before k3s starts.
+        Note that deleting manifest files will not remove or otherwise modify the resources
+        it created. Please use the the `--disable` flag or `.skip` files to delete/disable AddOns,
+        as mentioned in the [docs](https://docs.k3s.io/installation/packaged-components#disabling-manifests).
+        This option only makes sense on server nodes (`role = server`).
+        Read the [auto-deploying manifests docs](https://docs.k3s.io/installation/packaged-components#auto-deploying-manifests-addons)
+        for further information.
+      '';
+    };
+
+    charts = mkOption {
+      type = with types; attrsOf (either path package);
+      default = { };
+      example = lib.literalExpression ''
+        nginx = ../charts/my-nginx-chart.tgz;
+        redis = ../charts/my-redis-chart.tgz;
+      '';
+      description = ''
+        Packaged Helm charts that are linked to {file}`${chartDir}` before k3s starts.
+        The attribute name will be used as the link target (relative to {file}`${chartDir}`).
+        The specified charts will only be placed on the file system and made available to the
+        Kubernetes APIServer from within the cluster, you may use the
+        [k3s Helm controller](https://docs.k3s.io/helm#using-the-helm-controller)
+        to deploy the charts. This option only makes sense on server nodes
+        (`role = server`).
+      '';
+    };
+
+    images = mkOption {
+      type = with types; listOf package;
+      default = [ ];
+      example = lib.literalExpression ''
+        [
+          (pkgs.dockerTools.pullImage {
+            imageName = "docker.io/bitnami/keycloak";
+            imageDigest = "sha256:714dfadc66a8e3adea6609bda350345bd3711657b7ef3cf2e8015b526bac2d6b";
+            sha256 = "0imblp0kw9vkcr7sp962jmj20fpmb3hvd3hmf4cs4x04klnq3k90";
+            finalImageTag = "21.1.2-debian-11-r0";
+          })
+        ]
+      '';
+      description = ''
+        List of derivations that provide container images.
+        All images are linked to {file}`${imageDir}` before k3s starts and consequently imported
+        by the k3s agent. This option only makes sense on nodes with an enabled agent.
+      '';
+    };
   };
 
   # implementation
 
   config = mkIf cfg.enable {
+    warnings =
+      (lib.optional (cfg.role != "server" && cfg.manifests != { })
+        "k3s: Auto deploying manifests are only installed on server nodes (role == server), they will be ignored by this node."
+      )
+      ++ (lib.optional (cfg.role != "server" && cfg.charts != { })
+        "k3s: Helm charts are only made available to the cluster on server nodes (role == server), they will be ignored by this node."
+      )
+      ++ (lib.optional (cfg.disableAgent && cfg.images != [ ])
+        "k3s: Images are only imported on nodes with an enabled agent, they will be ignored by this node"
+      );
+
     assertions = [
       {
         assertion = cfg.role == "agent" -> (cfg.configPath != null || cfg.serverAddr != "");
@@ -178,6 +421,7 @@ in
         LimitCORE = "infinity";
         TasksMax = "infinity";
         EnvironmentFile = cfg.environmentFile;
+        ExecStartPre = activateK3sContent;
         ExecStart = concatStringsSep " \\\n " (
           [ "${cfg.package}/bin/k3s ${cfg.role}" ]
           ++ (optional cfg.clusterInit "--cluster-init")
@@ -186,9 +430,11 @@ in
           ++ (optional (cfg.token != "") "--token ${cfg.token}")
           ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
           ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
-          ++ [ cfg.extraFlags ]
+          ++ (lib.flatten cfg.extraFlags)
         );
       };
     };
   };
+
+  meta.maintainers = lib.teams.k3s.members;
 }

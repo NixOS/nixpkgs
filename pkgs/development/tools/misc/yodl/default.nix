@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   src = fetchFromGitLab {
-    sha256 = "sha256-MeD/jjhwoiWTb/G8pHrnEEX22h+entPr9MhJ6WHO3DM=";
+    hash = "sha256-MeD/jjhwoiWTb/G8pHrnEEX22h+entPr9MhJ6WHO3DM=";
     rev = version;
     repo = "yodl";
     owner = "fbb-git";

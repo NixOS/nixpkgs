@@ -12,6 +12,7 @@
 , python3
 , meson
 , ninja
+, versionCheckHook
 , wrapGAppsHook3
 , intltool
 , itstool
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.6.3";
+  version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    sha256 = "sha256-xsNqzicI11dM/DjY00pXaPpQdHA0ltP23g34fMWUoUA=";
+    sha256 = "sha256-FG8SlMyhee0W88Pt3oW1tsFyy/KeCOE+QlDbE6hzjcg=";
   };
 
   patches = [
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     itstool
     ninja
     python3
+    versionCheckHook
     wrapGAppsHook3
   ];
 
@@ -55,14 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    if [[ "$($out/bin/xed --version)" == "xed - Version ${version}" ]] ; then
-      echo "${pname} smoke test passed"
-    else
-      echo "${pname} smoke test failed"
-      return 1
-    fi
-  '';
+  versionCheckProgram = "${placeholder "out"}/bin/xed";
 
   meta = with lib; {
     description = "Light weight text editor from Linux Mint";

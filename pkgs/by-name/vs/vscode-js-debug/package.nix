@@ -1,8 +1,12 @@
 { lib
+, stdenv
 , buildNpmPackage
 , fetchFromGitHub
 , buildPackages
 , libsecret
+, xcbuild
+, Security
+, AppKit
 , pkg-config
 , nodePackages
 , runCommand
@@ -12,20 +16,28 @@
 
 buildNpmPackage rec {
   pname = "vscode-js-debug";
-  version = "1.90.0";
+  version = "1.91.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-js-debug";
     rev = "v${version}";
-    hash = "sha256-SmWPKO7CEXaOIkuf9Y+825EfGsIz+rWlnCsh1T2UEF0=";
+    hash = "sha256-3SZIIBHv599qLaW419CA0Nr7F6R7GB9wqUnOqbV4jKc=";
   };
 
-  npmDepsHash = "sha256-DfeaiqKadTnGzOObK01ctlavwqTMa0tqn59sLZMPvUM=";
+  npmDepsHash = "sha256-kZ5wCcmdpYtT6dqtV3i8R9LKFs20sq0rZC1W1w00XJQ=";
 
-  nativeBuildInputs = [ pkg-config nodePackages.node-gyp ];
+  nativeBuildInputs = [
+    pkg-config
+    nodePackages.node-gyp
+  ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-  buildInputs = [ libsecret ];
+  buildInputs =
+    lib.optionals (!stdenv.isDarwin) [ libsecret ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+      AppKit
+    ];
 
   postPatch = ''
     ${lib.getExe buildPackages.jq} '

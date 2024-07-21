@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "soundcloud-v2";
-  version = "1.3.7";
+  version = "1.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DiaCnIEXKSxyE4+MCq0KwdKWUGfWO3LAVwsMNEkOmqc=";
+    hash = "sha256-Cvi8VwUq87ZAH3NtzBNrA2mvOA3Av48QmecDrlNncVU=";
   };
 
   nativeBuildInputs = [ setuptools ];

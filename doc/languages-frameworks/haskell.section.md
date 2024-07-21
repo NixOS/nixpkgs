@@ -21,25 +21,14 @@ Many “normal” user facing packages written in Haskell, like `niv` or `cachix
 are also exposed at the top level, and there is nothing Haskell specific to
 installing and using them.
 
-All of these packages are originally defined in the `haskellPackages` package
-set and are re-exposed with a reduced dependency closure for convenience.
-(see `justStaticExecutables` or `separateBinOutput` below)
+All of these packages are originally defined in the `haskellPackages` package set.
+The same packages are re-exposed with a reduced dependency closure for convenience (see `justStaticExecutables` or `separateBinOutput` below).
 
-The `haskellPackages` set includes at least one version of every package from
-Hackage as well as some manually injected packages. This amounts to a lot of
-packages, so it is hidden from `nix-env -qa` by default for performance reasons.
-You can still list all packages in the set like this:
+:::{.note}
+See [](#chap-language-support) for techniques to explore package sets.
+:::
 
-```console
-$ nix-env -f '<nixpkgs>' -qaP -A haskellPackages
-haskellPackages.a50                                                         a50-0.5
-haskellPackages.AAI                                                         AAI-0.2.0.1
-haskellPackages.aasam                                                       aasam-0.2.0.0
-haskellPackages.abacate                                                     abacate-0.0.0.0
-haskellPackages.abc-puzzle                                                  abc-puzzle-0.2.1
-…
-```
-Also, the `haskellPackages` set is included on [search.nixos.org].
+The `haskellPackages` set includes at least one version of every package from [Hackage](https://hackage.haskell.org/) as well as some manually injected packages.
 
 The attribute names in `haskellPackages` always correspond with their name on
 Hackage. Since Hackage allows names that are not valid Nix without escaping,
@@ -49,8 +38,7 @@ For packages that are part of [Stackage] (a curated set of known to be
 compatible packages), we use the version prescribed by a Stackage snapshot
 (usually the current LTS one) as the default version. For all other packages we
 use the latest version from [Hackage](https://hackage.org) (the repository of
-basically all open source Haskell packages). See [below](#haskell-available-
-versions) for a few more details on this.
+basically all open source Haskell packages). See [below](#haskell-available-versions) for a few more details on this.
 
 Roughly half of the 16K packages contained in `haskellPackages` don’t actually
 build and are [marked as broken semi-automatically](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/broken.yaml).
@@ -63,67 +51,14 @@ How you can help with that is
 described in [Fixing a broken package](#haskell-fixing-a-broken-package).
 -->
 
-`haskellPackages` is built with our default compiler, but we also provide other
-releases of GHC and package sets built with them. You can list all available
-compilers like this:
+`haskellPackages` is built with our default compiler, but we also provide other releases of GHC and package sets built with them.
+Available compilers are collected under `haskell.compiler`.
 
-```console
-$ nix-env -f '<nixpkgs>' -qaP -A haskell.compiler
-haskell.compiler.ghc810                  ghc-8.10.7
-haskell.compiler.ghc90                   ghc-9.0.2
-haskell.compiler.ghc925                  ghc-9.2.5
-haskell.compiler.ghc926                  ghc-9.2.6
-haskell.compiler.ghc927                  ghc-9.2.7
-haskell.compiler.ghc92                   ghc-9.2.8
-haskell.compiler.ghc945                  ghc-9.4.5
-haskell.compiler.ghc946                  ghc-9.4.6
-haskell.compiler.ghc947                  ghc-9.4.7
-haskell.compiler.ghc94                   ghc-9.4.8
-haskell.compiler.ghc963                  ghc-9.6.3
-haskell.compiler.ghc96                   ghc-9.6.4
-haskell.compiler.ghc98                   ghc-9.8.1
-haskell.compiler.ghcHEAD                 ghc-9.9.20231121
-haskell.compiler.ghc8107Binary           ghc-binary-8.10.7
-haskell.compiler.ghc865Binary            ghc-binary-8.6.5
-haskell.compiler.ghc924Binary            ghc-binary-9.2.4
-haskell.compiler.integer-simple.ghc8107  ghc-integer-simple-8.10.7
-haskell.compiler.integer-simple.ghc810   ghc-integer-simple-8.10.7
-haskell.compiler.native-bignum.ghc90     ghc-native-bignum-9.0.2
-haskell.compiler.native-bignum.ghc902    ghc-native-bignum-9.0.2
-haskell.compiler.native-bignum.ghc925    ghc-native-bignum-9.2.5
-haskell.compiler.native-bignum.ghc926    ghc-native-bignum-9.2.6
-haskell.compiler.native-bignum.ghc927    ghc-native-bignum-9.2.7
-haskell.compiler.native-bignum.ghc92     ghc-native-bignum-9.2.8
-haskell.compiler.native-bignum.ghc928    ghc-native-bignum-9.2.8
-haskell.compiler.native-bignum.ghc945    ghc-native-bignum-9.4.5
-haskell.compiler.native-bignum.ghc946    ghc-native-bignum-9.4.6
-haskell.compiler.native-bignum.ghc947    ghc-native-bignum-9.4.7
-haskell.compiler.native-bignum.ghc94     ghc-native-bignum-9.4.8
-haskell.compiler.native-bignum.ghc948    ghc-native-bignum-9.4.8
-haskell.compiler.native-bignum.ghc963    ghc-native-bignum-9.6.3
-haskell.compiler.native-bignum.ghc96     ghc-native-bignum-9.6.4
-haskell.compiler.native-bignum.ghc964    ghc-native-bignum-9.6.4
-haskell.compiler.native-bignum.ghc98     ghc-native-bignum-9.8.1
-haskell.compiler.native-bignum.ghc981    ghc-native-bignum-9.8.1
-haskell.compiler.native-bignum.ghcHEAD   ghc-native-bignum-9.9.20231121
-haskell.compiler.ghcjs                   ghcjs-8.10.7
-```
-
-Each of those compiler versions has a corresponding attribute set built using
+Each of those compiler versions has a corresponding attribute set `packages` built with
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
 9.4.5 is `haskell.packages.ghc945`. In fact `haskellPackages` is just an alias
 for `haskell.packages.ghc964`:
-
-```console
-$ nix-env -f '<nixpkgs>' -qaP -A haskell.packages.ghc927
-haskell.packages.ghc927.a50                                                         a50-0.5
-haskell.packages.ghc927.AAI                                                         AAI-0.2.0.1
-haskell.packages.ghc927.aasam                                                       aasam-0.2.0.0
-haskell.packages.ghc927.abacate                                                     abacate-0.0.0.0
-haskell.packages.ghc927.abc-puzzle                                                  abc-puzzle-0.2.1
-…
-```
 
 Every package set also re-exposes the GHC used to build its packages as `haskell.packages.*.ghc`.
 

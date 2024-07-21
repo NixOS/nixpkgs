@@ -42,6 +42,8 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "fastapi" ];
+
   dependencies = [
     fastapi
     injector

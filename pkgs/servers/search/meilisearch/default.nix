@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "1.8.3";
+  version = "1.9.0";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
@@ -18,9 +18,9 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "meilisearch";
-    repo = "MeiliSearch";
+    repo = "meiliSearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-R074dn9kWxHf5loq/K4aLWvrJwpt7YAigNU0YHc0mRg=";
+    hash = "sha256-fPXhayS8OKiiiDvVvBry3njZ74/W6oVL0p85Z5qf3KA==";
   };
 
   cargoBuildFlags = [ "--package=meilisearch" ];
@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "actix-web-static-files-3.0.5" = "sha256-2BN0RzLhdykvN3ceRLkaKwSZtel2DBqZ+uz4Qut+nII=";
       "hf-hub-0.3.2" = "sha256-tsn76b+/HRvPnZ7cWd8SBcEdnMPtjUEIRJipOJUbz54=";
       "tokenizers-0.15.2" = "sha256-lWvCu2hDJFzK6IUBJ4yeL4eZkOA08LHEMfiKXVvkog8=";
     };

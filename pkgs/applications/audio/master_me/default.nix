@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     repo = "master_me";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-FG3X1dOF9KRHHSnd5/zP+GrYCB2O0y+tnI5/l9tNhyE=";
+    hash = "sha256-FG3X1dOF9KRHHSnd5/zP+GrYCB2O0y+tnI5/l9tNhyE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

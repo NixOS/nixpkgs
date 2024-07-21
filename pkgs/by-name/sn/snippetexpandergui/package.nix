@@ -17,7 +17,7 @@ buildGoModule rec {
 
   pname = "snippetexpandergui";
 
-  vendorHash = "sha256-W9NkENdZRzqSAONI9QS2EI5aERK+AaPqwYwITKLwXQE=";
+  vendorHash = "sha256-2nLO/b6XQC88VXE+SewhgKpkRtIHsva+fDudgKpvZiY=";
 
   proxyVendor = true;
 

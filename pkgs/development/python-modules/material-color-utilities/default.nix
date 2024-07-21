@@ -1,9 +1,7 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
   pillow,
   regex,
 }:
@@ -14,10 +12,9 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PG8C585wWViFRHve83z3b9NijHyV+iGY2BdMJpyVH64=";
+    hash = "sha256-PG8C585wWViFRHve83z3b9NijHyV+iGY2BdMJpyVH64=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [ "Pillow" ];
 
   propagatedBuildInputs = [

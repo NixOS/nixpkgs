@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "googleapis-common-protos";
-  version = "1.63.0";
+  version = "1.63.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F60BsR1fHQFxwG07pcBMVEdOiDtmuUlyK0k47iaU704=";
+    hash = "sha256-xkQvegprKoA2lFfXnmZyu33LqriOCEgwJJfj7IB4Cmo=";
   };
 
   nativeBuildInputs = [ setuptools ];

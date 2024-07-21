@@ -36,17 +36,15 @@ stdenv.mkDerivation rec {
   buildInputs = assert (blas.isILP64 == lapack.isILP64); [
     blas lapack
     metis
-    gfortran.cc.lib
+    (lib.getLib gfortran.cc)
     gmp
     mpfr
   ] ++ lib.optionals stdenv.cc.isClang [
     openmp
   ] ++ lib.optionals enableCuda [
-    cudaPackages.cuda_cudart.dev
-    cudaPackages.cuda_cudart.lib
-    cudaPackages.cuda_cccl.dev
-    cudaPackages.libcublas.dev
-    cudaPackages.libcublas.lib
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+    cudaPackages.libcublas
   ];
 
   preConfigure = ''
@@ -63,8 +61,8 @@ stdenv.mkDerivation rec {
     "CFLAGS=-DBLAS64"
   ] ++ lib.optionals enableCuda [
     "CUDA_PATH=${cudaPackages.cuda_nvcc}"
-    "CUDART_LIB=${cudaPackages.cuda_cudart.lib}/lib/libcudart.so"
-    "CUBLAS_LIB=${cudaPackages.libcublas.lib}/lib/libcublas.so"
+    "CUDART_LIB=${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so"
+    "CUBLAS_LIB=${lib.getLib cudaPackages.libcublas}/lib/libcublas.so"
   ] ++ lib.optionals stdenv.isDarwin [
     # Unless these are set, the build will attempt to use `Accelerate` on darwin, see:
     # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.13.0/SuiteSparse_config/SuiteSparse_config.mk#L368

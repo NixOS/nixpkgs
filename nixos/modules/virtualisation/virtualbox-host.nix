@@ -89,7 +89,7 @@ in
         Enable KVM support for VirtualBox. This increases compatibility with Linux kernel versions, because the VirtualBox kernel modules
         are not required.
 
-        This option is incompatible with `enableHardening` and `addNetworkInterface`.
+        This option is incompatible with `addNetworkInterface`.
 
         Note: This is experimental. Please check https://github.com/cyberus-technology/virtualbox-kvm/issues.
       '';
@@ -136,18 +136,6 @@ in
         assertion = !cfg.addNetworkInterface;
         message = "VirtualBox KVM only supports standard NAT networking for VMs. Please turn off virtualisation.virtualbox.host.addNetworkInterface.";
       }
-
-      {
-        assertion = !cfg.enableHardening;
-        message = "VirtualBox KVM is not compatible with hardening: Please turn off virtualisation.virtualbox.host.enableHardening.";
-      }
-    ];
-
-    warnings = [
-      ''
-        KVM support in VirtualBox is experimental. Not all security features are available yet.
-        See: https://github.com/cyberus-technology/virtualbox-kvm/issues/12
-      ''
     ];
   }) (mkIf (!cfg.enableKvm) {
     boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" ];

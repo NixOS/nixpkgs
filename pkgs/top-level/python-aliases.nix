@@ -33,10 +33,12 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases ({
+  aadict = throw "aadict was removed, it was introduced as a dependency for a package that never manifested and has been an unused leaf package ever since"; # added 2024-07-08
   abodepy = jaraco-abode; # added 2023-02-01
   acebinf = throw "acebinf has been removed because it is abandoned and broken."; # Added 2023-05-19
   adafruit-nrfutil = throw "adafruit-nrfutil has been promoted to a top-level attribute name: `pkgs.adafruit-nrfutil`."; # Added 2023-11-19
   aioaladdinconnect = throw "aioaladdinconnect has been removed, as the API is supported was obsoleted on 2024-01-24."; # Added 2024-06-07
+  aiomysensors = throw "aiomysensors has been removed, as it was packaged for Home Assistant, which migrated to pymysensors."; # Added 2024-07-07
   aioh2 = throw "aioh2 has been removed because it is abandoned and broken."; # Added 2022-03-30
   aionotify = throw "aionotify has been removed because is unmaintained and incompatible with python3.11."; # Added 2023-10-27
   aiosenseme = throw "aiosenseme has been removed, because it does no longer work with the latest firmware and has become unmaintained"; # Added 2023-07-05
@@ -53,6 +55,7 @@ mapAliases ({
   APScheduler = apscheduler; # added 2023-02-19
   async_generator = async-generator; # added 2023-08-08
   async_stagger = async-stagger; # added 2023-08-08
+  asyncio-mqtt = throw "asyncio-mqtt has been replaced by aiomqtt, which is not API compatible."; # added 2024-07-07
   asyncio-nats-client = nats-py; # added 2022-02-08
   atsim_potentials = atsim-potentials; # added 2023-10-08
   awkward0 = throw "awkward0 has been removed, use awkward instead"; # added 2022-12-13
@@ -84,6 +87,7 @@ mapAliases ({
   cacheyou = throw "cacheyou has been removed, as it was no longer used for the only consumer pdm"; # added 2023-12-21
   cadquery = throw "cadquery was removed, because it was disabled on all python version since 3.8 and marked as broken"; # added 2024-05-13
   carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
+  case = throw "case has been removed, since it is an unused leaf package with a dependency on the nose test framework"; # added 2024-07-08
   cchardet = faust-cchardet; # added 2023-03-02
   cepa = throw "cepa has been removed, as onionshare switched back to stem"; # added 2024-05-07
   class-registry = phx-class-registry; # added 2021-10-05
@@ -132,6 +136,7 @@ mapAliases ({
   django_hijack_admin = django-hijack-admin; # added 2023-05-16
   django-hijack-admin = throw "django-hijack-admin has been removed, since it is no longer compatible to django-hijack"; # added 2023-06-21
   django_modelcluster = django-modelcluster; # added 2022-04-02
+  django-mysql = throw "django-mysql has been removed, since it was an unused leaf package"; # added 2024-07-02
   django_nose = django-nose; # added 2023-07-25
   django-nose = throw "django-nose has been removed since it has not been maintained and there are no dependent packages"; # added 2024-05-21
   django_reversion = django-reversion; # added 2022-06-18
@@ -153,6 +158,7 @@ mapAliases ({
   email_validator = email-validator; # added 2022-06-22
   enhancements = throw "enhancements is unmaintained upstream and has therefore been removed"; # added 2023-10-27
   et_xmlfile = et-xmlfile; # added 2023-10-16
+  etebase-server = throw "pkgs.python3.etebase-server has been removed, use pkgs.etebase-server"; # added 2024-07-16
   ev3dev2 = python-ev3dev2; # added 2023-06-19
   eyeD3 = eyed3; # added 2024-01-03
   Fabric = fabric; # addedd 2023-02-19
@@ -160,6 +166,8 @@ mapAliases ({
   face_recognition_models = face-recognition-models; # added 2022-10-15
   factory_boy = factory-boy; # added 2023-10-08
   fake_factory = throw "fake_factory has been removed because it is unused and deprecated by upstream since 2016."; # added 2022-05-30
+  farm-haystack = throw "farm-haystack was removed in favor of haystack-ai"; # added 2024-07-03
+  faster-fifo = throw "faster-fifo has been removed since it was an unused leaf package"; # added 2024-07-02
   fastnlo_toolkit = fastnlo-toolkit; # added 2024-01-03
   fastpair = throw "fastpair is unmaintained upstream and has therefore been removed"; # added 2024-05-01
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
@@ -186,6 +194,7 @@ mapAliases ({
   flufl_bounce = flufl-bounce; # added 2023-11-03
   flufl_i18n = flufl-i18n; # added 2023-11-03
   flufl_lock = flufl-lock; # added 2023-11-03
+  forbiddenfruit = throw "forbiddenfruit has been removed, because it was unmaintained and relied on the nose test framework"; # added 2024-07-08
   FormEncode = formencode; # added 2023-02-19
   foundationdb51 = throw "foundationdb51 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   foundationdb52 = throw "foundationdb52 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
@@ -306,6 +315,7 @@ mapAliases ({
   mrkd = throw "mrkd has been promoted to a top-level attribute name: `pkgs.mrkd`"; # added 2023-08-01
   multi_key_dict = multi-key-dict; # added 2023-11-05
   mutmut = throw "mutmut has been promoted to a top-level attribute name: `pkgs.mutmut`"; # added 2022-10-02
+  nbmerge = throw "nbmerge has moved to pkgs.nbmerge"; # added 2024-07-05
   net2grid = gridnet; # add 2022-04-22
   nghttp2 = throw "in 1.52.0 removed deprecated python bindings."; # added 2023-06-08
   ninja-python = ninja; # add 2022-08-03
@@ -383,6 +393,7 @@ mapAliases ({
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   PyMVGLive = pymvglive; # added 2023-02-19
   pymyq = python-myq; # added 2023-10-20
+  pynose = throw "pynose was removed, because it violates the license of nose, by redistributing modified LGPL code under MIT.";
   python-myq = throw "python-myq has been removed, as the service provider has decided to block its API requests"; # added 2023-12-07
   pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
   pyqt5_sip = pyqt5-sip; # added 2024-01-07
@@ -421,6 +432,7 @@ mapAliases ({
   pytest_6 = pytest; # added 2022-02-10
   pytestcov = pytest-cov; # added 2021-01-04
   pytest-ordering = throw "pytest-ordering has been removed, since it is no longer maintained and broken"; # added 2023-06-22
+  pytest-openfiles = throw "pytest-openfiles has been removed, since it is unmaintained and archived"; # added 2024-06-19
   pytest-pep8 = pytestpep8; # added 2021-01-04
   pytest-pep257 = throw "pytest-pep257 was removed, as the pep257 package was migrated into pycodestyle"; # added 2022-04-12
   pytest-pythonpath = throw "pytest-pythonpath is obsolete as of pytest 7.0.0 and has been removed"; # added 2022-03-09
@@ -504,11 +516,13 @@ mapAliases ({
   sharkiqpy = sharkiq; # added 2022-05-21
   shouldbe = throw "shouldbe was removed, because it was disabled on all python version since 3.8 and last updated in 2019."; # added 2024-05-12
   sip_4 = sip4; # added 2024-01-07
+  slackclient = slack-sdk; # added 2024-06-27
   ssh-mitm = throw "ssh-mitm was removed in favor of the top-level ssh-mitm"; # added 2023-05-09
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
   smpp_pdu = smpp-pdu; # added 2024-03-05
   somecomfort = throw "somecomfort was removed because Home Assistant switched to aiosomecomfort"; # added 2023-02-01
+  solaredge = throw "solaredge was removed because Home Assistant switched to aiosolaredge"; # added 2024-07-15
   sorl_thumbnail = sorl-thumbnail; # added 2023-11-12
   spacy_models = spacy-models; # added 2024-04-21
   SPARQLWrapper = sparqlwrapper;
@@ -551,6 +565,12 @@ mapAliases ({
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvdb_api = tvdb-api; # added 2023-10-20
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
+  twitter-common-collections = throw "twitter-common-collections has been removed because it is abandoned and unmaintained"; # added 2024-07-14
+  twitter-common-confluence = throw "twitter-common-confluence has been removed because it is abandoned and unmaintained"; # added 2024-07-14
+  twitter-common-dirutil = throw "twitter-common-dirutil has been removed because it is abandoned and unmaintained"; # added 2024-07-14
+  twitter-common-lang = throw "twitter-common-lang has been removed because it is abandoned and unmaintained"; # added 2024-07-14
+  twitter-common-log = throw "twitter-common-log has been removed because it is abandoned and unmaintained"; # added 2024-07-14
+  twitter-common-options = throw "twitter-common-options has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   types-cryptography = throw "types-cryptography has been removed because it is obsolete since cryptography version 3.4.4."; # added 2022-05-30
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
   ufoLib2 = ufolib2; # added 2024-01-07

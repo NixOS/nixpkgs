@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "supabase-cli";
-  version = "1.169.5";
+  version = "1.187.2";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-H0y/eBmUG5nT/EsF1iC5hbhRBhR8jwwxlYav4Q7bSqM=";
+    hash = "sha256-zc38w09+DvCJMlXMjWvSekrhck8BkWL46RfvQHGpE9c=";
   };
 
-  vendorHash = "sha256-wZ+yYPwmePKMfYTve3Ha7teSx1mlHLnc1ZaZE6ZEdu4=";
+  vendorHash = "sha256-87G0Smjt+/+f0IjloKySgRpIaIyHI5DG89uNuP0sb9U=";
 
   ldflags = [
     "-s"
@@ -31,7 +31,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    rm $out/bin/{codegen,docs,listdep}
+    rm $out/bin/{docs,listdep}
     mv $out/bin/{cli,supabase}
 
     installShellCompletion --cmd supabase \

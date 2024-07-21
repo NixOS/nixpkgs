@@ -1,5 +1,4 @@
-{ stdenv
-, aacgain
+{ aacgain
 , ffmpeg
 , flac
 , imagemagick

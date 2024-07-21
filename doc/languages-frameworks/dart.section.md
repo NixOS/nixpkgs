@@ -114,7 +114,7 @@ flutter322.buildFlutterApplication {
     owner = "canonical";
     repo = "firmware-updater";
     rev = "6e7dbdb64e344633ea62874b54ff3990bd3b8440";
-    sha256 = "sha256-s5mwtr5MSPqLMN+k851+pFIFFPa0N1hqz97ys050tFA=";
+    hash = "sha256-s5mwtr5MSPqLMN+k851+pFIFFPa0N1hqz97ys050tFA=";
     fetchSubmodules = true;
   };
 

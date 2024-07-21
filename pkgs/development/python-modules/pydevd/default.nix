@@ -6,6 +6,7 @@
   setuptools,
   numpy,
   psutil,
+  pytest-xdist,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     numpy
     psutil
+    pytest-xdist
     pytestCheckHook
     trio
     untangle
@@ -66,6 +68,9 @@ buildPythonPackage rec {
       "test_case_stop_async_iteration_exception"
       "test_case_unhandled_exception_generator"
       "test_function_breakpoints_async"
+      # raise segmentation fault
+      # https://github.com/fabioz/PyDev.Debugger/issues/269
+      "test_evaluate_expression"
     ]
     ++ lib.optionals stdenv.isDarwin [
       "test_multiprocessing_simple"

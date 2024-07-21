@@ -31,14 +31,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snes9x" + lib.optionalString withGtk "-gtk";
-  version = "1.62.3-unstable-2024-04-22";
+  version = "1.63";
 
   src = fetchFromGitHub {
     owner = "snes9xgit";
     repo = "snes9x";
-    rev = "582128bce7ccf4e3cf7848ae9f6a729a1ebad4c4";
+    rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-fJ1g/L7oA9bhEawTsWjfLl1dDIKEGI+pcpWQCTutyR8=";
+    hash = "sha256-INMVyB3alwmsApO7ToAaUWgh7jlg2MeLxqHCEnUO88U=";
   };
 
   nativeBuildInputs = [
@@ -101,6 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  enableParallelBuilding = true;
 
   meta = let
     interface = if withGtk then "GTK" else "X11";

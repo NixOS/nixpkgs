@@ -23,7 +23,7 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "sha256-mRL62PIAkPK0aLA7uYpGlUvaJfbD354RDOD4P8MLzx8=";
+    hash = "sha256-mRL62PIAkPK0aLA7uYpGlUvaJfbD354RDOD4P8MLzx8=";
   };
 
   patches = [

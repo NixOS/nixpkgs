@@ -26,33 +26,22 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.gnome.gnome-keyring ];
+    environment.systemPackages = [ pkgs.gnome-keyring ];
 
     services.dbus.packages = [
-      pkgs.gnome.gnome-keyring
+      pkgs.gnome-keyring
       pkgs.gcr
     ];
 
-    xdg.portal.extraPortals = [ pkgs.gnome.gnome-keyring ];
+    xdg.portal.extraPortals = [ pkgs.gnome-keyring ];
 
-    security.pam.services = lib.mkMerge [
-      {
-        login.enableGnomeKeyring = true;
-      }
-      (lib.mkIf config.services.xserver.displayManager.gdm.enable {
-        gdm-password.enableGnomeKeyring = true;
-        gdm-autologin.enableGnomeKeyring = true;
-      })
-      (lib.mkIf (config.services.xserver.displayManager.gdm.enable && config.services.fprintd.enable) {
-        gdm-fingerprint.enableGnomeKeyring = true;
-      })
-    ];
+    security.pam.services.login.enableGnomeKeyring = true;
 
     security.wrappers.gnome-keyring-daemon = {
       owner = "root";
       group = "root";
       capabilities = "cap_ipc_lock=ep";
-      source = "${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon";
+      source = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon";
     };
   };
 }

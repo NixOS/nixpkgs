@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "roever";
     repo = "toppler";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ecEaELu52Nmov/BD9VzcUw6wyWeHJcsKQkEzTnaW330=";
+    hash = "sha256-ecEaELu52Nmov/BD9VzcUw6wyWeHJcsKQkEzTnaW330=";
   };
 
   nativeBuildInputs = [

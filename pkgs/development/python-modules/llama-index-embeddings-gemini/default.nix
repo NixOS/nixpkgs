@@ -5,8 +5,6 @@
   google-generativeai,
   llama-index-core,
   poetry-core,
-  pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
 }:
 
@@ -27,7 +25,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     google-generativeai

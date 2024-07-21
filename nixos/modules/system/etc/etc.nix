@@ -64,14 +64,6 @@ let
 
   etcHardlinks = filter (f: f.mode != "symlink" && f.mode != "direct-symlink") etc';
 
-  build-composefs-dump = pkgs.runCommand "build-composefs-dump.py"
-    {
-      buildInputs = [ pkgs.python3 ];
-    } ''
-    install ${./build-composefs-dump.py} $out
-    patchShebangs --host $out
-  '';
-
 in
 
 {
@@ -255,6 +247,30 @@ in
           --options lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
           $tmpEtcMount
 
+        # Before moving the new /etc overlay under the old /etc, we have to
+        # move mounts on top of /etc to the new /etc mountpoint.
+        findmnt /etc --submounts --list --noheading --kernel --output TARGET | while read -r mountPoint; do
+          if [[ "$mountPoint" = "/etc" ]]; then
+            continue
+          fi
+
+          tmpMountPoint="$tmpEtcMount/''${mountPoint:5}"
+            ${if config.system.etc.overlay.mutable then ''
+              if [[ -f "$mountPoint" ]]; then
+                touch "$tmpMountPoint"
+              elif [[ -d "$mountPoint" ]]; then
+                mkdir -p "$tmpMountPoint"
+              fi
+            '' else ''
+              if [[ ! -e "$tmpMountPoint" ]]; then
+                echo "Skipping undeclared mountpoint in environment.etc: $mountPoint"
+                continue
+              fi
+            ''
+          }
+          mount --bind "$mountPoint" "$tmpMountPoint"
+        done
+
         # Move the new temporary /etc mount underneath the current /etc mount.
         #
         # This should eventually use util-linux to perform this move beneath,
@@ -263,8 +279,7 @@ in
         ${pkgs.move-mount-beneath}/bin/move-mount --move --beneath $tmpEtcMount /etc
 
         # Unmount the top /etc mount to atomically reveal the new mount.
-        umount /etc
-
+        umount --recursive /etc
       fi
     '' else ''
       # Set up the statically computed bits of /etc.
@@ -295,10 +310,12 @@ in
     system.build.etcMetadataImage =
       let
         etcJson = pkgs.writeText "etc-json" (builtins.toJSON etc');
-        etcDump = pkgs.runCommand "etc-dump" { } "${build-composefs-dump} ${etcJson} > $out";
+        etcDump = pkgs.runCommand "etc-dump" { } ''
+          ${lib.getExe pkgs.buildPackages.python3} ${./build-composefs-dump.py} ${etcJson} > $out
+        '';
       in
       pkgs.runCommand "etc-metadata.erofs" {
-        nativeBuildInputs = [ pkgs.composefs pkgs.erofs-utils ];
+        nativeBuildInputs = with pkgs.buildPackages; [ composefs erofs-utils ];
       } ''
         mkcomposefs --from-file ${etcDump} $out
         fsck.erofs $out

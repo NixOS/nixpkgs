@@ -1,36 +1,22 @@
-{ lib
-, melpaBuild
-, fetchFromGitLab
-, writeText
-, unstableGitUpdater
+{
+  lib,
+  melpaBuild,
+  fetchFromGitLab,
+  unstableGitUpdater,
 }:
 
-let
-  pname = "ligo-mode";
-  version = "20230302.1616";
-  commit = "d1073474efc9e0a020a4bcdf5e0c12a217265a3a";
-in
 melpaBuild {
-  inherit pname version commit;
+  pname = "ligo-mode";
+  version = "1.7.1-unstable-2024-07-17";
 
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
-    rev = commit;
-    hash = "sha256-wz9DF9mqi8WUt1Ebd+ueUTA314rKkdbjmoWF8cKuS8I=";
+    rev = "09afc3ff3dd9c88b2dfbc563278a78a099b39902";
+    hash = "sha256-AX0zZljZPrfBlpdgCNuiq0JaYpHcVBdHHZ9jM31LlQs=";
   };
 
-  packageRequires = [ ];
-
-  buildInputs = [ ];
-
-  checkInputs = [ ];
-
-  recipe = writeText "recipe" ''
-    (ligo-mode :fetcher gitlab
-               :repo "ligolang/ligo"
-               :files ("tools/emacs/ligo-mode.el"))
-  '';
+  files = ''("tools/emacs/ligo-mode.el")'';
 
   passthru.updateScript = unstableGitUpdater { };
 

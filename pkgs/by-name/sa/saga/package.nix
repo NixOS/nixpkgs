@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "System for Automated Geoscientific Analyses";
     homepage = "https://saga-gis.sourceforge.io";
+    changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog ${version}/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; teams.geospatial.members ++ [ michelk mpickering ];
     platforms = with platforms; unix;

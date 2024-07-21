@@ -6,7 +6,7 @@
 
 melpaBuild {
   pname = "grid";
-  version = "20240526.1305";
+  version = "0-unstable-2024-05-26";
 
   src = fetchFromGitHub {
     owner = "ichernyshovvv";

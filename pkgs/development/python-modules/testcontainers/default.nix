@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "testcontainers";
-  version = "4.6.0";
+  version = "4.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "testcontainers";
     repo = "testcontainers-python";
     rev = "refs/tags/testcontainers-v${version}";
-    hash = "sha256-jTTpeIWZD61UZkQWW5q/c0vgViT76qjDXw4qXfNqDnA=";
+    hash = "sha256-cmMuX3tKVGe4F+dQlOqQSTS/e49oWuudOekeL/j0YFw=";
   };
 
   postPatch = ''
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Allows using docker containers for functional and integration testing";
     homepage = "https://github.com/testcontainers/testcontainers-python";
+    changelog = "https://github.com/testcontainers/testcontainers-python/releases/tag/testcontainers-v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };

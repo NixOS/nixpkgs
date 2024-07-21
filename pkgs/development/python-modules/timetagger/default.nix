@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   asgineer,
   bcrypt,
   buildPythonPackage,

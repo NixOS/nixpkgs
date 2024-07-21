@@ -142,7 +142,6 @@ stdenv'.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       cmacrae
       shardy
-      ivar
       khaneliman
     ];
     sourceProvenance =

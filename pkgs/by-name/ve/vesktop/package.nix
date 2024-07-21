@@ -13,38 +13,40 @@
   pipewire,
   libpulseaudio,
   autoPatchelfHook,
-  pnpm,
+  pnpm_9,
   nodejs,
+  nix-update-script,
   withTTS ? true,
+  withMiddleClickScroll ? false,
   # Enables the use of vencord from nixpkgs instead of
   # letting vesktop manage it's own version
   withSystemVencord ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cZOyydwpIW9Xq716KVi1RGtSlgVnOP3w8vXDwouS70E=";
+    hash = "sha256-HlT7ddlrMHG1qOCqdaYjuWhJD+5FF1Nkv2sfXLWd07o=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
-    hash = "sha256-PogE8uf3W5cKSCqFHMz7FOvT7ONUP4FiFWGBgtk3UC8=";
+    hash = "sha256-rizJu6v04wFEpJtakC2tfPg/uylz7gAOzJiXvUwdDI4=";
   };
 
   nativeBuildInputs =
     [
       nodejs
-      pnpm.configHook
+      pnpm_9.configHook
     ]
     ++ lib.optionals stdenv.isLinux [
       # vesktop uses venmic, which is a shipped as a prebuilt node module
@@ -134,6 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper ${electron}/bin/electron $out/bin/vesktop \
         --add-flags $out/opt/Vesktop/resources/app.asar \
         ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
+        ${lib.optionalString withMiddleClickScroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
     ''
     + lib.optionalString stdenv.isDarwin ''
@@ -162,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) pnpmDeps;
+    updateScript = nix-update-script { };
   };
 
   meta = {

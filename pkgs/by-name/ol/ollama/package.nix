@@ -1,5 +1,5 @@
 { lib
-, buildGo122Module
+, buildGoModule
 , fetchFromGitHub
 , fetchpatch
 , buildEnv
@@ -7,6 +7,7 @@
 , overrideCC
 , makeWrapper
 , stdenv
+, addDriverRunpath
 
 , cmake
 , gcc12
@@ -14,8 +15,8 @@
 , libdrm
 , rocmPackages
 , cudaPackages
-, linuxPackages
 , darwin
+, autoAddDriverRunpath
 
 , nixosTests
 , testers
@@ -31,28 +32,31 @@
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.1.45";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-AKAuySyReG6kkwwgWodAso44+kri2Gz5VSLco8GBoIw=";
+    hash = "sha256-YHBGS615dxz6pZR+8awMinp+ZRf3J8Re5BVeDEIyt2E=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-LNH3mpxIrPMe5emfum1W10jvXIjKC6GkGcjq1HhpJQo=";
+  vendorHash = "sha256-hSxcREAujhvzHVNwnRTfhi0MKI3s8HNavER2VLz6SYk=";
 
   # ollama's patches of llama.cpp's example server
   # `ollama/llm/generate/gen_common.sh` -> "apply temporary patches until fix is upstream"
   # each update, these patches should be synchronized with the contents of `ollama/llm/patches/`
   llamacppPatches = [
-    (preparePatch "01-load-progress.diff" "sha256-K4GryCH/1cl01cyxaMLX3m4mTE79UoGwLMMBUgov+ew=")
+    (preparePatch "01-load-progress.diff" "sha256-UTmnBS5hQjIL3eXDZc8RBDNJunLlkqJWH20LpXNiGRQ=")
     (preparePatch "02-clip-log.diff" "sha256-rMWbl3QgrPlhisTeHwD7EnGRJyOhLB4UeS7rqa0tdXM=")
-    (preparePatch "03-load_exception.diff" "sha256-0XfMtMyg17oihqSFDBakBtAF0JwhsR188D+cOodgvDk=")
-    (preparePatch "04-metal.diff" "sha256-Ne8J9R8NndUosSK0qoMvFfKNwqV5xhhce1nSoYrZo7Y=")
-    (preparePatch "05-default-pretokenizer.diff" "sha256-JnCmFzAkmuI1AqATG3jbX7nGIam4hdDKqqbG5oh7h70=")
-    (preparePatch "06-qwen2.diff" "sha256-nMtoAQUsjYuJv45uTlz8r/K1oF5NUsc75SnhgfSkE30=")
+    (preparePatch "03-load_exception.diff" "sha256-NJkT/k8Mf8HcEMb0XkaLmyUNKV3T+384JRPnmwDI/sk=")
+    (preparePatch "04-metal.diff" "sha256-bPBCfoT3EjZPjWKfCzh0pnCUbM/fGTj37yOaQr+QxQ4=")
+    (preparePatch "05-default-pretokenizer.diff" "sha256-50+mzQBQZmYEhYvARHw/dliH0M/gDOYm2uy/yJupDF4=")
+    (preparePatch "06-qwen2.diff" "sha256-FdDqEIblPy47z3yavKUnaV93Yk+3oboEzj4vHq+R66M=")
+    (preparePatch "07-embeddings.diff" "sha256-lqg2SI0OapD9LCoAG6MJW6HIHXEmCTv7P75rE9yq/Mo=")
+    (preparePatch "08-clip-unicode.diff" "sha256-1qMJoXhDewxsqPbmi+/7xILQfGaybZDyXc5eH0winL8=")
+    (preparePatch "09-pooling.diff" "sha256-7meKWbr06lbVrtxau0AU9BwJ88Z9svwtDXhmHI+hYBk=")
   ];
 
   preparePatch = patch: hash: fetchpatch {
@@ -100,12 +104,12 @@ let
   };
 
   cudaToolkit = buildEnv {
-    name = "cuda-toolkit";
-    ignoreCollisions = true; # FIXME: find a cleaner way to do this without ignoring collisions
+    name = "cuda-merged";
     paths = [
-      cudaPackages.cudatoolkit
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cudart.static
+      (lib.getBin (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
+      (lib.getLib cudaPackages.cuda_cudart)
+      (lib.getOutput "static" cudaPackages.cuda_cudart)
+      (lib.getLib cudaPackages.libcublas)
     ];
   };
 
@@ -117,23 +121,24 @@ let
     appleFrameworks.MetalPerformanceShaders
   ];
 
-  runtimeLibs = lib.optionals enableRocm [
-    rocmPath
-  ] ++ lib.optionals enableCuda [
-    linuxPackages.nvidia_x11
-  ];
-  wrapperOptions = builtins.concatStringsSep " " ([
-    "--suffix LD_LIBRARY_PATH : '/run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs}'"
+  wrapperOptions = [
+    # ollama embeds llama-cpp binaries which actually run the ai models
+    # these llama-cpp binaries are unaffected by the ollama binary's DT_RUNPATH
+    # LD_LIBRARY_PATH is temporarily required to use the gpu
+    # until these llama-cpp binaries can have their runpath patched
+    "--suffix LD_LIBRARY_PATH : '${addDriverRunpath.driverLink}/lib'"
   ] ++ lib.optionals enableRocm [
+    "--suffix LD_LIBRARY_PATH : '${rocmPath}/lib'"
     "--set-default HIP_PATH '${rocmPath}'"
-  ]);
+  ];
+  wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
 
   goBuild =
     if enableCuda then
-      buildGo122Module.override { stdenv = overrideCC stdenv gcc12; }
+      buildGoModule.override { stdenv = overrideCC stdenv gcc12; }
     else
-      buildGo122Module;
+      buildGoModule;
   inherit (lib) licenses platforms maintainers;
 in
 goBuild ((lib.optionalAttrs enableRocm {
@@ -141,8 +146,6 @@ goBuild ((lib.optionalAttrs enableRocm {
   CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
 }) // (lib.optionalAttrs enableCuda {
   CUDA_LIB_DIR = "${cudaToolkit}/lib";
-  CUDACXX = "${cudaToolkit}/bin/nvcc";
-  CUDAToolkit_ROOT = cudaToolkit;
 }) // {
   inherit pname version src vendorHash;
 
@@ -150,8 +153,11 @@ goBuild ((lib.optionalAttrs enableRocm {
     cmake
   ] ++ lib.optionals enableRocm [
     rocmPackages.llvm.bintools
+  ] ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
   ] ++ lib.optionals (enableRocm || enableCuda) [
     makeWrapper
+    autoAddDriverRunpath
   ] ++ lib.optionals stdenv.isDarwin
     metalFrameworks;
 
@@ -159,6 +165,8 @@ goBuild ((lib.optionalAttrs enableRocm {
     (rocmLibs ++ [ libdrm ])
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+    cudaPackages.libcublas
   ] ++ lib.optionals stdenv.isDarwin
     metalFrameworks;
 
@@ -187,8 +195,7 @@ goBuild ((lib.optionalAttrs enableRocm {
     mv "$out/bin/app" "$out/bin/.ollama-app"
   '' + lib.optionalString (enableRocm || enableCuda) ''
     # expose runtime libraries necessary to use the gpu
-    mv "$out/bin/ollama" "$out/bin/.ollama-unwrapped"
-    makeWrapper "$out/bin/.ollama-unwrapped" "$out/bin/ollama" ${wrapperOptions}
+    wrapProgram "$out/bin/ollama" ${wrapperArgs}
   '';
 
   ldflags = [
@@ -207,6 +214,8 @@ goBuild ((lib.optionalAttrs enableRocm {
     };
   } // lib.optionalAttrs stdenv.isLinux {
     inherit ollama-rocm ollama-cuda;
+    service-cuda = nixosTests.ollama-cuda;
+    service-rocm = nixosTests.ollama-rocm;
   };
 
   meta = {

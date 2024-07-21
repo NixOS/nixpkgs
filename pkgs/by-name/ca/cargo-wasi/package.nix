@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     inherit version;
     pname = "cargo-wasi-src";
-    sha256 = "sha256-fmQ23BtcBUPNcgZgvNq85iqdY6WRUhqwAp4aIobqMIw=";
+    hash = "sha256-fmQ23BtcBUPNcgZgvNq85iqdY6WRUhqwAp4aIobqMIw=";
   };
 
   cargoHash = "sha256-yXtxznUp2gECq2CvRByiFzbTjYtWvTheDjGoynJWb+o=";

@@ -8,6 +8,7 @@
   pythonAtLeast,
   pythonOlder,
   addOpenGLRunpath,
+  callPackage,
   cudaPackages,
   future,
   numpy,
@@ -15,6 +16,7 @@
   pyyaml,
   requests,
   setuptools,
+  torch-bin,
   typing-extensions,
   sympy,
   jinja2,
@@ -118,6 +120,11 @@ buildPythonPackage {
   dontStrip = true;
 
   pythonImportsCheck = [ "torch" ];
+
+  passthru.tests = callPackage ./tests.nix {
+    torchWithCuda = torch-bin;
+    torchWithRocm = torch-bin;
+  };
 
   meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";

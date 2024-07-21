@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cachecontrol,
   feedparser,
   fetchFromGitHub,
   gitpython,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-rss-plugin";
-  version = "1.13.1";
+  version = "1.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
     rev = "refs/tags/${version}";
-    hash = "sha256-FxVyPks42hoj2y2epZjSNuTOvhDk3Vxm895a4teeSuw=";
+    hash = "sha256-sGm6uWlZeW65uorfTK8pk8ZT2AE9nmsZhe+UYVrSr+8=";
   };
 
   postPatch = ''
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    cachecontrol
     gitpython
     mkdocs
   ];

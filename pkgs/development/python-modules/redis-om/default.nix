@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
   unasync,
   poetry-core,
   python,
@@ -35,7 +34,6 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    pythonRelaxDepsHook
     unasync
     poetry-core
   ];

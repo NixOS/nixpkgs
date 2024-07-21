@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pynose,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
@@ -28,7 +27,6 @@ buildPythonPackage rec {
   dependencies = [ python-dateutil ];
 
   nativeCheckInputs = [
-    pynose
     pytestCheckHook
     simplejson
   ];

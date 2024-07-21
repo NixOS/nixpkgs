@@ -33,11 +33,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "unciv";
-  version = "4.11.16";
+  version = "4.11.17";
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-hvWXqPT+GeMaBa7so0S1KjsH5fpnbcbEIWsq6KUbFTk=";
+    hash = "sha256-qKLRn9QmB8lZv8vGGX8JS72IRLEDJV5Zj1MVsPr+iSI=";
   };
 
   dontUnpack = true;

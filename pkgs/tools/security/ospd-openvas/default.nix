@@ -17,13 +17,13 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "defusedxml"
     "packaging"
+    "psutil"
     "python-gnupg"
   ];
 
   build-system = with python3.pkgs; [ poetry-core ];
-
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3.pkgs; [
     defusedxml

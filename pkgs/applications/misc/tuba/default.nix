@@ -13,14 +13,17 @@
 , json-glib
 , glib
 , glib-networking
+, gnome
 , gobject-introspection
 , gtksourceview5
 , libxml2
 , libgee
+, librsvg
 , libsoup_3
 , libsecret
 , libwebp
 , libspelling
+, webp-pixbuf-loader
 , icu
 , gst_all_1
 , clapper
@@ -86,12 +89,23 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+  # Pull in WebP support for avatars from Misskey instances.
+  # In postInstall to run before gappsWrapperArgsHook.
+  postInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
+  '';
+
   meta = {
     description = "Browse the Fediverse";
     homepage = "https://tuba.geopjr.dev/";
     mainProgram = "dev.geopjr.Tuba";
     license = lib.licenses.gpl3Only;
     changelog = "https://github.com/GeopJr/Tuba/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ chuangzhu aleksana ];
+    maintainers = with lib.maintainers; [ chuangzhu aleksana donovanglover ];
   };
 }

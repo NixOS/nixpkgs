@@ -5,7 +5,7 @@
 , qttools
 
 , asciidoctor
-, botan2
+, botan3
 , curl
 , libXi
 , libXtst
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    botan2
+    botan3
     libXi
     libXtst
     libargon2

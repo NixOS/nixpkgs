@@ -4,7 +4,7 @@
   fetchPypi,
   isPy3k,
   httplib2,
-  keyring,
+  keyring_24,
   lazr-restfulclient,
   lazr-uri,
   setuptools,
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     httplib2
-    keyring
+    keyring_24
     lazr-restfulclient
     lazr-uri
     setuptools

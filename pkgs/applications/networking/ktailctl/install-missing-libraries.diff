@@ -1,9 +1,0 @@
-diff --git a/src/config/CMakeLists.txt b/src/config/CMakeLists.txt
-index ed0a64a..970e509 100644
---- a/src/config/CMakeLists.txt
-+++ b/src/config/CMakeLists.txt
-@@ -7,3 +7,4 @@ target_link_libraries(ktailctl_config
-     KF6::ConfigGui
-     ktailctl_wrapper
- )
-+install(TARGETS ktailctl_config)

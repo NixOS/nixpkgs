@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook3, gtk-vnc
 , vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
-, gsettings-desktop-schemas, gst_all_1, libosinfo, gnome, gtksourceview4, docutils, cpio
+, gsettings-desktop-schemas, gst_all_1, libosinfo, adwaita-icon-theme, gtksourceview4, docutils, cpio
 , e2fsprogs, findutils, gzip, cdrtools, xorriso, fetchpatch
 , desktopToDarwinBundle, stdenv
 , spiceSupport ? true, spice-gtk ? null
@@ -33,6 +33,11 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://github.com/virt-manager/virt-manager/commit/cc4a39ea94f42bc92765eb3bb56e2b7f9198be67.patch";
       hash = "sha256-dw6yrMaAOnTh8Z6xJQQKmYelOkOl6EBAOfJQU9vQ8Ws=";
     })
+    # fix xml test output mismatch
+    (fetchpatch {
+      url = "https://github.com/virt-manager/virt-manager/commit/8b6db203f726965529567459b302aab1c68c70eb.patch";
+      hash = "sha256-FghrSyP4NaTkJhvyqlc2uDNWKaeiylKnaiqkl5Ax6yE=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -45,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
+    libvirt-glib vte dconf gtk-vnc adwaita-icon-theme avahi
     gsettings-desktop-schemas libosinfo gtksourceview4
   ] ++ lib.optional spiceSupport spice-gtk;
 

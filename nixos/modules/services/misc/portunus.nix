@@ -70,7 +70,7 @@ in
 
         To activate dex, first a search user must be created in the Portunus web ui
         and then the password must to be set as the `DEX_SEARCH_USER_PASSWORD` environment variable
-        in the [](#opt-services.dex.environmentFile) setting.
+        in the [](#opt-services.dex.environmentFile) setting
       '';
 
       oidcClients = mkOption {

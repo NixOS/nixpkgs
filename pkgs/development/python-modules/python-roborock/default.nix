@@ -15,12 +15,11 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.3.0";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,7 +28,7 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YjD/aTSUeVuMyrdC2dcKgIqeBC+8NircRFLh2+mbD+8=";
+    hash = "sha256-Mszy1p7TOEynCePCEiLhwdWiKXfFnlo3/a3vc9TxGeY=";
   };
 
   postPatch = ''
@@ -41,7 +40,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     aiohttp

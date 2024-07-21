@@ -38,7 +38,7 @@
 , colord-gtk
 , libwebp
 , libsecret
-, gnome
+, adwaita-icon-theme
 , SDL2
 , ocl-icd
 , pcre
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     libwebp
     libsecret
     SDL2
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     osm-gps-map
     pcre
     isocodes

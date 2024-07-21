@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "HansKristian-Work";
     repo = pname;
     inherit rev;
-    sha256 = "sha256-iLpVvYmWhqy0rbbyJoT+kxzIqp68Vsb/TkihGtQQucU=";
+    hash = "sha256-iLpVvYmWhqy0rbbyJoT+kxzIqp68Vsb/TkihGtQQucU=";
     fetchSubmodules = true;
   };
 

@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
-  pythonRelaxDepsHook,
   poetry-core,
 
   appdirs,
@@ -50,7 +49,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

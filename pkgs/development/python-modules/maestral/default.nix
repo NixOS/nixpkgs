@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.9.3";
+  version = "1.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = "maestral";
     rev = "refs/tags/v${version}";
-    hash = "sha256-h7RDaCVICi3wl6/b1s01cINhFirDOpOXoxTPZIBH3jE=";
+    hash = "sha256-akh0COltpUU4Z4kfubg6A7k6W8ICoqVYkmFpMkTC8H8=";
   };
 
   build-system = [ setuptools ];
@@ -66,14 +66,6 @@ buildPythonPackage rec {
     watchdog
     xattr
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ rubicon-objc ];
-
-  patches = [
-    (fetchpatch {
-      name = "upgrade-dropbox-version-bounds";
-      url = "https://github.com/samschott/maestral/commit/8fd581fa503391534913afbc33a61132ff2e21ce.patch";
-      hash = "sha256-2Dke9iF/5Ptsf3CSRHUkjdFRrmdKY+L3sILRMyYrUH0=";
-    })
-  ];
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them

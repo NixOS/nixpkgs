@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Free and open source development kit for the Nintendo SNES";
     homepage = "https://github.com/alekmaul/pvsneslib";
+    changelog = "https://github.com/alekmaul/pvsneslib/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soyouzpanda ];
     mainProgram = "pvsneslib";

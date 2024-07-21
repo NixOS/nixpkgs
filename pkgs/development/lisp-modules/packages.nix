@@ -430,7 +430,7 @@ let
       pkgs.gsettings-desktop-schemas pkgs.glib pkgs.gtk3
 
       # needed for XDG_ICON_DIRS
-      pkgs.gnome.adwaita-icon-theme
+      pkgs.adwaita-icon-theme
     ];
 
     # This patch removes the :build-operation component from the nyxt/gi-gtk-application system.

@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-VPHQwy2+XR9R7toIN5sNFB91ddROlL7Scr8AKLgUzuo=";
+    hash = "sha256-VPHQwy2+XR9R7toIN5sNFB91ddROlL7Scr8AKLgUzuo=";
   };
 
   nativeBuildInputs = [
@@ -70,7 +70,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs;
     [ beautifulsoup4 pillow pycairo pygobject3 ]
     ++ lib.optional lastFMSupport pylast
-    ++ lib.optional youtubeSupport youtube-dl
+    ++ lib.optional youtubeSupport yt-dlp
     ++ lib.optional kid3Support pkgs.kid3;
 
   postPatch = ''

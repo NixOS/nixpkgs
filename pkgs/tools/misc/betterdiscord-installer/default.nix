@@ -23,7 +23,7 @@ in appimageTools.wrapType2 {
     description = "Installer for BetterDiscord";
     homepage = "https://betterdiscord.app";
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "betterdiscord-installer";
   };

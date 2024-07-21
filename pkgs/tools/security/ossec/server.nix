@@ -54,7 +54,6 @@ EOF
       mv $out/stats $out/share
       rm -r $out/active-response
       rm -r $out/tmp
-      ls -lah $out
 
       runHook postInstall
   '';

@@ -90,6 +90,7 @@ stdenv.mkDerivation {
       payment system.
     '';
     homepage = "https://taler.net/";
+    changelog = "https://git.taler.net/exchange.git/tree/ChangeLog";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ astro ];
     platforms = platforms.linux;

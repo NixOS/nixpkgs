@@ -22,6 +22,8 @@ let
   '';
 
   systemdBootBuilder = pkgs.substituteAll rec {
+    name = "systemd-boot";
+
     src = checkedSource;
 
     isExecutable = true;

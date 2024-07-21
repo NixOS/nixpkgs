@@ -23,7 +23,6 @@
   pycparser,
   pyformlang,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyvex,
   rich,
   rpyc,
@@ -37,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.107";
+  version = "9.2.110";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -46,13 +45,12 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "angr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-f4RiLXEp4q3V2SiX6OSLHbAVCaZ5GLOvqm1qmBAYIZ8=";
+    hash = "sha256-t0OgY8donh/axg3lgEENRxhx+qx9xNmV/oMBsy2DCa4=";
   };
 
   pythonRelaxDeps = [ "capstone" ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, bzip2, libX11
+{ lib, stdenv, fetchFromGitHub, fetchpatch2, cmake, pkg-config, bzip2, libX11
 , mkDerivation, qtbase, qttools, qtmultimedia, qtscript
 , libiconv, pcre-cpp, libidn, lua5, miniupnpc, aspell, gettext, perl }:
 
@@ -12,6 +12,13 @@ mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-JmAopXFS6MkxW0wDQ1bC/ibRmWgOpzU0971hcqAehLU=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/eiskaltdcpp/eiskaltdcpp/commit/5ab5e1137a46864b6ecd1ca302756da8b833f754.patch?full_index=1";
+      hash = "sha256-GIdcIHKXNSbHxbiMGRPgfq2w/zNSfR/FhyyXayFWfg8=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ qtbase qttools qtmultimedia qtscript bzip2 libX11 pcre-cpp libidn lua5 miniupnpc aspell gettext

@@ -13,7 +13,7 @@ buildDunePackage (rec {
     owner = "nomadic-labs/cryptography";
     repo = "ocaml-chia-vdf";
     rev = "v${version}";
-    sha256 = "sha256-KvpnX2DTUyfKARNWHC2lLBGH2Ou2GfRKjw05lu4jbBs=";
+    hash = "sha256-KvpnX2DTUyfKARNWHC2lLBGH2Ou2GfRKjw05lu4jbBs=";
   };
 
   minimalOCamlVersion = "4.08";

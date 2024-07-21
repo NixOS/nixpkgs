@@ -6,7 +6,6 @@ with lib;
 let
 
   cfg = config.hardware.pulseaudio;
-  alsaCfg = config.sound;
 
   hasZeroconf = let z = cfg.zeroconf; in z.publish.enable || z.discovery.enable;
 
@@ -58,7 +57,7 @@ let
   # Write an /etc/asound.conf that causes all ALSA applications to
   # be re-routed to the PulseAudio server through ALSA's Pulse
   # plugin.
-  alsaConf = writeText "asound.conf" (''
+  alsaConf = ''
     pcm_type.pulse {
       libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;
       ${lib.optionalString enable32BitAlsaPlugins
@@ -76,8 +75,7 @@ let
     ctl.!default {
       type pulse
     }
-    ${alsaCfg.extraConfig}
-  '');
+  '';
 
 in {
 
@@ -221,10 +219,8 @@ in {
 
       environment.systemPackages = [ overriddenPackage ];
 
-      sound.enable = true;
-
       environment.etc = {
-        "asound.conf".source = alsaConf;
+        "alsa/conf.d/99-pulseaudio.conf".text = alsaConf;
 
         "pulse/daemon.conf".source = writeText "daemon.conf"
           (lib.generators.toKeyValue {} cfg.daemon.config);

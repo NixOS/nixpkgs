@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   psutil,
-  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:

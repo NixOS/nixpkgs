@@ -81,7 +81,7 @@ buildGoModule rec {
     description = "Looking-glass for BGP sessions";
     changelog = "https://github.com/alice-lg/alice-lg/blob/main/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ janik ];
+    maintainers = with maintainers; [ ];
     mainProgram = "alice-lg";
   };
 }

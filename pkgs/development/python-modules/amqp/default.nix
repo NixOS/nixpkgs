@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  case,
   fetchPypi,
   pytestCheckHook,
   pytest-rerunfailures,
@@ -26,7 +25,6 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    case
     pytestCheckHook
     pytest-rerunfailures
   ];

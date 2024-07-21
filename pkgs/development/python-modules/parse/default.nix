@@ -7,14 +7,14 @@
 }:
 buildPythonPackage rec {
   pname = "parse";
-  version = "1.20.1";
+  version = "1.20.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "r1chardj0n3s";
     repo = "parse";
     rev = "refs/tags/${version}";
-    hash = "sha256-FAAs39peR+Ibv0RKLrcnY2w0Z2EjVYyZ8U4HcbjTiew=";
+    hash = "sha256-i/H3E/Z8vqt2jLS8BaVHJuD2Fbi7TP7EeOjXAJ16bWg=";
   };
 
   postPatch = ''

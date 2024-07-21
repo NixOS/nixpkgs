@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchzip
+{ stdenv, lib, fetchFromGitHub, fetchzip, fetchpatch
 , autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
@@ -97,6 +97,10 @@ in stdenv.mkDerivation (finalAttrs: {
       hash  = "sha256-xrFWqgwTkurEwt3/+/e4SCM6Uk9nxuW62SrCFWWqZO0=";
     };
 
+    patches = [
+      ./no-python-lib.patch
+    ];
+
     # make  derivations declared in the let binding available here, so
     # they can be overridden
     inherit libdvdcss libdvdnav libdvdread groovy
@@ -189,6 +193,7 @@ in stdenv.mkDerivation (finalAttrs: {
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
       "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
+      "-DPYTHON_LIB_PATH=${python3Packages.python.sitePackages}"
       # When wrapped KODI_HOME will likely contain symlinks to static assets
       # that Kodi's built in webserver will cautiously refuse to serve up
       # (because their realpaths are outside of KODI_HOME and the other

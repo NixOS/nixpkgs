@@ -1,21 +1,18 @@
 {
+  lib,
   buildPythonPackage,
   fetchFromGitLab,
-  lib,
-  nix-update-script,
   pytestCheckHook,
   python-dateutil,
   pythonAtLeast,
   pythonOlder,
+  setuptools,
 }:
-let
-  version = "0.15.4";
-in
-buildPythonPackage {
-  inherit version;
 
+buildPythonPackage rec {
   pname = "vcard";
-  format = "setuptools";
+  version = "0.16.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
@@ -23,25 +20,27 @@ buildPythonPackage {
     owner = "engmark";
     repo = "vcard";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7GNq6PoWZgwhhpxhWOkUEpqckeSfzocex1ZGN9CTJyo=";
+    hash = "sha256-cz1WF8LQsyJwcVKMSWmFb6OB/JWyfc2FgcOT3jJ45Cg=";
   };
 
-  propagatedBuildInputs = [ python-dateutil ];
+  pythonRelaxDeps = [ "python-dateutil" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [ python-dateutil ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "vcard" ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
-    homepage = "https://gitlab.com/engmark/vcard";
     description = "vCard validator, class and utility functions";
     longDescription = ''
       This program can be used for strict validation and parsing of vCards. It currently supports vCard 3.0 (RFC 2426).
     '';
+    homepage = "https://gitlab.com/engmark/vcard";
     license = lib.licenses.agpl3Plus;
     mainProgram = "vcard";
-    maintainers = [ lib.maintainers.l0b0 ];
+    maintainers = with lib.maintainers; [ l0b0 ];
   };
 }

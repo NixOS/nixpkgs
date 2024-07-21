@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "photutils";
-  version = "1.12.0";
+  version = "1.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "astropy";
     repo = "photutils";
     rev = "refs/tags/${version}";
-    hash = "sha256-k5MxpkCAvefSRoNPMAVIvNcCTU5HPicU4XSFXk13O9Q=";
+    hash = "sha256-J1i1H7AfQdiUIyBpgJK3dkH6C8MoEOwug4YQP+NEPbk=";
   };
 
   postPatch = ''

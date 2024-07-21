@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "editorconfig-core-c";
-  version = "0.12.8";
+  version = "0.12.9";
 
   outputs = [ "out" "dev" ];
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "editorconfig";
     repo = "editorconfig-core-c";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zhWq87X8n7iyp5HBmV2ZTjcN09zQ/sBXPrGmQT0iRr4=";
+    hash = "sha256-myJNJxKwgmgm+P2MqnYmW8OC0oYcInL+Suyf/xwX9xo=";
     fetchSubmodules = true;
   };
 

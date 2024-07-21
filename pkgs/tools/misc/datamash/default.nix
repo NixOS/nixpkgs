@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/datamash/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub vrthra ];
+    maintainers = with maintainers; [ pSub ];
   };
 
 }

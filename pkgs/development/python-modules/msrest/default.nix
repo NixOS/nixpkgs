@@ -79,7 +79,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       bendlas
-      jonringer
       maxwilson
     ];
   };

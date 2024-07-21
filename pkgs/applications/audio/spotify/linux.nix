@@ -1,6 +1,6 @@
 { fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeShellWrapper, wrapGAppsHook3, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss_latest, libpng, libnotify
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_4, curlWithGnuTls, zlib, gnome
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_4, curlWithGnuTls, zlib, zenity
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
 , pname, meta, harfbuzz, libayatana-appindicator, libdbusmenu, libGL
   # High-DPI support: Spotify's --force-device-scale-factor argument
@@ -133,8 +133,6 @@ stdenv.mkDerivation {
       mkdir -p $libdir
       mv ./usr/* $out/
 
-      cp meta/snap.yaml $out
-
       # Work around Spotify referring to a specific minor version of
       # OpenSSL.
 
@@ -179,7 +177,7 @@ stdenv.mkDerivation {
           --add-flags "--force-device-scale-factor=${toString deviceScaleFactor}" \
         ''} \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
-        --prefix PATH : "${gnome.zenity}/bin" \
+        --prefix PATH : "${zenity}/bin" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
       runHook postFixup

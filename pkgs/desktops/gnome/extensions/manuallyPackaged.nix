@@ -11,6 +11,7 @@
   "pidgin@muffinmad" = callPackage ./pidgin-im-integration { };
   "pop-shell@system76.com" = callPackage ./pop-shell { };
   "sound-output-device-chooser@kgshank.net" = callPackage ./sound-output-device-chooser { };
+  "systemd-manager@hardpixel.eu" = callPackage ./systemd-manager { };
   "taskwhisperer-extension@infinicode.de" = callPackage ./taskwhisperer { };
   "tilingnome@rliang.github.com" = callPackage ./tilingnome { };
   "TopIcons@phocean.net" = callPackage ./topicons-plus { };

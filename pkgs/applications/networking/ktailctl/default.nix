@@ -23,30 +23,25 @@
 }:
 
 let
-  version = "0.16.1";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
     rev = "v${version}";
-    hash = "sha256-rMvFwWTrYWZUAMWd6H/SXE26q5ASjwsa8bD1tFC6yBI=";
+    hash = "sha256-urB8NcdQMF6RNX8F2CpzOd0ZkRi3IS4XFyOOXIeChpY=";
   };
 
   goDeps = (buildGoModule {
     pname = "ktailctl-go-wrapper";
     inherit src version;
     modRoot = "src/wrapper";
-    vendorHash = "sha256-GD+G+7b8GBwR3OrRPJbGJVom+kLC67VvlGFIA0S7UF8=";
+    vendorHash = "sha256-Ls4MVppMJbUUukaKkDAN8Lx/s09JRJTf/RMgk0iDcnw=";
   }).goModules;
 in
 stdenv.mkDerivation {
   pname = "ktailctl";
   inherit version src;
-
-  patches = [
-    # Install libktailctl_config.so https://github.com/f-koehler/KTailctl/pull/212
-    ./install-missing-libraries.diff
-  ];
 
   postPatch = ''
     cp -r --reflink=auto ${goDeps} src/wrapper/vendor

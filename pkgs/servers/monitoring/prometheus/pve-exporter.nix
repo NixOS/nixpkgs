@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-C7agnOUdtd4YncAiaPQaZqBJ8DKZoM1Fa+dr1F4xYgI=";
+    hash = "sha256-C7agnOUdtd4YncAiaPQaZqBJ8DKZoM1Fa+dr1F4xYgI=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

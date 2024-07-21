@@ -5,7 +5,6 @@
 , openssl
 , pkg-config
 , rustPlatform
-, stdenv
 ,
 }:
 

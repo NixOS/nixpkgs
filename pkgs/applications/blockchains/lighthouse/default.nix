@@ -23,7 +23,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "4.6.0";
+  version = "5.2.0";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    hash = "sha256-uMrVnVvYXcY2Axn3ycsf+Pwur3HYGoOYjjUkGS5c3l4=";
+    hash = "sha256-kruHYFPQ9H9HtEjzscQOyghPSpx++wNbHDYOVo0qtjY=";
   };
 
   patches = [
     ./use-system-sqlite.patch
-    ./use-c-kzg-from-crates-io.patch
+    ./fix-dep-lazy_static.patch
   ];
 
   postPatch = ''
@@ -48,12 +48,9 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "amcl-0.3.0" = "sha256-kc8k/ls4W0TwFBsRcyyotyz8ZBEjsZXHeJnJtsnW/LM=";
-      "discv5-0.4.0" = "sha256-GKAk9Du6fy0ldeBEwPueDbVPhyNxdKNROKpMJvR/OTc=";
-      "futures-bounded-0.2.3" = "sha256-/LbD+je9P1lPnXMJVDqRQHJziQPXPvSDmQadTfsQ5I8=";
+      "alloy-consensus-0.1.0" = "sha256-y5AIZN4d7Vm2dVa3jd0e6zXwC8hzPyOv0h5+W/Az3rs=";
       "libmdbx-0.1.4" = "sha256-NMsR/Wl1JIj+YFPyeMMkrJFfoS07iEAKEQawO89a+/Q=";
       "lmdb-rkv-0.14.0" = "sha256-sxmguwqqcyOlfXOZogVz1OLxfJPo+Q0+UjkROkbbOCk=";
-      "warp-0.3.6" = "sha256-knDt2aw/PJ0iabhKg+okwwnEzCY+vQVhE7HKCTM6QbE=";
     };
   };
 

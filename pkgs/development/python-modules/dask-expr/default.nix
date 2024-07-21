@@ -11,11 +11,12 @@
   pyarrow,
   distributed,
   pytestCheckHook,
+  xarray
 }:
 
 buildPythonPackage rec {
   pname = "dask-expr";
-  version = "1.1.5";
+  version = "1.1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask-expr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ON2Fyyq5fa0TgS28v6FAbR6MpI1k8EOS8HWchfZyT+g=";
+    hash = "sha256-3wQhADDS05soZq+oy75eBXIK0JQhochrRmtIqykuvOA=";
   };
 
   postPatch = ''
@@ -49,6 +50,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     distributed
     pytestCheckHook
+    xarray
   ];
 
   __darwinAllowLocalNetworking = true;

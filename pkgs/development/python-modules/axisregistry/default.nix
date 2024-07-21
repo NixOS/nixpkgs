@@ -4,19 +4,18 @@
   fetchPypi,
   fonttools,
   protobuf,
-  pythonRelaxDepsHook,
   pytestCheckHook,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "axisregistry";
-  version = "0.4.9";
+  version = "0.4.10";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-obpjiX86fzokao7UWQUXgarKYRNdxplr6/r2D2d7DCI=";
+    hash = "sha256-/N67VDr1ZFDRmZsxYCFT+KdUmc2ElgGNd8ljGWC5V0U=";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +23,6 @@ buildPythonPackage rec {
     protobuf
   ];
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 

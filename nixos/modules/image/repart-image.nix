@@ -69,7 +69,7 @@ let
     patchShebangs --build $out
 
     black --check --diff $out
-    ruff --line-length 88 $out
+    ruff check --line-length 88 $out
     mypy --strict $out
   '';
 
@@ -90,8 +90,8 @@ let
   }."${compression.algorithm}";
 
   compressionCommand = {
-    "zstd" = "zstd --no-progress --threads=0 -${toString compression.level}";
-    "xz" = "xz --keep --verbose --threads=0 -${toString compression.level}";
+    "zstd" = "zstd --no-progress --threads=$NIX_BUILD_CORES -${toString compression.level}";
+    "xz" = "xz --keep --verbose --threads=$NIX_BUILD_CORES -${toString compression.level}";
   }."${compression.algorithm}";
 in
   stdenvNoCC.mkDerivation (finalAttrs:

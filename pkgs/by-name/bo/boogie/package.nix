@@ -2,13 +2,13 @@
 
 buildDotnetModule rec {
   pname = "Boogie";
-  version = "3.1.6";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "boogie-org";
     repo = "boogie";
     rev = "v${version}";
-    sha256 = "sha256-Bli/vEzzVQTWicQJskK9cQC2XsFRwMxX9cAePXN511c=";
+    sha256 = "sha256-3+9zOoKk8IdqkxoMzjZofizyx+294mer3t6illXUr2M=";
   };
 
   projectFile = [ "Source/Boogie.sln" ];

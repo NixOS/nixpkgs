@@ -35,6 +35,8 @@ buildGoModule {
 
   doCheck = true;
 
+  tags = [ "sqlite_mattn" ];
+
   passthru.tests = {
     inherit (nixosTests) scion-freestanding-deployment;
   };

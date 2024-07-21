@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv, pkg-config, makeWrapper, meson, ninja, installShellFiles, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre2, libev
 , yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
-, xorgserver, xvfb-run
+, xvfb-run
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libstartup_notification libX11 pcre2 libev yajl xcb-util-cursor perl pango
     perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
     perlPackages.ExtUtilsPkgConfig perlPackages.InlineC
-    xorgserver xvfb-run
+    xvfb-run
   ];
 
   configureFlags = [ "--disable-builddir" ];

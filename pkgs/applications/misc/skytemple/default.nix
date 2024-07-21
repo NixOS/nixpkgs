@@ -15,10 +15,12 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
+    repo = "skytemple";
     rev = "refs/tags/${version}";
     hash = "sha256-yfXu1sboKi8STPiX5FUD9q+1U9GfhOyEKDRvU9rgdfI=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   buildInputs = [
     gtk3
@@ -34,7 +36,12 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  pythonRelaxDeps = [
+    "skytemple-files"
+    "skytemple-ssb-debugger"
+  ];
+
+  dependencies = with python3Packages; [
     cairosvg
     natsort
     ndspy

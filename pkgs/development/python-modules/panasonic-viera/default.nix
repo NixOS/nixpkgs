@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  poetry-core,
   aiohttp,
   pycryptodome,
   xmltodict,
@@ -9,17 +10,18 @@
 
 buildPythonPackage rec {
   pname = "panasonic-viera";
-  version = "0.4.0";
-
-  format = "setuptools";
+  version = "0.4.2";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "panasonic_viera";
     inherit version;
-    sha256 = "baad2db7958ddbc7288d0f1c50a9eeddd8b83f3d30ad14ac3f6c51fe953e0eb6";
+    hash = "sha256-gcFAFwEdCqiC1yHIA2B/gzmwvRwMC9fDxkgCbzIOpjM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     pycryptodome
     xmltodict

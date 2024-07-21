@@ -156,6 +156,7 @@ let
       pythonRuntime = with python.pkgs; [
         scipy
         pyqtgraph
+        pyqt5
       ];
     };
     gr-analog = {

@@ -20,11 +20,11 @@ jobs:
     if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == true && (github.event_name != 'labeled' || startsWith('backport', github.event.label.name))
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Create backport PRs
-        uses: korthout/backport-action@ef20d86abccbac3ee3a73cb2efbdc06344c390e5 # v2.5.0
+        uses: korthout/backport-action@bd410d37cdcae80be6d969823ff5a225fe5c833f # v3.0.2
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
           copy_labels_pattern: 'severity:\ssecurity'

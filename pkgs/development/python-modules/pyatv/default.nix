@@ -18,7 +18,6 @@
   pytest-httpserver,
   pytest-timeout,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonAtLeast,
   pythonOlder,
   requests,
@@ -64,7 +63,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

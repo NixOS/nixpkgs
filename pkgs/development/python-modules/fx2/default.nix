@@ -5,6 +5,7 @@
   fetchFromGitHub,
   sdcc,
   libusb1,
+  setuptools-scm,
   crcmod,
 }:
 
@@ -20,7 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-PtWxjT+97+EeNMN36zOT1+ost/w3lRRkaON3Cl3dpp4=";
   };
 
-  nativeBuildInputs = [ sdcc ];
+  nativeBuildInputs = [
+    setuptools-scm
+    sdcc
+  ];
 
   propagatedBuildInputs = [
     libusb1

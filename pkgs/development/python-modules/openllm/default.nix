@@ -6,7 +6,6 @@
   hatchling,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   accelerate,
   bentoml,
   bitsandbytes,
@@ -54,7 +53,6 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/openllm-python";
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [
     # remove cuda-python as it has an unfree license

@@ -109,4 +109,4 @@ let
       ./with-objectstore.nix
     ];
 in
-listToAttrs (concatMap genTests [ 27 28 29 ])
+listToAttrs (concatMap genTests [ 28 29 ])

@@ -91,10 +91,10 @@ let
     cd ${webroot}
     sudo=exec
     if [[ "$USER" != nextcloud ]]; then
-      sudo='exec /run/wrappers/bin/sudo -u nextcloud --preserve-env=NEXTCLOUD_CONFIG_DIR --preserve-env=OC_PASS'
+      sudo='exec /run/wrappers/bin/sudo -u nextcloud'
     fi
-    export NEXTCLOUD_CONFIG_DIR="${datadir}/config"
-    $sudo \
+    $sudo ${pkgs.coreutils}/bin/env \
+      NEXTCLOUD_CONFIG_DIR="${datadir}/config" \
       ${phpCli} \
       occ "$@"
   '';
@@ -300,7 +300,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud26" "nextcloud27" "nextcloud28" ];
+      relatedPackages = [ "nextcloud28" "nextcloud29" ];
     };
     phpPackage = mkPackageOption pkgs "php" {
       example = "php82";
@@ -489,7 +489,7 @@ in {
             implementation into the virtual filesystem.
 
             Further details about this feature can be found in the
-            [upstream documentation](https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html).
+            [upstream documentation](https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html)
           '';
           bucket = mkOption {
             type = types.str;
@@ -591,7 +591,7 @@ in {
         This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
         You may want to disable it for increased security. In that case, previews will still be available
         for some images (e.g. JPEG and PNG).
-        See <https://github.com/nextcloud/server/issues/13099>.
+        See <https://github.com/nextcloud/server/issues/13099>
     '' // {
       default = true;
     };
@@ -861,8 +861,6 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if versionOlder stateVersion "23.05" then nextcloud25
-          else if versionOlder stateVersion "23.11" then nextcloud26
           else if versionOlder stateVersion "24.05" then nextcloud27
           else nextcloud29
         );

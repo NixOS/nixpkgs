@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "treefmt";
-  version = "2.0.0-rc5";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "treefmt";
     rev = "v${version}";
-    hash = "sha256-Ckvpb2at7lg7AB0XNtIxeo8lWXX+04MVHHKoUs876dg=";
+    hash = "sha256-aTZBI4D0ZZ59CU1tS1EzszZzlqeUOmiA9bnOohqq7M0=";
   };
 
   vendorHash = "sha256-rjdGNfR2DpLZCzL/+3xiZ7gGDd4bPyBT5qMCO+NyWbg=";

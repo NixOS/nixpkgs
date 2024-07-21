@@ -1,13 +1,12 @@
-{ trivialBuild
-, llvmPackages
-}:
+{ melpaBuild, llvmPackages }:
 
-trivialBuild {
+melpaBuild {
   pname = "llvm-mode";
   inherit (llvmPackages.llvm) src version;
 
-  postUnpack = ''
-    sourceRoot="$sourceRoot/llvm/utils/emacs"
+  files = ''
+    ("llvm/utils/emacs/*.el"
+     "llvm/utils/emacs/README")
   '';
 
   meta = {

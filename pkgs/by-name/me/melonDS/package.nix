@@ -1,35 +1,37 @@
-{ lib
-, SDL2
-, cmake
-, extra-cmake-modules
-, fetchFromGitHub
-, libGL
-, libarchive
-, libpcap
-, libsForQt5
-, libslirp
-, pkg-config
-, stdenv
-, unstableGitUpdater
-, wayland
-, zstd
+{
+  lib,
+  SDL2,
+  cmake,
+  extra-cmake-modules,
+  fetchFromGitHub,
+  libGL,
+  libarchive,
+  libpcap,
+  libslirp,
+  pkg-config,
+  qt6,
+  stdenv,
+  unstableGitUpdater,
+  wayland,
+  zstd,
 }:
 
 let
-  inherit (libsForQt5)
+  inherit (qt6)
     qtbase
     qtmultimedia
+    qtwayland
     wrapQtAppsHook;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "0.9.5-unstable-2024-06-18";
+  version = "0.9.5-unstable-2024-07-14";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "cbb0f4b872ea8a5e2348c7f1a22695056968192f";
-    hash = "sha256-J1i7+VrOVQruHFhzjBnSf+DbmIa3o+rWISsdm8kMRC8=";
+    rev = "94ba7c159427c88b85806a4e099a44287681778c";
+    hash = "sha256-l38RgDWtDi8cVn0LL57F9pAT2bNmZIj6eo+1E+IJ7Lw=";
   };
 
   nativeBuildInputs = [
@@ -46,15 +48,30 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     qtbase
     qtmultimedia
-    wayland
     zstd
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland
+    qtwayland
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "USE_QT6" true)
   ];
 
   strictDeps = true;
 
-  qtWrapperArgs = [
+  qtWrapperArgs = lib.optionals stdenv.isLinux [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
   ];
+
+  installPhase = lib.optionalString stdenv.isDarwin ''
+    runHook preInstall
+    mkdir -p $out/Applications
+    cp -r melonDS.app $out/Applications/
+    runHook postInstall
+ '';
 
   passthru = {
     updateScript = unstableGitUpdater { };
@@ -88,6 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
       benley
       shamilton
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

@@ -14,7 +14,6 @@
   html5lib,
   jinja2,
   psutil,
-  pytestCheckHook,
 }:
 
 let

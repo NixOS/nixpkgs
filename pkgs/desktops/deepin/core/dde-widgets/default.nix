@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-widgets";
-  version = "6.0.19";
+  version = "6.0.22";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-oB0lyfmxBSwqjXO+etYdc+DghZVSBU+LXYqK1WS5DaU=";
+    hash = "sha256-rE/7AoTID9UWxAS+LVYY5WYDNAo8GnSJmUrJFn3l+1M=";
   };
 
   nativeBuildInputs = [

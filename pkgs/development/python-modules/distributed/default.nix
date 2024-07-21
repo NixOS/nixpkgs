@@ -11,7 +11,6 @@
   packaging,
   psutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   setuptools,
   setuptools-scm,
@@ -26,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2024.6.2";
+  version = "2024.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -35,7 +34,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "distributed";
     rev = "refs/tags/${version}";
-    hash = "sha256-GgW9BtTqjac+olAGg+LOO+lTopuUukVUmQ0ZWsMJOc8=";
+    hash = "sha256-1VLYOUPo2esFltcoI6B/HMGyuyRq4vvkE55C8acdbG8=";
   };
 
   postPatch = ''
@@ -45,7 +44,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     versioneer

@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchurl
 , fetchFromGitHub
 , buildGoModule

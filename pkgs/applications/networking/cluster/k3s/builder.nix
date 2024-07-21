@@ -88,18 +88,12 @@ lib:
 # make sure they're in the path if desired.
 let
 
-  baseMeta = with lib; {
+  baseMeta = {
     description = "Lightweight Kubernetes distribution";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = with maintainers; [
-      euank
-      mic92
-      superherointj
-      wrmilling
-      yajo
-    ];
-    platforms = platforms.linux;
+    maintainers = lib.teams.k3s.members;
+    platforms = lib.platforms.linux;
 
     # resolves collisions with other installations of kubectl, crictl, ctr
     # prefer non-k3s versions
@@ -373,6 +367,7 @@ buildGoModule rec {
   # https://github.com/NixOS/nixpkgs/pull/158089#discussion_r799965694
   # So, why do we use buildGoModule at all? For the `vendorHash` / `go mod download` stuff primarily.
   buildPhase = ''
+    runHook preBuild
     patchShebangs ./scripts/package-cli ./scripts/download ./scripts/build-upload
 
     # copy needed 'go generate' inputs into place
@@ -393,12 +388,14 @@ buildGoModule rec {
 
     ./scripts/package-cli
     mkdir -p $out/bin
+    runHook postBuild
   '';
 
   # Otherwise it depends on 'getGoDirs', which is normally set in buildPhase
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
     # wildcard to match the arm64 build too
     install -m 0755 dist/artifacts/k3s* -D $out/bin/k3s
     wrapProgram $out/bin/k3s \
@@ -410,26 +407,31 @@ buildGoModule rec {
     install -m 0755 ${k3sKillallSh} -D $out/bin/k3s-killall.sh
     wrapProgram $out/bin/k3s-killall.sh \
       --prefix PATH : ${lib.makeBinPath (k3sRuntimeDeps ++ k3sKillallDeps)}
+    runHook postInstall
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
     $out/bin/k3s --version | grep -F "v${k3sVersion}" >/dev/null
+    runHook postInstallCheck
   '';
 
-  passthru.updateScript = updateScript;
-
-  passthru.mkTests =
-    version:
-    let
-      k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
-    in
-    {
-      etcd = nixosTests.k3s.etcd.${k3s_version};
-      single-node = nixosTests.k3s.single-node.${k3s_version};
-      multi-node = nixosTests.k3s.multi-node.${k3s_version};
-    };
-  passthru.tests = passthru.mkTests k3sVersion;
+  passthru = {
+    k3sCNIPlugins = k3sCNIPlugins;
+    k3sContainerd = k3sContainerd;
+    k3sRepo = k3sRepo;
+    k3sRoot = k3sRoot;
+    k3sServer = k3sServer;
+    mkTests =
+      version:
+      let
+        k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
+      in
+      lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
+    tests = passthru.mkTests k3sVersion;
+    updateScript = updateScript;
+  };
 
   meta = baseMeta;
 }

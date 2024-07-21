@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pynose,
+  nose,
   setuptools,
   pythonOlder,
 }:
@@ -21,7 +21,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pynose ];
+  # tests rely on nose, archived in 2020
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     runHook preCheck

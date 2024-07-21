@@ -11,13 +11,12 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.5";
+  version = "0.11.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +25,7 @@ buildPythonPackage rec {
     owner = "yanyongyu";
     repo = "githubkit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YlI5NEfZD+9I2Ikd/LyEq+MnsdYixi+UVNUP8mfFKc8=";
+    hash = "sha256-bh01m/L1ubQGc4EoHw8If/6yF64M5CsifSwVezZjFDQ=";
   };
 
   postPatch = ''
@@ -38,7 +37,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     hishel

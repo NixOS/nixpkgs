@@ -1,9 +1,12 @@
 { lib
-, python3
+, python311
 , fetchFromGitHub
 , fetchpatch
 }:
 
+let
+  python3 = python311;
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "autotools-language-server";
   version = "0.0.19";

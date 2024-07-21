@@ -4,6 +4,8 @@
 , pkg-config
 , meson
 , ninja
+, brasero
+, colord
 , exiv2
 , libheif
 , libjpeg
@@ -17,10 +19,10 @@
 , gsettings-desktop-schemas
 , librsvg
 , libwebp
+, libX11
 , lcms2
 , bison
 , flex
-, clutter-gtk
 , wrapGAppsHook3
 , shared-mime-info
 , python3
@@ -31,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pix";
-  version = "3.4.1";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-QkgjUzoBOXE3mxXy/Lq3YkHq7f9oE97FeP7PHIBDHvc=";
+    sha256 = "sha256-Ra+5hXSNPRc2LvTeEYwg1xSnIYgrpfvTrpPwzuTXhdU=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +55,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    clutter-gtk
+    brasero
+    colord
     exiv2
     glib
     gsettings-desktop-schemas
@@ -72,6 +75,7 @@ stdenv.mkDerivation rec {
     libsecret
     libtiff
     libwebp
+    libX11
     xapp
   ];
 

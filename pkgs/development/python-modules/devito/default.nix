@@ -19,23 +19,22 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   scipy,
   sympy,
 }:
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.8.7";
+  version = "4.8.10";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UEj3WXRBaEOMX+wIDUjE6AP30QSSBUJHzNh3Kp/2AkE=";
+    hash = "sha256-n8mbhbW5zN8hQeVF6T3MbET9tJlIy99iwFiZCOh6xTg=";
   };
 
   pythonRemoveDeps = [
@@ -46,8 +45,6 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = true;
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     anytree

@@ -9,7 +9,7 @@ let
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
-      sha256 = "sha256-TFMU9owxBGrrbatk7Jj9xP8OEJNjXnjbwnW6Xq34awI=";
+      hash = "sha256-TFMU9owxBGrrbatk7Jj9xP8OEJNjXnjbwnW6Xq34awI=";
     };
 
     enableParallelBuilding = true;

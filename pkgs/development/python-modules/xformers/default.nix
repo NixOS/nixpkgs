@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
@@ -52,26 +53,30 @@ buildPythonPackage {
       # noqa: C801
       __version__ = "${version}"
       EOF
-    ''
-    + lib.optionalString cudaSupport ''
-      export CUDA_HOME=${cudaPackages.cuda_nvcc}
-      export TORCH_CUDA_ARCH_LIST="${lib.concatStringsSep ";" cudaCapabilities}"
     '';
+
+  env = lib.attrsets.optionalAttrs cudaSupport {
+    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
+  };
+
+  stdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 
   buildInputs = lib.optionals cudaSupport (
     with cudaPackages;
     [
       # flash-attn build
       cuda_cudart # cuda_runtime_api.h
-      libcusparse.dev # cusparse.h
-      cuda_cccl.dev # nv/target
-      libcublas.dev # cublas_v2.h
-      libcusolver.dev # cusolverDn.h
-      libcurand.dev # curand_kernel.h
+      libcusparse # cusparse.h
+      cuda_cccl # nv/target
+      libcublas # cublas_v2.h
+      libcusolver # cusolverDn.h
+      libcurand # curand_kernel.h
     ]
   );
 
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [ which ] ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_nvcc
+  ]);
 
   propagatedBuildInputs = [
     numpy

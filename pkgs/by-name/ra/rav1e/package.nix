@@ -10,6 +10,7 @@
   libgit2,
   libiconv,
   nasm,
+  nix-update-script,
   testers,
   zlib,
   rav1e,
@@ -59,6 +60,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests.version = testers.testVersion { package = rav1e; };
+    updateScript = nix-update-script { };
   };
 
   meta = {

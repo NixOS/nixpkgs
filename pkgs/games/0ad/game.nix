@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchpatch, perl, fetchurl, python3, fmt, libidn
+{ stdenv, lib, fetchpatch, fetchpatch2, perl, fetchurl, python3, fmt, libidn
 , pkg-config, spidermonkey_78, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
@@ -72,6 +72,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/0ad/0ad/commit/093e1eb23519ab4a4633a999a555a58e4fd5343e.patch";
       hash = "sha256-NuWO64narU1JID/F3cj7lJKjo96XR7gSW0w8I3/hhuw=";
     })
+    # Fix build with miniupnpc 2.2.8
+    # https://github.com/0ad/0ad/pull/45
+    (fetchpatch2 {
+      url = "https://github.com/0ad/0ad/commit/1575580bbc5278576693f3fbbb32de0b306aa27e.patch?full_index=1";
+      hash = "sha256-iXiUYTJCWwJpb2U3P58jTV4OpyW6quofu8Jq6xNEq48=";
+    })
   ];
 
   configurePhase = ''
@@ -120,7 +126,7 @@ stdenv.mkDerivation rec {
     description = "Free, open-source game of ancient warfare";
     homepage = "https://play0ad.com/";
     license = with licenses; [
-      gpl2 lgpl21 mit cc-by-sa-30
+      gpl2Plus lgpl21 mit cc-by-sa-30
       licenses.zlib # otherwise masked by pkgs.zlib
     ];
     maintainers = with maintainers; [ chvp ];

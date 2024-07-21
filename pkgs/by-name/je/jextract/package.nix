@@ -1,40 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, emptyDirectory
-, writeText
 , makeBinaryWrapper
 , gradle
 , jdk22
 , llvmPackages
 }:
-
-let
-  gradleInit = writeText "init.gradle" ''
-    logger.lifecycle 'Replacing Maven repositories with empty directory...'
-    gradle.projectsLoaded {
-      rootProject.allprojects {
-        buildscript {
-          repositories {
-            clear()
-            maven { url '${emptyDirectory}' }
-          }
-        }
-        repositories {
-          clear()
-          maven { url '${emptyDirectory}' }
-        }
-      }
-    }
-    settingsEvaluated { settings ->
-      settings.pluginManagement {
-        repositories {
-          maven { url '${emptyDirectory}' }
-        }
-      }
-    }
-  '';
-in
 
 stdenv.mkDerivation {
   pname = "jextract";
@@ -52,27 +23,14 @@ stdenv.mkDerivation {
     makeBinaryWrapper
   ];
 
-  env = {
-    ORG_GRADLE_PROJECT_llvm_home = llvmPackages.libclang.lib;
-    ORG_GRADLE_PROJECT_jdk22_home = jdk22;
-  };
-
-  buildPhase = ''
-    runHook preBuild
-
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle --console plain --init-script "${gradleInit}" assemble
-
-    runHook postBuild
-  '';
+  gradleFlags = [
+    "-Pllvm_home=${llvmPackages.libclang.lib}"
+    "-Pjdk22_home=${jdk22}"
+  ];
 
   doCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
-    gradle --console plain --init-script "${gradleInit}" verify
-    runHook postCheck
-  '';
+  gradleCheckTask = "verify";
 
   installPhase = ''
     runHook preInstall

@@ -48,7 +48,7 @@ let
   };
 
   appimageContents = appimageTools.extractType2 {
-    name = "${pname}-${version}";
+    inherit pname version;
     src = "${src}/pcloud";
   };
 

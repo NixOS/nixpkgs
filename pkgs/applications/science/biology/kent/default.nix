@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "kent";
-  version = "466";
+  version = "467";
 
   src = fetchFromGitHub {
     owner = "ucscGenomeBrowser";
     repo = pname;
     rev = "v${version}_base";
-    hash = "sha256-zoDZ+8G0SHKfWmkXBqp+WSjQXtmkcTIZjrjPhUIJw1c=";
+    hash = "sha256-Y8iHSo70nsPZwVy8ZiiqjU3mGrPOyPQkW0VpLS+ulGE=";
   };
 
   buildInputs = [ libpng libuuid zlib bzip2 xz openssl curl libmysqlclient ];

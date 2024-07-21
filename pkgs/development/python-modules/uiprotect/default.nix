@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   poetry-core,
@@ -11,6 +12,7 @@
   aiohttp,
   aioshutil,
   async-timeout,
+  convertertools,
   dateparser,
   orjson,
   packaging,
@@ -35,14 +37,16 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "1.7.2";
+  version = "5.3.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gr+P7V0vsmWha/Di3BGORjssCLz0lsufawzMZKOMYt0=";
+    hash = "sha256-3+et24rvB9wh1cvUOXtgeDkh+SI0+dOrEnFBH5g735o=";
   };
 
   postPatch = ''
@@ -51,11 +55,14 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "pydantic" ];
+
   dependencies = [
     aiofiles
     aiohttp
     aioshutil
     async-timeout
+    convertertools
     dateparser
     orjson
     packaging

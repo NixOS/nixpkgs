@@ -40,8 +40,10 @@ makeScopeWithSplicing' {
       stdenvLibcMinimal = crossLibcStdenv.override (old: {
         cc = old.cc.override {
           libc = self.libcMinimal;
+          noLibc = false;
           bintools = old.cc.bintools.override {
             libc = self.libcMinimal;
+            noLibc = false;
             sharedLibraryLoader = null;
           };
         };
@@ -98,7 +100,7 @@ makeScopeWithSplicing' {
         inherit (buildNetbsd) makeMinimal;
       };
 
-      libcMinimal = self.callPackage ./pkgs/libcMinimal.nix {
+      libcMinimal = self.callPackage ./pkgs/libcMinimal/package.nix {
         inherit (self) headers csu;
         inherit (buildNetbsd)
           netbsdSetupHook

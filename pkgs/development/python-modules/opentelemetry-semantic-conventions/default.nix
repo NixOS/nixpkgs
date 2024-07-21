@@ -1,5 +1,4 @@
 {
-  lib,
   buildPythonPackage,
   pythonOlder,
   hatchling,
@@ -21,6 +20,8 @@ buildPythonPackage {
   sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-semantic-conventions";
 
   build-system = [ hatchling ];
+
+  dependencies = [ opentelemetry-api ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

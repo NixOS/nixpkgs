@@ -34,17 +34,19 @@ let
       };
 
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
+
+      sentry-sdk = super.sentry-sdk_2;
     };
   };
 
   pname = "pretix";
-  version = "2024.5.0";
+  version = "2024.6.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dLzCugbRQSGuOwe99a3WLMffisyvYWNRdSdcdW9knjY=";
+    hash = "sha256-erI3Ai6zwNSvMiF3YKfnU9ePb9R92rfi5rsxfAOh6EQ=";
   };
 
   npmDeps = buildNpmPackage {
@@ -52,7 +54,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-SEgAC3dmnxG1xM9QZQ/e+6NFOwXU3tXlbfZCzrAMFO0=";
+    npmDepsHash = "sha256-//CLPnx5eUxIHIUGc7x2UF8qsfAYRtvHbHXSDNtI/eI=";
 
     dontBuild = true;
 
@@ -97,7 +99,8 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail "protobuf==5.27.*" protobuf \
       --replace-fail "pycryptodome==3.20.*" pycryptodome \
       --replace-fail "python-dateutil==2.9.*" python-dateutil \
-      --replace-fail "requests==2.32.*" "requests" \
+      --replace-fail "requests==2.31.*" "requests" \
+      --replace-fail "sentry-sdk==2.5.*" "sentry-sdk>=2" \
       --replace-fail "stripe==7.9.*" stripe
   '';
 
@@ -226,6 +229,13 @@ python.pkgs.buildPythonApplication rec {
   disabledTests = [
     # unreliable around day changes
     "test_order_create_invoice"
+
+    # outdated translation files
+    # https://github.com/pretix/pretix/commit/c4db2a48b6ac81763fa67475d8182aee41c31376
+    "test_different_dates_spanish"
+    "test_same_day_spanish"
+    "test_same_month_spanish"
+    "test_same_year_spanish"
   ];
 
   preCheck = ''

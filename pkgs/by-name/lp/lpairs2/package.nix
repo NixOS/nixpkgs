@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lpairs2";
-  version = "2.3";
+  version = "2.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/lpairs2-${finalAttrs.version}.tar.gz";
-    hash = "sha256-gw1BNkcztyTuoXRdx5+TBZNJEJNrLCfEUCQ1JzROogA=";
+    hash = "sha256-ES5RGr817vc8t2DFNeETTqrm0uwk3JuTypSZjXK86Bg=";
   };
 
   buildInputs = [

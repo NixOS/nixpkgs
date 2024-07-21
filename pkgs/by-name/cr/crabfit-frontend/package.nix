@@ -7,7 +7,7 @@
   fetchpatch,
   nodejs,
   yarn,
-  fixup_yarn_lock,
+  fixup-yarn-lock,
   google-fonts,
   api_url ? "http://127.0.0.1:3000",
   frontend_url ? "crab.fit",
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     yarn
-    fixup_yarn_lock
+    fixup-yarn-lock
   ];
 
   postPatch = ''
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo 'NEXT_PUBLIC_API_URL="${api_url}"' > .env.local
 
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror ${finalAttrs.offlineCache}
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules

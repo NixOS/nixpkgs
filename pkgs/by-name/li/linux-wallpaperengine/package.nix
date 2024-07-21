@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , ffmpeg
-, freeglut
+, libglut
 , freeimage
 , glew
 , glfw
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     ffmpeg
-    freeglut
+    libglut
     freeimage
     glew
     glfw

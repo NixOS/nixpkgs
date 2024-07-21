@@ -9,12 +9,13 @@
 
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.62.2";
+  version = "1.64.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-X9XhWCtnjmuUHuX1gJNAvl4HJGkd9SmaroImZA+U4Y8=";
+    pname = "grpcio_tools";
+    inherit version;
+    hash = "sha256-crNVC5GtuDVGVuzw9tHUYRKZBEuuEfsefMHRu2a4wes=";
   };
 
   postPatch = ''

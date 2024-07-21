@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pytest7CheckHook,
-  pythonRelaxDepsHook,
   setuptools,
   jsonschema,
   pyyaml,
@@ -26,7 +25,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

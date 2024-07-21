@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "correctionlib";
-  version = "2.6.0";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cms-nanoAOD";
     repo = "correctionlib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RI0wL+/6aNCV9PZMY9ZLNFLVYPm9kAyxcvLzLLM/T3Y=";
+    hash = "sha256-mfNSETMjhLoa3MK7zPggz568j1T6ay42cKa1GGKKfT8=";
     fetchSubmodules = true;
   };
 

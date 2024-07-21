@@ -96,48 +96,48 @@ let
     };
 
     TIMELINE_LIMIT_HOURLY = mkOption {
-      type = types.str;
-      default = "10";
+      type = types.int;
+      default = 10;
       description = ''
         Limits for timeline cleanup.
       '';
     };
 
     TIMELINE_LIMIT_DAILY = mkOption {
-      type = types.str;
-      default = "10";
+      type = types.int;
+      default = 10;
       description = ''
         Limits for timeline cleanup.
       '';
     };
 
     TIMELINE_LIMIT_WEEKLY = mkOption {
-      type = types.str;
-      default = "0";
+      type = types.int;
+      default = 0;
       description = ''
         Limits for timeline cleanup.
       '';
     };
 
     TIMELINE_LIMIT_MONTHLY = mkOption {
-      type = types.str;
-      default = "10";
+      type = types.int;
+      default = 10;
       description = ''
         Limits for timeline cleanup.
       '';
     };
 
     TIMELINE_LIMIT_QUARTERLY = mkOption {
-      type = types.str;
-      default = "0";
+      type = types.int;
+      default = 0;
       description = ''
         Limits for timeline cleanup.
       '';
     };
 
     TIMELINE_LIMIT_YEARLY = mkOption {
-      type = types.str;
-      default = "10";
+      type = types.int;
+      default = 10;
       description = ''
         Limits for timeline cleanup.
       '';
@@ -353,4 +353,6 @@ in
       ) (attrNames cfg.configs);
     }
   );
+
+  meta.maintainers = with lib.maintainers; [ Djabx ];
 }

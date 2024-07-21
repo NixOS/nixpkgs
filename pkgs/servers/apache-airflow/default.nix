@@ -17,7 +17,6 @@ let
         };
         nativeBuildInputs = with pySelf; [
           setuptools
-          pythonRelaxDepsHook
         ];
         pythonRelaxDeps = [
           "werkzeug"

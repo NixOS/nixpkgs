@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "uade-music-player";
     repo = "uade";
     rev = "uade-${version}";
-    sha256 = "sha256-skPEXBQwyr326zCmZ2jwGxcBoTt3Y/h2hagDeeqbMpw=";
+    hash = "sha256-skPEXBQwyr326zCmZ2jwGxcBoTt3Y/h2hagDeeqbMpw=";
   };
 
   postPatch = ''

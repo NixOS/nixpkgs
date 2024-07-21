@@ -1,5 +1,5 @@
 { callPackage, cmake, pkg-config, wrapGAppsHook3, gobject-introspection
-, python3Packages, libnotify, intltool, gnome, gdk-pixbuf }:
+, python3Packages, libnotify, intltool, adwaita-icon-theme, gdk-pixbuf }:
 python3Packages.buildPythonApplication {
 
   inherit (callPackage ./common-drv-attrs.nix {
@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication {
   }) pname version src meta;
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 intltool gobject-introspection ];
-  buildInputs = [ libnotify gnome.adwaita-icon-theme gdk-pixbuf ];
+  buildInputs = [ libnotify adwaita-icon-theme gdk-pixbuf ];
   propagatedBuildInputs = with python3Packages; [ pygobject3 ];
 
   pyproject = false;

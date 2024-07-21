@@ -68,7 +68,7 @@ linkDLLsInfolder() {
             markFileAsDone "$file"
             if [ ! -e "./$file" ]; then
                 local pathsFound
-                readarray -d '' pathsFound < <(find "${searchPaths[@]}" -name "$file" -type f -print0)
+                readarray -d '' pathsFound < <(find -L "${searchPaths[@]}" -name "$file" -type f -print0)
                 if [ ${#pathsFound[@]} -eq 0 ]; then continue; fi
                 local dllPath
                 dllPath="${pathsFound[0]}"

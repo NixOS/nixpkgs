@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
   cython,
   enum34,
   gfortran,
@@ -18,7 +19,8 @@ buildPythonPackage rec {
   pname = "scikits.odes";
   version = "2.7.0";
 
-  disabled = isPy27;
+  # https://github.com/bmcage/odes/issues/130
+  disabled = isPy27 || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

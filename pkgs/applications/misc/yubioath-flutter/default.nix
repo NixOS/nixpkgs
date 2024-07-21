@@ -6,7 +6,7 @@
 , libnotify
 , libappindicator
 , pkg-config
-, gnome
+, gnome-screenshot
 , makeWrapper
 , removeReferencesTo
 }:
@@ -67,7 +67,7 @@ flutter319.buildFlutterApplication rec {
 
   # Needed for QR scanning to work
   extraWrapProgramArgs = ''
-    --prefix PATH : ${lib.makeBinPath [ gnome.gnome-screenshot ]}
+    --prefix PATH : ${lib.makeBinPath [ gnome-screenshot ]}
   '';
 
   nativeBuildInputs = [

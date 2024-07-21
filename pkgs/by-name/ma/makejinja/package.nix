@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "makejinja";
-  version = "2.6.0";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mirkolenz";
     repo = "makejinja";
-    rev = "v${version}";
-    hash = "sha256-sH4m+rcHA6nW21xEJon10lS7e5QiFwUyvV49NZ3UY+s=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-F56y+TxDD/B67ncnBTOd0FZGmXO/zjXitwbk/5aiekM=";
   };
 
   build-system = with python3Packages; [ poetry-core ];

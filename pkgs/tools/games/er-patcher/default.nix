@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "er-patcher";
-  version = "1.12-1";
+  version = "1.12-3";
 
   src = fetchFromGitHub {
     owner = "gurrgur";
     repo = "er-patcher";
     rev = "v${version}";
-    sha256 = "sha256-IN7JKaPexc6XLOymBWKbwtjhIlSEy3NhXoPpLiIc7qY=";
+    sha256 = "sha256-D+XYZI3kmK5sb+i8RxtODTvbTgzhpDzwB/JM61ddcTA=";
   };
 
   buildInputs = [
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
       that ensures the patched executable is never run with EAC enabled (unless explicity told to do so). Use at your own risk!
     '';
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     mainProgram = "er-patcher";
   };
 }

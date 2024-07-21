@@ -6,6 +6,7 @@
 , enableSwftools ? false
 , swftools
 , python3Packages
+, pythonOlder
 , qtbase
 , qtcharts
 , makeDesktopItem
@@ -14,14 +15,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "578";
+  version = "581";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-u2SXhL57iNVjRFqerzc/TByB9ArAJx81mxOjTBVBMkg=";
+    hash = "sha256-Q/EdqwIMCjeDtFAPlYd04NMpEgC6xUDGK5LwxDCiI9Y=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,7 @@ python3Packages.buildPythonPackage rec {
     lz4
     numpy
     opencv4
+    olefile
     pillow
     pillow-heif
     psutil
@@ -74,10 +76,14 @@ python3Packages.buildPythonPackage rec {
     pyyaml
     qtpy
     requests
+    show-in-file-manager
     send2trash
     service-identity
     twisted
   ];
+
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = with python3Packages; [
     nose
