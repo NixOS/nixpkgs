@@ -20033,8 +20033,6 @@ with pkgs;
     cudaPackages = cudaPackages_12;
   };
 
-  arrow-glib = callPackage ../development/libraries/arrow-glib { };
-
   arsenal = callPackage ../tools/security/arsenal { };
 
   assimp = callPackage ../development/libraries/assimp { };
