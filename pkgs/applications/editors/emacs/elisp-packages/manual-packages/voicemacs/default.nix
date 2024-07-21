@@ -13,6 +13,7 @@
   melpaBuild,
   nav-flash,
   porthole,
+  unstableGitUpdater,
   yasnippet,
 }:
 
@@ -27,7 +28,9 @@ melpaBuild {
     hash = "sha256-/MBB2R9/V0aYZp15e0vx+67ijCPp2iPlgxe262ldmtc=";
   };
 
-  patches = [ ./0000-add-missing-require.patch ];
+  patches = [
+    ./0000-add-missing-require.patch
+  ];
 
   packageRequires = [
     avy
@@ -44,9 +47,12 @@ melpaBuild {
     yasnippet
   ];
 
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+
   meta = {
     homepage = "https://github.com/jcaw/voicemacs/";
     description = "Set of utilities for controlling Emacs by voice";
     license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
