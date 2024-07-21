@@ -165,10 +165,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    maintainers = lib.teams.musl.members ++ (with lib.maintainers; [
       AndersonTorres
       thoughtpolice
-    ];
+    ]);
     platforms = [
       "aarch64-linux"
       "armv5tel-linux"
