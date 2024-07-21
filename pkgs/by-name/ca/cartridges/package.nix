@@ -15,14 +15,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "cartridges";
-  version = "2.8.5";
+  version = "2.9.3";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "cartridges";
-    rev = "v${version}";
-    hash = "sha256-7T+q3T8z8SCpAn3ayodZeETOsTwL+hhVWzY2JyBEoi4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-37i8p6KaS/G7ybw850XYaPiG83/Lffn/+21xVk5xva0=";
   };
 
   # TODO: remove this when #286814 hits master
