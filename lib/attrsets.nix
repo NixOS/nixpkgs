@@ -1901,6 +1901,35 @@ rec {
   */
   getLib = getOutput "lib";
 
+  /**
+    Get a package's `static` output.
+    If the output does not exist, fallback to `.lib`, then to `.out`, and then to the default.
+
+    # Inputs
+
+    `pkg`
+
+    : The package whose `static` output will be retrieved.
+
+    # Type
+
+    ```
+    getStatic :: Derivation -> Derivation
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.getStatic` usage example
+
+    ```nix
+    "${lib.getStatic pkgs.glibc}"
+    => "/nix/store/00000000000000000000000000000000-glibc-2.39-52-static"
+    ```
+
+    :::
+  */
+  getStatic = getFirstOutput [ "static" "lib" "out" ];
+
 
   /**
     Get a package's `dev` output.

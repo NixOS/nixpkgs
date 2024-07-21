@@ -87,7 +87,7 @@ let
       mapAttrsRecursiveCond genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput getFirstOutput
-      getBin getLib getDev getInclude getMan chooseDevOutputs zipWithNames zip
+      getBin getLib getStatic getDev getInclude getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProduct cartesianProductOfSets
       mapCartesianProduct updateManyAttrsByPath listToAttrs hasAttr getAttr isAttrs intersectAttrs removeAttrs;
     inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
