@@ -53,6 +53,7 @@ _overrideFirst outputInclude "include" "$outputDev"
 
 # so-libs are often among the main things to keep, and so go to $out
 _overrideFirst outputLib "lib" "out"
+_overrideFirst outputStatic "static" "$outputLib"
 
 _overrideFirst outputDoc "doc" "out"
 _overrideFirst outputDevdoc "devdoc" REMOVE # documentation for developers
