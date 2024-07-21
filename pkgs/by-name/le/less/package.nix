@@ -58,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "less";
     maintainers = with lib.maintainers; [
       eelco
-      dtzWill
     ];
     platforms = lib.platforms.unix;
   };
