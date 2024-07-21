@@ -13396,8 +13396,6 @@ with pkgs;
 
   timer = callPackage ../tools/misc/timer { };
 
-  tio = callPackage ../tools/misc/tio { };
-
   tiv = callPackage ../applications/misc/tiv { };
 
   tkman = callPackage ../tools/misc/tkman { };
@@ -17348,8 +17346,6 @@ with pkgs;
   spidermonkey_115 = callPackage ../development/interpreters/spidermonkey/115.nix {
     inherit (darwin) libobjc;
   };
-
-  ssm-session-manager-plugin = callPackage ../applications/networking/cluster/ssm-session-manager-plugin { };
 
   starlark-rust = callPackage ../development/interpreters/starlark-rust { };
 
@@ -27162,8 +27158,6 @@ with pkgs;
 
   delve = callPackage ../development/tools/delve { };
 
-  dep2nix = callPackage ../development/tools/dep2nix { };
-
   easyjson = callPackage ../development/tools/easyjson { };
 
   iferr = callPackage ../development/tools/iferr { };
@@ -27573,6 +27567,7 @@ with pkgs;
     withPasswordQuality = false;
     withVmspawn = false;
     withQrencode = false;
+    withLibarchive = false;
   };
   systemdLibs = systemdMinimal.override {
     pname = "systemd-minimal-libs";

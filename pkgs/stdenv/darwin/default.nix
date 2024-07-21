@@ -547,6 +547,8 @@ in
         buildInputs = old.buildInputs or [ ] ++ [ self.darwin.CF ];
       });
 
+      scons = super.scons.override { python3Packages = self.python3Minimal.pkgs; };
+
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         apple_sdk = superDarwin.apple_sdk // {
           inherit (prevStage.darwin.apple_sdk) sdkRoot;
