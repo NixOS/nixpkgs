@@ -1,8 +1,8 @@
 {
   "bookmarks": {
-    "hash": "sha256-hqmX64arwllviwG7ySvdwA8IYzWoLjP2MyhT389UZXw=",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v14.2.2/bookmarks-14.2.2.tar.gz",
-    "version": "14.2.2",
+    "hash": "sha256-j+phBOocJCC2MFIIUG6PLORhX58Q/I2blceFr2QP+fY=",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v14.2.3/bookmarks-14.2.3.tar.gz",
+    "version": "14.2.3",
     "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- ☠ Find broken links and duplicates\n- 📲 Synchronize with all your browsers and devices\n- 📔 Store archived versions of your links in case they are depublished\n- 🔍 Full-text search on site contents\n- 👪 Share bookmarks with other users and via public links\n- ⚛ Generate RSS feeds of your collections\n- 📈 Stats on how often you access which links\n- 🔒 Automatic backups of your bookmarks collection\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "hash": "sha256-qToUgtGGwr8h5me95TxxCk3o/rsYD0yasqV4Kz/pbCA=",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.7.14/calendar-v4.7.14.tar.gz",
-    "version": "4.7.14",
+    "hash": "sha256-AcPONkfFTDRd7CQC5d0C7Fr3pKRsQXl8+GhaNlqpgiY=",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.7.15/calendar-v4.7.15.tar.gz",
+    "version": "4.7.15",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -65,6 +65,26 @@
     "version": "1.14.5",
     "description": "Provides the necessary endpoint to enable end-to-end encryption.\n\n**Notice:** E2EE is currently not compatible to be used together with server-side encryption",
     "homepage": "https://github.com/nextcloud/end_to_end_encryption",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "files_automatedtagging": {
+    "hash": "sha256-ivC/yW43tXHfeVCEdr7Ky8MXiEdP4dPFcb1plaU072E=",
+    "url": "https://github.com/nextcloud-releases/files_automatedtagging/releases/download/v1.18.0/files_automatedtagging-v1.18.0.tar.gz",
+    "version": "1.18.0",
+    "description": "An app for Nextcloud that automatically assigns tags to newly uploaded files based on some conditions.\n\nThe tags can later be used to control retention, file access, automatic script execution and more.\n\n## How it works\nTo define tags, administrators can create and manage a set of rule groups. Each rule group consists of one or more rules combined through operators. Rules can include criteria like file type, size, time and more. A request matches a group if all rules evaluate to true. On uploading a file all defined groups are evaluated and when matching, the given tags are assigned to the file.",
+    "homepage": "https://github.com/nextcloud/files_automatedtagging",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "files_retention": {
+    "hash": "sha256-Zd+L1pgC/uIaJntjmPnUL6buaB9GJ2H55InmiNGwwOg=",
+    "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v1.17.2/files_retention-v1.17.2.tar.gz",
+    "version": "1.17.2",
+    "description": "An app for Nextcloud to control automatic deletion of files after a given time.\nOptionally the users can be informed the day before.",
+    "homepage": "https://github.com/nextcloud/files_retention",
     "licenses": [
       "agpl"
     ]
@@ -210,9 +230,9 @@
     ]
   },
   "polls": {
-    "hash": "sha256-Lya2mkgOIG68owLws561/tdR3WWrj0RI5ZP5FTX7FdI=",
-    "url": "https://github.com/nextcloud/polls/releases/download/v7.1.4/polls.tar.gz",
-    "version": "7.1.4",
+    "hash": "sha256-6vYcZvI0F+imCMRO1XwBcyLmNJR+1miOkR2mpPpYAJE=",
+    "url": "https://github.com/nextcloud/polls/releases/download/v7.2.0/polls.tar.gz",
+    "version": "7.2.0",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
