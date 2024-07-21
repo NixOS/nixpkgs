@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.61.1";
+  version = "0.62.0";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = pname;
     rev = version;
-    hash = "sha256-/m4s5BW33I9g9hi5j3Vtui271w8Jv91+rQrI3qpO5Og=";
+    hash = "sha256-YHecsYEgVBiisz/GKHBBA4qEcRFGWTDAptljDdoLS9A=";
   };
 
   nativeBuildInputs = [ pkg-config which zip ]
