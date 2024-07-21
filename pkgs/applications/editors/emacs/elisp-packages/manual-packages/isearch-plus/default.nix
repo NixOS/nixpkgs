@@ -1,11 +1,12 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
-, emacs
+{
+  lib,
+  melpaBuild,
+  fetchFromGitHub,
 }:
 
-trivialBuild {
+melpaBuild {
   pname = "isearch-plus";
+  ename = "isearch+";
   version = "3434-unstable-2021-08-23";
 
   src = fetchFromGitHub {
@@ -15,11 +16,13 @@ trivialBuild {
     hash = "sha256-kD+Fyps3fc5YK6ATU1nrkKHazGMYJnU2gRcpQZf6A1E=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.emacswiki.org/emacs/IsearchPlus";
     description = "Extensions to isearch";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ leungbk AndersonTorres ];
-    inherit (emacs.meta) platforms;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      leungbk
+      AndersonTorres
+    ];
   };
 }

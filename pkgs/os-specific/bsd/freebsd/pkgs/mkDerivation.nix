@@ -117,7 +117,9 @@ lib.makeOverridable (
     // {
       patches =
         (lib.optionals (attrs.autoPickPatches or true) (
-          freebsd-lib.filterPatches patches (attrs.extraPaths or [ ] ++ [ attrs.path ])
+          freebsd-lib.filterPatches patches (
+            attrs.extraPaths or [ ] ++ (lib.optional (attrs ? path) attrs.path)
+          )
         ))
         ++ attrs.patches or [ ];
     }
