@@ -157,6 +157,7 @@ stdenv.mkDerivation(finalAttrs: {
     (lib.mesonEnable "libpulse" pulseTunnelSupport)
     (lib.mesonEnable "avahi" zeroconfSupport)
     (lib.mesonEnable "gstreamer" gstreamerSupport)
+    (lib.mesonEnable "gstreamer-device-provider" gstreamerSupport)
     (lib.mesonEnable "systemd" enableSystemd)
     (lib.mesonEnable "systemd-system-service" enableSystemd)
     (lib.mesonEnable "udev" (!enableSystemd))
