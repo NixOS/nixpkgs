@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, which, makeWrapper
-, libpfm, zlib, python3Packages, procps, gdb, capnproto
+, bash, cmake, pkg-config, which, makeWrapper
+, libpfm, zlib, python3, procps, gdb, capnproto
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
     sed '7i#include <math.h>' -i src/Scheduler.cc
     sed '1i#include <ctime>' -i src/test-monitor/test-monitor.cc
-    patchShebangs .
+    patchShebangs src
   '';
 
   # With LTO enabled, linking fails with the following message:
@@ -33,12 +33,17 @@ stdenv.mkDerivation rec {
   # See also https://github.com/NixOS/nixpkgs/pull/110846
   preConfigure = ''substituteInPlace CMakeLists.txt --replace "-flto" ""'';
 
-  nativeBuildInputs = [ cmake pkg-config which makeWrapper ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ cmake pkg-config which makeWrapper capnproto python3.pythonOnBuildForHost ];
+
   buildInputs = [
-    libpfm zlib python3Packages.python python3Packages.pexpect procps gdb capnproto
+    libpfm zlib python3 procps gdb capnproto bash
   ];
+
   cmakeFlags = [
-    "-Ddisable32bit=ON"
+    (lib.cmakeBool "disable32bit" true)
+    (lib.cmakeBool "BUILD_TESTS" doCheck)
   ];
 
   # we turn on additional warnings due to hardening
