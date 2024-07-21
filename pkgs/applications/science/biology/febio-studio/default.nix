@@ -1,46 +1,54 @@
 {
   lib,
   stdenv,
+  overrideSDK,
   fetchFromGitHub,
   cmake,
+  ninja,
   zlib,
-  libglvnd,
   libGLU,
-  wrapQtAppsHook,
+  qt6Packages,
+  febio,
+  glew,
   sshSupport ? true,
   openssl,
   libssh,
   tetgenSupport ? true,
   tetgen,
   ffmpegSupport ? true,
-  ffmpeg_4,
+  ffmpeg_7,
   dicomSupport ? false,
   dcmtk,
   withModelRepo ? true,
   withCadFeatures ? false,
 }:
 
-stdenv.mkDerivation rec {
+let
+  stdenv' =
+    if stdenv.isDarwin then
+      overrideSDK stdenv {
+        darwinSdkVersion = "11.0";
+        darwinMinVersion = "10.15";
+      }
+    else
+      stdenv;
+in
+
+stdenv'.mkDerivation (finalAttrs: {
   pname = "febio-studio";
-  version = "1.6.1";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "febiosoftware";
     repo = "FEBioStudio";
-    rev = "v${version}";
-    sha256 = "0r6pg49i0q9idp7pjymj7mlxd63qjvmfvg0l7fmx87y1yd2hfw4h";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ggIzz6bvNjqlI8s31EVnbM0TOspBSc9/myKpWukS3MU=";
   };
 
-  patches = [
-    ./febio-studio-cmake.patch # Fix Errors that appear with certain Cmake flags
-  ];
+  patches = [ ./cmake-install.patch ];
 
   cmakeFlags =
-    [
-      "-DQt_Ver=5"
-      "-DNOT_FIRST=On"
-      "-DOpenGL_GL_PREFERENCE=GLVND"
-    ]
+    [ (lib.cmakeFeature "Qt_Root" "${qt6Packages.qtbase}") ]
     ++ lib.optional sshSupport "-DUSE_SSH=On"
     ++ lib.optional tetgenSupport "-DUSE_TETGEN=On"
     ++ lib.optional ffmpegSupport "-DUSE_FFMPEG=On"
@@ -48,36 +56,34 @@ stdenv.mkDerivation rec {
     ++ lib.optional withModelRepo "-DMODEL_REPO=On"
     ++ lib.optional withCadFeatures "-DCAD_FEATURES=On";
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/
-    cp -R bin $out/
-    runHook postInstall
-  '';
-
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    ninja
+    qt6Packages.wrapQtAppsHook
   ];
+
   buildInputs =
     [
       zlib
-      libglvnd
       libGLU
+      glew
+      qt6Packages.qtbase
+      febio
+    ]
+    ++ lib.optionals sshSupport [
       openssl
       libssh
     ]
-    ++ lib.optional sshSupport openssl
     ++ lib.optional tetgenSupport tetgen
-    ++ lib.optional ffmpegSupport ffmpeg_4
+    ++ lib.optional ffmpegSupport ffmpeg_7
     ++ lib.optional dicomSupport dcmtk;
 
-  meta = with lib; {
+  meta = {
     description = "FEBio Suite Solver";
     mainProgram = "FEBioStudio";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     homepage = "https://febio.org/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
-}
+})

@@ -37181,7 +37181,7 @@ with pkgs;
 
   fastp = callPackage ../applications/science/biology/fastp { };
 
-  febio-studio = libsForQt5.callPackage ../applications/science/biology/febio-studio { };
+  febio-studio = callPackage ../applications/science/biology/febio-studio { };
 
   flywheel-cli = callPackage ../applications/science/biology/flywheel-cli { };
 
