@@ -18834,7 +18834,7 @@ with pkgs;
   maven3 = maven;
   inherit (maven) buildMaven;
 
-  mavproxy = python3Packages.callPackage ../applications/science/robotics/mavproxy { };
+  mavproxy = python311Packages.callPackage ../applications/science/robotics/mavproxy { };
 
   go-md2man = callPackage ../development/tools/misc/go-md2man { };
 
