@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   melpaBuild,
+  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -14,6 +15,8 @@ melpaBuild {
     rev = "4a2765f835dd115d472142da05215c4c748809f4";
     hash = "sha256-A1Kt4nm7iRV9J5yaLupwiNL5g7ddZvQs79dggmqZ7Rk=";
   };
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://www.emacswiki.org/emacs/IsearchPlus";
