@@ -30,8 +30,6 @@ let
     mainProgram = "zap";
   };
 
-  passthru = { inherit sources; };
-
   darwin = stdenv.mkDerivation {
     inherit pname version meta;
 
