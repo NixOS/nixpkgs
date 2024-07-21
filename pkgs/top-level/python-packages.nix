@@ -15582,6 +15582,8 @@ self: super: with self; {
 
   toonapi = callPackage ../development/python-modules/toonapi { };
 
+  topojson =  callPackage ../development/python-modules/topojson { };
+
   toposort = callPackage ../development/python-modules/toposort { };
 
   torch = callPackage ../development/python-modules/torch {
