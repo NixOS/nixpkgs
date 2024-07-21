@@ -28,7 +28,7 @@ let
     homepage = "https://goauthentik.io/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jvanbruegge ];
+    maintainers = with maintainers; [ jvanbruegge risson ];
   };
 
   website = buildNpmPackage {
