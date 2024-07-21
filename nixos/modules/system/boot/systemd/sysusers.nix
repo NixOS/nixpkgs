@@ -72,12 +72,19 @@ in
         assertion = config.users.mutableUsers -> config.system.etc.overlay.enable;
         message = "config.users.mutableUsers requires config.system.etc.overlay.enable.";
       }
-    ] ++ lib.mapAttrsToList
-      (username: opts: {
+    ] ++ (lib.mapAttrsToList
+      (_username: opts: {
         assertion = !opts.isNormalUser;
         message = "systemd-sysusers doesn't create normal users. You can currently only use it to create system users.";
       })
-      userCfg.users;
+      userCfg.users)
+    ++ lib.mapAttrsToList
+      (username: opts: {
+        assertion = (opts.password == opts.initialPassword || opts.password == null) &&
+          (opts.hashedPassword == opts.initialHashedPassword || opts.hashedPassword == null);
+        message = "${username} uses password or hashedPassword. systemd-sysupdate only supports initial passwords. It'll never update your passwords.";
+      })
+      systemUsers;
 
     systemd = {
 
