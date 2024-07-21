@@ -8382,9 +8382,6 @@ with pkgs;
 
   go-sct = callPackage ../tools/X11/go-sct { };
 
-  # rename to upower-notify?
-  go-upower-notify = callPackage ../tools/misc/upower-notify { };
-
   goattracker = callPackage ../applications/audio/goattracker { };
 
   goattracker-stereo = callPackage ../applications/audio/goattracker {
