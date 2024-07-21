@@ -15,6 +15,7 @@
   netperf,
   nixosTests,
   python3,
+  readline,
   stdenv,
   zip,
 }:
@@ -50,6 +51,9 @@ python3.pkgs.buildPythonApplication rec {
     # This is needed until we fix
     # https://github.com/NixOS/nixpkgs/issues/40427
     ./fix-deadlock-detector-import.patch
+    # Quick & dirty fix for bashreadline
+    # https://github.com/NixOS/nixpkgs/issues/328743
+    ./bashreadline.py-remove-dependency-on-elftools.patch
   ];
 
   propagatedBuildInputs = [ python3.pkgs.netaddr ];
@@ -86,6 +90,9 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/iovisor/bcc/issues/3996
     substituteInPlace src/cc/libbcc.pc.in \
       --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+
+    substituteInPlace tools/bashreadline.py \
+      --replace '/bin/bash' '${readline}/lib/libreadline.so'
   '';
 
   preInstall = ''
