@@ -1,9 +1,10 @@
-{ lib
-, trivialBuild
-, fetchurl
+{
+  lib,
+  melpaBuild,
+  fetchurl,
 }:
 
-trivialBuild rec {
+melpaBuild rec {
   pname = "jam-mode";
   version = "0.3";
 
@@ -20,10 +21,15 @@ trivialBuild rec {
     runHook postUnpack
   '';
 
-  meta = with lib; {
+  postPatch = ''
+    echo ";;; jam-mode.el ---" > tmp.el
+    cat jam-mode.el >> tmp.el
+    mv tmp.el jam-mode.el
+  '';
+
+  meta = {
     description = "Emacs major mode for editing Jam files";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }
