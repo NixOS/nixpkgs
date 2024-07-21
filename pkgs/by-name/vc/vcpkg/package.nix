@@ -1,6 +1,7 @@
 { fetchFromGitHub
 , stdenvNoCC
 , lib
+, git
 , vcpkg-tool
 , makeWrapper
 , doWrap ? true
@@ -14,7 +15,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "microsoft";
     repo = "vcpkg";
     rev = finalAttrs.version;
-    hash = "sha256-eDpMGDtC44eh0elLWV0r1H/WbpVdZ5qMedKh7Ct50Cs=";
+    hash = "sha256-omHlViym0hs02cn/25nUVtNVa38yowByttZ2vjqpWhs=";
+    # If you use a builtin-baseline in a vcpkg.json file, then vcpkg will try
+    # to run “git show <baseline-commit>”. We need a deep clone in order to
+    # ensure that that works.
+    deepClone = true;
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -32,12 +37,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
       runHook preInstall
 
-      mkdir -p "$out/bin" "$out/share/vcpkg/scripts/buildsystems"
-      cp --preserve=mode -r ./{docs,ports,triplets,scripts,.vcpkg-root,versions,LICENSE.txt} "$out/share/vcpkg/"
+      mkdir -p "$out/bin" "$out/libexec/vcpkg" "$out/share/vcpkg/scripts/buildsystems"
+      cp --preserve=mode -r ./{.git,docs,ports,triplets,scripts,.vcpkg-root,versions,LICENSE.txt} "$out/share/vcpkg/"
 
       ${lib.optionalString doWrap ''
+        # If you use a builtin-baseline in a vcpkg.json file, then vcpkg will
+        # try to run “git show” on $out/share/vcpkg. By default, Git will fail
+        # if a Git repo isn’t owned by the current user. We create a wrapper
+        # for git here to make sure that the “git show” command succeeds, even
+        # if the user running vcpkg doesn’t own $out/share/vcpkg.
+        makeWrapper "${git}/bin/git" "$out/libexec/vcpkg/git" \
+          --add-flags -c --add-flags safe.directory="$out/share/vcpkg"
+
         makeWrapper "${vcpkg-tool}/bin/vcpkg" "$out/bin/vcpkg" \
-          --set-default VCPKG_ROOT "$out/share/vcpkg"
+          --set-default VCPKG_ROOT "$out/share/vcpkg" \
+          --prefix PATH : "$out/libexec/git"
       ''}
 
       ln -s "$out/bin/vcpkg" "$out/share/vcpkg/vcpkg"
