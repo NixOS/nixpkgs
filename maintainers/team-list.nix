@@ -733,6 +733,13 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  musl = {
+    members = [ ];
+    scope = "Maintain musl libc.";
+    shortName = "musl";
+    enableFeatureFreezePing = true;
+  };
+
   node = {
     members = [ winter ];
     scope = "Maintain Node.js runtimes and build tooling.";
