@@ -4,13 +4,11 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
-  pytest-runner,
   aiohttp,
   attrs,
   multidict,
   colorlog,
   pynacl,
-  pytest-cov,
   pytest-randomly,
   pytest-asyncio,
   mock,
@@ -52,9 +50,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-runner
     pytest-asyncio
-    pytest-cov
     pytest-randomly
     mock
   ];
