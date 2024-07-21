@@ -4829,6 +4829,8 @@ self: super: with self; {
 
   geocachingapi = callPackage ../development/python-modules/geocachingapi { };
 
+  geoarrow-c = callPackage ../development/python-modules/geoarrow-c { };
+
   geoarrow-rust-core = callPackage ../development/python-modules/geoarrow-rust-core { };
 
   geocoder = callPackage ../development/python-modules/geocoder { };
