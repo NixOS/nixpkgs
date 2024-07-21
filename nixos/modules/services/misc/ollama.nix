@@ -70,7 +70,7 @@ in
       host = lib.mkOption {
         type = types.str;
         default = "127.0.0.1";
-        example = "0.0.0.0";
+        example = "[::]";
         description = ''
           The host address which the ollama server HTTP interface listens to.
         '';
