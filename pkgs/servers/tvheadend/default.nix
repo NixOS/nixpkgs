@@ -14,7 +14,7 @@
 , bzip2
 , dbus
 , dtv-scan-tables
-, ffmpeg_4
+, ffmpeg_7
 , gettext
 , gnutar
 , gzip
@@ -22,10 +22,15 @@
 , openssl
 , uriparser
 , zlib
+, libdvbcsa
+, x264
+, x265
+, libvpx
+, libopus
 }:
 
 let
-  version = "4.2.8";
+  version = "4.3-unstable-2024-08-04";
 in stdenv.mkDerivation {
   pname = "tvheadend";
   inherit version;
@@ -33,24 +38,13 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "tvheadend";
     repo = "tvheadend";
-    rev = "v${version}";
-    sha256 = "1xq059r2bplaa0nd0wkhw80jfwd962x0h5hgd7fz2yp6largw34m";
+    rev = "078a822cf548b37bc474475fa57e48e9604090ee";
+    hash = "sha256-3uCFPGBe5xCxsX7LU9HAwAtB51V2Iet1Uxin7cYhwoI=";
   };
 
   outputs = [
     "out"
     "man"
-  ];
-
-  patches = [
-    # Pull upstream fix for -fno-common toolchain
-    #   https://github.com/tvheadend/tvheadend/pull/1342
-    # TODO: can be removed with 4.3 release.
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://github.com/tvheadend/tvheadend/commit/bd92f1389f1aacdd08e913b0383a0ca9dc223153.patch";
-      sha256 = "17bsx6mnv4pjiayvx1d57dphva0kvlppvnmmaym06dh4524pnly1";
-    })
   ];
 
   nativeBuildInputs = [
@@ -64,24 +58,21 @@ in stdenv.mkDerivation {
     avahi
     bzip2
     dbus
-    ffmpeg_4 # depends on libav
+    ffmpeg_7
     gettext
     gzip
     libiconv
     openssl
     uriparser
     zlib
+    libdvbcsa
+    x264
+    x265
+    libvpx
+    libopus
   ];
 
   enableParallelBuilding = true;
-
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-Wno-error=format-truncation"
-    "-Wno-error=stringop-truncation"
-  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-    # Needed with GCC 12 but unrecognized with GCC 9
-    "-Wno-error=use-after-free"
-  ]);
 
   configureFlags = [
     # disable dvbscan, as having it enabled causes a network download which
@@ -103,10 +94,10 @@ in stdenv.mkDerivation {
 
   preConfigure = ''
     substituteInPlace src/config.c \
-      --replace /usr/bin/tar ${gnutar}/bin/tar
+      --replace-fail /usr/bin/tar ${gnutar}/bin/tar
 
     substituteInPlace src/input/mpegts/scanfile.c \
-      --replace /usr/share/dvb ${dtv-scan-tables}/share/dvbv5
+      --replace-fail /usr/share/dvb ${dtv-scan-tables}/share/dvbv5
 
     # the version detection script `support/version` reads this file if it
     # exists, so let's just use that
