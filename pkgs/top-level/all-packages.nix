@@ -10925,8 +10925,6 @@ with pkgs;
 
   npth = callPackage ../development/libraries/npth { };
 
-  nmap = callPackage ../tools/security/nmap { };
-
   nmap-formatter = callPackage ../tools/security/nmap-formatter { };
 
   nmapsi4 = libsForQt5.callPackage ../tools/security/nmap/qt.nix { };
