@@ -17024,6 +17024,8 @@ self: super: with self; {
 
   vobject = callPackage ../development/python-modules/vobject { };
 
+  voip-utils = callPackage ../development/python-modules/voip-utils { };
+
   volatile = callPackage ../development/python-modules/volatile { };
 
   volkszaehler = callPackage ../development/python-modules/volkszaehler { };

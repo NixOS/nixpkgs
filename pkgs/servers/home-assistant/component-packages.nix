@@ -4885,8 +4885,9 @@
       hassil
       home-assistant-intents
       mutagen
+      voip-utils
       webrtc-noise-gain
-    ]; # missing inputs: voip-utils
+    ];
     "volkszaehler" = ps: with ps; [
       volkszaehler
     ];
@@ -6018,6 +6019,7 @@
     "vlc_telnet"
     "vodafone_station"
     "voicerss"
+    "voip"
     "volumio"
     "volvooncall"
     "vulcan"
