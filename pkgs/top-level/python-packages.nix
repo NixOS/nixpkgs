@@ -4831,6 +4831,8 @@ self: super: with self; {
 
   geoarrow-c = callPackage ../development/python-modules/geoarrow-c { };
 
+  geoarrow-pandas = callPackage ../development/python-modules/geoarrow-pandas { };
+
   geoarrow-pyarrow = callPackage ../development/python-modules/geoarrow-pyarrow { };
 
   geoarrow-rust-core = callPackage ../development/python-modules/geoarrow-rust-core { };
