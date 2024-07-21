@@ -366,15 +366,10 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     };
   in [
     "${mingw-patch}/*.patch"
-  ]) ++ optionals (pythonAtLeast "3.12") [
+  ]) ++ optionals isPy312 [
     # backport fix for various platforms; armv7l, riscv64, s390
     # https://github.com/python/cpython/pull/121178
-    (
-      if (pythonAtLeast "3.13") then
-        ./3.13/0001-Fix-build-with-_PY_SHORT_FLOAT_REPR-0.patch
-      else
-        ./3.12/0001-Fix-build-with-_PY_SHORT_FLOAT_REPR-0.patch
-    )
+    ./3.12/0001-Fix-build-with-_PY_SHORT_FLOAT_REPR-0.patch
   ];
 
   postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
