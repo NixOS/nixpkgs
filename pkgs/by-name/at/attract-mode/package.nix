@@ -1,58 +1,76 @@
 {
-  expat,
+  lib,
+  stdenv,
   fetchFromGitHub,
-  ffmpeg_4,
-  fontconfig,
+  pkg-config,
+  expat,
+  ffmpeg_7,
   freetype,
   libarchive,
   libjpeg,
   libGLU,
-  libGL,
-  openal,
-  pkg-config,
   sfml,
-  lib,
-  stdenv,
   zlib,
+  openal,
+  fontconfig,
+  darwin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "attract-mode";
-  version = "2.6.2";
+  version = "2.7.0-unstable-2024-08-02";
 
   src = fetchFromGitHub {
     owner = "mickelson";
     repo = "attract";
-    rev = "v${version}";
-    sha256 = "sha256-gKxUU2y6Gtm5a/tXYw/fsaTBrriNh5vouPGICs3Ph3c=";
+    rev = "6ed3a1e32a519608c0b495295cc4c18ceea6b461";
+    hash = "sha256-uhbu/DaQSE9Dissv7XLFMVYitPn8ZEewq90poCtEfYY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  patchPhase = ''
-    sed -i "s|prefix=/usr/local|prefix=$out|" Makefile
-  '';
+  buildInputs =
+    [
+      expat
+      ffmpeg_7
+      freetype
+      libarchive
+      libjpeg
+      libGLU
+      sfml
+      zlib
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      openal
+      fontconfig
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+      darwin.apple_sdk.frameworks.Carbon
+      darwin.apple_sdk.frameworks.IOKit
+      darwin.apple_sdk.frameworks.CoreVideo
+      darwin.apple_sdk.frameworks.OpenAL
+    ];
 
-  buildInputs = [
-    expat
-    ffmpeg_4
-    fontconfig
-    freetype
-    libarchive
-    libjpeg
-    libGLU
-    libGL
-    openal
-    sfml
-    zlib
-  ];
+  makeFlags = [
+    "prefix=$(out)"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+    "STRIP=${stdenv.cc.targetPrefix}strip"
+    "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+    "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "BUILD_EXPAT=0"
+  ] ++ lib.optionals stdenv.isDarwin [ "USE_FONTCONFIG=0" ];
 
-  meta = with lib; {
+  enableParallelBuilding = true;
+
+  meta = {
     description = "Frontend for arcade cabinets and media PCs";
     homepage = "http://attractmode.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hrdinka ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.hrdinka ];
+    platforms = lib.platforms.unix;
     mainProgram = "attract";
   };
 }
