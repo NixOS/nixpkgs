@@ -10927,8 +10927,6 @@ with pkgs;
 
   nmap-formatter = callPackage ../tools/security/nmap-formatter { };
 
-  nmapsi4 = libsForQt5.callPackage ../tools/security/nmap/qt.nix { };
-
   noise-repellent = callPackage ../applications/audio/noise-repellent { };
 
   noisetorch = callPackage ../applications/audio/noisetorch { };
