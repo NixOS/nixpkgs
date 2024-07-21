@@ -1,41 +1,92 @@
 {
   stdenv,
   lib,
-  fetchzip,
+  fetchFromGitHub,
+  maven,
+  pnpm_9,
   makeWrapper,
   jre,
+  nodejs,
   nixosTests,
   callPackage,
   confFile ? null,
   plugins ? [ ],
   extraFeatures ? [ ],
   disabledFeatures ? [ ],
+  stdenvNoCC,
 }:
 
 let
+  pnpm = pnpm_9;
   featuresSubcommand = ''
     ${lib.optionalString (extraFeatures != [ ]) "--features=${lib.concatStringsSep "," extraFeatures}"} \
     ${lib.optionalString (disabledFeatures != [ ]) "--features-disabled=${lib.concatStringsSep "," disabledFeatures}"}
   '';
-in stdenv.mkDerivation rec {
+
   pname = "keycloak";
   version = "25.0.2";
 
-  src = fetchzip {
-    url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    hash = "sha256-DYuK1W8dXI/UUB+9HzMnjiJdpJulS3QuIpmr3AA4OLo=";
+  src = fetchFromGitHub {
+    owner = "keycloak";
+    repo = "keycloak";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7YJjOChUC5HScNdU5XXp3gDparRCKtj1s2FQwyp6RPI=";
   };
+
+  frontend = stdenvNoCC.mkDerivation (finalAttrs: {
+    pname = "keycloak-frontend";
+    inherit version src;
+
+    nativeBuildInputs = [
+      nodejs
+      pnpm.configHook
+    ];
+
+    pnpmDeps = pnpm.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      hash = "sha256-r1ZY3pK1ljWZ/N87a4fvn6mDfkRJWs+IF/G2wu3Ojzc=";
+    };
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out"
+      cp -r . $out/
+
+      runHook postInstall
+    '';
+
+  });
+in
+maven.buildMavenPackage rec {
+  inherit pname version src;
+
+  patches = [ ./disable-pnpm-install.patch ];
+
+  mvnHash = "sha256-mJvZ7OQVf9/dgIjb+k5Kg+2O0SGQ8XJwjM7UtcTrQXY=";
+
+  mvnParameters = lib.escapeShellArgs [
+    "-Pdistribution"
+    "-DskipTestsuite"
+    "-DskipTests"
+  ];
 
   nativeBuildInputs = [
     jre
     makeWrapper
   ];
 
-  patches = [
-    # Make home.dir and config.dir configurable through the
-    # KC_HOME_DIR and KC_CONF_DIR environment variables.
-    ./config_vars.patch
-  ];
+  configurePhase = ''
+    runHook preConfigure
+    ln -s "${frontend}" node_modules
+    runHook postConfigure
+  '';
+
+  #patches = [
+  #  # Make home.dir and config.dir configurable through the
+  #  # KC_HOME_DIR and KC_CONF_DIR environment variables.
+  #  ./config_vars.patch
+  #];
 
   buildPhase = ''
     runHook preBuild
@@ -85,7 +136,6 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.keycloak.org";
     description = "Identity and access management for modern applications and services";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     platforms = jre.meta.platforms;
     maintainers = with lib.maintainers; [ ngerstle talyz nickcao ];

@@ -1,0 +1,216 @@
+diff --git a/distribution/galleon-feature-packs/saml-adapter-galleon-pack/pom.xml b/distribution/galleon-feature-packs/saml-adapter-galleon-pack/pom.xml
+index 422120a3ec..d6f1269d6f 100644
+--- a/distribution/galleon-feature-packs/saml-adapter-galleon-pack/pom.xml
++++ b/distribution/galleon-feature-packs/saml-adapter-galleon-pack/pom.xml
+@@ -233,20 +233,6 @@
+                         <version>${wildfly.common.wildfly.aligned.version}</version>
+                     </dependency>
+                 </dependencies>
+-                <executions>
+-                    <execution>
+-                        <id>keycloak-saml-adapter-galleon-pack-build</id>
+-                        <goals>
+-                            <goal>build-feature-pack</goal>
+-                        </goals>
+-                        <phase>compile</phase>
+-                        <configuration>
+-                            <generate-channel-manifest>true</generate-channel-manifest>
+-                            <add-feature-packs-as-required-manifests>false</add-feature-packs-as-required-manifests>
+-                            <fork-embedded>false</fork-embedded>
+-                        </configuration>
+-                    </execution>
+-                </executions>
+             </plugin>
+             <plugin>
+                 <groupId>org.wildfly.maven.plugins</groupId>
+@@ -296,4 +282,4 @@
+             </build>
+         </profile>
+     </profiles>
+-</project>
+\ No newline at end of file
++</project>
+diff --git a/js/apps/account-ui/pom.xml b/js/apps/account-ui/pom.xml
+index bfd3897087..1e92b431c2 100644
+--- a/js/apps/account-ui/pom.xml
++++ b/js/apps/account-ui/pom.xml
+@@ -65,35 +65,5 @@
+             </resource>
+         </resources>
+ 
+-        <plugins>
+-            <plugin>
+-                <groupId>com.github.eirslett</groupId>
+-                <artifactId>frontend-maven-plugin</artifactId>
+-                <executions>
+-                    <execution>
+-                        <id>lib-build</id>
+-                        <goals>
+-                            <goal>pnpm</goal>
+-                        </goals>
+-                        <configuration>
+-                            <arguments>build</arguments>
+-                            <environmentVariables>
+-                                <LIB>true</LIB>
+-                            </environmentVariables>
+-                        </configuration>
+-                    </execution>
+-                    <execution>
+-                        <id>pack</id>
+-                        <phase>package</phase>
+-                        <goals>
+-                            <goal>pnpm</goal>
+-                        </goals>
+-                        <configuration>
+-                            <arguments>pack --pack-destination=target</arguments>
+-                        </configuration>
+-                    </execution>
+-                </executions>
+-            </plugin>
+-        </plugins>
+     </build>
+-</project>
+\ No newline at end of file
++</project>
+diff --git a/js/libs/keycloak-admin-client/pom.xml b/js/libs/keycloak-admin-client/pom.xml
+index febefd67f3..655cbea8f2 100644
+--- a/js/libs/keycloak-admin-client/pom.xml
++++ b/js/libs/keycloak-admin-client/pom.xml
+@@ -42,22 +42,6 @@
+                     </execution>
+                 </executions>
+             </plugin>
+-            <plugin>
+-                <groupId>com.github.eirslett</groupId>
+-                <artifactId>frontend-maven-plugin</artifactId>
+-                <executions>
+-                    <execution>
+-                        <id>pack</id>
+-                        <phase>package</phase>
+-                        <goals>
+-                            <goal>pnpm</goal>
+-                        </goals>
+-                        <configuration>
+-                            <arguments>pack --pack-destination=target</arguments>
+-                        </configuration>
+-                    </execution>
+-                </executions>
+-            </plugin>
+         </plugins>
+     </build>
+ </project>
+diff --git a/js/libs/keycloak-js/pom.xml b/js/libs/keycloak-js/pom.xml
+index 6eef60e08c..c63b83f2f6 100644
+--- a/js/libs/keycloak-js/pom.xml
++++ b/js/libs/keycloak-js/pom.xml
+@@ -42,22 +42,6 @@
+                     </execution>
+                 </executions>
+             </plugin>
+-            <plugin>
+-                <groupId>com.github.eirslett</groupId>
+-                <artifactId>frontend-maven-plugin</artifactId>
+-                <executions>
+-                    <execution>
+-                        <id>pack</id>
+-                        <phase>package</phase>
+-                        <goals>
+-                            <goal>pnpm</goal>
+-                        </goals>
+-                        <configuration>
+-                            <arguments>pack --pack-destination=target</arguments>
+-                        </configuration>
+-                    </execution>
+-                </executions>
+-            </plugin>
+             <plugin>
+                 <groupId>org.codehaus.mojo</groupId>
+                 <artifactId>build-helper-maven-plugin</artifactId>
+diff --git a/js/libs/ui-shared/pom.xml b/js/libs/ui-shared/pom.xml
+index b926509100..7fd282c0e0 100644
+--- a/js/libs/ui-shared/pom.xml
++++ b/js/libs/ui-shared/pom.xml
+@@ -42,22 +42,6 @@
+                     </execution>
+                 </executions>
+             </plugin>
+-            <plugin>
+-                <groupId>com.github.eirslett</groupId>
+-                <artifactId>frontend-maven-plugin</artifactId>
+-                <executions>
+-                    <execution>
+-                        <id>pack</id>
+-                        <phase>package</phase>
+-                        <goals>
+-                            <goal>pnpm</goal>
+-                        </goals>
+-                        <configuration>
+-                            <arguments>pack --pack-destination=target</arguments>
+-                        </configuration>
+-                    </execution>
+-                </executions>
+-            </plugin>
+         </plugins>
+     </build>
+ </project>
+diff --git a/pom.xml b/pom.xml
+index 14785bd060..3603c58657 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -230,12 +230,6 @@
+         <!-- Version suffix that is appended to directories. Default is the maven GAV version but this can be edited to use a short form version -->
+         <server.output.dir.version>${project.version}</server.output.dir.version>
+ 
+-        <!-- Frontend -->
+-        <node.version>v20.13.0</node.version>
+-        <pnpm.version>9.1.0</pnpm.version>
+-        <pnpm.args.install>install --prefer-offline --frozen-lockfile --ignore-scripts</pnpm.args.install>
+-        <!-- The clean step is skipped on Windows -->
+-        <js.skip.clean>false</js.skip.clean>
+     </properties>
+ 
+     <url>http://keycloak.org</url>
+@@ -1660,43 +1654,6 @@
+                         </filesets>
+                     </configuration>
+                 </plugin>
+-                <plugin>
+-                    <groupId>com.github.eirslett</groupId>
+-                    <artifactId>frontend-maven-plugin</artifactId>
+-                    <version>${frontend.plugin.version}</version>
+-                    <executions>
+-                        <execution>
+-                            <goals>
+-                                <goal>install-node-and-pnpm</goal>
+-                            </goals>
+-                        </execution>
+-                        <execution>
+-                            <id>pnpm-install</id>
+-                            <goals>
+-                                <goal>pnpm</goal>
+-                            </goals>
+-                            <configuration>
+-                                <arguments>install --prefer-offline --frozen-lockfile --ignore-scripts</arguments>
+-                                <workingDirectory>${maven.multiModuleProjectDirectory}</workingDirectory>
+-                            </configuration>
+-                        </execution>
+-                        <execution>
+-                            <id>pnpm-build</id>
+-                            <goals>
+-                                <goal>pnpm</goal>
+-                            </goals>
+-                            <configuration>
+-                                <arguments>build</arguments>
+-                            </configuration>
+-                        </execution>
+-                    </executions>
+-                    <configuration>
+-                        <nodeVersion>${node.version}</nodeVersion>
+-                        <pnpmVersion>${pnpm.version}</pnpmVersion>
+-                        <installDirectory>${maven.multiModuleProjectDirectory}</installDirectory>
+-                        <pnpmInheritsProxyConfigFromMaven>false</pnpmInheritsProxyConfigFromMaven>
+-                    </configuration>
+-                </plugin>
+                 <plugin>
+                     <groupId>org.keycloak</groupId>
+                     <artifactId>keycloak-distribution-licenses-maven-plugin</artifactId>
