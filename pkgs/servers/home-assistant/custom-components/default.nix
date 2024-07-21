@@ -60,6 +60,8 @@
 
   tuya_local = callPackage ./tuya_local {};
 
+  volkswagencarnet = callPackage ./volkswagencarnet { };
+
   waste_collection_schedule = callPackage ./waste_collection_schedule {};
 
   xiaomi_gateway3 = callPackage ./xiaomi_gateway3 {};
