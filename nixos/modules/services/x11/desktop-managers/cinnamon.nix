@@ -105,7 +105,7 @@ in
         cinnamon-common
         cinnamon-screensaver
         nemo-with-extensions
-        xapp
+        pkgs.xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
       services.gnome.evolution-data-server.enable = true;

@@ -27,7 +27,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   nemo-python = callPackage ./nemo-extensions/nemo-python { };
   nemo-with-extensions = callPackage ./nemo/wrapper.nix { };
   muffin = callPackage ./muffin { };
-  xapp = callPackage ./xapp { };
 }) // lib.optionalAttrs config.allowAliases {
   # Aliases need to be outside the scope or they will shadow the attributes from parent scope.
   bulky = lib.warn "cinnamon.bulky was moved to top-level. Please use pkgs.bulky directly." pkgs.bulky; # Added on 2024-07-14
@@ -43,7 +42,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   mint-y-icons = lib.warn "cinnamon.mint-y-icons was moved to top-level. Please use pkgs.mint-y-icons directly." pkgs.mint-y-icons; # Added on 2024-07-14
   pix = lib.warn "cinnamon.pix was moved to top-level. Please use pkgs.pix directly." pkgs.pix; # Added on 2024-07-14
   warpinator = lib.warn "cinnamon.warpinator was moved to top-level. Please use pkgs.warpinator directly." pkgs.warpinator; # Added on 2024-07-14
-  xapps = pkgs.cinnamon.xapp; # added 2022-07-27
+  xapp = lib.warn "cinnamon.xapp was moved to top-level. Please use pkgs.xapp directly." pkgs.xapp; # Added on 2024-07-14
+  xapps = lib.warn "cinnamon.xapps was moved to top-level and renamed to pkgs.xapp." pkgs.xapp; # Added 2022-07-27
   xreader = lib.warn "cinnamon.xreader was moved to top-level. Please use pkgs.xreader directly." pkgs.xreader; # Added on 2024-07-14
   xviewer = lib.warn "cinnamon.xviewer was moved to top-level. Please use pkgs.xviewer directly." pkgs.xviewer; # Added on 2024-07-14
 }

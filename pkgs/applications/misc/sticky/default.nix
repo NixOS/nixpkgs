@@ -6,7 +6,7 @@
 , ninja
 , python3
 , wrapGAppsHook3
-, cinnamon
+, xapp
 , glib
 , gspell
 , gtk3
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cinnamon.xapp
+    xapp
     glib
     gspell
     gtk3

@@ -22,6 +22,7 @@
 , wrapGAppsHook3
 , cinnamon
 , yelp-tools
+, xapp
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cinnamon.cinnamon-desktop
     exempi
     gdk-pixbuf
     glib
@@ -59,8 +61,7 @@ stdenv.mkDerivation rec {
     libpeas
     librsvg
     libxml2
-    cinnamon.cinnamon-desktop
-    cinnamon.xapp
+    xapp
   ];
 
   meta = with lib; {

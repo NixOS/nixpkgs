@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , substituteAll
-, cinnamon
+, xapp
 , circle-flags
 , gettext
 , gobject-introspection
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   buildInputs = [
-    cinnamon.xapp
+    xapp
     python3 # for patchShebangs
   ];
 

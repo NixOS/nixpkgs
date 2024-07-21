@@ -7,7 +7,7 @@
 , python3
 , gtk3
 , gdk-pixbuf
-, cinnamon
+, xapp
 , wrapGAppsHook3
 , gettext
 , polkit
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     gtk3
     gdk-pixbuf
     pythonEnv
-    cinnamon.xapp
+    xapp
   ];
 
   mesonFlags = [
