@@ -439,8 +439,10 @@ checksum = "a21f936df1771bf62b77f047b726c4625ff2e8aa607c01ec06e5a05bd8463401"
 dependencies = [
  "android-tzdata",
  "iana-time-zone",
+ "js-sys",
  "num-traits",
  "serde",
+ "wasm-bindgen",
  "windows-targets 0.52.6",
 ]
 
@@ -3498,7 +3500,7 @@ dependencies = [
 
 [[package]]
 name = "sync-lsp"
-version = "0.11.15"
+version = "0.11.16"
 dependencies = [
  "anyhow",
  "clap",
@@ -3637,7 +3639,7 @@ dependencies = [
 
 [[package]]
 name = "tests"
-version = "0.11.15"
+version = "0.11.16"
 dependencies = [
  "insta",
  "lsp-server",
@@ -3734,12 +3736,13 @@ dependencies = [
 
 [[package]]
 name = "tinymist"
-version = "0.11.15"
+version = "0.11.16"
 dependencies = [
  "anyhow",
  "async-trait",
  "base64 0.22.1",
  "cargo_metadata",
+ "chrono",
  "clap",
  "clap_builder",
  "clap_complete",
@@ -3766,7 +3769,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sync-lsp",
- "tinymist-assets 0.11.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tinymist-assets 0.11.16 (registry+https://github.com/rust-lang/crates.io-index)",
  "tinymist-query",
  "tinymist-render",
  "tokio",
@@ -3793,20 +3796,21 @@ dependencies = [
 
 [[package]]
 name = "tinymist-assets"
-version = "0.11.15"
+version = "0.11.16"
 
 [[package]]
 name = "tinymist-assets"
-version = "0.11.15"
+version = "0.11.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9a903925a80e7eb0726472180da9b8a7cc7d14bc97f639e32110aa597f77f6e4"
+checksum = "062cb57e1c109783370323fd2aa7c5160b3b1e169bf7f5fffb196e8157bedcd3"
 
 [[package]]
 name = "tinymist-query"
-version = "0.11.15"
+version = "0.11.16"
 dependencies = [
  "anyhow",
  "biblatex",
+ "chrono",
  "comemo 0.4.0",
  "dashmap",
  "ecow 0.2.2",
@@ -3848,7 +3852,7 @@ dependencies = [
 
 [[package]]
 name = "tinymist-render"
-version = "0.11.15"
+version = "0.11.16"
 dependencies = [
  "base64 0.22.1",
  "log",
@@ -4123,7 +4127,7 @@ checksum = "42ff0bf0c66b8238c6f3b578df37d0b7848e55df8577b3f74f92a69acceeb825"
 
 [[package]]
 name = "typlite"
-version = "0.11.15"
+version = "0.11.16"
 dependencies = [
  "insta",
  "typst-syntax 0.11.1",
@@ -4234,7 +4238,7 @@ dependencies = [
 
 [[package]]
 name = "typst-preview"
-version = "0.11.15"
+version = "0.11.16"
 dependencies = [
  "clap",
  "comemo 0.4.0",
@@ -4245,7 +4249,7 @@ dependencies = [
  "once_cell",
  "serde",
  "serde_json",
- "tinymist-assets 0.11.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tinymist-assets 0.11.16 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio",
  "tokio-tungstenite",
  "typst",
