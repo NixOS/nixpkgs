@@ -22,12 +22,22 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  unpackPhase = "cp $src ngrok";
+  unpackPhase = ''
+    runHook preUnpack
+    cp $src ngrok
+    runHook postUnpack
+  '';
 
-  buildPhase = "chmod a+x ngrok";
+  buildPhase = ''
+    runHook preBuild
+    chmod a+x ngrok
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
     install -D ngrok $out/bin/ngrok
+    runHook postInstall
   '';
 
   passthru.updateScript = ./update.sh;
