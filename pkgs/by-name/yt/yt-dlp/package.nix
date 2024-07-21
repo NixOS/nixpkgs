@@ -32,6 +32,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     brotli
     certifi
+    curl-cffi
     mutagen
     pycryptodomex
     requests
