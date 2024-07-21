@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitea
-, installShellFiles
-, scdoc
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  installShellFiles,
+  scdoc,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -56,7 +57,11 @@ buildGoModule rec {
     homepage = "https://soju.im";
     changelog = "https://codeberg.org/emersion/soju/releases/tag/${src.rev}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ azahi malte-v jtbx ];
+    maintainers = with maintainers; [
+      azahi
+      malte-v
+      jtbx
+    ];
     mainProgram = "sojuctl";
   };
 }
