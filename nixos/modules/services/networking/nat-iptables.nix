@@ -36,7 +36,7 @@ let
     ${cfg.extraStopCommands}
   '';
 
-  mkSetupNat = { iptables, dest, internalIPs, forwardPorts }: ''
+  mkSetupNat = { iptables, dest, internalIPs, forwardPorts, externalIp }: ''
     # We can't match on incoming interface in POSTROUTING, so
     # mark packets coming from the internal interfaces.
     ${concatMapStrings (iface: ''
@@ -60,7 +60,7 @@ let
     ${concatMapStrings (fwd: ''
       ${iptables} -w -t nat -A nixos-nat-pre \
         -i ${toString cfg.externalInterface} -p ${fwd.proto} \
-        --dport ${builtins.toString fwd.sourcePort} \
+        ${optionalString (externalIp != null) "-d ${externalIp}"} --dport ${builtins.toString fwd.sourcePort} \
         -j DNAT --to-destination ${fwd.destination}
 
       ${concatMapStrings (loopbackip:
@@ -102,6 +102,7 @@ let
       inherit dest;
       inherit (cfg) internalIPs;
       forwardPorts = filter (x: !(isIPv6 x.destination)) cfg.forwardPorts;
+      externalIp = cfg.externalIP;
     }}
 
     ${optionalString cfg.enableIPv6 (mkSetupNat {
@@ -109,6 +110,7 @@ let
       dest = destIPv6;
       internalIPs = cfg.internalIPv6s;
       forwardPorts = filter (x: isIPv6 x.destination) cfg.forwardPorts;
+      externalIp = cfg.externalIPv6;
     })}
 
     ${optionalString (cfg.dmzHost != null) ''
