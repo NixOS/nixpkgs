@@ -32,32 +32,12 @@ let
     }
   '';
 
-  staticSysusersCredentials = pkgs.runCommand "static-sysusers-credentials" { } ''
-    mkdir $out; cd $out
-    ${lib.concatLines (
-      (lib.mapAttrsToList
-        (username: opts: "echo -n '${opts.initialHashedPassword}' > 'passwd.hashed-password.${username}'")
-        (lib.filterAttrs (_username: opts: opts.initialHashedPassword != null) systemUsers))
-        ++
-      (lib.mapAttrsToList
-        (username: opts: "echo -n '${opts.initialPassword}' > 'passwd.plaintext-password.${username}'")
-        (lib.filterAttrs (_username: opts: opts.initialPassword != null) systemUsers))
-        ++
-      (lib.mapAttrsToList
-        (username: opts: "cat '${opts.hashedPasswordFile}' > 'passwd.hashed-password.${username}'")
-        (lib.filterAttrs (_username: opts: opts.hashedPasswordFile != null) systemUsers))
-      )
-    }
-  '';
-
-  staticSysusers = pkgs.runCommand "static-sysusers"
-    {
-      nativeBuildInputs = [ pkgs.systemd ];
-    } ''
-    mkdir $out
-    export CREDENTIALS_DIRECTORY=${staticSysusersCredentials}
-    systemd-sysusers --root $out ${sysusersConfig}/00-nixos.conf
-  '';
+  immutableEtc = config.system.etc.overlay.enable && !config.system.etc.overlay.mutable;
+  # The location of the password files when using an immutable /etc.
+  immutablePasswordFilesLocation = "/var/lib/nixos/etc";
+  passwordFilesLocation = if immutableEtc then immutablePasswordFilesLocation else "/etc";
+  # The filenames created by systemd-sysusers.
+  passwordFiles = [ "passwd" "group" "shadow" "gshadow" ];
 
 in
 
@@ -99,93 +79,100 @@ in
       })
       userCfg.users;
 
-    systemd = lib.mkMerge [
-      ({
+    systemd = {
 
-        # Create home directories, do not create /var/empty even if that's a user's
-        # home.
-        tmpfiles.settings.home-directories = lib.mapAttrs'
-          (username: opts: lib.nameValuePair opts.home {
-            d = {
-              mode = opts.homeMode;
-              user = username;
-              group = opts.group;
-            };
-          })
-          (lib.filterAttrs (_username: opts: opts.home != "/var/empty") systemUsers);
-
-        # Create uid/gid marker files for those without an explicit id
-        tmpfiles.settings.nixos-uid = lib.mapAttrs'
-          (username: opts: lib.nameValuePair "/var/lib/nixos/uid/${username}" {
-            f = {
-              user = username;
-            };
-          })
-          (lib.filterAttrs (_username: opts: opts.uid == null) systemUsers);
-
-        tmpfiles.settings.nixos-gid = lib.mapAttrs'
-          (groupname: opts: lib.nameValuePair "/var/lib/nixos/gid/${groupname}" {
-            f = {
-              group = groupname;
-            };
-          })
-          (lib.filterAttrs (_groupname: opts: opts.gid == null) userCfg.groups);
-      })
-
-      (lib.mkIf config.users.mutableUsers {
-        additionalUpstreamSystemUnits = [
-          "systemd-sysusers.service"
-        ];
-
-        services.systemd-sysusers = {
-          # Enable switch-to-configuration to restart the service.
-          unitConfig.ConditionNeedsUpdate = [ "" ];
-          requiredBy = [ "sysinit-reactivation.target" ];
-          before = [ "sysinit-reactivation.target" ];
-          restartTriggers = [ "${config.environment.etc."sysusers.d".source}" ];
-
-          serviceConfig = {
-            LoadCredential = lib.mapAttrsToList
-              (username: opts: "passwd.hashed-password.${username}:${opts.hashedPasswordFile}")
-              (lib.filterAttrs (_username: opts: opts.hashedPasswordFile != null) systemUsers);
-            SetCredential = (lib.mapAttrsToList
-              (username: opts: "passwd.hashed-password.${username}:${opts.initialHashedPassword}")
-              (lib.filterAttrs (_username: opts: opts.initialHashedPassword != null) systemUsers))
-            ++
-            (lib.mapAttrsToList
-              (username: opts: "passwd.plaintext-password.${username}:${opts.initialPassword}")
-              (lib.filterAttrs (_username: opts: opts.initialPassword != null) systemUsers))
-            ;
+      # Create home directories, do not create /var/empty even if that's a user's
+      # home.
+      tmpfiles.settings.home-directories = lib.mapAttrs'
+        (username: opts: lib.nameValuePair opts.home {
+          d = {
+            mode = opts.homeMode;
+            user = username;
+            group = opts.group;
           };
+        })
+        (lib.filterAttrs (_username: opts: opts.home != "/var/empty") systemUsers);
+
+      # Create uid/gid marker files for those without an explicit id
+      tmpfiles.settings.nixos-uid = lib.mapAttrs'
+        (username: opts: lib.nameValuePair "/var/lib/nixos/uid/${username}" {
+          f = {
+            user = username;
+          };
+        })
+        (lib.filterAttrs (_username: opts: opts.uid == null) systemUsers);
+
+      tmpfiles.settings.nixos-gid = lib.mapAttrs'
+        (groupname: opts: lib.nameValuePair "/var/lib/nixos/gid/${groupname}" {
+          f = {
+            group = groupname;
+          };
+        })
+        (lib.filterAttrs (_groupname: opts: opts.gid == null) userCfg.groups);
+
+      additionalUpstreamSystemUnits = [
+        "systemd-sysusers.service"
+      ];
+
+      services.systemd-sysusers = {
+        # Enable switch-to-configuration to restart the service.
+        unitConfig.ConditionNeedsUpdate = [ "" ];
+        requiredBy = [ "sysinit-reactivation.target" ];
+        before = [ "sysinit-reactivation.target" ];
+        restartTriggers = [ "${config.environment.etc."sysusers.d".source}" ];
+
+        serviceConfig = {
+          # When we have an immutable /etc we cannot write the files directly
+          # to /etc so we write it to a different directory and symlink them
+          # into /etc.
+          #
+          # We need to explicitly list the config file, otherwise
+          # systemd-sysusers cannot find it when we also pass another flag.
+          ExecStart = lib.mkIf immutableEtc
+            [ "" "${config.systemd.package}/bin/systemd-sysusers --root ${builtins.dirOf immutablePasswordFilesLocation} /etc/sysusers.d/00-nixos.conf" ];
+
+          # Make the source files writable before executing sysusers.
+          ExecStartPre = lib.mkIf (!userCfg.mutableUsers)
+            (lib.map
+              (file: "-${pkgs.util-linux}/bin/umount ${passwordFilesLocation}/${file}")
+              passwordFiles);
+          # Make the source files read-only after sysusers has finished.
+          ExecStartPost = lib.mkIf (!userCfg.mutableUsers)
+            (lib.map
+              (file: "${pkgs.util-linux}/bin/mount --bind -o ro ${passwordFilesLocation}/${file} ${passwordFilesLocation}/${file}")
+              passwordFiles);
+
+          LoadCredential = lib.mapAttrsToList
+            (username: opts: "passwd.hashed-password.${username}:${opts.hashedPasswordFile}")
+            (lib.filterAttrs (_username: opts: opts.hashedPasswordFile != null) systemUsers);
+          SetCredential = (lib.mapAttrsToList
+            (username: opts: "passwd.hashed-password.${username}:${opts.initialHashedPassword}")
+            (lib.filterAttrs (_username: opts: opts.initialHashedPassword != null) systemUsers))
+          ++
+          (lib.mapAttrsToList
+            (username: opts: "passwd.plaintext-password.${username}:${opts.initialPassword}")
+            (lib.filterAttrs (_username: opts: opts.initialPassword != null) systemUsers))
+          ;
         };
-      })
-    ];
+      };
+
+    };
 
     environment.etc = lib.mkMerge [
-      (lib.mkIf (!userCfg.mutableUsers) {
-        "passwd" = {
-          source = "${staticSysusers}/etc/passwd";
-          mode = "0644";
-        };
-        "group" = {
-          source = "${staticSysusers}/etc/group";
-          mode = "0644";
-        };
-        "shadow" = {
-          source = "${staticSysusers}/etc/shadow";
-          mode = "0000";
-        };
-        "gshadow" = {
-          source = "${staticSysusers}/etc/gshadow";
-          mode = "0000";
-        };
-      })
-
-      (lib.mkIf userCfg.mutableUsers {
+      ({
         "sysusers.d".source = sysusersConfig;
       })
-    ];
 
+      # Statically create the symlinks to immutablePasswordFilesLocation when
+      # using an immutable /etc because we will not be able to do it at
+      # runtime!
+      (lib.mkIf immutableEtc (lib.listToAttrs (lib.map
+        (file: lib.nameValuePair file {
+          source = "${immutablePasswordFilesLocation}/${file}";
+          mode = "direct-symlink";
+        })
+        passwordFiles)))
+    ];
   };
 
   meta.maintainers = with lib.maintainers; [ nikstur ];

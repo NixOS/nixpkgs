@@ -16,9 +16,12 @@ in
     systemd.sysusers.enable = true;
     users.mutableUsers = false;
 
-    # Override the empty root password set by the test instrumentation
-    users.users.root.hashedPasswordFile = lib.mkForce null;
-    users.users.root.initialHashedPassword = rootPassword;
+
+    # Read this password file at runtime from outside the Nix store.
+    environment.etc."rootpw.secret".text = rootPassword;
+    # Override the empty root password set by the test instrumentation.
+    users.users.root.hashedPasswordFile = lib.mkForce "/etc/rootpw.secret";
+
     users.users.sysuser = {
       isSystemUser = true;
       group = "wheel";
@@ -37,16 +40,6 @@ in
   };
 
   testScript = ''
-    with subtest("Users are not created with systemd-sysusers"):
-      machine.fail("systemctl status systemd-sysusers.service")
-      machine.fail("ls /etc/sysusers.d")
-
-    with subtest("Correct mode on the password files"):
-      assert machine.succeed("stat -c '%a' /etc/passwd") == "644\n"
-      assert machine.succeed("stat -c '%a' /etc/group") == "644\n"
-      assert machine.succeed("stat -c '%a' /etc/shadow") == "0\n"
-      assert machine.succeed("stat -c '%a' /etc/gshadow") == "0\n"
-
     with subtest("root user has correct password"):
       print(machine.succeed("getent passwd root"))
       assert "${rootPassword}" in machine.succeed("getent shadow root"), "root user password is not correct"
@@ -56,13 +49,15 @@ in
       assert machine.succeed("stat -c '%U' /sysuser") == "sysuser\n"
       assert "${sysuserPassword}" in machine.succeed("getent shadow sysuser"), "sysuser user password is not correct"
 
+    with subtest("Fail to add new user manually"):
+      machine.fail("useradd manual-sysuser")
+
 
     machine.succeed("/run/current-system/specialisation/new-generation/bin/switch-to-configuration switch")
 
 
     with subtest("new-sysuser user is created after switching to new generation"):
       print(machine.succeed("getent passwd new-sysuser"))
-      print(machine.succeed("getent shadow new-sysuser"))
       assert machine.succeed("stat -c '%U' /new-sysuser") == "new-sysuser\n"
   '';
 }

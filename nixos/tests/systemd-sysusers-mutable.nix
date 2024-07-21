@@ -63,6 +63,9 @@ in
       print(machine.succeed("getent passwd sysuser"))
       assert machine.succeed("stat -c '%U' /sysuser") == "sysuser\n"
 
+    with subtest("Manually add new user"):
+      machine.succeed("useradd manual-sysuser")
+
 
     machine.succeed("/run/current-system/specialisation/new-generation/bin/switch-to-configuration switch")
 
