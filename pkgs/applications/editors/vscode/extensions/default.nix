@@ -887,43 +887,7 @@ let
         };
       };
 
-      charliermarsh.ruff = buildVscodeMarketplaceExtension {
-        mktplcRef =
-          let
-            sources = {
-              "x86_64-linux" = {
-                arch = "linux-x64";
-                hash = "sha256-2c0tH/MlDOqeyffcV8ZCy4woogBTcf1GCuPPO8JXaWc=";
-              };
-              "x86_64-darwin" = {
-                arch = "darwin-x64";
-                hash = "sha256-euvGIlO7931N56R5BWKu3F9nSEoDgf+DXk7Hgl1qSUw=";
-              };
-              "aarch64-linux" = {
-                arch = "linux-arm64";
-                hash = "sha256-dGpIHChnfrQbxRZDuoAi4imgStyyPdxdvTQ3lknMYu0=";
-              };
-              "aarch64-darwin" = {
-                arch = "darwin-arm64";
-                hash = "sha256-tElX4C0I5AmpxSHMtqOsxSAUImD1tqArB5fnvhw4LFc=";
-              };
-            };
-          in
-          {
-            name = "ruff";
-            publisher = "charliermarsh";
-            version = "2024.4.0";
-          }
-          // sources.${stdenv.system} or (throw "Unsupported system ${stdenv.system}");
-        meta = {
-          license = lib.licenses.mit;
-          changelog = "https://marketplace.visualstudio.com/items/charliermarsh.ruff/changelog";
-          description = "Visual Studio Code extension with support for the Ruff linter";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff";
-          homepage = "https://github.com/astral-sh/ruff-vscode";
-          maintainers = [ lib.maintainers.azd325 ];
-        };
-      };
+      charliermarsh.ruff = callPackage ./charliermarsh.ruff { };
 
       cameron.vscode-pytest = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -3178,15 +3142,36 @@ let
         mktplcRef = {
           name = "black-formatter";
           publisher = "ms-python";
-          version = "2023.4.1";
-          hash = "sha256-IJaLke0WF1rlKTiuwJHAXDQB1SS39AoQhc4iyqqlTyY=";
+          version = "2024.2.0";
+          hash = "sha256-qIO+YqTXjwgznzUlnPSts1R2BM6iN8B9vESkelGPgZM=";
         };
-        meta = with lib; {
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ms-python.black-formatter/changelog";
           description = "Formatter extension for Visual Studio Code using black";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter";
           homepage = "https://github.com/microsoft/vscode-black-formatter";
-          license = licenses.mit;
-          maintainers = with maintainers; [ sikmir ];
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [
+            amadejkastelic
+            sikmir
+          ];
+        };
+      };
+
+      ms-python.flake8 = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "flake8";
+          publisher = "ms-python";
+          version = "2023.10.0";
+          hash = "sha256-4Vjw8yJPrxLg0hcoTw8AEBEcmQ9sEUNqFaHLxICks0E=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ms-python.flake8/changelog";
+          description = "Python linting support for VS Code using Flake8";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.flake8";
+          homepage = "https://github.com/microsoft/vscode-flake8";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.amadejkastelic ];
         };
       };
 
@@ -3203,6 +3188,23 @@ let
           homepage = "https://github.com/microsoft/vscode-isort";
           license = licenses.mit;
           maintainers = with maintainers; [ sikmir ];
+        };
+      };
+
+      ms-python.pylint = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "pylint";
+          publisher = "ms-python";
+          version = "2023.10.1";
+          hash = "sha256-1tI5u33c5CHFQxkJZ/OxW3ZA5qPr4RoCIf6dqIMPykQ=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ms-python.pylint/changelog";
+          description = "Python linting support for VS Code using Pylint";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.pylint";
+          homepage = "https://github.com/microsoft/vscode-pylint";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.amadejkastelic ];
         };
       };
 
