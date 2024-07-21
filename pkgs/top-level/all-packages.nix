@@ -35161,8 +35161,6 @@ with pkgs;
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-  xed-editor = callPackage ../applications/editors/xed-editor { };
-
   xenPackages = recurseIntoAttrs (callPackage ../applications/virtualization/xen/packages.nix {});
 
   xen = xenPackages.xen-vanilla;
@@ -35258,12 +35256,6 @@ with pkgs;
     nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
   };
   libfakeXinerama = callPackage ../tools/X11/xpra/libfakeXinerama.nix { };
-
-
-  xplayer = callPackage ../applications/video/xplayer {
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad;
-  };
-  libxplayer-plparser = callPackage ../applications/video/xplayer/plparser.nix { };
 
   xrectsel = callPackage ../tools/X11/xrectsel { };
 
