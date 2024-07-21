@@ -101,11 +101,11 @@ in
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-      services.dbus.packages = with pkgs.cinnamon; [
-        cinnamon-common
-        cinnamon-screensaver
-        nemo-with-extensions
-        pkgs.xapp
+      services.dbus.packages = with pkgs; [
+        cinnamon.cinnamon-common
+        cinnamon.cinnamon-screensaver
+        cinnamon.nemo-with-extensions
+        xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
       services.gnome.evolution-data-server.enable = true;
@@ -134,21 +134,21 @@ in
         cinnamon-screensaver = {};
       };
 
-      environment.systemPackages = with pkgs.cinnamon // pkgs; ([
+      environment.systemPackages = with pkgs; ([
         desktop-file-utils
 
         # common-files
-        cinnamon-common
-        cinnamon-session
-        cinnamon-desktop
-        cinnamon-menus
-        cinnamon-translations
+        cinnamon.cinnamon-common
+        cinnamon.cinnamon-session
+        cinnamon.cinnamon-desktop
+        cinnamon.cinnamon-menus
+        cinnamon.cinnamon-translations
 
         # utils needed by some scripts
         killall
 
         # session requirements
-        cinnamon-screensaver
+        cinnamon.cinnamon-screensaver
         # cinnamon-killer-daemon: provided by cinnamon-common
         networkmanagerapplet # session requirement - also nm-applet not needed
 
@@ -156,10 +156,10 @@ in
         polkit_gnome
 
         # packages
-        nemo-with-extensions
+        cinnamon.nemo-with-extensions
         gnome-online-accounts-gtk
-        cinnamon-control-center
-        cinnamon-settings-daemon
+        cinnamon.cinnamon-control-center
+        cinnamon.cinnamon-settings-daemon
         libgnomekbd
 
         # theme
@@ -233,7 +233,7 @@ in
       programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
       programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
-      environment.systemPackages = with pkgs // pkgs.cinnamon; utils.removePackagesByName [
+      environment.systemPackages = with pkgs; utils.removePackagesByName [
         # cinnamon team apps
         bulky
         warpinator
