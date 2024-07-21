@@ -12,6 +12,7 @@
 , lib
 , fetchurl
 , gcc10Stdenv
+, gcc13Stdenv
 }:
 
 # When adding a kernel:
@@ -160,6 +161,7 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
+      stdenv = if stdenv.hostPlatform.isLoongArch64 then gcc13Stdenv else stdenv;
     };
 
     linux_rt_6_1 = callPackage ../os-specific/linux/kernel/linux-rt-6.1.nix {
@@ -168,6 +170,7 @@ in {
         kernelPatches.request_key_helper
         kernelPatches.export-rt-sched-migrate
       ];
+      stdenv = if stdenv.hostPlatform.isLoongArch64 then gcc13Stdenv else stdenv;
     };
 
     linux_6_6 = callPackage ../os-specific/linux/kernel/mainline.nix {
@@ -214,6 +217,7 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
+      stdenv = if stdenv.hostPlatform.isLoongArch64 then gcc13Stdenv else stdenv;
     };
 
     linux_testing = let
@@ -225,6 +229,7 @@ in {
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
         ];
+        stdenv = if stdenv.hostPlatform.isLoongArch64 then gcc13Stdenv else stdenv;
       };
       latest = packageAliases.linux_latest.kernel;
     in if latest.kernelAtLeast testing.baseVersion
