@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   pythonOlder,
+  pythonAtLeast,
   fetchFromGitHub,
   substituteAll,
   gdb,
@@ -91,6 +92,9 @@ buildPythonPackage rec {
           .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
         }
       )'';
+
+  # Disable tests for unmaintained versions of python
+  doCheck = pythonAtLeast "3.11";
 
   nativeCheckInputs = [
     ## Used to run the tests:

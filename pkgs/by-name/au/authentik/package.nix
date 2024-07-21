@@ -13,13 +13,13 @@
 , makeWrapper }:
 
 let
-  version = "2024.6.0";
+  version = "2024.6.1";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-eYxabUUQVeURrVAaF/Ecohzw9LJj0LZyCSM43gNvajY=";
+    hash = "sha256-SMupiJGJbkBn33JP4WLF3IsBdt3SN3JvZg/EYlz443g=";
   };
 
   meta = with lib; {
@@ -28,7 +28,7 @@ let
     homepage = "https://goauthentik.io/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jvanbruegge ];
+    maintainers = with maintainers; [ jvanbruegge risson ];
   };
 
   website = buildNpmPackage {
@@ -86,7 +86,7 @@ let
       ln -s ${src}/website $out/
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-LAy2o/gs9lwbZT4NqD2GSsx7PCipnkthwnX9ICVpAWU=";
+    npmDepsHash = "sha256-v9oD8qV5UDJeZn4GZDEPlVM/jGVSeTqdIUDJl6tYXZw=";
 
     postPatch = ''
       cd web
