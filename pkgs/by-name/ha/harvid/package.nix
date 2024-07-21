@@ -28,17 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ];
 
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "libdir=\"/lib\""
-  ];
-
-  postInstall = ''
-    mkdir -p $out/bin
-    mv $out/usr/local/bin/* $out/bin
-    mv $out/usr/local/share $out/
-    rm -r $out/usr
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   passthru.updateScript = nix-update-script { };
 
