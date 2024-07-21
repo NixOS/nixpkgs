@@ -1,4 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin, nixosTests }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+  nixosTests,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "static-web-server";
@@ -13,9 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ymI5O6j6NEcgIbMLEYgyUZBBkwxDWDWaVn4hqJScGxA=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   # Lots of tests fail due to unexpected argument '--test-threads' because CLI options of
   # test runner is being parsed
@@ -33,13 +38,18 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 -t $out/lib/systemd/system/ systemd/static-web-server.{service,socket}
   '';
 
-  passthru.tests = { inherit (nixosTests) static-web-server; };
+  passthru.tests = {
+    inherit (nixosTests) static-web-server;
+  };
 
   meta = with lib; {
     description = "Asynchronous web server for static files-serving";
     homepage = "https://static-web-server.net/";
     changelog = "https://github.com/static-web-server/static-web-server/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "static-web-server";
   };
