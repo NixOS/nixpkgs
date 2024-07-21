@@ -1,16 +1,6 @@
 { config, pkgs, lib }:
 
 lib.makeScope pkgs.newScope (self: with self; {
-  # Extensions added here will be shipped by default
-  # We keep this in sync with a default Mint installation
-  # Right now (only) nemo-share is missing
-  nemoExtensions = [
-    pkgs.folder-color-switcher
-    nemo-emblems
-    nemo-fileroller
-    nemo-python
-  ];
-
   cinnamon-common = callPackage ./cinnamon-common { };
   cinnamon-control-center = callPackage ./cinnamon-control-center { };
   cinnamon-desktop = callPackage ./cinnamon-desktop { };
@@ -40,6 +30,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   mint-themes = lib.warn "cinnamon.mint-themes was moved to top-level. Please use pkgs.mint-themes directly." pkgs.mint-themes; # Added on 2024-07-14
   mint-x-icons = lib.warn "cinnamon.mint-x-icons was moved to top-level. Please use pkgs.mint-x-icons directly." pkgs.mint-x-icons; # Added on 2024-07-14
   mint-y-icons = lib.warn "cinnamon.mint-y-icons was moved to top-level. Please use pkgs.mint-y-icons directly." pkgs.mint-y-icons; # Added on 2024-07-14
+  nemoExtensions = throw "cinnamon.nemoExtensions is no longer exposed. To modify list of selected nemo extensions please override cinnamon.nemo-with-extensions."; # Added on 2024-07-14
   pix = lib.warn "cinnamon.pix was moved to top-level. Please use pkgs.pix directly." pkgs.pix; # Added on 2024-07-14
   warpinator = lib.warn "cinnamon.warpinator was moved to top-level. Please use pkgs.warpinator directly." pkgs.warpinator; # Added on 2024-07-14
   xapp = lib.warn "cinnamon.xapp was moved to top-level. Please use pkgs.xapp directly." pkgs.xapp; # Added on 2024-07-14
