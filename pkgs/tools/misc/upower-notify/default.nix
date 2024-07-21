@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 # To use upower-notify, the maintainer suggests adding something like this to your configuration.nix:
 #
@@ -8,22 +12,14 @@
 # '';
 buildGoModule {
   pname = "upower-notify";
-  version = "0-unstable-2019-01-06";
+  version = "0-unstable-2024-07-20";
 
   src = fetchFromGitHub {
     owner = "omeid";
     repo = "upower-notify";
-    rev = "7013b0d4d2687e03554b1287e566dc8979896ea5";
-    sha256 = "sha256-8kGMeWIyM6ML1ffQ6L+SNzuBb7e5Y5I5QKMkyEjSVEA=";
+    rev = "c05ffbba9b8d475573be0908d75ac7c64d74be2d";
+    sha256 = "sha256-y+Cy3jkIfWiqF2HFopafdNSyGVA2ws4250Lg02rVxmo=";
   };
-
-  patches = [
-    # Migrate to Go module
-    (fetchpatch {
-      url = "https://github.com/omeid/upower-notify/commit/dff8ad7e33e5b0cf148e73c6ea0c358da72006ed.patch";
-      hash = "sha256-zPSryo6f+6QGgjOkC3W1fPIbZ3FD6S/rAuBJXHWqjZg=";
-    })
-  ];
 
   vendorHash = "sha256-58zK6t3rb+19ilaQaNgsMVFQBYKPIV40ww8klrGbpnw=";
   proxyVendor = true;
