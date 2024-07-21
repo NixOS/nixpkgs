@@ -19,10 +19,10 @@ let
     builtins.all (
       license:
       license.free
-      || license.redistributable
       || builtins.elem license.shortName [
         "CUDA EULA"
         "cuDNN EULA"
+        "cuTENSOR EULA"
         "NVidia OptiX EULA"
       ]
     ) (ensureList p.meta.license);
