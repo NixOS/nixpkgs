@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, libGLU, libXmu, libXi, libXext
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, libGLU
+, libXmu
+, libXi
+, libXext
 , OpenGL
-, enableEGL ? false
+, enableEGL ? (!stdenv.isDarwin)
 , testers
 }:
 
