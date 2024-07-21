@@ -23,7 +23,7 @@ let
 
   meta = with lib; {
     homepage = "https://www.zaproxy.org/";
-    description = "An open-source web application security scanner";
+    description = "Open-source web application security scanner";
     maintainers = with maintainers; [ mog rafael ];
     platforms = platforms.unix;
     license = licenses.asl20;
