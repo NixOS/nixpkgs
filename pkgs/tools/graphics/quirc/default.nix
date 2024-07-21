@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     dylib=$out/lib/libquirc.${finalAttrs.version}.dylib
     ${stdenv.cc.targetPrefix}install_name_tool -id "$dylib" "$dylib"
   '' else ''
-    ln -s $out/lib/libquirc.so.* $out/lib/libquirc.so
+    test -e "$out/lib/libquirc.so" || ln -s $out/lib/libquirc.so.* $out/lib/libquirc.so
   '');
 
   meta = {
