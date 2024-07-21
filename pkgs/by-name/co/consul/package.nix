@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "consul";
-  version = "1.18.2";
+  version = "1.18.3";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
   # vendored. See
@@ -21,8 +21,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9feeWsCAZKip+AYUJTCcqFOTfxsUFMzTRqHjo/Pptho=";
+    rev = "refs/tags/ent-changelog-${version}";
+    hash = "sha256-WDdo7p4wWfXJat1AV5pTZ4/HaEXsxBqjJG7ESA2C76s=";
   };
 
   # This corresponds to paths with package main - normally unneeded but consul
@@ -32,7 +32,12 @@ buildGoModule rec {
     "connect/certgen"
   ];
 
-  vendorHash = "sha256-bBc3qgPUOmR8c/sFyiskePKLKjHTQcWVTLY6esFIRTc=";
+  vendorHash = "sha256-E0nmqBfM8qnUqqZYcSoPcrlXsOXVAir8W+N8F/PpWy0=";
+
+  postPatch = ''
+    # override dev version from release tag
+    echo ${version} > version/VERSION
+  '';
 
   doCheck = false;
 
@@ -47,7 +52,12 @@ buildGoModule rec {
       inherit (nixosTests) consul;
     };
 
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-vr"
+        "ent-changelog-(1.18.*)"
+      ];
+    };
   };
 
   meta = with lib; {
