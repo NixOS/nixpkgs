@@ -33807,10 +33807,6 @@ with pkgs;
 
   sish = callPackage ../tools/networking/sish { };
 
-  sky = libsForQt5.callPackage ../applications/networking/instant-messengers/sky {
-    libjpeg_turbo = libjpeg8;
-  };
-
   slingshot = callPackage ../tools/misc/slingshot { };
 
   slop = callPackage ../tools/misc/slop { };
