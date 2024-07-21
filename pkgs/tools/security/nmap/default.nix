@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, libpcap, pkg-config, openssl, lua5_4
-, pcre, libssh2
+, pcre2, libssh2
 , withLua ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "nmap";
-  version = "7.94";
+  version = "7.95";
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    sha256 = "sha256-1xvhie7EPX4Jm6yFcVCdMWxFd8p5SRgyrD4SF7yPksw=";
+    sha256 = "sha256-4Uq1MOR7Wv2I8ciiusf4nNj+a0eOItJVxbm923ocV3g=";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcre libssh2 libpcap openssl ];
+  buildInputs = [ pcre2 libssh2 libpcap openssl ];
 
   enableParallelBuilding = true;
 
