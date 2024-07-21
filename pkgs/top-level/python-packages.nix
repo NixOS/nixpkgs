@@ -4843,6 +4843,8 @@ self: super: with self; {
 
   geographiclib = callPackage ../development/python-modules/geographiclib { };
 
+  geohash = callPackage ../development/python-modules/geohash { };
+
   geoip2 = callPackage ../development/python-modules/geoip2 { };
 
   geoip = callPackage ../development/python-modules/geoip {
