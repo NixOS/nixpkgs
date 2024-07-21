@@ -22136,6 +22136,12 @@
     githubId = 2242427;
     name = "Yoann Ono";
   };
+  yael = {
+    email = "contact@yael.moe";
+    github = "yael333";
+    githubId = 42537566;
+    name = "Yael";
+  };
   yah = {
     email = "yah@singularpoint.cc";
     github = "wangxiaoerYah";
