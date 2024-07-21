@@ -30,6 +30,7 @@ buildPythonPackage rec {
     construct
     lxml
     pycryptodomex
+    setuptools
   ];
 
   propagatedNativeBuildInputs = [ argon2-cffi ];
