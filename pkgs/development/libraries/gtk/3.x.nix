@@ -50,6 +50,12 @@
 , broadwaySupport ? true
 , wayland-scanner
 , testers
+
+# for passthru.tests
+, clutter
+, gtk-sharp-3_0
+, gtkmm3
+, gtkspell3
 }:
 
 let
@@ -238,7 +244,15 @@ stdenv.mkDerivation (finalAttrs: {
       attrPath = "gtk3";
       freeze = true;
     };
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      inherit
+        clutter
+        gtk-sharp-3_0
+        gtkmm3
+        gtkspell3
+      ;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
