@@ -85,6 +85,7 @@ in stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = jre.meta.platforms;
     maintainers = with maintainers; [ ngerstle talyz nickcao ];
+    mainProgram = "kc.sh";
   };
 
 }
