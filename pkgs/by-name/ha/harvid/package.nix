@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  ffmpeg_4,
+  ffmpeg,
   libjpeg,
   libpng,
   nix-update-script,
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    ffmpeg_4
+    ffmpeg
     libjpeg
     libpng
   ];
