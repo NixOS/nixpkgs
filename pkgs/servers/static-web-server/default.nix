@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   stdenv,
   darwin,
   nixosTests,
@@ -20,18 +21,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ymI5O6j6NEcgIbMLEYgyUZBBkwxDWDWaVn4hqJScGxA=";
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/static-web-server/static-web-server/pull/466.patch";
+      hash = "sha256-VYSoi6swG4nEFmGKvdEaJ05mJlxaXYsjs8cQai40P4g=";
+    })
+  ];
+
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  # Lots of tests fail due to unexpected argument '--test-threads' because CLI options of
-  # test runner is being parsed
-  doCheck = false;
-
-  checkFlags = [
-    # TODO: investigate why these tests fail
-    "--skip=tests::handle_byte_ranges_if_range_too_old"
-    "--skip=tests::handle_not_modified"
-    "--skip=handle_precondition"
-  ];
+  # Some tests rely on timestamps newer than 18 Nov 1974 00:00:00
+  preCheck = ''
+    find docker/public -exec touch -m {} \;
+  '';
 
   # Need to copy in the systemd units for systemd.packages to discover them
   postInstall = ''
