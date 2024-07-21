@@ -12453,6 +12453,8 @@ self: super: with self; {
 
   pytest-param-files = callPackage ../development/python-modules/pytest-param-files { };
 
+  pytest-parametrization = callPackage ../development/python-modules/pytest-parametrization { };
+
   pytest-parallel = callPackage ../development/python-modules/pytest-parallel { };
 
   pytest-playwright = callPackage ../development/python-modules/pytest-playwright {};
