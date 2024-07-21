@@ -66,6 +66,25 @@ The following is an example expression using `buildGoModule`:
 
 The function `buildGoPackage` builds legacy Go programs, not supporting Go modules.
 
+::: {.warning}
+`buildGoPackage` is deprecated and will be removed for the 25.05 release.
+:::
+
+### Migrating from `buildGoPackage` to `buildGoModule` {#buildGoPackage-migration}
+
+Go modules, released 6y ago, are now widely adopted in the ecosystem.
+Most upstream projects are using Go modules, and the tooling previously used for dependency management in Go is mostly deprecated, archived or at least unmaintained at this point.
+
+In case a project doesn't have external dependencies or dependencies are vendored in a way understood by `go mod init`, migration can be done with a few changes in the package.
+
+- Switch the builder from `buildGoPackage` to `buildGoModule`
+- Remove `goPackagePath` and other attributes specific to `buildGoPackage`
+- Set `vendorHash = null;`
+- Run `go mod init <module name>` in `postPatch`
+
+In case the package has external dependencies that aren't vendored or the build setup is more complex the upstream source might need to be patched.
+Examples for the migration can be found in the [issue tracking migration withing nixpkgs](https://github.com/NixOS/nixpkgs/issues/318069).
+
 ### Example for `buildGoPackage` {#example-for-buildgopackage}
 
 In the following is an example expression using `buildGoPackage`, the following arguments are of special significance to the function:
