@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     homepage = "https://ngrok.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = lib.platforms.unix;
     maintainers = with maintainers; [ bobvanderlinden brodes ];
     mainProgram = "ngrok";
   };
