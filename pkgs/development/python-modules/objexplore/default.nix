@@ -1,13 +1,13 @@
 {
-  blessed,
-  buildPythonPackage,
-  fetchFromGitHub,
   lib,
-  pandas,
-  pytestCheckHook,
+  buildPythonPackage,
   pythonOlder,
-  rich,
+  fetchFromGitHub,
   setuptools,
+  blessed,
+  rich,
+  pytestCheckHook,
+  pandas
 }:
 
 buildPythonPackage rec {
@@ -20,14 +20,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kylepollina";
     repo = "objexplore";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-FFQIiip7pk9fQhjGLxMSMakwoXbzaUjXcbQgDX52dnI=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail '==' '>='
-  '';
+  pythonRelaxDeps = [ "blessed" "rich" ];
 
   build-system = [ setuptools ];
 
@@ -53,10 +50,10 @@ buildPythonPackage rec {
     "objexplore.utils"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal UI to interactively inspect and explore Python objects";
     homepage = "https://github.com/kylepollina/objexplore";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds sigmanificient ];
   };
 }
