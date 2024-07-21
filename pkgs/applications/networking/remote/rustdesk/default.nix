@@ -70,6 +70,13 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  prePatch = ''
+    # Patch 404 repos
+    substituteInPlace Cargo.lock --replace-fail "fufesou" "rustdesk-org";
+    substituteInPlace Cargo.toml --replace-fail "fufesou" "rustdesk-org";
+    substituteInPlace libs/enigo/Cargo.toml --replace-fail "fufesou" "rustdesk-org";
+  '';
+
   desktopItems = [
     (makeDesktopItem {
       name = "rustdesk";

@@ -1962,7 +1962,7 @@ dependencies = [
 [[package]]
 name = "evdev"
 version = "0.11.5"
-source = "git+https://github.com/fufesou/evdev#cec616e37790293d2cd2aa54a96601ed6b1b35a9"
+source = "git+https://github.com/rustdesk-org/evdev#cec616e37790293d2cd2aa54a96601ed6b1b35a9"
 dependencies = [
  "bitvec",
  "libc",
@@ -3724,7 +3724,7 @@ dependencies = [
 [[package]]
 name = "mouce"
 version = "0.2.1"
-source = "git+https://github.com/fufesou/mouce.git#ed83800d532b95d70e39915314f6052aa433e9b9"
+source = "git+https://github.com/rustdesk-org/mouce.git#ed83800d532b95d70e39915314f6052aa433e9b9"
 dependencies = [
  "glob",
 ]
@@ -4192,7 +4192,7 @@ checksum = "b15813163c1d831bf4a13c3610c05c0d03b39feb07f7e09fa234dac9b15aaf39"
 [[package]]
 name = "pam"
 version = "0.7.0"
-source = "git+https://github.com/fufesou/pam#10da2cbbabe32cbc9de22a66abe44738e7ec0ea0"
+source = "git+https://github.com/rustdesk-org/pam#10da2cbbabe32cbc9de22a66abe44738e7ec0ea0"
 dependencies = [
  "libc",
  "pam-macros",
@@ -4881,7 +4881,7 @@ dependencies = [
 [[package]]
 name = "rdev"
 version = "0.5.0-2"
-source = "git+https://github.com/fufesou/rdev#2e8221d653f4995c831ad52966e79a514516b1fa"
+source = "git+https://github.com/rustdesk-org/rdev#2e8221d653f4995c831ad52966e79a514516b1fa"
 dependencies = [
  "cocoa",
  "core-foundation",
@@ -6040,7 +6040,7 @@ checksum = "222a222a5bfe1bba4a77b45ec488a741b3cb8872e5e499451fd7d0129c9c7c3d"
 [[package]]
 name = "tfc"
 version = "0.6.1"
-source = "git+https://github.com/fufesou/The-Fat-Controller#9dd86151525fd010dc93f6bc9b6aedd1a75cc342"
+source = "git+https://github.com/rustdesk-org/The-Fat-Controller#9dd86151525fd010dc93f6bc9b6aedd1a75cc342"
 dependencies = [
  "anyhow",
  "core-graphics",
