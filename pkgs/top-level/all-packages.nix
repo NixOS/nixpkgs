@@ -266,6 +266,8 @@ with pkgs;
 
   altserver-linux = callPackage ../tools/misc/altserver-linux { };
 
+  archipelago-minecraft = callPackage ../by-name/ar/archipelago/package.nix { extraPackages = [jdk17]; };
+
   asciicam = callPackage ../applications/video/asciicam { };
 
   asitop = pkgs.python3Packages.callPackage ../os-specific/darwin/asitop { };
@@ -4119,8 +4121,6 @@ with pkgs;
     libssl = openssl;
   };
 
-  b3sum = callPackage ../tools/security/b3sum { };
-
   backblaze-b2 = callPackage ../development/tools/backblaze-b2 { };
 
   bandwhich = callPackage ../tools/networking/bandwhich {
@@ -7830,8 +7830,6 @@ with pkgs;
     icu = icu63;
   };
 
-  fluent-bit = darwin.apple_sdk_11_0.callPackage ../tools/misc/fluent-bit { };
-
   fluent-reader = callPackage ../applications/networking/feedreaders/fluent-reader { };
 
   flux = callPackage ../development/compilers/flux { };
@@ -8695,8 +8693,6 @@ with pkgs;
   haguichi = callPackage ../tools/networking/haguichi { };
 
   hans = callPackage ../tools/networking/hans { };
-
-  h2 = callPackage ../servers/h2 { };
 
   haproxy = callPackage ../tools/networking/haproxy { };
 
@@ -12443,8 +12439,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  rustdesk = callPackage ../applications/networking/remote/rustdesk { };
-
   rustfilt = callPackage ../development/tools/rust/rustfilt { };
 
   rustscan = callPackage ../tools/security/rustscan {
@@ -13400,8 +13394,6 @@ with pkgs;
   time-decode = callPackage ../tools/misc/time-decode { };
 
   timer = callPackage ../tools/misc/timer { };
-
-  tio = callPackage ../tools/misc/tio { };
 
   tiv = callPackage ../applications/misc/tiv { };
 
@@ -16969,10 +16961,10 @@ with pkgs;
   groovy = callPackage ../development/interpreters/groovy { };
 
   inherit (callPackages ../applications/networking/cluster/hadoop {})
+    hadoop_3_4
     hadoop_3_3
-    hadoop_3_2
     hadoop2;
-  hadoop3 = hadoop_3_3;
+  hadoop3 = hadoop_3_4;
   hadoop = hadoop3;
 
   hashlink = callPackage ../development/interpreters/hashlink { };
@@ -17383,8 +17375,6 @@ with pkgs;
   spidermonkey_115 = callPackage ../development/interpreters/spidermonkey/115.nix {
     inherit (darwin) libobjc;
   };
-
-  ssm-session-manager-plugin = callPackage ../applications/networking/cluster/ssm-session-manager-plugin { };
 
   starlark-rust = callPackage ../development/interpreters/starlark-rust { };
 
@@ -25421,8 +25411,8 @@ with pkgs;
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };
 
-  inherit (callPackage ../servers/hbase {}) hbase_2_4 hbase_2_5 hbase_3_0;
-  hbase2 = hbase_2_5;
+  inherit (callPackage ../servers/hbase {}) hbase_2_4 hbase_2_5 hbase_2_6 hbase_3_0;
+  hbase2 = hbase_2_6;
   hbase3 = hbase_3_0;
   hbase = hbase2; # when updating, point to the latest stable release
 
@@ -27204,8 +27194,6 @@ with pkgs;
   air = callPackage ../development/tools/air { };
 
   delve = callPackage ../development/tools/delve { };
-
-  dep2nix = callPackage ../development/tools/dep2nix { };
 
   easyjson = callPackage ../development/tools/easyjson { };
 
@@ -33810,10 +33798,6 @@ with pkgs;
 
   sish = callPackage ../tools/networking/sish { };
 
-  sky = libsForQt5.callPackage ../applications/networking/instant-messengers/sky {
-    libjpeg_turbo = libjpeg8;
-  };
-
   slingshot = callPackage ../tools/misc/slingshot { };
 
   slop = callPackage ../tools/misc/slop { };
@@ -36818,8 +36802,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  theforceengine = callPackage ../games/theforceengine { };
-
   tbe = libsForQt5.callPackage ../games/the-butterfly-effect { };
 
   tbls = callPackage ../tools/misc/tbls { };
@@ -38154,11 +38136,6 @@ with pkgs;
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
   csxcad = callPackage ../applications/science/electronics/csxcad { };
-
-  dataexplorer = callPackage ../applications/science/electronics/dataexplorer {
-    # executable fails at startup for jdk > 17
-    jdk = jdk17;
-  };
 
   degate = libsForQt5.callPackage ../applications/science/electronics/degate { };
 

@@ -549,6 +549,53 @@
     patches = [ ./patches/coq_nvim/emulate-venv.patch ];
   };
 
+  cord-nvim =
+    let
+      version = "2024-07-19";
+      src = fetchFromGitHub {
+        owner = "vyfor";
+        repo = "cord.nvim";
+        rev = "cd97c25320fb0a672b11bcd95d8332bb3088ecce";
+        hash = "sha256-66NtKteM1mvHP5wAU4e9JbsF+bq91lmCDcTh/6RPhoo=";
+      };
+      extension = if stdenv.isDarwin then "dylib" else "so";
+      rustPackage = rustPlatform.buildRustPackage {
+        pname = "cord.nvim-rust";
+        inherit version src;
+
+        cargoSha256 = "sha256-6FYf4pHEPxvhKHHPmkjQ40zPxaiypnpDxF8kNH+h+tg=";
+
+        installPhase = let
+          cargoTarget = stdenv.hostPlatform.rust.cargoShortTarget;
+        in ''
+          install -D target/${cargoTarget}/release/libcord.${extension} $out/lib/cord.${extension}
+        '';
+      };
+    in
+    buildVimPlugin {
+      pname = "cord.nvim";
+      inherit version src;
+
+      nativeBuildInputs = [
+        rustPackage
+      ];
+
+      buildPhase = ''
+        install -D ${rustPackage}/lib/cord.${extension} cord.${extension}
+      '';
+
+      installPhase = ''
+        install -D cord $out/lua/cord.${extension}
+      '';
+
+      doInstallCheck = true;
+      nvimRequireCheck = "cord";
+
+      meta = {
+        homepage = "https://github.com/vyfor/cord.nvim";
+      };
+    };
+
   cornelis = super.cornelis.overrideAttrs {
     dependencies = with self; [ vim-textobj-user ];
     opt = with self; [ vim-which-key ];
@@ -1085,6 +1132,10 @@
 
   neotest-playwright = super.neotest-playwright.overrideAttrs {
     dependencies = [ self.telescope-nvim ];
+  };
+
+  neotest-golang = super.neotest-golang.overrideAttrs {
+    dependencies = [ self.nvim-dap-go ];
   };
 
   neo-tree-nvim = super.neo-tree-nvim.overrideAttrs {

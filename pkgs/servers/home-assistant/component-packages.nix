@@ -4456,10 +4456,12 @@
     ];
     "telegram" = ps: with ps; [
       python-telegram-bot
-    ]; # missing inputs: python-telegram-bot.optional-dependencies.socks
+    ]
+    ++ python-telegram-bot.optional-dependencies.socks;
     "telegram_bot" = ps: with ps; [
       python-telegram-bot
-    ]; # missing inputs: python-telegram-bot.optional-dependencies.socks
+    ]
+    ++ python-telegram-bot.optional-dependencies.socks;
     "tellduslive" = ps: with ps; [
       tellduslive
     ];
@@ -4883,8 +4885,9 @@
       hassil
       home-assistant-intents
       mutagen
+      voip-utils
       webrtc-noise-gain
-    ]; # missing inputs: voip-utils
+    ];
     "volkszaehler" = ps: with ps; [
       volkszaehler
     ];
@@ -5937,6 +5940,8 @@
     "tcp"
     "technove"
     "tedee"
+    "telegram"
+    "telegram_bot"
     "tellduslive"
     "temper"
     "template"
@@ -6014,6 +6019,7 @@
     "vlc_telnet"
     "vodafone_station"
     "voicerss"
+    "voip"
     "volumio"
     "volvooncall"
     "vulcan"

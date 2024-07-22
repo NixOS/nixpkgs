@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "wakatime-cli";
-  version = "1.93.0";
+  version = "1.95.0";
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "wakatime-cli";
     rev = "v${version}";
-    hash = "sha256-S4AvAGpaxp5lKi9RnLLaN8qLURYsLWIzhtXKRgQPuGc=";
+    hash = "sha256-dTT4+lvxB6WjDWdYznYBOs/cIa7mJudyN4P4TF67hRY=";
   };
 
   vendorHash = "sha256-+9zdEIaKQlLcBwFaY5Fe5mpHWQDqfV+j1TPmDkdRjyk=";
@@ -24,11 +24,6 @@ buildGoModule rec {
     "-w"
     "-X github.com/wakatime/wakatime-cli/pkg/version.Version=${version}"
   ];
-
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail "go 1.22.4" "go 1.22.3"
-  '';
 
   checkFlags =
     let

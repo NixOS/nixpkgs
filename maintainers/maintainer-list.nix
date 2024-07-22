@@ -6634,6 +6634,12 @@
     githubId = 5741401;
     name = "Tim Windelschmidt";
   };
+  fiq = {
+    email = "raf+git@dreamthought.com";
+    github = "fiq";
+    githubId = 236293;
+    name = "Raf Gemmail";
+  };
   firefly-cpp = {
     email = "iztok@iztok-jr-fister.eu";
     github = "firefly-cpp";
@@ -13174,6 +13180,13 @@
     name = "Michael Donovan";
     github = "michaeldonovan";
     githubId = 14077230;
+  };
+  michaelglass = {
+    email = "nixpkgs@mike.is";
+    name = "Michael Glass";
+    github = "michaelglass";
+    githubId = 60136;
+    keys = [ { fingerprint = "46AF 8625 D92A 219B 8E6D  B7F8 9CDD 3769 1649 1385"; } ];
   };
   michaelgrahamevans = {
     email = "michaelgrahamevans@gmail.com";
@@ -22194,6 +22207,12 @@
     github = "Eternity-Yarr";
     githubId = 3705333;
     name = "Dmitry V.";
+  };
+  yash-garg = {
+    email = "me@yashgarg.dev";
+    github = "yash-garg";
+    githubId = 33605526;
+    name = "Yash Garg";
   };
   yavko = {
     name = "Yavor Kolev";
