@@ -2521,6 +2521,10 @@ self: super: with self; {
 
   contourpy = callPackage ../development/python-modules/contourpy { };
 
+  contourpy-numpy_2 = contourpy.override {
+    numpy = numpy_2;
+  };
+
   controku = callPackage ../development/python-modules/controku { };
 
   convertdate = callPackage ../development/python-modules/convertdate { };
