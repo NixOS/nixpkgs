@@ -3,6 +3,8 @@
 
 set -eu -o pipefail
 
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
 get_download_info() {
     xh --json \
         https://update.equinox.io/check \
@@ -29,4 +31,4 @@ get_download_info() {
     get_download_info darwin amd64
     get_download_info darwin arm64
 ) | jq --slurp 'map ({ (.sys): . }) | add' \
-    >pkgs/by-name/ng/ngrok/versions.json
+    >versions.json
