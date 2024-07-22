@@ -14,6 +14,7 @@
   msgpack,
   nixosTests,
   pymongo,
+  redis,
   pytest-celery,
   pytest-click,
   pytest-subtests,
@@ -59,6 +60,7 @@ buildPythonPackage rec {
     mongodb = [ pymongo ];
     msgpack = [ msgpack ];
     yaml = [ pyyaml ];
+    redis = [ redis ];
   };
 
   nativeCheckInputs = [
