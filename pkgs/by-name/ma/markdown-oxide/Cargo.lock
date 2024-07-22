@@ -434,6 +434,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "fuzzydate"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7265f35cc1f40c655aad829323a1daef5f21fd38904f6ed9bd5ec3df3cbd851c"
+dependencies = [
+ "chrono",
+ "lazy_static",
+ "thiserror",
+]
+
+[[package]]
 name = "generic-array"
 version = "0.14.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -625,11 +636,12 @@ dependencies = [
 
 [[package]]
 name = "markdown-oxide"
-version = "0.1.0"
+version = "0.22.0"
 dependencies = [
  "anyhow",
  "chrono",
  "config",
+ "fuzzydate",
  "indexmap",
  "itertools",
  "nanoid",
