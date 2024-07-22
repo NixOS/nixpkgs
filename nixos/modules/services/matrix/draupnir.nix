@@ -147,10 +147,6 @@ in
         assertion = !cfg.pantalaimon.enable -> cfg.pantalaimon.passwordFile == null;
         message = "Unset services.draupnir.pantalaimon.passwordFile, as it has no effect when Pantalaimon is disabled.";
       }
-      {
-        assertion = cfg.pantalaimon.enable -> cfg.pantalaimon.
-      }
-
       # Removed options for those migrating from the Mjolnir module - mkRemovedOption module does *not* work with submodules.
 
       # Noop in v2, but should ideally not be used in mjolnir or 1.x either.
