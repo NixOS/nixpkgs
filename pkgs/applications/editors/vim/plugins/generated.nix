@@ -4403,6 +4403,18 @@ final: prev:
     meta.homepage = "https://github.com/blazkowolf/gruber-darker.nvim/";
   };
 
+  grug-far-nvim = buildVimPlugin {
+    pname = "grug-far.nvim";
+    version = "2024-07-22";
+    src = fetchFromGitHub {
+      owner = "MagicDuck";
+      repo = "grug-far.nvim";
+      rev = "f9a8592b037b761fac6a327bc314e9e3eb47401e";
+      sha256 = "13aa8s9lxdjiyifj9vmbph6hl9px0spfm36my1j2h41biq5nsx5q";
+    };
+    meta.homepage = "https://github.com/MagicDuck/grug-far.nvim/";
+  };
+
   gruvbox = buildVimPlugin {
     pname = "gruvbox";
     version = "2023-08-14";
@@ -5963,18 +5975,6 @@ final: prev:
     meta.homepage = "https://github.com/mkasa/lushtags/";
   };
 
-  lz-n = buildNeovimPlugin {
-    pname = "lz.n";
-    version = "2024-07-10";
-    src = fetchFromGitHub {
-      owner = "nvim-neorocks";
-      repo = "lz.n";
-      rev = "3d36b6848fc67f6a13d2a52cf4f96fd3403c0c43";
-      sha256 = "11ic8hylck3dvlp6d9kzblingbi167j2kcid155x4hpc2hhqf2aj";
-    };
-    meta.homepage = "https://github.com/nvim-neorocks/lz.n/";
-  };
-
   magma-nvim-goose = buildVimPlugin {
     pname = "magma-nvim-goose";
     version = "2023-07-04";
@@ -6948,6 +6948,18 @@ final: prev:
       sha256 = "0wmxiv06zjjsr2fzp20p8lynn8wxqlx86r6zycan8v6kgs2vljh4";
     };
     meta.homepage = "https://github.com/nvim-neotest/neotest-go/";
+  };
+
+  neotest-golang = buildVimPlugin {
+    pname = "neotest-golang";
+    version = "2024-07-17";
+    src = fetchFromGitHub {
+      owner = "fredrikaverpil";
+      repo = "neotest-golang";
+      rev = "f6657d875e9046e2f215c5480c62105dd8002f94";
+      sha256 = "1xsizbmryhac8iw7r8zs4mjycakzanq5bfdpfcl289d52rl92y0l";
+    };
+    meta.homepage = "https://github.com/fredrikaverpil/neotest-golang/";
   };
 
   neotest-gradle = buildVimPlugin {

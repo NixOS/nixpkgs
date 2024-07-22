@@ -81,5 +81,9 @@ buildPythonPackage rec {
     homepage = "http://aplpy.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ smaret ];
+    # Tests fail due to expired matplotlib deprecations:
+    #
+    # > (`matplotlib.cm' has no attribute 'get_cmap'`)
+    broken = true;
   };
 }

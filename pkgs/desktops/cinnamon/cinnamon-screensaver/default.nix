@@ -23,7 +23,7 @@
 , xapp
 , xdotool
 , xorg
-, iso-flags-png-320x420
+, iso-flags-png-320x240
 }:
 
 stdenv.mkDerivation rec {
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     (python3.withPackages (pp: with pp; [
       pygobject3
       setproctitle
-      python3.pkgs.xapp # The scope prefix is required
+      python-xapp
       pycairo
     ]))
     xapp
@@ -74,9 +74,6 @@ stdenv.mkDerivation rec {
     cinnamon-common
     libgnomekbd
     gnome.caribou
-
-    # things
-    iso-flags-png-320x420
   ];
 
   postPatch = ''
@@ -85,7 +82,7 @@ stdenv.mkDerivation rec {
       -e s,/usr/share/locale,/run/current-system/sw/share/locale,g \
       -e s,/usr/lib/cinnamon-screensaver,$out/lib,g \
       -e s,/usr/share/cinnamon-screensaver,$out/share,g \
-      -e s,/usr/share/iso-flag-png,${iso-flags-png-320x420}/share/iso-flags-png,g \
+      -e s,/usr/share/iso-flag-png,${iso-flags-png-320x240}/share/iso-flags-png,g \
       {} +
   '';
 

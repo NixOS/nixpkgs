@@ -66,17 +66,17 @@ in
         enable = mkDefault true;
 
         # Taken from mint-artwork.gschema.override
-        theme = mkIf (notExcluded pkgs.cinnamon.mint-themes) {
+        theme = mkIf (notExcluded pkgs.mint-themes) {
           name = mkDefault "Mint-Y-Aqua";
-          package = mkDefault pkgs.cinnamon.mint-themes;
+          package = mkDefault pkgs.mint-themes;
         };
-        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-y-icons) {
+        iconTheme = mkIf (notExcluded pkgs.mint-y-icons) {
           name = mkDefault "Mint-Y-Sand";
-          package = mkDefault pkgs.cinnamon.mint-y-icons;
+          package = mkDefault pkgs.mint-y-icons;
         };
-        cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
+        cursorTheme = mkIf (notExcluded pkgs.mint-cursor-themes) {
           name = mkDefault "Bibata-Modern-Classic";
-          package = mkDefault pkgs.cinnamon.mint-cursor-themes;
+          package = mkDefault pkgs.mint-cursor-themes;
         };
       };
 
@@ -101,10 +101,10 @@ in
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-      services.dbus.packages = with pkgs.cinnamon; [
-        cinnamon-common
-        cinnamon-screensaver
-        nemo-with-extensions
+      services.dbus.packages = with pkgs; [
+        cinnamon.cinnamon-common
+        cinnamon.cinnamon-screensaver
+        cinnamon.nemo-with-extensions
         xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
@@ -134,21 +134,21 @@ in
         cinnamon-screensaver = {};
       };
 
-      environment.systemPackages = with pkgs.cinnamon // pkgs; ([
+      environment.systemPackages = with pkgs; ([
         desktop-file-utils
 
         # common-files
-        cinnamon-common
-        cinnamon-session
-        cinnamon-desktop
-        cinnamon-menus
-        cinnamon-translations
+        cinnamon.cinnamon-common
+        cinnamon.cinnamon-session
+        cinnamon.cinnamon-desktop
+        cinnamon.cinnamon-menus
+        cinnamon.cinnamon-translations
 
         # utils needed by some scripts
         killall
 
         # session requirements
-        cinnamon-screensaver
+        cinnamon.cinnamon-screensaver
         # cinnamon-killer-daemon: provided by cinnamon-common
         networkmanagerapplet # session requirement - also nm-applet not needed
 
@@ -156,10 +156,10 @@ in
         polkit_gnome
 
         # packages
-        nemo-with-extensions
+        cinnamon.nemo-with-extensions
         gnome-online-accounts-gtk
-        cinnamon-control-center
-        cinnamon-settings-daemon
+        cinnamon.cinnamon-control-center
+        cinnamon.cinnamon-settings-daemon
         libgnomekbd
 
         # theme
@@ -233,7 +233,7 @@ in
       programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
       programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
-      environment.systemPackages = with pkgs // pkgs.cinnamon; utils.removePackagesByName [
+      environment.systemPackages = with pkgs; utils.removePackagesByName [
         # cinnamon team apps
         bulky
         warpinator
