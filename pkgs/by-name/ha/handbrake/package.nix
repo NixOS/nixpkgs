@@ -253,21 +253,19 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://handbrake.fr/";
       description = "Tool for converting video files and ripping DVDs";
       longDescription = ''
-        Tool for converting and remuxing video files
-        into selection of modern and widely supported codecs
-        and containers. Very versatile and customizable.
-        Package provides:
-        CLI - `HandbrakeCLI`
-        GTK GUI - `ghb`
+        Tool for converting and remuxing video files into selection of modern
+        and widely supported codecs and containers. Very versatile and
+        customizable.
       '';
-      license = licenses.gpl2Only;
-      maintainers = with maintainers; [ Anton-Latukha wmertens ];
-      platforms = with platforms; unix;
-      broken = stdenv.isDarwin;  # https://github.com/NixOS/nixpkgs/pull/297984#issuecomment-2016503434
+      license = lib.licenses.gpl2Only;
+      maintainers = with lib.maintainers; [ Anton-Latukha wmertens ];
+      platforms = lib.platforms.unix;
+      # https://github.com/NixOS/nixpkgs/pull/297984#issuecomment-2016503434
+      broken = stdenv.isDarwin;
     };
   };
 in
