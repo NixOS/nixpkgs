@@ -6,7 +6,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-gsettings-overrides = callPackage ./cinnamon-gsettings-overrides { };
   cinnamon-screensaver = callPackage ./cinnamon-screensaver { };
   cinnamon-session = callPackage ./cinnamon-session { };
-  nemo-python = callPackage ./nemo-extensions/nemo-python { };
   nemo-with-extensions = callPackage ./nemo/wrapper.nix { };
   muffin = callPackage ./muffin { };
 }) // lib.optionalAttrs config.allowAliases {
@@ -30,6 +29,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   nemo = lib.warn "cinnamon.nemo was moved to top-level. Please use pkgs.nemo directly." pkgs.nemo; # Added on 2024-07-22
   nemo-emblems = lib.warn "cinnamon.nemo-emblems was moved to top-level. Please use pkgs.nemo-emblems directly." pkgs.nemo-emblems; # Added on 2024-07-22
   nemo-fileroller = lib.warn "cinnamon.nemo-fileroller was moved to top-level. Please use pkgs.nemo-fileroller directly." pkgs.nemo-fileroller; # Added on 2024-07-22
+  nemo-python = lib.warn "cinnamon.nemo-python was moved to top-level. Please use pkgs.nemo-python directly." pkgs.nemo-python; # Added on 2024-07-22
   nemoExtensions = throw "cinnamon.nemoExtensions is no longer exposed. To modify list of selected nemo extensions please override cinnamon.nemo-with-extensions."; # Added on 2024-07-14
   pix = lib.warn "cinnamon.pix was moved to top-level. Please use pkgs.pix directly." pkgs.pix; # Added on 2024-07-14
   warpinator = lib.warn "cinnamon.warpinator was moved to top-level. Please use pkgs.warpinator directly." pkgs.warpinator; # Added on 2024-07-14
