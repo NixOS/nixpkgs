@@ -23395,6 +23395,8 @@ with pkgs;
 
   opendmarc = callPackage ../development/libraries/opendmarc { };
 
+  openenclave-sgx = callPackage (import ../development/libraries/openenclave { type = "sgx"; }) { };
+
   ois = callPackage ../development/libraries/ois {
     inherit (darwin.apple_sdk.frameworks) Cocoa IOKit Kernel;
   };
