@@ -101,6 +101,9 @@ stdenv.mkDerivation rec {
       ];
     };
   in ''
+    ls -al opt/microsoft/msedge/msedge-sandbox
+    chmod 4755 opt/microsoft/msedge/msedge-sandbox
+
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath.msedge}" \
