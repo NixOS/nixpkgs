@@ -14,6 +14,8 @@
   pythonOlder,
   sqlalchemy,
   thrift,
+  requests,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -49,6 +51,8 @@ buildPythonPackage rec {
     pyarrow
     sqlalchemy
     thrift
+    requests
+    urllib3
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
