@@ -156,8 +156,8 @@ in
   }) ];
   "12" = [ (fetchurl {
     name = "gcc-12-darwin-aarch64-support.patch";
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/f1188b90d610e2ed170b22512ff7435ba5c891e2/gcc/gcc-12.3.0.diff";
-    sha256 = "sha256-naL5ZNiurqfDBiPSU8PTbTmLqj25B+vjjiqc4fAFgYs=";
+    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/1ed9eaea059f1677d27382c62f21462b476b37fe/gcc/gcc-12.4.0.diff";
+    sha256 = "sha256-wOjpT79lps4TKG5/E761odhLGCphBIkCbOPiQg/D1Fw=";
   }) ];
   "11" = [ (fetchpatch {
     # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
@@ -166,11 +166,11 @@ in
     hash = "sha256-6prPgR2eGVJs7vKd6iM1eZsEPCD1ShzLns2Z+29vlt4=";
   }) ];
   "10" = [ (fetchpatch {
-      # There are no upstream release tags in https://github.com/iains/gcc-10-branch.
-      # ff4bf32 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-10.5.0
-      url = "https://github.com/iains/gcc-10-branch/compare/d04fe5541c53cb16d1ca5c80da044b4c7633dbc6...a61e86820ed213edffa3bb246e9d263e3c7828d5.diff";
-      hash = "sha256-kVUHZKtYqkWIcqxHG7yAOR2B60w4KWLoxzaiFD/FWYk=";
-    }) ];
+    # There are no upstream release tags in https://github.com/iains/gcc-10-branch.
+    # d04fe55 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-10.5.0
+    url = "https://github.com/iains/gcc-10-branch/compare/d04fe5541c53cb16d1ca5c80da044b4c7633dbc6...gcc-10-5Dr0-pre-0.diff";
+    hash = "sha256-kVUHZKtYqkWIcqxHG7yAOR2B60w4KWLoxzaiFD/FWYk=";
+  }) ];
 }.${majorVersion} or [])
 
 
