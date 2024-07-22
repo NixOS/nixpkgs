@@ -15803,6 +15803,8 @@ self: super: with self; {
 
   tracing = callPackage ../development/python-modules/tracing { };
 
+  translate-toolkit = callPackage ../development/python-modules/translate-toolkit { };
+
   trackpy = callPackage ../development/python-modules/trackpy { };
 
   trafilatura = callPackage ../development/python-modules/trafilatura { };
