@@ -166,6 +166,7 @@ buildPythonPackage rec {
     blas = blas.provider;
     blasImplementation = blas.implementation;
     inherit cfg;
+    isNumpy2 = true;
     tests = {
       inherit sage;
     };
