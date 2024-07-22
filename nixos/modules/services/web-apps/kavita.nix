@@ -1,9 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 let
   cfg = config.services.kavita;
   settingsFormat = pkgs.formats.json { };
-  appsettings = settingsFormat.generate "appsettings.json" ({ TokenKey = "@TOKEN@"; } // cfg.settings);
 in
 {
   imports = [
@@ -34,7 +33,7 @@ in
     tokenKeyFile = lib.mkOption {
       type = lib.types.path;
       description = ''
-        A file containing the TokenKey, a secret with at 512+ bits.
+        A secret with at least 512 bits.
         It can be generated with `head -c 64 /dev/urandom | base64 --wrap=0`.
       '';
     };
@@ -71,15 +70,13 @@ in
       description = "Kavita";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      preStart = ''
-        install -m600 ${appsettings} ${lib.escapeShellArg cfg.dataDir}/config/appsettings.json
-        ${pkgs.replace-secret}/bin/replace-secret '@TOKEN@' \
-          ''${CREDENTIALS_DIRECTORY}/token \
-          '${cfg.dataDir}/config/appsettings.json'
-      '';
+      preStart = utils.genConfigOutOfBand {
+        config = { TokenKey._secret = cfg.tokenKeyFile; } // cfg.settings;
+        configLocation = "${lib.escapeShellArg cfg.dataDir}/config/appsettings.json";
+        generator = utils.genConfigOutOfBandFormatAdapter settingsFormat;
+      };
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;
-        LoadCredential = [ "token:${cfg.tokenKeyFile}" ];
         ExecStart = lib.getExe cfg.package;
         Restart = "always";
         User = cfg.user;
