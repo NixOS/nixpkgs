@@ -1,4 +1,4 @@
-{ lib, go, buildGoModule, fetchFromGitHub, installShellFiles, nix-update-script, testers, vcluster }:
+{ buildGoModule, fetchFromGitHub, go, installShellFiles, lib, nix-update-script, testers, vcluster }:
 
 buildGoModule rec {
   pname = "vcluster";
