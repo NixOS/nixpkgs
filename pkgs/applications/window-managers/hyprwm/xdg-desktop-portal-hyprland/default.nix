@@ -25,23 +25,14 @@
 }:
 stdenv.mkDerivation (self: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
     rev = "v${self.version}";
-    hash = "sha256-KsX7sAwkEFpXiwyjt0HGTnnrUU58wW1jlzj5IA/LRz8=";
+    hash = "sha256-cyyxu/oj4QEFp3CVx2WeXa9T4OAUyynuBJHGkBZSxJI=";
   };
-
-  patches = [
-    # TODO: remove on next upgrade
-    (fetchpatch {
-      name = "fix-compilation-pipewire-1.2.0.patch";
-      url = "https://github.com/hyprwm/xdg-desktop-portal-hyprland/commit/c5b30938710d6c599f3f5cd99a3ffac35381fb0f.patch";
-      hash = "sha256-f9OgW9tLuGuHXYH6bR1Y+CEuBPHOhRiHfEPebJzlwK8=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
