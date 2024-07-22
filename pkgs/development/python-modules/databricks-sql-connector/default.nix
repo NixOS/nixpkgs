@@ -16,6 +16,7 @@
   thrift,
   requests,
   urllib3,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-a3OeKJ3c2UCClsPMah7iJY2YvIVLfHmmBuHAx8vdXZs=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-pandas.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/databricks/databricks-sql-python/pull/416.patch";
+      sha256 = "sha256-sNCp8xSSmKP2yNzDK4wyWC5Hoe574AeHnKTeNcIxaek=";
+    })
+  ];
 
   pythonRelaxDeps = [
     "pyarrow"
