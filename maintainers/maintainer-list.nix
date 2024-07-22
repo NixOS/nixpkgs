@@ -546,12 +546,6 @@
     githubId = 5091511;
     name = "Allen Nelson";
   };
-  adolfogc = {
-    email = "adolfo.garcia.cr@gmail.com";
-    github = "adolfogc";
-    githubId = 1250775;
-    name = "Adolfo E. García Castro";
-  };
   adriandole = {
     email = "adrian@dole.tech";
     github = "adriandole";
