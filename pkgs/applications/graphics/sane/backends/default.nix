@@ -49,6 +49,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-4mwPGeRsyzngDxBQ8/48mK+VR9LYV6082xr8lTrUZrk=";
   };
 
+  postPatch = ''
+    # Do not create lock dir in install phase
+    sed -i '/^install-lockpath:/!b;n;c\       # pass' backend/Makefile.am
+  '';
+
   preConfigure = ''
     # create version files, so that autotools macros can use them:
     # https://gitlab.com/sane-project/backends/-/issues/440
@@ -103,14 +108,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    lib.optional (avahi != null)   "--with-avahi"
-    ++ lib.optional (libusb1 != null) "--with-usb"
-  ;
+  configureFlags = [ "--with-lockdir=/var/lock/sane" ]
+    ++ lib.optional (avahi != null)   "--with-avahi"
+    ++ lib.optional (libusb1 != null) "--with-usb";
 
   # autoconf check for HAVE_MMAP is never set on cross compilation.
   # The pieusb backend fails compilation if HAVE_MMAP is not set.
-  buildFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "CFLAGS=-DHAVE_MMAP=${if stdenv.hostPlatform.isLinux then "1" else "0"}" ];
+  buildFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "CFLAGS=-DHAVE_MMAP=${if stdenv.hostPlatform.isLinux then "1" else "0"}"
+  ];
 
   postInstall = let
 
