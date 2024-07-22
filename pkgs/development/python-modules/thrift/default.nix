@@ -2,10 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
   pythonOlder,
   setuptools,
   six,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -14,12 +14,24 @@ buildPythonPackage rec {
   pyproject = true;
 
   # Still uses distutils
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-TdZi6t9riuvopBcpUnvWmt9s6qKoaBy+9k0Sc7Po/ro=";
   };
+
+  preBuild = ''
+    # Fix so distutils is available in build prosess.
+    # Function setuptools/_distutils/util.py:byte_compile is used in build prosess
+    # but setuptools distutils import trick/hack is not working in build prosses
+    # and we get ModuleNotfoundError 'No module named 'distutils'
+    # For more explanation see first attempt:
+    # https://github.com/NixOS/nixpkgs/pull/328182
+    DISTUTILS=$(mktemp -d)
+    ln -s ${setuptools}/${python.sitePackages}/setuptools/_distutils "$DISTUTILS/distutils"
+    PYTHONPATH="$PYTHONPATH:$DISTUTILS"
+  '';
 
   build-system = [ setuptools ];
 
