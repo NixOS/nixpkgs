@@ -159,7 +159,7 @@ in
         cinnamon.nemo-with-extensions
         gnome-online-accounts-gtk
         cinnamon.cinnamon-control-center
-        cinnamon.cinnamon-settings-daemon
+        cinnamon-settings-daemon
         libgnomekbd
 
         # theme
