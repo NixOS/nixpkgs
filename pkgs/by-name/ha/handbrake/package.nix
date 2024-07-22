@@ -217,39 +217,47 @@ let
     dontUseNinjaInstall = true;
 
 
-    postPatch = ''
-      install -Dm444 ${versionFile} ${versionFile.name}
+    postPatch = lib.concatStringsSep "\n" ([
+      ''
+        install -Dm444 ${versionFile} ${versionFile.name}
 
-      patchShebangs scripts
-      patchShebangs gtk/data/
-
-      substituteInPlace libhb/hb.c \
-        --replace-fail 'return hb_version;' 'return "${self.version}";'
-
+        patchShebangs scripts
+        patchShebangs gtk/data/
+        substituteInPlace libhb/hb.c \
+          --replace-fail 'return hb_version;' 'return "${self.version}";'
+      ''
       # Force using nixpkgs dependencies
-      sed -i '/MODULES += contrib/d' make/include/main.defs
-      sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
-          -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
-          -i make/configure.py
-    '' + optionalString stdenv.isDarwin ''
+      ''
+        sed -e '/MODULES += contrib/d' -i make/include/main.defs
+        sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
+            -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
+            -i make/configure.py
+      ''
+    ] ++ optionals stdenv.isDarwin [
       # Prevent the configure script from failing if xcodebuild isn't available,
       # which it isn't in the Nix context. (The actual build goes fine without
       # xcodebuild.)
-      sed -e '/xcodebuild = ToolProbe/s/abort=.\+)/abort=False)/' -i make/configure.py
-    '' + optionalString useGtk ''
-      substituteInPlace gtk/module.rules \
-        --replace-fail '$(MESON.exe)' 'meson' \
-        --replace-fail '$(NINJA.exe)' 'ninja' \
+      ''
+        sed -e '/xcodebuild = ToolProbe/s/abort=.\+)/abort=False)/' -i make/configure.py
+      ''
+    ] ++ optionals useGtk [
+      ''
+        substituteInPlace gtk/module.rules \
+          --replace-fail '$(MESON.exe)' 'meson' \
+          --replace-fail '$(NINJA.exe)' 'ninja' \
+      ''
       # Force using nixpkgs dependencies
-      substituteInPlace gtk/meson.build \
-        --replace-fail \
-          "hb_incdirs = include_directories(hb_dir / 'libhb', hb_dir / 'contrib/include')" \
-          "hb_incdirs = include_directories(hb_dir / 'libhb')"
-      substituteInPlace gtk/ghb.spec \
-        --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
-      substituteInPlace gtk/data/post_install.py \
-        --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
-    '';
+      ''
+        substituteInPlace gtk/meson.build \
+          --replace-fail \
+            "hb_incdirs = include_directories(hb_dir / 'libhb', hb_dir / 'contrib/include')" \
+            "hb_incdirs = include_directories(hb_dir / 'libhb')"
+        substituteInPlace gtk/ghb.spec \
+          --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
+        substituteInPlace gtk/data/post_install.py \
+          --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
+    ''
+    ]);
 
     passthru = {
       # for convenience
