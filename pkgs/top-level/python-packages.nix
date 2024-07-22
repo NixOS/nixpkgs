@@ -7456,6 +7456,10 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
     ghostscript = pkgs.ghostscript_headless;
   };
+  matplotlib-numpy_2 = matplotlib.override {
+    numpy = numpy_2;
+    contourpy = contourpy-numpy_2;
+  };
 
   matplotlib-inline = callPackage ../development/python-modules/matplotlib-inline { };
 
