@@ -93,9 +93,9 @@ import ../make-test-python.nix (
       draupnir = { ... }: {
         services.draupnir = {
           enable = true;
+          homeserverUrl = "http://homeserver:8448";
           accessTokenFile = "/tmp/draupnir-access-token";
           settings = {
-            homeserverUrl = "http://homeserver:8448";
             managementRoom = "#moderators:homeserver";
           };
         };
@@ -115,6 +115,7 @@ import ../make-test-python.nix (
       draupnirpantalaimon = { pkgs, ... }: {
         services.draupnir = {
           enable = true;
+          homeserverUrl = "http://homeserver:8448";
           pantalaimon = {
             enable = true;
             username = "draupnir";
@@ -122,7 +123,6 @@ import ../make-test-python.nix (
             options = {
               # otherwise draupnir tries to connect to ::1, which is not listened by pantalaimon
               listenAddress = "127.0.0.1";
-              homeserver = "http://homeserver:8448";
             };
           };
           settings = {
