@@ -103,7 +103,7 @@ in
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs; [
         cinnamon-common
-        cinnamon.cinnamon-screensaver
+        cinnamon-screensaver
         nemo-with-extensions
         xapp
       ];
@@ -148,7 +148,7 @@ in
         killall
 
         # session requirements
-        cinnamon.cinnamon-screensaver
+        cinnamon-screensaver
         # cinnamon-killer-daemon: provided by cinnamon-common
         networkmanagerapplet # session requirement - also nm-applet not needed
 
