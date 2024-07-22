@@ -32,6 +32,18 @@
     with subtest("direct symlinks point to the target without indirection"):
       assert machine.succeed("readlink -n /etc/localtime") == "/etc/zoneinfo/Utc"
 
+    with subtest("Correct mode on the source password files"):
+      assert machine.succeed("stat -c '%a' /var/lib/nixos/etc/passwd") == "644\n"
+      assert machine.succeed("stat -c '%a' /var/lib/nixos/etc/group") == "644\n"
+      assert machine.succeed("stat -c '%a' /var/lib/nixos/etc/shadow") == "0\n"
+      assert machine.succeed("stat -c '%a' /var/lib/nixos/etc/gshadow") == "0\n"
+
+    with subtest("Password files are symlinks to /var/lib/nixos/etc"):
+      assert machine.succeed("readlink -f /etc/passwd") == "/var/lib/nixos/etc/passwd\n"
+      assert machine.succeed("readlink -f /etc/group") == "/var/lib/nixos/etc/group\n"
+      assert machine.succeed("readlink -f /etc/shadow") == "/var/lib/nixos/etc/shadow\n"
+      assert machine.succeed("readlink -f /etc/gshadow") == "/var/lib/nixos/etc/gshadow\n"
+
     with subtest("switching to the same generation"):
       machine.succeed("/run/current-system/bin/switch-to-configuration test")
 
