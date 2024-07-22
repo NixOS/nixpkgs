@@ -1,25 +1,26 @@
 {
-  pkgs,
   lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-pkgs.buildGoModule rec {
+buildGoModule rec {
   pname = "ogen";
-  version = "1.0.0";
+  version = "1.2.2";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "ogen-go";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-wIcxICfBY5YHVqKHtHd2wzcaDmkzgp7eD6zEvnsRaIU=";
+    hash = "sha256-ZjeA9ogyMsoByBzdvikut93JT6s+8m1AyyPFtwEcYwY="
   };
 
   vendorHash = "sha256-EL8FcAnDMekHBIDRdGqQO4JNESjGC7MQ5aUcDkRqrbg=";
-  doCheck = false;
 
   subPackages = ["cmd/ogen"];
 
   meta = with lib; {
     description = "OpenAPI v3 code generator for go";
+    license = licenses.asl20;
     homepage = "https://github.com/ogen-go/ogen";
   };
 }
