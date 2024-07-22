@@ -123,23 +123,6 @@ in
               This prevents an issue where the control room becomes undefined when the alias can't be resolved.
             '';
           };
-
-          # protectedRooms = lib.mkOption {
-          #   type = lib.types.listOf lib.types.str;
-          #   default = [ ];
-          #   example = lib.literalExpression ''
-          #     [
-          #       "https://matrix.to/#/#yourroom:example.org"
-          #       "https://matrix.to/#/#anotherroom:example.org"
-          #     ]
-          #   '';
-          #   description = ''
-          #     A list of rooms to protect (matrix.to URLs).
-          #     These can also be configured interactively.
-
-          #     Note that this option does nothing in Draupnir v2+!
-          #   '';
-          # };
           #endregion
         };
       };
