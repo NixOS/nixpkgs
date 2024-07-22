@@ -267,6 +267,8 @@ python.pkgs.buildPythonApplication rec {
 
     # Fails because it fails to determine llvm version
     "test_item3_deflate_llvm_bitcode"
+    # Fails ever since an update to imagemagick
+    "test_has_visuals"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable flaky tests on Darwin
     "test_non_unicode_filename"
