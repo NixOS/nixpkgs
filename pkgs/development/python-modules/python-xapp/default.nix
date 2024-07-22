@@ -15,7 +15,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "xapp";
+  pname = "python-xapp";
   version = "2.4.2";
 
   format = "other";

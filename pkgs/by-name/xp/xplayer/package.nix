@@ -8,10 +8,7 @@
 , gettext
 , glib
 , gobject-introspection
-, gst-plugins-bad
-, gst-plugins-base
-, gst-plugins-good
-, gstreamer
+, gst_all_1
 , gtk-doc
 , gtk3
 , intltool
@@ -40,7 +37,7 @@ stdenv.mkDerivation rec {
   # the gstreamer toolsdir points to the wrong derivation output
   postPatch = ''
     substituteInPlace configure.ac \
-                      --replace '$gst10_toolsdir/gst-inspect-1.0' '${gstreamer}/bin/gst-inspect-1.0' \
+                      --replace '$gst10_toolsdir/gst-inspect-1.0' '${gst_all_1.gstreamer}/bin/gst-inspect-1.0' \
   '';
 
   preBuild = ''
@@ -68,10 +65,10 @@ stdenv.mkDerivation rec {
     clutter-gst
     clutter-gtk
     glib
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gstreamer
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gstreamer
     gtk3
     libpeas
     libxml2

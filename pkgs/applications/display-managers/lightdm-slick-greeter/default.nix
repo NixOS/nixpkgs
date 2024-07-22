@@ -7,7 +7,7 @@
 , python3
 , vala
 , wrapGAppsHook3
-, cinnamon
+, xapp
 , lightdm
 , gtk3
 , pixman
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cinnamon.xapp
+    xapp
     lightdm
     gtk3
     pixman

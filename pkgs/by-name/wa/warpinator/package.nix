@@ -22,7 +22,7 @@ let
     protobuf
     pygobject3
     setproctitle
-    pp.xapp
+    python-xapp
     zeroconf
     grpcio
     setuptools

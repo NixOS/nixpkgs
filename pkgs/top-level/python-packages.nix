@@ -10412,6 +10412,11 @@ self: super: with self; {
 
   python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
 
+  python-xapp = callPackage ../development/python-modules/python-xapp {
+    inherit (pkgs.buildPackages) meson;
+    inherit (pkgs) gtk3 gobject-introspection polkit xapp;
+  };
+
   python-tado = callPackage ../development/python-modules/python-tado { };
 
   python-idzip = callPackage ../development/python-modules/python-idzip { };
@@ -17373,12 +17378,6 @@ self: super: with self; {
 
   xapian = callPackage ../development/python-modules/xapian {
     inherit (pkgs) xapian;
-  };
-
-  xapp = callPackage ../development/python-modules/xapp {
-    inherit (pkgs.buildPackages) meson;
-    inherit (pkgs) gtk3 gobject-introspection polkit;
-    inherit (pkgs.cinnamon) xapp;
   };
 
   xarray = callPackage ../development/python-modules/xarray { };

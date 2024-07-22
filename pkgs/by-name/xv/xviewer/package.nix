@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, cinnamon-desktop
 , docbook_xsl
 , exempi
 , gdk-pixbuf
@@ -21,8 +20,9 @@
 , pkg-config
 , python3
 , wrapGAppsHook3
-, xapp
+, cinnamon
 , yelp-tools
+, xapp
 }:
 
 stdenv.mkDerivation rec {
@@ -37,9 +37,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cinnamon-desktop
     docbook_xsl
-    gdk-pixbuf
     gobject-introspection
     gtk-doc
     itstool
@@ -52,7 +50,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cinnamon.cinnamon-desktop
     exempi
+    gdk-pixbuf
     glib
     gtk3
     lcms2
