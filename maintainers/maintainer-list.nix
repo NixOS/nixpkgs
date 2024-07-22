@@ -22167,12 +22167,6 @@
     githubId = 99486674;
     name = "山下";
   };
-  yana = {
-    email = "yana@riseup.net";
-    github = "yanateras";
-    githubId = 1643293;
-    name = "Yana Timoshenko";
-  };
   yanganto = {
     name = "Antonio Yang";
     email = "yanganto@gmail.com";
