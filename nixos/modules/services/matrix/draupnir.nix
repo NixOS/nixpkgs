@@ -147,7 +147,7 @@ in
       # pantalaimon disabled - use accessTokenFile instead of passwordFile
       {
         assertion = !cfg.pantalaimon.enable -> cfg.accessTokenFile != null;
-        message = "Set services.draupnir.accessTokenFile, as it is required in order to use Draupnir witout Pantalaimon.";
+        message = "Set services.draupnir.accessTokenFile, as it is required in order to use Draupnir without Pantalaimon.";
       }
       {
         assertion = !cfg.pantalaimon.enable -> cfg.pantalaimon.passwordFile == null;
