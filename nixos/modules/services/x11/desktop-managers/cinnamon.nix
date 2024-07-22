@@ -141,7 +141,7 @@ in
         cinnamon.cinnamon-common
         cinnamon.cinnamon-session
         cinnamon-desktop
-        cinnamon.cinnamon-menus
+        cinnamon-menus
         cinnamon.cinnamon-translations
 
         # utils needed by some scripts
