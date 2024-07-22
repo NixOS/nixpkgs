@@ -855,7 +855,7 @@ dependencies = [
 
 [[package]]
 name = "beacon_node"
-version = "5.2.0"
+version = "5.2.1"
 dependencies = [
  "beacon_chain",
  "clap",
@@ -1061,7 +1061,7 @@ dependencies = [
 
 [[package]]
 name = "boot_node"
-version = "5.2.0"
+version = "5.2.1"
 dependencies = [
  "beacon_node",
  "clap",
@@ -1716,16 +1716,15 @@ dependencies = [
 
 [[package]]
 name = "curve25519-dalek"
-version = "4.1.2"
+version = "4.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a677b8922c94e01bdbb12126b0bc852f00447528dee1782229af9c720c3f348"
+checksum = "97fb8b7c4503de7d6ae7b42ab72a5a59857b4c937ec27a3d4539dba95b5ab2be"
 dependencies = [
  "cfg-if",
  "cpufeatures",
  "curve25519-dalek-derive",
  "digest 0.10.7",
  "fiat-crypto",
- "platforms 3.4.0",
  "rustc_version 0.4.0",
  "subtle",
  "zeroize",
@@ -4323,7 +4322,7 @@ checksum = "830d08ce1d1d941e6b30645f1a0eb5643013d835ce3779a5fc208261dbe10f55"
 
 [[package]]
 name = "lcli"
-version = "5.2.0"
+version = "5.2.1"
 dependencies = [
  "account_utils",
  "beacon_chain",
@@ -4894,7 +4893,7 @@ dependencies = [
 
 [[package]]
 name = "lighthouse"
-version = "5.2.0"
+version = "5.2.1"
 dependencies = [
  "account_manager",
  "account_utils",
@@ -4938,7 +4937,6 @@ dependencies = [
 name = "lighthouse_metrics"
 version = "0.2.0"
 dependencies = [
- "lazy_static",
  "prometheus",
 ]
 
@@ -4965,6 +4963,7 @@ dependencies = [
  "libp2p-mplex",
  "lighthouse_metrics",
  "lighthouse_version",
+ "logging",
  "lru",
  "lru_cache",
  "parking_lot 0.12.3",
@@ -6145,12 +6144,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e8d0eef3571242013a0d5dc84861c3ae4a652e56e12adf8bdc26ff5f8cb34c94"
 
 [[package]]
-name = "platforms"
-version = "3.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "db23d408679286588f4d4644f965003d056e3dd5abcaaa938116871d7ce2fee7"
-
-[[package]]
 name = "plotters"
 version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6456,7 +6449,7 @@ dependencies = [
  "nix 0.24.3",
  "num_cpus",
  "once_cell",
- "platforms 2.0.0",
+ "platforms",
  "thiserror",
  "unescape",
 ]
