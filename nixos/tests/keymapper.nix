@@ -15,7 +15,7 @@ let
 
     [stage]
 
-    [class="kitty"]
+    [class="kitty" system!="Darwin"]
     edit_copy >> Control{Shift{C}}
     edit_paste >> Control{Shift{V}}
   '';
@@ -46,6 +46,7 @@ in
       { stage = true; }
       {
         class = "kitty";
+        nosystem = "Darwin";
         mappings = [
           { input = "edit_copy"; output = "Control{Shift{C}}"; }
           { input = "edit_paste"; output = "Control{Shift{V}}"; }
