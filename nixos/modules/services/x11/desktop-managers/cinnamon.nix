@@ -158,7 +158,7 @@ in
         # packages
         nemo-with-extensions
         gnome-online-accounts-gtk
-        cinnamon.cinnamon-control-center
+        cinnamon-control-center
         cinnamon-settings-daemon
         libgnomekbd
 
