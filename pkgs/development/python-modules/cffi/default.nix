@@ -72,6 +72,16 @@ else
         --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
     '';
 
+    # it's kind of a miracle that this is all it takes for tests to work on FreeBSD.
+    # There are various comments in the source to the effect of assuming that anything that's
+    # not darwin or win32 must be linux and act exactly like linux
+    disabledTests = lib.optionals stdenv.isFreeBSD [
+      # this test assumes that libdl.dlopen actually works, but it does not on FreeBSD. You need
+      # to link against libc for the working function, but the function ends up being provided by
+      # the dynamic loader and so the test is not trivially fixable.
+      "test_dlopen_handle"
+    ];
+
     nativeBuildInputs = [
       pkg-config
       setuptools
