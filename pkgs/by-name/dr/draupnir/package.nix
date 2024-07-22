@@ -27,6 +27,7 @@ in
     ];
 
     offlineCache = fetchYarnDeps {
+      name = "${pname}-yarn-offline-cache";
       yarnLock = src + "/yarn.lock";
       hash = hashesFile.yarn_offline_cache_hash;
     };
