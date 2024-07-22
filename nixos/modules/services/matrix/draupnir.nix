@@ -22,6 +22,14 @@ in
       '';
     };
 
+    homeserverUrl = lib.mkOption {
+      type = lib.types.str;
+      description = ''
+        Base URL of the Matrix homeserver, that provides the Client-Server API.
+        Will be used by either Draupnir directly, or by Pantalaimon, if enabled.
+      '';
+    };
+
     #region Pantalaimon options
     pantalaimon = lib.mkOption {
       description = ''
@@ -98,19 +106,6 @@ in
           #endregion
 
           #region Base settings
-          homeserverUrl = lib.mkOption {
-            type = lib.types.str;
-
-            defaultText = ''
-              URL to the pantalaimon instance, if enabled. Else unset.
-            '';
-            description = ''
-              Base URL of the Matrix homeserver, that provides the Client-Server API.
-              If `services.draupnir.pantalaimon.enable` is `true`, this option will become read only. Configure `services.draupnir.pantalaimon.options.homeserver` instead in that case.
-              The listen address of `pantalaimon` will then become the `homeserverUrl` of `draupnir`.
-            '';
-          };
-
           managementRoom = lib.mkOption {
             type = lib.types.str;
             example = "#moderators:example.org";
@@ -153,6 +148,9 @@ in
         assertion = !cfg.pantalaimon.enable -> cfg.pantalaimon.passwordFile == null;
         message = "Unset services.draupnir.pantalaimon.passwordFile, as it has no effect when Pantalaimon is disabled.";
       }
+      {
+        assertion = cfg.pantalaimon.enable -> cfg.pantalaimon.
+      }
 
       # Removed options for those migrating from the Mjolnir module - mkRemovedOption module does *not* work with submodules.
 
@@ -175,8 +173,10 @@ in
       ++ lib.optionals (cfg.settings ? verboseLogging && cfg.settings.verboseLogging) [ "Verbose logging in Draupnir is deprecated and may be removed in a future version." ]
     ;
 
-    services.pantalaimon-headless.instances."draupnir" = lib.mkIf cfg.pantalaimon.enable (cfg.pantalaimon.options);
-    services.draupnir.settings.homeserverUrl = lib.mkIf cfg.pantalaimon.enable ("http://${config.services.pantalaimon-headless.instances."draupnir".listenAddress}:${toString config.services.pantalaimon-headless.instances."draupnir".listenPort}/");
+    services.pantalaimon-headless.instances.draupnir = lib.mkIf cfg.pantalaimon.enable (cfg.pantalaimon.options // { homeserver = cfg.homeserverUrl; });
+    services.draupnir.settings.homeserverUrl = if cfg.pantalaimon.enable
+      then (with config.services.pantalaimon-headless.instances.draupnir; "http://${listenAddress}:${toString listenPort}/")
+      else cfg.homeserverUrl;
     services.draupnir.settings.pantalaimon = lib.mkIf cfg.pantalaimon.enable ({
       use = true;
       username = cfg.pantalaimon.username;
