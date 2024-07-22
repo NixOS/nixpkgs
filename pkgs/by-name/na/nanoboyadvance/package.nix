@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_FMT" true)
     (lib.cmakeBool "USE_SYSTEM_TOML11" true)
     (lib.cmakeBool "USE_SYSTEM_UNARR" true)
+    (lib.cmakeBool "PORTABLE_MODE" false)
   ];
 
   meta = {
