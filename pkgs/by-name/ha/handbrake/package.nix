@@ -241,24 +241,16 @@ let
       # for convenience
       inherit ffmpeg-hb x265-hb;
 
-      tests.basic-conversion =
-        let
-          # Big Buck Bunny example, licensed under CC Attribution 3.0.
-          testMkv = fetchurl {
-            url = "https://github.com/Matroska-Org/matroska-test-files/blob/cf0792be144ac470c4b8052cfe19bb691993e3a2/test_files/test1.mkv?raw=true";
-            sha256 = "1hfxbbgxwfkzv85pvpvx55a72qsd0hxjbm9hkl5r3590zw4s75h9";
-          };
-        in
-        runCommand "${self.pname}-${self.version}-basic-conversion" { nativeBuildInputs = [ self ]; } ''
-          mkdir -p $out
-          cd $out
-          HandBrakeCLI -i ${testMkv} -o test.mp4 -e x264 -q 20 -B 160
-          test -e test.mp4
-          HandBrakeCLI -i ${testMkv} -o test.mkv -e x264 -q 20 -B 160
-          test -e test.mkv
-        '';
+      tests = {
+        version = testers.testVersion {
+          package = self;
+          command = "HandBrakeCLI --version";
+        };
 
-      tests.version = testers.testVersion { package = self; command = "HandBrakeCLI --version"; };
+        basic-conversion = callPackage ./tests/001-basic-conversion.nix {
+          handbrake = self;
+        };
+      };
     };
 
     meta = with lib; {
