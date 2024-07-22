@@ -19,7 +19,6 @@
 
 let
   sources = callPackage ./sources.nix { };
-  shaderc-patched = callPackage ./shaderc-patched.nix { };
   inherit (qt6)
     qtbase
     qtsvg
@@ -56,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtsvg
     qtwayland
-    shaderc-patched
+    sources.shaderc-patched
     wayland
   ]
   ++ cubeb.passthru.backendLibs;
