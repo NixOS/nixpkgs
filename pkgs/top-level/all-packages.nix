@@ -39585,8 +39585,6 @@ with pkgs;
 
   tewi-font = callPackage ../data/fonts/tewi { };
 
-  vcluster = callPackage ../applications/networking/cluster/vcluster { };
-
   sshportal = callPackage ../servers/sshportal { };
 
   ssh-audit = callPackage ../tools/security/ssh-audit { };
