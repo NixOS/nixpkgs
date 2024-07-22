@@ -84,7 +84,6 @@ in
       '';
       description = ''
         Draupnir settings (see [Draupnir's default configuration](https://github.com/the-draupnir-project/Draupnir/blob/main/config/default.yaml) for available settings).
-        These settings will override settings made by the module config.
       '';
       default = { };
       type = lib.types.submodule {
