@@ -1,27 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, wayland-scanner
-, makeWrapper
-, wrapQtAppsHook
-, hyprland-protocols
-, hyprlang
-, libdrm
-, mesa
-, pipewire
-, qtbase
-, qttools
-, qtwayland
-, sdbus-cpp
-, systemd
-, wayland
-, wayland-protocols
-, hyprland
-, hyprpicker
-, slurp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  wayland-scanner,
+  makeWrapper,
+  wrapQtAppsHook,
+  nix-update-script,
+  hyprland-protocols,
+  hyprlang,
+  libdrm,
+  mesa,
+  pipewire,
+  qtbase,
+  qttools,
+  qtwayland,
+  sdbus-cpp,
+  systemd,
+  wayland,
+  wayland-protocols,
+  hyprland,
+  hyprpicker,
+  slurp,
 }:
 stdenv.mkDerivation (self: {
   pname = "xdg-desktop-portal-hyprland";
@@ -71,18 +73,32 @@ stdenv.mkDerivation (self: {
   postInstall = ''
     wrapProgramShell $out/bin/hyprland-share-picker \
       "''${qtWrapperArgs[@]}" \
-      --prefix PATH ":" ${lib.makeBinPath [slurp hyprland]}
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          slurp
+          hyprland
+        ]
+      }
 
     wrapProgramShell $out/libexec/xdg-desktop-portal-hyprland \
-      --prefix PATH ":" ${lib.makeBinPath [(placeholder "out") hyprpicker]}
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          (placeholder "out")
+          hyprpicker
+        ]
+      }
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     homepage = "https://github.com/hyprwm/xdg-desktop-portal-hyprland";
     description = "xdg-desktop-portal backend for Hyprland";
     mainProgram = "hyprland-share-picker";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fufexan ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fufexan ];
+    platforms = lib.platforms.linux;
   };
 })
