@@ -512,6 +512,9 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/7b7b7819bd21cc92ac07f6696b0e7f26fa8f9834";
         hash = "sha256-TKI289XqtG86Sj9s7mVYvmkjAuRXeK+2cYYEDkg6u6I=";
       })
+    ]
+    ++ optionals (lib.versionAtLeast version "7.0") [
+      ./0001-avfoundation.m-macOS-SDK-10.12-compatibility.patch
     ];
 
   configurePlatforms = [];
