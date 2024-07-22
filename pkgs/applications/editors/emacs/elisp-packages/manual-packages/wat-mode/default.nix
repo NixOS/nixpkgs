@@ -1,5 +1,3 @@
-# Manually packaged until it is upstreamed to melpa
-# See https://github.com/devonsparks/wat-mode/issues/1
 {
   lib,
   melpaBuild,
