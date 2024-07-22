@@ -1,4 +1,4 @@
-{ lib, go, buildGoModule, fetchFromGitHub, installShellFiles, testers, vcluster }:
+{ lib, go, buildGoModule, fetchFromGitHub, installShellFiles, nix-update-script, testers, vcluster }:
 
 buildGoModule rec {
   pname = "vcluster";
@@ -44,6 +44,8 @@ buildGoModule rec {
     package = vcluster;
     command = "vcluster --version";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/loft-sh/vcluster/releases/tag/v${version}";
