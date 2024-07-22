@@ -4,6 +4,7 @@
   lib,
   melpaBuild,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -16,6 +17,8 @@ melpaBuild {
     rev = "46b4df83e92c585295d659d049560dbf190fe501";
     hash = "sha256-jV5V3TRY+D3cPSz3yFwVWn9yInhGOYIaUTPEhsOBxto=";
   };
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://github.com/devonsparks/wat-mode";
