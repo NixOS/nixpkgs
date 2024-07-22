@@ -15813,6 +15813,8 @@ self: super: with self; {
 
   translate-toolkit = callPackage ../development/python-modules/translate-toolkit { };
 
+  translation-finder = callPackage ../development/python-modules/translation-finder { };
+
   trackpy = callPackage ../development/python-modules/trackpy { };
 
   trafilatura = callPackage ../development/python-modules/trafilatura { };
