@@ -45,6 +45,9 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/pull/264126
     # Dead links in python sysconfig cause LLVM linker warnings, leading to cython doctest failures.
     ./patches/silence-linker.patch
+
+    # Stack overflows during doctests; this does not change functionality.
+    ./patches/disable-singular-doctest.patch
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
