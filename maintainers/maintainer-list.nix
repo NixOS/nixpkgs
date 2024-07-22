@@ -18215,6 +18215,12 @@
     githubId = 11587657;
     keys = [ { fingerprint = "E173 237A C782 296D 98F5  ADAC E13D FD4B 4712 7951"; } ];
   };
+  sdaqo = {
+    name = "sdaqo";
+    email = "sdaqo.dev@protonmail.com";
+    github = "sdaqo";
+    githubId = 63876564;
+  };
   sdht0 = {
     email = "nixpkgs@sdht.in";
     github = "sdht0";
