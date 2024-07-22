@@ -165,6 +165,12 @@ in
     url = "https://github.com/iains/gcc-11-branch/compare/ff4bf326d03e750a8d4905ea49425fe7d15a04b8..gcc-11.4-darwin-r0.diff";
     hash = "sha256-6prPgR2eGVJs7vKd6iM1eZsEPCD1ShzLns2Z+29vlt4=";
   }) ];
+  "10" = [ (fetchpatch {
+      # There are no upstream release tags in https://github.com/iains/gcc-10-branch.
+      # ff4bf32 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-10.5.0
+      url = "https://github.com/iains/gcc-10-branch/compare/d04fe5541c53cb16d1ca5c80da044b4c7633dbc6...a61e86820ed213edffa3bb246e9d263e3c7828d5.diff";
+      hash = "sha256-kVUHZKtYqkWIcqxHG7yAOR2B60w4KWLoxzaiFD/FWYk=";
+    }) ];
 }.${majorVersion} or [])
 
 
