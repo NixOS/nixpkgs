@@ -3289,6 +3289,8 @@ self: super: with self; {
 
   django-countries = callPackage ../development/python-modules/django-countries { };
 
+  django-crispy-bootstrap3 = callPackage ../development/python-modules/django-crispy-bootstrap3 { };
+
   django-crispy-bootstrap4 = callPackage ../development/python-modules/django-crispy-bootstrap4 { };
 
   django-crispy-bootstrap5 = callPackage ../development/python-modules/django-crispy-bootstrap5 { };
