@@ -4,7 +4,7 @@ let
   cfg = config.services.draupnir;
 
   format = pkgs.formats.yaml {};
-  configFile = format.generate "draupnir.yaml" (pkgs.lib.filterAttrsRecursive (name: value: value != null) cfg.settings);
+  configFile = format.generate "draupnir.yaml" (lib.filterAttrsRecursive (_: value: value != null) cfg.settings);
 in
 {
   #region Options
