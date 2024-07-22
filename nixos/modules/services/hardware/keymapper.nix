@@ -3,8 +3,27 @@
 , lib
 , ...
 }:
-with lib;
 let
+  inherit (lib)
+    concatStringsSep
+    mapAttrsToList
+    removeAttrs
+    pipe
+    hasPrefix
+    removePrefix
+    filter
+    optionalString
+    zipListsWith
+    mkOption
+    types
+    foldAttrs
+    mergeAttrs
+    mkEnableOption
+    literalExpression
+    foldl
+    optional
+    ;
+
   cfg = config.services.keymapper;
 
   generateAliases = aliases:
@@ -133,16 +152,14 @@ let
 in
 {
   options.services.keymapper = {
-    enable = lib.mkEnableOption null // {
-      description = ''
-        Whether to enable keymapper, A cross-platform context-aware key remapper.
+    enable = lib.mkEnableOption ''
+      keymapper, A cross-platform context-aware key remapper.
 
-        The program is split into two parts:
-        - {command}`keymapperd` is the service which needs to be given the permissions to grab the keyboard devices and inject keys.
-        - {command}`keymapper` should be run as normal user in a graphical environment. It loads the configuration, informs the service about it and the active context and also executes mapped terminal commands.
-        This module only enables {command}`keymapperd`. You have to add {command}`keymapper` to the desktop environment's auto-started application.
-      '';
-    };
+      The program is split into two parts:
+      - {command}`keymapperd` is the service which needs to be given the permissions to grab the keyboard devices and inject keys.
+      - {command}`keymapper` should be run as normal user in a graphical environment. It loads the configuration, informs the service about it and the active context and also executes mapped terminal commands.
+      This module only enables {command}`keymapperd`. You have to add {command}`keymapper` to the desktop environment's auto-started application.
+    '';
 
     package = lib.mkPackageOption pkgs "keymapper" { };
 
