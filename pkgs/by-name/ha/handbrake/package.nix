@@ -216,6 +216,7 @@ let
     dontUseNinjaBuild = true;
     dontUseNinjaInstall = true;
 
+    strictDeps = true;
 
     postPatch = lib.concatStringsSep "\n" ([
       ''
