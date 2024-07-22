@@ -104,7 +104,7 @@ in
       services.dbus.packages = with pkgs; [
         cinnamon.cinnamon-common
         cinnamon.cinnamon-screensaver
-        cinnamon.nemo-with-extensions
+        nemo-with-extensions
         xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
@@ -156,7 +156,7 @@ in
         polkit_gnome
 
         # packages
-        cinnamon.nemo-with-extensions
+        nemo-with-extensions
         gnome-online-accounts-gtk
         cinnamon.cinnamon-control-center
         cinnamon-settings-daemon
