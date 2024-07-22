@@ -78,6 +78,6 @@ stdenv.mkDerivation rec {
       free = true;
     };
     maintainers = lib.teams.sage.members;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
