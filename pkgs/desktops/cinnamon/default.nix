@@ -5,12 +5,12 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-control-center = callPackage ./cinnamon-control-center { };
   cinnamon-gsettings-overrides = callPackage ./cinnamon-gsettings-overrides { };
   cinnamon-screensaver = callPackage ./cinnamon-screensaver { };
-  cinnamon-session = callPackage ./cinnamon-session { };
 }) // lib.optionalAttrs config.allowAliases {
   # Aliases need to be outside the scope or they will shadow the attributes from parent scope.
   bulky = lib.warn "cinnamon.bulky was moved to top-level. Please use pkgs.bulky directly." pkgs.bulky; # Added on 2024-07-14
   cinnamon-desktop = lib.warn "cinnamon.cinnamon-desktop was moved to top-level. Please use pkgs.cinnamon-desktop directly." pkgs.cinnamon-desktop; # Added on 2024-07-22
   cinnamon-menus = lib.warn "cinnamon.cinnamon-menus was moved to top-level. Please use pkgs.cinnamon-menus directly." pkgs.cinnamon-menus; # Added on 2024-07-22
+  cinnamon-session = lib.warn "cinnamon.cinnamon-session was moved to top-level. Please use pkgs.cinnamon-session directly." pkgs.cinnamon-session; # Added on 2024-07-22
   cinnamon-settings-daemon = lib.warn "cinnamon.cinnamon-settings-daemon was moved to top-level. Please use pkgs.cinnamon-settings-daemon directly." pkgs.cinnamon-settings-daemon; # Added on 2024-07-22
   cinnamon-translations = lib.warn "cinnamon.cinnamon-translations was moved to top-level. Please use pkgs.cinnamon-translations directly." pkgs.cinnamon-translations; # Added on 2024-07-22
   cjs = lib.warn "cinnamon.cjs was moved to top-level. Please use pkgs.cjs directly." pkgs.cjs; # Added on 2024-07-22
