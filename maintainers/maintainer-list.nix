@@ -2304,6 +2304,12 @@
     githubId = 99703210;
     name = "Katherine Jamison";
   };
+  axka = {
+    name = "Axel Karjalainen";
+    email = "axel@axka.fi";
+    github = "axelkar";
+    githubId = 120189068;
+  };
   ayazhafiz = {
     email = "ayaz.hafiz.1@gmail.com";
     github = "hafiz";
