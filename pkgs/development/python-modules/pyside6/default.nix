@@ -5,6 +5,7 @@
   cups,
   ninja,
   python,
+  pythonImportsCheckHook,
   moveBuildTree,
   shiboken6,
   llvmPackages,
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     python
+    pythonImportsCheckHook
   ] ++ lib.optionals stdenv.isDarwin [ moveBuildTree ];
 
   buildInputs =
@@ -118,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     ${python.pythonOnBuildForHost.interpreter} setup.py egg_info --build-type=pyside6
     cp -r PySide6.egg-info $out/${python.sitePackages}/
   '';
+
+  pythonImportsCheck = [ "PySide6" ];
 
   meta = {
     description = "Python bindings for Qt";
