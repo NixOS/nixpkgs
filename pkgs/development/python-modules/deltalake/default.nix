@@ -13,6 +13,7 @@
 , pytest-benchmark
 , pytest-cov
 , pandas
+, azure-storage-blob
 }:
 
 buildPythonPackage rec {
@@ -59,6 +60,7 @@ buildPythonPackage rec {
     pandas
     pytest-benchmark
     pytest-cov
+    azure-storage-blob
   ];
 
   preCheck = ''
