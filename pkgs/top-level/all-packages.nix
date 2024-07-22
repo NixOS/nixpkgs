@@ -30891,7 +30891,9 @@ with pkgs;
     }
   );
 
-  manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
+  manuskript = libsForQt5.callPackage ../applications/editors/manuskript {
+    python3Packages = python311Packages;
+  };
 
   metacubexd = callPackage ../by-name/me/metacubexd/package.nix {
     pnpm = callPackage ../development/tools/pnpm/generic.nix {
