@@ -142,7 +142,7 @@ in
         cinnamon.cinnamon-session
         cinnamon-desktop
         cinnamon-menus
-        cinnamon.cinnamon-translations
+        cinnamon-translations
 
         # utils needed by some scripts
         killall
