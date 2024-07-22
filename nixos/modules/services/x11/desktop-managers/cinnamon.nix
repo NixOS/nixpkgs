@@ -140,7 +140,7 @@ in
         # common-files
         cinnamon.cinnamon-common
         cinnamon.cinnamon-session
-        cinnamon.cinnamon-desktop
+        cinnamon-desktop
         cinnamon.cinnamon-menus
         cinnamon.cinnamon-translations
 
