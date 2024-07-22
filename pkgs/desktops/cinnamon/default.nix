@@ -6,7 +6,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-gsettings-overrides = callPackage ./cinnamon-gsettings-overrides { };
   cinnamon-screensaver = callPackage ./cinnamon-screensaver { };
   cinnamon-session = callPackage ./cinnamon-session { };
-  muffin = callPackage ./muffin { };
 }) // lib.optionalAttrs config.allowAliases {
   # Aliases need to be outside the scope or they will shadow the attributes from parent scope.
   bulky = lib.warn "cinnamon.bulky was moved to top-level. Please use pkgs.bulky directly." pkgs.bulky; # Added on 2024-07-14
@@ -25,6 +24,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   mint-themes = lib.warn "cinnamon.mint-themes was moved to top-level. Please use pkgs.mint-themes directly." pkgs.mint-themes; # Added on 2024-07-14
   mint-x-icons = lib.warn "cinnamon.mint-x-icons was moved to top-level. Please use pkgs.mint-x-icons directly." pkgs.mint-x-icons; # Added on 2024-07-14
   mint-y-icons = lib.warn "cinnamon.mint-y-icons was moved to top-level. Please use pkgs.mint-y-icons directly." pkgs.mint-y-icons; # Added on 2024-07-14
+  muffin = lib.warn "cinnamon.muffin was moved to top-level. Please use pkgs.muffin directly." pkgs.muffin; # Added on 2024-07-22
   nemo = lib.warn "cinnamon.nemo was moved to top-level. Please use pkgs.nemo directly." pkgs.nemo; # Added on 2024-07-22
   nemo-emblems = lib.warn "cinnamon.nemo-emblems was moved to top-level. Please use pkgs.nemo-emblems directly." pkgs.nemo-emblems; # Added on 2024-07-22
   nemo-fileroller = lib.warn "cinnamon.nemo-fileroller was moved to top-level. Please use pkgs.nemo-fileroller directly." pkgs.nemo-fileroller; # Added on 2024-07-22
