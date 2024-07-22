@@ -84,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       seanrmurphy
       dezren39
+      ryand56
     ];
     mainProgram = "wrangler";
     # cpp is required for building workerd.
