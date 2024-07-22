@@ -7,7 +7,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-screensaver = callPackage ./cinnamon-screensaver { };
   cinnamon-session = callPackage ./cinnamon-session { };
   cinnamon-settings-daemon = callPackage ./cinnamon-settings-daemon { };
-  cjs = callPackage ./cjs { };
   nemo = callPackage ./nemo { };
   nemo-emblems = callPackage ./nemo-extensions/nemo-emblems { };
   nemo-fileroller = callPackage ./nemo-extensions/nemo-fileroller { };
@@ -20,6 +19,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-desktop = lib.warn "cinnamon.cinnamon-desktop was moved to top-level. Please use pkgs.cinnamon-desktop directly." pkgs.cinnamon-desktop; # Added on 2024-07-22
   cinnamon-menus = lib.warn "cinnamon.cinnamon-menus was moved to top-level. Please use pkgs.cinnamon-menus directly." pkgs.cinnamon-menus; # Added on 2024-07-22
   cinnamon-translations = lib.warn "cinnamon.cinnamon-translations was moved to top-level. Please use pkgs.cinnamon-translations directly." pkgs.cinnamon-translations; # Added on 2024-07-22
+  cjs = lib.warn "cinnamon.cjs was moved to top-level. Please use pkgs.cjs directly." pkgs.cjs; # Added on 2024-07-22
   iso-flags-png-320x420 = lib.warn "cinnamon.iso-flags-png-320x420 was moved to top-level and renamed to pkgs.iso-flags-png-320x240." pkgs.iso-flags-png-320x240; # Added on 2024-07-14
   iso-flags-svg = throw "cinnamon.iso-flags-svg was removed because this is not used in Cinnamon. You can directly obtain the images from \"\${pkgs.iso-flags.src}/svg\"."; # Added on 2024-07-14
   folder-color-switcher = lib.warn "cinnamon.folder-color-switcher was moved to top-level. Please use pkgs.folder-color-switcher directly." pkgs.folder-color-switcher; # Added on 2024-07-14
