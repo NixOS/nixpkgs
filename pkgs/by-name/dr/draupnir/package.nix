@@ -45,11 +45,9 @@ in
     '';
 
     buildPhase = ''
-      echo "Running preBuild"
       runHook preBuild
       echo "Building..."
       yarn --offline --verbose build
-      echo "Running postBuild..."
       runHook postBuild
     '';
 
