@@ -6,6 +6,41 @@ with pkgs;
 # https://github.com/NixOS/nixpkgs/pull/16208
 
 rec {
+  gmp =
+    (pkgs.gmp.override {
+      stdenv = emscriptenStdenv;
+      cxx = true;
+    }).overrideAttrs
+      (old: {
+        outputs = [ "out" ];
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+          writableTmpDirAsHomeHook
+          which
+        ];
+        configureFlags = lib.remove "ABI=64" (old.configureFlags or [ ]) ++ [
+          "--disable-shared"
+          "--enable-static"
+          "--host=wasm32"
+          "--prefix=${placeholder "out"}"
+        ];
+        configurePhase = ''
+          mkdir -p $PWD/.emscriptencache
+          export EM_CACHE=$PWD/.emscriptencache
+          emconfigure ./configure $configureFlags
+        '';
+        buildPhase = ''
+          emmake make
+        '';
+        checkPhase = ''
+          emcc -O2 -o example.js demos/isprime.c -I. -L.libs -lgmp
+          ${lib.getExe nodejs} ./example.js 23 42 | grep -E '^(23 is a prime|42 is composite)$'
+        '';
+        installPhase = ''
+          mkdir -p $out
+          emmake make install
+        '';
+      });
+
   json_c =
     (pkgs.json_c.override {
       stdenv = pkgs.emscriptenStdenv;
