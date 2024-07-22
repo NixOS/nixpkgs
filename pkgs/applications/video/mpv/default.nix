@@ -181,6 +181,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   mesonFlags =
     [
+      "--sysconfdir=/etc"
       (lib.mesonOption "default_library" "shared")
       (lib.mesonBool "libmpv" true)
       (lib.mesonEnable "libarchive" archiveSupport)
