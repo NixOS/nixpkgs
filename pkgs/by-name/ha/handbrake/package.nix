@@ -9,8 +9,7 @@
 
 { lib
 , stdenv
-, fetchFromGitHub
-, fetchpatch
+, callPackage
   # For tests
 , testers
 , runCommand
@@ -87,69 +86,15 @@
 }:
 
 let
-  version = "1.8.0";
+  sources = callPackage ./sources.nix { };
 
-  src = fetchFromGitHub {
-    owner = "HandBrake";
-    repo = "HandBrake";
-    # uses version commit for logic in version.txt
-    rev = "5edf59c1da54fe1c9a487d09e8f52561fe49cb2a";
-    hash = "sha256-gr2UhqPY5mZOP8KBvk9yydl4AkTlqE83hYAcLwSv1Is=";
-  };
+  version = sources.handbrake.version;
 
-  # Handbrake maintains a set of ffmpeg patches. In particular, these
-  # patches are required for subtitle timing to work correctly. See:
-  # https://github.com/HandBrake/HandBrake/issues/4029
-  # base ffmpeg version is specified in:
-  # https://github.com/HandBrake/HandBrake/blob/master/contrib/ffmpeg/module.defs
-  ffmpeg-version = "7.0";
-  ffmpeg-hb = (ffmpeg_7-full.override {
-    version = ffmpeg-version;
-    hash = "sha256-RdDfv+0y90XpgjIRvTjsemKyGunzDbsh4j4WiE9rfyM=";
-  }).overrideAttrs (old: {
-    patches = (old.patches or [ ]) ++ [
-      "${src}/contrib/ffmpeg/A01-mov-read-name-track-tag-written-by-movenc.patch"
-      "${src}/contrib/ffmpeg/A02-movenc-write-3gpp-track-titl-tag.patch"
-      "${src}/contrib/ffmpeg/A03-mov-read-3gpp-udta-tags.patch"
-      "${src}/contrib/ffmpeg/A04-movenc-write-3gpp-track-names-tags-for-all-available.patch"
-      "${src}/contrib/ffmpeg/A05-dvdsubdec-fix-processing-of-partial-packets.patch"
-      "${src}/contrib/ffmpeg/A06-dvdsubdec-return-number-of-bytes-used.patch"
-      "${src}/contrib/ffmpeg/A07-dvdsubdec-use-pts-of-initial-packet.patch"
-      "${src}/contrib/ffmpeg/A08-dvdsubdec-do-not-discard-zero-sized-rects.patch"
-      "${src}/contrib/ffmpeg/A09-ccaption_dec-fix-pts-in-real_time-mode.patch"
-      "${src}/contrib/ffmpeg/A10-matroskaenc-aac-extradata-updated.patch"
-      "${src}/contrib/ffmpeg/A11-videotoolbox-disable-H.264-10-bit-on-Intel-macOS.patch"
+  src = sources.handbrake.src;
 
-      # patch to fix <https://github.com/HandBrake/HandBrake/issues/5011>
-      # commented out because it causes ffmpeg's filter-pixdesc-p010le test to fail.
-      # "${src}/contrib/ffmpeg/A12-libswscale-fix-yuv420p-to-p01xle-color-conversion-bu.patch"
+  ffmpeg-hb = sources.ffmpeg-hb;
 
-      "${src}/contrib/ffmpeg/A13-qsv-fix-decode-10bit-hdr.patch"
-      "${src}/contrib/ffmpeg/A14-amfenc-Add-support-for-pict_type-field.patch"
-      "${src}/contrib/ffmpeg/A15-amfenc-Fixes-the-color-information-in-the-ou.patch"
-      "${src}/contrib/ffmpeg/A16-amfenc-HDR-metadata.patch"
-      "${src}/contrib/ffmpeg/A17-av1dec-dovi-rpu.patch"
-      "${src}/contrib/ffmpeg/A18-avformat-mov-add-support-audio-fallback-track-ref.patch"
-      "${src}/contrib/ffmpeg/A19-mov-ignore-old-infe-box.patch"
-      "${src}/contrib/ffmpeg/A20-mov-free-infe-on-failure.patch"
-    ];
-  });
-
-  x265-hb = x265.overrideAttrs (old: {
-    # nixpkgs' x265 sourceRoot is x265-.../source whereas handbrake's x265 patches
-    # are written with respect to the parent directory instead of that source directory.
-    # patches which don't cleanly apply are commented out.
-    postPatch = (old.postPatch or "") + ''
-      pushd ..
-      patch -p1 < ${src}/contrib/x265/A01-threads-priority.patch
-      patch -p1 < ${src}/contrib/x265/A02-threads-pool-adjustments.patch
-      patch -p1 < ${src}/contrib/x265/A03-sei-length-crash-fix.patch
-      patch -p1 < ${src}/contrib/x265/A04-ambient-viewing-enviroment-sei.patch
-      # patch -p1 < ${src}/contrib/x265/A05-memory-leaks.patch
-      # patch -p1 < ${src}/contrib/x265/A06-crosscompile-fix.patch
-      popd
-    '';
-  });
+  x265-hb = sources.x265-hb;
 
   versionFile = writeText "version.txt" ''
     URL=${src.meta.homepage}.git
@@ -167,7 +112,7 @@ let
 
 in
 let
-  self = stdenv.mkDerivation rec {
+  self = stdenv.mkDerivation {
     pname = "handbrake";
     inherit version src;
 
@@ -178,7 +123,7 @@ let
       patchShebangs gtk/data/
 
       substituteInPlace libhb/hb.c \
-        --replace-fail 'return hb_version;' 'return "${version}";'
+        --replace-fail 'return hb_version;' 'return "${self.version}";'
 
       # Force using nixpkgs dependencies
       sed -i '/MODULES += contrib/d' make/include/main.defs
@@ -304,7 +249,7 @@ let
             sha256 = "1hfxbbgxwfkzv85pvpvx55a72qsd0hxjbm9hkl5r3590zw4s75h9";
           };
         in
-        runCommand "${pname}-${version}-basic-conversion" { nativeBuildInputs = [ self ]; } ''
+        runCommand "${self.pname}-${self.version}-basic-conversion" { nativeBuildInputs = [ self ]; } ''
           mkdir -p $out
           cd $out
           HandBrakeCLI -i ${testMkv} -o test.mp4 -e x264 -q 20 -B 160
