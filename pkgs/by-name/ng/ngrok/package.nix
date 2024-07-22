@@ -57,8 +57,8 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  # Stripping causes SEGFAULT on x86_64-darwin
-  dontStrip = true;
+  # Stripping causes SEGFAULT on darwin
+  dontStrip = stdenv.isDarwin;
 
   meta = {
     description = "Allows you to expose a web server running on your local machine to the internet";
