@@ -3189,6 +3189,8 @@ self: super: with self; {
 
   distro = callPackage ../development/python-modules/distro { };
 
+  distutils = if pythonOlder "3.12" then null else callPackage ../development/python-modules/distutils { };
+
   distutils-extra = callPackage ../development/python-modules/distutils-extra { };
 
   # LTS in extended support phase
@@ -6150,6 +6152,8 @@ self: super: with self; {
 
   jaraco-email = callPackage ../development/python-modules/jaraco-email { };
 
+  jaraco-envs = callPackage ../development/python-modules/jaraco-envs { };
+
   jaraco-context = callPackage ../development/python-modules/jaraco-context { };
 
   jaraco-functools = callPackage ../development/python-modules/jaraco-functools { };
@@ -6159,6 +6163,8 @@ self: super: with self; {
   jaraco-logging = callPackage ../development/python-modules/jaraco-logging { };
 
   jaraco-net = callPackage ../development/python-modules/jaraco-net { };
+
+  jaraco-path = callPackage ../development/python-modules/jaraco-path { };
 
   jaraco-stream = callPackage ../development/python-modules/jaraco-stream { };
 
