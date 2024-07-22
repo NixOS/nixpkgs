@@ -1,0 +1,20 @@
+diff --git a/services/web/webpack.config.js b/services/web/webpack.config.js
+index 6da8f627f..dd6a42bff 100644
+--- a/services/web/webpack.config.js
++++ b/services/web/webpack.config.js
+@@ -54,9 +54,14 @@ glob
+ function getModuleDirectory(moduleName) {
+   const entrypointPath = require.resolve(moduleName)
+   const suffix = `node_modules/${moduleName}`
++  const suffixAlt = `libraries/${moduleName}`
+   const idx = entrypointPath.indexOf(suffix)
++  const idxAlt = entrypointPath.indexOf(suffixAlt)
+   if (idx === -1) {
+-    throw new Error(`could not find Node module: ${moduleName}`)
++    if (idxAlt === -1) {
++      throw new Error(`could not find Node module: ${moduleName}`)
++    }
++    return entrypointPath.slice(0, idxAlt + suffixAlt.length)
+   }
+   return entrypointPath.slice(0, idx + suffix.length)
+ }
