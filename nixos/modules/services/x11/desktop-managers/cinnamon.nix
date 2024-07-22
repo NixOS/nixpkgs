@@ -7,7 +7,7 @@ let
   cfg = config.services.xserver.desktopManager.cinnamon;
   serviceCfg = config.services.cinnamon;
 
-  nixos-gsettings-overrides = pkgs.cinnamon.cinnamon-gsettings-overrides.override {
+  nixos-gsettings-overrides = pkgs.cinnamon-gsettings-overrides.override {
     extraGSettingsOverridePackages = cfg.extraGSettingsOverridePackages;
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
