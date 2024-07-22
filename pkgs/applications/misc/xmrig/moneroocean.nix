@@ -20,6 +20,6 @@ xmrig.overrideAttrs (oldAttrs: rec {
     license = licenses.gpl3Plus;
     mainProgram = "xmrig";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ j0hax ];
+    maintainers = with maintainers; [ j0hax redhawk ];
   };
 })
