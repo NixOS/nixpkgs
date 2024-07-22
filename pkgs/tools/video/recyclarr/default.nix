@@ -1,82 +1,67 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, autoPatchelfHook
-, fixDarwinDylibNames
-, darwin
-, recyclarr
-, git
-, icu
-, openssl
-, testers
-, zlib
+{
+  lib,
+  openssl,
+  writeText,
+  git,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  recyclarr,
+  testers,
 }:
 let
-  os =
-    if stdenv.isDarwin
-    then "osx"
-    else "linux";
-
-  arch = {
-    x86_64-linux = "x64";
-    aarch64-linux = "arm64";
-    x86_64-darwin = "x64";
-    aarch64-darwin = "arm64";
-  }."${stdenv.hostPlatform.system}"
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
-  hash = {
-    x64-linux_hash = "sha256-LMAY1UIwvB+ne4rpwLKaYO6QGTwdiS3YBndr73zIzvQ=";
-    arm64-linux_hash = "sha256-by3PSYdN7TPjA0Cx4pfzIbpZ/YVU1agfcuvuZh6mbfU=";
-    x64-osx_hash = "sha256-/YqdlVktgbBUNdm+mAD053pf6wCMXYt6gQP+iTQdKqw=";
-    arm64-osx_hash = "sha256-2RRQGNTztK14KDFRqgpagNCWTizHVNY67psaxFfyDZ4=";
-  }."${arch}-${os}_hash";
-
-  libPath = {
-    osx = "DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [darwin.ICU openssl zlib]}";
-    linux = "LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu openssl zlib]}";
-  }."${os}";
-
+  nuget-config = writeText "nuget.config" ''
+    <configuration>
+      <packageSources>
+        <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+      </packageSources>
+    </configuration>
+  '';
 in
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "recyclarr";
-  version = "7.0.0";
+  version = "7.1.1";
 
-  src = fetchurl {
-    url = "https://github.com/recyclarr/recyclarr/releases/download/v${version}/recyclarr-${os}-${arch}.tar.xz";
-    inherit hash;
+  src = fetchFromGitHub {
+    owner = "recyclarr";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-0VPoCvhZQGMu8wZzQIk54J2OTlxe7+h/9QOxx+HuL+c=";
   };
 
-  sourceRoot = ".";
+  projectFile = "Recyclarr.sln";
+  nugetDeps = ./deps.nix;
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optional stdenv.isLinux autoPatchelfHook
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
-  buildInputs = [ icu zlib ];
+  prePatch = ''
+    substituteInPlace src/Recyclarr.Cli/Program.cs \
+      --replace-fail '$"v{GitVersionInformation.SemVer} ({GitVersionInformation.FullBuildMetaData})"' '"${version}-nixpkgs"'
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 recyclarr -t $out/bin
-
-    runHook postInstall
+    substituteInPlace src/Recyclarr.Cli/Console/Setup/ProgramInformationDisplayTask.cs \
+      --replace-fail 'GitVersionInformation.InformationalVersion' '"${version}-nixpkgs"'
   '';
+  patches = [ ./001-Git-Version.patch ];
 
-  postInstall = ''
-    wrapProgram $out/bin/recyclarr \
-      --prefix PATH : ${lib.makeBinPath [git]} \
-      --prefix ${libPath}
-  '';
+  dotnetRestoreFlags = [ "--configfile=${nuget-config}" ];
 
-  dontStrip = true; # stripping messes up dotnet single-file deployment
+  doCheck = false;
+
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-test-sdk = dotnetCorePackages.sdk_8_0;
+
+  executables = [ "recyclarr" ];
+  makeWrapperArgs = [
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        git
+        openssl
+      ]
+    }"
+  ];
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion {
-      package = recyclarr;
-      version = "v${version}";
-    };
+    tests.version = testers.testVersion { package = recyclarr; };
   };
 
   meta = with lib; {
@@ -84,8 +69,15 @@ stdenv.mkDerivation rec {
     homepage = "https://recyclarr.dev/";
     changelog = "https://github.com/recyclarr/recyclarr/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ josephst ];
-    mainProgram = "recyclarr";
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      josephst
+      aldoborrero
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }
