@@ -5563,12 +5563,6 @@
     name = "Moritz Fromm";
     keys = [ { fingerprint = "67BE E563 43B6 420D 550E  DF2A 6D61 7FD0 A85B AADA"; } ];
   };
-  e-renna = {
-    email = "nixpkgs@enricorenna.me";
-    github = "e-renna";
-    githubId = 115326412;
-    name = "Enrico Renna";
-  };
   eadwu = {
     email = "edmund.wu@protonmail.com";
     github = "eadwu";
@@ -6081,6 +6075,12 @@
     githubId = 2663216;
     name = "Alexandre Iooss";
     keys = [ { fingerprint = "2D37 1AD2 7E2B BC77 97E1  B759 6C79 278F 3FCD CC02"; } ];
+  };
+  e-renna = {
+    email = "nixpkgs@enricorenna.me";
+    github = "e-renna";
+    githubId = 115326412;
+    name = "Enrico Renna";
   };
   ereslibre = {
     email = "ereslibre@ereslibre.es";
