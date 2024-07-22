@@ -64,17 +64,17 @@ stdenv.mkDerivation (finalAttrs: {
   # Also we remove "Designer" from darwin build, due to linking failure
   postPatch =
     ''
-    # Don't ignore optional Qt modules
-    substituteInPlace cmake/PySideHelpers.cmake \
-      --replace-fail \
-        'string(FIND "''${_module_dir}" "''${_core_abs_dir}" found_basepath)' \
-        'set (found_basepath 0)'
-  ''
-  + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmake/PySideHelpers.cmake \
-      --replace-fail \
-        "Designer" ""
-  '';
+      # Don't ignore optional Qt modules
+      substituteInPlace cmake/PySideHelpers.cmake \
+        --replace-fail \
+          'string(FIND "''${_module_dir}" "''${_core_abs_dir}" found_basepath)' \
+          'set (found_basepath 0)'
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace cmake/PySideHelpers.cmake \
+        --replace-fail \
+          "Designer" ""
+    '';
 
   # "Couldn't find libclang.dylib You will likely need to add it manually to PATH to ensure the build succeeds."
   env = lib.optionalAttrs stdenv.isDarwin { LLVM_INSTALL_DIR = "${llvmPackages.libclang.lib}/lib"; };
