@@ -9,7 +9,7 @@ in
 {
   #region Options
   options.services.draupnir = {
-    enable = lib.mkEnableOption ("Draupnir, a moderation tool for Matrix");
+    enable = lib.mkEnableOption "Draupnir, a moderation bot for Matrix";
 
     package = lib.mkPackageOption pkgs "draupnir" { };
 
@@ -183,7 +183,7 @@ in
     });
 
     systemd.services.draupnir = {
-      description = "Draupnir - a moderation tool for Matrix";
+      description = "Draupnir - a moderation bot for Matrix";
       requires = lib.optionals (cfg.pantalaimon.enable) [
         "pantalaimon-draupnir.service"
       ];
