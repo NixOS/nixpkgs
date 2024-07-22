@@ -125,6 +125,39 @@ rec {
         '';
       });
 
+  mpfr =
+    (pkgs.mpfr.override {
+      stdenv = emscriptenStdenv;
+      gmp = gmp;
+    }).overrideAttrs
+      (old: {
+        outputs = [ "out" ];
+        propagatedBuildInputs = [ gmp ];
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+          writableTmpDirAsHomeHook
+        ];
+        configureFlags = (old.configureFlags or [ ]) ++ [
+          "--disable-shared"
+          "--enable-static"
+          "--with-gmp=${gmp}"
+          "--prefix=${placeholder "out"}"
+        ];
+        configurePhase = ''
+          emconfigure ./configure $configureFlags
+        '';
+        buildPhase = ''
+          emmake make
+        '';
+        checkPhase = ''
+          emcc -O2 -o example.js examples/sample.c -I${lib.getDev gmp}/include -Isrc -L${lib.getDev gmp}/lib -Lsrc/.libs -lgmp -lmpfr
+          ${lib.getExe nodejs} ./example.js | grep -E '^Sum is 2.7182818284590452353602874713526624977572470936999595749669131e0$'
+        '';
+        installPhase = ''
+          mkdir $out
+          emmake make install
+        '';
+      });
+
   xmlmirror = pkgs.buildEmscriptenPackage rec {
     pname = "xmlmirror";
     version = "unstable-2016-06-05";
