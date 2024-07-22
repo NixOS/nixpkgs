@@ -25,6 +25,7 @@
   msgpack,
   pymongo,
   pyyaml,
+  redis,
 
   # tests
   pytest-celery,
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     mongodb = [ pymongo ];
     msgpack = [ msgpack ];
     yaml = [ pyyaml ];
+    redis = [ redis ];
   };
 
   nativeCheckInputs =
