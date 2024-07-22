@@ -9416,8 +9416,6 @@ with pkgs;
     jdk = jdk11;
   };
 
-  kluctl = callPackage ../applications/networking/cluster/kluctl { };
-
   kibi = callPackage ../applications/editors/kibi { };
 
   kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
