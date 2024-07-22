@@ -208,7 +208,7 @@ let
     makeFlags = [ "--directory=build" ];
 
     # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
-    NIX_LDFLAGS = [ "-lx265" ];
+    env.NIX_LDFLAGS = builtins.toString [ "-lx265" ];
 
     # meson/ninja are used only for the subprojects, not the toplevel
     dontUseMesonConfigure = true;
