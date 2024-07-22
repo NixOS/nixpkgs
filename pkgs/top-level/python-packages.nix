@@ -10006,6 +10006,8 @@ self: super: with self; {
 
   phe = callPackage ../development/python-modules/phe { };
 
+  phply = callPackage ../development/python-modules/phply { };
+
   phik = callPackage ../development/python-modules/phik { };
 
   phone-modem = callPackage ../development/python-modules/phone-modem { };
