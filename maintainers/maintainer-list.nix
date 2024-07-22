@@ -5563,6 +5563,12 @@
     name = "Moritz Fromm";
     keys = [ { fingerprint = "67BE E563 43B6 420D 550E  DF2A 6D61 7FD0 A85B AADA"; } ];
   };
+  e-renna = {
+    email = "nixpkgs@enricorenna.me";
+    github = "e-renna";
+    githubId = 115326412;
+    name = "Enrico Renna";
+  };
   eadwu = {
     email = "edmund.wu@protonmail.com";
     github = "eadwu";
