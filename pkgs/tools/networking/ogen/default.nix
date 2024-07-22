@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "ogen-go";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZjeA9ogyMsoByBzdvikut93JT6s+8m1AyyPFtwEcYwY="
+    hash = "sha256-ZjeA9ogyMsoByBzdvikut93JT6s+8m1AyyPFtwEcYwY=";
   };
 
   vendorHash = "sha256-EL8FcAnDMekHBIDRdGqQO4JNESjGC7MQ5aUcDkRqrbg=";
