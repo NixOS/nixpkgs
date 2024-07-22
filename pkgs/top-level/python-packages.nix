@@ -17381,6 +17381,8 @@ self: super: with self; {
 
   weblate-language-data = callPackage ../development/python-modules/weblate-language-data { };
 
+  weblate-schemas = callPackage ../development/python-modules/weblate-schemas { };
+
   webob = callPackage ../development/python-modules/webob { };
 
   webrtc-noise-gain = callPackage ../development/python-modules/webrtc-noise-gain { };
