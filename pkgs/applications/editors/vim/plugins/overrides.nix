@@ -988,6 +988,8 @@
     dependencies = with self; [ luaPackages.jsregexp ];
   };
 
+  lz-n = neovimUtils.buildNeovimPlugin { luaAttr = "lz-n"; };
+
   magma-nvim-goose = buildVimPlugin {
     pname = "magma-nvim-goose";
     version = "2023-03-13";
