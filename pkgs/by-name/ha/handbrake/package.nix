@@ -124,12 +124,18 @@ let
       pkg-config
       python3
     ]
-    ++ optionals useGtk [ appstream desktop-file-utils intltool meson ninja wrapGAppsHook4 ];
+    ++ optionals useGtk [
+      appstream
+      desktop-file-utils
+      intltool
+      meson
+      ninja
+      wrapGAppsHook4
+    ];
 
     buildInputs = [
       a52dec
       dav1d
-      ffmpeg-hb
       fontconfig
       freetype
       fribidi
@@ -153,11 +159,16 @@ let
       speex
       svt-av1
       x264
-      x265-hb
       xz
       zimg
     ]
-    ++ optional (!stdenv.isDarwin) numactl
+    ++ [
+      ffmpeg-hb
+      x265-hb
+    ]
+    ++ optionals (!stdenv.isDarwin) [
+      numactl
+    ]
     ++ optionals useGtk [
       dbus-glib
       glib
@@ -173,7 +184,9 @@ let
       libnotify
       udev
     ]
-    ++ optional useFdk fdk_aac
+    ++ optionals useFdk [
+      fdk_aac
+    ]
     ++ optionals stdenv.isDarwin
       ([ darwin.libobjc ]
        ++ (with darwin.apple_sdk.frameworks; [
