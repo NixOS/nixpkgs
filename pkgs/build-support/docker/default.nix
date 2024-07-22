@@ -908,6 +908,7 @@ rec {
     , config ? { }
     , architecture ? defaultArchitecture
     , created ? "1970-01-01T00:00:01Z"
+    , mtime ? created
     , uid ? 0
     , gid ? 0
     , uname ? "root"
@@ -1007,7 +1008,7 @@ rec {
 
         conf = runCommand "${baseName}-conf.json"
           {
-            inherit fromImage maxLayers created uid gid uname gname;
+            inherit fromImage maxLayers created mtime uid gid uname gname;
             imageName = lib.toLower name;
             preferLocalBuild = true;
             passthru.imageTag =
@@ -1027,9 +1028,12 @@ rec {
             imageTag="${tag}"
           ''}
 
-          # convert "created" to iso format
+          # convert "created" and "mtime" to iso format
           if [[ "$created" != "now" ]]; then
               created="$(date -Iseconds -d "$created")"
+          fi
+          if [[ "$mtime" != "now" ]]; then
+              mtime="$(date -Iseconds -d "$mtime")"
           fi
 
           paths() {
@@ -1087,6 +1091,7 @@ rec {
               "customisation_layer", $customisation_layer,
               "repo_tag": $repo_tag,
               "created": $created,
+              "mtime": $mtime,
               "uid": $uid,
               "gid": $gid,
               "uname": $uname,
@@ -1098,6 +1103,7 @@ rec {
               --arg customisation_layer ${customisationLayer} \
               --arg repo_tag "$imageName:$imageTag" \
               --arg created "$created" \
+              --arg mtime "$mtime" \
               --arg uid "$uid" \
               --arg gid "$gid" \
               --arg uname "$uname" \
