@@ -35135,7 +35135,7 @@ with pkgs;
 
   xdg-desktop-portal-gtk = callPackage ../development/libraries/xdg-desktop-portal-gtk { };
 
-  xdg-desktop-portal-hyprland = callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland {
+  xdg-desktop-portal-hyprland = callPackage ../by-name/xd/xdg-desktop-portal-hyprland/package.nix {
     inherit (qt6) qtbase qttools qtwayland wrapQtAppsHook;
   };
 
