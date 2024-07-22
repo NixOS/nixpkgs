@@ -192,6 +192,8 @@ let
     ++ optional stdenv.isDarwin "--disable-xcode"
     ++ optional stdenv.hostPlatform.isx86 "--harden";
 
+    makeFlags = [ "--directory=build" ];
+
     # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
     NIX_LDFLAGS = [ "-lx265" ];
 
@@ -201,7 +203,6 @@ let
     dontUseNinjaBuild = true;
     dontUseNinjaInstall = true;
 
-    makeFlags = [ "--directory=build" ];
 
     postPatch = ''
       install -Dm444 ${versionFile} ${versionFile.name}
