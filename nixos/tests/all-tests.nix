@@ -719,6 +719,7 @@ in {
   osquery = handleTestOn ["x86_64-linux"] ./osquery.nix {};
   osrm-backend = handleTest ./osrm-backend.nix {};
   overlayfs = handleTest ./overlayfs.nix {};
+  overleaf = handleTest ./overleaf.nix {};
   pacemaker = handleTest ./pacemaker.nix {};
   packagekit = handleTest ./packagekit.nix {};
   pam-file-contents = handleTest ./pam/pam-file-contents.nix {};

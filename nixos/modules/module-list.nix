@@ -1442,6 +1442,7 @@
   ./services/web-apps/mobilizon.nix
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/outline.nix
+  ./services/web-apps/overleaf.nix
   ./services/web-apps/peering-manager.nix
   ./services/web-apps/peertube.nix
   ./services/web-apps/pgpkeyserver-lite.nix
