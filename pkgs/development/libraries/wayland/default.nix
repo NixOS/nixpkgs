@@ -55,9 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "bin" "dev" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
   separateDebugInfo = true;
-  # We don't want `bin` to be propagated, as it'd propagate wayland-scanner, which breaks cross.
-  # See https://github.com/NixOS/nixpkgs/pull/328804
-  propagatedBuildOutputs = [ "out" "dev" ];
 
   mesonFlags = [
     "-Ddocumentation=${lib.boolToString withDocumentation}"
