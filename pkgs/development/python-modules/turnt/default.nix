@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "turnt";
-  version = "1.11.0";
+  version = "1.12.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XN+qzRgZMSdeBmW0OM36mQ79sRCuP8E++SqH8FOoEq0=";
+    hash = "sha256-4K7cqGwKErGbZ+dxVa06v8aIfrpVLC293d29QT+vsBw=";
   };
 
   nativeBuildInputs = [ flit ];
