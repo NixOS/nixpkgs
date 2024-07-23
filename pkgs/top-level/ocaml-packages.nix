@@ -1181,6 +1181,8 @@ let
 
     mmap =  callPackage ../development/ocaml-modules/mmap { };
 
+    mopsa = callPackage ../development/ocaml-modules/mopsa { };
+
     morbig = callPackage ../development/ocaml-modules/morbig { };
 
     mparser =  callPackage ../development/ocaml-modules/mparser { };
