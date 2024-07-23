@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libiio";
-  version = "0.24";
+  version = "0.25";
 
   outputs = [ "out" "lib" "dev" ]
     ++ lib.optional pythonSupport "python";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "analogdevicesinc";
     repo = "libiio";
     rev = "v${version}";
-    sha256 = "sha256-c5HsxCdp1cv5BGTQ/8dc8J893zk9ntbfAudLpqoQ1ow=";
+    sha256 = "sha256-s+5zuw3nAxnE8LVreCdrLGVrEUzzXmfIfPXW5iH6auM=";
   };
 
   # Revert after https://github.com/NixOS/nixpkgs/issues/125008 is
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace libiio.rules.cmakein \
-      --replace /bin/sh ${runtimeShell}
+      --replace-fail /bin/sh ${runtimeShell}
   '' + lib.optionalString pythonSupport ''
     # Hardcode path to the shared library into the bindings.
     sed "s#@libiio@#$lib/lib/libiio${stdenv.hostPlatform.extensions.sharedLibrary}#g" ${./hardcode-library-path.patch} | patch -p1
