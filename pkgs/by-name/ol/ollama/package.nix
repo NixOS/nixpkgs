@@ -30,6 +30,13 @@
   acceleration ? null,
 }:
 
+assert builtins.elem acceleration [
+  null
+  false
+  "rocm"
+  "cuda"
+];
+
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
@@ -69,18 +76,11 @@ let
       extraPrefix = "llm/llama.cpp/";
     };
 
-  accelIsValid = builtins.elem acceleration [
-    null
-    false
-    "rocm"
-    "cuda"
-  ];
   validateFallback = lib.warnIf (config.rocmSupport && config.cudaSupport) (lib.concatStrings [
     "both `nixpkgs.config.rocmSupport` and `nixpkgs.config.cudaSupport` are enabled, "
     "but they are mutually exclusive; falling back to cpu"
   ]) (!(config.rocmSupport && config.cudaSupport));
   shouldEnable =
-    assert accelIsValid;
     mode: fallback: (acceleration == mode) || (fallback && acceleration == null && validateFallback);
 
   rocmRequested = shouldEnable "rocm" config.rocmSupport;
