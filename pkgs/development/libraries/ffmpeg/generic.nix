@@ -39,8 +39,7 @@
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
 , withAudioToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple AudioToolbox
-# Compiling ffmpeg 7 with AVFoundation on x86_64-darwin currently fails with "error: incompatible pointer to integer conversion passing 'NSString *const' to parameter of type 'enum AVMediaType' [-Wint-conversion] NSArray *devices = getDevicesWithMediaType(AVMediaTypeAudio);"
-, withAvFoundation ? withHeadlessDeps && stdenv.isDarwin && !(lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86) # Apple AVFoundation framework
+, withAvFoundation ? withHeadlessDeps && stdenv.isDarwin # Apple AVFoundation framework
 , withAvisynth ? withFullDeps # AviSynth script files reading
 , withBluray ? withFullDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
@@ -94,8 +93,7 @@
 , withPlacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withPulse ? withSmallDeps && stdenv.isLinux # Pulseaudio input support
 , withQrencode ? withFullDeps && lib.versionAtLeast version "7" # QR encode generation
-# On runtime fails with dyld[25216]: Library not loaded: libquirc.so.1.2 (Seems to not link the libary correctly)
-, withQuirc ? withFullDeps && lib.versionAtLeast version "7" && !stdenv.isDarwin # QR decoding
+, withQuirc ? withFullDeps && lib.versionAtLeast version "7" # QR decoding
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
 , withRtmp ? withFullDeps # RTMP[E] support
 , withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
