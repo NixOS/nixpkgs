@@ -156,7 +156,7 @@ buildNpmPackage' rec {
   meta = with lib; {
     description = "Open-source IDE For exploring and testing APIs";
     homepage = "https://www.usebruno.com";
-    inherit (electron.meta) platforms;
+    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mit;
     maintainers = with maintainers; [ gepbird kashw2 lucasew mattpolzin water-sucks redyf ];
     mainProgram = "bruno";
