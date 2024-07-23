@@ -11,6 +11,8 @@ let
 in
 
 appleDerivation {
+  patches = [ ./suppress-icu-check-crash.patch ];
+
   nativeBuildInputs = [ python3 ];
 
   depsBuildBuild = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ];
