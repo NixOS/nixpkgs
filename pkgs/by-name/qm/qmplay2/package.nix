@@ -29,6 +29,13 @@ in
 stdenv.mkDerivation (finalAttrs: {
   inherit (sources.qmplay2) pname version src;
 
+  postPatch = ''
+    pushd src
+    cp -va ${sources.qmvk.src}/* qmvk/
+    chmod --recursive 744 qmvk
+    popd
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -65,6 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     [ -e $out/bin/qmplay2 ] || ln -s $out/bin/QMPlay2 $out/bin/qmplay2
   '';
+
+  passthru = {
+    inherit sources;
+  };
 
   meta = {
     homepage = "https://github.com/zaps166/QMPlay2/";
