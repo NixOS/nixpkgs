@@ -22,7 +22,7 @@
   jinja2,
   networkx,
   filelock,
-  openai-triton,
+  triton,
 }:
 
 let
@@ -88,7 +88,7 @@ buildPythonPackage {
     jinja2
     networkx
     filelock
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [ openai-triton ];
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [ triton ];
 
   postInstall = ''
     # ONNX conversion
