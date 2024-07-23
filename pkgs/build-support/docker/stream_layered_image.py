@@ -33,6 +33,7 @@ function does all this.
 """  # noqa: E501
 
 
+import argparse
 import io
 import os
 import re
@@ -317,7 +318,36 @@ def add_bytes(tar, path, content, mtime):
 
 
 def main():
-    with open(sys.argv[1], "r") as f:
+    arg_parser = argparse.ArgumentParser(description="""
+This script generates a Docker image from a set of store paths. Uses
+Docker Image Specification v1.2 as reference [1].
+
+[1]: https://github.com/moby/moby/blob/master/image/spec/v1.2.md
+    """
+    )
+    arg_parser.add_argument(
+        "conf",
+        type=str,
+        help="""
+        JSON file with the following properties and writes the
+        image as an uncompressed tarball to stdout:
+
+        * "architecture", "config", "os", "created", "repo_tag" correspond to
+        the fields with the same name on the image spec [2].
+        * "created" can be "now".
+        * "created" is also used as mtime for files added to the image.
+        * "uid", "gid", "uname", "gname" is the file ownership, for example,
+        0, 0, "root", "root".
+        * "store_layers" is a list of layers in ascending order, where each
+        layer is the list of store paths to include in that layer.
+    """,
+    )
+    arg_parser.add_argument(
+        '--tag', '-t', type=str, help="Override the tag from the configuration"
+    )
+
+    args = arg_parser.parse_args()
+    with open(args.conf, "r") as f:
         conf = json.load(f)
 
     created = (
@@ -384,7 +414,7 @@ def main():
         manifest_json = [
             {
                 "Config": image_json_path,
-                "RepoTags": [conf["repo_tag"]],
+                "RepoTags": [args.tag or conf["repo_tag"]],
                 "Layers": [layer.path for layer in layers],
             }
         ]
