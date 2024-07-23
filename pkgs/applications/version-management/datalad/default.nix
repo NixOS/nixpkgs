@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "datalad";
-  version = "1.0.2";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-oq+DdlWcwjJSQdnqHlYCa9I7iSOKf+hI35Lcv/GM24c=";
+    hash = "sha256-Vw/RpMf+jnUijJ3GZ9nLk1IRWOADmM+jNtYl5Ba6uLg=";
   };
 
   nativeBuildInputs = [ installShellFiles git ];
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     # requests-ftp # not in nixpkgs yet
 
     # downloaders
-    boto
+    boto3
     keyrings-alt
     keyring
     msgpack
