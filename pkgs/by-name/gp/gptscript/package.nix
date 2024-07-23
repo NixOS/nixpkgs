@@ -7,16 +7,16 @@
 }:
 buildGoModule rec {
   pname = "gptscript";
-  version = "0.8.2";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "gptscript-ai";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BqGoIDFquVMGMkKe2IO3Se4IeqgVSqjv00gfhJf8evs=";
+    hash = "sha256-jNscG3tET7Keg5tTkRKnnaDwXeB9xNqi3ggOnN3OI7E=";
   };
 
-  vendorHash = "sha256-oI2agy8FOyoNl0zQzvXMsHY5tG1QNvkQf+n2GVGyNz8=";
+  vendorHash = "sha256-KOgCYN3whi8gI7cF62uHXkJfLKA5QzfwlFjYh2Q7PlI=";
 
   propagatedBuildInputs = with darwin;
     lib.optionals stdenv.isDarwin [Security];

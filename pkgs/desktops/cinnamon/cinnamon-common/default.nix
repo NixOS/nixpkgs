@@ -58,7 +58,7 @@ let
     setproctitle
     pygobject3
     pycairo
-    pp.xapp # don't omit `pp.`, see #213561
+    python-xapp
     pillow
     pyinotify # for looking-glass
     pytz
@@ -179,7 +179,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
     )
 
-    buildPythonPath "$out ${python3.pkgs.xapp}"
+    buildPythonPath "$out ${python3.pkgs.python-xapp}"
 
     # https://github.com/NixOS/nixpkgs/issues/200397
     patchPythonScript $out/bin/cinnamon-spice-updater

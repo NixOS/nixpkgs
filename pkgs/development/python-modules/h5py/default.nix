@@ -4,14 +4,15 @@
   buildPythonPackage,
   pythonOlder,
   setuptools,
-  wheel,
   numpy,
   hdf5,
+  pythonRelaxDepsHook,
   cython_0,
   pkgconfig,
   mpi4py ? null,
   openssh,
   pytestCheckHook,
+  pytest-mpi,
   cached-property,
 }:
 
@@ -39,11 +40,15 @@ buildPythonPackage rec {
     ./mpi4py-requirement.patch
   ];
 
-  # avoid strict pinning of numpy
+  # avoid strict pinning of numpy, can't be replaced with pythonRelaxDepsHook,
+  # see: https://github.com/NixOS/nixpkgs/issues/327941
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "numpy >=2.0.0rc1" "numpy"
   '';
+  pythonRelaxDeps = [
+    "mpi4py"
+  ];
 
   HDF5_DIR = "${hdf5}";
   HDF5_MPI = if mpiSupport then "ON" else "OFF";
@@ -57,11 +62,10 @@ buildPythonPackage rec {
   preBuild = lib.optionalString mpiSupport "export CC=${lib.getDev mpi}/bin/mpicc";
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     cython_0
-    numpy
     pkgconfig
     setuptools
-    wheel
   ];
 
   buildInputs = [ hdf5 ] ++ lib.optional mpiSupport mpi;
@@ -74,20 +78,27 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
-  # tests now require pytest-mpi, which isn't available and difficult to package
-  doCheck = false;
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-mpi
     openssh
   ];
+  # https://github.com/NixOS/nixpkgs/issues/255262
+  preCheck = ''
+    cd $out
+  '';
+  # For some reason these fail when mpi support is enabled, due to concurrent
+  # writings. There are a few open issues about this in the bug tracker, but
+  # not related to the tests.
+  disabledTests = lib.optionals mpiSupport [ "TestPageBuffering" ];
 
   pythonImportsCheck = [ "h5py" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/h5py/h5py/blob/${version}/docs/whatsnew/${lib.versions.majorMinor version}.rst";
     description = "Pythonic interface to the HDF5 binary data format";
     homepage = "http://www.h5py.org/";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

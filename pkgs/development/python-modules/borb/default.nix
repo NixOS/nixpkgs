@@ -63,11 +63,11 @@ buildPythonPackage rec {
     "tests/license/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading, creating and manipulating PDF files in Python";
     homepage = "https://borbpdf.com/";
     changelog = "https://github.com/jorisschellekens/borb/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ getchoo ];
   };
 }

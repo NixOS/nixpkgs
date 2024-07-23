@@ -3,10 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
   pythonOlder,
 
   # build-system
+  distutils,
   setuptools,
 
   # native dependencies
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   version = "3.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.12"; # requires distutils
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-ldap";
@@ -35,7 +35,10 @@ buildPythonPackage rec {
     hash = "sha256-v1cWoRGxbvvFnHqnwoIfmiQQcxfaA8Bf3+M5bE5PtuU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    distutils
+    setuptools
+  ];
 
   buildInputs = [
     openldap
