@@ -23,7 +23,7 @@ buildGoModule rec {
   # podman needed for apx to not error when building shell completions
   nativeBuildInputs = [ installShellFiles podman ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [ "-s" "-w" "-X 'main.Version=v${version}'" ];
 
   postPatch = ''
     substituteInPlace config/apx.json \
