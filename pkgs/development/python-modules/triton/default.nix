@@ -197,7 +197,7 @@ buildPythonPackage rec {
     # and pythonImportsCheck is commented back.
     import-triton =
       runCommand "import-triton"
-        { nativeBuildInputs = [ (python.withPackages (ps: [ ps.openai-triton ])) ]; }
+        { nativeBuildInputs = [ (python.withPackages (ps: [ ps.triton ])) ]; }
         ''
           python << \EOF
           import triton
