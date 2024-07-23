@@ -11322,6 +11322,10 @@ self: super: with self; {
 
   pyfuse3 = callPackage ../development/python-modules/pyfuse3 { };
 
+  pyfwup = callPackage ../development/python-modules/pyfwup {
+    inherit (pkgs) libusb1;
+  };
+
   pyfxa = callPackage ../development/python-modules/pyfxa { };
 
   pyfzf = callPackage ../development/python-modules/pyfzf {
