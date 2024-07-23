@@ -127,6 +127,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://streetpea.github.io/chiaki4deck/";
     description = "Fork of Chiaki (Open Source Playstation Remote Play) with Enhancements for Steam Deck";
+    # Includes OpenSSL linking exception that we currently have no way
+    # to represent.
+    #
+    # See also: <https://github.com/spdx/license-list-XML/issues/939>
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ devusb ];
     platforms = platforms.linux;
