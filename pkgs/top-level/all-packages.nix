@@ -1001,8 +1001,6 @@ with pkgs;
 
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
-  mangal = callPackage ../applications/misc/mangal { };
-
   mermaid-filter = callPackage ../tools/misc/mermaid-filter { };
 
   graphw00f = callPackage ../tools/security/graphw00f { };
