@@ -22,7 +22,8 @@ appleDerivation {
       --replace-fail "/usr/bin/" "" \
       --replace-fail "xcrun --sdk macosx --find" "echo -n" \
       --replace-fail "xcrun --sdk macosx.internal --show-sdk-path" "echo -n /dev/null" \
-      --replace-fail "-install_name " "-install_name $out"
+      --replace-fail "-install_name " "-install_name $out" \
+      --replace-fail '-x -u -r -S' '-x --keep-undefined -S'
 
     substituteInPlace icuSources/config/mh-darwin \
       --replace-fail "-install_name " "-install_name $out/"
