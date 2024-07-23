@@ -25,11 +25,12 @@
   pytestCheckHook,
   pytest-mock,
   eval-type-backport,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.7.4";
+  version = "2.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-S4FZUnOsKC8J0xyTeXhMmCACCma+VfCSmrE6sYAnpok=";
+    hash = "sha256-9Tbm5Y1wSPa3lTdI8y95csYHua7nKUIYAfxSn+3J5zI=";
   };
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
@@ -54,7 +55,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     email = [ email-validator ];
   };
 
@@ -65,8 +66,9 @@ buildPythonPackage rec {
       faker
       pytest-mock
       pytestCheckHook
+      rich
     ]
-    ++ lib.flatten (lib.attrValues passthru.optional-dependencies)
+    ++ lib.flatten (lib.attrValues optional-dependencies)
     ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
 
   preCheck = ''
