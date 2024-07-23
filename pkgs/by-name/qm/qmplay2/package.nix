@@ -15,19 +15,25 @@
   libsidplayfp,
   libva,
   libxcb,
+  ninja,
   pkg-config,
   qt5,
+  qt6,
   stdenv,
   taglib,
   vulkan-headers,
   vulkan-tools,
+  # Configurable options
+  qtVersion ? "6", # Can be 5 or 6
 }:
 
 let
   sources = callPackage ./sources.nix { };
 in
+assert lib.elem qtVersion [ "5" "6" ];
 stdenv.mkDerivation (finalAttrs: {
-  inherit (sources.qmplay2) pname version src;
+  pname = sources.qmplay2.pname + "-qt" + qtVersion;
+  inherit (sources.qmplay2) version src;
 
   postPatch = ''
     pushd src
@@ -38,9 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    ninja
     pkg-config
   ]
-  ++ [
+  ++ lib.optionals (qtVersion == "6") [
+    qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals (qtVersion == "5") [
     qt5.wrapQtAppsHook
   ];
 
@@ -62,7 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     vulkan-tools
   ]
-  ++ [
+  ++ lib.optionals (qtVersion == "6") [
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+  ]
+  ++ lib.optionals (qtVersion == "5") [
     qt5.qtbase
     qt5.qttools
   ];

@@ -6,13 +6,13 @@
   qmplay2 = let
     self = {
       pname = "qmplay2";
-      version = "24.04.07";
+      version = "24.05.23";
 
       src = fetchFromGitHub {
         owner = "zaps166";
         repo = "QMPlay2";
         rev = self.version;
-        hash = "sha256-achnbloKJq4t7xwJ7Qn0bAEGjuLx8wiZK7+BOLYZaN0=";
+        hash = "sha256-qh3Xaph8Siu6sLFdgEhCBmsgbtjllQXjVKTAdrlTmwA=";
       };
     };
   in
@@ -20,13 +20,13 @@
 
   qmvk = {
     pname = "qmvk";
-    version = "0-unstable-2024-03-30";
+    version = "0-unstable-2024-04-19";
 
     src = fetchFromGitHub {
       owner = "zaps166";
       repo = "QmVk";
-      rev = "50826653f34140afd03ccb7e8032715092b34446";
-      hash = "sha256-p2yt0PE5j9+YGOj3T1y/z9N3djbXzxh7h27xHCMnAwo=";
+      rev = "5c5c2942255820b6343afdfeea0405cd3b36870e";
+      hash = "sha256-viFM9N5PiSCgkGlxtrLFCVDIML/QyPiaPRX77RW2NNw=";
     };
   };
 }
