@@ -2843,6 +2843,8 @@ self: super: with self; {
 
   dataproperty = callPackage ../development/python-modules/dataproperty { };
 
+  datasalad = callPackage ../development/python-modules/datasalad { };
+
   dataset = callPackage ../development/python-modules/dataset { };
 
   datasets = callPackage ../development/python-modules/datasets { };
