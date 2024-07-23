@@ -30,7 +30,7 @@
 , wayland-protocols
 , enableAlsa ? stdenv.isLinux
 , alsa-lib
-# TODO: fix once x86_64-darwin sdk updated
+  # TODO: fix once x86_64-darwin sdk updated
 , enableCocoa ? (stdenv.isDarwin && stdenv.isAarch64)
 , Cocoa
 , OpenGL
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ] ++ lib.optionals enableWayland [
-    wayland
+    wayland.bin
   ];
 
   buildInputs = [
