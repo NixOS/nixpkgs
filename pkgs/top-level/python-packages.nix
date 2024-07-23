@@ -6753,6 +6753,8 @@ self: super: with self; {
 
   leather = callPackage ../development/python-modules/leather { };
 
+  leanblueprint = callPackage ../development/python-modules/leanblueprint { };
+
   leb128 = callPackage ../development/python-modules/leb128 { };
 
   led-ble = callPackage ../development/python-modules/led-ble { };
@@ -10456,6 +10458,12 @@ self: super: with self; {
   };
 
   plaster = callPackage ../development/python-modules/plaster { };
+
+  plasTeX = callPackage ../development/python-modules/plasTeX { };
+
+  plastexdepgraph = callPackage ../development/python-modules/plastexdepgraph { };
+
+  plastexshowmore = callPackage ../development/python-modules/plastexshowmore { };
 
   plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy { };
 
