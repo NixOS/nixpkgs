@@ -3439,6 +3439,12 @@
     githubId = 22370;
     name = "Charles Duffy";
   };
+  chairbender = {
+    email = "kwhipke1@gmail.com";
+    github = "chairbender";
+    githubId = 1329062;
+    name = "Kyle Hipke";
+  };
   changlinli = {
     email = "mail@changlinli.com";
     github = "changlinli";
