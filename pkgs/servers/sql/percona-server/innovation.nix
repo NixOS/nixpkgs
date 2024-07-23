@@ -1,9 +1,10 @@
 { lib, stdenv, fetchurl, bison, cmake, pkg-config
 , boost, icu, libedit, libevent, lz4, ncurses, openssl, perl, protobuf, re2, readline, zlib, zstd, libfido2
 , numactl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools, nixosTests
+, coreutils, procps, gnused, gnugrep, hostname, makeWrapper
 , systemd
 # Percona-specific deps
-, coreutils, cyrus_sasl, gnumake, openldap
+, cyrus_sasl, gnumake, openldap
 # optional: different malloc implementations
 , withJemalloc ? false, withTcmalloc ? false, jemalloc, gperftools
 }:
@@ -20,8 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GeuifzqCkStmb4qYa8147XBHvMogYwfsn0FyHdO4WEg";
   };
 
-  nativeBuildInputs = [ bison cmake pkg-config ]
-    ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
+  nativeBuildInputs = [
+    bison cmake pkg-config makeWrapper
+    # required for scripts/CMakeLists.txt
+    coreutils gnugrep procps
+  ] ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
@@ -88,6 +92,13 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "lib/*.a" $static
     so=${stdenv.hostPlatform.extensions.sharedLibrary}
     ln -s libmysqlclient$so $out/lib/libmysqlclient_r$so
+
+    wrapProgram $out/bin/mysqld_safe --prefix PATH : ${lib.makeBinPath [ coreutils procps gnugrep gnused hostname ]}
+    wrapProgram $out/bin/mysql_config --prefix PATH : ${lib.makeBinPath [ coreutils gnused ]}
+    wrapProgram $out/bin/ps_mysqld_helper --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep ]}
+    wrapProgram $out/bin/ps-admin --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep ]}
+  '' + lib.optionalString stdenv.isDarwin ''
+    wrapProgram $out/bin/mysqld_multi --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep ]}
   '';
 
   passthru = {
