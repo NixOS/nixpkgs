@@ -30,7 +30,7 @@
 }:
 
 let
-  # Compare with https://github.com/draios/sysdig/blob/0.38.0/cmake/modules/falcosecurity-libs.cmake
+  # Compare with https://github.com/draios/sysdig/blob/0.38.1/cmake/modules/falcosecurity-libs.cmake
   libsRev = "0.17.2";
   libsHash = "sha256-BTLXtdU7GjOJReaycHvXkSd2vtybnCn0rTR7OEsvaMQ=";
 
@@ -42,7 +42,7 @@ let
     hash = "sha256-wvFdjsDtKH7CpbEpQjzWtLC4RVOU9+D2rSK0Xo1cJqo=";
   };
 
-  # https://github.com/draios/sysdig/blob/0.38.0/cmake/modules/driver.cmake
+  # https://github.com/draios/sysdig/blob/0.38.1/cmake/modules/driver.cmake
   driver = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "libs";
@@ -57,7 +57,7 @@ let
     hash = "sha256-VI/tOSXs5OcEDehSqICF3apmSnwe4QCmbkHz+DGH4uM=";
   };
 
-  version = "0.38.0";
+  version = "0.38.1";
 in
 stdenv.mkDerivation {
   pname = "sysdig";
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    hash = "sha256-y6WArSz57w8vb3A3nHT37G6D8++6en2jQfeIS4YCD9U=";
+    hash = "sha256-oufRTr5TFdpF50pmem2L3bBFIfwxCR8f1xi0A328iHo=";
   };
 
   nativeBuildInputs = [
