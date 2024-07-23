@@ -1323,7 +1323,7 @@ in
 
         darwin = super.darwin.overrideScope (_: superDarwin: {
           inherit (prevStage.darwin)
-            CF ICU Libsystem darwin-stubs dyld locale libobjc rewrite-tbd xnu;
+            CF Libsystem darwin-stubs dyld locale libobjc rewrite-tbd xnu;
 
           apple_sdk = superDarwin.apple_sdk // {
             inherit (prevStage.darwin.apple_sdk) sdkRoot;
