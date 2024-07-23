@@ -27,8 +27,8 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "4.2.0";
-  format = "pyproject";
+  version = "4.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-pdf";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-ksLpxfRxrNVXezF0VjbAqadpF6bv/SAOOnCKabhugo0=";
+    hash = "sha256-wSF20I5WaxRoN0n0jxB5O3mAAIOxP/TclYBTRAUwYHo=";
   };
 
   outputs = [
@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--disable-socket" ""
+      --replace-fail "--disable-socket" ""
   '';
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
