@@ -119,6 +119,16 @@ let
 
     # No changes from 12.2 to 12.3
     "12.3" = attrs."12.2";
+
+    # Added support for Clang 17 and GCC 13
+    # https://docs.nvidia.com/cuda/archive/12.4.1/cuda-installation-guide-linux/index.html#host-compiler-support-policy
+    "12.4" = attrs."12.3" // {
+      clangMaxMajorVersion = "17";
+      gccMaxMajorVersion = "13";
+    };
+
+    # No changes from 12.4 to 12.5
+    "12.5" = attrs."12.4";
   };
 in
 attrs
