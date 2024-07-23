@@ -26,6 +26,9 @@ with pkgs;
   # all-packages.nix)
   _type = "pkgs";
 
+  # Hint for representing the full attrset as a simple string.
+  __toString = _: "Nix Packages collection";
+
   # A stdenv capable of building 32-bit binaries.
   # On x86_64-linux, it uses GCC compiled with multilib support; on i686-linux,
   # it's just the plain stdenv.
