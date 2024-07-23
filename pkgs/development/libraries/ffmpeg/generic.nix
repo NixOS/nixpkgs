@@ -93,8 +93,7 @@
 , withPlacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withPulse ? withSmallDeps && stdenv.isLinux # Pulseaudio input support
 , withQrencode ? withFullDeps && lib.versionAtLeast version "7" # QR encode generation
-# On runtime fails with dyld[25216]: Library not loaded: libquirc.so.1.2 (Seems to not link the libary correctly)
-, withQuirc ? withFullDeps && lib.versionAtLeast version "7" && !stdenv.isDarwin # QR decoding
+, withQuirc ? withFullDeps && lib.versionAtLeast version "7" # QR decoding
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
 , withRtmp ? withFullDeps # RTMP[E] support
 , withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
