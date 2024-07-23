@@ -310,8 +310,11 @@ in
 
       gdm-autologin.text = ''
         auth      requisite     pam_nologin.so
-
         auth      required      pam_succeed_if.so uid >= 1000 quiet
+        ${lib.optionalString pamCfg.login.enableGnomeKeyring ''
+          auth       [success=ok default=1]      ${pkgs.gnome.gdm}/lib/security/pam_gdm.so
+          auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
+        ''}
         auth      required      pam_permit.so
 
         account   sufficient    pam_unix.so
