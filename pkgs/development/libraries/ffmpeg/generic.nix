@@ -39,8 +39,7 @@
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
 , withAudioToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple AudioToolbox
-# Compiling ffmpeg 7 with AVFoundation on x86_64-darwin currently fails with "error: incompatible pointer to integer conversion passing 'NSString *const' to parameter of type 'enum AVMediaType' [-Wint-conversion] NSArray *devices = getDevicesWithMediaType(AVMediaTypeAudio);"
-, withAvFoundation ? withHeadlessDeps && stdenv.isDarwin && !(lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86) # Apple AVFoundation framework
+, withAvFoundation ? withHeadlessDeps && stdenv.isDarwin # Apple AVFoundation framework
 , withAvisynth ? withFullDeps # AviSynth script files reading
 , withBluray ? withFullDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
