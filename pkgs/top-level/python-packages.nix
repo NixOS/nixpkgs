@@ -3370,6 +3370,8 @@ self: super: with self; {
 
   django-sites = callPackage ../development/python-modules/django-sites { };
 
+  django-soft-delete = callPackage ../development/python-modules/django-soft-delete { };
+
   django-sr = callPackage ../development/python-modules/django-sr { };
 
   django-statici18n = callPackage ../development/python-modules/django-statici18n { };
@@ -15174,6 +15176,8 @@ self: super: with self; {
   timing-asgi = callPackage ../development/python-modules/timing-asgi { };
 
   timm = callPackage ../development/python-modules/timm { };
+
+  timy = callPackage ../development/python-modules/timy { };
 
   tiny-cuda-nn = toPythonModule (pkgs.tiny-cuda-nn.override {
     cudaPackages = self.torch.cudaPackages;
