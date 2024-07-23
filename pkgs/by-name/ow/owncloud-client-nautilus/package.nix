@@ -1,4 +1,4 @@
-{ python3, fetchFromGitHub, gnome, stdenv, lib }:
+{ python3, fetchFromGitHub, nautilus-python, stdenv, lib }:
 stdenv.mkDerivation rec {
   pname = "owncloud-client-nautilus";
   version = "5.0.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gnome.nautilus-python
+    nautilus-python
     python3.pkgs.pygobject3
   ];
 
