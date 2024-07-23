@@ -14536,6 +14536,13 @@
     githubId = 6391776;
     name = "Nikita Voloboev";
   };
+  niklashh = {
+    email = "niklas.2.halonen@aalto.fi";
+    github = "xhalo32";
+    githubId = 15152190;
+    keys = [ { fingerprint = "AF3B 80CD A027 245B 51FC  6D9B E83A 373D A5AF 5068"; } ];
+    name = "Niklas Halonen";
+  };
   niklaskorz = {
     name = "Niklas Korz";
     email = "niklas@niklaskorz.de";
@@ -19476,6 +19483,12 @@
     github = "strager";
     githubId = 48666;
     name = "Matthew \"strager\" Glazar";
+  };
+  strawbee = {
+    email = "henigingames@gmail.com";
+    github = "StillToad";
+    githubId = 57422776;
+    name = "strawbee";
   };
   strikerlulu = {
     email = "strikerlulu7@gmail.com";

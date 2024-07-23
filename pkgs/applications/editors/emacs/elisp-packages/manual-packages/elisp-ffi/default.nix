@@ -1,9 +1,10 @@
 {
   lib,
-  melpaBuild,
   fetchFromGitHub,
-  pkg-config,
   libffi,
+  melpaBuild,
+  pkg-config,
+  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -26,7 +27,10 @@ melpaBuild {
     make
   '';
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = {
+    homepage = "https://github.com/skeeto/elisp-ffi";
     description = "Emacs Lisp Foreign Function Interface";
     longDescription = ''
       This library provides an FFI for Emacs Lisp so that Emacs
@@ -35,5 +39,6 @@ melpaBuild {
       values on to Emacs.
     '';
     license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
