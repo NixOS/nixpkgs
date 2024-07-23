@@ -2,6 +2,7 @@
   lib,
   dash,
   editorconfig,
+  f,
   fetchFromGitHub,
   nodejs,
   s,
@@ -9,13 +10,13 @@
 }:
 melpaBuild {
   pname = "copilot";
-  version = "0-unstable-2023-12-26";
+  version = "0-unstable-2024-05-01";
 
   src = fetchFromGitHub {
-    owner = "zerolfx";
+    owner = "copilot-emacs";
     repo = "copilot.el";
-    rev = "d4fa14cea818e041b4a536c5052cf6d28c7223d7";
-    sha256 = "sha256-Tzs0Dawqa+OD0RSsf66ORbH6MdBp7BMXX7z+5UuNwq4=";
+    rev = "733bff26450255e092c10873580e9abfed8a81b8";
+    sha256 = "sha256-Knp36PtgA73gtYO+W1clQfr570bKCxTFsGW3/iH86A0=";
   };
 
   files = ''(:defaults "dist")'';
@@ -23,6 +24,7 @@ melpaBuild {
   packageRequires = [
     dash
     editorconfig
+    f
     s
   ];
 
@@ -30,8 +32,9 @@ melpaBuild {
 
   meta = {
     description = "Unofficial copilot plugin for Emacs";
-    homepage = "https://github.com/zerolfx/copilot.el";
+    homepage = "https://github.com/copilot-emacs/copilot.el";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bbigras ];
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"
