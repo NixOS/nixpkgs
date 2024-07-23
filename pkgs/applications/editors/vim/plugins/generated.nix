@@ -4403,6 +4403,18 @@ final: prev:
     meta.homepage = "https://github.com/blazkowolf/gruber-darker.nvim/";
   };
 
+  grug-far-nvim = buildVimPlugin {
+    pname = "grug-far.nvim";
+    version = "2024-07-22";
+    src = fetchFromGitHub {
+      owner = "MagicDuck";
+      repo = "grug-far.nvim";
+      rev = "f9a8592b037b761fac6a327bc314e9e3eb47401e";
+      sha256 = "13aa8s9lxdjiyifj9vmbph6hl9px0spfm36my1j2h41biq5nsx5q";
+    };
+    meta.homepage = "https://github.com/MagicDuck/grug-far.nvim/";
+  };
+
   gruvbox = buildVimPlugin {
     pname = "gruvbox";
     version = "2023-08-14";
@@ -5961,18 +5973,6 @@ final: prev:
       sha256 = "03saw1w5pybj6yywzi8hinciv18znimm7k0h34k4pqp5gi1jfaql";
     };
     meta.homepage = "https://github.com/mkasa/lushtags/";
-  };
-
-  lz-n = buildNeovimPlugin {
-    pname = "lz.n";
-    version = "2024-07-10";
-    src = fetchFromGitHub {
-      owner = "nvim-neorocks";
-      repo = "lz.n";
-      rev = "3d36b6848fc67f6a13d2a52cf4f96fd3403c0c43";
-      sha256 = "11ic8hylck3dvlp6d9kzblingbi167j2kcid155x4hpc2hhqf2aj";
-    };
-    meta.homepage = "https://github.com/nvim-neorocks/lz.n/";
   };
 
   magma-nvim-goose = buildVimPlugin {

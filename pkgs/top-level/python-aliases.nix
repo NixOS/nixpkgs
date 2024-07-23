@@ -596,6 +596,7 @@ mapAliases ({
   wxPython_4_2 = wxpython; # added 2024-01-07
   WSME = wsme; # added 2023-02-19
   x11_hash = x11-hash; # added 2023-11-05
+  xapp = python-xapp; # added 2024-07-19
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   XlsxWriter = xlsxwriter; # added 2023-02-19
   Yapsy = yapsy; # added 2023-02-19

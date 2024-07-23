@@ -455,6 +455,8 @@ let
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
+      homeassistant = self.toPythonModule home-assistant;
+      pytest-homeassistant-custom-component = self.callPackage ./pytest-homeassistant-custom-component.nix { };
     })
   ];
 

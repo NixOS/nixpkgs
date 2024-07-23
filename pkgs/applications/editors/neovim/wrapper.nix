@@ -201,7 +201,7 @@ let
       };
     };
 
-    meta = neovim-unwrapped.meta // {
+    meta = (builtins.removeAttrs neovim-unwrapped.meta ["position" "outputsToInstall"]) // {
       # To prevent builds on hydra
       hydraPlatforms = [];
       # prefer wrapper over the package

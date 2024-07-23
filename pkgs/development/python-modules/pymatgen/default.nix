@@ -112,6 +112,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/materialsproject/pymatgen/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
-    broken = stdenv.isDarwin; # tests segfault. that's bad.
+    broken = true; # tests segfault. that's bad.
   };
 }

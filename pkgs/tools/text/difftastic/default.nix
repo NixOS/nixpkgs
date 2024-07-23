@@ -17,16 +17,18 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
-  version = "0.58.0";
+  version = "0.59.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = pname;
     rev = version;
-    hash = "sha256-PTc8/NhWsLcKJj+9ebV/YaWEmyOWKJCYUjmVbr4z2SY=";
+    hash = "sha256-cy5IBovU/TDYK6UGlSn3s7MQ9LnX/d0eUJlNdaibG44=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   # skip flaky tests
   checkFlags = [
