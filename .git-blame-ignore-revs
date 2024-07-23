@@ -141,3 +141,6 @@ acd0e3898feb321cb9a71a0fd376f1157d0f4553
 
 # poptracker: format with nixfmt-rfc-style (#326697)
 ff5c8f6cc3d1f2e017e86d50965c14b71f00567b
+
+# nixos/pgadmin: format with nixfmt-rfc-style
+478ee172d3818fc36dce47a8f94d61742e6bd87c
