@@ -508,7 +508,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "vmspawn" withVmspawn)
     (lib.mesonEnable "libarchive" withLibarchive)
     (lib.mesonEnable "xenctrl" false)
-    (lib.mesonEnable "gnutls" false)
+    (lib.mesonEnable "gnutls" withRemote)
     (lib.mesonEnable "xkbcommon" false)
     (lib.mesonEnable "man" true)
 
