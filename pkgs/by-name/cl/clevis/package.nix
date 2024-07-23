@@ -85,6 +85,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/latchset/clevis";
     changelog = "https://github.com/latchset/clevis/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }
