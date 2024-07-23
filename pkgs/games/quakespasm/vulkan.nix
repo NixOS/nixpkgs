@@ -1,30 +1,52 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader, moltenvk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  glslang,
+  pkg-config,
+  flac,
+  libopus,
+  opusfile,
+  makeWrapper,
+  SDL2,
+  gzip,
+  libvorbis,
+  libmad,
+  vulkan-headers,
+  vulkan-loader,
+  moltenvk,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vkquake";
-  version = "1.22.3";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     rev = version;
-    sha256 = "sha256-+8DU1QT3Lgqf1AIReVnXQ2Lq6R6eBb8VjdkJfAn/Rtc=";
+    sha256 = "sha256-3xWwqN0EcwDMEhVxfLa0bMMClM+zELEFWzO/EJvPNs0=";
   };
-
-  sourceRoot = "${src.name}/Quake";
 
   nativeBuildInputs = [
     makeWrapper
+    glslang
+    meson
+    ninja
+    pkg-config
     vulkan-headers
   ];
 
   buildInputs = [
-    gzip
     SDL2
-    libvorbis
+    flac
+    gzip
     libmad
+    libopus
+    libvorbis
+    opusfile
     vulkan-loader
   ] ++ lib.optional stdenv.isDarwin moltenvk;
 
@@ -34,18 +56,15 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
   '';
 
-  makeFlags = [ "prefix=$(out) bindir=$(out)/bin" ];
-
   env = lib.optionalAttrs stdenv.isDarwin {
     NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
   };
 
   postFixup = ''
+    cp vkquake "$out/bin"
     wrapProgram $out/bin/vkquake \
       --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '';
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Vulkan Quake port based on QuakeSpasm";
