@@ -1,4 +1,4 @@
-{ lib, fetchzip, mkCoqDerivation, coq, version ? null }:
+{ lib, fetchzip, mkCoqDerivation, coq, coq-lsp, version ? null }:
 
 let
   release = {
@@ -17,6 +17,7 @@ in
 
 (with lib; mkCoqDerivation {
   pname = "serapi";
+  repo = "coq-serapi";
   inherit version release;
 
   defaultVersion =  with versions;
@@ -35,20 +36,15 @@ in
 
   useDune = true;
 
-  patches = [ ./janestreet-0.15.patch ];
-
   propagatedBuildInputs =
     with coq.ocamlPackages; [
       cmdliner
       findlib # run time dependency of SerAPI
       ppx_deriving
-      ppx_deriving_yojson
       ppx_import
       ppx_sexp_conv
       ppx_hash
       sexplib
-      yojson
-      zarith # needed because of Coq
     ];
 
   installPhase = ''
@@ -64,6 +60,7 @@ in
     maintainers = with maintainers; [ alizter Zimmi48 ];
   };
 }).overrideAttrs(o:
+if lib.versions.isLe "8.19.0+0.19.3" o.version && o.version != "dev" then
   let inherit (o) version; in {
   src = fetchzip {
     url =
@@ -98,8 +95,9 @@ in
     else [
     ];
 
-    propagatedBuildInputs = o.propagatedBuildInputs ++
-      lib.optional (version == "8.16.0+0.16.3" || version == "dev") coq.ocamlPackages.ppx_hash
-    ;
-
-})
+    propagatedBuildInputs = o.propagatedBuildInputs
+      ++ (with coq.ocamlPackages; [ ppx_deriving_yojson yojson zarith ])  # zarith needed because of Coq
+    ; }
+else
+  { propagatedBuildInputs = o.propagatedBuildInputs ++ [ coq-lsp ]; }
+)
