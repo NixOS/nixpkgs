@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hextazy";
-  version = "0.2";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "faelian";
     repo = "hextazy";
     rev = "${version}";
-    hash = "sha256-e1uoKMejdTz8KH7uFkZ9YCE1WTwaxCZjcxh4g2ermNY=";
+    hash = "sha256-ioj1OFNLoIsSMc6eKXREhclmYgs/Lf10viGSVdPLGA0=";
   };
 
-  cargoHash = "sha256-5Z+ptr1JmeiP4hK8k+M1d189I0X53/jRUEFwgWGK3xQ=";
+  cargoHash = "sha256-nWB6X3vNGlMGXbtrgCU5o/hXAlzQO4SBrf2qVoxj26M=";
 
   meta = {
     description = "TUI hexeditor in Rust with colored bytes";
