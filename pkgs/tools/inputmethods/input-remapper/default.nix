@@ -51,6 +51,9 @@ in
   '' + lib.optionalString withDebugLogLevel ''
     # if debugging
     substituteInPlace inputremapper/logger.py --replace "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
+  '' + ''
+    # set revision for --version output
+    echo "COMMIT_HASH = '${src.rev}'" > inputremapper/commit_hash.py
   '';
 
   doCheck = withDoCheck;
@@ -144,14 +147,4 @@ in
     maintainers = with maintainers; [ LunNova ];
     mainProgram = "input-remapper-gtk";
   };
-}).overrideAttrs (final: prev: {
-  # Set in an override as buildPythonApplication doesn't yet support
-  # the `final:` arg yet from #119942 'overlay style overridable recursive attributes'
-  # this ensures the rev matches the input src's rev after overriding
-  # See https://discourse.nixos.org/t/avoid-rec-expresions-in-nixpkgs/8293/7 for more
-  # discussion
-  postPatch = prev.postPatch or "" + ''
-    # set revision for --version output
-    echo "COMMIT_HASH = '${final.src.rev}'" > inputremapper/commit_hash.py
-  '';
 })
