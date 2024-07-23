@@ -58,9 +58,6 @@ python3.pkgs.buildPythonApplication rec {
     export PDM_BUILD_SCM_VERSION="${realVersion}"
   '';
 
-  # installCheck tries to build_ext again
-  doInstallCheck = false;
-
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d
     cp $src/config/*.rules $out/etc/udev/rules.d

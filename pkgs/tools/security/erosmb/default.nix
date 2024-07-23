@@ -27,11 +27,9 @@ python3.pkgs.buildPythonApplication rec {
     six
   ];
 
-  # Project has no tests
-  doCheck = false;
-
   doInstallCheck = true;
 
+  # Project has no tests
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/erosmb --help

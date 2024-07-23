@@ -120,7 +120,7 @@ buildPythonPackage rec {
     pluggy
   ];
 
-  nativeCheckInputs = [
+  nativeInstallCheckInputs = [
     hypothesis
   ];
 
@@ -144,8 +144,14 @@ The `buildPythonPackage` mainly does four things:
   environment variable and add dependent libraries to script's `sys.path`.
 * In the [`installCheck`](#ssec-installCheck-phase) phase, `${python.interpreter} -m pytest` is run.
 
-By default tests are run because [`doCheck = true`](#var-stdenv-doCheck). Test dependencies, like
-e.g. the test runner, should be added to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs).
+By default, tests are run because [`doInstallCheck = true`](#var-stdenv-doInstallCheck). Test dependencies, such as
+the test runner, should be added to [`nativeInstallCheckInputs`](#var-stdenv-nativeInstallCheckInputs).
+
+Python packages and applications don't have [`checkPhase`](#ssec-check-phase). `doCheck`, `checkPhase`, `checkInputs`, and `nativeCheckInputs` are aliases to the `installCheck`-related attributes for historical reason, but using them instead of the `installCheck`-related variables is obsolete and discouraged.
+
+:::{.note}
+`pytestCheckHook`, `setuptoolsCheckHook`, and `unittestCheckHook` still use `preCheck` and `postCheck`. Compatibility layers will be added during future renaming.
+:::
 
 By default `meta.platforms` is set to the same value
 as the interpreter unless overridden otherwise.
@@ -199,8 +205,8 @@ because their behaviour is different:
 * `buildInputs ? []`: Build and/or run-time dependencies that need to be
   compiled for the host machine. Typically non-Python libraries which are being
   linked.
-* `nativeCheckInputs ? []`: Dependencies needed for running the [`checkPhase`](#ssec-check-phase). These
-  are added to [`nativeBuildInputs`](#var-stdenv-nativeBuildInputs) when [`doCheck = true`](#var-stdenv-doCheck). Items listed in
+* `nativeInstallCheckInputs ? []`: Dependencies needed for running the [`installCheckPhase`](#ssec-installCheck-phase). These
+  are added to [`nativeBuildInputs`](#var-stdenv-nativeBuildInputs) when [`doInstallCheck = true`](#var-stdenv-doInstallCheck). Items listed in
   `tests_require` go here.
 * `dependencies ? []`: Aside from propagating dependencies,
   `buildPythonPackage` also injects code into and wraps executables with the
@@ -850,7 +856,7 @@ buildPythonPackage rec {
   ];
 
   # has no tests
-  doCheck = false;
+  doInstallCheck = false;
 
   pythonImportsCheck = [
     "toolz.itertoolz"
@@ -872,7 +878,7 @@ it accepts a set. In this case the set is a recursive set, `rec`. One of the
 arguments is the name of the package, which consists of a basename (generally
 following the name on PyPI) and a version. Another argument, `src` specifies the
 source, which in this case is fetched from PyPI using the helper function
-`fetchPypi`. The argument `doCheck` is used to set whether tests should be run
+`fetchPypi`. The argument `doInstallCheck` is used to set whether tests should be run
 when building the package. Since there are no tests, we rely on [`pythonImportsCheck`](#using-pythonimportscheck)
 to test whether the package can be imported. Furthermore, we specify some meta
 information. The output of the function is a derivation.
@@ -908,7 +914,7 @@ with import <nixpkgs> {};
       ];
 
       # has no tests
-      doCheck = false;
+      doInstallCheck = false;
 
       meta = {
         homepage = "https://github.com/pytoolz/toolz/";
@@ -944,7 +950,7 @@ Our example, `toolz`, does not have any dependencies on other Python packages or
 - `dependencies` - For Python runtime dependencies.
 - `build-system` - For Python build-time requirements.
 - [`buildInputs`](#var-stdenv-buildInputs) - For non-Python build-time requirements.
-- [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) - For test dependencies
+- [`nativeInstallCheckInputs`](#var-stdenv-nativeInstallCheckInputs) - For test dependencies
 
 Dependencies can belong to multiple arguments, for example if something is both a build time requirement & a runtime dependency.
 
@@ -986,7 +992,7 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  nativeCheckInputs = [
+  nativeInstallCheckInputs = [
     pytestCheckHook
   ];
 
@@ -1000,8 +1006,8 @@ buildPythonPackage rec {
 ```
 
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
-`python-dateutil`. Furthermore, we have [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) with `pytestCheckHook`.
-`pytestCheckHook` is a test runner hook and is only used during the [`checkPhase`](#ssec-check-phase) and is
+`python-dateutil`. Furthermore, we have [`nativeInstallCheckInputs`](#var-stdenv-nativeInstallCheckInputs) with `pytestCheckHook`.
+`pytestCheckHook` is a test runner hook and is only used during the [`installCheckPhase`](#ssec-installCheck-phase) and is
 therefore not added to `dependencies`.
 
 In the previous case we had only dependencies on other Python packages to consider.
@@ -1112,7 +1118,7 @@ buildPythonPackage rec {
   '';
 
   # Tests cannot import pyfftw. pyfftw works fine though.
-  doCheck = false;
+  doInstallCheck = false;
 
   pythonImportsCheck = [ "pyfftw" ];
 
@@ -1125,17 +1131,17 @@ buildPythonPackage rec {
 }
 ```
 
-Note also the line [`doCheck = false;`](#var-stdenv-doCheck), we explicitly disabled running the test-suite.
+Note also the line [`doInstallCheck = false;`](#var-stdenv-doInstallCheck), we explicitly disabled running the test-suite.
 
 #### Testing Python Packages {#testing-python-packages}
 
 It is highly encouraged to have testing as part of the package build. This
 helps to avoid situations where the package was able to build and install,
 but is not usable at runtime.
-Your package should provide its own [`checkPhase`](#ssec-check-phase).
+Your package should provide its own [`installCheckPhase`](#ssec-installCheck-phase).
 
 ::: {.note}
-The [`checkPhase`](#ssec-check-phase) for python maps to the `installCheckPhase` on a
+The [`installCheckPhase`](#ssec-installCheck-phase) for python maps to the `installCheckPhase` on a
 normal derivation. This is due to many python packages not behaving well
 to the pre-installed version of the package. Version info, and natively
 compiled extensions generally only exist in the install directory, and
@@ -1156,13 +1162,13 @@ test run would be:
 
 ```nix
 {
-  nativeCheckInputs = [ pytest ];
-  checkPhase = ''
-    runHook preCheck
+  nativeInstallCheckInputs = [ pytest ];
+  installCheckPhase = ''
+    runHook preInstallCheck
 
     pytest
 
-    runHook postCheck
+    runHook postInstallCheck
   '';
 }
 ```
@@ -1174,14 +1180,14 @@ To filter tests using pytest, one can do the following:
 
 ```nix
 {
-  nativeCheckInputs = [ pytest ];
+  nativeInstallCheckInputs = [ pytest ];
   # avoid tests which need additional data or touch network
-  checkPhase = ''
-    runHook preCheck
+  installCheckPhase = ''
+    runHook preInstallCheck
 
     pytest tests/ --ignore=tests/integration -k 'not download and not update' --ignore=tests/test_failing.py
 
-    runHook postCheck
+    runHook postInstallCheck
   '';
 }
 ```
@@ -1204,7 +1210,7 @@ been removed, in this case, it's recommended to use `pytestCheckHook`.
 #### Using pytestCheckHook {#using-pytestcheckhook}
 
 `pytestCheckHook` is a convenient hook which will set up (or configure)
-a [`checkPhase`](#ssec-check-phase) to run `pytest`. This is also beneficial
+a [`installCheckPhase`](#ssec-installCheck-phase) to run `pytest`. This is also beneficial
 when a package may need many items disabled to run the test suite.
 Most packages use `pytest` or `unittest`, which is compatible with `pytest`,
 so you will most likely use `pytestCheckHook`.
@@ -1213,7 +1219,7 @@ Using the example above, the analogous `pytestCheckHook` usage would be:
 
 ```nix
 {
-  nativeCheckInputs = [
+  nativeInstallCheckInputs = [
     pytestCheckHook
   ];
 
@@ -1255,7 +1261,7 @@ for example:
 ```
 
 Trying to concatenate the related strings to disable tests in a regular
-[`checkPhase`](#ssec-check-phase) would be much harder to read. This also enables us to comment on
+[`installCheckPhase`](#ssec-installCheck-phase) would be much harder to read. This also enables us to comment on
 why specific tests are disabled.
 
 #### Using pythonImportsCheck {#using-pythonimportscheck}
@@ -1278,14 +1284,14 @@ roughly translates to:
 
 ```nix
 {
-  postCheck = ''
+  postInstallCheck = ''
     PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
     python -c "import requests; import urllib"
   '';
 }
 ```
 
-However, this is done in its own phase, and not dependent on whether [`doCheck = true;`](#var-stdenv-doCheck).
+However, this is done in its own phase, and not dependent on whether [`doInstallCheck = true;`](#var-stdenv-doInstallCheck).
 
 This can also be useful in verifying that the package doesn't assume commonly
 present packages (e.g. `setuptools`).
@@ -1366,11 +1372,11 @@ time dependencies, they should be removed in `postPatch` through
 
 #### Using unittestCheckHook {#using-unittestcheckhook}
 
-`unittestCheckHook` is a hook which will set up (or configure) a [`checkPhase`](#ssec-check-phase) to run `python -m unittest discover`:
+`unittestCheckHook` is a hook which behaves like setting up (or configuring) a [`installCheckPhase`](#ssec-installCheck-phase) to run `python -m unittest discover`:
 
 ```nix
 {
-  nativeCheckInputs = [
+  nativeInstallCheckInputs = [
     unittestCheckHook
   ];
 
@@ -1859,7 +1865,7 @@ In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 
 * `setup_requires` corresponds to `build-system`
 * `install_requires` corresponds to `dependencies`
-* `tests_require` corresponds to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs)
+* `tests_require` corresponds to [`nativeInstallCheckInputs`](#var-stdenv-nativeInstallCheckInputs)
 
 ### How to enable interpreter optimizations? {#optimizations}
 
@@ -1935,9 +1941,9 @@ Both are also exported in `nix-shell`.
 It is recommended to test packages as part of the build process.
 Source distributions (`sdist`) often include test files, but not always.
 
-The best practice today is to pass a test hook (e.g. pytestCheckHook, unittestCheckHook) into nativeCheckInputs.
-This will reconfigure the checkPhase to make use of that particular test framework.
-Occasionally packages don't make use of a common test framework, which may then require a custom checkPhase.
+The best practice today is to pass a test hook (e.g. `pytestCheckHook`, `unittestCheckHook`) into [`nativeInstallCheckInputs`](#var-stdenv-nativeInstallCheckInputs).
+This will reconfigure the [`installCheckPhase`](#ssec-installCheck-phase) to make use of that particular test framework.
+Occasionally packages don't make use of a common test framework, which may then require a custom [`installCheckPhase`](#ssec-installCheck-phase).
 
 #### Common issues {#common-issues}
 
@@ -1950,7 +1956,7 @@ Occasionally packages don't make use of a common test framework, which may then 
   ```nix
   buildPythonPackage {
     # ...
-    nativeCheckInputs = [
+    nativeInstallCheckInputs = [
       pytestCheckHook
     ];
 

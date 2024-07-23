@@ -34,10 +34,10 @@
 # Run-time dependencies for the package
 , buildInputs ? []
 
-# Dependencies needed for running the checkPhase.
-# These are added to buildInputs when doCheck = true.
-, checkInputs ? []
-, nativeCheckInputs ? []
+# Dependencies needed for running the installCheckPhase.
+# These are added to buildInputs when doInstallCheck = true.
+, installCheckInputs ? attrs.checkInputs or [ ]
+, nativeInstallCheckInputs ? attrs.nativeCheckInputs or [ ]
 
 # propagate build dependencies so in case we have A -> B -> C,
 # C can import package A propagated by B
@@ -92,7 +92,7 @@
 
 , passthru ? {}
 
-, doCheck ? true
+, doInstallCheck ? attrs.doCheck or true
 
 , disabledTestPaths ? []
 
@@ -188,7 +188,7 @@ let
     ] ++ lib.optionals (format != "other") [(
       pipInstallHook
     )] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-      # This is a test, however, it should be ran independent of the checkPhase and checkInputs
+      # This is a test, however, it should be ran independent of the installCheckPhase and installCheckInputs
       pythonImportsCheckHook
     ] ++ lib.optionals withDistOutput [
       pythonOutputDistHook
@@ -209,15 +209,16 @@ let
 
     # Python packages don't have a checkPhase, only an installCheckPhase
     doCheck = false;
-    doInstallCheck = attrs.doCheck or true;
+    inherit doInstallCheck;
     nativeInstallCheckInputs = [
     ] ++ lib.optionals (format == "setuptools") [
       # Longer-term we should get rid of this and require
       # users of this function to set the `installCheckPhase` or
       # pass in a hook that sets it.
       setuptoolsCheckHook
-    ] ++ nativeCheckInputs;
-    installCheckInputs = checkInputs;
+    ] ++ nativeInstallCheckInputs;
+
+    inherit installCheckInputs;
 
     postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
       wrapPythonPrograms
@@ -233,7 +234,7 @@ let
       platforms = python.meta.platforms;
       isBuildPythonPackage = python.meta.platforms;
     } // meta;
-  } // lib.optionalAttrs (attrs?checkPhase) {
+  } // lib.optionalAttrs (!(attrs?installCheckPhase) && attrs?checkPhase) {
     # If given use the specified checkPhase, otherwise use the setup hook.
     # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
     installCheckPhase = attrs.checkPhase;
