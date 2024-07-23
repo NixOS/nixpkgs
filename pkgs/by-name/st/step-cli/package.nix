@@ -13,7 +13,7 @@ in
       owner = "smallstep";
       repo = "cli";
       rev = "refs/tags/v${version}";
-      hash = "sha256-lM42KlTgOch6AwQIzvjQNH1wVfFikVI9rVgH2/2KyJE=";
+      hash = "sha256-9w7rUtlLa1kl9oVboWZWj4eoZh+pPdGsEEQDWYdEMns=";
     };
 
     ldflags = [
