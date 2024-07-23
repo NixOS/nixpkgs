@@ -32,7 +32,6 @@ function does all this.
 [2]: https://github.com/moby/moby/blob/4fb59c20a4fb54f944fe170d0ff1d00eb4a24d6f/image/spec/v1.2.md#image-json-field-descriptions
 """  # noqa: E501
 
-
 import argparse
 import io
 import os
@@ -226,16 +225,13 @@ def add_layer_dir(tar, paths, store_dir, mtime, uid, gid, uname, gname):
     """
 
     invalid_paths = [i for i in paths if not i.startswith(store_dir)]
-    assert len(invalid_paths) == 0, \
-        f"Expecting absolute paths from {store_dir}, but got: {invalid_paths}"
+    assert (
+        len(invalid_paths) == 0
+    ), f"Expecting absolute paths from {store_dir}, but got: {invalid_paths}"
 
     # First, calculate the tarball checksum and the size.
     extract_checksum = ExtractChecksum()
-    archive_paths_to(
-        extract_checksum,
-        paths,
-        mtime, uid, gid, uname, gname
-    )
+    archive_paths_to(extract_checksum, paths, mtime, uid, gid, uname, gname)
     (checksum, size) = extract_checksum.extract()
 
     path = f"{checksum}/layer.tar"
@@ -246,12 +242,9 @@ def add_layer_dir(tar, paths, store_dir, mtime, uid, gid, uname, gname):
     # Then actually stream the contents to the outer tarball.
     read_fd, write_fd = os.pipe()
     with open(read_fd, "rb") as read, open(write_fd, "wb") as write:
+
         def producer():
-            archive_paths_to(
-                write,
-                paths,
-                mtime, uid, gid, uname, gname
-            )
+            archive_paths_to(write, paths, mtime, uid, gid, uname, gname)
             write.close()
 
         # Closing the write end of the fifo also closes the read end,
@@ -293,10 +286,7 @@ def add_customisation_layer(target_tar, customisation_layer, mtime):
         target_tar.addfile(tarinfo, f)
 
     return LayerInfo(
-      size=None,
-      checksum=checksum,
-      path=path,
-      paths=[customisation_layer]
+        size=None, checksum=checksum, path=path, paths=[customisation_layer]
     )
 
 
@@ -318,7 +308,8 @@ def add_bytes(tar, path, content, mtime):
 
 
 def main():
-    arg_parser = argparse.ArgumentParser(description="""
+    arg_parser = argparse.ArgumentParser(
+        description="""
 This script generates a Docker image from a set of store paths. Uses
 Docker Image Specification v1.2 as reference [1].
 
@@ -343,7 +334,7 @@ Docker Image Specification v1.2 as reference [1].
     """,
     )
     arg_parser.add_argument(
-        '--tag', '-t', type=str, help="Override the tag from the configuration"
+        "--tag", "-t", type=str, help="Override the tag from the configuration"
     )
 
     args = arg_parser.parse_args()
@@ -351,9 +342,9 @@ Docker Image Specification v1.2 as reference [1].
         conf = json.load(f)
 
     created = (
-      datetime.now(tz=timezone.utc)
-      if conf["created"] == "now"
-      else datetime.fromisoformat(conf["created"])
+        datetime.now(tz=timezone.utc)
+        if conf["created"] == "now"
+        else datetime.fromisoformat(conf["created"])
     )
     mtime = int(created.timestamp())
     uid = int(conf["uid"])
@@ -370,20 +361,28 @@ Docker Image Specification v1.2 as reference [1].
 
         start = len(layers) + 1
         for num, store_layer in enumerate(conf["store_layers"], start=start):
-            print("Creating layer", num, "from paths:", store_layer,
-                  file=sys.stderr)
-            info = add_layer_dir(tar, store_layer, store_dir,
-                                 mtime, uid, gid, uname, gname)
+            print(
+                "Creating layer",
+                num,
+                "from paths:",
+                store_layer,
+                file=sys.stderr,
+            )
+            info = add_layer_dir(
+                tar, store_layer, store_dir, mtime, uid, gid, uname, gname
+            )
             layers.append(info)
 
-        print("Creating layer", len(layers) + 1, "with customisation...",
-              file=sys.stderr)
+        print(
+            "Creating layer",
+            len(layers) + 1,
+            "with customisation...",
+            file=sys.stderr,
+        )
         layers.append(
-          add_customisation_layer(
-            tar,
-            conf["customisation_layer"],
-            mtime=mtime
-          )
+            add_customisation_layer(
+                tar, conf["customisation_layer"], mtime=mtime
+            )
         )
 
         print("Adding manifests...", file=sys.stderr)
@@ -399,8 +398,8 @@ Docker Image Specification v1.2 as reference [1].
             },
             "history": [
                 {
-                  "created": datetime.isoformat(created),
-                  "comment": f"store paths: {layer.paths}"
+                    "created": datetime.isoformat(created),
+                    "comment": f"store paths: {layer.paths}",
                 }
                 for layer in layers
             ],
