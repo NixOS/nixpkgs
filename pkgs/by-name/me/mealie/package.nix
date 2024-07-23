@@ -5,6 +5,7 @@
 , nixosTests
 , python3Packages
 , stdenv
+, fetchpatch
 , writeShellScript
 }:
 
@@ -36,6 +37,15 @@ in pythonpkgs.buildPythonPackage rec {
   pname = "mealie";
   inherit version src;
   pyproject = true;
+
+  patches = [
+    # fix PermissionError on "/run/secrets" with sops-nix
+    (fetchpatch {
+      url = "https://github.com/mealie-recipes/mealie/commit/445754c5d844ccf098f3678bc4f3cc9642bdaad6.patch";
+      hash = "sha256-ZdATmSYxhGSjoyrni+b5b8a30xQPlUeyp3VAc8OBmDY=";
+      revert = true;
+    })
+  ];
 
   nativeBuildInputs = [
     pythonpkgs.poetry-core
