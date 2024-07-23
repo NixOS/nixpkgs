@@ -16,16 +16,16 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "techouse";
-    repo = pname;
+    repo = "sqlite3-to-mysql";
     rev = "refs/tags/v${version}";
     hash = "sha256-pdPKP6Z4rOHUzxrfTft7ykWpCQBHN+FfndafXHyL+0Y=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     hatchling
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     click
     mysql-connector
     pytimeparse2
@@ -59,11 +59,11 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple Python tool to transfer data from SQLite 3 to MySQL";
     homepage = "https://github.com/techouse/sqlite3-to-mysql";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "sqlite3mysql";
   };
 }
