@@ -76,7 +76,7 @@ buildPythonPackage rec {
       // binary-hash
     );
 
-  optional-dependencies = rec {
+  passthru.optional-dependencies = rec {
     data-deps = [
       pandas
       pyarrow
