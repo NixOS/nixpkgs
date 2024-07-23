@@ -32,13 +32,13 @@
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.2.7";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-YHBGS615dxz6pZR+8awMinp+ZRf3J8Re5BVeDEIyt2E=";
+    hash = "sha256-uir/GoFs0nhhHpznyYkwVjAUWxwjWmGZ7liU2htyQ04=";
     fetchSubmodules = true;
   };
 
@@ -52,11 +52,11 @@ let
     (preparePatch "02-clip-log.diff" "sha256-rMWbl3QgrPlhisTeHwD7EnGRJyOhLB4UeS7rqa0tdXM=")
     (preparePatch "03-load_exception.diff" "sha256-NJkT/k8Mf8HcEMb0XkaLmyUNKV3T+384JRPnmwDI/sk=")
     (preparePatch "04-metal.diff" "sha256-bPBCfoT3EjZPjWKfCzh0pnCUbM/fGTj37yOaQr+QxQ4=")
-    (preparePatch "05-default-pretokenizer.diff" "sha256-50+mzQBQZmYEhYvARHw/dliH0M/gDOYm2uy/yJupDF4=")
-    (preparePatch "06-qwen2.diff" "sha256-FdDqEIblPy47z3yavKUnaV93Yk+3oboEzj4vHq+R66M=")
-    (preparePatch "07-embeddings.diff" "sha256-lqg2SI0OapD9LCoAG6MJW6HIHXEmCTv7P75rE9yq/Mo=")
-    (preparePatch "08-clip-unicode.diff" "sha256-1qMJoXhDewxsqPbmi+/7xILQfGaybZDyXc5eH0winL8=")
-    (preparePatch "09-pooling.diff" "sha256-7meKWbr06lbVrtxau0AU9BwJ88Z9svwtDXhmHI+hYBk=")
+    (preparePatch "05-default-pretokenizer.diff" "sha256-Mgx+xi59rz3d5yEXp90QPQMiUr9InlA0Wo1mOSuRcec=")
+    (preparePatch "06-embeddings.diff" "sha256-lqg2SI0OapD9LCoAG6MJW6HIHXEmCTv7P75rE9yq/Mo=")
+    (preparePatch "07-clip-unicode.diff" "sha256-1qMJoXhDewxsqPbmi+/7xILQfGaybZDyXc5eH0winL8=")
+    (preparePatch "08-pooling.diff" "sha256-7meKWbr06lbVrtxau0AU9BwJ88Z9svwtDXhmHI+hYBk=")
+    (preparePatch "09-lora.diff" "sha256-HVDYiqNkuWO9K7aIiT73iiMj5lxMsJC1oqIG4madAPk=")
   ];
 
   preparePatch = patch: hash: fetchpatch {
