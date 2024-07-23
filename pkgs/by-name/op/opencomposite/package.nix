@@ -1,19 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-
-, cmake
-
-, glm
-, jsoncpp
-, libGL
-, openxr-loader
-, python3
-, vulkan-headers
-, vulkan-loader
-, xorg
-
-, unstableGitUpdater
+{
+  cmake,
+  fetchFromGitLab,
+  glm,
+  jsoncpp,
+  lib,
+  libGL,
+  openxr-loader,
+  python3,
+  stdenv,
+  unstableGitUpdater,
+  vulkan-headers,
+  vulkan-loader,
+  xorg,
 }:
 
 stdenv.mkDerivation {
@@ -27,9 +25,7 @@ stdenv.mkDerivation {
     hash = "sha256-KQmNyGRlbUrntTPNn5rzTyyR+Bvh3EfSqBgyNGGDo04=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     glm
@@ -60,10 +56,10 @@ stdenv.mkDerivation {
     branch = "openxr";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Reimplementation of OpenVR, translating calls to OpenXR";
     homepage = "https://gitlab.com/znixian/OpenOVR";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ Scrumplex ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }
