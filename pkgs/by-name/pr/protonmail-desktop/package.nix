@@ -17,21 +17,25 @@ let
     x86_64-linux = "sha256-En5vkTHYtwN6GMgbtyhzsPqknOPRO9KlTqZfbBFaIFQ=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "protonmail-desktop";
   # Upstream info: "v"-prefix got dropped
   version = "1.0.5";
 
   src = fetchurl {
-    url = if stdenv.isDarwin then
-      "https://github.com/ProtonMail/inbox-desktop/releases/download/${version}/Proton.Mail-darwin-universal-${version}.zip"
-    else
-      "https://github.com/ProtonMail/inbox-desktop/releases/download/${version}/proton-mail_${version}_amd64.deb";
-    sha256 = {
-      x86_64-linux = srcHashes.x86_64-linux;
-      x86_64-darwin = srcHashes.universal-darwin;
-      aarch64-darwin = srcHashes.universal-darwin;
-    }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+    url =
+      if stdenv.isDarwin then
+        "https://github.com/ProtonMail/inbox-desktop/releases/download/${version}/Proton.Mail-darwin-universal-${version}.zip"
+      else
+        "https://github.com/ProtonMail/inbox-desktop/releases/download/${version}/proton-mail_${version}_amd64.deb";
+    sha256 =
+      {
+        x86_64-linux = srcHashes.x86_64-linux;
+        x86_64-darwin = srcHashes.universal-darwin;
+        aarch64-darwin = srcHashes.universal-darwin;
+      }
+      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
 
   sourceRoot = lib.optionalString stdenv.isDarwin ".";
@@ -41,30 +45,30 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ]
-  ++ lib.optional stdenv.isLinux dpkg
-  ++ lib.optional stdenv.isDarwin unzip;
+  ] ++ lib.optional stdenv.isLinux dpkg ++ lib.optional stdenv.isDarwin unzip;
 
-  installPhase = let
-    darwin = ''
-      mkdir -p $out/{Applications,bin}
-      cp -r "Proton Mail.app" $out/Applications/
-      makeWrapper $out/Applications/"Proton Mail.app"/Contents/MacOS/Proton\ Mail $out/bin/protonmail-desktop
-    '';
-    linux = ''
+  installPhase =
+    let
+      darwin = ''
+        mkdir -p $out/{Applications,bin}
+        cp -r "Proton Mail.app" $out/Applications/
+        makeWrapper $out/Applications/"Proton Mail.app"/Contents/MacOS/Proton\ Mail $out/bin/protonmail-desktop
+      '';
+      linux = ''
+        runHook preInstall
+        mkdir -p $out
+        cp -r usr/share/ $out/
+        cp -r usr/lib/proton-mail/resources/app.asar $out/share/
+      '';
+
+    in
+    ''
       runHook preInstall
-      mkdir -p $out
-      cp -r usr/share/ $out/
-      cp -r usr/lib/proton-mail/resources/app.asar $out/share/
+
+      ${if stdenv.isDarwin then darwin else linux}
+
+      runHook postInstall
     '';
-
-  in ''
-    runHook preInstall
-
-    ${if stdenv.isDarwin then darwin else linux}
-
-    runHook postInstall
-  '';
 
   preFixup = lib.optionalString stdenv.isLinux ''
     makeWrapper ${lib.getExe electron} $out/bin/${mainProgram} \
@@ -86,7 +90,11 @@ in stdenv.mkDerivation rec {
       sebtm
       matteopacini
     ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     inherit mainProgram;
   };
