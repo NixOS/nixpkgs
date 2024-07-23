@@ -26,6 +26,7 @@
   clang,
   libbpf,
   bpftools,
+  fetchurl,
 }:
 
 let
@@ -47,6 +48,13 @@ let
     repo = "libs";
     rev = "7.2.0+driver";
     hash = "sha256-FIlnJsNgofGo4HETEEpW28wpC3U9z5AZprwFR5AgFfA=";
+  };
+
+  # "main.c" from master after (https://github.com/falcosecurity/libs/pull/1884)
+  # Remove when an upstream release includes the driver update
+  driverKernel610MainC = fetchurl {
+    url = "https://raw.githubusercontent.com/falcosecurity/libs/fa26daf65bb4117ecfe099fcad48ea75fe86d8bb/driver/main.c";
+    hash = "sha256-VI/tOSXs5OcEDehSqICF3apmSnwe4QCmbkHz+DGH4uM=";
   };
 
   version = "0.38.0";
@@ -109,6 +117,7 @@ stdenv.mkDerivation {
 
     cp -r ${driver} driver-src
     chmod -R +w driver-src
+    cp ${driverKernel610MainC} driver-src/driver/main.c
 
     cmakeFlagsArray+=(
       "-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs"
