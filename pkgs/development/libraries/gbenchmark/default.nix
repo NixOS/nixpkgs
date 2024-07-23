@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
+
   postPatch = ''
     cp -r ${gtest.src} googletest
     chmod -R u+w googletest
