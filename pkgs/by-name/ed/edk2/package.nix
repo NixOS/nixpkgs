@@ -91,6 +91,12 @@ let
           lib.concatStrings
         ]}
         )
+
+        # enable compilation using Clang
+        # https://bugzilla.tianocore.org/show_bug.cgi?id=4620
+        substituteInPlace BaseTools/Conf/tools_def.template --replace-fail \
+          'DEFINE CLANGPDB_WARNING_OVERRIDES    = ' \
+          'DEFINE CLANGPDB_WARNING_OVERRIDES    = -Wno-unneeded-internal-declaration '
       '';
     };
 

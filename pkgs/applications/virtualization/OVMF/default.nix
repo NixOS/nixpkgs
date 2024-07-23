@@ -256,6 +256,5 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
       adamcstephens
       raitobezarius
     ];
-    broken = stdenv.isDarwin;
   };
 })
