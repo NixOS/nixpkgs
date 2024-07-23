@@ -8,13 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-ethtool";
+  pname = "ethtool";
   version = "0.15";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fedora-python";
-    repo = pname;
+    repo = "python-ethtool";
     rev = "v${version}";
     sha256 = "0arkcfq64a4fl88vjjsx4gd3mhcpa7mpq6sblpkgs4k4m9mccz6i";
   };

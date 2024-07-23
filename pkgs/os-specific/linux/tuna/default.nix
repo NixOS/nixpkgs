@@ -6,7 +6,7 @@
 , gobject-introspection
 , gtk3
 , python-linux-procfs
-, python-ethtool
+, ethtool
 , wrapGAppsHook3
 }:
 
@@ -38,7 +38,7 @@ buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = [ pygobject3 python-linux-procfs python-ethtool ];
+  propagatedBuildInputs = [ pygobject3 python-linux-procfs ethtool ];
 
   postInstall = ''
     mkdir -p $out/share/tuna
