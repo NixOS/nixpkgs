@@ -114,12 +114,11 @@ let
     ];
   };
 
-  appleFrameworks = darwin.apple_sdk_11_0.frameworks;
-  metalFrameworks = [
-    appleFrameworks.Accelerate
-    appleFrameworks.Metal
-    appleFrameworks.MetalKit
-    appleFrameworks.MetalPerformanceShaders
+  metalFrameworks = with darwin.apple_sdk_11_0.frameworks; [
+    Accelerate
+    Metal
+    MetalKit
+    MetalPerformanceShaders
   ];
 
   wrapperOptions =
