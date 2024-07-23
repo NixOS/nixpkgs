@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchpatch
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -32,6 +33,15 @@ stdenv.mkDerivation (self: {
     rev = "v${self.version}";
     hash = "sha256-wP611tGIWBA4IXShWbah7TxqdbvhfcfT2vnXalX/qzk=";
   };
+
+  patches = [
+    # Fixes a long-standing RCE vulnerability (hyprwm/xdg-desktop-portal-hyprland#242)
+    # Can be removed after v1.3.3
+    (fetchpatch {
+      url = "https://github.com/hyprwm/xdg-desktop-portal-hyprland/commit/84a9cdca3adcf1cb288c2d38f8c6fc1835a3ae23.patch";
+      hash = "sha256-rdu+8KDa1o125GZKTYquZfS8JG05odlzDzz8QxRoQYk=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
