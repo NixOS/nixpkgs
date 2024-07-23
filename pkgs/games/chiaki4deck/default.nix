@@ -6,7 +6,7 @@
 , pkg-config
 , protobuf
 , python3
-, ffmpeg_6
+, ffmpeg
 , libopus
 , wrapQtAppsHook
 , qtbase
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ffmpeg_6
+    ffmpeg
     libopus
     qtbase
     qtmultimedia
