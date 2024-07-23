@@ -2,6 +2,7 @@
   stdenv,
   cmake,
   fetchFromGitHub,
+  lib,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,5 +24,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cmake
   ];
+
+  meta = {
+    description = "A minimalistic C++ unit test framework";
+    homepage = "https://github.com/craflin/mingtest";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lutzberger ];
+    platforms = lib.platforms.linux;
+  };
+
 
 }
