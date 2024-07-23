@@ -18810,6 +18810,8 @@ with pkgs;
 
   moon = callPackage ../development/tools/build-managers/moon/default.nix { };
 
+  mopsa = ocamlPackages.mopsa.bin;
+
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
 
   msgpuck = callPackage ../development/libraries/msgpuck { };
