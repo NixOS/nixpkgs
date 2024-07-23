@@ -11,7 +11,6 @@
 , meson
 , ninja
 , pkg-config
-, python3
 , vala
 , libxml2
 , wrapGAppsHook4
@@ -19,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sideload";
-  version = "6.2.1";
+  version = "6.2.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BkU2lANn2KNaElL/JZ3TPVZIjh8eM3//ZiO4lFBIMm8=";
+    sha256 = "sha256-7qwjZpEvB0eHIRsXv8jU7fVhbCIYI6tqJYmYvZR8oLo=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +33,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook4
   ];
@@ -46,11 +44,6 @@ stdenv.mkDerivation rec {
     gtk4
     libxml2
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };
