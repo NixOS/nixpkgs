@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-jtBw4ahSl88L0iuCXxQgZVm1EcboWRJMNtjxLVTtzts=";
 
   meta = {
-    description = "A fast line-oriented regex search tool, similar to ag and ack";
+    description = "Fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = lib.licenses.unlicense;
     maintainers = [];
@@ -1000,7 +1000,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A fast line-oriented regex search tool, similar to ag and ack";
+    description = "Fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = with lib.licenses; [ mit unlicense ];
     maintainers = with lib.maintainers; [];

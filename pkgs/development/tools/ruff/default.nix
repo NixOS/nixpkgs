@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , stdenv
 , darwin
@@ -14,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.5.2";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/${version}";
-    hash = "sha256-g71RqbEoCpmCjd0CKkc++yv00ohoORDeMYAwYEHKhW4=";
+    hash = "sha256-dvvhd84T2YaNR5yu1uYcqwHjVzcWXvlXthyMBf8qZzE=";
   };
 
   cargoLock = {

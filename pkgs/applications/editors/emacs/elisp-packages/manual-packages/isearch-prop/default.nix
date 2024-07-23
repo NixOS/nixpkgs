@@ -1,10 +1,10 @@
-{ lib
-, fetchFromGitHub
-, trivialBuild
-, emacs
+{
+  lib,
+  fetchFromGitHub,
+  melpaBuild,
 }:
 
-trivialBuild {
+melpaBuild {
   pname = "isearch-prop";
   version = "0-unstable-2019-05-01";
 
@@ -15,11 +15,10 @@ trivialBuild {
     hash = "sha256-A1Kt4nm7iRV9J5yaLupwiNL5g7ddZvQs79dggmqZ7Rk=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.emacswiki.org/emacs/IsearchPlus";
     description = "Search text- or overlay-property contexts";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ leungbk ];
-    inherit (emacs.meta) platforms;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ leungbk ];
   };
 }

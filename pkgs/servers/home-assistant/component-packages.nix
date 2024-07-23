@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.7.2";
+  version = "2024.7.3";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -219,11 +219,12 @@
       apsystems-ez1
     ];
     "aquacell" = ps: with ps; [
+      aioaquacell
       fnv-hash-fast
       ifaddr
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: aioaquacell
+    ];
     "aqualogic" = ps: with ps; [
       aqualogic
     ];
@@ -4455,10 +4456,12 @@
     ];
     "telegram" = ps: with ps; [
       python-telegram-bot
-    ]; # missing inputs: python-telegram-bot.optional-dependencies.socks
+    ]
+    ++ python-telegram-bot.optional-dependencies.socks;
     "telegram_bot" = ps: with ps; [
       python-telegram-bot
-    ]; # missing inputs: python-telegram-bot.optional-dependencies.socks
+    ]
+    ++ python-telegram-bot.optional-dependencies.socks;
     "tellduslive" = ps: with ps; [
       tellduslive
     ];
@@ -4882,8 +4885,9 @@
       hassil
       home-assistant-intents
       mutagen
+      voip-utils
       webrtc-noise-gain
-    ]; # missing inputs: voip-utils
+    ];
     "volkszaehler" = ps: with ps; [
       volkszaehler
     ];
@@ -5274,6 +5278,7 @@
     "aprilaire"
     "aprs"
     "apsystems"
+    "aquacell"
     "aranet"
     "arcam_fmj"
     "aseko_pool_live"
@@ -5935,6 +5940,8 @@
     "tcp"
     "technove"
     "tedee"
+    "telegram"
+    "telegram_bot"
     "tellduslive"
     "temper"
     "template"
@@ -6012,6 +6019,7 @@
     "vlc_telnet"
     "vodafone_station"
     "voicerss"
+    "voip"
     "volumio"
     "volvooncall"
     "vulcan"

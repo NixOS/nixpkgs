@@ -6,12 +6,12 @@
   fetchFromGitHub,
   makeWrapper,
   mvnDepsHash ? null,
+  enableOcr ? true,
+  tesseract,
   nixosTests,
 }:
 
 let
-  maven' = maven.override { jdk = jdk8; };
-
   mvnDepsHashes = {
     "x86_64-linux" = "sha256-M8O1EJtlTm+mVy/qxapRcBWxD14eYL/LLUxP2uOBoM4=";
     "aarch64-linux" = "sha256-+ewdV9g0MfgiBiRAimkIZp9lrOTKnKnBB1LqhIlOSaQ=";
@@ -23,7 +23,7 @@ let
     mvnDepsHashes.${stdenv.system}
       or (lib.warn "This platform doesn't have a default mvnDepsHash value, you'll need to specify it manually" lib.fakeHash);
 in
-maven'.buildMavenPackage rec {
+maven.buildMavenPackage rec {
   pname = "tika";
   version = "2.9.2";
 
@@ -43,6 +43,7 @@ maven'.buildMavenPackage rec {
     "org.junit.platform:junit-platform-launcher:1.10.0"
   ];
 
+  mvnJdk = jdk8;
   mvnHash = if mvnDepsHash != null then mvnDepsHash else knownMvnDepsHash;
 
   mvnParameters = toString [
@@ -52,21 +53,25 @@ maven'.buildMavenPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      binPath = lib.makeBinPath ([ jdk8.jre ] ++ lib.optionals enableOcr [ tesseract ]);
+    in
+    ''
+      runHook preInstall
 
-    # Note: using * instead of version would match multiple files
-    install -Dm644 tika-app/target/tika-app-${version}.jar $out/share/tika/tika-app.jar
-    install -Dm644 tika-server/tika-server-standard/target/tika-server-standard-${version}.jar $out/share/tika/tika-server.jar
+      # Note: using * instead of version would match multiple files
+      install -Dm644 tika-app/target/tika-app-${version}.jar $out/share/tika/tika-app.jar
+      install -Dm644 tika-server/tika-server-standard/target/tika-server-standard-${version}.jar $out/share/tika/tika-server.jar
 
-    makeWrapper ${jdk8.jre}/bin/java $out/bin/tika-app \
-        --add-flags "-jar $out/share/tika/tika-app.jar"
-    makeWrapper ${jdk8.jre}/bin/java $out/bin/tika-server \
-        --prefix PATH : ${lib.makeBinPath [ jdk8.jre ]} \
-        --add-flags "-jar $out/share/tika/tika-server.jar"
+      makeWrapper ${jdk8.jre}/bin/java $out/bin/tika-app \
+          --add-flags "-jar $out/share/tika/tika-app.jar"
+      makeWrapper ${jdk8.jre}/bin/java $out/bin/tika-server \
+          --prefix PATH : ${binPath} \
+          --add-flags "-jar $out/share/tika/tika-server.jar"
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   passthru.tests = {
     inherit (nixosTests) tika;

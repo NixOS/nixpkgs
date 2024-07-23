@@ -417,9 +417,11 @@ stdenv.mkDerivation (rec {
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   ''
-  + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (if stdenv.buildPlatform.canExecute stdenv.hostPlatform then ''
+    ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native
+  '' else ''
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
-  '';
+  '');
 
   inherit doCheck;
 

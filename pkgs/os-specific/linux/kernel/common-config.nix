@@ -1147,6 +1147,8 @@ let
       # For systemd-binfmt
       BINFMT_MISC   = option yes;
 
+      # Required for EDID overriding
+      FW_LOADER = yes;
       # Disable the firmware helper fallback, udev doesn't implement it any more
       FW_LOADER_USER_HELPER_FALLBACK = option no;
 

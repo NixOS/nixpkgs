@@ -14,16 +14,16 @@
 
 buildGoModule rec {
   pname = "seabird";
-  version = "0.3.2";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "getseabird";
     repo = "seabird";
     rev = "v${version}";
-    hash = "sha256-MZEgzTwaBNXLimSj/vXR624DCJ7i2W5lYUdVxqvFii0=";
+    hash = "sha256-GfoP3TeSzA4Hi3fCUR3Y3yWUAj3ogxTRsD4hXuERPio=";
   };
 
-  vendorHash = "sha256-g7qKI78VeDUu8yafrk2llCIirW/1uxfx6urVLRexsPE=";
+  vendorHash = "sha256-uUMQ2AddIfPvD7B3KOfN7fWL8oIEK6G5L+NPYo+em5k=";
 
   nativeBuildInputs = [
     copyDesktopItems

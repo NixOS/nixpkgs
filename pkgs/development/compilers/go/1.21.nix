@@ -184,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://go.dev/";
     license = licenses.bsd3;
     maintainers = teams.golang.members;
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = platforms.darwin ++ platforms.linux ++ platforms.freebsd;
     mainProgram = "go";
   };
 })

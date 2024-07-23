@@ -83835,7 +83835,7 @@ in
   "rust-analyzer-build-deps-../../applications/editors/vscode/extensions/rust-lang.rust-analyzer/build-deps" = nodeEnv.buildNodePackage {
     name = "rust-analyzer";
     packageName = "rust-analyzer";
-    version = "0.3.1850";
+    version = "0.3.2029";
     src = ../../applications/editors/vscode/extensions/rust-lang.rust-analyzer/build-deps;
     dependencies = [
       sources."@azure/abort-controller-1.1.0"

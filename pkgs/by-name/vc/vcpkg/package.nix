@@ -2,7 +2,8 @@
 , stdenvNoCC
 , lib
 , vcpkg-tool
-, writeShellScript
+, makeWrapper
+, doWrap ? true
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -16,27 +17,31 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-eDpMGDtC44eh0elLWV0r1H/WbpVdZ5qMedKh7Ct50Cs=";
   };
 
-  installPhase = let
-    # vcpkg needs two directories to write to that is independent of installation directory.
-    # Since vcpkg already creates $HOME/.vcpkg/ we use that to create a root where vcpkg can write into.
-    vcpkgScript = writeShellScript "vcpkg" ''
-      vcpkg_writable_path="$HOME/.vcpkg/root/"
+  nativeBuildInputs = [ makeWrapper ];
 
-      VCPKG_ROOT="@out@/share/vcpkg" ${vcpkg-tool}/bin/vcpkg \
-        --x-downloads-root="$vcpkg_writable_path"/downloads \
-        --x-buildtrees-root="$vcpkg_writable_path"/buildtrees \
-        --x-packages-root="$vcpkg_writable_path"/packages \
-        "$@"
-      '';
-    in ''
+  postPatch = ''
+    substituteInPlace scripts/toolchains/linux.cmake \
+      --replace-fail "aarch64-linux-gnu-as"  "aarch64-unknown-linux-gnu-as" \
+      --replace-fail "aarch64-linux-gnu-gcc" "aarch64-unknown-linux-gnu-gcc" \
+      --replace-fail "aarch64-linux-gnu-g++" "aarch64-unknown-linux-gnu-g++" \
+      --replace-fail "arm-linux-gnueabihf-as"  "armv7l-unknown-linux-gnueabihf-as" \
+      --replace-fail "arm-linux-gnueabihf-gcc" "armv7l-unknown-linux-gnueabihf-gcc" \
+      --replace-fail "arm-linux-gnueabihf-g++" "armv7l-unknown-linux-gnueabihf-g++"
+  '';
+
+  installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/bin $out/share/vcpkg/scripts/buildsystems
-      cp --preserve=mode -r ./{docs,ports,triplets,scripts,.vcpkg-root,versions,LICENSE.txt} $out/share/vcpkg/
-      substitute ${vcpkgScript} $out/bin/vcpkg --subst-var-by out $out
-      chmod +x $out/bin/vcpkg
-      ln -s $out/bin/vcpkg $out/share/vcpkg/vcpkg
-      touch $out/share/vcpkg/vcpkg.disable-metrics
+      mkdir -p "$out/bin" "$out/share/vcpkg/scripts/buildsystems"
+      cp --preserve=mode -r ./{docs,ports,triplets,scripts,.vcpkg-root,versions,LICENSE.txt} "$out/share/vcpkg/"
+
+      ${lib.optionalString doWrap ''
+        makeWrapper "${vcpkg-tool}/bin/vcpkg" "$out/bin/vcpkg" \
+          --set-default VCPKG_ROOT "$out/share/vcpkg"
+      ''}
+
+      ln -s "$out/bin/vcpkg" "$out/share/vcpkg/vcpkg"
+      touch "$out/share/vcpkg/vcpkg.disable-metrics"
 
       runHook postInstall
     '';
@@ -46,7 +51,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "vcpkg";
     homepage = "https://vcpkg.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ guekka gracicot ];
+    maintainers = with lib.maintainers; [ guekka gracicot h7x4 ];
     platforms = lib.platforms.all;
   };
 })

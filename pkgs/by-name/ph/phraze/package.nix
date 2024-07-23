@@ -1,6 +1,9 @@
 {
   lib,
   fetchFromGitHub,
+  testers,
+  nix-update-script,
+  phraze,
   rustPlatform,
 }:
 
@@ -18,6 +21,13 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
 
   cargoHash = "sha256-kFk04YKDYiABWtild6aaP9H8gt/TuckOWRJE69dAXGU=";
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      version = testers.testVersion { package = phraze; };
+    };
+  };
 
   meta = {
     description = "Generate random passphrases";

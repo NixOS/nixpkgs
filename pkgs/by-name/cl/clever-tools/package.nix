@@ -30,6 +30,7 @@ buildNpmPackage rec {
     installShellCompletion --cmd clever \
       --bash <($out/bin/clever --bash-autocomplete-script $out/bin/clever) \
       --zsh <($out/bin/clever --zsh-autocomplete-script $out/bin/clever)
+  '' + ''
     rm $out/bin/install-clever-completion
     rm $out/bin/uninstall-clever-completion
   '';

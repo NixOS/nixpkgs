@@ -39,7 +39,8 @@
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
 , withAudioToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple AudioToolbox
-, withAvFoundation ? withHeadlessDeps && stdenv.isDarwin # Apple AVFoundation framework
+# Compiling ffmpeg 7 with AVFoundation on x86_64-darwin currently fails with "error: incompatible pointer to integer conversion passing 'NSString *const' to parameter of type 'enum AVMediaType' [-Wint-conversion] NSArray *devices = getDevicesWithMediaType(AVMediaTypeAudio);"
+, withAvFoundation ? withHeadlessDeps && stdenv.isDarwin && !(lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86) # Apple AVFoundation framework
 , withAvisynth ? withFullDeps # AviSynth script files reading
 , withBluray ? withFullDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
@@ -93,7 +94,8 @@
 , withPlacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withPulse ? withSmallDeps && stdenv.isLinux # Pulseaudio input support
 , withQrencode ? withFullDeps && lib.versionAtLeast version "7" # QR encode generation
-, withQuirc ? withFullDeps && lib.versionAtLeast version "7" # QR decoding
+# On runtime fails with dyld[25216]: Library not loaded: libquirc.so.1.2 (Seems to not link the libary correctly)
+, withQuirc ? withFullDeps && lib.versionAtLeast version "7" && !stdenv.isDarwin # QR decoding
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
 , withRtmp ? withFullDeps # RTMP[E] support
 , withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
@@ -128,8 +130,9 @@
 , withXcbShape ? withFullDeps # X11 grabbing shape rendering
 , withXcbShm ? withFullDeps # X11 grabbing shm communication
 , withXcbxfixes ? withFullDeps # X11 grabbing mouse rendering
-, withXevd ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 # MPEG-5 EVC decoding
-, withXeve ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 # MPEG-5 EVC encoding
+# Currently only supports gcc and msvc as compiler, the limitation for clang get removed in the next release, but that does not fix building on darwin.
+, withXevd ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 && stdenv.cc.isGNU # MPEG-5 EVC decoding
+, withXeve ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 && stdenv.cc.isGNU # MPEG-5 EVC encoding
 , withXlib ? withFullDeps # Xlib support
 , withXml2 ? withFullDeps # libxml2 support, for IMF and DASH demuxers
 , withXvid ? withHeadlessDeps && withGPL # Xvid encoder, native encoder exists
@@ -512,6 +515,9 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/7b7b7819bd21cc92ac07f6696b0e7f26fa8f9834";
         hash = "sha256-TKI289XqtG86Sj9s7mVYvmkjAuRXeK+2cYYEDkg6u6I=";
       })
+    ]
+    ++ optionals (lib.versionAtLeast version "7.0") [
+      ./0001-avfoundation.m-macOS-SDK-10.12-compatibility.patch
     ];
 
   configurePlatforms = [];
@@ -928,7 +934,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
     broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
-    maintainers = with maintainers; [ atemu arthsmn jopejoe1 ];
+    maintainers = with maintainers; [ atemu jopejoe1 ];
     mainProgram = "ffmpeg";
   };
 } // lib.optionalAttrs withCudaLLVM {

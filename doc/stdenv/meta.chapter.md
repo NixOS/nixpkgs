@@ -5,7 +5,7 @@ Nix packages can declare *meta-attributes* that contain information about a pack
 ```nix
 {
   meta = {
-    description = "A program that produces a familiar, friendly greeting";
+    description = "Program that produces a familiar, friendly greeting";
     longDescription = ''
       GNU Hello is a program that prints "Hello, world!" when you run it.
       It is fully customizable.

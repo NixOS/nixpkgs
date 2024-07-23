@@ -142,7 +142,6 @@ stdenv.mkDerivation {
               @executable_path/libs/libstdc++.6.dylib \
       $exe
   '' + ''
-    ls -al $out
     runHook postInstall
   '';
 

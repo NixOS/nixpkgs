@@ -361,8 +361,7 @@ let
             # See here for some context:
             # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
             ++ lib.optional (
-              stdenv.targetPlatform.isDarwin
-              && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
+              stdenv.targetPlatform.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
             ) (metadata.getVersionFile "lldb/cpu_subtype_arm64e_replacement.patch");
         }
         // lib.optionalAttrs (lib.versions.major metadata.release_version == "16") {
@@ -592,7 +591,13 @@ let
           ./compiler-rt/armv6-no-ldrexd-strexd.patch
           ./compiler-rt/armv6-scudo-no-yield.patch
           ./compiler-rt/armv6-scudo-libatomic.patch
-        ];
+        ]
+        ++ lib.optional (lib.versionAtLeast metadata.release_version "19") (
+          fetchpatch {
+            url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
+            hash = "sha256-1CkA+RzI+645uG/QXsmOMKrLAjhVpfLUjNtgZ0QTv1E=";
+          }
+        );
     in
     {
       compiler-rt-libc = callPackage ./compiler-rt {

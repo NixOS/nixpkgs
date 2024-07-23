@@ -371,7 +371,6 @@ nixos/tests/lxd/                        @adamcstephens
 pkgs/by-name/in/incus/                  @adamcstephens
 pkgs/by-name/lx/lxc*                    @adamcstephens
 pkgs/by-name/lx/lxd*                    @adamcstephens
-pkgs/os-specific/linux/lxc/             @adamcstephens
 
 # ExpidusOS, Flutter
 /pkgs/development/compilers/flutter @RossComputerGuy

@@ -345,6 +345,7 @@
         #       *developed in this repo*;
         #       - not individual tests
         #       - not packages for test frameworks
+        - pkgs/build-support/testers/**
         - nixos/lib/testing/**
         - nixos/lib/test-driver/**
         - nixos/tests/nixos-test-driver/**

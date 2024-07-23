@@ -34,7 +34,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/scottkosty/vit";
     description = "Visual Interactive Taskwarrior";
     mainProgram = "vit";
-    maintainers = with maintainers; [ dtzWill arcnmx ];
+    maintainers = with maintainers; [ arcnmx ];
     platforms = platforms.all;
     license = licenses.mit;
   };

@@ -455,6 +455,8 @@ let
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
+      homeassistant = self.toPythonModule home-assistant;
+      pytest-homeassistant-custom-component = self.callPackage ./pytest-homeassistant-custom-component.nix { };
     })
   ];
 
@@ -476,7 +478,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.7.2";
+  hassVersion = "2024.7.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -494,13 +496,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-FML1JZFj2xebcQvXJmBu02Eczz3ejg4r7PfnpBiDc50=";
+    hash = "sha256-6f4z1mpoLOntImC161+0CyyuT3NrPdfuCa6/+wqzHgs=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-okukdAbBXJCaDpnOCDY91dsLQdm5pMJ1SKXV9A68eoQ=";
+    hash = "sha256-YtrOUSQFTgDFL+iPm3itkKsMXs9IKyB2rCnpe7Bn2Gk=";
   };
 
   build-system = with python.pkgs; [
@@ -649,6 +651,13 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect=tests/helpers/test_translation.py::test_caching"
     # assert "Detected that integration 'hue' attempted to create an asyncio task from a thread at homeassistant/components/hue/light.py, line 23
     "--deselect=tests/util/test_async.py::test_create_eager_task_from_thread_in_integration"
+    # Services were renamed to Actions in language strings, but the tests are lagging behind
+    "--deselect=tests/test_core.py::test_serviceregistry_service_that_not_exists"
+    "--deselect=tests/test_core.py::test_services_call_return_response_requires_blocking"
+    "--deselect=tests/test_core.py::test_serviceregistry_return_response_arguments"
+    "--deselect=tests/helpers/test_script.py::test_parallel_error"
+    "--deselect=tests/helpers/test_script.py::test_propagate_error_service_not_found"
+    "--deselect=tests/helpers/test_script.py::test_continue_on_error_automation_issue"
     # tests are located in tests/
     "tests"
   ];

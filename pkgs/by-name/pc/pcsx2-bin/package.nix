@@ -32,16 +32,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
   meta = {
-    inherit (pcsx2.meta) homepage longDescription license changelog downloadPage;
+    inherit (pcsx2.meta)
+      homepage
+      longDescription
+      license
+      changelog
+      downloadPage
+      ;
     description = "Playstation 2 emulator; precompiled binary for MacOS, repacked from official website";
-    maintainers = with lib.maintainers; [
-      matteopacini
-    ];
+    maintainers = with lib.maintainers; [ matteopacini ];
     mainProgram = "pcsx2-qt";
-    platforms = lib.systems.inspect.patternLogicalAnd
-      lib.systems.inspect.patterns.isDarwin
-      lib.systems.inspect.patterns.isx86_64;
+    platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isDarwin lib.systems.inspect.patterns.isx86_64;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

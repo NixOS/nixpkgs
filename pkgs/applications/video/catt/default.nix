@@ -63,7 +63,7 @@ python.pkgs.buildPythonApplication rec {
     description = "Tool to send media from online sources to Chromecast devices";
     homepage = "https://github.com/skorokithakis/catt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ ];
     mainProgram = "catt";
   };
 }

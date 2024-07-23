@@ -245,6 +245,7 @@ in {
   davis = handleTest ./davis.nix {};
   db-rest = handleTest ./db-rest.nix {};
   dconf = handleTest ./dconf.nix {};
+  ddns-updater = handleTest ./ddns-updater.nix {};
   deconz = handleTest ./deconz.nix {};
   deepin = handleTest ./deepin.nix {};
   deluge = handleTest ./deluge.nix {};
@@ -331,6 +332,7 @@ in {
   firewall-nftables = handleTest ./firewall.nix { nftables = true; };
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
+  flaresolverr = handleTest ./flaresolverr.nix {};
   flood = handleTest ./flood.nix {};
   floorp = handleTest ./firefox.nix { firefoxPackage = pkgs.floorp; };
   fluentd = handleTest ./fluentd.nix {};
@@ -396,7 +398,7 @@ in {
   guix = handleTest ./guix {};
   gvisor = handleTest ./gvisor.nix {};
   hadoop = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop; };
-  hadoop_3_2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop_3_2; };
+  hadoop_3_3 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop_3_3; };
   hadoop2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop2; };
   haka = handleTest ./haka.nix {};
   haste-server = handleTest ./haste-server.nix {};
@@ -406,6 +408,7 @@ in {
   headscale = handleTest ./headscale.nix {};
   healthchecks = handleTest ./web-apps/healthchecks.nix {};
   hbase2 = handleTest ./hbase.nix { package=pkgs.hbase2; };
+  hbase_2_5 = handleTest ./hbase.nix { package=pkgs.hbase_2_5; };
   hbase_2_4 = handleTest ./hbase.nix { package=pkgs.hbase_2_4; };
   hbase3 = handleTest ./hbase.nix { package=pkgs.hbase3; };
   hddfancontrol = handleTest ./hddfancontrol.nix {};
@@ -438,6 +441,7 @@ in {
   hydra = handleTest ./hydra {};
   i3wm = handleTest ./i3wm.nix {};
   icingaweb2 = handleTest ./icingaweb2.nix {};
+  ifm = handleTest ./ifm.nix {};
   iftop = handleTest ./iftop.nix {};
   incron = handleTest ./incron.nix {};
   incus = pkgs.recurseIntoAttrs (handleTest ./incus { inherit handleTestOn; inherit (pkgs) incus; });
@@ -503,7 +507,6 @@ in {
   leaps = handleTest ./leaps.nix {};
   lemmy = handleTest ./lemmy.nix {};
   libinput = handleTest ./libinput.nix {};
-  libreddit = handleTest ./libreddit.nix {};
   librenms = handleTest ./librenms.nix {};
   libresprite = handleTest ./libresprite.nix {};
   libreswan = runTest ./libreswan.nix;
@@ -597,6 +600,7 @@ in {
   # Fails on aarch64-linux at the PDF creation step - need to debug this on an
   # aarch64 machine..
   musescore = handleTestOn ["x86_64-linux"] ./musescore.nix {};
+  music-assistant = runTest ./music-assistant.nix;
   munin = handleTest ./munin.nix {};
   mutableUsers = handleTest ./mutable-users.nix {};
   mycelium = handleTest ./mycelium {};
@@ -802,6 +806,7 @@ in {
   qemu-vm-restrictnetwork = handleTest ./qemu-vm-restrictnetwork.nix {};
   qemu-vm-volatile-root = runTest ./qemu-vm-volatile-root.nix;
   qemu-vm-external-disk-image = runTest ./qemu-vm-external-disk-image.nix;
+  qemu-vm-store = runTest ./qemu-vm-store.nix;
   qgis = handleTest ./qgis.nix { qgisPackage = pkgs.qgis; };
   qgis-ltr = handleTest ./qgis.nix { qgisPackage = pkgs.qgis-ltr; };
   qownnotes = handleTest ./qownnotes.nix {};

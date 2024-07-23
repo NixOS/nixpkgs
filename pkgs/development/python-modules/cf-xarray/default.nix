@@ -1,26 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  dask,
+  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+  xarray,
+
+  # optional-dependencies
   matplotlib,
   pint,
   pooch,
-  pytestCheckHook,
-  pythonOlder,
   regex,
   rich,
-  scipy,
-  setuptools,
-  setuptools-scm,
   shapely,
-  wheel,
-  xarray,
+
+  # checks
+  dask,
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "cf-xarray";
-  version = "0.9.3";
+  version = "0.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,13 +34,12 @@ buildPythonPackage rec {
     owner = "xarray-contrib";
     repo = "cf-xarray";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7eL8z2r1+X80QqiL/5XzfA+Jlx+WuKvuxIWG4YLCwfg=";
+    hash = "sha256-zio00ki86DZqWtGnVseDR28He4DW1jjKdwfsxRwFDfg=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
-    wheel
     xarray
   ];
 

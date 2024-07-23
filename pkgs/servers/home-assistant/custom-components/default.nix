@@ -32,6 +32,8 @@
 
   localtuya = callPackage ./localtuya {};
 
+  mass = callPackage ./mass { };
+
   midea_ac_lan = callPackage ./midea_ac_lan {};
 
   midea-air-appliances-lan = callPackage ./midea-air-appliances-lan {};

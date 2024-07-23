@@ -10,12 +10,7 @@
 , libGL
 }:
 
-let
-  mavenJdk17 = maven.override {
-    jdk = jdk17;
-  };
-in
-mavenJdk17.buildMavenPackage rec {
+maven.buildMavenPackage rec {
   pname = "runelite";
   version = "2.7.1";
 
@@ -25,6 +20,8 @@ mavenJdk17.buildMavenPackage rec {
     rev = version;
     hash = "sha256-7T9n23qMl4IJQL7yWLXKvRzYcMeXDUwkY8MBFc2t3Rw=";
   };
+
+  mvnJdk = jdk17;
   mvnHash = "sha256-FpfHtGIfo84z6v9/nzc47+JeIM43MR9mWhVOPSi0xhM=";
 
   desktop = makeDesktopItem {

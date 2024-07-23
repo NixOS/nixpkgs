@@ -5,8 +5,8 @@
 , buildWebExtension ? false
 }:
 let
-  version = "1.9.4";
-  gitHash = "9f79cc0";
+  version = "1.9.5";
+  gitHash = "5bd10c8";
 in
 buildNpmPackage rec {
   pname = "vencord";
@@ -16,7 +16,7 @@ buildNpmPackage rec {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${version}";
-    hash = "sha256-SbvxAkKos7f3AuU3VLmNTP6VO+CjvWX/kIO0WJzUX3k=";
+    hash = "sha256-7eJkdcZX4D6PUnnpY+iucWWZx9/ned8z/zA0M5TRcaY=";
   };
 
   ESBUILD_BINARY_PATH = lib.getExe (esbuild.overrideAttrs (final: _: {
@@ -34,7 +34,7 @@ buildNpmPackage rec {
   npmRebuildFlags = [ "|| true" ];
 
   makeCacheWritable = true;
-  npmDepsHash = "sha256-TeAuXJn07xCveoD5yaNLyULzhNZ8Mtdn4NNLfu2EwEg=";
+  npmDepsHash = "sha256-GTjL6cjYPoa1ohtqslxDskCN9tKuu1OP1ZWIWtFx+E0=";
   npmFlags = [ "--legacy-peer-deps" ];
   npmBuildScript = if buildWebExtension then "buildWeb" else "build";
   npmBuildFlags = [ "--" "--standalone" "--disable-updater" ];

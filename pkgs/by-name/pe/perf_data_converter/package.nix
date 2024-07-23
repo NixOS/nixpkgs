@@ -10,13 +10,13 @@
 
 buildBazelPackage rec {
   pname = "perf_data_converter";
-  version = "0-unstable-2024-03-12";
+  version = "0-unstable-2024-07-10";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "perf_data_converter";
-    rev = "e1cfe1e7e5d8cf3b728a166bf02d4227c82801eb";
-    hash = "sha256-Y3tBLH2jf1f28o6RK2inq9FulKc66qcqwKmxYdFC5tA=";
+    rev = "5b27c287a57811db91d40b5776cbaedd00945afc";
+    hash = "sha256-A5DEDi52gp1gTugGnutmKNRa/GGsc+LKLE3xRl/1gbw=";
   };
 
   bazel = bazel_6;

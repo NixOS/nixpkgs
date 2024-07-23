@@ -1,6 +1,8 @@
 { config
+, uthash
 , lib
 , stdenv
+, nv-codec-headers-12
 , fetchFromGitHub
 , fetchpatch
 , addOpenGLRunpath
@@ -39,7 +41,6 @@
 , withFdk ? true
 , pipewire
 , libdrm
-, libajantv2
 , librist
 , libva
 , srt
@@ -62,13 +63,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "30.1.2";
+  version = "30.2.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-M4IINBoYrgkM37ykb4boHyWP8AxwMX0b7IAeeNIw9Qo=";
+    hash = "sha256-mwh2KLSz+I/8f3i/wST/2vKL/hWTCTaq53sinIEX75M=";
     fetchSubmodules = true;
   };
 
@@ -113,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     libvlc
     mbedtls
     pciutils
-    libajantv2
     librist
     libva
     srt
@@ -124,6 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     libdatachannel
     libvpl
     qrcodegencpp
+    uthash
+    nv-codec-headers-12
   ]
   ++ optionals scriptingSupport [ luajit python3 ]
   ++ optional alsaSupport alsa-lib
@@ -155,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
     (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
+    (lib.cmakeBool "ENABLE_AJA" false) # TODO: fix linking against libajantv2
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

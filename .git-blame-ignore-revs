@@ -138,3 +138,6 @@ acd0e3898feb321cb9a71a0fd376f1157d0f4553
 
 # azure-cli: move to by-name, nixfmt #325950
 96cd538b68bd1d0a0a37979356d669abbba32ebc
+
+# poptracker: format with nixfmt-rfc-style (#326697)
+ff5c8f6cc3d1f2e017e86d50965c14b71f00567b

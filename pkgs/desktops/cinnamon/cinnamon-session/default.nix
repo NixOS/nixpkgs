@@ -25,20 +25,20 @@
 
 let
   pythonEnv = python3.withPackages (pp: with pp; [
-    pp.xapp # don't omit `pp.`, see #213561
+    python-xapp
     pygobject3
     setproctitle
   ]);
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
-  version = "6.2.0";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-2KQJNUc/uvbXnqqV0Yt3cltTHNbCo+wK67NXlid02Sk=";
+    hash = "sha256-mr+QOFogzoloasGt1uK6zH/KHuH+uWYzXAZxPYkW57A=";
   };
 
   patches = [

@@ -16,8 +16,8 @@
 # - Attribute names should be computable without relying on `final`.
 #   - Extensions should take arguments to build attribute names before relying on `final`.
 #
-# Silvan's recommendation then is to explicitly use `callPackage` to provide everything our extensions need
-# to compute the attribute names, without relying on `final`.
+# Silvan's recommendation then is to explicitly use `callPackage` to provide everything our
+# extensions need to compute the attribute names, without relying on `final`.
 #
 # I've (@connorbaker) attempted to do that, though I'm unsure of how this will interact with overrides.
 {
@@ -27,7 +27,6 @@
   newScope,
   pkgs,
   config,
-  __attrsFailEvaluation ? true,
 }:
 let
   inherit (lib)
@@ -50,10 +49,14 @@ let
     cudaAtLeast = strings.versionAtLeast cudaVersion;
 
     # Maintain a reference to the final cudaPackages.
-    # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an argument,
-    # it's provided with `cudaPackages` from the top-level scope, which is not what we want. We want to
-    # provide the `cudaPackages` from the final scope -- that is, the *current* scope.
-    cudaPackages = final;
+    # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an
+    # argument, it's provided with `cudaPackages` from the top-level scope, which is not what we
+    # want. We want to provide the `cudaPackages` from the final scope -- that is, the *current*
+    # scope. However, we also want to prevent `pkgs/top-level/release-attrpaths-superset.nix` from
+    # recursing more than one level here.
+    cudaPackages = final // {
+      __attrsFailEvaluation = true;
+    };
 
     # TODO(@connorbaker): `cudaFlags` is an alias for `flags` which should be removed in the future.
     cudaFlags = flags;
@@ -78,7 +81,7 @@ let
     nccl = final.callPackage ../development/cuda-modules/nccl { };
     nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
 
-    writeGpuTestPython = final.callPackage ../development/cuda-modules/write-gpu-python-test.nix { };
+    writeGpuTestPython = final.callPackage ../development/cuda-modules/write-gpu-test-python.nix { };
   });
 
   mkVersionedPackageName =
@@ -120,4 +123,4 @@ let
     fixedPoints.extends composedExtension passthruFunction
   );
 in
-cudaPackages // { inherit __attrsFailEvaluation; }
+cudaPackages

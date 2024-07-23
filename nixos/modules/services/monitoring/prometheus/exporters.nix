@@ -27,6 +27,7 @@ let
     "bird"
     "bitcoin"
     "blackbox"
+    "borgmatic"
     "buildkite-agent"
     "collectd"
     "deluge"

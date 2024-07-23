@@ -9,7 +9,7 @@
   find-libpython,
   pytestCheckHook,
   swig,
-  verilog,
+  iverilog,
   ghdl,
 }:
 
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     cocotb-bus
     pytestCheckHook
     swig
-    verilog
+    iverilog
     ghdl
   ];
   preCheck = ''
