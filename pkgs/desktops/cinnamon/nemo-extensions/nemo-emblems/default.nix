@@ -4,12 +4,16 @@
 , cinnamon-translations
 }:
 
-let
-  srcs = import ../srcs.nix { inherit fetchFromGitHub; };
-in
 python3.pkgs.buildPythonApplication rec {
   pname = "nemo-emblems";
-  inherit (srcs) version src;
+  version = "6.2.1";
+
+  src = fetchFromGitHub {
+    owner = "linuxmint";
+    repo = "nemo-extensions";
+    rev = "nemo-emblems-${version}";
+    hash = "sha256-HfWZntG+SHrzkN4fa3qYj9+fM6zF32qFquL/InoUi/k=";
+  };
 
   format = "setuptools";
 
