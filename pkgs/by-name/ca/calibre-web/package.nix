@@ -36,6 +36,7 @@ python.pkgs.buildPythonApplication rec {
     flask-principal
     flask-wtf
     iso-639
+    jsonschema
     lxml
     pypdf
     python-magic
