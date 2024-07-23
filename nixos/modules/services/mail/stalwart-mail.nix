@@ -78,6 +78,7 @@ in {
       ];
       config.resource = {
         spam-filter = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml";
+        webadmin = lib.mkDefault "file://${cfg.package}/share/web/webadmin.zip";
       };
     };
 
