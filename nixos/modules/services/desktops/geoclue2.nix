@@ -313,6 +313,9 @@ in
       isSystem = false;
     };
 
+    # https://github.com/NixOS/nixpkgs/issues/327464
+    environment.etc."geoclue/conf.d/.keep".text = "";
+
     environment.etc."geoclue/geoclue.conf".text =
       generators.toINI {} ({
         agent = {
