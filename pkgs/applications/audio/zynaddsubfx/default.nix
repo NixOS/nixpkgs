@@ -148,7 +148,7 @@ in stdenv.mkDerivation rec {
       else "https://zynaddsubfx.sourceforge.io";
 
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu kira-bruneau ];
+    maintainers = with maintainers; [ kira-bruneau ];
     platforms = platforms.all;
 
     # On macOS:
