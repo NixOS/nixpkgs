@@ -629,6 +629,8 @@ self: super: with self; {
 
   ansimarkup = callPackage ../development/python-modules/ansimarkup { };
 
+  ansitable = callPackage ../development/python-modules/ansitable { };
+
   ansiwrap = callPackage ../development/python-modules/ansiwrap { };
 
   anthemav = callPackage ../development/python-modules/anthemav { };
