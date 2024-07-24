@@ -7,6 +7,7 @@
   makeWrapper,
   maven,
   nix-update-script,
+  nixosTests,
 }:
 let
   version = "4.11.7";
@@ -95,6 +96,9 @@ maven.buildMavenPackage rec {
   passthru = {
     # passthru for nix-update
     inherit (frontend) npmDeps;
+    tests = {
+      inherit (nixosTests) dependency-track;
+    };
     updateScript = nix-update-script { };
   };
 
