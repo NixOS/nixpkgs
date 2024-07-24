@@ -120,7 +120,7 @@ rec {
       homepage = "http://jonls.dk/redshift";
       platforms = platforms.unix;
       mainProgram = "redshift";
-      maintainers = with maintainers; [ yana ];
+      maintainers = with maintainers; [ ];
     };
   };
 

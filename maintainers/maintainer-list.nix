@@ -540,12 +540,6 @@
     githubId = 5091511;
     name = "Allen Nelson";
   };
-  adolfogc = {
-    email = "adolfo.garcia.cr@gmail.com";
-    github = "adolfogc";
-    githubId = 1250775;
-    name = "Adolfo E. García Castro";
-  };
   adriandole = {
     email = "adrian@dole.tech";
     github = "adriandole";
@@ -22211,12 +22205,6 @@
     github = "yamashitax";
     githubId = 99486674;
     name = "山下";
-  };
-  yana = {
-    email = "yana@riseup.net";
-    github = "yanateras";
-    githubId = 1643293;
-    name = "Yana Timoshenko";
   };
   yanganto = {
     name = "Antonio Yang";
