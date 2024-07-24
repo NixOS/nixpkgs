@@ -13,7 +13,6 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      pydantic = self.pydantic_1;
       pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
         version = "0.11.2";
         src = fetchFromGitHub {
@@ -29,10 +28,6 @@ let
           ruamel-yaml
           types-deprecated
         ];
-      });
-      versioningit = super.versioningit.overridePythonAttrs (old: rec {
-        # incompatible with pydantic_1
-        doCheck = false;
       });
     };
   };
