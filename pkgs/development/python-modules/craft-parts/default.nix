@@ -10,7 +10,6 @@
   pyyaml,
   requests,
   requests-unixsocket,
-  types-pyyaml,
   urllib3,
   pytestCheckHook,
   pytest-check,
@@ -27,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "1.31.0";
+  version = "1.33.0";
 
   pyproject = true;
 
@@ -35,23 +34,19 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     rev = "refs/tags/${version}";
-    hash = "sha256-DohH81xhUfZI3NfmX6aDaOC/QLiddsxPzrc1vgFECTg=";
+    hash = "sha256-SP2mkaXsU0btnA3aanSA18GkdW6ReLgImOWdpnwZiyU=";
   };
 
   patches = [ ./bash-path.patch ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "pydantic-yaml[pyyaml]>=0.11.0,<1.0.0" "pydantic-yaml[pyyaml]" \
-      --replace-fail "urllib3<2" "urllib3"
-  '';
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  pythonRelaxDeps = [
+    "requests"
+    "urllib3"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     overrides
     pydantic_1
     pydantic-yaml-0
@@ -59,7 +54,6 @@ buildPythonPackage rec {
     pyyaml
     requests
     requests-unixsocket
-    types-pyyaml
     urllib3
   ];
 
