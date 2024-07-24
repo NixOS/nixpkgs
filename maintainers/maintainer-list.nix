@@ -8724,6 +8724,13 @@
     githubId = 37965;
     name = "Léo Stefanesco";
   };
+  inexcode = {
+    name = "Inex Code";
+    email = "nixpkgs@inex.dev";
+    matrix = "@inexcode:inex.rocks";
+    github = "inexcode";
+    githubId = 13254627;
+  };
   infinidoge = {
     name = "Infinidoge";
     email = "infinidoge@inx.moe";
