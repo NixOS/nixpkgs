@@ -1379,7 +1379,7 @@ let
     omd = callPackage ../development/ocaml-modules/omd { };
 
     opam-core = callPackage ../development/ocaml-modules/opam-core {
-      inherit (pkgs) opam unzip;
+      inherit (pkgs) opam;
     };
 
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
