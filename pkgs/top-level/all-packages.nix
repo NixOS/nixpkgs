@@ -23895,7 +23895,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  s2geometry = callPackage ../development/libraries/s2geometry { };
+  s2geometry = callPackage ../development/libraries/s2geometry {
+    abseil-cpp = abseil-cpp_202111;
+  };
 
   safefile = callPackage ../development/libraries/safefile { };
 
