@@ -60,6 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  # TODO: investigate how to prepare the dependencies so that they can be found
+  # while setting strictDeps as true. This will require studying the dark
+  # corners of cross-compilation in Nixpkgs...
+  strictDeps = false;
+
   # Since 2018-07-11, upstream relies on a hardcoded /bin/cat. See:
   # https://github.com/latchset/clevis/issues/61
   # https://github.com/latchset/clevis/pull/64
