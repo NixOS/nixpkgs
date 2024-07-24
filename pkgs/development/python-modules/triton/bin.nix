@@ -80,12 +80,12 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Language and compiler for custom Deep Learning operations";
-    homepage = "https://github.com/openai/triton/";
-    changelog = "https://github.com/openai/triton/releases/tag/v${version}";
+    homepage = "https://github.com/triton-lang/triton/";
+    changelog = "https://github.com/triton-lang/triton/releases/tag/v${version}";
     # Includes NVIDIA's ptxas, but redistributions of the binary are not limited.
     # https://docs.nvidia.com/cuda/eula/index.html
     # triton's license is MIT.
-    # openai-triton-bin includes ptxas binary, therefore unfreeRedistributable is set.
+    # triton-bin includes ptxas binary, therefore unfreeRedistributable is set.
     license = with licenses; [
       unfreeRedistributable
       mit

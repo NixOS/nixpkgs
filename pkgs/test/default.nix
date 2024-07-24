@@ -12,7 +12,6 @@ with pkgs;
         # Are throw aliases.
         (filter (n: n != "llvmPackages_rocm"))
         (filter (n: n != "llvmPackages_latest"))
-        (filter (n: n != "llvmPackages_git"))
         (filter (n: n != "llvmPackages_6"))
         (filter (n: n != "llvmPackages_7"))
         (filter (n: n != "llvmPackages_8"))

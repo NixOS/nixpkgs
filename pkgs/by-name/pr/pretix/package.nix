@@ -98,6 +98,7 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail "markdown==3.6" markdown \
       --replace-fail "protobuf==5.27.*" protobuf \
       --replace-fail "pycryptodome==3.20.*" pycryptodome \
+      --replace-fail "pypdf==4.2.*" pypdf \
       --replace-fail "python-dateutil==2.9.*" python-dateutil \
       --replace-fail "requests==2.31.*" "requests" \
       --replace-fail "sentry-sdk==2.5.*" "sentry-sdk>=2" \

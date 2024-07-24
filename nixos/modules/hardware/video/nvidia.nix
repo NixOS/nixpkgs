@@ -101,7 +101,10 @@ in
         Enabling this and using version 545 or newer of the proprietary NVIDIA
         driver causes it to provide its own framebuffer device, which can cause
         Wayland compositors to work when they otherwise wouldn't.
-      '';
+      '' // {
+        default = lib.versionAtLeast nvidia_x11.version "535";
+        defaultText = lib.literalExpression "lib.versionAtLeast nvidia_x11.version \"535\"";
+      };
 
       prime.nvidiaBusId = lib.mkOption {
         type = busIDType;

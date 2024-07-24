@@ -3,6 +3,7 @@
   color-theme,
   fetchFromGitHub,
   melpaBuild,
+  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -17,6 +18,8 @@ melpaBuild {
   };
 
   packageRequires = [ color-theme ];
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "http://ethanschoonover.com/solarized";

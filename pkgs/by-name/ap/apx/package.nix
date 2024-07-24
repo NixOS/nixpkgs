@@ -9,21 +9,21 @@
 
 buildGoModule rec {
   pname = "apx";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = "apx";
     rev = "v${version}";
-    hash = "sha256-X6nphUzJc/R3Egw09eRQbza1QebpLGsMIfV7BpLOXTc=";
+    hash = "sha256-zzdg8cIu4+l8f//Rn11NByh6jfVpidZ+5PT+DubzYPU=";
   };
 
-  vendorHash = "sha256-hGi+M5RRUL2oyxFGVeR0sum93/CA+FGYy0m4vDmlXTc=";
+  vendorHash = "sha256-YHnPLjZWUYoARHF4V1Pm1LYdCJGubPCve0wQ5FpeXUg=";
 
   # podman needed for apx to not error when building shell completions
   nativeBuildInputs = [ installShellFiles podman ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [ "-s" "-w" "-X 'main.Version=v${version}'" ];
 
   postPatch = ''
     substituteInPlace config/apx.json \
