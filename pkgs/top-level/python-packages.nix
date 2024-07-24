@@ -4000,6 +4000,8 @@ self: super: with self; {
 
   eth-utils = callPackage ../development/python-modules/eth-utils { };
 
+  ethtool = callPackage ../development/python-modules/ethtool { };
+
   etils = callPackage ../development/python-modules/etils { };
 
   etuples = callPackage ../development/python-modules/etuples { };
@@ -12645,8 +12647,6 @@ self: super: with self; {
   python-engineio = callPackage ../development/python-modules/python-engineio { };
 
   python-etcd = callPackage ../development/python-modules/python-etcd { };
-
-  python-ethtool = callPackage ../development/python-modules/python-ethtool { };
 
   python-ev3dev2 = callPackage ../development/python-modules/python-ev3dev2 { };
 
