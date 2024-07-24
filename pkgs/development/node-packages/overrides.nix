@@ -88,6 +88,7 @@ final: prev: {
   joplin = prev.joplin.override (oldAttrs:{
     nativeBuildInputs = [
       pkgs.pkg-config
+      (pkgs.python3.withPackages (ps: [ ps.setuptools ]))
     ] ++ lib.optionals stdenv.isDarwin [
       pkgs.xcbuild
     ];
@@ -124,7 +125,7 @@ final: prev: {
 
     meta = oldAttrs.meta // {
       # ModuleNotFoundError: No module named 'distutils'
-      broken = true;
+      broken = stdenv.isDarwin; # still broken on darwin
     };
   });
 
