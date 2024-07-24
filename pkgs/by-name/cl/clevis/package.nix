@@ -101,7 +101,14 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru.tests = {
-    inherit (nixosTests.installer) clevisBcachefs clevisBcachefsFallback clevisLuks clevisLuksFallback clevisZfs clevisZfsFallback;
+    inherit (nixosTests.installer)
+      clevisBcachefs
+      clevisBcachefsFallback
+      clevisLuks
+      clevisLuksFallback
+      clevisZfs
+      clevisZfsFallback
+      ;
     clevisLuksSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuks;
     clevisLuksFallbackSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuksFallback;
     clevisZfsSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisZfs;
