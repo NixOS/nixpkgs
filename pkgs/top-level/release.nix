@@ -22,6 +22,7 @@
     "x86_64-apple-darwin"
     "x86_64-unknown-linux-gnu"
     "x86_64-unknown-linux-musl"
+    "x86_64-unknown-freebsd"
   ]
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
@@ -248,6 +249,16 @@ let
               # Test a full stdenv bootstrap from the bootstrap tools definition
               # TODO: Re-enable once the new bootstrap-tools are in place.
               #inherit (bootstrap.test-pkgs) stdenv;
+            }
+          else if hasSuffix "-freebsd" config then
+            let
+              bootstrap = import ../stdenv/freebsd/make-bootstrap-tools.nix {
+                pkgs = import ../.. {
+                  localSystem = { inherit config; };
+                };
+              };
+            in {
+              inherit (bootstrap) build;  # test does't exist yet
             }
           else
             abort "No bootstrap implementation for system: ${config}"

@@ -490,12 +490,6 @@
     githubId = 2071575;
     name = "Adam C. Stephens";
   };
-  adamlwgriffiths = {
-    email = "adam.lw.griffiths@gmail.com";
-    github = "adamlwgriffiths";
-    githubId = 1239156;
-    name = "Adam Griffiths";
-  };
   adamt = {
     email = "mail@adamtulinius.dk";
     github = "adamtulinius";
@@ -3618,6 +3612,12 @@
     github = "chrispickard";
     githubId = 1438690;
     name = "Chris Pickard";
+  };
+  chrispwill = {
+    email = "chris@chrispwill.com";
+    github = "chrispwill";
+    githubId = 271099;
+    name = "Chris Williams";
   };
   chrisrosset = {
     email = "chris@rosset.org.uk";
