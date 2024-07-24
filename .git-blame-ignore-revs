@@ -144,3 +144,9 @@ ff5c8f6cc3d1f2e017e86d50965c14b71f00567b
 
 # mangal: format with nixfmt-rfc-style #328284
 3bb5e993cac3a6e1c3056d2bc9bf43eb2c7a5951
+
+# pico-sdk: switch to finalAttrs (#329438)
+8946018b0391ae594d167f1e58497b18de068968
+
+# ollama: format with nixfmt-rfc-style (#329353)
+bdfde18037f8d9f9b641a4016c8ada4dc4cbf856
