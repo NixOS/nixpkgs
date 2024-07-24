@@ -33,6 +33,8 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [ "agate" ];
+
   dependencies = [
     agate
     colorama
