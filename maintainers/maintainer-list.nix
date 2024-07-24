@@ -12148,6 +12148,11 @@
     github = "m00wl";
     githubId = 46034439;
   };
+  m010-cpu = {
+    name = "m010-cpu";
+    github = "m010-cpu";
+    githubId = 81363508;
+  };
   m1cr0man = {
     email = "lucas+nix@m1cr0man.com";
     github = "m1cr0man";
