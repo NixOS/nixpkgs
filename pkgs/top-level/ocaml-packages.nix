@@ -1714,6 +1714,8 @@ let
       inherit (pkgs) soundtouch;
     };
 
+    spdx_licenses = callPackage ../development/ocaml-modules/spdx_licenses { };
+
     speex = callPackage ../development/ocaml-modules/speex {
       inherit (pkgs) speex;
     };
