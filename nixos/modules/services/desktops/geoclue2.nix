@@ -301,6 +301,8 @@ in
       };
     };
 
+    services.avahi.enable = lib.mkIf cfg.enableNmea true;
+
     services.geoclue2.appConfig.epiphany = {
       isAllowed = true;
       isSystem = false;
