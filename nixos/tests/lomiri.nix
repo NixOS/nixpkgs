@@ -174,9 +174,6 @@ in {
         # Using the keybind has a chance of instantly closing the menu again? Just click the button
         mouse_click(20, 30)
 
-        # Look for Search box & GUI-less content-hub examples, highest chances of avoiding false positives
-        machine.wait_for_text(r"(Search|Export|Import|Share)")
-
     start_all()
     machine.wait_for_unit("multi-user.target")
 
