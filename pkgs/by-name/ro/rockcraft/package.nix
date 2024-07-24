@@ -25,6 +25,22 @@ let
           export HOME=$(mktemp -d)
         '';
       });
+      pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
+        version = "0.11.2";
+        src = fetchFromGitHub {
+          owner = "NowanIlfideme";
+          repo = "pydantic-yaml";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-AeUyVav0/k4Fz69Qizn4hcJKoi/CDR9eUan/nJhWsDY=";
+        };
+        dependencies = with self; [
+          deprecated
+          importlib-metadata
+          pydantic_1
+          ruamel-yaml
+          types-deprecated
+        ];
+      });
     };
   };
 in
