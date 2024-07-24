@@ -9,14 +9,14 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-l-icons";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     # https://github.com/linuxmint/mint-l-icons/issues/11
-    rev = "f5edf5683c7e7e51da2c0e66a9a288d5342edc63";
-    hash = "sha256-MKrynS9W5kHRwCKwkXMsUx43KIhtGMaYYWhb/j+vDpk=";
+    rev = "ee03e6dad0b1f9e25847977eae42766e2ddd4877";
+    hash = "sha256-OKlkqDp9mZOeM4M9QN9H0WH4k+5eMEUshvadaV6qhBA=";
   };
 
   propagatedBuildInputs = [

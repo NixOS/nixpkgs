@@ -479,6 +479,35 @@ in rec {
     };
   };
 
+  pass = mkTmuxPlugin {
+    pluginName = "pass";
+    version = "0-unstable-2020-02-28";
+    rtpFilePath = "plugin.tmux";
+    src = pkgs.fetchFromGitHub {
+      owner = "rafi";
+      repo = "tmux-pass";
+      rev = "76b1c98911d56928063a41bc93a2d9e81818ef4c";
+      sha256 = "sha256-bamz4IZrozo5R7jt+z7YKyrogawPqsZ9cTJi9osjVoA=";
+    };
+
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      rm $target/README.md
+      rm -r $target/test
+
+      wrapProgram $target/scripts/main.sh \
+        --prefix PATH : ${with pkgs; lib.makeBinPath ( [
+          findutils fzf gnugrep gnused ncurses pkgs.pass tmux
+        ] )}
+    '';
+
+    meta = with lib; {
+      description = "Password-store browser using fzf in tmux";
+      homepage = "https://github.com/rafi/tmux-pass";
+      license = licenses.unlicense;
+    };
+  };
+
   plumb = mkTmuxPlugin rec {
     pluginName = "plumb";
     version = "0.1.1";

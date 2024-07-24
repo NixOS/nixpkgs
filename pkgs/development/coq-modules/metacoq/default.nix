@@ -36,7 +36,7 @@ let
   releaseRev = v: "v${v}";
 
   # list of core metacoq packages sorted by dependency order
-  packages = if lib.versionAtLeast coq.coq-version "8.17"
+  packages = if lib.versionAtLeast coq.coq-version "8.17" || coq.coq-version == "dev"
      then [ "utils" "common" "template-coq" "pcuic" "safechecker" "template-pcuic" "erasure" "quotation" "safechecker-plugin" "erasure-plugin" "all" ]
      else [ "template-coq" "pcuic" "safechecker" "erasure" "all" ];
 
@@ -57,7 +57,7 @@ let
         mlPlugin = true;
         propagatedBuildInputs = [ equations coq.ocamlPackages.zarith ] ++ metacoq-deps;
 
-        patchPhase =  if lib.versionAtLeast coq.coq-version "8.17" then ''
+        patchPhase = if lib.versionAtLeast coq.coq-version "8.17" || coq.coq-version == "dev" then ''
           patchShebangs ./configure.sh
           patchShebangs ./template-coq/update_plugin.sh
           patchShebangs ./template-coq/gen-src/to-lower.sh

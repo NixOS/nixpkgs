@@ -53,7 +53,7 @@ buildPythonPackage rec {
       ./0000-dont-download-ptxas.patch
     ]
     ++ lib.optionals (!cudaSupport) [
-      # openai-triton wants to get ptxas version even if ptxas is not
+      # triton wants to get ptxas version even if ptxas is not
       # used, resulting in ptxas not found error.
       ./0001-ptxas-disable-version-key-for-non-cuda-targets.patch
     ];
@@ -127,7 +127,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     filelock
-    # openai-triton uses setuptools at runtime:
+    # triton uses setuptools at runtime:
     # https://github.com/NixOS/nixpkgs/pull/286763/#discussion_r1480392652
     setuptools
   ];
@@ -197,7 +197,7 @@ buildPythonPackage rec {
     # and pythonImportsCheck is commented back.
     import-triton =
       runCommand "import-triton"
-        { nativeBuildInputs = [ (python.withPackages (ps: [ ps.openai-triton ])) ]; }
+        { nativeBuildInputs = [ (python.withPackages (ps: [ ps.triton ])) ]; }
         ''
           python << \EOF
           import triton
