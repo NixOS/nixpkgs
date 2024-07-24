@@ -20,8 +20,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ libusb1 python3 ];
 
   outputs = [ "out" "man" "python" ];
+
+  postBuild = ''
+    $CC $NIX_CFLAGS -o usbreset usbreset.c
+  '';
+
   postInstall = ''
     moveToOutput "bin/lsusb.py" "$python"
+    install -Dm555 usbreset -t $out/bin
   '';
 
   meta = with lib; {
