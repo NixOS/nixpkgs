@@ -3,6 +3,7 @@
   fetchFromGitHub,
   melpaBuild,
   prop-menu,
+  gitUpdater,
 }:
 
 melpaBuild rec {
@@ -19,6 +20,8 @@ melpaBuild rec {
   packageRequires = [
     prop-menu
   ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://github.com/idris-community/idris2-mode";
