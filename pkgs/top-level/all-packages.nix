@@ -32208,6 +32208,8 @@ with pkgs;
 
   mbrola = callPackage ../applications/audio/mbrola { };
 
+  mbrola-voices = callPackage ../applications/audio/mbrola/voices.nix { };
+
   mcpp = callPackage ../development/compilers/mcpp { };
 
   mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
