@@ -2,13 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  deprecated,
   importlib-metadata,
-  pydantic_1,
+  pydantic,
   ruamel-yaml,
-  semver,
-  types-deprecated,
-  setuptools,
+  typing-extensions,
   setuptools-scm,
   pytest-mock,
   pytestCheckHook,
@@ -16,8 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic-yaml";
-  # nixpkgs-update: no auto update
-  version = "0.11.2";
+  version = "1.3.0";
 
   pyproject = true;
 
@@ -25,7 +21,7 @@ buildPythonPackage rec {
     owner = "NowanIlfideme";
     repo = "pydantic-yaml";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AeUyVav0/k4Fz69Qizn4hcJKoi/CDR9eUan/nJhWsDY=";
+    hash = "sha256-Kv1nLR91iwShmCgduXA07+a+2EP1nnvaC7fBAn/ufEM=";
   };
 
   postPatch = ''
@@ -33,18 +29,13 @@ buildPythonPackage rec {
       --replace-fail "0.0.0" "${version}"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    deprecated
+  dependencies = [
     importlib-metadata
-    pydantic_1
+    pydantic
     ruamel-yaml
-    semver
-    types-deprecated
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "pydantic_yaml" ];
