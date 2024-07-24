@@ -5,7 +5,7 @@
 , ninja
 , pkg-config
 , wrapGAppsHook3
-, cinnamon
+, cinnamon-desktop
 , glib
 , gsettings-desktop-schemas
 , gtk3
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cinnamon.cinnamon-desktop # org.cinnamon.desktop.background
+    cinnamon-desktop # org.cinnamon.desktop.background
     glib
     gsettings-desktop-schemas # org.gnome.system.location
     gtk3

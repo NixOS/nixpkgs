@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/zope.configuration";
     changelog = "https://github.com/zopefoundation/zope.configuration/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

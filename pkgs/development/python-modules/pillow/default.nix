@@ -67,10 +67,7 @@ import ./generic.nix (
         processing and graphics capabilities.
       '';
       license = licenses.hpnd;
-      maintainers = with maintainers; [
-        goibhniu
-        prikhi
-      ];
+      maintainers = with maintainers; [ prikhi ];
     };
   }
   // args

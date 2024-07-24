@@ -576,6 +576,8 @@ rec {
       created ? "1970-01-01T00:00:01Z"
     , # Compressor to use. One of: none, gz, zstd.
       compressor ? "gz"
+      # Populate the nix database in the image with the dependencies of `copyToRoot`.
+    , includeNixDB ? false
     , # Deprecated.
       contents ? null
     ,
@@ -613,20 +615,26 @@ rec {
 
       compress = compressorForImage compressor name;
 
+      # TODO: add the dependencies of the config json.
+      extraCommandsWithDB =
+        if includeNixDB then (mkDbExtraCommand rootContents) + extraCommands
+        else extraCommands;
+
       layer =
         if runAsRoot == null
         then
           mkPureLayer
             {
               name = baseName;
-              inherit baseJson keepContentsDirlinks extraCommands uid gid;
+              inherit baseJson keepContentsDirlinks uid gid;
+              extraCommands = extraCommandsWithDB;
               copyToRoot = rootContents;
             } else
           mkRootLayer {
             name = baseName;
             inherit baseJson fromImage fromImageName fromImageTag
-              keepContentsDirlinks runAsRoot diskSize buildVMMemorySize
-              extraCommands;
+              keepContentsDirlinks runAsRoot diskSize buildVMMemorySize;
+            extraCommands = extraCommandsWithDB;
             copyToRoot = rootContents;
           };
       result = runCommand "docker-image-${baseName}.tar${compress.ext}"
@@ -885,18 +893,9 @@ rec {
   # the container.
   # Be careful since this doesn't work well with multilayer.
   # TODO: add the dependencies of the config json.
-  buildImageWithNixDb = args@{ copyToRoot ? contents, contents ? null, extraCommands ? "", ... }: (
-    buildImage (args // {
-      extraCommands = (mkDbExtraCommand copyToRoot) + extraCommands;
-    })
-  );
+  buildImageWithNixDb = args: buildImage (args // { includeNixDB = true; });
 
-  # TODO: add the dependencies of the config json.
-  buildLayeredImageWithNixDb = args@{ contents ? null, extraCommands ? "", ... }: (
-    buildLayeredImage (args // {
-      extraCommands = (mkDbExtraCommand contents) + extraCommands;
-    })
-  );
+  buildLayeredImageWithNixDb = args: buildLayeredImage (args // { includeNixDB = true; });
 
   # Arguments are documented in ../../../doc/build-helpers/images/dockertools.section.md
   streamLayeredImage = lib.makeOverridable (
@@ -917,6 +916,7 @@ rec {
     , fakeRootCommands ? ""
     , enableFakechroot ? false
     , includeStorePaths ? true
+    , includeNixDB ? false
     , passthru ? {}
     ,
     }:
@@ -954,7 +954,9 @@ rec {
         customisationLayer = symlinkJoin {
           name = "${baseName}-customisation-layer";
           paths = contentsList;
-          inherit extraCommands fakeRootCommands;
+          extraCommands =
+            (lib.optionalString includeNixDB (mkDbExtraCommand contents)) + extraCommands;
+          inherit fakeRootCommands;
           nativeBuildInputs = [
             fakeroot
           ] ++ optionals enableFakechroot [
@@ -1107,7 +1109,9 @@ rec {
 
         result = runCommand "stream-${baseName}"
           {
+            inherit conf;
             inherit (conf) imageName;
+            inherit streamScript;
             preferLocalBuild = true;
             passthru = passthru // {
               inherit (conf) imageTag;
@@ -1118,7 +1122,7 @@ rec {
             };
             nativeBuildInputs = [ makeWrapper ];
           } ''
-          makeWrapper ${streamScript} $out --add-flags ${conf}
+          makeWrapper $streamScript $out --add-flags $conf
         '';
       in
       result

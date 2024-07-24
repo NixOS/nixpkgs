@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Inter-process locks";
     homepage = "https://www.python.org/pypi/zc.lockfile";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

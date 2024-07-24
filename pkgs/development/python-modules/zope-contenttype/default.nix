@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Utility module for content-type (MIME type) handling";
     changelog = "https://github.com/zopefoundation/zope.contenttype/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

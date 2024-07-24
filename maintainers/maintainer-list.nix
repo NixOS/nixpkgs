@@ -6239,6 +6239,12 @@
     githubId = 2147649;
     name = "Euan Kemp";
   };
+  eum3l = {
+    email = "eum3l@proton.me";
+    githubId = 77971322;
+    github = "eum3l";
+    name = "Emil";
+  };
   eureka-cpu = {
     email = "github.eureka@gmail.com";
     github = "eureka-cpu";
@@ -7540,12 +7546,6 @@
     github = "goertzenator";
     githubId = 605072;
     name = "Daniel Goertzen";
-  };
-  goibhniu = {
-    email = "cillian.deroiste@gmail.com";
-    github = "cillianderoiste";
-    githubId = 643494;
-    name = "Cillian de Róiste";
   };
   GoldsteinE = {
     email = "root@goldstein.rs";

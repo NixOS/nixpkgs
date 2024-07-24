@@ -305,7 +305,11 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/build-support/make-hardcode-gsettings-patch @jtojnar
 
 # Cinnamon
-/pkgs/desktops/cinnamon @mkg20001
+/pkgs/by-name/ci/cinnamon-*    @mkg20001
+/pkgs/by-name/cj/cjs           @mkg20001
+/pkgs/by-name/mu/muffin        @mkg20001
+/pkgs/by-name/ne/nemo          @mkg20001
+/pkgs/by-name/ne/nemo-*        @mkg20001
 
 # nim
 /pkgs/development/compilers/nim   @ehmry

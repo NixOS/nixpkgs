@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://frei0r.dyne.org";
     description = "Minimalist, cross-platform, shared video plugins";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

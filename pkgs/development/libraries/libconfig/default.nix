@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.hyperrealm.com/libconfig";
     description = "Simple library for processing structured configuration files";
     license = licenses.lgpl3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

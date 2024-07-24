@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "http://puredata.info";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ goibhniu carlthome ];
+    maintainers = with maintainers; [ carlthome ];
     mainProgram = "pd";
     changelog = "https://msp.puredata.info/Pd_documentation/x5.htm#s1";
   };

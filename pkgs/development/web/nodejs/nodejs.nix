@@ -220,7 +220,7 @@ let
       homepage = "https://nodejs.org";
       changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
       license = licenses.mit;
-      maintainers = with maintainers; [ goibhniu aduh95 ];
+      maintainers = with maintainers; [ aduh95 ];
       platforms = platforms.linux ++ platforms.darwin;
       mainProgram = "node";
       knownVulnerabilities = optional (versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";

@@ -86,6 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     pkgConfigModules = [ "jack" ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 })

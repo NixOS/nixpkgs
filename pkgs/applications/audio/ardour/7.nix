@@ -207,6 +207,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     mainProgram = "ardour7";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu magnetophon mitchmindtree ];
+    maintainers = with maintainers; [ magnetophon mitchmindtree ];
   };
 }

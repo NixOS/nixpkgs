@@ -160,7 +160,7 @@ stdenv.mkDerivation {
     description = "2D animation program";
     homepage = "http://www.synfig.org";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
