@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  fetchpatch,
   appstream,
   meson,
   ninja,
@@ -18,30 +17,26 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "0.9.6.1";
+  version = "1.0.1";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     rev = version;
-    hash = "sha256-EbaEjKqfotJBceaYEyz3LHilK3GnnwEpfMR7Teq96hI=";
+    hash = "sha256-GxnYPnrjaJ47/i+pigw+on2dmbHwQSX+STasvqnAtuQ=";
   };
 
   patches = [
     # Change the way XDG paths are handled so it makes sense outside of flatpak
     ./fix_xdg_path_flatpak.patch
-
-    # Let ollama instance stop gracefully so we don't have model instance left behind
-    (fetchpatch {
-      url = "https://github.com/Jeffser/Alpaca/commit/e81d918675896c1670cf5aa5a55e1b706be5ed51.patch";
-      hash = "sha256-gYYFvaoBI/Qn0g2qgS1cB0B4F08swznrSd5KCb51vh0=";
-    })
   ];
 
   postPatch = ''
     substituteInPlace src/local_instance.py \
       --replace-fail '/app/bin/ollama' 'ollama'
+    substituteInPlace src/window.py \
+      --replace-fail '/app/share' "$out/share"
   '';
 
   nativeBuildInputs = [
@@ -64,6 +59,8 @@ python3Packages.buildPythonApplication rec {
     requests
     pillow
     pypdf
+    pytube
+    html2text
   ];
 
   dontWrapGApps = true;
@@ -85,6 +82,7 @@ python3Packages.buildPythonApplication rec {
         ollama = pkgs.ollama-cuda;
       }
       ```
+      Or using `pkgs.ollama-rocm` for AMD GPUs.
     '';
     homepage = "https://jeffser.com/alpaca";
     license = lib.licenses.gpl3Plus;

@@ -41,7 +41,7 @@ mkDerivation rec {
     mainProgram = "qjackctl";
     homepage = "https://github.com/rncbc/qjackctl";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

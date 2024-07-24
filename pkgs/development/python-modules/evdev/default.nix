@@ -37,7 +37,7 @@ buildPythonPackage rec {
     homepage = "https://python-evdev.readthedocs.io/";
     changelog = "https://github.com/gvalkov/python-evdev/blob/v${version}/docs/changelog.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

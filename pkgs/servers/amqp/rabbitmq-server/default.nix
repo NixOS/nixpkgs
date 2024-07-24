@@ -91,6 +91,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/rabbitmq/rabbitmq-server/releases/tag/v${version}";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ turion ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

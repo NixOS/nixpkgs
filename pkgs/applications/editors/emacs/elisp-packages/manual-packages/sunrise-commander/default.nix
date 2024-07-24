@@ -2,6 +2,7 @@
   lib,
   melpaBuild,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -15,6 +16,8 @@ melpaBuild {
     rev = "16e6df7e86c7a383fb4400fae94af32baf9cb24e";
     hash = "sha256-D36qiRi5OTZrBtJ/bD/javAWizZ8NLlC/YP4rdLCSsw=";
   };
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://github.com/sunrise-commander/sunrise-commander/";

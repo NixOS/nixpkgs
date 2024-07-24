@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/brummer10/guitarix";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ astsmtl goibhniu lord-valen ];
+    maintainers = with maintainers; [ astsmtl lord-valen ];
     platforms = platforms.linux;
   };
 })

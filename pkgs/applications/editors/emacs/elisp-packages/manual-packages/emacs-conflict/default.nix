@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   melpaBuild,
+  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -14,6 +15,8 @@ melpaBuild {
     rev = "9f236b93930f3ceb4cb0258cf935c99599191de3";
     hash = "sha256-DIGvnotSQYIgHxGxtyCALHd8ZbrfkmdvjLXlkcqQ6v4=";
   };
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://github.com/ibizaman/emacs-conflict";
