@@ -17012,6 +17012,8 @@ self: super: with self; {
 
   ufolint = callPackage ../development/python-modules/ufolint { };
 
+  ufomerge = callPackage ../development/python-modules/ufomerge { };
+
   ufonormalizer = callPackage ../development/python-modules/ufonormalizer { };
 
   ufoprocessor = callPackage ../development/python-modules/ufoprocessor { };
