@@ -1,20 +1,39 @@
 { lib
 , commitizen
 , fetchFromGitHub
+, buildPythonPackage
 , git
-, python3
+, pythonOlder
 , stdenv
 , installShellFiles
+, poetry-core
 , nix-update-script
 , testers
+, argcomplete
+, charset-normalizer
+, colorama
+, decli
+, importlib-metadata
+, jinja2
+, packaging
+, pyyaml
+, questionary
+, termcolor
+, tomlkit
+, py
+, pytest-freezer
+, pytest-mock
+, pytest-regressions
+, pytest7CheckHook
+, deprecated
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "commitizen";
   version = "3.28.0";
   format = "pyproject";
 
-  disabled = python3.pythonOlder "3.8";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
@@ -28,12 +47,12 @@ python3.pkgs.buildPythonApplication rec {
     "decli"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     poetry-core
     installShellFiles
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     argcomplete
     charset-normalizer
     colorama
@@ -47,7 +66,7 @@ python3.pkgs.buildPythonApplication rec {
     tomlkit
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = [
     argcomplete
     deprecated
     git
@@ -59,6 +78,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   doCheck = true;
+
+  pythonImportsCheck = [ "commitizen" ];
 
   # The tests require a functional git installation
   # which requires a valid HOME directory.
@@ -85,14 +106,14 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall =
     let
-      argcomplete = lib.getExe' python3.pkgs.argcomplete "register-python-argcomplete";
+      register-python-argcomplete = lib.getExe' argcomplete "register-python-argcomplete";
     in
     lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
       ''
         installShellCompletion --cmd cz \
-          --bash <(${argcomplete} --shell bash $out/bin/cz) \
-          --zsh <(${argcomplete} --shell zsh $out/bin/cz) \
-          --fish <(${argcomplete} --shell fish $out/bin/cz)
+          --bash <(${register-python-argcomplete} --shell bash $out/bin/cz) \
+          --zsh <(${register-python-argcomplete} --shell zsh $out/bin/cz) \
+          --fish <(${register-python-argcomplete} --shell fish $out/bin/cz)
       '';
 
   passthru = {
