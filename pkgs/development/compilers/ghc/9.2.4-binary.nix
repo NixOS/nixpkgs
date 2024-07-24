@@ -282,7 +282,7 @@ stdenv.mkDerivation rec {
           -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
     '' +
     # Rename needed libraries and binaries, fix interpreter
-    lib.optionalString (stdenv.isLinux || stdenv.isFreeBSD) ''
+    lib.optionalString stdenv.hostPlatform.isElf ''
       find . -type f -executable -exec patchelf \
           --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
     '';
@@ -330,9 +330,9 @@ stdenv.mkDerivation rec {
   # This is extremely bogus and should be investigated.
   dontStrip = if stdenv.hostPlatform.isMusl then true else false; # `if` for explicitness
 
-  # On Linux/FreeBSD, use patchelf to modify the executables so that they can
+  # Use patchelf to modify ELF executables so that they can
   # find editline/gmp.
-  postFixup = lib.optionalString ((stdenv.isLinux || stdenv.isFreeBSD) && !(binDistUsed.isStatic or false))
+  postFixup = lib.optionalString (stdenv.hostPlatform.isElf && !(binDistUsed.isStatic or false))
     (if stdenv.hostPlatform.isAarch64 then
       # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
       # are 2 directories deep from $out/lib, so pooling symlinks there makes
