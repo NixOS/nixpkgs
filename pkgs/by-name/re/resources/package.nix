@@ -15,6 +15,7 @@
 , libadwaita
 , dmidecode
 , util-linux
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -64,6 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     (lib.mesonOption "profile" "default")
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/nokyan/resources/releases/tag/${finalAttrs.version}";
