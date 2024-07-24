@@ -66,4 +66,13 @@ with lib;
     glxinfo
   ];
 
+  nixpkgs.overlays = [
+    (self: super: {
+      mbrola-voices = super.mbrola-voices.override {
+        # only ship with one voice per language
+        languages = [ "*1" ];
+      };
+    })
+  ];
+
 }
