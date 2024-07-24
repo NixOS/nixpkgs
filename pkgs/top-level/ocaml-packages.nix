@@ -1390,9 +1390,7 @@ let
 
     opam-repository = callPackage ../development/ocaml-modules/opam-repository { };
 
-    opam-state = callPackage ../development/ocaml-modules/opam-state {
-      inherit (pkgs) unzip;
-    };
+    opam-state = callPackage ../development/ocaml-modules/opam-state { };
 
     opium = callPackage ../development/ocaml-modules/opium { };
 
