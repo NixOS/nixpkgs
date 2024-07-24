@@ -5,11 +5,34 @@
   lib,
   makeWrapper,
   nix-update-script,
-  python3Packages,
+  python3,
   squashfsTools,
   stdenv,
 }:
-python3Packages.buildPythonApplication rec {
+
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
+        version = "0.11.2";
+        src = fetchFromGitHub {
+          owner = "NowanIlfideme";
+          repo = "pydantic-yaml";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-AeUyVav0/k4Fz69Qizn4hcJKoi/CDR9eUan/nJhWsDY=";
+        };
+        dependencies = with self; [
+          deprecated
+          importlib-metadata
+          pydantic_1
+          ruamel-yaml
+          types-deprecated
+        ];
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "snapcraft";
   version = "8.3.1";
 
@@ -75,7 +98,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python.pkgs; [
     attrs
     catkin-pkg
     click
@@ -118,7 +141,7 @@ python3Packages.buildPythonApplication rec {
     validators
   ];
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python.pkgs; [ setuptools ];
 
   pythonRelaxDeps = [
     "docutils"
@@ -133,7 +156,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   nativeCheckInputs =
-    with python3Packages;
+    with python.pkgs;
     [
       pytest-check
       pytest-mock
