@@ -81,11 +81,11 @@ stdenv.mkDerivation rec {
     clevisZfsFallbackSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisZfsFallback;
   };
 
-  meta = with lib; {
-    description = "Automated Encryption Framework";
+  meta = {
     homepage = "https://github.com/latchset/clevis";
+    description = "Automated Encryption Framework";
     changelog = "https://github.com/latchset/clevis/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
