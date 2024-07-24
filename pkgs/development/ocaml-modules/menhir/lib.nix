@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "menhirLib";
-  version = "20231231";
+  version = "20240715";
   minimalOCamlVersion = "4.03";
 
   src = fetchFromGitLab {
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "fpottier";
     repo = "menhir";
     rev = version;
-    hash = "sha256-veB0ORHp6jdRwCyDDAfc7a7ov8sOeHUmiELdOFf/QYk=";
+    hash = "sha256-9CSxAIm0aEXkwF+aj8u/bqLG30y5eDNz65EnohJPjzI=";
   };
 
   meta = with lib; {
