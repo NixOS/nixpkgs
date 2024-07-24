@@ -68,6 +68,7 @@ let
       graph-theory = callPackage ../development/coq-modules/graph-theory {};
       heq = callPackage ../development/coq-modules/heq {};
       hierarchy-builder = callPackage ../development/coq-modules/hierarchy-builder {};
+      high-school-geometry = callPackage ../development/coq-modules/high-school-geometry {};
       HoTT = callPackage ../development/coq-modules/HoTT {};
       hydra-battles = callPackage ../development/coq-modules/hydra-battles {};
       interval = callPackage ../development/coq-modules/interval {};
