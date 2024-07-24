@@ -14082,8 +14082,6 @@ with pkgs;
 
   vul = callPackage ../applications/misc/vul { };
 
-  xar = callPackage ../tools/compression/xar { };
-
   xarchive = callPackage ../tools/archivers/xarchive { };
 
   xarchiver = callPackage ../tools/archivers/xarchiver { };
