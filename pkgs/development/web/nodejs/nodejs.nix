@@ -44,7 +44,13 @@ let
       (builtins.attrNames sharedLibDeps);
 
   extraConfigFlags = lib.optionals (!enableNpm) [ "--without-npm" ];
-  self = stdenv.mkDerivation {
+
+  package = stdenv.mkDerivation (finalAttrs:
+  let
+    /** the final package fixed point, after potential overrides */
+    self = finalAttrs.finalPackage;
+  in
+  {
     inherit pname version;
 
     src = fetchurl {
@@ -235,5 +241,5 @@ let
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version
-  };
-in self
+  });
+in package
