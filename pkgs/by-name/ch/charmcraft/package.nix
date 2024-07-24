@@ -45,6 +45,7 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace setup.py \
       --replace-fail 'version=determine_version()' 'version="${version}"'
 
+    # TODO remove setuptools from dependencies once this is removed
     substituteInPlace charmcraft/env.py \
       --replace-fail "distutils.util" "setuptools.dist"
   '';
@@ -64,6 +65,7 @@ python.pkgs.buildPythonApplication rec {
     requests
     requests-toolbelt
     requests-unixsocket
+    setuptools # see substituteInPlace above
     snap-helpers
     tabulate
     urllib3
