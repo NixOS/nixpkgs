@@ -913,4 +913,12 @@ rec {
     };
   };
 
+  useFUSEOverlayFS = buildImage {
+    name = "useFUSEOverlayFS";
+    tag = "latest";
+    runAsRoot = "touch /example-file";
+    fromImage = bash;
+    useFUSEOverlayFS = true;
+  };
+
 }

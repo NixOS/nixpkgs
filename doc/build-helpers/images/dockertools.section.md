@@ -153,6 +153,18 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
   _Default value:_ 512.
 
+`useFUSEOverlayFS` (Boolean; _optional_)
+
+: Controls whether the FUSE version of OverlayFS is used to run the script specified in `runAsRoot`.
+  This attribute is ignored if `runAsRoot` or `fromImage` are `null`.
+  It can be set to `true` to work around an error such as the following when building the image:
+
+  ```
+  mount: /tmp/disk/mnt: wrong fs type, bad option, bad superblock on overlay, missing codepage or helper program, or other error.
+  ```
+
+  _Default value:_ false.
+
 `created` (String; _optional_)
 
 : Specifies the time of creation of the generated image.
@@ -976,6 +988,17 @@ Because of this, using this function requires the `kvm` device to be available, 
 : Controls the disk size (in megabytes) of the VM used to unpack the image.
 
   _Default value:_ 1024.
+
+`useFUSEOverlayFS` (Boolean; _optional_)
+
+: Controls whether the FUSE version of OverlayFS is used when exporting the image.
+  It can be set to `true` to work around an error such as the following:
+
+  ```
+  mount: /tmp/disk/mnt: wrong fs type, bad option, bad superblock on overlay, missing codepage or helper program, or other error.
+  ```
+
+  _Default value:_ false.
 
 `name` (String; _optional_)
 
