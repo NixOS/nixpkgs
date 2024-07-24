@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libiconv, bash, updateAutotoolsGnuConfigScriptsHook
+{ stdenv, lib, fetchurl, libiconv, bash, darwin, updateAutotoolsGnuConfigScriptsHook
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -8,17 +8,20 @@
 
 stdenv.mkDerivation rec {
   pname = "gettext";
-  version = "0.21.1";
+  version = "0.22.4";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    sha256 = "sha256-6MNlDh2M7odcTzVWQjgsHfgwWL1aEe6FVcDPJ21kbUU=";
+    hash = "sha256-weC7KkQnqQJDkMZizVMtZkxLNrj/RE7V5UsRX9t6Guo=";
   };
   patches = [
     ./absolute-paths.diff
     # fix reproducibile output, in particular in the grub2 build
     # https://savannah.gnu.org/bugs/index.php?59658
     ./0001-msginit-Do-not-use-POT-Creation-Date.patch
+  ] ++ lib.optionals (darwin.apple_sdk.frameworks.CoreServices == null) [
+    # prevent infinite recursion for the darwin stdenv
+    ./0002-Revert-Avoid-crash-on-macOS-14.patch
   ];
 
   outputs = [ "out" "man" "doc" "info" ];
@@ -59,6 +62,9 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) [
     # HACK, see #10874 (and 14664)
     libiconv
+  ]
+  ++ lib.optionals (stdenv.isDarwin && darwin.apple_sdk.frameworks.CoreServices != null) [
+    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   setupHooks = [
