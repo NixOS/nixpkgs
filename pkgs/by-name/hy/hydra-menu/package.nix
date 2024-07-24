@@ -1,4 +1,5 @@
 { stdenv, lib, fetchFromGitHub }:
+
 stdenv.mkDerivation rec {
   name = "hydra-menu";
   version = "0-unstable-2024-06-18";
