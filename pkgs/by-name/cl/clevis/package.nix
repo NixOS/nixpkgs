@@ -84,6 +84,11 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/latchset/clevis";
     description = "Automated Encryption Framework";
+    longDescription = ''
+      Clevis is a pluggable framework for automated decryption. It can be used
+      to provide automated decryption of data or even automated unlocking of
+      LUKS volumes.
+    '';
     changelog = "https://github.com/latchset/clevis/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
