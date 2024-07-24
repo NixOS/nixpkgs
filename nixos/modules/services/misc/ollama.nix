@@ -184,12 +184,16 @@ in
       description = "Server for local large language models";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      environment = cfg.environmentVariables // {
-        HOME = cfg.home;
-        OLLAMA_MODELS = cfg.models;
-        OLLAMA_HOST = "${cfg.host}:${toString cfg.port}";
-        HSA_OVERRIDE_GFX_VERSION = lib.mkIf (cfg.rocmOverrideGfx != null) cfg.rocmOverrideGfx;
-      };
+      environment =
+        cfg.environmentVariables
+        // {
+          HOME = cfg.home;
+          OLLAMA_MODELS = cfg.models;
+          OLLAMA_HOST = "${cfg.host}:${toString cfg.port}";
+        }
+        // lib.optionalAttrs (cfg.rocmOverrideGfx != null) {
+          HSA_OVERRIDE_GFX_VERSION = cfg.rocmOverrideGfx;
+        };
       serviceConfig =
         lib.optionalAttrs staticUser {
           User = cfg.user;
