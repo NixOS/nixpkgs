@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   melpaBuild,
+  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -15,10 +16,12 @@ melpaBuild {
     hash = "sha256-A1Kt4nm7iRV9J5yaLupwiNL5g7ddZvQs79dggmqZ7Rk=";
   };
 
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+
   meta = {
     homepage = "https://www.emacswiki.org/emacs/IsearchPlus";
     description = "Search text- or overlay-property contexts";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ leungbk ];
+    maintainers = with lib.maintainers; [ leungbk AndersonTorres ];
   };
 }
