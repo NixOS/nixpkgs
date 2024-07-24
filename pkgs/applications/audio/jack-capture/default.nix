@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     mainProgram = "jack_capture";
     homepage = "https://github.com/kmatheussen/jack_capture/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ goibhniu orivej ];
+    maintainers = with maintainers; [ orivej ];
     platforms = lib.platforms.linux;
   };
 }

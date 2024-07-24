@@ -7,7 +7,9 @@
   ivy,
   pkg-config,
   tclap,
+  unstableGitUpdater,
   xapian,
+  # Configurable options
   # Include pre-configured hydras
   withHydra ? false,
   # Include Ivy integration
@@ -77,6 +79,7 @@ melpaBuild {
 
   passthru = {
     inherit notdeft-xapian;
+    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
   meta = {

@@ -28,10 +28,7 @@ stdenv.mkDerivation {
     description = "C++ utility library primarily aimed at audio/musical applications";
     homepage = "http://drobilla.net/software/raul";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [
-      goibhniu
-      t4ccer
-    ];
+    maintainers = with lib.maintainers; [ t4ccer ];
     platforms = lib.platforms.unix;
   };
 }
