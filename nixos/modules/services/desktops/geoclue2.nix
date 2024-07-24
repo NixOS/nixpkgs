@@ -55,6 +55,21 @@ let
     };
   };
 
+  pathModule = types.submodule {
+    options = {
+      text = mkOption {
+        default = null;
+        type = types.nullOr types.lines;
+        description = "Text of the geolocation file.";
+      };
+
+      source = mkOption {
+        default = null;
+        type = types.nullOr types.path;
+        description = "Path to the geolocation file.";
+      };
+    };
+  };
 in
 {
 
@@ -85,7 +100,10 @@ in
 
       enableNmea = mkOption {
         type = types.bool;
-        default = true;
+        default = !cfg.enableStaticSource;
+        defaultText = literalExpression ''
+          !config.services.geoclue2.enableStaticSource
+        '';
         description = ''
           Whether to fetch location from NMEA sources on local network.
         '';
@@ -93,7 +111,10 @@ in
 
       enable3G = mkOption {
         type = types.bool;
-        default = true;
+        default = !cfg.enableStaticSource;
+        defaultText = literalExpression ''
+          !config.services.geoclue2.enableStaticSource
+        '';
         description = ''
           Whether to enable 3G source.
         '';
@@ -101,7 +122,10 @@ in
 
       enableCDMA = mkOption {
         type = types.bool;
-        default = true;
+        default = !cfg.enableStaticSource;
+        defaultText = literalExpression ''
+          !config.services.geoclue2.enableStaticSource
+        '';
         description = ''
           Whether to enable CDMA source.
         '';
@@ -109,7 +133,10 @@ in
 
       enableModemGPS = mkOption {
         type = types.bool;
-        default = true;
+        default = !cfg.enableStaticSource;
+        defaultText = literalExpression ''
+          !config.services.geoclue2.enableStaticSource
+        '';
         description = ''
           Whether to enable Modem-GPS source.
         '';
@@ -117,7 +144,10 @@ in
 
       enableWifi = mkOption {
         type = types.bool;
-        default = true;
+        default = !cfg.enableStaticSource;
+        defaultText = literalExpression ''
+          !config.services.geoclue2.enableStaticSource
+        '';
         description = ''
           Whether to enable WiFi source.
         '';
@@ -125,7 +155,10 @@ in
 
       enableCompass = mkOption {
         type = types.bool;
-        default = true;
+        default = !cfg.enableStaticSource;
+        defaultText = literalExpression ''
+          !config.services.geoclue2.enableStaticSource
+        '';
         description = ''
           Whether to enable Compass source.
         '';
@@ -133,7 +166,12 @@ in
 
       enableStaticSource = mkOption {
         type = types.bool;
-        default = false;
+        default = (cfg.staticSource.text != null)
+          || (cfg.staticSource.source != null);
+        defaultText = literalExpression (
+          "(config.services.geoclue2.staticSource.text != null)"
+          + " || (config.services.geoclue2.staticSource.source != null)"
+        );
         description = ''
           Whether to enable Static source.
         '';
@@ -170,6 +208,23 @@ in
         description = ''
           A nickname to submit network data with.
           Must be 2-32 characters long.
+        '';
+      };
+
+      staticSource = mkOption {
+        type = pathModule;
+        default = { };
+        example = literalExpression ''
+          text = '''
+            # Example static location file for a machine inside Statue of Liberty torch
+            40.6893129   # latitude
+            -74.0445531  # longitude
+            96           # altitude
+            1.83         # accuracy radius (the diameter of the torch is 12 feet)
+          ''';
+        '';
+        description = ''
+          The static location file specified as `environment.etc.geolocation`.
         '';
       };
 
@@ -288,6 +343,16 @@ in
           enable = cfg.enableStaticSource;
         };
       } // mapAttrs' appConfigToINICompatible cfg.appConfig);
+
+    environment.etc."geolocation" = {
+      enable = cfg.enableStaticSource;
+      user = "geoclue";
+      group = "geoclue";
+      mode = "0600";
+    } // (
+      builtins.removeAttrs cfg.staticSource
+        (lib.optional (cfg.staticSource.source == null) "source")
+    );
   };
 
   meta = with lib; {
