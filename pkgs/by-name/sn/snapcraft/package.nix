@@ -13,6 +13,7 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
+      pydantic = self.pydantic_1;
       pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
         version = "0.11.2";
         src = fetchFromGitHub {
@@ -29,6 +30,10 @@ let
           types-deprecated
         ];
       });
+      versioningit = super.versioningit.overridePythonAttrs (old: rec {
+        # incompatible with pydantic_1
+        doCheck = false;
+      });
     };
   };
 in
@@ -37,11 +42,6 @@ python.pkgs.buildPythonApplication rec {
   version = "8.3.1";
 
   pyproject = true;
-
-  # Somewhere deep in the dependency tree is 'versioningit', which depends
-  # on pydantic 2. Snapcraft will soon migrate to pydantic 2, and disabling
-  # this doesn't seem to affect the functionality of the application.
-  catchConflicts = false;
 
   src = fetchFromGitHub {
     owner = "canonical";
