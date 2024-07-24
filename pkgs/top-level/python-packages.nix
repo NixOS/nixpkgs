@@ -2557,8 +2557,6 @@ self: super: with self; {
 
   cpyparsing = callPackage ../development/python-modules/cpyparsing { };
 
-  craft-application-1 = callPackage ../development/python-modules/craft-application-1 { };
-
   craft-application = callPackage ../development/python-modules/craft-application { };
 
   craft-archives = callPackage ../development/python-modules/craft-archives { };
@@ -11112,7 +11110,7 @@ self: super: with self; {
 
   pydantic-settings = callPackage ../development/python-modules/pydantic-settings { };
 
-  pydantic-yaml-0 = callPackage ../development/python-modules/pydantic-yaml-0 { };
+  pydantic-yaml = callPackage ../development/python-modules/pydantic-yaml { };
 
   pydash = callPackage ../development/python-modules/pydash { };
 
