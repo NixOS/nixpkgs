@@ -34,6 +34,7 @@
 
   # Feature flags
 , withAlsa ? withHeadlessDeps && stdenv.isLinux # Alsa in/output supporT
+, withAmf ? withFullDeps # AMD Media Framework video encoding
 , withAom ? withHeadlessDeps # AV1 reference encoder
 , withAppKit ? withHeadlessDeps && stdenv.isDarwin # Apple AppKit framework
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
@@ -218,6 +219,7 @@
  *  External libraries options
  */
 , alsa-lib
+, amf-headers
 , avisynthplus
 , bzip2
 , celt
@@ -570,6 +572,7 @@ stdenv.mkDerivation (finalAttrs: {
      *  External libraries
      */
     (enableFeature withAlsa "alsa")
+    (enableFeature withAmf "amf")
     (enableFeature withAom "libaom")
     (enableFeature withAppKit "appkit")
   ] ++ optionals (versionAtLeast version "6.1") [
@@ -734,6 +737,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = []
   ++ optionals withAlsa [ alsa-lib ]
+  ++ optionals withAmf [ amf-headers ]
   ++ optionals withAom [ libaom ]
   ++ optionals withAppKit [ AppKit ]
   ++ optionals withAribcaption [ libaribcaption ]
