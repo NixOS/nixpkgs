@@ -5,7 +5,7 @@
   nix-update-script,
   overrides,
   pydantic_1,
-  pydantic-yaml-0,
+  pydantic-yaml,
   pyxdg,
   pyyaml,
   requests,
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   dependencies = [
     overrides
     pydantic_1
-    pydantic-yaml-0
+    pydantic-yaml
     pyxdg
     pyyaml
     requests

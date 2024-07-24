@@ -11,7 +11,7 @@
   git,
   hypothesis,
   nix-update-script,
-  pydantic-yaml-0,
+  pydantic-yaml,
   pyfakefs,
   pygit2,
   pytest-check,
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     craft-grammar
     craft-parts
     craft-providers
-    pydantic-yaml-0
+    pydantic-yaml
     pygit2
     pyyaml
     snap-helpers

@@ -15,7 +15,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pydantic_yaml-0";
+  pname = "pydantic-yaml";
   # nixpkgs-update: no auto update
   version = "0.11.2";
 

@@ -6,7 +6,7 @@
   craft-cli,
   craft-parts,
   craft-providers,
-  pydantic-yaml-0,
+  pydantic-yaml,
   pyyaml,
   setuptools,
   setuptools-scm,
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     craft-cli
     craft-parts
     craft-providers
-    pydantic-yaml-0
+    pydantic-yaml
     pyyaml
   ];
 
