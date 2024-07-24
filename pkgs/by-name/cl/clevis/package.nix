@@ -20,14 +20,14 @@
   tpm2-tools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clevis";
   version = "19";
 
   src = fetchFromGitHub {
     owner = "latchset";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "clevis";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-3J3ti/jRiv+p3eVvJD7u0ko28rPd8Gte0mCJaVaqyOs=";
   };
 
@@ -89,8 +89,8 @@ stdenv.mkDerivation rec {
       to provide automated decryption of data or even automated unlocking of
       LUKS volumes.
     '';
-    changelog = "https://github.com/latchset/clevis/releases/tag/v${version}";
+    changelog = "https://github.com/latchset/clevis/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };
-}
+})
