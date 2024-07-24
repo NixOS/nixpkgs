@@ -373,7 +373,7 @@ let
       patchShebangs .
       # Link to our own Node.js and Java (required during the build):
       mkdir -p third_party/node/linux/node-linux-x64/bin
-      ln -s "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
+      ln -s${lib.optionalString (chromiumVersionAtLeast "127") "f"} "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
       ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
 
       # Allow building against system libraries in official builds
@@ -478,6 +478,8 @@ let
       # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
       # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
       rustc_version = buildPackages.rustc.version;
+    } // lib.optionalAttrs (chromiumVersionAtLeast "127") {
+      rust_bindgen_root = "${buildPackages.rust-bindgen}";
     } // lib.optionalAttrs (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) {
       # https://www.mail-archive.com/v8-users@googlegroups.com/msg14528.html
       arm_control_flow_integrity = "none";
