@@ -1,31 +1,32 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  isPy27,
+  pythonOlder,
+  fetchFromGitHub,
   more-itertools,
   setuptools-scm,
-  pydantic,
   pytestCheckHook,
   typeguard,
 }:
 
 buildPythonPackage rec {
   pname = "inflect";
-  version = "7.2.1";
-  disabled = isPy27;
-  format = "pyproject";
+  version = "7.3.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-p85eI9Z5hzTyVsGtntUhhrjsJ28QsYzj0+yxnCHrbLY=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "inflect";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-J0XgSKPzZIt/7WnMGARXpyYzagBGiqRiuNmNnGKDBrs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     more-itertools
-    pydantic
     typeguard
   ];
 
