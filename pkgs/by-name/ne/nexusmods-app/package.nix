@@ -21,14 +21,14 @@ in
 buildDotnetModule rec {
   pname = "nexusmods-app";
 
-  version = "0.4.1";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-FzQphMhiC1g+6qmk/R1v4rq2ldy35NcaWm0RR1UlwLA=";
+    hash = "sha256-vy7gc/pS29gphkWM/KezZxXDVsD5DV02b/72pPh2Y2c=";
   };
 
   projectFile = "NexusMods.App.sln";
