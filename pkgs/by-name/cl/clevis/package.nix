@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Replaces the clevis-decrypt 300s timeout to a 10s timeout
     # https://github.com/latchset/clevis/issues/289
-    ./tang-timeout.patch
+    ./0000-tang-timeout.patch
   ];
 
   postPatch = ''
