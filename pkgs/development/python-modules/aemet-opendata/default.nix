@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aemet-opendata";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Noltari";
     repo = "AEMET-OpenData";
     rev = "refs/tags/${version}";
-    hash = "sha256-cUvm8WJs2eW/KHIaLhQq/DYj7VIuTqxjhcwHprYIxAo=";
+    hash = "sha256-KsmH7QJGVf+bZ5XoT+NeScwvvyrXSTZcAwdc12nJLHI=";
   };
 
   build-system = [
