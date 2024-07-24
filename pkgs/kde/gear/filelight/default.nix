@@ -1,14 +1,16 @@
 {
   mkKdeDerivation,
-  kirigami,
+  kirigami-addons,
   kquickcharts,
+  kxmlgui,
 }:
 mkKdeDerivation {
   pname = "filelight";
 
   extraBuildInputs = [
-    kirigami
+    kirigami-addons
     kquickcharts
+    kxmlgui
   ];
   meta.mainProgram = "filelight";
 }
