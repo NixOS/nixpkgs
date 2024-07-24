@@ -63,14 +63,14 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "2.10.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     rev = version;
-    hash = "sha256-sK3jd26zfGp707GXZEU9RwB1aFuqfTGl8rGfGreuj38=";
+    hash = "sha256-ajinOND8MC9Z69WPxF65wjOmJfU5CZUzTRWJwLLh/OQ=";
   };
 
   postPatch = ''
