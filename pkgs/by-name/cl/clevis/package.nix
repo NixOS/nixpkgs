@@ -37,19 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0000-tang-timeout.patch
   ];
 
-  postPatch = ''
-    for f in $(find src/ -type f); do
-      grep -q "/bin/cat" "$f" && substituteInPlace "$f" \
-        --replace '/bin/cat' '${coreutils}/bin/cat' || true
-    done
-  '';
-
-  postInstall = ''
-    # We wrap the main clevis binary entrypoint but not the sub-binaries.
-    wrapProgram $out/bin/clevis \
-      --prefix PATH ':' "${lib.makeBinPath [tpm2-tools jose cryptsetup libpwquality luksmeta gnugrep gnused coreutils]}:${placeholder "out"}/bin"
-  '';
-
   nativeBuildInputs = [
     asciidoc
     makeWrapper
@@ -72,6 +59,32 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "man"
   ];
+
+  postPatch = ''
+    for f in $(find src/ -type f); do
+      grep -q "/bin/cat" "$f" && substituteInPlace "$f" \
+        --replace-fail '/bin/cat' '${lib.getExe' coreutils "cat"}' || true
+    done
+  '';
+
+  # We wrap the main clevis binary entrypoint but not the sub-binaries.
+  postInstall =
+    let
+      includeIntoPath = [
+        coreutils
+        cryptsetup
+        gnugrep
+        gnused
+        jose
+        libpwquality
+        luksmeta
+        tpm2-tools
+      ];
+    in
+    ''
+      wrapProgram $out/bin/clevis \
+        --prefix PATH ':' "${lib.makeBinPath includeIntoPath}:${placeholder "out"}/bin"
+    '';
 
   passthru.tests = {
     inherit (nixosTests.installer) clevisBcachefs clevisBcachefsFallback clevisLuks clevisLuksFallback clevisZfs clevisZfsFallback;
