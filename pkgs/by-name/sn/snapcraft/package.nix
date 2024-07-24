@@ -11,7 +11,7 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.2.12";
+  version = "8.3.1";
 
   pyproject = true;
 
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-1PwIbMweeYGi+jLfhFB3LYThqaN2VW7zdyzjD1m57ow=";
+    hash = "sha256-cdRlUY9hAJ8US93aiJymzsV27JVPY7lWCK7IUdjDmYE=";
   };
 
   patches = [
@@ -68,13 +68,14 @@ python3Packages.buildPythonApplication rec {
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
-    substituteInPlace snapcraft_legacy/internal/xattrs.py \
-      --replace-fail 'distutils.util' 'setuptools.dist'
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pytest-cov>=4.0",' "" \
+      --replace-fail "--cov=snapcraft" ""
   '';
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     attrs
     catkin-pkg
     click
@@ -93,27 +94,38 @@ python3Packages.buildPythonApplication rec {
     lxml
     macaroonbakery
     mypy-extensions
+    overrides
+    packaging
     progressbar
     pyelftools
     pygit2
     pylxd
+    pymacaroons
     python-apt
     python-gnupg
+    pyxdg
+    pyyaml
     raven
     requests-toolbelt
+    requests-unixsocket
     simplejson
     snap-helpers
     tabulate
+    toml
     tinydb
+    typing-extensions
+    urllib3
+    validators
   ];
 
-  nativeBuildInputs = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [
     "docutils"
     "jsonschema"
     "pygit2"
     "urllib3"
+    "validators"
   ];
 
   postInstall = ''
@@ -124,7 +136,6 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       pytest-check
-      pytest-cov
       pytest-mock
       pytest-subprocess
       pytestCheckHook
@@ -148,6 +159,7 @@ python3Packages.buildPythonApplication rec {
     "test_classic_linter_filter"
     "test_classic_linter"
     "test_complex_snap_yaml"
+    "test_core24_try_command"
     "test_get_base_configuration_snap_channel"
     "test_get_base_configuration_snap_instance_name_default"
     "test_get_base_configuration_snap_instance_name_not_running_as_snap"
