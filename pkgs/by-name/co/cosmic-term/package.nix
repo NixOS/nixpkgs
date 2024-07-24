@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-04-14";
+  env.VERGEN_GIT_COMMIT_DATE = "2024-07-24";
   env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''
