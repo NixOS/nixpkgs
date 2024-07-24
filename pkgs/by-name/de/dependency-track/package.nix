@@ -7,6 +7,7 @@
   makeWrapper,
   maven,
   nix-update-script,
+  nixosTests,
 }:
 let
   version = "4.11.5";
@@ -92,7 +93,12 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) dependency-track;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Intelligent Component Analysis platform that allows organizations to identify and reduce risk in the software supply chain";
