@@ -660,6 +660,7 @@
   ./services/mail/mailcatcher.nix
   ./services/mail/mailhog.nix
   ./services/mail/mailman.nix
+  ./services/mail/mailpit.nix
   ./services/mail/mlmmj.nix
   ./services/mail/nullmailer.nix
   ./services/mail/offlineimap.nix

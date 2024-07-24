@@ -548,6 +548,7 @@ in {
   magnetico = handleTest ./magnetico.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
   mailhog = handleTest ./mailhog.nix {};
+  mailpit = handleTest ./mailpit.nix {};
   mailman = handleTest ./mailman.nix {};
   man = handleTest ./man.nix {};
   mariadb-galera = handleTest ./mysql/mariadb-galera.nix {};
