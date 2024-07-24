@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-otEpfykVTJ0DH9n3kO4G/BO2VD6RGp9N6/UX6UAs2jU=";
 
   meta = with lib; {
-    description = "Cmake lsp based on tower-lsp and treesitter";
+    description = "CMake lsp based on tower-lsp and treesitter";
     homepage = "https://github.com/Decodetalkers/neocmakelsp";
     license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ rewine multivac61 ];
     mainProgram = "neocmakelsp";
   };
 }
