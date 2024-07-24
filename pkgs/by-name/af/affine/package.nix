@@ -18,10 +18,10 @@ stdenvNoCC.mkDerivation (finalAttrs: let
   };
 in {
   pname = "affine";
-  version = "0.13.1";
+  version = "0.15.6";
   src = fetchurl {
     url = "https://github.com/toeverything/AFFiNE/releases/download/v${finalAttrs.version}/affine-${finalAttrs.version}-stable-linux-x64.zip";
-    hash = "sha256-2Du5g/I82iTr8Bwb+qkLzyfbk1OrOlXqx6FHImVoAoE=";
+    hash = "sha256-0XlKmjL9rYUYIMgpJ9knM+RbtLlzB1P5Rk62naTmznw=";
   };
   nativeBuildInputs = [
     copyDesktopItems
@@ -51,7 +51,7 @@ in {
     })
   ];
   meta = with lib; {
-    description = "A workspace with fully merged docs, whiteboards and databases";
+    description = "Workspace with fully merged docs, whiteboards and databases";
     longDescription = ''
       AFFiNE is an open-source, all-in-one workspace and an operating
       system for all the building blocks that assemble your knowledge
@@ -61,7 +61,7 @@ in {
     homepage = "https://affine.pro/";
     downloadPage = "https://affine.pro/download";
     license = licenses.mit;
-    maintainers = with maintainers; [richar];
+    maintainers = with maintainers; [richar redyf];
     mainProgram = "affine";
     platforms = ["x86_64-linux"];
   };

@@ -1,8 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, substituteAll
 , cmake
 , ninja
 , openssl
@@ -98,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
         # fails with Out of Memory Error
         "test/sql/copy/parquet/batched_write/batch_memory_usage.test"
         # wants http connection
+        "test/sql/copy/csv/recursive_query_csv.test"
         "test/sql/copy/csv/test_mixed_lines.test"
       ] ++ lib.optionals stdenv.isAarch64 [
         "test/sql/aggregate/aggregates/test_kurtosis.test"

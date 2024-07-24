@@ -1,9 +1,15 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.postfix;
+  inherit (lib)
+    mkOption
+    types
+    mkIf
+    escapeShellArg
+    concatStringsSep
+    optional
+    ;
 in
 {
   port = 9154;

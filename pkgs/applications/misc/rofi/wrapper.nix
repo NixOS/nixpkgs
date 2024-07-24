@@ -1,4 +1,4 @@
-{ symlinkJoin, lib, rofi-unwrapped, makeWrapper, wrapGAppsHook, gdk-pixbuf, hicolor-icon-theme, theme ? null, plugins ? [], symlink-dmenu ? false }:
+{ symlinkJoin, lib, rofi-unwrapped, makeWrapper, wrapGAppsHook3, gdk-pixbuf, hicolor-icon-theme, theme ? null, plugins ? [], symlink-dmenu ? false }:
 
 symlinkJoin {
   name = "rofi-${rofi-unwrapped.version}";
@@ -7,7 +7,7 @@ symlinkJoin {
     rofi-unwrapped.out
   ] ++ (lib.forEach plugins (p: p.out));
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook3 ];
   buildInputs = [ gdk-pixbuf ];
 
   preferLocalBuild = true;

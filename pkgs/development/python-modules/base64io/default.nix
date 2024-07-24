@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, unstableGitUpdater
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  unstableGitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "base64io";
-  version = "1.0.3-unstable-2023-10-30";
+  version = "1.0.3-unstable-2024-06-24";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,13 +19,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "base64io-python";
-    rev = "604817576e607d1f7f8af1ffa1530522fd4e4be2";
-    hash = "sha256-RFl0iuyHdPf3VpBxH4m/N2yaKEBxkNMT1ldZP9VGGOk=";
+    rev = "f3dd88bf0db6eb412c55ff579f0aa9f39d970c41";
+    hash = "sha256-znQlPlS+jzPiHNBvnDnZ8l1pZP6iuYqExDlPii4dJwM=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     mock

@@ -1,40 +1,55 @@
-{ stdenv
-, lib
-, unzip
-, util-linux
-, libusb1
-, evdi
-, makeBinaryWrapper
-, requireFile
+{
+  stdenv,
+  lib,
+  unzip,
+  util-linux,
+  libusb1,
+  evdi,
+  makeBinaryWrapper,
+  requireFile,
 }:
 
 let
   bins =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "x64-ubuntu-1604"
-    else if stdenv.hostPlatform.system == "i686-linux" then "x86-ubuntu-1604"
-    else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64-linux-gnu"
-    else throw "Unsupported architecture";
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc util-linux libusb1 evdi ];
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      "x64-ubuntu-1604"
+    else if stdenv.hostPlatform.system == "i686-linux" then
+      "x86-ubuntu-1604"
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      "aarch64-linux-gnu"
+    else
+      throw "Unsupported architecture";
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    util-linux
+    libusb1
+    evdi
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "displaylink";
-  version = "5.8.0-63.33";
+  version = "6.0.0-24";
 
   src = requireFile rec {
-    name = "displaylink-580.zip";
-    sha256 = "05m8vm6i9pc9pmvar021lw3ls60inlmq92nling0vj28skm55i92";
+    name = "displaylink-600.zip";
+    sha256 = "1ixrklwk67w25cy77n7l0pq6j9i4bp4lkdr30kp1jsmyz8daaypw";
     message = ''
       In order to install the DisplayLink drivers, you must first
       comply with DisplayLink's EULA and download the binaries and
       sources from here:
 
-      https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu-5.8
+      https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu-6.0
 
       Once you have downloaded the file, please use the following
       commands and re-run the installation:
 
-      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu5.8-EXE.zip" \$PWD/${name}
+      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu6.0-EXE.zip" \$PWD/${name}
       nix-prefetch-url file://\$PWD/${name}
+
+      Alternatively, you can use the following command to download the
+      file directly:
+
+      nix-prefetch-url --name ${name} https://www.synaptics.com/sites/default/files/exe_files/2024-05/DisplayLink%20USB%20Graphics%20Software%20for%20Ubuntu6.0-EXE.zip
     '';
   };
 
@@ -73,13 +88,17 @@ stdenv.mkDerivation (finalAttrs: {
   dontPatchELF = true;
 
   meta = with lib; {
-    description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
+    description = "DisplayLink DL-7xxx, DL-6xxx, DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
     homepage = "https://www.displaylink.com/";
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     license = licenses.unfree;
     mainProgram = "DisplayLinkManager";
     maintainers = with maintainers; [ abbradar ];
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

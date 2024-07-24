@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-error=implicit-function-declaration"
+  ]);
+
   postInstall = ''
     install -Dm444 -t $out/share/doc/${pname} NEWS README
   '';

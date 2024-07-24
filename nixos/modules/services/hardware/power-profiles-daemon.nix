@@ -39,6 +39,12 @@ in
           which conflicts with services.tlp.enable = true;
         '';
       }
+      { assertion = !config.services.auto-cpufreq.enable;
+        message = ''
+          You have set services.power-profiles-daemon.enable = true;
+          which conflicts with services.auto-cpufreq.enable = true;
+        '';
+      }
     ];
 
     environment.systemPackages = [ cfg.package ];

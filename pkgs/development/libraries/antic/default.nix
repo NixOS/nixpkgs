@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "An algebraic number theory library";
+    description = "Algebraic number theory library";
     homepage = "https://github.com/flintlib/antic";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ smasher164 ];

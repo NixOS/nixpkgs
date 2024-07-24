@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-vkcapture";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "nowrep";
-    repo = finalAttrs.pname;
+    repo = "obs-vkcapture";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hYPQ1N4k4eb+bvGWZqaQJ/C8C5Lh8ooZ03raGF5ORgE=";
+    hash = "sha256-RIDsT6eL6bUfqPiyPlecnZHu5OorcJb3Xal8pjdOpAA=";
   };
 
   cmakeFlags = lib.optionals stdenv.isi686 [
@@ -61,10 +61,17 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "libvulkan.so.1" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
   '';
 
-  # Support 32bit Vulkan applications by linking in the 32bit Vulkan layer
+  # Support 32bit Vulkan applications by linking in the 32bit Vulkan layer and
+  # the wrapper executables. Note that vkcapture and glcapture are themselves
+  # wrapper scripts that simply exec gamecapture and print a warning but because
+  # they take gamecapture from PATH, we must link them to the 32 bit gamecapture
+  # directly.
   postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
     ln -s ${obs-vkcapture32}/share/vulkan/implicit_layer.d/obs_vkcapture_32.json \
       "$out/share/vulkan/implicit_layer.d/"
+    for bin in ${obs-vkcapture32}/bin/* ; do
+      ln -s ${obs-vkcapture32}/bin/obs-gamecapture "$out/bin/$(basename "$bin")32"
+    done
   '';
 
   meta = with lib; {

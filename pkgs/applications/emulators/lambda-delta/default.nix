@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ SDL2 ];
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-std=c89";
+  };
+
 
   configureFlags = [ "--without-SDL1" ];
 

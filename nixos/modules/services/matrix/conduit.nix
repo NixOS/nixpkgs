@@ -9,7 +9,7 @@ let
   configFile = format.generate "conduit.toml" cfg.settings;
 in
   {
-    meta.maintainers = with maintainers; [ pstn piegames ];
+    meta.maintainers = with maintainers; [ pstn ];
     options.services.matrix-conduit = {
       enable = mkEnableOption "matrix-conduit";
 
@@ -102,7 +102,7 @@ in
         default = {};
         description = ''
             Generates the conduit.toml configuration file. Refer to
-            <https://gitlab.com/famedly/conduit/-/blob/master/conduit-example.toml>
+            <https://docs.conduit.rs/configuration.html>
             for details on supported values.
             Note that database_path can not be edited because the service's reliance on systemd StateDir.
         '';

@@ -20,7 +20,7 @@ buildGoModule rec {
   vendorHash = "sha256-HffgkuKmaOjTYi+jQ6vBlC50JqqbYiikURT6TCqL7e0=";
 
   meta = with lib; {
-    description = "A tool to flash firmware to mechanical keyboards";
+    description = "Tool to flash firmware to mechanical keyboards";
     mainProgram = "wally-cli";
     homepage = "https://ergodox-ez.com/pages/wally-planck";
     platforms = with platforms; linux ++ darwin;

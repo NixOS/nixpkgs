@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://bellard.org/tinyemu/";
-    description = "A system emulator for the RISC-V and x86 architectures";
+    description = "System emulator for the RISC-V and x86 architectures";
     longDescription = ''
       TinyEMU is a system emulator for the RISC-V and x86 architectures. Its
       purpose is to be small and simple while being complete.

@@ -1,36 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, aiohttp
-, requests
-, pytz
+  # dependencies
+  aiohttp,
+  requests,
+  pytz,
 
-# tests
-, mock
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
+  # tests
+  mock,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyindego";
-  version = "3.1.1";
+  version = "3.2.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "pyIndego";
-    inherit version;
-    hash = "sha256-lRDi6qYMaPI8SiSNe0vzlKb92axujt44aei8opNPDug=";
+  src = fetchFromGitHub {
+    owner = "jm-73";
+    repo = "pyIndego";
+    rev = "refs/tags/${version}";
+    hash = "sha256-wPQocacWwWjEH4boMZ33aW/NPvdD6LSmMTFXGwBwwq8=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  postPatch = ''
+    sed -i "/addopts/d" pytest.ini
+  '';
+
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -52,9 +56,7 @@ buildPythonPackage rec {
     "test_update_battery"
   ];
 
-  pythonImportsCheck = [
-    "pyIndego"
-  ];
+  pythonImportsCheck = [ "pyIndego" ];
 
   meta = with lib; {
     description = "Python interface for Bosch API for lawnmowers";

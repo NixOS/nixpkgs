@@ -4,7 +4,7 @@ let
   settingsFormat = (pkgs.formats.json { });
 in
 {
-  meta.maintainers = with lib.maintainers; [ mohe2015 ];
+  meta.maintainers = with lib.maintainers; [ ];
 
   options = {
     services.step-ca = {
@@ -107,7 +107,7 @@ in
           UMask = "0077";
           Environment = "HOME=%S/step-ca";
           WorkingDirectory = ""; # override upstream
-          ReadWriteDirectories = ""; # override upstream
+          ReadWritePaths = ""; # override upstream
 
           # LocalCredential handles file permission problems arising from the use of DynamicUser.
           LoadCredential = "intermediate_password:${cfg.intermediatePasswordFile}";

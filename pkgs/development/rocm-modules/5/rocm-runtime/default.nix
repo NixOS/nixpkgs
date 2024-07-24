@@ -7,7 +7,7 @@
 , xxd
 , rocm-device-libs
 , rocm-thunk
-, libelf
+, elfutils
 , libdrm
 , numactl
 , valgrind
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     rocm-thunk
-    libelf
+    elfutils
     libdrm
     numactl
     valgrind

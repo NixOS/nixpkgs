@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib ];
 
   meta = with lib; {
-    description = "A bit-oriented parser combinator library";
+    description = "Bit-oriented parser combinator library";
     longDescription = ''
       Hammer is a parsing library. Like many modern parsing libraries, it
       provides a parser combinator interface for writing grammars as inline

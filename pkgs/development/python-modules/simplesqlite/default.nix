@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dataproperty
-, mbstrdecoder
-, pathvalidate
-, sqliteschema
-, setuptools
-, tabledata
-, typepy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  dataproperty,
+  mbstrdecoder,
+  pathvalidate,
+  sqliteschema,
+  setuptools,
+  tabledata,
+  typepy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

@@ -1,30 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, aiohttp
-, bcrypt
-, pyopenssl
-, python-gnupg
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  aiohttp,
+  bcrypt,
+  pyopenssl,
+  python-gnupg,
+  requests,
+  pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "proton-core";
-  version = "0.1.15-unstable-2023-10-24";
+  version = "0.1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-core";
-    rev = "5e795e04094dff67c03c56f2f3de03ff43514cc4";
-    hash = "sha256-hchwrolc65tVmSe2IzxwH2zDU2JZzXrCMzWaETWcMDI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-072XuHvgWludlFwp/tqLpuAU89vzifFhwQ01FuiCoL8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     bcrypt
@@ -41,9 +40,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "proton" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Single test, requires internet connection
@@ -71,6 +68,6 @@ buildPythonPackage {
     description = "Core logic used by the other Proton components";
     homepage = "https://github.com/ProtonVPN/python-proton-core";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

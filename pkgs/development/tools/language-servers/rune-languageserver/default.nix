@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A language server for the Rune Language, an embeddable dynamic programming language for Rust";
+    description = "Language server for the Rune Language, an embeddable dynamic programming language for Rust";
     homepage = "https://crates.io/crates/rune-languageserver";
     changelog = "https://github.com/rune-rs/rune/releases/tag/${version}";
     license = with licenses; [ asl20 mit ];

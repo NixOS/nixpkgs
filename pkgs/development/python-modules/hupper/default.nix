@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, watchdog
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  watchdog,
 }:
 
 buildPythonPackage rec {
@@ -18,11 +19,7 @@ buildPythonPackage rec {
 
   # FIXME: watchdog dependency is disabled on Darwin because of #31865, which causes very silent
   # segfaults in the testsuite that end up failing the tests in a background thread (in myapp)
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    watchdog
-  ];
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.optionals (!stdenv.isDarwin) [ watchdog ];
 
   disabledTestPaths = [
     # Doesn't work with an exported home, RuntimeError: timeout waiting for change to file=/build/tmpgfn145cx

@@ -1,34 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pycryptodomex
-, pyotp
-, pythonOlder
-, requests
-, roadlib
-, selenium
-, selenium-wire
-, setuptools
-, signxml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pycryptodomex,
+  pyotp,
+  pythonOlder,
+  requests,
+  roadlib,
+  selenium,
+  selenium-wire,
+  setuptools,
+  signxml,
 }:
 
 buildPythonPackage rec {
   pname = "roadtx";
-  version = "1.7.0";
+  version = "1.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qnumJbuBH+ajzfG+bLTrYPvB5uNnL8dJsTZoT2vo6g0=";
+    hash = "sha256-BJYBQBxgYbozY0rPgxpiduUxb6wEFBJxXY8TRVlLz5M=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pycryptodomex
     pyotp
     requests
@@ -38,9 +37,7 @@ buildPythonPackage rec {
     signxml
   ];
 
-  pythonImportsCheck = [
-    "roadtools.roadtx"
-  ];
+  pythonImportsCheck = [ "roadtools.roadtx" ];
 
   meta = with lib; {
     description = "ROADtools Token eXchange";

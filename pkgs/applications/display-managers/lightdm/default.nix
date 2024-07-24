@@ -21,13 +21,13 @@
 , polkit
 , accountsservice
 , gtk-doc
-, gnome
 , gobject-introspection
 , vala
 , fetchpatch
 , withQt5 ? false
 , qtbase
 , yelp-tools
+, yelp-xsl
 }:
 
 stdenv.mkDerivation rec {
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     yelp-tools
-    gnome.yelp-xsl
+    yelp-xsl
     gobject-introspection
     gtk-doc
     intltool
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/canonical/lightdm";
-    description = "A cross-desktop display manager";
+    description = "Cross-desktop display manager";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ ] ++ teams.pantheon.members;

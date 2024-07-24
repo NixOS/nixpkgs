@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "HTTP client for PostgreSQL, retrieve a web page from inside the database";
     homepage = "https://github.com/pramsey/pgsql-http";
     changelog = "https://github.com/pramsey/pgsql-http/releases/tag/v${version}";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.mit;
   };

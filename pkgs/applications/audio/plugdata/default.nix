@@ -9,7 +9,7 @@
 , alsa-lib
 , freetype
 , webkitgtk
-, gnome
+, zenity
 , curl
 , xorg
 , python3
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       # These X11 libs get dlopen'd, they cause visual bugs when unavailable.
       wrapProgram $out/bin/plugdata \
         --prefix PATH : '${lib.makeBinPath [
-          gnome.zenity
+          zenity
         ]}' \
         --prefix LD_LIBRARY_PATH : '${lib.makeLibraryPath [
         xorg.libXrandr

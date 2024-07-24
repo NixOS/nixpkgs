@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.18.0";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
     rev = version;
     owner = "wesnoth";
     repo = "wesnoth";
-    hash = "sha256-Db1OwBTA/2jjhu/fOZhwGo7dWV3mZ40y6hTNCCjaRJQ=";
+    hash = "sha256-nr+WUFzHeaPxCzwc+8JZRL86X8XEsnsGM1HXnNqOIF0=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
 
   meta = with lib; {
-    description = "The Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
+    description = "Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
     longDescription = ''
       The Battle for Wesnoth is a Free, turn-based tactical strategy
       game with a high fantasy theme, featuring both single-player, and

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "arpa2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2vb/7UL+uWGrQNh8yOZ3gih5G1/eOp064hF78SDsPGk=";
+    hash = "sha256-2vb/7UL+uWGrQNh8yOZ3gih5G1/eOp064hF78SDsPGk=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,19 +1,33 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, future, pyusb, ipython, pygreat }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  isPy3k,
+  future,
+  pyusb,
+  ipython,
+  pygreat,
+}:
 
 buildPythonPackage rec {
   pname = "greatfet";
-  version = "2019.5.1.dev0";
+  version = "2024.0.1";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "greatfet";
-    rev = "v${version}";
-    sha256 = "054vkx4xkbhxhh5grjbs9kw3pjkv1zapp91ysrqr0c8mg1pc7zxv";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-AKpaJZJTzMY3IQXLvVnLWh3IHeGp759z6tvaBl28BHQ=";
   };
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ future pyusb ipython pygreat ];
+  propagatedBuildInputs = [
+    future
+    pyusb
+    ipython
+    pygreat
+  ];
 
   doCheck = false;
 

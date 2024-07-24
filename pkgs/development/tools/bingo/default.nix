@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "Like `go get` but for Go tools! CI Automating versioning of Go binaries in a nested, isolated Go modules.";
+    description = "Like `go get` but for Go tools! CI Automating versioning of Go binaries in a nested, isolated Go modules";
     mainProgram = "bingo";
     homepage = "https://github.com/bwplotka/bingo";
     license = licenses.asl20;

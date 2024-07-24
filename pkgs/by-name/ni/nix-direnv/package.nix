@@ -4,13 +4,13 @@
 # https://github.com/abathur/resholve/issues/107
 resholve.mkDerivation rec {
   pname = "nix-direnv";
-  version = "3.0.4";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
     rev = version;
-    hash = "sha256-3Fkat0HWU/hdQKwJYx5KWVzX8sVbGtFTon6G6/F9zFk=";
+    hash = "sha256-imUlc5v/Ow7dgjCjTyEeet+4lNHLeEwfqGQcB4dKcao=";
   };
 
   # skip min version checks which are redundant when built with nix
@@ -56,7 +56,7 @@ resholve.mkDerivation rec {
   };
 
   meta = {
-    description = "A fast, persistent use_nix implementation for direnv";
+    description = "Fast, persistent use_nix implementation for direnv";
     homepage    = "https://github.com/nix-community/nix-direnv";
     license     = lib.licenses.mit;
     platforms   = lib.platforms.unix;

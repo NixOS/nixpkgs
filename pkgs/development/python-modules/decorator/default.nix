@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,17 +15,11 @@ buildPythonPackage rec {
     hash = "sha256-Y3mWIRA2tjhe+RQ15PriKYlHL51XH6uoknuoJTrLwzA=";
   };
 
-  pythonImportsCheck = [
-    "decorator"
-  ];
+  pythonImportsCheck = [ "decorator" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "src/tests/test.py"
-  ];
+  pytestFlagsArray = [ "src/tests/test.py" ];
 
   meta = with lib; {
     homepage = "https://github.com/micheles/decorator";

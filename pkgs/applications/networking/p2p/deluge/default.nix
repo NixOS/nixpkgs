@@ -7,7 +7,7 @@
 , glib
 , gobject-introspection
 , librsvg
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -54,7 +54,7 @@ let
         glib
       ] ++ optionals withGUI [
         gobject-introspection
-        wrapGAppsHook
+        wrapGAppsHook3
       ];
 
       nativeCheckInputs = with pypkgs; [

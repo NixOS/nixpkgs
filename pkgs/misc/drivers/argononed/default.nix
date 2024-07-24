@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "DarkElvenAngel";
     repo = pname;
     rev = "97c4fa07fc2c09ffc3bd86e0f6319d50fa639578";
-    sha256 = "sha256-5/xUYbprRiwD+FN8V2cUpHxnTbBkEsFG2wfsEXrCrgQ=";
+    hash = "sha256-5/xUYbprRiwD+FN8V2cUpHxnTbBkEsFG2wfsEXrCrgQ=";
   };
 
   patches = [ ./fix-hardcoded-reboot-poweroff-paths.patch ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/DarkElvenAngel/argononed";
-    description = "A replacement daemon for the Argon One Raspberry Pi case";
+    description = "Replacement daemon for the Argon One Raspberry Pi case";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.misterio77 ];

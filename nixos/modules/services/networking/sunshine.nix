@@ -1,6 +1,6 @@
 { config, lib, pkgs, utils, ... }:
 let
-  inherit (lib) mkEnableOption mkPackageOption mkOption mkIf mkDefault types optionals getExe;
+  inherit (lib) mkEnableOption mkPackageOption mkOption literalExpression mkIf mkDefault types optionals getExe;
   inherit (utils) escapeSystemdExecArgs;
   cfg = config.services.sunshine;
 
@@ -32,6 +32,13 @@ in
         Whether to give the Sunshine binary CAP_SYS_ADMIN, required for DRM/KMS screen capture.
       '';
     };
+    autoStart = mkOption {
+      type = bool;
+      default = true;
+      description = ''
+        Whether sunshine should be started automatically.
+      '';
+    };
     settings = mkOption {
       default = { };
       description = ''
@@ -39,7 +46,7 @@ in
 
         See https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/advanced_usage.html#configuration for syntax.
       '';
-      example = ''
+      example = literalExpression ''
         {
           sunshine_name = "nixos";
         }
@@ -60,7 +67,7 @@ in
       description = ''
         Configuration for applications to be exposed to Moonlight. If this is set, no configuration is possible from the web UI, and must be by the `settings` option.
       '';
-      example = ''
+      example = literalExpression ''
         {
           env = {
             PATH = "$(PATH):$(HOME)/.local/bin";
@@ -135,7 +142,7 @@ in
     systemd.user.services.sunshine = {
       description = "Self-hosted game stream host for Moonlight";
 
-      wantedBy = [ "graphical-session.target" ];
+      wantedBy = mkIf cfg.autoStart [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
       wants = [ "graphical-session.target" ];
       after = [ "graphical-session.target" ];

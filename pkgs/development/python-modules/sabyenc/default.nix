@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "sabyenc";
@@ -19,5 +23,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.georgewhewell ];
   };
-
 }

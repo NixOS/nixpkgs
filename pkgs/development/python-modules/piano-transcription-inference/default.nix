@@ -1,14 +1,14 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, fetchurl
-, librosa
-, matplotlib
-, mido
-, torch
-, torchlibrosa
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  fetchurl,
+  librosa,
+  matplotlib,
+  mido,
+  torch,
+  torchlibrosa,
 }:
 
 buildPythonPackage rec {
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "piano_transcription_inference" ];
 
   meta = with lib; {
-    description = "A piano transcription inference package";
+    description = "Piano transcription inference package";
     homepage = "https://github.com/qiuqiangkong/piano_transcription_inference";
     license = licenses.mit;
     maintainers = with maintainers; [ azuwis ];

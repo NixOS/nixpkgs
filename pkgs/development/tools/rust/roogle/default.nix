@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Rust API search engine which allows you to search functions by names and type signatures";
+    description = "Rust API search engine which allows you to search functions by names and type signatures";
     mainProgram = "roogle";
     homepage = "https://github.com/hkmatsumoto/roogle";
     license = with licenses; [ mit /* or */ asl20 ];

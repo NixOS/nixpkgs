@@ -5,7 +5,7 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gdk-pixbuf
 , jre
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gdk-pixbuf
     gobject-introspection
     autoPatchelfHook
@@ -68,7 +68,7 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/google/agi/releases/tag/v${version}";
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ ivar kashw2 ];
+    maintainers = with maintainers; [ kashw2 ];
     sourceProvenance = with sourceTypes; [
       binaryBytecode
       binaryNativeCode

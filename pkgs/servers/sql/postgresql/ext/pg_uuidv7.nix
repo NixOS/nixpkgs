@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tiny Postgres extension to create version 7 UUIDs";
+    description = "Tiny Postgres extension to create version 7 UUIDs";
     homepage = "https://github.com/fboulnois/pg_uuidv7";
     changelog = "https://github.com/fboulnois/pg_uuidv7/blob/main/CHANGELOG.md";
     maintainers = with maintainers; [ gaelreyrol ];

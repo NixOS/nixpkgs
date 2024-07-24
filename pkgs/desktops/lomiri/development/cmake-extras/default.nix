@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "A collection of add-ons for the CMake build tool";
+    description = "Collection of add-ons for the CMake build tool";
     homepage = "https://gitlab.com/ubports/development/core/cmake-extras/";
     license = licenses.gpl3Only;
     maintainers = teams.lomiri.members;

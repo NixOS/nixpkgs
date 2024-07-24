@@ -7,26 +7,26 @@
 , qt6
 , wayland
 , glib
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waycheck";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "serebit";
     repo = "waycheck";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sDfIR+F2W59mh50jXoOrcNZ1nuckm3r7jN613BH4Eog=";
+    hash = "sha256-82jOYWhgD9JNDn24eCAeMm63R5BTy20lQVpiAwhDIOk=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     qt6.wrapQtAppsHook
   ];
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple GUI that displays the protocols implemented by a Wayland compositor";
     homepage = "https://gitlab.freedesktop.org/serebit/waycheck";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ julienmalka federicoschonborn ];
+    maintainers = with lib.maintainers; [ julienmalka ];
     mainProgram = "waycheck";
     platforms = lib.platforms.linux;
   };

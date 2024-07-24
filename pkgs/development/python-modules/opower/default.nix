@@ -1,19 +1,20 @@
 {
   lib,
   aiohttp,
+  aiozoneinfo,
   arrow,
   buildPythonPackage,
   fetchFromGitHub,
   pyotp,
-  pytestCheckHook,
   python-dotenv,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "opower";
-  version = "0.4.3";
+  version = "0.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,19 +23,22 @@ buildPythonPackage rec {
     owner = "tronikos";
     repo = "opower";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qJMQoc0Bpo1X2jQ23XlmCLE7h8F5IsniQ+Hx9iJ0h6A=";
+    hash = "sha256-aK/zpeSe9GBONDbFqLF6ZGkBkhp2/GzH5gg3hfJcl/U=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
+    aiozoneinfo
     arrow
     pyotp
-    python-dotenv
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    python-dotenv
+  ];
 
   pythonImportsCheck = [ "opower" ];
 

@@ -214,8 +214,9 @@ in {
         RestrictRealtime = true;
         PrivateMounts = true;
         SystemCallFilter = [
-          "@system-service @pkey @chown"
+          "@system-service @pkey"
           "~@privileged @resources"
+          "@chown"
         ];
         SystemCallArchitectures = "native";
         # AF_UNIX is required to connect to a postgres socket.

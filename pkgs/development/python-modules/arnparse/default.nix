@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -16,18 +17,14 @@ buildPythonPackage rec {
     hash = "sha256-2+wxzYoS/KJXjYM6lZguxbr2Oxobo0eFNnzWZHLi0WM=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "arnparse"
-  ];
+  pythonImportsCheck = [ "arnparse" ];
 
   meta = with lib; {
     description = "Parse ARNs using Python";
     homepage = "https://github.com/PokaInc/arnparse";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

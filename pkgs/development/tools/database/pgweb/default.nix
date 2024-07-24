@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "pgweb";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "sosedoff";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-n8MFYwne25MdzVwYmmXt9d9rqKU37patAazb3Wn9coM=";
+    hash = "sha256-3iSnFzHqk3KBLvs7XixqpT4j2T/t2O2R7rMD4nlkIuw=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ buildGoModule rec {
 
   meta = with lib; {
     changelog = "https://github.com/sosedoff/pgweb/releases/tag/v${version}";
-    description = "A web-based database browser for PostgreSQL";
+    description = "Web-based database browser for PostgreSQL";
     longDescription = ''
       A simple postgres browser that runs as a web server. You can view data,
       run queries and examine tables and indexes.

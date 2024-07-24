@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, pkgs
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/abcminiuser/python-elgato-streamdeck";
     license = licenses.mit;
     maintainers = with maintainers; [ majiir ];
-    broken = stdenv.isDarwin;
   };
 }

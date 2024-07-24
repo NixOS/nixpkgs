@@ -2,7 +2,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "scheme-manpages";
-  version = "unstable-2024-02-11";
+  version = "0-unstable-2024-02-11";
 
   src = fetchFromGitHub {
     owner = "schemedoc";
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Unix manual pages for R6RS and R7RS";
     homepage = "https://github.com/schemedoc/manpages";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

@@ -113,12 +113,17 @@ in
       nameValuePair "wyoming-faster-whisper-${server}" {
         inherit (options) enable;
         description = "Wyoming faster-whisper server instance ${server}";
+        wants = [
+          "network-online.target"
+        ];
         after = [
           "network-online.target"
         ];
         wantedBy = [
           "multi-user.target"
         ];
+        # https://github.com/rhasspy/wyoming-faster-whisper/issues/27
+        environment."HF_HUB_CACHE" = "/tmp";
         serviceConfig = {
           DynamicUser = true;
           User = "wyoming-faster-whisper";

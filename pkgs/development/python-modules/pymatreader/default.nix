@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, setuptools
-, h5py
-, numpy
-, scipy
-, xmltodict
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  setuptools,
+  h5py,
+  numpy,
+  scipy,
+  xmltodict,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,14 +31,12 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pymatreader" ];
 
   meta = with lib; {
-    description = "A python package to read all kinds and all versions of Matlab mat files";
+    description = "Python package to read all kinds and all versions of Matlab mat files";
     homepage = "https://gitlab.com/obob/pymatreader/";
     changelog = "https://gitlab.com/obob/pymatreader/-/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd2;

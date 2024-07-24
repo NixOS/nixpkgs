@@ -1,6 +1,7 @@
-{ lib
-, vscode-utils
-, lua-language-server
+{
+  lib,
+  vscode-utils,
+  lua-language-server,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -21,7 +22,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   '';
 
   meta = {
-    description = "The Lua language server provides various language features for Lua to make development easier and faster.";
+    description = "Lua language server provides various language features for Lua to make development easier and faster";
     homepage = "https://marketplace.visualstudio.com/items?itemName=sumneko.lua";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lblasc ];

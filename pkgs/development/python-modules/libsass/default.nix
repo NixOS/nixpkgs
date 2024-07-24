@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libsass
-, six
-, pytestCheckHook
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libsass,
+  six,
+  pytestCheckHook,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
@@ -41,6 +42,6 @@ buildPythonPackage rec {
     mainProgram = "pysassc";
     homepage = "https://sass.github.io/libsass-python/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

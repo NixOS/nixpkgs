@@ -14,7 +14,7 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
-    description = "An old-school 4-oscillator subtractive polyphonic synthesizer with stereo fx";
+    description = "Old-school 4-oscillator subtractive polyphonic synthesizer with stereo fx";
     mainProgram = "synthv1_jack";
     homepage = "https://synthv1.sourceforge.io/";
     license = licenses.gpl2Plus;

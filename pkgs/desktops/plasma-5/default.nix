@@ -151,6 +151,7 @@ let
       plasma-browser-integration = callPackage ./plasma-browser-integration.nix { };
       plasma-desktop = callPackage ./plasma-desktop { };
       plasma-disks = callPackage ./plasma-disks.nix { };
+      plasma-firewall = callPackage ./plasma-firewall.nix { };
       plasma-integration = callPackage ./plasma-integration { };
       plasma-mobile = callPackage ./plasma-mobile { };
       plasma-nano = callPackage ./plasma-nano { };

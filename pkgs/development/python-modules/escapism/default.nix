@@ -1,6 +1,7 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
+{
+  pkgs,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {

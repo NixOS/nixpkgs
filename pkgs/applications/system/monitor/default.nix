@@ -20,7 +20,7 @@
 , libhandy
 , sassc
 , udisks2
-, wrapGAppsHook
+, wrapGAppsHook3
 , libX11
 , libXext
 , libXNVCtrl
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "sha256-Eo0nwATKrx6SmTsaXe3oFIkp0BUTmjcjIc3Vjt+Cr20=";
+    hash = "sha256-Eo0nwATKrx6SmTsaXe3oFIkp0BUTmjcjIc3Vjt+Cr20=";
     fetchSubmodules = true;
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     vala
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -39,7 +39,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A high-level API to automate web browsers";
+      description = "High-level API to automate web browsers";
       homepage = "https://playwright.dev";
       license = "Apache-2.0";
     };

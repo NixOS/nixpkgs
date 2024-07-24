@@ -1,7 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gitUpdater
 }: python3.pkgs.buildPythonApplication rec {
@@ -18,7 +18,7 @@
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   pythonPath = with python3.pkgs; [

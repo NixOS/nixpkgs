@@ -3,7 +3,7 @@
 , withCurses ? false, ncurses
 }:
 stdenv.mkDerivation rec {
-  version = "12.1";
+  version = "12.4";
   pname = "textadept";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "orbitalquark";
     repo = "textadept";
     rev = "textadept_${version}";
-    sha256 = "sha256-ce7U/GR/4zkjnRN3fx3FLecc9vuvFqCONy275SWnpNc=";
+    sha256 = "sha256-nPgpQeBq5Stv2o0Ke4W2Ltnx6qLe5TIC5a8HSYVkmfI=";
   };
 
   nativeBuildInputs = [ cmake ]
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ) (import ./deps.nix));
 
   meta = with lib; {
-    description = "An extensible text editor based on Scintilla with Lua scripting.";
+    description = "Extensible text editor based on Scintilla with Lua scripting";
     homepage = "http://foicica.com/textadept";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin mirrexagon arcuru ];

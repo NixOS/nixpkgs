@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# dependencies
-, django
-, djangorestframework
-, ujson
+  # dependencies
+  django,
+  djangorestframework,
+  ujson,
 
-# tests
-, pytest-django
-, pytest-mock
-, pytestCheckHook
+  # tests
+  pytest-django,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     sed -i '/--cov/d' setup.cfg
   '';
 
-  buildInputs = [
-    django
-  ];
+  buildInputs = [ django ];
 
   propagatedBuildInputs = [
     djangorestframework

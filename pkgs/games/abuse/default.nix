@@ -4,14 +4,14 @@
 , SDL2, SDL2_mixer, freepats
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname   = "abuse";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "Xenoveritas";
-    repo = pname;
-    rev = "v${version}";
+    repo = "abuse";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eneu0HxEoM//Ju2XMHnDMZ/igeVMPSLg7IaxR2cnJrk=";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    cp --reflink=auto -r ${data}/data/sfx ${data}/data/music data/
+    cp --reflink=auto -r ${finalAttrs.data}/data/sfx ${finalAttrs.data}/data/music data/
   '';
 
   desktopItems = [ (makeDesktopItem {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     substituteAll "${./abuse.sh}" $out/bin/abuse
     chmod +x $out/bin/abuse
 
-    install -Dm644 ${data}/doc/abuse.png $out/share/pixmaps/abuse.png
+    install -Dm644 ${finalAttrs.data}/doc/abuse.png $out/share/pixmaps/abuse.png
   '';
 
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2}/include/SDL2";
@@ -49,16 +49,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ copyDesktopItems cmake ];
   buildInputs       = [ SDL2 SDL2_mixer freepats ];
 
-  meta = with lib; {
+  meta = {
     description = "Side-scroller action game that pits you against ruthless alien killers";
     homepage    = "http://abuse.zoy.org/";
-    license     = with licenses; [ unfree ];
+    license     = lib.licenses.unfree;
     # Most of abuse is free (public domain, GPL2+, WTFPL), however the creator
     # of its sfx and music only gave Debian permission to redistribute the
     # files. Our friends from Debian thought about it some more:
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=648272
-    maintainers = with maintainers; [ iblech ];
-    platforms   = platforms.unix;
+    maintainers = with lib.maintainers; [ iblech ];
+    platforms   = lib.platforms.unix;
     broken      = stdenv.isDarwin;
   };
-}
+})

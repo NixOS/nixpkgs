@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://erratique.ch/software/cmarkit";
     changelog = "https://github.com/dbuenzli/cmarkit/blob/v${version}/CHANGES.md";
     license = licenses.isc;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     inherit (ocaml.meta) platforms;
   };
 }

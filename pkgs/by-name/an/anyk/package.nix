@@ -15,13 +15,11 @@
 , python3
 }:
 let
-  # Downloads can be found here: https://nav.gov.hu/nyomtatvanyok/letoltesek/nyomtatvanykitolto_programok/nyomtatvany_apeh/keretprogramok/AbevJava
-  # There are no versioned download URLs but archive.org can be used to preserve them.
-  # The original download URL is: https://nav.gov.hu/pfile/programFile?path=/nyomtatvanyok/letoltesek/nyomtatvanykitolto_programok/nyomtatvany_apeh/keretprogramok/AbevJava
-  # You can put the URL here to create a fresh archive URL: https://web.archive.org/save
-  abevjavaSrc = fetchzip {
-    url = "https://web.archive.org/web/20231106112510if_/https://nav.gov.hu/pfile/programFile?path=/nyomtatvanyok/letoltesek/nyomtatvanykitolto_programok/nyomtatvany_apeh/keretprogramok/AbevJava";
-    sha256 = "sha256-qt0mHv3HI6C8OltFjSR47+RLSnmB2Si5U8rXEvdN4/c=";
+  # Run update.py to update this file.
+  inherit (lib.importJSON ./version.json) version url sha256;
+
+  src = fetchzip {
+    inherit url sha256;
     extension = "zip";
     stripRoot = false;
   };
@@ -49,7 +47,7 @@ let
     (runCommandLocal "anyk-patch" {} ''
       mkdir $out
       cd $out
-      ${unzip}/bin/unzip ${abevjavaSrc}/application/abevjava.jar hu/piller/enykp/niszws/ClientStubBuilder.class
+      ${unzip}/bin/unzip ${src}/application/abevjava.jar hu/piller/enykp/niszws/ClientStubBuilder.class
       ${python3}/bin/python ${./patch_paths.py} hu/piller/enykp/niszws/ClientStubBuilder.class
     '')
   ];
@@ -89,9 +87,7 @@ let
   '';
 in stdenv.mkDerivation {
   pname = "anyk";
-  version = "3.26.0";
-
-  src = abevjavaSrc;
+  inherit version src;
 
   dontConfigure = true;
   dontBuild = true;

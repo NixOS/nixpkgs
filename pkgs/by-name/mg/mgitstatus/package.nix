@@ -28,6 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Show uncommitted, untracked and unpushed changes for multiple Git repos";
     downloadPage = "https://github.com/fboender/multi-git-status/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/fboender/multi-git-status";
+    changelog = "https://github.com/fboender/multi-git-status/releases/tag/${finalAttrs.src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ getpsyched ];
     mainProgram = "mgitstatus";

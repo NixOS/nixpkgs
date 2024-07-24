@@ -23,7 +23,7 @@ mkDerivation rec {
     owner = "aerusso";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bUVL5eRQ5UkSZo562pnyEcj0fVoSC5WHRq4BfN67jEM=";
+    hash = "sha256-bUVL5eRQ5UkSZo562pnyEcj0fVoSC5WHRq4BfN67jEM=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A graphical frontend to collectd";
+    description = "Graphical frontend to collectd";
     homepage = "https://www.antonioerusso.com/projects/kcollectd/";
     maintainers = [ maintainers.symphorien ];
     license = [ lib.licenses.gpl3Plus ];

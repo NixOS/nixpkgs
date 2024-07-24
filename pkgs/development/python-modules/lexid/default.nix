@@ -1,4 +1,11 @@
-{ lib, pythonOlder, buildPythonPackage, fetchPypi, pytestCheckHook, click }:
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  click,
+}:
 
 buildPythonPackage rec {
   pname = "lexid";

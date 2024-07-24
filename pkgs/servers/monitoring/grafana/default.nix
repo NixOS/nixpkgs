@@ -3,25 +3,22 @@
 , yarn, nodejs, python3, cacert
 , jq, moreutils
 , nix-update-script, nixosTests, xcbuild
+, faketty
 }:
 
 let
-  # We need dev dependencies to run webpack, but patch away
-  # `cypress` (and @grafana/e2e which has a direct dependency on cypress).
-  # This attempts to download random blobs from the Internet in
-  # postInstall. Also, it's just a testing framework, so not worth the hassle.
-  patchAwayGrafanaE2E = ''
-    find . -name package.json | while IFS=$'\n' read -r pkg_json; do
-      <"$pkg_json" jq '. + {
-        "devDependencies": .devDependencies | del(."@grafana/e2e") | del(.cypress)
-      }' | sponge "$pkg_json"
-    done
-    rm -r packages/grafana-e2e
+  # Grafana seems to just set it to the latest version available
+  # nowadays.
+  patchGoVersion = ''
+    substituteInPlace go.{mod,work} pkg/build/wire/go.mod \
+      --replace-fail "go 1.22.4" "go 1.22.3"
+    substituteInPlace Makefile \
+      --replace-fail "GO_VERSION = 1.22.4" "GO_VERSION = 1.22.3"
   '';
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "10.4.2";
+  version = "11.1.0";
 
   subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
@@ -29,11 +26,13 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-ahG9ABJJUUgrFqqNjkJRA1Gia8T4J90jIsCMFOhZ55w=";
+    hash = "sha256-iTTT10YN8jBT4/ukGXNK1QHcyzXnAqg2LiFtNiwnENw=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
-  env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+  env = {
+    CYPRESS_INSTALL_BINARY = 0;
+  } // lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
     # Fix error: no member named 'aligned_alloc' in the global namespace.
     # Occurs while building @esfx/equatable@npm:1.0.2 on x86_64-darwin
     NIX_CFLAGS_COMPILE = "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
@@ -48,7 +47,7 @@ buildGoModule rec {
     # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
     ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
     postPatch = ''
-      ${patchAwayGrafanaE2E}
+      ${patchGoVersion}
     '';
     buildPhase = ''
       runHook preBuild
@@ -65,23 +64,24 @@ buildGoModule rec {
     dontFixup = true;
     outputHashMode = "recursive";
     outputHash = rec {
-      x86_64-linux = "sha256-3CZgs732c6Z64t2sfWjPAmMFKVTzoolv2TwrbjeRCBA=";
+      x86_64-linux = "sha256-2VnhZBWLdYQhqKCxM63fCAwQXN4Zrh2wCdPBLCCUuvg=";
       aarch64-linux = x86_64-linux;
-      aarch64-darwin = "sha256-NKEajOe9uDZw0MF5leiKBIRH1CHUELRho7gyCa96BO8=";
+      aarch64-darwin = "sha256-MZE3/PHynL6SHOxJgOG41pi2X8XeutruAOyUFY9Lmsc=";
       x86_64-darwin = aarch64-darwin;
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-XmIF/ZWVO1qjSmRPTFnHgxvnliXXicGgsV8gQcKJl9U=";
+  vendorHash = "sha256-Ny/SoelFVPvBBn50QpHcLTuVY3ynKbCegM1uQkJzB9Y=";
 
   proxyVendor = true;
 
-  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
+  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 faketty ]
+    ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
 
   postPatch = ''
-    ${patchAwayGrafanaE2E}
+    ${patchGoVersion}
   '';
 
   postConfigure = ''
@@ -90,7 +90,6 @@ buildGoModule rec {
     wire gen -tags oss ./pkg/server
     wire gen -tags oss ./pkg/cmd/grafana-cli/runner
 
-    GOARCH= CGO_ENABLED=0 go generate ./pkg/plugins/plugindef
     GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
     GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
     # Setup node_modules
@@ -105,7 +104,7 @@ buildGoModule rec {
 
     yarn config set enableTelemetry 0
     yarn config set cacheFolder $offlineCache
-    yarn --immutable-cache
+    yarn install --immutable-cache
 
     # The build OOMs on memory constrained aarch64 without this
     export NODE_OPTIONS=--max_old_space_size=4096
@@ -113,7 +112,9 @@ buildGoModule rec {
 
   postBuild = ''
     # After having built all the Go code, run the JS builders now.
-    yarn run build
+
+    # Workaround for https://github.com/nrwl/nx/issues/22445
+    faketty yarn run build
     yarn run plugins:build-bundled
   '';
 

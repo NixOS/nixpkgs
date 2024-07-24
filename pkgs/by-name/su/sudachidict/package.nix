@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = with lib; {
-    description = "A lexicon for Sudachi";
+    description = "Lexicon for Sudachi";
     homepage = "https://github.com/WorksApplications/SudachiDict";
     changelog = "https://github.com/WorksApplications/SudachiDict/releases/tag/v${version}";
     license = licenses.asl20;

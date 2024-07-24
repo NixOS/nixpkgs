@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, babel
-, speaklater
-, jinja2
-, pytestCheckHook
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  babel,
+  speaklater,
+  jinja2,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  pytestFlagsArray = [
-    "tests/tests.py"
-  ];
+  pytestFlagsArray = [ "tests/tests.py" ];
 
   disabledTests = [
     # Disabled 3 tests failing due to string representations of dates:

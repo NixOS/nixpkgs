@@ -26,7 +26,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -36,8 +35,9 @@ python3Packages.buildPythonApplication rec {
     pexpect
   ];
 
+  doCheck = python3Packages.pythonOlder "3.12";
+
   nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
     nose
   ];
 
@@ -45,6 +45,12 @@ python3Packages.buildPythonApplication rec {
   pythonRemoveDeps = [ "argparse" ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ tarsnap ]}" ];
+
+  checkPhase = ''
+    runHook preCheck
+    nosetests tests
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "tarsnapper" ];
 

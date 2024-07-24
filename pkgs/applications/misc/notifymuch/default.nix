@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , gobject-introspection
 , libnotify
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , python3
 }:
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;

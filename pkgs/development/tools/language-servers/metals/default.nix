@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "metals";
-  version = "1.2.2";
+  version = "1.3.3";
 
   deps = stdenv.mkDerivation {
     name = "${pname}-deps-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-xk2ionn/lBV8AR7n7OR03UuRCoP1/K6KuohhpRwFock=";
+    outputHash = "sha256-OFpnfAR1BuY0QFCR8Zf210IEMgVDVLQnHNSCM2FbBxk=";
   };
 
   nativeBuildInputs = [ makeWrapper setJavaClassPath ];
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     description = "Language server for Scala";
     mainProgram = "metals";
-    maintainers = with maintainers; [ fabianhjr tomahna ];
+    maintainers = with maintainers; [ fabianhjr jpaju tomahna ];
   };
 }

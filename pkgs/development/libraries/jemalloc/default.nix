@@ -26,6 +26,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/jemalloc/jemalloc/commit/d00ecee6a8dfa90afcb1bbc0858985c17bef6559.patch";
       hash = "sha256-N5i4IxGJ4SSAgFiq5oGRnrNeegdk2flw9Sh2mP0yl4c=";
     })
+    # fix linking with libc++, can be removed in the next update (after 5.3.0).
+    # https://github.com/jemalloc/jemalloc/pull/2348
+    (fetchpatch {
+      url = "https://github.com/jemalloc/jemalloc/commit/4422f88d17404944a312825a1aec96cd9dc6c165.patch";
+      hash = "sha256-dunkE7XHzltn5bOb/rSHqzpRniAFuGubBStJeCxh0xo=";
+    })
   ];
 
   configureFlags =

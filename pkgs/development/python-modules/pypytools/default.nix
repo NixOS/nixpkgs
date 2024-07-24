@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, attrs
-, freezegun
-, numpy
-, py
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  attrs,
+  freezegun,
+  numpy,
+  py,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-oUDAU+TRwLroNfQGYusAQKdRkHcazysqiDLfp77v5Sk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     # attrs is an implicit dependency
@@ -50,9 +49,7 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonImportsCheck = [
-    "pypytools"
-  ];
+  pythonImportsCheck = [ "pypytools" ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.11") [
     # https://github.com/antocuni/pypytools/issues/4

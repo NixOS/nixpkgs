@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://jb55.com/datefmt";
-    description = "A tool that formats timestamps in text streams";
+    description = "Tool that formats timestamps in text streams";
     platforms = platforms.all;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jb55 ];

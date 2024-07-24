@@ -1,4 +1,9 @@
-{ buildPecl, lib, pkg-config, libyaml }:
+{
+  buildPecl,
+  lib,
+  pkg-config,
+  libyaml,
+}:
 
 buildPecl {
   pname = "yaml";
@@ -8,7 +13,10 @@ buildPecl {
 
   configureFlags = [ "--with-yaml=${libyaml.dev}" ];
 
-  nativeBuildInputs = [ pkg-config libyaml ];
+  nativeBuildInputs = [
+    pkg-config
+    libyaml
+  ];
 
   meta = {
     description = "YAML-1.1 parser and emitter";

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, httpcore
-, httpx
-, wsproto
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  httpcore,
+  httpx,
+  wsproto,
 }:
 
 buildPythonPackage rec {

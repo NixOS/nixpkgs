@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.codesynthesis.com/products/xsd";
-    description = "An open-source, cross-platform W3C XML Schema to C++ data binding compiler";
+    description = "Open-source, cross-platform W3C XML Schema to C++ data binding compiler";
     mainProgram = "xsd";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

@@ -23,7 +23,7 @@ let
   src = fetchurl (sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}"));
 
   meta = with lib; {
-    description = "A VR coworking platform";
+    description = "VR coworking platform";
     homepage = "https://immersed.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ haruki7049 ];

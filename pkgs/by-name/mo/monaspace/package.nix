@@ -5,12 +5,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "monaspace";
-  version = "1.000";
+  version = "1.101";
 
   src = fetchzip {
     url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-v${finalAttrs.version}.zip";
     stripRoot = false;
-    hash = "sha256-H8NOS+pVkrY9DofuJhPR2OlzkF4fMdmP2zfDBfrk83A=";
+    hash = "sha256-o5s4XBuwqA4sJ5KhEn5oYttBj4ojekr/LO6Ww9oQRGw=";
   };
 
   outputs = [ "out" "woff" ];
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "An innovative superfamily of fonts for code";
+    description = "Innovative superfamily of fonts for code";
     longDescription = ''
       Since the earliest days of the teletype machine, code has been set in
       monospaced type — letters, on a grid. Monaspace is a new type system that

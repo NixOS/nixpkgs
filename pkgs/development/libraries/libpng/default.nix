@@ -20,7 +20,11 @@ in stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/libpng/libpng-${finalAttrs.version}.tar.xz";
     hash = "sha256-alygZSOSotfJ2yrltAIQhDwLvAgcvUEIJasAzFnxSmw=";
   };
-  postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1";
+  postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1"
+  + lib.optionalString stdenv.isFreeBSD ''
+
+    sed -i 1i'int feenableexcept(int __mask);' contrib/libtests/pngvalid.c
+  '';
 
   outputs = [ "out" "dev" "man" ];
   outputBin = "dev";
@@ -36,7 +40,7 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "The official reference implementation for the PNG file format" + whenPatched " with animation patch";
+    description = "Official reference implementation for the PNG file format" + whenPatched " with animation patch";
     homepage = "http://www.libpng.org/pub/png/libpng.html";
     changelog = "https://github.com/pnggroup/libpng/blob/v${finalAttrs.version}/CHANGES";
     license = licenses.libpng2;

@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
 }: let
-  version = "0.5.0";
+  version = "0.8.0";
 in
   rustPlatform.buildRustPackage {
     pname = "kittysay";
@@ -13,10 +13,10 @@ in
       owner = "uncenter";
       repo = "kittysay";
       rev = "v${version}";
-      sha256 = "sha256-eOcHrEvU3nBKFokwE8CyDOUYoBA1+gBlnl7VRUuoFfE=";
+      sha256 = "sha256-ZYHrDBJ8cTqJAh2KUGSCsS1bY/emHRodPxZX2vxAhDs=";
     };
 
-    cargoHash = "sha256-dVgPp5jY3ii8mO/HLTDESQzQyZXzqut8Bjm2KfWD0+U=";
+    cargoHash = "sha256-F0WAtpAjBwL5YfzGtPgn7WTL6lgx3bjZFBQdDpjCr3I=";
 
     meta = {
       description = "Cowsay, but with a cute kitty :3";

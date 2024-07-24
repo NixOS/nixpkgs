@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, dill
-, fetchFromGitHub
-, multiprocess
-, pox
-, ppft
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  multiprocess,
+  pox,
+  ppft,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
   # Require network
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pathos"
-  ];
+  pythonImportsCheck = [ "pathos" ];
 
   meta = with lib; {
     description = "Parallel graph management and execution in heterogeneous computing";

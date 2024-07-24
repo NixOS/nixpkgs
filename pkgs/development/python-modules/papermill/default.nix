@@ -1,34 +1,37 @@
-{ lib
-, stdenv
-, azure-datalake-store
-, azure-identity
-, azure-storage-blob
-, boto3
-, buildPythonPackage
-, click
-, entrypoints
-, fetchFromGitHub
-, gcsfs
-, ipykernel
-, moto
-, nbclient
-, nbformat
-, pyarrow
-, pygithub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, setuptools
-, tenacity
-, tqdm
+{
+  lib,
+  stdenv,
+  aiohttp,
+  ansicolors,
+  azure-datalake-store,
+  azure-identity,
+  azure-storage-blob,
+  boto3,
+  buildPythonPackage,
+  click,
+  entrypoints,
+  fetchFromGitHub,
+  gcsfs,
+  ipykernel,
+  moto,
+  nbclient,
+  nbformat,
+  pyarrow,
+  pygithub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools,
+  tenacity,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "papermill";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,19 +40,12 @@ buildPythonPackage rec {
     owner = "nteract";
     repo = "papermill";
     rev = "refs/tags/${version}";
-    hash = "sha256-x6f5hhTdOPDVFiBvRhfrXq1wd5keYiuUshXnT0IkjX0=";
+    hash = "sha256-NxC5+hRDdMCl/7ZIho5ml4hdENrgO+wzi87GRPeMv8Q=";
   };
 
-  pythonRelaxDeps = [
-    "aiohttp"
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     click
     pyyaml
     nbformat
@@ -58,7 +54,8 @@ buildPythonPackage rec {
     requests
     entrypoints
     tenacity
-  ];
+    ansicolors
+  ] ++ lib.optionals (pythonAtLeast "3.12") [ aiohttp ];
 
   passthru.optional-dependencies = {
     azure = [
@@ -66,26 +63,20 @@ buildPythonPackage rec {
       azure-identity
       azure-storage-blob
     ];
-    gcs = [
-      gcsfs
-    ];
-    github = [
-      pygithub
-    ];
-    hdfs = [
-      pyarrow
-    ];
-    s3 = [
-      boto3
-    ];
+    gcs = [ gcsfs ];
+    github = [ pygithub ];
+    hdfs = [ pyarrow ];
+    s3 = [ boto3 ];
   };
 
-  nativeCheckInputs = [
-    ipykernel
-    moto
-    pytest-mock
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.azure
+  nativeCheckInputs =
+    [
+      ipykernel
+      moto
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ passthru.optional-dependencies.azure
     ++ passthru.optional-dependencies.s3
     ++ passthru.optional-dependencies.gcs;
 
@@ -93,17 +84,17 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "papermill"
-  ];
+  pythonImportsCheck = [ "papermill" ];
 
-  disabledTests = [
-    # pytest 8 compat
-    "test_read_with_valid_file_extension"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # might fail due to the sandbox
-    "test_end2end_autosave_slow_notebook"
-  ];
+  disabledTests =
+    [
+      # pytest 8 compat
+      "test_read_with_valid_file_extension"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # might fail due to the sandbox
+      "test_end2end_autosave_slow_notebook"
+    ];
 
   disabledTestPaths = [
     # ImportError: cannot import name 'mock_s3' from 'moto'

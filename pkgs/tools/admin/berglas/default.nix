@@ -53,7 +53,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A tool for managing secrets on Google Cloud";
+    description = "Tool for managing secrets on Google Cloud";
     homepage = "https://github.com/GoogleCloudPlatform/berglas";
     license = licenses.asl20;
     mainProgram = "berglas";

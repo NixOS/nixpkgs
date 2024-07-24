@@ -77,7 +77,7 @@ resholve.mkDerivation rec {
 
   meta = with lib; {
     inherit branch;
-    description = "An event listener/callback API for creating extensible bash programs";
+    description = "Event listener/callback API for creating extensible bash programs";
     mainProgram = "bashup.events";
     homepage = "https://github.com/bashup/events";
     license = licenses.cc0;

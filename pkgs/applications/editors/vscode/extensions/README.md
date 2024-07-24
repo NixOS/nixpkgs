@@ -20,6 +20,11 @@
   - `description` should mention it is a Visual Studio Code extension.
   - `downloadPage` is the VSCode marketplace URL.
   - `homepage` is the source-code URL.
+  - `maintainers`:
+    - optionally consider adding yourself as a maintainer to be notified of updates, breakages and help with upkeep.
+    - recommended format is:
+      - a `non-nested with`, such as: `with lib.maintainers; [ your-username ];`.
+      - maintainers are listed in alphabetical order.
   - verify `license` in upstream.
 
 * On commit messages:

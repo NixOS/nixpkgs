@@ -7,19 +7,21 @@
 , makeDesktopItem
 , copyDesktopItems
 , runtimeShell
+, unzip
 }:
+
 stdenv.mkDerivation rec {
   pname = "fiji";
-  version = "20201104-1356";
+  version = "20240614-2117";
 
   src = fetchurl {
-    url = "https://downloads.imagej.net/${pname}/archive/${version}/${pname}-nojre.tar.gz";
-    sha256 = "1jv4wjjkpid5spr2nk5xlvq3hg687qx1n5zh8zlw48y1y09c4q7a";
+    url = "https://downloads.imagej.net/fiji/archive/${version}/fiji-nojre.zip";
+    sha256 = "sha256-OCNnN8CYniNEIfKRHRBoJ3Fo+u5AwXoPJAzUCc4P+f0=";
   };
 
   dontBuild = true;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper copyDesktopItems unzip ];
   buildInputs = [ stdenv.cc.cc.lib ];
 
   desktopItems = [
@@ -46,10 +48,11 @@ stdenv.mkDerivation rec {
     cp -R * $out/fiji
     rm -f $out/fiji/jars/imagej-updater-*.jar
 
-    # Disgusting hack to stop a local desktop entry being created
+    # Don't create a local desktop entry and avoid deprecated garbage
+    # collection option
     cat <<EOF > $out/bin/.fiji-launcher-hack
     #!${runtimeShell}
-    exec \$($out/fiji/ImageJ-linux64 --dry-run "\$@")
+    exec \$($out/fiji/ImageJ-linux64 --default-gc --dry-run "\$@")
     EOF
     chmod +x $out/bin/.fiji-launcher-hack
 
@@ -72,6 +75,6 @@ stdenv.mkDerivation rec {
       binaryNativeCode
     ];
     license = with lib.licenses; [ gpl2Plus gpl3Plus bsd2 publicDomain ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ davisrichard437 ];
   };
 }

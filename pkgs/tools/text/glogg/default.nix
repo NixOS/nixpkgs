@@ -28,7 +28,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The fast, smart log explorer";
+    description = "Fast, smart log explorer";
     mainProgram = "glogg";
     longDescription = ''
       A multi-platform GUI application to browse and search through long or complex log files. It is designed with programmers and system administrators in mind. glogg can be seen as a graphical, interactive combination of grep and less.

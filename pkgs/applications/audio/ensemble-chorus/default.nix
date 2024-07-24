@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # fix compile error regarding packed attribute in 3rd party juice library
+    ./juice-cxx-packing-fix.diff
+  ];
+
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [

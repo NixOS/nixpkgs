@@ -24,7 +24,7 @@ let
     openssl
   ] ++ lib.optional stdenv.isLinux lttng-ust_2_12);
 
-in writeShellScriptBin "patch-nupkgs" ''
+in writeShellScriptBin "patch-nupkgs" (''
   set -euo pipefail
   shopt -s nullglob
   isELF() {
@@ -71,4 +71,16 @@ in writeShellScriptBin "patch-nupkgs" ''
     touch .nix-patched
     popd
   done
-''
+'' + lib.optionalString stdenv.isDarwin ''
+  for x in microsoft.dotnet.ilcompiler/*; do
+    # .nupkg.metadata is written last, so we know the packages is complete
+    [[ -d "$x" ]] && [[ -f "$x"/.nupkg.metadata ]] \
+      && [[ ! -f "$x"/.nix-patched ]] || continue
+    echo "Patching package $x"
+    pushd "$x"
+    sed -i 's: -no_code_signature_warning::g' build/Microsoft.NETCore.Native.targets
+    sed -i 's:Include="-ld_classic"::g' build/Microsoft.NETCore.Native.Unix.targets
+    touch .nix-patched
+    popd
+  done
+'')

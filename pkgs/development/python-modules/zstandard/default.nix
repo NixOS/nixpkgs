@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cffi
-, hypothesis
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cffi,
+  hypothesis,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,21 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-giajPFQry1TNa9CjZgZ7YQtBcTtkyavsG8RTPWn1HnA=";
   };
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
+  propagatedNativeBuildInputs = [ cffi ];
 
-  propagatedBuildInputs = [
-    cffi
-  ];
+  propagatedBuildInputs = [ cffi ];
 
-  nativeCheckInputs = [
-    hypothesis
-  ];
+  nativeCheckInputs = [ hypothesis ];
 
-  pythonImportsCheck = [
-    "zstandard"
-  ];
+  pythonImportsCheck = [ "zstandard" ];
 
   meta = with lib; {
     description = "zstandard bindings for Python";

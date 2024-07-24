@@ -16,7 +16,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/hashicorp/damon";
     license = licenses.mpl20;
-    description = "A terminal UI (TUI) for HashiCorp Nomad";
+    description = "Terminal UI (TUI) for HashiCorp Nomad";
     maintainers = teams.iog.members;
     mainProgram = "damon";
   };

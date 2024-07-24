@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, ffmpeg_4, libui, unstableGitUpdater, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, ffmpeg_4, libui, unstableGitUpdater, wrapGAppsHook3 }:
 
 stdenv.mkDerivation {
   pname = "untrunc-anthwlock";
-  version = "unstable-2021-11-21";
+  version = "0-unstable-2021-11-21";
 
   src = fetchFromGitHub {
     owner = "anthwlock";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     hash = "sha256-h+aFPhlbEM6EfCKbsJPelBY5ys7kv5K4rbK/HTHeEcw=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs = [ ffmpeg_4 libui ];
 
@@ -30,12 +30,15 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    # Only stale "latest" tag
+    hardcodeZeroVersion = true;
+  };
 
   meta = with lib; {
     description = "Restore a truncated mp4/mov (improved version of ponchio/untrunc)";
     homepage = "https://github.com/anthwlock/untrunc";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];
   };

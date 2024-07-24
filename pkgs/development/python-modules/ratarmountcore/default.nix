@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, indexed-bzip2
-, indexed-gzip
-, indexed-zstd
-, python-xz
-, setuptools
-, rapidgzip
-, rarfile
-, zstandard     # Python bindings
-, zstd          # System tool
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  indexed-bzip2,
+  indexed-gzip,
+  indexed-zstd,
+  python-xz,
+  setuptools,
+  rapidgzip,
+  rarfile,
+  zstandard, # Python bindings
+  zstd, # System tool
 }:
 
 buildPythonPackage rec {
@@ -32,11 +33,22 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/core";
 
   nativeBuildInputs = [ setuptools ];
-  propagatedBuildInputs = [ indexed-gzip indexed-bzip2 indexed-zstd python-xz rapidgzip rarfile ];
+  propagatedBuildInputs = [
+    indexed-gzip
+    indexed-bzip2
+    indexed-zstd
+    python-xz
+    rapidgzip
+    rarfile
+  ];
 
   pythonImportsCheck = [ "ratarmountcore" ];
 
-  nativeCheckInputs = [ pytestCheckHook zstandard zstd ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    zstandard
+    zstd
+  ];
 
   disabledTestPaths = [
     # Disable this test because for arcane reasons running pytest with nix-build uses 10-100x

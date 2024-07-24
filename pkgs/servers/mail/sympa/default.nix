@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source mailing list manager";
     homepage = "https://www.sympa.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sorki mmilata ];
     platforms = platforms.all;
   };

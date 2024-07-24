@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, flask
-, webassets
-, flask-script
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  flask,
+  webassets,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,16 +25,18 @@ buildPythonPackage rec {
     substituteInPlace tests/test_integration.py --replace "'/foo'" "'/x/foo'"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     flask
     webassets
-    flask-script
-    nose
   ];
+
+  doCheck = false; # tests are broken with webassets 2.0
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "flask_assets" ];
 
   meta = with lib; {
     homepage = "https://github.com/miracle2k/flask-assets";

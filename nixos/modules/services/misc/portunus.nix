@@ -70,7 +70,7 @@ in
 
         To activate dex, first a search user must be created in the Portunus web ui
         and then the password must to be set as the `DEX_SEARCH_USER_PASSWORD` environment variable
-        in the [](#opt-services.dex.environmentFile) setting.
+        in the [](#opt-services.dex.environmentFile) setting
       '';
 
       oidcClients = mkOption {
@@ -98,6 +98,10 @@ in
 
           The OIDC secret must be set as the `DEX_CLIENT_''${id}` environment variable
           in the [](#opt-services.dex.environmentFile) setting.
+
+          ::: {.note}
+          Make sure the id only contains characters that are allowed in an environment variable name, e.g. no -.
+          :::
         '';
       };
 
@@ -111,10 +115,7 @@ in
     ldap = {
       package = mkOption {
         type = types.package;
-        # needs openldap built with a libxcrypt that support crypt sha256 until users have had time to migrate to newer hashes
-        # Ref: <https://github.com/majewsky/portunus/issues/2>
-        # TODO: remove in NixOS 24.11 (cf. same note on pkgs/servers/portunus/default.nix)
-        default = pkgs.openldap.override { libxcrypt = pkgs.libxcrypt-legacy; };
+        default = pkgs.openldap;
         defaultText = lib.literalExpression "pkgs.openldap.override { libxcrypt = pkgs.libxcrypt-legacy; }";
         description = "The OpenLDAP package to use.";
       };
@@ -231,12 +232,14 @@ in
     };
 
     systemd.services = {
-      dex.serviceConfig = mkIf cfg.dex.enable {
-        # `dex.service` is super locked down out of the box, but we need some
-        # place to write the SQLite database. This creates $STATE_DIRECTORY below
-        # /var/lib/private because DynamicUser=true, but it gets symlinked into
-        # /var/lib/dex inside the unit
-        StateDirectory = "dex";
+      dex = mkIf cfg.dex.enable {
+        serviceConfig = {
+          # `dex.service` is super locked down out of the box, but we need some
+          # place to write the SQLite database. This creates $STATE_DIRECTORY below
+          # /var/lib/private because DynamicUser=true, but it gets symlinked into
+          # /var/lib/dex inside the unit
+          StateDirectory = "dex";
+        };
       };
 
       portunus = {

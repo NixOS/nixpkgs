@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pytestCheckHook
-, cython
-, setuptools
-, toolz
-, python
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pytestCheckHook,
+  cython,
+  setuptools,
+  toolz,
+  python,
+  isPy27,
 }:
 
 buildPythonPackage rec {
@@ -47,6 +48,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytoolz/cytoolz/";
     description = "Cython implementation of Toolz: High performance functional utilities";
     license = licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchDebianPatch
-, autoconf, gtkmm3, glib, pdftk, pkg-config, wrapGAppsHook
+, autoconf, gtkmm3, glib, pdftk, pkg-config, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config wrapGAppsHook autoconf
+    pkg-config wrapGAppsHook3 autoconf
   ];
 
   buildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A graphical user interface for the PDF Toolkit (PDFtk)";
+    description = "Graphical user interface for the PDF Toolkit (PDFtk)";
     homepage = "https://pdfchain.sourceforge.io";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hqurve ];

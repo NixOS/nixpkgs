@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, paramiko
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  paramiko,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://bitbucket.org/dundeemt/pysftp";
-    description = "A friendly face on SFTP";
+    description = "Friendly face on SFTP";
     license = licenses.mit;
     longDescription = ''
       A simple interface to SFTP. The module offers high level abstractions
@@ -28,5 +29,4 @@ buildPythonPackage rec {
       Book, in the docs, to see what pysftp can do for you.
     '';
   };
-
 }

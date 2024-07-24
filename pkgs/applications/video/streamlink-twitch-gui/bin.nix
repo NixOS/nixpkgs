@@ -5,7 +5,7 @@
 , makeDesktopItem
 , makeWrapper
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , at-spi2-core
 , atk
 , alsa-lib
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     libXtst
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [ streamlink ];

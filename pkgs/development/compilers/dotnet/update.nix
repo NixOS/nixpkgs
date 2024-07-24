@@ -101,7 +101,7 @@ in writeScript "update-dotnet-vmr.sh" ''
           | .[] | .PrivateSourceBuiltArtifactsVersion' eng/Versions.props)
 
       if [[ "$artifactsVersion" != "" ]]; then
-          artifactsUrl=https://dotnetcli.azureedge.net/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.centos.8-x64.tar.gz
+          artifactsUrl=https://dotnetcli.azureedge.net/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.centos.9-x64.tar.gz
       else
           artifactsUrl=$(xq -r '.Project.PropertyGroup |
               map(select(.PrivateSourceBuiltArtifactsUrl))

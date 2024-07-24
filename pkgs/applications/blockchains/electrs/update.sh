@@ -34,7 +34,6 @@ git -C $repo verify-tag v${version}
 rm -rf $repo/.git
 hash=$(nix hash path $repo)
 
-(cd "$nixpkgs" && update-source-version electrs "$version" "$hash")
-sed -i 's|cargoHash = .*|cargoHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";|' "$scriptDir/default.nix"
+(cd "$nixpkgs" && update-source-version electrs "$version" "$hash" && update-source-version electrs --ignore-same-version --source-key=cargoDeps)
 echo
 echo "electrs: $oldVersion -> $version"

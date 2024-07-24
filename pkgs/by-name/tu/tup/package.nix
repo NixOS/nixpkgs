@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    description = "A fast, file-based build system";
+    description = "Fast, file-based build system";
     mainProgram = "tup";
     longDescription = ''
       Tup is a file-based build system for Linux, OSX, and Windows. It inputs a list

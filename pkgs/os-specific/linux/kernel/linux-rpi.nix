@@ -2,18 +2,19 @@
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
-  modDirVersion = "6.1.63";
-  tag = "stable_20231123";
+  modDirVersion = "6.6.31";
+  tag = "stable_20240529";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
   inherit modDirVersion;
+  pname = "linux-rpi";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "linux";
     rev = tag;
-    hash = "sha256-4Rc57y70LmRFwDnOD4rHoHGmfxD9zYEAwYm9Wvyb3no=";
+    hash = "sha256-UWUTeCpEN7dlFSQjog6S3HyEWCCnaqiUqV5KxCjYink=";
   };
 
   defconfig = {
@@ -23,32 +24,33 @@ lib.overrideDerivation (buildLinux (args // {
     "4" = "bcm2711_defconfig";
   }.${toString rpiVersion};
 
+  structuredExtraConfig = (args.structuredExtraConfig or {}) // (with lib.kernel; {
+    # Workaround https://github.com/raspberrypi/linux/issues/6198
+    # Needed because NixOS 24.05+ sets DRM_SIMPLEDRM=y which pulls in
+    # DRM_KMS_HELPER=y.
+    BACKLIGHT_CLASS_DEVICE = yes;
+  });
+
   features = {
     efiBootStub = false;
   } // (args.features or {});
 
   kernelPatches = (args.kernelPatches or []) ++ [
-    # Fix "WARNING: unmet direct dependencies detected for MFD_RP1", and
-    # subsequent build failure.
-    # https://github.com/NixOS/nixpkgs/pull/268280#issuecomment-1911839809
-    # https://github.com/raspberrypi/linux/pull/5900
+    # Fix compilation errors due to incomplete patch backport.
+    # https://github.com/raspberrypi/linux/pull/6223
     {
-      name = "drm-rp1-depends-on-instead-of-select-MFD_RP1.patch";
+      name = "gpio-pwm_-_pwm_apply_might_sleep.patch";
       patch = fetchpatch {
-        url = "https://github.com/peat-psuwit/rpi-linux/commit/6de0bb51929cd3ad4fa27b2a421a2af12e6468f5.patch";
-        hash = "sha256-9pHcbgWTiztu48SBaLPVroUnxnXMKeCGt5vEo9V8WGw=";
+        url = "https://github.com/peat-psuwit/rpi-linux/commit/879f34b88c60dd59765caa30576cb5bfb8e73c56.patch";
+        hash = "sha256-HlOkM9EFmlzOebCGoj7lNV5hc0wMjhaBFFZvaRCI0lI=";
       };
     }
 
-    # Fix `ERROR: modpost: missing MODULE_LICENSE() in <...>/bcm2712-iommu.o`
-    # by preventing such code from being built as module.
-    # https://github.com/NixOS/nixpkgs/pull/284035#issuecomment-1913015802
-    # https://github.com/raspberrypi/linux/pull/5910
     {
-      name = "iommu-bcm2712-don-t-allow-building-as-module.patch";
+      name = "ir-rx51_-_pwm_apply_might_sleep.patch";
       patch = fetchpatch {
-        url = "https://github.com/peat-psuwit/rpi-linux/commit/693a5e69bddbcbe1d1b796ebc7581c3597685b1b.patch";
-        hash = "sha256-8BYYQDM5By8cTk48ASYKJhGVQnZBIK4PXtV70UtfS+A=";
+        url = "https://github.com/peat-psuwit/rpi-linux/commit/23431052d2dce8084b72e399fce82b05d86b847f.patch";
+        hash = "sha256-UDX/BJCJG0WVndP/6PbPK+AZsfU3vVxDCrpn1kb1kqE=";
       };
     }
   ];

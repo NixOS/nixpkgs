@@ -19,7 +19,7 @@ buildPythonApplication rec {
     homepage = "https://s3tools.org/s3cmd";
     description = "Command line tool for managing Amazon S3 and CloudFront services";
     mainProgram = "s3cmd";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

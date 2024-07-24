@@ -10,9 +10,7 @@
 , pprint
 , makeWrapper
 , lem
-, z3
 , linksem
-, num
 , yojson
 }:
 
@@ -73,7 +71,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/rems-project/sail";
-    description = "A language for describing the instruction-set architecture (ISA) semantics of processors";
+    description = "Language for describing the instruction-set architecture (ISA) semantics of processors";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd2;
   };

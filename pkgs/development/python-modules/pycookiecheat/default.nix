@@ -1,29 +1,29 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, keyring
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, playwright
-, setuptools
-, setuptools-scm
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  keyring,
+  pytestCheckHook,
+  pythonOlder,
+  playwright,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pycookiecheat";
-  version = "0.6.0";
-  format = "pyproject";
+  version = "0.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "n8henrie";
     repo = "pycookiecheat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mSc5FqMM8BICVEdSdsIny9Bnk6qCRekPk4RkBusDoVA=";
+    hash = "sha256-x568e4M7fz93hq0y06Grz9GlrjGV38GxWd+PhNiAyBY=";
   };
 
   pythonRelaxDeps = [
@@ -31,13 +31,13 @@ buildPythonPackage rec {
     "keyring"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+
+  dependencies = [
     cryptography
     keyring
   ];
@@ -47,9 +47,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pycookiecheat"
-  ];
+  pythonImportsCheck = [ "pycookiecheat" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -57,21 +55,23 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests want to use playwright executable
-    "test_no_cookies"
     "test_fake_cookie"
     "test_firefox_cookies"
-    "test_load_firefox_cookie_db"
-    "test_firefox_no_cookies"
     "test_firefox_get_default_profile"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_slack_config"
-  ];
+    "test_firefox_no_cookies"
+    "test_load_firefox_cookie_db"
+    "test_no_cookies"
+    "test_warns_for_string_browser"
+  ] ++ lib.optionals stdenv.isDarwin [ "test_slack_config" ];
 
   meta = with lib; {
     description = "Borrow cookies from your browser's authenticated session for use in Python scripts";
     homepage = "https://github.com/n8henrie/pycookiecheat";
     changelog = "https://github.com/n8henrie/pycookiecheat/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [
+      fab
+      n8henrie
+    ];
   };
 }

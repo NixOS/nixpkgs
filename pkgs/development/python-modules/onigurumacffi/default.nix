@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchPypi, oniguruma }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  oniguruma,
+}:
 python3Packages.buildPythonPackage rec {
   pname = "onigurumacffi";
   version = "1.3.0";

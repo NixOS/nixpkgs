@@ -102,19 +102,19 @@ trivial, so I'll also link to some real-world examples:
 ```nix
 {
   resholvedScript = resholve.writeScript "name" {
-      inputs = [ file ];
-      interpreter = "${bash}/bin/bash";
-    } ''
-      echo "Hello"
-      file .
-    '';
+    inputs = [ file ];
+    interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
   resholvedScriptBin = resholve.writeScriptBin "name" {
-      inputs = [ file ];
-      interpreter = "${bash}/bin/bash";
-    } ''
-      echo "Hello"
-      file .
-    '';
+    inputs = [ file ];
+    interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
 }
 ```
 
@@ -230,7 +230,7 @@ from the manpage, and the Nix equivalents:
     # all single-word directives use `true` as value
     aliases = true;
     "$GIT" = [ "gix" ];
-    interpreter = "/bin/bash";
+    "/bin/bash" = true;
   };
 
   # --keep 'source:$HOME /etc/bashrc ~/.bashrc'

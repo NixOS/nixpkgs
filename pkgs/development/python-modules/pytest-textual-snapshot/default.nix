@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, jinja2
-, pytest
-, rich
-, pythonOlder
-, syrupy
-, textual
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  jinja2,
+  pytest,
+  rich,
+  pythonOlder,
+  syrupy,
+  textual,
 }:
 
 buildPythonPackage rec {
@@ -24,13 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-XkXeyodRdwWqCP63Onx82Z3IbNLDDR/Lvaw8xUY7fAg=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     jinja2
@@ -42,9 +39,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pytest_textual_snapshot"
-  ];
+  pythonImportsCheck = [ "pytest_textual_snapshot" ];
 
   meta = with lib; {
     description = "Snapshot testing for Textual applications";

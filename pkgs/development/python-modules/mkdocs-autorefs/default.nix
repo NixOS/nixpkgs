@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, markdown
-, mkdocs
-, pytestCheckHook
-, pdm-backend
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  markdown,
+  mkdocs,
+  pytestCheckHook,
+  pdm-backend,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,18 +28,14 @@ buildPythonPackage rec {
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  nativeBuildInputs = [ pdm-backend ];
 
   propagatedBuildInputs = [
     markdown
     mkdocs
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # missing pymdownx
@@ -46,9 +43,7 @@ buildPythonPackage rec {
     "test_reference_implicit_with_code_inlinehilite_python"
   ];
 
-  pythonImportsCheck = [
-    "mkdocs_autorefs"
-  ];
+  pythonImportsCheck = [ "mkdocs_autorefs" ];
 
   meta = with lib; {
     description = "Automatically link across pages in MkDocs";

@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     homepage = "https://github.com/mcy/0x";
-    description = "A colorful, configurable xxd";
+    description = "Colorful, configurable xxd";
     mainProgram = "0x";
     license = licenses.asl20;
     maintainers = with maintainers; [ AndersonTorres ];

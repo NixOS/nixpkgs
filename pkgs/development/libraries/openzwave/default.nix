@@ -4,27 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "openzwave";
-  version = "1.6";
+  version = "1.6-unstable-2022-11-17";
 
   src = fetchFromGitHub {
     owner = "OpenZWave";
     repo = "open-zwave";
-    rev = "v${version}";
-    sha256 = "0xgs4mmr0480c269wx9xkk67ikjzxkh8xcssrdx0f5xcl1lyd333";
+    rev = "3fff11d246a0d558d26110e1db6bd634a1b347c0";
+    hash = "sha256-CLK2MeoTmZ8GMKb1OAZFNLyc4C+k+REK2w+WQxZv0/E=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-strncat-build-failure.patch";
-      url = "https://github.com/OpenZWave/open-zwave/commit/601e5fb16232a7984885e67fdddaf5b9c9dd8105.patch";
-      sha256 = "1n1k5arwk1dyc12xz6xl4n8yw28vghzhv27j65z1nca4zqsxgza1";
-    })
-    (fetchpatch {
-      name = "fix-text-uninitialized.patch";
-      url = "https://github.com/OpenZWave/open-zwave/commit/3b029a467e83bc7f0054e4dbba1e77e6eac7bc7f.patch";
-      sha256 = "183mrzjh1zx2b2wzkj4jisiw8br7g7bbs167afls4li0fm01d638";
-    })
-  ];
 
   outputs = [ "out" "doc" ];
 
@@ -46,6 +33,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace cpp/src/Options.cpp \
       --replace /etc/openzwave $out/etc/openzwave
+    substituteInPlace cpp/build/Makefile  \
+      --replace "-Werror" "-Werror -Wno-format"
   '';
 
   meta = with lib; {

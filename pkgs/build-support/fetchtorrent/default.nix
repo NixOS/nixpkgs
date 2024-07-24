@@ -1,4 +1,4 @@
-{ lib, runCommand, transmission_noSystemd, rqbit, writeShellScript, formats, cacert, rsync }:
+{ lib, runCommand, transmission_3_noSystemd, rqbit, writeShellScript, formats, cacert, rsync }:
 let
   urlRegexp = ''.*xt=urn:bt[im]h:([^&]{64}|[^&]{40}).*'';
 in
@@ -32,7 +32,7 @@ let
 in
 runCommand name {
   inherit meta;
-  nativeBuildInputs = [ cacert ] ++ (if (backend == "transmission" ) then [ transmission_noSystemd ] else if (backend == "rqbit") then [ rqbit ] else throw "rqbit or transmission are the only available backends for fetchtorrent");
+  nativeBuildInputs = [ cacert ] ++ (if (backend == "transmission" ) then [ transmission_3_noSystemd ] else if (backend == "rqbit") then [ rqbit ] else throw "rqbit or transmission are the only available backends for fetchtorrent");
   outputHashAlgo = if hash != "" then null else "sha256";
   outputHash = hash;
   outputHashMode = if recursiveHash then "recursive" else "flat";

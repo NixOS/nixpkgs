@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Next-generation RPM package management system";
     homepage = "https://github.com/rpm-software-management/dnf5";
-    changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${version}";
+    changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${finalAttrs.version}";
     license = licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ malt3 katexochen ];
     mainProgram = "dnf5";

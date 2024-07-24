@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, blurhash
-, cryptography
-, decorator
-, http-ece
-, python-dateutil
-, python-magic
-, requests
-, six
-, pytestCheckHook
-, pytest-mock
-, pytest-vcr
-, requests-mock
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  blurhash,
+  cryptography,
+  decorator,
+  http-ece,
+  python-dateutil,
+  python-magic,
+  requests,
+  six,
+  pytestCheckHook,
+  pytest-mock,
+  pytest-vcr,
+  requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     sed -i '/addopts/d' setup.cfg
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     blurhash
@@ -46,9 +45,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    blurhash = [
-      blurhash
-    ];
+    blurhash = [ blurhash ];
     webpush = [
       http-ece
       cryptography

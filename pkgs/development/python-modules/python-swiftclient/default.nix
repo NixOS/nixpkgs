@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, installShellFiles
-, mock
-, openstacksdk
-, pbr
-, python-keystoneclient
-, pythonOlder
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  installShellFiles,
+  mock,
+  openstacksdk,
+  pbr,
+  python-keystoneclient,
+  pythonOlder,
+  stestr,
 }:
 
 buildPythonPackage rec {
   pname = "python-swiftclient";
-  version = "4.5.0";
+  version = "4.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8qCIflo5KXq8BDJRrj+QiRTOFEei+NLcpWcWGGCBQr0=";
+    hash = "sha256-1NGFQEE4k/wWrYd5HXQPgj92NDXoIS5o61PWDaJjgjM=";
   };
 
   # remove duplicate script that will be created by setuptools from the
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     sed -i '/bin\/swift/d' setup.cfg
   '';
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   propagatedBuildInputs = [
     pbr
@@ -54,9 +53,7 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [
-    "swiftclient"
-  ];
+  pythonImportsCheck = [ "swiftclient" ];
 
   meta = with lib; {
     homepage = "https://github.com/openstack/python-swiftclient";

@@ -29,7 +29,7 @@ buildNpmPackage rec {
     description = "Generate types and converters from JSON, Schema, and GraphQL";
     homepage = "https://quicktype.io/";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "quicktype";
   };
 }

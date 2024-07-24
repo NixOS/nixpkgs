@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pymorphy2
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pymorphy2,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

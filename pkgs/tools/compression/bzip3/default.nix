@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
-    description = "A better and stronger spiritual successor to BZip2";
+    description = "Better and stronger spiritual successor to BZip2";
     homepage = "https://github.com/kspalaiologos/bzip3";
     changelog = "https://github.com/kspalaiologos/bzip3/blob/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.lgpl3Plus;

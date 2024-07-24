@@ -18,16 +18,21 @@ let
 in
 buildNpmPackage rec {
   pname = "cinny";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
     rev = "v${version}";
-    hash = "sha256-GcygxK9NcGlv4rwxQCJqi0BhNlOTFxjGB8mbfTaBMOk=";
+    hash = "sha256-wAa7y2mXPkXAfirRSFqwZYIJK0CKDzZG8ULzXzr4zZ4=";
   };
 
-  npmDepsHash = "sha256-4R+To2LhcnEM9x1noo6MhCckyBKgPWiAi7zgDqAmaN0=";
+  npmDepsHash = "sha256-dVdylvclUIHvF5syVumdxkXR4bG1FA4LOYg3GmnNzXE=";
+
+  # Fix error: no member named 'aligned_alloc' in the global namespace
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0"
+  ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
 
   nativeBuildInputs = [
     jq
@@ -55,7 +60,7 @@ buildNpmPackage rec {
   meta = with lib; {
     description = "Yet another Matrix client for the web";
     homepage = "https://cinny.in/";
-    maintainers = with maintainers; [ abbe ashkitten ];
+    maintainers = with maintainers; [ abbe ];
     license = licenses.agpl3Only;
     platforms = platforms.all;
   };

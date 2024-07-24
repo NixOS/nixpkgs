@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, ciso8601
-, fetchPypi
-, geopy
-, pythonOlder
-, requests
-, sseclient
+{
+  lib,
+  buildPythonPackage,
+  ciso8601,
+  fetchPypi,
+  geopy,
+  pythonOlder,
+  requests,
+  sseclient,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ritassist"
-  ];
+  pythonImportsCheck = [ "ritassist" ];
 
   meta = with lib; {
     description = "Python client to access RitAssist and FleetGO API";

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/sparsehash/sparsehash";
-    description = "An extremely memory-efficient hash_map implementation";
+    description = "Extremely memory-efficient hash_map implementation";
     platforms = platforms.all;
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];

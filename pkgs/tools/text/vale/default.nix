@@ -10,7 +10,7 @@
 
 buildGoModule rec {
   pname = "vale";
-  version = "3.4.1";
+  version = "3.7.0";
 
   subPackages = [ "cmd/vale" ];
 
@@ -18,10 +18,10 @@ buildGoModule rec {
     owner = "errata-ai";
     repo = "vale";
     rev = "v${version}";
-    hash = "sha256-fD2KBKDfKTNYuzP/zKkAx9h/HMxOlAyiWtp9EsWxop8=";
+    hash = "sha256-rngqTCnNQCecf/W2GkpJfKtfxfPq9Dd7yQlHzb2waKs=";
   };
 
-  vendorHash = "sha256-HMzFLSmO6sBDNU89UoIvHcPPd3ubpti2ii4sFMKUDmI=";
+  vendorHash = "sha256-OLlViQKLTark9yknnjJFiEThFtxNNjue5LUp1P/anKU=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -36,10 +36,13 @@ buildGoModule rec {
       wrapProgram "$out/bin/vale" \
         --set VALE_STYLES_PATH "$out/share/vale/styles/"
     '';
+    meta = {
+      inherit (vale.meta) mainProgram;
+    };
   };
 
   meta = with lib; {
-    description = "A syntax-aware linter for prose built with speed and extensibility in mind";
+    description = "Syntax-aware linter for prose built with speed and extensibility in mind";
     longDescription = ''
       Vale in Nixpkgs offers the helper `.withStyles` allow you to install it
       predefined styles:
@@ -50,6 +53,6 @@ buildGoModule rec {
     changelog = "https://github.com/errata-ai/vale/releases/tag/v${version}";
     mainProgram = "vale";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ maintainers.pbsds ];
   };
 }

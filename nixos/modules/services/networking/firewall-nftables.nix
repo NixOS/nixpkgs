@@ -45,6 +45,18 @@ in
           This option only works with the nftables based firewall.
         '';
       };
+
+      extraReversePathFilterRules = mkOption {
+        type = types.lines;
+        default = "";
+        example = "fib daddr . mark . iif type local accept";
+        description = ''
+          Additional nftables rules to be appended to the rpfilter-allow
+          chain.
+
+          This option only works with the nftables based firewall.
+        '';
+      };
     };
 
   };
@@ -79,12 +91,18 @@ in
             meta nfproto ipv4 udp sport . udp dport { 67 . 68, 68 . 67 } accept comment "DHCPv4 client/server"
             fib saddr . mark ${optionalString (cfg.checkReversePath != "loose") ". iif"} oif exists accept
 
+            jump rpfilter-allow
+
             ${optionalString cfg.logReversePathDrops ''
               log level info prefix "rpfilter drop: "
             ''}
 
           }
         ''}
+
+        chain rpfilter-allow {
+          ${cfg.extraReversePathFilterRules}
+        }
 
         chain input {
           type filter hook input priority filter; policy drop;

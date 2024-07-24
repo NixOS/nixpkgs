@@ -3,7 +3,7 @@
 , fetchurl
 , pkg-config
 , intltool
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , alsa-lib
 , libpulseaudio
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

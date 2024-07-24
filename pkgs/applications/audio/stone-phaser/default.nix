@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://github.com/jpcima/stone-phaser";
-    description = "A classic analog phaser effect, made with DPF and Faust";
+    description = "Classic analog phaser effect, made with DPF and Faust";
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
     license = licenses.boost;

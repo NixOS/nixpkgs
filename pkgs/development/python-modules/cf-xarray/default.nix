@@ -1,25 +1,31 @@
-{ lib
-, buildPythonPackage
-, dask
-, fetchFromGitHub
-, matplotlib
-, pint
-, pooch
-, pytestCheckHook
-, pythonOlder
-, regex
-, rich
-, scipy
-, setuptools
-, setuptools-scm
-, shapely
-, wheel
-, xarray
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+  xarray,
+
+  # optional-dependencies
+  matplotlib,
+  pint,
+  pooch,
+  regex,
+  rich,
+  shapely,
+
+  # checks
+  dask,
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "cf-xarray";
-  version = "0.9.0";
+  version = "0.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,19 +34,16 @@ buildPythonPackage rec {
     owner = "xarray-contrib";
     repo = "cf-xarray";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MlI5Wx0GOcXPRb/p0sPyAtbf84g3LQKVxCZLBfEIGLo=";
+    hash = "sha256-zio00ki86DZqWtGnVseDR28He4DW1jjKdwfsxRwFDfg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
     xarray
   ];
 
-  propagatedBuildInputs = [
-    xarray
-  ];
+  dependencies = [ xarray ];
 
   passthru.optional-dependencies = {
     all = [
@@ -59,9 +62,7 @@ buildPythonPackage rec {
     scipy
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "cf_xarray"
-  ];
+  pythonImportsCheck = [ "cf_xarray" ];
 
   disabledTestPaths = [
     # Tests require network access
@@ -69,11 +70,11 @@ buildPythonPackage rec {
     "cf_xarray/tests/test_helpers.py"
   ];
 
-  meta = with lib; {
-    description = "An accessor for xarray objects that interprets CF attributes";
+  meta = {
+    description = "Accessor for xarray objects that interprets CF attributes";
     homepage = "https://github.com/xarray-contrib/cf-xarray";
     changelog = "https://github.com/xarray-contrib/cf-xarray/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

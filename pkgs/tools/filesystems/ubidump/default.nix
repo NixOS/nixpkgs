@@ -1,35 +1,28 @@
-{ lib, fetchFromGitHub, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+}:
 
-python3.pkgs.buildPythonApplication rec {
-
+python3.pkgs.buildPythonApplication {
   pname = "ubidump";
-  version = "unstable-2019-09-11";
-  format = "other";
+  version = "0-unstable-2023-09-20";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nlitsme";
-    repo = pname;
-    rev = "0691f1a9a38604c2baf8c9af6b826eb2632af74a";
-    sha256 = "1hiivlgni4r3nd5n2rzl5qzw6y2wpjpmyls5lybrc8imd6rmj3w2";
+    repo = "ubidump";
+    rev = "c8cffcbb8c2d61ebece81dff643b8eccfe6d5642";
+    sha256 = "sha256-R568pV3bkdpNAexr8tfAbXVpvHEx/9r1KDWhDM+HyVg=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ crcmod python-lzo setuptools ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  dontBuild = true;
-
-  patchPhase = ''
-    sed -i '1s;^;#!${python3.interpreter}\n;' ubidump.py
-    patchShebangs ubidump.py
-  '';
-
-  installPhase = ''
-    install -D -m755 ubidump.py $out/bin/ubidump
-    wrapProgram $out/bin/ubidump --set PYTHONPATH $PYTHONPATH
-  '';
-
-  installCheckPhase = ''
-    $out/bin/ubidump -h  > /dev/null
-  '';
+  dependencies = with python3.pkgs; [
+    setuptools # pkg_resources
+    python-lzo
+    crcmod
+  ];
 
   meta = with lib; {
     description = "View or extract the contents of UBIFS images";
@@ -39,4 +32,3 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "ubidump";
   };
 }
-

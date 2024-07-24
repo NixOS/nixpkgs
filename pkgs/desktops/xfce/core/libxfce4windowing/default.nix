@@ -34,6 +34,6 @@ mkXfceDerivation {
   meta = {
     description = "Windowing concept abstraction library for X11 and Wayland";
     license = lib.licenses.lgpl21Plus;
-    maintainers = lib.teams.xfce.members ++ [ lib.maintainers.federicoschonborn ];
+    maintainers = lib.teams.xfce.members;
   };
 }

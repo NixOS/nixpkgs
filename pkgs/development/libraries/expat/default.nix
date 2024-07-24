@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, updateAutotoolsGnuConfigScriptsHook
 # for passthru.tests
 , python3
 , perlPackages
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers
   outputBin = "dev";
@@ -67,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     changelog = "https://github.com/libexpat/libexpat/blob/${tag}/expat/Changes";
     homepage = "https://libexpat.github.io/";
-    description = "A stream-oriented XML parser library written in C";
+    description = "Stream-oriented XML parser library written in C";
     mainProgram = "xmlwf";
     platforms = platforms.all;
     license = licenses.mit; # expat version

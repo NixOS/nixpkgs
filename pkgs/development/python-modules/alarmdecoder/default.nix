@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pyftdi
-, pyopenssl
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, pyusb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pyftdi,
+  pyopenssl,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  pyusb,
 }:
 
 buildPythonPackage rec {

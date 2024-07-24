@@ -6,7 +6,7 @@
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , glib
 , gtk3
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils # for update-desktop-database
     glib # for glib-compile-resources
     gtk3 # for gtk-update-icon-cache

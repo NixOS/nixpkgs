@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "biome";
-  version = "1.6.3";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "biomejs";
     repo = "biome";
     rev = "cli/v${version}";
-    hash = "sha256-DooUOp+fr5oOrx04SLlTGro8xc2LieVPNtdvDyTLL/s=";
+    hash = "sha256-RR4yHrLeEHNLe0Nr8FHm+u+DFJihbibRax41Ss9HDV8=";
   };
 
-  cargoHash = "sha256-zMMfLDhiqG8Ahe+7PFjpOtwaBXbKkLDIIoHS329/4uQ=";
+  cargoHash = "sha256-xCA1kxt70lrCrPygMe98eF8RC/l47EnJPjLaXBccBRE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "-p=biome_cli" ];
   cargoTestFlags = cargoBuildFlags ++
-    # skip a broken test from v1.6.3 release
+    # skip a broken test from v1.7.3 release
     # this will be removed on the next version
     [ "-- --skip=diagnostics::test::termination_diagnostic_size" ];
 

@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sonic-server";
-  version = "1.4.8";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "valeriansaliou";
     repo = "sonic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kNuLcImowjoptNQI12xHD6Tv+LLYdwlpauqYviKw6Xk=";
+    hash = "sha256-PTujR3ciLRvbpiqStNMx3W5fkUdW2dsGmCj/iFRTKJM=";
   };
 
-  cargoHash = "sha256-9XSRb5RB82L72RzRWPJ45AJahkRnLwAL7lI2QFqbeko=";
+  cargoHash = "sha256-bH9u38gvH6QEySQ3XFXEHBiSqKKtB+kjcZRLjx4Z6XM=";
 
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;

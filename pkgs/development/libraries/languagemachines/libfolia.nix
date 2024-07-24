@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   CXXFLAGS = [ "-DU_USING_ICU_NAMESPACE=1" ];
 
   meta = with lib; {
-    description = "A C++ API for FoLiA documents; an XML-based linguistic annotation format.";
+    description = "C++ API for FoLiA documents; an XML-based linguistic annotation format";
     mainProgram = "folialint";
     homepage    = "https://proycon.github.io/folia/";
     license     = licenses.gpl3;

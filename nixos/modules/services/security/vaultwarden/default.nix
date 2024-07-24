@@ -5,6 +5,8 @@ let
   user = config.users.users.vaultwarden.name;
   group = config.users.groups.vaultwarden.name;
 
+  StateDirectory = if lib.versionOlder config.system.stateVersion "24.11" then "bitwarden_rs" else "vaultwarden";
+
   # Convert name from camel case (e.g. disable2FARemember) to upper case snake case (e.g. DISABLE_2FA_REMEMBER).
   nameToEnvVar = name:
     let
@@ -23,7 +25,7 @@ let
       configEnv = lib.concatMapAttrs (name: value: lib.optionalAttrs (value != null) {
         ${nameToEnvVar name} = if lib.isBool value then lib.boolToString value else toString value;
       }) cfg.config;
-    in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
+    in { DATA_FOLDER = "/var/lib/${StateDirectory}"; } // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
     } // configEnv;
 
@@ -131,21 +133,13 @@ in {
         Additional environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets like {env}`ADMIN_TOKEN` and {env}`SMTP_PASSWORD`
-        may be passed to the service without adding them to the world-readable Nix store.
+        should be passed to the service without adding them to the world-readable Nix store.
 
-        Note that this file needs to be available on the host on which
-        `vaultwarden` is running.
+        Note that this file needs to be available on the host on which `vaultwarden` is running.
 
-        As a concrete example, to make the Admin UI available
-        (from which new users can be invited initially),
+        As a concrete example, to make the Admin UI available (from which new users can be invited initially),
         the secret {env}`ADMIN_TOKEN` needs to be defined as described
-        [here](https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page).
-        Setting `environmentFile` to `/var/lib/vaultwarden.env`
-        and ensuring permissions with e.g.
-        `chown vaultwarden:vaultwarden /var/lib/vaultwarden.env`
-        (the `vaultwarden` user will only exist after activating with
-        `enable = true;` before this), we can set the contents of the file to have
-        contents such as:
+        [here](https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page):
 
         ```
         # Admin secret token, see
@@ -184,16 +178,45 @@ in {
         User = user;
         Group = group;
         EnvironmentFile = [ configFile ] ++ lib.optional (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStart = "${vaultwarden}/bin/vaultwarden";
+        ExecStart = lib.getExe vaultwarden;
         LimitNOFILE = "1048576";
-        PrivateTmp = "true";
-        PrivateDevices = "true";
-        ProtectHome = "true";
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [ "" ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "noaccess";
         ProtectSystem = "strict";
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        StateDirectory = "bitwarden_rs";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        inherit StateDirectory;
         StateDirectoryMode = "0700";
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
         Restart = "always";
+        UMask = "0077";
       };
       wantedBy = [ "multi-user.target" ];
     };
@@ -201,7 +224,7 @@ in {
     systemd.services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
       description = "Backup vaultwarden";
       environment = {
-        DATA_FOLDER = "/var/lib/bitwarden_rs";
+        DATA_FOLDER = "/var/lib/${StateDirectory}";
         BACKUP_FOLDER = cfg.backupDir;
       };
       path = with pkgs; [ sqlite ];

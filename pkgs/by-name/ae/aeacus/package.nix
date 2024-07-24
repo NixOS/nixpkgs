@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -31,5 +32,6 @@ buildGoModule rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "aeacus";
+    platforms = platforms.linux;
   };
 }

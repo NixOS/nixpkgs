@@ -12,6 +12,7 @@ let
           CoreImage
           VideoToolbox
           ;
+        inherit (darwin) xcode;
       }
       // (initArgs // { inherit ffmpegVariant; })
     );
@@ -32,8 +33,8 @@ let
   };
 
   v7 = {
-    version = "7.0";
-    hash = "sha256-RdDfv+0y90XpgjIRvTjsemKyGunzDbsh4j4WiE9rfyM=";
+    version = "7.0.1";
+    hash = "sha256-HiCT6bvLx4zmJ6ffutoimdz5ENQ55CRF64WBT3HeXMA=";
   };
 in
 

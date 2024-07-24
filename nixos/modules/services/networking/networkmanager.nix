@@ -127,7 +127,7 @@ in
 {
 
   meta = {
-    maintainers = teams.freedesktop.members ++ [ lib.maintainers.janik ];
+    maintainers = teams.freedesktop.members;
   };
 
   ###### interface
@@ -470,7 +470,7 @@ in
       -      [main]
       -      no-auto-default=*
       -    '''
-      +    extraConfig.main.no-auto-default = "*";
+      +    settings.main.no-auto-default = "*";
          };
       ```
     ''

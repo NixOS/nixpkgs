@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
 , fetchurl
-, fetchpatch
 , scons
 , pkg-config
 , SDL2

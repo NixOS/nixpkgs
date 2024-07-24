@@ -5,6 +5,7 @@
 , imath
 , libdeflate
 , pkg-config
+, pkgsCross
 }:
 
 stdenv.mkDerivation rec {
@@ -45,8 +46,12 @@ stdenv.mkDerivation rec {
   # https://github.com/AcademySoftwareFoundation/openexr/issues/1400
   doCheck = !stdenv.isAarch32;
 
+  passthru.tests = {
+    musl = pkgsCross.musl64.openexr_3;
+  };
+
   meta = with lib; {
-    description = "A high dynamic-range (HDR) image file format";
+    description = "High dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ paperdigits ];

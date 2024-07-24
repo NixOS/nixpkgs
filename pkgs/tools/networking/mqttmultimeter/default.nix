@@ -4,16 +4,12 @@
 , dotnet-runtime_8
 , buildDotnetModule
 , fetchFromGitHub
-, autoPatchelfHook
 , fontconfig
 , xorg
 , libglvnd
 , makeDesktopItem
 , copyDesktopItems
 }:
-
-# NOTES:
-# 1. we need autoPatchelfHook for quite a number of things in $out/lib
 
 buildDotnetModule rec {
   pname = "mqttmultimeter";
@@ -35,13 +31,11 @@ buildDotnetModule rec {
   executables = [ "mqttMultimeter" ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
     copyDesktopItems
   ];
 
   buildInputs = [ stdenv.cc.cc.lib fontconfig ];
 
-  # don't care about musl and windows versions, as they fail autoPatchelfHook
   postInstall = ''
     rm -rf $out/lib/${lib.toLower pname}/runtimes/{*musl*,win*}
   '';

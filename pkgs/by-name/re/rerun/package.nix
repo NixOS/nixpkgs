@@ -78,8 +78,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.isLinux [ (lib.getLib wayland) ];
 
-  env.CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
-
   addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
     lib.optionals stdenv.hostPlatform.isLinux [
       libxkbcommon

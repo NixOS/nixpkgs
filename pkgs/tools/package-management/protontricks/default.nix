@@ -12,6 +12,7 @@
 , yad
 , pytestCheckHook
 , nix-update-script
+, extraCompatPaths ? ""
 }:
 
 buildPythonApplication rec {
@@ -51,7 +52,7 @@ buildPythonApplication rec {
     ]}"
     # Steam Runtime does not work outside of steam-run, so don't use it
     "--set STEAM_RUNTIME 0"
-  ];
+  ] ++ lib.optional (extraCompatPaths != "") "--set STEAM_EXTRA_COMPAT_TOOLS_PATHS ${extraCompatPaths}";
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -66,7 +67,7 @@ buildPythonApplication rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A simple wrapper for running Winetricks commands for Proton-enabled games";
+    description = "Simple wrapper for running Winetricks commands for Proton-enabled games";
     homepage = "https://github.com/Matoking/protontricks";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kira-bruneau ];

@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A CLI task runner defined by a simple markdown file";
+    description = "CLI task runner defined by a simple markdown file";
     mainProgram = "mask";
     homepage = "https://github.com/jacobdeichert/mask";
     changelog = "https://github.com/jacobdeichert/mask/blob/mask/${version}/CHANGELOG.md";

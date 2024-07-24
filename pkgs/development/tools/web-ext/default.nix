@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "web-ext";
-  version = "7.11.0";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "web-ext";
     rev = version;
-    hash = "sha256-tXYqAAzxAFQGREkNGgBrHLp7ukRDMtr0bPYW7hOEniY=";
+    hash = "sha256-5q1vB1EN+Qmss6o6qn4BAaNSwLJBhC8joFJVzncBx6k=";
   };
 
-  npmDepsHash = "sha256-uKAEWe28zUgE7Fv00sGXD5dKje/pHh22yJlYtk+7tN8=";
+  npmDepsHash = "sha256-MGuLCuTTUdh2L64j41K6GvCdquCDYPPPEk1Z/9R6sNA=";
 
   npmBuildFlags = [ "--production" ];
 
@@ -26,7 +26,7 @@ buildNpmPackage rec {
   '';
 
   meta = {
-    description = "A command line tool to help build, run, and test web extensions";
+    description = "Command line tool to help build, run, and test web extensions";
     homepage = "https://github.com/mozilla/web-ext";
     license = lib.licenses.mpl20;
     mainProgram = "web-ext";

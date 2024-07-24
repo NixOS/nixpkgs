@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, numpy
-, cloudpickle
-, gym-notices
-, jax-jumpy
-, typing-extensions
-, farama-notifications
-, importlib-metadata
-, pythonOlder
-, ffmpeg
-, jax
-, jaxlib
-, matplotlib
-, moviepy
-, opencv4
-, pybox2d
-, pygame
-, pytestCheckHook
-, scipy
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  numpy,
+  cloudpickle,
+  gym-notices,
+  jax-jumpy,
+  typing-extensions,
+  farama-notifications,
+  importlib-metadata,
+  pythonOlder,
+  ffmpeg,
+  jax,
+  jaxlib,
+  matplotlib,
+  moviepy,
+  opencv4,
+  pybox2d,
+  pygame,
+  pytestCheckHook,
+  scipy,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -79,7 +80,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A standard API for reinforcement learning and a diverse set of reference environments (formerly Gym)";
+    description = "Standard API for reinforcement learning and a diverse set of reference environments (formerly Gym)";
     homepage = "https://github.com/Farama-Foundation/Gymnasium";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];

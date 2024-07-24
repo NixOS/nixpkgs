@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  django,
 
-# optionals
-, bleach
-, docutils
-, markdown
-, pygments
-, python-creole
-, smartypants
-, textile
+  # optionals
+  bleach,
+  docutils,
+  markdown,
+  pygments,
+  python-creole,
+  smartypants,
+  textile,
 
-# tests
-, pytest-django
-, pytestCheckHook
+  # tests
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     sed -i "/--cov/d" pyproject.toml
   '';
 
-  buildInputs = [
-    django
-  ];
+  buildInputs = [ django ];
 
   passthru.optional-dependencies = {
     all_filter_dependencies = [
@@ -52,9 +51,7 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "django_markup"
-  ];
+  pythonImportsCheck = [ "django_markup" ];
 
   nativeCheckInputs = [
     pytest-django
@@ -64,7 +61,7 @@ buildPythonPackage rec {
   env.DJANGO_SETTINGS_MODULE = "django_markup.tests";
 
   meta = with lib; {
-    description = "Generic Django application to convert text with specific markup to html.";
+    description = "Generic Django application to convert text with specific markup to html";
     homepage = "https://github.com/bartTC/django-markup";
     changelog = "https://github.com/bartTC/django-markup/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;

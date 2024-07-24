@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, azure-core
-, cryptography
-, msal
-, msal-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  azure-core,
+  cryptography,
+  msal,
+  msal-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-identity";
-  version = "1.15.0";
+  version = "1.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TCj8JGt/kmVhDrUmHWWTEYPQGaI9Sw6ZNX+ssubCJ8g=";
+    hash = "sha256-oRaPIjstf6OWg2K3iv/RV6Hzdy8xCozc6IPMUVxsiZg=";
   };
 
   propagatedBuildInputs = [
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     msal-extensions
   ];
 
-  pythonImportsCheck = [
-    "azure.identity"
-  ];
+  pythonImportsCheck = [ "azure.identity" ];
 
   # Requires checkout from mono-repo and a mock account:
   # https://github.com/Azure/azure-sdk-for-python/blob/master/sdk/identity/tests.yml

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, plumbum
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  plumbum,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,17 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-BvXEXZlVbOmKBwnSBCDksUkbT7JPcMX48KZe/Gd5Y8Q=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    plumbum
-  ];
+  dependencies = [ plumbum ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export PYTHONPATH=$(pwd)/tests:$PYTHONPATH
@@ -62,9 +57,7 @@ buildPythonPackage rec {
     "tests/test_magic.py"
   ];
 
-  pythonImportsCheck = [
-    "rpyc"
-  ];
+  pythonImportsCheck = [ "rpyc" ];
 
   doCheck = !stdenv.isDarwin;
 

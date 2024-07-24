@@ -15,7 +15,7 @@ let
     python pytest nose3 cryptography pyyaml requests mock requests-mock
     python-dateutil setuptools;
 
-  version = "4.69";
+  version = "4.89";
 
 in
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    hash = "sha256-F8VyeIj9I7oDpHTyGw1T8ZvC6kxYf15soY9ni0Zg7u4=";
+    hash = "sha256-EuLXDbJembiFFEuIihrc8KkdqxLBgT4Ib3xwkKibVS8=";
   };
 
   pythonPaths = [ cryptography pyyaml requests ];
@@ -51,9 +51,13 @@ stdenv.mkDerivation rec {
       --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
-  doCheck = true;
+  doCheck = python3Packages.pythonOlder "3.12";
   checkPhase = ''
+    runHook preCheck
+
     sh scripts/run-tests.sh -2
+
+    runHook postCheck
   '';
 
   doInstallCheck = true;

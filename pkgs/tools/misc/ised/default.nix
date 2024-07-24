@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A numeric sequence editor";
+    description = "Numeric sequence editor";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = with lib.platforms; linux;
     license = lib.licenses.gpl3Plus;

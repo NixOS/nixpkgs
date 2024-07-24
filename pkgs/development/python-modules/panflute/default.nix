@@ -1,12 +1,13 @@
-{ lib
-, fetchPypi
-, click
-, pyyaml
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  click,
+  pyyaml,
+  buildPythonPackage,
+  pythonOlder,
 }:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   pname = "panflute";
   version = "2.3.1";
   format = "setuptools";
@@ -23,9 +24,7 @@ buildPythonPackage rec{
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "panflute"
-  ];
+  pythonImportsCheck = [ "panflute" ];
 
   meta = with lib; {
     description = "Pythonic alternative to John MacFarlane's pandocfilters, with extra helper functions";

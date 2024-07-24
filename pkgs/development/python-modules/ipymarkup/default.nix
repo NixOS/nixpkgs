@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, intervaltree
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  intervaltree,
 }:
 
 buildPythonPackage rec {

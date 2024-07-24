@@ -1,29 +1,29 @@
-{ lib
-, accelerate
-, aiohttp
-, buildPythonPackage
-, fastapi
-, fetchFromGitHub
-, flask
-, numpy
-, pg8000
-, pillow
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, redis
-, requests
-, sentence-transformers
-, setuptools
-, sqlalchemy
-, sqlitedict
-, tenacity
-, tiktoken
-, torch
-, transformers
-, uvicorn
-, xxhash
+{
+  lib,
+  accelerate,
+  aiohttp,
+  buildPythonPackage,
+  fastapi,
+  fetchFromGitHub,
+  flask,
+  numpy,
+  pg8000,
+  pillow,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  requests,
+  sentence-transformers,
+  setuptools,
+  sqlalchemy,
+  sqlitedict,
+  tenacity,
+  tiktoken,
+  torch,
+  transformers,
+  uvicorn,
+  xxhash,
 }:
 
 buildPythonPackage rec {
@@ -42,12 +42,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonRelaxDeps = [
-    "pydantic"
-  ];
+  pythonRelaxDeps = [ "pydantic" ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -77,9 +74,7 @@ buildPythonPackage rec {
       fastapi
       uvicorn
     ];
-    diffusers = [
-      pillow
-    ];
+    diffusers = [ pillow ];
     gcp = [
       pg8000
       # cloud-sql-python-connector
@@ -116,9 +111,7 @@ buildPythonPackage rec {
     "test_timing"
   ];
 
-  pythonImportsCheck = [
-    "manifest"
-  ];
+  pythonImportsCheck = [ "manifest" ];
 
   meta = with lib; {
     description = "Manifest for Prompting Foundation Models";

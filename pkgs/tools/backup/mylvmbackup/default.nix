@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.lenzg.net/mylvmbackup/";
-    description = "a tool for quickly creating full physical backups of a MySQL server's data files";
+    description = "Tool for quickly creating full physical backups of a MySQL server's data files";
     mainProgram = "mylvmbackup";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ ryantm ];

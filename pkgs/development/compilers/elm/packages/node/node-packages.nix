@@ -9283,13 +9283,13 @@ let
         sha512 = "y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==";
       };
     };
-    "node-watch-0.5.5" = {
+    "node-watch-0.7.4" = {
       name = "node-watch";
       packageName = "node-watch";
-      version = "0.5.5";
+      version = "0.7.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/node-watch/-/node-watch-0.5.5.tgz";
-        sha512 = "z9xN2ibI6P0UylFadN7oMcIMsoTeCENC0rZyRM5MVK9AqzSPx+uGqKG6KMPeC/laOV4wOGZq/GH0PTstRNSqOA==";
+        url = "https://registry.npmjs.org/node-watch/-/node-watch-0.7.4.tgz";
+        sha512 = "RinNxoz4W1cep1b928fuFhvAQ5ag/+1UlMDV7rbyGthBIgsiEouS4kvRayvvboxii4m8eolKOIBo3OjDqbc+uQ==";
       };
     };
     "nopt-1.0.10" = {
@@ -14795,7 +14795,7 @@ in
       sources."minimist-1.2.0"
       sources."ms-2.0.0"
       sources."negotiator-0.6.3"
-      sources."node-watch-0.5.5"
+      sources."node-watch-0.7.4"
       sources."oauth-sign-0.9.0"
       sources."on-finished-2.3.0"
       sources."opn-5.4.0"

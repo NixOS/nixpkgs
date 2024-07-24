@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, attrs
-, click
-, colorama
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchFromGitHub,
+  attrs,
+  click,
+  colorama,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

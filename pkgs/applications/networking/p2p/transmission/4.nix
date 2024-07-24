@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch2
 , cmake
 , pkg-config
 , python3
@@ -26,7 +27,7 @@
 , enableGTK3 ? false
 , gtkmm3
 , xorg
-, wrapGAppsHook
+, wrapGAppsHook3
 , enableQt5 ? false
 , enableQt6 ? false
 , qt5
@@ -59,15 +60,29 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  version = "4.0.5";
+  version = "4.0.6";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
     rev = finalAttrs.version;
-    hash = "sha256-gd1LGAhMuSyC/19wxkoE2mqVozjGPfupIPGojKY0Hn4=";
+    hash = "sha256-KBXvBFgrJ3njIoXrxHbHHLsiocwfd7Eba/GNI8uZA38=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/transmission/transmission/commit/febfe49ca3ecab1a7142ecb34012c1f0b2bcdee8.patch?full_index=1";
+      hash = "sha256-Ge0+AXf/ilfMieGBAdvvImY7JOb0gGIdeKprC37AROs=";
+      excludes = [
+        # The submodule that we don't use (we use our miniupnp)
+        "third-party/miniupnp"
+        # Hunk fails for this one, but we don't care because we don't rely upon
+        # xcode definitions even for the Darwin build.
+        "Transmission.xcodeproj/project.pbxproj"
+      ];
+    })
+  ];
 
   outputs = [ "out" "apparmor" ];
 
@@ -105,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3
   ]
-  ++ optionals enableGTK3 [ wrapGAppsHook ]
+  ++ optionals enableGTK3 [ wrapGAppsHook3 ]
   ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
   ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ]
   ;
@@ -162,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A fast, easy and free BitTorrent client";
+    description = "Fast, easy and free BitTorrent client";
     mainProgram = if (enableQt5 || enableQt6) then "transmission-qt" else if enableGTK3 then "transmission-gtk" else "transmission-cli";
     longDescription = ''
       Transmission is a BitTorrent client which features a simple interface

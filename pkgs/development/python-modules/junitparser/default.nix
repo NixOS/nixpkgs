@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, glibcLocales
-, lxml
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  glibcLocales,
+  lxml,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ future ];
 
-  nativeCheckInputs = [ unittestCheckHook lxml glibcLocales ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    lxml
+    glibcLocales
+  ];
 
   unittestFlagsArray = [ "-v" ];
 

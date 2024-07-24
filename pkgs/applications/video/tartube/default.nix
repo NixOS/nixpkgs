@@ -6,7 +6,7 @@
 , libnotify
 , pango
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , youtube-dl
 , glib
 , ffmpeg
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   strictDeps = false;
@@ -69,7 +69,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A GUI front-end for youtube-dl";
+    description = "GUI front-end for youtube-dl";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mkg20001 luc65r ];

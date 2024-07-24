@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, matplotlib
-, pydicom
-, python-dateutil
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  matplotlib,
+  pydicom,
+  python-dateutil,
+  setuptools,
 }:
 
 let
@@ -61,9 +62,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "deid"
-  ];
+  pythonImportsCheck = [ "deid" ];
 
   meta = with lib; {
     description = "Best-effort anonymization for medical images";

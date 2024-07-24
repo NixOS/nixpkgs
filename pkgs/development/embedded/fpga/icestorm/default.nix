@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = "https://github.com/YosysHQ/icestorm/";
     license     = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ shell thoughtpolice emily ];
+    maintainers = with lib.maintainers; [ shell thoughtpolice ];
     platforms   = lib.platforms.all;
   };
 }

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "templ";
-  version = "0.2.663";
+  version = "0.2.747";
 
   src = fetchFromGitHub {
     owner = "a-h";
     repo = "templ";
     rev = "v${version}";
-    hash = "sha256-TU8QG6OmUzSNDAX9W0Ntmz5cucLqVQeTskfnJbm/YM0=";
+    hash = "sha256-XFktmKFVN1/1Y57ZoUTVKDgEk38491N92orgejFLnMA=";
   };
 
-  vendorHash = "sha256-Upd5Wq4ajsyOMDiAWS2g2iNO1sm1XJc43AFQLIo5eDM=";
+  vendorHash = "sha256-p2xuyy11N1nGjz5OhLIy04Kgzz90k3s0+09qi6hbjEc=";
 
   subPackages = [ "cmd/templ" ];
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   ];
 
   meta = {
-    description = "A language for writing HTML user interfaces in Go";
+    description = "Language for writing HTML user interfaces in Go";
     homepage = "https://github.com/a-h/templ";
     license = lib.licenses.mit;
     mainProgram = "templ";

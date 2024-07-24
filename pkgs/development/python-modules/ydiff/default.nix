@@ -1,15 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi, docutils, pygments
-, gitMinimal, mercurial, subversion, patchutils, less
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pygments,
+  gitMinimal,
+  mercurial,
+  subversion,
+  patchutils,
+  less,
 }:
 
 buildPythonPackage rec {
   pname = "ydiff";
-  version = "1.2";
+  version = "1.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f5430577ecd30974d766ee9b8333e06dc76a947b4aae36d39612a0787865a121";
+    hash = "sha256-ii6EWI7zHT5SVwD6lksfmqth8MnEYoHgU0GlbgHc17g=";
   };
 
   patchPhase = ''
@@ -26,11 +34,11 @@ buildPythonPackage rec {
     patchShebangs tests/*.sh
   '';
 
-  nativeCheckInputs = [ docutils pygments ];
+  nativeCheckInputs = [ pygments ];
 
   checkPhase = ''
     runHook preCheck
-    make doc-check reg # We don't want the linter or coverage check.
+    make reg # We don't want the linter or coverage check.
     runHook postCheck
   '';
 

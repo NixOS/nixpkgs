@@ -2,18 +2,17 @@
   lib,
   python3,
   fetchFromGitHub,
-  fetchpatch,
   qt6,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nanovna-saver";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "NanoVNA-Saver";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-lL6n3hcsIbLmrRKPi/ckWW2XUAtmBqvMSplkWOF4VKQ=";
+    sha256 = "sha256-fAVsjknhLhsrGdHu2Q6JWLoFoxZoc+wDCNja+ySCsR4=";
   };
 
    nativeBuildInputs = [

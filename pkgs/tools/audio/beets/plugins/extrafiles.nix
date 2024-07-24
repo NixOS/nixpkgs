@@ -30,8 +30,10 @@ python3Packages.buildPythonApplication {
 
   meta = {
     homepage = "https://github.com/Holzhaus/beets-extrafiles";
-    description = "A plugin for beets that copies additional files and directories during the import process";
+    description = "Plugin for beets that copies additional files and directories during the import process";
     license = lib.licenses.mit;
     inherit (beets.meta) platforms;
+    # Upstream hasn't had commits since 2020, build is broken since beets 2.0.0
+    broken = true;
   };
 }

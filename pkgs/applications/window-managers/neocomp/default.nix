@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     license         = licenses.gpl3Only;
     maintainers     = with maintainers; [ twey moni ];
     platforms       = platforms.linux;
-    description     = "A fork of Compton, a compositor for X11";
+    description     = "Fork of Compton, a compositor for X11";
     longDescription = ''
       NeoComp is a (hopefully) fast and (hopefully) simple compositor
       for X11, focused on delivering frames from the window to the

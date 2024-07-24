@@ -71,7 +71,7 @@ let
   ''));
 
   testBazel = bazelTest {
-    name = "bazel-test-builtin-rules";
+    name = "${bazel.pname}-test-builtin-rules";
     inherit workspaceDir;
     bazelPkg = bazel;
     bazelScript = ''

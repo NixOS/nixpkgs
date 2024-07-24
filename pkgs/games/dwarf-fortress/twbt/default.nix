@@ -86,7 +86,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   meta = {
-    description = "A plugin for Dwarf Fortress / DFHack that improves various aspects of the game interface";
+    description = "Plugin for Dwarf Fortress / DFHack that improves various aspects of the game interface";
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;
     platforms = platforms.linux;

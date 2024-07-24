@@ -1,12 +1,13 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
-, color-theme
+{
+  lib,
+  color-theme,
+  fetchFromGitHub,
+  melpaBuild,
 }:
 
-trivialBuild {
+melpaBuild {
   pname = "color-theme-solarized";
-  version = "0.pre+unstable=2017-10-24";
+  version = "0-unstable-2017-10-24";
 
   src = fetchFromGitHub {
     owner = "sellout";
@@ -17,10 +18,10 @@ trivialBuild {
 
   packageRequires = [ color-theme ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://ethanschoonover.com/solarized";
     description = "Precision colors for machines and people; Emacs implementation";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuelrivas AndersonTorres ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }

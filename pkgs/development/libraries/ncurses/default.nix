@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , buildPackages
+, updateAutotoolsGnuConfigScriptsHook
 , ncurses
 , pkg-config
 , abiVersion ? "6"
@@ -13,11 +14,11 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "6.4";
+  version = "6.4.20221231";
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz";
+    url = "https://invisible-island.net/archives/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz";
     hash = "sha256-aTEoPZrIfFBz8wtikMTHXyFjK7T8NgOsgQCBK+0kgVk=";
   };
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
-  ] ++ lib.optionals (stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isStatic) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isUnix && enableStatic) [
       # For static binaries, the point is to have a standalone binary with
       # minimum dependencies. So here we make sure that binaries using this
       # package won't depend on a terminfo database located in the Nix store.
@@ -51,7 +52,16 @@ stdenv.mkDerivation (finalAttrs: {
       ]}"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "--with-build-cc=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
-  ];
+  ] ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") [
+      # lld17+ passes `--no-undefined-version` by default and makes this a hard
+      # error; ncurses' `resulting.map` version script references symbols that
+      # aren't present.
+      #
+      # See: https://lists.gnu.org/archive/html/bug-ncurses/2024-05/msg00086.html
+      #
+      # For now we allow this with `--undefined-version`:
+      "LDFLAGS=-Wl,--undefined-version"
+  ]);
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
@@ -59,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
     pkg-config
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
    # for `tic`, build already depends on for build `cc` so it's weird the build doesn't just build `tic`.

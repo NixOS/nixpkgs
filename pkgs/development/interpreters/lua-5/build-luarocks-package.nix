@@ -2,7 +2,7 @@
 { lib
 , lua
 , wrapLua
-, luarocks
+, luarocks_bootstrap
 , writeTextFile
 
 # Whether the derivation provides a lua module or not.
@@ -78,7 +78,7 @@ let
 
   luarocksDrv = luaLib.toLuaModule ( lua.stdenv.mkDerivation (self: attrs // {
 
-  name = namePrefix + pname + "-" + self.version;
+  name = namePrefix + self.pname + "-" + self.version;
   inherit rockspecVersion;
 
   __structuredAttrs = true;
@@ -89,8 +89,9 @@ let
   generatedRockspecFilename = "./${self.pname}-${self.rockspecVersion}.rockspec";
 
   nativeBuildInputs = [
+    lua  # for lua.h
     wrapLua
-    luarocks
+    luarocks_bootstrap
   ];
 
   inherit doCheck extraConfig rockspecFilename knownRockspec externalDeps nativeCheckInputs;
@@ -98,7 +99,7 @@ let
   buildInputs = let
     # example externalDeps': [ { name = "CRYPTO"; dep = pkgs.openssl; } ]
     externalDeps' = lib.filter (dep: !lib.isDerivation dep) self.externalDeps;
-    in [ lua.pkgs.luarocks ]
+    in [ luarocks_bootstrap ]
       ++ buildInputs
       ++ lib.optionals self.doCheck ([ luarocksCheckHook ] ++ self.nativeCheckInputs)
       ++ (map (d: d.dep) externalDeps')
@@ -113,7 +114,7 @@ let
   rocksSubdir = "${self.pname}-${self.version}-rocks";
 
   configFile = writeTextFile {
-    name = pname + "-luarocks-config.lua";
+    name = self.pname + "-luarocks-config.lua";
     text = self.luarocks_content;
   };
 
@@ -131,6 +132,8 @@ let
 
     generatedConfig = luaLib.generateLuarocksConfig {
       externalDeps = lib.unique (self.externalDeps ++ externalDepsGenerated);
+      local_cache = "";
+
       # Filter out the lua derivation itself from the Lua module dependency
       # closure, as it doesn't have a rock tree :)
       # luaLib.hasLuaModule
@@ -167,6 +170,7 @@ let
   buildPhase = ''
     runHook preBuild
 
+    source ${lua}/nix-support/utils.sh
     nix_debug "Using LUAROCKS_CONFIG=$LUAROCKS_CONFIG"
 
     LUAROCKS_EXTRA_ARGS=""

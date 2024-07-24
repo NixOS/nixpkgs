@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
     # https://gcc.gnu.org/PR108854
     lib.optionals (stdenv.cc.isGNU && stdenv.isx86_32) [ "-O2" ];
 
+  # Fix undefined reference errors with version script under LLVM.
+  NIX_LDFLAGS = lib.optionalString (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") "--undefined-version";
+
   # Disable failing test on musl
   # test/conformance/conformance_resumable_tasks.cpp:37:24: error: ‘suspend’ is not a member of ‘tbb::v1::task’; did you mean ‘tbb::detail::r1::suspend’?
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''

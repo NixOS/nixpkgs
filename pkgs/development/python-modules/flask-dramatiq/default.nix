@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitLab
-, poetry-core
-, dramatiq
-, flask
-, requests
-, pytestCheckHook
-, flask-migrate
-, periodiq
-, postgresql
-, postgresqlTestHook
-, psycopg2
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitLab,
+  poetry-core,
+  dramatiq,
+  flask,
+  requests,
+  pytestCheckHook,
+  flask-migrate,
+  periodiq,
+  postgresql,
+  postgresqlTestHook,
+  psycopg2,
 }:
 
 buildPythonPackage {
@@ -40,13 +41,9 @@ buildPythonPackage {
       -e 's:--cov-report=term-missing::'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    dramatiq
-  ];
+  propagatedBuildInputs = [ dramatiq ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -66,7 +63,11 @@ buildPythonPackage {
     python3 ./example.py db upgrade
   '';
 
-  pytestFlagsArray = [ "-x" "tests/func/" "tests/unit"];
+  pytestFlagsArray = [
+    "-x"
+    "tests/func/"
+    "tests/unit"
+  ];
 
   pythonImportsCheck = [ "flask_dramatiq" ];
 

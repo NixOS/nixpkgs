@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nulloy";
-  version = "0.9.8.7";
+  version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "nulloy";
     repo = "nulloy";
     rev = version;
-    hash = "sha256-s8DzL7pp3hmD9k8pVqmk7WGq3zZ1tLF9C+jxcRtJOXA=";
+    hash = "sha256-vFg789vBV7ks+4YiWWl3u0/kQjzpAiX8dMfXU0hynDM=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Music player with a waveform progress bar";
     homepage = "https://nulloy.com";
+    changelog = "https://github.com/nulloy/nulloy/blob/${src.rev}/ChangeLog";
     license = licenses.gpl3Only;
     mainProgram = "nulloy";
     maintainers = with maintainers; [ aleksana ];

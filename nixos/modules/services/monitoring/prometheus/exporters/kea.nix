@@ -5,10 +5,14 @@
 , ...
 }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.kea;
+  inherit (lib)
+    mkOption
+    types
+    mkRenamedOptionModule
+    literalExpression
+    ;
 in {
   imports = [
     (mkRenamedOptionModule [ "controlSocketPaths" ] [ "targets" ])

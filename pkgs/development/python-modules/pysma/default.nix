@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, attrs
-, buildPythonPackage
-, fetchPypi
-, jmespath
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  attrs,
+  buildPythonPackage,
+  fetchPypi,
+  jmespath,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # pypi does not contain tests and GitHub archive not available
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pysma"
-  ];
+  pythonImportsCheck = [ "pysma" ];
 
   meta = with lib; {
     description = "Python library for interacting with SMA Solar's WebConnect";

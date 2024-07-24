@@ -57,6 +57,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}: {
           };
 
           subnet4 = [ {
+            id = 1;
             subnet = "10.0.0.0/29";
             pools = [ {
               pool = "10.0.0.3 - 10.0.0.3";

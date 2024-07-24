@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,7 @@ buildPythonPackage rec {
     sha256 = "bf929455a2f7cc1e275b331de73d983587138a8d9179574988ba05fa152d3ccf";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # no tests on PyPI, no tags on GitLab
   doCheck = false;

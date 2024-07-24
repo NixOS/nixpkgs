@@ -92,11 +92,11 @@ in
 
     environment.etc."X11/xkb".source = xcfg.xkb.dir;
 
-    fonts.packages = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
+    fonts.packages = [ pkgs.dejavu_fonts ];
 
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
-    services.xserver.libinput.enable = mkDefault true;
+    services.libinput.enable = mkDefault true;
 
     services.dbus.packages = [ e.efl ];
 

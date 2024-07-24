@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-testinfra";
-  version = "10.1.0";
+  version = "10.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-93Qzm5R3Ws3zqMSjeTqOrS6N/HD/NLd4vhWquhQPoZ4=";
+    hash = "sha256-qHbxRToBtY2U2dk23VA0TCwBrHiAorQdFb3yM67Zzx8=";
   };
 
   build-system = [ setuptools-scm ];

@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An engine for iD software's Quake";
+    description = "Engine for iD software's Quake";
     homepage = "https://quakespasm.sourceforge.net/";
     longDescription = ''
       QuakeSpasm is a modern, cross-platform Quake 1 engine based on FitzQuake.

@@ -2,6 +2,7 @@
 let
   inherit (pkgs) lib;
   inherit (lib) hasPrefix removePrefix;
+  fs = lib.fileset;
 
   common = import ./common.nix;
 
@@ -22,6 +23,7 @@ let
       { name = "fileset"; description = "file set functions"; }
       { name = "sources"; description = "source filtering functions"; }
       { name = "cli"; description = "command-line serialization functions"; }
+      { name = "generators"; description = "functions that create file formats from nix data structures"; }
       { name = "gvariant"; description = "GVariant formatted string serialization functions"; }
       { name = "customisation"; description = "Functions to customise (derivation-related) functions, derivatons, or attribute sets"; }
       { name = "meta"; description = "functions for derivation metadata"; }
@@ -67,8 +69,8 @@ let
       $epubPath
 
     echo "application/epub+zip" > mimetype
-    zip -0Xq "$out" mimetype
-    cd scratch && zip -Xr9D "$out" *
+    zip -0Xq -b "$TMPDIR" "$out" mimetype
+    cd scratch && zip -Xr9D -b "$TMPDIR" "$out" *
   '';
 
   # NB: This file describes the Nixpkgs manual, which happens to use module
@@ -99,19 +101,37 @@ in pkgs.stdenv.mkDerivation {
     nixos-render-docs
   ];
 
-  src = ./.;
+  src = fs.toSource {
+    root = ./.;
+    fileset = fs.unions [
+      (fs.fileFilter (file:
+        file.hasExt "md"
+        || file.hasExt "md.in"
+      ) ./.)
+      ./style.css
+      ./anchor-use.js
+      ./anchor.min.js
+      ./manpage-urls.json
+    ];
+  };
 
   postPatch = ''
     ln -s ${optionsDoc.optionsJSON}/share/doc/nixos/options.json ./config-options.json
   '';
 
+  pythonInterpreterTable = pkgs.callPackage ./doc-support/python-interpreter-table.nix {};
+
+  passAsFile = [ "pythonInterpreterTable" ];
+
   buildPhase = ''
+    substituteInPlace ./languages-frameworks/python.section.md --subst-var-by python-interpreter-table "$(<"$pythonInterpreterTablePath")"
+
     cat \
       ./functions/library.md.in \
       ${lib-docs}/index.md \
       > ./functions/library.md
     substitute ./manual.md.in ./manual.md \
-      --replace '@MANUAL_VERSION@' '${pkgs.lib.version}'
+      --replace-fail '@MANUAL_VERSION@' '${pkgs.lib.version}'
 
     mkdir -p out/media
 

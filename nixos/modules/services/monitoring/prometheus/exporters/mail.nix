@@ -1,9 +1,19 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.mail;
+  inherit (lib)
+    mkOption
+    types
+    mapAttrs'
+    nameValuePair
+    toLower
+    filterAttrs
+    escapeShellArg
+    literalExpression
+    mkIf
+    concatStringsSep
+    ;
 
   configFile = if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configFile);
 

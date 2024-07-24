@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   buildInputs = [ libXext libX11 libjpeg libpng giflib ];
 
   meta = {
-    description = "A minimal image viewer using raw XLib";
+    description = "Minimal image viewer using raw XLib";
     homepage = "https://www.johnhawthorn.com/meh/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

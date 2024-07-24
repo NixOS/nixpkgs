@@ -6,22 +6,23 @@
 , meson
 , ninja
 , vala
-, gtk3
+, gtk4
+, libadwaita
 , libgee
-, granite
+, granite7
 , polkit
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-polkit";
-  version = "1.0.5";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-sC+Ec8a/17EfHsSRKQflBlzv9XAFjUVhjX691gIVa2A=";
+    hash = "sha256-Hm4vEubj2VjObD2t7wBHGrjnp6Nza6Ze7AOcJ0n5Dmc=";
   };
 
   nativeBuildInputs = [
@@ -29,12 +30,13 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
     polkit
   ];

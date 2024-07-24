@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   desktopItems = [ "src/etc/wslview.desktop" ];
 
   meta = with lib; {
-    description = "A collection of utilities for Windows Subsystem for Linux";
+    description = "Collection of utilities for Windows Subsystem for Linux";
     homepage = "https://github.com/wslutilities/wslu";
     changelog = "https://github.com/wslutilities/wslu/releases/tag/v${version}";
     license = licenses.gpl3Plus;

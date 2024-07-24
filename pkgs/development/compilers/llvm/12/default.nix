@@ -1,7 +1,7 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake
+{ lowPrio, newScope, pkgs, lib, stdenv
 , preLibcCrossHeaders
-, substitute, substituteAll, fetchFromGitHub, fetchpatch
-, libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
+, substitute, substituteAll, fetchFromGitHub, fetchpatch, fetchurl
+, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -17,29 +17,36 @@
     then null
     else pkgs.bintools
 , darwin
-}:
+# Allows passthrough to packages via newScope. This makes it possible to
+# do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
+# an llvmPackages whose packages are overridden in an internally consistent way.
+, ...
+}@args:
 
 let
-  release_version = "12.0.1";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
-  version = "${release_version}${dash-candidate}"; # differentiating these (variables) is important for RCs
 
-  fetch = name: sha256: fetchurl {
-    url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-${version}/${name}-${release_version}${candidate}.src.tar.xz";
-    inherit sha256;
+  metadata = rec {
+    release_version = "12.0.1";
+    version = "${release_version}${dash-candidate}"; # differentiating these (variables) is important for RCs
+    inherit (import ../common/common-let.nix { inherit lib release_version; }) llvm_meta;
+    fetch = name: sha256: fetchurl {
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-${metadata.version}/${name}-${metadata.release_version}${candidate}.src.tar.xz";
+      inherit sha256;
+    };
+    clang-tools-extra_src = fetch "clang-tools-extra" "1r9a4fdz9ci58b5z2inwvm4z4cdp6scrivnaw05dggkxz7yrwrb5";
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "1r9a4fdz9ci58b5z2inwvm4z4cdp6scrivnaw05dggkxz7yrwrb5";
+  inherit (metadata) fetch;
 
-  inherit (import ../common/common-let.nix { inherit lib release_version; }) llvm_meta;
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch buildLlvmTools; });
+    callPackage = newScope (tools // args // metadata);
     mkExtraBuildCommands0 = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
-      ln -s "${cc.lib}/lib/clang/${release_version}/include" "$rsrc"
+      ln -s "${cc.lib}/lib/clang/${metadata.release_version}/include" "$rsrc"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
     '';
     mkExtraBuildCommands = cc: mkExtraBuildCommands0 cc + ''
@@ -56,10 +63,54 @@ let
     then tools.bintools
     else bootBintools;
 
-  in rec {
+  in {
 
-    libllvm = callPackage ./llvm {
-      inherit llvm_meta;
+    libllvm = callPackage ../common/llvm {
+      src = fetch "llvm" "1pzx9zrmd7r3481sbhwvkms68fwhffpp4mmz45dgrkjpyl2q96kx";
+      polly_src = fetch "polly" "1yfm9ixda4a2sx7ak5vswijx4ydk5lv1c1xh39xmd2kh299y4m12";
+      patches = [
+        # When cross-compiling we configure llvm-config-native with an approximation
+        # of the flags used for the normal LLVM build. To avoid the need for building
+        # a native libLLVM.so (which would fail) we force llvm-config to be linked
+        # statically against the necessary LLVM components always.
+        ../common/llvm/llvm-config-link-static.patch
+        # Fix llvm being miscompiled by some gccs. See llvm/llvm-project#49955
+        # Fix llvm being miscompiled by some gccs. See https://github.com/llvm/llvm-project/issues/49955
+        ./llvm/fix-llvm-issue-49955.patch
+
+        ./llvm/gnu-install-dirs.patch
+        # On older CPUs (e.g. Hydra/wendy) we'd be getting an error in this test.
+        (fetchpatch {
+          name = "uops-CMOV16rm-noreg.diff";
+          url = "https://github.com/llvm/llvm-project/commit/9e9f991ac033.diff";
+          sha256 = "sha256:12s8vr6ibri8b48h2z38f3afhwam10arfiqfy4yg37bmc054p5hi";
+          stripLen = 1;
+        })
+
+        # Fix musl build.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+          relative = "llvm";
+          hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
+        })
+
+        # Backport gcc-13 fixes with missing includes.
+        (fetchpatch {
+          name = "signals-gcc-13.patch";
+          url = "https://github.com/llvm/llvm-project/commit/ff1681ddb303223973653f7f5f3f3435b48a1983.patch";
+          hash = "sha256-CXwYxQezTq5vdmc8Yn88BUAEly6YZ5VEIA6X3y5NNOs=";
+          stripLen = 1;
+        })
+        (fetchpatch {
+          name = "base64-gcc-13.patch";
+          url = "https://github.com/llvm/llvm-project/commit/5e9be93566f39ee6cecd579401e453eccfbe81e5.patch";
+          hash = "sha256-PAwrVrvffPd7tphpwCkYiz+67szPRzRB2TXBvKfzQ7U=";
+          stripLen = 1;
+        })
+      ];
+      pollyPatches = [
+        ./llvm/gnu-install-dirs-polly.patch
+      ];
     };
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
@@ -74,10 +125,9 @@ let
         ./clang/gnu-install-dirs.patch
         (substituteAll {
           src = ../common/clang/clang-11-15-LLVMgold-path.patch;
-          libllvmLibdir = "${libllvm.lib}/lib";
+          libllvmLibdir = "${tools.libllvm.lib}/lib";
         })
       ];
-      inherit clang-tools-extra_src llvm_meta;
     };
 
     clang-unwrapped = tools.libclang;
@@ -98,6 +148,9 @@ let
     #   enableManpages = true;
     #   python3 = pkgs.python3;  # don't use python-boot
     # });
+
+    # Wrapper for standalone command line utilities
+    clang-tools = callPackage ../common/clang-tools { };
 
     # pick clang appropriate for package set we are targeting
     clang =
@@ -130,7 +183,6 @@ let
       patches = [
         ./lld/gnu-install-dirs.patch
       ];
-      inherit llvm_meta;
       inherit (libraries) libunwind;
     };
 
@@ -151,7 +203,6 @@ let
           resourceDirPatch
           ./lldb/gnu-install-dirs.patch
         ];
-      inherit llvm_meta;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -242,7 +293,7 @@ let
   });
 
   libraries = lib.makeExtensible (libraries: let
-    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
+    callPackage = newScope (libraries // buildLlvmTools // args // metadata);
   in {
 
     compiler-rt-libc = callPackage ../common/compiler-rt {
@@ -261,7 +312,6 @@ let
         ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
         ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
       ];
-      inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
@@ -283,7 +333,6 @@ let
         ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
         ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
       ];
-      inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
                else stdenv;
@@ -302,7 +351,7 @@ let
       src = fetchFromGitHub {
         owner = "llvm";
         repo = "llvm-project";
-        rev = "refs/tags/llvmorg-${version}";
+        rev = "refs/tags/llvmorg-${metadata.version}";
         sparseCheckout = [
           "libcxx"
           "libcxxabi"
@@ -315,19 +364,18 @@ let
       patches = [
         (substitute {
           src = ../common/libcxxabi/wasm.patch;
-          replacements = [
+          substitutions = [
             "--replace-fail" "/cmake/" "/llvm/cmake/"
           ];
         })
       ] ++ lib.optionals stdenv.hostPlatform.isMusl [
         (substitute {
           src = ../common/libcxx/libcxx-0001-musl-hacks.patch;
-          replacements = [
+          substitutions = [
             "--replace-fail" "/include/" "/libcxx/include/"
           ];
         })
       ];
-      inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
@@ -336,7 +384,6 @@ let
       patches = [
         ./libunwind/gnu-install-dirs.patch
       ];
-      inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
@@ -349,9 +396,8 @@ let
           hash = "sha256-UxIlAifXnexF/MaraPW0Ut6q+sf3e7y1fMdEv1q103A=";
         })
       ];
-      inherit llvm_meta targetLlvm;
     };
   });
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)
+in { inherit tools libraries; inherit (metadata) release_version; } // (noExtend libraries) // (noExtend tools)

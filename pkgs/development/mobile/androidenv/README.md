@@ -6,7 +6,7 @@
 4. Update the relevant argument defaults in `compose-android-packages.nix`
 
 # How to run tests
-You may need to make yourself familiar with [tests](https://nixos.org/manual/nixpkgs/stable/#var-meta-tests), and [Writing larger package tests](https://nixos.org/manual/nixpkgs/stable/#ssec-package-tests-writing) in the Manual, then run tests locally with:
+You may need to make yourself familiar with [package tests](../../../README.md#package-tests), and [Writing larger package tests](../../../README.md#writing-larger-package-tests), then run tests locally with:
 
 ```shell
 $ export NIXPKGS_ALLOW_UNFREE=1

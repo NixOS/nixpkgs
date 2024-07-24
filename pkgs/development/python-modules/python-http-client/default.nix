@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     "test_daterange"
   ];
 
-  pythonImportsCheck = [
-    "python_http_client"
-  ];
+  pythonImportsCheck = [ "python_http_client" ];
 
   meta = with lib; {
     description = "Python HTTP library to call APIs";

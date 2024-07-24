@@ -1,9 +1,13 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.pihole;
+  inherit (lib)
+    mkOption
+    types
+    mkRemovedOptionModule
+    optionalString
+    ;
 in
 {
   imports = [

@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isLinux [ libxcb ];
 
   meta = with lib; {
-    description = "A command-line pager for JSON data";
+    description = "Command-line pager for JSON data";
     mainProgram = "jless";
     homepage = "https://jless.io";
     changelog = "https://github.com/PaulJuliusMartinez/jless/blob/${src.rev}/CHANGELOG.md";

@@ -2,13 +2,14 @@
 , buildGoModule
 , fetchFromGitHub
 , nixosTests
+, stdenv
 , testers
 , telegraf
 }:
 
 buildGoModule rec {
   pname = "telegraf";
-  version = "1.30.1";
+  version = "1.31.2";
 
   subPackages = [ "cmd/telegraf" ];
 
@@ -16,10 +17,10 @@ buildGoModule rec {
     owner = "influxdata";
     repo = "telegraf";
     rev = "v${version}";
-    hash = "sha256-cBEPNPeezh4X817Iq8Bo41/KX58I9HL2GA0lAU7+ISE=";
+    hash = "sha256-LTo9wWCqjLoA9wjCXhZ6EjvRR/Xp8ByHvq/ytgS8sCo=";
   };
 
-  vendorHash = "sha256-jTw5YLGgHs3uvihI6KPZg+cNrnNixUznJsH0CtIVe6I=";
+  vendorHash = "sha256-spXS1vNRgXBO2xZIyVgsfO5V+SYK8dC6YDA/dGOYt6g=";
   proxyVendor = true;
 
   ldflags = [
@@ -30,14 +31,15 @@ buildGoModule rec {
   ];
 
   passthru.tests = {
-    inherit (nixosTests) telegraf;
     version = testers.testVersion {
       package = telegraf;
     };
+  } // lib.optionalAttrs stdenv.isLinux {
+    inherit (nixosTests) telegraf;
   };
 
   meta = with lib; {
-    description = "The plugin-driven server agent for collecting & reporting metrics";
+    description = "Plugin-driven server agent for collecting & reporting metrics";
     mainProgram = "telegraf";
     homepage = "https://www.influxdata.com/time-series-platform/telegraf/";
     changelog = "https://github.com/influxdata/telegraf/blob/${src.rev}/CHANGELOG.md";

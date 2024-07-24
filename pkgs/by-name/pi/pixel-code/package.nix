@@ -1,7 +1,7 @@
 { lib, stdenvNoCC, fetchzip }:
 
 stdenvNoCC.mkDerivation rec {
-  name = "pixel-code";
+  pname = "pixel-code";
   version = "2.2";
 
   src = fetchzip {
@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/qwerasd205/PixelCode";
-    description = "A pixel font designed to actually be good for programming";
+    description = "Pixel font designed to actually be good for programming";
     license = licenses.ofl;
     maintainers = with maintainers; [ mattpolzin ];
   };

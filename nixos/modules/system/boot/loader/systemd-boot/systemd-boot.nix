@@ -7,8 +7,24 @@ let
 
   efi = config.boot.loader.efi;
 
+  # We check the source code in a derivation that does not depend on the
+  # system configuration so that most users don't have to redo the check and require
+  # the necessary dependencies.
+  checkedSource = pkgs.runCommand "systemd-boot" {
+    preferLocalBuild = true;
+  } ''
+    install -m755 -D ${./systemd-boot-builder.py} $out
+    ${lib.getExe pkgs.buildPackages.mypy} \
+      --no-implicit-optional \
+      --disallow-untyped-calls \
+      --disallow-untyped-defs \
+      $out
+  '';
+
   systemdBootBuilder = pkgs.substituteAll rec {
-    src = ./systemd-boot-builder.py;
+    name = "systemd-boot";
+
+    src = checkedSource;
 
     isExecutable = true;
 
@@ -66,19 +82,9 @@ let
     '';
   };
 
-  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" { } ''
-    mkdir -p $out/bin
-    install -m755 ${systemdBootBuilder} $out/bin/systemd-boot-builder
-    ${lib.getExe pkgs.buildPackages.mypy} \
-      --no-implicit-optional \
-      --disallow-untyped-calls \
-      --disallow-untyped-defs \
-      $out/bin/systemd-boot-builder
-  '';
-
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
-    ${checkedSystemdBootBuilder}/bin/systemd-boot-builder "$@"
+    ${systemdBootBuilder} "$@"
     ${cfg.extraInstallCommands}
   '';
 in {
@@ -319,15 +325,15 @@ in {
     assertions = [
       {
         assertion = (hasPrefix "/" efi.efiSysMountPoint);
-        message = "The ESP mount point '${efi.efiSysMountPoint}' must be an absolute path";
+        message = "The ESP mount point '${toString efi.efiSysMountPoint}' must be an absolute path";
       }
       {
         assertion = cfg.xbootldrMountPoint == null || (hasPrefix "/" cfg.xbootldrMountPoint);
-        message = "The XBOOTLDR mount point '${cfg.xbootldrMountPoint}' must be an absolute path";
+        message = "The XBOOTLDR mount point '${toString cfg.xbootldrMountPoint}' must be an absolute path";
       }
       {
         assertion = cfg.xbootldrMountPoint != efi.efiSysMountPoint;
-        message = "The XBOOTLDR mount point '${cfg.xbootldrMountPoint}' cannot be the same as the ESP mount point '${efi.efiSysMountPoint}'";
+        message = "The XBOOTLDR mount point '${toString cfg.xbootldrMountPoint}' cannot be the same as the ESP mount point '${toString efi.efiSysMountPoint}'";
       }
       {
         assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;

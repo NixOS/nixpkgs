@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "gitlab-container-registry";
-  version = "3.92.0";
+  version = "4.6.0";
   rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
@@ -10,16 +10,15 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    hash = "sha256-NHpqfqv3RCbWZilhXLGnQTN+ytzifAix6mcLk5Bw124=";
+    hash = "sha256-rFojpy8xUXhlzBFBYFW3+AjDI5efaNWh+Vi3wsqVebI=";
   };
 
-  vendorHash = "sha256-KZWdM8Q8ipsgm7OoLyOuHo+4Vg2Nve+yZtTSUDgjOW4=";
-
-  patches = [
-    ./Disable-inmemory-storage-driver-test.patch
-  ];
+  vendorHash = "sha256-xhy0WSqdlri5bckIeS6CSeyZGf3pBNpLElkvsMm6N48=";
 
   postPatch = ''
+    # Disable flaky inmemory storage driver test
+    rm registry/storage/driver/inmemory/driver_test.go
+
     substituteInPlace health/checks/checks_test.go \
       --replace \
         'func TestHTTPChecker(t *testing.T) {' \
@@ -27,7 +26,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The GitLab Docker toolset to pack, ship, store, and deliver content";
+    description = "GitLab Docker toolset to pack, ship, store, and deliver content";
     license = licenses.asl20;
     maintainers = with maintainers; [ yayayayaka xanderio ];
     platforms = platforms.unix;

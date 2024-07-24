@@ -3,10 +3,9 @@
   buildPythonPackage,
   fetchpatch,
   fetchPypi,
+  nose,
   parameterized,
   pytestCheckHook,
-  pynose,
-  python,
   pythonOlder,
   setuptools,
 }:
@@ -39,9 +38,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
+    nose
     parameterized
-    pynose
     pytestCheckHook
   ];
 
@@ -57,7 +59,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A drop-in replacement for pprint that's actually pretty";
+    description = "Drop-in replacement for pprint that's actually pretty";
     homepage = "https://github.com/wolever/pprintpp";
     changelog = "https://github.com/wolever/pprintpp/blob/${version}/CHANGELOG.txt";
     license = licenses.bsd2;

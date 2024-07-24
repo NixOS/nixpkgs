@@ -1,7 +1,6 @@
 { lib
 , callPackage
 , runCommand
-, fetchFromGitHub
 , fetchgit
 , fontconfig
 , git

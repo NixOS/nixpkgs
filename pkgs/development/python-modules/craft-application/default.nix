@@ -1,40 +1,42 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  git,
   craft-archives,
   craft-cli,
   craft-grammar,
   craft-parts,
   craft-providers,
+  fetchFromGitHub,
+  git,
+  hypothesis,
+  nix-update-script,
   pydantic-yaml-0,
-  pyyaml,
-  setuptools,
-  setuptools-scm,
-  snap-helpers,
-  stdenv,
-  pygit2,
   pyfakefs,
-  pytestCheckHook,
+  pygit2,
   pytest-check,
   pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
   responses,
-  hypothesis,
+  setuptools-scm,
+  setuptools,
+  snap-helpers,
 }:
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "2.5.0";
-
+  version = "2.8.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-application";
     rev = "refs/tags/${version}";
-    hash = "sha256-66Ldo88DJ6v0+ekvDl++eDzhdn95yxq0SMdzQxTGl5k=";
+    hash = "sha256-COcZgl2XzPWknSKMUZgZBEMzkDdwK2PouIEuWKOP8dc=";
   };
 
   postPatch = ''
@@ -42,15 +44,15 @@ buildPythonPackage rec {
       --replace-fail "dev" "${version}"
 
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==69.4.0" "setuptools"
+      --replace-fail "setuptools==" "setuptools>="
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     craft-archives
     craft-cli
     craft-grammar
@@ -61,8 +63,6 @@ buildPythonPackage rec {
     pyyaml
     snap-helpers
   ];
-
-  pythonImportsCheck = [ "craft_application" ];
 
   nativeCheckInputs = [
     git
@@ -88,23 +88,27 @@ buildPythonPackage rec {
       --replace-fail "os_utils.OsRelease()" "os_utils.OsRelease(os_release_file='$HOME/os-release')"
   '';
 
+  pythonImportsCheck = [ "craft_application" ];
+
   pytestFlagsArray = [ "tests/unit" ];
 
-  disabledTests = [
-    "test_to_yaml_file"
-    # Tests expecting pytest-time
-    "test_monitor_builds_success"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # These tests have hardcoded "amd64" strings which fail on aarch64
-    "test_process_grammar_build_for"
-    "test_process_grammar_platform"
-    "test_process_grammar_default"
-  ];
+  disabledTests =
+    [
+      "test_to_yaml_file"
+      # Tests expecting pytest-time
+      "test_monitor_builds_success"
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      # These tests have hardcoded "amd64" strings which fail on aarch64
+      "test_process_grammar_build_for"
+      "test_process_grammar_platform"
+      "test_process_grammar_default"
+    ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "The basis for Canonical craft applications";
+    description = "Basis for Canonical craft applications";
     homepage = "https://github.com/canonical/craft-application";
     changelog = "https://github.com/canonical/craft-application/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;

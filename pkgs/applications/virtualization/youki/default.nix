@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-PKn448fOCnyMC42NtQnLt8kvZIBautsq4Fw/bRvwmpw=";
 
   meta = with lib; {
-    description = "A container runtime written in Rust";
+    description = "Container runtime written in Rust";
     homepage = "https://containers.github.io/youki/";
     changelog = "https://github.com/containers/youki/releases/tag/v${version}";
     license = licenses.asl20;

@@ -26,7 +26,7 @@ mkDerivation {
     base bytestring prettyprinter tasty-bench text text-builder
   ];
   homepage = "https://github.com/hasura/graphql-parser-hs";
-  description = "A native Haskell GraphQL parser";
+  description = "Native Haskell GraphQL parser";
   license = lib.licenses.bsd3;
   maintainers = with lib.maintainers; [ lassulus ];
 

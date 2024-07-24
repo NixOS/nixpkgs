@@ -9,11 +9,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "geoserver";
-  version = "2.25.0";
+  version = "2.25.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/geoserver/GeoServer/${version}/geoserver-${version}-bin.zip";
-    sha256 = "sha256-maWDRRIo5Mqjb6K1NWFplmQwvJ9fLXGnelZcslwp4Oo=";
+    sha256 = "sha256-tIXa1HECBTgJ1XiAo/hjo2AfbiyHyIsewfZu/k513iE=";
   };
 
   patches = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: rec {
           '';
         });
       tests.geoserver = nixosTests.geoserver;
-      passthru.updateScript = ./update.sh;
+      updateScript = ./update.sh;
     };
 
   meta = with lib; {

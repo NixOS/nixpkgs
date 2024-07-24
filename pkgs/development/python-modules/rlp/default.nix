@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, setuptools
-, buildPythonPackage
-, eth-utils
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  setuptools,
+  buildPythonPackage,
+  eth-utils,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,11 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-cRp+ZOPYs9kcqMKGaiYMOFBY+aPCyFqu+1/5wloLwqU=";
   };
 
-  build-system = [ setuptools];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    eth-utils
-  ];
+  propagatedBuildInputs = [ eth-utils ];
 
   nativeCheckInputs = [
     hypothesis

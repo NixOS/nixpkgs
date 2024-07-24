@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/nickjj/rolespec";
-    description = "A test library for testing Ansible roles";
+    description = "Test library for testing Ansible roles";
     mainProgram = "rolespec";
     longDescription = ''
       A shell based test library for Ansible that works both locally and over

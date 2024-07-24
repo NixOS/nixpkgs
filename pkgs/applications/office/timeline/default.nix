@@ -4,7 +4,7 @@
 , gettext
 , makeDesktopItem
 , copyDesktopItems
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-qwH2mt3Va62QJKJGOpt5WV3QksqQaRGEif4CcPC5F2E=";
   };
 
-  nativeBuildInputs = [ python3.pkgs.wrapPython copyDesktopItems wrapGAppsHook ];
+  nativeBuildInputs = [ python3.pkgs.wrapPython copyDesktopItems wrapGAppsHook3 ];
 
   pythonPath = with python3.pkgs; [
     wxpython

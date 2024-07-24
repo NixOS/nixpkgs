@@ -33,7 +33,7 @@ buildGoModule rec {
   ]);
 
   meta = with lib; {
-    description = "A desktop application to control Elgato Keylights";
+    description = "Desktop application to control Elgato Keylights";
     longDescription = ''
       Requires having:
       * Elgato's Keylight paired to local wifi network.

@@ -110,7 +110,7 @@ in
     users.groups."${cfg.group}" = { };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - ${config.users.users.gollum.name} ${config.users.groups.gollum.name} - -"
+      "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.gollum = {

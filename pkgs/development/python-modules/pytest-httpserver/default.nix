@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
-, toml
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  toml,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-KCsZs4MGENByF/wB+aj3yvMp7lssHNVKx8jLhDQ1u4k=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    werkzeug
-  ];
+  propagatedBuildInputs = [ werkzeug ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -43,9 +40,7 @@ buildPythonPackage rec {
     "test_wait_raise_assertion_false" # racy
   ];
 
-  pythonImportsCheck = [
-    "pytest_httpserver"
-  ];
+  pythonImportsCheck = [ "pytest_httpserver" ];
 
   meta = with lib; {
     description = "HTTP server for pytest to test HTTP clients";

@@ -63,8 +63,10 @@ let
     hasAttrByPath
     hasInfix
     id
+    ifilter0
     isStorePath
     lazyDerivation
+    length
     lists
     listToAttrs
     makeExtensible
@@ -100,6 +102,7 @@ let
     testAllTrue
     toBaseDigits
     toHexString
+    fromHexString
     toInt
     toIntBase10
     toShellVars
@@ -282,6 +285,21 @@ runTests {
   testToHexString = {
     expr = toHexString 250;
     expected = "FA";
+  };
+
+  testFromHexStringFirstExample = {
+    expr = fromHexString "FF";
+    expected = 255;
+  };
+
+  testFromHexStringSecondExample = {
+    expr = fromHexString (builtins.hashString "sha256" "test");
+    expected = 9223372036854775807;
+  };
+
+  testFromHexStringWithPrefix = {
+    expr = fromHexString "0Xf";
+    expected = 15;
   };
 
   testToBaseDigits = {
@@ -649,6 +667,31 @@ runTests {
   testFilter = {
     expr = filter (x: x != "a") ["a" "b" "c" "a"];
     expected = ["b" "c"];
+  };
+
+  testIfilter0Example = {
+    expr = ifilter0 (i: v: i == 0 || v > 2) [ 1 2 3 ];
+    expected = [ 1 3 ];
+  };
+  testIfilter0Empty = {
+    expr = ifilter0 (i: v: abort "shouldn't be evaluated!") [ ];
+    expected = [ ];
+  };
+  testIfilter0IndexOnly = {
+    expr = length (ifilter0 (i: v: mod i 2 == 0) [ (throw "0") (throw "1") (throw "2") (throw "3")]);
+    expected = 2;
+  };
+  testIfilter0All = {
+    expr = ifilter0 (i: v: true) [ 10 11 12 13 14 15 ];
+    expected = [ 10 11 12 13 14 15 ];
+  };
+  testIfilter0First = {
+    expr = ifilter0 (i: v: i == 0) [ 10 11 12 13 14 15 ];
+    expected = [ 10 ];
+  };
+  testIfilter0Last = {
+    expr = ifilter0 (i: v: i == 5) [ 10 11 12 13 14 15 ];
+    expected = [ 15 ];
   };
 
   testFold =
@@ -1608,6 +1651,27 @@ runTests {
       "--retry" "3"
       "--url" "https://example.com/foo"
       "--url" "https://example.com/bar"
+      "--verbose"
+    ];
+  };
+
+  testToGNUCommandLineSeparator = {
+    expr = cli.toGNUCommandLine { optionValueSeparator = "="; } {
+      data = builtins.toJSON { id = 0; };
+      X = "PUT";
+      retry = 3;
+      retry-delay = null;
+      url = [ "https://example.com/foo" "https://example.com/bar" ];
+      silent = false;
+      verbose = true;
+    };
+
+    expected = [
+      "-X=PUT"
+      "--data={\"id\":0}"
+      "--retry=3"
+      "--url=https://example.com/foo"
+      "--url=https://example.com/bar"
       "--verbose"
     ];
   };

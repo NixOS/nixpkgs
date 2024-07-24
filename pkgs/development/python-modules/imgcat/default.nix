@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, numpy
-, pillow
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, tensorflow
-, torch
-, torchvision
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tensorflow,
+  torch,
+  torchvision,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
       --replace-fail "'pytest-runner<5.0'" ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     matplotlib
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  pythonImportsCheck = [
-    "imgcat"
-  ];
+  pythonImportsCheck = [ "imgcat" ];
 
   meta = with lib; {
     description = "Imgcat in Python";

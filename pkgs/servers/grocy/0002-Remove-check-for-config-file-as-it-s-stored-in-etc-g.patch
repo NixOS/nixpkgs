@@ -8,10 +8,10 @@ Subject: [PATCH 2/2] Remove check for config-file as it's stored in /etc/grocy
  1 file changed, 1 deletion(-)
 
 diff --git a/helpers/PrerequisiteChecker.php b/helpers/PrerequisiteChecker.php
-index da431b4b..6b878627 100644
+index 8e12a5c..37b433d 100644
 --- a/helpers/PrerequisiteChecker.php
 +++ b/helpers/PrerequisiteChecker.php
-@@ -17,7 +17,6 @@ class PrerequisiteChecker
+@@ -18,7 +18,6 @@ class PrerequisiteChecker
  	public function checkRequirements()
  	{
  		self::checkForPhpVersion();
@@ -20,5 +20,4 @@ index da431b4b..6b878627 100644
  		self::checkForComposer();
  		self::checkForPhpExtensions();
 -- 
-2.41.0
-
+2.42.0

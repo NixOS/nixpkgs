@@ -1,20 +1,24 @@
-{ lib
-, buildPythonPackage
-, chardet
-, fetchPypi
-, freetype
-, pillow
-, setuptools
-, glibcLocales
-, python
-, isPyPy
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  fetchPypi,
+  freetype,
+  pillow,
+  setuptools,
+  glibcLocales,
+  python,
+  isPyPy,
 }:
 
 let
-  ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
-in buildPythonPackage rec {
+  ft = freetype.overrideAttrs (oldArgs: {
+    dontDisableStatic = true;
+  });
+in
+buildPythonPackage rec {
   pname = "reportlab";
-  version = "4.1.0";
+  version = "4.2.2";
   pyproject = true;
 
   # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
@@ -22,7 +26,7 @@ in buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Opn69BJpEVnAaLP/AcFTB84v0s9rhgGZQ0h04AIECoQ=";
+    hash = "sha256-dl7svdaEkcVpR+KcOLi2m4NO5du90vt0CfCOvevwRCg=";
   };
 
   postPatch = ''
@@ -36,22 +40,16 @@ in buildPythonPackage rec {
     rm tests/test_graphics_charts.py
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [
-    ft
-  ];
+  buildInputs = [ ft ];
 
   propagatedBuildInputs = [
     chardet
     pillow
   ];
 
-  nativeCheckInputs = [
-    glibcLocales
-  ];
+  nativeCheckInputs = [ glibcLocales ];
 
   checkPhase = ''
     runHook preCheck
@@ -62,7 +60,7 @@ in buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "An Open Source Python library for generating PDFs and graphics";
+    description = "Open Source Python library for generating PDFs and graphics";
     homepage = "https://www.reportlab.com/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

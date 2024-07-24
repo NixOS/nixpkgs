@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "nixops-hetznercloud";
-  version = "unstable-2023-02-19";
+  version = "0-unstable-2023-02-19";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -44,9 +44,10 @@ buildPythonPackage {
   passthru.updateScript = unstableGitUpdater {};
 
   meta = with lib; {
-    description = "A NixOps plugin supporting Hetzner Cloud deployments";
+    description = "NixOps plugin supporting Hetzner Cloud deployments";
     homepage = "https://github.com/lukebfox/nixops-hetznercloud";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ lukebfox ];
+    broken = true; # never built on Hydra
   };
 }

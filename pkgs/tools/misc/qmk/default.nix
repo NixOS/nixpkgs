@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/qmk/qmk_cli";
-    description = "A program to help users work with QMK Firmware";
+    description = "Program to help users work with QMK Firmware";
     longDescription = ''
       qmk_cli is a companion tool to QMK firmware. With it, you can:
 
@@ -70,7 +70,7 @@ python3.pkgs.buildPythonApplication rec {
       - ... and many more!
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple babariviere ekleog ];
+    maintainers = with maintainers; [ bhipple ekleog ];
     mainProgram = "qmk";
   };
 }

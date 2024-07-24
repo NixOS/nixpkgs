@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "minica";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "jsha";
     repo = "minica";
     rev = "v${version}";
-    sha256 = "sha256-3p6rUFFiWXhX9BBbxqWxRoyRceexvNnqcFCyNi5HoaA=";
+    sha256 = "sha256-YUeP3xBoZzonJYfEAOWZYCTFwOxFWySW7ezvpMLNZ1I=";
   };
 
   vendorHash = null;
@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A simple tool for generating self signed certificates";
+    description = "Simple tool for generating self signed certificates";
     mainProgram = "minica";
     longDescription = ''
       Minica is a simple CA intended for use in situations where the CA operator

@@ -2,13 +2,13 @@
 buildKodiBinaryAddon rec {
   pname = "pvr-vdr-vnsi";
   namespace = "pvr.vdr.vnsi";
-  version = "20.4.1";
+  version = "21.1.1";
 
   src = fetchFromGitHub {
     owner = "kodi-pvr";
     repo = "pvr.vdr.vnsi";
     rev = "${version}-${rel}";
-    sha256 = "sha256-QooWK+LwlN5RAISjAQ2YiyDAjQQMzod8fFXpI0ll+hc=";
+    sha256 = "sha256-Bd/21y3oAhQMmvrZzrN5Z6jLHySBd2LXNbLt/Me4jSw=";
   };
 
   extraBuildInputs = [ libGL ];

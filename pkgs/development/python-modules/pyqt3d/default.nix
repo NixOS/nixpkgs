@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pyqt5
-, pyqt-builder
-, python
-, pythonOlder
-, qt3d
-, setuptools
-, sip
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyqt5,
+  pyqt-builder,
+  python,
+  pythonOlder,
+  qt3d,
+  setuptools,
+  sip,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +29,10 @@ buildPythonPackage rec {
       --replace "[tool.sip.project]" "[tool.sip.project]''\nsip-include-dirs = [\"${pyqt5}/${python.sitePackages}/PyQt5/bindings\"]"
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   enableParallelBuilding = true;
   # HACK: paralellize compilation of make calls within pyqt's setup.py
@@ -51,22 +54,16 @@ buildPythonPackage rec {
     pyqt-builder
   ];
 
-  buildInputs = [
-    qt3d
-  ];
+  buildInputs = [ qt3d ];
 
-  propagatedBuildInputs = [
-    pyqt5
-  ];
+  propagatedBuildInputs = [ pyqt5 ];
 
   dontConfigure = true;
 
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "PyQt5.Qt3DCore"
-  ];
+  pythonImportsCheck = [ "PyQt5.Qt3DCore" ];
 
   meta = with lib; {
     description = "Python bindings for the Qt 3D framework";

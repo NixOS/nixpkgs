@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "The SDK for the LADSPA audio plugin standard";
+    description = "SDK for the LADSPA audio plugin standard";
     longDescription = ''
       The LADSPA SDK, including the ladspa.h API header file,
       ten example LADSPA plugins and

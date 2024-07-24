@@ -1,14 +1,26 @@
 { symlinkJoin
 , lib
 , makeWrapper
+, folder-color-switcher
 , nemo
-, nemoExtensions
+, nemo-emblems
+, nemo-fileroller
+, nemo-python
+, python3
 , extensions ? [ ]
 , useDefaultExtensions ? true
 }:
 
 let
-  selectedExtensions = extensions ++ (lib.optionals useDefaultExtensions nemoExtensions);
+  selectedExtensions = extensions ++ lib.optionals useDefaultExtensions [
+    # We keep this in sync with a default Mint installation
+    # Right now (only) nemo-share is missing
+    folder-color-switcher
+    nemo-emblems
+    nemo-fileroller
+    nemo-python
+  ];
+  nemoPythonExtensionsDeps = lib.concatMap (x: x.nemoPythonExtensionDeps or []) selectedExtensions;
 in
 symlinkJoin {
   name = "nemo-with-extensions-${nemo.version}";
@@ -21,7 +33,8 @@ symlinkJoin {
     for f in $(find $out/bin/ $out/libexec/ -type l -not -path "*/.*"); do
       wrapProgram "$f" \
         --set "NEMO_EXTENSION_DIR" "$out/${nemo.extensiondir}" \
-        --set "NEMO_PYTHON_EXTENSION_DIR" "$out/share/nemo-python/extensions"
+        --set "NEMO_PYTHON_EXTENSION_DIR" "$out/share/nemo-python/extensions" \
+        --set "NEMO_PYTHON_SEARCH_PATH" "${python3.pkgs.makePythonPath nemoPythonExtensionsDeps}"
     done
 
     # Don't populate the same nemo actions twice when having this globally installed

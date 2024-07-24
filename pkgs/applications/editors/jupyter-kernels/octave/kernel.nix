@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A Jupyter kernel for Octave.";
+    description = "Jupyter kernel for Octave";
     homepage = "https://github.com/Calysto/octave_kernel";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ thomasjm ];

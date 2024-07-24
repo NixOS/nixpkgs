@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, coverage
-, ddt
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  coverage,
+  ddt,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {

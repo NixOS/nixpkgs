@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, django
-, django-allauth
-, django-otp
-, fetchFromGitHub
-, pythonOlder
-, qrcode
-, hatchling
+{
+  lib,
+  buildPythonPackage,
+  django,
+  django-allauth,
+  django-otp,
+  fetchFromGitHub,
+  pythonOlder,
+  qrcode,
+  hatchling,
 }:
 
 buildPythonPackage rec {
@@ -23,10 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-bm2RwhvX2nfhYs74MM0iZl9U2gHgm0lLlh2tuRRcGso=";
   };
 
-
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     django
@@ -35,9 +33,7 @@ buildPythonPackage rec {
     qrcode
   ];
 
-  pythonImportsCheck = [
-    "allauth_2fa"
-  ];
+  pythonImportsCheck = [ "allauth_2fa" ];
 
   meta = with lib; {
     description = "django-allauth-2fa adds two-factor authentication to django-allauth";

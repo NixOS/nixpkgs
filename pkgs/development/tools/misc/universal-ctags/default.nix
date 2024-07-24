@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://docs.ctags.io/en/latest/";
-    description = "A maintained ctags implementation";
+    description = "Maintained ctags implementation";
     longDescription = ''
       Universal Ctags (abbreviated as u-ctags) is a maintained implementation of
       ctags. ctags generates an index (or tag) file of language objects found in

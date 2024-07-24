@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, portpicker
-, pyserial
-, pyyaml
-, timeout-decorator
-, typing-extensions
+  # dependencies
+  portpicker,
+  pyserial,
+  pyyaml,
+  timeout-decorator,
+  typing-extensions,
 
-# tests
-, procps
-, pytestCheckHook
-, pytz
+  # tests
+  procps,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-hhI1jrHJk4wo49MK8J4VTS2dGmHG2kwzgZeSWBXdXkA=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     portpicker

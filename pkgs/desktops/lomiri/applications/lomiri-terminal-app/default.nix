@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A terminal app for desktop and mobile devices";
+    description = "Terminal app for desktop and mobile devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-terminal-app";
     license = licenses.gpl3Only;
     mainProgram = "lomiri-terminal-app";

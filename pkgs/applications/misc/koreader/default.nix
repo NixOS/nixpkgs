@@ -14,15 +14,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "koreader";
-  version = "2024.03.1";
+  version = "2024.04";
 
 
   src = if stdenv.isAarch64 then fetchurl {
     url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-arm64.deb";
-    hash = "sha256-9Bu+mWfJuPaH5nV71JMrcGipiZWfcf19KfVauCW92+I=";
+    hash = "sha256-FwwB9slKOiYQ3eud2tiqov6yGNxmIicIe6nFpsH28Vk=";
   } else fetchurl {
     url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-    hash = "sha256-EZ3iqp0A2BZwI343nvvp71RGQx6FPesUBy4Lha4Yz4U=";
+    hash = "sha256-hqJRZDZqzPNLK/8Bb+Oay70JqKAMKB0Epbbzeu5npLw=";
   };
 
   src_repo = fetchFromGitHub {
@@ -57,12 +57,13 @@ stdenv.mkDerivation rec {
     find ${src_repo}/resources/fonts -type d -execdir cp -r '{}' $out/lib/koreader/fonts \;
     find $out -xtype l -print -delete
     wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [ gtk3-x11 SDL2 glib ]
+      lib.makeLibraryPath [ gtk3-x11 SDL2 glib stdenv.cc.cc.lib ]
     }
   '';
 
   meta = with lib; {
     homepage = "https://github.com/koreader/koreader";
+    changelog = "https://github.com/koreader/koreader/releases/tag/v${version}";
     description =
       "An ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
     mainProgram = "koreader";

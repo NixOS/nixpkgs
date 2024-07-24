@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "hilbish";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "Rosettea";
     repo = "Hilbish";
     rev = "v${version}";
-    hash = "sha256-tkEEvxIBPpPbdIFxbo0pOHHORXEFZ8wn9emIeyz6glc=";
+    hash = "sha256-iqQhgge+m22gIIGlwwmAoYTxfMAs/sKrKjoQzyedil4=";
     fetchSubmodules = true;
   };
 
@@ -32,7 +32,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An interactive Unix-like shell written in Go";
+    description = "Interactive Unix-like shell written in Go";
     mainProgram = "hilbish";
     changelog = "https://github.com/Rosettea/Hilbish/releases/tag/v${version}";
     homepage = "https://github.com/Rosettea/Hilbish";

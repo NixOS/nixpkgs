@@ -1,15 +1,13 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 {
   options = {
     programs.appgate-sdp = {
-      enable = mkEnableOption "the AppGate SDP VPN client";
+      enable = lib.mkEnableOption "the AppGate SDP VPN client";
     };
   };
 
-  config = mkIf config.programs.appgate-sdp.enable {
+  config = lib.mkIf config.programs.appgate-sdp.enable {
     boot.kernelModules = [ "tun" ];
     environment.systemPackages = [ pkgs.appgate-sdp ];
     services.dbus.packages = [ pkgs.appgate-sdp ];

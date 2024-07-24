@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A C-library for generating multi page PostScript documents";
+    description = "C-library for generating multi page PostScript documents";
     homepage = "https://pslib.sourceforge.net/";
     changelog =
       "https://sourceforge.net/p/pslib/git/ci/master/tree/pslib/ChangeLog";

@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "The GNU Linear Programming Kit";
+    description = "GNU Linear Programming Kit";
 
     longDescription =
       '' The GNU Linear Programming Kit is intended for solving large

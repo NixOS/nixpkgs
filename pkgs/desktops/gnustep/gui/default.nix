@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   meta = {
     changelog = "https://github.com/gnustep/libs-gui/releases/tag/gui-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    description = "A GUI class library of GNUstep";
+    description = "GUI class library of GNUstep";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];

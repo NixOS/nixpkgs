@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, setuptools-scm }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  setuptools-scm,
+}:
 
 buildPythonPackage rec {
   pname = "f90nml";

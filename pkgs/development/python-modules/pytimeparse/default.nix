@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pynose
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,23 +19,20 @@ buildPythonPackage rec {
     hash = "sha256-6GE2R3vpJNfmcGRqmFYZV+jKcwjUSEHiH13ep1dVago=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pynose
-  ];
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
 
-  pythonImportsCheck = [
-    "pytimeparse"
-  ];
+  nativeCheckInputs = [ nose ];
+
+  pythonImportsCheck = [ "pytimeparse" ];
 
   meta = with lib; {
     description = "Library to parse various kinds of time expressions";
     homepage = "https://github.com/wroberts/pytimeparse";
     changelog = "https://github.com/wroberts/pytimeparse/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ ];
   };
 }

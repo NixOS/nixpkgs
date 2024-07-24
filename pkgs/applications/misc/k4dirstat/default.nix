@@ -32,7 +32,7 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/jeromerobert/k4dirstat";
-    description = "A small utility program that sums up disk usage for directory trees";
+    description = "Small utility program that sums up disk usage for directory trees";
     mainProgram = "k4dirstat";
     license = licenses.gpl2;
     maintainers = [ maintainers.raboof ];

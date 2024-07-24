@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A simple GObject game controller library";
+    description = "Simple GObject game controller library";
     mainProgram = "manette-test";
     homepage = "https://gnome.pages.gitlab.gnome.org/libmanette/";
     license = licenses.lgpl21Plus;

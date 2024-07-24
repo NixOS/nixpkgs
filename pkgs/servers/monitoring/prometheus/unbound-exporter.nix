@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.4.5";
+  version = "0.4.6";
 in
 buildGoModule {
   pname = "unbound_exporter";

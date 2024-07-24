@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cons
-, multipledispatch
-, py
-, pytestCheckHook
-, pytest-html
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cons,
+  multipledispatch,
+  py,
+  pytestCheckHook,
+  pytest-html,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     "--self-contained-html"
   ];
 
-  pythonImportsCheck = [
-    "etuples"
-  ];
+  pythonImportsCheck = [ "etuples" ];
 
   meta = with lib; {
     description = "Python S-expression emulation using tuple-like objects";

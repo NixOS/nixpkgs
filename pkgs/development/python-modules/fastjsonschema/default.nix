@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch2
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,24 +31,22 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   dontUseSetuptoolsCheck = true;
 
-  disabledTests = [
-    "benchmark"
-    # these tests require network access
-    "remote ref"
-    "definitions"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_compile_to_code_custom_format"  # cannot import temporary module created during test
-  ];
+  disabledTests =
+    [
+      "benchmark"
+      # these tests require network access
+      "remote ref"
+      "definitions"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_compile_to_code_custom_format" # cannot import temporary module created during test
+    ];
 
-  pythonImportsCheck = [
-    "fastjsonschema"
-  ];
+  pythonImportsCheck = [ "fastjsonschema" ];
 
   meta = with lib; {
     description = "JSON schema validator for Python";

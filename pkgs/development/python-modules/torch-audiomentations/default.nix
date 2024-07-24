@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, julius
-, librosa
-, torch
-, torchaudio
-, torch-pitch-shift
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  julius,
+  librosa,
+  torch,
+  torchaudio,
+  torch-pitch-shift,
 }:
 
 buildPythonPackage rec {

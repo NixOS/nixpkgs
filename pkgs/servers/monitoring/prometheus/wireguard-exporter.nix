@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = { inherit (nixosTests.prometheus-exporters) wireguard; };
 
   meta = with lib; {
-    description = "A Prometheus exporter for WireGuard, written in Rust";
+    description = "Prometheus exporter for WireGuard, written in Rust";
     homepage = "https://github.com/MindFlavor/prometheus_wireguard_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 globin ];

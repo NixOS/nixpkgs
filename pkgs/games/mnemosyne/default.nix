@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , python
 , fetchurl
 , anki

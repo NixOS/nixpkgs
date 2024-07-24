@@ -173,7 +173,7 @@ lib.mkOption {
 
 ## Extensible Option Types {#sec-option-declarations-eot}
 
-Extensible option types is a feature that allow to extend certain types
+Extensible option types is a feature that allows to extend certain types
 declaration through multiple module files. This feature only work with a
 restricted set of types, namely `enum` and `submodules` and any composed
 forms of them.

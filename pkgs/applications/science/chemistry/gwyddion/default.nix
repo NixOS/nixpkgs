@@ -16,10 +16,10 @@
 
 stdenv.mkDerivation rec {
   pname = "gwyddion";
-   version = "2.65";
+   version = "2.66";
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
-    sha256 = "sha256-kRX7CoPJY8YkYNode5g0OCyWmL+5sM8puCmk9ZE2nqM=";
+    sha256 = "sha256-N3vtzSsNjRM6MpaG2p9fkYB/8dR5N/mZEZXx6GN5LVI=";
   };
 
   nativeBuildInputs = [ pkg-config file ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux ++ darwin;
-    maintainers = [ lib.maintainers.cge ];
+    maintainers = [ ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };

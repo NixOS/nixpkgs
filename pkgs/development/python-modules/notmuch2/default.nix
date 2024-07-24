@@ -1,9 +1,9 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, notmuch
-, python
-, cffi
+{
+  lib,
+  buildPythonPackage,
+  notmuch,
+  python,
+  cffi,
 }:
 
 buildPythonPackage {
@@ -13,11 +13,10 @@ buildPythonPackage {
 
   sourceRoot = "notmuch-${notmuch.version}/bindings/python-cffi";
 
-  nativeBuildInputs = [
-    cffi
-  ];
+  nativeBuildInputs = [ cffi ];
   buildInputs = [
-    python notmuch
+    python
+    notmuch
   ];
 
   propagatedBuildInputs = [ cffi ];

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "crossguid";
-  version = "unstable-2019-05-29";
+  version = "0.2.2-unstable-2019-05-29";
 
   src = fetchFromGitHub {
     owner = "graeme-hill";
@@ -24,13 +24,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional stdenv.isLinux libuuid;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib; {
     description = "Lightweight cross platform C++ GUID/UUID library";
     license = licenses.mit;
     homepage = "https://github.com/graeme-hill/crossguid";
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

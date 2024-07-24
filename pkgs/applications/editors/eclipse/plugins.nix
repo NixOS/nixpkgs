@@ -152,7 +152,7 @@ rec {
     '';
 
     meta = with lib; {
-      description = "A powerful parser generator for processing structured text or binary files";
+      description = "Powerful parser generator for processing structured text or binary files";
       homepage = "https://www.antlr.org/";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd3;
@@ -175,7 +175,7 @@ rec {
     '';
 
     meta = with lib; {
-      description = "A powerful parser generator for processing structured text or binary files";
+      description = "Powerful parser generator for processing structured text or binary files";
       homepage = "https://www.antlr.org/";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd3;
@@ -552,7 +552,7 @@ rec {
 
     meta = with lib; {
       homepage = "http://scala-ide.org/";
-      description = "The Scala IDE for Eclipse";
+      description = "Scala IDE for Eclipse";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd3;
       platforms = platforms.all;
@@ -616,7 +616,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://github.com/vrapper/vrapper";
-      description = "A wrapper to provide a Vim-like input scheme for moving around and editing text";
+      description = "Wrapper to provide a Vim-like input scheme for moving around and editing text";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.gpl3;
       platforms = platforms.all;
@@ -640,7 +640,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://github.com/oyse/yedit";
-      description = "A YAML editor plugin for Eclipse";
+      description = "YAML editor plugin for Eclipse";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
       platforms = platforms.all;
@@ -658,7 +658,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://www.eclipse.org/gef/zest/";
-      description = "The Eclipse Visualization Toolkit";
+      description = "Eclipse Visualization Toolkit";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       platforms = platforms.all;
       maintainers = [ maintainers.romildo ];
@@ -681,7 +681,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://ant.apache.org/ivy/ivyde/index.html";
-      description = "A plugin which integrates Apache Ivy's dependency management";
+      description = "Plugin which integrates Apache Ivy's dependency management";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.asl20;
       platforms = platforms.all;
@@ -705,7 +705,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://ant.apache.org/ivy/ivyde/index.html";
-      description = "A graph viewer of the resolved dependencies.";
+      description = "Graph viewer of the resolved dependencies";
       longDescription = ''
         Apache IvyDE Resolve Visualizer is an optional dependency of Apache IvyDE since
         it requires additional plugins to be installed (Zest).
@@ -733,7 +733,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://ant.apache.org/ivy/index.html";
-      description = "A popular dependency manager focusing on flexibility and simplicity";
+      description = "Popular dependency manager focusing on flexibility and simplicity";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.asl20;
       platforms = platforms.all;

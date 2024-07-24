@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, zope-testing
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  zope-testing,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -12,10 +13,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xdzm4LG/W5ziYXaXbCOfQbZYZvaUUih3lWhkLzWqeUc=";
+    hash = "sha256-xdzm4LG/W5ziYXaXbCOfQbZYZvaUUih3lWhkLzWqeUc=";
   };
 
-  propagatedBuildInputs = [ six setuptools zope-testing ];
+  propagatedBuildInputs = [
+    six
+    setuptools
+    zope-testing
+  ];
 
   # Huge amount of testing dependencies (including Zope2)
   doCheck = false;

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    description = "A console-based network monitoring utility (fork of iptraf)";
+    description = "Console-based network monitoring utility (fork of iptraf)";
     longDescription = ''
       IPTraf-ng is a console-based network monitoring utility. IPTraf-ng
       gathers data like TCP connection packet and byte counts, interface

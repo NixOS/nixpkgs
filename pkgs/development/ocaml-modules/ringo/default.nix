@@ -7,7 +7,7 @@ buildDunePackage rec {
     owner = "nomadic-labs";
     repo = "ringo";
     rev = "v${version}";
-    sha256 = "sha256-9HW3M27BxrEPbF8cMHwzP8FmJduUInpQQAE2672LOuU=";
+    hash = "sha256-9HW3M27BxrEPbF8cMHwzP8FmJduUInpQQAE2672LOuU=";
   };
 
   minimalOCamlVersion = "4.08";

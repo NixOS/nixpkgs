@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A multi-agent programmable modeling environment";
+    description = "Multi-agent programmable modeling environment";
     mainProgram = "netlogo";
     longDescription = ''
       NetLogo is a multi-agent programmable modeling environment. It is used by

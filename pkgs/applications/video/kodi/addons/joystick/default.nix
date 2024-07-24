@@ -14,7 +14,7 @@ buildKodiBinaryAddon rec {
   extraBuildInputs = [ tinyxml udev ];
 
   meta = with lib; {
-    description = "Binary addon for raw joystick input.";
+    description = "Binary addon for raw joystick input";
     platforms = platforms.all;
     license = licenses.gpl2Only;
     maintainers = teams.kodi.members;

@@ -23,11 +23,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [ perl ];
 
-  # Cargo.lock is outdated
-  preConfigure = ''
-    cargo update --offline
-  '';
-
   # tests are locale sensitive
   preCheck = ''
     export LANG=${if stdenv.isDarwin then "en_US.UTF-8" else "C.UTF-8"}
@@ -42,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A tool to bypass a partial range of standard input to any command";
+    description = "Tool to bypass a partial range of standard input to any command";
     mainProgram = "teip";
     homepage = "https://github.com/greymd/teip";
     changelog = "https://github.com/greymd/teip/releases/tag/v${version}";

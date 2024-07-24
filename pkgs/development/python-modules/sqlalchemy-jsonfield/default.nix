@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sqlalchemy
-, setuptools-scm
-, setuptools
-, sphinx
-, pytestCheckHook
-, pytest-sugar
-, pymysql
-, psycopg2
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sqlalchemy,
+  setuptools-scm,
+  setuptools,
+  sphinx,
+  pytestCheckHook,
+  pytest-sugar,
+  pymysql,
+  psycopg2,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-4zLXB3UQh6pgQ80KrxkLeC5yiv1R8t2+JmSukmGXr7I=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     sqlalchemy
@@ -42,9 +41,7 @@ buildPythonPackage rec {
     psycopg2
   ];
 
-  pythonImportsCheck = [
-    "sqlalchemy_jsonfield"
-  ];
+  pythonImportsCheck = [ "sqlalchemy_jsonfield" ];
 
   meta = with lib; {
     description = "SQLALchemy JSONField implementation for storing dicts at SQL independently from JSON type support";

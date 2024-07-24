@@ -6,20 +6,29 @@
 , darwin
 , rust-jemalloc-sys
 , ruff-lsp
+, nix-update-script
+, testers
+, ruff
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.4.1";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VTFwuNoqh0RLk0AHTPWEwrja0/aErmUlz82MnCc58jA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-dvvhd84T2YaNR5yu1uYcqwHjVzcWXvlXthyMBf8qZzE=";
   };
 
-  cargoHash = "sha256-COZGGmc6v3WGh8NICoRZ5iYrVs0tML8gG2b1LqWbJs0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
+      "salsa-0.18.0" = "sha256-gcaAsrrJXrWOIHUnfBwwuTBG1Mb+lUEmIxSGIVLhXaM=";
+    };
+  };
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,12 +40,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.CoreServices
   ];
 
-  # tests expect no colors
-  preCheck = ''
-    export NO_COLOR=1
-  '';
-
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ruff \
       --bash <($out/bin/ruff generate-shell-completion bash) \
       --fish <($out/bin/ruff generate-shell-completion fish) \
@@ -45,14 +49,19 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = {
     inherit ruff-lsp;
+    updateScript = nix-update-script { };
+    version = testers.testVersion { package = ruff; };
   };
 
-  meta = with lib; {
-    description = "An extremely fast Python linter";
+  meta = {
+    description = "Extremely fast Python linter";
     homepage = "https://github.com/astral-sh/ruff";
-    changelog = "https://github.com/astral-sh/ruff/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/astral-sh/ruff/releases/tag/${version}";
+    license = lib.licenses.mit;
     mainProgram = "ruff";
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      GaetanLepage
+    ];
   };
 }

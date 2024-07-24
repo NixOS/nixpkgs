@@ -1,43 +1,34 @@
-{ lib
-, melpaBuild
-, fetchFromGitHub
-, acm
-, popon
-, writeText
-, unstableGitUpdater
+{
+  lib,
+  melpaBuild,
+  fetchFromGitHub,
+  acm,
+  popon,
+  unstableGitUpdater,
 }:
 
-let
-  rev = "0dbbd7f401da1bedd1a9146df6127233d601435b";
-in
 melpaBuild {
   pname = "acm-terminal";
-  version = "20230601.1326"; # 13:26 UTC
+  version = "0-unstable-2023-12-06";
 
   src = fetchFromGitHub {
     owner = "twlz0ne";
     repo = "acm-terminal";
-    inherit rev;
-    sha256 = "sha256-Opouy9A6z0YUT1zxZq1yHx+r/hwNE93JDwfa1fMWNgc=";
+    rev = "1851d8fa2a27d3fd8deeeb29cd21c3002b8351ba";
+    hash = "sha256-EYhFrOo0j0JSNTdcZCbyM0iLxaymUXi1u6jZy8lTOaY=";
   };
-
-  commit = rev;
 
   packageRequires = [
     acm
     popon
   ];
 
-  recipe = writeText "recipe" ''
-    (acm-terminal :repo "twlz0ne/acm-terminal" :fetcher github)
-  '';
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-  passthru.updateScript = unstableGitUpdater { };
-
-  meta = with lib; {
-    description = "Patch for LSP bridge acm on Terminal";
+  meta = {
     homepage = "https://github.com/twlz0ne/acm-terminal";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
+    description = "Patch for LSP bridge acm on Terminal";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
   };
 }

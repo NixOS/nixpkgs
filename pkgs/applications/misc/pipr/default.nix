@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A commandline-tool to interactively write shell pipelines";
+    description = "Commandline-tool to interactively write shell pipelines";
     mainProgram = "pipr";
     homepage = "https://github.com/ElKowar/pipr";
     license = licenses.mit;

@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A software introspection tool for Qt applications developed by KDAB";
+    description = "Software introspection tool for Qt applications developed by KDAB";
     homepage = "https://github.com/KDAB/GammaRay";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -1,31 +1,41 @@
-{ rustPlatform
-, fetchFromGitHub
-, lib
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
 
-, installShellFiles
-, stdenv
-, Foundation
+  installShellFiles,
+  stdenv,
+  Foundation,
+  rust-jemalloc-sys,
 
-, nix-update-script
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "yazi";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "sxyazi";
     repo = "yazi";
     rev = "v${version}";
-    hash = "sha256-c8fWWCOVBqQVdQch9BniCaJPrVEOCv35lLH8/hMIbvE=";
+    hash = "sha256-RwkgJX4naD3t97ce4Zg/VWJ41QiVFFqDW5nHpyMtISY=";
   };
 
-  cargoHash = "sha256-VeDyO+KCD3Axse4iPIoRxIvoAn3L33e2ObBZFV/REeg=";
+  cargoHash = "sha256-qnbinuTuaPiD7ib3aCJzSwuA4s3naFzi+txqX7jkHIo=";
 
   env.YAZI_GEN_COMPLETIONS = true;
 
+  # TODO: remove in the next release
+  cargoBuildFlags = [
+    "-p"
+    "yazi-fm"
+    "-p"
+    "yazi-cli"
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin [ Foundation ];
+  buildInputs = [ rust-jemalloc-sys ] ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
   postInstall = ''
     installShellCompletion --cmd yazi \
@@ -43,7 +53,12 @@ rustPlatform.buildRustPackage rec {
     description = "Blazing fast terminal file manager written in Rust, based on async I/O";
     homepage = "https://github.com/sxyazi/yazi";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ xyenon matthiasbeyer ];
+    maintainers = with lib.maintainers; [
+      xyenon
+      matthiasbeyer
+      linsui
+      eljamm
+    ];
     mainProgram = "yazi";
   };
 }

@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, chardet
-, fetchPypi
-, jinja2
-, jinja2-pluralize
-, pluggy
-, poetry-core
-, pycodestyle
-, pyflakes
-, pygments
-, pylint
-, pytest-datadir
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  fetchPypi,
+  jinja2,
+  jinja2-pluralize,
+  pluggy,
+  poetry-core,
+  pycodestyle,
+  pyflakes,
+  pygments,
+  pylint,
+  pytest-datadir,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "9.0.0";
+  version = "9.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,12 +28,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    hash = "sha256-HchR0/PzIMBI0DYY5MDZhh+koVBrQl0tCaVksgyVZ0o=";
+    hash = "sha256-te0glVs+ve6UR25CnP2fEyThwZoExKrjKok7EcNnPx4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     chardet
@@ -59,9 +58,7 @@ buildPythonPackage rec {
     "console"
   ];
 
-  pythonImportsCheck = [
-    "diff_cover"
-  ];
+  pythonImportsCheck = [ "diff_cover" ];
 
   meta = with lib; {
     description = "Automatically find diff lines that need test coverage";

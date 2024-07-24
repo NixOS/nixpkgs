@@ -84,6 +84,7 @@ let
     preBuild = args.preBuild or "";
     postBuild = args.modPostBuild or "";
     sourceRoot = args.sourceRoot or "";
+    setSourceRoot = args.setSourceRoot or "";
     env = args.env or { };
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
@@ -163,8 +164,10 @@ let
     inherit (go) GOOS GOARCH;
 
     GOFLAGS = GOFLAGS
-      ++ lib.optional (!proxyVendor) "-mod=vendor"
-      ++ lib.optional (!allowGoReference) "-trimpath";
+      ++ lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS) "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
+        (lib.optional (!proxyVendor) "-mod=vendor")
+      ++ lib.warnIf (builtins.elem "-trimpath" GOFLAGS) "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
+        (lib.optional (!allowGoReference) "-trimpath");
     inherit CGO_ENABLED enableParallelBuilding GO111MODULE GOTOOLCHAIN;
 
     # If not set to an explicit value, set the buildid empty for reproducibility.
@@ -196,7 +199,12 @@ let
       runHook postConfigure
     '');
 
-    buildPhase = args.buildPhase or (''
+    buildPhase = args.buildPhase or (
+      lib.warnIf (buildFlags != "" || buildFlagsArray != "")
+        "`buildFlags`/`buildFlagsArray` are deprecated and will be removed in the 24.11 release. Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
+      lib.warnIf (builtins.elem "-buildid=" ldflags)
+        "`-buildid=` is set by default as ldflag by buildGoModule"
+    ''
       runHook preBuild
 
       exclude='\(/_\|examples\|Godeps\|testdata'
@@ -211,8 +219,7 @@ let
       buildGoDir() {
         local cmd="$1" dir="$2"
 
-        . $TMPDIR/buildFlagsArray
-
+        declare -ga buildFlagsArray
         declare -a flags
         flags+=($buildFlags "''${buildFlagsArray[@]}")
         flags+=(''${tags:+-tags=''${tags// /,}})
@@ -251,11 +258,6 @@ let
         buildFlagsArray+=(-x)
       fi
 
-      if [ ''${#buildFlagsArray[@]} -ne 0 ]; then
-        declare -p buildFlagsArray > $TMPDIR/buildFlagsArray
-      else
-        touch $TMPDIR/buildFlagsArray
-      fi
       if [ -z "$enableParallelBuilding" ]; then
           export NIX_BUILD_CORES=1
       fi
@@ -313,9 +315,4 @@ let
     } // meta;
   });
 in
-lib.warnIf (buildFlags != "" || buildFlagsArray != "")
-  "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
-lib.warnIf (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
-lib.warnIf (builtins.elem "-trimpath" GOFLAGS) "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
-lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS) "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
-  package
+package

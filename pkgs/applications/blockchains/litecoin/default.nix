@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch
+{ lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch, fetchpatch2
 , pkg-config, autoreconfHook
 , openssl, db48, boost, zlib, miniupnpc
 , glib, protobuf, util-linux, qrencode
@@ -34,6 +34,13 @@ mkDerivation rec {
       url = "https://github.com/litecoin-project/litecoin/commit/6d1adb19aa79a8e8e140582759515bbd76816aa0.patch";
       hash = "sha256-1y4Iz2plMw5HMAjl9x50QQpYrYaUd2WKrrAcUnQmlBY=";
     })
+
+    # net: add compatibility for miniupnpc 2.2.8
+    # https://github.com/litecoin-project/litecoin/pull/971
+    (fetchpatch2 {
+      url = "https://github.com/litecoin-project/litecoin/commit/5dddffa3e1bbcc7a3e6963b4860ba2d675ca847b.patch?full_index=1";
+      hash = "sha256-F5GcL1RM91l04WrS3qYlV5zEcwyXrcRdmLLCqu1Hop0=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -56,7 +63,7 @@ mkDerivation rec {
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
-    description = "A lite version of Bitcoin using scrypt as a proof-of-work algorithm";
+    description = "Lite version of Bitcoin using scrypt as a proof-of-work algorithm";
     longDescription= ''
       Litecoin is a peer-to-peer Internet currency that enables instant payments
       to anyone in the world. It is based on the Bitcoin protocol but differs

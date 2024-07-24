@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
-, tomli
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  tomli,
 }:
 
 buildPythonPackage rec {
@@ -23,11 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-p/pPpuuNjVxHSPyi4RL2DJlj9weSq8QinugQ4zmv9Ck=";
   };
 
-  propagatedBuildInputs = [
-    ruamel-yaml
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  propagatedBuildInputs = [ ruamel-yaml ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     git
@@ -48,9 +45,7 @@ buildPythonPackage rec {
     git init .
   '';
 
-  pythonImportsCheck = [
-    "pre_commit_hooks"
-  ];
+  pythonImportsCheck = [ "pre_commit_hooks" ];
 
   meta = with lib; {
     description = "Some out-of-the-box hooks for pre-commit";

@@ -35,7 +35,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A small library to manage encrypted secrets using asymmetric encryption";
+    description = "Small library to manage encrypted secrets using asymmetric encryption";
     mainProgram = "ejson";
     license = licenses.mit;
     homepage = "https://github.com/Shopify/ejson";

@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, ihm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  ihm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "modelcif";
-  version = "0.9";
+  version = "1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihmwg";
     repo = "python-modelcif";
     rev = "refs/tags/${version}";
-    hash = "sha256-u+e2QtG6gO1e31OzPfAuzfCkwZymEZMxa2p0haYplAk=";
+    hash = "sha256-zJLwBdyUyWnH1hBx9Kejl5NfY7zJUxeGb//swBT02Dw=";
   };
 
   nativeBuildInputs = [
@@ -24,13 +25,9 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    ihm
-  ];
+  propagatedBuildInputs = [ ihm ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # require network access

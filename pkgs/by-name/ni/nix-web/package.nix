@@ -5,8 +5,9 @@
 , pkg-config
 , openssl
 , nixVersions
-, nixPackage ? nixVersions.nix_2_17
+, nixPackage ? nixVersions.nix_2_18
 , darwin
+, nukeReferences
 }:
 
 let
@@ -14,20 +15,20 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "nix-web";
-  version = "0.2.0";
+  version = "0.4.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "gorgon";
     repo = "gorgon";
     rev = "nix-web-v${version}";
-    hash = "sha256-M/0nlD2jUtvdWJ647QHrp8JcUUVYxiLJlGjnZ+cfpYU=";
+    hash = "sha256-lAk2VfhclHswsctA0RQgEj5oEX1fowh8TCaKykGEioY=";
   };
-  cargoHash = "sha256-6kcpP/CFiy571B98Y96/cdcClH50gdyPLZ28Npva7B4=";
+  cargoHash = "sha256-romL/RALr/pmwUA8/SN4AOwc+Vndspd1Yrqs0AHPYRY=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optional (!stdenv.isDarwin) openssl
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
 
   postPatch = ''
     substituteInPlace nix-web/nix-web.service \

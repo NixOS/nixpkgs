@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, perl
 , perlPackages
 }:
 
@@ -14,12 +13,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-p7rGc9qiRs9U/7SKET6t0gSmFWMOdrU7X2TYGidbd7M=";
   };
 
+  nativeBuildInputs = [ perlPackages.perl ];
   buildInputs = with perlPackages; [ perl IOStringy TestOutput ];
 
   doCheck = true;
 
   meta = with lib; {
-    description = "A tool for managing the installation of multiple software packages in the same run-time directory tree";
+    description = "Tool for managing the installation of multiple software packages in the same run-time directory tree";
 
     longDescription = ''
       GNU Stow is a symlink farm manager which takes distinct packages

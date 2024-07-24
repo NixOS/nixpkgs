@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchFromGitHub
+{ stdenv, lib, fetchgit
 , gn, ninja, python3, glib, pkg-config, icu
 , xcbuild, darwin
 , fetchpatch
@@ -190,5 +190,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ proglodyte matthewbauer ];
     platforms = platforms.unix;
     license = licenses.bsd3;
+    knownVulnerabilities = [ "Severely outdated with multiple publicly known vulnerabilities" ];
   };
 }

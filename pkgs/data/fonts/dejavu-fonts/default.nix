@@ -4,7 +4,7 @@ let
   version = "2.37";
 
   meta = {
-    description = "A typeface family based on the Bitstream Vera fonts";
+    description = "Typeface family based on the Bitstream Vera fonts";
     longDescription = ''
       The DejaVu fonts are TrueType fonts based on the BitStream Vera fonts,
       providing more styles and with greater coverage of Unicode.

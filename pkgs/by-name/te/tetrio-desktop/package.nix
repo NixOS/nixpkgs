@@ -6,7 +6,7 @@
 , callPackage
 , addOpenGLRunpath
 , electron
-, withTetrioPlus ? true
+, withTetrioPlus ? false
 , tetrio-plus ? null
 }:
 
@@ -28,7 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     let
       tetrio-plus' =
         if tetrio-plus == null
-        then callPackage ./tetrio-plus.nix { tetrio-src = finalAttrs.src; }
+        then
+          callPackage ./tetrio-plus.nix
+            {
+              tetrio-src = finalAttrs.src;
+              tetrio-version = finalAttrs.version;
+            }
         else tetrio-plus;
 
       asarPath =

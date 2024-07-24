@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , rofi-unwrapped
 , wayland-scanner
@@ -16,7 +15,7 @@ rofi-unwrapped.overrideAttrs (oldAttrs: rec {
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-pKxraG3fhBh53m+bLPzCigRr6dBcH/A9vbdf67CO2d8=";
+    hash = "sha256-pKxraG3fhBh53m+bLPzCigRr6dBcH/A9vbdf67CO2d8=";
   };
 
   nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ wayland-scanner ];

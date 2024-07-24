@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , cmake
 , opencv
@@ -20,23 +19,23 @@
 , libGL
 , libGLU
 , vtkWithQt5
-, wrapGAppsHook
+, wrapGAppsHook3
 , liblapack
 , xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "rtabmap";
-  version = "0.21.4";
+  version = "0.21.4.1";
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
     rev = "refs/tags/${version}";
-    hash = "sha256-HrIATYRuhFfTlO4oTRZo7CM30LFVyatZJON31Fe4HTQ=";
+    hash = "sha256-y/p1uFSxVQNXO383DLGCg4eWW7iu1esqpWlyPMF3huk=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook wrapGAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook wrapGAppsHook3 ];
   buildInputs = [
     ## Required
     opencv
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "Real-Time Appearance-Based 3D Mapping";
     homepage = "https://introlab.github.io/rtabmap/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
   };
 }

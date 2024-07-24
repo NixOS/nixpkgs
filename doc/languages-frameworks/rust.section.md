@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-jtBw4ahSl88L0iuCXxQgZVm1EcboWRJMNtjxLVTtzts=";
 
   meta = {
-    description = "A fast line-oriented regex search tool, similar to ag and ack";
+    description = "Fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = lib.licenses.unlicense;
     maintainers = [];
@@ -254,7 +254,7 @@ By default, it takes the `stdenv.hostPlatform.config` and replaces components
 where they are known to differ. But there are ways to customize the argument:
 
  - To choose a different target by name, define
-   `stdenv.hostPlatform.rustc.config` as that name (a string), and that
+   `stdenv.hostPlatform.rust.rustcTarget` as that name (a string), and that
    name will be used instead.
 
    For example:
@@ -262,7 +262,7 @@ where they are known to differ. But there are ways to customize the argument:
    ```nix
    import <nixpkgs> {
      crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
-       rustc.config = "thumbv7em-none-eabi";
+       rust.rustcTarget = "thumbv7em-none-eabi";
      };
    }
    ```
@@ -274,10 +274,10 @@ where they are known to differ. But there are ways to customize the argument:
    ```
 
  - To pass a completely custom target, define
-   `stdenv.hostPlatform.rustc.config` with its name, and
-   `stdenv.hostPlatform.rustc.platform` with the value.  The value will be
+   `stdenv.hostPlatform.rust.rustcTarget` with its name, and
+   `stdenv.hostPlatform.rust.platform` with the value.  The value will be
    serialized to JSON in a file called
-   `${stdenv.hostPlatform.rustc.config}.json`, and the path of that file
+   `${stdenv.hostPlatform.rust.rustcTarget}.json`, and the path of that file
    will be used instead.
 
    For example:
@@ -285,8 +285,8 @@ where they are known to differ. But there are ways to customize the argument:
    ```nix
    import <nixpkgs> {
      crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
-       rustc.config = "thumb-crazy";
-       rustc.platform = { foo = ""; bar = ""; };
+       rust.rustcTarget = "thumb-crazy";
+       rust.platform = { foo = ""; bar = ""; };
      };
    }
    ```
@@ -1000,7 +1000,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A fast line-oriented regex search tool, similar to ag and ack";
+    description = "Fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = with lib.licenses; [ mit unlicense ];
     maintainers = with lib.maintainers; [];

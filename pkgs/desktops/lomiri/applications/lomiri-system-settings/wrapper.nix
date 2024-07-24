@@ -5,7 +5,7 @@
 , lndir
 , lomiri-system-settings-unwrapped
 , lomiri-system-settings-security-privacy
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , plugins ? [ lomiri-system-settings-security-privacy ]
 }:
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     lndir
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 

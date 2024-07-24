@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, configobj
-, mock
-, pytestCheckHook
-, pygments
-, tabulate
-, terminaltables
-, wcwidth
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  configobj,
+  mock,
+  pytestCheckHook,
+  pygments,
+  tabulate,
+  terminaltables,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
@@ -61,7 +62,7 @@ buildPythonPackage rec {
       Read the documentation at http://cli-helpers.rtfd.io
     '';
     homepage = "https://cli-helpers.readthedocs.io/en/stable/";
-    license = licenses.bsd3 ;
+    license = licenses.bsd3;
     maintainers = [ maintainers.kalbasit ];
   };
 }

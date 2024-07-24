@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://gbforth.org/";
-    description = "A Forth-based Game Boy development kit";
+    description = "Forth-based Game Boy development kit";
     mainProgram = "gbforth";
     longDescription = ''
       A Forth-based Game Boy development kit.

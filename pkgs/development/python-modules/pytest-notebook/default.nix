@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pythonRelaxDepsHook
-, attrs
-, jsonschema
-, nbclient
-, nbdime
-, nbformat
-, pytest
-, black
-, coverage
-, ipykernel
-, pytest-cov
-, pytest-regressions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  attrs,
+  jsonschema,
+  nbclient,
+  nbdime,
+  nbformat,
+  pytest,
+  black,
+  coverage,
+  ipykernel,
+  pytest-cov,
+  pytest-regressions,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     nbformat
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   pythonImportsCheck = [ "pytest_notebook" ];
 
@@ -75,6 +72,8 @@ buildPythonPackage rec {
     "test_run_fail"
     "test_run_pass_with_meta"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     changelog = "https://github.com/chrisjsewell/pytest-notebook/blob/${src.rev}/docs/source/changelog.md";

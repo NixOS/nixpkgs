@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/obconf-qt";
-    description = "The Qt port of obconf, the Openbox configuration tool";
+    description = "Qt port of obconf, the Openbox configuration tool";
     mainProgram = "obconf-qt";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;

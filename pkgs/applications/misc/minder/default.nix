@@ -8,7 +8,7 @@
 , python3
 , shared-mime-info
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , cairo
 , discount
 , glib
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     python3
     shared-mime-info
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/phase1geo/Minder";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     mainProgram = "com.github.phase1geo.minder";
   };
 }

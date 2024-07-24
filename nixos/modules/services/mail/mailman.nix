@@ -445,6 +445,7 @@ in {
           "${removeSuffix "/" cfg.serve.virtualRoot}/static/".alias = webSettings.STATIC_ROOT + "/";
         };
       });
+      proxyTimeout = mkDefault "120s";
     };
 
     environment.systemPackages = [ (pkgs.buildEnv {
@@ -534,14 +535,11 @@ in {
               hyperkittyApiKey=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 64)
               secretKey=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 64)
 
-              mailmanWebCfgTmp=$(mktemp)
-              jq -n '.MAILMAN_ARCHIVER_KEY=$archiver_key | .SECRET_KEY=$secret_key' \
+              install -m 0440 -o root -g mailman \
+                <(jq -n '.MAILMAN_ARCHIVER_KEY=$archiver_key | .SECRET_KEY=$secret_key' \
                   --arg archiver_key "$hyperkittyApiKey" \
-                  --arg secret_key "$secretKey" \
-                  >"$mailmanWebCfgTmp"
-              chown root:mailman "$mailmanWebCfgTmp"
-              chmod 440 "$mailmanWebCfgTmp"
-              mv -n "$mailmanWebCfgTmp" "$mailmanWebCfg"
+                  --arg secret_key "$secretKey") \
+                "$mailmanWebCfg"
           fi
 
           hyperkittyApiKey="$(jq -r .MAILMAN_ARCHIVER_KEY "$mailmanWebCfg")"
@@ -649,7 +647,7 @@ in {
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ lheckemann qyliss ];
+    maintainers = with lib.maintainers; [ qyliss ];
     doc = ./mailman.md;
   };
 

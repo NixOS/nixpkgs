@@ -14,16 +14,17 @@
 , asar
 
 , tetrio-src
+, tetrio-version
 }:
 
 let
-  version = "unstable-2024-03-31";
+  version = "0.27.2";
 
   src = fetchFromGitLab {
     owner = "UniQMG";
     repo = "tetrio-plus";
-    rev = "b13d476a162a2aec4ca0def29eb7a4ada9ebf523";
-    hash = "sha256-bZwx0r2lu4Ed/pYRvNog6IIok/HMoK+UeDIQctggUEs=";
+    rev = "electron-v${version}-tetrio-v${lib.versions.major tetrio-version}";
+    hash = "sha256-PvTivTt1Zuvk5gaCcQDcIBFsUf/ZG7TJYXqm0NP++Bw=";
     fetchSubmodules = true;
 
     # tetrio-plus uses this info for displaying its version,
@@ -52,7 +53,7 @@ let
 
     sourceRoot = "${src.name}/tpsecore";
 
-    cargoHash = "sha256-14UjPSlfiuf696cqy8+fz3SmfmFoGQlEDg9obP0EKXg=";
+    cargoHash = "sha256-K9l8wQOtjf3l8gZMMdVnaNrgzVWGl62iBBcpA+ulJbw=";
 
     nativeBuildInputs = [
       wasm-pack
@@ -62,7 +63,7 @@ let
     ];
 
     buildPhase = ''
-      HOME=$(mktemp -d) RUSTFLAGS="-C linker=lld" wasm-pack build --target web --release
+      HOME=$(mktemp -d) wasm-pack build --target web --release
     '';
 
     installPhase = ''
@@ -72,7 +73,7 @@ let
     doCheck = false;
 
     meta = {
-      description = "A self contained toolkit for creating, editing, and previewing TPSE files";
+      description = "Self contained toolkit for creating, editing, and previewing TPSE files";
       homepage = "https://gitlab.com/UniQMG/tpsecore";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ huantian wackbyte ];
@@ -81,8 +82,8 @@ let
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = ./yarn.lock;
-    hash = "sha256-VYUh9y6PRc1OTLELkqCxP89Xbesv3Nu+eUq6fkuoQHE=";
+    yarnLock = "${src}/resources/desktop-ci/yarn.lock";
+    hash = "sha256-LfUC2bkUX+sFq3vMMOC1YVYbpDxUSnLO9GiKdoQBdAw=";
   };
 
 in
@@ -107,8 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Install custom package.json/yarn.lock that describe the additional node
     # dependencies that tetrio-plus needs to run, and install them in our output
-    install -m644 ${./package.json} package.json
-    install -m644 ${./yarn.lock} yarn.lock
+    cp ../resources/desktop-ci/yarn.lock .
+    patch package.json ../resources/desktop-ci/package.json.diff
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror ${offlineCache}
@@ -126,6 +127,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Finally, we install the tetrio-plus code where the above patch script expects
     cp -r $src out/tetrioplus
     chmod -R u+w out/tetrioplus
+
+    # Disable the uninstall button in the tetrio-plus popup,
+    # as it doesn't make sense to mutably uninstall it in a nix package
+    substituteInPlace out/tetrioplus/desktop-manifest.js \
+      --replace-fail '"show_uninstaller_button": true' '"show_uninstaller_button": false'
 
     # We don't need the tpsecore source code bundled
     rm -rf out/tetrioplus/tpsecore/

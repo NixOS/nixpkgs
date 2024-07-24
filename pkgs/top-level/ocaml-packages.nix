@@ -88,7 +88,11 @@ let
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
+    binning = callPackage ../development/ocaml-modules/binning { };
+
     biocaml = janeStreet_0_15.biocaml;
+
+    biotk = callPackage ../development/ocaml-modules/biotk { };
 
     bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
 
@@ -114,6 +118,8 @@ let
     brr = callPackage ../development/ocaml-modules/brr { };
 
     bwd = callPackage ../development/ocaml-modules/bwd { };
+
+    bytestring = callPackage ../development/ocaml-modules/bytestring { };
 
     bz2 = callPackage ../development/ocaml-modules/bz2 { };
 
@@ -227,6 +233,8 @@ let
 
     color = callPackage ../development/ocaml-modules/color { };
 
+    colors = callPackage ../development/ocaml-modules/colors { };
+
     conduit = callPackage ../development/ocaml-modules/conduit { };
 
     conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
@@ -236,6 +244,8 @@ let
     conduit-lwt-unix = callPackage ../development/ocaml-modules/conduit/lwt-unix.nix { };
 
     conduit-mirage = callPackage ../development/ocaml-modules/conduit/mirage.nix { };
+
+    config = callPackage ../development/ocaml-modules/config { };
 
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
@@ -456,6 +466,8 @@ let
 
     eqaf = callPackage ../development/ocaml-modules/eqaf { };
 
+    eqaf-cstruct = callPackage ../development/ocaml-modules/eqaf/cstruct.nix { };
+
     erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
 
     erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
@@ -469,6 +481,8 @@ let
     extlib-1-7-7 = callPackage ../development/ocaml-modules/extlib/1.7.7.nix { };
 
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
+
+    ezjsonm-encoding = callPackage ../development/ocaml-modules/ezjsonm-encoding { };
 
     ezxmlm = callPackage ../development/ocaml-modules/ezxmlm { };
 
@@ -562,13 +576,18 @@ let
 
     gapi-ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
 
-    gd4o = callPackage ../development/ocaml-modules/gd4o { };
+    gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
+    gd = callPackage ../development/ocaml-modules/gd { inherit (pkgs) gd; };
 
     gen = callPackage ../development/ocaml-modules/gen { };
 
     gen_js_api = callPackage ../development/ocaml-modules/gen_js_api { };
 
     genspio = callPackage ../development/ocaml-modules/genspio { };
+
+    get-activity = callPackage ../development/ocaml-modules/get-activity { };
+
+    get-activity-lib = callPackage ../development/ocaml-modules/get-activity/lib.nix { };
 
     getopt = callPackage ../development/ocaml-modules/getopt { };
 
@@ -594,6 +613,12 @@ let
     github-data = callPackage ../development/ocaml-modules/github/data.nix {  };
     github-jsoo = callPackage ../development/ocaml-modules/github/jsoo.nix {  };
     github-unix = callPackage ../development/ocaml-modules/github/unix.nix {  };
+
+    gitlab = callPackage ../development/ocaml-modules/gitlab {  };
+    gitlab-jsoo = callPackage ../development/ocaml-modules/gitlab/jsoo.nix {  };
+    gitlab-unix = callPackage ../development/ocaml-modules/gitlab/unix.nix {  };
+
+    gluon = callPackage ../development/ocaml-modules/gluon { };
 
     gluten = callPackage ../development/ocaml-modules/gluten { };
     gluten-eio = callPackage ../development/ocaml-modules/gluten/eio.nix { };
@@ -819,26 +844,8 @@ let
         cfstream = self.cfstream.override { inherit core_kernel; };
       };
 
-      phylogenetics = let
-        angstrom = self.angstrom.override { inherit ppx_let; };
-      in callPackage ../development/ocaml-modules/phylogenetics {
-        inherit biocaml;
-        ppx_deriving = self.ppx_deriving.override { inherit (jsDeps) ppxlib; };
-        angstrom-unix = self.angstrom-unix.override { inherit angstrom; };
-      };
-
       ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
     })).overrideScope liftJaneStreet;
-
-    janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
-      self = self.janeStreet_0_9_0;
-      super = self // {
-        janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {
-          defaultVersion = "0.9.0";
-        };
-      };
-      inherit (pkgs) stdenv lib openssl;
-    };
 
     javalib = callPackage ../development/ocaml-modules/javalib { };
 
@@ -947,6 +954,8 @@ let
 
     letsencrypt-mirage = callPackage ../development/ocaml-modules/letsencrypt/mirage.nix { };
 
+    libc = callPackage ../development/ocaml-modules/libc { };
+
     lilv = callPackage ../development/ocaml-modules/lilv {
       inherit (pkgs) lilv;
     };
@@ -1034,6 +1043,8 @@ let
     };
 
     mec = callPackage ../development/ocaml-modules/mec { };
+
+    memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
     memtrace = callPackage ../development/ocaml-modules/memtrace { };
 
@@ -1182,7 +1193,6 @@ let
 
     msat = callPackage ../development/ocaml-modules/msat { };
 
-    mtime_1 =  callPackage ../development/ocaml-modules/mtime/1_x.nix { };
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
@@ -1192,6 +1202,8 @@ let
     ### N ###
 
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
+
+    ninja_utils = callPackage ../development/ocaml-modules/ninja_utils { };
 
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
 
@@ -1289,6 +1301,7 @@ let
     ocamlformat_0_25_1 = ocamlformat.override { version = "0.25.1"; };
     ocamlformat_0_26_0 = ocamlformat.override { version = "0.26.0"; };
     ocamlformat_0_26_1 = ocamlformat.override { version = "0.26.1"; };
+    ocamlformat_0_26_2 = ocamlformat.override { version = "0.26.2"; };
 
     ocamlformat = callPackage ../development/ocaml-modules/ocamlformat/ocamlformat.nix {};
 
@@ -1383,7 +1396,7 @@ let
       inherit (pkgs) unzip;
     };
 
-    opium = callPackage ../development/ocaml-modules/opium { mtime = mtime_1; };
+    opium = callPackage ../development/ocaml-modules/opium { };
 
     opti = callPackage ../development/ocaml-modules/opti { };
 
@@ -1441,7 +1454,7 @@ let
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
-    phylogenetics = janeStreet_0_15.phylogenetics;
+    phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
 
     piaf = callPackage ../development/ocaml-modules/piaf { };
 
@@ -1629,6 +1642,8 @@ let
 
     ringo = callPackage ../development/ocaml-modules/ringo { };
 
+    rio = callPackage ../development/ocaml-modules/rio { };
+
     riot = callPackage ../development/ocaml-modules/riot { };
 
     rock = callPackage ../development/ocaml-modules/rock { };
@@ -1707,6 +1722,8 @@ let
 
     spelll = callPackage ../development/ocaml-modules/spelll { };
 
+    spices = callPackage ../development/ocaml-modules/spices { };
+
     srt = callPackage ../development/ocaml-modules/srt {
       inherit (pkgs) srt;
     };
@@ -1724,6 +1741,8 @@ let
     stog = callPackage ../applications/misc/stog { };
     stog_asy = callPackage ../applications/misc/stog/asy.nix { };
     stog_markdown = callPackage ../applications/misc/stog/markdown.nix { };
+
+    streaming = callPackage ../development/ocaml-modules/streaming { };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
@@ -2005,16 +2024,9 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_5_2 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.2.nix { });
 
-  ocamlPackages_latest = ocamlPackages_5_1;
+  ocamlPackages_latest = ocamlPackages_5_2;
 
   ocamlPackages = ocamlPackages_5_1;
-
-  # This is a nasty way to replace toplevel janestreet attributes in the scope,
-  # so that modules outside of ocamlPackages that depend on JS OCaml libraries
-  # *and* non-JS OCaml libraries can pull in the same version of JS transitive
-  # dependencies. Remove this once ligo and stanc can be compiled against
-  # janestreet 0.16 libraries.
-  ocamlPackages_4_14_janeStreet_0_15 = ocamlPackages_4_14.overrideScope (self: super: super // super.janeStreet_0_15);
 
   # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
   # Below are aliases for porting them to the latest versions of the OCaml 4 series.

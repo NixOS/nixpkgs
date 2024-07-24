@@ -56,7 +56,7 @@ mesonCheckPhase() {
     local flagsArray=($mesonCheckFlags "${mesonCheckFlagsArray[@]}")
 
     echoCmd 'mesonCheckPhase flags' "${flagsArray[@]}"
-    meson test --no-rebuild "${flagsArray[@]}"
+    meson test --no-rebuild --print-errorlogs "${flagsArray[@]}"
 
     runHook postCheck
 }

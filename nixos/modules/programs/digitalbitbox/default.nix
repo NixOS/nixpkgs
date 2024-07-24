@@ -1,29 +1,27 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.digitalbitbox;
 in
 
 {
   options.programs.digitalbitbox = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Installs the Digital Bitbox application and enables the complementary hardware module.
       '';
     };
 
-    package = mkPackageOption pkgs "digitalbitbox" {
+    package = lib.mkPackageOption pkgs "digitalbitbox" {
       extraDescription = ''
         This can be used to install a package with udev rules that differ from the defaults.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     hardware.digitalbitbox = {
       enable = true;

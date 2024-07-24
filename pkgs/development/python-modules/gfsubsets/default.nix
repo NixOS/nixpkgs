@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fonttools
-, importlib-resources
-, setuptools
-, setuptools-scm
-, youseedee
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fonttools,
+  importlib-resources,
+  setuptools,
+  setuptools-scm,
+  youseedee,
 }:
 
 buildPythonPackage rec {
   pname = "gfsubsets";
-  version = "2024.2.5";
+  version = "2024.5.9";
   gitTag = "v2024.02.05";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-g9QxLa3B1MMTs+jmj4CyJySZRU0zoFNYdbOZwHjKPaQ=";
+    hash = "sha256-OgpdcOJWX0o0Hy6LjRsxsZMAVWgKziM+bqe/FfJniZY=";
   };
 
   pyproject = true;
@@ -33,9 +34,7 @@ buildPythonPackage rec {
 
   # Package has no unit tests.
   doCheck = false;
-  pythonImportsCheck = [
-    "gfsubsets"
-  ];
+  pythonImportsCheck = [ "gfsubsets" ];
 
   meta = with lib; {
     description = "Codepoint definitions for the Google Fonts subsetter";

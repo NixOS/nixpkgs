@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+}:
 
 buildPythonPackage rec {
   pname = "pydes";
@@ -19,7 +24,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyDes" ];
 
   meta = with lib; {
-    description = "A pure python module which implements the DES and Triple-DES encryption algorithms";
+    description = "Pure python module which implements the DES and Triple-DES encryption algorithms";
     homepage = "https://github.com/twhiteman/pyDes";
     license = licenses.mit;
     maintainers = with maintainers; [ j0hax ];

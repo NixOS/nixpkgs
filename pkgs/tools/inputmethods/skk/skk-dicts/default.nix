@@ -64,7 +64,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A collection of standard SKK dictionaries";
+    description = "Collection of standard SKK dictionaries";
     longDescription = ''
       This package provides a collection of standard kana-to-kanji
       dictionaries for the SKK Japanese input method.

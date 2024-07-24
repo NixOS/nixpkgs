@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/troglobit/xplugd";
-    description = "A UNIX daemon that executes a script on X input and RandR changes";
+    description = "UNIX daemon that executes a script on X input and RandR changes";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ akho ];

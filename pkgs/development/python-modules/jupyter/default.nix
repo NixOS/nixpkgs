@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, notebook
-, qtconsole
-, jupyter-console
-, nbconvert
-, ipykernel
-, ipywidgets
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  notebook,
+  qtconsole,
+  jupyter-console,
+  nbconvert,
+  ipykernel,
+  ipywidgets,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,14 @@ buildPythonPackage rec {
     sha256 = "d9dc4b3318f310e34c82951ea5d6683f67bed7def4b259fafbfe4f1beb1d8e5f";
   };
 
-  propagatedBuildInputs = [ notebook qtconsole jupyter-console nbconvert ipykernel ipywidgets ];
+  propagatedBuildInputs = [
+    notebook
+    qtconsole
+    jupyter-console
+    nbconvert
+    ipykernel
+    ipywidgets
+  ];
 
   # Meta-package, no tests
   doCheck = false;
@@ -31,5 +39,4 @@ buildPythonPackage rec {
     platforms = platforms.all;
     priority = 100; # This is a metapackage which is unimportant
   };
-
 }

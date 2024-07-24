@@ -4,7 +4,6 @@
 , generateSplicesForMkScope
 , makeScopeWithSplicing'
 , fetchurl
-, fetchpatch
 , fetchpatch2
 , makeSetupHook
 , makeWrapper
@@ -15,10 +14,6 @@
 , buildPackages
 , python3
 , config
-
-  # options
-, developerBuild ? false
-, debug ? false
 }:
 
 let
@@ -47,7 +42,6 @@ let
       qtbase = callPackage ./modules/qtbase.nix {
         withGtk3 = !stdenv.hostPlatform.isMinGW;
         inherit (srcs.qtbase) src version;
-        inherit developerBuild;
         inherit (darwin.apple_sdk_11_0.frameworks)
           AGL AVFoundation AppKit Contacts CoreBluetooth EventKit GSS MetalKit;
         patches = [
@@ -197,7 +191,6 @@ let
             name = "qmake6-hook";
             propagatedBuildInputs = [ qtbase.dev ];
             substitutions = {
-              inherit debug;
               fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
             };
           } ./hooks/qmake-hook.sh)

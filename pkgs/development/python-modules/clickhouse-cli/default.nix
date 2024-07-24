@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, setuptools
-, click
-, prompt-toolkit
-, pygments
-, requests
-, sqlparse
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  click,
+  prompt-toolkit,
+  pygments,
+  requests,
+  sqlparse,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +21,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
-  pythonRelaxDeps = [
-    "sqlparse"
-  ];
+  pythonRelaxDeps = [ "sqlparse" ];
 
   propagatedBuildInputs = [
     click
@@ -40,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "clickhouse_cli" ];
 
   meta = with lib; {
-    description = "A third-party client for the Clickhouse DBMS server";
+    description = "Third-party client for the Clickhouse DBMS server";
     mainProgram = "clickhouse-cli";
     homepage = "https://github.com/hatarist/clickhouse-cli";
     license = licenses.mit;

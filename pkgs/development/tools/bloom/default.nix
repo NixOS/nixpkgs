@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Debug interface for AVR-based embedded systems development on GNU/Linux";
     homepage = "https://bloom.oscillate.io/";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "bloom";
     platforms = lib.platforms.linux;
   };

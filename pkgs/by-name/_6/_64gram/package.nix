@@ -7,7 +7,7 @@
 
 telegram-desktop.overrideAttrs (old: rec {
   pname = "64gram";
-  version = "1.1.19";
+  version = "1.1.31";
 
   src = fetchFromGitHub {
     owner = "TDesktop-x64";
@@ -15,13 +15,13 @@ telegram-desktop.overrideAttrs (old: rec {
     rev = "v${version}";
 
     fetchSubmodules = true;
-    hash = "sha256-9QCh7/eNPWqsOF+cjO61EnqqhAdy6+4UxZhWjfJc5gQ=";
+    hash = "sha256-xYCousLXV9TeQjDNiXkEMbTiiuusLc7Ib2xHkMYBD1M=";
   };
 
   passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
-    description = "An unofficial Telegram Desktop providing Windows 64bit build and extra features";
+    description = "Unofficial Telegram Desktop providing Windows 64bit build and extra features";
     license = licenses.gpl3Only;
     platforms = platforms.all;
     homepage = "https://github.com/TDesktop-x64/tdesktop";

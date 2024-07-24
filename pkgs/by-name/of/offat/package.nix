@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "offat";
-  version = "0.17.2";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "OFFAT";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tyQoTc/cfzYxK+vLg9TvZdbKRX3B4tL1Do/wDMArJSA=";
+    hash = "sha256-AROfhVVV9MN+yRGWrzC2y9lfErT4C3Mg8qPz8lSODFM=";
   };
 
   sourceRoot = "${src.name}/src";

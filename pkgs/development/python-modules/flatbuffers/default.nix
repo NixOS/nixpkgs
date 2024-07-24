@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, flatbuffers
+{
+  lib,
+  buildPythonPackage,
+  flatbuffers,
 }:
 
 buildPythonPackage rec {

@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, bx-py-utils
-, colorlog
-, fetchFromGitHub
-, importlib-resources
-, jaraco-classes
-, jaraco-collections
-, jaraco-itertools
-, jaraco-context
-, jaraco-net
-, keyring
-, lomond
-, more-itertools
-, platformdirs
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, requests-toolbelt
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  bx-py-utils,
+  colorlog,
+  fetchFromGitHub,
+  importlib-resources,
+  jaraco-classes,
+  jaraco-collections,
+  jaraco-itertools,
+  jaraco-context,
+  jaraco-net,
+  keyring,
+  lomond,
+  more-itertools,
+  platformdirs,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  requests-toolbelt,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-abode";
-  version = "5.1.1";
+  version = "5.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "jaraco.abode";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TUxljF1k/fvQoNcHx6jMRJrYgzxjXefvMl+mBD0DL8o=";
+    hash = "sha256-1omRBbUNS2/U2laK7E1M0uZfejZVMdGezG5oIGILj70=";
   };
 
   nativeBuildInputs = [
@@ -63,9 +64,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "jaraco.abode"
-  ];
+  pythonImportsCheck = [ "jaraco.abode" ];
 
   preCheck = ''
     export HOME=$TEMP
@@ -86,6 +85,9 @@ buildPythonPackage rec {
     description = "Library interfacing to the Abode home security system";
     mainProgram = "abode";
     license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee dotlambda ];
+    maintainers = with maintainers; [
+      jamiemagee
+      dotlambda
+    ];
   };
 }

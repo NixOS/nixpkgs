@@ -19,6 +19,6 @@ stdenv.mkDerivation {
     description = "Linux tools to inspect the gpiochip interface";
     maintainers = with maintainers; [ kwohlfahrt ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope-proxy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  zope-proxy,
 }:
 
 buildPythonPackage rec {
@@ -28,5 +29,4 @@ buildPythonPackage rec {
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
   };
-
 }

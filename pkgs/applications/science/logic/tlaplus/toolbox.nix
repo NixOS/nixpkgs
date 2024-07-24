@@ -7,7 +7,7 @@
 , libXtst
 , glib
 , zlib
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeShellWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;

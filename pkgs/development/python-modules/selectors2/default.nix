@@ -1,5 +1,11 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi
-, nose, psutil, mock }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  psutil,
+  mock,
+}:
 
 buildPythonPackage rec {
   version = "2.0.2";
@@ -11,11 +17,13 @@ buildPythonPackage rec {
     sha256 = "1f1bbaac203a23fbc851dc1b5a6e92c50698cc8cefa5873eb5b89eef53d1d82b";
   };
 
-  patches = [
-    ./mapping-import.patch
-  ];
+  patches = [ ./mapping-import.patch ];
 
-  nativeCheckInputs = [ nose psutil mock ];
+  nativeCheckInputs = [
+    nose
+    psutil
+    mock
+  ];
 
   checkPhase = ''
     # https://github.com/NixOS/nixpkgs/pull/46186#issuecomment-419450064
@@ -27,7 +35,6 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "https://www.github.com/SethMichaelLarson/selectors2";
     description = "Back-ported, durable, and portable selectors";
     license = licenses.mit;

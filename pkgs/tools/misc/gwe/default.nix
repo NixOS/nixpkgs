@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , meson
 , ninja
@@ -29,16 +29,17 @@ let
    rx
    gtk3
    reactivex
+   setuptools
  ]);
 in stdenv.mkDerivation rec {
   pname = "gwe";
-  version = "0.15.7";
+  version = "0.15.9";
 
   src = fetchFromGitLab {
     owner = "leinardi";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0/VQD3WuSMShsPjydOxVEufBZqVOCTFO3UbJpsy+oLE=";
+    hash = "sha256-agq967QN1nsAOn+1Ce64+id7UlSS/K3XGsUUihWOztk=";
   };
 
   prePatch = ''
@@ -51,7 +52,7 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
     meson
     ninja
@@ -84,7 +85,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/leinardi/gwe";
     platforms = platforms.linux;
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     mainProgram = "gwe";
   };
 }

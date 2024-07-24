@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "0xtools";
-  version = "1.2.4";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "tanelpoder";
     repo = "0xtools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-h0/HIbwb1CvFUh/NpozDUCjYGCH647lC7JhbpDCvaLk=";
+    hash = "sha256-S2jGF6wyjE9okbren/+p37zDr+eHUE8gJe/sbsXX4f4=";
   };
 
   postPatch = ''

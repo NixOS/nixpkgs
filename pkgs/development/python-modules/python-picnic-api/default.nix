@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -14,17 +15,13 @@ buildPythonPackage rec {
     sha256 = "1axqw4bs3wa9mdac35h7r25v3i5g7v55cvyy48c4sg31dxnr4wcp";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Project doesn't ship tests
   # https://github.com/MikeBrink/python-picnic-api/issues/13
   doCheck = false;
 
-  pythonImportsCheck = [
-    "python_picnic_api"
-  ];
+  pythonImportsCheck = [ "python_picnic_api" ];
 
   meta = with lib; {
     description = "Python wrapper for the Picnic API";

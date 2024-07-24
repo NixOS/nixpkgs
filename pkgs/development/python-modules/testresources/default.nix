@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pbr
-, fixtures
-, testtools
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pbr,
+  fixtures,
+  testtools,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
       --replace "failIf" "assertFalse"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pbr
-  ];
+  propagatedBuildInputs = [ pbr ];
 
   nativeCheckInputs = [
     fixtures

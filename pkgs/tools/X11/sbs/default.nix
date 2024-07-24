@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple background setter with 200 lines of code";
     homepage = "https://github.com/onur-ozkan/sbs";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ onur-ozkan ];
     mainProgram = "sbs";

@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage    = "https://github.com/YosysHQ/prjtrellis";
     license     = licenses.isc;
-    maintainers = with maintainers; [ q3k thoughtpolice emily rowanG077 ];
+    maintainers = with maintainers; [ q3k thoughtpolice rowanG077 ];
     platforms   = platforms.all;
   };
 }

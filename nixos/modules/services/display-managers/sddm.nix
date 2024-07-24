@@ -66,7 +66,14 @@ let
       HideShells = "/run/current-system/sw/bin/nologin";
     };
 
-    X11 = optionalAttrs xcfg.enable {
+    Wayland = {
+      EnableHiDPI = cfg.enableHidpi;
+      SessionDir = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
+      CompositorCommand = lib.optionalString cfg.wayland.enable cfg.wayland.compositorCommand;
+    };
+
+  } // optionalAttrs xcfg.enable {
+    X11 = {
       MinimumVT = if xcfg.tty != null then xcfg.tty else 7;
       ServerPath = toString xserverWrapper;
       XephyrPath = "${pkgs.xorg.xorgserver.out}/bin/Xephyr";
@@ -76,12 +83,6 @@ let
       DisplayCommand = toString Xsetup;
       DisplayStopCommand = toString Xstop;
       EnableHiDPI = cfg.enableHidpi;
-    };
-
-    Wayland = {
-      EnableHiDPI = cfg.enableHidpi;
-      SessionDir = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
-      CompositorCommand = lib.optionalString cfg.wayland.enable cfg.wayland.compositorCommand;
     };
   } // optionalAttrs dmcfg.autoLogin.enable {
     Autologin = {
@@ -111,8 +112,8 @@ let
       let
         westonIni = (pkgs.formats.ini { }).generate "weston.ini" {
           libinput = {
-            enable-tap = xcfg.libinput.mouse.tapping;
-            left-handed = xcfg.libinput.mouse.leftHanded;
+            enable-tap = config.services.libinput.mouse.tapping;
+            left-handed = config.services.libinput.mouse.leftHanded;
           };
           keyboard = {
             keymap_model = xcfg.xkb.model;

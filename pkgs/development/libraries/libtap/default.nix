@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ cmake perl ];
 
   meta = with lib; {
-    description = "A library to implement a test protocol";
+    description = "Library to implement a test protocol";
     longDescription = ''
       libtap is a library to implement the Test Anything Protocol for
       C originally created by Nik Clayton. This is a maintenance

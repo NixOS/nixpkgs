@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The theme from libadwaita ported to GTK-3";
+    description = "Theme from libadwaita ported to GTK-3";
     homepage = "https://github.com/lassekongo83/adw-gtk3";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;

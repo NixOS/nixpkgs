@@ -1,26 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-psycopg2";
-  version = "2.9.21.20240311";
+  version = "2.9.21.20240417";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cilF3/pqcpvrxmDxQTfzft/OrVosFesjQhKn0BfugHI=";
+    hash = "sha256-Bdslb0pFn7IaQmuOf8oGVsNTkQX/Agjq9r2vQGo4cIc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "psycopg2-stubs"
-  ];
+  pythonImportsCheck = [ "psycopg2-stubs" ];
 
   doCheck = false;
 

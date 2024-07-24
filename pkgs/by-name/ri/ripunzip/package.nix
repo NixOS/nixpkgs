@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripunzip";
-  version = "1.1.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "ripunzip";
     rev = "v${version}";
-    hash = "sha256-GyP4OPnPKhu9nXYXIfWCVLF/thwWiP0OqAQY/1D05LE=";
+    hash = "sha256-qDY81SxTVfGBCZU2jxuOswyTqzN7Mk3q7Ns6+ShRUnU=";
   };
 
-  cargoHash = "sha256-Jv9bCHT5xl/2CPnSuWd9HZuaGOttBC5iAbbpr3jaIhM=";
+  cargoHash = "sha256-8AKmIzMrxpQBDrW8C/OFZYvFn+u4yvWbMXSsCC0NX+Y=";
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tool to unzip files in parallel";
+    description = "Tool to unzip files in parallel";
     mainProgram = "ripunzip";
     homepage = "https://github.com/google/ripunzip";
     license = with lib.licenses; [ mit asl20 ];

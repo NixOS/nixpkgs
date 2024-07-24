@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# propagates
-, packaging
+  # propagates
+  packaging,
 
-# tests
-, pyqt5
-, pyside2
-, pytestCheckHook
+  # tests
+  pyqt5,
+  pyside2,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-paFf/VGVUKE2G9xW/8B/2lamr3KS8Xx7OV1Ag69jKYc=";
   };
 
-  propagatedBuildInputs = [
-    packaging
-  ];
+  propagatedBuildInputs = [ packaging ];
 
   doCheck = false; # ModuleNotFoundError: No module named 'PyQt5.QtConnectivity'
   nativeCheckInputs = [

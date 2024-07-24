@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, multidict
-, xmljson
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  multidict,
+  xmljson,
 }:
 
 buildPythonPackage rec {
   pname = "latex2mathml";
   version = "3.77.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -21,11 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-DLdSFMsNA0gD6Iw0kn+0IrbvyI0VEGOpz0ZYD48nRkY=";
   };
 
-  format = "pyproject";
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -45,6 +43,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/roniemartinez/latex2mathml";
     changelog = "https://github.com/roniemartinez/latex2mathml/releases/tag/${version}";
     license = licenses.mit;
+    mainProgram = "latex2mathml";
     maintainers = with maintainers; [ sfrijters ];
   };
 }

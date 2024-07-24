@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lark
-, pynose
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lark,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,22 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-rI/1n7m9Q36im4mn18UH/QoelXhFuumurGnyiSuNaB4=";
   };
 
-  # Nose is required during build process, so can not use `nativeCheckInputs`.
-  buildInputs = [
-    pynose
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    lark
-  ];
+  dependencies = [ lark ];
 
   # This fork of python-hcl2 doesn't ship tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hcl2"
-  ];
+  pythonImportsCheck = [ "hcl2" ];
 
   meta = with lib; {
     description = "Parser for HCL2 written in Python using Lark";

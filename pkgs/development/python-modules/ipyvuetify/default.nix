@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
   # Python Inputs
-, jupyter-packaging
-, jupyterlab
-, setuptools
-, wheel
-, ipyvue
+  jupyter-packaging,
+  jupyterlab,
+  setuptools,
+  wheel,
+  ipyvue,
 }:
 
 buildPythonPackage rec {
@@ -42,11 +43,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ipyvue ];
 
-  doCheck = false;  # no tests on PyPi/GitHub
+  doCheck = false; # no tests on PyPi/GitHub
   pythonImportsCheck = [ "ipyvuetify" ];
 
   meta = with lib; {
-    description = "Jupyter widgets based on Vuetify UI Components.";
+    description = "Jupyter widgets based on Vuetify UI Components";
     homepage = "https://github.com/mariobuikhuizen/ipyvuetify";
     license = licenses.mit;
     maintainers = with maintainers; [ drewrisinger ];

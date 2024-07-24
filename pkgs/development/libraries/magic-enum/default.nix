@@ -2,16 +2,19 @@
 , lib
 , stdenv
 , cmake
+, nix-update-script
+, testers
+, magic-enum
 }:
 stdenv.mkDerivation rec{
   pname = "magic-enum";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "Neargye";
     repo = "magic_enum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q82HdlEMXpiGISnqdjFd0rxiLgsobsoWiqqGLawu2pM=";
+    hash = "sha256-1pO9FWd0InXqg8+lwRF3YNFTAeVLjqoI9v15LjWxnZY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,11 +27,16 @@ stdenv.mkDerivation rec{
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  meta = with lib;{
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = magic-enum; };
+  };
+
+  meta = {
     description = "Static reflection for enums (to string, from string, iteration) for modern C++";
     homepage = "https://github.com/Neargye/magic_enum";
     changelog = "https://github.com/Neargye/magic_enum/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Alper-Celik ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Alper-Celik ];
   };
 }

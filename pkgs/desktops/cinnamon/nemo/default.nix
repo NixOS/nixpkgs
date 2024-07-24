@@ -1,5 +1,4 @@
 { fetchFromGitHub
-, fetchpatch
 , glib
 , gobject-introspection
 , meson
@@ -7,13 +6,15 @@
 , pkg-config
 , lib
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , gtk3
 , gvfs
 , cinnamon-desktop
 , xapp
 , libexif
+, json-glib
+, gtk-layer-shell
 , exempi
 , intltool
 , shared-mime-info
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "6.0.2";
+  version = "6.2.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-vSLFp0sgqGsZtcXdv82PVH0HcBbmcxrMySLFCBrLJpA=";
+    sha256 = "sha256-2gUIdAKpdL2obfK5lmlwRgyeeIkiFLO8LBdem1hBzkU=";
   };
 
   patches = [
@@ -50,13 +51,15 @@ stdenv.mkDerivation rec {
     exempi
     gvfs
     libgsf
+    json-glib
+    gtk-layer-shell
   ];
 
   nativeBuildInputs = [
     meson
     pkg-config
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     shared-mime-info
     gobject-introspection
@@ -65,6 +68,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
+    # enabled by default in Mint packaging (see debian/rules)
+    "-Dgtk_layer_shell=true"
   ];
 
   postInstall = ''

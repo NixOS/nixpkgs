@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , fetchpatch
 , buildPythonApplication
@@ -19,7 +18,7 @@
 , pygobject3
 , pyxdg
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonApplication rec {
@@ -55,7 +54,7 @@ buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
 
     # Python packages
     dbus-python

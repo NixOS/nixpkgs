@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkOption optionalString types versionAtLeast;
+  inherit (lib.options) literalExpression;
   cfg = config.amazonImage;
   amiBootMode = if config.ec2.efi then "uefi" else "legacy-bios";
 
@@ -15,7 +15,7 @@ in {
   # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html#timeout-nvme-ebs-volumes
   config.boot.kernelParams =
     let timeout =
-      if pkgs.lib.versionAtLeast config.boot.kernelPackages.kernel.version "4.15"
+      if versionAtLeast config.boot.kernelPackages.kernel.version "4.15"
       then "4294967295"
       else  "255";
     in [ "nvme_core.io_timeout=${timeout}" ];
@@ -71,9 +71,8 @@ in {
       '';
 
     zfsBuilder = import ../../../lib/make-multi-disk-zfs-image.nix {
-      inherit lib config configFile;
+      inherit lib config configFile pkgs;
       inherit (cfg) contents format name;
-      pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
 
       includeChannel = true;
 
@@ -120,10 +119,9 @@ in {
     };
 
     extBuilder = import ../../../lib/make-disk-image.nix {
-      inherit lib config configFile;
+      inherit lib config configFile pkgs;
 
       inherit (cfg) contents format name;
-      pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
 
       fsType = "ext4";
       partitionTableType = if config.ec2.efi then "efi" else "legacy+gpt";
@@ -158,5 +156,5 @@ in {
     };
   in if config.ec2.zfs.enable then zfsBuilder else extBuilder;
 
-  meta.maintainers = with maintainers; [ arianvp ];
+  meta.maintainers = with lib.maintainers; [ arianvp ];
 }

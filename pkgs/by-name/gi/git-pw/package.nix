@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
   });
 
   meta = with lib; {
-    description = "A tool for integrating Git with Patchwork, the web-based patch tracking system";
+    description = "Tool for integrating Git with Patchwork, the web-based patch tracking system";
     homepage = "https://github.com/getpatchwork/git-pw";
     license = licenses.mit;
     maintainers = with maintainers; [ raitobezarius ];

@@ -4,7 +4,7 @@
 , xxd
 , pkg-config
 , imagemagick
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , jansson
 , nixosTests
@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "urn-timer";
-  version = "unstable-2024-03-05";
+  version = "0-unstable-2024-03-05";
 
   src = fetchFromGitHub {
     owner = "paoloose";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     xxd
     pkg-config
     imagemagick
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

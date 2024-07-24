@@ -1,11 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, websockets
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pydantic,
+  pythonOlder,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +36,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiolivisi"
-  ];
+  pythonImportsCheck = [ "aiolivisi" ];
 
   meta = with lib; {
     description = "Module to communicate with LIVISI Smart Home Controller";

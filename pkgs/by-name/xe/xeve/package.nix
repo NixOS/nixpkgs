@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xeve";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "mpeg5";
     repo = "xeve";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8YueEx2oIh24jV38bzpDlCVHNZB7HDOXeP5MANM8zBc=";
+    hash = "sha256-8jXntm/yFme9ZPImdW54jAr11hEsU1K+N5/7RLmITPs=";
   };
 
   postPatch = ''
@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xeve_app";
     maintainers = with lib.maintainers; [ jopejoe1 ];
     platforms = lib.platforms.all;
-    broken = !stdenv.hostPlatform.isx86;
+    # Currently only supports gcc and msvc as compiler, the limitation for clang gets removed in the next release, but that does not fix building on darwin.
+    broken = !stdenv.hostPlatform.isx86 || !stdenv.cc.isGNU;
   };
 })

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An implementation of the QUIC transport protocol";
+    description = "Implementation of the QUIC transport protocol";
     homepage = "https://github.com/facebook/mvfst";
     license = licenses.mit;
     platforms = platforms.unix;

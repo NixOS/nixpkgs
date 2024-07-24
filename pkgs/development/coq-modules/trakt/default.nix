@@ -19,7 +19,7 @@ mkCoqDerivation {
   propagatedBuildInputs = [ coq-elpi ];
 
   meta = with lib; {
-    description = "A generic goal preprocessing tool for proof automation tactics in Coq";
+    description = "Generic goal preprocessing tool for proof automation tactics in Coq";
     maintainers = with maintainers; [ siraben ];
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;

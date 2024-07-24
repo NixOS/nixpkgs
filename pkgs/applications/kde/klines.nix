@@ -4,7 +4,7 @@ mkDerivation {
   pname = "klines";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.klines";
-    description = "A simple but highly addictive one player game";
+    description = "Simple but highly addictive one player game";
     mainProgram = "klines";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;

@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, ncurses
-, importlib-metadata
-, setuptools
-, wheel
-, patchelf
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  ncurses,
+  importlib-metadata,
+  setuptools,
+  wheel,
+  patchelf,
 }:
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "6.15.16";
+  version = "7.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "cx_Freeze";
+    pname = "cx_freeze";
     inherit version;
-    hash = "sha256-xjmRiG/ypTGfjw0HwDSaa74aZbXzIPi5JDiI5jyaSiI=";
+    hash = "sha256-M1wwutDj5lNlXyMJkzCEWL7cmXuvW3qZXoZB3rousoc=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +53,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A set of scripts and modules for freezing Python scripts into executables";
+    description = "Set of scripts and modules for freezing Python scripts into executables";
     homepage = "https://marcelotduarte.github.io/cx_Freeze/";
     changelog = "https://github.com/marcelotduarte/cx_Freeze/releases/tag/${version}";
     license = licenses.psfl;

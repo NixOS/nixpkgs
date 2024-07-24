@@ -23,7 +23,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/ocaml-multicore/domain-local-timeout";
-    description = "A scheduler independent timeout mechanism";
+    description = "Scheduler independent timeout mechanism";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };

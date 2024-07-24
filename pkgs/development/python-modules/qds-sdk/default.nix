@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, boto
-, inflection
-, requests
-, six
-, urllib3
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  boto,
+  inflection,
+  requests,
+  six,
+  urllib3,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-8aPIE2E3Fy2EiBM2FPRyjnJolIBdOzafI3Fvlod5hxU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     boto
@@ -35,14 +34,15 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  nativeCheckInputs = [ pytestCheckHook mock ];
-
-  pythonImportsCheck = [
-    "qds_sdk"
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
   ];
 
+  pythonImportsCheck = [ "qds_sdk" ];
+
   meta = with lib; {
-    description = "A Python module that provides the tools you need to authenticate with, and use the Qubole Data Service API";
+    description = "Python module that provides the tools you need to authenticate with, and use the Qubole Data Service API";
     homepage = "https://github.com/qubole/qds-sdk-py";
     license = licenses.asl20;
     maintainers = with maintainers; [ shahrukh330 ];

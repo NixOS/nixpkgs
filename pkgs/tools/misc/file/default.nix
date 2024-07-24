@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, file, zlib, libgnurx
+, updateAutotoolsGnuConfigScriptsHook
 , testers
 }:
 
@@ -13,8 +14,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     urls = [
-      "https://astron.com/pub/file/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
-      "https://distfiles.macports.org/file/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
+      "https://astron.com/pub/file/file-${finalAttrs.version}.tar.gz"
+      "https://distfiles.macports.org/file/file-${finalAttrs.version}.tar.gz"
     ];
     hash = "sha256-/Jf1ECm7DiyfTjv/79r2ePDgOe6HK53lwAKm0Jx4TYI=";
   };
@@ -30,7 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   enableParallelBuilding = true;
 
-  nativeBuildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
   buildInputs = [ zlib ]
     ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
@@ -43,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://darwinsys.com/file";
-    description = "A program that shows the type of files";
+    description = "Program that shows the type of files";
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.bsd2;
     pkgConfigModules = [ "libmagic" ];

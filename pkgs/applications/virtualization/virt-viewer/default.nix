@@ -30,7 +30,7 @@
 , spice-protocol
 , spiceSupport ? true
 , vte
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 with lib;
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A viewer for remote virtual machines";
+    description = "Viewer for remote virtual machines";
     maintainers = with maintainers; [ raskin atemu ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.gpl2;

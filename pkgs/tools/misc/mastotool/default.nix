@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A collection of command-line tools to work with your Mastodon account";
+    description = "Collection of command-line tools to work with your Mastodon account";
     homepage = "https://github.com/muesli/mastotool";
     changelog = "https://github.com/muesli/mastotool/releases/tag/${src.rev}";
     license = licenses.mit;

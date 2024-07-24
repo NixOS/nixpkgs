@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , brightnessctl
 , cargo
 , coreutils
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
     meson
     rustc
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A GTK based on screen display for keyboard shortcuts";
+    description = "GTK based on screen display for keyboard shortcuts";
     homepage = "https://github.com/ErikReider/SwayOSD";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ aleksana barab-i sergioribera ];

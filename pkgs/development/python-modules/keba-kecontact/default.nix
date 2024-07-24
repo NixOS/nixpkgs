@@ -1,9 +1,10 @@
-{ lib
-, asyncio-dgram
-, buildPythonPackage
-, fetchFromGitHub
-, netifaces
-, pythonOlder
+{
+  lib,
+  asyncio-dgram,
+  buildPythonPackage,
+  fetchFromGitHub,
+  netifaces,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "keba_kecontact"
-  ];
+  pythonImportsCheck = [ "keba_kecontact" ];
 
   meta = with lib; {
     description = "Python library for controlling KEBA charging stations";

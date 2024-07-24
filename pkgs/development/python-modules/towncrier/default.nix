@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, git # shells out to git
-, hatchling
-, importlib-resources
-, incremental
-, jinja2
-, mock
-, pytestCheckHook
-, pythonOlder
-, tomli
-, twisted
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  git, # shells out to git
+  hatchling,
+  importlib-resources,
+  incremental,
+  jinja2,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  tomli,
+  twisted,
 }:
 
 buildPythonPackage rec {
@@ -31,19 +32,16 @@ buildPythonPackage rec {
       --replace "hatchling ~= 1.17.1" "hatchling"
   '';
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = [
-    click
-    incremental
-    jinja2
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-resources
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  propagatedBuildInputs =
+    [
+      click
+      incremental
+      jinja2
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -56,9 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "towncrier"
-  ];
+  pythonImportsCheck = [ "towncrier" ];
 
   meta = with lib; {
     description = "Utility to produce useful, summarised news files";

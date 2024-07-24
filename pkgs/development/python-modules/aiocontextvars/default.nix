@@ -1,28 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pytest-asyncio,
+  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "aiocontextvars";
   version = "0.2.2";
-  format = "setuptools";
+  pyproject = true;
+
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "fantix";
-    repo = pname;
+    repo = "aiocontextvars";
     rev = "v${version}";
-    sha256 = "0a2gmrm9csiknc8n3si67sgzffkydplh9d7ga1k87ygk2aj22mmk";
+    hash = "sha256-s1YhpBLz+YNmUO+0BOltfjr3nz4m6mERszNqlmquTyg=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
+      --replace-fail "'pytest-runner'," ""
   '';
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook

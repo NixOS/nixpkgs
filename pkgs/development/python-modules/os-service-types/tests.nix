@@ -1,10 +1,11 @@
-{ buildPythonPackage
-, keystoneauth1
-, os-service-types
-, oslotest
-, requests-mock
-, stestr
-, testscenarios
+{
+  buildPythonPackage,
+  keystoneauth1,
+  os-service-types,
+  oslotest,
+  requests-mock,
+  stestr,
+  testscenarios,
 }:
 
 buildPythonPackage {

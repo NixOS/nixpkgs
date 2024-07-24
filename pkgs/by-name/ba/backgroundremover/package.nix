@@ -3,20 +3,21 @@
 , runCommand
 , fetchFromGitHub
 , fetchurl
+, gitUpdater
 }:
 
 let
   p = python3.pkgs;
   self = p.buildPythonApplication rec {
     pname = "backgroundremover";
-    version = "0.2.6";
+    version = "0.2.8";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "nadermx";
       repo = "backgroundremover";
       rev = "v${version}";
-      hash = "sha256-dDOo7NPwvdfV+ae2oMUytCGC+2HF6xUI7dyKk2we23w=";
+      hash = "sha256-LjVT4j0OzfbVSQgU0z/gzRTLm7N0RQRrfxtTugWwOxs=";
     };
 
     models = runCommand "background-remover-models" {} ''
@@ -32,6 +33,8 @@ let
     '';
 
     nativeBuildInputs = [ p.setuptools p.wheel ];
+
+    pythonRelaxDeps = [ "pillow" "torchvision" ];
 
     propagatedBuildInputs = [
       p.certifi
@@ -76,6 +79,7 @@ let
           backgroundremover -i ${demoImage} -o $out
         '';
       };
+      updateScript = gitUpdater { rev-prefix = "v"; };
     };
 
     doCheck = false; # no tests

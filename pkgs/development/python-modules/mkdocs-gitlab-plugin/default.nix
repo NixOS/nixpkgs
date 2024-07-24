@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, fetchzip
-, isPy3k
-, lib
-, mkdocs
+{
+  buildPythonPackage,
+  fetchzip,
+  isPy3k,
+  lib,
+  mkdocs,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mkdocs_gitlab_plugin" ];
 
   meta = with lib; {
-    description = "MkDocs plugin to transform strings such as #1234, %56, or !789 into links to a Gitlab repository.";
+    description = "MkDocs plugin to transform strings such as #1234, %56, or !789 into links to a Gitlab repository";
     homepage = "https://gitlab.inria.fr/vidjil/mkdocs-gitlab-plugin";
     license = licenses.mit;
     maintainers = with maintainers; [ snpschaaf ];

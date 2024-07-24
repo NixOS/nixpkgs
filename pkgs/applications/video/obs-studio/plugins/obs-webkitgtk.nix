@@ -8,7 +8,7 @@
 , cmake
 , pkg-config
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   postPatch = ''

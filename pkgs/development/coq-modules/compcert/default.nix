@@ -1,4 +1,4 @@
-{ lib, fetchzip, mkCoqDerivation
+{ lib, mkCoqDerivation
 , coq, flocq, compcert
 , ocamlPackages, fetchpatch, makeWrapper, coq2html
 , stdenv, tools ? stdenv.cc
@@ -29,7 +29,7 @@ compcert = mkCoqDerivation {
   releaseRev = v: "v${v}";
 
   defaultVersion =  with lib.versions; lib.switch coq.version [
-      { case = range "8.14" "8.19"; out = "3.13.1"; }
+      { case = range "8.14" "8.19"; out = "3.14"; }
       { case = isEq "8.13"        ; out = "3.10"; }
       { case = isEq "8.12"       ; out = "3.9"; }
       { case = range "8.8" "8.11"; out = "3.8"; }
@@ -43,6 +43,7 @@ compcert = mkCoqDerivation {
     "3.12".sha256 = "sha256-hXkQ8UnAx3k50OJGBmSm4hgrnRFCosu4+PEMrcKfmV0=";
     "3.13".sha256 = "sha256-ZedxgEPr1ZgKIcyhQ6zD1l2xr6RDNNUYq/4ZyR6ojM4=";
     "3.13.1".sha256 = "sha256-ldXbuzVB0Z+UVTd5S4yGSg6oRYiKbXLMmUZcQsJLcns=";
+    "3.14".sha256 = "sha256-QXJMpp/BaPiK5okHeo2rcmXENToXKjB51UqljMHTDgw=";
   };
 
   strictDeps = true;
@@ -65,8 +66,8 @@ compcert = mkCoqDerivation {
     -coqdevdir $lib/lib/coq/${coq.coq-version}/user-contrib/compcert/ \
     -toolprefix ${tools}/bin/ \
     -use-external-Flocq \
-    ${target}
-  '';
+    ${target} \
+  '';  # don't remove the \ above, the command gets appended in override below
 
   installTargets = "documentation install";
   installFlags = []; # trust ./configure
@@ -99,8 +100,8 @@ compcert = mkCoqDerivation {
     platforms   = builtins.attrNames targets;
     maintainers = with maintainers; [ thoughtpolice jwiegley vbgl ];
   };
-}; in
-compcert.overrideAttrs (o:
+};
+patched_compcert = compcert.overrideAttrs (o:
   {
     patches = with lib.versions; lib.switch [ coq.version o.version ] [
       { cases = [ (range "8.12.2" "8.13.2") "3.8" ];
@@ -192,8 +193,25 @@ compcert.overrideAttrs (o:
             url = "https://github.com/AbsInt/CompCert/commit/a2e4ed62fc558d565366845f9d135bd7db5e23c4.patch";
             hash = "sha256-ufk0bokuayLfkSvK3cK4E9iXU5eZpp9d/ETSa/zCfMg=";
           })
+          # Support for Coq 8.19.2
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/8fcfb7d2a6e9ba44003ccab0dfcc894982779af1.patch";
+            hash = "sha256-m/kcnDBBPWFriipuGvKZUqLQU8/W1uqw8j4qfCwnTZk=";
+          })
+        ];
+      }
+      { cases = [ (isEq "8.19") (isEq "3.14") ];
+        out = [
+          # Support for Coq 8.19.2
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/8fcfb7d2a6e9ba44003ccab0dfcc894982779af1.patch";
+            hash = "sha256-m/kcnDBBPWFriipuGvKZUqLQU8/W1uqw8j4qfCwnTZk=";
+          })
         ];
       }
     ] [];
-  }
+  }); in
+patched_compcert.overrideAttrs (o:
+  lib.optionalAttrs (coq.version != null && coq.version == "dev")
+  { configurePhase = "${o.configurePhase} -ignore-ocaml-version -ignore-coq-version"; }
 )

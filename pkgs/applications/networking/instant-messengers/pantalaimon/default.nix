@@ -24,7 +24,6 @@ python3Packages.buildPythonApplication rec {
     installShellFiles
   ] ++ (with python3Packages; [
     setuptools
-    pythonRelaxDepsHook
   ]);
 
   pythonRelaxDeps = [
@@ -74,7 +73,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "An end-to-end encryption aware Matrix reverse proxy daemon";
+    description = "End-to-end encryption aware Matrix reverse proxy daemon";
     homepage = "https://github.com/matrix-org/pantalaimon";
     license = licenses.asl20;
     maintainers = with maintainers; [ valodim ];

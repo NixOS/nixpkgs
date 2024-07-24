@@ -1,12 +1,13 @@
-{ buildPythonPackage
-, click
-, fetchPypi
-, gitpython
-, lib
-, nix-update-script
-, requests
-, setuptools-scm
-, setuptools
+{
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  gitpython,
+  lib,
+  nix-update-script,
+  requests,
+  setuptools-scm,
+  setuptools,
 }:
 
 buildPythonPackage rec {

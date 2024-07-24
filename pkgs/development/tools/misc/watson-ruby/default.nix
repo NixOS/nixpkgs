@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = bundlerUpdateScript "watson-ruby";
 
   meta = with lib; {
-    description = "An inline issue manager";
+    description = "Inline issue manager";
     homepage    = "https://goosecode.com/watson/";
     license     = with licenses; mit;
     maintainers = with maintainers; [ robertodr nicknovitski ];

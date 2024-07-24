@@ -40,7 +40,6 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

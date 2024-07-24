@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pyopenssl
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pyopenssl,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -24,21 +24,16 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "pyopenssl"
-  ];
+  pythonRelaxDeps = [ "pyopenssl" ];
 
   propagatedBuildInputs = [
     requests
     pyopenssl
   ];
 
-  pythonImportsCheck = [
-    "Netio"
-  ];
+  pythonImportsCheck = [ "Netio" ];
 
   # Module has no tests
   doCheck = false;

@@ -3,13 +3,13 @@
 with pkgs;
 
 let
-  openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
-  openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
-  openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17.nix { };
-  openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19.nix { };
-  openjfx20 = callPackage ../development/compilers/openjdk/openjfx/20.nix { };
-  openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21.nix { };
-  openjfx22 = callPackage ../development/compilers/openjdk/openjfx/22.nix { };
+  openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11 { };
+  openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15 { };
+  openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17 { };
+  openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19 { };
+  openjfx20 = callPackage ../development/compilers/openjdk/openjfx/20 { };
+  openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21 { };
+  openjfx22 = callPackage ../development/compilers/openjdk/openjfx/22 { };
 
 in {
   inherit openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21 openjfx22;
@@ -99,6 +99,7 @@ in {
     corretto11 = callPackage ../development/compilers/corretto/11.nix { };
     corretto17 = callPackage ../development/compilers/corretto/17.nix { };
     corretto19 = callPackage ../development/compilers/corretto/19.nix { };
+    corretto21 = callPackage ../development/compilers/corretto/21.nix { };
 
     openjdk8-bootstrap = mkBootstrap adoptopenjdk-8
       ../development/compilers/openjdk/bootstrap.nix
@@ -226,7 +227,7 @@ in {
       ../development/compilers/openjdk/22.nix
       ../development/compilers/zulu/22.nix
       {
-        openjdk22-bootstrap = temurin-bin.jdk-21;
+        openjdk22-bootstrap = temurin-bin.jdk-22;
         openjfx = openjfx22;
       };
 

@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, setuptools
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,14 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-fF0oFZ2q1wRH7IKBlCjm3Za4xtEMSHyEaGL09rHgtTY=";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [ "frozenlist2" ];
 
   meta = with lib; {
-    description = "An immutable list for Python";
+    description = "Immutable list for Python";
     homepage = "https://github.com/rohanpm/frozenlist2";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ t4ccer ];

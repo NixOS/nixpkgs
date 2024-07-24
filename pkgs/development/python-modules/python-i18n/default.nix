@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pyyaml }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pyyaml,
+}:
 
 buildPythonPackage rec {
   pname = "python-i18n";
@@ -18,7 +24,10 @@ buildPythonPackage rec {
       --replace-fail assertRaisesRegexp assertRaisesRegex
   '';
 
-  nativeCheckInputs = [ pytestCheckHook pyyaml ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyyaml
+  ];
   pytestFlagsArray = [ "i18n/tests/run_tests.py" ];
   pythonImportsCheck = [ "i18n" ];
 

@@ -18,13 +18,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "open-scq30";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "Oppzippy";
     repo = "OpenSCQ30";
     rev = "v${version}";
-    hash = "sha256-yls7F6ou0TsoY6CDi694fJrq30Y3B6d96T1VWl47K0w=";
+    hash = "sha256-DL2hYm1j27K0nnBvE3iGnguqm0m1k56bkuG+6+u4u4c=";
   };
 
   nativeBuildInputs = [
@@ -44,11 +44,12 @@ rustPlatform.buildRustPackage rec {
     pango
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk.frameworks.CoreBluetooth
     darwin.apple_sdk.frameworks.CoreGraphics
     darwin.apple_sdk.frameworks.Foundation
   ];
 
-  cargoHash = "sha256-VxweKzXNWOrBrzLzId8D6O0tZG8bI7HjhD+GJ3vRyhk=";
+  cargoHash = "sha256-YBJd43xOCumQbrvzfV/+F63McYzHg1bGI3icgGzGZrQ=";
 
   INSTALL_PREFIX = placeholder "out";
 
@@ -64,7 +65,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Cross platform application for controlling settings of Soundcore headphones.";
+    description = "Cross platform application for controlling settings of Soundcore headphones";
     homepage = "https://github.com/Oppzippy/OpenSCQ30";
     changelog = "https://github.com/Oppzippy/OpenSCQ30/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;

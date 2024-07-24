@@ -37,7 +37,11 @@ qtModule {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ VideoToolbox ];
 
-  patches = lib.optionals stdenv.hostPlatform.isMinGW [
+  patches = [
+    ../patches/fix-qtgui-include-incorrect-case.patch
+    # Remove new constants since macOS 12+, since we build Qt with the macOS 11 SDK
+    ../patches/qtmultimedia-darwin-revert-replace-deprecated-constant.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     ../patches/qtmultimedia-windows-no-uppercase-libs.patch
     ../patches/qtmultimedia-windows-resolve-function-name.patch
   ];

@@ -3,6 +3,7 @@
 , fetchurl
 , fetchpatch
 , gnome
+, adwaita-icon-theme
 , meson
 , ninja
 , pkg-config
@@ -12,7 +13,7 @@
 , udev
 , itstool
 , libxml2
-, wrapGAppsHook
+, wrapGAppsHook3
 , libnotify
 , libcanberra-gtk3
 , gobject-introspection
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     itstool
     pkg-config
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     gtk-doc
     docbook-xsl-nons
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
     udev
     libnotify
     libcanberra-gtk3
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gsettings-desktop-schemas
   ];
 
@@ -91,7 +92,7 @@ stdenv.mkDerivation rec {
     homepage = "https://help.gnome.org/users/gnome-bluetooth/stable/index.html.en";
     description = "Application that let you manage Bluetooth in the GNOME destkop";
     mainProgram = "bluetooth-sendto";
-    maintainers = teams.gnome.members;
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

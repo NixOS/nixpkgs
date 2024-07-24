@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A script to make wofi work with password-store";
+    description = "Script to make wofi work with password-store";
     homepage = "https://github.com/schmidtandreas/wofi-pass";
     maintainers = with lib.maintainers; [ akechishiro ];
     license = lib.licenses.gpl2Plus;

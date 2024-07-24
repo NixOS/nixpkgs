@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, build
-, coloredlogs
-, packaging
-, pip
-, readme-renderer
-, toml
-, twine
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  build,
+  coloredlogs,
+  packaging,
+  pip,
+  readme-renderer,
+  toml,
+  twine,
 }:
 
 buildPythonPackage rec {
@@ -28,11 +28,11 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
   pythonRelaxDeps = [
+    "build"
     "packaging"
     "readme-renderer"
     "twine"
@@ -46,9 +46,7 @@ buildPythonPackage rec {
     pip
     readme-renderer
     twine
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    toml
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ toml ];
 
   pythonImportsCheck = [
     "bork"
@@ -56,13 +54,9 @@ buildPythonPackage rec {
     "bork.cli"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "-m 'not network'"
-  ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
   disabledTests = [
     # tries to call python -m bork

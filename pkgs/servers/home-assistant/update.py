@@ -222,7 +222,7 @@ class HomeAssistant:
 
     async def update_components(self):
         await run_async([
-            f"{ROOT}/pkgs/servers/home-assistant/parse-requirements.py"
+            f"{ROOT}/pkgs/servers/home-assistant/update-component-packages.py"
         ])
 
 

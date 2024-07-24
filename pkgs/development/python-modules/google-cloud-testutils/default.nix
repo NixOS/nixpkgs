@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, google-auth
-, packaging
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  google-auth,
+  packaging,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,15 +29,13 @@ buildPythonPackage rec {
   # does not contain tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "test_utils"
-  ];
+  pythonImportsCheck = [ "test_utils" ];
 
   meta = with lib; {
     description = "System test utilities for google-cloud-python";
     mainProgram = "lower-bound-checker";
     homepage = "https://github.com/googleapis/python-test-utils";
-    changelog  ="https://github.com/googleapis/python-test-utils/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/python-test-utils/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

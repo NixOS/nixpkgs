@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -26,23 +27,20 @@ buildPythonPackage rec {
       --replace ">=3.6.*" ">=3.6"
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "gemfileparser2"
-  ];
+  pythonImportsCheck = [ "gemfileparser2" ];
 
   meta = with lib; {
     description = "Library to parse Rubygem gemspec and Gemfile files";
     homepage = "https://github.com/nexB/gemfileparser2";
     changelog = "https://github.com/nexB/gemfileparser2/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [ mit /* or */ gpl3Plus ];
+    license = with licenses; [
+      mit # or
+      gpl3Plus
+    ];
     maintainers = with maintainers; [ harvidsen ];
   };
 }

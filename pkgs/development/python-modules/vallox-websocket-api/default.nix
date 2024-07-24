@@ -1,19 +1,19 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, pythonOlder
-, pythonRelaxDepsHook
-, fetchFromGitHub
-, setuptools
-, construct
-, websockets
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  construct,
+  websockets,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "vallox-websocket-api";
-  version = "5.2.0";
+  version = "5.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,17 +22,14 @@ buildPythonPackage rec {
     owner = "yozik04";
     repo = "vallox_websocket_api";
     rev = "refs/tags/${version}";
-    hash = "sha256-qq58ZSrKVQ00rtXMe4L9xfz0QB+UpjGOhPo1srPYIY4=";
+    hash = "sha256-jJ+FFDU4w1vdCqErz6ksJDvjFcalSAwaH+G77BNI5/E=";
   };
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "websockets"
-  ];
+  pythonRelaxDeps = [ "websockets" ];
 
   propagatedBuildInputs = [
     aiohttp

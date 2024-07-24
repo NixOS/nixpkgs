@@ -22,9 +22,12 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
   buildInputs = [ wayland ];
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   meta = with lib; {
-    description = "An xrandr clone for wlroots compositors";
+    description = "Xrandr clone for wlroots compositors";
     homepage = "https://git.sr.ht/~emersion/wlr-randr";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];

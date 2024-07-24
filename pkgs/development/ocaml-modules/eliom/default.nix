@@ -1,7 +1,6 @@
 { buildDunePackage
 , lib
 , fetchFromGitHub
-, fetchpatch
 , which
 , ocsigen_server
 , lwt_react
@@ -18,19 +17,13 @@
 
 buildDunePackage rec {
   pname = "eliom";
-  version = "10.3.1";
+  version = "10.4.1";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "eliom";
     rev = version;
-    hash = "sha256-REOyxwnQqWOKywVYwN/WP22cNKZv5Nv0OpFVbNBPJN8=";
-  };
-
-  # Compatibility with tyxml 4.6.x
-  patches = fetchpatch {
-    url = "https://github.com/ocsigen/eliom/commit/9a6adcce3959a37b971890999331335d07f4f732.patch";
-    hash = "sha256-rgsqohSAHHljvag3c+HNGEgW9qwmqPq8qfTpX6vVKtg=";
+    hash = "sha256-j4t6GEd8hYyM87b9XvgcnaV9XMkouz6+v0SYW22/bqg=";
   };
 
   nativeBuildInputs = [

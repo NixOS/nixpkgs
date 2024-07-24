@@ -1,4 +1,4 @@
-{ wrapGAppsHook
+{ wrapGAppsHook3
 , lib
 , python3Packages
 , fetchFromGitHub
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = (with python3Packages; [

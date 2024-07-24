@@ -1,23 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, psycopg2
-, pymysql
-, sqlalchemy
-, pathlib
-, six
-, flask
-, pendulum
-, packaging
-, setuptools
-, poetry-core
-, pytestCheckHook
-, pytest-xdist
-, pytest-sugar
-, postgresql
-, postgresqlTestHook
-,
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  psycopg2,
+  pymysql,
+  sqlalchemy,
+  six,
+  flask,
+  pendulum,
+  packaging,
+  setuptools,
+  poetry-core,
+  pytestCheckHook,
+  pytest-xdist,
+  pytest-sugar,
+  postgresql,
+  postgresqlTestHook,
 }:
 buildPythonPackage rec {
   pname = "sqlbag";
@@ -32,22 +30,18 @@ buildPythonPackage rec {
     hash = "sha256-lipgnkqrzjzqwbhtVcWDQypBNzq6Dct/qoM8y/FNiNs=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  nativeBuildInputs = [ poetry-core ];
+
+  propagatedBuildInputs = [
+    sqlalchemy
+    six
+    packaging
+
+    psycopg2
+    pymysql
+
+    setuptools # needed for 'pkg_resources'
   ];
-
-  propagatedBuildInputs =
-    [
-      sqlalchemy
-      six
-      packaging
-
-      psycopg2
-      pymysql
-
-      setuptools # needed for 'pkg_resources'
-    ]
-    ++ lib.optional isPy27 pathlib;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -82,14 +76,13 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  pythonImportsCheck = [
-    "sqlbag"
-  ];
+  pythonImportsCheck = [ "sqlbag" ];
 
   meta = with lib; {
     description = "Handy python code for doing database things";
     homepage = "https://github.com/djrobstep/sqlbag";
     license = with licenses; [ unlicense ];
     maintainers = with maintainers; [ soispha ];
+    broken = true; # Fails to build against the current flask version
   };
 }

@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildBazelPackage,
   fetchFromGitHub,
-  fetchpatch,
   bazel_6,
   jdk,
   elfutils,
@@ -12,13 +10,13 @@
 
 buildBazelPackage rec {
   pname = "perf_data_converter";
-  version = "0-unstable-2024-03-12";
+  version = "0-unstable-2024-07-10";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "perf_data_converter";
-    rev = "e1cfe1e7e5d8cf3b728a166bf02d4227c82801eb";
-    hash = "sha256-Y3tBLH2jf1f28o6RK2inq9FulKc66qcqwKmxYdFC5tA=";
+    rev = "5b27c287a57811db91d40b5776cbaedd00945afc";
+    hash = "sha256-A5DEDi52gp1gTugGnutmKNRa/GGsc+LKLE3xRl/1gbw=";
   };
 
   bazel = bazel_6;
@@ -28,7 +26,7 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    sha256 = "sha256-IauQ4zEn9YHppLgW+4XjPv4N5IZlEkp//tE/Dy7k28s=";
+    sha256 = "sha256-Qm6Ng9cXvKx043P7qyNHyyMvdGK9aNarX1ZKeCp3mgY=";
   };
 
   nativeBuildInputs = [ jdk ];

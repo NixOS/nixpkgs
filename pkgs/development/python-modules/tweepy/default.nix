@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, async-lru
-, buildPythonPackage
-, fetchFromGitHub
-, oauthlib
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-oauthlib
-, six
-, vcrpy
+{
+  lib,
+  aiohttp,
+  async-lru,
+  buildPythonPackage,
+  fetchFromGitHub,
+  oauthlib,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-oauthlib,
+  six,
+  vcrpy,
 }:
 
 buildPythonPackage rec {
@@ -40,15 +41,11 @@ buildPythonPackage rec {
     vcrpy
   ];
 
-  pythonImportsCheck = [
-    "tweepy"
-  ];
+  pythonImportsCheck = [ "tweepy" ];
 
   # The checks with streaming fail due to (seemingly) not decoding (or unexpectedly sending response in) GZIP
   # Same issue impacted mastodon-py, see https://github.com/halcy/Mastodon.py/commit/cd86887d88bbc07de462d1e00a8fbc3d956c0151 (who just disabled these)
-  disabledTestPaths = [
-    "tests/test_client.py"
-  ];
+  disabledTestPaths = [ "tests/test_client.py" ];
 
   disabledTests = [
     "test_indicate_direct_message_typing"

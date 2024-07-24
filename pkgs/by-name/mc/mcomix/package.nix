@@ -6,7 +6,7 @@
 , mcomix
 , python3
 , testers
-, wrapGAppsHook
+, wrapGAppsHook3
 
   # Recommended Dependencies:
 , p7zip
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     python3.pkgs.setuptools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

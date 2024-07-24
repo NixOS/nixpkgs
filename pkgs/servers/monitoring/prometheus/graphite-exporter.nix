@@ -13,22 +13,22 @@ buildGoModule rec {
 
   vendorHash = "sha256-he2bmcTNkuKRsNGkn1IkhtOe+Eo/5RLWLYlNFWLo/As=";
 
-  preCheck = let
-    skippedTests = [
-      "TestBacktracking"
-      "TestInconsistentLabelsE2E"
-      "TestIssue111"
-      "TestIssue61"
-      "TestIssue90"
-    ];
-  in ''
-    buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-  '';
+  checkFlags =
+    let
+      skippedTests = [
+        "TestBacktracking"
+        "TestInconsistentLabelsE2E"
+        "TestIssue111"
+        "TestIssue61"
+        "TestIssue90"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) graphite; };
 
   meta = {
-    description = "An exporter for metrics exported in the Graphite plaintext protocol";
+    description = "Exporter for metrics exported in the Graphite plaintext protocol";
     homepage = "https://github.com/prometheus/graphite_exporter";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.misterio77 ];

@@ -1,15 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "py-zabbix";
   version = "1.1.7";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -29,17 +32,21 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "pyzabbix"
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pyzabbix" ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: 'RawConfigParser' object has no attribute 'readfp'
+    "config"
   ];
 
   meta = with lib; {
     description = "Python module to interact with Zabbix";
     homepage = "https://github.com/adubkov/py-zabbix";
+    changelog = "https://github.com/adubkov/py-zabbix/releases/tag/${version}";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
   };

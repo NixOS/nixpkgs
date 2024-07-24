@@ -21,7 +21,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A command line tool for shopify themes";
+    description = "Command line tool for shopify themes";
     mainProgram = "theme";
     homepage = "https://shopify.github.io/themekit/";
     license = licenses.mit;

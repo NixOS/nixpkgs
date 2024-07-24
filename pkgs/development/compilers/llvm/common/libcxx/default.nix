@@ -13,8 +13,8 @@
 , python3
 , fixDarwinDylibNames
 , version
-, cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else null
-, libcxxrt
+, freebsd
+, cxxabi ? if stdenv.hostPlatform.isFreeBSD then freebsd.libcxxrt else null
 , libunwind
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -67,15 +67,25 @@ let
 
   cxxCMakeFlags = [
     "-DLIBCXX_CXX_ABI=${cxxabiName}"
+  ] ++ lib.optionals (cxxabi == null && lib.versionAtLeast release_version "16") [
+    # Note: llvm < 16 doesn't support this flag (or it's broken); handled in postInstall instead.
+    # Include libc++abi symbols within libc++.a for static linking libc++;
+    # dynamic linking includes them through libc++.so being a linker script
+    # which includes both shared objects.
+    "-DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON"
   ] ++ lib.optionals (cxxabi != null) [
     "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${lib.getDev cxxabi}/include"
   ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) [
     "-DLIBCXX_HAS_MUSL_LIBC=1"
   ] ++ lib.optionals (lib.versionAtLeast release_version "18" && !useLLVM && stdenv.hostPlatform.libc == "glibc" && !stdenv.hostPlatform.isStatic) [
     "-DLIBCXX_ADDITIONAL_LIBRARIES=gcc_s"
+  ] ++ lib.optionals (lib.versionAtLeast release_version "18" && stdenv.hostPlatform.isFreeBSD) [
+    # Name and documentation claim this is for libc++abi, but its man effect is adding `-lunwind`
+    # to the libc++.so linker script. We want FreeBSD's so-called libgcc instead of libunwind.
+    "-DLIBCXXABI_USE_LLVM_UNWINDER=OFF"
   ] ++ lib.optionals useLLVM [
     "-DLIBCXX_USE_COMPILER_RT=ON"
-  ] ++ lib.optionals (useLLVM && lib.versionAtLeast release_version "16") [
+  ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isFreeBSD && lib.versionAtLeast release_version "16") [
     "-DLIBCXX_ADDITIONAL_LIBRARIES=unwind"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DLIBCXX_ENABLE_THREADS=OFF"
@@ -83,16 +93,12 @@ let
     "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
   ] ++ lib.optionals (!enableShared) [
     "-DLIBCXX_ENABLE_SHARED=OFF"
+  ] ++ lib.optionals (cxxabi != null && cxxabi.libName == "cxxrt") [
+    "-DLIBCXX_ENABLE_NEW_DELETE_DEFINITIONS=ON"
   ];
 
   cmakeFlags = [
     "-DLLVM_ENABLE_RUNTIMES=${lib.concatStringsSep ";" runtimes}"
-  ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) [
-    # libcxxabi's CMake looks as though it treats -nostdlib++ as implying -nostdlib,
-    # but that does not appear to be the case for example when building
-    # pkgsLLVM.libcxxabi (which uses clangNoCompilerRtWithLibc).
-    "-DCMAKE_EXE_LINKER_FLAGS=-nostdlib"
-    "-DCMAKE_SHARED_LINKER_FLAGS=-nostdlib"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
@@ -118,7 +124,7 @@ stdenv.mkDerivation (rec {
     ++ lib.optional (cxxabi != null) lndir;
 
   buildInputs = [ cxxabi ]
-    ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) [ libunwind ];
+    ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm && !stdenv.hostPlatform.isFreeBSD) [ libunwind ];
 
   # libc++.so is a linker script which expands to multiple libraries,
   # libc++.so.1 and libc++abi.so or the external cxxabi. ld-wrapper doesn't
@@ -126,6 +132,31 @@ stdenv.mkDerivation (rec {
   postInstall = lib.optionalString (cxxabi != null) ''
     lndir ${lib.getDev cxxabi}/include $dev/include/c++/v1
     lndir ${lib.getLib cxxabi}/lib $out/lib
+    libcxxabi=$out/lib/lib${cxxabi.libName}.a
+  ''
+  # LIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON doesn't work for LLVM < 16 or
+  # external cxxabi libraries so merge libc++abi.a into libc++.a ourselves.
+
+  # GNU binutils emits objects in LIFO order in MRI scripts so after the merge
+  # the objects are in reversed order so a second MRI script is required so the
+  # objects in the archive are listed in proper order (libc++.a, libc++abi.a)
+  + lib.optionalString (cxxabi != null || lib.versionOlder release_version "16") ''
+    libcxxabi=''${libcxxabi-$out/lib/libc++abi.a}
+    if [[ -f $out/lib/libc++.a && -e $libcxxabi ]]; then
+      $AR -M <<MRI
+        create $out/lib/libc++.a
+        addlib $out/lib/libc++.a
+        addlib $libcxxabi
+        save
+        end
+    MRI
+      $AR -M <<MRI
+        create $out/lib/libc++.a
+        addlib $out/lib/libc++.a
+        save
+        end
+    MRI
+    fi
   '';
 
   passthru = {

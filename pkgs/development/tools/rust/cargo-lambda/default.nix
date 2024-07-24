@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A Cargo subcommand to help you work with AWS Lambda";
+    description = "Cargo subcommand to help you work with AWS Lambda";
     mainProgram = "cargo-lambda";
     homepage = "https://cargo-lambda.info";
     license = licenses.mit;

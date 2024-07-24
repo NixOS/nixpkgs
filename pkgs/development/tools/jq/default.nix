@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "doc" "man" "dev" "lib" "out" ];
 
+  # https://github.com/jqlang/jq/issues/2871
+  postPatch = lib.optionalString stdenv.isFreeBSD ''
+    substituteInPlace Makefile.am --replace-fail "tests/mantest" "" --replace-fail "tests/optionaltest" ""
+  '';
+
   # Upstream script that writes the version that's eventually compiled
   # and printed in `jq --help` relies on a .git directory which our src
   # doesn't keep.
@@ -73,7 +78,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit onigurumaSupport; };
 
   meta = with lib; {
-    description = "A lightweight and flexible command-line JSON processor";
+    description = "Lightweight and flexible command-line JSON processor";
     homepage = "https://jqlang.github.io/jq/";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin artturin ncfavier ];

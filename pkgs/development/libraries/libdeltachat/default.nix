@@ -5,6 +5,7 @@
 , cmake
 , deltachat-desktop
 , deltachat-repl
+, deltachat-rpc-server
 , openssl
 , perl
 , pkg-config
@@ -30,13 +31,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.136.3";
+  version = "1.140.2";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
     rev = "v${version}";
-    hash = "sha256-/ZWpPpxnOCLGswrfbEPvfUn1LpdBQeR5LecRAB0PEhI=";
+    hash = "sha256-BSbvgKiI89B+nxp5McBKTJAwgePt27C1QvSQLhTL7pQ=";
   };
 
   patches = [
@@ -81,7 +82,7 @@ in stdenv.mkDerivation rec {
   passthru = {
     inherit cargoLock;
     tests = {
-      inherit deltachat-desktop deltachat-repl;
+      inherit deltachat-desktop deltachat-repl deltachat-rpc-server;
       python = python3.pkgs.deltachat;
     };
   };

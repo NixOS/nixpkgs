@@ -1,16 +1,15 @@
-{ lib
-, stdenv
-, substituteAll
-, buildPythonPackage
-, fetchPypi
-, joblib
-, segments
-, attrs
-, dlinfo
-, typing-extensions
-, espeak-ng
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  stdenv,
+  substituteAll,
+  buildPythonPackage,
+  fetchPypi,
+  joblib,
+  segments,
+  attrs,
+  dlinfo,
+  typing-extensions,
+  espeak-ng,
 }:
 
 buildPythonPackage rec {

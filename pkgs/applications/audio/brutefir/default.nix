@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://torger.se/anders/brutefir.html";
-    description = "A software convolution engine";
+    description = "Software convolution engine";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ auchter ];
     platforms = [ "x86_64-linux" "i686-linux" ];

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) installPhase;
 
   meta = with lib; {
-    description = "An OCaml library for segmenting Unicode text";
+    description = "OCaml library for segmenting Unicode text";
     homepage = webpage;
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];

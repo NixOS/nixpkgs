@@ -3,7 +3,7 @@
 , makeWrapper
 , fetchurl
 , dpkg
-, wrapGAppsHook
+, wrapGAppsHook3
 , autoPatchelfHook
 , gtk3
 , cairo
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     autoPatchelfHook
     makeWrapper
     dpkg

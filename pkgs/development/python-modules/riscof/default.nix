@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, jinja2
-, pythonOlder
-, riscv-config
-, riscv-isac
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+  jinja2,
+  pythonOlder,
+  riscv-config,
+  riscv-isac,
 }:
 
 buildPythonPackage rec {
@@ -41,9 +42,7 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  pythonImportsCheck = [
-    "riscof"
-  ];
+  pythonImportsCheck = [ "riscof" ];
 
   # No unitests available
   doCheck = false;

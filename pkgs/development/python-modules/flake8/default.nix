@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, mccabe
-, pycodestyle
-, pyflakes
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  mccabe,
+  pycodestyle,
+  pyflakes,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flake8";
-  version = "7.0.0";
+  version = "7.1.0";
 
   disabled = pythonOlder "3.8";
 
@@ -21,12 +22,10 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "flake8";
     rev = version;
-    hash = "sha256-2oVvchDhH3cX90RTIquYLyr+rzHxzQgYA4k4ReTxpH8=";
+    hash = "sha256-jkRr/k/XjiKOkcd4jlOQTnnFun7/hMHdVUWBlS1QZ1E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     mccabe
@@ -34,12 +33,10 @@ buildPythonPackage rec {
     pyflakes
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "The modular source code checker: pep8, pyflakes and co";
+    description = "Modular source code checker: pep8, pyflakes and co";
     homepage = "https://github.com/PyCQA/flake8";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

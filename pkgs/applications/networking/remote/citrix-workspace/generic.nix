@@ -1,4 +1,4 @@
-{ lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook, which, more
+{ lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook3, which, more
 , file, atk, alsa-lib, cairo, fontconfig, gdk-pixbuf, glib, webkitgtk, gtk2-x11, gtk3
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     more
     which
-    wrapGAppsHook
+    wrapGAppsHook3
     libfaketime
   ];
 
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
         ${lib.optionalString (icaFlag program != null) ''--add-flags "${icaFlag program} $ICAInstDir"''} \
         --set ICAROOT "$ICAInstDir" \
         --prefix LD_LIBRARY_PATH : "$ICAInstDir:$ICAInstDir/lib" \
-        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so" \
         --set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"
     '';
     wrapLink = program: ''

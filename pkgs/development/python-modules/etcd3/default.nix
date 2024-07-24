@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, etcd
-, fetchFromGitHub
-, grpcio
-, hypothesis
-, mock
-, pifpaf
-, protobuf
-, pytestCheckHook
-, six
-, tenacity
+{
+  lib,
+  buildPythonPackage,
+  etcd,
+  fetchFromGitHub,
+  grpcio,
+  hypothesis,
+  mock,
+  pifpaf,
+  protobuf,
+  pytestCheckHook,
+  six,
+  tenacity,
 }:
 
 buildPythonPackage rec {
@@ -46,9 +47,7 @@ buildPythonPackage rec {
     pifpaf -e PYTHON run etcd --cluster
   '';
 
-  pythonImportsCheck = [
-    "etcd3"
-  ];
+  pythonImportsCheck = [ "etcd3" ];
 
   meta = with lib; {
     description = "Python client for the etcd API v3";

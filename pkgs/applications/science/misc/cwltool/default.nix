@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cwltool";
-  version = "3.1.20240404144621";
+  version = "3.1.20240508115724";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwltool";
     rev = "refs/tags/${version}";
-    hash = "sha256-atpXkMIQ60POuUk99uiiuCoRXt4Seg11g/eHCeTDe+Q=";
+    hash = "sha256-hBP/8PIqvs820UsxrRuyMVIWgQGFVcMHCUToxhcupTk=";
   };
 
   postPatch = ''
@@ -24,7 +24,6 @@ python3.pkgs.buildPythonApplication rec {
       --replace '"schema-salad >= 8.4.20230426093816, < 9",' "" \
       --replace "PYTEST_RUNNER + " ""
     substituteInPlace pyproject.toml \
-      --replace "mypy==1.8.0" "mypy" \
       --replace "ruamel.yaml>=0.16.0,<0.18" "ruamel.yaml"
   '';
 

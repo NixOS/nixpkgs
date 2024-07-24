@@ -15,6 +15,6 @@ buildDunePackage rec {
   strictDeps = true;
 
   meta = mirage-crypto.meta // {
-    description = "A cryptographically secure PRNG";
+    description = "Cryptographically secure PRNG";
   };
 }

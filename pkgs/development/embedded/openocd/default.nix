@@ -3,6 +3,7 @@
 , fetchurl
 , pkg-config
 , hidapi
+, tcl
 , jimtcl
 , libjaylink
 , libusb1
@@ -12,8 +13,12 @@
 
 # Allow selection the hardware targets (SBCs, JTAG Programmers, JTAG Adapters)
 , extraHardwareSupport ? []
-}:
+}: let
 
+  isWindows = stdenv.hostPlatform.isWindows;
+  notWindows = !isWindows;
+
+in
 stdenv.mkDerivation rec {
   pname = "openocd";
   version = "0.12.0";
@@ -22,23 +27,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ryVHiL6Yhh8r2RA/5uYKd07Jaow3R0Tu+Rl/YEMHWvo=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config tcl ];
 
-  buildInputs = [ hidapi jimtcl libftdi1 libjaylink libusb1 ]
+  buildInputs = [ libusb1 ]
+    ++ lib.optionals notWindows [ hidapi jimtcl libftdi1 libjaylink ]
     ++
     # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
     lib.optional stdenv.isLinux libgpiod_1;
 
   configureFlags = [
     "--disable-werror"
-    "--disable-internal-jimtcl"
-    "--disable-internal-libjaylink"
     "--enable-jtag_vpi"
-    "--enable-buspirate"
     "--enable-remote-bitbang"
-    (lib.enableFeature enableFtdi "ftdi")
+    (lib.enableFeature notWindows "buspirate")
+    (lib.enableFeature (notWindows && enableFtdi) "ftdi")
     (lib.enableFeature stdenv.isLinux "linuxgpiod")
     (lib.enableFeature stdenv.isLinux "sysfsgpio")
+    (lib.enableFeature isWindows "internal-jimtcl")
+    (lib.enableFeature isWindows "internal-libjaylink")
   ] ++
     map (hardware: "--enable-${hardware}") extraHardwareSupport
   ;
@@ -75,6 +81,6 @@ stdenv.mkDerivation rec {
     homepage = "https://openocd.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ bjornfor prusnak ];
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

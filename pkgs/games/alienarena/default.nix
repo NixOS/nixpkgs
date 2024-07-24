@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://github.com/alienarena/alienarena/releases/tag/${version}";
-    description = "A free, stand-alone first-person shooter computer game";
+    description = "Free, stand-alone first-person shooter computer game";
     longDescription = ''
       Do you like old school deathmatch with modern features? How
       about rich, colorful, arcade-like atmospheres? How about retro

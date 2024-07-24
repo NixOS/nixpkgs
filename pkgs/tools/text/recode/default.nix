@@ -8,13 +8,13 @@
 , libintl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "recode";
   version = "3.7.14";
 
   # Use official tarball, avoid need to bootstrap/generate build system
   src = fetchurl {
-    url = "https://github.com/rrthomas/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/rrthomas/recode/releases/download/v${finalAttrs.version}/recode-${finalAttrs.version}.tar.gz";
     hash = "sha256-eGqv1USFGisTsKN36sFQD4IM5iYVzMLmMLUB53Q7nzM=";
   };
 
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rrthomas/recode";
     description = "Converts files between various character sets and usages";
     mainProgram = "recode";
-    changelog = "https://github.com/rrthomas/recode/raw/v${version}/NEWS";
+    changelog = "https://github.com/rrthomas/recode/raw/v${finalAttrs.version}/NEWS";
     platforms = lib.platforms.unix;
     license = with lib.licenses; [ lgpl3Plus gpl3Plus ];
     maintainers = with lib.maintainers; [ jcumming ];
   };
-}
+})

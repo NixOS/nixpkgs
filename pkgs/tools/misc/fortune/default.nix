@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fortune-mod";
-  version = "3.20.0";
+  version = "3.22.0";
 
   # We use fetchurl instead of fetchFromGitHub because the release pack has some
   # special files.
   src = fetchurl {
     url = "https://github.com/shlomif/fortune-mod/releases/download/${pname}-${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-MQG+lfuJxISNSD5ykw2o0D9pJXN6I9eIA9a1XEL+IJQ=";
+    sha256 = "sha256-BpMhu01K46v1VJPQQ86gZTTck/Giwp6GaU2e2xOAoOM=";
   };
 
   nativeBuildInputs = [ cmake perl rinutils ];
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
   '') ];
 
   postFixup = lib.optionalString (!withOffensive) ''
-    rm -f $out/share/fortunes/men-women*
+    rm $out/share/games/fortunes/men-women*
   '';
 
   meta = with lib; {
     mainProgram = "fortune";
-    description = "A program that displays a pseudorandom message from a database of quotations";
+    description = "Program that displays a pseudorandom message from a database of quotations";
     license = licenses.bsdOriginal;
     platforms = platforms.unix;
     maintainers = with maintainers; [ vonfry ];

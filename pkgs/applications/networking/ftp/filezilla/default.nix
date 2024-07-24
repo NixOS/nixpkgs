@@ -12,7 +12,7 @@
 , sqlite
 , tinyxml
 , boost
-, wrapGAppsHook
+, wrapGAppsHook3
 , wxGTK32
 , gtk3
 , xdg-utils
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook3 ];
 
   buildInputs = [
     boost

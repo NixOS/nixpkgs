@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv }:
+{ lib, rustPlatform, fetchFromGitHub }:
 rustPlatform.buildRustPackage {
   pname = "loco-cli";
   version = "0.2.6";
@@ -21,8 +21,9 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     mainProgram = "loco";
-    description = "Loco CLI is a powerful command-line tool designed to streamline the process of generating Loco websites.";
+    description = "Loco CLI is a powerful command-line tool designed to streamline the process of generating Loco websites";
     homepage = "https://loco.rs";
+    changelog = "https://github.com/loco-rs/loco/blob/master/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ sebrut ];
   };

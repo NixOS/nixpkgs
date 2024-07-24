@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "An app to send/receive SMS, make USSD requests, control mobile data usage and more";
+    description = "App to send/receive SMS, make USSD requests, control mobile data usage and more";
     longDescription = ''
       A simple GTK based GUI compatible with Modem manager, Wader and oFono
       system services able to control EDGE/3G/4G broadband modem specific

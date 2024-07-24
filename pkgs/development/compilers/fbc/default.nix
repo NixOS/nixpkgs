@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.freebasic.net/";
-    description = "A multi-platform BASIC Compiler";
+    description = "Multi-platform BASIC Compiler";
     mainProgram = "fbc";
     longDescription = ''
       FreeBASIC is a completely free, open-source, multi-platform BASIC compiler (fbc),

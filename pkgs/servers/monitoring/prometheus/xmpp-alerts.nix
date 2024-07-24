@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , python3Packages
 , prometheus-alertmanager
-, fetchpatch
 , runCommand
 , prometheus-xmpp-alerts
 }:

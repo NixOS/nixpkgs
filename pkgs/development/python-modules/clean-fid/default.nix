@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# dependencies
-, numpy
-, pillow
-, requests
-, scipy
-, torch
-, torchvision
-, tqdm
+  # dependencies
+  numpy,
+  pillow,
+  requests,
+  scipy,
+  torch,
+  torchvision,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  pythonImportsCheck = [
-    "cleanfid"
-  ];
+  pythonImportsCheck = [ "cleanfid" ];
 
   # no tests1
   doCheck = false;

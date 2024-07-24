@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.unifiedremote.com/";
-    description = "The one-and-only remote for your computer";
+    description = "One-and-only remote for your computer";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ sfrijters ];

@@ -1,11 +1,12 @@
-{ lib
-, blockdiag
-, fetchFromGitHub
-, buildPythonPackage
-, pynose
-, pytestCheckHook
-, setuptools
-, pythonOlder
+{
+  lib,
+  blockdiag,
+  fetchFromGitHub,
+  buildPythonPackage,
+  nose,
+  pytestCheckHook,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,22 +23,19 @@ buildPythonPackage rec {
     hash = "sha256-uKrdkXpL5YBr953sRsHknYg+2/WwrZmyDf8BMA2+0tU=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    blockdiag
-  ];
+  dependencies = [ blockdiag ];
+
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
-    pynose
+    nose
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "src/nwdiag/tests/"
-  ];
+  pytestFlagsArray = [ "src/nwdiag/tests/" ];
 
   disabledTests = [
     # AttributeError: 'TestRstDirectives' object has no attribute 'assertRegexpMatches'
@@ -45,9 +43,7 @@ buildPythonPackage rec {
     "noviewbox"
   ];
 
-  pythonImportsCheck = [
-    "nwdiag"
-  ];
+  pythonImportsCheck = [ "nwdiag" ];
 
   meta = with lib; {
     description = "Generate network-diagram image from spec-text file (similar to Graphviz)";

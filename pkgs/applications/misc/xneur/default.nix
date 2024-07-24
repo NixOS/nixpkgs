@@ -5,7 +5,7 @@
 , autoreconfHook
 , intltool
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , enchant
 , gdk-pixbuf
 , glib
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     autoreconfHook
     intltool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

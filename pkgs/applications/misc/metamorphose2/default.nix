@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "a graphical mass renaming program for files and folders";
+    description = "Graphical mass renaming program for files and folders";
     homepage    = "https://github.com/timinaust/metamorphose2";
     license     = with licenses; gpl3Plus;
     maintainers = with maintainers; [ ramkromberg ];

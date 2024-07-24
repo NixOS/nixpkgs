@@ -1,8 +1,9 @@
-{ lib
-, python3Packages
-, podman
-, fetchPypi
-, bindep
+{
+  lib,
+  python3Packages,
+  podman,
+  fetchPypi,
+  bindep,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "ansible-builder";
@@ -19,9 +20,7 @@ python3Packages.buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    bindep
-  ];
+  buildInputs = [ bindep ];
 
   propagatedBuildInputs = with python3Packages; [
     podman
@@ -37,7 +36,7 @@ python3Packages.buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "An Ansible execution environment builder";
+    description = "Ansible execution environment builder";
     homepage = "https://ansible-builder.readthedocs.io/en/stable/";
     license = licenses.asl20;
     maintainers = with maintainers; [ melkor333 ];

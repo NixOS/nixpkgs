@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "A mixnet providing IP-level privacy";
+    description = "Mixnet providing IP-level privacy";
     longDescription = ''
       Nym routes IP packets through other participating nodes to hide their source and destination.
       In contrast with Tor, it prevents timing attacks at the cost of latency.

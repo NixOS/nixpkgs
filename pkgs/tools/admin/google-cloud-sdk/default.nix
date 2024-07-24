@@ -7,13 +7,13 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, callPackage, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, callPackage, installShellFiles, with-gce ? false }:
 
 let
   pythonEnv = python.withPackages (p: with p; [
     cffi
     cryptography
-    openssl
+    pyopenssl
     crcmod
     numpy
   ] ++ lib.optional (with-gce) google-compute-engine);
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ python ];
 
-  nativeBuildInputs = [ jq makeWrapper ];
+  nativeBuildInputs = [ jq makeWrapper installShellFiles ];
 
   patches = [
     # For kubectl configs, don't store the absolute path of the `gcloud` binary as it can be garbage-collected
@@ -49,6 +49,9 @@ in stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/google-cloud-sdk
+    if [ -d .install/platform/bundledpythonunix ]; then
+      rm -r .install/platform/bundledpythonunix
+    fi
     cp -R * .install $out/google-cloud-sdk/
 
     mkdir -p $out/google-cloud-sdk/lib/surface/{alpha,beta}
@@ -70,7 +73,7 @@ in stdenv.mkDerivation rec {
 
     # disable component updater and update check
     substituteInPlace $out/google-cloud-sdk/lib/googlecloudsdk/core/config.json \
-      --replace "\"disable_updater\": false" "\"disable_updater\": true"
+      --replace-fail "\"disable_updater\": false" "\"disable_updater\": true"
     echo "
     [component_manager]
     disable_update_check = true" >> $out/google-cloud-sdk/properties
@@ -86,6 +89,12 @@ in stdenv.mkDerivation rec {
     ln -s $out/share/zsh/site-functions/_gcloud $out/share/zsh/site-functions/_gsutil
     # zsh doesn't load completions from $FPATH without #compdef as the first line
     sed -i '1 i #compdef gcloud' $out/share/zsh/site-functions/_gcloud
+
+    # setup fish completion
+    installShellCompletion --cmd gcloud \
+      --fish <(echo "complete -c gcloud -f -a '(__fish_argcomplete_complete gcloud)'")
+    installShellCompletion --cmd gsutil \
+      --fish <(echo "complete -c gsutil -f -a '(__fish_argcomplete_complete gsutil)'")
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
@@ -107,6 +116,8 @@ in stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    # Avoid trying to write logs to homeless-shelter
+    export HOME=$(mktemp -d)
     $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
   '';
 
@@ -117,7 +128,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tools for the google cloud platform";
-    longDescription = "The Google Cloud SDK. This package has the programs: gcloud, gsutil, and bq";
+    longDescription = "The Google Cloud SDK for GCE hosts. Used by `google-cloud-sdk` only on GCE guests.";
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryNativeCode  # anthoscli and possibly more
@@ -126,7 +137,7 @@ in stdenv.mkDerivation rec {
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
     changelog = "https://cloud.google.com/sdk/docs/release-notes";
-    maintainers = with maintainers; [ iammrinal0 pradyuman stephenmw zimbatm ];
+    maintainers = with maintainers; [ iammrinal0 marcusramberg pradyuman stephenmw zimbatm ];
     platforms = builtins.attrNames data.googleCloudSdkPkgs;
     mainProgram = "gcloud";
   };

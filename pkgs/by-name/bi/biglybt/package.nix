@@ -3,20 +3,20 @@
   stdenv,
   fetchurl,
   jre,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "biglybt";
-  version = "3.5.0.0";
+  version = "3.6.0.0";
 
   src = fetchurl {
     url = "https://github.com/BiglySoftware/BiglyBT/releases/download/v${version}/GitHub_BiglyBT_unix.tar.gz";
-    hash = "sha256-ToTCIjunj/ABi3wVSmeddLGBdQlv+CfK2jGRjixJd0w=";
+    hash = "sha256-a7g9sB3orO2m0X7qNwQ1dDygYPhs/b6kX0RDSG8Wq2U=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   configurePhase = ''
     runHook preConfigure
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     changelog = "https://github.com/BiglySoftware/BiglyBT/releases/tag/v${version}";
-    description = "A BitTorrent client based on the Azureus that supports I2P darknet for privacy";
+    description = "BitTorrent client based on the Azureus that supports I2P darknet for privacy";
     downloadPage = "https://github.com/BiglySoftware/BiglyBT";
     homepage = "https://www.biglybt.com/";
     license = lib.licenses.gpl3Plus;

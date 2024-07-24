@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with lib; {
-    description = "A preprocessor for mdbook to add inline Table of Contents support";
+    description = "Preprocessor for mdbook to add inline Table of Contents support";
     mainProgram = "mdbook-toc";
     homepage = "https://github.com/badboy/mdbook-toc";
     license = [ licenses.mpl20 ];

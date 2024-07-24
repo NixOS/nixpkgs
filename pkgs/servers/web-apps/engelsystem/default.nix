@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description =
       "Coordinate your volunteers in teams, assign them to work shifts or let them decide for themselves when and where they want to help with what";
     homepage = "https://engelsystem.de";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     mainProgram = "migrate";
     maintainers = with maintainers; [ ];
     platforms = platforms.all;

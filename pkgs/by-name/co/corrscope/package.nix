@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "corrscope";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corrscope";
     repo = "corrscope";
-    rev = version;
-    hash = "sha256-kOPhVm4epIhBSsgQVKNCoQ7DZcMG/b3sapxwwKo/V+U=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-SKsPe68CNaoUzGjMZn4azGFM3SbBipHK8gJcrm4+T+I=";
   };
 
   pythonRelaxDeps = [ "attrs" "ruamel.yaml" ];
@@ -26,7 +26,6 @@ python3Packages.buildPythonApplication rec {
     wrapQtAppsHook
   ]) ++ (with python3Packages; [
     poetry-core
-    pythonRelaxDepsHook
   ]);
 
   buildInputs = [

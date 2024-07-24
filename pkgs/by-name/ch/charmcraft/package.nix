@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "2.6.0";
+  version = "2.7.0";
 
   pyproject = true;
 
@@ -16,12 +16,15 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "charmcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-B0ZcOORW6yaSIpisPLnq5/S/CcqqvHNTXcfP1sKW2KQ=";
+    hash = "sha256-yMcGXi7OxEtfOv3zLEUlnZrR90TkFc0y9RB9jS34ZWs=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail 'version=determine_version()' 'version="${version}"'
+
+    substituteInPlace charmcraft/env.py \
+      --replace-fail "distutils.util" "setuptools.dist"
   '';
 
   propagatedBuildInputs = with python3Packages; [
@@ -44,23 +47,22 @@ python3Packages.buildPythonApplication rec {
     urllib3
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
+  pythonRelaxDeps = [ "urllib3" ];
 
-  nativeCheckInputs = with python3Packages; [
-    pyfakefs
-    pytest-check
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-    responses
-  ] ++ [ git ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pyfakefs
+      pytest-check
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+      responses
+      setuptools
+    ]
+    ++ [ git ];
 
   preCheck = ''
     mkdir -p check-phase

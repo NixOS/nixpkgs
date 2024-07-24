@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timeshift";
-  version = "24.01.1";
+  version = "24.06.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "timeshift";
     rev = version;
-    hash = "sha256-vAKUR0VsOuiQmB+1jPOR0KufzfXaxAsf3EOPzdgFt0A=";
+    hash = "sha256-npYiUSAPzr6g29ilQ1JELxqR1VbOR7TNMkdx37n92kk=";
   };
 
   patches = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A system restore tool for Linux";
+    description = "System restore tool for Linux";
     longDescription = ''
       TimeShift creates filesystem snapshots using rsync+hardlinks or BTRFS snapshots.
       Snapshots can be restored using TimeShift installed on the system or from Live CD or USB.

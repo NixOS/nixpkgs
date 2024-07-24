@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Web server log file analysis program";
     homepage = "https://webalizer.net/";
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

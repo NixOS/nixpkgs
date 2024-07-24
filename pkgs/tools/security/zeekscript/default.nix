@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A Zeek script formatter and analyzer";
+    description = "Zeek script formatter and analyzer";
     homepage = "https://github.com/zeek/zeekscript";
     changelog = "https://github.com/zeek/zeekscript/blob/v${version}/CHANGES";
     license = licenses.bsd3;

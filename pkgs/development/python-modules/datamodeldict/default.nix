@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-DadBRsc8qEu9PWgMNllGS2ESKL7kgBLDhg4yDr87WRk=";
   };
 
-  propagatedBuildInputs = [
-    xmltodict
-  ];
+  propagatedBuildInputs = [ xmltodict ];
 
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "DataModelDict"
-  ];
+  pythonImportsCheck = [ "DataModelDict" ];
 
   meta = with lib; {
     description = "Class allowing for data models equivalently represented as Python dictionaries, JSON, and XML";

@@ -27,7 +27,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A simple and flexible build tool using Lua, similar to make/mk";
+    description = "Simple and flexible build tool using Lua, similar to make/mk";
     mainProgram = "knit";
     homepage = "https://github.com/zyedidia/knit";
     changelog = "https://github.com/zyedidia/knit/releases/tag/v${version}";

@@ -17,7 +17,7 @@ buildGoModule rec {
   vendorHash = "sha256-CPh9j5PJOSNvqgq/S9w+Kx3c5yIMHjc1AaqLwz9efeY=";
 
   meta = with lib; {
-    description = "A CLI tool to fetch GitHub user information and show like neofetch";
+    description = "CLI tool to fetch GitHub user information and show like neofetch";
     homepage = "https://github.com/orangekame3/ghfetch";
     license = licenses.mit;
     mainProgram = "ghfetch";

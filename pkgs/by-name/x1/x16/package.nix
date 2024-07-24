@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://cx16forum.com/";
-    description = "The official emulator of CommanderX16 8-bit computer";
+    description = "Official emulator of CommanderX16 8-bit computer";
     changelog = "https://github.com/X16Community/x16-emulator/blob/r${finalAttrs.version}/RELEASES.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ AndersonTorres ];

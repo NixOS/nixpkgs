@@ -13,7 +13,7 @@
 , mate-panel
 , pam
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     libxml2 # provides xmllint
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

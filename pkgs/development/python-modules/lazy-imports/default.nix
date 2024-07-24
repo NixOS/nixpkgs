@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, packaging
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  packaging,
 }:
 let
   pname = "lazy-imports";
@@ -20,9 +20,7 @@ buildPythonPackage {
     hash = "sha256-i+VPlBoxNqk56U4oiEgS1Ayhi1t2O8PtLZ/bzEurUY8=";
   };
 
-  pythonImportsCheck = [
-    "lazy_imports"
-  ];
+  pythonImportsCheck = [ "lazy_imports" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -30,7 +28,7 @@ buildPythonPackage {
   ];
 
   meta = with lib; {
-    description = "Python tool to support lazy imports.";
+    description = "Python tool to support lazy imports";
     homepage = "https://github.com/telekom/lazy-imports";
     changelog = "https://github.com/telekom/lazy-imports/releases/tag/${version}";
     license = licenses.asl20;

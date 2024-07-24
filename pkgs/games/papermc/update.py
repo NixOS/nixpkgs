@@ -1,6 +1,7 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i python -p "python3.withPackages (ps: with ps; [ps.requests ])"
 
+import os
 import hashlib
 import base64
 import json
@@ -95,7 +96,13 @@ class VersionManager:
             indent=4
         )
 
-    def write_versions(self, file_name: str):
+    def find_version_json() -> str:
+        """
+        Find the versions.json file in the same directory as this script
+        """
+        return os.path.join(os.path.dirname(os.path.realpath(__file__)), "versions.json")
+
+    def write_versions(self, file_name: str = find_version_json()):
         """ write all processed versions to json """
         # save json to versions.json
         with open(file_name, 'w') as f:
@@ -142,4 +149,4 @@ if __name__ == '__main__':
     version_manager.fetch_versions()
     version_manager.fetch_latest_version_builds()
     version_manager.generate_version_hashes()
-    version_manager.write_versions(file_name="versions.json")
+    version_manager.write_versions()

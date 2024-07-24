@@ -47,7 +47,7 @@ index 660d3e0935..0e6760c360 100644
 -static QemuClipboardInfo *cbinfo;
 -static QemuEvent cbevent;
 -
- // Utility functions to run specified code block with iothread lock held
+ // Utility functions to run specified code block with the BQL held
  typedef void (^CodeBlock)(void);
  typedef bool (^BoolCodeBlock)(void);
 @@ -1799,107 +1794,6 @@ static void addRemovableDevicesMenuItems(void)
@@ -65,7 +65,7 @@ index 660d3e0935..0e6760c360 100644
 -        return;
 -    }
 -
--    with_iothread_lock(^{
+-    with_bql(^{
 -        QemuClipboardInfo *info = qemu_clipboard_info_ref(cbinfo);
 -        qemu_event_reset(&cbevent);
 -        qemu_clipboard_request(info, QEMU_CLIPBOARD_TYPE_TEXT);
@@ -73,9 +73,9 @@ index 660d3e0935..0e6760c360 100644
 -        while (info == cbinfo &&
 -               info->types[QEMU_CLIPBOARD_TYPE_TEXT].available &&
 -               info->types[QEMU_CLIPBOARD_TYPE_TEXT].data == NULL) {
--            qemu_mutex_unlock_iothread();
+-            bql_unlock();
 -            qemu_event_wait(&cbevent);
--            qemu_mutex_lock_iothread();
+-            bql_lock();
 -        }
 -
 -        if (info == cbinfo) {
@@ -186,9 +186,9 @@ index 660d3e0935..0e6760c360 100644
  }
  
 @@ -2071,12 +1952,6 @@ static void cocoa_display_init(DisplayState *ds, DisplayOptions *opts)
- 
      // register vga output callbacks
      register_displaychangelistener(&dcl);
+     [cocoaView updateUIInfo];
 -
 -    qemu_event_init(&cbevent, false);
 -    cbowner = [[QemuCocoaPasteboardTypeOwner alloc] init];

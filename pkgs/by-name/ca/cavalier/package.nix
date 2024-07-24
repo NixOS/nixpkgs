@@ -11,6 +11,7 @@
 , appstream-glib
 , desktop-file-utils
 , cava
+, libGL
 }:
 
 buildDotnetModule rec {
@@ -49,6 +50,7 @@ buildDotnetModule rec {
     glib
     gtk4
     libadwaita
+    libGL
   ];
 
   postInstall = ''

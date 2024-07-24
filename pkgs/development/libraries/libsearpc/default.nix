@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/haiwen/libsearpc";
-    description = "A simple and easy-to-use C language RPC framework based on GObject System";
+    description = "Simple and easy-to-use C language RPC framework based on GObject System";
     mainProgram = "searpc-codegen.py";
     license = licenses.lgpl3;
     platforms = platforms.linux;

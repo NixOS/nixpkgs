@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, setuptools
-, setuptools-scm
-, matchpy
-, numpy
-, astunparse
-, typing-extensions
-, pytest7CheckHook
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  matchpy,
+  numpy,
+  astunparse,
+  typing-extensions,
+  pytest7CheckHook,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
@@ -24,10 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-wTKqOw64b+/kdZpSYLwCJATOuo807BWCtVHB4pH58fY=";
   };
 
-  nativeBuildInputs = [ setuptools setuptools-scm ];
-  build-system = [
+  nativeBuildInputs = [
     setuptools
+    setuptools-scm
   ];
+  build-system = [ setuptools ];
 
   dependencies = [
     astunparse

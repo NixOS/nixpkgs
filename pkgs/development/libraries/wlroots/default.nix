@@ -97,7 +97,7 @@ let
       passthru.tests.tinywl = nixosTests.tinywl;
 
       meta = {
-        description = "A modular Wayland compositor library";
+        description = "Modular Wayland compositor library";
         longDescription = ''
           Pluggable, composable, unopinionated modules for building a Wayland
           compositor; or about 50,000 lines of code you were going to write anyway.
@@ -125,11 +125,13 @@ rec {
   };
 
   wlroots_0_17 = generic {
-    version = "0.17.2";
-    hash = "sha256-Of9qykyVnBURc5A2pvCMm7sLbnuuG7OPWLxodQLN2Xg=";
+    version = "0.17.4";
+    hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
+    extraNativeBuildInputs = [
+      hwdata
+    ];
     extraBuildInputs = [
       ffmpeg
-      hwdata
       libliftoff
       libdisplay-info
     ];

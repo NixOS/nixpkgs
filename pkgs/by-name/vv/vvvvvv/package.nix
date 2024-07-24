@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "TerryCavanagh";
     repo = "VVVVVV";
     rev = version;
-    sha256 = "sha256-HosrYBzx1Kh7rQIH7IAoOTPgpm4lgYOVR3MWtWX3usQ=";
+    hash = "sha256-HosrYBzx1Kh7rQIH7IAoOTPgpm4lgYOVR3MWtWX3usQ=";
     fetchSubmodules = true;
   };
 
@@ -91,8 +91,9 @@ stdenv.mkDerivation rec {
       (Redistributable version, doesn't include the original levels.)
     '';
     homepage = "https://thelettervsixtim.es";
+    changelog = "https://github.com/TerryCavanagh/VVVVVV/releases/tag/${src.rev}";
     license = licenses.unfree;
-    maintainers = with maintainers; [ martfont ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

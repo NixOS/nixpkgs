@@ -30,7 +30,7 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
-    description = "An OCaml library implementing the Telegram bot API";
+    description = "OCaml library implementing the Telegram bot API";
     homepage = "https://github.com/nv-vn/TelegraML/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

@@ -24,7 +24,7 @@ buildHomeAssistantComponent rec {
 
   meta = with lib; {
     changelog = "https://github.com/robbinjanssen/home-assistant-omnik-inverter/releases/tag/v${version}";
-    description = "The Omnik Inverter integration will scrape data from an Omnik inverter connected to your local network";
+    description = "Omnik Inverter integration will scrape data from an Omnik inverter connected to your local network";
     homepage = "https://github.com/robbinjanssen/home-assistant-omnik-inverter";
     maintainers = with maintainers; [ _9R ];
     license = licenses.mit;

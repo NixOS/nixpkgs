@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, fonttools
-, pytestCheckHook
-, setuptools-scm
-, wheel
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  fonttools,
+  pytestCheckHook,
+  setuptools-scm,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -33,13 +34,9 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    fonttools
-  ];
+  propagatedBuildInputs = [ fonttools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cffsubr" ];
 

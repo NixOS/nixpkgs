@@ -1,11 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, dnspython
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
-, tenacity
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  dnspython,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
+  tenacity,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
       -e "/--no-cov/d"
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -41,9 +40,7 @@ buildPythonPackage rec {
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "linear_garage_door"
-  ];
+  pythonImportsCheck = [ "linear_garage_door" ];
 
   meta = with lib; {
     description = "Control Linear Garage Doors with Python";

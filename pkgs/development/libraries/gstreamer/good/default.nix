@@ -16,7 +16,9 @@
 , libavc1394
 , libiec61883
 , libvpx
+, libdrm
 , speex
+, opencore-amr
 , flac
 , taglib
 , libshout
@@ -39,6 +41,7 @@
 , enableJack ? true, libjack2
 , enableX11 ? stdenv.isLinux, xorg
 , ncurses
+, enableWayland ? stdenv.isLinux
 , wayland
 , wayland-protocols
 , libgudev
@@ -55,16 +58,18 @@ assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.22.9";
+  version = "1.24.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-JpWfz+v/9jfU6gjvQDFrrzG2G7dymCCwaE6ADDoUeLY=";
+    hash = "sha256-FQ+RTmHcBWALaLiMoQPHzCJxMBWOOJ6p6hWfQFCi67A=";
   };
 
   patches = [
+    # Reenable dynamic loading of libsoup on Darwin and use a different approach to do it.
+    ./souploader-darwin.diff
     # dlopen libsoup_3 with an absolute path
     (substituteAll {
       src = ./souploader.diff;
@@ -94,7 +99,7 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals qt6Support (with qt6; [
     qtbase
     qttools
-  ]) ++ lib.optionals stdenv.isLinux [
+  ]) ++ lib.optionals enableWayland [
     wayland-protocols
   ];
 
@@ -105,6 +110,7 @@ stdenv.mkDerivation rec {
     libdv
     libvpx
     speex
+    opencore-amr
     flac
     taglib
     cairo
@@ -127,6 +133,8 @@ stdenv.mkDerivation rec {
     xorg.libXext
     xorg.libXfixes
     xorg.libXdamage
+    xorg.libXtst
+    xorg.libXi
   ] ++ lib.optionals gtkSupport [
     # for gtksink
     gtk3
@@ -142,12 +150,14 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ] ++ lib.optionals stdenv.isLinux [
+    libdrm
     libGL
     libv4l
     libpulseaudio
     libavc1394
     libiec61883
     libgudev
+  ] ++ lib.optionals enableWayland [
     wayland
   ] ++ lib.optionals enableJack [
     libjack2
@@ -207,6 +217,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }

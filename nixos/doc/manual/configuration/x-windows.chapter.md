@@ -79,7 +79,7 @@ Wine, you should also set the following:
 
 ```nix
 {
-  hardware.opengl.driSupport32Bit = true;
+  hardware.graphics.enable32Bit = true;
 }
 ```
 
@@ -183,23 +183,6 @@ If you have an older card, you may have to use one of the legacy drivers:
 You may need to reboot after enabling this driver to prevent a clash
 with other kernel modules.
 
-## Proprietary AMD drivers {#sec-x11--graphics-cards-amd}
-
-AMD provides a proprietary driver for its graphics cards that is not
-enabled by default because it's not Free Software, is often broken in
-nixpkgs and as of this writing doesn't offer more features or
-performance. If you still want to use it anyway, you need to explicitly
-set:
-
-```nix
-{
-  services.xserver.videoDrivers = [ "amdgpu-pro" ];
-}
-```
-
-You will need to reboot after enabling this driver to prevent a clash
-with other kernel modules.
-
 ## Touchpads {#sec-x11-touchpads}
 
 Support for Synaptics touchpads (found in many laptops such as the Dell
@@ -207,7 +190,7 @@ Latitude series) can be enabled as follows:
 
 ```nix
 {
-  services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 }
 ```
 
@@ -216,7 +199,7 @@ For instance, the following disables tap-to-click behavior:
 
 ```nix
 {
-  services.xserver.libinput.touchpad.tapping = false;
+  services.libinput.touchpad.tapping = false;
 }
 ```
 

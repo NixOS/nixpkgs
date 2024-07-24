@@ -8,7 +8,7 @@
 
 let
   pname = "aeron";
-  version = "1.43.0";
+  version = "1.44.1";
   groupId = "io.aeron";
 
   aeronAll_1_40_0 = fetchMavenArtifact {
@@ -53,8 +53,22 @@ let
     hash = "sha512-a/ti4Kd8WwzOzDGMgdYk0pxsu8vRA4kRD9cm4D3S+r6xc/rL8ECHVoogOMDeabDd1EYSIbx/sKE01BJOW7BVsg==";
   };
 
-  aeronAll = aeronAll_1_43_0;
-  aeronSamples = aeronSamples_1_43_0;
+  aeronAll_1_44_1 = fetchMavenArtifact {
+    inherit groupId;
+    artifactId = "aeron-all";
+    version = "1.44.1";
+    hash = "sha256-O80bWp7F6mRh3me1znzpfFfFEpvvMVjL4PrAt7+3Fq0=";
+  };
+
+  aeronSamples_1_44_1 = fetchMavenArtifact {
+    inherit groupId;
+    version = "1.44.1";
+    artifactId = "aeron-samples";
+    hash = "sha256-ZSuTed45BRzr4JJuGeXghUgEifv/FpnCzTNJWa+nwjo=";
+  };
+
+  aeronAll = aeronAll_1_44_1;
+  aeronSamples = aeronSamples_1_44_1;
 
 in stdenv.mkDerivation {
 

@@ -1,27 +1,26 @@
 { lib
-, fetchFromGitLab
+, fetchFromGitea
 , pkg-config
 , python3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "poezio";
-  version = "0.13.1";
-  format = "setuptools";
+  version = "0.14";
+  pyproject = true;
 
-  src = fetchFromGitLab {
-    domain = "lab.louiz.org";
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-3pUegEfhQxEv/7Htw6b2BN1lXtDockyANmi1xW4wPhA=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "poezio";
+    repo = "poezio";
+    rev = "v${version}";
+    hash = "sha256-sk+8r+a0CcoB0RidqnE7hJUgt/xvN/MCJMkxiquvdJc=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
+  build-system = [ python3.pkgs.setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aiodns
     cffi
     mpd2
@@ -30,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     pyasn1-modules
     pycares
     pyinotify
+    setuptools
     slixmpp
     typing-extensions
   ];
@@ -42,10 +42,15 @@ python3.pkgs.buildPythonApplication rec {
     "poezio"
   ];
 
+  # remove poezio directory to prevent pytest import confusion
+  preCheck = ''
+    rm -r poezio
+  '';
+
   meta = with lib; {
     description = "Free console XMPP client";
     homepage = "https://poez.io";
-    changelog = "https://lab.louiz.org/poezio/poezio/-/blob/v${version}/CHANGELOG";
+    changelog = "https://codeberg.org/poezio/poezio/src/tag/v${version}/CHANGELOG";
     license = licenses.zlib;
     maintainers = with maintainers; [ lsix ];
   };

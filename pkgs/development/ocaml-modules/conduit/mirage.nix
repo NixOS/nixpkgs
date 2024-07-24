@@ -20,6 +20,6 @@ buildDunePackage {
   ];
 
   meta = conduit-lwt.meta // {
-    description = "A network connection establishment library for MirageOS";
+    description = "Network connection establishment library for MirageOS";
   };
 }

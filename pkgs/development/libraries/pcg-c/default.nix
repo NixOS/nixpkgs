@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A family of better random number generators";
+    description = "Family of better random number generators";
     homepage = "https://www.pcg-random.org/";
     license = lib.licenses.asl20;
     longDescription = ''

@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, aiocoap
-, aiohappyeyeballs
-, async-interrupt
-, bleak
-, bleak-retry-connector
-, chacha20poly1305
-, chacha20poly1305-reuseable
-, commentjson
-, cryptography
-, fetchFromGitHub
-, orjson
-, poetry-core
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  aiocoap,
+  aiohappyeyeballs,
+  async-interrupt,
+  bleak,
+  bleak-retry-connector,
+  chacha20poly1305,
+  chacha20poly1305-reuseable,
+  commentjson,
+  cryptography,
+  fetchFromGitHub,
+  orjson,
+  poetry-core,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-F3PhZsuIgT3x1Y3/kx9juPwN2WKxvdbahrRm+r6ZPps=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiocoap
@@ -73,9 +72,7 @@ buildPythonPackage rec {
     "test_discover_device_id_case_upper"
   ];
 
-  pythonImportsCheck = [
-    "aiohomekit"
-  ];
+  pythonImportsCheck = [ "aiohomekit" ];
 
   meta = with lib; {
     description = "Python module that implements the HomeKit protocol";

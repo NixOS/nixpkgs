@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, cargo
-, cffi
-, fetchPypi
-, glean-parser
-, iso8601
-, lmdb
-, pkg-config
-, pytest-localserver
-, pytestCheckHook
-, python
-, pythonOlder
-, rustc
-, rustPlatform
-, semver
-, setuptools-rust
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  cargo,
+  cffi,
+  fetchPypi,
+  glean-parser,
+  iso8601,
+  lmdb,
+  pkg-config,
+  pytest-localserver,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  rustc,
+  rustPlatform,
+  semver,
+  setuptools-rust,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +45,7 @@ buildPythonPackage rec {
     setuptools-rust
   ];
 
-  buildInputs = [
-    lmdb
-  ];
+  buildInputs = [ lmdb ];
 
   propagatedBuildInputs = [
     cffi
@@ -70,9 +69,7 @@ buildPythonPackage rec {
     readelf -a $out/${python.sitePackages}/glean/libglean_ffi.so | grep -F 'Shared library: [liblmdb.so'
   '';
 
-  pythonImportsCheck = [
-    "glean"
-  ];
+  pythonImportsCheck = [ "glean" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

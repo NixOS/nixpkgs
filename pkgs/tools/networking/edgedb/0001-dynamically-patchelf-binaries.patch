@@ -1,8 +1,8 @@
 diff --git a/src/portable/install.rs b/src/portable/install.rs
-index dc0d932..5394fc1 100644
+index 15944e4..f873349 100644
 --- a/src/portable/install.rs
 +++ b/src/portable/install.rs
-@@ -133,8 +133,16 @@ fn unpack_package(cache_file: &Path, target_dir: &Path)
+@@ -134,8 +134,16 @@ fn unpack_package(cache_file: &Path, target_dir: &Path) -> anyhow::Result<()> {
      for entry in arch.entries()? {
          let mut entry = entry?;
          let path = entry.path()?;
@@ -11,7 +11,7 @@ index dc0d932..5394fc1 100644
 +            path_iter.next(); // discards first folder
 +            path_iter.as_path().starts_with("bin")
 +        };
-         if let Some(path) = build_path(&target_dir, &*path)? {
+         if let Some(path) = build_path(&target_dir, &path)? {
 -            entry.unpack(path)?;
 +            entry.unpack(&path)?;
 +            if is_inside_bin {
@@ -20,7 +20,7 @@ index dc0d932..5394fc1 100644
          }
      }
      bar.finish_and_clear();
-@@ -203,3 +211,11 @@ pub fn package(pkg_info: &PackageInfo) -> anyhow::Result<InstallInfo> {
+@@ -222,3 +230,11 @@ pub fn package(pkg_info: &PackageInfo) -> anyhow::Result<InstallInfo> {
  
      Ok(info)
  }

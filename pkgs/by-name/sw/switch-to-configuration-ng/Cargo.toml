@@ -1,0 +1,19 @@
+[package]
+name = "switch-to-configuration"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.82"
+dbus = "0.9.7"
+glob = "0.3.1"
+log = "0.4.21"
+nix = { version = "0.28.0", features = ["fs", "signal"] }
+regex = "1.10.4"
+rust-ini = "0.21.0"
+syslog = "6.1.1"
+
+[build-dependencies]
+dbus-codegen = "0.11.0"

@@ -12,14 +12,14 @@ let
   # steamos-devkit requires a build of the unreleased pyimgui 2.0 branch, move to pythonPackages when 2.0 is released.
   pyimgui = python3.pkgs.buildPythonPackage {
     pname = "pyimgui";
-    version = "unstable-2022-03-06";
+    version = "2.0.0";
 
     src = fetchFromGitHub {
       owner = "pyimgui";
       repo = "pyimgui";
-      rev = "1f095af5886f424ee12f26fa93b108b6420fafa4"; # dev/version-2.0 branch
+      rev = "2.0.0";
       fetchSubmodules = true;
-      sha256 = "sha256-k070ue132m8H1Zm8bo7J7spCS5dSTGOj689ci7vJ+aw=";
+      sha256 = "sha256-sw/bLTdrnPhBhrnk5yyXCbEK4kMo+PdEvoMJ9aaZbsE=";
     };
 
     nativeBuildInputs = with python3.pkgs; [
@@ -57,14 +57,14 @@ let
 in
 python3.pkgs.buildPythonPackage rec {
   pname = "steamos-devkit";
-  version = "0.20230411.0";
+  version = "0.20240216.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.steamos.cloud";
     owner = "devkit";
     repo = "steamos-devkit";
     rev = "v${version}";
-    sha256 = "sha256-DQIyjEpUFnC0OjMjKMrGYs4+HoEDfcSc3m3rfXLPyZ0=";
+    sha256 = "sha256-eOtESkGMIjcijAFITOcYKPsXH6xH/Xcj9D+OItMqebM=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

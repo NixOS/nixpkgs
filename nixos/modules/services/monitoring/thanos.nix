@@ -696,7 +696,7 @@ in {
     };
 
     store = paramsToOptions params.store // {
-      enable = mkEnableOption "the Thanos store node giving access to blocks in a bucket provider.";
+      enable = mkEnableOption "the Thanos store node giving access to blocks in a bucket provider";
       arguments = mkArgumentsOption "store";
     };
 

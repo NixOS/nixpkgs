@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, enum-compat
-, fetchFromGitHub
-, pytestCheckHook
-, unicodecsv
-, six
+{
+  lib,
+  buildPythonPackage,
+  enum-compat,
+  fetchFromGitHub,
+  pytestCheckHook,
+  unicodecsv,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -29,13 +30,9 @@ buildPythonPackage rec {
     six
   ];
 
-  disabledTestPaths = [
-    "samples"
-  ];
+  disabledTestPaths = [ "samples" ];
 
-  pythonImportsCheck = [
-    "Registry"
-  ];
+  pythonImportsCheck = [ "Registry" ];
 
   meta = with lib; {
     description = "Pure Python parser for Windows Registry hives";

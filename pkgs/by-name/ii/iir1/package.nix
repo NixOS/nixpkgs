@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://berndporr.github.io/iir1/";
-    description = "A DSP IIR realtime filter library written in C++";
+    description = "DSP IIR realtime filter library written in C++";
     downloadPage = "https://github.com/berndporr/iir1";
     changelog = "https://github.com/berndporr/iir1/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ mit ];

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
     # Basically GPL2+ with font exception.
     license = "https://unifoundry.com/LICENSE.txt";
-    maintainers = [ maintainers.rycee maintainers.vrthra ];
+    maintainers = [ maintainers.rycee ];
     platforms = platforms.all;
   };
 }

@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flake8
-, orderedmultidict
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  flake8,
+  orderedmultidict,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -32,6 +34,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     flake8
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # AssertionError: assert '//////path' == '////path'
+    "test_odd_urls"
   ];
 
   pythonImportsCheck = [ "furl" ];

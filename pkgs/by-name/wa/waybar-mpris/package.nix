@@ -24,7 +24,7 @@ buildGoModule {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A waybar component/utility for displaying and controlling MPRIS2 compliant media players individually";
+    description = "Waybar component/utility for displaying and controlling MPRIS2 compliant media players individually";
     homepage = "https://git.hrfee.pw/hrfee/waybar-mpris";
     license = licenses.mit;
     mainProgram = "waybar-mpris";

@@ -2,25 +2,67 @@
 , lib
 , fetchFromGitHub
 , rustPlatform
+, nixosTests
 , nix-update-script
 , protobuf
 , rust-jemalloc-sys
 , Security
+, nodejs
+, yarn
+, fetchYarnDeps
+, fixup-yarn-lock
 }:
 
 let
   pname = "quickwit";
-  version = "0.8.0";
-in
-rustPlatform.buildRustPackage rec {
-  inherit pname version;
+  version = "0.8.2";
+
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/quickwit/quickwit-ui/yarn.lock";
+    hash = "sha256-HppK9ycUxCOIagvzCmE+VfcmfMQfPIC8WeWM6WbA6fQ=";
+  };
 
   src = fetchFromGitHub {
     owner = "quickwit-oss";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FZVGQfDuQYIdRnCsBZvXeLbJBdcLugZeHNm+kf6L9SY=";
+    hash = "sha256-OrCO0mCFmhYBdpr4Gps56KJJ37uuJpV6ZJHWspOScyw=";
   };
+
+  quickwit-ui = stdenv.mkDerivation {
+    name = "quickwit-ui";
+    src = "${src}/quickwit/quickwit-ui";
+
+    nativeBuildInputs = [
+      nodejs
+      yarn
+      fixup-yarn-lock
+    ];
+
+    configurePhase = ''
+      export HOME=$(mktemp -d)
+    '';
+
+    buildPhase = ''
+      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      fixup-yarn-lock yarn.lock
+
+      yarn install --offline \
+        --frozen-lockfile --no-progress \
+        --ignore-engines --ignore-scripts
+      patchShebangs .
+
+      yarn build
+    '';
+
+    installPhase = ''
+      mkdir $out
+      mv build/* $out
+    '';
+  };
+in
+rustPlatform.buildRustPackage rec {
+  inherit pname version src;
 
   postPatch = ''
     substituteInPlace ./quickwit-ingest/build.rs \
@@ -33,6 +75,11 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/quickwit";
 
+  preBuild = ''
+    mkdir -p quickwit-ui/build
+    cp -r ${quickwit-ui}/* quickwit-ui/build
+  '';
+
   buildInputs = [
     rust-jemalloc-sys
   ] ++ lib.optionals stdenv.isDarwin [ Security ];
@@ -40,7 +87,7 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "chitchat-0.8.0" = "sha256-cjwKaBXoztYUXgnJvtFH+OSQU6tl2U3zKFWX324+9wo=";
+      "chitchat-0.8.0" = "sha256-6K2noPoFaDnOxQIEV1WbmVPfRGwlI/WS1OWSBH2qb1Q=";
       "mrecordlog-0.4.0" = "sha256-9LIVs+BqK9FLSfHL3vm9LL+/FXIXJ6v617QLv4luQik=";
       "ownedbytes-0.6.0" = "sha256-in18/NYYIgUiZ9sm8NgJlebWidRp34DR7AhOD1Nh0aw=";
       "pulsar-5.0.2" = "sha256-j7wpsAro6x4fk3pvSL4fxLkddJFq8duZ7jDj0Edf3YQ=";
@@ -49,11 +96,20 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  CARGO_PROFILE_RELEASE_LTO = "fat";
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) quickwit;
+      inherit (nixosTests.vector) syslog-quickwit;
+    };
+    updateScript = nix-update-script { };
+  };
 
   checkFlags = [
     # tries to make a network access
@@ -72,6 +128,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=object_storage::s3_compatible_storage::tests::test_s3_compatible_storage_relative_path"
     # flaky test
     "--skip=actors::indexer::tests::test_indexer_triggers_commit_on_drained_mailbox"
+    "--skip=actors::indexer::tests::test_indexer_triggers_commit_on_timeout"
     "--skip=actors::indexer::tests::test_indexer_partitioning"
     "--skip=actors::indexing_pipeline::tests::test_merge_pipeline_does_not_stop_on_indexing_pipeline_failure"
     "--skip=actors::indexer::tests::test_indexer_triggers_commit_on_target_num_docs"

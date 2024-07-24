@@ -61,6 +61,7 @@ buildPythonPackage rec {
   # The tests require the generation of code before execution. This requires
   # the protoc-gen-python_betterproto script from the package to be on PATH.
   preCheck = ''
+    (($(ulimit -n) < 1024)) && ulimit -n 1024
     export PATH=$PATH:$out/bin
     patchShebangs src/betterproto/plugin/main.py
     ${python.interpreter} -m tests.generate

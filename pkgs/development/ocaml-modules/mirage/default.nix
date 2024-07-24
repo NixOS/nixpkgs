@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, ocaml, alcotest
+{ buildDunePackage, ocaml, alcotest
 , functoria, mirage-runtime, bos
 , ipaddr, astring, logs, stdlib-shims
 }:
@@ -34,6 +34,6 @@ buildDunePackage rec {
   '';
 
   meta = mirage-runtime.meta // {
-    description = "The MirageOS library operating system";
+    description = "MirageOS library operating system";
   };
 }

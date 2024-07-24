@@ -1,27 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fixtures
-, purl
-, pytestCheckHook
-, python
-, requests
-, requests-futures
-, six
-, testtools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fixtures,
+  purl,
+  pytestCheckHook,
+  requests,
+  requests-futures,
+  setuptools,
+  setuptools-scm,
+  testtools,
 }:
 
 buildPythonPackage rec {
   pname = "requests-mock";
-  version = "1.11.0";
-  format = "setuptools";
+  version = "1.12.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7xC1crSJpfKOCbcIaXIIxKOyuJ74Cp8BWENA6jV+w8Q=";
+    hash = "sha256-6eEuMztSUVboKjyFLyIBa5FYIg0vR0VN6crop303FAE=";
   };
 
-  propagatedBuildInputs = [ requests six ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     fixtures

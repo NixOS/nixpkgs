@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An embeddable Lua 2.5 interpreter implemented in OCaml";
+    description = "Embeddable Lua 2.5 interpreter implemented in OCaml";
     inherit (src.meta) homepage;
     inherit (ocaml.meta) platforms;
     license = lib.licenses.bsd2;

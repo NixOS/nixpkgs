@@ -20,6 +20,8 @@ buildDotnetModule rec {
   projectFile = "Marksman/Marksman.fsproj";
   dotnetBuildFlags = [ "-p:VersionString=${version}" ];
 
+  __darwinAllowLocalNetworking = true;
+
   doCheck = true;
   testProjectFile = "Tests/Tests.fsproj";
 

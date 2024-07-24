@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
   # The tests try to connect to qemu
   doCheck = false;
 
-  pythonImportsCheck = [
-    "vagrant"
-  ];
+  pythonImportsCheck = [ "vagrant" ];
 
   meta = {
     description = "Python module that provides a thin wrapper around the vagrant command line executable";

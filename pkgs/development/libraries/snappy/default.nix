@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snappy";
-  version = "1.1.10";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "snappy";
     rev = version;
-    hash = "sha256-wYZkKVDXKCugycx/ZYhjV0BjM/NrEM0R6A4WFhs/WPU=";
+    hash = "sha256-IzKzrMDjh+Weor+OrKdX62cAKYTdDXgldxCgNE2/8vk=";
   };
 
   patches = [
@@ -22,11 +22,6 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://build.opensuse.org/public/source/openSUSE:Factory/snappy/reenable-rtti.patch?rev=a759aa6fba405cd40025e3f0ab89941d";
       sha256 = "sha256-RMuM5yd6zP1eekN/+vfS54EyY4cFbGDVor1E1vj3134=";
-    })
-    # Fix -Wsign-compare warning on clang.
-    (fetchpatch {
-      url = "https://github.com/google/snappy/commit/27f34a580be4a3becf5f8c0cba13433f53c21337.patch";
-      sha256 = "sha256-eq6ueeMAkd2bYmPJcKAZZzd5QlXyeWOrsxFIwR8KOpQ=";
     })
   ];
 

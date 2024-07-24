@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "6.7.3";
+  version = "6.8.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Da+J+NOXW+n55LvaPQw6XiRhJJQ4Pc4Z1p21qMym/Xw=";
+    hash = "sha256-4/UaVnwIcDCS+R0El6P8Ku/jJ+/Ncl0D5m89zRHtm2g=";
   };
 
   patches = [
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
     websocket-client
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
     description = "CLI for extracting streams from various websites to video player of your choosing";
     homepage = "https://streamlink.github.io/";
@@ -66,8 +66,8 @@ python3Packages.buildPythonApplication rec {
 
       Streamlink is a fork of the livestreamer project.
     '';
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "streamlink";
-    maintainers = with maintainers; [ dezgeg zraexy DeeUnderscore ];
+    maintainers = with lib.maintainers; [ dezgeg zraexy DeeUnderscore ];
   };
 }

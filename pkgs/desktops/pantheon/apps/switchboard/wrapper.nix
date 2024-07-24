@@ -1,4 +1,4 @@
-{ wrapGAppsHook
+{ wrapGAppsHook3
 , glib
 , lib
 , stdenv
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     glib
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = lib.forEach selectedPlugs (x: x.buildInputs)

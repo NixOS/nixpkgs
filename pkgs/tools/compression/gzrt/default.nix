@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.urbanophile.com/arenn/hacking/gzrt/";
-    description = "The gzip Recovery Toolkit";
+    description = "Gzip Recovery Toolkit";
     maintainers = with maintainers; [ ];
     mainProgram = "gzrecover";
     license = licenses.gpl2Plus;

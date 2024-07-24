@@ -1,9 +1,10 @@
-{ lib
-, attrs
-, fetchFromGitHub
-, buildPythonPackage
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  attrs,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,17 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-eMpUk5s49OyD+cNGdAeKA2LvpXdKta2QjZIFDnIBKC8=";
   };
 
-  propagatedBuildInputs = [
-    attrs
-  ];
+  propagatedBuildInputs = [ attrs ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "jsonlines"
-  ];
+  pythonImportsCheck = [ "jsonlines" ];
 
   meta = with lib; {
     description = "Python library to simplify working with jsonlines and ndjson data";

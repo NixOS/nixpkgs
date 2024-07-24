@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, playwright
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  playwright,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,20 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-ZWmuVwjEgrPmfxjvws3TdocW6tyNH++fyRfKQ0oJ6bo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    playwright
-  ];
+  propagatedBuildInputs = [ playwright ];
 
   # Tests require Chromium binary
   doCheck = false;
 
-  pythonImportsCheck = [
-    "playwright_stealth"
-  ];
+  pythonImportsCheck = [ "playwright_stealth" ];
 
   meta = with lib; {
     description = "Playwright stealth";

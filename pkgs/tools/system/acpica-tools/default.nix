@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.acpica.org/";
     description = "ACPICA Tools";
     license = with licenses; [ iasl gpl2Only bsd3 ];
-    maintainers = with maintainers; [ delroth tadfisher ];
+    maintainers = with maintainers; [ tadfisher ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

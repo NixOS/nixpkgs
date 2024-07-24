@@ -6,8 +6,6 @@
 , cctools
 , IOKit
 , lib
-, fetchpatch
-, makeBinaryWrapper
 , nixosTests
 , enableLocalIcons ? false
 , nix-update-script
@@ -29,16 +27,16 @@ let
 in
 buildNpmPackage rec {
   pname = "homepage-dashboard";
-  version = "0.8.11";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-vKKdyPUsKfTOBhOFw7psKU0YezLFPt7mrP1RqIyxrss=";
+    hash = "sha256-j5DGi5bLoUOoeu8RupiN+qeixNcpPAu3XG4PidZ5Bsg=";
   };
 
-  npmDepsHash = "sha256-w3Wmutru91Zt+kAZ0PBf2CdpgdpxFRoqUmE/0CAu/z4=";
+  npmDepsHash = "sha256-jYZUVwrOxoAbfHHSBkN5IlYhC6yZVVwRoZErkbYrjUs=";
 
   preBuild = ''
     mkdir -p config
@@ -94,7 +92,7 @@ buildNpmPackage rec {
   };
 
   meta = {
-    description = "A highly customisable dashboard with Docker and service API integrations";
+    description = "Highly customisable dashboard with Docker and service API integrations";
     changelog = "https://github.com/gethomepage/homepage/releases/tag/v${version}";
     mainProgram = "homepage";
     homepage = "https://gethomepage.dev";

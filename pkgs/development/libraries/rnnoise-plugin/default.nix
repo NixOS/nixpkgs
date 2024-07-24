@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "rnnoise-plugin";
-  version = "1.03";
+  version = "1.10";
 
   src = fetchFromGitHub {
     owner = "werman";
     repo = "noise-suppression-for-voice";
     rev = "v${version}";
-    sha256 = "sha256-1DgrpGYF7G5Zr9vbgtKm/Yv0HSdI7LrFYPSGKYNnNDQ=";
+    sha256 = "sha256-sfwHd5Fl2DIoGuPDjELrPp5KpApZJKzQikCJmCzhtY8=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ];
 
   meta = with lib; {
-    description = "A real-time noise suppression plugin for voice based on Xiph's RNNoise";
+    description = "Real-time noise suppression plugin for voice based on Xiph's RNNoise";
     homepage = "https://github.com/werman/noise-suppression-for-voice";
     license = licenses.gpl3;
     platforms = platforms.all;

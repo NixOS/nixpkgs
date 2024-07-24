@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "7.4.3";
+  version = "7.5.3";
   pyproject = true;
 
   # uses f strings
@@ -16,12 +17,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J29gd6XGFEekjRM+0T51nAnmKv8NyEJ0po3BhmAQTVI=";
+    hash = "sha256-BK78pRkNHcelOkwaWn+FaIETBteo7iMcQvtpIVVxlE8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # No tests in archive
   doCheck = false;

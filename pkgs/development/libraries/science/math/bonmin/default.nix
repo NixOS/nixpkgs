@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An open-source code for solving general MINLP (Mixed Integer NonLinear Programming) problems";
+    description = "Open-source code for solving general MINLP (Mixed Integer NonLinear Programming) problems";
     mainProgram = "bonmin";
     homepage = "https://github.com/coin-or/Bonmin";
     license = licenses.epl10;

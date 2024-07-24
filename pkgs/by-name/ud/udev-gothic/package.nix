@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A programming font that combines BIZ UD Gothic and JetBrains Mono";
+    description = "Programming font that combines BIZ UD Gothic and JetBrains Mono";
     homepage = "https://github.com/yuru7/udev-gothic";
     license = licenses.ofl;
     maintainers = with maintainers; [ haruki7049 ];

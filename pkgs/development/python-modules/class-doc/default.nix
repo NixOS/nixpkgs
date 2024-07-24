@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, more-itertools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  more-itertools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,21 +29,13 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    more-itertools
-  ];
+  propagatedBuildInputs = [ more-itertools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "class_doc"
-  ];
+  pythonImportsCheck = [ "class_doc" ];
 
   meta = with lib; {
     description = "Extract attributes docstrings defined in various ways";

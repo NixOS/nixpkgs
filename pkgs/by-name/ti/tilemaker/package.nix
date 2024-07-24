@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Make OpenStreetMap vector tiles without the stack";
     homepage = "https://tilemaker.org/";
-    changelog = "https://github.com/systemed/tilemaker/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/systemed/tilemaker/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.free; # FTWPL
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;

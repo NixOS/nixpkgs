@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ncurses readline ronn ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace '-ltermcap' '-lncurses' \

@@ -20,8 +20,6 @@ let
 
     DB_USER = cfg.database.user;
 
-    REDIS_HOST = cfg.redis.host;
-    REDIS_PORT = toString(cfg.redis.port);
     DB_HOST = cfg.database.host;
     DB_NAME = cfg.database.name;
     LOCAL_DOMAIN = cfg.localDomain;
@@ -34,6 +32,8 @@ let
 
     TRUSTED_PROXY_IP = cfg.trustedProxy;
   }
+  // lib.optionalAttrs (cfg.redis.host != null) { REDIS_HOST = cfg.redis.host; }
+  // lib.optionalAttrs (cfg.redis.port != null) { REDIS_PORT = toString(cfg.redis.port); }
   // lib.optionalAttrs (cfg.redis.createLocally && cfg.redis.enableUnixSocket) { REDIS_URL = "unix://${config.services.redis.servers.mastodon.unixSocket}"; }
   // lib.optionalAttrs (cfg.database.host != "/run/postgresql" && cfg.database.port != null) { DB_PORT = toString cfg.database.port; }
   // lib.optionalAttrs cfg.smtp.authenticate { SMTP_LOGIN  = cfg.smtp.user; }
@@ -90,6 +90,11 @@ let
     SystemCallArchitectures = "native";
   };
 
+  # Services that all Mastodon units After= and Requires= on
+  commonServices = lib.optional redisActuallyCreateLocally "redis-mastodon.service"
+    ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+    ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+
   envFile = pkgs.writeText "mastodon.env" (lib.concatMapStrings (s: s + "\n") (
     (lib.concatLists (lib.mapAttrsToList (name: value:
       lib.optional (value != null) ''${name}="${toString value}"''
@@ -117,14 +122,8 @@ let
       jobClassLabel = toString ([""] ++ processCfg.jobClasses);
       threads = toString (if processCfg.threads == null then cfg.sidekiqThreads else processCfg.threads);
     in {
-      after = [ "network.target" "mastodon-init-dirs.service" ]
-        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
-        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
-      requires = [ "mastodon-init-dirs.service" ]
-        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
-        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+      after = [ "network.target" "mastodon-init-dirs.service" ] ++ commonServices;
+      requires = [ "mastodon-init-dirs.service" ] ++ commonServices;
       description = "Mastodon sidekiq${jobClassLabel}";
       wantedBy = [ "mastodon.target" ];
       environment = env // {
@@ -149,14 +148,8 @@ let
       (map (i: {
         name = "mastodon-streaming-${toString i}";
         value = {
-          after = [ "network.target" "mastodon-init-dirs.service" ]
-            ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
-            ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-            ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
-          requires = [ "mastodon-init-dirs.service" ]
-            ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
-            ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-            ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+          after = [ "network.target" "mastodon-init-dirs.service" ] ++ commonServices;
+          requires = [ "mastodon-init-dirs.service" ] ++ commonServices;
           wantedBy = [ "mastodon.target" "mastodon-streaming.target" ];
           description = "Mastodon streaming ${toString i}";
           environment = env // { SOCKET = "/run/mastodon-streaming/streaming-${toString i}.socket"; };
@@ -401,14 +394,20 @@ in {
 
         host = lib.mkOption {
           description = "Redis host.";
-          type = lib.types.str;
-          default = "127.0.0.1";
+          type = lib.types.nullOr lib.types.str;
+          default = if cfg.redis.createLocally && !cfg.redis.enableUnixSocket then "127.0.0.1" else null;
+          defaultText = lib.literalExpression ''
+            if config.${opt.redis.createLocally} && !config.${opt.redis.enableUnixSocket} then "127.0.0.1" else null
+          '';
         };
 
         port = lib.mkOption {
           description = "Redis port.";
-          type = lib.types.port;
-          default = 31637;
+          type = lib.types.nullOr lib.types.port;
+          default = if cfg.redis.createLocally && !cfg.redis.enableUnixSocket then 31637 else null;
+          defaultText = lib.literalExpression ''
+            if config.${opt.redis.createLocally} && !config.${opt.redis.enableUnixSocket} then 31637 else null
+          '';
         };
 
         passwordFile = lib.mkOption {
@@ -632,6 +631,20 @@ in {
   config = lib.mkIf cfg.enable (lib.mkMerge [{
     assertions = [
       {
+        assertion = !redisActuallyCreateLocally -> (cfg.redis.host != "127.0.0.1" && cfg.redis.port != null);
+        message = ''
+          `services.mastodon.redis.host` and `services.mastodon.redis.port` need to be set if
+            `services.mastodon.redis.createLocally` is not enabled.
+        '';
+      }
+      {
+        assertion = redisActuallyCreateLocally -> (!cfg.redis.enableUnixSocket || (cfg.redis.host == null && cfg.redis.port == null));
+        message = ''
+          `services.mastodon.redis.enableUnixSocket` needs to be disabled if
+            `services.mastodon.redis.host` and `services.mastodon.redis.port` is used.
+        '';
+      }
+      {
         assertion = redisActuallyCreateLocally -> (!cfg.redis.enableUnixSocket || cfg.redis.passwordFile == null);
         message = ''
           <option>services.mastodon.redis.enableUnixSocket</option> needs to be disabled if
@@ -783,14 +796,8 @@ in {
     };
 
     systemd.services.mastodon-web = {
-      after = [ "network.target" "mastodon-init-dirs.service" ]
-        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
-        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
-      requires = [ "mastodon-init-dirs.service" ]
-        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
-        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+      after = [ "network.target" "mastodon-init-dirs.service" ] ++ commonServices;
+      requires = [ "mastodon-init-dirs.service" ] ++ commonServices;
       wantedBy = [ "mastodon.target" ];
       description = "Mastodon web";
       environment = env // (if cfg.enableUnixSocket

@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , autoPatchelfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , flac
 , gnome2
 , harfbuzzFull
@@ -54,15 +54,15 @@
 
 let
   version = {
-    corporate = "23.11.1.822-1";
-    beta = "24.1.1.939-1";
-    stable = "24.1.1.940-1";
+    corporate = "24.4.3.1073-1";
+    beta = "24.4.1.952-1";
+    stable = "24.4.1.951-1";
   }.${edition};
 
   hash = {
-    corporate = "sha256-OOcz2dQeVea0vBjF1FyrCsnRR+WrCzfLTd+YXpLJCsI=";
-    beta = "sha256-Meswp1aeNTBr79l7XGWqJT9qqUdOfSzIpdL1L29UfJw=";
-    stable = "sha256-FZHoCRedpHHVwibSXts2DncUN83PZ9UlVOSXPjgAaNs=";
+    corporate = "sha256-f2Q6q3rL+RcVYX46RHRAageF2JKPxmBaV6KHYl5XtN8=";
+    beta = "sha256-WCyjgb5uj9guqyge6giP0wavndorlMG6yacG134xWjw=";
+    stable = "sha256-4AsMpANtMXUS2NCPKI+Ut0tWGurRIpWCmS3PhEi1CGo=";
   }.${edition};
 
   app = {
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     qt6.wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -165,5 +165,12 @@ in stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ dan4ik605743 ionutnechita ];
     platforms = [ "x86_64-linux" ];
+
+    knownVulnerabilities = [
+      ''
+      Trusts a Russian government issued CA certificate for some websites.
+      See https://habr.com/en/company/yandex/blog/655185/ (Russian) for details.
+      ''
+    ];
   };
 }

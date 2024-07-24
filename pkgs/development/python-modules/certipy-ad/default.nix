@@ -1,20 +1,21 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, cryptography
-, dnspython
-, dsinternals
-, fetchFromGitHub
-, impacket
-, ldap3
-, pyasn1
-, pycryptodome
-, pyopenssl
-, pythonOlder
-, requests
-, requests-ntlm
-, unicrypto
-, setuptools
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  cryptography,
+  dnspython,
+  dsinternals,
+  fetchFromGitHub,
+  impacket,
+  ldap3,
+  pyasn1,
+  pycryptodome,
+  pyopenssl,
+  pythonOlder,
+  requests,
+  requests-ntlm,
+  unicrypto,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
       --replace "pyasn1==0.4.8" "pyasn1"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     asn1crypto
@@ -60,9 +59,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "certipy"
-  ];
+  pythonImportsCheck = [ "certipy" ];
 
   meta = with lib; {
     description = "Library and CLI tool to enumerate and abuse misconfigurations in Active Directory Certificate Services";

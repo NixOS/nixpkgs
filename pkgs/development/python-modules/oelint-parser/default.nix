@@ -1,21 +1,22 @@
-{ lib
-, nix-update-script
-, fetchPypi
-, buildPythonPackage
-, deprecated
-, regex
-, pip
+{
+  lib,
+  nix-update-script,
+  fetchPypi,
+  buildPythonPackage,
+  deprecated,
+  regex,
+  pip,
 }:
 
 buildPythonPackage rec {
   pname = "oelint-parser";
-  version = "3.4.1";
+  version = "3.5.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "oelint_parser";
-    hash = "sha256-AZkbLTMWSUfrbgXZzvKy+maNaB7AwLPoh3Q8QT4Zq5U=";
+    hash = "sha256-2ZGzGJaVChd7XQM45qQF4vDw70iCEqxrVQP8lhGNfUg=";
   };
 
   buildInputs = [ pip ];

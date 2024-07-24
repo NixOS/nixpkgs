@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./ -i python3 -p "python3.withPackages (ps: with ps; [ ])" -p git -p nix-prefetch-github -p nix-prefetch-scripts
+#!nix-shell -I nixpkgs=./ -i python3 -p "python3.withPackages (ps: with ps; [ ])" -p git -p nix-prefetch-github -p nix-prefetch-git -p nix-prefetch-scripts
 
 import json
 import os
@@ -69,7 +69,11 @@ CORES = {
     "gw": {"repo": "gw-libretro"},
     "handy": {"repo": "libretro-handy"},
     "hatari": {"repo": "hatari"},
-    "mame": {"repo": "mame"},
+    # Setting fetch_submodules=True since libretro/mame constantly gives
+    # different hashes for its tarballs, see:
+    # - https://github.com/NixOS/nixpkgs/issues/259488#issuecomment-1751768379
+    # - https://github.com/NixOS/nixpkgs/pull/303494
+    "mame": {"repo": "mame", "fetch_submodules": True},
     "mame2000": {"repo": "mame2000-libretro"},
     "mame2003": {"repo": "mame2003-libretro"},
     "mame2003-plus": {"repo": "mame2003-plus-libretro"},

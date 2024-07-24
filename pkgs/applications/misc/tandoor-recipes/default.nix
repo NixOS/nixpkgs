@@ -1,11 +1,11 @@
 { callPackage
 , nixosTests
-, python3
+, python311
 , fetchFromGitHub
-, fetchpatch
 }:
 let
-  python = python3.override {
+  # python-ldap-3.4.4 does not work with python3(12)
+  python = python311.override {
     packageOverrides = self: super: {
       validators = super.validators.overridePythonAttrs (_: rec {
         version = "0.20.0";
@@ -16,6 +16,27 @@ let
           hash = "sha256-ZnLyTHlsrXthGnaPzlV2ga/UTm5SSEHLTwC/tobiPak=";
         };
         propagatedBuildInputs = [ super.decorator super.six ];
+      });
+
+      djangorestframework = super.djangorestframework.overridePythonAttrs (oldAttrs: rec {
+        version = "3.14.0";
+        src = oldAttrs.src.override {
+          rev = version;
+          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
+        };
+        nativeCheckInputs = with super; [
+          pytest7CheckHook
+          pytest-django
+        ];
+      });
+
+      # python3.11-extruct-0.16.0 doesn't work with lxml-5.2.2
+      lxml = super.lxml.overridePythonAttrs (oldAttrs: rec {
+        version = "5.1.0";
+        src = oldAttrs.src.override {
+          rev = version;
+          hash = "sha256-eWLYzZWatYDmhuBTZynsdytlNFKKmtWQ1XIyzVD8sDY=";
+        };
       });
     };
   };
@@ -154,7 +175,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     updateScript = ./update.sh;
 
     tests = {
-      inherit (nixosTests) tandoor-recipes;
+      inherit (nixosTests) tandoor-recipes tandoor-recipes-script-name;
     };
   };
 

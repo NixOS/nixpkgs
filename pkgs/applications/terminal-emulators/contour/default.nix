@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchurl
 , cmake
 , pkg-config
 , boxed-cpp

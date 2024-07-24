@@ -16,52 +16,60 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
   };
 
   nodes = {
-    defaultMachine = { ... }: { };
+    defaultMachine = { ... }: {
+      services.logrotate.enable = true;
+    };
     failingMachine = { ... }: {
-      services.logrotate.configFile = pkgs.writeText "logrotate.conf" ''
-        # self-written config file
-        su notarealuser notagroupeither
-      '';
+      services.logrotate = {
+        enable = true;
+        configFile = pkgs.writeText "logrotate.conf" ''
+          # self-written config file
+          su notarealuser notagroupeither
+        '';
+      };
     };
     machine = { config, ... }: {
       imports = [ importTest ];
 
-      services.logrotate.settings = {
-        # remove default frequency header and add another
-        header = {
-          frequency = null;
-          delaycompress = true;
-        };
-        # extra global setting... affecting nothing
-        last_line = {
-          global = true;
-          priority = 2000;
-          shred = true;
-        };
-        # using mail somewhere should add --mail to logrotate invocation
-        sendmail = {
-          mail = "user@domain.tld";
-        };
-        # postrotate should be suffixed by 'endscript'
-        postrotate = {
-          postrotate = "touch /dev/null";
-        };
-        # check checkConfig works as expected: there is nothing to check here
-        # except that the file build passes
-        checkConf = {
-          su = "root utmp";
-          createolddir = "0750 root utmp";
-          create = "root utmp";
-          "create " = "0750 root utmp";
-        };
-        # multiple paths should be aggregated
-        multipath = {
-          files = [ "file1" "file2" ];
-        };
-        # overriding imported path should keep existing attributes
-        # (e.g. olddir is still set)
-        import = {
-          notifempty = true;
+      services.logrotate = {
+        enable = true;
+        settings = {
+          # remove default frequency header and add another
+          header = {
+            frequency = null;
+            delaycompress = true;
+          };
+          # extra global setting... affecting nothing
+          last_line = {
+            global = true;
+            priority = 2000;
+            shred = true;
+          };
+          # using mail somewhere should add --mail to logrotate invocation
+          sendmail = {
+            mail = "user@domain.tld";
+          };
+          # postrotate should be suffixed by 'endscript'
+          postrotate = {
+            postrotate = "touch /dev/null";
+          };
+          # check checkConfig works as expected: there is nothing to check here
+          # except that the file build passes
+          checkConf = {
+            su = "root utmp";
+            createolddir = "0750 root utmp";
+            create = "root utmp";
+            "create " = "0750 root utmp";
+          };
+          # multiple paths should be aggregated
+          multipath = {
+            files = [ "file1" "file2" ];
+          };
+          # overriding imported path should keep existing attributes
+          # (e.g. olddir is still set)
+          import = {
+            notifempty = true;
+          };
         };
       };
     };

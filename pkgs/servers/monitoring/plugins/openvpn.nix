@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A nagios/icinga/sensu check plugin for OpenVPN";
+    description = "Nagios/icinga/sensu check plugin for OpenVPN";
     mainProgram = "check_openvpn";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

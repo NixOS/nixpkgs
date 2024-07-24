@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://clusterlabs.org/pacemaker/";
-    description = "Pacemaker is an open source, high availability resource manager suitable for both small and large clusters.";
+    description = "Pacemaker is an open source, high availability resource manager suitable for both small and large clusters";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ryantm astro ];

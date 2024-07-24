@@ -10,7 +10,7 @@
 , hicolor-icon-theme
 , json-glib
 , mate-desktop
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 # can be defaulted to true once switch to meson
 , withMagic ? stdenv.buildPlatform.canExecute stdenv.hostPlatform, file
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     libxml2  # for xmllint
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-files";
-  version = "unstable-2024-02-28";
+  version = "0-unstable-2024-06-10";
 
   src = fetchFromGitHub {
     owner = "pop-os";
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-02-28";
+  env.VERGEN_GIT_COMMIT_DATE = "2024-06-10";
   env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''

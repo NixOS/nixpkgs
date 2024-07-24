@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     mainProgram = "djmount";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.jagajaga ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
 }

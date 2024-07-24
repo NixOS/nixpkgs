@@ -121,6 +121,10 @@ stdenv.mkDerivation rec {
     # Bump from 4KB, much faster I/O
     CONFIG_FEATURE_COPYBUF_KB 64
 
+    # Doesn't build with current kernel headers.
+    # https://bugs.busybox.net/show_bug.cgi?id=15934
+    CONFIG_TC n
+
     # Set the path for the udhcpc script
     CONFIG_UDHCPC_DEFAULT_SCRIPT "${outDispatchPath}"
 
@@ -167,6 +171,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ TethysSvensson qyliss ];
     platforms = platforms.linux;
-    priority = 10;
+    priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
   };
 }

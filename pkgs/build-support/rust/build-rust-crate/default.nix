@@ -16,6 +16,16 @@
 }:
 
 let
+  # Returns a true if the builder's rustc was built with support for the target.
+  targetAlreadyIncluded = lib.elem stdenv.hostPlatform.rust.rustcTarget
+    (lib.splitString "," (lib.removePrefix "--target=" (
+      lib.elemAt (lib.filter (f: lib.hasPrefix "--target=" f) pkgsBuildBuild.rustc.unwrapped.configureFlags) 0)
+    ));
+
+  # If the build's rustc was built with support for the target then reuse it. (Avoids uneeded compilation for targets like `wasm32-unknown-unknown`)
+  rustc' = if targetAlreadyIncluded then pkgsBuildBuild.rustc else rustc;
+  cargo' = if targetAlreadyIncluded then pkgsBuildBuild.cargo else cargo;
+
   # Create rustc arguments to link against the given list of dependencies
   # and renames.
   #
@@ -49,7 +59,9 @@ let
           filename =
             if lib.any (x: x == "lib" || x == "rlib") dep.crateType
             then "${dep.metadata}.rlib"
-            else "${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}";
+            # Adjust lib filename for crates of type proc-macro. Proc macros are compiled/run on the build platform architecture.
+            else if (lib.attrByPath [ "procMacro" ] false dep) then "${dep.metadata}${stdenv.buildPlatform.extensions.library}"
+            else "${dep.metadata}${stdenv.hostPlatform.extensions.library}";
         in
         " --extern ${opts}${name}=${dep.lib}/lib/lib${extern}-${filename}"
       )
@@ -75,6 +87,7 @@ let
 
   buildCrate = import ./build-crate.nix {
     inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI;
+    rustc = rustc';
   };
 
   installCrate = import ./install-crate.nix { inherit stdenv; };
@@ -272,7 +285,8 @@ crate_: lib.makeOverridable
       name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
       version = crate.version;
       depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
-      nativeBuildInputs = [ rust stdenv.cc cargo jq ]
+      nativeBuildInputs = [ rustc' cargo' jq ]
+        ++ lib.optionals stdenv.hasCC [ stdenv.cc ]
         ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ]
         ++ (crate.nativeBuildInputs or [ ]) ++ nativeBuildInputs_;
       buildInputs = lib.optionals stdenv.isDarwin [ libiconv ] ++ (crate.buildInputs or [ ]) ++ buildInputs_;
@@ -343,7 +357,7 @@ crate_: lib.makeOverridable
 
 
       configurePhase = configureCrate {
-        inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
+        inherit crateName crateType buildDependencies completeDeps completeBuildDeps crateDescription
           crateFeatures crateRenames libName build workspace_member release libPath crateVersion crateLinks
           extraLinkFlags extraRustcOptsForBuildRs
           crateLicense crateLicenseFile crateReadme crateRepository crateRustVersion
@@ -378,7 +392,7 @@ crate_: lib.makeOverridable
     )
   )
 {
-  rust = rustc;
+  rust = rustc';
   release = crate_.release or true;
   verbose = crate_.verbose or true;
   extraRustcOpts = [ ];

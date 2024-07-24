@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorHash = "sha256-gPF4XrUqDDJCCY1zrUr3AXDG0uoADR8LBxRP4yolcug=";
 
   meta = with lib; {
-    description = "A TUI for Mastodon with vim inspired keys";
+    description = "TUI for Mastodon with vim inspired keys";
     homepage = "https://github.com/RasmusLindroth/tut";
     license = licenses.mit;
     maintainers = with maintainers; [ equirosa ];

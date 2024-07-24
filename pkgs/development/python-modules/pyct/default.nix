@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, param
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  param,
+  pytestCheckHook,
+  pythonAtLeast,
+  pyyaml,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   version = "0.5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyct"
-  ];
+  pythonImportsCheck = [ "pyct" ];
 
   meta = with lib; {
     description = "ClI for Python common tasks for users";

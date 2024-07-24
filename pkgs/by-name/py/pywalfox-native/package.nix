@@ -1,13 +1,17 @@
-{ lib, python3, fetchPypi }:
-
-python3.pkgs.buildPythonApplication rec {
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+}:
+python3.pkgs.buildPythonApplication {
   pname = "pywalfox-native";
   version = "2.7.4";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "pywalfox";
-    hash = "sha256-Wec9fic4lXT7gBY04D2EcfCb/gYoZcrYA/aMRWaA7WY=";
+  src = fetchFromGitHub {
+    owner = "Frewacom";
+    repo = "pywalfox-native";
+    rev = "7ecbbb193e6a7dab424bf3128adfa7e2d0fa6ff9";
+    hash = "sha256-i1DgdYmNVvG+mZiFiBmVHsQnFvfDFOFTGf0GEy81lpE=";
   };
 
   pythonImportsCheck = [ "pywalfox" ];

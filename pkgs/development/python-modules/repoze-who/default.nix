@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, zope-interface
-, webob
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  zope-interface,
+  webob,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,15 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-6VWt8AwfCwxxXoKJeaI37Ev37nCCe9l/Xhe/gnYNyzA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
+    zope-interface
+    webob
   ];
 
-  propagatedBuildInputs = [ zope-interface webob ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # skip failing test
   # OSError: [Errno 22] Invalid argument
@@ -34,9 +34,7 @@ buildPythonPackage rec {
     rm repoze/who/plugins/tests/test_htpasswd.py
   '';
 
-  pythonImportsCheck = [
-    "repoze.who"
-  ];
+  pythonImportsCheck = [ "repoze.who" ];
 
   pythonNamespaces = [
     "repoze"

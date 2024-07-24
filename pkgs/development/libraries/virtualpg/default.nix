@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, validatePkgConfig, postgresql, sqlite }:
+{ lib, stdenv, fetchurl, validatePkgConfig, postgresql, sqlite, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "virtualpg";
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     postgresql  # for pg_config
   ];
 
-  buildInputs = [ postgresql sqlite ];
+  buildInputs = [ postgresql sqlite ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Kerberos ];
 
   meta = with lib; {
     description = "Loadable dynamic extension to both SQLite and SpatiaLite";

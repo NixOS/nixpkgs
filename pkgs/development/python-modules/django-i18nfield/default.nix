@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# tests
-, djangorestframework
-, html5lib
-, lxml
-, pytest-django
-, pytestCheckHook
-, pyyaml
+  # tests
+  djangorestframework,
+  html5lib,
+  lxml,
+  pytest-django,
+  pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage {

@@ -1,16 +1,17 @@
-{ fetchFromGitHub
-, buildPythonPackage
-, cargo
-, rustPlatform
-, rustc
-, setuptools-rust
-, numpy
-, fixtures
-, networkx
-, testtools
-, libiconv
-, stdenv
-, lib
+{
+  fetchFromGitHub,
+  buildPythonPackage,
+  cargo,
+  rustPlatform,
+  rustc,
+  setuptools-rust,
+  numpy,
+  fixtures,
+  networkx,
+  testtools,
+  libiconv,
+  stdenv,
+  lib,
 }:
 
 buildPythonPackage rec {
@@ -39,12 +40,16 @@ buildPythonPackage rec {
 
   buildInputs = [ numpy ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  checkInputs = [ fixtures networkx testtools ];
+  checkInputs = [
+    fixtures
+    networkx
+    testtools
+  ];
 
   pythonImportsCheck = [ "rustworkx" ];
 
   meta = with lib; {
-    description = "A high performance Python graph library implemented in Rust";
+    description = "High performance Python graph library implemented in Rust";
     homepage = "https://github.com/Qiskit/rustworkx";
     license = licenses.asl20;
     maintainers = with maintainers; [ raitobezarius ];

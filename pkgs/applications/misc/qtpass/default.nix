@@ -23,9 +23,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
 
-  # HACK `propagatedSandboxProfile` does not appear to actually propagate the sandbox profile from `qt5.qtbase`
-  sandboxProfile = toString qtbase.__propagatedSandboxProfile;
-
   qmakeFlags = [
     # setup hook only sets QMAKE_LRELEASE, set QMAKE_LUPDATE too:
     "QMAKE_LUPDATE=${qttools.dev}/bin/lupdate"
@@ -42,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A multi-platform GUI for pass, the standard unix password manager";
+    description = "Multi-platform GUI for pass, the standard unix password manager";
     mainProgram = "qtpass";
     homepage = "https://qtpass.org";
     license = licenses.gpl3;

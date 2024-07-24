@@ -60,11 +60,7 @@
       └── uos
           └── .license.key
   */
-  uosLicense ? requireFile {
-    name = "license.tar.gz";
-    url = "https://www.uniontech.com";
-    sha256 = "53760079c1a5b58f2fa3d5effe1ed35239590b288841d812229ef4e55b2dbd69";
-  }
+  uosLicense ? null
 }:
 let
   wechat-uos-env = stdenvNoCC.mkDerivation {
@@ -85,6 +81,30 @@ let
       ln -s ${wechat}/usr/lib/wechat-uos/license/libuosdevicea.so $out/lib/license/
     '';
     preferLocalBuild = true;
+  };
+
+  uosLicenseUnzipped = stdenvNoCC.mkDerivation {
+    name = "uos-license-unzipped";
+    src =
+      if uosLicense == null then
+        requireFile
+          {
+            name = "license.tar.gz";
+            url = "https://www.uniontech.com";
+            sha256 = "53760079c1a5b58f2fa3d5effe1ed35239590b288841d812229ef4e55b2dbd69";
+          } else uosLicense;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -r * $out/
+
+      runHook postInstall
+    '';
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = "sha256-pNftwtUZqBsKBSPQsEWlYLlb6h2Xd9j56ZRMi8I82ME=";
   };
 
   wechat-uos-runtime = with xorg; [
@@ -149,23 +169,25 @@ let
     bzip2
   ];
 
+  sources = import ./sources.nix;
+
   wechat = stdenvNoCC.mkDerivation
     rec {
       pname = "wechat-uos";
-      version = "1.0.0.238";
+      version = sources.version;
 
       src = {
         x86_64-linux = fetchurl {
-          url = "https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.wechat/com.tencent.wechat_${version}_amd64.deb";
-          hash = "sha256-NxAmZ526JaAzAjtAd9xScFnZBuwD6i2wX2/AEqtAyWs=";
+          url = sources.amd64_url;
+          hash = sources.amd64_hash;
         };
         aarch64-linux = fetchurl {
-          url = "https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.wechat/com.tencent.wechat_${version}_arm64.deb";
-          hash = "sha256-3ru6KyBYXiuAlZuWhyyvtQCWbOJhGYzker3FS0788RE=";
+          url = sources.arm64_url;
+          hash = sources.arm64_hash;
         };
         loongarch64-linux = fetchurl {
-          url = "https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.wechat/com.tencent.wechat_${version}_loongarch64.deb";
-          hash = "sha256-iuJeLMKD6v8J8iKw3+cyODN7PZQrLpi9p0//mkI0ujE=";
+          url = sources.loongarch64_url;
+          hash = sources.loongarch64_hash;
         };
       }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
@@ -195,11 +217,10 @@ let
         dpkg -x $src ./wechat-uos
         dpkg -x $uosSrc ./wechat-uos-old-source
 
-        tar -xvf $uosLicense
-
         runHook postUnpack
       '';
 
+      # Use ln for license to prevent being garbage collection
       installPhase = ''
         runHook preInstall
         mkdir -p $out
@@ -207,7 +228,7 @@ let
         cp -r wechat-uos/* $out
 
         mkdir -pv $out/usr/lib/wechat-uos/license
-        cp -r license/* $out/usr/lib/wechat-uos/license
+        ln -s ${uosLicenseUnzipped}/* $out/usr/lib/wechat-uos/license/
         cp -r wechat-uos-old-source/usr/lib/license/libuosdevicea.so $out/usr/lib/wechat-uos/license/
 
         runHook postInstall
@@ -253,6 +274,8 @@ buildFHSEnv {
       --replace-quiet 'Exec=/usr/bin/wechat' "Exec=$out/bin/wechat-uos --"
   '';
   targetPkgs = pkgs: [ wechat-uos-env ];
+
+  passthru.updateScript = ./update.sh;
 
   extraOutputsToInstall = [ "usr" "var/lib/uos" "var/uos" "etc" ];
 }

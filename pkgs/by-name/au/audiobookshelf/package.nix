@@ -5,7 +5,6 @@
   runCommand,
   buildNpmPackage,
   nodejs_18,
-  tone,
   ffmpeg-full,
   util-linux,
   python3,
@@ -33,6 +32,8 @@ let
       cp -r ${src}/client $out
     '';
 
+    # don't download the Cypress binary
+    CYPRESS_INSTALL_BINARY = 0;
     NODE_OPTIONS = "--openssl-legacy-provider";
 
     npmBuildScript = "generate";
@@ -40,7 +41,7 @@ let
   };
 
   wrapper = import ./wrapper.nix {
-    inherit stdenv ffmpeg-full tone pname nodejs getopt;
+    inherit stdenv ffmpeg-full pname nodejs getopt;
   };
 
 in buildNpmPackage {

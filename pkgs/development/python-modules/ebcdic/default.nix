@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,9 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/${pname}";
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # https://github.com/roskakori/CodecMapper/issues/18
@@ -38,9 +35,7 @@ buildPythonPackage rec {
     "test_has_ignored_codec_names"
   ];
 
-  pythonImportsCheck = [
-    "ebcdic"
-  ];
+  pythonImportsCheck = [ "ebcdic" ];
 
   meta = with lib; {
     description = "Additional EBCDIC codecs";

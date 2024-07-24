@@ -33,7 +33,7 @@ qt5.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A desktop tool to decrypt data encrypted by Cloud Sync.";
+    description = "Desktop tool to decrypt data encrypted by Cloud Sync";
     homepage = "https://kb.synology.com/en-global/DSM/help/SynologyCloudSyncDecryptionTool/synologycloudsyncdecryptiontool";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;

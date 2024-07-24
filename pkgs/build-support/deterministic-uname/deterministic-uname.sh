@@ -131,6 +131,8 @@ fi
 #  Darwin *nodename* 22.1.0 Darwin Kernel Version 22.1.0: Sun Oct  9 20:14:30 PDT 2022; root:xnu-8792.41.9~2/RELEASE_ARM64_T8103 arm64 arm Darwin
 # NixOS:
 #  Linux *nodename* 6.0.13 #1-NixOS SMP PREEMPT_DYNAMIC Wed Dec 14 10:41:06 UTC 2022 x86_64 GNU/Linux
+# FreeBSD:
+#  FreeBSD *nodename* 14.0-RELEASE FreeBSD 14.0-RELEASE #0 releng/14.0-n265380-f9716eee8ab4: Fri Nov 10 05:57:23 UTC 2023     root@releng1.nyi.freebsd.org:/usr/obj/usr/src/amd64.amd64/sys/GENERIC amd64 amd64 AMD Ryzen 9 5950X 16-Core Processor             FreeBSD
 output=()
 if [[ "$all" = "1" ]]; then
     output+=("$KERNEL_NAME_VAL" "$NODENAME_VAL" "$KERNEL_RELEASE_VAL" "$KERNEL_VERSION_VAL" "$MACHINE_VAL")

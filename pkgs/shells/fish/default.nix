@@ -299,7 +299,7 @@ let
       description = "Smart and user-friendly command line shell";
       homepage = "https://fishshell.com/";
       changelog = "https://github.com/fish-shell/fish-shell/releases/tag/${version}";
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
       platforms = platforms.unix;
       maintainers = with maintainers; [ adamcstephens cole-h winter ];
       mainProgram = "fish";

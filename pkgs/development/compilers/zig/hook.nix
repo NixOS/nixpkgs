@@ -32,7 +32,9 @@ makeSetupHook {
     zig_default_flags =
       let
         releaseType =
-          if lib.versionAtLeast zig.version "0.11" then
+          if lib.versionAtLeast zig.version "0.12" then
+            "--release=safe"
+          else if lib.versionAtLeast zig.version "0.11" then
             "-Doptimize=ReleaseSafe"
           else
             "-Drelease-safe=true";
@@ -43,7 +45,7 @@ makeSetupHook {
   passthru = { inherit zig; };
 
   meta = {
-    description = "A setup hook for using the Zig compiler in Nixpkgs";
+    description = "Setup hook for using the Zig compiler in Nixpkgs";
     inherit (zig.meta) maintainers platforms broken;
   };
 } ./setup-hook.sh

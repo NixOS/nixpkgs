@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     repo = pname;
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-0siAx141DZx39facXWmKbsi0rHBNpobApTdey07EcXg=";
+    hash = "sha256-0siAx141DZx39facXWmKbsi0rHBNpobApTdey07EcXg=";
   };
 
   outputs = [ "out" "doc" ];

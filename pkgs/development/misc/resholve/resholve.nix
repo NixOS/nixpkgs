@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , callPackage
 , python27
 , fetchFromGitHub

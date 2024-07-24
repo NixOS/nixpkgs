@@ -1,9 +1,10 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, psycopg2
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  psycopg2,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
   # Tests requires a PostgreSQL Docker instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiopg"
-  ];
+  pythonImportsCheck = [ "aiopg" ];
 
   meta = with lib; {
     description = "Python library for accessing a PostgreSQL database";

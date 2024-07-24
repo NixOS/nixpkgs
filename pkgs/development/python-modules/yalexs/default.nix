@@ -14,12 +14,13 @@
   pythonOlder,
   requests,
   requests-mock,
-  setuptools,
+  poetry-core,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "3.0.1";
+  version = "6.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,16 +29,15 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "yalexs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+FdQQzQhKhIOEnOym2DNT9uQL2uAbfE8tUXUHIFFK2I=";
+    hash = "sha256-0EvQj+aKzpnehvI5IS3DBaJOp4wYpAWwkkaOLgwtdJs=";
   };
 
   postPatch = ''
-    # Not used requirement
-    substituteInPlace setup.py \
-      --replace-fail '"vol",' ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "-v -Wdefault --cov=yalexs --cov-report=term-missing:skip-covered" ""
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiofiles
@@ -47,6 +47,7 @@ buildPythonPackage rec {
     pyjwt
     python-dateutil
     requests
+    typing-extensions
   ];
 
   # aiounittest is not supported on 3.12

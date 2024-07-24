@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, linuxHeaders
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  linuxHeaders,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "evdev";
-  version = "1.7.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lb0qHgxs4s16LsxubNlzb/eUs61ctU2B2MvC5BTQuHA=";
+    hash = "sha256-DHLDcL2inYV+GI2TEBnDJlGpweqXfAjI2TmxztFjf94=";
   };
 
   patchPhase = ''
@@ -23,19 +24,13 @@ buildPythonPackage rec {
       --replace-fail /usr/include ${linuxHeaders}/include
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  buildInputs = [
-    linuxHeaders
-  ];
+  buildInputs = [ linuxHeaders ];
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "evdev"
-  ];
+  pythonImportsCheck = [ "evdev" ];
 
   meta = with lib; {
     description = "Provides bindings to the generic input event interface in Linux";

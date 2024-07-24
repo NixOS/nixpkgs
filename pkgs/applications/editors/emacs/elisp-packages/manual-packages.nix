@@ -11,8 +11,6 @@ in
 
   acm-terminal = callPackage ./manual-packages/acm-terminal { };
 
-  agda-input = callPackage ./manual-packages/agda-input { };
-
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
   beancount = callPackage ./manual-packages/beancount { };
@@ -33,17 +31,17 @@ in
 
   elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
 
-  ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
+  emacs-conflict = callPackage ./manual-packages/emacs-conflict { };
+
+  enlight = callPackage ./manual-packages/enlight { };
 
   evil-markdown = callPackage ./manual-packages/evil-markdown { };
 
   font-lock-plus = callPackage ./manual-packages/font-lock-plus { };
 
-  ghc-mod = callPackage ./manual-packages/ghc-mod { };
-
   git-undo = callPackage ./manual-packages/git-undo { };
 
-  haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
+  grid = callPackage ./manual-packages/grid { };
 
   helm-words = callPackage ./manual-packages/helm-words { };
 
@@ -60,7 +58,7 @@ in
   llvm-mode = callPackage ./manual-packages/llvm-mode { };
 
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
-    inherit (pkgs) python3 git go gopls pyright;
+    inherit (pkgs) basedpyright git go gopls python3;
   };
 
   lspce = callPackage ./manual-packages/lspce { };
@@ -74,8 +72,6 @@ in
   notdeft = callPackage ./manual-packages/notdeft { };
 
   ott-mode = callPackage ./manual-packages/ott-mode { };
-
-  perl-completion = callPackage ./manual-packages/perl-completion { };
 
   pod-mode = callPackage ./manual-packages/pod-mode { };
 
@@ -119,6 +115,12 @@ in
   emacsSessionManagement = self.session-management-for-emacs;
   rectMark = self.rect-mark;
   sunriseCommander = self.sunrise-commander;
-
-  __attrsFailEvaluation = true;
+}
+### Aliases
+// lib.optionalAttrs pkgs.config.allowAliases {
+  agda-input = throw "emacsPackages.agda-input is contained in emacsPackages.agda2-mode, please use that instead."; # Added 2024-07-17
+  ess-R-object-popup = throw "emacsPackages.ess-R-object-popup was deleted, since the upstream repo looks abandoned."; # Added 2024-07-15
+  ghc-mod = throw "emacsPackages.ghc-mod was deleted because it is deprecated, use haskell-language-server instead."; # Added 2024-07-17
+  haskell-unicode-input-method = throw "emacsPackages.haskell-unicode-input-method is contained in emacsPackages.haskell-mode, please use that instead."; # Added 2024-07-17
+  perl-completion = throw "emacsPackages.perl-completion was removed, since it is broken."; # Added 2024-07-19
 }

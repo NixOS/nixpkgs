@@ -17,7 +17,7 @@ buildGoModule rec {
   vendorHash = "sha256-83nKtiEy1na1HgAQcbTEfl+0vGg6BkCLBK1REN9fP+k=";
 
   meta = with lib; {
-    description = "A local command-line Japanese dictionary tool using yomichan's dictionary files";
+    description = "Local command-line Japanese dictionary tool using yomichan's dictionary files";
     homepage = "https://github.com/masakichi/tango";
     license = licenses.mit;
     maintainers = with maintainers; [ donovanglover ];

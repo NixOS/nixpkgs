@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A multitalented APRS i-gate / digipeater";
+    description = "Multitalented APRS i-gate / digipeater";
     homepage = "http://thelifeofkenneth.com/aprx";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sarcasticadmin ];

@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
+, fetchpatch2
 , stdenv
 , cmake
 , pkg-config
@@ -18,8 +18,11 @@
 , SDL2
 , libevdev
 , udev
+, curlFull
 , hidapi
+, json_c
 , fftw
+, miniupnpc
 , speexdsp
 , libplacebo
 , vulkan-loader
@@ -33,15 +36,24 @@
 
 stdenv.mkDerivation rec {
   pname = "chiaki4deck";
-  version = "1.6.6";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hai7fIyeNcAURfeQtAIqOLb9j8erPNoy3zHK4rgLjc0=";
+    hash = "sha256-NiShxa49ZKmK/3q8+PHwy7edwjaqtkOqfhd2ncWK5UQ=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix build with miniupnpc 2.2.8
+    # https://github.com/streetpea/chiaki4deck/pull/355
+    (fetchpatch2 {
+      url = "https://github.com/streetpea/chiaki4deck/commit/e5806ae39cc6e8632d0f8cccefb5b7ddd458951a.patch?full_index=1";
+      hash = "sha256-0oGhymCZkhckJkvP64WNc4aaEzXlXYI84S7Blq7WgVw=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -65,8 +77,11 @@ stdenv.mkDerivation rec {
     qtwebengine
     protobuf
     SDL2
+    curlFull
     hidapi
+    json_c
     fftw
+    miniupnpc
     libevdev
     udev
     speexdsp
@@ -79,8 +94,18 @@ stdenv.mkDerivation rec {
     xxHash
   ];
 
+  # handle cmake not being able to identify if curl is built with websocket support, and library name discrepancy when curl not built with cmake
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail ' WS WSS' ""
+
+    substituteInPlace lib/CMakeLists.txt \
+      --replace-fail 'libcurl_shared' 'libcurl'
+  '';
+
   cmakeFlags = [
     "-Wno-dev"
+    (lib.cmakeFeature "CHIAKI_USE_SYSTEM_CURL" "true")
   ];
 
   qtWrapperArgs = [

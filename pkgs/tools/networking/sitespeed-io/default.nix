@@ -24,13 +24,13 @@
 assert (!withFirefox && !withChromium) -> throw "Either `withFirefox` or `withChromium` must be enabled.";
 buildNpmPackage rec {
   pname = "sitespeed-io";
-  version = "33.5.0";
+  version = "34.0.1";
 
   src = fetchFromGitHub {
     owner = "sitespeedio";
     repo = "sitespeed.io";
     rev = "v${version}";
-    hash = "sha256-CR2/EBFxwUPAWnOXD1sEV1XirSJy6ojOndRR8Y1Ir24=";
+    hash = "sha256-yC/TlAJa71hbPYYuqPV+k3syGuo/VhnNjXmmxh47ySQ=";
   };
 
   nodejs = nodejs_18;
@@ -46,7 +46,7 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--omit=dev" ];
-  npmDepsHash = "sha256-7MB5zc4b0cy0OzAKidcmBeBMor/ZsMfHlRBN/y9QKI4=";
+  npmDepsHash = "sha256-Q0cWxV5OOaG8Z3aM2j0HtD1e9yPFVDSRcMKBf/yscv4=";
 
   postInstall = ''
     mv $out/bin/sitespeed{.,-}io
@@ -87,7 +87,7 @@ buildNpmPackage rec {
   };
 
   meta = with lib; {
-    description = "An open source tool that helps you monitor, analyze and optimize your website speed and performance";
+    description = "Open source tool that helps you monitor, analyze and optimize your website speed and performance";
     homepage = "https://sitespeed.io";
     license = licenses.mit;
     maintainers = with maintainers; [ misterio77 ];

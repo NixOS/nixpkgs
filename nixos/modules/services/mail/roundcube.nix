@@ -7,7 +7,7 @@ let
   fpm = config.services.phpfpm.pools.roundcube;
   localDB = cfg.database.host == "localhost";
   user = cfg.database.username;
-  phpWithPspell = pkgs.php81.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
+  phpWithPspell = pkgs.php83.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
 in
 {
   options.services.roundcube = {
@@ -93,13 +93,17 @@ in
     maxAttachmentSize = mkOption {
       type = types.int;
       default = 18;
+      apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.37)}M";
       description = ''
         The maximum attachment size in MB.
-
-        Note: Since roundcube only uses 70% of max upload values configured in php
-        30% is added automatically to [](#opt-services.roundcube.maxAttachmentSize).
+        [upstream issue comment]: https://github.com/roundcube/roundcubemail/issues/7979#issuecomment-808879209
+        ::: {.note}
+        Since there is some overhead in base64 encoding applied to attachments, + 37% will be added
+        to the value set in this option in order to offset the overhead. For example, setting
+        `maxAttachmentSize` to `100` would result in `137M` being the real value in the configuration.
+        See [upstream issue comment] for more details on the motivations behind this.
+        :::
       '';
-      apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.3)}M";
     };
 
     configureNginx = lib.mkOption {
@@ -247,14 +251,15 @@ in
       (mkIf (cfg.database.host == "localhost") {
         requires = [ "postgresql.service" ];
         after = [ "postgresql.service" ];
-        path = [ config.services.postgresql.package ];
       })
       {
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
+
+        path = [ config.services.postgresql.package ];
         script = let
-          psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} ${pkgs.postgresql}/bin/psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";
+          psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";
         in
         ''
           version="$(${psql} -t <<< "select value from system where name = 'roundcube-version';" || true)"

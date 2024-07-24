@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A frontend for arcade cabinets and media PCs";
+    description = "Frontend for arcade cabinets and media PCs";
     homepage = "http://attractmode.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hrdinka ];

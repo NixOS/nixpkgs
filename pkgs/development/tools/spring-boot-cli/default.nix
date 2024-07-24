@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spring-boot-cli";
-  version = "3.2.4";
+  version = "3.3.1";
 
   src = fetchzip {
-    url = "mirror://maven/org/springframework/boot/${finalAttrs.pname}/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}-bin.zip";
-    hash = "sha256-rOXQyIdyDT/YRuWgbbObFWnCOI+XEZ4+vGvIxJJ8CC4=";
+    url = "mirror://maven/org/springframework/boot/spring-boot-cli/${finalAttrs.version}/spring-boot-cli-${finalAttrs.version}-bin.zip";
+    hash = "sha256-3Mlid+hvHVjAw5pE6vyieSHWH8Zkoty3GuwE1gB5yQM=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];

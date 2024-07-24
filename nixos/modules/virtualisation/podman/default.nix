@@ -219,6 +219,11 @@ in
       systemd.services.podman.environment = config.networking.proxy.envVars;
       systemd.sockets.podman.wantedBy = [ "sockets.target" ];
       systemd.sockets.podman.socketConfig.SocketGroup = "podman";
+      # Podman does not support multiple sockets, as of podman 5.0.2, so we use
+      # a symlink. Unfortunately this does not let us use an alternate group,
+      # such as `docker`.
+      systemd.sockets.podman.socketConfig.Symlinks =
+        lib.mkIf cfg.dockerSocket.enable [ "/run/docker.sock" ];
 
       systemd.user.services.podman.environment = config.networking.proxy.envVars;
       systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
@@ -238,11 +243,6 @@ in
             >$out/lib/tmpfiles.d/podman.conf
         '')
       ];
-
-      systemd.tmpfiles.rules =
-        lib.optionals cfg.dockerSocket.enable [
-          "L! /run/docker.sock - - - - /run/podman/podman.sock"
-        ];
 
       users.groups.podman = { };
 

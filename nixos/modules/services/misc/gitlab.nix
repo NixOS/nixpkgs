@@ -12,11 +12,13 @@ let
   postgresqlPackage = if config.services.postgresql.enable then
                         config.services.postgresql.package
                       else
-                        pkgs.postgresql_13;
+                        pkgs.postgresql_14;
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
   pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
+
+  gitlabVersionAtLeast = version: lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) version;
 
   databaseConfig = let
     val = {
@@ -27,10 +29,16 @@ let
       encoding = "utf8";
       pool = cfg.databasePool;
     } // cfg.extraDatabaseConfig;
-  in if lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "15.0" then {
-    production.main = val;
-  } else {
-    production = val;
+  in {
+    production = (
+      if (gitlabVersionAtLeast "15.0")
+      then { main = val; }
+      else val
+    ) // lib.optionalAttrs (gitlabVersionAtLeast "15.9") {
+      ci = val // {
+        database_tasks = false;
+      };
+    };
   };
 
   # We only want to create a database if we're actually going to connect to it.
@@ -1111,8 +1119,8 @@ in {
         message = "services.gitlab.secrets.jwsFile must be set!";
       }
       {
-        assertion = versionAtLeast postgresqlPackage.version "13.6.0";
-        message = "PostgreSQL >=13.6 is required to run GitLab 16. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
+        assertion = versionAtLeast postgresqlPackage.version "14.9";
+        message = "PostgreSQL >= 14.9 is required to run GitLab 17. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
       }
     ];
 
@@ -1168,7 +1176,7 @@ in {
         set -eu
 
         PSQL() {
-            psql --port=${toString pgsql.port} "$@"
+            psql --port=${toString pgsql.settings.port} "$@"
         }
 
         PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${cfg.databaseName}'" | grep -q 1 || PSQL -tAc 'CREATE DATABASE "${cfg.databaseName}" OWNER "${cfg.databaseUsername}"'
@@ -1274,6 +1282,7 @@ in {
       "d ${gitlabConfig.production.shared.path}/registry 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/terraform_state 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/ci_secure_files 0750 ${cfg.user} ${cfg.group} -"
+      "d ${gitlabConfig.production.shared.path}/external-diffs 0750 ${cfg.user} ${cfg.group} -"
       "L+ /run/gitlab/config - - - - ${cfg.statePath}/config"
       "L+ /run/gitlab/log - - - - ${cfg.statePath}/log"
       "L+ /run/gitlab/tmp - - - - ${cfg.statePath}/tmp"
@@ -1348,7 +1357,7 @@ in {
 
             rm -f '${cfg.statePath}/config/database.yml'
 
-            ${if cfg.databasePasswordFile != null then ''
+            ${lib.optionalString (cfg.databasePasswordFile != null) ''
                 db_password="$(<'${cfg.databasePasswordFile}')"
                 export db_password
 
@@ -1356,16 +1365,24 @@ in {
                   >&2 echo "Database password was an empty string!"
                   exit 1
                 fi
+            ''}
 
-                jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
-                   '.${if lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "15.0" then "production.main" else "production"}.password = $ENV.db_password' \
-                   >'${cfg.statePath}/config/database.yml'
-              ''
-              else ''
-                jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
-                   >'${cfg.statePath}/config/database.yml'
-              ''
-            }
+            # GitLab expects the `production.main` section to be the first entry in the file.
+            jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} '{
+              production: [
+                ${lib.optionalString (cfg.databasePasswordFile != null) (
+                  builtins.concatStringsSep "\n      " (
+                    [ ".production${lib.optionalString (gitlabVersionAtLeast "15.0") ".main"}.password = $ENV.db_password" ]
+                    ++ lib.optional (gitlabVersionAtLeast "15.9") "| .production.ci.password = $ENV.db_password"
+                    ++ [ "|" ]
+                  )
+                )} .production
+                | to_entries[]
+              ]
+              | sort_by(.key)
+              | reverse
+              | from_entries
+            }' >'${cfg.statePath}/config/database.yml'
 
             ${utils.genJqSecretsReplacementSnippet
                 gitlabConfig

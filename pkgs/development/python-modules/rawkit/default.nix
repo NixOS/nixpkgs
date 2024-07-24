@@ -1,6 +1,12 @@
-{ lib, fetchPypi, buildPythonPackage, fetchpatch
-, libraw
-, pytest, mock }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  fetchpatch,
+  libraw,
+  pytest,
+  mock,
+}:
 
 buildPythonPackage rec {
   pname = "rawkit";
@@ -22,7 +28,10 @@ buildPythonPackage rec {
 
   buildInputs = [ libraw ];
 
-  nativeCheckInputs = [ pytest mock ];
+  nativeCheckInputs = [
+    pytest
+    mock
+  ];
 
   checkPhase = ''
     py.test tests

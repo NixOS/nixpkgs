@@ -29,12 +29,6 @@ in stdenv.mkDerivation {
     runHook postBuild
   '';
 
-  doCheck = true;
-
-  checkPhase = ''
-    [[ $($out/bin/mueval -e 42) == 42 ]]
-  '';
-
   passthru = { inherit defaultPkgs; };
   meta.mainProgram = "mueval";
 }

@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/CoolnsX/dra-cla";
-    description = "A cli tool to browse and play korean drama, chinese drama";
+    description = "Cli tool to browse and play korean drama, chinese drama";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ idlip ];
     platforms = platforms.unix;

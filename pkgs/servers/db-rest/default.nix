@@ -3,12 +3,11 @@
 , fetchFromGitHub
 , nodejs_18
 , nix-update-script
-, fetchpatch
 , nixosTests
 }:
 buildNpmPackage rec {
   pname = "db-rest";
-  version = "6.0.4";
+  version = "6.0.5";
 
   nodejs = nodejs_18;
 
@@ -16,10 +15,10 @@ buildNpmPackage rec {
     owner = "derhuerst";
     repo = pname;
     rev = version;
-    hash = "sha256-guiAtPOvU/yqspq+G+mTSIFqBp6Kl0JZBPfjPC+ZM1g=";
+    hash = "sha256-jMHqJ1whGPz2ti7gn8SPz6o7Fm4oMF6hYjB4wsjKAEU=";
   };
 
-  npmDepsHash = "sha256-lJT344HpHJFN3QO6kVAj1NhRFTwS+EVkR0ePbtIguFo=";
+  npmDepsHash = "sha256-rXBIpar5L6fGpDlphr1PqRNxARSccV7Gi+uTNlCqh7I=";
 
   preConfigure = ''
     patchShebangs ./build/index.js
@@ -31,7 +30,7 @@ buildNpmPackage rec {
   };
 
   meta = {
-    description = "A clean REST API wrapping around the Deutsche Bahn API";
+    description = "Clean REST API wrapping around the Deutsche Bahn API";
     homepage = "https://v6.db.transport.rest/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ marie ];

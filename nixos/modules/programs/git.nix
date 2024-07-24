@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.git;
 in
@@ -9,23 +7,23 @@ in
 {
   options = {
     programs.git = {
-      enable = mkEnableOption "git, a distributed version control system";
+      enable = lib.mkEnableOption "git, a distributed version control system";
 
-      package = mkPackageOption pkgs "git" {
+      package = lib.mkPackageOption pkgs "git" {
         example = "gitFull";
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         type =
-          with types;
+          with lib.types;
           let
             gitini = attrsOf (attrsOf anything);
           in
           either gitini (listOf gitini) // {
             merge = loc: defs:
               let
-                config = foldl'
-                  (acc: { value, ... }@x: acc // (if isList value then {
+                config = builtins.foldl'
+                  (acc: { value, ... }@x: acc // (if builtins.isList value then {
                     ordered = acc.ordered ++ value;
                   } else {
                     unordered = acc.unordered ++ [ x ];
@@ -55,25 +53,25 @@ in
       };
 
       prompt = {
-        enable = mkEnableOption "automatically sourcing git-prompt.sh. This does not change $PS1; it simply provides relevant utility functions";
+        enable = lib.mkEnableOption "automatically sourcing git-prompt.sh. This does not change $PS1; it simply provides relevant utility functions";
       };
 
       lfs = {
-        enable = mkEnableOption "git-lfs (Large File Storage)";
+        enable = lib.mkEnableOption "git-lfs (Large File Storage)";
 
-        package = mkPackageOption pkgs "git-lfs" { };
+        package = lib.mkPackageOption pkgs "git-lfs" { };
       };
     };
   };
 
-  config = mkMerge [
-    (mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
       environment.systemPackages = [ cfg.package ];
-      environment.etc.gitconfig = mkIf (cfg.config != [ ]) {
-        text = concatMapStringsSep "\n" generators.toGitINI cfg.config;
+      environment.etc.gitconfig = lib.mkIf (cfg.config != [ ]) {
+        text = lib.concatMapStringsSep "\n" lib.generators.toGitINI cfg.config;
       };
     })
-    (mkIf (cfg.enable && cfg.lfs.enable) {
+    (lib.mkIf (cfg.enable && cfg.lfs.enable) {
       environment.systemPackages = [ cfg.lfs.package ];
       programs.git.config = {
         filter.lfs = {
@@ -84,12 +82,12 @@ in
         };
       };
     })
-    (mkIf (cfg.enable && cfg.prompt.enable) {
+    (lib.mkIf (cfg.enable && cfg.prompt.enable) {
       environment.interactiveShellInit = ''
         source ${cfg.package}/share/bash-completion/completions/git-prompt.sh
       '';
     })
   ];
 
-  meta.maintainers = with maintainers; [ figsoda ];
+  meta.maintainers = with lib.maintainers; [ figsoda ];
 }

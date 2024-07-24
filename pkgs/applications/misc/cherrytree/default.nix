@@ -4,7 +4,7 @@
 , cmake
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtkmm3
 , gtksourceview
 , gtksourceviewmm
@@ -20,20 +20,20 @@
 
 stdenv.mkDerivation rec {
   pname = "cherrytree";
-  version = "1.1.2";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "giuspen";
     repo = "cherrytree";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gDDFrF1yK6mWwkb3KJVRj6P5aiH1pQ/xL17XwVb4rfk=";
+    hash = "sha256-JiSGoEVGotaPqEKFHjTagi+sZPgdX+tKI0FIHRmJKHE=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An hierarchical note taking application";
+    description = "Hierarchical note taking application";
     mainProgram = "cherrytree";
     longDescription = ''
       Cherrytree is an hierarchical note taking application, featuring rich

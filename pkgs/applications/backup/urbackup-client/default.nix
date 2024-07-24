@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "urbackup-client";
-  version = "2.5.24";
+  version = "2.5.25";
 
   src = fetchzip {
     url = "https://hndl.urbackup.org/Client/${version}/urbackup-client-${version}.tar.gz";
-    sha256 = "sha256-n0/NVClZz6ANgEdPCtdZxsEvllIl32vwDjC2nq5R8Z4=";
+    sha256 = "sha256-+xm2mBcTLMvrstCq2sLgJiU3zbFCassKvln3SMmRH9s=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "An easy to setup Open Source client/server backup system";
+    description = "Easy to setup Open Source client/server backup system";
     longDescription = "An easy to setup Open Source client/server backup system, that through a combination of image and file backups accomplishes both data safety and a fast restoration time";
     homepage = "https://www.urbackup.org/index.html";
     license = licenses.agpl3Plus;
