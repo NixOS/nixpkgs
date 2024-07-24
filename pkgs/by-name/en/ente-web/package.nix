@@ -6,11 +6,9 @@
 , yarnConfigHook
 , yarnBuildHook
 , extraBuildEnv ? null
-,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-
   pname = "ente-web";
   version = "0.9.5";
 
