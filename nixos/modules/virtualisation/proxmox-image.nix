@@ -62,7 +62,7 @@ with lib;
       };
       machine = mkOption {
         type = types.enum [ "i440fx" "q35" ];
-        default = "i440fx ";
+        default = "i440fx";
         description = ''
           Select QEMU machine type (q35 recommended for PCIe support).
         '';
