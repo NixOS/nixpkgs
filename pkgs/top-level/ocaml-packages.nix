@@ -1384,9 +1384,7 @@ let
 
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
 
-    opam-format = callPackage ../development/ocaml-modules/opam-format {
-      inherit (pkgs) unzip;
-    };
+    opam-format = callPackage ../development/ocaml-modules/opam-format { };
 
     opam-repository = callPackage ../development/ocaml-modules/opam-repository { };
 
