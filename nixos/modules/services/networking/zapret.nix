@@ -1,14 +1,20 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.zapret;
-in {
+in
+{
   options.services.zapret = {
     enable = mkEnableOption "DPI bypass multi platform service";
 
-    package = mkPackageOption pkgs "zapret" {};
+    package = mkPackageOption pkgs "zapret" { };
 
     settings = mkOption {
       type = types.lines;
@@ -19,15 +25,18 @@ in {
         NFQWS_OPT_DESYNC="--dpi-desync-ttl=5"
       '';
 
-      description = "
+      description = ''
         Rules for zapret to work. Run ```nix-shell -p zapret --command blockcheck``` to get values to pass here.
 
         Config example can be found here https://github.com/bol-van/zapret/blob/master/config
-      ";
+      '';
     };
 
     firewallType = mkOption {
-      type = types.enum [ "iptables" "nftables" ];
+      type = types.enum [
+        "iptables"
+        "nftables"
+      ];
       default = "nftables";
       description = ''
         Which firewall zapret should use
@@ -44,14 +53,13 @@ in {
     };
   };
 
-
   config = mkIf cfg.enable {
     users.users.tpws = {
       isSystemUser = true;
       group = "tpws";
     };
 
-    users.groups.tpws = {};
+    users.groups.tpws = { };
 
     systemd.services.zapret = {
       after = [ "network-online.target" ];
@@ -74,11 +82,14 @@ in {
         ExecStart = "${cfg.package}/bin/zapret start";
         ExecStop = "${cfg.package}/bin/zapret stop";
 
-        EnvironmentFile = pkgs.writeText "${cfg.package.pname}-environment" (concatStrings [ ''
-          FWTYPE=${cfg.firewallType}
-          DISABLE_IPV6=${if cfg.disableIpv6 then "1" else "0"}
+        EnvironmentFile = pkgs.writeText "${cfg.package.pname}-environment" (concatStrings [
+          ''
+            FWTYPE=${cfg.firewallType}
+            DISABLE_IPV6=${if cfg.disableIpv6 then "1" else "0"}
 
-        '' cfg.settings ]);
+          ''
+          cfg.settings
+        ]);
 
         # hardening
         DevicePolicy = "closed";
