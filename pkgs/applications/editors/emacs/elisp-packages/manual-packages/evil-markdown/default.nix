@@ -4,6 +4,7 @@
   fetchFromGitHub,
   markdown-mode,
   melpaBuild,
+  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -21,6 +22,8 @@ melpaBuild {
     evil
     markdown-mode
   ];
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://github.com/Somelauw/evil-markdown";
