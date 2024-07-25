@@ -420,4 +420,9 @@ self: super: ({
       "-p" "!/issue-108/"
     ];
   }) super.ad;
+
+  # Fixes missing libcharset.h:
+  # https://hydra.nixos.org/build/259447667
+  # not sure why this is needed only on x86 darwin. is there potentially some deeper libiconv / stdenv issue?
+  with-utf8 = overrideCabal (_ : { extraLibraries = [pkgs.libiconv]; }) super.with-utf8;
 })
