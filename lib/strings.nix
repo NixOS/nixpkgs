@@ -176,11 +176,12 @@ rec {
 
   /*
     Remove leading and/or trailing whitespace from a string.
+    To remove both leading and trailing whitespace, you can also use [`trim`](#function-library-lib.strings.trim)
 
     Whitespace is defined as any of the following characters:
       " ", "\t" "\r" "\n"
 
-    Type: trimWith :: Attrs -> string -> string
+    Type: trimWith :: { start ? false, end ? false } -> string -> string
 
     Example:
       trimWith { start = true; } "   hello, world!   "}
@@ -190,9 +191,9 @@ rec {
   */
   trimWith =
     {
-      # Trim leading whitespace
+      # Trim leading whitespace (`false` by default)
       start ? false,
-      # Trim trailing whitespace
+      # Trim trailing whitespace (`false` by default)
       end ? false,
     }:
     s:
