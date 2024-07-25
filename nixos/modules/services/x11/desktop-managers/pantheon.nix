@@ -194,6 +194,7 @@ in
 
       # Global environment
       environment.systemPackages = (with pkgs.pantheon; [
+        elementary-bluetooth-daemon
         elementary-session-settings
         elementary-settings-daemon
         gala
