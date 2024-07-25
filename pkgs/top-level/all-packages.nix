@@ -18495,8 +18495,6 @@ with pkgs;
 
   hcloud = callPackage ../development/tools/hcloud { };
 
-  hclfmt = callPackage ../development/tools/hclfmt { };
-
   help2man = callPackage ../development/tools/misc/help2man { };
 
   heroku = callPackage ../development/tools/heroku { };
