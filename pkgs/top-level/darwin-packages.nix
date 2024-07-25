@@ -55,7 +55,11 @@ makeScopeWithSplicing' {
     "10.12" = apple_sdk_10_12;
     "11.0" = apple_sdk_11_0;
   }.${stdenv.hostPlatform.darwinSdkVersion}
-  or (throw "Unsupported sdk: ${stdenv.hostPlatform.darwinSdkVersion}");
+  or ((if stdenv.hostPlatform.isDarwin then throw else lib.flip lib.trace apple_sdk_11_0)
+    # darwinSdkVersion gets set to sdkVer as a fallback and some non-darwin
+    # platforms, android, use sdkVer causing this check to fail
+    "Unsupported darwinSdkVersion: ${stdenv.hostPlatform.darwinSdkVersion}"
+  );
 
   # Pick the source of libraries: either Apple's open source releases, or the
   # SDK.
