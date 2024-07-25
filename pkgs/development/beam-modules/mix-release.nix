@@ -26,6 +26,9 @@
 , enableDebugInfo ? false
 , mixEnv ? "prod"
 , compileFlags ? [ ]
+  # Build a particular named release.
+  # see https://hexdocs.pm/mix/1.12/Mix.Tasks.Release.html#content
+, mixReleaseName ? ""
 
   # Options to be passed to the Erlang compiler. As documented in the reference
   # manual, these must be valid Erlang terms. They will be turned into an
@@ -175,7 +178,7 @@ stdenv.mkDerivation (overridable // {
   installPhase = attrs.installPhase or ''
     runHook preInstall
 
-    mix release --no-deps-check --path "$out"
+    mix release ${mixReleaseName} --no-deps-check --path "$out"
 
     runHook postInstall
   '';
