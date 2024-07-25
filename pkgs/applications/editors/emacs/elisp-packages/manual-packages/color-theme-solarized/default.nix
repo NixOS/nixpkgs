@@ -1,6 +1,5 @@
 {
   lib,
-  color-theme,
   fetchFromGitHub,
   melpaBuild,
   unstableGitUpdater,
@@ -16,8 +15,6 @@ melpaBuild {
     rev = "b186e5d62d0b83cbf5cf38f7eb7a199dea9a3ee3";
     hash = "sha256-7E8r56dzfD06tsQEnqU5mWSbwz9x9QPbzken2J/fhlg=";
   };
-
-  packageRequires = [ color-theme ];
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
