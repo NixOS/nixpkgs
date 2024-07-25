@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
   buildInputs = [ qtmultimedia ];
 
-  meta = with lib; {
+  meta = {
     description = "Learn and train typing with the ten-finger system";
     mainProgram = "tipp10";
     homepage = "https://gitlab.com/tipp10/tipp10";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ sigmanificient ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ sigmanificient ];
+    platforms = lib.platforms.all;
   };
 }
