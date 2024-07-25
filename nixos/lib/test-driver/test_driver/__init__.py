@@ -103,14 +103,30 @@ def main() -> None:
         type=Path,
     )
     arg_parser.add_argument(
-        "testscript",
+        "--testscript",
         action=EnvDefault,
         envvar="testScript",
         help="the test script to run",
         type=Path,
     )
+    arg_parser.add_argument(
+        # TODO: pick a name for this
+        "--internal-print-update-driver-info-and-exit",
+        action="store_true",
+        # For internal use. Don't print help text.
+        help=argparse.SUPPRESS,
+    )
 
     args = arg_parser.parse_args()
+
+    # print the info needed to update another Driver
+    # TODO: properly escape these arguments
+    if args.internal_print_update_driver_info_and_exit:
+        print(*args.start_scripts)
+        print(*args.vlans)
+        print(args.testscript)
+        print(args.output_directory)
+        exit(0)
 
     output_directory = args.output_directory.resolve()
     logger = CompositeLogger([TerminalLogger()])
