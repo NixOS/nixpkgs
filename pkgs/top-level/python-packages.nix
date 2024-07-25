@@ -11388,8 +11388,6 @@ self: super: with self; {
 
   pygobject-stubs = callPackage ../development/python-modules/pygobject-stubs { };
 
-  pygogo = callPackage ../development/python-modules/pygogo { };
-
   pygpgme = callPackage ../development/python-modules/pygpgme { };
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz {
