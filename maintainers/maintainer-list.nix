@@ -17629,6 +17629,12 @@
     githubId = 19433256;
     name = "Radoslaw Sniezek";
   };
+  rsrohitsingh682 = {
+    email = "rsrohitsingh682@gmail.com";
+    github = "rsrohitsingh682";
+    githubId = 45477585;
+    name = "Rohit Singh";
+  };
   rster2002 = {
     name = "Bjørn";
     github = "rster2002";

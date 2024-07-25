@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     description = "Define and build CI for Nix projects anywhere";
     homepage = "https://github.com/srid/nixci";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ srid shivaraj-bh ];
+    maintainers = with maintainers; [ srid shivaraj-bh rsrohitsingh682 ];
     mainProgram = "nixci";
   };
 }
