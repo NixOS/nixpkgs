@@ -1,30 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libadwaita
-, libgee
-, libportal-gtk4
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook4
-, desktop-file-utils
-, glib
-, gtk4
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  desktop-file-utils,
+  glib,
+  gtk4,
+  libadwaita,
+  libgee,
+  libportal-gtk4,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
+  wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "haguichi";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "ztefn";
     repo = "haguichi";
-    rev = version;
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-Rhag2P4GAO9qhcajwDHIkgzKZqNii/SgvFwCI6Kc8XE=";
   };
+
+  postPatch = ''
+    patchShebangs meson_post_install.py
+  '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -39,25 +46,22 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glib
+    gtk4
     libadwaita
     libgee
     libportal-gtk4
-    glib
-    gtk4
   ];
-
-  postPatch = ''
-    patchShebangs meson_post_install.py
-  '';
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Graphical frontend for Hamachi on Linux";
     mainProgram = "haguichi";
     homepage = "https://haguichi.net/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ OPNA2608 ];
+    changelog = "https://haguichi.net/news/release${lib.strings.replaceStrings ["."] [""] finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
   };
-}
+})
