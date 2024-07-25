@@ -12894,6 +12894,8 @@ self: super: with self; {
 
   python-axolotl-curve25519 = callPackage ../development/python-modules/python-axolotl-curve25519 { };
 
+  python-barbicanclient = callPackage ../development/python-modules/python-barbicanclient { };
+
   python-barcode = callPackage ../development/python-modules/python-barcode { };
 
   python-baseconv = callPackage ../development/python-modules/python-baseconv { };
