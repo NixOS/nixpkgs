@@ -17391,6 +17391,8 @@ self: super: with self; {
     enablePython = true;
   });
 
+  vttlib = callPackage ../development/python-modules/vttlib { };
+
   vulcan-api = callPackage ../development/python-modules/vulcan-api { };
 
   vultr = callPackage ../development/python-modules/vultr { };
