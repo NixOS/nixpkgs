@@ -18222,6 +18222,12 @@
     githubId = 11587657;
     keys = [ { fingerprint = "E173 237A C782 296D 98F5  ADAC E13D FD4B 4712 7951"; } ];
   };
+  scvalex = {
+    name = "Alexandru Scvorțov";
+    email = "github@abstractbinary.org";
+    github = "scvalex";
+    githubId = 2588;
+  };
   sdaqo = {
     name = "sdaqo";
     email = "sdaqo.dev@protonmail.com";
