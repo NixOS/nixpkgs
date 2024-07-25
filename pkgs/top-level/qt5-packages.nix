@@ -69,9 +69,7 @@ makeScopeWithSplicing' {
     };
   in (lib.makeOverridable mkMaui attrs);
 
-  noExtraAttrs = set:
-    lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ]
-    // { __attrsFailEvaluation = true; };
+  noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ];
 
 in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // mauiPackages // qt5 // {
 
