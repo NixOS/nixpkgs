@@ -98,5 +98,8 @@ in
     };
   };
 
-  meta.doc = ./livebook.md;
+  meta = {
+    doc = ./livebook.md;
+    maintainers = with lib.maintainers; [ munksgaard scvalex ];
+  };
 }
