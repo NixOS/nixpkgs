@@ -1,13 +1,25 @@
-{ fetchFromGitHub, lib, stdenv, makeWrapper, unzip, libxml2, gmp, m4, uthash, which, pkg-config }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  makeWrapper,
+  unzip,
+  libxml2,
+  gmp,
+  m4,
+  uthash,
+  which,
+  pkg-config,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "z88dk";
   version = "2.3";
 
   src = fetchFromGitHub {
     owner = "z88dk";
     repo = "z88dk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CHTORgK6FYIO6n+cvTUX4huY2Ek5FuHrs40QN5NZX44=";
     fetchSubmodules = true;
   };
@@ -32,22 +44,35 @@ stdenv.mkDerivation rec {
   #_FORTIFY_SOURCE requires compiling with optimization (-O)
   env.NIX_CFLAGS_COMPILE = "-O";
 
-  short_rev = builtins.substring 0 7 src.rev;
+  short_rev = builtins.substring 0 7 finalAttrs.src.rev;
   makeFlags = [
-    "git_rev=${short_rev}"
-    "version=${version}"
+    "git_rev=${finalAttrs.short_rev}"
+    "version=${finalAttrs.version}"
     "DESTDIR=$(out)"
     "git_count=0"
   ];
 
-  nativeBuildInputs = [ which makeWrapper unzip pkg-config ];
-  buildInputs = [ libxml2 m4 uthash gmp ];
+  nativeBuildInputs = [
+    which
+    makeWrapper
+    unzip
+    pkg-config
+  ];
+  buildInputs = [
+    libxml2
+    m4
+    uthash
+    gmp
+  ];
 
   preInstall = ''
     mkdir -p $out/{bin,share}
   '';
 
-  installTargets = [ "libs" "install" ];
+  installTargets = [
+    "libs"
+    "install"
+  ];
 
   meta = with lib; {
     homepage = "https://www.z88dk.org";
@@ -56,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.siraben ];
     platforms = platforms.unix;
   };
-}
+})
