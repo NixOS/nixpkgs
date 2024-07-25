@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
@@ -17,7 +17,7 @@ buildPythonPackage {
     sha256 = "0f33jjjs5rvp7ar2j6ggyfykcrsrn04jaqcq71qfvycf6b7nw3rn";
   };
 
-  buildInputs = [ nose ];
+  nativeBuildInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/agramfort/tempita";
