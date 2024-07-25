@@ -1,51 +1,15 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 9194e520bb0..d05fdcfb6cb 100644
+index c4cd4b2c2a..e983b21353 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1160,10 +1160,6 @@ if(BUILD_SHARED_LIBS)
-       ${PROJECT_SOURCE_DIR}/cmake/Modules_CUDA_fix
-       DESTINATION share/cmake/Caffe2/
-       COMPONENT dev)
--  install(FILES
--      ${PROJECT_SOURCE_DIR}/cmake/Modules/FindCUDAToolkit.cmake
--      DESTINATION share/cmake/Caffe2/
--      COMPONENT dev)
-   install(FILES
-       ${PROJECT_SOURCE_DIR}/cmake/Modules/FindCUSPARSELT.cmake
-       DESTINATION share/cmake/Caffe2/
-diff --git a/cmake/public/cuda.cmake b/cmake/public/cuda.cmake
-index c7595774d81..4fc43771810 100644
---- a/cmake/public/cuda.cmake
-+++ b/cmake/public/cuda.cmake
-@@ -61,9 +61,15 @@ find_package(CUDAToolkit REQUIRED)
- cmake_policy(POP)
- 
- if(NOT CMAKE_CUDA_COMPILER_VERSION VERSION_EQUAL CUDAToolkit_VERSION)
--  message(FATAL_ERROR "Found two conflicting CUDA versions:\n"
--                      "V${CMAKE_CUDA_COMPILER_VERSION} in '${CUDA_INCLUDE_DIRS}' and\n"
--                      "V${CUDAToolkit_VERSION} in '${CUDAToolkit_INCLUDE_DIRS}'")
-+  if(CUDA_INCLUDE_DIRS IN_LIST CUDAToolkit_INCLUDE_DIR)
-+    message(STATUS "CUDA_INCLUDE_DIRS is a substring of CUDAToolkit_INCLUDE_DIR. "
-+                   "Setting CUDA_INCLUDE_DIRS to CUDAToolkit_INCLUDE_DIR.")
-+    set(CUDA_INCLUDE_DIRS "${CUDAToolkit_INCLUDE_DIR}")
-+  else()
-+    message(FATAL_ERROR "Found two conflicting CUDA installs:\n"
-+                        "V${CMAKE_CUDA_COMPILER_VERSION} in '${CUDA_INCLUDE_DIRS}' and\n"
-+                        "V${CUDAToolkit_VERSION} in '${CUDAToolkit_INCLUDE_DIR}'")
-+  endif()
- endif()
- 
- if(NOT TARGET CUDA::nvToolsExt)
-diff --git a/tools/setup_helpers/cmake.py b/tools/setup_helpers/cmake.py
-index fb19b66dfba..3f83bef32fe 100644
---- a/tools/setup_helpers/cmake.py
-+++ b/tools/setup_helpers/cmake.py
-@@ -207,6 +207,8 @@ class CMake:
-                     "BUILDING_WITH_TORCH_LIBS",
-                     "CUDA_HOST_COMPILER",
-                     "CUDA_NVCC_EXECUTABLE",
-+                    "CUDAToolkit_ROOT",
-+                    "CUDAToolkit_INCLUDE_DIR",
-                     "CUDA_SEPARABLE_COMPILATION",
-                     "CUDNN_LIBRARY",
-                     "CUDNN_INCLUDE_DIR",
+@@ -1319,10 +1319,6 @@ if(BUILD_SHARED_LIBS)
+     DIRECTORY ${PROJECT_SOURCE_DIR}/cmake/Modules_CUDA_fix
+     DESTINATION share/cmake/Caffe2/
+     COMPONENT dev)
+-  install(
+-    FILES ${PROJECT_SOURCE_DIR}/cmake/Modules/FindCUDAToolkit.cmake
+-    DESTINATION share/cmake/Caffe2/
+-    COMPONENT dev)
+   install(
+     FILES ${PROJECT_SOURCE_DIR}/cmake/Modules/FindCUSPARSELT.cmake
+     DESTINATION share/cmake/Caffe2/
