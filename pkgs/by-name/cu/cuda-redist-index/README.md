@@ -22,17 +22,17 @@ This package provides a script which helps maintain the CUDA redistributable pac
 
 > [!Note]
 >
-> `mk-index-of-sha256-and-relative-path` must be run before `mk-index-of-package-info`, and the index produced by `mk-index-of-sha256-and-relative-path` must be present in `pkgs/by-name/cu/cuda-redist-index/modules/data/indices/sha256-and-relative-path.json` and checked in to git.
+> `mk-index-of-sha256-and-relative-path` must be run before `mk-index-of-package-info`, and the index produced by `mk-index-of-sha256-and-relative-path` must be present in `pkgs/development/cuda-modules/redist-index/data/indices/sha256-and-relative-path.json` and checked in to git.
 
 > [!Important]
 >
-> `mk-index-of-package-info` requires a large amount of free space in the Nix store, since it will download every tarball from every NVIDIA manifest and unpack it.
+> `mk-index-of-package-info` requires a large amount of free space in the Nix store, since it will download every tarball from every NVIDIA manifest and unpack it. As of the time of writing, the closure of this package is about 500 GB.
 
 Make or update the indices with (from the root directory of Nixpkgs):
 
 ```bash
 nix run --builders "" --offline -L .#cuda-redist-lib
-git add pkgs/by-name/cu/cuda-redist-index/modules/data/indices/sha256-and-relative-path.json
-nix run --builders "" --offline -L .#cuda-redist-index
-git add pkgs/by-name/cu/cuda-redist-index/modules/data/indices/package-info.json
+git add pkgs/development/cuda-modules/redist-index/data/indices/sha256-and-relative-path.json
+NIXPKGS_ALLOW_UNFREE=1 nix run --impure --builders "" --offline -L .#cuda-redist-index
+git add pkgs/development/cuda-modules/redist-index/modules/data/indices/package-info.json
 ```

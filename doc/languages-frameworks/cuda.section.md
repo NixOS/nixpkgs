@@ -71,6 +71,10 @@ All new projects should use the CUDA redistributables available in [`cudaPackage
 
 ### Updating CUDA redistributables {#updating-cuda-redistributables}
 
+> **WARNING**
+>
+> The below is out of date. TODO(@connorbaker): Update this section since you moved the scripts in-tree.
+
 1. Go to NVIDIA's index of CUDA redistributables: <https://developer.download.nvidia.com/compute/cuda/redist/>
 2. Make a note of the new version of CUDA available.
 3. Run

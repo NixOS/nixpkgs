@@ -1,8 +1,8 @@
 {
   imports = [
-    ./cuda-redist-find-features
     ./data
     ./package-sets.nix
+    ./redist-index
     ./types.nix
     ./utils.nix
   ];
