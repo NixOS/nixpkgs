@@ -3830,6 +3830,12 @@
     githubId = 718298;
     name = "Michael Livshin";
   };
+  CnTeng = {
+    name = "CnTeng";
+    email = "me@snakepi.xyz";
+    github = "CnTeng";
+    githubId = 56501688;
+  };
   CobaltCause = {
     name = "Charles Hall";
     email = "charles@computer.surgery";
