@@ -98,10 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Includes
     pushd ../include
-    find . -name '*.h' -exec install -Dm644 {} $out/include/skia/{} \;
+    find . -name '*.h' -exec install -Dm644 {} $out/include/{} \;
     popd
     pushd ../modules
-    find . -name '*.h' -exec install -Dm644 {} $out/include/skia/modules/{} \;
+    find . -name '*.h' -exec install -Dm644 {} $out/include/modules/{} \;
+    popd
+    pushd ../src
+    find . -name '*.h' -exec install -Dm644 {} $out/include/src/{} \;
     popd
 
     # Pkg-config
@@ -110,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     prefix=${placeholder "out"}
     exec_prefix=''${prefix}
     libdir=''${prefix}/lib
-    includedir=''${prefix}/include/skia
+    includedir=''${prefix}/include
     Name: skia
     Description: 2D graphic library for drawing text, geometries and images.
     URL: https://skia.org/
