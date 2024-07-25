@@ -40107,8 +40107,6 @@ with pkgs;
 
   qubes-core-vchan-xen = callPackage ../applications/qubes/qubes-core-vchan-xen { };
 
-  coz = callPackage ../development/tools/analysis/coz { };
-
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
   gortr = callPackage ../servers/gortr { };
