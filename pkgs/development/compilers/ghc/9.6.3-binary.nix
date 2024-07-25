@@ -5,6 +5,7 @@
 , llvmPackages
 , coreutils
 , targetPackages
+, updateAutotoolsGnuConfigScriptsHook
 
   # minimal = true; will remove files that aren't strictly necessary for
   # regular builds and GHC bootstrapping.
@@ -172,7 +173,9 @@ stdenv.mkDerivation rec {
 
   src = fetchurl binDistUsed.src;
 
-  nativeBuildInputs = [ perl ];
+  # updateAutotoolsGnuConfigScriptsHook is necessary to build on native FreeBSD pending inclusion of
+  # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
+  nativeBuildInputs = [ perl updateAutotoolsGnuConfigScriptsHook ];
 
   # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
   # of the bindist installer can find the libraries they expect.

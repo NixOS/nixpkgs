@@ -1,10 +1,12 @@
 { lib, stdenv
 , fetchurl, perl, gcc
+, freebsd
 , ncurses5
 , ncurses6, gmp, libiconv, numactl, libffi
 , llvmPackages
 , coreutils
 , targetPackages
+, updateAutotoolsGnuConfigScriptsHook
 
   # minimal = true; will remove files that aren't strictly necessary for
   # regular builds and GHC bootstrapping.
@@ -110,6 +112,18 @@ let
         ];
         isHadrian = true;
       };
+      x86_64-freebsd = {
+          variantSuffix = "";
+          src = {
+            url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-portbld-freebsd.tar.xz";
+            sha256 = "d462447a57f032291864ef78a7f826a07b17af76392b9a15dc0a672c9bc2d024";
+          };
+          exePathForLibraryCheck = null;
+          archSpecificLibraries = [
+            { nixPackage = gmp; fileToCheckFor = null; }
+            { nixPackage = freebsd.libncurses; fileToCheckFor = null; }
+          ];
+        };
     };
     # Binary distributions for the musl libc for the respective system.
     musl = {
@@ -176,7 +190,9 @@ stdenv.mkDerivation rec {
 
   src = fetchurl binDistUsed.src;
 
-  nativeBuildInputs = [ perl ];
+  # updateAutotoolsGnuConfigScriptsHook is necessary to build on native FreeBSD pending inclusion of
+  # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
+  nativeBuildInputs = [ perl updateAutotoolsGnuConfigScriptsHook ];
 
   # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
   # of the bindist installer can find the libraries they expect.
@@ -266,7 +282,7 @@ stdenv.mkDerivation rec {
           -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
     '' +
     # Rename needed libraries and binaries, fix interpreter
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isElf ''
       find . -type f -executable -exec patchelf \
           --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
     '';
@@ -314,9 +330,9 @@ stdenv.mkDerivation rec {
   # This is extremely bogus and should be investigated.
   dontStrip = if stdenv.hostPlatform.isMusl then true else false; # `if` for explicitness
 
-  # On Linux, use patchelf to modify the executables so that they can
+  # Use patchelf to modify ELF executables so that they can
   # find editline/gmp.
-  postFixup = lib.optionalString (stdenv.isLinux && !(binDistUsed.isStatic or false))
+  postFixup = lib.optionalString (stdenv.hostPlatform.isElf && !(binDistUsed.isStatic or false))
     (if stdenv.hostPlatform.isAarch64 then
       # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
       # are 2 directories deep from $out/lib, so pooling symlinks there makes
