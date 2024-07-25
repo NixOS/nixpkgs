@@ -23,7 +23,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "neuron";
-  version = "8.2.4";
+  version = "8.2.6";
 
   # format is for pythonModule conversion
   format = "other";
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals useMpi [
     python3.pkgs.mpi4py
   ] ++ optionals useRx3d [
-    python3.pkgs.cython_0 # NOTE: cython<3 is required as of 8.2.4
+    python3.pkgs.cython_0 # NOTE: cython<3 is required as of 8.2.6
     python3.pkgs.numpy
   ];
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "nrn";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-KsULc+LHoWmrkGYebpoUot6DhStKidbLQf5a3S+pi4s=";
+    hash = "sha256-xASBpsF8rIzrb5G+4Qi6rvWC2wqL7nAGlSeMsBAI6WM=";
   };
 
   meta = with lib; {
