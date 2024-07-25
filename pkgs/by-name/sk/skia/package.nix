@@ -71,6 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
       # Don't use missing tools
       "skia_use_dng_sdk=false"
       "skia_use_wuffs=false"
+      # Renable options that get disabled by component build
+      "skia_enable_svg=true"
+      "skia_enable_skottie=true"
       # Use system dependencies
       "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
     ] ++ map (lib: "skia_use_system_${lib}=true") [
