@@ -1,20 +1,20 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 9194e520bb0..d05fdcfb6cb 100644
+index c4cd4b2c2..e983b2135 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1160,10 +1160,6 @@ if(BUILD_SHARED_LIBS)
-       ${PROJECT_SOURCE_DIR}/cmake/Modules_CUDA_fix
-       DESTINATION share/cmake/Caffe2/
-       COMPONENT dev)
--  install(FILES
--      ${PROJECT_SOURCE_DIR}/cmake/Modules/FindCUDAToolkit.cmake
--      DESTINATION share/cmake/Caffe2/
--      COMPONENT dev)
-   install(FILES
-       ${PROJECT_SOURCE_DIR}/cmake/Modules/FindCUSPARSELT.cmake
-       DESTINATION share/cmake/Caffe2/
+@@ -1319,10 +1319,6 @@ if(BUILD_SHARED_LIBS)
+     DIRECTORY ${PROJECT_SOURCE_DIR}/cmake/Modules_CUDA_fix
+     DESTINATION share/cmake/Caffe2/
+     COMPONENT dev)
+-  install(
+-    FILES ${PROJECT_SOURCE_DIR}/cmake/Modules/FindCUDAToolkit.cmake
+-    DESTINATION share/cmake/Caffe2/
+-    COMPONENT dev)
+   install(
+     FILES ${PROJECT_SOURCE_DIR}/cmake/Modules/FindCUSPARSELT.cmake
+     DESTINATION share/cmake/Caffe2/
 diff --git a/cmake/public/cuda.cmake b/cmake/public/cuda.cmake
-index c7595774d81..4fc43771810 100644
+index b37036d2f..9878b70cf 100644
 --- a/cmake/public/cuda.cmake
 +++ b/cmake/public/cuda.cmake
 @@ -61,9 +61,15 @@ find_package(CUDAToolkit REQUIRED)
@@ -37,10 +37,10 @@ index c7595774d81..4fc43771810 100644
  
  if(NOT TARGET CUDA::nvToolsExt)
 diff --git a/tools/setup_helpers/cmake.py b/tools/setup_helpers/cmake.py
-index fb19b66dfba..3f83bef32fe 100644
+index 4d10b3db1..48a463df5 100644
 --- a/tools/setup_helpers/cmake.py
 +++ b/tools/setup_helpers/cmake.py
-@@ -207,6 +207,8 @@ class CMake:
+@@ -206,6 +206,8 @@ class CMake:
                      "BUILDING_WITH_TORCH_LIBS",
                      "CUDA_HOST_COMPILER",
                      "CUDA_NVCC_EXECUTABLE",
