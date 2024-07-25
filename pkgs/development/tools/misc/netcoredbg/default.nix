@@ -1,20 +1,20 @@
 { lib, clangStdenv, stdenv, cmake, autoPatchelfHook, fetchFromGitHub, dotnetCorePackages, buildDotnetModule, netcoredbg, testers }:
 let
   pname = "netcoredbg";
-  build = "1018";
-  release = "3.0.0";
+  build = "1031";
+  release = "3.1.0";
   version = "${release}-${build}";
-  hash = "sha256-9Rd0of1psQTVLaTOCPWsYgvIXN7apZKDQNxuZGj4vXw=";
+  hash = "sha256-/ScV6NPGOun47D88e7BLisSOipeQWdUbYaEryrlPbHg=";
 
-  coreclr-version = "v7.0.14";
+  coreclr-version = "v8.0.7";
   coreclr-src = fetchFromGitHub {
     owner = "dotnet";
     repo = "runtime";
     rev = coreclr-version;
-    sha256 = "sha256-n7ySUTB4XOXxeeVomySdZIYepdp0PNNGW9pU/2wwVGM=";
+    hash = "sha256-vxyhZ1Z5TB/2jpF4qiXTpUj1hKeqV7xPgG1BJYOLIko=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
   src = fetchFromGitHub {
     owner = "Samsung";
