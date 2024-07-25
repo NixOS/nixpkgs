@@ -1,23 +1,28 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, testfixtures
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  testfixtures,
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "bump2version";
   version = "1.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "c4urself";
-    repo = pname;
-    rev = "v${version}";
+    repo = "bump2version";
+    rev = "refs/tags/v${version}";
     sha256 = "sha256-j6HKi3jTwSgGBrA8PCJJNg+yQqRMo1aqaLgPGf4KAKU=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -40,6 +45,7 @@ buildPythonApplication rec {
       all version strings in your source code by the correct increment.
     '';
     homepage = "https://github.com/c4urself/bump2version";
+    changelog = "https://github.com/c4urself/bump2version/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jefflabonte ];
   };
