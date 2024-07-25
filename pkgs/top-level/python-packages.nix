@@ -11542,7 +11542,11 @@ self: super: with self; {
 
   pylibjpeg = callPackage ../development/python-modules/pylibjpeg { };
 
+  pylibjpeg-data = callPackage ../development/python-modules/pylibjpeg-data { };
+
   pylibjpeg-libjpeg = callPackage ../development/python-modules/pylibjpeg-libjpeg { };
+
+  pylibjpeg-openjpeg = callPackage ../development/python-modules/pylibjpeg-openjpeg { };
 
   pyliblo = callPackage ../development/python-modules/pyliblo { };
 
