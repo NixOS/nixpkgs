@@ -123,6 +123,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   contractor = callPackage ./services/contractor { };
 
+  elementary-bluetooth-daemon = callPackage ./services/elementary-bluetooth-daemon { };
+
   elementary-capnet-assist = callPackage ./services/elementary-capnet-assist { };
 
   elementary-notifications = callPackage ./services/elementary-notifications { };
