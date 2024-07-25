@@ -167,6 +167,14 @@ in
   }) ];
 }.${majorVersion} or [])
 
+# Work around newer AvailabilityInternal.h when building older versions of GCC.
+++ optionals (stdenv.isDarwin) ({
+  "9" = [ ../patches/9/AvailabilityInternal.h-fixincludes.patch ];
+  "8" = [ ../patches/8/AvailabilityInternal.h-fixincludes.patch ];
+  "7" = [ ../patches/7/AvailabilityInternal.h-fixincludes.patch ];
+  "6" = [ ../patches/6/AvailabilityInternal.h-fixincludes.patch ];
+}.${majorVersion} or [])
+
 
 ## Windows
 

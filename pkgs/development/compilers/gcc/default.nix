@@ -450,7 +450,7 @@ pipe ((callFile ./common/builder.nix {}) ({
     badPlatforms =
       # avr-gcc8 is maintained for the `qmk` package
       if (is8 && targetPlatform.isAvr) then []
-      else if !(is48 || is49) then [ "aarch64-darwin" ]
+      else if !(is48 || is49 || is6) then [ "aarch64-darwin" ]
       else platforms.darwin;
   } // optionalAttrs is11 {
     badPlatforms = if targetPlatform != hostPlatform then [ "aarch64-darwin" ] else [ ];
