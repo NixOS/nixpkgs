@@ -14595,8 +14595,6 @@ with pkgs;
     nvidiaSupport = true;
   };
 
-  zerotierone = callPackage ../tools/networking/zerotierone { };
-
   zerofree = callPackage ../tools/filesystems/zerofree { };
 
   zet = callPackage ../tools/text/zet { };
