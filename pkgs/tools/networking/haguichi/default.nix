@@ -1,26 +1,29 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, libadwaita
+, libgee
+, libportal-gtk4
 , meson
 , ninja
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook3
+, wrapGAppsHook4
 , desktop-file-utils
 , glib
-, gtk3
+, gtk4
 }:
 
 stdenv.mkDerivation rec {
   pname = "haguichi";
-  version = "1.4.6";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "ztefn";
     repo = "haguichi";
     rev = version;
-    hash = "sha256-H/Aw8zJOioOLWxiM/pMb+QSIoEp3zIkLb26S6QN3hv0=";
+    hash = "sha256-Rhag2P4GAO9qhcajwDHIkgzKZqNii/SgvFwCI6Kc8XE=";
   };
 
   nativeBuildInputs = [
@@ -29,15 +32,18 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
     desktop-file-utils # for update-desktop-database
     glib # for glib-compile-resources
-    gtk3 # for gtk-update-icon-cache
+    gtk4 # for gtk-update-icon-cache
   ];
 
   buildInputs = [
+    libadwaita
+    libgee
+    libportal-gtk4
     glib
-    gtk3
+    gtk4
   ];
 
   postPatch = ''
