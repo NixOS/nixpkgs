@@ -80,6 +80,7 @@ let
       itauto = callPackage ../development/coq-modules/itauto { };
       ITree = callPackage ../development/coq-modules/ITree { };
       itree-io = callPackage ../development/coq-modules/itree-io { };
+      json = callPackage ../development/coq-modules/json {};
       LibHyps = callPackage ../development/coq-modules/LibHyps {};
       ltac2 = callPackage ../development/coq-modules/ltac2 {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
