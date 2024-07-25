@@ -563,7 +563,7 @@
         pname = "cord.nvim-rust";
         inherit version src;
 
-        cargoSha256 = "sha256-6FYf4pHEPxvhKHHPmkjQ40zPxaiypnpDxF8kNH+h+tg=";
+        cargoHash = "sha256-6FYf4pHEPxvhKHHPmkjQ40zPxaiypnpDxF8kNH+h+tg=";
 
         installPhase = let
           cargoTarget = stdenv.hostPlatform.rust.cargoShortTarget;
@@ -1893,7 +1893,7 @@
       vim-markdown-composer-bin = rustPlatform.buildRustPackage {
         pname = "vim-markdown-composer-bin";
         inherit (super.vim-markdown-composer) src version;
-        cargoSha256 = "sha256-Vie8vLTplhaVU4E9IohvxERfz3eBpd62m8/1Ukzk8e4=";
+        cargoHash = "sha256-Vie8vLTplhaVU4E9IohvxERfz3eBpd62m8/1Ukzk8e4=";
         # tests require network access
         doCheck = false;
       };
