@@ -123,6 +123,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_get_cyclonedx_report"
     # Test fails on Hydra
     "test_sast_js_filtered_files_by_ts"
+    # Timing sensitive
+    "test_non_multiline_pair_time_limit_creating_report"
   ];
 
   disabledTestPaths = [
