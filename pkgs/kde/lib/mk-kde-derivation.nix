@@ -112,7 +112,6 @@ in
 
       # FIXME: figure out what to propagate here
       propagatedBuildInputs = deps ++ extraPropagatedBuildInputs;
-      strictDeps = true;
 
       dontFixCmake = true;
       cmakeFlags = ["-DQT_MAJOR_VERSION=6"] ++ extraCmakeFlags;
