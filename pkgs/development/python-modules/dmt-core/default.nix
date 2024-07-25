@@ -62,7 +62,7 @@ buildPythonPackage rec {
 
   LD_LIBRARY_PATH = "${stdenv.cc.cc.lib}/lib/";
 
-  checkPhase = ''
+  preCheck = ''
     export XDG_CONFIG_HOME=$PWD/config
     mkdir -p $XDG_CONFIG_HOME/DMT
     touch $XDG_CONFIG_HOME/DMT/DMT_config.yaml
