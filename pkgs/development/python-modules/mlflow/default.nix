@@ -95,6 +95,7 @@ buildPythonPackage rec {
     requests
     scikit-learn
     scipy
+    setuptools
     #shap
     simplejson
     sqlalchemy
