@@ -8200,8 +8200,6 @@ with pkgs;
 
   gitlab-pages = callPackage ../applications/version-management/gitlab/gitlab-pages { };
 
-  gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
-
   gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell { };
 
   gitlab-triage = callPackage ../applications/version-management/gitlab-triage { };
