@@ -1,0 +1,48 @@
+diff --git a/src/libcrypto.cc b/src/libcrypto.cc
+index 5139f66..517103f 100644
+--- a/src/libcrypto.cc
++++ b/src/libcrypto.cc
+@@ -100,17 +100,9 @@ int load_libcrypto() {
+   }
+ 
+   sdprintf("Loading libcrypto");
++  dlerror(); // Clear Errors
++  libcrypto_handle = dlopen("@openssl@/lib/libcrypto.so", RTLD_LAZY|RTLD_GLOBAL);
+ 
+-  bd::Array<bd::String> libs_list(bd::String("libcrypto.so." SHLIB_VERSION_NUMBER " libcrypto.so libcrypto.so.1.1 libcrypto.so.1.0.0 libcrypto.so.0.9.8 libcrypto.so.10 libcrypto.so.9 libcrypto.so.8 libcrypto.so.7 libcrypto.so.6").split(' '));
+-
+-  for (size_t i = 0; i < libs_list.length(); ++i) {
+-    dlerror(); // Clear Errors
+-    libcrypto_handle = dlopen(bd::String(libs_list[i]).c_str(), RTLD_LAZY|RTLD_GLOBAL);
+-    if (libcrypto_handle) {
+-      sdprintf("Found libcrypto: %s", bd::String(libs_list[i]).c_str());
+-      break;
+-    }
+-  }
+   if (!libcrypto_handle) {
+     fprintf(stderr, STR("Unable to find libcrypto\n"));
+     return(1);
+diff --git a/src/libssl.cc b/src/libssl.cc
+index 6010abc..86e29fc 100644
+--- a/src/libssl.cc
++++ b/src/libssl.cc
+@@ -78,17 +78,9 @@ int load_libssl() {
+   }
+ 
+   sdprintf("Loading libssl");
++  dlerror(); // Clear Errors
++  libssl_handle = dlopen("@openssl@/lib/libssl.so", RTLD_LAZY);
+ 
+-  bd::Array<bd::String> libs_list(bd::String("libssl.so." SHLIB_VERSION_NUMBER " libssl.so libssl.so.1.1 libssl.so.1.0.0 libssl.so.0.9.8 libssl.so.10 libssl.so.9 libssl.so.8 libssl.so.7 libssl.so.6").split(' '));
+-
+-  for (size_t i = 0; i < libs_list.length(); ++i) {
+-    dlerror(); // Clear Errors
+-    libssl_handle = dlopen(bd::String(libs_list[i]).c_str(), RTLD_LAZY);
+-    if (libssl_handle) {
+-      sdprintf("Found libssl: %s", bd::String(libs_list[i]).c_str());
+-      break;
+-    }
+-  }
+   if (!libssl_handle) {
+     fprintf(stderr, STR("Unable to find libssl\n"));
+     return(1);

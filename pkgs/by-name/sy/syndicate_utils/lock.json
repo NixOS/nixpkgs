@@ -1,0 +1,75 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": [
+        "hashlib"
+      ],
+      "path": "/nix/store/fav82xdbicvlk34nmcbl89zx99lr3mbs-source",
+      "rev": "f9455d4be988e14e3dc7933eb7cc7d7c4820b7ac",
+      "sha256": "1sx6j952lj98629qfgr7ds5aipyw9d6lldcnnqs205wpj4pkcjb3",
+      "srcDir": "",
+      "url": "https://github.com/ehmry/hashlib/archive/f9455d4be988e14e3dc7933eb7cc7d7c4820b7ac.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "illwill"
+      ],
+      "path": "/nix/store/3lmm3z36qn4gz7bfa209zv0pqrpm3di9-source",
+      "ref": "v0.3.2",
+      "rev": "1d12cb36ab7b76c31d2d25fa421013ecb382e625",
+      "sha256": "0f9yncl5gbdja18mrqf5ixrdgrh95k0khda923dm1jd1x1b7ar8z",
+      "srcDir": "",
+      "url": "https://github.com/johnnovak/illwill/archive/1d12cb36ab7b76c31d2d25fa421013ecb382e625.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "nimcrypto"
+      ],
+      "path": "/nix/store/zyr8zwh7vaiycn1s4r8cxwc71f2k5l0h-source",
+      "ref": "traditional-api",
+      "rev": "602c5d20c69c76137201b5d41f788f72afb95aa8",
+      "sha256": "1dmdmgb6b9m5f8dyxk781nnd61dsk3hdxqks7idk9ncnpj9fng65",
+      "srcDir": "",
+      "url": "https://github.com/cheatfate/nimcrypto/archive/602c5d20c69c76137201b5d41f788f72afb95aa8.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "npeg"
+      ],
+      "path": "/nix/store/ffkxmjmigfs7zhhiiqm0iw2c34smyciy-source",
+      "ref": "1.2.1",
+      "rev": "26d62fdc40feb84c6533956dc11d5ee9ea9b6c09",
+      "sha256": "0xpzifjkfp49w76qmaylan8q181bs45anmp46l4bwr3lkrr7bpwh",
+      "srcDir": "src",
+      "url": "https://github.com/zevv/npeg/archive/26d62fdc40feb84c6533956dc11d5ee9ea9b6c09.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "preserves"
+      ],
+      "path": "/nix/store/fmb2yckksz7iv3qdkk5gk1j060kppkq9-source",
+      "ref": "20231102",
+      "rev": "4faeb766dc3945bcfacaa1a836ef6ab29b20ceb0",
+      "sha256": "1a3g5bk1l1h250q3p6sqv6r1lpsplp330qqyp48r0i4a5r0jksq3",
+      "srcDir": "src",
+      "url": "https://git.syndicate-lang.org/ehmry/preserves-nim/archive/4faeb766dc3945bcfacaa1a836ef6ab29b20ceb0.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "syndicate"
+      ],
+      "path": "/nix/store/nhpvl223vbzdrlzikw7pgyfxs344w7ma-source",
+      "ref": "20231108",
+      "rev": "095418032180e360ea27ec7fcd63193944b68e2c",
+      "sha256": "09pbml2chzz0v5zpz67fs7raj0mfmg8qrih2vz85xxc51h7ncqvw",
+      "srcDir": "src",
+      "url": "https://git.syndicate-lang.org/ehmry/syndicate-nim/archive/095418032180e360ea27ec7fcd63193944b68e2c.tar.gz"
+    }
+  ]
+}

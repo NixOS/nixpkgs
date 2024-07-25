@@ -1,0 +1,11 @@
+https://github.com/wbond/oscrypto/issues/75
+--- a/oscrypto/_openssl/_libcrypto_cffi.py
++++ b/oscrypto/_openssl/_libcrypto_cffi.py
+@@ -37,1 +37,1 @@
+-version_match = re.search('\\b(\\d\\.\\d\\.\\d[a-z]*)\\b', version_string)
++version_match = re.search('\\b(\\d\\.\\d\\.\\d+[a-z]*)\\b', version_string)
+--- a/oscrypto/_openssl/_libcrypto_ctypes.py
++++ b/oscrypto/_openssl/_libcrypto_ctypes.py
+@@ -40,1 +40,1 @@
+-version_match = re.search('\\b(\\d\\.\\d\\.\\d[a-z]*)\\b', version_string)
++version_match = re.search('\\b(\\d\\.\\d\\.\\d+[a-z]*)\\b', version_string)

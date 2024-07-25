@@ -1,0 +1,16 @@
+diff --git a/src/worker.cpp b/src/worker.cpp
+index 0cf8955..b9dc70f 100644
+--- a/src/worker.cpp
++++ b/src/worker.cpp
+@@ -29,7 +29,10 @@ void Worker::work(const std::stop_token &stop_token) {
+   while (!stop_token.stop_requested()) {
+     while ((proc = process_queue->poll(500ms)).has_value()) {
+       const auto &p = proc.value();
+-      const auto &rule = rules->get_rule(p.name);
++      auto name = p.name;
++      if (name.starts_with('.') && name.ends_with("-wrapped"))
++        name = name.substr(1, name.find_last_of('-') - 1);
++      const auto &rule = rules->get_rule(name);
+ 
+       processed_count++;
+ 

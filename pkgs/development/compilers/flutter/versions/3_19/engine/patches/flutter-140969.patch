@@ -1,0 +1,41 @@
+From dd74740ddceac81e748a7e7834c28135abc59454 Mon Sep 17 00:00:00 2001
+From: Brandon DeRosier <bdero@google.com>
+Date: Tue, 16 Jan 2024 11:00:34 -0800
+Subject: [PATCH] [Flutter GPU] Fix playground shader paths. (#49790)
+
+Resolves https://github.com/flutter/flutter/issues/140969.
+
+Makes the shader paths absolute to prevent issues caused by the working
+directory differing across build environments.
+---
+ impeller/fixtures/BUILD.gn  | 3 ++-
+ impeller/tools/impeller.gni | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/impeller/fixtures/BUILD.gn b/impeller/fixtures/BUILD.gn
+index 9165f06542a2a..5ea90ab3969f3 100644
+--- a/impeller/fixtures/BUILD.gn
++++ b/impeller/fixtures/BUILD.gn
+@@ -131,7 +131,8 @@
+     "flutter_gpu_texture.vert",
+   ]
+   shader_target_flags = [ "--runtime-stage-metal" ]
+-  shader_bundle = "{\"UnlitFragment\": {\"type\": \"fragment\", \"file\": \"../../flutter/impeller/fixtures/flutter_gpu_unlit.frag\"}, \"UnlitVertex\": {\"type\": \"vertex\", \"file\": \"../../flutter/impeller/fixtures/flutter_gpu_unlit.vert\"}, \"TextureFragment\": {\"type\": \"fragment\", \"file\": \"../../flutter/impeller/fixtures/flutter_gpu_texture.frag\"}, \"TextureVertex\": {\"type\": \"vertex\", \"file\": \"../../flutter/impeller/fixtures/flutter_gpu_texture.vert\"}}"
++  fixtures = rebase_path("//flutter/impeller/fixtures")
++  shader_bundle = "{\"UnlitFragment\": {\"type\": \"fragment\", \"file\": \"${fixtures}/flutter_gpu_unlit.frag\"}, \"UnlitVertex\": {\"type\": \"vertex\", \"file\": \"${fixtures}/flutter_gpu_unlit.vert\"}, \"TextureFragment\": {\"type\": \"fragment\", \"file\": \"${fixtures}/flutter_gpu_texture.frag\"}, \"TextureVertex\": {\"type\": \"vertex\", \"file\": \"${fixtures}/flutter_gpu_texture.vert\"}}"
+   shader_bundle_output = "playground.shaderbundle"
+ }
+
+diff --git a/impeller/tools/impeller.gni b/impeller/tools/impeller.gni
+index 6541c3b12173b..2ab7ec0f0b07a 100644
+--- a/impeller/tools/impeller.gni
++++ b/impeller/tools/impeller.gni
+@@ -313,7 +313,7 @@
+   if (defined(invoker.shader_bundle)) {
+     assert(
+         defined(invoker.shader_bundle_output),
+-        "When shader_bundle is specified, shader_output_bundle must also be specified.")
++        "When shader_bundle is specified, shader_bundle_output must also be specified.")
+   }
+ 
+   sksl = false

@@ -1,0 +1,47 @@
+From 64f06c0643f1f8691a8f2757496b60f1ab98c866 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Sa=C3=AFd=20Benaissa?= <sbenaissa@shearwatergeo.com>
+Date: Fri, 8 Dec 2023 21:51:32 +0100
+Subject: [PATCH] Add include for cstdint, fix segyio build on fedora
+
+---
+ lib/experimental/segyio/segyio.hpp | 1 +
+ python/segyio/segyio.cpp           | 1 +
+ python/setup.py                    | 2 +-
+ 3 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/lib/experimental/segyio/segyio.hpp b/lib/experimental/segyio/segyio.hpp
+index 706f07ff5..7ba3ffb99 100644
+--- a/lib/experimental/segyio/segyio.hpp
++++ b/lib/experimental/segyio/segyio.hpp
+@@ -13,6 +13,7 @@
+ #include <vector>
+ 
+ #include <segyio/segy.h>
++#include <cstdint>
+ 
+ /*
+  * KNOWN ISSUES AND TODOs:
+diff --git a/python/segyio/segyio.cpp b/python/segyio/segyio.cpp
+index 76da965c3..bd8a8622e 100644
+--- a/python/segyio/segyio.cpp
++++ b/python/segyio/segyio.cpp
+@@ -16,6 +16,7 @@
+ #include <cstring>
+ #include <sstream>
+ #include <stdexcept>
++#include <cstdint>
+ 
+ #if PY_MAJOR_VERSION >= 3
+ #define IS_PY3K
+diff --git a/python/setup.py b/python/setup.py
+index 6c6553bc7..654075be9 100644
+--- a/python/setup.py
++++ b/python/setup.py
+@@ -1,6 +1,6 @@
+ import os
+ import sys
+-import skbuild
++import skbuild  # pip install scikit-build
+ import setuptools
+ 
+ long_description = """

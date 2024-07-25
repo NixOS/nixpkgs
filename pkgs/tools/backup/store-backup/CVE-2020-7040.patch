@@ -1,0 +1,23 @@
+Index: storeBackup/lib/fileDir.pl
+===================================================================
+--- storeBackup.orig/lib/fileDir.pl
++++ storeBackup/lib/fileDir.pl
+@@ -21,7 +21,7 @@
+ 
+ 
+ use Digest::MD5 qw(md5_hex);
+-use Fcntl qw(O_RDWR O_CREAT);
++use Fcntl qw(O_RDWR O_CREAT O_WRONLY O_EXCL);
+ use Fcntl ':mode';
+ use POSIX;
+ use Cwd 'abs_path';
+@@ -482,7 +482,7 @@ sub checkLockFile
+ 		  '-str' => ["creating lock file <$lockFile>"]);
+ 
+     &::checkDelSymLink($lockFile, $prLog, 0x01);
+-    open(FILE, '>', $lockFile) or
++    sysopen(FILE, $lockFile, O_WRONLY | O_CREAT | O_EXCL) or
+ 	$prLog->print('-kind' => 'E',
+ 		      '-str' => ["cannot create lock file <$lockFile>"],
+ 		      '-exit' => 1);
+
