@@ -15,6 +15,7 @@
 , bison
 , ninja
 , cunit
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +52,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkInputs = [ cunit ];
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git";
+    rev-prefix = "libtracefs-";
+  };
 
   meta = with lib; {
     description = "Linux kernel trace file system library";
