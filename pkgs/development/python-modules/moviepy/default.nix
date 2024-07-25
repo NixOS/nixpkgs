@@ -16,7 +16,7 @@
   scipy,
   setuptools,
   tqdm,
-  youtube-dl,
+  yt-dlp,
 }:
 
 buildPythonPackage rec {
@@ -56,7 +56,7 @@ buildPythonPackage rec {
       scikit-image
       scikit-learn
       scipy
-      youtube-dl
+      yt-dlp
     ];
   };
 
