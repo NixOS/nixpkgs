@@ -1,0 +1,28 @@
+diff --git a/setup.py b/setup.py
+index d8a37a27..acf33d15 100644
+--- a/setup.py
++++ b/setup.py
+@@ -94,10 +94,12 @@ else:
+         'fontconfig',
+         'GL',
+         'expat',
++        'svg',
++        'skresources',
++        'skia',
++        'skshaper',
++        'skunicode',
+     ]
+-    EXTRA_OBJECTS = list(
+-    ) + [os.path.join(SKIA_OUT_PATH, 'libsvg.a'), os.path.join(SKIA_OUT_PATH, 'libskresources.a'), os.path.join(SKIA_OUT_PATH, 'libskia.a'),
+-         os.path.join(SKIA_OUT_PATH, 'libskshaper.a'), os.path.join(SKIA_OUT_PATH, 'libskunicode.a')]
+     EXTRA_COMPILE_ARGS = [
+         '-std=c++17',
+         '-fvisibility=hidden',
+@@ -152,7 +154,6 @@ extension = Extension(
+     ],
+     define_macros=DEFINE_MACROS,
+     libraries=LIBRARIES,
+-    extra_objects=EXTRA_OBJECTS,
+     extra_compile_args=EXTRA_COMPILE_ARGS,
+     extra_link_args=EXTRA_LINK_ARGS,
+     depends=[os.path.join('src', 'skia', 'common.h')],
