@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-HEkPnTO1HeJg8gpHFSUTkEVBPWJ0OdfUhNn9iGfaDD4=";
   };
-  cargoSha256 = "sha256-jTRB9ogFQGVC4C9xpGxsJYV3cnWydAJLMcjhzUPULTE=";
+  cargoHash = "sha256-jTRB9ogFQGVC4C9xpGxsJYV3cnWydAJLMcjhzUPULTE=";
 
   passthru.tests.version = testers.testVersion {
     package = commitmsgfmt;
