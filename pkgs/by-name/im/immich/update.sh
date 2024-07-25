@@ -28,13 +28,17 @@ cat <<EOF > "$sources_tmp"
 }
 EOF
 
-for npm_component in server web "open-api/typescript-sdk"; do
+lock=$(mktemp)
+for npm_component in cli server web "open-api/typescript-sdk"; do
     echo "fetching $npm_component"
-    hash=$(prefetch-npm-deps <(curl -s "$upstream_src/$npm_component/package-lock.json"))
+    curl -s -o "$lock" "$upstream_src/$npm_component/package-lock.json"
+    hash=$(prefetch-npm-deps "$lock")
     echo "$(jq --arg npm_component "$npm_component" \
       --arg hash "$hash" \
-      '.components += {($npm_component): {npmDepsHash: $hash}}' \
+      --arg version "$(jq -r '.version' <"$lock")" \
+      '.components += {($npm_component): {npmDepsHash: $hash, version: $version}}' \
       "$sources_tmp")" > "$sources_tmp"
 done
 
+rm "$lock"
 cp "$sources_tmp" sources.json
