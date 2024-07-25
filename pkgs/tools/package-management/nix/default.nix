@@ -178,6 +178,12 @@ in lib.makeExtensible (self: ({
     self_attribute_name = "nix_2_22";
   };
 
+  nix_2_23 = common {
+    version = "2.23.3";
+    hash = "sha256-lAoLGVIhRFrfgv7wcyduEkyc83QKrtsfsq4of+WrBeg=";
+    self_attribute_name = "nix_2_23";
+  };
+
   git = (common rec {
     version = "2.24.0";
     suffix = "pre20240709_${lib.substring 0 8 src.rev}";
