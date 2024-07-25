@@ -1492,6 +1492,8 @@ self: super: with self; {
 
   bdffont = callPackage ../development/python-modules/bdffont { };
 
+  bdsim = callPackage ../development/python-modules/bdsim { };
+
   beaker = callPackage ../development/python-modules/beaker { };
 
   before-after = callPackage ../development/python-modules/before-after { };
@@ -9998,6 +10000,8 @@ self: super: with self; {
 
   pypsrp = callPackage ../development/python-modules/pypsrp { };
 
+  pgraph-python = callPackage ../development/python-modules/pgraph-python { };
+
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
   phunspell = callPackage ../development/python-modules/phunspell { };
@@ -13672,6 +13676,8 @@ self: super: with self; {
 
   robotframework-tools = callPackage ../development/python-modules/robotframework-tools { };
 
+  roboticstoolbox-python = callPackage ../development/python-modules/roboticstoolbox-python { };
+
   robotstatuschecker = callPackage ../development/python-modules/robotstatuschecker { };
 
   robotsuite = callPackage ../development/python-modules/robotsuite { };
@@ -14538,6 +14544,10 @@ self: super: with self; {
 
   spatial-image = callPackage ../development/python-modules/spatial-image { };
 
+  spatialgeometry = callPackage ../development/python-modules/spatialgeometry { };
+
+  spatialmath-python = callPackage ../development/python-modules/spatialmath-python { };
+
   spdx = callPackage ../development/python-modules/spdx { };
 
   spdx-lookup = callPackage ../development/python-modules/spdx-lookup { };
@@ -15035,6 +15045,8 @@ self: super: with self; {
   switchbot-api = callPackage ../development/python-modules/switchbot-api { };
 
   swift = callPackage ../development/python-modules/swift { };
+
+  swift-sim = callPackage ../development/python-modules/swift-sim { };
 
   swisshydrodata = callPackage ../development/python-modules/swisshydrodata { };
 
