@@ -137,7 +137,7 @@ in
       node = {
         listenAddress = mkOption {
           type = types.str;
-          default = "0.0.0.0";
+          default = "[::]";
           example = "127.0.0.1";
           description = "The IP address on which `radicle-node` listens.";
         };
