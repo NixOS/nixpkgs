@@ -40126,8 +40126,6 @@ with pkgs;
 
   pigeon = callPackage ../development/tools/pigeon { };
 
-  verifpal = callPackage ../tools/security/verifpal { };
-
   weasis = callPackage ../by-name/we/weasis/package.nix {
     jre = jdk21;
   };
