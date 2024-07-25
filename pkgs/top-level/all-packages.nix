@@ -40141,8 +40141,6 @@ with pkgs;
 
   verifpal = callPackage ../tools/security/verifpal { };
 
-  nix-store-gcs-proxy = callPackage ../tools/nix/nix-store-gcs-proxy { };
-
   weasis = callPackage ../by-name/we/weasis/package.nix {
     jre = jdk21;
   };
