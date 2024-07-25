@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   melpaBuild,
+  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -14,6 +15,8 @@ melpaBuild {
     rev = "cf31e38e7889e6ade7d2d2b9f8719fd44f52feb5";
     hash = "sha256-cVkK9EF6qQyVV3uVqnBEjF8e9nEx/8ixnM8PvxqCyYE=";
   };
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://github.com/jwiegley/git-undo-el";

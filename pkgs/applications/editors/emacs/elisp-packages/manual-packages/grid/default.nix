@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   melpaBuild,
+  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -14,6 +15,8 @@ melpaBuild {
     rev = "564eccf4e009955f1a6c268382d00e157d4eb302";
     hash = "sha256-3QDw4W3FbFvb2zpkDHAo9BJKxs3LaehyvUVJPKqS9RE=";
   };
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://github.com/ichernyshovvv/grid.el";

@@ -604,6 +604,8 @@ in {
 
     hid-tmff2 = callPackage ../os-specific/linux/hid-tmff2 { };
 
+    hpuefi-mod = callPackage ../os-specific/linux/hpuefi-mod { };
+
     drbd = callPackage ../os-specific/linux/drbd/driver.nix { };
 
   } // lib.optionalAttrs config.allowAliases {

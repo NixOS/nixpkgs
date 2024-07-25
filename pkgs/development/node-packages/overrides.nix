@@ -23,6 +23,13 @@ final: prev: {
     prePatch = ''
       export NG_CLI_ANALYTICS=false
     '';
+    nativeBuildInputs = [ pkgs.installShellFiles ];
+    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash zsh; do
+      installShellCompletion --cmd ng \
+        --$shell <($out/bin/ng completion script)
+    done
+    '';
   };
 
   "@electron-forge/cli" = prev."@electron-forge/cli".override {
@@ -88,6 +95,7 @@ final: prev: {
   joplin = prev.joplin.override (oldAttrs:{
     nativeBuildInputs = [
       pkgs.pkg-config
+      (pkgs.python3.withPackages (ps: [ ps.setuptools ]))
     ] ++ lib.optionals stdenv.isDarwin [
       pkgs.xcbuild
     ];
@@ -124,7 +132,7 @@ final: prev: {
 
     meta = oldAttrs.meta // {
       # ModuleNotFoundError: No module named 'distutils'
-      broken = true;
+      broken = stdenv.isDarwin; # still broken on darwin
     };
   });
 

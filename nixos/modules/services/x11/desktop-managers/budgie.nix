@@ -142,7 +142,7 @@ in {
       ]
       ++ lib.optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
       ++ (utils.removePackagesByName [
-          cinnamon.nemo
+          nemo
           mate.eom
           mate.pluma
           mate.atril

@@ -1,12 +1,34 @@
 {
   lib,
   git,
-  python3Packages,
+  python3,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
+        version = "0.11.2";
+        src = fetchFromGitHub {
+          owner = "NowanIlfideme";
+          repo = "pydantic-yaml";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-AeUyVav0/k4Fz69Qizn4hcJKoi/CDR9eUan/nJhWsDY=";
+        };
+        dependencies = with self; [
+          deprecated
+          importlib-metadata
+          pydantic_1
+          ruamel-yaml
+          types-deprecated
+        ];
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "charmcraft";
   version = "2.7.0";
 
@@ -23,11 +45,12 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace setup.py \
       --replace-fail 'version=determine_version()' 'version="${version}"'
 
+    # TODO remove setuptools from dependencies once this is removed
     substituteInPlace charmcraft/env.py \
       --replace-fail "distutils.util" "setuptools.dist"
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python.pkgs; [
     craft-cli
     craft-parts
     craft-providers
@@ -42,17 +65,18 @@ python3Packages.buildPythonApplication rec {
     requests
     requests-toolbelt
     requests-unixsocket
+    setuptools # see substituteInPlace above
     snap-helpers
     tabulate
     urllib3
   ];
 
-  nativeBuildInputs = with python3Packages; [ setuptools ];
+  build-system = with python.pkgs; [ setuptools ];
 
   pythonRelaxDeps = [ "urllib3" ];
 
   nativeCheckInputs =
-    with python3Packages;
+    with python.pkgs;
     [
       pyfakefs
       pytest-check
