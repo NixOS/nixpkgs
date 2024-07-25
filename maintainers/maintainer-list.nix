@@ -14456,6 +14456,13 @@
     github = "nicegamer7";
     githubId = 8083772;
   };
+  nicekoishi = {
+    name = "Lucas Portela";
+    email = "contato.koish@gmail.com";
+    github = "nicekoishi";
+    githubId = 89671198;
+    keys = [ { fingerprint = "A02F C5E4 48AB 3435 CAFA  5DE0 9F72 6CE9 91F7 ACD8"; } ];
+  };
   nickcao = {
     name = "Nick Cao";
     email = "nickcao@nichi.co";
