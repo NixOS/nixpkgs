@@ -48,9 +48,7 @@ stdenv.mkDerivation {
     rapidjson
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "GL" true)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "GL" true) ];
 
   strictDeps = true;
 
@@ -81,7 +79,10 @@ stdenv.mkDerivation {
     description = "Flexible emulator front-end supporting keyboardless navigation and custom system themes (forked by RetroPie)";
     license = with lib.licenses; [ mit ];
     mainProgram = "emulationstation";
-    maintainers = with lib.maintainers; [ AndersonTorres edwtjo ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      edwtjo
+    ];
     platforms = lib.platforms.linux;
   };
 }
