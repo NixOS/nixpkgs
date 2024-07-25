@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   stdenv,
   fetchFromGitHub,
   cmake,
@@ -40,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tool to automate managing your screen's saturation depending on what programs are running";
     homepage = "https://github.com/libvibrant/vibrantLinux";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ Scrumplex unclamped ];
+    maintainers = with maintainers; [
+      Scrumplex
+      unclamped
+    ];
     platforms = platforms.linux;
     mainProgram = "vibrantLinux";
   };
