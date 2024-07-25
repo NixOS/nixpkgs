@@ -18352,7 +18352,6 @@ with pkgs;
   fly = callPackage ../development/tools/continuous-integration/fly { };
 
   foreman = callPackage ../tools/system/foreman { };
-  goreman = callPackage ../tools/system/goreman { };
 
   fprettify = callPackage ../development/tools/fprettify { };
 
