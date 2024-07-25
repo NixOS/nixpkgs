@@ -18351,8 +18351,6 @@ with pkgs;
 
   fly = callPackage ../development/tools/continuous-integration/fly { };
 
-  foreman = callPackage ../tools/system/foreman { };
-
   fprettify = callPackage ../development/tools/fprettify { };
 
   framac = callPackage ../development/tools/analysis/frama-c { };
