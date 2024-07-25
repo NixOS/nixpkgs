@@ -6,7 +6,6 @@
   packaging,
   pyelftools,
   tlsh,
-  nose,
 }:
 buildPythonPackage rec {
   pname = "telfhash";
@@ -34,11 +33,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  nativeCheckInputs = [ nose ];
-
-  checkPhase = ''
-    nosetests
-  '';
+  doCheck = false; # no tests
 
   pythonImportsCheck = [ "telfhash" ];
 
