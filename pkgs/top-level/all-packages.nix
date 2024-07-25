@@ -12997,8 +12997,6 @@ with pkgs;
 
   structorizer = callPackage ../applications/graphics/structorizer { };
 
-  su-exec = callPackage ../tools/security/su-exec { };
-
   subberthehut = callPackage ../tools/misc/subberthehut { };
 
   subedit = callPackage ../tools/text/subedit { };
