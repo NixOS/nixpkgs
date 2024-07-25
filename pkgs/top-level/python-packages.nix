@@ -1316,6 +1316,8 @@ self: super: with self; {
 
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
 
+  azure-search-documents = callPackage ../development/python-modules/azure-search-documents { };
+
   azure-servicebus = callPackage ../development/python-modules/azure-servicebus { };
 
   azure-servicefabric = callPackage ../development/python-modules/azure-servicefabric { };
@@ -2844,6 +2846,8 @@ self: super: with self; {
   datashader = callPackage ../development/python-modules/datashader { };
 
   datashape = callPackage ../development/python-modules/datashape { };
+
+  datashaper = callPackage ../development/python-modules/datashaper { };
 
   datatable = callPackage ../development/python-modules/datatable { };
 
@@ -5237,6 +5241,8 @@ self: super: with self; {
   graphql-server-core = callPackage ../development/python-modules/graphql-server-core { };
 
   graphql-subscription-manager = callPackage ../development/python-modules/graphql-subscription-manager { };
+
+  graphrag = callPackage ../development/python-modules/graphrag { };
 
   graph-tool = callPackage ../development/python-modules/graph-tool { };
 
@@ -10892,6 +10898,8 @@ self: super: with self; {
 
   pyaml = callPackage ../development/python-modules/pyaml { };
 
+  pyaml-env = callPackage ../development/python-modules/pyaml-env { };
+
   pyannotate = callPackage ../development/python-modules/pyannotate { };
 
   pyannote-audio = callPackage ../development/python-modules/pyannote-audio { };
@@ -15037,6 +15045,8 @@ self: super: with self; {
   switchbot-api = callPackage ../development/python-modules/switchbot-api { };
 
   swift = callPackage ../development/python-modules/swift { };
+
+  swifter = callPackage ../development/python-modules/swifter { };
 
   swisshydrodata = callPackage ../development/python-modules/swisshydrodata { };
 
