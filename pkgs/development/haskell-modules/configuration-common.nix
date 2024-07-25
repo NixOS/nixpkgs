@@ -569,9 +569,8 @@ self: super: {
   HerbiePlugin = dontCheck super.HerbiePlugin;
   wai-cors = dontCheck super.wai-cors;
 
-  # 2022-01-29: Tests fail: https://github.com/psibi/streamly-bytestring/issues/27
   # 2022-02-14: Strict upper bound: https://github.com/psibi/streamly-bytestring/issues/30
-  streamly-bytestring = dontCheck (doJailbreak super.streamly-bytestring);
+  streamly-bytestring = doJailbreak super.streamly-bytestring;
 
   # 2024-05-18: Upstream tests against a different pandoc version
   pandoc-crossref = dontCheck super.pandoc-crossref;
@@ -783,9 +782,6 @@ self: super: {
 
   # 2023-06-26: Test failure: https://hydra.nixos.org/build/224869905
   comfort-blas = dontCheck super.comfort-blas;
-
-  # 2022-06-26: Too strict lower bound on semialign.
-  trie-simple = doJailbreak super.trie-simple;
 
   # These test suites run for ages, even on a fast machine. This is nuts.
   Random123 = dontCheck super.Random123;
@@ -1545,9 +1541,6 @@ self: super: {
   # https://github.com/commercialhaskell/stackage/issues/6884
   persistent-sqlite = dontCheck super.persistent-sqlite;
 
-  # 2021-12-26: Too strict bounds on doctest
-  polysemy-plugin = doJailbreak super.polysemy-plugin;
-
   # Needs matching lsp-types
   lsp_2_4_0_0 = super.lsp_2_4_0_0.override {
     lsp-types = self.lsp-types_2_1_1_0;
@@ -1871,10 +1864,6 @@ self: super: {
     })
   ] super.binary-strict;
 
-  # 2020-11-15: nettle tests are pre MonadFail change
-  # https://github.com/stbuehler/haskell-nettle/issues/10
-  nettle = dontCheck super.nettle;
-
   # The tests for semver-range need to be updated for the MonadFail change in
   # ghc-8.8:
   # https://github.com/adnelson/semver-range/issues/15
@@ -2104,12 +2093,6 @@ self: super: {
   # list `modbus` in librarySystemDepends, correct to `libmodbus`
   libmodbus = doJailbreak (addExtraLibrary pkgs.libmodbus super.libmodbus);
 
-  # 2021-04-02: Outdated optparse-applicative bound is fixed but not realeased on upstream.
-  trial-optparse-applicative = assert super.trial-optparse-applicative.version == "0.0.0.0"; doJailbreak super.trial-optparse-applicative;
-
-  # 2022-12-28: Too strict version bounds on bytestring
-  iconv = doJailbreak super.iconv;
-
   ginger = doJailbreak super.ginger;
 
   # 2024-05-05 syntax changes: https://github.com/obsidiansystems/haveibeenpwned/pull/9
@@ -2161,10 +2144,6 @@ self: super: {
       })
     ];
   };
-
-  # 2021-04-09: outdated base and alex-tools
-  # PR pending https://github.com/glguy/language-lua/pull/6
-  language-lua = doJailbreak super.language-lua;
 
   # 2021-04-09: too strict time bound
   # PR pending https://github.com/zohl/cereal-time/pull/2
@@ -2370,10 +2349,6 @@ self: super: {
   # https://github.com/muesli4/table-layout/issues/16
   table-layout = doJailbreak super.table-layout;
 
-  # 2021-06-20: Outdated upper bounds
-  # https://github.com/Porges/email-validate-hs/issues/58
-  email-validate = doJailbreak super.email-validate;
-
   # https://github.com/plow-technologies/hspec-golden-aeson/issues/17
   hspec-golden-aeson = dontCheck super.hspec-golden-aeson;
 
@@ -2389,9 +2364,6 @@ self: super: {
 
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
-
-  # 2022-12-30: Restrictive upper bound on optparse-applicative
-  retrie = doJailbreak super.retrie;
 
   # 2022-08-30 Too strict bounds on finite-typelits
   # https://github.com/jumper149/blucontrol/issues/1
@@ -2542,7 +2514,7 @@ self: super: {
   validation = doJailbreak super.validation;
 
   # 2022-03-16: strict upper bounds https://github.com/monadfix/shower/issues/18
-  shower = doJailbreak (dontCheck super.shower);
+  shower = doJailbreak super.shower;
 
   # Test suite isn't supposed to succeed yet, apparently…
   # https://github.com/andrewufrank/uniform-error/blob/f40629ad119e90f8dae85e65e93d7eb149bddd53/test/Uniform/Error_test.hs#L124
@@ -2594,9 +2566,6 @@ self: super: {
 
   # 2022-02-25: Unmaintained and to strict upper bounds
   paths = doJailbreak super.paths;
-
-  # 2022-02-26: https://github.com/emilypi/base64/issues/39
-  base64 = dontCheck super.base64;
 
   # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
   base-noprelude = doJailbreak super.base-noprelude;
@@ -2756,9 +2725,6 @@ self: super: {
     purescript
     purenix
     ;
-
-  # 2022-11-05: https://github.com/ysangkok/haskell-tzdata/issues/3
-  tzdata = dontCheck super.tzdata;
 
   # We provide newer dependencies than upstream expects.
   swarm = doJailbreak super.swarm;
