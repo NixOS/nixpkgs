@@ -37,7 +37,7 @@ in
 }@args:
 
 stdenv.mkDerivation (finalAttrs: ({
-  name = "emacs-${pname}-${finalAttrs.version}";
+  name = "emacs-${finalAttrs.pname}-${finalAttrs.version}";
 
   unpackCmd = ''
     case "$curSrc" in
