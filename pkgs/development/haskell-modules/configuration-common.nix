@@ -34,6 +34,13 @@ self: super: {
     process = self.process_1_6_20_0;
   }));
 
+  # hackage-security == 0.6.2.6 has a wider support range in theory, but it only
+  # makes sense to use the non Stackage version if we want to use Cabal* >= 3.12
+  hackage-security_0_6_2_6 = super.hackage-security_0_6_2_6.override {
+    Cabal = self.Cabal_3_12_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_12_1_0;
+  };
+
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
   # so we need to put some extra work for non-latest GHCs
   inherit (
@@ -41,25 +48,10 @@ self: super: {
       # !!! Use cself/csuper inside for the actual overrides
       cabalInstallOverlay = cself: csuper:
         {
-          # Needs to be downgraded compared to Stackage LTS 21
-          resolv = cself.resolv_0_1_2_0;
+          hackage-security = self.hackage-security_0_6_2_6;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.10") {
-          Cabal = cself.Cabal_3_10_3_0;
-          Cabal-syntax = cself.Cabal-syntax_3_10_3_0;
-        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.4") {
-          # We need at least directory >= 1.3.7.0. Using the latest version
-          # 1.3.8.* is not an option since it causes very annoying dependencies
-          # on newer versions of unix and filepath than GHC 9.2 ships
-          directory = cself.directory_1_3_7_1;
-          # GHC 9.2.5 starts shipping 1.6.16.0 which is required by
-          # cabal-install, but we need to recompile process even if the correct
-          # version is available to prevent inconsistent dependencies:
-          # process depends on directory.
-          process = cself.process_1_6_20_0;
-
-          # Prevent dependency on doctest which causes an inconsistent dependency
-          # due to depending on ghc which depends on directory etc.
-          vector = dontCheck csuper.vector;
+          Cabal = cself.Cabal_3_12_1_0;
+          Cabal-syntax = cself.Cabal-syntax_3_12_1_0;
         };
     in
     {
@@ -497,7 +489,6 @@ self: super: {
 
   # Tests require older versions of tasty.
   hzk = dontCheck super.hzk;
-  resolv_0_1_2_0 = doJailbreak super.resolv_0_1_2_0;
 
   # Test suite doesn't compile with 9.6, 9.8
   # https://github.com/sebastiaanvisser/fclabels/issues/45

@@ -580,7 +580,6 @@ default-package-overrides:
   - cabal-debian ==5.2.3
   - cabal-doctest ==1.0.10
   - cabal-file ==0.1.1
-  - cabal-install-solver ==3.10.2.1
   - cabal-plan ==0.7.3.0
   - cabal-rpm ==2.1.5
   - cabal-sort ==0.1.2
