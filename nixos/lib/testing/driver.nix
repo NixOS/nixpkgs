@@ -90,7 +90,7 @@ let
         ''}
 
         # set defaults through environment
-        # see: ./test-driver/test-driver.py argparse implementation
+        # see: nixos/lib/test-driver/test_driver/__init__.py argparse implementation
         wrapProgram $out/bin/nixos-test-driver \
           --set startScripts "''${vmStartScripts[*]}" \
           --set testScript "$out/test-script" \

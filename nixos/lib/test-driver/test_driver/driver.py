@@ -1,6 +1,7 @@
 import os
 import re
 import signal
+import subprocess
 import tempfile
 import threading
 from contextlib import contextmanager
@@ -109,6 +110,117 @@ class Driver:
                     vlan.stop()
                 except Exception as e:
                     self.logger.error(f"Error during cleanup of vlan{vlan.nr}: {e}")
+
+    # TODO: default to the path of this executable (need to make sure it's the wrapper and also via the symlink)
+    # TODO: handle the case of the result/ directory not just the executable
+    # TODO: check we're in interactive mode?
+    # TODO: consider renaming ()
+    # TODO: __init__ and reinit should share a bunch of code
+    def reinit(self, new_driver_cmd: str) -> None:
+
+        tmp_dir = get_tmp_dir()
+
+        new_driver_info = subprocess.check_output(
+            [new_driver_cmd, "--internal-print-update-driver-info-and-exit"],
+            text=True,
+        )
+        (
+            start_scripts,
+            vlans_str,
+            testscript,
+            output_directory,
+        ) = new_driver_info.rstrip().split("\n")
+
+        with self.logger.nested("updating machines"):
+            cmds = [
+                NixStartScript(start_script)
+                for start_script in start_scripts.split(" ")
+            ]
+            names = [cmd.machine_name for cmd in cmds]
+
+            # delete machines that are no longer part of the test
+            to_del = []
+            for idx, machine in enumerate(self.machines):
+                if machine.name not in names:
+                    if machine.is_up():
+                        self.logger.warning(
+                            f"{machine.name} removed from the test, but it's running so we're not going to shut it down automatically. Call driver.machines[\"{machine.name}\"].stop() and re-run this function to remove."
+                        )
+                    else:
+                        to_del.append(idx)
+            for idx in sorted(to_del, reverse=True):
+                self.logger.info(
+                    f"{self.machines[idx].name} removed from the test. deleting it from the environment"
+                )
+                del globals()[pythonize_name(self.machines[idx].name)]
+                del self.machines[idx]
+
+            # add and change new machines
+            for cmd in cmds:
+                existing = [m for m in self.machines if m.name == cmd.machine_name]
+                if len(existing) == 0:
+                    machine = self.create_machine(cmd._cmd)
+                    name = pythonize_name(machine.name)
+                    globals()[name] = machine
+                    self.machines.append(machine)
+
+                    self.logger.info(
+                        f'new machine created {cmd.machine_name}. start it with driver.machines["{cmd.machine_name}"].start()'
+                    )
+                elif len(existing) == 1:
+                    machine = existing[0]
+                    if machine.start_command._cmd == cmd._cmd:
+                        self.logger.info(f"{cmd.machine_name} unchanged.")
+                    elif not machine.booted:
+                        self.logger.info(f"{cmd.machine_name} changed.")
+                        machine.start_command = cmd
+                    else:
+                        with self.logger.nested(
+                            f"{cmd.machine_name} updated. switching to new configuration"
+                        ):
+                            # TODO: assuming things are at well-known paths isn't great
+                            switch_cmd = (
+                                Path(cmd._cmd).parent.parent
+                                / "system"
+                                / "bin"
+                                / "switch-to-configuration"
+                            )
+                            machine.succeed(f"{switch_cmd} test")
+                            machine.start_command = cmd
+                else:
+                    self.logger.warning(
+                        f"{cmd.machine_name} has multiple instances. This shouldn't be possible, but either way it's now ambiguous which to update."
+                    )
+
+        # XXX: something's going wrong here
+        with self.logger.nested("updating vlans"):
+            nrs = list(set([int(vlan) for vlan in vlans_str.split(" ")]))
+            to_del = []
+            for idx, vlan in enumerate(self.vlans):
+                if vlan.nr not in nrs:
+                    to_del.append(idx)
+            for idx in sorted(to_del, reverse=True):
+                self.logger.info(
+                    f"vlan {self.vlans[idx].nr} removed from test. Deleting it"
+                )
+                del self.vlans[idx]
+            # add new vlans
+            old_nrs = [vlan.nr for vlan in self.vlans]
+            for nr in nrs:
+                if nr not in old_nrs:
+                    self.vlans.append(VLan(nr, tmp_dir, self.logger))
+
+        # if the test script has already been run we can't post-hoc modify the actions, but we can at least update the script
+        new_tests = Path(testscript).read_text()
+        if new_tests != self.tests:
+            self.tests = Path(testscript).read_text()
+            self.logger.info("test script updated")
+
+        # we can't copy the existing outputs over to the new directory because there might be other files mixed in (and usually is)
+        new_out_dir = Path(output_directory)
+        if new_out_dir != self.out_dir:
+            self.logger.info("new output directory: `{new_out_dir}`. Already transferred files will remain in old directory `{self.out_dir}`.")
+            self.out_dir = new_out_dir
 
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
