@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchpatch, fetchurl, boost }:
+{ lib, stdenv, fetchpatch, fetchurl, boost, llvmPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "source-highlight";
   version = "3.1.9";
 
@@ -43,7 +43,10 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  buildInputs = [ boost ];
+  buildInputs = [ boost ]
+    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (llvmPackages.compiler-rt.override {
+      doFakeLibgcc = true;
+    });
 
   configureFlags = [
     "--with-boost=${boost.out}"
@@ -68,4 +71,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
-}
+} // lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
+  # Force linking to "libgcc" so tests pass
+  NIX_CFLAGS_COMPILE = "-lgcc";
+})
