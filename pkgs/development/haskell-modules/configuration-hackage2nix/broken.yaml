@@ -4519,7 +4519,6 @@ broken-packages:
   - pinchot # failure in job https://hydra.nixos.org/build/233230585 at 2023-09-02
   - piped # failure in job https://hydra.nixos.org/build/252729903 at 2024-03-16
   - Pipe # failure in job https://hydra.nixos.org/build/233243604 at 2023-09-02
-  - pipes-aeson # failure in job https://hydra.nixos.org/build/252733735 at 2024-03-16
   - pipes-async # failure in job https://hydra.nixos.org/build/233194729 at 2023-09-02
   - pipes-bgzf # failure in job https://hydra.nixos.org/build/233238921 at 2023-09-02
   - pipes-break # failure in job https://hydra.nixos.org/build/233250730 at 2023-09-02

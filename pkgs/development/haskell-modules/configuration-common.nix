@@ -1933,22 +1933,12 @@ self: super: {
     (self.generateOptparseApplicativeCompletions [ "hci" ])
   ];
 
-  pipes-aeson = appendPatches [
-    # Dependency of the aeson-2 patch
-    (fetchpatch {
-      name = "pipes-aeson-add-loop.patch";
-      url = "https://github.com/k0001/pipes-aeson/commit/d22133b4a678edbb52bcaec5079dc88ccc0de1d3.patch";
-      sha256 = "sha256-5o5ys1P1+QB4rjLCYok5AcPRWCtRiecP/TqCFm8ulVY=";
-      includes = ["src/Pipes/Aeson.hs" "src/Pipes/Aeson/Internal.hs" "src/Pipes/Aeson/Unchecked.hs"];
-    })
-    # https://github.com/k0001/pipes-aeson/pull/20
-    (fetchpatch {
-      name = "pipes-aeson-aeson-2.patch";
-      url = "https://github.com/hercules-ci/pipes-aeson/commit/ac735c9cd459c6ef51ba82325d1c55eb67cb7b2c.patch";
-      sha256 = "sha256-viWZ6D5t79x50RXiOjP6UeQ809opgNFYZOP+h+1KJh0=";
-      includes = ["src/Pipes/Aeson.hs" "src/Pipes/Aeson/Internal.hs" "src/Pipes/Aeson/Unchecked.hs"];
-    })
-  ] super.pipes-aeson;
+  # https://github.com/k0001/pipes-aeson/pull/21
+  pipes-aeson = appendPatch (fetchpatch {
+    url = "https://github.com/k0001/pipes-aeson/commit/08c25865ef557b41d7e4a783f52e655d2a193e18.patch";
+    relative = "pipes-aeson";
+    sha256 = "sha256-kFV6CcwKdMq+qSgyc+eIApnaycq5A++pEEVr2A9xvts=";
+  }) super.pipes-aeson;
 
   # Needs bytestring 0.11
   # https://github.com/Gabriella439/Haskell-Pipes-HTTP-Library/pull/17
@@ -1962,7 +1952,7 @@ self: super: {
       relative = "moto-postgresql";
       sha256 = "sha256-f2JVX9VveShCeV+T41RQgacpUoh1izfyHlE6VlErkZM=";
     })
-  ] (unmarkBroken super.moto-postgresql);
+  ] super.moto-postgresql;
 
   moto = appendPatches [
     # https://gitlab.com/k0001/moto/-/merge_requests/3
