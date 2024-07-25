@@ -10030,12 +10030,6 @@
     githubId = 5352661;
     name = "James Cleverley-Prance";
   };
-  jqqqqqqqqqq = {
-    email = "jqqqqqqqqqq@gmail.com";
-    github = "jqqqqqqqqqq";
-    githubId = 12872927;
-    name = "Curtis Jiang";
-  };
   jqueiroz = {
     email = "nixos@johnjq.com";
     github = "jqueiroz";
