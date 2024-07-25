@@ -15,6 +15,19 @@ let
   inherit (lib.trivial) importJSON pipe;
   inherit (lib.strings) removeSuffix;
 
+  storePathOf =
+    let
+      nixpkgsRootInStore = ../../../..;
+    in
+    # NOTE: Since nixpkgsRootInStore is an actual Path, we need to make sure we concatenate the directory separator
+    # with the stringified `path` argument before concatenating it with nixpkgsRootInStore.
+    path: nixpkgsRootInStore + ("/" + path);
+
+  cudaModulesPath = "./pkgs/development/cuda-modules";
+  redistIndexModulePath = cudaModulesPath + "/redist-index";
+  sha256IndexPath = redistIndexModulePath + "/data/indices/sha256-and-relative-path.json";
+  packageIndexPath = redistIndexModulePath + "/data/indices/package-info.json";
+
   # This does type-checking for us as well as bringing our data and utils helpers into scope.
   inherit
     ((evalModules {
@@ -22,10 +35,8 @@ let
         inherit pkgs;
       };
       modules = [
-        ./modules
-        {
-          config.data.indices.sha256AndRelativePath = importJSON ./modules/data/indices/sha256-and-relative-path.json;
-        }
+        (storePathOf redistIndexModulePath)
+        { config.data.indices.sha256AndRelativePath = importJSON (storePathOf sha256IndexPath); }
       ];
     }).config
     )
@@ -90,7 +101,7 @@ writeShellApplication {
   };
   meta = with lib; {
     description = "Generates an index of package information for use in Nixpkgs' CUDA ecosystem.";
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # TODO(@connorbaker): This is a placeholder license. Unfree redistributable because that's what the (majority) of
@@ -100,40 +111,37 @@ writeShellApplication {
     maintainers = with maintainers; [ connorbaker ];
   };
   text = ''
-    indexOfSha256AndRelativePathJSONPath="./pkgs/by-name/cu/cuda-redist-index/modules/data/indices/sha256-and-relative-path.json"
-    indexOfPackageInfoJSONPath="./pkgs/by-name/cu/cuda-redist-index/modules/data/indices/package-info.json"
-    hashToUnpackedStorePathJSONPath="${sha256ToUnpackedStorePath}"
     unpackedStorePathToNarHashJSONPath="$(mktemp)"
     unpackedStorePathToFeatureJSONPath="$(mktemp)"
 
     # Check if the input files exist
-    if [[ ! -f "$indexOfSha256AndRelativePathJSONPath" ]]; then
-      echo "The input file $indexOfSha256AndRelativePathJSONPath does not exist"
+    if [[ ! -f "${sha256IndexPath}" ]]; then
+      echo "The input file ${sha256IndexPath} does not exist"
       exit 1
     fi
 
-    if [[ ! -f "$hashToUnpackedStorePathJSONPath" ]]; then
-      echo "The input file $hashToUnpackedStorePathJSONPath does not exist"
+    if [[ ! -f "${sha256ToUnpackedStorePath}" ]]; then
+      echo "The input file ${sha256ToUnpackedStorePath} does not exist"
       exit 1
     fi
 
-    echo "Acquiring NAR hashes for store paths in $hashToUnpackedStorePathJSONPath"
-    jq "''${JQ_COMMON_FLAGS[@]}" '.[]' "$hashToUnpackedStorePathJSONPath" \
+    echo "Acquiring NAR hashes for store paths in ${sha256ToUnpackedStorePath}"
+    jq "''${JQ_COMMON_FLAGS[@]}" '.[]' "${sha256ToUnpackedStorePath}" \
       | nix path-info --quiet --json --stdin \
       | jq "''${JQ_COMMON_FLAGS[@]}" 'with_entries(.value |= .narHash)' \
       > "$unpackedStorePathToNarHashJSONPath"
 
-    echo "Acquiring features for store paths in $hashToUnpackedStorePathJSONPath"
-    jq "''${JQ_COMMON_FLAGS[@]}" '.[]' "$hashToUnpackedStorePathJSONPath" \
+    echo "Acquiring features for store paths in ${sha256ToUnpackedStorePath}"
+    jq "''${JQ_COMMON_FLAGS[@]}" '.[]' "${sha256ToUnpackedStorePath}" \
       | cuda-redist-feature-detector --stdin \
       > "$unpackedStorePathToFeatureJSONPath"
 
     echo "Joining the results"
-    jq "''${JQ_COMMON_FLAGS[@]}" --from-file "${./filter.jq}" "$indexOfSha256AndRelativePathJSONPath" \
-      --slurpfile hashToUnpackedStorePath "$hashToUnpackedStorePathJSONPath" \
+    jq "''${JQ_COMMON_FLAGS[@]}" --from-file "${./filter.jq}" "${sha256IndexPath}" \
+      --slurpfile hashToUnpackedStorePath "${sha256ToUnpackedStorePath}" \
       --slurpfile unpackedStorePathToFeature "$unpackedStorePathToFeatureJSONPath" \
       --slurpfile unpackedStorePathToNarHash "$unpackedStorePathToNarHashJSONPath" \
-      > "$indexOfPackageInfoJSONPath"
+      > "${packageIndexPath}"
 
     echo "Cleaning up temporary files"
     rm "$unpackedStorePathToNarHashJSONPath" "$unpackedStorePathToFeatureJSONPath"

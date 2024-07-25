@@ -35,4 +35,26 @@
     };
     linux-x86_64.cudnnVersion = "8.9.7";
   };
+  "10.3.0.26" = {
+    linux-aarch64 = {
+      cudaVersion = "12.6";
+      cudnnVersion = "8.9.6";
+    };
+    linux-sbsa = {
+      cudaVersion = "12.5";
+      cudnnVersion = "8.9.7";
+    };
+    linux-x86_64.cudnnVersion = "8.9.7";
+  };
+  "10.4.0.26" = {
+    linux-aarch64 = {
+      cudaVersion = "12.6";
+      cudnnVersion = "8.9.6";
+    };
+    linux-sbsa = {
+      cudaVersion = "12.6";
+      cudnnVersion = "8.9.7";
+    };
+    linux-x86_64.cudnnVersion = "8.9.7";
+  };
 }

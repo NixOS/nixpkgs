@@ -13,10 +13,9 @@ def main() -> None:
     with open(
         Path(".")
         / "pkgs"
-        / "by-name"
-        / "cu"
-        / "cuda-redist-index"
-        / "modules"
+        / "development"
+        / "cuda-modules"
+        / "redist-index"
         / "data"
         / "indices"
         / "sha256-and-relative-path.json",

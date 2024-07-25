@@ -10,6 +10,7 @@ mkRelativePath() {
   local -r redistArch=${3:?}
 
   local -r tensorrtMajorMinorPatchVersion="$(echo "$tensorrtMajorMinorPatchBuildVersion" | cut -d. -f1-3)"
+  local -r tensorrtMinorVersion="$(echo "$tensorrtMajorMinorPatchVersion" | cut -d. -f2)"
 
   local archiveDir=""
   local archiveExtension=""
@@ -17,20 +18,28 @@ mkRelativePath() {
   local platformName=""
   case "$redistArch" in
   linux-aarch64) archiveDir="tars" && archiveExtension="tar.gz" && osName="l4t" && platformName="aarch64-gnu" ;;
-  linux-sbsa) archiveDir="tars" && archiveExtension="tar.gz" && osName="Ubuntu-22.04" && platformName="aarch64-gnu" ;;
+  linux-sbsa)
+    archiveDir="tars" && archiveExtension="tar.gz" && platformName="aarch64-gnu"
+    # 10.0-10.3 use Ubuntu 22.40, 10.4+ use Ubuntu 24.04
+    case "$tensorrtMinorVersion" in
+    0|1|2|3) osName="Ubuntu-22.04" ;;
+    *) osName="Ubuntu-24.04" ;;
+    esac
+    ;;
   linux-x86_64) archiveDir="tars" && archiveExtension="tar.gz" && osName="Linux" && platformName="x86_64-gnu" ;;
-  windows-x86_64) archiveDir="zip" && archiveExtension="zip" && osName="Windows" && platformName="win10" ;;
+  windows-x86_64)
+    archiveExtension="zip" && platformName="win10" 
+    # Windows info is different for 10.0.*
+    case "$tensorrtMinorVersion" in
+    0) archiveDir="zips" && osName="Windows10" ;;
+    *) archiveDir="zip" && osName="Windows" ;;
+    esac
+    ;;
   *)
     echo "mkRelativePath: Unsupported redistArch: $redistArch" >&2
     exit 1
     ;;
   esac
-
-  # Windows info is different for 10.0.*
-  if [[ $tensorrtMajorMinorPatchBuildVersion =~ 10.0.* && $redistArch == "windows-x86_64" ]]; then
-    archiveDir="zips"
-    osName="Windows10"
-  fi
 
   local -r relativePath="tensorrt/$tensorrtMajorMinorPatchVersion/$archiveDir/TensorRT-${tensorrtMajorMinorPatchBuildVersion}.${osName}.${platformName}.cuda-${cudaMajorMinorVersion}.${archiveExtension}"
   echo "$relativePath"

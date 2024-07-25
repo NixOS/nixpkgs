@@ -24,8 +24,8 @@ let
 in
 {
   config.data.indices = {
-    packageInfo = importJSON ../cuda-redist-find-features/data/indices/package-info.json;
-    sha256AndRelativePath = importJSON ../cuda-redist-find-features/data/indices/sha256-and-relative-path.json;
+    packageInfo = importJSON ../redist-index/data/indices/package-info.json;
+    sha256AndRelativePath = importJSON ../redist-index/data/indices/sha256-and-relative-path.json;
   };
   options.data = mapAttrs (const mkOption) {
     cudatoolkitRunfileReleases = {
