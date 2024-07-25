@@ -32,8 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/src-tauri";
 
-  # modififying $cargoDepsCopy requires the lock to be vendored
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoHash = "sha256-bM+V37PJAob/DA2jy2g69zUY99ZyZBzgO6djadbdiJw=";
 
   postPatch = let
     cinny' =
