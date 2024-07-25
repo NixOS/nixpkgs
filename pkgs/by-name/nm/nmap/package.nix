@@ -1,15 +1,25 @@
-{ lib, stdenv, fetchurl, libpcap, pkg-config, openssl, lua5_4
-, pcre, libssh2
-, withLua ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libpcap,
+  pkg-config,
+  openssl,
+  lua5_4,
+  pcre2,
+  liblinear,
+  libssh2,
+  zlib,
+  withLua ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nmap";
-  version = "7.94";
+  version = "7.95";
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    sha256 = "sha256-1xvhie7EPX4Jm6yFcVCdMWxFd8p5SRgyrD4SF7yPksw=";
+    sha256 = "sha256-4Uq1MOR7Wv2I8ciiusf4nNj+a0eOItJVxbm923ocV3g=";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -21,7 +31,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (if withLua then "--with-liblua=${lua5_4}" else "--without-liblua")
-    "--with-liblinear=included"
     "--without-ndiff"
     "--without-zenmap"
   ];
@@ -37,17 +46,27 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcre libssh2 libpcap openssl ];
+  buildInputs = [
+    pcre2
+    liblinear
+    libssh2
+    libpcap
+    openssl
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
   doCheck = false; # fails 3 tests, probably needs the net
 
-  meta = with lib; {
+  meta = {
     description = "Free and open source utility for network discovery and security auditing";
-    homepage    = "http://www.nmap.org";
-    license     = licenses.gpl2Only;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice fpletz ];
+    homepage = "http://www.nmap.org";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      fpletz
+    ];
   };
 }
