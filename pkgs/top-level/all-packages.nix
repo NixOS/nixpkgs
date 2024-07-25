@@ -2282,8 +2282,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
-  git-codeowners = callPackage ../applications/version-management/git-codeowners { };
-
   git-codereview = callPackage ../applications/version-management/git-codereview { };
 
   git-cola = callPackage ../applications/version-management/git-cola { };
