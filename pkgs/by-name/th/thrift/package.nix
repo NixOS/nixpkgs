@@ -9,6 +9,7 @@
 , cmake
 , pkg-config
 , bison
+, pkgsBuildHost
 , flex
 , glibcLocales
 , nix-update-script
@@ -27,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cwFTcaNHq8/JJcQxWSelwAGOLvZHoMmjGV3HBumgcWo=";
   };
 
+  strictDeps = true;
+
   # Workaround to make the Python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
@@ -36,17 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     flex
     pkg-config
-    python3
-    python3.pkgs.setuptools
+    (python3.pythonOnBuildForHost.withPackages (ps: [
+      ps.setuptools
+      ps.tornado
+      ps.twisted
+    ]))
   ];
 
   buildInputs = [
     boost
-  ] ++ lib.optionals (!static) [
-    (python3.withPackages (ps: [
-      ps.tornado
-      ps.twisted
-    ]))
   ];
 
   propagatedBuildInputs = [
@@ -77,15 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_JAVASCRIPT" false)
     (lib.cmakeBool "BUILD_NODEJS" false)
-
-    # FIXME: Fails to link in static mode with undefined reference to
-    # `boost::unit_test::unit_test_main(bool (*)(), int, char**)'
-    (lib.cmakeBool "BUILD_TESTING" (!static))
     (lib.cmakeBool "WITH_STATIC_LIB" static)
+    (lib.cmakeBool "Boost_USE_STATIC_LIBS" static)
     (lib.cmakeBool "OPENSSL_USE_STATIC_LIBS" static)
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-DTHRIFT_COMPILER=${pkgsBuildHost.thrift}/bin/thrift"
   ];
-
-  doCheck = !static;
 
   nativeCheckInputs = [
     glibcLocales
