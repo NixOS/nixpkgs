@@ -35594,8 +35594,6 @@ with pkgs;
 
   conceal = callPackage ../applications/misc/conceal { };
 
-  confd = callPackage ../tools/system/confd { };
-
   conmon = callPackage ../applications/virtualization/conmon { };
 
   conmon-rs = callPackage ../applications/virtualization/conmon-rs { };
