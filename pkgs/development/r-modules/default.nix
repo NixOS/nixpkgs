@@ -301,6 +301,7 @@ let
     svaNUMT = [ jbedo ];
     svaRetro = [ jbedo ];
     StructuralVariantAnnotation = [ jbedo ];
+    RQuantLib = [ kupac ];
   };
 
   packagesWithRDepends = {

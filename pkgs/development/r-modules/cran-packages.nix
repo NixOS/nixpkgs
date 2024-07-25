@@ -4554,7 +4554,7 @@ in with self; {
   RPyGeo = derive2 { name="RPyGeo"; version="1.0.0"; sha256="1alqgx6blqqwxm76w05g82kc2icx8nvjw7qkdz73gf9ckgza5bb3"; depends=[magrittr purrr raster reticulate rmarkdown sf stringr]; };
   RQEntangle = derive2 { name="RQEntangle"; version="0.1.3"; sha256="178haddk8nnscy2vym3k2a3ca9lf6nl7rpjja8lxqdjninvhvwb2"; depends=[iterators itertools]; };
   RQdeltaCT = derive2 { name="RQdeltaCT"; version="1.3.0"; sha256="1zwajwyiwhl12v1119w9xlyw07a9iigj3yy27nm65ninqjbfrn8j"; depends=[coin corrplot ctrlGene dplyr GGally ggplot2 ggpmisc ggsignif Hmisc magrittr oddsratio pheatmap pROC tidyr tidyselect tidyverse]; };
-  RQuantLib = derive2 { name="RQuantLib"; version="0.4.22"; sha256="0zs8ldaf1h8hr6czlvj457rr0w4z0rjgj290r3krg4a9ilb1iink"; depends=[Rcpp zoo]; };
+  RQuantLib = derive2 { name="RQuantLib"; version="0.4.23"; sha256="114hlq7i8x0sbw1zv249vic9v2nwvcb32n72gknxy9jcpay631hx"; depends=[Rcpp zoo]; };
   RRBoost = derive2 { name="RRBoost"; version="0.1"; sha256="0zp3csrpi0awk88m6sq5sf5v7j32q5sd4mwv61x6bblg991k404k"; depends=[RobStatTM rpart]; };
   RRF = derive2 { name="RRF"; version="1.9.4"; sha256="1kdyw0v1m3ajf88gzs70p6l6pic4g46ccwqxi9iznimayby6ygjb"; depends=[]; };
   RRI = derive2 { name="RRI"; version="1.1"; sha256="0msdc5j5vx4snl8r3q5nn0mw2i80jds5pjykhmigcrx6jzg6h6i7"; depends=[Rcpp RcppArmadillo]; };
