@@ -8,6 +8,7 @@
   libjpeg,
   libpng,
   libtiff,
+  libwebp,
   pkg-config,
   stdenv,
 }:
@@ -29,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
       includes = [ "IMG_xcf.c" ];
       hash = "sha256-Z0nyEtE1LNGsGsN9SFG8ZyPDdunmvg81tUnEkrJQk5w=";
     })
+    # Fixes incompatible function pointer type errors with clang 16
+    ./clang16-webp-errors.patch
   ];
 
   configureFlags = [
@@ -37,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature false "jpg-shared")
     (lib.enableFeature false "png-shared")
     (lib.enableFeature false "tif-shared")
+    (lib.enableFeature false "webp-shared")
     (lib.enableFeature (!stdenv.isDarwin) "sdltest")
   ];
 
@@ -52,9 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     libtiff
+    libwebp
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
 
@@ -62,8 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.libsdl.org/projects/SDL_image/";
     description = "SDL image library";
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     inherit (SDL.meta) platforms;
   };
 })
