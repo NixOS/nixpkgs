@@ -8,11 +8,15 @@
 }:
 
 let
+  pname = "mbrola-voices";
+  version = "0-unstable-2020-03-30";
+
   src = fetchFromGitHub {
     owner = "numediart";
     repo = "MBROLA-voices";
     rev = "fe05a0ccef6a941207fd6aaad0b31294a1f93a51";
     hash = "sha256-QBUggnde5iNeCESzxE0btVVTDOxc3Kdk483mdGUXHvA=";
+    name = "${pname}-${version}";
   };
 
   meta = {
@@ -26,10 +30,7 @@ if (languages == [ ]) then
   src // { inherit meta; }
 else
   stdenv.mkDerivation {
-    pname = "mbrola-voices";
-    version = "0-unstable-2020-03-30";
-
-    inherit src;
+    inherit pname version src;
 
     postPatch = ''
       shopt -s extglob
