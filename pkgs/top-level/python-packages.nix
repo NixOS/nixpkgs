@@ -13880,8 +13880,6 @@ self: super: with self; {
 
   samarium = callPackage ../development/python-modules/samarium { };
 
-  sampledata = callPackage ../development/python-modules/sampledata { };
-
   samplerate = callPackage ../development/python-modules/samplerate {
     inherit (pkgs) libsamplerate;
   };
