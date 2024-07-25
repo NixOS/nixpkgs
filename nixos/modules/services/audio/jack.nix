@@ -260,7 +260,7 @@ in {
       systemd.services.jack-session = {
         description = "JACK session";
         script = ''
-          jack_wait -w
+          ${pkgs.jack-example-tools}/bin/jack_wait -w
           ${cfg.jackd.session}
           ${lib.optionalString cfg.loopback.enable cfg.loopback.session}
         '';
