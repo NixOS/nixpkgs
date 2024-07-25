@@ -13378,8 +13378,6 @@ with pkgs;
 
   tmux = callPackage ../tools/misc/tmux { };
 
-  tmux-cssh = callPackage ../tools/misc/tmux-cssh { };
-
   tmuxp = callPackage ../tools/misc/tmuxp { };
 
   tmuxinator = callPackage ../tools/misc/tmuxinator { };
