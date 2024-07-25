@@ -4429,7 +4429,6 @@ broken-packages:
   - pdfinfo # failure in job https://hydra.nixos.org/build/233214432 at 2023-09-02
   - pdf-slave-template # failure in job https://hydra.nixos.org/build/233217870 at 2023-09-02
   - pdf-toolbox-viewer # failure in job https://hydra.nixos.org/build/233196461 at 2023-09-02
-  - pdftotext # failure in job https://hydra.nixos.org/build/233242086 at 2023-09-02
   - pdynload # failure in job https://hydra.nixos.org/build/233226504 at 2023-09-02
   - PeanoWitnesses # failure in job https://hydra.nixos.org/build/233207451 at 2023-09-02
   - pecoff # failure in job https://hydra.nixos.org/build/233231268 at 2023-09-02

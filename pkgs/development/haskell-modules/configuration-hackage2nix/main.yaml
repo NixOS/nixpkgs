@@ -662,6 +662,7 @@ package-maintainers:
     - typerep-map
     - minio-hs
     - smtp-mail
+    - pdftotext
 
 unsupported-platforms:
   Allure:                                       [ platforms.darwin ]

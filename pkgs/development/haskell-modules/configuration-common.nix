@@ -3109,4 +3109,17 @@ self: super: {
     sha256 = "sha256-1QEaoO8BTdvfFzMrybrf0v7cK0NbYrWOj4Mqexr+ylc=";
   }) super.avro;
 
+  pdftotext = overrideCabal (drv: {
+      postPatch = ''
+        # Fixes https://todo.sr.ht/~geyaeb/haskell-pdftotext/6
+        substituteInPlace pdftotext.cabal --replace-quiet c-sources cxx-sources
+
+        # Fix cabal ignoring cxx because the cabal format version is too old
+        substituteInPlace pdftotext.cabal --replace-quiet ">=1.10" 2.2
+
+        # Fix wrong license name that breaks recent cabal version
+        substituteInPlace pdftotext.cabal --replace-quiet BSD3 BSD-3-Clause
+      '' + (drv.postPatch or "");
+    }) (doJailbreak (addExtraLibrary pkgs.pkg-config (addExtraLibrary pkgs.poppler super.pdftotext)));
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
