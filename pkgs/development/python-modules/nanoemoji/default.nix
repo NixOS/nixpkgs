@@ -1,19 +1,38 @@
-{ lib
-, python3
-, fetchFromGitHub
-, resvg
-, pngquant
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
+  resvg,
+  pngquant,
+  absl-py,
+  fonttools,
+  lxml,
+  ninja,
+  picosvg,
+  pillow,
+  regex,
+  toml,
+  tomlkit,
+  ufo2ft,
+  ufolib2,
+  zopfli,
 }:
-python3.pkgs.buildPythonApplication rec {
+
+buildPythonPackage rec {
   pname = "nanoemoji";
   version = "0.15.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
-    repo = pname;
+    repo = "nanoemoji";
     rev = "v${version}";
     hash = "sha256-P/lT0PnjTdYzyttICzszu4OL5kj+X8GHZ8doL3tpXQM=";
   };
+
   patches = [
     # this is necessary because the tests clear PATH/PYTHONPATH otherwise
     ./test-pythonpath.patch
@@ -21,9 +40,12 @@ python3.pkgs.buildPythonApplication rec {
     ./fix-test.patch
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = [
+    setuptools
     setuptools-scm
+  ];
 
+  nativeBuildInputs = [
     pngquant
     resvg
   ];
@@ -31,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
   # these two packages are just prebuilt wheels containing the respective binaries
   pythonRemoveDeps = [ "pngquant-cli" "resvg-cli" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = [
     absl-py
     fonttools
     lxml
@@ -46,9 +68,8 @@ python3.pkgs.buildPythonApplication rec {
     zopfli
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = [
     pytestCheckHook
-
     ninja
     picosvg
   ];
