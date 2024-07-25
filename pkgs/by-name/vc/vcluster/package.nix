@@ -1,14 +1,23 @@
-{ lib, go, buildGoModule, fetchFromGitHub, installShellFiles, testers, vcluster }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  go,
+  installShellFiles,
+  lib,
+  nix-update-script,
+  testers,
+  vcluster,
+}:
 
 buildGoModule rec {
   pname = "vcluster";
-  version = "0.19.6";
+  version = "0.19.7";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = "vcluster";
     rev = "v${version}";
-    hash = "sha256-yW+GaMEfgkeBEGHG7heo8gZcFQuAXmn3rlBPBrlbyvM=";
+    hash = "sha256-sO/kpbzoAy4ohmLZ3Q7+HzoC0NoK2y0qkJ6Ib8TlEns=";
   };
 
   vendorHash = null;
@@ -16,7 +25,8 @@ buildGoModule rec {
   subPackages = [ "cmd/vclusterctl" ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=${version}"
     "-X main.goVersion=${lib.getVersion go}"
   ];
@@ -45,6 +55,8 @@ buildGoModule rec {
     command = "vcluster --version";
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     changelog = "https://github.com/loft-sh/vcluster/releases/tag/v${version}";
     description = "Create fully functional virtual Kubernetes clusters";
@@ -52,6 +64,11 @@ buildGoModule rec {
     homepage = "https://www.vcluster.com/";
     license = lib.licenses.asl20;
     mainProgram = "vcluster";
-    maintainers = with lib.maintainers; [ berryp peterromfeldhk qjoly superherointj ];
+    maintainers = with lib.maintainers; [
+      berryp
+      peterromfeldhk
+      qjoly
+      superherointj
+    ];
   };
 }
