@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, openmp }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  llvmPackages,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bsc";
@@ -13,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  buildInputs = lib.optional stdenv.isDarwin openmp;
+  buildInputs = lib.optional stdenv.isDarwin llvmPackages.openmp;
 
   makeFlags = [
     "CC=$(CXX)"
