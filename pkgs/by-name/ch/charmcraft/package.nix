@@ -30,7 +30,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "2.7.0";
+  version = "3.1.1";
 
   pyproject = true;
 
@@ -38,24 +38,22 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "charmcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-yMcGXi7OxEtfOv3zLEUlnZrR90TkFc0y9RB9jS34ZWs=";
+    hash = "sha256-oxNbAIf7ltdDYkGJj29zvNDNXT6vt1jWaIqHJoMr7gU=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'version=determine_version()' 'version="${version}"'
-
-    # TODO remove setuptools from dependencies once this is removed
-    substituteInPlace charmcraft/env.py \
-      --replace-fail "distutils.util" "setuptools.dist"
+    substituteInPlace charmcraft/__init__.py --replace-fail "dev" "${version}"
   '';
 
   dependencies = with python.pkgs; [
+    craft-application
     craft-cli
     craft-parts
+    craft-platforms
     craft-providers
     craft-store
     distro
+    docker
     humanize
     jinja2
     jsonschema
@@ -65,19 +63,22 @@ python.pkgs.buildPythonApplication rec {
     requests
     requests-toolbelt
     requests-unixsocket
-    setuptools # see substituteInPlace above
     snap-helpers
     tabulate
     urllib3
   ];
 
-  build-system = with python.pkgs; [ setuptools ];
+  build-system = with python.pkgs; [
+    setuptools
+    setuptools-scm
+  ];
 
   pythonRelaxDeps = [ "urllib3" ];
 
   nativeCheckInputs =
     with python.pkgs;
     [
+      hypothesis
       pyfakefs
       pytest-check
       pytest-mock
