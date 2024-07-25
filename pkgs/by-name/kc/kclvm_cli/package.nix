@@ -5,13 +5,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "kclvm_cli";
-  version = "0.8.7";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "kcl";
     rev = "v${version}";
-    hash = "sha256-ieGpuNkzT6AODZYUcEanb7Jpb+PXclnQ9KkdmlehK0o=";
+    hash = "sha256-nk5oJRTBRj0LE2URJqno8AoZ+/342C2tEt8d6k2MAc8=";
   };
 
   sourceRoot = "source/cli";
