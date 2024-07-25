@@ -1015,8 +1015,6 @@ with pkgs;
 
   packcc = callPackage ../development/tools/packcc { };
 
-  packer = callPackage ../development/tools/packer { };
-
   packr = callPackage ../development/libraries/packr { };
 
   pacup = callPackage ../tools/package-management/pacup { };
