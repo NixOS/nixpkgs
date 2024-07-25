@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libtracefs";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot/libtracefs-libtracefs-${version}.tar.gz";
-    hash = "sha256-64eXFFdnZHHf4C3vbADtPuIMsfJ85VZ6t8A1gIc1CW0=";
+    hash = "sha256-2UiEgY4mQRLpWah+2rVfPiiUYBSSzRAy5gOv4YELQFQ=";
   };
 
   postPatch = ''
