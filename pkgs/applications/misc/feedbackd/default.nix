@@ -26,8 +26,8 @@ let
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "feedbackd-device-themes";
-    rev = "v0.1.0";
-    sha256 = "sha256-YK9fJ3awmhf1FAhdz95T/POivSO93jsNApm+u4OOZ80=";
+    rev = "v0.4.0";
+    hash = "sha256-kY/+DyRxKEUzq7ctl6Va14AKUCpWU7NRQhJOwhtkJp8=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
