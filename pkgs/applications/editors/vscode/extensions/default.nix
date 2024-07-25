@@ -1782,8 +1782,8 @@ let
         mktplcRef = {
           name = "dependi";
           publisher = "fill-labs";
-          version = "0.7.4";
-          hash = "sha256-6nU0bVAe/vwq43ECLwypIkMAG/q5+P2bE1RPAjeTCX4=";
+          version = "0.7.5";
+          hash = "sha256-troydfNj88c8A24ZtaCToE231VWzcCiQVLTSdVPM/XE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/fill-labs.dependi/changelog";
