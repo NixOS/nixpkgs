@@ -5,17 +5,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "rabbit";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natarajan-chidambaram";
     repo = "RABBIT";
     rev = "refs/tags/${version}";
-    hash = "sha256-cAWLVB7KpLsfXcxAbSXkE3O6N0V1mw3z9UdMeH0IkpI=";
+    hash = "sha256-l5k5wPEd6/x7xHc+GlnoyTry7GRTnzNiTLxrLAZFVzQ=";
   };
 
-  pythonRelaxDeps = true;
+  pythonRelaxDeps = [
+    "numpy"
+    "scipy"
+  ];
 
   build-system = [
     python3.pkgs.setuptools
@@ -25,7 +28,6 @@ python3.pkgs.buildPythonApplication rec {
   dependencies = with python3.pkgs; [
     numpy
     pandas
-    pip
     python-dateutil
     requests
     scikit-learn
