@@ -46,7 +46,10 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/becheran/mlc";
     changelog = "https://github.com/becheran/mlc/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ uncenter ];
+    maintainers = with lib.maintainers; [
+      uncenter
+      anas
+    ];
     mainProgram = "mlc";
   };
 }
