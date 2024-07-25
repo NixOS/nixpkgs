@@ -18,6 +18,7 @@ makeSetupHook {
     zig_default_flags = [
       "-Dcpu=baseline"
       "--release=safe"
+      "--color off" # Turn off progress output
     ];
   };
 
