@@ -230,6 +230,7 @@
   ./programs/light.nix
   ./programs/localsend.nix
   ./programs/mdevctl.nix
+  ./programs/mbrola-voices.nix
   ./programs/mepo.nix
   ./programs/mininet.nix
   ./programs/minipro.nix

@@ -32196,8 +32196,6 @@ with pkgs;
 
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
 
-  mbrola = callPackage ../applications/audio/mbrola { };
-
   mcpp = callPackage ../development/compilers/mcpp { };
 
   mda_lv2 = callPackage ../applications/audio/mda-lv2 { };

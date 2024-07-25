@@ -41,10 +41,17 @@ stdenv.mkDerivation rec {
       hash = "sha256-KfzqnRyQfz6nuMKnsHoUzb9rn9h/Pg54mupW1Cr+Zx0=";
     })
   ] ++ lib.optionals mbrolaSupport [
-    # Hardcode correct mbrola paths.
+    # Hardcode correct mbrola path.
     (substituteAll {
       src = ./mbrola.patch;
       inherit mbrola;
+    })
+
+    # Pick up mbrola voices from XDG_DATA_DIRS to reduce closure size.
+    # https://github.com/espeak-ng/espeak-ng/pull/1948
+    (fetchpatch {
+      url = "https://github.com/espeak-ng/espeak-ng/commit/7d31736c04e1bdd86f59e158a15be5e0f4a5b0cd.patch";
+      hash = "sha256-phVQeEjhm8gCZta3TARPleDtTKPGqXGUMaTQsjc9zlw=";
     })
   ];
 

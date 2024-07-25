@@ -329,6 +329,7 @@ in
       services.gnome.rygel.enable = mkDefault true;
       services.gvfs.enable = true;
       services.system-config-printer.enable = (lib.mkIf config.services.printing.enable (mkDefault true));
+      programs.mbrola-voices.enable = notExcluded pkgs.orca;
 
       systemd.packages = with pkgs.gnome; [
         gnome-session
