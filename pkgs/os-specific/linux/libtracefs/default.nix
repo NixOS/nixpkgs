@@ -7,7 +7,6 @@
 , xmlto
 , docbook_xml_dtd_45
 , docbook_xsl
-, coreutils
 , valgrind
 , sourceHighlight
 , meson
