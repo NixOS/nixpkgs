@@ -10030,12 +10030,6 @@
     githubId = 5352661;
     name = "James Cleverley-Prance";
   };
-  jqqqqqqqqqq = {
-    email = "jqqqqqqqqqq@gmail.com";
-    github = "jqqqqqqqqqq";
-    githubId = 12872927;
-    name = "Curtis Jiang";
-  };
   jqueiroz = {
     email = "nixos@johnjq.com";
     github = "jqueiroz";
@@ -17622,6 +17616,12 @@
     github = "rsniezek";
     githubId = 19433256;
     name = "Radoslaw Sniezek";
+  };
+  rsrohitsingh682 = {
+    email = "rsrohitsingh682@gmail.com";
+    github = "rsrohitsingh682";
+    githubId = 45477585;
+    name = "Rohit Singh";
   };
   rster2002 = {
     name = "Bjørn";
