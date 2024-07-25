@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
+  pytestCheckHook,
   mock,
   six,
   isPyPy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +22,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "rednose = 1" ""
+      --replace "rednose = 1" "" \
+      --replace-fail "--cov=sure" ""
   '';
 
   propagatedBuildInputs = [
@@ -31,9 +31,11 @@ buildPythonPackage rec {
     six
   ];
 
-  doCheck = pythonOlder "3.12"; # nose requires imp module
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [ nose ];
+  disabledTestPaths = [
+    "tests/test_old_api.py" # require nose
+  ];
 
   pythonImportsCheck = [ "sure" ];
 
