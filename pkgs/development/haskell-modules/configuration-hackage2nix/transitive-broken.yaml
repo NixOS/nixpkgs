@@ -977,10 +977,14 @@ dont-distribute-packages:
  - copilot-cbmc
  - copilot-frp-sketch
  - copilot-language
+ - copilot-language_3_20
  - copilot-libraries
+ - copilot-libraries_3_20
  - copilot-sbv
  - copilot-theorem
+ - copilot-theorem_3_20
  - copilot-verifier
+ - copilot_3_20
  - corenlp-parser
  - coroutine-enumerator
  - coroutine-iteratee
@@ -1967,6 +1971,7 @@ dont-distribute-packages:
  - hasloGUI
  - hasmtlib
  - hasql-cursor-query
+ - hasql-interpolate_1_0_0_0
  - hasql-postgres
  - hasql-postgres-options
  - hasql-queue
@@ -2544,6 +2549,7 @@ dont-distribute-packages:
  - libraft
  - librarian
  - librato
+ - libriscv
  - libxml-enumerator
  - lifted-base-tf
  - lightning-haskell
@@ -2966,6 +2972,8 @@ dont-distribute-packages:
  - opentracing-zipkin-common
  - opentracing-zipkin-v1
  - opentracing-zipkin-v2
+ - opt-env-conf
+ - opt-env-conf-test
  - optima-for-hasql
  - optimal-blocks
  - optimusprime
@@ -3197,7 +3205,6 @@ dont-distribute-packages:
  - protocol-buffers-descriptor
  - protocol-buffers-descriptor-fork
  - proton
- - psc-ide
  - psql
  - publicsuffixlist
  - puffytools
@@ -3208,7 +3215,6 @@ dont-distribute-packages:
  - pure-cdb
  - pure-priority-queue-tests
  - purescript-iso
- - purescript-tsd-gen
  - pursuit-client
  - push-notify
  - push-notify-ccs
@@ -3997,7 +4003,6 @@ dont-distribute-packages:
  - typed-streams
  - typedflow
  - typelevel
- - typesafe-precure
  - typescript-docs
  - typson-beam
  - typson-esqueleto
@@ -4312,7 +4317,6 @@ dont-distribute-packages:
  - yu-launch
  - yuuko
  - zasni-gerna
- - zephyr
  - zephyr-copilot
  - zerobin
  - zeromq3-conduit
