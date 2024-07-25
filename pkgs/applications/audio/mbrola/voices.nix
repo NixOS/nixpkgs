@@ -9,7 +9,7 @@
 
 let
   pname = "mbrola-voices";
-  version = "0-unstable-2020-03-30";
+  version = "3.3"; # FIXME: revert this line on staging*
 
   src = fetchFromGitHub {
     owner = "numediart";
