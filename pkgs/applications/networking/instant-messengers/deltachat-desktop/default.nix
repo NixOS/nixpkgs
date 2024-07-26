@@ -52,6 +52,11 @@ buildNpmPackage rec {
       $(jq -r '.packages."node_modules/@deltachat/jsonrpc-client".version' package-lock.json) \
       = ${deltachat-rpc-server.version} \
       || (echo "error: deltachat-rpc-server version does not match jsonrpc-client" && exit 1)
+
+    test \
+      $(jq -r '.packages."node_modules/electron".version' package-lock.json | grep -E -o "^[0-9]+") \
+      = ${lib.versions.major electron.version} \
+      || (echo 'error: electron version doesn not match package-lock.json' && exit 1)
   '';
 
   nativeBuildInputs = [
