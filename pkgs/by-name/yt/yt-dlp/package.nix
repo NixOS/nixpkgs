@@ -1,18 +1,9 @@
 { lib
-, buildPythonPackage
+, python3Packages
 , fetchPypi
-, brotli
-, hatchling
-, certifi
-, ffmpeg
+, ffmpeg-headless
 , rtmpdump
 , atomicparsley
-, pycryptodomex
-, websockets
-, mutagen
-, requests
-, secretstorage
-, urllib3
 , atomicparsleySupport ? true
 , ffmpegSupport ? true
 , rtmpSupport ? true
@@ -20,7 +11,7 @@
 , update-python-libraries
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "yt-dlp";
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
@@ -34,13 +25,14 @@ buildPythonPackage rec {
     hash = "sha256-dYeqJeI2z3sUvbk3i7//9RIC2QGwQgK+DPYsu1bTtSw=";
   };
 
-  build-system = [
+  build-system = with python3Packages; [
     hatchling
   ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     brotli
     certifi
+    curl-cffi
     mutagen
     pycryptodomex
     requests
@@ -57,7 +49,7 @@ buildPythonPackage rec {
     let
       packagesToBinPath = []
         ++ lib.optional atomicparsleySupport atomicparsley
-        ++ lib.optional ffmpegSupport ffmpeg
+        ++ lib.optional ffmpegSupport ffmpeg-headless
         ++ lib.optional rtmpSupport rtmpdump;
     in lib.optionals (packagesToBinPath != [])
     [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
