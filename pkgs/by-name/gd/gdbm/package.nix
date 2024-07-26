@@ -15,15 +15,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-dLEIHSH/8TrkvXwW5dblBKTCb3zeHcoNljpIQXS7ys0=";
   };
 
-  nativeBuildInputs = [
-    updateAutotoolsGnuConfigScriptsHook
-  ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
-  configureFlags = [
-    (lib.enableFeature true "libgdbm-compat")
-  ];
+  configureFlags = [ (lib.enableFeature true "libgdbm-compat") ];
 
-  outputs = [ "out" "dev" "info" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "info"
+    "lib"
+    "man"
+  ];
 
   doCheck = true;
 
