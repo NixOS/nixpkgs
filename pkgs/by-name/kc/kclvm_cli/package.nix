@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ kclvm rustc ] ++ (
     lib.optionals stdenv.isDarwin [
-      darwin.cctools
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.SystemConfiguration
