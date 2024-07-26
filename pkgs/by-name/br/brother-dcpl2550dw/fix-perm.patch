@@ -1,0 +1,10 @@
+--- a/opt/brother/Printers/DCPL2550DW/cupswrapper/lpdwrapper	2017-07-17 18:34:39.000000000 -0700
++++ b/opt/brother/Printers/DCPL2550DW/cupswrapper/lpdwrapper	2024-03-22 09:25:37.967798025 -0700
+@@ -379,6 +379,7 @@
+ 
+ 
+ `cp  $basedir/inf/br${PRINTER}rc  $TEMPRC`;
++`chmod 666  $TEMPRC`;
+ $ENV{BRPRINTERRCFILE} = $TEMPRC;
+ 
+ logprint( 0 , "TEMPRC    = $TEMPRC\n");
