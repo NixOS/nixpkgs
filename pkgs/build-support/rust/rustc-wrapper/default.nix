@@ -27,6 +27,9 @@ runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}" {
     defaultArgs = lib.optionalString
       (with rustc-unwrapped.stdenv.targetPlatform; isMusl && !isStatic)
       "-C target-feature=-crt-static";
+
+    ldflags = lib.optionalString (rustc-unwrapped.stdenv.targetPlatform.useLLVM or false)
+      "-rpath ${rustc-unwrapped.llvmPackages.libunwind}/lib";
   };
 
   passthru = {
@@ -43,9 +46,11 @@ runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}" {
   ln -s ${rustc-unwrapped}/bin/* $out/bin
   rm $out/bin/{rustc,rustdoc}
   prog=${rustc-unwrapped}/bin/rustc extraFlagsVar=NIX_RUSTFLAGS \
-      substituteAll ${./rustc-wrapper.sh} $out/bin/rustc
+      substituteAll ${./rustc-wrapper.sh} $out/bin/rustc \
+        --subst-var ldflags
   prog=${rustc-unwrapped}/bin/rustdoc extraFlagsVar=NIX_RUSTDOCFLAGS \
-      substituteAll ${./rustc-wrapper.sh} $out/bin/rustdoc
+      substituteAll ${./rustc-wrapper.sh} $out/bin/rustdoc \
+        --subst-var ldflags
   chmod +x $out/bin/{rustc,rustdoc}
   ${lib.concatMapStrings (output: "ln -s ${rustc-unwrapped.${output}} \$${output}\n")
     (lib.remove "out" rustc-unwrapped.outputs)}
