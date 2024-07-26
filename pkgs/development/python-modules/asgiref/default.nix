@@ -10,17 +10,17 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.7.2";
+  version = "3.8.1";
   pname = "asgiref";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "asgiref";
     rev = "refs/tags/${version}";
-    hash = "sha256-VW1PBh6+nLMD7qxmL83ymuxCPYKVY3qGKsB7ZiMqMu8=";
+    hash = "sha256-xepMbxglBpHL7mnJYlnvNUgixrFwf/Tc6b1zL4Wy+to=";
   };
 
   propagatedBuildInputs = [ typing-extensions ];
