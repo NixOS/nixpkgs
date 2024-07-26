@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "1oom";
-  version = "1.8.1";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "1oom-fork";
     repo = "1oom";
-    rev = "refs/tags/f${version}";
-    hash = "sha256-sBVcPR4+MDjyOLgrB4VcVy0cDyyG5MVY9vNhWwqAhBA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-M8UpdIOOMUMNY0e+Cxx/uoLBWKc2x7cv2d4VyLwcMng=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
