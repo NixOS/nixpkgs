@@ -38,7 +38,7 @@ let
     server.default_listen_address=${cfg.defaultListenAddress}
     server.databases.default_to_read_only=${boolToString cfg.readOnly}
     ${optionalString (cfg.workerCount > 0) ''
-      dbms.threads.worker_count=${toString cfg.workerCount}
+      server.threads.worker_count=${toString cfg.workerCount}
     ''}
 
     # Directories (readonly)
@@ -76,18 +76,18 @@ let
     ${concatStringsSep "\n" sslPolicies}
 
     # Default retention policy from neo4j.conf
-    db.tx_log.rotation.retention_policy=1 days
+    #db.tx_log.rotation.retention_policy=1 days
 
     # Default JVM parameters from neo4j.conf
-    server.jvm.additional=-XX:+UseG1GC
-    server.jvm.additional=-XX:-OmitStackTraceInFastThrow
-    server.jvm.additional=-XX:+AlwaysPreTouch
-    server.jvm.additional=-XX:+UnlockExperimentalVMOptions
-    server.jvm.additional=-XX:+TrustFinalNonStaticFields
-    server.jvm.additional=-XX:+DisableExplicitGC
-    server.jvm.additional=-Djdk.tls.ephemeralDHKeySize=2048
-    server.jvm.additional=-Djdk.tls.rejectClientInitiatedRenegotiation=true
-    server.jvm.additional=-Dunsupported.dbms.udc.source=tarball
+    #server.jvm.additional=-XX:+UseG1GC
+    #server.jvm.additional=-XX:-OmitStackTraceInFastThrow
+    #server.jvm.additional=-XX:+AlwaysPreTouch
+    #server.jvm.additional=-XX:+UnlockExperimentalVMOptions
+    #server.jvm.additional=-XX:+TrustFinalNonStaticFields
+    #server.jvm.additional=-XX:+DisableExplicitGC
+    #server.jvm.additional=-Djdk.tls.ephemeralDHKeySize=2048
+    #server.jvm.additional=-Djdk.tls.rejectClientInitiatedRenegotiation=true
+    #server.jvm.additional=-Dunsupported.dbms.udc.source=tarball
 
     #server.memory.off_heap.transaction_max_size=12000m
     #server.memory.heap.max_size=12000m
