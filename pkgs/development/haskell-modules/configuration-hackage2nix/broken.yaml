@@ -2399,7 +2399,6 @@ broken-packages:
   - hasktorch-ffi-th # failure in job https://hydra.nixos.org/build/233252974 at 2023-09-02
   - hasktorch-signatures-partial # failure in job https://hydra.nixos.org/build/233197869 at 2023-09-02
   - hasktorch-signatures-support # failure in job https://hydra.nixos.org/build/233212137 at 2023-09-02
-  - haskus-utils-variant # failure in job https://hydra.nixos.org/build/233218226 at 2023-09-02
   - haskyapi # failure in job https://hydra.nixos.org/build/233247040 at 2023-09-02
   - hasmin # failure in job https://hydra.nixos.org/build/233256557 at 2023-09-02
   - haspara # failure in job https://hydra.nixos.org/build/233208502 at 2023-09-02
