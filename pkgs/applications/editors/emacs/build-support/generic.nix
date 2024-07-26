@@ -62,8 +62,6 @@ stdenv.mkDerivation (finalAttrs: ({
 
   inherit setupHook;
 
-  doCheck = false;
-
   meta = {
     broken = false;
     platforms = emacs.meta.platforms;
