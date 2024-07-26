@@ -17,7 +17,7 @@
 # This separates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
+{ lib, fetchurl, fetchpatch2, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
 , libiconv, postgresql, nodejs, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, pcre2, gecode_3, curl
@@ -126,7 +126,16 @@ in
   };
 
   curses = attrs: {
+    dontBuild = false;
     buildInputs = [ ncurses ];
+    patches = lib.optionals (lib.versionOlder attrs.version "1.4.5") [
+      # Fixes incompatible function pointer type error with clang 16. Fixed in 1.4.5 and newer.
+      # Upstream issue: https://github.com/ruby/curses/issues/85
+      (fetchpatch2 {
+        url = "https://github.com/ruby/curses/commit/13e00d07c3aaed83d5f138cf268cc33c9f025d0e.patch?full_index=1";
+        hash = "sha256-ZJ2egqj3Uwmi4KrF79dtwczpwUqFCp52/xQYUymYDmc=";
+      })
+    ];
   };
 
   dep-selector-libgecode = attrs: {
