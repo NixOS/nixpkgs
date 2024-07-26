@@ -17414,6 +17414,12 @@
     githubId = 1080963;
     name = "Roberto";
   };
+  robertrichter = {
+    email = "robert.richter@rrcomtech.com";
+    github = "rrcomtech";
+    githubId = 50635122;
+    name = "Robert Richter";
+  };
   robgssp = {
     email = "robgssp@gmail.com";
     github = "robgssp";
