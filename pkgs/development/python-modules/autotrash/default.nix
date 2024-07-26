@@ -23,11 +23,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "autotrash" ];
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to automatically purge old trashed files";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://bneijt.nl/pr/autotrash";
-    maintainers = with maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "autotrash";
   };
 }

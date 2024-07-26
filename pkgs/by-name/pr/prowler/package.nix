@@ -6,21 +6,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "3.15.0";
+  version = "3.16.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     rev = "refs/tags/${version}";
-    hash = "sha256-7aWWaGdHTveFwXsFNj4+tjX5g83/nD77jLAOrDOw8JE=";
+    hash = "sha256-cBqPD5lOhaMXh4OKo7+mERU3YjRU1NiRzSbnKFR6+1I=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   dependencies = with python3.pkgs; [
     alive-progress
@@ -53,10 +51,12 @@ python3.pkgs.buildPythonApplication rec {
     msgraph-sdk
     msrestazure
     pydantic_1
+    pytz
     schema
     shodan
     slack-sdk
     tabulate
+    tzlocal
   ];
 
   pythonImportsCheck = [ "prowler" ];

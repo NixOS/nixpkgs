@@ -236,7 +236,7 @@ File sets cannot add single files to the store, they can only import files under
 Arguments:
 - (+) There's no point in using this library for a single file, since you can't do anything other than add it to the store or not.
   And it would be unclear how the library should behave if the one file wouldn't be added to the store:
-  `toSource { root = ./file.nix; fileset = <empty>; }` has no reasonable result because returing an empty store path wouldn't match the file type, and there's no way to have an empty file store path, whatever that would mean.
+  `toSource { root = ./file.nix; fileset = <empty>; }` has no reasonable result because returning an empty store path wouldn't match the file type, and there's no way to have an empty file store path, whatever that would mean.
 
 ### `fileFilter` takes a path
 

@@ -13,13 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-/YnU7vLz37Y9gggGx+vKWvtxBH0fjBwXGc+UWyOG2OE=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cgag/loc";
     description = "Count lines of code quickly";
     mainProgram = "loc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
 

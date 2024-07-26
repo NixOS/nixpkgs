@@ -47,11 +47,11 @@ buildGoModule rec {
     command = "HOME=$(mktemp -d) wakatime-cli --version";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wakatime.com/";
     description = "WakaTime command line interface";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sigmanificient ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "wakatime-cli";
   };
 }
