@@ -1,7 +1,9 @@
-{ pkgs ? import <nixpkgs> { }, stdenv ? pkgs.stdenv, qtbase ? pkgs.qt6.qtbase
-, full ? pkgs.qt6.full, cmake ? pkgs.cmake
-, wrapQtAppsHook ? pkgs.qt6.wrapQtAppsHook
-, fetchFromGitHub ? pkgs.fetchFromGitHub }:
+# { pkgs ? import <nixpkgs> { }, stdenv ? pkgs.stdenv, qtbase ? pkgs.qt6.qtbase
+# , full ? pkgs.qt6.full, cmake ? pkgs.cmake
+# , wrapQtAppsHook ? pkgs.qt6.wrapQtAppsHook
+# , fetchFromGitHub ? pkgs.fetchFromGitHub }:
+
+{ stdenv, fetchFromGitHub, cmake, qt6 }:
 
 stdenv.mkDerivation {
   pname = "shellstorm-qt";
@@ -15,14 +17,14 @@ stdenv.mkDerivation {
     sha256 = "sha256-KbdqGVqOz8CLPBOGiC5qsOpLW4Rzoalnsl0l55afJ7s";
   };
 
-  buildInputs = [ qtbase full ];
+  buildInputs = [ qt6.qtbase qt6.full ];
 
   configurePhase = ''
     cd src
     cmake .
   '';
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake qt6.wrapQtAppsHook ];
 
   buildPhase = ''
     cmake --build . --config Release
