@@ -12,6 +12,7 @@
   pexpect,
   pythonAtLeast,
   pytestCheckHook,
+  setuptools,
   substituteAll,
   tree,
   xclip,
@@ -22,11 +23,11 @@
 buildPythonPackage rec {
   pname = "pypass";
   version = "0.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nm4mj7pd7gz4ghic6b3wrnd1b59hd1f0axavdabfl79wy511l7r";
+    hash = "sha256-+dAQiufpULdU26or4EKDqazQbOZjGRbhI/+ddo+spNo=";
   };
 
   # Set absolute nix store paths to the executables that pypass uses
@@ -46,9 +47,11 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt --replace "enum34" ""
   '';
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [ pbr ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     colorama
     pexpect
@@ -70,13 +73,13 @@ buildPythonPackage rec {
   # as the test environment is non-graphical.
   disabledTests = [ "test_show_clip" ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.isDarwin;
     description = "Password manager pass in Python";
     mainProgram = "pypass";
     homepage = "https://github.com/aviau/python-pass";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }
