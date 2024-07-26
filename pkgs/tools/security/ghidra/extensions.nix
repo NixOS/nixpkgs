@@ -7,6 +7,8 @@ lib.makeScope newScope (self: {
 
   gnudisassembler = self.callPackage ./extensions/gnudisassembler { inherit ghidra; };
 
+  lightkeeper = self.callPackage ./extensions/lightkeeper { };
+
   machinelearning = self.callPackage ./extensions/machinelearning { inherit ghidra; };
 
   ret-sync = self.callPackage ./extensions/ret-sync { };
