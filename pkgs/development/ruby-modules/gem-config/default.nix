@@ -21,7 +21,7 @@
 , libiconv, postgresql, nodejs, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, pcre2, gecode_3, curl
-, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, gtk3, buildRubyGem
+, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, gtk3, lerc, buildRubyGem
 , cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook3, atk
@@ -388,6 +388,7 @@ in
       gtk3
       cairo
       harfbuzz
+      lerc
       libdatrie
       libthai
       pcre
