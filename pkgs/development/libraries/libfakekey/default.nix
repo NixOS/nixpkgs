@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchgit, automake, autoconf, libtool, libX11, libXi, libXtst, pkg-config, xorgproto }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  automake,
+  autoconf,
+  libtool,
+  libX11,
+  libXi,
+  libXtst,
+  pkg-config,
+  xorgproto,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libfakekey";
@@ -12,8 +24,20 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  nativeBuildInputs = [ automake autoconf pkg-config libtool ];
-  buildInputs = [ libX11 libXi libXtst xorgproto ];
+  nativeBuildInputs = [
+    automake
+    autoconf
+    pkg-config
+    libtool
+  ];
+
+  buildInputs = [
+    libX11
+    libXi
+    libXtst
+    xorgproto
+  ];
+
   NIX_LDFLAGS = "-lX11";
 
   meta = with lib; {
