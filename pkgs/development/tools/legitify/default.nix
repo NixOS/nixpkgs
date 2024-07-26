@@ -9,8 +9,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "Legit-Labs";
-    repo = pname;
-    rev = "v${version}";
+    repo = "legitify";
+    rev = "refs/tags/v${version}";
     hash = "sha256-ijW0vvamuqcN6coV5pAtmjAUjzNXxiqr2S9EwrNlrJc=";
   };
 
@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/Legit-Labs/legitify/internal/version.Version=${version}"
+    "-X=github.com/Legit-Labs/legitify/internal/version.Version=${version}"
   ];
 
   preCheck = ''
@@ -28,10 +28,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to detect and remediate misconfigurations and security risks of GitHub assets";
-    mainProgram = "legitify";
     homepage = "https://github.com/Legit-Labs/legitify";
     changelog = "https://github.com/Legit-Labs/legitify/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "legitify";
   };
 }
