@@ -16,21 +16,24 @@
   pythonOlder,
   pyyaml,
   requestsexceptions,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "3.1.0";
-  format = "setuptools";
+  version = "3.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cH8V1+wHSrJDS5peGYT6yrAPgi0nL0wqXeDSKgnrec0=";
+    hash = "sha256-BghpDKN8pzMnsPo3YdF+ZTlb43/yALhzXY8kJ3tPSYA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     platformdirs
     cryptography
     dogpile-cache
