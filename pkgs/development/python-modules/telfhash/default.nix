@@ -6,11 +6,12 @@
   packaging,
   pyelftools,
   tlsh,
+  setuptools,
 }:
 buildPythonPackage rec {
   pname = "telfhash";
   version = "0.9.8";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trendmicro";
@@ -22,11 +23,14 @@ buildPythonPackage rec {
   # The tlsh library's name is just "tlsh"
   postPatch = ''
     substituteInPlace requirements.txt \
-       --replace "python-tlsh" "tlsh" \
-       --replace "py-tlsh" "tlsh"
+       --replace-fail "python-tlsh" "tlsh" \
+       --replace-fail "py-tlsh" "tlsh" \
+       --replace-fail "nose>=1.3.7" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     capstone
     pyelftools
     tlsh
