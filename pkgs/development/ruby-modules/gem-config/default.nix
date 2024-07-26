@@ -457,6 +457,14 @@ in
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
   };
 
+  hpricot = attrs: {
+    dontBuild = false;
+    patches = [
+      # Fix incompatible function pointer conversion errors with clang 16
+      ./hpricot-fix-incompatible-function-pointer-conversion.patch
+    ];
+  };
+
   iconv = attrs: {
     dontBuild = false;
     buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
