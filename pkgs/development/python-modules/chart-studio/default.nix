@@ -4,24 +4,23 @@
   fetchFromGitHub,
   mock,
   plotly,
-  pytest,
   requests,
   retrying,
   setuptools,
-  six,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "chart-studio";
-  version = "5.23.0";
+  version = "1.1.0-unstable-2024-07-23";
   pyproject = true;
 
   # chart-studio was split from plotly
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
-    rev = "refs/tags/v${version}";
+    # We use plotly's upstream version as it's the same repo, but chart studio has its own version number.
+    rev = "v5.23.0";
     hash = "sha256-K1hEs00AGBCe2fgytyPNWqE5M0jU5ESTzynP55kc05Y=";
   };
 
@@ -33,19 +32,18 @@ buildPythonPackage rec {
     plotly
     requests
     retrying
-    six
   ];
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-    pytest
   ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  # most tests talk to a network service, so only run ones that don't
+  # most tests talk to a network service, so only run ones that don't do that.
   pytestFlagsArray = [
     "chart_studio/tests/test_core"
     "chart_studio/tests/test_plot_ly/test_api"
