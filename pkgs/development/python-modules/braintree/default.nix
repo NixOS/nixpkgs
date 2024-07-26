@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -10,24 +9,21 @@
 
 buildPythonPackage rec {
   pname = "braintree";
-  version = "4.14.0";
+  version = "4.29.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "braintree";
     repo = "braintree_python";
     rev = version;
-    hash = "sha256-qeqQX+qyy78sLe+46CA4D6VAxNHUVahS4LMYdGDzc2k=";
+    hash = "sha256-5MF8W2zUVvNiOnmszgJkMDmeYLZ6ppFHqmH6dmlCzQY=";
   };
 
   propagatedBuildInputs = [ requests ];
 
-  nativeCheckInputs = [
-    nose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "braintree" ];
 
