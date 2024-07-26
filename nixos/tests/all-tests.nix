@@ -715,6 +715,7 @@ in
   leaps = handleTest ./leaps.nix { };
   lemmy = handleTest ./lemmy.nix { };
   libinput = handleTest ./libinput.nix { };
+  lemurs = handleTest ./lemurs.nix { };
   librenms = runTest ./librenms.nix;
   libresprite = handleTest ./libresprite.nix { };
   libreswan = runTest ./libreswan.nix;
