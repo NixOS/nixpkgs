@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://armcord.app";
     downloadPage = "https://github.com/ArmCord/ArmCord";
     license = licenses.osl3;
-    maintainers = with maintainers; [ wrmilling ];
+    maintainers = with maintainers; [ wrmilling water-sucks ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "armcord";
   };
