@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, xorg, ncurses, freetype, fontconfig
-, pkg-config, makeWrapper, nixosTests, gitUpdater
+, pkg-config, makeWrapper, nixosTests, pkgsCross, gitUpdater
 , nix, gnused, coreutils, enableDecLocator ? true }:
 
 stdenv.mkDerivation rec {
@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
     tests = {
       customTest = nixosTests.xterm;
       standardTest = nixosTests.terminal-emulators.xterm;
+      musl = pkgsCross.musl64.xterm;
     };
 
     updateScript = gitUpdater {
