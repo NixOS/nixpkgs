@@ -10,10 +10,6 @@
   nixpkgs ? { },
 }:
 
-let
-  common = import ../common.nix;
-in
-
 stdenvNoCC.mkDerivation (
   finalAttrs:
   let
@@ -78,15 +74,15 @@ stdenvNoCC.mkDerivation (
     '';
 
     installPhase = ''
-      dest="$out/${common.outputPath}"
+      dest="$out/share/doc/nixpkgs"
       mkdir -p "$(dirname "$dest")"
       mv out "$dest"
-      mv "$dest/index.html" "$dest/${common.indexPath}"
+      mv "$dest/index.html" "$dest/manual.html"
 
       cp ${epub} "$dest/nixpkgs-manual.epub"
 
       mkdir -p $out/nix-support/
-      echo "doc manual $dest ${common.indexPath}" >> $out/nix-support/hydra-build-products
+      echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
       echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
     '';
 
@@ -101,7 +97,7 @@ stdenvNoCC.mkDerivation (
 
       shell = callPackage ../../pkgs/tools/nix/web-devmode.nix {
         buildArgs = "./.";
-        open = "/${common.outputPath}/${common.indexPath}";
+        open = "/share/doc/nixpkgs/manual.html";
       };
 
       tests.manpage-urls = callPackage ../tests/manpage-urls.nix { };
