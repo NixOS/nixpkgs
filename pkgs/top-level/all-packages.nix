@@ -12296,11 +12296,6 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.libs) simd;
   };
 
-  rnote = callPackage ../applications/graphics/rnote {
-    inherit (gst_all_1) gstreamer;
-    inherit (darwin.apple_sdk.frameworks) AudioUnit;
-  };
-
   rnp = callPackage ../tools/security/rnp { };
 
   rnr = callPackage ../tools/text/rnr { };
