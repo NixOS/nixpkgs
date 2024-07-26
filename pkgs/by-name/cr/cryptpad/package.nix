@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "2024.6.0";
+  version = "2024.6.1";
   # nix version of install-onlyoffice.sh
   # a later version could rebuild from sdkjs/web-apps as per
   # https://github.com/cryptpad/onlyoffice-builds/blob/main/build.sh
@@ -68,10 +68,10 @@ buildNpmPackage {
     owner = "cryptpad";
     repo = "cryptpad";
     rev = version;
-    hash = "sha256-huIhhnjatkaVfm1zDeqi88EX/nAUBQ0onPNOwn7hrX4=";
+    hash = "sha256-qwyXpTY8Ds7R5687PVGZa/rlEyrAZjNzJ4+VQZpF8v0=";
   };
 
-  npmDepsHash = "sha256-Oh1fBvP7OXC+VDiH3D+prHmi8pRrxld06n30sqw5apY=";
+  npmDepsHash = "sha256-GSTPsXqe/rxiDh5OW2t+ZY1YRNgRSDxkJ0pvcLIFtFw=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
