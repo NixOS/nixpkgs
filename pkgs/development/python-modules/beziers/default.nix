@@ -6,6 +6,7 @@
   matplotlib,
   pyclipper,
   unittestCheckHook,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,8 @@ buildPythonPackage rec {
     "test"
     "-v"
   ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Python library for manipulating Bezier curves and paths in fonts";
