@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "g4music";
     homepage = "https://gitlab.gnome.org/neithern/g4music";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ aleksana ];
     platforms = platforms.linux;
   };
 })
