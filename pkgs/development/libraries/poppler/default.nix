@@ -6,11 +6,9 @@
 , cairo
 , cmake
 , boost
-, cups-filters
 , curl
 , fontconfig
 , freetype
-, inkscape
 , lcms
 , libiconv
 , libintl
@@ -19,7 +17,6 @@
 , openjpeg
 , pkg-config
 , python3
-, scribus
 , zlib
 , withData ? true, poppler_data
 , qt5Support ? false, qt6Support ? false, qtbase ? null
@@ -28,6 +25,15 @@
 , utils ? false, nss ? null
 , minimal ? false
 , suffix ? "glib"
+
+# for passthru.tests
+, cups-filters
+, gdal
+, gegl
+, inkscape
+, pdfslicer
+, scribus
+, vips
 }:
 
 let
@@ -141,7 +147,19 @@ stdenv.mkDerivation (finalAttrs: rec {
     inherit testData;
     tests = {
       # These depend on internal poppler code that frequently changes.
-      inherit inkscape cups-filters scribus;
+      inherit
+        cups-filters
+        inkscape
+        scribus
+      ;
+
+      inherit
+        gegl
+        pdfslicer
+        vips
+      ;
+      gdal = gdal.override { usePoppler = true; };
+      python-poppler-qt5 = python3.pkgs.poppler-qt5;
     };
   };
 

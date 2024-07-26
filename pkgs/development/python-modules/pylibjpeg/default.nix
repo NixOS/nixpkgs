@@ -8,27 +8,9 @@
   setuptools,
   numpy,
   pydicom,
+  pylibjpeg-data,
   pylibjpeg-libjpeg,
 }:
-
-let
-  pylibjpeg-data = buildPythonPackage {
-    pname = "pylibjpeg-data";
-    version = "1.0.0dev0";
-    pyproject = true;
-
-    nativeBuildInputs = [ setuptools ];
-
-    src = fetchFromGitHub {
-      owner = "pydicom";
-      repo = "pylibjpeg-data";
-      rev = "2ab4b8a65b070656eca2582bd23197a3d01cdccd";
-      hash = "sha256-cFE1XjrqyGqwHCYGRucXK+q4k7ftUIbYwBw4WwIFtEc=";
-    };
-
-    doCheck = false;
-  };
-in
 
 buildPythonPackage rec {
   pname = "pylibjpeg";
@@ -44,9 +26,9 @@ buildPythonPackage rec {
     hash = "sha256-qGtrphsBBVieGS/8rdymbsjLMU/QEd7zFNAANN8bD+k=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
     pytestCheckHook

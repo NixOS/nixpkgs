@@ -1,22 +1,37 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) literalExpression types mkBefore;
 
   cfg = config.services.ollama;
-  ollamaPackage = cfg.package.override {
-    inherit (cfg) acceleration;
-  };
+  ollamaPackage = cfg.package.override { inherit (cfg) acceleration; };
 
   staticUser = cfg.user != null && cfg.group != null;
 in
 {
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "ollama" "listenAddress" ]
-      "Use `services.ollama.host` and `services.ollama.port` instead.")
-    (lib.mkRemovedOptionModule [ "services" "ollama" "sandbox" ]
-      "Set `services.ollama.user` and `services.ollama.group` instead.")
-    (lib.mkRemovedOptionModule [ "services" "ollama" "writablePaths" ]
-      "The `models` directory is now always writable. To make other directories writable, use `systemd.services.ollama.serviceConfig.ReadWritePaths`." )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "ollama"
+      "listenAddress"
+    ] "Use `services.ollama.host` and `services.ollama.port` instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "ollama"
+      "sandbox"
+    ] "Set `services.ollama.user` and `services.ollama.group` instead.")
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "ollama"
+        "writablePaths"
+      ]
+      "The `models` directory is now always writable. To make other directories writable, use `systemd.services.ollama.serviceConfig.ReadWritePaths`."
+    )
   ];
 
   options = {
@@ -84,7 +99,13 @@ in
         '';
       };
       acceleration = lib.mkOption {
-        type = types.nullOr (types.enum [ false "rocm" "cuda" ]);
+        type = types.nullOr (
+          types.enum [
+            false
+            "rocm"
+            "cuda"
+          ]
+        );
         default = null;
         example = "rocm";
         description = ''
@@ -150,83 +171,89 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    users = lib.mkIf staticUser  {
+    users = lib.mkIf staticUser {
       users.${cfg.user} = {
         inherit (cfg) home;
         isSystemUser = true;
         group = cfg.group;
       };
-      groups.${cfg.group} = {};
+      groups.${cfg.group} = { };
     };
 
     systemd.services.ollama = {
       description = "Server for local large language models";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      environment = cfg.environmentVariables // {
-        HOME = cfg.home;
-        OLLAMA_MODELS = cfg.models;
-        OLLAMA_HOST = "${cfg.host}:${toString cfg.port}";
-        HSA_OVERRIDE_GFX_VERSION = lib.mkIf (cfg.rocmOverrideGfx != null) cfg.rocmOverrideGfx;
-      };
-      serviceConfig = lib.optionalAttrs staticUser {
-        User = cfg.user;
-        Group = cfg.group;
-      } // {
-        DynamicUser = true;
-        ExecStart = "${lib.getExe ollamaPackage} serve";
-        WorkingDirectory = cfg.home;
-        StateDirectory = [ "ollama" ];
-        ReadWritePaths = [
-          cfg.home
-          cfg.models
-        ];
+      environment =
+        cfg.environmentVariables
+        // {
+          HOME = cfg.home;
+          OLLAMA_MODELS = cfg.models;
+          OLLAMA_HOST = "${cfg.host}:${toString cfg.port}";
+        }
+        // lib.optionalAttrs (cfg.rocmOverrideGfx != null) {
+          HSA_OVERRIDE_GFX_VERSION = cfg.rocmOverrideGfx;
+        };
+      serviceConfig =
+        lib.optionalAttrs staticUser {
+          User = cfg.user;
+          Group = cfg.group;
+        }
+        // {
+          DynamicUser = true;
+          ExecStart = "${lib.getExe ollamaPackage} serve";
+          WorkingDirectory = cfg.home;
+          StateDirectory = [ "ollama" ];
+          ReadWritePaths = [
+            cfg.home
+            cfg.models
+          ];
 
-        CapabilityBoundingSet = [ "" ];
-        DeviceAllow = [
-          # CUDA
-          # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
-          "char-nvidiactl"
-          "char-nvidia-caps"
-          "char-nvidia-uvm"
-          # ROCm
-          "char-drm"
-          "char-kfd"
-        ];
-        DevicePolicy = "closed";
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
-        PrivateDevices = false; # hides acceleration devices
-        PrivateTmp = true;
-        PrivateUsers = true;
-        ProcSubset = "all"; # /proc/meminfo
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "invisible";
-        ProtectSystem = "strict";
-        RemoveIPC = true;
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-        ];
-        SupplementaryGroups = [ "render" ]; # for rocm to access /dev/dri/renderD* devices
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service @resources"
-          "~@privileged"
-        ];
-        UMask = "0077";
-      };
+          CapabilityBoundingSet = [ "" ];
+          DeviceAllow = [
+            # CUDA
+            # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
+            "char-nvidiactl"
+            "char-nvidia-caps"
+            "char-nvidia-uvm"
+            # ROCm
+            "char-drm"
+            "char-kfd"
+          ];
+          DevicePolicy = "closed";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = false; # hides acceleration devices
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProcSubset = "all"; # /proc/meminfo
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          SupplementaryGroups = [ "render" ]; # for rocm to access /dev/dri/renderD* devices
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service @resources"
+            "~@privileged"
+          ];
+          UMask = "0077";
+        };
       postStart = mkBefore ''
         set -x
         export OLLAMA_HOST=${lib.escapeShellArg cfg.host}:${builtins.toString cfg.port}
@@ -242,5 +269,8 @@ in
     environment.systemPackages = [ ollamaPackage ];
   };
 
-  meta.maintainers = with lib.maintainers; [ abysssol onny ];
+  meta.maintainers = with lib.maintainers; [
+    abysssol
+    onny
+  ];
 }

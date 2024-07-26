@@ -150,3 +150,6 @@ ff5c8f6cc3d1f2e017e86d50965c14b71f00567b
 
 # ollama: format with nixfmt-rfc-style (#329353)
 bdfde18037f8d9f9b641a4016c8ada4dc4cbf856
+
+# nixos/ollama: format with nixfmt-rfc-style (#329561)
+246d1ee533810ac1946d863bbd9de9b525818d56

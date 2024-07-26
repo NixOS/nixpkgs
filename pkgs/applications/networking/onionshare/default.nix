@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
+, meek
 , obfs4
 , python3
 , qt5
@@ -44,9 +45,6 @@ let
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bbjubjub ];
   };
-
-  # TODO: package meek https://support.torproject.org/glossary/meek/
-  meek = "/meek-not-available";
 in
 rec {
   onionshare = python3.pkgs.buildPythonApplication {
