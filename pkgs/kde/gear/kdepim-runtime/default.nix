@@ -6,12 +6,13 @@
   qtwebengine,
   cyrus_sasl,
   lib,
-  libkgapi
+  libkgapi,
+  libxslt,
 }:
 mkKdeDerivation {
   pname = "kdepim-runtime";
 
-  extraNativeBuildInputs = [shared-mime-info];
+  extraNativeBuildInputs = [shared-mime-info libxslt];
   # FIXME: libkolabxml, libetebase
   extraBuildInputs = [qtnetworkauth qtspeech qtwebengine cyrus_sasl];
 
