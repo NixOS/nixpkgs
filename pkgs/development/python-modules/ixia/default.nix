@@ -20,11 +20,11 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
   pythonImportsCheck = [ "ixia" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/trag1c/ixia/blob/${src.rev}/CHANGELOG.md";
     description = "Connecting secrets' security with random's versatility";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://trag1c.github.io/ixia";
-    maintainers = with maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }
