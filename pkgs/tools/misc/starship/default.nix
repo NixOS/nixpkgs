@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.19.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     rev = "v${version}";
-    hash = "sha256-3IO9hHuhzJsCHU/6BA5ylEKQI2ik6ZiRul/iO/vzii4=";
+    hash = "sha256-TJU/pojUE+uwyZlqzJ4ULt9r+3bZpetwfaXK8kBtEG8=";
   };
 
   nativeBuildInputs = [ installShellFiles cmake ];
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     cp docs/public/presets/toml/*.toml $presetdir
   '';
 
-  cargoHash = "sha256-zX04gX40dFYsK+R6gafHNtDevzrWiGufMwrGfhqYVG0=";
+  cargoHash = "sha256-A4SipsaMjVkG7ImN1aK34ZGJxlPld9NE9IjffI0+eDA=";
 
   nativeCheckInputs = [ git ];
 
