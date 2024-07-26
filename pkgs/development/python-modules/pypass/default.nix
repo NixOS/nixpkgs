@@ -8,11 +8,10 @@
   git,
   gnugrep,
   gnupg,
-  nose,
   pbr,
   pexpect,
   pythonAtLeast,
-  pythonOlder,
+  pytestCheckHook,
   substituteAll,
   tree,
   xclip,
@@ -55,26 +54,21 @@ buildPythonPackage rec {
     pexpect
   ];
 
-  doCheck = pythonOlder "3.12";
-
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Configuration so that the tests work
   preCheck = ''
-    HOME=$TEMP ${git}/bin/git config --global user.email "nix-builder@nixos.org"
-    HOME=$TEMP ${git}/bin/git config --global user.name "Nix Builder"
-    HOME=$TEMP ${git}/bin/git config --global pull.ff only
-    HOME=$TEMP make setup_gpg
+    export HOME=$(mktemp -d)
+    export GNUPGHOME=pypass/tests/gnupg
+    ${git}/bin/git config --global user.email "nix-builder@nixos.org"
+    ${git}/bin/git config --global user.name "Nix Builder"
+    ${git}/bin/git config --global pull.ff only
+    make setup_gpg
   '';
 
-  # Run tests but exclude the test that uses clipboard as I wasn't able to make
-  # it work - probably the X clipboard just doesn't work in the build
-  # environment..
-  checkPhase = ''
-    runHook preCheck
-    HOME=$TEMP GNUPGHOME=pypass/tests/gnupg nosetests -v --exclude=test_show_clip .
-    runHook postCheck
-  '';
+  # Presumably this test needs the X clipboard, which we don't have
+  # as the test environment is non-graphical.
+  disabledTests = [ "test_show_clip" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
