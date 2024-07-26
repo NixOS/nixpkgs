@@ -9163,6 +9163,8 @@ self: super: with self; {
 
   ntplib = callPackage ../development/python-modules/ntplib { };
 
+  nuclear = callPackage ../development/python-modules/nuclear { };
+
   nuitka = callPackage ../development/python-modules/nuitka { };
 
   nuheat = callPackage ../development/python-modules/nuheat { };
