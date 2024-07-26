@@ -12930,6 +12930,8 @@ self: super: with self; {
 
   python-decouple = callPackage ../development/python-modules/python-decouple { };
 
+  python-designateclient = callPackage ../development/python-modules/python-designateclient { };
+
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
   python-didl-lite = callPackage ../development/python-modules/python-didl-lite { };
