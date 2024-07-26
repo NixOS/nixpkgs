@@ -1,0 +1,124 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d529473..62b2a35 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -69,38 +69,13 @@ set(PACKAGE_LIBGLIB2_MINVERSION 2.24)
+ 
+ #########################CPack PACKAGING SETUP###############################
+ set(RPM 0)
+-file(STRINGS /etc/os-release distro REGEX "^NAME=")
+-string(REGEX REPLACE "NAME=" "" distro "${distro}")
+-string(REGEX REPLACE "\"" "" distro "${distro}")
+-string(REGEX REPLACE "/" "" distro "${distro}")
+-string(REGEX REPLACE " " "" distro "${distro}")
+-file(STRINGS /etc/os-release disversion REGEX "^VERSION_ID=")
+-string(REGEX REPLACE "VERSION_ID=" "" disversion "${disversion}")
+-string(COMPARE EQUAL "${disversion}" "" result)
+-if(result)
+-  #sid/rawhide with no version - use project name
+-  message("-- Found no distro version - Using codename")
+-  file(STRINGS /etc/os-release disversion REGEX "^VERSION_CODENAME=")
+-  string(REGEX REPLACE "VERSION_CODENAME=" "" disversion "99_${disversion}")
+-endif()
++set(distro "nix")
++set(disversion "")
++
+ string(REGEX REPLACE "\"" "" disversion "${disversion}")
+ string(REGEX REPLACE "/" "" disversion "${disversion}")
+ string(REGEX REPLACE " " "" disversion "${disversion}")
+-#RPM Distro's
+-if(${distro} MATCHES "Alma*" OR ${distro} MATCHES "Rocky*" OR ${distro} MATCHES "Fedora*" OR ${distro} MATCHES "Red*" OR ${distro} MATCHES "CentOS*" OR ${distro} MATCHES "Oracle*" OR ${distro} MATCHES "openSUSE*" OR ${distro} MATCHES "SUSE*")
+-  set(RPM 1)
+-endif()
+-#Package architecture
+-if(${RPM})
+-  set(PACKAGE_DELIMITER "-")
+-  set(PACKAGE_ARCHITECTURE ".${CMAKE_HOST_SYSTEM_PROCESSOR}")
+-else()
+-  set(PACKAGE_DELIMITER "_")
+-  set(PACKAGE_ARCHITECTURE "_${CMAKE_HOST_SYSTEM_PROCESSOR}")
+-  if(${CMAKE_HOST_SYSTEM_PROCESSOR} MATCHES "x86_64")
+-    set(PACKAGE_ARCHITECTURE "_amd64")
+-  endif()
+-endif()
++
+ set(PACKAGE_DISTRO ${HARDINFO2_VERSION}-${distro}-${disversion}${CPACK_SYSTEM_NAME})
+ SET(CPACK_PACKAGE_VERSION ${HARDINFO2_VERSION})
+ #Put it together
+@@ -112,76 +87,8 @@ message("-- Found distro description ${distro}${disversion}")
+ #flavour output
+ set(HARDINFO2_OS ${distro})
+ 
+-#fedora ->35
+-if(${disversion} LESS 35.99)
+-  if(${distro} MATCHES "Fedora*")
+-    message("Fedora ->35 - LS24")
+-    set(HARDINFO2_LIBSOUP3 0)
+-  endif()
+-endif()
+-
+-#centos/redhat/oracle/opensuse/suse ->9
+-if(${disversion} LESS 9.99)
+-  if(${distro} MATCHES "Red*" OR ${distro} MATCHES "CentOS*" OR ${distro} MATCHES "Oracle*" OR ${distro} MATCHES "openSUSE*" OR ${distro} MATCHES "Alma*" OR ${distro} MATCHES "Rocky*")
+-    message("Centos/Redhat/oracle/opensuse/suse/rocky/alma ->9 - LS24")
+-    set(HARDINFO2_LIBSOUP3 0)
+-  endif()
+-endif()
+-
+-#centos/redhat/oracle/opensuse/suse 6
+-if(${disversion} LESS 6.99)
+-  if((${distro} MATCHES "Red*" OR ${distro} MATCHES "CentOS*" OR ${distro} MATCHES "Oracle*" OR ${distro} MATCHES "openSUSE*" OR ${distro} MATCHES "SUSE*"))
+-    message("RPM EL6 - GTK2 - deprecated - support will end at any time")
+-    message("RPM EL6 - LS24 - deprecated version 2.34.3 - but ok")
+-    set(HARDINFO2_GTK3 0)
+-    set(PACKAGE_LIBSOUP2_MINVERSION 2.34.3)
+-  endif()
+-endif()
+-
+-#debian 7
+-if(${distro}${disversion} MATCHES "DebianGNULinux7")
+-    message("DEB 7 - GTK2 to avoid c11 for ubergraph - deprecated - support will end at any time")
+-    message("DEB 7 - LS24 - deprecated version 2.34.3 - but ok")
+-    set(HARDINFO2_GTK3 0)
+-    set(PACKAGE_LIBSOUP2_MINVERSION 2.34.3)
+-endif()
+-
+-#debian 8
+-if(${distro}${disversion} MATCHES "DebianGNULinux8")
+-    message("DEB 8 - GTK3 version 3.14.5 is low - Themes disabled")
+-endif()
+-
+-#debian ->11
+-if(${disversion} LESS 11.99)
+-  if(${distro} MATCHES "DebianGNULinux")
+-    message("DEB ->11 - LS24")
+-    set(HARDINFO2_LIBSOUP3 0)
+-  endif()
+-endif()
+-
+-#ubuntu 20.04
+-if(${disversion} LESS 20.99)
+-  if(${distro} MATCHES "Ubuntu")
+-    message("Ubuntu ->20.xx - LS24")
+-    set(HARDINFO2_LIBSOUP3 0)
+-  endif()
+-endif()
+-
+-
+-#Fedora 39 - bug with man pages - upgrade cmake to 3.28.x
+-
+-################################################################################
+-
+-if(${CMAKE_BUILD_TYPE} MATCHES [Dd]ebug)
+-	set(HARDINFO2_DEBUG 1)
+-        if(${distro}${disversion} MATCHES "DebianGNULinux7")
+-        else()
+-	   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
+-        endif()
+-endif()
+ add_subdirectory(po)
+ 
+-
+ include(FindPkgConfig)
+ if (HARDINFO2_GTK3)
+     message(STATUS "Building for GTK3")
