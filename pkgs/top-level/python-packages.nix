@@ -13872,6 +13872,8 @@ self: super: with self; {
 
   saneyaml = callPackage ../development/python-modules/saneyaml { };
 
+  samarium = callPackage ../development/python-modules/samarium { };
+
   sampledata = callPackage ../development/python-modules/sampledata { };
 
   samplerate = callPackage ../development/python-modules/samplerate {
