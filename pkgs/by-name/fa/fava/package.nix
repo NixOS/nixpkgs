@@ -49,6 +49,9 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://beancount.github.io/fava";
     changelog = "https://beancount.github.io/fava/changelog.html";
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [
+      bhipple
+      sigmanificient
+    ];
   };
 }
