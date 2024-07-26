@@ -5,22 +5,22 @@
 
 { stdenv
 , lib
-, fetchFromGitHub
-, removeReferencesTo
-, makeWrapper
-, which
-, writeTextFile
-, curl
-, tzdata
-, gdb
-, Foundation
 , callPackage
-, targetPackages
+, fetchFromGitHub
 , fetchpatch
-, bash
 , installShellFiles
+, makeWrapper
+, removeReferencesTo
+, targetPackages
+, writeTextFile
+, bash
+, curl
+, Foundation
+, gdb
 , git
+, tzdata
 , unzip
+, which
 , dmdBootstrap ? callPackage ./bootstrap.nix { }
 , dmdBin ? "${dmdBootstrap}/bin"
 }:
