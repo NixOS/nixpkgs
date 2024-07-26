@@ -467,7 +467,10 @@ in
 
   iconv = attrs: {
     dontBuild = false;
-    buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+    buildFlags = lib.optionals stdenv.isDarwin [
+      "--with-iconv-dir=${lib.getLib libiconv}"
+      "--with-iconv-include=${lib.getDev libiconv}/include"
+    ];
     patches = [
       # Fix incompatible function pointer conversion errors with clang 16
       ./iconv-fix-incompatible-function-pointer-conversions.patch
