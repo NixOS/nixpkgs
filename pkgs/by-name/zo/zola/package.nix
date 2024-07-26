@@ -12,16 +12,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "0.18.0";
+  version = "0.19.1";
 
-  src = fetchFromGitHub {
-    owner = "getzola";
-    repo = "zola";
-    rev = "v${version}";
-    hash = "sha256-kNlFmCqWEfU2ktAMxXNKe6dmAV25voHjHYaovBYsOu8=";
+  src = builtins.fetchGit {
+    url = "https://github.com/getzola/zola";
+    ref = "refs/tags/v${version}";
+    rev = "041da029eedbca30c195bc9cd8c1acf89b4f60c0";
   };
 
-  cargoHash = "sha256-JWYuolHh/qdWF+i6WTgz/uDrkQ6V+SDFhEzGGkUA0E4=";
+  cargoHash = "sha256-Q2Zx00Gf89TJcsOFqkq0b4e96clv/CLQE51gGONZZl0=";
 
   nativeBuildInputs = [
     pkg-config
