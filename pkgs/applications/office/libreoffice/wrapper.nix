@@ -5,7 +5,6 @@
 , makeWrapper
 , xorg # for lndir
 , runCommand
-, substituteAll
 # For Emulating wrapGAppsHook3
 , gsettings-desktop-schemas
 , hicolor-icon-theme

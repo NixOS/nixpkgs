@@ -2,7 +2,6 @@
 , brotli
 , buildGoModule
 , forgejo
-, fetchpatch
 , git
 , gzip
 , lib

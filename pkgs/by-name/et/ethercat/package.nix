@@ -1,5 +1,4 @@
 { autoreconfHook
-, cmake
 , lib
 , pkg-config
 , stdenv

@@ -10,7 +10,6 @@
 , appstream-glib
 , gettext
 , itstool
-, libxml2
 , gtk4
 , libadwaita
 , glib

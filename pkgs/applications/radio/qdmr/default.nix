@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  writeText,
   cmake,
   libxslt,
   docbook_xsl_ns,

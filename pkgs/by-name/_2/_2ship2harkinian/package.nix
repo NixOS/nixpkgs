@@ -9,7 +9,6 @@
   copyDesktopItems,
   makeDesktopItem,
   python3,
-  boost,
   SDL2,
   pkg-config,
   libpulseaudio,

@@ -1,7 +1,5 @@
 {
   lib,
-  pkgs,
-  stdenv,
   fetchFromGitHub,
   python3Packages,
 }:

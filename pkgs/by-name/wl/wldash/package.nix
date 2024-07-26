@@ -4,7 +4,6 @@
   dbus,
   fetchFromGitHub,
   fontconfig,
-  libffi,
   libpulseaudio,
   libxkbcommon,
   pkg-config,

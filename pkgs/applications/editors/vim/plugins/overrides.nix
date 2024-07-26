@@ -1380,6 +1380,8 @@
     dependencies = with self; [ nvim-lspconfig ];
   };
 
+  rustaceanvim = neovimUtils.buildNeovimPlugin { luaAttr = "rustaceanvim"; };
+
   sg-nvim = super.sg-nvim.overrideAttrs (old:
     let
       sg-nvim-rust = rustPlatform.buildRustPackage {

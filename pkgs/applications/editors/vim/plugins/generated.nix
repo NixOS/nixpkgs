@@ -9833,18 +9833,6 @@ final: prev:
     meta.homepage = "https://github.com/rust-lang/rust.vim/";
   };
 
-  rustaceanvim = buildNeovimPlugin {
-    pname = "rustaceanvim";
-    version = "2024-07-10";
-    src = fetchFromGitHub {
-      owner = "mrcjkb";
-      repo = "rustaceanvim";
-      rev = "047f9c9d8cd2861745eb9de6c1570ee0875aa795";
-      sha256 = "0q06rkg8dfzxvlwp7svp8sjkk0f2x5vvjkv6grdmm302s43jj7rk";
-    };
-    meta.homepage = "https://github.com/mrcjkb/rustaceanvim/";
-  };
-
   sad-vim = buildVimPlugin {
     pname = "sad.vim";
     version = "2019-02-18";

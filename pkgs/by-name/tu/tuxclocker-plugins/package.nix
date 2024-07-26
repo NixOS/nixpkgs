@@ -1,7 +1,5 @@
-{ lib
-, stdenv
+{ stdenv
 , boost
-, cmake
 , gettext
 , libdrm
 , meson

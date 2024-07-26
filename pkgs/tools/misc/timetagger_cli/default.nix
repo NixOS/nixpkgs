@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Track your time from the command-line ";
+    description = "Track your time from the command-line";
     homepage = "https://github.com/almarklein/timetagger_cli";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ matthiasbeyer ];
