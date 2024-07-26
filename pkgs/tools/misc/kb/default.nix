@@ -5,14 +5,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kb";
-  version = "0.1.7";
+  version = "0.1.7-unstable-2023-10-17";
+  rev = "862a1abc68da7af5128dfb346a2c0f22e2cc9c1d";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gnebbia";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-K8EAqZbl2e0h03fFwaKIclZTZARDQp1tRo44znxwW0I=";
+    repo = "kb";
+    inherit rev;
+    hash = "sha256-d2NO3E4hX921E/oD93c1w9mROSU2eoGzcO+fO2R5rKo=";
   };
 
   postPatch = ''
