@@ -38,7 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [
-      jonringer
       maxwilson
     ];
   };

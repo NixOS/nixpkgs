@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "m3u8";
-  version = "4.1.0";
+  version = "5.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "globocom";
     repo = "m3u8";
     rev = "refs/tags/${version}";
-    hash = "sha256-vH5y/fk9dW8w54U3o+70enbTOubV4V0/NVbSSqOY9rQ=";
+    hash = "sha256-dvRs1FoyQz6D/G0mTC2SCUaCWP3UpxQpNw/oiaauaOE=";
   };
 
   build-system = [ setuptools ];

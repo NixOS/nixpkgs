@@ -4,25 +4,25 @@
   buildPythonPackage,
   fetchFromGitHub,
   libiconv,
-  cargo,
   rustPlatform,
-  rustc,
+  anyio,
   objsize,
   pydantic,
   pytestCheckHook,
+  trio,
   y-py,
 }:
 
 buildPythonPackage rec {
   pname = "pycrdt";
-  version = "0.8.24";
+  version = "0.9.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3j5OhjeVE42n4EEOOMUGlQGdnQ/xia0KD543uCMFpCo=";
+    hash = "sha256-1BGJ6I8ODLyEv566w+vQOsPEqN8nQlZHXTWv0tH0cR0=";
   };
 
   postPatch = ''
@@ -32,10 +32,8 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   nativeBuildInputs = [
-    cargo
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    rustc
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
@@ -43,9 +41,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pycrdt" ];
 
   nativeCheckInputs = [
+    anyio
     objsize
     pydantic
     pytestCheckHook
+    trio
     y-py
   ];
 

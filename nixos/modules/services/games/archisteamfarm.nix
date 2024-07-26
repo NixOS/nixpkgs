@@ -196,7 +196,7 @@ in
             Group = "archisteamfarm";
             WorkingDirectory = cfg.dataDir;
             Type = "simple";
-            ExecStart = "${lib.getExe cfg.package} --no-restart --process-required --service --system-required --path ${cfg.dataDir}";
+            ExecStart = "${lib.getExe cfg.package} --no-restart --service --system-required --path ${cfg.dataDir}";
             Restart = "always";
 
             # copied from the default systemd service at

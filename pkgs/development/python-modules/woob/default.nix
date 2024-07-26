@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitLab,
   fetchpatch,
-  pythonRelaxDepsHook,
   html2text,
   lxml,
   packaging,
@@ -48,7 +47,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "packaging" ];

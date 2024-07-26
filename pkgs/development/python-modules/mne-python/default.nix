@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "1.7.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "mne-tools";
     repo = "mne-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Nrar6Iw/jROuo4QTI7TktJSR5IdPSOQcbR+lycH52LI=";
+    hash = "sha256-piCFynpKh7gTWIGh2g0gJICLS+eg/0XAxaDkyu7v5vs=";
   };
 
   postPatch = ''
@@ -72,6 +72,11 @@ buildPythonPackage rec {
     export MNE_SKIP_TESTING_DATASET_TESTS=true
     export MNE_SKIP_NETWORK_TESTS=1
   '';
+
+  disabledTests = [
+    # Fails due to changes in Numpy types
+    "mne.stats._adjacency.combine_adjacency"
+  ];
 
   pythonImportsCheck = [ "mne" ];
 

@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     mainProgram = "cewl";
     homepage = "https://digi.ninja/projects/cewl.php/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

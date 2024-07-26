@@ -150,9 +150,13 @@ in
         HostKey ${initrdKeyPath path}
       '')}
 
-      KexAlgorithms ${concatStringsSep "," sshdCfg.settings.KexAlgorithms}
-      Ciphers ${concatStringsSep "," sshdCfg.settings.Ciphers}
-      MACs ${concatStringsSep "," sshdCfg.settings.Macs}
+      '' + lib.optionalString (sshdCfg.settings.KexAlgorithms != null) ''
+        KexAlgorithms ${concatStringsSep "," sshdCfg.settings.KexAlgorithms}
+      '' + lib.optionalString (sshdCfg.settings.Ciphers != null) ''
+        Ciphers ${concatStringsSep "," sshdCfg.settings.Ciphers}
+      '' + lib.optionalString (sshdCfg.settings.Macs != null) ''
+        MACs ${concatStringsSep "," sshdCfg.settings.Macs}
+      '' + ''
 
       LogLevel ${sshdCfg.settings.LogLevel}
 
@@ -160,6 +164,10 @@ in
         UseDNS yes
       '' else ''
         UseDNS no
+      ''}
+
+      ${optionalString (!config.boot.initrd.systemd.enable) ''
+        SshdSessionPath /bin/sshd-session
       ''}
 
       ${cfg.extraConfig}
@@ -187,6 +195,7 @@ in
 
     boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${package}/bin/sshd
+      copy_bin_and_libs ${package}/libexec/sshd-session
       cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib
     '';
 
@@ -261,7 +270,10 @@ in
             config.boot.initrd.network.ssh.authorizedKeys ++
             (map (file: lib.fileContents file) config.boot.initrd.network.ssh.authorizedKeyFiles));
       };
-      storePaths = ["${package}/bin/sshd"];
+      storePaths = [
+        "${package}/bin/sshd"
+        "${package}/libexec/sshd-session"
+      ];
 
       services.sshd = {
         description = "SSH Daemon";

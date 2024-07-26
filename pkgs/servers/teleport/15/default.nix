@@ -12,10 +12,6 @@ import ../generic.nix (args // {
       "sspi-0.10.1" = "sha256-fkclC/plTh2d8zcmqthYmr5yXqbPTeFxI1VuaPX5vxk=";
     };
   };
-  extPatches = [
-    # https://github.com/NixOS/nixpkgs/issues/120738
-    ../tsh_14.patch
-  ];
 
   # wasm-bindgen-cli version must match the version of wasm-bindgen in Cargo.lock
   wasm-bindgen-cli = wasm-bindgen-cli.override {

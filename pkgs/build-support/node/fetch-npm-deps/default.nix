@@ -142,7 +142,7 @@
     meta = with lib; {
       description = "Prefetch dependencies from npm (for use with `fetchNpmDeps`)";
       mainProgram = "prefetch-npm-deps";
-      maintainers = with maintainers; [ lilyinstarlight winter ];
+      maintainers = with maintainers; [ winter ];
       license = licenses.mit;
     };
   };

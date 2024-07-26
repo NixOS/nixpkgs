@@ -13,9 +13,6 @@
 , Security
 , nghttp2
 , libgit2
-# string interpolation dependends on a date that is erroring out
-# this will be fixed in releases after 0.90.1
-, doCheck ? false
 , withDefaultFeatures ? true
 , additionalFeatures ? (p: p)
 , testers
@@ -24,7 +21,7 @@
 }:
 
 let
-  version = "0.94.1";
+  version = "0.95.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -35,10 +32,10 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     rev = version;
-    hash = "sha256-uwtmSyNJJUtaFrBd9W89ZQpWzBOswOLWTevkPlg6Ano=";
+    hash = "sha256-NxdqQ5sWwDptX4jyQCkNX2pVCua5nN4v/VYHZ/Q1LpQ=";
   };
 
-  cargoHash = "sha256-4caqvbNxXRZksQrySydPlzn9S6gr2xPLFLSEcAEGnI8=";
+  cargoHash = "sha256-PNZPljUDXqkyQicjwjaZsiSltxgO6I9/9VJDWKkvUFA=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
@@ -52,12 +49,19 @@ rustPlatform.buildRustPackage {
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
 
-  inherit doCheck;
-
   checkPhase = ''
     runHook preCheck
-    echo "Running cargo test"
-    HOME=$(mktemp -d) cargo test
+    (
+      # The skipped tests all fail in the sandbox because in the nushell test playground,
+      # the tmp $HOME is not set, so nu falls back to looking up the passwd dir of the build
+      # user (/var/empty). The assertions however do respect the set $HOME.
+      set -x
+      HOME=$(mktemp -d) cargo test -j $NIX_BUILD_CORES --offline -- \
+        --test-threads=$NIX_BUILD_CORES \
+        --skip=repl::test_config_path::test_default_config_path \
+        --skip=repl::test_config_path::test_xdg_config_bad \
+        --skip=repl::test_config_path::test_xdg_config_empty
+    )
     runHook postCheck
   '';
 

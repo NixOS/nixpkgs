@@ -5,7 +5,7 @@ buildDunePackage rec {
   version = "0.5";
   useDune2 = true;
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   src = fetchFromGitHub {
     owner = "ocamlpro";

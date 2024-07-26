@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   capstone,
@@ -19,7 +18,6 @@
   unicorn,
   gdb-pt-dump,
   poetry-core,
-  pythonRelaxDepsHook,
 }:
 let
   # The newest gdb-pt-dump is incompatible with pwndbg 2024.02.14.
@@ -52,7 +50,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
   pythonRelaxDeps = true;
 

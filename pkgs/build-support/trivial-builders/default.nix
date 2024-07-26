@@ -586,7 +586,7 @@ rec {
   '';
 
 
-  # Docs in doc/builders/special/makesetuphook.section.md
+  # Docs in doc/build-helpers/special/makesetuphook.section.md
   # See https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs.makeSetupHook
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"

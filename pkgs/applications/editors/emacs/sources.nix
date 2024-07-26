@@ -93,15 +93,21 @@ in
         url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/12_all_org-remote-unsafe.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
         hash = "sha256-b6WU1o3PfDV/6BTPfPNUFny6oERJCNsDrvflxX3Yvek=";
       })
+
+      # security fix from Emacs 29.4
+      (fetchpatch {
+        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=c645e1d8205f0f0663ec4a2d27575b238c646c7c";
+        hash = "sha256-G+gGQx5w3KuWMotR1n/sYYL8WyAABYW3fUPeffMMs38=";
+      })
     ];
   });
 
   emacs29 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
-    version = "29.3";
+    version = "29.4";
     variant = "mainline";
-    rev = "29.3";
-    hash = "sha256-4yN81djeKb9Hlr6MvaDdXqf4XOl0oolXEYGqkA+KUO0=";
+    rev = "29.4";
+    hash = "sha256-FCP6ySkN9mAdp2T09n6foS2OciqZXc/54guRZ0B4Z2s=";
   });
 
   emacs28-macport = import ./make-emacs.nix (mkArgs {

@@ -5,10 +5,10 @@
 }:
 let
   pname = "rquickshare";
-  version = "0.7.1";
+  version = "0.8.2";
   src = fetchurl {
     url = "https://github.com/Martichou/rquickshare/releases/download/v${version}/r-quick-share_${version}_amd64.AppImage";
-    hash = "sha256-716d7T4nbs/dDS4KVGTADCpLO31U8iq6hDVD+c7Ks1I=";
+    hash = "sha256-0r8G3f46nHfTeReai4mWCykyx65AoaoGc0L7nrGEhTQ=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in

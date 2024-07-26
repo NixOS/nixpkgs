@@ -12,7 +12,7 @@ in buildPythonApplication rec {
     owner = "rastersoft";
     repo = "devedeng";
     rev = version;
-    sha256 = "sha256-CdntdD5DRA/eXTBRBRszkbYFeFxj+0odb8XHkAFdobU=";
+    hash = "sha256-CdntdD5DRA/eXTBRBRszkbYFeFxj+0odb8XHkAFdobU=";
   };
 
   nativeBuildInputs = [

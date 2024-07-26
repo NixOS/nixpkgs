@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
+{ lib, stdenv, fetchurl, ocaml }:
 
 lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
   "cmdliner 1.1 is not available for OCaml ${ocaml.version}"

@@ -3,7 +3,7 @@
 , copyDesktopItems
 , wrapGAppsHook3
 , glib
-, gnome
+, adwaita-icon-theme
 , mkCoqDerivation
 , coq
 , version ? null }:
@@ -29,7 +29,7 @@ mkCoqDerivation rec {
     wrapGAppsHook3
     coq.ocamlPackages.lablgtk3-sourceview3
     glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   buildPhase = ''

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "civo";
-  version = "1.0.87";
+  version = "1.0.88";
 
   src = fetchFromGitHub {
     owner  = "civo";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "sha256-9uoh0rdBgIONqiGwak9Hvrf3davqcvuB6KbhmyU16fk=";
+    sha256 = "sha256-fPCafa0V5lbzXocUa1gabLxAcPbg8rqOExMT0QnGUk8=";
   };
 
   vendorHash = "sha256-bEyknQc7TCxbWj7VsjJ2WGz65BG8HaP8ldL2kb+bbtc=";
@@ -42,6 +42,6 @@ buildGoModule rec {
     mainProgram = "civo";
     homepage = "https://github.com/civo/cli";
     license = licenses.asl20;
-    maintainers = with maintainers; [ berryp ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -69,7 +69,7 @@ let
     meta = with lib; {
       description = "Yamagi Quake II client";
       homepage = "https://www.yamagi.org/quake2/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       platforms = platforms.unix;
       maintainers = with maintainers; [ tadfisher ];
     };

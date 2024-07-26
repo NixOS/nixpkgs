@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   build,
   coloredlogs,
@@ -29,11 +28,11 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
   pythonRelaxDeps = [
+    "build"
     "packaging"
     "readme-renderer"
     "twine"

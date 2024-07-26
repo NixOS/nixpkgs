@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     owner = "timvisee";
     repo = "ffsend";
     rev = "v${version}";
-    sha256 = "sha256-L1j1lXPxy9nWMeED9uzQHV5y7XTE6+DB57rDnXa4kMo=";
+    hash = "sha256-L1j1lXPxy9nWMeED9uzQHV5y7XTE6+DB57rDnXa4kMo=";
   };
 
   cargoHash = "sha256-r1yIPV2sW/EpHJpdaJyi6pzE+rtNkBIxSUJF+XA8kbA=";
@@ -86,7 +86,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://gitlab.com/timvisee/ffsend";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lilyball equirosa ];
+    maintainers = with maintainers; [ equirosa ];
     platforms = platforms.unix;
     mainProgram = "ffsend";
   };

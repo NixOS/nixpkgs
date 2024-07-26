@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.isDarwin;
     description = "JACK audio connection kit";
     homepage = "https://jackaudio.org";
-    license = with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [ gpl2Plus lgpl21 ];
     pkgConfigModules = [ "jack" ];
     platforms = platforms.unix;
   };

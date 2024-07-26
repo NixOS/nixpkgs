@@ -3,9 +3,12 @@
 let
   namePrefix = [ "coq" "mathcomp" ];
   pname = "word";
-  fetcher = { domain, owner, repo, rev, sha256, ...}:
+  fetcher = { domain, owner, repo, rev, sha256 ? null, ...}:
+    let prefix = "https://${domain}/${owner}/${repo}/"; in
+    if sha256 == null then
+      fetchTarball { url = "${prefix}archive/refs/heads/${rev}.tar.gz"; } else
   fetchurl {
-    url = "https://${domain}/${owner}/${repo}/releases/download/${rev}/${lib.concatStringsSep "-" (namePrefix ++ [ pname ])}-${rev}.tbz";
+    url = "${prefix}releases/download/${rev}/${lib.concatStringsSep "-" (namePrefix ++ [ pname ])}-${rev}.tbz";
     inherit sha256;
   };
 in
@@ -29,8 +32,8 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ] [
-    { cases = [ (range "8.16" "8.19") (isGe "2.0")          ]; out = "3.2"; }
-    { cases = [ (range "8.12" "8.19") (range "1.12" "1.19") ]; out = "2.4"; }
+    { cases = [ (range "8.16" "8.20") (isGe "2.0")          ]; out = "3.2"; }
+    { cases = [ (range "8.12" "8.20") (range "1.12" "1.19") ]; out = "2.4"; }
   ] null;
 
   propagatedBuildInputs = [ mathcomp.algebra mathcomp.ssreflect mathcomp.fingroup ];

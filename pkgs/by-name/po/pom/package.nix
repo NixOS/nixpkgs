@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pom";
-  version = "0-unstable-2024-04-29";
+  version = "0.1.0-unstable-2024-05-17";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "pom";
-    rev = "a8a2da7043f222b9c849d1ea93726433980469c0";
-    hash = "sha256-EAt0Q0gSHngQj2G4qYM3zhUGkl/vqa7J36iajlH4dzs=";
+    rev = "699204a6db4f942ee6a6bf0dc389709ab6e1663f";
+    hash = "sha256-Qc4gU2oCgI/B788NuEqB+FoAYZQ84m5K3eArcdz+q20=";
   };
 
-  vendorHash = "sha256-2ghUITtL6RDRVqAZZ+PMj4sYDuh4VaKtGT11eSMlBiA=";
+  vendorHash = "sha256-xJNcFX+sZjZwXFTNrhsDnj3eR/r8+NH6tzpEJOhtkeY=";
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 

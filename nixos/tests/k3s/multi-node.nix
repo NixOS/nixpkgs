@@ -1,3 +1,4 @@
+# A test that runs a multi-node k3s cluster and verify pod networking works across nodes
 import ../make-test-python.nix (
   {
     pkgs,
@@ -75,21 +76,14 @@ import ../make-test-python.nix (
             role = "server";
             package = k3s;
             clusterInit = true;
-            extraFlags = builtins.toString [
-              "--disable"
-              "coredns"
-              "--disable"
-              "local-storage"
-              "--disable"
-              "metrics-server"
-              "--disable"
-              "servicelb"
-              "--disable"
-              "traefik"
-              "--node-ip"
-              "192.168.1.1"
-              "--pause-image"
-              "test.local/pause:local"
+            extraFlags = [
+              "--disable coredns"
+              "--disable local-storage"
+              "--disable metrics-server"
+              "--disable servicelb"
+              "--disable traefik"
+              "--node-ip 192.168.1.1"
+              "--pause-image test.local/pause:local"
             ];
           };
           networking.firewall.allowedTCPPorts = [
@@ -189,8 +183,6 @@ import ../make-test-python.nix (
         };
     };
 
-    meta.maintainers = k3s.meta.maintainers;
-
     testScript = ''
       machines = [server, server2, agent]
       for m in machines:
@@ -239,5 +231,7 @@ import ../make-test-python.nix (
       for m in machines:
           m.shutdown()
     '';
+
+    meta.maintainers = lib.teams.k3s.members;
   }
 )

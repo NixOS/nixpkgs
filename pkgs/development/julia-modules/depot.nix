@@ -56,6 +56,7 @@ runCommand "julia-depot" {
   # See https://github.com/NixOS/nixpkgs/issues/315890
   git config --global --add safe.directory '*'
 
+  # Tell Julia to use the Git binary we provide, rather than internal libgit2.
   export JULIA_PKG_USE_CLI_GIT="true"
 
   # At time of writing, this appears to be the only way to turn precompiling's

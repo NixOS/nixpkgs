@@ -24,13 +24,13 @@
 }:
 
 let
-  version = "2.9.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7dcZbuz3yi0sND6AEqIwIo9byeZheOpIAhmBpOW5lhU=";
+    hash = "sha256-lKPjvWc6FcEOwDgIUW8Eki8h8C19G618o1rhXnrlw/E=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -49,18 +49,6 @@ let
           rev = "0.25.0";
           hash = "sha256-ng98DTw49zyFjrPnEwfnPfONyjKKZYuLl0qduxSppYk=";
         };
-      });
-
-      djangorestframework = prev.djangorestframework.overridePythonAttrs (oldAttrs: rec {
-        version = "3.14.0";
-        src = oldAttrs.src.override {
-          rev = version;
-          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
-        };
-        nativeCheckInputs = with prev; [
-          pytest7CheckHook
-          pytest-django
-        ];
       });
     };
   };
@@ -86,7 +74,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-gLEzifZK8Ok1SOo3YIIV5pTx4cbedQh025VqkodYrYQ=";
+    npmDepsHash = "sha256-gbHavMUmsZaRSfBkdrrNpTO0R8zacb8110U8n5Y09oU=";
 
     nativeBuildInputs = [
       pkg-config
@@ -150,6 +138,7 @@ python.pkgs.buildPythonApplication rec {
     django-filter
     django-guardian
     django-multiselectfield
+    django-soft-delete
     djangorestframework
     djangorestframework-guardian2
     drf-writable-nested
@@ -165,7 +154,7 @@ python.pkgs.buildPythonApplication rec {
     ocrmypdf
     pathvalidate
     pdf2image
-    psycopg2
+    psycopg
     python-dateutil
     python-dotenv
     python-gnupg
@@ -230,6 +219,7 @@ python.pkgs.buildPythonApplication rec {
     pytest-django
     pytest-env
     pytest-httpx
+    pytest-mock
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook

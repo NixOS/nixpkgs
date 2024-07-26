@@ -2,41 +2,62 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  gnome,
+  sassc,
   gnome-themes-extra,
   gtk-engine-murrine,
+  colorVariants ? [] # default: install all icons
 }:
-stdenvNoCC.mkDerivation {
+
+let
   pname = "gruvbox-gtk-theme";
-  version = "0-unstable-2024-06-12";
+  colorVariantList = [
+    "dark"
+    "light"
+  ];
+
+in
+lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
+
+stdenvNoCC.mkDerivation {
+  inherit pname;
+  version = "0-unstable-2024-06-27";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
     repo = "Gruvbox-GTK-Theme";
-    rev = "1a0f6672283e1846ec307addd4647f2daad29402";
-    hash = "sha256-bbL4bHAdkmReogUQML9sMpSallZ7wrgbK3R64xiAYRo=";
+    rev = "f568ccd7bf7570d8a27feb62e318b07b88e24b94";
+    hash = "sha256-4vGwPggHdNjtQ03UFgN4OH5+ZEkdIlivCdYuZ0Dsd5Q=";
   };
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
+  nativeBuildInputs = [ gnome.gnome-shell sassc ];
   buildInputs = [ gnome-themes-extra ];
 
   dontBuild = true;
 
+  postPatch = ''
+    patchShebangs themes/install.sh
+  '';
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/themes
-    cp -a themes/* $out/share/themes
+    cd themes
+    ./install.sh -n Gruvbox -c ${lib.concatStringsSep " " (if colorVariants != [] then colorVariants else colorVariantList)} --tweaks macos -d "$out/share/themes"
     runHook postInstall
   '';
 
   meta = {
-    description = "Gtk theme based on the Gruvbox colour pallete";
-    homepage = "https://www.pling.com/p/1681313/";
-    license = lib.licenses.gpl3Only;
+    description = "GTK theme based on the Gruvbox colour palette";
+    homepage = "https://github.com/Fausto-Korpsvart/Gruvbox-GTK-Theme";
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       math-42
+      d3vil0p3r
     ];
   };
 }

@@ -1,7 +1,7 @@
 { lib, stdenvNoCC, fetchzip }:
 
 stdenvNoCC.mkDerivation rec {
-  name = "pixel-code";
+  pname = "pixel-code";
   version = "2.2";
 
   src = fetchzip {

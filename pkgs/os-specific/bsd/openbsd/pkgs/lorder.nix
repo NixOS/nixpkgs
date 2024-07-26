@@ -8,6 +8,7 @@
 }:
 
 mkDerivation {
+  noCC = true;
   path = "usr.bin/lorder";
   nativeBuildInputs = [
     bsdSetupHook

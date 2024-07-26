@@ -1,7 +1,7 @@
 { fasm, lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation (finalAttr: {
-  name = "patcher9x";
+  pname = "patcher9x";
   version = "0.8.50";
 
   srcs = [

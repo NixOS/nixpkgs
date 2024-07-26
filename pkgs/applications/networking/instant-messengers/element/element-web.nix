@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
 
   src = fetchFromGitHub {
     owner = "vector-im";
-    repo = finalAttrs.pname;
+    repo = "element-web";
     rev = "v${finalAttrs.version}";
     hash = webSrcHash;
   };

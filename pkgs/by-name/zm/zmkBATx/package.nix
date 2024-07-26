@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Battery monitoring for ZMK split keyboards";
     longDescription = "Opensource tool for peripheral battery monitoring zmk split keyboard over BLE for linux.";
     homepage = "https://github.com/mh4x0f/zmkBATx";
+    changelog = "https://github.com/mh4x0f/zmkBATx/releases/tag/${finalAttrs.src.rev}";
     license = licenses.mit;
     mainProgram = "zmkbatx";
     platforms = platforms.linux;

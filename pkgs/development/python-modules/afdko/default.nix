@@ -109,7 +109,13 @@ buildPythonPackage rec {
   '';
 
   disabledTests =
-    lib.optionals (!runAllTests) [
+    [
+      # broke in the fontforge 4.51 -> 4.53 update
+      "test_glyphs_2_7"
+      "test_hinting_data"
+      "test_waterfallplot"
+    ]
+    ++ lib.optionals (!runAllTests) [
       # Disable slow tests, reduces test time ~25 %
       "test_report"
       "test_post_overflow"

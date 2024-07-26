@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "devcontainer";
-  version = "0.64.0";
+  version = "0.65.0";
 
   src = fetchFromGitHub {
     owner = "devcontainers";
     repo = "cli";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-kO5bRLbHNObDLGURrEgNLK70ml2FVDQioLa8cbBBurk=";
+    hash = "sha256-Q1qQjIRyOeFr8qrZJZ1IkO12RM2hp4IxI1NI7WqpmZA=";
   };
 
   yarnOfflineCache = fetchYarnDeps {

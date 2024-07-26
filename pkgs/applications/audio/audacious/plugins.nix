@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl
+, fetchFromGitHub
 , alsa-lib
 , audacious
 , curl
@@ -8,7 +8,6 @@
 , flac
 , fluidsynth
 , gdk-pixbuf
-, gettext
 , lame
 , libbs2b
 , libcddb
@@ -39,7 +38,7 @@
 , pipewire
 , qtbase
 , qtmultimedia
-, qtx11extras
+, qtwayland
 , soxr
 , vgmstream
 , wavpack
@@ -47,17 +46,18 @@
 
 stdenv.mkDerivation rec {
   pname = "audacious-plugins";
-  version = "4.3.1";
+  version = "4.4";
 
-  src = fetchurl {
-    url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}.tar.bz2";
-    sha256 = "sha256-Leom469YOi1oTfJAsnsrKTK81lPfTbUAqF9P5dX9yKY=";
+  src = fetchFromGitHub {
+    owner = "audacious-media-player";
+    repo = "audacious-plugins";
+    rev = "${pname}-${version}";
+    hash = "sha256-J9jgBl8J4W9Yvrlg1KlzYgGTmdxUZM9L11rCftKFSlE=";
   };
 
   patches = [ ./0001-Set-plugindir-to-PREFIX-lib-audacious.patch ];
 
   nativeBuildInputs = [
-    gettext
     meson
     ninja
     pkg-config
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     pipewire
     qtbase
     qtmultimedia
-    qtx11extras
+    qtwayland
     soxr
     wavpack
     libopenmpt
@@ -116,5 +116,6 @@ stdenv.mkDerivation rec {
 
   meta = audacious.meta // {
     description = "Plugins for Audacious music player";
+    downloadPage = "https://github.com/audacious-media-player/audacious-plugins";
   };
 }

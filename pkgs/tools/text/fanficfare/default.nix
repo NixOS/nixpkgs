@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "fanficfare";
-  version = "4.35.0";
+  version = "4.36.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hPBURlsrr/7c26YFZo5UT7PTs8s+D8BXxjU/uposHjQ=";
+    hash = "sha256-gsaY02x8hJr0NzR5Q9VB3KkAFnotjrWXRoUjFpBJB0w=";
   };
 
   nativeBuildInputs = with python3Packages; [

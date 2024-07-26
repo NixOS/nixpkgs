@@ -1,27 +1,20 @@
 --- a/build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt
 +++ b/build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt
-@@ -87,13 +87,13 @@
-           }
-           val targetFile = root.resolve("${split[1]}-${split[2]}.jar")
-           val uri = BuildDependenciesDownloader.getUriForMavenArtifact(
--            mavenRepository = BuildDependenciesConstants.MAVEN_CENTRAL_URL,
-+            mavenRepository = "MAVEN_REPO_HERE",
-             groupId = split[0],
-             artifactId = split[1],
-             version = split[2],
-             packaging = "jar"
-           )
--          targetFile to downloadFileToCacheLocation(uri.toString(), communityRoot)
-+          targetFile to Path.of(uri.toString())
-         }
+@@ -89,7 +89,7 @@
        }
-     }.asSequence().map { it.getCompleted() }.toMap()
-@@ -133,21 +133,6 @@
+       val file = root.resolve("${split[1]}-${split[2]}.jar")
+       val uri = BuildDependenciesDownloader.getUriForMavenArtifact(
+-        mavenRepository = BuildDependenciesConstants.MAVEN_CENTRAL_URL,
++        mavenRepository = "MAVEN_REPO_HERE",
+         groupId = split[0],
+         artifactId = split[1],
+         version = split[2],
+@@ -145,22 +145,7 @@
    }
- 
+
    suspend fun downloadMavenDistribution(communityRoot: BuildDependenciesCommunityRoot): Path {
 -    val extractDir = communityRoot.communityRoot.resolve("plugins/maven/maven36-server-impl/lib/maven3")
--    val properties = BuildDependenciesDownloader.getDependenciesProperties(communityRoot)
+-    val properties = BuildDependenciesDownloader.getDependencyProperties(communityRoot)
 -    val bundledMavenVersion = properties.property("bundledMavenVersion")
 -    mutex.withLock {
 -      val uri = BuildDependenciesDownloader.getUriForMavenArtifact(
@@ -38,7 +31,8 @@
 -    return extractDir
 +    return Path.of("MAVEN_PATH_HERE")
    }
- }
+
+   suspend fun downloadMavenTelemetryDependencies(communityRoot: BuildDependenciesCommunityRoot): Path =
 --- a/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/BuildDependenciesDownloader.kt
 +++ b/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/BuildDependenciesDownloader.kt
 @@ -70,7 +70,7 @@
@@ -52,19 +46,19 @@
      return URI.create("${base}/${groupStr}/${artifactId}/${version}/${artifactId}-${version}${classifierStr}.${packaging}")
 --- a/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
 +++ b/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
-@@ -25,11 +25,7 @@
+@@ -33,11 +33,7 @@
    }
- 
-   fun getJdkHome(communityRoot: BuildDependenciesCommunityRoot, os: OS, arch: Arch, infoLog: (String) -> Unit): Path {
--    val jdkUrl = getUrl(communityRoot, os, arch)
--    val jdkArchive = BuildDependenciesDownloader.downloadFileToCacheLocation(communityRoot, jdkUrl)
--    val jdkExtracted = BuildDependenciesDownloader.extractFileToCacheLocation(
--      communityRoot, jdkArchive, BuildDependenciesExtractOptions.STRIP_ROOT)
--    infoLog("jps-bootstrap JDK is at $jdkExtracted")
+
+   suspend fun getJdkHome(communityRoot: BuildDependenciesCommunityRoot, os: OS, arch: Arch, infoLog: (String) -> Unit): Path {
+-    val jdkUrl = getUrl(communityRoot = communityRoot, os = os, arch = arch)
+-    val jdkArchive = downloadFileToCacheLocation(url = jdkUrl.toString(), communityRoot = communityRoot)
+-    val jdkExtracted = BuildDependenciesDownloader.extractFileToCacheLocation(communityRoot = communityRoot,
+-                                                                              archiveFile = jdkArchive,
+-                                                                              BuildDependenciesExtractOptions.STRIP_ROOT)
 +    val jdkExtracted = Path.of("JDK_PATH_HERE")
- 
-     val jdkHome: Path = if (os == OS.MACOSX) {
-       jdkExtracted.resolve("Contents").resolve("Home")
+     val jdkHome = if (os == OS.MACOSX) jdkExtracted.resolve("Contents").resolve("Home") else jdkExtracted
+     infoLog("JPS-bootstrap JDK (jdkHome=$jdkHome, executable=${getJavaExecutable(jdkHome)})")
+     return jdkHome
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/LinuxDistributionCustomizer.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/LinuxDistributionCustomizer.kt
 @@ -46,7 +46,7 @@
@@ -98,23 +92,24 @@
        val tarGzPath = buildTarGz(arch = arch, runtimeDir = runtimeDir, unixDistPath = osAndArchSpecificDistPath, suffix = suffix(arch))
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
-@@ -11,6 +11,7 @@
- import java.nio.file.Files
- import java.nio.file.Path
+@@ -9,6 +9,8 @@
+ import java.io.ByteArrayOutputStream
+ import java.io.DataOutputStream
  import java.util.*
++import java.nio.file.Path
 +import kotlin.io.path.readText
- 
+
  private const val MARKETPLACE_BROKEN_PLUGINS_URL = "https://plugins.jetbrains.com/files/brokenPlugins.json"
- 
-@@ -22,7 +23,7 @@
- 
+
+@@ -19,7 +21,7 @@
+   val span = Span.current()
+
    val allBrokenPlugins = try {
-     val jsonFormat = Json { ignoreUnknownKeys = true }
 -    val content = downloadAsText(MARKETPLACE_BROKEN_PLUGINS_URL)
 +    val content = Path.of("BROKEN_PLUGINS_HERE").readText()
-     jsonFormat.decodeFromString(ListSerializer(MarketplaceBrokenPlugin.serializer()), content)
+     @Suppress("JSON_FORMAT_REDUNDANT")
+     Json { ignoreUnknownKeys = true }.decodeFromString(ListSerializer(MarketplaceBrokenPlugin.serializer()), content)
    }
-   catch (e: Exception) {
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt
 @@ -23,31 +23,11 @@
@@ -151,3 +146,17 @@
    }
  
    fun getKotlinJpsPluginVersion(communityRoot: BuildDependenciesCommunityRoot): String {
+--- a/platform/build-scripts/downloader/src/ktor.kt
++++ b/platform/build-scripts/downloader/src/ktor.kt
+@@ -221,6 +221,11 @@
+   val lock = fileLocks.getLock(targetPath.hashCode())
+   lock.lock()
+   try {
++    if (url.startsWith("/")) {
++      var sourceUrl = Path.of(url)
++      Files.copy(sourceUrl, target)
++    }
++
+     if (Files.exists(target)) {
+       Span.current().addEvent("use asset from cache", Attributes.of(
+         AttributeKey.stringKey("url"), url,

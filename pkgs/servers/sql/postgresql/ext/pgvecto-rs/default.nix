@@ -44,6 +44,10 @@ in
       src = ./0001-read-clang-flags-from-environment.diff;
       clang = lib.getExe clang;
     })
+    # Fix build failure on rustc 1.78 due to missing feature flag.
+    # Can (likely) be removed when pgvecto-rs 0.3.0 is released.
+    # See https://github.com/NixOS/nixpkgs/issues/320131
+    ./0002-std-detect-use-upstream.diff
   ];
 
   src = fetchFromGitHub {
@@ -59,7 +63,7 @@ in
     lockFile = ./Cargo.lock;
     outputHashes = {
       "openai_api_rust-0.1.8" = "sha256-os5Y8KIWXJEYEcNzzT57wFPpEXdZ2Uy9W3j5+hJhhR4=";
-      "std_detect-0.1.5" = "sha256-RwWejfqyGOaeU9zWM4fbb/hiO1wMpxYPKEjLO0rtRmU=";
+      "std_detect-0.1.5" = "sha256-Rsy8N0pTJ/3AIHjRyeOeyY7Q9Ho46ZcDmJFurCbRxiQ=";
     };
   };
 

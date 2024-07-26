@@ -125,8 +125,8 @@ rec {
   };
 
   wlroots_0_17 = generic {
-    version = "0.17.3";
-    hash = "sha256-jth6BKci3sVDC86o+gSHKyDWnibVcNmipm7nn0S6LTg=";
+    version = "0.17.4";
+    hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
     extraNativeBuildInputs = [
       hwdata
     ];

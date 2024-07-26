@@ -1,0 +1,27 @@
+diff --git a/src/malloc.h b/src/malloc.h
+index cc4d3bf..bbf78cd 100644
+--- a/src/malloc.h
++++ b/src/malloc.h
+@@ -34,6 +34,10 @@ extern int low_memory_warning;
+ # define realloc(ptr, size)		mrealloc(NULL, ptr, size)
+ # define free(ptr)			mfree(NULL, ptr)
+ #else
++#ifdef __APPLE__
++    #include <stdlib.h>
++    #include <sys/types.h>
++#endif
+ # define mmalloc(md, size)		malloc(size)
+ # define mcalloc(md, size)		calloc(size)
+ # define mrealloc(md, ptr, size)	realloc(ptr, size)
+diff --git a/src/tfio.c b/src/tfio.c
+index 2cd2103..8640f2b 100644
+--- a/src/tfio.c
++++ b/src/tfio.c
+@@ -70,6 +70,7 @@ static void fileputs(const char *str, FILE *fp);
+ static void filenputs(const char *str, int n, FILE *fp);
+ static void queueputline(conString *line, TFILE *file);
+ 
++extern void    main_loop(void);
+ 
+ void init_tfio(void)
+ {

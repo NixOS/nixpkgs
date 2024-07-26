@@ -50,6 +50,10 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # test requires database access
     "--skip=session_middleware::tests::test_session_auth"
+
+    # tests require network access
+    "--skip=scheduled_tasks::tests::test_nodeinfo_mastodon_social"
+    "--skip=scheduled_tasks::tests::test_nodeinfo_voyager_lemmy_ml"
   ];
 
   passthru.updateScript = ./update.py;
@@ -59,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada billewanick ];
+    maintainers = with maintainers; [ happysalada billewanick georgyo ];
     mainProgram = "lemmy_server";
   };
 }

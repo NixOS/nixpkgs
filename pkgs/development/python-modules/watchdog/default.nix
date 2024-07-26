@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "4.0.0";
+  version = "4.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4+cGXL2r5hg6uCGZ16T2s7oKQ4xaUSpoVZhGzLdqeOw=";
+    hash = "sha256-7rqs9nT6JVEeiGcCjSgeYC7mUABFtX9DsId4CC9/i0Q=";
   };
 
   # force kqueue on x86_64-darwin, because our api version does
@@ -104,6 +104,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gorakhargosh/watchdog";
     changelog = "https://github.com/gorakhargosh/watchdog/blob/v${version}/changelog.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

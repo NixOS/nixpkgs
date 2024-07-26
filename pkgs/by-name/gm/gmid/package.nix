@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gmid";
-  version = "2.0.4";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
     repo = pname;
     rev = version;
-    hash = "sha256-ioyQS5jjOICAWtZG8no+WUmLybEVLvum6TFFFdnMdfY=";
+    hash = "sha256-xuA5yLtRu9GDrSr7FBlAwEjCjFVRmnOuBM62AHOHDhc=";
   };
 
   nativeBuildInputs = [ bison ];
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple and secure Gemini server";
     homepage = "https://gmid.omarpolo.com/";
+    changelog = "https://gmid.omarpolo.com/changelog.html";
     license = licenses.isc;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;

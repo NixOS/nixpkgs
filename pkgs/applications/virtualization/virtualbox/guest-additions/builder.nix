@@ -37,7 +37,6 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    #../gcc-13.patch
     ## https://www.virtualbox.org/changeset/100258/vbox
     ./no-legacy-xorg.patch
   ];

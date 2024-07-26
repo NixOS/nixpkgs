@@ -82,6 +82,6 @@ mkDerivation rec {
     mainProgram = "plasmaphonedialer";
     homepage = "https://invent.kde.org/plasma-mobile/plasma-dialer";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -15,7 +15,6 @@
   phonenumbers,
   python-magic,
   readabilipy,
-  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:

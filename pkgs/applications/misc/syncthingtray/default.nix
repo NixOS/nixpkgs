@@ -31,17 +31,18 @@ during runtime. Alternatively, one can edit the desktop file themselves after
 it is generated See:
 https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
 , autostartExecPath ? "syncthingtray"
+, versionCheckHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.5.4";
+  version = "1.5.5";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3Z9heiQiuYzWtReKs/XeA+ENRKgxHR74ANzrDcdyjh4=";
+    hash = "sha256-NfFB+4cqe1rHqc+w0Enl9h33gPjJ3CfrFpyOhysmz0Q=";
   };
 
   buildInputs = [
@@ -85,9 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Make binary available in PATH like on other platforms
     ln -s $out/Applications/syncthingtray.app/Contents/MacOS/syncthingtray $out/bin/syncthingtray
   '';
-  installCheckPhase = ''
-    $out/bin/syncthingtray --help | grep ${finalAttrs.version}
-  '';
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   cmakeFlags = [
     "-DQT_PACKAGE_PREFIX=Qt${lib.versions.major qtbase.version}"

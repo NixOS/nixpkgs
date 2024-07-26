@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://hpc.fau.de/research/tools/likwid/";
+    changelog = "https://github.com/RRZE-HPC/likwid/releases/tag/v${version}";
     description = "Performance monitoring and benchmarking suite";
     license = licenses.gpl3Only;
     # Might work on ARM by appropriately setting COMPILER in config.mk

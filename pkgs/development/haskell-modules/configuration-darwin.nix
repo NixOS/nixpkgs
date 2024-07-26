@@ -323,6 +323,20 @@ self: super: ({
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
 
+  warp = super.warp.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  ghcjs-dom-hello = overrideCabal (drv: {
+    libraryHaskellDepends = with self; [ jsaddle jsaddle-warp ];
+    executableHaskellDepends = with self; [ ghcjs-dom jsaddle-wkwebview ];
+  }) super.ghcjs-dom-hello;
+
+  jsaddle-hello = overrideCabal (drv: {
+    libraryHaskellDepends = with self; [ jsaddle lens ];
+    executableHaskellDepends = with self; [ jsaddle-warp jsaddle-wkwebview ];
+  }) super.jsaddle-hello;
+
   jsaddle-wkwebview = overrideCabal (drv: {
     libraryFrameworkDepends = with pkgs.buildPackages.darwin.apple_sdk.frameworks; [ Cocoa WebKit ];
     libraryHaskellDepends = with self; [ aeson data-default jsaddle ]; # cabal2nix doesn't add darwin-only deps

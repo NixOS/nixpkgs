@@ -2,14 +2,13 @@
 , stdenv
 , fetchurl
 , fetchFromGitLab
+, fetchpatch
 , cairo
 , cmake
 , boost
-, cups-filters
 , curl
 , fontconfig
 , freetype
-, inkscape
 , lcms
 , libiconv
 , libintl
@@ -18,7 +17,6 @@
 , openjpeg
 , pkg-config
 , python3
-, scribus
 , zlib
 , withData ? true, poppler_data
 , qt5Support ? false, qt6Support ? false, qtbase ? null
@@ -27,6 +25,15 @@
 , utils ? false, nss ? null
 , minimal ? false
 , suffix ? "glib"
+
+# for passthru.tests
+, cups-filters
+, gdal
+, gegl
+, inkscape
+, pdfslicer
+, scribus
+, vips
 }:
 
 let
@@ -54,6 +61,15 @@ stdenv.mkDerivation (finalAttrs: rec {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
     hash = "sha256-GRh6P90F8z59YExHmcGD3lygEYZAyIs3DdzzE2NDIi4=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://access.redhat.com/security/cve/CVE-2024-6239
+      name = "CVE-2024-6239.patch";
+      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/0554731052d1a97745cb179ab0d45620589dd9c4.patch";
+      hash = "sha256-I78wJ4l1DSh+x/e00ZL8uvrGdBH+ufp+EDm0A1XWyCU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -131,7 +147,19 @@ stdenv.mkDerivation (finalAttrs: rec {
     inherit testData;
     tests = {
       # These depend on internal poppler code that frequently changes.
-      inherit inkscape cups-filters scribus;
+      inherit
+        cups-filters
+        inkscape
+        scribus
+      ;
+
+      inherit
+        gegl
+        pdfslicer
+        vips
+      ;
+      gdal = gdal.override { usePoppler = true; };
+      python-poppler-qt5 = python3.pkgs.poppler-qt5;
     };
   };
 

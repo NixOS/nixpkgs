@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flashgbx";
-  version = "3.37";
+  version = "4.1";
 
   src = fetchFromGitHub {
     repo = "FlashGBX";
     owner = "lesserkuma";
-    rev = version;
-    hash = "sha256-3527QmSSpGotFHKTg0yb6MgHKSze+9BECQWqZM3qKsw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4/f3K5MQBEIdYdcT2NudHJL+VyZT/hj9bw5tfJIco8w=";
   };
 
   desktopItems = [

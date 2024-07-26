@@ -1,5 +1,4 @@
-{ lib
-, fetchFromGitHub
+{ fetchFromGitHub
 , fetchPypi
 , python3
 }:
@@ -17,7 +16,6 @@ let
         };
         nativeBuildInputs = with pySelf; [
           setuptools
-          pythonRelaxDepsHook
         ];
         pythonRelaxDeps = [
           "werkzeug"

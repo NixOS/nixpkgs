@@ -10,9 +10,9 @@
 , help2man
 , cmake
 , zlib
-, withApplePCSC ? stdenv.isDarwin
 , nix-update-script
 , testers
+, withApplePCSC ? stdenv.isDarwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "-Werror" ""
+    substituteInPlace CMakeLists.txt --replace-fail "-Werror" ""
   '';
 
   nativeBuildInputs = [
@@ -41,32 +41,37 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openssl
-    check
     zlib.dev
   ]
   ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
   cmakeFlags = [
-    "-DGENERATE_MAN_PAGES=ON"
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_MANDIR=share/man"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeBool "GENERATE_MAN_PAGES" true)
+    (lib.cmakeFeature "BACKEND" (if withApplePCSC then "macscard" else "pcsc"))
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_MANDIR" "share/man")
   ];
 
-  configureFlags = [ "--with-backend=${if withApplePCSC then "macscard" else "pcsc"}" ];
+  doCheck = true;
+
+  nativeCheckInputs = [ check ];
 
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [ "--version-regex" "yubico-piv-tool-([0-9.]+)$" ];
     };
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "yubico-piv-tool --version";
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "yubico-piv-tool --version";
+      };
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://developers.yubico.com/yubico-piv-tool/";
     changelog = "https://developers.yubico.com/yubico-piv-tool/Release_Notes.html";
     description = ''
@@ -80,9 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
       certificates, and create certificate requests, and other operations.
       A shared library and a command-line tool is included.
     '';
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ viraptor anthonyroussel ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ viraptor anthonyroussel ];
     mainProgram = "yubico-piv-tool";
+    pkgConfigModules = [ "ykcs11" "ykpiv" ];
   };
 })

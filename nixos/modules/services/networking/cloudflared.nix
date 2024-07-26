@@ -131,7 +131,7 @@ let
         `cloudflared` starts a proxy server to translate HTTP traffic into TCP when proxying, for example, SSH or RDP. This configures what type of proxy will be started. Valid options are:
 
         - `""` for the regular proxy
-        - `"socks"` for a SOCKS5 proxy. Refer to the [https://developers.cloudflare.com/cloudflare-one/tutorials/kubectl/](tutorial on connecting through Cloudflare Access using kubectl) for more information.
+        - `"socks"` for a SOCKS5 proxy. Refer to the [tutorial on connecting through Cloudflare Access using kubectl](https://developers.cloudflare.com/cloudflare-one/tutorials/kubectl/) for more information.
       '';
     };
   };
@@ -167,7 +167,7 @@ in
             description = ''
               Credential file.
 
-              See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file](Credentials file).
+              See [Credentials file](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file).
             '';
           };
 
@@ -178,7 +178,7 @@ in
               description = ''
                 Enable warp routing.
 
-                See [https://developers.cloudflare.com/cloudflare-one/tutorials/warp-to-tunnel/](Connect from WARP to a private network on Cloudflare using Cloudflare Tunnel).
+                See [Connect from WARP to a private network on Cloudflare using Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/tutorials/warp-to-tunnel/).
               '';
             };
           };
@@ -204,7 +204,7 @@ in
                   description = ''
                     Service to pass the traffic.
 
-                    See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/#supported-protocols](Supported protocols).
+                    See [Supported protocols](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/#supported-protocols).
                   '';
                   example = "http://localhost:80, tcp://localhost:8000, unix:/home/production/echo.sock, hello_world or http_status:404";
                 };
@@ -226,7 +226,7 @@ in
             description = ''
               Ingress rules.
 
-              See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/](Ingress rules).
+              See [Ingress rules](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/).
             '';
             example = {
               "*.domain.com" = "http://localhost:80";

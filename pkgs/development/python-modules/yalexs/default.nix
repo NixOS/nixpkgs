@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "6.0.0";
+  version = "6.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "yalexs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xBBO0cXdOzt2ioMQzzdtSKB0WxOZBIb4PsiKoRrUUSc=";
+    hash = "sha256-0EvQj+aKzpnehvI5IS3DBaJOp4wYpAWwkkaOLgwtdJs=";
   };
 
   postPatch = ''

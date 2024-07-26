@@ -39,7 +39,9 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   configureFlags = [ "--with-libgpg-error-prefix=${libgpg-error.dev}" ]
-      ++ lib.optional (stdenv.hostPlatform.isMusl || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--disable-asm"; # for darwin see https://dev.gnupg.org/T5157
+      ++ lib.optional (stdenv.hostPlatform.isMusl || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--disable-asm" # for darwin see https://dev.gnupg.org/T5157
+      # Fix undefined reference errors with version script under LLVM.
+      ++ lib.optional (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") "LDFLAGS=-Wl,--undefined-version";
 
   # Necessary to generate correct assembly when compiling for aarch32 on
   # aarch64
@@ -80,6 +82,6 @@ stdenv.mkDerivation rec {
     description = "General-purpose cryptographic library";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ ];
   };
 }

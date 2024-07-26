@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "C++ Performance Portability Programming EcoSystem";
     homepage = "https://github.com/kokkos/kokkos";
+    changelog = "https://github.com/kokkos/kokkos/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20-llvm ];
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.unix;

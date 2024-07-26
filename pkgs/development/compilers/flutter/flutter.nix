@@ -5,6 +5,8 @@
 , engineUrl ? "https://github.com/flutter/engine.git@${engineVersion}"
 , enginePatches ? []
 , engineRuntimeModes ? [ "release" "debug" ]
+, engineSwiftShaderHash
+, engineSwiftShaderRev
 , patches
 , channel
 , dart
@@ -19,26 +21,34 @@
 , git
 , which
 , jq
-, flutterTools ? callPackage ./flutter-tools.nix {
-    inherit dart version;
-    flutterSrc = src;
-    inherit patches;
-    inherit pubspecLock;
-    systemPlatform = stdenv.hostPlatform.system;
-  }
+, flutterTools ? null
 }@args:
 
 let
   engine = if args.useNixpkgsEngine or false then
     callPackage ./engine/default.nix {
-      dartSdkVersion = dart.version;
+      inherit (args) dart;
+      dartSdkVersion = args.dart.version;
       flutterVersion = version;
+      swiftshaderRev = engineSwiftShaderRev;
+      swiftshaderHash = engineSwiftShaderHash;
       version = engineVersion;
       hashes = engineHashes;
       url = engineUrl;
       patches = enginePatches;
       runtimeModes = engineRuntimeModes;
     } else null;
+
+  dart = if args.useNixpkgsEngine or false then
+    engine.dart else args.dart;
+
+  flutterTools = args.flutterTools or (callPackage ./flutter-tools.nix {
+    inherit dart version;
+    flutterSrc = src;
+    inherit patches;
+    inherit pubspecLock;
+    systemPlatform = stdenv.hostPlatform.system;
+  });
 
   unwrapped =
     stdenv.mkDerivation {

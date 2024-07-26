@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     repo = "Fire";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-X3pzTrNd0G6BouCDkr3dukQTFDzZ7qblIYxFQActKGE=";
+    hash = "sha256-X3pzTrNd0G6BouCDkr3dukQTFDzZ7qblIYxFQActKGE=";
   };
 
   patches = [

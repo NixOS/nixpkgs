@@ -57,7 +57,7 @@ buildPythonApplication rec {
     homepage = "https://owlink.org/";
     changelog = "https://github.com/seemoo-lab/opendrop/releases/tag/${src.rev}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     mainProgram = "opendrop";
     platforms = [ "x86_64-linux" ];
   };

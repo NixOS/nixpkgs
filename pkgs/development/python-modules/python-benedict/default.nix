@@ -15,7 +15,6 @@
   python-fsutil,
   python-slugify,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   setuptools,
@@ -41,7 +40,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "boto3" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

@@ -101,8 +101,7 @@ in {
 
       preStart = with cfg.settings; ''
         if ! test -f ${password-file}; then
-          < /dev/urandom tr -dc _A-Z-a-z-0-9 2> /dev/null | head -c32 > ${password-file}
-          chmod 0600 ${password-file}
+          < /dev/urandom tr -dc _A-Z-a-z-0-9 2> /dev/null | head -c32 | install -m 600 /dev/stdin ${password-file}
           echo "Initialized ${password-file} from /dev/urandom"
         fi
         if [ ! -f ${data-dir}/keys/libp2p.key ]; then

@@ -140,8 +140,7 @@ let
     passAsFile = [ "kernelConfig" ];
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [ perl gmp libmpc mpfr ]
-      ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ]
+    nativeBuildInputs = [ perl gmp libmpc mpfr bison flex ]
       ++ lib.optional (lib.versionAtLeast version "5.2") pahole
       ++ lib.optionals withRust [ rust-bindgen rustc ]
     ;
@@ -220,7 +219,7 @@ let
 
     config = {
       CONFIG_MODULES = "y";
-      CONFIG_FW_LOADER = "m";
+      CONFIG_FW_LOADER = "y";
       CONFIG_RUST = if withRust then "y" else "n";
     };
   });

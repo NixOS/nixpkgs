@@ -45,6 +45,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/aaugustin/django-sesame";
     changelog = "https://github.com/aaugustin/django-sesame/blob/${version}/docs/changelog.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

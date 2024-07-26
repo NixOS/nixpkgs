@@ -993,7 +993,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/blaze/datashape/releases/tag/${version}";
     homepage = "https://github.com/ContinuumIO/datashape";
-    description = "A data description language";
+    description = "Data description language";
     license = lib.licenses.bsd2;
   };
 }
@@ -1118,7 +1118,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/pyFFTW/pyFFTW/releases/tag/v${version}";
-    description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
+    description = "Pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
     homepage = "http://hgomersall.github.com/pyFFTW";
     license = with lib.licenses; [ bsd2 bsd3 ];
   };
@@ -1315,9 +1315,6 @@ we can do:
 
 ```nix
 {
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
   pythonRelaxDeps = [
     "pkg1"
     "pkg3"
@@ -1340,7 +1337,6 @@ example:
 
 ```nix
 {
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = true;
 }
 ```
@@ -1362,8 +1358,11 @@ instead of a dev dependency).
 Keep in mind that while the examples above are done with `requirements.txt`,
 `pythonRelaxDepsHook` works by modifying the resulting wheel file, so it should
 work with any of the [existing hooks](#setup-hooks).
-It indicates that `pythonRelaxDepsHook` has no effect on build time dependencies, such as in `build-system`.
-If a package requires incompatible build time dependencies, they should be removed in `postPatch` with `substituteInPlace` or something similar.
+
+The `pythonRelaxDepsHook` has no effect on build time dependencies, such as
+those specified in `build-system`. If a package requires incompatible build
+time dependencies, they should be removed in `postPatch` through
+`substituteInPlace` or similar.
 
 #### Using unittestCheckHook {#using-unittestcheckhook}
 

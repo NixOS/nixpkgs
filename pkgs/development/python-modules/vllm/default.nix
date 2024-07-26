@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   which,
@@ -35,6 +36,10 @@
   gpuTargets ? [ ],
 }:
 
+let
+  stdenv_pkg = stdenv;
+in
+
 buildPythonPackage rec {
   pname = "vllm";
   version = "0.3.3";
@@ -52,25 +57,24 @@ buildPythonPackage rec {
     lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets
   );
 
-  # xformers 0.0.23.post1 github release specifies its version as 0.0.24
-  #
   # cupy-cuda12x is the same wheel as cupy, but built with cuda dependencies, we already have it set up
   # like that in nixpkgs. Version upgrade is due to upstream shenanigans
   # https://github.com/vllm-project/vllm/pull/2845/commits/34a0ad7f9bb7880c0daa2992d700df3e01e91363
   #
   # hipcc --version works badly on NixOS due to unresolved paths.
+  # Unclear why pythonRelaxDeps doesn't work here, but on last attempt, it didn't.
   postPatch =
     ''
       substituteInPlace requirements.txt \
-        --replace "xformers == 0.0.23.post1" "xformers == 0.0.24"
+        --replace "xformers == 0.0.23.post1" "xformers"
       substituteInPlace requirements.txt \
-        --replace "cupy-cuda12x == 12.1.0" "cupy == 12.3.0"
+        --replace "cupy-cuda12x == 12.1.0" "cupy"
       substituteInPlace requirements-build.txt \
-        --replace "torch==2.1.2" "torch == 2.2.1"
+        --replace "torch==2.1.2" "torch"
       substituteInPlace pyproject.toml \
-        --replace "torch == 2.1.2" "torch == 2.2.1"
+        --replace "torch == 2.1.2" "torch"
       substituteInPlace requirements.txt \
-        --replace "torch == 2.1.2" "torch == 2.2.1"
+        --replace "torch == 2.1.2" "torch"
     ''
     + lib.optionalString rocmSupport ''
       substituteInPlace setup.py \
@@ -100,9 +104,9 @@ buildPythonPackage rec {
       with cudaPackages;
       [
         cuda_cudart # cuda_runtime.h, -lcudart
-        cuda_cccl.dev # <thrust/*>
-        libcusparse.dev # cusparse.h
-        libcublas.dev # cublas_v2.h
+        cuda_cccl # <thrust/*>
+        libcusparse # cusparse.h
+        libcublas # cublas_v2.h
         libcusolver # cusolverDn.h
       ]
     ))
@@ -140,6 +144,8 @@ buildPythonPackage rec {
       pynvml
       cupy
     ];
+
+  stdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv_pkg;
 
   pythonImportsCheck = [ "vllm" ];
 

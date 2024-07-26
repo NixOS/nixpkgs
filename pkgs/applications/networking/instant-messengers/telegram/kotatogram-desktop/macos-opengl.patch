@@ -1,0 +1,66 @@
+diff --git a/Telegram/SourceFiles/media/view/media_view_pip.cpp b/Telegram/SourceFiles/media/view/media_view_pip.cpp
+index 655e7cf410..c356acbffe 100644
+--- a/Telegram/SourceFiles/media/view/media_view_pip.cpp
++++ b/Telegram/SourceFiles/media/view/media_view_pip.cpp
+@@ -1333,7 +1333,7 @@ void Pip::setupStreaming() {
+ Ui::GL::ChosenRenderer Pip::chooseRenderer(
+ 		Ui::GL::Capabilities capabilities) {
+ 	const auto use = Platform::IsMac()
+-		? true
++		? false
+ 		: capabilities.transparency;
+ 	LOG(("OpenGL: %1 (PipPanel)").arg(Logs::b(use)));
+ 	if (use) {
+Submodule Telegram/lib_ui contains modified content
+diff --git a/Telegram/lib_ui/ui/gl/gl_detection.cpp b/Telegram/lib_ui/ui/gl/gl_detection.cpp
+index 150eb8b..c7ce9f9 100644
+--- a/Telegram/lib_ui/ui/gl/gl_detection.cpp
++++ b/Telegram/lib_ui/ui/gl/gl_detection.cpp
+@@ -236,7 +236,7 @@ Capabilities CheckCapabilities(QWidget *widget, bool avoidWidgetCreation) {
+ 
+ Backend ChooseBackendDefault(Capabilities capabilities) {
+ 	const auto use = ::Platform::IsMac()
+-		? true
++		? false
+ 		: ::Platform::IsWindows()
+ 		? capabilities.supported
+ 		: capabilities.transparency;
+diff --git a/Telegram/lib_ui/ui/platform/mac/ui_window_mac.mm b/Telegram/lib_ui/ui/platform/mac/ui_window_mac.mm
+index 7b29363..22c4fb3 100644
+--- a/Telegram/lib_ui/ui/platform/mac/ui_window_mac.mm
++++ b/Telegram/lib_ui/ui/platform/mac/ui_window_mac.mm
+@@ -16,7 +16,6 @@
+ #include <QtCore/QAbstractNativeEventFilter>
+ #include <QtGui/QWindow>
+ #include <QtGui/QtEvents>
+-#include <QOpenGLWidget>
+ #include <Cocoa/Cocoa.h>
+ 
+ @interface WindowObserver : NSObject {
+@@ -138,7 +137,6 @@ public:
+ 
+ private:
+ 	void init();
+-	void initOpenGL();
+ 	void resolveWeakPointers();
+ 	void revalidateWeakPointers() const;
+ 	void initCustomTitle();
+@@ -272,10 +270,6 @@ void WindowHelper::Private::enforceStyle() {
+ 	}
+ }
+ 
+-void WindowHelper::Private::initOpenGL() {
+-	auto forceOpenGL = std::make_unique<QOpenGLWidget>(_owner->window());
+-}
+-
+ void WindowHelper::Private::resolveWeakPointers() {
+ 	if (!_owner->window()->winId()) {
+ 		_owner->window()->createWinId();
+@@ -338,7 +332,6 @@ void WindowHelper::Private::initCustomTitle() {
+ }
+ 
+ void WindowHelper::Private::init() {
+-	initOpenGL();
+ 	resolveWeakPointers();
+ 	initCustomTitle();
+ }

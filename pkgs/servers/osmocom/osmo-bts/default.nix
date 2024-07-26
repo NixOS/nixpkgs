@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Osmocom GSM Base Transceiver Station (BTS)";
     homepage = "https://osmocom.org/projects/osmobts";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

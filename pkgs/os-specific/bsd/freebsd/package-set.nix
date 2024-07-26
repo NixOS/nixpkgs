@@ -7,6 +7,7 @@
   versionData,
   buildFreebsd,
   patchesRoot,
+  writeText,
 }:
 
 self:
@@ -39,6 +40,7 @@ lib.packagesFromDirectoryRecursive {
         ]
       )
     );
+    inherit lib writeText;
   };
 
   # The manual callPackages below should in principle be unnecessary, but are

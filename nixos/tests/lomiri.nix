@@ -74,6 +74,24 @@ in {
 
           inherit (alacritty) meta;
         })
+
+        # Polkit requests eventually time out.
+        # Keep triggering them until we signal detection success
+        (writeShellApplication {
+          name = "lpa-check";
+          text = ''
+            while [ ! -f /tmp/lpa-checked ]; do
+              pkexec echo a
+            done
+          '';
+        })
+        # Signal detection success
+        (writeShellApplication {
+          name = "lpa-signal";
+          text = ''
+            touch /tmp/lpa-checked
+          '';
+        })
       ];
     };
 
@@ -201,7 +219,15 @@ in {
         machine.wait_for_text(r"(/build/source|hub.cpp|handler.cpp|void|virtual|const)") # awaiting log messages from content-hub
         machine.send_key("ctrl-c")
 
-        machine.send_key("alt-f4")
+        # Doing this here, since we need an in-session shell & separately starting a terminal again wastes time
+        with subtest("polkit agent works"):
+            machine.send_chars("exec lpa-check\n")
+            machine.wait_for_text(r"(Elevated permissions|Login)")
+            machine.screenshot("polkit_agent")
+            machine.execute("lpa-signal")
+
+        # polkit test will quit terminal when agent request times out after OCR success
+        machine.wait_until_fails("pgrep -u ${user} -f lomiri-terminal-app")
 
     # We want the ability to launch applications
     with subtest("starter menu works"):
@@ -230,7 +256,7 @@ in {
 
         # morph-browser has a separate VM test, there isn't anything new we could test here
 
-        # Keep it running, we're using it to check content-hub communication from LSS
+        machine.send_key("alt-f4")
 
     # LSS provides DE settings
     with subtest("system settings open"):
@@ -282,9 +308,8 @@ in {
         # Testing any more would require more applications & setup, the fact that it's already being attempted is a good sign
         machine.send_key("esc")
 
-        machine.send_key("alt-f4") # LSS
-        machine.sleep(2) # focus is slow to switch to second window, closing it *really* helps with OCR afterwards
-        machine.send_key("alt-f4") # Morph
+        machine.sleep(2) # sleep a tiny bit so morph can close & the focus can return to LSS
+        machine.send_key("alt-f4")
 
     # The ayatana indicators are an important part of the experience, and they hold the only graphical way of exiting the session.
     # There's a test app we could use that also displays their contents, but it's abit inconsistent.

@@ -77,7 +77,7 @@ in
       description = "ZNC clientaway module";
       homepage = "https://github.com/kylef/znc-contrib";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ kiwi ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -117,7 +117,7 @@ in
       description = "ZNC ignore module";
       homepage = "https://github.com/kylef/znc-contrib";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ kiwi ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -137,7 +137,7 @@ in
       description = "Palaver ZNC module";
       homepage = "https://github.com/cocodelabs/znc-palaver";
       license = licenses.mit;
-      maintainers = with maintainers; [ kiwi szlend ];
+      maintainers = with maintainers; [ szlend ];
     };
   };
 

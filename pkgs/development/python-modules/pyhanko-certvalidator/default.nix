@@ -78,6 +78,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/MatthiasValvekens/certvalidator";
     changelog = "https://github.com/MatthiasValvekens/certvalidator/blob/v${version}/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

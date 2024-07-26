@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, intltool, perlPackages
-, goffice, gnome, wrapGAppsHook3, gtk3, bison, python3Packages
+, goffice, gnome, adwaita-icon-theme, wrapGAppsHook3, gtk3, bison, python3Packages
 , itstool
 }:
 
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
 
   # ToDo: optional libgda, introspection?
   buildInputs = [
-    goffice gtk3 gnome.adwaita-icon-theme
+    goffice gtk3 adwaita-icon-theme
     python pygobject3
   ] ++ (with perlPackages; [ perl XMLParser ]);
 

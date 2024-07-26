@@ -3,32 +3,24 @@
   python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
   pcre2, libkrb5, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
   libuuid, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
-  nss_wrapper, ncurses, Po4a, http-parser, jansson, jose,
-  docbook_xsl, docbook_xml_dtd_44,
-  testers, nix-update-script, nixosTests, fetchpatch,
+  nss_wrapper, ncurses, Po4a, jansson, jose,
+  docbook_xsl, docbook_xml_dtd_45,
+  testers, nix-update-script, nixosTests,
   withSudo ? false }:
 
 let
-  docbookFiles = "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
+  docbookFiles = "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.9.4";
+  version = "2.9.5";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = "sssd";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-VJXZndbmC6mAVxzvv5Wjb4adrQkP16Rt4cgjl4qGDIc=";
+    hash = "sha256-wr6qFgM5XN3aizYVquj0xF+mVRgrkLWWhA3/gQOK8hQ=";
   };
-
-  patches = [
-    # Fix the build with Samba 4.20
-    (fetchpatch {
-      url = "https://github.com/SSSD/sssd/commit/1bf51929a48b84d62ac54f2a42f17e7fbffe1612.patch";
-      hash = "sha256-VLx04APEipp860iOJNIwTGywxZ7rIDdyh3te6m7Ymlo=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs ./sbus_generate.sh.in
@@ -74,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
                   talloc tdb tevent ldb pam openldap pcre2 libkrb5
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2
                   libuuid python3.pkgs.python-ldap systemd nspr check cmocka uid_wrapper
-                  nss_wrapper ncurses Po4a http-parser jansson jose ];
+                  nss_wrapper ncurses Po4a jansson jose ];
 
   makeFlags = [
     "SGML_CATALOG_FILES=${docbookFiles}"

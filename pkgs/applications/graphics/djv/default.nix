@@ -17,6 +17,7 @@
 , libpng
 , opencolorio_1
 , freetype
+, openexr
 }:
 
 let
@@ -145,11 +146,12 @@ stdenv.mkDerivation rec {
     ilmbase
     glm
     glfw3
-    zlib.dev
+    zlib
     libpng
     freetype
     opencolorio_1
     djv-deps
+    openexr
   ];
 
   postPatch = ''
@@ -162,6 +164,13 @@ stdenv.mkDerivation rec {
     sed -i cmake/Modules/FindOCIO.cmake \
         -e 's/PATH_SUFFIXES static//' \
         -e '/OpenColorIO_STATIC/d'
+
+    # When searching for OpenEXR this looks for Iex.h, which exists in ilmbase,
+    # since it's a secondary inport, to find the correct OpenEXR lib, we search
+    # for something specifically in OpenEXR.
+
+    sed -i cmake/Modules/FindOpenEXR.cmake \
+        -e 's/find_path(OpenEXR_INCLUDE_DIR NAMES Iex.h PATH_SUFFIXES OpenEXR)/find_path(OpenEXR_INCLUDE_DIR NAMES ImfImage.h PATH_SUFFIXES OpenEXR)/'
   '';
 
   # GLFW requires a working X11 session.

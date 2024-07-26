@@ -61,13 +61,13 @@ let
   etcdEndpoints = ["https://${cfg.masterAddress}:2379"];
 
   mkCert = { name, CN, hosts ? [], fields ? {}, action ? "",
-             privateKeyOwner ? "kubernetes" }: rec {
+             privateKeyOwner ? "kubernetes", privateKeyGroup ? "kubernetes" }: rec {
     inherit name caCert CN hosts fields action;
     cert = secret name;
     key = secret "${name}-key";
     privateKeyOptions = {
       owner = privateKeyOwner;
-      group = "nogroup";
+      group = privateKeyGroup;
       mode = "0600";
       path = key;
     };
@@ -261,7 +261,7 @@ in {
           name = "service-account";
           CN = "system:service-account-signer";
           action = ''
-            systemctl reload \
+            systemctl restart \
               kube-apiserver.service \
               kube-controller-manager.service
           '';

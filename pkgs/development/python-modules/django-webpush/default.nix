@@ -4,7 +4,6 @@
   django,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
   pywebpush,
   setuptools-scm,
 }:
@@ -26,7 +25,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pywebpush" ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 

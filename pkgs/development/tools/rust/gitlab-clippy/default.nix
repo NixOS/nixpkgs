@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitLab
 , rustPlatform
 }:
@@ -12,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     owner = "dlalic";
     repo = pname;
     rev = version;
-    sha256 = "sha256-d7SmlAWIV4SngJhIvlud90ZUSF55FWIrzFpkfSXIy2Y=";
+    hash = "sha256-d7SmlAWIV4SngJhIvlud90ZUSF55FWIrzFpkfSXIy2Y=";
   };
   cargoSha256 = "sha256-ztPbI+ncMNMKnIxUksxgz8GHQpLZ7SVWdC4QJWh18Wk=";
 

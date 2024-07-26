@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ton";
-  version = "2024.04";
+  version = "2024.06";
 
   src = fetchFromGitHub {
     owner = "ton-blockchain";
     repo = "ton";
     rev = "v${version}";
-    hash = "sha256-hh8D4IZX6RS/RXdhVONhgetqp89kpTC2IwDQ2KHdKsE=";
+    hash = "sha256-5fuRdVayvmM+yK1WsdtWlCZpxz7KKBs+ZRfnueP0Ny0=";
     fetchSubmodules = true;
   };
 

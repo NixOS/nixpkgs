@@ -201,6 +201,6 @@ stdenv.mkDerivation rec {
 
     platforms = if xenSupport then [ "x86_64-linux" "i686-linux" ] else platforms.gnu ++ platforms.linux;
 
-    maintainers = [ maintainers.samueldr ];
+    maintainers = [ ];
   };
 })

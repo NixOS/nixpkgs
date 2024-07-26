@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
     CONFIG_WPS=y
     CONFIG_WPS_ER=y
     CONFIG_WPS_NFS=y
+    CONFIG_SUITEB=y
+    CONFIG_SUITEB192=y
   '' + optionalString withPcsclite ''
     CONFIG_EAP_SIM=y
     CONFIG_EAP_AKA=y

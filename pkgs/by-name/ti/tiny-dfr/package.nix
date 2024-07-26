@@ -2,18 +2,18 @@
 , cairo, gdk-pixbuf, glib, libinput, libxml2, pango, udev
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "tiny-dfr";
-  version = "0.2.0";
+  version = "0.3.0-unstable-2024-07-10";
 
   src = fetchFromGitHub {
     owner = "WhatAmISupposedToPutHere";
     repo = "tiny-dfr";
-    rev = "v${version}";
-    hash = "sha256-oawKYrfXAQ5RFMdUCG7F12wHcnFif++44s2KsX9ns6U=";
+    rev = "a066ded870d8184db81f16b4b55d0954b2ab4c88";
+    hash = "sha256-++TezIILx5FXJzIxVfxwNTjZiGGjcZyih2KBKwD6/tU=";
   };
 
-  cargoHash = "sha256-QOkztErJLFXPxCb8MvaXi7jGXeI5A0q8LwZtYddzUZE=";
+  cargoHash = "sha256-q0yx4QT6L1G+5PvstXjA4aa0kZPhQTpM8h69dd/1Mcw=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ cairo gdk-pixbuf glib libinput libxml2 pango udev ];

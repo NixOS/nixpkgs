@@ -1,13 +1,13 @@
 { fetchFromGitHub, rustPlatform, lib, pkg-config, openssl, glib, atk, gtk3, libsoup, webkitgtk_4_1 }:
 rustPlatform.buildRustPackage {
   pname = "snx-rs";
-  version = "2.2.0";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "ancwrd1";
     repo = "snx-rs";
-    rev = "v2.2.0";
-    hash = "sha256-9aBJM20+G1U2NuJXBmax50o3M/lwRpLeqdcHCA28iAw=";
+    rev = "v2.2.3";
+    hash = "sha256-tBl67uDeYVmVBwi8NQVclfFQ0Sj1dl+hR8Jct1iE2LI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "isakmp-0.1.0" = "sha256-Gk0/tyIQ62kH6ZSW6ov8SMVR2UBEWkz8HfqeWjSXmlY=";
+      "isakmp-0.1.0" = "sha256-6v5xhkt9iaQg3Eh8S1tXW55oLv4YFDYvY0cfsepMuIM=";
     };
   };
 
@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage {
     description = "Open source Linux client for Checkpoint VPN tunnels";
     homepage = "https://github.com/ancwrd1/snx-rs";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.lheckemann ];
+    maintainers = [ ];
   };
 }

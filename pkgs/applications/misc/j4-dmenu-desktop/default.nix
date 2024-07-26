@@ -31,6 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     mainProgram = "j4-dmenu-desktop";
     maintainers = with maintainers; [ ericsagnes ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 })

@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Defines the ProtonVPN kill switch interface";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-killswitch";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

@@ -3,11 +3,19 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
+  # dependencies
   django,
   django-debug-toolbar,
   graphene-django,
+
+  # tests
   python,
+  pytest-django,
+  pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -33,17 +41,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "graphiql_debug_toolbar" ];
 
-  DB_BACKEND = "sqlite";
-  DB_NAME = ":memory:";
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  nativeCheckInputs = [
+    pytest-django
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m django test tests
-    runHook postCheck
+  preCheck = ''
+    export DB_BACKEND=sqlite
+    export DB_NAME=:memory:
+    export DJANGO_SETTINGS_MODULE=tests.settings
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/flavors/django-graphiql-debug-toolbar/releases/tag/${src.rev}";
     description = "Django Debug Toolbar for GraphiQL IDE";
     homepage = "https://github.com/flavors/django-graphiql-debug-toolbar";
     license = licenses.mit;

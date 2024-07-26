@@ -27,7 +27,7 @@ buildPythonPackage rec {
     junit-xml
   ];
 
-  pythonImportCheck = [ "refery" ];
+  pythonImportsCheck = [ "refery" ];
 
   disabled = pythonOlder "3.10";
 

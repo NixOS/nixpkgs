@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage =  "https://www.openzim.org/wiki/Zimlib";
     license = licenses.gpl2;
     maintainers = with maintainers; [ greg ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

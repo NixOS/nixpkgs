@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "0.9.33";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,12 +18,12 @@ buildPythonPackage rec {
     owner = "lmfit";
     repo = "asteval";
     rev = "refs/tags/${version}";
-    hash = "sha256-j07HH84cn2AA5DyMcM7sXiBubCjZP67RJXVcErMPyBk=";
+    hash = "sha256-Ee7EAcSfLmo9ijm4oa3nEVPoz1pgLx4ozbSXBW3kRPw=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail " --cov=asteval --cov-report xml" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=asteval --cov-report html" ""
   '';
 
   build-system = [ setuptools-scm ];

@@ -4,11 +4,13 @@
 
 { lib
 , dotnet-sdk
-, buildDotnetModule
+, buildPackages # buildDotnetModule
 , runCommand
 }:
 
 let
+  inherit (buildPackages) buildDotnetModule;
+
   nugetDeps = ./nuget-deps.nix;
 
   # Specify the TargetFramework via an environment variable so that we don't
@@ -18,7 +20,8 @@ let
   library = buildDotnetModule {
     name = "project-references-test-library";
     src = ./library;
-    inherit nugetDeps TargetFramework;
+    inherit nugetDeps;
+    env.TargetFramework = TargetFramework;
 
     packNupkg = true;
   };
@@ -26,7 +29,8 @@ let
   application = buildDotnetModule {
     name = "project-references-test-application";
     src = ./application;
-    inherit nugetDeps TargetFramework;
+    inherit nugetDeps;
+    env.TargetFramework = TargetFramework;
 
     projectReferences = [ library ];
   };

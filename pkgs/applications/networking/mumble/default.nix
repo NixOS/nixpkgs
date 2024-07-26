@@ -27,6 +27,7 @@ let
 
     cmakeFlags = [
       "-D g15=OFF"
+      "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
     ] ++ (overrides.configureFlags or [ ]);
 
     preConfigure = ''
@@ -103,7 +104,7 @@ let
       owner = "mumble-voip";
       repo = "mumble";
       rev = "v${version}";
-      sha256 = "sha256-d9XmXHq264rTT80zphYcKLxS+AyUhjb19D3DuBJvMI4=";
+      hash = "sha256-d9XmXHq264rTT80zphYcKLxS+AyUhjb19D3DuBJvMI4=";
       fetchSubmodules = true;
     };
   };

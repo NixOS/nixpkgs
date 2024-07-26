@@ -16,7 +16,7 @@
   scipy,
   setuptools,
   tqdm,
-  youtube-dl,
+  yt-dlp,
 }:
 
 buildPythonPackage rec {
@@ -56,7 +56,7 @@ buildPythonPackage rec {
       scikit-image
       scikit-learn
       scipy
-      youtube-dl
+      yt-dlp
     ];
   };
 
@@ -73,6 +73,8 @@ buildPythonPackage rec {
     "test_setup"
     "test_subtitles"
     "test_sys_write_flush"
+    # media duration mismatch: assert 2.9 == 3.0
+    "test_ffmpeg_parse_infos"
   ];
 
   disabledTestPaths = [

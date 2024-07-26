@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "p1monitor";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-p1monitor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZtIY4HvRllqlLlf3j1+RMJuuQuq+BZbMuMn9n/v8H5M=";
+    hash = "sha256-WEvNPtaKGJsbHLjGjSl0/9BewmLLMFLoN9SHMdEBoAM=";
   };
 
   postPatch = ''

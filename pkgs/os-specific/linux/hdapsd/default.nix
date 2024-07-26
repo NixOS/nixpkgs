@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     { description = "Hard Drive Active Protection System Daemon";
       mainProgram = "hdapsd";
       homepage = "http://hdaps.sf.net/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       platforms = platforms.linux;
       maintainers = [ maintainers.ehmry ];
     };

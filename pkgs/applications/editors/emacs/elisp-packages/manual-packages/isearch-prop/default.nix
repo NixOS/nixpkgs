@@ -1,25 +1,27 @@
-{ lib
-, fetchFromGitHub
-, trivialBuild
-, emacs
+{
+  lib,
+  fetchFromGitHub,
+  melpaBuild,
+  unstableGitUpdater,
 }:
 
-trivialBuild {
+melpaBuild {
   pname = "isearch-prop";
-  version = "0-unstable-2019-05-01";
+  version = "0-unstable-2022-12-30";
 
   src = fetchFromGitHub {
     owner = "emacsmirror";
     repo = "isearch-prop";
-    rev = "4a2765f835dd115d472142da05215c4c748809f4";
-    hash = "sha256-A1Kt4nm7iRV9J5yaLupwiNL5g7ddZvQs79dggmqZ7Rk=";
+    rev = "5787fd57977c0d6c416ce71471c3b9da246dfb78";
+    hash = "sha256-Xli7TxBenl5cDMJv3Qz7ZELFpvJKStMploLpf9a+uoA=";
   };
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+
+  meta = {
     homepage = "https://www.emacswiki.org/emacs/IsearchPlus";
     description = "Search text- or overlay-property contexts";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ leungbk ];
-    inherit (emacs.meta) platforms;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ leungbk AndersonTorres ];
   };
 }

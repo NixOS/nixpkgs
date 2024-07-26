@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , cmake
 , removeReferencesTo
 , cppSupport ? true
@@ -28,21 +28,18 @@ assert !cppSupport || !mpiSupport;
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.14.3";
+  version = "1.14.4.3";
   pname = "hdf5"
     + lib.optionalString cppSupport "-cpp"
     + lib.optionalString fortranSupport "-fortran"
     + lib.optionalString mpiSupport "-mpi"
     + lib.optionalString threadsafe "-threadsafe";
 
-  src = fetchurl {
-    url =
-      let
-        majorMinor = lib.versions.majorMinor version;
-        majorMinorPatch = with lib.versions; "${major version}.${minor version}.${patch version}";
-      in
-      "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${majorMinor}/hdf5-${majorMinorPatch}/src/hdf5-${version}.tar.bz2";
-    sha256 = "sha256-lCXyJO110SgLtG1vJpI92Tj5BA5+rr9X5m7HNXwI+Rc=";
+  src = fetchFromGitHub {
+    owner = "HDFGroup";
+    repo = "hdf5";
+    rev = "hdf5_${version}";
+    hash = "sha256-lvz3x04SS0oZmUn/BIxQEHnugaDOws46kfT3NAw7Hos=";
   };
 
   passthru = {
@@ -83,6 +80,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional javaSupport "-DHDF5_BUILD_JAVA=ON"
     ++ lib.optional usev110Api "-DDEFAULT_API_VERSION=v110"
     ++ lib.optionals threadsafe [ "-DDHDF5_ENABLE_THREADSAFE:BOOL=ON" "-DHDF5_BUILD_HL_LIB=OFF" ]
+    # broken in nixpkgs since around 1.14.3 -> 1.14.4.3
+    # https://github.com/HDFGroup/hdf5/issues/4208#issuecomment-2098698567
+    ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) "-DHDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16=OFF"
   ;
 
   postInstall = ''

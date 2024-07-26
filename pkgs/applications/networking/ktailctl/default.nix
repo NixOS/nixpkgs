@@ -10,6 +10,7 @@
 , qtbase
 , qtdeclarative
 , qtsvg
+, qtwayland
 , kconfig
 , kcoreaddons
 , kguiaddons
@@ -18,23 +19,24 @@
 , kirigami-addons
 , knotifications
 , nlohmann_json
+, qqc2-desktop-style
 }:
 
 let
-  version = "0.16.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
     rev = "v${version}";
-    hash = "sha256-fIx6XfNGK+jDpeaoCzTKwv3J01yWoHOgWxjbwTGVK1U=";
+    hash = "sha256-urB8NcdQMF6RNX8F2CpzOd0ZkRi3IS4XFyOOXIeChpY=";
   };
 
   goDeps = (buildGoModule {
-    pname = "tailwrap";
+    pname = "ktailctl-go-wrapper";
     inherit src version;
-    modRoot = "tailwrap";
-    vendorHash = "sha256-egTzSdOKrhdEBKarIfROxZUsxbnR9F1JDbdoKzGf9UM=";
+    modRoot = "src/wrapper";
+    vendorHash = "sha256-Ls4MVppMJbUUukaKkDAN8Lx/s09JRJTf/RMgk0iDcnw=";
   }).goModules;
 in
 stdenv.mkDerivation {
@@ -42,7 +44,7 @@ stdenv.mkDerivation {
   inherit version src;
 
   postPatch = ''
-    cp -r --reflink=auto ${goDeps} tailwrap/vendor
+    cp -r --reflink=auto ${goDeps} src/wrapper/vendor
   '';
 
   # needed for go build to work
@@ -67,13 +69,16 @@ stdenv.mkDerivation {
     qtbase
     qtdeclarative
     qtsvg
+    qtwayland
     kconfig
     kcoreaddons
     kguiaddons
     ki18n
     kirigami
+    kirigami-addons
     knotifications
     nlohmann_json
+    qqc2-desktop-style
   ];
 
   meta = with lib; {
@@ -82,6 +87,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ k900 ];
     mainProgram = "ktailctl";
-    platforms = platforms.all;
+    platforms = platforms.unix;
   };
 }

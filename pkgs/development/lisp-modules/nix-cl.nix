@@ -215,18 +215,26 @@ let
       # save-lisp-and-die binaries in the past
       dontStrip = true;
 
-    } // (args // {
+    } // (args // (let
+      isJVM = args.pkg.pname == "abcl";
+      javaLibs = lib.optionals isJVM args.javaLibs or [];
+    in {
       pname = "${args.pkg.pname}-${args.pname}";
-      src = if builtins.length (args.patches or []) > 0
-            then pkgs.applyPatches { inherit (args) src patches; }
+      src = if args?patches || args?postPatch
+            then pkgs.applyPatches {
+              inherit (args) src;
+              patches = args.patches or [];
+              postPatch = args.postPatch or "";
+            }
             else args.src;
       patches = [];
+      inherit javaLibs;
       propagatedBuildInputs = args.propagatedBuildInputs or []
           ++ lispLibs ++ javaLibs ++ nativeLibs;
       meta = (args.meta or {}) // {
         maintainers = args.meta.maintainers or lib.teams.lisp.members;
       };
-    })) // {
+    }))) // {
       # Useful for overriding
       # Overriding code would prefer to use pname from the attribute set
       # However, pname is extended with the implementation name

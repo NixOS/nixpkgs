@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rofimoji";
-  version = "6.3.1";
+  version = "6.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofimoji";
     rev = "refs/tags/${version}";
-    hash = "sha256-gYLUUbT6OHMo2nzJ//Pa0vZ9WPcHs6YnAjTKNO07VNk=";
+    hash = "sha256-LJJWHn3UnrCJaowHHuYksD2MHqClLc2MmYYXQfUxTgQ=";
   };
 
   nativeBuildInputs = [

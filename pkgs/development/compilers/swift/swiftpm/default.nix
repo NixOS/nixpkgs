@@ -459,6 +459,6 @@ in stdenv.mkDerivation (commonAttrs // {
     homepage = "https://github.com/apple/swift-package-manager";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dtzWill trepetti dduan trundle stephank ];
+    maintainers = lib.teams.swift.members;
   };
 })

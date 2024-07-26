@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-workflows";
-  version = "1.14.3";
+  version = "1.14.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IUC5f3gDe5Z9QYVXaIZ3L+F7530q6ZltIHozTtWnf/4=";
+    hash = "sha256-qylBTJ2yAJGZt+xv9hRyYvP4zlTibhIIHVJF9J67d9c=";
   };
 
   nativeBuildInputs = [ setuptools ];

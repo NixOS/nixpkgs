@@ -44,6 +44,6 @@ mkDerivation rec {
     mainProgram = "kweather";
     homepage = "https://invent.kde.org/plasma-mobile/kweather";
     license = with licenses; [ gpl2Plus cc-by-40 ];
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [ ];
   };
 }

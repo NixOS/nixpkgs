@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     mainProgram = "dwarftherapist";
     description = "Tool to manage dwarves in a running game of Dwarf Fortress";
-    maintainers = with maintainers; [ abbradar bendlas numinit jonringer ];
+    maintainers = with maintainers; [ abbradar bendlas numinit ];
     license = licenses.mit;
     platforms = platforms.x86;
     homepage = "https://github.com/Dwarf-Therapist/Dwarf-Therapist";

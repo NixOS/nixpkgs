@@ -37,6 +37,9 @@ buildPythonPackage rec {
     graphql-relay
   ];
 
+  # snaphottest->fastdiff->wasmer dependency chain does not support 3.12.
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
     pytest7CheckHook
     pytest-asyncio

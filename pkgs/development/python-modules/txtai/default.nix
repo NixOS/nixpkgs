@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   # propagated build input
   faiss,
   torch,
@@ -54,7 +53,7 @@
   pythonAtLeast,
 }:
 let
-  version = "7.2.0";
+  version = "7.3.0";
   api = [
     aiohttp
     fastapi
@@ -156,10 +155,9 @@ buildPythonPackage {
     owner = "neuml";
     repo = "txtai";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2d31wzUz0/FcrejDIog2EI4BXgjd7XXpN4tRXpLk5DI=";
+    hash = "sha256-tnM6ye0Sxh8P2bm3awE72GvXEY0gXX1Sv+wPr77wRGU=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [
     # We call it faiss, not faiss-cpu.

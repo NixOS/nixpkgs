@@ -1,27 +1,34 @@
 {
   lib,
-  awkward,
   buildPythonPackage,
-  cachetools,
-  dask,
-  dask-histogram,
-  distributed,
+  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   hatch-vcs,
   hatchling,
+
+  # dependencies
+  awkward,
+  cachetools,
+  dask,
+  typing-extensions,
+
+  # optional-dependencies
+  pyarrow,
+
+  # checks
+  dask-histogram,
+  distributed,
   hist,
   pandas,
-  pyarrow,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
-  typing-extensions,
   uproot,
 }:
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2024.3.0";
+  version = "2024.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,25 +37,24 @@ buildPythonPackage rec {
     owner = "dask-contrib";
     repo = "dask-awkward";
     rev = "refs/tags/${version}";
-    hash = "sha256-Lkbp/XrDHOekMpT71pbxtuozgzU9iiGF2GJZ+tuV/yM=";
+    hash = "sha256-xy3rq/gXQUtquvyWSCcBjZ+gUYT3RzxMgXThyT6Fwec=";
   };
 
   pythonRelaxDeps = [ "awkward" ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     awkward
     cachetools
     dask
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     io = [ pyarrow ];
   };
 
@@ -59,7 +65,7 @@ buildPythonPackage rec {
     pandas
     pytestCheckHook
     uproot
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "dask_awkward" ];
 
@@ -74,11 +80,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Native Dask collection for awkward arrays, and the library to use it";
     homepage = "https://github.com/dask-contrib/dask-awkward";
     changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

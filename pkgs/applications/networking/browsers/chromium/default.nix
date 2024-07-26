@@ -1,7 +1,7 @@
 { newScope, config, stdenv, makeWrapper
 , buildPackages
 , ed, gnugrep, coreutils, xdg-utils
-, glib, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
+, glib, gtk3, gtk4, adwaita-icon-theme, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , runCommand
 , lib, libkrb5
@@ -54,8 +54,12 @@ let
         src = fetchgit {
           inherit (upstream-info.deps.gn) url rev hash;
         };
+      } // lib.optionalAttrs (chromiumVersionAtLeast "127") {
+        # Relax hardening as otherwise gn unstable 2024-06-06 and later fail with:
+        # cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
+        hardeningDisable = [ "format" ];
       });
-      recompressTarball = callPackage ./recompress-tarball.nix { };
+      recompressTarball = callPackage ./recompress-tarball.nix { inherit chromiumVersionAtLeast; };
     });
 
     browser = callPackage ./browser.nix {
@@ -101,7 +105,7 @@ in stdenv.mkDerivation {
     gsettings-desktop-schemas glib gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
 
     # Needed for kerberos at runtime
     libkrb5

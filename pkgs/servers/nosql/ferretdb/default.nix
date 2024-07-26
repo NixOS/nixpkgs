@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "ferretdb";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "FerretDB";
     repo = "FerretDB";
     rev = "v${version}";
-    hash = "sha256-wTnVZ2C6edXy7+DV5w9Ny1Ry8yKQtahS2AIjFkaJhm8=";
+    hash = "sha256-LrlBudJLqFFOPHShl56Z5LcEZ9E5nPVxnheUuVkjOcQ=";
   };
 
   postPatch = ''
@@ -20,7 +20,7 @@ buildGoModule rec {
     echo nixpkgs     > build/version/package.txt
   '';
 
-  vendorHash = "sha256-1Al7Dxw6EkGZpjmxQWbRU4uV0KT1emNI3YNGbiX87Yc=";
+  vendorHash = "sha256-7kwKz70Q2ulOgl5VZv26rraO1M/zGYgc3zMZur56mgA=";
 
   CGO_ENABLED = 0;
 
@@ -41,7 +41,7 @@ buildGoModule rec {
     description = "Truly Open Source MongoDB alternative";
     mainProgram = "ferretdb";
     changelog = "https://github.com/FerretDB/FerretDB/releases/tag/v${version}";
-    homepage = "https://www.ferretdb.io/";
+    homepage = "https://www.ferretdb.com/";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya noisersup julienmalka ];
   };

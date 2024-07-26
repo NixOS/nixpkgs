@@ -24,11 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-o8UKR17XDWp1wTWYeDL0DJY+D11YI4mg0UuGEAPkHxE=";
   };
 
-  # https://github.com/darosior/python-bip32/pull/40/files
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace-fail 'coincurve>=15.0,<19' 'coincurve>=15.0,<20'
-  '';
+  pythonRelaxDeps = [ "coincurve" ];
 
   nativeBuildInputs = [ setuptools ];
 

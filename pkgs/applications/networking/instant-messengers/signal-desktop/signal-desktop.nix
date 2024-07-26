@@ -2,7 +2,7 @@
 callPackage ./generic.nix { } rec {
   pname = "signal-desktop";
   dir = "Signal";
-  version = "7.11.1";
+  version = "7.16.0";
   url = "https://updates.signal.org/desktop/apt/pool/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-  hash = "sha256-ROJ2aQY0NPZD2GcjdQ1OxbeXKC+60n791Nxs93CyJ/Y=";
+  hash = "sha256-DfPQb3TGhVVZ7webNoMmyhjhRKKO3lWf12ZIpi7D7tc=";
 }

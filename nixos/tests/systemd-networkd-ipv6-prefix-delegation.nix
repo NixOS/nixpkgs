@@ -174,6 +174,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         # for fowarding/input from the configured interfaces so you do not have
         # to manage multiple places
         firewall.enable = false;
+        interfaces.eth1.ipv6.addresses = lib.mkForce [ ];
       };
 
       systemd.network = {
@@ -275,6 +276,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       networking = {
         useNetworkd = true;
         useDHCP = false;
+        interfaces.eth1.ipv6.addresses = lib.mkForce [ ];
       };
     };
   };

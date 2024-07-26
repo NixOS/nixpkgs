@@ -13,21 +13,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pixi";
-  version = "0.23.0";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     rev = "v${version}";
-    hash = "sha256-uLlScqcTU9nnBQiufRo+eee1TNyP5R52oI1jUaH6L1M=";
+    hash = "sha256-Qlr4CcrCq29ig3FPFWCR5oOtFrbREm/7zyGXUB3XL98=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async_zip-0.0.17" = "sha256-Q5fMDJrQtob54CTII3+SXHeozy5S5s3iLOzntevdGOs=";
-      "cache-key-0.0.1" = "sha256-fbaIeM4wgwi/3S8s9KRux8wKe6FbCBNPZFPekmrq2jA=";
-      "pubgrub-0.2.1" = "sha256-sqC7R2mtqymYFULDW0wSbM/MKCZc8rP7Yy/gaQpjYEI=";
+      "cache-key-0.0.1" = "sha256-lJJqjxyAzGQKZi6RtzZ7A9pCAOyIJnstHoS8jlUWeGA=";
+      "pubgrub-0.2.1" = "sha256-mAPyo2R996ymzCt6TAX2G7xU1C3vDGjYF0z7R8lI1yg=";
     };
   };
 
@@ -71,8 +71,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_incremental_lock_file"
     "--skip=test_purl_are_added_for_pypi"
 
-    # `/usr/bin/env` required
+    # `/usr/bin/env` is not available during build.
+    # Error: /usr/bin/env: No such file or directory
+    "--skip=test_clean_env"
+    "--skip=test_full_env_activation"
     "--skip=test_task_with_env"
+    "--skip=test_pixi_only_env_activation"
     "--skip=cli::shell_hook::tests::test_environment_json"
   ];
 

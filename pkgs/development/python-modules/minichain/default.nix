@@ -9,7 +9,6 @@
   openai,
   pytestCheckHook,
   pythonAtLeast,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +31,6 @@ buildPythonPackage rec {
     substituteInPlace ./minichain/__init__.py --replace "from .gradio import GradioConf, show" ""
   '';
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [
     # Only used in the examples:

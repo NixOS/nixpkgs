@@ -1,4 +1,4 @@
-{ fetchFromGitHub, buildGoModule, lib, testers, gitmux }:
+{ fetchFromGitHub, buildGoModule, lib, testers, gitmux, git }:
 
 buildGoModule rec {
   pname = "gitmux";
@@ -13,9 +13,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-PHY020MIuLlC1LqNGyBJRNd7J+SzoHbNMPAil7CKP/M=";
 
-  # GitHub source does contain a regression test for the module
-  # but it requires networking as it git clones a repo from github
-  doCheck = false;
+  nativeCheckInputs = [ git ];
+  doCheck = true;
 
   ldflags = [ "-X main.version=${version}" ];
 

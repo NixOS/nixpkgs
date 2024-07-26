@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
       A fork of Sil that's still actively developed.
     '';
     homepage = "https://github.com/sil-quirk/sil-q";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.kenran ];
     platforms = lib.platforms.linux;
   };

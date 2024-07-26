@@ -1,10 +1,13 @@
-{ lib
-, fetchFromGitHub
-, trivialBuild
+{
+  lib,
+  fetchFromGitHub,
+  melpaBuild,
+  unstableGitUpdater,
 }:
 
-trivialBuild {
+melpaBuild {
   pname = "font-lock-plus";
+  ename = "font-lock+";
   version = "208-unstable-2018-01-01";
 
   src = fetchFromGitHub {
@@ -14,9 +17,12 @@ trivialBuild {
     hash = "sha256-lFmdVMXIIXZ9ZohAJw5rhxpTv017qIyzmpuKOWDdeJ4=";
   };
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     homepage = "https://github.com/emacsmirror/font-lock-plus";
     description = "Enhancements to standard library font-lock.el";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }

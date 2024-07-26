@@ -21,7 +21,7 @@
 }:
 
 mkDerivation {
-  isStatic = true;
+  noLibc = true;
   pname = "libc";
   path = "lib/libc";
   extraPaths =

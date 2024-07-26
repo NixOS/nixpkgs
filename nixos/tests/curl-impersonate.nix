@@ -113,7 +113,7 @@ in {
   name = "curl-impersonate";
 
   meta = with lib.maintainers; {
-    maintainers = [ lilyinstarlight ];
+    maintainers = [ ];
   };
 
   nodes = {

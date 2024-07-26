@@ -11,6 +11,7 @@
 , gtk2
 , libmad
 , libogg
+, libpng
 , libpulseaudio
 , libvorbis
 , udev
@@ -51,6 +52,7 @@ stdenv.mkDerivation {
     gtk2
     libmad
     libogg
+    libpng
     libpulseaudio
     libvorbis
     udev
@@ -59,6 +61,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DWITH_SYSTEM_FFMPEG=1"
+    "-DWITH_SYSTEM_PNG=on"
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
   ];
@@ -79,8 +82,6 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     license = licenses.mit; # expat version
     maintainers = with maintainers; [ h7x4 ];
-    # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.isLinux && stdenv.isAarch64;
     mainProgram = "stepmania";
   };
 }

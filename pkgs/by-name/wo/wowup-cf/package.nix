@@ -3,19 +3,17 @@
 let
   version = "2.12.0";
   pname = "wowup-cf";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/WowUp/WowUp.CF/releases/download/v${version}/WowUp-CF-${version}.AppImage";
     hash = "sha256-uWz/EQBX/d1UBfpc9EL4x+UH72kINd6pqFIvJkV16e8=";
   };
 
-  appimageContents = appimageTools.extractType1 { inherit name src; };
+  appimageContents = appimageTools.extractType1 { inherit pname version src; };
 in appimageTools.wrapType1 {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'

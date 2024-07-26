@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-compute";
-  version = "1.19.0";
+  version = "1.19.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oHs0CLP3d4bcsZZmn/N2e8UQgHGKfC0/13ne/I2Be00=";
+    hash = "sha256-a0pbhsLLvNpd2Q9OM4xRA/PoRgTs+wAtTss6DF1BUxs=";
   };
 
   build-system = [ setuptools ];

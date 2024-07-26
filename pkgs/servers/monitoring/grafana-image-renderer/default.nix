@@ -7,18 +7,18 @@
 
 mkYarnPackage rec {
   pname = "grafana-image-renderer";
-  version = "3.10.5";
+  version = "3.11.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-image-renderer";
     rev = "v${version}";
-    hash = "sha256-Ah78mapwGTD5mTPN7oKk8iwXpp2RMQ8nm0QX3/jTjKU=";
+    hash = "sha256-ORXzMXw8pgOtb9zyntkAeT5O4CYGCB1wJ4ipZlB2T84=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-o8Bxc5KyoYMYJ6FwQ6PSi7A0LhU4VNuXh5xXbEXLb4Y=";
+    hash = "sha256-rW9mxrM4aHKGojyRbsxQe3ZZJQ8I42PJ0MplkVu3qyA=";
   };
 
   packageJSON = ./package.json;

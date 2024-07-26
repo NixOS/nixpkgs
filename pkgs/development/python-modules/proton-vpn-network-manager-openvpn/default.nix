@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Adds support for the OpenVPN protocol using NetworkManager";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-network-manager-openvpn";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

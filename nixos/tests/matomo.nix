@@ -41,14 +41,14 @@ let
 in {
   matomo = matomoTest pkgs.matomo // {
     name = "matomo";
-    meta.maintainers = with maintainers; [ florianjacob kiwi mmilata twey boozedog ];
+    meta.maintainers = with maintainers; [ florianjacob mmilata twey boozedog ];
   };
   matomo-beta = matomoTest pkgs.matomo-beta // {
     name = "matomo-beta";
-    meta.maintainers = with maintainers; [ florianjacob kiwi mmilata twey boozedog ];
+    meta.maintainers = with maintainers; [ florianjacob mmilata twey boozedog ];
   };
   matomo_5 = matomoTest pkgs.matomo_5 // {
     name = "matomo-5";
-    meta.maintainers = with maintainers; [ florianjacob kiwi mmilata twey boozedog ] ++ lib.teams.flyingcircus.members;
+    meta.maintainers = with maintainers; [ florianjacob mmilata twey boozedog ] ++ lib.teams.flyingcircus.members;
   };
 }

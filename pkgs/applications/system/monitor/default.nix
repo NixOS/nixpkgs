@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "sha256-Eo0nwATKrx6SmTsaXe3oFIkp0BUTmjcjIc3Vjt+Cr20=";
+    hash = "sha256-Eo0nwATKrx6SmTsaXe3oFIkp0BUTmjcjIc3Vjt+Cr20=";
     fetchSubmodules = true;
   };
 

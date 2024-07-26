@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchPypi,
   buildPythonPackage,
@@ -16,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rQSnQPNYr5SyeNbKoFAbnGb2X/8utrfWLa8gu93hy2w=";
+    hash = "sha256-rQSnQPNYr5SyeNbKoFAbnGb2X/8utrfWLa8gu93hy2w=";
   };
 
   buildInputs = [

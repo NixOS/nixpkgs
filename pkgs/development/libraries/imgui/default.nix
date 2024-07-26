@@ -46,8 +46,8 @@ let
     patches = [
       # Install imgui into split outputs:
       (fetchpatch {
-        url = "https://github.com/microsoft/vcpkg/commit/e91750f08383112e8850f209e55ed2f960181fa6.patch";
-        hash = "sha256-T+DN42PRl2gWGM8zJb9wZEsDl7+XNT6CFypNX3lBHNc=";
+        url = "https://github.com/microsoft/vcpkg/commit/4108dd75ce9731a4fdcf50fd05034405156eaddf.patch";
+        hash = "sha256-jXbR0NfyuO8EESmva5A+H3WmBfCG83OiA8ZCcWsRhQA=";
       })
     ];
   };
@@ -139,7 +139,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit; # vcpkg licensed as MIT too
     maintainers = with lib.maintainers; [
       SomeoneSerge
-      wolfangaukang
     ];
     platforms = lib.platforms.all;
   };

@@ -8,6 +8,7 @@
   buildPythonPackage,
   setuptools,
   numpy,
+  numpy_2,
   llvmlite,
   libcxx,
   importlib-metadata,
@@ -32,9 +33,7 @@ let
   cudatoolkit = cudaPackages.cuda_nvcc;
 in
 buildPythonPackage rec {
-  # Using an untagged version, with numpy 1.25 support, when it's released
-  # also drop the versioneer patch in postPatch
-  version = "0.59.1";
+  version = "0.60.0";
   pname = "numba";
   pyproject = true;
 
@@ -56,7 +55,7 @@ buildPythonPackage rec {
     # use `forceFetchGit = true;`.` If in the future we'll observe the hash
     # changes too often, we can always use forceFetchGit, and inject the
     # relevant strings ourselves, using `sed` commands, in extraPostFetch.
-    hash = "sha256-4udpgLLHbHNtxPiYVkj+gxAjTWV3ClZOv98Y313/qbc=";
+    hash = "sha256-hUL281wHLA7wo8umzBNhiGJikyIF2loCzjLECuC+pO0=";
   };
 
   postPatch = ''
@@ -68,16 +67,19 @@ buildPythonPackage rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
-  nativeBuildInputs =
-    [ numpy ]
-    ++ lib.optionals cudaSupport [
-      autoAddDriverRunpath
-      cudaPackages.cuda_nvcc
-    ];
+  build-system = [
+    setuptools
+    numpy_2
+  ];
+
+  nativeBuildInputs = lib.optionals cudaSupport [
+    autoAddDriverRunpath
+    cudaPackages.cuda_nvcc
+  ];
 
   buildInputs = lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     llvmlite
     setuptools

@@ -4,6 +4,7 @@
 , callPackage
 , closureInfo
 , coreutils
+, devShellTools
 , e2fsprogs
 , proot
 , fakeNss
@@ -23,6 +24,7 @@
 , runtimeShell
 , shadow
 , skopeo
+, stdenv
 , storeDir ? builtins.storeDir
 , substituteAll
 , symlinkJoin
@@ -47,6 +49,10 @@ let
   inherit (lib)
     escapeShellArgs
     toList
+    ;
+
+  inherit (devShellTools)
+    valueToString
     ;
 
   mkDbExtraCommand = contents:
@@ -570,6 +576,8 @@ rec {
       created ? "1970-01-01T00:00:01Z"
     , # Compressor to use. One of: none, gz, zstd.
       compressor ? "gz"
+      # Populate the nix database in the image with the dependencies of `copyToRoot`.
+    , includeNixDB ? false
     , # Deprecated.
       contents ? null
     ,
@@ -607,20 +615,26 @@ rec {
 
       compress = compressorForImage compressor name;
 
+      # TODO: add the dependencies of the config json.
+      extraCommandsWithDB =
+        if includeNixDB then (mkDbExtraCommand rootContents) + extraCommands
+        else extraCommands;
+
       layer =
         if runAsRoot == null
         then
           mkPureLayer
             {
               name = baseName;
-              inherit baseJson keepContentsDirlinks extraCommands uid gid;
+              inherit baseJson keepContentsDirlinks uid gid;
+              extraCommands = extraCommandsWithDB;
               copyToRoot = rootContents;
             } else
           mkRootLayer {
             name = baseName;
             inherit baseJson fromImage fromImageName fromImageTag
-              keepContentsDirlinks runAsRoot diskSize buildVMMemorySize
-              extraCommands;
+              keepContentsDirlinks runAsRoot diskSize buildVMMemorySize;
+            extraCommands = extraCommandsWithDB;
             copyToRoot = rootContents;
           };
       result = runCommand "docker-image-${baseName}.tar${compress.ext}"
@@ -879,18 +893,9 @@ rec {
   # the container.
   # Be careful since this doesn't work well with multilayer.
   # TODO: add the dependencies of the config json.
-  buildImageWithNixDb = args@{ copyToRoot ? contents, contents ? null, extraCommands ? "", ... }: (
-    buildImage (args // {
-      extraCommands = (mkDbExtraCommand copyToRoot) + extraCommands;
-    })
-  );
+  buildImageWithNixDb = args: buildImage (args // { includeNixDB = true; });
 
-  # TODO: add the dependencies of the config json.
-  buildLayeredImageWithNixDb = args@{ contents ? null, extraCommands ? "", ... }: (
-    buildLayeredImage (args // {
-      extraCommands = (mkDbExtraCommand contents) + extraCommands;
-    })
-  );
+  buildLayeredImageWithNixDb = args: buildLayeredImage (args // { includeNixDB = true; });
 
   # Arguments are documented in ../../../doc/build-helpers/images/dockertools.section.md
   streamLayeredImage = lib.makeOverridable (
@@ -911,12 +916,20 @@ rec {
     , fakeRootCommands ? ""
     , enableFakechroot ? false
     , includeStorePaths ? true
+    , includeNixDB ? false
     , passthru ? {}
     ,
     }:
       assert
       (lib.assertMsg (maxLayers > 1)
         "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
+      assert
+      (lib.assertMsg (enableFakechroot -> !stdenv.isDarwin) ''
+        cannot use `enableFakechroot` because `proot` is not portable to Darwin. Workarounds:
+              - use `fakeRootCommands` with the restricted `fakeroot` environment
+              - cross-compile your packages
+              - run your packages in a virtual machine
+              Discussion: https://github.com/NixOS/nixpkgs/issues/327311'');
       let
         baseName = baseNameOf name;
 
@@ -941,7 +954,9 @@ rec {
         customisationLayer = symlinkJoin {
           name = "${baseName}-customisation-layer";
           paths = contentsList;
-          inherit extraCommands fakeRootCommands;
+          extraCommands =
+            (lib.optionalString includeNixDB (mkDbExtraCommand contents)) + extraCommands;
+          inherit fakeRootCommands;
           nativeBuildInputs = [
             fakeroot
           ] ++ optionals enableFakechroot [
@@ -1094,7 +1109,9 @@ rec {
 
         result = runCommand "stream-${baseName}"
           {
+            inherit conf;
             inherit (conf) imageName;
+            inherit streamScript;
             preferLocalBuild = true;
             passthru = passthru // {
               inherit (conf) imageTag;
@@ -1105,7 +1122,7 @@ rec {
             };
             nativeBuildInputs = [ makeWrapper ];
           } ''
-          makeWrapper ${streamScript} $out --add-flags ${conf}
+          makeWrapper $streamScript $out --add-flags $conf
         '';
       in
       result
@@ -1141,7 +1158,7 @@ rec {
 
         # A binary that calls the command to build the derivation
         builder = writeShellScriptBin "buildDerivation" ''
-          exec ${lib.escapeShellArg (stringValue drv.drvAttrs.builder)} ${lib.escapeShellArgs (map stringValue drv.drvAttrs.args)}
+          exec ${lib.escapeShellArg (valueToString drv.drvAttrs.builder)} ${lib.escapeShellArgs (map valueToString drv.drvAttrs.args)}
         '';
 
         staticPath = "${dirOf shell}:${lib.makeBinPath [ builder ]}";
@@ -1173,20 +1190,9 @@ rec {
         # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/globals.hh#L464-L465
         sandboxBuildDir = "/build";
 
-        # This function closely mirrors what this Nix code does:
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/primops.cc#L1102
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/eval.cc#L1981-L2036
-        stringValue = value:
-          # We can't just use `toString` on all derivation attributes because that
-          # would not put path literals in the closure. So we explicitly copy
-          # those into the store here
-          if builtins.typeOf value == "path" then "${value}"
-          else if builtins.typeOf value == "list" then toString (map stringValue value)
-          else toString value;
-
         # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L992-L1004
         drvEnv = lib.mapAttrs' (name: value:
-          let str = stringValue value;
+          let str = valueToString value;
           in if lib.elem name (drv.drvAttrs.passAsFile or [])
           then lib.nameValuePair "${name}Path" (writeText "pass-as-text-${name}" str)
           else lib.nameValuePair name str

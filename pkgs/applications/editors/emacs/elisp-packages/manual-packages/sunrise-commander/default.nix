@@ -1,11 +1,13 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
-, emacs
+{
+  lib,
+  melpaBuild,
+  fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
-trivialBuild {
+melpaBuild {
   pname = "sunrise-commander";
+  ename = "sunrise";
   version = "0-unstable-2021-09-27";
 
   src = fetchFromGitHub {
@@ -15,9 +17,7 @@ trivialBuild {
     hash = "sha256-D36qiRi5OTZrBtJ/bD/javAWizZ8NLlC/YP4rdLCSsw=";
   };
 
-  buildInputs = [
-    emacs
-  ];
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://github.com/sunrise-commander/sunrise-commander/";

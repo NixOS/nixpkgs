@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "khanaa";
-  version = "0.0.6";
+  version = "0.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "cakimpei";
     repo = "khanaa";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BzxNHYMkp5pdJYQ80EI5jlP654yX9woW7wz1jArCln4=";
+    hash = "sha256-QFvvahVEld3BooINeUYJDahZyfh5xmQNtWRLAOdr6lw=";
   };
 
   build-system = [ setuptools ];

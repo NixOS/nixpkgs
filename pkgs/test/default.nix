@@ -12,7 +12,6 @@ with pkgs;
         # Are throw aliases.
         (filter (n: n != "llvmPackages_rocm"))
         (filter (n: n != "llvmPackages_latest"))
-        (filter (n: n != "llvmPackages_git"))
         (filter (n: n != "llvmPackages_6"))
         (filter (n: n != "llvmPackages_7"))
         (filter (n: n != "llvmPackages_8"))
@@ -82,6 +81,8 @@ with pkgs;
     llvmTests = recurseIntoAttrs llvmTests;
     inherit gccTests;
   };
+
+  devShellTools = callPackage ../build-support/dev-shell-tools/tests { };
 
   stdenv-inputs = callPackage ./stdenv-inputs { };
   stdenv = callPackage ./stdenv { };

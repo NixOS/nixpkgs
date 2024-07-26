@@ -6,27 +6,24 @@
   defaultMakeFlags,
   coreutils,
   cctools-port,
-  include,
-  libc,
-  libutil,
   install,
   bsdSetupHook,
   netbsdSetupHook,
   makeMinimal,
-  rsync,
-  fetchNetBSD,
-  _mainLibcExtraPaths,
+  version,
 }:
 
 mkDerivation (
   let
-    version = "9.2";
     commonDeps = [ zlib ];
   in
   {
     path = "tools/compat";
-    sha256 = "1vsxg7136nlhc72vpa664vs22874xh7ila95nkmsd8crn3z3cyn0";
-    inherit version;
+
+    outputs = [
+      "out"
+      "dev"
+    ];
 
     setupHooks = [
       ../../../../../build-support/setup-hooks/role.bash
@@ -55,7 +52,6 @@ mkDerivation (
       bsdSetupHook
       netbsdSetupHook
       makeMinimal
-      rsync
     ];
 
     buildInputs = commonDeps;
@@ -66,7 +62,7 @@ mkDerivation (
       defaultMakeFlags
       ++ [
         "INSTALL=${coreutils}/bin/install"
-        "DATADIR=$(out)/share"
+        "DATADIR=$(dev)/share"
         # Can't sort object files yet
         "LORDER=echo"
         "TSORT=cat"
@@ -99,48 +95,47 @@ mkDerivation (
     postInstall =
       ''
         # why aren't these installed by netbsd?
-        install -D compat_defs.h $out/include/compat_defs.h
-        install -D $BSDSRCDIR/include/cdbw.h $out/include/cdbw.h
-        install -D $BSDSRCDIR/sys/sys/cdbr.h $out/include/cdbr.h
+        install -D compat_defs.h $dev/include/compat_defs.h
+        install -D $BSDSRCDIR/include/cdbw.h $dev/include/cdbw.h
+        install -D $BSDSRCDIR/sys/sys/cdbr.h $dev/include/cdbr.h
         install -D $BSDSRCDIR/sys/sys/featuretest.h \
-                   $out/include/sys/featuretest.h
-        install -D $BSDSRCDIR/sys/sys/md5.h $out/include/md5.h
-        install -D $BSDSRCDIR/sys/sys/rmd160.h $out/include/rmd160.h
-        install -D $BSDSRCDIR/sys/sys/sha1.h $out/include/sha1.h
-        install -D $BSDSRCDIR/sys/sys/sha2.h $out/include/sha2.h
-        install -D $BSDSRCDIR/sys/sys/queue.h $out/include/sys/queue.h
-        install -D $BSDSRCDIR/include/vis.h $out/include/vis.h
-        install -D $BSDSRCDIR/include/db.h $out/include/db.h
-        install -D $BSDSRCDIR/include/netconfig.h $out/include/netconfig.h
-        install -D $BSDSRCDIR/include/utmpx.h $out/include/utmpx.h
-        install -D $BSDSRCDIR/include/tzfile.h $out/include/tzfile.h
-        install -D $BSDSRCDIR/sys/sys/tree.h $out/include/sys/tree.h
-        install -D $BSDSRCDIR/include/nl_types.h $out/include/nl_types.h
-        install -D $BSDSRCDIR/include/stringlist.h $out/include/stringlist.h
+                   $dev/include/sys/featuretest.h
+        install -D $BSDSRCDIR/sys/sys/md5.h $dev/include/md5.h
+        install -D $BSDSRCDIR/sys/sys/rmd160.h $dev/include/rmd160.h
+        install -D $BSDSRCDIR/sys/sys/sha1.h $dev/include/sha1.h
+        install -D $BSDSRCDIR/sys/sys/sha2.h $dev/include/sha2.h
+        install -D $BSDSRCDIR/sys/sys/queue.h $dev/include/sys/queue.h
+        install -D $BSDSRCDIR/include/vis.h $dev/include/vis.h
+        install -D $BSDSRCDIR/include/db.h $dev/include/db.h
+        install -D $BSDSRCDIR/include/netconfig.h $dev/include/netconfig.h
+        install -D $BSDSRCDIR/include/utmpx.h $dev/include/utmpx.h
+        install -D $BSDSRCDIR/include/tzfile.h $dev/include/tzfile.h
+        install -D $BSDSRCDIR/sys/sys/tree.h $dev/include/sys/tree.h
+        install -D $BSDSRCDIR/include/nl_types.h $dev/include/nl_types.h
+        install -D $BSDSRCDIR/include/stringlist.h $dev/include/stringlist.h
 
         # Collapse includes slightly to fix dangling reference
-        install -D $BSDSRCDIR/common/include/rpc/types.h $out/include/rpc/types.h
-        sed -i '1s;^;#include "nbtool_config.h"\n;' $out/include/rpc/types.h
+        install -D $BSDSRCDIR/common/include/rpc/types.h $dev/include/rpc/types.h
+        sed -i '1s;^;#include "nbtool_config.h"\n;' $dev/include/rpc/types.h
       ''
       + lib.optionalString stdenv.isDarwin ''
-        mkdir -p $out/include/ssp
-        touch $out/include/ssp/ssp.h
+        mkdir -p $dev/include/ssp
+        touch $dev/include/ssp/ssp.h
       ''
       + ''
-        mkdir -p $out/lib/pkgconfig
-        substitute ${./libbsd-overlay.pc} $out/lib/pkgconfig/libbsd-overlay.pc \
-          --subst-var-by out $out \
+        mkdir -p $dev/lib/pkgconfig
+        substitute ${./libbsd-overlay.pc} $dev/lib/pkgconfig/libbsd-overlay.pc \
+          --subst-var-by out "$out" \
+          --subst-var-by includedir "$dev/include" \
           --subst-var-by version ${version}
       '';
     extraPaths = [
-      include.src
-      libc.src
-      libutil.src
-      (fetchNetBSD "external/bsd/flex" "9.2" "0h98jpfj7vx5zh7vd7bk6b1hmzgkcb757a8j6d9zgygxxv13v43m")
-      (fetchNetBSD "sys/sys" "9.2" "0zawhw51klaigqqwkx0lzrx3mim2jywrc24cm7c66qsf1im9awgd")
-      (fetchNetBSD "common/include/rpc/types.h" "9.2"
-        "0n2df12mlc3cbc48jxq35yzl1y7ghgpykvy7jnfh898rdhac7m9a"
-      )
-    ] ++ libutil.extraPaths ++ _mainLibcExtraPaths;
+      "common"
+      "include"
+      "lib/libc"
+      "lib/libutil"
+      "external/bsd/flex"
+      "sys/sys"
+    ];
   }
 )

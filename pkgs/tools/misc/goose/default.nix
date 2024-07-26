@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "goose";
-  version = "3.20.0";
+  version = "3.21.1";
 
   src = fetchFromGitHub {
     owner = "pressly";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DgxFczS2YAnicf8RTMf7gDzCtDyj/zqzrGfeb3YcYzg=";
+    hash = "sha256-Klmgw5dYt2/JYc0nuqIZwos3/onlRwsfzTOJ/Yi2pMw=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-KzIOylWrsOF5oAuuFKUKVSnSJWq3KWZ3Ot7sryNnjIY=";
+  vendorHash = "sha256-V875bGtp6Aki64TM3x0n1aERc5sVPIDZ3rNPF9D/osk=";
 
   # skipping: end-to-end tests require a docker daemon
   postPatch = ''

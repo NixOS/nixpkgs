@@ -2,23 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   installShellFiles,
-  mock,
-  scripttest,
-  setuptools,
-  virtualenv,
   wheel,
-  pretend,
-  pytest,
+  setuptools,
 
   # docs
   sphinx,
+
+  # checks
+  freezegun,
+  git,
+  mock,
+  scripttest,
+  virtualenv,
+  pretend,
+  proxy-py,
+  pytestCheckHook,
+  tomli-w,
+  werkzeug,
 
   # coupled downsteam dependencies
   pip-tools,
 }:
 
-buildPythonPackage rec {
+let self = buildPythonPackage rec {
   pname = "pip";
   version = "24.0";
   format = "pyproject";
@@ -72,16 +81,20 @@ buildPythonPackage rec {
     cd ..
   '';
 
+  doCheck = false;
+
   nativeCheckInputs = [
+    freezegun
+    git
     mock
     scripttest
     virtualenv
     pretend
-    pytest
+    pytestCheckHook
+    proxy-py
+    tomli-w
+    werkzeug
   ];
-
-  # Pip wants pytest, but tests are not distributed
-  doCheck = false;
 
   postInstall = ''
     installManPage docs/build/man/*
@@ -94,6 +107,7 @@ buildPythonPackage rec {
 
   passthru.tests = {
     inherit pip-tools;
+    pytest = self.overridePythonAttrs { doCheck = true; };
   };
 
   meta = {
@@ -102,4 +116,5 @@ buildPythonPackage rec {
     homepage = "https://pip.pypa.io/";
     changelog = "https://pip.pypa.io/en/stable/news/#v${lib.replaceStrings [ "." ] [ "-" ] version}";
   };
-}
+};
+in self

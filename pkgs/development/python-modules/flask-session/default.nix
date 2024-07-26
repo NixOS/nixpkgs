@@ -2,38 +2,69 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+
+  # build-system
   flit-core,
+
+  # dependencies
   flask,
   cachelib,
+  msgspec,
+
+  # checks
+  boto3,
+  flask-sqlalchemy,
   pytestCheckHook,
+  redis,
+  pymongo,
+  pymemcache,
+  python-memcached,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "flask-session";
-  version = "0.5.0";
-  format = "pyproject";
+  version = "0.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-session";
     rev = "refs/tags/${version}";
-    hash = "sha256-t8w6ZS4gBDpnnKvL3DLtn+rRLQNJbrT2Hxm4f3+a3Xc=";
+    hash = "sha256-QLtsM0MFgZbuLJPLc5/mUwyYc3bYxildNKNxOF8Z/3Y=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
-    flask
+  dependencies = [
     cachelib
+    flask
+    msgspec
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  # The rest of the tests require database servers and optional db connector dependencies
-  pytestFlagsArray = [
-    "-k"
-    "'null_session or filesystem_session'"
+  nativeCheckInputs = [
+    flask-sqlalchemy
+    pytestCheckHook
+    redis
+    pymongo
+    pymemcache
+    python-memcached
+    boto3
   ];
+
+  preCheck = ''
+    ${pkgs.redis}/bin/redis-server &
+    ${pkgs.memcached}/bin/memcached &
+  '';
+
+  postCheck = ''
+    kill %%
+    kill %%
+  '';
+
+  disabledTests = [ "test_mongo_default" ]; # unfree
+
+  disabledTestPaths = [ "tests/test_dynamodb.py" ];
 
   pythonImportsCheck = [ "flask_session" ];
 

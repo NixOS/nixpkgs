@@ -4,6 +4,7 @@
   fetchFromGitHub,
   enaml,
   pyqtgraph,
+  pyqt5,
   pythonocc-core,
   typing-extensions,
 }:
@@ -24,6 +25,7 @@ buildPythonPackage rec {
     enaml
     # Until https://github.com/inkcut/inkcut/issues/105 perhaps
     pyqtgraph
+    pyqt5
     pythonocc-core
     typing-extensions
   ];

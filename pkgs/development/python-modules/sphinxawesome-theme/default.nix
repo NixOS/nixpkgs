@@ -5,7 +5,6 @@
   poetry-core,
   sphinx,
   beautifulsoup4,
-  pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -19,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-wk8eXAueR1OA0W/F8fO/2ElVgX2gkF2V9+IICdfNPF0=";
   };
 
-  build-system = [ poetry-core pythonRelaxDepsHook ];
+  build-system = [ poetry-core ];
   dependencies = [
     sphinx
     beautifulsoup4

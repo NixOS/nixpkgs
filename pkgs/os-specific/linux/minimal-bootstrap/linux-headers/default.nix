@@ -33,7 +33,7 @@ bash.runCommand "${pname}-${version}" {
 
   meta = with lib; {
     description = "Header files and scripts for Linux kernel";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = teams.minimal-bootstrap.members;
     platforms = platforms.linux;
   };

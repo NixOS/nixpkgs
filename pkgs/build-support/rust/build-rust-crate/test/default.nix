@@ -8,6 +8,7 @@
 , stdenv
 , symlinkJoin
 , writeTextFile
+, pkgsCross
 }:
 
 let
@@ -120,7 +121,10 @@ let
 
        `name` is used as part of the derivation name that performs the checking.
 
-       `crateArgs` is passed to `mkHostCrate` to build the crate with `buildRustCrate`.
+       `mkCrate` can be used to override the `mkCrate` call/implementation to use to
+       override the `buildRustCrate`, useful for cross compilation. Uses `mkHostCrate` by default.
+
+       `crateArgs` is passed to `mkCrate` to build the crate with `buildRustCrate`
 
        `expectedFiles` contains a list of expected file paths in the output. E.g.
        `[ "./bin/my_binary" ]`.
@@ -129,13 +133,13 @@ let
        output is used but e.g. `output = "lib";` will cause the lib output
        to be checked instead. You do not need to specify any directories.
      */
-    assertOutputs = { name, crateArgs, expectedFiles, output? null }:
+    assertOutputs = { name, mkCrate ? mkHostCrate, crateArgs, expectedFiles, output? null, }:
       assert (builtins.isString name);
       assert (builtins.isAttrs crateArgs);
       assert (builtins.isList expectedFiles);
 
       let
-        crate = mkHostCrate (builtins.removeAttrs crateArgs ["expectedTestOutput"]);
+        crate = mkCrate (builtins.removeAttrs crateArgs ["expectedTestOutput"]);
         crateOutput = if output == null then crate else crate."${output}";
         expectedFilesFile = writeTextFile {
           name = "expected-files-${name}";
@@ -155,7 +159,7 @@ let
       ''
       # sed out the hash because it differs per platform
       + ''
-        | sed -E -e 's/-[0-9a-fA-F]{10}\.rlib/-HASH.rlib/g' \
+        | sed 's/-${crate.metadata}//g' \
         > "$actualFiles"
       diff -q ${expectedFilesFile} "$actualFiles" > /dev/null || {
         echo -e "\033[0;1;31mERROR: Difference in expected output files in ${crateOutput} \033[0m" >&2
@@ -421,6 +425,53 @@ let
         buildDependencies = [ depCrate ];
         dependencies = [ depCrate ];
       };
+      # Support new invocation prefix for build scripts `cargo::`
+      # https://doc.rust-lang.org/cargo/reference/build-scripts.html#outputs-of-the-build-script
+      buildScriptInvocationPrefix = let
+        depCrate = buildRustCrate: mkCrate buildRustCrate {
+          crateName = "bar";
+          src = mkFile "build.rs" ''
+              fn main() {
+                // Old invocation prefix
+                // We likely won't see be mixing these syntaxes in the same build script in the wild.
+                println!("cargo:key_old=value_old");
+
+                // New invocation prefix
+                println!("cargo::metadata=key=value");
+                println!("cargo::metadata=key_complex=complex(value)");
+              }
+          '';
+        };
+      in {
+        crateName = "foo";
+        src = symlinkJoin {
+          name = "build-script-and-main-invocation-prefix";
+          paths = [
+            (mkFile  "src/main.rs" ''
+              const BUILDFOO: &'static str = env!("BUILDFOO");
+
+              #[test]
+              fn build_foo_check() { assert!(BUILDFOO == "yes(check)"); }
+
+              fn main() { }
+            '')
+            (mkFile  "build.rs" ''
+              use std::env;
+              fn main() {
+                assert!(env::var_os("DEP_BAR_KEY_OLD").expect("metadata key 'key_old' not set in dependency") == "value_old");
+                assert!(env::var_os("DEP_BAR_KEY").expect("metadata key 'key' not set in dependency") == "value");
+                assert!(env::var_os("DEP_BAR_KEY_COMPLEX").expect("metadata key 'key_complex' not set in dependency") == "complex(value)");
+
+                println!("cargo::rustc-env=BUILDFOO=yes(check)");
+              }
+            '')
+          ];
+        };
+        buildDependencies = [ (depCrate buildPackages.buildRustCrate) ];
+        dependencies = [ (depCrate buildRustCrate) ];
+        buildTests = true;
+        expectedTestOutputs = [ "test build_foo_check ... ok" ];
+      };
       # Regression test for https://github.com/NixOS/nixpkgs/issues/74071
       # Whenevever a build.rs file is generating files those should not be overlayed onto the actual source dir
       buildRsOutDirOverlay = {
@@ -604,7 +655,7 @@ let
       };
       expectedFiles = [
         "./nix-support/propagated-build-inputs"
-        "./lib/libtest_lib-HASH.rlib"
+        "./lib/libtest_lib.rlib"
         "./lib/link"
       ];
     };
@@ -621,7 +672,24 @@ let
       };
       expectedFiles = [
         "./nix-support/propagated-build-inputs"
-        "./lib/libtest_lib-HASH.rlib"
+        "./lib/libtest_lib.rlib"
+        "./lib/link"
+      ];
+    };
+
+    crateLibOutputsWasm32 = assertOutputs {
+      name = "wasm32-crate-lib";
+      output = "lib";
+      mkCrate = mkCrate pkgsCross.wasm32-unknown-none.buildRustCrate;
+      crateArgs = {
+        libName = "test_lib";
+        type = [ "cdylib" ];
+        libPath = "src/lib.rs";
+        src = mkLib "src/lib.rs";
+      };
+      expectedFiles = [
+        "./nix-support/propagated-build-inputs"
+        "./lib/test_lib.wasm"
         "./lib/link"
       ];
     };

@@ -5,12 +5,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wireviz";
-  version = "0.3.2";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MBgX7dWOr3SorOJQjVlRGlSvL+A7Lg+gC1UoS3un9rU=";
+    hash = "sha256-DiWtjC46Jpp91Kf0Xk6NME234EMrGEOmIKz6a+cFcOE=";
   };
 
   nativeBuildInputs = [
@@ -19,12 +19,17 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
+    click
     graphviz
     pillow
     pyyaml
   ];
 
-  pythonImportsCheck = [ "wireviz" ];
+  pythonImportsCheck = [
+    "wireviz"
+    "wireviz.wireviz"
+    "wireviz.wv_cli"
+  ];
 
   meta = with lib; {
     description = "Easily document cables and wiring harnesses";

@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
-, withLdap ? true
 , python3
+, withLdap ? false
 , withPostgres ? true
 , nix-update-script
 , nixosTests
@@ -14,7 +14,7 @@ let
     };
   };
 in
-python.pkgs.buildPythonPackage rec {
+python.pkgs.buildPythonApplication rec {
   pname = "etebase-server";
   version = "0.13.1";
 

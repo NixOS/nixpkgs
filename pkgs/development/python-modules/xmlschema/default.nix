@@ -34,6 +34,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # -file://///filer01/MY_HOME/dev/XMLSCHEMA/test.xsd
+    # +file:////filer01/MY_HOME/dev/XMLSCHEMA/test.xsd
+    "test_normalize_url_slashes"
+    "test_normalize_url_with_base_unc_path"
+  ];
+
   pythonImportsCheck = [ "xmlschema" ];
 
   meta = with lib; {
@@ -41,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sissaschool/xmlschema";
     changelog = "https://github.com/sissaschool/xmlschema/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
   };
 }

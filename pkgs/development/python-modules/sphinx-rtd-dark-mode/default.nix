@@ -2,7 +2,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  pynose,
+  pythonOlder,
+  nose,
   setuptools,
   sphinx,
   sphinx-rtd-theme,
@@ -24,8 +25,11 @@ buildPythonPackage rec {
 
   dependencies = [ sphinx-rtd-theme ];
 
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
-    pynose
+    nose
     sphinx
   ];
 

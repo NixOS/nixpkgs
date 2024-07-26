@@ -28,6 +28,8 @@ buildPythonPackage rec {
     hash = "sha256-MSQdX2PKQohmPGqtRZnUmCCVgKgaf4+cHAUItiPv7pY=";
   };
 
+  pythonRelaxDeps = [ "deepdiff" ];
+
   build-system = [
     poetry-core
     poetry-dynamic-versioning

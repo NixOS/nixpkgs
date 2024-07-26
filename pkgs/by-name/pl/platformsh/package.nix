@@ -9,7 +9,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "platformsh";
-  version = "5.0.13";
+  version = "5.0.15";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -17,19 +17,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     {
       x86_64-darwin = fetchurl {
         url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_darwin_all.tar.gz";
-        hash = "sha256-dCo5+de+9hXxrv+uPn0UoAh4UfSv+PyR2z/ytpfby0g=";
+        hash = "sha256-G5/T6ZPcvC7dvw82p2CEMEOb7GCTyCAB8xJ2lxV2UXk=";
       };
       aarch64-darwin = fetchurl {
         url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_darwin_all.tar.gz";
-        hash = "sha256-dCo5+de+9hXxrv+uPn0UoAh4UfSv+PyR2z/ytpfby0g=";
+        hash = "sha256-G5/T6ZPcvC7dvw82p2CEMEOb7GCTyCAB8xJ2lxV2UXk=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_linux_amd64.tar.gz";
-        hash = "sha256-JP0RCqNQ8V4sFP3645MW+Pd9QfPFRAuTbVPIK6WD6PQ=";
+        hash = "sha256-0h5Thp9pSp1TgUyNVVAjsEw+kAZVzfbsHzPMXzhZhSk=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_linux_arm64.tar.gz";
-        hash = "sha256-vpk093kpGAmMevd4SVr3KSIjUXUqt3yWDZFHOVxu9rw=";
+        hash = "sha256-m0rxC9IfqY1k4Zh027zSkDWCGNv0E0oopFfBC/vYRgU=";
       };
     }
     .${stdenvNoCC.system}

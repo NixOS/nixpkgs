@@ -39,7 +39,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";
-  version = "1.4.2";
+  version = "1.5.0";
 
   src =
     let
@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     {
       x86_64-linux = fetchurl {
         url = "${base}/v${finalAttrs.version}/GoofCord-${finalAttrs.version}-linux-amd64.deb";
-        hash = "sha256-fUP/se3hOhs+aAoew25YhRyxnodYPrgqN68RIg1A1Kw=";
+        hash = "sha256-T7z8myiNBaoDf04zynNhPekFtzoj435de09PVz8MWDM=";
       };
       aarch64-linux = fetchurl {
         url = "${base}/v${finalAttrs.version}/GoofCord-${finalAttrs.version}-linux-arm64.deb";
-        hash = "sha256-hVpXmBSIgoON683f/sRtmpHwqxcO6IrFCCRPZjsUqjw=";
+        hash = "sha256-u+qY1UWr9opjTBnIhqw62F9HYTdEnqagevJ+eg8XYr8=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

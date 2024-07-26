@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromSourcehut
+, fetchFromGitea
 , pkg-config
 , meson
 , ninja
@@ -15,15 +15,16 @@
 
 stdenv.mkDerivation rec {
   pname = "wmenu";
-  version = "0.1.8";
+  version = "0.1.9";
 
   strictDeps = true;
 
-  src = fetchFromSourcehut {
-    owner = "~adnano";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "adnano";
     repo = "wmenu";
     rev = version;
-    hash = "sha256-gVoqRHQ5bcY58LTgKxpPM1PnZJrLRoSOJUiYYqc/vRI=";
+    hash = "sha256-TF5BvgThvTOqxyfz5Zt/Z1cqjFJwvla+dgdyvz7Zhrg=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja wayland-scanner ];
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Efficient dynamic menu for Sway and wlroots based Wayland compositors";
-    homepage = "https://git.sr.ht/~adnano/wmenu";
+    homepage = "https://codeberg.org/adnano/wmenu";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ eken ];

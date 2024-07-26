@@ -6,23 +6,27 @@
 , darwin
 , rust-jemalloc-sys
 , ruff-lsp
+, nix-update-script
+, testers
+, ruff
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.4.8";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XuAJ65R80+IntWBGikG1cxAH8Tr3mnwQvSxeKFQj2ac=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-dvvhd84T2YaNR5yu1uYcqwHjVzcWXvlXthyMBf8qZzE=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
+      "salsa-0.18.0" = "sha256-gcaAsrrJXrWOIHUnfBwwuTBG1Mb+lUEmIxSGIVLhXaM=";
     };
   };
 
@@ -36,12 +40,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.CoreServices
   ];
 
-  # tests expect no colors
-  preCheck = ''
-    export NO_COLOR=1
-  '';
-
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ruff \
       --bash <($out/bin/ruff generate-shell-completion bash) \
       --fish <($out/bin/ruff generate-shell-completion fish) \
@@ -50,12 +49,14 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = {
     inherit ruff-lsp;
+    updateScript = nix-update-script { };
+    version = testers.testVersion { package = ruff; };
   };
 
   meta = {
     description = "Extremely fast Python linter";
     homepage = "https://github.com/astral-sh/ruff";
-    changelog = "https://github.com/astral-sh/ruff/releases/tag/v${version}";
+    changelog = "https://github.com/astral-sh/ruff/releases/tag/${version}";
     license = lib.licenses.mit;
     mainProgram = "ruff";
     maintainers = with lib.maintainers; [

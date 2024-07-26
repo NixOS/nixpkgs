@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pycodestyle";
-  version = "2.11.1";
+  version = "2.12.0";
 
   disabled = pythonOlder "3.6";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QboOevyXUt+1PO1UieifgYa+AOWZ5xJmBpW3p1/yZj8=";
+    hash = "sha256-RC+VAUG09D33Ut0wNRH/3tOgTCtvt/ZZgFdPDDHm55w=";
   };
 
   pythonImportsCheck = [ "pycodestyle" ];

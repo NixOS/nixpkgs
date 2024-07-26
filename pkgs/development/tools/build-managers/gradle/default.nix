@@ -130,6 +130,7 @@ rec {
           '';
         };
       };
+      passthru.jdk = defaultJava;
 
       meta = with lib; {
         inherit platforms;
@@ -160,9 +161,9 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.7";
-    nativeVersion = "0.22-milestone-25";
-    hash = "sha256-VEw11r2Emuil7QvOo5umd9xA9J330YNVYVgtogCblh0=";
+    version = "8.8";
+    nativeVersion = "0.22-milestone-26";
+    hash = "sha256-pLQVhgH4Y2ze6rCb12r7ZAAwu1sUSq/iYaXorwJ9xhI=";
     defaultJava = jdk21;
   };
 
@@ -179,4 +180,43 @@ rec {
     hash = "sha256-PiQCKFON6fGHcqV06ZoLqVnoPW7zUQFDgazZYxeBOJo=";
     defaultJava = jdk11;
   };
+
+  wrapGradle = {
+      lib, callPackage, mitm-cache, substituteAll, symlinkJoin, concatTextFile, makeSetupHook
+    }:
+    gradle-unwrapped:
+    lib.makeOverridable (args:
+    let
+      gradle = gradle-unwrapped.override args;
+    in symlinkJoin {
+      name = "gradle-${gradle.version}";
+
+      paths = [
+        (makeSetupHook { name = "gradle-setup-hook"; } (concatTextFile {
+          name = "setup-hook.sh";
+          files = [
+            (mitm-cache.setupHook)
+            (substituteAll {
+              src = ./setup-hook.sh;
+              # jdk used for keytool
+              inherit (gradle) jdk;
+              init_script = ./init-build.gradle;
+            })
+          ];
+        }))
+        gradle
+        mitm-cache
+      ];
+
+      passthru = {
+        fetchDeps = callPackage ./fetch-deps.nix { inherit mitm-cache; };
+        inherit (gradle) jdk;
+      };
+
+      meta = gradle.meta // {
+        # prefer normal gradle/mitm-cache over this wrapper, this wrapper only provides the setup hook
+        # and passthru
+        priority = (gradle.meta.priority or 0) + 1;
+      };
+    }) { };
 }

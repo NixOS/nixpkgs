@@ -1,49 +1,77 @@
-{ stdenv, lib, fetchurl, fetchpatch, runtimeShell, buildPackages
-, gettext, pkg-config, python3
-, avahi, libgphoto2, libieee1284, libjpeg, libpng, libtiff, libusb1, libv4l, net-snmp
-, curl, systemd, libxml2, poppler, gawk
-, sane-drivers
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  runtimeShell,
+  buildPackages,
+  gettext,
+  pkg-config,
+  python3,
+  avahi,
+  libgphoto2,
+  libieee1284,
+  libjpeg,
+  libpng,
+  libtiff,
+  libusb1,
+  libv4l,
+  net-snmp,
+  curl,
+  systemd,
+  libxml2,
+  poppler,
+  gawk,
+  sane-drivers,
+  nixosTests,
+  autoconf,
+  automake,
+  libtool,
+  autoconf-archive,
 
 # List of { src name backend } attibute sets - see installFirmware below:
-, extraFirmware ? []
+  extraFirmware ? [],
 
 # For backwards compatibility with older setups; use extraFirmware instead:
-, gt68xxFirmware ? null, snapscanFirmware ? null
+  gt68xxFirmware ? null, snapscanFirmware ? null,
 
 # Not included by default, scan snap drivers require fetching of unfree binaries.
-, scanSnapDriversUnfree ? false, scanSnapDriversPackage ? sane-drivers.epjitsu
+  scanSnapDriversUnfree ? false, scanSnapDriversPackage ? sane-drivers.epjitsu,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "sane-backends";
-  version = "1.2.1";
+  version = "1.3.1";
 
-  src = fetchurl {
-    # raw checkouts of the repo do not work because, the configure script is
-    # only functional in manually uploaded release tarballs.
-    # https://gitlab.com/sane-project/backends/-/issues/440
-    # unfortunately this make the url unpredictable on update, to find the link
-    # go to https://gitlab.com/sane-project/backends/-/releases and choose
-    # the link under the heading "Other".
-    url = "https://gitlab.com/sane-project/backends/uploads/110fc43336d0fb5e514f1fdc7360dd87/sane-backends-1.2.1.tar.gz";
-    sha256 = "f832395efcb90bb5ea8acd367a820c393dda7e0dd578b16f48928b8f5bdd0524";
+  src = fetchFromGitLab {
+    owner = "sane-project";
+    repo = "backends";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4mwPGeRsyzngDxBQ8/48mK+VR9LYV6082xr8lTrUZrk=";
   };
 
-  patches = [
-    # sane-desc will be used in postInstall so compile it for build
-    # https://github.com/void-linux/void-packages/blob/master/srcpkgs/sane/patches/sane-desc-cross.patch
-    (fetchpatch {
-      name = "compile-sane-desc-for-build.patch";
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/4b97cd2fb4ec38712544438c2491b6d7d5ab334a/srcpkgs/sane/patches/sane-desc-cross.patch";
-      sha256 = "sha256-y6BOXnOJBSTqvRp6LwAucqaqv+OLLyhCS/tXfLpnAPI=";
-    })
-  ];
-
   postPatch = ''
+    # Do not create lock dir in install phase
+    sed -i '/^install-lockpath:/!b;n;c\       # pass' backend/Makefile.am
+  '';
+
+  preConfigure = ''
+    # create version files, so that autotools macros can use them:
+    # https://gitlab.com/sane-project/backends/-/issues/440
+    printf "%s\n" "$version" > .tarball-version
+    printf "%s\n" "$version" > .version
+
+    autoreconf -fiv
+
+    # Fixes for cross compilation
+    # https://github.com/NixOS/nixpkgs/issues/308283
+
     # related to the compile-sane-desc-for-build
     substituteInPlace tools/Makefile.in \
       --replace 'cc -I' '$(CC_FOR_BUILD) -I'
+
+    # sane-desc will be used in postInstall so compile it for build
+    # https://github.com/void-linux/void-packages/blob/master/srcpkgs/sane/patches/sane-desc-cross.patch
+    patch -p1 -i ${./sane-desc-cross.patch}
   '';
 
   outputs = [ "out" "doc" "man" ];
@@ -51,7 +79,11 @@ stdenv.mkDerivation {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [
+    autoconf
+    autoconf-archive
+    automake
     gettext
+    libtool
     pkg-config
     python3
   ];
@@ -76,14 +108,15 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    lib.optional (avahi != null)   "--with-avahi"
-    ++ lib.optional (libusb1 != null) "--with-usb"
-  ;
+  configureFlags = [ "--with-lockdir=/var/lock/sane" ]
+    ++ lib.optional (avahi != null)   "--with-avahi"
+    ++ lib.optional (libusb1 != null) "--with-usb";
 
   # autoconf check for HAVE_MMAP is never set on cross compilation.
   # The pieusb backend fails compilation if HAVE_MMAP is not set.
-  buildFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "CFLAGS=-DHAVE_MMAP=${if stdenv.hostPlatform.isLinux then "1" else "0"}" ];
+  buildFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "CFLAGS=-DHAVE_MMAP=${if stdenv.hostPlatform.isLinux then "1" else "0"}"
+  ];
 
   postInstall = let
 
@@ -134,7 +167,7 @@ stdenv.mkDerivation {
     inherit (nixosTests) sane;
   };
 
-  meta = with lib; {
+  meta = {
     description = "SANE (Scanner Access Now Easy) backends";
     longDescription = ''
       Collection of open-source SANE backends (device drivers).
@@ -144,8 +177,8 @@ stdenv.mkDerivation {
       scanners, see http://www.sane-project.org/sane-backends.html.
     '';
     homepage = "http://www.sane-project.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.symphorien ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ lib.maintainers.symphorien ];
   };
 }

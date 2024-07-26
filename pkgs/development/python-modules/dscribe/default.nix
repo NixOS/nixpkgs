@@ -8,7 +8,6 @@
 , sparse
 , pybind11
 , scikit-learn
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsprune";
-  version = "24.1";
+  version = "24.2";
 
   src = fetchurl {
     url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
-    sha256 = "sha256-k7aRuz/FOqQe2C0luiUwoFxnIvgM6opwsGZV7+hxJSM=";
+    sha256 = "sha256-wGg7WPj61yx7zMBIdH9ls18BnD1R713U5Vgc/kL9qYs=";
   };
 
   dontUnpack = true;
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Application for viewing, editing and converting GPS coordinate data";
     homepage = "https://activityworkshop.net/software/gpsprune/";
+    changelog = "https://activityworkshop.net/software/gpsprune/whats_new.html";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ rycee ];

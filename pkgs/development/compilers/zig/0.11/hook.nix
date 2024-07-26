@@ -1,8 +1,4 @@
-{
-  lib,
-  makeSetupHook,
-  zig,
-}:
+{ makeSetupHook, zig }:
 
 makeSetupHook {
   name = "zig-hook";

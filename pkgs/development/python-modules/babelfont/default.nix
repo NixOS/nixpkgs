@@ -9,26 +9,31 @@
   glyphslib,
   openstep-plist,
   orjson,
-  poetry-core,
   pytestCheckHook,
+  setuptools,
+  setuptools-scm,
   ufolib2,
 }:
 
 buildPythonPackage rec {
   pname = "babelfont";
-  version = "3.0.1";
+  version = "3.0.5";
+  pyproject = true;
 
   # PyPI source tarballs omit tests, fetch from Github instead
   src = fetchFromGitHub {
     owner = "simoncozens";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-1DHcJDVaCgIAODyf5UUrXej8x3ySD4+6/KtxuF2yFV4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9PEOkkm7qH4ExiJJKrTZX5Ph/urtOyFsy7jjtFepncU=";
   };
 
-  pyproject = true;
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cu2qu
     fontfeatures
     fonttools
@@ -37,9 +42,7 @@ buildPythonPackage rec {
     orjson
     ufolib2
   ];
-  nativeBuildInputs = [ poetry-core ];
 
-  doCheck = true;
   nativeCheckInputs = [
     defcon
     pytestCheckHook

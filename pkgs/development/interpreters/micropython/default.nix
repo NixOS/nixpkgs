@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "micropython";
     repo = "micropython";
     rev = "v${version}";
-    sha256 = "sha256-sfJohmsqq5FumUoVE8x3yWv12DiCJJXae62br0j+190=";
+    hash = "sha256-sfJohmsqq5FumUoVE8x3yWv12DiCJJXae62br0j+190=";
     fetchSubmodules = true;
   };
 

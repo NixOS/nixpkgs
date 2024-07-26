@@ -237,6 +237,8 @@ in {
       serviceConfig = {
         User = cfg.user;
         StateDirectory = mkIf (hasPrefix "/var/lib/jenkins" cfg.home) "jenkins";
+        # For (possible) socket use
+        RuntimeDirectory = "jenkins";
       };
     };
   };

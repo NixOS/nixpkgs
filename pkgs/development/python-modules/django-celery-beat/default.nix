@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  case,
   celery,
   cron-descriptor,
   django-timezone-field,
@@ -42,7 +41,6 @@ buildPythonPackage rec {
     ephem
     pytest-timeout
     pytest-django
-    case
     pytestCheckHook
   ];
 

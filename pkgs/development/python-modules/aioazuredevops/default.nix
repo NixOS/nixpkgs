@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "aioazuredevops";
-  version = "2.0.0";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "aioazuredevops";
     rev = "refs/tags/${version}";
-    hash = "sha256-QEIVAcBoTvuOeLN2kfDa3uYfrUm5Qu1TLp9C0uU+mW4=";
+    hash = "sha256-1v58I9WOyyrp9n+qdvVeMZ3EObqP/06XCOZYS0nEvPU=";
   };
 
   build-system = [
@@ -54,7 +54,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "aioazuredevops.builds"
     "aioazuredevops.client"
     "aioazuredevops.core"
   ];

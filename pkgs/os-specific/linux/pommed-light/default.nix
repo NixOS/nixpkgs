@@ -71,6 +71,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/bytbox/pommed-light";
     platforms = [ "x86_64-linux" ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
   };
 }

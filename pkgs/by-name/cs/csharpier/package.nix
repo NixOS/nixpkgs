@@ -5,7 +5,7 @@ buildDotnetGlobalTool {
   version = "0.28.2";
   executables = "dotnet-csharpier";
 
-  nugetSha256 = "sha256-fXyE25niM80pPXCLC80Hm9XEHGUMx0XZOMxdVoA0h18=";
+  nugetHash = "sha256-fXyE25niM80pPXCLC80Hm9XEHGUMx0XZOMxdVoA0h18=";
 
   meta = with lib; {
     description = "Opinionated code formatter for C#";

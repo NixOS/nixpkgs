@@ -1,14 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, libjpeg, zlib, cmake, perl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libjpeg
+, perl
+, zlib
+
+# for passthru.tests
+, cups-filters
+, pdfmixtool
+, pdfslicer
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "qpdf";
-  version = "11.9.0";
+  version = "11.9.1";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
     rev = "v${version}";
-    hash = "sha256-HD7+2TBDLBIt+VaPO5WgnDjNZOj8naltFmYdYzOIn+4=";
+    hash = "sha256-DhrOKjUPgNo61db8av0OTfM8mCNebQocQWtTWdt002s=";
   };
 
   nativeBuildInputs = [ cmake perl ];
@@ -24,6 +37,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru.tests = {
+    inherit (python3.pkgs) pikepdf;
+    inherit
+      cups-filters
+      pdfmixtool
+      pdfslicer
+    ;
+  };
+
   meta = with lib; {
     homepage = "https://qpdf.sourceforge.io/";
     description = "C++ library and set of programs that inspect and manipulate the structure of PDF files";
@@ -31,5 +53,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.all;
     changelog = "https://github.com/qpdf/qpdf/blob/v${version}/ChangeLog";
+    mainProgram = "qpdf";
   };
 }

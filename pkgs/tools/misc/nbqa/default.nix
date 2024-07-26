@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-vRJxpWs2i4A8gi8F4YrTlmgBSnA73KeMCrmjLNF1zpA=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     ruff = [ ruff ];
   };
 
-  propagatedBuildInputs = with python3.pkgs;
+  dependencies = with python3.pkgs;
     [
       autopep8
       ipython
@@ -82,6 +82,10 @@ python3.pkgs.buildPythonApplication rec {
     "test_unable_to_reconstruct_message_pythonpath"
     "test_with_subcommand"
     "test_pylint_works"
+
+    # Test cases not updated to work with ruff>=0.5.0
+    # https://github.com/nbQA-dev/nbQA/issues/856
+    "test_ruff_works"
   ];
 
   disabledTestPaths = [
@@ -89,12 +93,12 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_include_exclude.py"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nbQA-dev/nbQA";
     changelog = "https://nbqa.readthedocs.io/en/latest/history.html";
     description = "Run ruff, isort, pyupgrade, mypy, pylint, flake8, black, blacken-docs, and more on Jupyter Notebooks";
-    license = licenses.mit;
-    maintainers = with maintainers; [ l0b0 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ l0b0 ];
     mainProgram = "nbqa";
   };
 }

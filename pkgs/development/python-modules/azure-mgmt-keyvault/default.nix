@@ -37,7 +37,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-keyvault_${version}/sdk/keyvault/azure-mgmt-keyvault/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [
-      jonringer
       maxwilson
     ];
   };

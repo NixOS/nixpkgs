@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libnotify
     libpulseaudio
     libxkbcommon
-    mesa.drivers
+    mesa
     nss
     xorg.libX11
     xorg.libXScrnSaver

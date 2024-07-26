@@ -1,8 +1,5 @@
 {
-  lib,
-  stdenv,
   buildPythonPackage,
-  callPackage,
   horizon-eda,
   mesa,
   pycairo,

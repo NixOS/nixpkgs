@@ -21,8 +21,7 @@ let
   };
 
   appimageContents = appimageTools.extract {
-    name = "${pname}-${version}";
-    inherit src;
+    inherit pname version src;
   };
 in
 stdenvNoCC.mkDerivation {

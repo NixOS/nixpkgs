@@ -20,10 +20,6 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
-  ];
-
   propagatedBuildInputs = with python3Packages; [
     wheel
     setuptools
@@ -79,6 +75,6 @@ python3Packages.buildPythonApplication rec {
     description = "iCloud Photos Downloader";
     license = licenses.mit;
     mainProgram = "icloudpd";
-    maintainers = with maintainers; [ anpin Enzime jnsgruk ];
+    maintainers = with maintainers; [ anpin jnsgruk ];
   };
 }

@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "7.23.2";
+  version = "7.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "youtype";
     repo = "mypy_boto3_builder";
     rev = "refs/tags/${version}";
-    hash = "sha256-v5/3TCEtDXbmitb3e15XWkW8VO5nJk8TCVvVyh5rAMs=";
+    hash = "sha256-uLatx9/nLIoB+CY/QrddBxaaa4TeAzVNu/Nl9wWUTz4=";
   };
 
   nativeBuildInputs = [ poetry-core ];

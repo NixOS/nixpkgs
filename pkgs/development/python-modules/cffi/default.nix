@@ -4,6 +4,7 @@
   buildPythonPackage,
   isPyPy,
   fetchPypi,
+  fetchpatch2,
   setuptools,
   pytestCheckHook,
   libffi,
@@ -12,6 +13,9 @@
   pythonAtLeast,
 }:
 
+let
+  ccVersion = lib.getVersion stdenv.cc;
+in
 if isPyPy then
   null
 else
@@ -38,10 +42,23 @@ else
         # deemed safe to trust in cffi.
         #
         ./darwin-use-libffi-closures.diff
+
+        (fetchpatch2 {
+          # https://github.com/python-cffi/cffi/pull/34
+          name = "python-3.13-compat-1.patch";
+          url = "https://github.com/python-cffi/cffi/commit/49127c6929bfc7186fbfd3819dd5e058ad888de4.patch";
+          hash = "sha256-RbspsjwDf4uwJxMqG0JZGvipd7/JqXJ2uVB7PO4Qcms=";
+        })
+        (fetchpatch2 {
+          # https://github.com/python-cffi/cffi/pull/24
+          name = "python-3.13-compat-2.patch";
+          url = "https://github.com/python-cffi/cffi/commit/14723b0bbd127790c450945099db31018d80fa83.patch";
+          hash = "sha256-H5rFgRRTr27l5S6REo8+7dmPDQW7WXhP4f4DGZjdi+s=";
+        })
       ]
-      ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion stdenv.cc) "13") [
+      ++ lib.optionals (stdenv.cc.isClang && (ccVersion == "boot" || lib.versionAtLeast ccVersion "13")) [
         # -Wnull-pointer-subtraction is enabled with -Wextra. Suppress it to allow the following tests
-        # to run and pass when cffi is built with newer versions of clang:
+        # to run and pass when cffi is built with newer versions of clang (including the bootstrap tools clang on Darwin):
         # - testing/cffi1/test_verify1.py::test_enum_usage
         # - testing/cffi1/test_verify1.py::test_named_pointer_as_argument
         ./clang-pointer-substraction-warning.diff

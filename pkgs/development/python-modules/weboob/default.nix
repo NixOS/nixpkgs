@@ -17,7 +17,6 @@
   pillow,
   prettytable,
   pyqt5,
-  pytestCheckHook,
   python-dateutil,
   pythonOlder,
   pyyaml,

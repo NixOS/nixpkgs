@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "narrowlink";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "narrowlink";
     repo = "narrowlink";
     rev = version;
-    hash = "sha256-Ro5SfcuKy0JqSwh2HbYisE9I4BTP4o7qjEA3fU3pAuw=";
+    hash = "sha256-O66eihqSxwvrUfJj+VMrs7Vfndz2LPKQEnH7BDljvUg=";
   };
 
-  cargoHash = "sha256-XHbgwqvzfnpbu2h8rbI8XsL+og0gkjQzhHzME6crmZg=";
+  cargoHash = "sha256-LqPfgnN1J/OMAPsaBg9c5YSPbEDhOOOSujLthwIK79U=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

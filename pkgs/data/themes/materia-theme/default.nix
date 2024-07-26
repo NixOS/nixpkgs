@@ -5,6 +5,7 @@
 , ninja
 , sassc
 , gnome
+, gnome-themes-extra
 , gtk-engine-murrine
 , gdk-pixbuf
 , librsvg
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja sassc ];
 
-  buildInputs = [ gnome.gnome-themes-extra gdk-pixbuf librsvg ];
+  buildInputs = [ gnome-themes-extra gdk-pixbuf librsvg ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 

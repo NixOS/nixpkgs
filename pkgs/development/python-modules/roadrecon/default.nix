@@ -11,7 +11,6 @@
   marshmallow-sqlalchemy,
   openpyxl,
   pythonOlder,
-  pythonRelaxDepsHook,
   roadlib,
   setuptools,
   sqlalchemy,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "flask" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-sensor-state-data";
-  version = "1.7.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-sensor-state-data";
     rev = "refs/tags/v${version}";
-    hash = "sha256-phiK+2tULBE78d1X/TsaT2kLRHxiCiuLMkaI7S6tqJ8=";
+    hash = "sha256-Gsg6Gbb+nvrKr7vn9zUuPTPtSjqFJyMk7oLt7LUUn5A=";
   };
 
   postPatch = ''

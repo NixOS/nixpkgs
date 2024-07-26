@@ -9,12 +9,12 @@
 }:
 buildPythonPackage rec {
   pname = "ansible-navigator";
-  version = "24.2.0";
+  version = "24.3.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qXBhM63fFwPwo0pmEhZnZnGC8Eht8eFPfVbDkY98MGM=";
+    hash = "sha256-IAcZFisB3BOmdxZuGZ3PZcDl2CXsg6ToI/1fdPpkIXw=";
   };
 
   buildInputs = with python3Packages; [

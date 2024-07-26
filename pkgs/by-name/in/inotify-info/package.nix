@@ -5,22 +5,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "inotify-info";
-  version = "0.0.2";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "mikesart";
     repo = "inotify-info";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-6EY2cyFWfMy1hPDdDGwIzSE92VkAPo0p5ZCG+B1wVYY=";
+    hash = "sha256-mxZpJMmSCgm5uV5/wknVb1PdxRIF/b2k+6rdOh4b8zA=";
   };
 
   buildFlags = ["INOTIFYINFO_VERSION=v${finalAttrs.version}"];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 _release/inotify-info $out/bin/inotify-info
-    runHook postInstall
-  '';
+  installFlags = ["PREFIX=$$out"];
 
   meta = with lib; {
     description = "Easily track down the number of inotify watches, instances, and which files are being watched";

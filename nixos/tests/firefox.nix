@@ -21,8 +21,7 @@ import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
       # Create a virtual sound device, with mixing
       # and all, for recording audio.
       boot.kernelModules = [ "snd-aloop" ];
-      sound.enable = true;
-      sound.extraConfig = ''
+      environment.etc."asound.conf".text = ''
         pcm.!default {
           type plug
           slave.pcm pcm.dmixer

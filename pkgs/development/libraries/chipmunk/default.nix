@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, freeglut, libGLU, libGL, glfw2, glew, libX11, xorgproto
+{ lib, stdenv, fetchurl, cmake, libglut, libGLU, libGL, glfw2, glew, libX11, xorgproto
 , libXi, libXmu, fetchpatch, libXrandr
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs =
-    [ freeglut libGLU libGL glfw2 glew libX11 xorgproto libXi libXmu libXrandr ];
+    [ libglut libGLU libGL glfw2 glew libX11 xorgproto libXi libXmu libXrandr ];
 
   postInstall = ''
     mkdir -p $out/bin

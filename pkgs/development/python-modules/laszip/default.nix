@@ -7,7 +7,7 @@
   scikit-build-core,
   pybind11,
   cmake,
-  LASzip,
+  laszip,
   ninja,
   pythonOlder,
 }:
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = [ LASzip ];
+  buildInputs = [ laszip ];
 
   # There are no tests
   doCheck = false;

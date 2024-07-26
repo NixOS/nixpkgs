@@ -26,6 +26,6 @@ mkDerivation {
     description = "Galactic strategy game";
     mainProgram = "konquest";
     license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ lheckemann ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

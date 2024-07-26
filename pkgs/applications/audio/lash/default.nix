@@ -34,6 +34,6 @@ stdenv.mkDerivation  rec {
     homepage = "https://www.nongnu.org/lash";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
   };
 }

@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wolfssl-${variant}";
-  version = "5.7.0";
+  version = "5.7.2";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "refs/tags/v${finalAttrs.version}-stable";
-    hash = "sha256-4j1GqeZJn5UWx56DjGjge05jlzBbIGn4IXxcaIBxON4=";
+    hash = "sha256-VTMVgBSDL6pw1eEKnxGzTdyQYWVbMd3mAnOnpAOKVhk=";
   };
 
   postPatch = ''
@@ -59,6 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
     # However, all ARM macOS systems have the supported extensions autodetected in the configure script.
     "--enable-armasm=inline"
   ] ++ extraConfigureFlags;
+
+  # Breaks tls13 tests on aarch64-darwin.
+  hardeningDisable = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "zerocallusedregs" ];
 
   # LTO should help with the C implementations.
   env.NIX_CFLAGS_COMPILE = lib.optionalString enableLto "-flto";

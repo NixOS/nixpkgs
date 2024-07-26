@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "DavidGriffith";
     repo = "frotz";
     rev = version;
-    sha256 = "sha256-GvGxojD8d5GVy/d8h3q6K7KJroz2lsKbfE0F0acjBl8=";
+    hash = "sha256-GvGxojD8d5GVy/d8h3q6K7KJroz2lsKbfE0F0acjBl8=";
   };
 
   buildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://davidgriffith.gitlab.io/frotz/";
     changelog = "https://gitlab.com/DavidGriffith/frotz/-/raw/${version}/NEWS";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ddelabru ];
     platforms = platforms.linux;
   };

@@ -9,14 +9,14 @@
 buildPythonPackage rec {
   pname = "editables";
   version = "0.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-MJYn2bXErcDmaNjG+nusG6fIxdQVwtJ/YPCB+OgNHeI=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -25,10 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "editables" ];
 
-  meta = with lib; {
+  meta = {
     description = "Editable installations";
-    maintainers = with maintainers; [ ];
     homepage = "https://github.com/pfmoore/editables";
-    license = licenses.mit;
+    changelog = "https://github.com/pfmoore/editables/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
   };
 }

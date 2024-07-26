@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "klaus";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jonashaag";
     repo = pname;
     rev = version;
-    hash = "sha256-BcLlvZ9Ip3laL0cLkqK+mhB+S7ubB4TuZ0VKXOOX3oA=";
+    hash = "sha256-GflSDhBmMsQ34o3ApraEJ6GmlXXP2kK6WW3lsfr6b7g=";
   };
 
   prePatch = ''

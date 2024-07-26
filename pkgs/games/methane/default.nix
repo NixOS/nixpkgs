@@ -7,7 +7,7 @@
 , SDL2_mixer
 , fontconfig
 , freealut
-, freeglut
+, libglut
 , gettext
 , libGL
 , libGLU
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     SDL2_mixer
     fontconfig
     freealut
-    freeglut
+    libglut
     libGL
     libGLU
     openal

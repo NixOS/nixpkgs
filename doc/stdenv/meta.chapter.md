@@ -5,7 +5,7 @@ Nix packages can declare *meta-attributes* that contain information about a pack
 ```nix
 {
   meta = {
-    description = "A program that produces a familiar, friendly greeting";
+    description = "Program that produces a familiar, friendly greeting";
     longDescription = ''
       GNU Hello is a program that prints "Hello, world!" when you run it.
       It is fully customizable.
@@ -22,6 +22,10 @@ Meta-attributes are not passed to the builder of the package. Thus, a change to 
 
 ## Standard meta-attributes {#sec-standard-meta-attributes}
 
+If the package is to be submitted to Nixpkgs, please check out the
+[requirements for meta attributes](https://github.com/NixOS/nixpkgs/tree/master/pkgs#meta-attributes)
+in the contributing documentation.
+
 It is expected that each meta-attribute is one of the following:
 
 ### `description` {#var-meta-description}
@@ -29,11 +33,21 @@ It is expected that each meta-attribute is one of the following:
 A short (one-line) description of the package.
 This is displayed on [search.nixos.org](https://search.nixos.org/packages).
 
-Don’t include a period at the end. Don’t include newline characters. Capitalise the first character. For brevity, don’t repeat the name of package --- just describe what it does.
+The general requirements of a description are:
+
+- Be short, just one sentence.
+- Be capitalized.
+- Not start with definite ("The") or indefinite ("A"/"An") article.
+- Not start with the package name.
+  - More generally, it should not refer to the package name.
+- Not end with a period (or any punctuation for that matter).
+- Provide factual information.
+  - Avoid subjective language.
+
 
 Wrong: `"libpng is a library that allows you to decode PNG images."`
 
-Right: `"A library for decoding PNG images"`
+Right: `"Library for decoding PNG images"`
 
 ### `longDescription` {#var-meta-longDescription}
 
@@ -66,6 +80,12 @@ The license, or licenses, for the package. One from the attribute set defined in
 - Multiple licenses referenced as a space delimited string of attribute shortNames (frowned upon) `"asl20 free ofl"`.
 
 For details, see [Licenses](#sec-meta-license).
+
+### `sourceProvenance` {#var-meta-sourceProvenance}
+
+A list containing the type or types of source inputs from which the package is built, e.g. original source code, pre-built binaries, etc.
+
+For details, see [Source provenance](#sec-meta-sourceProvenance).
 
 ### `maintainers` {#var-meta-maintainers}
 

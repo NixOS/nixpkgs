@@ -251,7 +251,7 @@ stdenv.mkDerivation {
     homepage = "https://developer.vmware.com/web/tool/ovf-tool/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ numinit wolfangaukang thanegill ];
+    maintainers = with maintainers; [ numinit thanegill ];
     platforms = builtins.attrNames ovftoolSystems;
     mainProgram = "ovftool";
     knownVulnerabilities = [

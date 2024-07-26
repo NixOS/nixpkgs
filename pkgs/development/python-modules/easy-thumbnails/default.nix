@@ -4,7 +4,6 @@
   django,
   fetchPypi,
   pillow,
-  pytestCheckHook,
   pythonOlder,
   reportlab,
   svglib,

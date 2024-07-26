@@ -34,7 +34,7 @@ let
       driver = Firefox(options=options)
 
       driver.implicitly_wait(20)
-      driver.get('http://localhost/#/register')
+      driver.get('http://localhost:8080/#/register')
 
       wait = WebDriverWait(driver, 10)
 
@@ -133,12 +133,12 @@ let
             enable = true;
             dbBackend = backend;
             config = {
-              rocketAddress = "0.0.0.0";
-              rocketPort = 80;
+              rocketAddress = "::";
+              rocketPort = 8080;
             };
           };
 
-          networking.firewall.allowedTCPPorts = [ 80 ];
+          networking.firewall.allowedTCPPorts = [ 8080 ];
 
           environment.systemPackages = [ pkgs.firefox-unwrapped pkgs.geckodriver testRunner ];
         }
@@ -152,10 +152,10 @@ let
     testScript = if testScript != null then testScript else ''
       start_all()
       server.wait_for_unit("vaultwarden.service")
-      server.wait_for_open_port(80)
+      server.wait_for_open_port(8080)
 
       with subtest("configure the cli"):
-          client.succeed("bw --nointeraction config server http://server")
+          client.succeed("bw --nointeraction config server http://server:8080")
 
       with subtest("can't login to nonexistent account"):
           client.fail(
@@ -179,6 +179,9 @@ let
               timeout=60
           )
           assert password.strip() == "${storedPassword}"
+
+      with subtest("Check systemd unit hardening"):
+          server.log(server.succeed("systemd-analyze security vaultwarden.service | grep -v ✓"))
     '';
   });
 in
@@ -193,7 +196,7 @@ builtins.mapAttrs (k: v: makeVaultwardenTest k v) {
     testScript = ''
       start_all()
       server.wait_for_unit("vaultwarden.service")
-      server.wait_for_open_port(80)
+      server.wait_for_open_port(8080)
 
       with subtest("Set up vaultwarden"):
           server.succeed("PYTHONUNBUFFERED=1 test-runner | systemd-cat -t test-runner")
@@ -205,6 +208,9 @@ builtins.mapAttrs (k: v: makeVaultwardenTest k v) {
           server.succeed('[ -d "/var/lib/vaultwarden/backups" ]')
           server.succeed('[ -f "/var/lib/vaultwarden/backups/db.sqlite3" ]')
           server.succeed('[ -d "/var/lib/vaultwarden/backups/attachments" ]')
+          server.succeed('[ -f "/var/lib/vaultwarden/backups/rsa_key.pem" ]')
+          # Ensure only the db backed up with the backup command exists and not the other db files.
+          server.succeed('[ ! -f "/var/lib/vaultwarden/backups/db.sqlite3-shm" ]')
     '';
   };
 }

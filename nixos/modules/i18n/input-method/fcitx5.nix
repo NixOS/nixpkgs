@@ -3,8 +3,8 @@
 with lib;
 
 let
-  im = config.i18n.inputMethod;
-  cfg = im.fcitx5;
+  imcfg = config.i18n.inputMethod;
+  cfg = imcfg.fcitx5;
   fcitx5Package =
     if cfg.plasma6Support
     then pkgs.qt6Packages.fcitx5-with-addons.override { inherit (cfg) addons; }
@@ -108,7 +108,7 @@ in
     '')
   ];
 
-  config = mkIf (im.enabled == "fcitx5") {
+  config = mkIf (imcfg.enable && imcfg.type == "fcitx5") {
     i18n.inputMethod.package = fcitx5Package;
 
     i18n.inputMethod.fcitx5.addons = lib.optionals (cfg.quickPhrase != { }) [

@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "roomeqwizard";
-  version = "5.31.1";
+  version = "5.31.2";
 
   src = fetchurl {
     url = "https://www.roomeqwizard.com/installers/REW_linux_no_jre_${lib.replaceStrings [ "." ] [ "_" ] version}.sh";
-    sha256 = "sha256-n1Ohja6Hpg/TNoxQKF1VCDkVj0UDCefr1x5ArIsgs2A=";
+    sha256 = "sha256-B4qP+qNNPMB/EkW/C2kfcx+h9YH8Md1lM9yUh5YT13s=";
   };
 
   dontUnpack = true;

@@ -1,11 +1,12 @@
 { lib
 , fetchFromGitHub
+, fetchpatch2
 , stdenv
 , cmake
 , pkg-config
 , protobuf
 , python3
-, ffmpeg_6
+, ffmpeg
 , libopus
 , wrapQtAppsHook
 , qtbase
@@ -35,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "chiaki4deck";
-  version = "1.7.2";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gh+ZOsAOi5mKZjs7B1xh07vatoD8F2j2HVxOT/fKDEo=";
+    hash = "sha256-9EF+Mm6nZeo3XYH8KO7e22cJ4e9TWUEinhkm+Z213RU=";
     fetchSubmodules = true;
   };
 
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ffmpeg_6
+    ffmpeg
     libopus
     qtbase
     qtmultimedia
@@ -117,6 +118,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://streetpea.github.io/chiaki4deck/";
     description = "Fork of Chiaki (Open Source Playstation Remote Play) with Enhancements for Steam Deck";
+    # Includes OpenSSL linking exception that we currently have no way
+    # to represent.
+    #
+    # See also: <https://github.com/spdx/license-list-XML/issues/939>
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ devusb ];
     platforms = platforms.linux;

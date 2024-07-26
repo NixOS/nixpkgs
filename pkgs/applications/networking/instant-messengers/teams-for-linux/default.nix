@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "teams-for-linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly chvp ];
+    maintainers = with lib.maintainers; [ muscaln qjoly chvp ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };

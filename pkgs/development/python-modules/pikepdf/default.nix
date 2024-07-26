@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "8.14.0";
+  version = "9.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-3ORvbhO3eLu/NIE0Lwdf93QtUHUmyMf7LmdMBJpkYIg=";
+    hash = "sha256-dTEYI3dGu3Q/80lijp0ooApveSL1VWVHwLw7covnYYc=";
   };
 
   patches = [
@@ -53,12 +53,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "shims_enabled = not cflags_defined" "shims_enabled = False"
+      --replace-fail "shims_enabled = not cflags_defined" "shims_enabled = False"
   '';
 
   buildInputs = [ qpdf ];
 
-  nativeBuildInputs = [
+  build-system = [
     pybind11
     setuptools
   ];
@@ -74,7 +74,7 @@ buildPythonPackage rec {
     python-xmp-toolkit
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecated
     lxml
     packaging
@@ -87,10 +87,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
-    maintainers = with maintainers; [
-      kiwi
-      dotlambda
-    ];
+    maintainers = with maintainers; [ dotlambda ];
     changelog = "https://github.com/pikepdf/pikepdf/blob/${src.rev}/docs/releasenotes/version${lib.versions.major version}.rst";
   };
 }

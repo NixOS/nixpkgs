@@ -28,6 +28,7 @@
 , libxmlb
 , malcontent
 , json-glib
+, glib-networking
 , libsecret
 , valgrind-light
 , docbook-xsl-nons
@@ -45,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "46.2";
+  version = "46.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5wDLood2T14iVVFOMS4WBVD9v3pdP+FjWLtve2cyuXQ=";
+    hash = "sha256-nWvB9jfYGytZhYN5BPBe1wdgAUfZrxYLqJEqvy1C8TY=";
   };
 
   patches = [
@@ -78,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     glib
+    glib-networking
     packagekit
     appstream
     libsoup_3

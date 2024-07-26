@@ -16,6 +16,7 @@
 , pkg-config
 , buildGoModule
 , makeWrapper
+, ncurses
 
   # apply feature parameter names according to
   # https://github.com/NixOS/rfcs/pull/169
@@ -60,7 +61,7 @@ let
     else if with_clblas then "clblas"
     else "";
 
-  inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart cudatoolkit;
+  inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart libcufft;
 
   go-llama = effectiveStdenv.mkDerivation {
     name = "go-llama";
@@ -77,13 +78,12 @@ let
     ];
 
     buildInputs = [ ]
+      ++ lib.optionals with_cublas [ cuda_cccl cuda_cudart libcublas ]
       ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
       ++ lib.optionals with_openblas [ openblas.dev ];
 
     nativeBuildInputs = [ cmake ]
-      # backward compatiblity with nixos-23.11
-      # use cuda_nvcc after release of nixos-24.05
-      ++ lib.optionals with_cublas [ cudatoolkit ];
+      ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     dontUseCmakeConfigure = true;
 
@@ -97,21 +97,17 @@ let
   llama-cpp-rpc = (llama-cpp-grpc.overrideAttrs (prev: {
     name = "llama-cpp-rpc";
     cmakeFlags = prev.cmakeFlags ++ [
-      (lib.cmakeBool "LLAMA_AVX" false)
-      (lib.cmakeBool "LLAMA_AVX2" false)
-      (lib.cmakeBool "LLAMA_AVX512" false)
-      (lib.cmakeBool "LLAMA_FMA" false)
-      (lib.cmakeBool "LLAMA_F16C" false)
-      (lib.cmakeBool "LLAMA_RPC" true)
+      (lib.cmakeBool "GGML_AVX" false)
+      (lib.cmakeBool "GGML_AVX2" false)
+      (lib.cmakeBool "GGML_AVX512" false)
+      (lib.cmakeBool "GGML_FMA" false)
+      (lib.cmakeBool "GGML_F16C" false)
     ];
-    postPatch = prev.postPatch + ''
-      sed -i examples/rpc/CMakeLists.txt \
-        -e '$a\install(TARGETS rpc-server RUNTIME)'
-    '';
   })).override {
     cudaSupport = false;
     openclSupport = false;
-    blasSupport = true; # TODO: set to false, when dropping 23.11 support
+    blasSupport = false;
+    rpcSupport = true;
   };
 
   llama-cpp-grpc = (llama-cpp.overrideAttrs (final: prev: {
@@ -119,8 +115,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "llama.cpp";
-      rev = "74f33adf5f8b20b08fc5a6aa17ce081abe86ef2f";
-      hash = "sha256-hSdHhsC5Q8pLEC2bj8Gke4/ffCts5l7LtYa9RDrpGBI=";
+      rev = "cb5fad4c6c2cbef92e9b8b63449e1cb7664e4846";
+      hash = "sha256-cIJuDC+MFLd5hkA1kUxuaw2dZagHqn5fi5Q2XKvDEII=";
       fetchSubmodules = true;
     };
     postPatch = prev.postPatch + ''
@@ -137,11 +133,11 @@ let
     '';
     cmakeFlags = prev.cmakeFlags ++ [
       (lib.cmakeBool "BUILD_SHARED_LIBS" false)
-      (lib.cmakeBool "LLAMA_AVX" enable_avx)
-      (lib.cmakeBool "LLAMA_AVX2" enable_avx2)
-      (lib.cmakeBool "LLAMA_AVX512" enable_avx512)
-      (lib.cmakeBool "LLAMA_FMA" enable_fma)
-      (lib.cmakeBool "LLAMA_F16C" enable_f16c)
+      (lib.cmakeBool "GGML_AVX" enable_avx)
+      (lib.cmakeBool "GGML_AVX2" enable_avx2)
+      (lib.cmakeBool "GGML_AVX512" enable_avx512)
+      (lib.cmakeBool "GGML_FMA" enable_fma)
+      (lib.cmakeBool "GGML_F16C" enable_f16c)
     ];
     buildInputs = prev.buildInputs ++ [
       protobuf # provides also abseil_cpp as propagated build input
@@ -273,15 +269,15 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "22d46b7ba4620e2db1281e210d0186863cffcec0";
-      hash = "sha256-JC3GHRBjFvfQSUWRdAcMc0pol54RsqUF1+zIZYAsbC4=";
+      rev = "b29b3b29240aac8b71ce8e5a4360c1f1562ad66f";
+      hash = "sha256-vSd+AP9AexbG4wvdkk6wjxYQBZdKWGK2Ix7c86MUfB8=";
     };
 
     nativeBuildInputs = [ cmake pkg-config ]
       ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     buildInputs = [ ]
-      ++ lib.optionals with_cublas [ cuda_cccl cuda_cudart libcublas ]
+      ++ lib.optionals with_cublas [ cuda_cccl cuda_cudart libcublas libcufft ]
       ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
       ++ lib.optionals with_openblas [ openblas.dev ];
 
@@ -392,18 +388,18 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.16.0";
+  version = "2.18.1";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-3SfU68wGyYIX0haKfuHGKHhthuDSeSdr18ReDkFzhH0=";
+    hash = "sha256-hRrbGUUawQV4fqxAn3eFBvn4/lZ+NrKhxnGHqpljrec=";
   };
 
   self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-UjqEsgRZ+xv4Thwh4u3juvg3JI3+RdGyCZlsk7ddgTU=";
+    vendorHash = "sha256-uvko1PQWW5P+6cgmwVKocKBm5GndszqCsSbxlXANqJs=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
@@ -427,16 +423,19 @@ let
           -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-avx/ d' \
           -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-cuda/ d' \
 
+      '' + lib.optionalString with_cublas ''
+        sed -i Makefile \
+          -e '/^CGO_LDFLAGS_WHISPER?=/ s;$;-L${libcufft}/lib -L${cuda_cudart}/lib;'
       '';
 
     postConfigure = ''
       shopt -s extglob
       mkdir -p backend-assets/grpc
-      cp ${llama-cpp-grpc}/bin/?(llama-cpp-)grpc-server backend-assets/grpc/llama-cpp-avx2
-      cp ${llama-cpp-rpc}/bin/?(llama-cpp-)grpc-server backend-assets/grpc/llama-cpp-grpc
+      cp ${llama-cpp-grpc}/bin/grpc-server backend-assets/grpc/llama-cpp-avx2
+      cp ${llama-cpp-rpc}/bin/grpc-server backend-assets/grpc/llama-cpp-grpc
 
       mkdir -p backend-assets/util
-      cp ${llama-cpp-rpc}/bin/?(llama-cpp-)rpc-server backend-assets/util/llama-cpp-rpc-server
+      cp ${llama-cpp-rpc}/bin/llama-rpc-server backend-assets/util/llama-cpp-rpc-server
     '';
 
     buildInputs = [ ]
@@ -451,6 +450,7 @@ let
       protoc-gen-go
       protoc-gen-go-grpc
       makeWrapper
+      ncurses # tput
     ]
     ++ lib.optionals with_cublas [ cuda_nvcc ];
 
@@ -509,7 +509,13 @@ let
     postFixup =
       let
         LD_LIBRARY_PATH = [ ]
-          ++ lib.optionals with_cublas [ (lib.getLib libcublas) cuda_cudart addDriverRunpath.driverLink ]
+          ++ lib.optionals with_cublas [
+          # driverLink has to be first to avoid loading the stub version of libcuda.so
+          # https://github.com/NixOS/nixpkgs/issues/320145#issuecomment-2190319327
+          addDriverRunpath.driverLink
+          (lib.getLib libcublas)
+          cuda_cudart
+        ]
           ++ lib.optionals with_clblas [ clblast ocl-icd ]
           ++ lib.optionals with_openblas [ openblas ]
           ++ lib.optionals with_tts [ piper-phonemize ];

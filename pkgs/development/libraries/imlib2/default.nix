@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.12.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/enlightenment/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    url = "mirror://sourceforge/enlightenment/imlib2-${finalAttrs.version}.tar.xz";
     hash = "sha256-zEmTGiBWCWioZIycoHkIWXYIXqltWaAbHhfLVa8P/kI=";
   };
 
