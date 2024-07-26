@@ -3,7 +3,7 @@
 , cargo
 , copyDesktopItems
 , dbus
-, electron_29
+, electron_31
 , fetchFromGitHub
 , glib
 , gnome-keyring
@@ -12,7 +12,6 @@
 , libsecret
 , makeDesktopItem
 , makeWrapper
-, moreutils
 , napi-rs-cli
 , nodejs_20
 , patchutils_0_4_2
@@ -26,41 +25,28 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_29;
+  electron = electron_31;
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.6.4";
+  version = "2024.8.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-oQ2VZoxePdYUC+xMKlRMpvPubSPULvt31XSh/OBw3Ec=";
+    hash = "sha256-szIa7fASDmeWKZPc6HtHKeXKerCAXrYZQWTVFMugAxk=";
   };
 
   patches = [
     ./electron-builder-package-lock.patch
   ];
 
-  # The nested package-lock.json from upstream is out-of-date, so copy the
-  # lock metadata from the root package-lock.json.
-  postPatch = ''
-    cat {,apps/desktop/src/}package-lock.json \
-      | ${lib.getExe jq} -s '
-        .[1].packages."".dependencies.argon2 = .[0].packages."".dependencies.argon2
-          | .[0].packages."" = .[1].packages.""
-          | .[1].packages = .[0].packages
-          | .[1]
-        ' \
-      | ${moreutils}/bin/sponge apps/desktop/src/package-lock.json
-  '';
-
   nodejs = nodejs_20;
 
   makeCacheWritable = true;
   npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-9d9pWrFYelAx/PPDHY3m92Frp8RSQuBqpiOjmWtm/1g=";
+  npmDepsHash = "sha256-5neEpU7ZhVO5OR181owsvAnFfl7lr0MymvqbRFCPs3M=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -76,21 +62,23 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-ZmblY1APVa8moAR1waVBZPhrf5Wt1Gi6dvAxkhizckQ=";
+    hash = "sha256-ya/5z5XpsyuWayziLxuETu/dY8LzZspaAMqL2p8jYN8=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    npm_config_build_from_source = "true";
+  };
 
   nativeBuildInputs = [
     cargo
     copyDesktopItems
     jq
     makeWrapper
-    moreutils
     napi-rs-cli
     pkg-config
-    python3
+    (python3.withPackages (ps: with ps; [ setuptools ]))
     rustc
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
@@ -107,13 +95,18 @@ in buildNpmPackage rec {
       echo 'ERROR: electron version mismatch'
       exit 1
     fi
+
+    pushd apps/desktop/desktop_native/napi
+    npm run build
+    popd
   '';
 
   postBuild = ''
     pushd apps/desktop
 
     # desktop_native/index.js loads a file of that name regarldess of the libc being used
-    mv desktop_native/desktop_native.* desktop_native/desktop_native.linux-x64-musl.node
+    ls -al desktop_native/napi
+    mv desktop_native/napi/desktop_napi.* desktop_native/napi/desktop_napi.linux-x64-musl.node
 
     npm exec electron-builder -- \
       --dir \
