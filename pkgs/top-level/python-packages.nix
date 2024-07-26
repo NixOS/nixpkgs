@@ -10109,6 +10109,8 @@ self: super: with self; {
 
   pcpp = callPackage ../development/python-modules/pcpp { };
 
+  pcre2-py = callPackage ../development/python-modules/pcre2-py { };
+
   pdb2pqr = callPackage ../development/python-modules/pdb2pqr { };
 
   pdbfixer = callPackage ../development/python-modules/pdbfixer { };
