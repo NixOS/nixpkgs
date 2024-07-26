@@ -1,0 +1,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -22,8 +22,6 @@
+ 
+ # Makefile for ComixCursors project.
+ 
+-SHELL = /bin/bash
+-
+ CURSORSNAME = ComixCursors
+ PACKAGENAME ?= ${CURSORSNAME}
+ SUMMARY ?= The original Comix Cursors

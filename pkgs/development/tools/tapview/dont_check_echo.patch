@@ -1,0 +1,44 @@
+diff --git a/tapview b/tapview
+index ad6a33a66d1..4cf9545d42f 100644
+--- a/tapview
++++ b/tapview
+@@ -13,21 +13,6 @@
+ #
+ # This is version 1.1
+ # A newer version may be available at https://gitlab.com/esr/tapview
+-#
+-# POSIX allows but does not mandate that -n suppresses emission of a
+-# trailing newline in echo. Thus, some shell builtin echos don't do
+-# that.  Cope gracefully.
+-# shellcheck disable=SC2039
+-if [ "$(echo -n "a"; echo "b")" != "ab" ]
+-then
+-    ECHO="echo"
+-elif [ "$(/bin/echo -n "a"; /bin/echo "b")" = "ab" ]
+-then
+-    ECHO="/bin/echo"
+-else
+-    echo "tapview: bailing out, your echo lacks -n support."
+-    exit 3
+-fi
+ 
+ OK="."
+ FAIL="F"
+@@ -37,7 +22,7 @@ TODO_OK="u"
+ 
+ ship_char() {
+     # shellcheck disable=SC2039
+-    "${ECHO}" -n "$1"
++    echo -n "$1"
+ }
+ 
+ ship_line() {
+@@ -155,7 +140,7 @@ do
+     fi
+ done
+ 
+-/bin/echo ""
++echo ""
+ 
+ if [ -z "$expect" ]
+ then

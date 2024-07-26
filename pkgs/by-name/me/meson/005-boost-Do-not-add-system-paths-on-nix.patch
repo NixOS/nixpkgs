@@ -1,0 +1,21 @@
+diff -Naur meson-0.60.2-old/mesonbuild/dependencies/boost.py meson-0.60.2-new/mesonbuild/dependencies/boost.py
+--- meson-0.60.2-old/mesonbuild/dependencies/boost.py	2021-11-02 16:58:07.000000000 -0300
++++ meson-0.60.2-new/mesonbuild/dependencies/boost.py	2021-12-12 19:21:27.895705897 -0300
+@@ -682,16 +682,7 @@
+         else:
+             tmp = []  # type: T.List[Path]
+ 
+-            # Add some default system paths
+-            tmp += [Path('/opt/local')]
+-            tmp += [Path('/usr/local/opt/boost')]
+-            tmp += [Path('/usr/local')]
+-            tmp += [Path('/usr')]
+-
+-            # Cleanup paths
+-            tmp = [x for x in tmp if x.is_dir()]
+-            tmp = [x.resolve() for x in tmp]
+-            roots += tmp
++            # Remove such spurious, non-explicit "system" paths for Nix&Nixpkgs
+ 
+         self.check_and_set_roots(roots, use_system=True)
+ 

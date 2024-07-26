@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 273968c..236e5fb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -3,10 +3,6 @@ project(mya)
+ set(CMAKE_C_STANDARD 11 )
+ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall")
+ 
+-if(UNIX)
+-	set(LINUX TRUE)
+-endif()
+-
+ set(SRC_DIR src)
+ set(INC_DIR include)
+ 
+@@ -17,7 +13,8 @@ set_target_properties(mya PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DI
+ target_include_directories(mya PRIVATE ${INC_DIR})
+ 
+ set(LIBS curl json-c bsd)
+-if(LINUX)
+-    list(APPEND LIBS)
++find_library(ARGP argp)
++if(ARGP)
++    list(APPEND LIBS argp)
+ endif()
+ target_link_libraries(mya ${LIBS})

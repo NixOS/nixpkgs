@@ -1,0 +1,13 @@
+--- a/contrib/mtree/Makefile	2023-12-04 23:02:13.919144141 -0700
++++ b/contrib/mtree/Makefile		2023-12-04 23:02:58.371810109 -0700
+@@ -10,8 +10,8 @@
+ SRCS=  compare.c crc.c create.c excludes.c misc.c mtree.c spec.c specspec.c \
+        verify.c getid.c pack_dev.c only.c
+ .if (${HOSTPROG:U} == "")
+-DPADD+= ${LIBUTIL}
+-LDADD+= -lutil
++LIBADD+= ${LIBUTIL}
++#LIBADD+= -lutil
+ .endif
+
+ CPPFLAGS+=	-I${NETBSDSRCDIR}/sbin/mknod

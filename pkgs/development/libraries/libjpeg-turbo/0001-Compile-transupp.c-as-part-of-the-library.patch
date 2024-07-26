@@ -1,0 +1,34 @@
+From 6442d11617f95d13e2a371bd3e01f5082a9c356d Mon Sep 17 00:00:00 2001
+From: Las <las@protonmail.ch>
+Date: Sun, 3 Jan 2021 18:35:37 +0000
+Subject: [PATCH] Compile transupp.c as part of the library
+
+---
+ CMakeLists.txt |  4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index adb0ca45..46fc16dd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -581,7 +581,7 @@ set(JPEG_SOURCES ${JPEG12_SOURCES} jcapimin.c jchuff.c jcicc.c jcinit.c
+   jclhuff.c jcmarker.c jcmaster.c jcomapi.c jcparam.c jcphuff.c jctrans.c
+   jdapimin.c jdatadst.c jdatasrc.c jdhuff.c jdicc.c jdinput.c jdlhuff.c
+   jdmarker.c jdmaster.c jdphuff.c jdtrans.c jerror.c jfdctflt.c jmemmgr.c
+-  jmemnobs.c jpeg_nbits.c)
++  jmemnobs.c jpeg_nbits.c transupp.c)
+ 
+ if(WITH_ARITH_ENC OR WITH_ARITH_DEC)
+   set(JPEG_SOURCES ${JPEG_SOURCES} jaricom.c)
+@@ -1803,7 +1803,7 @@ install(EXPORT ${CMAKE_PROJECT_NAME}Targets
+ 
+ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/jconfig.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/jerror.h ${CMAKE_CURRENT_SOURCE_DIR}/jmorecfg.h
+-  ${CMAKE_CURRENT_SOURCE_DIR}/jpeglib.h
++  ${CMAKE_CURRENT_SOURCE_DIR}/jpeglib.h ${CMAKE_CURRENT_SOURCE_DIR}/transupp.h
+   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT include)
+ 
+ include(cmakescripts/BuildPackages.cmake)
+-- 
+2.43.0
+
