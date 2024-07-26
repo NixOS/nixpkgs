@@ -2,10 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
   git,
   lxml,
   rnc2rng,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,11 +23,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ lxml ];
 
   nativeCheckInputs = [
-    nose
     git
+    pytestCheckHook
   ];
-  checkPhase = "nosetests tests";
-  doCheck = false; # seems to want a Git repository, but fetchgit with leaveDotGit also fails
+
   pythonImportsCheck = [ "citeproc" ];
 
   meta = with lib; {
