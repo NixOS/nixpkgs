@@ -88,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
       files, Rayman 2 music and chiptunes. It contains YouTube and MyFreeMP3
       browser.
     '';
-    changelog = "https://github.com/zaps166/QMPlay2/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     mainProgram = "qmplay2";
     maintainers = with lib.maintainers; [ AndersonTorres kashw2 ];
