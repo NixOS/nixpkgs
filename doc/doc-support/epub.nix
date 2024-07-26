@@ -1,3 +1,4 @@
+# To run this derivation, `nix-build -A nixpkgs-manual.epub`
 {
   lib,
   runCommand,

@@ -1,5 +1,5 @@
 # Generates the documentation for library functions via nixdoc.
-
+# To run this derivation, `nix-build -A nixpkgs-manual.lib-docs`
 {
   lib,
   stdenvNoCC,

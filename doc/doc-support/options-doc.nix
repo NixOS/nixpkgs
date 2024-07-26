@@ -1,3 +1,4 @@
+# To run this derivation, `nix-build -A nixpkgs-manual.optionsDoc`
 { lib, nixosOptionsDoc }:
 
 let
