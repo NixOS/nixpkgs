@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    description = "zdelta is a general purpose lossless delta compression library developed at Polytechnic University";
     homepage = "https://web.archive.org/web/20160316212948/http://cis.poly.edu/zdelta/";
     platforms = platforms.all;
     license = licenses.zlib;

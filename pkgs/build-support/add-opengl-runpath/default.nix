@@ -9,4 +9,8 @@ stdenv.mkDerivation {
     mkdir -p $out/nix-support
     substituteAll ${./setup-hook.sh} $out/nix-support/setup-hook
   '';
+
+  meta = {
+    description = "Build support script to set RUNPATH so that driver libraries in /run/opengl-driver(-32)/lib can be found";
+  }
 }
