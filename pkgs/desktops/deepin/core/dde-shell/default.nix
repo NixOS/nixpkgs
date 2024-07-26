@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dde-shell";
-  version = "0.0.23-unstable-2024-06-11";
+  version = "0.0.27";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-shell";
-    rev = "d68cc64ad2cd6978af2f34deb3ef48f991d54fc3";
-    hash = "sha256-hVrdfbtcL3EJitiDghNSuGr5MX/VVT1J3tuY6wjwYcw=";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-pVTwqci6EaN5CNHR12tn4henFtoNU/71grfWWNJISSM=";
   };
 
   patches = [
