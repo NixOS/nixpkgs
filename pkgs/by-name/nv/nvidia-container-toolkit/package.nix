@@ -48,6 +48,8 @@ buildGoModule rec {
 
   };
 
+  outputs = [ "out" "tools" ];
+
   vendorHash = null;
 
   patches = [
@@ -109,7 +111,13 @@ buildGoModule rec {
     in
     [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
 
-  postInstall = lib.optionalString (containerRuntimePath != null) ''
+  postInstall = ''
+    mkdir -p $tools/bin
+    mv $out/bin/{containerd,crio,docker,nvidia-toolkit,toolkit} -t $tools/bin
+
+    wrapProgram $out/bin/nvidia-container-runtime-hook \
+      --prefix PATH : ${libnvidia-container}/bin
+  '' + lib.optionalString (configTemplate != null || configTemplatePath != null) ''
     mkdir -p $out/etc/nvidia-container-runtime
 
     # nvidia-container-runtime invokes docker-runc or runc if that isn't
