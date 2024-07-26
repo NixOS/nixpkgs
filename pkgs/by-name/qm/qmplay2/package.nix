@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Because we think it is better to use only lowercase letters!
   # But sometimes we come across case-insensitive filesystems...
-  postFixup = ''
+  postInstall = ''
     [ -e $out/bin/qmplay2 ] || ln -s $out/bin/QMPlay2 $out/bin/qmplay2
   '';
 
