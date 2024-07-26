@@ -5,6 +5,7 @@
   rustPlatform,
   testers,
   lemurs,
+  nixosTests,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lemurs";
@@ -28,8 +29,11 @@ rustPlatform.buildRustPackage rec {
     linux-pam
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = lemurs;
+  passthru.tests = {
+    version = testers.testVersion {
+      package = lemurs;
+    };
+    inherit (nixosTests) lemurs;
   };
 
   meta = with lib; {
