@@ -11,6 +11,10 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = with python3Packages; [ setuptools-scm ];
+  postPatch = ''
+    substituteInPlace tests/test_cli.py \
+      --replace-fail '"fava"' '"${placeholder "out"}/bin/fava"'
+  '';
 
   propagatedBuildInputs = with python3Packages; [
     babel
@@ -40,11 +44,6 @@ python3Packages.buildPythonApplication rec {
   preCheck = ''
     export HOME=$TEMPDIR
   '';
-
-  disabledTests = [
-    # runs fava in debug mode, which tries to interpret bash wrapper as Python
-    "test_cli"
-  ];
 
   meta = with lib; {
     description = "Web interface for beancount";
