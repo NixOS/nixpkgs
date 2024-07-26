@@ -56,6 +56,12 @@ buildGoModule rec {
     ./0001-Add-dlopen-discoverer.patch
   ];
 
+  subPackages = [
+    "cmd/nvidia-ctk"
+    "cmd/nvidia-container-runtime"
+    "cmd/nvidia-container-runtime-hook"
+  ];
+
   postPatch = ''
     # Replace the default hookDefaultFilePath to the $out path and override
     # default ldconfig locations to the one in nixpkgs.
