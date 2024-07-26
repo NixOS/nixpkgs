@@ -3,7 +3,6 @@
 , requireFile
 , wrapQtAppsHook
 , autoPatchelfHook
-, makeWrapper
 , unixtools
 , fakeroot
 , mailcap

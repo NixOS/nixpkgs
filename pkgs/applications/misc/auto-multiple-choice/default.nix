@@ -21,7 +21,6 @@
 , perl
 , pkg-config
 , poppler
-, auto-multiple-choice
 }:
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "auto-multiple-choice";

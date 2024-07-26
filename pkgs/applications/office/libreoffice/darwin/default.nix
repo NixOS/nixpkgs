@@ -3,7 +3,6 @@
 , fetchurl
 , undmg
 , writeScript
-, callPackage
 }:
 
 let

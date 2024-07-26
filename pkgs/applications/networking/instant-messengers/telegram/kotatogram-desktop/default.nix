@@ -30,7 +30,6 @@
 , glibmm_2_68
 , jemalloc
 , rnnoise
-, abseil-cpp
 , microsoft-gsl
 , boost
 , fmt

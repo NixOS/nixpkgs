@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , python3
 , qtbase
-, qttools
 , git-lfs
 , wrapQtAppsHook
 }:

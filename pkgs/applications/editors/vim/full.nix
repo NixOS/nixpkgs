@@ -5,7 +5,6 @@
 , vimPlugins
 , makeWrapper
 , wrapGAppsHook3
-, runtimeShell
 
 # apple frameworks
 , CoreServices, CoreData, Cocoa, Foundation, libobjc
