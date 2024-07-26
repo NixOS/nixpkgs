@@ -4705,6 +4705,10 @@ self: super: with self; {
 
   freertos-gdb = callPackage ../development/python-modules/freertos-gdb { };
 
+  freesasa = callPackage ../development/python-modules/freesasa {
+    inherit (pkgs) freesasa;
+  };
+
   freetype-py = callPackage ../development/python-modules/freetype-py { };
 
   freezegun = callPackage ../development/python-modules/freezegun { };
