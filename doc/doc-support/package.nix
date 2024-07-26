@@ -99,6 +99,11 @@ stdenvNoCC.mkDerivation (
 
       pythonInterpreterTable = callPackage ./python-interpreter-table.nix { };
 
+      shell = callPackage ../../pkgs/tools/nix/web-devmode.nix {
+        buildArgs = "./.";
+        open = "/${common.outputPath}/${common.indexPath}";
+      };
+
       tests.manpage-urls = callPackage ../tests/manpage-urls.nix { };
     };
   }
