@@ -10691,6 +10691,9 @@ self: super: with self; {
     protobuf = pkgs.protobuf;
   };
 
+  # Protobuf 5.x
+  protobuf5 = callPackage ../development/python-modules/protobuf/default.nix { };
+
   # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
   protobuf = protobuf4;
 
