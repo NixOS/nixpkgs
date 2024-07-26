@@ -14,6 +14,8 @@ let
   # NB: This file describes the Nixpkgs manual, which happens to use module docs infra originally developed for NixOS.
   optionsDoc = callPackage ./doc-support/options-doc.nix { };
 
+  pythonInterpreterTable = pkgs.callPackage ./doc-support/python-interpreter-table.nix {};
+
 in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
@@ -39,12 +41,9 @@ in pkgs.stdenv.mkDerivation {
     ln -s ${optionsDoc.optionsJSON}/share/doc/nixos/options.json ./config-options.json
   '';
 
-  pythonInterpreterTable = pkgs.callPackage ./doc-support/python-interpreter-table.nix {};
-
-  passAsFile = [ "pythonInterpreterTable" ];
-
   buildPhase = ''
-    substituteInPlace ./languages-frameworks/python.section.md --subst-var-by python-interpreter-table "$(<"$pythonInterpreterTablePath")"
+    substituteInPlace ./languages-frameworks/python.section.md \
+      --subst-var-by python-interpreter-table "$(<"${pythonInterpreterTable}")"
 
     cat \
       ./functions/library.md.in \
@@ -92,7 +91,9 @@ in pkgs.stdenv.mkDerivation {
     echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
   '';
 
-  passthru.tests.manpage-urls = with pkgs; testers.invalidateFetcherByDrvHash
+  passthru = {
+    inherit pythonInterpreterTable;
+    tests.manpage-urls = with pkgs; testers.invalidateFetcherByDrvHash
     ({ name ? "manual_check-manpage-urls"
      , script
      , urlsFile
@@ -113,4 +114,5 @@ in pkgs.stdenv.mkDerivation {
       script = ./tests/manpage-urls.py;
       urlsFile = ./manpage-urls.json;
     };
+  };
 }
