@@ -3,13 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   mock,
-  nose,
   plotly,
   pytest,
   requests,
   retrying,
   setuptools,
   six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -38,13 +38,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    nose
+    pytestCheckHook
     pytest
   ];
-  # most tests talk to a service
-  checkPhase = ''
-    HOME=$TMPDIR pytest chart_studio/tests/test_core chart_studio/tests/test_plot_ly/test_api
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
+
+  # most tests talk to a network service, so only run ones that don't
+  pytestFlagsArray = [
+    "chart_studio/tests/test_core"
+    "chart_studio/tests/test_plot_ly/test_api"
+  ];
 
   meta = with lib; {
     description = "Utilities for interfacing with Plotly's Chart Studio service";
