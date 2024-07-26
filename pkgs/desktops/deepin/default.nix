@@ -28,6 +28,7 @@ let
     dtk6widget = callPackage ./library/dtk6widget { };
     dtk6declarative = callPackage ./library/dtk6declarative { };
     dtk6systemsettings = callPackage ./library/dtk6systemsettings { };
+    dtk6log = callPackage ./library/dtk6log { };
     qt6platform-plugins = callPackage ./library/qt6platform-plugins { };
     qt6integration = callPackage ./library/qt6integration { };
 
