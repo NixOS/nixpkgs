@@ -97,12 +97,14 @@ stdenv.mkDerivation {
     "-DCMAKE_CUDA_ARCHITECTURES=${flags.cmakeCudaArchitecturesString}"
   ];
 
-  buildFlags = [
-    "faiss"
-    "demo_ivfpq_indexing"
-  ] ++ lib.optionals pythonSupport [
-    "swigfaiss"
-  ];
+
+  buildFlags =
+    [ "faiss" ]
+    # This is just a demo app used as a test.
+    # Disabled because linkage fails:
+    # https://github.com/facebookresearch/faiss/issues/3484
+    ++ lib.optionals (!cudaSupport) [ "demo_ivfpq_indexing" ]
+    ++ lib.optionals pythonSupport [ "swigfaiss" ];
 
   # pip wheel->pip install commands copied over from opencv4
 
@@ -113,7 +115,9 @@ stdenv.mkDerivation {
 
   postInstall = ''
     mkdir -p $demos/bin
-    cp ./demos/demo_ivfpq_indexing $demos/bin/
+    if [[ "$buildInputs" == *demo_ivfpq_indexing* ]] ; then
+      cp ./demos/demo_ivfpq_indexing $demos/bin/
+    fi
   '' + lib.optionalString pythonSupport ''
     mkdir -p $out/${pythonPackages.python.sitePackages}
     (cd faiss/python && python -m pip install dist/*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache)
