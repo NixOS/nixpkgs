@@ -34169,8 +34169,6 @@ with pkgs;
 
   tasktimer = callPackage ../applications/misc/tasktimer { };
 
-  taskwarrior = callPackage ../applications/misc/taskwarrior { };
-
   taskwarrior-tui = callPackage ../applications/misc/taskwarrior-tui { };
 
   dstask = callPackage ../applications/misc/dstask { };
