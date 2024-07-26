@@ -1,8 +1,3 @@
-# { pkgs ? import <nixpkgs> { }, stdenv ? pkgs.stdenv, qtbase ? pkgs.qt6.qtbase
-# , full ? pkgs.qt6.full, cmake ? pkgs.cmake
-# , wrapQtAppsHook ? pkgs.qt6.wrapQtAppsHook
-# , fetchFromGitHub ? pkgs.fetchFromGitHub }:
-
 { stdenv, fetchFromGitHub, cmake, qt6 }:
 
 stdenv.mkDerivation {
