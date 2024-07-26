@@ -24,7 +24,7 @@ mkCoqDerivation {
   propagatedBuildInputs = [ mathcomp.algebra mathcomp.ssreflect mathcomp.fingroup ];
 
   meta =  with lib; {
-    description = "Formal proof of the Four Color Theorem ";
+    description = "Formal proof of the Four Color Theorem";
     maintainers = with maintainers; [ siraben ];
     license = licenses.cecill-b;
     platforms = platforms.unix;

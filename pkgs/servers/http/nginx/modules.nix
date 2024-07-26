@@ -600,7 +600,7 @@ let self = {
     inputs = [ pam ];
 
     meta = with lib; {
-      description = "Use PAM for simple http authentication ";
+      description = "Use PAM for simple http authentication";
       homepage = "https://github.com/sto/ngx_http_auth_pam_module";
       license = with licenses; [ bsd2 ];
       maintainers = with maintainers; [ ];
