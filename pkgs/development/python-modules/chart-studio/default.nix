@@ -27,9 +27,9 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/packages/python/chart-studio";
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     plotly
     requests
     retrying
@@ -51,10 +51,10 @@ buildPythonPackage rec {
     "chart_studio/tests/test_plot_ly/test_api"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for interfacing with Plotly's Chart Studio service";
     homepage = "https://github.com/plotly/plotly.py/tree/master/packages/python/chart-studio";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
 }
