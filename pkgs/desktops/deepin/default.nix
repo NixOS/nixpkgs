@@ -10,6 +10,7 @@ let
     dtkgui = callPackage ./library/dtkgui { };
     dtkwidget = callPackage ./library/dtkwidget { };
     dtkdeclarative = callPackage ./library/dtkdeclarative { };
+    dtklog = callPackage ./library/dtklog { };
     deepin-pdfium = callPackage ./library/deepin-pdfium { };
     qt5platform-plugins = callPackage ./library/qt5platform-plugins { };
     qt5integration = callPackage ./library/qt5integration { };
