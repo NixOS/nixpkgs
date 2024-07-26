@@ -1,22 +1,27 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "fava";
   version = "1.28";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-sWHVkR0/0VMGzH5OMxOCK4usf7G0odzMtr82ESRQhrk=";
   };
 
-  nativeBuildInputs = with python3Packages; [ setuptools-scm ];
   postPatch = ''
     substituteInPlace tests/test_cli.py \
       --replace-fail '"fava"' '"${placeholder "out"}/bin/fava"'
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = [ python3Packages.setuptools-scm ];
+
+  dependencies = with python3Packages; [
     babel
     beancount
     cheroot
@@ -32,14 +37,7 @@ python3Packages.buildPythonApplication rec {
     watchfiles
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'setuptools_scm>=8.0' 'setuptools_scm'
-  '';
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TEMPDIR
