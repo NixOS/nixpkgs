@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchurl, makeWrapper, unzip, python3, unar, ffmpeg, nixosTests }:
+{ stdenv, lib, fetchurl, makeWrapper, unzip, python3, libarchive, ffmpeg, nixosTests }:
 
 let
   runtimeProgDeps = [
     ffmpeg
-    unar
+    libarchive
   ];
 in
 stdenv.mkDerivation rec {
