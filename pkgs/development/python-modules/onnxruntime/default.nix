@@ -57,7 +57,8 @@ buildPythonPackage {
         libcublas # libcublasLt.so.XX libcublas.so.XX
         libcurand # libcurand.so.XX
         libcufft # libcufft.so.XX
-        cudnn # libcudnn.soXX
+        # NOTE: As of release 1.16.3, this package is incompatible with CUDNN 9.x
+        cudnn_8 # libcudnn.soXX
         cuda_cudart # libcudart.so.XX
         nccl # libnccl.so.XX
       ]

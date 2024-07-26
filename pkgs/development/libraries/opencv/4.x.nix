@@ -246,8 +246,7 @@ let
   #https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
 
-  inherit (cudaPackages) cudaFlags cudaVersion;
-  inherit (cudaFlags) cudaCapabilities;
+  inherit (cudaPackages.flags) cudaCapabilities;
 
 in
 
@@ -372,19 +371,19 @@ effectiveStdenv.mkDerivation {
     doxygen
     graphviz-nox
   ] ++ lib.optionals enableCuda (with cudaPackages; [
-    cuda_cudart
     cuda_cccl # <thrust/*>
-    libnpp # npp.h
+    cuda_cudart # <cuda_runtime_api.h> -lcudart
+    libnpp # npp.h -lnpp
     nvidia-optical-flow-sdk
   ] ++ lib.optionals enableCublas [
-    # May start using the default $out instead once
-    # https://github.com/NixOS/nixpkgs/issues/271792
-    # has been addressed
-    libcublas # cublas_v2.h
+    libcublas # <cublas_v2.h> -lcublas
   ] ++ lib.optionals enableCudnn [
-    cudnn # cudnn.h
+    # NOTE: As of version 4.9, OpenCV does not support CUDNN 9.x.
+    # See: https://github.com/opencv/opencv/pull/25412
+    # Revisit when updating to OpenCV 4.10.
+    cudnn_8 # <cudnn.h> -lcudnn
   ] ++ lib.optionals enableCufft [
-    libcufft # cufft.h
+    libcufft # <cufft.h> -lcufft
   ]);
 
   propagatedBuildInputs = lib.optionals enablePython [ pythonPackages.numpy ];
@@ -456,7 +455,7 @@ effectiveStdenv.mkDerivation {
     "-DCUDA_ARCH_BIN=${lib.concatStringsSep ";" cudaCapabilities}"
     "-DCUDA_ARCH_PTX=${lib.last cudaCapabilities}"
 
-    "-DNVIDIA_OPTICAL_FLOW_2_0_HEADERS_PATH=${nvidia-optical-flow-sdk}"
+    "-DNVIDIA_OPTICAL_FLOW_2_0_HEADERS_PATH=${lib.getOutput "include" nvidia-optical-flow-sdk}"
   ] ++ lib.optionals effectiveStdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
@@ -512,7 +511,7 @@ effectiveStdenv.mkDerivation {
   # see https://github.com/NixOS/nixpkgs/issues/276691
   + lib.optionalString (!enableCuda) ''
     mkdir -p "$cxxdev/nix-support"
-    echo "''${!outputDev}" >> "$cxxdev/nix-support/propagated-build-inputs"
+    printWords "''${!outputDev}" >> "$cxxdev/nix-support/propagated-build-inputs"
   ''
   # install python distribution information, so other packages can `import opencv`
   + lib.optionalString enablePython ''
@@ -532,6 +531,8 @@ effectiveStdenv.mkDerivation {
 
   passthru = {
     cudaSupport = enableCuda;
+    # OpenCV's OpenCVConfig.cmake requires consumers to use the same version of CUDA.
+    inherit cudaPackages;
 
     tests = {
       inherit (gst_all_1) gst-plugins-bad;

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    opencv
+    (lib.getOutput "cxxdev" opencv)
     SDL2
     gtk3
     spdlog

@@ -57,18 +57,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       CoreVideo
       MetalKit
     ] ++ lib.optionals cudaSupport ( with cudaPackages; [
-      cuda_cccl # provides nv/target
       cuda_cudart
       libcublas
     ]);
-
-  postPatch = let
-    cudaOldStr = "-lcuda ";
-    cudaNewStr = "-lcuda -L${cudaPackages.cuda_cudart}/lib/stubs ";
-  in lib.optionalString cudaSupport ''
-    substituteInPlace Makefile \
-      --replace '${cudaOldStr}' '${cudaNewStr}'
-  '';
 
   env = lib.optionalAttrs stdenv.isDarwin {
     WHISPER_COREML = "1";

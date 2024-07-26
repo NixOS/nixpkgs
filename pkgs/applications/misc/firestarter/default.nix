@@ -1,64 +1,35 @@
-{ stdenv
+{ config
+, stdenv
 , lib
 , fetchFromGitHub
-, fetchzip
-, addOpenGLRunpath
+, autoAddDriverRunpath
 , cmake
 , glibc_multi
 , glibc
 , git
 , pkg-config
+, pkgs
 , cudaPackages ? {}
-, withCuda ? false
+, withCuda ? config.cudaSupport
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit;
-
-  hwloc = stdenv.mkDerivation rec {
-    pname = "hwloc";
-    version = "2.2.0";
-
-    src = fetchzip {
-      url = "https://download.open-mpi.org/release/hwloc/v${lib.versions.majorMinor version}/hwloc-${version}.tar.gz";
-      sha256 = "1ibw14h9ppg8z3mmkwys8vp699n85kymdz20smjd2iq9b67y80b6";
-    };
-
-    configureFlags = [
-      "--enable-static"
-      "--disable-libudev"
-      "--disable-shared"
-      "--disable-doxygen"
-      "--disable-libxml2"
-      "--disable-cairo"
-      "--disable-io"
-      "--disable-pci"
-      "--disable-opencl"
-      "--disable-cuda"
-      "--disable-nvml"
-      "--disable-gl"
-      "--disable-libudev"
-      "--disable-plugin-dlopen"
-      "--disable-plugin-ltdl"
-    ];
-
-    nativeBuildInputs = [ pkg-config ];
-
-    enableParallelBuilding = true;
-
-    outputs = [ "out" "lib" "dev" "doc" "man" ];
-  };
-
+  inherit (lib.lists) optionals;
+  inherit (lib.strings) cmakeBool cmakeFeature optionalString;
+  inherit (cudaPackages) cuda_cudart cuda_nvcc cudaOlder libcublas libcufft libcurand;
+  hwloc = pkgs.hwloc.overrideAttrs (prevAttrs: {
+    configureFlags = prevAttrs.configureFlags ++ [ "--enable-static" ];
+  });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "firestarter";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "tud-zih-energy";
     repo = "FIRESTARTER";
-    rev = "v${version}";
-    sha256 = "1ik6j1lw5nldj4i3lllrywqg54m9i2vxkxsb2zr4q0d2rfywhn23";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-LblbOg8btbdOnda0jFWasmslgdyPvffJWR4k34mff1A=";
     fetchSubmodules = true;
   };
 
@@ -66,40 +37,33 @@ stdenv.mkDerivation rec {
     cmake
     git
     pkg-config
-  ] ++ lib.optionals withCuda [
-    addOpenGLRunpath
-  ];
+  ] ++ optionals withCuda [ autoAddDriverRunpath cuda_nvcc ];
 
-  buildInputs = [ hwloc ] ++ (if withCuda then
-    [ glibc_multi cudatoolkit ]
-  else
-    [ glibc.static ]);
-
-  NIX_LDFLAGS = lib.optionals withCuda [
-    "-L${cudatoolkit}/lib/stubs"
-  ];
+  buildInputs =
+    [ hwloc ]
+    ++ optionals (!withCuda) [ glibc.static ]
+    ++ optionals withCuda [ glibc_multi cuda_cudart libcufft libcublas libcurand ];
 
   cmakeFlags = [
-    "-DFIRESTARTER_BUILD_HWLOC=OFF"
-    "-DCMAKE_C_COMPILER_WORKS=1"
-    "-DCMAKE_CXX_COMPILER_WORKS=1"
-  ] ++ lib.optionals withCuda [
-    "-DFIRESTARTER_BUILD_TYPE=FIRESTARTER_CUDA"
+    (cmakeBool "FIRESTARTER_BUILD_HWLOC" false)
+    (cmakeBool "CMAKE_C_COMPILER_WORKS" true)
+    (cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
+  ] ++ optionals withCuda [
+    (cmakeFeature "FIRESTARTER_BUILD_TYPE" "FIRESTARTER_CUDA")
   ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    cp src/FIRESTARTER${lib.optionalString withCuda "_CUDA"} $out/bin/
+    cp src/FIRESTARTER${optionalString withCuda "_CUDA"} $out/bin/
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString withCuda ''
-    addOpenGLRunpath $out/bin/FIRESTARTER_CUDA
-  '';
-
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken =
+      (stdenv.isLinux && stdenv.isAarch64) ||
+      # Depends on CUDA redistributables, only available from 11.4.
+      (withCuda && cudaOlder "11.4");
     homepage = "https://tu-dresden.de/zih/forschung/projekte/firestarter";
     description = "Processor Stress Test Utility";
     platforms = platforms.linux;
@@ -107,4 +71,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     mainProgram = "FIRESTARTER";
   };
-}
+})

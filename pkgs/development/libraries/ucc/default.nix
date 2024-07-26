@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     ./autogen.sh
   '' + lib.optionalString enableCuda ''
-    configureFlagsArray+=( "--with-nvcc-gencode=${builtins.concatStringsSep " " cudaPackages.cudaFlags.gencode}" )
+    configureFlagsArray+=( "--with-nvcc-gencode=${cudaPackages.flags.gencodeString}" )
   '';
   configureFlags = [ ]
    ++ lib.optional enableSse41 "--with-sse41"
    ++ lib.optional enableSse42 "--with-sse42"
    ++ lib.optional enableAvx "--with-avx"
-   ++ lib.optional enableCuda "--with-cuda=${cudaPackages.cuda_cudart}";
+   ++ lib.optional enableCuda "--with-cuda=${lib.getOutput "stubs" cudaPackages.cuda_cudart}";
 
   postInstall = ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;

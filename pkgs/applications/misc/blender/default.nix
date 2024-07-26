@@ -5,7 +5,7 @@
   OpenAL,
   OpenGL,
   SDL,
-  addOpenGLRunpath,
+  autoAddDriverRunpath,
   alembic,
   blender,
   boost,
@@ -220,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.wrapPython
     ]
     ++ lib.optionals cudaSupport [
-      addOpenGLRunpath
+      autoAddDriverRunpath
       cudaPackages.cuda_nvcc
     ]
     ++ lib.optionals waylandSupport [ pkg-config ];
@@ -338,18 +338,9 @@ stdenv.mkDerivation (finalAttrs: {
         --add-flags '--python-use-system-env'
     '';
 
-  # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib can be
-  # found. See the explanation in libglvnd.
-  postFixup =
-    lib.optionalString cudaSupport ''
-      for program in $out/bin/blender $out/bin/.blender-wrapped; do
-        isELF "$program" || continue
-        addOpenGLRunpath "$program"
-      done
-    ''
-    + lib.optionalString stdenv.isDarwin ''
-      makeWrapper $out/Applications/Blender.app/Contents/MacOS/Blender $out/bin/blender
-    '';
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    makeWrapper $out/Applications/Blender.app/Contents/MacOS/Blender $out/bin/blender
+  '';
 
   passthru = {
     python = python3;

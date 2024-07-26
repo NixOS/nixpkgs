@@ -153,6 +153,7 @@ in
 
     meta = with lib; {
       description = "Lightning fast C++/CUDA neural network framework";
+      broken = true;
       homepage = "https://github.com/NVlabs/tiny-cuda-nn";
       license = licenses.bsd3;
       maintainers = with maintainers; [connorbaker];

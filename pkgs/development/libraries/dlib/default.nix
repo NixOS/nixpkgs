@@ -28,6 +28,8 @@
     sha256 = "sha256-1A/9u+ThtUtmmSwnFSn8S65Yavucl2X+o3bNYgew0Oc=";
   };
 
+  strictDeps = true;
+
   postPatch = ''
     rm -rf dlib/external
   '';
@@ -38,7 +40,11 @@
     (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
     (lib.cmakeBool "DLIB_USE_CUDA" cudaSupport)
   ] ++ lib.optionals cudaSupport [
-    (lib.cmakeFeature "DLIB_USE_CUDA_COMPUTE_CAPABILITIES" (builtins.concatStringsSep "," (with cudaPackages.flags; map dropDot cudaCapabilities)))
+    (
+      lib.cmakeFeature
+      "DLIB_USE_CUDA_COMPUTE_CAPABILITIES"
+      (lib.replaceStrings [";"] [","] cudaPackages.flags.cmakeCudaArchitecturesString)
+    )
   ];
 
   nativeBuildInputs = [
@@ -57,13 +63,12 @@
   ]
   ++ lib.optionals guiSupport [ libX11 ]
   ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_cccl
     cuda_cudart
-    cuda_nvcc
+    cudnn
     libcublas
     libcurand
     libcusolver
-    cudnn
-    cuda_cccl
   ]);
 
   passthru = {

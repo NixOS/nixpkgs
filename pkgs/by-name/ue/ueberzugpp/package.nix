@@ -1,4 +1,5 @@
-{ lib
+{ config
+, lib
 , stdenv
 , fetchFromGitHub
 , cmake
@@ -91,6 +92,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jstkdng/ueberzugpp";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ aleksana wegank ];
+    # Project fails to build with cudaSupport enabled due to oddity in OpenCV's cmake config file.
+    # Complains about missing FindCUDA.cmake file, which has been deprecated in CMake in favor of first-class language
+    # support for CUDA.
+    broken = config.cudaSupport;
     platforms = platforms.unix;
   };
 }

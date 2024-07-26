@@ -1,0 +1,55 @@
+{
+  "release_date": "2024-04-15",
+  "release_label": "10.0.1",
+  "release_product": "tensorrt",
+  "tensorrt": {
+    "name": "NVIDIA TensorRT",
+    "license": "TensorRT",
+    "version": "10.0.1.6",
+    "cuda_variant": ["11", "12"],
+    "linux-aarch64": {
+      "cuda12": {
+        "md5": "34a63595d03ef613a8c5e152f32cb3a7",
+        "relative_path": "tensorrt/10.0.1/tars/TensorRT-10.0.1.6.l4t.aarch64-gnu.cuda-12.4.tar.gz",
+        "sha256": "27f0163f03e43ef4841143c6ed4e4c53381f111a62fd3d7f0bab5f9d92145e8b",
+        "size": "666711593"
+      }
+    },
+    "linux-sbsa": {
+      "cuda12": {
+        "md5": "17e6efd8e73c5aa519186afd17971cf4",
+        "relative_path": "tensorrt/10.0.1/tars/TensorRT-10.0.1.6.Ubuntu-22.04.aarch64-gnu.cuda-12.4.tar.gz",
+        "sha256": "9415d499f75aceed0057cf2b85cf6f92cfc9a3ebde89bf70309e31e2f95b9468",
+        "size": "2339317496"
+      }
+    },
+    "linux-x86_64": {
+      "cuda11": {
+        "md5": "8a8044a8b33911380fd27d06d16197e4",
+        "relative_path": "tensorrt/10.0.1/tars/TensorRT-10.0.1.6.Linux.x86_64-gnu.cuda-11.8.tar.gz",
+        "sha256": "5a42364ee9ac80a76f540da8b22358ab28ff456c60bd0428f9020fe0dc0f7e32",
+        "size": "2344859851"
+      },
+      "cuda12": {
+        "md5": "b19adfb78e3c1d630f2ae67967de9399",
+        "relative_path": "tensorrt/10.0.1/tars/TensorRT-10.0.1.6.Linux.x86_64-gnu.cuda-12.4.tar.gz",
+        "sha256": "a5cd2863793d69187ce4c73b2fffc1f470ff28cfd91e3640017e53b8916453d5",
+        "size": "2349001911"
+      }
+    },
+    "windows-x86_64": {
+      "cuda11": {
+        "md5": "9c5fc49bbc32ccafb3f2e8baf284668f",
+        "relative_path": "tensorrt/10.0.1/zips/TensorRT-10.0.1.6.Windows10.win10.cuda-11.8.zip",
+        "sha256": "1f6ab09315017d5d8aeb21c8dc33391c175d70b106262c456807f114bb40ef5b",
+        "size": "1243178280"
+      },
+      "cuda12": {
+        "md5": "997f478bcc86d42b82b4ea71ff1e26f4",
+        "relative_path": "tensorrt/10.0.1/zips/TensorRT-10.0.1.6.Windows10.win10.cuda-12.4.zip",
+        "sha256": "d667bd10b178e239b621a8929008ef3e27967d181bf07a39845a0f99edeec47a",
+        "size": "1256712427"
+      }
+    }
+  }
+}

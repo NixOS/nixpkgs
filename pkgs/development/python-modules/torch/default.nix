@@ -8,16 +8,7 @@
   cudaSupport ? config.cudaSupport,
   cudaPackages,
   autoAddDriverRunpath,
-  effectiveMagma ?
-    if cudaSupport then
-      magma-cuda-static
-    else if rocmSupport then
-      magma-hip
-    else
-      magma,
   magma,
-  magma-hip,
-  magma-cuda-static,
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
   useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported || rocmSupport),
   MPISupport ? false,
@@ -94,7 +85,7 @@ let
     strings
     trivial
     ;
-  inherit (cudaPackages) cudaFlags cudnn nccl;
+  inherit (cudaPackages) flags cudnn nccl;
 
   rocmPackages = rocmPackages_5;
 
@@ -130,8 +121,8 @@ let
   #   lists.subtractLists a b = b - a
 
   # For CUDA
-  supportedCudaCapabilities = lists.intersectLists cudaFlags.cudaCapabilities supportedTorchCudaCapabilities;
-  unsupportedCudaCapabilities = lists.subtractLists supportedCudaCapabilities cudaFlags.cudaCapabilities;
+  supportedCudaCapabilities = lists.intersectLists flags.cudaCapabilities supportedTorchCudaCapabilities;
+  unsupportedCudaCapabilities = lists.subtractLists supportedCudaCapabilities flags.cudaCapabilities;
 
   # Use trivial.warnIf to print a warning if any unsupported GPU targets are specified.
   gpuArchWarner =
@@ -200,10 +191,6 @@ let
         "11"
         "12"
       ]);
-    "MPI cudatoolkit does not match cudaPackages.cudatoolkit" =
-      MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
-    "Magma cudaPackages does not match cudaPackages" =
-      cudaSupport && (effectiveMagma.cudaPackages != cudaPackages);
     "Rocm support is currently broken because `rocmPackages.hipblaslt` is unpackaged. (2024-06-09)" = rocmSupport;
   };
 in
@@ -434,13 +421,10 @@ buildPythonPackage rec {
       pybind11
       removeReferencesTo
     ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        autoAddDriverRunpath
-        cuda_nvcc
-      ]
-    )
+    ++ lib.optionals cudaSupport [
+      autoAddDriverRunpath
+      cudaPackages.cuda_nvcc
+    ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs =
@@ -479,7 +463,7 @@ buildPythonPackage rec {
       ]
     )
     ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
-    ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
+    ++ lib.optionals (cudaSupport || rocmSupport) [ magma ]
     ++ lib.optionals stdenv.isLinux [ numactl ]
     ++ lib.optionals stdenv.isDarwin [
       Accelerate

@@ -1,4 +1,5 @@
 { stdenv
+, autoAddDriverRunpath
 , boost
 , cmake
 , config
@@ -41,8 +42,11 @@ stdenv.mkDerivation rec {
   fakegit = writeShellScriptBin "git" "echo ${githash}";
 
   nativeBuildInputs = [
+    autoAddDriverRunpath
     cmake
     makeWrapper
+  ] ++ lib.optionals (backend == "cuda" || backend == "tensorrt") [
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
@@ -50,11 +54,17 @@ stdenv.mkDerivation rec {
     boost
   ] ++ lib.optionals (backend == "eigen") [
     eigen
+  ] ++ lib.optionals (backend == "cuda" || backend == "tensorrt") [
+    cudaPackages.cuda_cudart
+    mesa.drivers
   ] ++ lib.optionals (backend == "cuda") [
-    cudaPackages.cudnn
-    cudaPackages.cudatoolkit
+    cudaPackages.cuda_cccl # <nv/target>
+
+    # NOTE: Only CUDNN 8.x is supported as of release 1.14.1.
+    cudaPackages.cudnn_8
+
+    cudaPackages.libcublas
   ] ++ lib.optionals (backend == "tensorrt") [
-      cudaPackages.cudatoolkit
       cudaPackages.tensorrt
   ] ++ lib.optionals (backend == "opencl") [
     opencl-headers
@@ -79,18 +89,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cd cpp/
-  '' + lib.optionalString (backend == "cuda" || backend == "tensorrt") ''
-    export CUDA_PATH="${cudaPackages.cudatoolkit}"
-    export EXTRA_LDFLAGS="-L/run/opengl-driver/lib"
   '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin; cp katago $out/bin;
-  '' + lib.optionalString (backend == "cuda" || backend == "tensorrt") ''
-    wrapProgram $out/bin/katago \
-      --prefix LD_LIBRARY_PATH : "/run/opengl-driver/lib"
-  '' + ''
+    mkdir -p $out/bin
+    cp katago $out/bin
     runHook postInstall
   '';
 

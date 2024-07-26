@@ -26,7 +26,7 @@ mkDerivation {
     kio
     leptonica
     mauikit
-    opencv
+    (lib.getOutput "cxxdev" opencv)
     qtlocation
     exiv2
     kquickimageedit
