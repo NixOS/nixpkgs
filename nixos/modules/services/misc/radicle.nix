@@ -137,7 +137,7 @@ in
       node = {
         listenAddress = mkOption {
           type = types.str;
-          default = "0.0.0.0";
+          default = "[::]";
           example = "127.0.0.1";
           description = "The IP address on which `radicle-node` listens.";
         };
@@ -180,6 +180,14 @@ in
           See https://app.radicle.xyz/nodes/seed.radicle.garden/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/radicle/src/node/config.rs#L275
         '';
         default = { };
+        example = literalExpression ''
+          {
+            web.pinned.repositories = [
+              "rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5" # heartwood
+              "rad:z3trNYnLWS11cJWC6BbxDs5niGo82" # rips
+            ];
+          }
+        '';
         type = types.submodule {
           freeformType = json.type;
         };
