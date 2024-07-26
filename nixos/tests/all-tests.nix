@@ -498,6 +498,7 @@ in {
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
   lemmy = handleTest ./lemmy.nix {};
+  lemurs = handleTest ./lemurs.nix {};
   libinput = handleTest ./libinput.nix {};
   libreddit = handleTest ./libreddit.nix {};
   librenms = handleTest ./librenms.nix {};
