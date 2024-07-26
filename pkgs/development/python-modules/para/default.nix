@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
   pytestCheckHook,
 }:
 
@@ -17,7 +16,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    nose
     pytestCheckHook
   ];
 
