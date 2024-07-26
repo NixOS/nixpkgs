@@ -119,5 +119,6 @@ in stdenv.mkDerivation rec {
       jtojnar
     ];
     platforms = platforms.linux;
+    mainProgram = "speech-dispatcher";
   };
 }
