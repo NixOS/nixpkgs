@@ -5,7 +5,7 @@
   fetchFromGitHub,
   rustPlatform,
   libiconv,
-  Security,
+  darwin,
   openssl,
   pkg-config,
   nix-update-script,
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.isDarwin [
       libiconv
-      Security
+      darwin.apple_sdk.frameworks.Security
     ];
 
   doInstallCheck = true;
