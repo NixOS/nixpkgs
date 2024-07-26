@@ -16920,8 +16920,6 @@ self: super: with self; {
 
   urwid-readline = callPackage ../development/python-modules/urwid-readline { };
 
-  urwid-mitmproxy = callPackage ../development/python-modules/urwid-mitmproxy { };
-
   usb-devices = callPackage ../development/python-modules/usb-devices { };
 
   usbrelay-py = callPackage ../os-specific/linux/usbrelay/python.nix { };
