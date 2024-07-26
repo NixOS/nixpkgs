@@ -157,6 +157,69 @@ rec {
   */
   replicate = n: s: concatStrings (lib.lists.replicate n s);
 
+  /*
+    Remove leading and trailing whitespace from a string.
+
+    Whitespace is defined as any of the following characters:
+      " ", "\t" "\r" "\n"
+
+    Type: trim :: string -> string
+
+    Example:
+      trim "   hello, world!   "
+      => "hello, world!"
+  */
+  trim = trimWith {
+    start = true;
+    end = true;
+  };
+
+  /*
+    Remove leading and/or trailing whitespace from a string.
+    To remove both leading and trailing whitespace, you can also use [`trim`](#function-library-lib.strings.trim)
+
+    Whitespace is defined as any of the following characters:
+      " ", "\t" "\r" "\n"
+
+    Type: trimWith :: { start ? false, end ? false } -> string -> string
+
+    Example:
+      trimWith { start = true; } "   hello, world!   "}
+      => "hello, world!   "
+      trimWith { end = true; } "   hello, world!   "}
+      => "   hello, world!"
+  */
+  trimWith =
+    {
+      # Trim leading whitespace (`false` by default)
+      start ? false,
+      # Trim trailing whitespace (`false` by default)
+      end ? false,
+    }:
+    s:
+    let
+      # Define our own whitespace character class instead of using
+      # `[:space:]`, which is not well-defined.
+      chars = " \t\r\n";
+
+      # To match up until trailing whitespace, we need to capture a
+      # group that ends with a non-whitespace character.
+      regex =
+        if start && end then
+          "[${chars}]*(.*[^${chars}])[${chars}]*"
+        else if start then
+          "[${chars}]*(.*)"
+        else if end then
+          "(.*[^${chars}])[${chars}]*"
+        else
+          "(.*)";
+
+      # If the string was empty or entirely whitespace,
+      # then the regex may not match and `res` will be `null`.
+      res = match regex s;
+    in
+      optionalString (res != null) (head res);
+
   /* Construct a Unix-style, colon-separated search path consisting of
      the given `subDir` appended to each of the given paths.
 

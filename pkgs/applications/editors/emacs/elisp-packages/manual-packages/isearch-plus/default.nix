@@ -8,13 +8,13 @@
 melpaBuild {
   pname = "isearch-plus";
   ename = "isearch+";
-  version = "3434-unstable-2021-08-23";
+  version = "3434-unstable-2023-09-27";
 
   src = fetchFromGitHub {
     owner = "emacsmirror";
     repo = "isearch-plus";
-    rev = "93088ea0ac4d51bdb76c4c32ea53172f6c435852";
-    hash = "sha256-kD+Fyps3fc5YK6ATU1nrkKHazGMYJnU2gRcpQZf6A1E=";
+    rev = "b10a36fb6bb8b45ff9d924107384e3bf0cee201d";
+    hash = "sha256-h/jkIWjkLFbtBp9F+lhA3CulYy2XaeloLmexR0CDm3E=";
   };
 
   passthru.updateScript = unstableGitUpdater { };
