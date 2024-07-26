@@ -766,8 +766,6 @@ with pkgs;
 
   deviceTree = callPackage ../os-specific/linux/device-tree { };
 
-  shellstorm-qt = callPackage ../tools/security/shellstorm-qt { };
-
   enum4linux = callPackage ../tools/security/enum4linux { };
 
   enum4linux-ng = callPackage ../tools/security/enum4linux-ng { };
