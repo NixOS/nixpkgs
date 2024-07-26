@@ -145,6 +145,11 @@ in stdenv.mkDerivation {
       url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/241f70e5a13bb9c13a168282446ad074e16c3d74.patch";
       hash = "sha256-Cx7OL8iXGAOuDbCQReCCxSrWYvfZVrGoP0txIKSLTvs=";
     })
+
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/25551.patch";
+      hash = "sha256-EagZCwQOcZ//6i7CxTW3O4mGhKM+OyUQPxLzkbkuXd4=";
+    })
   ];
 
   postPatch = ''
@@ -176,6 +181,8 @@ in stdenv.mkDerivation {
   # Needed to discover llvm-config for cross
   preConfigure = ''
     PATH=${llvmPackages.libllvm.dev}/bin:$PATH
+  '' + lib.optionalString (stdenv.targetPlatform.useLLVM or false) ''
+    export PKG_CONFIG_PATH_FOR_BUILD="${glslang}/lib/pkgconfig:$PKG_CONFIG_PATH_FOR_BUILD"
   '';
 
   mesonFlags = [
