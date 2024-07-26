@@ -525,8 +525,8 @@ in
       "--with-xml2-lib=${libxml2.out}/lib"
       "--with-xml2-include=${libxml2.dev}/include/libxml2"
     ] ++ lib.optionals stdenv.isDarwin [
-      "--with-iconv-dir=${libiconv}"
-      "--with-opt-include=${libiconv}/include"
+      "--with-iconv-dir=${lib.getLib libiconv}"
+      "--with-opt-include=${lib.getDev libiconv}/include"
     ];
   };
 
