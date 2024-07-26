@@ -44,6 +44,7 @@ class BootSpec:
     toplevel: str
     specialisations: dict[str, "BootSpec"]
     sortKey: str  # noqa: N815
+    deviceTree: str | None
     initrdSecrets: str | None = None  # noqa: N815
 
 
@@ -135,18 +136,26 @@ def bootspec_from_json(bootspec_json: dict[str, Any]) -> BootSpec:
     specialisations = {k: bootspec_from_json(v) for k, v in specialisations.items()}
     systemdBootExtension = bootspec_json.get('org.nixos.systemd-boot', {})
     sortKey = systemdBootExtension.get('sortKey', 'nixos')
+    deviceTreeExtension = bootspec_json.get('org.nixos.deviceTree', {})
+    deviceTree = deviceTreeExtension.get('file', None)
     return BootSpec(
         **bootspec_json['org.nixos.bootspec.v1'],
         specialisations=specialisations,
-        sortKey=sortKey
+        sortKey=sortKey,
+        deviceTree=deviceTree,
     )
 
 
 def copy_from_file(file: str, dry_run: bool = False) -> str:
     store_file_path = os.path.realpath(file)
     suffix = os.path.basename(store_file_path)
-    store_dir = os.path.basename(os.path.dirname(store_file_path))
-    efi_file_path = f"{NIXOS_DIR}/{store_dir}-{suffix}.efi"
+    dirname = os.path.relpath(store_file_path, "/nix/store")
+    # find the first part of dirname, i.e. the store directory the file is in
+    # e.g. "iibg9gw9mi8c3qv5qs5di66wahh8nhnv-initrd-linux-6.9.8"
+    # the looked after string is in basename after the loop
+    while dirname:
+        dirname, basename = os.path.split(dirname)
+    efi_file_path = f"{NIXOS_DIR}/{basename}-{suffix}.efi"
     if not dry_run:
         copy_if_not_exists(store_file_path, f"{BOOT_MOUNT_POINT}{efi_file_path}")
     return efi_file_path
@@ -157,6 +166,7 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
         bootspec = bootspec.specialisations[specialisation]
     kernel = copy_from_file(bootspec.kernel)
     initrd = copy_from_file(bootspec.initrd)
+    deviceTree: str | None = copy_from_file(bootspec.deviceTree) if bootspec.deviceTree else None
 
     title = "{name}{profile}{specialisation}".format(
         name=DISTRO_NAME,
@@ -194,6 +204,8 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
                     description=f"{bootspec.label}, built on {build_date}"))
         if machine_id is not None:
             f.write("machine-id %s\n" % machine_id)
+        if deviceTree is not None:
+            f.write("devicetree %s\n" % deviceTree)
         f.flush()
         os.fsync(f.fileno())
     os.rename(tmp_path, entry_file)
