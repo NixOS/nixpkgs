@@ -8,6 +8,8 @@
 , godef
 , withGotools ? true
 , gotools
+, withRustAnalyzer ? true
+, rust-analyzer
 , withTypescript ? true
 , typescript
 , abseil-cpp
@@ -82,6 +84,10 @@ stdenv.mkDerivation {
     TARGET=$out/lib/ycmd/third_party/go/src/golang.org/x/tools/cmd/gopls
     mkdir -p $TARGET
     ln -sf ${gotools}/bin/gopls $TARGET
+  '' + lib.optionalString withRustAnalyzer ''
+    TARGET=$out/lib/ycmd/third_party/rust-analyzer
+    mkdir -p $TARGET
+    ln -sf ${rust-analyzer} $TARGET
   '' + lib.optionalString withTypescript ''
     TARGET=$out/lib/ycmd/third_party/tsserver
     ln -sf ${typescript} $TARGET
