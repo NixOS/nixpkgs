@@ -30,9 +30,7 @@ buildGoModule rec {
     "-X=kcl-lang.io/cli/pkg/version.version=v${version}"
   ];
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ] ++ (
-    lib.optionals stdenv.isDarwin [ darwin.cctools ]
-  );
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   buildInputs = [ kclvm kclvm_cli ] ++ (
     lib.optional stdenv.isDarwin [
