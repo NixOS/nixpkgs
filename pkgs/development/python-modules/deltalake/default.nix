@@ -5,6 +5,9 @@
 , pyarrow
 , pyarrow-hotfix
 , openssl
+, stdenv
+, darwin
+, libiconv
 , pkg-config
 , pytestCheckHook
 , pytest-benchmark
@@ -22,10 +25,12 @@ buildPythonPackage rec {
     hash = "sha256-qkmCKk1VnROK7luuPlKbIx3S3C8fzGJy8yhTyZWXyGc=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    hash = "sha256-Dj2vm0l4b/E6tbXgs5iPvbDAsxNW0iPUSRPzT5KaA3Y=";
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+
+  postPatch = ''
+    rm Cargo.lock
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   env.OPENSSL_NO_VENDOR = 1;
 
@@ -34,7 +39,13 @@ buildPythonPackage rec {
     pyarrow-hotfix
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
+    libiconv
+  ];
 
   nativeBuildInputs = [
     pkg-config # openssl-sys needs this
