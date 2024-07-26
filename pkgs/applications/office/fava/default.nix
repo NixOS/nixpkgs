@@ -1,6 +1,6 @@
-{ lib, python3, fetchPypi }:
+{ lib, python3Packages, fetchPypi }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "fava";
   version = "1.28";
   format = "pyproject";
@@ -10,9 +10,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-sWHVkR0/0VMGzH5OMxOCK4usf7G0odzMtr82ESRQhrk=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
+  nativeBuildInputs = with python3Packages; [ setuptools-scm ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     babel
     beancount
     cheroot
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     watchfiles
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 
