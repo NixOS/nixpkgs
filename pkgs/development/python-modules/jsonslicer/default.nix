@@ -23,7 +23,7 @@ buildPythonPackage rec {
   buildInputs = [ yajl ];
 
   meta = with lib; {
-    description = "Stream JSON parser for Python ";
+    description = "Stream JSON parser for Python";
     homepage = "https://github.com/AMDmi3/jsonslicer";
     license = licenses.mit;
     maintainers = with maintainers; [ jopejoe1 ];
