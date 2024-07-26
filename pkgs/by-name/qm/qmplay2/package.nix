@@ -30,7 +30,10 @@
 let
   sources = callPackage ./sources.nix { };
 in
-assert lib.elem qtVersion [ "5" "6" ];
+assert lib.elem qtVersion [
+  "5"
+  "6"
+];
 stdenv.mkDerivation (finalAttrs: {
   pname = sources.qmplay2.pname + "-qt" + qtVersion;
   inherit (sources.qmplay2) version src;
@@ -42,46 +45,44 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-  ]
-  ++ lib.optionals (qtVersion == "6") [
-    qt6.wrapQtAppsHook
-  ]
-  ++ lib.optionals (qtVersion == "5") [
-    qt5.wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      ninja
+      pkg-config
+    ]
+    ++ lib.optionals (qtVersion == "6") [ qt6.wrapQtAppsHook ]
+    ++ lib.optionals (qtVersion == "5") [ qt5.wrapQtAppsHook ];
 
-  buildInputs = [
-    alsa-lib
-    ffmpeg
-    fribidi
-    game-music-emu
-    libXdmcp
-    libXv
-    libass
-    libcddb
-    libcdio
-    libpulseaudio
-    libsidplayfp
-    libva
-    libxcb
-    taglib
-    vulkan-headers
-    vulkan-tools
-  ]
-  ++ lib.optionals (qtVersion == "6") [
-    qt6.qt5compat
-    qt6.qtbase
-    qt6.qtsvg
-    qt6.qttools
-  ]
-  ++ lib.optionals (qtVersion == "5") [
-    qt5.qtbase
-    qt5.qttools
-  ];
+  buildInputs =
+    [
+      alsa-lib
+      ffmpeg
+      fribidi
+      game-music-emu
+      libXdmcp
+      libXv
+      libass
+      libcddb
+      libcdio
+      libpulseaudio
+      libsidplayfp
+      libva
+      libxcb
+      taglib
+      vulkan-headers
+      vulkan-tools
+    ]
+    ++ lib.optionals (qtVersion == "6") [
+      qt6.qt5compat
+      qt6.qtbase
+      qt6.qtsvg
+      qt6.qttools
+    ]
+    ++ lib.optionals (qtVersion == "5") [
+      qt5.qtbase
+      qt5.qttools
+    ];
 
   strictDeps = true;
 
@@ -106,7 +107,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.lgpl3Plus;
     mainProgram = "qmplay2";
-    maintainers = with lib.maintainers; [ AndersonTorres kashw2 ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      kashw2
+    ];
     platforms = lib.platforms.linux;
   };
 })
