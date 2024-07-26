@@ -1,8 +1,4 @@
-{
-  lib,
-  mkDerivation,
-  make-rules,
-}:
+{ mkDerivation, make-rules }:
 
 mkDerivation {
   path = "usr.bin/make";

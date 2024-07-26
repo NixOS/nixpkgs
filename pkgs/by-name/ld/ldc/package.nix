@@ -6,12 +6,10 @@
 , llvm_17
 , curl
 , tzdata
-, libconfig
 , lit
 , gdb
 , unzip
 , darwin
-, bash
 , callPackage
 , makeWrapper
 , runCommand

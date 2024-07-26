@@ -1,6 +1,4 @@
-{ lib
-, pkgs
-, makeSetupHook
+{ makeSetupHook
 , waf
 }:
 

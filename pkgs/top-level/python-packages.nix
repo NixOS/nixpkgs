@@ -9287,6 +9287,8 @@ self: super: with self; {
 
   od = callPackage ../development/python-modules/od { };
 
+  oddsprout = callPackage ../development/python-modules/oddsprout { };
+
   odfpy = callPackage ../development/python-modules/odfpy { };
 
   odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
@@ -9788,6 +9790,8 @@ self: super: with self; {
   paypalhttp = callPackage ../development/python-modules/paypalhttp { };
 
   paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
+
+  pbar = callPackage ../development/python-modules/pbar { };
 
   pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
 
@@ -13866,6 +13870,8 @@ self: super: with self; {
   };
 
   saneyaml = callPackage ../development/python-modules/saneyaml { };
+
+  samarium = callPackage ../development/python-modules/samarium { };
 
   sampledata = callPackage ../development/python-modules/sampledata { };
 

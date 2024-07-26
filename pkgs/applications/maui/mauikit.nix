@@ -7,7 +7,6 @@
 , ki18n
 , knotifications
 , mauiman
-, qtbase
 , qtquickcontrols2
 , qtx11extras
 }:

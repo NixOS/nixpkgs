@@ -1,4 +1,4 @@
-{ lib, buildFHSEnv, callPackage, makeDesktopItem, writeScript, runtimeShell
+{ lib, buildFHSEnv, callPackage, makeDesktopItem, runtimeShell
 , runCommand, unstick, quartus-prime-lite
 , withQuesta ? true
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]

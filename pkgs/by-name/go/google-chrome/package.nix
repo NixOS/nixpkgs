@@ -24,7 +24,7 @@
 ## Ubuntu
 , liberation_ttf, curl, util-linux, xdg-utils, wget
 ## Arch Linux.
-, flac, harfbuzz, icu, libpng, libopus, snappy, speechd
+, flac, harfbuzz, icu, libpng, libopus, snappy, speechd-minimal
 ## Gentoo
 , bzip2, libcap
 
@@ -54,7 +54,7 @@ let
     systemd
     libexif pciutils
     liberation_ttf curl util-linux wget
-    flac harfbuzz icu libpng opusWithCustomModes snappy speechd
+    flac harfbuzz icu libpng opusWithCustomModes snappy speechd-minimal
     bzip2 libcap at-spi2-atk at-spi2-core
     libkrb5 libdrm libglvnd mesa coreutils
     libxkbcommon pipewire wayland

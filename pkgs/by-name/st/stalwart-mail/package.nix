@@ -14,7 +14,6 @@
   nix-update-script,
   nixosTests,
   rocksdb_8_11,
-  callPackage,
 }:
 
 let

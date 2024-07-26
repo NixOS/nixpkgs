@@ -1,4 +1,4 @@
-{ lib, ocamlPackages }:
+{ ocamlPackages }:
 
 with ocamlPackages; buildDunePackage {
   pname = "msat-bin";

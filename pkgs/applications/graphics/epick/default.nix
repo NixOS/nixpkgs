@@ -8,7 +8,6 @@
 , freetype
 , libGL
 , xorg
-, darwin
 , AppKit
 }:
 

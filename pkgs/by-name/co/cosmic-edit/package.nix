@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  cmake,
   makeBinaryWrapper,
   cosmic-icons,
   just,

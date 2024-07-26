@@ -8,7 +8,6 @@
   markdown-mode,
   melpaBuild,
   unstableGitUpdater,
-  writeText,
 }:
 
 melpaBuild {
