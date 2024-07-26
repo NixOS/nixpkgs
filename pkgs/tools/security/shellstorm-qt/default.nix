@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "algoatson";
     repo = "shellstorm-qt";
-    rev = "c4eb37395e28fe25dd7312c9414d85a160e46457"; # or another commit, tag, or branch
+    rev = "b8bc420773fa08caa7846b75fb388b9fae6cd8ec"; # or another commit, tag, or branch
     sha256 = "sha256-KbdqGVqOz8CLPBOGiC5qsOpLW4Rzoalnsl0l55afJ7s";
   };
 
@@ -23,10 +23,6 @@ stdenv.mkDerivation {
     full
   ];
 
-  # cmakeFlags = [
-  #   "-DCMAKE_BUILD_TYPE=Release"
-  #
-  # ];
   configurePhase = ''
     cd src
     cmake .
