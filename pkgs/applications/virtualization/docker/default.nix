@@ -21,6 +21,7 @@ rec {
       , withBtrfs ? stdenv.isLinux, btrfs-progs
       , withLvm ? stdenv.isLinux, lvm2
       , withSeccomp ? stdenv.isLinux, libseccomp
+      , knownVulnerabilities ? []
     }:
   let
     docker-runc = runc.overrideAttrs {
@@ -267,6 +268,7 @@ rec {
       license = licenses.asl20;
       maintainers = with maintainers; [ offline vdemeester periklis teutat3s ];
       mainProgram = "docker";
+      inherit knownVulnerabilities;
     };
   });
 
@@ -284,6 +286,12 @@ rec {
     containerdHash = "sha256-y3CYDZbA2QjIn1vyq/p1F1pAVxQHi/0a6hGWZCRWzyk=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+    knownVulnerabilities = [
+      "CVE-2024-23651"
+      "CVE-2024-23652"
+      "CVE-2024-23653"
+      "CVE-2024-41110"
+    ];
   };
 
   docker_25 = callPackage dockerGen rec {
