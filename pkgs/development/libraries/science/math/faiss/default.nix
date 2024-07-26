@@ -26,7 +26,7 @@
 
 let
   pname = "faiss";
-  version = "1.7.4";
+  version = "1.8.0";
 
   inherit (cudaPackages) flags backendStdenv;
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     owner = "facebookresearch";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-WSce9X6sLZmGM5F0ZkK54VqpIy8u1VB0e9/l78co29M=";
+    hash = "sha256-nS8nhkNGGb2oAJKfr/MIAZjAwMxBGbNd16/CkEtv67I=";
   };
 
   patches = [
