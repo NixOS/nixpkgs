@@ -17,6 +17,7 @@
   textlint-rule-no-start-duplicated-conjunction,
   textlint-rule-period-in-list-item,
   textlint-rule-preset-ja-technical-writing,
+  textlint-rule-prh,
   textlint-rule-stop-words,
   textlint-rule-terminology,
   textlint-rule-unexpanded-acronym,
@@ -117,6 +118,7 @@ buildNpmPackage rec {
         textlint-rule-no-start-duplicated-conjunction
         textlint-rule-period-in-list-item
         textlint-rule-preset-ja-technical-writing
+        textlint-rule-prh
         textlint-rule-stop-words
         textlint-rule-terminology
         textlint-rule-unexpanded-acronym
