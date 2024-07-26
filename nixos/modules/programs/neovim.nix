@@ -149,7 +149,7 @@ in
     environment.systemPackages = [
       cfg.finalPackage
     ];
-    environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "nvim");
+    environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "/run/current-system/sw/bin/nvim");
 
     environment.etc = builtins.listToAttrs (builtins.attrValues (builtins.mapAttrs
       (name: value: {
