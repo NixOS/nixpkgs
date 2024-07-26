@@ -23,7 +23,7 @@ mkDerivation rec {
 
    nativeBuildInputs = [ cmake ];
 
-   cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=" ];
+   cmakeFlags = [ (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "") ];
 
    installFlags = [ "DESTDIR=$(out)" ];
 

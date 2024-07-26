@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
-    "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
-    "-DCMAKE_NM=${gcc-unwrapped}/bin/gcc-nm"
+    (lib.cmakeFeature "CMAKE_AR" "${gcc-unwrapped}/bin/gcc-ar")
+    (lib.cmakeFeature "CMAKE_RANLIB" "${gcc-unwrapped}/bin/gcc-ranlib")
+    (lib.cmakeFeature "CMAKE_NM" "${gcc-unwrapped}/bin/gcc-nm")
   ];
 
   installPhase = ''

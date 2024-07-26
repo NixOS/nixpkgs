@@ -129,7 +129,7 @@ mkDerivation rec {
   # let's disable this and install udev rules manually via postInstall
   # see https://github.com/mixxxdj/mixxx/blob/2.3.5/CMakeLists.txt#L1381-L1392
   cmakeFlags = [
-    "-DINSTALL_USER_UDEV_RULES=OFF"
+    (lib.cmakeBool "INSTALL_USER_UDEV_RULES" false)
   ];
 
   postInstall = lib.optionalString stdenv.isLinux ''

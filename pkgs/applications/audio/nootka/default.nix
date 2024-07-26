@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INCLUDE_PATH=${lib.getDev libjack2}/include/jack;${lib.getDev libpulseaudio}/include/pulse"
-    "-DENABLE_JACK=ON"
-    "-DENABLE_PULSEAUDIO=ON"
+    (lib.cmakeFeature "CMAKE_INCLUDE_PATH" "${lib.getDev libjack2}/include/jack;${lib.getDev libpulseaudio}/include/pulse")
+    (lib.cmakeBool "ENABLE_JACK" true)
+    (lib.cmakeBool "ENABLE_PULSEAUDIO" true)
   ];
 
   meta = with lib; {

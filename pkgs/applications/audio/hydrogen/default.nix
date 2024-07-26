@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DWANT_DEBUG=OFF"
+    (lib.cmakeBool "WANT_DEBUG" false)
   ];
 
   meta = with lib; {

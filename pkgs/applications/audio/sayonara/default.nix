@@ -52,7 +52,7 @@ mkDerivation rec {
   # we carry the patched taglib 1.11.1 that doesn't break ogg but sayonara just
   # checks for the version
   cmakeFlags = [
-    "-DWITH_SYSTEM_TAGLIB=ON"
+    (lib.cmakeBool "WITH_SYSTEM_TAGLIB" true)
   ];
 
   # gstreamer cannot otherwise be found

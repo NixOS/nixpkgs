@@ -44,7 +44,7 @@ mkDerivation rec {
     })
   ];
 
-  cmakeFlags = [ "-DWANT_QT5=ON" ];
+  cmakeFlags = [ (lib.cmakeBool "WANT_QT5" true) ];
 
   meta = with lib; {
     description = "DAW similar to FL Studio (music production software)";

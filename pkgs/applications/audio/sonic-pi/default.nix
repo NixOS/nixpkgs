@@ -102,9 +102,9 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DUSE_SYSTEM_LIBS=ON"
-    "-DBUILD_IMGUI_INTERFACE=${if withImGui then "ON" else "OFF"}"
-    "-DWITH_QT_GUI_WEBENGINE=${if withTauWidget then "ON" else "OFF"}"
+    (lib.cmakeBool "USE_SYSTEM_LIBS" true)
+    (lib.cmakeBool "BUILD_IMGUI_INTERFACE" withImGui)
+    (lib.cmakeBool "WITH_QT_GUI_WEBENGINE" withTauWidget)
   ];
 
   doCheck = true;

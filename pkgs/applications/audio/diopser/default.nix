@@ -70,8 +70,8 @@ in  stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_AR=${stdenv.cc.cc}/bin/gcc-ar"
-    "-DCMAKE_RANLIB=${stdenv.cc.cc}/bin/gcc-ranlib"
+    (lib.cmakeFeature "CMAKE_AR" "${stdenv.cc.cc}/bin/gcc-ar")
+    (lib.cmakeFeature "CMAKE_RANLIB" "${stdenv.cc.cc}/bin/gcc-ranlib")
   ];
 
   meta = with lib; {

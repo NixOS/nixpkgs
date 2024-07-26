@@ -38,7 +38,7 @@ mkDerivation rec {
 
   doCheck = true;
 
-  cmakeFlags = [ "-DBUILD_TESTS=ON" ];
+  cmakeFlags = [ (lib.cmakeBool "BUILD_TESTS" true) ];
 
   preCheck = ''
     # Running the tests requires a location at the home directory for logging.

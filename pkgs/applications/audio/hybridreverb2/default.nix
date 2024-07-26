@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DHybridReverb2_AdvancedJackStandalone=ON"
-    "-DHybridReverb2_UseLocalDatabase=ON"
+    (lib.cmakeBool "HybridReverb2_AdvancedJackStandalone" true)
+    (lib.cmakeBool "HybridReverb2_UseLocalDatabase" true)
   ];
 
   enableParallelBuilding = true;

@@ -146,20 +146,20 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DAUDACITY_BUILD_LEVEL=2"
-    "-DAUDACITY_REV_LONG=nixpkgs"
-    "-DAUDACITY_REV_TIME=nixpkgs"
-    "-DDISABLE_DYNAMIC_LOADING_FFMPEG=ON"
-    "-Daudacity_conan_enabled=Off"
-    "-Daudacity_use_ffmpeg=loaded"
-    "-Daudacity_has_vst3=Off"
-    "-Daudacity_has_crashreports=Off"
+    (lib.cmakeFeature "AUDACITY_BUILD_LEVEL" "2")
+    (lib.cmakeFeature "AUDACITY_REV_LONG" "nixpkgs")
+    (lib.cmakeFeature "AUDACITY_REV_TIME" "nixpkgs")
+    (lib.cmakeBool "DISABLE_DYNAMIC_LOADING_FFMPEG" true)
+    (lib.cmakeBool "audacity_conan_enabled" false)
+    (lib.cmakeFeature "audacity_use_ffmpeg" "loaded")
+    (lib.cmakeBool "audacity_has_vst3" false)
+    (lib.cmakeBool "audacity_has_crashreports" false)
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
 
     # Fix duplicate store paths
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
   ];
 
   # [ 57%] Generating LightThemeAsCeeCode.h...

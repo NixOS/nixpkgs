@@ -16,7 +16,7 @@ mkDerivation {
                   libmad libpulseaudio libsamplerate.dev libsndfile.dev libvorbis
                   portaudio qtbase wavpack ];
 
-  cmakeFlags = [ "-DWANT_PORTAUDIO=1" "-DWANT_PULSEAUDIO=1" "-DWANT_MP3_ENCODE=1" "-DWANT_LV2=0" ];
+  cmakeFlags = [ (lib.cmakeFeature "WANT_PORTAUDIO" "1" "-DWANT_PULSEAUDIO=1" "-DWANT_MP3_ENCODE=1" "-DWANT_LV2=0") ];
 
   hardeningDisable = [ "format" ];
 

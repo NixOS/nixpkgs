@@ -46,13 +46,13 @@ stdenv.mkDerivation rec {
     ++ lib.optional jackaudioSupport libjack2;
 
   cmakeFlags = lib.optionals (!jackaudioSupport) [
-    "-DRTAUDIO_USE_JACK=OFF"
-    "-DRTMIDI_USE_JACK=OFF"
-    "-DGO_USE_JACK=OFF"
-    "-DINSTALL_DEPEND=OFF"
-  ] ++ lib.optional (!includeDemo) "-DINSTALL_DEMO=OFF";
+    (lib.cmakeBool "RTAUDIO_USE_JACK" false)
+    (lib.cmakeBool "RTMIDI_USE_JACK" false)
+    (lib.cmakeBool "GO_USE_JACK" false)
+    (lib.cmakeBool "INSTALL_DEPEND" false)
+  ] ++ lib.optional (!includeDemo) (lib.cmakeBool "INSTALL_DEMO" false);
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DTARGET_OS_IPHONE=0";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (lib.cmakeFeature "TARGET_OS_IPHONE" "0");
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/{Applications,bin,lib}

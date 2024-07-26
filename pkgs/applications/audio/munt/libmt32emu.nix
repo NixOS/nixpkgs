@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   dontFixCmake = true;
 
   cmakeFlags = [
-    "-Dmunt_WITH_MT32EMU_SMF2WAV=OFF"
-    "-Dmunt_WITH_MT32EMU_QT=OFF"
+    (lib.cmakeBool "munt_WITH_MT32EMU_SMF2WAV" false)
+    (lib.cmakeBool "munt_WITH_MT32EMU_QT" false)
   ];
 
   postFixup = ''

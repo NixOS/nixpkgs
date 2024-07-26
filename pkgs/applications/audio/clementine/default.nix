@@ -117,8 +117,8 @@ in mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DUSE_SYSTEM_PROJECTM=ON"
-    "-DSPOTIFY_BLOB=OFF"
+    (lib.cmakeBool "USE_SYSTEM_PROJECTM" true)
+    (lib.cmakeBool "SPOTIFY_BLOB" false)
   ];
 
   postInstall = ''

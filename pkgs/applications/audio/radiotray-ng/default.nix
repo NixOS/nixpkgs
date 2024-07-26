@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    (lib.cmakeBool "BUILD_TESTS" doCheck)
   ];
 
   # 'wxFont::wxFont(int, int, int, int, bool, const wxString&, wxFontEncoding)' is deprecated

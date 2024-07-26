@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # Without this, the lv2 ends up in
   # /nix/store/$HASH/nix/store/$HASH/lib/lv2
   cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
   ];
 
   meta = with lib; {

@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-Dmunt_WITH_MT32EMU_QT=OFF"
-    "-Dmunt_WITH_MT32EMU_SMF2WAV=ON"
+    (lib.cmakeBool "munt_WITH_MT32EMU_QT" false)
+    (lib.cmakeBool "munt_WITH_MT32EMU_SMF2WAV" true)
   ];
 
   meta = with lib; {

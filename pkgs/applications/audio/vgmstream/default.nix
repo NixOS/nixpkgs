@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     # It always tries to download it, no option to use the system one
-    "-DUSE_CELT=OFF"
-  ] ++ lib.optional (! buildAudaciousPlugin) "-DBUILD_AUDACIOUS=OFF";
+    (lib.cmakeBool "USE_CELT" false)
+  ] ++ lib.optional (! buildAudaciousPlugin) (lib.cmakeBool "BUILD_AUDACIOUS" false);
 
   meta = with lib; {
     description = "Library for playback of various streamed audio formats used in video games";
