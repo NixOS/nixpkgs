@@ -5,7 +5,6 @@
 , pkg-config
 , automake
 , autoconf
-, m4
 , libtool
 , gtk3
 , libv3270
@@ -13,7 +12,6 @@
 , openssl
 , gettext
 , desktop-file-utils
-, glib
 , wrapGAppsHook3
 }:
 

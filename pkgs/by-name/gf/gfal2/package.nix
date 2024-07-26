@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, callPackage
 , fetchFromGitHub
   # Native build inputs
 , cmake

@@ -7,7 +7,6 @@
 , xorg
 , gtk3
 , webkitgtk
-, gsettings-desktop-schemas
 , snippetexpanderd
 , snippetexpanderx
 }:
