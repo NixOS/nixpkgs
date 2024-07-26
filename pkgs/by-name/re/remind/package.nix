@@ -5,7 +5,12 @@
   tk,
   tcllib,
   tcl,
-  tkremind ? true,
+  tkremind ? null,
+  withGui ?
+    if tkremind != null then
+      lib.warn "tkremind is deprecated and should be removed; use withGui instead." tkremind
+    else
+      true,
 }:
 
 tcl.mkTclDerivation rec {
@@ -17,20 +22,20 @@ tcl.mkTclDerivation rec {
     hash = "sha256-XxVjAV3TGDPI8XaFXXSminsMffq8m8ljw68YMIC2lYg=";
   };
 
-  propagatedBuildInputs = lib.optionals tkremind [
+  propagatedBuildInputs = lib.optionals withGui [
     tcllib
     tk
   ];
 
-  postPatch = lib.optionalString tkremind ''
+  postPatch = lib.optionalString withGui ''
     # NOTA BENE: The path to rem2pdf is replaced in tkremind for future use
     # as rem2pdf is currently not build since it requires the JSON::MaybeXS,
     # Pango and Cairo Perl modules.
     substituteInPlace scripts/tkremind \
-      --replace-fail "exec wish" "exec ${lib.getBin tk}/bin/wish" \
-      --replace-fail 'set Remind "remind"' "set Remind \"$out/bin/remind\"" \
-      --replace-fail 'set Rem2PS "rem2ps"' "set Rem2PS \"$out/bin/rem2ps\"" \
-      --replace-fail 'set Rem2PDF "rem2pdf"' "set Rem2PDF \"$out/bin/rem2pdf\""
+      --replace-fail "exec wish" "exec ${lib.getExe' tk "wish"}" \
+      --replace-fail 'set Remind "remind"' 'set Remind "$out/bin/remind"' \
+      --replace-fail 'set Rem2PS "rem2ps"' 'set Rem2PS "$out/bin/rem2ps"' \
+      --replace-fail 'set Rem2PDF "rem2pdf"' 'set Rem2PDF "$out/bin/rem2pdf"'
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
