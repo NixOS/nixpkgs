@@ -3,16 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "braintree";
   version = "4.29.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "braintree";
@@ -21,21 +19,25 @@ buildPythonPackage rec {
     hash = "sha256-5MF8W2zUVvNiOnmszgJkMDmeYLZ6ppFHqmH6dmlCzQY=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "braintree" ];
 
-  disabledTestPaths = [
-    # Don't test integrations
-    "tests/integration"
+  pytestFlagsArray = [
+    "tests/"
+    "tests/fixtures"
+    "tests/unit"
+    "tests/integration/test_credentials_parser.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for integration with Braintree";
     homepage = "https://github.com/braintree/braintree_python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }
