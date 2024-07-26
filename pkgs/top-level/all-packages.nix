@@ -12215,8 +12215,6 @@ with pkgs;
 
   relic = callPackage ../development/tools/relic { };
 
-  remind = callPackage ../tools/misc/remind { };
-
   remmina = darwin.apple_sdk_11_0.callPackage ../applications/networking/remote/remmina { };
 
   rename = callPackage ../tools/misc/rename { };
