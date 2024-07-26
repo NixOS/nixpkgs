@@ -24074,6 +24074,17 @@ with pkgs;
 
   speechd = callPackage ../development/libraries/speechd { };
 
+  speechd-minimal = speechd.override {
+    withLibao = false;
+    withPulse = false;
+    withAlsa = false;
+    withOss = false;
+    withFlite = false;
+    withEspeak = false;
+    withPico = false;
+    libsOnly = true;
+  };
+
   speech-tools = callPackage ../development/libraries/speech-tools {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   };
@@ -32141,6 +32152,8 @@ with pkgs;
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
 
   mbrola = callPackage ../applications/audio/mbrola { };
+
+  mbrola-voices = callPackage ../applications/audio/mbrola/voices.nix { };
 
   mcpp = callPackage ../development/compilers/mcpp { };
 
