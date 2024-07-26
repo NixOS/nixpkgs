@@ -2,13 +2,16 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  makeBinaryWrapper,
   meson,
   ninja,
   scdoc,
   pkg-config,
   nix-update-script,
+  bash,
   dmenu,
   libnotify,
+  newt,
   python3Packages,
   util-linux,
   fumonSupport ? true,
@@ -34,18 +37,20 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    makeBinaryWrapper
     meson
     ninja
     pkg-config
     scdoc
   ];
 
-  buildInputs = [
-    libnotify
-    util-linux
+  propagatedBuildInputs = [
+    util-linux # waitpid
+    newt # whiptail
+    libnotify # notify
+    bash # sh
+    python
   ] ++ (lib.optionals uuctlSupport [ dmenu ]);
-
-  propagatedBuildInputs = [ python ];
 
   mesonFlags = [
     "--prefix=${placeholder "out"}"
@@ -61,9 +66,19 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+  postInstall = ''
+    wrapProgram $out/bin/uwsm \
+      --prefix PATH : ${lib.makeBinPath finalAttrs.propagatedBuildInputs}
+    ${lib.optionalString uuctlSupport ''
+      wrapProgram $out/bin/uuctl \
+        --prefix PATH : ${lib.makeBinPath finalAttrs.propagatedBuildInputs}
+    ''}
+  '';
+
   meta = {
     description = "Universal wayland session manager";
     homepage = "https://github.com/Vladimir-csp/uwsm";
+    mainProgram = "uwsm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       johnrtitor
