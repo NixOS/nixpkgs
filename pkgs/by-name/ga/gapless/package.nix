@@ -14,7 +14,7 @@
 , wrapGAppsHook4
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "g4music";
+  pname = "gapless";
   version = "3.7.2";
 
   src = fetchFromGitLab {
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "g4music";
     homepage = "https://gitlab.gnome.org/neithern/g4music";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ magnouvean ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 })
