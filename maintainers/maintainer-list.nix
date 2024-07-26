@@ -6442,6 +6442,12 @@
     githubId = 878822;
     name = "Tristan Helmich";
   };
+  fagg = {
+    email = "ashton+nixpkgs@fagg.id.au";
+    github = "fagg";
+    githubId = 1742468;
+    name = "Ashton Fagg";
+  };
   falsifian = {
     email = "james.cook@utoronto.ca";
     github = "falsifian";
