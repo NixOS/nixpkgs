@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
   setuptools,
   pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,18 +21,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  # tests rely on nose, archived in 2020
-  doCheck = pythonOlder "3.12";
-
-  nativeCheckInputs = [ nose ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    nosetests -v
-
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "xlwt" ];
 
