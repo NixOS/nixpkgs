@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   isPy27,
   pytestCheckHook,
-  nose,
   numpy,
   pandas,
   xarray,
@@ -14,25 +12,22 @@
 
 buildPythonPackage rec {
   pname = "traittypes";
-  version = "unstable-2019-06-23";
   format = "setuptools";
+  version = "0.2.1-unstable-2020-07-17";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jupyter-widgets";
     repo = pname;
-    rev = "0a030b928991dec732c17a7a1cb13acbcd7650a2";
-    sha256 = "0rlm5krmq6n8yi47dgdsjyrkz3m079pndpbzkz2gx98pb3jd9pjs";
+    rev = "af2ebeec9e58b73a12d4cf841bd506d6eadb8868";
+    hash = "sha256-q7kt8b+yDHsWML/wCeND9PrZMVjemhzG7Ih1OtHbnTw=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-intarray-test.patch";
-      url = "https://github.com/minrk/traittypes/commit/a02441e5b259e5858453a853207260c9bd4efbb5.patch";
-      sha256 = "120dsvr5nksizw75z1ah3h38mi399fxbvz5anakica557jahi0aw";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace traittypes/tests/test_traittypes.py \
+      --replace-fail "np.int" "int"
+  '';
 
   propagatedBuildInputs = [ traitlets ];
 
@@ -40,13 +35,7 @@ buildPythonPackage rec {
     numpy
     pandas
     xarray
-    nose
     pytestCheckHook
-  ];
-
-  disabledTestPaths = lib.optionals (lib.versionAtLeast numpy.version "1.17") [
-    # https://github.com/jupyter-widgets/traittypes/blob/master/setup.py#L86-L87
-    "traittypes/tests/test_traittypes.py"
   ];
 
   pythonImportsCheck = [ "traittypes" ];
