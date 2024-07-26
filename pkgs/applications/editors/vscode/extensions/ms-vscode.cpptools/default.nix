@@ -43,11 +43,11 @@ let
   isx86Linux = stdenv.hostPlatform.system == "x86_64-linux";
   supported = {
     x86_64-linux = {
-      hash = "sha256-arTBt3UWA5zoo0dL044Sx/NT1LUS76XfGIS96NOMvJk=";
+      hash = "sha256-jibImnpRtshbHu21JeS4VxL1jETm3Ein8S/M73UXc2w=";
       arch = "linux-x64";
     };
     aarch64-linux = {
-      hash = "sha256-oVuDxx117bVd/jDqn9KivTwR5T2X5UZMHk/nZ/e/IOg=";
+      hash = "sha256-7UagRO7qHyT1JIvvTSx9+USYrnDRXJ2wnXPLaBHRc3k=";
       arch = "linux-arm64";
     };
   };
@@ -60,7 +60,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.20.5";
+    version = "1.21.4";
   };
 
   nativeBuildInputs = [
