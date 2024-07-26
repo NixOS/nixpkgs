@@ -8,19 +8,36 @@
 , buildc2xml ? false
 , libllvm
 , libxml2
+, substituteAll
+, llvmPackages
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smatch";
   version = "1.73";
 
   src = fetchFromGitHub {
     owner = "error27";
     repo = "smatch";
-    rev = version;
-    sha256 = "sha256-Pv3bd2cjnQKnhH7TrkYWfDEeaq6u/q/iK1ZErzn6bME=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-Pv3bd2cjnQKnhH7TrkYWfDEeaq6u/q/iK1ZErzn6bME=";
   };
 
+  patches = [
+    (let
+      clang-major = lib.versions.major (lib.getVersion llvmPackages.clang-unwrapped);
+      clang-lib = lib.getLib llvmPackages.clang-unwrapped;
+
+      clang = "${clang-lib}/lib/clang/${clang-major}/include";
+      libc = "${lib.getDev stdenv.cc.libc}/include";
+    in substituteAll {
+      src = ./fix_include_path.patch;
+
+      inherit clang libc;
+    })
+  ];
+
+  enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ sqlite openssl ]
@@ -29,11 +46,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" "CXX=${stdenv.cc.targetPrefix}c++" ];
 
-  meta = with lib; {
+  meta = {
     description = "Semantic analysis tool for C";
     homepage = "https://sparse.docs.kernel.org/";
-    maintainers = with maintainers; [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
-}
+})

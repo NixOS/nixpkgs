@@ -1,0 +1,58 @@
+diff --git a/pre-process.c b/pre-process.c
+index 457685c0..006209ad 100644
+--- a/pre-process.c
++++ b/pre-process.c
+@@ -2410,32 +2410,27 @@ static void do_preprocess(struct token **list)
+ 
+ void init_include_path(void)
+ {
+-	FILE *fp;
+-	char path[256];
+-	char arch[32];
+-	char os[32];
+-
+-	fp = popen("/bin/uname -m", "r");
+-	if (!fp)
+-		return;
+-	if (!fgets(arch, sizeof(arch) - 1, fp))
+-		return;
+-	pclose(fp);
+-	if (arch[strlen(arch) - 1] == '\n')
+-		arch[strlen(arch) - 1] = '\0';
+-
+-	fp = popen("/bin/uname -o", "r");
+-	if (!fp)
+-		return;
+-	fgets(os, sizeof(os) - 1, fp);
+-	pclose(fp);
+-
+-	if (strcmp(os, "GNU/Linux\n") != 0)
+-		return;
+-	strcpy(os, "linux-gnu");
+-
+-	snprintf(path, sizeof(path), "/usr/include/%s-%s/", arch, os);
+-	add_pre_buffer("#add_system \"%s/\"\n", path);
++	add_pre_buffer("#add_system \"%s/\"\n", "@clang@");
++	add_pre_buffer("#add_system \"%s/\"\n", "@libc@");
++
++    bool collect = false;
++    char *nix_cflags = getenv("NIX_CFLAGS_COMPILE");
++    if (nix_cflags == NULL)
++        return;
++
++    for (
++        char *token = strtok(nix_cflags, " ");
++        token != NULL;
++        token = strtok(NULL, " ")
++    ) {
++        if (collect && *token == '/') {
++	        add_pre_buffer("#add_system \"%s/\"\n", token);
++            collect = false;
++            continue;
++        }
++        if (!strcmp(token, "-isystem"))
++            collect = true;
++    }
+ }
+ 
+ struct token * preprocess(struct token *token)
