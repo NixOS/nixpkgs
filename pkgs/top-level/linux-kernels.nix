@@ -528,6 +528,8 @@ in {
 
     turbostat = callPackage ../os-specific/linux/turbostat { };
 
+    corefreq = callPackage ../os-specific/linux/corefreq { };
+
     trelay = callPackage ../os-specific/linux/trelay { };
 
     universal-pidff = callPackage ../os-specific/linux/universal-pidff { };
