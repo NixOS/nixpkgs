@@ -1,4 +1,4 @@
-# To run this derivation, `nix-build -A nixpkgs-manual.tests.manpage-urls`
+# To build this derivation, run `nix-build -A nixpkgs-manual.tests.manpage-urls`
 {
   lib,
   runCommand,

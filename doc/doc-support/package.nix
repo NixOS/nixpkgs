@@ -1,3 +1,6 @@
+# This file describes the Nixpkgs manual, which happens to use module docs infra originally
+# developed for NixOS. To build this derivation, run `nix-build -A nixpkgs-manual`.
+#
 {
   lib,
   stdenvNoCC,
@@ -92,7 +95,6 @@ stdenvNoCC.mkDerivation (
 
       epub = callPackage ./epub.nix { };
 
-      # NB: This file describes the Nixpkgs manual, which happens to use module docs infra originally developed for NixOS.
       optionsDoc = callPackage ./options-doc.nix { };
 
       pythonInterpreterTable = callPackage ./python-interpreter-table.nix { };

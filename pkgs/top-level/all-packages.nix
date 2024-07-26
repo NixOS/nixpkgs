@@ -39140,6 +39140,8 @@ with pkgs;
 
   nixpkgs-lint-community = callPackage ../tools/nix/nixpkgs-lint { };
 
+  nixpkgs-manual = callPackage ../../doc/doc-support/package.nix { };
+
   rnix-hashes = callPackage ../tools/nix/rnix-hashes { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };

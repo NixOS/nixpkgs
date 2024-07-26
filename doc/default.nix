@@ -3,4 +3,4 @@
   nixpkgs ? { },
 }:
 
-pkgs.callPackage ./doc-support/package.nix { inherit nixpkgs; }
+pkgs.nixpkgs-manual.override { inherit nixpkgs; }
