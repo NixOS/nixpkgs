@@ -15,7 +15,7 @@
 , writeTextFile
 , bash
 , curl
-, Foundation
+, darwin
 , gdb
 , git
 , tzdata
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     tzdata
   ] ++ lib.optionals stdenv.isDarwin [
-    Foundation
+    darwin.apple_sdk.frameworks.Foundation
   ];
 
   nativeCheckInputs = [
