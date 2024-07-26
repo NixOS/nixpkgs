@@ -1,0 +1,13 @@
+diff --git a/resources/settings/settings_description.json b/resources/settings/settings_description.json
+index 20fff81..9979de5 100644
+--- a/resources/settings/settings_description.json
++++ b/resources/settings/settings_description.json
+@@ -118,7 +118,7 @@
+       },
+       {
+         "value": "checkForUpdates",
+-        "default": true
++        "default": false
+       },
+       {
+         "value": "enableInputRepeat",

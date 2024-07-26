@@ -1,0 +1,27 @@
+From 2040fcab5a7be2f28add46a1412bef62ac5ccf11 Mon Sep 17 00:00:00 2001
+From: Maximilian Marx <mmarx@wh2.tu-dresden.de>
+Date: Thu, 24 Nov 2022 20:00:33 +0100
+Subject: [PATCH] Use glucose binary from PATH if present
+
+---
+ src/package.lisp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/package.lisp b/src/package.lisp
+index b6e26ac..bdb2581 100644
+--- a/src/package.lisp
++++ b/src/package.lisp
+@@ -13,7 +13,9 @@
+ (defvar *glucose-home* (asdf:system-relative-pathname :cl-sat.glucose "glucose-syrup/"))
+ 
+ (defun glucose-binary (&optional (*glucose-home* *glucose-home*))
+-  (merge-pathnames "simp/glucose_static" *glucose-home*))
++  (if (trivial-package-manager:which "glucose")
++      "glucose"
++      (merge-pathnames "simp/glucose_static" *glucose-home*)))
+ 
+ (defmethod solve ((input pathname) (solver (eql :glucose)) &rest options &key debug &allow-other-keys)
+   (remf options :debug)
+-- 
+2.36.2
+

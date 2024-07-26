@@ -1,0 +1,25 @@
+From 07c799a1b170c0e28b385474b511c1034cfcb263 Mon Sep 17 00:00:00 2001
+From: Janik H <janik@aq0.de>
+Date: Sat, 16 Sep 2023 19:45:32 +0200
+Subject: [PATCH] fix nix store path regex
+
+---
+ plugin/sensible.vim | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugin/sensible.vim b/plugin/sensible.vim
+index 0fc26e0..b3ee6e9 100644
+--- a/plugin/sensible.vim
++++ b/plugin/sensible.vim
+@@ -26,7 +26,7 @@ function! s:MaySet(option) abort
+     silent verbose execute 'setglobal all' a:option . '?'
+     redir END
+   endif
+-  return out !~# " \\(\\~[\\/][^\n]*\\|Lua\\)$"
++  return out !~# "/nix/store/.*" && out !~# " \\(\\~[\\/][^\n]*\\|Lua\\)$"
+ endfunction
+ 
+ if s:MaySet('backspace')
+-- 
+2.41.0
+

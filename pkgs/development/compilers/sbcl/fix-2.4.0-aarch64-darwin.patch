@@ -1,0 +1,39 @@
+From aed233638604b46c9a0c51e08d096d47303375ca Mon Sep 17 00:00:00 2001
+From: Douglas Katzman <dougk@google.com>
+Date: Tue, 2 Jan 2024 09:20:48 -0500
+Subject: [PATCH] Fix multiple def error
+
+reported by Hraban Luyat
+---
+ src/runtime/gc-common.c | 1 +
+ src/runtime/gc.h        | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/runtime/gc-common.c b/src/runtime/gc-common.c
+index 51963b8ff..07536f628 100644
+--- a/src/runtime/gc-common.c
++++ b/src/runtime/gc-common.c
+@@ -2999,6 +2999,7 @@ void recompute_gen_bytes_allocated() {
+ #endif
+ 
+ #ifdef LISP_FEATURE_DARWIN_JIT
++_Atomic(char) *page_execp;
+ #include "sys_mmap.inc"
+ #include <errno.h>
+ /* darwin-jit has another reason to remap besides just zeroing, namely,
+diff --git a/src/runtime/gc.h b/src/runtime/gc.h
+index 804e6fce2..5fdc215c2 100644
+--- a/src/runtime/gc.h
++++ b/src/runtime/gc.h
+@@ -151,7 +151,7 @@ extern void prepare_pages(bool commit, page_index_t start, page_index_t end,
+  * squeeze a bit into the 'type' field of the page table, but it's clearer to
+  * have this externally so that page type 0 remains as "free" */
+ #ifdef LISP_FEATURE_DARWIN_JIT
+-_Atomic(char) *page_execp;
++extern _Atomic(char) *page_execp;
+ static inline void set_page_executable(page_index_t i, bool val) { page_execp[i] = val; }
+ #endif
+ 
+-- 
+2.42.0
+

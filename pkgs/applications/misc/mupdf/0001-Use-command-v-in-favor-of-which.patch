@@ -1,0 +1,13 @@
+Use command -v in favor of which
+
+--- a/Makerules
++++ b/Makerules
+@@ -170,7 +170,7 @@
+   ifneq ($(ARCHFLAGS),)
+     $(warning "MacOS with ARCHFLAGS set. Assuming we are building for arm64, and setting HAVE_LIBCRYPTO to no.")
+     HAVE_LIBCRYPTO := no
+-  else ifeq (, $(shell which pkg-config))
++  else ifeq (, $(shell command -v pkg-config))
+     $(warning "No pkg-config found, install it for proper integration of libcrypto")
+   else
+     HAVE_LIBCRYPTO := $(shell pkg-config --exists 'libcrypto >= 1.1.0' && echo yes)
