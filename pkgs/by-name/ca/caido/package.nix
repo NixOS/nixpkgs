@@ -40,7 +40,7 @@ let
       install -m 444 -D ${appimageContents}/caido.png \
         $out/share/icons/hicolor/512x512/apps/caido.png
       source "${makeWrapper}/nix-support/setup-hook"
-      wrapProgram $out/bin/${pname} \
+      wrapProgram $out/bin/caido \
         --set WEBKIT_DISABLE_COMPOSITING_MODE 1
     '';
   };
