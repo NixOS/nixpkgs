@@ -84,9 +84,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Qt-based Multimedia player";
     longDescription = ''
       QMPlay2 is a video and audio player. It can play all formats supported by
-      FFmpeg, libmodplug (including J2B and SFX). It also supports Audio CD, raw
-      files, Rayman 2 music and chiptunes. It contains YouTube and MyFreeMP3
-      browser.
+      FFmpeg and libmodplug (including J2B and SFX). It also supports Audio CD,
+      raw files, Rayman 2 music, and chiptunes. It also contains YouTube and
+      MyFreeMP3 browser.
     '';
     license = lib.licenses.lgpl3Plus;
     mainProgram = "qmplay2";
