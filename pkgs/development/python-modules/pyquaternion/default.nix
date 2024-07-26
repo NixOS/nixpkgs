@@ -1,9 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   numpy,
-  nose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   version = "0.9.9";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sfYa8hnLL+lmtft5oZISTy5jo/end6w8rfKVexqBvqg=";
+  src = fetchFromGitHub {
+    owner = "KieranWynn";
+    repo = "pyquaternion";
+    rev = "v${version}";
+    hash = "sha256-L0wT9DFUDRcmmN7OpmIDNvtQWQrM7iFnZt6R2xrJ+3A=";
   };
 
   # The VERSION.txt file is required for setup.py
@@ -24,7 +26,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "pyquaternion/test/" ];
+
   pythonImportsCheck = [ "pyquaternion" ];
 
   meta = with lib; {
