@@ -102,13 +102,13 @@ in
         else
           [
             #direnv has a fish library which sources direnv for some reason
-            (cfg.package.overrideAttrs (old: {
-              installPhase =
-                (old.installPhase or "")
-                + ''
-                  rm -rf $out/share/fish
-                '';
-            }))
+            (pkgs.symlinkJoin {
+              inherit (cfg.package) name;
+              paths = [ cfg.package ];
+              postBuild = ''
+                rm -rf $out/share/fish
+              '';
+            })
           ];
 
       variables = {
