@@ -200,9 +200,8 @@ let
       }) // {
         inherit (x) md5name md5;
       }) srcsAttributes.deps;
-  } // optionalAttrs (variant != "collabora") {
-    translations = fetchurl srcsAttributes.translations;
-    help = fetchurl srcsAttributes.help;
+    translations = srcsAttributes.translations { inherit fetchurl fetchgit; };
+    help = srcsAttributes.help { inherit fetchurl fetchgit; };
   };
 
   qtMajor = lib.versions.major qtbase.version;
@@ -235,14 +234,17 @@ in stdenv.mkDerivation (finalAttrs: {
       ln -sfv ${f} $sourceRoot/${tarballPath}/${f.md5name}
       ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
     '')}
-  '' + optionalString (variant != "collabora") ''
 
+  '' + (if (variant != "collabora") then ''
     ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
     ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
 
     tar -xf ${srcs.help}
     tar -xf ${srcs.translations}
-  '';
+  '' else ''
+    cp -r --no-preserve=mode ${srcs.help}/. $sourceRoot/helpcontent2/
+    cp -r --no-preserve=mode ${srcs.translations}/. $sourceRoot/translations/
+  '');
 
   patches = [
     # Skip some broken tests:

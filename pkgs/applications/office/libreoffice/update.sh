@@ -47,7 +47,8 @@ case $variant in
     echo \"$full_version\" > version.nix
 
     for t in help translations; do
-        echo "{" > $t.nix
+        echo "{ fetchurl, ... }:" > $t.nix
+        echo "fetchurl {" >> $t.nix
         echo "  sha256 = "\"$(nix-prefetch-url $baseurl/libreoffice-$t-$full_version.tar.xz)'";' >> $t.nix
         echo "  url = "\"$baseurl/libreoffice-$t-$full_version.tar.xz'";' >> $t.nix
         echo "}" >> $t.nix
@@ -56,7 +57,7 @@ case $variant in
     # Out of loop nix-prefetch-url, because there is no $t, and we want the output
     # path as well, to get the download.lst file from there afterwards.
     main_path_hash=($(nix-prefetch-url --print-path $baseurl/libreoffice-$full_version.tar.xz))
-    echo "{ fetchurl, ...}:" > main.nix
+    echo "{ fetchurl, ... }:" > main.nix
     echo "fetchurl {" >> main.nix
     echo "  sha256 = "\"${main_path_hash[0]}'";' >> main.nix
     echo "  url = "\"$baseurl/libreoffice-$full_version.tar.xz'";' >> main.nix
@@ -78,27 +79,41 @@ case $variant in
     ;;
 
 (collabora)
-    full_version=$(git ls-remote --tags --sort -v:refname https://gerrit.libreoffice.org/core | grep -Pom1 'refs/tags/cp-\K\d+\.\d+\.\d+-\d+$')
+    all_tags=$(git ls-remote --tags --sort -v:refname https://gerrit.libreoffice.org/core)
+    rev=$(grep --perl-regexp --only-matching --max-count=1 \
+        '\Krefs/tags/cp-\d+\.\d+\.\d+-\d+$' <<< "$all_tags")
+    full_version=${rev#refs/tags/cp-}
     echoerr full version is $full_version
     echo \"$full_version\" > version.nix
 
-    rev="refs/tags/cp-$full_version"
+    # The full checkout including the submodules is too big for Hydra, so we fetch
+    # submodules separately.
+    declare -A dirnames=([help]=helpcontent2 [translations]=translations)
+    for t in help translations; do
+        sub_rev=$(curl --silent "https://git.libreoffice.org/core/+/$rev/${dirnames[$t]}" |\
+            pup '.gitlink-detail text{}' |\
+            sed -n 's/^Submodule link to \([0-9a-f]\{40\}\) of .*/\1/p')
+        echoerr got rev $sub_rev for $t
+        prefetch_output=$(nix-prefetch-git "https://gerrit.libreoffice.org/$t" --rev "$sub_rev")
+        echo "{ fetchgit, ... }:" > $t.nix
+        echo "fetchgit {" >> $t.nix
+        echo "  url = \"$(jq -r '.url' <<< "$prefetch_output")\";" >> $t.nix
+        echo "  rev = \"$rev\";" >> $t.nix
+        echo "  hash = \"$(jq -r '.hash' <<< "$prefetch_output")\";" >> $t.nix
+        echo "}"
+    done
 
-    prefetch_output=$(nix-prefetch-git https://gerrit.libreoffice.org/core --rev "$rev" --fetch-submodules)
-    fetched_git_path=$(echo "$prefetch_output" | jq -r '.path')
-    hash=$(echo "$prefetch_output" | jq -r '.hash')
-
-    # Generate main.nix
+    local prefetch_output=$(nix-prefetch-git "https://gerrit.libreoffice.org/core" --rev "$rev")
     echo "{ fetchgit, ... }:" > main.nix
     echo "fetchgit {" >> main.nix
-    echo "  url = \"https://gerrit.libreoffice.org/core\";" >> main.nix
+    echo "  url = \"$(jq -r '.url' <<< "$prefetch_output")\";" >> main.nix
     echo "  rev = \"$rev\";" >> main.nix
-    echo "  hash = \"$hash\";" >> main.nix
-    echo "  fetchSubmodules = true;" >> main.nix
+    echo "  hash = \"$(jq -r '.hash' <<< "$prefetch_output")\";" >> main.nix
+    echo "  fetchSubmodules = false;" >> main.nix
     echo "}" >> main.nix
 
     # Environment variable required by ../generate-libreoffice-srcs.py
-    export downloadList="$fetched_git_path/download.lst"
+    export downloadList=$(jq -r '.path' <<< "$prefetch_output")/download.lst
 esac
 
 cd ..
