@@ -55,6 +55,8 @@ let
     "ruby-tree-sitter.old"
     # this is the (unmaintained) rust language bindings, tree-sitter-rust is the grammar
     "rust-tree-sitter"
+    # this is the kotlin language bindings, tree-sitter-kotlin is the grammar
+    "kotlin-tree-sitter"
     # this is the nodejs language bindings, tree-sitter-javascript is the grammar
     "node-tree-sitter"
     # this is the python language bindings, tree-sitter-python is the grammar

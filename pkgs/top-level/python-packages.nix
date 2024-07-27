@@ -15743,6 +15743,12 @@ self: super: with self; {
 
   tree-sitter0_21 = callPackage ../development/python-modules/tree-sitter0_21 { };
 
+  tree-sitter-grammars = lib.recurseIntoAttrs (
+    lib.mapAttrs
+      (name: grammarDrv: callPackage ../development/python-modules/tree-sitter-grammars { inherit name grammarDrv; })
+      pkgs.tree-sitter.builtGrammars
+  );
+
   tree-sitter-html = callPackage ../development/python-modules/tree-sitter-html { };
 
   tree-sitter-python = callPackage ../development/python-modules/tree-sitter-python { };

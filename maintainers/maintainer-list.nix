@@ -515,6 +515,13 @@
     githubId = 1773511;
     name = "Adrien Devresse";
   };
+  adfaure = {
+    email = "adfaure@pm.me";
+    matrix = "@adfaure:matrix.org";
+    github = "adfaure";
+    githubId = 8026586;
+    name = "Adrien Faure";
+  };
   adisbladis = {
     email = "adisbladis@gmail.com";
     matrix = "@adis:blad.is";
@@ -718,6 +725,13 @@
     github = "ajaxbits";
     githubId = 45179933;
     name = "Alex Jackson";
+  };
+  a-jay98 = {
+    name = "Ali Jamadi";
+    email = "ali@jamadi.me";
+    matrix = "@a.jamadi:matrix.org";
+    github = "a-jay98";
+    githubId = 23138252;
   };
   ajgrf = {
     email = "a@ajgrf.com";
