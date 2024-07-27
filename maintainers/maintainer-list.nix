@@ -20101,6 +20101,12 @@
     githubId = 29044;
     name = "Jacek Galowicz";
   };
+  tfkhdyt = {
+    email = "tfkhdyt@proton.me";
+    name = "Taufik Hidayat";
+    github = "tfkhdyt";
+    githubId = 47195537;
+  };
   tfmoraes = {
     name = "Thiago Franco de Moraes";
     github = "tfmoraes";
