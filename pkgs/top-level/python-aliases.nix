@@ -517,6 +517,7 @@ mapAliases ({
   ruamel_yaml_clib = ruamel-yaml-clib; # added 2021-11-01
   inherit (super.pkgs) ruff-lsp; # added 2023-06-23
   runway-python = throw "SDK has been deprecated and was archived by upstream"; # added 2023-05-03
+  sampledata = throw "sampledata has been removed, it was unmaintained since 2017"; # added 2024-07-27
   sapi-python-client = kbcstorage; # added 2022-04-20
   scikitimage = scikit-image; # added 2023-05-14
   scikitlearn = scikit-learn; # added 2021-07-21
