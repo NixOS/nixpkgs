@@ -222,5 +222,9 @@ in
     hardware.deviceTree.package = if (cfg.overlays != [])
       then pkgs.deviceTree.applyOverlays filteredDTBs (withDTBOs cfg.overlays)
       else filteredDTBs;
+
+    boot.bootspec.extensions."org.nixos.deviceTree" = mkIf (cfg.name != null) {
+      file = "${cfg.package}/${cfg.name}";
+    };
   };
 }
