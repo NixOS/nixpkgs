@@ -269,6 +269,7 @@ let
           license     = licenses.ruby;
           maintainers = with maintainers; [ manveru ];
           platforms   = platforms.all;
+          mainProgram = "ruby";
           knownVulnerabilities = op (lib.versionOlder ver.majMin "3.0") "This Ruby release has reached its end of life. See https://www.ruby-lang.org/en/downloads/branches/.";
         };
 
