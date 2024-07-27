@@ -14520,6 +14520,8 @@ self: super: with self; {
 
   sopel = callPackage ../development/python-modules/sopel { };
 
+  sopel-help = callPackage ../development/python-modules/sopel-help { };
+
   sorl-thumbnail = callPackage ../development/python-modules/sorl-thumbnail { };
 
   sortedcollections = callPackage ../development/python-modules/sortedcollections { };
