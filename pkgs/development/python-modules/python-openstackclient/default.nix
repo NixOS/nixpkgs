@@ -14,11 +14,13 @@
   python-keystoneclient,
   python-manilaclient,
   python-novaclient,
+  python-openstackclient,
   requests-mock,
   setuptools,
   sphinxHook,
   sphinxcontrib-apidoc,
   stestr,
+  testers,
 }:
 
 buildPythonPackage rec {
@@ -62,15 +64,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openstackclient" ];
 
-  passthru.optional-dependencies = {
-    # See https://github.com/openstack/python-openstackclient/blob/master/doc/source/contributor/plugins.rst
-    cli-plugins = [
-      python-barbicanclient
-      python-designateclient
-      python-heatclient
-      python-ironicclient
-      python-manilaclient
-    ];
+  passthru = {
+    optional-dependencies = {
+      # See https://github.com/openstack/python-openstackclient/blob/master/doc/source/contributor/plugins.rst
+      cli-plugins = [
+        python-barbicanclient
+        python-designateclient
+        python-heatclient
+        python-ironicclient
+        python-manilaclient
+      ];
+    };
+    tests.version = testers.testVersion {
+      package = python-openstackclient;
+      command = "openstack --version";
+    };
   };
 
   meta = with lib; {
