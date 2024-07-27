@@ -20,6 +20,7 @@
 , enableStatic ? !enableShared
 , gnome
 , testers
+, enableHttp ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -87,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature icuSupport "icu")
     (lib.withFeature pythonSupport "python")
     (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
-  ];
+  ] ++ lib.optional enableHttp "--with-http";
 
   installFlags = lib.optionals pythonSupport [
     "pythondir=\"${placeholder "py"}/${python.sitePackages}\""
