@@ -12,6 +12,8 @@ in
     services.nar-serve = {
       enable = mkEnableOption "serving NAR file contents via HTTP";
 
+      package = mkPackageOption pkgs "nar-serve" { };
+
       port = mkOption {
         type = types.port;
         default = 8383;
@@ -47,7 +49,7 @@ in
       serviceConfig = {
         Restart = "always";
         RestartSec = "5s";
-        ExecStart = "${pkgs.nar-serve}/bin/nar-serve";
+        ExecStart = lib.getExe cfg.package;
         DynamicUser = true;
       };
     };
