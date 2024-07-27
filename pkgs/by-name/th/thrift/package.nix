@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, zlib
-, libevent
-, openssl
-, python3
-, cmake
-, pkg-config
-, bison
-, pkgsBuildHost
-, flex
-, glibcLocales
-, nix-update-script
-, testers
-, static ? stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  zlib,
+  libevent,
+  openssl,
+  python3,
+  cmake,
+  pkg-config,
+  bison,
+  pkgsBuildHost,
+  flex,
+  glibcLocales,
+  nix-update-script,
+  testers,
+  static ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Workaround to make the Python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
-  pythonPath = [];
+  pythonPath = [ ];
 
   nativeBuildInputs = [
     bison
@@ -46,9 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]))
   ];
 
-  buildInputs = [
-    boost
-  ];
+  buildInputs = [ boost ];
 
   propagatedBuildInputs = [
     libevent
@@ -75,46 +74,49 @@ stdenv.mkDerivation (finalAttrs: {
     export PY_PREFIX=$out
   '';
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_JAVASCRIPT" false)
-    (lib.cmakeBool "BUILD_NODEJS" false)
-    (lib.cmakeBool "WITH_STATIC_LIB" static)
-    (lib.cmakeBool "Boost_USE_STATIC_LIBS" static)
-    (lib.cmakeBool "OPENSSL_USE_STATIC_LIBS" static)
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    "-DTHRIFT_COMPILER=${pkgsBuildHost.thrift}/bin/thrift"
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_JAVASCRIPT" false)
+      (lib.cmakeBool "BUILD_NODEJS" false)
+      (lib.cmakeBool "WITH_STATIC_LIB" static)
+      (lib.cmakeBool "Boost_USE_STATIC_LIBS" static)
+      (lib.cmakeBool "OPENSSL_USE_STATIC_LIBS" static)
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      "-DTHRIFT_COMPILER=${pkgsBuildHost.thrift}/bin/thrift"
+    ];
 
-  nativeCheckInputs = [
-    glibcLocales
-  ];
+  nativeCheckInputs = [ glibcLocales ];
 
   checkPhase =
     let
-      disabledTests = [
-        "PythonTestSSLSocket"
-        "PythonThriftTNonblockingServer"
-        "python_test"
-      ] ++ lib.optionals stdenv.isDarwin [
-        # Tests that hang up in the Darwin sandbox
-        "SecurityTest"
-        "SecurityFromBufferTest"
+      disabledTests =
+        [
+          "PythonTestSSLSocket"
+          "PythonThriftTNonblockingServer"
+          "python_test"
+        ]
+        ++ lib.optionals stdenv.isDarwin [
+          # Tests that hang up in the Darwin sandbox
+          "SecurityTest"
+          "SecurityFromBufferTest"
 
-        # fails on hydra, passes locally
-        "concurrency_test"
+          # fails on hydra, passes locally
+          "concurrency_test"
 
-        # Tests that fail in the Darwin sandbox when trying to use network
-        "UnitTests"
-        "TInterruptTest"
-        "TServerIntegrationTest"
-        "processor"
-        "TNonblockingServerTest"
-        "TNonblockingSSLServerTest"
-        "StressTest"
-        "StressTestConcurrent"
-        "StressTestNonBlocking"
-      ];
-    in ''
+          # Tests that fail in the Darwin sandbox when trying to use network
+          "UnitTests"
+          "TInterruptTest"
+          "TServerIntegrationTest"
+          "processor"
+          "TNonblockingServerTest"
+          "TNonblockingSSLServerTest"
+          "StressTest"
+          "StressTestConcurrent"
+          "StressTestNonBlocking"
+        ];
+    in
+    ''
       runHook preCheck
 
       export LD_LIBRARY_PATH=$PWD/lib
@@ -141,6 +143,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/apache/thrift/blob/v${finalAttrs.version}/CHANGES.md";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor anthonyroussel ];
+    maintainers = with maintainers; [
+      bjornfor
+      anthonyroussel
+    ];
   };
 })
