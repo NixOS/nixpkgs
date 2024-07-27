@@ -47,11 +47,7 @@ in with pkgs; rec {
     inherit bootBinutils coreutilsMinimal tarMinimal busyboxMinimal bootGCC libc patchelf;
   };
 
-  bootstrapFiles = {
-    # Make them their own store paths to test that busybox still works when the binary is named /nix/store/HASH-busybox
-    busybox = runCommand "busybox" {} "cp ${build}/on-server/busybox $out";
-    bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
-  };
+  inherit (build) bootstrapFiles;
 
   bootstrapTools =
     let extraAttrs = lib.optionalAttrs

@@ -23,6 +23,7 @@
   mpfr,
   patch,
   patchelf,
+  runCommand,
   tarMinimal,
   zlib,
 }:
@@ -30,7 +31,7 @@ let
   # ${libc.src}/sysdeps/unix/sysv/linux/loongarch/lp64/libnsl.abilist does not exist!
   withLibnsl = !stdenv.hostPlatform.isLoongArch64;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   name = "stdenv-bootstrap-tools";
 
   meta = {
@@ -208,4 +209,14 @@ stdenv.mkDerivation {
   # that we can safely copy them out of the store and to other
   # locations in the store.
   allowedReferences = [ ];
-}
+
+  passthru = {
+    bootstrapFiles = {
+      # Make them their own store paths to test that busybox still works when the binary is named /nix/store/HASH-busybox
+      busybox = runCommand "busybox" { } "cp ${finalAttrs.finalPackage}/on-server/busybox $out";
+      bootstrapTools =
+        runCommand "bootstrap-tools.tar.xz" { }
+          "cp ${finalAttrs.finalPackage}/on-server/bootstrap-tools.tar.xz $out";
+    };
+  };
+})
