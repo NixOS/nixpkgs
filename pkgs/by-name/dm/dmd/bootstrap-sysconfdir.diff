@@ -1,0 +1,13 @@
+--- a/dmd/src/inifile.c
++++ b/dmd/src/inifile.c
+@@ -106,9 +106,7 @@ const char *findConfFile(const char *argv0, const char *inifile)
+     }
+ 
+     // Search /etc/ for inifile
+-#ifndef SYSCONFDIR
+-# error SYSCONFDIR not defined
+-#endif
++#define SYSCONFDIR "@out@/etc/"
+     assert(SYSCONFDIR != NULL && strlen(SYSCONFDIR));
+     filename = FileName::combine(SYSCONFDIR, inifile);
+ #endif // __linux__ || __APPLE__ || __FreeBSD__ || __OpenBSD__ || __sun

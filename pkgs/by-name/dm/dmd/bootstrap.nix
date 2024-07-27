@@ -1,9 +1,7 @@
-{ callPackage }:
-callPackage ./binary.nix {
-  version = "2.090.1";
-  hashes = {
-    # Get these from `nix-prefetch-url http://downloads.dlang.org/releases/2.x/2.090.1/dmd.2.090.1.linux.tar.xz` etc..
-    osx = "sha256-9HwGVO/8jfZ6aTiDIUi8w4C4Ukry0uUS8ACP3Ig8dmU=";
-    linux = "sha256-ByCrIA4Nt7i9YT0L19VXIL1IqIp+iObcZux407amZu4=";
-  };
+import ./generic.nix {
+  version = "2.076.1";
+  dmdRevision = "54c21a585da7ee7a6af24963a7e0973ea5b4d99b";
+  dmdHash = "sha256-APagC4FykwYZMTpC7gMy9bz5K4BRkcBRz1g2GsKohB8=";
+  phobosHash = "sha256-sSxhATBYlJ0mSrDZzmM6UZU6t7SWTtNECFsvY3ds0Gw=";
+  bootstrap = true;
 }
