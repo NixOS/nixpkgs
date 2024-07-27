@@ -79,4 +79,16 @@
     rev = "v3.0.14";
     sha256 = "sha256-bd0Lx75Gd1pcBJtwz5WGki7XoYSpqhinCT3a77wpY2c=";
   };
+
+  commit-verification = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "commit-verification-source";
+    url = "https://codeberg.org/flandweber/git-verify";
+    rev = "a43858e8f106b313aed68b6455a45340db7dd758";
+    sha256 = "sha256-tryIB8KlETlbHyTfW+IpsAgu2BQCcoeuHJpvzyFFsMg=";
+    verifyCommit = true;
+    publicKeys = [{
+        type="ssh-ed25519";
+        key="AAAAC3NzaC1lZDI1NTE5AAAAIBiNDWMPZNRItkm1U1CQkJUUrrmM+l7CdE6wyUHzr4Nr";
+      }];
+  };
 }
