@@ -2,8 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  openstackdocstheme,
   pbr,
   six,
+  sphinxHook,
   wrapt,
   callPackage,
 }:
@@ -18,7 +20,13 @@ buildPythonPackage rec {
     hash = "sha256-KokX0lsOHx0NNl08HG7Px6UiselxbooaSpFRJvfM6m8=";
   };
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [
+    openstackdocstheme
+    pbr
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
 
   propagatedBuildInputs = [
     six
