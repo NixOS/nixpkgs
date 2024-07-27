@@ -1,16 +1,14 @@
 {
   lib,
-  callPackage,
   f,
   markdown-mode,
   melpaBuild,
   nix-update-script,
   yasnippet,
+  # put lspce-module here so that users can override it
+  lspce-module,
 }:
 
-let
-  lspce-module = callPackage ./module.nix { };
-in
 melpaBuild {
   pname = "lspce";
   inherit (lspce-module) version src meta;

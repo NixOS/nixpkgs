@@ -61,7 +61,9 @@ in
     inherit (pkgs) basedpyright git go gopls python3;
   };
 
-  lspce = callPackage ./manual-packages/lspce { };
+  lspce = callPackage ./manual-packages/lspce {
+    lspce-module = callPackage ./manual-packages/lspce/module.nix { };
+  };
 
   matrix-client = callPackage ./manual-packages/matrix-client {
     _map = self.map;
