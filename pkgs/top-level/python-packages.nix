@@ -9117,8 +9117,6 @@ self: super: with self; {
 
   nose-timer = callPackage ../development/python-modules/nose-timer { };
 
-  nose-warnings-filters = callPackage ../development/python-modules/nose-warnings-filters { };
-
   nose-xunitmp = callPackage ../development/python-modules/nose-xunitmp { };
 
   notebook = callPackage ../development/python-modules/notebook { };
