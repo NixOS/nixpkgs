@@ -253,6 +253,7 @@
   ./programs/noisetorch.nix
   ./programs/npm.nix
   ./programs/ns-usbloader.nix
+  ./programs/nushell.nix
   ./programs/oblogout.nix
   ./programs/oddjobd.nix
   ./programs/openvpn3.nix
