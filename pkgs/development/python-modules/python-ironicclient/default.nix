@@ -16,6 +16,7 @@
   pyyaml,
   requests,
   requests-mock,
+  setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
   stestr,
@@ -25,22 +26,23 @@
 buildPythonPackage rec {
   pname = "python-ironicclient";
   version = "5.7.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-Blx0pr73uZA8eHd2iZ9WY+aozBFWsQhWpxoQKtjtJSk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     openstackdocstheme
+    setuptools
     sphinxcontrib-apidoc
     sphinxHook
   ];
 
   sphinxBuilders = [ "man" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cliff
     dogpile-cache
     jsonschema
@@ -62,7 +64,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
     stestr run
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "ironicclient" ];
