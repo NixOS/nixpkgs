@@ -8528,8 +8528,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter";
-      rev = "1899c8c8ec98dee5c61da4c98b3e989c8ef840d1";
-      sha256 = "14mxpn1i4d4b8q44dy6xg2lfkm63cjn703ya608lyvwvv7090m8d";
+      rev = "2b4881286ad73c9ece7e5e4da130b2e4726c09fc";
+      sha256 = "0phg5vmgaiig8y15gnlklvrsfafrldsa3g84ahd0927a4yb52rw0";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
   };
