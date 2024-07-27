@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  installShellFiles,
   pbr,
   openstackdocstheme,
   oslo-config,
@@ -12,7 +11,7 @@
   prettytable,
   requests,
   simplejson,
-  sphinx,
+  sphinxHook,
   sphinxcontrib-programoutput,
   babel,
   osc-lib,
@@ -32,11 +31,12 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    installShellFiles
     openstackdocstheme
-    sphinx
+    sphinxHook
     sphinxcontrib-programoutput
   ];
+
+  sphinxBuilders = [ "man" ];
 
   propagatedBuildInputs = [
     pbr
@@ -52,12 +52,6 @@ buildPythonPackage rec {
     python-keystoneclient
     debtcollector
   ];
-
-  postInstall = ''
-    export PATH=$out/bin:$PATH
-    sphinx-build -a -E -d doc/build/doctrees -b man doc/source doc/build/man
-    installManPage doc/build/man/python-manilaclient.1
-  '';
 
   # Checks moved to 'passthru.tests' to workaround infinite recursion
   doCheck = false;
