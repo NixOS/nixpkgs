@@ -181,7 +181,7 @@ in {
           "nixpkgs=${cfg.channel}/nixexprs.tar.xz"
         ]
       else
-        [ "--flake ${cfg.flake}" ]);
+        [ "--flake" "${cfg.flake}" ]);
 
     systemd.services.nixos-upgrade = {
       description = "NixOS Upgrade";
@@ -213,7 +213,7 @@ in {
         shutdown = "${config.systemd.package}/bin/shutdown";
         upgradeFlag = optional (cfg.channel == null) "--upgrade";
       in if cfg.allowReboot then ''
-        ${nixos-rebuild} boot ${toString (cfg.flags ++ upgradeFlag)}
+        ${nixos-rebuild} boot ${escapeShellArgs (cfg.flags ++ upgradeFlag)}
         booted="$(${readlink} /run/booted-system/{initrd,kernel,kernel-modules})"
         built="$(${readlink} /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
 
@@ -243,7 +243,7 @@ in {
         ''}
 
         if [ "''${booted}" = "''${built}" ]; then
-          ${nixos-rebuild} ${cfg.operation} ${toString cfg.flags}
+          ${nixos-rebuild} ${cfg.operation} ${escapeShellArgs cfg.flags}
         ${optionalString (cfg.rebootWindow != null) ''
           elif [ "''${do_reboot}" != true ]; then
             echo "Outside of configured reboot window, skipping."
@@ -252,7 +252,7 @@ in {
           ${shutdown} -r +1
         fi
       '' else ''
-        ${nixos-rebuild} ${cfg.operation} ${toString (cfg.flags ++ upgradeFlag)}
+        ${nixos-rebuild} ${cfg.operation} ${escapeShellArgs (cfg.flags ++ upgradeFlag)}
       '';
 
       startAt = cfg.dates;
