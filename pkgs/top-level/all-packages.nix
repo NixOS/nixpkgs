@@ -23563,6 +23563,7 @@ with pkgs;
   protozero = callPackage ../development/libraries/protozero { };
 
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
+  flatbuffers_23 = callPackage ../development/libraries/flatbuffers/23.nix { };
 
   nanopbMalloc = callPackage ../by-name/na/nanopb/package.nix { enableMalloc = true; };
 
