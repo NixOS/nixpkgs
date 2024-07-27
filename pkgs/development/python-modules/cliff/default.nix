@@ -5,7 +5,6 @@
   autopage,
   cmd2,
   importlib-metadata,
-  installShellFiles,
   openstackdocstheme,
   pbr,
   prettytable,
@@ -13,7 +12,7 @@
   pyyaml,
   setuptools,
   stevedore,
-  sphinx,
+  sphinxHook,
   callPackage,
 }:
 
@@ -34,11 +33,12 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    installShellFiles
     openstackdocstheme
     setuptools
-    sphinx
+    sphinxHook
   ];
+
+  sphinxBuilders = [ "man" ];
 
   dependencies = [
     autopage
@@ -50,11 +50,6 @@ buildPythonPackage rec {
     pyyaml
     stevedore
   ];
-
-  postInstall = ''
-    sphinx-build -a -E -d doc/build/doctrees -b man doc/source doc/build/man
-    installManPage doc/build/man/cliff.1
-  '';
 
   # check in passthru.tests.pytest to escape infinite recursion with stestr
   doCheck = false;
