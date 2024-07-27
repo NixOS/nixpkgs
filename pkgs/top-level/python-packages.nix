@@ -9807,6 +9807,8 @@ self: super: with self; {
   paho-mqtt_2 = callPackage ../development/python-modules/paho-mqtt/default.nix { };
   paho-mqtt = paho-mqtt_1;
 
+  paintcompiler = callPackage ../development/python-modules/paintcompiler { };
+
   palace = callPackage ../development/python-modules/palace { };
 
   palettable = callPackage ../development/python-modules/palettable { };
