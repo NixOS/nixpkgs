@@ -62,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://discordpy.rtfd.org/";
     changelog = "https://github.com/Rapptz/discord.py/blob/v${version}/docs/whats_new.rst";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ getpsyched ];
   };
 }
