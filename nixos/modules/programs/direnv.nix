@@ -62,14 +62,6 @@ in
     };
   };
 
-  imports = [
-    (lib.mkRemovedOptionModule [
-      "programs"
-      "direnv"
-      "persistDerivations"
-    ] "persistDerivations was removed as it is no longer necessary")
-  ];
-
   config = lib.mkIf cfg.enable {
 
     programs = {
