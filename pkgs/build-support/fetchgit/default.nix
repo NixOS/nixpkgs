@@ -1,4 +1,4 @@
-{lib, stdenvNoCC, git, git-lfs, cacert}: let
+{lib, stdenvNoCC, git, git-lfs, cacert, runCommand, writeText, openssh}: let
   urlToName = url: rev: let
     inherit (lib) removeSuffix splitString last;
     base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
@@ -30,6 +30,8 @@ lib.makeOverridable (lib.fetchers.withNormalizedHash { } (
   netrcImpureEnvVars ? []
 , meta ? {}
 , allowedRequisites ? null
+, publicKeys ? []
+, verifyCommit ? false
 }:
 
 /* NOTE:
@@ -60,8 +62,8 @@ assert nonConeMode -> (sparseCheckout != []);
 if builtins.isString sparseCheckout then
   # Changed to throw on 2023-06-04
   throw "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
-else
-stdenvNoCC.mkDerivation {
+else let
+fetchresult = stdenvNoCC.mkDerivation {
   inherit name;
   builder = ./builder.sh;
   fetcher = ./nix-prefetch-git;
@@ -77,7 +79,9 @@ stdenvNoCC.mkDerivation {
   # > from standard in as a newline-delimited list instead of from the arguments.
   sparseCheckout = builtins.concatStringsSep "\n" sparseCheckout;
 
-  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName nonConeMode postFetch;
+  inherit url rev fetchLFS fetchSubmodules deepClone branchName nonConeMode postFetch;
+
+  leaveDotGit = leaveDotGit || verifyCommit;
 
   postHook = if netrcPhase == null then null else ''
     ${netrcPhase}
@@ -97,5 +101,20 @@ stdenvNoCC.mkDerivation {
   passthru = {
     gitRepoUrl = url;
   };
-}
+};
+allowedSignersFile = writeText "allowed signers" (lib.concatMapStrings (k: "* ${k.type} ${k.key}\n") publicKeys);
+in
+if verifyCommit then
+runCommand name {
+  buildInputs = [git openssh];
+  inherit leaveDotGit;
+    } ''
+  git -c gpg.ssh.allowedSignersFile="${allowedSignersFile}" -c safe.directory='*' -C "${fetchresult}" verify-commit ${rev}
+  cp -r --no-preserve=all "${fetchresult}" $out
+  if test "$leaveDotGit" != 1; then
+      rm -rf "$out"/.git
+  fi
+''
+else
+fetchresult
 ))
