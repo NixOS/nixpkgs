@@ -2,28 +2,36 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pytz,
-  requests,
-  six,
+  setuptools,
+  packaging,
   tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "plotly";
   version = "5.23.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-ieV9ADoRYwOjTeZwCGI5E2fdVkIiq3H4Ux33Ann8AZM=";
   };
 
-  propagatedBuildInputs = [
-    pytz
-    requests
-    six
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "\"jupyterlab~=3.0;python_version>='3.6'\"," ""
+  '';
+
+  env.SKIP_NPM = true;
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    packaging
     tenacity
   ];
+
+  pythonImportsCheck = [ "plotly" ];
 
   # No tests in archive
   doCheck = false;
