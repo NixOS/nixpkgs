@@ -5,6 +5,7 @@
   fetchFromGitea,
   jsonschema,
   keystoneauth1,
+  openstackdocstheme,
   osc-lib,
   oslo-serialization,
   oslo-utils,
@@ -14,6 +15,8 @@
   requests-mock,
   requests,
   setuptools,
+  sphinxHook,
+  sphinxcontrib-apidoc,
   stestr,
 }:
 
@@ -35,9 +38,14 @@ buildPythonPackage rec {
   env.PBR_VERSION = version;
 
   build-system = [
+    openstackdocstheme
     pbr
     setuptools
+    sphinxHook
+    sphinxcontrib-apidoc
   ];
+
+  sphinxBuilders = [ "man" ];
 
   dependencies = [
     debtcollector
