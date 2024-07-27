@@ -5,6 +5,7 @@
   fetchPypi,
   iso8601,
   keystoneauth1,
+  openstackdocstheme,
   osc-lib,
   oslo-i18n,
   oslo-serialization,
@@ -16,6 +17,7 @@
   pyyaml,
   requests,
   requests-mock,
+  sphinxHook,
   stestr,
   testscenarios,
 }:
@@ -31,6 +33,13 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-B1F40HYHFF91mkxwySR/kqCvlwLLtBgqwUvw2byOc9g=";
   };
+
+  nativeBuildInputs = [
+    openstackdocstheme
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
 
   propagatedBuildInputs = [
     cliff
