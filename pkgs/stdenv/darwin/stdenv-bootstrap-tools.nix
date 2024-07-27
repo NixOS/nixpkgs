@@ -29,12 +29,13 @@
   openssl,
   patch,
   pbzx,
+  runCommand,
   writeText,
   xar,
   xz,
   zlib,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   name = "stdenv-bootstrap-tools";
 
   nativeBuildInputs = [
@@ -290,7 +291,16 @@ stdenv.mkDerivation {
 
   allowedReferences = [ ];
 
+  passthru = {
+    bootstrapFiles = {
+      bootstrapTools = "${finalAttrs.finalPackage}/on-server/bootstrap-tools.tar.xz";
+      unpack = runCommand "unpack" { allowedReferences = [ ]; } ''
+        cp -r ${finalAttrs.finalPackage}/unpack $out
+      '';
+    };
+  };
+
   meta = {
     maintainers = [ lib.maintainers.copumpkin ];
   };
-}
+})

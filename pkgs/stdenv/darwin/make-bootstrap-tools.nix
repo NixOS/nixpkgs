@@ -25,12 +25,7 @@ in
 
 rec {
   build = pkgs.callPackage ./stdenv-bootstrap-tools.nix { };
-  bootstrapFiles = {
-    bootstrapTools = "${build}/on-server/bootstrap-tools.tar.xz";
-    unpack = pkgs.runCommand "unpack" { allowedReferences = []; } ''
-      cp -r ${build}/unpack $out
-    '';
-  };
+  inherit (build) bootstrapFiles;
 
   bootstrapTools = pkgs.callPackage ./bootstrap-tools.nix {
     inherit (bootstrapFiles) bootstrapTools unpack;
