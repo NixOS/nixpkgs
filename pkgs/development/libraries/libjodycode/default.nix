@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libjodycode";
-  version = "3.1";
+  version = "3.1.1";
 
   outputs = [ "out" "man" "dev" ];
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "jbruchon";
     repo = "libjodycode";
     rev = "v${version}";
-    hash = "sha256-uhWQh5YwLwYRm34nY5HvcEepqlTSDt9s3PSoD403kQM=";
+    hash = "sha256-sVEa2gNvgRJK1Ycmv4inbViTBPQFjzcZ8XHlAdsNzOk=";
   };
 
   env.PREFIX = placeholder "out";
