@@ -151,22 +151,22 @@ makeCmakeFindLibs(){
   for flag in ${NIX_CFLAGS_COMPILE-} ${NIX_LDFLAGS-}; do
     if test -n "$isystem_seen" && test -d "$flag"; then
       isystem_seen=
-      export CMAKE_INCLUDE_PATH="${CMAKE_INCLUDE_PATH-}${CMAKE_INCLUDE_PATH:+:}${flag}"
+      addToSearchPath CMAKE_INCLUDE_PATH "${flag}"
     elif test -n "$iframework_seen" && test -d "$flag"; then
       iframework_seen=
-      export CMAKE_FRAMEWORK_PATH="${CMAKE_FRAMEWORK_PATH-}${CMAKE_FRAMEWORK_PATH:+:}${flag}"
+      addToSearchPath CMAKE_FRAMEWORK_PATH "${flag}"
     else
       isystem_seen=
       iframework_seen=
       case $flag in
         -I*)
-          export CMAKE_INCLUDE_PATH="${CMAKE_INCLUDE_PATH-}${CMAKE_INCLUDE_PATH:+:}${flag:2}"
+          addToSearchPath CMAKE_INCLUDE_PATH "${flag:2}"
           ;;
         -L*)
-          export CMAKE_LIBRARY_PATH="${CMAKE_LIBRARY_PATH-}${CMAKE_LIBRARY_PATH:+:}${flag:2}"
+          addToSearchPath CMAKE_LIBRARY_PATH "${flag:2}"
           ;;
         -F*)
-          export CMAKE_FRAMEWORK_PATH="${CMAKE_FRAMEWORK_PATH-}${CMAKE_FRAMEWORK_PATH:+:}${flag:2}"
+          addToSearchPath CMAKE_FRAMEWORK_PATH "${flag:2}"
           ;;
         -isystem)
           isystem_seen=1
