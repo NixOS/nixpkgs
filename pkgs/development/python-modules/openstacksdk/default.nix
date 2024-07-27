@@ -11,12 +11,14 @@
   keystoneauth1,
   munch,
   netifaces,
+  openstackdocstheme,
   os-service-types,
   pbr,
   pythonOlder,
   pyyaml,
   requestsexceptions,
   setuptools,
+  sphinxHook,
 }:
 
 buildPythonPackage rec {
@@ -26,12 +28,29 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-BghpDKN8pzMnsPo3YdF+ZTlb43/yALhzXY8kJ3tPSYA=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    # Disable rsvgconverter not needed to build manpage
+    substituteInPlace doc/source/conf.py \
+      --replace-fail "'sphinxcontrib.rsvgconverter'," "#'sphinxcontrib.rsvgconverter',"
+  '';
+
+  build-system = [
+    openstackdocstheme
+    setuptools
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
 
   dependencies = [
     platformdirs
