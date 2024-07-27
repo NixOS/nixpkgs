@@ -49,6 +49,8 @@ buildPythonPackage rec {
     pyre-extensions
   ];
 
+  env.ALLOW_BOTORCH_LATEST = "1";
+
   checkInputs = [
     hypothesis
     mercurial

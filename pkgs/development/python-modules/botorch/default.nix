@@ -26,13 +26,13 @@ buildPythonPackage rec {
     hash = "sha256-YX/G46U09y/VZuWZhKY8zU0Y+bf0NKumzSGYUWvrq/0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependenciess = [
     gpytorch
     linear-operator
     multipledispatch
@@ -41,9 +41,13 @@ buildPythonPackage rec {
     torch
   ];
 
-  pythonRelaxDeps = [ "linear-operator" ];
+  pythonRelaxDeps = [
+    "gpytorch"
+    "linear-operator"
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "botorch" ];
 
   meta = with lib; {

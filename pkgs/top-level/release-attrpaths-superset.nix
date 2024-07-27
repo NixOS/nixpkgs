@@ -75,11 +75,6 @@ let
     newScope = true;
     scope = true;
     pkgs = true;
-    test-pkgs = true;
-
-    buildPackages = true;
-    buildFreebsd = true;
-
     callPackage = true;
     mkDerivation = true;
     overrideDerivation = true;

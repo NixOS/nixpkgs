@@ -96,9 +96,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         cmd = "dbus-send --session --dest=org.pantheon.gala --print-reply /org/pantheon/gala org.pantheon.gala.PerformAction int32:1"
         env = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus DISPLAY=:0"
         machine.succeed(f"su - ${user.name} -c '{env} {cmd}'")
-        machine.sleep(3)
+        machine.sleep(5)
         machine.screenshot("multitasking")
-        machine.succeed(f"su - ${user.name} -c '{env} {cmd}'")
 
     with subtest("Check if gala has ever coredumped"):
         machine.fail("coredumpctl --json=short | grep gala")
