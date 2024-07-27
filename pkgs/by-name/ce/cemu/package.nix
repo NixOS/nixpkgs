@@ -73,6 +73,7 @@ in stdenv.mkDerivation (finalAttrs: {
     nasm
     ninja
     pkg-config
+    wxGTK32
   ];
 
   buildInputs = [

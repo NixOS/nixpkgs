@@ -76,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     dpkg # for setting LOMIRI_APP_LAUNCH_ARCH
     gobject-introspection
+    lttng-ust
     pkg-config
     validatePkgConfig
   ] ++ lib.optionals withDocumentation [
