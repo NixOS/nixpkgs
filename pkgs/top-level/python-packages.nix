@@ -14056,8 +14056,6 @@ self: super: with self; {
     inherit (pkgs) cmake ninja;
   };
 
-  selectors2 = callPackage ../development/python-modules/selectors2 { };
-
   selenium = callPackage ../development/python-modules/selenium { };
 
   selenium-wire = callPackage ../development/python-modules/selenium-wire { };
