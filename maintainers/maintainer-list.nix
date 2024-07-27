@@ -822,6 +822,12 @@
     githubId = 20405311;
     name = "Aksh Gupta";
   };
+  akssri = {
+    email = "akssri@vakra.xyz";
+    github = "akssri";
+    githubId = 108771991;
+    name = "Akṣaya Śrīnivāsan";
+  };
   aktaboot = {
     email = "akhtaboo@protonmail.com";
     github = "aktaboot";
