@@ -12553,6 +12553,8 @@ with pkgs;
 
   sdl-jstest = callPackage ../tools/misc/sdl-jstest { };
 
+  secretive = callPackage ../os-specific/darwin/secretive { };
+
   senpai = callPackage ../applications/networking/irc/senpai { };
 
   skim = callPackage ../tools/misc/skim { };
