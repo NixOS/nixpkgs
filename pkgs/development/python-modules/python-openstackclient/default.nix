@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   ddt,
-  installShellFiles,
   openstackdocstheme,
   osc-lib,
   pbr,
@@ -11,7 +10,7 @@
   python-keystoneclient,
   python-novaclient,
   requests-mock,
-  sphinx,
+  sphinxHook,
   sphinxcontrib-apidoc,
   stestr,
 }:
@@ -27,11 +26,12 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    installShellFiles
     openstackdocstheme
-    sphinx
+    sphinxHook
     sphinxcontrib-apidoc
   ];
+
+  sphinxBuilders = [ "man" ];
 
   propagatedBuildInputs = [
     osc-lib
@@ -40,11 +40,6 @@ buildPythonPackage rec {
     python-keystoneclient
     python-novaclient
   ];
-
-  postInstall = ''
-    sphinx-build -a -E -d doc/build/doctrees -b man doc/source doc/build/man
-    installManPage doc/build/man/openstack.1
-  '';
 
   nativeCheckInputs = [
     ddt
