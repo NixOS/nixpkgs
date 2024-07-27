@@ -291,23 +291,8 @@ rec {
     '';
   };
 
-  bootstrapTools = derivation {
-    inherit (stdenv.hostPlatform) system;
-
-    name = "bootstrap-tools";
-    builder = "${bootstrapFiles.unpack}/bin/bash";
-
-    args = [
-      "${bootstrapFiles.unpack}/bootstrap-tools-unpack.sh"
-        bootstrapFiles.bootstrapTools
-    ];
-
-    PATH = lib.makeBinPath [
-      (placeholder "out")
-      bootstrapFiles.unpack
-    ];
-
-    allowedReferences = [ "out" ];
+  bootstrapTools = pkgs.callPackage ./bootstrap-tools.nix {
+    inherit (bootstrapFiles) bootstrapTools unpack;
   };
 
   test = derivation {
