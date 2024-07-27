@@ -16,9 +16,8 @@ in
 {
   options.services.speechd = {
     # FIXME: figure out how to deprecate this EXTREMELY CAREFULLY
-    enable = mkEnableOption "speech-dispatcher speech synthesizer daemon" // {
-      default = true;
-    };
+    # default guessed conservatively in ../misc/graphical-desktop.nix
+    enable = mkEnableOption "speech-dispatcher speech synthesizer daemon";
     package = mkPackageOption pkgs "speechd" { };
   };
 
