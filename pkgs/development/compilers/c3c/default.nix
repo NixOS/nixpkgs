@@ -1,13 +1,14 @@
-{ llvmPackages
-, lib
-, fetchFromGitHub
-, cmake
-, python3
-, curl
-, libxml2
-, libffi
-, xar
-, testers
+{
+  llvmPackages,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  curl,
+  libxml2,
+  libffi,
+  xar,
+  testers,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
@@ -26,9 +27,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       --replace-fail "\''${LLVM_LIBRARY_DIRS}" "${llvmPackages.lld.lib}/lib ${llvmPackages.llvm.lib}/lib"
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     llvmPackages.llvm
@@ -36,9 +35,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     curl
     libxml2
     libffi
-  ] ++ lib.optionals llvmPackages.stdenv.isDarwin [
-    xar
-  ];
+  ] ++ lib.optionals llvmPackages.stdenv.isDarwin [ xar ];
 
   nativeCheckInputs = [ python3 ];
 
@@ -52,16 +49,17 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {
     description = "Compiler for the C3 language";
     homepage = "https://github.com/c3lang/c3c";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ luc65r anas ];
+    maintainers = with maintainers; [
+      luc65r
+      anas
+    ];
     platforms = platforms.all;
     mainProgram = "c3c";
   };
