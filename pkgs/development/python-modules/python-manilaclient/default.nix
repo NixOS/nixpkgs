@@ -11,6 +11,7 @@
   prettytable,
   requests,
   simplejson,
+  setuptools,
   sphinxHook,
   sphinxcontrib-programoutput,
   babel,
@@ -23,22 +24,23 @@
 buildPythonPackage rec {
   pname = "python-manilaclient";
   version = "4.9.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-TebykdG0fkeC+5Vs9eiwuJpXam41gg8gR4F2poYKDhI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     openstackdocstheme
+    setuptools
     sphinxHook
     sphinxcontrib-programoutput
   ];
 
   sphinxBuilders = [ "man" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pbr
     oslo-config
     oslo-log
