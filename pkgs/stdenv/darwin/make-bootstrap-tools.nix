@@ -27,14 +27,11 @@ let
       { };
 
   pkgs = import pkgspath ({ inherit localSystem; } // cross // custom-bootstrap);
-in
 
-rec {
   build = pkgs.callPackage ./stdenv-bootstrap-tools.nix { };
-  inherit (build) bootstrapFiles;
 
   bootstrapTools = pkgs.callPackage ./bootstrap-tools.nix {
-    inherit (bootstrapFiles) bootstrapTools unpack;
+    inherit (build.bootstrapFiles) bootstrapTools unpack;
   };
 
   test = pkgs.callPackage ./test-bootstrap-tools.nix { inherit bootstrapTools; };
@@ -50,9 +47,19 @@ rec {
       args:
       let
         args' = args // {
-          inherit bootstrapFiles;
+          inherit (build) bootstrapFiles;
         };
       in
       (import (test-pkgspath + "/pkgs/stdenv/darwin") args');
   };
+in
+{
+  inherit
+    build
+    bootstrapTools
+    test
+    test-pkgs
+    ;
+
+  inherit (build) bootstrapFiles;
 }
