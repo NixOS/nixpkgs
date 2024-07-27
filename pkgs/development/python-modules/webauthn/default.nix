@@ -2,8 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   asn1crypto,
   cbor2,
+  cryptography,
   pythonOlder,
   pyopenssl,
   pytestCheckHook,
@@ -12,7 +14,7 @@
 buildPythonPackage rec {
   pname = "webauthn";
   version = "2.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,9 +25,12 @@ buildPythonPackage rec {
     hash = "sha256-NBCR5GwmXA6COP9NOYnoD3l1vuOpym/kyNawd8FstLc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     asn1crypto
     cbor2
+    cryptography
     pyopenssl
   ];
 
