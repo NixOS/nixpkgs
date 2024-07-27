@@ -618,6 +618,7 @@ mapAliases ({
   xapp = python-xapp; # added 2024-07-19
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   XlsxWriter = xlsxwriter; # added 2023-02-19
+  xsser = "xsser has been removed because it was unmaintained and relies on a archived project"; # added 2024-07-27
   Yapsy = yapsy; # added 2023-02-19
   yanc  = throw "yanc has been removed because it relies on nose"; # added 2024-07-27
   z3 = z3-solver; # added 2023-12-03
