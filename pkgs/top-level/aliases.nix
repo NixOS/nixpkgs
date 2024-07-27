@@ -533,7 +533,7 @@ mapAliases {
   go-upower-notify = upower-notify; # Added 2024-07-21
   gpicview = throw "'gpicview' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'loupe', 'gthumb' or 'image-roll' instead"; # Added 2024-09-15
   gprbuild-boot = gnatPackages.gprbuild-boot; # Added 2024-02-25;
-
+  gpsbabel-gui = gpsbabel; # added 2025-01-21
   gqview = throw "'gqview' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'gthumb' instead";
   graalvmCEPackages = graalvmPackages; # Added 2024-08-10
   graalvm-ce = graalvmPackages.graalvm-ce; # Added 2024-08-10

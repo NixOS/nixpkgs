@@ -13726,12 +13726,7 @@ with pkgs;
 
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
-  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
-
-  gpsbabel-gui = gpsbabel.override {
-    withGUI = true;
-    withDoc = true;
-  };
+  gpsbabel = qt6Packages.callPackage ../applications/misc/gpsbabel { };
 
   gpu-screen-recorder = callPackage ../applications/video/gpu-screen-recorder { };
 
