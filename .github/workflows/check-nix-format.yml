@@ -76,7 +76,7 @@ jobs:
             if [[ -n "$source" ]] && ! nixfmt --check ${{ env.base }}/"$source" 2>/dev/null; then
               echo "Ignoring file $file because it's not formatted in the base commit"
             elif ! nixfmt --check "$dest"; then
-              unformattedFiles+=("$file")
+              unformattedFiles+=("$dest")
             fi
           done < <(git diff -z --name-status ${{ env.baseRev }} -- '*.nix')
 
