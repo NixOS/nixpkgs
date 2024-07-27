@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   qtWrapperArgs = lib.optionals stdenv.isLinux [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap wayland ]}"
   ] ++ lib.optionals stdenv.isDarwin [
     "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
   ];
