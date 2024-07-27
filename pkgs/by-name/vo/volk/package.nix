@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, python3
-, enableModTool ? true
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  python3,
+  enableModTool ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,9 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "ENABLE_MODTOOL" enableModTool)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "ENABLE_MODTOOL" enableModTool) ];
 
   nativeBuildInputs = [
     cmake
