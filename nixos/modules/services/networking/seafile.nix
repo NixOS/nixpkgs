@@ -8,52 +8,50 @@ with lib;
 let
   cfg = config.services.seafile;
   settingsFormat = pkgs.formats.ini { };
+  filterNull = lib.attrsets.filterAttrsRecursive (k: v: v != null);
 
-  ccnetConf = settingsFormat.generate "ccnet.conf" (
-    cfg.ccnetSettings
-    // {
-      Database = {
-        ENGINE = "mysql";
-        UNIX_SOCKET = "/var/run/mysqld/mysqld.sock";
-        DB = "ccnet_db";
-        CONNECTION_CHARSET = "utf8";
-      };
-    }
-  );
+  ccnetConf = settingsFormat.generate "ccnet.conf" (filterNull cfg.ccnetSettings);
 
-  seafileConf = settingsFormat.generate "seafile.conf" (
-    cfg.seafileSettings
-    // {
-      database = {
-        type = "mysql";
-        unix_socket = "/var/run/mysqld/mysqld.sock";
-        db_name = "seafile_db";
-        connection_charset = "utf8";
-      };
-    }
-  );
+  seafileConf = settingsFormat.generate "seafile.conf" (filterNull cfg.seafileSettings);
 
-  seahubSettings = pkgs.writeText "seahub_settings.py" ''
-    FILE_SERVER_ROOT = '${cfg.ccnetSettings.General.SERVICE_URL}/seafhttp'
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME' : 'seahub_db',
-            'HOST' : '/var/run/mysqld/mysqld.sock',
-        }
-    }
-    MEDIA_ROOT = '${seahubDir}/media/'
-    THUMBNAIL_ROOT = '${seahubDir}/thumbnail/'
+  seahubDatabaseJson = builtins.toJSON (filterNull {
+    default = {
+      ENGINE = "django.db.backends.mysql";
+      NAME = cfg.database.seahubName;
+      HOST = lib.concatStrings (
+        builtins.filter (v: v != null) [
+          cfg.database.unixSocket
+          cfg.database.host
+        ]
+      );
+      PORT = cfg.database.port;
+      USER = cfg.database.user;
+      # password is read programatically below
+    };
+  });
 
-    SERVICE_URL = '${cfg.ccnetSettings.General.SERVICE_URL}'
+  seahubSettings =
+    pkgs.writeText "seahub_settings.py" ''
+      FILE_SERVER_ROOT = '${cfg.ccnetSettings.General.SERVICE_URL}/seafhttp'
+      DATABASES = ${seahubDatabaseJson}
+      MEDIA_ROOT = '${seahubDir}/media/'
+      THUMBNAIL_ROOT = '${seahubDir}/thumbnail/'
 
-    CSRF_TRUSTED_ORIGINS = ["${cfg.ccnetSettings.General.SERVICE_URL}"]
+      SERVICE_URL = '${cfg.ccnetSettings.General.SERVICE_URL}'
 
-    with open('${seafRoot}/.seahubSecret') as f:
-        SECRET_KEY = f.readline().rstrip()
+      CSRF_TRUSTED_ORIGINS = ["${cfg.ccnetSettings.General.SERVICE_URL}"]
 
-    ${cfg.seahubExtraConf}
-  '';
+      with open('${seafRoot}/.seahubSecret') as f:
+          SECRET_KEY = f.readline().rstrip()
+
+    ''
+    + (lib.optionalString (cfg.database.passwordFile != null) ''
+      import configparser
+      passwordConfig = configparser.ConfigParser()
+      passwordConfig.read('${cfg.database.passwordFile}')
+      DATABASES.default.password = passwordConfig['client']['password']
+    '')
+    + cfg.seahubExtraConf;
 
   seafRoot = "/var/lib/seafile";
   ccnetDir = "${seafRoot}/ccnet";
@@ -80,6 +78,48 @@ in
               description = ''
                 Seahub public URL.
               '';
+            };
+          };
+          Database = {
+            ENGINE = mkOption {
+              type = types.str;
+              default = "mysql";
+              visible = false;
+            };
+            UNIX_SOCKET = mkOption {
+              type = types.nullOr types.str;
+              default = cfg.database.unixSocket;
+              visible = false;
+            };
+            HOST = mkOption {
+              type = types.nullOr types.str;
+              default = cfg.database.host;
+              visible = false;
+            };
+            PORT = mkOption {
+              type = types.nullOr types.str;
+              default = cfg.database.port;
+              visible = false;
+            };
+            USER = mkOption {
+              type = types.nullOr types.str;
+              default = cfg.database.user;
+              visible = false;
+            };
+            # PASSWD = mkOption {
+            #   type = types.nullOr types.str;
+            #   default = cfg.database.password;
+            #   visible = false;
+            # };
+            DB = mkOption {
+              type = types.nullOr types.str;
+              default = cfg.database.ccnetName;
+              visible = false;
+            };
+            CONNECTION_CHARSET = mkOption {
+              type = types.str;
+              default = "utf8";
+              visible = false;
             };
           };
         };
@@ -118,6 +158,48 @@ in
                 ipv4:<ipv4addr> for binding to an ipv4 address
                 Otherwise the addr is assumed to be ipv4.
               '';
+            };
+          };
+          database = {
+            type = mkOption {
+              type = types.str;
+              default = "mysql";
+              visible = false;
+            };
+            unix_socket = mkOption {
+              type = types.nullOr types.str;
+              default = cfg.database.unixSocket;
+              visible = false;
+            };
+            host = mkOption {
+              type = types.nullOr types.str;
+              default = cfg.database.host;
+              visible = false;
+            };
+            port = mkOption {
+              type = types.nullOr types.str;
+              default = cfg.database.port;
+              visible = false;
+            };
+            user = mkOption {
+              type = types.nullOr types.str;
+              default = cfg.database.user;
+              visible = false;
+            };
+            # password = mkOption {
+            #   type = types.nullOr types.str;
+            #   default = cfg.database.password;
+            #   visible = false;
+            # };
+            db_name = mkOption {
+              type = types.nullOr types.str;
+              default = cfg.database.seafileName;
+              visible = false;
+            };
+            connection_charset = mkOption {
+              type = types.str;
+              default = "utf8";
+              visible = false;
             };
           };
         };
@@ -179,6 +261,68 @@ in
       type = types.singleLineStr;
       default = defaultUser;
       description = "Group under which seafile runs.";
+    };
+
+    database = {
+      unixSocket = mkOption {
+        type = types.nullOr types.path;
+        default = "/var/run/mysqld/mysqld.sock";
+        description = "Path to the MySQL unix socket.";
+      };
+      host = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Hostname of the MySQL server.";
+      };
+      port = mkOption {
+        type = types.nullOr types.port;
+        default = null;
+        description = "Port of the MySQL server to connect to.";
+      };
+      user = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          MySQL user to authenticate as.
+          Optional when connecting with the unix socket.
+        '';
+      };
+      passwordFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          Path to a MySQL option file containing the password for the MySQL user, in INI format.
+          Example:
+          ```
+          [client]
+          password=mysupersecurepassword
+          ```
+        '';
+      };
+      createLocally = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable a MySQL server locally and create the required databases.
+          It is recommended to leave the connection and authentication options
+          at their defaults when using this option.
+        '';
+      };
+      ccnetName = mkOption {
+        type = types.str;
+        default = "ccnet_db";
+        description = "Database to use for ccnet data";
+      };
+      seafileName = mkOption {
+        type = types.str;
+        default = "seafile_db";
+        description = "Database to use for seafile-server data";
+      };
+      seahubName = mkOption {
+        type = types.str;
+        default = "seahub_db";
+        description = "Database to use for seahub data";
+      };
     };
 
     dataDir = mkOption {
@@ -245,21 +389,52 @@ in
   ###### Implementation
 
   config = mkIf cfg.enable {
-    services.mysql = {
+    assertions = [
+      {
+        assertion = cfg.database.unixSocket != null || cfg.database.host != null;
+        message = "One of services.seafile.database.unixSocket or services.seafile.database.host must be set";
+      }
+      {
+        assertion = cfg.database.unixSocket == null || cfg.database.host == null;
+        message = "services.seafile.database.unixSocket and services.seafile.database.host cannot both be set";
+      }
+      {
+        assertion = cfg.database.host != null -> cfg.database.port != null;
+        message = "services.seafile.database.port must be set when using a remote database server";
+      }
+      {
+        assertion = cfg.database.host != null -> cfg.database.user != null && cfg.database.password != null;
+        message = "services.seafile.database.user and services.seafile.database.password must be set when using a remote database server";
+      }
+      {
+        assertion = cfg.database.createLocally -> cfg.database.unixSocket != null;
+        message = "services.seafile.database.unixSocket must be set if services.seafile.database.createLocally is set true";
+      }
+      {
+        assertion = cfg.database.createLocally -> cfg.database.user == null;
+        message = "services.seafile.database.user must not be set if services.seafile.database.createLocally is set true";
+      }
+      {
+        assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+        message = "a password cannot be specified if services.seafile.database.createLocally is set to true";
+      }
+    ];
+
+    services.mysql = mkIf cfg.database.createLocally {
       enable = true;
       package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [
-        "ccnet_db"
-        "seafile_db"
-        "seahub_db"
+        cfg.database.ccnetName
+        cfg.database.seafileName
+        cfg.database.seahubName
       ];
       ensureUsers = [
         {
           name = cfg.user;
           ensurePermissions = {
-            "ccnet_db.*" = "ALL PRIVILEGES";
-            "seafile_db.*" = "ALL PRIVILEGES";
-            "seahub_db.*" = "ALL PRIVILEGES";
+            "${cfg.database.ccnetName}.*" = "ALL PRIVILEGES";
+            "${cfg.database.seafileName}.*" = "ALL PRIVILEGES";
+            "${cfg.database.seahubName}.*" = "ALL PRIVILEGES";
           };
         }
       ];
@@ -319,17 +494,26 @@ in
           ConfigurationDirectory = "seafile";
           ReadWritePaths = lib.lists.optional (cfg.dataDir != "${seafRoot}/data") cfg.dataDir;
         };
+
+        mysqlServer = lib.lists.optional cfg.database.createLocally "mysql.service";
+        mysqlCommand = lib.strings.concatStrings [
+          "${pkgs.mysql-client}/bin/mysql"
+          (lib.optionalString (cfg.database.unixSocket != null) " --socket=${cfg.database.unixSocket}")
+          (lib.optionalString (cfg.database.host != null) " --host=${cfg.database.host}")
+          (lib.optionalString (cfg.database.port != null) " --port=${cfg.database.port}")
+          (lib.optionalString (cfg.database.user != null) " --user=${cfg.database.user}")
+          (lib.optionalString (
+            cfg.database.passwordFile != null
+          ) " --defaults-extra-file==${cfg.database.passwordFile}")
+        ];
       in
       {
         seaf-server = {
           description = "Seafile server";
           partOf = [ "seafile.target" ];
           unitConfig.RequiresMountsFor = lib.lists.optional (cfg.dataDir != "${seafRoot}/data") cfg.dataDir;
-          requires = [ "mysql.service" ];
-          after = [
-            "network.target"
-            "mysql.service"
-          ];
+          requires = mysqlServer;
+          after = [ "network.target" ] ++ mysqlServer;
           wantedBy = [ "seafile.target" ];
           restartTriggers = [
             ccnetConf
@@ -351,8 +535,8 @@ in
             if [ ! -f "${seafRoot}/server-setup" ]; then
                 mkdir -p ${cfg.dataDir}/library-template
                 # Load schema on first install
-                ${pkgs.mysql-client}/bin/mysql --database=ccnet_db < ${cfg.seahubPackage.seafile-server}/share/seafile/sql/mysql/ccnet.sql
-                ${pkgs.mysql-client}/bin/mysql --database=seafile_db < ${cfg.seahubPackage.seafile-server}/share/seafile/sql/mysql/seafile.sql
+                ${mysqlCommand} --database=${cfg.database.ccnetName} < ${cfg.seahubPackage.seafile-server}/share/seafile/sql/mysql/ccnet.sql
+                ${mysqlCommand} --database=${cfg.database.seafileName} < ${cfg.seahubPackage.seafile-server}/share/seafile/sql/mysql/seafile.sql
                 echo "${cfg.seahubPackage.seafile-server.version}-mysql" > "${seafRoot}"/server-setup
                 echo Loaded MySQL schemas for first install
             fi
@@ -377,14 +561,14 @@ in
                   ${lib.getExe cfg.seahubPackage.python3} ${cfg.seahubPackage}/scripts/sqlite2mysql.py >> ${ccnetDir}/ccnet.sql
                 sed 's/ctime INTEGER/ctime BIGINT/g' -i ${ccnetDir}/ccnet.sql
                 sed 's/email TEXT, role TEXT/email VARCHAR(255), role TEXT/g' -i ${ccnetDir}/ccnet.sql
-                ${pkgs.mysql-client}/bin/mysql --database=ccnet_db < ${ccnetDir}/ccnet.sql
+                ${mysqlCommand} --database=${cfg.database.ccnetName} < ${ccnetDir}/ccnet.sql
 
                 echo Migrating seafile database to MySQL
                 ${lib.getExe pkgs.sqlite} ${cfg.dataDir}/seafile.db ".dump" | \
                   ${lib.getExe cfg.seahubPackage.python3} ${cfg.seahubPackage}/scripts/sqlite2mysql.py > ${cfg.dataDir}/seafile.sql
                 sed 's/owner_id TEXT/owner_id VARCHAR(255)/g' -i ${cfg.dataDir}/seafile.sql
                 sed 's/user_name TEXT/user_name VARCHAR(255)/g' -i ${cfg.dataDir}/seafile.sql
-                ${pkgs.mysql-client}/bin/mysql --database=seafile_db < ${cfg.dataDir}/seafile.sql
+                ${mysqlCommand} --database=${cfg.database.seafileName} < ${cfg.dataDir}/seafile.sql
 
                 echo Migrating seahub database to MySQL
                 echo 'SET FOREIGN_KEY_CHECKS=0;' > ${seahubDir}/seahub.sql
@@ -396,7 +580,7 @@ in
                 sed '/INSERT INTO `base_dirfileslastmodifiedinfo`/d' -i ${seahubDir}/seahub.sql
                 sed '/INSERT INTO `notifications_usernotification`/d' -i ${seahubDir}/seahub.sql
                 sed 's/DEFERRABLE INITIALLY DEFERRED//g' -i ${seahubDir}/seahub.sql
-                ${pkgs.mysql-client}/bin/mysql --database=seahub_db < ${seahubDir}/seahub.sql
+                ${mysqlCommand} --database=${cfg.database.seahubName} < ${seahubDir}/seahub.sql
 
                 echo "${cfg.seahubPackage.seafile-server.version}-mysql" > "${seafRoot}"/server-setup
                 echo Migration complete
@@ -421,15 +605,11 @@ in
           wantedBy = [ "seafile.target" ];
           partOf = [ "seafile.target" ];
           unitConfig.RequiresMountsFor = lib.lists.optional (cfg.dataDir != "${seafRoot}/data") cfg.dataDir;
-          requires = [
-            "mysql.service"
-            "seaf-server.service"
-          ];
+          requires = [ "seaf-server.service" ] ++ mysqlServer;
           after = [
             "network.target"
-            "mysql.service"
             "seaf-server.service"
-          ];
+          ] ++ mysqlServer;
           restartTriggers = [ seahubSettings ];
           environment = {
             PYTHONPATH = "${cfg.seahubPackage.pythonPath}:${cfg.seahubPackage}/thirdpart:${cfg.seahubPackage}";
