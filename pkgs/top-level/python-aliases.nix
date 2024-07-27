@@ -381,6 +381,7 @@ mapAliases ({
   pydrive = throw "pydrive is broken and deprecated and has been replaced with pydrive2."; # added 2022-06-01
   pyjet = throw "pyjet is deprecated, use fastjet instead"; # added 2023-05-10
   pygame_sdl2 = pygame-sdl2; # added 2024-01-07
+  pygogo = throw "pygogo has been removed, since it is abandoned and had no maintainer"; # added 2024-07-27
   pygbm = throw "pygbm has been removed, since it is abandoned and broken"; # added 2023-06-20
   PyGithub = pygithub; # added 2023-02-19
   pyGtkGlade = throw "Glade support for pygtk has been removed"; # added 2022-01-15
