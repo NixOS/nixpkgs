@@ -1291,6 +1291,10 @@ self: super: {
     '';
   }) super.hpack;
 
+  # Upstream stack-0.15.7 is compiled with hpack-0.36.0, and we make sure to
+  # keep the same hpack version in Nixpkgs.
+  stack = super.stack.override { hpack = self.hpack_0_36_0; };
+
   # hslua has tests that break when using musl.
   # https://github.com/hslua/hslua/issues/106
   hslua-core = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.hslua-core else super.hslua-core;
