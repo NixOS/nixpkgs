@@ -116,7 +116,7 @@ let
 
       # We need to replace the ssh-askpass-sublime executable because the default one
       # will not function properly, in order to work it needs to pass an argv[0] to
-      # the sublime_merge binary, and the built-in version will will try to call the
+      # the sublime_merge binary, and the built-in version will try to call the
       # sublime_merge wrapper script which cannot pass through the original argv[0] to
       # the sublime_merge binary. Thankfully the ssh-askpass-sublime functionality is
       # very simple and can be replaced with a simple wrapper script.

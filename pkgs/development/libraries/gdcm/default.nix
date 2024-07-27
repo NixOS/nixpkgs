@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     "TestFind"
     "gdcmscu-echo-dicomserver"
     "gdcmscu-find-dicomserver"
-    # seemingly ought to be be disabled when the test data submodule is not present:
+    # seemingly ought to be disabled when the test data submodule is not present:
     "TestvtkGDCMImageReader2_3"
     "TestSCUValidation"
     # errors because 3 classes not wrapped:
