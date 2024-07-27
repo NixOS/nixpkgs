@@ -38,6 +38,8 @@ let
 
   rootPools = unique (map fsToPool (filter fsNeededForBoot zfsFilesystems));
 
+  earlyPools = unique ((config.boot.initrd.zfs.extraPools) ++ rootPools);
+
   dataPools = unique (filter (pool: !(elem pool rootPools)) allPools);
 
   snapshotNames = [ "frequent" "hourly" "daily" "weekly" "monthly" ];
@@ -216,6 +218,23 @@ in
   ###### interface
 
   options = {
+    boot.initrd.zfs = {
+      extraPools = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "encrypted_data" ];
+        description = ''
+          Name or GUID of extra ZFS pools that you wish to import during boot stage 1.
+
+          Most setups should use {option}`boot.zfs.extraPools` to import extra pools during
+          stage 2 instead. The root pool(s) do not need to be listed here, as they are
+          automatically imported based on NixOS's {option}`fileSystems` options.
+
+          This option is needed when encrypted pools will be unlocked over SSH as the
+          SSH server in {option}`boot.initrd.network.ssh` only runs during stage 1.
+        '';
+      };
+    };
     boot.zfs = {
       package = mkOption {
         type = types.package;
@@ -639,7 +658,7 @@ in
               else concatMapStrings (fs: ''
                 zfs load-key -- ${escapeShellArg fs}
               '') (filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials)}
-        '') rootPools)));
+        '') earlyPools)));
 
         # Systemd in stage 1
         systemd = mkIf config.boot.initrd.systemd.enable {
@@ -649,7 +668,7 @@ in
             systemd = config.boot.initrd.systemd.package;
             force = cfgZfs.forceImportRoot;
             prefix = "/sysroot";
-          }) rootPools);
+          }) earlyPools);
           targets.zfs-import.wantedBy = [ "zfs.target" ];
           targets.zfs.wantedBy = [ "initrd.target" ];
           extraBin = {
