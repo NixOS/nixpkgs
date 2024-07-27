@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
+    (lib.cmakeBool "CMAKE_BUILD_WITH_INSTALL_RPATH" true)
   ];
 
   postPatch = "cd Build";

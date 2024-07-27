@@ -46,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # Otherwise, it tries to parse $out/etc/mympd.conf on startup.
-    "-DCMAKE_INSTALL_SYSCONFDIR=/etc"
+    (lib.cmakeFeature "CMAKE_INSTALL_SYSCONFDIR" "/etc")
     # similarly here
-    "-DCMAKE_INSTALL_LOCALSTATEDIR=/var/lib/mympd"
+    (lib.cmakeFeature "CMAKE_INSTALL_LOCALSTATEDIR" "/var/lib/mympd")
   ];
   hardeningDisable = [
     # causes redefinition of _FORTIFY_SOURCE

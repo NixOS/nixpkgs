@@ -32,8 +32,8 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCONFIG_JACK_VERSION=1"
-    "-DCONFIG_JACK_SESSION=${toString jackSession}"
+    (lib.cmakeFeature "CONFIG_JACK_VERSION" "1")
+    (lib.cmakeFeature "CONFIG_JACK_SESSION" "${toString jackSession}")
   ];
 
   meta = with lib; {

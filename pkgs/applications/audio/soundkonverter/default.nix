@@ -67,7 +67,7 @@ mkDerivation rec {
   propagatedBuildInputs = [ libkcddb kconfig kconfigwidgets ki18n kdelibs4support kio solid kwidgetsaddons kxmlgui qtbase phonon];
   buildInputs = [ taglib ] ++ runtimeDeps;
   # encoder plugins go to ${out}/lib so they're found by kbuildsycoca5
-  cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=$out" ];
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "$out") ];
   sourceRoot = "${src.name}/src";
   # add runt-time deps to PATH
   postInstall = ''

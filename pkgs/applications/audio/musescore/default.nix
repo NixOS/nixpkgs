@@ -60,24 +60,24 @@ in stdenv'.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    "-DMUSESCORE_BUILD_MODE=release"
+    (lib.cmakeFeature "MUSESCORE_BUILD_MODE" "release")
     # Disable the build and usage of the `/bin/crashpad_handler` utility - it's
     # not useful on NixOS, see:
     # https://github.com/musescore/MuseScore/issues/15571
-    "-DMUE_BUILD_CRASHPAD_CLIENT=OFF"
+    (lib.cmakeBool "MUE_BUILD_CRASHPAD_CLIENT" false)
     # Use our versions of system libraries
-    "-DMUE_COMPILE_USE_SYSTEM_FREETYPE=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_TINYXML=ON"
+    (lib.cmakeBool "MUE_COMPILE_USE_SYSTEM_FREETYPE" true)
+    (lib.cmakeBool "MUE_COMPILE_USE_SYSTEM_TINYXML" true)
     # Implies also -DMUE_COMPILE_USE_SYSTEM_OPUS=ON
-    "-DMUE_COMPILE_USE_SYSTEM_OPUSENC=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_FLAC=ON"
+    (lib.cmakeBool "MUE_COMPILE_USE_SYSTEM_OPUSENC" true)
+    (lib.cmakeBool "MUE_COMPILE_USE_SYSTEM_FLAC" true)
     # From some reason, in $src/build/cmake/SetupBuildEnvironment.cmake,
     # upstream defaults to compiling to x86_64 only, unless this cmake flag is
     # set
-    "-DMUE_COMPILE_BUILD_MACOS_APPLE_SILICON=ON"
+    (lib.cmakeBool "MUE_COMPILE_BUILD_MACOS_APPLE_SILICON" true)
     # Don't bundle qt qml files, relevant really only for darwin, but we set
     # this for all platforms anyway.
-    "-DMUE_COMPILE_INSTALL_QTQML_FILES=OFF"
+    (lib.cmakeBool "MUE_COMPILE_INSTALL_QTQML_FILES" false)
   ];
 
   qtWrapperArgs = [

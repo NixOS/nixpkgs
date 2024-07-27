@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ AppKit AudioUnit CoreAudio CoreMIDI CoreServices ];
 
   cmakeFlags = [
-    "-Denable-framework=off"
+    (lib.cmakeBool "enable-framework" false)
   ];
 
   meta = with lib; {

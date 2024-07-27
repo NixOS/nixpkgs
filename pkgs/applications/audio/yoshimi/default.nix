@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.cc.libc}/lib/libm.so" ];
+  cmakeFlags = [ (lib.cmakeFeature "FLTK_MATH_LIBRARY" "${stdenv.cc.libc}/lib/libm.so") ];
 
   meta = with lib; {
     description = "High quality software synthesizer based on ZynAddSubFX";

@@ -103,10 +103,10 @@ let
     buildInputs = [ alsa-lib libjack2 libpulseaudio ];
 
     cmakeFlags = [
-      "-DRTAUDIO_API_ALSA=ON"
-      "-DRTAUDIO_API_PULSE=ON"
-      "-DRTAUDIO_API_JACK=ON"
-      "-DRTAUDIO_API_CORE=OFF"
+      (lib.cmakeBool "RTAUDIO_API_ALSA" true)
+      (lib.cmakeBool "RTAUDIO_API_PULSE" true)
+      (lib.cmakeBool "RTAUDIO_API_JACK" true)
+      (lib.cmakeBool "RTAUDIO_API_CORE" false)
     ];
   };
 in

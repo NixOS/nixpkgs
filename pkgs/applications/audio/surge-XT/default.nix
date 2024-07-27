@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   cmakeFlags = [
-    "-DSURGE_BUILD_LV2=TRUE"
+    (lib.cmakeBool "SURGE_BUILD_LV2" true)
   ];
 
   CXXFLAGS = [

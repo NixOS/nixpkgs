@@ -61,7 +61,7 @@ mkDerivation rec {
   ] ++ lib.optionals withGui [ qtbase qttools qrencode ];
 
   cmakeFlags = lib.optionals (!withGui) [
-    "-DBUILD_BITCOIN_QT=OFF"
+    (lib.cmakeBool "BUILD_BITCOIN_QT" false)
   ];
 
   # many of the generated scripts lack execute permissions

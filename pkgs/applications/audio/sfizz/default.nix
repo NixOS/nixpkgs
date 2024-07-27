@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       --replace '/usr/bin/zenity' '${zenity}/bin/zenity'
   '';
 
-  cmakeFlags = [ "-DSFIZZ_TESTS=ON" ];
+  cmakeFlags = [ (lib.cmakeBool "SFIZZ_TESTS" true) ];
 
   doCheck = true;
 

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = lib.optionals (!stdenv.hostPlatform.isStatic) [
-    "-DBUILD_SHARED_LIBS=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
   ];
 
   CFLAGS = [ "-O3" "-funroll-loops" ];

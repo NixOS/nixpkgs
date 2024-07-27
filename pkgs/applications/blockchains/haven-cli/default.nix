@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
 
   cmakeFlags = [
-    "-DBUILD_GUI_DEPS=ON"
-    "-DReadline_ROOT_DIR=${readline.dev}"
-    "-DReadline_INCLUDE_DIR=${readline.dev}/include/readline"
-    "-DRandomX_ROOT_DIR=${randomx}"
-  ] ++ lib.optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
-    ++ lib.optional (!trezorSupport) "-DUSE_DEVICE_TREZOR=OFF";
+    (lib.cmakeBool "BUILD_GUI_DEPS" true)
+    (lib.cmakeFeature "Readline_ROOT_DIR" "${readline.dev}")
+    (lib.cmakeFeature "Readline_INCLUDE_DIR" "${readline.dev}/include/readline")
+    (lib.cmakeFeature "RandomX_ROOT_DIR" "${randomx}")
+  ] ++ lib.optional stdenv.isDarwin (lib.cmakeBool "Boost_USE_MULTITHREADED" false)
+    ++ lib.optional (!trezorSupport) (lib.cmakeBool "USE_DEVICE_TREZOR" false);
 
   outputs = [ "out" "source" ];
 

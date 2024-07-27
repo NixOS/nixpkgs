@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ qtbase qtsvg qtwayland alsa-lib pipewire ];
 
-  cmakeFlags = [ "-DCONFIG_WAYLAND=ON" ];
+  cmakeFlags = [ (lib.cmakeBool "CONFIG_WAYLAND" true) ];
 
   meta = with lib; {
     description = "Qt graph manager for PipeWire, similar to QjackCtl";

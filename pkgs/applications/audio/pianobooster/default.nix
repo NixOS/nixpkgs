@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DOpenGL_GL_PREFERENCE=GLVND"
-    "-DUSE_JACK=ON"
+    (lib.cmakeFeature "OpenGL_GL_PREFERENCE" "GLVND")
+    (lib.cmakeBool "USE_JACK" true)
   ];
 
   postInstall = ''

@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_BINDIR=bin"
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
   ];
 
   nativeBuildInputs = [

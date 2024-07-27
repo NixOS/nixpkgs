@@ -87,12 +87,12 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals (guiModule == "ntk") [ ntk cairo libXpm ]
     ++ lib.optionals (guiModule == "zest") [ libGL libX11 ];
 
-  cmakeFlags = [ "-DGuiModule=${guiModule}" ]
+  cmakeFlags = [ (lib.cmakeFeature "GuiModule" "${guiModule}") ]
     # OSS library is included in glibc.
     # Must explicitly disable if support is not wanted.
-    ++ lib.optional (!ossSupport) "-DOssEnable=OFF"
+    ++ lib.optional (!ossSupport) (lib.cmakeBool "OssEnable" false)
     # Find FLTK without requiring an OpenGL library in buildInputs
-    ++ lib.optional (guiModule == "fltk") "-DFLTK_SKIP_OPENGL=ON";
+    ++ lib.optional (guiModule == "fltk") (lib.cmakeBool "FLTK_SKIP_OPENGL" true);
 
   CXXFLAGS = [
     # GCC 13: error: 'uint8_t' does not name a type
