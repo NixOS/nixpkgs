@@ -7511,12 +7511,6 @@ with pkgs;
 
   volctl = callPackage ../tools/audio/volctl { };
 
-  volk = if (stdenv.isDarwin && stdenv.isAarch64) then
-    (callPackage ../development/libraries/volk/2.5.0.nix { })
-  else
-    (callPackage ../development/libraries/volk { })
-  ;
-
   vorta = qt6Packages.callPackage ../applications/backup/vorta { };
 
   vowpal-wabbit = callPackage ../applications/science/machine-learning/vowpal-wabbit { };
