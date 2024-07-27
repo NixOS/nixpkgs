@@ -9,16 +9,22 @@
 }:
 
 let
-  cross = if crossSystem != null
-    then { inherit crossSystem; }
-    else {};
+  cross = if crossSystem != null then { inherit crossSystem; } else { };
 
-  custom-bootstrap = if bootstrapFiles != null
-    then { stdenvStages = args:
-            let args' = args // { bootstrapFiles = bootstrapFiles; };
-            in (import "${pkgspath}/pkgs/stdenv/darwin" args');
-         }
-    else {};
+  custom-bootstrap =
+    if bootstrapFiles != null then
+      {
+        stdenvStages =
+          args:
+          let
+            args' = args // {
+              bootstrapFiles = bootstrapFiles;
+            };
+          in
+          (import "${pkgspath}/pkgs/stdenv/darwin" args');
+      }
+    else
+      { };
 
   pkgs = import pkgspath ({ inherit localSystem; } // cross // custom-bootstrap);
 in
@@ -40,8 +46,13 @@ rec {
     # that platform.
     localSystem = if crossSystem != null then crossSystem else localSystem;
 
-    stdenvStages = args: let
-        args' = args // { inherit bootstrapFiles; };
-      in (import (test-pkgspath + "/pkgs/stdenv/darwin") args');
+    stdenvStages =
+      args:
+      let
+        args' = args // {
+          inherit bootstrapFiles;
+        };
+      in
+      (import (test-pkgspath + "/pkgs/stdenv/darwin") args');
   };
 }
