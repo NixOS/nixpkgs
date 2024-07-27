@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitea,
   installShellFiles,
   libX11,
@@ -9,17 +8,34 @@
   libxkbcommon,
   pixman,
   pkg-config,
-  wayland-scanner,
+  stdenv,
+  testers,
   wayland,
   wayland-protocols,
+  wayland-scanner,
   wlroots,
   writeText,
   xcbutilwm,
   xwayland,
+  # Boolean flags
   enableXWayland ? true,
+  withCustomConfigH ? (configH != null),
+  # Configurable options
+  configH ?
+    if conf != null then
+      lib.warn ''
+        conf parameter is deprecated;
+        use configH instead
+      '' conf
+    else
+      null,
+  # Deprecated options
+  # Remove them before next version of either Nixpkgs or dwl itself
   conf ? null,
 }:
 
+# If we set withCustomConfigH, let's not forget configH
+assert withCustomConfigH -> (configH != null);
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwl";
   version = "0.5";
@@ -59,30 +75,43 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  # Allow users to set an alternative config.def.h
   postPatch =
     let
       configFile =
-        if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.def.h" conf;
+        if lib.isDerivation configH || builtins.isPath configH then
+          configH
+        else
+          writeText "config.h" configH;
     in
-    lib.optionalString (conf != null) "cp ${configFile} config.def.h";
+    lib.optionalString withCustomConfigH "cp ${configFile} config.h";
 
-  makeFlags = [
-    "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
-    "WAYLAND_SCANNER=wayland-scanner"
-    "PREFIX=$(out)"
-    "MANDIR=$(man)/share/man"
-  ];
+  makeFlags =
+    [
+      "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
+      "WAYLAND_SCANNER=wayland-scanner"
+      "PREFIX=$(out)"
+      "MANDIR=$(man)/share/man"
+    ]
+    ++ lib.optionals enableXWayland [
+      ''XWAYLAND="-DXWAYLAND"''
+      ''XLIBS="xcb xcb-icccm"''
+    ];
 
-  preBuild = ''
-    makeFlagsArray+=(
-      XWAYLAND=${lib.optionalString enableXWayland "-DXWAYLAND"}
-      XLIBS=${lib.optionalString enableXWayland "xcb\\ xcb-icccm"}
-    )
-  '';
+  strictDeps = true;
+
+  # required for whitespaces in makeFlags
+  __structuredAttrs = true;
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      # `dwl -v` emits its version string to stderr and returns 1
+      command = "dwl -v 2>&1; return 0";
+    };
+  };
 
   meta = {
-    homepage = "https://github.com/djpohly/dwl/";
+    homepage = "https://codeberg.org/dwl/dwl";
     description = "Dynamic window manager for Wayland";
     longDescription = ''
       dwl is a compact, hackable compositor for Wayland based on wlroots. It is
@@ -92,10 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
 
       - Easy to understand, hack on, and extend with patches
       - One C source file (or a very small number) configurable via config.h
-      - Limited to 2000 SLOC to promote hackability
       - Tied to as few external dependencies as possible
     '';
-    changelog = "https://github.com/djpohly/dwl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.AndersonTorres ];
     inherit (wayland.meta) platforms;
