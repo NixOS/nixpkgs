@@ -1,0 +1,28 @@
+diff --git a/joblib/externals/loky/backend/context.py b/joblib/externals/loky/backend/context.py
+index d0f5903..a3310f0 100644
+--- a/joblib/externals/loky/backend/context.py
++++ b/joblib/externals/loky/backend/context.py
+@@ -126,6 +126,11 @@ def cpu_count(only_physical_cores=False):
+         # Respect user setting
+         return max(cpu_count_user, 1)
+ 
++    if sys.platform == "linux" and not os.path.exists("/sys/devices/system/cpu/possible"):
++        # lscpu which used on linux, uses /sys/devices/system/cpu/possible
++        # which is not availble in nix sandbox environment
++        return aggregate_cpu_count
++
+     cpu_count_physical, exception = _count_physical_cores()
+     if cpu_count_physical != "not found":
+         return cpu_count_physical
+@@ -226,7 +231,10 @@ def _cpu_count_user(os_cpu_count):
+     # User defined soft-limit passed as a loky specific environment variable.
+     cpu_count_loky = int(os.environ.get("LOKY_MAX_CPU_COUNT", os_cpu_count))
+ 
+-    return min(cpu_count_affinity, cpu_count_cgroup, cpu_count_loky)
++    # If used inside nix build, consider NIX_BUILD_CORES as well
++    cpu_count_nix = int(os.environ.get("NIX_BUILD_CORES", os_cpu_count))
++
++    return min(cpu_count_affinity, cpu_count_cgroup, cpu_count_loky, cpu_count_nix)
+ 
+ 
+ def _count_physical_cores():
