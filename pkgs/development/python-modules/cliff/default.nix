@@ -11,6 +11,7 @@
   prettytable,
   pyparsing,
   pyyaml,
+  setuptools,
   stevedore,
   sphinx,
   callPackage,
@@ -19,7 +20,7 @@
 buildPythonPackage rec {
   pname = "cliff";
   version = "4.7.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -32,13 +33,14 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     installShellFiles
     openstackdocstheme
+    setuptools
     sphinx
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     autopage
     cmd2
     importlib-metadata
