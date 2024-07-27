@@ -48,18 +48,18 @@
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "5.4.3";
+  version = "5.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "Flask-Security-Too";
+    pname = "flask_security_too";
     inherit version;
-    hash = "sha256-YrGTl+jXGo1MuNwNRAnMehSXmCVJAwOWlgruUYdV5YM=";
+    hash = "sha256-nuYOqKgH3Wfk2IFEDUhWUB6aP1xZ+c4DK7n0zB01TSk=";
   };
 
-   build-system = [ setuptools ];
+  build-system = [ setuptools ];
 
   # flask-login>=0.6.2 not satisfied by version 0.7.0.dev0
   pythonRelaxDeps = [ "flask-login" ];
