@@ -15,7 +15,7 @@ permissions:
 jobs:
   nixos:
     runs-on: ubuntu-latest
-    if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
+    if: "!contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
@@ -76,7 +76,7 @@ jobs:
             if [[ -n "$source" ]] && ! nixfmt --check ${{ env.base }}/"$source" 2>/dev/null; then
               echo "Ignoring file $file because it's not formatted in the base commit"
             elif ! nixfmt --check "$dest"; then
-              unformattedFiles+=("$file")
+              unformattedFiles+=("$dest")
             fi
           done < <(git diff -z --name-status ${{ env.baseRev }} -- '*.nix')
 
