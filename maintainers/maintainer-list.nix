@@ -20558,6 +20558,12 @@
     githubId = 6118602;
     name = "Viktor";
   };
+  tne = {
+    email = "tne@garudalinux.org";
+    github = "JustTNE";
+    githubId = 38938720;
+    name = "TNE";
+  };
   tnias = {
     email = "phil@grmr.de";
     matrix = "@tnias:stratum0.org";

@@ -32,16 +32,21 @@ let
     ip46tables -w -t nat -D OUTPUT -j nixos-nat-out 2>/dev/null || true
     ip46tables -w -t nat -F nixos-nat-out 2>/dev/null || true
     ip46tables -w -t nat -X nixos-nat-out 2>/dev/null || true
+    ip46tables -w -t filter -D FORWARD -j nixos-filter-forward 2>/dev/null || true
+    ip46tables -w -t filter -F nixos-filter-forward 2>/dev/null || true
+    ip46tables -w -t filter -X nixos-filter-forward 2>/dev/null || true
 
     ${cfg.extraStopCommands}
   '';
 
-  mkSetupNat = { iptables, dest, internalIPs, forwardPorts }: ''
+  mkSetupNat = { iptables, dest, internalIPs, forwardPorts, externalIp }: ''
     # We can't match on incoming interface in POSTROUTING, so
     # mark packets coming from the internal interfaces.
     ${concatMapStrings (iface: ''
       ${iptables} -w -t nat -A nixos-nat-pre \
         -i '${iface}' -j MARK --set-mark 1
+      ${iptables} -w -t filter -A nixos-filter-forward \
+        -i '${iface}' ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} -j ACCEPT
     '') cfg.internalInterfaces}
 
     # NAT the marked packets.
@@ -54,14 +59,23 @@ let
     ${concatMapStrings (range: ''
       ${iptables} -w -t nat -A nixos-nat-post \
         -s '${range}' ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
+      ${iptables} -w -t filter -A nixos-filter-forward \
+        -s '${range}' ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} -j ACCEPT
     '') internalIPs}
+
+    # Related connections are allowed
+    ${iptables} -w -t filter -A nixos-filter-forward \
+      -m state --state ESTABLISHED,RELATED -j ACCEPT
 
     # NAT from external ports to internal ports.
     ${concatMapStrings (fwd: ''
       ${iptables} -w -t nat -A nixos-nat-pre \
         -i ${toString cfg.externalInterface} -p ${fwd.proto} \
-        --dport ${builtins.toString fwd.sourcePort} \
+        ${optionalString (externalIp != null) "-d ${externalIp}"} --dport ${builtins.toString fwd.sourcePort} \
         -j DNAT --to-destination ${fwd.destination}
+      ${iptables} -w -t filter -A nixos-filter-forward \
+        -i ${toString cfg.externalInterface} -p ${fwd.proto} \
+        --dport ${builtins.toString fwd.sourcePort} -j ACCEPT
 
       ${concatMapStrings (loopbackip:
         let
@@ -77,15 +91,32 @@ let
             -j DNAT --to-destination ${fwd.destination}
 
           # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from other hosts behind NAT
-          ${iptables} -w -t nat -A nixos-nat-pre \
-            -d ${loopbackip} -p ${fwd.proto} \
-            --dport ${builtins.toString fwd.sourcePort} \
-            -j DNAT --to-destination ${fwd.destination}
-
-          ${iptables} -w -t nat -A nixos-nat-post \
-            -d ${destinationIP} -p ${fwd.proto} \
-            --dport ${destinationPorts} \
-            -j SNAT --to-source ${loopbackip}
+          ${concatMapStrings (range: ''
+            ${iptables} -w -t nat -A nixos-nat-pre \
+              -d ${loopbackip} -p ${fwd.proto} -s '${range}' \
+              --dport ${builtins.toString fwd.sourcePort} \
+              -j DNAT --to-destination ${fwd.destination}
+            ${iptables} -w -t nat -A nixos-nat-post \
+              -d ${destinationIP} -p ${fwd.proto} \
+              -s '${range}' --dport ${destinationPorts} \
+              -j SNAT --to-source ${loopbackip}
+            ${iptables} -w -t filter -A nixos-filter-forward \
+              -d ${destinationIP} -p ${fwd.proto} \
+              -s '${range}' --dport ${destinationPorts} -j ACCEPT
+          '') internalIPs}
+          ${concatMapStrings (iface: ''
+            ${iptables} -w -t nat -A nixos-nat-pre \
+              -d ${loopbackip} -p ${fwd.proto} -i '${iface}' \
+              --dport ${builtins.toString fwd.sourcePort} \
+              -j DNAT --to-destination ${fwd.destination}
+            ${iptables} -w -t nat -A nixos-nat-post \
+              -d ${destinationIP} -p ${fwd.proto} \
+              -i '${iface}' --dport ${destinationPorts} \
+              -j SNAT --to-source ${loopbackip}
+            ${iptables} -w -t filter -A nixos-filter-forward \
+              -d ${destinationIP} -p ${fwd.proto} \
+              -i '${iface}' --dport ${destinationPorts} -j ACCEPT
+          '') cfg.internalInterfaces}
         '') fwd.loopbackIPs}
     '') forwardPorts}
   '';
@@ -96,12 +127,14 @@ let
     ip46tables -w -t nat -N nixos-nat-pre
     ip46tables -w -t nat -N nixos-nat-post
     ip46tables -w -t nat -N nixos-nat-out
+    ip46tables -w -t filter -N nixos-filter-forward
 
     ${mkSetupNat {
       iptables = "iptables";
       inherit dest;
       inherit (cfg) internalIPs;
       forwardPorts = filter (x: !(isIPv6 x.destination)) cfg.forwardPorts;
+      externalIp = cfg.externalIP;
     }}
 
     ${optionalString cfg.enableIPv6 (mkSetupNat {
@@ -109,6 +142,7 @@ let
       dest = destIPv6;
       internalIPs = cfg.internalIPv6s;
       forwardPorts = filter (x: isIPv6 x.destination) cfg.forwardPorts;
+      externalIp = cfg.externalIPv6;
     })}
 
     ${optionalString (cfg.dmzHost != null) ''
@@ -123,6 +157,7 @@ let
     ip46tables -w -t nat -A PREROUTING -j nixos-nat-pre
     ip46tables -w -t nat -A POSTROUTING -j nixos-nat-post
     ip46tables -w -t nat -A OUTPUT -j nixos-nat-out
+    ip46tables -w -t filter -A FORWARD -j nixos-filter-forward
   '';
 
 in
