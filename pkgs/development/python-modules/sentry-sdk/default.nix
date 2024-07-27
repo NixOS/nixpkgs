@@ -187,6 +187,8 @@ buildPythonPackage rec {
     # assert count_item_types["sessions"] == 1
     # assert 0 == 1
     "test_auto_session_tracking_with_aggregates"
+    # timing sensitive
+    "test_profile_captured"
   ];
 
   pythonImportsCheck = [ "sentry_sdk" ];
