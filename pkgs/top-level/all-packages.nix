@@ -37395,6 +37395,8 @@ with pkgs;
 
   prodigal = callPackage ../applications/science/biology/prodigal { };
 
+  psipred = callPackage ../applications/science/biology/psipred { };
+
   quast = callPackage ../applications/science/biology/quast { };
 
   raxml = callPackage ../applications/science/biology/raxml { };
