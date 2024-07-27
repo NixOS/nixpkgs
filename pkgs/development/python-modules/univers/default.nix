@@ -5,33 +5,35 @@
   commoncode,
   fetchPypi,
   packaging,
-  pyparsing,
   pytestCheckHook,
   pythonOlder,
   saneyaml,
   semantic-version,
   semver,
+  setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "univers";
   version = "30.12.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-NbsoYfTk5SWyUQZnOdm+ZCXK7wD+DV/updRHqHoU49c=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     packaging
-    pyparsing
     semantic-version
     semver
   ];
