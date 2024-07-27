@@ -17648,6 +17648,8 @@ self: super: with self; {
     python3Packages = self;
   });
 
+  yt-dlp-dearrow = callPackage ../development/python-modules/yt-dlp-dearrow { };
+
   youtube-search = callPackage ../development/python-modules/youtube-search { };
 
   youtube-search-python = callPackage ../development/python-modules/youtube-search-python { };
