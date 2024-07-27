@@ -1,9 +1,16 @@
-{ busybox}:
+{ lib, stdenv, busybox, musl }:
 
 # Minimal shell for use as basic /bin/sh in sandbox builds
 busybox.override {
   enableStatic = true;
   enableMinimal = true;
+
+  useMusl =
+    # We could probably switch to `glibc.static` for GNU hosts. But historically
+    # we've linked it against `musl` and it has the added benefit of significantly
+    # bringing down the binary size.
+    stdenv.hostPlatform.isGnu && lib.meta.availableOn stdenv.hostPlatform musl;
+
   extraConfig = ''
     CONFIG_FEATURE_FANCY_ECHO y
     CONFIG_FEATURE_SH_MATH y
