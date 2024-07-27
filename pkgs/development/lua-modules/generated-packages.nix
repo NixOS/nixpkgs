@@ -620,14 +620,14 @@ buildLuarocksPackage {
 haskell-tools-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "haskell-tools.nvim";
-  version = "3.1.10-1";
+  version = "4.0.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/haskell-tools.nvim-3.1.10-1.rockspec";
-    sha256 = "0s7haq3l29b26x9yj88j4xh70gm9bnnqn4q7qnkrwand3bj9m48q";
+    url    = "mirror://luarocks/haskell-tools.nvim-4.0.0-1.rockspec";
+    sha256 = "1iz7bgy7a0zclsg31rmf6hcrjxnikhqwzh5blirif3m9bdi9mv6v";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/mrcjkb/haskell-tools.nvim/archive/3.1.10.zip";
-    sha256 = "1cxfv2f4vvkqmx1k936k476mxsy1yn85blg0qyfsjfagca25ymmv";
+    url    = "https://github.com/mrcjkb/haskell-tools.nvim/archive/4.0.0.zip";
+    sha256 = "0k6kw42n4c2hc7mqjv8ahwcwqia7wdgmszy1np96sc9dd0bkiqx9";
   };
 
   disabled = luaOlder "5.1";
