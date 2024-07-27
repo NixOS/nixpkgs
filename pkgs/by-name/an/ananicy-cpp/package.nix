@@ -1,27 +1,28 @@
-{ lib
-, clangStdenv
-, fetchFromGitLab
-, fetchpatch
-, cmake
-, pkg-config
-, spdlog
-, nlohmann_json
-, systemd
-, libbpf
-, elfutils
-, bpftools
-, pcre2
-, zlib
+{
+  lib,
+  clangStdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  spdlog,
+  nlohmann_json,
+  systemd,
+  libbpf,
+  elfutils,
+  bpftools,
+  pcre2,
+  zlib,
 }:
 
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "ananicy-cpp";
   version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "ananicy-cpp";
     repo = "ananicy-cpp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-oPinSc00+Z6SxjfTh7DttcXSjsLv1X0NI+O37C8M8GY=";
   };
@@ -55,17 +56,22 @@ clangStdenv.mkDerivation rec {
   ];
 
   # BPF A call to built-in function '__stack_chk_fail' is not supported.
-  hardeningDisable = [ "stackprotector" "zerocallusedregs" ];
+  hardeningDisable = [
+    "stackprotector"
+    "zerocallusedregs"
+  ];
 
   cmakeFlags = [
-    "-DUSE_EXTERNAL_JSON=ON"
-    "-DUSE_EXTERNAL_SPDLOG=ON"
-    "-DUSE_EXTERNAL_FMTLIB=ON"
-    "-DUSE_BPF_PROC_IMPL=ON"
-    "-DBPF_BUILD_LIBBPF=OFF"
-    "-DENABLE_SYSTEMD=ON"
-    "-DENABLE_REGEX_SUPPORT=ON"
-    "-DVERSION=${version}"
+    (lib.mapAttrsToList lib.cmakeBool {
+      "USE_EXTERNAL_JSON" = true;
+      "USE_EXTERNAL_SPDLOG" = true;
+      "USE_EXTERNAL_FMTLIB" = true;
+      "USE_BPF_PROC_IMPL" = true;
+      "BPF_BUILD_LIBBPF" = false;
+      "ENABLE_SYSTEMD" = true;
+      "ENABLE_REGEX_SUPPORT" = true;
+    })
+    (lib.cmakeFeature "VERSION" finalAttrs.version)
   ];
 
   postInstall = ''
@@ -85,4 +91,4 @@ clangStdenv.mkDerivation rec {
     ];
     mainProgram = "ananicy-cpp";
   };
-}
+})
