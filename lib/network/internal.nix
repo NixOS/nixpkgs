@@ -118,6 +118,49 @@ let
           throw "0x${hex} is not a valid u16 integer";
     in
     map (piece: u16FromHexStr piece) addr;
+
+  /**
+    Returns a new list where each element is taken modulo `mod`. The algorithm
+    starts with the last element, the last element becomes the remainder of `mod`
+    and adds an quotient part to the previous element.
+
+    # Type: int -> [ int ] -> [ int ]
+
+    # Example:
+
+    ```nix
+    modList 10 [9 10]
+    => [1 0 0]
+    modList 3 [1 2 10]
+    => [2 2 1]
+    ```
+  */
+  modList =
+    mod: list:
+    assert lib.assertMsg (mod > 0) "modList: module must be positive integer";
+    let
+      modListRec =
+        add: mod: list:
+        let
+          listLen = length list;
+        in
+        if listLen == 0 then
+          if add == 0 then [ ] else [ add ]
+        else
+          # Create a new list. The last element is the remainder and add the
+          # quotient to the previous element.
+          let
+            newValue = lists.last list + add;
+            newList = lists.take (listLen - 1) list;
+          in
+          let
+            quot = newValue / mod;
+            rem = trivial.mod newValue mod;
+            prefix = modListRec quot mod newList;
+          in
+          prefix ++ [ rem ];
+    in
+    modListRec 0 mod list;
 in
 let
   /**
@@ -234,8 +277,38 @@ let
       lastAddress = lists.zipListsWith (l: r: trivial.bitOr l r) addr suffixMask;
     in
     lastAddress;
+
+  /**
+    Calculates the next address. Returns null if the passed address is the
+    last one.
+
+    # Type: ipv6IR -> int -> ipv6IR
+
+    # Example:
+
+    ```nix
+    calculateNextAddress [8193 3512 0 0 0 0 0 65535]
+    => [8193 3512 0 0 0 0 1 0]
+    ```
+  */
+  calculateNextAddress =
+    addr: prefixLength:
+    if addr == calculateLastAddress addr prefixLength then
+      null
+    else
+      let
+        # Add one to the last piece of the address, then take the modulus - if
+        # it's greater than 65535, make it 0 and add one to the penultimate piece.
+        newAddr = (lists.take (length addr - 1) addr) ++ [ (lists.last addr + 1) ];
+        nextAddr = modList (ipv6PieceMaxValue + 1) newAddr;
+      in
+      nextAddr;
 in
 {
+  _common = {
+    inherit modList;
+  };
+
   /*
     Internally, an IPv6 address is stored as a list of 16-bit integers with
     8 elements. Wherever you see `ipv6IR` (ipv6 internal representation) in
@@ -243,7 +316,7 @@ in
     one of the internal parsers, such as `parseIpv6FromString`
   */
   _ipv6 = {
-    inherit calculateFirstAddress calculateLastAddress;
+    inherit calculateFirstAddress calculateLastAddress calculateNextAddress;
 
     /*
       Creates ipv6AddrAttrs. The returned attr set contains most of the basic

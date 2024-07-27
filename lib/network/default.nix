@@ -154,5 +154,36 @@ in
         address = _ipv6.calculateLastAddress addrV6._address addrV6.prefixLength;
       in
       _ipv6.makeIpv6Type address addrV6.prefixLength;
+
+    /**
+      Calculates the next address in an IPv6 subnet. If this is the last address, null is returned.
+
+      # Type
+
+      ```
+      nextAddress :: ipv6AddrAttrs -> (ipv6AddrAttrs | null)
+      ```
+
+      # Examples
+
+      ```nix
+      nextAddress (fromString "2001:DB8::ffff/64")
+      => {
+        address = "2001:db8:0:0:0:0:1:0";
+        ...
+      }
+      ```
+
+      # Arguments
+
+      addrV6
+      : IPv6 type produced by a parser like `ipv6.fromString`.
+    */
+    nextAddress =
+      addrV6:
+      let
+        address = _ipv6.calculateNextAddress addrV6._address addrV6.prefixLength;
+      in
+      if address == null then null else _ipv6.makeIpv6Type address addrV6.prefixLength;
   };
 }

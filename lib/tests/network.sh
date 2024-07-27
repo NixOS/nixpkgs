@@ -121,6 +121,18 @@ expectSuccess '(internal._ipv6.calculateLastAddress [0 0 0 0 0 0 0 0] 1)'       
 expectSuccess '(internal._ipv6.calculateLastAddress [0 0 0 0 0 0 0 0] 64)'      '[0,0,0,0,65535,65535,65535,65535]'
 expectSuccess '(internal._ipv6.calculateLastAddress [0 0 1 0 0 0 0 65535] 127)' '[0,0,1,0,0,0,0,65535]'
 
+expectSuccess '(internal._ipv6.calculateNextAddress [0 0 0 0 0 0 0 0]) 64'                                 '[0,0,0,0,0,0,0,1]'
+expectSuccess '(internal._ipv6.calculateNextAddress [0 0 0 0 0 0 0 65535]) 64'                             '[0,0,0,0,0,0,1,0]'
+expectSuccess '(internal._ipv6.calculateNextAddress [0 0 0 0 0 0 0 65535]) 112'                            'null'
+
+expectSuccess '(internal._common.modList 10 [0 0])' '[0,0]'
+expectSuccess '(internal._common.modList 10 [0 100])' '[1,0,0]'
+expectSuccess '(internal._common.modList 10 [9 9 9 10])' '[1,0,0,0,0]'
+expectSuccess '(internal._common.modList 10 [10 0 0 10])' '[1,0,0,1,0]'
+expectSuccess '(internal._common.modList 10 [])' '[]'
+
+expectFailure '(internal._common.modList (-1) [])' 'module must be positive integer'
+
 # Library API
 expectSuccess 'ipv6.isValidIpStr "2001:DB8::ffff/64"' 'true'
 expectSuccess 'ipv6.isValidIpStr ":::ffff/64"'        'false'
@@ -138,5 +150,9 @@ expectSuccess '(ipv6.firstAddress (ipv6.fromString "ffff:ffff:ffff:ffff:ffff:fff
 expectSuccess '(ipv6.lastAddress (ipv6.fromString "2001:DB8::ffff/64")).addressCidr'                          '"2001:db8:0:0:ffff:ffff:ffff:ffff/64"'
 expectSuccess '(ipv6.lastAddress (ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44")).addressCidr' '"1234:5678:90af:ffff:ffff:ffff:ffff:ffff/44"'
 expectSuccess '(ipv6.lastAddress (ipv6.fromString "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff")).addressCidr'    '"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128"'
+
+expectSuccess '(ipv6.nextAddress (ipv6.fromString "2001:DB8::ffff/64")).addressCidr'                          '"2001:db8:0:0:0:0:1:0/64"'
+expectSuccess '(ipv6.nextAddress (ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44")).addressCidr' '"1234:5678:90ab:cdef:fedc:ba09:8765:4322/44"'
+expectSuccess '(ipv6.nextAddress (ipv6.fromString "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/1"))'              'null'
 
 echo >&2 tests ok
