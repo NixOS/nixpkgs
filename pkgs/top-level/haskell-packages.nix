@@ -342,13 +342,6 @@ in {
           packages.ghc963
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc963
-        else if stdenv.hostPlatform.isDarwin then
-          # it seems like the GHC 9.6.* bindists are built with a different
-          # toolchain than we are using (which I'm guessing from the fact
-          # that 9.6.4 bindists pass linker flags our ld doesn't support).
-          # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-          # the clock package (probably a hsc2hs problem).
-          packages.ghc963
         else
           packages.ghc963Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -366,13 +359,6 @@ in {
         if stdenv.hostPlatform.isAarch32 then
           packages.ghc963
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
-          packages.ghc963
-        else if stdenv.hostPlatform.isDarwin then
-          # it seems like the GHC 9.6.* bindists are built with a different
-          # toolchain than we are using (which I'm guessing from the fact
-          # that 9.6.4 bindists pass linker flags our ld doesn't support).
-          # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-          # the clock package (probably a hsc2hs problem).
           packages.ghc963
         else
           packages.ghc963Binary;
@@ -418,13 +404,6 @@ in {
         if stdenv.hostPlatform.isAarch32 then
           packages.ghc963
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
-          packages.ghc963
-        else if stdenv.hostPlatform.isDarwin then
-          # it seems like the GHC 9.6.* bindists are built with a different
-          # toolchain than we are using (which I'm guessing from the fact
-          # that 9.6.4 bindists pass linker flags our ld doesn't support).
-          # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-          # the clock package (probably a hsc2hs problem).
           packages.ghc963
         else
           packages.ghc963Binary;
