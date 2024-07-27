@@ -42,6 +42,8 @@ buildPythonPackage rec {
     sha256 = "1aparxiq11y0hbvkayp92w684nyxyyx7mi0n1x6x51g5z6c58vmy";
   };
 
+  patches = [ ./drop-removed-networkx-formats.patch ];
+
   build-system = [ setuptools ];
 
   nativeBuildInputs = lib.optionals withGui [ qt5.wrapQtAppsHook ];
@@ -59,6 +61,8 @@ buildPythonPackage rec {
       pydot
       pygments
     ]
+    ++ networkx.optional-dependencies.default
+    ++ networkx.optional-dependencies.extra
     ++ lib.optionals withGui [
       pyqt5
       pyperclip
