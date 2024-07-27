@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.12.1";
+  version = "2.12.3";
   name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "ena_linux_${version}";
-    hash = "sha256-K7FcUdx5pPMtBGSqFgxhHWlg9FT6J3MhUqwGtqHzex4=";
+    hash = "sha256-F8vDPPwO0PnGXhqt0EeT4m/+d8w/rjMHWRV3RYC/wVQ=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -24,9 +24,8 @@ stdenv.mkDerivation rec {
   env.KERNEL_BUILD_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   patches = [
-    # The eth_hw_addr_set function was backported to kernel 4.19.291 but support for it wasn't added to ENA. It will be added in a future release.
-    # See https://github.com/amzn/amzn-drivers/issues/302#issuecomment-2126587626
-    ./0001-Temp-fix-Allow-4.19.291-to-compile-eth_hw_addr_set.patch
+    # https://github.com/amzn/amzn-drivers/issues/313
+    ./0001-workaround-patch-for-kernel-6.10.patch
   ];
 
   configurePhase = ''
