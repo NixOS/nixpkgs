@@ -4618,18 +4618,6 @@ final: prev:
     meta.homepage = "https://github.com/mrcjkb/haskell-snippets.nvim/";
   };
 
-  haskell-tools-nvim = buildNeovimPlugin {
-    pname = "haskell-tools.nvim";
-    version = "2024-07-14";
-    src = fetchFromGitHub {
-      owner = "MrcJkb";
-      repo = "haskell-tools.nvim";
-      rev = "b003e20e99aa79bfec7c632e5ab817e1c10c8036";
-      sha256 = "18gjqnf66nxq76bcb0icihyplmzs0nwav6qpxmszqm05cm1m8l30";
-    };
-    meta.homepage = "https://github.com/MrcJkb/haskell-tools.nvim/";
-  };
-
   haskell-vim = buildVimPlugin {
     pname = "haskell-vim";
     version = "2021-01-19";
