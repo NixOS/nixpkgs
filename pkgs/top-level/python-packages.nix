@@ -8017,6 +8017,8 @@ self: super: with self; {
 
   multiprocess = callPackage ../development/python-modules/multiprocess { };
 
+  multiscale-spatial-image = callPackage ../development/python-modules/multiscale-spatial-image { };
+
   multiset = callPackage ../development/python-modules/multiset { };
 
   multitasking = callPackage ../development/python-modules/multitasking { };
@@ -17433,6 +17435,8 @@ self: super: with self; {
   xarray = callPackage ../development/python-modules/xarray { };
 
   xarray-dataclasses = callPackage ../development/python-modules/xarray-dataclasses { };
+
+  xarray-datatree = callPackage ../development/python-modules/xarray-datatree { };
 
   xarray-einstats = callPackage ../development/python-modules/xarray-einstats { };
 
