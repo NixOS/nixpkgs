@@ -13,6 +13,7 @@
   bpftools,
   pcre2,
   zlib,
+  withBpf ? true,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
@@ -42,6 +43,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+  ] ++ lib.optionals withBpf [
     bpftools
   ];
 
@@ -50,9 +52,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     spdlog
     nlohmann_json
     systemd
+    zlib
+  ] ++ lib.optionals withBpf [
     libbpf
     elfutils
-    zlib
   ];
 
   # BPF A call to built-in function '__stack_chk_fail' is not supported.
@@ -66,7 +69,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       "USE_EXTERNAL_JSON" = true;
       "USE_EXTERNAL_SPDLOG" = true;
       "USE_EXTERNAL_FMTLIB" = true;
-      "USE_BPF_PROC_IMPL" = true;
+      "USE_BPF_PROC_IMPL" = withBpf;
       "BPF_BUILD_LIBBPF" = false;
       "ENABLE_SYSTEMD" = true;
       "ENABLE_REGEX_SUPPORT" = true;
