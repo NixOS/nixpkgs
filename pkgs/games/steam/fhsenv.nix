@@ -23,7 +23,7 @@ let
     # Errors in output without those
     pciutils
     # run.sh wants ldconfig
-    glibc.bin
+    glibc_multi.bin
     # Games' dependencies
     xorg.xrandr
     which
