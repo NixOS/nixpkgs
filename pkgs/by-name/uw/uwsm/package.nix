@@ -65,7 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Universal wayland session manager";
     homepage = "https://github.com/Vladimir-csp/uwsm";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ johnrtitor ];
+    maintainers = with lib.maintainers; [
+      johnrtitor
+      kai-tub
+    ];
     platforms = lib.platforms.linux;
   };
 })
