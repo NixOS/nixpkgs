@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pytestCheckHook,
   mock,
   six,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "sure";
   version = "2.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = isPyPy;
 
@@ -26,12 +27,13 @@ buildPythonPackage rec {
       --replace-fail "--cov=sure" ""
   '';
 
-  propagatedBuildInputs = [
-    mock
-    six
-  ];
+  build-system = [ setuptools ];
+  dependencies = [ six ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+  ];
 
   disabledTestPaths = [
     "tests/test_old_api.py" # require nose
