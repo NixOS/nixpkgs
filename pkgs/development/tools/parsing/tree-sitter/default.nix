@@ -149,6 +149,10 @@ rustPlatform.buildRustPackage {
     PREFIX=$out make install
     ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
     ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
+    ${lib.optionalString webUISupport ''
+      cp lib/binding_web/tree-sitter.js $out/lib
+      cp lib/binding_web/tree-sitter.wasm $out/lib
+    ''}
   '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
