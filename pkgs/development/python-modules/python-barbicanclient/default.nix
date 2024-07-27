@@ -4,6 +4,7 @@
   cliff,
   fetchFromGitea,
   keystoneauth1,
+  openstackdocstheme,
   oslo-i18n,
   oslo-serialization,
   oslo-utils,
@@ -12,6 +13,8 @@
   requests-mock,
   requests,
   setuptools,
+  sphinxcontrib-apidoc,
+  sphinxHook,
   stestr,
 }:
 
@@ -32,10 +35,21 @@ buildPythonPackage rec {
 
   env.PBR_VERSION = version;
 
+  postPatch = ''
+    # Disable rsvgconverter not needed to build manpage
+    substituteInPlace doc/source/conf.py \
+      --replace-fail "'sphinxcontrib.rsvgconverter'," "#'sphinxcontrib.rsvgconverter',"
+  '';
+
   build-system = [
+    openstackdocstheme
     pbr
     setuptools
+    sphinxHook
+    sphinxcontrib-apidoc
   ];
+
+  sphinxBuilders = [ "man" ];
 
   dependencies = [
     cliff
