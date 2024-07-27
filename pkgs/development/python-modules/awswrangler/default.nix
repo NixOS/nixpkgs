@@ -1,5 +1,4 @@
 {
-  backoff,
   sparqlwrapper,
   boto3,
   buildPythonPackage,

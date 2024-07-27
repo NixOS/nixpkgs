@@ -15,7 +15,6 @@
   pyyaml,
   regex,
   sarif-om,
-  setuptools,
   sympy,
 }:
 

@@ -19,7 +19,6 @@
   hypothesis,
   git,
   squashfsTools,
-  setuptools,
   setuptools-scm,
   stdenv,
 }:

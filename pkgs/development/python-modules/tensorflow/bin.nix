@@ -4,7 +4,6 @@
   fetchurl,
   buildPythonPackage,
   isPy3k,
-  pythonOlder,
   pythonAtLeast,
   astor,
   gast,

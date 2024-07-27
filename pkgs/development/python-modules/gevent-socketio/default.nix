@@ -4,7 +4,6 @@
   fetchPypi,
   gevent,
   gevent-websocket,
-  mock,
   versiontools,
   pythonOlder,
 }:

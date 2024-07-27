@@ -13,7 +13,6 @@
   graphene-django,
 
   # tests
-  python,
   pytest-django,
   pytestCheckHook
 }:
