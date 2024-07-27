@@ -29317,6 +29317,10 @@ with pkgs;
 
   cutecapture = callPackage ../applications/video/cutecapture { };
 
+  cwtch-ui = callPackage ../by-name/cw/cwtch-ui/package.nix {
+    flutter = flutter313;
+  };
+
   milkytracker = callPackage ../applications/audio/milkytracker {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio Foundation;
   };
