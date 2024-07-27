@@ -10137,6 +10137,8 @@ self: super: with self; {
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
+  opentype-feature-freezer = callPackage ../development/python-modules/opentype-feature-freezer { };
+
   openusd = callPackage ../development/python-modules/openusd {
     alembic = pkgs.alembic;
   };
