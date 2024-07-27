@@ -2,8 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  pythonOlder,
-  nose,
+  pytestCheckHook,
   setuptools,
   sphinx,
   sphinx-rtd-theme,
@@ -26,17 +25,11 @@ buildPythonPackage rec {
   dependencies = [ sphinx-rtd-theme ];
 
   nativeCheckInputs = [
-    nose
+    pytestCheckHook
     sphinx
   ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    nosetests tests
-
-    runHook postCheck
-  '';
+  pytestFlagsArray = [ "tests/build.py" ];
 
   pythonImportsCheck = [ "sphinx_rtd_dark_mode" ];
 

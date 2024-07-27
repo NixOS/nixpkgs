@@ -32,9 +32,9 @@ let
       rev = "v${version}";
       hash = "sha256-OsDohXRxovtEXaWiRGp8gJ0dXmoALyO+ZimeSO8aPVI=";
     } else if llvmMajor == "14" then {
-      version = "14.0.0+unstable-2024-02-14";
-      rev = "2221771c28dc224d5d560faf6a2cd73f8ecf713d";
-      hash = "sha256-J4qOgDdcsPRU1AXXXWN+qe4c47uMCrjmtM8MSrl9NjE=";
+      version = "14.0.0+unstable-2024-05-27";
+      rev = "62f5b09b11b1da42274371b1f7535f6f2ab11485";
+      hash = "sha256-lEOdWHyq9hEyBZPz9z1LxUAZqNub+mZFHHWMlzh3HaI=";
     } else if llvmMajor == "11" then {
       version = "11.0.0+unstable-2022-05-04";
       rev = "4ef524240833abfeee1c5b9fff6b1bd53f4806b3"; # 267 commits ahead of v11.0.0

@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     file
     flex
     python
+    swig
   ];
 
   buildInputs = [
@@ -55,7 +56,6 @@ stdenv.mkDerivation rec {
     libpcap
     ncurses
     openssl
-    swig
     zlib
     python
   ] ++ lib.optionals stdenv.isLinux [

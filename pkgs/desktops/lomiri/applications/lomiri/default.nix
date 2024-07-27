@@ -155,8 +155,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests/whitespace/check_whitespace.py
   '';
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     cmake
     glib # populates GSETTINGS_SCHEMAS_PATH

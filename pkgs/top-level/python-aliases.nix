@@ -334,7 +334,9 @@ mapAliases ({
   nose-cprof = throw "nose-cprof has been removed since it has not been maintained for 7 years and there are no dependent packages"; # added 2024-05-21
   nose-exclude = throw "nose-exclude has been removed since it has not been maintained since 2016"; # added 2024-05-21
   nose-randomly = throw "nose-randomly has been removed, it was archived and unmaintained since 2019"; # added 2024-05-22
+  nose-pattern-exclude = throw "nose-pattern-exclude has been removed as it has been unmaintained since 2014"; # added 2024-07-27
   nose_progressive = throw "nose_progressive has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; #added 2023-02-21
+  nose-warnings-filters = throw "nose-warnings-filters has been removed as it has been unmaintained since 2016"; # added 2024-07-27
   nose_warnings_filters = nose-warnings-filters; # added 2024-01-07
   notifymuch = throw "notifymuch has been promoted to a top-level attribute name: `pkgs.notifymuch`"; # added 2022-10-02
   Nuitka = nuitka; # added 2023-02-19
@@ -573,6 +575,7 @@ mapAliases ({
   theanoWithoutCuda = throw "theano has been removed because it is no longer maintained"; # added 2024-05-20
   theano-pymc = throw "theano-pymc has been removed because it is no longer maintained"; # added 2024-05-20
   thumborPexif = throw "thumborPexif has been removed, because it was unused."; # added 2024-01-07
+  tissue = throw "tissue has been removed, because it is archived since October 2022"; # added 2024-07-27
   torchgpipe = throw "torchgpipe has been removed, because it appears unmaintained and Pytorch now includes pipeline parallelism support"; # added 2024-05-18
   torrent_parser = torrent-parser; # added 2023-11-04
   transip = throw "transip has been removed because it is no longer maintained. TransIP SOAP V5 API was marked as deprecated"; # added 2023-02-27

@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     substituteInPlace bindings/python/CMakeLists.txt --replace " -u -r" ""
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ openssl python3.pkgs.pybind11 ];
   propagatedBuildInputs = [ caf' ];
 
