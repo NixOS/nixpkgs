@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   future,
   networkx,
   pygments,
@@ -12,7 +13,6 @@
   click,
   pydot,
   ipython,
-  packaging,
   pyqt5,
   pyperclip,
   nose,
@@ -33,7 +33,7 @@
 buildPythonPackage rec {
   pname = "androguard";
   version = "3.4.0a1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = pname;
@@ -42,9 +42,11 @@ buildPythonPackage rec {
     sha256 = "1aparxiq11y0hbvkayp92w684nyxyyx7mi0n1x6x51g5z6c58vmy";
   };
 
-  nativeBuildInputs = [ packaging ] ++ lib.optionals withGui [ qt5.wrapQtAppsHook ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs =
+  nativeBuildInputs = lib.optionals withGui [ qt5.wrapQtAppsHook ];
+
+  dependencies =
     [
       asn1crypto
       click
