@@ -206,7 +206,6 @@ in buildFHSEnv rec {
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-plugins-base
     json-glib # paradox launcher (Stellaris)
-    libdrm
     libxkbcommon # paradox launcher
     libvorbis # Dead Cells
     libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
@@ -223,9 +222,7 @@ in buildFHSEnv rec {
     zlib
     atk
     cairo
-    freetype
     gdk-pixbuf
-    fontconfig
 
     # Prison Architect
     libGLU
