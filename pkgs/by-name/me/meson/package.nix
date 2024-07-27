@@ -31,6 +31,9 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   patches = [
+    # Nixpkgs cmake uses NIXPKGS_CMAKE_PREFIX_PATH for the search path
+    ./000-nixpkgs-cmake-prefix-path.patch
+
     # In typical distributions, RPATH is only needed for internal libraries so
     # meson removes everything else. With Nix, the locations of libraries
     # are not as predictable, therefore we need to keep them in the RPATH.
