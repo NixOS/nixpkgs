@@ -3,19 +3,20 @@
 , libunwind
 , lz4
 , pkg-config
-, python3
+, elfutils
+, python311Packages
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python311Packages.buildPythonApplication rec {
   pname = "memray";
-  version = "1.11.0";
+  version = "1.13.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DaJ1Hhg7q4ckA5feUx0twOsmy28v5aBBCTUAkn43xAo=";
+    hash = "sha256-8ztnXNdsthoMvooWoJLKrB9yGHjkYhQ2jiwF3KujAnw=";
   };
 
   nativeBuildInputs = [
@@ -25,18 +26,22 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     libunwind
     lz4
-  ] ++ (with python3.pkgs; [
+    elfutils  # for `-ldebuginfod`
+  ] ++ (with python311Packages; [
     cython
   ]);
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python311Packages; [
+    pkgconfig
+    textual
     jinja2
     rich
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python311Packages; [
     ipython
     pytestCheckHook
+    pytest-cov # fix Unknown pytest.mark.no_cover
   ] ++ lib.optionals (pythonOlder "3.12") [
     greenlet
   ];
@@ -53,6 +58,15 @@ python3.pkgs.buildPythonApplication rec {
     # Import issue
     "test_header_allocator"
     "test_hybrid_stack_of_allocations_inside_ceval"
+
+    # snapshot-based tests are too fragile
+    # see https://github.com/bloomberg/memray/issues/654
+    "TestTUILooks"
+    "test_tui_basic"
+    "test_tui_pause"
+    "test_tui_gradient"
+    "test_merge_threads"
+    "test_unmerge_threads"
   ];
 
   disabledTestPaths = [
