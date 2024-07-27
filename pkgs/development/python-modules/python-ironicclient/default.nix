@@ -6,6 +6,7 @@
   dogpile-cache,
   jsonschema,
   keystoneauth1,
+  openstackdocstheme,
   openstacksdk,
   osc-lib,
   oslo-utils,
@@ -15,6 +16,8 @@
   pyyaml,
   requests,
   requests-mock,
+  sphinxcontrib-apidoc,
+  sphinxHook,
   stestr,
   stevedore,
 }:
@@ -28,6 +31,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-Blx0pr73uZA8eHd2iZ9WY+aozBFWsQhWpxoQKtjtJSk=";
   };
+
+  nativeBuildInputs = [
+    openstackdocstheme
+    sphinxcontrib-apidoc
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
 
   propagatedBuildInputs = [
     cliff
