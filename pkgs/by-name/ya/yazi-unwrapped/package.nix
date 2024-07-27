@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-qnbinuTuaPiD7ib3aCJzSwuA4s3naFzi+txqX7jkHIo=";
 
   env.YAZI_GEN_COMPLETIONS = true;
+  env.VERGEN_GIT_SHA = "Nixpkgs";
+  env.VERGEN_BUILD_DATE = "2024-04-23";
 
   # TODO: remove in the next release
   cargoBuildFlags = [
