@@ -7324,6 +7324,12 @@
     name = "George Shammas";
     keys = [ { fingerprint = "D0CF 440A A703 E0F9 73CB  A078 82BB 70D5 41AE 2DB4"; } ];
   };
+  gepardgame = {
+    name = "Thomas Schauer-Koeckeis";
+    email = "thomas.degg@gmail.com";
+    github = "Gepardgame";
+    githubId = 75749982;
+  };
   gepbird = {
     email = "gutyina.gergo.2@gmail.com";
     github = "gepbird";
