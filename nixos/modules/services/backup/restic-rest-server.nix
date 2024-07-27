@@ -15,7 +15,7 @@ in
       default = "8000";
       example = "127.0.0.1:8080";
       type = types.str;
-      description = "Listen on a specific IP address and port.";
+      description = "Listen on a specific IP address and port or unix socket.";
     };
 
     dataDir = mkOption {
