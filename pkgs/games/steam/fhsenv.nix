@@ -271,10 +271,10 @@ in buildFHSEnv rec {
   '' + extraProfile;
 
   runScript = writeShellScript "steam-wrapper.sh" ''
-    if [ -f /host/etc/NIXOS ]; then   # Check only useful on NixOS
-      ${glxinfo-i686}/bin/glxinfo >/dev/null 2>&1
+    if [ -f /etc/NIXOS ]; then   # Check only useful on NixOS
+      ${glxinfo-i686}/bin/glxinfo 2>&1 | grep -q Error
       # If there was an error running glxinfo, we know something is wrong with the configuration
-      if [ $? -ne 0 ]; then
+      if [ $? -eq 0 ]; then
         cat <<EOF > /dev/stderr
     **
     WARNING: Steam is not set up. Add the following options to /etc/nixos/configuration.nix
@@ -303,6 +303,7 @@ in buildFHSEnv rec {
   '' + args.extraPreBwrapCmds or "";
 
   extraBwrapArgs = [
+    "--bind /etc/NIXOS /etc/NIXOS" # required 32bit driver check in runScript
     "--bind-try /tmp/dumps /tmp/dumps"
   ] ++ args.extraBwrapArgs or [];
 
