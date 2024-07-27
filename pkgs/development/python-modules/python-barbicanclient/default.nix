@@ -79,6 +79,7 @@ buildPythonPackage rec {
     homepage = "https://opendev.org/openstack/python-barbicanclient";
     description = "Client library for OpenStack Barbican API";
     license = lib.licenses.asl20;
+    mainProgram = "barbican";
     maintainers = lib.teams.openstack.members;
   };
 }
