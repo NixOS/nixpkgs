@@ -37,7 +37,6 @@ mkKdeDerivation {
 
     mlt
     libv4l
-    glaxnimate
   ];
 
   qtWrapperArgs = [
