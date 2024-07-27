@@ -5,6 +5,7 @@
   glyphslib,
   setuptools-scm,
   ufo2ft,
+  ufolib2,
   fonttools,
   fontmath,
   lxml,
@@ -27,11 +28,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     glyphslib
     ufo2ft
+    ufolib2
     fonttools
     fontmath
     lxml
     setuptools
-  ];
+  ] ++ ufolib2.optional-dependencies.json;
 
   pythonImportsCheck = [ "fontmake" ];
 
