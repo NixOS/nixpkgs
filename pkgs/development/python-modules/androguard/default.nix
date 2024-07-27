@@ -15,8 +15,7 @@
   ipython,
   pyqt5,
   pyperclip,
-  nose,
-  nose-timer,
+  pytestCheckHook,
   mock,
   python-magic,
   codecov,
@@ -25,10 +24,11 @@
   # This is usually used as a library, and it'd be a shame to force the GUI
   # libraries to the closure if GUI is not desired.
   withGui ? false,
-  # Tests take a very long time, and currently fail, but next release' tests
-  # shouldn't fail
-  doCheck ? false,
+  # Deprecated in 24.11.
+  doCheck ? true,
 }:
+
+assert lib.warnIf (!doCheck) "python3Packages.androguard: doCheck is deprecated" true;
 
 buildPythonPackage rec {
   pname = "androguard";
@@ -42,7 +42,10 @@ buildPythonPackage rec {
     sha256 = "1aparxiq11y0hbvkayp92w684nyxyyx7mi0n1x6x51g5z6c58vmy";
   };
 
-  patches = [ ./drop-removed-networkx-formats.patch ];
+  patches = [
+    ./drop-removed-networkx-formats.patch
+    ./fix-tests.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -69,23 +72,17 @@ buildPythonPackage rec {
     ];
 
   nativeCheckInputs = [
+    pytestCheckHook
     codecov
     coverage
     mock
-    nose
-    nose-timer
     pyperclip
     pyqt5
     python-magic
   ];
-  inherit doCheck;
 
   # If it won't be verbose, you'll see nothing going on for a long time.
-  checkPhase = ''
-    runHook preCheck
-    nosetests --verbosity=3
-    runHook postCheck
-  '';
+  pytestFlagsArray = [ "--verbose" ];
 
   preFixup = lib.optionalString withGui ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
