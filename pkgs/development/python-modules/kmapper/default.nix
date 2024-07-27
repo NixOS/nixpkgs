@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   scikit-learn,
   numpy,
   scipy,
@@ -17,21 +18,25 @@
 buildPythonPackage rec {
   pname = "kmapper";
   version = "2.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-tda";
     repo = "kepler-mapper";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-i909J0yI8v8BqGbCkcjBAdA02Io+qpILdDkojZj0wv4=";
+    hash = "sha256-i909J0yI8v8BqGbCkcjBAdA02Io+qpILdDkojZj0wv4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     scikit-learn
     numpy
     scipy
     jinja2
   ];
+
+  pythonImportsCheck = [ "kmapper" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -47,6 +52,5 @@ buildPythonPackage rec {
     homepage = "https://kepler-mapper.scikit-tda.org/";
     license = licenses.mit;
     maintainers = [ ];
-    broken = true;
   };
 }
