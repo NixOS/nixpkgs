@@ -41,6 +41,16 @@ jobs:
         run: "nix-env -f '<nixpkgs>' -iAP nixf jq"
       - name: Check that Nix files pass nixf-tidy
         run: |
+          # Filtering error messages we don't like
+          nixf_wrapper(){
+            nixf-tidy --variable-lookup < "$1" | jq -r '
+              [
+                "sema-escaping-with"
+              ]
+              as $ignored_errors|[.[]|select(.sname as $s|$ignored_errors|index($s)|not)]
+            '
+          }
+
           failedFiles=()
 
           # Don't report errors to file overview
@@ -74,11 +84,11 @@ jobs:
                 continue
             esac
 
-            if [[ -n "$source" ]] && [[ "$(nixf-tidy --variable-lookup < ${{ env.base }}/"$source")" != '[]' ]] 2>/dev/null; then
+            if [[ -n "$source" ]] && [[ "$(nixf_wrapper ${{ env.base }}/"$source")" != '[]' ]] 2>/dev/null; then
               echo "Ignoring file $file because it doesn't pass nixf-tidy in the base commit"
               echo # insert blank line
             else
-              nixf_report="$(nixf-tidy --variable-lookup < "$dest")"
+              nixf_report="$(nixf_wrapper "$dest")"
               if [[ "$nixf_report" != '[]' ]]; then
                 echo "$dest doesn't pass nixf-tidy. Reported by nixf-tidy:"
                 errors=$(echo "$nixf_report" | jq -r --arg dest "$dest" '
