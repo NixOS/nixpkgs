@@ -61,7 +61,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     description = "Compiler for the C3 language";
     homepage = "https://github.com/c3lang/c3c";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [ luc65r anas ];
     platforms = platforms.all;
     mainProgram = "c3c";
   };
