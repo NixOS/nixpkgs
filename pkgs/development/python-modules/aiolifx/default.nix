@@ -40,8 +40,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for local communication with LIFX devices over a LAN";
-    homepage = "https://github.com/frawau/aiolifx";
-    changelog = "https://github.com/frawau/aiolifx/releases/tag/${version}";
+    homepage = "https://github.com/aiolifx/aiolifx";
+    changelog = "https://github.com/aiolifx/aiolifx/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ netixx ];
     mainProgram = "aiolifx";
