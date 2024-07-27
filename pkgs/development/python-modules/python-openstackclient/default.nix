@@ -10,6 +10,7 @@
   python-keystoneclient,
   python-novaclient,
   requests-mock,
+  setuptools,
   sphinxHook,
   sphinxcontrib-apidoc,
   stestr,
@@ -18,22 +19,23 @@
 buildPythonPackage rec {
   pname = "python-openstackclient";
   version = "6.6.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-u+8e00gpxBBSsuyiZIDinKH3K+BY0UMNpTQexExPKVw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     openstackdocstheme
+    setuptools
     sphinxHook
     sphinxcontrib-apidoc
   ];
 
   sphinxBuilders = [ "man" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     osc-lib
     pbr
     python-cinderclient
@@ -48,7 +50,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
     stestr run
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "openstackclient" ];
