@@ -45,6 +45,8 @@ in
 
   helm-words = callPackage ./manual-packages/helm-words { };
 
+  icicles = callPackage ./manual-packages/icicles { };
+
   idris2-mode = callPackage ./manual-packages/idris2-mode { };
 
   isearch-plus = callPackage ./manual-packages/isearch-plus { };
