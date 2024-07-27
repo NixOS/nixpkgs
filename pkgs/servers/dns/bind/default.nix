@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, darwin
 , perl
 , pkg-config
 , libcap
@@ -41,7 +42,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libidn2 libtool libxml2 openssl libuv nghttp2 jemalloc ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
-    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
+    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]))
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
