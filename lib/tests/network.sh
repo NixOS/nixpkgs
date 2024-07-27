@@ -111,6 +111,16 @@ expectFailure '(internal._ipv6.split "::/0").prefixLength'   "IPv6 subnet should
 expectFailure '(internal._ipv6.split "::/129").prefixLength' "IPv6 subnet should be in range \[1;128\], got 129"
 expectFailure '(internal._ipv6.split "/::/").prefixLength'   "is not a valid IPv6 address in CIDR notation"
 
+expectSuccess '(internal._ipv6.calculateFirstAddress [65535 65535 65535 65535 65535 65535 65535 65535] 1)'   '[32768,0,0,0,0,0,0,0]'
+expectSuccess '(internal._ipv6.calculateFirstAddress [65535 65535 65535 65535 65535 65535 65535 65535] 16)'  '[65535,0,0,0,0,0,0,0]'
+expectSuccess '(internal._ipv6.calculateFirstAddress [65535 65535 65535 65535 65535 65535 65535 65535] 17)'  '[65535,32768,0,0,0,0,0,0]'
+expectSuccess '(internal._ipv6.calculateFirstAddress [65535 65535 65535 65535 65535 65535 65535 65535] 128)' '[65535,65535,65535,65535,65535,65535,65535,65535]'
+expectSuccess '(internal._ipv6.calculateFirstAddress [0 0 0 0 65535 65535 65535 65535] 64)'                  '[0,0,0,0,0,0,0,0]'
+
+expectSuccess '(internal._ipv6.calculateLastAddress [0 0 0 0 0 0 0 0] 1)'       '[32767,65535,65535,65535,65535,65535,65535,65535]'
+expectSuccess '(internal._ipv6.calculateLastAddress [0 0 0 0 0 0 0 0] 64)'      '[0,0,0,0,65535,65535,65535,65535]'
+expectSuccess '(internal._ipv6.calculateLastAddress [0 0 1 0 0 0 0 65535] 127)' '[0,0,1,0,0,0,0,65535]'
+
 # Library API
 expectSuccess 'ipv6.isValidIpStr "2001:DB8::ffff/64"' 'true'
 expectSuccess 'ipv6.isValidIpStr ":::ffff/64"'        'false'
@@ -120,5 +130,13 @@ expectSuccess '(ipv6.fromString "2001:DB8::ffff/64").addressCidr' '"2001:db8:0:0
 expectSuccess '(ipv6.fromString "2001:DB8::ffff").addressCidr'    '"2001:db8:0:0:0:0:0:ffff/128"'
 expectSuccess '(ipv6.fromString "2001:DB8::ffff").url'    '"[2001:db8:0:0:0:0:0:ffff]"'
 expectSuccess '(ipv6.fromString "2001:DB8::ffff").urlWithPort 80'    '"[2001:db8:0:0:0:0:0:ffff]:80"'
+
+expectSuccess '(ipv6.firstAddress (ipv6.fromString "2001:DB8::ffff/64")).addressCidr'                          '"2001:db8:0:0:0:0:0:0/64"'
+expectSuccess '(ipv6.firstAddress (ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44")).addressCidr' '"1234:5678:90a0:0:0:0:0:0/44"'
+expectSuccess '(ipv6.firstAddress (ipv6.fromString "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff")).addressCidr'    '"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128"'
+
+expectSuccess '(ipv6.lastAddress (ipv6.fromString "2001:DB8::ffff/64")).addressCidr'                          '"2001:db8:0:0:ffff:ffff:ffff:ffff/64"'
+expectSuccess '(ipv6.lastAddress (ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44")).addressCidr' '"1234:5678:90af:ffff:ffff:ffff:ffff:ffff/44"'
+expectSuccess '(ipv6.lastAddress (ipv6.fromString "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff")).addressCidr'    '"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128"'
 
 echo >&2 tests ok

@@ -92,5 +92,67 @@ in
         isValid = (builtins.tryEval (builtins.deepSeq parsed parsed)).success;
       in
       isValid;
+
+    /**
+      Calculates the first address in an IPv6 subnet.
+
+      # Type
+
+      ```
+      firstAddress :: ipv6AddrAttrs -> ipv6AddrAttrs
+      ```
+
+      # Examples
+
+      ```nix
+      firstAddress (fromString "2001:DB8::ffff/64")
+      => {
+        address = "2001:db8:0:0:0:0:0:0";
+        ...
+      }
+      ```
+
+      # Arguments
+
+      addrV6
+      : IPv6 type produced by a parser like `ipv6.fromString`.
+    */
+    firstAddress =
+      addrV6:
+      let
+        address = _ipv6.calculateFirstAddress addrV6._address addrV6.prefixLength;
+      in
+      _ipv6.makeIpv6Type address addrV6.prefixLength;
+
+    /**
+      Calculates the last address in an IPv6 subnet.
+
+      # Type
+
+      ```
+      lastAddress :: ipv6AddrAttrs -> ipv6AddrAttrs
+      ```
+
+      # Examples
+
+      ```nix
+      lastAddress (fromString "2001:DB8::ffff/64")
+      => {
+        address = "2001:db8:0:0:ffff:ffff:ffff:ffff";
+        ...
+      }
+      ```
+
+      # Arguments
+
+      addrV6
+      : IPv6 type produced by a parser like `ipv6.fromString`.
+    */
+    lastAddress =
+      addrV6:
+      let
+        address = _ipv6.calculateLastAddress addrV6._address addrV6.prefixLength;
+      in
+      _ipv6.makeIpv6Type address addrV6.prefixLength;
   };
 }

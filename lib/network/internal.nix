@@ -155,6 +155,85 @@ let
       length pieces == ipv6Pieces
     ) "toStringFromExpandedIp: expected a list with ${ipv6Pieces}";
     (strings.concatMapStringsSep ":" (piece: strings.toLower (trivial.toHexString piece)) pieces);
+
+  /**
+    Raises `base` to the power of `exponent`.
+
+    # Type: int -> int -> int
+
+    ```nix
+    pow 2 3
+    => 8
+    ```
+  */
+  pow =
+    base: exponent:
+    if exponent < 0 then
+      throw "lib.network.pow: Exponent cannot be negative."
+    else if exponent == 0 then
+      1
+    else
+      lists.foldl' (acc: _: acc * base) 1 (lists.range 1 exponent);
+in
+let
+  /**
+    Calculates the first address in a subnet.
+
+    # Type: ipv6IR -> int -> ipv6IR
+
+    ```nix
+    calculateFirstAddress [8193 3512 0 0 0 0 0 65535] 16
+    => [8193 0 0 0 0 0 0 0]
+    ```
+  */
+  calculateFirstAddress =
+    addr: prefixLength:
+    let
+      prefixMask = lists.imap0 (
+        idx: piece:
+        # Generate a decimal number, which in binary format will have the format "1111111100000000", where the number of ones is equal to `bits'.
+        let
+          bits = trivial.min (trivial.max (prefixLength - ipv6PieceBits * idx) 0) ipv6PieceBits;
+          # 2^n - 2^(n-k) to pad k bits with ones on the left.
+          maskForPiece = (pow 2 ipv6PieceBits) - (pow 2 (ipv6PieceBits - bits));
+        in
+        maskForPiece
+      ) addr;
+
+      firstAddress = lists.zipListsWith (l: r: trivial.bitAnd l r) addr prefixMask;
+    in
+    firstAddress;
+
+  /**
+    Calculates the last address in a subnet.
+
+    # Type: ipv6IR -> int -> ipv6IR
+
+    ```nix
+    calculateLastAddress [8193 3512 0 0 0 0 0 65535] 16
+    => [8193 65535 65535 65535 65535 65535 65535 65535]
+    ```
+  */
+  calculateLastAddress =
+    addr: prefixLength:
+    let
+      suffixLength = ipv6Bits - prefixLength;
+      suffixMask = lists.imap0 (
+        idx: piece:
+        # Generate a decimal number, which in binary format will have the format "0000000011111111", where the number of ones is equal to `bits'.
+        let
+          bits = trivial.min (trivial.max (
+            suffixLength - ipv6PieceBits * (ipv6Pieces - idx - 1)
+          ) 0) ipv6PieceBits;
+          # 2^n - 1 to pad k bits with ones on the right.
+          maskForPiece = (pow 2 bits) - 1;
+        in
+        maskForPiece
+      ) addr;
+
+      lastAddress = lists.zipListsWith (l: r: trivial.bitOr l r) addr suffixMask;
+    in
+    lastAddress;
 in
 {
   /*
@@ -164,6 +243,8 @@ in
     one of the internal parsers, such as `parseIpv6FromString`
   */
   _ipv6 = {
+    inherit calculateFirstAddress calculateLastAddress;
+
     /*
       Creates ipv6AddrAttrs. The returned attr set contains most of the basic
       fields that a user wants to get from an address, such as the URL-formatted
