@@ -2,7 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   jedi,
+  packaging,
   pygments,
   urwid,
   urwid-readline,
@@ -14,7 +16,7 @@
 buildPythonPackage rec {
   pname = "pudb";
   version = "2024.1.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,8 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-rcmwAEK6g2cRffCmwNxi+pYJq9IcO/jltz1iCQfFtD4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     jedi
+    packaging
     pygments
     urwid
     urwid-readline
