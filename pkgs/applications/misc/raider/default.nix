@@ -2,8 +2,6 @@
 , blueprint-compiler
 , desktop-file-utils
 , fetchFromGitHub
-, gettext
-, glib
 , gtk4
 , lib
 , libadwaita

@@ -9288,6 +9288,8 @@ self: super: with self; {
 
   od = callPackage ../development/python-modules/od { };
 
+  oddsprout = callPackage ../development/python-modules/oddsprout { };
+
   odfpy = callPackage ../development/python-modules/odfpy { };
 
   odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
@@ -9666,6 +9668,8 @@ self: super: with self; {
 
   pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
 
+  pandoc-latex-environment = callPackage ../development/python-modules/pandoc-latex-environment { };
+
   pandoc-xnos = callPackage ../development/python-modules/pandoc-xnos { };
 
   pandocfilters = callPackage ../development/python-modules/pandocfilters { };
@@ -9789,6 +9793,8 @@ self: super: with self; {
   paypalhttp = callPackage ../development/python-modules/paypalhttp { };
 
   paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
+
+  pbar = callPackage ../development/python-modules/pbar { };
 
   pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
 
@@ -12606,6 +12612,8 @@ self: super: with self; {
 
   python-axolotl-curve25519 = callPackage ../development/python-modules/python-axolotl-curve25519 { };
 
+  python-barbicanclient = callPackage ../development/python-modules/python-barbicanclient { };
+
   python-barcode = callPackage ../development/python-modules/python-barcode { };
 
   python-baseconv = callPackage ../development/python-modules/python-baseconv { };
@@ -12639,6 +12647,8 @@ self: super: with self; {
   python-dbusmock = callPackage ../development/python-modules/python-dbusmock { };
 
   python-decouple = callPackage ../development/python-modules/python-decouple { };
+
+  python-designateclient = callPackage ../development/python-modules/python-designateclient { };
 
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
@@ -13867,6 +13877,8 @@ self: super: with self; {
   };
 
   saneyaml = callPackage ../development/python-modules/saneyaml { };
+
+  samarium = callPackage ../development/python-modules/samarium { };
 
   sampledata = callPackage ../development/python-modules/sampledata { };
 
@@ -17628,15 +17640,13 @@ self: super: with self; {
 
   yoyo-migrations = callPackage ../development/python-modules/yoyo-migrations { };
 
-  yt-dlp = callPackage ../tools/misc/yt-dlp {
-    ffmpeg = pkgs.ffmpeg-headless;
-  };
+  yt-dlp = toPythonModule (pkgs.yt-dlp.override {
+    python3Packages = self;
+  });
 
-  yt-dlp-light = callPackage ../tools/misc/yt-dlp {
-    atomicparsleySupport = false;
-    ffmpegSupport = false;
-    rtmpSupport = false;
-  };
+  yt-dlp-light = toPythonModule (pkgs.yt-dlp-light.override {
+    python3Packages = self;
+  });
 
   youtube-search = callPackage ../development/python-modules/youtube-search { };
 

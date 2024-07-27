@@ -1,5 +1,4 @@
 {
-  lib,
   makeScopeWithSplicing',
   generateSplicesForMkScope,
   callPackage,

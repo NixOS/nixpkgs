@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, pkgs
 , fetchFromGitHub
 , fetchurl
 , mpiCheckPhaseHook
@@ -14,7 +13,6 @@
 , lapack
 , python3
 , tcsh
-, bash
 , automake
 , autoconf
 , libtool

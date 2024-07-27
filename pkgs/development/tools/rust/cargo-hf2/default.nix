@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ libusb1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
 
   meta = with lib; {
-    description = "Cargo Subcommand for Microsoft HID Flashing Library for UF2 Bootloaders ";
+    description = "Cargo Subcommand for Microsoft HID Flashing Library for UF2 Bootloaders";
     mainProgram = "cargo-hf2";
     homepage = "https://lib.rs/crates/cargo-hf2";
     license = with licenses; [ mit ];

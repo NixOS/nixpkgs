@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-analogue-clock-applet";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "samlane-ma";
     repo = "analogue-clock-applet";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yId5bbdmELinBmZ5eISa5hQSYkeZCkix2FJ287GdcCs=";
+    hash = "sha256-NvXX5paRrjeJFqnOeJS9yNp+7cRohsN3+eocLqvcVj8=";
   };
 
   nativeBuildInputs = [

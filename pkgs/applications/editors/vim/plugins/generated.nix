@@ -6168,6 +6168,18 @@ final: prev:
     meta.homepage = "https://github.com/savq/melange-nvim/";
   };
 
+  messenger-nvim = buildVimPlugin {
+    pname = "messenger.nvim";
+    version = "2024-07-18";
+    src = fetchFromGitHub {
+      owner = "lsig";
+      repo = "messenger.nvim";
+      rev = "309fec2ddd3de55eba2781b676931b37ce8190af";
+      sha256 = "1ycvxxcp04hh134nazdrzd9g98mkdipc2p0amvcphpqr9p9s3pcm";
+    };
+    meta.homepage = "https://github.com/lsig/messenger.nvim/";
+  };
+
   miasma-nvim = buildVimPlugin {
     pname = "miasma.nvim";
     version = "2023-10-24";
@@ -9819,18 +9831,6 @@ final: prev:
       sha256 = "1xklq4g6dvqd3a5msnrir899hzqmjkscpb8bq9wd4fi3ivmjjjgg";
     };
     meta.homepage = "https://github.com/rust-lang/rust.vim/";
-  };
-
-  rustaceanvim = buildNeovimPlugin {
-    pname = "rustaceanvim";
-    version = "2024-07-10";
-    src = fetchFromGitHub {
-      owner = "mrcjkb";
-      repo = "rustaceanvim";
-      rev = "047f9c9d8cd2861745eb9de6c1570ee0875aa795";
-      sha256 = "0q06rkg8dfzxvlwp7svp8sjkk0f2x5vvjkv6grdmm302s43jj7rk";
-    };
-    meta.homepage = "https://github.com/mrcjkb/rustaceanvim/";
   };
 
   sad-vim = buildVimPlugin {

@@ -1,8 +1,6 @@
 {
   lib,
   vscode-utils,
-  writeScript,
-  runtimeShell,
   jq,
   clang-tools,
   gdbUseFixed ? true,

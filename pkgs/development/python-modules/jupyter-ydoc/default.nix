@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-ydoc";
-  version = "2.0.1";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyter_ydoc";
     inherit version;
-    hash = "sha256-cW3ajLiviB/sL7yIrqP7DTuyS764Cpmor/LgHQidWw0=";
+    hash = "sha256-HcvxOGGzZ4AA1pr07zi0njoS+AgbqFHGgDk8Lhi8S4Q=";
   };
 
   nativeBuildInputs = [

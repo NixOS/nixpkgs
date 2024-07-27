@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, lazarus, fpc, pango, cairo, glib
-, atk, gtk2, libX11, gdk-pixbuf, busybox, python3
+, atk, gtk2, libX11, gdk-pixbuf, python3
 , makeWrapper
 }:
 

@@ -38,7 +38,7 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.antennas = {
-      description = "Antennas HDHomeRun emulator for Tvheadend. ";
+      description = "Antennas HDHomeRun emulator for Tvheadend.";
       wantedBy    = [ "multi-user.target" ];
 
       # Config

@@ -2,7 +2,6 @@
 , blueprint-compiler
 , buildGoModule
 , fetchFromGitHub
-, fetchpatch
 , gobject-introspection
 , gtk4
 , libadwaita

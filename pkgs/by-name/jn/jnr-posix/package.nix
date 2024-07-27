@@ -1,9 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, dpkg
 , jdk
-, makeWrapper
 , maven
 , which
 }:

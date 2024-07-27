@@ -1598,10 +1598,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  agate = callPackage ../servers/gemini/agate {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   agi = callPackage ../tools/graphics/agi { };
 
   agola = callPackage ../development/tools/continuous-integration/agola { };
@@ -17193,8 +17189,8 @@ with pkgs;
   python27Packages = python27.pkgs;
   python39Packages = python39.pkgs;
   python310Packages = python310.pkgs;
-  python311Packages = python311.pkgs;
-  python312Packages = python312.pkgs;
+  python311Packages = recurseIntoAttrs python311.pkgs;
+  python312Packages = recurseIntoAttrs python312.pkgs;
   python313Packages = python313.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
@@ -22711,7 +22707,6 @@ with pkgs;
   libviperfx = callPackage ../development/libraries/libviperfx { };
 
   libvpx = callPackage ../development/libraries/libvpx { };
-  libvpx_1_8 = callPackage ../development/libraries/libvpx/1_8.nix { };
 
   libvterm = callPackage ../development/libraries/libvterm { };
   libvterm-neovim = callPackage ../development/libraries/libvterm-neovim { };
@@ -23393,6 +23388,7 @@ with pkgs;
   openslp = callPackage ../development/libraries/openslp { };
 
   openstackclient = with python311Packages; toPythonApplication python-openstackclient;
+  barbicanclient = with python311Packages; toPythonApplication python-barbicanclient;
   glanceclient = with python311Packages; toPythonApplication python-glanceclient;
   heatclient = with python311Packages; toPythonApplication python-heatclient;
   ironicclient = with python311Packages; toPythonApplication python-ironicclient;
@@ -35305,9 +35301,11 @@ with pkgs;
 
   youki = callPackage ../applications/virtualization/youki { };
 
-  yt-dlp = with python3Packages; toPythonApplication yt-dlp;
-
-  yt-dlp-light = with python3Packages; toPythonApplication yt-dlp-light;
+  yt-dlp-light = yt-dlp.override {
+    atomicparsleySupport = false;
+    ffmpegSupport = false;
+    rtmpSupport = false;
+  };
 
   youtube-viewer = perlPackages.WWWYoutubeViewer;
 
@@ -39136,6 +39134,8 @@ with pkgs;
   nixpkgs-hammering = callPackage ../tools/nix/nixpkgs-hammering { };
 
   nixpkgs-lint-community = callPackage ../tools/nix/nixpkgs-lint { };
+
+  nixpkgs-manual = callPackage ../../doc/doc-support/package.nix { };
 
   rnix-hashes = callPackage ../tools/nix/rnix-hashes { };
 

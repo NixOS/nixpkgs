@@ -2,8 +2,6 @@
 , stdenv
 , autoPatchelfHook
 , requireFile
-, callPackage
-, makeWrapper
 , alsa-lib
 , dbus
 , fontconfig

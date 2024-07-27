@@ -2973,14 +2973,14 @@ buildLuarocksPackage {
 rustaceanvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "rustaceanvim";
-  version = "4.25.1-1";
+  version = "5.0.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/rustaceanvim-4.25.1-1.rockspec";
-    sha256 = "1lrjybnicbyl9rh0qcp846s6b57gryca0fw719c8h8pasb9kf1m0";
+    url    = "mirror://luarocks/rustaceanvim-5.0.0-1.rockspec";
+    sha256 = "0rabhsya9qx4lybd47b6s95yh6y7nnngpfpqxf2h8pf492790yxc";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/mrcjkb/rustaceanvim/archive/4.25.1.zip";
-    sha256 = "1rym8n7595inb9zdrmw7jwp5iy5r28b7mfjs4k2mvmlby9fxcmz0";
+    url    = "https://github.com/mrcjkb/rustaceanvim/archive/5.0.0.zip";
+    sha256 = "07a0r6lhwxsk3asrnwmj39j51kqaz33qi3kv9788nms3mpvplxc1";
   };
 
   disabled = luaOlder "5.1";

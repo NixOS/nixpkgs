@@ -7,7 +7,6 @@
 , tzdata
 , unicode-emoji
 , unicode-character-database
-, darwin
 , cmake
 , ninja
 , pkg-config

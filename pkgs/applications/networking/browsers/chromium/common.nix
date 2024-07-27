@@ -267,6 +267,31 @@ let
         commit = "a976cb05b4024b7a6452d1541378d718cdfe33e6";
         hash = "sha256-K2PSeJAvhGH2/Yp63/4mJ85NyqXqDDkMWY+ptrpgmOI=";
       })
+    ] ++ lib.optionals (versionRange "127" "128") [
+      # Fix missing chrome/browser/ui/webui_name_variants.h dependency
+      # and ninja 1.12 compat in M127.
+      # https://issues.chromium.org/issues/345645751
+      # https://issues.chromium.org/issues/40253918
+      # https://chromium-review.googlesource.com/c/chromium/src/+/5641516
+      (githubPatch {
+        commit = "2c101186b60ed50f2ba4feaa2e963bd841bcca47";
+        hash = "sha256-luu3ggo6XoeeECld1cKZ6Eh8x/qQYmmKI/ThEhuutuY=";
+      })
+      # https://chromium-review.googlesource.com/c/chromium/src/+/5644627
+      (githubPatch {
+        commit = "f2b43c18b8ecfc3ddc49c42c062d796c8b563984";
+        hash = "sha256-uxXxSsiS8R0827Oi3xsG2gtT0X+jJXziwZ1y8+7K+Qg=";
+      })
+      # https://chromium-review.googlesource.com/c/chromium/src/+/5646245
+      (githubPatch {
+        commit = "4ca70656fde83d2db6ed5a8ac9ec9e7443846924";
+        hash = "sha256-iQuRRZjDDtJfr+B7MV+TvUDDX3bvpCnv8OpSLJ1WqCE=";
+      })
+      # https://chromium-review.googlesource.com/c/chromium/src/+/5647662
+      (githubPatch {
+        commit = "50d63ffee3f7f1b1b9303363742ad8ebbfec31fa";
+        hash = "sha256-H+dv+lgXSdry3NkygpbCdTAWWdTVdKdVD3Aa62w091E=";
+      })
     ] ++ [
       # Required to fix the build with a more recent wayland-protocols version
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
@@ -365,7 +390,7 @@ let
       patchShebangs .
       # Link to our own Node.js and Java (required during the build):
       mkdir -p third_party/node/linux/node-linux-x64/bin
-      ln -s "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
+      ln -s${lib.optionalString (chromiumVersionAtLeast "127") "f"} "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
       ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
 
       # Allow building against system libraries in official builds
@@ -462,6 +487,9 @@ let
       use_system_libffi = true;
       # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
       rust_sysroot_absolute = "${buildPackages.rustc}";
+    } // lib.optionalAttrs (chromiumVersionAtLeast "127") {
+      rust_bindgen_root = "${buildPackages.rust-bindgen}";
+    } // {
       enable_rust = true;
       # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
       # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).

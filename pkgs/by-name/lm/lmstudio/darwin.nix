@@ -1,7 +1,6 @@
 { stdenv
 , fetchurl
 , undmg
-, lib
 , meta
 , pname
 , version
