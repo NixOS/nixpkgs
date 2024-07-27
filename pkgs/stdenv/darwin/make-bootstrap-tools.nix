@@ -1,25 +1,34 @@
-{ pkgspath ? ../../.., test-pkgspath ? pkgspath
-, localSystem ? { system = builtins.currentSystem; }
-, crossSystem ? null
-, bootstrapFiles ? null
+{
+  pkgspath ? ../../..,
+  test-pkgspath ? pkgspath,
+  localSystem ? {
+    system = builtins.currentSystem;
+  },
+  crossSystem ? null,
+  bootstrapFiles ? null,
 }:
 
-let cross = if crossSystem != null
-      then { inherit crossSystem; }
-      else {};
-    custom-bootstrap = if bootstrapFiles != null
-      then { stdenvStages = args:
-              let args' = args // { bootstrapFiles = bootstrapFiles; };
-              in (import "${pkgspath}/pkgs/stdenv/darwin" args');
-           }
-      else {};
-in with import pkgspath ({ inherit localSystem; } // cross // custom-bootstrap);
+let
+  cross = if crossSystem != null
+    then { inherit crossSystem; }
+    else {};
+
+  custom-bootstrap = if bootstrapFiles != null
+    then { stdenvStages = args:
+            let args' = args // { bootstrapFiles = bootstrapFiles; };
+            in (import "${pkgspath}/pkgs/stdenv/darwin" args');
+         }
+    else {};
+
+  pkgs = import pkgspath ({ inherit localSystem; } // cross // custom-bootstrap);
+  inherit (pkgs) lib stdenv darwin;
+in
 
 rec {
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
-    nativeBuildInputs = [ dumpnar nukeReferences ];
+    nativeBuildInputs = [ pkgs.dumpnar pkgs.nukeReferences ];
 
     buildCommand = let
       inherit (lib)
@@ -28,7 +37,7 @@ rec {
         getLib
         ;
 
-      coreutils_ = (coreutils.override (args: {
+      coreutils_ = (pkgs.coreutils.override (args: {
         # We want coreutils without ACL support.
         aclSupport = false;
         # Cannot use a single binary build, or it gets dynamically linked against gmp.
@@ -41,13 +50,13 @@ rec {
       });
 
       # Avoid messing with libkrb5 and libnghttp2.
-      curl_ = curlMinimal.override (args: {
+      curl_ = pkgs.curlMinimal.override (args: {
         gssSupport = false;
         http2Support = false;
         scpSupport = false;
       });
 
-      unpackScript = writeText "bootstrap-tools-unpack.sh" ''
+      unpackScript = pkgs.writeText "bootstrap-tools-unpack.sh" ''
         set -euo pipefail
 
         echo Unpacking the bootstrap tools... >&2
@@ -104,8 +113,8 @@ rec {
 
       cp -rL ${getDev darwin.Libsystem}/include $out
       chmod -R u+w $out/include
-      cp -rL ${getDev libiconv}/include/* $out/include
-      cp -rL ${getDev gnugrep.pcre2}/include/* $out/include
+      cp -rL ${getDev pkgs.libiconv}/include/* $out/include
+      cp -rL ${getDev pkgs.gnugrep.pcre2}/include/* $out/include
       mv $out/include $out/include-Libsystem
 
       # Copy binutils.
@@ -118,58 +127,58 @@ rec {
       cp ${getBin coreutils_}/bin/* $out/bin
       (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
 
-      cp -d ${getBin bash}/bin/{ba,}sh $out/bin
-      cp -d ${getBin diffutils}/bin/* $out/bin
-      cp ${getBin findutils}/bin/{find,xargs} $out/bin
-      cp -d ${getBin gawk}/bin/{g,}awk $out/bin
-      cp -d ${getBin gnugrep}/bin/grep $out/bin
-      cp -d ${getBin gnumake}/bin/* $out/bin
-      cp -d ${getBin gnused}/bin/* $out/bin
-      cp -d ${getBin patch}/bin/* $out/bin
+      cp -d ${getBin pkgs.bash}/bin/{ba,}sh $out/bin
+      cp -d ${getBin pkgs.diffutils}/bin/* $out/bin
+      cp ${getBin pkgs.findutils}/bin/{find,xargs} $out/bin
+      cp -d ${getBin pkgs.gawk}/bin/{g,}awk $out/bin
+      cp -d ${getBin pkgs.gnugrep}/bin/grep $out/bin
+      cp -d ${getBin pkgs.gnumake}/bin/* $out/bin
+      cp -d ${getBin pkgs.gnused}/bin/* $out/bin
+      cp -d ${getBin pkgs.patch}/bin/* $out/bin
 
-      cp -d ${getLib gettext}/lib/libintl*.dylib $out/lib
-      cp -d ${getLib gnugrep.pcre2}/lib/libpcre2*.dylib $out/lib
-      cp -d ${getLib libiconv}/lib/lib*.dylib $out/lib
-      cp -d ${getLib libxml2}/lib/libxml2*.dylib $out/lib
-      cp -d ${getLib ncurses}/lib/libncurses*.dylib $out/lib
+      cp -d ${getLib pkgs.gettext}/lib/libintl*.dylib $out/lib
+      cp -d ${getLib pkgs.gnugrep.pcre2}/lib/libpcre2*.dylib $out/lib
+      cp -d ${getLib pkgs.libiconv}/lib/lib*.dylib $out/lib
+      cp -d ${getLib pkgs.libxml2}/lib/libxml2*.dylib $out/lib
+      cp -d ${getLib pkgs.ncurses}/lib/libncurses*.dylib $out/lib
 
       # copy package extraction tools
-      cp -d ${getBin bzip2}/bin/b{,un}zip2 $out/bin
-      cp ${getBin cpio}/bin/cpio $out/bin
-      cp ${getBin gnutar}/bin/tar $out/bin
-      cp ${getBin gzip}/bin/.gzip-wrapped $out/bin/gzip
-      cp ${getBin pbzx}/bin/pbzx $out/bin
-      cp ${getBin xz}/bin/xz $out/bin
-      cp -d ${getLib bzip2}/lib/libbz2*.dylib $out/lib
-      cp -d ${getLib gmpxx}/lib/libgmp*.dylib $out/lib
-      cp -d ${getLib xar}/lib/libxar*.dylib $out/lib
-      cp -d ${getLib xz}/lib/liblzma*.dylib $out/lib
-      cp -d ${getLib zlib}/lib/libz*.dylib $out/lib
+      cp -d ${getBin pkgs.bzip2}/bin/b{,un}zip2 $out/bin
+      cp ${getBin pkgs.cpio}/bin/cpio $out/bin
+      cp ${getBin pkgs.gnutar}/bin/tar $out/bin
+      cp ${getBin pkgs.gzip}/bin/.gzip-wrapped $out/bin/gzip
+      cp ${getBin pkgs.pbzx}/bin/pbzx $out/bin
+      cp ${getBin pkgs.xz}/bin/xz $out/bin
+      cp -d ${getLib pkgs.bzip2}/lib/libbz2*.dylib $out/lib
+      cp -d ${getLib pkgs.gmpxx}/lib/libgmp*.dylib $out/lib
+      cp -d ${getLib pkgs.xar}/lib/libxar*.dylib $out/lib
+      cp -d ${getLib pkgs.xz}/lib/liblzma*.dylib $out/lib
+      cp -d ${getLib pkgs.zlib}/lib/libz*.dylib $out/lib
 
       # This used to be in-nixpkgs, but now is in the bundle
       # because I can't be bothered to make it partially static
       cp ${getBin curl_}/bin/curl $out/bin
       cp -d ${getLib curl_}/lib/libcurl*.dylib $out/lib
-      cp -d ${getLib openssl}/lib/*.dylib $out/lib
+      cp -d ${getLib pkgs.openssl}/lib/*.dylib $out/lib
 
       # Copy what we need of clang
-      cp -d ${getBin llvmPackages.clang-unwrapped}/bin/clang{,++,-cl,-cpp,-[0-9]*} $out/bin
-      cp -d ${getLib llvmPackages.clang-unwrapped}/lib/libclang-cpp*.dylib $out/lib
-      cp -rd ${getLib llvmPackages.clang-unwrapped}/lib/clang $out/lib
+      cp -d ${getBin pkgs.llvmPackages.clang-unwrapped}/bin/clang{,++,-cl,-cpp,-[0-9]*} $out/bin
+      cp -d ${getLib pkgs.llvmPackages.clang-unwrapped}/lib/libclang-cpp*.dylib $out/lib
+      cp -rd ${getLib pkgs.llvmPackages.clang-unwrapped}/lib/clang $out/lib
 
-      cp -d ${getLib llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
+      cp -d ${getLib pkgs.llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
       mkdir -p $out/lib/darwin
-      cp -d ${getLib llvmPackages.compiler-rt}/lib/darwin/libclang_rt.{,profile_}osx.a  $out/lib/darwin
-      cp -d ${getLib llvmPackages.compiler-rt}/lib/libclang_rt.{,profile_}osx.a $out/lib
-      cp -d ${getLib llvmPackages.llvm}/lib/libLLVM.dylib $out/lib
-      cp -d ${getLib libffi}/lib/libffi*.dylib $out/lib
+      cp -d ${getLib pkgs.llvmPackages.compiler-rt}/lib/darwin/libclang_rt.{,profile_}osx.a  $out/lib/darwin
+      cp -d ${getLib pkgs.llvmPackages.compiler-rt}/lib/libclang_rt.{,profile_}osx.a $out/lib
+      cp -d ${getLib pkgs.llvmPackages.llvm}/lib/libLLVM.dylib $out/lib
+      cp -d ${getLib pkgs.libffi}/lib/libffi*.dylib $out/lib
 
       mkdir $out/include
-      cp -rd ${getDev llvmPackages.libcxx}/include/c++ $out/include
+      cp -rd ${getDev pkgs.llvmPackages.libcxx}/include/c++ $out/include
 
       # copy .tbd assembly utils
       cp ${getBin darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
-      cp -d ${getLib libyaml}/lib/libyaml*.dylib $out/lib
+      cp -d ${getLib pkgs.libyaml}/lib/libyaml*.dylib $out/lib
 
       # copy sigtool
       cp -d ${getBin darwin.sigtool}/bin/{codesign,sigtool} $out/bin
@@ -178,13 +187,13 @@ rec {
 
       # tools needed to unpack bootstrap archive
       mkdir -p unpack/bin unpack/lib
-      cp -d ${getBin bash}/bin/{bash,sh} unpack/bin
+      cp -d ${getBin pkgs.bash}/bin/{bash,sh} unpack/bin
       cp ${getBin coreutils_}/bin/mkdir unpack/bin
-      cp ${getBin gnutar}/bin/tar unpack/bin
-      cp ${getBin xz}/bin/xz unpack/bin
-      cp -d ${getLib gettext}/lib/libintl*.dylib unpack/lib
-      cp -d ${getLib libiconv}/lib/lib*.dylib unpack/lib
-      cp -d ${getLib xz}/lib/liblzma*.dylib unpack/lib
+      cp ${getBin pkgs.gnutar}/bin/tar unpack/bin
+      cp ${getBin pkgs.xz}/bin/xz unpack/bin
+      cp -d ${getLib pkgs.gettext}/lib/libintl*.dylib unpack/lib
+      cp -d ${getLib pkgs.libiconv}/lib/lib*.dylib unpack/lib
+      cp -d ${getLib pkgs.xz}/lib/liblzma*.dylib unpack/lib
       cp ${unpackScript} unpack/bootstrap-tools-unpack.sh
 
       #
@@ -277,7 +286,7 @@ rec {
 
   bootstrapFiles = {
     bootstrapTools = "${build}/on-server/bootstrap-tools.tar.xz";
-    unpack = runCommand "unpack" { allowedReferences = []; } ''
+    unpack = pkgs.runCommand "unpack" { allowedReferences = []; } ''
       cp -r ${build}/unpack $out
     '';
   };
@@ -383,7 +392,7 @@ rec {
       clang++ -Wl,-flat_namespace -idirafter $tools/include-Libsystem -isystem$tools/include/c++/v1 \
         --sysroot=$tools -L./libtest -L$PWD/libSystem-boot hello3.cc
 
-      tar xvf ${hello.src}
+      tar xvf ${pkgs.hello.src}
       cd hello-*
       # hello configure detects -liconv is needed but doesn't add to the link step
       LDFLAGS=-liconv ./configure --prefix=$out
