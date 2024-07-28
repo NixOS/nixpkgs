@@ -5,7 +5,6 @@
   python3Packages,
   perl,
   ffmpeg,
-  gitMinimal,
 }:
 
 let
@@ -17,8 +16,7 @@ let
     pysocks
     cryptography
     pyyaml
-    nose3
-    pytest
+    pytestCheckHook
     mock
     requests-mock
     ;
@@ -55,25 +53,18 @@ buildPythonApplication {
   ];
 
   nativeCheckInputs = [
-    nose3
-    pytest
+    pytestCheckHook
     mock
     requests-mock
-    gitMinimal
+  ];
+
+  pytestFlagsArray = [
+    "--doctest-modules"
+    "lib"
   ];
 
   postBuild = ''
     make svtplay-dl.1
-  '';
-
-  doCheck = python3Packages.pythonOlder "3.12";
-
-  checkPhase = ''
-    runHook preCheck
-
-    nosetests --all-modules --with-doctest
-
-    runHook postCheck
   '';
 
   postInstall = ''
