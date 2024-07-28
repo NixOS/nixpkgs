@@ -86,7 +86,7 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-player";
     description = "Media Player for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
