@@ -2892,8 +2892,6 @@ with pkgs;
 
   portfolio-filemanager = callPackage ../applications/file-managers/portfolio-filemanager { };
 
-  pot = callPackage ../by-name/po/pot/package.nix { pnpm = pnpm_8; };
-
   potreeconverter = callPackage ../applications/graphics/potreeconverter { };
 
   ranger = callPackage ../applications/file-managers/ranger { };

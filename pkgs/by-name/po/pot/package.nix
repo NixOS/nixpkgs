@@ -4,7 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   nodejs,
-  pnpm,
+  pnpm_9,
   wrapGAppsHook3,
   cargo,
   rustc,
@@ -20,15 +20,18 @@
   xdotool,
 }:
 
+let
+  pnpm = pnpm_9;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pot";
-  version = "2.7.9";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "pot-app";
     repo = "pot-desktop";
     rev = finalAttrs.version;
-    hash = "sha256-Y2gFLvRNBjOGxdpIeoY1CXEip0Ht73aymWIP5wuc9kU=";
+    hash = "sha256-Y0/N5xunEXOG+FuZE23xsSwFd6PL1XClV5UIckTYNPs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
@@ -40,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-nRRUX6CH3s1cEoI80gtRmu0ovXpIwS+h1rFJo8kw60E=";
+    hash = "sha256-AmMV8Nrn+zH/9bDkFX3Mx5xIQjkoXR8SzkdJRXkxTbA=";
   };
 
   pnpmRoot = "..";
@@ -49,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     lockFile = ./Cargo.lock;
     outputHashes = {
       # All other crates in the same workspace reuse this hash.
-      "tauri-plugin-autostart-0.0.0" = "sha256-/uxaSBp+N1VjjSiwf6NwNnSH02Vk6gQZ/CzO+AyEI7o=";
+      "tauri-plugin-autostart-0.0.0" = "sha256-fgJvoe3rKom2DdXXgd5rx7kzaWL/uvvye8jfL2SNhrM=";
     };
   };
 
@@ -73,21 +76,20 @@ stdenv.mkDerivation (finalAttrs: {
     xdotool
   ];
 
-  ESBUILD_BINARY_PATH = "${lib.getExe (
+  env.ESBUILD_BINARY_PATH = "${lib.getExe (
     esbuild.override {
       buildGoModule =
         args:
         buildGoModule (
           args
           // rec {
-            version = "0.18.20";
+            version = "0.21.5";
             src = fetchFromGitHub {
               owner = "evanw";
               repo = "esbuild";
               rev = "v${version}";
-              hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
+              hash = "sha256-FpvXWIlt67G8w3pBKZo/mcp57LunxDmRUaCU/Ne89B8=";
             };
-            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
           }
         );
     }
