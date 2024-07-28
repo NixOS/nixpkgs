@@ -2,6 +2,7 @@
 , tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, Cocoa
 , debug
 , useXdgDir
+, desktopFilePath
 }:
 
 let
@@ -13,10 +14,10 @@ let
   tilesDeps = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf freetype ]
     ++ optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
-  patchDesktopFile = ''
-    substituteInPlace $out/share/applications/org.cataclysmdda.CataclysmDDA.desktop \
+  patchDesktopFile = if desktopFilePath != "" then ''
+    substituteInPlace ${desktopFilePath} \
       --replace "Exec=cataclysm-tiles" "Exec=$out/bin/cataclysm-tiles"
-  '';
+  '' else '''';
 
   installMacOSAppLauncher = ''
     app=$out/Applications/Cataclysm.app

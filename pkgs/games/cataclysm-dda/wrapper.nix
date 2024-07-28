@@ -1,4 +1,4 @@
-{ lib, symlinkJoin, makeWrapper }:
+{ lib, symlinkJoin, makeWrapper, desktopFilePath }:
 
 unwrapped:
 
@@ -36,7 +36,7 @@ else symlinkJoin {
         mv "''${1}.bk" "$1"
         sed -i "$1" -e "s,${builtins.storeDir}/.\+\(/bin/cataclysm-tiles\),$out\1,"
     }
-    for script in "$out/share/applications/cataclysm-dda.desktop" \
+    for script in "${desktopFilePath}" \
                   "$out/Applications/Cataclysm.app/Contents/MacOS/Cataclysm.sh"
     do
         if [ -e "$script" ]; then

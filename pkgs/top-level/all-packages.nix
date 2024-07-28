@@ -34396,6 +34396,8 @@ with pkgs;
 
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
+  cataclysm-bn-git = cataclysmDDA.bn-git.tiles;
+
   cbonsai = callPackage ../games/cbonsai { };
 
   cdogs-sdl = callPackage ../games/cdogs-sdl { };

@@ -15,6 +15,7 @@
 let
   common = callPackage ./common.nix {
     inherit CoreFoundation tiles Cocoa debug useXdgDir;
+    desktopFilePath = "$out/share/applications/org.cataclysmdda.CataclysmDDA.desktop";
   };
 
   self = common.overrideAttrs (common: rec {
