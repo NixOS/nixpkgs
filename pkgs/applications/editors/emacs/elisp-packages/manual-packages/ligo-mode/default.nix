@@ -7,13 +7,13 @@
 
 melpaBuild {
   pname = "ligo-mode";
-  version = "1.7.1-unstable-2024-07-17";
+  version = "1.7.0-unstable-2024-07-27";
 
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
-    rev = "09afc3ff3dd9c88b2dfbc563278a78a099b39902";
-    hash = "sha256-AX0zZljZPrfBlpdgCNuiq0JaYpHcVBdHHZ9jM31LlQs=";
+    rev = "8e31c2851fb722bba177f6e372eb69783e5c03b1";
+    hash = "sha256-8qADbo+7ASLlWEkNG0lPMIPoQnHOwyQipnBzImkELwc=";
   };
 
   files = ''("tools/emacs/ligo-mode.el")'';
