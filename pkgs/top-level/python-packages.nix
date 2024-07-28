@@ -16810,6 +16810,8 @@ self: super: with self; {
 
   vdirsyncer = callPackage ../development/python-modules/vdirsyncer { };
 
+  vecs = callPackage ../development/python-modules/vecs { };
+
   vector = callPackage ../development/python-modules/vector { };
 
   vehicle = callPackage ../development/python-modules/vehicle { };
