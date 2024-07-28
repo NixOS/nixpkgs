@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitea
+, jdupes
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   env.PREFIX = placeholder "out";
+
+  passthru.tests = {
+    inherit jdupes;
+  };
 
   meta = with lib; {
     description = "Shared code used by several utilities written by Jody Bruchon";
