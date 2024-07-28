@@ -51,10 +51,6 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
-
   nativeBuildInputs =
     [ just pkg-config makeBinaryWrapper rustPlatform.bindgenHook ];
   buildInputs = [ wayland libxkbcommon alsa-lib ffmpeg llvmPackages.clang ];
