@@ -7,18 +7,18 @@
 }:
 
 let
-  pname = "vscode-runner";
   version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "Merrit";
-    repo = pname;
+    repo = "vscode-runner";
     rev = "v${version}";
     hash = "sha256-mDhwydAFlDcpbpmh+I2zjjuC+/5hmygFkpHSZGEpuLs=";
   };
 in
 buildDartApplication {
-  inherit pname version src;
+  pname = "vscode-runner";
+  inherit version src;
 
   vendorHash = "sha256-jS4jH00uxZIX81sZQIi+s42ofmXpD4/tPMRV2heaM2U=";
 
