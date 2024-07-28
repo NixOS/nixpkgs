@@ -3,7 +3,6 @@
   blockdiag,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -23,17 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-WmprkHOgvlsOIg8H77P7fzEqxGnj6xaL7Df7urRkg3o=";
   };
 
+  patches = [ ./fix_test_generate.patch ];
+
   build-system = [ setuptools ];
 
   propagatedBuildInputs = [ blockdiag ];
 
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
-
-  nativeCheckInputs = [
-    nose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "src/actdiag/tests/" ];
 

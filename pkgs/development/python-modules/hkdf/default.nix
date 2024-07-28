@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   nose,
   setuptools,
 }:
@@ -22,9 +21,6 @@ buildPythonPackage {
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "hkdf" ];
-
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [ nose ];
 

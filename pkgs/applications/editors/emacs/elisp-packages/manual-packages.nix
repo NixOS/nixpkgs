@@ -13,11 +13,11 @@ in
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
-  beancount = callPackage ./manual-packages/beancount { };
-
   cask = callPackage ./manual-packages/cask { };
 
-  codeium = callPackage ./manual-packages/codeium { };
+  codeium = callPackage ./manual-packages/codeium {
+    inherit (pkgs) codeium;
+  };
 
   consult-gh = callPackage ./manual-packages/consult-gh { };
 
@@ -33,8 +33,6 @@ in
 
   emacs-conflict = callPackage ./manual-packages/emacs-conflict { };
 
-  enlight = callPackage ./manual-packages/enlight { };
-
   evil-markdown = callPackage ./manual-packages/evil-markdown { };
 
   font-lock-plus = callPackage ./manual-packages/font-lock-plus { };
@@ -44,6 +42,8 @@ in
   grid = callPackage ./manual-packages/grid { };
 
   helm-words = callPackage ./manual-packages/helm-words { };
+
+  icicles = callPackage ./manual-packages/icicles { };
 
   idris2-mode = callPackage ./manual-packages/idris2-mode { };
 

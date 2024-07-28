@@ -36,5 +36,5 @@ rustPlatform.buildRustPackage rec {
       cp ${cargo-lock} $out/Cargo.lock
     '';
 
-  cargoSha256 = "0d6g52hjflnw2zvlx10pz78527vh7mw5n43yi8q6dwr3pkbds1fs";
+  cargoHash = "sha256-2gXd1rwj82Ywin4QW3g9cB9R0PkXhE73F9xSJ6EozzQ=";
 }

@@ -35,7 +35,7 @@
 , glib, gtk3, dbus-glib
 , libXScrnSaver, libXcursor, libXtst, libxshmfence, libGLU, libGL
 , mesa
-, pciutils, protobuf, speechd, libXdamage, at-spi2-core
+, pciutils, protobuf, speechd-minimal, libXdamage, at-spi2-core
 , pipewire
 , libva
 , libdrm, wayland, libxkbcommon # Ozone
@@ -196,7 +196,7 @@ let
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       mesa # required for libgbm
-      pciutils protobuf speechd libXdamage at-spi2-core
+      pciutils protobuf speechd-minimal libXdamage at-spi2-core
       pipewire
       libva
       libdrm wayland libxkbcommon
@@ -224,7 +224,7 @@ let
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       mesa # required for libgbm
-      pciutils protobuf speechd libXdamage at-spi2-core
+      pciutils protobuf speechd-minimal libXdamage at-spi2-core
       pipewire
       libva
       libdrm wayland libxkbcommon

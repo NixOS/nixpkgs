@@ -24,7 +24,7 @@
 ## Ubuntu
 , liberation_ttf, curl, util-linux, xdg-utils, wget
 ## Arch Linux.
-, flac, harfbuzz, icu, libpng, libopus, snappy, speechd
+, flac, harfbuzz, icu, libpng, libopus, snappy, speechd-minimal
 ## Gentoo
 , bzip2, libcap
 
@@ -38,7 +38,7 @@
 , libvaSupport ? true, libva
 
 # For Vulkan support (--enable-features=Vulkan)
-, addOpenGLRunpath
+, addDriverRunpath
 }:
 
 let
@@ -54,7 +54,7 @@ let
     systemd
     libexif pciutils
     liberation_ttf curl util-linux wget
-    flac harfbuzz icu libpng opusWithCustomModes snappy speechd
+    flac harfbuzz icu libpng opusWithCustomModes snappy speechd-minimal
     bzip2 libcap at-spi2-atk at-spi2-core
     libkrb5 libdrm libglvnd mesa coreutils
     libxkbcommon pipewire wayland
@@ -129,7 +129,7 @@ in stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : "$rpath" \
       --prefix PATH            : "$binpath" \
       --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
-      --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addOpenGLRunpath.driverLink}/share" \
+      --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
       --set CHROME_WRAPPER  "google-chrome-$dist" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}

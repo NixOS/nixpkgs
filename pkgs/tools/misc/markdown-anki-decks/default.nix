@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     markdown
     python-frontmatter
     typer
-  ] ++ typer.optional-dependencies.all;
+  ];
 
   # No tests available on Pypi and there is only a failing version assertion test in the repo.
   doCheck = false;

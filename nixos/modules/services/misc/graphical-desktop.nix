@@ -42,6 +42,8 @@ in
 
     programs.gnupg.agent.pinentryPackage = lib.mkOverride 1100 pkgs.pinentry-gnome3;
 
+    services.speechd.enable = lib.mkDefault true;
+
     systemd.defaultUnit = lib.mkIf (xcfg.autorun || dmcfg.enable) "graphical.target";
 
     xdg = {

@@ -39,9 +39,6 @@ tcl.mkTclDerivation rec {
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
-    # Disable clang link time optimization until the following issue is resolved:
-    # https://github.com/NixOS/nixpkgs/issues/19098
-    "-fno-lto"
     # On Darwin setenv and unsetenv are defined in stdlib.h from libSystem
     "-DHAVE_SETENV"
     "-DHAVE_UNSETENV"

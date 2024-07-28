@@ -8,14 +8,14 @@ Subject: [PATCH] meson.build: do not create systemdstatedir
  1 file changed, 1 deletion(-)
 
 diff --git a/meson.build b/meson.build
-index 7419e2b0b0..c82a527976 100644
+index cecdbc3aa7..bd7f8ec580 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -2497,7 +2497,6 @@ install_data('LICENSE.GPL2',
+@@ -2652,7 +2652,6 @@ install_data('LICENSE.GPL2',
  install_subdir('LICENSES',
                 install_dir : docdir)
  
 -install_emptydir(systemdstatedir)
  
- ############################################################
+ #####################################################################
  

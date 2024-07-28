@@ -13,6 +13,7 @@
 , python3
 , substituteAll
 , zlib
+, fetchpatch
 }:
 
 let
@@ -20,13 +21,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-hRTmKO2E6SIdvAhO7OJtV8dcsGm39c51H+2ZGEkdcFY=";
+    hash = "sha256-RBE4AUF5fymUA87JEDWtpUFXmVPFzdhZgDI7/kscTx4=";
   };
 
   patches = [
@@ -71,13 +72,15 @@ python3.pkgs.buildPythonApplication rec {
     # This edge case is explicitly part of meson but is wrong for nix
     ./007-freebsd-pkgconfig-path.patch
 
-    # Fix cross-compilation of proc-macro (and mesa)
-    # https://github.com/mesonbuild/meson/issues/12973
-    ./0001-Revert-rust-recursively-pull-proc-macro-dependencies.patch
-
-    # Fix compilation of Meson using Ninja 1.12
-    # FIXME: remove in the next point release
-    ./007-Allow-building-via-ninja-12.patch
+    # Find boost via pkg-config
+    # https://github.com/NixOS/nixpkgs/issues/86131
+    # Already merged upstream PR: https://github.com/mesonbuild/meson/pull/13272
+    # FIXME: Will be in meson 1.5.0
+    (fetchpatch {
+      name = "find-boost-pkg-config.patch";
+      url = "https://github.com/mesonbuild/meson/commit/c21b886ba8a60cce7fa56e4be40bd7547129fb00.patch";
+      hash = "sha256-uSilNuSx9yd1cxs0XVLcLw4MOXEd2uIe2g+wk+SBqeU=";
+    })
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
