@@ -13114,6 +13114,8 @@ self: super: with self; {
 
   qmk-dotty-dict = callPackage ../development/python-modules/qmk-dotty-dict { };
 
+  r2r = callPackage ../development/python-modules/r2r { };
+
   r2pipe = callPackage ../development/python-modules/r2pipe { };
 
   rachiopy = callPackage ../development/python-modules/rachiopy { };
