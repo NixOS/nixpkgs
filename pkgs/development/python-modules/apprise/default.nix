@@ -60,8 +60,12 @@ buildPythonPackage rec {
     # Nondeterministic. Fails with `assert 0 == 1`
     "test_notify_emoji_general"
     "test_plugin_mqtt_general"
+    # Nondeterministic. Fails with `assert 3 == 2`
+    "test_plugin_matrix_transaction_ids_api_v3"
     # Nondeterministic. Fails with `AssertionError`
     "test_plugin_xbmc_kodi_urls"
+    # Nondeterministic. Fails with `AssertionError`
+    "test_plugin_zulip_urls"
   ];
 
   disabledTestPaths = [
