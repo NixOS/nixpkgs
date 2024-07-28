@@ -203,6 +203,36 @@ let
       };
     };
 
+    pkgsArocc = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsArocc = super';
+        })
+      ] ++ overlays;
+      # Bootstrap a cross stdenv using the Aro C compiler.
+      # This is currently not possible when compiling natively,
+      # so we don't need to check hostPlatform != buildPlatform.
+      crossSystem = stdenv.hostPlatform // {
+        useArocc = true;
+        linker = "lld";
+      };
+    };
+
+    pkgsZig = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsZig = super';
+        })
+      ] ++ overlays;
+      # Bootstrap a cross stdenv using the Zig toolchain.
+      # This is currently not possible when compiling natively,
+      # so we don't need to check hostPlatform != buildPlatform.
+      crossSystem = stdenv.hostPlatform // {
+        useZig = true;
+        linker = "lld";
+      };
+    };
+
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported. 32-bit is also not supported.
