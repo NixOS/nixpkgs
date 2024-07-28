@@ -1,15 +1,15 @@
 { pkgs ? import ../../.. {} }:
 
 let
+  inherit (pkgs) lib stdenv config;
   libc = pkgs.stdenv.cc.libc;
   patchelf = pkgs.patchelf.overrideAttrs(previousAttrs: {
     NIX_CFLAGS_COMPILE = (previousAttrs.NIX_CFLAGS_COMPILE or []) ++ [ "-static-libgcc" "-static-libstdc++" ];
     NIX_CFLAGS_LINK = (previousAttrs.NIX_CFLAGS_LINK or []) ++ [ "-static-libgcc" "-static-libstdc++" ];
   });
-in with pkgs; rec {
-
-
-  coreutilsMinimal = coreutils.override (args: {
+in
+rec {
+  coreutilsMinimal = pkgs.coreutils.override (args: {
     # We want coreutils without ACL/attr support.
     aclSupport = false;
     attrSupport = false;
@@ -17,10 +17,10 @@ in with pkgs; rec {
     singleBinary = "symlinks";
   });
 
-  tarMinimal = gnutar.override { acl = null; };
+  tarMinimal = pkgs.gnutar.override { acl = null; };
 
-  busyboxMinimal = busybox.override {
-    useMusl = lib.meta.availableOn stdenv.hostPlatform musl;
+  busyboxMinimal = pkgs.busybox.override {
+    useMusl = lib.meta.availableOn stdenv.hostPlatform pkgs.musl;
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''
@@ -34,8 +34,8 @@ in with pkgs; rec {
     '';
   };
 
-  bootGCC = gcc.cc.override { enableLTO = false; };
-  bootBinutils = binutils.bintools.override {
+  bootGCC = pkgs.gcc.cc.override { enableLTO = false; };
+  bootBinutils = pkgs.binutils.bintools.override {
     withAllTargets = false;
     # Don't need two linkers, disable whatever's not primary/default.
     enableGold = false;
@@ -43,7 +43,7 @@ in with pkgs; rec {
     enableShared = false;
   };
 
-  build = callPackage ./stdenv-bootstrap-tools.nix {
+  build = pkgs.callPackage ./stdenv-bootstrap-tools.nix {
     inherit bootBinutils coreutilsMinimal tarMinimal busyboxMinimal bootGCC libc patchelf;
   };
 
@@ -70,7 +70,7 @@ in with pkgs; rec {
     }
     else throw "unsupported libc";
 
-  test = callPackage ./test-bootstrap-tools.nix {
+  test = pkgs.callPackage ./test-bootstrap-tools.nix {
     inherit bootstrapTools;
     inherit (bootstrapFiles) busybox;
   };
