@@ -44,7 +44,7 @@ in
 stdenv.mkDerivation {
   inherit pname version;
 
-  outputs = [ "out" "demos" ];
+  outputs = [ "out" "demos" "dist" ];
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
@@ -67,27 +67,19 @@ stdenv.mkDerivation {
     addDriverRunpath
   ] ++ lib.optionals pythonSupport [
     pythonPackages.python
+    pythonPackages.setuptools
+    pythonPackages.pip
+    pythonPackages.wheel
   ];
 
   buildInputs = [
     blas
     swig
   ] ++ lib.optionals pythonSupport [
-    pythonPackages.setuptools
-    pythonPackages.pip
-    pythonPackages.wheel
+    pythonPackages.numpy
   ] ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
   ] ++ lib.optionals cudaSupport cudaComponents;
-
-  propagatedBuildInputs = lib.optionals pythonSupport [
-    pythonPackages.numpy
-    pythonPackages.packaging
-  ];
-
-  passthru.extra-requires.all = [
-    pythonPackages.numpy
-  ];
 
   cmakeFlags = [
     "-DFAISS_ENABLE_GPU=${if cudaSupport then "ON" else "OFF"}"
@@ -119,19 +111,14 @@ stdenv.mkDerivation {
       cp ./demos/demo_ivfpq_indexing $demos/bin/
     fi
   '' + lib.optionalString pythonSupport ''
-    mkdir -p $out/${pythonPackages.python.sitePackages}
-    (cd faiss/python && python -m pip install dist/*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache)
+    mkdir "$dist"
+    cp faiss/python/dist/*.whl "$dist/"
   '';
 
   postFixup = lib.optionalString (pythonSupport && cudaSupport) ''
     addDriverRunpath $out/${pythonPackages.python.sitePackages}/faiss/*.so
     addDriverRunpath $demos/bin/*
   '';
-
-  # Need buildPythonPackage for this one
-  # pythonImportsCheck = [
-  #   "faiss"
-  # ];
 
   passthru = {
     inherit cudaSupport cudaPackages pythonSupport;
