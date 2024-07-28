@@ -17258,8 +17258,6 @@ self: super: with self; {
 
   webexteamssdk = callPackage ../development/python-modules/webexteamssdk { };
 
-  webhelpers = callPackage ../development/python-modules/webhelpers { };
-
   webob = callPackage ../development/python-modules/webob { };
 
   webrtc-noise-gain = callPackage ../development/python-modules/webrtc-noise-gain { };
