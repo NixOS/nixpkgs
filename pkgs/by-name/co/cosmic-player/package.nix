@@ -62,9 +62,7 @@ rustPlatform.buildRustPackage rec {
   dontUseJustBuild = true;
 
   justFlags = [
-    "--set"
-    "prefix"
-    (placeholder "out")
+    "--set prefix ${placeholder "out"}"
     "--set"
     "bin-src"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-player"
