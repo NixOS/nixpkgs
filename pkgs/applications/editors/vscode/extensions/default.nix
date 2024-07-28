@@ -2894,6 +2894,55 @@ let
         };
       };
 
+      ms-dotnettools.vscodeintellicode-csharp = buildVscodeMarketplaceExtension {
+        mktplcRef =
+          let
+            sources = {
+              "x86_64-linux" = {
+                arch = "linux-x64";
+                hash = "sha256-oQMwzQuW5vjxtDboRCeiEO5aytsAY6rb14JDTmK3JPg=";
+              };
+              "x86_64-darwin" = {
+                arch = "darwin-x64";
+                hash = "sha256-/9+qtLDNYUFvdoehit3BihA38p6RqJ7na5Q27xxpZk0=";
+              };
+              "aarch64-linux" = {
+                arch = "linux-arm64";
+                hash = "sha256-JqLlYMKyTXaEzuTPPxVaO8WJiuCUN+9xBzyA6+aYdSc=";
+              };
+              "aarch64-darwin" = {
+                arch = "darwin-arm64";
+                hash = "sha256-dhiUePePkO3MxRQ5UP+lOxRax503JlERe/GWJ8pPUIg=";
+              };
+            };
+          in
+          {
+            name = "vscodeintellicode-csharp";
+            publisher = "ms-dotnettools";
+            version = "2.1.11";
+          }
+          // sources.${stdenv.system};
+        nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+        buildInputs = [
+          stdenv.cc.cc.lib
+          zlib
+        ];
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ms-dotnettools.vscodeintellicode-csharp/changelog";
+          description = "AI-assisted development features for C# in Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.vscodeintellicode-csharp";
+          homepage = "https://github.com/MicrosoftDocs/intellicode";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.magnouvean ];
+          platforms = [
+            "x86_64-linux"
+            "x86_64-darwin"
+            "aarch64-darwin"
+            "aarch64-linux"
+          ];
+        };
+      };
+
       ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-kubernetes-tools";
