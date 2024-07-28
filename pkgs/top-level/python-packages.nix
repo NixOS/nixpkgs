@@ -5331,6 +5331,8 @@ self: super: with self; {
     inherit (pkgs.buildPackages) meson;
   };
 
+  gstools = callPackage ../development/python-modules/gstools { };
+
   gtfs-realtime-bindings = callPackage ../development/python-modules/gtfs-realtime-bindings { };
 
   gto = callPackage ../development/python-modules/gto { };
@@ -5420,6 +5422,8 @@ self: super: with self; {
   halohome = callPackage ../development/python-modules/halohome { };
 
   handout = callPackage ../development/python-modules/handout { };
+
+  hankel = callPackage ../development/python-modules/hankel { };
 
   hap-python = callPackage ../development/python-modules/hap-python { };
 
@@ -9116,10 +9120,6 @@ self: super: with self; {
 
   nose-timer = callPackage ../development/python-modules/nose-timer { };
 
-  nose-pattern-exclude = callPackage ../development/python-modules/nose-pattern-exclude { };
-
-  nose-warnings-filters = callPackage ../development/python-modules/nose-warnings-filters { };
-
   nose-xunitmp = callPackage ../development/python-modules/nose-xunitmp { };
 
   notebook = callPackage ../development/python-modules/notebook { };
@@ -10689,16 +10689,21 @@ self: super: with self; {
 
   proto-plus = callPackage ../development/python-modules/proto-plus { };
 
-  # Protobuf 4.x
-  protobuf = callPackage ../development/python-modules/protobuf {
-    # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
-    protobuf = pkgs.protobuf;
-  };
-
   # Protobuf 3.x
   protobuf3 = callPackage ../development/python-modules/protobuf/3.nix {
     protobuf = pkgs.protobuf3_20;
   };
+
+  # Protobuf 4.x
+  protobuf4 = callPackage ../development/python-modules/protobuf/4.nix {
+    protobuf = pkgs.protobuf;
+  };
+
+  # Protobuf 5.x
+  protobuf5 = callPackage ../development/python-modules/protobuf/default.nix { };
+
+  # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
+  protobuf = protobuf4;
 
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
 
@@ -11266,6 +11271,8 @@ self: super: with self; {
   pyevmasm = callPackage ../development/python-modules/pyevmasm { };
 
   pyevilgenius = callPackage ../development/python-modules/pyevilgenius { };
+
+  pyevtk = callPackage ../development/python-modules/pyevtk { };
 
   pyexcel = callPackage ../development/python-modules/pyexcel { };
 
@@ -15538,8 +15545,6 @@ self: super: with self; {
 
   tinytuya = callPackage ../development/python-modules/tinytuya { };
 
-  tissue = callPackage ../development/python-modules/tissue { };
-
   titlecase = callPackage ../development/python-modules/titlecase { };
 
   tld = callPackage ../development/python-modules/tld { };
@@ -16924,8 +16929,6 @@ self: super: with self; {
   urwidtrees = callPackage ../development/python-modules/urwidtrees { };
 
   urwid-readline = callPackage ../development/python-modules/urwid-readline { };
-
-  urwid-mitmproxy = callPackage ../development/python-modules/urwid-mitmproxy { };
 
   usb-devices = callPackage ../development/python-modules/usb-devices { };
 

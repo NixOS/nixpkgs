@@ -6,22 +6,28 @@
   rustPlatform,
   darwin,
   libiconv,
+  mitmproxy,
   mitmproxy-macos,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy-rs";
-  version = "0.5.1";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy_rs";
     rev = version;
-    hash = "sha256-nrm1T2yaGVmYsubwNJHPnPDC/A/jYiKVzwBKmuc9MD4=";
+    hash = "sha256-zBlt83mtJOsVqskDAkpk50yZHxJO6B8QP7iv8L1YPWA=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+  cargoDeps = rustPlatform.importCargoLock {
+    outputHashes = {
+      "smoltcp-0.11.0" = "sha256-KC9nTKd2gfZ1ICjrkLK//M2bbqYlfcCK18gBdN0RqWQ=";
+    };
+    lockFile = ./Cargo.lock;
+  };
 
   buildAndTestSubdir = "mitmproxy-rs";
 
@@ -43,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mitmproxy/mitmproxy_rs";
     changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    inherit (mitmproxy.meta) maintainers;
   };
 }

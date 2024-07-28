@@ -822,6 +822,12 @@
     githubId = 20405311;
     name = "Aksh Gupta";
   };
+  akssri = {
+    email = "akssri@vakra.xyz";
+    github = "akssri";
+    githubId = 108771991;
+    name = "Akṣaya Śrīnivāsan";
+  };
   aktaboot = {
     email = "akhtaboo@protonmail.com";
     github = "aktaboot";
@@ -2368,6 +2374,13 @@
     github = "bcdarwin";
     githubId = 164148;
     name = "Ben Darwin";
+  };
+  bchmnn = {
+    email = "jacob.bachmann@posteo.de";
+    matrix = "@trilloyd:matrix.tu-berlin.de";
+    github = "bchmnn";
+    githubId = 34620799;
+    name = "Jacob Bachmann";
   };
   bdd = {
     email = "bdd@mindcast.org";

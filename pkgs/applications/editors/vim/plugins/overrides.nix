@@ -15,7 +15,8 @@
 , python3
 , rustPlatform
 , # Misc dependencies
-  Cocoa
+  arrow-cpp
+, Cocoa
 , code-minimap
 , dasht
 , deno
@@ -1200,8 +1201,11 @@
         dbee-go = buildGoModule {
           name = "nvim-dbee";
           src = "${oa.src}/dbee";
-          vendorHash = "sha256-AItvgOehVskGLARJWDnJLtWM5YHKN/zn/FnZQ0evAtI=";
-          buildInputs = [ duckdb ];
+          vendorHash = "sha256-U/3WZJ/+Bm0ghjeNUILsnlZnjIwk3ySaX3Rd4L9Z62A=";
+          buildInputs = [
+            arrow-cpp
+            duckdb
+          ];
         };
       in {
     dependencies = [ self.nui-nvim ];

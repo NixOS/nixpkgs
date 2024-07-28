@@ -12,17 +12,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rojo";
-  version = "7.4.1";
+  version = "7.4.2";
 
   src = fetchFromGitHub {
     owner = "rojo-rbx";
     repo = "rojo";
     rev = "v${version}";
-    hash = "sha256-7fnzNYAbsZW/48C4dwpMXXQy2ZgxbYFSs85wNKGcu/4=";
+    hash = "sha256-T4a54JiCGKfXvt80rCRZbS/zqV3gomzG0IwAQRxcQo8=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-9kmSNWsZY0OcqaYOCblMwkXTdGXhj7f/2pUDx/L/o2o=";
+  cargoHash = "sha256-hXEz7u6dT2LRcQDYNjK4yxSHA1lxXZwNP98r0NT6mgA=";
 
   nativeBuildInputs = [
     pkg-config

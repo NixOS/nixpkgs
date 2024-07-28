@@ -3167,8 +3167,6 @@ with pkgs;
 
   arduino-ci = callPackage ../development/embedded/arduino/arduino-ci { };
 
-  arduino-cli = callPackage ../development/embedded/arduino/arduino-cli { };
-
   arduino-core = callPackage ../development/embedded/arduino/arduino-core/chrootenv.nix { };
   arduino-core-unwrapped = callPackage ../development/embedded/arduino/arduino-core { };
 
@@ -7594,7 +7592,7 @@ with pkgs;
   easeprobe = callPackage ../tools/misc/easeprobe { };
 
   emscripten = callPackage ../development/compilers/emscripten {
-    llvmPackages = llvmPackages_18;
+    llvmPackages = llvmPackages_git;
   };
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
@@ -9140,8 +9138,8 @@ with pkgs;
 
   jadx = callPackage ../tools/security/jadx { };
 
-  jamesdsp = libsForQt5.callPackage ../applications/audio/jamesdsp { };
-  jamesdsp-pulse = libsForQt5.callPackage ../applications/audio/jamesdsp {
+  jamesdsp = qt6Packages.callPackage ../applications/audio/jamesdsp { };
+  jamesdsp-pulse = qt6Packages.callPackage ../applications/audio/jamesdsp {
     usePipewire = false;
     usePulseaudio = true;
   };
@@ -12207,8 +12205,6 @@ with pkgs;
   reiserfsprogs = callPackage ../tools/filesystems/reiserfsprogs { };
 
   relic = callPackage ../development/tools/relic { };
-
-  remind = callPackage ../tools/misc/remind { };
 
   remmina = darwin.apple_sdk_11_0.callPackage ../applications/networking/remote/remmina { };
 
@@ -24946,17 +24942,17 @@ with pkgs;
   };
 
   # Steel Bank Common Lisp
-  sbcl_2_4_5 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.4.5"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_4_6 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.4.6"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_4_6;
+  sbcl_2_4_7 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.7"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_4_7;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
