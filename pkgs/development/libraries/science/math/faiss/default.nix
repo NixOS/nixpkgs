@@ -53,11 +53,11 @@ stdenv.mkDerivation {
     hash = "sha256-nS8nhkNGGb2oAJKfr/MIAZjAwMxBGbNd16/CkEtv67I=";
   };
 
+  # Remove the following substituteInPlace when updating
+  # to a release that contains change from PR
+  # https://github.com/facebookresearch/faiss/issues/3239
+  # that fixes building faiss with swig 4.2.x
   postPatch = ''
-    # Remove the following substituteInPlace when updating
-    # to a release that contains change from PR
-    # https://github.com/facebookresearch/faiss/issues/3239
-    # that fixes building faiss with swig 4.2.x
     substituteInPlace faiss/python/swigfaiss.swig \
       --replace-fail '#ifdef SWIGWORDSIZE64' '#if (__SIZEOF_LONG__ == 8)'
   '';
