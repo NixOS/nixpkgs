@@ -86,7 +86,7 @@ rustPlatform.buildRustPackage rec {
     description = "High-performance build system for JavaScript and TypeScript codebases";
     homepage = "https://turbo.build/";
     changelog = "https://github.com/vercel/turbo/releases/tag/v${version}";
-    license = lib.licenses.mpl20;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dlip
       getchoo
