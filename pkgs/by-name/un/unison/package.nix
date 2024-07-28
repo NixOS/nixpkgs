@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.cis.upenn.edu/~bcpierce/unison/";
     description = "Bidirectional file synchronizer";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ viric nevivurn ];
+    maintainers = with maintainers; [ nevivurn ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin && enableX11; # unison-gui and uimac are broken on darwin
     mainProgram = if enableX11 then "unison-gui" else "unison";

@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://pointclouds.org/";
     description = "Open project for 2D/3D image and point cloud processing";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

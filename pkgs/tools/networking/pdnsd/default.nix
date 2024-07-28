@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "http://members.home.nl/p.a.rombouts/pdnsd";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [viric];
+    maintainers = [ ];
   };
 }

@@ -1,0 +1,36 @@
+A change introduced in PR https://github.com/rubygems/rubygems/pull/7797
+does not delete the binstub lock files after the binstub file is created.
+
+This change was introduced in rubygems 3.5.15,
+and this version causes Hydra builds to fail, in particular mastodon.
+
+A resolution is delete these binstub lock files after the binstub file is created
+to prevent lock files from ending up in the bin folders of the various derivations
+which will cause the build to fail.
+
+---
+diff --git a/bundler/lib/bundler/rubygems_ext.rb b/bundler/lib/bundler/rubygems_ext.rb
+index 503959bba7..603b30e277 100644
+--- a/bundler/lib/bundler/rubygems_ext.rb
++++ b/bundler/lib/bundler/rubygems_ext.rb
+@@ -47,6 +47,8 @@ def self.open_file_with_flock(path, &block)
+         else
+           File.open(path, flags, &block)
+         end
++      ensure
++        FileUtils.rm_f(path) if File.exist?(path)
+       end
+     end
+   end
+diff --git a/lib/rubygems.rb b/lib/rubygems.rb
+index 569041f3d7..bcc95ae85c 100644
+--- a/lib/rubygems.rb
++++ b/lib/rubygems.rb
+@@ -796,6 +796,8 @@ def self.open_file_with_flock(path, &block)
+       else
+         open_file(path, flags, &block)
+       end
++    ensure
++      FileUtils.rm_f(path) if File.exist?(path)
+     end
+   end

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   future,
   networkx,
   pygments,
@@ -12,11 +13,9 @@
   click,
   pydot,
   ipython,
-  packaging,
   pyqt5,
   pyperclip,
-  nose,
-  nose-timer,
+  pytestCheckHook,
   mock,
   python-magic,
   codecov,
@@ -25,15 +24,16 @@
   # This is usually used as a library, and it'd be a shame to force the GUI
   # libraries to the closure if GUI is not desired.
   withGui ? false,
-  # Tests take a very long time, and currently fail, but next release' tests
-  # shouldn't fail
-  doCheck ? false,
+  # Deprecated in 24.11.
+  doCheck ? true,
 }:
+
+assert lib.warnIf (!doCheck) "python3Packages.androguard: doCheck is deprecated" true;
 
 buildPythonPackage rec {
   pname = "androguard";
   version = "3.4.0a1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = pname;
@@ -42,9 +42,16 @@ buildPythonPackage rec {
     sha256 = "1aparxiq11y0hbvkayp92w684nyxyyx7mi0n1x6x51g5z6c58vmy";
   };
 
-  nativeBuildInputs = [ packaging ] ++ lib.optionals withGui [ qt5.wrapQtAppsHook ];
+  patches = [
+    ./drop-removed-networkx-formats.patch
+    ./fix-tests.patch
+  ];
 
-  propagatedBuildInputs =
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = lib.optionals withGui [ qt5.wrapQtAppsHook ];
+
+  dependencies =
     [
       asn1crypto
       click
@@ -57,29 +64,25 @@ buildPythonPackage rec {
       pydot
       pygments
     ]
+    ++ networkx.optional-dependencies.default
+    ++ networkx.optional-dependencies.extra
     ++ lib.optionals withGui [
       pyqt5
       pyperclip
     ];
 
   nativeCheckInputs = [
+    pytestCheckHook
     codecov
     coverage
     mock
-    nose
-    nose-timer
     pyperclip
     pyqt5
     python-magic
   ];
-  inherit doCheck;
 
   # If it won't be verbose, you'll see nothing going on for a long time.
-  checkPhase = ''
-    runHook preCheck
-    nosetests --verbosity=3
-    runHook postCheck
-  '';
+  pytestFlagsArray = [ "--verbose" ];
 
   preFixup = lib.optionalString withGui ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

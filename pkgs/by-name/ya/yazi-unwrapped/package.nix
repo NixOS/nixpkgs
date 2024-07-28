@@ -7,8 +7,6 @@
   stdenv,
   Foundation,
   rust-jemalloc-sys,
-
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -49,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 assets/logo.png $out/share/pixmaps/yazi.png
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript.command = [ ./update.sh ];
 
   meta = {
     description = "Blazing fast terminal file manager written in Rust, based on async I/O";
