@@ -3,23 +3,26 @@
 { lib, stdenv, emacs, texinfo, writeText }:
 
 let
-  handledArgs = [ "meta" ];
   genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText; };
+  libBuildHelper = import ./lib-build-helper.nix { inherit lib; };
 
 in
+
+libBuildHelper.extendMkDerivation { } genericBuild (finalAttrs:
 
 { pname
 , version
 , src
+, dontUnpack ? true
 , meta ? {}
 , ...
 }@args:
 
-genericBuild ({
+{
 
-  dontUnpack = true;
+  inherit dontUnpack;
 
-  installPhase = ''
+  installPhase = args.installPhase or ''
     runHook preInstall
 
     emacs --batch -Q -l ${./elpa2nix.el} \
@@ -34,4 +37,4 @@ genericBuild ({
   } // meta;
 }
 
-// removeAttrs args handledArgs)
+)

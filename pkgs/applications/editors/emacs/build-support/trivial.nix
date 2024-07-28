@@ -2,10 +2,20 @@
 
 { callPackage, lib, ... }@envargs:
 
-args:
+let
+  libBuildHelper = import ./lib-build-helper.nix { inherit lib; };
+in
 
-callPackage ./generic.nix envargs ({
-  buildPhase = ''
+libBuildHelper.extendMkDerivation { } (callPackage ./generic.nix envargs) (finalAttrs:
+
+{ pname
+, version
+, src
+, ...
+}@args:
+
+{
+  buildPhase = args.buildPhase or ''
     runHook preBuild
 
     emacs -L . --batch -f batch-byte-compile *.el
@@ -13,7 +23,7 @@ callPackage ./generic.nix envargs ({
     runHook postBuild
   '';
 
-  installPhase = ''
+  installPhase = args.installPhase or ''
     runHook preInstall
 
     LISPDIR=$out/share/emacs/site-lisp
@@ -24,4 +34,4 @@ callPackage ./generic.nix envargs ({
   '';
 }
 
-// args)
+)

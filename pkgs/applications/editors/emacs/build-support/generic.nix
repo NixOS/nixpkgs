@@ -21,7 +21,11 @@ let
     fi
   '';
 
+  libBuildHelper = import ./lib-build-helper.nix { inherit lib; };
+
 in
+
+libBuildHelper.adaptMkDerivation { } stdenv.mkDerivation (finalAttrs:
 
 { pname
 , version
@@ -37,7 +41,7 @@ in
 , ...
 }@args:
 
-stdenv.mkDerivation (finalAttrs: ({
+{
   name = "emacs-${finalAttrs.pname}-${finalAttrs.version}";
 
   unpackCmd = ''
@@ -96,4 +100,4 @@ stdenv.mkDerivation (finalAttrs: ({
   '' + postInstall;
 }
 
-// removeAttrs args handledArgs))
+// removeAttrs args handledArgs)
