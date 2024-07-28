@@ -102,8 +102,8 @@ in
         driver causes it to provide its own framebuffer device, which can cause
         Wayland compositors to work when they otherwise wouldn't.
       '' // {
-        default = lib.versionAtLeast nvidia_x11.version "535";
-        defaultText = lib.literalExpression "lib.versionAtLeast nvidia_x11.version \"535\"";
+        default = lib.versionAtLeast cfg.package.version "535";
+        defaultText = lib.literalExpression "lib.versionAtLeast cfg.package.version \"535\"";
       };
 
       prime.nvidiaBusId = lib.mkOption {
