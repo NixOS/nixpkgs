@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       "CVE-2023-47995"
       "CVE-2023-47996"
     ];
-    maintainers = with lib.maintainers; [viric l-as];
+    maintainers = with lib.maintainers; [ l-as ];
     platforms = with lib.platforms; unix;
   };
 })
