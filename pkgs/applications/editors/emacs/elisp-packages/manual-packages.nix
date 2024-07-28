@@ -15,7 +15,9 @@ in
 
   cask = callPackage ./manual-packages/cask { };
 
-  codeium = callPackage ./manual-packages/codeium { };
+  codeium = callPackage ./manual-packages/codeium {
+    inherit (pkgs) codeium;
+  };
 
   consult-gh = callPackage ./manual-packages/consult-gh { };
 
