@@ -4,6 +4,7 @@
   fetchFromGitHub,
   isPy27,
   pytestCheckHook,
+  setuptools,
   numpy,
   pandas,
   xarray,
@@ -12,8 +13,8 @@
 
 buildPythonPackage rec {
   pname = "traittypes";
-  format = "setuptools";
   version = "0.2.1-unstable-2020-07-17";
+  pyproject = true;
 
   disabled = isPy27;
 
@@ -29,7 +30,9 @@ buildPythonPackage rec {
       --replace-fail "np.int" "int"
   '';
 
-  propagatedBuildInputs = [ traitlets ];
+  build-system = [ setuptools ];
+
+  dependencies = [ traitlets ];
 
   nativeCheckInputs = [
     numpy
@@ -40,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "traittypes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Trait types for NumPy, SciPy, XArray, and Pandas";
     homepage = "https://github.com/jupyter-widgets/traittypes";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }
