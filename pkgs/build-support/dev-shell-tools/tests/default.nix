@@ -13,23 +13,13 @@ let
     concatLines
     escapeShellArg
     isString
-    mapAttrs
     mapAttrsToList
     ;
 in
 lib.recurseIntoAttrs {
 
-  nixos = lib.recurseIntoAttrs (
-    # This should have been a simple optioanlAttrs, but release.nix is very picky.
-    # > cannot find attribute `tests.devShellTools.nixos.docker-tools-nix-shell'
-    let
-      tests = {
-        inherit (nixosTests) docker-tools-nix-shell;
-      };
-    in
-    if stdenv.hostPlatform.system == "x86_64-linux" then tests else
-      mapAttrs (k: v: emptyFile) tests
-  );
+  # nix-build -A tests.devShellTools.nixos
+  nixos = nixosTests.docker-tools-nix-shell;
 
   # nix-build -A tests.devShellTools.valueToString
   valueToString =
