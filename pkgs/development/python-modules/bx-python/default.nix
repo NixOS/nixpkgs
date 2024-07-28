@@ -7,7 +7,7 @@
   cython,
   zlib,
   python-lzo,
-  nose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,10 +30,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
+  nativeCheckInputs = [
     python-lzo
+    pytestCheckHook
   ];
 
-  nativeCheckInputs = [ nose ];
+  # https://github.com/bxlab/bx-python/issues/101
+  doCheck = false;
 
   postInstall = ''
     cp -r scripts/* $out/bin
