@@ -3,7 +3,7 @@
 { lib, stdenv, emacs, texinfo, writeText, gcc, ... }:
 
 let
-  inherit (lib) optionalAttrs getLib;
+  inherit (lib) optionalAttrs;
   handledArgs = [ "buildInputs" "packageRequires" "propagatedUserEnvPkgs" "meta" ]
     ++ lib.optionals (emacs.withNativeCompilation or false) [ "nativeBuildInputs" "postInstall" ];
 
@@ -72,8 +72,6 @@ stdenv.mkDerivation (finalAttrs: ({
 }
 
 // optionalAttrs (emacs.withNativeCompilation or false) {
-
-  LIBRARY_PATH = "${getLib stdenv.cc.libc}/lib";
 
   nativeBuildInputs = [ gcc ] ++ nativeBuildInputs;
 
