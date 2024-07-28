@@ -10,9 +10,11 @@
 , fakeNss
 , fakeroot
 , file
+, fuse-overlayfs
 , go
 , jq
 , jshon
+, kmod
 , lib
 , makeWrapper
 , moreutils
@@ -244,6 +246,7 @@ rec {
     , preMount ? ""
     , postMount ? ""
     , postUmount ? ""
+    , useFUSEOverlayFS ? false
     }:
       vmTools.runInLinuxVM (
         runCommand name
@@ -253,10 +256,9 @@ rec {
               fullName = "docker-run-disk";
               destination = "./image";
             };
-            inherit fromImage fromImageName fromImageTag;
+            inherit fromImage fromImageName fromImageTag useFUSEOverlayFS;
             memSize = buildVMMemorySize;
-
-            nativeBuildInputs = [ util-linux e2fsprogs jshon rsync jq ];
+            nativeBuildInputs = [ util-linux e2fsprogs jshon rsync jq fuse-overlayfs kmod ];
           } ''
           mkdir disk
           mkfs /dev/${vmTools.hd}
@@ -322,7 +324,12 @@ rec {
           ''}
 
           if [ -n "$lowerdir" ]; then
-            mount -t overlay overlay -olowerdir=$lowerdir,workdir=work,upperdir=layer mnt
+            if [ -n "$useFUSEOverlayFS" ]; then
+              modprobe fuse
+              fuse-overlayfs -o lowerdir=$lowerdir,workdir=work,upperdir=layer mnt
+            else
+              mount -t overlay overlay -olowerdir=$lowerdir,workdir=work,upperdir=layer mnt
+            fi
           else
             mount --bind layer mnt
           fi
@@ -344,9 +351,16 @@ rec {
           ${postUmount}
         '');
 
-  exportImage = { name ? fromImage.name, fromImage, fromImageName ? null, fromImageTag ? null, diskSize ? 1024 }:
+  exportImage = {
+    name ? fromImage.name,
+    fromImage,
+    fromImageName ? null,
+    fromImageTag ? null,
+    diskSize ? 1024,
+    useFUSEOverlayFS ? false,
+  }:
     runWithOverlay {
-      inherit name fromImage fromImageName fromImageTag diskSize;
+      inherit name fromImage fromImageName fromImageTag diskSize useFUSEOverlayFS;
 
       postMount = ''
         echo "Packing raw image..."
@@ -456,6 +470,8 @@ rec {
       diskSize ? 1024
     , # How much memory to allocate for the temporary virtual machine.
       buildVMMemorySize ? 512
+    , # Whether to use FUSE overlays instead of native Linux overlays.
+      useFUSEOverlayFS ? false
     , # Commands (bash) to run on the layer; these do not require sudo.
       extraCommands ? ""
     }:
@@ -467,7 +483,7 @@ rec {
     runWithOverlay {
       name = "docker-layer-${name}";
 
-      inherit fromImage fromImageName fromImageTag diskSize buildVMMemorySize;
+      inherit fromImage fromImageName fromImageTag diskSize buildVMMemorySize useFUSEOverlayFS;
 
       preMount = lib.optionalString (copyToRoot != null && copyToRoot != [ ]) ''
         echo "Adding contents..."
@@ -580,7 +596,8 @@ rec {
     , includeNixDB ? false
     , # Deprecated.
       contents ? null
-    ,
+    , # Whether to use FUSE overlays instead of native Linux overlays.
+      useFUSEOverlayFS ? false
     }:
 
     let
@@ -633,7 +650,8 @@ rec {
           mkRootLayer {
             name = baseName;
             inherit baseJson fromImage fromImageName fromImageTag
-              keepContentsDirlinks runAsRoot diskSize buildVMMemorySize;
+              keepContentsDirlinks runAsRoot diskSize buildVMMemorySize
+              useFUSEOverlayFS;
             extraCommands = extraCommandsWithDB;
             copyToRoot = rootContents;
           };

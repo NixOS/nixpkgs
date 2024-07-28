@@ -644,5 +644,10 @@ in {
             "${examples.nix-layered} | docker load",
             "docker run --rm ${examples.nix-layered.imageName} nix-store -q --references /bin/bash"
         )
+
+    with subtest("Ensure runAsRoot works with useFUSEOverlayFS"):
+        docker.succeed(
+            "docker load --input='${examples.useFUSEOverlayFS}'"
+        )
   '';
 })
