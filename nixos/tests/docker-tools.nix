@@ -60,7 +60,7 @@ let
     };
 
   nonRootTestImage =
-    pkgs.dockerTools.streamLayeredImage rec {
+    pkgs.dockerTools.streamLayeredImage {
       name = "non-root-test";
       tag = "latest";
       uid = 1000;

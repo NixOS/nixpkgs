@@ -6,16 +6,21 @@ in
 {
   name = "docker-tools-nix-shell";
   meta = with lib.maintainers; {
-    maintainers = [ infinisil roberth ];
+    maintainers = [
+      infinisil
+      roberth
+    ];
   };
 
   nodes = {
-    docker = { ... }: {
-      virtualisation = {
-        diskSize = 3072;
-        docker.enable = true;
+    docker =
+      { ... }:
+      {
+        virtualisation = {
+          diskSize = 3072;
+          docker.enable = true;
+        };
       };
-    };
   };
 
   testScript = ''
