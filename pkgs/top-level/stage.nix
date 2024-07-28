@@ -292,10 +292,20 @@ let
           pkgsExtraHardening = super';
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags ++ [
+              "shadowstack"
               "stackclashprotection"
               "trivialautovarinit"
             ]
           ) super'.stdenv;
+          glibc = super'.glibc.override rec {
+            enableCET = if self'.stdenv.hostPlatform.isx86_64 then "permissive" else false;
+            enableCETRuntimeDefault = enableCET != false;
+          };
+        } // lib.optionalAttrs (with super'.stdenv.hostPlatform; isx86_64 && isLinux) {
+          # causes shadowstack disablement
+          pcre = super'.pcre.override { enableJit = false; };
+          pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
+          pcre16 = super'.pcre16.override { enableJit = false; };
         })
       ] ++ overlays;
     };

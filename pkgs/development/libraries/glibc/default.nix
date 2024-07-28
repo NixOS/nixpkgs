@@ -3,6 +3,7 @@
 , profilingLibraries ? false
 , withGd ? false
 , enableCET ? if stdenv.hostPlatform.isx86_64 then "permissive" else false
+, enableCETRuntimeDefault ? false
 , pkgsBuildBuild
 , libgcc
 }:
@@ -16,7 +17,7 @@ let
 in
 
 (callPackage ./common.nix { inherit stdenv; } {
-  inherit withLinuxHeaders withGd profilingLibraries enableCET;
+  inherit withLinuxHeaders withGd profilingLibraries enableCET enableCETRuntimeDefault;
   pname = "glibc" + lib.optionalString withGd "-gd" + lib.optionalString (stdenv.cc.isGNU && libgcc==null) "-nolibgcc";
 }).overrideAttrs(previousAttrs: {
 

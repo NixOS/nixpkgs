@@ -1,5 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, updateAutotoolsGnuConfigScriptsHook
 , pcre, windows ? null
+  # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
+, enableJit ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
 , variant ? null
 }:
 
@@ -18,11 +20,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
-  # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
-  configureFlags = lib.optional (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit=auto" ++ [
+  hardeningDisable = lib.optional enableJit "shadowstack";
+
+  configureFlags = [
     "--enable-unicode-properties"
     "--disable-cpp"
-  ]
+  ] ++ lib.optional enableJit "--enable-jit=auto"
     ++ lib.optional (variant != null) "--enable-${variant}";
 
   patches = [
