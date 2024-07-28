@@ -407,6 +407,10 @@ with pkgs;
 
   c64-debugger = callPackage ../applications/emulators/c64-debugger { };
 
+  cameractrls-gtk4 = cameractrls.override { withGtk = 4; };
+
+  cameractrls-gtk3 = cameractrls.override { withGtk = 3; };
+
   camunda-modeler = callPackage ../applications/misc/camunda-modeler { };
 
   checkpointBuildTools = callPackage ../build-support/checkpoint-build.nix {};
