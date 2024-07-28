@@ -75,12 +75,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apprise" ];
 
-  meta = with lib; {
+  meta = {
     description = "Push Notifications that work with just about every platform";
     homepage = "https://github.com/caronc/apprise";
     changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ getchoo ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "apprise";
   };
 }
