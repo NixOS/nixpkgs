@@ -4,14 +4,17 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  nose,
-  pkgs,
+  pkg-config,
+  swig,
+  libcdio,
+  libiconv,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pycdio";
   version = "2.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -29,22 +32,28 @@ buildPythonPackage rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [
-    nose
-    pkgs.pkg-config
-    pkgs.swig
-  ];
-  buildInputs = [
-    setuptools
-    pkgs.libcdio
-  ] ++ lib.optional stdenv.isDarwin pkgs.libiconv;
+  build-system = [ setuptools ];
 
-  # Run tests using nosetests but first need to install the binaries
-  # to the root source directory where they can be found.
-  checkPhase = ''
-    ./setup.py install_lib -d .
-    nosetests
+  nativeBuildInputs = [
+    pkg-config
+    swig
+  ];
+
+  propagatedBuildInputs = [ libcdio ] ++ lib.optional stdenv.isDarwin libiconv;
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    substituteInPlace test/test-cdtext.py \
+      --replace-fail "assertEquals" "assertEqual"
   '';
+
+  pytestFlagsArray = [
+    "test/test-cdio.py"
+    "test/test-cdtext.py"
+    "test/test-iso.py"
+    "test/test-isocopy.py"
+  ];
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/libcdio/";
