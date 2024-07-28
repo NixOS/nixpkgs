@@ -32432,6 +32432,8 @@ with pkgs;
 
   rofi-top = callPackage ../applications/misc/rofi-top { };
 
+  rofi-blocks = callPackage ../applications/misc/rofi-blocks { };
+
   rofi-vpn = callPackage ../applications/networking/rofi-vpn { };
 
   seamly2d = libsForQt5.callPackage ../applications/graphics/seamly2d { };
