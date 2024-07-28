@@ -19909,6 +19909,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreServices;
   };
 
+  faun = callPackage ../development/libraries/audio/faun { };
+
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
   hci = callPackage ../development/tools/continuous-integration/hci { };
@@ -36947,6 +36949,8 @@ with pkgs;
   xsokoban = callPackage ../games/xsokoban { };
 
   xtris = callPackage ../games/xtris { };
+
+  xu4 = callPackage ../games/xu4 { };
 
   inherit (callPackage ../games/quake2/yquake2 {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
