@@ -30188,10 +30188,6 @@ with pkgs;
 
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
 
-  imhex = callPackage ../by-name/im/imhex/package.nix {
-    llvm = llvm_17;
-  };
-
   inframap = callPackage ../applications/networking/cluster/inframap { };
 
   inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
