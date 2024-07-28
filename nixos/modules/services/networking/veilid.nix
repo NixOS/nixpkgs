@@ -603,4 +603,5 @@ in {
     };
   };
 
+  meta.maintainers = with lib.maintainers; [ figboy9 ];
 }
