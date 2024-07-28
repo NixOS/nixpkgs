@@ -24,8 +24,9 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-T6lufyADWczEnPZlfjGsNfXm5V0A+7PO36ZykDz3WyQ=";
+    pname = "google_cloud_pubsub";
+    inherit version;
+    hash = "sha256-pMKxpcosCzLI03dshfSYJmw9eWlmlupnAQyFe0WvF9g=";
   };
 
   build-system = [ setuptools ];
