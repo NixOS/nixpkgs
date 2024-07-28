@@ -1,65 +1,80 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, pkg-config
 , cmake
+, doxygen
+, graphviz
 , gtest
 , valgrind
+, buildDocs ? true
+, buildTests ? !stdenv.hostPlatform.isStatic && !stdenv.isDarwin
+, buildExamples ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rapidjson";
-  version = "1.1.0";
+  version = "unstable-2024-04-09";
+
+  outputs = [
+    "out"
+  ] ++ lib.optionals buildDocs [
+    "doc"
+  ] ++ lib.optionals buildExamples [
+    "example"
+  ];
 
   src = fetchFromGitHub {
     owner = "Tencent";
     repo = "rapidjson";
-    rev = "v${version}";
-    sha256 = "1jixgb8w97l9gdh3inihz7avz7i770gy2j2irvvlyrq3wi41f5ab";
+    rev = "ab1842a2dae061284c0a62dca1cc6d5e7e37e346";
+    hash = "sha256-kAGVJfDHEUV2qNR1LpnWq3XKBJy4hD3Swh6LX5shJpM=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/rapidjson/raw/48402da9f19d060ffcd40bf2b2e6987212c58b0c/f/rapidjson-1.1.0-c++20.patch";
-      sha256 = "1qm62iad1xfsixv1li7qy475xc7gc04hmi2q21qdk6l69gk7mf82";
-    })
-    (fetchpatch {
-      name = "do-not-include-gtest-src-dir.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/rapidjson/do-not-include-gtest-src-dir.patch?id=9e5eefc7a5fcf5938a8dc8a3be8c75e9e6809909";
-      hash = "sha256-BjSZEwfCXA/9V+kxQ/2JPWbc26jQn35CfN8+8NW24s4=";
-    })
-    # One of these three tests reports memcpy overlap after update to glibc-2.38
-    ./test-skip-valgrind.diff
+  patches = lib.optionals buildTests [
+    ./0000-unstable-use-nixpkgs-gtest.patch
+    # https://github.com/Tencent/rapidjson/issues/2214
+    ./0001-unstable-valgrind-suppress-failures.patch
   ];
 
-  postPatch = ''
-    find -name CMakeLists.txt | xargs \
-      sed -i -e "s/-Werror//g" -e "s/-march=native//g"
-  '';
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals buildDocs [
+    doxygen
+    graphviz
+  ];
 
-  nativeBuildInputs = [ pkg-config cmake ];
-
-  # for tests, adding gtest to checkInputs does not work
-  # https://github.com/NixOS/nixpkgs/pull/212200
-  buildInputs = [ gtest ];
   cmakeFlags = [
-    "-DGTEST_SOURCE_DIR=${gtest.dev}/include"
-
-    # Build rapidjson with std=c++17 so gtest 1.13.0+ works
-    # https://github.com/NixOS/nixpkgs/pull/282245#issuecomment-1951796902
-    "-DRAPIDJSON_BUILD_CXX11=OFF"
-    "-DRAPIDJSON_BUILD_CXX17=ON"
+    (lib.cmakeBool "RAPIDJSON_BUILD_DOC" buildDocs)
+    (lib.cmakeBool "RAPIDJSON_BUILD_TESTS" buildTests)
+    (lib.cmakeBool "RAPIDJSON_BUILD_EXAMPLES" buildExamples)
+    # gtest 1.13+ requires C++14 or later.
+    (lib.cmakeBool "RAPIDJSON_BUILD_CXX11" false)
+    (lib.cmakeBool "RAPIDJSON_BUILD_CXX17" true)
+  ] ++ lib.optionals buildTests [
+    (lib.cmakeFeature "GTEST_INCLUDE_DIR" "${lib.getDev gtest}")
   ];
 
-  nativeCheckInputs = [ valgrind ];
-  doCheck = !stdenv.hostPlatform.isStatic && !stdenv.isDarwin;
+  doCheck = buildTests;
+
+  nativeCheckInputs = [
+    gtest
+    valgrind
+  ];
+
+  postInstall = lib.optionalString buildExamples ''
+    mkdir -p $example/bin
+
+    find bin -type f -executable \
+      -not -name "perftest" \
+      -not -name "unittest" \
+      -exec cp -a {} $example/bin \;
+  '';
 
   meta = with lib; {
     description = "Fast JSON parser/generator for C++ with both SAX/DOM style API";
     homepage = "http://rapidjson.org/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda Madouura tobim ];
   };
-}
+})

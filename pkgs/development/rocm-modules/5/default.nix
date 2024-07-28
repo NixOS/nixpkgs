@@ -10,7 +10,6 @@
 , opencv
 , ffmpeg_4
 , libjpeg_turbo
-, rapidjson-unstable
 }:
 
 let
@@ -304,7 +303,6 @@ in rec {
     inherit (llvm) clang openmp;
     opencv = opencv.override { enablePython = true; };
     ffmpeg = ffmpeg_4;
-    rapidjson = rapidjson-unstable;
     stdenv = llvm.rocmClangStdenv;
 
     # Unfortunately, rocAL needs a custom libjpeg-turbo until further notice
