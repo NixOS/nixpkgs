@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Tool to integrate C/Cpp code with Lua";
     homepage = "http://www.codenix.com/~tolua/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "tolua++";
     platforms = with platforms; unix;
   };

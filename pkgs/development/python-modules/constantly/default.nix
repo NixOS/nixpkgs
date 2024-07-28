@@ -51,7 +51,7 @@ let
       description = "Module for symbolic constant support";
       homepage = "https://github.com/twisted/constantly";
       license = licenses.mit;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

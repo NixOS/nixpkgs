@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rabbit72/single-source";
     changelog = "https://github.com/rabbit72/single-source/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

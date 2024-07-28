@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.jpj.net/~trevor/aumix.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

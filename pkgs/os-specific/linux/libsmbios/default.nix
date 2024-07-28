@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dell/libsmbios";
     description = "Library to obtain BIOS information";
     license = with licenses; [ osl21 gpl2Plus ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

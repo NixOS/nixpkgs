@@ -33,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cog";
     homepage = "https://github.com/oknozor/cocogitto";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
