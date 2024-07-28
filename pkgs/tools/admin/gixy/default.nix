@@ -1,11 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  python311,
+  fetchpatch2,
+  python3,
 }:
 
 let
-  python = python311.override {
+  python = python3.override {
     packageOverrides = self: super: {
       pyparsing = super.pyparsing.overridePythonAttrs rec {
         version = "2.4.7";
@@ -33,6 +34,15 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "14arz3fjidb8z37m08xcpih1391varj8s0v3gri79z3qb4zq5k6b";
   };
 
+  patches = [
+    # Migrate tests to pytest
+    # https://github.com/yandex/gixy/pull/146
+    (fetchpatch2 {
+      url = "https://github.com/yandex/gixy/compare/6f68624a7540ee51316651bda656894dc14c9a3e...b1c6899b3733b619c244368f0121a01be028e8c2.patch";
+      hash = "sha256-6VUF2eQ2Haat/yk8I5qIXhHdG9zLQgEXJMLfe25OKEo=";
+    })
+  ];
+
   build-system = [ python.pkgs.setuptools ];
 
   dependencies = with python.pkgs; [
@@ -43,7 +53,7 @@ python.pkgs.buildPythonApplication rec {
     six
   ];
 
-  nativeCheckInputs = [ python.pkgs.nose3 ];
+  nativeCheckInputs = [ python.pkgs.pytestCheckHook ];
 
   pythonRemoveDeps = [ "argparse" ];
 
