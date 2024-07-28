@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python311 }:
+{
+  lib,
+  fetchFromGitHub,
+  python311,
+}:
 
 let
   python = python311.override {
@@ -11,9 +15,7 @@ let
           rev = "pyparsing_${version}";
           sha256 = "14pfy80q2flgzjcx8jkracvnxxnr59kjzp3kdm5nh232gk1v6g6h";
         };
-        nativeBuildInputs = [
-          super.setuptools
-        ];
+        nativeBuildInputs = [ super.setuptools ];
       };
     };
   };
@@ -21,10 +23,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "gixy";
   version = "0.1.20";
-  format = "setuptools";
-
-  # package is only compatible with python 2.7 and 3.5+
-  disabled = with python.pkgs; !(pythonAtLeast "3.5" || isPy27);
+  pyproject = true;
 
   # fetching from GitHub because the PyPi source is missing the tests
   src = fetchFromGitHub {
@@ -34,21 +33,21 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "14arz3fjidb8z37m08xcpih1391varj8s0v3gri79z3qb4zq5k6b";
   };
 
-  postPatch = ''
-    sed -ie '/argparse/d' setup.py
-  '';
+  build-system = [ python.pkgs.setuptools ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     cached-property
     configargparse
     pyparsing
     jinja2
-    nose3
-    setuptools
     six
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ python.pkgs.nose3 ];
+
+  pythonRemoveDeps = [ "argparse" ];
+
+  meta = {
     description = "Nginx configuration static analyzer";
     mainProgram = "gixy";
     longDescription = ''
@@ -56,8 +55,9 @@ python.pkgs.buildPythonApplication rec {
       The main goal of Gixy is to prevent security misconfiguration and automate flaw detection.
     '';
     homepage = "https://github.com/yandex/gixy";
-    license = licenses.mpl20;
-    maintainers = [ maintainers.willibutz ];
-    platforms = platforms.unix;
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.mpl20;
+    maintainers = [ lib.maintainers.willibutz ];
+    platforms = lib.platforms.unix;
   };
 }
