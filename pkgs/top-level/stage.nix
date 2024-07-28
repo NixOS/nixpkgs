@@ -323,6 +323,7 @@ let
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags ++ [
               "shadowstack"
+              "pacret"
               "stackclashprotection"
               "trivialautovarinit"
             ]
