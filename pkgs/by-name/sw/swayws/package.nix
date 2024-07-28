@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-f0kXy7/31imgHHqKPmW9K+QrLqroaPaXwlJkzOoezRU=";
   };
 
-  cargoSha256 = "sha256-VYT6wV59fraAoJgR/i6GlO8s7LUoehGtxPAggEL1eLo=";
+  cargoHash = "sha256-VYT6wV59fraAoJgR/i6GlO8s7LUoehGtxPAggEL1eLo=";
   # Required patch until upstream fixes https://gitlab.com/w0lff/swayws/-/issues/1
   cargoPatches = [
     ./ws-update-Cargo-lock.patch

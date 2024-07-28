@@ -38,7 +38,7 @@
 
 , xdg-user-dirs
 
-, addOpenGLRunpath
+, addDriverRunpath
 
 # Whether to pre-compile Python 2 bytecode for performance.
 , compilePy2Bytecode ? false
@@ -217,7 +217,7 @@ in stdenv.mkDerivation {
       exit 1
     fi
 
-    patchelf --add-rpath "${lib.makeLibraryPath wrappedLibs}:${addOpenGLRunpath.driverLink}/lib" \
+    patchelf --add-rpath "${lib.makeLibraryPath wrappedLibs}:${addDriverRunpath.driverLink}/lib" \
       $out/libexec/darling/usr/libexec/darling/mldr
   '';
 

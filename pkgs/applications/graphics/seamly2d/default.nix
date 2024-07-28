@@ -1,5 +1,5 @@
 { stdenv, lib, qtbase, wrapQtAppsHook, fetchFromGitHub,
-  addOpenGLRunpath, poppler_utils, qtxmlpatterns, qtsvg, mesa, xvfb-run,
+  addDriverRunpath, poppler_utils, qtxmlpatterns, qtsvg, mesa, xvfb-run,
   fontconfig, freetype, xorg, qmake, python3, qttools, git
 }:
 let
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     xvfb-run
     fontconfig
     wrapQtAppsHook

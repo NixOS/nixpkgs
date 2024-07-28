@@ -2,14 +2,17 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
+  legacy-cgi,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "webob";
   version = "1.8.7";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,6 +21,11 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-tk71FBvlWc+t5EjwRPpFwiYDUe3Lao72t+AMfc7wwyM=";
   };
+
+  build-system = [ setuptools ];
+
+  # https://github.com/Pylons/webob/issues/437
+  dependencies = lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

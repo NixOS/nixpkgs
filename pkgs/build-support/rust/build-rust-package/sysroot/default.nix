@@ -14,7 +14,7 @@ in rustPlatform.buildRustPackage {
 
   RUSTC_BOOTSTRAP = 1;
   __internal_dontAddSysroot = true;
-  cargoSha256 = "sha256-zgkwevitxsu1C4OgGTsqNSc0gDxaNXYK1WPbfER48d0=";
+  cargoHash = "sha256-zgkwevitxsu1C4OgGTsqNSc0gDxaNXYK1WPbfER48d0=";
 
   doCheck = false;
 

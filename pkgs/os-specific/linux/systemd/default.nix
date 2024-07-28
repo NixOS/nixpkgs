@@ -6,6 +6,7 @@
 , pkgsCross
 , fetchFromGitHub
 , fetchzip
+, fetchpatch
 , buildPackages
 , makeBinaryWrapper
 , ninja
@@ -16,6 +17,7 @@
 , gperf
 , getent
 , glibcLocales
+, autoPatchelfHook
 
   # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
 , glib
@@ -67,6 +69,7 @@
 , p11-kit
 , libpwquality
 , qrencode
+, libarchive
 
   # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to
   # be available during build time.
@@ -153,6 +156,7 @@
   # building disk images for non-NixOS systems. To save users from trying to use it
   # on their live NixOS system, we disable it by default.
 , withKernelInstall ? false
+, withLibarchive ? true
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
   # build only libudev and libsystemd
@@ -179,14 +183,14 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "255.6";
+  version = "256.2";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1701895110";
+  releaseTimestamp = "1720202583";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
@@ -195,9 +199,9 @@ stdenv.mkDerivation (finalAttrs: {
   # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
-    repo = "systemd-stable";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ah0678iNfy0c5NhHhjn0roY6RoM8OE0hWyEt+qEGKRQ=";
+    repo = "systemd";
+    rev = "v${version}";
+    hash = "sha256-fyHzL+oe192YYuwyoTrov10IlrB0NSfY/XKVWzJrQEI=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -226,6 +230,19 @@ stdenv.mkDerivation (finalAttrs: {
     ./0015-tpm2_context_init-fix-driver-name-checking.patch
     ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
     ./0017-meson.build-do-not-create-systemdstatedir.patch
+
+    # https://github.com/systemd/systemd/pull/33258
+    # Remove after 256.3
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/compare/b268a71069786a45460807967e669d505ba3c5a2..f26b2ec46118a4493608618da2253bb9dfc6b517.patch";
+      hash = "sha256-OmuPDm3NykrDeNTA3NcYt9iTXEUFwKJ5apPP4KqtABg=";
+    })
+
+    # https://github.com/systemd/systemd/pull/33400
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/compare/051d462b42fe6c27824046c15cd3c84fa5afe05b..5e2d802c018f0b6d5dd58745f64d6958fa261096.patch";
+      hash = "sha256-drGAnx+ECixOjIP0DUSbCG/emUgoVips9WQL5ny3NKQ=";
+    })
   ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
@@ -274,129 +291,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace \
       "/usr/lib/systemd/boot/efi" \
       "$out/lib/systemd/boot/efi"
-  '' + (
-    let
-      # The following patches references to dynamic libraries to ensure that all
-      # the features that are implemented via dlopen(3) are available (or
-      # explicitly deactivated) by pointing dlopen to the absolute store path
-      # instead of relying on the linkers runtime lookup code.
-      #
-      # All of the shared library references have to be handled. When new ones
-      # are introduced by upstream (or one of our patches) they must be
-      # explicitly declared, otherwise the build will fail.
-      #
-      # As of systemd version 247 we've seen a few errors like `libpcre2.… not
-      # found` when using e.g. --grep with journalctl. Those errors should
-      # become less unexpected now.
-      #
-      # There are generally two classes of dlopen(3) calls. Those that we want
-      # to support and those that should be deactivated / unsupported. This
-      # change enforces that we handle all dlopen calls explicitly. Meaning:
-      # There is not a single dlopen call in the source code tree that we did
-      # not explicitly handle.
-      #
-      # In order to do this we introduced a list of attributes that maps from
-      # shared object name to the package that contains them. The package can be
-      # null meaning the reference should be nuked and the shared object will
-      # never be loadable during runtime (because it points at an invalid store
-      # path location).
-      #
-      # To get a list of dynamically loaded libraries issue something like
-      #   `grep -ri '"lib[a-zA-Z0-9-]*\.so[\.0-9a-zA-z]*"'' $src`
-      # and update the list below.
-      dlopenLibs =
-        let
-          opt = condition: pkg: if condition then pkg else null;
-        in
-        [
-          # bpf compilation support. We use libbpf 1 now.
-          { name = "libbpf.so.1"; pkg = opt withLibBPF libbpf; }
-          { name = "libbpf.so.0"; pkg = null; }
-
-          # We did never provide support for libxkbcommon
-          { name = "libxkbcommon.so.0"; pkg = null; }
-
-          # qrencode
-          { name = "libqrencode.so.4"; pkg = opt withQrencode qrencode; }
-          { name = "libqrencode.so.3"; pkg = null; }
-
-          # Password quality
-          # We currently do not package passwdqc, only libpwquality.
-          { name = "libpwquality.so.1"; pkg = opt withPasswordQuality libpwquality; }
-          { name = "libpasswdqc.so.1"; pkg = null; }
-
-          # Only include cryptsetup if it is enabled. We might not be able to
-          # provide it during "bootstrap" in e.g. the minimal systemd build as
-          # cryptsetup has udev (aka systemd) in it's dependencies.
-          { name = "libcryptsetup.so.12"; pkg = opt withCryptsetup cryptsetup; }
-
-          # We are using libidn2 so we only provide that and ignore the others.
-          # Systemd does this decision during configure time and uses ifdef's to
-          # enable specific branches. We can safely ignore (nuke) the libidn "v1"
-          # libraries.
-          { name = "libidn2.so.0"; pkg = opt withLibidn2 libidn2; }
-          { name = "libidn.so.12"; pkg = null; }
-          { name = "libidn.so.11"; pkg = null; }
-
-          # journalctl --grep requires libpcre so let's provide it
-          { name = "libpcre2-8.so.0"; pkg = pcre2; }
-
-          # Support for TPM2 in systemd-cryptsetup, systemd-repart and systemd-cryptenroll
-          { name = "libtss2-esys.so.0"; pkg = opt withTpm2Tss tpm2-tss; }
-          { name = "libtss2-rc.so.0"; pkg = opt withTpm2Tss tpm2-tss; }
-          { name = "libtss2-mu.so.0"; pkg = opt withTpm2Tss tpm2-tss; }
-          { name = "libtss2-tcti-"; pkg = opt withTpm2Tss tpm2-tss; }
-          { name = "libfido2.so.1"; pkg = opt withFido2 libfido2; }
-
-          # inspect-elf support
-          { name = "libelf.so.1"; pkg = opt withCoredump elfutils; }
-          { name = "libdw.so.1"; pkg = opt withCoredump elfutils; }
-
-          # Support for PKCS#11 in systemd-cryptsetup, systemd-cryptenroll and systemd-homed
-          { name = "libp11-kit.so.0"; pkg = opt (withHomed || withCryptsetup) p11-kit; }
-
-          { name = "libip4tc.so.2"; pkg = opt withIptables iptables; }
-        ];
-
-      patchDlOpen = dl:
-        let
-          library = "${lib.makeLibraryPath [ dl.pkg ]}/${dl.name}";
-        in
-        if dl.pkg == null then ''
-          # remove the dependency on the library by replacing it with an invalid path
-          for file in $(grep -lr '"${dl.name}"' src); do
-            echo "patching dlopen(\"${dl.name}\", …) in $file to an invalid store path ("${builtins.storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}")…"
-            substituteInPlace "$file" --replace '"${dl.name}"' '"${builtins.storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}"'
-          done
-        '' else ''
-          # ensure that the library we provide actually exists
-          if ! [ -e ${library} ]; then
-            # exceptional case, details:
-            # https://github.com/systemd/systemd-stable/blob/v249-stable/src/shared/tpm2-util.c#L157
-            if ! [[ "${library}" =~ .*libtss2-tcti-$ ]]; then
-              echo 'The shared library `${library}` does not exist but was given as substitute for `${dl.name}`'
-              exit 1
-            fi
-          fi
-          # make the path to the dependency explicit
-          for file in $(grep -lr '"${dl.name}"' src); do
-            echo "patching dlopen(\"${dl.name}\", …) in $file to ${library}…"
-            substituteInPlace "$file" --replace '"${dl.name}"' '"${library}"'
-          done
-
-        '';
-    in
-    # patch all the dlopen calls to contain absolute paths to the libraries
-    lib.concatMapStringsSep "\n" patchDlOpen dlopenLibs
-  )
-  # finally ensure that there are no left-over dlopen calls (or rather strings
-  # pointing to shared libraries) that we didn't handle
-  + ''
-    if grep -qr '"lib[a-zA-Z0-9-]*\.so[\.0-9a-zA-z]*"' src; then
-      echo "Found unhandled dynamic library calls: "
-      grep -r '"lib[a-zA-Z0-9-]*\.so[\.0-9a-zA-z]*"' src
-      exit 1
-    fi
   ''
   # Finally, patch shebangs in scripts used at build time. This must not patch
   # scripts that will end up in the output, to avoid build platform references
@@ -412,7 +306,8 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
     "trivialautovarinit"
-  ];
+    # breaks clang -target bpf; should be fixed to filter target?
+  ] ++ (lib.optional withLibBPF "zerocallusedregs");
 
   nativeBuildInputs =
     [
@@ -424,6 +319,7 @@ stdenv.mkDerivation (finalAttrs: {
       glibcLocales
       getent
       m4
+      autoPatchelfHook
 
       intltool
       gettext
@@ -476,6 +372,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
     ++ lib.optionals withPasswordQuality [ libpwquality ]
     ++ lib.optionals withQrencode [ qrencode ]
+    ++ lib.optionals withLibarchive [ libarchive ]
   ;
 
   mesonBuildType = "release";
@@ -492,13 +389,11 @@ stdenv.mkDerivation (finalAttrs: {
     #   https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
     (lib.mesonOption "time-epoch" releaseTimestamp)
 
-    (lib.mesonOption "version-tag" finalAttrs.version)
+    (lib.mesonOption "version-tag" version)
     (lib.mesonOption "mode" "release")
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
     (lib.mesonOption "debug-shell" "${bashInteractive}/bin/bash")
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
-    # Use cgroupsv2. This is already the upstream default, but better be explicit.
-    (lib.mesonOption "default-hierarchy" "unified")
     (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
 
     # Attempts to check /usr/sbin and that fails in macOS sandbox because
@@ -524,8 +419,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sbat-distro" "nixos")
     (lib.mesonOption "sbat-distro-summary" "NixOS")
     (lib.mesonOption "sbat-distro-url" "https://nixos.org/")
-    (lib.mesonOption "sbat-distro-pkgname" finalAttrs.pname)
-    (lib.mesonOption "sbat-distro-version" finalAttrs.version)
+    (lib.mesonOption "sbat-distro-pkgname" pname)
+    (lib.mesonOption "sbat-distro-version" version)
 
     # Users
     (lib.mesonOption "system-uid-max" "999")
@@ -542,6 +437,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Mount
     (lib.mesonOption "mount-path" "${lib.getOutput "mount" util-linux}/bin/mount")
     (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
+
+    # SSH
+    # Disabled for now until someone makes this work.
+    (lib.mesonOption "sshconfdir" "no")
+    (lib.mesonOption "sshdconfdir" "no")
 
 
     # Features
@@ -606,6 +506,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "kmod" withKmod)
     (lib.mesonEnable "qrencode" withQrencode)
     (lib.mesonEnable "vmspawn" withVmspawn)
+    (lib.mesonEnable "libarchive" withLibarchive)
     (lib.mesonEnable "xenctrl" false)
     (lib.mesonEnable "gnutls" false)
     (lib.mesonEnable "xkbcommon" false)
@@ -873,7 +774,8 @@ stdenv.mkDerivation (finalAttrs: {
     interfaceVersion = 2;
 
     inherit withBootloader withCryptsetup withEfi withHostnamed withImportd withKmod
-      withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
+      withLocaled withMachined withPortabled withTimedated withTpm2Tss withUtmp
+      util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests)

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0086asrx48qlmc484pjz5r5znli85q6qgpfbd81gjlzylj7f57gg";
   };
 
-  cargoSha256 = "1qfqhqimp56g34bir30zgl273yssrbmwf1h8h8yvdpzkybpd92gx";
+  cargoHash = "sha256-/YnU7vLz37Y9gggGx+vKWvtxBH0fjBwXGc+UWyOG2OE=";
 
   meta = {
     homepage = "https://github.com/cgag/loc";

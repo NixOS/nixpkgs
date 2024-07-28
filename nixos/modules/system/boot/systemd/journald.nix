@@ -96,6 +96,7 @@ in {
       "systemd-journald@.service"
       "systemd-journal-flush.service"
       "systemd-journal-catalog-update.service"
+      "systemd-journald-sync@.service"
       ] ++ (optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
       "systemd-journald-dev-log.socket"
       "syslog.socket"
