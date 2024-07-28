@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "flashrom";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchurl {
-    url = "https://download.flashrom.org/releases/flashrom-v${version}.tar.bz2";
-    hash = "sha256-oFMjRFPM0BLnnzRDvcxhYlz5e3/Xy0zdi/v/vosUliM=";
+    url = "https://download.flashrom.org/releases/flashrom-${version}.tar.xz";
+    hash = "sha256-rX7htJI5xvtPj1XjZwb81zFDXbGkvS+rPYDx9yUIzO4=";
   };
 
   nativeBuildInputs = [
