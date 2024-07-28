@@ -1,5 +1,6 @@
 {
   lib,
+  apprise,
   babel,
   buildPythonPackage,
   click,
@@ -17,6 +18,7 @@
   requests,
   requests-oauthlib,
   setuptools,
+  testers,
 }:
 
 buildPythonPackage rec {
@@ -80,6 +82,13 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "apprise" ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = apprise;
+      version = "v${version}";
+    };
+  };
 
   meta = {
     description = "Push Notifications that work with just about every platform";
