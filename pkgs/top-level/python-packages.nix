@@ -9120,6 +9120,8 @@ self: super: with self; {
 
   nose2 = callPackage ../development/python-modules/nose2 { };
 
+  nose2pytest = callPackage ../development/python-modules/nose2pytest { };
+
   nose3 = callPackage ../development/python-modules/nose3 { };
 
   nose-timer = callPackage ../development/python-modules/nose-timer { };
