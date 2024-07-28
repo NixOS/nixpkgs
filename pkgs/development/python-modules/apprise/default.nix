@@ -67,6 +67,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # AttributeError: module 'apprise.plugins' has no attribute 'NotifyBulkSMS'
     "test/test_plugin_bulksms.py"
+    # Nondeterministic. Multiple tests will fail with `AssertionError`
+    "test/test_plugin_workflows.py"
   ];
 
   postInstall = ''
