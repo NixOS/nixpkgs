@@ -91,6 +91,6 @@ rustPlatform.buildRustPackage rec {
     description = "Media Player for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jh-devv ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
