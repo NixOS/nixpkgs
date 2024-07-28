@@ -11,7 +11,7 @@
   llvmPackages,
   blas,
   swig,
-  addDriverRunpath,
+  autoAddDriverRunpath,
   optLevel ?
     let
       optLevels =
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
     [ cmake ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_nvcc
-      addDriverRunpath
+      autoAddDriverRunpath
     ]
     ++ lib.optionals pythonSupport [
       pythonPackages.python
@@ -126,11 +126,6 @@ stdenv.mkDerivation {
       mkdir "$dist"
       cp faiss/python/dist/*.whl "$dist/"
     '';
-
-  postFixup = lib.optionalString (pythonSupport && cudaSupport) ''
-    addDriverRunpath $out/${pythonPackages.python.sitePackages}/faiss/*.so
-    addDriverRunpath $demos/bin/*
-  '';
 
   passthru = {
     inherit cudaSupport cudaPackages pythonSupport;
