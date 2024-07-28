@@ -3120,4 +3120,11 @@ self: super: {
       '' + (drv.postPatch or "");
     }) (doJailbreak (addExtraLibrary pkgs.pkg-config (addExtraLibrary pkgs.poppler super.pdftotext)));
 
+  # 2024-07-27: building test component requires non-trivial custom build steps
+  # https://github.com/awakesecurity/proto3-suite/blob/bec9d40e2767143deed5b2d451197191f1d8c7d5/nix/overlays/haskell-packages.nix#L311
+  proto3-suite = lib.pipe super.proto3-suite [
+    dontCheck # Hackage release trails a good deal behind master
+    doJailbreak
+  ];
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
