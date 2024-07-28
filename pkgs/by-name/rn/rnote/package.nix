@@ -9,7 +9,7 @@
 , desktop-file-utils
 , dos2unix
 , glib
-, gstreamer
+, gst_all_1
 , gtk4
 , libadwaita
 , libxml2
@@ -22,24 +22,24 @@
 , rustc
 , shared-mime-info
 , wrapGAppsHook4
-, AudioUnit
+, darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.10.2";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    hash = "sha256-SqT8bJfJM+d5fewso3C22M4Qo7wY2g2QmEot/gCpwT4=";
+    hash = "sha256-RbuEgmly6Mjmx58zOV+tg6Mv5ghCNy/dE5FXYrEXtdg=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ink-stroke-modeler-rs-0.1.0" = "sha256-WfZwezohm8+ZXiKZlssTX+b/Izk1M4jFwxQejeTfc6M=";
+      "ink-stroke-modeler-rs-0.1.0" = "sha256-B6lT6qSOIHxqBpKTE4nO2+Xs9KF7JLVRUHOkYp8Sl+M=";
       "piet-0.6.2" = "sha256-3juXzuKwoLuxia6MoVwbcBJ3jXBQ9QRNVoxo3yFp2Iw=";
     };
   };
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     appstream
     glib
-    gstreamer
+    gst_all_1.gstreamer
     gtk4
     libadwaita
     libxml2
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [
-    AudioUnit
+    darwin.apple_sdk.frameworks.AudioUnit
   ];
 
   postPatch = ''
