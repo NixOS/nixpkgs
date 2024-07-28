@@ -1,4 +1,4 @@
-lib: { rke2Version, rke2RepoSha256, rke2VendorHash, updateScript
+lib: { releaseName, rke2Version, rke2RepoSha256, rke2VendorHash, updateScript
 
 , rke2Commit, k8sImageTag, etcdVersion, pauseVersion, ccmVersion, dockerizedVersion, ... }:
 
@@ -91,9 +91,9 @@ buildGoModule rec {
       package = rke2;
       version = "v${version}";
     };
-  } // lib.optionalAttrs stdenv.isLinux {
-    inherit (nixosTests) rke2;
-  };
+  } // (lib.optionalAttrs stdenv.isLinux (lib.mapAttrs (
+      name: value: nixosTests.rke2.${name}.${releaseName}
+    ) nixosTests.rke2));
 
   meta = with lib; {
     homepage = "https://github.com/rancher/rke2";

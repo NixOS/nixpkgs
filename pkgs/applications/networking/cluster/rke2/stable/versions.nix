@@ -1,4 +1,5 @@
 {
+  releaseName = "rke2_stable";
   rke2Version = "1.28.10+rke2r1";
   rke2RepoSha256 = "1pbanikvrl6rqrplrpvjc9ym8qq1yrs621gwy99shp0prfw5zvsx";
   rke2Commit = "b0d0d687d98f4fa015e7b30aaf2807b50edcc5d7";
