@@ -61,7 +61,7 @@ buildGoModule rec {
     homepage = "https://micro-editor.github.io";
     description = "Modern and intuitive terminal-based text editor";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ AndersonTorres ];
     mainProgram = "micro";
   };
 }
