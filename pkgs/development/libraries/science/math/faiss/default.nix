@@ -1,7 +1,6 @@
 { lib
 , config
 , fetchFromGitHub
-, fetchpatch2
 , stdenv
 , cmake
 , cudaPackages ? { }
@@ -26,7 +25,7 @@
 
 let
   pname = "faiss";
-  version = "1.7.4";
+  version = "1.8.0";
 
   inherit (cudaPackages) flags backendStdenv;
 
@@ -51,17 +50,8 @@ stdenv.mkDerivation {
     owner = "facebookresearch";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-WSce9X6sLZmGM5F0ZkK54VqpIy8u1VB0e9/l78co29M=";
+    hash = "sha256-nS8nhkNGGb2oAJKfr/MIAZjAwMxBGbNd16/CkEtv67I=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # Replace distutils with packaging for version checks
-      url = "https://github.com/facebookresearch/faiss/commit/c540e762ca0ecf8f43da0bfc215da148c5cf420e.patch";
-      includes = [ "faiss/python/loader.py" ];
-      hash = "sha256-yMHAXo0+oDXknSpv1fxUgil3R/WG1+vTLyxvwVR3VtE=";
-    })
-  ];
 
   postPatch = ''
     # Remove the following substituteInPlace when updating
@@ -107,12 +97,14 @@ stdenv.mkDerivation {
     "-DCMAKE_CUDA_ARCHITECTURES=${flags.cmakeCudaArchitecturesString}"
   ];
 
-  buildFlags = [
-    "faiss"
-    "demo_ivfpq_indexing"
-  ] ++ lib.optionals pythonSupport [
-    "swigfaiss"
-  ];
+
+  buildFlags =
+    [ "faiss" ]
+    # This is just a demo app used as a test.
+    # Disabled because linkage fails:
+    # https://github.com/facebookresearch/faiss/issues/3484
+    ++ lib.optionals (!cudaSupport) [ "demo_ivfpq_indexing" ]
+    ++ lib.optionals pythonSupport [ "swigfaiss" ];
 
   # pip wheel->pip install commands copied over from opencv4
 
@@ -123,7 +115,9 @@ stdenv.mkDerivation {
 
   postInstall = ''
     mkdir -p $demos/bin
-    cp ./demos/demo_ivfpq_indexing $demos/bin/
+    if [[ "$buildInputs" == *demo_ivfpq_indexing* ]] ; then
+      cp ./demos/demo_ivfpq_indexing $demos/bin/
+    fi
   '' + lib.optionalString pythonSupport ''
     mkdir -p $out/${pythonPackages.python.sitePackages}
     (cd faiss/python && python -m pip install dist/*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache)
