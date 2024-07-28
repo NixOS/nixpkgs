@@ -4,7 +4,7 @@
 
 let
   inherit (lib) optionalAttrs;
-  handledArgs = [ "buildInputs" "nativeBuildInputs" "packageRequires" "propagatedUserEnvPkgs" "meta" ]
+  handledArgs = [ "buildInputs" "nativeBuildInputs" "packageRequires" "propagatedBuildInputs" "propagatedUserEnvPkgs" "meta" ]
     ++ lib.optionals (emacs.withNativeCompilation or false) [ "postInstall" ];
 
   setupHook = writeText "setup-hook.sh" ''
@@ -28,6 +28,7 @@ in
 , buildInputs ? []
 , nativeBuildInputs ? []
 , packageRequires ? []
+, propagatedBuildInputs ? []
 , propagatedUserEnvPkgs ? []
 , postInstall ? ""
 , meta ? {}
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: ({
 
   buildInputs = packageRequires ++ buildInputs;
   nativeBuildInputs = [ emacs texinfo ] ++ nativeBuildInputs;
-  propagatedBuildInputs = packageRequires;
+  propagatedBuildInputs = packageRequires ++ propagatedBuildInputs;
   propagatedUserEnvPkgs = packageRequires ++ propagatedUserEnvPkgs;
 
   inherit setupHook;
