@@ -1,14 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, jdupes
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  jdupes,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libjodycode";
   version = "3.1.1";
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ];
 
   src = fetchFromGitea {
     domain = "codeberg.org";
