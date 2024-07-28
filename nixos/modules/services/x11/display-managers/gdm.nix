@@ -302,10 +302,21 @@ in
       '';
 
       gdm-password.text = ''
-        auth      substack      login
-        account   include       login
-        password  substack      login
-        session   include       login
+        auth       include       login
+        ${lib.optionalString pamCfg.login.enableGnomeKeyring ''
+          auth       optional      ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
+        ''}
+
+        account    include       login
+        password   include       login
+        ${lib.optionalString pamCfg.login.enableGnomeKeyring ''
+          password   optional      ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so use_authtok
+        ''}
+
+        session    include       login
+        ${lib.optionalString pamCfg.login.enableGnomeKeyring ''
+          session    optional      ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
+        ''}
       '';
 
       gdm-autologin.text = ''
