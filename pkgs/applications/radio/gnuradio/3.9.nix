@@ -11,7 +11,6 @@
 , boost
 , log4cpp
 , mpir
-, doxygen
 , python
 , codec2
 , gsm
@@ -69,10 +68,6 @@ let
         mako
         six
       ];
-    };
-    doxygen = {
-      native = [ doxygen ];
-      cmakeEnableFlag = "DOXYGEN";
     };
     man-pages = {
       cmakeEnableFlag = "MANPAGES";
