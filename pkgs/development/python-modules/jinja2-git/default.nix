@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "1.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "wemake-services";
@@ -21,9 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-ZcKRLHcZ/rpiUyYK4ifDJaZriN+YyRF1RKCjIKum98U=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ jinja2 ];
+  dependencies = [ jinja2 ];
 
   # the tests need to be run on the git repository
   doCheck = false;
