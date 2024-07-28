@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "cosmic-player";
     rev = "afcb8c72bc0fc4022ebc68393056e9578bfe8db0";
     hash = "sha256-JEKEZ3Vb41CKKCwd/AJam26GgfUIGH3kc5kzOiinsj8=";
   };
