@@ -35,7 +35,7 @@ buildDartApplication {
 
   postInstall = ''
     substituteInPlace ./package/codes.merritt.vscode_runner.service \
-      --replace "Exec=" "Exec=$out/bin/vscode_runner"
+      --replace-fail "Exec=" "Exec=$out/bin/vscode_runner"
     install -D \
       ./package/codes.merritt.vscode_runner.service \
       $out/share/dbus-1/services/codes.merritt.vscode_runner.service
