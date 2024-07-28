@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "httping";
-  version = "3.6";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = "HTTPing";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-lDgQC3VzfcLqMOQSaRZ/znMamAAGYq/9C9bHgI4G7B8=";
+    hash = "sha256-JtsPtrj/ZineBokEytbkZdAfjVLTkiaNcGtKVJlKm38=";
   };
 
   nativeBuildInputs = [
