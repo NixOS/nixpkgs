@@ -2,19 +2,19 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  future,
   mock,
   parameterized,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "vertica-python";
   version = "1.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,8 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-VCB4ri/t7mlK3tsE2Bxu3Cd7h+10QDApQhB9hqC81EU=";
   };
 
-  propagatedBuildInputs = [
-    future
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-dateutil
     six
   ];
