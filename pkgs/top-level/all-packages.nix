@@ -9965,6 +9965,8 @@ with pkgs;
 
   l3afpad = callPackage ../applications/editors/l3afpad { };
 
+  leanblueprint = with python3Packages; toPythonApplication leanblueprint;
+
   leanify = callPackage ../tools/misc/leanify { };
 
   leatherman = callPackage ../development/libraries/leatherman { };
