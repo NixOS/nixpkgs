@@ -92,11 +92,13 @@ stdenv.mkDerivation {
 
   cmakeFlags =
     [
-      "-DFAISS_ENABLE_GPU=${if cudaSupport then "ON" else "OFF"}"
-      "-DFAISS_ENABLE_PYTHON=${if pythonSupport then "ON" else "OFF"}"
-      "-DFAISS_OPT_LEVEL=${optLevel}"
+      (lib.cmakeBool "FAISS_ENABLE_GPU" cudaSupport)
+      (lib.cmakeBool "FAISS_ENABLE_PYTHON" pythonSupport)
+      (lib.cmakeFeature "FAISS_OPT_LEVEL" optLevel)
     ]
-    ++ lib.optionals cudaSupport [ "-DCMAKE_CUDA_ARCHITECTURES=${flags.cmakeCudaArchitecturesString}" ];
+    ++ lib.optionals cudaSupport [
+      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)
+    ];
 
   buildFlags =
     [ "faiss" ]
