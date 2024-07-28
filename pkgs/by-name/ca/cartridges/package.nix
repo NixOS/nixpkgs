@@ -25,9 +25,6 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-37i8p6KaS/G7ybw850XYaPiG83/Lffn/+21xVk5xva0=";
   };
 
-  # TODO: remove this when #286814 hits master
-  mesonFlags = [ "-Dtiff_compression=jpeg" ];
-
   nativeBuildInputs = [
     appstream
     blueprint-compiler
@@ -53,6 +50,10 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapGApps = true;
   makeWrapperArgs = [ ''''${gappsWrapperArgs[@]}'' ];
+
+  postFixup = ''
+    wrapPythonProgramsIn $out/libexec $out $pythonPath
+  '';
 
   meta = {
     description = "GTK4 + Libadwaita game launcher";
