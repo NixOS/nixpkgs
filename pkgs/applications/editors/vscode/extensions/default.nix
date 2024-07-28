@@ -3126,6 +3126,23 @@ let
       ms-dotnettools.csdevkit = callPackage ./ms-dotnettools.csdevkit { };
       ms-dotnettools.csharp = callPackage ./ms-dotnettools.csharp { };
 
+      ms-dotnettools.vscode-dotnet-runtime = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-dotnet-runtime";
+          publisher = "ms-dotnettools";
+          version = "2.1.1";
+          hash = "sha256-k14bjWITPDduJi79W59SnMV2TFNRCeAymhs6u1Y0vzk=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ms-dotnettools.vscode-dotnet-runtime/changelog";
+          description = "Provides a way for other Visual Studio Code extensions to install local versions of .NET SDK/Runtime";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.vscode-dotnet-runtime";
+          homepage = "https://github.com/dotnet/vscode-dotnet-runtime";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.magnouvean ];
+        };
+      };
+
       ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-kubernetes-tools";
