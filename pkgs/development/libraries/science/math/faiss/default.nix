@@ -1,26 +1,28 @@
-{ lib
-, config
-, fetchFromGitHub
-, stdenv
-, cmake
-, cudaPackages ? { }
-, cudaSupport ? config.cudaSupport
-, pythonSupport ? true
-, pythonPackages
-, llvmPackages
-, blas
-, swig
-, addDriverRunpath
-, optLevel ? let
-    optLevels =
-      lib.optionals stdenv.hostPlatform.avx2Support [ "avx2" ]
-      ++ lib.optionals stdenv.hostPlatform.sse4_1Support [ "sse4" ]
-      ++ [ "generic" ];
-  in
-  # Choose the maximum available optimization level
-  builtins.head optLevels
-, faiss # To run demos in the tests
-, runCommand
+{
+  lib,
+  config,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  cudaPackages ? { },
+  cudaSupport ? config.cudaSupport,
+  pythonSupport ? true,
+  pythonPackages,
+  llvmPackages,
+  blas,
+  swig,
+  addDriverRunpath,
+  optLevel ?
+    let
+      optLevels =
+        lib.optionals stdenv.hostPlatform.avx2Support [ "avx2" ]
+        ++ lib.optionals stdenv.hostPlatform.sse4_1Support [ "sse4" ]
+        ++ [ "generic" ];
+    in
+    # Choose the maximum available optimization level
+    builtins.head optLevels,
+  faiss, # To run demos in the tests
+  runCommand,
 }@inputs:
 
 let
@@ -44,7 +46,11 @@ in
 stdenv.mkDerivation {
   inherit pname version;
 
-  outputs = [ "out" "demos" "dist" ];
+  outputs = [
+    "out"
+    "demos"
+    "dist"
+  ];
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
@@ -62,33 +68,35 @@ stdenv.mkDerivation {
       --replace-fail '#ifdef SWIGWORDSIZE64' '#if (__SIZEOF_LONG__ == 8)'
   '';
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-    addDriverRunpath
-  ] ++ lib.optionals pythonSupport [
-    pythonPackages.python
-    pythonPackages.setuptools
-    pythonPackages.pip
-    pythonPackages.wheel
-  ];
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+      addDriverRunpath
+    ]
+    ++ lib.optionals pythonSupport [
+      pythonPackages.python
+      pythonPackages.setuptools
+      pythonPackages.pip
+      pythonPackages.wheel
+    ];
 
-  buildInputs = [
-    blas
-    swig
-  ] ++ lib.optionals pythonSupport [
-    pythonPackages.numpy
-  ] ++ lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ] ++ lib.optionals cudaSupport cudaComponents;
+  buildInputs =
+    [
+      blas
+      swig
+    ]
+    ++ lib.optionals pythonSupport [ pythonPackages.numpy ]
+    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
+    ++ lib.optionals cudaSupport cudaComponents;
 
-  cmakeFlags = [
-    "-DFAISS_ENABLE_GPU=${if cudaSupport then "ON" else "OFF"}"
-    "-DFAISS_ENABLE_PYTHON=${if pythonSupport then "ON" else "OFF"}"
-    "-DFAISS_OPT_LEVEL=${optLevel}"
-  ] ++ lib.optionals cudaSupport [
-    "-DCMAKE_CUDA_ARCHITECTURES=${flags.cmakeCudaArchitecturesString}"
-  ];
-
+  cmakeFlags =
+    [
+      "-DFAISS_ENABLE_GPU=${if cudaSupport then "ON" else "OFF"}"
+      "-DFAISS_ENABLE_PYTHON=${if pythonSupport then "ON" else "OFF"}"
+      "-DFAISS_OPT_LEVEL=${optLevel}"
+    ]
+    ++ lib.optionals cudaSupport [ "-DCMAKE_CUDA_ARCHITECTURES=${flags.cmakeCudaArchitecturesString}" ];
 
   buildFlags =
     [ "faiss" ]
@@ -105,15 +113,17 @@ stdenv.mkDerivation {
      python -m pip wheel --verbose --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist .)
   '';
 
-  postInstall = ''
-    mkdir -p $demos/bin
-    if [[ "$buildInputs" == *demo_ivfpq_indexing* ]] ; then
-      cp ./demos/demo_ivfpq_indexing $demos/bin/
-    fi
-  '' + lib.optionalString pythonSupport ''
-    mkdir "$dist"
-    cp faiss/python/dist/*.whl "$dist/"
-  '';
+  postInstall =
+    ''
+      mkdir -p $demos/bin
+      if [[ "$buildInputs" == *demo_ivfpq_indexing* ]] ; then
+        cp ./demos/demo_ivfpq_indexing $demos/bin/
+      fi
+    ''
+    + lib.optionalString pythonSupport ''
+      mkdir "$dist"
+      cp faiss/python/dist/*.whl "$dist/"
+    '';
 
   postFixup = lib.optionalString (pythonSupport && cudaSupport) ''
     addDriverRunpath $out/${pythonPackages.python.sitePackages}/faiss/*.so
@@ -124,15 +134,13 @@ stdenv.mkDerivation {
     inherit cudaSupport cudaPackages pythonSupport;
 
     tests = {
-      runDemos = runCommand "${pname}-run-demos"
-        { buildInputs = [ faiss.demos ]; }
-        # There are more demos, we run just the one that documentation mentions
-        ''
-          demo_ivfpq_indexing && touch $out
-        '';
-    } // lib.optionalAttrs pythonSupport {
-      pytest = pythonPackages.callPackage ./tests.nix { };
-    };
+      runDemos =
+        runCommand "${pname}-run-demos" { buildInputs = [ faiss.demos ]; }
+          # There are more demos, we run just the one that documentation mentions
+          ''
+            demo_ivfpq_indexing && touch $out
+          '';
+    } // lib.optionalAttrs pythonSupport { pytest = pythonPackages.callPackage ./tests.nix { }; };
   };
 
   meta = with lib; {
