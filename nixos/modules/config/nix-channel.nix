@@ -12,6 +12,7 @@ let
     mkDefault
     mkIf
     mkOption
+    stringAfter
     types
     ;
 
@@ -97,5 +98,8 @@ in
     systemd.tmpfiles.rules = lib.mkIf cfg.channel.enable [
       ''f /root/.nix-channels - - - - ${config.system.defaultChannel} nixos\n''
     ];
+
+    system.activationScripts.no-nix-channel = mkIf (!cfg.channel.enable)
+      (stringAfter [ "etc" "users" ] (builtins.readFile ./nix-channel/activation-check.sh));
   };
 }

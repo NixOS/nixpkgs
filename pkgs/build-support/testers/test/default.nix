@@ -16,6 +16,8 @@ lib.recurseIntoAttrs {
 
   hasPkgConfigModules = pkgs.callPackage ../hasPkgConfigModules/tests.nix { };
 
+  shellcheck = pkgs.callPackage ../shellcheck/tests.nix { };
+
   runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest ({ lib, ... }: {
     name = "runNixOSTest-test";
     nodes.machine = { pkgs, ... }: {
