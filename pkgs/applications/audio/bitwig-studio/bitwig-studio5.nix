@@ -21,6 +21,7 @@
 , pulseaudio
 , vulkan-loader
 , wrapGAppsHook3
+, xcb-imdkit
 , xdg-utils
 , xorg
 , zlib
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
     pulseaudio
     stdenv.cc.cc.lib
     vulkan-loader
+    xcb-imdkit
     xcbutil
     xcbutilwm
     zlib
@@ -80,6 +82,11 @@ stdenv.mkDerivation rec {
     cp -r opt/bitwig-studio $out/libexec
     ln -s $out/libexec/bitwig-studio $out/bin/bitwig-studio
     cp -r usr/share $out/share
+
+    # Bitwig includes a copy of libxcb-imdkit.
+    # Removing it will force it to use our version.
+    rm $out/libexec/lib/bitwig-studio/libxcb-imdkit.so.1
+
     substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
       $out/share/applications/com.bitwig.BitwigStudio.desktop \
       --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
