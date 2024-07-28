@@ -770,6 +770,7 @@ let
           "Priority"
           "IncomingInterface"
           "OutgoingInterface"
+          "L3MasterDevice"
           "SourcePort"
           "DestinationPort"
           "IPProtocol"
@@ -785,6 +786,7 @@ let
         (assertInt "FirewallMark")
         (assertRange "FirewallMark" 1 4294967295)
         (assertInt "Priority")
+        (assertValueOneOf "L3MasterDevice" boolValues)
         (assertPortOrPortRange "SourcePort")
         (assertPortOrPortRange "DestinationPort")
         (assertValueOneOf "InvertRule" boolValues)
