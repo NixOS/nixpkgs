@@ -139,7 +139,7 @@ let
 
 
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
-  bootstrapTools = (import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
+  bootstrapTools = (import (if localSystem.libc == "musl" then ./bootstrap-tools/musl.nix else ./bootstrap-tools/glibc.nix) {
     inherit system bootstrapFiles;
     extraAttrs = lib.optionalAttrs config.contentAddressedByDefault {
       __contentAddressed = true;
