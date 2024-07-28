@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "atop";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchurl {
     url = "https://www.atoptool.nl/download/atop-${version}.tar.gz";
-    hash = "sha256-56ZzzyyCV4592C7LDeyD/Z7LMIKLJWHCip+lqvddX5M=";
+    hash = "sha256-m5TGZmAu//e/QC7M5wbDR/OMOctjSY+dOWJoYeVkbiA=";
   };
 
   nativeBuildInputs = lib.optionals withAtopgpu [
