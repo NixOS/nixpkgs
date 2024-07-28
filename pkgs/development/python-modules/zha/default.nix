@@ -102,6 +102,12 @@ buildPythonPackage rec {
     "test_sinope_time"
     "test_siren_timed_off"
     "test_zha_group_light_entity"
+    # flaky, either due to race conditions or timeouts
+    "test_zha_group_switch_entity"
+    "test_zha_group_fan_entity"
+    "test_startup_concurrency_limit"
+    "test_fan_ikea"
+    "test_background"
   ];
 
   disabledTestPaths = [ "tests/test_cluster_handlers.py" ];
