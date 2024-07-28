@@ -43,10 +43,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "Lanzaboote UEFI tooling for SecureBoot enablement on NixOS systems";
+    description = "Lanzaboote UEFI tooling for SecureBoot enablement on NixOS systems (unwrapped; does not contain the required stub)";
     homepage = "https://github.com/nix-community/lanzaboote";
     license = licenses.gpl3Only;
-    mainProgram = "lzbt";
+    mainProgram = "lzbt-unwrapped";
     maintainers = with maintainers; [ raitobezarius nikstur ];
     # Broken on aarch64-linux and any other architecture for now.
     # Wait for 0.4.0.
