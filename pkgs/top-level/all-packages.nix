@@ -6413,10 +6413,6 @@ with pkgs;
 
   boltbrowser = callPackage ../tools/misc/boltbrowser { };
 
-  bsc = callPackage ../tools/compression/bsc {
-    inherit (llvmPackages) openmp;
-  };
-
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
   bzip2_1_1 = callPackage ../tools/compression/bzip2/1_1.nix { };
