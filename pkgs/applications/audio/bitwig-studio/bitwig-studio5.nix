@@ -19,6 +19,7 @@
 , pango
 , pipewire
 , pulseaudio
+, vulkan-loader
 , wrapGAppsHook3
 , xdg-utils
 , xorg
@@ -27,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
-  version = "5.1.9";
+  version = "5.2";
 
   src = fetchurl {
     url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
-    hash = "sha256-J5kLqXCMnGb0ZMhES6PQIPjN51ptlBGj4Fy8qSzJ6Qg=";
+    hash = "sha256:0cnjwgjbpyrb4pd0841zbhy84ps7gkmq3j148ga826nrxnw082pi";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
@@ -66,6 +67,7 @@ stdenv.mkDerivation rec {
     pipewire
     pulseaudio
     stdenv.cc.cc.lib
+    vulkan-loader
     xcbutil
     xcbutilwm
     zlib

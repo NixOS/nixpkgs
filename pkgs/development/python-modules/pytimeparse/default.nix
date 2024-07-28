@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:
@@ -21,10 +21,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
-
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "pytimeparse/tests/testtimeparse.py" ];
 
   pythonImportsCheck = [ "pytimeparse" ];
 

@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     glib # glib-compile-schemas
+    lttng-ust
     pkg-config
     validatePkgConfig
     wrapQtAppsHook

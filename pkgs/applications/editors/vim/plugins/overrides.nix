@@ -15,7 +15,8 @@
 , python3
 , rustPlatform
 , # Misc dependencies
-  Cocoa
+  arrow-cpp
+, Cocoa
 , code-minimap
 , dasht
 , deno
@@ -844,6 +845,8 @@
     dependencies = with self; [ nvim-treesitter ];
   };
 
+  haskell-tools-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "haskell-tools-nvim"; };
+
   hex-nvim = super.hex-nvim.overrideAttrs {
     postPatch = ''
       substituteInPlace lua/hex.lua --replace xxd ${xxd}/bin/xxd
@@ -1198,8 +1201,11 @@
         dbee-go = buildGoModule {
           name = "nvim-dbee";
           src = "${oa.src}/dbee";
-          vendorHash = "sha256-AItvgOehVskGLARJWDnJLtWM5YHKN/zn/FnZQ0evAtI=";
-          buildInputs = [ duckdb ];
+          vendorHash = "sha256-U/3WZJ/+Bm0ghjeNUILsnlZnjIwk3ySaX3Rd4L9Z62A=";
+          buildInputs = [
+            arrow-cpp
+            duckdb
+          ];
         };
       in {
     dependencies = [ self.nui-nvim ];

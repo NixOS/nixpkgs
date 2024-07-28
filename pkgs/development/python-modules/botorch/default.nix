@@ -32,7 +32,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  dependenciess = [
+  dependencies = [
     gpytorch
     linear-operator
     multipledispatch

@@ -5331,6 +5331,8 @@ self: super: with self; {
     inherit (pkgs.buildPackages) meson;
   };
 
+  gstools = callPackage ../development/python-modules/gstools { };
+
   gtfs-realtime-bindings = callPackage ../development/python-modules/gtfs-realtime-bindings { };
 
   gto = callPackage ../development/python-modules/gto { };
@@ -5420,6 +5422,8 @@ self: super: with self; {
   halohome = callPackage ../development/python-modules/halohome { };
 
   handout = callPackage ../development/python-modules/handout { };
+
+  hankel = callPackage ../development/python-modules/hankel { };
 
   hap-python = callPackage ../development/python-modules/hap-python { };
 
@@ -8017,6 +8021,8 @@ self: super: with self; {
 
   multiprocess = callPackage ../development/python-modules/multiprocess { };
 
+  multiscale-spatial-image = callPackage ../development/python-modules/multiscale-spatial-image { };
+
   multiset = callPackage ../development/python-modules/multiset { };
 
   multitasking = callPackage ../development/python-modules/multitasking { };
@@ -9114,10 +9120,6 @@ self: super: with self; {
   nose3 = callPackage ../development/python-modules/nose3 { };
 
   nose-timer = callPackage ../development/python-modules/nose-timer { };
-
-  nose-pattern-exclude = callPackage ../development/python-modules/nose-pattern-exclude { };
-
-  nose-warnings-filters = callPackage ../development/python-modules/nose-warnings-filters { };
 
   nose-xunitmp = callPackage ../development/python-modules/nose-xunitmp { };
 
@@ -11266,6 +11268,8 @@ self: super: with self; {
 
   pyevilgenius = callPackage ../development/python-modules/pyevilgenius { };
 
+  pyevtk = callPackage ../development/python-modules/pyevtk { };
+
   pyexcel = callPackage ../development/python-modules/pyexcel { };
 
   pyexcel-io = callPackage ../development/python-modules/pyexcel-io { };
@@ -11393,8 +11397,6 @@ self: super: with self; {
   };
 
   pygobject-stubs = callPackage ../development/python-modules/pygobject-stubs { };
-
-  pygogo = callPackage ../development/python-modules/pygogo { };
 
   pygpgme = callPackage ../development/python-modules/pygpgme { };
 
@@ -11647,6 +11649,8 @@ self: super: with self; {
   pymediaroom = callPackage ../development/python-modules/pymediaroom { };
 
   pymedio = callPackage ../development/python-modules/pymedio { };
+
+  pymee = callPackage ../development/python-modules/pymee { };
 
   pymeeus = callPackage ../development/python-modules/pymeeus { };
 
@@ -13880,8 +13884,6 @@ self: super: with self; {
 
   samarium = callPackage ../development/python-modules/samarium { };
 
-  sampledata = callPackage ../development/python-modules/sampledata { };
-
   samplerate = callPackage ../development/python-modules/samplerate {
     inherit (pkgs) libsamplerate;
   };
@@ -14055,8 +14057,6 @@ self: super: with self; {
   segyio = callPackage ../development/python-modules/segyio {
     inherit (pkgs) cmake ninja;
   };
-
-  selectors2 = callPackage ../development/python-modules/selectors2 { };
 
   selenium = callPackage ../development/python-modules/selenium { };
 
@@ -15543,8 +15543,6 @@ self: super: with self; {
   tinysegmenter = callPackage ../development/python-modules/tinysegmenter { };
 
   tinytuya = callPackage ../development/python-modules/tinytuya { };
-
-  tissue = callPackage ../development/python-modules/tissue { };
 
   titlecase = callPackage ../development/python-modules/titlecase { };
 
@@ -17039,6 +17037,8 @@ self: super: with self; {
 
   veryprettytable = callPackage ../development/python-modules/veryprettytable { };
 
+  vfblib = callPackage ../development/python-modules/vfblib { };
+
   vg = callPackage ../development/python-modules/vg { };
 
   vharfbuzz = callPackage ../development/python-modules/vharfbuzz { };
@@ -17331,6 +17331,8 @@ self: super: with self; {
 
   whoisdomain = callPackage ../development/python-modules/whoisdomain { };
 
+  whool = callPackage ../development/python-modules/whool { };
+
   whoosh = callPackage ../development/python-modules/whoosh { };
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
@@ -17433,6 +17435,8 @@ self: super: with self; {
   xarray = callPackage ../development/python-modules/xarray { };
 
   xarray-dataclasses = callPackage ../development/python-modules/xarray-dataclasses { };
+
+  xarray-datatree = callPackage ../development/python-modules/xarray-datatree { };
 
   xarray-einstats = callPackage ../development/python-modules/xarray-einstats { };
 
@@ -17576,8 +17580,6 @@ self: super: with self; {
 
   yamlordereddictloader = callPackage ../development/python-modules/yamlordereddictloader { };
 
-  yanc = callPackage ../development/python-modules/yanc { };
-
   yangson = callPackage ../development/python-modules/yangson { };
 
   yapf = callPackage ../development/python-modules/yapf { };
@@ -17647,6 +17649,8 @@ self: super: with self; {
   yt-dlp-light = toPythonModule (pkgs.yt-dlp-light.override {
     python3Packages = self;
   });
+
+  yt-dlp-dearrow = callPackage ../development/python-modules/yt-dlp-dearrow { };
 
   youtube-search = callPackage ../development/python-modules/youtube-search { };
 

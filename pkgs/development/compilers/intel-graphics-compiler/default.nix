@@ -31,13 +31,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.16695.4";
+  version = "1.0.17193.4";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    hash = "sha256-XgQ2Gk3HDKBpsfomlpRUt8WybEIoHfKlyuWJCwCnmDA=";
+    hash = "sha256-OOKj3kfl+0/dgeICFtbiOVE0nsYYvI4v97BLjcExAmc=";
   };
 
   nativeBuildInputs = [ bison cmake flex (python3.withPackages (ps : with ps; [ mako ])) ];

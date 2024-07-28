@@ -13,6 +13,8 @@ let
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
     environment.systemPackages = [ pkgs.efibootmgr ];
+    # Needed for machine-id to be persisted between reboots
+    environment.etc."machine-id".text = "00000000000000000000000000000000";
   };
 
   commonXbootldr = { config, lib, pkgs, ... }:
@@ -81,7 +83,7 @@ let
     os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
   '';
 in
-{
+rec {
   basic = makeTest {
     name = "systemd-boot";
     meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer julienmalka ];
@@ -93,7 +95,8 @@ in
       machine.wait_for_unit("multi-user.target")
 
       machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
-      machine.succeed("grep 'sort-key nixos' /boot/loader/entries/nixos-generation-1.conf")
+      # our sort-key will uses r to sort before nixos
+      machine.succeed("grep 'sort-key nixor-default' /boot/loader/entries/nixos-generation-1.conf")
 
       # Ensure we actually booted using systemd-boot
       # Magic number is the vendor UUID used by systemd-boot.
@@ -399,15 +402,15 @@ in
     '';
   };
 
-  garbage-collect-entry = makeTest {
-    name = "systemd-boot-garbage-collect-entry";
+  garbage-collect-entry = { withBootCounting ? false, ... }: makeTest {
+    name = "systemd-boot-garbage-collect-entry" + optionalString withBootCounting "-with-boot-counting";
     meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes = {
       inherit common;
       machine = { pkgs, nodes, ... }: {
         imports = [ common ];
-
+        boot.loader.systemd-boot.bootCounting.enable = withBootCounting;
         # These are configs for different nodes, but we'll use them here in `machine`
         system.extraDependencies = [
           nodes.common.system.build.toplevel
@@ -422,8 +425,12 @@ in
       ''
         machine.succeed("nix-env -p /nix/var/nix/profiles/system --set ${baseSystem}")
         machine.succeed("nix-env -p /nix/var/nix/profiles/system --delete-generations 1")
+        # At this point generation 1 has already been marked as good so we reintroduce counters artificially
+        ${optionalString withBootCounting ''
+        machine.succeed("mv /boot/loader/entries/nixos-generation-1.conf /boot/loader/entries/nixos-generation-1+3.conf")
+        ''}
         machine.succeed("${baseSystem}/bin/switch-to-configuration boot")
-        machine.fail("test -e /boot/loader/entries/nixos-generation-1.conf")
+        machine.fail("test -e /boot/loader/entries/nixos-generation-1*")
         machine.succeed("test -e /boot/loader/entries/nixos-generation-2.conf")
       '';
   };
@@ -443,4 +450,138 @@ in
         machine.wait_for_unit("multi-user.target")
       '';
     };
+
+  # Check that we are booting the default entry and not the generation with largest version number
+  defaultEntry = { withBootCounting ? false, ... }: makeTest {
+    name = "systemd-boot-default-entry" + optionalString withBootCounting "-with-boot-counting";
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
+
+    nodes = {
+      machine = { pkgs, lib, nodes, ... }: {
+        imports = [ common ];
+        system.extraDependencies = [ nodes.other_machine.system.build.toplevel ];
+        boot.loader.systemd-boot.bootCounting.enable = withBootCounting;
+      };
+
+      other_machine = { pkgs, lib, ... }: {
+        imports = [ common ];
+        boot.loader.systemd-boot.bootCounting.enable = withBootCounting;
+        environment.systemPackages = [ pkgs.hello ];
+      };
+    };
+    testScript = { nodes, ... }:
+      let
+        orig = nodes.machine.system.build.toplevel;
+        other = nodes.other_machine.system.build.toplevel;
+      in
+      ''
+        orig = "${orig}"
+        other = "${other}"
+
+        def check_current_system(system_path):
+            machine.succeed(f'test $(readlink -f /run/current-system) = "{system_path}"')
+
+        check_current_system(orig)
+
+        # Switch to other configuration
+        machine.succeed("nix-env -p /nix/var/nix/profiles/system --set ${other}")
+        machine.succeed(f"{other}/bin/switch-to-configuration boot")
+        # Rollback, default entry is now generation 1
+        machine.succeed("nix-env -p /nix/var/nix/profiles/system --rollback")
+        machine.succeed(f"{orig}/bin/switch-to-configuration boot")
+        machine.shutdown()
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+        # Check that we booted generation 1 (default)
+        # even though generation 2 comes first in alphabetical order
+        check_current_system(orig)
+      '';
+  };
+
+
+  bootCounting =
+    let
+      baseConfig = { pkgs, lib, ... }: {
+        imports = [ common ];
+        boot.loader.systemd-boot.bootCounting.enable = true;
+        boot.loader.systemd-boot.bootCounting.trials = 2;
+      };
+    in
+    makeTest {
+      name = "systemd-boot-counting";
+      meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
+
+      nodes = {
+        machine = { pkgs, lib, nodes, ... }: {
+          imports = [ baseConfig ];
+          system.extraDependencies = [ nodes.bad_machine.system.build.toplevel ];
+        };
+
+        bad_machine = { pkgs, lib, ... }: {
+          imports = [ baseConfig ];
+
+          systemd.services."failing" = {
+            script = "exit 1";
+            requiredBy = [ "boot-complete.target" ];
+            before = [ "boot-complete.target" ];
+            serviceConfig.Type = "oneshot";
+          };
+        };
+      };
+      testScript = { nodes, ... }:
+        let
+          orig = nodes.machine.system.build.toplevel;
+          bad = nodes.bad_machine.system.build.toplevel;
+        in
+        ''
+          orig = "${orig}"
+          bad = "${bad}"
+
+          def check_current_system(system_path):
+              machine.succeed(f'test $(readlink -f /run/current-system) = "{system_path}"')
+
+          # Ensure we booted using an entry with counters enabled
+          machine.succeed(
+              "test -e /sys/firmware/efi/efivars/LoaderBootCountPath-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
+          )
+
+          # systemd-bless-boot should have already removed the "+2" suffix from the boot entry
+          machine.wait_for_unit("systemd-bless-boot.service")
+          machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+          check_current_system(orig)
+
+          # Switch to bad configuration
+          machine.succeed("nix-env -p /nix/var/nix/profiles/system --set ${bad}")
+          machine.succeed(f"{bad}/bin/switch-to-configuration boot")
+
+          # Ensure new bootloader entry has initialized counter
+          machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+          machine.succeed("test -e /boot/loader/entries/nixos-generation-2+2.conf")
+          machine.shutdown()
+
+          machine.start()
+          machine.wait_for_unit("multi-user.target")
+          check_current_system(bad)
+          machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+          machine.succeed("test -e /boot/loader/entries/nixos-generation-2+1-1.conf")
+          machine.shutdown()
+
+          machine.start()
+          machine.wait_for_unit("multi-user.target")
+          check_current_system(bad)
+          machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+          machine.succeed("test -e /boot/loader/entries/nixos-generation-2+0-2.conf")
+          machine.shutdown()
+
+          # Should boot back into original configuration
+          machine.start()
+          check_current_system(orig)
+          machine.wait_for_unit("multi-user.target")
+          machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+          machine.succeed("test -e /boot/loader/entries/nixos-generation-2+0-2.conf")
+          machine.shutdown()
+        '';
+    };
+  defaultEntryWithBootCounting = defaultEntry { withBootCounting = true; };
+  garbageCollectEntryWithBootCounting = garbage-collect-entry { withBootCounting = true; };
 }
