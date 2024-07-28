@@ -1,6 +1,7 @@
-{ buildGoModule
+{ lib
+, stdenv
+, buildGoModule
 , fetchFromGitHub
-, lib
 , installShellFiles
 , testers
 , cue
@@ -30,7 +31,7 @@ buildGoModule rec {
     "-X cuelang.org/go/cmd/cue/cmd.version=v${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cue \
       --bash <($out/bin/cue completion bash) \
       --fish <($out/bin/cue completion fish) \
