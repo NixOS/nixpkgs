@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, zlib
+, fetchpatch
 , pkg-config
 , autoreconfHook
 , libintl
@@ -20,26 +20,41 @@
 , enableStatic ? !enableShared
 , gnome
 , testers
+, enableHttp ? false
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxml2";
-  version = "2.12.7";
+  version = "2.13.2";
 
-  outputs = [ "bin" "dev" "out" "doc" ]
+  outputs = [ "bin" "dev" "out" "devdoc" ]
     ++ lib.optional pythonSupport "py"
     ++ lib.optional (enableStatic && enableShared) "static";
   outputMan = "bin";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-    hash = "sha256-JK54/xNjqXPm2L66lBp5RdoqwFbhm1OVautpJ/1s+1Y=";
+    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor finalAttrs.version}/libxml2-${finalAttrs.version}.tar.xz";
+    hash = "sha256-58j14LVUIVng3cQJwiyRZDBLWB6qmTBlOnb7hFsWkmM=";
   };
 
-  # https://gitlab.gnome.org/GNOME/libxml2/-/issues/725
-  postPatch = if stdenv.hostPlatform.isFreeBSD then ''
-    substituteInPlace ./configure.ac --replace-fail pthread_join pthread_create
-  '' else null;
+  patches = [
+    # Fix XInclude failing too aggresively.
+    # https://gitlab.gnome.org/GNOME/libxml2/-/issues/772
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/a0330b53c8034bb79220e403e8d4ad8c23ef088f.patch";
+      hash = "sha256-iVAgX8qNF0fw8GYUKsWduudjEuRMEOTAENAIFTjyRjU=";
+    })
+    # Fix error handling
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/ed8b4264f65b1ced1e3b13967dd1cf90102cfa40.patch";
+      hash = "sha256-EvxoUcr+VXBbYvK1PBV+KWcWTDk9rMWf+GXCYvXWDMI=";
+    })
+    # Fix more error handling
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/e30cb632e734394ddbd7bd62b57cee3586424352.patch";
+      hash = "sha256-C0ef17wTRC9rH0dKua/LJwwqTRI5W8sKWmvL7JxzT4o=";
+    })
+  ];
 
   strictDeps = true;
 
@@ -59,7 +74,6 @@ stdenv.mkDerivation (finalAttrs: rec {
   ];
 
   propagatedBuildInputs = [
-    zlib
     findXMLCatalogs
   ] ++ lib.optionals stdenv.isDarwin [
     libiconv
@@ -74,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     (lib.withFeature icuSupport "icu")
     (lib.withFeature pythonSupport "python")
     (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
-  ];
+  ] ++ lib.optional enableHttp "--with-http";
 
   installFlags = lib.optionals pythonSupport [
     "pythondir=\"${placeholder "py"}/${python.sitePackages}\""
@@ -95,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   '';
 
   preInstall = lib.optionalString pythonSupport ''
-    substituteInPlace python/libxml2mod.la --replace "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
+    substituteInPlace python/libxml2mod.la --replace-fail "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
   '';
 
   postFixup = ''
@@ -106,11 +120,10 @@ stdenv.mkDerivation (finalAttrs: rec {
   '';
 
   passthru = {
-    inherit version;
-    pythonSupport = pythonSupport;
+    inherit pythonSupport;
 
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libxml2";
       versionPolicy = "none";
     };
     tests = {

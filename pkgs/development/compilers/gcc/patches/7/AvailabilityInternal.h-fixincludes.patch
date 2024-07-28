@@ -1,0 +1,105 @@
+diff --git a/fixincludes/fixincl.x b/fixincludes/fixincl.x
+index d12ba7c3e88..9f31b29c509 100644
+--- a/fixincludes/fixincl.x
++++ b/fixincludes/fixincl.x
+@@ -3468,6 +3468,43 @@ static const char* apzDarwin_Ucred__AtomicPatch[] = {
+ #endif\n",
+     (char*)NULL };
+ 
++/* * * * * * * * * * * * * * * * * * * * * * * * * *
++ *
++ *  Description of Darwin_Nix_Sdk_Availabilityinternal fix
++ */
++tSCC zDarwin_Nix_Sdk_AvailabilityinternalName[] =
++     "darwin_nix_sdk_availabilityinternal";
++
++/*
++ *  File name selection pattern
++ */
++tSCC zDarwin_Nix_Sdk_AvailabilityinternalList[] =
++  "AvailabilityInternal.h\0";
++/*
++ *  Machine/OS name selection pattern
++ */
++tSCC* apzDarwin_Nix_Sdk_AvailabilityinternalMachs[] = {
++        "*-*-darwin*",
++        (const char*)NULL };
++
++/*
++ *  content selection pattern - do fix if pattern found
++ */
++tSCC zDarwin_Nix_Sdk_AvailabilityinternalSelect0[] =
++       "(.*)__has_builtin\\(__is_target_os\\)(.*)";
++
++#define    DARWIN_NIX_SDK_AVAILABILITYINTERNAL_TEST_CT  1
++static tTestDesc aDarwin_Nix_Sdk_AvailabilityinternalTests[] = {
++  { TT_EGREP,    zDarwin_Nix_Sdk_AvailabilityinternalSelect0, (regex_t*)NULL }, };
++
++/*
++ *  Fix Command Arguments for Darwin_Nix_Sdk_Availabilityinternal
++ */
++static const char* apzDarwin_Nix_Sdk_AvailabilityinternalPatch[] = {
++    "format",
++    "%10%2",
++    (char*)NULL };
++
+ /* * * * * * * * * * * * * * * * * * * * * * * * * *
+  *
+  *  Description of Dec_Intern_Asm fix
+@@ -10347,9 +10384,9 @@ static const char* apzX11_SprintfPatch[] = {
+  *
+  *  List of all fixes
+  */
+-#define REGEX_COUNT          291
++#define REGEX_COUNT          292
+ #define MACH_LIST_SIZE_LIMIT 187
+-#define FIX_COUNT            253
++#define FIX_COUNT            254
+ 
+ /*
+  *  Enumerate the fixes
+@@ -10435,6 +10472,7 @@ typedef enum {
+     DARWIN_STDINT_6_FIXIDX,
+     DARWIN_STDINT_7_FIXIDX,
+     DARWIN_UCRED__ATOMIC_FIXIDX,
++    DARWIN_NIX_SDK_AVAILABILITYINTERNAL_FIXIDX,
+     DEC_INTERN_ASM_FIXIDX,
+     DJGPP_WCHAR_H_FIXIDX,
+     ECD_CURSOR_FIXIDX,
+@@ -11011,6 +11049,11 @@ tFixDesc fixDescList[ FIX_COUNT ] = {
+      DARWIN_UCRED__ATOMIC_TEST_CT, FD_MACH_ONLY | FD_SUBROUTINE,
+      aDarwin_Ucred__AtomicTests,   apzDarwin_Ucred__AtomicPatch, 0 },
+ 
++  {  zDarwin_Nix_Sdk_AvailabilityinternalName,    zDarwin_Nix_Sdk_AvailabilityinternalList,
++     apzDarwin_Nix_Sdk_AvailabilityinternalMachs,
++     DARWIN_NIX_SDK_AVAILABILITYINTERNAL_TEST_CT, FD_MACH_ONLY | FD_SUBROUTINE,
++     aDarwin_Nix_Sdk_AvailabilityinternalTests,   apzDarwin_Nix_Sdk_AvailabilityinternalPatch, 0 },
++
+   {  zDec_Intern_AsmName,    zDec_Intern_AsmList,
+      apzDec_Intern_AsmMachs,
+      DEC_INTERN_ASM_TEST_CT, FD_MACH_ONLY,
+diff --git a/fixincludes/inclhack.def b/fixincludes/inclhack.def
+index 179e2f3c98a..70b681f35c8 100644
+--- a/fixincludes/inclhack.def
++++ b/fixincludes/inclhack.def
+@@ -1793,6 +1793,20 @@ fix = {
+     test_text = ""; /* Don't provide this for wrap fixes.  */
+ };
+ 
++/*
++ * Newer versions of AvailabilityInternal.h use `__has_builtin`,
++ * which is not implemented in or compatible with GCC.
++ */
++fix = {
++    hackname  = darwin_nix_sdk_availabilityinternal;
++    mach      = "*-*-darwin*";
++    files     = AvailabilityInternal.h;
++    c_fix     = format;
++    c_fix_arg = "%10%2";
++    select    = "(.*)__has_builtin\\(__is_target_os\\)(.*)";
++    test_text = "__has_builtin(__is_target_os)";
++};
++
+ /*
+  *  Fix <c_asm.h> on Digital UNIX V4.0:
+  *  It contains a prototype for a DEC C internal asm() function,

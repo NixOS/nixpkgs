@@ -5,7 +5,7 @@
 , fetchurl
 , rpmextract
 , _7zz
-, darwin
+, cctools
 , validatePkgConfig
 , enableStatic ? stdenv.hostPlatform.isStatic
 }:
@@ -72,7 +72,7 @@ in stdenvNoCC.mkDerivation ({
 
   nativeBuildInputs = [ validatePkgConfig ] ++ (if stdenvNoCC.isDarwin
     then
-      [ _7zz darwin.cctools ]
+      [ _7zz cctools ]
     else
       [ rpmextract ]);
 

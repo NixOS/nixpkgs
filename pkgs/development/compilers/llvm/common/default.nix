@@ -225,7 +225,24 @@ let
                   stripLen = 1;
                   hash = "sha256-e8YKrMy2rGcSJGC6er2V66cOnAnI+u1/yImkvsRsmg8=";
                 }
-              );
+              )
+          ++ lib.optionals (lib.versions.major metadata.release_version == "18") [
+            # Reorgs one test so the next patch applies
+            (fetchpatch {
+              name = "osabi-test-reorg.patch";
+              url = "https://github.com/llvm/llvm-project/commit/06cecdc60ec9ebfdd4d8cdb2586d201272bdf6bd.patch";
+              stripLen = 1;
+              hash = "sha256-s9GZTNgzLS511Pzh6Wb1hEV68lxhmLWXjlybHBDMhvM=";
+            })
+            # Sets the OSABI for OpenBSD, needed for an LLD patch for OpenBSD.
+            # https://github.com/llvm/llvm-project/pull/98553
+            (fetchpatch {
+              name = "mc-set-openbsd-osabi.patch";
+              url = "https://github.com/llvm/llvm-project/commit/b64c1de714c50bec7493530446ebf5e540d5f96a.patch";
+              stripLen = 1;
+              hash = "sha256-fqw5gTSEOGs3kAguR4tINFG7Xja1RAje+q67HJt2nGg=";
+            })
+          ];
         pollyPatches =
           [ (metadata.getVersionFile "llvm/gnu-install-dirs-polly.patch") ]
           ++ lib.optional (lib.versionAtLeast metadata.release_version "15")
@@ -327,7 +344,16 @@ let
           )
           ++ lib.optional (
             lib.versionAtLeast metadata.release_version "16" && lib.versionOlder metadata.release_version "18"
-          ) (metadata.getVersionFile "lld/add-table-base.patch");
+          ) (metadata.getVersionFile "lld/add-table-base.patch")
+          ++ lib.optional (lib.versions.major metadata.release_version == "18") (
+            # https://github.com/llvm/llvm-project/pull/97122
+            fetchpatch {
+              name = "more-openbsd-program-headers.patch";
+              url = "https://github.com/llvm/llvm-project/commit/d7fd8b19e560fbb613159625acd8046d0df75115.patch";
+              stripLen = 1;
+              hash = "sha256-7wTy7XDTx0+fhWQpW1KEuz7xJvpl42qMTUfd20KGOfA=";
+            }
+          );
       };
 
       lldb = callPackage ./lldb.nix (

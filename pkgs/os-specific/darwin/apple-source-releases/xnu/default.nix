@@ -44,8 +44,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
       --replace " -o 0" "" \
       --replace '$SRC/$mig' '-I$DSTROOT/include $SRC/$mig' \
       --replace '$SRC/servers/netname.defs' '-I$DSTROOT/include $SRC/servers/netname.defs' \
-      --replace '$BUILT_PRODUCTS_DIR/mig_hdr' '$BUILT_PRODUCTS_DIR' \
-      --replace 'MACHINE_ARCH=armv7' 'MACHINE_ARCH=arm64' # this might break the comments saying 32-bit is required
+      --replace '$BUILT_PRODUCTS_DIR/mig_hdr' '$BUILT_PRODUCTS_DIR'
 
     patchShebangs .
   '' + lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11") ''
@@ -72,11 +71,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
   HOST_FLEX = "flex";
   HOST_BISON = "bison";
   HOST_GM4 = "m4";
-  # use unwrapped clang to generate headers because wrapper is not compatible with a 32 bit -arch.
-  # aarch64 should likely do this as well and remove the --replace MACHINE_ARCH above
-  MIGCC = if stdenv.isx86_64 && lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11"
-    then "${lib.getBin pkgsBuildBuild.stdenv.cc.cc}/bin/clang"
-    else "cc";
+  MIGCC = "${lib.getBin pkgsBuildBuild.stdenv.cc.cc}/bin/clang";
   ARCHS = arch;
   ARCH_CONFIGS = arch;
 

@@ -3,7 +3,7 @@
 , fetchNpmDeps
 , buildPackages
 , nodejs
-, darwin
+, cctools
 } @ topLevelArgs:
 
 { name ? "${args.pname}-${args.version}"
@@ -76,7 +76,7 @@ stdenv.mkDerivation (args // {
       (if npmInstallHook != null then npmInstallHook else npmHooks.npmInstallHook)
       nodejs.python
     ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
+    ++ lib.optionals stdenv.isDarwin [ cctools ];
   buildInputs = buildInputs ++ [ nodejs ];
 
   strictDeps = true;

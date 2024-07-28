@@ -1,0 +1,53 @@
+From 55b2a5fcc38eb62f53e155bd8c741481690f1c73 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 10 Apr 2024 19:08:39 -0400
+Subject: [PATCH 1/6] Fix build issues with misc/redo_prebinding.c
+
+- Add missing headers; and
+- Add missing arguments to `writeout`.
+---
+ misc/redo_prebinding.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/misc/redo_prebinding.c b/misc/redo_prebinding.c
+index a5a3c81..9d0f4c8 100644
+--- a/misc/redo_prebinding.c
++++ b/misc/redo_prebinding.c
+@@ -83,6 +83,7 @@
+ #include <mach-o/redo_prebinding.h>
+ #endif /* defined(LIBRARY_API) */
+ 
++#import <stdint.h>
+ #import <stdio.h>
+ #import <stdlib.h>
+ #import <string.h>
+@@ -106,7 +107,7 @@
+ #import <stuff/hppa.h>
+ #import <stuff/execute.h>
+ #import <stuff/guess_short_name.h>
+-//#import <stuff/seg_addr_table.h>
++#import <stuff/seg_addr_table.h>
+ #import <stuff/macosx_deployment_target.h>
+ 
+ #include <mach-o/dyld.h>
+@@ -918,7 +919,7 @@ char *envp[])
+                 if(write_to_stdout)
+                     output_file = NULL;
+ 		writeout(archs, narchs, output_file, mode, TRUE, FALSE, FALSE,
+-		         FALSE, NULL);
++		         FALSE, FALSE, NULL);
+ 		if(errors){
+                     if(write_to_stdout == FALSE)
+                         unlink(output_file);
+@@ -928,7 +929,7 @@ char *envp[])
+ 	    else{
+ 		output_file = makestr(input_file, ".redo_prebinding", NULL);
+ 		writeout(archs, narchs, output_file, mode, TRUE, FALSE, FALSE,
+-			 FALSE, NULL);
++			 FALSE, FALSE, NULL);
+ 		if(errors){
+ 		    unlink(output_file);
+ 		    return(2);
+-- 
+2.45.2
+

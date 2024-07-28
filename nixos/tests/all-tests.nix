@@ -301,6 +301,7 @@ in {
   esphome = handleTest ./esphome.nix {};
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
+  activation-lib = pkgs.callPackage ../modules/system/activation/lib/test.nix { };
   activation-var = runTest ./activation/var.nix;
   activation-nix-channel = runTest ./activation/nix-channel.nix;
   activation-etc-overlay-mutable = runTest ./activation/etc-overlay-mutable.nix;
@@ -624,6 +625,7 @@ in {
   nbd = handleTest ./nbd.nix {};
   ncdns = handleTest ./ncdns.nix {};
   ndppd = handleTest ./ndppd.nix {};
+  nix-channel = pkgs.callPackage ../modules/config/nix-channel/test.nix { };
   nebula = handleTest ./nebula.nix {};
   netbird = handleTest ./netbird.nix {};
   nimdow = handleTest ./nimdow.nix {};

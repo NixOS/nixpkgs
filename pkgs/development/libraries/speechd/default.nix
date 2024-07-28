@@ -21,6 +21,7 @@
 , withEspeak ? true, espeak, sonic, pcaudiolib
 , mbrola
 , withPico ? true, svox
+, libsOnly ? false
 }:
 
 let
@@ -101,14 +102,16 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
   '';
 
-  postInstall = ''
+  postInstall = if libsOnly then ''
+    rm -rf $out/{bin,etc,lib/speech-dispatcher,lib/systemd,libexec,share}
+  '' else ''
     wrapPythonPrograms
   '';
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Common interface to speech synthesis";
+    description = "Common interface to speech synthesis" + lib.optionalString libsOnly " - client libraries only";
     homepage = "https://devel.freebsoft.org/speechd";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
@@ -116,5 +119,6 @@ in stdenv.mkDerivation rec {
       jtojnar
     ];
     platforms = platforms.linux;
+    mainProgram = "speech-dispatcher";
   };
 }

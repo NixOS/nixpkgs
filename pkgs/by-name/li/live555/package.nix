@@ -1,6 +1,6 @@
 {
   lib,
-  darwin,
+  cctools,
   fetchpatch,
   fetchurl,
   openssl,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    darwin.cctools
+    cctools
   ];
 
   buildInputs = [

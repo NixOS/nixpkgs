@@ -12,7 +12,7 @@
   copyDesktopItems,
   makeDesktopItem,
   electron,
-  darwin,
+  cctools,
 }:
 
 let
@@ -92,7 +92,7 @@ buildNpmPackage rec {
       makeWrapper
     ]
     ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
+    ++ lib.optionals stdenv.isDarwin [ cctools ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

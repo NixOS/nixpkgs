@@ -7,7 +7,7 @@
 , glibmm
 , libpulseaudio
 , libao
-, speechd
+, speechd-minimal
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     glibmm
     libpulseaudio
     libao
-    speechd
+    speechd-minimal
   ];
 
   meta = {

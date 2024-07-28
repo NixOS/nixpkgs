@@ -37,6 +37,8 @@ let
       "cryptsetup.target"
       "cryptsetup-pre.target"
       "remote-cryptsetup.target"
+    ] ++ optionals cfg.package.withTpm2Tss [
+      "tpm2.target"
     ] ++ [
       "sigpwr.target"
       "timers.target"
@@ -116,6 +118,7 @@ let
       "sleep.target"
       "hybrid-sleep.target"
       "systemd-hibernate.service"
+      "systemd-hibernate-clear.service"
       "systemd-hybrid-sleep.service"
       "systemd-suspend.service"
       "systemd-suspend-then-hibernate.service"
@@ -140,6 +143,16 @@ let
       "systemd-ask-password-wall.path"
       "systemd-ask-password-wall.service"
 
+      # Varlink APIs
+      "systemd-bootctl@.service"
+      "systemd-bootctl.socket"
+      "systemd-creds@.service"
+      "systemd-creds.socket"
+    ] ++ lib.optional cfg.package.withTpm2Tss [
+      "systemd-pcrlock@.service"
+      "systemd-pcrlock.socket"
+    ] ++ [
+
       # Slices / containers.
       "slices.target"
     ] ++ optionals cfg.package.withImportd [
@@ -162,6 +175,7 @@ let
     ] ++ optionals cfg.package.withHostnamed [
       "dbus-org.freedesktop.hostname1.service"
       "systemd-hostnamed.service"
+      "systemd-hostnamed.socket"
     ] ++ optionals cfg.package.withPortabled [
       "dbus-org.freedesktop.portable1.service"
       "systemd-portabled.service"
