@@ -1,6 +1,7 @@
-{ appimageTools
-, lib
-, fetchurl
+{
+  appimageTools,
+  lib,
+  fetchurl,
 }:
 let
   pname = "nuclear";
@@ -19,17 +20,16 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Streaming music player that finds free music for you";
     homepage = "https://nuclear.js.org/";
-    license = licenses.agpl3Plus;
-    maintainers = [ maintainers.NotAShelf ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = [ lib.maintainers.NotAShelf ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "nuclear";
   };
 }
-
