@@ -72,7 +72,7 @@ let
     "address-model=${toString stdenv.hostPlatform.parsed.cpu.bits}"
     "architecture=${if stdenv.hostPlatform.isMips64
                     then if lib.versionOlder version "1.78" then "mips1" else "mips"
-                    else if stdenv.hostPlatform.parsed.cpu.name == "s390x" then "s390x"
+                    else if stdenv.hostPlatform.isS390 then "s390x"
                     else toString stdenv.hostPlatform.parsed.cpu.family}"
     # env in host triplet for Mach-O is "macho", but boost binary format for Mach-O is "mach-o"
     "binary-format=${if stdenv.hostPlatform.isMacho then "mach-o"

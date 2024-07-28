@@ -36,20 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  buildInputs = lib.optionals finalAttrs.doCheck [
+  buildInputs = [
     gbenchmark
     gtest
   ];
 
-  propagatedBuildInputs = [
-    abseil-cpp
-    icu
-  ];
+  propagatedBuildInputs = [ abseil-cpp ] ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ icu ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "RE2_BUILD_TESTING" finalAttrs.doCheck)
-    (lib.cmakeBool "RE2_USE_ICU" true)
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) (lib.cmakeBool "BUILD_SHARED_LIBS" true);
+  cmakeFlags =
+    [ (lib.cmakeBool "RE2_BUILD_TESTING" true) ]
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+      (lib.cmakeBool "RE2_USE_ICU" true)
+      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    ];
 
   doCheck = true;
 
