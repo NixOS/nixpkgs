@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://openvpn.net/community-downloads/";
     homepage = "https://openvpn.net/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ viric peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
     mainProgram = "openvpn";
   };

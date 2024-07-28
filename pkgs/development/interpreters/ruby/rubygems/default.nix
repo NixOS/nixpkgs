@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     ./0001-add-post-extract-hook.patch
     ./0002-binaries-with-env-shebang.patch
     ./0003-gem-install-default-to-user.patch
+    ./0004-delete-binstub-lock-file.patch
   ];
 
   installPhase = ''
