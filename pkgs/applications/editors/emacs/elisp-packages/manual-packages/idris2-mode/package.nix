@@ -6,9 +6,12 @@
   gitUpdater,
 }:
 
-melpaBuild rec {
-  pname = "idris2-mode";
+let
   version = "1.1";
+in
+melpaBuild {
+  pname = "idris2-mode";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "idris-community";
