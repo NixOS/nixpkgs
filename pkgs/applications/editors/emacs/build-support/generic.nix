@@ -31,6 +31,8 @@ in
 , propagatedUserEnvPkgs ? []
 , postInstall ? ""
 , meta ? {}
+, turnCompilationWarningToError ? false
+, ignoreCompilationError ? true
 , ...
 }@args:
 
@@ -77,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: ({
 
   addEmacsNativeLoadPath = true;
 
+  inherit turnCompilationWarningToError ignoreCompilationError;
+
   postInstall = ''
     # Besides adding the output directory to the native load path, make sure
     # the current package's elisp files are in the load path, otherwise
@@ -86,8 +90,13 @@ stdenv.mkDerivation (finalAttrs: ({
     addEmacsVars "$out"
 
     find $out/share/emacs -type f -name '*.el' -print0 \
-      | xargs -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
-          "emacs --batch --eval '(setq large-file-warning-threshold nil)' -f batch-native-compile {} || true"
+      | xargs --verbose -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
+          "emacs \
+             --batch \
+             --eval '(setq large-file-warning-threshold nil)' \
+             --eval '(setq byte-compile-error-on-warn ${if finalAttrs.turnCompilationWarningToError then "t" else "nil"})' \
+             -f batch-native-compile {} \
+           || exit ${if finalAttrs.ignoreCompilationError then "0" else "\\$?"}"
   '' + postInstall;
 }
 

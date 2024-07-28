@@ -35,10 +35,6 @@ buildPythonPackage rec {
     looseversion
   ];
 
-  # tests rely on nose
-  # resolved in 0.5.1: https://github.com/BioPandas/biopandas/commit/67aa2f237c70c826cd9ab59d6ae114582da2112f
-  doCheck = pythonOlder "3.12";
-
   nativeCheckInputs = [
     nose
     pytestCheckHook

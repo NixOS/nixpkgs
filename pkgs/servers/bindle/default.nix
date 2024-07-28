@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "sha256-RECEeo0uoGO5bBe+r++zpTjYYX3BIkT58uht2MLYkN0=";
+  cargoHash = "sha256-RECEeo0uoGO5bBe+r++zpTjYYX3BIkT58uht2MLYkN0=";
 
   cargoBuildFlags = [
     "--bin" "bindle"

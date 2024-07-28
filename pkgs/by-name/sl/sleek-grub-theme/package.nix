@@ -2,20 +2,20 @@
 , stdenv
 , fetchFromGitHub
 , withBanner ? "Grub Bootloader" # use override to specify your own banner text
-, withStyle ? "white" # use override to specify one of "dark" / "orange" / "bigSur"
+, withStyle ? "light" # use override to specify one of "dark" / "orange" / "bigSur"
 }:
 
-assert builtins.any (s: withStyle == s) ["white" "dark" "orange" "bigSur"];
+assert builtins.any (s: withStyle == s) ["light" "dark" "orange" "bigSur"];
 
 stdenv.mkDerivation {
-  pname = "sleek-grub-theme";
-  version = "unstable-2022-06-04";
+  pname = "sleek-grub-theme"; 
+  version = "unstable-2023-12-31";
 
   src = fetchFromGitHub ({
     owner = "sandesh236";
     repo = "sleek--themes";
-    rev = "981326a8e35985dc23f1b066fdbe66ff09df2371";
-    hash = "sha256-yD4JuoFGTXE/aI76EtP4rEWCc5UdFGi7Ojys6Yp8Z58=";
+    rev = "0a680163a0711c4ed23d5d3b1b9a0f67115cb6d8";   
+    hash = "sha256-bof/4Ab9XmhlG7kRQfVGzsyClAW2bctHn4kdcIJox9o=";
   });
 
   installPhase = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
     mkdir -p $out/
 
-    cp -r 'Sleek theme-${withStyle}'/sleek/* $out/
+    cp -r 'Sleek theme-${withStyle}'/sleek/* $out/  
     sed -i "s/Grub Bootloader/${withBanner}/" $out/theme.txt
 
     runHook postInstall

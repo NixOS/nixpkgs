@@ -10,7 +10,7 @@
 # requiring to build a special variant for that software. Example: 'haproxy'
 , variant ? "all"
 , extraConfigureFlags ? []
-, enableLto ? !(stdenv.isDarwin || stdenv.hostPlatform.isStatic || stdenv.cc.isClang)
+, enableLto ? !(stdenv.hostPlatform.isStatic || stdenv.cc.isClang)
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wolfssl-${variant}";

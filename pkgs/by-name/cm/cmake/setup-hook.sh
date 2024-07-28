@@ -5,7 +5,7 @@ addCMakeParams() {
 fixCmakeFiles() {
     # Replace occurences of /usr and /opt by /var/empty.
     echo "fixing cmake files..."
-    find "$1" \( -type f -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt \) -print |
+    find "$1" -type f \( -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt \) -print |
         while read fn; do
             sed -e 's^/usr\([ /]\|$\)^/var/empty\1^g' -e 's^/opt\([ /]\|$\)^/var/empty\1^g' < "$fn" > "$fn.tmp"
             mv "$fn.tmp" "$fn"

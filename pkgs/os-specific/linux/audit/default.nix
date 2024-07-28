@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-v0ItQSard6kqTDrDneVHPyeNw941ck0lGKSMe+FdVNg=";
   };
 
-  patches = lib.optionals (!stdenv.hostPlatform.isGnu) [
+  patches = [
     (fetchpatch {
       name = "musl.patch";
       url = "https://github.com/linux-audit/audit-userspace/commit/64cb48e1e5137b8a389c7528e611617a98389bc7.patch";

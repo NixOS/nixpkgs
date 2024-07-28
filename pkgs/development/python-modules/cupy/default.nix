@@ -10,7 +10,7 @@
   mock,
   setuptools,
   cudaPackages,
-  addOpenGLRunpath,
+  addDriverRunpath,
   pythonOlder,
   symlinkJoin,
   fetchpatch
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
-    addOpenGLRunpath
+    addDriverRunpath
     cython_0
     cudaPackages.cuda_nvcc
   ];
@@ -107,7 +107,7 @@ buildPythonPackage rec {
 
   postFixup = ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addDriverRunpath "$lib"
     done
   '';
 

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-pRDRRVb8Lyna8X/PEjS9tS5dbG4g7vyMCU5AqPlpxec=";
   };
 
-  cargoSha256 = "sha256-SZWmJGiCc/FevxMWJpa8xKVz/rbll52oNbFtqPpz74g=";
+  cargoHash = "sha256-SZWmJGiCc/FevxMWJpa8xKVz/rbll52oNbFtqPpz74g=";
 
   meta = with lib; {
     description = "Clean and optimize SVG files from unnecessary data";

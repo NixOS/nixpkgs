@@ -27,7 +27,7 @@ in
     version = "unstable-2021-01-05";
     inherit src meta;
 
-    cargoSha256 = "sha256-3WtiW31AkyNX7HiT/zqfNo2VSKR7Q57/wCigST066Js=";
+    cargoHash = "sha256-3WtiW31AkyNX7HiT/zqfNo2VSKR7Q57/wCigST066Js=";
 
     buildAndTestSubdir = "server";
 
@@ -45,7 +45,7 @@ in
     version = "unstable-2021-01-05";
     inherit src meta;
 
-    cargoSha256 = "sha256-pxan6W/CEsOxv8DbbytEBuIqxWn/C4qT4ze/RnvESOM=";
+    cargoHash = "sha256-pxan6W/CEsOxv8DbbytEBuIqxWn/C4qT4ze/RnvESOM=";
 
     PROTOC = "${protobuf}/bin/protoc";
 

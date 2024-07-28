@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-y6xj4A5SHcW747aFE9TfuurNnuUxjTUeKJmzxeiWqVc=";
   };
 
-  cargoSha256 = "sha256-co58YBeFjP9DKzxDegQI7txuJ1smqJxdlRLae+Ppwh0=";
+  cargoHash = "sha256-co58YBeFjP9DKzxDegQI7txuJ1smqJxdlRLae+Ppwh0=";
 
   meta = with lib; {
     description = "Test the 16 terminal colors in all combinations";

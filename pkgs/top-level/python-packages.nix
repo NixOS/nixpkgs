@@ -6189,7 +6189,6 @@ self: super: with self; {
   };
 
   jaxlib-build = callPackage ../development/python-modules/jaxlib rec {
-    inherit (pkgs.darwin) cctools;
     # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
     inherit (pkgs.config) cudaSupport;
     IOKit = pkgs.darwin.apple_sdk_11_0.IOKit;
@@ -6777,6 +6776,8 @@ self: super: with self; {
   ledgerwallet = callPackage ../development/python-modules/ledgerwallet {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
+
+  legacy-cgi = callPackage ../development/python-modules/legacy-cgi { };
 
   leidenalg = callPackage ../development/python-modules/leidenalg {
     igraph-c = pkgs.igraph;
@@ -7710,9 +7711,7 @@ self: super: with self; {
 
   minio = callPackage ../development/python-modules/minio { };
 
-  miniupnpc = callPackage ../development/python-modules/miniupnpc {
-    inherit (pkgs.darwin) cctools;
-  };
+  miniupnpc = callPackage ../development/python-modules/miniupnpc { };
 
   mip = callPackage ../development/python-modules/mip { };
 
@@ -10692,16 +10691,21 @@ self: super: with self; {
 
   proto-plus = callPackage ../development/python-modules/proto-plus { };
 
-  # Protobuf 4.x
-  protobuf = callPackage ../development/python-modules/protobuf {
-    # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
-    protobuf = pkgs.protobuf;
-  };
-
   # Protobuf 3.x
   protobuf3 = callPackage ../development/python-modules/protobuf/3.nix {
     protobuf = pkgs.protobuf3_20;
   };
+
+  # Protobuf 4.x
+  protobuf4 = callPackage ../development/python-modules/protobuf/4.nix {
+    protobuf = pkgs.protobuf;
+  };
+
+  # Protobuf 5.x
+  protobuf5 = callPackage ../development/python-modules/protobuf/default.nix { };
+
+  # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
+  protobuf = protobuf4;
 
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
 
@@ -15291,7 +15295,6 @@ self: super: with self; {
     };
   in
   callPackage ../development/python-modules/tensorflow {
-    inherit (pkgs.darwin) cctools;
     inherit (pkgs.config) cudaSupport;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
     flatbuffers-core = pkgs.flatbuffers;
@@ -15318,9 +15321,7 @@ self: super: with self; {
 
   tensorflow-metadata = callPackage ../development/python-modules/tensorflow-metadata { };
 
-  tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability {
-    inherit (pkgs.darwin) cctools;
-  };
+  tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
   tensorflow = self.tensorflow-build;
 
@@ -16928,8 +16929,6 @@ self: super: with self; {
   urwidtrees = callPackage ../development/python-modules/urwidtrees { };
 
   urwid-readline = callPackage ../development/python-modules/urwid-readline { };
-
-  urwid-mitmproxy = callPackage ../development/python-modules/urwid-mitmproxy { };
 
   usb-devices = callPackage ../development/python-modules/usb-devices { };
 

@@ -5,7 +5,7 @@
   lib,
   fetchFromGitHub,
   symlinkJoin,
-  addOpenGLRunpath,
+  addDriverRunpath,
   fetchpatch,
   fetchzip,
   linkFarm,
@@ -308,7 +308,7 @@ let
       perl
       protobuf-core
       protobuf-extra
-    ] ++ lib.optional cudaSupport addOpenGLRunpath;
+    ] ++ lib.optional cudaSupport addDriverRunpath;
 
     buildInputs =
       [
@@ -581,7 +581,7 @@ let
 
       postFixup = lib.optionalString cudaSupport ''
         find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-          addOpenGLRunpath "$lib"
+          addDriverRunpath "$lib"
         done
       '';
 
@@ -664,11 +664,11 @@ buildPythonPackage {
     wrapt
   ] ++ lib.optionals withTensorboard [ tensorboard ];
 
-  nativeBuildInputs = lib.optionals cudaSupport [ addOpenGLRunpath ];
+  nativeBuildInputs = lib.optionals cudaSupport [ addDriverRunpath ];
 
   postFixup = lib.optionalString cudaSupport ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addDriverRunpath "$lib"
 
       patchelf --set-rpath "${cudatoolkit}/lib:${cudatoolkit.lib}/lib:${cudnnMerged}/lib:${lib.getLib nccl}/lib:$(patchelf --print-rpath "$lib")" "$lib"
     done

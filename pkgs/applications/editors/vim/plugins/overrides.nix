@@ -564,7 +564,7 @@
         pname = "cord.nvim-rust";
         inherit version src;
 
-        cargoSha256 = "sha256-6FYf4pHEPxvhKHHPmkjQ40zPxaiypnpDxF8kNH+h+tg=";
+        cargoHash = "sha256-6FYf4pHEPxvhKHHPmkjQ40zPxaiypnpDxF8kNH+h+tg=";
 
         installPhase = let
           cargoTarget = stdenv.hostPlatform.rust.cargoShortTarget;
@@ -928,7 +928,7 @@
         inherit version;
         src = LanguageClient-neovim-src;
 
-        cargoSha256 = "H34UqJ6JOwuSABdOup5yKeIwFrGc83TUnw1ggJEx9o4=";
+        cargoHash = "sha256-H34UqJ6JOwuSABdOup5yKeIwFrGc83TUnw1ggJEx9o4=";
         buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
         # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -1901,7 +1901,7 @@
       vim-markdown-composer-bin = rustPlatform.buildRustPackage {
         pname = "vim-markdown-composer-bin";
         inherit (super.vim-markdown-composer) src version;
-        cargoSha256 = "sha256-Vie8vLTplhaVU4E9IohvxERfz3eBpd62m8/1Ukzk8e4=";
+        cargoHash = "sha256-Vie8vLTplhaVU4E9IohvxERfz3eBpd62m8/1Ukzk8e4=";
         # tests require network access
         doCheck = false;
       };

@@ -235,8 +235,10 @@ rec {
       """
       )
 
-      output = machine.succeed("/run/current-system/bin/switch-to-configuration boot")
+      output = machine.succeed("/run/current-system/bin/switch-to-configuration boot 2>&1")
       assert "updating systemd-boot from 000.0-1-notnixos to " in output, "Couldn't find systemd-boot update message"
+      assert 'to "/boot/EFI/systemd/systemd-bootx64.efi"' in output, "systemd-boot not copied to to /boot/EFI/systemd/systemd-bootx64.efi"
+      assert 'to "/boot/EFI/BOOT/BOOTX64.EFI"' in output, "systemd-boot not copied to to /boot/EFI/BOOT/BOOTX64.EFI"
     '';
   };
 

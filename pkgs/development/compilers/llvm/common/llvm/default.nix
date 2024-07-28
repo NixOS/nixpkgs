@@ -102,6 +102,10 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "lib" "dev" "python" ];
 
+  hardeningDisable = [
+    "trivialautovarinit"
+  ];
+
   nativeBuildInputs = [ cmake ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
     ++ [ python ]
@@ -537,6 +541,4 @@ stdenv.mkDerivation (rec {
     check_version minor ${minor}
     check_version patch ${patch}
   '';
-} // lib.optionalAttrs (lib.versionOlder release_version "17" || lib.versionAtLeast release_version "18") {
-  hardeningDisable = [ "trivialautovarinit" ];
 })
