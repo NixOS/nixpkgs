@@ -13,6 +13,8 @@ let
         rev = "4da97087c5babbd8429b5ce62a8323b9b03c6022";
         hash = "sha256-XsvPsA/lUzPWyJAdJg9XtD/vLDtk7guG7p+8ZOQ8Nno=";
       };
+
+      packageRequires = [ epkgs.async ];
     };
 
     semaphore = epkgs.melpaBuild {
