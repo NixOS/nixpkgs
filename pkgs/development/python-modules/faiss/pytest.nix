@@ -1,8 +1,10 @@
-{ lib
-, buildPythonPackage
-, faiss
-, scipy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  faiss,
+  faiss-build,
+  scipy,
+  pytestCheckHook,
 }:
 
 assert faiss.pythonSupport;
@@ -13,15 +15,13 @@ buildPythonPackage {
 
   format = "other";
 
-  src = "${faiss.src}/tests";
+  src = "${faiss-build.src}/tests";
 
   dontBuild = true;
   dontInstall = true;
 
   # Tests that need GPUs and would fail in the sandbox
-  disabledTestPaths = lib.optionals faiss.cudaSupport [
-    "test_contrib.py"
-  ];
+  disabledTestPaths = lib.optionals faiss.cudaSupport [ "test_contrib.py" ];
 
   disabledTests = [
     # https://github.com/facebookresearch/faiss/issues/2836
@@ -32,6 +32,9 @@ buildPythonPackage {
     faiss
     pytestCheckHook
     scipy
-  ] ++
-  faiss.extra-requires.all;
+  ];
+
+  meta = faiss.meta // {
+    description = "Faiss test suite";
+  };
 }
