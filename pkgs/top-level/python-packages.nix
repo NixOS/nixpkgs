@@ -4332,6 +4332,8 @@ self: super: with self; {
 
   first = callPackage ../development/python-modules/first { };
 
+  fissix = callPackage ../development/python-modules/fissix { };
+
   fitbit = callPackage ../development/python-modules/fitbit { };
 
   fivem-api = callPackage ../development/python-modules/fivem-api { };
