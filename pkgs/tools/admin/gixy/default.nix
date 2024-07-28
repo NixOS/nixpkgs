@@ -3,6 +3,7 @@
   fetchFromGitHub,
   fetchpatch2,
   python3,
+  nginx,
 }:
 
 let
@@ -56,6 +57,10 @@ python.pkgs.buildPythonApplication rec {
   nativeCheckInputs = [ python.pkgs.pytestCheckHook ];
 
   pythonRemoveDeps = [ "argparse" ];
+
+  passthru = {
+    inherit (nginx.passthru) tests;
+  };
 
   meta = {
     description = "Nginx configuration static analyzer";
