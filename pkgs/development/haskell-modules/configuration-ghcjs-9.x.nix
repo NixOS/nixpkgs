@@ -23,5 +23,5 @@ with haskellLib;
 
   reflex-dom = super.reflex-dom.override (drv: {
     jsaddle-webkit2gtk = null;
-  }) ;
+  });
 })
