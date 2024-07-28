@@ -62,6 +62,13 @@ stdenv.mkDerivation {
       --replace-fail '#ifdef SWIGWORDSIZE64' '#if (__SIZEOF_LONG__ == 8)'
   '';
 
+  nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    addDriverRunpath
+  ] ++ lib.optionals pythonSupport [
+    pythonPackages.python
+  ];
+
   buildInputs = [
     blas
     swig
@@ -76,13 +83,6 @@ stdenv.mkDerivation {
   propagatedBuildInputs = lib.optionals pythonSupport [
     pythonPackages.numpy
     pythonPackages.packaging
-  ];
-
-  nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-    addDriverRunpath
-  ] ++ lib.optionals pythonSupport [
-    pythonPackages.python
   ];
 
   passthru.extra-requires.all = [
