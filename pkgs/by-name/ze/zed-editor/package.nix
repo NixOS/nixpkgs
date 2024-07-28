@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchzip,
   clang,
   copyDesktopItems,
   curl,
@@ -27,6 +28,8 @@
   vulkan-loader,
   envsubst,
   nix-update-script,
+  cargo-bundle,
+  git,
 
   withGLES ? false,
 }:
@@ -35,14 +38,14 @@ assert withGLES -> stdenv.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.144.4";
+  version = "0.145.0";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-F/44NjoBCH2und9VVayE0wxrrOtcFoP5yuvxgxCkxuM=";
-    fetchSubmodules = true;
+    # https://github.com/zed-industries/zed/pull/13343
+    rev = "dcc24b0f97d1ed4aa093d3b3ccd6a4fa6709132e";
+    hash = "sha256-pJ1pJZoI0rliIDoRskj/YDb28S719+7eeQECEukzD3w=";
   };
 
   cargoLock = {
@@ -52,7 +55,9 @@ rustPlatform.buildRustPackage rec {
       "async-pipe-0.1.3" = "sha256-g120X88HGT8P6GNCrzpS5SutALx5H+45Sf4iSSxzctE=";
       "blade-graphics-0.4.0" = "sha256-c0KhzG/FCpAyiafGZTbxDMz1ktCTURNDxO3fkB16nUw=";
       "cosmic-text-0.11.2" = "sha256-TLPDnqixuW+aPAhiBhSvuZIa69vgV3xLcw32OlkdCcM=";
+      "cpal-0.15.3" = "sha256-t+jY+0gygP+4ZHbWc40o2i+A4tLXjwKYEwS6cPvujes=";
       "font-kit-0.11.0" = "sha256-+4zMzjFyMS60HfLMEXGfXqKn6P+pOngLA45udV09DM8=";
+      "libwebrtc-0.3.4" = "sha256-LmRBbFeui7rVkjHAfzZWa3abljyZ+TqfhisK72DN7oY=";
       "lsp-types-0.95.1" = "sha256-N4MKoU9j1p/Xeowki/+XiNQPwIcTm9DgmfM/Eieq4js=";
       "naga-0.20.0" = "sha256-07lLKQLfWYyOwWmvzFQ0vMeuC5pxmclz6Ub72ooSmwk=";
       "nvim-rs-0.6.0-pre" = "sha256-bdWWuCsBv01mnPA5e5zRpq48BgOqaqIcAu+b7y1NnM8=";
@@ -69,15 +74,20 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [
-    clang
-    copyDesktopItems
-    curl
-    perl
-    pkg-config
-    protobuf
-    rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ];
+  nativeBuildInputs =
+    [
+      clang
+      copyDesktopItems
+      curl
+      perl
+      pkg-config
+      protobuf
+      rustPlatform.bindgenHook
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      xcbuild.xcrun
+      cargo-bundle
+    ];
 
   buildInputs =
     [
@@ -97,9 +107,9 @@ rustPlatform.buildRustPackage rec {
       xorg.libxcb
     ]
     ++ lib.optionals stdenv.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
+      (with darwin.apple_sdk.frameworks; [
         AppKit
+        AVFoundation
         CoreAudio
         CoreFoundation
         CoreGraphics
@@ -107,19 +117,33 @@ rustPlatform.buildRustPackage rec {
         CoreServices
         CoreText
         Foundation
+        # fails to build if imported from 12.3 SDK
         IOKit
         Metal
+        MetalKit
+        ReplayKit
         Security
+        System
         SystemConfiguration
+      ])
+      # The overrideSDK pattern as described in https://discourse.nixos.org/t/darwin-updates-news/42249/14
+      # does not work here as ScreenCaptureKit is not contained in the unversioned frameworks.
+      # It would also currently break IOKit.
+      ++ (with darwin.apple_sdk_12_3.frameworks; [
+        # introduced in 12.3
+        ScreenCaptureKit
+        # Zed needs latency control from VideoToolbox, available from 11.3+
         VideoToolbox
-      ]
+      ])
     );
 
   cargoBuildFlags = [
     "--package=zed"
     "--package=cli"
   ];
-  buildFeatures = [ "gpui/runtime_shaders" ];
+  # Required on darwin because we don't have access to the
+  # proprietary Metal shader compiler.
+  buildFeatures = lib.optionals stdenv.isDarwin [ "gpui/runtime_shaders" ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -130,6 +154,28 @@ rustPlatform.buildRustPackage rec {
       ];
     };
   };
+
+  # TODO: can this be built from source?
+  LK_CUSTOM_WEBRTC =
+    let
+      # Must match WEBRTC_TAG in https://github.com/livekit/rust-sdks/blob/v$VERSION/webrtc-sys/build/src/lib.rs
+      # where $VERSION is the resolved version of libwebrtc in our ./Cargo.lock
+      webrtc_tag = "webrtc-b951613-4";
+      webrtc_os = if stdenv.isDarwin then "mac" else "linux";
+      webrtc_arch = if stdenv.isAarch64 then "arm64" else "x64";
+      webrtc_target = "${webrtc_os}-${webrtc_arch}";
+    in
+    fetchzip {
+      url = "https://github.com/livekit/client-sdk-rust/releases/download/${webrtc_tag}/webrtc-${webrtc_target}-release.zip";
+      hash =
+        {
+          "linux-arm64" = "sha256-s2bXdOGaTcXN6KI7hMWbV1Q9joGrKSbcrhQlyvRvtVo=";
+          "linux-x64" = "sha256-F/e6eWvV3R7p0NlfijGBDMmfNpvk3qCcMM8Gf9d5YQ8=";
+          "mac-arm64" = "sha256-RO15n3TQs0b9tnRdbqF7GoQ9H5orN3IduNBnG+BF3H4=";
+          "mac-x64" = "sha256-vLKfw5ZsxhjG+tsw3hUeep2Sb0HaqmajgPkioi5Oyow=";
+        }
+        .${webrtc_target};
+    };
 
   RUSTFLAGS = if withGLES then "--cfg gles" else "";
   gpu-lib = if withGLES then libglvnd else vulkan-loader;
@@ -144,30 +190,69 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_open_paths_action"
   ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    if stdenv.isDarwin then
+      ''
+        runHook preInstall
 
-    mkdir -p $out/bin $out/libexec
-    cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/zed $out/libexec/zed-editor
-    cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cli $out/bin/zed
+        # cargo-bundle expects the binary in target/release
+        mv target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/zed target/release/zed
 
-    install -D ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
-    install -D ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
+        pushd crates/zed
 
-    # extracted from https://github.com/zed-industries/zed/blob/v0.141.2/script/bundle-linux (envsubst)
-    # and https://github.com/zed-industries/zed/blob/v0.141.2/script/install.sh (final desktop file name)
-    (
-      export DO_STARTUP_NOTIFY="true"
-      export APP_CLI="zed"
-      export APP_ICON="zed"
-      export APP_NAME="Zed"
-      export APP_ARGS="%U"
-      mkdir -p "$out/share/applications"
-      ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/dev.zed.Zed.desktop"
-    )
+        # Note that this is GNU sed, while Zed's bundle-mac uses BSD sed
+        sed -i "s/package.metadata.bundle-stable/package.metadata.bundle/" Cargo.toml
+        export CARGO_BUNDLE_SKIP_BUILD=true
+        app_path=$(cargo bundle --release | xargs)
 
-    runHook postInstall
-  '';
+        # We're not using Zed's fork of cargo-bundle, so we must manually append their plist extensions
+        # Remove closing tags from Info.plist (last two lines)
+        head -n -2 $app_path/Contents/Info.plist > Info.plist
+        # Append extensions
+        cat resources/info/*.plist >> Info.plist
+        # Add closing tags
+        printf "</dict>\n</plist>\n" >> Info.plist
+        mv Info.plist $app_path/Contents/Info.plist
+
+        popd
+
+        mkdir -p $out/Applications $out/bin
+        # Zed expects git next to its own binary
+        ln -s ${git}/bin/git $app_path/Contents/MacOS/git
+        mv target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cli $app_path/Contents/MacOS/cli
+        mv $app_path $out/Applications/
+
+        # Physical location of the CLI must be inside the app bundle as this is used
+        # to determine which app to start
+        ln -s $out/Applications/Zed.app/Contents/MacOS/cli $out/bin/zed
+
+        runHook postInstall
+      ''
+    else
+      ''
+        runHook preInstall
+
+        mkdir -p $out/bin $out/libexec
+        cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/zed $out/libexec/zed-editor
+        cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cli $out/bin/zed
+
+        install -D ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
+        install -D ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
+
+        # extracted from https://github.com/zed-industries/zed/blob/v0.141.2/script/bundle-linux (envsubst)
+        # and https://github.com/zed-industries/zed/blob/v0.141.2/script/install.sh (final desktop file name)
+        (
+          export DO_STARTUP_NOTIFY="true"
+          export APP_CLI="zed"
+          export APP_ICON="zed"
+          export APP_NAME="Zed"
+          export APP_ARGS="%U"
+          mkdir -p "$out/share/applications"
+          ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/dev.zed.Zed.desktop"
+        )
+
+        runHook postInstall
+      '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
@@ -186,8 +271,6 @@ rustPlatform.buildRustPackage rec {
       niklaskorz
     ];
     mainProgram = "zed";
-    platforms = lib.platforms.all;
-    # Currently broken on darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
-    broken = stdenv.isDarwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
