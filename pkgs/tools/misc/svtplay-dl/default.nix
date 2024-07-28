@@ -1,27 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, python3Packages
-, perl
-, zip
-, gitMinimal
-, ffmpeg
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  python3Packages,
+  perl,
+  ffmpeg,
+  gitMinimal,
 }:
 
 let
 
   inherit (python3Packages)
-    python pytest nose3 cryptography pyyaml requests mock requests-mock
-    python-dateutil setuptools;
+    buildPythonApplication
+    setuptools
+    requests
+    pysocks
+    cryptography
+    pyyaml
+    nose3
+    pytest
+    mock
+    requests-mock
+    ;
 
   version = "4.97.1";
 
 in
 
-stdenv.mkDerivation rec {
+buildPythonApplication {
   pname = "svtplay-dl";
   inherit version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spaam";
@@ -30,47 +39,56 @@ stdenv.mkDerivation rec {
     hash = "sha256-9h3hHRRL7DKeCpEXL5w72hYi1nTS+a+x5e9ArMmVgYQ=";
   };
 
-  pythonPaths = [ cryptography pyyaml requests ];
-  buildInputs = [ python perl python-dateutil setuptools ] ++ pythonPaths;
-  nativeBuildInputs = [ gitMinimal zip makeWrapper ];
-  nativeCheckInputs = [ nose3 pytest mock requests-mock ];
+  build-system = [ setuptools ];
 
-  postPatch = ''
-    substituteInPlace scripts/run-tests.sh \
-      --replace 'PYTHONPATH=lib' 'PYTHONPATH=lib:$PYTHONPATH'
+  dependencies = [
+    requests
+    pysocks
+    cryptography
+    pyyaml
+  ];
 
-    sed -i '/def test_sublang2\?(/ i\    @unittest.skip("accesses network")' \
-      lib/svtplay_dl/tests/test_postprocess.py
-  '';
+  nativeBuildInputs = [
+    # For `pod2man(1)`.
+    perl
+    installShellFiles
+  ];
 
-  makeFlags = [ "PREFIX=$(out)" "SYSCONFDIR=$(out)/etc" "PYTHON=${python.interpreter}" ];
+  nativeCheckInputs = [
+    nose3
+    pytest
+    mock
+    requests-mock
+    gitMinimal
+  ];
 
-  postInstall = ''
-    wrapProgram "$out/bin/svtplay-dl" \
-      --prefix PATH : "${ffmpeg}" \
-      --prefix PYTHONPATH : "$PYTHONPATH"
+  postBuild = ''
+    make svtplay-dl.1
   '';
 
   doCheck = python3Packages.pythonOlder "3.12";
+
   checkPhase = ''
     runHook preCheck
 
-    sh scripts/run-tests.sh -2
+    nosetests --all-modules --with-doctest
 
     runHook postCheck
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/svtplay-dl --help > /dev/null
-    runHook postInstallCheck
+  postInstall = ''
+    installManPage svtplay-dl.1
+    makeWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ ffmpeg ]}")
   '';
 
-  meta = with lib; {
+  postInstallCheck = ''
+    $out/bin/svtplay-dl --help > /dev/null
+  '';
+
+  meta = {
     homepage = "https://github.com/spaam/svtplay-dl";
     description = "Command-line tool to download videos from svtplay.se and other sites";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     mainProgram = "svtplay-dl";
   };
