@@ -1,13 +1,19 @@
-{ lib, fetchFromGitHub, fetchpatch, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+}:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "grin";
   version = "1.3.0";
   namePrefix = "";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthew-brett";
-    repo = pname;
+    repo = "grin";
     rev = "1.3.0";
     hash = "sha256-exKUy7LaDtpq0rJLSuNYsIcynpB4QLtLIE6T/ncB7RQ=";
   };
@@ -21,9 +27,9 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    nose3
-  ];
+  build-system = [ python3Packages.setuptools ];
+
+  nativeCheckInputs = with python3Packages; [ nose3 ];
 
   meta = {
     homepage = "https://github.com/matthew-brett/grin";
