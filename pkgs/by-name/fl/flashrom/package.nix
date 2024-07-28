@@ -1,13 +1,17 @@
 {
   fetchurl,
   stdenv,
-  installShellFiles,
+  bash-completion,
+  cmocka,
   lib,
   libftdi1,
   libjaylink,
   libusb1,
+  meson,
+  ninja,
   pciutils,
   pkg-config,
+  sphinx,
   jlinkSupport ? false,
 }:
 
@@ -21,15 +25,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
-    installShellFiles
+    sphinx
+    bash-completion
   ];
   buildInputs =
     [
+      cmocka
       libftdi1
       libusb1
     ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pciutils ]
+    ++ lib.optionals (!stdenv.isDarwin) [ pciutils ]
     ++ lib.optional jlinkSupport libjaylink;
 
   postPatch = ''
@@ -37,20 +45,8 @@ stdenv.mkDerivation rec {
       --replace 'GROUP="plugdev"' 'TAG+="uaccess", TAG+="udev-acl"'
   '';
 
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "libinstall"
-    ]
-    ++ lib.optional jlinkSupport "CONFIG_JLINK_SPI=yes"
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      "CONFIG_INTERNAL_X86=no"
-      "CONFIG_INTERNAL_DMI=no"
-      "CONFIG_RAYER_SPI=no"
-    ];
-
   postInstall = ''
-    install -Dm644 util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
+    install -Dm644 $NIX_BUILD_TOP/$sourceRoot/util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
   '';
 
   NIX_CFLAGS_COMPILE = lib.optionalString (
