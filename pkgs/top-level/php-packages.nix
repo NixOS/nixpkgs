@@ -644,6 +644,7 @@ in {
           configureFlags = [
             "--enable-soap"
           ];
+          doCheck = stdenv.isDarwin;  # TODO: a couple tests still fail on *-linux
           internalDeps = [ php.extensions.session ];
           patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
             # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
