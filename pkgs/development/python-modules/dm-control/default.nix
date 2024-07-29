@@ -15,8 +15,6 @@
   h5py,
   lxml,
   mock,
-  nose,
-  nose-xunitmp,
   numpy,
   pillow,
   protobuf,
@@ -64,8 +62,6 @@ buildPythonPackage rec {
     lxml
     mock
     mujoco
-    nose
-    nose-xunitmp
     numpy
     pillow
     protobuf
