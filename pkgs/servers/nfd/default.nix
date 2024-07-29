@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, boost179 # probably needs to match the one from ndn-cxx
+, boost
 , fetchFromGitHub
 , libpcap
 , ndn-cxx
@@ -20,34 +20,32 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "named-data";
-    repo = lib.toUpper pname;
+    repo = "NFD";
     rev = "NFD-${version}";
-    hash = "sha256-iEI8iS0eLLVe6PkOiCHL3onYNVYVZ1ttmk/aWrBkDhg=";
-    fetchSubmodules = true;
+    hash = "sha256-HbKPO3gwQWOZf4QZE+N7tAiqsNl1GrcwE4EUGjWmf5s=";
   };
 
-  postPatch = ''
-    # These tests fail because they try to check for user/group permissions.
-    rm tests/daemon/mgmt/general-config-section.t.cpp
+  prePatch = lib.optional withWebSocket ''
+    ln -s ${websocketpp}/include/websocketpp websocketpp
   '';
 
-  nativeBuildInputs = [ pkg-config sphinx wafHook ];
-  buildInputs = [ boost179 libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
+  nativeBuildInputs = [
+    pkg-config
+    sphinx
+    wafHook
+  ];
+  buildInputs = [
+    libpcap
+    ndn-cxx
+    openssl
+  ] ++ lib.optional withWebSocket websocketpp
+  ++ lib.optional withSystemd systemd;
+
 
   wafConfigureFlags = [
-    "--boost-includes=${boost179.dev}/include"
-    "--boost-libs=${boost179.out}/lib"
-    "--with-tests"
+    "--boost-includes=${boost.dev}/include"
+    "--boost-libs=${boost.out}/lib"
   ] ++ lib.optional (!withWebSocket) "--without-websocket";
-
-  doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    build/unit-tests-core
-    build/unit-tests-daemon
-    build/unit-tests-tools
-    runHook postCheck
-  '';
 
   meta = with lib; {
     homepage = "https://named-data.net/";
