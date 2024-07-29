@@ -17,6 +17,7 @@
 , # Misc dependencies
   arrow-cpp
 , Cocoa
+, coc-diagnostic
 , code-minimap
 , dasht
 , deno
@@ -334,6 +335,11 @@
 
   cmp-zsh = super.cmp-zsh.overrideAttrs {
     dependencies = with self; [ nvim-cmp zsh ];
+  };
+
+  coc-diagnostic = buildVimPlugin {
+    inherit (coc-diagnostic) pname version meta;
+    src = "${coc-diagnostic}/lib/node_modules/coc-diagnostic";
   };
 
   coc-nginx = buildVimPlugin {
@@ -2118,7 +2124,6 @@
       "coc-clangd"
       "coc-cmake"
       "coc-css"
-      "coc-diagnostic"
       "coc-docker"
       "coc-emmet"
       "coc-eslint"
