@@ -12,6 +12,7 @@ let
   inherit (lib)
     literalExpression
     mapAttrsToList
+    mkEnableOption
     mkOption
     optionals
     types
@@ -104,6 +105,15 @@ let
         Whether to allow unfree packages.
 
         See [Installing unfree packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree) in the NixOS manual.
+      '';
+    };
+
+    allowNonSource = mkEnableOption "" // {
+      default = true;
+      defaultText = literalExpression ''true && builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE" != "0"'';
+      description = ''
+        Whether to allow non-source packages.
+        Can be combined with `config.allowNonSourcePredicate`.
       '';
     };
 

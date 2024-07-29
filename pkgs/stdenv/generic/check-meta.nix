@@ -55,7 +55,7 @@ let
     envVar = builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE";
   in if envVar != ""
      then envVar != "0"
-     else config.allowNonSource or true;
+     else config.allowNonSource;
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];
