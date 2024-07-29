@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -9,7 +14,11 @@ in
 {
   imports = [
     (mkRemovedOptionModule
-      [ "services" "gollum" "mathjax" ]
+      [
+        "services"
+        "gollum"
+        "mathjax"
+      ]
       "MathJax rendering might be discontinued in the future, use services.gollum.math instead to enable KaTeX rendering or file a PR if you really need Mathjax"
     )
   ];
@@ -42,13 +51,23 @@ in
     };
 
     allowUploads = mkOption {
-      type = types.nullOr (types.enum [ "dir" "page" ]);
+      type = types.nullOr (
+        types.enum [
+          "dir"
+          "page"
+        ]
+      );
       default = null;
       description = "Enable uploads of external files";
     };
 
     user-icons = mkOption {
-      type = types.nullOr (types.enum [ "gravatar" "identicon" ]);
+      type = types.nullOr (
+        types.enum [
+          "gravatar"
+          "identicon"
+        ]
+      );
       default = null;
       description = "Enable specific user icons for history view";
     };
@@ -116,9 +135,7 @@ in
 
     users.groups."${cfg.group}" = { };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.rules = [ "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -" ];
 
     systemd.services.gollum = {
       description = "Gollum wiki";
@@ -154,5 +171,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ erictapen bbenno ];
+  meta.maintainers = with lib.maintainers; [
+    erictapen
+    bbenno
+  ];
 }
