@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Library to produce ansi color output and colored highlighting and diffing";
     homepage = "https://github.com/numerodix/ansicolor/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

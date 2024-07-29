@@ -39,6 +39,6 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "pifpaf";
     homepage = "https://github.com/jd/pifpaf";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

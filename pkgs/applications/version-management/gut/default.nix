@@ -28,7 +28,7 @@ buildGoModule rec {
     description = "Alternative git CLI";
     homepage = "https://gut-cli.dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "gut";
   };
 }

@@ -59,7 +59,7 @@ buildPythonPackage rec {
     description = "Python wrapper for the OpenZWave C++ library";
     homepage = "https://github.com/OpenZWave/python-openzwave";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     inherit (openzwave.meta) platforms;
   };
 }

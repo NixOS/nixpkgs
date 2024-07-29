@@ -67,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/iMerica/dj-rest-auth";
     changelog = "https://github.com/iMerica/dj-rest-auth/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

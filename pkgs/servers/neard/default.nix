@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "Near Field Communication manager";
     homepage = "https://01.org/linux-nfc";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     # error: wcwidth-0.2.13 not supported for interpreter python2.7
     broken = true; # Added 2024-03-17

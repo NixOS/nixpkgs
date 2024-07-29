@@ -191,6 +191,17 @@
     };
     meta.homepage = "https://github.com/ambroisie/tree-sitter-bp";
   };
+  bqn = buildGrammar {
+    language = "bpn";
+    version = "0.0.0+rev=8c62b74";
+    src = fetchFromGitHub {
+      owner = "shnarazk";
+      repo = "tree-sitter-bqn";
+      rev = "8c62b746924398304c8fa1aa18393c3124d1e50d";
+      hash = "sha256-jK0zn7DWzy2yfYOX1ZBoGOC7QBrcp4PHWnaOKaDL9ws=";
+    };
+    meta.homepage = "https://github.com/shnarazk/tree-sitter-bqn";
+  };
   c = buildGrammar {
     language = "c";
     version = "0.0.0+rev=be23d2c";

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.juniper-lang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

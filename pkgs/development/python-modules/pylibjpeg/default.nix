@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pylibjpeg";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = "pylibjpeg";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qGtrphsBBVieGS/8rdymbsjLMU/QEd7zFNAANN8bD+k=";
+    hash = "sha256-MA1A/hTIx95MYZ2LGOifnHn77wbv0ydAgQSzNZRykVg=";
   };
 
   build-system = [ flit-core ];

@@ -62822,24 +62822,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-diagnostic = nodeEnv.buildNodePackage {
-    name = "coc-diagnostic";
-    packageName = "coc-diagnostic";
-    version = "0.24.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-diagnostic/-/coc-diagnostic-0.24.1.tgz";
-      sha512 = "pAiP55qF3Uh4Mb7QzJAhtMyys3OOVg9iowupr27XBnoFZJxmxOZYG5nydOtHKBqhXIJ+mMfy/okHNLheD/4w/w==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "diagnostic-languageserver extension for coc.nvim";
-      homepage = "https://github.com/iamcco/coc-diagnostic#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-docker = nodeEnv.buildNodePackage {
     name = "coc-docker";
     packageName = "coc-docker";

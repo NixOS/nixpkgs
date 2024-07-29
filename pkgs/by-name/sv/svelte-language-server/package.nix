@@ -29,6 +29,6 @@ in buildNpmPackage {
     homepage = "https://github.com/sveltejs/language-tools";
     license = lib.licenses.mit;
     mainProgram = "svelteserver";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

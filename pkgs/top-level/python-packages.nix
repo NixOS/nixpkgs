@@ -2053,6 +2053,8 @@ self: super: with self; {
 
   command-runner = callPackage ../development/python-modules/command-runner { };
 
+  commitizen = callPackage ../development/python-modules/commitizen { };
+
   connect-box = callPackage ../development/python-modules/connect-box { };
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
@@ -4309,6 +4311,8 @@ self: super: with self; {
   find-libpython = callPackage ../development/python-modules/find-libpython { };
 
   findpython = callPackage ../development/python-modules/findpython { };
+
+  finetuning-scheduler = callPackage ../development/python-modules/finetuning-scheduler { };
 
   fingerprints = callPackage ../development/python-modules/fingerprints { };
 
@@ -13029,8 +13033,6 @@ self: super: with self; {
   };
 
   pyuseragents = callPackage ../development/python-modules/pyuseragents { };
-
-  pyutilib = callPackage ../development/python-modules/pyutilib { };
 
   pyuv = callPackage ../development/python-modules/pyuv { };
 

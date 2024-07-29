@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Python charting library";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

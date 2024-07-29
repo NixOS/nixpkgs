@@ -45,7 +45,7 @@ buildPythonPackage rec {
     description = "Email bounce detectors";
     homepage = "https://gitlab.com/warsaw/flufl.bounce";
     changelog = "https://gitlab.com/warsaw/flufl.bounce/-/blob/${version}/flufl/bounce/NEWS.rst";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.asl20;
   };
 }

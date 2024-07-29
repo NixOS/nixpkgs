@@ -24,6 +24,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/clean-css/clean-css-cli";
     license = lib.licenses.mit;
     mainProgram = "cleancss";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://timelens.blinry.org";
     changelog = "https://github.com/timelens/timelens/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "timelens";
   };
 }
