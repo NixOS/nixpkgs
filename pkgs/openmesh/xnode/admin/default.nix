@@ -26,7 +26,7 @@ pkgs.python3Packages.buildPythonPackage rec {
     homepage = "https://openmesh.network/";
     description = "Agent service for Xnode reconfiguration and management";
     mainProgram = "openmesh-xnode-admin";
-    #license = with licenses; [ x ];
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ harrys522 j-openmesh ];
   };
 }
