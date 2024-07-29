@@ -8,11 +8,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   appres = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXt, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "appres";
-    version = "1.0.6";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/appres-1.0.6.tar.xz";
-      sha256 = "02sr4f1bm3y1w24gsvjfzvbpac1kgkq27v1s68q87bd1l3i5f8lb";
+      url = "mirror://xorg/individual/app/appres-1.0.7.tar.xz";
+      sha256 = "17w17gqnfmpfmqgbjci1j4lnsd468k5yscxl3n6pmn4z4f4v250i";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
