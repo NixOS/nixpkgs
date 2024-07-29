@@ -6,7 +6,7 @@ let
   cfg = config.services.openmesh.xnode.admin;
 in {
 
-  options.services.openmesh = { 
+  options.services.openmesh = {
     xnode.admin = {
       enable = mkEnableOption "Management service for Xnode";
       package = mkPackageOption pkgs "xnode-admin" { };
@@ -40,6 +40,10 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
+    environment.variables = {
+      PYTHONUNBUFFERED = "1";
+    };
+
     systemd.services.openmesh-xnode-admin = {
       description = "Openmesh Xnode Administration and Configuration Subsystem Daemon";
       wantedBy = [ "multi-user.target" ];
@@ -47,7 +51,7 @@ in {
       wants = [ "network-online.target" ];
 
       serviceConfig = {
-        ExecStart = ''${lib.getExe cfg.package} --remote ${cfg.remoteDir} ${cfg.stateDir}''; 
+        ExecStart = ''${lib.getExe cfg.package} --remote ${cfg.remoteDir} ${cfg.stateDir}'';
         Restart = "always";
         RestartSec = 5;
         WorkingDirectory = cfg.stateDir;
