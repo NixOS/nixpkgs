@@ -564,6 +564,7 @@ mapAliases ({
   supervise_api = supervise-api; # added 2023-10-11
   suseapi = throw "suseapi has been removed because it is no longer maintained"; # added 2023-02-27
   sysv_ipc = sysv-ipc; # added 2024-01-07
+  tempita = throw "tempita has been removed because it is unmaintained and the upstream repository is gone"; # added 2024-07-29
   tensorflow-bin_2 = tensorflow-bin; # added 2021-11-25
   tensorflow-build_2 = tensorflow-build; # added 2021-11-25
   tensorflow-estimator = tensorflow-estimator-bin; # added 2023-01-17

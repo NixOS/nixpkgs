@@ -15218,8 +15218,6 @@ self: super: with self; {
 
   tempest = callPackage ../development/python-modules/tempest { };
 
-  tempita = callPackage ../development/python-modules/tempita { };
-
   templateflow = callPackage ../development/python-modules/templateflow { };
 
   tempora = callPackage ../development/python-modules/tempora { };
