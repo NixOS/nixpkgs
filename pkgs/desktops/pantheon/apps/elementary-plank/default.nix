@@ -26,7 +26,7 @@
   granite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elementary-plank";
   version = "unstable-2021-05-07";
 
