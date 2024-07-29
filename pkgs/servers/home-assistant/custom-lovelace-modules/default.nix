@@ -26,6 +26,8 @@
 
   mushroom = callPackage ./mushroom { };
 
+  rmv-card = callPackage ./rmv-card { };
+
   valetudo-map-card = callPackage ./valetudo-map-card { };
 
   zigbee2mqtt-networkmap = callPackage ./zigbee2mqtt-networkmap { };
