@@ -629,7 +629,8 @@
       zeroconf
     ];
     "ccm15" = ps: with ps; [
-    ]; # missing inputs: py-ccm15
+      py-ccm15
+    ];
     "cert_expiry" = ps: with ps; [
     ];
     "channels" = ps: with ps; [
@@ -5334,6 +5335,7 @@
     "camera"
     "canary"
     "cast"
+    "ccm15"
     "cert_expiry"
     "clicksend_tts"
     "climate"
