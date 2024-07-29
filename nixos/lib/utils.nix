@@ -4,22 +4,17 @@ let
   inherit (lib)
     any
     attrNames
-    collect'
     concatMapStringsSep
     concatStringsSep
     elem
-    escapeShellArg
     filter
     flatten
-    forEach
     getExe
     getName
     getPlaceholderReplacements
-    hasAttr
     hasPrefix
     hasSuffix
     imap0
-    imap1
     isAttrs
     isDerivation
     isFloat
@@ -29,7 +24,6 @@ let
     isString
     listToAttrs
     mapAttrs
-    mapAttrsRecursiveCond'
     mapAttrsToList
     nameValuePair
     optionalString

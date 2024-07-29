@@ -1,7 +1,8 @@
-{ system ? builtins.currentSystem
-, config ? {}
-, pkgs ? import ../.. { inherit system config; }
-, lib ? pkgs.lib
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
+  lib ? pkgs.lib,
 }:
 
 let
@@ -46,13 +47,23 @@ let
       inherit wantedConfig;
 
       nodeConfig = {
-        system.activationScripts.genOutOfBand = pkgs.stringsWithDeps.stringAfter [ "aSecret" "bSecret" "eSecret" ] (utils.replacePlaceholdersScript {
-          sourceField = "_secret";
-          fileWithPlaceholders = pkgs.writeText "config.yaml.template"
-            (lib.generators.toJSON {} (lib.replaceWithPlaceholder "_secret" userConfig));
-          inherit configLocation;
-          replacements = lib.getPlaceholderReplacements "_secret" userConfig;
-        });
+        system.activationScripts.genOutOfBand =
+          pkgs.stringsWithDeps.stringAfter
+            [
+              "aSecret"
+              "bSecret"
+              "eSecret"
+            ]
+            (
+              utils.replacePlaceholdersScript {
+                sourceField = "_secret";
+                fileWithPlaceholders = pkgs.writeText "config.yaml.template" (
+                  lib.generators.toJSON { } (lib.replaceWithPlaceholder "_secret" userConfig)
+                );
+                inherit configLocation;
+                replacements = lib.getPlaceholderReplacements "_secret" userConfig;
+              }
+            );
       };
 
       pythonParseFile = ''
@@ -66,11 +77,20 @@ let
       inherit wantedConfig;
 
       nodeConfig = {
-        system.activationScripts.genOutOfBand = pkgs.stringsWithDeps.stringAfter [ "aSecret" "bSecret" "eSecret" ] (utils.genConfigOutOfBand {
-          config = userConfig;
-          inherit configLocation;
-          generator = utils.genConfigOutOfBandFormatAdapter (pkgs.formats.json {});
-        });
+        system.activationScripts.genOutOfBand =
+          pkgs.stringsWithDeps.stringAfter
+            [
+              "aSecret"
+              "bSecret"
+              "eSecret"
+            ]
+            (
+              utils.genConfigOutOfBand {
+                config = userConfig;
+                inherit configLocation;
+                generator = utils.genConfigOutOfBandFormatAdapter (pkgs.formats.json { });
+              }
+            );
       };
 
       pythonParseFile = ''
@@ -84,11 +104,20 @@ let
       inherit wantedConfig;
 
       nodeConfig = {
-        system.activationScripts.genOutOfBand = pkgs.stringsWithDeps.stringAfter [ "aSecret" "bSecret" "eSecret" ] (utils.genConfigOutOfBand {
-          config = userConfig;
-          inherit configLocation;
-          generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON {});
-        });
+        system.activationScripts.genOutOfBand =
+          pkgs.stringsWithDeps.stringAfter
+            [
+              "aSecret"
+              "bSecret"
+              "eSecret"
+            ]
+            (
+              utils.genConfigOutOfBand {
+                config = userConfig;
+                inherit configLocation;
+                generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
+              }
+            );
       };
 
       pythonParseFile = ''
@@ -122,20 +151,30 @@ let
           preStart = utils.genConfigOutOfBand {
             config = lib.attrsets.updateManyAttrsByPath [
               {
-                path = [ "a" "a" "_secret" ];
-                update = old: "$CREDENTIALS_DIRECTORY/a-secret.txt"; 
+                path = [
+                  "a"
+                  "a"
+                  "_secret"
+                ];
+                update = old: "$CREDENTIALS_DIRECTORY/a-secret.txt";
               }
               {
-                path = [ "b" "_secret" ];
-                update = old: "$CREDENTIALS_DIRECTORY/b-secret.txt"; 
+                path = [
+                  "b"
+                  "_secret"
+                ];
+                update = old: "$CREDENTIALS_DIRECTORY/b-secret.txt";
               }
               {
-                path = [ "e" "_secret" ];
-                update = old: "$CREDENTIALS_DIRECTORY/e-secret.txt"; 
+                path = [
+                  "e"
+                  "_secret"
+                ];
+                update = old: "$CREDENTIALS_DIRECTORY/e-secret.txt";
               }
             ] userConfig;
             inherit configLocation;
-            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON {});
+            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
           };
           script = "cat ${configLocation}";
         };
@@ -174,20 +213,30 @@ let
           preStart = utils.genConfigOutOfBand {
             config = lib.attrsets.updateManyAttrsByPath [
               {
-                path = [ "a" "a" "_secret" ];
-                update = old: "$CREDENTIALS_DIRECTORY/a-secret.txt"; 
+                path = [
+                  "a"
+                  "a"
+                  "_secret"
+                ];
+                update = old: "$CREDENTIALS_DIRECTORY/a-secret.txt";
               }
               {
-                path = [ "b" "_secret" ];
-                update = old: "$CREDENTIALS_DIRECTORY/b-secret.txt"; 
+                path = [
+                  "b"
+                  "_secret"
+                ];
+                update = old: "$CREDENTIALS_DIRECTORY/b-secret.txt";
               }
               {
-                path = [ "e" "_secret" ];
-                update = old: "$CREDENTIALS_DIRECTORY/e-secret.txt"; 
+                path = [
+                  "e"
+                  "_secret"
+                ];
+                update = old: "$CREDENTIALS_DIRECTORY/e-secret.txt";
               }
             ] userConfig;
             configLocation = "$STATE_DIRECTORY/my config.json";
-            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON {});
+            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
           };
           script = "cat \"$STATE_DIRECTORY/my config.json\"";
         };
@@ -197,7 +246,6 @@ let
         gotConfig = json.loads(gotConfig)
       '';
     };
-
 
     dynamicUser = {
       configLocation = "/var/lib/private/outOfBandConfig/config.json";
@@ -227,20 +275,30 @@ let
           preStart = utils.genConfigOutOfBand {
             config = lib.attrsets.updateManyAttrsByPath [
               {
-                path = [ "a" "a" "_secret" ];
-                update = old: "$CREDENTIALS_DIRECTORY/a-secret.txt"; 
+                path = [
+                  "a"
+                  "a"
+                  "_secret"
+                ];
+                update = old: "$CREDENTIALS_DIRECTORY/a-secret.txt";
               }
               {
-                path = [ "b" "_secret" ];
-                update = old: "$CREDENTIALS_DIRECTORY/b-secret.txt"; 
+                path = [
+                  "b"
+                  "_secret"
+                ];
+                update = old: "$CREDENTIALS_DIRECTORY/b-secret.txt";
               }
               {
-                path = [ "e" "_secret" ];
-                update = old: "$CREDENTIALS_DIRECTORY/e-secret.txt"; 
+                path = [
+                  "e"
+                  "_secret"
+                ];
+                update = old: "$CREDENTIALS_DIRECTORY/e-secret.txt";
               }
             ] userConfig;
             configLocation = "$STATE_DIRECTORY/config.json";
-            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON {});
+            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
           };
           script = "cat $STATE_DIRECTORY/config.json";
         };
@@ -251,39 +309,60 @@ let
       '';
     };
 
-
   };
 
-  mkTest = name: { configLocation, wantedConfig, nodeConfig, pythonParseFile, waitForUnit ? null }:
-    import ./make-test-python.nix ({ pkgs, ... }: {
-      inherit name;
-      meta.maintainers = with pkgs.lib.maintainers; [ ibizaman ];
-      nodes.machine = lib.mkMerge [{
-        system.activationScripts.aSecret = aSecret;
-        system.activationScripts.bSecret = bSecret;
-        system.activationScripts.eSecret = eSecret;
-      } nodeConfig];
+  mkTest =
+    name:
+    {
+      configLocation,
+      wantedConfig,
+      nodeConfig,
+      pythonParseFile,
+      waitForUnit ? null,
+    }:
+    import ./make-test-python.nix (
+      { pkgs, ... }:
+      {
+        inherit name;
+        meta.maintainers = with pkgs.lib.maintainers; [ ibizaman ];
+        nodes.machine = lib.mkMerge [
+          {
+            system.activationScripts.aSecret = aSecret;
+            system.activationScripts.bSecret = bSecret;
+            system.activationScripts.eSecret = eSecret;
+          }
+          nodeConfig
+        ];
 
-      testScript = ''
-        import json
+        testScript =
+          ''
+            import json
 
-        start_all()
+            start_all()
 
-        wantedConfig = json.loads('${lib.generators.toJSON {} wantedConfig}')
+            wantedConfig = json.loads('${lib.generators.toJSON { } wantedConfig}')
 
-        machine.wait_for_file("${configLocation}")
-      '' + (if waitForUnit == null then "" else ''
-        machine.wait_for_unit("${waitForUnit}")
-      '') + ''
-        gotConfig = machine.succeed("cat '${configLocation}'")
-        print(gotConfig)
-        ${pythonParseFile}
+            machine.wait_for_file("${configLocation}")
+          ''
+          + (
+            if waitForUnit == null then
+              ""
+            else
+              ''
+                machine.wait_for_unit("${waitForUnit}")
+              ''
+          )
+          + ''
+            gotConfig = machine.succeed("cat '${configLocation}'")
+            print(gotConfig)
+            ${pythonParseFile}
 
-        if wantedConfig != gotConfig:
-          raise Exception("\nwantedConfig: {}\n!= gotConfig: {}".format(wantedConfig, gotConfig))
+            if wantedConfig != gotConfig:
+              raise Exception("\nwantedConfig: {}\n!= gotConfig: {}".format(wantedConfig, gotConfig))
 
-      '';
-    });
+          '';
+      }
+    );
 in
 
 builtins.mapAttrs mkTest tests
