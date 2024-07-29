@@ -1,12 +1,9 @@
 {
   lib,
-  betamax,
   buildPythonPackage,
   cachetools,
   coloredlogs,
-  emoji,
   fetchPypi,
-  nose,
   pythonOlder,
   pytz,
   requests,
@@ -30,13 +27,6 @@ buildPythonPackage rec {
     cachetools
     pytz
   ];
-
-  nativeCheckInputs = [
-    betamax
-    emoji
-    nose
-  ];
-
   postPatch = ''
     # Tests requirements want to pull in multiple modules which we don't need
     substituteInPlace setup.py \
@@ -46,12 +36,8 @@ buildPythonPackage rec {
       --replace "pytz>=2023.3" "pytz"
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    # Only coverage no real unit tests
-    nosetests
-    runHook postCheck
-  '';
+  # There are no tests
+  doCheck = false;
 
   pythonImportsCheck = [ "locationsharinglib" ];
 
