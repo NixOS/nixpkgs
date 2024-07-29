@@ -1,0 +1,103 @@
+From 38b2cb092e866dede6b6ffddd135ff54a9bda69e Mon Sep 17 00:00:00 2001
+From: Angel Pons <th3fanbus@gmail.com>
+Date: Wed, 2 Nov 2022 22:45:52 +0100
+Subject: [PATCH] sb600spi.c: Drop "Promontory" support
+
+The "Promontory" code is riddled with issues, some of them can result in
+soft bricks. Moreover, Promontory doesn't have a SPI controller.
+
+Drop support for "Promontory" in flashrom for now: it's holding back the
+entire project and it's unlikely that it'll be fixed in a timely manner.
+
+Change-Id: I1457946dce68321b496d9ffa40a0c5ab46455f72
+Signed-off-by: Angel Pons <th3fanbus@gmail.com>
+Reviewed-on: https://review.coreboot.org/c/flashrom/+/68824
+Tested-by: build bot (Jenkins) <no-reply@coreboot.org>
+Reviewed-by: Felix Singer <felixsinger@posteo.net>
+Reviewed-by: Swift Geek (Sebastian Grzywna) <swiftgeek@gmail.com>
+Reviewed-by: Edward O'Callaghan <quasisec@chromium.org>
+(cherry picked from commit 664c58f32af45b2acf7520c05bb40ef2c2f0891e)
+---
+ sb600spi.c | 31 ++-----------------------------
+ 1 file changed, 2 insertions(+), 29 deletions(-)
+
+diff --git a/sb600spi.c b/sb600spi.c
+index cec7e0a5..e84bb8d6 100644
+--- a/sb600spi.c
++++ b/sb600spi.c
+@@ -48,7 +48,6 @@ enum amd_chipset {
+ 	CHIPSET_HUDSON234,
+ 	CHIPSET_BOLTON,
+ 	CHIPSET_YANGTZE,
+-	CHIPSET_PROMONTORY,
+ };
+ 
+ #define FIFO_SIZE_OLD		8
+@@ -135,7 +134,8 @@ static enum amd_chipset determine_generation(struct pci_dev *dev)
+ 		 */
+ 		} else if (rev == 0x4b || rev == 0x51 || rev == 0x59 || rev == 0x61 || rev == 0x71) {
+ 			msg_pdbg("Promontory (rev 0x%02x) detected.\n", rev);
+-			return CHIPSET_PROMONTORY;
++			msg_perr("AMD \"Promontory\" chipsets are currently not supported (https://ticket.coreboot.org/issues/370)");
++			return CHIPSET_AMD_UNKNOWN;
+ 		} else {
+ 			msg_pwarn("FCH device found but SMBus revision 0x%02x does not match known values.\n"
+ 				  "Please report this to flashrom@flashrom.org and include this log and\n"
+@@ -572,18 +572,6 @@ static int handle_imc(const struct programmer_cfg *cfg, struct pci_dev *dev, enu
+ 	return amd_imc_shutdown(dev);
+ }
+ 
+-static int promontory_read_memmapped(struct flashctx *flash, uint8_t *buf,
+-		unsigned int start, unsigned int len)
+-{
+-	struct sb600spi_data * data = (struct sb600spi_data *)flash->mst->spi.data;
+-	if (!data->flash) {
+-		map_flash(flash);
+-		data->flash = flash; /* keep a copy of flashctx for unmap() on tear-down. */
+-	}
+-	mmio_readn((void *)(flash->virtual_memory + start), buf, len);
+-	return 0;
+-}
+-
+ static int sb600spi_shutdown(void *data)
+ {
+ 	struct sb600spi_data *sb600_data = data;
+@@ -617,17 +605,6 @@ static const struct spi_master spi_master_yangtze = {
+ 	.shutdown	= sb600spi_shutdown,
+ };
+ 
+-static const struct spi_master spi_master_promontory = {
+-	.max_data_read	= MAX_DATA_READ_UNLIMITED,
+-	.max_data_write	= FIFO_SIZE_YANGTZE - 3,
+-	.command	= spi100_spi_send_command,
+-	.map_flash_region	= physmap,
+-	.unmap_flash_region	= physunmap,
+-	.read		= promontory_read_memmapped,
+-	.write_256	= default_spi_write_256,
+-	.shutdown	= sb600spi_shutdown,
+-};
+-
+ int sb600_probe_spi(const struct programmer_cfg *cfg, struct pci_dev *dev)
+ {
+ 	struct pci_dev *smbus_dev;
+@@ -731,8 +708,6 @@ int sb600_probe_spi(const struct programmer_cfg *cfg, struct pci_dev *dev)
+ 	case CHIPSET_SB89XX:
+ 	case CHIPSET_HUDSON234:
+ 	case CHIPSET_YANGTZE:
+-	case CHIPSET_PROMONTORY:
+-		msg_pdbg(", SpiBusy=%"PRIi32"", (tmp >> 31) & 0x1);
+ 	default: break;
+ 	}
+ 	msg_pdbg("\n");
+@@ -808,8 +783,6 @@ int sb600_probe_spi(const struct programmer_cfg *cfg, struct pci_dev *dev)
+ 		register_spi_master(&spi_master_sb600, data);
+ 	else if (amd_gen == CHIPSET_YANGTZE)
+ 		register_spi_master(&spi_master_yangtze, data);
+-	else
+-		register_spi_master(&spi_master_promontory, data);
+ 
+ 	return 0;
+ }
+-- 
+2.45.2
+
