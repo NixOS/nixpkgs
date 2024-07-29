@@ -7,7 +7,7 @@ import ./make-test-python.nix (
     nodes.machine =
       { pkgs, ... }:
       {
-        services.mailpit.enable = true;
+        services.mailpit.instances.default = { };
 
         environment.systemPackages = with pkgs; [ swaks ];
       };
@@ -17,7 +17,7 @@ import ./make-test-python.nix (
 
       from json import loads
 
-      machine.wait_for_unit("mailpit.service")
+      machine.wait_for_unit("mailpit-default.service")
       machine.wait_for_open_port(1025)
       machine.wait_for_open_port(8025)
       machine.succeed(
