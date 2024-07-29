@@ -59,6 +59,7 @@ buildGoModule rec {
   subPackages = [
     "cmd/nvidia-ctk"
     "cmd/nvidia-container-runtime"
+    "cmd/nvidia-container-runtime.legacy"
     "cmd/nvidia-container-runtime-hook"
   ];
 
@@ -127,10 +128,10 @@ buildGoModule rec {
     # podman, i.e., there's no need to have mutually exclusivity on what high
     # level runtime can enable the nvidia runtime because each high level
     # runtime has its own config.toml file.
-    wrapProgram $out/bin/nvidia-container-runtime \
-      --run "${warnIfXdgConfigHomeIsSet}" \
-      --prefix PATH : ${isolatedContainerRuntimePath}:${libnvidia-container}/bin \
-      --set-default XDG_CONFIG_HOME $out/etc
+    # wrapProgram $out/bin/nvidia-container-runtime.legacy \
+    #   --run "${warnIfXdgConfigHomeIsSet}" \
+    #   --prefix PATH : ${isolatedContainerRuntimePath}:${libnvidia-container}/bin \
+    #   --set-default XDG_CONFIG_HOME $out/etc
 
     cp ${configToml} $out/etc/nvidia-container-runtime/config.toml
 
@@ -140,7 +141,7 @@ buildGoModule rec {
     # See: https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/packaging/debian/nvidia-container-toolkit.postinst#L12
     ln -s $out/bin/nvidia-container-runtime-hook $out/bin/nvidia-container-toolkit
 
-    wrapProgram $out/bin/nvidia-container-toolkit \
+    wrapProgram $out/bin/nvidia-ctk \
       --add-flags "-config ${placeholder "out"}/etc/nvidia-container-runtime/config.toml"
   '';
 
