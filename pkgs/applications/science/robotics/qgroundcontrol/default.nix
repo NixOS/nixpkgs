@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LKERjHoIgJ4cF1MjB5nVW3FB/DrmKP4Xj58avsDobhc=";
+    hash = "sha256-LKERjHoIgJ4cF1MjB5nVW3FB/DrmKP4Xj58avsDobhc=";
     fetchSubmodules = true;
   };
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "http://qgroundcontrol.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lopsided98 ];
+    maintainers = with maintainers; [ lopsided98 pandapip1 ];
     mainProgram = "QGroundControl";
   };
 }

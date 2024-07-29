@@ -1,25 +1,28 @@
-{ lib, stdenv, fetchgit }:
+{ lib, stdenv, fetchgit, unstableGitUpdater, writeShellScript }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "numad";
-  version = "0.5";
+  version = "0.5-unstable-2023-09-06";
 
   src = fetchgit {
     url = "https://pagure.io/numad.git";
-    rev = "334278ff3d774d105939743436d7378a189e8693";
-    sha256 = "sha256-6nrbfooUI1ufJhsPf68li5584oKQcznXQlxfpStuX5I=";
+    rev = "3399d89305b6560e27e70aff4ad9fb403dedf947";
+    hash = "sha256-USEffVcakaAbilqijJmpro92ujvxbglcXxyBlntMxaI=";
   };
 
-  hardeningDisable = [ "format" ];
-
-  patches = [
-    ./numad-linker-flags.patch
-  ];
   postPatch = ''
     substituteInPlace Makefile --replace "install -m" "install -Dm"
   '';
 
   makeFlags = [ "prefix=$(out)" ];
+
+  passthru.updateScript = unstableGitUpdater {
+    tagConverter = writeShellScript "tagConverter" ''
+      read tag
+      test "$tag" = "0" \
+        && tag=0.5; echo "$tag"
+    '';
+  };
 
   meta = with lib; {
     description = "User-level daemon that monitors NUMA topology and processes resource consumption to facilitate good NUMA resource access";
@@ -27,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://fedoraproject.org/wiki/Features/numad";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

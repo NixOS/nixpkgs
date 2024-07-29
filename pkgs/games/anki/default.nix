@@ -250,12 +250,25 @@ python3.pkgs.buildPythonApplication {
   '';
 
   # mimic https://github.com/ankitects/anki/blob/76d8807315fcc2675e7fa44d9ddf3d4608efc487/build/ninja_gen/src/python.rs#L232-L250
-  checkPhase = ''
+  checkPhase = let
+    disabledTestsString = lib.pipe [
+      # assumes / is not writeable, somehow fails on nix-portable brwap
+      "test_create_open"
+    ] [
+      (lib.map (test: "not ${test}"))
+      (lib.concatStringsSep " and ")
+      lib.escapeShellArg
+    ];
+
+  in ''
+    runHook preCheck
     HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
-      pytest -p no:cacheprovider pylib/tests
+      pytest -p no:cacheprovider pylib/tests -k ${disabledTestsString}
     HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
-      pytest -p no:cacheprovider qt/tests
+      pytest -p no:cacheprovider qt/tests -k ${disabledTestsString}
+    runHook postCheck
   '';
+
 
   preInstall = ''
     mkdir dist

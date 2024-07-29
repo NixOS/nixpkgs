@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sqlite-anyio";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "davidbrochart";
     repo = "sqlite-anyio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lOUGT9SUxvzTvTDpiwx7Oa+0o3/lnrJ9xxMYFQAmFZk=";
+    hash = "sha256-cZyTpFmYD0l20Cmxl+Hwfh3oVkWvtXD45dMpcSwA2QE=";
   };
 
   build-system = [ hatchling ];
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/davidbrochart/sqlite-anyio";
     changelog = "https://github.com/davidbrochart/sqlite-anyio/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

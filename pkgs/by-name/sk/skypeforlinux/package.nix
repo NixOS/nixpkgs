@@ -127,7 +127,7 @@ stdenv.mkDerivation {
   unpackPhase = ''
     runHook preUnpack
 
-    unsquashfs "$src" /meta/{'gui/*.desktop',snap.yaml} \
+    unsquashfs "$src" '/meta/gui/*.desktop' \
         /usr/share/{doc/skypeforlinux,'icons/hicolor/*/apps/skypeforlinux.png',kservices5,pixmaps,skypeforlinux}
     sourceRoot=squashfs-root
 
@@ -139,7 +139,7 @@ stdenv.mkDerivation {
 
     mkdir -p "$out/bin"
     mv meta/gui usr/share/applications
-    mv meta/snap.yaml usr/share "$out"
+    mv usr/share "$out"
     ln -s "$out/share/skypeforlinux/skypeforlinux" "$out/bin"
 
     runHook postInstall

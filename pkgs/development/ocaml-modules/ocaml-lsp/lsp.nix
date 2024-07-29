@@ -14,7 +14,6 @@
 , re
 , stdune
 , chrome-trace
-, dune_3
 , csexp
 , result
 , pp
@@ -24,7 +23,7 @@
 , ocaml
 , version ?
     if lib.versionAtLeast ocaml.version "4.14" then
-      "1.17.0"
+      "1.18.0"
     else if lib.versionAtLeast ocaml.version "4.13" then
       "1.10.5"
     else if lib.versionAtLeast ocaml.version "4.12" then
@@ -39,7 +38,6 @@ let jsonrpc_v = jsonrpc.override {
 buildDunePackage rec {
   pname = "lsp";
   inherit (jsonrpc_v) version src;
-  duneVersion = "3";
   minimalOCamlVersion =
     if lib.versionAtLeast version "1.7.0" then
       "4.12"

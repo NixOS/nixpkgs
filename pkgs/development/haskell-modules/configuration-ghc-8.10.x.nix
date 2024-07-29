@@ -119,6 +119,10 @@ self: super: {
     algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
   });
 
+  # Uses haddock placement that isn't supported by the versions of haddock
+  # bundled with GHC < 9.0.
+  wai-extra = dontHaddock super.wai-extra;
+
   # Overly-strict bounds introducted by a revision in version 0.3.2.
   text-metrics = doJailbreak super.text-metrics;
 

@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RcCTYwM30Bpqj5d6JGrW1zLrEfLgcrsibVmtPSR4HJk=";
+    hash = "sha256-RcCTYwM30Bpqj5d6JGrW1zLrEfLgcrsibVmtPSR4HJk=";
   };
 
   # https://github.com/sirfz/tesserocr/issues/314

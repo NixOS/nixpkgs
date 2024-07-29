@@ -58,7 +58,7 @@ let
     xcbuild = xcodebuild;
 
     swift-unwrapped = callPackage ./compiler {
-      inherit (darwin) DarwinTools cctools sigtool;
+      inherit (darwin) DarwinTools sigtool;
       inherit (apple_sdk) MacOSX-SDK CLTools_Executables;
       inherit (apple_sdk.frameworks) CoreServices Foundation Combine;
     };
@@ -85,7 +85,7 @@ let
     };
 
     swiftpm = callPackage ./swiftpm {
-      inherit (darwin) DarwinTools cctools;
+      inherit (darwin) DarwinTools;
       inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
       swift = swiftNoSwiftDriver;
     };
@@ -107,6 +107,8 @@ let
     };
 
     swift-format = callPackage ./swift-format { };
+
+    swiftpm2nix = callPackage ./swiftpm2nix { };
 
   };
 

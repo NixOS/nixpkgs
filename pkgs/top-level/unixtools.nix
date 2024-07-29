@@ -1,4 +1,4 @@
-{ pkgs, buildEnv, runCommand, lib, stdenv, freebsd }:
+{ pkgs, buildEnv, runCommand, lib, stdenv, freebsd, binlore }:
 
 # These are some unix tools that are commonly included in the /usr/bin
 # and /usr/sbin directory under more normal distributions. Along with
@@ -30,7 +30,9 @@ let
         priority = 10;
         platforms = platforms.${stdenv.hostPlatform.parsed.kernel.name} or platforms.all;
       };
-      passthru = { inherit provider; };
+      passthru = { inherit provider; } // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
+        binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
+      };
       preferLocalBuild = true;
     } ''
       if ! [ -x ${bin} ]; then
@@ -76,6 +78,10 @@ let
       linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc
               else pkgs.netbsd.getconf;
       darwin = pkgs.darwin.system_cmds;
+      # I don't see any obvious arg exec in the doc/manpage
+      binlore = ''
+        execer cannot bin/getconf
+      '';
     };
     getent = {
       linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc.getent
@@ -118,6 +124,11 @@ let
       linux = pkgs.glibc;
       darwin = pkgs.darwin.adv_cmds;
       freebsd = pkgs.freebsd.locale;
+      # technically just targeting glibc version
+      # no obvious exec in manpage
+      binlore = ''
+        execer cannot bin/locale
+      '';
     };
     logger = {
       linux = pkgs.util-linux;
@@ -130,6 +141,13 @@ let
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.diskdev_cmds;
       freebsd = freebsd.mount;
+      # technically just targeting the darwin version; binlore already
+      # ids the util-linux copy as 'cannot'
+      # no obvious exec in manpage args; I think binlore flags 'can'
+      # on the code to run `mount_<filesystem>` variants
+      binlore = ''
+        execer cannot bin/mount
+      '';
     };
     netstat = {
       linux = pkgs.nettools;
@@ -145,6 +163,12 @@ let
       linux = pkgs.procps;
       darwin = pkgs.darwin.ps;
       freebsd = pkgs.freebsd.bin;
+      # technically just targeting procps ps (which ids as can)
+      # but I don't see obvious exec in args; have yet to look
+      # for underlying cause in source
+      binlore = ''
+        execer cannot bin/ps
+      '';
     };
     quota = {
       linux = pkgs.linuxquota;
@@ -168,6 +192,13 @@ let
       linux = pkgs.procps;
       darwin = pkgs.darwin.top;
       freebsd = pkgs.freebsd.top;
+      # technically just targeting procps top; haven't needed this in
+      # any scripts so far, but overriding it for consistency with ps
+      # override above and in procps. (procps also overrides 'free',
+      # but it isn't included here.)
+      binlore = ''
+        execer cannot bin/top
+      '';
     };
     umount = {
       linux = pkgs.util-linux;

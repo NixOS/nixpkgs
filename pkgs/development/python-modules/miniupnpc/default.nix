@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KwpNVl+tZTZHHZKW9p3a/S0nZJW6lZftjBK9ECkRUMo=";
+    hash = "sha256-KwpNVl+tZTZHHZKW9p3a/S0nZJW6lZftjBK9ECkRUMo=";
   };
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [

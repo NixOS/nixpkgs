@@ -8,8 +8,8 @@ mkDerivation {
   pname = "nixfmt";
   version = "0.6.0";
   src = fetchzip {
-    url = "https://github.com/nixos/nixfmt/archive/698954723ecec3f91770460ecae762ce590f2d9e.tar.gz";
-    sha256 = "1k057nxj58ghid15gd4xi19whaavqgspypk69r0qshb5bhl74nm5";
+    url = "https://github.com/nixos/nixfmt/archive/83de1eceaae8a891ae52a3a2b82226540207309e.tar.gz";
+    sha256 = "0lnl9vlbyrfplmq3hpmpjlmhjdwwbgk900wgi25ib27v0mlgpnxp";
   };
   isLibrary = true;
   isExecutable = true;
@@ -22,7 +22,7 @@ mkDerivation {
   ];
   jailbreak = true;
   homepage = "https://github.com/NixOS/nixfmt";
-  description = "The official formatter for Nix code";
+  description = "Official formatter for Nix code";
   license = lib.licenses.mpl20;
   mainProgram = "nixfmt";
 }

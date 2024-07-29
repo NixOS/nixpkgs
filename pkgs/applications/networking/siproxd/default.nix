@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     homepage = "http://siproxd.sourceforge.net/";
     description = "Masquerading SIP Proxy Server";
     mainProgram = "siproxd";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
     license = lib.licenses.gpl2Plus;
   };

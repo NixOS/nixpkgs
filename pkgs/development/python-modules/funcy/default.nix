@@ -25,6 +25,6 @@ buildPythonPackage rec {
     homepage = "https://funcy.readthedocs.org/";
     changelog = "https://github.com/Suor/funcy/blob/2.0/CHANGELOG";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

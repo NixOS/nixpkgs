@@ -5,11 +5,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gomp";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11nq40igqbyfiygdzb1zyxx1n6d9xkv8vlmprbbi75mq54gfihhb";
+    sha256 = "sha256-Ixq9jtV56FKbh68jqmRd3lwpbMG00GcOUIpjzJhnSp0=";
   };
 
   doCheck = false; # tests require interactive terminal

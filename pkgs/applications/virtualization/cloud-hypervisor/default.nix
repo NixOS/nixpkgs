@@ -26,7 +26,8 @@ rustPlatform.buildRustPackage rec {
   separateDebugInfo = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isAarch64 dtc;
+  buildInputs = lib.optional stdenv.isAarch64 dtc;
+  checkInputs = [ openssl ];
 
   OPENSSL_NO_VENDOR = true;
 

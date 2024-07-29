@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "deck";
-  version = "1.39.2";
+  version = "1.39.3";
 
   src = fetchFromGitHub {
     owner = "Kong";
     repo = "deck";
     rev = "v${version}";
-    hash = "sha256-8Z2JBxVUoJKzxdMvyZg5SxHyIFW9lyA71GU7R6S27Rs=";
+    hash = "sha256-Oi/2sIsnJp1wK9PCS4GMCnFPLIAwNZeP7Qnnum3a118=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitLab
 , fetchpatch
-, autoreconfHook, pkg-config, python3, addOpenGLRunpath
+, autoreconfHook, pkg-config, python3, addDriverRunpath
 , libX11, libXext, xorgproto
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config python3 addOpenGLRunpath ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 addDriverRunpath ];
   buildInputs = [ libX11 libXext xorgproto ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString ([
     "-UDEFAULT_EGL_VENDOR_CONFIG_DIRS"
     # FHS paths are added so that non-NixOS applications can find vendor files.
-    "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${addOpenGLRunpath.driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
+    "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${addDriverRunpath.driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
 
     "-Wno-error=array-bounds"
   ] ++ lib.optionals stdenv.cc.isClang [
@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
   # Note that libEGL does not need it because it uses driver config files which should
   # contain absolute paths to libraries.
   postFixup = ''
-    addOpenGLRunpath $out/lib/libGLX.so
+    addDriverRunpath $out/lib/libGLX.so
   '';
 
-  passthru = { inherit (addOpenGLRunpath) driverLink; };
+  passthru = { inherit (addDriverRunpath) driverLink; };
 
   meta = with lib; {
     description = "GL Vendor-Neutral Dispatch library";

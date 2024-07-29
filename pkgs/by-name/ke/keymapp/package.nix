@@ -7,7 +7,6 @@
   libusb1,
   libsoup_3,
   webkitgtk_4_1,
-  writeShellScript,
   makeDesktopItem,
   copyDesktopItems,
 }:
@@ -26,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "keymapp";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.tar.gz";
-    hash = "sha256-WiazQD40dG72B9tl4DwcMJgoVEl/Dgq55AHgeqK+sq8=";
+    hash = "sha256-e02EOJH7QXm8ue7pZt++tyUjAC+DFga4MWNoeVfJjy8=";
   };
 
   nativeBuildInputs = [

@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     pname = "swc_cli";
     inherit version;
-    sha256 = "sha256-8zbxE1qkEWeSYt2L5PElZeJPRuK4Yiooy8xDmCD/PYw=";
+    hash = "sha256-8zbxE1qkEWeSYt2L5PElZeJPRuK4Yiooy8xDmCD/PYw=";
   };
 
-  cargoSha256 = "sha256-kRsRUOvDMRci3bN5NfhiLCWojNkSuLz3K4BfKfGYc7g=";
+  cargoHash = "sha256-kRsRUOvDMRci3bN5NfhiLCWojNkSuLz3K4BfKfGYc7g=";
 
   buildFeatures = [ "swc_core/plugin_transform_host_native" ];
 

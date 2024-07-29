@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "loco-3d";
-    repo = finalAttrs.pname;
+    repo = "crocoddyl";
     rev = "v${finalAttrs.version}";
     hash = "sha256-SVV9sleDXLm2QJmNgL25XLHC3y5bfKab4GSlE8jbT8w=";
   };
@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+  ] ++ lib.optionals pythonSupport [
+    python3Packages.python
   ];
 
   propagatedBuildInputs = lib.optionals (!pythonSupport) [

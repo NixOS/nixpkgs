@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "spicetify-cli";
-  version = "2.36.11";
+  version = "2.36.15";
 
   src = fetchFromGitHub {
     owner = "spicetify";
-    repo = "spicetify-cli";
+    repo = "cli";
     rev = "v${version}";
-    hash = "sha256-ZqWGKuYDxuKVqz6cNxZ3cTcKTxkxuu42b48hlAialKc=";
+    hash = "sha256-K3lhPeW6L9N9OljNn8e6iQqx4k4HX5A9mX7SUlv2IRw=";
   };
 
-  vendorHash = "sha256-UPrLXzAdvCOmLm1tekzKyulQ4+2BSyPUF1k66GwKS88=";
+  vendorHash = "sha256-i3xnf440lslzeDJ4pLLONqw8ACbdkKgPIhlPSuC1Vng=";
 
   ldflags = [
     "-s -w"
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   # used at runtime, but not installed by default
   postInstall = ''
-    mv $out/bin/spicetify-cli $out/bin/spicetify
+    mv $out/bin/cli $out/bin/spicetify
     ln -s $out/bin/spicetify $out/bin/spicetify-cli
     cp -r ${src}/jsHelper $out/bin/jsHelper
     cp -r ${src}/CustomApps $out/bin/CustomApps
@@ -43,11 +43,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command-line tool to customize Spotify client";
-    homepage = "https://github.com/spicetify/spicetify-cli/";
+    homepage = "https://github.com/spicetify/cli";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      mdarocha
-    ];
+    maintainers = [ maintainers.mdarocha ];
     mainProgram = "spicetify";
   };
 }

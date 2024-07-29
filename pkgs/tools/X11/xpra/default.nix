@@ -1,5 +1,5 @@
 { lib
-, fetchurl
+, fetchFromGitHub
 , substituteAll
 , pkg-config
 , runCommand
@@ -70,11 +70,13 @@ let
   '';
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.4.6";
+  version = "5.0.9";
 
-  src = fetchurl {
-    url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    hash = "sha256-BWf3nypfSrYCzpJ0OfBkecoHGbG1lEgu5jLZhfkIejQ=";
+  src = fetchFromGitHub {
+    owner = "Xpra-org";
+    repo = "xpra";
+    rev = "v${version}";
+    hash = "sha256-gwo5plCAryGC8/BKVEqyMkgB+3FM8HXG6sESomDOtNM=";
   };
 
   patches = [
@@ -86,9 +88,8 @@ in buildPythonApplication rec {
     ./fix-122159.patch # https://github.com/NixOS/nixpkgs/issues/122159
   ];
 
-  # Note: xposix is renamed to posix in v5.
   postPatch = lib.optionalString stdenv.isLinux ''
-    substituteInPlace xpra/platform/xposix/features.py \
+    substituteInPlace xpra/platform/posix/features.py \
       --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
   '';
 

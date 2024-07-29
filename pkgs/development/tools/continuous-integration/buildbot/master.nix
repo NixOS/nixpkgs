@@ -71,7 +71,7 @@ let
 in
 buildPythonApplication rec {
   pname = "buildbot";
-  version = "4.0.0";
+  version = "4.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -80,7 +80,7 @@ buildPythonApplication rec {
     owner = "buildbot";
     repo = "buildbot";
     rev = "v${version}";
-    hash = "sha256-uJj7bSRGdYkA7Jl0qe/DncexWXNfQEEPcqGI7AbwX1w=";
+    hash = "sha256-xvXPVHbDpYZidZsMXHQPW9rPQomZ2xJ2YS964h44YEs=";
   };
 
   build-system = [

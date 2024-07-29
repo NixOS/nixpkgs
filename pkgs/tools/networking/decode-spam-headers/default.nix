@@ -54,6 +54,6 @@ python3Packages.buildPythonApplication rec {
       have been blocked.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

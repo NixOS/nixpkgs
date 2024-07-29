@@ -13,14 +13,17 @@
 , json-glib
 , glib
 , glib-networking
+, gnome
 , gobject-introspection
 , gtksourceview5
 , libxml2
 , libgee
+, librsvg
 , libsoup_3
 , libsecret
 , libwebp
 , libspelling
+, webp-pixbuf-loader
 , icu
 , gst_all_1
 , clapper
@@ -32,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-dN915sPBttnrcOuhUJjEtdojOQi9VRLmc+t1RvWmx64=";
+    hash = "sha256-nBNb2Hqv2AumwYoQnYZnH6YGp9wGr1o9vRO8YOty214=";
   };
 
   nativeBuildInputs = [
@@ -86,12 +89,23 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+  # Pull in WebP support for avatars from Misskey instances.
+  # In postInstall to run before gappsWrapperArgsHook.
+  postInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
+  '';
+
   meta = {
     description = "Browse the Fediverse";
     homepage = "https://tuba.geopjr.dev/";
     mainProgram = "dev.geopjr.Tuba";
     license = lib.licenses.gpl3Only;
     changelog = "https://github.com/GeopJr/Tuba/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ chuangzhu aleksana ];
+    maintainers = with lib.maintainers; [ chuangzhu aleksana donovanglover ];
   };
 }

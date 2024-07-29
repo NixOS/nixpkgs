@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ rob anthonyroussel ];
+    mainProgram = "cowsay";
   };
 })

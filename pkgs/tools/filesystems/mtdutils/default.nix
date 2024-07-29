@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.infradead.org/mtd-utils.git";
     rev = "v${version}";
-    sha256 = "sha256-uYXzZnVL5PkyDAntH8YsocwmQ8tf1f0Vl78SdE2B+Oc=";
+    hash = "sha256-uYXzZnVL5PkyDAntH8YsocwmQ8tf1f0Vl78SdE2B+Oc=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ] ++ lib.optional doCheck cmocka;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://git.infradead.org/mtd-utils.git";
     license = licenses.gpl2Plus;
     homepage = "http://www.linux-mtd.infradead.org/";
-    maintainers = with maintainers; [ viric ];
+    maintainers = [ ];
     platforms = with platforms; linux;
   };
 }

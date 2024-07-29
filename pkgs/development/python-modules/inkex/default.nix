@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   inkscape,
+  fetchpatch,
   poetry-core,
   cssselect,
   lxml,
@@ -24,6 +25,17 @@ buildPythonPackage {
   format = "pyproject";
 
   inherit (inkscape) src;
+
+  patches = [
+    # Fix “distribute along path” test with Python 3.12.
+    # https://gitlab.com/inkscape/extensions/-/issues/580
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/extensions/-/commit/c576043c195cd044bdfc975e6367afb9b655eb14.patch";
+      extraPrefix = "share/extensions/";
+      stripLen = 1;
+      hash = "sha256-D9HxBx8RNkD7hHuExJqdu3oqlrXX6IOUw9m9Gx6+Dr8=";
+    })
+  ];
 
   nativeBuildInputs = [ poetry-core ];
 

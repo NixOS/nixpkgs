@@ -7,15 +7,17 @@
 , pkg-config
 , gobject-introspection
 , blueprint-compiler
+, itstool
 , wrapGAppsHook4
 , desktop-file-utils
 , shared-mime-info
 , libadwaita
+, libgee
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-graphs";
-  version = "1.7.2";
+  version = "1.8.1";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -23,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "Graphs";
     rev = "v${version}";
-    hash = "sha256-CgCLOkKrMEN0Jnib5NZyVa+s3ico2ANt0ALGa4we3Ak=";
+    hash = "sha256-ae6lyyr3vvENyn1kKc8Va4I++7B0rdURwjEpA9klLGg=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +35,7 @@ python3Packages.buildPythonApplication rec {
     pkg-config
     gobject-introspection
     blueprint-compiler
+    itstool
     wrapGAppsHook4
     desktop-file-utils
     shared-mime-info
@@ -40,9 +43,10 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     libadwaita
+    libgee
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     pygobject3
     numpy
     numexpr

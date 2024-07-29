@@ -1527,7 +1527,11 @@ The following flags are disabled by default and should be enabled with `hardenin
 
 #### `pie` {#pie}
 
-This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for `musl` based package builds.
+This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for
+
+  - `musl`-based package builds, except on Aarch64 and Aarch32, where there are issues.
+
+  - Statically-linked for OpenBSD builds, where it appears to be required to get a working binary.
 
 Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Executables are needed to take advantage of Address Space Layout Randomization, supported by modern kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this with the `pic` flag, so they gain ASLR automatically, but binary .text regions need to be build with `pie` to gain ASLR. When this happens, ROP attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.
 

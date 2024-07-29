@@ -35,6 +35,7 @@
 , libxcrypt
 , libyaml
 , luajitPackages
+, lua-language-server
 , mariadb
 , magic-enum
 , mpfr
@@ -244,6 +245,10 @@ in
     # Lua 5.4 support is experimental at the moment, see
     # https://github.com/lgi-devs/lgi/pull/249
     meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+  });
+
+  llscheck = prev.llscheck.overrideAttrs (oa: {
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ lua-language-server ];
   });
 
   lmathx = prev.luaLib.overrideLuarocks prev.lmathx (drv:
@@ -745,6 +750,16 @@ in
     };
   })) {};
 
+  rustaceanvim  = prev.rustaceanvim.overrideAttrs(oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+      '';
+  });
 
   sqlite = prev.sqlite.overrideAttrs (drv: {
 

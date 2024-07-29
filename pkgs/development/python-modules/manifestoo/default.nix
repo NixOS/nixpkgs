@@ -2,25 +2,22 @@
   buildPythonPackage,
   fetchPypi,
   hatch-vcs,
-  importlib-metadata,
   lib,
   manifestoo-core,
   nix-update-script,
   pytestCheckHook,
-  pythonOlder,
   textual,
   typer,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "manifestoo";
-  version = "0.7";
+  version = "1.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gCGchc+fShBgt6fVJAx80+QnH+vxWo3jsIyePkFwhYE=";
+    hash = "sha256-iP9QVyAvKMTo8GuceiXWALmWKQ9yLX2qxl0S7IT+kMA=";
   };
 
   nativeBuildInputs = [ hatch-vcs ];
@@ -32,9 +29,7 @@ buildPythonPackage rec {
       manifestoo-core
       textual
       typer
-    ]
-    ++ typer.passthru.optional-dependencies.all
-    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+    ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -56,6 +56,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Style neutral scalable cursor theme";
     platforms = platforms.all;
     license = licenses.cc-by-sa-30;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

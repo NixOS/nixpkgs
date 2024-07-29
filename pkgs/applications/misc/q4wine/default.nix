@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, mkDerivation, cmake, sqlite
 , qtbase, qtsvg, qttools, wrapQtAppsHook
 , icoutils # build and runtime deps.
-, wget, fuseiso, wine, sudo, which # runtime deps.
+, wget, fuseiso, wine, which # runtime deps.
 }:
 
 mkDerivation rec {

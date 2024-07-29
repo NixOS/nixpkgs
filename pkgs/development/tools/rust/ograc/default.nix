@@ -7,9 +7,9 @@ rustPlatform.buildRustPackage {
     owner = "lirnril";
     repo = "ograc";
     rev = "d09b3102ff7a364bf2593589327a16a473bd4f25";
-    sha256 = "sha256-vdHPFY6zZ/OBNlJO3N/6YXcvlddw2wYHgFWI0yfSgVo=";
+    hash = "sha256-vdHPFY6zZ/OBNlJO3N/6YXcvlddw2wYHgFWI0yfSgVo=";
   };
-  cargoSha256 = "sha256-HAeEd7HY+hbTUOkIt6aTfvPYLRPtdAcUGvkuBUMjohA=";
+  cargoHash = "sha256-HAeEd7HY+hbTUOkIt6aTfvPYLRPtdAcUGvkuBUMjohA=";
 
   meta = with lib; {
     description = "like cargo, but backwards";

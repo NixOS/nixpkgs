@@ -1,9 +1,7 @@
 { lib
-, stdenv
 , symlinkJoin
 , callPackage
 , fetchFromGitHub
-, fetchurl
 , buildGoModule
 , makeWrapper
 , breakpointHook

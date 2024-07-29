@@ -4,7 +4,6 @@
   , fontconfig
   , lib
   , openal
-  , stdenv
   , xorg
 }:
 

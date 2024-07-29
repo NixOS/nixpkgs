@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "octopus-code";
     repo = "octopus";
     rev = version;
-    sha256 = "sha256-8wZR+bYdxJFsUPMWbIGYxRdNzjLgHm+KFLjY7fSN7io=";
+    hash = "sha256-8wZR+bYdxJFsUPMWbIGYxRdNzjLgHm+KFLjY7fSN7io=";
   };
 
   nativeBuildInputs = [

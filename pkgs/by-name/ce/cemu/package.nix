@@ -1,7 +1,7 @@
 {
   lib,
   SDL2,
-  addOpenGLRunpath,
+  addDriverRunpath,
   boost,
   cmake,
   cubeb,
@@ -66,13 +66,14 @@ in stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     SDL2
-    addOpenGLRunpath
+    addDriverRunpath
     wrapGAppsHook3
     cmake
     glslang
     nasm
     ninja
     pkg-config
+    wxGTK32
   ];
 
   buildInputs = [

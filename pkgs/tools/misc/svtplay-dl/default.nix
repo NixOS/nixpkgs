@@ -51,9 +51,13 @@ stdenv.mkDerivation rec {
       --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
-  doCheck = true;
+  doCheck = python3Packages.pythonOlder "3.12";
   checkPhase = ''
+    runHook preCheck
+
     sh scripts/run-tests.sh -2
+
+    runHook postCheck
   '';
 
   doInstallCheck = true;

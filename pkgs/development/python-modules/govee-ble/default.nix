@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "govee-ble";
-  version = "0.31.3";
+  version = "0.40.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "govee-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Gb9k2MieRKSJeKpmltL9HYA7pYKTSTWLGDgo52mY6xA=";
+    hash = "sha256-w21paR1VTV/ZFnl9SKkJmFFDZMPgA3d7P6blceVvnVk=";
   };
 
   postPatch = ''

@@ -3,16 +3,13 @@
 , cmake
 , pkg-config
 , python3
-, ruby
 , rake
-, git
 , curl
 , fetchFromGitHub
 , libGL
 , libGLU
 , alsa-lib
 , libX11
-, xorgproto
 , libICE
 , libXi
 , libXScrnSaver
@@ -30,7 +27,6 @@
 , libdecor
 , pipewire
 , libpulseaudio
-, libiconv
 # Whether to build TIC-80's "Pro" version, which is an incentive to support the project financially,
 # that enables some additional features. It is, however, fully open source.
 , withPro ? false
@@ -50,7 +46,7 @@ stdenv.mkDerivation rec {
     owner = "nesbox";
     repo = "TIC-80";
     rev = "v" + version;
-    sha256 = "sha256-p7OyuD/4KxAzylQDlXW681TvEZwKYDD4zq2KDRkcv48=";
+    hash = "sha256-p7OyuD/4KxAzylQDlXW681TvEZwKYDD4zq2KDRkcv48=";
     # TIC-80 vendors its dependencies as submodules, so to use its current build system,
     # we need to fetch them. Managing the dependencies ourselves would require a lot of
     # changes in the build system, which doesn't seem worth it right now. In future versions,

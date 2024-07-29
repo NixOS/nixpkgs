@@ -62,7 +62,7 @@ self: super: builtins.intersectAttrs super {
     # This prevents linking issues when running TH splices.
     postInstall = ''
       mv "$out/bin/haskell-language-server" "$out/bin/.haskell-language-server-${self.ghc.version}-unwrapped"
-      BOOT_PKGS=`ghc-pkg-${self.ghc.version} --global list --simple-output`
+      BOOT_PKGS="ghc-${self.ghc.version} template-haskell-$(ghc-pkg-${self.ghc.version} --global --simple-output field template-haskell version)"
       ${pkgs.buildPackages.gnused}/bin/sed \
         -e "s!@@EXE_DIR@@!$out/bin!" \
         -e "s/@@EXE_NAME@@/.haskell-language-server-${self.ghc.version}-unwrapped/" \
@@ -242,6 +242,19 @@ self: super: builtins.intersectAttrs super {
   cabal2nix = self.generateOptparseApplicativeCompletions [ "cabal2nix" ] super.cabal2nix;
 
   arbtt = overrideCabal (drv: {
+    buildTools = drv.buildTools or [] ++ [
+      pkgs.buildPackages.installShellFiles
+      pkgs.buildPackages.libxslt
+    ];
+    postBuild = ''
+      xsl=${pkgs.buildPackages.docbook_xsl}/share/xml/docbook-xsl
+      make -C doc man XSLTPROC_MAN_STYLESHEET=$xsl/manpages/profile-docbook.xsl
+    '';
+    postInstall = ''
+      for f in doc/man/man[1-9]/*; do
+        installManPage $f
+      done
+    '';
     # The test suite needs the packages's executables in $PATH to succeed.
     preCheck = ''
       for i in $PWD/dist/build/*; do
@@ -1199,15 +1212,11 @@ self: super: builtins.intersectAttrs super {
         '';
       });
     in
-
-    {
-      fourmolu = fourmoluTestFix super.fourmolu;
-      fourmolu_0_14_1_0 = fourmoluTestFix super.fourmolu_0_14_1_0;
-      fourmolu_0_15_0_0 = fourmoluTestFix super.fourmolu_0_15_0_0;
-    })
+      builtins.mapAttrs (_: fourmoluTestFix) super
+    )
     fourmolu
-    fourmolu_0_14_1_0
     fourmolu_0_15_0_0
+    fourmolu_0_16_2_0
     ;
 
   # Test suite needs to execute 'disco' binary
@@ -1342,18 +1351,20 @@ self: super: builtins.intersectAttrs super {
       gi-javascriptcore
       gi-webkit2webextension
       gi-gtk_4_0_8
-      gi-gdk_4_0_7
+      gi-gdk_4_0_8
       gi-gsk
       gi-adwaita
       ;
 
     webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
       (addBuildDepend pkgs.xorg.libXtst)
+      (addBuildDepend pkgs.lerc)
       (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
     ];
 
     gi-webkit2 = lib.pipe super.gi-webkit2 [
       (addBuildDepend pkgs.xorg.libXtst)
+      (addBuildDepend pkgs.lerc)
       (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
     ];
 

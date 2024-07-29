@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "obgm";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-SzuXFn4rihZIHxKSH5waC5362mhsOtBdRatIGI6nv4I=";
+    hash = "sha256-SzuXFn4rihZIHxKSH5waC5362mhsOtBdRatIGI6nv4I=";
   };
   nativeBuildInputs = [
     automake

@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  google-generativeai,
   llama-index-core,
   poetry-core,
-  pytestCheckHook,
   pythonOlder,
 }:
 

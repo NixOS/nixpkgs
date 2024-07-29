@@ -28,6 +28,6 @@ kio knotifications kwindowsystem kxmlgui ktextwidgets
     mainProgram = "ktimetracker";
     license = licenses.gpl2;
     homepage = "https://userbase.kde.org/KTimeTracker";
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

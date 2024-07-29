@@ -34,6 +34,6 @@ buildGoModule {
     mainProgram = "wgo";
     homepage = "https://github.com/bokwoon95/wgo";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

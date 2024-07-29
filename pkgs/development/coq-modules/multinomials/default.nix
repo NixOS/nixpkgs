@@ -41,7 +41,7 @@
     "1.0".sha256   = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
   };
 
-  useDuneifVersion = v: lib.versions.isGe "1.5.3" v || v == "dev";
+  useDuneifVersion = lib.versions.range "1.5.3" "2.2.0";
 
   preConfigure = ''
     patchShebangs configure || true

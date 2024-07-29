@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "C++ library to control Z-Wave Networks via a USB Z-Wave Controller";
     homepage = "http://www.openzwave.net/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

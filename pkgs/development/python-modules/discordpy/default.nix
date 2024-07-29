@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "discord.py";
-  version = "2.3.2";
+  version = "2.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Rapptz";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-bZoYdDpk34x+Vw1pAZ3EcTFp2JJ/Ow0Jfof/XjqeRmY=";
+    hash = "sha256-GIwXx7bRCH2+G3zlilJ/Tb8el50SDbxGGX2/1bqL3+U=";
   };
 
   propagatedBuildInputs =
@@ -62,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://discordpy.rtfd.org/";
     changelog = "https://github.com/Rapptz/discord.py/blob/v${version}/docs/whats_new.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

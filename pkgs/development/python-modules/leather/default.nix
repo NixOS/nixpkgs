@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+WS+wghvMVOmwW5wfyDLcY+BH1evEWB19MD0gFxgi5U=";
+    hash = "sha256-+WS+wghvMVOmwW5wfyDLcY+BH1evEWB19MD0gFxgi5U=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Python charting library";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = [ ];
   };
 }

@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     description = "Facebook's friendly syntax to OCaml";
     license = licenses.mit;
     inherit (ocaml.meta) platforms;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

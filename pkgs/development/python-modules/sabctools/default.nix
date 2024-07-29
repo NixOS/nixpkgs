@@ -7,12 +7,12 @@
 }:
 buildPythonPackage rec {
   pname = "sabctools";
-  version = "8.2.3"; # needs to match version sabnzbd expects, e.g. https://github.com/sabnzbd/sabnzbd/blob/4.0.x/requirements.txt#L3
+  version = "8.2.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cP3GCp2mGivtjyA76vqtO7mJyZjHeNkvBLl2kXxOT5w=";
+    hash = "sha256-qPi/+Q+xLm+djlYeTXyVi3q/R1zEtXgOY7wxLjnp7Ew=";
   };
 
   nativeBuildInputs = [ setuptools ];

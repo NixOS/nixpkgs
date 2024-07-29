@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Text to sentence splitter using heuristic algorithm by Philipp Koehn and Josh Schroeder";
     homepage = "https://github.com/mediacloud/sentence-splitter";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

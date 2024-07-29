@@ -3,18 +3,18 @@
 , fetchFromGitHub
 , git
 , nixosTests
-, python3
+, python311
 , vaultwarden
 }:
 
 let
-  version = "2024.5.1";
+  version = "2024.5.1b";
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-iNSkvQn3g64pI0uY7M4S7jEiRRDAc0wlPuJevzMJ+dc=";
+    hash = "sha256-5nlFt05ari9ovl+CaoyR/X9BzhsmsGyDt6eGLJ5ae/4=";
   };
 
 in buildNpmPackage rec {
@@ -37,7 +37,8 @@ in buildNpmPackage rec {
   '';
 
   nativeBuildInputs = [
-    python3
+    # signalr through gyp wants to import distutils
+    python311
   ];
 
   makeCacheWritable = true;

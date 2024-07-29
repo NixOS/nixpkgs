@@ -77,6 +77,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Open multi-site list manager for Unix-like systems (ex-wMAL)";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

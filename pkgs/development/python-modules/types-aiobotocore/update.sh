@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update nixfmt curl jq
+#!nix-shell -i bash -p nix-update nixfmt-classic curl jq
 
 set -eu -o pipefail
 

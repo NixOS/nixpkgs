@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   };
 
   postPatch = ''
-    patchShebangs build.sh
+    patchShebangs build.sh odinfmt.sh
   '';
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
 
-    ./build.sh
+    ./build.sh && ./odinfmt.sh
 
     runHook postBuild
   '';
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 ols -t $out/bin/
+    install -Dm755 ols odinfmt -t $out/bin/
     wrapProgram $out/bin/ols --set-default ODIN_ROOT ${odin}/share
 
     runHook postInstall

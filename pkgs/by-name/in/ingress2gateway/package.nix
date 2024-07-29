@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "Convert Ingress resources to Gateway API resources ";
+    description = "Convert Ingress resources to Gateway API resources";
     homepage = "https://github.com/kubernetes-sigs/ingress2gateway";
     license = licenses.asl20;
     maintainers = with maintainers; [ arikgrahl ];

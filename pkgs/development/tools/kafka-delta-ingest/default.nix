@@ -47,6 +47,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "kafka-delta-ingest";
     homepage = "https://github.com/delta-io/kafka-delta-ingest";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

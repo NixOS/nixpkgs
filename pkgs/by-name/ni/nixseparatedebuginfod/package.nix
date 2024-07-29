@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nixseparatedebuginfod";
-  version = "0.3.4";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nixseparatedebuginfod";
     rev = "v${version}";
-    hash = "sha256-lbYU9gveZ4SkIpMMN8KRJItA3PZSDWcJAJs4WDoivBg=";
+    hash = "sha256-sVQ6UgQvSTEIxXPxISeTI9tqAdJlxQpLxq1h4I31r6k=";
   };
 
-  cargoHash = "sha256-iKmAOPxxuhIYRKQfOuqHrF+u3wtjOk7RJ9gzPFHGGqw=";
+  cargoHash = "sha256-abHczsRzWDST6ji7yi/Iox1o8QHGjt5T7/KDwsYGYMk=";
 
   # tests need a working nix install with access to the internet
   doCheck = false;

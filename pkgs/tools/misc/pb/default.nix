@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "pb";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "parseablehq";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dMc4IgtyYVFXGPUjevVyPo4XYImHJlgwp4jKnh3CedM=";
+    hash = "sha256-ub4/ou0FprDPTdGarehUPVPov2kLl6SbIlhpPiEarE8=";
   };
 
   vendorHash = "sha256-38lXffh3ZkMtvHi9roLHW0A6bzb+LRC91I3DdYyq1h0=";

@@ -2,8 +2,6 @@
 , blueprint-compiler
 , desktop-file-utils
 , fetchFromGitHub
-, gettext
-, glib
 , gtk4
 , lib
 , libadwaita
@@ -17,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "raider";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "ADBeveridge";
     repo = "raider";
     rev = "v${version}";
-    hash = "sha256-zqM2B1M7E4CRupd09rvFYG7H7wBd2hTWnjN3xadS36w=";
+    hash = "sha256-LkGSEUoruWfEq/ttM3LkA/UjHc3ZrlvGF44HsJLntAo=";
   };
 
   nativeBuildInputs = [

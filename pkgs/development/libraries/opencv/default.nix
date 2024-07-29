@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
 
+  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++14";
+
   env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
@@ -78,7 +80,7 @@ stdenv.mkDerivation rec {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
     license = if enableUnfree then licenses.unfree else licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

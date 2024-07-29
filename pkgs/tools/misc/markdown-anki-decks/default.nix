@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     markdown
     python-frontmatter
     typer
-  ] ++ typer.optional-dependencies.all;
+  ];
 
   # No tests available on Pypi and there is only a failing version assertion test in the repo.
   doCheck = false;
@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/lukesmurray/markdown-anki-decks";
     changelog = "https://github.com/lukesmurray/markdown-anki-decks/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "mdankideck";
   };

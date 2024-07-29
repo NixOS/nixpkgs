@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "galene";
-  version = "0.9";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "jech";
     repo = "galene";
     rev = "galene-${version}";
-    hash = "sha256-wklWAs5Ag9FZu85vLPNXoiS7TVQe98fLbRiMIp2OsaI=";
+    hash = "sha256-Ky38PM9HX1jV1LTMUeqaY8fUjZAxe4uK52YKQF8WOMA=";
   };
 
   vendorHash = "sha256-U8DH3b2KbFQbEV+7suVsBiTA42FEl6DebH+GJDaH6aE=";

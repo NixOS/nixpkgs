@@ -25,7 +25,8 @@ The following snippet can be used to configure IBus:
 ```nix
 {
   i18n.inputMethod = {
-    enabled = "ibus";
+    enable = true;
+    type = "ibus";
     ibus.engines = with pkgs.ibus-engines; [ anthy hangul mozc ];
   };
 }
@@ -81,7 +82,8 @@ The following snippet can be used to configure Fcitx:
 ```nix
 {
   i18n.inputMethod = {
-    enabled = "fcitx5";
+    enable = true;
+    type = "fcitx5";
     fcitx5.addons = with pkgs; [ fcitx5-mozc fcitx5-hangul fcitx5-m17n ];
   };
 }
@@ -119,7 +121,8 @@ The following snippet can be used to configure Nabi:
 ```nix
 {
   i18n.inputMethod = {
-    enabled = "nabi";
+    enable = true;
+    type = "nabi";
   };
 }
 ```
@@ -134,7 +137,8 @@ The following snippet can be used to configure uim:
 ```nix
 {
   i18n.inputMethod = {
-    enabled = "uim";
+    enable = true;
+    type = "uim";
   };
 }
 ```
@@ -154,7 +158,8 @@ The following snippet can be used to configure Hime:
 ```nix
 {
   i18n.inputMethod = {
-    enabled = "hime";
+    enable = true;
+    type = "hime";
   };
 }
 ```
@@ -168,7 +173,8 @@ The following snippet can be used to configure Kime:
 ```nix
 {
   i18n.inputMethod = {
-    enabled = "kime";
+    enable = true;
+    type = "kime";
   };
 }
 ```

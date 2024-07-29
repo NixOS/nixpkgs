@@ -1,8 +1,6 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, git
-, pytest
 , pyyaml
 , setuptools
 , installShellFiles

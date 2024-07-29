@@ -57,5 +57,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/outlines-dev/outlines";
     license = licenses.asl20;
     maintainers = with maintainers; [ lach ];
+    # Missing dependencies since the last update
+    broken = true;
   };
 }

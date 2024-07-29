@@ -5,14 +5,12 @@
 , glib
 , nss
 , nspr
-, at-spi2-atk
 , cups
 , dbus
 , libdrm
 , gtk3
 , pango
 , cairo
-, xorg
 , libxkbcommon
 , mesa
 , expat

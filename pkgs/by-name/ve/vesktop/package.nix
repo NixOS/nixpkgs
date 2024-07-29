@@ -15,6 +15,7 @@
   autoPatchelfHook,
   pnpm_9,
   nodejs,
+  nix-update-script,
   withTTS ? true,
   withMiddleClickScroll ? false,
   # Enables the use of vencord from nixpkgs instead of
@@ -164,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) pnpmDeps;
+    updateScript = nix-update-script { };
   };
 
   meta = {

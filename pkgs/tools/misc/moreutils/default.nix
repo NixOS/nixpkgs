@@ -8,7 +8,7 @@
 , perlPackages
 , makeWrapper
 , perl # for pod2man
-, darwin
+, cctools
 , gitUpdater
 }:
 
@@ -22,23 +22,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-hVvRAIXlG8+pAD2v/Ma9Z6EUL/1xIRz7Gx1fOxoQyi0=";
   };
 
-  preBuild = ''
-    substituteInPlace Makefile --replace /usr/share/xml/docbook/stylesheet/docbook-xsl ${docbook-xsl}/xml/xsl/docbook
-  '';
-
   strictDeps = true;
   nativeBuildInputs = [ makeWrapper perl libxml2 libxslt docbook-xsl docbook_xml_dtd_44 ];
-  buildInputs = lib.optional stdenv.isDarwin darwin.cctools;
+  buildInputs = [
+    (perl.withPackages (p: [ p.IPCRun p.TimeDate p.TimeDuration ]))
+  ] ++ lib.optionals stdenv.isDarwin [
+    cctools
+  ];
 
-  propagatedBuildInputs = with perlPackages; [ perl IPCRun TimeDate TimeDuration ];
-
-  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
-  installFlags = [ "PREFIX=$(out)" ];
-
-  postInstall = ''
-    wrapProgram $out/bin/chronic --prefix PERL5LIB : $PERL5LIB
-    wrapProgram $out/bin/ts --prefix PERL5LIB : $PERL5LIB
-  '';
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "DOCBOOKXSL=${docbook-xsl}/xml/xsl/docbook"
+    "INSTALL_BIN=install"
+    "PREFIX=${placeholder "out"}"
+  ];
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.

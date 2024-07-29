@@ -9,7 +9,7 @@ buildGoModule rec {
     repo = "NoiseTorch";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-gOPSMPH99Upi/30OnAdwSb7SaMV0i/uHB051cclfz6A=";
+    hash = "sha256-gOPSMPH99Upi/30OnAdwSb7SaMV0i/uHB051cclfz6A=";
   };
 
   vendorHash = null;

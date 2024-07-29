@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "feed2imap-go";
-  version = "1.7.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "Necoro";
     repo = "feed2imap-go";
     rev = "v${version}";
-    sha256 = "sha256-Qtpg8DvIFkba+Do8IwemBF0rt85wS4Tq7yOLsdpQFCs=";
+    sha256 = "sha256-LMtuGrNRVG3/2cgZFS7YlVmassbWDhH/nQgPh08NmpA=";
   };
 
   ldflags = [
@@ -17,7 +17,7 @@ buildGoModule rec {
     "-X github.com/Necoro/feed2imap-go/pkg/version.commit=nixpkgs"
   ];
 
-  vendorHash = "sha256-WFbfSzU1N2RAOMfCM7wqiAQ6R1HRaT0EfX4KYhstHJU=";
+  vendorHash = "sha256-3J9fd/ogClQ+1a2ORahwf+JwkC4b1+pR1vdVjwLutoY=";
 
   # The print-cache tool is not an end-user tool (https://github.com/Necoro/feed2imap-go/issues/94)
   postInstall = ''

@@ -90,7 +90,7 @@ as [Trezor](https://trezor.io/).
 
 ### systemd Stage 1 {#sec-luks-file-systems-fido2-systemd}
 
-If systemd stage 1 is enabled, it handles unlocking of LUKS-enrypted volumes
+If systemd stage 1 is enabled, it handles unlocking of LUKS-encrypted volumes
 during boot. The following example enables systemd stage1 and adds support for
 unlocking the existing LUKS2 volume `root` using any enrolled FIDO2 compatible
 tokens.

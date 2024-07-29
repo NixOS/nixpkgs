@@ -1,5 +1,4 @@
-{ stdenv
-, mkDerivation
+{ mkDerivation
 , lib
 , fetchFromGitHub
 , fetchpatch
@@ -39,7 +38,7 @@ mkDerivation rec {
     repo = "RedisDesktopManager";
     fetchSubmodules = true;
     rev = version;
-    sha256 = "sha256-5eI3J2RsYE5Ejb1r8YkgzmGX2FyaCLFD0lc10J+fOT4=";
+    hash = "sha256-5eI3J2RsYE5Ejb1r8YkgzmGX2FyaCLFD0lc10J+fOT4=";
   };
 
   nativeBuildInputs = [
@@ -100,6 +99,6 @@ mkDerivation rec {
     homepage = "https://resp.app/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

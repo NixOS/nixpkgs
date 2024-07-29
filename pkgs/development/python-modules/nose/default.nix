@@ -5,24 +5,25 @@
   isPy3k,
   isPyPy,
   python,
-  pythonAtLeast,
+  python312,
   coverage,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   version = "1.3.7";
-  format = "setuptools";
   pname = "nose";
-
-  # unmaintained, relies on the imp module
-  disabled = pythonAtLeast "3.12";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98";
   };
 
-  # 2to3 was removed in setuptools 58
+  build-system = [ setuptools ];
+
+  patches = lib.optional isPy3k [ ./0001-nose-python-3.12-fixes.patch ];
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace "'use_2to3': True," ""
@@ -31,8 +32,9 @@ buildPythonPackage rec {
       --replace "from setuptools.command.build_py import Mixin2to3" "from distutils.util import Mixin2to3"
   '';
 
-  preBuild = lib.optionalString (isPy3k) ''
-    ${python.pythonOnBuildForHost}/bin/2to3 -wn nose functional_tests unit_tests
+  # 2to3 is removed from Python 3.13, so always use Python 3.12 2to3 for now.
+  preBuild = lib.optionalString isPy3k ''
+    ${python312.pythonOnBuildForHost}/bin/2to3 -wn nose functional_tests unit_tests
   '';
 
   propagatedBuildInputs = [ coverage ];
@@ -56,6 +58,6 @@ buildPythonPackage rec {
     mainProgram = "nosetests";
     homepage = "https://nose.readthedocs.io/";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

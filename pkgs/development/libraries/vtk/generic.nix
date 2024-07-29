@@ -3,6 +3,7 @@
 , fetchpatch
 , enableQt ? false, qtx11extras, qttools, qtdeclarative, qtEnv
 , enablePython ? false, python ? throw "vtk: Python support requested, but no python interpreter was given."
+, enableEgl ? false
 # Darwin support
 , AGL, Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
 , ApplicationServices, CoreText, IOSurface, ImageIO, xpc, libobjc
@@ -15,7 +16,9 @@ let
   pythonMajor = lib.substring 0 1 python.pythonVersion;
 
 in stdenv.mkDerivation {
-  pname = "vtk${optionalString enableQt "-qvtk"}";
+  pname = "vtk"
+    + optionalString enableEgl "-egl"
+    + optionalString enableQt "-qvtk";
   inherit version;
 
   src = fetchurl {
@@ -82,7 +85,7 @@ in stdenv.mkDerivation {
     "-DVTK_MODULE_ENABLE_VTK_RenderingExternal=YES"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DOPENGL_INCLUDE_DIR=${libGL}/include"
-    "-DVTK_OPENGL_HAS_EGL=ON"
+    (lib.cmakeBool "VTK_OPENGL_HAS_EGL" enableEgl)
   ] ++ [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
@@ -113,6 +116,7 @@ in stdenv.mkDerivation {
     homepage = "https://www.vtk.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp tfmoraes ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
+    badPlatforms = optionals enableEgl platforms.darwin;
   };
 }

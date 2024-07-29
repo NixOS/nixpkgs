@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
     description = "luculent font";
     homepage = "http://www.eastfarthing.com/luculent/";
     license = licenses.ofl;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

@@ -29,22 +29,22 @@ let
     {
       x86_64-linux = {
         arch = "linux-x64";
-        hash = "sha256-Y+Re3tDX8HQrWo045JxdX8Jt4jomm1/C9T+BU2/hE+g=";
+        hash = "sha256-uCayu7WU+qqiCDxxfO4j1aOypP+O49uNZMnfwq+hO4k=";
         binaries = linuxBins;
       };
       aarch64-linux = {
         arch = "linux-arm64";
-        hash = "sha256-nFCFK2GVLljMqmxJnlma6kAXHc9qN/DnnRiWrkjmLmo=";
+        hash = "sha256-b4Q3JWNdZtLlgxMUBpu+5ppJDILxjPHBZeMxsQHiDa0=";
         binaries = linuxBins;
       };
       x86_64-darwin = {
         arch = "darwin-x64";
-        hash = "sha256-hC1ZJdBKJR3om9xuxEBhaBtQXEin1R0t7BFVdOUu6X8=";
+        hash = "sha256-uVI2PmHfhmuQMTCbwrGuLamC1DyjeLCZf41pjT891GE=";
         binaries = darwinBins;
       };
       aarch64-darwin = {
         arch = "darwin-arm64";
-        hash = "sha256-mIZJXgACvJmhrJzOtKcF2DKeBkLSjKehE1xEwtp1X+E=";
+        hash = "sha256-zNSvznX7nYTBexlkD49t3Ne66/u3paecZJZwMuPmSf4=";
         binaries = darwinBins ++ [
           ".debugger/arm64/vsdbg-ui"
           ".debugger/arm64/vsdbg"
@@ -57,7 +57,7 @@ buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csharp";
     publisher = "ms-dotnettools";
-    version = "2.34.12";
+    version = "2.39.29";
     inherit (extInfo) hash arch;
   };
 

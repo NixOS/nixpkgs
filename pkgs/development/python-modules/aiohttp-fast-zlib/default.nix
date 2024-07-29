@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bdraco/aiohttp-fast-zlib";
     changelog = "https://github.com/bdraco/aiohttp-fast-zlib/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

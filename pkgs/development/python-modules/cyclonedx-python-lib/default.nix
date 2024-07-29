@@ -35,8 +35,9 @@ buildPythonPackage rec {
     hash = "sha256-yBBtE9DfHzUNXHMCo3KoUAAsvkBshczmVtMCUTtQ9zg=";
   };
 
-  build-system = [ poetry-core ];
+  pythonRelaxDeps = [ "py-serializable" ];
 
+  build-system = [ poetry-core ];
 
   dependencies = [
     importlib-metadata
@@ -51,17 +52,26 @@ buildPythonPackage rec {
     types-toml
   ];
 
+  passthru.optional-dependencies = {
+    validation = [
+      jsonschema
+      lxml
+    ];
+    json-validation = [
+      jsonschema
+    ];
+    xml-validation = [
+      lxml
+    ];
+  };
+
   nativeCheckInputs = [
     ddt
-    jsonschema
-    lxml
     pytestCheckHook
     xmldiff
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [ "cyclonedx" ];
-
-  pythonRelaxDeps = [ "py-serializable" ];
 
   preCheck = ''
     export PYTHONPATH=tests''${PYTHONPATH+:$PYTHONPATH}

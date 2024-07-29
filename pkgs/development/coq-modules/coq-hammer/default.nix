@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, coq, coq-hammer-tactics, version ? null }:
+{ mkCoqDerivation, coq, coq-hammer-tactics, version ? null }:
 
 mkCoqDerivation {
   inherit version;

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "2.22.0";
+  version = "2.22.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SUaW4XiMVe9bL61GSBP92fWRF/wogZt9nSehhz17f60=";
+    hash = "sha256-2xexWvjUfaDPj7DjZfqvvNEfmqYngc4EjCmYiAiz3H0=";
   };
 
   build-system = [ setuptools ];
@@ -62,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-monitoring";
     changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-monitoring-v${version}/packages/google-cloud-monitoring";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

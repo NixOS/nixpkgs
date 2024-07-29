@@ -158,7 +158,7 @@ def fetch_patch(*, name: str, release_info: ReleaseInfo) -> Optional[Patch]:
 
 def parse_version(version_str: str) -> Version:
     version: Version = []
-    for component in re.split('\.|\-', version_str):
+    for component in re.split(r'\.|\-', version_str):
         try:
             version.append(int(component))
         except ValueError:

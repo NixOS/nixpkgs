@@ -42,7 +42,6 @@ in
     _: ps:
     lib.pipe ps [
       (lib.filterAttrs isTest)
-      (as: as // { __attrsFailEvaluation = true; })
       recurseIntoAttrs
     ]
   ))

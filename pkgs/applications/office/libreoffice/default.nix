@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchgit
 , fetchpatch2
 , lib
 , pam
@@ -98,7 +99,8 @@
 , libetonyek
 , liborcus
 , libpng
-, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fi" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sk" "sl" "tr" "uk" "zh-CN" ]
+, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fi" "fr" "hu" "it" "ja" "ko" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sk" "sl" "tr" "uk" "zh-CN" ]
+, withFonts ? false
 , withHelp ? true
 , kdeIntegration ? false
 , qtbase ? null
@@ -143,14 +145,14 @@
 , sonnet ? null
 }:
 
-assert builtins.elem variant [ "fresh" "still" ];
+assert builtins.elem variant [ "fresh" "still" "collabora" ];
 
 let
   inherit (lib)
     flatten flip
     concatMapStrings concatStringsSep
     getDev getLib
-    optionals optionalString;
+    optionals optionalAttrs optionalString;
 
   fontsConf = makeFontsConf {
     fontDirectories = [
@@ -198,8 +200,8 @@ let
       }) // {
         inherit (x) md5name md5;
       }) srcsAttributes.deps;
-    translations = fetchurl srcsAttributes.translations;
-    help = fetchurl srcsAttributes.help;
+    translations = srcsAttributes.translations { inherit fetchurl fetchgit; };
+    help = srcsAttributes.help { inherit fetchurl fetchgit; };
   };
 
   qtMajor = lib.versions.major qtbase.version;
@@ -222,7 +224,8 @@ let
 in stdenv.mkDerivation (finalAttrs: {
   pname = "libreoffice";
   inherit version;
-  src = fetchurl srcsAttributes.main;
+
+  src = srcsAttributes.main { inherit fetchurl fetchgit; };
 
   postUnpack = ''
     mkdir -v $sourceRoot/${tarballPath}
@@ -232,12 +235,16 @@ in stdenv.mkDerivation (finalAttrs: {
       ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
     '')}
 
+  '' + (if (variant != "collabora") then ''
     ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
     ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
 
     tar -xf ${srcs.help}
     tar -xf ${srcs.translations}
-  '';
+  '' else ''
+    cp -r --no-preserve=mode ${srcs.help}/. $sourceRoot/helpcontent2/
+    cp -r --no-preserve=mode ${srcs.translations}/. $sourceRoot/translations/
+  '');
 
   patches = [
     # Skip some broken tests:
@@ -257,11 +264,14 @@ in stdenv.mkDerivation (finalAttrs: {
     ./0001-Strip-away-BUILDCONFIG.patch
     # See above
     ./skip-broken-tests-still.patch
-  ] ++ lib.optionals (variant == "fresh") [
+  ] ++ lib.optionals (variant == "fresh" || variant == "collabora") [
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
     ./readd-explicit-zlib-link.patch
     # See above
     ./skip-broken-tests-fresh.patch
+  ] ++ lib.optionals (variant == "collabora") [
+    ./fix-unpack-collabora.patch
+    ./skip-broken-tests-collabora.patch
   ];
 
   postPatch = ''
@@ -473,7 +483,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # Modified on every upgrade, though
     "--disable-odk"
     "--disable-firebird-sdbc"
-    "--without-fonts"
+    (lib.withFeature withFonts "fonts")
     "--without-doxygen"
 
     # TODO: package these as system libraries
@@ -534,7 +544,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "--keep-going"  # easier to debug test failures
   ];
 
-  postInstall = ''
+  postInstall = optionalString (variant != "collabora") ''
     mkdir -p $out/share/icons
 
     cp -r sysui/desktop/icons/hicolor $out/share/icons
@@ -562,6 +572,7 @@ in stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit srcs;
     jdk = jre';
+    python = python311; # for unoconv
     updateScript = [
       ./update.sh
       # Pass it this file name as argument
@@ -633,5 +644,6 @@ in stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
+    mainProgram = "libreoffice";
   };
 })

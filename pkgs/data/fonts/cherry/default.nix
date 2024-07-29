@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "cherry font";
     homepage = "https://github.com/turquoise-hexagon/cherry";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

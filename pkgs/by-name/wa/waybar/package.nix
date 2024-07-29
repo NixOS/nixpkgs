@@ -66,6 +66,8 @@
   wireplumberSupport ? true,
   withMediaPlayer ? mprisSupport && false,
   nix-update-script,
+  testers,
+  waybar,
 }:
 
 let
@@ -79,18 +81,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = finalAttrs.version;
-    hash = "sha256-LUageV0xC42MldMmYY1njkm95icBsqID1tEGy3wwrRM=";
+    hash = "sha256-/JW3WnRLpfz8j+9Zc9YkK63i8DjHrKwv9PWKIMz3MVI=";
   };
 
   postUnpack = lib.optional cavaSupport ''
     pushd "$sourceRoot"
-    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.1
+    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.2
     patchShebangs .
     popd
   '';
@@ -183,7 +185,13 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = waybar;
+      version = "v${finalAttrs.version}";
+    };
+  };
 
   meta = {
     homepage = "https://github.com/alexays/waybar";

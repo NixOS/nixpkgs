@@ -4,8 +4,9 @@
   fetchPypi,
   pythonOlder,
   ncurses,
-  importlib-metadata,
   setuptools,
+  filelock,
+  typing-extensions,
   wheel,
   patchelf,
 }:
@@ -23,22 +24,28 @@ buildPythonPackage rec {
     hash = "sha256-M1wwutDj5lNlXyMJkzCEWL7cmXuvW3qZXoZB3rousoc=";
   };
 
-  nativeBuildInputs = [
+  pythonRelaxDeps = [
+    "setuptools"
+    "wheel"
+  ];
+
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
-    importlib-metadata # upstream has this for 3.8 as well
+  buildInputs = [
     ncurses
+  ];
+
+  dependencies = [
+    filelock
     setuptools
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
   ];
 
   postPatch = ''
-    # timestamp need to come after 1980 for zipfiles and nix store is set to epoch
-    substituteInPlace cx_Freeze/freezer.py \
-      --replace "st.st_mtime" "time.time()"
-
     sed -i /patchelf/d pyproject.toml
   '';
 
@@ -57,7 +64,7 @@ buildPythonPackage rec {
     homepage = "https://marcelotduarte.github.io/cx_Freeze/";
     changelog = "https://github.com/marcelotduarte/cx_Freeze/releases/tag/${version}";
     license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "cxfreeze";
   };
 }

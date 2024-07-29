@@ -41,9 +41,12 @@ mkDerivation {
 
       "sys/rpc/types.h"
     ]
-    ++ lib.optionals (versionData.major == 14) [ "sys/sys/bitcount.h" ]
+    ++ lib.optionals (versionData.major == 14) [
+      "sys/sys/bitcount.h"
+      "sys/sys/linker_set.h"
+      "sys/sys/module.h"
+    ]
     ++ [
-
       # Listed in Makekfile as INC
       "include/mpool.h"
       "include/ndbm.h"
@@ -64,7 +67,7 @@ mkDerivation {
     ]
     ++ [
 
-      # Listed in Makekfile as SYSINC
+      # Listed in Makefile as SYSINCS
 
       "sys/sys/capsicum.h"
       "sys/sys/caprights.h"

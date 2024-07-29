@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , python310Packages
 , testers
@@ -10,13 +9,13 @@ python310Packages.buildPythonApplication rec {
   pname = "stig";
   # This project has a different concept for pre release / alpha,
   # Read the project's README for details: https://github.com/rndusr/stig#stig
-  version = "0.12.8a0";
+  version = "0.12.10a0";
 
   src = fetchFromGitHub {
     owner = "rndusr";
     repo = "stig";
     rev = "v${version}";
-    sha256 = "sha256-vfmuA6DqWvAygcS6N+qX1h+Ag+P4eOwm41DhAFZR3r8=";
+    sha256 = "sha256-lSFI4/DxWl17KFgLXZ7c5nW/e5IUGN7s8Gm6wTM5ZWg=";
   };
 
   propagatedBuildInputs = with python310Packages; [
@@ -58,12 +57,13 @@ python310Packages.buildPythonApplication rec {
     version = "stig version ${version}";
   };
 
+  # https://github.com/rndusr/stig/issues/214#issuecomment-1995651219
+  dontUsePytestCheck = true;
+
   meta = with lib; {
     description = "TUI and CLI for the BitTorrent client Transmission";
     homepage = "https://github.com/rndusr/stig";
     license = licenses.gpl3Plus;
-    # Too many broken tests, and it fails to launch
-    broken = true;
-    maintainers = with maintainers; [  ];
+    maintainers = [ ];
   };
 }

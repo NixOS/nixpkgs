@@ -19,14 +19,14 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tuifimanager";
-  version = "4.0.6";
+  version = "4.1.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "GiorgosXou";
     repo = "TUIFIManager";
     rev = "v.${version}";
-    hash = "sha256-pppPlpPA1UYjUCKvGCjUo9jFNyOOkk6aF7/v5sXIptI=";
+    hash = "sha256-kljodLSSjvGcjhD7IhAVAAGd6LoiM6IYwMXuSsIJ198=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "TUIFIManager" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform terminal-based termux-oriented file manager";
     longDescription = ''
       A cross-platform terminal-based termux-oriented file manager (and component),
@@ -70,8 +70,8 @@ python3.pkgs.buildPythonApplication rec {
       attempt to get more attention to the Uni-Curses project.
     '';
     homepage = "https://github.com/GiorgosXou/TUIFIManager";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ michaelBelsanti sigmanificient ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ michaelBelsanti sigmanificient ];
     mainProgram = "tuifi";
   };
 }

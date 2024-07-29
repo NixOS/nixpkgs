@@ -1,4 +1,4 @@
-{ buildDunePackage, alcotest, atd, atdgen-codec-runtime, atdgen-runtime, biniou, re, yojson
+{ buildDunePackage, alcotest, atd, atdgen-codec-runtime, atdgen-runtime, re
 , python3
 }:
 

@@ -9,11 +9,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nzbhydra2";
-  version = "7.2.3";
+  version = "7.3.0";
 
   src = fetchzip {
     url = "https://github.com/theotherp/${pname}/releases/download/v${version}/${pname}-${version}-generic.zip";
-    hash = "sha256-gGTEOqqnVSgsKvEjd6b5aG8EM2M8u0FdpIebYNQFP50=";
+    hash = "sha256-ybI6nCw8yY2XceXiMkION7/p7gl58lrAPpUq6EpManU=";
     stripRoot = false;
   };
 
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Usenet meta search";
     homepage = "https://github.com/theotherp/nzbhydra2";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ matteopacini ];
-    platforms = with platforms; linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ matteopacini ];
+    platforms = lib.platforms.linux;
     mainProgram = "nzbhydra2";
   };
 }

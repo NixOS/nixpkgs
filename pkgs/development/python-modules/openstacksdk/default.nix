@@ -11,26 +11,48 @@
   keystoneauth1,
   munch,
   netifaces,
+  openstackdocstheme,
   os-service-types,
   pbr,
   pythonOlder,
   pyyaml,
   requestsexceptions,
+  setuptools,
+  sphinxHook,
 }:
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "3.1.0";
-  format = "setuptools";
+  version = "3.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cH8V1+wHSrJDS5peGYT6yrAPgi0nL0wqXeDSKgnrec0=";
+    hash = "sha256-BghpDKN8pzMnsPo3YdF+ZTlb43/yALhzXY8kJ3tPSYA=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # Disable rsvgconverter not needed to build manpage
+    substituteInPlace doc/source/conf.py \
+      --replace-fail "'sphinxcontrib.rsvgconverter'," "#'sphinxcontrib.rsvgconverter',"
+  '';
+
+  build-system = [
+    openstackdocstheme
+    setuptools
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
+
+  dependencies = [
     platformdirs
     cryptography
     dogpile-cache

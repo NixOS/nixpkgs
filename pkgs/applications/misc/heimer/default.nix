@@ -32,7 +32,7 @@ mkDerivation rec {
     homepage = "https://github.com/juzzlin/Heimer";
     changelog = "https://github.com/juzzlin/Heimer/blob/${version}/CHANGELOG";
     license = licenses.gpl3Plus;
-    maintainers  = with maintainers; [ dtzWill ];
+    maintainers  = [ ];
     platforms = platforms.linux;
   };
 }

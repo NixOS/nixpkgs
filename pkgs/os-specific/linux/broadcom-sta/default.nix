@@ -24,7 +24,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   patches = [
-    ./i686-build-failure.patch
     ./license.patch
     ./linux-4.7.patch
     # source: https://git.archlinux.org/svntogit/community.git/tree/trunk/004-linux48.patch?h=packages/broadcom-wl-dkms
@@ -72,7 +71,7 @@ stdenv.mkDerivation {
     description = "Kernel module driver for some Broadcom's wireless cards";
     homepage = "http://www.broadcom.com/support/802.11/linux_sta.php";
     license = lib.licenses.unfreeRedistributable;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

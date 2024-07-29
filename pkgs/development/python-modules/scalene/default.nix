@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   hypothesis,
   fetchPypi,
@@ -11,6 +12,7 @@
   numpy,
   psutil,
   pynvml,
+  nvidia-ml-py,
   pytestCheckHook,
   pythonOlder,
   rich,
@@ -37,9 +39,13 @@ buildPythonPackage rec {
     cloudpickle
     jinja2
     psutil
-    pynvml
     rich
-  ];
+    pynvml
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
+
+  pythonRemoveDeps = [
+    "nvidia-ml-py3"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "nvidia-ml-py" ];
 
   __darwinAllowLocalNetworking = true;
 

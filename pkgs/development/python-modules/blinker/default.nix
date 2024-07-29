@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Fast Python in-process signal/event dispatching system";
     homepage = "https://github.com/pallets-eco/blinker/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.16.1";
+  version = "5.16.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-C3D07uouV8QZLplIonmViZoCXb4AAEN+uGvNly2hcMc=";
+    hash = "sha256-vOU5P45AJPULGWj9lscZKP3JqfSpkPDnq1Fyq9lIawc=";
   };
 
   postPatch = ''

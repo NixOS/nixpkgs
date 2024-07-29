@@ -72,7 +72,8 @@ let
 
   isGeneric =
     /**/ (stdenv.hostPlatform.isPower && stdenv.hostPlatform.isLittleEndian)
-    || stdenv.hostPlatform.parsed.cpu.name == "armv6l";
+    || stdenv.hostPlatform.parsed.cpu.name == "armv6l"
+    || stdenv.hostPlatform.isRiscV;
 
   target =
     /**/ if (stdenv.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) then

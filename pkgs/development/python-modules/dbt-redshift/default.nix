@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-redshift";
-  version = "1.8.0";
+  version = "1.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-redshift";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XTAWCJ+aTFrAuggS3dbR9X08/x9ypXgE8tlWTaOmyRc=";
+    hash = "sha256-SmFN1GXX14L+3jtAo5Vqm53HLRaear2U/KI2Afx0ztU=";
   };
 
   pythonRelaxDeps = [

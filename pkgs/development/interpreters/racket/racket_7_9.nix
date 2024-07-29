@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = [ ];
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"

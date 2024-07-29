@@ -10,6 +10,7 @@
   libgit2,
   libiconv,
   nasm,
+  nix-update-script,
   testers,
   zlib,
   rav1e,
@@ -45,6 +46,8 @@ rustPlatform.buildRustPackage rec {
   # and linking it with cctools ld64.
   postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
     substituteInPlace build.rs --replace-fail '.arg("-x")' '.arg("-S")'
+    # Thin LTO doesn’t appear to work with Rust 1.79. rav1e fail to build when building fern.
+    substituteInPlace Cargo.toml --replace-fail 'lto = "thin"' 'lto = "fat"'
   '';
 
   checkType = "debug";
@@ -59,6 +62,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests.version = testers.testVersion { package = rav1e; };
+    updateScript = nix-update-script { };
   };
 
   meta = {

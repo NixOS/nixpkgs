@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.aquamaniac.de/rdm/";
     hydraPlatforms = [];
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

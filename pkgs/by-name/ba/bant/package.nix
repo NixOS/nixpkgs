@@ -5,7 +5,6 @@
   fetchFromGitHub,
   bazel_6,
   jdk,
-  git,
 }:
 
 let
@@ -18,13 +17,13 @@ let
   };
 in buildBazelPackage rec {
   pname = "bant";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "bant";
     rev = "v${version}";
-    hash = "sha256-3xGAznR/IHQHY1ISqmU8NxI90Pl57cdYeRDeLVh9L08=";
+    hash = "sha256-4h76ok2aN7WfD8OHIS0O2Dk924+hFXJXewKRM7XYjKw=";
   };
 
   bazelFlags = ["--registry" "file://${registry}"];
@@ -35,14 +34,13 @@ in buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      aarch64-linux = "sha256-jtItWNfl+ebQqU8VWmvLsgNYNARGxN8+CTBz2nZcBEY=";
-      x86_64-linux = "sha256-ACJqybpHoMSg2ApGWkIyhdAQjIhb8gxUdo8SuWJvTNE=";
+      aarch64-linux = "sha256-38O9HPKMjqpNCO+kC8hUlsJAclONVCj3oj/iVRwOEDo=";
+      x86_64-linux = "sha256-OUVjgVIBNh0j10dgk/l42bqmsGuBC56uf4Ei/IRXxBI=";
     }.${system} or (throw "No hash for system: ${system}");
   };
 
   nativeBuildInputs = [
     jdk
-    git
   ];
   bazel = bazel_6;
 

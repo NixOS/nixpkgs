@@ -142,7 +142,7 @@ class Repo:
         return loaded
 
     def prefetch(self, ref: Optional[str]) -> str:
-        print("Prefetching")
+        print("Prefetching %s", self.uri)
         loaded = self._prefetch(ref)
         return loaded["sha256"]
 
@@ -266,6 +266,7 @@ class PluginDesc:
 
     @staticmethod
     def load_from_csv(config: FetchConfig, row: Dict[str, str]) -> "PluginDesc":
+        log.debug("Loading row %s", row)
         branch = row["branch"]
         repo = make_repo(row["repo"], branch.strip())
         repo.token = config.github_token
@@ -328,7 +329,7 @@ def load_plugins_from_csv(
 
 
 
-def run_nix_expr(expr, nixpkgs: str):
+def run_nix_expr(expr, nixpkgs: str, **args):
     '''
     :param expr nix expression to fetch current plugins
     :param nixpkgs Path towards a nixpkgs checkout
@@ -347,7 +348,7 @@ def run_nix_expr(expr, nixpkgs: str):
             nix_path,
         ]
         log.debug("Running command: %s", " ".join(cmd))
-        out = subprocess.check_output(cmd, timeout=90)
+        out = subprocess.check_output(cmd, **args)
         data = json.loads(out)
         return data
 
@@ -736,6 +737,7 @@ def rewrite_input(
     redirects: Redirects = {},
     append: List[PluginDesc] = [],
 ):
+    log.info("Rewriting input file %s", input_file)
     plugins = load_plugins_from_csv(
         config,
         input_file,
@@ -744,10 +746,14 @@ def rewrite_input(
     plugins.extend(append)
 
     if redirects:
+        log.debug("Dealing with deprecated plugins listed in %s", deprecated)
+
         cur_date_iso = datetime.now().strftime("%Y-%m-%d")
         with open(deprecated, "r") as f:
             deprecations = json.load(f)
+        # TODO parallelize this step
         for pdesc, new_repo in redirects.items():
+            log.info("Rewriting input file %s", input_file)
             new_pdesc = PluginDesc(new_repo, pdesc.branch, pdesc.alias)
             old_plugin, _ = prefetch_plugin(pdesc)
             new_plugin, _ = prefetch_plugin(new_pdesc)
@@ -791,7 +797,7 @@ def update_plugins(editor: Editor, args):
     start_time = time.time()
     redirects = update()
     duration = time.time() - start_time
-    print(f"The plugin update took {duration}s.")
+    print(f"The plugin update took {duration:.2f}s.")
     editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, redirects)
 
     autocommit = not args.no_commit

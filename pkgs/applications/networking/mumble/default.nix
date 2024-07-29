@@ -11,7 +11,7 @@
 , jackSupport ? false, libjack2
 , pipewireSupport ? true, pipewire
 , pulseSupport ? true, libpulseaudio
-, speechdSupport ? false, speechd
+, speechdSupport ? false, speechd-minimal
 }:
 
 let
@@ -53,7 +53,7 @@ let
     buildInputs = [ flac libogg libopus libsndfile libvorbis qt5.qtsvg rnnoise speex ]
       ++ lib.optional (!jackSupport) alsa-lib
       ++ lib.optional jackSupport libjack2
-      ++ lib.optional speechdSupport speechd
+      ++ lib.optional speechdSupport speechd-minimal
       ++ lib.optional pulseSupport libpulseaudio
       ++ lib.optional pipewireSupport pipewire;
 
@@ -72,7 +72,7 @@ let
       ++ lib.optional (!pipewireSupport) "-D pipewire=OFF"
       ++ lib.optional jackSupport "-D alsa=OFF -D jackaudio=ON";
 
-    env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd}/include/speech-dispatcher";
+    env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
 
     postFixup = ''
       wrapProgram $out/bin/mumble \
@@ -104,7 +104,7 @@ let
       owner = "mumble-voip";
       repo = "mumble";
       rev = "v${version}";
-      sha256 = "sha256-d9XmXHq264rTT80zphYcKLxS+AyUhjb19D3DuBJvMI4=";
+      hash = "sha256-d9XmXHq264rTT80zphYcKLxS+AyUhjb19D3DuBJvMI4=";
       fetchSubmodules = true;
     };
   };

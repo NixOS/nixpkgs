@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0rqlxxl58dpfvm2idhi0vzinraf4bgiapmawiih9wxs599fnhm3y";
   };
 
-  cargoSha256 = "1i29wps7wz6b0qarqqg8rplq7ak1zz83k6m182sjk17cni74n21l";
+  cargoHash = "sha256-NAhLTrTshCm1QKGaOdD/YaqD6c3oYZwVBst8fvTlScQ=";
 
   nativeBuildInputs = [ pkg-config file perl cmake curl ];
   buildInputs = [ openssl libssh2 libgit2 libzip ] ++ lib.optional stdenv.isDarwin Security;
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "powerline-shell rewritten in Rust, inspired by powerline-go";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "powerline-rs";
   };

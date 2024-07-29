@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Speedy, parallel, and modular, login brute-forcer";
     mainProgram = "medusa";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

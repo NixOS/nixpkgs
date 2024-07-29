@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.26.0";
+  version = "0.27.0.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ywqZggn1k7zezk5CS1y6EWZfLoIWMHmGO8mvqxBaB9g=";
+    hash = "sha256-c5MCcpU6g95DMycSgOaUdpvPUtgVV/zUSdKVDbZWZGM=";
   };
 
   build-system = [ setuptools-scm ];

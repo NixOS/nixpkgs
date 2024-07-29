@@ -17,6 +17,7 @@ let
     lomiri-system-settings = callPackage ./applications/lomiri-system-settings/wrapper.nix { };
     lomiri-terminal-app = callPackage ./applications/lomiri-terminal-app { };
     morph-browser = callPackage ./applications/morph-browser { };
+    teleports = callPackage ./applications/teleports { };
 
     #### Data
     lomiri-schemas = callPackage ./data/lomiri-schemas { };

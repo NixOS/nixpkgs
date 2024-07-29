@@ -3,8 +3,8 @@
 , buildNpmPackage
 , nodejs_20
 , fetchFromGitHub
-, python3
-, darwin
+, python311
+, cctools
 , nixosTests
 , xcbuild
 }:
@@ -25,9 +25,9 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-rwzyKaCW3LAOqw6BEu8DLS0Ad5hB6cH1OnjWzbSEgVI=";
 
   nativeBuildInputs = [
-    python3
+    python311
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+    cctools
     xcbuild.xcrun
   ];
 

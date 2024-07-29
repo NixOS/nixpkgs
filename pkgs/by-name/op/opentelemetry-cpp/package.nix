@@ -15,19 +15,19 @@ let
   opentelemetry-proto = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-proto";
-    rev = "v1.0.0";
-    hash = "sha256-1IylAZs8gElpruSX52A+ZopU8jXH/MjRE+FQV3gQ+Gk=";
+    rev = "v1.3.2";
+    hash = "sha256-bkVqPSVhyMHrmFvlI9DTAloZzDozj3sefIEwfW7OVrI=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentelemetry-cpp";
-  version = "1.13.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Tf1ZnmHavnwwvRb4Tes20LMld+w/2kRo5UErT8pHf3w=";
+    hash = "sha256-31zwIZ4oehhfn+oCyg8VQTurPOmdgp72plH1Pf/9UKQ=";
   };
 
   patches = [
@@ -73,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/open-telemetry/opentelemetry-cpp";
     license = [ lib.licenses.asl20 ];
     maintainers = with lib.maintainers; [ jfroche ];
+    platforms = lib.platforms.linux;
     # https://github.com/protocolbuffers/protobuf/issues/14492
     broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };

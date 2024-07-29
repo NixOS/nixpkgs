@@ -1,30 +1,39 @@
 { lib
+, buildPackages
+, clang
 , fetchFromGitHub
+, libclang
+, libiconv
+, llvmPackages_12
 , openssl
 , pkg-config
 , protobuf
 , rustPlatform
-, buildPackages
-, git
 , stdenv
-, libiconv
-, clang
-, libclang
 , Security
 , SystemConfiguration
 }:
-rustPlatform.buildRustPackage rec {
+let
+  # Rust rocksdb bindings have C++ compilation/linking errors on Darwin when using newer clang
+  # Forcing it to clang 12 fixes the issue.
+  buildRustPackage =
+    if stdenv.isDarwin then
+      rustPlatform.buildRustPackage.override { stdenv = llvmPackages_12.stdenv; }
+    else
+      rustPlatform.buildRustPackage;
+in
+buildRustPackage rec {
   pname = "fedimint";
-  version = "0.3.2-rc.0";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
     rev = "v${version}";
-    hash = "sha256-eOGmx/freDQLxZ48nP9Y2kA84F6sdig6qfZwnJfOB3g=";
+    hash = "sha256-0SsIuMCdsZdYSRA1yT1axMe6+p+tIpXyN71V+1B7jYc=";
   };
 
-  cargoHash = "sha256-2ctrZLvovgMpxZPFtmblZ/NGyxievE6FmzC4BBGuw6g=";
+  cargoHash = "sha256-nQvEcgNOT04H5OgMHfN1713A4nbEaKK2KDx9E3qxcbM=";
 
   nativeBuildInputs = [
     protobuf

@@ -7,7 +7,6 @@
   jinja2,
   nodeenv,
   pydantic,
-  pytestCheckHook,
   python-dotenv,
   pythonOlder,
   setuptools,

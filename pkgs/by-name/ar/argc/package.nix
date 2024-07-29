@@ -4,6 +4,7 @@
   pkgsCross,
   rustPlatform,
   stdenv,
+  glibcLocales,
   fetchFromGitHub,
   installShellFiles,
 }:
@@ -13,16 +14,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "argc";
-  version = "1.14.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "argc";
     rev = "v${version}";
-    hash = "sha256-Li/K5/SLG6JuoRJDz2DQoj1Oi9LQgZWHNvtZ1HVbj88=";
+    hash = "sha256-I5dx0/aHCGmzgAEBL9gZcG7DFWCkSpndGvv2enQIZGU=";
   };
 
-  cargoHash = "sha256-D1T9FWTvwKtAYoqFlR2OmLRLGWhPJ9D8J7lq/QKcBoM=";
+  cargoHash = "sha256-30BY6ceJj0UeZE30O/LovR+YXSd7jIxFo6ojKFuecFM=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional (!canExecuteHost) buildPackages.argc;
 
@@ -36,6 +37,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   disallowedReferences = lib.optional (!canExecuteHost) buildPackages.argc;
+
+  env =
+    {
+      LANG = "C.UTF-8";
+    }
+    // lib.optionalAttrs (glibcLocales != null) {
+      LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+    };
 
   passthru = {
     tests = {

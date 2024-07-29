@@ -60,6 +60,6 @@ buildPythonPackage rec {
     mainProgram = "btp2";
     homepage = "http://www.boltztrap.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

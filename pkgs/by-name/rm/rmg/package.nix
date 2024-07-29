@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
+, gitUpdater
 , boost
 , cmake
 , discord-rpc
@@ -30,24 +30,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "rmg";
-  version = "0.5.7";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "Rosalie241";
     repo = "RMG";
     rev = "v${version}";
-    hash = "sha256-j3OVhcTGUXPC0+AqvAJ7+mc+IFqJeBITU99pvfXIunQ=";
+    hash = "sha256-mgb9Ed11fBQVnhhU5w1958a19dbTOL0ADczUOxKAnqA=";
   };
-
-  patches = [
-    # Fix bad concatenation of CMake GNUInstallDirs variables, causing broken asset lookup paths
-    # Remove when version > 0.5.7
-    (fetchpatch {
-      name = "0001-rmg-Fix-GNUInstallDirs-usage.patch";
-      url = "https://github.com/Rosalie241/RMG/commit/685aa597c7ee7ad7cfd4dd782f40d21863b75899.patch";
-      hash = "sha256-HnaxUAX+3Z/VTtYYuhoXOtsDtV61nskgyzEcp8fdBsU=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -86,6 +76,8 @@ stdenv.mkDerivation rec {
   qtWrapperArgs = lib.optionals stdenv.isLinux [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
   ] ++ lib.optional withWayland "--set RMG_WAYLAND 1";
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     homepage = "https://github.com/Rosalie241/RMG";

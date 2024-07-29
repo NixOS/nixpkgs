@@ -1,7 +1,6 @@
 { git
 , lib
 , libgit2
-, makeWrapper
 , rustPlatform
 , stdenv
 , fetchFromGitHub
@@ -36,7 +35,7 @@ rustPlatform.buildRustPackage {
     mainProgram = "git-instafix";
     homepage = "https://github.com/quodlibetor/git-instafix";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ mightyiam ];
+    maintainers = with maintainers; [ mightyiam quodlibetor ];
     changelog = "https://github.com/quodlibetor/git-instafix/releases/tag/v${version}";
     broken = stdenv.isDarwin;
   };

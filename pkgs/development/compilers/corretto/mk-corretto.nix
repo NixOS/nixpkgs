@@ -31,7 +31,9 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
 
   dontConfigure = true;
 
-  postPatch = ''
+  postPatch = let
+    extra_config = builtins.concatStringsSep " " extraConfig;
+  in ''
     # The rpm/deb task definitions require a Gradle plugin which we don't
     # have and so the build fails. We'll simply remove them here because
     # they are not needed anyways.
@@ -41,35 +43,29 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
     for file in $(find installers -name "build.gradle"); do
       substituteInPlace $file --replace-warn "workingDir '/usr/bin'" "workingDir '.'"
     done
+
+    gradleFlagsArray+=(-Pcorretto.extra_config="${extra_config}")
   '';
 
+  # since we dontConfigure, we must run this manually
+  preBuild = "gradleConfigureHook";
 
-  buildPhase =
-    let
-      # The Linux installer is placed at linux/universal/tar whereas the MacOS
-      # one is at mac/tar.
-      task =
-        if stdenv.isDarwin then
-          ":installers:mac:tar:packageBuildResults"
-        else ":installers:linux:universal:tar:packageBuildResults";
-      extra_config = builtins.concatStringsSep " " extraConfig;
-    in
-    ''
-      runHook preBuild
+  # The Linux installer is placed at linux/universal/tar whereas the MacOS
+  # one is at mac/tar.
+  gradleBuildTask =
+    if stdenv.isDarwin then
+      ":installers:mac:tar:build"
+    else ":installers:linux:universal:tar:packageBuildResults";
 
-      # Corretto's actual built is triggered via `gradle`.
-      gradle -Pcorretto.extra_config="${extra_config}" --console=plain --no-daemon ${task}
-
-      # Prepare for the installPhase so that it looks like if a normal
-      # OpenJDK had been built.
-      dir=build/jdkImageName/images
-      mkdir -p $dir
-      file=$(find ./installers -name 'amazon-corretto-${version}*.tar.gz')
-      tar -xzf $file -C $dir
-      mv $dir/amazon-corretto-* $dir/jdk
-
-      runHook postBuild
-    '';
+  postBuild = ''
+    # Prepare for the installPhase so that it looks like if a normal
+    # OpenJDK had been built.
+    dir=build/jdkImageName/images
+    mkdir -p $dir
+    file=$(find ./installers -name 'amazon-corretto-${version}*.tar.gz')
+    tar -xzf $file -C $dir
+    mv $dir/amazon-corretto-* $dir/jdk
+  '' + oldAttrs.postBuild or "";
 
   installPhase = oldAttrs.installPhase + ''
     # The installPhase will place everything in $out/lib/openjdk and

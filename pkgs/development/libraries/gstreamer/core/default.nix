@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  separateDebugInfo = true;
+
   src = let
     inherit (finalAttrs) pname version;
   in fetchurl {

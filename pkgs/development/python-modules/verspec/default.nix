@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xFBMppeyBWzbS/pxIUYfWg6BgJJVtBwD3aS6gjY3wB4=";
+    hash = "sha256-xFBMppeyBWzbS/pxIUYfWg6BgJJVtBwD3aS6gjY3wB4=";
   };
 
   nativeCheckInputs = [
@@ -39,6 +39,6 @@ buildPythonPackage rec {
       bsd2 # and
       asl20
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

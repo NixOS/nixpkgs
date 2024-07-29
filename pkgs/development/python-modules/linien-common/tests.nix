@@ -1,5 +1,4 @@
 {
-  lib,
   buildPythonPackage,
   linien-common,
   linien-client,

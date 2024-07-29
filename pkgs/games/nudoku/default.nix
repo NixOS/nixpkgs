@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "http://jubalh.github.io/nudoku/";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }
 

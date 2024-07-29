@@ -21,13 +21,13 @@ let
   # Use the plugin version as in vscode marketplace, updated by update script.
   inherit (vsix) version;
 
-  releaseTag = "2024-02-19";
+  releaseTag = "2024-07-08";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = releaseTag;
-    hash = "sha256-Oj/RPMridKpYt3eRqUIPg9YNrj6npG8THIGuWjsamnE=";
+    hash = "sha256-STmaV9Zu74QtkGGrbr9uMhskwagfCjJqOAYapXabiuk=";
   };
 
   build-deps =
@@ -67,9 +67,7 @@ let
       ' package.json | sponge package.json
 
       mkdir -p $vsix
-      # vsce ask for continue due to missing LICENSE.md
-      # Should be removed after https://github.com/rust-lang/rust-analyzer/commit/acd5c1f19bf7246107aaae7b6fe3f676a516c6d2
-      echo y | npx vsce package -o $vsix/${pname}.zip
+      npx vsce package -o $vsix/${pname}.zip
     '';
   };
 in
@@ -87,7 +85,7 @@ vscode-utils.buildVscodeExtension {
   ];
 
   preInstall = lib.optionalString setDefaultServerPath ''
-    jq '.contributes.configuration.properties."rust-analyzer.server.path".default = $s' \
+    jq '(.contributes.configuration[] | select(.title == "server") | .properties."rust-analyzer.server.path".default) = $s' \
       --arg s "${rust-analyzer}/bin/rust-analyzer" \
       package.json | sponge package.json
   '';

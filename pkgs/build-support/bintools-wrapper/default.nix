@@ -46,19 +46,20 @@
     "stackprotector"
     "strictoverflow"
     "zerocallusedregs"
-  ] ++ lib.optional (with stdenvNoCC;
-    # Musl-based platforms will keep "pie", other platforms will not.
-    # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
-    # in the nixpkgs manual to inform users about the defaults.
-    targetPlatform.libc == "musl"
-    # Except when:
-    #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
-    #    - static armv7l, where compilation fails.
-    && !(targetPlatform.isAarch && targetPlatform.isStatic)
-  ) "pie"
-
-# Darwin code signing support utilities
-, postLinkSignHook ? null, signingUtils ? null
+  ] ++ lib.optional (with stdenvNoCC; lib.any (x: x) [
+    # OpenBSD static linking requires PIE
+    (with targetPlatform; isOpenBSD && isStatic)
+    (lib.all (x: x) [
+      # Musl-based platforms will keep "pie", other platforms will not.
+      # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
+      # in the nixpkgs manual to inform users about the defaults.
+      (targetPlatform.libc == "musl")
+      # Except when:
+      #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
+      #    - static armv7l, where compilation fails.
+      (!(targetPlatform.isAarch && targetPlatform.isStatic))
+    ])
+  ]) "pie"
 }:
 
 assert propagateDoc -> bintools ? man;
@@ -353,7 +354,7 @@ stdenvNoCC.mkDerivation {
     ##
 
     # TODO(@sternenseemann): make a generic strip wrapper?
-    + optionalString (bintools.isGNU or false) ''
+    + optionalString (bintools.isGNU or false || bintools.isCCTools or false) ''
       wrap ${targetPrefix}strip ${./gnu-binutils-strip-wrapper.sh} \
         "${bintools_bin}/bin/${targetPrefix}strip"
     ''
@@ -391,24 +392,6 @@ stdenvNoCC.mkDerivation {
         substituteAll ${./add-darwin-ldflags-before.sh} $out/nix-support/add-local-ldflags-before.sh
       ''
     )
-
-    ##
-    ## Code signing on Apple Silicon
-    ##
-    + optionalString (targetPlatform.isDarwin && targetPlatform.isAarch64) ''
-      echo 'source ${postLinkSignHook}' >> $out/nix-support/post-link-hook
-
-      export signingUtils=${signingUtils}
-
-      wrap \
-        ${targetPrefix}install_name_tool \
-        ${./darwin-install_name_tool-wrapper.sh} \
-        "${bintools_bin}/bin/${targetPrefix}install_name_tool"
-
-      wrap \
-        ${targetPrefix}strip ${./darwin-strip-wrapper.sh} \
-        "${bintools_bin}/bin/${targetPrefix}strip"
-    ''
 
     ##
     ## Extra custom steps

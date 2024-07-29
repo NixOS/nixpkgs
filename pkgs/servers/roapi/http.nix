@@ -22,7 +22,7 @@ in
 #     sha256 = "sha256-qHAO3h+TTCQQ7vdd4CoXVGfKZ1fIxTWKqbUNnRsJaok=";
 #   };
 
-#   cargoSha256 = "sha256-qDJKC6MXeKerPFwJsNND3WkziFtGkTvCgVEsdPbBGAo=";
+#   cargoHash = "sha256-qDJKC6MXeKerPFwJsNND3WkziFtGkTvCgVEsdPbBGAo=";
 
 #   buildAndTestSubdir = "roapi-http";
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Create full-fledged APIs for static datasets without writing a single line of code. ";
+    description = "Create full-fledged APIs for static datasets without writing a single line of code.";
     homepage = "https://roapi.github.io/docs/";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];

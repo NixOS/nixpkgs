@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 
 , SDL2
 , cmake
@@ -30,11 +29,11 @@
 }:
 
 let
-  openrct2-version = "0.4.11";
+  openrct2-version = "0.4.12";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.4.4";
+  objects-version = "1.4.6";
   openmsx-version = "1.5";
   opensfx-version = "1.0.5";
   title-sequences-version = "0.4.6";
@@ -43,14 +42,14 @@ let
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    hash = "sha256-zaaVieU/hulc2G/F19diJug3xuj3ejn5ihnmKfkBDcQ=";
+    hash = "sha256-AZFJt1ZsYO07hHN9Nt+N95wTGfYPob/kZ7EkVVkUezg=";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
     rev = "v${objects-version}";
-    hash = "sha256-wKxWp/DSKkxCEI0lp4X8F9LxQsUKZfLk2CgajQ+y84k=";
+    hash = "sha256-XfVic6b5jB1P2I0w5C+f97vvWvCh2zlcWpaXGLOj3CA=";
   };
 
   openmsx-src = fetchFromGitHub {
@@ -79,19 +78,6 @@ stdenv.mkDerivation {
   version = openrct2-version;
 
   src = openrct2-src;
-
-  patches = [
-    # https://github.com/OpenRCT2/OpenRCT2/pull/21043
-    #
-    # Basically <https://github.com/OpenRCT2/OpenRCT2/pull/19785> has broken
-    # OpenRCT2 - at least with older maps, as were used for testing - as stated
-    # in <https://github.com/NixOS/nixpkgs/issues/263025>.
-    (fetchpatch {
-      name = "remove-openrct2-music.patch";
-      url = "https://github.com/OpenRCT2/OpenRCT2/commit/9ea13848be0b974336c34e6eb119c49ba42a907c.patch";
-      hash = "sha256-2PPRqUZf4+ys89mdzp5nvdtdv00V9Vzj3v/95rmlf1c=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

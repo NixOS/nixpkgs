@@ -8,10 +8,7 @@
 , maven
 }:
 
-let
-  mvn = maven.override { jdk = jdk11; };
-in
-mvn.buildMavenPackage rec {
+maven.buildMavenPackage rec {
   pname = "protege";
   version = "5.6.4";
 
@@ -22,6 +19,7 @@ mvn.buildMavenPackage rec {
     hash = "sha256-Q3MHa7nCeF31n7JPltcemFBc/sJwGA9Ev0ymjQhY/U0=";
   };
 
+  mvnJdk = jdk11;
   mvnHash = "sha256-kemP2gDv1CYuaoK0fwzBxdLTusarPasf2jCDQj/HPYE=";
 
   patches = [

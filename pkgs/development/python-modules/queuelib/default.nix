@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KFUWIJbPAjBRCJCzVDeeocD/GdEF0xR9NJ0kM7siKwg=";
+    hash = "sha256-KFUWIJbPAjBRCJCzVDeeocD/GdEF0xR9NJ0kM7siKwg=";
   };
 
   buildInputs = [ pytest ];
@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Collection of persistent (disk-based) queues for Python";
     homepage = "https://github.com/scrapy/queuelib";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

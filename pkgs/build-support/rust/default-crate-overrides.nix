@@ -62,6 +62,7 @@ in
   cairo-sys-rs = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ cairo ];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   capnp-rpc = attrs: {
@@ -134,6 +135,7 @@ in
   glib-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ glib ];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   gobject-sys = attrs: {
@@ -328,6 +330,7 @@ in
   soup3-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libsoup_3 ];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   thrussh-libsodium = attrs: {
@@ -342,6 +345,7 @@ in
   webkit2gtk-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ webkitgtk_4_1 ];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   xcb = attrs: {

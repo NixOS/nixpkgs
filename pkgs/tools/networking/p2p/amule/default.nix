@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://github.com/amule-project/amule";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     # Undefined symbols for architecture arm64: "_FSFindFolder"
     broken = stdenv.isDarwin;
