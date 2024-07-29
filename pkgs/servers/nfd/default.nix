@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, boost ? ndn-cxx.boost
-, fetchFromGitHub
-, libpcap
-, ndn-cxx
-, openssl
-, pkg-config
-, sphinx
-, systemd
-, wafHook
-, websocketpp
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, withWebSocket ? true
+{
+  lib,
+  stdenv,
+  boost ? ndn-cxx.boost,
+  fetchFromGitHub,
+  libpcap,
+  ndn-cxx,
+  openssl,
+  pkg-config,
+  sphinx,
+  systemd,
+  wafHook,
+  websocketpp,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withWebSocket ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,8 +26,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-HbKPO3gwQWOZf4QZE+N7tAiqsNl1GrcwE4EUGjWmf5s=";
   };
 
-  nativeBuildInputs = [ pkg-config sphinx wafHook ];
-  buildInputs = [ libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
+  nativeBuildInputs = [
+    pkg-config
+    sphinx
+    wafHook
+  ];
+  buildInputs = [
+    libpcap
+    ndn-cxx
+    openssl
+    websocketpp
+  ] ++ lib.optional withSystemd systemd;
 
   wafConfigureFlags = [
     "--boost-includes=${boost.dev}/include"
