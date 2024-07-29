@@ -6,6 +6,8 @@
 
   apexcharts-card = callPackage ./apexcharts-card { };
 
+  atomic-calendar-revive = callPackage ./atomic-calendar-revive { };
+
   button-card = callPackage ./button-card { };
 
   card-mod = callPackage ./card-mod { };
