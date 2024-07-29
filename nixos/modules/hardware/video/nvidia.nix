@@ -472,7 +472,6 @@ in
 
           hardware.graphics = {
             extraPackages = [ pkgs.nvidia-vaapi-driver ];
-            extraPackages32 = [ pkgs.pkgsi686Linux.nvidia-vaapi-driver ];
           };
 
           environment.systemPackages =
