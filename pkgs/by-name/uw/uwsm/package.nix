@@ -14,9 +14,13 @@
   newt,
   python3Packages,
   util-linux,
+  hyprland,
+  sway,
   fumonSupport ? true,
   uuctlSupport ? true,
   uwsmAppSupport ? true,
+  hyprlandSupport ? false,
+  swaySupport ? false,
 }:
 let
   python = python3Packages.python.withPackages (ps: [
@@ -66,14 +70,31 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  postInstall = ''
-    wrapProgram $out/bin/uwsm \
-      --prefix PATH : ${lib.makeBinPath finalAttrs.propagatedBuildInputs}
-    ${lib.optionalString uuctlSupport ''
-      wrapProgram $out/bin/uuctl \
-        --prefix PATH : ${lib.makeBinPath finalAttrs.propagatedBuildInputs}
-    ''}
-  '';
+  postInstall =
+    let
+      wrapperArgs = ''
+        --prefix PATH : "${lib.makeBinPath finalAttrs.propagatedBuildInputs}" \
+        --suffix PATH : "${
+          lib.makeBinPath (
+            # uwsm as of 0.17.2 can load WMs like sway and hyprland by path
+            # but this is still needed as a fallback
+            lib.optionals hyprlandSupport [ hyprland ] ++ lib.optionals swaySupport [ sway ]
+          )
+        }"
+      '';
+    in
+    ''
+      wrapProgram $out/bin/uwsm ${wrapperArgs}
+      ${lib.optionalString uuctlSupport ''
+        wrapProgram $out/bin/uuctl ${wrapperArgs}
+      ''}
+      ${lib.optionalString uwsmAppSupport ''
+        wrapProgram $out/bin/uwsm-app ${wrapperArgs}
+      ''}
+      ${lib.optionalString fumonSupport ''
+        wrapProgram $out/bin/fumon ${wrapperArgs}
+      ''}
+    '';
 
   meta = {
     description = "Universal wayland session manager";
