@@ -23,12 +23,14 @@ buildPythonPackage rec {
     hash = "sha256-91NG6tLncHp+kapvgwln2aqmLDHFqdzdhWl1QqjAfIk=";
   };
 
-  patches = [(fetchpatch2 {
-    name = "fix-python-collections.patch";
-    url = "https://github.com/AndreaCensi/contracts/commit/d23ee2902e9e9aeffec86cbdb7a392d71be70861.patch";
-    hash = "sha256-7fPkO5sm439ZgW1yTMML+pQOlC2zyfBU67H0XHI6QKI=";
-    excludes = [ "src/contracts/__init__.py"];
-  })];
+  patches = [
+    (fetchpatch2 {
+      name = "fix-python-collections.patch";
+      url = "https://github.com/AndreaCensi/contracts/commit/d23ee2902e9e9aeffec86cbdb7a392d71be70861.patch";
+      hash = "sha256-7fPkO5sm439ZgW1yTMML+pQOlC2zyfBU67H0XHI6QKI=";
+      excludes = [ "src/contracts/__init__.py" ];
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/contracts/backported.py \
@@ -53,11 +55,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "src/contracts/testing/*.py"];
+  pytestFlagsArray = [ "src/contracts/testing/*.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows to declare constraints on function parameters and return values";
     homepage = "https://pypi.python.org/pypi/PyContracts";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
+    maintainers = [ ];
   };
 }
