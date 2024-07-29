@@ -6,31 +6,29 @@
 }:
 
 let
-  cfg = config.services.mailpit;
+  inherit (config.services.mailpit) instances;
   inherit (lib)
     cli
     concatStringsSep
     const
     filterAttrs
     getExe
-    mkEnableOption
+    mapAttrs'
     mkIf
     mkOption
+    nameValuePair
     types
     ;
 
   isNonNull = v: v != null;
-  cliFlags = concatStringsSep " " (
-    cli.toGNUCommandLine { } (filterAttrs (const isNonNull) cfg.settings)
-  );
+  genCliFlags =
+    settings: concatStringsSep " " (cli.toGNUCommandLine { } (filterAttrs (const isNonNull) settings));
 in
 {
-  options.services.mailpit = {
-    enable = mkEnableOption "mailpit";
-
-    settings = mkOption {
-      default = { };
-      type = types.submodule {
+  options.services.mailpit.instances = mkOption {
+    default = { };
+    type = types.attrsOf (
+      types.submodule {
         freeformType = types.attrsOf (
           types.oneOf [
             types.str
@@ -75,28 +73,33 @@ in
             '';
           };
         };
-      };
-      description = ''
-        Attribute-set of all flags passed to mailpit. See
-        [upstream docs](https://mailpit.axllent.org/docs/configuration/runtime-options/)
-        for all available options.
-      '';
-    };
+      }
+    );
+    description = ''
+      Configure mailpit instances. The attribute-set values are
+      CLI flags passed to the `mailpit` CLI.
+
+      See [upstream docs](https://mailpit.axllent.org/docs/configuration/runtime-options/)
+      for all available options.
+    '';
   };
 
-  config = mkIf cfg.enable {
-    systemd.services.mailpit = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
-      serviceConfig = {
-        DynamicUser = true;
-        StateDirectory = "mailpit";
-        WorkingDirectory = "%S/mailpit";
-        ExecStart = "${getExe pkgs.mailpit} ${cliFlags}";
-        Restart = "on-failure";
-      };
-    };
+  config = mkIf (instances != { }) {
+    systemd.services = mapAttrs' (
+      name: cfg:
+      nameValuePair "mailpit-${name}" {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        serviceConfig = {
+          DynamicUser = true;
+          StateDirectory = "mailpit";
+          WorkingDirectory = "%S/mailpit";
+          ExecStart = "${getExe pkgs.mailpit} ${genCliFlags cfg}";
+          Restart = "on-failure";
+        };
+      }
+    ) instances;
   };
 
   meta.maintainers = lib.teams.flyingcircus.members;
