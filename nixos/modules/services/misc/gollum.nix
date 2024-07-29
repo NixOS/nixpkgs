@@ -7,6 +7,13 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule
+      [ "services" "gollum" "mathjax" ]
+      "MathJax rendering might be discontinued in the future, use services.gollum.math instead to enable KaTeX rendering or file a PR if you really need Mathjax"
+    )
+  ];
+
   options.services.gollum = {
     enable = mkEnableOption "Gollum, a git-powered wiki service";
 
@@ -28,10 +35,10 @@ in
       description = "Content of the configuration file";
     };
 
-    mathjax = mkOption {
+    math = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable support for math rendering using MathJax";
+      description = "Enable support for math rendering using KaTeX";
     };
 
     allowUploads = mkOption {
@@ -134,7 +141,7 @@ in
             --host ${cfg.address} \
             --config ${pkgs.writeText "gollum-config.rb" cfg.extraConfig} \
             --ref ${cfg.branch} \
-            ${optionalString cfg.mathjax "--mathjax"} \
+            ${optionalString cfg.math "--math"} \
             ${optionalString cfg.emoji "--emoji"} \
             ${optionalString cfg.h1-title "--h1-title"} \
             ${optionalString cfg.no-edit "--no-edit"} \
