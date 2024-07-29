@@ -35603,8 +35603,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  fava = callPackage ../applications/office/fava { };
-
   nux = callPackage ../tools/misc/nux { };
 
   phonemizer = with python3Packages; toPythonApplication phonemizer;
