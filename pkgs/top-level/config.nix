@@ -182,6 +182,23 @@ let
       feature = "build packages with ROCm support by default";
     };
 
+    packageOverrides = mkOption {
+      type = types.functionTo types.raw;
+      default = lib.id;
+      defaultText = literalExpression ''lib.id'';
+      example = literalExpression ''
+        pkgs: rec {
+          foo = pkgs.foo.override { /* ... */ };
+        };
+      '';
+      description = ''
+        A function that takes the current nixpkgs instance (`pkgs`) as an argument
+        and returns a modified set of packages.
+
+        See [Modify packages via `packageOverrides`](#sec-modify-via-packageOverrides).
+      '';
+    };
+
     showDerivationWarnings = mkOption {
       type = types.listOf (types.enum [ "maintainerless" ]);
       default = [ ];
