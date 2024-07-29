@@ -13066,6 +13066,11 @@ with pkgs;
     trilium-server
     ;
 
+  inherit (callPackage ../applications/office/trilium-next {})
+    trilium-next-desktop
+    trilium-next-server
+    ;
+
   trippy = callPackage ../tools/networking/trippy { };
 
   trousers = callPackage ../tools/security/trousers { };
