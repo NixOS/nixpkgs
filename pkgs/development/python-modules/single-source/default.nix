@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "single_source" ];
 
-  meta = with lib; {
+  meta = {
     description = "Access to the project version in Python code for PEP 621-style projects";
     homepage = "https://github.com/rabbit72/single-source";
     changelog = "https://github.com/rabbit72/single-source/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }
