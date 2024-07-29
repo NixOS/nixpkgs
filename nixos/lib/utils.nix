@@ -438,7 +438,7 @@ utils = rec {
       replaceSecret = pattern: args:
         ''
           ${getExe pkgs.replace-secret} \
-            ${pattern} ${args.${sourceField}} ${configLocation} \
+            ${pattern} "${args.${sourceField}}" "${configLocation}" \
             --prefix="${args.prefix}" \
             --suffix="${args.suffix}" \
             --prefix-if-not-present="${args.prefixIfNotPresent}" \
@@ -448,9 +448,9 @@ utils = rec {
       ''
       set -euo pipefail
 
-      mkdir -p $(dirname ${configLocation})
-      rm -f ${configLocation}
-      install -Dm600 ${fileWithPlaceholders} ${configLocation}
+      test -d "$(dirname "${configLocation}")" || mkdir -p "$(dirname "${configLocation}")"
+      rm -f "${configLocation}"
+      install -Dm600 "${fileWithPlaceholders}" "${configLocation}"
       ''
       + concatStringsSep "\n" (mapAttrsToList replaceSecret replacements);
 };

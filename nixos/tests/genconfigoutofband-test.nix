@@ -2,25 +2,30 @@
 , config ? {}
 , pkgs ? import ../.. { inherit system config; }
 , lib ? pkgs.lib
-, testing ? import ../lib/testing-python.nix { inherit system pkgs; }
 }:
 
 let
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   utils = import ../lib/utils.nix { inherit lib config pkgs; };
 
-  aSecret = pkgs.writeText "a-secret.txt" "Secret of A";
-  bSecret = pkgs.writeText "b-secret.txt" "Secret of B";
-  eSecret = pkgs.writeText "e-secret.txt" "prefix-abc";
+  writeSecretScript = name: value: ''
+    mkdir -p /run/secrets
+    touch /run/secrets/${name}
+    chmod 700 /run/secrets/${name}
+    echo "${value}" > /run/secrets/${name}
+  '';
+
+  aSecret = writeSecretScript "a-secret.txt" "Secret of A";
+  bSecret = writeSecretScript "b-secret.txt" "Secret of B";
+  eSecret = writeSecretScript "e-secret.txt" "prefix-abc";
 
   userConfig = {
-    a.a._secret = aSecret;
-    b._secret = bSecret;
+    a.a._secret = "/run/secrets/a-secret.txt";
+    b._secret = "/run/secrets/b-secret.txt";
     b.prefix = "prefix-";
     b.suffix = "-suffix";
     c = "not secret C";
     d.d = "not secret D";
-    e._secret = eSecret;
+    e._secret = "/run/secrets/e-secret.txt";
     e.prefixIfNotPresent = "prefix-";
     e.suffixIfNotPresent = "-suffix";
   };
@@ -34,17 +39,20 @@ let
   };
 
   tests = {
-    replacePlaceholdersScriptJSONTest = rec {
-      configLocation = "/var/lib/config.json";
+    replacePlaceholdersScriptJSON = rec {
+      # Path with space on purpose!
+      configLocation = "/var/lib/my config.json";
 
       inherit wantedConfig;
 
-      script = utils.replacePlaceholdersScript {
-        sourceField = "_secret";
-        fileWithPlaceholders = pkgs.writeText "config.yaml.template"
-          (lib.generators.toJSON {} (lib.replaceWithPlaceholder "_secret" userConfig));
-        inherit configLocation;
-        replacements = lib.getPlaceholderReplacements "_secret" userConfig;
+      nodeConfig = {
+        system.activationScripts.genOutOfBand = pkgs.stringsWithDeps.stringAfter [ "aSecret" "bSecret" "eSecret" ] (utils.replacePlaceholdersScript {
+          sourceField = "_secret";
+          fileWithPlaceholders = pkgs.writeText "config.yaml.template"
+            (lib.generators.toJSON {} (lib.replaceWithPlaceholder "_secret" userConfig));
+          inherit configLocation;
+          replacements = lib.getPlaceholderReplacements "_secret" userConfig;
+        });
       };
 
       pythonParseFile = ''
@@ -52,15 +60,17 @@ let
       '';
     };
 
-    genConfigOutOfBandJSONFormat = rec {
+    jsonFormat = rec {
       configLocation = "/var/lib/config.json";
 
       inherit wantedConfig;
 
-      script = utils.genConfigOutOfBand {
-        config = userConfig;
-        inherit configLocation;
-        generator = utils.genConfigOutOfBandFormatAdapter (pkgs.formats.json {});
+      nodeConfig = {
+        system.activationScripts.genOutOfBand = pkgs.stringsWithDeps.stringAfter [ "aSecret" "bSecret" "eSecret" ] (utils.genConfigOutOfBand {
+          config = userConfig;
+          inherit configLocation;
+          generator = utils.genConfigOutOfBandFormatAdapter (pkgs.formats.json {});
+        });
       };
 
       pythonParseFile = ''
@@ -68,30 +78,191 @@ let
       '';
     };
 
-    genConfigOutOfBandJSONGen = rec {
+    jsonGen = rec {
       configLocation = "/var/lib/config.json";
 
       inherit wantedConfig;
 
-      script = utils.genConfigOutOfBand {
-        config = userConfig;
-        inherit configLocation;
-        generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON {});
+      nodeConfig = {
+        system.activationScripts.genOutOfBand = pkgs.stringsWithDeps.stringAfter [ "aSecret" "bSecret" "eSecret" ] (utils.genConfigOutOfBand {
+          config = userConfig;
+          inherit configLocation;
+          generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON {});
+        });
       };
 
       pythonParseFile = ''
         gotConfig = json.loads(gotConfig)
       '';
     };
+
+    otherUserGroupTmpFiles = rec {
+      configLocation = "/var/lib/outOfBandConfig/config.json";
+
+      inherit wantedConfig;
+
+      waitForUnit = "outOfBand.service";
+
+      nodeConfig = {
+        systemd.tmpfiles.rules = [ "d /var/lib/outOfBandConfig 0770 nobody nobody" ];
+        systemd.services.outOfBand = {
+          wantedBy = [ "sysinit.target" ];
+          after = [ "sysinit.target" ];
+          unitConfig.DefaultDependencies = false;
+          serviceConfig.Type = "oneshot";
+          serviceConfig.RemainAfterExit = true;
+
+          serviceConfig.User = "nobody";
+          serviceConfig.Group = "nobody";
+          serviceConfig.LoadCredential = [
+            "a-secret.txt:/run/secrets/a-secret.txt"
+            "b-secret.txt:/run/secrets/b-secret.txt"
+            "e-secret.txt:/run/secrets/e-secret.txt"
+          ];
+          preStart = utils.genConfigOutOfBand {
+            config = lib.attrsets.updateManyAttrsByPath [
+              {
+                path = [ "a" "a" "_secret" ];
+                update = old: "$CREDENTIALS_DIRECTORY/a-secret.txt"; 
+              }
+              {
+                path = [ "b" "_secret" ];
+                update = old: "$CREDENTIALS_DIRECTORY/b-secret.txt"; 
+              }
+              {
+                path = [ "e" "_secret" ];
+                update = old: "$CREDENTIALS_DIRECTORY/e-secret.txt"; 
+              }
+            ] userConfig;
+            inherit configLocation;
+            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON {});
+          };
+          script = "cat ${configLocation}";
+        };
+      };
+
+      pythonParseFile = ''
+        gotConfig = json.loads(gotConfig)
+      '';
+    };
+
+    otherUserGroupStateDirectory = {
+      # Path with space on purpose!.
+      # StateDirectory can't contain spaces.
+      configLocation = "/var/lib/outOfBandConfig/my config.json";
+
+      inherit wantedConfig;
+
+      waitForUnit = "outOfBand.service";
+
+      nodeConfig = {
+        systemd.services.outOfBand = {
+          wantedBy = [ "sysinit.target" ];
+          after = [ "sysinit.target" ];
+          unitConfig.DefaultDependencies = false;
+          serviceConfig.Type = "oneshot";
+          serviceConfig.RemainAfterExit = true;
+
+          serviceConfig.User = "nobody";
+          serviceConfig.Group = "nobody";
+          serviceConfig.StateDirectory = "outOfBandConfig";
+          serviceConfig.LoadCredential = [
+            "a-secret.txt:/run/secrets/a-secret.txt"
+            "b-secret.txt:/run/secrets/b-secret.txt"
+            "e-secret.txt:/run/secrets/e-secret.txt"
+          ];
+          preStart = utils.genConfigOutOfBand {
+            config = lib.attrsets.updateManyAttrsByPath [
+              {
+                path = [ "a" "a" "_secret" ];
+                update = old: "$CREDENTIALS_DIRECTORY/a-secret.txt"; 
+              }
+              {
+                path = [ "b" "_secret" ];
+                update = old: "$CREDENTIALS_DIRECTORY/b-secret.txt"; 
+              }
+              {
+                path = [ "e" "_secret" ];
+                update = old: "$CREDENTIALS_DIRECTORY/e-secret.txt"; 
+              }
+            ] userConfig;
+            configLocation = "$STATE_DIRECTORY/my config.json";
+            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON {});
+          };
+          script = "cat \"$STATE_DIRECTORY/my config.json\"";
+        };
+      };
+
+      pythonParseFile = ''
+        gotConfig = json.loads(gotConfig)
+      '';
+    };
+
+
+    dynamicUser = {
+      configLocation = "/var/lib/private/outOfBandConfig/config.json";
+
+      inherit wantedConfig;
+
+      waitForUnit = "outOfBand.service";
+
+      nodeConfig = {
+        # # Needed so that the testScript can fine the config file.
+        # systemd.tmpfiles.rules = [ "d /var/lib/outOfBandConfig 0770 nobody nobody" ];
+
+        systemd.services.outOfBand = {
+          wantedBy = [ "sysinit.target" ];
+          after = [ "sysinit.target" ];
+          unitConfig.DefaultDependencies = false;
+          serviceConfig.Type = "oneshot";
+          serviceConfig.RemainAfterExit = true; # Allows wait_for_unit to work.
+
+          serviceConfig.DynamicUser = true;
+          serviceConfig.StateDirectory = "outOfBandConfig";
+          serviceConfig.LoadCredential = [
+            "a-secret.txt:/run/secrets/a-secret.txt"
+            "b-secret.txt:/run/secrets/b-secret.txt"
+            "e-secret.txt:/run/secrets/e-secret.txt"
+          ];
+          preStart = utils.genConfigOutOfBand {
+            config = lib.attrsets.updateManyAttrsByPath [
+              {
+                path = [ "a" "a" "_secret" ];
+                update = old: "$CREDENTIALS_DIRECTORY/a-secret.txt"; 
+              }
+              {
+                path = [ "b" "_secret" ];
+                update = old: "$CREDENTIALS_DIRECTORY/b-secret.txt"; 
+              }
+              {
+                path = [ "e" "_secret" ];
+                update = old: "$CREDENTIALS_DIRECTORY/e-secret.txt"; 
+              }
+            ] userConfig;
+            configLocation = "$STATE_DIRECTORY/config.json";
+            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON {});
+          };
+          script = "cat $STATE_DIRECTORY/config.json";
+        };
+      };
+
+      pythonParseFile = ''
+        gotConfig = json.loads(gotConfig)
+      '';
+    };
+
+
   };
 
-  mkTest = name: { configLocation, wantedConfig, script, pythonParseFile }:
+  mkTest = name: { configLocation, wantedConfig, nodeConfig, pythonParseFile, waitForUnit ? null }:
     import ./make-test-python.nix ({ pkgs, ... }: {
       inherit name;
       meta.maintainers = with pkgs.lib.maintainers; [ ibizaman ];
-      nodes.machine = {
-        system.activationScripts.genOutOfBand = script;
-      };
+      nodes.machine = lib.mkMerge [{
+        system.activationScripts.aSecret = aSecret;
+        system.activationScripts.bSecret = bSecret;
+        system.activationScripts.eSecret = eSecret;
+      } nodeConfig];
 
       testScript = ''
         import json
@@ -101,9 +272,10 @@ let
         wantedConfig = json.loads('${lib.generators.toJSON {} wantedConfig}')
 
         machine.wait_for_file("${configLocation}")
-        print(machine.succeed("cat ${pkgs.writeText "replaceInTemplate" script}"))
-
-        gotConfig = machine.succeed("cat ${configLocation}")
+      '' + (if waitForUnit == null then "" else ''
+        machine.wait_for_unit("${waitForUnit}")
+      '') + ''
+        gotConfig = machine.succeed("cat '${configLocation}'")
         print(gotConfig)
         ${pythonParseFile}
 
@@ -114,4 +286,4 @@ let
     });
 in
 
-builtins.mapAttrs (k: v: mkTest k v) tests
+builtins.mapAttrs mkTest tests
