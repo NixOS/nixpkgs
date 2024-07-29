@@ -13,9 +13,7 @@
   libev,
   libredirect,
   mock,
-  nose,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   pyyaml,
   scales,
@@ -29,8 +27,6 @@ buildPythonPackage rec {
   version = "3.29.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "datastax";
     repo = "python-driver";
@@ -41,9 +37,13 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'geomet>=0.1,<0.3' 'geomet'
+    substituteInPlace tests/unit/test_response_future.py \
+      --replace-fail "assertRaisesRegexp" "assertRaisesRegex"
   '';
 
-  nativeBuildInputs = [ cython_0 ];
+  build-system = [
+    cython
+  ];
 
   buildInputs = [ libev ];
 
@@ -55,12 +55,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     mock
-    nose
     pytz
     pyyaml
     sure
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
+  # This is used to determine the version of cython that can be used
+  CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
   # Make /etc/protocols accessible to allow socket.getprotobyname('tcp') in sandbox,
   # also /etc/resolv.conf is referenced by some tests
   preCheck =
@@ -92,6 +93,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # requires puresasl
     "tests/unit/advanced/test_auth.py"
+    # Uses asyncore, which is deprecated in python 3.12+
+    "tests/unit/io/test_asyncorereactor.py"
   ];
 
   disabledTests = [
