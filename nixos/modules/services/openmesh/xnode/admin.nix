@@ -40,15 +40,15 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    environment.variables = {
-      PYTHONUNBUFFERED = "1";
-    };
-
     systemd.services.openmesh-xnode-admin = {
       description = "Openmesh Xnode Administration and Configuration Subsystem Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
+
+      environment = {
+        PYTHONUNBUFFERED = "1";
+      };
 
       serviceConfig = {
         ExecStart = ''${lib.getExe cfg.package} --remote ${cfg.remoteDir} ${cfg.stateDir}'';
