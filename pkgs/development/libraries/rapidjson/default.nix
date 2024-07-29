@@ -6,7 +6,6 @@
 , graphviz
 , gtest
 , valgrind
-, buildTests ? !stdenv.hostPlatform.isStatic && !stdenv.isDarwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,11 +24,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kAGVJfDHEUV2qNR1LpnWq3XKBJy4hD3Swh6LX5shJpM=";
   };
 
-  patches = lib.optionals buildTests [
-    ./0000-unstable-use-nixpkgs-gtest.patch
+  patches = [
+    ./use-nixpkgs-gtest.patch
     # https://github.com/Tencent/rapidjson/issues/2214
-    ./0001-unstable-valgrind-suppress-failures.patch
+    ./suppress-valgrind-failures.patch
   ];
+
+  postPatch = ''
+    for f in doc/Doxyfile.*; do
+      substituteInPlace $f \
+        --replace-fail "WARN_IF_UNDOCUMENTED   = YES" "WARN_IF_UNDOCUMENTED   = NO"
+    done
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -37,21 +43,29 @@ stdenv.mkDerivation (finalAttrs: {
     graphviz
   ];
 
+  buildInputs = [
+    gtest
+  ];
+
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "RAPIDJSON_BUILD_DOC" true)
-    (lib.cmakeBool "RAPIDJSON_BUILD_TESTS" buildTests)
+    (lib.cmakeBool "RAPIDJSON_BUILD_TESTS" true)
     (lib.cmakeBool "RAPIDJSON_BUILD_EXAMPLES" true)
     # gtest 1.13+ requires C++14 or later.
     (lib.cmakeBool "RAPIDJSON_BUILD_CXX11" false)
     (lib.cmakeBool "RAPIDJSON_BUILD_CXX17" true)
-  ] ++ lib.optionals buildTests [
-    (lib.cmakeFeature "GTEST_INCLUDE_DIR" "${lib.getDev gtest}")
+    # Prevent -march=native
+    (lib.cmakeBool "RAPIDJSON_ENABLE_INSTRUMENTATION_OPT" false)
+    # Disable -Werror by using build type specific flags, which are
+    # added after general CMAKE_CXX_FLAGS.
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS_RELEASE" "-Wno-error")
   ];
 
-  doCheck = buildTests;
+  doCheck = !(stdenv.hostPlatform.isStatic || stdenv.isDarwin);
 
   nativeCheckInputs = [
-    gtest
     valgrind
   ];
 
