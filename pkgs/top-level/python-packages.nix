@@ -14792,8 +14792,6 @@ self: super: with self; {
 
   sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
 
-  sqlalchemy-migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
-
   sqlalchemy-mixins = callPackage ../development/python-modules/sqlalchemy-mixins { };
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
