@@ -235,6 +235,7 @@ in {
   couchdb = handleTest ./couchdb.nix {};
   crabfit = handleTest ./crabfit.nix {};
   cri-o = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cri-o.nix {};
+  cryptpad = runTest ./cryptpad.nix;
   cups-pdf = handleTest ./cups-pdf.nix {};
   curl-impersonate = handleTest ./curl-impersonate.nix {};
   custom-ca = handleTest ./custom-ca.nix {};
@@ -263,6 +264,7 @@ in {
   docker-rootless = handleTestOn ["aarch64-linux" "x86_64-linux"] ./docker-rootless.nix {};
   docker-registry = handleTest ./docker-registry.nix {};
   docker-tools = handleTestOn ["x86_64-linux"] ./docker-tools.nix {};
+  docker-tools-nix-shell = runTest ./docker-tools-nix-shell.nix;
   docker-tools-cross = handleTestOn ["x86_64-linux" "aarch64-linux"] ./docker-tools-cross.nix {};
   docker-tools-overlay = handleTestOn ["x86_64-linux"] ./docker-tools-overlay.nix {};
   documize = handleTest ./documize.nix {};
@@ -274,6 +276,7 @@ in {
   dovecot = handleTest ./dovecot.nix {};
   drawterm = discoverTests (import ./drawterm.nix);
   drbd = handleTest ./drbd.nix {};
+  druid = handleTestOn [ "x86_64-linux" ] ./druid {};
   dublin-traceroute = handleTest ./dublin-traceroute.nix {};
   earlyoom = handleTestOn ["x86_64-linux"] ./earlyoom.nix {};
   early-mount-options = handleTest ./early-mount-options.nix {};
@@ -299,6 +302,7 @@ in {
   esphome = handleTest ./esphome.nix {};
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
+  activation-lib = pkgs.callPackage ../modules/system/activation/lib/test.nix { };
   activation-var = runTest ./activation/var.nix;
   activation-nix-channel = runTest ./activation/nix-channel.nix;
   activation-etc-overlay-mutable = runTest ./activation/etc-overlay-mutable.nix;
@@ -375,6 +379,7 @@ in {
   gnome-xorg = handleTest ./gnome-xorg.nix {};
   gns3-server = handleTest ./gns3-server.nix {};
   gnupg = handleTest ./gnupg.nix {};
+  goatcounter = handleTest ./goatcounter.nix {};
   go-neb = handleTest ./go-neb.nix {};
   gobgpd = handleTest ./gobgpd.nix {};
   gocd-agent = handleTest ./gocd-agent.nix {};
@@ -621,6 +626,7 @@ in {
   nbd = handleTest ./nbd.nix {};
   ncdns = handleTest ./ncdns.nix {};
   ndppd = handleTest ./ndppd.nix {};
+  nix-channel = pkgs.callPackage ../modules/config/nix-channel/test.nix { };
   nebula = handleTest ./nebula.nix {};
   netbird = handleTest ./netbird.nix {};
   nimdow = handleTest ./nimdow.nix {};

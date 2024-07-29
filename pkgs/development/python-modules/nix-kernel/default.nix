@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Simple jupyter kernel for nix-repl";
     homepage = "https://github.com/GTrunSec/nix-kernel";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nix-update-script
 }:
 
 buildGoModule rec {
@@ -21,6 +22,8 @@ buildGoModule rec {
   checkFlags = [
     "-short"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Utility for ensuring secure connections to Google Cloud SQL instances";

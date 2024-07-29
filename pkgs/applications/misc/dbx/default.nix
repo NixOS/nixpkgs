@@ -50,8 +50,7 @@ python.pkgs.buildPythonApplication rec {
       tenacity
       typer
       watchdog
-    ]
-    ++ typer.optional-dependencies.all;
+    ];
 
   passthru.optional-dependencies = with python3.pkgs; {
     aws = [ boto3 ];

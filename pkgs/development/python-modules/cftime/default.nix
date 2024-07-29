@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Time-handling functionality from netcdf4-python";
     homepage = "https://github.com/Unidata/cftime";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

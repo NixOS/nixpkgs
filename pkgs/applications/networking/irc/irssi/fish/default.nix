@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/falsovsky/FiSH-irssi";
     license = licenses.mit;
-    maintainers = with maintainers; [ viric ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

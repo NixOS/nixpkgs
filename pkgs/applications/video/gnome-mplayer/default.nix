@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     mainProgram = "gnome-mplayer";
     homepage = "https://sites.google.com/site/kdekorte2/gnomemplayer";
     license = licenses.gpl2;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

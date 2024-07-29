@@ -2,7 +2,7 @@
 , libGL, libXrandr, libXinerama, libXcursor, libX11, libXi, libXext
 , Carbon, Cocoa, Kernel, fixDarwinDylibNames
 , extra-cmake-modules, wayland
-, wayland-scanner, wayland-protocols, libxkbcommon
+, wayland-scanner, wayland-protocols, libxkbcommon, libdecor
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,11 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace src/wl_init.c \
-      --replace "libxkbcommon.so.0" "${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0"
+      --replace-fail "libxkbcommon.so.0" "${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0" \
+      --replace-fail "libdecor-0.so.0" "${lib.getLib libdecor}/lib/libdecor-0.so.0" \
+      --replace-fail "libwayland-client.so.0" "${lib.getLib wayland}/lib/libwayland-client.so.0" \
+      --replace-fail "libwayland-cursor.so.0" "${lib.getLib wayland}/lib/libwayland-cursor.so.0" \
+      --replace-fail "libwayland-egl.so.1" "${lib.getLib wayland}/lib/libwayland-egl.so.1"
   '';
 
   # glfw may dlopen libwayland-client.so:

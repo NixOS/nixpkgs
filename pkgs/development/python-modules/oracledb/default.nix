@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "oracledb";
-  version = "2.2.1";
+  version = "2.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hGTG8ClfMxja9sLHLIPC3Lw34T+P1E4+Of+GZfRC1rY=";
+    hash = "sha256-ubDE7CgLEAY+Z4m+0j3cJDWumFaevmTguaJweAuRA9U=";
   };
 
   build-system = [

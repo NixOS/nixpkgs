@@ -19,7 +19,6 @@
 # Develompent support
 /.editorconfig @Mic92 @zowoq
 /shell.nix @infinisil @NixOS/Security
-/.envrc @infinisil @NixOS/Security
 
 # Libraries
 /lib                        @infinisil
@@ -305,7 +304,11 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/build-support/make-hardcode-gsettings-patch @jtojnar
 
 # Cinnamon
-/pkgs/desktops/cinnamon @mkg20001
+/pkgs/by-name/ci/cinnamon-*    @mkg20001
+/pkgs/by-name/cj/cjs           @mkg20001
+/pkgs/by-name/mu/muffin        @mkg20001
+/pkgs/by-name/ne/nemo          @mkg20001
+/pkgs/by-name/ne/nemo-*        @mkg20001
 
 # nim
 /pkgs/development/compilers/nim   @ehmry

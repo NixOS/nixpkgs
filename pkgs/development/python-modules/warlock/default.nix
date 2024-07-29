@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Python object model built on JSON schema and JSON patch";
     homepage = "https://github.com/bcwaldon/warlock";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

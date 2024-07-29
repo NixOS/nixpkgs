@@ -23,6 +23,6 @@ buildGoModule rec {
     mainProgram = "neosay";
     homepage = "https://github.com/donuts-are-good/neosay";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

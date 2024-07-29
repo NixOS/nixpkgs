@@ -1,38 +1,50 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, boost
 , cmake
-, pkg-config
-, openssl
+, git
 , hyperscan
+, openssl
+, pkg-config
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "noseyparker";
-  version = "0.12.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "noseyparker";
     rev = "v${version}";
-    hash = "sha256-qop6KjTFPQ5o1kPEVPP0AfDfr8w/JP3YmC+sb5OUbDY=";
+    hash = "sha256-IorJWXhS1ZUye1wKPnGb+zx/YgfXhwi3cb/V3zpYaKY=";
   };
 
-  cargoHash = "sha256-ZtoJO/R11qTFYAE6G7AVCpnYZ3JGrxtVSXvCm0W8DAA=";
+  cargoHash = "sha256-xf70RKPZY96oUuifBC0mg5lV0MjGpzR2qDQbNJMSYtM=";
 
-  postPatch = ''
-    # disabledTests (network, failing)
-    rm tests/test_noseyparker_github.rs
-    rm tests/test_noseyparker_scan.rs
-  '';
+  nativeCheckInputs = [
+    git
+  ];
+
+  checkFlags = [
+    # These tests expect access to network to clone and use GitHub API
+    "--skip=github::github_repos_list_multiple_user_dedupe_jsonl_format"
+    "--skip=github::github_repos_list_org_badtoken"
+    "--skip=github::github_repos_list_user_badtoken"
+    "--skip=github::github_repos_list_user_human_format"
+    "--skip=github::github_repos_list_user_json_format"
+    "--skip=github::github_repos_list_user_jsonl_format"
+    "--skip=scan::appmaker::scan_workflow_from_git_url"
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
   buildInputs = [
-    openssl
+    boost
     hyperscan
+    openssl
   ];
 
   OPENSSL_NO_VENDOR = 1;

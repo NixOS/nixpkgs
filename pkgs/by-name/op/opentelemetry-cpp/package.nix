@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentelemetry-cpp";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rMqNz8F/ahgDtQiLsswckd2jQPR9FTeSZKRFz2jWVoo=";
+    hash = "sha256-31zwIZ4oehhfn+oCyg8VQTurPOmdgp72plH1Pf/9UKQ=";
   };
 
   patches = [

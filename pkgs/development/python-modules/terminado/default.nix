@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Terminals served by Tornado websockets";
     homepage = "https://github.com/jupyter/terminado";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "RedWax CA service module for handling the Netscape keygen requests. ";
+    description = "RedWax CA service module for handling the Netscape keygen requests.";
     homepage = "https://redwax.eu";
     changelog = "https://source.redwax.eu/projects/RS/repos/mod_spkac/browse/ChangeLog";
     license = licenses.asl20;

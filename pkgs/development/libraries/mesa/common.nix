@@ -1,14 +1,18 @@
 { lib, fetchurl }:
+# When updating this package, please verify at least these build (assuming x86_64-linux):
+# nix build .#mesa .#pkgsi686Linux.mesa .#pkgsCross.aarch64-multiplatform.mesa .#pkgsMusl.mesa
+# Ideally also verify:
+# nix build .#legacyPackages.x86_64-darwin.mesa .#legacyPackages.aarch64-darwin.mesa
 rec {
   pname = "mesa";
-  version = "24.1.2";
+  version = "24.1.4";
 
   src = fetchurl {
     urls = [
       "https://archive.mesa3d.org/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    hash = "sha256-osWEyNV9O9i6EXkKbprjcT+IId+WwFm3ivsp3Zdcn0U=";
+    hash = "sha256-fPfG9mUmOtASKInB1LB2ZUwe7ep6LzjGnIxRV5k3reE=";
   };
 
   meta = {

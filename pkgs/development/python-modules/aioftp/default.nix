@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Python FTP client/server for asyncio";
     homepage = "https://aioftp.readthedocs.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

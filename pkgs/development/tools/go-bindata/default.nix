@@ -22,7 +22,7 @@ buildGoModule rec {
     changelog = "https://github.com/kevinburke/go-bindata/blob/v${version}/CHANGELOG.md";
     description = "Small utility which generates Go code from any file, useful for embedding binary data in a Go program";
     mainProgram = "go-bindata";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.cc0;
   };
 }

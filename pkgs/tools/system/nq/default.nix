@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/chneukirchen/nq";
     license = licenses.publicDomain;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

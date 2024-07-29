@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , python3Packages
-, cmake
 , xvfb-run
 , firefox-esr
 , geckodriver

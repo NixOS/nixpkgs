@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, callPackage }:
+{ stdenv, lib, fetchFromGitHub }:
 stdenv.mkDerivation rec {
   pname = "nvidia-docker";
   version = "2.5.0";

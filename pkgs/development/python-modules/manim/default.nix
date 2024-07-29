@@ -271,6 +271,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/ManimCommunity/manim";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

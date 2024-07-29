@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Fault-tolerant Python3 package for searching, navigating, and modifying LaTeX documents";
     homepage = "https://github.com/alvinwan/TexSoup";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

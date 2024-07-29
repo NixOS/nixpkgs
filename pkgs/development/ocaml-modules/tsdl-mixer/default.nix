@@ -34,6 +34,6 @@ buildDunePackage rec {
     description = "SDL2_mixer bindings to go with Tsdl";
     homepage = "https://github.com/sanette/tsdl-mixer";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

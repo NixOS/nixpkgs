@@ -20,6 +20,8 @@ let
   haskellPackages = pkgs.callPackage makePackageSet {
     package-set = initialPackages;
     inherit stdenv haskellLib ghc extensible-self all-cabal-hashes;
+
+    # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing here.
     buildHaskellPackages = buildHaskellPackages // { __attrsFailEvaluation = true; };
   };
 

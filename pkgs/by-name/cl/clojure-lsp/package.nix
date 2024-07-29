@@ -1,10 +1,8 @@
 {
   lib,
   buildGraalvmNativeImage,
-  babashka,
   fetchurl,
   fetchFromGitHub,
-  clojure,
   writeScript,
   testers,
   clojure-lsp,

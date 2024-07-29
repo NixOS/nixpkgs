@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cdown/srt";
     description = "Tiny but featureful Python library for parsing, modifying, and composing SRT files";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

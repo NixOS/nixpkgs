@@ -63,7 +63,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/Kozea/cairocffi/blob/v${version}/NEWS.rst";
     homepage = "https://github.com/SimonSapin/cairocffi";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     description = "cffi-based cairo bindings for Python";
   };
 }

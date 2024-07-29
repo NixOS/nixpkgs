@@ -67,7 +67,6 @@ buildPythonPackage rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
       neosimsim
-      turion
     ];
   };
 }

@@ -4,7 +4,7 @@
   stdenv,
 
   # Build-time dependencies:
-  addOpenGLRunpath,
+  addDriverRunpath,
   autoAddDriverRunpath,
   bazel_6,
   binutils,

@@ -24,6 +24,6 @@ buildGoModule rec {
     mainProgram = "nasmfmt";
     homepage = "https://github.com/yamnikov-oleg/nasmfmt";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

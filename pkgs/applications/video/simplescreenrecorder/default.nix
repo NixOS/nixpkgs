@@ -40,6 +40,6 @@ mkDerivation rec {
     homepage = "https://www.maartenbaert.be/simplescreenrecorder";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
   };
 }

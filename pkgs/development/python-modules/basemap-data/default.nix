@@ -32,6 +32,6 @@ buildPythonPackage rec {
       mit
       lgpl3Plus
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -3,8 +3,6 @@
 , stdenv
 , fetchYarnDeps
 , yarnConfigHook
-, yarnBuildHook
-, nodejs
 , fetchFromGitHub
 , typescript
 , jq

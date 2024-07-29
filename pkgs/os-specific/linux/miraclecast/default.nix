@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     description = "Connect external monitors via Wi-Fi";
     homepage    = "https://github.com/albfan/miraclecast";
     license     = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms   = platforms.linux;
   };
 }

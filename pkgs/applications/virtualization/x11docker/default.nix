@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Run graphical applications with Docker";
     homepage = "https://github.com/mviereck/x11docker";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "x11docker";
   };

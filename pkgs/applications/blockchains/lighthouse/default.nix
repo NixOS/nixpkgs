@@ -1,5 +1,4 @@
-{ clang
-, cmake
+{ cmake
 , CoreFoundation
 , fetchFromGitHub
 , fetchurl
@@ -18,7 +17,6 @@
 , stdenv
 , SystemConfiguration
 , testers
-, unzip
 }:
 
 rustPlatform.buildRustPackage rec {

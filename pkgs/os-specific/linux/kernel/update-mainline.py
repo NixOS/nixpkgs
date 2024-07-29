@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i python3 -p "python3.withPackages (ps: [ ps.beautifulsoup4 ps.lxml ps.packaging ])"
+from itertools import groupby
 import json
 import os
 import pathlib
@@ -11,7 +12,7 @@ from enum import Enum
 
 from bs4 import BeautifulSoup, NavigableString, Tag
 from packaging.version import parse as parse_version, Version
-from typing import List
+
 
 HERE = pathlib.Path(__file__).parent
 ROOT = HERE.parent.parent.parent.parent
@@ -41,7 +42,7 @@ def parse_release(release: Tag) -> KernelRelease | None:
     except KeyError:
         return None
 
-    version = columns[1].get_text().rstrip(" [EOL]")
+    version = parse_version(columns[1].get_text().rstrip(" [EOL]"))
     date = columns[2].get_text()
     link = columns[3].find("a")
     if link is not None and isinstance(link, Tag):
@@ -59,13 +60,12 @@ def parse_release(release: Tag) -> KernelRelease | None:
     )
 
 
-def get_branch(version: str):
+def get_branch(version: Version):
     # This is a testing kernel.
-    if "rc" in version:
+    if version.is_prerelease:
         return "testing"
     else:
-        major, minor, *_ = version.split(".")
-        return f"{major}.{minor}"
+        return f"{version.major}.{version.minor}"
 
 
 def get_hash(kernel: KernelRelease):
@@ -113,11 +113,11 @@ def main():
 
     oldest_branch = get_oldest_branch()
 
-    for kernel in parsed_releases:
-        branch = get_branch(kernel.version)
+    for (branch, kernels) in groupby(parsed_releases, lambda kernel: get_branch(kernel.version)):
+        kernel = max(kernels, key=lambda kernel: kernel.version)
         nixpkgs_branch = branch.replace(".", "_")
 
-        old_version = all_kernels.get(branch, {}).get("version")
+        old_version = parse_version(all_kernels.get(branch, {}).get("version"))
         if old_version == kernel.version:
             print(f"linux_{nixpkgs_branch}: {kernel.version} is latest, skipping...")
             continue
@@ -144,7 +144,7 @@ def main():
         print(message, file=sys.stderr)
 
         all_kernels[branch] = {
-            "version": kernel.version,
+            "version": str(kernel.version),
             "hash": get_hash(kernel),
         }
 

@@ -1,5 +1,4 @@
 {
-  lib,
   buildPythonPackage,
   poetry-core,
   llama-index-agent-openai,

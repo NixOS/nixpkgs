@@ -40,6 +40,16 @@
       },
       "name": "python"
     },
+    "1347": {
+      "compatible": [
+        "idea-community",
+        "idea-ultimate"
+      ],
+      "builds": {
+        "241.18034.62": "https://plugins.jetbrains.com/files/1347/560035/scala-intellij-bin-2024.1.24.zip"
+      },
+      "name": "scala"
+    },
     "2162": {
       "compatible": [
         "clion",
@@ -691,6 +701,7 @@
     "https://plugins.jetbrains.com/files/12559/508216/keymap-eclipse-241.14494.150.zip": "sha256-/hEx0gIFvUXD799tRmMHAt9Z5ziFgaQs1RX0zQwTJIA=",
     "https://plugins.jetbrains.com/files/13017/445774/keymap-visualStudio-233.11799.165.zip": "sha256-Nb2tSxL+mAY1qJ3waipgV8ep+0R/BaYnzz7zfwtLHmk=",
     "https://plugins.jetbrains.com/files/13017/508253/keymap-visualStudio-241.14494.150.zip": "sha256-tNgt0vIkdCB/LcaSj58mT6cNlw4lytRo0cZSt7sIERU=",
+    "https://plugins.jetbrains.com/files/1347/560035/scala-intellij-bin-2024.1.24.zip": "sha256-lXAZCaCTxyVqV6SPJeSZ7EJmDf5SA+eby64kIsC9sVY=",
     "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar": "sha256-eXInfAqY3yEZRXCAuv3KGldM1pNKEioNwPB0rIGgJFw=",
     "https://plugins.jetbrains.com/files/14004/523287/protoeditor-241.15989.49.zip": "sha256-cltbHY5OOvf29otDNsF9Q2shJHDdW6UMbzDdZ6OATtI=",
     "https://plugins.jetbrains.com/files/164/546759/IdeaVim-2.12.0-signed.zip": "sha256-6ibo1vdwO4olQTCWpWAefT3QCwgtzTo1ojilDes8Rvg=",

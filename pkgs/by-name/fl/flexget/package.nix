@@ -45,6 +45,7 @@ python.pkgs.buildPythonApplication rec {
     jsonschema
     loguru
     psutil
+    pydantic
     pynzb
     pyrss2gen
     python-dateutil

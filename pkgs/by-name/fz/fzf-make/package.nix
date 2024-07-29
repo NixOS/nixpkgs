@@ -29,12 +29,12 @@ rustPlatform.buildRustPackage rec {
       --suffix PATH : ${lib.makeBinPath [ bat gnugrep gnumake ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fuzzy finder for Makefile";
     homepage = "https://github.com/kyu08/fzf-make";
     changelog = "https://github.com/kyu08/fzf-make/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda sigmanificient ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda sigmanificient ];
     mainProgram = "fzf-make";
   };
 }

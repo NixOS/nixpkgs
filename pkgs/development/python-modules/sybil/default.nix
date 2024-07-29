@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cjw296/sybil";
     changelog = "https://github.com/simplistix/sybil/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

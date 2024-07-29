@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.citusdata.com/";
     changelog = "https://github.com/citusdata/citus/blob/${src.rev}/CHANGELOG.md";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     inherit (postgresql.meta) platforms;
   };
 }

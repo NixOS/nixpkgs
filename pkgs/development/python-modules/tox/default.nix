@@ -72,6 +72,6 @@ buildPythonPackage rec {
     mainProgram = "tox";
     homepage = "https://github.com/tox-dev/tox";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

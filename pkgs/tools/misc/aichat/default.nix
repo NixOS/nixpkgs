@@ -4,6 +4,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,6 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -28,6 +30,10 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
   ];
+
+  postInstall = ''
+    installShellCompletion ./scripts/completions/aichat.{bash,fish,zsh}
+  '';
 
   meta = with lib; {
     description = "Use GPT-4(V), Gemini, LocalAI, Ollama and other LLMs in the terminal";

@@ -1,4 +1,4 @@
-{ pkgs, lib, rustPlatform, fetchFromGitLab, wireguard-tools, makeWrapper }:
+{ lib, rustPlatform, fetchFromGitLab, wireguard-tools, makeWrapper }:
 rustPlatform.buildRustPackage rec {
   pname = "wg-bond";
   version = "0.2.0";
@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256:04k0maxy39k7qzcsqsv1byddsmjszmnyjffrf22nzbvml83p3l0y";
   };
 
-  cargoSha256 = "1nlzhkhk1y0jhj6n3wn4dm783ldsxn7dk0d2xjx6ylczf9z3gp12";
+  cargoHash = "sha256-Itw3fnKfUW+67KKB2Y7tutGBTm3E8mGNhBL4MOGEn9o=";
 
   nativeBuildInputs = [ makeWrapper ];
   postInstall = ''

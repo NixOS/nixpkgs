@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1qq167hc7pp9l0m40ysphfljakmm8hjjnhpldvb0kbc825h0z8z5";
   };
 
-  cargoSha256 = "sha256-1BIUXepR7ppEkTLDOCZz9RBv+RazNMXnCnH1rvzVFgs=";
+  cargoHash = "sha256-1BIUXepR7ppEkTLDOCZz9RBv+RazNMXnCnH1rvzVFgs=";
 
   checkFlags = [
     # currently broken: https://github.com/jesseduffield/lazycli/pull/20

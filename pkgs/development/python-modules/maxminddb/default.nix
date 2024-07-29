@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/maxmind/MaxMind-DB-Reader-python";
     changelog = "https://github.com/maxmind/MaxMind-DB-Reader-python/blob/v${version}/HISTORY.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

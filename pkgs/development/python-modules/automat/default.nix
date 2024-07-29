@@ -47,7 +47,7 @@ let
       description = "Self-service finite-state machines for the programmer on the go";
       mainProgram = "automat-visualize";
       license = licenses.mit;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

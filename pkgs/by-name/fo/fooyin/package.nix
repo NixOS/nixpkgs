@@ -7,10 +7,8 @@
 , ffmpeg
 , kdePackages
 , kdsingleapplication
-, openssl
 , pipewire
 , taglib
-, zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {

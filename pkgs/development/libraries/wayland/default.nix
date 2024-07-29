@@ -34,11 +34,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland";
-  version = "1.22.0";
+  version = "1.23.0";
 
   src = fetchurl {
     url = with finalAttrs; "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
-    hash = "sha256-FUCvHqaYpHHC2OnSiDMsfg/TYMjx0Sk267fny8JCWEI=";
+    hash = "sha256-BbPhV00+Z2JrWXT4YvNrW0J8fO65Zcs2pObC00LkWrI=";
   };
 
   patches = [

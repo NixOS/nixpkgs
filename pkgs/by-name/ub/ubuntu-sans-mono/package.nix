@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ubuntu-sans-mono";
-  version = "1.004";
+  version = "1.006";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "Ubuntu-Sans-Mono-fonts";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IjfjFsXRYK2l6i4Q/LoYuwu5t18TmVXXJQDSsW45qNc=";
+    hash = "sha256-EFZZnMZTQHo2Tr9/rtb7C5gAlQ/0uYT+MQ1gKkqQ5hE=";
   };
 
   installPhase = ''

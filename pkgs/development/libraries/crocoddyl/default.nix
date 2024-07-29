@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+  ] ++ lib.optionals pythonSupport [
+    python3Packages.python
   ];
 
   propagatedBuildInputs = lib.optionals (!pythonSupport) [

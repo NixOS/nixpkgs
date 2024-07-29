@@ -22,6 +22,6 @@ buildDunePackage {
     downloadPage = "https://github.com/reasonml/reason-native/tree/master/src/refmterr";
     homepage = "https://reason-native.com/docs/refmterr/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kanaka/websockify";
     changelog = "https://github.com/novnc/websockify/releases/tag/v${version}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

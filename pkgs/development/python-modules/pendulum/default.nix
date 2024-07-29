@@ -92,6 +92,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sdispater/pendulum";
     changelog = "https://github.com/sdispater/pendulum/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

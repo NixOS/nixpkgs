@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Electric Sheep, a distributed screen saver for evolving artificial organisms";
     homepage = "https://electricsheep.org/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
     license = licenses.gpl2Only;
   };

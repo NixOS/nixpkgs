@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Inotify shim for macOS and BSD";
     homepage = "https://github.com/libinotify-kqueue/libinotify-kqueue";
     license = licenses.mit;
-    maintainers = with maintainers; [ yana ];
+    maintainers = [ ];
     platforms = with platforms; darwin ++ freebsd ++ netbsd ++ openbsd;
   };
 }

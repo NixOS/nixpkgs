@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/clbarnes/coordinates";
     changelog = "https://github.com/clbarnes/coordinates/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

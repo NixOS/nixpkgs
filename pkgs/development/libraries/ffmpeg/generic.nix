@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, removeReferencesTo, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
+{ lib, stdenv, buildPackages, removeReferencesTo, addDriverRunpath, pkg-config, perl, texinfo, texinfo6, yasm
 
   # You can fetch any upstream version using this derivation by specifying version and hash
   # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
@@ -72,6 +72,7 @@
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
 , withJxl ? withFullDeps && lib.versionAtLeast version "5" # JPEG XL de/encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
+, withLcms2 ? withFullDeps # ICC profile support via lcms2
 , withLzma ? withHeadlessDeps # xz-utils
 , withMetal ? false # Unfree and requires manual downloading of files
 , withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
@@ -237,6 +238,7 @@
 , intel-media-sdk
 , ladspaH
 , lame
+, lcms2
 , libaom
 , libaribcaption
 , libass
@@ -425,43 +427,10 @@ stdenv.mkDerivation (finalAttrs: {
             --replace 'const AVInputFormat *const ' 'const AVInputFormat *'
         '';
       })
-    ]
-    ++ optionals (lib.versionAtLeast version "5" && lib.versionOlder version "6") [
       (fetchpatch2 {
-        name = "fix_build_failure_due_to_libjxl_version_to_new";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/75b1a555a70c178a9166629e43ec2f6250219eb2";
-        hash = "sha256-+2kzfPJf5piim+DqEgDuVEEX5HLwRsxq0dWONJ4ACrU=";
-      })
-      (fetchpatch2 {
-        name = "5.x-CVE-2024-31585.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/8711cea3841fc385cccb1e7255176479e865cd4d";
-        hash = "sha256-WT+ly/l04yM/tRVbhkESA3sDDjwvtd/Cg2y8tQo4ApI=";
-      })
-      (fetchpatch2 {
-        name = "CVE-2024-31582.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/99debe5f823f45a482e1dc08de35879aa9c74bd2";
-        hash = "sha256-+CQ9FXR6Vr/AmsbXFiCUXZcxKj1s8nInEdke/Oc/kUA=";
-      })
-      (fetchpatch2 {
-        name = "CVE-2024-31578.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/3bb00c0a420c3ce83c6fafee30270d69622ccad7";
-        hash = "sha256-oZMZysBA+/gwaGEM1yvI+8wCadXWE7qLRL6Emap3b8Q=";
-      })
-      ./5.1.4-CVE-2023-49502.patch
-      (fetchpatch2 {
-        name = "CVE-2023-50008.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/5f87a68cf70dafeab2fb89b42e41a4c29053b89b";
-        hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
-      })
-      (fetchpatch2 {
-        name = "CVE-2023-51793.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/8b8b4bdef311f88c0075a06a25320187aff00bf2";
-        hash = "sha256-e7oGyOfUXuA8XK3vfygNtFlHpHl92O2KSLAo50sNJ5o=";
-      })
-      (fetchpatch2 {
-        name = "CVE-2023-51796.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e01a55c5283b82667dad347331816a5e20869ce9";
-        hash = "sha256-m4rq+UFG3nXdgOJ3S6XcruMZ+CPw+twmy2HFv3cnvJc=";
+        name = "CVE-2023-51794.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/50f0f8c53c818f73fe2d752708e2fa9d2a2d8a07";
+        hash = "sha256-5G9lmKjMEa0+vqbA8EEiNIr6QG+PeEoIL+uZP4Hlo28=";
       })
     ]
     ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
@@ -648,6 +617,9 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withJxl "libjxl")
   ] ++ [
     (enableFeature withLadspa "ladspa")
+  ] ++ optionals (versionAtLeast version "5.1") [
+    (enableFeature withLcms2 "lcms2")
+  ] ++ [
     (enableFeature withLzma "lzma")
   ] ++ optionals (versionAtLeast version "5.0") [
     (enableFeature withMetal "metal")
@@ -755,7 +727,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ]
+  nativeBuildInputs = [ removeReferencesTo addDriverRunpath perl pkg-config yasm ]
+  # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
+  ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
   ++ optionals withCudaLLVM [ clang ];
 
   buildInputs = []
@@ -795,6 +769,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withJack [ libjack2 ]
   ++ optionals withJxl [ libjxl ]
   ++ optionals withLadspa [ ladspaH ]
+  ++ optionals withLcms2 [ lcms2 ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
   ++ optionals withModplug [ libmodplug ]
@@ -888,10 +863,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
+  # See the explanation in addDriverRunpath.
   postFixup = optionalString (stdenv.isLinux && withLib) ''
-    addOpenGLRunpath ${placeholder "lib"}/lib/libavcodec.so
-    addOpenGLRunpath ${placeholder "lib"}/lib/libavutil.so
+    addDriverRunpath ${placeholder "lib"}/lib/libavcodec.so
+    addDriverRunpath ${placeholder "lib"}/lib/libavutil.so
   ''
   # https://trac.ffmpeg.org/ticket/10809
   + optionalString (versionAtLeast version "5.0" && withVulkan && !stdenv.hostPlatform.isMinGW) ''

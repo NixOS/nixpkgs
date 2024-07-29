@@ -63,6 +63,6 @@ buildPythonPackage rec {
     description = "Open Source Python library for generating PDFs and graphics";
     homepage = "https://www.reportlab.com/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

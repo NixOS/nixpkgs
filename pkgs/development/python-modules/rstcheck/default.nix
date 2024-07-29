@@ -39,7 +39,7 @@ buildPythonPackage rec {
     types-docutils
     pydantic
     typer
-  ] ++ typer.optional-dependencies.all;
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

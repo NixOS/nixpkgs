@@ -46,7 +46,7 @@ buildGoModule rec {
     description = "collection of helper tools for network engineers, while configuring and experimenting with their own network labs";
     homepage = "https://labctl.net";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "labctl";
   };
 }

@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Discover and load entry points from installed packages";
     homepage = "https://github.com/takluyver/entrypoints";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -23,6 +23,7 @@
 , metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
 , vulkanSupport ? false
 , rpcSupport ? false
+, shaderc
 , vulkan-headers
 , vulkan-loader
 , ninja
@@ -61,6 +62,7 @@ let
   ];
 
   vulkanBuildInputs = [
+    shaderc
     vulkan-headers
     vulkan-loader
   ];

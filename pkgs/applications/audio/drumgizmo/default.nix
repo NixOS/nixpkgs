@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.drumgizmo.org";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu maintainers.nico202 ];
+    maintainers = [ maintainers.nico202 ];
   };
 }

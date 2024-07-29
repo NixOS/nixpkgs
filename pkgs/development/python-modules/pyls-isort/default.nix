@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   python-lsp-server,
   isort,
 }:
@@ -22,6 +23,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "pyls_isort" ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
     isort

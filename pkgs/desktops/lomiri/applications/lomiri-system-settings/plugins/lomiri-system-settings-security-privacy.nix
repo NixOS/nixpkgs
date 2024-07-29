@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     python3
+    qtdeclarative
   ];
 
   buildInputs = [

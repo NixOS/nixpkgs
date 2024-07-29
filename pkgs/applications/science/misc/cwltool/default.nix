@@ -24,7 +24,8 @@ python3.pkgs.buildPythonApplication rec {
       --replace '"schema-salad >= 8.4.20230426093816, < 9",' "" \
       --replace "PYTEST_RUNNER + " ""
     substituteInPlace pyproject.toml \
-      --replace "ruamel.yaml>=0.16.0,<0.18" "ruamel.yaml"
+      --replace "ruamel.yaml>=0.16.0,<0.18" "ruamel.yaml" \
+      --replace "mypy==1.10.0" "mypy==1.10.*"
   '';
 
   nativeBuildInputs = [

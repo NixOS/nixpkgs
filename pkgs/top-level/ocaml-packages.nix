@@ -1379,22 +1379,16 @@ let
     omd = callPackage ../development/ocaml-modules/omd { };
 
     opam-core = callPackage ../development/ocaml-modules/opam-core {
-      inherit (pkgs) opam unzip;
+      inherit (pkgs) opam;
     };
 
     opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
 
-    opam-format = callPackage ../development/ocaml-modules/opam-format {
-      inherit (pkgs) unzip;
-    };
+    opam-format = callPackage ../development/ocaml-modules/opam-format { };
 
-    opam-repository = callPackage ../development/ocaml-modules/opam-repository {
-      inherit (pkgs) unzip;
-    };
+    opam-repository = callPackage ../development/ocaml-modules/opam-repository { };
 
-    opam-state = callPackage ../development/ocaml-modules/opam-state {
-      inherit (pkgs) unzip;
-    };
+    opam-state = callPackage ../development/ocaml-modules/opam-state { };
 
     opium = callPackage ../development/ocaml-modules/opium { };
 
@@ -1716,6 +1710,8 @@ let
       inherit (pkgs) soundtouch;
     };
 
+    spdx_licenses = callPackage ../development/ocaml-modules/spdx_licenses { };
+
     speex = callPackage ../development/ocaml-modules/speex {
       inherit (pkgs) speex;
     };
@@ -1745,6 +1741,8 @@ let
     streaming = callPackage ../development/ocaml-modules/streaming { };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
+
+    swhid_core = callPackage ../development/ocaml-modules/swhid_core { };
 
     syslog = callPackage ../development/ocaml-modules/syslog { };
 

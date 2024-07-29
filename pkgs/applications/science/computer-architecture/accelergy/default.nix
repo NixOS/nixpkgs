@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, pkgs }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "accelergy";

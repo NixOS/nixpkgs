@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     gtk3
   ];
 
-  cargoSha256 = "sha256-NSLBIvgo5EdCvZq52d+UbAa7K4uOST++2zbhO9DW38E=";
+  cargoHash = "sha256-NSLBIvgo5EdCvZq52d+UbAa7K4uOST++2zbhO9DW38E=";
 
   meta = with lib; {
     description = "GTK viewer for the output of `nix store --query --tree`";

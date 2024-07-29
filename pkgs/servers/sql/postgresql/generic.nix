@@ -2,7 +2,7 @@ let
 
   generic =
       # dependencies
-      { stdenv, lib, fetchurl, makeWrapper
+      { stdenv, lib, fetchurl, fetchpatch, makeWrapper
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
       , linux-pam
@@ -120,6 +120,22 @@ let
         locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
 
+      (
+        if atLeast "16" then
+          fetchpatch {
+            name = "libxml2-2.13-compat.patch";
+            # This one is for 16 branch upstream.
+            url = "https://github.com/postgres/postgres/commit/f85c91a1867b45742bb28e4578ca2b4a0976383f.diff";
+            hash = "sha256-4YcXfo98uVuCu+ybVw3bM4x8Y0I1xfjdjBZOlhyF21w=";
+          }
+        else
+          fetchpatch {
+            name = "libxml2-2.13-compat.patch";
+            # This one is for 15 branch upstream, but it also applies well to all our older branches.
+            url = "https://github.com/postgres/postgres/commit/f68d6aabb7e2c803818185b49a3d356bdb2b2974.diff";
+            hash = "sha256-Nelb0mbjx0Xq9UJuVv7cs3ifCtUPP7UZraPMPGb2wyQ=";
+          }
+      )
     ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
       # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
       map fetchurl (lib.attrValues muslPatches)

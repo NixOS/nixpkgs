@@ -102,6 +102,6 @@ buildPythonPackage rec {
     homepage = "https://datasette.io/";
     changelog = "https://github.com/simonw/datasette/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

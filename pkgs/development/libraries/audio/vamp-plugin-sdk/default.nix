@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Audio processing plugin system for plugins that extract descriptive information from audio data";
     homepage = "https://vamp-plugins.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.goibhniu maintainers.marcweber ];
+    maintainers = [ maintainers.marcweber ];
     platforms = platforms.unix;
   };
 }

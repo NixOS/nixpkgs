@@ -34,6 +34,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "snallygaster";
     homepage = "https://github.com/hannob/snallygaster";
     license = licenses.cc0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

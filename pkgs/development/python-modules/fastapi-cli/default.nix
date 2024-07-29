@@ -54,7 +54,7 @@ let self = buildPythonPackage rec {
     changelog = "https://github.com/tiangolo/fastapi-cli/releases/tag/${version}";
     mainProgram = "fastapi";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 };
 in self

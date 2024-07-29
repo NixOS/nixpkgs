@@ -20,10 +20,10 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
   pythonImportsCheck = [ "paperbush" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/trag1c/paperbush/blob/${src.rev}/CHANGELOG.md";
     description = "Super concise argument parsing tool for Python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sigmanificient ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

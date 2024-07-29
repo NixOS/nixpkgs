@@ -7,7 +7,6 @@
   wrapGAppsHook4,
   blueprint-compiler,
   desktop-file-utils,
-  appstream-glib,
   python3Packages,
   glib,
   gtk4,

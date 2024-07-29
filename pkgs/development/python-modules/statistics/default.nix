@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Python 2.* port of 3.4 Statistics Module";
     homepage = "https://github.com/digitalemagine/py-statistics";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -7,7 +7,6 @@
 , flex
 , json_c
 , libmpdclient
-, libxcb
 , libyaml
 , meson
 , ninja

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     homepage = "https://codesynthesis.com/projects/libcutl/";
     changelog = "https://git.codesynthesis.com/cgit/libcutl/libcutl/plain/NEWS?h=${version}";
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 

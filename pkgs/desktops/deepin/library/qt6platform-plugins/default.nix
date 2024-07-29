@@ -12,22 +12,19 @@
 
 stdenv.mkDerivation rec {
   pname = "qt6platform-plugins";
-  version = "6.0.16";
+  version = "6.0.18";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-0/hwsdB0UNzlekxfdKeItW2lXTMTzEtBR2hS153woLo=";
+    hash = "sha256-O2wylkNKqN0JxKffwFNSfv7S1hPIFrVKwSsppSGTp6I=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "support-to-qt_6_7_1.patch";
-      url = "https://github.com/linuxdeepin/qt6platform-plugins/commit/88ba963d11355391d62501cd5a6da9e3d5e9ddce.patch";
-      hash = "sha256-9NiKIdY9PXBYgKQGRf5pFV+tNrHe7BjbVrnwII9lLFI=";
-    })
-  ];
+  postUnpack = ''
+    tar -xf ${qt6Packages.qtbase.src}
+    mv qtbase-everywhere-src-${qt6Packages.qtbase.version}/src/plugins/platforms/xcb ${src.name}/xcb/libqt6xcbqpa-dev/${qt6Packages.qtbase.version}
+  '';
 
   nativeBuildInputs = [
     cmake

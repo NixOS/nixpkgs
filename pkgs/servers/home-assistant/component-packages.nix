@@ -771,6 +771,7 @@
       aiodhcpwatcher
       aiodiscover
       async-upnp-client
+      av
       bleak
       bleak-retry-connector
       bluetooth-adapters
@@ -779,7 +780,6 @@
       cached-ipaddress
       dbus-fast
       fnv-hash-fast
-      ha-av
       ha-ffmpeg
       habluetooth
       hass-nabucasa
@@ -1484,7 +1484,7 @@
       aio-georss-gdacs
     ];
     "generic" = ps: with ps; [
-      ha-av
+      av
       pillow
     ];
     "generic_hygrostat" = ps: with ps; [
@@ -4301,7 +4301,7 @@
     "stookwijzer" = ps: with ps; [
     ]; # missing inputs: stookwijzer
     "stream" = ps: with ps; [
-      ha-av
+      av
       numpy_1
       pyturbojpeg
     ];

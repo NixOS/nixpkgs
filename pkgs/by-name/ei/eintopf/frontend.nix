@@ -1,9 +1,7 @@
-{ lib
-, stdenv
+{ stdenv
 , fetchYarnDeps
 , fixup-yarn-lock
 , yarn
-, fetchFromGitea
 , src
 , version
 , nodejs

@@ -21,6 +21,6 @@ buildDunePackage rec {
       "A an alternative pretty printing library to the Format module of the OCaml standard library";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = ./update.py;
 
   meta = with lib; {
-    description = "ownCloud Infinite Scale Stack ";
+    description = "ownCloud Infinite Scale Stack";
     homepage = "https://owncloud.dev/ocis/";
     changelog = "https://github.com/owncloud/ocis/releases/tag/v${finalAttrs.version}";
     # oCIS is licensed under non-free EULA which can be found here :

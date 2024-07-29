@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pkg-config
 , cmake
-, qtbase
 , qttools
 , libuuid
 , seafile-shared

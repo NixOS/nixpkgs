@@ -24,9 +24,13 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
+  # AppStreamQt tries to be relocatable, in hacky cmake ways that generally fail
+  # horribly on NixOS. Just hardcode the paths.
   postFixup = ''
     sed -i "$dev/lib/cmake/AppStreamQt${qtSuffix}/AppStreamQt${qtSuffix}Config.cmake" \
       -e "/INTERFACE_INCLUDE_DIRECTORIES/ s@\''${PACKAGE_PREFIX_DIR}@$dev@"
+    sed -i "$dev/lib/cmake/AppStreamQt${qtSuffix}/AppStreamQt${qtSuffix}Config.cmake" \
+      -e "/IMPORTED_LOCATION/ s@\''${PACKAGE_PREFIX_DIR}@$out@"
   '';
 
   passthru = appstream.passthru // {

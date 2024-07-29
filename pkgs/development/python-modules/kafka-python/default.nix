@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Pure Python client for Apache Kafka";
     homepage = "https://github.com/dpkp/kafka-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

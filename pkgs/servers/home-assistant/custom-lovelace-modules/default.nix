@@ -4,6 +4,8 @@
 {
   android-tv-card = callPackage ./android-tv-card { };
 
+  apexcharts-card = callPackage ./apexcharts-card { };
+
   button-card = callPackage ./button-card { };
 
   card-mod = callPackage ./card-mod { };

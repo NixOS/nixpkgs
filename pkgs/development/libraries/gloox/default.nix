@@ -31,7 +31,7 @@ stdenv.mkDerivation rec{
     mainProgram = "gloox-config";
     homepage = "http://camaya.net/gloox";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

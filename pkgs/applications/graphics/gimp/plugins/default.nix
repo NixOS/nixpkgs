@@ -2,7 +2,7 @@
 # If you just want a subset of plug-ins, you can specify them explicitly:
 # `gimp-with-plugins.override { plugins = with gimpPlugins; [ gap ]; }`.
 
-{ config, lib, pkgs }:
+{ lib, pkgs }:
 
 let
   inherit (pkgs) stdenv fetchurl fetchpatch fetchpatch2 pkg-config intltool glib fetchFromGitHub fetchFromGitLab;
@@ -102,7 +102,7 @@ in
       description = "Batch Image Manipulation Plugin for GIMP";
       homepage = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 

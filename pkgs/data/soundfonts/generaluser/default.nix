@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.schristiancollins.com/generaluser.php";
     license = licenses.generaluser;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

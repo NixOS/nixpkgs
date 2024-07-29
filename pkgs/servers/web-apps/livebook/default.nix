@@ -36,7 +36,7 @@ beamPackages.mixRelease rec {
     license = licenses.asl20;
     homepage = "https://livebook.dev/";
     description = "Automate code & data workflows with interactive Elixir notebooks";
-    maintainers = with maintainers; [ munksgaard ];
+    maintainers = with maintainers; [ munksgaard scvalex ];
     platforms = platforms.unix;
   };
 }

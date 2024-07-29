@@ -6,7 +6,6 @@
 , curl
 , pkg-config
 , openssl
-, llvmPackages
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snarkos";

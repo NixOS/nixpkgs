@@ -1,21 +1,15 @@
-{ lib, buildGoModule, fetchFromSourcehut, nixosTests }:
+{ lib, buildGoModule, fetchzip, nixosTests }:
 
 buildGoModule rec {
   pname = "phylactery";
-  version = "0.1.2";
+  version = "0.2.0";
 
-  src = fetchFromSourcehut {
-    owner = "~cnx";
-    repo = pname;
-    rev = version;
-    hash = "sha256-HQN6wJ/4YeuQaDcNgdHj0RgYnn2NxXGRfxybmv60EdQ=";
+  src = fetchzip {
+    url = "https://trong.loang.net/phylactery/snapshot/phylactery-${version}.tar.gz";
+    hash = "sha256-UokK6rVjpzbcKOkZteo5kU7rFMm1meBUM4bkYAYM8rI=";
   };
 
   vendorHash = null;
-
-  preBuild = ''
-    cp ${./go.mod} go.mod
-  '';
 
   ldflags = [ "-s" "-w" ];
 
@@ -24,7 +18,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Old school comic web server";
     mainProgram = "phylactery";
-    homepage = "https://git.sr.ht/~cnx/phylactery";
+    homepage = "https://trong.loang.net/phylactery/about";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ McSinyx ];
     platforms = platforms.all;

@@ -18,7 +18,6 @@
 , desktop-file-utils
 , appstream-glib
 , libpeas
-, libgdata
 , dbus
 , vala
 , wrapGAppsHook3
@@ -27,7 +26,6 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_43
 , docutils
-, gobject-introspection
 , gst_all_1
 , sofia_sip
 }:

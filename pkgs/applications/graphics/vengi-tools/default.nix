@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, writeText
 
 , cmake
 , pkg-config

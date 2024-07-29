@@ -6,7 +6,7 @@
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
 , pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript, python3, runCommand
 , libunity
-, speechd
+, speechd-minimal
 , wayland
 , branch
 , withOpenASAR ? false, openasar
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     libappindicator-gtk3
     libdbusmenu
     wayland
-  ] ++ lib.optional withTTS speechd);
+  ] ++ lib.optional withTTS speechd-minimal);
 
   installPhase = ''
     runHook preInstall

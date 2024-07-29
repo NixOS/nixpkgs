@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   pythonOlder,
 
@@ -32,6 +33,14 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-MR6kyoGM3uXt6JiIEfGcsmTmxqlLxUF9Wn+CFuK5LtQ=";
   };
+
+  patches = [
+    # fix xarray tests, remove on next release
+    (fetchpatch {
+      url = "https://github.com/cogeotiff/rio-tiler/commit/7a36ed58b649d2f4d644f280b54851ecb7ffa4e9.patch";
+      hash = "sha256-QlX5ZKpjSpXevi76gx39dXok0aClApkLU0cAVpCuYYs=";
+    })
+  ];
 
   build-system = [ hatchling ];
 

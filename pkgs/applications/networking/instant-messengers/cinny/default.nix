@@ -18,16 +18,16 @@ let
 in
 buildNpmPackage rec {
   pname = "cinny";
-  version = "3.2.0";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
     rev = "v${version}";
-    hash = "sha256-wAa7y2mXPkXAfirRSFqwZYIJK0CKDzZG8ULzXzr4zZ4=";
+    hash = "sha256-5Tf1CgB/YAyGVpopHERQ8xNGwklB+f2l+yfgCKsR3I8=";
   };
 
-  npmDepsHash = "sha256-dVdylvclUIHvF5syVumdxkXR4bG1FA4LOYg3GmnNzXE=";
+  npmDepsHash = "sha256-wtHFqnz5BtMUikdFZyTiLrw+e69WErowYBhu8cnEjkI=";
 
   # Fix error: no member named 'aligned_alloc' in the global namespace
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
@@ -57,11 +57,11 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Yet another Matrix client for the web";
     homepage = "https://cinny.in/";
-    maintainers = with maintainers; [ abbe ];
-    license = licenses.agpl3Only;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ abbe ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.all;
   };
 }

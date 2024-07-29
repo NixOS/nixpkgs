@@ -1,9 +1,5 @@
 # Dependency of pygame, toppler
-{
-  lib,
-  SDL2_image,
-  fetchurl,
-}:
+{ SDL2_image, fetchurl }:
 
 SDL2_image.overrideAttrs (oldAttrs: {
   version = "2.0.5";

@@ -355,7 +355,7 @@ in
                 ${pkgs.writeScript "backupPrepareCommand" backup.backupPrepareCommand}
               ''}
               ${optionalString (backup.initialize) ''
-                ${resticCmd} snapshots || ${resticCmd} init
+                ${resticCmd} cat config > /dev/null || ${resticCmd} init
               ''}
               ${optionalString (backup.paths != null && backup.paths != []) ''
                 cat ${pkgs.writeText "staticPaths" (concatStringsSep "\n" backup.paths)} >> ${filesFromTmpFile}

@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.fossil-scm.org/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ maggesi viric ];
+    maintainers = with maintainers; [ maggesi ];
     platforms = platforms.all;
     mainProgram = "fossil";
   };

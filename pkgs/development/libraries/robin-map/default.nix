@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Tessil/robin-map";
     changelog = "https://github.com/Tessil/robin-map/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

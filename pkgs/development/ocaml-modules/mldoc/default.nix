@@ -64,6 +64,6 @@ buildDunePackage rec {
     homepage = "https://github.com/logseq/mldoc";
     description = "Another Emacs Org-mode and Markdown parser";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

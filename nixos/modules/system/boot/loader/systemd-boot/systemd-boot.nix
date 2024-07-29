@@ -80,6 +80,8 @@ let
         ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
       '') cfg.extraEntries)}
     '';
+    bootCountingTries = cfg.bootCounting.tries;
+    bootCounting = if cfg.bootCounting.enable then "True" else "False";
   };
 
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
@@ -89,7 +91,10 @@ let
   '';
 in {
 
-  meta.maintainers = with lib.maintainers; [ julienmalka ];
+  meta = {
+    maintainers = with lib.maintainers; [ julienmalka ];
+    doc = ./boot-counting.md;
+  };
 
   imports =
     [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
@@ -317,6 +322,15 @@ in {
         Only enable this option if `systemd-boot` otherwise fails to install, as the
         scope or implication of the `--graceful` option may change in the future.
       '';
+    };
+
+    bootCounting = {
+      enable = mkEnableOption "automatic boot assessment";
+      tries = mkOption {
+        default = 3;
+        type = types.int;
+        description = "number of tries each entry should start with";
+      };
     };
 
   };

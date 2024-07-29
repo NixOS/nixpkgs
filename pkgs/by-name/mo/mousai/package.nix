@@ -7,7 +7,6 @@
 , desktop-file-utils
 , glib
 , glib-networking
-, gobject-introspection
 , gst_all_1
 , gtk4
 , libadwaita

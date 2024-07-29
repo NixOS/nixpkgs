@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     description = "Speech Recognition Toolkit";
     homepage = "https://kaldi-asr.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

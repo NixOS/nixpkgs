@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
         --replace '/usr/bin/gnome-terminal' 'gnome-terminal'
   '';
 
-  cargoSha256 = "sha256-cTvrq0fH057UIx/O9u8zHMsg+psMGg1q9klV5OMxtok=";
+  cargoHash = "sha256-cTvrq0fH057UIx/O9u8zHMsg+psMGg1q9klV5OMxtok=";
 
   cargoBuildFlags = [ "--package" "pop-launcher-bin" ];
 

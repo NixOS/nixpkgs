@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "iocsearcher";
-  version = "2.3-unstable-2024-03-04";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";

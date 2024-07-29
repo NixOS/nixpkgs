@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tool that aims at generating automatically execution trace from HPC programs";
     license = licenses.cecill-b;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

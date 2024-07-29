@@ -7,7 +7,7 @@ let
   cfg = config.services.xserver.desktopManager.cinnamon;
   serviceCfg = config.services.cinnamon;
 
-  nixos-gsettings-overrides = pkgs.cinnamon.cinnamon-gsettings-overrides.override {
+  nixos-gsettings-overrides = pkgs.cinnamon-gsettings-overrides.override {
     extraGSettingsOverridePackages = cfg.extraGSettingsOverridePackages;
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
@@ -51,7 +51,7 @@ in
 
     environment.cinnamon.excludePackages = mkOption {
       default = [];
-      example = literalExpression "[ pkgs.cinnamon.blueberry ]";
+      example = literalExpression "[ pkgs.blueman ]";
       type = types.listOf types.package;
       description = "Which packages cinnamon should exclude from the default environment";
     };
@@ -60,7 +60,7 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      services.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
+      services.displayManager.sessionPackages = [ pkgs.cinnamon-common ];
 
       services.xserver.displayManager.lightdm.greeters.slick = {
         enable = mkDefault true;
@@ -102,9 +102,9 @@ in
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs; [
-        cinnamon.cinnamon-common
-        cinnamon.cinnamon-screensaver
-        cinnamon.nemo-with-extensions
+        cinnamon-common
+        cinnamon-screensaver
+        nemo-with-extensions
         xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
@@ -138,17 +138,17 @@ in
         desktop-file-utils
 
         # common-files
-        cinnamon.cinnamon-common
-        cinnamon.cinnamon-session
-        cinnamon.cinnamon-desktop
-        cinnamon.cinnamon-menus
-        cinnamon.cinnamon-translations
+        cinnamon-common
+        cinnamon-session
+        cinnamon-desktop
+        cinnamon-menus
+        cinnamon-translations
 
         # utils needed by some scripts
         killall
 
         # session requirements
-        cinnamon.cinnamon-screensaver
+        cinnamon-screensaver
         # cinnamon-killer-daemon: provided by cinnamon-common
         networkmanagerapplet # session requirement - also nm-applet not needed
 
@@ -156,10 +156,10 @@ in
         polkit_gnome
 
         # packages
-        cinnamon.nemo-with-extensions
+        nemo-with-extensions
         gnome-online-accounts-gtk
-        cinnamon.cinnamon-control-center
-        cinnamon.cinnamon-settings-daemon
+        cinnamon-control-center
+        cinnamon-settings-daemon
         libgnomekbd
 
         # theme
@@ -200,7 +200,7 @@ in
         })
       ];
 
-      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon.cinnamon-common ];
+      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon-common ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";

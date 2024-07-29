@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2;
 
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.viric ];
+    maintainers = [ ];
   };
 }

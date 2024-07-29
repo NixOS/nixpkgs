@@ -6,7 +6,6 @@
 , less
 , xdg-utils
 , testers
-, runCommand
 , stackit-cli
 }:
 

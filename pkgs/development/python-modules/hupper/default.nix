@@ -33,6 +33,6 @@ buildPythonPackage rec {
     mainProgram = "hupper";
     homepage = "https://github.com/Pylons/hupper";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

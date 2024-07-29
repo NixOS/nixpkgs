@@ -41,7 +41,10 @@ buildPythonPackage rec {
     userpath
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    argcomplete
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -95,9 +98,9 @@ buildPythonPackage rec {
 
   postInstall = ''
     installShellCompletion --cmd pipx \
-      --bash <(${argcomplete}/bin/register-python-argcomplete pipx --shell bash) \
-      --zsh <(${argcomplete}/bin/register-python-argcomplete pipx --shell zsh) \
-      --fish <(${argcomplete}/bin/register-python-argcomplete pipx --shell fish)
+      --bash <(register-python-argcomplete pipx --shell bash) \
+      --zsh <(register-python-argcomplete pipx --shell zsh) \
+      --fish <(register-python-argcomplete pipx --shell fish)
   '';
 
   meta = with lib; {

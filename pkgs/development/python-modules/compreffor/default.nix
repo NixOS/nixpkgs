@@ -49,6 +49,6 @@ buildPythonPackage rec {
     mainProgram = "compreffor";
     homepage = "https://github.com/googlefonts/compreffor";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

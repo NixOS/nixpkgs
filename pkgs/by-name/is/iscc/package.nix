@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = "https://jrsoftware.org/isinfo.php";
     changelog = "https://jrsoftware.org/files/is6-whatsnew.htm";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = wineWow64Packages.stable.meta.platforms;
   };
 }

@@ -38,6 +38,6 @@ buildPythonPackage rec {
     mainProgram = "plac_runner.py";
     homepage = "https://github.com/micheles/plac";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

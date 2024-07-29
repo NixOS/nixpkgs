@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Louvain Community Detection";
     mainProgram = "community";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

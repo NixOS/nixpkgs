@@ -21,19 +21,18 @@
 rustPlatform.buildRustPackage rec {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "3.2.0";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     rev = "v${version}";
-    hash = "sha256-uHGqvulH7/9JpUjkpcbCh1pPvX4/ndVIKcBXzWmDo+s=";
+    hash = "sha256-05T/2e5+st+vGQuO8lRw6KWz3+Qiqd14dCPvayyz5mo=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
 
-  # modififying $cargoDepsCopy requires the lock to be vendored
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoHash = "sha256-bM+V37PJAob/DA2jy2g69zUY99ZyZBzgO6djadbdiJw=";
 
   postPatch = let
     cinny' =
@@ -94,12 +93,12 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Yet another matrix client for desktop";
     homepage = "https://github.com/cinnyapp/cinny-desktop";
-    maintainers = with maintainers; [ qyriad ];
-    license = licenses.agpl3Only;
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with lib.maintainers; [ qyriad ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cinny";
   };
 }

@@ -1,5 +1,4 @@
-{ lib
-, stdenvNoCC
+{ stdenvNoCC
 , fetchurl
 , undmg
 , pname

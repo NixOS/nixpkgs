@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-FFWHADATEfvZvxGwdkj+eTVoq7pnPuoUAhMGTokUkMs=";
   };
 
-  cargoSha256 = "sha256-OEArMqOiT+PZ+zMRt9h0EzeP7ikFuOYR8mFGtm+xCkQ=";
+  cargoHash = "sha256-OEArMqOiT+PZ+zMRt9h0EzeP7ikFuOYR8mFGtm+xCkQ=";
 
   # disable doc tests
   cargoTestFlags = [

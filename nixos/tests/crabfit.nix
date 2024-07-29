@@ -4,7 +4,7 @@ import ./make-test-python.nix (
   {
     name = "crabfit";
 
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = [ ];
 
     nodes = {
       machine =

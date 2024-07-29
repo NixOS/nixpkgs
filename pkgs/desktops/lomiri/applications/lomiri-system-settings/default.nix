@@ -127,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib # glib-compile-schemas
     intltool
     pkg-config
+    qtdeclarative
     validatePkgConfig
   ];
 

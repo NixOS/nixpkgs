@@ -85,7 +85,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Cloudsmith Command Line Interface";
     mainProgram = "cloudsmith";
     changelog = "https://github.com/cloudsmith-io/cloudsmith-cli/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.asl20;
     platforms = with platforms; unix;
   };

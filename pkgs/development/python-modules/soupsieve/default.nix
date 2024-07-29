@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "CSS4 selector implementation for Beautiful Soup";
     license = licenses.mit;
     homepage = "https://github.com/facelessuser/soupsieve";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

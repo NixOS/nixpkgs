@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Module to generate SVG railroad syntax diagrams";
     homepage = "https://github.com/tabatkins/railroad-diagrams";
     license = licenses.cc0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

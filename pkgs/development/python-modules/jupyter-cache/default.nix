@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/jupyter-cache";
     changelog = "https://github.com/executablebooks/jupyter-cache/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

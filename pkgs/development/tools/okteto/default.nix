@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "okteto";
-  version = "2.27.4";
+  version = "2.29.3";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     rev = version;
-    hash = "sha256-FctWmYGOdmGqjHGlsi3k+RUmU35ufzpMh7Eh88GZiUc=";
+    hash = "sha256-aU2yH33HVg9CHA5+NOWZUmhRC7W6yMjKIwyDM8E4e2g=";
   };
 
-  vendorHash = "sha256-RpkKWz/cJ1StbpVydqpSfA6uwIYgKa1YOCJVXZRer6k=";
+  vendorHash = "sha256-7XZImCS9hv8ILYfGcoY3tMk0grswWbfpQrBKhghTfsY=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
@@ -35,9 +35,21 @@ buildGoModule rec {
     export HOME="$(mktemp -d)"
   '';
 
-  checkFlags = [
-    "-skip=TestCreateDockerfile" # Skip flaky test
-  ];
+  checkFlags =
+    let
+      skippedTests = [
+        # require network access
+        "TestCreateDockerfile"
+
+        # access file system
+        "Test_translateDeployment"
+        "Test_translateStatefulSet"
+        "Test_translateJobWithoutVolumes"
+        "Test_translateJobWithVolumes"
+        "Test_translateService"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     installShellCompletion --cmd okteto \

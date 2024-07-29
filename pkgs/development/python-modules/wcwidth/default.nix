@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jquast/wcwidth";
     changelog = "https://github.com/jquast/wcwidth/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

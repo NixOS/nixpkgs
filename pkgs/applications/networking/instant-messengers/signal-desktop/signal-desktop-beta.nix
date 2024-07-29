@@ -2,7 +2,7 @@
 callPackage ./generic.nix { } rec {
   pname = "signal-desktop-beta";
   dir = "Signal Beta";
-  version = "7.17.0-beta.1";
+  version = "7.18.0-beta.1";
   url = "https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_${version}_amd64.deb";
-  hash = "sha256-sK42Bqh+j4b8SduZk6eMhgBhRMG0q/ee5lAqFYVc4Tg=";
+  hash = "sha256-ZNFssB0SiNAAW7SupxNqdbEtEpemrv+IoyfdWVKu8CI=";
 }

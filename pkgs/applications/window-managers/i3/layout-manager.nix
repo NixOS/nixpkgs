@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     mainProgram = "layout_manager";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

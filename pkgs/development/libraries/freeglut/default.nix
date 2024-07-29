@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freeglut";
-  version = "3.4.0";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/freeglut/freeglut-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-PAvLkV2bGAqX7a69ARt6HeVFg6g4ZE3NQrsOoMbz6uw=";
+    sha256 = "sha256-nD1NZRb7+gKA7ck8d2mPtzA+RDwaqvN9Jp4yiKbD6lI=";
   };
 
   outputs = [ "out" "dev" ];

@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/davidfischer/requirements-parser";
     changelog = "https://github.com/madpah/requirements-parser/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

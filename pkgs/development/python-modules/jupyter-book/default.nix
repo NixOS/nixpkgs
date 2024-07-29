@@ -70,7 +70,7 @@ buildPythonPackage rec {
     homepage = "https://jupyterbook.org/";
     changelog = "https://github.com/executablebooks/jupyter-book/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "jupyter-book";
   };
 }

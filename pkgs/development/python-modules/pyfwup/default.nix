@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyfwup";
-  version = "0.4.0";
+  version = "0.5.0";
 
   pyproject = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "greatscottgadgets";
     repo = "pyfwup";
     rev = "refs/tags/${version}";
-    hash = "sha256-JSaAEGobdLqpSj9yvKrAsXfdkHpXSCcuGYRxz2QJqck=";
+    hash = "sha256-HZaR7X19kWb8w/VcnRHReGPkUBQ/u89BjmkTPpayoxE=";
   };
 
   dependencies = [

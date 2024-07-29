@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Fast NumPy array functions";
     homepage = "https://github.com/pydata/bottleneck";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

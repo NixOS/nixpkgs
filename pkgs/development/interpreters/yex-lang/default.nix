@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-sxzkZ2Rhn3HvZIfjnJ6Z2au/l/jV5705ecs/X3Iah6k=";
   };
 
-  cargoSha256 = "sha256-nX5FoPAk50wt0CXskyg7jQeHvD5YtBNnCe0CVOGXTMI=";
+  cargoHash = "sha256-nX5FoPAk50wt0CXskyg7jQeHvD5YtBNnCe0CVOGXTMI=";
 
   meta = with lib; {
     homepage = "https://github.com/nonamescm/yex-lang";

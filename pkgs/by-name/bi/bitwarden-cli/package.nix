@@ -4,7 +4,7 @@
 , nodejs_20
 , fetchFromGitHub
 , python311
-, darwin
+, cctools
 , nixosTests
 , xcbuild
 }:
@@ -27,7 +27,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     python311
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+    cctools
     xcbuild.xcrun
   ];
 

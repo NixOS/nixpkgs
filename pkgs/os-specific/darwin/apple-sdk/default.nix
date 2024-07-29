@@ -363,7 +363,7 @@ in rec {
 
   objc4 = pkgs.darwin.libobjc;
 
-  sdkRoot = pkgs.callPackage ./sdkRoot.nix { sdkVersion = "10.12"; };
+  sdkRoot = pkgs.callPackage ./sdkRoot.nix { sdkVersion = "10.12.4"; };
 
   inherit (pkgs.darwin) Libsystem;
 

@@ -60,6 +60,7 @@
 , texinfo
 , webkitgtk
 , wrapGAppsHook3
+, zlib
 
 # Boolean flags
 , withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
@@ -250,6 +251,7 @@ mkDerivation (finalAttrs: {
     glib-networking
   ] ++ lib.optionals withNativeCompilation [
     libgccjit
+    zlib
   ] ++ lib.optionals withImageMagick [
     imagemagick
   ] ++ lib.optionals withPgtk [

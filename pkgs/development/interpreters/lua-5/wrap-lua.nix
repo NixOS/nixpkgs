@@ -1,5 +1,4 @@
-{ lib
-, lua
+{ lua
 , makeSetupHook
 , makeWrapper
 }:

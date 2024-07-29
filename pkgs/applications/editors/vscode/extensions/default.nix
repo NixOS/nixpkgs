@@ -1047,26 +1047,26 @@ let
             sources = {
               "x86_64-linux" = {
                 arch = "linux-x64";
-                hash = "sha256-ZlbPRFQwvZNCp8K/rbHqVa3coXa2dT4nOrNChC9naC8=";
+                hash = "sha256-X6Oszc88F0ENABwX63uwxbJ4VPQOQzZbJA87znVg5d8=";
               };
               "x86_64-darwin" = {
                 arch = "darwin-x64";
-                hash = "sha256-hSRdvno8VZNi48rckaqWbAgDXT6RXEcPnkNOT8DV1wA=";
+                hash = "sha256-NH3kGmNZpKofNplw+FRJFvV3m36HRuIqGR3zt6X5x60=";
               };
               "aarch64-linux" = {
                 arch = "linux-arm64";
-                hash = "sha256-rimE7dKT6zajHo6E42z7IyfP35xBXThIwMHhZjaZwHk=";
+                hash = "sha256-hlFAMz17cl2/1CK7/dgrLktcPZYAcccIWIpkAVdwpkI=";
               };
               "aarch64-darwin" = {
                 arch = "darwin-arm64";
-                hash = "sha256-7TeUAZLiEnqi5i5nHLhtv5aMxIcw7iiABOAkwP1YYqM=";
+                hash = "sha256-oVkmdw0sHv5Y+ysT4zWW6qFDh/h4/TcgSAauh1KrE1c=";
               };
             };
           in
           {
             name = "continue";
             publisher = "Continue";
-            version = "0.8.40";
+            version = "0.8.44";
           }
           // sources.${stdenv.system};
         nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
@@ -1096,6 +1096,23 @@ let
         meta = {
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.kamadorueda ];
+        };
+      };
+
+      csharpier.csharpier-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "csharpier-vscode";
+          publisher = "csharpier";
+          version = "1.7.3";
+          hash = "sha256-/ZLjnlLl6xmgEazdCbnuE6UuuV1tDwAjpxz+vmBuYHE=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/csharpier.csharpier-vscode/changelog";
+          description = "CSharpier code formatter for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode";
+          homepage = "https://github.com/belav/csharpier";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.magnouvean ];
         };
       };
 
@@ -1782,8 +1799,8 @@ let
         mktplcRef = {
           name = "dependi";
           publisher = "fill-labs";
-          version = "0.7.4";
-          hash = "sha256-6nU0bVAe/vwq43ECLwypIkMAG/q5+P2bE1RPAjeTCX4=";
+          version = "0.7.5";
+          hash = "sha256-troydfNj88c8A24ZtaCToE231VWzcCiQVLTSdVPM/XE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/fill-labs.dependi/changelog";
@@ -3108,6 +3125,72 @@ let
 
       ms-dotnettools.csdevkit = callPackage ./ms-dotnettools.csdevkit { };
       ms-dotnettools.csharp = callPackage ./ms-dotnettools.csharp { };
+
+      ms-dotnettools.vscode-dotnet-runtime = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-dotnet-runtime";
+          publisher = "ms-dotnettools";
+          version = "2.1.1";
+          hash = "sha256-k14bjWITPDduJi79W59SnMV2TFNRCeAymhs6u1Y0vzk=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ms-dotnettools.vscode-dotnet-runtime/changelog";
+          description = "Provides a way for other Visual Studio Code extensions to install local versions of .NET SDK/Runtime";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.vscode-dotnet-runtime";
+          homepage = "https://github.com/dotnet/vscode-dotnet-runtime";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.magnouvean ];
+        };
+      };
+
+      ms-dotnettools.vscodeintellicode-csharp = buildVscodeMarketplaceExtension {
+        mktplcRef =
+          let
+            sources = {
+              "x86_64-linux" = {
+                arch = "linux-x64";
+                hash = "sha256-oQMwzQuW5vjxtDboRCeiEO5aytsAY6rb14JDTmK3JPg=";
+              };
+              "x86_64-darwin" = {
+                arch = "darwin-x64";
+                hash = "sha256-/9+qtLDNYUFvdoehit3BihA38p6RqJ7na5Q27xxpZk0=";
+              };
+              "aarch64-linux" = {
+                arch = "linux-arm64";
+                hash = "sha256-JqLlYMKyTXaEzuTPPxVaO8WJiuCUN+9xBzyA6+aYdSc=";
+              };
+              "aarch64-darwin" = {
+                arch = "darwin-arm64";
+                hash = "sha256-dhiUePePkO3MxRQ5UP+lOxRax503JlERe/GWJ8pPUIg=";
+              };
+            };
+          in
+          {
+            name = "vscodeintellicode-csharp";
+            publisher = "ms-dotnettools";
+            version = "2.1.11";
+          }
+          // sources.${stdenv.system};
+        nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+        buildInputs = [
+          stdenv.cc.cc.lib
+          zlib
+        ];
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ms-dotnettools.vscodeintellicode-csharp/changelog";
+          description = "AI-assisted development features for C# in Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.vscodeintellicode-csharp";
+          homepage = "https://github.com/MicrosoftDocs/intellicode";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.magnouvean ];
+          platforms = [
+            "x86_64-linux"
+            "x86_64-darwin"
+            "aarch64-darwin"
+            "aarch64-linux"
+          ];
+        };
+      };
 
       ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {

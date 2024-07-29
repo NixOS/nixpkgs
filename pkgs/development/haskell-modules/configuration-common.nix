@@ -3100,6 +3100,11 @@ self: super: {
     hash = "sha256-JxraFWzErJT4EhELa3PWBGHaLT9OLgEPNSnxwpdpHd0=";
   }) (doJailbreak super.argon2); # Unmaintained
 
+  safe-exceptions = overrideCabal (drv: {
+    # Fix strictDeps build error "could not execute: hspec-discover"
+    testToolDepends = drv.testToolDepends or [] ++ [ self.hspec-discover ];
+  }) super.safe-exceptions;
+
   # Apply patch to use v.4.0.2
   push-notify-apn = appendPatch (
     fetchpatch {

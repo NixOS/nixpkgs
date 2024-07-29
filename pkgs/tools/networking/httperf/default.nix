@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Httperf HTTP load generator";
     homepage = "https://github.com/httperf/httperf";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     mainProgram = "httperf";

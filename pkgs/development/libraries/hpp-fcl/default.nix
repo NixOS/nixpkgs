@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     doxygen
+  ] ++ lib.optionals pythonSupport [
+    python3Packages.numpy
   ];
 
   propagatedBuildInputs = [

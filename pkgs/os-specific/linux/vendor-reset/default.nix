@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Linux kernel vendor specific hardware reset module";
     homepage = "https://github.com/gnif/vendor-reset";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     broken = kernel.kernelOlder "4.19";
   };

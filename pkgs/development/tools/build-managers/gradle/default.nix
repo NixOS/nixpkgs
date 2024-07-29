@@ -211,6 +211,7 @@ rec {
       passthru = {
         fetchDeps = callPackage ./fetch-deps.nix { inherit mitm-cache; };
         inherit (gradle) jdk;
+        unwrapped = gradle;
       };
 
       meta = gradle.meta // {

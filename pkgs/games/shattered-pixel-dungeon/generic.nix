@@ -53,7 +53,7 @@ let
     keywords = [ "roguelike" "dungeon" "crawler" ];
   };
 
-  depsPath' = if depsPath != null then depsPath else ./${pname}/deps.json;
+  depsPath' = if depsPath != null then depsPath else ./. + "/${pname}/deps.json";
 
 in stdenv.mkDerivation (cleanAttrs // {
   inherit pname version src patches postPatch;

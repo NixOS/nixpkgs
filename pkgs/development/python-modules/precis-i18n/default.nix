@@ -26,6 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/byllyfish/precis_i18n";
     changelog = "https://github.com/byllyfish/precis_i18n/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

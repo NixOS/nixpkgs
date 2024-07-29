@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2024.6.10";
+  version = "2024.7.18";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "materialsproject";
     repo = "pymatgen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BV3zwb74ZnwTWUgKt5K6lZLASdO6/UQ8Ke3gBsLhy2M=";
+    hash = "sha256-LL3cZO3LkmBuGGcO7dhO2Wtgqx9nxLureFpC8EqvS3M";
   };
 
   build-system = [ setuptools ];
@@ -82,8 +82,6 @@ buildPythonPackage rec {
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   preCheck = ''
-    # hide from tests
-    mv pymatgen _pymatgen
     # ensure tests can find these
     export PMG_TEST_FILES_DIR="$(realpath ./tests/files)"
     # some tests cover the command-line scripts

@@ -61,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-bigquery-storage";
     changelog = "https://github.com/googleapis/python-bigquery-storage/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
