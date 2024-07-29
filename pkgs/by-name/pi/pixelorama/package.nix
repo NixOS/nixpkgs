@@ -4,16 +4,17 @@
   alsa-lib,
   autoPatchelfHook,
   fetchFromGitHub,
-  godot3-headless,
-  godot3-export-templates,
-  libGLU,
+  godot_4,
+  godot_4-export-templates,
+  libGL,
   libpulseaudio,
   libX11,
   libXcursor,
+  libXext,
   libXi,
-  libXinerama,
   libXrandr,
-  libXrender,
+  vulkan-loader,
+
   nix-update-script,
   udev,
 }:
@@ -26,42 +27,47 @@ let
       "Mac OSX"
     else
       throw "unsupported platform";
+
+  godot_version_folder = lib.replaceStrings [ "-" ] [ "." ] godot_4.version;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "0.11.4";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-VEQjZ9kDqXz1hoT4PrsBtzoi1TYWyN+YcPMyf9qJMRE=";
+    hash = "sha256-lfim5ZiykOhI1kgsu0ni2frUVHPRIPJdrGx6TuUQcSY=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    godot3-headless
+    godot_4
   ];
 
-  buildInputs = [
-    libGLU
+  runtimeDependencies = map lib.getLib [
+    vulkan-loader
+    libGL
     libX11
     libXcursor
+    libXext
     libXi
-    libXinerama
     libXrandr
-    libXrender
+    alsa-lib
+    libpulseaudio
+    udev
   ];
 
   buildPhase = ''
     runHook preBuild
 
     export HOME=$(mktemp -d)
-    mkdir -p $HOME/.local/share/godot/
-    ln -s "${godot3-export-templates}/share/godot/templates" "$HOME/.local/share/godot/templates"
+    mkdir -p $HOME/.local/share/godot/export_templates
+    ln -s "${godot_4-export-templates}" "$HOME/.local/share/godot/export_templates/${godot_version_folder}"
     mkdir -p build
-    godot3-headless -v --export "${preset}" ./build/pixelorama
-    godot3-headless -v --export-pack "${preset}" ./build/pixelorama.pck
+    godot4 --headless --export-release "${preset}" ./build/pixelorama
 
     runHook postBuild
   '';
@@ -78,12 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-  runtimeDependencies = map lib.getLib [
-    alsa-lib
-    libpulseaudio
-    udev
-  ];
 
   passthru.updateScript = nix-update-script { };
 
