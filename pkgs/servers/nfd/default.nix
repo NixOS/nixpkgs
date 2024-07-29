@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, boost
-, fetchFromGitHub
-, libpcap
-, ndn-cxx
-, openssl
-, pkg-config
-, sphinx
-, systemd
-, wafHook
-, websocketpp
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, withWebSocket ? true
+{
+  lib,
+  stdenv,
+  boost,
+  fetchFromGitHub,
+  libpcap,
+  ndn-cxx,
+  openssl,
+  pkg-config,
+  sphinx,
+  systemd,
+  wafHook,
+  websocketpp,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withWebSocket ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,10 +39,7 @@ stdenv.mkDerivation rec {
     libpcap
     ndn-cxx
     openssl
-  ] ++ lib.optional withWebSocket websocketpp
-  ++ lib.optional withSystemd systemd;
-
-
+  ] ++ lib.optional withWebSocket websocketpp ++ lib.optional withSystemd systemd;
   wafConfigureFlags = [
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"
