@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "jupysql";
-  version = "0.10.11";
+  version = "0.10.12";
 
   pyproject = true;
   disabled = pythonOlder "3.7";
@@ -40,10 +40,8 @@ buildPythonPackage rec {
     owner = "ploomber";
     repo = "jupysql";
     rev = "refs/tags/${version}";
-    hash = "sha256-A9zTjH+9RYKcgy4mI6uOMHOc46om06y1zK3IbxeVcWE=";
+    hash = "sha256-xq4yLJTqqqiN8L85jrUnVxAZHfmR3LS0/gwqtF89qJE=";
   };
-
-  pythonRelaxDeps = [ "sqlalchemy" ];
 
   build-system = [ setuptools ];
 
