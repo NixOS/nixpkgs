@@ -17,7 +17,7 @@ runTest ({ config, ... }: {
           redis = true;
           memcached = false;
         };
-        config.dbtype = "pgsql";
+        settings.dbtype = "pgsql";
         notify_push = {
           enable = true;
           logLevel = "debug";

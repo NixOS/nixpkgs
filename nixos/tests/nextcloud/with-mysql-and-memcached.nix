@@ -17,7 +17,7 @@ runTest ({ config, ... }: {
           redis = false;
           memcached = true;
         };
-        config.dbtype = "mysql";
+        settings.dbtype = "mysql";
       };
 
       services.memcached.enable = true;
