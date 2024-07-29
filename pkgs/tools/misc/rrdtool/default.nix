@@ -15,13 +15,13 @@
 
 perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
   pname = "rrdtool";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "oetiker";
     repo = "rrdtool-1.x";
     rev = "v${version}";
-    hash = "sha256-a+AxU1+YpkGoFs1Iu/CHAEZ4XIkWs7Vsnr6RcfXzsBE=";
+    hash = "sha256-CPbSu1mosNlfj2nqiNVH14a5C5njkfvJM8ix3X3aP8E=";
   };
 
   nativeBuildInputs = [
