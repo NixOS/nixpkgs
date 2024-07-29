@@ -26892,6 +26892,9 @@ with pkgs;
   linuxPackages_testing = linuxKernel.packages.linux_testing;
   linux_testing = linuxKernel.kernels.linux_testing;
 
+  linuxPackages_scx = linuxKernel.packages.linux_scx;
+  linux_scx = linuxKernel.kernels.linux_scx;
+
   # Realtime kernel
   linuxPackages-rt = linuxKernel.packageAliases.linux_rt_default;
   linuxPackages-rt_latest = linuxKernel.packageAliases.linux_rt_latest;

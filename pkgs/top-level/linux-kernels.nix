@@ -216,6 +216,11 @@ in {
       ];
     };
 
+    linux_scx = callPackage ../os-specific/linux/kernel/linux-scx.nix {
+        kernel = linux_6_10;
+        kernelPatches = linux_6_10.kernelPatches;
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/mainline.nix {
         # A special branch that tracks the kernel under the release process
@@ -663,6 +668,8 @@ in {
 
     # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
     linux_testing = packagesFor kernels.linux_testing;
+
+    linux_scx = recurseIntoAttrs (packagesFor kernels.linux_scx);
 
     linux_hardened = recurseIntoAttrs (packagesFor kernels.linux_hardened);
 
