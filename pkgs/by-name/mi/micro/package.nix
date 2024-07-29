@@ -9,7 +9,6 @@
 , makeWrapper
 # Boolean flags
 , withXclip ? stdenv.isLinux
-, withWlclip ? null
 , withWlClipboard ?
   if withWlclip != null then
     lib.warn ''
@@ -17,6 +16,10 @@
       use withWlClipboard instead.
     '' withWlclip
   else stdenv.isLinux
+# Deprecated options
+# Remove them before or right after next version update from Nixpkgs or this
+# package itself
+, withWlclip ? null
 }:
 
 let
@@ -68,10 +71,9 @@ let
         '';
 
     passthru = {
-      tests = {
-        expect = callPackage ./test-with-expect.nix {
-          micro = self;
-        };
+      tests = lib.packagesFromDirectoryRecursive {
+        inherit callPackage;
+        directory = ./tests;
       };
     };
 
