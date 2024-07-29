@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildDartApplication,
-  sqlite,
   kdePackages,
 }:
 
@@ -27,11 +26,6 @@ buildDartApplication {
   dartEntryPoints = {
     "bin/vscode_runner" = "bin/vscode_runner.dart";
   };
-
-  preFixup = ''
-    wrapProgram $out/bin/vscode_runner \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ sqlite ]}
-  '';
 
   postInstall = ''
     substituteInPlace ./package/codes.merritt.vscode_runner.service \
