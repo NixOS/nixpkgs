@@ -9,12 +9,13 @@
   pyexcel,
   pytestCheckHook,
   pytest-cov,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyexcel-xls";
   version = "0.7.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyexcel";
@@ -33,7 +34,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyexcel-io
     xlrd
     xlwt
@@ -53,6 +56,6 @@ buildPythonPackage rec {
     description = "Wrapper library to read, manipulate and write data in xls using xlrd and xlwt";
     homepage = "http://docs.pyexcel.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }
