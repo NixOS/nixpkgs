@@ -39,7 +39,7 @@ in
           ]
         );
         options = {
-          db-file = mkOption {
+          database = mkOption {
             type = types.nullOr types.str;
             default = null;
             example = "mailpit.db";
