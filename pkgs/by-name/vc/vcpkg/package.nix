@@ -27,6 +27,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-fail "arm-linux-gnueabihf-as"  "armv7l-unknown-linux-gnueabihf-as" \
       --replace-fail "arm-linux-gnueabihf-gcc" "armv7l-unknown-linux-gnueabihf-gcc" \
       --replace-fail "arm-linux-gnueabihf-g++" "armv7l-unknown-linux-gnueabihf-g++"
+    # If we don’t turn this off, then you won’t be able to run binaries that
+    # are installed by vcpkg.
+    find triplets -name '*linux*.cmake' -exec bash -c 'echo "set(X_VCPKG_RPATH_KEEP_SYSTEM_PATHS ON)" >> "$1"' -- {} \;
   '';
 
   installPhase = ''

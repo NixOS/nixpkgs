@@ -35,13 +35,13 @@ assert withGLES -> stdenv.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.144.4";
+  version = "0.145.1";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-F/44NjoBCH2und9VVayE0wxrrOtcFoP5yuvxgxCkxuM=";
+    hash = "sha256-fO1VT2LiZa9XkQxP7QcEG9uCTtEm3soces7FCFwosbU=";
     fetchSubmodules = true;
   };
 

@@ -407,6 +407,10 @@ with pkgs;
 
   c64-debugger = callPackage ../applications/emulators/c64-debugger { };
 
+  cameractrls-gtk4 = cameractrls.override { withGtk = 4; };
+
+  cameractrls-gtk3 = cameractrls.override { withGtk = 3; };
+
   camunda-modeler = callPackage ../applications/misc/camunda-modeler { };
 
   checkpointBuildTools = callPackage ../build-support/checkpoint-build.nix {};
@@ -6408,10 +6412,6 @@ with pkgs;
   bash_unit = callPackage ../tools/misc/bash_unit { };
 
   boltbrowser = callPackage ../tools/misc/boltbrowser { };
-
-  bsc = callPackage ../tools/compression/bsc {
-    inherit (llvmPackages) openmp;
-  };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
@@ -27721,10 +27721,6 @@ with pkgs;
   sensible-side-buttons = callPackage ../os-specific/darwin/sensible-side-buttons { };
 
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
-
-  wpa_supplicant_ro_ssids = wpa_supplicant.override {
-    readOnlyModeSSIDs = true;
-  };
 
   wpa_supplicant_gui = libsForQt5.callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
 

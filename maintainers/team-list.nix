@@ -749,7 +749,10 @@ with lib.maintainers;
   };
 
   openstack = {
-    members = [ SuperSandro2000 ];
+    members = [
+      SuperSandro2000
+      anthonyroussel
+    ];
     scope = "Maintain the ecosystem around OpenStack";
     shortName = "OpenStack";
   };

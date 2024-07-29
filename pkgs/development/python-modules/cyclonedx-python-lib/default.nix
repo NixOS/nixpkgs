@@ -82,6 +82,12 @@ buildPythonPackage rec {
     "tests/test_output_xml.py"
   ];
 
+  passthru.optional-dependencies = {
+    validation = [
+      jsonschema
+    ];
+  };
+
   meta = with lib; {
     description = "Python library for generating CycloneDX SBOMs";
     homepage = "https://github.com/CycloneDX/cyclonedx-python-lib";
