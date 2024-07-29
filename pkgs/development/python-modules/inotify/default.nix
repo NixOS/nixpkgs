@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,10 +18,18 @@ buildPythonPackage rec {
     fetchSubmodules = false;
   };
 
-  nativeCheckInputs = [ nose ];
+  postPatch = ''
+    # First is needed because assertEquals was removed in python 3.12
+    # Second and third are needed because these are the opposite pair now for some reason
+    substituteInPlace tests/test_inotify.py \
+      --replace-fail "assertEquals" "assertEqual" \
+      --replace-fail "['IN_ISDIR', 'IN_CREATE']" "['IN_CREATE', 'IN_ISDIR']" \
+      --replace-fail "['IN_ISDIR', 'IN_DELETE']" "['IN_DELETE', 'IN_ISDIR']"
+  '';
 
-  # dunno what's wrong but the module works regardless
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [ "test__renames" ];
 
   meta = with lib; {
     homepage = "https://github.com/dsoprea/PyInotify";
