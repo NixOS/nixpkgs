@@ -159,3 +159,12 @@ fbdcdde04a7caa007e825a8b822c75fab9adb2d6
 
 # step-cli: format package.nix with nixfmt (#331629)
 fc7a83f8b62e90de5679e993d4d49ca014ea013d
+
+# ndn-cxx: format with nixfmt-rfc-style
+5e77a9a0c3642d0623f318f41206911f255ccb77
+
+# ndn-tools: format with nixfmt-rfc-style
+6a768cfd9feedaab99c8004b5eaf0b5a69d8f426
+
+# nfd: format with nixfmt-rfc-style
+0262831e1b31eaf9853ce4f88e212c734f48e9b9
