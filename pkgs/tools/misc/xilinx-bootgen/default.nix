@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 bootgen $out/bin/bootgen
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generate Boot Images for Xilinx Zynq and ZU+ SoCs";
     longDescription = ''
       Bootgen for Xilinx Zynq and ZU+ SoCs, without code related to generating
@@ -35,9 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
       For more details about Bootgen, please refer to Xilinx UG1283.
     '';
     homepage = "https://github.com/Xilinx/bootgen";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.flokli ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.flokli lib.maintainers.jmbaur ];
     mainProgram = "bootgen";
   };
 })
