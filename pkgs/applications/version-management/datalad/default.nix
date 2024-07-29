@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, python3, git, git-annex, p7zip, curl, coreutils }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  python3,
+  git,
+  git-annex,
+  p7zip,
+  curl,
+  coreutils,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "datalad";
@@ -16,47 +27,53 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail "/bin/ls" "${coreutils}/bin/ls"
   '';
 
-  nativeBuildInputs = [ installShellFiles git ];
+  nativeBuildInputs = [
+    installShellFiles
+    git
+  ];
 
   build-system = [ python3.pkgs.setuptools ];
 
-  dependencies = with python3.pkgs; [
-    # core
-    platformdirs
-    chardet
-    iso8601
-    humanize
-    fasteners
-    packaging
-    patool
-    tqdm
-    annexremote
-    looseversion
-    setuptools
-    git-annex
+  dependencies =
+    with python3.pkgs;
+    [
+      # core
+      platformdirs
+      chardet
+      iso8601
+      humanize
+      fasteners
+      packaging
+      patool
+      tqdm
+      annexremote
+      looseversion
+      setuptools
+      git-annex
 
-    # downloaders-extra
-    # requests-ftp # not in nixpkgs yet
+      # downloaders-extra
+      # requests-ftp # not in nixpkgs yet
 
-    # downloaders
-    boto3
-    keyrings-alt
-    keyring
-    msgpack
-    requests
+      # downloaders
+      boto3
+      keyrings-alt
+      keyring
+      msgpack
+      requests
 
-    # publish
-    python-gitlab
+      # publish
+      python-gitlab
 
-    # misc
-    argcomplete
-    pyperclip
-    python-dateutil
-    # duecredit
-    duecredit
-    # python>=3.8
-    distro
-  ] ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
+      # misc
+      argcomplete
+      pyperclip
+      python-dateutil
+      # duecredit
+      duecredit
+      # python>=3.8
+      distro
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
     ++ lib.optionals (python3.pythonOlder "3.9") [ importlib-resources ]
     ++ lib.optionals (python3.pythonOlder "3.10") [ importlib-metadata ]
     ++ lib.optionals (python3.pythonOlder "3.11") [ typing_extensions ];
@@ -161,7 +178,13 @@ python3.pkgs.buildPythonApplication rec {
     "test_wtf"
   ];
 
-  nativeCheckInputs = [ p7zip python3.pkgs.pytestCheckHook git-annex curl python3.pkgs.httpretty ];
+  nativeCheckInputs = [
+    p7zip
+    python3.pkgs.pytestCheckHook
+    git-annex
+    curl
+    python3.pkgs.httpretty
+  ];
 
   pythonImportsCheck = [ "datalad" ];
 
