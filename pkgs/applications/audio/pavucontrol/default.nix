@@ -5,39 +5,50 @@
   pkg-config,
   intltool,
   libpulseaudio,
-  gtkmm3,
+  gtkmm4,
   libsigcxx,
+  # Since version 6.0, libcanberra is optional
+  withLibcanberra ? true,
   libcanberra-gtk3,
   json-glib,
   adwaita-icon-theme,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
+  meson,
+  ninja,
+  libpressureaudio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pavucontrol";
-  version = "5.0";
+  version = "6.0";
 
   src = fetchurl {
     url = "https://freedesktop.org/software/pulseaudio/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-zityw7XxpwrQ3xndgXUPlFW9IIcNHTo20gU2ry6PTno=";
+    sha256 = "sha256-hchg1o/x+CzZjHKpJXGEvuOSmVeKsSLSm8Uey+z79ls=";
   };
 
   buildInputs = [
     libpulseaudio
-    gtkmm3
+    gtkmm4
     libsigcxx
-    libcanberra-gtk3
+    (lib.optionals withLibcanberra libcanberra-gtk3)
     json-glib
     adwaita-icon-theme
+    libpressureaudio
   ];
 
   nativeBuildInputs = [
     pkg-config
     intltool
-    wrapGAppsHook3
+    wrapGAppsHook4
+    meson
+    ninja
   ];
 
-  configureFlags = [ "--disable-lynx" ];
+  mesonFlags = [
+    "--prefix=${placeholder "out"}"
+    (lib.mesonBool "lynx" false)
+  ];
 
   enableParallelBuilding = true;
 
