@@ -6306,6 +6306,8 @@ self: super: with self; {
     pkgs.hpp-manipulation-corba.override { python3Packages = self; }
   );
 
+  hpp-plot = toPythonModule (pkgs.hpp-plot.override { python3Packages = self; });
+
   hpp-romeo = toPythonModule (
     pkgs.hpp-romeo.override {
       pythonSupport = true;
