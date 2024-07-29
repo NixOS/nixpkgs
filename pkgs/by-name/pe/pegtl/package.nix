@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       for creating parsers according to a Parsing Expression Grammar (PEG).
     '';
     license = lib.licenses.boost;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -37,6 +37,6 @@ buildPythonPackage rec {
     mainProgram = "pyannotate";
     homepage = "https://github.com/dropbox/pyannotate";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

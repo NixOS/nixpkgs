@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
       Center (BVLC) and by community contributors.
     '';
     homepage = "http://caffe.berkeleyvision.org/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     broken =
       (pythonSupport && (python.isPy310))
       || cudaSupport

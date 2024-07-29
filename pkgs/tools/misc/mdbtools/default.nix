@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = ".mdb (MS Access) format tools";
     license = with licenses; [ gpl2Plus lgpl2 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     inherit (src.meta) homepage;
   };

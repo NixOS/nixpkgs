@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
     description = "Utility for converting, quantizing, and querying word embeddings";
     homepage = "https://github.com/finalfusion/finalfusion-utils/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "finalfusion";
   };
 }

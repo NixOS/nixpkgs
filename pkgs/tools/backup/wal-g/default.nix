@@ -35,6 +35,6 @@ buildGoModule rec {
     license = licenses.asl20;
     description = "Archival restoration tool for PostgreSQL";
     mainProgram = "wal-g";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

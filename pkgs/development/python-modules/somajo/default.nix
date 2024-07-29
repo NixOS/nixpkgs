@@ -36,6 +36,6 @@ buildPythonPackage rec {
     mainProgram = "somajo-tokenizer";
     homepage = "https://github.com/tsproisl/SoMaJo";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

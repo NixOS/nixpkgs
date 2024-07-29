@@ -51,7 +51,7 @@ in bundlerApp {
     homepage    = "https://jekyllrb.com/";
     #changelog   = "https://raw.githubusercontent.com/jekyll/jekyll/v${version}/History.markdown";
     license     = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms   = platforms.unix;
     mainProgram = "jekyll";
   };

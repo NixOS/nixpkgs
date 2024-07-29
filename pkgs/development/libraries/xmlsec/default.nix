@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://www.aleksey.com/xmlsec/download.html";
     license = licenses.mit;
     mainProgram = "xmlsec1";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; linux ++ darwin;
   };
 }

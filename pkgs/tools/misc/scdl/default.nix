@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     description = "Download Music from Soundcloud";
     homepage = "https://github.com/flyingrub/scdl";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "scdl";
   };
 }

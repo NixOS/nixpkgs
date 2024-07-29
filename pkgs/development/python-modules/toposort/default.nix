@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Topological sort algorithm";
     homepage = "https://pypi.python.org/pypi/toposort/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     license = licenses.asl20;
   };

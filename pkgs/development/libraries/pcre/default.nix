@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     pkgConfigModules = [
       "libpcre"
       "libpcreposix"

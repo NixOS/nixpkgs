@@ -58,6 +58,6 @@ buildPythonPackage rec {
     mainProgram = "nosetests";
     homepage = "https://nose.readthedocs.io/";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

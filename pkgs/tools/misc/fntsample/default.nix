@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/eugmes/fntsample";
     description = "PDF and PostScript font samples generator";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://modeemi.fi/~tuomov/ion";
     platforms = with platforms; linux;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -24,7 +24,7 @@ buildGoModule rec {
     mainProgram = "gosu";
     homepage = "https://github.com/tianon/gosu";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }
