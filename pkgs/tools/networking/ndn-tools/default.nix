@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, boost
+, boost ? ndn-cxx.boost
 , fetchFromGitHub
 , libpcap
 , ndn-cxx
@@ -12,25 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ndn-tools";
-  version = "22.12";
+  version = "24.07";
 
   src = fetchFromGitHub {
     owner = "named-data";
-    repo = pname;
+    repo = "ndn-tools";
     rev = "ndn-tools-${version}";
-    sha256 = "sha256-28sPgo2nq5AhIzZmvDz38echGPzKDzNm2J6iIao4yL8=";
+    sha256 = "sha256-rzGd+8SkztrkXRXcEcQm6rOtAGnF7h/Jg8jaBb7FP9w=";
   };
-
-  # Hacky workaround for new pcap-config.
-  postPatch = ''
-    patch -p1 <<EOF
-      --- a/tools/dump/wscript
-      +++ b/tools/dump/wscript
-      @@ -5 +5 @@
-      -    conf.check_cfg(package='libpcap', uselib_store='PCAP',
-      +    conf.check_cfg(package="", uselib_store='PCAP',
-    EOF
-  '';
 
   nativeBuildInputs = [ pkg-config sphinx wafHook ];
   buildInputs = [ libpcap ndn-cxx openssl ];
