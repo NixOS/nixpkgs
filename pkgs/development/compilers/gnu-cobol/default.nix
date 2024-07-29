@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     description = "Open-source COBOL compiler";
     homepage = "https://sourceforge.net/projects/gnucobol/";
     license = with licenses; [ gpl3Only lgpl3Only ];
-    maintainers = with maintainers; [ ericsagnes lovesegfault ];
+    maintainers = with maintainers; [ ericsagnes lovesegfault techknowlogick ];
     platforms = platforms.all;
   };
 }
