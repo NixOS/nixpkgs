@@ -6,38 +6,62 @@
   glslang,
   meson,
   ninja,
+  pkg-config,
   windows,
   spirv-headers,
   vulkan-headers,
   SDL2,
   glfw,
   gitUpdater,
-  sdl2Support ? true,
-  glfwSupport ? false,
+  sdl2Support ? (!stdenv.hostPlatform.isWindows),
+  glfwSupport ? (!stdenv.hostPlatform.isWindows),
 }:
 
-# SDL2 and GLFW support are mutually exclusive.
-assert !sdl2Support || !glfwSupport;
+assert stdenv.hostPlatform.isWindows -> !glfwSupport && !sdl2Support;
 
 let
-  isWindows = stdenv.hostPlatform.uname.system == "Windows";
+  inherit (stdenv) hostPlatform;
+
+  libPrefix = lib.optionalString (!hostPlatform.isWindows) "lib";
+  soVersion =
+    version:
+    if hostPlatform.isDarwin then
+      ".${version}${hostPlatform.extensions.sharedLibrary}"
+    else if hostPlatform.isWindows then
+      hostPlatform.extensions.sharedLibrary
+    else
+      "${hostPlatform.extensions.sharedLibrary}.${version}";
+
+  libglfw = "${libPrefix}glfw${soVersion "3"}";
+  libSDL2 = "${libPrefix}SDL2${lib.optionalString (!hostPlatform.isWindows) "-2.0"}${soVersion "0"}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dxvk";
-  version = "2.3.1";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "doitsujin";
     repo = "dxvk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lUzD1NHFLO4UqOg/BUr7PnYMJCMr1KBh3VNx8etbt8c=";
+    hash = "sha256-4U0Z1oR0BKIHZ6YNT/+8sFe2I/ZKmPecInMXUho4MHg=";
     fetchSubmodules = true; # Needed for the DirectX headers and libdisplay-info
   };
 
-  postPatch = ''
-    substituteInPlace "subprojects/libdisplay-info/tool/gen-search-table.py" \
-      --replace "/usr/bin/env python3" "${lib.getBin pkgsBuildHost.python3}/bin/python3"
-  '';
+  postPatch =
+    ''
+      substituteInPlace meson.build \
+        --replace-fail "dependency('glfw'" "dependency('glfw3'"
+      substituteInPlace subprojects/libdisplay-info/tool/gen-search-table.py \
+        --replace-fail "/usr/bin/env python3" "${lib.getBin pkgsBuildHost.python3}/bin/python3"
+    ''
+    + lib.optionalString glfwSupport ''
+      substituteInPlace src/wsi/glfw/wsi_platform_glfw.cpp \
+        --replace-fail '${libglfw}' '${lib.getLib glfw}/lib/${libglfw}'
+    ''
+    + lib.optionalString sdl2Support ''
+      substituteInPlace src/wsi/sdl2/wsi_platform_sdl2.cpp \
+        --replace-fail '${libSDL2}' '${lib.getLib SDL2}/lib/${libSDL2}'
+    '';
 
   strictDeps = true;
 
@@ -45,15 +69,16 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     meson
     ninja
-  ];
+  ] ++ lib.optionals (glfwSupport || sdl2Support) [ pkg-config ];
+
   buildInputs =
     [
       spirv-headers
       vulkan-headers
     ]
-    ++ lib.optionals (!isWindows && sdl2Support) [ SDL2 ]
-    ++ lib.optionals (!isWindows && glfwSupport) [ glfw ]
-    ++ lib.optionals isWindows [ windows.pthreads ];
+    ++ lib.optionals sdl2Support [ SDL2 ]
+    ++ lib.optionals glfwSupport [ glfw ]
+    ++ lib.optionals hostPlatform.isWindows [ windows.pthreads ];
 
   # Build with the Vulkan SDK in nixpkgs.
   preConfigure = ''
@@ -63,8 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonBuildType = "release";
 
-  mesonFlags = lib.optionals glfwSupport [ "-Ddxvk_native_wsi=glfw" ];
-
   doCheck = true;
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
@@ -72,11 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    description = "Vulkan-based translation layer for Direct3D 9/10/11";
+    description = "Vulkan-based translation layer for Direct3D 8/9/10/11";
     homepage = "https://github.com/doitsujin/dxvk";
     changelog = "https://github.com/doitsujin/dxvk/releases";
     maintainers = [ lib.maintainers.reckenrode ];
     license = lib.licenses.zlib;
-    platforms = lib.platforms.windows ++ lib.platforms.linux;
+    badPlatforms = lib.platforms.darwin;
+    platforms = lib.platforms.windows ++ lib.platforms.unix;
   };
 })
