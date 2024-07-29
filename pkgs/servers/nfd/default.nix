@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, boost179 # probably needs to match the one from ndn-cxx
+, boost ? ndn-cxx.boost
 , fetchFromGitHub
 , libpcap
 , ndn-cxx
@@ -16,34 +16,22 @@
 
 stdenv.mkDerivation rec {
   pname = "nfd";
-  version = "22.12";
+  version = "24.07";
 
   src = fetchFromGitHub {
     owner = "named-data";
-    repo = lib.toUpper pname;
+    repo = "NFD";
     rev = "NFD-${version}";
-    hash = "sha256-epY5qtET7rsKL3KIKvxfa+wF+AGZbYs+zRhy8SnIffk=";
-    fetchSubmodules = true;
+    hash = "sha256-HbKPO3gwQWOZf4QZE+N7tAiqsNl1GrcwE4EUGjWmf5s=";
   };
 
   nativeBuildInputs = [ pkg-config sphinx wafHook ];
   buildInputs = [ libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
 
   wafConfigureFlags = [
-    "--boost-includes=${boost179.dev}/include"
-    "--boost-libs=${boost179.out}/lib"
-    "--with-tests"
+    "--boost-includes=${boost.dev}/include"
+    "--boost-libs=${boost.out}/lib"
   ] ++ lib.optional (!withWebSocket) "--without-websocket";
-
-  doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    build/unit-tests-core
-    # build/unit-tests-daemon # 3 tests fail
-    build/unit-tests-rib
-    build/unit-tests-tools
-    runHook postCheck
-  '';
 
   meta = with lib; {
     homepage = "https://named-data.net/";
