@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xilinx-bootgen";
-  version = "xilinx_v2023.2";
+  version = "xilinx_v2024.1";
 
   src = fetchFromGitHub {
     owner = "xilinx";
     repo = "bootgen";
-    rev = version;
-    hash = "sha256-YRaq36N6uBHyjuHQ5hCO35Y+y818NuSjg/js181iItA=";
+    rev = finalAttrs.version;
+    hash = "sha256-/gNAqjwfaD2NWxs2536XGv8g2IyRcQRHzgLcnCr4a34=";
   };
 
   buildInputs = [ openssl ];
@@ -19,7 +24,7 @@ stdenv.mkDerivation rec {
     install -Dm755 bootgen $out/bin/bootgen
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generate Boot Images for Xilinx Zynq and ZU+ SoCs";
     longDescription = ''
       Bootgen for Xilinx Zynq and ZU+ SoCs, without code related to generating
@@ -30,9 +35,9 @@ stdenv.mkDerivation rec {
       For more details about Bootgen, please refer to Xilinx UG1283.
     '';
     homepage = "https://github.com/Xilinx/bootgen";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.flokli ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.flokli lib.maintainers.jmbaur ];
     mainProgram = "bootgen";
   };
-}
+})

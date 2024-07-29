@@ -27731,8 +27731,6 @@ with pkgs;
 
   xf86_video_nested = callPackage ../os-specific/linux/xf86-video-nested { };
 
-  xilinx-bootgen = callPackage ../tools/misc/xilinx-bootgen { };
-
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
 
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
