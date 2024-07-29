@@ -2,41 +2,36 @@
   lib,
   buildPythonPackage,
   cryptography,
-  fetchPypi,
-  mock,
-  nose,
-  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "http-ece";
-  version = "1.2.0";
+  version = "1.2.1";
 
-  src = fetchPypi {
-    pname = "http_ece";
-    inherit version;
-    hash = "sha256-tZIPjvuOG1+wJXE+Ozb9pUM2JiAQY0sm3B+Y+F0es94=";
+  src = fetchFromGitHub {
+    owner = "web-push-libs";
+    repo = "encrypted-content-encoding";
+    rev = version;
+    hash = "sha256-HjXJWoOvCVOdEto4Ss4HPUuf+uNcQkfvj/cxJGHOhQ8=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail '"nose",' "" \
-      --replace-fail '"coverage",' ""
-  '';
+  sourceRoot = "${src.name}/python";
 
   propagatedBuildInputs = [ cryptography ];
 
-  doCheck = pythonOlder "3.12";
-
   nativeCheckInputs = [
-    mock
-    nose
+    pytestCheckHook
+    pytest-cov-stub
   ];
 
   meta = with lib; {
     description = "Encipher HTTP Messages";
-    homepage = "https://github.com/martinthomson/encrypted-content-encoding";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    homepage = "https://github.com/web-push-libs/encrypted-content-encoding";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }
