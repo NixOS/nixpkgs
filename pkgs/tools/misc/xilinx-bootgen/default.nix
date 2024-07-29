@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, openssl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xilinx-bootgen";
-  version = "xilinx_v2023.2";
+  version = "xilinx_v2024.1";
 
   src = fetchFromGitHub {
     owner = "xilinx";
     repo = "bootgen";
-    rev = version;
-    hash = "sha256-YRaq36N6uBHyjuHQ5hCO35Y+y818NuSjg/js181iItA=";
+    rev = finalAttrs.version;
+    hash = "sha256-/gNAqjwfaD2NWxs2536XGv8g2IyRcQRHzgLcnCr4a34=";
   };
 
   buildInputs = [ openssl ];
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.flokli ];
     mainProgram = "bootgen";
   };
-}
+})
