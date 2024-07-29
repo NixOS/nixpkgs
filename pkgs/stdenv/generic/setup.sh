@@ -47,63 +47,57 @@ getAllOutputNames() {
     fi
 }
 
-if [[ -n "${NIX_LOG_FD:-}" ]]; then
-    # Logs arguments to $NIX_LOG_FD, if it exists, no-op if it does not.
-    nixLog() {
-        echo "$@" >&"$NIX_LOG_FD"
-    }
+# Logs arguments to $NIX_LOG_FD, if it exists, no-op if it does not.
+nixLog() {
+    if [[ -z ${NIX_LOG_FD-} ]]; then
+        return
+    fi
+    echo "$@" >&"$NIX_LOG_FD"
+}
 
-    # Log a hook, to be run before the hook is actually called.
-    # logging for "implicit" hooks -- the ones specified directly
-    # in derivation's arguments -- is done in _callImplicitHook instead.
-    _logHook() {
-        local hookKind="$1"
-        local hookExpr="$2"
-        shift 2
+# Log a hook, to be run before the hook is actually called.
+# logging for "implicit" hooks -- the ones specified directly
+# in derivation's arguments -- is done in _callImplicitHook instead.
+_logHook() {
+    # Fast path in case nixLog is no-op.
+    if [[ -z ${NIX_LOG_FD-} ]]; then
+        return
+    fi
 
-        if declare -F "$hookExpr" > /dev/null 2>&1; then
-            nixLog "calling '$hookKind' function hook '$hookExpr'" "$@"
-        elif type -p "$hookExpr" > /dev/null; then
-            nixLog "sourcing '$hookKind' script hook '$hookExpr'"
-        elif [[ "$hookExpr" != "_callImplicitHook"* ]]; then
-            # Here we have a string hook to eval.
-            # Join lines onto one with literal \n characters unless NIX_DEBUG >= 2.
-            local exprToOutput
-            if (( "${NIX_DEBUG:-0}" >= 2 )); then
-                exprToOutput="$hookExpr"
-            else
-                # We have `r'\n'.join([line.lstrip() for lines in text.split('\n')])` at home.
-                local hookExprLine
-                while IFS= read -r hookExprLine; do
-                    # These lines often have indentation,
-                    # so let's remove leading whitespace.
-                    hookExprLine="${hookExprLine#"${hookExprLine%%[![:space:]]*}"}"
-                    # If this line wasn't entirely whitespace,
-                    # then add it to our output
-                    if [[ -n "$hookExprLine" ]]; then
-                        exprToOutput+="$hookExprLine\\n "
-                    fi
-                done <<< "$hookExpr"
+    local hookKind="$1"
+    local hookExpr="$2"
+    shift 2
 
-                # And then remove the final, unnecessary, \n
-                exprToOutput="${exprToOutput%%\\n }"
-            fi
-            nixLog "evaling '$hookKind' string hook '$exprToOutput'"
+    if declare -F "$hookExpr" > /dev/null 2>&1; then
+        nixLog "calling '$hookKind' function hook '$hookExpr'" "$@"
+    elif type -p "$hookExpr" > /dev/null; then
+        nixLog "sourcing '$hookKind' script hook '$hookExpr'"
+    elif [[ "$hookExpr" != "_callImplicitHook"* ]]; then
+        # Here we have a string hook to eval.
+        # Join lines onto one with literal \n characters unless NIX_DEBUG >= 2.
+        local exprToOutput
+        if (( "${NIX_DEBUG:-0}" >= 2 )); then
+            exprToOutput="$hookExpr"
+        else
+            # We have `r'\n'.join([line.lstrip() for lines in text.split('\n')])` at home.
+            local hookExprLine
+            while IFS= read -r hookExprLine; do
+                # These lines often have indentation,
+                # so let's remove leading whitespace.
+                hookExprLine="${hookExprLine#"${hookExprLine%%[![:space:]]*}"}"
+                # If this line wasn't entirely whitespace,
+                # then add it to our output
+                if [[ -n "$hookExprLine" ]]; then
+                    exprToOutput+="$hookExprLine\\n "
+                fi
+            done <<< "$hookExpr"
+
+            # And then remove the final, unnecessary, \n
+            exprToOutput="${exprToOutput%%\\n }"
         fi
-    }
-else
-    nixLog() {
-        # Stub.
-        # Note: because bash syntax, this colon is load bearing. Removing it
-        # will turn this function into a syntax error.
-        :
-    }
-
-    _logHook() {
-        # Load-bearing colon; same as above.
-        :
-    }
-fi
+        nixLog "evaling '$hookKind' string hook '$exprToOutput'"
+    fi
+}
 
 ######################################################################
 # Hook handling.
