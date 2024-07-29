@@ -250,6 +250,14 @@ let
     };
 
     checkMetaRecursively = mkEnableOption "checking that the `meta` attribute of derivations and their references are correct during evalution";
+
+    handleEvalIssue = mkOption {
+      type = types.functionTo (types.functionTo types.bool);
+      internal = true;
+      description = ''
+        Function to handle evaluation errors and possibly output a more informative message.
+      '';
+    };
   };
 
 in
