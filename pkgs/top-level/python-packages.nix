@@ -6612,6 +6612,8 @@ self: super: with self; {
     }
   );
 
+  hpp-tutorial = toPythonModule (pkgs.hpp-tutorial.override { python3Packages = self; });
+
   hpp-universal-robot = toPythonModule (
     pkgs.hpp-universal-robot.override {
       pythonSupport = true;
