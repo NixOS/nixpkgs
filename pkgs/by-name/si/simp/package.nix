@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
   ];
   postInstall = ''
     mkdir -p $out/share/icons/hicolor/256x256/apps
-    cp $src/icon.png $out/share/icons/hicolor/256x256/apps/
+    install -Dm644 -t $out/share/icons/hicolor/256x256/apps/ $src/icon.png
   '';
 
   meta = {
