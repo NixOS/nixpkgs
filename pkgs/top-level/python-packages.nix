@@ -7242,6 +7242,8 @@ self: super: with self; {
 
   losant-rest = callPackage ../development/python-modules/losant-rest { };
 
+  lottie = callPackage ../development/python-modules/lottie { };
+
   lpc-checksum = callPackage ../development/python-modules/lpc-checksum { };
 
   lrcalc-python = callPackage ../development/python-modules/lrcalc-python { };
@@ -9163,6 +9165,8 @@ self: super: with self; {
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
   ntplib = callPackage ../development/python-modules/ntplib { };
+
+  nuclear = callPackage ../development/python-modules/nuclear { };
 
   nuitka = callPackage ../development/python-modules/nuitka { };
 
@@ -17191,6 +17195,8 @@ self: super: with self; {
 
   wasmerPackages = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/wasmer { });
   inherit (self.wasmerPackages) wasmer wasmer-compiler-cranelift wasmer-compiler-llvm wasmer-compiler-singlepass;
+
+  wat = callPackage ../development/python-modules/wat { };
 
   watchdog = callPackage ../development/python-modules/watchdog {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;

@@ -6413,10 +6413,6 @@ with pkgs;
 
   boltbrowser = callPackage ../tools/misc/boltbrowser { };
 
-  bsc = callPackage ../tools/compression/bsc {
-    inherit (llvmPackages) openmp;
-  };
-
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
   bzip2_1_1 = callPackage ../tools/compression/bzip2/1_1.nix { };
@@ -27725,10 +27721,6 @@ with pkgs;
   sensible-side-buttons = callPackage ../os-specific/darwin/sensible-side-buttons { };
 
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
-
-  wpa_supplicant_ro_ssids = wpa_supplicant.override {
-    readOnlyModeSSIDs = true;
-  };
 
   wpa_supplicant_gui = libsForQt5.callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
 
