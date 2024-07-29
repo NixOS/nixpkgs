@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "A fast and simple GPU-accelerated image manipulation program";
+    description = "Fast and simple GPU-accelerated image manipulation program";
     homepage = "https://github.com/Kl4rry/simp";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ oluceps ];
