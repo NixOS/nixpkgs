@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xilinx-bootgen";
