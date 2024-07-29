@@ -34,8 +34,9 @@ buildPythonPackage {
     hash = "sha256-L5KqiR+TgSyKjEBlkE0yOU1pemMHFk2PhEmxLdbbxUU=";
   };
 
-  # triton wants to download every dependency, even if we are not using cuda.
-  patches = lib.optionals (!cudaSupport) [ ./0000-dont-download-ptxas.patch ];
+  patches = [
+    ./0001-setup.py-introduce-TRITON_OFFLINE_BUILD.patch
+  ];
 
   postPatch =
     ''
@@ -107,6 +108,7 @@ buildPythonPackage {
 
   env = {
     TRITON_BUILD_PROTON = "OFF";
+    TRITON_OFFLINE_BUILD = true;
   } // lib.optionalAttrs cudaSupport {
     CC = "${cudaPackages.backendStdenv.cc}/bin/cc";
     CXX = "${cudaPackages.backendStdenv.cc}/bin/c++";
