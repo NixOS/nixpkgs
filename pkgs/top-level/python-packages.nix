@@ -877,6 +877,8 @@ self: super: with self; {
 
   asyauth = callPackage ../development/python-modules/asyauth { };
 
+  asyncarve = callPackage ../development/python-modules/asyncarve { };
+
   async-dns = callPackage ../development/python-modules/async-dns { };
 
   async-generator = callPackage ../development/python-modules/async-generator { };
