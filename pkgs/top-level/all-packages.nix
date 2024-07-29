@@ -39873,6 +39873,8 @@ with pkgs;
 
   dartHooks = callPackage ../build-support/dart/build-dart-application/hooks { };
 
+  melos = callPackage ../development/tools/misc/melos { };
+
   httrack = callPackage ../tools/backup/httrack { };
 
   httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
