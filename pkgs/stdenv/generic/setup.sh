@@ -1624,7 +1624,7 @@ showPhaseFooter() {
 
 
 runPhase() {
-    local status=0
+    local retval=0
     local curPhase="$*"
     if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then return; fi
     if [[ "$curPhase" = patchPhase && -n "${dontPatch:-}" ]]; then return; fi
@@ -1645,13 +1645,9 @@ runPhase() {
     startTime=$(date +"%s")
 
     # Evaluate the variable named $curPhase if it exists, otherwise the
-    # function named $curPhase. Trap errors in subshell to set error status.
-    trap 'status=1; trap - ERR' ERR
+    # function named $curPhase. Trap errors in subshell to set non-zero retval.
+    trap 'retval=1; trap - ERR' ERR
     eval "set -o errtrace; ${!curPhase:-$curPhase}"
-
-    # Evaluate the variable named $curPhase if it exists, otherwise the
-    # function named $curPhase.
-    eval "${!curPhase:-$curPhase}"
 
     endTime=$(date +"%s")
 
@@ -1664,7 +1660,7 @@ runPhase() {
         cd -- "${sourceRoot:-.}"
     fi
 
-    return $status
+    return $retval
 }
 
 
