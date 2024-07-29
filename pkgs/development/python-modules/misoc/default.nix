@@ -9,7 +9,7 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "misoc";
   version = "unstable-2022-10-08";
   format = "setuptools";
@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "misoc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Original high performance and small footprint system-on-chip based on Migen";
     homepage = "https://github.com/m-labs/misoc";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }
