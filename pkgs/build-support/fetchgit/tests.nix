@@ -80,15 +80,27 @@
     sha256 = "sha256-bd0Lx75Gd1pcBJtwz5WGki7XoYSpqhinCT3a77wpY2c=";
   };
 
-  commit-verification = testers.invalidateFetcherByDrvHash fetchgit {
-    name = "commit-verification-source";
+  ssh-commit-verification = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "ssh-commit-verification-source";
     url = "https://codeberg.org/flandweber/git-verify";
     rev = "a43858e8f106b313aed68b6455a45340db7dd758";
     sha256 = "sha256-tryIB8KlETlbHyTfW+IpsAgu2BQCcoeuHJpvzyFFsMg=";
     verifyCommit = true;
     publicKeys = [{
-        type="ssh-ed25519";
-        key="AAAAC3NzaC1lZDI1NTE5AAAAIBiNDWMPZNRItkm1U1CQkJUUrrmM+l7CdE6wyUHzr4Nr";
+        type = "ssh-ed25519";
+        key = "AAAAC3NzaC1lZDI1NTE5AAAAIBiNDWMPZNRItkm1U1CQkJUUrrmM+l7CdE6wyUHzr4Nr";
+      }];
+  };
+
+  gpg-commit-verification = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "gpg-commit-verification-source";
+    url = "https://gitlab.torproject.org/tpo/core/tor";
+    rev = "8888e4ca6b44bb7476139be4644e739035441b35";
+    sha256 = "sha256-mC18zGHAh/u9zcYMoYjgrQfsOtjp0UwfP4JXGZWzJHs=";
+    verifyCommit = true;
+    publicKeys = [{
+        type="gpg";
+        key= ./testkey.asc;
       }];
   };
 }
