@@ -5642,6 +5642,8 @@ self: super: with self; {
 
   html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
 
+  html-table-parser-python3 = callPackage ../development/python-modules/html-table-parser-python3 { };
+
   html-tag-names = callPackage ../development/python-modules/html-tag-names { };
 
   html-text = callPackage ../development/python-modules/html-text { };
