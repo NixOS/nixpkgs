@@ -26938,6 +26938,14 @@ with pkgs;
   linuxPackages_xanmod_latest = linuxKernel.packages.linux_xanmod_latest;
   linux_xanmod_latest = linuxKernel.kernels.linux_xanmod_latest;
 
+  # CachyOS kernel
+  linuxPackages_cachyos = linuxKernel.packages.linux_cachyos;
+  linux_cachyos = linuxKernel.kernels.linux_cachyos;
+  linuxPackages_cachyos_stable = linuxKernel.packages.linux_cachyos_stable;
+  linux_cachyos_stable = linuxKernel.kernels.linux_cachyos_stable;
+  linuxPackages_cachyos_latest = linuxKernel.packages.linux_cachyos_latest;
+  linux_cachyos_latest = linuxKernel.kernels.linux_cachyos_latest;
+
   linux-doc = callPackage ../os-specific/linux/kernel/htmldocs.nix { };
 
   cryptodev = linuxPackages.cryptodev;

@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ lib.maintainers.hlolli ];
-    broken = kernel.kernelOlder "5.4";
+    broken = kernel.kernelOlder "5.4" || (kernel.isCachy && (lib.versionAtLeast kernel.version "6.10"));
   };
 }

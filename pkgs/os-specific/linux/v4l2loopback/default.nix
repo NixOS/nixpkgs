@@ -39,5 +39,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ moni ];
     platforms = platforms.linux;
     outputsToInstall = [ "out" ];
+    broken = kernel.isCachy && (lib.versionAtLeast kernel.version "6.10");
   };
 }

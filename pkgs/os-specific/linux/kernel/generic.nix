@@ -66,6 +66,7 @@ lib.makeOverridable ({ # The kernel source tarball.
 , isZen      ? false
 , isLibre    ? false
 , isHardened ? false
+, isCachy    ? false
 
 # easy overrides to stdenv.hostPlatform.linux-kernel members
 , autoModules ? stdenv.hostPlatform.linux-kernel.autoModules
@@ -229,7 +230,7 @@ kernel.overrideAttrs (finalAttrs: previousAttrs: {
 
   passthru = previousAttrs.passthru or { } // basicArgs // {
     features = kernelFeatures;
-    inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre;
+    inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isCachy isZen isHardened isLibre;
     isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
 
     # Adds dependencies needed to edit the config:

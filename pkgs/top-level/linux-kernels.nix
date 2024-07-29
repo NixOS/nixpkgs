@@ -261,6 +261,18 @@ in {
     linux_xanmod_stable = xanmodKernels.main;
     linux_xanmod_latest = xanmodKernels.main;
 
+    # This contains the variants of the CachyOS kernel
+    cachyosKernels = callPackage ../os-specific/linux/kernel/cachyos-kernels.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
+    linux_cachyos = cachyosKernels.lts;
+    linux_cachyos_stable = cachyosKernels.main;
+    linux_cachyos_latest = cachyosKernels.main;
+
     linux_libre = deblobKernel packageAliases.linux_default.kernel;
 
     linux_latest_libre = deblobKernel packageAliases.linux_latest.kernel;
@@ -314,7 +326,7 @@ in {
     inherit (kernel) stdenv; # in particular, use the same compiler by default
 
     # to help determine module compatibility
-    inherit (kernel) isZen isHardened isLibre;
+    inherit (kernel) isZen isHardened isLibre isCachy;
     inherit (kernel) kernelOlder kernelAtLeast;
     # Obsolete aliases (these packages do not depend on the kernel).
     inherit (pkgs) odp-dpdk pktgen; # added 2018-05
@@ -680,6 +692,9 @@ in {
     linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
     linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
     linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
+    linux_cachyos = recurseIntoAttrs (packagesFor kernels.linux_cachyos);
+    linux_cachyos_stable = recurseIntoAttrs (packagesFor kernels.linux_cachyos_stable);
+    linux_cachyos_latest = recurseIntoAttrs (packagesFor kernels.linux_cachyos_latest);
 
     linux_libre = recurseIntoAttrs (packagesFor kernels.linux_libre);
 

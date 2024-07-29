@@ -48,6 +48,7 @@ in lib.makeOverridable ({
   isZen      ? false,
   isLibre    ? false,
   isHardened ? false,
+  isCachy    ? false,
 
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false,
@@ -132,7 +133,7 @@ let
       passthru = rec {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
-        inherit isZen isHardened isLibre withRust;
+        inherit isZen isHardened isLibre isCachy withRust;
         isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
         baseVersion = lib.head (lib.splitString "-rc" version);
         kernelOlder = lib.versionOlder baseVersion;

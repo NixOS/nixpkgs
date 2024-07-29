@@ -5384,6 +5384,12 @@
     githubId = 20759788;
     name = "JP Lippold";
   };
+  drakon64 = {
+    email = "adam@drakon.cloud";
+    github = "drakon64";
+    githubId = 6444703;
+    name = "Adam Chance";
+  };
   dramaturg = {
     email = "seb@ds.ag";
     github = "dramaturg";
