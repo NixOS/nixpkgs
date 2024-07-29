@@ -1,5 +1,5 @@
 {
-  fetchurl,
+  fetchFromGitLab,
   lib,
   stdenv,
   pkg-config,
@@ -22,9 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "pavucontrol";
   version = "6.0";
 
-  src = fetchurl {
-    url = "https://freedesktop.org/software/pulseaudio/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-hchg1o/x+CzZjHKpJXGEvuOSmVeKsSLSm8Uey+z79ls=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "pulseaudio";
+    repo = "pavucontrol";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-nxzFvD/KUevIJOw9jgcr0Hfvg7KiSOmTBfKN3jLu3Cg=";
   };
 
   buildInputs = [
