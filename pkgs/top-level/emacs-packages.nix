@@ -24,12 +24,12 @@
 let
 
   mkElpaDevelPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/elpa-devel-packages.nix {
-    inherit (pkgs) stdenv texinfo writeText gcc pkgs buildPackages;
+    inherit (pkgs) pkgs buildPackages;
     inherit lib;
   };
 
   mkElpaPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/elpa-packages.nix {
-    inherit (pkgs) stdenv texinfo writeText gcc pkgs buildPackages;
+    inherit (pkgs) pkgs buildPackages;
     inherit lib;
   };
 
@@ -78,6 +78,10 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
     });
 
     trivialBuild = pkgs.callPackage ../applications/editors/emacs/build-support/trivial.nix {
+      inherit (self) emacs;
+    };
+
+    elpaBuild = pkgs.callPackage ../applications/editors/emacs/build-support/elpa.nix {
       inherit (self) emacs;
     };
 
