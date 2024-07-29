@@ -1,0 +1,50 @@
+From 989ba5e30cefa0dd8990da158661713c4a21c0fe Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Thu, 11 Apr 2024 18:05:34 -0400
+Subject: [PATCH 3/6] Fix utimensat compatability with the 10.12 SDK
+
+---
+ include/compat.h    | 3 +++
+ libstuff/writeout.c | 2 +-
+ misc/lipo.c         | 2 +-
+ 3 files changed, 5 insertions(+), 2 deletions(-)
+ create mode 100644 include/compat.h
+
+diff --git a/include/compat.h b/include/compat.h
+new file mode 100644
+index 0000000..8b1b866
+--- /dev/null
++++ b/include/compat.h
+@@ -0,0 +1,3 @@
++#pragma once
++#include <time.h>
++extern int utimensat(int dirfd, const char* pathname, const struct timespec times[_Nullable 2], int flags);
+diff --git a/libstuff/writeout.c b/libstuff/writeout.c
+index f904caa..03fa535 100644
+--- a/libstuff/writeout.c
++++ b/libstuff/writeout.c
+@@ -297,7 +297,7 @@ no_throttle:
+ 	     * have been zeroed out when the library was created. writeout
+ 	     * will not zero out the modification time in the filesystem.
+ 	     */
+-	    if (__builtin_available(macOS 10.12, *)) {
++	    if (__builtin_available(macOS 10.13, *)) {
+ 		struct timespec times[2] = {0};
+ 		memcpy(&times[0], &toc_timespec, sizeof(struct timespec));
+ 		memcpy(&times[1], &toc_timespec, sizeof(struct timespec));
+diff --git a/misc/lipo.c b/misc/lipo.c
+index 04a3eca..887c049 100644
+--- a/misc/lipo.c
++++ b/misc/lipo.c
+@@ -607,7 +607,7 @@ unknown_flag:
+ 		    if(close(fd) == -1)
+ 			system_fatal("can't close output file: %s",output_file);
+ #ifndef __OPENSTEP__
+-		    if (__builtin_available(macOS 10.12, *)) {
++		    if (__builtin_available(macOS 10.13, *)) {
+ 			time_result = utimensat(AT_FDCWD, output_file,
+ 						output_times, 0);
+ 		    }
+-- 
+2.45.2
+

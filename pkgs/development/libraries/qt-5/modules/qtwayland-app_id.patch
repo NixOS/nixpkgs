@@ -1,0 +1,36 @@
+Ensure that the correct `app_id` for Wayland is set. The upstream implementation
+uses `QFileInfo::baseName()`[1] which strips everything away after the first dot.
+This means that `.foo-wrapped` has an empty `app_id` because `baseName` returns
+an empty string in this case.
+
+The patch basically checks whether the program has the form `.foo-wrapped` (i.e. got
+wrapped by `makeWrapper`) and if that's the case, `foo` will be the correct `app_id`.
+
+[1] https://doc.qt.io/qt-5/qfileinfo.html#baseName
+
+diff --git a/src/client/qwaylandwindow.cpp b/src/client/qwaylandwindow.cpp
+index ba881cb..b3fd031 100644
+--- a/src/client/qwaylandwindow.cpp
++++ b/src/client/qwaylandwindow.cpp
+@@ -167,7 +167,20 @@ void QWaylandWindow::initWindow()
+                                                                                  Qt::SkipEmptyParts);
+ 
+                 if (domainName.isEmpty()) {
+-                    mShellSurface->setAppId(fi.baseName());
++                    auto baseName = fi.baseName();
++                    if (baseName.isEmpty()) {
++                        auto fileName = fi.fileName();
++                        if (fileName.endsWith("-wrapped") && fileName.startsWith(".")) {
++                            do {
++                                auto len = fileName.length();
++                                fileName = fileName.right(len - 1);
++                                fileName = fileName.left(len - 9);
++                            } while (fileName.endsWith("-wrapped") && fileName.startsWith("."));
++                            mShellSurface->setAppId(fileName);
++                        }
++                    } else {
++                        mShellSurface->setAppId(baseName);
++                    }
+                 } else {
+                     QString appId;
+                     for (int i = 0; i < domainName.count(); ++i)

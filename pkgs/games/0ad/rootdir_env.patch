@@ -1,0 +1,39 @@
+diff --git a/source/ps/GameSetup/Paths.cpp b/source/ps/GameSetup/Paths.cpp
+index 474364e..bf084b4 100644
+--- a/source/ps/GameSetup/Paths.cpp
++++ b/source/ps/GameSetup/Paths.cpp
+@@ -155,32 +155,8 @@ Paths::Paths(const CmdLineArgs& args)
+ 
+ /*static*/ OsPath Paths::Root(const OsPath& argv0)
+ {
+-#if OS_ANDROID
+-	return OsPath("/sdcard/0ad"); // TODO: this is kind of bogus
+-#else
+-
+-	// get full path to executable
+-	OsPath pathname = sys_ExecutablePathname();	// safe, but requires OS-specific implementation
+-	if(pathname.empty())	// failed, use argv[0] instead
+-	{
+-		errno = 0;
+-		pathname = wrealpath(argv0);
+-		if(pathname.empty())
+-			WARN_IF_ERR(StatusFromErrno());
+-	}
+-
+-	// make sure it's valid
+-	if(!FileExists(pathname))
+-	{
+-		LOGERROR("Cannot find executable (expected at '%s')", pathname.string8());
+-		WARN_IF_ERR(StatusFromErrno());
+-	}
+-
+-	for(size_t i = 0; i < 2; i++)	// remove "system/name.exe"
+-		pathname = pathname.Parent();
+-	return pathname;
+-
+-#endif
++        UNUSED2(argv0);
++        return OsPath(getenv("ZEROAD_ROOTDIR"));
+ }
+ 
+ /*static*/ OsPath Paths::RootData(const OsPath& argv0)
