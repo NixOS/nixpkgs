@@ -15,7 +15,6 @@
 , granite7
 , libgee
 , libhandy
-, bamf
 , libcanberra-gtk3
 , gnome-desktop
 , mesa
