@@ -28,6 +28,8 @@
 
   rmv-card = callPackage ./rmv-card { };
 
+  template-entity-row = callPackage ./template-entity-row { };
+
   valetudo-map-card = callPackage ./valetudo-map-card { };
 
   zigbee2mqtt-networkmap = callPackage ./zigbee2mqtt-networkmap { };
