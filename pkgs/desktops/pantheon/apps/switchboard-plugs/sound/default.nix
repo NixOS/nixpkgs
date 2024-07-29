@@ -9,7 +9,6 @@
 , libadwaita
 , libcanberra
 , libgee
-, libhandy
 , granite7
 , gtk4
 , pulseaudio
