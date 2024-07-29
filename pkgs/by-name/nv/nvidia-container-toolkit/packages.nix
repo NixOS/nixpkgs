@@ -1,9 +1,6 @@
 {
   lib,
   newScope,
-  docker,
-  libnvidia-container,
-  runc,
   symlinkJoin,
 }:
 
@@ -30,7 +27,6 @@ lib.makeScope newScope (
       };
     };
     nvidia-container-toolkit-docker = self.callPackage ./package.nix {
-      containerRuntimePath = "${docker}/libexec/docker/docker";
       configTemplate = self.dockerConfig;
     };
 
@@ -51,15 +47,12 @@ lib.makeScope newScope (
       };
     };
     nvidia-container-toolkit-podman = self.nvidia-container-toolkit-docker.override {
-      containerRuntimePath = lib.getExe runc;
-
       configTemplate = self.podmanConfig;
     };
 
     nvidia-docker = symlinkJoin {
       name = "nvidia-docker";
       paths = [
-        libnvidia-container
         self.nvidia-docker-unwrapped
         self.nvidia-container-toolkit-docker
       ];
@@ -71,7 +64,6 @@ lib.makeScope newScope (
     nvidia-podman = symlinkJoin {
       name = "nvidia-podman";
       paths = [
-        libnvidia-container
         self.nvidia-container-toolkit-podman
       ];
       inherit (self.nvidia-container-toolkit-podman) meta;
