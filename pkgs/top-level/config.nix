@@ -130,6 +130,22 @@ let
       '';
     };
 
+    allowNonSourcePredicate = mkOption {
+      type = types.functionTo types.bool;
+      default = _: false;
+      defaultText = literalExpression ''pkg: false'';
+      example = literalExpression ''
+        pkg:
+        (lib.all (
+          prov: prov.isSource || prov == lib.sourceTypes.binaryFirmware
+        ) pkg.meta.sourceProvenance);
+      '';
+      description = ''
+        A function that specifies whether a given non-source package may be permitted.
+        Only takes effect if [`config.allowNonSource`](#opt-allowNonSource) is set to false.
+      '';
+    };
+
     allowBroken = mkOption {
       type = types.bool;
       default = false;

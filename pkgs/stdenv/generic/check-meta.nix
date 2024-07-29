@@ -145,7 +145,7 @@ let
   #   allowNonSource = false;
   #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) pkg.meta.sourceProvenance);
   # }
-  allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
+  inherit (config) allowNonSourcePredicate;
 
   # Check whether non-source packages are allowed and if not, whether the
   # package has non-source provenance and is not explicitly allowed by the
