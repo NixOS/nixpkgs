@@ -1,12 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   colorama,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "migen";
   version = "unstable-2022-09-02";
   format = "setuptools";
@@ -22,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "migen" ];
 
-  meta = with lib; {
+  meta = {
     description = " A Python toolbox for building complex digital hardware";
     homepage = "https://m-labs.hk/migen";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ l-as ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ l-as ];
   };
 }
