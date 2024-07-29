@@ -1,0 +1,13 @@
+diff --git a/src/common/plugin.c b/src/common/plugin.c
+index 47557d735..03471e805 100644
+--- a/src/common/plugin.c
++++ b/src/common/plugin.c
+@@ -617,7 +617,7 @@ void plugin_load_all(const gchar *type)
+ 		g_strstrip(buf);
+ 		replace_old_plugin_name(buf);
+ 
+-		if ((buf[0] != '\0') && (plugin_load(buf, &error) == NULL)) {
++		if ((buf[0] != '\0') && (plugin_load_in_default_dir(buf, &error) == NULL)) {
+ 			g_warning("plugin loading error: %s", error);
+ 			g_free(error);
+ 		}							
