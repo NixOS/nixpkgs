@@ -108,6 +108,19 @@ let
       '';
     };
 
+    allowUnfreePredicate = mkOption {
+      type = types.functionTo types.bool;
+      default = _: false;
+      defaultText = literalExpression ''pkg: false'';
+      example = literalExpression ''pkg: lib.hasPrefix "vscode" pkg.name'';
+      description = ''
+        A function that specifies whether a given unfree package may be permitted.
+        Only takes effect if [`config.allowUnfree`](#opt-allowUnfree) is set to false.
+
+        See [Installing unfree packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree) in the NixOS manual.
+      '';
+    };
+
     allowNonSource = mkEnableOption "" // {
       default = true;
       defaultText = literalExpression ''true && builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE" != "0"'';
