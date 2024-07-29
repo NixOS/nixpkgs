@@ -3,31 +3,35 @@
   buildPythonPackage,
   fetchPypi,
   jsonable,
-  nose,
   pytestCheckHook,
+  fetchpatch2,
 }:
 
 buildPythonPackage rec {
   pname = "mwtypes";
-  version = "0.3.2";
-  format = "setuptools";
+  version = "0.4.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3BF2xZZWKcEj6FmzGa5hUdTjhVMemngWBMDUyjQ045k=";
+    inherit version pname;
+    hash = "sha256-PgcGUk/27cAIvzfLvRoVX2vHOCab59m+4bciDPmtlW8=";
   };
+
+  patches = [
+    # https://github.com/mediawiki-utilities/python-mwtypes/pull/6
+    (fetchpatch2 {
+      name = "nose-to-pytest.patch";
+      url = "https://github.com/mediawiki-utilities/python-mwtypes/commit/58d7f59e4927aaa6278f84576794df713c673058.patch";
+      hash = "sha256-jh1uEqqhIK2DyNvVN0XYGM7BXTmypnoC4VoB0V+9JmE=";
+    })
+  ];
 
   propagatedBuildInputs = [ jsonable ];
 
-  nativeCheckInputs = [
-    nose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_normalize_path_bad_extension"
-    "test_open_file"
-  ];
+  # Even with 7z included, this test does not pass
+  disabledTests = [ "test_open_file" ];
 
   pythonImportsCheck = [ "mwtypes" ];
 
