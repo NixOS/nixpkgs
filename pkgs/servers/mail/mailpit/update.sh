@@ -28,7 +28,7 @@ TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' exit
 
 NIXPKGS_MAILPIT_PATH=$(cd $(dirname ${BASH_SOURCE[0]}); pwd -P)/
-VERSIONS_NIX="$NIXPKGS_MAILPIT_PATH/versions.nix"
+SOURCE_NIX="$NIXPKGS_MAILPIT_PATH/source.nix"
 
 PREFETCH_JSON=$TMP/prefetch.json
 nix-prefetch-git --rev "$TARGET_TAG" --url "https://github.com/$OWNER/$REPO" > "$PREFETCH_JSON"
@@ -38,7 +38,7 @@ NPM_DEPS_HASH="$(prefetch-npm-deps $PREFETCH_PATH/package-lock.json)"
 
 FAKE_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 
-cat > $VERSIONS_NIX <<-EOF
+cat > $SOURCE_NIX <<-EOF
 {
   version = "$TARGET_VERSION";
   hash = "$PREFETCH_HASH";
@@ -50,7 +50,7 @@ EOF
 GO_HASH="$(nix-instantiate --eval -A mailpit.vendorHash | tr -d '"')"
 VENDOR_HASH=$(extractVendorHash "$GO_HASH")
 
-cat > $VERSIONS_NIX <<-EOF
+cat > $SOURCE_NIX <<-EOF
 {
   version = "$TARGET_VERSION";
   hash = "$PREFETCH_HASH";
@@ -68,6 +68,6 @@ cat <<-EOF
   "attrPath": "$UPDATE_NIX_ATTR_PATH",
   "oldVersion": "$UPDATE_NIX_OLD_VERSION",
   "newVersion": "$TARGET_VERSION",
-  "files": ["$VERSIONS_NIX"]
+  "files": ["$SOURCE_NIX"]
 }]
 EOF
