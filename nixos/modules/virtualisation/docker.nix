@@ -256,7 +256,7 @@ in
         live-restore = mkDefault cfg.liveRestore;
         runtimes = mkIf cfg.enableNvidia {
           nvidia = {
-            path = "${pkgs.nvidia-docker}/bin/nvidia-container-runtime";
+            path = "${pkgs.nvidia-docker}/bin/nvidia-container-runtime.legacy";
           };
         };
       };
