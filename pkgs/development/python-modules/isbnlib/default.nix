@@ -4,15 +4,13 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "isbnlib";
   version = "3.10.14";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xlcnd";
@@ -20,6 +18,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-d6p0wv7kj+NOZJRE2rzQgb7PXv+E3tASIibYCjzCdx8=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
