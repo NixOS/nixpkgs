@@ -4,27 +4,33 @@
   fetchFromGitHub,
   gitUpdater,
   nixosTests,
+  boost,
   cmake,
   glib,
+  glm,
   gtest,
   libevdev,
+  libglvnd,
   libnotify,
+  libuuid,
   libxkbcommon,
+  mesa,
   mir,
   nlohmann_json,
+  pcre2,
   pkg-config,
   yaml-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "mattkae";
     repo = "miracle-wm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bpKv0E3nfnJkeYsVgJ/d3f8bCZ1mBn9Faj5YUXsPCAk=";
+    hash = "sha256-Ss93yI33e+XFjbKedbBjmYHkjPeWUWxEStwNTgTszA4=";
   };
 
   postPatch =
@@ -48,12 +54,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    boost
     glib
+    glm
     libevdev
+    libglvnd
     libnotify
+    libuuid
     libxkbcommon
+    mesa # gbm.h
     mir
     nlohmann_json
+    pcre2
     yaml-cpp
   ];
 
