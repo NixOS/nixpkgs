@@ -743,6 +743,13 @@
     sha256 = "1918817070ae9e0ceef57b93366d18b6e8bf577fd632e7da999e1e2abbb53656";
     description = "Microsoft Azure Command-Line Tools AzureMigrateV2 Extension";
   };
+  oracle-database = mkAzExtension rec {
+    pname = "oracle-database";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/oracle_database-${version}-py3-none-any.whl";
+    sha256 = "058c3de6c1e103ff0c62a188b1c606a35097a6652cb7eb6c3e5b77f77e15b5b1";
+    description = "Microsoft Azure Command-Line Tools OracleDatabase Extension";
+  };
   orbital = mkAzExtension rec {
     pname = "orbital";
     version = "0.1.0";
