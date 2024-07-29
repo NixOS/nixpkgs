@@ -1,31 +1,33 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, cmake
-, makeWrapper
-, vulkan-loader
-, freetype
-, fontconfig
-, QuartzCore
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  makeWrapper,
+  vulkan-loader,
+  freetype,
+  fontconfig,
+  QuartzCore,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-utils";
-  version = "0.17.0";
+  version = "22.0.0";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
     rev = "v${version}";
-    hash = "sha256-NFn7rCmg37/Vy8owZUNmdH1BQv+bU46bkZl0reMrjWI=";
+    hash = "sha256-bc+W7lAIulCnlxHZjwwyIL3KfmeyEJ4yPegS/wIA9UU=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "naga-0.13.0" = "sha256-6GlUj1oIWeBmawdZ/IpC8SN9EJ6RyhA1K441tqN3HAM=";
+      "noise-0.8.2" = "sha256-7GvShJeSNfwMCBIfqLghXgKQv7EDMqVchJw0uxPhNr4=";
+      "rspirv-0.11.0+sdk-1.2.198" = "sha256-AcJqkcXBr/+SHdUDXd63sQ0h5eosMqRhV4aUREJH8Bw=";
     };
   };
 
@@ -35,7 +37,10 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs = [ freetype fontconfig ] ++ lib.optional stdenv.isDarwin QuartzCore;
+  buildInputs = [
+    freetype
+    fontconfig
+  ] ++ lib.optional stdenv.isDarwin QuartzCore;
 
   # Tests fail, as the Nix sandbox doesn't provide an appropriate adapter (e.g. Vulkan).
   doCheck = false;
@@ -48,7 +53,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Safe and portable GPU abstraction in Rust, implementing WebGPU API";
     homepage = "https://wgpu.rs/";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ erictapen ];
     mainProgram = "wgpu-info";
   };
