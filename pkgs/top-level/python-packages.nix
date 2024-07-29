@@ -6605,6 +6605,8 @@ self: super: with self; {
 
   hpp-plot = toPythonModule (pkgs.hpp-plot.override { python3Packages = self; });
 
+  hpp-practicals = toPythonModule (pkgs.hpp-practicals.override { python3Packages = self; });
+
   hpp-romeo = toPythonModule (
     pkgs.hpp-romeo.override {
       pythonSupport = true;
