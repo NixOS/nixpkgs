@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  ax,
+  ax-platform,
   botorch,
   ipywidgets,
   jinja2,
@@ -22,13 +22,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ax";
+  pname = "ax-platform";
   version = "0.4.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "facebook";
-    repo = pname;
+    repo = "ax";
     rev = "refs/tags/${version}";
     hash = "sha256-dj6Gig8N4oLtcZLwPl4QDHG/FwA2nFBtYxSARnWiJJU=";
   };
@@ -86,7 +86,7 @@ buildPythonPackage rec {
   # Many portions of the test suite fail under Python 3.12
   doCheck = lib.versions.majorMinor python.version != "3.12";
 
-  passthru.tests.check = ax.overridePythonAttrs { doCheck = true; };
+  passthru.tests.check = ax-platform.overridePythonAttrs { doCheck = true; };
 
   meta = with lib; {
     description = "Ax is an accessible, general-purpose platform for understanding, managing, deploying, and automating adaptive experiments";
