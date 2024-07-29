@@ -270,7 +270,8 @@
       pexpect
     ];
     "arve" = ps: with ps; [
-    ]; # missing inputs: asyncarve
+      asyncarve
+    ];
     "arwn" = ps: with ps; [
       paho-mqtt_1
     ];
@@ -5281,6 +5282,7 @@
     "aquacell"
     "aranet"
     "arcam_fmj"
+    "arve"
     "aseko_pool_live"
     "assist_pipeline"
     "asterisk_mbox"
