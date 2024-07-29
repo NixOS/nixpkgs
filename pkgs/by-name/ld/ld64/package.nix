@@ -170,7 +170,9 @@ stdenv.mkDerivation (finalAttrs: {
     cd "$NIX_BUILD_TOP/$sourceRoot"
 
     export NIX_CFLAGS_COMPILE+=" --ld-path=$out/bin/${targetPrefix}ld"
-    meson setup build-install-check -Db_lto=true --buildtype=$mesonBuildType
+    meson setup build-install-check -Db_lto=true --buildtype=$mesonBuildType${
+      lib.optionalString (targetPrefix != "") " -Dtarget_prefix=${targetPrefix}"
+    }
 
     cd build-install-check
     ninja ${targetPrefix}ld "-j$NIX_BUILD_CORES"
