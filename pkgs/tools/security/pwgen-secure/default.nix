@@ -23,8 +23,11 @@ buildPythonApplication rec {
   postPatch = ''
     shareDir=$out/share/${pname}
 
+    substituteInPlace spwgen.py \
+      --replace-fail ' \ ' ' \\ '
+
     substituteInPlace pwgen_secure/rpg.py \
-      --replace "os.path.join(path, 'words.txt')" "os.path.join('$shareDir', 'words.txt')"
+      --replace-fail "os.path.join(path, 'words.txt')" "os.path.join('$shareDir', 'words.txt')"
   '';
 
   propagatedBuildInputs = with python3Packages; [ docopt ];
