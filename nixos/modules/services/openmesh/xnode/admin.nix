@@ -6,7 +6,7 @@ let
   cfg = config.services.openmesh.xnode.admin;
 in {
 
-  options.services.openmesh = { 
+  options.services.openmesh = {
     xnode.admin = {
       enable = mkEnableOption "Management service for Xnode";
       package = mkPackageOption pkgs "xnode-admin" { };
@@ -46,8 +46,12 @@ in {
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
 
+      environment = {
+        PYTHONUNBUFFERED = "1";
+      };
+
       serviceConfig = {
-        ExecStart = ''${lib.getExe cfg.package} --remote ${cfg.remoteDir} ${cfg.stateDir}''; 
+        ExecStart = ''${lib.getExe cfg.package} --remote ${cfg.remoteDir} ${cfg.stateDir}'';
         Restart = "always";
         RestartSec = 5;
         WorkingDirectory = cfg.stateDir;
