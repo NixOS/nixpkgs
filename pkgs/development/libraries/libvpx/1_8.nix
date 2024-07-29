@@ -181,5 +181,10 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd3;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;
+    knownVulnerabilities = [
+      "CVE-2023-6349"
+      "CVE-2023-44488"
+      "CVE-2024-5197"
+    ];
   };
 }
