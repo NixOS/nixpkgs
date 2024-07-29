@@ -121,6 +121,42 @@ let
       '';
     };
 
+    allowlistedLicenses = mkOption {
+      type = types.listOf (types.lazyAttrsOf types.raw); # list of license attrsets
+      default = [ ];
+      example = literalExpression ''
+        [
+          lib.licenses.cc-by-nc-sa-20
+          ({
+            spdxId = "Abstyles";
+            fullName = "Abstyles License";
+          })
+        ]
+      '';
+      description = ''
+        Permits evaluation of a package, if the package:
+          * only has free licenses or licenses in this allowlist, and
+          * does not fail evaluation for some other reason.
+      '';
+    };
+
+    blocklistedLicenses = mkOption {
+      type = types.listOf (types.lazyAttrsOf types.raw); # list of license attrsets
+      default = [ ];
+      example = literalExpression ''
+        [
+          lib.licenses.cc-by-nc-sa-20
+          ({
+            spdxId = "Abstyles";
+            fullName = "Abstyles License";
+          })
+        ]
+      '';
+      description = ''
+        Disallows evaluation of a package, if the package has a license in this blocklist.
+      '';
+    };
+
     allowNonSource = mkEnableOption "" // {
       default = true;
       defaultText = literalExpression ''true && builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE" != "0"'';
