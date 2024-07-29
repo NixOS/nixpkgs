@@ -3,10 +3,7 @@
 , fetchFromGitLab
 , makeWrapper
 , buildGoModule
-, linkFarm
-, writeShellScript
 , formats
-, containerRuntimePath ? null
 , configTemplate ? null
 , configTemplatePath ? null
 , libnvidia-container
@@ -17,20 +14,6 @@ assert configTemplate != null -> (lib.isAttrs configTemplate && configTemplatePa
 assert configTemplatePath != null -> (lib.isStringLike configTemplatePath && configTemplate == null);
 
 let
-  isolatedContainerRuntimePath = linkFarm "isolated_container_runtime_path" [
-    {
-      name = "runc";
-      path = containerRuntimePath;
-    }
-  ];
-  warnIfXdgConfigHomeIsSet = writeShellScript "warn_if_xdg_config_home_is_set" ''
-    set -eo pipefail
-
-    if [ -n "$XDG_CONFIG_HOME" ]; then
-      echo >&2 "$(tput setaf 3)warning: \$XDG_CONFIG_HOME=$XDG_CONFIG_HOME$(tput sgr 0)"
-    fi
-  '';
-
   configToml = if configTemplatePath != null then configTemplatePath else (formats.toml { }).generate "config.toml" configTemplate;
 
   # From https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L54
@@ -58,8 +41,8 @@ buildGoModule rec {
 
   subPackages = [
     "cmd/nvidia-ctk"
-    "cmd/nvidia-container-runtime"
     "cmd/nvidia-container-runtime-hook"
+    "cmd/nvidia-container-runtime.legacy"
   ];
 
   postPatch = ''
@@ -97,14 +80,6 @@ buildGoModule rec {
     makeWrapper
   ];
 
-  preConfigure = lib.optionalString (containerRuntimePath != null) ''
-    # Ensure the runc symlink isn't broken:
-    if ! readlink --quiet --canonicalize-existing "${isolatedContainerRuntimePath}/runc" ; then
-      echo "${isolatedContainerRuntimePath}/runc: broken symlink" >&2
-      exit 1
-    fi
-  '';
-
   checkFlags =
     let
       skippedTests = [
@@ -115,33 +90,16 @@ buildGoModule rec {
     in
     [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
 
-  postInstall = lib.optionalString (containerRuntimePath != null) ''
+  postInstall = ''
+    wrapProgram $out/bin/nvidia-container-runtime-hook \
+      --prefix PATH : ${libnvidia-container}/bin
+  '' + lib.optionalString (configTemplate != null || configTemplatePath != null) ''
     mkdir -p $out/etc/nvidia-container-runtime
-
-    # nvidia-container-runtime invokes docker-runc or runc if that isn't
-    # available on PATH.
-    #
-    # Also set XDG_CONFIG_HOME if it isn't already to allow overriding
-    # configuration. This in turn allows users to have the nvidia container
-    # runtime enabled for any number of higher level runtimes like docker and
-    # podman, i.e., there's no need to have mutually exclusivity on what high
-    # level runtime can enable the nvidia runtime because each high level
-    # runtime has its own config.toml file.
-    wrapProgram $out/bin/nvidia-container-runtime \
-      --run "${warnIfXdgConfigHomeIsSet}" \
-      --prefix PATH : ${isolatedContainerRuntimePath}:${libnvidia-container}/bin \
-      --set-default XDG_CONFIG_HOME $out/etc
 
     cp ${configToml} $out/etc/nvidia-container-runtime/config.toml
 
     substituteInPlace $out/etc/nvidia-container-runtime/config.toml \
       --subst-var-by glibcbin ${lib.getBin glibc}
-
-    # See: https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/packaging/debian/nvidia-container-toolkit.postinst#L12
-    ln -s $out/bin/nvidia-container-runtime-hook $out/bin/nvidia-container-toolkit
-
-    wrapProgram $out/bin/nvidia-container-toolkit \
-      --add-flags "-config ${placeholder "out"}/etc/nvidia-container-runtime/config.toml"
   '';
 
   meta = with lib; {
