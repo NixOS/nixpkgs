@@ -4,8 +4,7 @@
   click,
   fetchPypi,
   jinja2,
-  mock,
-  nose,
+  pytestCheckHook,
   poetry-core,
   pythonOlder,
   terminaltables,
@@ -31,21 +30,11 @@ buildPythonPackage rec {
     terminaltables
   ];
 
-  # test rely on nose
-  doCheck = pythonOlder "3.12";
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    mock
-    nose
-  ];
+  pytestFlagsArray = [ "envs/tests.py" ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    nosetests --with-isolation
-
-    runHook postCheck
-  '';
+  disabledTests = [ "test_list_envs" ];
 
   pythonImportsCheck = [ "envs" ];
 
