@@ -21,7 +21,7 @@ let
   mkExtraBuildCommands0 = cc: ''
     rsrc="$out/resource-root"
     mkdir "$rsrc"
-    ln -s "${lib.getLib cc}/lib/clang/16/include" "$rsrc"
+    ln -s "${lib.getLib cc}/lib/clang/${lib.versions.major cc.version}/include" "$rsrc"
     echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
   '';
   mkExtraBuildCommands =
@@ -87,7 +87,8 @@ let
           "bin/clang++"
           "bin/cpp"
         ];
-        version = "16";
+        # SYNCME: this version number must be synced with the one in make-bootstrap-tools.nix
+        version = "18";
       };
       libunwind = linkBootstrap {
         name = "libunwind";

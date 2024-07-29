@@ -17,12 +17,12 @@ index 2d3723b49f5b..6bbff732b9d7 100644
 +++ b/lib/libc/locale/collate.h
 @@ -36,6 +36,7 @@
  #ifndef _COLLATE_H_
- #define	_COLLATE_H_
+ #define        _COLLATE_H_
  
 +#include <stdint.h>
- #include <sys/cdefs.h>
  #include <sys/types.h>
  #include <limits.h>
+ #include "xlocale_private.h"
 diff --git a/usr.bin/localedef/charmap.c b/usr.bin/localedef/charmap.c
 index 44b7e3292eae..79c30b7cf372 100644
 --- a/usr.bin/localedef/charmap.c
