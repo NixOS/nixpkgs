@@ -11,14 +11,14 @@
 
 buildPythonPackage {
   pname = "misoc";
-  version = "unstable-2022-10-08";
+  version = "0-unstable-2024-05-14";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "m-labs";
     repo = "misoc";
-    rev = "6a7c670ab6120b8136f652c41d907eb0fb16ed54";
-    hash = "sha256-dLDp0xg5y5b443hD7vbJFobHxbhtnj68RdZnQ7ckgp4=";
+    rev = "fea9de558c730bc394a5936094ae95bb9d6fa726";
+    hash = "sha256-zZ9LnUwvTvBL9iNFfmNTklQnd0I4PmV0BApMSblTnc0=";
   };
 
   propagatedBuildInputs = [
