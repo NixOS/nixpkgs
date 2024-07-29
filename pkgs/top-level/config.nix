@@ -258,6 +258,14 @@ let
         Function to handle evaluation errors and possibly output a more informative message.
       '';
     };
+
+    inHydra = mkEnableOption "" // {
+      internal = true;
+      description = ''
+        Whether the current nixpkgs instance is being evauluated by Hydra.
+        If set to true, evaluation checks will produce less verbose error messages.
+      '';
+    };
   };
 
 in

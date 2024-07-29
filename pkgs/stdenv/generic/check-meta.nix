@@ -41,7 +41,8 @@ let
 
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
-  inHydra = config.inHydra or false;
+  inherit (config) inHydra;
+
   # Allow the user to opt-into additional warnings, e.g.
   # import <nixpkgs> { config = { showDerivationWarnings = [ "maintainerless" ]; }; }
   showWarnings = config.showDerivationWarnings;
