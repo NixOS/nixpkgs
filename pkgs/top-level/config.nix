@@ -248,6 +248,8 @@ let
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
       '';
     };
+
+    checkMetaRecursively = mkEnableOption "checking that the `meta` attribute of derivations and their references are correct during evalution";
   };
 
 in
