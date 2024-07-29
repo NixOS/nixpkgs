@@ -13,6 +13,7 @@
   python-ironicclient,
   python-keystoneclient,
   python-manilaclient,
+  python-neutronclient,
   python-openstackclient,
   requests-mock,
   requests,
@@ -73,6 +74,7 @@ buildPythonPackage rec {
         python-heatclient
         python-ironicclient
         python-manilaclient
+        python-neutronclient
       ];
     };
     tests.version = testers.testVersion {
