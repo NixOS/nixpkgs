@@ -6300,6 +6300,13 @@ self: super: with self; {
     }
   );
 
+  hpp-romeo = toPythonModule (
+    pkgs.hpp-romeo.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
   hpp-universal-robot = toPythonModule (
     pkgs.hpp-universal-robot.override {
       pythonSupport = true;
