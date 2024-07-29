@@ -68,11 +68,13 @@ stdenv.mkDerivation (rec {
 
     # Do not look in /usr etc. for dependencies.
     ++ lib.optional (lib.versionOlder version "5.38.0") ./no-sys-dirs-5.31.patch
-    ++ lib.optional (lib.versionAtLeast version "5.38.0") ./no-sys-dirs-5.38.0.patch
+    ++ lib.optional ((lib.versions.majorMinor version) == "5.38") ./no-sys-dirs-5.38.0.patch
+    ++ lib.optional ((lib.versions.majorMinor version) == "5.40") ./no-sys-dirs-5.40.0.patch
 
     ++ lib.optional stdenv.isSunOS ./ld-shared.patch
     ++ lib.optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
-    ++ lib.optional crossCompiling ./cross.patch;
+    ++ lib.optional (crossCompiling && (lib.versionAtLeast version "5.40.0")) ./cross540.patch
+    ++ lib.optional (crossCompiling && (lib.versionOlder version "5.40.0")) ./cross.patch;
 
   # This is not done for native builds because pwd may need to come from
   # bootstrap tools when building bootstrap perl.
@@ -128,7 +130,7 @@ stdenv.mkDerivation (rec {
 
   dontAddPrefix = !crossCompiling;
 
-  enableParallelBuilding = !crossCompiling;
+  enableParallelBuilding = false;
 
   # perl includes the build date, the uname of the build system and the
   # username of the build user in some files.
@@ -156,6 +158,10 @@ stdenv.mkDerivation (rec {
     OLD_ZLIB     = False
     GZIP_OS_CODE = AUTO_DETECT
     USE_ZLIB_NG  = False
+  '' + lib.optionalString (lib.versionAtLeast version "5.40.0") ''
+    ZLIB_INCLUDE = ${zlib.dev}/include
+    ZLIB_LIB     = ${zlib.out}/lib
+  '' + ''
     EOF
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
@@ -241,14 +247,14 @@ stdenv.mkDerivation (rec {
     mainProgram = "perl";
   };
 } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-  crossVersion = "84db4c71ae3d3b01fb2966cd15a060a7be334710"; # Nov 29, 2023
+  crossVersion = "1.6";
 
   perl-cross-src = fetchFromGitHub {
     name = "perl-cross-${crossVersion}";
     owner = "arsv";
     repo = "perl-cross";
     rev = crossVersion;
-    sha256 = "sha256-1Zqw4sy/lD2nah0Z8rAE11tSpq1Ym9nBbatDczR+mxs=";
+    sha256 = "sha256-TVDLxw8ctl64LSfLfB4/WLYlSTO31GssSzmdVfqkBmg=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];

@@ -308,7 +308,8 @@ in
       # This is not an issue for the final stdenv, because this perl
       # won't be included in the final stdenv and won't be exported to
       # top-level pkgs as an override either.
-      perl = super.perl.override { enableThreading = false; enableCrypt = false; };
+      # FIXME: Pinning this stage to 538 as 540 doesn't build in stage1 atm
+      perl = super.perl538.override { enableThreading = false; enableCrypt = false; };
     };
 
     # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
