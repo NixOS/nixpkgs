@@ -77,7 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Pipewire Volume Control";
     homepage = "https://github.com/saivert/pwvucontrol";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ figsoda Guanran928 ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      Guanran928
+      johnrtitor
+    ];
     mainProgram = "pwvucontrol";
     platforms = lib.platforms.linux;
   };
