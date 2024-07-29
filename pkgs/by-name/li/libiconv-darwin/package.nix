@@ -16,7 +16,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libiconv";
-  version = "99";
+  version = "102";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apple-oss-distributions";
     repo = "libiconv";
     rev = "libiconv-${finalAttrs.version}";
-    hash = "sha256-TGt6rsU52ztfW2rCqwnhMAExLbexI/59IoDOGY+XGu0=";
+    hash = "sha256-Us33gtElybZdA63sLIL0RvFANRH4tropVTgrzoYOMJ4=";
   };
 
   setupHooks =
