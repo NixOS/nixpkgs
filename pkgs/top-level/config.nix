@@ -170,6 +170,33 @@ let
       '';
     };
 
+    permittedInsecurePackages = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = ''
+        List of insecure package names that are permitted.
+        Only takes effect if [`config.allowInsecurePredicate`](#opt-allowInsecurePredicate) is left as default
+        or is written to use the values in this option.
+
+        See [Installing insecure packages](#sec-allow-insecure).
+      '';
+    };
+
+    allowInsecurePredicate = mkOption {
+      type = types.functionTo types.bool;
+      defaultText = literalExpression ''
+        pkg:
+        builtins.elem (pkg.name
+          or "''${pkg.pname or "«name-missing»"}-''${pkg.version or "«version-missing»"}"
+        ) config.permittedInsecurePackages
+      '';
+      description = ''
+        A function that specifies whether a given insecure package may be permitted.
+
+        See [Installing insecure packages](#sec-allow-insecure).
+      '';
+    };
+
     cudaSupport = mkMassRebuild {
       type = types.bool;
       default = false;

@@ -123,7 +123,7 @@ let
     !allowUnfree &&
     !allowUnfreePredicate attrs;
 
-  allowInsecureDefaultPredicate = x: builtins.elem (getNameWithVersion x) (config.permittedInsecurePackages or []);
+  allowInsecureDefaultPredicate = x: elem (getNameWithVersion x) config.permittedInsecurePackages;
   allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
 
   hasAllowedInsecure = attrs:
