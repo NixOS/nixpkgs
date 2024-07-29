@@ -17,5 +17,23 @@ mkKdeDerivation rec {
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [ libgit2 ];
 
+  patchPhase = ''
+    cat > src/data/kommitdiff.sh <<EOF
+#!/bin/sh
+$out/bin/kommit diff "\$@"
+EOF
+    cat > src/data/kommitmerge.sh <<EOF
+#!/bin/sh
+$out/bin/kommit merge "\$@"
+EOF
+  '';
+
+  dontWrapQtApps = true;
+  preFixup = ''
+    wrapQtApp $out/bin/kommit
+    patchShebangs --host $out/bin/kommitdiff
+    patchShebangs --host $out/bin/kommitmerge
+  '';
+
   meta.license = [ lib.licenses.gpl3Only ];
 }
