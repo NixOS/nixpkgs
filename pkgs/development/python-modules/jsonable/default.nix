@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
   pytestCheckHook,
+  fetchpatch2,
 }:
 
 buildPythonPackage rec {
@@ -18,10 +18,16 @@ buildPythonPackage rec {
     hash = "sha256-3FIzG2djSZOPDdoYeKqs3obQjgHrFtyp0sdBwZakkHA=";
   };
 
-  nativeCheckInputs = [
-    nose
-    pytestCheckHook
+  patches = [
+    # https://github.com/halfak/python-jsonable/pull/2
+    (fetchpatch2 {
+      name = "eq-to-assert.patch";
+      url = "https://github.com/halfak/python-jsonable/pull/2/commits/335e61bb4926e644aef983f7313793bf506d2463.patch";
+      hash = "sha256-tCVA0wG+UMyB6oaNf4nbZ2BPWkNumaGPcjP5VJKegBo=";
+    })
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jsonable" ];
 
