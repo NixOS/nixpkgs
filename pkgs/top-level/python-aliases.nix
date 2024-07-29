@@ -339,6 +339,7 @@ mapAliases ({
   nose-timer = throw "nose-timer has been removed as it depends on the abandoned nose test framework"; # added 2024-07-27
   nose-warnings-filters = throw "nose-warnings-filters has been removed as it has been unmaintained since 2016"; # added 2024-07-27
   nose_warnings_filters = nose-warnings-filters; # added 2024-01-07
+  nose-xunitmp = throw "nose-xunitmp has been removed as it depends on the abandoned nose test framework"; # added 2024-07-29
   notifymuch = throw "notifymuch has been promoted to a top-level attribute name: `pkgs.notifymuch`"; # added 2022-10-02
   Nuitka = nuitka; # added 2023-02-19
   ntlm-auth = throw "ntlm-auth has been removed, because it relies on the md4 implementation provided by openssl. Use pyspnego instead.";
