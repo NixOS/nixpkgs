@@ -2053,6 +2053,8 @@ self: super: with self; {
 
   command-runner = callPackage ../development/python-modules/command-runner { };
 
+  commitizen = callPackage ../development/python-modules/commitizen { };
+
   connect-box = callPackage ../development/python-modules/connect-box { };
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
