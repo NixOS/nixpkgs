@@ -6,9 +6,7 @@
 , graphviz
 , gtest
 , valgrind
-, buildDocs ? true
 , buildTests ? !stdenv.hostPlatform.isStatic && !stdenv.isDarwin
-, buildExamples ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,10 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
-  ] ++ lib.optionals buildDocs [
     "doc"
-  ] ++ lib.optionals buildExamples [
-    "example"
   ];
 
   src = fetchFromGitHub {
@@ -38,15 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optionals buildDocs [
     doxygen
     graphviz
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "RAPIDJSON_BUILD_DOC" buildDocs)
+    (lib.cmakeBool "RAPIDJSON_BUILD_DOC" true)
     (lib.cmakeBool "RAPIDJSON_BUILD_TESTS" buildTests)
-    (lib.cmakeBool "RAPIDJSON_BUILD_EXAMPLES" buildExamples)
+    (lib.cmakeBool "RAPIDJSON_BUILD_EXAMPLES" true)
     # gtest 1.13+ requires C++14 or later.
     (lib.cmakeBool "RAPIDJSON_BUILD_CXX11" false)
     (lib.cmakeBool "RAPIDJSON_BUILD_CXX17" true)
@@ -60,15 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
     valgrind
   ];
-
-  postInstall = lib.optionalString buildExamples ''
-    mkdir -p $example/bin
-
-    find bin -type f -executable \
-      -not -name "perftest" \
-      -not -name "unittest" \
-      -exec cp -a {} $example/bin \;
-  '';
 
   meta = with lib; {
     description = "Fast JSON parser/generator for C++ with both SAX/DOM style API";
