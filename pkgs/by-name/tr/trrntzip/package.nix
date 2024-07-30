@@ -48,6 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ TheBrainScrambler ];
+    maintainers = with maintainers; [ ];
   };
 })
