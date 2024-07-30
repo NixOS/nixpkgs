@@ -23,6 +23,8 @@ buildPythonPackage rec {
       --replace 'library_dirs=library_dirs' 'library_dirs=[dir.decode("utf-8") for dir in library_dirs]' \
       --replace 'include_dirs=include_dirs' 'include_dirs=[dir.decode("utf-8") for dir in include_dirs]' \
       --replace 'runtime_library_dirs=runtime_lib_dirs' 'runtime_library_dirs=[dir.decode("utf-8") for dir in runtime_lib_dirs]'
+    substituteInPlace test/test-cdtext.py \
+      --replace assertEquals assertEqual
   '';
 
   preConfigure = ''
