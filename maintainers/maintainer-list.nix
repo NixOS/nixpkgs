@@ -15119,6 +15119,12 @@
     githubId = 39134647;
     name = "Oliver Koss";
   };
+  oliviermarty = {
+    name = "Olivier Marty";
+    email = "omarty@google.com";
+    github = "OlivierMarty";
+    githubId = 4533890;
+  };
   ollieB = {
     github = "oliverbunting";
     githubId = 1237862;
