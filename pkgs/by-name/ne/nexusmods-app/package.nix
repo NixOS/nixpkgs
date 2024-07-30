@@ -121,7 +121,6 @@ buildDotnetModule rec {
   };
 
   meta = {
-    description = "Game mod installer, creator and manager";
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
     changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${src.rev}";
@@ -131,5 +130,32 @@ buildDotnetModule rec {
       MattSturgeon
     ];
     platforms = lib.platforms.linux;
+    description = "Game mod installer, creator and manager";
+    longDescription = ''
+      A mod installer, creator and manager for all your popular games.
+
+      Currently experimental and undergoing active development,
+      new releases may include breaking changes!
+
+      ${
+        if _7zz.meta.unfree then
+          ''
+            This "unfree" variant includes support for mods packaged as RAR archives.
+          ''
+        else
+          ''
+            It is strongly recommended that you use the "unfree" variant of this package,
+            which provides support for mods packaged as RAR archives.
+
+            You can also enable unrar support manually, by overriding the `_7zz` used:
+
+            ```nix
+            pkgs.nexusmods-app.override {
+              _7zz = pkgs._7zz-rar;
+            }
+            ```
+          ''
+      }
+    '';
   };
 }
