@@ -53,13 +53,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.70.1";
+  version = "1.71.1";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-wtSkmjx5mzESMvIflqH+QEavH5oeBgKBz8/JjU+CASo=";
+    hash = "sha256-69iqpXzG9NXrqv08lJ36hlHWXwXUJs6yqcaGr32cHPw=";
   };
 
   enableParallelBuilding = true;
