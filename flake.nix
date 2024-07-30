@@ -92,6 +92,9 @@
         })
       );
 
+      # Allows the RFC 166 formatter to be run by just using nix fmt.
+      formatter = forAllSystems (system: self.legacyPackages.${system}.nixfmt-rfc-style);
+
       nixosModules = {
         notDetected = ./nixos/modules/installer/scan/not-detected.nix;
 
