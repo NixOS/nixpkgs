@@ -5,28 +5,26 @@ import ../make-test-python.nix (
     name = "${k3s.name}-airgap-images";
     meta.maintainers = lib.teams.k3s.members;
 
-    nodes.machine =
-      { pkgs, ... }:
-      {
-        # k3s uses enough resources the default vm fails.
-        virtualisation.memorySize = 1536;
-        virtualisation.diskSize = 4096;
+    nodes.machine = _: {
+      # k3s uses enough resources the default vm fails.
+      virtualisation.memorySize = 1536;
+      virtualisation.diskSize = 4096;
 
-        services.k3s = {
-          enable = true;
-          role = "server";
-          package = k3s;
-          # Slightly reduce resource usage
-          extraFlags = [
-            "--disable coredns"
-            "--disable local-storage"
-            "--disable metrics-server"
-            "--disable servicelb"
-            "--disable traefik"
-          ];
-          images = [ k3s.airgapImages ];
-        };
+      services.k3s = {
+        enable = true;
+        role = "server";
+        package = k3s;
+        # Slightly reduce resource usage
+        extraFlags = [
+          "--disable coredns"
+          "--disable local-storage"
+          "--disable metrics-server"
+          "--disable servicelb"
+          "--disable traefik"
+        ];
+        images = [ k3s.airgapImages ];
       };
+    };
 
     testScript = ''
       import json
