@@ -59,9 +59,9 @@
   };
   aks-preview = mkAzExtension rec {
     pname = "aks-preview";
-    version = "6.0.0b1";
+    version = "7.0.0b2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/aks_preview-${version}-py2.py3-none-any.whl";
-    sha256 = "2e04cfef1cb404760006d73786c57259f8e5c92bc42b9eaca7314301ce0ba1a4";
+    sha256 = "f2f8aba2abf4252b3e77c2d4245320c025e111d5374bb6c1a57631cd72c42e39";
     description = "Provides a preview for upcoming AKS features";
   };
   akshybrid = mkAzExtension rec {
@@ -87,9 +87,9 @@
   };
   amg = mkAzExtension rec {
     pname = "amg";
-    version = "1.3.5";
+    version = "1.3.6";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/amg-${version}-py3-none-any.whl";
-    sha256 = "5eb4615d05dd85021d7d00311fdc25645535fe69e07cea1eca68d58cfb7bd44e";
+    sha256 = "52fbff96d56e381e636f6b2e9f8be80ac7eef766153ba8225a183b73d2972f25";
     description = "Microsoft Azure Command-Line Tools Azure Managed Grafana Extension";
   };
   amlfs = mkAzExtension rec {
@@ -143,9 +143,9 @@
   };
   azure-firewall = mkAzExtension rec {
     pname = "azure-firewall";
-    version = "1.0.1";
+    version = "1.1.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/azure_firewall-${version}-py2.py3-none-any.whl";
-    sha256 = "920023c55ae72d7e85baa43d81d96683be0e8348228b6f8e89e479fd4092c0f8";
+    sha256 = "562cc396c6afa1ef996c35b7bed801b3fd9677e4c6923f1148cb09255b24d1ef";
     description = "Manage Azure Firewall resources";
   };
   azurelargeinstance = mkAzExtension rec {
@@ -318,9 +318,9 @@
   };
   dataprotection = mkAzExtension rec {
     pname = "dataprotection";
-    version = "1.5.1";
+    version = "1.5.2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/dataprotection-${version}-py3-none-any.whl";
-    sha256 = "2089e0c5ce213e0d79148cc2724c28679d93dc70a1e7290ee2ec99e5e0eed513";
+    sha256 = "534ba81cbfece53352e1862d4bfadc8a5b3fd0449178c482e13fc1925970dac3";
     description = "Microsoft Azure Command-Line Tools DataProtectionClient Extension";
   };
   datashare = mkAzExtension rec {
@@ -742,6 +742,13 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/offazure-${version}-py3-none-any.whl";
     sha256 = "1918817070ae9e0ceef57b93366d18b6e8bf577fd632e7da999e1e2abbb53656";
     description = "Microsoft Azure Command-Line Tools AzureMigrateV2 Extension";
+  };
+  oracle-database = mkAzExtension rec {
+    pname = "oracle-database";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/oracle_database-${version}-py3-none-any.whl";
+    sha256 = "058c3de6c1e103ff0c62a188b1c606a35097a6652cb7eb6c3e5b77f77e15b5b1";
+    description = "Microsoft Azure Command-Line Tools OracleDatabase Extension";
   };
   orbital = mkAzExtension rec {
     pname = "orbital";

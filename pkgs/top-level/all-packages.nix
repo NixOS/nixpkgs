@@ -2555,6 +2555,24 @@ with pkgs;
       pkgsCross.gnu64.hello;
   };
 
+  box86 =
+    let
+      args = {
+        hello-x86_32 = if stdenv.hostPlatform.isx86_32 then
+          hello
+        else
+          pkgsCross.gnu32.hello;
+      };
+    in
+    if stdenv.hostPlatform.is32bit then
+      callPackage ../applications/emulators/box86 args
+    else if stdenv.hostPlatform.isx86_64 then
+      pkgsCross.gnu32.callPackage ../applications/emulators/box86 args
+    else if stdenv.hostPlatform.isAarch64 then
+      pkgsCross.armv7l-hf-multiplatform.callPackage ../applications/emulators/box86 args
+    else
+      throw "Don't know 32-bit platform for cross from: ${stdenv.hostPlatform.stdenv}";
+
   caprice32 = callPackage ../applications/emulators/caprice32 { };
 
   ccemux = callPackage ../applications/emulators/ccemux { };
@@ -26356,8 +26374,6 @@ with pkgs;
 
   fit-trackee = callPackage ../servers/geospatial/fit-trackee { };
 
-  geoserver = callPackage ../servers/geospatial/geoserver { };
-
   mapcache = callPackage ../servers/geospatial/mapcache { };
 
   mapproxy = callPackage ../servers/geospatial/mapproxy { };
@@ -29856,7 +29872,6 @@ with pkgs;
 
   docker-buildx = callPackage ../applications/virtualization/docker/buildx.nix { };
   docker-compose = callPackage ../applications/virtualization/docker/compose.nix { };
-  docker-compose_1 = python3Packages.callPackage ../applications/virtualization/docker/compose_1.nix { };
   docker-sbom = callPackage ../applications/virtualization/docker/sbom.nix { };
 
 
@@ -31223,6 +31238,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/wlroots {})
     wlroots_0_16
     wlroots_0_17
+    wlroots_0_18
     wlroots;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
@@ -32011,7 +32027,7 @@ with pkgs;
 
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
-  lsp-plugins = callPackage ../applications/audio/lsp-plugins { php = php81; };
+  lsp-plugins = callPackage ../applications/audio/lsp-plugins { php = php82; };
 
   ltex-ls = callPackage ../tools/text/ltex-ls { };
 

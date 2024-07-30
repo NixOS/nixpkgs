@@ -17,13 +17,13 @@
 let
   data = stdenv.mkDerivation (finalAttrs: {
     pname = "path-of-building-data";
-    version = "2.47.2";
+    version = "2.47.3";
 
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-fNPSRo5BG3BoNnxBTZnmVFQHVqLhUc3P6Wicd518RcM=";
+      hash = "sha256-wxsU178BrjdeBTTPY2C3REWlyORWI+/fFijn5oa2Gms=";
     };
 
     nativeBuildInputs = [ unzip ];

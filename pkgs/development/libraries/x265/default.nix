@@ -1,4 +1,5 @@
 { lib
+, gccStdenv
 , stdenv
 , fetchurl
 , fetchpatch
@@ -66,7 +67,11 @@ stdenv.mkDerivation rec {
     })
     # Fix detection of NEON (and armv6 build) :
     ./fix-neon-detection.patch
-  ];
+  ]
+    # CMake files require a bit of patching to support CMAKE_ASM_COMPILER.
+    # Made by @RossComputerGuy for x265 v3.5.
+    # https://mailman.videolan.org/pipermail/x265-devel/2024-July/013734.html
+    ++ lib.optional (stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin) ./fix-clang-asm.patch;
 
   postPatch = ''
     substituteInPlace cmake/Version.cmake \
@@ -89,7 +94,9 @@ stdenv.mkDerivation rec {
     (mkFlag ppaSupport "ENABLE_PPA")
     (mkFlag vtuneSupport "ENABLE_VTUNE")
     (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
-  ];
+  ]
+    # Clang does not support the endfunc directive so use GCC.
+    ++ lib.optional (stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin) "-DCMAKE_ASM_COMPILER=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc";
 
   cmakeStaticLibFlags = [
     "-DHIGH_BIT_DEPTH=ON"
