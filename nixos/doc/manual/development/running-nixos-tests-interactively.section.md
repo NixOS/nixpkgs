@@ -24,6 +24,23 @@ back into the test driver command line upon its completion. This allows
 you to inspect the state of the VMs after the test (e.g. to debug the
 test script).
 
+## Separating outputs {#sec-nixos-test-separating-outputs}
+
+Logs from the running virtual machines get output in-line and can be disruptive
+while using the python REPL. You can separate these streams by redirecting
+stderr:
+
+```ShellSession
+$ ./result/bin/nixos-test-driver 2>machine_output`
+[...]
+````
+
+and to see the output live in another terminal:
+
+```ShellSession
+$ less -F machine_output
+```
+
 ## Shell access in interactive mode {#sec-nixos-test-shell-access}
 
 The function `<yourmachine>.shell_interact()` grants access to a shell running
@@ -89,6 +106,35 @@ $ ./result/bin/nixos-test-driver --keep-vm-state
 
 The machine state is stored in the `$TMPDIR/vm-state-machinename`
 directory.
+
+## Rebuilding the test / redeploying the VMs {#sec-nixos-test-rebuild}
+
+When you change the VM configurations, you can update the running interactive
+driver and redeploy to those machines without restarting. The `rebuild()`
+command at the python REPL will update the running driver based on the
+executable produced by the command provided.
+
+```py
+>>> rebuild("nix-build . -A nixosTests.login.driverInteractive")
+```
+
+By default the new `nixos-test-driver` executable is assumed to be located at
+the same place the running driver was launched from. This works because the
+`reuslt/` symlink is updated to point at the new derivation. If needed, the path
+can be overridden with the `exe` parameter to `rebuild()`.
+
+You can also specify the rebuild command at the command line when the driver is
+first launched. Then `rebuild()` can be called without arguments.
+
+```ShellSession
+$ build_cmd="nix-build . -A nixosTests.login.driverInteractive"
+$ $build_cmd
+$ ./result/bin/nixos-test-driver --rebuild-cmd $build_cmd 2>machine_output
+>>> start_all()
+[test edited in another window]
+>>> rebuild()
+[new configurations deployed to VMs]
+```
 
 ## Interactive-only test configuration {#sec-nixos-test-interactive-configuration}
 
