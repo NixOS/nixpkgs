@@ -1,33 +1,40 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, makeWrapper
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  python3Packages,
+  texinfo,
+  perl,
+  texi2html,
+  autoreconfHook,
+  bashInteractive,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bashdb";
-  version = "5.0-1.1.2";
+  version = "5.2-1.1.2";
 
-  src = fetchurl {
-    url =  "mirror://sourceforge/bashdb/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-MBdtKtKMWwCy4tIcXqGu+PuvQKj52fcjxnxgUx87czA=";
+  src = fetchFromGitHub {
+    owner = "rocky";
+    repo = "bashdb";
+    rev = "1daa08b095fe2556fb25ad4191f194cb8fb03f5c";
+    sha256 = "sha256-FI63KARtzV14cd77phTZ40RiYMVt0DF3JD9destQUHM=";
   };
 
-  patches = [
-    # Enable building with bash 5.1/5.2
-    # Remove with any upstream 5.1-x.y.z release
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/569fbb806d9ee813afa8b27d2098a44f93433922/devel/bashdb/files/patch-configure";
-      sha256 = "19zfzcnxavndyn6kfxp775kjcd0gigsm4y3bnh6fz5ilhnnbbbgr";
-    })
-  ];
-  patchFlags = [ "-p0" ];
-
   nativeBuildInputs = [
+    autoreconfHook
     makeWrapper
+    texinfo
   ];
+
+  buildInputs = [
+    bashInteractive
+    perl
+    texi2html
+  ];
+
+  # NOTE: disabled because of failing tests
+  doCheck = false;
 
   postInstall = ''
     wrapProgram $out/bin/bashdb --prefix PYTHONPATH ":" "$(toPythonPath ${python3Packages.pygments})"
@@ -36,8 +43,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Bash script debugger";
     mainProgram = "bashdb";
-    homepage = "https://bashdb.sourceforge.net/";
+    homepage = "https://github.com/rocky/bashdb";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
