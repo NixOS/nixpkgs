@@ -3,24 +3,30 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   coloredlogs,
   datasets,
+  huggingface-hub,
+  numpy,
+  packaging,
+  sympy,
+  torch,
+  transformers,
+
+  # optional-dependencies
   diffusers,
   evaluate,
   h5py,
-  huggingface-hub,
-  numpy,
   onnx,
   onnxruntime,
-  packaging,
   protobuf,
-  setuptools,
-  sympy,
   tensorflow,
   tf2onnx,
   timm,
-  torch,
-  transformers,
 }:
 
 buildPythonPackage rec {
@@ -38,6 +44,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "transformers" ];
 
   dependencies = [
     coloredlogs
@@ -108,12 +116,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "optimum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Accelerate training and inference of 🤗 Transformers and 🤗 Diffusers with easy to use hardware optimization tools";
     mainProgram = "optimum-cli";
     homepage = "https://github.com/huggingface/optimum";
     changelog = "https://github.com/huggingface/optimum/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }
