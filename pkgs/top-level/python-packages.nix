@@ -9260,6 +9260,8 @@ self: super: with self; {
 
   py-radix-sr = callPackage ../development/python-modules/py-radix-sr { };
 
+  py-sucks = callPackage ../development/python-modules/py-sucks { };
+
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
   oasatelematics = callPackage ../development/python-modules/oasatelematics { };
