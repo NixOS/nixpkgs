@@ -208,7 +208,7 @@ makeTest {
         barrier.wait()
 
       # Get to the Server Bookmarks screen on both clients. This takes a while so do it asynchronously.
-      barrier = threading.Barrier(3, timeout=120)
+      barrier = threading.Barrier(len(clients) + 1, timeout=240)
       for client in clients:
         threading.Thread(target=client_setup, args=(client, servers, barrier)).start()
       barrier.wait()
