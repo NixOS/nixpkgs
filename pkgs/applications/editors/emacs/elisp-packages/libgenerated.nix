@@ -1,6 +1,9 @@
 lib: self:
 
 let
+  inherit (lib) elemAt;
+
+  matchForgeRepo = builtins.match "(.+)/(.+)";
 
   fetchers = lib.mapAttrs (_: fetcher: self.callPackage fetcher { }) {
     github =
@@ -10,9 +13,13 @@ let
         ...
       }:
       { sha256, commit, ... }:
+      let
+        m = matchForgeRepo repo;
+      in
+      assert m != null;
       fetchFromGitHub {
-        owner = lib.head (lib.splitString "/" repo);
-        repo = lib.head (lib.tail (lib.splitString "/" repo));
+        owner = elemAt m 0;
+        repo = elemAt m 1;
         rev = commit;
         inherit sha256;
       };
@@ -24,9 +31,13 @@ let
         ...
       }:
       { sha256, commit, ... }:
+      let
+        m = matchForgeRepo repo;
+      in
+      assert m != null;
       fetchFromGitLab {
-        owner = lib.head (lib.splitString "/" repo);
-        repo = lib.head (lib.tail (lib.splitString "/" repo));
+        owner = elemAt m 0;
+        repo = elemAt m 1;
         rev = commit;
         inherit sha256;
       };
