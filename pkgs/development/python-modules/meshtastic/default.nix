@@ -52,6 +52,7 @@ buildPythonPackage rec {
     setuptools
     tabulate
     timeago
+    pytap2
   ];
 
   passthru.optional-dependencies = {
@@ -68,6 +69,15 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "meshtastic" ];
+
+  patches = [
+    ./version.patch
+  ];
+
+  postPatch = ''
+    echo v${version}
+    substituteInPlace meshtastic/__main__.py meshtastic/util.py --replace %VERSION% ${version}
+  '';
 
   disabledTests = [
     # TypeError
