@@ -30,13 +30,6 @@ buildGoModule rec {
 
   tags = ["ts2019"];
 
-  postInstall = ''
-    installShellCompletion --cmd headscale \
-      --bash <($out/bin/headscale completion bash) \
-      --fish <($out/bin/headscale completion fish) \
-      --zsh <($out/bin/headscale completion zsh)
-  '';
-
   passthru.tests = { inherit (nixosTests) headscale; };
 
   meta = with lib; {
