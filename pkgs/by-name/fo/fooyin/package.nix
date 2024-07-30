@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTING" (finalAttrs.doCheck or false))
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     # we need INSTALL_FHS to be true as the various artifacts are otherwise just dumped in the root
     # of $out and the fixupPhase cleans things up anyway
     (lib.cmakeBool "INSTALL_FHS" true)
