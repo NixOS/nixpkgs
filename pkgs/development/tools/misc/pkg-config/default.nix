@@ -38,7 +38,10 @@ stdenv.mkDerivation rec {
          "glib_cv_uscore=no"
          "ac_cv_func_posix_getpwuid_r=yes"
          "ac_cv_func_posix_getgrgid_r=yes"
-       ];
+       ]
+    ++ optional (stdenv.hostPlatform.useAndroidPrebuilt && stdenv.targetPlatform.isAarch32) [
+      "CFLAGS=-Wno-implicit-function-declaration"
+    ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     # Silence "incompatible integer to pointer conversion passing 'gsize'" when building with Clang.
