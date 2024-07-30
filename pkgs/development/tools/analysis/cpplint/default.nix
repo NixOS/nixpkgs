@@ -1,26 +1,20 @@
 { lib, python3Packages, fetchFromGitHub }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "cpplint";
-  version = "1.6.1";
+  version = "1.7-unreleased";
   pyproject = true;
 
   # Fetch from github instead of pypi, since the test cases are not in the pypi archive
   src = fetchFromGitHub {
     owner = "cpplint";
     repo = "cpplint";
-    rev = "refs/tags/${version}";
-    hash = "sha256-N5YrlhEXQGYxhsJ4M5dGYZUzA81GKRSI83goaqbtCkI=";
+    rev = "9be08b54bf2621eb8e52f813f33f5310af4b334e";
+    hash = "sha256-OnN0egGviM1zQqwG1KkbO6+QDnGdblyP7KstkUl1xZY=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail '"pytest-runner==5.2"' ""
-
     patchShebangs cpplint_unittest.py
-
-    substituteInPlace cpplint_unittest.py \
-      --replace-fail "assertEquals" "assertEqual"
   '';
 
   build-system = with python3Packages; [
@@ -29,7 +23,8 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [
     pytest
-    pytest-runner
+    parameterized
+    wrapPython
   ];
 
   checkPhase = ''
