@@ -23,7 +23,7 @@
 , useChineseVersion ? false
 }:
 let
-  pkgVersion = "11.1.0.11720";
+  pkgVersion = "11.1.0.11723";
   url =
     if useChineseVersion then
       "https://wps-linux-personal.wpscdn.cn/wps/download/ep/Linux2019/${lib.last (lib.splitVersion pkgVersion)}/wps-office_${pkgVersion}_amd64.deb"
@@ -33,7 +33,7 @@ let
     if useChineseVersion then
       "sha256-wf0zgFrhqHXV68Qsa20X8FbMA83XeYr/dSCBg1IjVlg="
     else
-      "sha256-MvJ5XQx9fmNIFKvzSEbu1BAdxiASJ6HR+qsDFLm53dU=";
+      "sha256-o8njvwE/UsQpPuLyChxGAZ4euvwfuaHxs5pfUvcM7kI=";
   uri = builtins.replaceStrings [ "https://wps-linux-personal.wpscdn.cn" ] [ "" ] url;
   securityKey = "7f8faaaa468174dc1c9cd62e5f218a5b";
 in
