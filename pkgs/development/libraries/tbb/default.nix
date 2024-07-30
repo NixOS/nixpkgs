@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   # test/conformance/conformance_resumable_tasks.cpp:37:24: error: ‘suspend’ is not a member of ‘tbb::v1::task’; did you mean ‘tbb::detail::r1::suspend’?
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace test/CMakeLists.txt \
-      --replace 'conformance_resumable_tasks' ""
+      --replace-fail 'tbb_add_test(SUBDIR conformance NAME conformance_resumable_tasks DEPENDENCIES TBB::tbb)' ""
   '';
 
   meta = with lib; {
