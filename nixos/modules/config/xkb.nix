@@ -17,7 +17,7 @@ in
       default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
       defaultText = lib.literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
       description = ''
-        Path used for -xkbdir xserver parameter.
+        Path to the xkb configs which are symlinked to /etc/X11/xkb and will be used for the `-xkbdir` xserver parameter.
       '';
     };
 
