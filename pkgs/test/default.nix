@@ -128,6 +128,8 @@ with pkgs;
 
   cross = callPackage ./cross {} // { __attrsFailEvaluation = true; };
 
+  splicing = callPackage ./splicing {};
+
   php = recurseIntoAttrs (callPackages ./php {});
 
   pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { }) // { __recurseIntoDerivationForReleaseJobs = true; };
