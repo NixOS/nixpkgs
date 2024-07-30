@@ -2217,6 +2217,35 @@ rec {
     in
       listToAttrs (map genReplacement allSecrets);
 
+  updateToLoadCredentials = sourceField: rootDir: attrs:
+    let
+      hasPlaceholderField = v: isAttrs v && hasAttr sourceField v;
+
+      valueOrLoadCredential = path: value:
+        if ! (hasPlaceholderField value)
+        then value
+        else value // { ${sourceField} = rootDir + "/" + concatStringsSep "_" path; };
+    in
+      mapAttrsRecursiveCond' (v: ! (hasPlaceholderField v)) valueOrLoadCredential attrs;
+
+  getLoadCredentials = sourceField: attrs:
+    let
+      hasPlaceholderField = v: isAttrs v && hasAttr sourceField v;
+
+      addPathField = path: value:
+        if ! (hasPlaceholderField value)
+        then value
+        else value // { inherit path; };
+
+      secretsWithPath = mapAttrsRecursiveCond' (v: ! (hasPlaceholderField v)) addPathField attrs;
+
+      allSecrets = collect' (v: hasPlaceholderField v) secretsWithPath;
+
+      genLoadCredentials = secret:
+        "${concatStringsSep "_" secret.path}:${secret.${sourceField}}";
+    in
+      map genLoadCredentials allSecrets;
+
   # DEPRECATED
   zipWithNames = warn
     "lib.zipWithNames is a deprecated alias of lib.zipAttrsWithNames." zipAttrsWithNames;

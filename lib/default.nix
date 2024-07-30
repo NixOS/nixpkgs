@@ -90,7 +90,7 @@ let
       getBin getLib getStatic getDev getInclude getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProduct cartesianProductOfSets
       mapCartesianProduct updateManyAttrsByPath listToAttrs hasAttr getAttr isAttrs intersectAttrs removeAttrs
-      replaceWithPlaceholder getPlaceholderReplacements;
+      replaceWithPlaceholder getPlaceholderReplacements getLoadCredentials updateToLoadCredentials;
     inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
       filter ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists

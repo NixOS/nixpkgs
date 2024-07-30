@@ -12,6 +12,7 @@ let
     getExe
     getName
     getPlaceholderReplacements
+    getLoadCredentials
     hasPrefix
     hasSuffix
     imap0
@@ -33,6 +34,7 @@ let
     replaceStrings
     stringToCharacters
     types
+    updateToLoadCredentials
     ;
 
   inherit (lib.strings) toJSON normalizePath escapeC;
@@ -316,7 +318,7 @@ utils = rec {
 
   systemdUtils = {
     lib = import ./systemd-lib.nix { inherit lib config pkgs utils; };
-    unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };
+    unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils utils; };
     types = import ./systemd-types.nix { inherit lib systemdUtils pkgs; };
     network = {
       units = import ./systemd-network-units.nix { inherit lib systemdUtils; };
@@ -421,11 +423,20 @@ utils = rec {
         inherit sourceField fileWithPlaceholders configLocation replacements;
       };
 
+  genConfigOutOfBandSystemd = { config, configLocation, generator, sourceField ? "_secret" }:
+    {
+      loadCredentials = getLoadCredentials sourceField config;
+      preStart = genConfigOutOfBand {
+        inherit configLocation generator sourceField;
+        config = updateToLoadCredentials sourceField "$CREDENTIALS_DIRECTORY" config;
+      };
+    };
+
   genConfigOutOfBandFormatAdapter = format:
     format.generate;
 
   genConfigOutOfBandGeneratorAdapter = generator: name: value:
-    pkgs.writeText "generator " (generator value);
+    pkgs.writeText "generator-${name}" (generator value);
 
   replacePlaceholdersScript = { sourceField, fileWithPlaceholders, configLocation, replacements }:
     let

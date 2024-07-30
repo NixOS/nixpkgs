@@ -59,6 +59,7 @@ let
     getExe
     getExe'
     getLicenseFromSpdxIdOr
+    getLoadCredentials
     getPlaceholderReplacements
     groupBy
     groupBy'
@@ -112,6 +113,7 @@ let
     toShellVars
     types
     updateManyAttrsByPath
+    updateToLoadCredentials
     versions
     xor
     ;
@@ -2629,5 +2631,34 @@ runTests {
             doubleNestedList = [ { n = item; } ];
           }
         );
+  };
+
+  testGetLoadCredentials = {
+    expected = [
+      "a_a:/my/secret/location-a.txt"
+      "c:/my/secret/location-c.txt"
+    ];
+
+    expr = getLoadCredentials "_secret" {
+      a.a._secret = "/my/secret/location-a.txt";
+      b = "/something/else";
+      c._secret = "/my/secret/location-c.txt";
+    };
+  };
+
+  testUpdateToLoadCredentials = {
+    expected = {
+      a.a._secret = "$rootDir/a_a";
+      a.a.other = "other";
+      b = "/something/else";
+      c._secret = "$rootDir/c";
+    };
+
+    expr = updateToLoadCredentials "_secret" "$rootDir" {
+      a.a._secret = "/my/secret/location-a.txt";
+      a.a.other = "other";
+      b = "/something/else";
+      c._secret = "/my/secret/location-c.txt";
+    };
   };
 }

@@ -125,10 +125,16 @@ let
       '';
     };
 
-    otherUserGroupTmpFiles = rec {
+    otherUserGroupTmpFiles = let
       configLocation = "/var/lib/outOfBandConfig/config.json";
 
-      inherit wantedConfig;
+      config = utils.genConfigOutOfBandSystemd {
+        config = userConfig;
+        inherit configLocation;
+        generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
+      };
+    in {
+      inherit configLocation wantedConfig;
 
       waitForUnit = "outOfBand.service";
 
@@ -143,39 +149,8 @@ let
 
           serviceConfig.User = "nobody";
           serviceConfig.Group = "nobody";
-          serviceConfig.LoadCredential = [
-            "a-secret.txt:/run/secrets/a-secret.txt"
-            "b-secret.txt:/run/secrets/b-secret.txt"
-            "e-secret.txt:/run/secrets/e-secret.txt"
-          ];
-          preStart = utils.genConfigOutOfBand {
-            config = lib.attrsets.updateManyAttrsByPath [
-              {
-                path = [
-                  "a"
-                  "a"
-                  "_secret"
-                ];
-                update = old: "$CREDENTIALS_DIRECTORY/a-secret.txt";
-              }
-              {
-                path = [
-                  "b"
-                  "_secret"
-                ];
-                update = old: "$CREDENTIALS_DIRECTORY/b-secret.txt";
-              }
-              {
-                path = [
-                  "e"
-                  "_secret"
-                ];
-                update = old: "$CREDENTIALS_DIRECTORY/e-secret.txt";
-              }
-            ] userConfig;
-            inherit configLocation;
-            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
-          };
+          serviceConfig.LoadCredential = config.loadCredentials;
+          preStart = config.preStart;
           script = "cat ${configLocation}";
         };
       };
@@ -185,7 +160,13 @@ let
       '';
     };
 
-    otherUserGroupStateDirectory = {
+    otherUserGroupStateDirectory = let
+      config = utils.genConfigOutOfBandSystemd {
+        config = userConfig;
+        configLocation = "$STATE_DIRECTORY/my config.json";
+        generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
+      };
+    in {
       # Path with space on purpose!.
       # StateDirectory can't contain spaces.
       configLocation = "/var/lib/outOfBandConfig/my config.json";
@@ -205,39 +186,8 @@ let
           serviceConfig.User = "nobody";
           serviceConfig.Group = "nobody";
           serviceConfig.StateDirectory = "outOfBandConfig";
-          serviceConfig.LoadCredential = [
-            "a-secret.txt:/run/secrets/a-secret.txt"
-            "b-secret.txt:/run/secrets/b-secret.txt"
-            "e-secret.txt:/run/secrets/e-secret.txt"
-          ];
-          preStart = utils.genConfigOutOfBand {
-            config = lib.attrsets.updateManyAttrsByPath [
-              {
-                path = [
-                  "a"
-                  "a"
-                  "_secret"
-                ];
-                update = old: "$CREDENTIALS_DIRECTORY/a-secret.txt";
-              }
-              {
-                path = [
-                  "b"
-                  "_secret"
-                ];
-                update = old: "$CREDENTIALS_DIRECTORY/b-secret.txt";
-              }
-              {
-                path = [
-                  "e"
-                  "_secret"
-                ];
-                update = old: "$CREDENTIALS_DIRECTORY/e-secret.txt";
-              }
-            ] userConfig;
-            configLocation = "$STATE_DIRECTORY/my config.json";
-            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
-          };
+          serviceConfig.LoadCredential = config.loadCredentials;
+          preStart = config.preStart;
           script = "cat \"$STATE_DIRECTORY/my config.json\"";
         };
       };
@@ -247,7 +197,13 @@ let
       '';
     };
 
-    dynamicUser = {
+    dynamicUser = let
+      config = utils.genConfigOutOfBandSystemd {
+        config = userConfig;
+        configLocation = "$STATE_DIRECTORY/config.json";
+        generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
+      };
+    in {
       configLocation = "/var/lib/private/outOfBandConfig/config.json";
 
       inherit wantedConfig;
@@ -255,9 +211,6 @@ let
       waitForUnit = "outOfBand.service";
 
       nodeConfig = {
-        # # Needed so that the testScript can fine the config file.
-        # systemd.tmpfiles.rules = [ "d /var/lib/outOfBandConfig 0770 nobody nobody" ];
-
         systemd.services.outOfBand = {
           wantedBy = [ "sysinit.target" ];
           after = [ "sysinit.target" ];
@@ -267,40 +220,12 @@ let
 
           serviceConfig.DynamicUser = true;
           serviceConfig.StateDirectory = "outOfBandConfig";
-          serviceConfig.LoadCredential = [
-            "a-secret.txt:/run/secrets/a-secret.txt"
-            "b-secret.txt:/run/secrets/b-secret.txt"
-            "e-secret.txt:/run/secrets/e-secret.txt"
-          ];
-          preStart = utils.genConfigOutOfBand {
-            config = lib.attrsets.updateManyAttrsByPath [
-              {
-                path = [
-                  "a"
-                  "a"
-                  "_secret"
-                ];
-                update = old: "$CREDENTIALS_DIRECTORY/a-secret.txt";
-              }
-              {
-                path = [
-                  "b"
-                  "_secret"
-                ];
-                update = old: "$CREDENTIALS_DIRECTORY/b-secret.txt";
-              }
-              {
-                path = [
-                  "e"
-                  "_secret"
-                ];
-                update = old: "$CREDENTIALS_DIRECTORY/e-secret.txt";
-              }
-            ] userConfig;
-            configLocation = "$STATE_DIRECTORY/config.json";
-            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
-          };
-          script = "cat $STATE_DIRECTORY/config.json";
+          serviceConfig.LoadCredential = config.loadCredentials;
+          preStart = config.preStart;
+          script = ''
+            echo $STATE_DIRECTORY/config.json
+            cat $STATE_DIRECTORY/config.json
+          '';
         };
       };
 
@@ -308,7 +233,6 @@ let
         gotConfig = json.loads(gotConfig)
       '';
     };
-
   };
 
   mkTest =
@@ -350,9 +274,11 @@ let
             else
               ''
                 machine.wait_for_unit("${waitForUnit}")
+                print(machine.succeed("systemctl cat ${waitForUnit}"))
               ''
           )
           + ''
+            print(machine.succeed("ls -l '${configLocation}'"))
             gotConfig = machine.succeed("cat '${configLocation}'")
             print(gotConfig)
             ${pythonParseFile}
