@@ -18,7 +18,7 @@ let
   _7zzWithOptionalUnfreeRarSupport = _7zz.override { inherit enableUnfree; };
 in
 buildDotnetModule rec {
-  pname = "nexusmods-app";
+  pname = "nexusmods-app" + lib.strings.optionalString enableUnfree "-unfree";
   version = "0.4.1";
 
   src = fetchFromGitHub {
