@@ -80,11 +80,11 @@ rustPlatform.buildRustPackage rec {
       target/*/release/build/sequoia-wot-*/out/sq-wot-path.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rust CLI tool for authenticating bindings and exploring a web of trust";
     homepage = "https://gitlab.com/sequoia-pgp/sequoia-wot";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ Cryolitia ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ Cryolitia ];
     mainProgram = "sq-wot";
   };
 }
