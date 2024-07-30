@@ -632,6 +632,7 @@
   ./services/home-automation/zigbee2mqtt.nix
   ./services/home-automation/zwave-js.nix
   ./services/libeufin/bank.nix
+  ./services/libeufin/nexus.nix
   ./services/libeufin/module.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
