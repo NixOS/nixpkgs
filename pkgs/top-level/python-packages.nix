@@ -14380,6 +14380,8 @@ self: super: with self; {
 
   sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
+  sleekxmppfs = callPackage ../development/python-modules/sleekxmppfs { };
+
   sleepyq = callPackage ../development/python-modules/sleepyq { };
 
   slicedimage = callPackage ../development/python-modules/slicedimage { };
