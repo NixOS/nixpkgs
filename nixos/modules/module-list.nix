@@ -1670,6 +1670,7 @@
   ./virtualisation/cri-o.nix
   ./virtualisation/docker-rootless.nix
   ./virtualisation/docker.nix
+  ./virtualisation/sysbox.nix
   ./virtualisation/ecs-agent.nix
   ./virtualisation/hyperv-guest.nix
   ./virtualisation/incus.nix
