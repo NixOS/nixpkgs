@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "nuclear";
-  version = "2.2.5";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "igrek51";
     repo = "nuclear";
     rev = version;
-    hash = "sha256-JuO7BKmlQE6bWKqy1QvX5U4A9YkKu/4ouTSJh9R7JGo=";
+    hash = "sha256-UeU803SYMBLSWXjuxtWP2R2dBumRom+qsj2ljTiYFm0=";
   };
 
   build-system = [ setuptools ];
@@ -38,10 +38,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Disabled because test tries to install bash in a non-NixOS way
     "tests/autocomplete/test_bash_install.py"
-  ];
-  disabledTests = [
-    # Setting the time zone in nix sandbox does not work - to be investigated
-    "test_context_logger"
   ];
   pythonImportsCheck = [ "nuclear" ];
 
