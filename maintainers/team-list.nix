@@ -1019,10 +1019,7 @@ with lib.maintainers;
   };
 
   zig = {
-    members = [
-      AndersonTorres
-      figsoda
-    ];
+    members = [ figsoda ];
     scope = "Maintain the Zig compiler toolchain and nixpkgs integration.";
     shortName = "Zig";
     enableFeatureFreezePing = true;
