@@ -216,6 +216,7 @@ in
             "char-nvidiactl"
             "char-nvidia-caps"
             "char-nvidia-uvm"
+            "char-nvidia-frontend"
             # ROCm
             "char-drm"
             "char-kfd"
