@@ -140,8 +140,7 @@ class Driver:
 
         with self.logger.nested("updating machines"):
             start_cmds = [
-                NixStartScript(start_script)
-                for start_script in start_scripts.split(" ")
+                NixStartScript(start_script) for start_script in start_scripts.split()
             ]
             names = [start_cmd.machine_name for start_cmd in start_cmds]
 
@@ -201,7 +200,6 @@ class Driver:
                         f"{start_cmd.machine_name} has multiple instances. This shouldn't be possible, but either way it's now ambiguous which to update."
                     )
 
-        # XXX: something's going wrong here
         with self.logger.nested("updating vlans"):
             nrs = list(set([int(vlan) for vlan in vlans_str.split(" ")]))
             to_del = []
