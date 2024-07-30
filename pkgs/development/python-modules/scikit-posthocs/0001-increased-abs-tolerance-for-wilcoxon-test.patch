@@ -1,0 +1,25 @@
+From 02266a00ce0eb6a089e7efe07816da1aa5152fc9 Mon Sep 17 00:00:00 2001
+From: Maksim Terpilovskii <maximtrp@gmail.com>
+Date: Sun, 31 Jul 2022 12:25:14 +0300
+Subject: [PATCH] increased abs tolerance for wilcoxon test
+
+---
+ tests/test_posthocs.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/test_posthocs.py b/tests/test_posthocs.py
+index 956d808..8cc65e4 100644
+--- a/tests/test_posthocs.py
++++ b/tests/test_posthocs.py
+@@ -471,7 +471,7 @@ class TestPosthocs(unittest.TestCase):
+                               [2.857818e-06, 1.230888e-05, 1]])
+ 
+         results = sp.posthoc_wilcoxon(self.df.sort_index(), val_col = 'pulse', group_col = 'kind')
+-        self.assertTrue(np.allclose(results, r_results))
++        self.assertTrue(np.allclose(results, r_results, atol=1e-4))
+ 
+ 
+     def test_posthoc_scheffe(self):
+-- 
+2.36.1
+

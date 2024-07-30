@@ -1,0 +1,48 @@
+diff --git a/src/dbus.cpp b/src/dbus.cpp
+index 7379af1..4eef3fe 100644
+--- a/src/dbus.cpp
++++ b/src/dbus.cpp
+@@ -152,7 +152,7 @@ bool dbus_manager::get_media_player_metadata(metadata& meta, std::string name) {
+ }
+ 
+ bool dbus_manager::init_internal() {
+-    if (!m_dbus_ldr.IsLoaded() && !m_dbus_ldr.Load("libdbus-1.so.3")) {
++    if (!m_dbus_ldr.IsLoaded() && !m_dbus_ldr.Load("@libdbus@/lib/libdbus-1.so.3")) {
+         SPDLOG_ERROR("Could not load libdbus-1.so.3");
+         return false;
+     }
+diff --git a/src/logging.cpp b/src/logging.cpp
+index 7d4cb98..256128c 100644
+--- a/src/logging.cpp
++++ b/src/logging.cpp
+@@ -27,8 +27,12 @@ string exec(string command) {
+ #endif
+     std::array<char, 128> buffer;
+     std::string result;
++
++    char* originalPath = getenv("PATH");
++    setenv("PATH", "@path@", 1);
+     auto deleter = [](FILE* ptr){ pclose(ptr); };
+     std::unique_ptr<FILE, decltype(deleter)> pipe(popen(command.c_str(), "r"), deleter);
++    setenv("PATH", originalPath, 1);
+     if (!pipe) {
+       return "popen failed!";
+     }
+diff --git a/src/pci_ids.cpp b/src/pci_ids.cpp
+index 002a843..5a6262b 100644
+--- a/src/pci_ids.cpp
++++ b/src/pci_ids.cpp
+@@ -24,11 +24,9 @@ static std::istream& get_uncommented_line(std::istream& is, std::string &line)
+ void parse_pciids()
+ {
+     std::ifstream file;
+-    file.open("/usr/share/hwdata/pci.ids");
++    file.open("@hwdata@/share/hwdata/pci.ids");
+     if (file.fail()){
+-        file.open("/usr/share/misc/pci.ids");
+-        if (file.fail())
+-            SPDLOG_ERROR("can't find file pci.ids");
++        SPDLOG_ERROR("can't find file pci.ids");
+     }
+ 
+     std::string line;

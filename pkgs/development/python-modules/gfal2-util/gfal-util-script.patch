@@ -1,0 +1,19 @@
+--- a/gfal-SCRIPT_NAME	2022-11-17 00:00:00.000000000 +0000
++++ b/gfal-SCRIPT_NAME	2022-11-17 00:00:00.000000000 +0000
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ #
+ # Copyright (c) 2022 CERN
+@@ -15,10 +15,2 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+-
+-# Execute script content with first python interpreter found:
+-# * GFAL_PYTHONBIN environment variable
+-# * python on the PATH if import gfal2, gfal2_util succeeds
+-# * python3 on the PATH if import gfal2, gfal2_util succeeds
+-# * python2 on the PATH if import gfal2, gfal2_util succeeds
+-# * /usr/bin/python
+-"exec" "$(  check_interpreter() { unalias $1 2> /dev/null; unset $1; GFAL_PYTHONBIN=$(command -v $1); [ $GFAL_PYTHONBIN ] && $GFAL_PYTHONBIN -c 'import gfal2, gfal2_util' > /dev/null 2>&1 && { echo $GFAL_PYTHONBIN; unset GFAL_PYTHONBIN; }; }; [ $GFAL_PYTHONBIN ] && echo $GFAL_PYTHONBIN || check_interpreter python || check_interpreter python3 || check_interpreter python2 || echo /usr/bin/python )" "-u" "-Wignore" "$0" "$@"

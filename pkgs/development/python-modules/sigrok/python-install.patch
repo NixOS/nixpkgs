@@ -1,0 +1,16 @@
+diff --git a/Makefile.am b/Makefile.am
+index 280cf64d..e10eb79f 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -888,8 +888,9 @@ $(PDIR)/timestamp: $(PDIR)/sigrok/core/classes.i \
+ 
+ python-install:
+ 	$(AM_V_at)$(MKDIR_P) "$(DESTDIR)$(prefix)" "$(DESTDIR)$(exec_prefix)"
+-	destdir='$(DESTDIR)'; $(setup_py) install $${destdir:+"--root=$$destdir"} \
+-		--prefix "$(prefix)" --exec-prefix "$(exec_prefix)"
++	destdir='$(DESTDIR)'; $(setup_py) install --root=$${destdir:-/} \
++		--prefix "$(prefix)" --exec-prefix "$(exec_prefix)" \
++		--single-version-externally-managed
+ 
+ python-clean:
+ 	-$(AM_V_at)rm -f $(PDIR)/timestamp

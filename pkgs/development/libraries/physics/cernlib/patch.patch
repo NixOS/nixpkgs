@@ -1,0 +1,186 @@
+diff --git a/2006/src/config/Imake.tmpl b/2006/src/config/Imake.tmpl
+index 054fb04..a3b3828 100644
+--- a/2006/src/config/Imake.tmpl
++++ b/2006/src/config/Imake.tmpl
+@@ -455,7 +455,7 @@ XCOMM the platform-specific parameters - edit site.def to change
+ #define NoRConst NO /* YES if const for structs of funcs is bad */
+ #endif
+ #ifndef InstPgmFlags
+-#define InstPgmFlags -s
++#define InstPgmFlags
+ #endif
+ #ifndef InstBinFlags
+ #define InstBinFlags -m 0755
+diff --git a/2006/src/config/biglib.rules b/2006/src/config/biglib.rules
+index c90e58a..9173bdc 100644
+--- a/2006/src/config/biglib.rules
++++ b/2006/src/config/biglib.rules
+@@ -368,7 +368,7 @@ define build-object-list						@@\
+ @ (set -e;\							@@\
+ 	 case '${MFLAGS}' in *[i]*) set +e;; esac; \		@@\
+ 	 subdirs=Quote(dirs);\					@@\
+-	 list=`/bin/pwd`/$@;\					@@\
++	 list=`pwd`/$@;\					@@\
+ 	 for dir in $$subdirs; do \				@@\
+ 	  (set -e;cd $$dir;SedCmd -e "\=^[^/]=s=^.=$$dir/&=" $@ >> $$list);\@@\
+ 	 done) || (rm $@; exit 1)				@@\
+diff --git a/2006/src/config/imake_boot b/2006/src/config/imake_boot
+index b52d0d3..69cf1b3 100755
+--- a/2006/src/config/imake_boot
++++ b/2006/src/config/imake_boot
+@@ -10,8 +10,8 @@ if [ "$CVSCOSRC" = "" ] ; then
+ fi
+ if [ -f Imakefile ] ; then
+ 	imake -DUseInstalled -I$CVSCOSRC/config \
+-		-DTOPDIR=`/bin/pwd` -DCURDIR= -fImakefile
++		-DTOPDIR=`pwd` -DCURDIR= -fImakefile
+ else
+ 	imake -DUseInstalled -I$CVSCOSRC/config \
+-		-DTOPDIR=`/bin/pwd` -DCURDIR= -f$CVSCOSRC/Imakefile
++		-DTOPDIR=`pwd` -DCURDIR= -f$CVSCOSRC/Imakefile
+ fi
+diff --git a/2006/src/config/linux-lp64.cf b/2006/src/config/linux-lp64.cf
+index e071b2f..3cc5c3b 100644
+--- a/2006/src/config/linux-lp64.cf
++++ b/2006/src/config/linux-lp64.cf
+@@ -173,7 +173,7 @@
+ #define FortranCmd		g77
+ #define XargsCmd		xargs
+ #define FortranSaveFlags	/* */ /* Everything static !? */
+-#define DefaultFCOptions	-fno-automatic -fno-second-underscore -fugly-complex
++#define DefaultFCOptions	-fno-automatic -fno-second-underscore
+ #define CernlibSystem	        -DCERNLIB_LINUX -DCERNLIB_UNIX -DCERNLIB_LNX -DCERNLIB_QMGLIBC -DCERNLIB_QMLXIA64
+ 
+ # endif
+diff --git a/2006/src/config/linux.cf b/2006/src/config/linux.cf
+index cc0bee5..a8dd954 100644
+--- a/2006/src/config/linux.cf
++++ b/2006/src/config/linux.cf
+@@ -258,7 +258,7 @@ endif									@@\
+ #define FortranCmd		g77
+ #define XargsCmd		xargs
+ #define FortranSaveFlags	/* */ /* Everything static !? */
+-#define DefaultFCOptions	-fno-automatic -fno-second-underscore -fugly-complex
++#define DefaultFCOptions	-fno-automatic -fno-second-underscore
+ #define CernlibSystem	        -DCERNLIB_LINUX -DCERNLIB_UNIX -DCERNLIB_LNX -DCERNLIB_QMGLIBC
+ 
+ # endif
+diff --git a/2006/src/packlib/kuip/code_kuip/kkern.c b/2006/src/packlib/kuip/code_kuip/kkern.c
+index 3a5579f..5f3c352 100644
+--- a/2006/src/packlib/kuip/code_kuip/kkern.c
++++ b/2006/src/packlib/kuip/code_kuip/kkern.c
+@@ -543,24 +543,6 @@ char *str0dup( const char *str )
+ 
+ 
+ /*
+- * like strdup() but string is n characters long and not terminated
+- */
+-char *strndup( const char *str,
+-              size_t len )
+-{
+-  size_t bytes = len + 1;
+-  char *p;
+-
+-  if( bytes < ALLOC_MIN_BYTES )
+-    bytes = ALLOC_MIN_BYTES;
+-
+-  p = strncpy( malloc( bytes ), str, len );
+-  p[len] = '\0';
+-  return p;
+-}
+-
+-
+-/*
+  * strdup() of character representation of integer n
+  */
+ char *stridup( int n )
+diff --git a/2006/src/packlib/kuip/code_kuip/kmenu.c b/2006/src/packlib/kuip/code_kuip/kmenu.c
+index f135b07..23007a8 100644
+--- a/2006/src/packlib/kuip/code_kuip/kmenu.c
++++ b/2006/src/packlib/kuip/code_kuip/kmenu.c
+@@ -1404,7 +1404,7 @@ void interactive_find( char *expr, int keym )
+          printf ("See also:\n    ");
+          for (i = 0; i < nval; i++) {
+              if (i == ncmd) continue;
+-             printf (flis_name[i]);
++             printf ("%s", flis_name[i]);
+              if (i < nval-1)
+                 printf (", ");
+              else
+diff --git a/2006/src/packlib/kuip/kuip/kstring.h b/2006/src/packlib/kuip/kuip/kstring.h
+index 7811f15..12a1344 100644
+--- a/2006/src/packlib/kuip/kuip/kstring.h
++++ b/2006/src/packlib/kuip/kuip/kstring.h
+@@ -21,7 +21,6 @@ extern "C" {
+  */
+ 
+ #ifndef WIN32
+-extern void* memmove( void* dst, const void* src, size_t n );
+ #endif
+ 
+ /* GF. make conform to kkern.c#if !defined(__convexc__)*/
+@@ -46,7 +45,6 @@ extern char* str4dup( const char* str1, const char* str2, const char* str3,
+                      const char* str4 );
+ extern char* str5dup( const char* str1, const char* str2, const char* str3,
+                      const char* str4, const char* str5 );
+-extern char* strndup( const char* buf, size_t n );
+ extern char* stridup( int i );
+ 
+ extern char* mstrcat( char* ptr, const char* str );
+diff --git a/2006/src/pawlib/paw/cpaw/bugrep.c b/2006/src/pawlib/paw/cpaw/bugrep.c
+index d503a45..d26e30f 100644
+--- a/2006/src/pawlib/paw/cpaw/bugrep.c
++++ b/2006/src/pawlib/paw/cpaw/bugrep.c
+@@ -432,51 +432,7 @@ br_add_config( char * tmp_file )
+ 
+ static int
+ br_mail_file( char *addr, char *subj, char *file )
+-#if (defined(CERNLIB_UNIX))&&(!defined(CERNLIB_WINNT))&&(!defined(CERNLIB_MACOSX))
+-{
+-        FILE            *mfp, *fp;
+-        char            line[1024], my_addr[L_cuserid];
+-        time_t          clock;
+-        struct tm       *ts;
+-
+-        fp = fopen( file, "r" );
+-        if ( fp == NULL ) {
+-                printf( "BUGREPORT: cannot (re)open temporary file\n" );
+-                return MAIL_ERROR;
+-        }
+-
+-        cuserid( my_addr );
+-
+-        sprintf( line, "/usr/lib/sendmail -t" );
+-        mfp = popen( line, "w" );
+-
+-        if ( mfp == NULL ) {
+-                printf( "BUGREPORT: cannot run sendmail\n" );
+-                return MAIL_ERROR;
+-        }
+-
+-
+-        clock = time( (time_t *) 0 );
+-        ts = localtime( &clock );
+-        strftime( line, sizeof( line ),
+-                "%a, %d %h %y %H:%M:%S", ts );
+-        fprintf ( mfp, "To: %s\n", addr );
+-        fprintf ( mfp, "Bcc: %s\n", my_addr );
+-        fprintf ( mfp, "Date: %s\n", line );
+-        fprintf ( mfp, "Subject: %s\n", subj );
+-        fprintf ( mfp, "\n" );
+-
+-        while( fgets( line, sizeof( line ), fp ) != NULL ) {
+-                fputs( line, mfp );
+-        }
+-        fclose( fp );
+-
+-        pclose( mfp );
+-
+-        return MAIL_OK;
+-}
+-#endif
+-#if defined(CERNLIB_MACOSX)
++#if (defined(CERNLIB_UNIX))&&(!defined(CERNLIB_WINNT))
+ {
+         FILE            *mfp, *fp;
+         char            line[1024], *my_addr;

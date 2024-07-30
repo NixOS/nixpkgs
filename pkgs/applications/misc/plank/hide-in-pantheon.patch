@@ -1,0 +1,9 @@
+diff --git a/data/plank.desktop.in b/data/plank.desktop.in
+index 330c3a4..e1bdf5f 100644
+--- a/data/plank.desktop.in
++++ b/data/plank.desktop.in
+@@ -8,3 +8,4 @@ Exec=plank
+ Icon=plank
+ Terminal=false
+ NoDisplay=false
++NotShowIn=Pantheon;

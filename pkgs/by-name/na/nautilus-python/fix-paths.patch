@@ -1,0 +1,14 @@
+diff --git a/src/nautilus-python.c b/src/nautilus-python.c
+index 843e3c6..466a513 100644
+--- a/src/nautilus-python.c
++++ b/src/nautilus-python.c
+@@ -184,6 +184,9 @@ nautilus_python_init_python (void) {
+         return FALSE;
+     }
+ 
++    debug("Add PyGObject to path");
++    PyRun_SimpleString("import site;import functools; functools.reduce(lambda k, p: site.addsitedir(p, k), [@pythonPaths@], site._init_pathinfo())");
++
+     /* import gobject */
+     debug("init_pygobject");
+     if (!np_init_pygobject()) {

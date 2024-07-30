@@ -1,0 +1,84 @@
+diff --git a/homeassistant/components/ffmpeg/__init__.py b/homeassistant/components/ffmpeg/__init__.py
+index 4ab4ee32a0..0f04f037f6 100644
+--- a/homeassistant/components/ffmpeg/__init__.py
++++ b/homeassistant/components/ffmpeg/__init__.py
+@@ -46,7 +46,7 @@ CONF_FFMPEG_BIN = "ffmpeg_bin"
+ CONF_EXTRA_ARGUMENTS = "extra_arguments"
+ CONF_OUTPUT = "output"
+ 
+-DEFAULT_BINARY = "ffmpeg"
++DEFAULT_BINARY = "@ffmpeg@"
+ 
+ CONFIG_SCHEMA = vol.Schema(
+     {
+diff --git a/tests/components/ffmpeg/test_binary_sensor.py b/tests/components/ffmpeg/test_binary_sensor.py
+index 6eec115d6f..c55b4fb26c 100644
+--- a/tests/components/ffmpeg/test_binary_sensor.py
++++ b/tests/components/ffmpeg/test_binary_sensor.py
+@@ -24,7 +24,7 @@ async def test_noise_setup_component(hass: HomeAssistant) -> None:
+         await async_setup_component(hass, "binary_sensor", CONFIG_NOISE)
+     await hass.async_block_till_done()
+ 
+-    assert hass.data["ffmpeg"].binary == "ffmpeg"
++    assert hass.data["ffmpeg"].binary == "@ffmpeg@"
+     assert hass.states.get("binary_sensor.ffmpeg_noise") is not None
+ 
+ 
+@@ -35,7 +35,7 @@ async def test_noise_setup_component_start(mock_start, hass: HomeAssistant):
+         await async_setup_component(hass, "binary_sensor", CONFIG_NOISE)
+     await hass.async_block_till_done()
+ 
+-    assert hass.data["ffmpeg"].binary == "ffmpeg"
++    assert hass.data["ffmpeg"].binary == "@ffmpeg@"
+     assert hass.states.get("binary_sensor.ffmpeg_noise") is not None
+ 
+     hass.bus.async_fire(EVENT_HOMEASSISTANT_START)
+@@ -55,7 +55,7 @@ async def test_noise_setup_component_start_callback(mock_ffmpeg, hass: HomeAssis
+         await async_setup_component(hass, "binary_sensor", CONFIG_NOISE)
+     await hass.async_block_till_done()
+ 
+-    assert hass.data["ffmpeg"].binary == "ffmpeg"
++    assert hass.data["ffmpeg"].binary == "@ffmpeg@"
+     assert hass.states.get("binary_sensor.ffmpeg_noise") is not None
+ 
+     hass.bus.async_fire(EVENT_HOMEASSISTANT_START)
+@@ -80,7 +80,7 @@ async def test_motion_setup_component(hass: HomeAssistant) -> None:
+         await async_setup_component(hass, "binary_sensor", CONFIG_MOTION)
+     await hass.async_block_till_done()
+ 
+-    assert hass.data["ffmpeg"].binary == "ffmpeg"
++    assert hass.data["ffmpeg"].binary == "@ffmpeg@"
+     assert hass.states.get("binary_sensor.ffmpeg_motion") is not None
+ 
+ 
+@@ -91,7 +91,7 @@ async def test_motion_setup_component_start(mock_start, hass: HomeAssistant):
+         await async_setup_component(hass, "binary_sensor", CONFIG_MOTION)
+     await hass.async_block_till_done()
+ 
+-    assert hass.data["ffmpeg"].binary == "ffmpeg"
++    assert hass.data["ffmpeg"].binary == "@ffmpeg@"
+     assert hass.states.get("binary_sensor.ffmpeg_motion") is not None
+ 
+     hass.bus.async_fire(EVENT_HOMEASSISTANT_START)
+@@ -111,7 +111,7 @@ async def test_motion_setup_component_start_callback(mock_ffmpeg, hass: HomeAssi
+         await async_setup_component(hass, "binary_sensor", CONFIG_MOTION)
+     await hass.async_block_till_done()
+ 
+-    assert hass.data["ffmpeg"].binary == "ffmpeg"
++    assert hass.data["ffmpeg"].binary == "@ffmpeg@"
+     assert hass.states.get("binary_sensor.ffmpeg_motion") is not None
+ 
+     hass.bus.async_fire(EVENT_HOMEASSISTANT_START)
+diff --git a/tests/components/ffmpeg/test_init.py b/tests/components/ffmpeg/test_init.py
+index 452a818859..41ba776436 100644
+--- a/tests/components/ffmpeg/test_init.py
++++ b/tests/components/ffmpeg/test_init.py
+@@ -81,7 +81,7 @@ def test_setup_component():
+         with assert_setup_component(1):
+             setup_component(hass, ffmpeg.DOMAIN, {ffmpeg.DOMAIN: {}})
+ 
+-        assert hass.data[ffmpeg.DATA_FFMPEG].binary == "ffmpeg"
++        assert hass.data[ffmpeg.DATA_FFMPEG].binary == "@ffmpeg@"
+         hass.stop()
+ 
+ 

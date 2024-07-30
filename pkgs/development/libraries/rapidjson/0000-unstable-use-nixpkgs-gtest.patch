@@ -1,0 +1,35 @@
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 11c1b04c..762eaa75 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -1,20 +1,14 @@
+-find_package(GTestSrc)
++enable_testing()
+ 
+-IF(GTESTSRC_FOUND)
+-    enable_testing()
++if (WIN32 AND (NOT CYGWIN) AND (NOT MINGW))
++    set(gtest_disable_pthreads ON)
++    set(gtest_force_shared_crt ON)
++endif()
+ 
+-    if (WIN32 AND (NOT CYGWIN) AND (NOT MINGW))
+-        set(gtest_disable_pthreads ON)
+-        set(gtest_force_shared_crt ON)
+-    endif()
++include_directories(SYSTEM ${GTEST_INCLUDE_DIR})
+ 
+-    add_subdirectory(${GTEST_SOURCE_DIR} ${CMAKE_BINARY_DIR}/googletest)
+-    include_directories(SYSTEM ${GTEST_INCLUDE_DIR})
++set(TEST_LIBRARIES gtest gtest_main)
+ 
+-    set(TEST_LIBRARIES gtest gtest_main)
+-
+-    add_custom_target(tests ALL)
+-    add_subdirectory(perftest)
+-    add_subdirectory(unittest)
+-
+-ENDIF(GTESTSRC_FOUND)
++add_custom_target(tests ALL)
++add_subdirectory(perftest)
++add_subdirectory(unittest)
