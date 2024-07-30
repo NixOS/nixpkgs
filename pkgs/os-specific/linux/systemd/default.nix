@@ -248,33 +248,36 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-6fdf03bd950e55ef7881041606f6e76141033716.tar.gz";
-        sha256 = "/+9aJdOxBY8Y4vJPftOCxmyK8L2nvR82KmJxil1a2aY=";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-89b75b46371d5e9172cb496b461824d8551a2af5.tar.gz";
+        hash = "sha256-etdIIdo3FezVafEYP5uAS9pO36Rdea2A+Da1P44cPXg=";
       };
       musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
     in
     [
-      (musl-patches + "/0017-Adjust-for-musl-headers.patch")
-      (musl-patches + "/0016-pass-correct-parameters-to-getdents64.patch")
-      (musl-patches + "/0018-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
-      (musl-patches + "/0001-missing_type.h-add-comparison_fn_t.patch")
-      (musl-patches + "/0002-add-fallback-parse_printf_format-implementation.patch")
-      (musl-patches + "/0003-src-basic-missing.h-check-for-missing-strndupa.patch")
-      (musl-patches + "/0004-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
-      (musl-patches + "/0005-add-missing-FTW_-macros-for-musl.patch")
-      (musl-patches + "/0006-Use-uintmax_t-for-handling-rlim_t.patch")
-      (musl-patches + "/0007-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
-      (musl-patches + "/0008-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
-      (musl-patches + "/0009-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
-      (musl-patches + "/0010-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
-      (musl-patches + "/0011-avoid-redefinition-of-prctl_mm_map-structure.patch")
-      (musl-patches + "/0012-do-not-disable-buffer-in-writing-files.patch")
-      (musl-patches + "/0013-Handle-__cpu_mask-usage.patch")
-      (musl-patches + "/0014-Handle-missing-gshadow.patch")
-      (musl-patches + "/0015-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
-      (musl-patches + "/0020-sd-event-Make-malloc_trim-conditional-on-glibc.patch")
-      (musl-patches + "/0021-shared-Do-not-use-malloc_info-on-musl.patch")
-      (musl-patches + "/0022-avoid-missing-LOCK_EX-declaration.patch")
+      (musl-patches + "/0004-missing_type.h-add-comparison_fn_t.patch")
+      (musl-patches + "/0005-add-fallback-parse_printf_format-implementation.patch")
+      (musl-patches + "/0006-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
+      (musl-patches + "/0007-add-missing-FTW_-macros-for-musl.patch")
+      (musl-patches + "/0008-Use-uintmax_t-for-handling-rlim_t.patch")
+      (musl-patches + "/0009-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
+      (musl-patches + "/0010-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
+      (musl-patches + "/0011-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
+      (musl-patches + "/0012-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
+      (musl-patches + "/0013-avoid-redefinition-of-prctl_mm_map-structure.patch")
+      (musl-patches + "/0014-do-not-disable-buffer-in-writing-files.patch")
+      (musl-patches + "/0015-Handle-__cpu_mask-usage.patch")
+      (musl-patches + "/0016-Handle-missing-gshadow.patch")
+      (musl-patches + "/0017-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
+      (musl-patches + "/0018-pass-correct-parameters-to-getdents64.patch")
+      (musl-patches + "/0019-Adjust-for-musl-headers.patch")
+      (musl-patches + "/0020-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
+      (musl-patches + "/0022-sd-event-Make-malloc_trim-conditional-on-glibc.patch")
+      (musl-patches + "/0023-shared-Do-not-use-malloc_info-on-musl.patch")
+      (musl-patches + "/0024-avoid-missing-LOCK_EX-declaration.patch")
+      (musl-patches + "/0025-include-signal.h-to-avoid-the-undeclared-error.patch")
+      (musl-patches + "/0026-undef-stdin-for-references-using-stdin-as-a-struct-m.patch")
+      (musl-patches + "/0027-adjust-header-inclusion-order-to-avoid-redeclaration.patch")
+      (musl-patches + "/0028-build-path.c-avoid-boot-time-segfault-for-musl.patch")
     ]
   );
 
