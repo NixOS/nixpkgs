@@ -348,8 +348,8 @@ nixos/modules/tasks/filesystems/zfs.nix   @raitobezarius
 nixos/tests/zfs.nix                       @raitobezarius
 
 # Zig
-/pkgs/development/compilers/zig @figsoda
-/doc/hooks/zig.section.md       @figsoda
+/pkgs/development/compilers/zig @figsoda @RossComputerGuy
+/doc/hooks/zig.section.md       @figsoda @RossComputerGuy
 
 # Buildbot
 nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
