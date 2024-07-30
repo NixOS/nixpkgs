@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Client library for interacting with a dask-gateway server";
     homepage = "https://gateway.dask.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

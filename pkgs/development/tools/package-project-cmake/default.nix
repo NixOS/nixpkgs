@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       packaging process into a single, easy-to-use command.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 })

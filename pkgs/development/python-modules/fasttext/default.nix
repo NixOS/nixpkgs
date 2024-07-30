@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Python module for text classification and representation learning";
     homepage = "https://fasttext.cc/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

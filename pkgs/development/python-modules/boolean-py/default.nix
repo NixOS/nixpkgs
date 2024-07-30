@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Implements boolean algebra in one module";
     homepage = "https://github.com/bastikr/boolean.py";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

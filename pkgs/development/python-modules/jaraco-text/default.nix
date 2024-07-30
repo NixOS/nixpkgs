@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Module for text manipulation";
     homepage = "https://github.com/jaraco/jaraco.text";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

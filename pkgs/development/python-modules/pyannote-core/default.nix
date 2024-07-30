@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyannote/pyannote-core";
     changelog = "https://github.com/pyannote/pyannote-core/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

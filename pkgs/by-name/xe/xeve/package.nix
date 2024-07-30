@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   gitUpdater,
   stdenv,
   cmake,
@@ -17,6 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8jXntm/yFme9ZPImdW54jAr11hEsU1K+N5/7RLmITPs=";
   };
 
+  patches = lib.optionals (!lib.versionOlder "0.5.0" finalAttrs.version) [
+    (fetchpatch2 {
+      url = "https://github.com/mpeg5/xeve/commit/954ed6e0494cd2438fd15c717c0146e88e582b33.patch?full_index=1";
+      hash = "sha256-//NtOUm1fqPFvOM955N6gF+QgmOdmuVunwx/3s/G/J8=";
+    })
+  ];
+
   postPatch = ''
     echo v$version > version.txt
   '';
@@ -26,8 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     ln $dev/include/xeve/* $dev/include/
   '';
-
-  env.NIX_CFLAGS_COMPILE = toString [ "-lm" ];
 
   outputs = [
     "out"

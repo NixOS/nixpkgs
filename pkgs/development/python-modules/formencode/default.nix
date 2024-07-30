@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "FormEncode validates and converts nested structures";
     homepage = "http://formencode.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

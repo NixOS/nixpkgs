@@ -57,7 +57,7 @@ buildPythonPackage rec {
     homepage = "https://bitbucket.org/zzzeek/alembic";
     description = "Database migration tool for SQLAlchemy";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "alembic";
   };
 }

@@ -61,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/libgit2/pygit2";
     changelog = "https://github.com/libgit2/pygit2/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

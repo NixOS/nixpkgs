@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/approvals/ApprovalTests.Python";
     changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

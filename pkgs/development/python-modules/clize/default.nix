@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Command-line argument parsing for Python";
     homepage = "https://github.com/epsy/clize";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

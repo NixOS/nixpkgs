@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "Graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
     changelog = "https://github.com/apache/age/raw/v${src.rev}/RELEASE";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.asl20;
   };

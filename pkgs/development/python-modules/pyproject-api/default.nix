@@ -77,6 +77,6 @@ buildPythonPackage rec {
     description = "API to interact with the python pyproject.toml based projects";
     homepage = "https://github.com/tox-dev/pyproject-api";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

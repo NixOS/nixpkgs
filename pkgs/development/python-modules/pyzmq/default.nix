@@ -88,6 +88,6 @@ buildPythonPackage rec {
       bsd3 # or
       lgpl3Only
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

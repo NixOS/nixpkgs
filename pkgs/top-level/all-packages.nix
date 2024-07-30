@@ -4360,8 +4360,6 @@ with pkgs;
 
   burpsuite = callPackage ../tools/networking/burpsuite { };
 
-  bs-platform = callPackage ../development/compilers/bs-platform { };
-
   ciano = callPackage ../applications/graphics/ciano {
     inherit (pantheon) granite;
     python = python3;
@@ -4544,7 +4542,7 @@ with pkgs;
 
   comma = callPackage ../tools/package-management/comma { };
 
-  commitizen = callPackage ../applications/version-management/commitizen { };
+  commitizen = with python3Packages; toPythonApplication commitizen;
 
   common-licenses = callPackage ../data/misc/common-licenses { };
 
@@ -15974,7 +15972,7 @@ with pkgs;
     # assumption is that or any later version is good.
     choose = platform:
       /**/ if platform.isDarwin then 16
-      else if platform.isFreeBSD then 16
+      else if platform.isFreeBSD then 18
       else if platform.isOpenBSD then 18
       else if platform.isAndroid then 12
       else if platform.isLinux then 18
@@ -17454,8 +17452,6 @@ with pkgs;
   refurb = callPackage ../development/tools/refurb { };
 
   srandrd = callPackage ../tools/X11/srandrd { };
-
-  sratoolkit = callPackage ../applications/science/biology/sratoolkit { };
 
   srecord = callPackage ../development/tools/misc/srecord { };
 
@@ -23337,6 +23333,9 @@ with pkgs;
   openslp = callPackage ../development/libraries/openslp { };
 
   openstackclient = with python311Packages; toPythonApplication python-openstackclient;
+  openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
+    dependencies = oldAttrs.dependencies ++ oldAttrs.passthru.optional-dependencies.cli-plugins;
+  });
   barbicanclient = with python311Packages; toPythonApplication python-barbicanclient;
   glanceclient = with python311Packages; toPythonApplication python-glanceclient;
   heatclient = with python311Packages; toPythonApplication python-heatclient;
@@ -27730,8 +27729,6 @@ with pkgs;
 
   xf86_video_nested = callPackage ../os-specific/linux/xf86-video-nested { };
 
-  xilinx-bootgen = callPackage ../tools/misc/xilinx-bootgen { };
-
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
 
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
@@ -29845,7 +29842,7 @@ with pkgs;
   inherit (callPackage ../applications/virtualization/docker {})
     docker_24 docker_25 docker_26 docker_27;
 
-  docker = docker_24;
+  docker = docker_27;
   docker-client = docker.override { clientOnly = true; };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
@@ -30703,10 +30700,6 @@ with pkgs;
     ;
 
   freerdpUnstable = freerdp;
-
-  friture = callPackage ../by-name/fr/friture/package.nix {
-    python3Packages = python311Packages;
-  };
 
   g933-utils = callPackage ../tools/misc/g933-utils { };
 
@@ -35601,8 +35594,6 @@ with pkgs;
   eureka-ideas = callPackage ../applications/misc/eureka-ideas {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  fava = callPackage ../applications/office/fava { };
 
   nux = callPackage ../tools/misc/nux { };
 

@@ -32,6 +32,6 @@ buildPythonPackage rec {
     mainProgram = "snakebite";
     homepage = "https://github.com/spotify/snakebite";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

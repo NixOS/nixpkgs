@@ -90,7 +90,7 @@ buildPythonPackage rec {
     mainProgram = "turses";
     homepage = "https://github.com/louipc/turses";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

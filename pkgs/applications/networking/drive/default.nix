@@ -29,7 +29,7 @@ buildGoModule rec {
     homepage = "https://github.com/odeke-em/drive";
     description = "Google Drive client for the commandline";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "drive";
   };
 }

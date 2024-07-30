@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/extremetuxracer/";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "etr";
     platforms = with lib.platforms; linux;
   };

@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Port of node-semver";
     homepage = "https://github.com/podhmo/python-semver";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

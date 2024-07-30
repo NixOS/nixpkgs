@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "Text-mode web browser";
     homepage = "https://lynx.invisible-island.net/";
     mainProgram = "lynx";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

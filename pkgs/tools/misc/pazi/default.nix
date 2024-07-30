@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     description = "Autojump \"zap to directory\" helper";
     homepage = "https://github.com/euank/pazi";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "pazi";
   };
 }

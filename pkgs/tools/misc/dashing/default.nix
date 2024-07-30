@@ -23,7 +23,7 @@ buildGoModule rec {
     description = "Dash Generator Script for Any HTML";
     homepage = "https://github.com/technosophos/dashing";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "dashing";
   };
 }

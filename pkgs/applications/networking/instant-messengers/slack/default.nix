@@ -45,14 +45,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.38.121";
-  x86_64-darwin-sha256 = "1w0s6j8z8961sv4y00jxpy5gjlj0dswyxs15c7isb26ii11nn1i2";
+  x86_64-darwin-version = "4.39.90";
+  x86_64-darwin-sha256 = "0wdvsw0m1jks1n97anzamssicl9jfx9js480q3kl9hd80viz97lq";
 
-  x86_64-linux-version = "4.38.125";
-  x86_64-linux-sha256 = "sha256-BJeFXZ8STbMCmGvYRoFsfsyIpGukQkuwv0m2NzE+89c=";
+  x86_64-linux-version = "4.39.90";
+  x86_64-linux-sha256 = "00ygbka304xnh99s17hh51lxjdkv2flh6nmn143dkj7qqabgrll8";
 
-  aarch64-darwin-version = "4.38.121";
-  aarch64-darwin-sha256 = "161z947p7a2d7584hybl77chab8y027cqpph2hd2s4b5k6bchkj5";
+  aarch64-darwin-version = "4.39.90";
+  aarch64-darwin-sha256 = "0rm0khbf2bqxs2ddlmss7m3sb5yy05lb96kv0a065ifadzcf5zsb";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -65,15 +65,15 @@ let
     base = "https://downloads.slack-edge.com";
   in {
     x86_64-darwin = fetchurl {
-      url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
+      url = "${base}/desktop-releases/mac/universal/${version}/Slack-${version}-macOS.dmg";
       sha256 = x86_64-darwin-sha256;
     };
     x86_64-linux = fetchurl {
-      url = "${base}/releases/linux/${version}/prod/x64/slack-desktop-${version}-amd64.deb";
+      url = "${base}/desktop-releases/linux/x64/${version}/slack-desktop-${version}-amd64.deb";
       sha256 = x86_64-linux-sha256;
     };
     aarch64-darwin = fetchurl {
-      url = "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
+      url = "${base}/desktop-releases/mac/arm64/${version}/Slack-${version}-macOS.dmg";
       sha256 = aarch64-darwin-sha256;
     };
   }.${system} or throwSystem;

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Make Pidgin IM conversations appear in the Gnome Shell message tray";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     broken = versionAtLeast gnome.gnome-shell.version "3.32"; # Doesn't support 3.34
   };
 }

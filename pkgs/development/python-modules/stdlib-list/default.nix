@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "List of Python Standard Libraries";
     homepage = "https://github.com/jackmaney/python-stdlib-list";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

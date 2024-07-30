@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ColinIanKing/cpustat";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "cpustat";
   };
 }

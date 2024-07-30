@@ -23,7 +23,7 @@ buildGoModule rec {
     downloadPage = "https://github.com/ent/contrib/";
     license = licenses.asl20;
     homepage = "https://entgo.io/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
 

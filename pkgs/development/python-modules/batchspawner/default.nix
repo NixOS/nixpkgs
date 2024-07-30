@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyterhub/batchspawner";
     changelog = "https://github.com/jupyterhub/batchspawner/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sbtinstruments/aiomqtt";
     changelog = "https://github.com/sbtinstruments/aiomqtt/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
