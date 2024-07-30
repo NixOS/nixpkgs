@@ -644,6 +644,5 @@ in stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
-    mainProgram = "libreoffice";
   };
 })
