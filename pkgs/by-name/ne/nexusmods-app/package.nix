@@ -1,26 +1,24 @@
-{ _7zz
-, buildDotnetModule
-, copyDesktopItems
-, desktop-file-utils
-, dotnetCorePackages
-, fetchFromGitHub
-, fontconfig
-, lib
-, libICE
-, libSM
-, libX11
-, nexusmods-app
-, runCommand
-, enableUnfree ? false # Set to true to support RAR format mods
+{
+  _7zz,
+  buildDotnetModule,
+  copyDesktopItems,
+  desktop-file-utils,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  fontconfig,
+  lib,
+  libICE,
+  libSM,
+  libX11,
+  nexusmods-app,
+  runCommand,
+  enableUnfree ? false, # Set to true to support RAR format mods
 }:
 let
-  _7zzWithOptionalUnfreeRarSupport = _7zz.override {
-    inherit enableUnfree;
-  };
+  _7zzWithOptionalUnfreeRarSupport = _7zz.override { inherit enableUnfree; };
 in
 buildDotnetModule rec {
   pname = "nexusmods-app";
-
   version = "0.4.1";
 
   src = fetchFromGitHub {
@@ -39,9 +37,7 @@ buildDotnetModule rec {
   projectFile = "src/NexusMods.App/NexusMods.App.csproj";
   testProjectFile = "NexusMods.App.sln";
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
+  nativeBuildInputs = [ copyDesktopItems ];
 
   nugetDeps = ./deps.nix;
 
@@ -61,7 +57,7 @@ buildDotnetModule rec {
   '';
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [desktop-file-utils]}"
+    "--prefix PATH : ${lib.makeBinPath [ desktop-file-utils ]}"
     "--set APPIMAGE $out/bin/${meta.mainProgram}" # Make associating with nxm links work on Linux
   ];
 
@@ -72,26 +68,27 @@ buildDotnetModule rec {
     libX11
   ];
 
-  executables = [
-    nexusmods-app.meta.mainProgram
-  ];
+  executables = [ nexusmods-app.meta.mainProgram ];
 
   doCheck = true;
 
   dotnetTestFlags = [
     "--environment=USER=nobody"
-    (lib.strings.concatStrings [
+    (
       "--filter="
-      (lib.strings.concatStrings (lib.strings.intersperse "&" ([
-        "Category!=Disabled"
-        "FlakeyTest!=True"
-        "RequiresNetworking!=True"
-        "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
-        "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
-      ] ++ lib.optionals (! enableUnfree) [
-        "FullyQualifiedName!=NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
-       ])))
-    ])
+      + lib.strings.concatStringsSep "&" (
+        [
+          "Category!=Disabled"
+          "FlakeyTest!=True"
+          "RequiresNetworking!=True"
+          "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
+          "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
+        ]
+        ++ lib.optionals (!enableUnfree) [
+          "FullyQualifiedName!=NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
+        ]
+      )
+    )
   ];
 
   passthru = {
