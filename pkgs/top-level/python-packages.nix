@@ -4544,6 +4544,8 @@ self: super: with self; {
 
   flufl-lock = callPackage ../development/python-modules/flufl/lock.nix { };
 
+  flupy = callPackage ../development/python-modules/flupy { };
+
   flux-led = callPackage ../development/python-modules/flux-led { };
 
   flyingsquid = callPackage ../development/python-modules/flyingsquid { };
@@ -13307,6 +13309,8 @@ self: super: with self; {
 
   qmk-dotty-dict = callPackage ../development/python-modules/qmk-dotty-dict { };
 
+  r2r = callPackage ../development/python-modules/r2r { };
+
   r2pipe = callPackage ../development/python-modules/r2pipe { };
 
   rachiopy = callPackage ../development/python-modules/rachiopy { };
@@ -17011,6 +17015,8 @@ self: super: with self; {
   vdf = callPackage ../development/python-modules/vdf { };
 
   vdirsyncer = callPackage ../development/python-modules/vdirsyncer { };
+
+  vecs = callPackage ../development/python-modules/vecs { };
 
   vector = callPackage ../development/python-modules/vector { };
 
