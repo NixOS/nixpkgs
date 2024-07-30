@@ -3,11 +3,14 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   absl-py,
   mujoco,
   pyparsing,
   setuptools,
-  wheel,
+
+  # dependencies
   dm-env,
   dm-tree,
   fsspec,
@@ -27,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "dm-control";
-  version = "1.0.20";
+  version = "1.0.21";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,7 +39,7 @@ buildPythonPackage rec {
     owner = "google-deepmind";
     repo = "dm_control";
     rev = "refs/tags/${version}";
-    hash = "sha256-huXvfQz7E+OCqRrhLC5dUaG/A2PQXrPBzseIFx7ZIeE=";
+    hash = "sha256-yY75QpvZ0fAW2W0GVM7fzmXKmTdDyukCVC/1cyU5IjQ=";
   };
 
   build-system = [
@@ -44,7 +47,6 @@ buildPythonPackage rec {
     mujoco
     pyparsing
     setuptools
-    wheel
   ];
 
   pythonRemoveDeps = [
