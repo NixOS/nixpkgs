@@ -39,21 +39,51 @@ import ../make-test-python.nix (
       bank =
         { config, pkgs, ... }:
         {
-          services.libeufin.bank = {
-            enable = true;
-            debug = true;
-            settings = {
-              libeufin-bank = {
-                # SUGGESTED_WITHDRAWAL_EXCHANGE = "http://exchange:8081";
-                WIRE_TYPE = "x-taler-bank";
-                X_TALER_BANK_PAYTO_HOSTNAME = "http://bank:8082/";
+          services.libeufin = {
+            bank = {
+              enable = true;
+              debug = true;
+              settings = {
+                libeufin-bank = {
+                  # SUGGESTED_WITHDRAWAL_EXCHANGE = "http://exchange:8081";
+                  WIRE_TYPE = "x-taler-bank";
+                  X_TALER_BANK_PAYTO_HOSTNAME = "http://bank:8082/";
 
-                # Allow creating new accounts and give new accounts a starting bonus
-                ALLOW_REGISTRATION = "yes";
-                REGISTRATION_BONUS_ENABLED = "yes";
-                REGISTRATION_BONUS = "${CURRENCY}:100";
+                  # Allow creating new accounts
+                  ALLOW_REGISTRATION = "yes";
 
-                inherit CURRENCY;
+                  # A registration bonus makes withdrawals easier since the
+                  # bank account balance is not empty
+                  REGISTRATION_BONUS_ENABLED = "yes";
+                  REGISTRATION_BONUS = "${CURRENCY}:100";
+
+                  inherit CURRENCY;
+                };
+              };
+            };
+            nexus = {
+              enable = true;
+              debug = true;
+              settings = {
+                nexus-ebics = {
+                  # == Mandatory ==
+                  inherit CURRENCY;
+                  # Bank
+                  HOST_BASE_URL = "http://bank:8082/";
+                  BANK_DIALECT = "postfinance";
+                  # EBICS IDs
+                  HOST_ID = "PFEBICS";
+                  USER_ID = "PFC00563";
+                  PARTNER_ID = "PFC00563";
+                  # Account information
+                  IBAN = "CH7789144474425692816";
+                  BIC = "POFICHBEXXX";
+                  NAME = "John Smith S.A.";
+
+                  # == Optional ==
+                  CLIENT_PRIVATE_KEYS_FILE = "/var/lib/libeufin-nexus/client-ebics-keys.json";
+                };
+                libeufin-nexusdb-postgres.CONFIG = "postgresql:///libeufin-nexus";
               };
             };
           };
@@ -61,7 +91,31 @@ import ../make-test-python.nix (
           environment.systemPackages = [
             pkgs.wget
             config.services.libeufin.bank.package
+            # TODO: remove
+            pkgs.neovim
+            pkgs.zellij
           ];
+          # TODO: for debugging. remove later
+          virtualisation.forwardPorts = [
+            {
+              from = "host";
+              host.port = 4444; # socat
+              guest.port = 22;
+            }
+            {
+              from = "host";
+              host.port = 2222; # ssh
+              guest.port = 22;
+            }
+          ];
+          services.openssh = {
+            enable = true;
+            settings = {
+              PermitRootLogin = "yes";
+              PermitEmptyPasswords = "yes";
+            };
+          };
+          security.pam.services.sshd.allowNullPassword = true;
         };
 
       client =
@@ -78,6 +132,7 @@ import ../make-test-python.nix (
         bankConfig = toString nodes.bank.services.libeufin.configFile.outPath;
 
         bankSettings = nodes.bank.services.libeufin.settings.libeufin-bank;
+        nexusSettings = nodes.bank.services.libeufin.settings.nexus-ebics;
 
         # Bank admin account credentials
         AUSER = "admin";
@@ -119,6 +174,24 @@ import ../make-test-python.nix (
               -a wget-register-account.log \
               "http://bank:${toString bankSettings.PORT}/accounts"
           '';
+
+        nexus_fake_incoming = pkgs.writeShellScript "nexus_fake_incoming" ''
+          set -eux
+          RESERVE_PUB=$(
+            taler-wallet-cli \
+              api 'acceptManualWithdrawal' \
+                '{"exchangeBaseUrl":"http://exchange:8081/",
+                  "amount":"${nexusSettings.CURRENCY}:20"
+                 }' | jq -r .result.reservePub
+            )
+
+          libeufin-nexus \
+            testing fake-incoming \
+            -c ${bankConfig} \
+            --amount="${nexusSettings.CURRENCY}:20" \
+            --subject="$RESERVE_PUB" \
+            "payto://iban/CH8389144317421994586"
+        '';
       in
 
       # NOTE: for NeoVim formatting and highlights. Remove later.
@@ -256,6 +329,15 @@ import ../make-test-python.nix (
                     client.fail(f'echo Wanted balance: "{balanceWanted}", got: "{balanceGot}"')
                 else:
                     client.succeed(f"echo Withdraw successfully made. New balance: {balanceWanted}")
+
+        # WIP:
+        with subtest("Nexus fake incoming payment"):
+            # Setup ebics keys
+            bank.succeed("libeufin-nexus ebics-setup -L debug -c ${bankConfig}")
+
+            # Make fake transaction
+            systemd_run(bank, "${nexus_fake_incoming}", "libeufin-nexus")
+            wallet_cli("run-until-done")
       '';
   }
 )
