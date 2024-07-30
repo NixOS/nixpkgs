@@ -7,6 +7,7 @@
   watchdog,
   portalocker,
   pytestCheckHook,
+  pytest-cov-stub,
   pymongo,
   dnspython,
   pymongo-inmemory,
@@ -39,15 +40,9 @@ buildPythonPackage rec {
     portalocker
   ];
 
-  preCheck = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail  \
-        '"--cov' \
-        '#"--cov'
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pymongo
     dnspython
     pymongo-inmemory
