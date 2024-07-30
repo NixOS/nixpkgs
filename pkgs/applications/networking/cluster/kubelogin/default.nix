@@ -23,6 +23,6 @@ buildGoModule rec {
     mainProgram = "kubelogin";
     inherit (src.meta) homepage;
     license = licenses.mit;
-    maintainers = [];
+    maintainers = [ ];
   };
 }
