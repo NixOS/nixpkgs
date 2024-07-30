@@ -32,7 +32,7 @@
         default = false;
         type = lib.types.bool;
         description = ''
-          Enable dynamic CDI configuration for NVidia devices by running
+          Enable dynamic CDI configuration for Nvidia devices by running
           nvidia-container-toolkit on boot.
         '';
       };
