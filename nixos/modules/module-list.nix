@@ -1620,6 +1620,7 @@
   ./system/boot/systemd/homed.nix
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
+  ./system/boot/zram-as-tmp.nix
   ./system/boot/uvesafb.nix
   ./system/etc/etc-activation.nix
   ./tasks/auto-upgrade.nix
