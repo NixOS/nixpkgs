@@ -2782,6 +2782,12 @@
     githubId = 50839;
     name = "Brian Jones";
   };
+  bollu = {
+    name = "Siddharth Bhat";
+    email = "siddu.druid@gmail.com";
+    github = "bollu";
+    githubId = 1694861;
+  };
   boltzmannrain = {
     email = "boltzmannrain@gmail.com";
     github = "boltzmannrain";
