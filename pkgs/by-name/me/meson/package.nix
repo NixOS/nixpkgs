@@ -21,13 +21,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-Y//8fXBNdx+ikpvg+S5Bk2rN3UVS5qo2bnbTSVBb8b8=";
+    hash = "sha256-BqsEO1a93a8d7/UH232buSPBt+WSNJbw1DGYA2nm9rs=";
   };
 
   patches = [
@@ -79,12 +79,6 @@ python3.pkgs.buildPythonApplication rec {
       name = "tests-skip-framework-recasting-if-CMake-unavailable.patch";
       url = "https://github.com/mesonbuild/meson/commit/8a8a3a0578fd8d5a8720a7a706f6f3b99e857f9c.patch";
       hash = "sha256-XkwNQ5eg/fVekhsFg/V2/S2LbIVGz3H0wsSFlUT3ZZE=";
-    })
-
-    (fetchpatch {
-      name = "cross.patch";
-      url = "https://github.com/mesonbuild/meson/pull/13411.patch";
-      hash = "sha256-IHSV0Dfse0lzDtxh/+APc/dzGr/BUbR/WIOqDsm7/8Y=";
     })
 
     # Fix extraframework lookup on case-sensitive APFS.
