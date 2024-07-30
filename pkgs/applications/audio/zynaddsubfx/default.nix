@@ -71,10 +71,10 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
 
   patches = [
-    # Hardcode system installed banks & presets
+    # Lazily expand ZYN_DATADIR to fix builtin banks across updates
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/zynaddsubfx/zynaddsubfx/pull/295.patch";
-      hash = "sha256-UN62i9/JBs7uWTmHDKk3lkAxUXsVmIs6+6avOcL1NBg=";
+      url = "https://github.com/zynaddsubfx/zynaddsubfx/commit/853aa03f4f92a180b870fa62a04685d12fca55a7.patch";
+      hash = "sha256-4BsRZ9keeqKopr6lCQJznaZ3qWuMgD1/mCrdMiskusg=";
     })
   ];
 
