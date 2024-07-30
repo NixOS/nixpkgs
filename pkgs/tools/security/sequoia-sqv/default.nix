@@ -50,11 +50,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line OpenPGP signature verification tool";
     homepage = "https://docs.sequoia-pgp.org/sqv/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "sqv";
   };
 }
