@@ -40,11 +40,9 @@ let
   };
 
   tests = {
-    replacePlaceholdersScriptJSON = rec {
+    replacePlaceholdersScriptJSON = {
       # Path with space on purpose!
-      configLocation = "/var/lib/my config.json";
-
-      inherit wantedConfig;
+      configs = { "/var/lib/my config.json" = wantedConfig; };
 
       nodeConfig = {
         system.activationScripts.genOutOfBand =
@@ -60,7 +58,7 @@ let
                 fileWithPlaceholders = pkgs.writeText "config.yaml.template" (
                   lib.generators.toJSON { } (lib.replaceWithPlaceholder "_secret" userConfig)
                 );
-                inherit configLocation;
+                configLocation = "/var/lib/my config.json";
                 replacements = lib.getPlaceholderReplacements "_secret" userConfig;
               }
             );
@@ -71,10 +69,8 @@ let
       '';
     };
 
-    jsonFormat = rec {
-      configLocation = "/var/lib/config.json";
-
-      inherit wantedConfig;
+    jsonFormat = {
+      configs = { "/var/lib/config.json" = wantedConfig; };
 
       nodeConfig = {
         system.activationScripts.genOutOfBand =
@@ -87,7 +83,7 @@ let
             (
               utils.genConfigOutOfBand {
                 config = userConfig;
-                inherit configLocation;
+                configLocation = "/var/lib/config.json";
                 generator = utils.genConfigOutOfBandFormatAdapter (pkgs.formats.json { });
               }
             );
@@ -98,10 +94,8 @@ let
       '';
     };
 
-    jsonGen = rec {
-      configLocation = "/var/lib/config.json";
-
-      inherit wantedConfig;
+    jsonGen = {
+      configs = { "/var/lib/config.json" = wantedConfig; };
 
       nodeConfig = {
         system.activationScripts.genOutOfBand =
@@ -114,7 +108,7 @@ let
             (
               utils.genConfigOutOfBand {
                 config = userConfig;
-                inherit configLocation;
+                configLocation = "/var/lib/config.json";
                 generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
               }
             );
@@ -134,7 +128,7 @@ let
         generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
       };
     in {
-      inherit configLocation wantedConfig;
+      configs = { ${configLocation} = wantedConfig; };
 
       waitForUnit = "outOfBand.service";
 
@@ -160,7 +154,7 @@ let
       '';
     };
 
-    otherUserGroupStateDirectory = let
+    otherUserGroupStateDirectoryManual = let
       config = utils.genConfigOutOfBandSystemd {
         config = userConfig;
         configLocation = "$STATE_DIRECTORY/my config.json";
@@ -169,9 +163,7 @@ let
     in {
       # Path with space on purpose!.
       # StateDirectory can't contain spaces.
-      configLocation = "/var/lib/outOfBandConfig/my config.json";
-
-      inherit wantedConfig;
+      configs = { "/var/lib/outOfBandConfig/my config.json" = wantedConfig; };
 
       waitForUnit = "outOfBand.service";
 
@@ -188,7 +180,10 @@ let
           serviceConfig.StateDirectory = "outOfBandConfig";
           serviceConfig.LoadCredential = config.loadCredentials;
           preStart = config.preStart;
-          script = "cat \"$STATE_DIRECTORY/my config.json\"";
+          script = ''
+            echo "$STATE_DIRECTORY/my config.json"
+            cat "$STATE_DIRECTORY/my config.json"
+          '';
         };
       };
 
@@ -197,16 +192,49 @@ let
       '';
     };
 
-    dynamicUser = let
+    otherUserGroupStateDirectoryModule = {
+      # Path with space on purpose!.
+      # StateDirectory can't contain spaces.
+      configs = { "/var/lib/outOfBandConfig/my config.json" = wantedConfig; };
+
+      waitForUnit = "outOfBand.service";
+
+      nodeConfig = {
+        systemd.services.outOfBand = {
+          wantedBy = [ "sysinit.target" ];
+          after = [ "sysinit.target" ];
+          unitConfig.DefaultDependencies = false;
+          serviceConfig.Type = "oneshot";
+          serviceConfig.RemainAfterExit = true;
+
+          serviceConfig.User = "nobody";
+          serviceConfig.Group = "nobody";
+          serviceConfig.StateDirectory = "outOfBandConfig";
+          outOfBandConfig = [{
+            name = "my config.json";
+            config = userConfig;
+            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
+          }];
+          script = ''
+            echo "$STATE_DIRECTORY/my config.json"
+            cat "$STATE_DIRECTORY/my config.json"
+          '';
+        };
+      };
+
+      pythonParseFile = ''
+        gotConfig = json.loads(gotConfig)
+      '';
+    };
+
+    dynamicUserManual = let
       config = utils.genConfigOutOfBandSystemd {
         config = userConfig;
         configLocation = "$STATE_DIRECTORY/config.json";
         generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
       };
     in {
-      configLocation = "/var/lib/private/outOfBandConfig/config.json";
-
-      inherit wantedConfig;
+      configs = { "/var/lib/private/outOfBandConfig/config.json" = wantedConfig; };
 
       waitForUnit = "outOfBand.service";
 
@@ -233,13 +261,88 @@ let
         gotConfig = json.loads(gotConfig)
       '';
     };
+
+    dynamicUserModule = {
+      configs = { "/var/lib/outOfBandConfig/config.json" = wantedConfig; };
+
+      waitForUnit = "outOfBand.service";
+
+      nodeConfig = {
+        systemd.services.outOfBand = {
+          wantedBy = [ "sysinit.target" ];
+          after = [ "sysinit.target" ];
+          unitConfig.DefaultDependencies = false;
+          serviceConfig.Type = "oneshot";
+          serviceConfig.RemainAfterExit = true; # Allows wait_for_unit to work.
+
+          serviceConfig.StateDirectory = "outOfBandConfig";
+          outOfBandConfig = [{
+            name = "config.json";
+            config = userConfig;
+            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
+          }];
+          serviceConfig.DynamicUser = true;
+          script = ''
+            echo $STATE_DIRECTORY/config.json
+            cat $STATE_DIRECTORY/config.json
+          '';
+        };
+      };
+
+      pythonParseFile = ''
+        gotConfig = json.loads(gotConfig)
+      '';
+    };
+
+    multiConfigModule = {
+      configs = {
+        "/var/lib/outOfBandConfig/config1.json" = wantedConfig;
+        "/var/lib/outOfBandConfig/config2.json" = {
+          config2 = "Secret of A";
+        };
+      };
+
+      waitForUnit = "outOfBand.service";
+
+      nodeConfig = {
+        systemd.services.outOfBand = {
+          wantedBy = [ "sysinit.target" ];
+          after = [ "sysinit.target" ];
+          unitConfig.DefaultDependencies = false;
+          serviceConfig.Type = "oneshot";
+          serviceConfig.RemainAfterExit = true; # Allows wait_for_unit to work.
+
+          serviceConfig.StateDirectory = "outOfBandConfig";
+          outOfBandConfig = [{
+            name = "config1.json";
+            config = userConfig;
+            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
+          } {
+            name = "config2.json";
+            config = {
+              config2._secret = "/run/secrets/a-secret.txt";
+            };
+            generator = utils.genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON { });
+          }];
+          script = ''
+            echo $STATE_DIRECTORY/config1.json
+            cat $STATE_DIRECTORY/config1.json
+            echo $STATE_DIRECTORY/config2.json
+            cat $STATE_DIRECTORY/config2.json
+          '';
+        };
+      };
+
+      pythonParseFile = ''
+        gotConfig = json.loads(gotConfig)
+      '';
+    };
   };
 
   mkTest =
     name:
     {
-      configLocation,
-      wantedConfig,
+      configs,
       nodeConfig,
       pythonParseFile,
       waitForUnit ? null,
@@ -264,10 +367,10 @@ let
 
             start_all()
 
-            wantedConfig = json.loads('${lib.generators.toJSON { } wantedConfig}')
-
-            machine.wait_for_file("${configLocation}")
           ''
+          + (lib.concatStringsSep "\n" (lib.mapAttrsToList (c: _: ''
+            machine.wait_for_file("${c}")
+          '') configs))
           + (
             if waitForUnit == null then
               ""
@@ -277,16 +380,17 @@ let
                 print(machine.succeed("systemctl cat ${waitForUnit}"))
               ''
           )
-          + ''
-            print(machine.succeed("ls -l '${configLocation}'"))
-            gotConfig = machine.succeed("cat '${configLocation}'")
+          + (lib.concatStringsSep "\n" (lib.mapAttrsToList (c: wantedConfig: ''
+            print(machine.succeed("ls -l '${c}'"))
+            gotConfig = machine.succeed("cat '${c}'")
             print(gotConfig)
             ${pythonParseFile}
 
+            wantedConfig = json.loads('${lib.generators.toJSON { } wantedConfig}')
+
             if wantedConfig != gotConfig:
               raise Exception("\nwantedConfig: {}\n!= gotConfig: {}".format(wantedConfig, gotConfig))
-
-          '';
+          '') configs));
       }
     );
 in
