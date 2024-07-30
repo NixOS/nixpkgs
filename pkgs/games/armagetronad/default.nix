@@ -131,7 +131,7 @@ let
       ] ++ lib.optional dedicatedServer "--enable-dedicated"
         ++ lib.optional (!dedicatedServer) "--enable-music";
 
-      buildInputs = [ libxml2 ]
+      buildInputs = lib.singleton (libxml2.override { enableHttp = true; })
         ++ (resolvedParams.extraBuildInputs or []);
 
       nativeBuildInputs = [ autoconf automake gnum4 pkg-config which python3 ]
