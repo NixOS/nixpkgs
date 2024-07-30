@@ -128,7 +128,7 @@ first launched. Then `rebuild()` can be called without arguments.
 
 ```ShellSession
 $ build_cmd="nix-build . -A nixosTests.login.driverInteractive"
-$ $build_cmd
+$ eval $build_cmd
 $ ./result/bin/nixos-test-driver --rebuild-cmd $build_cmd 2>machine_output
 >>> start_all()
 [test edited in another window]
