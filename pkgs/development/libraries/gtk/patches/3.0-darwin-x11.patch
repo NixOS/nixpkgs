@@ -1,0 +1,28 @@
+--- a/gdk/x11/gdkapplaunchcontext-x11.c
++++ b/gdk/x11/gdkapplaunchcontext-x11.c
+@@ -27,7 +27,9 @@
+ #include "gdkprivate-x11.h"
+ 
+ #include <glib.h>
++#if defined(HAVE_GIO_UNIX) && !defined(__APPLE__)
+ #include <gio/gdesktopappinfo.h>
++#endif
+ 
+ #include <string.h>
+ #include <unistd.h>
+@@ -352,10 +354,15 @@
+   else
+     workspace_str = NULL;
+ 
++#if defined(HAVE_GIO_UNIX) && !defined(__APPLE__)
+   if (G_IS_DESKTOP_APP_INFO (info))
+     application_id = g_desktop_app_info_get_filename (G_DESKTOP_APP_INFO (info));
+   else
+     application_id = NULL;
++#else
++  application_id = NULL;
++#warning Please add support for creating AppInfo from id for your OS
++#endif
+ 
+   startup_id = g_strdup_printf ("%s-%lu-%s-%s-%d_TIME%lu",
+                                 g_get_prgname (),

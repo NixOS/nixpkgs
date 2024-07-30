@@ -1,0 +1,45 @@
+From aceb689ae69857def8a26a8d1ceb114ccfbb2569 Mon Sep 17 00:00:00 2001
+From: Philipp Jungkamp <p.jungkamp@gmx.net>
+Date: Tue, 28 May 2024 19:22:29 +0200
+Subject: [PATCH] NixOS: Search ONEVPLRT in /run/opengl-driver/lib
+
+---
+ api/mfx_dispatch/linux/mfxloader.cpp                            | 2 ++
+ .../suites/mfx_dispatch/linux/mfx_dispatch_test_cases_libs.cpp  | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/api/mfx_dispatch/linux/mfxloader.cpp b/api/mfx_dispatch/linux/mfxloader.cpp
+index 39b6bff1..f76ed65d 100644
+--- a/api/mfx_dispatch/linux/mfxloader.cpp
++++ b/api/mfx_dispatch/linux/mfxloader.cpp
+@@ -193,6 +193,7 @@ mfxStatus LoaderCtx::Init(mfxInitParam& par)
+   if (selected_runtime && strcmp(selected_runtime, "ONEVPL") == 0) {
+     libs.emplace_back(ONEVPLRT);
+     libs.emplace_back(MFX_MODULES_DIR "/" ONEVPLRT);
++    libs.emplace_back("/run/opengl-driver/lib/" ONEVPLRT);
+   } else if ((selected_runtime && strcmp(selected_runtime, "MSDK") == 0) || (platform != MFX_HW_UNKNOWN)) {
+     if (MFX_IMPL_BASETYPE(par.Implementation) == MFX_IMPL_AUTO ||
+         MFX_IMPL_BASETYPE(par.Implementation) == MFX_IMPL_AUTO_ANY) {
+@@ -213,6 +214,7 @@ mfxStatus LoaderCtx::Init(mfxInitParam& par)
+   } else {
+     libs.emplace_back(ONEVPLRT);
+     libs.emplace_back(MFX_MODULES_DIR "/" ONEVPLRT);
++    libs.emplace_back("/run/opengl-driver/lib/" ONEVPLRT);
+   }
+ 
+   mfxStatus mfx_res = MFX_ERR_UNSUPPORTED;
+diff --git a/tests/unit/suites/mfx_dispatch/linux/mfx_dispatch_test_cases_libs.cpp b/tests/unit/suites/mfx_dispatch/linux/mfx_dispatch_test_cases_libs.cpp
+index dedee0b3..9657da4b 100644
+--- a/tests/unit/suites/mfx_dispatch/linux/mfx_dispatch_test_cases_libs.cpp
++++ b/tests/unit/suites/mfx_dispatch/linux/mfx_dispatch_test_cases_libs.cpp
+@@ -123,6 +123,7 @@ TEST_P(DispatcherLibsTestParametrized, ShouldEnumerateCorrectLibNames)
+     {
+         libs.emplace_back(ONEVPLRT);
+         libs.emplace_back(modules_dir + "/" + ONEVPLRT);
++        libs.emplace_back("/run/opengl-driver/lib/" + ONEVPLRT);
+     }
+ 
+     for (const std::string& lib : libs)
+-- 
+2.44.0
+

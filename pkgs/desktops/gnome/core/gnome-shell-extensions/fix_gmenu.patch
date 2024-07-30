@@ -1,0 +1,22 @@
+diff --git a/extensions/apps-menu/extension.js b/extensions/apps-menu/extension.js
+index 6eb58f1..28e1195 100644
+--- a/extensions/apps-menu/extension.js
++++ b/extensions/apps-menu/extension.js
+@@ -10,7 +10,7 @@ import Atk from 'gi://Atk';
+ import Clutter from 'gi://Clutter';
+ import Gio from 'gi://Gio';
+ import GLib from 'gi://GLib';
+-import GMenu from 'gi://GMenu';
++import GIRepository from 'gi://GIRepository';
+ import GObject from 'gi://GObject';
+ import Gtk from 'gi://Gtk';
+ import Meta from 'gi://Meta';
+@@ -25,6 +25,8 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
+ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+ 
++GIRepository.Repository.prepend_search_path('@gmenu_path@');
++const {default: GMenu} = await import('gi://GMenu');
+ const appSys = Shell.AppSystem.get_default();
+ 
+ const APPLICATION_ICON_SIZE = 32;

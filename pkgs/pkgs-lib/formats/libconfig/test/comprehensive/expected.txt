@@ -1,0 +1,6 @@
+array1d=[1, 5, 2];array2d=([1, 2], [2, 1]);list1d=(1, "mixed!", 5, 2);list2d=(1, (1, 1.2, "foo"), ("bar", 1.2, 1));nasty_string="\"@
+\\	^*bf
+0\";'''$";nested={attrset={has={a={integer={value=100;};};};};};simple_top_level_attr="1.0";some_floaty=29.95;weirderTypes={
+@include "@include_file@"
+array_of_ints=[0732, 0xa3, 1234];bigint=9223372036854775807;float=0.0012;hex=0x1fc3;list_of_weird_types=(3.141592654, 9223372036854775807, 0x1fc3, 027, 1.2e-32, 1.0);octal=027;pi=3.141592654;};
+

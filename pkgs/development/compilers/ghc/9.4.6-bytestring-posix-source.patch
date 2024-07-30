@@ -1,0 +1,15 @@
+Make sure that the appropriate feature flags are set when
+Rts.h is included, so that clockid_t is defined.
+
+diff --git a/cbits/is-valid-utf8.c b/cbits/is-valid-utf8.c
+index 01b3b41..c69596a 100644
+--- a/libraries/bytestring/cbits/is-valid-utf8.c
++++ b/libraries/bytestring/cbits/is-valid-utf8.c
+@@ -29,6 +29,7 @@ SUCH DAMAGE.
+ */
+ #pragma GCC push_options
+ #pragma GCC optimize("-O2")
++#include "rts/PosixSource.h"
+ #include <stdbool.h>
+ #include <stddef.h>
+ #include <stdint.h>

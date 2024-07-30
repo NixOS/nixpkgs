@@ -1,0 +1,30 @@
+diff --git a/build/gulpfile.reh.js b/build/gulpfile.reh.js
+index 4630eaad3cc..96b165b0949 100644
+--- a/build/gulpfile.reh.js
++++ b/build/gulpfile.reh.js
+@@ -271,9 +271,6 @@ function packageTask(type, platform, arch, sourceFolderName, destinationFolderNa
+ 			.pipe(util.stripSourceMappingURL())
+ 			.pipe(jsFilter.restore);
+
+-		const nodePath = `.build/node/v${nodeVersion}/${platform}-${arch}`;
+-		const node = gulp.src(`${nodePath}/**`, { base: nodePath, dot: true });
+-
+ 		let web = [];
+ 		if (type === 'reh-web') {
+ 			web = [
+@@ -290,7 +287,6 @@ function packageTask(type, platform, arch, sourceFolderName, destinationFolderNa
+ 			license,
+ 			sources,
+ 			deps,
+-			node,
+ 			...web
+ 		);
+
+@@ -408,7 +404,6 @@ function tweakProductForServerWeb(product) {
+ 			const destinationFolderName = `vscode-${type}${dashed(platform)}${dashed(arch)}`;
+
+ 			const serverTaskCI = task.define(`vscode-${type}${dashed(platform)}${dashed(arch)}${dashed(minified)}-ci`, task.series(
+-				gulp.task(`node-${platform}-${arch}`),
+ 				util.rimraf(path.join(BUILD_ROOT, destinationFolderName)),
+ 				packageTask(type, platform, arch, sourceFolderName, destinationFolderName)
+ 			));

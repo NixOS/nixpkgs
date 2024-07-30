@@ -1,0 +1,17 @@
+diff --git a/bin/backlight_helper/ddcci/ddcci.go b/bin/backlight_helper/ddcci/ddcci.go
+index 679beea3..ccbfc508 100644
+--- a/bin/backlight_helper/ddcci/ddcci.go
++++ b/bin/backlight_helper/ddcci/ddcci.go
+@@ -103,11 +103,6 @@ func newDDCCI() (*ddcci, error) {
+ 		displayHandleMap: make(map[string]*displayHandle),
+ 	}
+ 
+-	status := C.ddca_set_max_tries(C.DDCA_MULTI_PART_TRIES, 5)
+-	if status < C.int(0) {
+-		return nil, fmt.Errorf("brightness: Error setting retries: %d", status)
+-	}
+-
+ 	err := ddc.RefreshDisplays()
+ 	if err != nil {
+ 		return nil, err
+

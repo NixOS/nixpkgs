@@ -1,0 +1,14 @@
+Fix parallel build failure bya dding the dependency.
+
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=996964
+--- a/Makefile
++++ b/Makefile
+@@ -6,7 +6,7 @@ debian: cramfsswap
+ cramfsswap: cramfsswap.c
+ 	$(CC) -Wall -g -O $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o cramfsswap cramfsswap.c -lz
+ 
+-strip:
++strip: cramfsswap
+ 	strip cramfsswap
+ 
+ install: cramfsswap

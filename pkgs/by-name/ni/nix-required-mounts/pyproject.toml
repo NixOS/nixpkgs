@@ -1,0 +1,20 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools" ]
+
+[project]
+name = "nix-required-mounts"
+version = "0.0.1"
+description = """
+A --pre-build-hook for Nix, \
+that allows to expose extra paths in the build sandbox \
+based on derivations' requiredSystemFeatrues"""
+
+[project.urls]
+Homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/ni/nix-required-mounts"
+
+[project.scripts]
+nix-required-mounts = "nix_required_mounts:entrypoint"
+
+[tool.black]
+line-length = 79

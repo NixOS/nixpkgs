@@ -1,0 +1,29 @@
+From 41e94983dcfbc1667f1b18c5b566aa5c5975edcb Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Mon, 17 Feb 2020 04:45:03 -0600
+Subject: [PATCH 4/4] start_kdeinit-environ-hard-limit
+
+---
+ src/start_kdeinit/start_kdeinit.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/start_kdeinit/start_kdeinit.c b/src/start_kdeinit/start_kdeinit.c
+index f2db3e9..4ff2602 100644
+--- a/src/start_kdeinit/start_kdeinit.c
++++ b/src/start_kdeinit/start_kdeinit.c
+@@ -148,7 +148,11 @@ int main(int argc, char **argv)
+                         ++i) {
+                     unsigned len;
+                     if (read(0, &len, sizeof(unsigned)) == sizeof(unsigned)
+-                            && len && len < (1 << 12)) {
++                            && len) {
++                        if (len >= (1 << 20)) {
++                            fprintf(stderr, "%s: exceeded environment length limit", argv[0]);
++                            return 1;
++                        }
+                         env[ i ] = malloc(len + 1);
+                         if ((unsigned) read(0, env[ i ], len) == len) {
+                             env[ i ][ len ] = '\0';
+-- 
+2.23.1
+

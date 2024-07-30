@@ -1,0 +1,12 @@
+--- a/src/pfsglview/CMakeLists.txt	2022-04-04 23:21:11.164016369 +0300
++++ b/src/pfsglview/CMakeLists.txt	2022-04-04 23:21:32.757878750 +0300
+@@ -11,8 +11,7 @@
+ 
+ add_executable(pfsglview pfsglview.cpp picture_io.cpp module.cpp m_histogram.cpp m_status.cpp m_on_screen_display.cpp)
+ 
+-# TODO: Use ${GLUT_LIBRARY} instead.
+-target_link_libraries(pfsglview ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} pfs)
++target_link_libraries(pfsglview ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} pfs)
+ 
+ install (TARGETS pfsglview DESTINATION bin)
+ install (FILES pfsglview.1 DESTINATION ${MAN_DIR})
