@@ -11,7 +11,7 @@ let
   };
 
 in
-lib.recurseIntoAttrs {
+lib.recurseIntoAttrs rec {
   lycheeLinkCheck = lib.recurseIntoAttrs pkgs.lychee.tests;
 
   hasPkgConfigModules = pkgs.callPackage ../hasPkgConfigModules/tests.nix { };
@@ -28,6 +28,24 @@ lib.recurseIntoAttrs {
       machine.succeed("hello | figlet >/dev/console")
     '';
   });
+
+  runNixOSTest-extendNixOS =
+    let t =
+      runNixOSTest-example.extendNixOS {
+        module = { hi, lib, ... }: {
+          config = {
+            assertions = [ { assertion = hi; } ];
+          };
+          options = {
+            itsProofYay = lib.mkOption {};
+          };
+        };
+        specialArgs.hi = true;
+      };
+    in
+      assert lib.isDerivation t;
+      assert t.nodes.machine?itsProofYay;
+      t;
 
   # Check that the wiring of nixosTest is correct.
   # Correct operation of the NixOS test driver should be asserted elsewhere.

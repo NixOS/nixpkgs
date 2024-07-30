@@ -1,4 +1,4 @@
-testModuleArgs@{ config, lib, hostPkgs, nodes, ... }:
+testModuleArgs@{ config, lib, hostPkgs, nodes, options, ... }:
 
 let
   inherit (lib)
@@ -60,6 +60,8 @@ let
         ];
     };
 
+  # TODO: Dedup with run.nix, add to lib/options.nix
+  mkOneUp = opt: f: lib.mkOverride (opt.highestPrio - 1) (f opt.value);
 
 in
 
@@ -158,6 +160,13 @@ in
         config.nodes;
 
     passthru.nodes = config.nodesCompat;
+
+    passthru.extendNixOS = { module, specialArgs ? { } }: config.passthru.extend {
+      modules = [ {
+        extraBaseModules = module;
+        node.specialArgs = mkOneUp options.node.specialArgs (_: specialArgs);
+      } ];
+    };
 
     defaults = mkIf config.node.pkgsReadOnly {
       nixpkgs.pkgs = config.node.pkgs;
