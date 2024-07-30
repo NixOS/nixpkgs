@@ -12,6 +12,8 @@ in
   options.services.gotify = {
     enable = lib.mkEnableOption "Gotify webserver";
 
+    package = lib.mkPackageOption pkgs "gotify-server" { };
+
     port = lib.mkOption {
       type = lib.types.port;
       description = ''
@@ -44,7 +46,7 @@ in
         StateDirectory = cfg.stateDirectoryName;
         Restart = "always";
         DynamicUser = true;
-        ExecStart = "${pkgs.gotify-server}/bin/server";
+        ExecStart = lib.getExe cfg.package;
       };
     };
   };
