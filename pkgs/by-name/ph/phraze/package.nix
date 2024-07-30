@@ -34,7 +34,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sts10/phraze";
     changelog = "https://github.com/sts10/phraze/releases/tag/v${version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ x123 ];
+    maintainers = with lib.maintainers; [
+      x123
+      donovanglover
+    ];
     mainProgram = "phraze";
   };
 }
