@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchFromGitHub
 , makeDesktopItem
 , pkg-config
@@ -61,7 +62,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Fix failing cmake assertion when disabling X11 whithout explicitly enabling Wayland.
-    ./0001-client-cmake-move-X11-config-directives-to-displayse.patch
+    (fetchpatch {
+      url = "https://github.com/gnif/LookingGlass/commit/20972cfd9b940fddf9e7f3d2887a271d16398979.patch";
+      hash = "sha256-CqB8AmOZ4YxnEsQkyu/ZEaun6ywpSh4B7PM+MFJF0qU=";
+      stripLen = 1;
+    })
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
