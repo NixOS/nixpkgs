@@ -14452,6 +14452,8 @@ self: super: with self; {
 
   sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
+  sleekxmppfs = callPackage ../development/python-modules/sleekxmppfs { };
+
   sleepyq = callPackage ../development/python-modules/sleepyq { };
 
   sleqp = toPythonModule (pkgs.sleqp.override { pythonSupport = true; python3Packages = self; });
