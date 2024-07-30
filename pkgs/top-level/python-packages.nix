@@ -11094,6 +11094,8 @@ self: super: with self; {
 
   pycountry = callPackage ../development/python-modules/pycountry { };
 
+  pycountry-convert = callPackage ../development/python-modules/pycountry-convert { };
+
   pycparser = callPackage ../development/python-modules/pycparser { };
 
   py-canary = callPackage ../development/python-modules/py-canary { };
