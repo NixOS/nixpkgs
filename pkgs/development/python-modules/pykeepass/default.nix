@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pykeepass";
-  version = "4.1.0";
+  version = "4.1.0-post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "libkeepass";
     repo = "pykeepass";
-    rev = "v${version}";
-    hash = "sha256-33bpkj2ADpxSqiTOVcawE5aJdqWHfcY9WrlQJdg3vHY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CsVwjv+9v+yzjywq9bppma+kkrlsXlvU8TsKmq466II=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +30,6 @@ buildPythonPackage rec {
     construct
     lxml
     pycryptodomex
-    setuptools
   ];
 
   propagatedNativeBuildInputs = [ argon2-cffi ];
