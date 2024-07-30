@@ -12632,6 +12632,8 @@ self: super: with self; {
 
   python3-saml = callPackage ../development/python-modules/python3-saml { };
 
+  python3-xcaplib = callPackage ../development/python-modules/python3-xcaplib { };
+
   python-axolotl = callPackage ../development/python-modules/python-axolotl { };
 
   python-axolotl-curve25519 = callPackage ../development/python-modules/python-axolotl-curve25519 { };
