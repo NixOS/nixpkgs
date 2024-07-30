@@ -107,5 +107,6 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres dotlambda ];
+    mainProgram = "udiskie";
   };
 }
