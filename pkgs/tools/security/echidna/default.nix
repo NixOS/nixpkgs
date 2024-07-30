@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchpatch,
   mkDerivation,
@@ -7,7 +8,7 @@
   slither-analyzer,
 }:
 
-mkDerivation rec {
+mkDerivation (rec {
   pname = "echidna";
   version = "2.2.3";
 
@@ -106,4 +107,12 @@ mkDerivation rec {
   ];
   platforms = lib.platforms.unix;
   mainProgram = "echidna-test";
-}
+
+} // lib.optionalAttrs (stdenv.isDarwin && stdenv.isAarch64) {
+
+  # https://github.com/NixOS/nixpkgs/pull/304352
+  postInstall = with haskellPackages; ''
+    remove-references-to -t ${warp.out} "$out/bin/echidna"
+    remove-references-to -t ${wreq.out} "$out/bin/echidna"
+  '';
+})
