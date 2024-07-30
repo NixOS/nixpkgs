@@ -1,46 +1,47 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchurl
-}:
+{ lib, stdenv, fetchurl }:
 
 let
-  nnueFile = "nn-5af11540bbfe.nnue";
-  nnue = fetchurl {
-    url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
-    hash = "sha256-WvEVQLv+/LVOOMXdAAyrS0ad+nWZodVb5dJyLCCokps=";
-  };
-in
-rustPlatform.buildRustPackage rec {
+  version = "2.9.3";
+  releaseUrl =
+    "https://fishnet-releases.s3.dualstack.eu-west-3.amazonaws.com/v${version}";
+  src = if stdenv.isDarwin && stdenv.isAarch64 then
+    fetchurl {
+      url = "${releaseUrl}/fishnet-aarch64-apple-darwin";
+      hash = "sha256-PKh+qn7qfR+WdfoK+uJJ8nHpmIAkuKUbtYo+QnXvnXg=";
+    }
+  else if stdenv.isDarwin then
+    fetchurl {
+      url = "${releaseUrl}/fishnet-x86_64-apple-darwin";
+      hash = "sha256-38JV2mw5hCM9DOKyD6PGFAglDo7Fhvzt+BjG6EfuHj4=";
+    }
+  else if stdenv.isAarch64 then
+    fetchurl {
+      url = "${releaseUrl}/fishnet-aarch64-unknown-linux-musl";
+      hash = "sha256-yluU4eM8gGCJp14CBOYC8oUwms6KUq6OY1x79YyC7Vk=";
+    }
+  else
+    fetchurl {
+      url = "${releaseUrl}/fishnet-x86_64-unknown-linux-musl";
+      hash = "sha256-IjOZOv2J8PH426lEE7j68sNhX/22dxizSu8jnrXDG7A=";
+    };
+in stdenv.mkDerivation {
+  inherit version src;
   pname = "fishnet";
-  version = "2.7.1";
 
-  src = fetchFromGitHub {
-    owner = "lichess-org";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-q73oGQYSWx1aFy9IvbGpecOoc0wLEY2IzJH9GufnvCs=";
-    fetchSubmodules = true;
-  };
+  dontUnpack = true;
 
-  postPatch = ''
-    cp -v '${nnue}' 'Stockfish/src/${nnueFile}'
-    cp -v '${nnue}' 'Fairy-Stockfish/src/${nnueFile}'
+  installPhase = ''
+    mkdir -p $out/bin
+    install -Dm 555 $src $out/bin/fishnet
   '';
-
-  # Copying again bacause the file is deleted during build.
-  postBuild = ''
-    cp -v '${nnue}' 'Stockfish/src/${nnueFile}'
-  '';
-
-  cargoHash = "sha256-NO3u2ZXSiDQnZ/FFZLOtTnQoGMyN9pSI4sqGIXtjEcI=";
 
   meta = with lib; {
     description = "Distributed Stockfish analysis for lichess.org";
     homepage = "https://github.com/lichess-org/fishnet";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ tu-maurice ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ tu-maurice thibault ];
+    platforms =
+      [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
     mainProgram = "fishnet";
   };
 }
