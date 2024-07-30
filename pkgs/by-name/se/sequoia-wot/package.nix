@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage rec {
     description = "Rust CLI tool for authenticating bindings and exploring a web of trust";
     homepage = "https://gitlab.com/sequoia-pgp/sequoia-wot";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ Cryolitia ];
+    maintainers = with lib.maintainers; [ doronbehar Cryolitia ];
     mainProgram = "sq-wot";
   };
 }
