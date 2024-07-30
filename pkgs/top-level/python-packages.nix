@@ -877,6 +877,8 @@ self: super: with self; {
 
   asyauth = callPackage ../development/python-modules/asyauth { };
 
+  asyncarve = callPackage ../development/python-modules/asyncarve { };
+
   async-dns = callPackage ../development/python-modules/async-dns { };
 
   async-generator = callPackage ../development/python-modules/async-generator { };
@@ -1846,6 +1848,8 @@ self: super: with self; {
   btest = callPackage ../development/python-modules/btest { };
 
   bthome-ble = callPackage ../development/python-modules/bthome-ble { };
+
+  bthomehub5-devicelist = callPackage ../development/python-modules/bthomehub5-devicelist { };
 
   bt-proximity = callPackage ../development/python-modules/bt-proximity { };
 
@@ -5640,6 +5644,8 @@ self: super: with self; {
 
   html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
 
+  html-table-parser-python3 = callPackage ../development/python-modules/html-table-parser-python3 { };
+
   html-tag-names = callPackage ../development/python-modules/html-tag-names { };
 
   html-text = callPackage ../development/python-modules/html-text { };
@@ -7946,6 +7952,8 @@ self: super: with self; {
 
   mox3 = callPackage ../development/python-modules/mox3 { };
 
+  mozart-api = callPackage ../development/python-modules/mozart-api { };
+
   mozilla-django-oidc = callPackage ../development/python-modules/mozilla-django-oidc { };
 
   mpd2 = callPackage ../development/python-modules/mpd2 { };
@@ -9126,8 +9134,6 @@ self: super: with self; {
 
   nose3 = callPackage ../development/python-modules/nose3 { };
 
-  nose-xunitmp = callPackage ../development/python-modules/nose-xunitmp { };
-
   notebook = callPackage ../development/python-modules/notebook { };
 
   notebook-shim = callPackage ../development/python-modules/notebook-shim { };
@@ -9239,6 +9245,8 @@ self: super: with self; {
   python-youtube = callPackage ../development/python-modules/python-youtube { };
 
   py-aosmith = callPackage ../development/python-modules/py-aosmith { };
+
+  py-ccm15 = callPackage ../development/python-modules/py-ccm15 { };
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
 
@@ -15106,8 +15114,6 @@ self: super: with self; {
   });
 
   synergy = callPackage ../development/python-modules/synergy { };
-
-  synologydsm-api = callPackage ../development/python-modules/synologydsm-api { };
 
   syslog-rfc5424-formatter = callPackage ../development/python-modules/syslog-rfc5424-formatter { };
 

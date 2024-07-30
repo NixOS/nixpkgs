@@ -213,7 +213,7 @@ let
         ++ (optionals (tun ? inPort) (optionalNullInt "inport" tun.inPort))
         ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList));
         in concatStringsSep "\n" inTunOpts))];
-    in pkgs.writeText "i2pd-tunnels.conf" opts;
+    in pkgs.writeText "i2pd-tunnels.conf" (concatStringsSep "\n" opts);
 
   i2pdFlags = concatStringsSep " " (
     optional (cfg.address != null) ("--host=" + cfg.address) ++ [

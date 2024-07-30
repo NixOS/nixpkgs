@@ -17453,8 +17453,6 @@ with pkgs;
 
   srandrd = callPackage ../tools/X11/srandrd { };
 
-  sratoolkit = callPackage ../applications/science/biology/sratoolkit { };
-
   srecord = callPackage ../development/tools/misc/srecord { };
 
   srelay = callPackage ../tools/networking/srelay { };
@@ -27730,8 +27728,6 @@ with pkgs;
   xf86_input_wacom = callPackage ../os-specific/linux/xf86-input-wacom { };
 
   xf86_video_nested = callPackage ../os-specific/linux/xf86-video-nested { };
-
-  xilinx-bootgen = callPackage ../tools/misc/xilinx-bootgen { };
 
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
 
