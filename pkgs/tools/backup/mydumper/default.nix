@@ -22,10 +22,8 @@ stdenv.mkDerivation rec {
   version = "0.16.3-6";
 
   src = fetchFromGitHub {
-    owner = "
-    mydumper ";
-    repo = "
-    mydumper ";
+    owner = "mydumper";
+    repo = "mydumper";
     rev = "refs/tags/v${version} ";
     hash = "sha256-iMhrwKRAorufmkkNU4h0BvLV6c3/cwYPdsGm41jTkZ4=";
   };
