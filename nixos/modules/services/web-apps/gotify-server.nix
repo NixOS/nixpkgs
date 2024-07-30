@@ -1,33 +1,35 @@
-{ pkgs, lib, config, ... }:
-
-with lib;
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 let
   cfg = config.services.gotify;
-in {
-  options = {
-    services.gotify = {
-      enable = mkEnableOption "Gotify webserver";
+in
+{
+  options.services.gotify = {
+    enable = lib.mkEnableOption "Gotify webserver";
 
-      port = mkOption {
-        type = types.port;
-        description = ''
-          Port the server listens to.
-        '';
-      };
+    port = lib.mkOption {
+      type = lib.types.port;
+      description = ''
+        Port the server listens to.
+      '';
+    };
 
-      stateDirectoryName = mkOption {
-        type = types.str;
-        default = "gotify-server";
-        description = ''
-          The name of the directory below {file}`/var/lib` where
-          gotify stores its runtime data.
-        '';
-      };
+    stateDirectoryName = lib.mkOption {
+      type = lib.types.str;
+      default = "gotify-server";
+      description = ''
+        The name of the directory below {file}`/var/lib` where
+        gotify stores its runtime data.
+      '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.gotify-server = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -41,7 +43,7 @@ in {
         WorkingDirectory = "/var/lib/${cfg.stateDirectoryName}";
         StateDirectory = cfg.stateDirectoryName;
         Restart = "always";
-        DynamicUser = "yes";
+        DynamicUser = true;
         ExecStart = "${pkgs.gotify-server}/bin/server";
       };
     };
