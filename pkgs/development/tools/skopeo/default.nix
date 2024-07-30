@@ -18,13 +18,13 @@
 
 buildGoModule rec {
   pname = "skopeo";
-  version = "1.15.1";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    hash = "sha256-Zv36vSPfXcpBmxyEA8b3Xoo9HhSWtxnWPP/SubIcHDo=";
+    hash = "sha256-M9BRsW3mNIRAr+yXSmoPNNoEY/XrCFNt+m2PtTuJUO4=";
   };
 
   outputs = [ "out" "man" ];

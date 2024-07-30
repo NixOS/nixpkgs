@@ -120,7 +120,7 @@ rec {
       homepage = "http://jonls.dk/redshift";
       platforms = platforms.unix;
       mainProgram = "redshift";
-      maintainers = with maintainers; [ yana ];
+      maintainers = [ ];
     };
   };
 
@@ -132,7 +132,7 @@ rec {
       owner = "chinstrap";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-EdVLBBIEjMu+yy9rmcxQf4zdW47spUz5SbBDbhmLjOU=";
+      hash = "sha256-EdVLBBIEjMu+yy9rmcxQf4zdW47spUz5SbBDbhmLjOU=";
     };
 
     meta = redshift.meta // {

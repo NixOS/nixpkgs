@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   aocd-example-parser,
   beautifulsoup4,
   buildPythonPackage,

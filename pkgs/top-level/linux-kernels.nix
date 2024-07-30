@@ -208,6 +208,14 @@ in {
       ];
     };
 
+    linux_6_10 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.10";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/mainline.nix {
         # A special branch that tracks the kernel under the release process
@@ -343,7 +351,7 @@ in {
 
     dddvb = callPackage ../os-specific/linux/dddvb { };
 
-    decklink = throw "The decklink kernel module has been removed due to being unmaintained"; # Module removed on 2024-07-02
+    decklink = callPackage ../os-specific/linux/decklink { };
 
     digimend = callPackage ../os-specific/linux/digimend { };
 
@@ -411,8 +419,7 @@ in {
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
-    nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }))
-    // { __attrsFailEvaluation = true; };
+    nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }));
 
     nvidia_x11             = nvidiaPackages.stable;
     nvidia_x11_beta        = nvidiaPackages.beta;
@@ -596,6 +603,8 @@ in {
 
     hid-tmff2 = callPackage ../os-specific/linux/hid-tmff2 { };
 
+    hpuefi-mod = callPackage ../os-specific/linux/hpuefi-mod { };
+
     drbd = callPackage ../os-specific/linux/drbd/driver.nix { };
 
   } // lib.optionalAttrs config.allowAliases {
@@ -620,7 +629,7 @@ in {
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_8 = recurseIntoAttrs (packagesFor kernels.linux_6_8);
     linux_6_9 = recurseIntoAttrs (packagesFor kernels.linux_6_9);
-    __attrsFailEvaluation = true;
+    linux_6_10 = recurseIntoAttrs (packagesFor kernels.linux_6_10);
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
     linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11"; # Added 2023-10-11
@@ -641,7 +650,6 @@ in {
      linux_rt_5_15 = packagesFor kernels.linux_rt_5_15;
      linux_rt_6_1 = packagesFor kernels.linux_rt_6_1;
      linux_rt_6_6 = packagesFor kernels.linux_rt_6_6;
-     __attrsFailEvaluation = true;
   };
 
   rpiPackages = {
@@ -649,7 +657,6 @@ in {
     linux_rpi2 = packagesFor kernels.linux_rpi2;
     linux_rpi3 = packagesFor kernels.linux_rpi3;
     linux_rpi4 = packagesFor kernels.linux_rpi4;
-     __attrsFailEvaluation = true;
   };
 
   packages = recurseIntoAttrs (vanillaPackages // rtPackages // rpiPackages // {
@@ -689,11 +696,11 @@ in {
   packageAliases = {
     linux_default = packages.linux_6_6;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_9;
+    linux_latest = packages.linux_6_10;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_15;
     linux_rt_latest = packages.linux_rt_6_6;
-  } // { __attrsFailEvaluation = true; };
+  };
 
   manualConfig = callPackage ../os-specific/linux/kernel/manual-config.nix {};
 

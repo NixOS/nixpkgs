@@ -27,7 +27,7 @@ mkDerivation rec {
     owner = "stuko";
     repo = "ovito";
     rev = "v${version}";
-    sha256 = "sha256-Z3uwjOYJ7di/LLllbzdKjzUE7m119i03bA8dJPqhxWA=";
+    hash = "sha256-Z3uwjOYJ7di/LLllbzdKjzUE7m119i03bA8dJPqhxWA=";
   };
 
   nativeBuildInputs = [

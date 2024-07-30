@@ -18,7 +18,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.0.0";
+  version = "2.3.6";
   format = "setuptools";
   pname = "beancount";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z2aGhpx+o+78CU7hPthmv196K7DGHk1PXfPjX4Rs/98=";
+    hash = "sha256-gB+Tvta1fS4iQ2aIxInVob8fduIQ887RhoB1fmDTR1o=";
   };
 
   # Tests require files not included in the PyPI archive.
@@ -58,6 +58,6 @@ buildPythonPackage rec {
       generate a variety of reports from them, and provides a web interface.
     '';
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [ sharzy polarmutex ];
   };
 }

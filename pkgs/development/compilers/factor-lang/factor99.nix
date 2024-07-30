@@ -217,7 +217,7 @@ stdenv.mkDerivation {
       under a BSD license.
     '';
     license = licenses.bsd2;
-    maintainers = with maintainers; [ vrthra spacefrogg ];
+    maintainers = with maintainers; [ spacefrogg ];
     platforms = lib.intersectLists platforms.x86_64 platforms.linux;
     mainProgram = "factor";
   };

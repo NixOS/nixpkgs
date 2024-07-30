@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-sql";
-  version = "3.9";
+  version = "3.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.sql";
     rev = "refs/tags/${version}";
-    hash = "sha256-aq/p6oa+6C2BS2TV8YYXwGP580tIHYZqO455bYm0yeo=";
+    hash = "sha256-mhZvvPmREBY29U31POH8OfktVdNqNpQVIICPBin5WyI=";
   };
 
   build-system = [

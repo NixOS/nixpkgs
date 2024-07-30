@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  python3,
+  python,
   pythonOlder,
   django,
   hatchling,
@@ -38,7 +38,7 @@ buildPythonPackage {
 
   checkPhase = ''
     runHook preCheck
-    ${python3.interpreter} manage.py test testapp
+    ${python.interpreter} manage.py test testapp
     runHook postCheck
   '';
 

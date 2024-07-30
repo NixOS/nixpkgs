@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "Geonkick-Synthesizer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zoEC85QYcQMF92KvLBikYw1nDoSHaedpTDDqvoAtte0=";
+    hash = "sha256-zoEC85QYcQMF92KvLBikYw1nDoSHaedpTDDqvoAtte0=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

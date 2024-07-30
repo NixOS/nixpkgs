@@ -6,11 +6,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "silverbullet";
-  version = "0.7.7";
+  version = "0.8.2";
 
   src = fetchurl {
     url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet.js";
-    hash = "sha256-EhHPysliRi1bv/skS4+ljQW6qFsijmSup1+7/fVfFdg=";
+    hash = "sha256-Y2WhxgiLJLMqwUK8KuNbuGbKfz5XOfD4Z1zxFqrAI1U=";
   };
 
   dontUnpack = true;

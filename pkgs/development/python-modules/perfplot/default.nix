@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nschloe/perfplot";
     changelog = "https://github.com/nschloe/perfplot/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

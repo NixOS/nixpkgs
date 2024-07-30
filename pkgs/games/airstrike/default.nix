@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lm";
 
   installPhase = ''
-    ls -l
     mkdir -p $out/bin
     cp airstrike $out/bin
 

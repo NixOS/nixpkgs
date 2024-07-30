@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "Karabiner-Elements is a powerful utility for keyboard customization on macOS Sierra (10.12) or later";
     homepage = "https://karabiner-elements.pqrs.org/";
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.unlicense;
   };
 }

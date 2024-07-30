@@ -13,11 +13,11 @@
 , yelp-tools
 , vala
 , gsettings-desktop-schemas
-, gtk3
+, gtk4
 , adwaita-icon-theme
 , desktop-file-utils
 , nix-update-script
-, wrapGAppsHook3
+, wrapGAppsHook4
 , gobject-introspection
 # withWebkit enables the "webkit" feature, also known as Google Fonts
 , withWebkit ? true, glib-networking, libsoup, webkitgtk
@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.8.9";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "font-manager";
     rev = version;
-    hash = "sha256-LsQry6CjvVcJFRutKOaqA4lLP7Ek09Q/D/TPnSvx59Q=";
+    hash = "sha256-nUFxjqUiL8zLfPJrLM1aQ/SZ2x6CYFKFJI1W/eXlrV8=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     vala
     yelp-tools
-    wrapGAppsHook3
+    wrapGAppsHook4
     # For https://github.com/FontManager/master/blob/master/lib/unicode/meson.build
     gobject-introspection
   ];
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     json-glib
     sqlite
     gsettings-desktop-schemas # for font settings
-    gtk3
+    gtk4
     adwaita-icon-theme
   ] ++ lib.optionals withWebkit [
     glib-networking # for SSL so that Google Fonts can load
@@ -66,11 +66,6 @@ stdenv.mkDerivation rec {
     "-Dreproducible=true" # Do not hardcode build directory…
     (lib.mesonBool "webkit" withWebkit)
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   passthru.updateScript = nix-update-script { };
 

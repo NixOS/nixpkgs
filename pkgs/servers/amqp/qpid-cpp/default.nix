@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     description = "AMQP message broker and a C++ messaging API";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cpages ];
+    maintainers = [ ];
   };
 }

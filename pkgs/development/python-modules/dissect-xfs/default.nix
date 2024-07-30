@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-xfs";
-  version = "3.9";
+  version = "3.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.xfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-jUNstyHVPJazf4idXNe9xICpi0MKkz8q0rWUEHjk2ZA=";
+    hash = "sha256-VZu6XmEKYcmqGM2eJMpABRTOBxDTwsYd7Pn662kO13o=";
   };
 
   build-system = [

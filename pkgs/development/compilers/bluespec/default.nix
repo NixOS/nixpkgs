@@ -17,7 +17,7 @@
 , zlib
 , ghc
 , gmp-static
-, verilog
+, iverilog
 , asciidoctor
 , texliveFull
 , which
@@ -108,7 +108,7 @@ in stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     gmp-static
-    verilog
+    iverilog
   ];
 
   checkTarget = "check-smoke"; # this is the shortest check but "check-suite" tests much more

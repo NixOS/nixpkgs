@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kickoff";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "j0ru";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ha1pRViiOH0U0djUq1x8TIpVoUMn8l+2pA//YP70jdk=";
+    hash = "sha256-q/+Ik8L58LxOllpEosYyvD38RJb+NIQHslYpgGSwjKc=";
   };
 
-  cargoHash = "sha256-pdncUUGSfsn35VpwuNWZ/0DAIImBLAm0LyPbqQ06Xho=";
+  cargoHash = "sha256-8LSz/YeqdbtFXpWq2MMhEI9+8mxsLdE4LUyQHcgLkZY=";
 
   libPath = lib.makeLibraryPath [
     wayland

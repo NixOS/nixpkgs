@@ -53,9 +53,9 @@
   cffi,
   click,
   typing-extensions,
-  # ROCm build and `torch.compile` requires `openai-triton`
+  # ROCm build and `torch.compile` requires `triton`
   tritonSupport ? (!stdenv.isDarwin),
-  openai-triton,
+  triton,
 
   # Unit tests
   hypothesis,
@@ -486,7 +486,7 @@ buildPythonPackage rec {
       CoreServices
       libobjc
     ]
-    ++ lib.optionals tritonSupport [ openai-triton ]
+    ++ lib.optionals tritonSupport [ triton ]
     ++ lib.optionals MPISupport [ mpi ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
@@ -514,7 +514,7 @@ buildPythonPackage rec {
 
     # torch/csrc requires `pybind11` at runtime
     pybind11
-  ] ++ lib.optionals tritonSupport [ openai-triton ];
+  ] ++ lib.optionals tritonSupport [ triton ];
 
   propagatedCxxBuildInputs =
     [ ] ++ lib.optionals MPISupport [ mpi ] ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];

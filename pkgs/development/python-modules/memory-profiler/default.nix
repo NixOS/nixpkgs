@@ -12,7 +12,7 @@ python.pkgs.buildPythonPackage rec {
   src = fetchPypi {
     pname = "memory_profiler";
     inherit version;
-    sha256 = "sha256-Tltz14ZKHRKS+3agPoKj5475NNBoKKaY2dradtogZ7A=";
+    hash = "sha256-Tltz14ZKHRKS+3agPoKj5475NNBoKKaY2dradtogZ7A=";
   };
 
   propagatedBuildInputs = with python.pkgs; [

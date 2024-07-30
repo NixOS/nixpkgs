@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "Cubitect";
     repo = pname;
     rev = version;
-    sha256 = "sha256-UUvNSTM98r8D/Q+/pPTXwGzW4Sl1qhgem4WsFRfybuo=";
+    hash = "sha256-UUvNSTM98r8D/Q+/pPTXwGzW4Sl1qhgem4WsFRfybuo=";
     fetchSubmodules = true;
   };
 

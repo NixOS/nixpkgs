@@ -51,9 +51,9 @@ lib.makeExtensible (self: ({
 
   lix_2_90 = (
     common {
-      version = "2.90.0-rc1";
-      hash = "sha256-WY7BGnu5PnbK4O8cKKv9kvxwzZIGbIQUQLGPHFXitI0=";
-      docCargoHash = "sha256-V/MEC2aRlVrt/IKozyYZvZTXENrtDS/wsV08/ao4TCw=";
+      version = "2.90.0";
+      hash = "sha256-f8k+BezKdJfmE+k7zgBJiohtS3VkkriycdXYsKOm3sc=";
+      docCargoHash = "sha256-vSf9MyD2XzofZlbzsmh6NP69G+LiX72GX4Um9UJp3dc=";
     }
   );
 

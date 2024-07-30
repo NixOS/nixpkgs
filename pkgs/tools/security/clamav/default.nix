@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  checkInputs = [
+    python3.pkgs.pytest
+  ];
+
   meta = with lib; {
     homepage = "https://www.clamav.net";
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";

@@ -355,8 +355,10 @@ _accumFlagsArray() {
             local -n nameref="$name"
             case "$name" in
                 *Array)
+                    # shellcheck disable=SC2206
                     flagsArray+=( ${nameref+"${nameref[@]}"} ) ;;
                 *)
+                    # shellcheck disable=SC2206
                     flagsArray+=( ${nameref-} ) ;;
             esac
         done
@@ -576,7 +578,9 @@ findInputs() {
     # Sanity check
     (( hostOffset <= targetOffset )) || exit 1
 
+    # shellcheck disable=SC1087
     local varVar="${pkgAccumVarVars[hostOffset + 1]}"
+    # shellcheck disable=SC1087
     local varRef="$varVar[$((targetOffset - hostOffset))]"
     local var="${!varRef}"
     unset -v varVar varRef
@@ -585,6 +589,7 @@ findInputs() {
     # nix-shell doesn't use impure bash. This should replace the O(n)
     # case with an O(1) hash map lookup, assuming bash is implemented
     # well :D.
+    # shellcheck disable=SC1087
     local varSlice="$var[*]"
     # ${..-} to hack around old bash empty array problem
     case "${!varSlice-}" in
@@ -999,12 +1004,12 @@ _allFlags() {
     # so some substitutions such as name don't have to be in the env attrset
     # when __structuredAttrs is enabled
     export system pname name version
-    for varName in $(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }'); do
+    while IFS='' read -r varName; do
         if (( "${NIX_DEBUG:-0}" >= 1 )); then
             printf "@%s@ -> %q\n" "${varName}" "${!varName}" >&2
         fi
         args+=("--subst-var" "$varName")
-    done
+    done < <(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }')
 }
 
 substituteAllStream() {
@@ -1175,6 +1180,7 @@ unpackPhase() {
     if [ -n "$__structuredAttrs" ]; then
         srcsArray=( "${srcs[@]}" )
     else
+        # shellcheck disable=SC2206
         srcsArray=( $srcs )
     fi
 
@@ -1242,8 +1248,10 @@ patchPhase() {
 
     local -a patchesArray
     if [ -n "$__structuredAttrs" ]; then
+        # shellcheck disable=SC2206
         patchesArray=( ${patches:+"${patches[@]}"} )
     else
+        # shellcheck disable=SC2206
         patchesArray=( ${patches:-} )
     fi
 
@@ -1269,7 +1277,7 @@ patchPhase() {
         if [ -n "$__structuredAttrs" ]; then
             flagsArray=( "${patchFlags[@]:--p1}" )
         else
-            # shellcheck disable=SC2086
+            # shellcheck disable=SC2086,SC2206
             flagsArray=( ${patchFlags:--p1} )
         fi
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
@@ -1382,7 +1390,7 @@ buildPhase() {
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
-            SHELL=$SHELL
+            SHELL="$SHELL"
         )
         _accumFlagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
 
@@ -1407,9 +1415,9 @@ checkPhase() {
     if [[ -z "${checkTarget:-}" ]]; then
         #TODO(@oxij): should flagsArray influence make -n?
         if make -n ${makefile:+-f $makefile} check >/dev/null 2>&1; then
-            checkTarget=check
+            checkTarget="check"
         elif make -n ${makefile:+-f $makefile} test >/dev/null 2>&1; then
-            checkTarget=test
+            checkTarget="test"
         fi
     fi
 
@@ -1420,16 +1428,18 @@ checkPhase() {
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
-            SHELL=$SHELL
+            SHELL="$SHELL"
         )
 
         _accumFlagsArray makeFlags makeFlagsArray
         if [ -n "$__structuredAttrs" ]; then
             flagsArray+=( "${checkFlags[@]:-VERBOSE=y}" )
         else
+            # shellcheck disable=SC2206
             flagsArray+=( ${checkFlags:-VERBOSE=y} )
         fi
         _accumFlagsArray checkFlagsArray
+        # shellcheck disable=SC2206
         flagsArray+=( ${checkTarget} )
 
         echoCmd 'check flags' "${flagsArray[@]}"
@@ -1461,12 +1471,13 @@ installPhase() {
     # shellcheck disable=SC2086
     local flagsArray=(
         ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
-        SHELL=$SHELL
+        SHELL="$SHELL"
     )
     _accumFlagsArray makeFlags makeFlagsArray installFlags installFlagsArray
     if [ -n "$__structuredAttrs" ]; then
         flagsArray+=( "${installTargets[@]:-install}" )
     else
+        # shellcheck disable=SC2206
         flagsArray+=( ${installTargets:-install} )
     fi
 
@@ -1548,11 +1559,12 @@ installCheckPhase() {
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
-            SHELL=$SHELL
+            SHELL="$SHELL"
         )
 
         _accumFlagsArray makeFlags makeFlagsArray \
           installCheckFlags installCheckFlagsArray
+        # shellcheck disable=SC2206
         flagsArray+=( ${installCheckTarget:-installcheck} )
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
@@ -1569,6 +1581,7 @@ distPhase() {
 
     local flagsArray=()
     _accumFlagsArray distFlags distFlagsArray
+    # shellcheck disable=SC2206
     flagsArray+=( ${distTarget:-dist} )
 
     echo 'dist flags: %q' "${flagsArray[@]}"
@@ -1627,21 +1640,22 @@ runPhase() {
     showPhaseHeader "$curPhase"
     dumpVars
 
-    local startTime=$(date +"%s")
+    local startTime endTime
+    startTime=$(date +"%s")
 
     # Evaluate the variable named $curPhase if it exists, otherwise the
     # function named $curPhase.
     eval "${!curPhase:-$curPhase}"
 
-    local endTime=$(date +"%s")
+    endTime=$(date +"%s")
 
     showPhaseFooter "$curPhase" "$startTime" "$endTime"
 
     if [ "$curPhase" = unpackPhase ]; then
         # make sure we can cd into the directory
-        [ -n "${sourceRoot:-}" ] && chmod +x "${sourceRoot}"
+        [ -n "${sourceRoot:-}" ] && chmod +x -- "${sourceRoot}"
 
-        cd "${sourceRoot:-.}"
+        cd -- "${sourceRoot:-.}"
     fi
 }
 

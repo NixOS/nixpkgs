@@ -1,21 +1,22 @@
-{ lib
-, bazel_6
-, bazel-gazelle
-, buildBazelPackage
-, fetchFromGitHub
-, stdenv
-, cmake
-, gn
-, go
-, jdk
-, ninja
-, patchelf
-, python3
-, linuxHeaders
-, nixosTests
+{
+  lib,
+  bazel_6,
+  bazel-gazelle,
+  buildBazelPackage,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  gn,
+  go,
+  jdk,
+  ninja,
+  patchelf,
+  python3,
+  linuxHeaders,
+  nixosTests,
 
   # v8 (upstream default), wavm, wamr, wasmtime, disabled
-, wasmRuntime ? "wamr"
+  wasmRuntime ? "wamr",
 }:
 
 let
@@ -24,16 +25,18 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.30.4";
-    rev = "32113313a357829ba3a5dce0795b6780bf8cbf4d";
-    hash = "sha256-u9lTVe40pwXTt0YRwJXRuZonS5KJL2JQUQ3L9ymuA74=";
+    version = "1.31.0";
+    rev = "7b8baff1758f0a584dcc3cb657b5032000bcb3d7";
+    hash = "sha256-pKERyXABcpMpKMRRvqJavp2jYGXTxwFLDPERqDT6jnY=";
   };
 
   # these need to be updated for any changes to fetchAttrs
-  depsHash = {
-    x86_64-linux = "sha256-m7dMr/dCmjpKLPT+8FXBHGkTlNoN9x1oQ7D6uO0sHtQ=";
-    aarch64-linux = "sha256-9GqVpWkMHP9nb5EZHjGKixkWazi//oLlIUum45xTvoM=";
-  }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+  depsHash =
+    {
+      x86_64-linux = "sha256-33yu2oxP2zgKs01qn6RIyZx6zHJ1NuCNxolgk0/uWpM=";
+      aarch64-linux = "sha256-ox7CJPqNbwucMDORQvx8SFs4oXR/WKixwJ6uK+l4NJc=";
+    }
+    .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 in
 buildBazelPackage {
   pname = "envoy";
@@ -78,9 +81,7 @@ buildBazelPackage {
     patchelf
   ];
 
-  buildInputs = [
-    linuxHeaders
-  ];
+  buildInputs = [ linuxHeaders ];
 
   fetchAttrs = {
     sha256 = depsHash;
@@ -148,33 +149,35 @@ buildBazelPackage {
   removeLocalConfigCc = true;
   removeLocal = false;
   bazelTargets = [ "//source/exe:envoy-static" ];
-  bazelBuildFlags = [
-    "-c opt"
-    "--spawn_strategy=standalone"
-    "--noexperimental_strict_action_env"
-    "--cxxopt=-Wno-error"
-    "--linkopt=-Wl,-z,noexecstack"
+  bazelBuildFlags =
+    [
+      "-c opt"
+      "--spawn_strategy=standalone"
+      "--noexperimental_strict_action_env"
+      "--cxxopt=-Wno-error"
+      "--linkopt=-Wl,-z,noexecstack"
 
-    # Force use of system Java.
-    "--extra_toolchains=@local_jdk//:all"
-    "--java_runtime_version=local_jdk"
-    "--tool_java_runtime_version=local_jdk"
+      # Force use of system Java.
+      "--extra_toolchains=@local_jdk//:all"
+      "--java_runtime_version=local_jdk"
+      "--tool_java_runtime_version=local_jdk"
 
-    # undefined reference to 'grpc_core::*Metadata*::*Memento*
-    #
-    # During linking of the final binary, we see undefined references to grpc_core related symbols.
-    # The missing symbols would be instantiations of a template class from https://github.com/grpc/grpc/blob/v1.59.4/src/core/lib/transport/metadata_batch.h
-    # "ParseMemento" and "MementoToValue" are only implemented for some types
-    # and appear unused and unimplemented for the undefined cases reported by the linker.
-    "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
+      # undefined reference to 'grpc_core::*Metadata*::*Memento*
+      #
+      # During linking of the final binary, we see undefined references to grpc_core related symbols.
+      # The missing symbols would be instantiations of a template class from https://github.com/grpc/grpc/blob/v1.59.4/src/core/lib/transport/metadata_batch.h
+      # "ParseMemento" and "MementoToValue" are only implemented for some types
+      # and appear unused and unimplemented for the undefined cases reported by the linker.
+      "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
 
-    "--define=wasm=${wasmRuntime}"
-  ] ++ (lib.optionals stdenv.isAarch64 [
-    # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
-    #   611 |       : [end_ptr] "=&r"(end_ptr), [cpu_id] "=&r"(cpu_id),
-    #       |         ^
-    "--define=tcmalloc=disabled"
-  ]);
+      "--define=wasm=${wasmRuntime}"
+    ]
+    ++ (lib.optionals stdenv.isAarch64 [
+      # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
+      #   611 |       : [end_ptr] "=&r"(end_ptr), [cpu_id] "=&r"(cpu_id),
+      #       |         ^
+      "--define=tcmalloc=disabled"
+    ]);
 
   bazelFetchFlags = [
     "--define=wasm=${wasmRuntime}"
@@ -199,6 +202,9 @@ buildBazelPackage {
     mainProgram = "envoy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

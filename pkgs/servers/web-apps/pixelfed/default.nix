@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , php
 , nixosTests
@@ -10,16 +9,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "pixelfed";
-  version = "0.12.1";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
-    repo = finalAttrs.pname;
+    repo = "pixelfed";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pNo10vvUD7q0HLM7+GgT+6PyocF4kDZ3Zee4ZCPDJNQ=";
+    hash = "sha256-CKjqnxp7p2z/13zfp4HQ1OAmaoUtqBKS6HFm6TV8Jwg=";
   };
 
-  vendorHash = "sha256-y6dgF/LHEYEVG+MgNnZa6f6oMQGvuvAgG6PVbmeMIz4=";
+  vendorHash = "sha256-zjIjGkR9MCnjRho/ViqZ5EbS9MJ7OQ1kkg93jBssuZU=";
 
   postInstall = ''
     mv "$out/share/php/${finalAttrs.pname}"/* $out

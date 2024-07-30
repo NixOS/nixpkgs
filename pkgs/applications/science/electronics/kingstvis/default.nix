@@ -6,7 +6,6 @@
 , glib
 , lib
 , libGL
-, stdenv
 , xkeyboard_config
 , xorg
 , zlib

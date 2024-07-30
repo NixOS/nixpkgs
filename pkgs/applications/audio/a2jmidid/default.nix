@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Daemon for exposing legacy ALSA sequencer applications in JACK MIDI system";
     homepage = "https://a2jmidid.ladish.org/";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
   };
 }

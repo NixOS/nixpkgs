@@ -27,6 +27,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/FredrikNoren/ungit";
     license = lib.licenses.mit;
     mainProgram = "ungit";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

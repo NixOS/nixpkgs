@@ -59,6 +59,6 @@ gnustep.stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     homepage = "https://github.com/inverse-inc/sope";
     platforms = platforms.linux;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
   };
 }

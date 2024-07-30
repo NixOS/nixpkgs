@@ -2,17 +2,18 @@
 , stdenv
 , fetchFromGitHub
 , kdePackages
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "application-title-bar";
-  version = "0.6.5";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "antroids";
     repo = "application-title-bar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hA8aK2rd53VyYQnR0SG4KfwycCqT1EYB7iAJvkDGvYs=";
+    hash = "sha256-pwCmkFEhxz7ZtNZNnIK2cTo+GDlIRIZ3VQ76n6qJ0Ac=";
   };
 
   propagatedUserEnvPkgs = with kdePackages; [ kconfig ];
@@ -25,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r package/* $out/share/plasma/plasmoids/com.github.antroids.application-title-bar
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "KDE Plasma6 widget with window controls";

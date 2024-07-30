@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0o4FvhuFudNSEL6fwBVqxldaNePbbidY9utDqXiLRNc=";
+    hash = "sha256-0o4FvhuFudNSEL6fwBVqxldaNePbbidY9utDqXiLRNc=";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     description = "Command-line tool to download manga from mangaplus";
     homepage = "https://github.com/hurlenko/mloader";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "mloader";
   };
 }

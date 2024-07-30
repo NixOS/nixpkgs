@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQt6_Charts";
     inherit version;
-    sha256 = "sha256-xPfPNpko978DLk4z9xjTuP5m2hdtSVn+MHNalw2G81w=";
+    hash = "sha256-xPfPNpko978DLk4z9xjTuP5m2hdtSVn+MHNalw2G81w=";
   };
 
   # fix include path and increase verbosity

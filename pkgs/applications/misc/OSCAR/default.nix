@@ -7,7 +7,7 @@ mkDerivation rec {
     owner = "pholy";
     repo = "OSCAR-code";
     rev = "v${version}";
-    sha256 = "sha256-FBHbPtMZeIgcR1pQflfEWK2FS8bquctXaeY/yaZofHg=";
+    hash = "sha256-FBHbPtMZeIgcR1pQflfEWK2FS8bquctXaeY/yaZofHg=";
   };
 
   buildInputs = [ qtbase qttools qtserialport libGLU ];

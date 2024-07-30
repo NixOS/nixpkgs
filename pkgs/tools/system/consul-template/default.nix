@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "consul-template";
-  version = "0.39.0";
+  version = "0.39.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "consul-template";
     rev = "v${version}";
-    hash = "sha256-I6uv3UtYQ0tpwz/ml3ZL9mRchsqxa8UNPw+vMpvlqmM=";
+    hash = "sha256-VaNAy6bB59QRf29Sgprv7HtVfjvCNic7r31gU2e6prQ=";
   };
 
-  vendorHash = "sha256-xXRIYTd3rRe54lYDWI2PiCV8lG1H6cJfYpL+hdWZClU=";
+  vendorHash = "sha256-OTpon/UIDbH5zbcIyAWqKgTTMNGxytgcMlgaiHOBmeo=";
 
   # consul-template tests depend on vault and consul services running to
   # execute tests so we skip them here

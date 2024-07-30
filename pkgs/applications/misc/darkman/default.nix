@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "WhyNotHugo";
     repo = "darkman";
     rev = "v${version}";
-    sha256 = "sha256-FaEpVy/0PqY5Bmw00hMyFZb9wcwYwEuCKMatYN8Xk3o=";
+    hash = "sha256-FaEpVy/0PqY5Bmw00hMyFZb9wcwYwEuCKMatYN8Xk3o=";
   };
 
   patches = [

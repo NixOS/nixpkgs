@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "owasp-modsecurity";
     repo = "ModSecurity";
     rev = "v${version}";
-    sha256 = "sha256-WIFAg9LvKAC8e3gpcIxtNHT53AIfPtUTyrv30woxP4M=";
+    hash = "sha256-WIFAg9LvKAC8e3gpcIxtNHT53AIfPtUTyrv30woxP4M=";
     fetchSubmodules = true;
   };
 

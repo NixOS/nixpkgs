@@ -39,6 +39,7 @@ in {
         qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
         suru-icon-theme
         telephony-service
+        teleports
       ]);
       variables = {
         # To override the keyboard layouts in Lomiri
@@ -62,7 +63,7 @@ in {
 
     fonts.packages = with pkgs; [
       # Applications tend to default to Ubuntu font
-      ubuntu_font_family
+      ubuntu-classic
     ];
 
     # Copy-pasted basic stuff

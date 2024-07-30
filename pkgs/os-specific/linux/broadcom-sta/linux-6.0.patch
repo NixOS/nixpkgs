@@ -1,18 +1,22 @@
-From dbee29df729e543a89b3f95c1436e982eb0047c1 Mon Sep 17 00:00:00 2001
+From cec136ba06039aa2e4441771df855894391db298 Mon Sep 17 00:00:00 2001
 From: Joan Bruguera <joanbrugueram@gmail.com>
 Date: Thu, 30 Jun 2022 02:15:35 +0200
-Subject: [PATCH] Tentative patch for broadcom-wl 6.30.223.271 driver for Linux 6.0-rc1
+Subject: [PATCH 14/16] linuxPackages.broadcom_sta: fix build for kernel 6.0+
+
+Tentative patch for broadcom-wl 6.30.223.271 driver for Linux 6.0-rc1
 
 Applies on top of all the patches applied to broadcom-wl-dkms 6.30.223.271-33 on Arch Linux.
+
+Source: https://gist.github.com/joanbm/207210d74637870c01ef5a3c262a597d
 ---
  src/wl/sys/wl_cfg80211_hybrid.c | 5 +++++
  1 file changed, 5 insertions(+)
 
 diff --git a/src/wl/sys/wl_cfg80211_hybrid.c b/src/wl/sys/wl_cfg80211_hybrid.c
-index d815b33..7faa735 100644
+index c45ad48..9ae56a1 100644
 --- a/src/wl/sys/wl_cfg80211_hybrid.c
 +++ b/src/wl/sys/wl_cfg80211_hybrid.c
-@@ -2381,7 +2381,12 @@ wl_bss_roaming_done(struct wl_cfg80211_priv *wl, struct net_device *ndev,
+@@ -2354,7 +2354,12 @@ wl_bss_roaming_done(struct wl_cfg80211_priv *wl, struct net_device *ndev,
  	bss = cfg80211_get_bss(wl_to_wiphy(wl), NULL, (s8 *)&wl->bssid,
  	ssid->SSID, ssid->SSID_len, WLAN_CAPABILITY_ESS, WLAN_CAPABILITY_ESS);
  	struct cfg80211_roam_info roam_info = {
@@ -26,5 +30,5 @@ index d815b33..7faa735 100644
  		.req_ie_len = conn_info->req_ie_len,
  		.resp_ie = conn_info->resp_ie,
 -- 
-2.37.0
+2.45.1
 

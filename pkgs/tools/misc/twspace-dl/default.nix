@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchPypi {
     inherit version;
     pname = "twspace_dl";
-    sha256 = "sha256-GLs+UGEOsdGcp/mEh+12Vs+XlY1goEql7UOAvVVi1pg=";
+    hash = "sha256-GLs+UGEOsdGcp/mEh+12Vs+XlY1goEql7UOAvVVi1pg=";
   };
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/HoloArchivists/twspace-dl";
     changelog = "https://github.com/HoloArchivists/twspace-dl/releases/tag/${version}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "twspace_dl";
   };
 }

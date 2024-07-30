@@ -6,26 +6,27 @@
 , darwin
 , rust-jemalloc-sys
 , ruff-lsp
+, nix-update-script
 , testers
 , ruff
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.5.0";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/${version}";
-    hash = "sha256-OjMoa247om4DLPZ6u0XPMd5L+LYlVzHL39plCCr/fYE=";
+    hash = "sha256-dqfK6YdAV4cdUYB8bPE9I5FduBJ90RxUA7TMvcVq6Zw=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
-      "salsa-0.18.0" = "sha256-keVEmSwV1Su1RlOTaIu253FZidk279qA+rXcCeuOggc=";
+      "salsa-0.18.0" = "sha256-gcaAsrrJXrWOIHUnfBwwuTBG1Mb+lUEmIxSGIVLhXaM=";
     };
   };
 
@@ -39,31 +40,6 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.CoreServices
   ];
 
-  # tests expect no colors
-  preCheck = ''
-    export NO_COLOR=1
-  '';
-
-  # Failing for an unclear reason.
-  # According to the maintainers, those tests are from an experimental crate that isn't actually
-  # used by ruff currently and can thus be safely skipped.
-  checkFlags = [
-    "--skip=semantic::tests::expression_scope"
-    "--skip=semantic::tests::reachability_trivial"
-    "--skip=semantic::types::infer::tests::follow_import_to_class"
-    "--skip=semantic::types::infer::tests::if_elif"
-    "--skip=semantic::types::infer::tests::if_elif_else"
-    "--skip=semantic::types::infer::tests::ifexpr_walrus"
-    "--skip=semantic::types::infer::tests::ifexpr_walrus_2"
-    "--skip=semantic::types::infer::tests::join_paths"
-    "--skip=semantic::types::infer::tests::literal_int_arithmetic"
-    "--skip=semantic::types::infer::tests::maybe_unbound"
-    "--skip=semantic::types::infer::tests::narrow_none"
-    "--skip=semantic::types::infer::tests::resolve_base_class_by_name"
-    "--skip=semantic::types::infer::tests::resolve_module_member"
-    "--skip=semantic::types::infer::tests::resolve_visible_def"
-  ];
-
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ruff \
       --bash <($out/bin/ruff generate-shell-completion bash) \
@@ -73,8 +49,28 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = {
     inherit ruff-lsp;
+    updateScript = nix-update-script { };
     version = testers.testVersion { package = ruff; };
   };
+
+  # Failing on darwin for an unclear reason.
+  # According to the maintainers, those tests are from an experimental crate that isn't actually
+  # used by ruff currently and can thus be safely skipped.
+  checkFlags = lib.optionals stdenv.isDarwin [
+    "--skip=changed_file"
+    "--skip=changed_metadata"
+    "--skip=deleted_file"
+    "--skip=directory_deleted"
+    "--skip=directory_moved_to_trash"
+    "--skip=directory_moved_to_workspace"
+    "--skip=directory_renamed"
+    "--skip=move_file_to_trash"
+    "--skip=move_file_to_workspace"
+    "--skip=new_file"
+    "--skip=new_ignored_file"
+    "--skip=rename_file"
+    "--skip=search_path"
+  ];
 
   meta = {
     description = "Extremely fast Python linter";

@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "sha256-pEJkuz0wxKt2PkowmLE2YC+HPYa2ZiENK7FAW14Ec/Y=";
+    hash = "sha256-pEJkuz0wxKt2PkowmLE2YC+HPYa2ZiENK7FAW14Ec/Y=";
   };
 
   # removing optional dependency needing pyobjc

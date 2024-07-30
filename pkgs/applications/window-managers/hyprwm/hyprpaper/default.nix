@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "hyprwm";
-    repo = finalAttrs.pname;
+    repo = "hyprpaper";
     rev = "v${finalAttrs.version}";
     hash = "sha256-l13c8ALA7ZKDgluYA1C1OfkDGYD6e1/GR6LJnxCLRhA=";
   };

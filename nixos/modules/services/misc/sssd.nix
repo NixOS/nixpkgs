@@ -145,7 +145,7 @@ in {
         # https://github.com/krb5/krb5/blob/krb5-1.19.3-final/src/include/kcm.h#L43
         listenStreams = [ "/var/run/.heim_org.h5l.kcm-socket" ];
       };
-      krb5.libdefaults.default_ccache_name = "KCM:";
+      security.krb5.settings.libdefaults.default_ccache_name = "KCM:";
     })
 
     (mkIf cfg.sshAuthorizedKeysIntegration {

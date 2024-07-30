@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tHfohB8OoOCf2rby8wXPON+XfZ4ULlaTo3RgXXXdb+A=";
+    hash = "sha256-tHfohB8OoOCf2rby8wXPON+XfZ4ULlaTo3RgXXXdb+A=";
   };
 
   buildInputs = [
@@ -56,6 +56,6 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/frescobaldi/python-poppler-qt5";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

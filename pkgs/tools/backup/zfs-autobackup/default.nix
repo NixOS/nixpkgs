@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchPypi {
     inherit version;
     pname = "zfs_autobackup";
-    sha256 = "sha256-rvtY7fsn2K2hueAsQkaPXcwxUAgE8j+GsQFF3eJKG2o=";
+    hash = "sha256-rvtY7fsn2K2hueAsQkaPXcwxUAgE8j+GsQFF3eJKG2o=";
   };
 
 
@@ -25,6 +25,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/psy0rz/zfs_autobackup";
     changelog = "https://github.com/psy0rz/zfs_autobackup/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

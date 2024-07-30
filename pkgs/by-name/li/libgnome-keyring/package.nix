@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, glib, dbus, libgcrypt, pkg-config, intltool, gobject-introspection, gnome
-, testers
+{ lib, stdenv, fetchurl, glib, dbus, libgcrypt, pkg-config, intltool, gobject-introspection, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Bash style brace expansion for Python";
     homepage = "https://github.com/facelessuser/bracex";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

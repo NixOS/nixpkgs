@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , lib
-, verilog
+, iverilog
 , verilator
 , gnumake
 , edalize
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fusesoc" ];
 
-  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ verilog verilator gnumake ]}"];
+  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ iverilog verilator gnumake ]}"];
 
   meta = with lib; {
     homepage = "https://github.com/olofk/fusesoc";

@@ -26,6 +26,9 @@
 
 stdenv.mkDerivation rec {
   pname = "nextcloud-client";
+  # make sure an official release has been published on
+  # https://github.com/nextcloud-releases/desktop/releases and re-check the
+  # hash afterwards
   version = "3.13.2";
 
   outputs = [ "out" "dev" ];

@@ -319,7 +319,7 @@ void mapOptions(const std::function<void(const std::string & path)> & f, Context
 }
 
 // Calls f on all the config values inside one option.
-// Simple options have one config value inside, like sound.enable = true.
+// Simple options have one config value inside, like services.foo.enable = true.
 // Compound options have multiple config values.  For example, the option
 // "users.users" has about 1000 config values inside it:
 //   users.users.avahi.createHome = false;

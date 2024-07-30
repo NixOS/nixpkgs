@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Script to clone virtualenvs";
     mainProgram = "virtualenv-clone";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

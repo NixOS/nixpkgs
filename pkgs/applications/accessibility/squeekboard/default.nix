@@ -5,7 +5,6 @@
 , meson
 , ninja
 , pkg-config
-, gnome
 , gnome-desktop
 , glib
 , gtk3

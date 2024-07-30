@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
   pname = "ptable";
   version = "unstable-2019-06-14";
-  format = "setuptools";
+  pyproject = true;
 
   # https://github.com/kxxoling/PTable/issues/27
   src = fetchFromGitHub {
@@ -18,11 +19,9 @@ buildPythonPackage {
     sha256 = "1cj314rp6irlvr0a2c4xffsm2idsb0hzwr38vzz6z3kbhphcb63i";
   };
 
-  nativeCheckInputs = [ nose ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    nosetests --with-coverage --cover-package=prettytable --cover-min-percentage=75
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/kxxoling/PTable";

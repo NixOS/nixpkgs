@@ -1,9 +1,5 @@
 {
   lib,
-  dotnet-sdk,
-  stdenv,
-  substituteAll,
-
   buildDotnetModule,
   fetchFromGitHub,
 
@@ -25,7 +21,7 @@ buildDotnetModule rec {
     owner = "affederaffe";
     repo = "BeatSaberModManager";
     rev = "v${version}";
-    sha256 = "sha256-HHWC+MAwJ+AMCuBzSuR7FbW3k+wLri0B9J1DftyfNEU=";
+    hash = "sha256-HHWC+MAwJ+AMCuBzSuR7FbW3k+wLri0B9J1DftyfNEU=";
     fetchSubmodules = true; # It vendors BSIPA-Linux
   };
 

@@ -62,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/daltonmaag/statmake";
     changelog = "https://github.com/daltonmaag/statmake/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

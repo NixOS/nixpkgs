@@ -23,6 +23,7 @@
 , metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
 , vulkanSupport ? false
 , rpcSupport ? false
+, shaderc
 , vulkan-headers
 , vulkan-loader
 , ninja
@@ -61,19 +62,20 @@ let
   ];
 
   vulkanBuildInputs = [
+    shaderc
     vulkan-headers
     vulkan-loader
   ];
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "3260";
+  version = "3403";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-0KVwSzxfGinpv5KkDCgF2J+1ijDv87PlDrC+ldscP6s=";
+    hash = "sha256-+WWJyEt04ZUC/vh9ZReLek851iOZJYoGc49XJyRPkVE=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT

@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchzip
 , python310
 , rtlcss

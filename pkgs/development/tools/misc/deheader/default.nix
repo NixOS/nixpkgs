@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "esr";
     repo = "deheader";
     rev = version;
-    sha256 = "sha256-dYTHvFWlt3aM/fdZFge7GBdd9bfCrEcp7ULJuBl71Xs=";
+    hash = "sha256-dYTHvFWlt3aM/fdZFge7GBdd9bfCrEcp7ULJuBl71Xs=";
   };
 
   buildInputs = [ python3 ];

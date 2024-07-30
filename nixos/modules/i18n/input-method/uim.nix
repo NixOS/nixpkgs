@@ -3,7 +3,8 @@
 with lib;
 
 let
-  cfg = config.i18n.inputMethod.uim;
+  imcfg = config.i18n.inputMethod;
+  cfg = imcfg.uim;
 in
 {
   options = {
@@ -21,7 +22,7 @@ in
 
   };
 
-  config = mkIf (config.i18n.inputMethod.enabled == "uim") {
+  config = mkIf (imcfg.enable && imcfg.type == "uim") {
     i18n.inputMethod.package = pkgs.uim;
 
     environment.variables = {

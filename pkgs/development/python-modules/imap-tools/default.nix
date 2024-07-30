@@ -3,23 +3,26 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "imap-tools";
-  version = "1.6.0";
+  version = "1.7.1";
 
   disabled = pythonOlder "3.5";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ikvk";
     repo = "imap_tools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-T4sA/PsoTfS2L0RwJyJP6BY33MJuybVqruHnwwstnXA=";
+    hash = "sha256-G2CO5WgMvpPeq/EM9eFW36xYoMD+7nUm8FsMWfCoLf4=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

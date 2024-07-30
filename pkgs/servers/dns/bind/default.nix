@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, darwin
 , perl
 , pkg-config
 , libcap
@@ -24,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.18.27";
+  version = "9.18.28";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-6j89jPovaueMhyJ1HQCPVLwXo67Svj9zmet79fTNqPE=";
+    hash = "sha256-58zpoWX3thnu/Egy8KjcFrAF0p44kK7WAIxQbqKGpec=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -41,7 +42,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libidn2 libtool libxml2 openssl libuv nghttp2 jemalloc ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
-    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
+    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]))
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 

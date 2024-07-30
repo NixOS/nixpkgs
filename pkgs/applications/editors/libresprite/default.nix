@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "LibreSprite";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-d8GmVHYomDb74iSeEhJEVTHvbiVXggXg7xSqIKCUSzY=";
+    hash = "sha256-d8GmVHYomDb74iSeEhJEVTHvbiVXggXg7xSqIKCUSzY=";
   };
 
   # Backport GCC 13 build fix

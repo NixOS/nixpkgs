@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "snakedye";
     repo = "kile";
     rev = "c24208761d04e0a74d203fc1dcd2f7fed68da388";
-    sha256 = "sha256-4iclNVd7nm6LkgvsHwWaWyi1bZL/A+bbT5OSXn70bLs=";
+    hash = "sha256-4iclNVd7nm6LkgvsHwWaWyi1bZL/A+bbT5OSXn70bLs=";
   };
 
   passthru.updateScript = unstableGitUpdater {

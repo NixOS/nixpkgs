@@ -30,6 +30,6 @@ buildNpmPackage rec {
     mainProgram = "matrix-alertmanager";
     homepage = "https://github.com/jaywink/matrix-alertmanager";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

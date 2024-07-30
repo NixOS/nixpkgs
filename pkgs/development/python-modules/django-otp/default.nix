@@ -55,6 +55,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/django-otp/django-otp/blob/${src.rev}/CHANGES.rst";
     description = "Pluggable framework for adding two-factor authentication to Django using one-time passwords";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

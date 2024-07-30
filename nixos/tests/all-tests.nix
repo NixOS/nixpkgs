@@ -235,15 +235,18 @@ in {
   couchdb = handleTest ./couchdb.nix {};
   crabfit = handleTest ./crabfit.nix {};
   cri-o = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cri-o.nix {};
+  cryptpad = runTest ./cryptpad.nix;
   cups-pdf = handleTest ./cups-pdf.nix {};
   curl-impersonate = handleTest ./curl-impersonate.nix {};
   custom-ca = handleTest ./custom-ca.nix {};
   croc = handleTest ./croc.nix {};
   darling = handleTest ./darling.nix {};
+  darling-dmg = runTest ./darling-dmg.nix;
   dae = handleTest ./dae.nix {};
   davis = handleTest ./davis.nix {};
   db-rest = handleTest ./db-rest.nix {};
   dconf = handleTest ./dconf.nix {};
+  ddns-updater = handleTest ./ddns-updater.nix {};
   deconz = handleTest ./deconz.nix {};
   deepin = handleTest ./deepin.nix {};
   deluge = handleTest ./deluge.nix {};
@@ -261,6 +264,7 @@ in {
   docker-rootless = handleTestOn ["aarch64-linux" "x86_64-linux"] ./docker-rootless.nix {};
   docker-registry = handleTest ./docker-registry.nix {};
   docker-tools = handleTestOn ["x86_64-linux"] ./docker-tools.nix {};
+  docker-tools-nix-shell = runTest ./docker-tools-nix-shell.nix;
   docker-tools-cross = handleTestOn ["x86_64-linux" "aarch64-linux"] ./docker-tools-cross.nix {};
   docker-tools-overlay = handleTestOn ["x86_64-linux"] ./docker-tools-overlay.nix {};
   documize = handleTest ./documize.nix {};
@@ -272,6 +276,7 @@ in {
   dovecot = handleTest ./dovecot.nix {};
   drawterm = discoverTests (import ./drawterm.nix);
   drbd = handleTest ./drbd.nix {};
+  druid = handleTestOn [ "x86_64-linux" ] ./druid {};
   dublin-traceroute = handleTest ./dublin-traceroute.nix {};
   earlyoom = handleTestOn ["x86_64-linux"] ./earlyoom.nix {};
   early-mount-options = handleTest ./early-mount-options.nix {};
@@ -297,6 +302,7 @@ in {
   esphome = handleTest ./esphome.nix {};
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
+  activation-lib = pkgs.callPackage ../modules/system/activation/lib/test.nix { };
   activation-var = runTest ./activation/var.nix;
   activation-nix-channel = runTest ./activation/nix-channel.nix;
   activation-etc-overlay-mutable = runTest ./activation/etc-overlay-mutable.nix;
@@ -330,6 +336,7 @@ in {
   firewall-nftables = handleTest ./firewall.nix { nftables = true; };
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
+  flaresolverr = handleTest ./flaresolverr.nix {};
   flood = handleTest ./flood.nix {};
   floorp = handleTest ./firefox.nix { firefoxPackage = pkgs.floorp; };
   fluentd = handleTest ./fluentd.nix {};
@@ -372,6 +379,7 @@ in {
   gnome-xorg = handleTest ./gnome-xorg.nix {};
   gns3-server = handleTest ./gns3-server.nix {};
   gnupg = handleTest ./gnupg.nix {};
+  goatcounter = handleTest ./goatcounter.nix {};
   go-neb = handleTest ./go-neb.nix {};
   gobgpd = handleTest ./gobgpd.nix {};
   gocd-agent = handleTest ./gocd-agent.nix {};
@@ -380,6 +388,7 @@ in {
   gonic = handleTest ./gonic.nix {};
   google-oslogin = handleTest ./google-oslogin {};
   goss = handleTest ./goss.nix {};
+  gotenberg = handleTest ./gotenberg.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
   gotosocial = runTest ./web-apps/gotosocial.nix;
   grafana = handleTest ./grafana {};
@@ -394,7 +403,7 @@ in {
   guix = handleTest ./guix {};
   gvisor = handleTest ./gvisor.nix {};
   hadoop = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop; };
-  hadoop_3_2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop_3_2; };
+  hadoop_3_3 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop_3_3; };
   hadoop2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop2; };
   haka = handleTest ./haka.nix {};
   haste-server = handleTest ./haste-server.nix {};
@@ -404,6 +413,7 @@ in {
   headscale = handleTest ./headscale.nix {};
   healthchecks = handleTest ./web-apps/healthchecks.nix {};
   hbase2 = handleTest ./hbase.nix { package=pkgs.hbase2; };
+  hbase_2_5 = handleTest ./hbase.nix { package=pkgs.hbase_2_5; };
   hbase_2_4 = handleTest ./hbase.nix { package=pkgs.hbase_2_4; };
   hbase3 = handleTest ./hbase.nix { package=pkgs.hbase3; };
   hddfancontrol = handleTest ./hddfancontrol.nix {};
@@ -436,6 +446,7 @@ in {
   hydra = handleTest ./hydra {};
   i3wm = handleTest ./i3wm.nix {};
   icingaweb2 = handleTest ./icingaweb2.nix {};
+  ifm = handleTest ./ifm.nix {};
   iftop = handleTest ./iftop.nix {};
   incron = handleTest ./incron.nix {};
   incus = pkgs.recurseIntoAttrs (handleTest ./incus { inherit handleTestOn; inherit (pkgs) incus; });
@@ -501,7 +512,6 @@ in {
   leaps = handleTest ./leaps.nix {};
   lemmy = handleTest ./lemmy.nix {};
   libinput = handleTest ./libinput.nix {};
-  libreddit = handleTest ./libreddit.nix {};
   librenms = handleTest ./librenms.nix {};
   libresprite = handleTest ./libresprite.nix {};
   libreswan = runTest ./libreswan.nix;
@@ -516,6 +526,7 @@ in {
   listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix {};
   litestream = handleTest ./litestream.nix {};
   lldap = handleTest ./lldap.nix {};
+  localsend = handleTest ./localsend.nix {};
   locate = handleTest ./locate.nix {};
   login = handleTest ./login.nix {};
   logrotate = handleTest ./logrotate.nix {};
@@ -568,6 +579,7 @@ in {
   minidlna = handleTest ./minidlna.nix {};
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
+  miracle-wm = runTest ./miracle-wm.nix;
   miriway = handleTest ./miriway.nix {};
   misc = handleTest ./misc.nix {};
   mjolnir = handleTest ./matrix/mjolnir.nix {};
@@ -594,9 +606,9 @@ in {
   # Fails on aarch64-linux at the PDF creation step - need to debug this on an
   # aarch64 machine..
   musescore = handleTestOn ["x86_64-linux"] ./musescore.nix {};
+  music-assistant = runTest ./music-assistant.nix;
   munin = handleTest ./munin.nix {};
   mutableUsers = handleTest ./mutable-users.nix {};
-  mxisd = handleTest ./mxisd.nix {};
   mycelium = handleTest ./mycelium {};
   mympd = handleTest ./mympd.nix {};
   mysql = handleTest ./mysql/mysql.nix {};
@@ -615,6 +627,7 @@ in {
   nbd = handleTest ./nbd.nix {};
   ncdns = handleTest ./ncdns.nix {};
   ndppd = handleTest ./ndppd.nix {};
+  nix-channel = pkgs.callPackage ../modules/config/nix-channel/test.nix { };
   nebula = handleTest ./nebula.nix {};
   netbird = handleTest ./netbird.nix {};
   nimdow = handleTest ./nimdow.nix {};
@@ -686,7 +699,9 @@ in {
   ocis = handleTest ./ocis.nix {};
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix {};
   oh-my-zsh = handleTest ./oh-my-zsh.nix {};
-  ollama = handleTest ./ollama.nix {};
+  ollama = runTest ./ollama.nix;
+  ollama-cuda = runTestOn ["x86_64-linux" "aarch64-linux"] ./ollama-cuda.nix;
+  ollama-rocm = runTestOn ["x86_64-linux" "aarch64-linux"] ./ollama-rocm.nix;
   ombi = handleTest ./ombi.nix {};
   openarena = handleTest ./openarena.nix {};
   openldap = handleTest ./openldap.nix {};
@@ -771,6 +786,7 @@ in {
   postgresql = handleTest ./postgresql.nix {};
   postgresql-jit = handleTest ./postgresql-jit.nix {};
   postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
+  postgresql-tls-client-cert = handleTest ./postgresql-tls-client-cert.nix {};
   powerdns = handleTest ./powerdns.nix {};
   powerdns-admin = handleTest ./powerdns-admin.nix {};
   power-profiles-daemon = handleTest ./power-profiles-daemon.nix {};
@@ -797,6 +813,7 @@ in {
   qemu-vm-restrictnetwork = handleTest ./qemu-vm-restrictnetwork.nix {};
   qemu-vm-volatile-root = runTest ./qemu-vm-volatile-root.nix;
   qemu-vm-external-disk-image = runTest ./qemu-vm-external-disk-image.nix;
+  qemu-vm-store = runTest ./qemu-vm-store.nix;
   qgis = handleTest ./qgis.nix { qgisPackage = pkgs.qgis; };
   qgis-ltr = handleTest ./qgis.nix { qgisPackage = pkgs.qgis-ltr; };
   qownnotes = handleTest ./qownnotes.nix {};
@@ -808,9 +825,11 @@ in {
   rabbitmq = handleTest ./rabbitmq.nix {};
   radarr = handleTest ./radarr.nix {};
   radicale = handleTest ./radicale.nix {};
+  radicle = runTest ./radicle.nix;
   ragnarwm = handleTest ./ragnarwm.nix {};
   rasdaemon = handleTest ./rasdaemon.nix {};
   readarr = handleTest ./readarr.nix {};
+  realm = handleTest ./realm.nix {};
   redis = handleTest ./redis.nix {};
   redlib = handleTest ./redlib.nix {};
   redmine = handleTest ./redmine.nix {};
@@ -974,11 +993,13 @@ in {
   teeworlds = handleTest ./teeworlds.nix {};
   telegraf = handleTest ./telegraf.nix {};
   teleport = handleTest ./teleport.nix {};
+  teleports = runTest ./teleports.nix;
   thelounge = handleTest ./thelounge.nix {};
   terminal-emulators = handleTest ./terminal-emulators.nix {};
   thanos = handleTest ./thanos.nix {};
   tiddlywiki = handleTest ./tiddlywiki.nix {};
   tigervnc = handleTest ./tigervnc.nix {};
+  tika = runTest ./tika.nix;
   timescaledb = handleTest ./timescaledb.nix {};
   timezone = handleTest ./timezone.nix {};
   tinc = handleTest ./tinc {};

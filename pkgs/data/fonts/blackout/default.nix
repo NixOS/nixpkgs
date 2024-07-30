@@ -1,12 +1,12 @@
 { lib, fetchFromGitHub, stdenvNoCC }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "blackout";
   version = "2014-07-29";
 
   src = fetchFromGitHub {
     owner = "theleagueof";
-    repo = finalAttrs.pname;
+    repo = "blackout";
     rev = "4864cfc1749590e9f78549c6e57116fe98480c0f";
     hash = "sha256-UmJVmtuPQYW/w+mdnJw9Ql4R1xf/07l+/Ky1wX9WKqw=";
   };
@@ -33,4 +33,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ minijackson ];
   };
-})
+}

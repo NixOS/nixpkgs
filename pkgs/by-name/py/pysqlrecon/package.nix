@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pysqlrecon";
-  version = "0.1.4";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Tw1sm";
     repo = "PySQLRecon";
     rev = "refs/tags/v${version}";
-    hash = "sha256-v6IO5fQLvzJhpMPNaZ+ehmU4NYgRDfnDRwQYv5QVx00=";
+    hash = "sha256-AJCvGpOjnh5ih5HrrpI+x0zyB7P6rMGL70707UunhEM=";
   };
 
   pythonRelaxDeps = [

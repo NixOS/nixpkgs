@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "relaxng";
     repo = "jing-trang";
     rev = "V${version}";
-    sha256 = "sha256-Krupa3MGk5UaaQsaNpPMZuIUzHJytDiksz9ysCPkFS4=";
+    hash = "sha256-Krupa3MGk5UaaQsaNpPMZuIUzHJytDiksz9ysCPkFS4=";
     fetchSubmodules = true;
   };
 

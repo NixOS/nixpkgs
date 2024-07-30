@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, rust-jemalloc-sys, testers, fd }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, rust-jemalloc-sys, testers, fd }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage doc/fd.1
-
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fd \
       --bash <($out/bin/fd --gen-completions bash) \
       --fish <($out/bin/fd --gen-completions fish)

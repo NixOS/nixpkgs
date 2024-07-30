@@ -1,4 +1,4 @@
-{ lib, buildDunePackage
+{ buildDunePackage
 , macaddr, cstruct
 }:
 

@@ -56,9 +56,7 @@ stdenv.mkDerivation rec {
     # ../../../server/TracyView.cpp:649:34, preventing building.
     ++ lib.optional stdenv.isDarwin "-Wno-format-security"
     ++ lib.optional stdenv.isLinux "-ltbb"
-    ++ lib.optional stdenv.cc.isClang "-faligned-allocation"
-    # workaround issue #19098
-    ++ lib.optional (stdenv.cc.isClang && stdenv.isDarwin) "-fno-lto");
+    ++ lib.optional stdenv.cc.isClang "-faligned-allocation");
 
   buildPhase = ''
     runHook preBuild

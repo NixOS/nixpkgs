@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = "wbg";
     rev = version;
-    sha256 = "sha256-zd5OWC0r/75IaeKy5xjV+pQefRy48IcFTxx93iy0a0Q=";
+    hash = "sha256-zd5OWC0r/75IaeKy5xjV+pQefRy48IcFTxx93iy0a0Q=";
   };
 
   nativeBuildInputs = [

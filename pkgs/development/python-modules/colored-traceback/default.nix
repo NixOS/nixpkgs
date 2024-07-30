@@ -2,20 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pygments,
 }:
 
 buildPythonPackage rec {
   pname = "colored-traceback";
-  version = "0.3.0";
-  format = "setuptools";
+  version = "0.4.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bafOKx2oafa7VMkntBW5VyfEu22ahMRhXqd9mHKRGwU=";
+    hash = "sha256-7LyOQfBxLqgZMdfNQ2uL658+/xWV0kmPGD4O9ptW/oQ=";
   };
 
-  buildInputs = [ pygments ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pygments ];
 
   # No setuptools tests for the package.
   doCheck = false;

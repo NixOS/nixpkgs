@@ -6,7 +6,6 @@
   kitchen,
   lockfile,
   munch,
-  nose,
   openidc-client,
   pytestCheckHook,
   pythonOlder,
@@ -43,7 +42,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    nose
   ];
 
   disabledTestPaths = [
@@ -58,6 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/fedora-infra/python-fedora";
     changelog = "https://github.com/fedora-infra/python-fedora/releases/tag/${version}";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

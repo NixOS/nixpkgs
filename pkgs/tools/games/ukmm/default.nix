@@ -5,18 +5,19 @@
 , pkg-config
 , wrapGAppsHook3
 , libglvnd
+, libxkbcommon
 , nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ukmm";
-  version = "0.11.1";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "NiceneNerd";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-yxF08kTA/IhM3LKFH523kVY3QfqwUElz3ICkjKPAo7E=";
+    hash = "sha256-YnF0gn2JihZKkDBwI6Odne2CW8k2trQJiPbxMrtI8Gg=";
   };
 
   cargoLock = {
@@ -35,9 +36,21 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook3
   ];
 
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]})
-  '';
+  buildInputs = [
+    libglvnd
+    libxkbcommon
+  ];
+
+  # Force linking to libEGL, which is always dlopen()ed, and to
+  # libwayland-client & libxkbcommon, which is dlopen()ed based on the
+  # winit backend.
+  RUSTFLAGS = map (a: "-C link-arg=${a}") [
+    "-Wl,--push-state,--no-as-needed"
+    "-lEGL"
+    "-lwayland-client"
+    "-lxkbcommon"
+    "-Wl,--pop-state"
+  ];
 
   cargoTestFlags = [
     "--all"

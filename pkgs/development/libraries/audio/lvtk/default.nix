@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     mainProgram = "ttl2c";
     homepage = "https://lvtk.org/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

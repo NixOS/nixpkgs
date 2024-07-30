@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/sphinx-multitoc-numbering";
     changelog = "https://github.com/executablebooks/sphinx-multitoc-numbering/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

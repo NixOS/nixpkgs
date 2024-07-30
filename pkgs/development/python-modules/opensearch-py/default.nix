@@ -12,6 +12,7 @@
   requests,
   six,
   urllib3,
+  events,
 
   # optional-dependencies
   aiohttp,
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     requests
     six
     urllib3
+    events
   ];
 
   passthru.optional-dependencies.async = [ aiohttp ];

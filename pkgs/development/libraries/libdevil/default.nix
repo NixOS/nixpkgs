@@ -66,6 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl2;
     pkgConfigModules = [ "IL" ];
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 })

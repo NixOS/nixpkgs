@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "kevincox";
     repo = "watchlog";
     rev = "v${version}";
-    sha256 = "sha256-8uNBjkxETQXZOfRtxDg+aS8sIbYTD3g9ttBA4m2wavY=";
+    hash = "sha256-8uNBjkxETQXZOfRtxDg+aS8sIbYTD3g9ttBA4m2wavY=";
   };
 
   cargoHash = "sha256-YFQGqkvUgoJJE2B/SQFksWS42YTF/O2tn3CNL54LRUY=";

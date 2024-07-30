@@ -54,7 +54,6 @@ python3.pkgs.buildPythonApplication {
     pysocks
     qrcode
     requests
-    tlslite-ng
     certifi
     jsonpatch
     # plugins

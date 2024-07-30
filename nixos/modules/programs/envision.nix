@@ -31,6 +31,14 @@ in
       };
     };
 
+    services.udev = {
+      enable = true;
+      packages = with pkgs; [
+        android-udev-rules
+        xr-hardware
+      ];
+    };
+
     environment.systemPackages = [ cfg.package ];
 
     networking.firewall = lib.mkIf cfg.openFirewall {

@@ -4,7 +4,6 @@
   callPackage,
   pythonOlder,
   fetchPypi,
-  fetchpatch2,
   writeText,
 
   # build-system
@@ -23,7 +22,6 @@
   argcomplete,
   hypothesis,
   mock,
-  nose,
   pygments,
   requests,
   xmlschema,
@@ -72,7 +70,6 @@ buildPythonPackage rec {
       attrs
       hypothesis
       mock
-      nose
       pygments
       requests
       setuptools

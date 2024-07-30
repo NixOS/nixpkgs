@@ -1,3 +1,4 @@
+# A test that runs a single node k3s cluster and verify a pod can run
 import ../make-test-python.nix (
   {
     pkgs,
@@ -40,7 +41,6 @@ import ../make-test-python.nix (
   in
   {
     name = "${k3s.name}-single-node";
-    meta.maintainers = k3s.meta.maintainers;
 
     nodes.machine =
       { pkgs, ... }:
@@ -58,19 +58,13 @@ import ../make-test-python.nix (
         services.k3s.role = "server";
         services.k3s.package = k3s;
         # Slightly reduce resource usage
-        services.k3s.extraFlags = builtins.toString [
-          "--disable"
-          "coredns"
-          "--disable"
-          "local-storage"
-          "--disable"
-          "metrics-server"
-          "--disable"
-          "servicelb"
-          "--disable"
-          "traefik"
-          "--pause-image"
-          "test.local/pause:local"
+        services.k3s.extraFlags = [
+          "--disable coredns"
+          "--disable local-storage"
+          "--disable metrics-server"
+          "--disable servicelb"
+          "--disable traefik"
+          "--pause-image test.local/pause:local"
         ];
 
         users.users = {
@@ -120,5 +114,7 @@ import ../make-test-python.nix (
 
         machine.shutdown()
       '';
+
+    meta.maintainers = lib.teams.k3s.members;
   }
 )

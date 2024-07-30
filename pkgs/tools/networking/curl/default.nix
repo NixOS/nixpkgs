@@ -155,6 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
       "--without-ca-path"
     ] ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport && !rustlsSupport) [
       "--without-ssl"
+    ] ++ lib.optionals (gnutlsSupport && !stdenv.isDarwin) [
+      "--with-ca-path=/etc/ssl/certs"
     ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";

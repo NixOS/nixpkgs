@@ -8,7 +8,7 @@ buildGoModule rec {
   src = fetchgit {
     url = "https://github.com/twirphp/twirp.git";
     rev = "v${version}";
-    sha256 = "sha256-LUFwmxlbZVTlEyp82lm3ylh6KYtVlviYK13pxj4MH0M=";
+    hash = "sha256-LUFwmxlbZVTlEyp82lm3ylh6KYtVlviYK13pxj4MH0M=";
   };
 
   vendorHash = "sha256-BPvKRIYvIxen0m8C9geFC4gIq4VH8mmdI0ZLMnlBB/I=";

@@ -69,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mozilla/glean_parser";
     changelog = "https://github.com/mozilla/glean_parser/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,45 +1,62 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
-  aiocontextvars,
-  boltons,
-  hypothesis,
-  pyrsistent,
-  pytestCheckHook,
+  pythonAtLeast,
+
   setuptools,
-  six,
-  testtools,
+
+  boltons,
+  orjson,
+  pyrsistent,
   zope-interface,
+
+  daemontools,
+  dask,
+  distributed,
+  hypothesis,
+  pandas,
+  pytestCheckHook,
+  testtools,
+  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "eliot";
-  version = "1.14.0";
-  format = "setuptools";
+  version = "1.15.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wvCZo+jV7PwidFdm58xmSkjbZLa4nZht/ycEkdhoMUk=";
+  src = fetchFromGitHub {
+    owner = "itamarst";
+    repo = "eliot";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Ur7q7PZ5HH4ttD3b0HyBTe1B7eQ2nEWcTBR/Hjeg9yw=";
   };
 
-  propagatedBuildInputs = [
-    aiocontextvars
+  build-system = [ setuptools ];
+
+  dependencies = [
     boltons
+    orjson
     pyrsistent
-    setuptools
-    six
     zope-interface
   ];
 
   nativeCheckInputs = [
+    dask
+    distributed
     hypothesis
+    pandas
     pytestCheckHook
     testtools
-  ];
+    twisted
+  ] ++ lib.optionals stdenv.isLinux [ daemontools ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "eliot" ];
 
@@ -48,17 +65,12 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  disabledTests = [
-    "test_parse_stream"
-    # AttributeError: module 'inspect' has no attribute 'getargspec'
-    "test_default"
-  ];
-
-  meta = with lib; {
+  meta = {
     homepage = "https://eliot.readthedocs.io";
     description = "Logging library that tells you why it happened";
+    changelog = "https://github.com/itamarst/eliot/blob/${version}/docs/source/news.rst";
     mainProgram = "eliot-prettyprint";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dpausp ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dpausp ];
   };
 }

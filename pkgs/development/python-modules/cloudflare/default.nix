@@ -47,6 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/cloudflare/python-cloudflare/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = "cli4";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

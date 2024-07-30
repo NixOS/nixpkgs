@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-X09IcZHBnruQgnCxt7UpfxMtozKxVouWqRRXTAee0Xc=";
+    hash = "sha256-X09IcZHBnruQgnCxt7UpfxMtozKxVouWqRRXTAee0Xc=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Bindings for Chromaprint acoustic fingerprinting";
     homepage = "https://github.com/sampsyo/pyacoustid";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

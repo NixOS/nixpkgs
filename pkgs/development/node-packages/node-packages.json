@@ -12,7 +12,6 @@
 , "@tailwindcss/line-clamp"
 , "@tailwindcss/typography"
 , "@uppy/companion"
-, "@vue/cli"
 , {"@webassemblyjs/cli": "1.11.1"}
 , {"@webassemblyjs/repl": "1.11.1"}
 , "@webassemblyjs/wasm-strip"
@@ -32,7 +31,6 @@
 , "coc-clangd"
 , "coc-cmake"
 , "coc-css"
-, "coc-diagnostic"
 , "coc-docker"
 , "coc-emmet"
 , "coc-eslint"
@@ -108,7 +106,6 @@
 , "ganache"
 , "gatsby-cli"
 , "@gitbeaker/cli"
-, "grammarly-languageserver"
 , "graphql"
 , "graphql-cli"
 , "graphql-language-service-cli"
@@ -259,7 +256,6 @@
 , "webpack-dev-server"
 , "copy-webpack-plugin"
 , "webtorrent-cli"
-, "wrangler"
 , "wring"
 , "@yaegassy/coc-nginx"
 , "yalc"

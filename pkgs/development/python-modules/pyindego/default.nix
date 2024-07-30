@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -20,14 +20,19 @@
 
 buildPythonPackage rec {
   pname = "pyindego";
-  version = "3.1.1";
+  version = "3.2.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "pyIndego";
-    inherit version;
-    hash = "sha256-lRDi6qYMaPI8SiSNe0vzlKb92axujt44aei8opNPDug=";
+  src = fetchFromGitHub {
+    owner = "jm-73";
+    repo = "pyIndego";
+    rev = "refs/tags/${version}";
+    hash = "sha256-wPQocacWwWjEH4boMZ33aW/NPvdD6LSmMTFXGwBwwq8=";
   };
+
+  postPatch = ''
+    sed -i "/addopts/d" pytest.ini
+  '';
 
   build-system = [ setuptools ];
 

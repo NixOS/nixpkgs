@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch2
 , cmake
 , pkg-config
 , python3
@@ -68,6 +69,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KBXvBFgrJ3njIoXrxHbHHLsiocwfd7Eba/GNI8uZA38=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/transmission/transmission/commit/febfe49ca3ecab1a7142ecb34012c1f0b2bcdee8.patch?full_index=1";
+      hash = "sha256-Ge0+AXf/ilfMieGBAdvvImY7JOb0gGIdeKprC37AROs=";
+      excludes = [
+        # The submodule that we don't use (we use our miniupnp)
+        "third-party/miniupnp"
+        # Hunk fails for this one, but we don't care because we don't rely upon
+        # xcode definitions even for the Darwin build.
+        "Transmission.xcodeproj/project.pbxproj"
+      ];
+    })
+  ];
 
   outputs = [ "out" "apparmor" ];
 

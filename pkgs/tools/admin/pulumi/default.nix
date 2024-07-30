@@ -15,7 +15,7 @@
 
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.99.0";
+  version = "3.122.0";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -131,7 +131,7 @@ buildGoModule rec {
       ''
         mkdir -p $out/bin
         makeWrapper ${pulumi}/bin/pulumi $out/bin/pulumi \
-          --suffix PATH : ${lib.makeSearchPath "bin" (f pulumiPackages)}
+          --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib
       '';
   };
 

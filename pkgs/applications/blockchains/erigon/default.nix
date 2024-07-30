@@ -2,7 +2,7 @@
 
 let
   pname = "erigon";
-  version = "2.60.2";
+  version = "2.60.4";
 in
 buildGoModule {
   inherit pname version;
@@ -11,7 +11,7 @@ buildGoModule {
     owner = "ledgerwatch";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+KUe+wpcE59Y6ktDRpoMXQYSML9sfN4OaDV8+sKfzQQ=";
+    hash = "sha256-qcBKWwF9/i9ipE70+5AG5cuhYYqDBXAlY2OWxIh4KfU=";
     fetchSubmodules = true;
   };
 

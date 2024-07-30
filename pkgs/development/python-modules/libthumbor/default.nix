@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Python extension to thumbor";
     homepage = "https://github.com/heynemann/libthumbor";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

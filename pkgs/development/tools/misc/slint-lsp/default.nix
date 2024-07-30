@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-wqAcHBHWtYavAakHLhHHCI+Yercgdtzo1EAOilsZOK0=";
+    hash = "sha256-wqAcHBHWtYavAakHLhHHCI+Yercgdtzo1EAOilsZOK0=";
   };
 
   cargoHash = "sha256-XjVXhXoGEhxWc+LZa0EsPiw3Gq2pg03YjKONTptSQvA=";

@@ -171,7 +171,7 @@
            then ./docs-sphinx-7-ghc98.patch
            else ./docs-sphinx-7.patch )
         ]
-        ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8") [
+        ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.6") [
           (fetchpatch {
             name = "fix-fully_static.patch";
             url = "https://gitlab.haskell.org/ghc/ghc/-/commit/1bb24432ff77e11a0340a7d8586e151e15bba2a1.diff";
@@ -288,18 +288,16 @@ let
 
         otool = cc.bintools.bintools;
 
-        # GHC needs install_name_tool on all darwin platforms. On aarch64-darwin it is
-        # part of the bintools wrapper (due to codesigning requirements), but not on
-        # x86_64-darwin. We decide based on target platform to have consistent tools
-        # across all GHC stages.
-        install_name_tool =
-          if stdenv.targetPlatform.isAarch64
-          then cc.bintools
-          else cc.bintools.bintools;
-        # Same goes for strip.
+        # GHC needs install_name_tool on all darwin platforms. The same one can
+        # be used on both platforms. It is safe to use with linker-generated
+        # signatures because it will update the signatures automatically after
+        # modifying the target binary.
+        install_name_tool = cc.bintools.bintools;
+
+        # strip on darwin is wrapped to enable deterministic mode.
         strip =
           # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
-          if stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin
+          if stdenv.targetPlatform.isDarwin
           then cc.bintools
           else cc.bintools.bintools;
       }.${name};

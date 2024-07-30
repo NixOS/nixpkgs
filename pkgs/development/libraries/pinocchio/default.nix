@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
-    repo = finalAttrs.pname;
+    repo = "pinocchio";
     rev = "v${finalAttrs.version}";
     hash = "sha256-h4NzfS27+jWyHbegxF+pgN6JzJdVAoM16J6G/9uNJc4=";
   };

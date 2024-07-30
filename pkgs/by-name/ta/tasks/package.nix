@@ -15,7 +15,6 @@
   pango,
   sqlite,
   vulkan-loader,
-  stdenv,
   wayland,
   nix-update-script,
 }:

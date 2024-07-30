@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     mainProgram = "openxcom";
     homepage = "https://openxcom.org";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ cpages ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

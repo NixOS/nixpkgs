@@ -40,14 +40,14 @@
 
 stdenv.mkDerivation (final: {
   pname = "pacman";
-  version = "6.1.0";
+  version = "7.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.archlinux.org";
     owner = "pacman";
     repo = "pacman";
     rev = "v${final.version}";
-    hash = "sha256-uHBq1A//YSqFATlyqjC5ZgmvPkNKqp7sVew+nbmLH78=";
+    hash = "sha256-ejOBxN2HjV4dZwFA7zvPz3JUJa0xiJ/jZ+evEQYG1Mc=";
   };
 
   strictDeps = true;
@@ -106,8 +106,6 @@ stdenv.mkDerivation (final: {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ];
-
-  hardeningDisable = [ "fortify3" ];
 
   postInstall = ''
     installShellCompletion --bash scripts/pacman --zsh scripts/_pacman

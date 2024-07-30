@@ -3,14 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   packaging,
-  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fastcore";
-  version = "1.5.48";
+  version = "1.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +18,7 @@ buildPythonPackage rec {
     owner = "fastai";
     repo = "fastcore";
     rev = "refs/tags/${version}";
-    hash = "sha256-wBw6b6/tjvoiQnOyyTkdNlGxHkB7XnIrzFxwenbn06k=";
+    hash = "sha256-dVzJtYnsezk7Pb5Y59BUY8TQ/3Z5JLntqjld2zJk6pA=";
   };
 
   build-system = [ setuptools ];

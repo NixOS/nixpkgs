@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sbt-extras";
-  rev = "7208170046457c70a67e4b86c833a074be9de958";
-  version = "2024-05-06";
+  rev = "ed4bce34420650fbc06cc161f1960b539f19289d";
+  version = "2024-07-10";
 
   src = fetchFromGitHub {
     owner = "paulp";
     repo = "sbt-extras";
     inherit rev;
-    sha256 = "Ci4V1GHKzGux5qU33Z6+NC+YApqlQfgjekGb+WHtLaQ=";
+    sha256 = "lsYFupTSZQe2id0wuy+E7lszG4IT3R6fuo+Yql91MkM=";
   };
 
   dontBuild = true;

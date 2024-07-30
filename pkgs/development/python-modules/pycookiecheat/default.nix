@@ -69,6 +69,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/n8henrie/pycookiecheat";
     changelog = "https://github.com/n8henrie/pycookiecheat/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [
+      fab
+      n8henrie
+    ];
   };
 }

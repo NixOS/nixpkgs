@@ -1,14 +1,12 @@
 {
   lib,
   asar,
-  binutils,
   commandLineArgs ? "",
   copyDesktopItems,
   electron_30,
   fetchurl,
   makeDesktopItem,
   makeWrapper,
-  nix-update-script,
   stdenv,
   zstd,
 }:
@@ -16,19 +14,21 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
   version = "2.0.5";
 
-  desktopItem = makeDesktopItem {
-    desktopName = "Youtube Music Desktop App";
-    exec = "ytmdesktop";
-    icon = "ytmdesktop";
-    name = "ytmdesktop";
-    genericName = finalAttrs.meta.description;
-    mimeTypes = [ "x-scheme-handler/ytmd" ];
-    categories = [
-      "AudioVideo"
-      "Audio"
-    ];
-    startupNotify = true;
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Youtube Music Desktop App";
+      exec = "ytmdesktop";
+      icon = "ytmdesktop";
+      name = "ytmdesktop";
+      genericName = finalAttrs.meta.description;
+      mimeTypes = [ "x-scheme-handler/ytmd" ];
+      categories = [
+        "AudioVideo"
+        "Audio"
+      ];
+      startupNotify = true;
+    })
+  ];
 
   nativeBuildInputs = [
     asar

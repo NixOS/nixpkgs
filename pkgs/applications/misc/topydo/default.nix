@@ -48,6 +48,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/topydo/topydo";
     changelog = "https://github.com/topydo/topydo/blob/${src.rev}/CHANGES.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

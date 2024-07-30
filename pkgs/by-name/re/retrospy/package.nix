@@ -12,13 +12,13 @@
 , runCommandLocal
 }:
 let
-  version = "6.4.8";
+  version = "6.5";
 
   src = fetchFromGitHub {
     owner = "retrospy";
     repo = "RetroSpy";
     rev = "v${version}";
-    hash = "sha256-0rdLdud78gnBX8CIdG81caJ1IRoIjGzb7coP4huEPDA=";
+    hash = "sha256-gnk/cOxCZuBNrBgvzvEeUjGIeCGtC1uXpYBrWwTqeCQ=";
   };
 
   executables = [
@@ -58,8 +58,8 @@ buildDotnetModule {
     "UsbUpdaterX2/UsbUpdaterX2.csproj"
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   nugetDeps = ./deps.nix;
 

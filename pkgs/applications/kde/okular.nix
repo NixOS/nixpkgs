@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, lib
+{ mkDerivation, lib
 , extra-cmake-modules, kdoctools
 , breeze-icons, chmlib, discount, djvulibre, ebook_tools, kactivities
 , karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons

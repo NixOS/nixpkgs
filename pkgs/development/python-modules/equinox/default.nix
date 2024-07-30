@@ -72,6 +72,10 @@ buildPythonPackage rec {
     # AssertionError: assert 'foo:\n   pri...pe=float32)\n' == 'foo:\n   pri...pe=float32)\n'
     # Also reported in patrick-kidger/equinox#716
     "test_backward_nan"
+
+    # Flaky test
+    # See https://github.com/patrick-kidger/equinox/issues/781
+    "test_traceback_runtime_eqx"
   ];
 
   meta = {

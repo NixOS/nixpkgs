@@ -30,7 +30,6 @@
 , glibmm_2_68
 , jemalloc
 , rnnoise
-, abseil-cpp
 , microsoft-gsl
 , boost
 , fmt
@@ -55,7 +54,7 @@ stdenv.mkDerivation rec {
     owner = "kotatogram";
     repo = "kotatogram-desktop";
     rev = "fbb22ebd3e39dfa4a036fa79a7a3f78b86b1cea2";
-    sha256 = "sha256-ccfmaqapk9ct+5kvBI02xHJ7YCGmm1CcqwM+3hC1bk0=";
+    hash = "sha256-ccfmaqapk9ct+5kvBI02xHJ7YCGmm1CcqwM+3hC1bk0=";
     fetchSubmodules = true;
   };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/python-pillow/Sane";
-    description = "Python interface to the SANE scanner and frame grabber ";
+    description = "Python interface to the SANE scanner and frame grabber";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
   };

@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -13,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2EZkJ6pZIqxdS36cZbaTEIQnz1N9ZT1oyyEsBxPo5vU=";
+    hash = "sha256-2EZkJ6pZIqxdS36cZbaTEIQnz1N9ZT1oyyEsBxPo5vU=";
   };
 
   propagatedBuildInputs = [ pyusb ];

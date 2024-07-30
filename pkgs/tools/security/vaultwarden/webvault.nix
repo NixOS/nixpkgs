@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , git
 , nixosTests
-, python3
+, python311
 , vaultwarden
 }:
 
@@ -37,7 +37,8 @@ in buildNpmPackage rec {
   '';
 
   nativeBuildInputs = [
-    python3
+    # signalr through gyp wants to import distutils
+    python311
   ];
 
   makeCacheWritable = true;
