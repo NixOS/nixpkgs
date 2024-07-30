@@ -110,7 +110,13 @@ def main() -> None:
         type=Path,
     )
     arg_parser.add_argument(
-        # TODO: pick a name for this
+        "--rebuild-cmd",
+        action=EnvDefault,
+        envvar="rebuildCmd",
+        help="When running the driver interactively, this command builds a new version of the driver when rebuild() is called",
+        type=str,
+    )
+    arg_parser.add_argument(
         "--internal-print-update-driver-info-and-exit",
         action="store_true",
         # For internal use. Don't print help text.
@@ -140,6 +146,9 @@ def main() -> None:
     if not args.keep_vm_state:
         logger.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
+    if args.rebuild_cmd and args.interactive:
+        logger.warning("--rebuild-cmd is not useful outside of interactive mode")
+
     with Driver(
         args.start_scripts,
         args.vlans,
@@ -148,6 +157,7 @@ def main() -> None:
         logger,
         args.keep_vm_state,
         args.global_timeout,
+        args.rebuild_cmd,
     ) as driver:
         if args.interactive:
             history_dir = os.getcwd()
