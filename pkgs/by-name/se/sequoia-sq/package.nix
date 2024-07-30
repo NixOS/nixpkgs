@@ -47,7 +47,6 @@ rustPlatform.buildRustPackage rec {
     nettle
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
 
-  # Sometimes, tests fail on CI (ofborg) & hydra without this
   checkFlags = [
     # doctest for sequoia-ipc fail for some reason
     "--skip=macros::assert_send_and_sync"
@@ -69,12 +68,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Cool new OpenPGP implementation";
     homepage = "https://sequoia-pgp.org/";
     changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${version}/NEWS";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ minijackson doronbehar ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ minijackson doronbehar ];
     mainProgram = "sq";
   };
 }
