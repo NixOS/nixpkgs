@@ -1,6 +1,5 @@
 {
   lib,
-  datalad,
   git,
   python3,
   fetchFromGitHub,

@@ -2835,6 +2835,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
+  datalad = callPackage ../development/python-modules/datalad { };
+
   datalad-next = callPackage ../development/python-modules/datalad-next { };
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };

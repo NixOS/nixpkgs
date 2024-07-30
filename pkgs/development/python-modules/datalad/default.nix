@@ -1,17 +1,55 @@
 {
+  buildPythonPackage,
   lib,
+  setuptools,
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  python3,
   git,
+  coreutils,
+  # core
+  platformdirs,
+  chardet,
+  iso8601,
+  humanize,
+  fasteners,
+  packaging,
+  patool,
+  tqdm,
+  annexremote,
+  looseversion,
   git-annex,
+  # downloaders
+  boto3,
+  keyrings-alt,
+  keyring,
+  msgpack,
+  requests,
+  # publish
+  python-gitlab,
+  # misc
+  argcomplete,
+  pyperclip,
+  python-dateutil,
+  # duecredit
+  duecredit,
+  # python>=3.8
+  distro,
+  # win
+  colorama,
+  # python-version-dependent
+  pythonOlder,
+  importlib-resources,
+  importlib-metadata,
+  typing-extensions,
+  # tests
+  pytestCheckHook,
   p7zip,
   curl,
-  coreutils,
+  httpretty,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "datalad";
   version = "1.1.1";
 
@@ -32,10 +70,9 @@ python3.pkgs.buildPythonApplication rec {
     git
   ];
 
-  build-system = [ python3.pkgs.setuptools ];
+  build-system = [ setuptools ];
 
   dependencies =
-    with python3.pkgs;
     [
       # core
       platformdirs
@@ -68,15 +105,17 @@ python3.pkgs.buildPythonApplication rec {
       argcomplete
       pyperclip
       python-dateutil
+
       # duecredit
       duecredit
+
       # python>=3.8
       distro
     ]
     ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
-    ++ lib.optionals (python3.pythonOlder "3.9") [ importlib-resources ]
-    ++ lib.optionals (python3.pythonOlder "3.10") [ importlib-metadata ]
-    ++ lib.optionals (python3.pythonOlder "3.11") [ typing_extensions ];
+    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
+    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   postInstall = ''
     installShellCompletion --cmd datalad \
@@ -180,10 +219,10 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = [
     p7zip
-    python3.pkgs.pytestCheckHook
+    pytestCheckHook
     git-annex
     curl
-    python3.pkgs.httpretty
+    httpretty
   ];
 
   pythonImportsCheck = [ "datalad" ];
