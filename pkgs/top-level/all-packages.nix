@@ -35868,6 +35868,8 @@ with pkgs;
 
   blackshades = callPackage ../games/blackshades { };
 
+  blackvoxel = callPackage ../games/blackvoxel { };
+
   blobby = callPackage ../games/blobby { };
 
   blobwars = callPackage ../games/blobwars { };
