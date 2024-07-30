@@ -179,7 +179,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "255.6";
+  version = "255.9";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -197,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-ah0678iNfy0c5NhHhjn0roY6RoM8OE0hWyEt+qEGKRQ=";
+    hash = "sha256-fnMvBYyMRQrP2x//8ntGTSwoHOtFk2TQ4S5fwcsSLDU=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -411,7 +411,8 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
     "trivialautovarinit"
-  ];
+    # breaks clang -target bpf; should be fixed to filter target?
+  ] ++ (lib.optional withLibBPF "zerocallusedregs");
 
   nativeBuildInputs =
     [

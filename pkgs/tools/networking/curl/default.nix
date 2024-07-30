@@ -59,10 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-b+oqrGpGEPvQQAr7C83b5yWKZMY/H2jlhV68DGWXEM0=";
   };
 
-  patches = lib.optionals (lib.versionOlder finalAttrs.version "8.7.2") [
+  patches = [
     # https://github.com/curl/curl/pull/13219
     # https://github.com/newsboat/newsboat/issues/2728
     ./8.7.1-compression-fix.patch
+
+    # https://curl.se/docs/CVE-2024-6197.html
+    ./0001-x509asn1-remove-superfluous-free.patch
   ];
 
   postPatch = ''
