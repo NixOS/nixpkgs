@@ -1,4 +1,4 @@
-{ lib, stdenv, kernel, looking-glass-client }:
+{ lib, stdenv, fetchpatch, kernel, looking-glass-client }:
 
 stdenv.mkDerivation {
   pname = "kvmfr";
@@ -8,6 +8,15 @@ stdenv.mkDerivation {
   sourceRoot = "${looking-glass-client.src.name}/module";
   hardeningDisable = [ "pic" "format" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
+
+  patches = [
+    # fix build for linux-6_10
+    (fetchpatch {
+      url = "https://github.com/gnif/LookingGlass/commit/7305ce36af211220419eeab302ff28793d515df2.patch";
+      hash = "sha256-97nZsIH+jKCvSIPf1XPf3i8Wbr24almFZzMOhjhLOYk=";
+      stripLen = 1;
+    })
+  ];
 
   makeFlags = [
     "KVER=${kernel.modDirVersion}"
