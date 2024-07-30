@@ -1,91 +1,140 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, llvmPackages
-, libxml2
-, zlib
-, coreutils
-, callPackage
-, ...
-}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  llvmPackages,
+  libxml2,
+  zlib,
+  coreutils,
+  callPackage,
+  version,
+  hash,
+  patches ? [ ],
+}@args:
 
-args:
-
-stdenv.mkDerivation (finalAttrs: {
-  pname = "zig";
-
-  src = fetchFromGitHub {
-    owner = "ziglang";
-    repo = "zig";
-    rev = finalAttrs.version;
-    inherit (args) hash;
-  };
-
-  nativeBuildInputs = [
-    cmake
-    llvmPackages.llvm.dev
-  ];
-
-  buildInputs = [
-    libxml2
-    zlib
-  ] ++ (with llvmPackages; [
-    libclang
-    lld
-    llvm
-  ]);
-
-  # On Darwin, Zig calls std.zig.system.darwin.macos.detect during the build,
-  # which parses /System/Library/CoreServices/SystemVersion.plist and
-  # /System/Library/CoreServices/.SystemVersionPlatform.plist to determine the
-  # OS version. This causes the build to fail during stage 3 with
-  # OSVersionDetectionFail when the sandbox is enabled.
-  __impureHostDeps = lib.optionals stdenv.isDarwin [
-    "/System/Library/CoreServices/.SystemVersionPlatform.plist"
-    "/System/Library/CoreServices/SystemVersion.plist"
-  ];
-
-  env.ZIG_GLOBAL_CACHE_DIR = "$TMPDIR/zig-cache";
-
-  # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
-  # work in Nix's sandbox. Use env from our coreutils instead.
-  postPatch = if lib.versionAtLeast args.version "0.12" then ''
-    substituteInPlace lib/std/zig/system.zig \
-      --replace "/usr/bin/env" "${coreutils}/bin/env"
-  '' else ''
-    substituteInPlace lib/std/zig/system/NativeTargetInfo.zig \
-      --replace "/usr/bin/env" "${coreutils}/bin/env"
-  '';
-
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out/bin/zig test --cache-dir "$TMPDIR/zig-test-cache" -I $src/test $src/test/behavior.zig
-
-    runHook postInstallCheck
-  '';
-
-  passthru = {
-    hook = callPackage ./hook.nix {
+stdenv.mkDerivation (
+  finalAttrs:
+  let
+    common = callPackage ./common.nix {
+      inherit (finalAttrs) pname version;
       zig = finalAttrs.finalPackage;
     };
-    cc = callPackage ./cc.nix {
-      zig = finalAttrs.finalPackage;
-    };
-    stdenv = callPackage ./stdenv.nix {
-      zig = finalAttrs.finalPackage;
-    };
-  };
+  in
+  {
+    pname = "zig";
+    inherit version;
 
-  meta = {
-    description = "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
-    homepage = "https://ziglang.org/";
-    changelog = "https://ziglang.org/download/${finalAttrs.version}/release-notes.html";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ andrewrk ] ++ lib.teams.zig.members;
-    mainProgram = "zig";
-    platforms = lib.platforms.unix;
-  };
-} // removeAttrs args [ "hash" ])
+    src = fetchFromGitHub {
+      owner = "ziglang";
+      repo = "zig";
+      rev = finalAttrs.version;
+      inherit hash;
+    };
+
+    patches =
+      args.patches or [ ]
+      ++ lib.optionals (lib.versions.majorMinor finalAttrs.version == "0.9") [
+        # Fix index out of bounds reading RPATH (cherry-picked from 0.10-dev)
+        ./0.9/000-0.9-read-dynstr-at-rpath-offset.patch
+        # Fix build on macOS 13 (cherry-picked from 0.10-dev)
+        ./0.9/001-0.9-bump-macos-supported-version.patch
+      ]
+      ++
+        lib.optional (lib.versions.majorMinor finalAttrs.version == "0.19")
+          # Backport alignment related panics from zig-master to 0.10.
+          # Upstream issue: https://github.com/ziglang/zig/issues/14559
+          ./0.10/001-0.10-macho-fixes.patch;
+
+    nativeBuildInputs = [
+      cmake
+      (lib.getDev llvmPackages.llvm.dev)
+    ];
+
+    buildInputs =
+      [
+        libxml2
+        zlib
+      ]
+      ++ (with llvmPackages; [
+        libclang
+        lld
+        llvm
+      ]);
+
+    cmakeFlags = [
+      # file RPATH_CHANGE could not write new RPATH
+      (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+      # ensure determinism in the compiler build
+      (lib.cmakeFeature "ZIG_TARGET_MCPU" "baseline")
+      # always link against static build of LLVM
+      (lib.cmakeBool "ZIG_STATIC_LLVM" true)
+    ];
+
+    outputs = [
+      "out"
+      "doc"
+    ];
+
+    # strictDeps breaks zig when clang is being used.
+    # https://github.com/NixOS/nixpkgs/issues/317055#issuecomment-2148438395
+    strictDeps = !stdenv.cc.isClang;
+
+    # On Darwin, Zig calls std.zig.system.darwin.macos.detect during the build,
+    # which parses /System/Library/CoreServices/SystemVersion.plist and
+    # /System/Library/CoreServices/.SystemVersionPlatform.plist to determine the
+    # OS version. This causes the build to fail during stage 3 with
+    # OSVersionDetectionFail when the sandbox is enabled.
+    __impureHostDeps = lib.optionals stdenv.isDarwin [
+      "/System/Library/CoreServices/.SystemVersionPlatform.plist"
+      "/System/Library/CoreServices/SystemVersion.plist"
+    ];
+
+    env.ZIG_GLOBAL_CACHE_DIR = "$TMPDIR/zig-cache";
+
+    # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
+    # work in Nix's sandbox. Use env from our coreutils instead.
+    postPatch =
+      if lib.versionAtLeast finalAttrs.version "0.12" then
+        ''
+          substituteInPlace lib/std/zig/system.zig \
+            --replace "/usr/bin/env" "${coreutils}/bin/env"
+        ''
+      else
+        ''
+          substituteInPlace lib/std/zig/system/NativeTargetInfo.zig \
+            --replace "/usr/bin/env" "${coreutils}/bin/env"
+        '';
+
+    postBuild =
+      if lib.versionAtLeast finalAttrs.version "0.13" then
+        ''
+          stage3/bin/zig build langref
+        ''
+      else
+        ''
+          stage3/bin/zig run ../tools/docgen.zig -- ../doc/langref.html.in langref.html --zig $PWD/stage3/bin/zig
+        '';
+
+    postInstall =
+      if lib.versionAtLeast finalAttrs.version "0.13" then
+        ''
+          install -Dm444 ../zig-out/doc/langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
+        ''
+      else
+        ''
+          install -Dm444 langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
+        '';
+
+    doInstallCheck = true;
+    installCheckPhase = ''
+      runHook preInstallCheck
+
+      $out/bin/zig test --cache-dir "$TMPDIR/zig-test-cache" -I $src/test $src/test/behavior.zig
+
+      runHook postInstallCheck
+    '';
+
+    inherit (common) passthru meta;
+  }
+)
