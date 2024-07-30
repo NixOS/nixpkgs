@@ -27,6 +27,8 @@ buildPythonPackage rec {
     hash = "sha256-xPjyi5dFR9xVp1Fl6mM2JNKTRlLBQ6J9aB0dpjnZ+eQ=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   build-system = [ setuptools ];
 
   dependencies = [ ed25519 ];
