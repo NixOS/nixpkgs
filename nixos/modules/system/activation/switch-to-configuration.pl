@@ -78,10 +78,11 @@ if ("@localeArchive@" ne "") {
     $ENV{LOCALE_ARCHIVE} = "@localeArchive@";
 }
 
-if (!defined($action) || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate")) {
+if (!defined($action) || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate" && $action ne "check")) {
     print STDERR <<"EOF";
-Usage: $0 [switch|boot|test|dry-activate]
+Usage: $0 [check|switch|boot|test|dry-activate]
 
+check:        run pre-switch checks and exit
 switch:       make the configuration the boot default and activate now
 boot:         make the configuration the boot default
 test:         activate the configuration, but don\'t make it the boot default
@@ -100,6 +101,17 @@ make_path("/run/nixos", { mode => oct(755) });
 open(my $stc_lock, '>>', '/run/nixos/switch-to-configuration.lock') or die "Could not open lock - $!";
 flock($stc_lock, LOCK_EX) or die "Could not acquire lock - $!";
 openlog("nixos", "", LOG_USER);
+
+# run pre-switch checks
+if (($ENV{"NIXOS_NO_CHECK"} // "") ne "1") {
+    chomp(my $pre_switch_checks = <<'EOFCHECKS');
+@preSwitchCheck@
+EOFCHECKS
+    system("$pre_switch_checks $out") == 0 or exit 1;
+    if ($action eq "check") {
+        exit 0;
+    }
+}
 
 # Install or update the bootloader.
 if ($action eq "switch" || $action eq "boot") {
