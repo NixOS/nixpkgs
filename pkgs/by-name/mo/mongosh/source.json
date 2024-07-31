@@ -1,6 +1,6 @@
 {
-  "version": "2.2.12",
-  "integrity": "sha512-xdjUc5p7ccHHpigT4dQb8OKRFF6rxDu8T8cMHLAHmJV3YhQdh2j+3NPn4Cj0JQQ5J1nmzPKM6jp+SlyUbs+2xg==",
-  "filename": "mongosh-2.2.12.tgz",
-  "deps": "sha256-yM9C4joROSyX02noNS4n5bUhWyDDXzFttGyyyFAubPM="
+  "version": "2.2.15",
+  "integrity": "sha512-9K9+S7toDI0QtGSM+KbQCm+m7ofNOrlJ75Pmmdg+l7Q7HW5prUzSiBF48lRumPqbp5f/mgDoQ7S6IhU5Zp3oCw==",
+  "filename": "mongosh-2.2.15.tgz",
+  "deps": "sha256-LPe54jox2q+KvQ8f36JrVUSwB7tcXFmt3csK65mLVNo="
 }
