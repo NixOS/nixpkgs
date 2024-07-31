@@ -6,7 +6,6 @@
 , pkgsCross
 , fetchFromGitHub
 , fetchzip
-, fetchpatch
 , fetchpatch2
 , buildPackages
 , makeBinaryWrapper
@@ -184,7 +183,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "256.2";
+  version = "256.4";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -202,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-fyHzL+oe192YYuwyoTrov10IlrB0NSfY/XKVWzJrQEI=";
+    hash = "sha256-dugBiRgDFpB0eKhhIT3LkA8FhClM0lvvwCMJ+dKtjPM=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -231,13 +230,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0015-tpm2_context_init-fix-driver-name-checking.patch
     ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
     ./0017-meson.build-do-not-create-systemdstatedir.patch
-
-    # https://github.com/systemd/systemd/pull/33258
-    # Remove after 256.3
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/compare/b268a71069786a45460807967e669d505ba3c5a2..f26b2ec46118a4493608618da2253bb9dfc6b517.patch";
-      hash = "sha256-OmuPDm3NykrDeNTA3NcYt9iTXEUFwKJ5apPP4KqtABg=";
-    })
 
     # https://github.com/systemd/systemd/issues/33392
     (fetchpatch2 {
