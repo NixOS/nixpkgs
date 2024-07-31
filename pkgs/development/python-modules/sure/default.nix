@@ -41,12 +41,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sure" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility belt for automated testing";
     mainProgram = "sure";
     homepage = "https://sure.readthedocs.io/";
     changelog = "https://github.com/gabrielfalcao/sure/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = [ sigmanificient ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }
