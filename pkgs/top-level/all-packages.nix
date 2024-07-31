@@ -1787,8 +1787,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  gh-markdown-preview = callPackage ../tools/misc/gh-markdown-preview { };
-
   ghostie = callPackage ../tools/misc/ghostie { };
 
   glooctl = callPackage ../applications/networking/cluster/glooctl { };
