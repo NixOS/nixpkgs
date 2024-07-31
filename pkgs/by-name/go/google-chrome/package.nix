@@ -64,11 +64,11 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "google-chrome";
-  version = "127.0.6533.72";
+  version = "127.0.6533.88";
 
   src = fetchurl {
     url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-DpEYK/6SEaNfEa8uzGhXhALSSxt51X9X5ksaia8srJg=";
+    hash = "sha256-0l9cidNFO0dcyzWy4nDD/OGFQDBLXx9aPVq6ioDkqK0=";
   };
 
   nativeBuildInputs = [ patchelf makeWrapper ];
