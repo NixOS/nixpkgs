@@ -17178,7 +17178,6 @@ with pkgs;
     ffmpeg = ffmpeg-headless;
   };
 
-  pipewire_0_2 = callPackage ../development/libraries/pipewire/0.2.nix { };
   wireplumber = callPackage ../development/libraries/pipewire/wireplumber.nix { };
 
   pw-volume = callPackage ../tools/audio/pw-volume { };

@@ -1123,6 +1123,7 @@ mapAliases ({
   php80Packages = php80; # Added 2023-06-21
   php80Extensions = php80; # Added 2023-06-21
 
+  pipewire_0_2 = throw "pipewire_0_2 has been removed as it is outdated and no longer used"; # Added 2024-07-28
   pipewire-media-session = throw "pipewire-media-session is no longer maintained and has been removed. Please use Wireplumber instead.";
   pkgconfig = throw "'pkgconfig' has been renamed to/replaced by 'pkg-config'"; # Converted to throw 2023-09-10
   pleroma-otp = pleroma; # Added 2021-07-10
