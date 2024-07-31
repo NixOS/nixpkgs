@@ -16,7 +16,15 @@ let
 
   ## Files in versions/ are generated automatically by update.sh ##
   dotnet_6_0 = import ./versions/6.0.nix buildAttrs;
-  dotnet_7_0 = import ./versions/7.0.nix buildAttrs;
+  dotnet_7_0 = lib.mapAttrs
+    (n: v: if lib.isDerivation v then v.overrideAttrs (old: {
+      meta = old.meta // {
+        knownVulnerabilities = [
+          ".NET 7 is unsupported since 2024-05-14 (https://endoflife.date/dotnet)"
+        ];
+      };
+    }) else v)
+    (import ./versions/7.0.nix buildAttrs);
   dotnet_8_0 = import ./versions/8.0.nix buildAttrs;
   dotnet_9_0 = import ./versions/9.0.nix buildAttrs;
 
