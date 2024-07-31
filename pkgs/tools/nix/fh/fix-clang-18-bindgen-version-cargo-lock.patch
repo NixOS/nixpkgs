@@ -1,0 +1,66 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 5c597e1..a261ce5 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -250,16 +250,16 @@ checksum = "9ba43ea6f343b788c8764558649e08df62f86c6ef251fdaeb1ffd010a9ae50a2"
+ 
+ [[package]]
+ name = "bindgen"
+-version = "0.68.1"
++version = "0.69.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "726e4313eb6ec35d2730258ad4e15b547ee75d6afaa1361a922e78e59b7d8078"
++checksum = "a00dc851838a2120612785d195287475a3ac45514741da670b735818822129a0"
+ dependencies = [
+  "bitflags 2.4.0",
+  "cexpr",
+  "clang-sys",
++ "itertools",
+  "lazy_static",
+  "lazycell",
+- "peeking_take_while",
+  "proc-macro2",
+  "quote",
+  "regex",
+@@ -538,6 +538,12 @@ version = "1.0.14"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "23d2f3407d9a573d666de4b5bdf10569d73ca9478087346697dcbae6244bfbcd"
+ 
++[[package]]
++name = "either"
++version = "1.13.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "60b1af1c220855b6ceac025d3f6ecdd2b7c4894bfe9cd9bda4fbb4bc7c0d4cf0"
++
+ [[package]]
+ name = "encode_unicode"
+ version = "0.3.6"
+@@ -919,6 +925,15 @@ version = "2.8.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "28b29a3cd74f0f4598934efe3aeba42bae0eb4680554128851ebbecb02af14e6"
+ 
++[[package]]
++name = "itertools"
++version = "0.12.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "ba291022dbbd398a455acf126c1e341954079855bc60dfdda641363bd6922569"
++dependencies = [
++ "either",
++]
++
+ [[package]]
+ name = "itoa"
+ version = "1.0.9"
+@@ -1162,12 +1177,6 @@ dependencies = [
+  "windows-targets 0.48.5",
+ ]
+ 
+-[[package]]
+-name = "peeking_take_while"
+-version = "0.1.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "19b17cddbe7ec3f8bc800887bab5e717348c95ea2ca0b1bf0837fb964dc67099"
+-
+ [[package]]
+ name = "percent-encoding"
+ version = "2.3.0"

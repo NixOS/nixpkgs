@@ -19,7 +19,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-fRaKydMSwd1zl6ptBKvn5ej2pqtI8xi9dioFmR8QA+g=";
   };
 
-  cargoHash = "sha256-iOP5llFtySG8Z2Mj7stt6fYpQWqiQqJuftuYBrbkmyU=";
+  # fix bindgen generation with clang_18
+  # can be removed when upstream uses bindgen 0.69.2 or later
+  cargoPatches = [ ./fix-clang-18-bindgen-version-cargo-lock.patch ];
+
+  cargoHash = "sha256-M5NUQytM8ZBLksUmTL2D5bOUqdrZEOvvF4okjvUXYnc=";
 
   nativeBuildInputs = [
     installShellFiles
