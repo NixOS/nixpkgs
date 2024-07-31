@@ -11692,7 +11692,7 @@ with pkgs;
 
   pngquant = callPackage ../tools/graphics/pngquant { };
 
-  inherit (callPackages ../development/tools/pnpm { })
+  inherit (callPackage ../development/tools/pnpm { })
     pnpm_8 pnpm_9;
   pnpm = pnpm_9;
 
