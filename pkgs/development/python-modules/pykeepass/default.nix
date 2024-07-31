@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pykeepass";
-  version = "4.1.0-post1";
+  version = "4.1.0.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "libkeepass";
     repo = "pykeepass";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CsVwjv+9v+yzjywq9bppma+kkrlsXlvU8TsKmq466II=";
+    hash = "sha256-64is/XoRF/kojqd4jQIAQi1od8TRhiv9uR+WNIGvP2A=";
   };
 
   build-system = [ setuptools ];
