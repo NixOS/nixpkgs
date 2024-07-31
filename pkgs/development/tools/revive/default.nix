@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, go, lib, makeWrapper }:
 
 buildGoModule rec {
   pname = "revive";
@@ -31,6 +31,15 @@ buildGoModule rec {
   preBuild = ''
     ldflags+=" -X github.com/mgechev/revive/cli.commit=$(cat COMMIT)"
     ldflags+=" -X 'github.com/mgechev/revive/cli.date=$(cat DATE)'"
+  '';
+
+  allowGoReference = true;
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postFixup = ''
+    wrapProgram $out/bin/revive \
+      --prefix PATH : ${lib.makeBinPath [ go ]}
   '';
 
   # The following tests fail when built by nix:
