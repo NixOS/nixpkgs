@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-fast-url-dispatcher";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiohttp-fast-url-dispatcher";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DZTW9CazcUY3hyxr0MbVfM/yJzUzwN43c2n07Sloxa8=";
+    hash = "sha256-RBS17LhbaAOxFYGjmoEyrq2DCEHeZNpkITPDdCd7Jk0=";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Faster URL dispatcher for aiohttp";
     homepage = "https://github.com/bdraco/aiohttp-fast-url-dispatcher";
-    changelog = "https://github.com/bdraco/aiohttp-fast-url-dispatcher/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/aiohttp-fast-url-dispatcher/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
