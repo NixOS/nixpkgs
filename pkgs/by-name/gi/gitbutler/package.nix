@@ -183,7 +183,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/gitbutlerapp/gitbutler/releases/tag/release/${version}";
     mainProgram = "git-butler";
     license = lib.licenses.fsl11Mit;
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      techknowlogick
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
