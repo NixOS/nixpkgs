@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ protobuf ];
 
-  meta = with lib; {
+  meta = {
     description = "Kontroll demonstates how to control the Keymapp API, making it easy to control your ZSA keyboard from the command line and scripts";
     homepage = "https://github.com/zsa/kontroll";
-    license = licenses.mit;
-    maintainers = with maintainers; [ davsanchez ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ davsanchez ];
     mainProgram = "kontroll";
   };
 }
