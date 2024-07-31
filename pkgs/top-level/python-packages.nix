@@ -3769,6 +3769,8 @@ self: super: with self; {
 
   easywatch = callPackage ../development/python-modules/easywatch { };
 
+  easywebdav = callPackage ../development/python-modules/easywebdav {};
+
   ebaysdk = callPackage ../development/python-modules/ebaysdk { };
 
   ebcdic = callPackage ../development/python-modules/ebcdic { };
@@ -5975,6 +5977,8 @@ self: super: with self; {
   insightface = callPackage ../development/python-modules/insightface { };
 
   installer = callPackage ../development/python-modules/installer { };
+
+  install-freedesktop = callPackage ../development/python-modules/install-freedesktop {};
 
   insteon-frontend-home-assistant = callPackage ../development/python-modules/insteon-frontend-home-assistant { };
 
@@ -11708,6 +11712,8 @@ self: super: with self; {
 
   pymongo-inmemory = callPackage ../development/python-modules/pymongo-inmemory { };
 
+  pymonocypher = callPackage ../development/python-modules/pymonocypher {};
+
   pymoo = callPackage ../development/python-modules/pymoo { };
 
   pymorphy2 = callPackage ../development/python-modules/pymorphy2 { };
@@ -13264,6 +13270,8 @@ self: super: with self; {
   qtile-extras = callPackage ../development/python-modules/qtile-extras { };
 
   qtpy = callPackage ../development/python-modules/qtpy { };
+
+  qtwidgets = callPackage ../development/python-modules/qtwidgets {};
 
   quadprog = callPackage ../development/python-modules/quadprog { };
 
