@@ -22,13 +22,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aquamarine";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "aquamarine";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rux5XA+ixI0fuiQGSOerLKxsW2D8cfjmP1B7FY24xF8=";
+    hash = "sha256-UKdFUKA/h6SeiXpQ06BSZkBJKDwFOFaGI3NtiuaDOhg=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    hwdata
     hyprutils
     libdisplay-info
     libdrm
@@ -52,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
-  depsBuildBuild = [ hwdata ];
+  strictDeps = true;
 
   outputs = [
     "out"
