@@ -2185,6 +2185,8 @@ with pkgs;
 
   datalad = with python3Packages; toPythonApplication datalad;
 
+  datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
+
   darcs-to-git = callPackage ../applications/version-management/darcs-to-git { };
 
   degit = callPackage ../applications/version-management/degit { };

@@ -1,15 +1,22 @@
 {
+  buildPythonPackage,
   lib,
   git,
-  python3,
   fetchFromGitHub,
-  fetchpatch,
   darwin,
+  setuptools,
   stdenv,
   git-annex,
+  pyside6,
+  pyqtdarktheme,
+  datalad-next,
+  outdated,
+  datalad,
+  pytestCheckHook,
+  pytest-qt,
 }:
 
-python3.pkgs.buildPythonApplication {
+buildPythonPackage {
   pname = "datalad-gooey";
   # many bug fixes on `master` but no new release
   version = "unstable-2024-02-20";
@@ -22,9 +29,9 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-8779SLcV4wwJ3124lteGzvimDxgijyxa818ZrumPMs4=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = [ setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = [
     pyside6
     pyqtdarktheme
     datalad-next
@@ -39,8 +46,8 @@ python3.pkgs.buildPythonApplication {
   '';
 
   nativeCheckInputs = [
-    python3.pkgs.pytestCheckHook
-    python3.pkgs.pytest-qt
+    pytestCheckHook
+    pytest-qt
     git
     git-annex
   ];

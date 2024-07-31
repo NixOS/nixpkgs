@@ -2837,6 +2837,8 @@ self: super: with self; {
 
   datalad = callPackage ../development/python-modules/datalad { };
 
+  datalad-gooey = callPackage ../development/python-modules/datalad-gooey { };
+
   datalad-next = callPackage ../development/python-modules/datalad-next { };
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
