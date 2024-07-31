@@ -1,36 +1,49 @@
-{ stdenv, fetchurl, autoPatchelfHook, installShellFiles, makeWrapper, lib, zlib
+{
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  installShellFiles,
+  makeWrapper,
+  lib,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bleep";
   version = "0.0.5";
 
-  platform = if stdenv.isLinux && stdenv.isx86_64 then
-    "x86_64-pc-linux"
-  else if stdenv.isDarwin && stdenv.isx86_64 then
-    "x86_64-apple-darwin"
-  else if stdenv.isDarwin && stdenv.isAarch64 then
-    "arm64-apple-darwin"
-  else
-    throw "unsupported platform";
-
-  src = fetchurl {
-    url =
-      "https://github.com/oyvindberg/bleep/releases/download/v${version}/bleep-${platform}.tar.gz";
-    sha256 = if stdenv.isLinux && stdenv.isx86_64 then
-      "sha256-oNowRH92i76Ubbn07fLBzzX2X9Xez1ByZ/va4+vMdP0="
+  platform =
+    if stdenv.isLinux && stdenv.isx86_64 then
+      "x86_64-pc-linux"
     else if stdenv.isDarwin && stdenv.isx86_64 then
-      "sha256-XvgD7Y02hWUEJyTscQ3orOREv5pB78tTIJq0EEGVeN4="
+      "x86_64-apple-darwin"
     else if stdenv.isDarwin && stdenv.isAarch64 then
-      "sha256-aGXNKUcbuaz1GJIJfVU8B3YJKC24EtX7hgsEOoXKBwo="
+      "arm64-apple-darwin"
     else
       throw "unsupported platform";
+
+  src = fetchurl {
+    url = "https://github.com/oyvindberg/bleep/releases/download/v${version}/bleep-${platform}.tar.gz";
+    sha256 =
+      if stdenv.isLinux && stdenv.isx86_64 then
+        "sha256-oNowRH92i76Ubbn07fLBzzX2X9Xez1ByZ/va4+vMdP0="
+      else if stdenv.isDarwin && stdenv.isx86_64 then
+        "sha256-XvgD7Y02hWUEJyTscQ3orOREv5pB78tTIJq0EEGVeN4="
+      else if stdenv.isDarwin && stdenv.isAarch64 then
+        "sha256-aGXNKUcbuaz1GJIJfVU8B3YJKC24EtX7hgsEOoXKBwo="
+      else
+        throw "unsupported platform";
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ]
-    ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
-  buildInputs = [ zlib stdenv.cc.cc ];
+  buildInputs = [
+    zlib
+    stdenv.cc.cc
+  ];
 
   unpackPhase = ''
     runHook preUnpack
@@ -48,17 +61,19 @@ stdenv.mkDerivation rec {
 
   dontAutoPatchelf = true;
 
-  postFixup = lib.optionalString stdenv.isLinux ''
-    autoPatchelf $out
-  '' + ''
-    mkdir temp
-    cp $out/bin/.bleep-wrapped temp/bleep
-    PATH="./temp:$PATH"
+  postFixup =
+    lib.optionalString stdenv.isLinux ''
+      autoPatchelf $out
+    ''
+    + ''
+      mkdir temp
+      cp $out/bin/.bleep-wrapped temp/bleep
+      PATH="./temp:$PATH"
 
-    installShellCompletion --cmd bleep \
-      --bash <(bleep install-tab-completions-bash --stdout) \
-      --zsh <(bleep install-tab-completions-zsh --stdout) \
-  '';
+      installShellCompletion --cmd bleep \
+        --bash <(bleep install-tab-completions-bash --stdout) \
+        --zsh <(bleep install-tab-completions-zsh --stdout) \
+    '';
 
   meta = with lib; {
     homepage = "https://bleep.build/";
@@ -66,7 +81,11 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "Bleeping fast scala build tool";
     mainProgram = "bleep";
-    platforms = [ "x86_64-linux" "x86_64-apple-darwin" "arm64-apple-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-apple-darwin"
+      "arm64-apple-darwin"
+    ];
     maintainers = with maintainers; [ kristianan ];
   };
 }
