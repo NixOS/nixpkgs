@@ -82,7 +82,7 @@ let
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrNames attrValues getAttrs catAttrs filterAttrs
-      filterAttrsRecursive foldlAttrs foldAttrs collect nameValuePair mapAttrs
+      filterAttrsRecursive foldlAttrs foldAttrs collect recursiveCollect nameValuePair mapAttrs
       mapAttrs' mapAttrsToList attrsToList concatMapAttrs mapAttrsRecursive
       mapAttrsRecursiveCond genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil

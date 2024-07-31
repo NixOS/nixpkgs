@@ -35,6 +35,8 @@ let
     callPackageWith
     cartesianProduct
     cli
+    collect
+    recursiveCollect
     composeExtensions
     composeManyExtensions
     concatLines
@@ -61,6 +63,7 @@ let
     getLicenseFromSpdxIdOr
     groupBy
     groupBy'
+    hasAttr
     hasAttrByPath
     hasInfix
     id
@@ -1216,6 +1219,62 @@ runTests {
   testAttrsToListsCanDealWithFunctions = testingEval (
     attrsToList { someFunc= a: a + 1;}
   );
+
+  testCollect = {
+    expr = collect (x: x ? "collect-me") {
+      a.collect-me = "a";
+      a.other-attr = "other";
+      b = "b";
+      c.c.collect-me = "c.c";
+      d = [ { a.collect-me = "d.0.a"; } ];
+    };
+    expected = [
+      { collect-me = "a";
+        other-attr = "other";
+      }
+      { collect-me = "c.c"; }
+    ];
+  };
+
+  testCollectDoc = {
+    expr = collect (x: x ? "outPath") {
+      a = { outPath = "a/"; };
+      b.b = { outPath = "b/"; };
+      c = [ { outPath = "c/"; } ];
+    };
+    expected = [
+      { outPath = "a/"; }
+      { outPath = "b/"; }
+    ];
+  };
+
+  testRecursiveCollect = {
+    expr = recursiveCollect (x: x ? "collect-me") {
+      a.collect-me = "a";
+      a.other-attr = "other";
+      b = "b";
+      c.c.collect-me = "c.c";
+      d = [ { a.collect-me = "d.0.a"; } ];
+    };
+    expected = [
+      { collect-me = "a"; other-attr = "other"; }
+      { collect-me = "c.c"; }
+      { collect-me = "d.0.a"; }
+    ];
+  };
+
+  testRecursiveCollectDoc = {
+    expr = recursiveCollect (x: x ? "outPath") {
+      a = { outPath = "a/"; };
+      b.b = { outPath = "b/"; };
+      c = [ { outPath = "c/"; } ];
+    };
+    expected = [
+      { outPath = "a/"; }
+      { outPath = "b/"; }
+      { outPath = "c/"; }
+    ];
+  };
 
 # GENERATORS
 # these tests assume attributes are converted to lists

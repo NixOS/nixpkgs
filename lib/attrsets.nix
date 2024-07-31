@@ -11,7 +11,7 @@ let
 in
 
 rec {
-  inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr removeAttrs intersectAttrs;
+  inherit (builtins) attrNames listToAttrs hasAttr isAttrs isList getAttr removeAttrs intersectAttrs;
 
 
   /**
@@ -826,10 +826,10 @@ rec {
 
 
   /**
-    Recursively collect sets that verify a given predicate named `pred`
-    from the set `attrs`. The recursion is stopped when the predicate is
-    verified.
+    Recursively collect sets that verify a given predicate named `pred` from the set arbitrary
+    nested set `attrs`. The recursion is stopped when the predicate is verified.
 
+    Does not descend into lists. For a version that does, see [`lib.attrsets.recursiveCollect`](#function-library-lib.attrsets.recursiveCollect)
 
     # Inputs
 
@@ -856,10 +856,16 @@ rec {
     => [["b"] [1]]
 
     collect (x: x ? outPath)
-       { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
-    => [{ outPath = "a/"; } { outPath = "b/"; }]
+      {
+        a = { outPath = "a/"; };
+        b.b = { outPath = "b/"; };
+        c = [ { outPath = "c/"; } ];
+      }
+    => [
+      { outPath = "a/"; }
+      { outPath = "b/"; }
+    ]
     ```
-
     :::
   */
   collect =
@@ -869,6 +875,62 @@ rec {
       [ attrs ]
     else if isAttrs attrs then
       concatMap (collect pred) (attrValues attrs)
+    else
+      [];
+
+
+  /**
+    Recursively collect sets that verify a given predicate named `pred` from the arbitrary nesting of
+    sets and lists `attrs`. The recursion is stopped when the predicate is verified.
+
+    In other words, it behaves like [`lib.attrsets.collect`](#function-library-lib.attrsets.collect) but also recurses on lists.
+
+    # Inputs
+
+    `pred`
+
+    : Given an attribute's value, determine if recursion should stop.
+
+    `attrs`
+
+    : The arbitrary nesting of sets and lists to recursively collect from.
+
+    # Type
+
+    ```
+    collect :: (AttrSet -> Bool) -> AttrSet -> [x]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.recursiveCollect` usage example
+
+    ```nix
+    collect (x: x ? outPath)
+      {
+        a = { outPath = "a/"; };
+        b.b = { outPath = "b/"; };
+        c = [
+          { outPath = "c/"; }
+        ];
+      }
+    => [
+      { outPath = "a/"; }
+      { outPath = "b/"; }
+      { outPath = "c/"; }
+    ]
+    ```
+    :::
+  */
+  recursiveCollect =
+  pred:
+  attrs:
+    if pred attrs then
+      [ attrs ]
+    else if isAttrs attrs then
+      concatMap (recursiveCollect pred) (attrValues attrs)
+    else if isList attrs then
+      concatMap (recursiveCollect pred) attrs
     else
       [];
 
