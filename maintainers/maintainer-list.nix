@@ -17158,6 +17158,12 @@
     githubId = 5265630;
     name = "Michael Köppl";
   };
+  returntoreality = {
+    email = "linus@lotz.li";
+    github = "retuntoreality";
+    githubId = 255667;
+    name = "Linus Karl";
+  };
   revol-xut = {
     email = "revol-xut@protonmail.com";
     name = "Tassilo Tanneberger";
