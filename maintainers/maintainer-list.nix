@@ -4780,6 +4780,12 @@
     githubId = 41747605;
     keys = [ { fingerprint = "6130 3BBA D7D1 BF74 EFA4  4E3B E7FE 2087 E438 0E64"; } ];
   };
+  definfo = {
+    name = "Adrien SUN";
+    email = "hjsdbb1@gmail.com";
+    github = "definfo";
+    githubId = 66514911;
+  };
   deifactor = {
     name = "Ash Zahlen";
     email = "ext0l@riseup.net";
