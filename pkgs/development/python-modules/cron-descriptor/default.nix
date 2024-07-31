@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "cron_descriptor";
-  version = "1.4";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "cron-descriptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-r5TMatjNYaPhPxhJbBGGshQf6VxKyBV6Za1lQoblxYA=";
+    hash = "sha256-Bvg2diheQihhiCVJjHqdFxbatb/gXS/aRogpzhIproE=";
   };
 
   # remove tests_require, as we don't do linting anyways
