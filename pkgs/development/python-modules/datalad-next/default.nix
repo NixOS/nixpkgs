@@ -14,6 +14,7 @@
   setuptools,
   openssh,
   unzip,
+  versioneer,
   webdavclient3,
 }:
 
@@ -29,9 +30,17 @@ buildPythonPackage rec {
     hash = "sha256-fqP6nG2ncDRg48kvlsmPjNBOzfQp9+7wTcGvsYVrRzA=";
   };
 
+  postPatch = ''
+    # Remove vendorized versioneer.py
+    rm versioneer.py
+  '';
+
   nativeBuildInputs = [ git ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
   dependencies = [
     annexremote
