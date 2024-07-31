@@ -60,11 +60,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohappyeyeballs" ];
 
-  disabledTestPaths = [
-    # https://github.com/bdraco/aiohappyeyeballs/issues/30
-    "tests/test_impl.py"
-  ];
-
   meta = with lib; {
     description = "Happy Eyeballs for pre-resolved hosts";
     homepage = "https://github.com/bdraco/aiohappyeyeballs";
