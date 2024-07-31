@@ -12,8 +12,8 @@
 
 buildPythonPackage rec {
   pname = "mwxml";
-  format = "setuptools";
   version = "0.3.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -29,6 +29,8 @@ buildPythonPackage rec {
     })
   ];
 
+  build-system = [ setuptools ];
+
   dependencies = [
     jsonschema
     mwcli
@@ -39,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mwxml" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of utilities for processing MediaWiki XML dump data";
     mainProgram = "mwxml";
     homepage = "https://github.com/mediawiki-utilities/python-mwxml";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
