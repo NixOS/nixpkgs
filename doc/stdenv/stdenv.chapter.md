@@ -434,6 +434,8 @@ The propagated equivalent of `depsTargetTarget`. This is prefixed for the same r
 
 A number between 0 and 7 indicating how much information to log. If set to 1 or higher, `stdenv` will print moderate debugging information during the build. In particular, the `gcc` and `ld` wrapper scripts will print out the complete command line passed to the wrapped tools. If set to 6 or higher, the `stdenv` setup script will be run with `set -x` tracing. If set to 7 or higher, the `gcc` and `ld` wrapper scripts will also be run with `set -x` tracing.
 
+In order to set the `NIX_DEBUG` environment variable, Nix itself must be re-compiled so that it's set in the local derivation build environment. This ensures that the derivation's hash doesn't change because `NIX_DEBUG` has been set. Most Nix derivation have a `withNixDebug` attribute which can be overridden. Set the `nix.package` option to use this `NIX_DEBUG`-enabled Nix.
+
 ### Attributes affecting build properties {#attributes-affecting-build-properties}
 
 #### `enableParallelBuilding` {#var-stdenv-enableParallelBuilding}
@@ -1421,7 +1423,7 @@ Both parameters take a list of flags as strings. The special `"all"` flag can be
 
 For more in-depth information on these hardening flags and hardening in general, refer to the [Debian Wiki](https://wiki.debian.org/Hardening), [Ubuntu Wiki](https://wiki.ubuntu.com/Security/Features), [Gentoo Wiki](https://wiki.gentoo.org/wiki/Project:Hardened), and the [Arch Wiki](https://wiki.archlinux.org/title/Security).
 
-Note that support for some hardening flags varies by compiler, CPU architecture, target OS and libc. Combinations of these that don't support a particular hardening flag will silently ignore attempts to enable it. To see exactly which hardening flags are being employed in any invocation, the `NIX_DEBUG` environment variable can be used.
+Note that support for some hardening flags varies by compiler, CPU architecture, target OS and libc. Combinations of these that don't support a particular hardening flag will silently ignore attempts to enable it. To see exactly which hardening flags are being employed in any invocation, the [`NIX_DEBUG` environment variable](#var-stdenv-NIX_DEBUG) can be used.
 
 ### Hardening flags enabled by default {#sec-hardening-flags-enabled-by-default}
 
