@@ -30,6 +30,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
+  pythonRelaxDeps = [ "aiohttp" ];
+
   propagatedBuildInputs = [ aiohttp ];
 
   nativeCheckInputs = [
