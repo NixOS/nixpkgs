@@ -22,14 +22,9 @@ stdenv.mkDerivation {
     make clean
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    mv ./src/ryzen_monitor $out/bin
-
-    runHook postInstall
-  '';
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   meta = with lib; {
     description = "Access Ryzen SMU information exposed by the ryzen_smu driver";
