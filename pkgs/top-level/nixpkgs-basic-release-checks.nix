@@ -82,9 +82,10 @@ pkgs.runCommand "nixpkgs-release-checks"
         # Catch any trace calls not caught by NIX_ABORT_ON_WARN (lib.warn)
         if [ -s eval-warnings.log ]; then
             echo "Nixpkgs on $platform evaluated with warnings, aborting"
+            echo "Warnings logged:"
+            cat eval-warnings.log
             exit 1
         fi
-        rm eval-warnings.log
 
         nix-env -f $src \
             --show-trace --argstr system "$platform" \
