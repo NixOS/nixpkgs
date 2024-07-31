@@ -8421,6 +8421,13 @@
     githubId = 6109326;
     name = "David Hummel";
   };
+  husky = {
+    email = "husky@husky.sh";
+    github = "huskyistaken";
+    githubId = 20684258;
+    name = "Luna Perego";
+    keys = [ { fingerprint = "09E4 B981 9B93 5B0C 0B91  1274 0578 7332 9217 08FF"; } ];
+  };
   huyngo = {
     email = "huyngo@disroot.org";
     github = "Huy-Ngo";
