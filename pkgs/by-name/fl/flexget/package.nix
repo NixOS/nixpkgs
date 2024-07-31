@@ -1,16 +1,9 @@
 { lib
 , python3
-, python311
 , fetchFromGitHub
 }:
 
-let
-  python = if (builtins.tryEval python3.pkgs.nose.outPath).success
-    then python3
-    else python311;
-in
-
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "flexget";
   version = "3.11.41";
   pyproject = true;
@@ -28,12 +21,12 @@ python.pkgs.buildPythonApplication rec {
     sed 's/[~<>=][^;]*//' -i requirements.txt
   '';
 
-  build-system = with python.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
     wheel
   ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/pyproject.toml
     apscheduler
     beautifulsoup4
