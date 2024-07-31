@@ -42,6 +42,7 @@ in stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     qt6.qtbase
     qt6.qtsvg
+    qt6.qtwayland
     libarchive
     pcre2
     protobuf
