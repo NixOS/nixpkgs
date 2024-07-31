@@ -140,6 +140,7 @@ mapAliases ({
   avldrums-lv2 = x42-avldrums; # Added 2020-03-29
   awesome-4-0 = awesome; # Added 2022-05-05
   aws-env = throw "aws-env has been removed as the upstream project was unmaintained"; # Added 2024-06-11
+  aws-google-auth = throw "aws-google-auth has been removed as the upstream project was unmaintained"; # Added 2024-07-31
 
   ### B ###
 
