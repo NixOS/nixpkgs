@@ -245,8 +245,16 @@ def update_gitaly():
     logger.info("Updating gitaly")
     data = _get_data_json()
     gitaly_server_version = data['passthru']['GITALY_SERVER_VERSION']
+    repo = GitLabRepo(repo="gitaly")
+    gitaly_dir = pathlib.Path(__file__).parent / 'gitaly'
+
+    makefile = repo.get_file("Makefile", f"v{gitaly_server_version}")
+    makefile += "\nprint-%:;@echo $($*)\n"
+
+    git_version = subprocess.run(["make", "-f", "-", "print-GIT_VERSION"], check=True, input=makefile, text=True, capture_output=True).stdout.strip()
 
     _call_nix_update("gitaly", gitaly_server_version)
+    _call_nix_update("gitaly.git", git_version)
 
 
 @cli.command("update-gitlab-pages")

@@ -1,5 +1,4 @@
 {
-  lib,
   mkDerivation,
   bsdSetupHook,
   freebsdSetupHook,

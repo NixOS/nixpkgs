@@ -5,6 +5,11 @@ callPackage ./binary.nix {
     # Use `print-hashes.sh ${version}` to generate the list below
     darwin-amd64 = "b314de9f704ab122c077d2ec8e67e3670affe8865479d1f01991e7ac55d65e70";
     darwin-arm64 = "3aca44de55c5e098de2f406e98aba328898b05d509a2e2a356416faacf2c4566";
+    freebsd-386 = "312a0065714a50862af714e7a5b3fbbd70fe68f905ffb9bcc56d42eadf6bffab";
+    freebsd-amd64 = "b8eaa36654625df799654f77f4af0ea7bd9e5e760ebe86e68fe7c484748ae995";
+    freebsd-arm64 = "bca5be1a9934fc522cb1a2e4849bb9f12ee6b480b48949e36a4dfb8e755a4b25";
+    freebsd-armv6l = "f4c9c91fa9c37d6d6b7644f3f6b67167b2a44bd48c0cba1d2a5ff5fd50ceb364";
+    freebsd-riscv64 = "45b99a9884dcd0dd4c8e4c0f99a4dc2901b8e9628dd8091ae5c0620afd536f0a";
     linux-386 = "0e6f378d9b072fab0a3d9ff4d5e990d98487d47252dba8160015a61e6bd0bcba";
     linux-amd64 = "d0398903a16ba2232b389fb31032ddf57cac34efda306a0eebac34f0965a0742";
     linux-arm64 = "f3d4548edf9b22f26bbd49720350bbfe59d75b7090a1a2bff1afad8214febaf3";

@@ -41,7 +41,6 @@ let
     isDarwin
     buildPlatform
     targetPlatform;
-  inherit (darwin) cctools-llvm;
   inherit (swiftPackages) apple_sdk swift;
 
   releaseManifest = lib.importJSON releaseManifestFile;
@@ -52,16 +51,6 @@ let
   targetArch = lib.elemAt (lib.splitString "-" targetRid) 1;
 
   sigtool = callPackage ./sigtool.nix {};
-
-  # we need dwarfdump from cctools, but can't have e.g. 'ar' overriding stdenv
-  dwarfdump = stdenvNoCC.mkDerivation {
-    name = "dwarfdump-wrapper";
-    dontUnpack = true;
-    installPhase = ''
-      mkdir -p "$out/bin"
-      ln -s "${cctools-llvm}/bin/dwarfdump" "$out/bin"
-    '';
-  };
 
   _icu = if isDarwin then darwin.ICU else icu;
 
@@ -118,7 +107,6 @@ in stdenv.mkDerivation rec {
       buildInputs = old.buildInputs ++ old.propagatedBuildInputs;
       propagatedBuildInputs = [];
     }))
-    dwarfdump
     sigtool
     Foundation
     CoreFoundation

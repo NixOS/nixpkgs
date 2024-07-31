@@ -62,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "TUIFIManager" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform terminal-based termux-oriented file manager";
     longDescription = ''
       A cross-platform terminal-based termux-oriented file manager (and component),
@@ -70,8 +70,8 @@ python3.pkgs.buildPythonApplication rec {
       attempt to get more attention to the Uni-Curses project.
     '';
     homepage = "https://github.com/GiorgosXou/TUIFIManager";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ michaelBelsanti sigmanificient ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ michaelBelsanti sigmanificient ];
     mainProgram = "tuifi";
   };
 }

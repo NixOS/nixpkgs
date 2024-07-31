@@ -45,6 +45,6 @@ buildPythonPackage rec {
     license = licenses.asl20;
     description = "Python wrapper for Google Tesseract";
     mainProgram = "pytesseract";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

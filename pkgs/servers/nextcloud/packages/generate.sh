@@ -1,10 +1,12 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../../.. -i bash -p jq gnused curl
+#! nix-shell -i bash -p jq gnused curl
 
 set -e
 set -u
 set -o pipefail
 set -x
+
+cd $(dirname -- "${BASH_SOURCE[0]}")
 
 export NEXTCLOUD_VERSIONS=$(nix-instantiate --eval -E 'import ./nc-versions.nix {}' -A e)
 
@@ -30,7 +32,7 @@ for v in ${NEXTCLOUD_VERSIONS//,/ }; do
             # Get all of our variables
             VERSION=$(jq -r ".[] | select(.id == \"${a}\") | .releases[0].version" "$APPS_PER_VERSION")
             URL=$(jq -r ".[] | select(.id == \"${a}\") | .releases[0].download" "$APPS_PER_VERSION")
-            HASH=$(nix store prefetch-file --json --hash-type sha256 --unpack "$URL" | jq -r .hash)
+            HASH=$(nix --extra-experimental-features nix-command store prefetch-file --json --hash-type sha256 --unpack "$URL" | jq -r .hash)
             HOMEPAGE=$(jq -r ".[] | select(.id == \"${a}\") | .website" "$APPS_PER_VERSION")
             DESCRIPTION=$(jq ".[] | select(.id == \"${a}\") | .translations.en.description" "$APPS_PER_VERSION")
             # Add all variables to the file

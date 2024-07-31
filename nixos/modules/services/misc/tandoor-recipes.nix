@@ -11,7 +11,6 @@ let
     DEBUG = "0";
     DEBUG_TOOLBAR = "0";
     MEDIA_ROOT = "/var/lib/tandoor-recipes";
-    GUNICORN_MEDIA = true;
   } // optionalAttrs (config.time.timeZone != null) {
     TZ = config.time.timeZone;
   } // (

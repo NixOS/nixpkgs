@@ -4428,7 +4428,7 @@ checksum = "a183cf7feeba97b4dd1c0d46788634f6221d87fa961b305bed08c851829efcc0"
 
 [[package]]
 name = "uv"
-version = "0.2.26"
+version = "0.2.27"
 dependencies = [
  "anstream",
  "anyhow",
@@ -4760,6 +4760,7 @@ dependencies = [
  "nanoid",
  "once_cell",
  "path-absolutize",
+ "path-slash",
  "pep440_rs",
  "pep508_rs",
  "platform-tags",
@@ -4934,6 +4935,7 @@ dependencies = [
  "install-wheel-rs",
  "itertools 0.13.0",
  "once_cell",
+ "owo-colors",
  "pep440_rs",
  "pep508_rs",
  "platform-tags",
@@ -4942,6 +4944,7 @@ dependencies = [
  "reqwest",
  "reqwest-middleware",
  "rmp-serde",
+ "rustix",
  "same-file",
  "schemars",
  "serde",
@@ -4964,6 +4967,7 @@ dependencies = [
  "uv-warnings",
  "which",
  "winapi",
+ "winsafe",
 ]
 
 [[package]]
@@ -5136,7 +5140,6 @@ dependencies = [
  "uv-python",
  "uv-state",
  "uv-virtualenv",
- "uv-warnings",
 ]
 
 [[package]]
@@ -5161,7 +5164,7 @@ dependencies = [
 
 [[package]]
 name = "uv-version"
-version = "0.2.26"
+version = "0.2.27"
 
 [[package]]
 name = "uv-virtualenv"
@@ -5362,6 +5365,7 @@ checksum = "8211e4f58a2b2805adfbefbc07bab82958fc91e3836339b1ab7ae32465dce0d7"
 dependencies = [
  "either",
  "home",
+ "regex",
  "rustix",
  "winsafe",
 ]

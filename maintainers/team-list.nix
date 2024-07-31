@@ -749,7 +749,10 @@ with lib.maintainers;
   };
 
   openstack = {
-    members = [ SuperSandro2000 ];
+    members = [
+      SuperSandro2000
+      anthonyroussel
+    ];
     scope = "Maintain the ecosystem around OpenStack";
     shortName = "OpenStack";
   };
@@ -1016,10 +1019,7 @@ with lib.maintainers;
   };
 
   zig = {
-    members = [
-      AndersonTorres
-      figsoda
-    ];
+    members = [ figsoda ];
     scope = "Maintain the Zig compiler toolchain and nixpkgs integration.";
     shortName = "Zig";
     enableFeatureFreezePing = true;

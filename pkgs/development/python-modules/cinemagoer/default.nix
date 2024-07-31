@@ -31,6 +31,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/cinemagoer/cinemagoer/";
     homepage = "https://cinemagoer.github.io/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

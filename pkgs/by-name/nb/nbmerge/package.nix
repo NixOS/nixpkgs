@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
     description = "Tool to merge/concatenate Jupyter (IPython) notebooks";
     inherit (src.meta) homepage;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "nbmerge";
   };
 }

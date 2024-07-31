@@ -8,9 +8,7 @@
 , coreutils
 , gnome-keyring
 , libsecret
-, bash
 , openvpn
-, nerdfonts
 , gzip
 , killall
 }:

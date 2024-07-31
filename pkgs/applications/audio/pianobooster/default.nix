@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pianobooster/PianoBooster";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu orivej ];
+    maintainers = with maintainers; [ orivej ];
   };
 }

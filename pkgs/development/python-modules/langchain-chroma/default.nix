@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-chroma";
-  version = "0.2.9";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-core==${version}";
-    hash = "sha256-/BUn/NxaE9l3VY6dPshr1JJaHTGzn9NMQhSQ2De65Jg=";
+    rev = "refs/tags/langchain-chroma==${version}";
+    hash = "sha256-PQ3bepiAqzWhQdKofQSzQKxRrwI6dxBfSNV91462aJE=";
   };
 
   sourceRoot = "${src.name}/libs/partners/chroma";
@@ -44,8 +44,9 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "Build context-aware reasoning applications";
-    homepage = "https://github.com/langchain-ai/langchain";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-chroma==${version}";
+    description = "Integration package connecting Chroma and LangChain";
+    homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/chroma";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

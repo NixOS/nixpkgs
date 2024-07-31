@@ -23,6 +23,13 @@ final: prev: {
     prePatch = ''
       export NG_CLI_ANALYTICS=false
     '';
+    nativeBuildInputs = [ pkgs.installShellFiles ];
+    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash zsh; do
+      installShellCompletion --cmd ng \
+        --$shell <($out/bin/ng completion script)
+    done
+    '';
   };
 
   "@electron-forge/cli" = prev."@electron-forge/cli".override {
@@ -88,6 +95,7 @@ final: prev: {
   joplin = prev.joplin.override (oldAttrs:{
     nativeBuildInputs = [
       pkgs.pkg-config
+      (pkgs.python3.withPackages (ps: [ ps.setuptools ]))
     ] ++ lib.optionals stdenv.isDarwin [
       pkgs.xcbuild
     ];
@@ -124,7 +132,7 @@ final: prev: {
 
     meta = oldAttrs.meta // {
       # ModuleNotFoundError: No module named 'distutils'
-      broken = true;
+      broken = stdenv.isDarwin; # still broken on darwin
     };
   });
 
@@ -195,6 +203,11 @@ final: prev: {
         (fetchpatch {
           url = "https://github.com/svanderburg/node2nix/commit/3b63e735458947ef39aca247923f8775633363e5.patch";
           hash = "sha256-pe8Xm4mjPh9oKXugoMY6pRl8YYgtdw0sRXN+TienalU=";
+        })
+        # Use top-level cctools in generated files - PR svanderburg/node2nix#334
+        (fetchpatch {
+          url = "https://github.com/svanderburg/node2nix/commit/31c308bba5f39ea0105f66b9f40dbe57fed7a292.patch";
+          hash = "sha256-DdNRteonMvyffPh0uo0lUbsohKYnyqv0QcD9vjN6aXE=";
         })
       ];
     in ''

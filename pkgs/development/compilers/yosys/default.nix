@@ -80,7 +80,7 @@ in stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
-    rev   = "refs/tags/${finalAttrs.pname}-${finalAttrs.version}";
+    rev   = "refs/tags/yosys-${finalAttrs.version}";
     hash  = "sha256-MJTtQvHsHvuo4aNNYSPxSMbeXCty66q83/sbp1Yiiv4=";
     fetchSubmodules = true;
     leaveDotGit = true;

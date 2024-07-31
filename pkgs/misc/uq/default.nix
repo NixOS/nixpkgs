@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1qqqmdk0v1d3ckasmmw5lbrkvhkv0nws4bzi9cfi1ndhrbvbkbxb";
   };
 
-  cargoSha256 = "1p6008vxm2pi9v31qhsq7zysanal6rcvcl8553373bkqlfd7w5c4";
+  cargoHash = "sha256-hBV+mqN4rnHGKAVRtlk2VFml/T9YQxzGTvGK2jcCwNw=";
 
   meta = with lib; {
     description = "Simple, user-friendly alternative to sort | uniq";

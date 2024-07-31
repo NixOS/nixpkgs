@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "Library to provide an easy API to file locking";
     homepage = "https://github.com/WoLpH/portalocker";
     license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

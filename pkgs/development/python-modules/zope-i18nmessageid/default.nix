@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Message Identifiers for internationalization";
     changelog = "https://github.com/zopefoundation/zope.i18nmessageid/blob/${version}/CHANGES.rst";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

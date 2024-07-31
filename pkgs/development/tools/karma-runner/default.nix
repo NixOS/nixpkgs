@@ -27,6 +27,6 @@ buildNpmPackage rec {
     homepage = "http://karma-runner.github.io/";
     license = lib.licenses.mit;
     mainProgram = "karma";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

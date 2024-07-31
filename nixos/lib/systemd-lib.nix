@@ -169,6 +169,10 @@ in rec {
     optional (attr ? ${name} && !isInt attr.${name})
       "Systemd ${group} field `${name}' is not an integer";
 
+  assertRemoved = name: see: group: attr:
+    optional (attr ? ${name})
+      "Systemd ${group} field `${name}' has been removed. See ${see}";
+
   checkUnitConfig = group: checks: attrs: let
     # We're applied at the top-level type (attrsOf unitOption), so the actual
     # unit options might contain attributes from mkOverride and mkIf that we need to

@@ -7,7 +7,7 @@
   python,
   pythonAtLeast,
   pythonOlder,
-  addOpenGLRunpath,
+  addDriverRunpath,
   callPackage,
   cudaPackages,
   future,
@@ -44,7 +44,7 @@ buildPythonPackage {
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
-    addOpenGLRunpath
+    addDriverRunpath
     autoPatchelfHook
     autoAddDriverRunpath
   ];
@@ -121,10 +121,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torch" ];
 
-  passthru.tests = callPackage ./tests.nix {
-    torchWithCuda = torch-bin;
-    torchWithRocm = torch-bin;
-  };
+  passthru.tests = callPackage ./tests.nix {};
 
   meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";

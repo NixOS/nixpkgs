@@ -1,13 +1,18 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
-  fetchPypi,
+  pythonOlder,
+  fetchFromGitHub,
+
   ruff,
+
+  # dependencies
   cattrs,
   lsprotocol,
   python-lsp-server,
   tomli,
+
+  # checks
   pytestCheckHook,
 }:
 
@@ -17,10 +22,11 @@ buildPythonPackage rec {
   pyproject = true;
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "python_lsp_ruff";
-    hash = "sha256-P4C9sLSo7iRiRZahz/YLKMw3dxdzcw+b99lG3f+fDKw=";
+  src = fetchFromGitHub {
+    owner = "python-lsp";
+    repo = "python-lsp-ruff";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-czGA/gl7uoWG9UqYUaY9zER79IKfv7ClqgimgyNCAa4=";
   };
 
   postPatch = ''

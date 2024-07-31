@@ -17,6 +17,6 @@ buildGoModule {
     mainProgram = "mm";
     homepage = "https://git.lost.host/meutraa/mm";
     license = licenses.isc;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

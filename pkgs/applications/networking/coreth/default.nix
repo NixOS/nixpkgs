@@ -5,19 +5,19 @@
 
 buildGoModule rec {
   pname = "coreth";
-  version = "0.13.5";
+  version = "0.13.7";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cnxNIFf0zCpbUg9G+bHNoApxB31O7RH5BVgprYN2GYk=";
+    hash = "sha256-ZWM45RoGfGd9mRQkQ/Hz7MGlYq4X26J/QV7FWDjMVrk=";
   };
 
   # go mod vendor has a bug, see: golang/go#57529
   proxyVendor = true;
 
-  vendorHash = "sha256-IVmz+2pWHsiZOhHKEK9GW9zZq8m1IH5lpfKeClnmc3o=";
+  vendorHash = "sha256-KSBoqp56n/b9zk5elEWsv7EAv3oyVhmc7hjyudicTWs=";
 
   ldflags = [
     "-s"

@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bugsnag/bugsnag-python";
     changelog = "https://github.com/bugsnag/bugsnag-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

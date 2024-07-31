@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     laszip
     libgeotiff
     libtiff
-    libxml2
+    (libxml2.override { enableHttp = true; })
     openscenegraph
     postgresql
     proj

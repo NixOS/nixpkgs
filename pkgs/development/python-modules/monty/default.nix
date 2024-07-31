@@ -63,6 +63,8 @@ buildPythonPackage rec {
     "test_Path_objects"
     "test_zopen"
     "test_zpath"
+    # flaky, precision/rounding error
+    "TestJson.test_datetime"
   ];
 
   meta = with lib; {

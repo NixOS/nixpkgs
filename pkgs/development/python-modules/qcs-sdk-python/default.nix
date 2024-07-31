@@ -3,6 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  opentelemetry-api,
+  opentelemetry-sdk,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -15,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.17.10";
+  version = "0.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +26,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
     rev = "python/v${version}";
-    hash = "sha256-pBh7g4MH5hL3k458q6UhkW/5/HdFm4ELnJHIl0wQFGE=";
+    hash = "sha256-M2JG4EOpvSNy7C7uFRMNl4fvkeCXm3B5LpL8fKKJ61M=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -43,6 +45,10 @@ buildPythonPackage rec {
 
   dependencies = [ quil ];
 
+  optional-dependencies = {
+    tracing-opentelemetry = [ opentelemetry-api ];
+  };
+
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
@@ -50,6 +56,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    opentelemetry-sdk
     pytest-asyncio
     pytestCheckHook
     syrupy

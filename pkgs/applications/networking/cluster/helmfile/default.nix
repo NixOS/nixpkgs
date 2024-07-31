@@ -17,7 +17,9 @@ buildGoModule rec {
     hash = "sha256-TZskvZyNihklCJB0yMFXk1bLEuhetQvJ+6uLnYiLBs0=";
   };
 
-  vendorHash = "sha256-aQ/g7MWMWvxRcTHPUYRGjaaPX9ZH6m+TJ6BdsFeGOsY=";
+  vendorHash = "sha256-Ny7r9G3Y5SuigIKkXra5Xn08QIlhzFASXGMMc+g1S/E=";
+
+  proxyVendor = true; # darwin/linux hash mismatch
 
   doCheck = false;
 

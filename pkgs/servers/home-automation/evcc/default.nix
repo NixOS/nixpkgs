@@ -16,16 +16,16 @@
 
 buildGoModule rec {
   pname = "evcc";
-  version = "0.128.2";
+  version = "0.129.0";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-V/cFLvJ9SDOBkZF5hZkRMWEj5Ow2rCcNlwDUlFUJnbA=";
+    hash = "sha256-LoDY6mVV2iDWUo1fUPrOjTTaQudkxrBTkCeIGQWSN8M=";
   };
 
-  vendorHash = "sha256-kjbFu82XnukB5b7ZNygtnZ3/3XFgEMao2FtwGHOTSOI=";
+  vendorHash = "sha256-AY1MXFgd6dK1w36iV0vur7ACGn5FTfPICEHXCnRfcb8=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
@@ -79,6 +79,7 @@ buildGoModule rec {
       "TestTemplates/elering"
       "TestTemplates/energinet"
       "TestTemplates/grünstromindex"
+      "TestTemplates/keba-modbus"
       "TestTemplates/pun"
       "TestTemplates/entsoe"
       "TestTemplates/ngeso"

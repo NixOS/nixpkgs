@@ -287,10 +287,10 @@ rec {
     all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
 
   /**
-    Get the corresponding attribute in lib.licenses
-    from the SPDX ID.
-    For SPDX IDs, see
-    https://spdx.org/licenses
+    Get the corresponding attribute in lib.licenses from the SPDX ID
+    or warn and fallback to `{ shortName = <license string>; }`.
+
+    For SPDX IDs, see https://spdx.org/licenses
 
     # Type
 
@@ -315,14 +315,56 @@ rec {
     :::
   */
   getLicenseFromSpdxId =
-    let
-      spdxLicenses = lib.mapAttrs (id: ls: assert lib.length ls == 1; builtins.head ls)
-        (lib.groupBy (l: lib.toLower l.spdxId) (lib.filter (l: l ? spdxId) (lib.attrValues lib.licenses)));
-    in licstr:
-      spdxLicenses.${ lib.toLower licstr } or (
+    licstr:
+      getLicenseFromSpdxIdOr licstr (
         lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}"
         { shortName = licstr; }
       );
+
+  /**
+    Get the corresponding attribute in lib.licenses from the SPDX ID
+    or fallback to the given default value.
+
+    For SPDX IDs, see https://spdx.org/licenses
+
+    # Inputs
+
+    `licstr`
+    : 1\. SPDX ID string to find a matching license
+
+    `default`
+    : 2\. Fallback value when a match is not found
+
+    # Type
+
+    ```
+    getLicenseFromSpdxIdOr :: str -> Any -> Any
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.getLicenseFromSpdxIdOr` usage example
+
+    ```nix
+    lib.getLicenseFromSpdxIdOr "MIT" null == lib.licenses.mit
+    => true
+    lib.getLicenseFromSpdxId "mIt" null == lib.licenses.mit
+    => true
+    lib.getLicenseFromSpdxIdOr "MY LICENSE" lib.licenses.free == lib.licenses.free
+    => true
+    lib.getLicenseFromSpdxIdOr "MY LICENSE" null
+    => null
+    lib.getLicenseFromSpdxIdOr "MY LICENSE" (builtins.throw "No SPDX ID matches MY LICENSE")
+    => error: No SPDX ID matches MY LICENSE
+    ```
+    :::
+  */
+  getLicenseFromSpdxIdOr =
+    let
+      spdxLicenses = lib.mapAttrs (id: ls: assert lib.length ls == 1; builtins.head ls)
+        (lib.groupBy (l: lib.toLower l.spdxId) (lib.filter (l: l ? spdxId) (lib.attrValues lib.licenses)));
+    in licstr: default:
+      spdxLicenses.${ lib.toLower licstr } or default;
 
   /**
     Get the path to the main program of a package based on meta.mainProgram

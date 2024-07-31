@@ -28,7 +28,7 @@ let
       description = "Kramdown extension for converting Markdown documents to AsciiDoc";
       homepage = "https://asciidoctor.org/";
       license = licenses.mit;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
       platforms = platforms.unix;
       mainProgram = "kramdoc";
     };

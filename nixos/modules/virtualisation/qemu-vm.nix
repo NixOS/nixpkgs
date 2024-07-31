@@ -134,32 +134,25 @@ let
           TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
       fi
 
-      ${lib.optionalString (cfg.useNixStoreImage)
-        (if cfg.writableStore
-          then ''
-            # Create a writable copy/snapshot of the store image.
-            ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${storeImage}/nixos.qcow2 "$TMPDIR"/store.img
-          ''
-          else ''
-            (
-              cd ${builtins.storeDir}
-              ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
-                --force-uid=0 \
-                --force-gid=0 \
-                -L ${nixStoreFilesystemLabel} \
-                -U eb176051-bd15-49b7-9e6b-462e0b467019 \
-                -T 0 \
-                --exclude-regex="$(
-                  <${hostPkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
-                    sed -e 's^.*/^^g' \
-                  | cut -c -10 \
-                  | ${hostPkgs.python3}/bin/python ${./includes-to-excludes.py} )" \
-                "$TMPDIR"/store.img \
-                . \
-                </dev/null >/dev/null
-            )
-          ''
-        )
+      ${lib.optionalString (cfg.useNixStoreImage) ''
+        echo "Creating Nix store image..."
+
+        ${hostPkgs.gnutar}/bin/tar --create \
+          --absolute-names \
+          --verbatim-files-from \
+          --transform 'flags=rSh;s|/nix/store/||' \
+          --files-from ${hostPkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
+          | ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
+            --force-uid=0 \
+            --force-gid=0 \
+            -L ${nixStoreFilesystemLabel} \
+            -U eb176051-bd15-49b7-9e6b-462e0b467019 \
+            -T 0 \
+            --tar=f \
+            "$TMPDIR"/store.img
+
+        echo "Created Nix store image."
+      ''
       }
 
       # Create a directory for exchanging data with the VM.
@@ -296,21 +289,6 @@ let
     additionalSpace = "0M";
     copyChannel = false;
     OVMF = cfg.efi.OVMF;
-  };
-
-  storeImage = import ../../lib/make-disk-image.nix {
-    name = "nix-store-image";
-    inherit pkgs config lib;
-    additionalPaths = [ regInfo ];
-    format = "qcow2";
-    onlyNixStore = true;
-    label = nixStoreFilesystemLabel;
-    partitionTableType = "none";
-    installBootLoader = false;
-    touchEFIVars = false;
-    diskSize = "auto";
-    additionalSpace = "0M";
-    copyChannel = false;
   };
 
 in
@@ -788,10 +766,14 @@ in
           this can drastically improve performance, but at the cost of
           disk space and image build time.
 
-          As an alternative, you can use a bootloader which will provide you
-          with a full NixOS system image containing a Nix store and
-          avoid mounting the host nix store through
-          {option}`virtualisation.mountHostNixStore`.
+          The Nix store image is built just-in-time right before the VM is
+          started. Because it does not produce another derivation, the image is
+          not cached between invocations and never lands in the store or binary
+          cache.
+
+          If you want a full disk image with a partition table and a root
+          filesystem instead of only a store image, enable
+          {option}`virtualisation.useBootLoader` instead.
         '';
       };
 
@@ -1019,25 +1001,7 @@ in
         ];
 
     warnings =
-      optional (
-        cfg.writableStore &&
-        cfg.useNixStoreImage &&
-        opt.writableStore.highestPrio > lib.modules.defaultOverridePriority)
-        ''
-          You have enabled ${opt.useNixStoreImage} = true,
-          without setting ${opt.writableStore} = false.
-
-          This causes a store image to be written to the store, which is
-          costly, especially for the binary cache, and because of the need
-          for more frequent garbage collection.
-
-          If you really need this combination, you can set ${opt.writableStore}
-          explicitly to true, incur the cost and make this warning go away.
-          Otherwise, we recommend
-
-            ${opt.writableStore} = false;
-            ''
-      ++ optional (cfg.directBoot.enable && cfg.useBootLoader)
+      optional (cfg.directBoot.enable && cfg.useBootLoader)
         ''
           You enabled direct boot and a bootloader, QEMU will not boot your bootloader, rendering
           `useBootLoader` useless. You might want to disable one of those options.
@@ -1049,8 +1013,6 @@ in
     # FIXME: make a sense of this mess wrt to multiple ESP present in the system, probably use boot.efiSysMountpoint?
     boot.loader.grub.device = mkVMOverride (if cfg.useEFIBoot then "nodev" else cfg.bootLoaderDevice);
     boot.loader.grub.gfxmodeBios = with cfg.resolution; "${toString x}x${toString y}";
-
-    boot.initrd.kernelModules = optionals (cfg.useNixStoreImage && !cfg.writableStore) [ "erofs" ];
 
     boot.loader.supportsInitrdSecrets = mkIf (!cfg.useBootLoader) (mkVMOverride false);
 
@@ -1171,7 +1133,7 @@ in
         name = "nix-store";
         file = ''"$TMPDIR"/store.img'';
         deviceExtraOpts.bootindex = "2";
-        driveExtraOpts.format = if cfg.writableStore then "qcow2" else "raw";
+        driveExtraOpts.format = "raw";
       }])
       (imap0 (idx: _: {
         file = "$(pwd)/empty${toString idx}.qcow2";
@@ -1226,6 +1188,7 @@ in
         });
         "/nix/.ro-store" = lib.mkIf cfg.useNixStoreImage {
           device = "/dev/disk/by-label/${nixStoreFilesystemLabel}";
+          fsType = "erofs";
           neededForBoot = true;
           options = [ "ro" ];
         };

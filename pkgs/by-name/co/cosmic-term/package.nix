@@ -8,7 +8,6 @@
 , libinput
 , libxkbcommon
 , makeBinaryWrapper
-, mesa
 , pkg-config
 , rustPlatform
 , stdenv

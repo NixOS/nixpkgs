@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "https://rapidxml.sourceforge.net/";
     license = licenses.boost;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

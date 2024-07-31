@@ -7,8 +7,6 @@
   stdenv,
   Foundation,
   rust-jemalloc-sys,
-
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,6 +23,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-qnbinuTuaPiD7ib3aCJzSwuA4s3naFzi+txqX7jkHIo=";
 
   env.YAZI_GEN_COMPLETIONS = true;
+  env.VERGEN_GIT_SHA = "Nixpkgs";
+  env.VERGEN_BUILD_DATE = "2024-04-23";
 
   # TODO: remove in the next release
   cargoBuildFlags = [
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 assets/logo.png $out/share/pixmaps/yazi.png
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript.command = [ ./update.sh ];
 
   meta = {
     description = "Blazing fast terminal file manager written in Rust, based on async I/O";

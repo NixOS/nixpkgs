@@ -20,7 +20,7 @@
 #     "${edids}/lib/firmware/edid/PG278Q_2014.bin";
 stdenv.mkDerivation rec {
   pname = "linuxhw-edid-fetcher";
-  version = "unstable-2023-05-08";
+  version = "0-unstable-2023-05-08";
 
   src = fetchFromGitHub {
     owner = "linuxhw";

@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "Plugin standard for audio systems";
     mainProgram = "lv2_validate";
     license = licenses.mit;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

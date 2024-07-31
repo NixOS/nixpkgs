@@ -166,7 +166,7 @@ let
 in lib.mapAttrs (lib.const (attrs: makeTest (attrs // {
   name = "${attrs.name}-Networking-NetworkManager";
   meta = {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
 }))) testCases

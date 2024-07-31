@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
+    dbus-test-runner
     (python3.withPackages (ps: with ps; [
       python-dbusmock
     ]))

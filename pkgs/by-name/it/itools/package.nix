@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgs
 , pkg-config
 , perl
 , libitl

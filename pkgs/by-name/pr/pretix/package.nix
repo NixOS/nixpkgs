@@ -93,11 +93,13 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail vat_moss_forked==2020.3.20.0.11.0 vat-moss \
       --replace-fail "bleach==5.0.*" bleach \
       --replace-fail "djangorestframework==3.15.*" djangorestframework \
+      --replace-fail "django-compressor==4.5" django-compressor \
       --replace-fail "dnspython==2.6.*" dnspython \
       --replace-fail "importlib_metadata==7.*" importlib_metadata \
       --replace-fail "markdown==3.6" markdown \
       --replace-fail "protobuf==5.27.*" protobuf \
       --replace-fail "pycryptodome==3.20.*" pycryptodome \
+      --replace-fail "pypdf==4.2.*" pypdf \
       --replace-fail "python-dateutil==2.9.*" python-dateutil \
       --replace-fail "requests==2.31.*" "requests" \
       --replace-fail "sentry-sdk==2.5.*" "sentry-sdk>=2" \

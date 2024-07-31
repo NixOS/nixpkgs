@@ -9,6 +9,7 @@
   langchain,
   langchain-core,
   langsmith,
+  httpx,
   lark,
   numpy,
   pandas,
@@ -28,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.2.9";
+  version = "0.2.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,11 +37,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-core==${version}";
-    hash = "sha256-/BUn/NxaE9l3VY6dPshr1JJaHTGzn9NMQhSQ2De65Jg=";
+    rev = "refs/tags/langchain-community==${version}";
+    hash = "sha256-r0YSJkYPcwjHyw1xST5Zrgg9USjN9GOsvhV97imSFCQ=";
   };
 
   sourceRoot = "${src.name}/libs/community";
+
+  preConfigure = ''
+    ln -s ${src}/libs/standard-tests/langchain_standard_tests ./langchain_standard_tests
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "path = \"../standard-tests\"" "path = \"./langchain_standard_tests\""
+  '';
 
   build-system = [ poetry-core ];
 
@@ -57,13 +65,14 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [ typer ];
   };
 
   pythonImportsCheck = [ "langchain_community" ];
 
   nativeCheckInputs = [
+    httpx
     lark
     pandas
     pytest-asyncio
@@ -93,9 +102,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-community==${version}";
     description = "Community contributed LangChain integrations";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/community";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

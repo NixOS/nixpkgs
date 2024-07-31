@@ -637,7 +637,7 @@ let
           { name = "mysql"; enable = cfg.mysqlAuth; control = "sufficient"; modulePath = "${pkgs.pam_mysql}/lib/security/pam_mysql.so"; settings = {
             config_file = "/etc/security/pam_mysql.conf";
           }; }
-          { name = "kanidm"; enable = config.services.kanidm.enablePam; control = "sufficient"; modulePath = "${pkgs.kanidm}/lib/pam_kanidm.so"; settings = {
+          { name = "kanidm"; enable = config.services.kanidm.enablePam; control = "sufficient"; modulePath = "${config.services.kanidm.package}/lib/pam_kanidm.so"; settings = {
             ignore_unknown_user = true;
           }; }
           { name = "sss"; enable = config.services.sssd.enable; control = if cfg.sssdStrictAccess then "[default=bad success=ok user_unknown=ignore]" else "sufficient"; modulePath = "${pkgs.sssd}/lib/security/pam_sss.so"; }
@@ -750,7 +750,7 @@ let
           { name = "ldap"; enable = use_ldap; control = "sufficient"; modulePath = "${pam_ldap}/lib/security/pam_ldap.so"; settings = {
             use_first_pass = true;
           }; }
-          { name = "kanidm"; enable = config.services.kanidm.enablePam; control = "sufficient"; modulePath = "${pkgs.kanidm}/lib/pam_kanidm.so"; settings = {
+          { name = "kanidm"; enable = config.services.kanidm.enablePam; control = "sufficient"; modulePath = "${config.services.kanidm.package}/lib/pam_kanidm.so"; settings = {
             ignore_unknown_user = true;
             use_first_pass = true;
           }; }
@@ -787,7 +787,7 @@ let
           { name = "mysql"; enable = cfg.mysqlAuth; control = "sufficient"; modulePath = "${pkgs.pam_mysql}/lib/security/pam_mysql.so"; settings = {
             config_file = "/etc/security/pam_mysql.conf";
           }; }
-          { name = "kanidm"; enable = config.services.kanidm.enablePam; control = "sufficient"; modulePath = "${pkgs.kanidm}/lib/pam_kanidm.so"; }
+          { name = "kanidm"; enable = config.services.kanidm.enablePam; control = "sufficient"; modulePath = "${config.services.kanidm.package}/lib/pam_kanidm.so"; }
           { name = "sss"; enable = config.services.sssd.enable; control = "sufficient"; modulePath = "${pkgs.sssd}/lib/security/pam_sss.so"; }
           { name = "krb5"; enable = config.security.pam.krb5.enable; control = "sufficient"; modulePath = "${pam_krb5}/lib/security/pam_krb5.so"; settings = {
             use_first_pass = true;
@@ -841,7 +841,7 @@ let
           { name = "mysql"; enable = cfg.mysqlAuth; control = "optional"; modulePath = "${pkgs.pam_mysql}/lib/security/pam_mysql.so"; settings = {
             config_file = "/etc/security/pam_mysql.conf";
           }; }
-          { name = "kanidm"; enable = config.services.kanidm.enablePam; control = "optional"; modulePath = "${pkgs.kanidm}/lib/pam_kanidm.so"; }
+          { name = "kanidm"; enable = config.services.kanidm.enablePam; control = "optional"; modulePath = "${config.services.kanidm.package}/lib/pam_kanidm.so"; }
           { name = "sss"; enable = config.services.sssd.enable; control = "optional"; modulePath = "${pkgs.sssd}/lib/security/pam_sss.so"; }
           { name = "krb5"; enable = config.security.pam.krb5.enable; control = "optional"; modulePath = "${pam_krb5}/lib/security/pam_krb5.so"; }
           { name = "otpw"; enable = cfg.otpwAuth; control = "optional"; modulePath = "${pkgs.otpw}/lib/security/pam_otpw.so"; }
@@ -1517,7 +1517,7 @@ in
       # Include the PAM modules in the system path mostly for the manpages.
       [ pkgs.pam ]
       ++ optional config.users.ldap.enable pam_ldap
-      ++ optional config.services.kanidm.enablePam pkgs.kanidm
+      ++ optional config.services.kanidm.enablePam config.services.kanidm.package
       ++ optional config.services.sssd.enable pkgs.sssd
       ++ optionals config.security.pam.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]

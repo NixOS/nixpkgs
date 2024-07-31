@@ -1,5 +1,4 @@
-{ lib
-, appimageTools
+{ appimageTools
 , fetchurl
 , version
 , pname

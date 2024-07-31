@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.23.5";
+  version = "0.24.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "huggingface_hub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Nncyi9u72aq1142wBpz3M/ji2GlCbdEqCZ9+kRRnMT4=";
+    hash = "sha256-tbv5ri37udhx9qhPhCRFe0GOc62n0e7uF0EjDpF2TIQ=";
   };
 
   build-system = [ setuptools ];

@@ -10,7 +10,6 @@
   gnugrep,
   gnused,
   jq,
-  ncurses,
   pciutils,
   procps,
   python3,
@@ -26,45 +25,45 @@
   zsync,
   OVMF,
   OVMFFull,
-  quickemu,
   testers,
   installShellFiles,
 }:
 let
-  runtimePaths = [
-    cdrtools
-    curl
-    gawk
-    gnugrep
-    gnused
-    jq
-    ncurses
-    pciutils
-    procps
-    python3
-    qemu_full
-    socat
-    swtpm
-    util-linux
-    unzip
-    xrandr
-    zsync
-  ] ++ lib.optionals stdenv.isLinux [
-    glxinfo
-    usbutils
-    xdg-user-dirs
-  ];
+  runtimePaths =
+    [
+      cdrtools
+      curl
+      gawk
+      gnugrep
+      gnused
+      jq
+      pciutils
+      procps
+      python3
+      qemu_full
+      socat
+      swtpm
+      util-linux
+      unzip
+      xrandr
+      zsync
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      glxinfo
+      usbutils
+      xdg-user-dirs
+    ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
-  version = "4.9.5";
+  version = "4.9.6";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
     rev = finalAttrs.version;
-    hash = "sha256-UlpNujF2E8H1zcWTen8D29od60pY8FaGueviT0iwupQ=";
+    hash = "sha256-VaA39QNZNaomvSBMzJMjYN0KOTwWw2798KE8VnM+1so=";
   };
 
   postPatch = ''
@@ -99,9 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = testers.testVersion {
-    package = quickemu;
-  };
+  passthru.tests = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Quickly create and run optimised Windows, macOS and Linux virtual machines";

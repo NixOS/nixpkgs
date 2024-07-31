@@ -13,7 +13,6 @@
   libsForQt5,
   python3,
   stdenv,
-  yt-dlp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

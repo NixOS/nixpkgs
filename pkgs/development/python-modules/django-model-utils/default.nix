@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Django model mixins and utilities";
     changelog = "https://github.com/jazzband/django-model-utils/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
