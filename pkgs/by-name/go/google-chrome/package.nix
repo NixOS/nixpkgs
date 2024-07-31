@@ -1,68 +1,166 @@
-{ lib, stdenv, patchelf, makeWrapper, fetchurl, writeScript
+{
+  lib,
+  stdenv,
+  patchelf,
+  makeWrapper,
+  fetchurl,
+  writeScript,
 
-# Linked dynamic libraries.
-, glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, nss, nspr
-, libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
-, alsa-lib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
-, dbus, gtk3, gtk4, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
-, libkrb5, libdrm, libglvnd, mesa
-, libxkbcommon, pipewire, wayland # ozone/wayland
+  # Linked dynamic libraries.
+  glib,
+  fontconfig,
+  freetype,
+  pango,
+  cairo,
+  libX11,
+  libXi,
+  atk,
+  nss,
+  nspr,
+  libXcursor,
+  libXext,
+  libXfixes,
+  libXrender,
+  libXScrnSaver,
+  libXcomposite,
+  libxcb,
+  alsa-lib,
+  libXdamage,
+  libXtst,
+  libXrandr,
+  libxshmfence,
+  expat,
+  cups,
+  dbus,
+  gtk3,
+  gtk4,
+  gdk-pixbuf,
+  gcc-unwrapped,
+  at-spi2-atk,
+  at-spi2-core,
+  libkrb5,
+  libdrm,
+  libglvnd,
+  mesa,
+  libxkbcommon,
+  pipewire,
+  wayland, # ozone/wayland
 
-# Command line programs
-, coreutils
+  # Command line programs
+  coreutils,
 
-# command line arguments which are always set e.g "--disable-gpu"
-, commandLineArgs ? ""
+  # command line arguments which are always set e.g "--disable-gpu"
+  commandLineArgs ? "",
 
-# Will crash without.
-, systemd
+  # Will crash without.
+  systemd,
 
-# Loaded at runtime.
-, libexif, pciutils
+  # Loaded at runtime.
+  libexif,
+  pciutils,
 
-# Additional dependencies according to other distros.
-## Ubuntu
-, liberation_ttf, curl, util-linux, xdg-utils, wget
-## Arch Linux.
-, flac, harfbuzz, icu, libpng, libopus, snappy, speechd
-## Gentoo
-, bzip2, libcap
+  # Additional dependencies according to other distros.
+  ## Ubuntu
+  liberation_ttf,
+  curl,
+  util-linux,
+  xdg-utils,
+  wget,
+  ## Arch Linux.
+  flac,
+  harfbuzz,
+  icu,
+  libpng,
+  libopus,
+  snappy,
+  speechd-minimal,
+  ## Gentoo
+  bzip2,
+  libcap,
 
-# Necessary for USB audio devices.
-, pulseSupport ? true, libpulseaudio
+  # Necessary for USB audio devices.
+  pulseSupport ? true,
+  libpulseaudio,
 
-, gsettings-desktop-schemas
-, gnome
+  gsettings-desktop-schemas,
+  adwaita-icon-theme,
 
-# For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
-, libvaSupport ? true, libva
+  # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
+  libvaSupport ? true,
+  libva,
 
-# For Vulkan support (--enable-features=Vulkan)
-, addOpenGLRunpath
+  # For Vulkan support (--enable-features=Vulkan)
+  addDriverRunpath,
 }:
 
 let
-  opusWithCustomModes = libopus.override {
-    withCustomModes = true;
-  };
+  opusWithCustomModes = libopus.override { withCustomModes = true; };
 
-  deps = [
-    glib fontconfig freetype pango cairo libX11 libXi atk nss nspr
-    libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
-    alsa-lib libXdamage libXtst libXrandr libxshmfence expat cups
-    dbus gdk-pixbuf gcc-unwrapped.lib
-    systemd
-    libexif pciutils
-    liberation_ttf curl util-linux wget
-    flac harfbuzz icu libpng opusWithCustomModes snappy speechd
-    bzip2 libcap at-spi2-atk at-spi2-core
-    libkrb5 libdrm libglvnd mesa coreutils
-    libxkbcommon pipewire wayland
-  ] ++ lib.optional pulseSupport libpulseaudio
+  deps =
+    [
+      glib
+      fontconfig
+      freetype
+      pango
+      cairo
+      libX11
+      libXi
+      atk
+      nss
+      nspr
+      libXcursor
+      libXext
+      libXfixes
+      libXrender
+      libXScrnSaver
+      libXcomposite
+      libxcb
+      alsa-lib
+      libXdamage
+      libXtst
+      libXrandr
+      libxshmfence
+      expat
+      cups
+      dbus
+      gdk-pixbuf
+      gcc-unwrapped.lib
+      systemd
+      libexif
+      pciutils
+      liberation_ttf
+      curl
+      util-linux
+      wget
+      flac
+      harfbuzz
+      icu
+      libpng
+      opusWithCustomModes
+      snappy
+      speechd-minimal
+      bzip2
+      libcap
+      at-spi2-atk
+      at-spi2-core
+      libkrb5
+      libdrm
+      libglvnd
+      mesa
+      coreutils
+      libxkbcommon
+      pipewire
+      wayland
+    ]
+    ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional libvaSupport libva
-    ++ [ gtk3 gtk4 ];
+    ++ [
+      gtk3
+      gtk4
+    ];
 
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "google-chrome";
   version = "127.0.6533.88";
 
@@ -71,10 +169,15 @@ in stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0l9cidNFO0dcyzWy4nDD/OGFQDBLXx9aPVq6ioDkqK0=";
   };
 
-  nativeBuildInputs = [ patchelf makeWrapper ];
+  nativeBuildInputs = [
+    patchelf
+    makeWrapper
+  ];
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings-desktop-schemas glib gtk3
+    gsettings-desktop-schemas
+    glib
+    gtk3
 
     # needed for XDG_ICON_DIRS
     gnome.adwaita-icon-theme
@@ -159,7 +262,10 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.google.com/chrome/browser/";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ jnsgruk johnrtitor ];
+    maintainers = with lib.maintainers; [
+      jnsgruk
+      johnrtitor
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "google-chrome-stable";
   };
