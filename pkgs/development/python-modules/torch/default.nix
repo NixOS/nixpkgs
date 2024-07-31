@@ -26,7 +26,6 @@
 
   # tests.cudaAvailable:
   callPackage,
-  torchWithCuda,
 
   # Native build inputs
   cmake,

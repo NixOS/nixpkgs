@@ -5,11 +5,9 @@
   twisted,
   passlib,
   pyparsing,
-  service-identity,
   six,
   zope-interface,
   pythonOlder,
-  python,
 }:
 
 buildPythonPackage rec {

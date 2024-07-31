@@ -17,7 +17,6 @@
   scikit-learn,
   scipy,
   seaborn,
-  tbb,
   tensorflow,
   tensorflow-probability,
   tqdm,

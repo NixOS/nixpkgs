@@ -3,7 +3,6 @@
   buildPythonPackage,
   click,
   dateutils,
-  dbt-postgres,
   fetchFromGitHub,
   hatchling,
   hypothesis,

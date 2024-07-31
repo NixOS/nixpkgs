@@ -5,7 +5,6 @@
   fetchFromGitHub,
   installShellFiles,
   pandoc,
-  pythonOlder,
   # BuildInputs
   charset-normalizer,
   defusedxml,
@@ -16,7 +15,6 @@
   setuptools,
   rich,
   pysocks,
-  # CheckInputs
   pip,
   pytest-httpbin,
   pytest-lazy-fixture,

@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   fetchFromGitHub,
-  python,
   buildPythonPackage,
   absl-py,
   nltk,
