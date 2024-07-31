@@ -7720,8 +7720,6 @@ with pkgs;
 
   Fabric = with python3Packages; toPythonApplication fabric;
 
-  fail2ban = callPackage ../tools/security/fail2ban { };
-
   fakeroot = callPackage ../tools/system/fakeroot { };
 
   fakeroute = callPackage ../tools/networking/fakeroute { };
@@ -8355,9 +8353,6 @@ with pkgs;
   goofys = callPackage ../tools/filesystems/goofys { };
 
   go-sct = callPackage ../tools/X11/go-sct { };
-
-  # rename to upower-notify?
-  go-upower-notify = callPackage ../tools/misc/upower-notify { };
 
   goattracker = callPackage ../applications/audio/goattracker { };
 
@@ -11697,7 +11692,7 @@ with pkgs;
 
   pngquant = callPackage ../tools/graphics/pngquant { };
 
-  inherit (callPackages ../development/tools/pnpm { })
+  inherit (callPackage ../development/tools/pnpm { })
     pnpm_8 pnpm_9;
   pnpm = pnpm_9;
 
@@ -17183,7 +17178,6 @@ with pkgs;
     ffmpeg = ffmpeg-headless;
   };
 
-  pipewire_0_2 = callPackage ../development/libraries/pipewire/0.2.nix { };
   wireplumber = callPackage ../development/libraries/pipewire/wireplumber.nix { };
 
   pw-volume = callPackage ../tools/audio/pw-volume { };
@@ -32764,8 +32758,6 @@ with pkgs;
   mypaint-brushes = callPackage ../development/libraries/mypaint-brushes { };
 
   mythtv = libsForQt5.callPackage ../applications/video/mythtv { };
-
-  micro = callPackage ../applications/editors/micro { };
 
   mle = callPackage ../applications/editors/mle { };
 
