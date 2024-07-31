@@ -35537,13 +35537,15 @@ with pkgs;
 
   scaleway-cli = callPackage ../tools/admin/scaleway-cli { };
 
+  bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
+
   beancount = with python3.pkgs; toPythonApplication beancount;
 
   beancount-black = with python3.pkgs; toPythonApplication beancount-black;
 
   beanhub-cli = with python3.pkgs; toPythonApplication beanhub-cli;
 
-  bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
+  beanprice = with python3.pkgs; toPythonApplication beanprice;
 
   bench =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
