@@ -7167,6 +7167,8 @@ self: super: with self; {
     llvm = pkgs.llvm_14;
   };
 
+  lm-format-enforcer = callPackage ../development/python-modules/lm-format-enforcer { };
+
   lmcloud = callPackage ../development/python-modules/lmcloud { };
 
   lmdb = callPackage ../development/python-modules/lmdb {
@@ -10903,6 +10905,8 @@ self: super: with self; {
   pyahocorasick = callPackage ../development/python-modules/pyahocorasick { };
 
   pyairnow = callPackage ../development/python-modules/pyairnow { };
+
+  pyairports = callPackage ../development/python-modules/pyairports { };
 
   pyairvisual = callPackage ../development/python-modules/pyairvisual { };
 
