@@ -8606,6 +8606,13 @@
     githubId = 7481521;
     name = "Balázs Lengyel";
   };
+  IldenH = {
+    name = "IldenH";
+    email = "IldenH.1@proton.me";
+    github = "IldenH";
+    githubId = 84644748;
+    keys = [ { fingerprint = "DE71 1AD8 7070 5765 BA19  132D 0978 4473 A85F A784"; } ];
+  };
   ilian = {
     email = "ilian@tuta.io";
     github = "ilian";
