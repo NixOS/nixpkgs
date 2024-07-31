@@ -1,9 +1,8 @@
 {
-  copyDesktopItems,
-  fetchurl,
+  fetchFromGitHub,
+  gradle,
   jre,
   lib,
-  makeDesktopItem,
   makeWrapper,
   stdenvNoCC,
 
@@ -20,25 +19,42 @@
   xorg,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+let
   pname = "atlauncher";
   version = "3.4.36.10";
 
-  src = fetchurl {
-    url = "https://github.com/ATLauncher/ATLauncher/releases/download/v${finalAttrs.version}/ATLauncher-${finalAttrs.version}.jar";
-    hash = "sha256-JZTiYcea5ik8a4RmNLxZcuea7spGWftUGRiRW2Ive7c=";
+  src = fetchFromGitHub {
+    owner = "ATLauncher";
+    repo = "ATLauncher";
+    rev = "v${version}";
+    hash = "sha256-EMV/M5W/acJaQJsi4COoRQC2YVfuJG9HGcwvGfakoNo=";
   };
+in
+stdenvNoCC.mkDerivation {
+  inherit pname version src;
 
-  env.ICON = fetchurl {
-    url = "https://atlauncher.com/assets/images/logo.svg";
-    hash = "sha256-XoqpsgLmkpa2SdjZvPkgg6BUJulIBIeu6mBsJJCixfo=";
-  };
-
-  dontUnpack = true;
+  postPatch = ''
+    # exclude UI tests
+    sed -i "/test {/a\    exclude '**/BasicLauncherUiTest.class'" build.gradle
+  '';
 
   nativeBuildInputs = [
-    copyDesktopItems
+    gradle
     makeWrapper
+  ];
+
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
+
+  doCheck = true;
+
+  gradleBuildTask = "shadowJar";
+
+  gradleFlags = [
+    "--exclude-task"
+    "createExe"
   ];
 
   installPhase =
@@ -59,33 +75,31 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ''
       runHook preInstall
 
-      mkdir -p $out/bin $out/share/java
-      cp $src $out/share/java/ATLauncher.jar
+      mkdir -p $out/{bin,share/java}
+      cp build/libs/ATLauncher-${version}.jar $out/share/java/ATLauncher.jar
 
-      makeWrapper ${jre}/bin/java $out/bin/atlauncher \
+      makeWrapper ${lib.getExe jre} $out/bin/atlauncher \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibraries}" \
         --add-flags "-jar $out/share/java/ATLauncher.jar" \
         --add-flags "--working-dir \"\''${XDG_DATA_HOME:-\$HOME/.local/share}/ATLauncher\"" \
         --add-flags "--no-launcher-update"
 
-      mkdir -p $out/share/icons/hicolor/scalable/apps
-      cp $ICON $out/share/icons/hicolor/scalable/apps/atlauncher.svg
-
       runHook postInstall
     '';
 
-  desktopItems = [
-    (makeDesktopItem {
-      categories = [ "Game" ];
-      desktopName = "ATLauncher";
-      exec = "atlauncher";
-      icon = "atlauncher";
-      name = "atlauncher";
-    })
-  ];
+  postInstall =
+    let
+      packagingDir = "${src}/packaging/linux/_common";
+    in
+    ''
+      install -D -m444 ${packagingDir}/atlauncher.desktop -t $out/share/applications
+      install -D -m444 ${packagingDir}/atlauncher.metainfo.xml -t $out/share/metainfo
+      install -D -m444 ${packagingDir}/atlauncher.png -t $out/share/pixmaps
+      install -D -m444 ${packagingDir}/atlauncher.svg -t $out/share/icons/hicolor/scalable/apps
+    '';
 
   meta = {
-    changelog = "https://github.com/ATLauncher/ATLauncher/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/ATLauncher/ATLauncher/blob/v${version}/CHANGELOG.md";
     description = "Simple and easy to use Minecraft launcher which contains many different modpacks for you to choose from and play";
     downloadPage = "https://atlauncher.com/downloads";
     homepage = "https://atlauncher.com";
@@ -93,6 +107,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "atlauncher";
     maintainers = with lib.maintainers; [ getpsyched ];
     platforms = lib.platforms.all;
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode # mitm cache
+    ];
   };
-})
+}
