@@ -14218,6 +14218,8 @@ self: super: with self; {
 
   shimmy = callPackage ../development/python-modules/shimmy { };
 
+  shiny = callPackage ../development/python-modules/shiny { };
+
   shippai = callPackage ../development/python-modules/shippai { };
 
   shiv = callPackage ../development/python-modules/shiv { };
