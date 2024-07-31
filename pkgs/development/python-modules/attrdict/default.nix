@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bcj/AttrDict";
     changelog = "https://github.com/bcj/AttrDict/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

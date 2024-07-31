@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://sure.readthedocs.io/";
     changelog = "https://github.com/gabrielfalcao/sure/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sigmanificient ];
+    maintainers = [ sigmanificient ];
   };
 }

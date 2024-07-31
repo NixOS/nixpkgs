@@ -49,6 +49,6 @@ buildPythonPackage rec {
     mainProgram = "paster";
     homepage = "https://github.com/cdent/pastescript/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

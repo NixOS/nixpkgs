@@ -4,7 +4,6 @@
   fetchPypi,
   substituteAll,
   graphviz,
-  python,
   pytestCheckHook,
   chardet,
   pythonOlder,
@@ -60,6 +59,6 @@ buildPythonPackage rec {
     description = "Allows to create both directed and non directed graphs from Python";
     homepage = "https://github.com/erocarrera/pydot";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

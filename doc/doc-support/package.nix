@@ -60,7 +60,7 @@ stdenvNoCC.mkDerivation (
 
       nixos-render-docs manual html \
         --manpage-urls ./manpage-urls.json \
-        --revision ${lib.trivial.revisionWithDefault (nixpkgs.rev or "master")} \
+        --revision ${nixpkgs.rev or "master"} \
         --stylesheet style.css \
         --stylesheet highlightjs/mono-blue.css \
         --script ./highlightjs/highlight.pack.js \

@@ -848,6 +848,32 @@ buildLuarocksPackage {
   };
 }) {};
 
+llscheck = callPackage({ ansicolors, argparse, buildLuarocksPackage, fetchFromGitHub, fetchurl, lua-cjson, luaOlder, luafilesystem, penlight }:
+buildLuarocksPackage {
+  pname = "llscheck";
+  version = "0.5.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/llscheck-0.5.0-1.rockspec";
+    sha256 = "1bcyg1gphlgwmra8l1503yaw6wfihs1fksdvvp1y38zryhkvj0dy";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "jeffzi";
+    repo = "llscheck";
+    rev = "v0.5.0";
+    hash = "sha256-cG/FNzOwvLvrAEut4OvXI8WWSVzNEl4r3OgiSnp3S5c=";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ ansicolors argparse lua-cjson luafilesystem penlight ];
+
+  meta = {
+    homepage = "https://github.com/jeffzi/llscheck";
+    description = "Human-friendly Lua code analysis powered by Lua Language Server";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 lmathx = callPackage({ buildLuarocksPackage, fetchurl }:
 buildLuarocksPackage {
   pname = "lmathx";

@@ -2555,6 +2555,24 @@ with pkgs;
       pkgsCross.gnu64.hello;
   };
 
+  box86 =
+    let
+      args = {
+        hello-x86_32 = if stdenv.hostPlatform.isx86_32 then
+          hello
+        else
+          pkgsCross.gnu32.hello;
+      };
+    in
+    if stdenv.hostPlatform.is32bit then
+      callPackage ../applications/emulators/box86 args
+    else if stdenv.hostPlatform.isx86_64 then
+      pkgsCross.gnu32.callPackage ../applications/emulators/box86 args
+    else if stdenv.hostPlatform.isAarch64 then
+      pkgsCross.armv7l-hf-multiplatform.callPackage ../applications/emulators/box86 args
+    else
+      throw "Don't know 32-bit platform for cross from: ${stdenv.hostPlatform.stdenv}";
+
   caprice32 = callPackage ../applications/emulators/caprice32 { };
 
   ccemux = callPackage ../applications/emulators/ccemux { };
@@ -4360,8 +4378,6 @@ with pkgs;
 
   burpsuite = callPackage ../tools/networking/burpsuite { };
 
-  bs-platform = callPackage ../development/compilers/bs-platform { };
-
   ciano = callPackage ../applications/graphics/ciano {
     inherit (pantheon) granite;
     python = python3;
@@ -4544,7 +4560,7 @@ with pkgs;
 
   comma = callPackage ../tools/package-management/comma { };
 
-  commitizen = callPackage ../applications/version-management/commitizen { };
+  commitizen = with python3Packages; toPythonApplication commitizen;
 
   common-licenses = callPackage ../data/misc/common-licenses { };
 
@@ -7839,8 +7855,9 @@ with pkgs;
 
   fingerprintx = callPackage ../tools/security/fingerprintx { };
 
-  bsd-finger = callPackage ../tools/networking/bsd-finger { };
-  bsd-fingerd = bsd-finger.override({ buildClient = false; });
+  bsd-fingerd = bsd-finger.override({
+    buildProduct = "daemon";
+  });
 
   iprange = callPackage ../applications/networking/firehol/iprange.nix { };
 
@@ -17457,8 +17474,6 @@ with pkgs;
 
   srandrd = callPackage ../tools/X11/srandrd { };
 
-  sratoolkit = callPackage ../applications/science/biology/sratoolkit { };
-
   srecord = callPackage ../development/tools/misc/srecord { };
 
   srelay = callPackage ../tools/networking/srelay { };
@@ -19420,7 +19435,7 @@ with pkgs;
       # tests fail on old version
       doCheck = false;
       meta = libgit2.meta // {
-        maintainers = [];
+        maintainers = [ ];
         knownVulnerabilities = [ "CVE-2024-24575" "CVE-2024-24577" "CVE-2022-29187" "CVE 2022-24765" ];
       };
     };
@@ -23339,6 +23354,9 @@ with pkgs;
   openslp = callPackage ../development/libraries/openslp { };
 
   openstackclient = with python311Packages; toPythonApplication python-openstackclient;
+  openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
+    dependencies = oldAttrs.dependencies ++ oldAttrs.passthru.optional-dependencies.cli-plugins;
+  });
   barbicanclient = with python311Packages; toPythonApplication python-barbicanclient;
   glanceclient = with python311Packages; toPythonApplication python-glanceclient;
   heatclient = with python311Packages; toPythonApplication python-heatclient;
@@ -23660,8 +23678,6 @@ with pkgs;
   rapidfuzz-cpp = callPackage ../development/libraries/rapidfuzz-cpp { };
 
   rapidjson = callPackage ../development/libraries/rapidjson { };
-
-  rapidjson-unstable = callPackage ../development/libraries/rapidjson/unstable.nix { };
 
   rapidxml = callPackage ../development/libraries/rapidxml { };
 
@@ -26366,8 +26382,6 @@ with pkgs;
 
   fit-trackee = callPackage ../servers/geospatial/fit-trackee { };
 
-  geoserver = callPackage ../servers/geospatial/geoserver { };
-
   mapcache = callPackage ../servers/geospatial/mapcache { };
 
   mapproxy = callPackage ../servers/geospatial/mapproxy { };
@@ -27738,8 +27752,6 @@ with pkgs;
   xf86_input_wacom = callPackage ../os-specific/linux/xf86-input-wacom { };
 
   xf86_video_nested = callPackage ../os-specific/linux/xf86-video-nested { };
-
-  xilinx-bootgen = callPackage ../tools/misc/xilinx-bootgen { };
 
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
 
@@ -29855,7 +29867,7 @@ with pkgs;
   inherit (callPackage ../applications/virtualization/docker {})
     docker_24 docker_25 docker_26 docker_27;
 
-  docker = docker_24;
+  docker = docker_27;
   docker-client = docker.override { clientOnly = true; };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
@@ -29868,7 +29880,6 @@ with pkgs;
 
   docker-buildx = callPackage ../applications/virtualization/docker/buildx.nix { };
   docker-compose = callPackage ../applications/virtualization/docker/compose.nix { };
-  docker-compose_1 = python3Packages.callPackage ../applications/virtualization/docker/compose_1.nix { };
   docker-sbom = callPackage ../applications/virtualization/docker/sbom.nix { };
 
 
@@ -29937,7 +29948,7 @@ with pkgs;
 
   dyff = callPackage ../development/tools/dyff { };
 
-  dwl = callPackage ../applications/window-managers/dwl {
+  dwl = callPackage ../by-name/dw/dwl/package.nix {
     wlroots = wlroots_0_17;
   };
 
@@ -30714,10 +30725,6 @@ with pkgs;
 
   freerdpUnstable = freerdp;
 
-  friture = callPackage ../by-name/fr/friture/package.nix {
-    python3Packages = python311Packages;
-  };
-
   g933-utils = callPackage ../tools/misc/g933-utils { };
 
   gavrasm = callPackage ../development/compilers/gavrasm { };
@@ -31239,6 +31246,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/wlroots {})
     wlroots_0_16
     wlroots_0_17
+    wlroots_0_18
     wlroots;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
@@ -32027,7 +32035,7 @@ with pkgs;
 
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
-  lsp-plugins = callPackage ../applications/audio/lsp-plugins { php = php81; };
+  lsp-plugins = callPackage ../applications/audio/lsp-plugins { php = php82; };
 
   ltex-ls = callPackage ../tools/text/ltex-ls { };
 
@@ -35611,8 +35619,6 @@ with pkgs;
   eureka-ideas = callPackage ../applications/misc/eureka-ideas {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  fava = callPackage ../applications/office/fava { };
 
   nux = callPackage ../tools/misc/nux { };
 

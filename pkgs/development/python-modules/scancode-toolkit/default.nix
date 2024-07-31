@@ -156,6 +156,6 @@ buildPythonPackage rec {
       asl20
       cc-by-40
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

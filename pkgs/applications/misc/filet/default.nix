@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/buffet/filet";
     license = licenses.mpl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "filet";
   };
 }

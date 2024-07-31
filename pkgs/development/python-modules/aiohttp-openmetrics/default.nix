@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jelmer/aiohttp-openmetrics/";
     changelog = "https://github.com/jelmer/aiohttp-openmetrics/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

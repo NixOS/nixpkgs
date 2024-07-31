@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "powerline-shell rewritten in Rust, inspired by powerline-go";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "powerline-rs";
   };

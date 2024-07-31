@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/lukesmurray/markdown-anki-decks";
     changelog = "https://github.com/lukesmurray/markdown-anki-decks/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "mdankideck";
   };

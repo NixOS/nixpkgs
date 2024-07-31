@@ -1,4 +1,5 @@
 { lib
+, gccStdenv
 , stdenv
 , fetchurl
 , cmake
@@ -63,7 +64,9 @@ stdenv.mkDerivation rec {
     (mkFlag ppaSupport "ENABLE_PPA")
     (mkFlag vtuneSupport "ENABLE_VTUNE")
     (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
-  ];
+  ]
+    # Clang does not support the endfunc directive so use GCC.
+    ++ lib.optional (stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin) "-DCMAKE_ASM_COMPILER=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc";
 
   cmakeStaticLibFlags = [
     "-DHIGH_BIT_DEPTH=ON"

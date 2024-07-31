@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Generic Security Service";
     mainProgram = "gss";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

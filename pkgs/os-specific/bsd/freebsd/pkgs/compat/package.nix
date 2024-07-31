@@ -14,7 +14,7 @@
 }:
 
 let
-  inherit (freebsd-lib) mkBsdArch;
+  inherit (freebsd-lib) mkBsdMachine;
 in
 
 mkDerivation {
@@ -81,7 +81,7 @@ mkDerivation {
       "sys/sys/elf64.h"
       "sys/sys/elf_common.h"
       "sys/sys/elf_generic.h"
-      "sys/${mkBsdArch stdenv}/include"
+      "sys/${mkBsdMachine stdenv}/include"
     ]
     ++ lib.optionals stdenv.hostPlatform.isx86 [ "sys/x86/include" ]
     ++ [
@@ -121,8 +121,8 @@ mkDerivation {
     ''
       NIX_CFLAGS_COMPILE+=' -I../../include -I../../sys'
 
-      cp ../../sys/${mkBsdArch stdenv}/include/elf.h ../../sys/sys
-      cp ../../sys/${mkBsdArch stdenv}/include/elf.h ../../sys/sys/${mkBsdArch stdenv}
+      cp ../../sys/${mkBsdMachine stdenv}/include/elf.h ../../sys/sys
+      cp ../../sys/${mkBsdMachine stdenv}/include/elf.h ../../sys/sys/${mkBsdMachine stdenv}
     ''
     + lib.optionalString stdenv.hostPlatform.isx86 ''
       cp ../../sys/x86/include/elf.h ../../sys/x86

@@ -64,6 +64,6 @@ buildPythonPackage rec {
     description = "CSV on the Web";
     homepage = "https://github.com/cldf/csvw";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

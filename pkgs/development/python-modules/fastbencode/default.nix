@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/breezy-team/fastbencode";
     changelog = "https://github.com/breezy-team/fastbencode/releases/tag/v${version}";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

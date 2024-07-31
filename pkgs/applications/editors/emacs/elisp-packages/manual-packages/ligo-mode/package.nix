@@ -24,6 +24,6 @@ melpaBuild {
     description = "Major mode for editing LIGO source code";
     homepage = "https://gitlab.com/ligolang/ligo";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

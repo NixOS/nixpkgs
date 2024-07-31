@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  git,
   jinja2,
   pythonOlder,
   riscv-config,

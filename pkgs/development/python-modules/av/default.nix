@@ -98,6 +98,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mikeboers/PyAV/";
     changelog = "https://github.com/PyAV-Org/PyAV/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

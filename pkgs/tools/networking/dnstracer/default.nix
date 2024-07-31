@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Determines where a given Domain Name Server (DNS) gets its information from, and follows the chain of DNS servers back to the servers which know the data";
     homepage = "http://www.mavetju.org/unix/general.php";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "dnstracer";
   };

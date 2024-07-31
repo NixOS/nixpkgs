@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage    = "https://chrisvest.github.io/xxv/";
     license     = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "xxv";
   };
 }

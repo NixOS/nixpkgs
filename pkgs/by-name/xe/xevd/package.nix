@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   stdenv,
   gitUpdater,
   testers,
@@ -18,6 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Dc2V77t+DrZo9252FAL0eczrmikrseU02ob2RLBdVvU=";
   };
 
+  patches = lib.optionals (!lib.versionOlder "0.5.0" finalAttrs.version) [
+    (fetchpatch2 {
+      url = "https://github.com/mpeg5/xevd/commit/7eda92a6ebb622189450f7b63cfd4dcd32fd6dff.patch?full_index=1";
+      hash = "sha256-Ru7jGk1b+Id5x1zaiGb7YKZGTNaTcArZGYyHbJURfgs=";
+    })
+  ];
+
   postPatch = ''
     echo v$version > version.txt
   '';
@@ -33,8 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
     "dev"
   ];
-
-  env.NIX_CFLAGS_COMPILE = toString [ "-lm" ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

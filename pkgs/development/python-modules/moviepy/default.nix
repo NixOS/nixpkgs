@@ -94,6 +94,6 @@ buildPythonPackage rec {
     homepage = "https://zulko.github.io/moviepy/";
     changelog = "https://github.com/Zulko/moviepy/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

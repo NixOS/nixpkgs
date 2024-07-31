@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://param.holoviz.org/";
     changelog = "https://github.com/holoviz/param/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/harlowja/fasteners";
     changelog = "https://github.com/harlowja/fasteners/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

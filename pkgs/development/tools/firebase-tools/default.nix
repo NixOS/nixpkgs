@@ -39,6 +39,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/firebase/firebase-tools";
     license = lib.licenses.mit;
     mainProgram = "firebase";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

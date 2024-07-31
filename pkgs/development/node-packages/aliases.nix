@@ -68,6 +68,7 @@ mapAliases {
   castnow = pkgs.castnow; # added 2023-07-30
   inherit (pkgs) clean-css-cli; # added 2023-08-18
   inherit (pkgs) clubhouse-cli; # added 2023-08-18
+  inherit (pkgs) coc-diagnostic; # added 2024-06-29
   coc-imselect = throw "coc-imselect was removed because it was broken"; # added 2023-08-21
   coinmon = throw "coinmon was removed since it was abandoned upstream"; # added 2024-03-19
   coffee-script = pkgs.coffeescript; # added 2023-08-18

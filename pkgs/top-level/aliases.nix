@@ -184,6 +184,7 @@ mapAliases ({
   bpftool = bpftools; # Added 2021-05-03
   bpytop = throw "bpytop has been deprecated by btop"; # Added 2023-02-16
   bro = throw "'bro' has been renamed to/replaced by 'zeek'"; # Converted to throw 2023-09-10
+  bs-platform = throw "'bs-platform' was removed as it was broken, development ended and 'melange' has superseded it"; # Added 2024-07-29
 
   budgie = throw "The `budgie` scope has been removed and all packages moved to the top-level"; # Added 2024-07-14
   budgiePlugins = throw "The `budgiePlugins` scope has been removed and all packages moved to the top-level"; # Added 2024-07-14
@@ -325,6 +326,7 @@ mapAliases ({
   dhcp = throw "dhcp (ISC DHCP) has been removed from nixpkgs, because it reached its end of life"; # Added 2023-04-04
   dibbler = throw "dibbler was removed because it is not maintained anymore"; # Added 2024-05-14
   dnnl = oneDNN; # Added 2020-04-22
+  docker-compose_1 = throw "'docker-compose_1' has been removed because it has been unmaintained since May 2021. Use docker-compose instead."; # Added 2024-07-29
   docker-distribution = distribution; # Added 2023-12-26
   docker-machine = throw "'docker-machine' has been removed, because the upstream project was archived"; # Added 2023-12-27
   docker-machine-kvm = throw "'docker-machine-kvm' has been removed, because 'docker-machine' was archived upstream and removed"; # Added 2023-12-27
@@ -1232,6 +1234,7 @@ mapAliases ({
   radicle-upstream = throw "'radicle-upstream' was sunset, see <https://community.radworks.org/t/2962>"; # Added 2024-05-04
   railway-travel = diebahn; # Added 2024-04-01
   rambox-pro = rambox; # Added 2022-12-12
+  rapidjson-unstable = lib.warn "'rapidjson-unstable' has been renamed to 'rapidjson'" rapidjson; # Added 2024-07-28
   rarian = throw "rarian has been removed as unused"; # Added 2023-07-05
   rccl = throw "'rccl' has been replaced with 'rocmPackages.rccl'"; # Added 2023-10-08
   rdc = throw "'rdc' has been replaced with 'rocmPackages.rdc'"; # Added 2023-10-08

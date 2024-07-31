@@ -39,6 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kahing/catfs";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

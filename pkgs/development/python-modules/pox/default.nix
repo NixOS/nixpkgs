@@ -27,6 +27,6 @@ buildPythonPackage rec {
     mainProgram = "pox";
     homepage = "https://pox.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

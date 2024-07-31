@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  typer,
 }:
 
 buildPythonPackage rec {

@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jonringer/nix-template/";
     changelog = "https://github.com/jonringer/nix-template/releases/tag/v${version}";
     license = licenses.cc0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "nix-template";
   };
 }

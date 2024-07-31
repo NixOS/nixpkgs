@@ -3,7 +3,6 @@
   pkgs,
   python3Packages,
   podman,
-  oniguruma,
   fetchPypi,
   buildPythonPackage,
 }:

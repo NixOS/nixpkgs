@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     mainProgram = "osmo-mgw";
     homepage = "https://osmocom.org/projects/osmo-mgw";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

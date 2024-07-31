@@ -47,6 +47,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "finalfrontier";
     homepage = "https://github.com/finalfusion/finalfrontier/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
