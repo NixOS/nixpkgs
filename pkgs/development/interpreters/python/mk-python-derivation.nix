@@ -21,6 +21,7 @@
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
 , pythonRuntimeDepsCheckHook
+, relaxBuildSystemRequiresHook
 , setuptoolsBuildHook
 , wheelUnpackHook
 , eggUnpackHook
@@ -254,6 +255,8 @@ let
       pythonCatchConflictsHook
     ] ++ optionals (attrs ? pythonRelaxDeps || attrs ? pythonRemoveDeps) [
       pythonRelaxDepsHook
+    ] ++ optionals (attrs ? relaxBuildSystem || attrs ? removeBuildSystem) [
+      relaxBuildSystemRequiresHook
     ] ++ optionals removeBinBytecode [
       pythonRemoveBinBytecodeHook
     ] ++ optionals (hasSuffix "zip" (attrs.src.name or "")) [

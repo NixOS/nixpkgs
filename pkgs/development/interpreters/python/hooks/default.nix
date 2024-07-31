@@ -189,6 +189,19 @@ in {
       };
     } ./python-runtime-deps-check-hook.sh) {};
 
+  relaxBuildSystemRequiresHook = callPackage ({ makePythonHook, packaging, tomlkit }:
+    makePythonHook {
+      name = "relax-build-system-requires-hook";
+      propagatedBuildInputs = [ packaging tomlkit ];
+      substitutions = {
+        inherit pythonInterpreter;
+        hook = ./relax-build-system-requires-hook.py;
+      };
+      passthru.tests = callPackage ./relax-build-system-requires-hook-test.nix {
+        inherit pythonOnBuildForHost;
+      };
+    } ./relax-build-system-requires-hook.sh) {};
+
   setuptoolsBuildHook = callPackage ({ makePythonHook, setuptools, wheel }:
     makePythonHook {
       name = "setuptools-build-hook";

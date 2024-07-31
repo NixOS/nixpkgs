@@ -489,6 +489,7 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
   See [example usage](#using-pythonrelaxdepshook).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
+- `relaxBuildSystemRequiresHook` to relax build-system restrictions defined in PEP518 for the package.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `sphinxHook` to build documentation and manpages using Sphinx.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
@@ -1376,8 +1377,53 @@ work with any of the [existing hooks](#setup-hooks).
 
 The `pythonRelaxDepsHook` has no effect on build time dependencies, such as
 those specified in `build-system`. If a package requires incompatible build
-time dependencies, they should be removed in `postPatch` through
-`substituteInPlace` or similar.
+time dependencies, consider using `relaxBuildSystem` or `removeBuildSystem`.
+
+#### Using relaxBuildSystemRequiresHook {#using-relaxbuildsystemrequireshook}
+
+`relaxBuildSystemRequiresHook` has the same function as `pythonRelaxDepsHook`,
+but it affects `build-system` instead of `dependencies`.
+
+For example, given the following `pyproject.toml` file:
+
+```toml
+[build-system]
+requires = [
+  "pkg1<1.0",
+  "pkg2",
+  "pkg3>=1.0,<=2.0",
+]
+```
+
+we can do:
+
+```nix
+{
+  relaxBuildSystem = [
+    "pkg1"
+    "pkg3"
+  ];
+  removeBuildSystem = [
+    "pkg2"
+  ];
+}
+```
+
+which would result in the following `pyproject.toml` file:
+
+```toml
+[build-system]
+requires = [
+  "pkg1",
+  "pkg3",
+]
+```
+
+In general you should always use `relaxBuildSystem`, because `removeBuildSystem`
+will cause silent build errors. However `removeBuildSystem` may
+still be useful in exceptional cases, and also to remove dependencies wrongly
+declared by upstream (for example, declaring `pytest` as a build dependency
+instead of a test dependency).
 
 For ease of use, both `buildPythonPackage` and `buildPythonApplication` will
 automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
@@ -2008,7 +2054,8 @@ The following rules are desired to be respected:
 * Only unversioned attributes (e.g. `pydantic`, but not `pypdantic_1`) can be included in `dependencies`,
   since due to `PYTHONPATH` limitations we can only ever support a single version for libraries
   without running into duplicate module name conflicts.
-* The version restrictions of `dependencies` can be relaxed by [`pythonRelaxDepsHook`](#using-pythonrelaxdepshook).
+* The version restrictions of `dependencies` can be relaxed by [`pythonRelaxDepsHook`](#using-pythonrelaxdepshook)
+  and of `build-system` can be relaxed by [`relaxBuildSystemRequiresHook`](#using-relaxbuildsystemrequireshook).
 * Make sure the tests are enabled using for example [`pytestCheckHook`](#using-pytestcheckhook) and, in the case of
   libraries, are passing for all interpreters. If certain tests fail they can be
   disabled individually. Try to avoid disabling the tests altogether. In any
