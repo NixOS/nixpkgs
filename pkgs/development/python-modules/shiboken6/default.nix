@@ -3,6 +3,7 @@
   fetchurl,
   llvmPackages,
   python,
+  qt6,
   cmake,
   autoPatchelfHook,
   stdenv,
@@ -33,7 +34,7 @@ stdenv'.mkDerivation (finalAttrs: {
   buildInputs = [
     llvmPackages.llvm
     llvmPackages.libclang
-    python.pkgs.qt6.qtbase
+    qt6.qtbase
     python.pkgs.ninja
     python.pkgs.packaging
     python.pkgs.setuptools

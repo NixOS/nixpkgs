@@ -12,7 +12,6 @@
 , darwin
 , overrideSDK
 , buildPackages
-, python3
 , config
 }:
 
@@ -26,7 +25,7 @@ let
     let
       callPackage = self.newScope ({
         inherit (self) qtModule;
-        inherit srcs python3;
+        inherit srcs;
         stdenv =
           if stdenv.isDarwin
           then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }

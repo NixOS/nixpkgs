@@ -13442,10 +13442,6 @@ self: super: with self; {
 
   qt5reactor = callPackage ../development/python-modules/qt5reactor { };
 
-  qt6 = pkgs.qt6.override {
-    python3 = self.python;
-  };
-
   qtawesome = callPackage ../development/python-modules/qtawesome { };
 
   qtconsole = callPackage ../development/python-modules/qtconsole { };

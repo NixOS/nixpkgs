@@ -6,6 +6,7 @@
   ninja,
   python,
   pythonImportsCheckHook,
+  qt6,
   moveBuildTree,
   shiboken6,
   llvmPackages,
@@ -14,7 +15,7 @@
   darwin,
 }:
 let
-  packages = with python.pkgs.qt6; [
+  packages = with qt6; [
     # required
     python.pkgs.ninja
     python.pkgs.packaging
@@ -91,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     if stdenv.isLinux then
       # qtwebengine fails under darwin
       # see https://github.com/NixOS/nixpkgs/pull/312987
-      packages ++ [ python.pkgs.qt6.qtwebengine ]
+      packages ++ [ qt6.qtwebengine ]
     else
       with darwin.apple_sdk_11_0.frameworks;
       [
