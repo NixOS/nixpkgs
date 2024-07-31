@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "http-ece";
   version = "1.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "web-push-libs";
@@ -21,14 +22,16 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/python";
 
-  propagatedBuildInputs = [ cryptography ];
+  build-system = [ setuptools ];
+
+  dependencies = [ cryptography ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Encipher HTTP Messages";
     homepage = "https://github.com/web-push-libs/encrypted-content-encoding";
     license = lib.licenses.mit;
