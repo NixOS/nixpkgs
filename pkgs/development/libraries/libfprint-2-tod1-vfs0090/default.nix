@@ -7,7 +7,7 @@ stdenv.mkDerivation rec{
     domain = "gitlab.freedesktop.org";
     owner = "3v1n0";
     repo = "libfprint-tod-vfs0090";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-Qy2GYyx5aG1HfeAMVsiI3wLbfaN0bfjAOG0Jd9OnCdU=";
   };
 
