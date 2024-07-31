@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bleep";
-  version = "0.0.4";
+  version = "0.0.5";
 
   platform =
     if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/oyvindberg/bleep/releases/download/v${version}/bleep-${platform}.tar.gz";
     sha256 =
-      if stdenv.isLinux && stdenv.isx86_64 then "sha256-FN8isien2d4CG2BvzX3chhylaiO3/03atInJOlBetjY="
-      else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-DTIdoX/cbltE03+8JCPQ4YzEikWf7XDhxkuuJG5plrM="
-      else if stdenv.isDarwin && stdenv.isAarch64 then "sha256-L27Pmk2TX/0hrZeRsnPUPUMEVV+s76Fbx9zJBP2WEIQ="
+      if stdenv.isLinux && stdenv.isx86_64 then "sha256-oNowRH92i76Ubbn07fLBzzX2X9Xez1ByZ/va4+vMdP0="
+      else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-XvgD7Y02hWUEJyTscQ3orOREv5pB78tTIJq0EEGVeN4="
+      else if stdenv.isDarwin && stdenv.isAarch64 then "sha256-aGXNKUcbuaz1GJIJfVU8B3YJKC24EtX7hgsEOoXKBwo="
     else throw "unsupported platform";
   };
 
