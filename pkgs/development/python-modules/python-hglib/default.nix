@@ -1,24 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchhg,
   mercurial,
-  nose,
 }:
 
 buildPythonPackage rec {
   pname = "python-hglib";
-  version = "2.6.2";
+  version = "2.6.2-unstable-2024-06-17";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sYvR7VPJDuV9VxTWata7crZOkw1K7KmDCJLAi7KNpgg=";
+  src = fetchhg {
+    url = "https://repo.mercurial-scm.org/python-hglib";
+    rev = "484b56ac4aec";
+    hash = "sha256-cksteuqNgr/oeY5t+4IPHcaGX8wXxLWDHyYnmzSx3Uc=";
   };
+
+  # setup.py requires a valid versioning in the sense of Python specifications.
+  # https://packaging.python.org/en/latest/specifications/version-specifiers/
+  # Remove this when version >2.6.2 released.
+  postUnpack = ''
+    echo "tag: ${lib.concatStrings (lib.strings.intersperse "." (lib.take 3 (lib.versions.splitVersion version)))}+nixpkgs.1" > hg-archive/.hg_archival.txt
+  '';
 
   nativeCheckInputs = [
     mercurial
-    nose
   ];
 
   preCheck = ''
