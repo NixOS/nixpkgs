@@ -62,7 +62,7 @@ let
       zlib
       readline
       openssl
-      libxml2
+      (libxml2.override {enableHttp = true;})
       icu
     ]
       ++ lib.optionals (olderThan "13") [ libxcrypt ]
