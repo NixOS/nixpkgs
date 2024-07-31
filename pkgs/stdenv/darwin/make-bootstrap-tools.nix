@@ -112,6 +112,7 @@ rec {
       for i in as ld ar ranlib nm strip otool install_name_tool lipo codesign_allocate; do
         cp ${getBin darwin.binutils-unwrapped}/bin/$i $out/bin
       done
+      cp -d ${getLib ld64}/lib/libcodedirectory*.dylib $out/lib
 
       # Copy coreutils, bash, etc.
       cp ${getBin coreutils_}/bin/* $out/bin
