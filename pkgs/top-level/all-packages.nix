@@ -7720,8 +7720,6 @@ with pkgs;
 
   Fabric = with python3Packages; toPythonApplication fabric;
 
-  fail2ban = callPackage ../tools/security/fail2ban { };
-
   fakeroot = callPackage ../tools/system/fakeroot { };
 
   fakeroute = callPackage ../tools/networking/fakeroute { };
