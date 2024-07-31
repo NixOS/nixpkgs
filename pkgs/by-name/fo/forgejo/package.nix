@@ -57,10 +57,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     makeWrapper
-    git # checkPhase
-    openssh # checkPhase
   ];
+
   buildInputs = lib.optional pamSupport pam;
+
+  nativeCheckInputs = [
+    git
+    openssh
+  ];
 
   patches = [
     ./static-root-path.patch
