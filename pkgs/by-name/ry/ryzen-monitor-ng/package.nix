@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation {
   pname = "ryzen-monitor-ng";
@@ -22,14 +27,14 @@ stdenv.mkDerivation {
     make clean
   '';
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Access Ryzen SMU information exposed by the ryzen_smu driver";
-    homepage = "https://github.com/mann1x/ryzen_monitor_ng";
-    changelog = "https://github.com/mann1x/ryzen_monitor_ng/blob/master/CHANGELOG.md";
+    homepage = "https://github.com/plasmin/ryzen_monitor_ng";
+    changelog = "https://github.com/plasmin/ryzen_monitor_ng/blob/master/CHANGELOG.md";
     license = licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ phdyellow ];
