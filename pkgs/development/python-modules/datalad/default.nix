@@ -7,6 +7,7 @@
   installShellFiles,
   git,
   coreutils,
+  versioneer,
   # core
   platformdirs,
   chardet,
@@ -63,6 +64,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace datalad/distribution/create_sibling.py \
       --replace-fail "/bin/ls" "${coreutils}/bin/ls"
+    # Remove vendorized versioneer.py
+    rm versioneer.py
   '';
 
   nativeBuildInputs = [
@@ -70,7 +73,10 @@ buildPythonPackage rec {
     git
   ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
   dependencies =
     [
