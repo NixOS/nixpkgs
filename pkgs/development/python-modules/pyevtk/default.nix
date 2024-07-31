@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
   numpy,
   pytestCheckHook,
@@ -10,14 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pyevtk";
-  version = "1.2.0";
+  version = "1.6.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "pyscience-projects";
-    repo = "pyevtk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HrodoVxjREZiutgRJ3ZUrART29+gAZfpR9f4A4SRh4Q=";
+  src = fetchPypi {
+    inherit pname version;
+
+    hash = "sha256-H2vnh2o6AFyCWIYVUdpP5+RP8aLn/yqT1txR3u39pfQ=";
   };
 
   postPatch = ''
