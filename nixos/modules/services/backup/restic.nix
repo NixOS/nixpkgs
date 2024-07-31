@@ -83,6 +83,15 @@ in
           '';
         };
 
+        inhibitsSleep = mkOption {
+          default = false;
+          type = types.bool;
+          example = true;
+          description = ''
+            Prevents the system from sleeping while backing up.
+          '';
+        };
+
         repository = mkOption {
           type = with types; nullOr str;
           default = null;
@@ -299,7 +308,14 @@ in
         (name: backup:
           let
             extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-            resticCmd = "${backup.package}/bin/restic${extraOptions}";
+            inhibitCmd = concatStringsSep " " [
+              "${pkgs.systemd}/bin/systemd-inhibit"
+              "--mode='block'"
+              "--who='restic'"
+              "--what='sleep'"
+              "--why=${escapeShellArg "Scheduled backup ${name}"} "
+            ];
+            resticCmd = "${optionalString backup.inhibitsSleep inhibitCmd}${backup.package}/bin/restic${extraOptions}";
             excludeFlags = optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
             doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != []);

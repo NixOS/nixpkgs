@@ -74,6 +74,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     platforms = platforms.unix;
+    mainProgram = "prisma";
     maintainers = with maintainers; [ pimeys tomhoule aqrln ];
   };
 }
