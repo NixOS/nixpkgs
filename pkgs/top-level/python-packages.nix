@@ -15097,6 +15097,8 @@ self: super: with self; {
 
   strawberry-graphql = callPackage ../development/python-modules/strawberry-graphql { };
 
+  strawberry-django = callPackage ../development/python-modules/strawberry-django { };
+
   strct = callPackage ../development/python-modules/strct { };
 
   streamcontroller-plugin-tools = callPackage ../development/python-modules/streamcontroller-plugin-tools { };
