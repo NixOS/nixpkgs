@@ -1,71 +1,68 @@
-{ _7zz
-, buildDotnetModule
-, copyDesktopItems
-, desktop-file-utils
-, dotnetCorePackages
-, fetchFromGitHub
-, fontconfig
-, lib
-, libICE
-, libSM
-, libX11
-, nexusmods-app
-, runCommand
-, enableUnfree ? false # Set to true to support RAR format mods
+{
+  _7zz,
+  buildDotnetModule,
+  copyDesktopItems,
+  desktop-file-utils,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  fontconfig,
+  lib,
+  libICE,
+  libSM,
+  libX11,
+  nexusmods-app,
+  runCommand,
+  enableUnfree ? false, # Set to true to support RAR format mods
 }:
-let
-  _7zzWithOptionalUnfreeRarSupport = _7zz.override {
-    inherit enableUnfree;
-  };
-in
 buildDotnetModule rec {
-  pname = "nexusmods-app";
+  pname = "nexusmods-app" + lib.optionalString enableUnfree "-unfree";
 
-  version = "0.4.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-FzQphMhiC1g+6qmk/R1v4rq2ldy35NcaWm0RR1UlwLA=";
+    hash = "sha256-NQUHvMGFeexy/EYvEwZrXUHAAuBqA3fyGm7FYjXTq6s=";
   };
 
-  projectFile = "NexusMods.App.sln";
+  projectFile = "src/NexusMods.App/NexusMods.App.csproj";
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
+  nativeBuildInputs = [ copyDesktopItems ];
 
   nugetDeps = ./deps.nix;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  preConfigure = ''
-    substituteInPlace Directory.Build.props \
-      --replace '</PropertyGroup>' '<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles></PropertyGroup>'
-  '';
+  dotnetBuildFlags = [
+    # Tell the app it is a distro package; affects wording in update prompts
+    "--property:INSTALLATION_METHOD_PACKAGE_MANAGER=1"
 
-  postPatch = ''
-    ln --force --symbolic "${lib.getExe _7zzWithOptionalUnfreeRarSupport}" src/ArchiveManagement/NexusMods.FileExtractor/runtimes/linux-x64/native/7zz
-  '';
+    # Don't include upstream's 7zz binary; we use the nixpkgs version
+    "--property:NEXUSMODS_APP_USE_SYSTEM_EXTRACTOR=1"
+
+    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.5.2/src/NexusMods.App/app.pupnet.conf#L39
+    "--property:Version=${version}"
+    "--property:TieredCompilation=true"
+  ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [desktop-file-utils]}"
     "--set APPIMAGE $out/bin/${meta.mainProgram}" # Make associating with nxm links work on Linux
   ];
 
+  propagatedBuildInputs = [ (_7zz.override { inherit enableUnfree; }) ];
+
   runtimeDeps = [
+    desktop-file-utils
     fontconfig
     libICE
     libSM
     libX11
   ];
 
-  executables = [
-    nexusmods-app.meta.mainProgram
-  ];
+  executables = [ meta.mainProgram ];
 
   doCheck = true;
 
@@ -73,15 +70,18 @@ buildDotnetModule rec {
     "--environment=USER=nobody"
     (lib.strings.concatStrings [
       "--filter="
-      (lib.strings.concatStrings (lib.strings.intersperse "&" ([
-        "Category!=Disabled"
-        "FlakeyTest!=True"
-        "RequiresNetworking!=True"
-        "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
-        "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
-      ] ++ lib.optionals (! enableUnfree) [
-        "FullyQualifiedName!=NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
-       ])))
+      (lib.strings.concatStringsSep "&" (
+        [
+          "Category!=Disabled"
+          "FlakeyTest!=True" # Flaky
+          "RequiresNetworking!=True" # aka. RequiresNexusModsAPIKey https://github.com/Nexus-Mods/NexusMods.App/issues/1223#issuecomment-2060706341
+          "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile" # Requires networking
+          "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage" # Requires networking
+        ]
+        ++ lib.optionals (!enableUnfree) [
+          "FullyQualifiedName!=NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
+        ]
+      ))
     ])
   ];
 
