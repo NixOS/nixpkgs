@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.mit;
     homepage = "https://github.com/FT-labs/picom";
-    maintainers = with maintainers; [ertes gepbird twey thiagokokada];
+    maintainers = with maintainers; [eriksundin];
     platforms = platforms.linux;
     mainProgram = "picom";
   };
