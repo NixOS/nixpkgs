@@ -14,7 +14,6 @@
   httpx,
   huggingface-hub,
   packaging,
-  requests,
   typing-extensions,
   websockets,
   # checkInputs

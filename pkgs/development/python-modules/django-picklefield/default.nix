@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  pytest,
-  pytest-django,
   python,
 }:
 

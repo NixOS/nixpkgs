@@ -12,8 +12,6 @@
   pythonOlder,
   setuptools,
   voluptuous,
-  websocket-client,
-  xmltodict,
 }:
 
 buildPythonPackage rec {

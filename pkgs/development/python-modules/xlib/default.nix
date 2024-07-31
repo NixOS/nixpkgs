@@ -7,7 +7,6 @@
   setuptools,
   setuptools-scm,
   xorg,
-  python,
   mock,
   pytestCheckHook,
   util-linux,

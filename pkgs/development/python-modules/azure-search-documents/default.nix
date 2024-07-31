@@ -6,7 +6,6 @@
   azure-common,
   azure-core,
   isodate,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

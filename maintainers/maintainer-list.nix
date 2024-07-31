@@ -4780,6 +4780,12 @@
     githubId = 41747605;
     keys = [ { fingerprint = "6130 3BBA D7D1 BF74 EFA4  4E3B E7FE 2087 E438 0E64"; } ];
   };
+  definfo = {
+    name = "Adrien SUN";
+    email = "hjsdbb1@gmail.com";
+    github = "definfo";
+    githubId = 66514911;
+  };
   deifactor = {
     name = "Ash Zahlen";
     email = "ext0l@riseup.net";
@@ -8414,6 +8420,13 @@
     github = "hummeltech";
     githubId = 6109326;
     name = "David Hummel";
+  };
+  husky = {
+    email = "husky@husky.sh";
+    github = "huskyistaken";
+    githubId = 20684258;
+    name = "Luna Perego";
+    keys = [ { fingerprint = "09E4 B981 9B93 5B0C 0B91  1274 0578 7332 9217 08FF"; } ];
   };
   huyngo = {
     email = "huyngo@disroot.org";

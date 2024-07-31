@@ -2020,8 +2020,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.200.920";
-          hash = "sha256-LMShW9GN/wsDBodVn33Ui4qW0619r13VO2rSTPVE9TQ=";
+          version = "1.219.1019"; # compatible with vscode ^1.91.0
+          hash = "sha256-W39hZyJ5XtDghkKu4Ml99M0/jZ1tVMGesKAKPquTkb8=";
         };
 
         meta = {
@@ -2037,8 +2037,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot-chat";
-          version = "0.16.2024060502"; # compatible with vscode 1.90.0
-          hash = "sha256-SAydDc3JlJzfCtbJICy3rWx8psVPdRdPfOuzR9Dqtp8=";
+          version = "0.17.2024062801"; # compatible with vscode ^1.91.0
+          hash = "sha256-aDTqHDGdWE/CG5bt/9um62sGFngHsJJvTl38NEqNq8E=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
@@ -4439,8 +4439,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "4.0.4";
-          hash = "sha256-WbEhTIuPqH77IuEDgjPUz9chHM/aYjMdpCI9Kf0KS2Q=";
+          version = "4.0.5";
+          hash = "sha256-vrM3a13S1LKQq2Bl/DN/vasVMyClBdYBOt8DiUbh61I=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";

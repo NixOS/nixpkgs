@@ -3,7 +3,6 @@
   buildPythonPackage,
   cymem,
   cython,
-  python,
   fetchPypi,
   murmurhash,
   pytestCheckHook,

@@ -1,6 +1,5 @@
 {
   lib,
-  azure-identity,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,

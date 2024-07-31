@@ -4972,9 +4972,7 @@ self: super: with self; {
 
   glean-parser = callPackage ../development/python-modules/glean-parser { };
 
-  glean-sdk = callPackage ../development/python-modules/glean-sdk {
-    inherit (pkgs) lmdb;
-  };
+  glean-sdk = callPackage ../development/python-modules/glean-sdk { };
 
   glfw = callPackage ../development/python-modules/glfw { };
 
@@ -13878,8 +13876,6 @@ self: super: with self; {
 
   sacremoses = callPackage ../development/python-modules/sacremoses { };
 
-  safe = callPackage ../development/python-modules/safe { };
-
   safe-pysha3 = callPackage ../development/python-modules/safe-pysha3 { };
 
   safeio = callPackage ../development/python-modules/safeio { };
@@ -14217,6 +14213,8 @@ self: super: with self; {
   });
 
   shimmy = callPackage ../development/python-modules/shimmy { };
+
+  shiny = callPackage ../development/python-modules/shiny { };
 
   shippai = callPackage ../development/python-modules/shippai { };
 
