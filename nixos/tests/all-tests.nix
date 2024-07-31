@@ -342,7 +342,8 @@ in {
   fluentd = handleTest ./fluentd.nix {};
   fluidd = handleTest ./fluidd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
-  forgejo = handleTest ./forgejo.nix { };
+  forgejo = handleTest ./forgejo.nix { forgejoPackage = pkgs.forgejo; };
+  forgejo-lts = handleTest ./forgejo.nix { forgejoPackage = pkgs.forgejo-lts; };
   freenet = handleTest ./freenet.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
   freetube = discoverTests (import ./freetube.nix);

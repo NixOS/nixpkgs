@@ -153,7 +153,7 @@ buildGoModule rec {
         -exec brotli --best --keep --no-copy-stat {} ';'
     '';
 
-    tests = nixosTests.forgejo;
+    tests = if lts then nixosTests.forgejo-lts else nixosTests.forgejo;
     updateScript = nix-update-script { };
   };
 
