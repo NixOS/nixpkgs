@@ -5,6 +5,7 @@
   jsonable,
   pytestCheckHook,
   fetchpatch2,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ jsonable ];
+  build-system = [ setuptools ];
+
+  dependencies = [ jsonable ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -35,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mwtypes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of classes for working with MediaWiki data types";
     homepage = "https://github.com/mediawiki-utilities/python-mwtypes";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
