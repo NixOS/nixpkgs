@@ -62,7 +62,6 @@ pkgs.runCommand "nixpkgs-release-checks"
         fi
 
         s1=$(sha1sum packages1 | cut -c1-40)
-        echo $s1
 
         nix-env -f $src2 \
             --show-trace --argstr system "$platform" \
