@@ -55,12 +55,18 @@ nixLog() {
     echo "$@" >&"$NIX_LOG_FD"
 }
 
+# Call `nixLog` if $NIX_DEBUG is set to 1 or more.
+nixLogDebug() {
+    if (( "${NIX_DEBUG:-0}" == 0 )); then return; fi
+    nixLog "$@"
+}
+
 # Log a hook, to be run before the hook is actually called.
 # logging for "implicit" hooks -- the ones specified directly
 # in derivation's arguments -- is done in _callImplicitHook instead.
 _logHook() {
-    # Fast path in case nixLog is no-op.
-    if [[ -z ${NIX_LOG_FD-} ]]; then
+    # Fast path in case nixLog is no-op or NIX_DEBUG is 0 or unset.
+    if [[ -z ${NIX_LOG_FD-} ]] || (( "${NIX_DEBUG:-0}" == 0 )); then
         return
     fi
 
@@ -153,13 +159,13 @@ _callImplicitHook() {
     local def="$1"
     local hookName="$2"
     if declare -F "$hookName" > /dev/null; then
-        nixLog "calling implicit '$hookName' function hook"
+        nixLogDebug "calling implicit '$hookName' function hook"
         "$hookName"
     elif type -p "$hookName" > /dev/null; then
-        nixLog "sourcing implicit '$hookName' script hook"
+        nixLogDebug "sourcing implicit '$hookName' script hook"
         source "$hookName"
     elif [ -n "${!hookName:-}" ]; then
-        nixLog "evaling implicit '$hookName' string hook"
+        nixLogDebug "evaling implicit '$hookName' string hook"
         eval "${!hookName}"
     else
         return "$def"
@@ -705,7 +711,7 @@ activatePackage() {
     (( hostOffset <= targetOffset )) || exit 1
 
     if [ -f "$pkg" ]; then
-        nixLog "sourcing setup hook '$pkg'"
+        nixLogDebug "sourcing setup hook '$pkg'"
         source "$pkg"
     fi
 
@@ -729,7 +735,7 @@ activatePackage() {
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
-        nixLog "sourcing setup hook '$pkg/nix-support/setup-hook'"
+        nixLogDebug "sourcing setup hook '$pkg/nix-support/setup-hook'"
         source "$pkg/nix-support/setup-hook"
     fi
 }
