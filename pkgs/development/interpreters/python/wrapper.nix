@@ -1,6 +1,7 @@
 { lib, stdenv, buildEnv, makeBinaryWrapper
 
 # manually pased
+, hasPythonModule
 , python
 , requiredPythonModules
 
@@ -18,9 +19,16 @@
 let
   env = let
     paths = requiredPythonModules (extraLibs ++ [ python ] ) ;
+    badExtraLibs = lib.filter (p: ! (hasPythonModule p)) extraLibs;
     pythonPath = "${placeholder "out"}/${python.sitePackages}";
     pythonExecutable = "${placeholder "out"}/bin/${python.executable}";
-  in buildEnv {
+  in
+  assert lib.assertMsg (badExtraLibs == []) ''
+    Encountered incompatible packages while constructing a python environment.
+    The following paths do not represent a python package compatible with the interpreter ${python.name}:
+      ${lib.concatStringsSep "\n  " badExtraLibs}
+  '';
+  buildEnv {
     name = "${python.name}-env";
 
     inherit paths;
