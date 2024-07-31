@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmysqlclient
     libpng
     libtiff
-    libxml2
+    (libxml2.override { enableHttp = true; })
     netcdf
     pdal
     postgresql
