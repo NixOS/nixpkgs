@@ -23,7 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     zig_0_13.hook
   ];
 
-  # ln -s fails with error: ... RenameAcrossMountPoints
   postPatch = ''
     cp -a ${callPackage ./deps.nix { }}/. $ZIG_GLOBAL_CACHE_DIR/p
   '';
