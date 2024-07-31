@@ -1,8 +1,8 @@
 {
   lib,
-  python,
   fetchFromGitHub,
   buildPythonPackage,
+  unittestCheckHook,
   mock,
   setuptools,
 }:
@@ -25,11 +25,11 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
-  checkInputs = [ mock ];
 
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
+  nativeCheckInputs = [
+    mock
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [ "cron_descriptor" ];
 
