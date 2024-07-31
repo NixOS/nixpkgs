@@ -1,3 +1,10 @@
+{ lts ? false
+, version
+, hash
+, npmDepsHash
+, vendorHash
+}:
+
 { bash
 , brotli
 , buildGoModule
@@ -20,11 +27,17 @@
 }:
 
 let
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "forgejo";
+    repo = "forgejo";
+    rev = "v${version}";
+    inherit hash;
+  };
+
   frontend = buildNpmPackage {
     pname = "forgejo-frontend";
-    inherit (forgejo) src version;
-
-    npmDepsHash = "sha256-Nu9aOjJpEAuCWWnJfZXy/GayiUDiyc3hOu6Bx7GxfxA=";
+    inherit src version npmDepsHash;
 
     patches = [
       ./package-json-npm-build-frontend.patch
@@ -38,18 +51,13 @@ let
   };
 in
 buildGoModule rec {
-  pname = "forgejo";
-  version = "7.0.5";
+  pname = "forgejo" + lib.optionalString lts "-lts";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "forgejo";
-    repo = "forgejo";
-    rev = "v${version}";
-    hash = "sha256-Y/Ita5dr3COACffAIAjcqHHcdKiUWWEb/f/MPzMG200=";
-  };
-
-  vendorHash = "sha256-hfbNyCQMQzDzJxFc2MPAR4+v/qNcnORiQNbwbbIA4Nw=";
+  inherit
+    version
+    src
+    vendorHash
+  ;
 
   subPackages = [ "." "contrib/environment-to-ini" ];
 
