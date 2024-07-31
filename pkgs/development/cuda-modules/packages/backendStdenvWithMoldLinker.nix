@@ -16,9 +16,13 @@
 # Cf. https://github.com/NixOS/nixpkgs/pull/218265 for context
 let
   gccMajorVersion = data.nvccCompatibilities.${cudaVersion}.gccMaxMajorVersion;
-  # TODO(@connorbaker): Get numbers for why we should use stdenvAdapters.useMoldLinker.
-  cudaStdenv = stdenvAdapters.useLibsFrom stdenv pkgs."gcc${gccMajorVersion}Stdenv";
-  passthruExtra.withMoldLinker = stdenvAdapters.useMoldLinker cudaStdenv;
+  cudaStdenv = stdenvAdapters.useMoldLinker (stdenvAdapters.useLibsFrom stdenv pkgs."gcc${gccMajorVersion}Stdenv");
+  passthruExtra = {
+    # cudaPackages.backendStdenv.nixpkgsCompatibleLibstdcxx has been removed,
+    # if you need it you're likely doing something wrong. There has been a
+    # warning here for a month or so. Now we can no longer return any
+    # meaningful value in its place and drop the attribute entirely.
+  };
   assertCondition = true;
 in
 
