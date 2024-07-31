@@ -27370,8 +27370,6 @@ with pkgs;
 
   rtl8761b-firmware = callPackage ../os-specific/linux/firmware/rtl8761b-firmware { };
 
-  rtw88-firmware = callPackage ../os-specific/linux/firmware/rtw88-firmware { };
-
   rvvm = callPackage ../applications/virtualization/rvvm { };
 
   s3ql = callPackage ../tools/backup/s3ql { };
