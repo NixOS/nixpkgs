@@ -18792,8 +18792,9 @@ with pkgs;
 
   nix-build-uncached = callPackage ../development/tools/misc/nix-build-uncached { };
 
-  nexusmods-app-unfree = callPackage ../by-name/ne/nexusmods-app/package.nix {
-    enableUnfree = true;
+  nexusmods-app-unfree = nexusmods-app.override {
+    pname = "nexusmods-app-unfree";
+    _7zz = _7zz-rar;
   };
 
   nmrpflash = callPackage ../development/embedded/nmrpflash { };

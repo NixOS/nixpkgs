@@ -12,13 +12,10 @@
   libX11,
   nexusmods-app,
   runCommand,
-  enableUnfree ? false, # Set to true to support RAR format mods
+  pname ? "nexusmods-app",
 }:
-let
-  _7zzWithOptionalUnfreeRarSupport = _7zz.override { inherit enableUnfree; };
-in
 buildDotnetModule rec {
-  pname = "nexusmods-app";
+  inherit pname;
   version = "0.4.1";
 
   src = fetchFromGitHub {
@@ -50,7 +47,7 @@ buildDotnetModule rec {
   '';
 
   postPatch = ''
-    ln --force --symbolic "${lib.getExe _7zzWithOptionalUnfreeRarSupport}" src/ArchiveManagement/NexusMods.FileExtractor/runtimes/linux-x64/native/7zz
+    ln --force --symbolic "${lib.getExe _7zz}" src/ArchiveManagement/NexusMods.FileExtractor/runtimes/linux-x64/native/7zz
 
     # for some reason these tests fail (intermittently?) with a zero timestamp
     touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
@@ -84,7 +81,7 @@ buildDotnetModule rec {
           "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
           "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
         ]
-        ++ lib.optionals (!enableUnfree) [
+        ++ lib.optionals (!_7zz.meta.unfree) [
           "FullyQualifiedName!=NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
         ]
       )
