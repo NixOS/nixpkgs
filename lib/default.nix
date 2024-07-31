@@ -84,7 +84,7 @@ let
       getAttrFromPath attrVals attrNames attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldlAttrs foldAttrs collect nameValuePair mapAttrs
       mapAttrs' mapAttrsToList attrsToList concatMapAttrs mapAttrsRecursive
-      mapAttrsRecursiveCond genAttrs isDerivation toDerivation optionalAttrs
+      mapAttrsRecursiveCond mapDataRecursiveCond genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput getFirstOutput
       getBin getLib getStatic getDev getInclude getMan chooseDevOutputs zipWithNames zip
