@@ -9,6 +9,7 @@
 , soapysdr-with-plugins
 , libxml2
 , volk
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     soapysdr-with-plugins
     libxml2
     volk
+    zlib
   ];
 
   meta = with lib; {
