@@ -3,7 +3,6 @@
   apt,
   buildPythonPackage,
   fetchFromGitLab,
-  python,
   setuptools,
 }:
 

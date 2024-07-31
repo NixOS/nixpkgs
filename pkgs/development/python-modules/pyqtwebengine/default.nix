@@ -12,7 +12,6 @@
   qtdeclarative,
   wrapQtAppsHook,
   darwin,
-  buildPackages,
 }:
 
 let

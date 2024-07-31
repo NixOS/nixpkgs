@@ -162,7 +162,8 @@ following are specific to `buildPythonPackage`:
 * `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
   variable in wrapped programs.
-* `pyproject`: Whether the pyproject format should be used. When set to `true`,
+* `pyproject`: Whether the pyproject format should be used. As all other formats
+  are deprecated, you are recommended to set this to `true`. When you do so,
   `pypaBuildHook` will be used, and you can add the required build dependencies
   from `build-system.requires` to `build-system`. Note that the pyproject
   format falls back to using `setuptools`, so you can use `pyproject = true`

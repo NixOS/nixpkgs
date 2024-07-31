@@ -20,7 +20,6 @@
   preshed,
   pydantic,
   pytestCheckHook,
-  python,
   pythonOlder,
   requests,
   setuptools,

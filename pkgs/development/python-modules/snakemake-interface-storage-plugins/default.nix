@@ -7,7 +7,6 @@
   snakemake-interface-common,
   throttler,
   wrapt,
-  snakemake,
 }:
 
 buildPythonPackage rec {

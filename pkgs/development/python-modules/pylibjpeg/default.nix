@@ -5,7 +5,6 @@
   pythonOlder,
   pytestCheckHook,
   flit-core,
-  setuptools,
   numpy,
   pydicom,
   pylibjpeg-data,

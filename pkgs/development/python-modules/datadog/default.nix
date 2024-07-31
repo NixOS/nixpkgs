@@ -9,7 +9,6 @@
   pytest-vcr,
   pytestCheckHook,
   python-dateutil,
-  pythonAtLeast,
   pythonOlder,
   requests,
   vcrpy,

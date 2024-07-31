@@ -8,8 +8,6 @@
   pytestCheckHook,
   pygments,
   tabulate,
-  terminaltables,
-  wcwidth,
 }:
 
 buildPythonPackage rec {

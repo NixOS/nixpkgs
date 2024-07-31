@@ -6,7 +6,6 @@
   ghostscript,
   hypothesis,
   img2pdf,
-  importlib-resources,
   jbig2enc,
   packaging,
   pdfminer-six,
@@ -23,7 +22,6 @@
   setuptools-scm,
   substituteAll,
   tesseract,
-  tqdm,
   unpaper,
   installShellFiles,
 }:

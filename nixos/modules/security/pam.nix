@@ -99,6 +99,7 @@ let
     }));
   };
 
+  package = config.security.pam.package;
   parentConfig = config;
 
   pamOpts = { config, name, ... }: let cfg = config; in let config = parentConfig; in {
@@ -648,16 +649,16 @@ let
           # The required pam_unix.so module has to come after all the sufficient modules
           # because otherwise, the account lookup will fail if the user does not exist
           # locally, for example with MySQL- or LDAP-auth.
-          { name = "unix"; control = "required"; modulePath = "pam_unix.so"; }
+          { name = "unix"; control = "required"; modulePath = "${package}/lib/security/pam_unix.so"; }
         ];
 
         auth = autoOrderRules ([
           { name = "oslogin_login"; enable = cfg.googleOsLoginAuthentication; control = "[success=done perm_denied=die default=ignore]"; modulePath = "${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so"; }
-          { name = "rootok"; enable = cfg.rootOK; control = "sufficient"; modulePath = "pam_rootok.so"; }
-          { name = "wheel"; enable = cfg.requireWheel; control = "required"; modulePath = "pam_wheel.so"; settings = {
+          { name = "rootok"; enable = cfg.rootOK; control = "sufficient"; modulePath = "${package}/lib/security/pam_rootok.so"; }
+          { name = "wheel"; enable = cfg.requireWheel; control = "required"; modulePath = "${package}/lib/security/pam_wheel.so"; settings = {
             use_uid = true;
           }; }
-          { name = "faillock"; enable = cfg.logFailures; control = "required"; modulePath = "pam_faillock.so"; }
+          { name = "faillock"; enable = cfg.logFailures; control = "required"; modulePath = "${package}/lib/security/pam_faillock.so"; }
           { name = "mysql"; enable = cfg.mysqlAuth; control = "sufficient"; modulePath = "${pkgs.pam_mysql}/lib/security/pam_mysql.so"; settings = {
             config_file = "/etc/security/pam_mysql.conf";
           }; }
@@ -710,7 +711,7 @@ let
               || cfg.zfs))
             [
               { name = "systemd_home-early"; enable = config.services.homed.enable; control = "optional"; modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so"; }
-              { name = "unix-early"; enable = cfg.unixAuth; control = "optional"; modulePath = "pam_unix.so"; settings = {
+              { name = "unix-early"; enable = cfg.unixAuth; control = "optional"; modulePath = "${package}/lib/security/pam_unix.so"; settings = {
                 nullok = cfg.allowNullPassword;
                 inherit (cfg) nodelay;
                 likeauth = true;
@@ -731,7 +732,7 @@ let
               { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
                 store-only = cfg.gnupg.storeOnly;
               }; }
-              { name = "faildelay"; enable = cfg.failDelay.enable; control = "optional"; modulePath = "${pkgs.pam}/lib/security/pam_faildelay.so"; settings = {
+              { name = "faildelay"; enable = cfg.failDelay.enable; control = "optional"; modulePath = "${package}/lib/security/pam_faildelay.so"; settings = {
                 inherit (cfg.failDelay) delay;
               }; }
               { name = "google_authenticator"; enable = cfg.googleAuthenticator.enable; control = "required"; modulePath = "${pkgs.google-authenticator}/lib/security/pam_google_authenticator.so"; settings = {
@@ -740,7 +741,7 @@ let
               { name = "duo"; enable = cfg.duoSecurity.enable; control = "required"; modulePath = "${pkgs.duo-unix}/lib/security/pam_duo.so"; }
             ]) ++ [
           { name = "systemd_home"; enable = config.services.homed.enable; control = "sufficient"; modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so"; }
-          { name = "unix"; enable = cfg.unixAuth; control = "sufficient"; modulePath = "pam_unix.so"; settings = {
+          { name = "unix"; enable = cfg.unixAuth; control = "sufficient"; modulePath = "${package}/lib/security/pam_unix.so"; settings = {
             nullok = cfg.allowNullPassword;
             inherit (cfg) nodelay;
             likeauth = true;
@@ -768,12 +769,12 @@ let
             action = "store";
             use_first_pass = true;
           }; }
-          { name = "deny"; control = "required"; modulePath = "pam_deny.so"; }
+          { name = "deny"; control = "required"; modulePath = "${package}/lib/security/pam_deny.so"; }
         ]);
 
         password = autoOrderRules [
           { name = "systemd_home"; enable = config.services.homed.enable; control = "sufficient"; modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so"; }
-          { name = "unix"; control = "sufficient"; modulePath = "pam_unix.so"; settings = {
+          { name = "unix"; control = "sufficient"; modulePath = "${package}/lib/security/pam_unix.so"; settings = {
             nullok = true;
             yescrypt = true;
           }; }
@@ -798,24 +799,24 @@ let
         ];
 
         session = autoOrderRules [
-          { name = "env"; enable = cfg.setEnvironment; control = "required"; modulePath = "pam_env.so"; settings = {
+          { name = "env"; enable = cfg.setEnvironment; control = "required"; modulePath = "${package}/lib/security/pam_env.so"; settings = {
             conffile = "/etc/pam/environment";
             readenv = 0;
           }; }
-          { name = "unix"; control = "required"; modulePath = "pam_unix.so"; }
-          { name = "loginuid"; enable = cfg.setLoginUid; control = if config.boot.isContainer then "optional" else "required"; modulePath = "pam_loginuid.so"; }
-          { name = "tty_audit"; enable = cfg.ttyAudit.enable; control = "required"; modulePath = "${pkgs.pam}/lib/security/pam_tty_audit.so"; settings = {
+          { name = "unix"; control = "required"; modulePath = "${package}/lib/security/pam_unix.so"; }
+          { name = "loginuid"; enable = cfg.setLoginUid; control = if config.boot.isContainer then "optional" else "required"; modulePath = "${package}/lib/security/pam_loginuid.so"; }
+          { name = "tty_audit"; enable = cfg.ttyAudit.enable; control = "required"; modulePath = "${package}/lib/security/pam_tty_audit.so"; settings = {
             open_only = cfg.ttyAudit.openOnly;
             enable = cfg.ttyAudit.enablePattern;
             disable = cfg.ttyAudit.disablePattern;
           }; }
           { name = "systemd_home"; enable = config.services.homed.enable; control = "required"; modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so"; }
-          { name = "mkhomedir"; enable = cfg.makeHomeDir; control = "required"; modulePath = "${pkgs.pam}/lib/security/pam_mkhomedir.so"; settings = {
+          { name = "mkhomedir"; enable = cfg.makeHomeDir; control = "required"; modulePath = "${package}/lib/security/pam_mkhomedir.so"; settings = {
             silent = true;
             skel = config.security.pam.makeHomeDir.skelDirectory;
             inherit (config.security.pam.makeHomeDir) umask;
           }; }
-          { name = "lastlog"; enable = cfg.updateWtmp; control = "required"; modulePath = "${pkgs.pam}/lib/security/pam_lastlog.so"; settings = {
+          { name = "lastlog"; enable = cfg.updateWtmp; control = "required"; modulePath = "${package}/lib/security/pam_lastlog.so"; settings = {
             silent = true;
           }; }
           { name = "ecryptfs"; enable = config.security.pam.enableEcryptfs; control = "optional"; modulePath = "${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"; }
@@ -823,11 +824,11 @@ let
           # Skips the pam_fscrypt module for systemd-user sessions which do not have a password
           # anyways.
           # See also https://github.com/google/fscrypt/issues/95
-          { name = "fscrypt-skip-systemd"; enable = config.security.pam.enableFscrypt; control = "[success=1 default=ignore]"; modulePath = "pam_succeed_if.so"; args = [
+          { name = "fscrypt-skip-systemd"; enable = config.security.pam.enableFscrypt; control = "[success=1 default=ignore]"; modulePath = "${package}/lib/security/pam_succeed_if.so"; args = [
             "service" "=" "systemd-user"
           ]; }
           { name = "fscrypt"; enable = config.security.pam.enableFscrypt; control = "optional"; modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so"; }
-          { name = "zfs_key-skip-systemd"; enable = cfg.zfs; control = "[success=1 default=ignore]"; modulePath = "pam_succeed_if.so"; args = [
+          { name = "zfs_key-skip-systemd"; enable = cfg.zfs; control = "[success=1 default=ignore]"; modulePath = "${package}/lib/security/pam_succeed_if.so"; args = [
             "service" "=" "systemd-user"
           ]; }
           { name = "zfs_key"; enable = cfg.zfs; control = "optional"; modulePath = "${config.boot.zfs.package}/lib/security/pam_zfs_key.so"; settings = {
@@ -846,14 +847,14 @@ let
           { name = "krb5"; enable = config.security.pam.krb5.enable; control = "optional"; modulePath = "${pam_krb5}/lib/security/pam_krb5.so"; }
           { name = "otpw"; enable = cfg.otpwAuth; control = "optional"; modulePath = "${pkgs.otpw}/lib/security/pam_otpw.so"; }
           { name = "systemd"; enable = cfg.startSession; control = "optional"; modulePath = "${config.systemd.package}/lib/security/pam_systemd.so"; }
-          { name = "xauth"; enable = cfg.forwardXAuth; control = "optional"; modulePath = "pam_xauth.so"; settings = {
+          { name = "xauth"; enable = cfg.forwardXAuth; control = "optional"; modulePath = "${package}/lib/security/pam_xauth.so"; settings = {
             xauthpath = "${pkgs.xorg.xauth}/bin/xauth";
             systemuser = 99;
           }; }
-          { name = "limits"; enable = cfg.limits != []; control = "required"; modulePath = "${pkgs.pam}/lib/security/pam_limits.so"; settings = {
+          { name = "limits"; enable = cfg.limits != []; control = "required"; modulePath = "${package}/lib/security/pam_limits.so"; settings = {
             conf = "${makeLimitsConf cfg.limits}";
           }; }
-          { name = "motd"; enable = cfg.showMotd && (config.users.motd != null || config.users.motdFile != null); control = "optional"; modulePath = "${pkgs.pam}/lib/security/pam_motd.so"; settings = {
+          { name = "motd"; enable = cfg.showMotd && (config.users.motd != null || config.users.motdFile != null); control = "optional"; modulePath = "${package}/lib/security/pam_motd.so"; settings = {
             inherit motd;
           }; }
           { name = "apparmor"; enable = cfg.enableAppArmor && config.security.apparmor.enable; control = "optional"; modulePath = "${pkgs.apparmor-pam}/lib/security/pam_apparmor.so"; settings = {
@@ -966,6 +967,8 @@ in
   ###### interface
 
   options = {
+
+    security.pam.package = mkPackageOption pkgs "pam" { };
 
     security.pam.loginLimits = mkOption {
       default = [];
@@ -1515,7 +1518,7 @@ in
 
     environment.systemPackages =
       # Include the PAM modules in the system path mostly for the manpages.
-      [ pkgs.pam ]
+      [ package ]
       ++ optional config.users.ldap.enable pam_ldap
       ++ optional config.services.kanidm.enablePam config.services.kanidm.package
       ++ optional config.services.sssd.enable pkgs.sssd
@@ -1533,7 +1536,7 @@ in
         setuid = true;
         owner = "root";
         group = "root";
-        source = "${pkgs.pam}/bin/unix_chkpwd";
+        source = "${package}/bin/unix_chkpwd";
       };
     };
 
@@ -1574,11 +1577,6 @@ in
       lib.concatMapStrings
         (name: "r ${config.environment.etc."pam.d/${name}".source},\n")
         (attrNames config.security.pam.services) +
-      ''
-      mr ${getLib pkgs.pam}/lib/security/pam_filter/*,
-      mr ${getLib pkgs.pam}/lib/security/pam_*.so,
-      r ${getLib pkgs.pam}/lib/security/,
-      '' +
       (with lib; pipe config.security.pam.services [
         attrValues
         (catAttrs "rules")
@@ -1586,6 +1584,12 @@ in
         (concatMap attrValues)
         (filter (rule: rule.enable))
         (catAttrs "modulePath")
+        # TODO(@uninsane): replace this warning + filter with just an assertion
+        (map (modulePath: lib.warnIfNot
+          (hasPrefix "/" modulePath)
+          ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor and will be treated as an error by future versions of nixpkgs; see <https://github.com/NixOS/nixpkgs/pull/314791>''
+          modulePath
+        ))
         (filter (hasPrefix "/"))
         unique
         (map (module: "mr ${module},"))

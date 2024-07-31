@@ -23677,8 +23677,6 @@ with pkgs;
 
   rapidjson = callPackage ../development/libraries/rapidjson { };
 
-  rapidjson-unstable = callPackage ../development/libraries/rapidjson/unstable.nix { };
-
   rapidxml = callPackage ../development/libraries/rapidxml { };
 
   rapidyaml = callPackage ../development/libraries/rapidyaml {};
@@ -29941,7 +29939,7 @@ with pkgs;
 
   dyff = callPackage ../development/tools/dyff { };
 
-  dwl = callPackage ../applications/window-managers/dwl {
+  dwl = callPackage ../by-name/dw/dwl/package.nix {
     wlroots = wlroots_0_17;
   };
 
