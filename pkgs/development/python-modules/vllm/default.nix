@@ -41,7 +41,8 @@
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
 
-  rocmSupport ? config.rocmSupport,
+  # Has to be either rocm or cuda, default to the free one
+  rocmSupport ? !config.cudaSupport,
   rocmPackages ? { },
   gpuTargets ? [ ],
 }@args:
