@@ -173,11 +173,13 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     patchelf
   ];
+
   buildInputs = [
     # needed for XDG_ICON_DIRS
     adwaita-icon-theme
     glib
     gtk3
+    gtk4
     # needed for GSETTINGS_SCHEMAS_PATH
     gsettings-desktop-schemas
   ];
