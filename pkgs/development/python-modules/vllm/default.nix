@@ -60,19 +60,14 @@ buildPythonPackage rec {
   version = "0.5.3.post1";
   pyproject = true;
 
+  stdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
+
   src = fetchFromGitHub {
     owner = "vllm-project";
     repo = pname;
     rev = "refs/tags/v${version}";
     hash = "sha256-++DK2Y2zz+1KrEcdQc5XFrSjc7fCwMD2DQ/RqY7PoFU=";
   };
-
-  stdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
-
-  # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
-  PYTORCH_ROCM_ARCH = lib.optionalString rocmSupport (
-    lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets
-  );
 
   # hipcc --version works badly on NixOS due to unresolved paths.
   postPatch =
@@ -85,25 +80,18 @@ buildPythonPackage rec {
         --replace "'hipcc', '--version'" "'${writeShellScript "hipcc-version-stub" "echo HIP version: 0.0"}'"
     '';
 
-  preBuild =
-    lib.optionalString rocmSupport ''
-      export ROCM_HOME=${rocmPackages.clr}
-      export PATH=$PATH:${rocmPackages.hipcc}
-    ''
-    + lib.optionalString cudaSupport ''
-      export CUDA_HOME=${cudaPackages.cuda_nvcc}
-    '';
-
   nativeBuildInputs = [
     cmake
     ninja
-    packaging
     pythonRelaxDepsHook
-    setuptools
-    torch
-    wheel
     which
   ] ++ lib.optionals rocmSupport [ rocmPackages.hipcc ];
+
+  build-system = [
+    packaging
+    setuptools
+    wheel
+  ];
 
   buildInputs =
     (lib.optionals cudaSupport (
@@ -129,7 +117,7 @@ buildPythonPackage rec {
       ]
     ));
 
-  propagatedBuildInputs =
+  dependencies =
     [
       aioprometheus
       fastapi
@@ -161,6 +149,20 @@ buildPythonPackage rec {
     ];
 
   dontUseCmakeConfigure = true;
+
+  # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
+  PYTORCH_ROCM_ARCH = lib.optionalString rocmSupport (
+    lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets
+  );
+
+  preBuild =
+    lib.optionalString rocmSupport ''
+      export ROCM_HOME=${rocmPackages.clr}
+      export PATH=$PATH:${rocmPackages.hipcc}
+    ''
+    + lib.optionalString cudaSupport ''
+      export CUDA_HOME=${cudaPackages.cuda_nvcc}
+    '';
 
   pythonRelaxDeps = true;
 
