@@ -42,17 +42,6 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ go ]}
   '';
 
-  # The following tests fail when built by nix:
-  #
-  # $ nix log /nix/store/build-revive.1.3.9.drv | grep FAIL
-  #
-  # --- FAIL: TestAll (0.01s)
-  # --- FAIL: TestTimeEqual (0.00s)
-  # --- FAIL: TestTimeNaming (0.00s)
-  # --- FAIL: TestUnhandledError (0.00s)
-  # --- FAIL: TestUnhandledErrorWithBlacklist (0.00s)
-  doCheck = false;
-
   meta = with lib; {
     description = "Fast, configurable, extensible, flexible, and beautiful linter for Go";
     mainProgram = "revive";
