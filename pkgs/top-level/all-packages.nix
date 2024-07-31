@@ -31193,8 +31193,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/wlroots {})
     wlroots_0_16
     wlroots_0_17
-    wlroots_0_18
-    wlroots;
+    wlroots_0_18;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
 
@@ -34335,7 +34334,9 @@ with pkgs;
 
   trayer = callPackage ../applications/window-managers/trayer { };
 
-  tinywl = callPackage ../applications/window-managers/tinywl { };
+  tinywl = callPackage ../applications/window-managers/tinywl {
+    wlroots = wlroots_0_18;
+  };
 
   tree-from-tags = callPackage ../applications/audio/tree-from-tags { };
 
