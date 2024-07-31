@@ -1,14 +1,16 @@
 {
   lib,
   python,
-  buildPythonPackage,
   fetchFromGitHub,
+  buildPythonPackage,
   mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cron_descriptor";
   version = "1.4.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Salamek";
@@ -22,6 +24,7 @@ buildPythonPackage rec {
     sed -i "/'pep8\|flake8\|pep8-naming',/d" setup.py
   '';
 
+  build-system = [ setuptools ];
   checkInputs = [ mock ];
 
   checkPhase = ''
