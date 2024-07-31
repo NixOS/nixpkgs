@@ -7,6 +7,7 @@
   djangorestframework,
   pytestCheckHook,
   pytest-django,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,7 @@ buildPythonPackage rec {
     djangorestframework
     pytestCheckHook
     pytest-django
+    pytz
   ];
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";
