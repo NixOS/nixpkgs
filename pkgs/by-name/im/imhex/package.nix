@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, cmake
-, darwin
-, llvmPackages_17
-, fetchFromGitHub
-, mbedtls
-, gtk3
-, pkg-config
-, capstone
-, dbus
-, libGLU
-, libGL
-, glfw3
-, file
-, perl
-, python3
-, jansson
-, curl
-, fmt_8
-, nlohmann_json
-, yara
-, rsync
-, nix-update-script
-, autoPatchelfHook
-, makeWrapper
-, overrideSDK
+{
+  lib,
+  stdenv,
+  cmake,
+  darwin,
+  llvmPackages_17,
+  fetchFromGitHub,
+  mbedtls,
+  gtk3,
+  pkg-config,
+  capstone,
+  dbus,
+  libGLU,
+  libGL,
+  glfw3,
+  file,
+  perl,
+  python3,
+  jansson,
+  curl,
+  fmt_8,
+  nlohmann_json,
+  yara,
+  rsync,
+  nix-update-script,
+  autoPatchelfHook,
+  makeWrapper,
+  overrideSDK,
 }:
 
 let
@@ -48,7 +49,7 @@ let
   };
 
 in
-stdenv'.mkDerivation(finalAttrs: {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "imhex";
   inherit version;
 
@@ -61,7 +62,7 @@ stdenv'.mkDerivation(finalAttrs: {
     hash = "sha256-8vhOOHfg4D9B9yYgnGZBpcjAjuL4M4oHHax9ad5PJtA=";
   };
 
-   postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/PostprocessBundle.cmake \
       --replace-fail "fixup_bundle" "#fixup_bundle"
     substituteInPlace plugins/builtin/source/content/providers/process_memory_provider.cpp \
@@ -69,18 +70,17 @@ stdenv'.mkDerivation(finalAttrs: {
       --replace-fail "mach/arm/vm_types.h" "mach/machine/vm_types.h"
   '';
 
-  nativeBuildInputs = [
-    cmake
-    llvmPackages.llvm
-    python3
-    perl
-    pkg-config
-    rsync
-  ] ++ lib.optionals stdenv.isLinux [
-    autoPatchelfHook
-  ] ++ lib.optionals stdenv.isDarwin [
-    makeWrapper
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      llvmPackages.llvm
+      python3
+      perl
+      pkg-config
+      rsync
+    ]
+    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ]
+    ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
 
   buildInputs = [
     capstone
@@ -95,9 +95,7 @@ stdenv'.mkDerivation(finalAttrs: {
     mbedtls
     nlohmann_json
     yara
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.UniformTypeIdentifiers
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.UniformTypeIdentifiers ];
 
   # autoPatchelfHook only searches for *.so and *.so.*, and won't find *.hexpluglib
   # however, we will append to RUNPATH ourselves
@@ -120,21 +118,25 @@ stdenv'.mkDerivation(finalAttrs: {
   ];
 
   # rsync is used here so we can not copy the _schema.json files
-  postInstall = if stdenv.isLinux then ''
-    mkdir -p $out/share/imhex
-    rsync -av --exclude="*_schema.json" ${patterns_src}/{constants,encodings,includes,magic,nodes,patterns} $out/share/imhex
-''
-    else if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    mv $out/imhex.app $out/Applications
-    rsync -av --exclude="*_schema.json" ${patterns_src}/{constants,encodings,includes,magic,nodes,patterns} "$out/Applications/imhex.app/Contents/MacOS"
-    install_name_tool \
-      -change "$out/lib/libimhex.${finalAttrs.version}${stdenv.hostPlatform.extensions.sharedLibrary}" \
-      "@executable_path/../Frameworks/libimhex.${finalAttrs.version}${stdenv.hostPlatform.extensions.sharedLibrary}" \
-      "$out/Applications/imhex.app/Contents/MacOS/imhex"
-    makeWrapper "$out/Applications/imhex.app/Contents/MacOS/imhex" "$out/bin/imhex"
-  ''
-    else throw "Unsupported system";
+  postInstall =
+    if stdenv.isLinux then
+      ''
+        mkdir -p $out/share/imhex
+        rsync -av --exclude="*_schema.json" ${patterns_src}/{constants,encodings,includes,magic,nodes,patterns} $out/share/imhex
+      ''
+    else if stdenv.isDarwin then
+      ''
+        mkdir -p $out/Applications
+        mv $out/imhex.app $out/Applications
+        rsync -av --exclude="*_schema.json" ${patterns_src}/{constants,encodings,includes,magic,nodes,patterns} "$out/Applications/imhex.app/Contents/MacOS"
+        install_name_tool \
+          -change "$out/lib/libimhex.${finalAttrs.version}${stdenv.hostPlatform.extensions.sharedLibrary}" \
+          "@executable_path/../Frameworks/libimhex.${finalAttrs.version}${stdenv.hostPlatform.extensions.sharedLibrary}" \
+          "$out/Applications/imhex.app/Contents/MacOS/imhex"
+        makeWrapper "$out/Applications/imhex.app/Contents/MacOS/imhex" "$out/bin/imhex"
+      ''
+    else
+      throw "Unsupported system";
 
   passthru.updateScript = nix-update-script { };
 
