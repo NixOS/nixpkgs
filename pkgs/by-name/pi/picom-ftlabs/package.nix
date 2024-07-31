@@ -32,14 +32,14 @@
   withDebug ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "picom";
-  version = "11.2";
+  pname = "picom-ftlabs";
+  version = "df4c6a3"; # Example date for the version
 
   src = fetchFromGitHub {
     owner = "FT-labs";
     repo = "picom";
-    rev = "v${finalAttrs.version}";
-    hash = "";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-FmORxY7SLFnAmtQyC82sK36RoUBa94rJ7BsDXjXUCXk=";
     fetchSubmodules = true;
   };
 
