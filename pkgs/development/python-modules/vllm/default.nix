@@ -69,16 +69,10 @@ buildPythonPackage rec {
     hash = "sha256-++DK2Y2zz+1KrEcdQc5XFrSjc7fCwMD2DQ/RqY7PoFU=";
   };
 
-  # hipcc --version works badly on NixOS due to unresolved paths.
-  postPatch =
-    ''
-      substituteInPlace setup.py \
-        --replace 'cmake_args = [' 'cmake_args = ["-DFETCHCONTENT_SOURCE_DIR_CUTLASS=${cutlass}",'
-    ''
-    + lib.optionalString rocmSupport ''
-      substituteInPlace setup.py \
-        --replace "'hipcc', '--version'" "'${writeShellScript "hipcc-version-stub" "echo HIP version: 0.0"}'"
-    '';
+  patches = [
+    ./0001-setup.py-don-t-ask-for-hipcc-version.patch
+    ./0002-setup.py-nix-support-respect-cmakeFlags.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -149,6 +143,7 @@ buildPythonPackage rec {
     ];
 
   dontUseCmakeConfigure = true;
+  cmakeFlags = [ (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}") ];
 
   # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
   PYTORCH_ROCM_ARCH = lib.optionalString rocmSupport (
