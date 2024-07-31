@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
+  setuptools,
   pkg-config,
   yajl,
 }:
@@ -9,7 +11,7 @@
 buildPythonPackage rec {
   pname = "jsonslicer";
   version = "0.1.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AMDmi3";
@@ -18,9 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-uKIe/nJLCTe8WFIMB7+g3c0Yv3addgZEKYaBI6EpBSY=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  build-system = [
+    setuptools
+    pkg-config
+  ];
 
   buildInputs = [ yajl ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Stream JSON parser for Python";
