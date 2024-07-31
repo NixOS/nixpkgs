@@ -60,6 +60,13 @@ let unwrapped = mkXfceDerivation {
     sed -i -e 's|thunar_dialogs_show_insecure_program (parent, _(".*"), file, exec)|1|' thunar/thunar-file.c
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # https://github.com/NixOS/nixpkgs/issues/329688
+      --prefix PATH : ${lib.makeBinPath [ exo ]}
+    )
+  '';
+
   meta = with lib; {
     description = "Xfce file manager";
     mainProgram = "thunar";
