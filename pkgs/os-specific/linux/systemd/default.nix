@@ -7,6 +7,7 @@
 , fetchFromGitHub
 , fetchzip
 , fetchpatch
+, fetchpatch2
 , buildPackages
 , makeBinaryWrapper
 , ninja
@@ -238,10 +239,11 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-OmuPDm3NykrDeNTA3NcYt9iTXEUFwKJ5apPP4KqtABg=";
     })
 
-    # https://github.com/systemd/systemd/pull/33400
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/compare/051d462b42fe6c27824046c15cd3c84fa5afe05b..5e2d802c018f0b6d5dd58745f64d6958fa261096.patch";
-      hash = "sha256-drGAnx+ECixOjIP0DUSbCG/emUgoVips9WQL5ny3NKQ=";
+    # https://github.com/systemd/systemd/issues/33392
+    (fetchpatch2 {
+      url = "https://github.com/systemd/systemd/commit/f8b02a56febf14adf2474875a1b6625f1f346a6f.patch?full_index=1";
+      hash = "sha256-qRW92gPtACjk+ifptkw5mujhHlkCF56M3azGIjLiMKE=";
+      revert = true;
     })
   ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
