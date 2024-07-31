@@ -74,6 +74,15 @@ buildPythonPackage rec {
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
   ];
 
+  # Ignore the python version check because it hard-codes minor versions and
+  # lags behind `ray`'s python interpreter support
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'set(PYTHON_SUPPORTED_VERSIONS' \
+        'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
+  '';
+
   nativeBuildInputs = [
     cmake
     ninja
