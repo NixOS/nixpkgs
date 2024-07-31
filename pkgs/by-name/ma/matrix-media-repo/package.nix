@@ -7,13 +7,13 @@
 }:
 let
   pname = "matrix-media-repo";
-  version = "1.3.6";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
     owner = "t2bot";
     repo = "matrix-media-repo";
     rev = "v${version}";
-    hash = "sha256-Yrw+6WKHm9Y31YvW5iXnUDhIg0TcSctaouIGhAN4iBo=";
+    hash = "sha256-trVn+Mn98aJLQCpQX1+qps/uuA5+8zeDoM94eauxHO8=";
   };
 
   vendorHash = "sha256-fKDdL7C3L33caoXxlutzoND2izB5GH+5qTeojTskIUg=";
