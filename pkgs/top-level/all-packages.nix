@@ -38360,7 +38360,14 @@ with pkgs;
 
   apmplanner2 = libsForQt5.callPackage ../applications/science/robotics/apmplanner2 { };
 
-  betaflight-configurator = callPackage ../applications/science/robotics/betaflight-configurator { };
+  betaflight-configurator = callPackage ../applications/science/robotics/betaflight-configurator {
+    version = "10.10.0";
+    sha256 = "sha256-UB5Vr5wyCUZbOaQNckJQ1tAXwh8VSLNI1IgTiJzxV08";
+  };
+  betaflight-configurator_10_9 = callPackage ../applications/science/robotics/betaflight-configurator {
+    version = "10.9.0";
+    sha256 = "0lkf7llbcw2l7r28g3djwgblb91k0685hlvvbiryvnhi2b4cqp7l";
+  };
 
   emuflight-configurator = callPackage ../applications/science/robotics/emuflight-configurator { };
 
