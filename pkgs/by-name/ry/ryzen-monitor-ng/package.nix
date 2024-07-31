@@ -16,16 +16,15 @@ stdenv.mkDerivation {
     owner = "plasmin";
     repo = "ryzen_monitor_ng";
     rev = "8b7854791d78de731a45ce7d30dd17983228b7b1";
-    hash = "sha256-fcW2fEsCFliRnMFnboR0jchzVIlCYbr2AE6AS06cb6o=";
+    hash = "sha256-xdYNtXCbNy3/y5OAHZEi9KgPtwr1LTtLWAZC5DDCfmE=";
+    # Upstream repo contains pre-compiled binaries and object files
+    # that are out of date.
+    # These need to be removed before build stage.
+    postFetch = ''
+      rm "$out/src/ryzen_monitor"
+      make -C "$out" clean
+    '';
   };
-
-  # Upstream repo contains pre-compiled binaries and object files
-  # that are out of date.
-  # These need to be removed before build stage.
-  preBuild = ''
-    rm src/ryzen_monitor
-    make clean
-  '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
