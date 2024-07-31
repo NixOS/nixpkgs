@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
     libxklavier
   ];
 
+  postInstall = ''
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
     odd-unstable = true;
