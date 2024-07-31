@@ -23,17 +23,17 @@ let
   platforms = {
     x86_64-linux = {
       archSuffix = "x86_64";
-      hash = "sha256-Etz6NaeLMysSkcQGC3g+IqUy9QrONCrbkyej63uLflo=";
+      hash = "sha256-b+YXBVnxu54HfC/tWapcs/ZYzwBOJswYbEbEU3SVNss=";
     };
     aarch64-linux = {
       archSuffix = "arm64";
-      hash = "sha256-PVpgxhJU8RY6QepydqImQnisWBjbrsuW4j49Xot3C6Y=";
+      hash = "sha256-l54FAtT+Rj4Mv3GuOF0/9WuKdJowgbZDZYo7VCh6Flg=";
     };
   };
 
 in stdenv.mkDerivation rec {
   pname = "renoise";
-  version = "3.4.3";
+  version = "3.4.4";
 
   src = if releasePath != null then
     releasePath
