@@ -4224,6 +4224,8 @@ self: super: with self; {
 
   faster-whisper = callPackage ../development/python-modules/faster-whisper { };
 
+  fasthtml = callPackage ../development/python-modules/fasthtml { };
+
   fastimport = callPackage ../development/python-modules/fastimport { };
 
   fastjet = toPythonModule (pkgs.fastjet.override {
