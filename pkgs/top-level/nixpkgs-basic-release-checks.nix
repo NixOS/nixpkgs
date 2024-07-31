@@ -44,6 +44,9 @@ pkgs.runCommand "nixpkgs-release-checks"
         # Relies on impure eval
         export NIX_ABORT_ON_WARN=true
 
+        # Suppress GC warnings
+        export GC_LARGE_ALLOC_WARN_INTERVAL=100000
+
         set +e
         (
           set -x
