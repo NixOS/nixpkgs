@@ -210,6 +210,7 @@ in {
         LimitNOFILE = "1048576";
         LimitNPROC = "infinity";
         TasksMax = "infinity";
+        Delegate = true; # LXD needs to manage cgroups in its subtree
 
         # By default, `lxd` loads configuration files from hard-coded
         # `/usr/share/lxc/config` - since this is a no-go for us, we have to
