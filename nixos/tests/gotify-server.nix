@@ -9,7 +9,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
 
     services.gotify = {
       enable = true;
-      port = 3000;
+      environment = {
+        GOTIFY_SERVER_PORT = 3000;
+      };
     };
   };
 
