@@ -62,14 +62,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop";
-  version = "5.2.3";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-VSMSlR3rIUTYQ4GLQrVMZNrSAFfh3aJo6p92xgXMrvo=";
+    hash = "sha256-RmbMY73tCBZG69tSCZxNiKvqM9pFQObqppcMvyKXqxY=";
   };
 
   patches = [
@@ -183,13 +183,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    "-Ddisable_autoupdate=ON"
+    (lib.cmakeBool "DESKTOP_APP_DISABLE_AUTOUPDATE" true)
     # We're allowed to used the API ID of the Snap package:
-    "-DTDESKTOP_API_ID=611335"
-    "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
+    (lib.cmakeFeature "TDESKTOP_API_ID" "611335")
+    (lib.cmakeFeature "TDESKTOP_API_HASH" "d524b414d21f4d37f08684c1df41ac9c")
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
-    "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
-    "-DDESKTOP_APP_DISABLE_SCUDO=ON"
+    (lib.cmakeBool "DESKTOP_APP_USE_PACKAGED_FONTS" false)
   ];
 
   preBuild = ''
@@ -219,17 +218,17 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Telegram Desktop messaging app";
     longDescription = ''
       Desktop client for the Telegram messenger, based on the Telegram API and
       the MTProto secure protocol.
     '';
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
     homepage = "https://desktop.telegram.org/";
-    changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ nickcao ];
+    changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
   };
 })
