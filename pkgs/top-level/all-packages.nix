@@ -2193,6 +2193,8 @@ with pkgs;
 
   diff-so-fancy = callPackage ../applications/version-management/diff-so-fancy { };
 
+  forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
+
   gex = callPackage ../applications/version-management/gex {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
