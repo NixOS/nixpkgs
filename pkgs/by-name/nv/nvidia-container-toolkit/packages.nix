@@ -30,26 +30,6 @@ lib.makeScope newScope (
       configTemplate = self.dockerConfig;
     };
 
-    podmanConfig = {
-      disable-require = true;
-      #swarm-resource = "DOCKER_RESOURCE_GPU";
-
-      nvidia-container-cli = {
-        #root = "/run/nvidia/driver";
-        #path = "/usr/bin/nvidia-container-cli";
-        environment = [ ];
-        #debug = "/var/log/nvidia-container-runtime-hook.log";
-        ldcache = "/tmp/ld.so.cache";
-        load-kmods = true;
-        no-cgroups = true;
-        #user = "root:video";
-        ldconfig = "@@glibcbin@/bin/ldconfig";
-      };
-    };
-    nvidia-container-toolkit-podman = self.nvidia-container-toolkit-docker.override {
-      configTemplate = self.podmanConfig;
-    };
-
     nvidia-docker = symlinkJoin {
       name = "nvidia-docker";
       paths = [
@@ -60,13 +40,5 @@ lib.makeScope newScope (
     };
     nvidia-docker-unwrapped =
       self.callPackage ./nvidia-docker.nix { };
-
-    nvidia-podman = symlinkJoin {
-      name = "nvidia-podman";
-      paths = [
-        self.nvidia-container-toolkit-podman
-      ];
-      inherit (self.nvidia-container-toolkit-podman) meta;
-    };
   }
 )
