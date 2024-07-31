@@ -1788,6 +1788,7 @@ dont-distribute-packages:
  - groundhog-sqlite
  - groundhog-th
  - grpc-etcd-client
+ - grpc-haskell
  - gruff
  - gruff-examples
  - gsc-weighting
