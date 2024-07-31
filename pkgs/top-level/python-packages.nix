@@ -14822,6 +14822,8 @@ self: super: with self; {
 
   sqlite-fts4 = callPackage ../development/python-modules/sqlite-fts4 { };
 
+  sqlite-minutils = callPackage ../development/python-modules/sqlite-minutils { };
+
   sqlite-utils = callPackage ../development/python-modules/sqlite-utils { };
 
   sqliteschema = callPackage ../development/python-modules/sqliteschema { };
