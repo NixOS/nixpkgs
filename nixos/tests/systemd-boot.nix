@@ -506,7 +506,7 @@ rec {
       baseConfig = { pkgs, lib, ... }: {
         imports = [ common ];
         boot.loader.systemd-boot.bootCounting.enable = true;
-        boot.loader.systemd-boot.bootCounting.trials = 2;
+        boot.loader.systemd-boot.bootCounting.tries = 2;
       };
     in
     makeTest {
