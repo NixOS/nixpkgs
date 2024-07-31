@@ -145,19 +145,13 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
   cmakeFlags = [ (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}") ];
 
-  # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
-  PYTORCH_ROCM_ARCH = lib.optionalString rocmSupport (
-    lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets
-  );
-
-  preBuild =
-    lib.optionalString rocmSupport ''
-      export ROCM_HOME=${rocmPackages.clr}
-      export PATH=$PATH:${rocmPackages.hipcc}
-    ''
-    + lib.optionalString cudaSupport ''
-      export CUDA_HOME=${cudaPackages.cuda_nvcc}
-    '';
+  env =
+    lib.optionalAttrs cudaSupport { CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}"; }
+    // lib.optionalAttrs rocmSupport {
+      # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
+      PYTORCH_ROCM_ARCH = lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets;
+      ROCM_HOME = "${rocmPackages.clr}";
+    };
 
   pythonRelaxDeps = true;
 
