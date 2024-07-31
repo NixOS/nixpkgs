@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "cron_descriptor";
+  pname = "cron-descriptor";
   version = "1.4.3";
   pyproject = true;
 
