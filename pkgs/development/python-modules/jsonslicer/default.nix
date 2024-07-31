@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "jsonslicer";
-  version = "0.1.7";
+  version = "0.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AMDmi3";
     repo = "jsonslicer";
     rev = version;
-    hash = "sha256-uKIe/nJLCTe8WFIMB7+g3c0Yv3addgZEKYaBI6EpBSY=";
+    hash = "sha256-nPifyqr+MaFqoCYFbFSSBDjvifpX0CFnHCdMCvhwYTA=";
   };
 
   build-system = [
