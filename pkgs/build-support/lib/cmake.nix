@@ -20,11 +20,13 @@ let
       "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
     ] ++ optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
+    ] ++ optionals (stdenv.hostPlatform.isNone) [
+      "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
     ] ++ optionals stdenv.hostPlatform.isStatic [
       "-DCMAKE_LINK_SEARCH_START_STATIC=ON"
     ]);
 
-  makeCMakeFlags = { cmakeFlags ? [], ... }: cmakeFlags ++ cmakeFlags';
+  makeCMakeFlags = { cmakeFlags ? [ ], ... }: cmakeFlags ++ cmakeFlags';
 
 in
 {
