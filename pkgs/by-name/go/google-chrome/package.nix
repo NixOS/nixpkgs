@@ -1,48 +1,48 @@
 {
-  lib,
-  stdenv,
-  patchelf,
-  makeWrapper,
   fetchurl,
+  lib,
+  makeWrapper,
+  patchelf,
+  stdenv,
   writeScript,
 
   # Linked dynamic libraries.
-  glib,
-  fontconfig,
-  freetype,
-  pango,
-  cairo,
-  libX11,
-  libXi,
-  atk,
-  nss,
-  nspr,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXrender,
-  libXScrnSaver,
-  libXcomposite,
-  libxcb,
   alsa-lib,
-  libXdamage,
-  libXtst,
-  libXrandr,
-  libxshmfence,
-  expat,
-  cups,
-  dbus,
-  gtk3,
-  gtk4,
-  gdk-pixbuf,
-  gcc-unwrapped,
   at-spi2-atk,
   at-spi2-core,
-  libkrb5,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fontconfig,
+  freetype,
+  gcc-unwrapped,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  gtk4,
   libdrm,
   libglvnd,
-  mesa,
+  libkrb5,
+  libX11,
+  libxcb,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
   libxkbcommon,
+  libXrandr,
+  libXrender,
+  libXScrnSaver,
+  libxshmfence,
+  libXtst,
+  mesa,
+  nspr,
+  nss,
+  pango,
   pipewire,
   wayland, # ozone/wayland
 
@@ -61,17 +61,17 @@
 
   # Additional dependencies according to other distros.
   ## Ubuntu
-  liberation_ttf,
   curl,
+  liberation_ttf,
   util-linux,
-  xdg-utils,
   wget,
+  xdg-utils,
   ## Arch Linux.
   flac,
   harfbuzz,
   icu,
-  libpng,
   libopus,
+  libpng,
   snappy,
   speechd-minimal,
   ## Gentoo
@@ -79,15 +79,15 @@
   libcap,
 
   # Necessary for USB audio devices.
-  pulseSupport ? true,
   libpulseaudio,
+  pulseSupport ? true,
 
-  gsettings-desktop-schemas,
   adwaita-icon-theme,
+  gsettings-desktop-schemas,
 
   # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
-  libvaSupport ? true,
   libva,
+  libvaSupport ? true,
 
   # For Vulkan support (--enable-features=Vulkan)
   addDriverRunpath,
@@ -98,59 +98,59 @@ let
 
   deps =
     [
-      glib
-      fontconfig
-      freetype
-      pango
-      cairo
-      libX11
-      libXi
-      atk
-      nss
-      nspr
-      libXcursor
-      libXext
-      libXfixes
-      libXrender
-      libXScrnSaver
-      libXcomposite
-      libxcb
       alsa-lib
-      libXdamage
-      libXtst
-      libXrandr
-      libxshmfence
-      expat
-      cups
-      dbus
-      gdk-pixbuf
-      gcc-unwrapped.lib
-      systemd
-      libexif
-      pciutils
-      liberation_ttf
-      curl
-      util-linux
-      wget
-      flac
-      harfbuzz
-      icu
-      libpng
-      opusWithCustomModes
-      snappy
-      speechd-minimal
-      bzip2
-      libcap
       at-spi2-atk
       at-spi2-core
-      libkrb5
-      libdrm
-      libglvnd
-      mesa
+      atk
+      bzip2
+      cairo
       coreutils
+      cups
+      curl
+      dbus
+      expat
+      flac
+      fontconfig
+      freetype
+      gcc-unwrapped.lib
+      gdk-pixbuf
+      glib
+      harfbuzz
+      icu
+      libcap
+      libdrm
+      liberation_ttf
+      libexif
+      libglvnd
+      libkrb5
+      libpng
+      libX11
+      libxcb
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
       libxkbcommon
+      libXrandr
+      libXrender
+      libXScrnSaver
+      libxshmfence
+      libXtst
+      mesa
+      nspr
+      nss
+      opusWithCustomModes
+      pango
+      pciutils
       pipewire
+      snappy
+      speechd-minimal
+      systemd
+      util-linux
       wayland
+      wget
     ]
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional libvaSupport libva
@@ -170,17 +170,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    patchelf
     makeWrapper
+    patchelf
   ];
   buildInputs = [
-    # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings-desktop-schemas
+    # needed for XDG_ICON_DIRS
+    adwaita-icon-theme
     glib
     gtk3
-
-    # needed for XDG_ICON_DIRS
-    gnome.adwaita-icon-theme
+    # needed for GSETTINGS_SCHEMAS_PATH
+    gsettings-desktop-schemas
   ];
 
   unpackPhase = ''
