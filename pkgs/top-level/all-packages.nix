@@ -4460,8 +4460,6 @@ with pkgs;
 
   cbftp = callPackage ../tools/networking/cbftp { };
 
-  cddl = callPackage ../development/tools/cddl { };
-
   cedille = callPackage ../applications/science/logic/cedille
                           { inherit (haskellPackages) alex happy Agda ghcWithPackages;
                           };
