@@ -29941,7 +29941,7 @@ with pkgs;
 
   dyff = callPackage ../development/tools/dyff { };
 
-  dwl = callPackage ../applications/window-managers/dwl {
+  dwl = callPackage ../by-name/dw/dwl/package.nix {
     wlroots = wlroots_0_17;
   };
 
