@@ -14,6 +14,7 @@
 , gdk-pixbuf
 , glib
 , gtk3
+, hashes
 , lib
 , libcap
 , libdrm
@@ -32,6 +33,7 @@
 , stdenv
 , systemd
 , udev
+, version
 , wrapGAppsHook3
 , xorg
 }:
@@ -86,8 +88,6 @@ let
 
     extraOutputsToInstall = [ "lib" "out" ];
   };
-
-  version = "0.89.0";
 in
 stdenv.mkDerivation {
   pname = "nwjs";
@@ -97,12 +97,7 @@ stdenv.mkDerivation {
     let flavor = if sdk then "sdk-" else "";
     in fetchurl {
       url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
-      hash = {
-        "sdk-ia32" = "sha256-gHZLxZRborfbwmblKQrgr6tf+Rwt1YqxrGELAHPM0so=";
-        "sdk-x64" = "sha256-NOQGS3jEdZumTwCmi0DUtnGlOaSAZi2rGYSLVioJDdg=";
-        "ia32" = "sha256-L3PGK2YZCUo+KfkakL9AjkPcnUWPFOn4S2GePi+rph0=";
-        "x64" = "sha256-epsbDjrpq4K7NnNDAcKoEJMcjfdehU2JjFcmA5exug8=";
-      }."${flavor + bits}";
+      hash = hashes."${flavor + bits}";
     };
 
   nativeBuildInputs = [
