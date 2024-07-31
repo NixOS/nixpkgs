@@ -4,8 +4,6 @@ rustPlatform,
 fetchFromGitHub,
 pkg-config,
 openssl,
-jq,
-moreutils,
 CoreServices,
 SystemConfiguration
 }:
