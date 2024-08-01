@@ -23,7 +23,7 @@ buildGoModule rec {
     homepage = "https://github.com/yorukot/superfile";
     changelog = "https://github.com/yorukot/superfile/blob/${src.rev}/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [momeemt];
+    maintainers = with maintainers; [momeemt redyf];
     mainProgram = "superfile";
   };
 }
