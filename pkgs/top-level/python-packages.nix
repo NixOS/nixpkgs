@@ -9486,6 +9486,8 @@ self: super: with self; {
 
   opentelemetry-instrumentation-asgi = callPackage ../development/python-modules/opentelemetry-instrumentation-asgi { };
 
+  opentelemetry-instrumentation-dbapi = callPackage ../development/python-modules/opentelemetry-instrumentation-dbapi { };
+
   opentelemetry-instrumentation-django = callPackage ../development/python-modules/opentelemetry-instrumentation-django { };
 
   opentelemetry-instrumentation-fastapi = callPackage ../development/python-modules/opentelemetry-instrumentation-fastapi { };
