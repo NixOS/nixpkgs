@@ -14798,19 +14798,9 @@ with pkgs;
   temurin-bin-21 = javaPackages.compiler.temurin-bin.jdk-21;
   temurin-jre-bin-21 = javaPackages.compiler.temurin-bin.jre-21;
 
-  temurin-bin-20 = javaPackages.compiler.temurin-bin.jdk-20;
-  temurin-jre-bin-20 = javaPackages.compiler.temurin-bin.jre-20;
-
-  temurin-bin-19 = javaPackages.compiler.temurin-bin.jdk-19;
-  temurin-jre-bin-19 = javaPackages.compiler.temurin-bin.jre-19;
-
-  temurin-bin-18 = javaPackages.compiler.temurin-bin.jdk-18;
-  temurin-jre-bin-18 = javaPackages.compiler.temurin-bin.jre-18;
-
   temurin-bin-17 = javaPackages.compiler.temurin-bin.jdk-17;
   temurin-jre-bin-17 = javaPackages.compiler.temurin-bin.jre-17;
 
-  temurin-bin-16 = javaPackages.compiler.temurin-bin.jdk-16;
   temurin-bin-11 = javaPackages.compiler.temurin-bin.jdk-11;
   temurin-jre-bin-11 = javaPackages.compiler.temurin-bin.jre-11;
   temurin-bin-8 = javaPackages.compiler.temurin-bin.jdk-8;
@@ -14823,8 +14813,6 @@ with pkgs;
   semeru-jre-bin-21 = javaPackages.compiler.semeru-bin.jre-21;
   semeru-bin-17 = javaPackages.compiler.semeru-bin.jdk-17;
   semeru-jre-bin-17 = javaPackages.compiler.semeru-bin.jre-17;
-  semeru-bin-16 = javaPackages.compiler.semeru-bin.jdk-16;
-  semeru-jre-bin-16 = javaPackages.compiler.semeru-bin.jre-16;
   semeru-bin-11 = javaPackages.compiler.semeru-bin.jdk-11;
   semeru-jre-bin-11 = javaPackages.compiler.semeru-bin.jre-11;
   semeru-bin-8 = javaPackages.compiler.semeru-bin.jdk-8;
