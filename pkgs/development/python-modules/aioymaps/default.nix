@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aioymaps";
-  version = "1.2.4";
+  version = "1.2.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-btBeYP+/ntWpWm5O6ERkRJlhpV8tLe9lrFLYOEB55cY=";
+    hash = "sha256-tEl2tX/mB8uYTYj1YFDs/2sPXiv6897jCEmsFCWBXYg=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
