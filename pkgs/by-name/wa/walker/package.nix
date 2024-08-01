@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "walker";
-  version = "0.0.88";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "walker";
     rev = "v${version}";
-    hash = "sha256-1y4lXKpaNUoxjFJNhGn3e6wn/IPXNqHFeSetfyKoAXE=";
+    hash = "sha256-crbBLK/xcdOkWtoLoV1gEK8UB3oyqnDk3zwbX+RR1Yk=";
   };
 
-  vendorHash = "sha256-zDntJ695k8dbwyFXbg9PapWD335MHrWbep1xxzXNIL4=";
+  vendorHash = "sha256-2t6WXQ5XoDtnlhzc96KeJ2cx+8sVS1oy2z3tsIRGq1Y=";
 
   nativeBuildInputs = [
     pkg-config
