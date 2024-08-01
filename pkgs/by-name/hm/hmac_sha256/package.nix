@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6Zl5qfd22x5P1+ZlqIyH6w1dcnzOhxMJaARMa7yxShU=";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -28,6 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
+
+  doCheck = true;
+
+  enableParallelBuilding = true;
 
   meta = {
     description = ''
