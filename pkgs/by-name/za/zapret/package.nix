@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation {
   pname = "zapret";
-  version = "0-unstable-2024-07-16";
+  version = "0-unstable-2024-08-01";
 
   src = fetchFromGitHub {
     owner = "bol-van";
     repo = "zapret";
-    rev = "9fcd8f830ebde2491719a5c698e22d1d5210e0fb";
+    rev = "9cf72b7c68f6a7c80dfddc6c1cf6d6db32718376";
     sha256 = "sha256-8cqKCNYLLkZXlwrybKUPG6fLd7gmf8zV9tjWoTxAwIY=";
   };
 
