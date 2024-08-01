@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, writeText
-, git
-, buildDotnetModule
-, dotnetCorePackages
-, fetchFromGitHub
-, recyclarr
-, testers
+{
+  lib,
+  openssl,
+  writeText,
+  git,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  recyclarr,
+  testers,
 }:
 let
   nuget-config = writeText "nuget.config" ''
@@ -38,9 +39,7 @@ buildDotnetModule rec {
     substituteInPlace src/Recyclarr.Cli/Console/Setup/ProgramInformationDisplayTask.cs \
       --replace-fail 'GitVersionInformation.InformationalVersion' '"${version}-nixpkgs"'
   '';
-  patches = [
-    ./001-Git-Version.patch
-  ];
+  patches = [ ./001-Git-Version.patch ];
 
   dotnetRestoreFlags = [ "--configfile=${nuget-config}" ];
 
@@ -52,14 +51,17 @@ buildDotnetModule rec {
 
   executables = [ "recyclarr" ];
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [git]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        git
+        openssl
+      ]
+    }"
   ];
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion {
-      package = recyclarr;
-    };
+    tests.version = testers.testVersion { package = recyclarr; };
   };
 
   meta = with lib; {
@@ -67,7 +69,15 @@ buildDotnetModule rec {
     homepage = "https://recyclarr.dev/";
     changelog = "https://github.com/recyclarr/recyclarr/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ josephst aldoborrero ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      josephst
+      aldoborrero
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }
