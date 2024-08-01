@@ -2,17 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  ax,
   botorch,
   ipywidgets,
   jinja2,
   pandas,
   plotly,
-  python,
   setuptools,
   setuptools-scm,
   typeguard,
-  wheel,
   hypothesis,
   mercurial,
   pyfakefs,
@@ -22,24 +19,23 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ax";
-  version = "0.4.0";
-  format = "pyproject";
+  pname = "ax-platform";
+  version = "0.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
-    repo = pname;
+    repo = "ax";
     rev = "refs/tags/${version}";
-    hash = "sha256-dj6Gig8N4oLtcZLwPl4QDHG/FwA2nFBtYxSARnWiJJU=";
+    hash = "sha256-ygMMMKY5XsoQGp9yUMFAQqkSUlXNBJCb8xgGE10db4U=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     botorch
     ipywidgets
     jinja2
@@ -51,7 +47,7 @@ buildPythonPackage rec {
 
   env.ALLOW_BOTORCH_LATEST = "1";
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mercurial
     pyfakefs
@@ -83,12 +79,8 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "ax" ];
 
-  # Many portions of the test suite fail under Python 3.12
-  doCheck = lib.versions.majorMinor python.version != "3.12";
-
-  passthru.tests.check = ax.overridePythonAttrs { doCheck = true; };
-
   meta = with lib; {
+    changelog = "https://github.com/facebook/Ax/releases/tag/${version}";
     description = "Ax is an accessible, general-purpose platform for understanding, managing, deploying, and automating adaptive experiments";
     homepage = "https://ax.dev/";
     license = licenses.mit;
