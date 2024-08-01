@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, unzip, lib }:
+{
+  stdenv,
+  fetchurl,
+  unzip,
+  lib,
+}:
 
 stdenv.mkDerivation rec {
   owner = "eldadru";
@@ -6,8 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.6.2";
 
   src = fetchurl {
-    url =
-      "https://github.com/${owner}/${pname}/releases/download/v${version}/ksniff.zip";
+    url = "https://github.com/${owner}/${pname}/releases/download/v${version}/ksniff.zip";
     sha256 = "sha256-xZtcnqhNbLdxCW8SRskZtxOJ+dQjToWPSSkgiVflYf0=";
   };
 
@@ -39,8 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "Kubernetes CLI plugin for live capture of network traffic between pods";
+    description = "Kubernetes CLI plugin for live capture of network traffic between pods";
     homepage = "https://github.com/eldadru/ksniff";
     license = licenses.mit;
     maintainers = with maintainers; [ maintainers.behoof4mind ];
