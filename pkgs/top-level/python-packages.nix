@@ -9486,6 +9486,8 @@ self: super: with self; {
 
   opentelemetry-instrumentation-asgi = callPackage ../development/python-modules/opentelemetry-instrumentation-asgi { };
 
+  opentelemetry-instrumentation-botocore = callPackage ../development/python-modules/opentelemetry-instrumentation-botocore { };
+
   opentelemetry-instrumentation-django = callPackage ../development/python-modules/opentelemetry-instrumentation-django { };
 
   opentelemetry-instrumentation-fastapi = callPackage ../development/python-modules/opentelemetry-instrumentation-fastapi { };
@@ -9495,6 +9497,8 @@ self: super: with self; {
   opentelemetry-instrumentation-grpc = callPackage ../development/python-modules/opentelemetry-instrumentation-grpc { };
 
   opentelemetry-instrumentation-wsgi = callPackage ../development/python-modules/opentelemetry-instrumentation-wsgi { };
+
+  opentelemetry-propagator-aws-xray = callPackage ../development/python-modules/opentelemetry-propagator-aws-xray { };
 
   opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto { };
 
