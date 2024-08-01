@@ -1,8 +1,11 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix (
+  { pkgs, ... }:
 
   {
     name = "firefly-iii-data-importer";
-    meta = with pkgs.lib.maintainers; { maintainers = [ litchipi ]; };
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ litchipi ];
+    };
 
     nodes = {
       server = {
@@ -19,4 +22,5 @@ import ./make-test-python.nix ({ pkgs, ... }:
       server.wait_for_open_port(9001)
       server.succeed("curl --fail http://localhost:9001")
     '';
-  })
+  }
+)

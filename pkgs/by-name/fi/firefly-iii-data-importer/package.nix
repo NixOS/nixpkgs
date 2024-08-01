@@ -1,20 +1,23 @@
-{
-  stdenv,
-  unzip,
-}: let
+{ stdenv, unzip }:
+let
   version = "1.5.2";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "firefly-iii-data-importer";
   inherit version;
 
-  src = builtins.fetchurl { 
+  src = builtins.fetchurl {
     url = "https://github.com/firefly-iii/data-importer/releases/download/v${version}/DataImporter-v${version}.zip";
     sha256 = "sha256:1ssxhgd6x4lp8ak5zkgj02hvpvdsgxafli9syb9lwrkkr9z8lyyg";
   };
 
   buildInputs = [ unzip ];
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" ];
+  phases = [
+    "unpackPhase"
+    "patchPhase"
+    "installPhase"
+  ];
 
   unpackPhase = ''
     unzip $src
