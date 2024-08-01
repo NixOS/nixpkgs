@@ -29,9 +29,9 @@ buildPythonPackage rec {
       -e "/--no-cov/d"
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     dnspython
     tenacity
