@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 let
   version = "0.27.2";
@@ -29,6 +31,15 @@ buildGoModule {
   '';
 
   vendorHash = "sha256-GD9TAvWqE3nvgVpoy/4CkkdVxliNMy+GNBXJtGSNVqo=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd step \
+      --bash <($out/bin/step completion bash) \
+      --zsh <($out/bin/step completion zsh) \
+      --fish <($out/bin/step completion fish)
+  '';
 
   meta = {
     description = "Zero trust swiss army knife for working with X509, OAuth, JWT, OATH OTP, etc";
