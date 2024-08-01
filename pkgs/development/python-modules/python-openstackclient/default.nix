@@ -15,6 +15,7 @@
   python-manilaclient,
   python-novaclient,
   python-openstackclient,
+  python-zaqarclient,
   requests-mock,
   setuptools,
   sphinxHook,
@@ -73,6 +74,7 @@ buildPythonPackage rec {
         python-heatclient
         python-ironicclient
         python-manilaclient
+        python-zaqarclient
       ];
     };
     tests.version = testers.testVersion {
