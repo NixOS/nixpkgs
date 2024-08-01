@@ -1,24 +1,23 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, pytz
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  pytz,
 }:
 
 buildHomeAssistantComponent rec {
-  owner = "presto8";
+  owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
     rev = "v${version}";
-    hash = "sha256-OWpOYNVzowdn0iZfJwhdMrAYeqDpNJvSwHpsJX9fDk4=";
+    hash = "sha256-0eTEgRDgm4+Om2uqrt24Gj7dSdA6OJs/0oi5J5SHOyI=";
   };
 
-  propagatedBuildInputs = [
-    pytz
-  ];
+  dependencies = [ pytz ];
 
   dontBuild = true;
 
