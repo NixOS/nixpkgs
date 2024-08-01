@@ -1,8 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Victor Fuentes <vmfuentes64@gmail.com>
+Date: Thu, 1 Aug 2024 15:59:54 -0400
+Subject: [PATCH] Uses pkexec within modules in order to run calamares without
+ root permissions as a whole.
+
+Also fixes storage check in the welcome module
+---
+ src/libcalamares/utils/Runner.cpp             |  8 +++---
+ src/modules/mount/main.py                     |  8 +++---
+ .../welcome/checker/GeneralRequirements.cpp   | 27 ++++++++++++++++++-
+ .../welcome/checker/GeneralRequirements.h     |  1 +
+ 4 files changed, 35 insertions(+), 9 deletions(-)
+
 diff --git a/src/libcalamares/utils/Runner.cpp b/src/libcalamares/utils/Runner.cpp
-index 632f32028..fe9052449 100644
+index f7872a7d0..a246ca110 100644
 --- a/src/libcalamares/utils/Runner.cpp
 +++ b/src/libcalamares/utils/Runner.cpp
-@@ -137,13 +137,13 @@ Calamares::Utils::Runner::run()
+@@ -145,13 +145,13 @@ Calamares::Utils::Runner::run()
      }
      if ( m_location == RunLocation::RunInTarget )
      {
@@ -21,20 +35,19 @@ index 632f32028..fe9052449 100644
  
      if ( m_output )
 diff --git a/src/modules/mount/main.py b/src/modules/mount/main.py
-index 4202639f3..de2556b91 100644
+index 4a16f8872..6d32916a5 100644
 --- a/src/modules/mount/main.py
 +++ b/src/modules/mount/main.py
-@@ -235,7 +235,8 @@ def mount_partition(root_mount_point, partition, partitions, mount_options, moun
- 
+@@ -244,7 +244,7 @@ def mount_partition(root_mount_point, partition, partitions, mount_options, moun
      # Ensure that the created directory has the correct SELinux context on
      # SELinux-enabled systems.
+ 
 -    os.makedirs(mount_point, exist_ok=True)
 +    subprocess.check_call(["pkexec", "mkdir", "-p", mount_point])
-+
+ 
      try:
          subprocess.call(['chcon', '--reference=' + raw_mount_point, mount_point])
-     except FileNotFoundError as e:
-@@ -278,13 +279,13 @@ def mount_partition(root_mount_point, partition, partitions, mount_options, moun
+@@ -288,13 +288,13 @@ def mount_partition(root_mount_point, partition, partitions, mount_options, moun
          for s in btrfs_subvolumes:
              if not s["subvolume"]:
                  continue

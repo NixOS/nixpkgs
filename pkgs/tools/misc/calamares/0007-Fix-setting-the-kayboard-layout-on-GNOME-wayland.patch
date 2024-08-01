@@ -1,5 +1,16 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Victor Fuentes <vmfuentes64@gmail.com>
+Date: Thu, 1 Aug 2024 16:03:14 -0400
+Subject: [PATCH] Fix setting the kayboard layout on GNOME wayland.
+
+By default the module uses the setxkbmap, which will not change the
+keyboard
+---
+ src/modules/keyboard/Config.cpp | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
 diff --git a/src/modules/keyboard/Config.cpp b/src/modules/keyboard/Config.cpp
-index d8b1e8e86..b2e1b7b5f 100644
+index ad6bee6f7..4d43abe53 100644
 --- a/src/modules/keyboard/Config.cpp
 +++ b/src/modules/keyboard/Config.cpp
 @@ -307,7 +307,10 @@ Config::xkbApply()
