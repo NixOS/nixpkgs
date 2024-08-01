@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zchunk";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "zchunk";
     repo = "zchunk";
     rev = finalAttrs.version;
-    hash = "sha256-GiZM8Jh+v0US8xr90rySY0Ud3eAAl8UqLi162zDR3qw=";
+    hash = "sha256-X8qywx55TUVEOfYJMV5ARwyUdMjmN4hTmJQ6Upq5zyI=";
   };
 
   nativeBuildInputs = [
