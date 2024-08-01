@@ -321,6 +321,8 @@ in {
 
     akvcam = callPackage ../os-specific/linux/akvcam { };
 
+    amneziawg = callPackage ../os-specific/linux/amneziawg { };
+
     apfs = callPackage ../os-specific/linux/apfs { };
 
     ax99100 = callPackage ../os-specific/linux/ax99100 {};
