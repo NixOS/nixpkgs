@@ -7,6 +7,7 @@
   libjpeg,
   libpng,
   pkg-config,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/usr/local/share $out/
     rm -r $out/usr
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Decodes still images from movie files and serves them via HTTP";
