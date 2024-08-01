@@ -168,6 +168,9 @@ stdenv.mkDerivation rec {
       # Fixes intermittent crash
       # The upstream setup links in glew statically
       --prefix LD_PRELOAD : "${glew.out}/lib/libGLEW.so"
+
+      # Otherwise crashes the application for many people (see #293854, #328235)
+      --unset __GLX_VENDOR_LIBRARY_NAME
     )
   '';
 
