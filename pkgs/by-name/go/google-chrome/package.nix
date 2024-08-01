@@ -90,7 +90,7 @@
   libvaSupport ? true,
 
   # For Vulkan support (--enable-features=Vulkan)
-  addDriverRunpath,
+  addOpenGLRunpath,
 }:
 
 let
