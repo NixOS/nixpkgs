@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ kdePackages.qtdeclarative ];
 
-  postConfigure = lib.optionalString finalAttrs.doCheck ''
+  postConfigure = lib.optionalString finalAttrs.finalPackage.doCheck ''
     ln -s ${testData} $cmakeDir/test-data
   '';
 

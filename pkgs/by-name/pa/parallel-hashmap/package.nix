@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DPHMAP_BUILD_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
+    "-DPHMAP_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DPHMAP_BUILD_EXAMPLES=OFF"
   ];
 
