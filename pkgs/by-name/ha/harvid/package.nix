@@ -2,34 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  pkg-config,
   ffmpeg_4,
   libjpeg,
   libpng,
-  pkg-config,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harvid";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "harvid";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-qt6aep7iMF8/lnlT2wLqu6LkFDqzdfsGLZvrOlXttG8=";
+    sha256 = "sha256-p0W+rKHH/iuGOcRjl6b4s6jQYkm7bqWCz849SDI/7fQ=";
   };
-
-  patches = [
-    # Fix pending upstream inclusion to support parallel builds:
-    #   https://github.com/x42/harvid/pull/10
-    (fetchpatch {
-      name = "parallel-build.patch";
-      url = "https://github.com/x42/harvid/commit/a3f85c57ad2559558706d9b22989de36452704d9.patch";
-      sha256 = "sha256-0aBfM/4XEqM7C1nFw996IVwaeL0tNgMUQ1C3kblOobI=";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config ];
 
