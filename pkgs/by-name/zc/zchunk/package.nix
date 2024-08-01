@@ -1,6 +1,7 @@
 {
   lib,
   argp-standalone,
+  callPackage,
   curl,
   fetchFromGitHub,
   gitUpdater,
@@ -44,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gitUpdater { };
+    tests = lib.packagesFromDirectoryRecursive {
+      inherit callPackage;
+      directory = ./tests;
+    };
   };
 
   meta = {
