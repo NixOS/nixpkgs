@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, lib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "calamares-nixos-extensions";
-  version = "0.3.16";
+  version = "0.3.17";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "calamares-nixos-extensions";
-    rev = version;
-    hash = "sha256-ajQWmZVY60Q2cGJcLqMT2ypIi7bMMiyHMgdlp3g9874=";
+    rev = finalAttrs.version;
+    hash = "sha256-B9qXxVPuFVyl6wQyrsiJO3ES6YE+LDsYehLyiCKPRCM=";
   };
 
   installPhase = ''
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ vlinkz ];
     platforms = platforms.linux;
   };
-}
+})
