@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gradle
-, jdk
-, quark-engine
-, makeWrapper
-, imagemagick
-, makeDesktopItem
-, copyDesktopItems
-, desktopToDarwinBundle
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gradle,
+  jdk,
+  quark-engine,
+  makeWrapper,
+  imagemagick,
+  makeDesktopItem,
+  copyDesktopItems,
+  desktopToDarwinBundle,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,8 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+F+PHAd1+FmdAlQkjYDBsUYCUzKXG19ZUEorfvBUEg0=";
   };
 
-  nativeBuildInputs = [ gradle jdk imagemagick makeWrapper copyDesktopItems ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs = [
+    gradle
+    jdk
+    imagemagick
+    makeWrapper
+    copyDesktopItems
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
   __darwinAllowLocalNetworking = true;
@@ -69,7 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "jadx-gui";
       icon = "jadx";
       comment = finalAttrs.meta.description;
-      categories = [ "Development" "Utility" ];
+      categories = [
+        "Development"
+        "Utility"
+      ];
     })
   ];
 
@@ -81,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.asl20;
     platforms = platforms.unix;
