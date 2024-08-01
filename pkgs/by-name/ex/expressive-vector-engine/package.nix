@@ -10,14 +10,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "expressive-vector-engine";
-  version = finalAttrs.src.rev;
+  version = "2024-07-23";
 
   src = fetchFromGitHub {
     owner = "jfalcou";
     repo = "eve";
-    rev = "v2023.02.15";
-    hash = "sha256-k7dDtLR9PoJp9SR0z4j6uNwm8JOJQiHXbr09kXtRJ7g=";
+    rev = "df1cac9ccc510ce9841501fbbe6a166a6e7ad5ae";
+    hash = "sha256-prtzUc1hlskQPv7FI5B0PEEVsq3nolYM48DjNO+bwxU=";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     cmake
@@ -31,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false; #TODO
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    moveToOutput "lib/*/*.cmake" "$dev"
+  '';
 
   meta = {
     description = ''
