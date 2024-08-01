@@ -35784,6 +35784,10 @@ with pkgs;
 
   arena = callPackage ../games/arena { };
 
+  art = callPackage ../by-name/ar/art/package.nix {
+    fftw = fftwSinglePrec;
+  };
+
   arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis { };
 
   asc = callPackage ../games/asc {
