@@ -80,7 +80,7 @@ for module in $(< ~-/closure); do
     # of its output.
     modinfo -b $kernel --set-version "$version" -F firmware $module | grep -v '^name:' | while read -r i; do
         echo "firmware for $module: $i"
-        for name in "$i" "$i.xz" ""; do
+        for name in "$i" "$i.xz" "$i.zst" ""; do
             [ -z "$name" ] && echo "WARNING: missing firmware $i for module $module"
             if cp -v --parents --no-preserve=mode lib/firmware/$name "$out" 2>/dev/null; then
                 break
@@ -88,6 +88,14 @@ for module in $(< ~-/closure); do
         done
     done || :
 done
+
+if test -e lib/firmware/edid ; then
+    echo "lib/firmware/edid found, copying."
+    mkdir -p "$out/lib/firmware"
+    cp -v --no-preserve=mode --recursive --dereference --no-target-directory lib/firmware/edid "$out/lib/firmware/edid"
+else
+    echo "lib/firmware/edid not found, skipping."
+fi
 
 # copy module ordering hints for depmod
 cp $kernel/lib/modules/"$version"/modules.order $out/lib/modules/"$version"/.

@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   # patches Cargo.lock to include a more up-to-date version of lexical-core
   cargoPatches = [ ./cargo-lock-update-lexical-core.patch ];
 
-  cargoSha256 = "sha256-W5Emkbe1jI9Z+irMckD/3gJO47rACa9E5k5dqAFC1yQ=";
+  cargoHash = "sha256-W5Emkbe1jI9Z+irMckD/3gJO47rACa9E5k5dqAFC1yQ=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook pkg-config ];
   buildInputs = [ dbus fuse sqlite ];
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A tag-based filesystem";
+    description = "Tag-based filesystem";
     longDescription = ''
       Supertag is a tag-based filesystem, written in Rust, for Linux and MacOS.
       It provides a tag-based view of your files by removing the hierarchy

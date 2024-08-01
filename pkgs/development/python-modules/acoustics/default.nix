@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, matplotlib
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, scipy
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  matplotlib,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  tabulate,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "python-acoustics";
-    repo  = "python-acoustics";
+    repo = "python-acoustics";
     rev = "99d79206159b822ea2f4e9d27c8b2fbfeb704d38";
     hash = "sha256-/4bVjlhj8ihpAFHEWPaZ/xBILi3rb8f0NmwAexJCg+o=";
   };
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
 
-  pytestFlagsArray = [
-    "-Wignore::DeprecationWarning"
-  ];
+  pytestFlagsArray = [ "-Wignore::DeprecationWarning" ];
 
   pythonImportsCheck = [ "acoustics" ];
 

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pyopenssl
-, pythonOlder
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pyopenssl,
+  pythonOlder,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-2sI2SSqawSYKdgAUouVqs4sJ2BQylbXollRTWbYf7dY=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     pyopenssl
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "paypalrestsdk"
-  ];
+  pythonImportsCheck = [ "paypalrestsdk" ];
 
   meta = with lib; {
     description = "Python APIs to create, process and manage payment";
@@ -45,6 +42,6 @@ buildPythonPackage rec {
       fullName = "PayPal SDK License";
       url = "https://github.com/paypal/PayPal-Python-SDK/blob/master/LICENSE";
     };
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

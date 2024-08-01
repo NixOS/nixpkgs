@@ -22,7 +22,7 @@
 , pam
 , libredirect
 , etcDir ? null
-, withKerberos ? true
+, withKerberos ? false
 , withLdns ? true
 , libkrb5
 , libfido2
@@ -33,9 +33,10 @@
 , withPAM ? stdenv.hostPlatform.isLinux
 , dsaKeysSupport ? false
 , linkOpenssl ? true
+, isNixos ? stdenv.hostPlatform.isLinux
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   patches = [
@@ -77,6 +78,12 @@ stdenv.mkDerivation {
     unset LD
   '';
 
+  env = lib.optionalAttrs isNixos {
+    # openssh calls passwd to allow the user to reset an expired password, but nixos
+    # doesn't ship it at /usr/bin/passwd.
+    PATH_PASSWD_PROG = "/run/wrappers/bin/passwd";
+  };
+
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
   configureFlags = [
@@ -104,7 +111,7 @@ stdenv.mkDerivation {
 
   hardeningEnable = [ "pie" ];
 
-  doCheck = true;
+  doCheck = false;
   enableParallelChecking = false;
   nativeCheckInputs = [ openssl ] ++ lib.optional (!stdenv.isDarwin) hostname;
   preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
@@ -170,13 +177,20 @@ stdenv.mkDerivation {
     "sysconfdir=\${out}/etc/ssh"
   ];
 
-  passthru.tests = {
-    borgbackup-integration = nixosTests.borgbackup;
-    openssh = nixosTests.openssh;
+  passthru = {
+    inherit withKerberos;
+    tests = {
+      borgbackup-integration = nixosTests.borgbackup;
+      nixosTest = nixosTests.openssh;
+      openssh = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+        pname = previousAttrs.pname + "-test";
+        doCheck = true;
+      });
+    };
   };
 
   meta = with lib; {
-    description = "An implementation of the SSH protocol${extraDesc}";
+    description = "Implementation of the SSH protocol${extraDesc}";
     homepage = "https://www.openssh.com/";
     changelog = "https://www.openssh.com/releasenotes.html";
     license = licenses.bsd2;
@@ -184,4 +198,4 @@ stdenv.mkDerivation {
     maintainers = (extraMeta.maintainers or []) ++ (with maintainers; [ eelco aneeshusa ]);
     mainProgram = "ssh";
   } // extraMeta;
-}
+})

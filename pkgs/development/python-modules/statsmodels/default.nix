@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, numpy
-, packaging
-, pandas
-, patsy
-, pythonOlder
-, scipy
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  numpy,
+  packaging,
+  pandas,
+  patsy,
+  pythonOlder,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -37,6 +39,13 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=int-conversion"
+    ];
+  };
+
   dependencies = [
     numpy
     packaging
@@ -48,9 +57,7 @@ buildPythonPackage rec {
   # Huge test suites with several test failures
   doCheck = false;
 
-  pythonImportsCheck = [
-    "statsmodels"
-  ];
+  pythonImportsCheck = [ "statsmodels" ];
 
   meta = with lib; {
     description = "Statistical computations and models for use with SciPy";

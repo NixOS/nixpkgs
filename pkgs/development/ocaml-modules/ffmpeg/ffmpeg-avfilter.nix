@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, dune-configurator, pkg-config, fetchFromGitHub, callPackage
+{ lib, buildDunePackage, dune-configurator, pkg-config, callPackage
 , AppKit
 , CoreImage
 , ffmpeg-base ? callPackage ./base.nix { }

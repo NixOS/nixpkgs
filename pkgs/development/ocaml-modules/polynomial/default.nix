@@ -14,7 +14,7 @@ buildDunePackage rec {
     owner = "nomadic-labs";
     repo = "cryptography/ocaml-polynomial";
     rev = version;
-    sha256 = "sha256-is/PrYLCwStHiQsNq5OVRCwHdXjO2K2Z7FrXgytRfAU=";
+    hash = "sha256-is/PrYLCwStHiQsNq5OVRCwHdXjO2K2Z7FrXgytRfAU=";
   };
 
   propagatedBuildInputs = [ zarith ff-sig ];

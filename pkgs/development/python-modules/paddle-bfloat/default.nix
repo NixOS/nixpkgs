@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pythonAtLeast
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pythonAtLeast,
+  numpy,
 }:
 let
   pname = "paddle-bfloat";
@@ -28,13 +29,11 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "paddle_bfloat" ];
 
-# upstream has no tests
+  # upstream has no tests
   doCheck = false;
 
   meta = with lib; {

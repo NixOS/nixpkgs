@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, cryptography
-, mock
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
+  cryptography,
+  mock,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +25,15 @@ buildPythonPackage rec {
     hash = "sha256-Oc73Jx31SLzuhT9Iym5HHszKfflKZ+3aky5flXudvmI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  patches = [
+    # fixes deprecated test assertion, assertRaisesRegexp in python 3
+    (fetchpatch {
+      url = "https://github.com/trishtzy/stem/commit/d5012a1039f05c69ebe832723ce96ecbe8f79fe1.patch";
+      hash = "sha256-ozOTx4/c86sW/9Ss5eZ6ZxX63ByJT5x7JF6wBBd+VFY=";
+    })
   ];
+
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     cryptography

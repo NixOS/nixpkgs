@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
-, wheel
-, django
-, pyscaffold
-, configupdater
-, pre-commit
-, pytest
-, pytest-cov
-, pytest-xdist
-, tox
-, virtualenv
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  django,
+  pyscaffold,
+  configupdater,
+  pre-commit,
+  pytest,
+  pytest-cov,
+  pytest-xdist,
+  tox,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
@@ -55,6 +56,6 @@ buildPythonPackage rec {
     description = "Integration of django builtin scaffold cli (django-admin) into PyScaffold";
     homepage = "https://pypi.org/project/pyscaffoldext-django/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

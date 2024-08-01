@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A chemical modelling, analysis and structure drawing program";
+    description = "Chemical modelling, analysis and structure drawing program";
     homepage = "https://chemaxon.com/products/marvin";
     maintainers = with maintainers; [ fusion809 ];
     license = licenses.unfree;

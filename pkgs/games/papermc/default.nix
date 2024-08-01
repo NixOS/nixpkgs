@@ -1,6 +1,8 @@
+let
+  versions = builtins.fromJSON (builtins.readFile ./versions.json);
+in
 { callPackage, lib, ... }:
 let
-  versions = lib.importJSON ./versions.json;
   latestVersion = lib.last (builtins.sort lib.versionOlder (builtins.attrNames versions));
   escapeVersion = builtins.replaceStrings [ "." ] [ "_" ];
   packages = lib.mapAttrs'

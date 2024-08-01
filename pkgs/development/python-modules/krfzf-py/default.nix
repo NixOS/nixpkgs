@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -15,14 +16,12 @@ buildPythonPackage rec {
     hash = "sha256-/M9Atu9MLAGmnEdx6tknMJAit2o4Xt971uQ7pb0CBCk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   pythonImportsCheck = [ "fzf" ];
 
   meta = with lib; {
-    description = "A Pythonic Fzf Wrapper";
+    description = "Pythonic Fzf Wrapper";
     downloadPage = "https://github.com/justfoolingaround/fzf.py";
     homepage = "https://pypi.org/project/krfzf-py/";
     license = licenses.gpl3Only;

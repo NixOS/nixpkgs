@@ -57,7 +57,8 @@
 let
   inherit (stdenv) targetPlatform;
   ARCH = if targetPlatform.isAarch64 then "arm64" else "x64";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version;
 
   # Please backport all updates to the stable channel.
@@ -155,10 +156,10 @@ in stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 
-    # Fix the desktop link and fix showing application icon in tray
+    # Fix the desktop link
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace "/opt/${dir}/${pname}" $out/bin/${pname} \
-      ${if pname == "signal-desktop" then "--replace \"bin/signal-desktop\" \"bin/signal-desktop --use-tray-icon\"" else ""}
+      --replace-fail "StartupWMClass=Signal" "StartupWMClass=signal"
 
     # Note: The following path contains bundled libraries:
     # $out/lib/${dir}/resources/app.asar.unpacked/node_modules/
@@ -180,7 +181,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://signal.org/";
     changelog = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ eclairevoyant mic92 equirosa urandom bkchr ];
+    maintainers = with lib.maintainers; [ eclairevoyant mic92 equirosa urandom bkchr teutat3s ];
     mainProgram = pname;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

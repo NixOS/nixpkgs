@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
       extract the decoded AndroidManifest.xml directly from an APK file.
     '';
     homepage = "https://github.com/ytsutano/axmldec";
+    changelog = "https://github.com/ytsutano/axmldec/releases/tag/${src.rev}";
     license = licenses.isc;
     mainProgram = "axmldec";
     maintainers = with maintainers; [ franciscod ];

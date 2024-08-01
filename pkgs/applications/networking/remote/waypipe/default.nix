@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "waypipe";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
     rev = "v${version}";
-    hash = "sha256-zk5IzZiFff9EeJn24/QmE1ybcBkxpaz6Owp77CfCwV0=";
+    hash = "sha256-4I8ohllhIA3/LNgFAKH5GwwHKO5QKNex0+Be0OOgR14=";
   };
 
   strictDeps = true;
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A network proxy for Wayland clients (applications)";
+    description = "Network proxy for Wayland clients (applications)";
     longDescription = ''
       waypipe is a proxy for Wayland clients. It forwards Wayland messages and
       serializes changes to shared memory buffers over a single socket. This

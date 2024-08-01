@@ -11,6 +11,7 @@
 , busybox
 , apk-tools
 , perl
+, findutils
 }:
 
 stdenv.mkDerivation rec {
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     scdoc
     makeWrapper
     file
+    findutils
   ];
 
   patchPhase = ''

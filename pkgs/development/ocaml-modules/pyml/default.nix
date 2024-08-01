@@ -1,7 +1,6 @@
 { buildDunePackage
 , lib
 , fetchFromGitHub
-, fetchpatch
 , utop
 , python3
 , stdcompat

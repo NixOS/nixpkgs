@@ -5,7 +5,7 @@
 , pkg-config
 , libpulseaudio
 , dbus
-, speechd
+, speechd-minimal
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libpulseaudio
     dbus
-    speechd
+    speechd-minimal
   ];
 
   nativeBuildInputs = [
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An unofficial GoXLR App replacement for Linux, Windows and MacOS";
+    description = "Unofficial GoXLR App replacement for Linux, Windows and MacOS";
     homepage = "https://github.com/GoXLR-on-Linux/goxlr-utility";
     license = licenses.mit;
     maintainers = with maintainers; [ errnoh ];

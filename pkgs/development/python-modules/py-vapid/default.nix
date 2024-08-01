@@ -1,27 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytestCheckHook
-, cryptography
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytestCheckHook,
+  cryptography,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "py-vapid";
-  version = "1.9.0";
+  version = "1.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BmSreJl0LvKyhzl6TUYe9pHtDML1hyBRKNjPYX/9uRk=";
+    pname = "py_vapid";
+    inherit version;
+    hash = "sha256-/itUYb9Fx7r/EDnfaYHwO4f6qHzeBIKt36NbP+Y2rBs=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
   nativeCheckInputs = [
     mock
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     mainProgram = "vapid";
     homepage = "https://github.com/mozilla-services/vapid";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

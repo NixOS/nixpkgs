@@ -11,7 +11,6 @@
 , ghcVersion
   # Customization
 , userSettings ? null
-, enableHyperlinkedSource
 }:
 
 mkDerivation {
@@ -21,13 +20,6 @@ mkDerivation {
   postUnpack = ''
     sourceRoot="$sourceRoot/hadrian"
   '';
-  patches = lib.optionals (!enableHyperlinkedSource) [
-    ./disable-hyperlinked-source.patch
-  ] ++ lib.optionals (lib.elem ghcVersion [ "9.8.1" "9.8.2" ]) [
-    # Incorrect bounds on Cabal
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/24100
-    ./hadrian-9.8.1-allow-Cabal-3.10.patch
-  ];
   # Overwrite UserSettings.hs with a provided custom one
   postPatch = lib.optionalString (userSettings != null) ''
     install -m644 "${writeText "UserSettings.hs" userSettings}" src/UserSettings.hs

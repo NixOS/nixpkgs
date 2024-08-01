@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, which
+{ lib, stdenv, fetchFromGitHub, which
 , boost, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf
 , glew, zlib, icu, pkg-config, cairo, libvpx, glm
 }:
@@ -32,6 +32,8 @@ stdenv.mkDerivation {
     libvpx
     glm
   ];
+
+  env.CXXFLAGS = "-DGLM_ENABLE_EXPERIMENTAL -Wno-error=deprecated-declarations";
 
   enableParallelBuilding = true;
 

@@ -26,7 +26,7 @@ let
   version = "0.3.3";
 
   meta = with lib; {
-    description = "A Jupyter kernel for Clojure";
+    description = "Jupyter kernel for Clojure";
     homepage = "https://github.com/clojupyter/clojupyter";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];  # deps from maven
     license = licenses.mit;

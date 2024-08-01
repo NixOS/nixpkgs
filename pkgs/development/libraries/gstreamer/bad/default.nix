@@ -59,6 +59,7 @@
 , neon
 , openal
 , openexr_3
+, openh264Support ? lib.meta.availableOn stdenv.hostPlatform openh264
 , openh264
 , libopenmpt
 , pango
@@ -81,7 +82,7 @@
 , mjpegtools
 , libGLU
 , libGL
-, addOpenGLRunpath
+, addDriverRunpath
 , gtk3
 , libintl
 , game-music-emu
@@ -112,20 +113,20 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.24.2";
+  version = "1.24.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-RI4yeHvIK1hsbLL4HJqO9AT+pPd/JVZv4G5Zej9ZE2s=";
+    hash = "sha256-6Q8mx9ycdvSqWZt1jP1tjBDWoLnLJluiw8m984iFWPg=";
   };
 
   patches = [
     # Add fallback paths for nvidia userspace libraries
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit (addOpenGLRunpath) driverLink;
+      inherit (addDriverRunpath) driverLink;
     })
   ];
 
@@ -140,7 +141,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ] ++ lib.optionals enableDocumentation [
     hotdoc
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.isLinux) [
     wayland # for wayland-scanner
   ];
 
@@ -175,7 +176,6 @@ stdenv.mkDerivation rec {
     neon
     openal
     openexr_3
-    openh264
     rtmpdump
     pango
     soundtouch
@@ -211,7 +211,9 @@ stdenv.mkDerivation rec {
     bluez
   ] ++ lib.optionals microdnsSupport [
     libmicrodns
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals openh264Support [
+    openh264
+  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.isLinux) [
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
     wayland-protocols
@@ -300,11 +302,13 @@ stdenv.mkDerivation rec {
     "-Daja=disabled" # should pass libajantv2 via aja-sdk-dir instead
     "-Dmicrodns=${if microdnsSupport then "enabled" else "disabled"}"
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
+    (lib.mesonEnable "openh264" openh264Support)
     (lib.mesonEnable "doc" enableDocumentation)
   ]
   ++ lib.optionals (!stdenv.isLinux) [
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
     "-Dnvcodec=disabled" # Linux-only
+  ] ++ lib.optionals (!stdenv.isLinux || !gst-plugins-base.waylandEnabled) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
   ] ++ lib.optionals (!stdenv.isLinux || !guiSupport) [
     "-Ddirectfb=disabled"
@@ -322,8 +326,8 @@ stdenv.mkDerivation rec {
     "-Duvch264=disabled" # requires gudev
     "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
-  ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64) [
-    "-Dqsv=disabled" # Linux (and Windows) x86 only
+  ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64 || !gst-plugins-base.waylandEnabled) [
+    "-Dqsv=disabled" # Linux (and Windows) x86 only, makes va required
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
     "-Dgl=disabled"
   ] ++ lib.optionals (!gst-plugins-base.waylandEnabled || !guiSupport) [
@@ -371,6 +375,6 @@ stdenv.mkDerivation rec {
     '';
     license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }

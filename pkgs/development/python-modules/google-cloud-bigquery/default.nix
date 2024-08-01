@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.21.0";
+  version = "3.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YmXDn51b31DxHLganCoGBdKF3zSsE53g0jM7ElCt0P8=";
+    hash = "sha256-Wyr/MgWoVEgRF0NoNq4UA/EfJZTmgQqYiGr9V+2ihQk=";
   };
 
   build-system = [ setuptools ];
@@ -93,8 +93,10 @@ buildPythonPackage rec {
     "test_arrow_extension_types_same_for_storage_and_REST_APIs_894"
     "test_list_rows_empty_table"
     "test_list_rows_page_size"
-    "test_list_rows_scalars"
+    "test_list_rows_range_csv"
+    "test_list_rows_range"
     "test_list_rows_scalars_extreme"
+    "test_list_rows_scalars"
     "test_dry_run"
     "test_session"
     # Mocking of _ensure_bqstorage_client fails
@@ -130,6 +132,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-bigquery";
     changelog = "https://github.com/googleapis/python-bigquery/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

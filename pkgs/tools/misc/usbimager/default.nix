@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "bztsrc";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
+    hash = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
   };
 
   sourceRoot = "${src.name}/src";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withUdisks "USE_UDISKS2=yes";
 
   meta = with lib; {
-    description = "A very minimal GUI app that can write compressed disk images to USB drives";
+    description = "Very minimal GUI app that can write compressed disk images to USB drives";
     homepage = "https://gitlab.com/bztsrc/usbimager";
     license = licenses.mit;
     maintainers = with maintainers; [ vdot0x23 ];

@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.linuxfoundation.org/collaborate/workgroups/openprinting/cups-filters";
     description = "Backends, filters, and other software that was once part of the core CUPS distribution but is no longer maintained by Apple Inc";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
 }

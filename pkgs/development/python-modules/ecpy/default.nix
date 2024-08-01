@@ -1,4 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, future }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPy3k,
+  future,
+}:
 
 buildPythonPackage rec {
   pname = "ecpy";

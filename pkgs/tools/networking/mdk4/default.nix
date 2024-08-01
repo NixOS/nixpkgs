@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" "SBINDIR=$(PREFIX)/bin" ];
 
   meta = with lib; {
-    description = "A tool that injects data into wireless networks";
+    description = "Tool that injects data into wireless networks";
     homepage = "https://github.com/aircrack-ng/mdk4";
     maintainers = with maintainers; [ moni ];
     license = licenses.gpl2Plus;

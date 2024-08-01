@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub
+{ lib, buildGoModule, fetchFromGitHub
 , nixosTests
 , pkg-config, taglib, zlib
 

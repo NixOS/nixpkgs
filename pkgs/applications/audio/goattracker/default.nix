@@ -66,7 +66,7 @@ in stdenv.mkDerivation (finalAttrs: {
   desktopItems = [ desktopItem ];
 
   meta = {
-    description = "A crossplatform music editor for creating Commodore 64 music. Uses reSID library by Dag Lem and supports alternatively HardSID & CatWeasel devices"
+    description = "Crossplatform music editor for creating Commodore 64 music. Uses reSID library by Dag Lem and supports alternatively HardSID & CatWeasel devices"
       + lib.optionalString isStereo " - Stereo version";
     homepage = "https://cadaver.github.io/tools.html";
     downloadPage = "https://sourceforge.net/projects/goattracker2/";

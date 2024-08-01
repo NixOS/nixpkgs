@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, h5py
-, numpy
-, six
-, wasserstein
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  h5py,
+  numpy,
+  six,
+  wasserstein,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,12 +33,8 @@ buildPythonPackage rec {
     wasserstein
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-  pytestFlagsArray = [
-    "energyflow/tests"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "energyflow/tests" ];
   disabledTestPaths = [
     "energyflow/tests/test_archs.py" # requires tensorflow
     "energyflow/tests/test_emd.py" # requires "ot"

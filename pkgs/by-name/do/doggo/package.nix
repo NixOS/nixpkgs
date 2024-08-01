@@ -1,34 +1,38 @@
 { buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, nix-update-script
 , lib
 }:
 
 buildGoModule rec {
   pname = "doggo";
-  version = "0.5.7";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "mr-karan";
-    repo = pname;
+    repo = "doggo";
     rev = "v${version}";
-    hash = "sha256-hzl7BE3vsE2G9O2nwN/gkqQTJ+9aDfNIjmpmgN1AYq8=";
+    hash = "sha256-SD/BcJxoc5Oi8+nAs+CWBEcbgtaohykNlZ14jJvEWew=";
   };
 
-  vendorHash = "sha256-uonybBLABPj9CPtc+y82ajvQI7kubK+lKi4eLcZIUqA=";
+  vendorHash = "sha256-JIc6/G1hMf8+oIe4OMc+b0th5MCgi5Mwp3AxW4OD1lg=";
   nativeBuildInputs = [ installShellFiles ];
   subPackages = [ "cmd/doggo" ];
 
   ldflags = [
-    "-w -s"
+    "-s"
     "-X main.buildVersion=v${version}"
   ];
 
   postInstall = ''
     installShellCompletion --cmd doggo \
-      --fish --name doggo.fish completions/doggo.fish \
-      --zsh --name _doggo completions/doggo.zsh
+      --bash <($out/bin/doggo completions bash) \
+      --fish <($out/bin/doggo completions fish) \
+      --zsh <($out/bin/doggo completions zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/mr-karan/doggo";

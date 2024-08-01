@@ -13,7 +13,6 @@
 , glib
 , openh264
 , openssl
-, p11-kit
 , pcre2
 , pkcs11helper
 , uriparser
@@ -69,13 +68,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.4.0";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
-    hash = "sha256-ZOYHhldTdV8DrOHoXS42NXB6JHBJMGRswgTczn1S6BE=";
+    hash = "sha256-LdgHQ2lb3cde4cX4aIwHvSo0q9iwpLzaWDHbv1/rneE=";
   };
 
   postPatch = ''
@@ -196,14 +195,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   meta = with lib; {
-    description = "A Remote Desktop Protocol Client";
+    description = "Remote Desktop Protocol Client";
     longDescription = ''
       FreeRDP is a client-side implementation of the Remote Desktop Protocol (RDP)
       following the Microsoft Open Specifications.
     '';
     homepage = "https://www.freerdp.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg lheckemann ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
   };
 })

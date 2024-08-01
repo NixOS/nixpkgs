@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook gtk-doc gettext pkg-config unzip gobject-introspection ];
 
   meta = with lib; {
-    description = "An interface library to access tags for identifying languages";
+    description = "Interface library to access tags for identifying languages";
     license = licenses.mpl20;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;

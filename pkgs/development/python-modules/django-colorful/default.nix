@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
 }:
 
 buildPythonPackage rec {
@@ -25,5 +26,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/charettes/django-colorful";
     license = licenses.mit;
   };
-
 }

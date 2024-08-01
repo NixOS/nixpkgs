@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = ["-Wno-error" "-I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"];
 
   meta = with lib; {
-    description = "A stand-alone panel";
+    description = "Stand-alone panel";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.mit;

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "relic";
-  version = "7.6.2";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "sassoftware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-T76+Ftky1rSIqEoKE3RLsf6g2gguVJgYFflWmyEhdEk=";
+    sha256 = "sha256-w7KU3XntkKep0mcuOUBSG4fJW14yCamioeRH5YrULSo=";
   };
 
-  vendorHash = "sha256-5mgqIw3BV88rEF3ALD3pLhm658yUUFf44hQFSw085cU=";
+  vendorHash = "sha256-/P4W+smY01feV1HP5Tsx0PsoOyp//ik7RVWuEaiSepY=";
 
   ldflags = [
     "-s"
@@ -33,7 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/sassoftware/relic";
-    description = "A service and a tool for adding digital signatures to operating system packages for Linux and Windows";
+    description = "Service and a tool for adding digital signatures to operating system packages for Linux and Windows";
     mainProgram = "relic";
     license = licenses.asl20;
     maintainers = with maintainers; [ strager ];

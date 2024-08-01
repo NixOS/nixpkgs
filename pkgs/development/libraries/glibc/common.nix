@@ -44,7 +44,7 @@
 
 let
   version = "2.39";
-  patchSuffix = "-31";
+  patchSuffix = "-52";
   sha256 = "sha256-93vUfPgXDFc2Wue/hmlsEYrbOxINMlnGTFAtPcHi2SY=";
 in
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation ({
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
           $ git fetch --all -p && git checkout origin/release/2.39/master && git describe
-          glibc-2.39-31-g31da30f23c
+          glibc-2.39-52-gf8e4623421
           $ git show --minimal --reverse glibc-2.39.. ':!ADVISORIES' > 2.39-master.patch
 
          To compare the archive contents zdiff can be used.
@@ -278,7 +278,7 @@ stdenv.mkDerivation ({
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/libc/";
-    description = "The GNU C Library";
+    description = "GNU C Library";
 
     longDescription =
       '' Any Unix-like operating system needs a C library: the library which

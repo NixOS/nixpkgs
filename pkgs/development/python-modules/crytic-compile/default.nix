@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, cbor2
-, fetchFromGitHub
-, pycryptodome
-, pythonOlder
-, setuptools
-, solc-select
-, toml
+{
+  lib,
+  buildPythonPackage,
+  cbor2,
+  fetchFromGitHub,
+  pycryptodome,
+  pythonOlder,
+  setuptools,
+  solc-select,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
   # required for import check to work
   # PermissionError: [Errno 13] Permission denied: '/homeless-shelter'
   env.HOME = "/tmp";
-  pythonImportsCheck = [
-    "crytic_compile"
-  ];
+  pythonImportsCheck = [ "crytic_compile" ];
 
   meta = with lib; {
     description = "Abstraction layer for smart contract build systems";
@@ -47,6 +46,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/crytic/crytic-compile";
     changelog = "https://github.com/crytic/crytic-compile/releases/tag/${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ arturcygan hellwolf ];
+    maintainers = with maintainers; [
+      arturcygan
+      hellwolf
+    ];
   };
 }

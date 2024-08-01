@@ -1,19 +1,20 @@
-{ lib
-, asyncpg
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, numpy
-, peewee
-, postgresql
-, postgresqlTestHook
-, psycopg
-, psycopg2
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, sqlalchemy
-, sqlmodel
+{
+  lib,
+  asyncpg,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  numpy,
+  peewee,
+  postgresql,
+  postgresqlTestHook,
+  psycopg,
+  psycopg2,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  sqlalchemy,
+  sqlmodel,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-XKoaEwLW59pV4Dwis7p2L65XoO2zUEa1kXxz6Lgs2d8=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [
     asyncpg

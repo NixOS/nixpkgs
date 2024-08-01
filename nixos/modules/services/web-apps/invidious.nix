@@ -390,7 +390,7 @@ in
         '';
       };
 
-      package = lib.mkPackageOptionMD pkgs "http3-ytproxy" { };
+      package = lib.mkPackageOption pkgs "http3-ytproxy" { };
     };
   };
 

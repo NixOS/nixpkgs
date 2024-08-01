@@ -2,7 +2,6 @@
 , buildPgrxExtension
 , cargo-pgrx_0_11_2
 , clang_16
-, fetchCrate
 , fetchFromGitHub
 , nix-update-script
 , nixosTests
@@ -45,6 +44,10 @@ in
       src = ./0001-read-clang-flags-from-environment.diff;
       clang = lib.getExe clang;
     })
+    # Fix build failure on rustc 1.78 due to missing feature flag.
+    # Can (likely) be removed when pgvecto-rs 0.3.0 is released.
+    # See https://github.com/NixOS/nixpkgs/issues/320131
+    ./0002-std-detect-use-upstream.diff
   ];
 
   src = fetchFromGitHub {
@@ -60,7 +63,7 @@ in
     lockFile = ./Cargo.lock;
     outputHashes = {
       "openai_api_rust-0.1.8" = "sha256-os5Y8KIWXJEYEcNzzT57wFPpEXdZ2Uy9W3j5+hJhhR4=";
-      "std_detect-0.1.5" = "sha256-RwWejfqyGOaeU9zWM4fbb/hiO1wMpxYPKEjLO0rtRmU=";
+      "std_detect-0.1.5" = "sha256-Rsy8N0pTJ/3AIHjRyeOeyY7Q9Ho46ZcDmJFurCbRxiQ=";
     };
   };
 
@@ -93,7 +96,9 @@ in
   meta = with lib; {
     # The pgrx 0.11.2 dependency is broken in aarch64-linux: https://github.com/pgcentralfoundation/pgrx/issues/1429
     # It is fixed in pgrx 0.11.3, but upstream is still using pgrx 0.11.2
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    # Additionally, upstream (accidentally) broke support for PostgreSQL 12 and 13 on 0.2.1, but
+    # they are removing it in 0.3.0 either way: https://github.com/tensorchord/pgvecto.rs/issues/343
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin || (versionOlder postgresql.version "14");
     description = "Scalable, Low-latency and Hybrid-enabled Vector Search in Postgres";
     homepage = "https://github.com/tensorchord/pgvecto.rs";
     license = licenses.asl20;

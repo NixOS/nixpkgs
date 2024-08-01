@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , rustPlatform
 , fetchFromGitHub
 , fetchNpmDeps
@@ -96,7 +95,6 @@ rustPlatform.buildRustPackage rec {
     echo entering pagefind_web...
     (
       cd pagefind_web
-      export RUSTFLAGS="-C linker=lld"
       bash ./local_build.sh
     )
 

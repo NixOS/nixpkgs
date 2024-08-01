@@ -6,22 +6,21 @@
 , less
 , xdg-utils
 , testers
-, runCommand
 , stackit-cli
 }:
 
 buildGoModule rec {
   pname = "stackit-cli";
-  version = "0.3.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "stackitcloud";
     repo = "stackit-cli";
     rev = "v${version}";
-    hash = "sha256-EoZ1ThAve08NitKf6jPJNyqkGz0JUW2GmzKtvWm9cDU=";
+    hash = "sha256-lw3KzARVkKrFs8Ql+WlA2LJNj6x6f8+/+XnyLnQwxw4=";
   };
 
-  vendorHash = "sha256-WQNb4vs1qcsY0hqlLXNiH67065/yq5xZEgZBOwFZzNM=";
+  vendorHash = "sha256-0cwkFDUKjwEHY5fT1pUJIWEZaGhDm3pEqtC+hDZjE0g=";
 
   subPackages = [ "." ];
 

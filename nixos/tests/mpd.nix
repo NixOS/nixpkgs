@@ -37,7 +37,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
     mkServer = { mpd, musicService, }:
       { boot.kernelModules = [ "snd-dummy" ];
-        sound.enable = true;
         services.mpd = mpd;
         systemd.services.musicService = musicService;
       };

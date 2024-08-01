@@ -1,29 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pytest-runner
-, aiohttp
-, attrs
-, multidict
-, colorlog
-, pynacl
-, pytest-cov
-, pytest-randomly
-, pytest-asyncio
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pytest-runner,
+  aiohttp,
+  attrs,
+  multidict,
+  colorlog,
+  pynacl,
+  pytest-cov,
+  pytest-randomly,
+  pytest-asyncio,
+  mock,
 }:
 buildPythonPackage rec {
   pname = "hikari";
-  version = "2.0.0.dev124";
+  version = "2.0.0.dev126";
 
   src = fetchFromGitHub {
     owner = "hikari-py";
     repo = "hikari";
     rev = version;
-    hash = "sha256-zDgU3Ol/I3YNnwXm+aBh20KwonW746p5TObuwuWORog=";
+    hash = "sha256-KpF9P92IciILV7zlYTCgtMqhudT9uOR2SQJdWDtxYaA=";
     # The git commit is part of the `hikari.__git_sha1__` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -36,9 +36,6 @@ buildPythonPackage rec {
     '';
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -62,19 +59,20 @@ buildPythonPackage rec {
     mock
   ];
 
-  pythonImportChecks = [ "hikari" ];
+  pythonImportsCheck = [ "hikari" ];
 
   disabled = pythonOlder "3.7";
 
   postPatch = ''
-    substituteInPlace hikari/_about.py --replace "__git_sha1__: typing.Final[str] = \"HEAD\"" "__git_sha1__: typing.Final[str] = \"$(cat $src/COMMIT)\""
+    substituteInPlace hikari/_about.py \
+      --replace-fail "__git_sha1__: typing.Final[str] = \"HEAD\"" "__git_sha1__: typing.Final[str] = \"$(cat $src/COMMIT)\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Discord API wrapper for Python written with asyncio";
     homepage = "https://www.hikari-py.dev/";
     changelog = "https://github.com/hikari-py/hikari/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tomodachi94 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tomodachi94 sigmanificient ];
   };
 }

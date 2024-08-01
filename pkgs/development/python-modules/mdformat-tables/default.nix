@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, mdformat
-, mdit-py-plugins
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  mdformat,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,26 +22,21 @@ buildPythonPackage rec {
     hash = "sha256-Q61GmaRxjxJh9GjyR8QCZOH0njFUtAWihZ9lFQJ2nQQ=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    mdformat
-  ];
+  propagatedBuildInputs = [ mdformat ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mdformat_tables"
-  ];
+  pythonImportsCheck = [ "mdformat_tables" ];
 
   meta = with lib; {
-    description = "An mdformat plugin for rendering tables";
+    description = "Mdformat plugin for rendering tables";
     homepage = "https://github.com/executablebooks/mdformat-tables";
     license = licenses.mit;
-    maintainers = with maintainers; [ aldoborrero polarmutex ];
+    maintainers = with maintainers; [
+      aldoborrero
+      polarmutex
+    ];
   };
 }

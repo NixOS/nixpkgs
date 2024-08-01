@@ -18,18 +18,18 @@ assert sslSupportEnabled -> sslLibs ? ${sslSupport};
 
 skawarePackages.buildPackage {
   pname = "s6-networking";
-  version = "2.7.0.2";
-  sha256 = "wzxvGyvhb4miGvlGz9BiQqEvmBhMiYt1XdskM4ZxzrE=";
+  version = "2.7.0.3";
+  sha256 = "20EcVDcaF+19RUPdhs+VMM4l/PYkvvg64rV5Ug5ecL8=";
 
   manpages = skawarePackages.buildManPages {
     pname = "s6-networking-man-pages";
-    version = "2.5.1.3.3";
-    sha256 = "02ba5jyfpbib402mfl42pbbdxyjy2vhpiz1b2qdg4ax58yr4jzqk";
+    version = "2.7.0.3.1";
+    sha256 = "9u2C1TF9vma+7Qo+00uZ6eOCn/9eMgKALgHDVgMcrfg=";
     description = "Port of the documentation for the s6-networking suite to mdoc";
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 
-  description = "A suite of small networking utilities for Unix systems";
+  description = "Suite of small networking utilities for Unix systems";
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
 

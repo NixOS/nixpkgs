@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 {
   name = "samba";
 
-  meta.maintainers = [ pkgs.lib.maintainers.eelco ];
+  meta.maintainers = [ ];
 
   nodes =
     { client =

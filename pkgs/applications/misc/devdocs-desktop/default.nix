@@ -24,7 +24,7 @@ in appimageTools.wrapType2 rec {
   '';
 
   meta = with lib; {
-    description = "A full-featured desktop app for DevDocs.io";
+    description = "Full-featured desktop app for DevDocs.io";
     longDescription = ''
       DevDocs.io combines multiple API documentations in a fast, organized, and searchable interface. This is an unofficial desktop app for it.
     '';

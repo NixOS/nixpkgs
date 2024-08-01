@@ -21,6 +21,14 @@ in
         example = "tomcat10";
       };
 
+      port = lib.mkOption {
+        type = lib.types.port;
+        default = 8080;
+        description = ''
+          The TCP port Tomcat should listen on.
+        '';
+      };
+
       purifyOnStart = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -244,8 +252,12 @@ in
             hostElementsString = lib.concatMapStringsSep "\n" hostElementForVirtualHost cfg.virtualHosts;
             hostElementsSedString = lib.replaceStrings ["\n"] ["\\\n"] hostElementsString;
           in ''
-            # Create a modified server.xml which also includes all virtual hosts
-            sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\\"${lib.escapeShellArg hostElementsSedString} \
+            # Create a modified server.xml which listens on the given port,
+            # and also includes all virtual hosts.
+            # The host modification must be last here,
+            # else if hostElementsSedString is empty sed gets confused as to what to append
+            sed -e 's/<Connector port="8080"/<Connector port="${toString cfg.port}"/' \
+                -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\\"${lib.escapeShellArg hostElementsSedString} \
                   ${tomcat}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
           ''
         }

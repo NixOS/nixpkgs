@@ -1,42 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# dependencies
-, aiofiles
-, aiohttp
-, aiohttp-socks
-, h11
-, h2
-, jsonschema
-, pycryptodome
-, unpaddedbase64
+  # dependencies
+  aiofiles,
+  aiohttp,
+  aiohttp-socks,
+  h11,
+  h2,
+  jsonschema,
+  pycryptodome,
+  unpaddedbase64,
 
-# optional-dependencies
-, atomicwrites
-, cachetools
-, peewee
-, python-olm
+  # optional-dependencies
+  atomicwrites,
+  cachetools,
+  peewee,
+  python-olm,
 
-# tests
-, aioresponses
-, faker
-, hpack
-, hyperframe
-, hypothesis
-, pytest-aiohttp
-, pytest-benchmark
-, pytestCheckHook
+  # tests
+  aioresponses,
+  faker,
+  hpack,
+  hyperframe,
+  hypothesis,
+  pytest-aiohttp,
+  pytest-benchmark,
+  pytestCheckHook,
 
-# passthru tests
-, nixosTests
-, opsdroid
-, pantalaimon
-, weechatScripts
-, zulip
+  # passthru tests
+  nixosTests,
+  opsdroid,
+  pantalaimon,
+  weechatScripts,
+  zulip,
 }:
 
 buildPythonPackage rec {
@@ -51,9 +52,7 @@ buildPythonPackage rec {
     hash = "sha256-XlswVHLvKOi1qr+I7Mbm4IBjn1DG7glgDsNY48NA5Ew=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiofiles
@@ -86,9 +85,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ passthru.optional-dependencies.e2e;
 
-  pytestFlagsArray = [
-    "--benchmark-disable"
-  ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   disabledTests = [
     # touches network
@@ -103,22 +100,19 @@ buildPythonPackage rec {
       matrix-appservice-irc
       matrix-conduit
       mjolnir
-    ;
-    inherit (weechatScripts)
-      weechat-matrix
-    ;
-    inherit
-      opsdroid
-      pantalaimon
-      zulip
-    ;
+      ;
+    inherit (weechatScripts) weechat-matrix;
+    inherit opsdroid pantalaimon zulip;
   };
 
   meta = with lib; {
     homepage = "https://github.com/poljar/matrix-nio";
     changelog = "https://github.com/poljar/matrix-nio/blob/${version}/CHANGELOG.md";
-    description = "A Python Matrix client library, designed according to sans I/O principles";
+    description = "Python Matrix client library, designed according to sans I/O principles";
     license = licenses.isc;
-    maintainers = with maintainers; [ tilpner emily symphorien ];
+    maintainers = with maintainers; [
+      tilpner
+      symphorien
+    ];
   };
 }

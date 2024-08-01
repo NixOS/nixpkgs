@@ -90,7 +90,7 @@ in stdenv.mkDerivation rec {
     mainProgram = "xidel";
     homepage = "https://www.videlibri.de/xidel.html";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
   };
 }

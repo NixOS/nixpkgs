@@ -1,14 +1,14 @@
-{ lib
-, fetchPypi
-, fetchFromGitHub
-, python
-, buildPythonPackage
-, absl-py
-, nltk
-, numpy
-, six
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  fetchFromGitHub,
+  buildPythonPackage,
+  absl-py,
+  nltk,
+  numpy,
+  six,
+  pytestCheckHook,
+  pythonOlder,
 }:
 let
   testdata = fetchFromGitHub {
@@ -18,7 +18,8 @@ let
     rev = "1d4d2f1aa6f2883a790d2ae46a6ee8ab150d8f31";
     hash = "sha256-ojqk6U2caS7Xz4iGUC9aQVHrKb2QNvMlPuQAL/jJat0=";
   };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "rouge-score";
   version = "0.1.2";
   format = "setuptools";
@@ -37,7 +38,12 @@ in buildPythonPackage rec {
       --replace 'os.path.join(os.path.dirname(__file__), "testdata")' '"${testdata}/rouge/testdata/"'
   '';
 
-  propagatedBuildInputs = [ absl-py nltk numpy six ];
+  propagatedBuildInputs = [
+    absl-py
+    nltk
+    numpy
+    six
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

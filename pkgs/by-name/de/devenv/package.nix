@@ -29,7 +29,7 @@ let
     doInstallCheck = false;
   });
 
-  version = "1.0.5";
+  version = "1.0.8";
 in rustPlatform.buildRustPackage {
   pname = "devenv";
   inherit version;
@@ -38,10 +38,10 @@ in rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     rev = "v${version}";
-    hash = "sha256-W5DFIifCjGYJXJzLU3RpqBeqes4zrf0Sr/6rwzTygPU=";
+    hash = "sha256-q/ERT4Ui315opFz4h4+BsJ/zrTYdXkwq13vvrpL+KzM=";
   };
 
-  cargoHash = "sha256-a6o28oonA6G0xo83PXwbH86V0aDDAAA2zajE67qsSU0=";
+  cargoHash = "sha256-fCXAFVmKns8uglbzyCznoVFGCU+Veq0t1h8T7i1P5XQ=";
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
@@ -66,6 +66,6 @@ in rustPlatform.buildRustPackage {
     homepage = "https://github.com/cachix/devenv";
     license = lib.licenses.asl20;
     mainProgram = "devenv";
-    maintainers = with lib.maintainers; [ domenkozar drupol ];
+    maintainers = with lib.maintainers; [ domenkozar ];
   };
 }

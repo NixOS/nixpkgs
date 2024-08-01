@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , meson
 , python3Packages
 , ninja
@@ -56,7 +55,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3Packages; [
-    nose
     mock
     xvfb-run
     pytest

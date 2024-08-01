@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   cargoDepsName = pname;
 
   meta = with lib; {
-    description = "A tool to sync Bluetooth pairing keys with macos on ARM Macs";
+    description = "Tool to sync Bluetooth pairing keys with macos on ARM Macs";
     homepage = "https://crates.io/crates/asahi-btsync";
     license = licenses.mit;
     maintainers = with maintainers; [ lukaslihotzki ];

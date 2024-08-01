@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
   # build inputs
-, jsonref
-, jsonschema
-, python-dateutil
-, pyyaml
-, requests
-, simplejson
-, six
-, swagger-spec-validator
-, pytz
-, msgpack
+  jsonref,
+  jsonschema,
+  python-dateutil,
+  pyyaml,
+  requests,
+  simplejson,
+  six,
+  swagger-spec-validator,
+  pytz,
+  msgpack,
   # check inputs
-, pytestCheckHook
-, mock
+  pytestCheckHook,
+  mock,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-kyHmZNPl5lLKmm5i3TSi8Tfi96mQHqaiyBfceBJcOdw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     jsonref
@@ -50,17 +49,11 @@ buildPythonPackage rec {
     msgpack
   ] ++ jsonschema.optional-dependencies.format-nongpl;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-    mock
-  ];
+  checkInputs = [ mock ];
 
-  pythonImportsCheck = [
-    "bravado_core"
-  ];
+  pythonImportsCheck = [ "bravado_core" ];
 
   disabledTestPaths = [
     # skip benchmarks
@@ -74,6 +67,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/Yelp/bravado-core";
     changelog = "https://github.com/Yelp/bravado-core/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ vanschelven nickcao ];
+    maintainers = with maintainers; [
+      vanschelven
+      nickcao
+    ];
   };
 }

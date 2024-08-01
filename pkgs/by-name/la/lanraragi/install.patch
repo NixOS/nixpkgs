@@ -1,5 +1,5 @@
 diff --git a/tools/install.pl b/tools/install.pl
-index dbeb7c11..06e4c675 100755
+index b7c7adb..a63de58 100644
 --- a/tools/install.pl
 +++ b/tools/install.pl
 @@ -9,6 +9,7 @@ use Config;
@@ -10,7 +10,7 @@ index dbeb7c11..06e4c675 100755
  
  #Vendor dependencies
  my @vendor_css = (
-@@ -91,32 +92,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
+@@ -90,34 +91,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
      $cpanopt = " -l " . $ENV{HOMEBREW_FORMULA_PREFIX} . "/libexec";
  }
  
@@ -30,9 +30,11 @@ index dbeb7c11..06e4c675 100755
 -
 -#Check for GhostScript
 -say("Checking for GhostScript...");
--can_run('gs')
--  or warn 'NOT FOUND! PDF support will not work properly. Please install the "gs" tool.';
--say("OK!");
+-if ( can_run('gs') ) {
+-    say("OK!");
+-} else {
+-    warn 'NOT FOUND! PDF support will not work properly. Please install the "gs" tool.';
+-}
 -
 -#Check for libarchive
 -say("Checking for libarchive...");
@@ -43,7 +45,7 @@ index dbeb7c11..06e4c675 100755
  #Check for PerlMagick
  say("Checking for ImageMagick/PerlMagick...");
  my $imgk;
-@@ -136,36 +111,11 @@ if ($@) {
+@@ -137,37 +110,11 @@ if ($@) {
      say("OK!");
  }
  
@@ -67,7 +69,8 @@ index dbeb7c11..06e4c675 100755
  
 -    say("\r\nObtaining remote Web dependencies...\r\n");
 -
--    if ( system("npm ci") != 0 ) {
+-    my $npmcmd = $legacy ? "npm install" : "npm ci";
+-    if ( system($npmcmd) != 0 ) {
 -        die "Something went wrong while obtaining node modules - Bailing out.";
 -    }
 -
@@ -80,7 +83,7 @@ index dbeb7c11..06e4c675 100755
      make_path getcwd . "/public/css/vendor";
      make_path getcwd . "/public/css/webfonts";
      make_path getcwd . "/public/js/vendor";
-@@ -212,19 +162,3 @@ sub cp_node_module {
+@@ -214,19 +161,3 @@ sub cp_node_module {
  
  }
  

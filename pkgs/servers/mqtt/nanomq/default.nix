@@ -101,7 +101,7 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An ultra-lightweight and blazing-fast MQTT broker for IoT edge";
+    description = "Ultra-lightweight and blazing-fast MQTT broker for IoT edge";
     homepage = "https://nanomq.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];

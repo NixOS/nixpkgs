@@ -8,8 +8,7 @@
 
 let
   pname = "trezor-suite";
-  version = "24.4.3";
-  name = "${pname}-${version}";
+  version = "24.7.2";
 
   suffix = {
     aarch64-linux = "linux-arm64";
@@ -17,24 +16,23 @@ let
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://github.com/trezor/${pname}/releases/download/v${version}/Trezor-Suite-${version}-${suffix}.AppImage";
-    hash = { # curl -Lfs https://github.com/trezor/trezor-suite/releases/latest/download/latest-linux{-arm64,}.yml | grep ^sha512 | sed 's/: /-/'
-      aarch64-linux = "sha512-EPpnEgE9euHGSo7CFMJg7hF3p5LqPc3zPxDQsNzyOI2lNv90vydtEmOm1fORj0MXbQsGLLS1nSzMH3vI6O9WmA==";
-      x86_64-linux  = "sha512-FjHaomHjMSVwxO63NEEC5UjotzDlrX8yTGaz20RyoadClAUKIeVfeEt/5jDueFr2ZXfeLraRIQ0ywKm+wkC2EQ==";
+    url = "https://github.com/trezor/trezor-suite/releases/download/v${version}/Trezor-Suite-${version}-${suffix}.AppImage";
+    hash = { # curl -Lfs https://github.com/trezor/trezor-suite/releases/download/v${version}/latest-linux{-arm64,}.yml | grep ^sha512 | sed 's/: /-/'
+      aarch64-linux = "sha512-RYkRav7U7WUbZuSvwuWf+IvKgkpUYrclW5vzINcVp/Wzqj3Brl0Cb1fC4dFe7c/UyE/K1oQ4++zd2dHJu6gxEQ==";
+      x86_64-linux  = "sha512-WmdH3IC+9tbSLtQirmawi6vgtR7GoFceN2FdZ94rGtCkrvhi9STz5RHfZAljyQfRZ9Xx+DlTChZrsWA6DNqBpg==";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 
 in
 
 appimageTools.wrapType2 rec {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
     mkdir -p $out/bin $out/share/${pname} $out/share/${pname}/resources
 
     cp -a ${appimageContents}/locales/ $out/share/${pname}

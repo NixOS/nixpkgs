@@ -1,32 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, hatchling
+  # build-system
+  hatchling,
 
-# tests
-, argcomplete
-, pytest-mock
-, pytestCheckHook
+  # tests
+  argcomplete,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "traitlets";
-  version = "5.14.2";
+  version = "5.14.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jN2DwEDat9He6CJnjl9dEAtRT3tysBYVsm/FcYkW/fk=";
+    hash = "sha256-ntBXnTUCyUtLNzKsEgN1zalvkjEUUihH3ks7uYuWtrc=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   nativeCheckInputs = [
     argcomplete

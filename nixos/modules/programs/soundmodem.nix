@@ -1,26 +1,24 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.soundmodem;
 in
 {
   options = {
     programs.soundmodem = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to add Soundmodem to the global environment and configure a
           wrapper for 'soundmodemconfig' for users in the 'soundmodem' group.
         '';
       };
-      package = mkPackageOption pkgs "soundmodem" { };
+      package = lib.mkPackageOption pkgs "soundmodem" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     users.groups.soundmodem = { };
 

@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "k3sup";
-  version = "0.13.0";
+  version = "0.13.6";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "k3sup";
     rev = version;
-    sha256 = "sha256-GppNYNqX/YqRtCYQIe3t2x6eNJCZc/yi6F2xHvA3YXE=";
+    sha256 = "sha256-ngC1yT0pV/ygGzNTYz71qf8V19hqvz3XP7CP8saGwCI=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
@@ -23,7 +23,7 @@ buildGoModule rec {
   vendorHash = null;
 
   postConfigure = ''
-    substituteInPlace vendor/github.com/alexellis/go-execute/pkg/v1/exec.go \
+    substituteInPlace vendor/github.com/alexellis/go-execute/v2/exec.go \
       --replace "/bin/bash" "${bash}/bin/bash"
   '';
 

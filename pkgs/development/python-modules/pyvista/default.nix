@@ -1,51 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, imageio
-, matplotlib
-, numpy
-, pillow
-, pooch
-, pythonOlder
-, scooby
-, setuptools
-, vtk
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  pillow,
+  pooch,
+  pythonOlder,
+  scooby,
+  setuptools,
+  typing-extensions,
+  vtk,
 }:
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.43.6";
+  version = "0.44.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pyvista";
+    repo = "pyvista";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EhhnX7r8yHynEVahMSB6LxCAquQcUF4cI0S4oW+IZ/Y=";
+    hash = "sha256-V6Ez9lwO6Oy2V1dIK802S5Fd41TZV/Ck/53ZUd0uUVE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    imageio
+  dependencies = [
     matplotlib
     numpy
     pillow
     pooch
     scooby
+    typing-extensions
     vtk
   ];
 
   # Fatal Python error: Aborted
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyvista"
-  ];
+  pythonImportsCheck = [ "pyvista" ];
 
   meta = with lib; {
     description = "Easier Pythonic interface to VTK";

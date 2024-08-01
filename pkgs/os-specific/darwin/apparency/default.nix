@@ -4,13 +4,18 @@
 , undmg
 }:
 
+let
+  snapshot = "20240601172844";
+in
 stdenv.mkDerivation {
   pname = "apparency";
-  version = "1.5.1";
+  version = "2.0";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20230815073821/https://www.mothersruin.com/software/downloads/Apparency.dmg";
-    hash = "sha256-JpaBdlt8kTNFzK/yZVZ+ZFJ3DnPQbogJC7QBmtSVkoQ=";
+   # Use externally archived download URL because
+   # upstream does not provide stable URLs for versioned releases
+    url = "https://web.archive.org/web/${snapshot}/https://www.mothersruin.com/software/downloads/Apparency.dmg";
+    hash = "sha256-XKxWxqfxy9AQneILLrN9XqLt4/k2N8yumZ5mrSvczFk=";
   };
 
   nativeBuildInputs = [ undmg ];
@@ -28,10 +33,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "The App That Opens Apps";
+    description = "App That Opens Apps";
     homepage = "https://www.mothersruin.com/software/Apparency/";
     license = lib.licenses.unfreeRedistributable;
-    maintainers = with lib.maintainers; [ Enzime ];
+    maintainers = [ ];
     mainProgram = "appy";
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

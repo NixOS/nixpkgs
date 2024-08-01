@@ -4,6 +4,8 @@
 , pkg-config
 , sqlite
 , zstd
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,6 +28,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     sqlite
     zstd
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {

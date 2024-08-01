@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , unzip
 , cmake
-, freeglut
+, libglut
 , libGLU
 , libGL
 , zlib
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     unzip
     cmake
     doxygen
+    python3
   ];
 
   buildInputs = [
@@ -38,12 +39,11 @@ stdenv.mkDerivation rec {
     swig
     xorg.libXi
     xorg.libXmu
-    python3
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
     darwin.apple_sdk.frameworks.GLUT
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    freeglut
+    libglut
     libGLU
     libGL
   ];

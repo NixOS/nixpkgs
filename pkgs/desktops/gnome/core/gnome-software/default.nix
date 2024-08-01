@@ -28,6 +28,7 @@
 , libxmlb
 , malcontent
 , json-glib
+, glib-networking
 , libsecret
 , valgrind-light
 , docbook-xsl-nons
@@ -43,13 +44,13 @@ let
   withFwupd = stdenv.hostPlatform.isx86;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "46.0";
+  version = "46.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-software/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-EYkwAru1QIKJZoNwe8OZGuVaLzBAgRp2DjqSyWVE+G4=";
+    url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
+    hash = "sha256-nWvB9jfYGytZhYN5BPBe1wdgAUfZrxYLqJEqvy1C8TY=";
   };
 
   patches = [
@@ -78,6 +79,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk4
     glib
+    glib-networking
     packagekit
     appstream
     libsoup_3
@@ -110,7 +112,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-software";
       attrPath = "gnome.gnome-software";
     };
   };
@@ -123,4 +125,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})

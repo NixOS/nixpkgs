@@ -1,25 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, cython
-, zstd
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  cython,
+  zstd,
 }:
 
 buildPythonPackage rec {
   pname = "indexed_zstd";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-icCerrv6ihBjSTS4Fsw7qhoA5ha8yegfMVRiIOhTvvY=";
+    hash = "sha256-i3Q3j5Rh/OqxdSFbZeHEiYZN2zS9gWBYk2pifwzKOos=";
   };
 
-  nativeBuildInputs = [ cython setuptools ];
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
 
   buildInputs = [ zstd.dev ];
 

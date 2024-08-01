@@ -1,47 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, deprecation
-, poetry-core
-, pythonRelaxDepsHook
-, async-timeout
-, cloudevents
-, fastapi
-, grpcio
-, httpx
-, kubernetes
-, numpy
-, orjson
-, pandas
-, prometheus-client
-, protobuf
-, psutil
-, python-dateutil
-, ray
-, six
-, tabulate
-, timing-asgi
-, uvicorn
-, avro
-, azure-storage-blob
-, azure-storage-file-share
-, boto3
-, botocore
-, google-cloud-storage
-, pytestCheckHook
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  deprecation,
+  poetry-core,
+
+  # dependencies
+  async-timeout,
+  cloudevents,
+  fastapi,
+  grpcio,
+  httpx,
+  kubernetes,
+  numpy,
+  orjson,
+  pandas,
+  prometheus-client,
+  protobuf,
+  psutil,
+  pydantic,
+  python-dateutil,
+  pyyaml,
+  ray,
+  six,
+  tabulate,
+  timing-asgi,
+  uvicorn,
+
+  # checks
+  avro,
+  azure-storage-blob,
+  azure-storage-file-share,
+  boto3,
+  botocore,
+  google-cloud-storage,
+  grpcio-testing,
+  pytest-asyncio,
+  pytestCheckHook,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "kserve";
-  version = "0.12.1";
+  version = "0.13.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gKJkG8zJY1sGGpI27YZ/QnEPU8J7KHva3nI+JCglQaQ=";
+    hash = "sha256-wGS001PK+k21oCOaQCiAtytTDjfe0aiTVJ9spyOucYA=";
   };
 
   sourceRoot = "${src.name}/python/kserve";
@@ -49,10 +62,6 @@ buildPythonPackage rec {
   build-system = [
     deprecation
     poetry-core
-  ];
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -68,7 +77,9 @@ buildPythonPackage rec {
     prometheus-client
     protobuf
     psutil
+    pydantic
     python-dateutil
+    pyyaml
     ray
     six
     tabulate
@@ -83,6 +94,7 @@ buildPythonPackage rec {
     "protobuf"
     "ray"
     "uvicorn"
+    "psutil"
   ];
 
   pythonImportsCheck = [ "kserve" ];
@@ -94,6 +106,8 @@ buildPythonPackage rec {
     boto3
     botocore
     google-cloud-storage
+    grpcio-testing
+    pytest-asyncio
     pytestCheckHook
     tomlkit
   ];
@@ -110,10 +124,11 @@ buildPythonPackage rec {
     "test_infer_v2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Standardized Serverless ML Inference Platform on Kubernetes";
     homepage = "https://github.com/kserve/kserve/tree/master/python/kserve";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/kserve/kserve/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

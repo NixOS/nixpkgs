@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, morphys
-, pytestCheckHook
-, pythonOlder
-, six
-, varint
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  morphys,
+  pytestCheckHook,
+  pythonOlder,
+  six,
+  varint,
 }:
 
 buildPythonPackage rec {
@@ -37,13 +38,9 @@ buildPythonPackage rec {
     varint
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "multicodec"
-  ];
+  pythonImportsCheck = [ "multicodec" ];
 
   meta = with lib; {
     description = "Compact self-describing codecs";

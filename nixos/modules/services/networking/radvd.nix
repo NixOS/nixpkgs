@@ -33,6 +33,17 @@ in
 
     package = mkPackageOption pkgs "radvd" { };
 
+    debugLevel = mkOption {
+      type = types.int;
+      default = 0;
+      example = 5;
+      description = ''
+          The debugging level is an integer in the range from 1 to 5,
+          from quiet to very verbose. A debugging level of 0 completely
+          turns off debugging.
+        '';
+    };
+
     config = mkOption {
       type = types.lines;
       example =
@@ -67,7 +78,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig =
-          { ExecStart = "@${cfg.package}/bin/radvd radvd -n -u radvd -C ${confFile}";
+          { ExecStart = "@${cfg.package}/bin/radvd radvd -n -u radvd -d ${toString cfg.debugLevel} -C ${confFile}";
             Restart = "always";
           };
       };

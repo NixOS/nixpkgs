@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }:
 let
-  password = "foobar";
-  newPass = "barfoo";
+  password = "foobarfoo";
+  newPass = "barfoobar";
 in
 {
   name = "systemd-homed";

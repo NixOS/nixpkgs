@@ -1,68 +1,87 @@
 { pkgs, config, lib, ... } :
 
 let
-  inherit (lib) mkIf concatStringsSep concatMapStrings toList mapAttrs
-    mapAttrsToList;
+  inherit (lib)  mapAttrs;
   cfg = config.services.kerberos_server;
-  kerberos = config.security.krb5.package;
-  stateDir = "/var/heimdal";
-  aclFiles = mapAttrs
-    (name: {acl, ...}: pkgs.writeText "${name}.acl" (concatMapStrings ((
-      {principal, access, target, ...} :
-      "${principal}\t${concatStringsSep "," (toList access)}\t${target}\n"
-    )) acl)) cfg.realms;
+  package = config.security.krb5.package;
 
-  kdcConfigs = mapAttrsToList (name: value: ''
-    database = {
-      dbname = ${stateDir}/heimdal
-      acl_file = ${value}
-    }
-  '') aclFiles;
-  kdcConfFile = pkgs.writeText "kdc.conf" ''
-    [kdc]
-    ${concatStringsSep "\n" kdcConfigs}
-  '';
+  aclConfigs = lib.pipe cfg.settings.realms [
+    (mapAttrs (name: { acl, ... }: lib.concatMapStringsSep "\n" (
+      { principal, access, target, ... }:
+      "${principal}\t${lib.concatStringsSep "," (lib.toList access)}\t${target}"
+    ) acl))
+    (lib.mapAttrsToList (name: text:
+      {
+        dbname = "/var/lib/heimdal/heimdal";
+        acl_file = pkgs.writeText "${name}.acl" text;
+      }
+    ))
+  ];
+
+  finalConfig = cfg.settings // {
+    realms = mapAttrs (_: v: removeAttrs v [ "acl" ]) (cfg.settings.realms or { });
+    kdc = (cfg.settings.kdc or { }) // {
+      database = aclConfigs;
+    };
+  };
+
+  format = import ../../../security/krb5/krb5-conf-format.nix { inherit pkgs lib; } { enableKdcACLEntries = true; };
+
+  kdcConfFile = format.generate "kdc.conf" finalConfig;
 in
 
 {
-  # No documentation about correct triggers, so guessing at them.
+  config = lib.mkIf (cfg.enable && package.passthru.implementation == "heimdal") {
+    environment.etc."heimdal-kdc/kdc.conf".source = kdcConfFile;
 
-  config = mkIf (cfg.enable && kerberos == pkgs.heimdal) {
+    systemd.tmpfiles.settings."10-heimdal" = let
+      databases = lib.pipe finalConfig.kdc.database [
+        (map (dbAttrs: dbAttrs.dbname or null))
+        (lib.filter (x: x != null))
+        lib.unique
+      ];
+    in lib.genAttrs databases (_: {
+      d = {
+        user = "root";
+        group = "root";
+        mode = "0700";
+      };
+    });
+
     systemd.services.kadmind = {
       description = "Kerberos Administration Daemon";
-      wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        mkdir -m 0755 -p ${stateDir}
-      '';
-      serviceConfig.ExecStart =
-        "${kerberos}/libexec/kadmind --config-file=/etc/heimdal-kdc/kdc.conf";
+      partOf = [ "kerberos-server.target" ];
+      wantedBy = [ "kerberos-server.target" ];
+      serviceConfig = {
+        ExecStart = "${package}/libexec/kadmind --config-file=/etc/heimdal-kdc/kdc.conf";
+        Slice = "system-kerberos-server.slice";
+        StateDirectory = "heimdal";
+      };
       restartTriggers = [ kdcConfFile ];
     };
 
     systemd.services.kdc = {
       description = "Key Distribution Center daemon";
-      wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        mkdir -m 0755 -p ${stateDir}
-      '';
-      serviceConfig.ExecStart =
-        "${kerberos}/libexec/kdc --config-file=/etc/heimdal-kdc/kdc.conf";
+      partOf = [ "kerberos-server.target" ];
+      wantedBy = [ "kerberos-server.target" ];
+      serviceConfig = {
+        ExecStart = "${package}/libexec/kdc --config-file=/etc/heimdal-kdc/kdc.conf";
+        Slice = "system-kerberos-server.slice";
+        StateDirectory = "heimdal";
+      };
       restartTriggers = [ kdcConfFile ];
     };
 
     systemd.services.kpasswdd = {
       description = "Kerberos Password Changing daemon";
-      wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        mkdir -m 0755 -p ${stateDir}
-      '';
-      serviceConfig.ExecStart = "${kerberos}/libexec/kpasswdd";
+      partOf = [ "kerberos-server.target" ];
+      wantedBy = [ "kerberos-server.target" ];
+      serviceConfig = {
+        ExecStart = "${package}/libexec/kpasswdd";
+        Slice = "system-kerberos-server.slice";
+        StateDirectory = "heimdal";
+      };
       restartTriggers = [ kdcConfFile ];
-    };
-
-    environment.etc = {
-      # Can be set via the --config-file option to KDC
-      "heimdal-kdc/kdc.conf".source = kdcConfFile;
     };
   };
 }

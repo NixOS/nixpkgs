@@ -19,7 +19,7 @@
 , alsa-lib
 , libpulseaudio
 , dbus
-, speechd
+, speechd-minimal
 , fontconfig
 , udev
 , withDebug ? false
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withPulseaudio libpulseaudio
   ++ lib.optional withDbus dbus
   ++ lib.optional withDbus dbus.lib
-  ++ lib.optional withSpeechd speechd
+  ++ lib.optional withSpeechd speechd-minimal
   ++ lib.optional withFontconfig fontconfig
   ++ lib.optional withFontconfig fontconfig.lib
   ++ lib.optional withUdev udev;
@@ -132,6 +132,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp bin/godot.* $out/bin/godot4
 
@@ -144,6 +146,8 @@ stdenv.mkDerivation rec {
       --replace "Godot Engine" "Godot Engine 4"
     cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
     cp icon.png "$out/share/icons/godot.png"
+
+    runHook postInstall
   '';
 
   meta = {

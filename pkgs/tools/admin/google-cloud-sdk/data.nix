@@ -1,32 +1,32 @@
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
-  version = "467.0.0";
+  version = "485.0.0";
   googleCloudSdkPkgs = {
     x86_64-linux =
       {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-467.0.0-linux-x86_64.tar.gz";
-        sha256 = "09qkz9zw23rza5siz77m52nzfyikdzszrqsl200z2zs2cm69g50w";
+        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-485.0.0-linux-x86_64.tar.gz";
+        sha256 = "17y6gbn0qnmrmawijg9l3kgygd8mbg57rgf5fcx05x57m7jy07v7";
       };
     x86_64-darwin =
       {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-467.0.0-darwin-x86_64.tar.gz";
-        sha256 = "0il26ivqym4n94kjb22pcizgmy6j1p70l2yxjfrsj8i6vhwi3qbq";
+        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-485.0.0-darwin-x86_64.tar.gz";
+        sha256 = "0zh6z567dm6a75xi8mz724xg7xw9n7xzp3kbaj01qmvwmri7rahi";
       };
     aarch64-linux =
       {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-467.0.0-linux-arm.tar.gz";
-        sha256 = "1d72l35jcxg7r2r8ajhyigadj8ydp2k1g25kw6rkwvlg4whv8d7b";
+        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-485.0.0-linux-arm.tar.gz";
+        sha256 = "0mw80qs8qzjyjlbirqzpc9r22dv5m6i90v3p016na4w4hgc15v33";
       };
     aarch64-darwin =
       {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-467.0.0-darwin-arm.tar.gz";
-        sha256 = "0yd9hjn8pgaih7hj3hhbl70apcmg5b3gkx758r8m9823vhqkk5wm";
+        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-485.0.0-darwin-arm.tar.gz";
+        sha256 = "1x6s521iad1mzi7af0874qh421ldyxc1dd3952ayxi2zm8misg63";
       };
     i686-linux =
       {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-467.0.0-linux-x86.tar.gz";
-        sha256 = "0wag0qjzh0m6kmpzvmzvr7sy74w20xzgysljwjfravqr1xmw9m48";
+        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-485.0.0-linux-x86.tar.gz";
+        sha256 = "05b9lg3gnqknx8y5smz2msr61803zib827283bsf7zmmr7bnignh";
       };
   };
 }

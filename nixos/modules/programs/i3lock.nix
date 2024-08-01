@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.programs.i3lock;
@@ -12,8 +10,8 @@ in {
 
   options = {
     programs.i3lock = {
-      enable = mkEnableOption "i3lock";
-      package = mkPackageOption pkgs "i3lock" {
+      enable = lib.mkEnableOption "i3lock";
+      package = lib.mkPackageOption pkgs "i3lock" {
         example = "i3lock-color";
         extraDescription = ''
           ::: {.note}
@@ -21,8 +19,8 @@ in {
           :::
         '';
       };
-      u2fSupport = mkOption {
-        type        = types.bool;
+      u2fSupport = lib.mkOption {
+        type        = lib.types.bool;
         default     = false;
         example     = true;
         description = ''
@@ -36,11 +34,11 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ cfg.package ];
 
-    security.wrappers.i3lock = mkIf cfg.u2fSupport {
+    security.wrappers.i3lock = lib.mkIf cfg.u2fSupport {
       setuid = true;
       owner = "root";
       group = "root";

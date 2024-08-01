@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/storaged-project/libblockdev/raw/${finalAttrs.src.rev}/NEWS.rst";
-    description = "A library for manipulating block devices";
+    description = "Library for manipulating block devices";
     homepage = "http://storaged.org/libblockdev/";
     license = with lib.licenses; [ lgpl2Plus gpl2Plus ]; # lgpl2Plus for the library, gpl2Plus for the utils
     maintainers = with lib.maintainers; [ johnazoidberg ];

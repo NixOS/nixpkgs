@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, pillow
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,17 +27,11 @@ buildPythonPackage rec {
     pillow
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ansi2image"
-  ];
+  pythonImportsCheck = [ "ansi2image" ];
 
-  pytestFlagsArray = [
-    "tests/tests.py"
-  ];
+  pytestFlagsArray = [ "tests/tests.py" ];
 
   meta = with lib; {
     description = "Module to convert ANSI text to an image";

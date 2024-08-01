@@ -1,6 +1,6 @@
 {
   lib,
-  darwin,
+  cctools,
   fetchpatch,
   fetchurl,
   openssl,
@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2024.04.19";
+  version = "2024.05.30";
 
   src = fetchurl {
     urls = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-5sLr/sZ3LB83CEJx5OUjarx/Dh/ESJ+YaXY0QCAN3MI=";
+    hash = "sha256-hVCwbY1UwAdfgOle9nQqncZ3/K/C27gkfwODL7mtVk8=";
   };
 
   patches = [
@@ -31,18 +31,31 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    darwin.cctools
+    cctools
   ];
 
   buildInputs = [
     openssl
   ];
 
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "C_COMPILER=$(CC)"
+    "CPLUSPLUS_COMPILER=$(CXX)"
+    "LIBRARY_LINK=$(AR) cr "
+    "LINK=$(CXX) -o "
+  ];
+
+  # Since NIX_CFLAGS_COMPILE affects both C and C++ toolchains, we set CXXFLAGS
+  # directly
+  env.CXXFLAGS = "-std=c++20";
+
   strictDeps = true;
 
-  # Since NIX_CFLAGS_COMPILE does not differentiate C and C++ toolchains, we
-  # set CXXFLAGS directly
-  env.CXXFLAGS = "-std=c++20";
+  enableParallelBuilding = true;
+
+  # required for whitespaces in makeFlags
+  __structuredAttrs = true;
 
   postPatch = ''
     substituteInPlace config.macosx-catalina \
@@ -74,19 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postConfigure
   '';
-
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "C_COMPILER=$(CC)"
-    "CPLUSPLUS_COMPILER=$(CXX)"
-    "LIBRARY_LINK=$(AR) cr "
-    "LINK=$(CXX) -o "
-  ];
-
-  # required for whitespaces in makeFlags
-  __structuredAttrs = true;
-
-  enableParallelBuilding = true;
 
   passthru.tests = {
     # Downstream dependency

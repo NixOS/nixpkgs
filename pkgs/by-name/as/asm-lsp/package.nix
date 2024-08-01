@@ -6,7 +6,7 @@
 }:
 let
   pname = "asm-lsp";
-  version = "0.4.2";
+  version = "0.7.3";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage {
     owner = "bergercookie";
     repo = "asm-lsp";
     rev = "v${version}";
-    hash = "sha256-EGgYOU6y23ULjnMGNjYhgF0JMPgvRuQ4UOWqwJxhBpU=";
+    hash = "sha256-LWsawBh1czS7LUX70IXrJHUonIt2XEN8L26iP5cVyRk=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,12 @@ rustPlatform.buildRustPackage {
     openssl
   ];
 
-  cargoHash = "sha256-x8Cj39Wki+pdoNIO8QPGK29KFJrHtDMoZJIXFEldno0=";
+  cargoHash = "sha256-pIjOelOQ5X8jl/ZtE8IzXPtcLmANDtWsJaNXno8CT6Y=";
+
+  # tests expect ~/.cache/asm-lsp to be writable
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = {
     description = "Language server for NASM/GAS/GO Assembly";

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, flask-migrate
-, ldap3
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  flask-migrate,
+  ldap3,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-s/kd9A/d3SPMZC9+B4DdcXVi77WLH/SBwXIdaKHUj34=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     flask
@@ -33,13 +32,9 @@ buildPythonPackage rec {
     ldap3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "automx2"
-  ];
+  pythonImportsCheck = [ "automx2" ];
 
   meta = with lib; {
     description = "Email client configuration made easy";

@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , git
 , mimic
 , mimic-happy-eyeballs
@@ -91,6 +90,6 @@ buildDunePackage {
   ];
 
   meta = git.meta // {
-    description = "A package to use ocaml-git with MirageOS backend";
+    description = "Package to use ocaml-git with MirageOS backend";
   };
 }

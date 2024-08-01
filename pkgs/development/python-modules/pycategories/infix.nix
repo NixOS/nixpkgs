@@ -1,6 +1,7 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/borntyping/python-infix";
-    description = "A decorator that allows functions to be used as infix functions";
+    description = "Decorator that allows functions to be used as infix functions";
     license = lib.licenses.mit;
   };
 }

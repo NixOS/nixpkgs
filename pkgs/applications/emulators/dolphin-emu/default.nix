@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -41,11 +40,7 @@
 , xz
 
   # Used in passthru
-, common-updater-scripts
-, dolphin-emu
-, jq
 , testers
-, writeShellScript
 
   # Darwin-only dependencies
 , CoreBluetooth
@@ -57,47 +52,27 @@
 , VideoToolbox
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "5.0-21088";
+  version = "2407";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "9240f579eab18a2f67eef23846a6b508393d0e6c";
-    hash = "sha256-lOiDbEQZoi9Bsiyta/w+B1VXNNW4qST2cBZekqo5dDA=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-8W4KyIj+rhDkWnQogjpzlEJVo3HJenfpWKimSyMGN7c=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Remove when merged https://github.com/dolphin-emu/dolphin/pull/12070
-    ./find-minizip-ng.patch
-
-    # fix buidl w/ glibc-2.39
-    (fetchpatch {
-      url = "https://github.com/dolphin-emu/dolphin/commit/3da2e15e6b95f02f66df461e87c8b896e450fdab.patch";
-      hash = "sha256-+8yGF412wQUYbyEuYWd41pgOgEbhCaezexxcI5CNehc=";
-    })
-  ];
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    stdenv.cc
     cmake
     pkg-config
     wrapQtAppsHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    CoreBluetooth
-    ForceFeedback
-    IOBluetooth
-    IOKit
-    moltenvk
-    OpenGL
-    VideoToolbox
-  ] ++ [
+  buildInputs = [
     bzip2
     cubeb
     curl
@@ -123,7 +98,9 @@ stdenv.mkDerivation rec {
     SDL2
     sfml
     xxHash
-    xz # LibLZMA
+    xz
+    # Causes linker errors with minizip-ng, prefer vendored. Possible reason why: https://github.com/dolphin-emu/dolphin/pull/12070#issuecomment-1677311838
+    #zlib-ng
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     bluez
@@ -135,12 +112,20 @@ stdenv.mkDerivation rec {
     #mgba # Derivation doesn't support Darwin
     udev
     vulkan-loader
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreBluetooth
+    ForceFeedback
+    IOBluetooth
+    IOKit
+    moltenvk
+    OpenGL
+    VideoToolbox
   ];
 
   cmakeFlags = [
     "-DDISTRIBUTOR=NixOS"
-    "-DDOLPHIN_WC_REVISION=${src.rev}"
-    "-DDOLPHIN_WC_DESCRIBE=${version}"
+    "-DDOLPHIN_WC_REVISION=${finalAttrs.src.rev}"
+    "-DDOLPHIN_WC_DESCRIBE=${finalAttrs.version}"
     "-DDOLPHIN_WC_BRANCH=master"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
@@ -160,13 +145,6 @@ stdenv.mkDerivation rec {
     "--set QT_QPA_PLATFORM xcb"
   ];
 
-  # Use nix-provided libraries instead of submodules
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace CMakeLists.txt \
-      --replace "if(NOT APPLE)" "if(true)" \
-      --replace "if(LIBUSB_FOUND AND NOT APPLE)" "if(LIBUSB_FOUND)"
-  '';
-
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -178,20 +156,10 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests.version = testers.testVersion {
-      package = dolphin-emu;
+      package = finalAttrs.finalPackage;
       command = "dolphin-emu-nogui --version";
-      version = if stdenv.hostPlatform.isDarwin then "Dolphin 5.0" else version;
+      inherit (finalAttrs) version;
     };
-
-    updateScript = writeShellScript "dolphin-update-script" ''
-      set -eou pipefail
-      export PATH=${lib.makeBinPath [ curl jq common-updater-scripts ]}
-
-      json="$(curl -s https://dolphin-emu.org/update/latest/beta)"
-      version="$(jq -r '.shortrev' <<< "$json")"
-      rev="$(jq -r '.hash' <<< "$json")"
-      update-source-version dolphin-emu "$version" --rev="$rev"
-    '';
   };
 
   meta = with lib; {
@@ -201,9 +169,6 @@ stdenv.mkDerivation rec {
     branch = "master";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [
-      ashkitten
-      ivar
-    ];
+    maintainers = with maintainers; [ pbsds ];
   };
-}
+})

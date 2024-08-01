@@ -13,10 +13,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "sha256-qNXv6Z9sKl7rol78UTOSRFML/JCGfOJMGOdt49KHD50=";
+  cargoHash = "sha256-qNXv6Z9sKl7rol78UTOSRFML/JCGfOJMGOdt49KHD50=";
 
   meta = with lib; {
-    description = "A minimal, fast alternative to 'du -sh'";
+    description = "Minimal, fast alternative to 'du -sh'";
     homepage = "https://github.com/sharkdp/diskus";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.fuerbringer ];

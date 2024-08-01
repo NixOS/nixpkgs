@@ -9,7 +9,7 @@ buildPythonApplication rec {
   version = "2.0.2";
   src = fetchPypi {
   inherit pname version;
-  sha256 = "sha256-HwO5gvrsW9pArz4RLtxNfCmiFqa85AAi6wBJI+F9GE8=";
+  hash = "sha256-HwO5gvrsW9pArz4RLtxNfCmiFqa85AAi6wBJI+F9GE8=";
   };
   prePatch = ''
     substituteInPlace mapproxy/util/ext/serving.py --replace "args = [sys.executable] + sys.argv" "args = sys.argv"

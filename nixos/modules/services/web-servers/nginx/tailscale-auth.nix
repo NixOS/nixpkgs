@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   inherit (lib)
@@ -22,7 +22,7 @@ in
   ];
 
   options.services.nginx.tailscaleAuth = {
-    enable = mkEnableOption "Enable tailscale.nginx-auth, to authenticate nginx users via tailscale.";
+    enable = mkEnableOption "tailscale.nginx-auth, to authenticate nginx users via tailscale";
 
     expectedTailnet = mkOption {
       default = "";

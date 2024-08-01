@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, pillow
-, vacuum-map-parser-base
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  pillow,
+  vacuum-map-parser-base,
 }:
 
 buildPythonPackage rec {

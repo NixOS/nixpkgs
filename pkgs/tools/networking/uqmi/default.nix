@@ -22,6 +22,8 @@ stdenv.mkDerivation {
     # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
     "-Wno-error=dangling-pointer"
     "-Wno-error=maybe-uninitialized"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=sometimes-uninitialized"
   ]);
 
   meta = with lib; {

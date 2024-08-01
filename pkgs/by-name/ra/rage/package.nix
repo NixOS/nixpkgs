@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple, secure and modern encryption tool with small explicit keys, no config options, and UNIX-style composability";
+    description = "Simple, secure and modern encryption tool with small explicit keys, no config options, and UNIX-style composability";
     homepage = "https://github.com/str4d/rage";
     changelog = "https://github.com/str4d/rage/blob/v${version}/rage/CHANGELOG.md";
     license = with licenses; [ asl20 mit ]; # either at your option

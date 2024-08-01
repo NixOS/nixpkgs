@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, certifi
-, chardet
-, datadog
-, decorator
-, fetchPypi
-, idna
-, requests
-, urllib3
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  chardet,
+  datadog,
+  decorator,
+  fetchPypi,
+  idna,
+  requests,
+  urllib3,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  pythonImportsCheck = [
-    "gradient_statsd"
-  ];
+  pythonImportsCheck = [ "gradient_statsd" ];
 
   # Pypi does not contain tests
   doCheck = false;

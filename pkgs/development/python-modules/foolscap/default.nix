@@ -1,31 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, service-identity
-, six
-, twisted
-, txi2p-tahoe
-, txtorcon
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  mock,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
+  twisted,
+  txi2p-tahoe,
+  txtorcon,
+  versioneer,
 }:
 
 buildPythonPackage rec {
   pname = "foolscap";
   version = "23.3.0";
 
-  disabled = pythonOlder "3.7";
+  pyproject = true;
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
-  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-Vu7oXC1brsgBwr2q59TAgx8j1AFRbi5mjRNIWZTbkUU=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # Remove vendorized versioneer.py
+    rm versioneer.py
+  '';
+
+  dependencies = [
     six
     twisted
     pyopenssl
@@ -52,6 +63,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/warner/foolscap";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

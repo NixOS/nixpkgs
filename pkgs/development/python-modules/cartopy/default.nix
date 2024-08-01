@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchpatch
-, cython
-, setuptools-scm
-, geos
-, proj
-, matplotlib
-, numpy
-, pyproj
-, pyshp
-, shapely
-, owslib
-, pillow
-, gdal
-, scipy
-, fontconfig
-, pytest-mpl
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchpatch,
+  fetchPypi,
+  cython,
+  setuptools-scm,
+  geos,
+  proj,
+  matplotlib,
+  numpy,
+  pyproj,
+  pyshp,
+  shapely,
+  owslib,
+  pillow,
+  gdal,
+  scipy,
+  fontconfig,
+  pytest-mpl,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,15 @@ buildPythonPackage rec {
     pname = "Cartopy";
     hash = "sha256-Ix83s1cB8rox2UlZzKdebaBMLuo6fxTOHHXuOw6udnY=";
   };
+
+  patches = [
+    # Some tests in the 0.23.0 release are failing due to missing network markers. Revisit after update.
+    (fetchpatch {
+      name = "mnt-add-missing-needs-network-markers.patch";
+      url = "https://github.com/SciTools/cartopy/commit/2403847ea69c3d95e899ad5d0cab32ac6017df0e.patch";
+      hash = "sha256-aGBUX4jFn7GgoqmHVC51DmS+ga3GcQGKfkut++x67Q0=";
+    })
+  ];
 
   nativeBuildInputs = [
     cython
@@ -56,8 +66,15 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    ows = [ owslib pillow ];
-    plotting = [ gdal pillow scipy ];
+    ows = [
+      owslib
+      pillow
+    ];
+    plotting = [
+      gdal
+      pillow
+      scipy
+    ];
   };
 
   nativeCheckInputs = [
@@ -78,6 +95,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    "test_gridliner_constrained_adjust_datalim"
     "test_gridliner_labels_bbox_style"
   ];
 

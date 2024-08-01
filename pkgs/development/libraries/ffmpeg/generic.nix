@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, removeReferencesTo, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
+{ lib, stdenv, buildPackages, removeReferencesTo, addDriverRunpath, pkg-config, perl, texinfo, texinfo6, yasm
 
   # You can fetch any upstream version using this derivation by specifying version and hash
   # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
@@ -72,7 +72,9 @@
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
 , withJxl ? withFullDeps && lib.versionAtLeast version "5" # JPEG XL de/encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
+, withLcms2 ? withFullDeps # ICC profile support via lcms2
 , withLzma ? withHeadlessDeps # xz-utils
+, withMetal ? false # Unfree and requires manual downloading of files
 , withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
 , withMp3lame ? withHeadlessDeps # LAME MP3 encoder
@@ -106,6 +108,7 @@
 , withSvtav1 ? withHeadlessDeps && !stdenv.isAarch64 && !stdenv.hostPlatform.isMinGW # AV1 encoder/decoder (focused on speed and correctness)
 , withTensorflow ? false # Tensorflow dnn backend support (Increases closure size by ~390 MiB)
 , withTheora ? withHeadlessDeps # Theora encoder
+, withTwolame ? withFullDeps # MP2 encoding
 , withV4l2 ? withHeadlessDeps && stdenv.isLinux  # Video 4 Linux support
 , withV4l2M2m ? withV4l2
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
@@ -126,8 +129,9 @@
 , withXcbShape ? withFullDeps # X11 grabbing shape rendering
 , withXcbShm ? withFullDeps # X11 grabbing shm communication
 , withXcbxfixes ? withFullDeps # X11 grabbing mouse rendering
-, withXevd ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 # MPEG-5 EVC decoding
-, withXeve ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 # MPEG-5 EVC encoding
+# Currently only supports gcc and msvc as compiler, the limitation for clang get removed in the next release, but that does not fix building on darwin.
+, withXevd ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 && stdenv.cc.isGNU # MPEG-5 EVC decoding
+, withXeve ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 && stdenv.cc.isGNU # MPEG-5 EVC encoding
 , withXlib ? withFullDeps # Xlib support
 , withXml2 ? withFullDeps # libxml2 support, for IMF and DASH demuxers
 , withXvid ? withHeadlessDeps && withGPL # Xvid encoder, native encoder exists
@@ -234,6 +238,7 @@
 , intel-media-sdk
 , ladspaH
 , lame
+, lcms2
 , libaom
 , libaribcaption
 , libass
@@ -288,6 +293,7 @@
 , quirc
 , rav1e
 , rtmpdump
+, twolame
 , samba
 , SDL2
 , shaderc
@@ -317,6 +323,7 @@
 , AVFoundation
 , CoreImage
 , VideoToolbox
+, xcode # unfree contains metalcc and metallib
 /*
  *  Testing
  */
@@ -395,22 +402,22 @@ stdenv.mkDerivation (finalAttrs: {
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
   '';
 
-  patches = map (patch: fetchpatch2 patch) ([ ]
+  patches = []
     ++ optionals (versionOlder version "5") [
-      {
+      (fetchpatch2 {
         name = "libsvtav1-1.5.0-compat-compressed_ten_bit_format.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/031f1561cd286596cdb374da32f8aa816ce3b135";
         hash = "sha256-agJgzIzrBTQBAypuCmGXXFo7vw6Iodw5Ny5O5QCKCn8=";
-      }
-      {
+      })
+      (fetchpatch2 {
         # Backport fix for binutils-2.41.
         name = "binutils-2.41.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
         hash = "sha256-vLSltvZVMcQ0CnkU0A29x6fJSywE8/aU+Mp9os8DZYY=";
-      }
+      })
       # The upstream patch isn’t for ffmpeg 4, but it will apply with a few tweaks.
       # Fixes a crash when built with clang 16 due to UB in ff_seek_frame_binary.
-      {
+      (fetchpatch2 {
         name = "utils-fix_crash_in_ff_seek_frame_binary.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/ab792634197e364ca1bb194f9abe36836e42f12d";
         hash = "sha256-vqqVACjbCcGL9Qvmg1QArSKqVmOqr8BEr+OxTBDt6mA=";
@@ -419,35 +426,72 @@ stdenv.mkDerivation (finalAttrs: {
             --replace libavformat/seek.c libavformat/utils.c \
             --replace 'const AVInputFormat *const ' 'const AVInputFormat *'
         '';
-      }
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-51794.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/50f0f8c53c818f73fe2d752708e2fa9d2a2d8a07";
+        hash = "sha256-5G9lmKjMEa0+vqbA8EEiNIr6QG+PeEoIL+uZP4Hlo28=";
+      })
     ]
-    ++ (lib.optionals (lib.versionAtLeast version "5" && lib.versionOlder version "6") [
-      {
-        name = "fix_build_failure_due_to_libjxl_version_to_new";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/75b1a555a70c178a9166629e43ec2f6250219eb2";
-        hash = "sha256-+2kzfPJf5piim+DqEgDuVEEX5HLwRsxq0dWONJ4ACrU=";
-      }
-    ])
-    ++ (lib.optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
-      { # this can be removed post 6.1
+    ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
+      (fetchpatch2 { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
         hash = "sha256-sxRXKKgUak5vsQTiV7ge8vp+N22CdTIvuczNgVRP72c=";
-      }
-      {
+      })
+      (fetchpatch2 {
         name = "fix_vulkan_av1";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e06ce6d2b45edac4a2df04f304e18d4727417d24";
         hash = "sha256-73mlX1rdJrguw7OXaSItfHtI7gflDrFj+7SepVvvUIg=";
-      }
-    ])
-    ++ (lib.optionals (lib.versionAtLeast version "7.0") [
-      {
+      })
+      (fetchpatch2 {
+        name = "CVE-2024-31582.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/99debe5f823f45a482e1dc08de35879aa9c74bd2";
+        hash = "sha256-+CQ9FXR6Vr/AmsbXFiCUXZcxKj1s8nInEdke/Oc/kUA=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2024-31578.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/3bb00c0a420c3ce83c6fafee30270d69622ccad7";
+        hash = "sha256-oZMZysBA+/gwaGEM1yvI+8wCadXWE7qLRL6Emap3b8Q=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-49501.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/4adb93dff05dd947878c67784d98c9a4e13b57a7";
+        hash = "sha256-7cwktto3fPMDGvCZCVtB01X8Q9S/4V4bDLUICSNfGgw=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-49502.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/737ede405b11a37fdd61d19cf25df296a0cb0b75";
+        hash = "sha256-mpSJwR9TX5ENjjCKvzuM/9e1Aj/AOiQW0+72oOMl9v8=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-50007.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/b1942734c7cbcdc9034034373abcc9ecb9644c47";
+        hash = "sha256-v0hNcqBtm8GCGAU9UbRUCE0slodOjZCHrkS8e4TrVcQ=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-50008.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/5f87a68cf70dafeab2fb89b42e41a4c29053b89b";
+        hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
+      })
+    ]
+    ++ optionals (lib.versionAtLeast version "7.0" && lib.versionOlder version "7.0.1") [
+      (fetchpatch2 {
         # Will likely be obsolete in >7.0
         name = "fate_avoid_dependency_on_samples";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/7b7b7819bd21cc92ac07f6696b0e7f26fa8f9834";
         hash = "sha256-TKI289XqtG86Sj9s7mVYvmkjAuRXeK+2cYYEDkg6u6I=";
-      }
-    ]));
+      })
+    ]
+    ++ optionals (lib.versionAtLeast version "7.0") [
+      ./0001-avfoundation.m-macOS-SDK-10.12-compatibility.patch
+
+      # Expose a private API for Chromium / Qt WebEngine.
+      (fetchpatch2 {
+        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
+        hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
+      })
+    ];
 
   configurePlatforms = [];
   setOutputFlags = false; # Only accepts some of them
@@ -579,7 +623,13 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withJxl "libjxl")
   ] ++ [
     (enableFeature withLadspa "ladspa")
+  ] ++ optionals (versionAtLeast version "5.1") [
+    (enableFeature withLcms2 "lcms2")
+  ] ++ [
     (enableFeature withLzma "lzma")
+  ] ++ optionals (versionAtLeast version "5.0") [
+    (enableFeature withMetal "metal")
+  ] ++ [
     (enableFeature withMfx "libmfx")
     (enableFeature withModplug "libmodplug")
     (enableFeature withMp3lame "libmp3lame")
@@ -618,6 +668,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withSvtav1 "libsvtav1")
     (enableFeature withTensorflow "libtensorflow")
     (enableFeature withTheora "libtheora")
+    (enableFeature withTwolame "libtwolame")
     (enableFeature withV4l2 "libv4l2")
     (enableFeature withV4l2M2m "v4l2-m2m")
     (enableFeature withVaapi "vaapi")
@@ -664,6 +715,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals stdenv.cc.isClang [
     "--cc=clang"
     "--cxx=clang++"
+  ] ++ optionals withMetal [
+    "--metalcc=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metal"
+    "--metallib=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metallib"
   ];
 
   # ffmpeg embeds the configureFlags verbatim in its binaries and because we
@@ -672,13 +726,16 @@ stdenv.mkDerivation (finalAttrs: {
   # such references except for data.
   postConfigure = let
     toStrip = map placeholder (lib.remove "data" finalAttrs.outputs) # We want to keep references to the data dir.
-      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc;
+      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc
+      ++ lib.optional withMetal xcode;
   in
     "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${o}") toStrip)} config.h";
 
   strictDeps = true;
 
-  nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ]
+  nativeBuildInputs = [ removeReferencesTo addDriverRunpath perl pkg-config yasm ]
+  # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
+  ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
   ++ optionals withCudaLLVM [ clang ];
 
   buildInputs = []
@@ -718,6 +775,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withJack [ libjack2 ]
   ++ optionals withJxl [ libjxl ]
   ++ optionals withLadspa [ ladspaH ]
+  ++ optionals withLcms2 [ lcms2 ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
   ++ optionals withModplug [ libmodplug ]
@@ -749,6 +807,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withSvtav1 [ svt-av1 ]
   ++ optionals withTensorflow [ libtensorflow ]
   ++ optionals withTheora [ libtheora ]
+  ++ optionals withTwolame [ twolame ]
   ++ optionals withV4l2 [ libv4l ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
   ++ optionals withVdpau [ libvdpau ]
@@ -810,10 +869,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
+  # See the explanation in addDriverRunpath.
   postFixup = optionalString (stdenv.isLinux && withLib) ''
-    addOpenGLRunpath ${placeholder "lib"}/lib/libavcodec.so
-    addOpenGLRunpath ${placeholder "lib"}/lib/libavutil.so
+    addDriverRunpath ${placeholder "lib"}/lib/libavcodec.so
+    addDriverRunpath ${placeholder "lib"}/lib/libavutil.so
   ''
   # https://trac.ffmpeg.org/ticket/10809
   + optionalString (versionAtLeast version "5.0" && withVulkan && !stdenv.hostPlatform.isMinGW) ''
@@ -825,7 +884,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "A complete, cross-platform solution to record, convert and stream audio and video";
+    description = "Complete, cross-platform solution to record, convert and stream audio and video";
     homepage = "https://www.ffmpeg.org/";
     changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
     longDescription = ''
@@ -854,7 +913,10 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
     broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
-    maintainers = with maintainers; [ atemu arthsmn jopejoe1 ];
+    maintainers = with maintainers; [ atemu jopejoe1 emily ];
     mainProgram = "ffmpeg";
   };
+} // lib.optionalAttrs withCudaLLVM {
+  # remove once https://github.com/NixOS/nixpkgs/issues/318674 is addressed properly
+  hardeningDisable = [ "zerocallusedregs" ];
 })

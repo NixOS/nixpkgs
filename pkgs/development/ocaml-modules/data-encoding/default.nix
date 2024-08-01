@@ -1,5 +1,4 @@
 { lib
-, fetchFromGitLab
 , buildDunePackage
 , ppx_hash
 , bigstringaf
@@ -10,8 +9,6 @@
 , hex
 , json-data-encoding
 , json-data-encoding-bson
-, alcotest
-, crowbar
 , ppx_expect
 }:
 

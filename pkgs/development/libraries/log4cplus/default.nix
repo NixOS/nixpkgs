@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://log4cplus.sourceforge.net/";
-    description = "A port the log4j library from Java to C++";
+    description = "Port the log4j library from Java to C++";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };

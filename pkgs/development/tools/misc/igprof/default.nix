@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     broken = (stdenv.isLinux && stdenv.isAarch64);
-    description = "The Ignominous Profiler";
+    description = "Ignominous Profiler";
 
     longDescription = ''
       IgProf is a fast and light weight profiler. It correctly handles

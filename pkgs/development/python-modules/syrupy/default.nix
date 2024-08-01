@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, poetry-core
-, pytest
-, colored
-, invoke
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  poetry-core,
+  pytest,
+  colored,
+  invoke,
 }:
 
 buildPythonPackage rec {
@@ -22,17 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-NBJJqQsZqqKHOdqGa/j/2KQvlenLCEJBqlfdjtFK00U=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    colored
-  ];
+  propagatedBuildInputs = [ colored ];
 
   nativeCheckInputs = [
     invoke
@@ -53,6 +48,6 @@ buildPythonPackage rec {
     description = "Pytest Snapshot Test Utility";
     homepage = "https://github.com/tophat/syrupy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

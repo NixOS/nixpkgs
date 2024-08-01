@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A very simple PDF parser";
+    description = "Very simple PDF parser";
     homepage = "https://indefero.soutade.fr/p/updfparser";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ autumnal ];

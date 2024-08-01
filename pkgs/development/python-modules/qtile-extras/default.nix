@@ -11,6 +11,7 @@
   pytest-asyncio,
   pytest-lazy-fixture,
   pytestCheckHook,
+  python-dateutil,
   qtile,
   requests,
   setuptools-scm,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.25.0";
+  version = "0.27.0.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OYzSKOVg4D5gKxaEreclYq3D16dl8ddLipSdifokDNY=";
+    hash = "sha256-c5MCcpU6g95DMycSgOaUdpvPUtgVV/zUSdKVDbZWZGM=";
   };
 
   build-system = [ setuptools-scm ];
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-lazy-fixture
     pytestCheckHook
+    python-dateutil
     qtile
     requests
     xorgserver

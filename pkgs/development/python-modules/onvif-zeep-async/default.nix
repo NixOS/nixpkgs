@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, ciso8601
-, fetchPypi
-, httpx
-, pythonOlder
-, zeep
+{
+  lib,
+  buildPythonPackage,
+  ciso8601,
+  fetchPypi,
+  httpx,
+  pythonOlder,
+  zeep,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     zeep
   ];
 
-  pythonImportsCheck = [
-    "onvif"
-  ];
+  pythonImportsCheck = [ "onvif" ];
 
   # Tests are not shipped
   doCheck = false;

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "univrsal";
     repo = "input-overlay";
     rev = "v${version}";
-    sha256 = "sha256-9HqEz+KnTt8MyhwqFWjalbl3H/DCzumckXMctCGhs3o=";
+    hash = "sha256-9HqEz+KnTt8MyhwqFWjalbl3H/DCzumckXMctCGhs3o=";
     fetchSubmodules = true;
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
-    description = "Show keyboard, gamepad and mouse input on stream ";
+    description = "Show keyboard, gamepad and mouse input on stream";
     homepage = "https://github.com/univrsal/input-overlay";
     maintainers = with maintainers; [ glittershark ];
     license = licenses.gpl2;

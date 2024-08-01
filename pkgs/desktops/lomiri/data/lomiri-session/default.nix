@@ -135,6 +135,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       excludes = [ "systemd/lomiri.service" ];
       hash = "sha256-BICb6ZwU/sUBzmM4udsOndIgw1A03I/UEG000YvMZ9Y=";
     })
+
+    ./1001-Unset-QT_QPA_PLATFORMTHEME.patch
   ];
 
   postPatch = ''
@@ -147,8 +149,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     substituteInPlace lomiri-session \
       --replace-fail '/usr/libexec/Xwayland.lomiri' '${lib.getBin lomiri}/libexec/Xwayland.lomiri'
   '';
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     cmake

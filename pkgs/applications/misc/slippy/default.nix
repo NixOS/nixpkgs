@@ -53,11 +53,6 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  # Cargo.lock is outdated
-  postConfigure = ''
-    cargo metadata --offline
-  '';
-
   meta = with lib; {
     description = "Markdown slideshows in Rust";
     homepage = "https://github.com/axodotdev/slippy";

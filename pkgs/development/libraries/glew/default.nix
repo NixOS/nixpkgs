@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/glew/${finalAttrs.pname}-${finalAttrs.version}.tgz";
+    url = "mirror://sourceforge/glew/glew-${finalAttrs.version}.tgz";
     sha256 = "1qak8f7g1iswgswrgkzc7idk7jmqgwrs58fhg2ai007v7j4q5z6l";
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "An OpenGL extension loading library for C/C++";
+    description = "OpenGL extension loading library for C/C++";
     homepage = "https://glew.sourceforge.net/";
     license = with licenses; [ /* modified bsd */ free mit gpl2Only ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
     pkgConfigModules = [ "glew" ];

@@ -47,7 +47,7 @@ let
                   '') (attrValues nodes);
                 };
               };
-              programs.bash.enableCompletion = true;
+              programs.bash.completion.enable = true;
               environment.systemPackages = [ wrapKubectl ];
               services.flannel.iface = "eth1";
               services.kubernetes = {

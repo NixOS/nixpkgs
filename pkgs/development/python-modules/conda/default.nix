@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonRelaxDepsHook,
   hostPlatform,
   fetchFromGitHub,
   # build dependencies
@@ -12,6 +11,7 @@
   conda-libmamba-solver,
   conda-package-handling,
   distro,
+  frozendict,
   jsonpatch,
   packaging,
   platformdirs,
@@ -27,18 +27,17 @@
 }:
 buildPythonPackage rec {
   pname = "conda";
-  version = "24.1.2";
+  version = "24.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     inherit pname version;
     owner = "conda";
     repo = "conda";
-    rev = version;
-    hash = "sha256-L/Y7Bb3R5YqXbjTN4CRPFnkgymVLrxuFmjVzpvt28dE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5Zj27rqULUThbLb5lbb4oynAYoqsDa0mTkNH9sLM3VU=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     hatchling
@@ -50,6 +49,7 @@ buildPythonPackage rec {
     conda-libmamba-solver
     conda-package-handling
     distro
+    frozendict
     jsonpatch
     packaging
     platformdirs

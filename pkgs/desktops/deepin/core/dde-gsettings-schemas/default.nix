@@ -1,9 +1,8 @@
 { lib
-, stdenv
 , runCommand
 , glib
 , gtk3
-, dde-dock
+, dde-grand-search
 , startdde
 , dde-session-shell
 , dde-file-manager
@@ -17,7 +16,7 @@
 
 let
   gsettingsOverridePackages = [
-    dde-dock
+    dde-grand-search
     startdde
     dde-session-shell
     dde-file-manager

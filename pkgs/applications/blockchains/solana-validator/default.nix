@@ -2,7 +2,6 @@
 
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , lib
 , rustPlatform
 , pkg-config
@@ -97,7 +96,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces. ";
+    description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces.";
     homepage = "https://solana.com";
     license = licenses.asl20;
     maintainers = with maintainers; [ adjacentresearch ];

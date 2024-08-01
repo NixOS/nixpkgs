@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A rofi menu for interacting with MPD written in Python";
+    description = "Rofi menu for interacting with MPD written in Python";
     mainProgram = "rofi-mpd";
     homepage = "https://github.com/JakeStanger/Rofi_MPD";
     license = licenses.mit;

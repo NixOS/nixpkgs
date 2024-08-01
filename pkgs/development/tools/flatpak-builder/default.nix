@@ -41,19 +41,16 @@
 , attr
 }:
 
-let
-  installed_testdir = "${placeholder "installedTests"}/libexec/installed-tests/flatpak-builder";
-in stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak-builder";
-  version = "1.4.2";
+  version = "1.4.4";
 
   outputs = [ "out" "doc" "man" "installedTests" ];
 
   # fetchFromGitHub fetches an archive which does not contain the full source (https://github.com/flatpak/flatpak-builder/issues/558)
   src = fetchurl {
-    # TODO: remove the '-fixed-libglnx' in the next release
-    url = "https://github.com/flatpak/flatpak-builder/releases/download/${finalAttrs.version}/flatpak-builder-${finalAttrs.version}-fixed-libglnx.tar.xz";
-    hash = "sha256-wEG5dOA6LC082oig7+Hs9p+a30KhdY6sNB1VXnedBZY=";
+    url = "https://github.com/flatpak/flatpak-builder/releases/download/${finalAttrs.version}/flatpak-builder-${finalAttrs.version}.tar.xz";
+    hash = "sha256-3CcVk5S6qiy1I/Uvh0Ry/1DRYZgyMyZMoqIuhQdB7Ho=";
   };
 
   patches = [
@@ -124,7 +121,9 @@ in stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   # Installed tests
-  postFixup = ''
+  postFixup = let
+    installed_testdir = "${placeholder "installedTests"}/libexec/installed-tests/flatpak-builder";
+  in ''
     for file in ${installed_testdir}/{test-builder.sh,test-builder-python.sh,test-builder-deprecated.sh}; do
       patchShebangs $file
     done

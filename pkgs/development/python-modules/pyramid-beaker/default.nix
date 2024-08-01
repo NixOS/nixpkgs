@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, beaker, pyramid }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  beaker,
+  pyramid,
+}:
 
 buildPythonPackage rec {
   pname = "pyramid-beaker";
@@ -8,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyramid_beaker";
     inherit version;
-    sha256 = "sha256-zMUT60z7W0Flfym25rKMor17O/n9qRMGoQKa7pLRz6U=";
+    hash = "sha256-zMUT60z7W0Flfym25rKMor17O/n9qRMGoQKa7pLRz6U=";
   };
 
   checkPhase = ''
@@ -18,7 +25,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytest ];
 
-  propagatedBuildInputs = [ beaker pyramid ];
+  propagatedBuildInputs = [
+    beaker
+    pyramid
+  ];
 
   meta = with lib; {
     description = "Beaker session factory backend for Pyramid";

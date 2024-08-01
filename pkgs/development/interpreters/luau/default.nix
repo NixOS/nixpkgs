@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A fast, small, safe, gradually typed embeddable scripting language derived from Lua";
+    description = "Fast, small, safe, gradually typed embeddable scripting language derived from Lua";
     homepage = "https://luau-lang.org/";
     changelog = "https://github.com/luau-lang/luau/releases/tag/${version}";
     license = licenses.mit;

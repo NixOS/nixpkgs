@@ -6,13 +6,13 @@ in
 
 buildDunePackage rec {
   pname = "headache";
-  version = "1.07";
+  version = "1.08";
 
   src = fetchFromGitHub {
     owner = "frama-c";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RL80ggcJSJFu2UTECUNP6KufRhR8ZnG7sQeYzhrw37g=";
+    sha256 = "sha256-UXQIIsCyJZN4qos7Si7LLm9vQueOduUmLeYHuyT2GZo=";
   };
 
   propagatedBuildInputs = [

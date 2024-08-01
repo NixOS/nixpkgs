@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "Programie";
     repo = "krunner-ssh";
     rev = version;
-    sha256 = "sha256-rFTTvmetDeN6t0axVc+8t1TRiuyPBpwqhvsq2IFxa/A=";
+    hash = "sha256-rFTTvmetDeN6t0axVc+8t1TRiuyPBpwqhvsq2IFxa/A=";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple backend for KRunner providing SSH hosts from your .ssh/known_hosts file as search results";
+    description = "Simple backend for KRunner providing SSH hosts from your .ssh/known_hosts file as search results";
     homepage = "https://selfcoders.com/projects/krunner-ssh";
     license = licenses.mit;
     maintainers = with maintainers; [ aanderse ];

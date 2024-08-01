@@ -7,12 +7,16 @@
 , tzdata
 , unicode-emoji
 , unicode-character-database
-, darwin
 , cmake
 , ninja
+, pkg-config
+, libavif
 , libxcrypt
 , python3
 , qt6Packages
+, woff2
+, ffmpeg
+, skia
 , nixosTests
 , AppKit
 , Cocoa
@@ -22,11 +26,11 @@
 
 let
   inherit (builtins) elemAt;
-  cldr_version = "44.1.0";
+  cldr_version = "45.0.0";
   cldr-json = fetchzip {
     url = "https://github.com/unicode-org/cldr-json/releases/download/${cldr_version}/cldr-${cldr_version}-json-modern.zip";
     stripRoot = false;
-    hash = "sha256-EbbzaaspKgRT/dsJV3Kf0Dfj8LN9zT+Pl4gk5kiOXWk=";
+    hash = "sha256-BPDvYjlvJMudX/YlS7HrwKEABYx+1KzjiFlLYA5+Oew=";
     postFetch = ''
       echo -n ${cldr_version} > $out/version.txt
     '';
@@ -50,22 +54,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-03-16";
+  version = "0-unstable-2024-07-11";
 
   src = fetchFromGitHub {
-    owner = "SerenityOS";
-    repo = "serenity";
-    rev = "3a8bde9ef24dace600484b38992fdc7d17bf92c3";
-    hash = "sha256-r8HYcexrOjDYsXuCtROiNY7Rl60pVQBvVQf190gqNuY=";
+    owner = "LadybirdWebBrowser";
+    repo = "ladybird";
+    rev = "da8633b2d0ab3b9d8f1cdad39a8ad85ca2accf03";
+    hash = "sha256-NJSuhJWxeGPOVotK+s/mG2bfq19su08wBoxFDs/H9JU=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/Ladybird";
-
   postPatch = ''
-    sed -i '/iconutil/d' CMakeLists.txt
+    sed -i '/iconutil/d' Ladybird/CMakeLists.txt
 
     # Don't set absolute paths in RPATH
-    substituteInPlace ../Meta/CMake/lagom_install_options.cmake \
+    substituteInPlace Meta/CMake/lagom_install_options.cmake \
       --replace-fail "\''${CMAKE_INSTALL_BINDIR}" "bin" \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}" "lib"
   '';
@@ -74,6 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Setup caches for LibLocale, LibUnicode, LibTimezone, LibTLS and LibGfx
     # Note that the versions of the input data packages must match the
     # expected version in the package's CMake.
+
+    # Check that the versions match
+    grep -F 'locale_version = "${cldr_version}"' Meta/gn/secondary/Userland/Libraries/LibLocale/BUILD.gn || (echo cldr_version mismatch && exit 1)
+    grep -F 'tzdb_version = "${tzdata.version}"' Meta/gn/secondary/Userland/Libraries/LibTimeZone/BUILD.gn || (echo tzdata.version mismatch && exit 1)
+    grep -F 'set(CACERT_VERSION "${cacert_version}")' Meta/CMake/ca_certificates_data.cmake || (echo cacert_version mismatch && exit 1)
+
     mkdir -p build/Caches
 
     ln -s ${cldr-json} build/Caches/CLDR
@@ -104,14 +112,21 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = with qt6Packages; [
     cmake
     ninja
+    pkg-config
     python3
     wrapQtAppsHook
   ];
 
   buildInputs = with qt6Packages; [
+    ffmpeg
+    libavif
     libxcrypt
     qtbase
     qtmultimedia
+    skia
+    woff2
+  ] ++ lib.optional stdenv.isLinux [
+    qtwayland
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Cocoa
@@ -123,11 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable network operations
     "-DSERENITY_CACHE_DIR=Caches"
     "-DENABLE_NETWORK_DOWNLOADS=OFF"
-    "-DENABLE_COMMONMARK_SPEC_DOWNLOAD=OFF"
   ] ++ lib.optionals stdenv.isLinux [
     "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
-    # FIXME: Enable this when launching with the commandline flag --enable-gpu-painting doesn't fail calling eglBindAPI on GNU/Linux
-    "-DENABLE_ACCELERATED_GRAPHICS=OFF"
   ];
 
   # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
@@ -149,11 +161,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
+    description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
     homepage = "https://ladybird.dev";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "Ladybird";
+    # use of undeclared identifier 'NSBezelStyleAccessoryBarAction'
+    broken = stdenv.isDarwin;
   };
 })

@@ -3,14 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  poetry-dynamic-versioning,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "govee-local-api";
-  version = "1.4.4";
+  version = "1.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,13 +18,10 @@ buildPythonPackage rec {
     owner = "Galorhallen";
     repo = "govee-local-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J4SG4n6LIZ/G6pEXAzliV7uTWzqsH7rtFe3Y7BJ2dWE=";
+    hash = "sha256-pmExXQmkkjeMHegXV/b94a95qkoOHA7SJOkR1NUV4lE=";
   };
 
-  build-system = [
-    poetry-core
-    poetry-dynamic-versioning
-  ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

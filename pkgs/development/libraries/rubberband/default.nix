@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, libsamplerate, libsndfile, fftw
-, lv2, jdk
+, lv2, jdk_headless
 , vamp-plugin-sdk, ladspaH, meson, ninja, darwin }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-2e+J4rjvn4WxOsPC+uww4grPLJ86nIxFzmN/K8leV2w=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja jdk ];
+  nativeBuildInputs = [ pkg-config meson ninja jdk_headless ];
   buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH lv2 ] ++ lib.optionals stdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [Accelerate CoreGraphics CoreVideo]);
   makeFlags = [ "AR:=$(AR)" ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://breakfastquay.com/rubberband/";
     # commercial license available as well, see homepage. You'll get some more optimized routines
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu maintainers.marcweber ];
+    maintainers = [ maintainers.marcweber ];
     platforms = platforms.all;
   };
 }

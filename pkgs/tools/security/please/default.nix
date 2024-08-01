@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = { inherit (nixosTests) please; };
 
   meta = with lib; {
-    description = "A polite regex-first sudo alternative";
+    description = "Polite regex-first sudo alternative";
     longDescription = ''
       Delegate accurate least privilege access with ease. Express easily with a
       regex and expose only what is needed and nothing more. Or validate file

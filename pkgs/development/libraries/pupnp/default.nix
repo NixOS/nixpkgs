@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An open source UPnP development kit for Linux";
+    description = "Open source UPnP development kit for Linux";
 
     longDescription = ''
       The Linux SDK for UPnP Devices (libupnp) provides developers

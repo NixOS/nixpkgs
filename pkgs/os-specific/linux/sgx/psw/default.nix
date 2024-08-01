@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
       # Also include the Data Center Attestation Primitives (DCAP) platform
       # enclaves.
       dcap = rec {
-        version = "1.20";
+        version = "1.21";
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-nPsI89KSBA3cSNTMWyktZP5dkf+BwL3NZ4MuUf6G98o=";
+          hash = "sha256-/PPD2MyNxoCwzNljIFcpkFvItXbyvymsJ7+Uf4IyZuk=";
         };
       };
     in
@@ -158,31 +158,31 @@ stdenv.mkDerivation rec {
     # is helpful to have properly patched versions for non-NixOS distributions.
     echo "Fixing aesmd.service"
     substituteInPlace $out/lib/systemd/system/aesmd.service \
-      --replace '@aesm_folder@' \
-                "$out/aesm" \
-      --replace 'Type=forking' \
-                'Type=simple' \
-      --replace "ExecStart=$out/aesm/aesm_service" \
-                "ExecStart=$out/bin/aesm_service --no-daemon"\
-      --replace "/bin/mkdir" \
-                "${coreutils}/bin/mkdir" \
-      --replace "/bin/chown" \
-                "${coreutils}/bin/chown" \
-      --replace "/bin/chmod" \
-                "${coreutils}/bin/chmod" \
-      --replace "/bin/kill" \
-                "${coreutils}/bin/kill"
+      --replace-fail '@aesm_folder@' \
+                     "$out/aesm" \
+      --replace-fail 'Type=forking' \
+                     'Type=simple' \
+      --replace-fail "ExecStart=$out/aesm/aesm_service" \
+                     "ExecStart=$out/bin/aesm_service --no-daemon"\
+      --replace-fail "/bin/mkdir" \
+                     "${coreutils}/bin/mkdir" \
+      --replace-fail "/bin/chown" \
+                     "${coreutils}/bin/chown" \
+      --replace-fail "/bin/chmod" \
+                     "${coreutils}/bin/chmod" \
+      --replace-fail "/bin/kill" \
+                     "${coreutils}/bin/kill"
   '';
 
   passthru.tests = {
     service = nixosTests.aesmd;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Intel SGX Architectural Enclave Service Manager";
     homepage = "https://github.com/intel/linux-sgx";
-    maintainers = with maintainers; [ phlip9 veehaitch citadelcore ];
+    maintainers = with lib.maintainers; [ phlip9 veehaitch citadelcore ];
     platforms = [ "x86_64-linux" ];
-    license = with licenses; [ bsd3 ];
+    license = [ lib.licenses.bsd3 ];
   };
 }

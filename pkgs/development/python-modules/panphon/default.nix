@@ -1,33 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-, unittestCheckHook
+  unittestCheckHook,
 
-, setuptools
+  setuptools,
 
-, unicodecsv
-, pyyaml
-, regex
-, numpy
-, editdistance
-, munkres
-, levenshtein
+  unicodecsv,
+  pyyaml,
+  regex,
+  numpy,
+  editdistance,
+  munkres,
+  levenshtein,
 }:
 
 buildPythonPackage rec {
   pname = "panphon";
-  version = "0.20.0";
+  version = "0.21.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gio52n1NZWeyCK+eJW/Fp827wjvwnMNDFAR4pKa8VcY=";
+    hash = "sha256-Zgug40R1my1BPOoV9iOkbzouMKeQsc0YYFmBIoypDqk=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     setuptools # need for pkg_resources
@@ -40,11 +39,12 @@ buildPythonPackage rec {
     levenshtein # need for align_wordlists.py script
   ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "test" ];
+  unittestFlagsArray = [
+    "-s"
+    "test"
+  ];
 
   pythonImportsCheck = [
     "panphon"

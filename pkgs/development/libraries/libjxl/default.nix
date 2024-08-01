@@ -27,7 +27,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.10.2";
+  version = "0.10.3";
 
   outputs = [ "out" "dev" ];
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    hash = "sha256-Ip/5fbzt6OfIrHJajnxEe14ppvX1hJ1FSJUBEE/h5YQ=";
+    hash = "sha256-zk/fI1C26K5WC9QBfzS6MqPT9PiR4wmWURjOOIiNsg4=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/libjxl/libjxl";
-    description = "JPEG XL image format reference implementation.";
+    description = "JPEG XL image format reference implementation";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nh2 ];
     platforms = platforms.all;

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , fixDarwinDylibNames
 , pkgsStatic
 }:
@@ -54,11 +53,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A library for reading and writing gif images";
+    description = "Library for reading and writing gif images";
     homepage = "https://giflib.sourceforge.net/";
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     branch = "5.2";
   };
 }

@@ -230,6 +230,16 @@
       "source": "hosted",
       "version": "1.18.0"
     },
+    "console": {
+      "dependency": "transitive",
+      "description": {
+        "name": "console",
+        "sha256": "e04e7824384c5b39389acdd6dc7d33f3efe6b232f6f16d7626f194f6a01ad69a",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "4.1.0"
+    },
     "convert": {
       "dependency": "transitive",
       "description": {
@@ -466,6 +476,16 @@
       "source": "hosted",
       "version": "0.6.18+2"
     },
+    "flutter_multi_slider": {
+      "dependency": "direct main",
+      "description": {
+        "name": "flutter_multi_slider",
+        "sha256": "3c4603999f5c399b57b5a85086cf92c8870e726fe07fd63bc3968bd3e564518b",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.0.1"
+    },
     "flutter_rust_bridge": {
       "dependency": "direct main",
       "description": {
@@ -507,6 +527,16 @@
       },
       "source": "hosted",
       "version": "3.2.0"
+    },
+    "get_it": {
+      "dependency": "transitive",
+      "description": {
+        "name": "get_it",
+        "sha256": "d85128a5dae4ea777324730dc65edd9c9f43155c109d5cc0a69cab74139fbac1",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "7.7.0"
     },
     "github": {
       "dependency": "direct main",
@@ -737,6 +767,16 @@
       },
       "source": "hosted",
       "version": "1.0.4"
+    },
+    "msix": {
+      "dependency": "direct dev",
+      "description": {
+        "name": "msix",
+        "sha256": "519b183d15dc9f9c594f247e2d2339d855cf0eaacc30e19b128e14f3ecc62047",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.16.7"
     },
     "multicast_dns": {
       "dependency": "direct main",

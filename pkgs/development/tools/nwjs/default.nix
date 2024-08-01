@@ -17,6 +17,7 @@
 , lib
 , libcap
 , libdrm
+, libGL
 , libnotify
 , libuuid
 , libxcb
@@ -55,6 +56,7 @@ let
       gtk3
       libcap
       libdrm
+      libGL
       libnotify
       libxkbcommon
       mesa
@@ -85,7 +87,7 @@ let
     extraOutputsToInstall = [ "lib" "out" ];
   };
 
-  version = "0.85.0";
+  version = "0.89.0";
 in
 stdenv.mkDerivation {
   pname = "nwjs";
@@ -96,10 +98,10 @@ stdenv.mkDerivation {
     in fetchurl {
       url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
       hash = {
-        "sdk-ia32" = "sha256-QcFKX+TLRBYAMt5oUYoVMfBgGFZZ/4pdhhtNI0OxF/M=";
-        "sdk-x64" = "sha256-Wqq0iI5VLa/hJLTNF10YpFTtLRP6okjCC2EzlXxeuWI=";
-        "ia32" = "sha256-st/J/Zejo3R0dKxxdM7XBvmAlfsO2+2i5lYlAv9A5lY=";
-        "x64" = "sha256-hxSyzNEH6UJVejUqoG01vpJxb319wrLgp7uyF6Pt5YQ=";
+        "sdk-ia32" = "sha256-gHZLxZRborfbwmblKQrgr6tf+Rwt1YqxrGELAHPM0so=";
+        "sdk-x64" = "sha256-NOQGS3jEdZumTwCmi0DUtnGlOaSAZi2rGYSLVioJDdg=";
+        "ia32" = "sha256-L3PGK2YZCUo+KfkakL9AjkPcnUWPFOn4S2GePi+rph0=";
+        "x64" = "sha256-epsbDjrpq4K7NnNDAcKoEJMcjfdehU2JjFcmA5exug8=";
       }."${flavor + bits}";
     };
 
@@ -136,7 +138,7 @@ stdenv.mkDerivation {
     '';
 
   meta = with lib; {
-    description = "An app runtime based on Chromium and node.js";
+    description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = [ "i686-linux" "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

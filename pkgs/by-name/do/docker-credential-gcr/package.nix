@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "docker-credential-gcr";
-  version = "2.1.22";
+  version = "2.1.23";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "docker-credential-gcr";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-vGX6Jhh91dUqZ+y+h1SlPiFE3dL0UO3iJyyzvQVoUsQ=";
+    sha256 = "sha256-ViZxxqRZQPevuK/yueHKmg4CwnNpgfyXszGalzWucko=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ buildGoModule rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A Docker credential helper for GCR (https://gcr.io) users";
+    description = "Docker credential helper for GCR (https://gcr.io) users";
     longDescription = ''
       docker-credential-gcr is Google Container Registry's Docker credential
       helper. It allows for Docker clients v1.11+ to easily make

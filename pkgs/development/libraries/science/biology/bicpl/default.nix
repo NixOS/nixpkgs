@@ -1,19 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libminc, netpbm }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libminc,
+  netpbm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bicpl";
-  version = "unstable-2020-10-15";
+  version = "unstable-2024-05-14";
 
-  # current master is significantly ahead of most recent release, so use Git version:
+  # master is not actively maintained, using develop and develop-apple branches
   src = fetchFromGitHub {
-    owner  = "BIC-MNI";
-    repo   = pname;
-    rev    = "a58af912a71a4c62014975b89ef37a8e72de3c9d";
-    sha256 = "0iw0pmr8xrifbx5l8a0xidfqbm1v8hwzqrw0lcmimxlzdihyri0g";
+    owner = "BIC-MNI";
+    repo = pname;
+    rev = "7e1e791483cf135fe29b8eecd7a360aa892823ae";
+    hash = "sha256-SvbtPUfEYp3IGivG+5yFdJF904miyMk+s15zwW7e7b4=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libminc netpbm ];
+  buildInputs = [
+    libminc
+    netpbm
+  ];
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" ];
 
@@ -25,6 +35,9 @@ stdenv.mkDerivation rec {
     description = "Brain Imaging Centre programming library";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = with licenses; [ hpndUc gpl3Plus ];
+    license = with licenses; [
+      hpndUc
+      gpl3Plus
+    ];
   };
 }

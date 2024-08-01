@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/cgreen-devs/cgreen";
-    description = "The Modern Unit Test and Mocking Framework for C and C++";
+    description = "Modern Unit Test and Mocking Framework for C and C++";
     mainProgram = "cgreen-runner";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.AndersonTorres ];

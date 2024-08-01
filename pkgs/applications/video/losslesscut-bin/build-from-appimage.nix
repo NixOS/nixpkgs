@@ -1,9 +1,6 @@
-{ lib
-, appimageTools
+{ appimageTools
 , fetchurl
 , makeWrapper
-, gtk3
-, gsettings-desktop-schemas
 , pname
 , version
 , hash
@@ -28,8 +25,6 @@ appimageTools.wrapType2 {
   profile = ''
     export LC_ALL=C.UTF-8
   '';
-
-  extraPkgs = ps: appimageTools.defaultFhsEnvArgs.multiPkgs ps;
 
   extraInstallCommands = ''
     (

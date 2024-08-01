@@ -1,18 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, boto3
-, diskcache
-, enum34
-, packaging
-, pathlib
-, numpy
-, requests
-, scikit-image
-, six
-, pytestCheckHook
-, isPy27
-, tifffile
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  boto3,
+  diskcache,
+  packaging,
+  numpy,
+  requests,
+  scikit-image,
+  six,
+  pytestCheckHook,
+  tifffile,
 }:
 
 buildPythonPackage rec {
@@ -36,11 +34,9 @@ buildPythonPackage rec {
     scikit-image
     six
     tifffile
-  ] ++ lib.optionals isPy27 [ pathlib enum34 ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Ignore tests which require setup, check again if disabledTestFiles can be used
   pytestFlagsArray = [ "--ignore tests/io_" ];

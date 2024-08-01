@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mcaselector";
-  version = "2.4";
+  version = "2.4.1";
 
   src = fetchurl {
     url = "https://github.com/Querz/mcaselector/releases/download/${finalAttrs.version}/mcaselector-${finalAttrs.version}.jar";
-    hash = "sha256-6WQIvDmyVVmxHFOMk2emT1a4PMGVjvtC0aSkryvwARs=";
+    hash = "sha256-4czkp7+akZEPvnYLMFGrqrhBYafDVxDo1iQZYwvaARE=";
   };
 
   dontUnpack = true;
@@ -27,16 +27,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/mcaselector}
     cp $src $out/lib/mcaselector/mcaselector.jar
-    makeWrapper ${jre}/bin/java $out/bin/mcaselector \
-      --add-flags "-jar $out/lib/mcaselector/mcaselector.jar" \
-      ''${gappsWrapperArgs[@]}
 
     runHook postInstall
   '';
 
+  preFixup = ''
+    makeWrapper ${jre}/bin/java $out/bin/mcaselector \
+      --add-flags "-jar $out/lib/mcaselector/mcaselector.jar" \
+      ''${gappsWrapperArgs[@]}
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/Querz/mcaselector";
-    description = "A tool to select chunks from Minecraft worlds for deletion or export";
+    description = "Tool to select chunks from Minecraft worlds for deletion or export";
     mainProgram = "mcaselector";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;

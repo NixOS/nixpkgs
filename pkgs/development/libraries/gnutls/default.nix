@@ -44,6 +44,8 @@
 , rsyslog
 , openconnect
 , samba
+
+, gitUpdater
 }:
 
 let
@@ -58,11 +60,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.8.4";
+  version = "3.8.6";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    hash = "sha256-K+pOFUeU8/ABgPoqXFH+iwBax6Mc1YvUTN+n8268Ops=";
+    hash = "sha256-LhWIquU8sy1Dk38fTsoo/r2cDHqhc0/F3WGn6B4OvN0=";
   };
 
   outputs = [ "bin" "dev" "out" ]
@@ -97,12 +99,6 @@ stdenv.mkDerivation rec {
     sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
   '' + lib.optionalString stdenv.hostPlatform.isMusl '' # See https://gitlab.com/gnutls/gnutls/-/issues/945
     sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool.sh
-  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
-    # Adapted from https://gitlab.com/gnutls/gnutls/-/commit/d214cd4570fb1559a20e941bb7ceac7df52e96d3
-    # Can be removed with 3.8.5+.
-    sed -i lib/nettle/backport/rsa-sign-tr.c -e \
-      '/^#include <nettle\/rsa\.h>/i\
-    #define nettle_rsa_compute_root_tr _gnutls_nettle_backport_rsa_compute_root_tr'
   '';
 
   preConfigure = "patchShebangs .";
@@ -153,6 +149,11 @@ stdenv.mkDerivation rec {
       --replace "-lunistring" ""
   '';
 
+
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.com/gnutls/gnutls.git";
+  };
+
   passthru.tests = {
     inherit ngtcp2-gnutls curlWithGnuTls ffmpeg emacs qemu knot-resolver samba openconnect;
     inherit (ocamlPackages) ocamlnet;
@@ -163,7 +164,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The GNU Transport Layer Security Library";
+    description = "GNU Transport Layer Security Library";
 
     longDescription = ''
       GnuTLS is a project that aims to develop a library which

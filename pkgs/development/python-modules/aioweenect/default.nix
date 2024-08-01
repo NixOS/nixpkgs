@@ -1,12 +1,13 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
       --replace "--cov --cov-report term-missing --cov-report xml --cov=aioweenect tests" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   nativeCheckInputs = [
     aresponses
@@ -42,10 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-
-  pythonImportsCheck = [
-    "aioweenect"
-  ];
+  pythonImportsCheck = [ "aioweenect" ];
 
   meta = with lib; {
     description = "Library for the weenect API";

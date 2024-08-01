@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  mock,
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,6 @@ buildPythonPackage rec {
     description = "Load me later. A lazy plugin management system for Python";
     homepage = "http://lml.readthedocs.io/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

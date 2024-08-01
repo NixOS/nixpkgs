@@ -1,10 +1,19 @@
-{ stdenv, writeScript, coreutils, gnugrep, gnused, common-updater-scripts, nix }:
+{ lib
+, stdenv
+, common-updater-scripts
+, coreutils
+, gnugrep
+, gnused
+, nix
+, writeScript
+}:
 
 { name ? null
 , pname ? null
 , version ? null
 , attrPath ? null
 , versionLister
+, allowedVersions ? ""
 , ignoredVersions ? ""
 , rev-prefix ? ""
 , odd-unstable ? false
@@ -14,6 +23,9 @@
 let
   # where to print git commands and debugging messages
   fileForGitCommands = "update-git-commits.txt";
+
+  grep = lib.getExe gnugrep;
+  sed = lib.getExe gnused;
 
   # shell script to update package
   updateScript = writeScript "generic-update-script.sh" ''
@@ -26,10 +38,11 @@ let
     version="$3"
     attr_path="$4"
     version_lister="$5"
-    ignored_versions="$6"
-    rev_prefix="$7"
-    odd_unstable="$8"
-    patchlevel_unstable="$9"
+    allowed_versions="$6"
+    ignored_versions="$7"
+    rev_prefix="$8"
+    odd_unstable="$9"
+    patchlevel_unstable="$${10}"
 
     [[ -n "$name" ]] || name="$UPDATE_NIX_NAME"
     [[ -n "$pname" ]] || pname="$UPDATE_NIX_PNAME"
@@ -41,20 +54,20 @@ let
 
     function version_is_ignored() {
       local tag="$1"
-      [ -n "$ignored_versions" ] && grep -E "$ignored_versions" <<< "$tag"
+      [ -n "$ignored_versions" ] && ${grep} -E -e "$ignored_versions" <<< "$tag"
     }
 
     function version_is_unstable() {
       local tag="$1"
       local enforce="$2"
       if [ -n "$odd_unstable" -o -n "$enforce" ]; then
-        local minor=$(echo "$tag" | ${gnused}/bin/sed -rne 's,^[0-9]+\.([0-9]+).*,\1,p')
+        local minor=$(echo "$tag" | ${sed} -rne 's,^[0-9]+\.([0-9]+).*,\1,p')
         if [ $((minor % 2)) -eq 1 ]; then
           return 0
         fi
       fi
       if [ -n "$patchlevel_unstable" -o -n "$enforce" ]; then
-        local patchlevel=$(echo "$tag" | ${gnused}/bin/sed -rne 's,^[0-9]+\.[0-9]+\.([0-9]+).*$,\1,p')
+        local patchlevel=$(echo "$tag" | ${sed} -rne 's,^[0-9]+\.[0-9]+\.([0-9]+).*$,\1,p')
         if ((patchlevel >= 90)); then
           return 0
         fi
@@ -71,10 +84,13 @@ let
 
     # cut any revision prefix not used in the NixOS package version
     if [ -n "$rev_prefix" ]; then
-      tags=$(echo "$tags" | ${gnugrep}/bin/grep "^$rev_prefix")
-      tags=$(echo "$tags" | ${gnused}/bin/sed -e "s,^$rev_prefix,,")
+      tags=$(echo "$tags" | ${grep} "^$rev_prefix")
+      tags=$(echo "$tags" | ${sed} -e "s,^$rev_prefix,,")
     fi
-    tags=$(echo "$tags" | ${gnugrep}/bin/grep "^[0-9]")
+    tags=$(echo "$tags" | ${grep} "^[0-9]")
+    if [ -n "$allowed_versions" ]; then
+      tags=$(echo "$tags" | ${grep} -E -e "$allowed_versions")
+    fi
 
     # sort the tags in decreasing order
     tags=$(echo "$tags" | ${coreutils}/bin/sort --reverse --version-sort)
@@ -116,7 +132,7 @@ let
 
 in {
   name = "generic-update-script";
-  command = [ updateScript name pname version attrPath versionLister ignoredVersions rev-prefix odd-unstable patchlevel-unstable ];
+  command = [ updateScript name pname version attrPath versionLister allowedVersions ignoredVersions rev-prefix odd-unstable patchlevel-unstable ];
   supportedFeatures = [
     # Stdout must contain output according to the updateScript commit protocol when the update script finishes with a non-zero exit code.
     "commit"

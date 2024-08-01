@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "glooctl";
-  version = "1.16.10";
+  version = "1.16.17";
 
   src = fetchFromGitHub {
     owner = "solo-io";
     repo = "gloo";
     rev = "v${version}";
-    hash = "sha256-GC0/HGPO/sbkyf2bLY0A+pQrPYqMv6BP0zNUHENpQjg=";
+    hash = "sha256-18ZvxXAE83/NT/Syv/wshTiulTMroAaamxYtfuYIuR4=";
   };
 
-  vendorHash = "sha256-UyzqKpF2WBj25Bm4MtkF6yjl87A61vGsteBNCjJV178=";
+  vendorHash = "sha256-wLB+sUaSOBb1VLx/iwlU4U6LKakUP+GbhdWfjlvCu84=";
 
   subPackages = [ "projects/gloo/cli/cmd" ];
 
@@ -41,6 +41,6 @@ buildGoModule rec {
     mainProgram = "glooctl";
     homepage = "https://docs.solo.io/gloo-edge/latest/reference/cli/glooctl/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

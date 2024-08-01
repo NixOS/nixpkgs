@@ -1,38 +1,39 @@
-{ lib
-, anyascii
-, beautifulsoup4
-, buildPythonPackage
-, callPackage
-, django
-, django-filter
-, django-modelcluster
-, django-taggit
-, django-treebeard
-, djangorestframework
-, draftjs-exporter
-, fetchPypi
-, html5lib
-, l18n
-, laces
-, openpyxl
-, permissionedforms
-, pillow
-, pythonOlder
-, requests
-, telepath
-, willow
+{
+  lib,
+  anyascii,
+  beautifulsoup4,
+  buildPythonPackage,
+  callPackage,
+  django,
+  django-filter,
+  django-modelcluster,
+  django-taggit,
+  django-treebeard,
+  djangorestframework,
+  draftjs-exporter,
+  fetchPypi,
+  html5lib,
+  l18n,
+  laces,
+  openpyxl,
+  permissionedforms,
+  pillow,
+  pythonOlder,
+  requests,
+  telepath,
+  willow,
 }:
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "6.0.2";
+  version = "6.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-58/DwPU/swLxeY8OAqesYHirAusOhwPA9xzL0/GOOG8=";
+    hash = "sha256-j0kIqxtrljqKp6348OxzjNHcebmBbG1fWQGPYApAQ3g=";
   };
 
   postPatch = ''
@@ -70,7 +71,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "wagtail" ];
 
   meta = with lib; {
-    description = "A Django content management system focused on flexibility and user experience";
+    description = "Django content management system focused on flexibility and user experience";
     mainProgram = "wagtail";
     homepage = "https://github.com/wagtail/wagtail";
     changelog = "https://github.com/wagtail/wagtail/blob/v${version}/CHANGELOG.txt";

@@ -19,7 +19,7 @@ let
       [Startup]
       sync_effects_enabled = ${toPyBoolStr cfg.syncEffectsEnabled}
       devices_off_on_screensaver = ${toPyBoolStr cfg.devicesOffOnScreensaver}
-      battery_notifier = ${toPyBoolStr (cfg.mouseBatteryNotifier || cfg.batteryNotifier.enable)}
+      battery_notifier = ${toPyBoolStr cfg.batteryNotifier.enable}
       battery_notifier_freq = ${builtins.toString cfg.batteryNotifier.frequency}
       battery_notifier_percent = ${builtins.toString cfg.batteryNotifier.percentage}
 
@@ -80,14 +80,6 @@ in
         '';
       };
 
-      mouseBatteryNotifier = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Mouse battery notifier.
-        '';
-      };
-
       batteryNotifier = mkOption {
         description = ''
           Settings for device battery notifications.
@@ -143,14 +135,11 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    warnings = flatten [
-      (optional cfg.mouseBatteryNotifier ''
-        The option openrazer.mouseBatteryNotifier is deprecated.
-        Please use openrazer.batteryNotifier instead to enable and configure battery notifications.
-      '')
-    ];
+  imports = [
+    (mkRenamedOptionModule [ "hardware" "openrazer" "mouseBatteryNotifier" ] [ "hardware" "openrazer" "batteryNotifier" "enable" ])
+  ];
 
+  config = mkIf cfg.enable {
     boot.extraModulePackages = [ kernelPackages.openrazer ];
     boot.kernelModules = drivers;
 

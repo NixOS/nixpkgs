@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, setuptools
-, watchdog
-, portalocker
-, pytestCheckHook
-, pymongo
-, dnspython
-, pymongo-inmemory
-, pandas
-, birch
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  watchdog,
+  portalocker,
+  pytestCheckHook,
+  pymongo,
+  dnspython,
+  pymongo-inmemory,
+  pandas,
+  birch,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,6 @@ buildPythonPackage rec {
   pythonRemoveDeps = [ "setuptools" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -75,9 +74,7 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
   '';
 
-  pythonImportsCheck = [
-    "cachier"
-  ];
+  pythonImportsCheck = [ "cachier" ];
 
   meta = {
     homepage = "https://github.com/python-cachier/cachier";

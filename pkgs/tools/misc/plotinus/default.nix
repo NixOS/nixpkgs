@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A searchable command palette in every modern GTK application";
+    description = "Searchable command palette in every modern GTK application";
     homepage = "https://github.com/p-e-w/plotinus";
     maintainers = with maintainers; [ samdroid-apps ];
     platforms = platforms.linux;

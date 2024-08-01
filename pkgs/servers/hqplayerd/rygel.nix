@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
+    description = "Home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
     homepage = "https://gitlab.gnome.org/GNOME/rygel";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

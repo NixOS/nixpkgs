@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# dependencies
-, wcwidth
+  # dependencies
+  wcwidth,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,15 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-XkIUPHAl75eUTKJhnWthsGGfxmVPmHcdOehiwUJMdcA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    wcwidth
-  ];
+  propagatedBuildInputs = [ wcwidth ];
 
   nativeCheckInputs = [
+    versionCheckHook
     pytestCheckHook
   ];
 
@@ -45,7 +44,6 @@ buildPythonPackage rec {
     # Calls poetry and fails to match output exactly
     "tests/test_cli.py"
   ];
-
 
   meta = with lib; {
     description = "Given Unicode text, make its representation consistent and possibly less broken";

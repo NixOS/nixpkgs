@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytest-xdist
-, pytestCheckHook
-, setuptools-scm
-, fastprogress
-, jax
-, jaxlib
-, jaxopt
-, optax
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytest-xdist,
+  pytestCheckHook,
+  setuptools-scm,
+  fastprogress,
+  jax,
+  jaxlib,
+  jaxopt,
+  optax,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "blackjax";
-  version = "1.1.1";
+  version = "1.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,12 +26,12 @@ buildPythonPackage rec {
     owner = "blackjax-devs";
     repo = "blackjax";
     rev = "refs/tags/${version}";
-    hash = "sha256-6+ElY1F8oRCtWT4a/LIG6hYMthlq5mDx2baKAc6zIns=";
+    hash = "sha256-W89L/3bpvecZdCpLCQOppev+fPc+SXd/T+zZLBH2wJs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fastprogress
     jax
     jaxlib
@@ -42,21 +44,32 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
   ];
-  disabledTestPaths = [ "tests/test_benchmarks.py" ];
-  disabledTests = [
-    # too slow
-    "test_adaptive_tempered_smc"
-  ];
 
-  pythonImportsCheck = [
-    "blackjax"
-  ];
+  disabledTestPaths =
+    [ "tests/test_benchmarks.py" ]
+    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      # Assertion errors on numerical values
+      "tests/mcmc/test_integrators.py"
+    ];
 
-  meta = with lib; {
+  disabledTests =
+    [
+      # too slow
+      "test_adaptive_tempered_smc"
+    ]
+    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      # Numerical test (AssertionError)
+      # https://github.com/blackjax-devs/blackjax/issues/668
+      "test_chees_adaptation"
+    ];
+
+  pythonImportsCheck = [ "blackjax" ];
+
+  meta = {
     homepage = "https://blackjax-devs.github.io/blackjax";
     description = "Sampling library designed for ease of use, speed and modularity";
     changelog = "https://github.com/blackjax-devs/blackjax/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

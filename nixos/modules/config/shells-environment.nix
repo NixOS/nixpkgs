@@ -42,8 +42,10 @@ in
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = with types; attrsOf (oneOf [ (listOf (oneOf [ float int str ])) float int str path ]);
-      apply = mapAttrs (n: v: if isList v then concatMapStringsSep ":" toString v else toString v);
+      type = with types; attrsOf (oneOf [ (listOf (oneOf [ int str path ])) int str path ]);
+      apply = let
+        toStr = v: if isPath v then "${v}" else toString v;
+      in mapAttrs (n: v: if isList v then concatMapStringsSep ":" toStr v else toStr v);
     };
 
     environment.profiles = mkOption {

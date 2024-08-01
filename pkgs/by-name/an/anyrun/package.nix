@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    description = "A wayland-native, highly customizable runner";
+    description = "Wayland-native, highly customizable runner";
     homepage = "https://github.com/kirottu/anyrun";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ eclairevoyant NotAShelf ];

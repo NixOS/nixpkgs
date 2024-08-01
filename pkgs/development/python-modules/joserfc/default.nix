@@ -1,57 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, cryptography
-, pycryptodome
+  # dependencies
+  cryptography,
+  pycryptodome,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "joserfc";
-  version = "0.9.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "authlib";
     repo = "joserfc";
-    rev = version;
-    hash = "sha256-+NFCveMPzE0hSs2Qe20/MDHApXVtU3cR/GPFKPqfVV4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-mnJzhkdX0+5Y/XwGlHgxLP0me8Cs/Cl3p46KgTKw2ug=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    cryptography
-  ];
+  dependencies = [ cryptography ];
 
   optional-dependencies = {
-    drafts = [
-      pycryptodome
-    ];
+    drafts = [ pycryptodome ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "joserfc"
-  ];
+  pythonImportsCheck = [ "joserfc" ];
 
   meta = with lib; {
     description = "Implementations of JOSE RFCs in Python";
     homepage = "https://github.com/authlib/joserfc";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

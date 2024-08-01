@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-cal";
-  version = "0.6.10";
+  version = "0.6.15";
 
   src = fetchFromGitHub {
     owner = "awslabs";
-    repo = finalAttrs.pname;
+    repo = "aws-c-cal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rzJypIf0DrKI/2Wt5vFop34dL+KYTeCfWC0RflZpiMo=";
+    hash = "sha256-RrUJz3IqwbBJ8NuJTIWqK33FlJHolcaid55PT2EhO24=";
   };
 
   patches = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "AWS Crypto Abstraction Layer ";
+    description = "AWS Crypto Abstraction Layer";
     homepage = "https://github.com/awslabs/aws-c-cal";
     license = licenses.asl20;
     platforms = platforms.unix;

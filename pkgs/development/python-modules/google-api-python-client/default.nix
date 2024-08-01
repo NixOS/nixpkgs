@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "2.126.0";
+  version = "2.135.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l8BBBjDivr0ZTZnpG9Yg2rW8a27AvwM/mpEJtwC4Oss=";
+    hash = "sha256-tVKigSPtlUkwNWmNuA6O14yRBqi0IuY6F1FQubVbcE4=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "googleapiclient" ];
 
   meta = with lib; {
-    description = "The official Python client library for Google's discovery based APIs";
+    description = "Official Python client library for Google's discovery based APIs";
     longDescription = ''
       These client libraries are officially supported by Google. However, the
       libraries are considered complete and are in maintenance mode. This means
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/google-api-python-client";
     changelog = "https://github.com/googleapis/google-api-python-client/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

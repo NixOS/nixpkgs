@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, dosfstools, libseccomp, makeWrapper, mtools, parted
-, pkg-config, qemu, syslinux, util-linux }:
+, pkg-config, qemu_test, syslinux, util-linux }:
 
 let
   version = "0.8.1";
@@ -55,10 +55,12 @@ in stdenv.mkDerivation {
   '';
 
   doCheck = stdenv.hostPlatform.isLinux;
-  nativeCheckInputs = [ util-linux qemu ];
+  nativeCheckInputs = [ util-linux qemu_test ];
   checkPhase = ''
     runHook preCheck
     patchShebangs tests
+    substituteInPlace scripts/virtio-run/solo5-virtio-run.sh \
+      --replace " -no-acpi" ""
     ./tests/bats-core/bats ./tests/tests.bats
     runHook postCheck
   '';

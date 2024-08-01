@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free MUD client for macOS, Linux and Windows";
+    description = "Free MUD client for macOS, Linux and Windows";
     homepage    = "https://tintin.mudhalla.net/index.php";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ abathur ];

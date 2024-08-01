@@ -368,6 +368,15 @@ in {
                     '';
                   };
 
+                  type = mkOption {
+                    type = types.enum [ "sendreceive" "sendonly" "receiveonly" "receiveencrypted" ];
+                    default = "sendreceive";
+                    description = ''
+                      Controls how the folder is handled by Syncthing.
+                      See <https://docs.syncthing.net/users/config.html#config-option-folder.type>.
+                    '';
+                  };
+
                   devices = mkOption {
                     type = types.listOf types.str;
                     default = [];

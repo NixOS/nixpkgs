@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A clock application that morphs digits when they are changed";
+    description = "Clock application that morphs digits when they are changed";
     maintainers = with maintainers; [ raskin ];
     platforms = with platforms; linux ++ freebsd;
     license = licenses.free; #TODO BSD on Gentoo, looks like MIT

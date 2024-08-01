@@ -1,29 +1,29 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pythonRelaxDepsHook
-, poetry-core
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  poetry-core,
 
-, appdirs
-, astor
-, inquirer
-, litellm
-, pyyaml
-, rich
-, six
-, tiktoken
-, tokentrim
-, wget
-, psutil
-, html2image
-, ipykernel
-, jupyter-client
-, matplotlib
-, toml
-, posthog
-, openai
-, setuptools
+  appdirs,
+  astor,
+  inquirer,
+  litellm,
+  pyyaml,
+  rich,
+  six,
+  tiktoken,
+  tokentrim,
+  wget,
+  psutil,
+  html2image,
+  ipykernel,
+  jupyter-client,
+  matplotlib,
+  toml,
+  posthog,
+  openai,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -45,13 +45,10 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml --replace 'git-python = "^1.0.3"' ""
   '';
 
-  pythonRelaxDeps = [
-    "tiktoken"
-  ];
+  pythonRelaxDeps = [ "tiktoken" ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

@@ -7,12 +7,12 @@
 }:
 buildPythonPackage rec {
   pname = "conda-package-handling";
-  version = "2.2.0";
+  version = "2.3.0";
   src = fetchFromGitHub {
     owner = "conda";
     repo = "conda-package-handling";
-    rev = version;
-    hash = "sha256-WeGfmT6lLwcwhheLBPMFcVMudY+zPsvTuXuOsiEAorQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Mo3qCNA/NtVtrsJmJ96ST6GMt2basSh5KlFBkrJ4pGE=";
   };
 
   pyproject = true;

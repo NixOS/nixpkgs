@@ -16,6 +16,7 @@ let p5 = camlp5; in
 let camlp5 = p5.override { legacy = true; }; in
 
 let fetched = coqPackages.metaFetch ({
+    release."1.19.2".sha256 = "sha256-7VTUbsFVoNT6srLwcAn5WNSsWC7cVUdphKRWBHHiH5M=";
     release."1.18.1".sha256 = "sha256-zgBJefQDe3JyCGbC0wvMcx/9iMVbftBJ43NPogkNeHY=";
     release."1.17.0".sha256 = "sha256-DTxE8CvYl0et20pxueydI+WzraI6UPHMNvxyp2gU/+w=";
     release."1.16.5".sha256 = "sha256-tKX5/cVPoBeHiUe+qn7c5FIRYCwY0AAukN7vSd/Nz9A=";

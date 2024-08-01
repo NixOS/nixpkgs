@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "cliphist";
@@ -12,6 +16,10 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-O4jOFWygmFxm8ydOq1xtB1DESyWpFGXeSp8a6tT+too=";
+
+  postInstall = ''
+    cp ${src}/contrib/* $out/bin/
+  '';
 
   meta = with lib; {
     description = "Wayland clipboard manager";

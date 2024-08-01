@@ -43,6 +43,6 @@ buildPythonApplication rec {
       "vpnc-script replacement for easy and secure split-tunnel VPN setup";
     mainProgram = "vpn-slice";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ liketechnik ];
+    maintainers = [ ];
   };
 }

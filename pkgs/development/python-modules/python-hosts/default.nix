@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-hosts";
-  version = "1.0.5";
+  version = "1.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xabbGnvzXNiE0koQVq9dmEib5Cv7kg1JjpZAyb7IZM0=";
+    hash = "sha256-LfWfBzJ3UyArcHxrIUDsIa8pIr1WkUikf6F6v+IVLG4=";
   };
 
   # win_inet_pton is required for Windows support
@@ -27,18 +28,14 @@ buildPythonPackage rec {
       --replace "import win_inet_pton" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pyyaml
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "python_hosts"
-  ];
+  pythonImportsCheck = [ "python_hosts" ];
 
   disabledTests = [
     # Tests require network access
@@ -60,4 +57,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-

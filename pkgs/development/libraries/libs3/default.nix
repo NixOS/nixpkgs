@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/bji/libs3";
-    description = "A library for interfacing with amazon s3";
+    description = "Library for interfacing with amazon s3";
     mainProgram = "s3";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;

@@ -10,18 +10,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "marp-cli";
-  version = "3.2.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "marp-team";
     repo = "marp-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bx5mq5KI85qUct/9Hr6mby6dWmRkmpVbiIw+M8PZas8=";
+    hash = "sha256-azscuPkQ9/xcQtBg+5pJigXSQQVtBGvbd7ZwiLwU7Qo=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-BogCt7ezmWxv2YfhljHYoBf47/FHR0qLZosjnoQhqgs=";
+    hash = "sha256-b/JyhsfXEbmM6+ajrjL65WhX9u9MEH+m1NHE6cTyf2g=";
   };
 
   nativeBuildInputs = [

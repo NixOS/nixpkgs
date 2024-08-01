@@ -41,6 +41,7 @@
 , nukeReferences
 , which
 , libarchive
+, jq
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -175,7 +176,7 @@ let
     libPath = libPathFor pkgs;
     libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
 
-    nativeBuildInputs = [ perl nukeReferences which libarchive ]
+    nativeBuildInputs = [ perl nukeReferences which libarchive jq ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
     disallowedReferences = optionals (!libsOnly) [ kernel.dev ];
@@ -239,7 +240,7 @@ let
       platforms = [ "x86_64-linux" ]
         ++ optionals (sha256_32bit != null) [ "i686-linux" ]
         ++ optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
-      maintainers = with maintainers; [ jonringer kiskae edwtjo ];
+      maintainers = with maintainers; [ kiskae edwtjo ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
       inherit broken;
     };

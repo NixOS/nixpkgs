@@ -19,10 +19,10 @@
 
 let
   pname = "spotube";
-  version = "3.6.0";
+  version = "3.7.1";
 
   meta = {
-    description = "An open source, cross-platform Spotify client compatible across multiple platforms";
+    description = "Open source, cross-platform Spotify client compatible across multiple platforms";
     longDescription = ''
       Spotube is an open source, cross-platform Spotify client compatible across
       multiple platforms utilizing Spotify's data API and YouTube (or Piped.video or JioSaavn)
@@ -53,7 +53,7 @@ let
 
     src = fetchArtifact {
       filename = "Spotube-macos-universal.dmg";
-      hash = "sha256-Qsr+66ToyLCCUwirj/7V6vzSNmx7BZ3O34liLx6AdlI=";
+      hash = "sha256-EYgjVXO/ztIsVYzEHe14YgXbQTclQIht9Qqr8ewHU8w=";
     };
 
     sourceRoot = ".";
@@ -77,7 +77,7 @@ let
 
     src = fetchArtifact {
       filename = "Spotube-linux-x86_64.deb";
-      hash = "sha256-dSFtjCuufrg5tG+FLgLgdx20WpO2s4wGOPtK+tel3dg=";
+      hash = "sha256-JKp2RMYNfdBzywqlBpTaHL1iD+E71EL8xY+nzkdA3us=";
     };
 
     nativeBuildInputs = [

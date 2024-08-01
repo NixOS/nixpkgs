@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/apache/mod_perl/blob/trunk/Changes";
     license = licenses.asl20;
     mainProgram = "mp2bug";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

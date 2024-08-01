@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A convenience library for the geocoding and reverse geocoding using Nominatim service";
+    description = "Convenience library for the geocoding and reverse geocoding using Nominatim service";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

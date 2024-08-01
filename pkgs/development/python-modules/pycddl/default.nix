@@ -1,26 +1,31 @@
-{ lib
-, pythonOlder
-, fetchPypi
-, buildPythonPackage
-, rustPlatform
-, pytestCheckHook
-, psutil
-, cbor2
+{
+  lib,
+  pythonOlder,
+  fetchPypi,
+  buildPythonPackage,
+  rustPlatform,
+  pytestCheckHook,
+  psutil,
+  cbor2,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "pycddl";
-  version = "0.5.2";
+  version = "0.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LdecJPSov2Y/QI4MWb20DcF0EtMuDO0VwiQDUeD55GI=";
+    hash = "sha256-63fe8UJXEH6t4l7ujV8JDvlGb7q3kL6fHHATFdklzFc=";
   };
 
-  nativeBuildInputs = with rustPlatform; [ maturinBuildHook cargoSetupHook ];
+  nativeBuildInputs = with rustPlatform; [
+    maturinBuildHook
+    cargoSetupHook
+  ];
 
   postPatch = ''
     # We don't place pytest-benchmark in the closure because we have no
@@ -37,10 +42,21 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-FJET2Xb1cq4aePFhPXpp2oEPIOtpugYWNFAa2Dj0F6Y=";
+    hash = "sha256-ssDEKRd3Y9/10oXBZHCxvlRkl9KMh3pGYbCkM4rXThQ=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook psutil cbor2 ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+    psutil
+    cbor2
+  ];
+
+  disabledTests =[
+    # flaky
+    "test_memory_usage"
+  ];
+
   pythonImportsCheck = [ "pycddl" ];
 
   meta = with lib; {

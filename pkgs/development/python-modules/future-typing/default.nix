@@ -1,8 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {

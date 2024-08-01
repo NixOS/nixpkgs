@@ -1,5 +1,6 @@
 { lib
 , pkgs
+, customQemu ? null
 , kernel ? pkgs.linux
 , img ? pkgs.stdenv.hostPlatform.linux-kernel.target
 , storeDir ? builtins.storeDir
@@ -40,10 +41,14 @@ rec {
         ${pkgs.stdenv.cc.libc}/lib/libc.so.* \
         ${pkgs.stdenv.cc.libc}/lib/libm.so.* \
         ${pkgs.stdenv.cc.libc}/lib/libresolv.so.* \
+        ${pkgs.stdenv.cc.libc}/lib/libpthread.so.* \
+        ${pkgs.zstd.out}/lib/libzstd.so.* \
+        ${pkgs.xz.out}/lib/liblzma.so.* \
         $out/lib
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* $out/bin
+      cp -pd ${pkgs.kmod}/bin/* $out/bin
 
       # Run patchelf to make the programs refer to the copied libraries.
       for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
@@ -53,6 +58,11 @@ rec {
               echo "patching $i..."
               patchelf --set-interpreter $out/lib/ld-*.so.? --set-rpath $out/lib $i || true
           fi
+      done
+
+      find $out/lib -type f \! -name 'ld*.so.?' | while read i; do
+        echo "patching $i..."
+        patchelf --set-rpath $out/lib $i
       done
     ''; # */
 
@@ -209,7 +219,7 @@ rec {
 
 
   qemuCommandLinux = ''
-    ${qemu-common.qemuBinary qemu} \
+    ${if (customQemu != null) then customQemu else (qemu-common.qemuBinary qemu)} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \

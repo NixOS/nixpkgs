@@ -6,7 +6,7 @@
 , yarn
 , makeBinaryWrapper
 , nodejs
-, python3
+, python311
 , nixosTests
 }:
 
@@ -52,7 +52,11 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     makeBinaryWrapper
     yarn
-    python3 # needed for sqlite node-gyp
+    python311 # needed for sqlite node-gyp
+  ];
+
+  buildInputs = [
+    nodejs
   ];
 
   dontConfigure = true;
@@ -75,7 +79,8 @@ in stdenv.mkDerivation {
     yarn --immutable-cache
     yarn run build
 
-    rm bin/heroku
+    # Delete scripts that are not useful for NixOS
+    rm bin/{heroku,setup}
     patchShebangs bin/*
 
     runHook postBuild
@@ -85,11 +90,10 @@ in stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/share/hedgedoc
-    cp -r bin $out
-    cp -r {app.js,lib,locales,node_modules,package.json,public} $out/share/hedgedoc
+    cp -r {app.js,bin,lib,locales,node_modules,package.json,public} $out/share/hedgedoc
 
-    for bin in $out/bin/*; do
-      wrapProgram $bin \
+    for bin in $out/share/hedgedoc/bin/*; do
+      makeWrapper $bin $out/bin/$(basename $bin) \
         --set NODE_ENV production \
         --set NODE_PATH "$out/share/hedgedoc/lib/node_modules"
     done

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch2
 , pkg-config
 , glib
 , glibc
@@ -12,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "conmon";
-  version = "2.1.11";
+  version = "2.1.12";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QQgpvvk7S6ARzBct/4AQP66End30EXcUPqv8a4Udoas=";
+    hash = "sha256-iSC1Q7fdf+4YH4vLFPOscRWxNv/xygYx872u8msmMmc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     changelog = "https://github.com/containers/conmon/releases/tag/${src.rev}";
     homepage = "https://github.com/containers/conmon";
-    description = "An OCI container runtime monitor";
+    description = "OCI container runtime monitor";
     license = licenses.asl20;
     maintainers = with maintainers; [ ] ++ teams.podman.members;
     platforms = platforms.linux;

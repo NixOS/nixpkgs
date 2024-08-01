@@ -11,6 +11,7 @@
 , rustc
 , cargo
 , cargo-c
+, lld
 , nasm
 , gstreamer
 , gst-plugins-base
@@ -29,6 +30,7 @@
 , nix-update-script
 # specifies a limited subset of plugins to build (the default `null` means all plugins supported on the stdenv platform)
 , plugins ? null
+, withGtkPlugins ? true
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null
 , hotdoc
@@ -114,7 +116,7 @@ let
       "reqwest" # tests hang on darwin
       "threadshare" # tests cannot bind to localhost on darwin
       "webp" # not supported on darwin (upstream crate issue)
-    ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
+    ] ++ lib.optionals (!gst-plugins-base.glEnabled || !withGtkPlugins) [
       # these require gstreamer-gl
       "gtk4"
       "livesync"
@@ -198,9 +200,13 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     cargo-c'
     nasm
+  ] ++ lib.optionals stdenv.isDarwin [
+    lld
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
+
+  env = lib.optionalAttrs stdenv.isDarwin { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
 
   buildInputs = [
     gstreamer
@@ -257,6 +263,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs";
     license = with licenses; [ mpl20 asl20 mit lgpl21Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
   };
 })

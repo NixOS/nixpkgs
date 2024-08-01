@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The classical Unix `at' job scheduling command";
+    description = "Classical Unix `at' job scheduling command";
     license = licenses.gpl2Plus;
     homepage = "https://tracker.debian.org/pkg/at";
     changelog = "https://salsa.debian.org/debian/at/-/raw/master/ChangeLog";

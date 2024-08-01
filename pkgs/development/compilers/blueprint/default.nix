@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A markup language for GTK user interface files";
+    description = "Markup language for GTK user interface files";
     mainProgram = "blueprint-compiler";
     homepage = "https://gitlab.gnome.org/jwestman/blueprint-compiler";
     license = licenses.lgpl3Plus;

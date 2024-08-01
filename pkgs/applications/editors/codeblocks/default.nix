@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     maintainers = [ maintainers.linquize ];
     platforms = platforms.all;
-    description = "The open source, cross platform, free C, C++ and Fortran IDE";
+    description = "Open source, cross platform, free C, C++ and Fortran IDE";
     longDescription =
       ''
         Code::Blocks is a free C, C++ and Fortran IDE built to meet the most demanding needs of its users.

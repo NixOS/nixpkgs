@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, cmake
-, setuptools
+  # build-system
+  cmake,
+  setuptools,
 
-# native dependencies
-, zlib-ng
+  # native dependencies
+  zlib-ng,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,17 +35,11 @@ buildPythonPackage rec {
 
   env.PYTHON_ZLIB_NG_LINK_DYNAMIC = true;
 
-  buildInputs = [
-    zlib-ng
-  ];
+  buildInputs = [ zlib-ng ];
 
-  pythonImportsCheck = [
-    "zlib_ng"
-  ];
+  pythonImportsCheck = [ "zlib_ng" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     rm -rf src
@@ -61,7 +56,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A drop-in replacement for Python's zlib and gzip modules using zlib-ng";
+    description = "Drop-in replacement for Python's zlib and gzip modules using zlib-ng";
     homepage = "https://github.com/pycompression/python-zlib-ng";
     changelog = "https://github.com/pycompression/python-zlib-ng/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.psfl;

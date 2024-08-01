@@ -1,23 +1,23 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, fetchpatch
 , buildDotnetModule
 , buildNpmPackage
 , dotnetCorePackages
 , nixosTests
-, substituteAll
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kavita";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "kareadita";
     repo = "kavita";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Z8bGVF6h//37zz/J+PDlJhm7c9AUs2pgKhYY/4ELMhQ=";
+    # commit immediately following the v${version} tag
+    # for correct version reporting
+    rev = "44c046176e54fa81e3420a1a40dcd9871e0a45f1";
+    hash = "sha256-cHX6nzajFqygdFF9y4KEAMv0tdNx9xFbpOoVNo8uafs=";
   };
 
   backend = buildDotnetModule {
@@ -25,15 +25,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version src;
 
     patches = [
-      # Fix wrongly bumped version 0.8.0.10 -> 0.8.1
-      # Remove on next release
-      (fetchpatch {
-        name = "fix-0.8.1-version.patch";
-        url = "https://github.com/Kareadita/Kavita/commit/3c9565468ad5494aef11dace62ba4b18b0c7d7f3.patch";
-        hash = "sha256-/dPHYrCeS6M82rw0lQ8K6C4jfXEvVVmjA85RKyVaxcE=";
-      })
       # The webroot is hardcoded as ./wwwroot
       ./change-webroot.diff
+      # Upstream removes database migrations between versions
+      # Restore them to avoid breaking on updates
+      # Info: Restores migrations for versions between v0.7.1.4 and v0.7.9
+      # On update: check if more migrations need to be restored!
+      # Migrations should at least allow updates from previous NixOS versions
+      ./restore-migrations.diff
     ];
     postPatch = ''
       substituteInPlace API/Services/DirectoryService.cs --subst-var out
@@ -59,7 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     npmBuildScript = "prod";
     npmFlags = [ "--legacy-peer-deps" ];
     npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent playwright from trying to install browsers
-    npmDepsHash = "sha256-+RJ9mX/cIainO2xS/hIrIOShPVbHkhkCq6q2bP8dGKM=";
+    npmDepsHash = "sha256-H53lwRr43MQWBbwc8N0GikAOkN2N0CwyiY8eGHveNFc=";
   };
 
   dontBuild = true;
@@ -81,7 +80,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A fast, feature rich, cross platform reading server";
+    description = "Fast, feature rich, cross platform reading server";
     homepage = "https://kavitareader.com";
     changelog = "https://github.com/kareadita/kavita/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;

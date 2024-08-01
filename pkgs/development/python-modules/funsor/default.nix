@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, makefun
-, multipledispatch
-, numpy
-, opt-einsum
-, typing-extensions
-, pyro-ppl
-, torch
-, pandas
-, pillow
-, pyro-api
-, pytest
-, pytest-xdist
-, requests
-, scipy
-, torchvision
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  makefun,
+  multipledispatch,
+  numpy,
+  opt-einsum,
+  typing-extensions,
+  pyro-ppl,
+  torch,
+  pandas,
+  pillow,
+  pyro-api,
+  pytest,
+  pytest-xdist,
+  requests,
+  scipy,
+  torchvision,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
   };
 
   # Disable the tests that rely on downloading assets from the internet as well as the linting checks.
-  patches = [
-    ./patch-makefile-for-tests.patch
-  ];
+  patches = [ ./patch-makefile-for-tests.patch ];
 
   propagatedBuildInputs = [
     makefun

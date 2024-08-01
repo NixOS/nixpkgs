@@ -27,7 +27,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+qqsSLjdY2I19fxdfkOEQ9DhTTHccUDll4O5yqtLiz0=";
+    hash = "sha256-+qqsSLjdY2I19fxdfkOEQ9DhTTHccUDll4O5yqtLiz0=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Simple modeling tool written in Python";
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     homepage = "https://github.com/gaphor/gaphor";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];

@@ -445,6 +445,7 @@ in {
           "${removeSuffix "/" cfg.serve.virtualRoot}/static/".alias = webSettings.STATIC_ROOT + "/";
         };
       });
+      proxyTimeout = mkDefault "120s";
     };
 
     environment.systemPackages = [ (pkgs.buildEnv {
@@ -646,7 +647,7 @@ in {
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ lheckemann qyliss ];
+    maintainers = with lib.maintainers; [ qyliss ];
     doc = ./mailman.md;
   };
 

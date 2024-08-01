@@ -1,5 +1,4 @@
 { buildGoModule
-, cacert
 , cairo
 , cargo
 , cargo-tauri
@@ -7,26 +6,24 @@
 , fetchFromGitHub
 , gdk-pixbuf
 , gobject-introspection
-, jq
 , lib
 , libsoup
-, llvmPackages_15
 , makeBinaryWrapper
-, moreutils
-, nodePackages
+, nodejs
+, openssl
 , pango
 , pkg-config
+, pnpm
 , rustc
 , rustPlatform
 , stdenv
 , stdenvNoCC
-, wasm-bindgen-cli
 , webkitgtk
 }:
 
 let
 
-  esbuild-18-20 = let version = "0.18.20";
+  esbuild-20-2 = let version = "0.20.2";
   in esbuild.override {
     buildGoModule = args:
       buildGoModule (args // {
@@ -35,123 +32,59 @@ let
           owner = "evanw";
           repo = "esbuild";
           rev = "v${version}";
-          hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
+          hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
         };
         vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
       });
   };
 
-  wasm-bindgen-cli-2-92 = wasm-bindgen-cli.override {
-    version = "0.2.92";
-    hash = "sha256-1VwY8vQy7soKEgbki4LD+v259751kKxSxmo/gqE6yV0=";
-    cargoHash = "sha256-aACJ+lYNEU8FFBs158G1/JG8sc6Rq080PeKCMnwdpH0=";
-  };
-
 in stdenv.mkDerivation (finalAttrs: {
   pname = "surrealist";
-  version = "1.11.7";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
-    owner = "StarlaneStudios";
-    repo = "Surrealist";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-1jTvbr7jFo2GOB79ClwtBVVnNQlSEkqY2eqbiZxWG74=";
+    owner = "surrealdb";
+    repo = "surrealist";
+    rev = "surrealist-v${finalAttrs.version}";
+    hash = "sha256-5OiVqn+ujssxXZXC6pnGiG1Nw8cAhoDU5IIl9skywBw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  embed = stdenv.mkDerivation {
-    inherit (finalAttrs) src version;
-    pname = "${finalAttrs.pname}-embed";
-    sourceRoot = "${finalAttrs.src.name}/src-embed";
-    auditable = false;
-    dontInstall = true;
-
-    cargoDeps = rustPlatform.fetchCargoTarball {
-      inherit (finalAttrs) src;
-      sourceRoot = "${finalAttrs.src.name}/src-embed";
-      hash = "sha256-0cAhaeoP8EPcE1230CyznQZZIKRs0lrI8XOXECgb8pg=";
-    };
-
-    nativeBuildInputs = [
-      cargo
-      rustc
-      llvmPackages_15.clangNoLibc
-      llvmPackages_15.lld
-      rustPlatform.cargoSetupHook
-      wasm-bindgen-cli-2-92
-    ];
-
-    postBuild = ''
-      CC=clang CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER=lld cargo build \
-        --target wasm32-unknown-unknown \
-        --release
-
-      wasm-bindgen \
-        target/wasm32-unknown-unknown/release/surrealist_embed.wasm \
-        --out-dir $out \
-        --out-name surrealist-embed \
-        --target web
-    '';
-  };
-
-  pnpm-deps = stdenvNoCC.mkDerivation {
-    inherit (finalAttrs) src version;
-    pname = "${finalAttrs.pname}-pnpm-deps";
-    dontFixup = true;
-
-    nativeBuildInputs = [ cacert jq moreutils nodePackages.pnpm ];
-
-    postInstall = ''
-      export HOME=$(mktemp -d)
-      pnpm config set store-dir $out
-      # use --ignore-script and --no-optional to avoid downloading binaries
-      # use --frozen-lockfile to avoid checking git deps
-      pnpm install --frozen-lockfile --no-optional --ignore-script
-
-      # Remove timestamp and sort the json files
-      rm -rf $out/v3/tmp
-      for f in $(find $out -name "*.json"); do
-        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-        jq --sort-keys . $f | sponge $f
-      done
-    '';
-
-    outputHashMode = "recursive";
-    outputHash = "sha256-jT0Bw0xiusOw/5o6EUaEV3/GqkD/l6jkwXmOqc3a/nc=";
-  };
-
   ui = stdenvNoCC.mkDerivation {
     inherit (finalAttrs) src version;
     pname = "${finalAttrs.pname}-ui";
-    dontFixup = true;
 
-    ESBUILD_BINARY_PATH = "${lib.getExe esbuild-18-20}";
+    pnpmDeps = pnpm.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      hash = "sha256-apvU7nanzueaF7PEQL7EKjVT5z1M6I7PZpEIJxfKuCQ=";
+    };
 
-    nativeBuildInputs = [ nodePackages.pnpm ];
+    ESBUILD_BINARY_PATH = "${lib.getExe esbuild-20-2}";
 
-    postPatch = ''
-      ln -s ${finalAttrs.embed} src/generated
-    '';
+    nativeBuildInputs = [ nodejs pnpm.configHook ];
 
-    postBuild = ''
-      export HOME=$(mktemp -d)
-      pnpm config set store-dir ${finalAttrs.pnpm-deps}
-      pnpm install --offline --frozen-lockfile --no-optional --ignore-script
+    buildPhase = ''
+      runHook preBuild
+
       pnpm build
+
+      runHook postBuild
     '';
 
-    postInstall = ''
+    installPhase = ''
+      runHook preInstall
+
       cp -r dist $out
+
+      runHook postInstall
     '';
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-localhost-0.1.0" =
-        "sha256-7PJgz6t/jPEwX/2xaOe0SYawfPSZw/F1QtOrc6iPiP0=";
-    };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) src sourceRoot version;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-uE4r0smgSbl4l77/MsHtn1Ar5fqspsYcLC/u8TUrcu8=";
   };
 
   nativeBuildInputs = [
@@ -164,12 +97,16 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    [ cairo gdk-pixbuf gobject-introspection libsoup pango webkitgtk ];
+    [ cairo gdk-pixbuf gobject-introspection libsoup openssl pango webkitgtk ];
+
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+  };
 
   postPatch = ''
     substituteInPlace ./tauri.conf.json \
-      --replace '"distDir": "../dist",' '"distDir": "${finalAttrs.ui}",' \
-      --replace '"beforeBuildCommand": "pnpm build",' '"beforeBuildCommand": "",'
+      --replace-fail '"distDir": "../dist",' '"distDir": "${finalAttrs.ui}",' \
+      --replace-fail '"beforeBuildCommand": "pnpm build",' '"beforeBuildCommand": "",'
   '';
 
   postBuild = ''
@@ -186,8 +123,8 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Powerful graphical SurrealDB query playground and database explorer for Browser and Desktop";
-    homepage = "https://surrealist.starlane.studio";
+    description = "Surrealist is the ultimate way to visually manage your SurrealDB database";
+    homepage = "https://surrealdb.com/surrealist";
     license = licenses.mit;
     mainProgram = "surrealist";
     maintainers = with maintainers; [ frankp ];

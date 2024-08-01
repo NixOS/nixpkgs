@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  libcst,
+  mock,
+  proto-plus,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths =[
+  disabledTestPaths = [
     # unmaintained, reference wrong import path for google.cloud.iam.v1
     "tests/unit/gapic/iam_admin_v1/test_iam.py"
   ];

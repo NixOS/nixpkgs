@@ -1,14 +1,21 @@
 { lib
 , mkXfceDerivation
+, wayland-scanner
 , exo
+, gtk3
+, libX11
+, libXext
+, libXfixes
+, libXtst
 , libxml2
-, libsoup_3
 , libxfce4ui
 , libxfce4util
+, wayland
+, wlr-protocols
 , xfce4-panel
 , xfconf
 , curl
-, gnome
+, zenity
 , jq
 , xclip
 }:
@@ -16,17 +23,27 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screenshooter";
-  version = "1.10.5";
+  version = "1.11.0";
   odd-unstable = false;
 
-  sha256 = "sha256-x1uQIfiUNMYowrCLpwdt1IsHfJLn81f8I/4NBwX/z9k=";
+  sha256 = "sha256-DMLGaDHmwDDHvOMev/QKvmDr6AQ6Qnzxf3YCbf0/nXg=";
+
+  nativeBuildInputs = [
+    wayland-scanner
+  ];
 
   buildInputs = [
     exo
+    gtk3
+    libX11
+    libXext
+    libXfixes
+    libXtst
     libxml2
-    libsoup_3
     libxfce4ui
     libxfce4util
+    wayland
+    wlr-protocols
     xfce4-panel
     xfconf
   ];
@@ -35,7 +52,7 @@ mkXfceDerivation {
     # For Imgur upload action
     # https://gitlab.xfce.org/apps/xfce4-screenshooter/-/merge_requests/51
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ curl gnome.zenity jq xclip ]}
+      --prefix PATH : ${lib.makeBinPath [ curl zenity jq xclip ]}
     )
   '';
 

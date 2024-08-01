@@ -36,7 +36,6 @@
   pygtrie,
   pyparsing,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   rich,
   ruamel-yaml,
@@ -58,7 +57,7 @@
 
 buildPythonPackage rec {
   pname = "dvc";
-  version = "3.50.0";
+  version = "3.51.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -67,7 +66,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc";
     rev = "refs/tags/${version}";
-    hash = "sha256-/MvKWpJzKWLj1+y8nPMQiAwdktmQyJNM+s6ctYNk9u0=";
+    hash = "sha256-MjzunpPWzGfa62Jr+krEdm+i+N10QNmW7qRWaU/58OM=";
   };
 
   pythonRelaxDeps = [
@@ -84,7 +83,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies =
     [

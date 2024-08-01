@@ -20,8 +20,8 @@ let
   vc_intrinsics_src = fetchFromGitHub {
     owner = "intel";
     repo = "vc-intrinsics";
-    rev = "v0.16.0";
-    hash = "sha256-d197m80vSICdv4VKnyqdy3flzbKLKmB8jroY2difA7o=";
+    rev = "v0.18.0";
+    hash = "sha256-F2GR3TDUUiygEhdQN+PsMT/CIYBATMQX5wkvwrziS2E=";
   };
 
   inherit (llvmPackages_14) lld llvm;
@@ -31,13 +31,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.16238.4";
+  version = "1.0.17193.4";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    hash = "sha256-XgQ2Gk3HDKBpsfomlpRUt8WybEIoHfKlyuWJCwCnmDA=";
+    hash = "sha256-OOKj3kfl+0/dgeICFtbiOVE0nsYYvI4v97BLjcExAmc=";
   };
 
   nativeBuildInputs = [ bison cmake flex (python3.withPackages (ps : with ps; [ mako ])) ];

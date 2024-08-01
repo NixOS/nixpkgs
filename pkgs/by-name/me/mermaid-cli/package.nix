@@ -11,18 +11,18 @@
 
 stdenv.mkDerivation rec {
   pname = "mermaid-cli";
-  version = "10.8.0";
+  version = "10.9.0";
 
   src = fetchFromGitHub {
     owner = "mermaid-js";
     repo = "mermaid-cli";
     rev = version;
-    hash = "sha256-nCLLv8QXx9N4WiUFw3WB+Rpfd4H4oCFa1ac01al+ovY=";
+    hash = "sha256-o9QaJsJlfqsAguYGHAdf8aqZWbOgDJs+0KVQAVtRlA0=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-thZxaa7S3vlS1Ws+G5dklun+ISCV908p1Ov7qb8fP3c=";
+    hash = "sha256-SfRzn5FxO+Ls+ne7ay3tySNLr+awEJ9fo/nwcAY11qA=";
   };
 
   nativeBuildInputs  = [

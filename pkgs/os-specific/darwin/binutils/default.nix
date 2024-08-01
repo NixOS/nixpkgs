@@ -1,108 +1,126 @@
-{ lib, stdenv, makeWrapper, binutils-unwrapped, cctools, llvm, clang-unwrapped, dualAs ? false }:
-
-# Make sure both underlying packages claim to have prepended their binaries
-# with the same targetPrefix.
-assert binutils-unwrapped.targetPrefix == cctools.targetPrefix;
+{
+  lib,
+  stdenvNoCC,
+  cctools,
+  clang-unwrapped,
+  ld64,
+  llvm,
+  llvm-manpages,
+  makeWrapper,
+  enableManpages ? stdenvNoCC.targetPlatform == stdenvNoCC.hostPlatform,
+}:
 
 let
-  inherit (binutils-unwrapped) targetPrefix;
-  cmds = [
-    "ar" "ranlib" "as" "install_name_tool"
-    "ld" "strip" "otool" "lipo" "nm" "strings" "size"
-    "codesign_allocate"
-  ];
-  isCCToolsLLVM = lib.getName cctools == "cctools-llvm";
-in
+  inherit (stdenvNoCC) targetPlatform hostPlatform;
+  targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
 
-# TODO: loop over targetPrefixed binaries too
-stdenv.mkDerivation {
-  pname = "${targetPrefix}cctools-binutils-darwin" + lib.optionalString dualAs "-dualas";
+  llvm_cmds = [
+    "addr2line"
+    "ar"
+    "c++filt"
+    "dwarfdump"
+    "dsymutil"
+    "nm"
+    "objcopy"
+    "objdump"
+    "otool"
+    "size"
+    "strings"
+    "strip"
+  ];
+
+  cctools_cmds = [
+    "codesign_allocate"
+    "gprof"
+    "ranlib"
+    # Use the cctools versions because the LLVM ones can crash or fail when the cctools ones don’t.
+    # Revisit when LLVM is updated to LLVM 18 on Darwin.
+    "lipo"
+    "install_name_tool"
+  ];
+
+  linkManPages =
+    pkg: source: target:
+    lib.optionalString enableManpages ''
+      sourcePath=${pkg}/share/man/man1/${source}.1.gz
+      targetPath=''${!outputMan}/share/man/man1/${target}.1.gz
+
+      if [ -f "$sourcePath" ]; then
+        mkdir -p "$(dirname "$targetPath")"
+        ln -s "$sourcePath" "$targetPath"
+      fi
+    '';
+in
+stdenvNoCC.mkDerivation {
+  pname = "${targetPrefix}cctools-binutils-darwin";
   inherit (cctools) version;
-  outputs = [ "out" "man" ];
+
+  outputs = [ "out" ] ++ lib.optional enableManpages "man";
+
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper ];
+
   buildCommand = ''
     mkdir -p $out/bin $out/include
 
-    ln -s ${binutils-unwrapped.out}/bin/${targetPrefix}c++filt $out/bin/${targetPrefix}c++filt
+    for tool in ${toString llvm_cmds}; do
+      # Translate between LLVM and traditional tool names (e.g., `c++filt` versus `cxxfilt`).
+      cctoolsTool=''${tool//-/_}
+      llvmTool=''${tool//++/xx}
 
-    # We specifically need:
-    # - ld: binutils doesn't provide it on darwin
-    # - as: as above
-    # - ar: the binutils one produces .a files that the cctools ld doesn't like
-    # - ranlib: for compatibility with ar
-    # - otool: we use it for some of our name mangling
-    # - install_name_tool: we use it to rewrite stuff in our bootstrap tools
-    # - strip: the binutils one seems to break mach-o files
-    # - lipo: gcc build assumes it exists
-    # - nm: the gnu one doesn't understand many new load commands
-    for i in ${lib.concatStringsSep " " (map (e: targetPrefix + e) cmds)}; do
-      ln -sf "${cctools}/bin/$i" "$out/bin/$i"
+      # Some tools aren’t prefixed (like `dsymutil`).
+      llvmPath="${lib.getBin llvm}/bin"
+      if [ -e "$llvmPath/llvm-$llvmTool" ]; then
+        llvmTool=llvm-$llvmTool
+      elif [ -e "$llvmPath/${targetPrefix}$llvmTool" ]; then
+        llvmTool=${targetPrefix}$llvmTool
+      fi
+
+      # Not all tools are included in the bootstrap tools. Don’t link them if they don’t exist.
+      if [ -e "$llvmPath/$llvmTool" ]; then
+        ln -s "$llvmPath/$llvmTool" "$out/bin/${targetPrefix}$cctoolsTool"
+      fi
+      ${linkManPages llvm-manpages "$llvmTool" "$cctoolsTool"}
     done
 
-    ln -s ${llvm}/bin/dsymutil $out/bin/dsymutil
-
-    ln -s ${binutils-unwrapped.out}/share $out/share
-
-    mkdir -p "$man"/share/man/man{1,5}
-    for i in ${lib.concatStringsSep " " cmds}; do
-      for path in "${cctools.man}"/share/man/man?/$i.*; do
-        dest_path="$man''${path#${cctools.man}}"
-        ln -sv "$path" "$dest_path"
-      done
+    for tool in ${toString cctools_cmds}; do
+      toolsrc="${lib.getBin cctools}/bin/${targetPrefix}$tool"
+      if [ -e "$toolsrc" ]; then
+        ln -s "${lib.getBin cctools}/bin/${targetPrefix}$tool" "$out/bin/${targetPrefix}$tool"
+      fi
+      ${linkManPages (lib.getMan cctools) "$tool" "$tool"}
     done
-  ''
-  + lib.optionalString (!isCCToolsLLVM) (
-    # cctools-port has a `libexec` folder for `as`, but cctools-llvm uses the clang
-    # assembler on both platforms. Only link it when cctools is cctools-port.
-    ''
-      ln -s ${cctools}/libexec $out/libexec
-    ''
-    # cctools-llvm uses the LLVM assembler on both architectures, so use the assembler
-    # from that instead of relinking it.
-    #
-    # On aarch64-darwin we must use clang, because "as" from cctools just doesn't
-    # handle the arch. Proxying calls to clang produces quite a bit of warnings,
-    # and using clang directly here is a better option than relying on cctools.
-    # On x86_64-darwin the Clang version is too old to support this mode.
-    + lib.optionalString stdenv.isAarch64 ''
-      rm $out/bin/${targetPrefix}as
-      makeWrapper "${clang-unwrapped}/bin/clang" "$out/bin/${targetPrefix}as" \
-        --add-flags "-x assembler -integrated-as -c"
-    ''
-    # x86-64 Darwin gnat-bootstrap emits assembly
-    # with MOVQ as the mnemonic for quadword interunit moves
-    # such as `movq %rbp, %xmm0`.
-    # The clang integrated assembler recognises this as valid,
-    # but unfortunately the cctools-port GNU assembler does not;
-    # it instead uses MOVD as the mnemonic.
-    # The assembly that a GCC build emits is determined at build time
-    # and cannot be changed afterwards.
-    #
-    # To build GNAT on x86-64 Darwin, therefore,
-    # we need both the clang _and_ the cctools-port assemblers to be available:
-    # the former to build at least the stage1 compiler,
-    # and the latter at least to be detectable
-    # as the target for the final compiler.
-    #
-    # We choose to match the Aarch64 case above,
-    # wrapping the clang integrated assembler as `as`.
-    # It then seems sensible to wrap the cctools GNU assembler as `gas`.
-    #
-    + lib.optionalString (stdenv.isx86_64 && dualAs) ''
-      mv $out/bin/${targetPrefix}as $out/bin/${targetPrefix}gas
-      makeWrapper "${clang-unwrapped}/bin/clang" "$out/bin/${targetPrefix}as" \
-        --add-flags "-x assembler -integrated-as -c"
-    ''
-  );
+    ${
+      # These are unprefixed because some tools expect to invoke them without it when cross-compiling to Darwin:
+      # - clang needs `dsymutil` when building with debug information;
+      # - meson needs `lipo` when cross-compiling to Darwin; and
+      # - meson also needs `install_name_tool` and `otool` when performing rpath cleanup on installation.
+      lib.optionalString (targetPrefix != "") ''
+        for bintool in dsymutil install_name_tool lipo otool; do
+          ln -s "$out/bin/${targetPrefix}$bintool" "$out/bin/$bintool"
+        done
+      ''
+    }
+    # Use the clang-integrated assembler. `as` in cctools is deprecated upstream and no longer built in nixpkgs.
+    makeWrapper "${lib.getBin clang-unwrapped}/bin/clang" "$out/bin/${targetPrefix}as" \
+      --add-flags "-x assembler -integrated-as -c"
 
-  nativeBuildInputs = lib.optionals (!isCCToolsLLVM && (stdenv.isAarch64 || dualAs)) [ makeWrapper ];
+    ln -s '${lib.getBin ld64}/bin/${targetPrefix}ld' "$out/bin/${targetPrefix}ld"
+    ${linkManPages (lib.getMan ld64) "ld" "ld"}
+    ${linkManPages (lib.getMan ld64) "ld-classic" "ld-classic"}
+    ${linkManPages (lib.getMan ld64) "ld64" "ld64"}
+  '';
+
+  __structuredAttrs = true;
 
   passthru = {
-    inherit targetPrefix;
-    isCCTools = true;
+    inherit cctools_cmds llvm_cmds targetPrefix;
+    isCCTools = true; # The fact ld64 is used instead of lld is why this isn’t `isLLVM`.
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    maintainers = with lib.maintainers; [ reckenrode ];
     priority = 10;
   };
 }

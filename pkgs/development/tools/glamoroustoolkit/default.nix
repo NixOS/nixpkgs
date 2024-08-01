@@ -98,7 +98,7 @@ preFixup = let
 
   meta = {
     homepage = "https://gtoolkit.com";
-    description = "The GlamorousToolkit Development Environment";
+    description = "GlamorousToolkit Development Environment";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.akgrant43 ];
     platforms = [ "x86_64-linux" ];

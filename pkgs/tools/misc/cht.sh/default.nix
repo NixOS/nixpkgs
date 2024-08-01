@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "cht.sh";
-  version = "unstable-2022-04-18";
+  version = "0-unstable-2022-04-18";
 
   nativeBuildInputs = [ makeWrapper ];
 

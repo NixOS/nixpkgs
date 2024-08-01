@@ -68,7 +68,10 @@ let
       passthru = (oldAttrs.passthru or {})// {
         pythonModule = python;
         pythonPath = [ ]; # Deprecated, for compatibility.
-        requiredPythonModules = requiredPythonModules drv.propagatedBuildInputs;
+        requiredPythonModules =
+          builtins.addErrorContext
+          "while calculating requiredPythonModules for ${drv.name or drv.pname}:"
+          (requiredPythonModules drv.propagatedBuildInputs);
       };
     });
 
@@ -96,6 +99,8 @@ in {
   inherit toPythonModule toPythonApplication;
 
   python = toPythonModule python;
-  # Dont take pythonPackages from "global" pkgs scope to avoid mixing python versions
-  pythonPackages = self;
+
+  # Don't take pythonPackages from "global" pkgs scope to avoid mixing python versions.
+  # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing more than one level here.
+  pythonPackages = self // { __attrsFailEvaluation = true; };
 }

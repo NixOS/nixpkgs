@@ -9,11 +9,11 @@
 }:
 let
   pname = "jetbrains-toolbox";
-  version = "2.3.1.31116";
+  version = "2.4.0.32175";
 
   src = fetchzip {
     url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}.tar.gz";
-    sha256 = "sha256-mrTeUp9DBSO1S6Nxx077lqtY847CiCBCCi/vboZ8ADs=";
+    hash = "sha256-+EKl8o+S5nwV3u+RrhxuOm/6dLH6zRSvFnyaZRO8xc0=";
     stripRoot = false;
   };
 
@@ -35,7 +35,6 @@ let
   appimage = appimageTools.wrapAppImage {
     inherit pname version;
     src = appimageContents;
-    extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.targetPkgs pkgs);
   };
 in
 stdenv.mkDerivation {

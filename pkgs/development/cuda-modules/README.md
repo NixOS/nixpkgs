@@ -23,7 +23,7 @@ scope. These are typically required for the creation of the finalized
 ## Top-level directories
 
 - `cuda`: CUDA redistributables! Provides extension to `cudaPackages` scope.
-- `cudatoolkit`: monolothic CUDA Toolkit run-file installer. Provides extension
+- `cudatoolkit`: monolithic CUDA Toolkit run-file installer. Provides extension
     to `cudaPackages` scope.
 - `cudnn`: NVIDIA cuDNN library.
 - `cutensor`: NVIDIA cuTENSOR library.

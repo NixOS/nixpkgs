@@ -90,7 +90,7 @@ in
         export DATABASE_PASSWORD="$(<"${cfg.dbpassFile}")"
       '' + ''
         export DATABASE_URL="${dbUrl}"
-        ${cfg.package}/bin/notify_push '${cfgN.datadir}/config/config.php'
+        exec ${cfg.package}/bin/notify_push '${cfgN.datadir}/config/config.php'
       '';
       serviceConfig = {
         User = "nextcloud";
@@ -98,6 +98,7 @@ in
         RuntimeDirectory = [ "nextcloud-notify_push" ];
         Restart = "on-failure";
         RestartSec = "5s";
+        Type = "notify";
       };
     };
 

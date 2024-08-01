@@ -1,40 +1,33 @@
-{ lib
-, buildPythonPackage
-, hypothesis
-, fetchpatch
-, fetchPypi
-, setuptools
-, setuptools-scm
-, cloudpickle
-, cython
-, jinja2
-, numpy
-, psutil
-, pynvml
-, pytestCheckHook
-, pythonOlder
-, rich
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  hypothesis,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  cloudpickle,
+  cython,
+  jinja2,
+  numpy,
+  psutil,
+  pynvml,
+  nvidia-ml-py,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.39";
+  version = "1.5.42.2";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-B4pDLP3+56toQZyvh6+6NimCKv0cpcO0ydcqV1tJZkg=";
+    hash = "sha256-0ZGk0xFBFSeeg4vjNXu/ppGdEKGhUc2ql4R6oWG23aQ=";
   };
-
-  patches = [
-    # fix scalene_config import. remove on next update
-    (fetchpatch {
-      name = "scalene_config-import-fix.patch";
-      url = "https://github.com/plasma-umass/scalene/commit/cd437be11f600ac0925ce77efa516e6d83934200.patch";
-      hash = "sha256-YjFh+mu5jyIJYUQFhmGqLXhec6lgQAdj4tWxij3NkwU=";
-    })
-  ];
 
   nativeBuildInputs = [
     cython
@@ -46,27 +39,21 @@ buildPythonPackage rec {
     cloudpickle
     jinja2
     psutil
-    pynvml
     rich
-  ];
+    pynvml
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
+
+  pythonRemoveDeps = [
+    "nvidia-ml-py3"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "nvidia-ml-py" ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
     hypothesis
     numpy
-  ];
-
-  disabledTestPaths = [
-    # remove on next update
-    # Failing Darwin-specific tests that were subsequently removed from the source repo.
-    "tests/test_coverup_35.py"
-    "tests/test_coverup_42.py"
-    "tests/test_coverup_43.py"
   ];
 
   # remove scalene directory to prevent pytest import confusion

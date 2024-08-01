@@ -17,12 +17,12 @@ import ../make-test-python.nix {
 
     # Start the daemon and wait until it is ready
     machine.execute("lorri daemon > lorri.stdout 2> lorri.stderr &")
-    machine.wait_until_succeeds("grep --fixed-strings 'ready' lorri.stdout")
+    machine.wait_until_succeeds("grep --fixed-strings 'ready' lorri.stderr")
 
     # Ping the daemon
-    machine.succeed("lorri internal ping shell.nix")
+    machine.succeed("lorri internal ping --shell-file shell.nix")
 
     # Wait for the daemon to finish the build
-    machine.wait_until_succeeds("grep --fixed-strings 'Completed' lorri.stdout")
+    machine.wait_until_succeeds("grep --fixed-strings 'Completed' lorri.stderr")
   '';
 }

@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An OpenGL interop library that can be used with ArrayFire or any other application using CUDA or OpenCL compute backend";
+    description = "OpenGL interop library that can be used with ArrayFire or any other application using CUDA or OpenCL compute backend";
     longDescription = ''
       An OpenGL interop library that can be used with ArrayFire or any other application using CUDA or OpenCL compute backend.
       The goal of Forge is to provide high performance OpenGL visualizations for C/C++ applications that use CUDA/OpenCL.

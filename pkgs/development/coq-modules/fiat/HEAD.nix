@@ -28,7 +28,7 @@ mkCoqDerivation rec {
 
   meta = {
     homepage = "http://plv.csail.mit.edu/fiat/";
-    description = "A library for the Coq proof assistant for synthesizing efficient correct-by-construction programs from declarative specifications";
+    description = "Library for the Coq proof assistant for synthesizing efficient correct-by-construction programs from declarative specifications";
     maintainers = with lib.maintainers; [ jwiegley ];
   };
 }

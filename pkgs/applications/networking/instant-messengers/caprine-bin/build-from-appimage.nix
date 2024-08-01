@@ -1,5 +1,4 @@
-{ lib
-, fetchurl
+{ fetchurl
 , appimageTools
 , xorg
 , pname
@@ -26,8 +25,6 @@ in
   profile = ''
     export LC_ALL=C.UTF-8
   '';
-
-  extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
 
   extraInstallCommands = ''
     mkdir -p $out/share

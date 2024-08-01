@@ -1,8 +1,9 @@
-{ lib
+{
+  lib,
 
-, buildPythonPackage
-, notmuch
-, python
+  buildPythonPackage,
+  notmuch,
+  python,
 }:
 
 buildPythonPackage {
@@ -12,7 +13,10 @@ buildPythonPackage {
 
   format = "setuptools";
 
-  buildInputs = [ python notmuch ];
+  buildInputs = [
+    python
+    notmuch
+  ];
 
   postPatch = ''
     sed -i -e '/CDLL/s@"libnotmuch\.@"${notmuch}/lib/libnotmuch.@' \
@@ -24,10 +28,9 @@ buildPythonPackage {
   pythonImportsCheck = [ "notmuch" ];
 
   meta = with lib; {
-    description = "A Python wrapper around notmuch";
+    description = "Python wrapper around notmuch";
     homepage = "https://notmuchmail.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
-
 }

@@ -27,10 +27,10 @@ filename_is_valid with path_is_valid.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/shared/tpm2-util.c b/src/shared/tpm2-util.c
-index 5e07b88a89..8dd7315009 100644
+index 10a78adfaf..6493d5d270 100644
 --- a/src/shared/tpm2-util.c
 +++ b/src/shared/tpm2-util.c
-@@ -654,7 +654,7 @@ int tpm2_context_new(const char *device, Tpm2Context **ret_context) {
+@@ -670,7 +670,7 @@ int tpm2_context_new(const char *device, Tpm2Context **ret_context) {
                  fn = strjoina("libtss2-tcti-", driver, ".so.0");
  
                  /* Better safe than sorry, let's refuse strings that cannot possibly be valid driver early, before going to disk. */

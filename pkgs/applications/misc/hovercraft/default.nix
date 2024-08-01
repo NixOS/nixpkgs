@@ -39,6 +39,6 @@ buildPythonApplication rec {
     mainProgram = "hovercraft";
     homepage = "https://github.com/regebro/hovercraft";
     license = licenses.mit;
-    maintainers = with maintainers; [ goibhniu makefu ];
+    maintainers = with maintainers; [ makefu ];
   };
 }

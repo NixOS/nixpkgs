@@ -8,10 +8,10 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "1l21ji9zqy8x1g2gvqwdhya505max07ibx1hh88s36k0jbvdb7xc";
+    hash = "sha256-rJ/V9pJgmqERgjD0FQ/oqhZQlIeN4/3ECx15/FOUQdA=";
   };
 
-  cargoSha256 = "159a5ph1gxwcgahyr8885lq3c1w76nxzfrfdpyqixqrr7jzx2rd3";
+  cargoHash = "sha256-o2XRvzw54x6xv81l97s1hwc2MC0Ioeyheoz3F+AtKpU=";
   cargoDepsName = pname;
 
   nativeBuildInputs = [ libgpg-error gpgme gettext installShellFiles ];
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "The 'share-secrets-safely' CLI to interact with GPG/pass-like vaults";
+    description = "'share-secrets-safely' CLI to interact with GPG/pass-like vaults";
     homepage = "https://share-secrets-safely.github.io/cli/";
     changelog = "https://github.com/share-secrets-safely/cli/releases/tag/${version}";
     license = with licenses; [ lgpl21Only ];

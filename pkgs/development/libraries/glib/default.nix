@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -22,7 +23,11 @@
 , makeHardcodeGsettingsPatch
 , testers
 , gobject-introspection
-, withIntrospection ? stdenv.buildPlatform.canExecute stdenv.hostPlatform && lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+, mesonEmulatorHook
+, withIntrospection ?
+  stdenv.hostPlatform.emulatorAvailable buildPackages &&
+  lib.meta.availableOn stdenv.hostPlatform gobject-introspection &&
+  stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian
 }:
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
@@ -47,24 +52,29 @@ let
     x11Support = false;
   };
 
-  librarySuffix = if (stdenv.targetPlatform.extensions.library == ".so") then "2.0.so.0"
-                  else if (stdenv.targetPlatform.extensions.library == ".dylib") then "2.0.0.dylib"
-                  else if (stdenv.targetPlatform.extensions.library == ".a") then "2.0.a"
-                  else if (stdenv.targetPlatform.extensions.library == ".dll") then "2.0-0.dll"
+  librarySuffix = if (stdenv.hostPlatform.extensions.library == ".so") then "2.0.so.0"
+                  else if (stdenv.hostPlatform.extensions.library == ".dylib") then "2.0.0.dylib"
+                  else if (stdenv.hostPlatform.extensions.library == ".a") then "2.0.a"
+                  else if (stdenv.hostPlatform.extensions.library == ".dll") then "2.0-0.dll"
                   else "2.0-0.lib";
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.80.0";
+  version = "2.80.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-giipL5KkEhYLE5rmi2NFvSjyRDSnta8VDr4h/1h6Vh0=";
+    hash = "sha256-JOApxd/JtE5Fc2l63zMHipgnxIk4VVAEs7kJb6TqA08=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
     ./darwin-compilation.patch
+    # FIXME: remove when https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4088 is merged and is in the tagged release
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/9d0988ca62ee96e09aa76abbd65ff192cfce6858.patch";
+      hash = "sha256-JrR3Ba6L+3M0Nt8DgHmPG8uKtx7hOgUp7np08ATIzjA=";
+    })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
@@ -110,6 +120,15 @@ stdenv.mkDerivation (finalAttrs: {
     # 3. Tools for desktop environment that cannot go to $bin due to $out depending on them ($out)
     #    * gio-launch-desktop
     ./split-dev-programs.patch
+
+    # Tell Meson to install gdb scripts next to the lib
+    # GDB only looks there and in ${gdb}/share/gdb/auto-load,
+    # and by default meson installs in to $out/share/gdb/auto-load
+    # which does not help
+    ./gdb_script.patch
+
+    # glib assumes that `RTLD_LOCAL` is defined to `0`, which is true on Linux and FreeBSD but not on Darwin.
+    ./gmodule-rtld_local.patch
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
@@ -150,6 +169,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals withIntrospection [
     gi-docgen
     gobject-introspection'
+  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -205,6 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     moveToOutput "share/glib-2.0" "$dev"
+    moveToOutput "share/glib-2.0/gdb" "$out"
     substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
 
@@ -233,11 +255,12 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc/glib-2.0" "$devdoc"
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
+  # Conditional necessary to break infinite recursion with passthru.tests
   preCheck = lib.optionalString finalAttrs.finalPackage.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
@@ -260,14 +283,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $PWD/gobject/libgobject-${librarySuffix} $out/lib/libgobject-${librarySuffix}
     ln -s $PWD/gio/libgio-${librarySuffix} $out/lib/libgio-${librarySuffix}
     ln -s $PWD/glib/libglib-${librarySuffix} $out/lib/libglib-${librarySuffix}
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-
-    meson test --print-errorlogs
-
-    runHook postCheck
   '';
 
   postCheck = ''

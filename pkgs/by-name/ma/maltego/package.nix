@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.maltego.com";
-    description = "An open source intelligence and forensics application, enabling to easily gather information about DNS, domains, IP addresses, websites, persons, and so on";
+    description = "Open source intelligence and forensics application, enabling to easily gather information about DNS, domains, IP addresses, websites, persons, and so on";
     mainProgram = "maltego";
     maintainers = with maintainers; [ emilytrau d3vil0p3r ];
     platforms = platforms.unix;

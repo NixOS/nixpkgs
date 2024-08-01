@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     homepage = "https://github.com/evmar/n2";
-    description = "A ninja compatible build system";
+    description = "Ninja compatible build system";
     mainProgram = "n2";
     license = licenses.asl20;
     maintainers = with maintainers; [ fgaz ];

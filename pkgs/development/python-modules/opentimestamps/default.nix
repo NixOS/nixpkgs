@@ -1,12 +1,12 @@
-{ lib
-, bitcoinlib
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, gitpython
-, pycryptodomex
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  bitcoinlib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gitpython,
+  pycryptodomex,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +29,7 @@ buildPythonPackage rec {
     pycryptodomex
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Remove a failing test which expects the test source file to reside in the
   # project's Git repo
@@ -39,9 +37,7 @@ buildPythonPackage rec {
     rm opentimestamps/tests/core/test_git.py
   '';
 
-  pythonImportsCheck = [
-    "opentimestamps"
-  ];
+  pythonImportsCheck = [ "opentimestamps" ];
 
   meta = with lib; {
     description = "Create and verify OpenTimestamps proofs";

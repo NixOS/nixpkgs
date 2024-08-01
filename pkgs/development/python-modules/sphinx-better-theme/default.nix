@@ -1,10 +1,18 @@
-{ lib, buildPythonPackage, fetchFromGitHub, sphinxHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sphinxHook,
+}:
 
 buildPythonPackage rec {
   pname = "sphinx-better-theme";
   version = "0.1.5";
   format = "setuptools";
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "irskep";

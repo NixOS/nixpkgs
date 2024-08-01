@@ -20,10 +20,13 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  cmakeFlags = [ "-DDEBUG:STRING=OFF" ];
+  cmakeFlags = [
+    "-DDEBUG:STRING=OFF"
+    (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+  ];
 
   installPhase =
-    let so = stdenv.hostPlatform.extensions.sharedLibrary;
+    let so = stdenv.hostPlatform.extensions.library;
     in ''
       # This is pretty horrible but sadly there is not installation procedure
       # provided.

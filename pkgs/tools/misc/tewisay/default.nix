@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "tewisay";
-  version = "unstable-2022-11-04";
+  version = "0-unstable-2022-11-04";
 
   # lucy deleted the old repo, this is a fork/mirror
   src = fetchFromGitHub {

@@ -1,7 +1,6 @@
 { lib
 , buildDunePackage
 , fetchurl
-, ppx_deriving
 , bppsuite
 , alcotest
 , angstrom-unix
@@ -12,16 +11,15 @@
 , menhir
 , menhirLib
 , printbox-text
-, yojson
 }:
 
 buildDunePackage rec {
   pname = "phylogenetics";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchurl {
     url = "https://github.com/biocaml/phylogenetics/releases/download/v${version}/phylogenetics-${version}.tbz";
-    hash = "sha256-JFpYp3pyW7PrBjqCwwDZxkJPA84dp6Qs8rOPvHPY92o=";
+    hash = "sha256-3oZ9fMAXqOQ02rQ+8W8PZJWXOJLNe2qERrGOeTk3BKg=";
   };
 
   minimalOCamlVersion = "4.08";
@@ -36,9 +34,7 @@ buildDunePackage rec {
     gsl
     lacaml
     menhirLib
-    ppx_deriving
     printbox-text
-    yojson
   ];
 
   checkPhase = ''

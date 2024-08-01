@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , gexiv2
 , gobject-introspection
@@ -81,7 +80,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/varietywalls/variety";
-    description = "A wallpaper manager for Linux systems";
+    description = "Wallpaper manager for Linux systems";
     mainProgram = "variety";
     longDescription = ''
       Variety is a wallpaper manager for Linux systems. It supports numerous

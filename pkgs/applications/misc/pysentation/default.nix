@@ -17,7 +17,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -34,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "pysentation" ];
 
   meta = with lib; {
-    description = "A CLI for displaying Python presentations";
+    description = "CLI for displaying Python presentations";
     homepage = "https://github.com/mimseyedi/pysentation";
     changelog = "https://github.com/mimseyedi/pysentation/releases/tag/${src.rev}";
     license = licenses.gpl3Only;

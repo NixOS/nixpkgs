@@ -14,6 +14,15 @@ let
     packageOverrides = self: super: {
       django = super.django_4;
 
+      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
+        version = "2.3.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
+        };
+      });
+
       stripe = super.stripe.overridePythonAttrs rec {
         version = "7.9.0";
 
@@ -25,17 +34,19 @@ let
       };
 
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
+
+      sentry-sdk = super.sentry-sdk_2;
     };
   };
 
   pname = "pretix";
-  version = "2024.3.0";
+  version = "2024.6.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Wz1vZcqgwyS0xJgTtRxqfaJpJ1fAMhIyxvTvBT/ABSo=";
+    hash = "sha256-erI3Ai6zwNSvMiF3YKfnU9ePb9R92rfi5rsxfAOh6EQ=";
   };
 
   npmDeps = buildNpmPackage {
@@ -43,7 +54,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-2fHlEEmYzpF3SyvF7+FbwCt+zQVGF0/kslDFnJ+DQGE=";
+    npmDepsHash = "sha256-//CLPnx5eUxIHIUGc7x2UF8qsfAYRtvHbHXSDNtI/eI=";
 
     dontBuild = true;
 
@@ -81,16 +92,17 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail psycopg2-binary psycopg2 \
       --replace-fail vat_moss_forked==2020.3.20.0.11.0 vat-moss \
       --replace-fail "bleach==5.0.*" bleach \
+      --replace-fail "djangorestframework==3.15.*" djangorestframework \
+      --replace-fail "django-compressor==4.5" django-compressor \
       --replace-fail "dnspython==2.6.*" dnspython \
-      --replace-fail "django-countries==7.5.*" django-countries \
-      --replace-fail "django-filter==24.1" django-filter \
       --replace-fail "importlib_metadata==7.*" importlib_metadata \
       --replace-fail "markdown==3.6" markdown \
-      --replace-fail "protobuf==5.26.*" protobuf \
+      --replace-fail "protobuf==5.27.*" protobuf \
       --replace-fail "pycryptodome==3.20.*" pycryptodome \
-      --replace-fail "pypdf==3.9.*" pypdf \
+      --replace-fail "pypdf==4.2.*" pypdf \
       --replace-fail "python-dateutil==2.9.*" python-dateutil \
-      --replace-fail "sentry-sdk==1.42.*" sentry-sdk \
+      --replace-fail "requests==2.31.*" "requests" \
+      --replace-fail "sentry-sdk==2.5.*" "sentry-sdk>=2" \
       --replace-fail "stripe==7.9.*" stripe
   '';
 
@@ -175,11 +187,14 @@ python.pkgs.buildPythonApplication rec {
     text-unidecode
     tlds
     tqdm
+    ua-parser
     vat-moss
     vobject
     webauthn
     zeep
-  ] ++ plugins;
+  ]
+  ++ django.optional-dependencies.argon2
+  ++ plugins;
 
   optional-dependencies = with python.pkgs; {
     memcached = [
@@ -211,6 +226,18 @@ python.pkgs.buildPythonApplication rec {
 
   pytestFlagsArray = [
     "--reruns" "3"
+  ];
+
+  disabledTests = [
+    # unreliable around day changes
+    "test_order_create_invoice"
+
+    # outdated translation files
+    # https://github.com/pretix/pretix/commit/c4db2a48b6ac81763fa67475d8182aee41c31376
+    "test_different_dates_spanish"
+    "test_same_day_spanish"
+    "test_same_month_spanish"
+    "test_same_year_spanish"
   ];
 
   preCheck = ''

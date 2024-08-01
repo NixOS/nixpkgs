@@ -19,7 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/ajaxray/geek-life";
-    description = "The Todo List / Task Manager for Geeks in command line";
+    description = "Todo List / Task Manager for Geeks in command line";
     maintainers = with maintainers; [ noisersup ];
     license = licenses.mit;
     mainProgram = "geek-life";

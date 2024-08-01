@@ -24,6 +24,7 @@ shell-helpers.section.md
 steam.section.md
 cataclysm-dda.section.md
 urxvt.section.md
+vcpkg.section.md
 weechat.section.md
 xorg.section.md
 ```

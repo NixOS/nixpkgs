@@ -5,7 +5,6 @@
 , meson
 , ninja
 , pkg-config
-, gnome
 , gnome-desktop
 , glib
 , gtk3
@@ -18,7 +17,6 @@
 , rustc
 , feedbackd
 , wrapGAppsHook3
-, fetchpatch
 , nixosTests
 }:
 
@@ -67,10 +65,10 @@ stdenv.mkDerivation rec {
   passthru.tests.phosh = nixosTests.phosh;
 
   meta = with lib; {
-    description = "A virtual keyboard supporting Wayland";
+    description = "Virtual keyboard supporting Wayland";
     homepage = "https://gitlab.gnome.org/World/Phosh/squeekboard";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ artturin tomfitzhenry ];
+    maintainers = with maintainers; [ artturin ];
     platforms = platforms.linux;
   };
 }

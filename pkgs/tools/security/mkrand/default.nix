@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "A Digital Random Bit Generator";
+    description = "Digital Random Bit Generator";
     mainProgram = "mkrand";
     longDescription = "MKRAND is a utility for generating random information.";
     homepage = "https://github.com/mknight-tag/MKRAND/";

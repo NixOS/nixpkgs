@@ -1,11 +1,12 @@
 { stdenv, buildPackages, lib
-, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
+, fetchurl, fetchpatch, fetchFromSavannah
 , zlib, gdbm, ncurses, readline, groff, libyaml, libffi, jemalloc, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix, cargo, rustPlatform, rustc
 , makeBinaryWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
 , openssl
 , linuxPackages, libsystemtap
+, gitUpdater
 } @ args:
 
 let
@@ -13,7 +14,7 @@ let
   ops = lib.optionals;
   opString = lib.optionalString;
   config = import ./config.nix { inherit fetchFromSavannah; };
-  rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
+  rubygems = import ./rubygems { inherit stdenv lib fetchurl gitUpdater; };
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
@@ -26,7 +27,7 @@ let
     yjitSupported = atLeast32 && (stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64));
     rubyDrv = lib.makeOverridable (
       { stdenv, buildPackages, lib
-      , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
+      , fetchurl, fetchpatch, fetchFromSavannah
       , rubygemsSupport ? true
       , zlib, zlibSupport ? true
       , openssl, opensslSupport ? true
@@ -57,6 +58,7 @@ let
           rubygemsSupport = false;
         }
       , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform
+      , gitUpdater
       }:
       stdenv.mkDerivation ( finalAttrs: {
         pname = "ruby";
@@ -160,6 +162,9 @@ let
           "--with-out-ext=tk"
           # on yosemite, "generating encdb.h" will hang for a very long time without this flag
           "--with-setjmp-type=setjmp"
+        ] ++ ops stdenv.hostPlatform.isFreeBSD [
+          "rb_cv_gnu_qsort_r=no"
+          "rb_cv_bsd_qsort_r=yes"
         ];
 
         preConfigure = opString docSupport ''
@@ -167,6 +172,14 @@ let
           # it's not going to be used.
           export HOME=$TMPDIR
         '';
+
+        # Work around useSystemCoreFoundationFramework hook causing issues with the ld64 upgrade.
+        # This will be fixed on staging in https://github.com/NixOS/nixpkgs/pull/329529
+        preBuild =
+          if lib.versionAtLeast ver.majMin "3.3" && stdenv.isDarwin && stdenv.isx86_64 then
+            "unset NIX_COREFOUNDATION_RPATH"
+          else
+            null;
 
         # fails with "16993 tests, 2229489 assertions, 105 failures, 14 errors, 89 skips"
         # mostly TZ- and patch-related tests
@@ -261,11 +274,12 @@ let
           ++ op useBaseRuby baseRuby;
 
         meta = with lib; {
-          description = "An object-oriented language for quick and easy programming";
+          description = "Object-oriented language for quick and easy programming";
           homepage    = "https://www.ruby-lang.org/";
           license     = licenses.ruby;
-          maintainers = with maintainers; [ vrthra manveru ];
+          maintainers = with maintainers; [ manveru ];
           platforms   = platforms.all;
+          mainProgram = "ruby";
           knownVulnerabilities = op (lib.versionOlder ver.majMin "3.0") "This Ruby release has reached its end of life. See https://www.ruby-lang.org/en/downloads/branches/.";
         };
 
@@ -296,8 +310,8 @@ in {
   mkRuby = generic;
 
   ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "5" "";
-    hash = "sha256-NoXFHu7hNSwx6gOXBtcZdvU9AKttdzEt5qoauvXNosU=";
+    version = rubyVersion "3" "1" "6" "";
+    hash = "sha256-DQ2vuFnnZ2NDJXGjEJ0VN9l2JmvjCDRFZR3Gje7SXCI=";
   };
 
   ruby_3_2 = generic {
@@ -307,8 +321,8 @@ in {
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "1" "";
-    hash = "sha256-jcKvKALMcAzRgtVDByY4jM+IWz8KFPzWoPIf8knJqpk=";
+    version = rubyVersion "3" "3" "4" "";
+    hash = "sha256-/mow+X1U4Cl2jy3fSSNpnEFs28Om6W2z4tVxbH25ajQ=";
     cargoHash = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
   };
 

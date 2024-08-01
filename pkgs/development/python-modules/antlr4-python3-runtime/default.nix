@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, setuptools
-, python
-, antlr4
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  python,
+  antlr4,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/runtime/Python3";
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   postPatch = ''
     substituteInPlace tests/TestIntervalSet.py \

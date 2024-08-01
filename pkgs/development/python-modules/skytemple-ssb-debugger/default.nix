@@ -1,40 +1,50 @@
-{ buildPythonPackage
-, explorerscript
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, gtksourceview4
-, importlib-metadata
-, lib
-, ndspy
-, nest-asyncio
-, pmdsky-debug-py
-, pycairo
-, pygobject3
-, pygtkspellcheck
-, pythonOlder
-, range-typed-integers
-, skytemple-files
-, skytemple-icons
-, skytemple-ssb-emulator
-, wrapGAppsHook3
+{
+  buildPythonPackage,
+  explorerscript,
+  fetchFromGitHub,
+  setuptools,
+  gobject-introspection,
+  gtk3,
+  gtksourceview4,
+  importlib-metadata,
+  lib,
+  ndspy,
+  nest-asyncio,
+  pmdsky-debug-py,
+  pycairo,
+  pygobject3,
+  pygtkspellcheck,
+  pythonOlder,
+  range-typed-integers,
+  skytemple-files,
+  skytemple-icons,
+  skytemple-ssb-emulator,
+  wrapGAppsHook3,
 }:
 
 buildPythonPackage rec {
   pname = "skytemple-ssb-debugger";
-  version = "1.6.4";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
+    repo = "skytemple-ssb-debugger";
     rev = version;
-    hash = "sha256-whnwFwPYPGF+UtjrzRKgXJNPsUGvmE+HHKJcPf0qcuA=";
+    hash = "sha256-S38Nw7FntacEdwdGu2d/zUKOsGostVy9+U2KPxlvI5Q=";
   };
 
-  buildInputs = [ gtk3 gtksourceview4 ];
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook3 ];
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  buildInputs = [
+    gtk3
+    gtksourceview4
+  ];
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
+  dependencies = [
     explorerscript
     ndspy
     nest-asyncio
@@ -46,9 +56,7 @@ buildPythonPackage rec {
     skytemple-files
     skytemple-icons
     skytemple-ssb-emulator
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   doCheck = false; # requires Pokémon Mystery Dungeon ROM
   pythonImportsCheck = [ "skytemple_ssb_debugger" ];

@@ -1,41 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatch-jupyter-builder
-, hatchling
-, async-lru
-, httpx
-, packaging
-, tornado
-, ipykernel
-, jupyter-core
-, jupyter-lsp
-, jupyterlab-server
-, jupyter-server
-, notebook-shim
-, jinja2
-, tomli
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-jupyter-builder,
+  hatchling,
+  async-lru,
+  httpx,
+  packaging,
+  tornado,
+  ipykernel,
+  jupyter-core,
+  jupyter-lsp,
+  jupyterlab-server,
+  jupyter-server,
+  notebook-shim,
+  jinja2,
+  tomli,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.1.8";
+  version = "4.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M4St7YaA585QT9Y7i7iaOd8hycdpTZ59xKaHQs2zD5s=";
+    hash = "sha256-NDqXn7lYL9CMhRGCPjIHAygc0HKgBJvNr9x6/tp/JTc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-jupyter-builder
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-lru
     httpx
     packaging
@@ -47,9 +48,7 @@ buildPythonPackage rec {
     jupyter-server
     notebook-shim
     jinja2
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   makeWrapperArgs = [
     "--set"
@@ -60,9 +59,7 @@ buildPythonPackage rec {
   # Depends on npm
   doCheck = false;
 
-  pythonImportsCheck = [
-    "jupyterlab"
-  ];
+  pythonImportsCheck = [ "jupyterlab" ];
 
   meta = with lib; {
     changelog = "https://github.com/jupyterlab/jupyterlab/blob/v${version}/CHANGELOG.md";

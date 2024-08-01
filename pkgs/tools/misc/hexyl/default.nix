@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-fXrdOiCmRgMPJxZIS/SkTkZZkag8ZUhNnMlU4k1m/+0=";
 
   meta = with lib; {
-    description = "A command-line hex viewer";
+    description = "Command-line hex viewer";
     longDescription = ''
       `hexyl` is a simple hex viewer for the terminal. It uses a colored
       output to distinguish different categories of bytes (NULL bytes,

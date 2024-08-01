@@ -30,7 +30,7 @@
 , libXrender
 , libXt
 , libnotify
-, gnome
+, adwaita-icon-theme
 , libGLU
 , libGL
 , nspr
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
   buildInputs =
-    [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
+    [ gsettings-desktop-schemas glib gtk3 adwaita-icon-theme dconf ];
 
   dontConfigure = true;
   dontBuild = true;

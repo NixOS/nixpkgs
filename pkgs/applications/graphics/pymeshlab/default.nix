@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "The open source mesh processing python library";
+    description = "Open source mesh processing python library";
     homepage = "https://github.com/cnr-isti-vclab/PyMeshLab";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ nim65s ];

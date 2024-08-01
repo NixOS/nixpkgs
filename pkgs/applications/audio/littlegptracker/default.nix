@@ -48,7 +48,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "A music tracker similar to lsdj optimised to run on portable game consoles";
+    description = "Music tracker similar to lsdj optimised to run on portable game consoles";
     longDescription = ''
       LittleGPTracker (a.k.a 'The piggy', 'lgpt') is a music tracker optimised
       to run on portable game consoles. It is currently running on Game Park's

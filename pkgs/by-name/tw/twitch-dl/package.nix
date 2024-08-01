@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "twitch-dl";
-  version = "2.2.2";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "twitch-dl";
     rev = "refs/tags/${version}";
-    hash = "sha256-Os27uqH3MA3v9+8WzfL5KIEUewAzf8JUyRtsWSzw81o=";
+    hash = "sha256-ixkIDJbysa3TOJiNmAG2SuJwCv5MaX6nCtUnS4901rg=";
   };
 
   pythonRelaxDeps = [
@@ -24,7 +24,6 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     python3Packages.setuptools
     python3Packages.setuptools-scm
-    python3Packages.pythonRelaxDepsHook
     installShellFiles
     scdoc
   ];
@@ -42,6 +41,7 @@ python3Packages.buildPythonApplication rec {
   disabledTestPaths = [
     # Requires network access
     "tests/test_api.py"
+    "tests/test_cli.py"
   ];
 
   pythonImportsCheck = [

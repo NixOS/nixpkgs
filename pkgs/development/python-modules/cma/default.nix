@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,23 +21,19 @@ buildPythonPackage rec {
     hash = "sha256-+UJI3hDVbDMfRF4bkwHED3eJCHzxS2hO4YPUzJqcoQI=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   checkPhase = ''
     # At least one doctest fails, thus only limited amount of files is tested
     ${python.executable} -m cma.test interfaces.py purecma.py logger.py optimization_tools.py transformations.py
   '';
 
-  pythonImportsCheck = [
-    "cma"
-  ];
+  pythonImportsCheck = [ "cma" ];
 
   meta = with lib; {
     description = "Library for Covariance Matrix Adaptation Evolution Strategy for non-linear numerical optimization";
     homepage = "https://github.com/CMA-ES/pycma";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

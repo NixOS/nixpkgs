@@ -11,7 +11,7 @@ in
     description = ''
       Periodic backups to create with Restic.
     '';
-    type = types.attrsOf (types.submodule ({ config, name, ... }: {
+    type = types.attrsOf (types.submodule ({ name, ... }: {
       options = {
         passwordFile = mkOption {
           type = types.str;
@@ -80,6 +80,15 @@ in
             set and also must be readable by root. Options set in
             `rcloneConfig` will override those set in this
             file.
+          '';
+        };
+
+        inhibitsSleep = mkOption {
+          default = false;
+          type = types.bool;
+          example = true;
+          description = ''
+            Prevents the system from sleeping while backing up.
           '';
         };
 
@@ -206,12 +215,19 @@ in
           ];
         };
 
+        runCheck = mkOption {
+          type = types.bool;
+          default = (builtins.length config.services.restic.backups.${name}.checkOpts > 0);
+          defaultText = literalExpression ''builtins.length config.services.backups.${name}.checkOpts > 0'';
+          description = "Whether to run the `check` command with the provided `checkOpts` options.";
+          example = true;
+        };
+
         checkOpts = mkOption {
           type = types.listOf types.str;
           default = [ ];
           description = ''
-            A list of options for 'restic check', which is run after
-            pruning.
+            A list of options for 'restic check'.
           '';
           example = [
             "--with-cache"
@@ -292,13 +308,22 @@ in
         (name: backup:
           let
             extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-            resticCmd = "${backup.package}/bin/restic${extraOptions}";
+            inhibitCmd = concatStringsSep " " [
+              "${pkgs.systemd}/bin/systemd-inhibit"
+              "--mode='block'"
+              "--who='restic'"
+              "--what='sleep'"
+              "--why=${escapeShellArg "Scheduled backup ${name}"} "
+            ];
+            resticCmd = "${optionalString backup.inhibitsSleep inhibitCmd}${backup.package}/bin/restic${extraOptions}";
             excludeFlags = optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
             doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != []);
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
               (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
-              (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
+            ];
+            checkCmd = optionals backup.runCheck [
+                (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
             ];
             # Helper functions for rclone remotes
             rcloneRemoteName = builtins.elemAt (splitString ":" backup.repository) 1;
@@ -331,7 +356,7 @@ in
             serviceConfig = {
               Type = "oneshot";
               ExecStart = (optionals doBackup [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} --files-from=${filesFromTmpFile}" ])
-                ++ pruneCmd;
+                ++ pruneCmd ++ checkCmd;
               User = backup.user;
               RuntimeDirectory = "restic-backups-${name}";
               CacheDirectory = "restic-backups-${name}";
@@ -346,7 +371,7 @@ in
                 ${pkgs.writeScript "backupPrepareCommand" backup.backupPrepareCommand}
               ''}
               ${optionalString (backup.initialize) ''
-                ${resticCmd} snapshots || ${resticCmd} init
+                ${resticCmd} cat config > /dev/null || ${resticCmd} init
               ''}
               ${optionalString (backup.paths != null && backup.paths != []) ''
                 cat ${pkgs.writeText "staticPaths" (concatStringsSep "\n" backup.paths)} >> ${filesFromTmpFile}

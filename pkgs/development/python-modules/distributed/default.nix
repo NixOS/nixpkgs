@@ -1,31 +1,31 @@
-{ lib
-, buildPythonPackage
-, click
-, cloudpickle
-, dask
-, fetchFromGitHub
-, jinja2
-, locket
-, msgpack
-, packaging
-, psutil
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, setuptools
-, setuptools-scm
-, sortedcontainers
-, tblib
-, toolz
-, tornado
-, urllib3
-, versioneer
-, zict
+{
+  lib,
+  buildPythonPackage,
+  click,
+  cloudpickle,
+  dask,
+  fetchFromGitHub,
+  jinja2,
+  locket,
+  msgpack,
+  packaging,
+  psutil,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  sortedcontainers,
+  tblib,
+  toolz,
+  tornado,
+  urllib3,
+  versioneer,
+  zict,
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2024.4.2";
+  version = "2024.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,27 +34,24 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "distributed";
     rev = "refs/tags/${version}";
-    hash = "sha256-xoQ+b7qzstZl9gRNs4jssNOsGQHDdvTXU7pTjBSuyWs=";
+    hash = "sha256-1VLYOUPo2esFltcoI6B/HMGyuyRq4vvkE55C8acdbG8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "versioneer[toml]==" "versioneer[toml]>=" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail "versioneer[toml]==" "versioneer[toml]>=" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
     setuptools
     setuptools-scm
     versioneer
   ] ++ versioneer.optional-dependencies.toml;
 
-  pythonRelaxDeps = [
-    "dask"
-  ];
+  pythonRelaxDeps = [ "dask" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     cloudpickle
     dask
@@ -75,15 +72,13 @@ buildPythonPackage rec {
   # When tested random tests would fail and not repeatably
   doCheck = false;
 
-  pythonImportsCheck = [
-    "distributed"
-  ];
+  pythonImportsCheck = [ "distributed" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed computation in Python";
     homepage = "https://distributed.readthedocs.io/";
     changelog = "https://github.com/dask/distributed/blob/${version}/docs/source/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

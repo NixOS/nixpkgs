@@ -98,14 +98,12 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-print-shim = callPackage ./desktop/elementary-print-shim { };
 
   elementary-session-settings = callPackage ./desktop/elementary-session-settings {
-    inherit (gnome) gnome-session gnome-keyring;
+    inherit (gnome) gnome-session;
   };
 
   elementary-shortcut-overlay = callPackage ./desktop/elementary-shortcut-overlay { };
 
-  file-roller-contract = callPackage ./desktop/file-roller-contract {
-    inherit (gnome) file-roller;
-  };
+  file-roller-contract = callPackage ./desktop/file-roller-contract { };
 
   gala = callPackage ./desktop/gala { };
 
@@ -124,6 +122,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   #### SERVICES
 
   contractor = callPackage ./services/contractor { };
+
+  elementary-bluetooth-daemon = callPackage ./services/elementary-bluetooth-daemon { };
 
   elementary-capnet-assist = callPackage ./services/elementary-capnet-assist { };
 
@@ -221,10 +221,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   ### THIRD-PARTY
 
-  # Put packages that ONLY works with Pantheon in pkgs/desktops/pantheon/third-party,
-  # specifically third party switchboard plugins and wingpanel indicators.
-  # Please call these packages in pkgs/top-level/all-packages.nix instead of this file.
-  # https://github.com/NixOS/nixpkgs/issues/115222#issuecomment-906868654
+  # As suggested in https://github.com/NixOS/nixpkgs/issues/115222#issuecomment-906868654
+  # please avoid putting third-party packages in the `pantheon` scope.
 
 }) // lib.optionalAttrs config.allowAliases {
 
@@ -238,11 +236,11 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-screenshot-tool = throw "The ‘pantheon.elementary-screenshot-tool’ alias was removed on 2022-02-02, please use ‘pantheon.elementary-screenshot’ directly."; # added 2021-07-21
 
-  evince = pkgs.gnome.evince; # added 2022-03-18
+  evince = pkgs.evince; # added 2022-03-18
 
   extra-elementary-contracts = throw "extra-elementary-contracts has been removed as all contracts have been upstreamed."; # added 2021-12-01
 
-  file-roller = pkgs.gnome.file-roller; # added 2022-03-12
+  file-roller = pkgs.file-roller; # added 2022-03-12
 
   gnome-bluetooth-contract = throw "pantheon.gnome-bluetooth-contract has been removed, abandoned by upstream."; # added 2022-06-30
 

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, setuptools-scm
-, sniffio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  sniffio,
 }:
 
 buildPythonPackage rec {
@@ -30,16 +31,12 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    sniffio
-  ];
+  dependencies = [ sniffio ];
 
   # Circular dependencies, starlette
   doCheck = false;
 
-  pythonImportsCheck = [
-    "asgi_lifespan"
-  ];
+  pythonImportsCheck = [ "asgi_lifespan" ];
 
   meta = with lib; {
     description = "Programmatic startup/shutdown of ASGI apps";

@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sslmate.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

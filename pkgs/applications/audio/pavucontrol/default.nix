@@ -1,56 +1,72 @@
-{ fetchurl
-, lib
-, stdenv
-, pkg-config
-, intltool
-, libpulseaudio
-, gtkmm3
-, libsigcxx
-, libcanberra-gtk3
-, json-glib
-, gnome
-, wrapGAppsHook3
+{
+  fetchFromGitLab,
+  lib,
+  stdenv,
+  pkg-config,
+  intltool,
+  libpulseaudio,
+  gtkmm4,
+  libsigcxx,
+  # Since version 6.0, libcanberra is optional
+  withLibcanberra ? true,
+  libcanberra-gtk3,
+  json-glib,
+  adwaita-icon-theme,
+  wrapGAppsHook4,
+  meson,
+  ninja,
+  libpressureaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pavucontrol";
-  version = "5.0";
+  version = "6.0";
 
-  src = fetchurl {
-    url = "https://freedesktop.org/software/pulseaudio/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-zityw7XxpwrQ3xndgXUPlFW9IIcNHTo20gU2ry6PTno=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "pulseaudio";
+    repo = "pavucontrol";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-nxzFvD/KUevIJOw9jgcr0Hfvg7KiSOmTBfKN3jLu3Cg=";
   };
 
   buildInputs = [
     libpulseaudio
-    gtkmm3
+    gtkmm4
     libsigcxx
-    libcanberra-gtk3
+    (lib.optionals withLibcanberra libcanberra-gtk3)
     json-glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
+    libpressureaudio
   ];
 
-  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    wrapGAppsHook4
+    meson
+    ninja
+  ];
 
-  configureFlags = [ "--disable-lynx" ];
+  mesonFlags = [
+    "--prefix=${placeholder "out"}"
+    (lib.mesonBool "lynx" false)
+  ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://freedesktop.org/software/pulseaudio/pavucontrol/#news";
     description = "PulseAudio Volume Control";
-
+    homepage = "http://freedesktop.org/software/pulseaudio/pavucontrol/";
+    license = lib.licenses.gpl2Plus;
     longDescription = ''
       PulseAudio Volume Control (pavucontrol) provides a GTK
       graphical user interface to connect to a PulseAudio server and
       easily control the volume of all clients, sinks, etc.
     '';
-
-    homepage = "http://freedesktop.org/software/pulseaudio/pavucontrol/";
-
-    license = lib.licenses.gpl2Plus;
-
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
     mainProgram = "pavucontrol";
+    maintainers = with lib.maintainers; [ abbradar ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pytestCheckHook
-, python
-, pythonOlder
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -29,18 +29,12 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    httpx = [
-      httpx
-    ];
+    httpx = [ httpx ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.httpx;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.httpx;
 
-  pythonImportsCheck = [
-    "requests_aws4auth"
-  ];
+  pythonImportsCheck = [ "requests_aws4auth" ];
 
   meta = with lib; {
     description = "Amazon Web Services version 4 authentication for the Python Requests library";

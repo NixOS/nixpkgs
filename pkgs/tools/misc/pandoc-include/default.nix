@@ -5,23 +5,26 @@
 , panflute
 , lxml
 , setuptools
+, nix-update-script
 }:
 
 buildPythonApplication rec {
   pname = "pandoc-include";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DCsunset";
     repo = "pandoc-include";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8TIGw6p9c61oSH3ld14rmeG6wZY9u9JHALImxXM3c3Y=";
+    hash = "sha256-8gG1xkDuIN007uYSwSWgsDW4IFVIE44v3j7FN0RaZwU=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
+
+  passthru.updateScript = nix-update-script {};
 
   propagatedBuildInputs = [ natsort panflute lxml ];
 

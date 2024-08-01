@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, argon2-cffi
-, certifi
-, urllib3
-, pycryptodome
-, typing-extensions
+  # dependencies
+  argon2-cffi,
+  certifi,
+  urllib3,
+  pycryptodome,
+  typing-extensions,
 
-# test
-, faker
-, mock
-, pytestCheckHook
+  # test
+  faker,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "7.2.6";
+  version = "7.2.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "minio";
     repo = "minio-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-zK+D2DNgh1cASdA2gstNW0ODUu7Dn6vMY01mcrdSSo0=";
+    hash = "sha256-Qb3KPwSODtIqwS4FfR+DHphx4duPsNdMlHt2rpdV2+Y=";
   };
 
   postPatch = ''
@@ -38,9 +39,7 @@ buildPythonPackage rec {
       --replace-fail "assertEquals" "assertEqual"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     argon2-cffi
@@ -61,9 +60,7 @@ buildPythonPackage rec {
     "tests/unit/credentials_test.py"
   ];
 
-  pythonImportsCheck = [
-    "minio"
-  ];
+  pythonImportsCheck = [ "minio" ];
 
   meta = with lib; {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";

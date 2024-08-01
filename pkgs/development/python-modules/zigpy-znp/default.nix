@@ -1,24 +1,25 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, coloredlogs
-, fetchFromGitHub
-, jsonschema
-, pytest-asyncio
-, pytest-mock
-, pytest-rerunfailures
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, voluptuous
-, zigpy
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  coloredlogs,
+  fetchFromGitHub,
+  jsonschema,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-rerunfailures,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  voluptuous,
+  zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.12.1";
+  version = "0.12.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,12 +28,10 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Bs/m9Iyr8x+sMUVXt1whk2E4EJ5bpitMsEWZtmCyIf8=";
+    hash = "sha256-qrIYcGumOHu3/gG9MOyKngAhOkeZEmCgXIDDcghoYn0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -58,9 +57,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--reruns=3"
-  ];
+  pytestFlagsArray = [ "--reruns=3" ];
 
   disabledTests = [
     # failing since zigpy 0.60.0
@@ -73,9 +70,7 @@ buildPythonPackage rec {
     "test_zigpy_request_failure"
   ];
 
-  pythonImportsCheck = [
-    "zigpy_znp"
-  ];
+  pythonImportsCheck = [ "zigpy_znp" ];
 
   meta = with lib; {
     description = "Library for zigpy which communicates with TI ZNP radios";

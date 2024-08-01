@@ -1,5 +1,5 @@
 diff --git a/psycopg/psycopg/pq/_pq_ctypes.py b/psycopg/psycopg/pq/_pq_ctypes.py
-index 9ca1d129..02929ab6 100644
+index cfc68672..02929ab6 100644
 --- a/psycopg/psycopg/pq/_pq_ctypes.py
 +++ b/psycopg/psycopg/pq/_pq_ctypes.py
 @@ -11,14 +11,10 @@ from ctypes import Structure, CFUNCTYPE, POINTER
@@ -18,12 +18,15 @@ index 9ca1d129..02929ab6 100644
  
  
  class FILE(Structure):
-@@ -28,9 +24,7 @@ class FILE(Structure):
+@@ -28,12 +24,7 @@ class FILE(Structure):
  FILE_ptr = POINTER(FILE)
  
  if sys.platform == "linux":
 -    libcname = ctypes.util.find_library("c")
--    assert libcname
+-    if not libcname:
+-        # Likely this is a system using musl libc, see the following bug:
+-        # https://github.com/python/cpython/issues/65821
+-        libcname = "libc.so"
 -    libc = ctypes.cdll.LoadLibrary(libcname)
 +    libc = ctypes.cdll.LoadLibrary("@libc@")
  

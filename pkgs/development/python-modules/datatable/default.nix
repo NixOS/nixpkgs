@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pipInstallHook
-, writeText
-, blessed
-, docutils
-, libcxx
-, llvm
-, pytestCheckHook
-, typesentry
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pipInstallHook,
+  blessed,
+  docutils,
+  libcxx,
+  llvm,
+  pytestCheckHook,
+  typesentry,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +39,18 @@ buildPythonPackage rec {
   '';
   DT_RELEASE = "1";
 
-  propagatedBuildInputs = [ typesentry blessed ];
-  buildInputs = [ llvm pipInstallHook ];
-  nativeCheckInputs = [ docutils pytestCheckHook ];
+  propagatedBuildInputs = [
+    typesentry
+    blessed
+  ];
+  buildInputs = [
+    llvm
+    pipInstallHook
+  ];
+  nativeCheckInputs = [
+    docutils
+    pytestCheckHook
+  ];
 
   LLVM = llvm;
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";

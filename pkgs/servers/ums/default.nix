@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = {
       description = "Universal Media Server: a DLNA-compliant UPnP Media Server";
-      license = lib.licenses.gpl2;
+      license = lib.licenses.gpl2Only;
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ thall snicket2100 ];
       mainProgram = "ums";

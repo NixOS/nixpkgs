@@ -1,5 +1,5 @@
 { lib
-, wakatime
+, wakatime-cli
 , buildFishPlugin
 , fetchFromGitHub
 }:
@@ -17,12 +17,12 @@ buildFishPlugin rec {
 
   preFixup = ''
     substituteInPlace $out/share/fish/vendor_conf.d/wakatime.fish \
-      --replace "if type -p wakatime" "if type -p ${lib.getExe wakatime}" \
-      --replace "(type -p wakatime)" "${lib.getExe wakatime}"
+      --replace-fail "if type -p wakatime" "if type -p ${lib.getExe wakatime-cli}" \
+      --replace-fail "(type -p wakatime)" "${lib.getExe wakatime-cli}"
   '';
 
   meta = with lib; {
-    description = "A fish plugin for wakatime";
+    description = "Fish plugin for wakatime";
     homepage = "https://github.com/ik11235/wakatime.fish";
     license = licenses.mit;
     maintainers = with maintainers; [ ocfox ];

@@ -25,7 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/arduino/arduinoOTA";
-    description = "A tool for uploading programs to Arduino boards over a network";
+    description = "Tool for uploading programs to Arduino boards over a network";
     mainProgram = "arduinoOTA";
     license = licenses.gpl3;
     maintainers = with maintainers; [ poelzi ];

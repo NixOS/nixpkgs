@@ -77,8 +77,22 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    environment = {
+  config = {
+    assertions = mkIf (cfg.enable || config.services.kerberos_server.enable) [(let
+      implementation = cfg.package.passthru.implementation or "<NOT SET>";
+    in {
+      assertion = lib.elem implementation [ "krb5" "heimdal" ];
+      message = ''
+        `security.krb5.package` must be one of:
+
+          - krb5
+          - heimdal
+
+        Currently chosen implementation: ${implementation}
+      '';
+    })];
+
+    environment = mkIf cfg.enable {
       systemPackages = [ cfg.package ];
       etc."krb5.conf".source = format.generate "krb5.conf" cfg.settings;
     };

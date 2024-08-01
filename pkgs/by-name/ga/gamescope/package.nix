@@ -1,8 +1,10 @@
 { stdenv
+, edid-decode
 , fetchFromGitHub
 , meson
 , pkg-config
 , ninja
+, cmake
 , xorg
 , libdrm
 , libei
@@ -18,15 +20,13 @@
 , SDL2
 , pipewire
 , pixman
+, python3
 , libinput
 , glslang
 , hwdata
-, openvr
 , stb
 , wlroots
-, libliftoff
 , libdecor
-, libdisplay-info
 , lib
 , makeBinaryWrapper
 , patchelfUnstable
@@ -44,28 +44,31 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.14.11";
+  version = "3.14.24";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Ex4uJ50EiX9ZVzmndygxET0wZmPtPB4Ditjq5bdhKTQ=";
+    hash = "sha256-+8uojnfx8V8BiYAeUsOaXTXrlcST83z6Eld7qv1oboE=";
   };
 
   patches = [
-    # Unvendor dependencies
-    ./use-pkgconfig.patch
-
     # Make it look for shaders in the right place
     ./shaders-path.patch
+    # patch relative gamescopereaper path with absolute
+    ./gamescopereaper.patch
   ];
 
   # We can't substitute the patch itself because substituteAll is itself a derivation,
   # so `placeholder "out"` ends up pointing to the wrong place
   postPatch = ''
     substituteInPlace src/reshade_effect_manager.cpp --replace "@out@" "$out"
+    # Patching shebangs in the main `libdisplay-info` build
+    patchShebangs subprojects/libdisplay-info/tool/gen-search-table.py
+    # Replace gamescopereeaper with absolute path
+    substituteInPlace src/Utils/Process.cpp --subst-var-by "gamescopereaper" "$out/bin/gamescopereaper"
   '';
 
   mesonFlags = [
@@ -86,6 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     pkg-config
     ninja
+    # For `libdisplay-info`
+    python3
+    hwdata
+    edid-decode
+    # For OpenVR
+    cmake
   ] ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang
@@ -98,7 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     vulkan-loader
-    openvr
     glm
   ] ++ lib.optionals enableWsi [
     vulkan-headers
@@ -116,7 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
     libavif
     libdrm
     libei
-    libliftoff
     SDL2
     libdecor
     libinput
@@ -125,7 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     libcap
     stb
-    libdisplay-info
   ]);
 
   postInstall = lib.optionalString enableExecutable ''

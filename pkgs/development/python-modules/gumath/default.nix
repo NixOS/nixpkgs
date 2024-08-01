@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchpatch
-, python
-, numba
-, ndtypes
-, xnd
-, libndtypes
-, libxnd
-, libgumath
-, isPy27
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchpatch,
+  python,
+  numba,
+  ndtypes,
+  xnd,
+  libndtypes,
+  libxnd,
+  libgumath,
+  isPy27,
 }:
 
 buildPythonPackage {
@@ -34,7 +35,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [ numba ];
 
-  propagatedBuildInputs = [ ndtypes xnd ];
+  propagatedBuildInputs = [
+    ndtypes
+    xnd
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -60,4 +64,3 @@ buildPythonPackage {
     popd
   '';
 }
-

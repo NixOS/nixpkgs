@@ -1,13 +1,14 @@
-{ callPackage
-, lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, semantic-version
-, setuptools
-, setuptools-scm
-, tomli
-, typing-extensions
+{
+  callPackage,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  semantic-version,
+  setuptools,
+  setuptools-scm,
+  tomli,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -31,13 +32,9 @@ buildPythonPackage rec {
     semantic-version
     setuptools
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  pythonImportsCheck = [
-    "setuptools_rust"
-  ];
+  pythonImportsCheck = [ "setuptools_rust" ];
 
   doCheck = false;
 
@@ -48,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyO3/setuptools-rust";
     changelog = "https://github.com/PyO3/setuptools-rust/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

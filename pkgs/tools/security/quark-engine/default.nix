@@ -7,19 +7,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
-  version = "24.5.1";
+  version = "24.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quark-engine";
     repo = "quark-engine";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W1UeTiyyYZzxu3XQ/6VkTvEyqPWl1Du6QutuoPhaSfs=";
+    hash = "sha256-Tk+pp6Bvc+fcrFp78UQCPLA/svMJIJ4FQlJ6D9jkMqg=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     androguard

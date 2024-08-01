@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Opensource macOS Cursors.";
+    description = "Opensource macOS Cursors";
     homepage = "https://github.com/ful1e5/apple_cursor";
     license = licenses.gpl3;
     platforms = platforms.linux;

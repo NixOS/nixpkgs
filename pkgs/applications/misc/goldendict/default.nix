@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://goldendict.org/";
-    description = "A feature-rich dictionary lookup program";
+    description = "Feature-rich dictionary lookup program";
     platforms = with platforms; linux ++ darwin;
     mainProgram = "goldendict";
     maintainers = with maintainers; [ gebner astsmtl sikmir ];

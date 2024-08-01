@@ -22,7 +22,7 @@ buildNpmPackage rec {
     description = "Command line management interface to Philips Hue";
     homepage = "https://github.com/bahamas10/hueadm";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "hueadm";
   };
 }

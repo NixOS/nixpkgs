@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope-proxy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  zope-proxy,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/zope.location/";
     description = "Zope Location";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
-
 }

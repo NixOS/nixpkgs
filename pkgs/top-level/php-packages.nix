@@ -16,7 +16,7 @@
 , gettext
 , gmp
 , html-tidy
-, icu64
+, icu73
 , libffi
 , libiconv
 , libkrb5
@@ -46,15 +46,18 @@
 , fetchpatch
 }:
 
-lib.makeScope pkgs.newScope (self: with self; {
+lib.makeScope pkgs.newScope (self: let
+  inherit (self) buildPecl callPackage mkExtension php;
+
+  builders = import ../build-support/php/builders {
+    inherit callPackages callPackage buildPecl;
+  };
+in {
   buildPecl = callPackage ../build-support/php/build-pecl.nix {
     php = php.unwrapped;
   };
 
-  composerHooks = callPackages ../build-support/php/hooks { };
-
-  mkComposerRepository = callPackage ../build-support/php/build-composer-repository.nix { };
-  buildComposerProject = callPackage ../build-support/php/build-composer-project.nix { };
+  inherit (builders.v1) buildComposerProject buildComposerWithPlugin composerHooks mkComposerRepository;
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
@@ -187,6 +190,10 @@ lib.makeScope pkgs.newScope (self: with self; {
     castor = callPackage ../development/php-packages/castor { };
 
     composer = callPackage ../development/php-packages/composer { };
+
+    composer-local-repo-plugin = callPackage ../development/php-packages/composer-local-repo-plugin { };
+
+    cyclonedx-php-composer = callPackage ../development/php-packages/cyclonedx-php-composer { };
 
     deployer = callPackage ../development/php-packages/deployer { };
 
@@ -386,6 +393,18 @@ lib.makeScope pkgs.newScope (self: with self; {
                 "NEWS"
               ];
             })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
+              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
+              excludes = [ "NEWS" ];
+            })
           ];
         }
         {
@@ -425,10 +444,9 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "iconv";
-          configureFlags = [
-            "--with-iconv${lib.optionalString stdenv.isDarwin "=${libiconv}"}"
-          ];
-          doCheck = false;
+          buildInputs = [ libiconv ];
+          configureFlags = [ "--with-iconv" ];
+          doCheck = stdenv.isLinux;
         }
         {
           name = "imap";
@@ -437,7 +455,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "intl";
-          buildInputs = [ icu64 ];
+          buildInputs = [ icu73 ];
         }
         {
           name = "ldap";
@@ -542,6 +560,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "pdo_odbc";
           internalDeps = [ php.extensions.pdo ];
+          buildInputs = [ unixODBC ];
           configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ];
           doCheck = false;
         }
@@ -598,6 +617,19 @@ lib.makeScope pkgs.newScope (self: with self; {
           configureFlags = [
             "--enable-simplexml"
           ];
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
+              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
+              excludes = [ "NEWS" ];
+            })
+          ];
         }
         {
           name = "snmp";
@@ -613,7 +645,21 @@ lib.makeScope pkgs.newScope (self: with self; {
           configureFlags = [
             "--enable-soap"
           ];
-          doCheck = false;
+          doCheck = stdenv.isDarwin;  # TODO: a couple tests still fail on *-linux
+          internalDeps = [ php.extensions.session ];
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
+              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
+              excludes = [ "NEWS" ];
+            })
+          ];
         }
         {
           name = "sockets";
@@ -646,6 +692,19 @@ lib.makeScope pkgs.newScope (self: with self; {
             "--enable-xml"
           ];
           doCheck = false;
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
+              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
+              excludes = [ "NEWS" ];
+            })
+          ];
         }
         {
           name = "xmlreader";
@@ -663,6 +722,19 @@ lib.makeScope pkgs.newScope (self: with self; {
           configureFlags = [
             "--enable-xmlwriter"
           ];
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
+              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
+              excludes = [ "NEWS" ];
+            })
+          ];
         }
         {
           name = "xsl";
@@ -672,7 +744,11 @@ lib.makeScope pkgs.newScope (self: with self; {
           env.NIX_CFLAGS_COMPILE = toString [ "-I../.." "-DHAVE_DOM" ];
           configureFlags = [ "--with-xsl=${libxslt.dev}" ];
         }
-        { name = "zend_test"; }
+        {
+          name = "zend_test";
+          internalDeps = [ php.extensions.dom ];
+          env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+        }
         {
           name = "zip";
           buildInputs = [ libzip pcre2 ];

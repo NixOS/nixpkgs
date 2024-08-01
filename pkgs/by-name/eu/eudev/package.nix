@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/eudev-project/eudev";
-    description = "A fork of udev with the aim of isolating it from init";
+    description = "Fork of udev with the aim of isolating it from init";
     longDescription = ''
       eudev is a standalone dynamic and persistent device naming support (aka
       userspace devfs) daemon that runs independently from the init

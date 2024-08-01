@@ -1,39 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gpytorch
-, linear-operator
-, multipledispatch
-, pyro-ppl
-, setuptools
-, setuptools-scm
-, wheel
-, torch
-, scipy
-, pytestCheckHook
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gpytorch,
+  linear-operator,
+  multipledispatch,
+  pyro-ppl,
+  setuptools,
+  setuptools-scm,
+  torch,
+  scipy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.10.0";
-  format = "pyproject";
+  version = "0.11.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
-    repo = pname;
+    repo = "botorch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IaFtQWrgOhVHDOiPQ4oG8l+Q0igWamYVWEReGccbVoI=";
+    hash = "sha256-AtRU5KC8KlkxMCU0OUAHDFK7BsPO3TbRmmzDGV7+yVk=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     gpytorch
     linear-operator
     multipledispatch
@@ -43,15 +40,18 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "gpytorch"
     "linear-operator"
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [ "test_all_cases_covered" ];
+
   pythonImportsCheck = [ "botorch" ];
 
   meta = with lib; {
+    changelog = "https://github.com/pytorch/botorch/blob/${src.rev}/CHANGELOG.md";
     description = "Bayesian Optimization in PyTorch";
     homepage = "https://botorch.org";
     license = licenses.mit;

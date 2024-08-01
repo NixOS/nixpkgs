@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, hatchling
-, hatch-nodejs-version
-, fastjsonschema
-, jsonschema
-, jupyter-core
-, traitlets
-, pep440
-, pytestCheckHook
-, testpath
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  hatchling,
+  hatch-nodejs-version,
+  fastjsonschema,
+  jsonschema,
+  jupyter-core,
+  traitlets,
+  pep440,
+  pytestCheckHook,
+  testpath,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  pythonImportsCheck = [
-    "nbformat"
-  ];
+  pythonImportsCheck = [ "nbformat" ];
 
   nativeCheckInputs = [
     pep440
@@ -50,7 +49,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "The Jupyter Notebook format";
+    description = "Jupyter Notebook format";
     mainProgram = "jupyter-trust";
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;

@@ -11,7 +11,7 @@ in
   options.services.ebusd = {
     enable = mkEnableOption "ebusd, a daemon for communication with eBUS heating systems";
 
-    package = mkPackageOptionMD pkgs "ebusd" { };
+    package = mkPackageOption pkgs "ebusd" { };
 
     device = mkOption {
       type = types.str;
@@ -138,7 +138,7 @@ in
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = let
-          args = cli.toGNUCommandLineShell { } (foldr (a: b: a // b) { } [
+          args = cli.toGNUCommandLineShell { optionValueSeparator = "="; } (foldr (a: b: a // b) { } [
             {
               inherit (cfg) device port configpath scanconfig readonly;
               foreground = true;

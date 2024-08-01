@@ -1,24 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# docs
-, furo
-, sphinxHook
+  # docs
+  furo,
+  sphinxHook,
 
-# runtime
-, babel
-, flask
-, jinja2
-, pytz
+  # runtime
+  babel,
+  flask,
+  jinja2,
+  pytz,
 
-# tests
-, pytest-mock
-, pytestCheckHook
+  # tests
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -51,9 +51,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  pythonImportsCheck = [
-    "flask_babel"
-  ];
+  pythonImportsCheck = [ "flask_babel" ];
 
   checkInputs = [
     pytest-mock

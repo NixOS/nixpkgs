@@ -12,15 +12,34 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [libdvdread];
 
-  configureScript = "./configure2"; # wtf?
+  # The upstream supports two configuration workflow:
+  # one is to generate ./configure via `autoconf`,
+  # the other is to run ./configure2.
+  # ./configure2 is a configureation script included in the upstream source
+  # that supports common "--<name>" flags and generates config.mak and config.h.
+  # See INSTALL inside the upstream source for detail.
+  configureScript = "./configure2";
+
+  configureFlags = [
+    "--cc=${stdenv.cc.targetPrefix}cc"
+    # Let's strip the binaries ourselves,
+    # as unprefixed `strip` command is not available during cross compilation.
+    "--disable-strip"
+  ];
 
   preConfigure = ''
     mkdir -p $out
   '';
 
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "LD=${stdenv.cc.targetPrefix}ld"
+    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+  ];
+
   meta = {
     homepage = "http://dvdnav.mplayerhq.hu/";
-    description = "A library that implements DVD navigation features such as DVD menus";
+    description = "Library that implements DVD navigation features such as DVD menus";
     mainProgram = "dvdnav-config";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.wmertens ];

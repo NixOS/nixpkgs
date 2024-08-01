@@ -1,19 +1,19 @@
-{ lib
-, pkgs
-, python3Packages
-, podman
-, oniguruma
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  pkgs,
+  python3Packages,
+  podman,
+  fetchPypi,
+  buildPythonPackage,
 }:
 buildPythonPackage rec {
   pname = "ansible-navigator";
-  version = "24.2.0";
+  version = "24.3.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qXBhM63fFwPwo0pmEhZnZnGC8Eht8eFPfVbDkY98MGM=";
+    hash = "sha256-IAcZFisB3BOmdxZuGZ3PZcDl2CXsg6ToI/1fdPpkIXw=";
   };
 
   buildInputs = with python3Packages; [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A text-based user interface (TUI) for Ansible.";
+    description = "Text-based user interface (TUI) for Ansible";
     homepage = "https://ansible.readthedocs.io/projects/navigator/";
     license = licenses.asl20;
     maintainers = with maintainers; [ melkor333 ];

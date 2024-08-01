@@ -40,8 +40,6 @@ rec {
         NIX_LDFLAGS = (oa.NIX_LDFLAGS or "") + " -headerpad_max_install_names";
       });
 
-      cctools_ = darwin.cctools;
-
       # Avoid messing with libkrb5 and libnghttp2.
       curl_ = curlMinimal.override (args: {
         gssSupport = false;
@@ -112,8 +110,9 @@ rec {
 
       # Copy binutils.
       for i in as ld ar ranlib nm strip otool install_name_tool lipo codesign_allocate; do
-        cp ${getBin cctools_}/bin/$i $out/bin
+        cp ${getBin darwin.binutils-unwrapped}/bin/$i $out/bin
       done
+      cp -d ${getLib ld64}/lib/libcodedirectory*.dylib $out/lib
 
       # Copy coreutils, bash, etc.
       cp ${getBin coreutils_}/bin/* $out/bin

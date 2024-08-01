@@ -7,9 +7,10 @@
   undmg,
 }:
 
+
 let
   pname = "joplin-desktop";
-  version = "2.14.17";
+  version = "3.0.13";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -36,7 +37,7 @@ let
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
   meta = with lib; {
-    description = "An open source note taking and to-do application with synchronisation capabilities";
+    description = "Open source note taking and to-do application with synchronisation capabilities";
     mainProgram = "joplin-desktop";
     longDescription = ''
       Joplin is a free, open source note taking and to-do application, which can
@@ -56,6 +57,7 @@ let
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+
   };
 
   linux = appimageTools.wrapType2 rec {
@@ -70,8 +72,6 @@ let
       export LC_ALL=C.UTF-8
     '';
 
-    multiArch = false; # no 32bit needed
-    extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
@@ -92,7 +92,7 @@ let
       meta
       ;
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ _7zz ];
 
     sourceRoot = "Joplin.app";
 

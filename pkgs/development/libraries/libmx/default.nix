@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.clutter-project.org/";
-    description = "A Clutter-based toolkit";
+    description = "Clutter-based toolkit";
     mainProgram = "mx-create-image-cache";
     longDescription =
       ''Mx is a widget toolkit using Clutter that provides a set of standard
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
         feature is the possibility setting style properties from a CSS format
         file.'';
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; linux;
   };
 }

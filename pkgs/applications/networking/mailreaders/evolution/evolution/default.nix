@@ -23,6 +23,7 @@
 , libical
 , db
 , sqlite
+, adwaita-icon-theme
 , gnome
 , gnome-desktop
 , librsvg
@@ -44,11 +45,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.52.1";
+  version = "3.52.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-aNrtER2t42GMpwjss8q0zZO6UC9a6dXnlwc8OhPinek=";
+    hash = "sha256-HCL1O1VU4mCkjpF/PWaYNNJOTTrVoSTL4EKipKzkQcU=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     bogofilter
     db
     evolution-data-server

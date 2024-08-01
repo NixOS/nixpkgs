@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://cadsondemak.github.io/${pname}/";
-    description = "A slightly-condensed looped Thai and sans serif Latin typeface for communications";
+    description = "Slightly-condensed looped Thai and sans serif Latin typeface for communications";
     longDescription = ''
       The most popular typeface from the 13 fonts from SIPA Thailand’s National
       fonts project. Sarabun was designed by Suppakit Chalermlarp to be a

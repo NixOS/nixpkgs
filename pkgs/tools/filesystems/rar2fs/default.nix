@@ -3,18 +3,18 @@
 , fetchFromGitHub
 , autoreconfHook
 , fuse2
-, unrar_6
+, unrar
 }:
 
 stdenv.mkDerivation rec {
   pname = "rar2fs";
-  version = "1.29.6";
+  version = "1.29.7";
 
   src = fetchFromGitHub {
     owner = "hasse69";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b8zMCzSFJewXMQOuaKwMJx//Wq9vT/bUj6XS/jDBBBo=";
+    sha256 = "sha256-iYlmNtaJZrnsNNNlaoV1Vu6PHrHIr/glhgs3784JCm4=";
   };
 
   postPatch = ''
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ fuse2 unrar_6 ];
+  buildInputs = [ fuse2 unrar ];
 
   configureFlags = [
-    "--with-unrar=${unrar_6.src}/unrar"
+    "--with-unrar=${unrar.src}/unrar"
     "--disable-static-unrar"
   ];
 

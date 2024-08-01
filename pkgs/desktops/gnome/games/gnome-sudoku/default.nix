@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-sudoku";
-  version = "46.0";
+  version = "46.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-sudoku/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-d8TnjYhvOxRFav7w+5aPLqAa01cDzEhSP41yR4P/pq8=";
+    hash = "sha256-OKJqwUvlO2w0/9UuxmhSVpFEQHSF4xsvgXkn0hdmUSQ=";
   };
 
   nativeBuildInputs = [

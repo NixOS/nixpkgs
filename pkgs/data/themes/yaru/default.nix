@@ -8,7 +8,7 @@
 , ninja
 , python3
 , gtk3
-, gnome
+, gnome-themes-extra
 , gtk-engine-murrine
 , humanity-icon-theme
 , hicolor-icon-theme
@@ -16,17 +16,17 @@
 
 stdenv.mkDerivation rec {
   pname = "yaru";
-  version = "24.04.2";
+  version = "24.04.3";
 
   src = fetchFromGitHub {
     owner = "ubuntu";
     repo = "yaru";
     rev = version;
-    hash = "sha256-nvNJ0ppx3oete+CsklJtpDOLyUA0Oj/oUmcLjsR54MU=";
+    hash = "sha256-Z0qW3hW5Sije5Hn6OB9f5M6xnmMmRnP76p0kjiQZznw=";
   };
 
   nativeBuildInputs = [ meson sassc pkg-config glib ninja python3 ];
-  buildInputs = [ gtk3 gnome.gnome-themes-extra ];
+  buildInputs = [ gtk3 gnome-themes-extra ];
   propagatedBuildInputs = [ humanity-icon-theme hicolor-icon-theme ];
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 

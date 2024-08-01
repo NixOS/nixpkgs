@@ -1,60 +1,59 @@
-{ lib
-, alembic
-, buildPythonPackage
-, click
-, cloudpickle
-, databricks-cli
-, docker
-, entrypoints
-, fetchPypi
-, flask
-, gitpython
-, gorilla
-, graphene
-, gunicorn
-, importlib-metadata
-, markdown
-, matplotlib
-, numpy
-, packaging
-, pandas
-, prometheus-flask-exporter
-, protobuf
-, python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
-, pyarrow
-, pytz
-, pyyaml
-, querystring-parser
-, requests
-, setuptools
-, scikit-learn
-, scipy
-, simplejson
-, sqlalchemy
-, sqlparse
+{
+  lib,
+  alembic,
+  buildPythonPackage,
+  cachetools,
+  click,
+  cloudpickle,
+  databricks-cli,
+  docker,
+  entrypoints,
+  fetchPypi,
+  flask,
+  gitpython,
+  gorilla,
+  graphene,
+  gunicorn,
+  importlib-metadata,
+  markdown,
+  matplotlib,
+  numpy,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  packaging,
+  pandas,
+  prometheus-flask-exporter,
+  protobuf,
+  python-dateutil,
+  pythonOlder,
+  pyarrow,
+  pytz,
+  pyyaml,
+  querystring-parser,
+  requests,
+  setuptools,
+  scikit-learn,
+  scipy,
+  simplejson,
+  sqlalchemy,
+  sqlparse,
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.12.1";
+  version = "2.14.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qpKuuyN5qcVITL6QHN93nVQIrJamQeSx+KLR/5dNt8k=";
+    hash = "sha256-zqC2eK3zjR+PbNlxMKhjJddLsVk7iVtq+tx1ACHr9aI=";
   };
 
   # Remove currently broken dependency `shap`, a model explainability package.
   # This seems quite unprincipled especially with tests not being enabled,
   # but not mlflow has a 'skinny' install option which does not require `shap`.
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
   pythonRemoveDeps = [ "shap" ];
   pythonRelaxDeps = [
     "packaging"
@@ -64,6 +63,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     alembic
+    cachetools
     click
     cloudpickle
     databricks-cli
@@ -78,27 +78,28 @@ buildPythonPackage rec {
     markdown
     matplotlib
     numpy
+    opentelemetry-api
+    opentelemetry-sdk
     packaging
     pandas
     prometheus-flask-exporter
     protobuf
-    python-dateutil
     pyarrow
+    python-dateutil
     pytz
     pyyaml
     querystring-parser
     requests
     scikit-learn
     scipy
+    setuptools
     #shap
     simplejson
     sqlalchemy
     sqlparse
   ];
 
-  pythonImportsCheck = [
-    "mlflow"
-  ];
+  pythonImportsCheck = [ "mlflow" ];
 
   # no tests in PyPI dist
   # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config

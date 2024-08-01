@@ -1,47 +1,47 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, hatch-jupyter-builder
-, hatchling
-, jupyter-client
-, markdown-it-py
-, mdit-py-plugins
-, nbformat
-, notebook
-, packaging
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, toml
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-jupyter-builder,
+  hatchling,
+  jupyter-client,
+  markdown-it-py,
+  mdit-py-plugins,
+  nbformat,
+  notebook,
+  packaging,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.16.1";
+  version = "1.16.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aMe2hoXocOgOYP2oKG+9Ymnpx03B30MW32/kbqvJTJk=";
+    hash = "sha256-HrrJkEYd2fR3/3/uyeMAP6GsyJ88FroBtz95/XbwGpg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-jupyter-builder
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     markdown-it-py
     mdit-py-plugins
     nbformat
     packaging
     pyyaml
-    toml
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     jupyter-client
@@ -56,9 +56,7 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH;
   '';
 
-  disabledTestPaths = [
-    "tests/external"
-  ];
+  disabledTestPaths = [ "tests/external" ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # requires access to trash

@@ -13,8 +13,8 @@ in {
 
       enable = mkEnableOption ''
         Networkd-dispatcher service for systemd-networkd connection status
-        change. See [https://gitlab.com/craftyguy/networkd-dispatcher](upstream instructions)
-        for usage.
+        change. See [upstream instructions](https://gitlab.com/craftyguy/networkd-dispatcher)
+        for usage
       '';
 
       rules = mkOption {
@@ -35,7 +35,7 @@ in {
         '';
         description = ''
           Declarative configuration of networkd-dispatcher rules. See
-          [https://gitlab.com/craftyguy/networkd-dispatcher](upstream instructions)
+          [upstream instructions](https://gitlab.com/craftyguy/networkd-dispatcher)
           for an introduction and example scripts.
         '';
         type = types.attrsOf (types.submodule {

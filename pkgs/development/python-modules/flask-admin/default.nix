@@ -1,24 +1,25 @@
-{ lib
-, azure-storage-blob
-, boto
-, buildPythonPackage
-, fetchpatch
-, fetchFromGitHub
-, flask
-, flask-mongoengine
-, flask-sqlalchemy
-, geoalchemy2
-, mongoengine
-, pillow
-, psycopg2
-, pymongo
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, shapely
-, sqlalchemy
-, wtf-peewee
-, wtforms
+{
+  lib,
+  azure-storage-blob,
+  boto,
+  buildPythonPackage,
+  fetchpatch,
+  fetchFromGitHub,
+  flask,
+  flask-mongoengine,
+  flask-sqlalchemy,
+  geoalchemy2,
+  mongoengine,
+  pillow,
+  psycopg2,
+  pymongo,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  shapely,
+  sqlalchemy,
+  wtf-peewee,
+  wtforms,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +45,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     flask
@@ -91,9 +90,7 @@ buildPythonPackage rec {
     "flask_admin/tests/peeweemodel/test_basic.py"
   ];
 
-  pythonImportsCheck = [
-    "flask_admin"
-  ];
+  pythonImportsCheck = [ "flask_admin" ];
 
   meta = with lib; {
     description = "Admin interface framework for Flask";

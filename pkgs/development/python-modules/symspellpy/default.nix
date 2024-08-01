@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
 
-, pythonOlder
+  pythonOlder,
 
-, pytestCheckHook
+  pytestCheckHook,
 
-, setuptools
+  setuptools,
 
   # for testing
-, numpy
-, importlib-resources
+  numpy,
+  importlib-resources,
 
   # requirements
-, editdistpy
+  editdistpy,
 }:
 
 buildPythonPackage rec {
@@ -46,13 +47,9 @@ buildPythonPackage rec {
     hash = "sha256-D8xdMCy4fSff3nuS2sD2QHWk0869AlFDE+lFRvayYDQ=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    editdistpy
-  ];
+  dependencies = [ editdistpy ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -65,12 +62,11 @@ buildPythonPackage rec {
     "symspellpy.symspellpy"
   ];
 
-  meta = with lib;
-    {
-      description = "Python port of SymSpell v6.7.1, which provides much higher speed and lower memory consumption";
-      homepage = "https://github.com/mammothb/symspellpy";
-      changelog = "https://github.com/mammothb/symspellpy/releases/tag/v${version}";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vizid ];
-    };
+  meta = with lib; {
+    description = "Python port of SymSpell v6.7.1, which provides much higher speed and lower memory consumption";
+    homepage = "https://github.com/mammothb/symspellpy";
+    changelog = "https://github.com/mammothb/symspellpy/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vizid ];
+  };
 }

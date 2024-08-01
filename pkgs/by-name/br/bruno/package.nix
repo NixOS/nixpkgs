@@ -8,6 +8,7 @@
 , writeShellScriptBin
 , makeWrapper
 , copyDesktopItems
+, giflib
 , makeDesktopItem
 , pkg-config
 , pixman
@@ -27,20 +28,20 @@ let
 in
 buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.16.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-nhs44W7cOREdULdXFNZpFGeeZeVTGUffKOBhtL4zAaw=";
+    hash = "sha256-RcMmW1+XbQSVeaYnK7y8/WdQLYOIozyt9OCDAsSZ3HU=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-p4rBEOK9zKGO1q3SCKpfdX3EPMkYHRvn9UnGBhsksSE=";
+  npmDepsHash = "sha256-157hm7h5FWuOuxoo6WTtlMPq5LcRZIsSt5NDg0pvim8=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
@@ -57,6 +58,7 @@ buildNpmPackage' rec {
     pango
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreText
+    giflib
   ];
 
   desktopItems = [
@@ -147,11 +149,11 @@ buildNpmPackage' rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "Open-source IDE For exploring and testing APIs.";
+    description = "Open-source IDE For exploring and testing APIs";
     homepage = "https://www.usebruno.com";
-    inherit (electron.meta) platforms;
+    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mit;
-    maintainers = with maintainers; [ gepbird kashw2 lucasew mattpolzin water-sucks ];
+    maintainers = with maintainers; [ gepbird kashw2 lucasew mattpolzin water-sucks redyf ];
     mainProgram = "bruno";
   };
 }

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.6.76";
 
   src = fetchurl {
-    url = "http://www.five-ten-sg.com/libpst/packages/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "http://www.five-ten-sg.com/libpst/packages/libpst-${finalAttrs.version}.tar.gz";
     hash = "sha256-PSkb7rvbSNK5NGCLwGGVtkHaY9Ko9eDThvLp1tBaC0I=";
   };
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.five-ten-sg.com/libpst/";
-    description = "A library to read PST (MS Outlook Personal Folders) files";
+    description = "Library to read PST (MS Outlook Personal Folders) files";
     license = licenses.gpl2Plus;
     maintainers = [ ];
     platforms = platforms.unix;

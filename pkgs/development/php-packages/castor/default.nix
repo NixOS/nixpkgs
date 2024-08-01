@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, php
-, nix-update-script
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  php,
+  nix-update-script,
+  testers,
 }:
 
 php.buildComposerProject (finalAttrs: {

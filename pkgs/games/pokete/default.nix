@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A terminal based Pokemon like game";
+    description = "Terminal based Pokemon like game";
     mainProgram = "pokete";
     homepage = "https://lxgr-linux.github.io/pokete";
     license = licenses.gpl3Only;

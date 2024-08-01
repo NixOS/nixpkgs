@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://apng2gif.sourceforge.net/";
-    description = "A simple program that converts APNG files to animated GIF format";
+    description = "Simple program that converts APNG files to animated GIF format";
     license = licenses.zlib;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

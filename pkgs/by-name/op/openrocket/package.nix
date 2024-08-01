@@ -60,7 +60,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     changelog = "https://github.com/openrocket/openrocket/releases/tag/${finalAttrs.src.rev}";
     description = "Model-rocketry aerodynamics and trajectory simulation software";
-    homepage = "openrocket.info";
+    homepage = "https://openrocket.info";
     license = lib.licenses.gpl3Plus;
     mainProgram = "openrocket";
     maintainers = with lib.maintainers; [ tomasajt ];

@@ -2,7 +2,7 @@ let
 
   generic =
       # dependencies
-      { stdenv, lib, fetchurl, makeWrapper, fetchpatch
+      { stdenv, lib, fetchurl, fetchpatch, makeWrapper
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
       , linux-pam
@@ -120,6 +120,22 @@ let
         locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
 
+      (
+        if atLeast "16" then
+          fetchpatch {
+            name = "libxml2-2.13-compat.patch";
+            # This one is for 16 branch upstream.
+            url = "https://github.com/postgres/postgres/commit/f85c91a1867b45742bb28e4578ca2b4a0976383f.diff";
+            hash = "sha256-4YcXfo98uVuCu+ybVw3bM4x8Y0I1xfjdjBZOlhyF21w=";
+          }
+        else
+          fetchpatch {
+            name = "libxml2-2.13-compat.patch";
+            # This one is for 15 branch upstream, but it also applies well to all our older branches.
+            url = "https://github.com/postgres/postgres/commit/f68d6aabb7e2c803818185b49a3d356bdb2b2974.diff";
+            hash = "sha256-Nelb0mbjx0Xq9UJuVv7cs3ifCtUPP7UZraPMPGb2wyQ=";
+          }
+      )
     ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
       # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
       map fetchurl (lib.attrValues muslPatches)
@@ -198,18 +214,6 @@ let
     # autodetection doesn't seem to able to find this, but it's there.
     checkTarget = "check";
 
-    # TODO: Remove after the next set of minor releases on May 9th 2024
-    preCheck =
-      # On musl, comment skip the following tests, because they break due to
-      #     ! ERROR:  could not load library "/build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so": Error loading shared library libpq.so.5: No such file or directory (needed by /build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so)
-      # See also here:
-      #     https://git.alpinelinux.org/aports/tree/main/postgresql/disable-broken-tests.patch?id=6d7d32c12e073a57a9e5946e55f4c1fbb68bd442
-      if stdenv'.hostPlatform.isMusl then ''
-        substituteInPlace src/test/regress/parallel_schedule \
-          --replace "subscription" "" \
-          --replace "object_address" ""
-      '' else null;
-
     disallowedReferences = [ stdenv'.cc ];
 
     passthru = let
@@ -261,10 +265,10 @@ let
 
     meta = with lib; {
       homepage    = "https://www.postgresql.org";
-      description = "A powerful, open source object-relational database system";
+      description = "Powerful, open source object-relational database system";
       license     = licenses.postgresql;
       changelog   = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
-      maintainers = with maintainers; [ thoughtpolice danbst globin ivan ma27 ];
+      maintainers = with maintainers; [ thoughtpolice danbst globin ivan ma27 wolfgangwalther ];
       pkgConfigModules = [ "libecpg" "libecpg_compat" "libpgtypes" "libpq" ];
       platforms   = platforms.unix;
 

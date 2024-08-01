@@ -7,7 +7,7 @@
 
 let
   pname = "llm-ls";
-  version = "0.5.2";
+  version = "0.5.3";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage {
     owner = "huggingface";
     repo = "llm-ls";
     rev = version;
-    sha256 = "sha256-DyPdx+nNBhOZ86GQljMYULatWny2EteNNzzO6qv1Wlk=";
+    sha256 = "sha256-ICMM2kqrHFlKt2/jmE4gum1Eb32afTJkT3IRoqcjJJ8=";
   };
 
-  cargoHash = "sha256-7McUyQjnCuV0JG65hUoR8TtB4vrjiEO1l7NXYochgG8=";
+  cargoHash = "sha256-Fat67JxTYIkxkdwGNAyTfnuLt8ofUGVJ2609sbn1frU=";
 
   nativeBuildInputs = [ pkg-config ];
 

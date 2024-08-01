@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -9,6 +10,7 @@
 , gdk-pixbuf
 , gtk4
 , wrapGAppsHook4
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,10 +38,12 @@ rustPlatform.buildRustPackage rec {
     atk
     gdk-pixbuf
     gtk4
-  ];
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Foundation
+  ]);
 
   meta = with lib; {
-    description = "A simple but powerful and fast bulk file renamer";
+    description = "Simple but powerful and fast bulk file renamer";
     homepage = "https://github.com/qarmin/szyszka";
     license = licenses.mit;
     maintainers = with maintainers; [ kranzes ];

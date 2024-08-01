@@ -1,6 +1,9 @@
 { lib, stdenv
 , fetchFromBitbucket
 , autoreconfHook
+
+# Reverse dependency
+, sage
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
   ];
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     description = "Littlewood-Richardson calculator";

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alfaview";
-  version = "9.9.1";
+  version = "9.13.0";
 
   src = fetchurl {
     url = "https://assets.alfaview.com/stable/linux/deb/${pname}_${version}.deb";
-    hash = "sha256-GZLIVpXQ22W4JykdLJ7pTogOFhDaiukgsLa2E7giiaU=";
+    hash = "sha256-ENd3ozRi47vszgHZIX63nQu7wZz6Zf4HdmCsNvkcLOo=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage = "https://alfaview.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang hexchen ];
+    maintainers = [ ];
     mainProgram = "alfaview";
     platforms = [ "x86_64-linux" ];
   };

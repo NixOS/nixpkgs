@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xscreensaver";
-  version = "6.08";
+  version = "6.09";
 
   src = fetchurl {
     url = "https://www.jwz.org/xscreensaver/xscreensaver-${finalAttrs.version}.tar.gz";
-    hash = "sha256-XPUrpSXO7PlLLyvWNIXr3zGOEvzA8q2tfUwQbYVedqM=";
+    hash = "sha256-9GZ3Ba24zEP9LzlzqIobVLFvIBkK/pOyHiIfL1cyCwU=";
   };
 
   outputs = [ "out" "man" ];
@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.jwz.org/xscreensaver/";
-    description = "A set of screensavers";
+    description = "Set of screensavers";
     downloadPage = "https://www.jwz.org/xscreensaver/download.html";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raskin AndersonTorres ];

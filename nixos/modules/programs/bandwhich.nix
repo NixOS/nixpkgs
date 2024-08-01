@@ -1,15 +1,13 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let cfg = config.programs.bandwhich;
 in {
-  meta.maintainers = with maintainers; [ Br1ght0ne ];
+  meta.maintainers = with lib.maintainers; [ Br1ght0ne ];
 
   options = {
     programs.bandwhich = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to add bandwhich to the global environment and configure a
@@ -19,7 +17,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ bandwhich ];
     security.wrappers.bandwhich = {
       owner = "root";

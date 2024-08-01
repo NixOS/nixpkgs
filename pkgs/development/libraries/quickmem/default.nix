@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "arpa2";
     repo = "Quick-MEM";
     rev = "v${version}";
-    sha256 = "sha256-cqg8QN4/I+zql7lVDDAgFA05Dmg4ylBTvPSPP7WATdc=";
+    hash = "sha256-cqg8QN4/I+zql7lVDDAgFA05Dmg4ylBTvPSPP7WATdc=";
   };
 
   nativeBuildInputs = [

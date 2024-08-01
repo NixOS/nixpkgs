@@ -10,7 +10,7 @@ bundlerEnv {
   passthru.tests.fluentd = nixosTests.fluentd;
 
   meta = with lib; {
-    description = "A data collector";
+    description = "Data collector";
     homepage    = "https://www.fluentd.org/";
     license     = licenses.asl20;
     maintainers = with maintainers; [ offline nicknovitski ];

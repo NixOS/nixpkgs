@@ -1,20 +1,21 @@
-{ lib
-, boto3
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, hatchling
-, mock
-, python
-, pythonOlder
-, requests
-, responses
-, urllib3
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  hatchling,
+  mock,
+  python,
+  pythonOlder,
+  requests,
+  responses,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "django-anymail";
-  version = "10.3";
+  version = "11.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,12 +24,10 @@ buildPythonPackage rec {
     owner = "anymail";
     repo = "django-anymail";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5uSpPeXpMkpuzMXzsGE6uQJWP/Dt/oqakB8Xb5G1eZY=";
+    hash = "sha256-tCGohY/vwdKKOqhFGLJqX+kyl0n3XUJToJMErICGjEw=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     django
@@ -42,9 +41,7 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.amazon-ses;
 
   passthru.optional-dependencies = {
-    amazon-ses = [
-      boto3
-    ];
+    amazon-ses = [ boto3 ];
   };
 
   checkPhase = ''
@@ -53,9 +50,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "anymail"
-  ];
+  pythonImportsCheck = [ "anymail" ];
 
   meta = with lib; {
     description = "Django email backends and webhooks for Mailgun";

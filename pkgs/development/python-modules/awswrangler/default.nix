@@ -1,5 +1,4 @@
 {
-  backoff,
   sparqlwrapper,
   boto3,
   buildPythonPackage,
@@ -20,14 +19,13 @@
   pyparsing,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   redshift-connector,
   requests-aws4auth,
 }:
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.7.3";
+  version = "3.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,18 +34,13 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-sdk-pandas";
     rev = "refs/tags/${version}";
-    hash = "sha256-gm6ieteW+NcY+AOLcMZLUPcSi2Z/Mo27rzd1i9imp5I=";
+    hash = "sha256-XhTRnQ2wsCD2jiiRFHDagmMB26lZ8Oj+tscgVypN0+c=";
   };
 
   pythonRelaxDeps = [ "packaging" ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   dependencies = [
     boto3
@@ -75,9 +68,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "awswrangler"
-  ];
+  pythonImportsCheck = [ "awswrangler" ];
 
   pytestFlagsArray = [
     # Subset of tests that run in upstream CI (many others require credentials)

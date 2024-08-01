@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "Suspends automatic idling of Wayland compositors when media is being played through Pipewire.";
+    description = "Suspends automatic idling of Wayland compositors when media is being played through Pipewire";
     homepage = "https://github.com/rafaelrc7/wayland-pipewire-idle-inhibit/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

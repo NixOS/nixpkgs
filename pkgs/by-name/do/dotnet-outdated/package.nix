@@ -8,13 +8,13 @@ let
 
 in buildDotnetModule rec {
   pname = "dotnet-outdated";
-  version = "4.6.1";
+  version = "4.6.4";
 
   src = fetchFromGitHub {
     owner = "dotnet-outdated";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cYEW++XKCBhB4fyGj4bDKOBuQ1CJwm9CfZfiZUiy7Sw=";
+    hash = "sha256-Ah5VOCIkSRkeDWk/KYHIc/OELo0T/HuJl0LEUiumlu0=";
   };
 
   inherit dotnet-sdk;
@@ -29,7 +29,7 @@ in buildDotnetModule rec {
   dotnetInstallFlags = [ "--framework" "net8.0" ];
 
   meta = with lib; {
-    description = "A .NET Core global tool to display and update outdated NuGet packages in a project";
+    description = ".NET Core global tool to display and update outdated NuGet packages in a project";
     homepage = "https://github.com/dotnet-outdated/dotnet-outdated";
     sourceProvenance = with sourceTypes; [
       fromSource

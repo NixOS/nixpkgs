@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchgit,
   linkFarm,
   dub,
   ldc,
@@ -43,11 +44,27 @@ let
       };
     };
 
-  lockJson = if lib.isPath dubLock then lib.importJSON dubLock else dubLock;
+  makeGitDep =
+    {
+      pname,
+      version,
+      repository,
+      sha256,
+    }:
+    {
+      inherit pname version;
+      src = fetchgit {
+        url = repository;
+        rev = version;
+        inherit sha256;
+      };
+    };
 
-  lockedDeps = lib.mapAttrsToList (
-    pname: { version, sha256 }: makeDubDep { inherit pname version sha256; }
-  ) lockJson.dependencies;
+  lockJson = if lib.isPath dubLock then lib.importJSON dubLock else dubLock;
+  depsRaw = lib.mapAttrsToList (pname: args: { inherit pname; } // args) lockJson.dependencies;
+
+  dubDeps = map makeDubDep (lib.filter (args: !(args ? repository)) depsRaw);
+  gitDeps = map makeGitDep (lib.filter (args: args ? repository) depsRaw);
 
   # a directory with multiple single element registries
   # one big directory with all .zip files leads to version parsing errors
@@ -56,7 +73,7 @@ let
     map (dep: {
       name = "${dep.pname}/${dep.pname}-${dep.version}.zip";
       path = dep.src;
-    }) lockedDeps
+    }) dubDeps
   );
 
   combinedFlags = "--skip-registry=all --compiler=${lib.getExe compiler} ${toString dubFlags}";
@@ -79,12 +96,18 @@ stdenv.mkDerivation (
         runHook preConfigure
 
         export DUB_HOME="$NIX_BUILD_TOP/.dub"
-        mkdir -p $DUB_HOME
+        mkdir -p "$DUB_HOME"
 
-        # register dependencies
+        # register dub dependencies
         ${lib.concatMapStringsSep "\n" (dep: ''
           dub fetch ${dep.pname}@${dep.version} --cache=user --skip-registry=standard --registry=file://${dubRegistryBase}/${dep.pname}
-        '') lockedDeps}
+        '') dubDeps}
+
+        # register git dependencies
+        ${lib.concatMapStringsSep "\n" (dep: ''
+          mkdir -p "$DUB_HOME/packages/${dep.pname}/${dep.version}"
+          cp -r --no-preserve=all ${dep.src} "$DUB_HOME/packages/${dep.pname}/${dep.version}/${dep.pname}"
+        '') gitDeps}
 
         runHook postConfigure
       '';

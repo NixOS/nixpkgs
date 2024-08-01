@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, flit-core
-, pytestCheckHook
-, numpy
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  numpy,
+  scipy,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-nWaBhiFw76azx6dV4I18XodiUnHiLb0gNNhXks6iHIg=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     "test_threadpool_limits_manual_restore"
   ];
 
-  pythonImportsCheck = [
-    "threadpoolctl"
-  ];
+  pythonImportsCheck = [ "threadpoolctl" ];
 
   meta = with lib; {
     homepage = "https://github.com/joblib/threadpoolctl";
@@ -57,5 +54,4 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };
-
 }

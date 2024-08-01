@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/rakitzis/rc";
-    description = "The Plan 9 shell";
+    description = "Plan 9 shell";
     license = [ lib.licenses.zlib ];
     mainProgram = "rc";
     maintainers = with lib.maintainers; [ ramkromberg AndersonTorres ];

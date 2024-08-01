@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "General purpose text processing utility based on the concept of pattern matching.";
+    description = "General purpose text processing utility based on the concept of pattern matching";
     longDescription = "Reads an input file and copies it to an output file transforming the data as specified by the patterns defined by the user.";
     homepage = "https://gema.sourceforge.net/";
     license = lib.licenses.mit;

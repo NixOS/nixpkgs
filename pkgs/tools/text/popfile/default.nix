@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An email classification system that automatically sorts messages and fights spam";
+    description = "Email classification system that automatically sorts messages and fights spam";
     homepage = "https://getpopfile.org/";
     license = lib.licenses.gpl2Only;
 

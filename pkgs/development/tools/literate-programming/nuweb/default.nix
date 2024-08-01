@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple literate programming tool";
+    description = "Simple literate programming tool";
     mainProgram = "nuweb";
     homepage = "https://nuweb.sourceforge.net";
     license = licenses.free;

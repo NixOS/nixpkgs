@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, icalendar
-, pytz
-, pytestCheckHook
-, restructuredtext-lint
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  icalendar,
+  pytz,
+  pytestCheckHook,
+  restructuredtext-lint,
+  pygments,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-itqsVYYUcpbKTh0BM6IHk6F9xhB+pAQnnJsnZAVpNL4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     icalendar

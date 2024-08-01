@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, sudachidict
-, setuptools
-, sudachipy
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  sudachidict,
+  setuptools,
+  sudachipy,
 }:
 
 buildPythonPackage rec {
@@ -30,13 +31,9 @@ buildPythonPackage rec {
       --replace "%%DICT_TYPE%%" ${sudachidict.dict-type}
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    sudachipy
-  ];
+  propagatedBuildInputs = [ sudachipy ];
 
   # we need to prepare some files before the build
   # https://github.com/WorksApplications/SudachiDict/blob/develop/package_python.sh

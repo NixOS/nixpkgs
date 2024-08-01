@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, six
-, requests
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  six,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,10 @@ buildPythonPackage rec {
     touch changelog.md
   '';
 
-  propagatedBuildInputs = [ six requests ];
+  propagatedBuildInputs = [
+    six
+    requests
+  ];
 
   # requires an active Azure Cosmos service
   doCheck = false;
@@ -29,6 +33,6 @@ buildPythonPackage rec {
     description = "Azure Cosmos DB API";
     homepage = "https://github.com/Azure/azure-cosmos-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

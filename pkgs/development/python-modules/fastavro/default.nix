@@ -1,22 +1,23 @@
-{ buildPythonPackage
-, cython
-, fetchFromGitHub
-, isPy38
-, lib
-, lz4
-, numpy
-, pandas
-, pytestCheckHook
-, python-dateutil
-, python-snappy
-, pythonOlder
-, zlib-ng
-, zstandard
+{
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  isPy38,
+  lib,
+  lz4,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  python-dateutil,
+  python-snappy,
+  pythonOlder,
+  zlib-ng,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.9.4";
+  version = "1.9.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-UWvNEi6vzQknUws+b7UCFUajMUJkfnQkfBeCR0XfqQY=";
+    hash = "sha256-rw0kTSROCFthjo8SrLevBiACNaKpKWcZfIYoc89Q3eM=";
   };
 
   preBuild = ''
@@ -40,15 +41,9 @@ buildPythonPackage rec {
       python-snappy
       zstandard
     ];
-    snappy = [
-      python-snappy
-    ];
-    zstandard = [
-      zstandard
-    ];
-    lz4 = [
-      lz4
-    ];
+    snappy = [ python-snappy ];
+    zstandard = [ zstandard ];
+    lz4 = [ lz4 ];
   };
 
   nativeCheckInputs = [

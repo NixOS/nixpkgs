@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gnome, glib, libxml2, gtk-engine-murrine, gdk-pixbuf, librsvg, bc }:
+{ lib, stdenv, fetchFromGitHub, gnome, gnome-themes-extra, glib, libxml2, gtk-engine-murrine, gdk-pixbuf, librsvg, bc }:
 
 stdenv.mkDerivation rec {
   pname = "equilux-theme";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ glib libxml2 bc ];
 
-  buildInputs = [ gnome.gnome-themes-extra gdk-pixbuf librsvg ];
+  buildInputs = [ gnome-themes-extra gdk-pixbuf librsvg ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A Material Design theme for GNOME/GTK based desktop environments";
+    description = "Material Design theme for GNOME/GTK based desktop environments";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.fpletz ];

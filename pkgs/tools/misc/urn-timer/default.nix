@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "urn-timer";
-  version = "unstable-2024-03-05";
+  version = "0-unstable-2024-03-05";
 
   src = fetchFromGitHub {
     owner = "paoloose";

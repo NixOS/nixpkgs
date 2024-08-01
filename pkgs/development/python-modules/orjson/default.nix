@@ -1,36 +1,37 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, rustPlatform
-, cffi
+  # build-system
+  rustPlatform,
+  cffi,
 
-# native dependencies
-, libiconv
+  # native dependencies
+  libiconv,
 
-# tests
-, numpy
-, psutil
-, pytestCheckHook
-, python-dateutil
-, pytz
-, xxhash
-, python
+  # tests
+  numpy,
+  psutil,
+  pytestCheckHook,
+  python-dateutil,
+  pytz,
+  xxhash,
+  python,
 
-# for passthru.tests
-, falcon
-, fastapi
-, gradio
-, mashumaro
-, ufolib2
+  # for passthru.tests
+  falcon,
+  fastapi,
+  gradio,
+  mashumaro,
+  ufolib2,
 }:
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.10.1";
+  version = "3.10.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,27 +40,25 @@ buildPythonPackage rec {
     owner = "ijl";
     repo = "orjson";
     rev = "refs/tags/${version}";
-    hash = "sha256-vEJriLd7f+zlYcMIyhDTkq2kmNc5MaNLHo0qMLS5hro=";
+    hash = "sha256-K3wCzwaGOsaiCm2LW4Oc4XOnp6agrdTxCxqEIMq0fuU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-yQkpjedHwgsZiiZEzYV66aa9RepCFW0PBqtD29tfoMI=";
+    hash = "sha256-SNdwqb47dJ084TMNsm2Btks1UCDerjSmSrQQUiGbx50=";
   };
 
   maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
-  nativeBuildInputs = [
-    cffi
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  nativeBuildInputs =
+    [ cffi ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+    ]);
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   nativeCheckInputs = [
     numpy
@@ -70,9 +69,7 @@ buildPythonPackage rec {
     xxhash
   ];
 
-  pythonImportsCheck = [
-    "orjson"
-  ];
+  pythonImportsCheck = [ "orjson" ];
 
   passthru.tests = {
     inherit
@@ -81,14 +78,17 @@ buildPythonPackage rec {
       gradio
       mashumaro
       ufolib2
-    ;
+      ;
   };
 
   meta = with lib; {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
     homepage = "https://github.com/ijl/orjson";
     changelog = "https://github.com/ijl/orjson/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ misuzu ];
   };

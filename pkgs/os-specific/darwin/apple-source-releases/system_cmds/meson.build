@@ -88,6 +88,7 @@ install_man('accton/accton.8')
 executable(
     'arch',
     build_by_default : sdk_version.version_compare('>=11'),
+    dependencies : [ core_foundation ],
     install : sdk_version.version_compare('>=11'),
     sources : 'arch/arch.c'
 )
@@ -145,7 +146,7 @@ install_man('chkpasswd/chkpasswd.8')
 
 executable(
     'chpass',
-    dependencies : [ cfopen_directory, directory_service, open_directory ],
+    dependencies : [ core_foundation, cfopen_directory, directory_service, open_directory ],
     install : true,
     sources : [
         'chpass/chpass.c',
@@ -358,7 +359,7 @@ install_man(
 executable(
     'nvram',
     c_args : '-DTARGET_OS_BRIDGE=0',
-    dependencies : [ iokit, libc_private, xnu_private ],
+    dependencies : [ core_foundation, iokit, libc_private, xnu_private ],
     install : true,
     sources : 'nvram/nvram.c'
 )
@@ -377,7 +378,7 @@ install_man('pagesize/pagesize.1')
 
 executable(
     'passwd',
-    dependencies : [ cfopen_directory, directory_service, open_directory, pam ],
+    dependencies : [ core_foundation, cfopen_directory, directory_service, open_directory, pam ],
     install : true,
     sources : [
         'passwd/file_passwd.c',
@@ -521,7 +522,7 @@ executable(
     'zlog',
     build_by_default : sdk_version.version_compare('>=11'),
     c_args : '-DKERN_NOT_FOUND=56',
-    dependencies : core_symbolication,
+    dependencies : [ core_foundation, core_symbolication ],
     install : sdk_version.version_compare('>=11'),
     sources : [
         'zlog/SymbolicationHelper.c',

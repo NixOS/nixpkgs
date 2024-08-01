@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "The European Molecular Biology Open Software Suite";
+    description = "European Molecular Biology Open Software Suite";
     longDescription = ''EMBOSS is a free Open Source software analysis package
     specially developed for the needs of the molecular biology (e.g. EMBnet)
     user community, including libraries. The software automatically copes with

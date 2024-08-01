@@ -29,9 +29,6 @@ let
   };
 
   nixosRules = ''
-    # Miscellaneous devices.
-    KERNEL=="kvm",                  MODE="0666"
-
     # Needed for gpm.
     SUBSYSTEM=="input", KERNEL=="mice", TAG+="systemd"
   '';
@@ -93,7 +90,7 @@ let
       echo "OK"
 
       echo -n "Checking that all programs called by absolute paths in udev rules exist... "
-      import_progs=$(grep 'IMPORT{program}="\/' $out/* |
+      import_progs=$(grep 'IMPORT{program}="/' $out/* |
         sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
       run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="/' |
         sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)
@@ -167,10 +164,16 @@ let
       mv etc/udev/hwdb.bin $out
     '';
 
-  compressFirmware = firmware: if (config.boot.kernelPackages.kernelAtLeast "5.3" && (firmware.compressFirmware or true)) then
-    pkgs.compressFirmwareXz firmware
-  else
-    id firmware;
+  compressFirmware = firmware:
+    let
+      inherit (config.boot.kernelPackages) kernelAtLeast;
+    in
+      if ! (firmware.compressFirmware or true) then
+        firmware
+      else
+        if kernelAtLeast "5.19" then pkgs.compressFirmwareZstd firmware
+        else if kernelAtLeast "5.3" then pkgs.compressFirmwareXz firmware
+        else firmware;
 
   # Udev has a 512-character limit for ENV{PATH}, so create a symlink
   # tree to work around this.

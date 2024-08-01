@@ -71,7 +71,7 @@ mkDerivation rec {
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";
     changelog = "https://github.com/supercollider/supercollider/blob/Version-${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

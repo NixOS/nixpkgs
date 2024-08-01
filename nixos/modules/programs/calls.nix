@@ -1,19 +1,17 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.calls;
 in {
   options = {
     programs.calls = {
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         GNOME calls: a phone dialer and call handler
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     programs.dconf.enable = true;
 
     environment.systemPackages = [

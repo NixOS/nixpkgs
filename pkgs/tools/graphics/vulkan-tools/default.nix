@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.280.0";
+  version = "1.3.283.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-v6Piz1nvNffopz5FVRkgJ1pXj63jCWTyNopkpjcBFXA=";
+    hash = "sha256-IAlqFCenv5e70XyLSYh2fE84JZQFJwg+YKTGaK7ShKA=";
   };
 
   nativeBuildInputs = [

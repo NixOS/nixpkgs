@@ -1,17 +1,18 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, python
-, zope-testrunner
-, transaction
-, six
-, zope-interface
-, zodbpickle
-, zconfig
-, persistent
-, zc-lockfile
-, btrees
-, manuel
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  python,
+  zope-testrunner,
+  transaction,
+  six,
+  zope-interface,
+  zodbpickle,
+  zconfig,
+  persistent,
+  zc-lockfile,
+  btrees,
+  manuel,
 }:
 
 buildPythonPackage rec {
@@ -54,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://zodb-docs.readthedocs.io/";
     changelog = "https://github.com/zopefoundation/ZODB/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "An implementation of the C++ standard template library STL for external memory (out-of-core) computations";
+    description = "Implementation of the C++ standard template library STL for external memory (out-of-core) computations";
     homepage = "https://github.com/stxxl/stxxl";
     license = licenses.boost;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "stxxl_tool";
     platforms = platforms.all;
   };

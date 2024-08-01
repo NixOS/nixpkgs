@@ -17,8 +17,7 @@
 }:
 
 let
-  useGccGoBootstrap = stdenv.buildPlatform.isMusl;
-  goBootstrap = if useGccGoBootstrap then buildPackages.gccgo12 else buildPackages.callPackage ./bootstrap121.nix { };
+  goBootstrap = buildPackages.callPackage ./bootstrap121.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo122Module; };
 
@@ -37,6 +36,7 @@ let
     "riscv64" = "riscv64";
     "s390x" = "s390x";
     "x86_64" = "amd64";
+    "wasm32" = "wasm";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
 
   # We need a target compiler which is still runnable at build time,
@@ -47,11 +47,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.22.2";
+  version = "1.22.5";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-N06oKyiexzjpaCZ8rFnH1f8YD5SSJQJUeEsgROkN9ak=";
+    hash = "sha256-rJxyPyJJaa7mJLw0/TTJ4T8qIS11xxyAfeZEu0bhEvY=";
   };
 
   strictDeps = true;
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./go_no_vendor_checks-1.22.patch
   ];
 
-  GOOS = stdenv.targetPlatform.parsed.kernel.name;
+  GOOS = if stdenv.targetPlatform.isWasi then "wasip1" else stdenv.targetPlatform.parsed.kernel.name;
   GOARCH = goarch stdenv.targetPlatform;
   # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
   # Go will nevertheless build a for host system that we will copy over in
@@ -113,9 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   GOARM = toString (lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
-  CGO_ENABLED = 1;
+  # Wasi does not support CGO
+  CGO_ENABLED = if stdenv.targetPlatform.isWasi then 0 else 1;
 
-  GOROOT_BOOTSTRAP = if useGccGoBootstrap then goBootstrap else "${goBootstrap}/share/go";
+  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
   buildPhase = ''
     runHook preBuild
@@ -180,11 +181,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
-    description = "The Go Programming language";
+    description = "Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;
     maintainers = teams.golang.members;
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
     mainProgram = "go";
   };
 })

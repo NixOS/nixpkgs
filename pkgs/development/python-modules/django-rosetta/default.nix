@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, polib
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  polib,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # require internet connection
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rosetta"
-  ];
+  pythonImportsCheck = [ "rosetta" ];
 
   meta = with lib; {
     description = "Rosetta is a Django application that facilitates the translation process of your Django projects";
@@ -42,4 +41,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ derdennisop ];
   };
 }
-

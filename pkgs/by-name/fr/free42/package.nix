@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "free42";
-  version = "3.1.5";
+  version = "3.1.8";
 
   src = fetchFromGitHub {
     owner = "thomasokken";
     repo = "free42";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YFTmEyOd/r8Pbj+PzD+VYkkB0gqDJ4wteLBTdwa1qcE=";
+    hash = "sha256-z1HlI2e3mCRJ/sWMdsLF7IpcvTh+Zlrk77M8gaJXMzQ=";
   };
 
   nativeBuildInputs = [
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/thomasokken/free42";
-    description = "A software clone of HP-42S Calculator";
+    description = "Software clone of HP-42S Calculator";
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ AndersonTorres ];
     mainProgram = "free42dec";

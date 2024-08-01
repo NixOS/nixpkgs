@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An OBS Studio source, encoder and video filter plugin to use GStreamer elements/pipelines in OBS Studio";
+    description = "OBS Studio source, encoder and video filter plugin to use GStreamer elements/pipelines in OBS Studio";
     homepage = "https://github.com/fzwoch/obs-gstreamer";
     maintainers = with maintainers; [ ahuzik pedrohlc ];
     license = licenses.gpl2Plus;

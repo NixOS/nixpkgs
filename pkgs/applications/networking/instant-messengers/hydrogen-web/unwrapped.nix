@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "vector-im";
-    repo = finalAttrs.pname;
+    repo = "hydrogen-web";
     rev = "v${finalAttrs.version}";
     hash = "sha256-u8Yex3r7EZH+JztQHJbfncYeyyl6hgb1ZNFIg//wcb0=";
   };

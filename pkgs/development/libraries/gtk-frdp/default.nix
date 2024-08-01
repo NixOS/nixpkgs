@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-frdp";
-  version = "unstable-2024-03-01";
+  version = "3.37.1-unstable-2024-03-01";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -41,7 +41,9 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
   };
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [

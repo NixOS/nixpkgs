@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, jinja2
-, pdoc-pyo3-sample-library
-, pygments
-, markupsafe
-, astunparse
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  jinja2,
+  pdoc-pyo3-sample-library,
+  pygments,
+  markupsafe,
+  astunparse,
+  pytestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "14.4.0";
+  version = "14.6.0";
   disabled = pythonOlder "3.8";
 
   pyproject = true;
@@ -23,12 +24,10 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "pdoc";
     rev = "v${version}";
-    hash = "sha256-2k9uIK6TvoGtVqnh97g9f5QvjhyZlznRvYdw5sPaeVE=";
+    hash = "sha256-kQBW8bN8WYvWzpqM6JatB3bB/bAQqpHGd98prznyO+g=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   dependencies = [
     jinja2

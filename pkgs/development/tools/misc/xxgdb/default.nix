@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "A simple but powerful graphical interface to gdb";
+    description = "Simple but powerful graphical interface to gdb";
     mainProgram = "xxgdb";
     license = licenses.mit;
     maintainers = with maintainers; [ emilytrau ];

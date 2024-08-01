@@ -1,45 +1,46 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, callPackage
-, cargo
-, certifi
-, cffi
-, cryptography-vectors ? (callPackage ./vectors.nix { })
-, fetchPypi
-, fetchpatch2
-, isPyPy
-, libiconv
-, libxcrypt
-, openssl
-, pkg-config
-, pretend
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, rustc
-, rustPlatform
-, Security
-, setuptoolsRustBuildHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  callPackage,
+  cargo,
+  certifi,
+  cffi,
+  cryptography-vectors ? (callPackage ./vectors.nix { }),
+  fetchPypi,
+  fetchpatch2,
+  isPyPy,
+  libiconv,
+  libxcrypt,
+  openssl,
+  pkg-config,
+  pretend,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  rustc,
+  rustPlatform,
+  Security,
+  setuptoolsRustBuildHook,
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "42.0.5"; # Also update the hash in vectors.nix
+  version = "42.0.8"; # Also update the hash in vectors.nix
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-b+B+7JXf1HfrlTCu9b6tNP7IGbOq9sW9bSBWXaYHv+E=";
+    hash = "sha256-jQnQVDnOe6qOnpWwfsW2yIb1SN634Pae8l9ks7zoQvI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-Pw3ftpcDMfZr/w6US5fnnyPVsFSB9+BuIKazDocYjTU=";
+    hash = "sha256-PgxPcFocEhnQyrsNtCN8YHiMptBmk1PUhEDQFdUR1nU=";
   };
 
   patches = [
@@ -63,22 +64,17 @@ buildPythonPackage rec {
     cargo
     rustc
     pkg-config
-  ] ++ lib.optionals (!isPyPy) [
-    cffi
-  ];
+  ] ++ lib.optionals (!isPyPy) [ cffi ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    libiconv
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    libxcrypt
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+      libiconv
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
-  propagatedBuildInputs = lib.optionals (!isPyPy) [
-    cffi
-  ];
+  propagatedBuildInputs = lib.optionals (!isPyPy) [ cffi ];
 
   nativeCheckInputs = [
     certifi
@@ -88,9 +84,7 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlagsArray = [
-    "--disable-pytest-warnings"
-  ];
+  pytestFlagsArray = [ "--disable-pytest-warnings" ];
 
   disabledTestPaths = [
     # save compute time by not running benchmarks
@@ -98,16 +92,20 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A package which provides cryptographic recipes and primitives";
+    description = "Package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to
       common cryptographic algorithms such as symmetric ciphers, message
       digests, and key derivation functions.
     '';
     homepage = "https://github.com/pyca/cryptography";
-    changelog = "https://cryptography.io/en/latest/changelog/#v"
-      + replaceStrings [ "." ] [ "-" ] version;
-    license = with licenses; [ asl20 bsd3 psfl ];
+    changelog =
+      "https://cryptography.io/en/latest/changelog/#v" + replaceStrings [ "." ] [ "-" ] version;
+    license = with licenses; [
+      asl20
+      bsd3
+      psfl
+    ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

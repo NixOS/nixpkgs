@@ -403,7 +403,7 @@ in
       path = with pkgs; [
         # unfree:
         # config.boot.kernelPackages.nvidiaPackages.latest.bin
-        ffmpeg_5-headless
+        ffmpeg-headless
         libva-utils
         procps
         radeontop
@@ -427,10 +427,6 @@ in
         PrivateTmp = true;
         CacheDirectory = "frigate";
         CacheDirectoryMode = "0750";
-
-        BindPaths = [
-          "/migrations:${cfg.package}/share/frigate/migrations:ro"
-        ];
       };
     };
   };

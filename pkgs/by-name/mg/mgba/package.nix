@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://mgba.io";
-    description = "A modern GBA emulator with a focus on accuracy";
+    description = "Modern GBA emulator with a focus on accuracy";
     longDescription = ''
       mGBA is a new Game Boy Advance emulator written in C.
 

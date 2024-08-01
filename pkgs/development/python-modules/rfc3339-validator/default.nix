@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, hypothesis
-, six
-, strict-rfc3339
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  hypothesis,
+  six,
+  strict-rfc3339,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  nativeCheckInputs = [ pytestCheckHook hypothesis strict-rfc3339 ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+    strict-rfc3339
+  ];
   pythonImportsCheck = [ "rfc3339_validator" ];
 
   meta = with lib; {

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,12 +21,10 @@ buildPythonPackage rec {
 
   doCheck = false; # Circular dependency
 
-  pythonImportsCheck = [
-    "Cheetah"
-  ];
+  pythonImportsCheck = [ "Cheetah" ];
 
   meta = with lib; {
-    description = "A template engine and code generation tool";
+    description = "Template engine and code generation tool";
     homepage = "http://www.cheetahtemplate.org/";
     changelog = "https://github.com/CheetahTemplate3/cheetah3/releases/tag/${version}";
     license = licenses.mit;

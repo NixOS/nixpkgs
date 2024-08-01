@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "5.3.0";
+  version = "5.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "ecederstrand";
     repo = "exchangelib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rcXQJYjyWLPrlMci/j8IY7EbDEyyc+5uSOOXo0YwjKo=";
+    hash = "sha256-FPn2l+PkTXFqzjqF4kQ8KE49BXZUzDDIcFI3UqoxqQM=";
   };
 
   build-system = [ setuptools ];

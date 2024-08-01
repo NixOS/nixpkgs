@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-iLzGGgizUbaEG1xrNq4WDaWrGtcaLwAYgn4NGYiSDBo=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Update location for run with pytest
   preCheck = ''
@@ -29,9 +28,7 @@ buildPythonPackage rec {
       --replace '"xbefiles"' '"tests/xbefiles"'
   '';
 
-  pythonImportsCheck = [
-    "xbe"
-  ];
+  pythonImportsCheck = [ "xbe" ];
 
   meta = with lib; {
     description = "Library to work with XBE files";

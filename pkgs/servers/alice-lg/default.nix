@@ -78,10 +78,10 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/alice-lg/alice-lg";
-    description = "A looking-glass for BGP sessions";
+    description = "Looking-glass for BGP sessions";
     changelog = "https://github.com/alice-lg/alice-lg/blob/main/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ janik ];
+    maintainers = [ ];
     mainProgram = "alice-lg";
   };
 }

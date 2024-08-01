@@ -2,10 +2,10 @@
 , Foundation
 , bazelTest
 , callPackage
+, cctools
 , darwin
 , distDir
 , extraBazelArgs ? ""
-, fetchFromGitHub
 , fetchurl
 , jdk11_headless
 , lib
@@ -98,8 +98,8 @@ let
     #! ${runtimeShell}
 
     export CXX='${stdenv.cc}/bin/clang++'
-    export LD='${darwin.cctools}/bin/ld'
-    export LIBTOOL='${darwin.cctools}/bin/libtool'
+    export LD='${cctools}/bin/ld'
+    export LIBTOOL='${cctools}/bin/libtool'
     export CC='${stdenv.cc}/bin/clang'
 
     # XXX: hack for macosX, this flags disable bazel usage of xcode

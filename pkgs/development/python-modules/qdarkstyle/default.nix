@@ -1,8 +1,9 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, helpdev
-, qtpy
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  helpdev,
+  qtpy,
 }:
 
 buildPythonPackage rec {
@@ -19,10 +20,13 @@ buildPythonPackage rec {
   # No tests available
   doCheck = false;
 
-  propagatedBuildInputs = [ helpdev qtpy ];
+  propagatedBuildInputs = [
+    helpdev
+    qtpy
+  ];
 
   meta = with lib; {
-    description = "A dark stylesheet for Python and Qt applications";
+    description = "Dark stylesheet for Python and Qt applications";
     homepage = "https://github.com/ColinDuquesnoy/QDarkStyleSheet";
     license = licenses.mit;
     maintainers = with maintainers; [ nyanloutre ];

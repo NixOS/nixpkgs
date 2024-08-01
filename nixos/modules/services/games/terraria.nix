@@ -19,15 +19,28 @@ let
     (boolFlag "secure" cfg.secure)
     (boolFlag "noupnp" cfg.noUPnP)
   ];
-  stopScript = pkgs.writeScript "terraria-stop" ''
-    #!${pkgs.runtimeShell}
 
+  tmuxCmd = "${lib.getExe pkgs.tmux} -S ${lib.escapeShellArg cfg.dataDir}/terraria.sock";
+
+  stopScript = pkgs.writeShellScript "terraria-stop" ''
     if ! [ -d "/proc/$1" ]; then
       exit 0
     fi
 
-    ${getBin pkgs.tmux}/bin/tmux -S ${cfg.dataDir}/terraria.sock send-keys Enter exit Enter
-    ${getBin pkgs.coreutils}/bin/tail --pid="$1" -f /dev/null
+    lastline=$(${tmuxCmd} capture-pane -p | grep . | tail -n1)
+
+    # If the service is not configured to auto-start a world, it will show the world selection prompt
+    # If the last non-empty line on-screen starts with "Choose World", we know the prompt is open
+    if [[ "$lastline" =~ ^'Choose World' ]]; then
+      # In this case, nothing needs to be saved, so we can kill the process
+      ${tmuxCmd} kill-session
+    else
+      # Otherwise, we send the `exit` command
+      ${tmuxCmd} send-keys Enter exit Enter
+    fi
+
+    # Wait for the process to stop
+    tail --pid="$1" -f /dev/null
   '';
 in
 {
@@ -152,7 +165,7 @@ in
         Type = "forking";
         GuessMainPID = true;
         UMask = 007;
-        ExecStart = "${getBin pkgs.tmux}/bin/tmux -S ${cfg.dataDir}/terraria.sock new -d ${pkgs.terraria-server}/bin/TerrariaServer ${concatStringsSep " " flags}";
+        ExecStart = "${tmuxCmd} new -d ${pkgs.terraria-server}/bin/TerrariaServer ${concatStringsSep " " flags}";
         ExecStop = "${stopScript} $MAINPID";
       };
     };

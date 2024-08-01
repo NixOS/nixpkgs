@@ -20,6 +20,6 @@ buildDunePackage rec {
   meta = {
     homepage = "http://opti.recherche.enac.fr/facile/";
     license = lib.licenses.lgpl21Plus;
-    description = "A Functional Constraint Library";
+    description = "Functional Constraint Library";
   };
 }

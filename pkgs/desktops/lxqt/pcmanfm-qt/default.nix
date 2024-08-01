@@ -13,6 +13,7 @@
 , qtimageformats
 , qttools
 , qtwayland
+, qtsvg
 , wrapQtAppsHook
 , gitUpdater
 }:
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     qtbase
     qtimageformats # add-on module to support more image file formats
     qtwayland
+    qtsvg
   ];
 
   passthru.updateScript = gitUpdater { };

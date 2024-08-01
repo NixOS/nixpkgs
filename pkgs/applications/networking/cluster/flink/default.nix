@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "flink";
-  version = "1.19.0";
+  version = "1.19.1";
 
   src = fetchurl {
     url = "mirror://apache/flink/${pname}-${version}/${pname}-${version}-bin-scala_2.12.tgz";
-    sha256 = "sha256-MRnG2zqPSBPe/OHInKxGER350MuXEqJk2gs6O3KQv4Y=";
+    sha256 = "sha256-WWFp8+/KcdQZMvA/krWJsTf3we3+KFARcibXOeeZvc4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A distributed stream processing framework";
+    description = "Distributed stream processing framework";
     mainProgram = "flink";
     homepage = "https://flink.apache.org";
     downloadPage = "https://flink.apache.org/downloads.html";

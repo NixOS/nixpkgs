@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest
   '';
 
-  pythonImportsCheck = [
-    "ciscomobilityexpress"
-  ];
+  pythonImportsCheck = [ "ciscomobilityexpress" ];
 
   meta = with lib; {
     description = "Module to interact with Cisco Mobility Express APIs to fetch connected devices";

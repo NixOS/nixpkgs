@@ -44,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libsdl-org/SDL_net";
     description = "SDL multiplatform networking library";
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = lib.teams.sdl.members
+                  ++ (with lib.maintainers; [ ]);
     inherit (SDL2.meta) platforms;
   };
 })

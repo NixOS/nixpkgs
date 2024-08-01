@@ -25,10 +25,7 @@ mesonConfigurePhase() {
         "--buildtype=${mesonBuildType:-plain}"
     )
 
-    flagsArray+=(
-        $mesonFlags
-        "${mesonFlagsArray[@]}"
-    )
+    _accumFlagsArray mesonFlags mesonFlagsArray
 
     echoCmd 'mesonConfigurePhase flags' "${flagsArray[@]}"
 
@@ -56,7 +53,7 @@ mesonCheckPhase() {
     local flagsArray=($mesonCheckFlags "${mesonCheckFlagsArray[@]}")
 
     echoCmd 'mesonCheckPhase flags' "${flagsArray[@]}"
-    meson test --no-rebuild "${flagsArray[@]}"
+    meson test --no-rebuild --print-errorlogs "${flagsArray[@]}"
 
     runHook postCheck
 }

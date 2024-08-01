@@ -9,20 +9,19 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_43
 , gettext
-, mesonEmulatorHook
 , libffi
 , libintl
 }:
 
 stdenv.mkDerivation rec {
   pname = "p11-kit";
-  version = "0.25.3";
+  version = "0.25.5";
 
   src = fetchFromGitHub {
     owner = "p11-glue";
     repo = pname;
     rev = version;
-    hash = "sha256-zIbkw0pwt4TdyjncnSDeTN6Gsx7cc+x7Un4rnagZxQk=";
+    hash = "sha256-2xDUvXGsF8x42uezgnvOXLVUdNNHcaE042HDDEJeplc=";
     fetchSubmodules = true;
   };
 
@@ -39,10 +38,6 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     docbook_xml_dtd_43
     gettext
-  ] ++ lib.optionals
-    (!stdenv.buildPlatform.canExecute stdenv.hostPlatform
-      && !stdenv.hostPlatform.isMinGW) [
-    mesonEmulatorHook
   ];
 
   buildInputs = [

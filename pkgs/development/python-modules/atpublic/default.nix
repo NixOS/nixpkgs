@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, hatchling
-, sybil
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  hatchling,
+  sybil,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -20,13 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-0cjNkxr3Rh9tGLxgYzg+hlTZ6e8Z1Y7m3AHoUVu/Vd8=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -42,9 +39,7 @@ buildPythonPackage rec {
     sed -i '/cov=public/d' pyproject.toml
   '';
 
-  pythonImportsCheck = [
-    "public"
-  ];
+  pythonImportsCheck = [ "public" ];
 
   meta = with lib; {
     description = "Python decorator and function which populates a module's __all__ and globals";

@@ -23,9 +23,9 @@ import ./versions.nix ({ version, hash, ... }:
     '';
 
     meta = with lib; {
-      description = "An enterprise-class open source distributed monitoring solution (web frontend)";
+      description = "Enterprise-class open source distributed monitoring solution (web frontend)";
       homepage = "https://www.zabbix.com/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       maintainers = [ maintainers.mmahut ];
       platforms = platforms.linux;
     };

@@ -1,47 +1,64 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, fetchpatch
-, appdirs
-, cffi
-, decorator
-, mako
-, mesa_drivers
-, numpy
-, ocl-icd
-, oldest-supported-numpy
-, opencl-headers
-, platformdirs
-, pybind11
-, pytest
-, pytestCheckHook
-, pytools
-, setuptools
-, six
-, wheel
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  cmake,
+  scikit-build-core,
+  pathspec,
+  ninja,
+  nanobind,
+
+  # dependencies
+  appdirs,
+  cffi,
+  darwin,
+  decorator,
+  mako,
+  numpy,
+  ocl-icd,
+  oldest-supported-numpy,
+  opencl-headers,
+  platformdirs,
+  pybind11,
+  pytestCheckHook,
+  pytools,
+  six,
 }:
 
 let
-  os-specific-buildInputs =
-    if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
-in buildPythonPackage rec {
+  os-specific-buildInputs = if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
+in
+buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2024.1";
+  version = "2024.2.6";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7NVy7pQK2L2hY5w6e+tog0/JqYrX6z9uAarE99nUusE=";
+  src = fetchFromGitHub {
+    owner = "inducer";
+    repo = "pyopencl";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nP7ZAGeRXrjqDRWlc2SDP1hk1fseGeu9Zx0lOp9Pchs=";
   };
 
   nativeBuildInputs = [
+    cmake
+    nanobind
+    ninja
+    numpy
     oldest-supported-numpy
-    setuptools
-    wheel
+    pathspec
+    scikit-build-core
   ];
 
-  buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
+  dontUseCmakeConfigure = true;
+
+  buildInputs = [
+    opencl-headers
+    pybind11
+  ] ++ os-specific-buildInputs;
 
   propagatedBuildInputs = [
     appdirs
@@ -58,6 +75,7 @@ in buildPythonPackage rec {
 
   preBuild = ''
     export HOME=$(mktemp -d)
+    rm -rf pyopencl
   '';
 
   # gcc: error: pygpu_language_opencl.cpp: No such file or directory

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, smmap
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  smmap,
 }:
 
 buildPythonPackage rec {
@@ -22,24 +22,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "smmap"
-  ];
+  pythonRelaxDeps = [ "smmap" ];
 
-  propagatedBuildInputs = [
-    smmap
-  ];
+  propagatedBuildInputs = [ smmap ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "gitdb"
-  ];
+  pythonImportsCheck = [ "gitdb" ];
 
   disabledTests = [
     # Tests need part which are not shipped with PyPI releases
@@ -58,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gitpython-developers/gitdb";
     changelog = "https://github.com/gitpython-developers/gitdb/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

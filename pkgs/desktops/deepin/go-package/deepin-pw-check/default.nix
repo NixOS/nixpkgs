@@ -41,9 +41,9 @@ buildGoModule rec {
   ];
 
   postPatch = ''
-    sed -i 's|iniparser/||' */*.c
+    sed -i '1i#include <stdlib.h>\n#include <string.h>' tool/pwd_conf_update.c
     substituteInPlace misc/{pkgconfig/libdeepin_pw_check.pc,system-services/org.deepin.dde.PasswdConf1.service} \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   buildPhase = ''

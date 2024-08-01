@@ -7,7 +7,6 @@
 , ruby
 , lua
 , python3Packages
-, writeText
 , wrapNeovimUnstable
 , runCommand
 }:
@@ -78,7 +77,7 @@ let
         ++ (extraPython3Packages ps)
         ++ (lib.concatMap (f: f ps) pluginPython3Packages));
 
-      luaEnv = neovim-unwrapped.lua.withPackages(extraLuaPackages);
+      luaEnv = neovim-unwrapped.lua.withPackages extraLuaPackages;
 
       # as expected by packdir
       packpathDirs.myNeovimPackages = myVimPackage;
@@ -101,13 +100,13 @@ let
           "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
         ];
 
-      manifestRc = vimUtils.vimrcContent ({ customRC = ""; }) ;
+      manifestRc = vimUtils.vimrcContent { customRC = ""; };
       # we call vimrcContent without 'packages' to avoid the init.vim generation
-      neovimRcContent = vimUtils.vimrcContent ({
+      neovimRcContent = vimUtils.vimrcContent {
         beforePlugins = "";
         customRC = lib.concatStringsSep "\n" (pluginRC ++ [customRC]);
         packages = null;
-      });
+      };
     in
 
     builtins.removeAttrs args ["plugins"] // {
@@ -225,9 +224,49 @@ let
         } // grammar.meta;
       }
       ''
-        mkdir -p $out/parser
-        ln -s ${grammar}/parser $out/parser/${name}.so
+        mkdir -p "$out/parser"
+        ln -s "${grammar}/parser" "$out/parser/${name}.so"
+
+        mkdir -p "$out/queries/${name}"
+        if [ -d "${grammar}/queries/${name}" ]; then
+          echo "moving queries from neovim queries dir"
+          for file in "${grammar}/queries/${name}"*; do
+            ln -s "$file" "$out/queries/${name}/$(basename "$file")"
+          done
+        else
+          if [ -d "${grammar}/queries" ]; then
+            echo "moving queries from standard queries dir"
+            for file in "${grammar}/queries/"*; do
+              ln -s "$file" "$out/queries/${name}/$(basename "$file")"
+            done
+          else
+            echo "missing queries for ${name}"
+          fi
+        fi
       '');
+
+  /*
+    Fork of vimUtils.packDir that additionnally generates a propagated-build-inputs-file that
+    can be used by the lua hooks to generate a proper LUA_PATH
+
+    Generates a packpath folder as expected by vim
+       Example:
+       packDir ( {myVimPackage = { start = [ vimPlugins.vim-fugitive ]; opt = []; }; })
+       => "/nix/store/xxxxx-pack-dir"
+  */
+  packDir = packages:
+  let
+    rawPackDir = vimUtils.packDir packages;
+
+  in
+    rawPackDir.override ({
+    postBuild = ''
+      mkdir $out/nix-support
+      for i in $(find -L $out -name propagated-build-inputs ); do
+        cat "$i" >> $out/nix-support/propagated-build-inputs
+      done
+      '';});
+
 
 in
 {
@@ -235,6 +274,7 @@ in
   inherit generateProviderRc;
   inherit legacyWrapper;
   inherit grammarToPlugin;
+  inherit packDir;
 
   inherit buildNeovimPlugin;
   buildNeovimPluginFrom2Nix = lib.warn "buildNeovimPluginFrom2Nix was renamed to buildNeovimPlugin" buildNeovimPlugin;

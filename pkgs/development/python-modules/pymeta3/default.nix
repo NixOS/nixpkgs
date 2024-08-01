@@ -1,6 +1,7 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
 }:
 buildPythonPackage rec {
   pname = "pymeta3";
@@ -15,15 +16,16 @@ buildPythonPackage rec {
 
   doCheck = false; # Tests do not support Python3
 
-  pythonImportsCheck = [
-    "pymeta"
-  ];
+  pythonImportsCheck = [ "pymeta" ];
 
   meta = with lib; {
     description = "Pattern-matching language based on OMeta for Python 3 and 2";
     homepage = "https://github.com/wbond/pymeta3";
     changelog = "https://github.com/wbond/pymeta3/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ jfly matusf ];
+    maintainers = with maintainers; [
+      jfly
+      matusf
+    ];
   };
 }

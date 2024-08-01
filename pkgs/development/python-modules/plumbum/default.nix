@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, hatch-vcs
-, openssh
-, ps
-, psutil
-, pytest-mock
-, pytest-timeout
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  openssh,
+  ps,
+  psutil,
+  pytest-mock,
+  pytest-timeout,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -63,9 +64,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/tomerfiliba/plumbum/releases/tag/v${version}";
-    description = " Plumbum: Shell Combinators ";
+    description = " Plumbum: Shell Combinators";
     homepage = " https://github.com/tomerfiliba/plumbum ";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

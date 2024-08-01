@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "binbloom";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "quarkslab";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-UiKiDey/pHtJDr4UYqt+T/TneKig5tT8YU2u98Ttjmo=";
+    hash = "sha256-ox4o9RPtqMsme//8dVatNUo+mA/6dM9eI/T5lsuSAus=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

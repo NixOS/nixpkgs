@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A port of Cro-Mag Rally, a 2000 Macintosh game by Pangea Software, for modern operating systems";
+    description = "Port of Cro-Mag Rally, a 2000 Macintosh game by Pangea Software, for modern operating systems";
     homepage = "https://github.com/jorio/CroMagRally";
     changelog = "https://github.com/jorio/CroMagRally/releases";
     license = licenses.cc-by-sa-40;

@@ -1,17 +1,54 @@
-{fetchurl, lib, stdenv, dpkg, makeWrapper,
- alsa-lib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
- harfbuzz, libcap, libGL, libGLU, libpulseaudio, libxkbcommon, libxml2, libxslt,
- nspr, nss, openssl_1_1, systemd, wayland, xorg, zlib, ...
+{
+  fetchurl,
+  lib,
+  stdenv,
+  dpkg,
+  makeWrapper,
+  alsa-lib,
+  brotli,
+  cups,
+  curl,
+  dbus,
+  expat,
+  fontconfig,
+  freetype,
+  glib,
+  gst_all_1,
+  harfbuzz,
+  lcms,
+  libcap,
+  libevent,
+  libGL,
+  libGLU,
+  libkrb5,
+  libopus,
+  libpulseaudio,
+  libxkbcommon,
+  libxkbfile,
+  libxml2,
+  libxslt,
+  libwebp,
+  mesa,
+  nspr,
+  nss,
+  openssl,
+  snappy,
+  systemd,
+  wayland,
+  xorg,
+  zlib,
+  zstd,
+  ...
 }:
 
 stdenv.mkDerivation {
   pname = "viber";
-  version = "16.1.0.37";
+  version = "21.8.0.11";
 
   src = fetchurl {
     # Official link: https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb
-    url = "https://web.archive.org/web/20211119123858/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    sha256 = "sha256-hOz+EQc2OOlLTPa2kOefPJMUyWvSvrgqgPgBKjWE3p8=";
+    url = "https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    hash = "sha256-RrObmN21QOm5nk0R2avgCH0ulrfiUIo2PnyYWvQaGVw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -20,51 +57,61 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   libPath = lib.makeLibraryPath [
-      alsa-lib
-      cups
-      curl
-      dbus
-      expat
-      fontconfig
-      freetype
-      glib
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
-      harfbuzz
-      libcap
-      libGLU libGL
-      libpulseaudio
-      libxkbcommon
-      libxml2
-      libxslt
-      nspr
-      nss
-      openssl_1_1
-      stdenv.cc.cc
-      systemd
-      wayland
-      zlib
+    alsa-lib
+    brotli
+    cups
+    curl
+    dbus
+    expat
+    fontconfig
+    freetype
+    glib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    harfbuzz
+    lcms
+    libcap
+    libevent
+    libGLU
+    libGL
+    libkrb5
+    libopus
+    libpulseaudio
+    libxkbcommon
+    libxkbfile
+    libxml2
+    libxslt
+    libwebp
+    mesa
+    nspr
+    nss
+    openssl
+    snappy
+    stdenv.cc.cc
+    systemd
+    wayland
+    zlib
+    zstd
 
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXScrnSaver
-      xorg.libXtst
-      xorg.xcbutilimage
-      xorg.xcbutilkeysyms
-      xorg.xcbutilrenderutil
-      xorg.xcbutilwm
-  ]
-  ;
+    xorg.libICE
+    xorg.libSM
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXScrnSaver
+    xorg.libXtst
+    xorg.xcbutilimage
+    xorg.xcbutilkeysyms
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
+  ];
 
   installPhase = ''
     dpkg-deb -x $src $out
@@ -101,7 +148,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://www.viber.com";
-    description = "An instant messaging and Voice over IP (VoIP) app";
+    description = "Instant messaging and Voice over IP (VoIP) app";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];

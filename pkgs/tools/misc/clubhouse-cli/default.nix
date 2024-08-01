@@ -17,7 +17,7 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-QlCLEvmqLVkWwgTVlToYD6bptLp/MVfQ10Wdfr3PIr4=";
 
   meta = {
-    description = "A command line tool for viewing, creating and updating clubhouse.io stories";
+    description = "Command line tool for viewing, creating and updating clubhouse.io stories";
     homepage = "https://github.com/andjosh/clubhouse-cli";
     changelog = "https://github.com/andjosh/clubhouse-cli/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;

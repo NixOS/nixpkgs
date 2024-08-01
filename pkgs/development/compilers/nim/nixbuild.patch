@@ -6,7 +6,7 @@ index f31ae94dd..debed9c07 100644
  
  import strutils
  
-+when defined(nixbuild):
++when defined(nixbuild) and not defined(windows):
 +  import os
 +
  type
@@ -16,7 +16,7 @@ index f31ae94dd..debed9c07 100644
        libCandidates(prefix & middle & suffix, dest)
    else:
      add(dest, s)
-+  when defined(nixbuild):
++  when defined(nixbuild) and not defined(windows):
 +    # Nix doesn't have a global library directory so
 +    # load libraries using an absolute path if one
 +    # can be derived from NIX_LDFLAGS.

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "ac_cv_file__usr_include_mach_audit_triggers_defs=no" ];
 
   meta = {
-    description = "An implementation of Sun's Basic Security Module (BSM) security audit API and file format";
+    description = "Implementation of Sun's Basic Security Module (BSM) security audit API and file format";
     homepage = "http://www.openbsm.org/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ matthewbauer ];

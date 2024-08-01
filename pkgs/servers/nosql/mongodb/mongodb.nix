@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , buildPackages
 , boost
 , gperftools
@@ -13,7 +13,7 @@
 , openldap
 , openssl
 , libpcap
-, python3
+, python311Packages
 , curl
 , Security
 , CoreFoundation
@@ -29,10 +29,11 @@ with lib;
 
 { version, sha256, patches ? []
 , license ? lib.licenses.sspl
+, avxSupport ? stdenv.hostPlatform.avxSupport
 }:
 
 let
-  scons = buildPackages.scons;
+  scons = buildPackages.scons.override{ python3Packages = python311Packages; };
   python = scons.python.withPackages (ps: with ps; [
     pyyaml
     cheetah3
@@ -63,8 +64,10 @@ in stdenv.mkDerivation rec {
   inherit version;
   pname = "mongodb";
 
-  src = fetchurl {
-    url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "mongodb";
+    repo = "mongo";
+    rev = "r${version}";
     inherit sha256;
   };
 
@@ -112,6 +115,9 @@ in stdenv.mkDerivation rec {
     # don't fail by default on i686
     substituteInPlace src/mongo/db/storage/storage_options.h \
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
+  '' + lib.optionalString (!avxSupport) ''
+    substituteInPlace SConstruct \
+      --replace-fail "default=['+sandybridge']," 'default=[],'
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
@@ -127,6 +133,7 @@ in stdenv.mkDerivation rec {
     "--disable-warnings-as-errors"
     "VARIANT_DIR=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
     "--link-model=static"
+    "MONGO_VERSION=${version}"
   ]
   ++ map (lib: "--use-system-${lib}") system-libraries;
 
@@ -168,7 +175,7 @@ in stdenv.mkDerivation rec {
   hardeningEnable = [ "pie" ];
 
   meta = {
-    description = "A scalable, high-performance, open source NoSQL database";
+    description = "Scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";
     inherit license;
 

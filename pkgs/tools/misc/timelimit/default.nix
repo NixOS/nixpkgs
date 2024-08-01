@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "timelimit";
     repo = pname;
     rev = "release/${version}";
-    sha256 = "sha256-5IEAF8zCKaCVH6BAxjoa/2rrue9pRGBBkFzN57d+g+g=";
+    hash = "sha256-5IEAF8zCKaCVH6BAxjoa/2rrue9pRGBBkFzN57d+g+g=";
   };
 
   nativeCheckInputs = [ perl ];

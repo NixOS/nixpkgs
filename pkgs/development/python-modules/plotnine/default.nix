@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.13.5";
+  version = "0.13.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "has2k1";
     repo = "plotnine";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vGxsBcY4CRT4rBUq0AQ4oo0etKK+CtUD487VvnoK/rI=";
+    hash = "sha256-/yxRYK3ZTrYj+l3TQhFllyICnJjCZPd4ebNurCLZAYg=";
   };
 
   postPatch = ''
@@ -35,6 +35,8 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools-scm ];
+
+  pythonRelaxDeps = [ "mizani" ];
 
   dependencies = [
     matplotlib
@@ -56,6 +58,12 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "plotnine" ];
+
+  disabledTests = [
+    # Tries to change locale. The issued warning causes this test to fail.
+    # UserWarning: Could not set locale to English/United States. Some date-related tests may fail
+    "test_no_after_scale_warning"
+  ];
 
   disabledTestPaths = [
     # Assertion Errors:
@@ -99,11 +107,11 @@ buildPythonPackage rec {
     "tests/test_lint_and_format.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Grammar of graphics for Python";
     homepage = "https://plotnine.readthedocs.io/";
     changelog = "https://github.com/has2k1/plotnine/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

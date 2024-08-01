@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A simple wrapper over nmcli using wifiscanner made in rust";
+    description = "Simple wrapper over nmcli using wifiscanner made in rust";
     mainProgram = "ifwifi";
     longDescription = ''
       In the author's words:

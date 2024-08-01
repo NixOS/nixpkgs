@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, anyio
-, asyncio-rlock
-, asyncio-throttle
-, ircstates
-, async-stagger
-, async-timeout
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  anyio,
+  asyncio-rlock,
+  asyncio-throttle,
+  ircstates,
+  async-stagger,
+  async-timeout,
+  python,
 }:
 
 buildPythonPackage rec {

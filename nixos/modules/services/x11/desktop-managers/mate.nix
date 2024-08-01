@@ -84,6 +84,7 @@ in
       programs.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
 
       services.gnome.at-spi2-core.enable = true;
+      services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.udev.packages = [ pkgs.mate.mate-settings-daemon ];
       services.gvfs.enable = true;

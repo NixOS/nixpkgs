@@ -17,11 +17,17 @@ let
           "ManageForeignRoutingPolicyRules"
           "ManageForeignRoutes"
           "RouteTable"
+          "IPv6PrivacyExtensions"
+          "IPv4Forwarding"
+          "IPv6Forwarding"
         ])
         (assertValueOneOf "SpeedMeter" boolValues)
         (assertInt "SpeedMeterIntervalSec")
         (assertValueOneOf "ManageForeignRoutingPolicyRules" boolValues)
         (assertValueOneOf "ManageForeignRoutes" boolValues)
+        (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
+        (assertValueOneOf "IPv4Forwarding" boolValues)
+        (assertValueOneOf "IPv6Forwarding" boolValues)
       ];
 
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
@@ -117,10 +123,12 @@ let
           "VNetHeader"
           "User"
           "Group"
+          "KeepCarrier"
         ])
         (assertValueOneOf "MultiQueue" boolValues)
         (assertValueOneOf "PacketInfo" boolValues)
         (assertValueOneOf "VNetHeader" boolValues)
+        (assertValueOneOf "KeepCarrier" boolValues)
       ];
 
       # See https://www.freedesktop.org/software/systemd/man/latest/systemd.netdev.html#%5BIPVTAP%5D%20Section%20Options
@@ -384,7 +392,7 @@ let
         (assertValueOneOf "UDP6ZeroChecksumRx" boolValues)
       ];
 
-      sectionL2TPSession = checkUnitConfig "L2TPSession" [
+      sectionL2TPSession = checkUnitConfigWithLegacyKey "l2tpSessionConfig" "L2TPSession" [
         (assertOnlyFields [
           "Name"
           "SessionId"
@@ -419,7 +427,7 @@ let
       # NOTE The PresharedKey directive is missing on purpose here, please
       # do not add it to this list. The nix store is world-readable,let's
       # refrain ourselves from providing a footgun.
-      sectionWireGuardPeer = checkUnitConfig "WireGuardPeer" [
+      sectionWireGuardPeer = checkUnitConfigWithLegacyKey "wireguardPeerConfig" "WireGuardPeer" [
         (assertOnlyFields [
           "PublicKey"
           "PresharedKeyFile"
@@ -630,6 +638,7 @@ let
           "LinkLocalAddressing"
           "IPv6LinkLocalAddressGenerationMode"
           "IPv6StableSecretAddress"
+          "IPv4LLStartAddress"
           "IPv4LLRoute"
           "DefaultRouteOnDevice"
           "LLMNR"
@@ -647,17 +656,23 @@ let
           "DNSDefaultRoute"
           "NTP"
           "IPForward"
+          "IPv4Forwarding"
+          "IPv6Forwarding"
           "IPMasquerade"
           "IPv6PrivacyExtensions"
           "IPv6AcceptRA"
           "IPv6DuplicateAddressDetection"
           "IPv6HopLimit"
+          "IPv4ReversePathFilter"
+          "IPv4AcceptLocal"
+          "IPv4RouteLocalnet"
           "IPv4ProxyARP"
           "IPv6ProxyNDP"
           "IPv6ProxyNDPAddress"
           "IPv6SendRA"
           "DHCPPrefixDelegation"
           "IPv6MTUBytes"
+          "KeepMaster"
           "Bridge"
           "Bond"
           "VRF"
@@ -691,7 +706,9 @@ let
         (assertValueOneOf "LLDP" (boolValues ++ ["routers-only"]))
         (assertValueOneOf "EmitLLDP" (boolValues ++ ["nearest-bridge" "non-tpmr-bridge" "customer-bridge"]))
         (assertValueOneOf "DNSDefaultRoute" boolValues)
-        (assertValueOneOf "IPForward" (boolValues ++ ["ipv4" "ipv6"]))
+        (assertRemoved "IPForward" "IPv4Forwarding and IPv6Forwarding in systemd.network(5) and networkd.conf(5)")
+        (assertValueOneOf "IPv4Forwarding" boolValues)
+        (assertValueOneOf "IPv6Forwarding" boolValues)
         (assertValueOneOf "IPMasquerade" (boolValues ++ ["ipv4" "ipv6" "both"]))
         (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
         (assertValueOneOf "IPv6AcceptRA" boolValues)
@@ -699,18 +716,22 @@ let
         (assertMinimum "IPv6DuplicateAddressDetection" 0)
         (assertInt "IPv6HopLimit")
         (assertMinimum "IPv6HopLimit" 0)
+        (assertValueOneOf "IPv4ReversePathFilter" ["no" "strict" "loose"])
+        (assertValueOneOf "IPv4AcceptLocal" boolValues)
+        (assertValueOneOf "IPv4RouteLocalnet" boolValues)
         (assertValueOneOf "IPv4ProxyARP" boolValues)
         (assertValueOneOf "IPv6ProxyNDP" boolValues)
         (assertValueOneOf "IPv6SendRA" boolValues)
         (assertValueOneOf "DHCPPrefixDelegation" boolValues)
         (assertByteFormat "IPv6MTUBytes")
+        (assertValueOneOf "KeepMaster" boolValues)
         (assertValueOneOf "ActiveSlave" boolValues)
         (assertValueOneOf "PrimarySlave" boolValues)
         (assertValueOneOf "ConfigureWithoutCarrier" boolValues)
         (assertValueOneOf "KeepConfiguration" (boolValues ++ ["static" "dhcp-on-stop" "dhcp"]))
       ];
 
-      sectionAddress = checkUnitConfig "Address" [
+      sectionAddress = checkUnitConfigWithLegacyKey "addressConfig" "Address" [
         (assertOnlyFields [
           "Address"
           "Peer"
@@ -735,7 +756,7 @@ let
         (assertValueOneOf "AutoJoin" boolValues)
       ];
 
-      sectionRoutingPolicyRule = checkUnitConfig "RoutingPolicyRule" [
+      sectionRoutingPolicyRule = checkUnitConfigWithLegacyKey "routingPolicyRuleConfig" "RoutingPolicyRule" [
         (assertOnlyFields [
           "TypeOfService"
           "From"
@@ -770,7 +791,7 @@ let
         (assertRange "SuppressInterfaceGroup" 0 2147483647)
       ];
 
-      sectionRoute = checkUnitConfig "Route" [
+      sectionRoute = checkUnitConfigWithLegacyKey "routeConfig" "Route" [
         (assertOnlyFields [
           "Gateway"
           "GatewayOnLink"
@@ -950,6 +971,7 @@ let
           "UseGateway"
           "UseRoutePrefix"
           "Token"
+          "UsePREF64"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
@@ -960,6 +982,7 @@ let
         (assertValueOneOf "UseMTU" boolValues)
         (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutePrefix" boolValues)
+        (assertValueOneOf "UsePREF64" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
@@ -1031,7 +1054,15 @@ let
         (assertValueOneOf "EmitDomains" boolValues)
       ];
 
-      sectionIPv6Prefix = checkUnitConfig "IPv6Prefix" [
+      sectionIPv6PREF64Prefix = checkUnitConfigWithLegacyKey "ipv6PREF64PrefixConfig" "IPv6PREF64Prefix" [
+        (assertOnlyFields [
+          "Prefix"
+          "LifetimeSec"
+        ])
+        (assertInt "LifetimeSec")
+      ];
+
+      sectionIPv6Prefix = checkUnitConfigWithLegacyKey "ipv6PrefixConfig" "IPv6Prefix" [
         (assertOnlyFields [
           "AddressAutoconfiguration"
           "OnLink"
@@ -1046,7 +1077,7 @@ let
         (assertValueOneOf "Assign" boolValues)
       ];
 
-      sectionIPv6RoutePrefix = checkUnitConfig "IPv6RoutePrefix" [
+      sectionIPv6RoutePrefix = checkUnitConfigWithLegacyKey "ipv6RoutePrefixConfig" "IPv6RoutePrefix" [
         (assertOnlyFields [
           "Route"
           "LifetimeSec"
@@ -1055,7 +1086,7 @@ let
         (assertInt "LifetimeSec")
       ];
 
-      sectionDHCPServerStaticLease = checkUnitConfig "DHCPServerStaticLease" [
+      sectionDHCPServerStaticLease = checkUnitConfigWithLegacyKey "dhcpServerStaticLeaseConfig" "DHCPServerStaticLease" [
         (assertOnlyFields [
           "MACAddress"
           "Address"
@@ -1102,7 +1133,7 @@ let
         (assertRange "Priority" 0 63)
       ];
 
-      sectionBridgeFDB = checkUnitConfig "BridgeFDB" [
+      sectionBridgeFDB = checkUnitConfigWithLegacyKey "bridgeFDBConfig" "BridgeFDB" [
         (assertOnlyFields [
           "MACAddress"
           "Destination"
@@ -1119,7 +1150,7 @@ let
         (assertValueOneOf "AssociatedWith" [ "use" "self" "master" "router" ])
       ];
 
-      sectionBridgeMDB = checkUnitConfig "BridgeMDB" [
+      sectionBridgeMDB = checkUnitConfigWithLegacyKey "bridgeMDBConfig" "BridgeMDB" [
         (assertOnlyFields [
           "MulticastGroupAddress"
           "VLANId"
@@ -1522,7 +1553,7 @@ let
         (assertRange "Weight" 1 1023)
       ];
 
-      sectionBridgeVLAN = checkUnitConfig "BridgeVLAN" [
+      sectionBridgeVLAN = checkUnitConfigWithLegacyKey "bridgeVLANConfig" "BridgeVLAN" [
         (assertOnlyFields [
           "VLAN"
           "EgressUntagged"
@@ -1625,34 +1656,21 @@ let
 
   };
 
-
-  l2tpSessionOptions = {
-    options = {
-      l2tpSessionConfig = mkOption {
-        default = {};
-        type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionL2TPSession;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[L2TPSession]` section of the unit.  See
-          {manpage}`systemd.netdev(5)` for details.
-        '';
-      };
+  mkSubsectionType = oldKey: checkF:
+    let
+      type = types.addCheck (types.attrsOf unitOption) checkF;
+    in type // {
+      merge = loc: defs:
+        let
+          final = type.merge loc defs;
+        in
+        if final?${oldKey}
+          then warn
+            "Using '${oldKey}' is deprecated! Move all attributes inside one level up and remove it."
+            final.${oldKey}
+        else
+          final;
     };
-  };
-
-  wireguardPeerOptions = {
-    options = {
-      wireguardPeerConfig = mkOption {
-        default = {};
-        type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWireGuardPeer;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[WireGuardPeer]` section of the unit.  See
-          {manpage}`systemd.netdev(5)` for details.
-        '';
-      };
-    };
-  };
 
   netdevOptions = commonNetworkOptions // {
 
@@ -1803,12 +1821,12 @@ let
 
     l2tpSessions = mkOption {
       default = [];
-      example = [ { l2tpSessionConfig={
+      example = [ {
         SessionId = 25;
         PeerSessionId = 26;
         Name = "l2tp-sess";
-      };}];
-      type = with types; listOf (submodule l2tpSessionOptions);
+      }];
+      type = types.listOf (mkSubsectionType "l2tpSessionConfig" check.netdev.sectionL2TPSession);
       description = ''
         Each item in this array specifies an option in the
         `[L2TPSession]` section of the unit. See
@@ -1836,14 +1854,14 @@ let
 
     wireguardPeers = mkOption {
       default = [];
-      example = [ { wireguardPeerConfig={
+      example = [ {
         Endpoint = "192.168.1.1:51820";
         PublicKey = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
         PresharedKeyFile = "/etc/wireguard/psk.key";
         AllowedIPs = [ "10.0.0.1/32" ];
         PersistentKeepalive = 15;
-      };}];
-      type = with types; listOf (submodule wireguardPeerOptions);
+      } ];
+      type = types.listOf (mkSubsectionType "wireguardPeerConfig" check.netdev.sectionWireGuardPeer);
       description = ''
         Each item in this array specifies an option in the
         `[WireGuardPeer]` section of the unit. See
@@ -1913,143 +1931,6 @@ let
       '';
     };
 
-  };
-
-  addressOptions = {
-    options = {
-      addressConfig = mkOption {
-        example = { Address = "192.168.0.100/24"; };
-        type = types.addCheck (types.attrsOf unitOption) check.network.sectionAddress;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[Address]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
-        '';
-      };
-    };
-  };
-
-  routingPolicyRulesOptions = {
-    options = {
-      routingPolicyRuleConfig = mkOption {
-        default = { };
-        example = { Table = 10; IncomingInterface = "eth1"; Family = "both"; };
-        type = types.addCheck (types.attrsOf unitOption) check.network.sectionRoutingPolicyRule;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[RoutingPolicyRule]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
-        '';
-      };
-    };
-  };
-
-  routeOptions = {
-    options = {
-      routeConfig = mkOption {
-        default = {};
-        example = { Gateway = "192.168.0.1"; };
-        type = types.addCheck (types.attrsOf unitOption) check.network.sectionRoute;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[Route]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
-        '';
-      };
-    };
-  };
-
-  ipv6PrefixOptions = {
-    options = {
-      ipv6PrefixConfig = mkOption {
-        default = {};
-        example = { Prefix = "fd00::/64"; };
-        type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6Prefix;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[IPv6Prefix]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
-        '';
-      };
-    };
-  };
-
-  ipv6RoutePrefixOptions = {
-    options = {
-      ipv6RoutePrefixConfig = mkOption {
-        default = {};
-        example = { Route = "fd00::/64"; };
-        type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6RoutePrefix;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[IPv6RoutePrefix]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
-        '';
-      };
-    };
-  };
-
-  dhcpServerStaticLeaseOptions = {
-    options = {
-      dhcpServerStaticLeaseConfig = mkOption {
-        default = {};
-        example = { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; };
-        type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPServerStaticLease;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[DHCPServerStaticLease]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
-
-          Make sure to configure the corresponding client interface to use
-          `ClientIdentifier=mac`.
-        '';
-      };
-    };
-  };
-
-  bridgeFDBOptions = {
-    options = {
-      bridgeFDBConfig = mkOption {
-        default = {};
-        example = { MACAddress = "65:43:4a:5b:d8:5f"; Destination = "192.168.1.42"; VNI = 20; };
-        type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridgeFDB;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[BridgeFDB]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
-        '';
-      };
-    };
-  };
-
-  bridgeMDBOptions = {
-    options = {
-      bridgeMDBConfig = mkOption {
-        default = {};
-        example = { MulticastGroupAddress = "ff02::1:2:3:4"; VLANId = 10; };
-        type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridgeMDB;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[BridgeMDB]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
-        '';
-      };
-    };
-  };
-
-  bridgeVLANOptions = {
-    options = {
-      bridgeVLANConfig = mkOption {
-        default = {};
-        example = { VLAN = 20; };
-        type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridgeVLAN;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[BridgeVLAN]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
-        '';
-      };
-    };
   };
 
   networkOptions = commonNetworkOptions // {
@@ -2161,10 +2042,20 @@ let
       '';
     };
 
+    ipv6PREF64Prefixes = mkOption {
+      default = [];
+      example = [ { Prefix = "64:ff9b::/96"; } ];
+      type = types.listOf (mkSubsectionType "ipv6PREF64PrefixConfig" check.network.sectionIPv6PREF64Prefix);
+      description = ''
+        A list of IPv6PREF64Prefix sections to be added to the unit. See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     dhcpServerStaticLeases = mkOption {
       default = [];
-      example = [ { dhcpServerStaticLeaseConfig = { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; }; } ];
-      type = with types; listOf (submodule dhcpServerStaticLeaseOptions);
+      example = [ { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; } ];
+      type = types.listOf (mkSubsectionType "dhcpServerStaticLeaseConfig" check.network.sectionDHCPServerStaticLease);
       description = ''
         A list of DHCPServerStaticLease sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
@@ -2173,8 +2064,8 @@ let
 
     ipv6Prefixes = mkOption {
       default = [];
-      example = [ { ipv6PrefixConfig = { AddressAutoconfiguration = true; OnLink = true; }; } ];
-      type = with types; listOf (submodule ipv6PrefixOptions);
+      example = [ { AddressAutoconfiguration = true; OnLink = true; } ];
+      type = types.listOf (mkSubsectionType "ipv6PrefixConfig" check.network.sectionIPv6Prefix);
       description = ''
         A list of ipv6Prefix sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
@@ -2183,8 +2074,8 @@ let
 
     ipv6RoutePrefixes = mkOption {
       default = [];
-      example = [ { ipv6RoutePrefixConfig = { Route = "fd00::/64"; LifetimeSec = 3600; }; } ];
-      type = with types; listOf (submodule ipv6RoutePrefixOptions);
+      example = [ { Route = "fd00::/64"; LifetimeSec = 3600; } ];
+      type = types.listOf (mkSubsectionType "ipv6RoutePrefixConfig" check.network.sectionIPv6RoutePrefix);
       description = ''
         A list of ipv6RoutePrefix sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
@@ -2204,8 +2095,8 @@ let
 
     bridgeFDBs = mkOption {
       default = [];
-      example = [ { bridgeFDBConfig = { MACAddress = "90:e2:ba:43:fc:71"; Destination = "192.168.100.4"; VNI = 3600; }; } ];
-      type = with types; listOf (submodule bridgeFDBOptions);
+      example = [ { MACAddress = "90:e2:ba:43:fc:71"; Destination = "192.168.100.4"; VNI = 3600; } ];
+      type = types.listOf (mkSubsectionType "bridgeFDBConfig" check.network.sectionBridgeFDB);
       description = ''
         A list of BridgeFDB sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
@@ -2214,8 +2105,8 @@ let
 
     bridgeMDBs = mkOption {
       default = [];
-      example = [ { bridgeMDBConfig = { MulticastGroupAddress = "ff02::1:2:3:4"; VLANId = 10; } ; } ];
-      type = with types; listOf (submodule bridgeMDBOptions);
+      example = [ { MulticastGroupAddress = "ff02::1:2:3:4"; VLANId = 10; } ];
+      type = types.listOf (mkSubsectionType "bridgeMDBConfig" check.network.sectionBridgeMDB);
       description = ''
         A list of BridgeMDB sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
@@ -2532,8 +2423,8 @@ let
 
     bridgeVLANs = mkOption {
       default = [];
-      example = [ { bridgeVLANConfig = { VLAN = "10-20"; }; } ];
-      type = with types; listOf (submodule bridgeVLANOptions);
+      example = [ { VLAN = "10-20"; } ];
+      type = types.listOf (mkSubsectionType "bridgeVLANConfig" check.network.sectionBridgeVLAN);
       description = ''
         A list of BridgeVLAN sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
@@ -2683,7 +2574,8 @@ let
 
     addresses = mkOption {
       default = [ ];
-      type = with types; listOf (submodule addressOptions);
+      example = [ { Address = "192.168.0.100/24"; } ];
+      type = types.listOf (mkSubsectionType "addressConfig" check.network.sectionAddress);
       description = ''
         A list of address sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
@@ -2692,7 +2584,8 @@ let
 
     routingPolicyRules = mkOption {
       default = [ ];
-      type = with types; listOf (submodule routingPolicyRulesOptions);
+      example = [ { Table = 10; IncomingInterface = "eth1"; Family = "both"; } ];
+      type = types.listOf (mkSubsectionType "routingPolicyRuleConfig" check.network.sectionRoutingPolicyRule);
       description = ''
         A list of routing policy rules sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
@@ -2701,7 +2594,8 @@ let
 
     routes = mkOption {
       default = [ ];
-      type = with types; listOf (submodule routeOptions);
+      example = [ { Gateway = "192.168.0.1"; } ];
+      type = types.listOf (mkSubsectionType "routeConfig" check.network.sectionRoute);
       description = ''
         A list of route sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
@@ -2949,6 +2843,7 @@ let
         "systemd-networkd-wait-online.service"
         "systemd-networkd.service"
         "systemd-networkd.socket"
+        "systemd-networkd-persistent-storage.service"
       ];
 
       environment.etc."systemd/networkd.conf" = renderConfig cfg.config;

@@ -7,9 +7,10 @@
 , pkg-config
 , vala
 , wrapGAppsHook4
-, evolution-data-server
+, evolution-data-server-gtk4
 , glib
 , glib-networking
+, gst_all_1
 , gtk4
 , gtksourceview5
 , gxml
@@ -27,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.7";
+  version = "4.9.0";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
     rev = version;
-    hash = "sha256-5hiVTU1w3Rk/BdxYwDB0Y+EZFnSAaEWtx19IB1ak1yY=";
+    hash = "sha256-zNQe0w8Vbe+ZIYTer1ISwJ6yA4dOdDtuWme5txcbY3w=";
   };
 
   nativeBuildInputs = [
@@ -46,9 +47,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    evolution-data-server
+    evolution-data-server-gtk4
     glib
     glib-networking
+    # Needed for GtkMediaStream creation with success.ogg, see #311295.
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     gtk4
     gtksourceview5
     gxml
@@ -72,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "Task manager with Todoist support designed for GNU/Linux";
     homepage = "https://github.com/alainm23/planify";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dtzWill ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "io.github.alainm23.planify";
   };

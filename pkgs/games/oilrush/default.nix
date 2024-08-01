@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     chmod +x "$out/bin/oilrush"
   '';
   meta = {
-    description = "A naval strategy game";
+    description = "Naval strategy game";
     longDescription = ''
       Oil Rush is a real-time naval strategy game based on group control. It
       combines the strategic challenge of a classical RTS with the sheer fun

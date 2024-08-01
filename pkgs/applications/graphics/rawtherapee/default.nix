@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchurl
 , cmake
 , pkg-config
 , wrapGAppsHook3
@@ -36,6 +37,14 @@ stdenv.mkDerivation rec {
     # https://www.rawtherapee.com/downloads/5.10/#news-relevant-to-package-maintainers
     forceFetchGit = true;
   };
+
+  # https://github.com/Beep6581/RawTherapee/issues/7074
+  patches = [
+    (fetchurl {
+      url = "https://github.com/Beep6581/RawTherapee/commit/6b9f45c69c1ddfc3607d3d9c1206dcf1def30295.diff";
+      hash = "sha256-3Rti9HV8N1ueUm5B9qxEZL7Lb9bBb+iy2AGKMpJ9YOM=";
+    })
+  ];
 
   postPatch = ''
     echo "set(HG_VERSION ${version})" > ReleaseInfo.cmake

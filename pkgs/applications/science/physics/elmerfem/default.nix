@@ -1,5 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, cmake, git, gfortran, mpi, blas, liblapack, pkg-config, libGL, libGLU, opencascade-occt, libsForQt5, tbb, vtkWithQt5 }:
-
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gfortran
+, mpi
+, blas
+, liblapack
+, pkg-config
+, libGL
+, libGLU
+, opencascade-occt_7_6
+, libsForQt5
+, tbb
+, vtkWithQt5
+}:
+let
+  opencascade-occt = opencascade-occt_7_6;
+in
 stdenv.mkDerivation rec {
   pname = "elmerfem";
   version = "unstable-2023-09-18";
@@ -19,6 +36,7 @@ stdenv.mkDerivation rec {
     pkg-config
     libsForQt5.wrapQtAppsHook
   ];
+
   buildInputs = [
     mpi
     blas
@@ -54,7 +72,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://elmerfem.org";
-    description = "A finite element software for multiphysical problems";
+    description = "Finite element software for multiphysical problems";
     platforms = platforms.unix;
     maintainers = with maintainers; [ wulfsta broke ];
     license = licenses.lgpl21;

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ back base gui ];
 
   meta = {
-    description = "The settings manager for the GNUstep environment and its applications";
+    description = "Settings manager for the GNUstep environment and its applications";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "SystemPreferences";

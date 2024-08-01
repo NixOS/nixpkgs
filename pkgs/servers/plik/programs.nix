@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchurl, makeWrapper, runCommand }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, runCommand }:
 
 let
   version = "1.3.8";

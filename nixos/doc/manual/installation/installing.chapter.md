@@ -174,8 +174,6 @@ commands:
 OK
 > set_network 0 psk "mypassword"
 OK
-> set_network 0 key_mgmt WPA-PSK
-OK
 > enable_network 0
 OK
 ```
@@ -190,8 +188,6 @@ OK
 > set_network 0 identity "myname@example.com"
 OK
 > set_network 0 password "mypassword"
-OK
-> set_network 0 key_mgmt WPA-EAP
 OK
 > enable_network 0
 OK

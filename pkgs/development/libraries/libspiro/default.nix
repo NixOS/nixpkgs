@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   meta = with lib; {
-    description = "A library that simplifies the drawing of beautiful curves";
+    description = "Library that simplifies the drawing of beautiful curves";
     homepage = "https://github.com/fontforge/libspiro";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.erictapen ];

@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A VNC server for wlroots based Wayland compositors";
+    description = "VNC server for wlroots based Wayland compositors";
     longDescription = ''
       This is a VNC server for wlroots based Wayland compositors. It attaches
       to a running Wayland session, creates virtual input devices and exposes a
@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
       headless one, so it is also possible to run wayvnc without a physical
       display attached.
     '';
+    mainProgram = "wayvnc";
     inherit (src.meta) homepage;
     changelog = "https://github.com/any1/wayvnc/releases/tag/v${version}";
     license = licenses.isc;

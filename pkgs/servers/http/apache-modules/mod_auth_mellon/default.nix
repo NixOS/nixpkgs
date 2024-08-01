@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/latchset/mod_auth_mellon";
-    description = "An Apache module with a simple SAML 2.0 service provider";
+    description = "Apache module with a simple SAML 2.0 service provider";
     mainProgram = "mellon_create_metadata.sh";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

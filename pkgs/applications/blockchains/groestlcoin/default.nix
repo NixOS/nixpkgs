@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch2
 , autoreconfHook
 , pkg-config
 , installShellFiles
@@ -40,6 +41,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0f6vi2k5xvjrhiazfjcd4aj246dfcg51xsnqb9wdjl41cg0ckwmf";
   };
+
+  patches = [
+    # upnp: add compatibility for miniupnpc 2.2.8
+    (fetchpatch2 {
+      url = "https://github.com/Groestlcoin/groestlcoin/commit/8acdf66540834b9f9cf28f16d389e8b6a48516d5.patch?full_index=1";
+      hash = "sha256-oDvHUvwAEp0LJCf6QBESn38Bu359TcPpLhvuLX3sm6M=";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config installShellFiles ]
     ++ lib.optionals stdenv.isLinux [ util-linux ]

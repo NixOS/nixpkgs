@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , rustPlatform
 , clang
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # bpf code compilation
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [ "stackprotector" "zerocallusedregs" ];
 
   nativeBuildInputs = [ clang pkg-config rustfmt ];
   buildInputs = [ elfutils zlib ];
@@ -40,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     platforms = platforms.linux;
     maintainers = with maintainers; [ globin ];
-    description = "A time traveling resource monitor for modern Linux systems";
+    description = "Time traveling resource monitor for modern Linux systems";
     license = licenses.asl20;
     homepage = "https://github.com/facebookincubator/below";
     mainProgram = "below";

@@ -4,7 +4,7 @@
 , libjpeg
 , libGLU
 , libGL
-, freeglut
+, libglut
 , zlib
 , cmake
 , libX11
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libjpeg libGLU libGL freeglut zlib libX11 libxml2 libpng libXxf86vm ];
+  buildInputs = [ libjpeg libGLU libGL libglut zlib libX11 libxml2 libpng libXxf86vm ];
 
   postPatch = ''
     sed -i -e '/GECKO/d' CMakeLists.txt

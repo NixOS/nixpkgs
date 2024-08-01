@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, more-itertools
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  more-itertools,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -36,15 +37,13 @@ buildPythonPackage rec {
     "test_utime"
   ];
 
-  pythonImportsCheck = [
-    "path"
-  ];
+  pythonImportsCheck = [ "path" ];
 
   meta = with lib; {
     description = "Object-oriented file system path manipulation";
     homepage = "https://github.com/jaraco/path";
     changelog = "https://github.com/jaraco/path/blob/v${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A custom discord client that supports streaming with audio on Linux";
+    description = "Custom discord client that supports streaming with audio on Linux";
     mainProgram = "discord-screenaudio";
     homepage = "https://github.com/maltejur/discord-screenaudio";
     downloadPage = "https://github.com/maltejur/discord-screenaudio/releases";

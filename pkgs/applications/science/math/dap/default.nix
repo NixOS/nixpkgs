@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/dap";
-    description = "A small statistics and graphics package based on C";
+    description = "Small statistics and graphics package based on C";
     longDescription = ''
       Dap is a small statistics and graphics package based on C. Version 3.0 and
       later of Dap can read SBS programs (based on the utterly famous, industry

@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pytest,
+}:
 
 buildPythonPackage rec {
   version = "3.1.2";
@@ -21,7 +27,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/google/python-gflags";
-    description = "A module for command line handling, similar to Google's gflags for C++";
+    description = "Module for command line handling, similar to Google's gflags for C++";
     license = lib.licenses.bsd3;
   };
 }

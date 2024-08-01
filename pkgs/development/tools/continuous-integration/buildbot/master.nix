@@ -1,14 +1,13 @@
 { lib
 , stdenv
 , buildPythonApplication
-, fetchPypi
+, fetchFromGitHub
 , makeWrapper
 # Tie withPlugins through the fixed point here, so it will receive an
 # overridden version properly
 , buildbot
 , pythonOlder
 , python
-, pythonRelaxDepsHook
 , twisted
 , jinja2
 , msgpack
@@ -72,18 +71,19 @@ let
 in
 buildPythonApplication rec {
   pname = "buildbot";
-  version = "3.11.1";
+  version = "4.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ruYW1sVoGvFMi+NS+xiNsn0Iq2RmKlax4bxHgYrj6ZY=";
+  src = fetchFromGitHub {
+    owner = "buildbot";
+    repo = "buildbot";
+    rev = "v${version}";
+    hash = "sha256-xvXPVHbDpYZidZsMXHQPW9rPQomZ2xJ2YS964h44YEs=";
   };
 
   build-system = [
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -137,7 +137,10 @@ buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
+    substituteInPlace master/buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
+  '';
+  preBuild = ''
+    cd master
   '';
 
   # Silence the depreciation warning from SqlAlchemy
@@ -158,12 +161,15 @@ buildPythonApplication rec {
 
   passthru = {
     inherit withPlugins;
-    tests.buildbot = nixosTests.buildbot;
     updateScript = ./update.sh;
+  } // lib.optionalAttrs stdenv.isLinux {
+    tests = {
+      inherit (nixosTests) buildbot;
+    };
   };
 
   meta = with lib; {
-    description = "An open-source continuous integration framework for automating software build, test, and release processes";
+    description = "Open-source continuous integration framework for automating software build, test, and release processes";
     homepage = "https://buildbot.net/";
     changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
     maintainers = teams.buildbot.members;

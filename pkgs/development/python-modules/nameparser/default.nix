@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,19 +18,15 @@ buildPythonPackage rec {
     hash = "sha256-qiQArXHM+AcGdbQDEaJXyTRln5GFSxVOG6bCZHYcBJ0=";
   };
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "nameparser"
-  ];
+  pythonImportsCheck = [ "nameparser" ];
 
   meta = with lib; {
     description = "Module for parsing human names into their individual components";
     homepage = "https://github.com/derek73/python-nameparser";
     changelog = "https://github.com/derek73/python-nameparser/releases/tag/v${version}";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, gtk3, fetchFromGitHub
+{ lib, stdenv, intltool, pkg-config, gtk3, fetchFromGitHub
 , autoreconfHook, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "Simple text editor forked from Leafpad using GTK+ 3.x";
     homepage = "https://github.com/stevenhoneyman/l3afpad";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = [ ];
     license = licenses.gpl2;
     mainProgram = "l3afpad";
   };

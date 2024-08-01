@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A software package for mapping low-divergent sequences against a large reference genome, such as the human genome";
+    description = "Software package for mapping low-divergent sequences against a large reference genome, such as the human genome";
     mainProgram = "bwa";
     license     = licenses.gpl3Plus;
     homepage    = "https://bio-bwa.sourceforge.net/";

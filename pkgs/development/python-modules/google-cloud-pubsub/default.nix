@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.21.1";
+  version = "2.21.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MfzwdES3+BOmFsS2UOH78dyZigiP4AWadhZIVawX8Fw=";
+    hash = "sha256-T6lufyADWczEnPZlfjGsNfXm5V0A+7PO36ZykDz3WyQ=";
   };
 
   build-system = [ setuptools ];
@@ -68,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-pubsub";
     changelog = "https://github.com/googleapis/python-pubsub/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,13 +1,16 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, libstatgrab
-, pkg-config
-, pythonOlder
-, setuptools
-, unittestCheckHook
-, wheel
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  libstatgrab,
+  pkg-config,
+  pythonOlder,
+  setuptools,
+  unittestCheckHook,
+  wheel,
+  darwin,
 }:
 
 buildPythonPackage rec {
@@ -20,33 +23,34 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "libstatgrab";
     repo = "pystatgrab";
-    rev = "PYSTATGRAB_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "PYSTATGRAB_${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-0FDhkIK8jy3/SFmCzrl9l4RTeIKDjO0o5UoODx6Wnfs=";
   };
 
-  nativeBuildInputs = [
-    cython
-    pkg-config
+  build-system = [
     setuptools
     wheel
   ];
 
+  nativeBuildInputs = [
+    cython
+    pkg-config
+  ];
+
   buildInputs = [
     libstatgrab
-  ];
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ IOKit ]);
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "statgrab"
-  ];
+  pythonImportsCheck = [ "statgrab" ];
 
   meta = with lib; {
     description = "Python bindings for libstatgrab";
     homepage = "https://github.com/libstatgrab/pystatgrab";
-    changelog = "https://github.com/libstatgrab/pystatgrab/blob/PYSTATGRAB_${lib.replaceStrings ["."] ["_"] version}/NEWS";
+    changelog = "https://github.com/libstatgrab/pystatgrab/blob/PYSTATGRAB_${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }/NEWS";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ fab ];
   };

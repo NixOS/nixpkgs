@@ -1,41 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, python-jose
-, pythonOlder
-, requests
-, requests-toolbelt
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  deprecation,
+  fetchFromGitHub,
+  jwcrypto,
+  poetry-core,
+  pythonOlder,
+  requests,
+  requests-toolbelt,
 }:
 
 buildPythonPackage rec {
   pname = "python-keycloak";
-  version = "2.6.0";
-  format = "pyproject";
+  version = "4.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "marcospereirampj";
     repo = "python-keycloak";
-    rev = "v${version}";
-    hash = "sha256-cuj0gJlZDkbJ2HRSMcQvO4nxpjw65CKGEpWCL5sucvg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZXS29bND4GsJNhTGiUsLo+4FYd8Tubvg/+PJ33tqovY=";
   };
 
   postPatch = ''
+    # Upstream doesn't set version
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace 'requests-toolbelt = "^0.9.1"' 'requests-toolbelt = "*"'
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  buildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    python-jose
-    urllib3
+  dependencies = [
+    deprecation
+    jwcrypto
     requests
     requests-toolbelt
   ];
@@ -43,14 +42,13 @@ buildPythonPackage rec {
   # Test fixtures require a running keycloak instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "keycloak"
-  ];
+  pythonImportsCheck = [ "keycloak" ];
 
   meta = with lib; {
     description = "Provides access to the Keycloak API";
     homepage = "https://github.com/marcospereirampj/python-keycloak";
+    changelog = "https://github.com/marcospereirampj/python-keycloak/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

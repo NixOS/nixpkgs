@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://phrat.de/index.html";
-    description = "An X window manager based on evilwm and aewm";
+    description = "X window manager based on evilwm and aewm";
     longDescription = ''
       YeahWM is a h* window manager for X based on evilwm and aewm.
 

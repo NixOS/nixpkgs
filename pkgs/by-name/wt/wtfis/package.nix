@@ -5,21 +5,17 @@
 
 let
   pname = "wtfis";
-  version = "0.9.0";
+  version = "0.10.0";
   src = fetchFromGitHub {
     owner = "pirxthepilot";
     repo = "wtfis";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LeIb2MLxulDsgQepNr7I81u8gG4HQC6PsszKZKVjFkw=";
+    hash = "sha256-5mvbwIKnCk8mbjVJAmUwV1zKzGk8HVVZLiUVQXRvczA=";
   };
 in python3.pkgs.buildPythonApplication {
   inherit pname version src;
 
   format = "pyproject";
-
-  nativeBuildInputs = [
-    python3.pkgs.pythonRelaxDepsHook
-  ];
 
   propagatedBuildInputs = [
     python3.pkgs.hatchling

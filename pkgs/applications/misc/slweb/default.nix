@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A static website generator which aims at being simplistic";
+    description = "Static website generator which aims at being simplistic";
     homepage = "https://strahinja.srht.site/slweb/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

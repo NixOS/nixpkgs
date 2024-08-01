@@ -6,7 +6,7 @@ let
   pname = "cppo";
 
   meta = with lib; {
-    description = "The C preprocessor for OCaml";
+    description = "C preprocessor for OCaml";
     mainProgram = "cppo";
     longDescription = ''
       Cppo is an equivalent of the C preprocessor targeted at the OCaml language and its variants.

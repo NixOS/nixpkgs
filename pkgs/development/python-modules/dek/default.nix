@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, xmod
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  xmod,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,27 +19,19 @@ buildPythonPackage rec {
     hash = "sha256-DYODdImTRCukGmGbkZ+9TQeI9DYaeRd/EHS6VND5IDs=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    xmod
-  ];
+  dependencies = [ xmod ];
 
-  nativeBuildInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dek"
-  ];
+  pythonImportsCheck = [ "dek" ];
 
   meta = with lib; {
-    description = "The decorator-decorator";
+    description = "Decorator-decorator";
     homepage = "https://github.com/rec/dek";
     changelog = "https://github.com/rec/dek/blob/${src.rev}/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

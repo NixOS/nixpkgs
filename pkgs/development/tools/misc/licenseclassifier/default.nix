@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A License Classifier";
+    description = "License Classifier";
     mainProgram = "identify_license";
     longDescription = ''
       The license classifier can analyze text to determine what type of license

@@ -9,7 +9,7 @@ in {
     services.code-server = {
       enable = lib.mkEnableOption "code-server";
 
-      package = lib.mkPackageOptionMD pkgs "code-server" {
+      package = lib.mkPackageOption pkgs "code-server" {
         example = ''
           pkgs.vscode-with-extensions.override {
             vscode = pkgs.code-server;

@@ -1,22 +1,19 @@
 { lib, stdenv, fetchurl
 , buildPackages, bison, flex, pkg-config
-, db, iptables, elfutils, libmnl
+, db, iptables, elfutils, libmnl ,libbpf
 , gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.8.0";
+  version = "6.10.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-A6bMo9cakI0fFfe0lb4rj+hR+UFFjcRmSQDX9F/PaM4=";
+    hash = "sha256-kaYvgnN7RJBaAPqAM2nER9VJ6RTpoqQBj911sdVOjc4=";
   };
 
   postPatch = ''
-    # Don't try to create /var/lib/arpd:
-    sed -e '/ARPDDIR/d' -i Makefile
-
     substituteInPlace Makefile \
       --replace "CC := gcc" "CC ?= $CC"
   '';
@@ -50,7 +47,9 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [ bison flex pkg-config ];
-  buildInputs = [ db iptables elfutils libmnl ];
+  buildInputs = [ db iptables libmnl libbpf ]
+    # needed to uploaded bpf programs
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ elfutils ];
 
   enableParallelBuilding = true;
 
@@ -62,9 +61,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
-    description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
+    description = "Collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ primeos eelco fpletz globin ];
   };
 }

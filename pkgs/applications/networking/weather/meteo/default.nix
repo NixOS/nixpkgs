@@ -11,6 +11,7 @@
 , vala
 , wrapGAppsHook3
 , glib
+, glib-networking
 , gtk3
 , json-glib
 , libappindicator
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "bitseater";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hubKusrs0Hh8RryoEI29pnhTSNsIbtGMltlH4qoM6gE=";
+    hash = "sha256-hubKusrs0Hh8RryoEI29pnhTSNsIbtGMltlH4qoM6gE=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
+    glib-networking # see #311066
     gtk3
     json-glib
     libappindicator

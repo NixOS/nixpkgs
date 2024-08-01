@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, pythonOlder
-, pythonAtLeast
-, argcomplete
-, requests
-, looseversion
-, gnupg
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pythonOlder,
+  pythonAtLeast,
+  argcomplete,
+  requests,
+  looseversion,
+  gnupg,
 }:
 
 buildPythonPackage rec {
@@ -26,10 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     argcomplete
     requests
-  ] ++ requests.optional-dependencies.socks
-  ++ lib.optionals (pythonAtLeast "3.12") [
-    looseversion
-  ];
+  ] ++ requests.optional-dependencies.socks ++ lib.optionals (pythonAtLeast "3.12") [ looseversion ];
 
   postInstall = ''
     wrapProgram $out/bin/sdkmanager \
@@ -43,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/fdroid/sdkmanager";
-    description = "A drop-in replacement for sdkmanager from the Android SDK written in Python";
+    description = "Drop-in replacement for sdkmanager from the Android SDK written in Python";
     mainProgram = "sdkmanager";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ linsui ];

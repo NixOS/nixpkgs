@@ -24,7 +24,11 @@ deployAndroidPackage rec {
       addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib64
     fi
 
-    find toolchains -type d -name bin -or -name lib64 | while read dir; do
+    if [ -d $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib ]; then
+      addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib
+    fi
+
+    find toolchains -type d -name bin -or -name lib64 -or -name lib | while read dir; do
       autoPatchelf "$dir"
     done
 

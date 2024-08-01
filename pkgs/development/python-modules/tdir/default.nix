@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, dek
-, xmod
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  dek,
+  xmod,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,28 +20,22 @@ buildPythonPackage rec {
     hash = "sha256-YYQ33Blhqk/CbocqkB9Nh6qbzMjQT07fmzx+fDTvdw8=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     dek
     xmod
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "tdir"
-  ];
+  pythonImportsCheck = [ "tdir" ];
 
   meta = with lib; {
     description = "Create, fill a temporary directory";
     homepage = "https://github.com/rec/tdir";
     changelog = "https://github.com/rec/tdir/blob/${src.rev}/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

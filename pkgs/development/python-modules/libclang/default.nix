@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, llvmPackages
-, setuptools
-, writeText
+{
+  lib,
+  buildPythonPackage,
+  llvmPackages,
+  setuptools,
+  writeText,
 }:
 
 let
@@ -22,7 +23,8 @@ let
     [options]
     packages = clang
   '';
-in buildPythonPackage {
+in
+buildPythonPackage {
   pname = "libclang";
   format = "pyproject";
 
@@ -51,6 +53,6 @@ in buildPythonPackage {
 
   meta = libclang.meta // {
     description = "Python bindings for the C language family frontend for LLVM";
-    maintainers = with lib.maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
   };
 }

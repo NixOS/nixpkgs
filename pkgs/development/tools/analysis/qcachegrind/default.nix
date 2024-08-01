@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "A Qt GUI to visualize profiling data";
+    description = "Qt GUI to visualize profiling data";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ periklis ];

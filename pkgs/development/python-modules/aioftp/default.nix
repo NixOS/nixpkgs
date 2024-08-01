@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, async-timeout
-, buildPythonPackage
-, fetchPypi
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, siosocks
-, trustme
+{
+  lib,
+  stdenv,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  siosocks,
+  trustme,
 }:
 
 buildPythonPackage rec {
@@ -28,18 +29,12 @@ buildPythonPackage rec {
       --replace " --cov" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    siosocks
-  ];
+  propagatedBuildInputs = [ siosocks ];
 
   passthru.optional-dependencies = {
-    socks = [
-      siosocks
-    ];
+    socks = [ siosocks ];
   };
 
   nativeCheckInputs = [
@@ -54,14 +49,12 @@ buildPythonPackage rec {
     "test_pasv_connection_pasv_forced_response_address"
   ];
 
-  pythonImportsCheck = [
-    "aioftp"
-  ];
+  pythonImportsCheck = [ "aioftp" ];
 
   meta = with lib; {
     description = "Python FTP client/server for asyncio";
     homepage = "https://aioftp.readthedocs.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

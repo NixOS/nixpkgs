@@ -138,6 +138,10 @@ in stdenv.mkDerivation (finalAttrs: {
     # https://lists.debian.org/debian-ai/2024/02/msg00178.html
     substituteInPlace rocclr/utils/flags.hpp \
       --replace-fail "HIP_USE_RUNTIME_UNBUNDLER, false" "HIP_USE_RUNTIME_UNBUNDLER, true"
+
+    substituteInPlace opencl/khronos/icd/loader/icd_platform.h \
+      --replace-fail '#define ICD_VENDOR_PATH "/etc/OpenCL/vendors/";' \
+                     '#define ICD_VENDOR_PATH "/run/opengl-driver/etc/OpenCL/vendors/";'
   '';
 
   postInstall = ''

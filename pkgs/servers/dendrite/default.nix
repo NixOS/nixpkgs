@@ -63,7 +63,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://matrix-org.github.io/dendrite";
-    description = "A second-generation Matrix homeserver written in Go";
+    description = "Second-generation Matrix homeserver written in Go";
     changelog = "https://github.com/matrix-org/dendrite/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = teams.matrix.members;

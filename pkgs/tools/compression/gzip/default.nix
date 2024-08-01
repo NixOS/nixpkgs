@@ -1,7 +1,9 @@
 { lib, stdenv
 , fetchurl
 , makeWrapper
+, updateAutotoolsGnuConfigScriptsHook
 , xz
+, runtimeShellPackage
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -22,7 +24,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ xz.bin makeWrapper ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook makeWrapper ];
+  buildInputs = [ runtimeShellPackage ];
 
   makeFlags = [
     "SHELL=/bin/sh"

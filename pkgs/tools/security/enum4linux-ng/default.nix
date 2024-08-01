@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "enum4linux-ng";
-  version = "1.3.3";
+  version = "1.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cddmp";
     repo = "enum4linux-ng";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VpNYgdgvsQG5UcxoyyLCj5ijJdIKKhCSqnHTvTgD4lA=";
+    hash = "sha256-MN3AUubro9CHkdPe/X1xcE11ye/D/A+Kf6zUOJTN4l0=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

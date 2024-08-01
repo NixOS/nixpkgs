@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, cohttp-lwt
+{ buildDunePackage, cohttp-lwt
 , conduit-lwt-unix, conduit-lwt, ppx_sexp_conv
 , cmdliner, fmt, logs, magic-mime
 , ounit

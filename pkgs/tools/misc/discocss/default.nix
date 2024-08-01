@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tiny Discord css-injector";
+    description = "Tiny Discord css-injector";
     changelog = "https://github.com/mlvzk/discocss/releases/tag/v${version}";
     homepage = "https://github.com/mlvzk/discocss";
     license = licenses.mpl20;

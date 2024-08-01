@@ -1,10 +1,11 @@
-{ beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, html5lib
-, lib
-, lxml
-, python
+{
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  html5lib,
+  lib,
+  lxml,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,10 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     lxml = [ lxml ];
-    html5lib = [ beautifulsoup4 html5lib ];
+    html5lib = [
+      beautifulsoup4
+      html5lib
+    ];
   };
 
   checkInputs = passthru.optional-dependencies.lxml ++ passthru.optional-dependencies.html5lib;

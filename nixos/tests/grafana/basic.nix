@@ -10,7 +10,7 @@ let
         analytics.reporting_enabled = false;
 
         server = {
-          http_addr = "localhost";
+          http_addr = "::1";
           domain = "localhost";
         };
 
@@ -47,7 +47,7 @@ let
 
     postgresql = {
       services.grafana.settings.database = {
-        host = "127.0.0.1:5432";
+        host = "[::1]:5432";
         user = "grafana";
       };
       services.postgresql = {
@@ -91,9 +91,9 @@ in {
 
     with subtest("Declarative plugins installed"):
         declarativePlugins.wait_for_unit("grafana.service")
-        declarativePlugins.wait_for_open_port(3000)
+        declarativePlugins.wait_for_open_port(3000, addr="::1")
         declarativePlugins.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/plugins | grep grafana-clock-panel"
+            "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/plugins | grep grafana-clock-panel"
         )
         declarativePlugins.shutdown()
 
@@ -101,10 +101,10 @@ in {
         sqlite.wait_for_unit("grafana.service")
         sqlite.wait_for_open_port(3000)
         print(sqlite.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/org/users -i"
+            "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/org/users -i"
         ))
         sqlite.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/org/users | grep admin\@localhost"
+            "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/org/users | grep admin\@localhost"
         )
         sqlite.shutdown()
 
@@ -112,10 +112,10 @@ in {
         socket.wait_for_unit("grafana.service")
         socket.wait_for_open_port(80)
         print(socket.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1/api/org/users -i"
+            "curl -sSfN -u testadmin:snakeoilpwd http://[::1]/api/org/users -i"
         ))
         socket.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1/api/org/users | grep admin\@localhost"
+            "curl -sSfN -u testadmin:snakeoilpwd http://[::1]/api/org/users | grep admin\@localhost"
         )
         socket.shutdown()
 
@@ -125,7 +125,7 @@ in {
         postgresql.wait_for_open_port(3000)
         postgresql.wait_for_open_port(5432)
         postgresql.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/org/users | grep admin\@localhost"
+            "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/org/users | grep admin\@localhost"
         )
         postgresql.shutdown()
 
@@ -135,7 +135,7 @@ in {
         mysql.wait_for_open_port(3000)
         mysql.wait_for_open_port(3306)
         mysql.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/org/users | grep admin\@localhost"
+            "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/org/users | grep admin\@localhost"
         )
         mysql.shutdown()
   '';

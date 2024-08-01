@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "An interactive CLI for creating conventional commits";
+    description = "Interactive CLI for creating conventional commits";
     homepage = "https://github.com/its-danny/koji";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ByteSudoer ];

@@ -19,6 +19,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
+    changelog = "https://github.com/sa7mon/S3Scanner/releases/tag/${src.rev}";
     description = "Scan for misconfigured S3 buckets across S3-compatible APIs";
     downloadPage = "https://github.com/sa7mon/S3Scanner/releases/tag/v${version}";
     homepage = "https://github.com/sa7mon/s3scanner";

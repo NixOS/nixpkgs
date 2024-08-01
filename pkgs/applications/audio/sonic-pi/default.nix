@@ -224,7 +224,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sonic-pi.net/";
     description = "Free live coding synth for everyone originally designed to support computing and music lessons within schools";
     license = licenses.mit;
-    maintainers = with maintainers; [ Phlogistique kamilchm c0deaddict sohalt lilyinstarlight ];
+    maintainers = with maintainers; [ Phlogistique kamilchm c0deaddict sohalt ];
     platforms = platforms.linux;
   };
 }

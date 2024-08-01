@@ -180,7 +180,7 @@ in
       #dnsmasq = 141;# dynamically allocated as of 2021-09-03
       #uhub = 142; # unused
       yandexdisk = 143;
-      mxisd = 144; # was once collectd
+      # mxisd = 144; # removed 2024-07-10
       #consul = 145;# dynamically allocated as of 2021-09-03
       #mailpile = 146; # removed 2022-01-12
       redmine = 147;
@@ -503,7 +503,7 @@ in
       #dnsmasq = 141; # unused
       uhub = 142;
       #yandexdisk = 143; # unused
-      mxisd = 144; # was once collectd
+      # mxisd = 144; # removed 2024-07-10
       #consul = 145; # unused
       #mailpile = 146; # removed 2022-01-12
       redmine = 147;

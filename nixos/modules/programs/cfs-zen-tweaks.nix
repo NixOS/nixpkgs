@@ -2,8 +2,6 @@
 
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
 
   cfg = config.programs.cfs-zen-tweaks;
@@ -13,14 +11,14 @@ in
 {
 
   meta = {
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with lib.maintainers; [ mkg20001 ];
   };
 
   options = {
-    programs.cfs-zen-tweaks.enable = mkEnableOption "CFS Zen Tweaks";
+    programs.cfs-zen-tweaks.enable = lib.mkEnableOption "CFS Zen Tweaks";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.packages = [ pkgs.cfs-zen-tweaks ];
 
     systemd.services.set-cfs-tweaks.wantedBy = [

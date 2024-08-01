@@ -1,59 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchFromGitHub
-, pythonOlder
-, substituteAll
-, colorama
-, contourpy
-, jinja2
-, numpy
-, nodejs
-, packaging
-, pandas
-, pillow
-, tornado
-, pytestCheckHook
-, pyyaml
-, setuptools
-, setuptools-git-versioning
-, xyzservices
-, beautifulsoup4
-, channels
-, click
-, colorcet
-, coverage
-, firefox
-, geckodriver
-, isort
-, json5
-, nbconvert
-, networkx
-, psutil
-, pygments
-, pygraphviz
-, pytest
-, pytest-asyncio
-, pytest-xdist
-, pytest-timeout
-, requests
-, scipy
-, selenium
-, toml
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchFromGitHub,
+  pythonOlder,
+  substituteAll,
+  colorama,
+  contourpy,
+  jinja2,
+  numpy,
+  nodejs,
+  packaging,
+  pandas,
+  pillow,
+  tornado,
+  pytestCheckHook,
+  pyyaml,
+  setuptools,
+  setuptools-git-versioning,
+  xyzservices,
+  beautifulsoup4,
+  channels,
+  click,
+  colorcet,
+  coverage,
+  firefox,
+  geckodriver,
+  isort,
+  json5,
+  nbconvert,
+  networkx,
+  psutil,
+  pygments,
+  pygraphviz,
+  pytest,
+  pytest-asyncio,
+  pytest-xdist,
+  pytest-timeout,
+  requests,
+  scipy,
+  selenium,
+  toml,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "3.4.1";
+  version = "3.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2CSWHkJlNnsHUM5YsH5WStC4PKZLM1UhzTQh6bnxDYk=";
+    hash = "sha256-Zeia3b6QDDevJaIFKuF0ttO6HvCMkf1att/XEuGEw5k=";
   };
 
   src_test = fetchFromGitHub {

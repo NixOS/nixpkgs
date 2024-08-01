@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +20,7 @@ buildPythonPackage rec {
   # Project has no real tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyhomeworks"
-  ];
+  pythonImportsCheck = [ "pyhomeworks" ];
 
   meta = with lib; {
     description = "Python interface to Lutron Homeworks Series 4/8";

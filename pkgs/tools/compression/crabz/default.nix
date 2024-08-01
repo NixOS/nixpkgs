@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "A cross platform, fast, compression and decompression tool";
+    description = "Cross platform, fast, compression and decompression tool";
     homepage = "https://github.com/sstadick/crabz";
     changelog = "https://github.com/sstadick/crabz/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ unlicense /* or */ mit ];

@@ -13,7 +13,7 @@ let
 in
 stdenv.mkDerivation (args // {
   name = "${name}-source";
-  installPhase = "cp -r . $out";
+  installPhase = "cp -pr --reflink=auto -- . $out";
   outputs = [ "out" ];
   separateDebugInfo = false;
   dontUnpack = false;

@@ -1,33 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jaconv";
   version = "0.3.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ikegami-yukino";
-    repo = pname;
+    repo = "jaconv";
     rev = "refs/tags/v${version}";
     hash = "sha256-9ruhOLaYNESeKOwJs3IN6ct66fSq7My9DOyA7/cH3d0=";
   };
 
-  nativeCheckInputs = [
-    nose
-    pytestCheckHook
-  ];
+  patches = [ ./use-pytest.patch ];
 
-  pythonImportsCheck = [
-    "jaconv"
-  ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "jaconv" ];
 
   meta = with lib; {
     description = "Python Japanese character interconverter for Hiragana, Katakana, Hankaku and Zenkaku";

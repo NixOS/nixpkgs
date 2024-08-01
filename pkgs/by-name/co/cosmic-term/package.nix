@@ -8,7 +8,6 @@
 , libinput
 , libxkbcommon
 , makeBinaryWrapper
-, mesa
 , pkg-config
 , rustPlatform
 , stdenv
@@ -99,7 +98,6 @@ rustPlatform.buildRustPackage rec {
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
         libxkbcommon
-        mesa.drivers
         vulkan-loader
         xorg.libX11
         xorg.libXcursor

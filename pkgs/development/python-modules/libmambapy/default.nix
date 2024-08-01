@@ -22,14 +22,14 @@
 }:
 buildPythonPackage rec {
   pname = "libmambapy";
-  version = "1.5.7";
+  version = "2024.03.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
-    rev = "${pname}-${version}";
-    hash = "sha256-HfmvLi9IBWlaGAn2Ej4Bnm4b3l19jEXwNl5IUkdVxi0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-sxZDlMFoMLq2EAzwBVO++xvU1C30JoIoZXEX/sqkXS0=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,6 @@ buildPythonPackage rec {
     pypaBuildPhase
   '';
 
-  pythonRemoveDeps = [ "scikit-build" ];
 
   pythonImportsCheck = [
     "libmambapy"
@@ -85,7 +84,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "The python library for the fast Cross-Platform Package Manager";
+    description = "Python library for the fast Cross-Platform Package Manager";
     homepage = "https://github.com/mamba-org/mamba";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ericthemagician ];

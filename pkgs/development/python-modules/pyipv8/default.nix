@@ -1,16 +1,17 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, cryptography
-, libnacl
-, aiohttp
-, aiohttp-apispec
-, pyopenssl
-, pyasn1
-, marshmallow
-, typing-extensions
-, packaging
-, apispec
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  cryptography,
+  libnacl,
+  aiohttp,
+  aiohttp-apispec,
+  pyopenssl,
+  pyasn1,
+  marshmallow,
+  typing-extensions,
+  packaging,
+  apispec,
 }:
 
 buildPythonPackage rec {
@@ -41,8 +42,6 @@ buildPythonPackage rec {
     description = "Python implementation of Tribler's IPv8 p2p-networking layer";
     homepage = "https://github.com/Tribler/py-ipv8";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
-      mkg20001
-    ];
+    maintainers = with maintainers; [ mkg20001 ];
   };
 }

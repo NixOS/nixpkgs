@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, html5tagger
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  html5tagger,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-rI1MNdYl/P64tUHyB3qV9gfLbGbCVOXnEFoqFTkaqgg=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    html5tagger
-  ];
+  propagatedBuildInputs = [ html5tagger ];
 
   postInstall = ''
     cp tracerite/style.css $out/${python.sitePackages}/tracerite
@@ -36,15 +33,13 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tracerite"
-  ];
+  pythonImportsCheck = [ "tracerite" ];
 
   meta = with lib; {
     description = "Tracebacks for Humans in Jupyter notebooks";
     homepage = "https://github.com/sanic-org/tracerite";
     changelog = "https://github.com/sanic-org/tracerite/releases/tag/v${version}";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

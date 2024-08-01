@@ -1,6 +1,7 @@
-{ buildPythonPackage
-, isPyPy
-, pytest
+{
+  buildPythonPackage,
+  isPyPy,
+  pytest,
 }:
 
 buildPythonPackage rec {

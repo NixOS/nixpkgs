@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "USBGuard";
     repo = pname;
     rev = "usbguard-${version}";
-    sha256 = "sha256-uwNoKczmVOMpkU4KcKTOtbcTHiYVGXjk/rVbqMl5pGk=";
+    hash = "sha256-uwNoKczmVOMpkU4KcKTOtbcTHiYVGXjk/rVbqMl5pGk=";
     fetchSubmodules = true;
   };
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   passthru.tests = nixosTests.usbguard;
 
   meta = with lib; {
-    description = "The USBGuard software framework helps to protect your computer against BadUSB";
+    description = "USBGuard software framework helps to protect your computer against BadUSB";
     longDescription = ''
       USBGuard is a software framework for implementing USB device authorization
       policies (what kind of USB devices are authorized) as well as method of

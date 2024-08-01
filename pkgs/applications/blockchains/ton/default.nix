@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ton";
-  version = "2024.04";
+  version = "2024.06";
 
   src = fetchFromGitHub {
     owner = "ton-blockchain";
     repo = "ton";
     rev = "v${version}";
-    hash = "sha256-hh8D4IZX6RS/RXdhVONhgetqp89kpTC2IwDQ2KHdKsE=";
+    hash = "sha256-5fuRdVayvmM+yK1WsdtWlCZpxz7KKBs+ZRfnueP0Ny0=";
     fetchSubmodules = true;
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     # The build fails on darwin as:
     #   error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
     broken = stdenv.isDarwin;
-    description = "A fully decentralized layer-1 blockchain designed by Telegram";
+    description = "Fully decentralized layer-1 blockchain designed by Telegram";
     homepage = "https://ton.org/";
     changelog = "https://github.com/ton-blockchain/ton/blob/v${version}/Changelog.md";
     license = licenses.lgpl2Only;

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dbus-python
-, pygobject3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  dbus-python,
+  pygobject3,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,6 @@ buildPythonPackage rec {
     mainProgram = "gattctl";
     homepage = "https://github.com/getsenic/gatt-python/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

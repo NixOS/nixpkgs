@@ -1,34 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, lxml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  lxml,
+  lxml-html-clean,
 }:
 
 buildPythonPackage rec {
   pname = "justext";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "miso-belica";
     repo = "jusText";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WNxDoM5666tEHS9pMl5dOoig4S7dSYaCLZq71tehWqw=";
+    hash = "sha256-9i7hzCK/ijh8xw9l2ZbVhVj5IBf0WD/49/R1tSWgqrQ=";
   };
 
   propagatedBuildInputs = [
     lxml
+    lxml-html-clean
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # patch out coverage report
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov=justext --cov-report=term-missing --no-cov-on-fail" ""
+      --replace-fail " --cov=justext --cov-report=term-missing --no-cov-on-fail" ""
   '';
 
   pythonImportsCheck = [ "justext" ];

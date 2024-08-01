@@ -82,8 +82,8 @@ in
 
       apiServer = mkOption {
         type = types.str;
-        example = "localhost:8080";
-        description = "host:port to connect to the API. Ignored unless mode is set to 'api'";
+        example = "http://localhost:8080";
+        description = "URI to connect to the API. Ignored unless mode is set to 'api'";
       };
 
       extraArguments = mkOption {

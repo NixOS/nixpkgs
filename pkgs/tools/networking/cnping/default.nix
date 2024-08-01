@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "cntools";
     repo = "cnping";
     rev = "6b89363e6b79ecbf612306d42a8ef94a5a2f756a";
-    sha256 = "sha256-E3Wm5or6C4bHq7YoyaEbtDwyd+tDVYUOMeQrprlmL4A=";
+    hash = "sha256-E3Wm5or6C4bHq7YoyaEbtDwyd+tDVYUOMeQrprlmL4A=";
     fetchSubmodules = true;
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Minimal Graphical IPV4 Ping Tool";
     homepage = "https://github.com/cntools/cnping";
     license = with licenses; [ mit bsd3 ]; # dual licensed, MIT-x11 & BSD-3-Clause
-    maintainers = with maintainers; [ ckie ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "cnping";
   };

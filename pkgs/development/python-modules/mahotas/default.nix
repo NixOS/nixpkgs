@@ -1,25 +1,25 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pillow
-, scipy
-, numpy
-, pytestCheckHook
-, imread
-, lib
-, stdenv
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
+  scipy,
+  numpy,
+  pytestCheckHook,
+  imread,
+  lib,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "mahotas";
-  version = "1.4.13";
+  version = "1.4.14";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "luispedro";
     repo = "mahotas";
-    rev = "v${version}";
-    hash = "sha256-AmctF/9hLgHw6FUm0s61eCdcc12lBa1t0OkXclis//w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9tjk3rhcfAYROZKwmwHzHAN7Ui0EgmxPErQyF//K0r8=";
   };
 
   propagatedBuildInputs = [
@@ -31,11 +31,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-
   # mahotas/_morph.cpp:864:10: error: no member named 'random_shuffle' in namespace 'std'
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-std=c++14";
-  };
+  env = lib.optionalAttrs stdenv.cc.isClang { NIX_CFLAGS_COMPILE = "-std=c++14"; };
 
   # tests must be run in the build directory
   preCheck = ''
@@ -50,9 +47,7 @@ buildPythonPackage rec {
     "test_haralick3d"
   ];
 
-  pythonImportsCheck = [
-    "mahotas"
-  ];
+  pythonImportsCheck = [ "mahotas" ];
 
   disabled = stdenv.isi686; # Failing tests
 

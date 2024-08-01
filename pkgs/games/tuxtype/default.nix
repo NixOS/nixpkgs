@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--without-sdlpango" ];
 
   meta = with lib; {
-    description = "An Educational Typing Tutor Game Starring Tux, the Linux Penguin";
+    description = "Educational Typing Tutor Game Starring Tux, the Linux Penguin";
     mainProgram = "tuxtype";
     homepage = "https://github.com/tux4kids/tuxtype";
     license = licenses.gpl3Plus;

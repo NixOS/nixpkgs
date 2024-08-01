@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, autoPatchelfHook
 , alsa-lib, gcc-unwrapped, libX11, libcxx, libdrm, libglvnd, libpulseaudio, libxcb, mesa, wayland, xz, zlib
-, libva, libvdpau, addOpenGLRunpath
+, libva, libvdpau, addDriverRunpath
 }:
 
 stdenv.mkDerivation rec {
   pname = "mdk-sdk";
-  version = "0.26.0";
+  version = "0.29.0";
 
   src = fetchurl {
     url = "https://github.com/wang-bin/mdk-sdk/releases/download/v${version}/mdk-sdk-linux-x64.tar.xz";
-    hash = "sha256-DZiipuGXhzrlm49doNeFExApHMDI7ILfOumgXA8useA=";
+    hash = "sha256-umseIESdiiefQReycc2W8gsurxlpFHfAgV0YdXl1hZE=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   appendRunpaths = lib.makeLibraryPath [
-    libva libvdpau addOpenGLRunpath.driverLink
+    libva libvdpau addDriverRunpath.driverLink
   ];
 
   installPhase = ''

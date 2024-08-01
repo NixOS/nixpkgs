@@ -1,14 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, colorama
-, meson
-, ninja
-, pyproject-metadata
-, tomli
-, typing-extensions
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  meson,
+  ninja,
+  pyproject-metadata,
+  tomli,
+  typing-extensions,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,21 +26,15 @@ buildPythonPackage rec {
     ninja
     pyproject-metadata
     tomli
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   propagatedBuildInputs = [
     meson
     ninja
     pyproject-metadata
     tomli
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
-  setupHooks = [
-    ./add-build-flags.sh
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  setupHooks = [ ./add-build-flags.sh ];
 
   meta = {
     changelog = "https://github.com/mesonbuild/meson-python/blob/${version}/CHANGELOG.rst";

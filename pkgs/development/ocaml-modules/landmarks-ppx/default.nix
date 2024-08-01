@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, landmarks, ppxlib }:
+{ lib, buildDunePackage, ocaml, landmarks, ppxlib }:
 
 buildDunePackage {
   pname = "landmarks-ppx";

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gevent
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gevent,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,21 +21,15 @@ buildPythonPackage rec {
     hash = "sha256-zA4apOGyrbjBOxUKBARiKmmM9rSVFVGWsDpOaItOoLU=";
   };
 
-  patches = [
-    ./tests.patch
-  ];
+  patches = [ ./tests.patch ];
 
-  nativeCheckInputs = [
-    gevent
-  ];
+  nativeCheckInputs = [ gevent ];
 
   checkPhase = ''
     ${python.interpreter} run_tests.py
   '';
 
-  pythonImportsCheck = [
-    "yappi"
-  ];
+  pythonImportsCheck = [ "yappi" ];
 
   meta = with lib; {
     description = "Python profiler that supports multithreading and measuring CPU time";

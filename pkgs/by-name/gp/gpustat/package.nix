@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-M9P/qfw/tp9ogkNOE3b2fD2rGFnii1/VwmqJHqXb7Mg=";
   };
 
-  cargoSha256 = "sha256-po/pEMZEtySZnz7l2FI7Wqbmp2CiWBijchKGkqlIMPU=";
+  cargoHash = "sha256-po/pEMZEtySZnz7l2FI7Wqbmp2CiWBijchKGkqlIMPU=";
 
   nativeBuildInputs = [
     cmake
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple utility for viewing GPU utilization";
+    description = "Simple utility for viewing GPU utilization";
     homepage = "https://github.com/arduano/gpustat";
     license = licenses.asl20;
     maintainers = with maintainers; [ arduano ];

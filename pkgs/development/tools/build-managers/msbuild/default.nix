@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, nuget, unzip, dotnetCorePackages, writeText, roslyn }:
+{ lib, stdenv, fetchurl, makeWrapper, glibcLocales, mono, nuget, unzip, dotnetCorePackages, writeText, roslyn }:
 
 let
 
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    unset NUGET_PACKAGES
     # nuget would otherwise try to base itself in /homeless-shelter
     export HOME=$(pwd)/fake-home
 

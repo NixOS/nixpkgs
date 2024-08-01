@@ -19,7 +19,7 @@ let
   };
 
   meta = with lib; {
-    description = "A set of nit-picky rules that aim to point out and explain common mistakes in nixpkgs package pull requests";
+    description = "Set of nit-picky rules that aim to point out and explain common mistakes in nixpkgs package pull requests";
     homepage = "https://github.com/jtojnar/nixpkgs-hammering";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A GUI for Cargo";
+    description = "GUI for Cargo";
     mainProgram = "cargo-ui";
     homepage = "https://github.com/slint-ui/cargo-ui";
     changelog = "https://github.com/slint-ui/cargo-ui/blob/v${version}/CHANGELOG.md";

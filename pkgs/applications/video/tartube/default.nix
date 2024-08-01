@@ -69,7 +69,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A GUI front-end for youtube-dl";
+    description = "GUI front-end for youtube-dl";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mkg20001 luc65r ];

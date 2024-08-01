@@ -327,6 +327,10 @@ let
       INET_RAW_DIAG     = mkDefault module;
       INET_DIAG_DESTROY = mkDefault yes;
 
+      # IPsec over TCP
+      INET_ESPINTCP  = whenAtLeast "5.8" yes;
+      INET6_ESPINTCP = whenAtLeast "5.8" yes;
+
       # enable multipath-tcp
       MPTCP           = whenAtLeast "5.6" yes;
       MPTCP_IPV6      = whenAtLeast "5.6" yes;
@@ -435,13 +439,14 @@ let
       DRM_GMA500             = whenAtLeast "5.12" module;
       DRM_GMA600             = whenOlder "5.13" yes;
       DRM_GMA3600            = whenOlder "5.12" yes;
-      DRM_VMWGFX_FBCON       = whenOlder "6.2" yes;
+      DRM_VMWGFX_FBCON       = whenOlder "6.1" yes;
       # (experimental) amdgpu support for verde and newer chipsets
       DRM_AMDGPU_SI = yes;
       # (stable) amdgpu support for bonaire and newer chipsets
       DRM_AMDGPU_CIK = yes;
       # Allow device firmware updates
-      DRM_DP_AUX_CHARDEV = yes;
+      DRM_DP_AUX_CHARDEV = whenOlder "6.10" yes;
+      DRM_DISPLAY_DP_AUX_CHARDEV = whenAtLeast "6.10" yes;
       # amdgpu display core (DC) support
       DRM_AMD_DC_DCN1_0 = whenOlder "5.6" yes;
       DRM_AMD_DC_DCN2_0 = whenBetween "5.3" "5.6" yes;
@@ -470,7 +475,8 @@ let
       MEDIA_CEC_RC = whenAtLeast "5.10" yes;
 
       # Enable CEC over DisplayPort
-      DRM_DP_CEC = yes;
+      DRM_DP_CEC = whenOlder "6.10" yes;
+      DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = yes;
@@ -505,6 +511,7 @@ let
       # Support configuring jack functions via fw mechanism at boot
       SND_HDA_PATCH_LOADER = yes;
       SND_HDA_CODEC_CA0132_DSP = whenOlder "5.7" yes; # Enable DSP firmware loading on Creative Soundblaster Z/Zx/ZxR/Recon
+      SND_HDA_CODEC_CS8409 = whenAtLeast "6.6" module; # Cirrus Logic HDA Bridge CS8409
       SND_OSSEMUL         = yes;
       SND_USB_CAIAQ_INPUT = yes;
       SND_USB_AUDIO_MIDI_V2 = whenAtLeast "6.5" yes;
@@ -615,8 +622,8 @@ let
       F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
-      NFSD_V2_ACL            = whenOlder "5.15" yes;
-      NFSD_V3                = whenOlder "5.15" yes;
+      NFSD_V2_ACL            = whenOlder "5.10" yes;
+      NFSD_V3                = whenOlder "5.10" yes;
       NFSD_V3_ACL            = yes;
       NFSD_V4                = yes;
       NFSD_V4_SECURITY_LABEL = yes;
@@ -665,20 +672,29 @@ let
     };
 
     security = {
+      # Report BUG() conditions and kill the offending process.
+      BUG = yes;
+      BUG_ON_DATA_CORRUPTION = yes;
+
       FORTIFY_SOURCE                   = option yes;
 
       # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
       DEBUG_LIST                       = yes;
+
       HARDENED_USERCOPY                = yes;
       RANDOMIZE_BASE                   = option yes;
+      STRICT_KERNEL_RWX                = yes;
+      STRICT_MODULE_RWX                = yes;
       STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
       IO_STRICT_DEVMEM                 = mkDefault yes;
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
+
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
       # The goal of Landlock is to enable to restrict ambient rights (e.g. global filesystem access) for a set of processes.
       # This does not have any effect if a program does not support it
       SECURITY_LANDLOCK                = whenAtLeast "5.13" yes;
+
       DEVKMEM                          = whenOlder "5.13" no; # Disable /dev/kmem
 
       USER_NS                          = yes; # Support for user namespaces
@@ -713,6 +729,10 @@ let
 
       # Enable support for page poisoning. Still needs to be enabled on the command line to actually work.
       PAGE_POISONING                   = yes;
+      # Randomize page allocator when page_alloc.shuffle=1
+      SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;
+
+      INIT_ON_ALLOC_DEFAULT_ON = whenAtLeast "5.3" yes;
 
       # Enable stack smashing protections in schedule()
       # See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v4.8&id=0d9e26329b0c9263d4d9e0422d80a0e73268c52f
@@ -737,6 +757,10 @@ let
       # Mitigate straight line speculation at the cost of some file size
       SLS = whenBetween "5.17" "6.9" yes;
       MITIGATION_SLS = whenAtLeast "6.9" yes;
+
+      DEFAULT_MMAP_MIN_ADDR = freeform "65536";
+    } // optionalAttrs stdenv.hostPlatform.isAarch64 {
+      DEFAULT_MMAP_MIN_ADDR = freeform "32768";
     };
 
     microcode = {
@@ -871,12 +895,14 @@ let
     };
 
     zram = {
-      ZRAM            = module;
-      ZRAM_WRITEBACK  = option yes;
-      ZRAM_MULTI_COMP = whenAtLeast "6.2" yes;
-      ZSWAP           = option yes;
-      ZPOOL           = yes;
-      ZBUD            = option yes;
+      ZRAM                          = module;
+      ZRAM_WRITEBACK                = option yes;
+      ZRAM_MULTI_COMP               = whenAtLeast "6.2" yes;
+      ZRAM_DEF_COMP_ZSTD            = whenAtLeast "5.11" yes;
+      ZSWAP                         = option yes;
+      ZSWAP_COMPRESSOR_DEFAULT_ZSTD = whenAtLeast "5.7" (mkOptionDefault yes);
+      ZPOOL                         = yes;
+      ZSMALLOC                      = option yes;
     };
 
     brcmfmac = {
@@ -925,8 +951,10 @@ let
       # i686 issues: https://github.com/NixOS/nixpkgs/pull/117961#issuecomment-812106375
       useZstd = stdenv.buildPlatform.is64bit && versionAtLeast version "5.9";
     in {
-      KERNEL_XZ            = mkIf (!useZstd) yes;
-      KERNEL_ZSTD          = mkIf useZstd yes;
+      # stdenv.hostPlatform.linux-kernel.target assumes uncompressed on RISC-V.
+      KERNEL_UNCOMPRESSED  = mkIf stdenv.hostPlatform.isRiscV yes;
+      KERNEL_XZ            = mkIf (!stdenv.hostPlatform.isRiscV && !useZstd) yes;
+      KERNEL_ZSTD          = mkIf (!stdenv.hostPlatform.isRiscV && useZstd) yes;
 
       HID_BATTERY_STRENGTH = yes;
       # enabled by default in x86_64 but not arm64, so we do that here
@@ -948,8 +976,8 @@ let
       THRUSTMASTER_FF    = yes;
       ZEROPLUS_FF        = yes;
 
-      MODULE_COMPRESS    = whenOlder "5.13" yes;
-      MODULE_COMPRESS_XZ = yes;
+      MODULE_COMPRESS      = whenOlder "5.13" yes;
+      MODULE_COMPRESS_XZ   = yes;
 
       SYSVIPC            = yes;  # System-V IPC
 
@@ -1001,12 +1029,15 @@ let
       SERIAL_DEV_CTRL_TTYPORT = yes; # enables support for TTY serial devices
 
       BT_HCIBTUSB_MTK = whenAtLeast "5.3" yes; # MediaTek protocol support
-      BT_HCIUART_QCA = yes; # Qualcomm Atheros protocol support
+
+      BT_HCIUART        = module; # required for BT devices with serial port interface (QCA6390)
+      BT_HCIUART_BCM    = option yes; # Broadcom Bluetooth support
+      BT_HCIUART_BCSP   = option yes; # CSR BlueCore support
+      BT_HCIUART_H4     = option yes; # UART (H4) protocol support
+      BT_HCIUART_LL     = option yes; # Texas Instruments BRF
+      BT_HCIUART_QCA    = yes; # Qualcomm Atheros support
       BT_HCIUART_SERDEV = yes; # required by BT_HCIUART_QCA
-      BT_HCIUART = module; # required for BT devices with serial port interface (QCA6390)
-      BT_HCIUART_BCSP = option yes;
-      BT_HCIUART_H4   = option yes; # UART (H4) protocol support
-      BT_HCIUART_LL   = option yes;
+
       BT_RFCOMM_TTY   = option yes; # RFCOMM TTY support
       BT_QCA = module; # enables QCA6390 bluetooth
 
@@ -1021,6 +1052,12 @@ let
       EFI_STUB            = yes; # EFI bootloader in the bzImage itself
       EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER =
           whenOlder "6.2" (whenAtLeast "5.8" yes); # initrd kernel parameter for EFI
+
+      # Generic compression support for EFI payloads
+      # Add new platforms only after they have been verified to build and boot.
+      # This is unsupported on x86 due to a custom decompression mechanism.
+      EFI_ZBOOT = mkIf stdenv.hostPlatform.isAarch64 (whenAtLeast "6.1" yes);
+
       CGROUPS             = yes; # used by systemd
       FHANDLE             = yes; # used by systemd
       SECCOMP             = yes; # used by systemd >= 231
@@ -1120,10 +1157,13 @@ let
       # For systemd-binfmt
       BINFMT_MISC   = option yes;
 
+      # Required for EDID overriding
+      FW_LOADER = yes;
       # Disable the firmware helper fallback, udev doesn't implement it any more
       FW_LOADER_USER_HELPER_FALLBACK = option no;
 
       FW_LOADER_COMPRESS = whenAtLeast "5.3" yes;
+      FW_LOADER_COMPRESS_ZSTD = whenAtLeast "5.19" yes;
 
       HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
       HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support

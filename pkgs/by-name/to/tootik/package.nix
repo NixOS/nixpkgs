@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tootik";
-  version = "0.10.3";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "tootik";
     rev = version;
-    hash = "sha256-afGFQxC9WJxSQk6LLl4IBo1JoKqcKQ/Qc7HOaJKi2Do=";
+    hash = "sha256-b4uSztroeOKPOyPwxVB3ofkAmDpWFstHDQX2IwQwG/4=";
   };
 
-  vendorHash = "sha256-Lsc8nK4I1gZEW7RbEapHr3IJ6wTATLElX3XfNX1LwvM=";
+  vendorHash = "sha256-B+SmzNLAXIjkUO1JGpD1eqa52Z1zOdPiG8urvLFXf88=";
 
   nativeBuildInputs = [ openssl ];
 
@@ -26,7 +26,7 @@ buildGoModule rec {
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 
   meta = {
-    description = "A federated nanoblogging service with a Gemini frontend";
+    description = "Federated nanoblogging service with a Gemini frontend";
     homepage = "https://github.com/dimkr/tootik";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sikmir ];

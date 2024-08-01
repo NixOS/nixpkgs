@@ -28,7 +28,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = {
-    description = "A command line tool for simple creation and cloning of virtual machines based on libvirt";
+    description = "Command line tool for simple creation and cloning of virtual machines based on libvirt";
     homepage = "https://github.com/LINBIT/virter";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];

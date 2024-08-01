@@ -1,15 +1,15 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, cliff
-, oslo-i18n
-, oslo-utils
-, openstacksdk
-, pbr
-, requests-mock
-, simplejson
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cliff,
+  oslo-i18n,
+  oslo-utils,
+  openstacksdk,
+  pbr,
+  requests-mock,
+  simplejson,
+  stestr,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +27,7 @@ buildPythonPackage rec {
   # fake version to make pbr.packaging happy and not reject it...
   PBR_VERSION = version;
 
-  nativeBuildInputs = [
-    pbr
-  ];
+  nativeBuildInputs = [ pbr ];
 
   propagatedBuildInputs = [
     cliff

@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, bottle
-, importlib-resources
-, proxy-tools
-, pygobject3
-, pyqtwebengine
-, pytest
-, pythonOlder
-, qt5
-, qtpy
-, six
-, xvfb-run
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  bottle,
+  importlib-resources,
+  proxy-tools,
+  pygobject3,
+  pyqtwebengine,
+  pytest,
+  pythonOlder,
+  qt5,
+  qtpy,
+  six,
+  xvfb-run,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     pyqtwebengine
     proxy-tools
     six
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
 
   nativeCheckInputs = [
     pygobject3
@@ -68,9 +67,7 @@ buildPythonPackage rec {
     popd
   '';
 
-  pythonImportsCheck = [
-    "webview"
-  ];
+  pythonImportsCheck = [ "webview" ];
 
   meta = with lib; {
     description = "Lightweight cross-platform wrapper around a webview";

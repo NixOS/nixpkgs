@@ -5,19 +5,19 @@
 
 buildNpmPackage rec {
   pname = "reveal-md";
-  version = "5.5.2";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "webpro";
     repo = "reveal-md";
     rev = version;
-    hash = "sha256-Uge7N6z9O1wc+nW/0k5qz+CPYbYgr7u2mulH75pXvHY=";
+    hash = "sha256-MPNxQpof36XHg3Zl7fHkyCXnoDOcRvMiMiPH29GEWqE=";
   };
 
-  npmDepsHash = "sha256-+gzur0pAmZe4nrDxNQwjFn/hM9TvZEd6JzLOnJLhNtg=";
+  npmDepsHash = "sha256-535tauun6ysPDC096ttPpvJZ+RSZ75aY8mVKj8mnMJI=";
 
   env = {
-    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
+    PUPPETEER_SKIP_DOWNLOAD = true;
   };
 
   dontNpmBuild = true;

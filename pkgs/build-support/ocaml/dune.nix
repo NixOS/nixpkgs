@@ -7,8 +7,7 @@ let Dune =
   { "1" = dune_1; "2" = dune_2; "3" = dune_3; }."${dune-version}"
 ; in
 
-if (args ? minimumOCamlVersion && lib.versionOlder ocaml.version args.minimumOCamlVersion) ||
-   (args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion)
+if args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion
 then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
 else
 

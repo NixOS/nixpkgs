@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 
 let
   inherit (lib)
@@ -40,12 +40,16 @@ in
     (mkRemovedOptionModule [ "networking" "vpnc" ] "Use environment.etc.\"vpnc/service.conf\" instead.")
     (mkRemovedOptionModule [ "networking" "wicd" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "gnome-documents" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "programs" "pantheon-tweaks" ] ''
+      pantheon-tweaks is no longer a switchboard plugin but an independent app,
+      adding the package to environment.systemPackages is sufficient.
+    '')
     (mkRemovedOptionModule [ "programs" "tilp2" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] ("way-cooler is abandoned by its author: " +
       "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"))
     (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
-        The hidepid module was removed, since the underlying machinery
-        is broken when using cgroups-v2.
+      The hidepid module was removed, since the underlying machinery
+      is broken when using cgroups-v2.
     '')
     (mkRemovedOptionModule [ "services" "baget" "enable" ] "The baget module was removed due to the upstream package being unmaintained.")
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
@@ -70,6 +74,7 @@ in
     (mkRemovedOptionModule [ "services" "mathics" ] "The Mathics module has been removed")
     (mkRemovedOptionModule [ "services" "meguca" ] "Use meguca has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "mesos" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "mxisd" ] "The mxisd module has been removed as both mxisd and ma1sd got removed.")
     (mkRemovedOptionModule [ "services" "moinmoin" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mwlib" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
@@ -80,6 +85,7 @@ in
     '')
     (mkRemovedOptionModule [ "services" "quagga" ] "the corresponding package has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "railcar" ] "the corresponding package has been removed from nixpkgs")
+    (mkRemovedOptionModule [ "services" "replay-sorcery" ] "the corresponding package has been removed from nixpkgs as it is unmaintained upstream. Consider using `gpu-screen-recorder` or `obs-studio` instead.")
     (mkRemovedOptionModule [ "services" "seeks" ] "")
     (mkRemovedOptionModule [ "services" "ssmtp" ] ''
       The ssmtp package and the corresponding module have been removed due to
@@ -101,6 +107,7 @@ in
       as the underlying package isn't being maintained. Working alternatives are
       libinput and synaptics.
     '')
+    (mkRemovedOptionModule [ "services" "xmr-stak" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "virtualisation" "rkt" ] "The rkt module has been removed, it was archived by upstream")
     (mkRemovedOptionModule [ "services" "racoon" ] ''
       The racoon module has been removed, because the software project was abandoned upstream.
@@ -110,7 +117,6 @@ in
     (mkRemovedOptionModule [ "services" "virtuoso" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "openfire" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "riak" ] "The corresponding package was removed from nixpkgs.")
-    (mkRemovedOptionModule [ "services" "cryptpad" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "rtsp-simple-server" ] "Package has been completely rebranded by upstream as mediamtx, and thus the service and the package were renamed in NixOS as well.")
     (mkRemovedOptionModule [ "services" "prayer" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "restya-board" ] "The corresponding package was removed from nixpkgs.")

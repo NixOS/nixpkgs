@@ -84,9 +84,9 @@ in stdenv.mkDerivation {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "An open-source engine for Star Wars Jedi Academy game";
+    description = "Open-source engine for Star Wars Jedi Academy game";
     homepage = "https://github.com/JACoders/OpenJK";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tgunnoe ];
   };

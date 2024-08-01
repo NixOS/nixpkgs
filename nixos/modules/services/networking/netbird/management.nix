@@ -137,7 +137,7 @@ in
 
 {
   options.services.netbird.server.management = {
-    enable = mkEnableOption "Netbird Management Service.";
+    enable = mkEnableOption "Netbird Management Service";
 
     package = mkPackageOption pkgs "netbird" { };
 
@@ -335,7 +335,7 @@ in
       description = "Log level of the netbird services.";
     };
 
-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird management service.";
+    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird management service";
   };
 
   config = mkIf cfg.enable {

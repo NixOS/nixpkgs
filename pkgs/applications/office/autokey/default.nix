@@ -6,7 +6,7 @@
 , gtksourceview3
 , libappindicator-gtk3
 , libnotify
-, gnome
+, zenity
 , wmctrl
 }:
 
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   runtimeDeps = [
-    gnome.zenity
+    zenity
     wmctrl
   ];
 

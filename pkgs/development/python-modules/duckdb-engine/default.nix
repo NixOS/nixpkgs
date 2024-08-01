@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, duckdb
-, hypothesis
-, ipython-sql
-, pandas
-, poetry-core
-, pytest-remotedata
-, snapshottest
-, sqlalchemy
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  duckdb,
+  hypothesis,
+  pandas,
+  poetry-core,
+  pytest-remotedata,
+  snapshottest,
+  sqlalchemy,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.12.0";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,12 +26,10 @@ buildPythonPackage rec {
     repo = "duckdb_engine";
     owner = "Mause";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cm0vbz0VZ2Ws6FDWJO16q4KZW2obs0CBNrfY9jmR+6A=";
+    hash = "sha256-6aVVs3ii8pJOSaLx0maoFmiMvbUh/LOdizmPSpqPiM4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     duckdb
@@ -41,31 +40,30 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
   '';
 
-  disabledTests = [
-    # test should be skipped based on sqlalchemy version but isn't and fails
-    "test_commit"
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
     hypothesis
-    ipython-sql
     pandas
     pytest-remotedata
-    snapshottest
     typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.12") [
+    # requires wasmer which is broken for python 3.12
+    # https://github.com/wasmerio/wasmer-python/issues/778
+    snapshottest
   ];
 
   pytestFlagsArray = [
-    "-m" "'not remote_data'"
+    "-m"
+    "'not remote_data'"
   ];
 
-  pythonImportsCheck = [
-    "duckdb_engine"
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # requires snapshottest
+    "duckdb_engine/tests/test_datatypes.py"
   ];
+
+  pythonImportsCheck = [ "duckdb_engine" ];
 
   meta = with lib; {
     description = "SQLAlchemy driver for duckdb";

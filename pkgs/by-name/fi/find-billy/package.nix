@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A 2 dimensional Pixel Art Jump & Run";
+    description = "2 dimensional Pixel Art Jump & Run";
     homepage = "https://codeberg.org/annaaurora/Find-Billy";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];

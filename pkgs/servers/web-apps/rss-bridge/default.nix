@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The RSS feed for websites missing it";
+    description = "RSS feed for websites missing it";
     homepage = "https://github.com/RSS-Bridge/rss-bridge";
     license = licenses.unlicense;
     maintainers = with maintainers; [ dawidsowa mynacol ];

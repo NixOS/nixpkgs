@@ -1,17 +1,17 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, deprecated
-, hopcroftkarp
-, joblib
-, matplotlib
-, numpy
-, scikit-learn
-, scipy
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  deprecated,
+  hopcroftkarp,
+  joblib,
+  matplotlib,
+  numpy,
+  scikit-learn,
+  scipy,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +36,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # specifically needed for darwin
@@ -47,9 +45,7 @@ buildPythonPackage rec {
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
 
-  pythonImportsCheck = [
-    "persim"
-  ];
+  pythonImportsCheck = [ "persim" ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.10") [
     # AttributeError: module 'collections' has no attribute 'Iterable'
@@ -72,7 +68,6 @@ buildPythonPackage rec {
     homepage = "https://persim.scikit-tda.org";
     changelog = "https://github.com/scikit-tda/persim/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    broken = stdenv.isDarwin;
+    maintainers = [ ];
   };
 }

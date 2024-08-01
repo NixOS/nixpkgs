@@ -26,7 +26,7 @@ buildGoModule rec {
   vendorHash = "sha256-t/pdJWz6rLnBbH8iq9Nqy+E+DD2770UCEcowwStPdqM=";
 
   meta = with lib; {
-    description = "A CLI tool for managing hostfiles";
+    description = "CLI tool for managing hostfiles";
     license = licenses.mit;
     homepage = "https://github.com/goodhosts/cli/tree/main";
     maintainers = with maintainers; [ schinmai-akamai ];

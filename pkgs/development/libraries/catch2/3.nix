@@ -31,9 +31,12 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CTEST_ARGUMENTS=-E;ApprovalTests"
   ];
 
-  # Tests fail on x86_32 if compiled with x87 floats: https://github.com/catchorg/Catch2/issues/2796
   env = lib.optionalAttrs stdenv.isx86_32 {
+    # Tests fail on x86_32 if compiled with x87 floats: https://github.com/catchorg/Catch2/issues/2796
     NIX_CFLAGS_COMPILE = "-msse2 -mfpmath=sse";
+  } // lib.optionalAttrs (stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isAarch32) {
+    # Build failure caused by -Werror: https://github.com/catchorg/Catch2/issues/2808
+    NIX_CFLAGS_COMPILE = "-Wno-error=cast-align";
   };
 
   doCheck = true;

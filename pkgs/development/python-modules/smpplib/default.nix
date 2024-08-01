@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, six
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  six,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,12 +15,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UhWpWwU40m8YlgDgmCsx2oKB90U81uKGLFsh4+EAIzE=";
+    hash = "sha256-UhWpWwU40m8YlgDgmCsx2oKB90U81uKGLFsh4+EAIzE=";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   nativeCheckInputs = [
     mock
@@ -30,15 +29,13 @@ buildPythonPackage rec {
     rm -rf $out/${python.sitePackages}/tests
   '';
 
-  pythonImportsCheck = [
-    "smpplib"
-  ];
+  pythonImportsCheck = [ "smpplib" ];
 
   meta = with lib; {
     description = "SMPP library for Python";
     homepage = "https://github.com/python-smpplib/python-smpplib";
     changelog = "https://github.com/python-smpplib/python-smpplib/releases/tag/${version}";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

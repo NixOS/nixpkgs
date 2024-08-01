@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "git-credential-oauth";
-  version = "0.11.2";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "hickford";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dGn1I47/S6DYXva5zjvcQnB+I4Ex354xMmZ/3OkpjMw=";
+    hash = "sha256-hCZZPbkbkZcR2xFTECQWJl2MvSu8MnOznadaj0nKfSo=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

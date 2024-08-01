@@ -1,10 +1,11 @@
-{ lib
-, bash
-, buildPythonPackage
-, fetchFromGitHub
-, jupyterhub
-, pythonOlder
-, tornado
+{
+  lib,
+  bash,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jupyterhub,
+  pythonOlder,
+  tornado,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
       --replace "/bin/bash" "${bash}/bin/bash"
   '';
 
-  buildInputs = [
-    bash
-  ];
+  buildInputs = [ bash ];
 
   propagatedBuildInputs = [
     jupyterhub
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     patchShebangs $out/bin
   '';
 
-  pythonImportsCheck = [
-    "systemdspawner"
-  ];
+  pythonImportsCheck = [ "systemdspawner" ];
 
   meta = with lib; {
     description = "JupyterHub Spawner using systemd for resource isolation";
@@ -57,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyterhub/systemdspawner";
     changelog = "https://github.com/jupyterhub/systemdspawner/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,5 +1,6 @@
 { lib
 , config
+, stdenv
 , aws-sdk-cpp
 , boehmgc
 , callPackage
@@ -7,6 +8,7 @@
 , fetchpatch
 , fetchpatch2
 , runCommand
+, overrideSDK
 , Security
 
 , storeDir ? "/nix/store"
@@ -138,7 +140,8 @@ in lib.makeExtensible (self: ({
     patches = [
       patch-monitorfdhup
     ];
-    maintainers = with lib.maintainers; [ flokli raitobezarius ];
+    self_attribute_name = "nix_2_3";
+    maintainers = with lib.maintainers; [ flokli ];
   }).override { boehmgc = boehmgc-nix_2_3; }).overrideAttrs {
     # https://github.com/NixOS/nix/issues/10222
     # spurious test/add.sh failures
@@ -146,42 +149,63 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_18 = common {
-    version = "2.18.2";
-    hash = "sha256-8gNJlBlv2bnffRg0CejiBXc6U/S6YeCLAdHrYvTPyoY=";
+    version = "2.18.5";
+    hash = "sha256-xEcYQuJz6DjdYfS6GxIYcn8U+3Hgopne3CvqrNoGguQ=";
+    self_attribute_name = "nix_2_18";
   };
 
   nix_2_19 = common {
-    version = "2.19.4";
-    hash = "sha256-qXjyVmDm1SFWk1az3GWIsJ0fVG0nWet2FdldFOnUydI=";
+    version = "2.19.6";
+    hash = "sha256-XT5xiwOLgXf+TdyOjbJVOl992wu9mBO25WXHoyli/Tk=";
+    self_attribute_name = "nix_2_19";
   };
 
   nix_2_20 = common {
-    version = "2.20.6";
-    hash = "sha256-BSl8Jijq1A4n1ToQy0t0jDJCXhJK+w1prL8QMHS5t54=";
+    version = "2.20.8";
+    hash = "sha256-M2tkMtjKi8LDdNLsKi3IvD8oY/i3rtarjMpvhybS3WY=";
+    self_attribute_name = "nix_2_20";
   };
 
   nix_2_21 = common {
-    version = "2.21.2";
-    hash = "sha256-ObaVDDPtnOeIE0t7m4OVk5G+OS6d9qYh+ktK67Fe/zE=";
+    version = "2.21.4";
+    hash = "sha256-c6nVZ0pSrfhFX3eVKqayS+ioqyAGp3zG9ZPO5rkXFRQ=";
+    self_attribute_name = "nix_2_21";
   };
 
   nix_2_22 = common {
-    version = "2.22.0";
-    hash = "sha256-Ugcc+lSq8nJP+mddMlGFnoG4Ix1lRFHWOal3299bqR8=";
+    version = "2.22.3";
+    hash = "sha256-l04csH5rTWsK7eXPWVxJBUVRPMZXllFoSkYFTq/i8WU=";
+    self_attribute_name = "nix_2_22";
   };
 
-  git = common rec {
-    version = "2.23.0";
-    suffix = "pre20240426_${lib.substring 0 8 src.rev}";
+  nix_2_23 = common {
+    version = "2.23.3";
+    hash = "sha256-lAoLGVIhRFrfgv7wcyduEkyc83QKrtsfsq4of+WrBeg=";
+    self_attribute_name = "nix_2_23";
+  };
+
+  git = (common rec {
+    version = "2.24.0";
+    suffix = "pre20240723_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "2f678331d59451dd6f1d9512cb6d92e4ecb9750f";
-      hash = "sha256-4AwaLB/gTRgvZG4FmFY6OY52yeLAnj0a6rtJCz7TRXA=";
+      rev = "fb450de20ec8df558f9f7f167d748acf7cabe151";
+      hash = "sha256-xjN65yaPGwmly+Fdo6lVHL67+0IG+Cnxv7hNgYgoTGk=";
     };
-  };
+    self_attribute_name = "git";
+  }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+    # Fix the following error with the default x86_64-darwin SDK:
+    #
+    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
+    #
+    # Despite the use of the 10.13 deployment target here, the aligned
+    # allocation function Clang uses with this setting actually works
+    # all the way back to 10.6.
+    stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
+  });
 
-  latest = self.nix_2_22;
+  latest = self.nix_2_23;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,

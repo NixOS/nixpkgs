@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchpatch
-, setuptools
-, fields
-, process-tests
-, pytestCheckHook
-, tornado
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  fetchpatch,
+  setuptools,
+  fields,
+  process-tests,
+  pytestCheckHook,
+  tornado,
 }:
 
 buildPythonPackage rec {
@@ -32,13 +33,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    fields
-  ];
+  propagatedBuildInputs = [ fields ];
 
   pythonImportsCheck = [
     "aspectlib"
@@ -53,9 +50,7 @@ buildPythonPackage rec {
     tornado
   ];
 
-  pytestFlagsArray = [
-    "-W ignore::DeprecationWarning"
-  ];
+  pytestFlagsArray = [ "-W ignore::DeprecationWarning" ];
 
   __darwinAllowLocalNetworking = true;
 

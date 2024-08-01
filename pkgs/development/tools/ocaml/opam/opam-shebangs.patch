@@ -2,7 +2,7 @@ diff --git a/src/client/opamInitDefaults.ml b/src/client/opamInitDefaults.ml
 index eca13a7c..1fd66f43 100644
 --- a/src/client/opamInitDefaults.ml
 +++ b/src/client/opamInitDefaults.ml
-@@ -35,14 +35,18 @@ let eval_variables = [
+@@ -42,16 +42,20 @@ let eval_variables = [
  let os_filter os =
    FOp (FIdent ([], OpamVariable.of_string "os", None), `Eq, FString os)
  
@@ -13,17 +13,21 @@ index eca13a7c..1fd66f43 100644
  let macos_filter = os_filter "macos"
  let openbsd_filter = os_filter "openbsd"
  let freebsd_filter = os_filter "freebsd"
+ let netbsd_filter = os_filter "netbsd"
+ let dragonflybsd_filter = os_filter "dragonfly"
  let not_open_free_bsd_filter =
    FNot (FOr (openbsd_filter,  freebsd_filter))
  let win32_filter = os_filter "win32"
+ let not_win32_filter =
+   FOp (FIdent ([], OpamVariable.of_string "os", None), `Neq, FString "win32")
  let sandbox_filter = FOr (linux_filter, macos_filter)
 +let nixos_filter = os_distribution_filter "nixos"
  
- let gpatch_filter = FOr (openbsd_filter, freebsd_filter)
+ let gpatch_filter =
+   FOr (FOr (openbsd_filter, netbsd_filter),
+        FOr (freebsd_filter, dragonflybsd_filter))
  let patch_filter = FNot gpatch_filter
-@@ -50,6 +54,11 @@ let wrappers ~sandboxing () =
-     CString t, None;
-   ] in
+@@ -79,4 +81,9 @@ let wrappers ~sandboxing () =
    let w = OpamFile.Wrappers.empty in
 +  let w = { w with
 +            OpamFile.Wrappers.
@@ -31,8 +35,8 @@ index eca13a7c..1fd66f43 100644
 +          }
 +  in
    if sandboxing then
-     { w with
-       OpamFile.Wrappers.
+     List.fold_left OpamFile.Wrappers.(fun w -> function
+         | `build wrap_build -> { w with wrap_build }
 @@ -113,6 +122,7 @@ let required_tools ~sandboxing () =
  let init_scripts () = [
    ("sandbox.sh", OpamScript.bwrap), Some bwrap_filter;

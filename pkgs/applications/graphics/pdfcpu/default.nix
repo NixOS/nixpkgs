@@ -60,7 +60,7 @@ buildGoModule rec {
   subPackages = [ "cmd/pdfcpu" ];
 
   meta = with lib; {
-    description = "A PDF processor written in Go";
+    description = "PDF processor written in Go";
     homepage = "https://pdfcpu.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];

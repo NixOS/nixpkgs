@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +15,7 @@ buildPythonPackage rec {
     hash = "sha256-VmPVp7O/ru4LxDcuf8SPnP9JQLPuxUpkUcxSmfEJdpA=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   # Circular dependency on beautifulsoup4
   doCheck = false;
@@ -26,9 +24,9 @@ buildPythonPackage rec {
   # pythonImportsCheck = [ "soupsieve" ];
 
   meta = with lib; {
-    description = "A CSS4 selector implementation for Beautiful Soup";
+    description = "CSS4 selector implementation for Beautiful Soup";
     license = licenses.mit;
     homepage = "https://github.com/facelessuser/soupsieve";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

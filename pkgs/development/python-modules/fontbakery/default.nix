@@ -1,57 +1,56 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchpatch
-, fetchPypi
-, axisregistry
-, babelfont
-, beautifulsoup4
-, beziers
-, cmarkgfm
-, collidoscope
-, defcon
-, dehinter
-, fonttools
-, font-v
-, freetype-py
-, gflanguages
-, gfsubsets
-, git
-, glyphsets
-, lxml
-, installShellFiles
-, jinja2
-, munkres
-, opentypespec
-, ots-python
-, packaging
-, pip-api
-, protobuf
-, pytestCheckHook
-, pytest-xdist
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, requests-mock
-, rich
-, setuptools
-, setuptools-scm
-, shaperglot
-, stringbrewer
-, toml
-, unicodedata2
-, ufo2ft
-, ufolint
-, vharfbuzz
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchPypi,
+  axisregistry,
+  babelfont,
+  beautifulsoup4,
+  beziers,
+  cmarkgfm,
+  collidoscope,
+  defcon,
+  dehinter,
+  fonttools,
+  font-v,
+  freetype-py,
+  gflanguages,
+  gfsubsets,
+  git,
+  glyphsets,
+  lxml,
+  installShellFiles,
+  jinja2,
+  munkres,
+  opentypespec,
+  ots-python,
+  packaging,
+  pip-api,
+  protobuf,
+  pytestCheckHook,
+  pytest-xdist,
+  pyyaml,
+  requests,
+  requests-mock,
+  rich,
+  setuptools,
+  setuptools-scm,
+  shaperglot,
+  stringbrewer,
+  toml,
+  unicodedata2,
+  ufo2ft,
+  ufolint,
+  vharfbuzz,
 }:
 
 buildPythonPackage rec {
   pname = "fontbakery";
-  version = "0.12.2";
+  version = "0.12.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sHkTxu8TdPXbUZvpJH46SF8U4JNIzfFb5HJEXCqomOI=";
+    hash = "sha256-7cZeazEyAyU+WDop2n7wneg2wzh+9U9atKSRcreJpGw=";
   };
 
   pyproject = true;
@@ -96,7 +95,6 @@ buildPythonPackage rec {
   ];
   nativeBuildInputs = [
     installShellFiles
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -151,4 +149,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ danc86 ];
   };
 }
-

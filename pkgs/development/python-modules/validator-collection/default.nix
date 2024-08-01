@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  wheel,
   alabaster,
   attrs,
   babel,
@@ -134,6 +133,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "validator_collection" ];
+
+  disabledTests = [
+    # Issues with fake filesystem /var/data
+    "test_writeable"
+    "test_executable"
+    "test_readable"
+    "test_is_readable"
+  ];
 
   meta = with lib; {
     description = "Python library of 60+ commonly-used validator functions";

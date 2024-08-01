@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pkg-config
-, setuptools
-, libjpeg
-, libpng
-, libtiff
-, libwebp
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pkg-config,
+  setuptools,
+  libjpeg,
+  libpng,
+  libtiff,
+  libwebp,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -36,19 +37,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
     # verbose build outputs needed to debug hard-to-reproduce hydra failures
     "-v"
-    "--pyargs" "imread"
-  ];
-
-  pythonImportsCheck = [
+    "--pyargs"
     "imread"
   ];
+
+  pythonImportsCheck = [ "imread" ];
 
   preCheck = ''
     cd $TMPDIR
@@ -63,5 +61,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     platforms = platforms.unix;
   };
-
 }

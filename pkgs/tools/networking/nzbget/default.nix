@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , boost
 , pkg-config
@@ -19,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzbget";
-  version = "24.0";
+  version = "24.1";
 
   src = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "nzbget";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vEtbf4y3Jc69FrEzGE34Xt/4oDmZlWTbwispvoypRI0=";
+    hash = "sha256-HovfnTsgu07/lp/spI+iA8H7lOj0Qyrri2MOJKyMKHQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -55,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://nzbget.com/";
     changelog = "https://github.com/nzbgetcom/nzbget/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
-    description = "A command line tool for downloading files from news servers";
+    description = "Command line tool for downloading files from news servers";
     maintainers = with maintainers; [ pSub devusb ];
     platforms = with platforms; unix;
     mainProgram = "nzbget";

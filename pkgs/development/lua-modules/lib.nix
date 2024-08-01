@@ -93,7 +93,6 @@ rec {
       externalDeps ? []
     # a list of lua derivations
     , requiredLuaRocks ? []
-    , rocksSubdir ? "rocks-subdir"
     , ...
     }@args: let
       rocksTrees = lib.imap0
@@ -124,11 +123,7 @@ rec {
         (lib.filter (lib.isDerivation) externalDeps);
 
       generatedConfig = ({
-        local_cache = "";
 
-        # To prevent collisions when creating environments, we install the rock
-        # files into per-package subdirectories
-        rocks_subdir = rocksSubdir;
 
         # first tree is the default target where new rocks are installed,
         # any other trees in the list are treated as additional sources of installed rocks for matching dependencies.

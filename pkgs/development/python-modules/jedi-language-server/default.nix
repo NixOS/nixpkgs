@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, docstring-to-markdown
-, fetchFromGitHub
-, jedi
-, lsprotocol
-, poetry-core
-, pygls
-, pydantic
-, pyhamcrest
-, pytestCheckHook
-, python-lsp-jsonrpc
-, pythonOlder
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  docstring-to-markdown,
+  fetchFromGitHub,
+  jedi,
+  lsprotocol,
+  poetry-core,
+  pygls,
+  pydantic,
+  pyhamcrest,
+  pytestCheckHook,
+  python-lsp-jsonrpc,
+  pythonOlder,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-RDLwL9AZ3G8CzVwDtWqFFZNH/ulpHeFBhglbWNv/ZIk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     docstring-to-markdown
@@ -56,12 +55,10 @@ buildPythonPackage rec {
     "test_publish_diagnostics_on_save"
   ];
 
-  pythonImportsCheck = [
-    "jedi_language_server"
-  ];
+  pythonImportsCheck = [ "jedi_language_server" ];
 
   meta = with lib; {
-    description = "A Language Server for the latest version(s) of Jedi";
+    description = "Language Server for the latest version(s) of Jedi";
     mainProgram = "jedi-language-server";
     homepage = "https://github.com/pappasam/jedi-language-server";
     changelog = "https://github.com/pappasam/jedi-language-server/blob/${version}/CHANGELOG.md";

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "godu";
-  version = "1.4.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "viktomas";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-fJeSUAuNELZZ1DcybNsYd2ZX93VYWsLum5tHp68ZVlo=";
+    hash = "sha256-z1LCPweaf8e/HWkSrRCiMYZl4F4dKo4/wDkWgY+eTvk=";
   };
 
   vendorHash = "sha256-8cZCeZ0gqxqbwB0WuEOFmEUNQd3/KcLeN0eLGfWG8BY=";

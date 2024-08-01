@@ -619,10 +619,14 @@ rec {
     fakeRootCommands = ''
       mkdir -p ./home/alice
       chown 1000 ./home/alice
-      ln -s ${pkgs.hello.overrideAttrs (o: {
+      ln -s ${pkgs.hello.overrideAttrs (finalAttrs: prevAttrs: {
         # A unique `hello` to make sure that it isn't included via another mechanism by accident.
-        configureFlags = o.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
+        configureFlags = prevAttrs.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
         doCheck = false;
+        versionCheckProgram = "${builtins.placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+        meta = prevAttrs.meta // {
+          mainProgram = "layeredImageWithFakeRootCommands-hello";
+        };
       })} ./hello
     '';
   };
@@ -895,6 +899,18 @@ rec {
       buildDerivation
       $out/bin/hello
     '';
+  };
+
+  nix-layered = pkgs.dockerTools.streamLayeredImage  {
+    name = "nix-layered";
+    tag = "latest";
+    contents = [ pkgs.nix pkgs.bash ];
+    includeNixDB = true;
+    config = {
+      Env = [
+        "NIX_PAGER=cat"
+      ];
+    };
   };
 
 }

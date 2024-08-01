@@ -1,36 +1,36 @@
-{ lib
-, azure-identity
-, azure-monitor-ingestion
-, boto3
-, buildPythonPackage
-, dateparser
-, dnspython
-, elastic-transport
-, elasticsearch
-, elasticsearch-dsl
-, expiringdict
-, fetchPypi
-, fetchurl
-, geoip2
-, google-api-core
-, google-api-python-client
-, google-auth
-, google-auth-httplib2
-, google-auth-oauthlib
-, hatchling
-, imapclient
-, kafka-python
-, lxml
-, mailsuite
-, msgraph-core
-, nixosTests
-, opensearch-py
-, publicsuffixlist
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, tqdm
-, xmltodict
+{
+  lib,
+  azure-identity,
+  azure-monitor-ingestion,
+  boto3,
+  buildPythonPackage,
+  dateparser,
+  dnspython,
+  elastic-transport,
+  elasticsearch,
+  elasticsearch-dsl,
+  expiringdict,
+  fetchPypi,
+  fetchurl,
+  geoip2,
+  google-api-core,
+  google-api-python-client,
+  google-auth,
+  google-auth-httplib2,
+  google-auth-oauthlib,
+  hatchling,
+  imapclient,
+  kafka-python-ng,
+  lxml,
+  mailsuite,
+  msgraph-core,
+  nixosTests,
+  opensearch-py,
+  publicsuffixlist,
+  pythonOlder,
+  requests,
+  tqdm,
+  xmltodict,
 }:
 
 let
@@ -41,19 +41,18 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.11.0";
+  version = "8.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OBxiaXB8NKNMviRI19rYYJxpnfnaEL3zSPmYB4urIug=";
+    hash = "sha256-mscc3TRMYuaTqrrxGPCVVKa2fg5sXwK/BglpbvLXbLc=";
   };
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -78,7 +77,7 @@ buildPythonPackage rec {
     google-auth-httplib2
     google-auth-oauthlib
     imapclient
-    kafka-python
+    kafka-python-ng
     lxml
     mailsuite
     msgraph-core
@@ -93,9 +92,7 @@ buildPythonPackage rec {
   # https://github.com/domainaware/parsedmarc/issues/426
   doCheck = false;
 
-  pythonImportsCheck = [
-    "parsedmarc"
-  ];
+  pythonImportsCheck = [ "parsedmarc" ];
 
   passthru = {
     inherit dashboard;
@@ -105,7 +102,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
-    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${lib.replaceStrings [ "." ] [ "" ] version}";
+    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${
+      lib.replaceStrings [ "." ] [ "" ] version
+    }";
     license = licenses.asl20;
     maintainers = with maintainers; [ talyz ];
     mainProgram = "parsedmarc";

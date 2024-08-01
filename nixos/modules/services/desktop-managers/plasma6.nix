@@ -8,7 +8,7 @@
   cfg = config.services.desktopManager.plasma6;
 
   inherit (pkgs) kdePackages;
-  inherit (lib) literalExpression mkDefault mkIf mkOption mkPackageOptionMD types;
+  inherit (lib) literalExpression mkDefault mkIf mkOption mkPackageOption types;
 
   activationScript = ''
     # will be rebuilt automatically
@@ -29,7 +29,7 @@ in {
         description = "Enable Qt 5 integration (theming, etc). Disable for a pure Qt 6 system.";
       };
 
-      notoPackage = mkPackageOptionMD pkgs "Noto fonts - used for UI by default" {
+      notoPackage = mkPackageOption pkgs "Noto fonts - used for UI by default" {
         default = ["noto-fonts"];
         example = "noto-fonts-lgc-plus";
       };
@@ -60,10 +60,8 @@ in {
     qt.enable = true;
     environment.systemPackages = with kdePackages; let
       requiredPackages = [
-        # Hack? To make everything run on Wayland
-        qtwayland
-        # Needed to render SVG icons
-        qtsvg
+        qtwayland # Hack? To make everything run on Wayland
+        qtsvg # Needed to render SVG icons
 
         # Frameworks with globally loadable bits
         frameworkintegration # provides Qt plugin
@@ -75,6 +73,9 @@ in {
         kiconthemes # provides Qt plugins
         kimageformats # provides Qt plugins
         kio # provides helper service + a bunch of other stuff
+        kio-admin # managing files as admin
+        kio-extras # stuff for MTP, AFC, etc
+        kio-fuse # fuse interface for KIO
         kpackage # provides kpackagetool tool
         kservice # provides kbuildsycoca6 tool
         kwallet # provides helper service
@@ -87,30 +88,26 @@ in {
         # Core Plasma parts
         kwin
         pkgs.xwayland
-
         kscreen
         libkscreen
-
         kscreenlocker
-
         kactivitymanagerd
         kde-cli-tools
-        kglobalacceld
+        kglobalacceld # keyboard shortcut daemon
         kwrited # wall message proxy, not to be confused with kwrite
-
-        milou
-        polkit-kde-agent-1
-
+        baloo # system indexer
+        milou # search engine atop baloo
+        kdegraphics-thumbnailers # pdf etc thumbnailer
+        polkit-kde-agent-1 # polkit auth ui
         plasma-desktop
         plasma-workspace
-
-        # Crash handler
-        drkonqi
+        drkonqi # crash handler
+        kde-inotify-survey # warns the user on low inotifywatch limits
 
         # Application integration
         libplasma # provides Kirigami platform theme
         plasma-integration # provides Qt platform theme
-        kde-gtk-config
+        kde-gtk-config # syncs KDE settings to GTK
 
         # Artwork + themes
         breeze
@@ -124,44 +121,32 @@ in {
 
         # misc Plasma extras
         kdeplasma-addons
-
         pkgs.xdg-user-dirs # recommended upstream
 
         # Plasma utilities
         kmenuedit
-
         kinfocenter
         plasma-systemmonitor
         ksystemstats
         libksysguard
-
-        spectacle
         systemsettings
         kcmutils
-
-        # Gear
-        baloo
-        dolphin
-        dolphin-plugins
-        ffmpegthumbs
-        kdegraphics-thumbnailers
-        kde-inotify-survey
-        kio-admin
-        kio-extras
-        kio-fuse
       ];
       optionalPackages = [
         plasma-browser-integration
         konsole
         (lib.getBin qttools) # Expose qdbus in PATH
-
         ark
         elisa
         gwenview
         okular
         kate
         khelpcenter
-        print-manager
+        dolphin
+        dolphin-plugins
+        spectacle
+        ffmpegthumbs
+        krdp
       ];
     in
       requiredPackages
@@ -183,12 +168,13 @@ in {
         )
         kio-extras-kf5
       ]
-      # Optional hardware support features
+      # Optional and hardware support features
       ++ lib.optionals config.hardware.bluetooth.enable [bluedevil bluez-qt pkgs.openobex pkgs.obexftp]
       ++ lib.optional config.networking.networkmanager.enable plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
       ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
       ++ lib.optional config.powerManagement.enable powerdevil
+      ++ lib.optional config.services.printing.enable print-manager
       ++ lib.optional config.services.colord.enable colord-kde
       ++ lib.optional config.services.hardware.bolt.enable plasma-thunderbolt
       ++ lib.optional config.services.samba.enable kdenetwork-filesharing
@@ -217,7 +203,7 @@ in {
     environment.sessionVariables.KPACKAGE_DEP_RESOLVERS_PATH = "${kdePackages.frameworkintegration.out}/libexec/kf6/kpackagehandlers";
 
     # Enable GTK applications to load SVG icons
-    services.xserver.gdk-pixbuf.modulePackages = [pkgs.librsvg];
+    programs.gdk-pixbuf.modulePackages = [pkgs.librsvg];
 
     fonts.packages = [cfg.notoPackage pkgs.hack-font];
     fonts.fontconfig.defaultFonts = {
@@ -227,6 +213,7 @@ in {
     };
 
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
+    programs.kde-pim.enable = mkDefault true;
     programs.ssh.askPassword = mkDefault "${kdePackages.ksshaskpass.out}/bin/ksshaskpass";
 
     # Enable helpful DBus services.
@@ -267,6 +254,7 @@ in {
       extraPackages = with kdePackages; [
         breeze-icons
         kirigami
+        libplasma
         plasma5support
         qtsvg
         qtvirtualkeyboard
@@ -278,12 +266,24 @@ in {
         enable = true;
         package = kdePackages.kwallet-pam;
       };
-      kde.kwallet = {
-        enable = true;
-        package = kdePackages.kwallet-pam;
+      kde = {
+        allowNullPassword = true;
+        kwallet = {
+          enable = true;
+          package = kdePackages.kwallet-pam;
+        };
       };
       kde-fingerprint = lib.mkIf config.services.fprintd.enable { fprintAuth = true; };
       kde-smartcard = lib.mkIf config.security.pam.p11.enable { p11Auth = true; };
+    };
+
+    security.wrappers = {
+      kwin_wayland = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_sys_nice+ep";
+        source = "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
+      };
     };
 
     programs.dconf.enable = true;

@@ -5,7 +5,7 @@
 , dpkg
 , wrapGAppsHook3
 , quickemu
-, gnome
+, zenity
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
 
   buildInputs = [
     quickemu
-    gnome.zenity
+    zenity
   ];
 
   strictDeps = true;
@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ quickemu gnome.zenity ]}
+      --prefix PATH : ${lib.makeBinPath [ quickemu zenity ]}
     )
   '';
 
@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Flutter frontend for quickemu";
+    description = "Flutter frontend for quickemu";
     homepage = "https://github.com/quickemu-project/quickgui";
     changelog = "https://github.com/quickemu-project/quickgui/releases/tag/v${version}";
     license = licenses.mit;

@@ -1,12 +1,13 @@
-{ lib
-, brotli
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  brotli,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -25,13 +26,9 @@ buildPythonPackage rec {
     hash = "sha256-Z59GjrOL+BPHqBCirg9T4qBOrjiuBng6Q5lTuLQx9ac=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    brotli
-  ];
+  propagatedBuildInputs = [ brotli ];
 
   nativeCheckInputs = [
     django
@@ -51,15 +48,13 @@ buildPythonPackage rec {
     "test_modified"
   ];
 
-  pythonImportsCheck = [
-    "whitenoise"
-  ];
+  pythonImportsCheck = [ "whitenoise" ];
 
   meta = with lib; {
     description = "Library to serve static file for WSGI applications";
     homepage = "https://whitenoise.readthedocs.io/";
     changelog = "https://github.com/evansd/whitenoise/blob/${version}/docs/changelog.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

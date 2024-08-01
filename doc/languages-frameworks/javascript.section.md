@@ -206,7 +206,7 @@ buildNpmPackage rec {
   NODE_OPTIONS = "--openssl-legacy-provider";
 
   meta = {
-    description = "A modern web UI for various torrent clients with a Node.js backend and React frontend";
+    description = "Modern web UI for various torrent clients with a Node.js backend and React frontend";
     homepage = "https://flood.js.org";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ winter ];
@@ -233,7 +233,7 @@ If these are not defined, `npm pack` may miss some files, and no binaries will b
 * `npmPruneFlags`: Flags to pass to `npm prune`. Defaults to the value of `npmInstallFlags`.
 * `makeWrapperArgs`: Flags to pass to `makeWrapper`, added to executable calling the generated `.js` with `node` as an interpreter. These scripts are defined in `package.json`.
 * `nodejs`: The `nodejs` package to build against, using the corresponding `npm` shipped with that version of `node`. Defaults to `pkgs.nodejs`.
-* `npmDeps`: The dependencies used to build the npm package. Especially useful to not have to recompute workspace depedencies.
+* `npmDeps`: The dependencies used to build the npm package. Especially useful to not have to recompute workspace dependencies.
 
 #### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}
 
@@ -310,7 +310,138 @@ See `node2nix` [docs](https://github.com/svanderburg/node2nix) for more info.
 - `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from npm distributed with `nodejs_16`.
 - `node2nix` does not like missing packages from npm. If you see something like `Cannot resolve version: vue-loader-v16@undefined` then you might want to try another tool. The package might have been pulled off of npm.
 
+### pnpm {#javascript-pnpm}
+
+Pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_8` and `pnpm_9`, which support different sets of lock file versions.
+
+When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The functions `pnpm_8.fetchDeps` and `pnpm_9.fetchDeps` can create this pnpm store derivation. In conjunction, the setup hooks `pnpm_8.configHook` and `pnpm_9.configHook` will prepare the build environment to install the prefetched dependencies store. Here is an example for a package that contains a `package.json` and a `pnpm-lock.yaml` files using the above `pnpm_` attributes:
+
+```nix
+{
+  stdenv,
+  nodejs,
+  # This is pinned as { pnpm = pnpm_9; }
+  pnpm
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "foo";
+  version = "0-unstable-1980-01-01";
+
+  src = ...;
+
+  nativeBuildInputs = [
+    nodejs
+    pnpm.configHook
+  ];
+
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "...";
+  };
+})
+```
+
+NOTE: It is highly recommended to use a pinned version of pnpm (i.e. `pnpm_8` or `pnpm_9`), to increase future reproducibility. It might also be required to use an older version, if the package needs support for a certain lock file version.
+
+In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `finalAttrs.patches` to the function as well (i.e. `inherit (finalAttrs) patches`.
+
+#### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
+
+NOTE: Nixpkgs pnpm tooling doesn't support building projects with a `pnpm-workspace.yaml`, or building monorepos. It maybe possible to use `pnpm.fetchDeps` for these projects, but it may be hard or impossible to produce a binary from such projects ([an example attempt](https://github.com/NixOS/nixpkgs/pull/290715#issuecomment-2144543728)).
+
+If the pnpm project is in a subdirectory, you can just define `sourceRoot` or `setSourceRoot` for `fetchDeps`. Note, that projects using `pnpm-workspace.yaml` are currently not supported, and will probably not work using this approach.
+If `sourceRoot` is different between the parent derivation and `fetchDeps`, you will have to set `pnpmRoot` to effectively be the same location as it is in `fetchDeps`.
+
+Assuming the following directory structure, we can define `sourceRoot` and `pnpmRoot` as follows:
+
+```
+.
+├── frontend
+│   ├── ...
+│   ├── package.json
+│   └── pnpm-lock.yaml
+└── ...
+```
+
+```nix
+  ...
+  pnpmDeps = pnpm.fetchDeps {
+    ...
+    sourceRoot = "${finalAttrs.src.name}/frontend";
+  };
+
+  # by default the working directory is the extracted source
+  pnpmRoot = "frontend";
+```
+
+### Yarn {#javascript-yarn}
+
+Yarn based projects use a `yarn.lock` file instead of a `package-lock.json` to pin dependencies. Nixpkgs provides the Nix function `fetchYarnDeps` which fetches an offline cache suitable for running `yarn install` before building the project. In addition, Nixpkgs provides the hooks:
+
+- `yarnConfigHook`: Fetches the dependencies from the offline cache and installs them into `node_modules`.
+- `yarnBuildHook`: Runs `yarn build` or a specified `yarn` command that builds the project.
+
+An example usage of the above attributes is:
+
+```nix
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
+  npmHooks,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "...";
+  version = "...";
+
+  src = fetchFromGitHub {
+    owner = "...";
+    repo = "...";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  };
+
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    hash = "sha256-mo8urQaWIHu33+r0Y7mL9mJ/aSe/5CihuIetTeDHEUQ=";
+  };
+
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    # Needed for executing package.json scripts
+    nodejs
+    npmHooks.npmInstallHook
+  ];
+
+  meta = {
+    # ...
+  };
+})
+```
+
+Note that there is no setup hook for installing yarn based packages - `npmHooks.npmInstallHook` should fit most cases, but sometimes you may need to override the `installPhase` completely.
+
+#### `yarnConfigHook` arguments {#javascript-yarnconfighook}
+
+By default, `yarnConfigHook` relies upon the attribute `${yarnOfflineCache}` (or `${offlineCache}` if the former is not set) to find the location of the offline cache produced by `fetchYarnDeps`. To disable this phase, you can set `dontYarnInstallDeps = true` or override the `configurePhase`.
+
+#### `yarnBuildHook` arguments {#javascript-yarnbuildhook}
+
+This script by default runs `yarn --offline build`, and it relies upon the project's dependencies installed at `node_modules`. Below is a list of additional `mkDerivation` arguments read by this hook:
+
+- `yarnBuildScript`: Sets a different `yarn --offline` subcommand (defaults to `build`).
+- `yarnBuildFlags`: Single string list of additional flags to pass the above command, or a Nix list of such additional flags.
+
 ### yarn2nix {#javascript-yarn2nix}
+
+WARNING: The `yarn2nix` functions have been deprecated in favor of the new `yarnConfigHook` and `yarnBuildHook`. Documentation for them still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
 
 #### Preparation {#javascript-yarn2nix-preparation}
 

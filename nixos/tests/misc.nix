@@ -44,28 +44,6 @@ in {
 
   testScript =
     ''
-      import json
-
-
-      def get_path_info(path):
-          result = machine.succeed(f"nix --option experimental-features nix-command path-info --json {path}")
-          parsed = json.loads(result)
-          return parsed
-
-
-      with subtest("nix-db"):
-          info = get_path_info("${foo}")
-          print(info)
-
-          if (
-              info[0]["narHash"]
-              != "sha256-BdMdnb/0eWy3EddjE83rdgzWWpQjfWPAj3zDIFMD3Ck="
-          ):
-              raise Exception("narHash not set")
-
-          if info[0]["narSize"] != 128:
-              raise Exception("narSize not set")
-
       with subtest("nixos-version"):
           machine.succeed("[ `nixos-version | wc -w` = 2 ]")
 
@@ -148,9 +126,6 @@ in {
 
       with subtest("shell-vars"):
           machine.succeed('[ -n "$NIX_PATH" ]')
-
-      with subtest("nix-db"):
-          machine.succeed("nix-store -qR /run/current-system | grep nixos-")
 
       with subtest("Test sysctl"):
           machine.wait_for_unit("systemd-sysctl.service")

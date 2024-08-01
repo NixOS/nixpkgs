@@ -1,33 +1,33 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, argcomplete
-, requests
-, requests-toolbelt
-, pyyaml
+  # dependencies
+  argcomplete,
+  requests,
+  requests-toolbelt,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "python-gitlab";
-  version = "4.4.0";
+  version = "4.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-HRF797QzroJV5ddOcsZgl49Q7oXrYiSMn7Uu9Dw+OBQ=";
+    pname = "python_gitlab";
+    inherit version;
+    hash = "sha256-wsTXsc1QPZBa/l38Dz9mGZNDYfdq6FXGzsmmZoZNN88=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     requests
@@ -35,20 +35,14 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    autocompletion = [
-      argcomplete
-    ];
-    yaml = [
-      pyyaml
-    ];
+    autocompletion = [ argcomplete ];
+    yaml = [ pyyaml ];
   };
 
   # Tests rely on a gitlab instance on a local docker setup
   doCheck = false;
 
-  pythonImportsCheck = [
-    "gitlab"
-  ];
+  pythonImportsCheck = [ "gitlab" ];
 
   meta = with lib; {
     description = "Interact with GitLab API";

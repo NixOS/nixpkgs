@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# optional-dependencies
-, furo
-, myst-parser
-, sphinx-autobuild
-, sphinxHook
+  # optional-dependencies
+  furo,
+  myst-parser,
+  sphinx-autobuild,
+  sphinxHook,
 
-# tests
-, pytest-asyncio
-, pytestCheckHook
+  # tests
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aiohappyeyeballs";
-  version = "2.3.2";
+  version = "2.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiohappyeyeballs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3Lj1eUDPoVCElrxowBhhrS0GCjD5qeUCiSB/gHoqC3Q=";
+    hash = "sha256-yzhxO/f9s6cKt5V3/qzqg+f0+iFx7MxuqUqryAY5Xac=";
   };
 
   outputs = [
@@ -41,9 +42,7 @@ buildPythonPackage rec {
       --replace " --cov=aiohappyeyeballs --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ] ++ passthru.optional-dependencies.docs;
+  nativeBuildInputs = [ poetry-core ] ++ passthru.optional-dependencies.docs;
 
   passthru.optional-dependencies = {
     docs = [
@@ -59,9 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiohappyeyeballs"
-  ];
+  pythonImportsCheck = [ "aiohappyeyeballs" ];
 
   disabledTestPaths = [
     # https://github.com/bdraco/aiohappyeyeballs/issues/30
@@ -73,6 +70,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/bdraco/aiohappyeyeballs";
     changelog = "https://github.com/bdraco/aiohappyeyeballs/blob/v${version}/CHANGELOG.md";
     license = licenses.psfl;
-    maintainers = with maintainers; [ fab hexa ];
+    maintainers = with maintainers; [
+      fab
+      hexa
+    ];
   };
 }

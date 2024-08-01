@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-11up3e2FwX6IWiCaAOuOJI7kB2IUny8qeTYMqFdGfaw=";
   };
 
-  pythonImportsCheck = [
-    "bitstruct"
-  ];
+  pythonImportsCheck = [ "bitstruct" ];
 
   meta = with lib; {
     description = "Python bit pack/unpack package";

@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
 
   meta = {
     homepage = "https://git.sr.ht/~rycee/nmd";
-    description = "A documentation framework for projects based on NixOS modules";
+    description = "Documentation framework for projects based on NixOS modules";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rycee ];
   };

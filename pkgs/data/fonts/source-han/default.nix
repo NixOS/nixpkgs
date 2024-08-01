@@ -44,7 +44,7 @@ let
       '';
 
       meta = {
-        description = "An open source Pan-CJK ${description} typeface";
+        description = "Open source Pan-CJK ${description} typeface";
         homepage = "https://github.com/adobe-fonts/source-han-${family}";
         license = lib.licenses.ofl;
         maintainers = with lib.maintainers; [ taku0 emily ];
@@ -71,7 +71,7 @@ let
       postFetch = "install -Dm444 $downloadedFile $out/share/fonts/variable/SourceHan${Family}-VF.${format}.ttc";
 
       meta = {
-        description = "An open source Pan-CJK ${Family} typeface";
+        description = "Open source Pan-CJK ${Family} typeface";
         homepage = "https://github.com/adobe-fonts/source-han-${family}";
         license = lib.licenses.ofl;
         maintainers = with lib.maintainers; [ taku0 emily ];

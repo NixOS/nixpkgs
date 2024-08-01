@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pandas
-, dask
-, fastparquet
-, pyarrow
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dask,
+  fastparquet,
+  fetchFromGitHub,
+  pandas,
+  pyarrow,
+  pythonOlder,
+  setuptools,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -27,13 +29,17 @@ buildPythonPackage rec {
     # Break circular dependency
     substituteInPlace requirements.txt \
       --replace-fail "intake" ""
+
+    # Remove vendorized versioneer.py
+    rm versioneer.py
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
+    versioneer
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pandas
     dask
     fastparquet

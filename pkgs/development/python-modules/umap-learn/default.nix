@@ -1,25 +1,25 @@
-{ lib
-, bokeh
-, buildPythonPackage
-, colorcet
-, datashader
-, fetchFromGitHub
-, holoviews
-, matplotlib
-, numba
-, numpy
-, pandas
-, pynndescent
-, pytestCheckHook
-, pythonOlder
-, scikit-image
-, scikit-learn
-, scipy
-, seaborn
-, tbb
-, tensorflow
-, tensorflow-probability
-, tqdm
+{
+  lib,
+  bokeh,
+  buildPythonPackage,
+  colorcet,
+  datashader,
+  fetchFromGitHub,
+  holoviews,
+  matplotlib,
+  numba,
+  numpy,
+  pandas,
+  pynndescent,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-image,
+  scikit-learn,
+  scipy,
+  seaborn,
+  tensorflow,
+  tensorflow-probability,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -62,16 +62,12 @@ buildPythonPackage rec {
       tensorflow-probability
     ];
 
-    tbb = [
-      tbb
-    ];
+    tbb = [ tbb ];
 
     all = plot ++ parametric_umap ++ tbb;
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -96,6 +92,6 @@ buildPythonPackage rec {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

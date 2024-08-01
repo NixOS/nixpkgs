@@ -1,19 +1,8 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, tailscale }:
 
-let
-  version = "1.64.2";
-in
 buildGoModule {
   pname = "tailscale-nginx-auth";
-  inherit version;
-
-  src = fetchFromGitHub {
-    owner = "tailscale";
-    repo = "tailscale";
-    rev = "v${version}";
-    hash = "sha256-DS7C/G1Nj9gIjYwXaEeCLbtH9HbB0tRoJBDjZc/nq5g=";
-  };
-  vendorHash = "sha256-pYeHqYd2cCOVQlD1r2lh//KC+732H0lj1fPDBr+W8qA=";
+  inherit (tailscale) version src vendorHash;
 
   CGO_ENABLED = 0;
 
@@ -22,8 +11,8 @@ buildGoModule {
   ldflags = [
     "-w"
     "-s"
-    "-X tailscale.com/version.longStamp=${version}"
-    "-X tailscale.com/version.shortStamp=${version}"
+    "-X tailscale.com/version.longStamp=${tailscale.version}"
+    "-X tailscale.com/version.shortStamp=${tailscale.version}"
   ];
 
   postInstall = lib.optionalString stdenv.isLinux ''
@@ -35,7 +24,7 @@ buildGoModule {
 
   meta = with lib; {
     homepage = "https://tailscale.com";
-    description = "Tool that allows users to use Tailscale Whois authentication with NGINX as a reverse proxy.";
+    description = "Tool that allows users to use Tailscale Whois authentication with NGINX as a reverse proxy";
     license = licenses.bsd3;
     mainProgram = "tailscale.nginx-auth";
     maintainers = with maintainers; [ phaer ];

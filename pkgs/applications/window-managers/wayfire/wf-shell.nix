@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/WayfireWM/wf-shell";
     description = "GTK3-based panel for Wayfire";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ qyliss wucke13 rewine ];
+    maintainers = with lib.maintainers; [ wucke13 rewine ];
     platforms = lib.platforms.unix;
   };
 })

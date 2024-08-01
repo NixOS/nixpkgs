@@ -23,7 +23,7 @@ in {
         nginx.location = "/(c)git/";
         repos = {
           some-repo = {
-            path = "/srv/git/some-repo";
+            path = "/tmp/git/some-repo";
             desc = "some-repo description";
           };
         };
@@ -50,12 +50,12 @@ in {
 
     server.fail("curl -fsS http://localhost/robots.txt")
 
-    server.succeed("${pkgs.writeShellScript "setup-cgit-test-repo" ''
+    server.succeed("sudo -u cgit ${pkgs.writeShellScript "setup-cgit-test-repo" ''
       set -e
-      git init --bare -b master /srv/git/some-repo
+      git init --bare -b master /tmp/git/some-repo
       git init -b master reference
       cd reference
-      git remote add origin /srv/git/some-repo
+      git remote add origin /tmp/git/some-repo
       date > date.txt
       git add date.txt
       git -c user.name=test -c user.email=test@localhost commit -m 'add date'

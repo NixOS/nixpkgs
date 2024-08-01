@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pytestCheckHook
-, pythonOlder
-, requests
-, robotframework
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  robotframework,
 }:
 
 buildPythonPackage rec {
@@ -28,22 +29,16 @@ buildPythonPackage rec {
     robotframework
   ];
 
-  buildInputs = [
-    pytestCheckHook
-  ];
+  buildInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "RequestsLibrary"
-  ];
+  pythonImportsCheck = [ "RequestsLibrary" ];
 
-  pytestFlagsArray = [
-    "utests"
-  ];
+  pytestFlagsArray = [ "utests" ];
 
   meta = with lib; {
     description = "Robot Framework keyword library wrapper around the HTTP client library requests";
     homepage = "https://github.com/bulkan/robotframework-requests";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

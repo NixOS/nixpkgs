@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A simple system fetch written in rust";
+    description = "Simple system fetch written in rust";
     homepage = "https://github.com/IogaMaster/leaf";
     license = licenses.mit;
     maintainers = with maintainers; [ iogamaster ];

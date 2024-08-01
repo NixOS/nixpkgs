@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.broadinstitute.org/igv/";
-    description = "A visualization tool for interactive exploration of genomic datasets";
+    description = "Visualization tool for interactive exploration of genomic datasets";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.mimame ];

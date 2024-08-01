@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, php
+{
+  lib,
+  fetchFromGitHub,
+  php,
 }:
 
 php.buildComposerProject (finalAttrs: {
@@ -14,7 +15,7 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-7ATlfAlCFv78JSKg5cD/VcYoq/EAM/6/GjH3lkfVCJ8=";
   };
 
-  vendorHash = "sha256-ykAv7laYMvzd+uD6raMRQiZmCEa0ELQj1hJPb8UvjCk=";
+  vendorHash = "sha256-MOq7xmX8wqDk9W3M2gkejyXXPTcVFFgU0ohmDpL0Tvg=";
 
   composerLock = ./composer.lock;
 

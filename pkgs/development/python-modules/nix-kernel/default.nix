@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pexpect
-, notebook
-, nix
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  pexpect,
+  notebook,
+  nix,
 }:
 
 buildPythonPackage rec {
@@ -44,6 +45,6 @@ buildPythonPackage rec {
     description = "Simple jupyter kernel for nix-repl";
     homepage = "https://github.com/GTrunSec/nix-kernel";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

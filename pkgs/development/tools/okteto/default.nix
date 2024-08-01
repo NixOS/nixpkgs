@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "okteto";
-  version = "2.26.1";
+  version = "2.29.3";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     rev = version;
-    hash = "sha256-bWyerkXmAto0c/LYybUSRctajmL1R0PldfpKsh8crfA=";
+    hash = "sha256-aU2yH33HVg9CHA5+NOWZUmhRC7W6yMjKIwyDM8E4e2g=";
   };
 
-  vendorHash = "sha256-cYiyKNpsMfjqLL+6Q/s3nHRcj2y0DHuOu+S5GndLHxk=";
+  vendorHash = "sha256-7XZImCS9hv8ILYfGcoY3tMk0grswWbfpQrBKhghTfsY=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
@@ -20,6 +20,8 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
+
+  excludedPackages = [ "integration" "samples" ];
 
   ldflags = [
     "-s"
@@ -30,12 +32,24 @@ buildGoModule rec {
   tags = [ "osusergo" "netgo" "static_build" ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
+    export HOME="$(mktemp -d)"
   '';
 
-  checkFlags = [
-    "-skip=TestCreateDockerfile" # Skip flaky test
-  ];
+  checkFlags =
+    let
+      skippedTests = [
+        # require network access
+        "TestCreateDockerfile"
+
+        # access file system
+        "Test_translateDeployment"
+        "Test_translateStatefulSet"
+        "Test_translateJobWithoutVolumes"
+        "Test_translateJobWithVolumes"
+        "Test_translateService"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     installShellCompletion --cmd okteto \
@@ -46,7 +60,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = okteto;
-    command = "HOME=$(mktemp -d) okteto version";
+    command = "HOME=\"$(mktemp -d)\" okteto version";
   };
 
   meta = with lib; {

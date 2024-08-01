@@ -125,7 +125,7 @@ let
     };
 
     meta = with lib; {
-      description = "A plugin-based Matrix bot system written in Python";
+      description = "Plugin-based Matrix bot system written in Python";
       homepage = "https://maubot.xyz/";
       changelog = "https://github.com/maubot/maubot/blob/v${version}/CHANGELOG.md";
       license = licenses.agpl3Plus;

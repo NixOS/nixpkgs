@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, paramiko
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paramiko,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-LTkZ1p2P9fsD+gZEQZaCS68Q6nGc4qFGMNtH75gQmXQ=";
   };
 
-  propagatedBuildInputs = [
-    paramiko
-  ];
+  propagatedBuildInputs = [ paramiko ];
 
   # Tests require a running SSH server
   doCheck = false;
 
-  pythonImportsCheck = [
-    "spur"
-  ];
+  pythonImportsCheck = [ "spur" ];
 
   meta = with lib; {
     description = "Python module to run commands and manipulate files locally or over SSH";

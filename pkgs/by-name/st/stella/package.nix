@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://stella-emu.github.io/";
-    description = "An open-source Atari 2600 VCS emulator";
+    description = "Open-source Atari 2600 VCS emulator";
     longDescription = ''
       Stella is a multi-platform Atari 2600 VCS emulator released under the GNU
       General Public License (GPL). Stella was originally developed for Linux by

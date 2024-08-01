@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://cista.rocks";
-    description = "A simple, high-performance, zero-copy C++ serialization & reflection library";
+    description = "Simple, high-performance, zero-copy C++ serialization & reflection library";
     license = licenses.mit;
     maintainers = [ maintainers.sigmanificient ];
     platforms = platforms.all;

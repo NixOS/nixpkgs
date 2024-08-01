@@ -89,3 +89,22 @@ index b5633e2..86e4738 100644
    endif()
    get_target_property(lldb_python_bindings_dir swig_wrapper_python BINARY_DIR)
    finish_swig_python("lldb-python" "${lldb_python_bindings_dir}" "${lldb_python_target_dir}")
+diff --git a/source/API/CMakeLists.txt b/source/API/CMakeLists.txt
+index b5633e2..86e4738 100644
+--- a/source/API/CMakeLists.txt	2024-05-30 19:08:14.241656491 -0700
++++ b/source/API/CMakeLists.txt	2024-05-30 19:08:48.218219667 -0700
+@@ -113,14 +113,6 @@
+   ${option_install_prefix}
+ )
+ 
+-# lib/pythonX.Y/dist-packages/lldb/_lldb.so is a symlink to lib/liblldb.so,
+-# which depends on lib/libLLVM*.so (BUILD_SHARED_LIBS) or lib/libLLVM-10git.so
+-# (LLVM_LINK_LLVM_DYLIB). Add an additional rpath $ORIGIN/../../../../lib so
+-# that _lldb.so can be loaded from Python.
+-if(LLDB_ENABLE_PYTHON AND (BUILD_SHARED_LIBS OR LLVM_LINK_LLVM_DYLIB) AND UNIX AND NOT APPLE)
+-  set_property(TARGET liblldb APPEND PROPERTY INSTALL_RPATH "\$ORIGIN/../../../../lib${LLVM_LIBDIR_SUFFIX}")
+-endif()
+-
+ if(Python3_RPATH)
+   set_property(TARGET liblldb APPEND PROPERTY INSTALL_RPATH "${Python3_RPATH}")
+   set_property(TARGET liblldb APPEND PROPERTY BUILD_RPATH   "${Python3_RPATH}")

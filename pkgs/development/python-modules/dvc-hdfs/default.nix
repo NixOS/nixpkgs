@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, dvc
-, fetchFromGitHub
-, fsspec
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  dvc,
+  fetchFromGitHub,
+  fsspec,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
   # Circular dependency with dvc
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dvc_hdfs"
-  ];
+  pythonImportsCheck = [ "dvc_hdfs" ];
 
   meta = with lib; {
     description = "HDFS/WebHDFS plugin for dvc";

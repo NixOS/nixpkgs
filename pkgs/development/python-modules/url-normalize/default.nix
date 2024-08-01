@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pytest-flakes
-, pytest-mock
-, pytest-socket
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pytest-flakes,
+  pytest-mock,
+  pytest-socket,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-WE3MM9B/voI23taFbLp2FYhl0uxOfuUWsaCTBG1hyiY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   nativeCheckInputs = [
     pytest-flakes
@@ -51,9 +48,7 @@ buildPythonPackage rec {
     sed -i "/--flakes/d" tox.ini
   '';
 
-  pythonImportsCheck = [
-    "url_normalize"
-  ];
+  pythonImportsCheck = [ "url_normalize" ];
 
   meta = with lib; {
     description = "URL normalization for Python";

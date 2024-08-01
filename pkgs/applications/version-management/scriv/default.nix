@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    description = "Command-line tool for helping developers maintain useful changelogs.";
+    description = "Command-line tool for helping developers maintain useful changelogs";
     homepage = "https://github.com/nedbat/scriv";
     changelog = "https://github.com/nedbat/scriv/releases/tag/${version}";
     license = lib.licenses.asl20;

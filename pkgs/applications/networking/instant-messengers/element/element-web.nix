@@ -1,9 +1,7 @@
 { lib
 , stdenv
-, runCommand
 , fetchFromGitHub
 , fetchYarnDeps
-, writeText
 , jq
 , yarn
 , fixup-yarn-lock
@@ -23,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
 
   src = fetchFromGitHub {
     owner = "vector-im";
-    repo = finalAttrs.pname;
+    repo = "element-web";
     rev = "v${finalAttrs.version}";
     hash = webSrcHash;
   };
@@ -77,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   '';
 
   meta = {
-    description = "A glossy Matrix collaboration client for the web";
+    description = "Glossy Matrix collaboration client for the web";
     homepage = "https://element.io/";
     changelog = "https://github.com/vector-im/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = lib.teams.matrix.members;

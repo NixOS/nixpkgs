@@ -1,4 +1,4 @@
-{ stdenv, lib, rel, addonDir, buildKodiBinaryAddon, fetchFromGitHub, pugixml, glib, nspr, nss, gtest }:
+{ stdenv, lib, rel, addonDir, buildKodiBinaryAddon, fetchFromGitHub, pugixml, glib, nspr, nss, gtest, rapidjson }:
 let
   bento4 = fetchFromGitHub {
     owner = "xbmc";
@@ -10,13 +10,13 @@ in
 buildKodiBinaryAddon rec {
   pname = "inputstream-adaptive";
   namespace = "inputstream.adaptive";
-  version = "21.4.4";
+  version = "21.4.6";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.adaptive";
     rev = "${version}-${rel}";
-    sha256 = "sha256-Nzlm1AW/nW9chQAourKF0o2FSQmsr1MNhJ4gEO0/9sM=";
+    sha256 = "sha256-ub4ep89datfr8aZLZAfoz7zhOizGFpzgp2PVON6Ptj8=";
   };
 
   extraCMakeFlags = [
@@ -26,7 +26,7 @@ buildKodiBinaryAddon rec {
 
   extraNativeBuildInputs = [ gtest ];
 
-  extraBuildInputs = [ pugixml ];
+  extraBuildInputs = [ pugixml rapidjson ];
 
   extraRuntimeDependencies = [ glib nspr nss stdenv.cc.cc.lib ];
 

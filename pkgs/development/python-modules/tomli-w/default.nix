@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tomli_w" ];
 
   meta = with lib; {
-    description = "A write-only counterpart to Tomli, which is a read-only TOML parser";
+    description = "Write-only counterpart to Tomli, which is a read-only TOML parser";
     homepage = "https://github.com/hukkin/tomli-w";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];

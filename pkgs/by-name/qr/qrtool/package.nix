@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , rustPlatform
 , asciidoctor
@@ -8,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "qrtool";
-  version = "0.10.10";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "sorairolake";
     repo = "qrtool";
     rev = "v${version}";
-    sha256 = "sha256-2gUvnQjAA0nTeJL4IbsfCmeSD+mGKjywJCCi914f5mM=";
+    sha256 = "sha256-TA4JuFd01gOzLDFYzuP0Ohk+Bd6lT3oZF9sFY9KjOfM=";
   };
 
-  cargoHash = "sha256-M5G5f+aycpIbFaPbkUNalMK3if1PIAXD7MaNsLzdvI4=";
+  cargoHash = "sha256-bcrwf7Ufd7o2FPIxEReZGy9EANdWNOgoFBHzSdoYTlI=";
 
   nativeBuildInputs = [ asciidoctor installShellFiles ];
 
@@ -33,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     maintainers = with maintainers; [ philiptaron ];
-    description = "A utility for encoding and decoding QR code images";
+    description = "Utility for encoding and decoding QR code images";
     license = licenses.asl20;
     homepage = "https://sorairolake.github.io/qrtool/book/index.html";
     changelog = "https://sorairolake.github.io/qrtool/book/changelog.html";

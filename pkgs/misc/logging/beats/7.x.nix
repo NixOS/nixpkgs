@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, elk7Version, buildGoModule, libpcap, nixosTests, systemd, config }:
 
-let beat = package: extraArgs: buildGoModule (rec {
+let beat = package: extraArgs: buildGoModule (lib.attrsets.recursiveUpdate (rec {
   pname = package;
   version = elk7Version;
 
@@ -21,7 +21,7 @@ let beat = package: extraArgs: buildGoModule (rec {
     maintainers = with maintainers; [ fadenb basvandijk dfithian ];
     platforms = platforms.linux;
   };
-} // extraArgs);
+}) extraArgs);
 in
 rec {
   auditbeat7 = beat "auditbeat" { meta.description = "Lightweight shipper for audit data"; };

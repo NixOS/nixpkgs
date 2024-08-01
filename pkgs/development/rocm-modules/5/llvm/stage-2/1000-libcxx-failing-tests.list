@@ -169,3 +169,7 @@
 ../libcxx/test/std/utilities/utility/mem.res/mem.res.pool/mem.res.pool.mem/unsync_allocate_overaligned_request.pass.cpp
 ../libcxx/test/std/utilities/utility/mem.res/mem.res.pool/mem.res.pool.mem/unsync_allocate_reuse_blocks.pass.cpp
 ../libcxx/test/std/utilities/utility/mem.res/mem.res.pool/mem.res.pool.mem/unsync_allocate.pass.cpp
+../libcxx/test/std/language.support/support.dynamic/hardware_inference_size.compile.pass.cpp
+../libcxx/test/std/language.support/support.dynamic/new.delete/new.delete.array/sized_delete_array14.pass.cpp
+../libcxx/test/std/language.support/support.dynamic/new.delete/new.delete.single/sized_delete14.pass.cpp
+../libcxx/test/libcxx/selftest/sh.cpp/empty.sh.cpp

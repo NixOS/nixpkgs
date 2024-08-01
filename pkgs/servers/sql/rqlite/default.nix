@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "rqlite";
-  version = "8.23.4";
+  version = "8.26.7";
 
   src = fetchFromGitHub {
     owner = "rqlite";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5/vcle0b/EypdA7IC28IYRYc5HxUC2zT/VsKLPurWPk=";
+    sha256 = "sha256-LiYPubQF5eGJwSDzy+0zhO6YeMNhti0CoOg7+rR1DOU=";
   };
 
-  vendorHash = "sha256-Z/Cou6NDVQVu1F4XlgMM0jI72jF2vuI6mRGhWqObXKM=";
+  vendorHash = "sha256-Hxo5pFz8IGvHoB5N2S6VOWVu4U/Fwit1x1WpbckKCeU=";
 
   subPackages = [ "cmd/rqlite" "cmd/rqlited" "cmd/rqbench" ];
 
@@ -29,7 +29,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The lightweight, distributed relational database built on SQLite";
+    description = "Lightweight, distributed relational database built on SQLite";
     homepage = "https://github.com/rqlite/rqlite";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];

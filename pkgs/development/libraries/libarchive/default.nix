@@ -23,18 +23,21 @@
 , cmake
 , nix
 , samba
+
+# for passthru.lore
+, binlore
 }:
 
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.7.3";
+  version = "3.7.4";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bfuEhw8l/flGyHNRguVcygyTYCLdnv5PAo7QGb2LybQ=";
+    hash = "sha256-czNKXHoEn1x4deNErnqp/NZfCglF1CxNoLtZ8tcl394=";
   };
 
   outputs = [ "out" "lib" "dev" ];
@@ -125,4 +128,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit cmake nix samba;
   };
+
+  # bsdtar is detected as "cannot" because its exec is internal to
+  # calls it makes into libarchive itself. If binlore gains support
+  # for detecting another layer down into libraries, this can be cut.
+  passthru.binlore.out = binlore.synthesize finalAttrs.finalPackage ''
+    execer can bin/bsdtar
+  '';
 })

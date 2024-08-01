@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A synergy client for Wayland compositors";
+    description = "Synergy client for Wayland compositors";
     longDescription = ''
       A synergy client for Wayland compositors
     '';

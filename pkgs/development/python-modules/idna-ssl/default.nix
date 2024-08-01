@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, idna }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  idna,
+}:
 
 buildPythonPackage rec {
   pname = "idna-ssl";

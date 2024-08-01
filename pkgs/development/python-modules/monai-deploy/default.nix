@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, networkx
-, numpy
-, pytest-lazy-fixture
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typeguard
-, versioneer
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  networkx,
+  numpy,
+  pytest-lazy-fixture,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typeguard,
+  versioneer,
 }:
 
 buildPythonPackage rec {

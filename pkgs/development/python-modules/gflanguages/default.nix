@@ -1,25 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, protobuf
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, setuptools-scm
-, uharfbuzz
-, youseedee
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  uharfbuzz,
+  youseedee,
 }:
 
 buildPythonPackage rec {
   pname = "gflanguages";
-  version = "0.5.17";
+  version = "0.6.2";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dScgRQ6usjSqV0FqDyP+KGvHL06wlTFVcO+MmZ2NMAs=";
+    hash = "sha256-v93mXDwHT/8Tau78ApLUR+dQCpL9jmRQp0BT5y/sfq4=";
   };
 
   pyproject = true;
@@ -28,21 +28,16 @@ buildPythonPackage rec {
   # ecosystem have begun upgrading from protobuf 3 to protobuf 4,
   # so we need to use protobuf 4 here as well to avoid a conflict
   # in the closure of fontbakery. It seems to be compatible enough.
-  pythonRelaxDeps = [
-    "protobuf"
-  ];
+  pythonRelaxDeps = [ "protobuf" ];
 
   build-system = [
     setuptools
     setuptools-scm
   ];
 
-  dependencies = [
-    protobuf
-  ];
+  dependencies = [ protobuf ];
 
   nativeCheckInputs = [
-    pythonRelaxDepsHook
     pytestCheckHook
     uharfbuzz
     youseedee

@@ -8,7 +8,7 @@ let
 in
 {
   name = "soju";
-  meta.maintainers = with lib.maintainers; [ Benjamin-L ];
+  meta.maintainers = [ ];
 
   nodes.machine = { ... }: {
     services.soju = {

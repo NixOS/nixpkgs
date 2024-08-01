@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, dvc
-, fetchFromGitHub
-, pydrive2
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  dvc,
+  fetchFromGitHub,
+  pydrive2,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
   # Circular dependency with dvc
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dvc_gdrive"
-  ];
+  pythonImportsCheck = [ "dvc_gdrive" ];
 
   meta = with lib; {
     description = "Google Drive plugin for DVC";

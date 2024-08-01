@@ -1,10 +1,14 @@
-{ lib
-, fetchFromGitHub
-, python3
-, pkg-config
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pkg-config,
+  cffi,
+  secp256k1,
+  pytestCheckHook,
 }:
 
-python3.pkgs.buildPythonPackage {
+buildPythonPackage {
   pname = "python-secp256k1-cardano";
   version = "0.2.3";
 
@@ -19,22 +23,25 @@ python3.pkgs.buildPythonPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = with python3.pkgs; [ cffi secp256k1 ];
+  propagatedBuildInputs = [
+    cffi
+    secp256k1
+  ];
 
-  nativeCheckInputs = [ python3.pkgs.pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Tests expect .so files and are failing
   doCheck = false;
 
   preConfigure = ''
-    cp -r ${python3.pkgs.secp256k1.src} libsecp256k1
-    export INCLUDE_DIR=${python3.pkgs.secp256k1}/include
-    export LIB_DIR=${python3.pkgs.secp256k1}/lib
+    cp -r ${secp256k1.src} libsecp256k1
+    export INCLUDE_DIR=${secp256k1}/include
+    export LIB_DIR=${secp256k1}/lib
   '';
 
   meta = {
     homepage = "https://github.com/OpShin/python-secp256k1";
-    description = "A fork of python-secp256k1, fixing the commit hash of libsecp256k1 to a Cardano compatible version";
+    description = "Fork of python-secp256k1, fixing the commit hash of libsecp256k1 to a Cardano compatible version";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ t4ccer ];
   };

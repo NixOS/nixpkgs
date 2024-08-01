@@ -103,7 +103,7 @@ in stdenv.mkDerivation rec {
           spin-offs, thereby making zillions more people happy!
     '';
     homepage = "https://sc2.sourceforge.net/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jcumming aszlig ];
     platforms = with lib.platforms; linux;
   };

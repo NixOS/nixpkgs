@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, opencv4
-, pythonOlder
-, pythonRelaxDepsHook
-, scikit-learn
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  opencv4,
+  pythonOlder,
+  scikit-learn,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +21,8 @@ buildPythonPackage rec {
     hash = "sha256-2xmOKIerDJqgAj5WWvv/Qd+3azYfhf1eE/eA11uhjMg=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
-  pythonRemoveDeps = [
-    "opencv-python"
-  ];
+  pythonRemoveDeps = [ "opencv-python" ];
 
   propagatedBuildInputs = [
     numpy

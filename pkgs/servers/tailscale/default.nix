@@ -2,6 +2,7 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , makeWrapper
 , getent
 , iproute2
@@ -9,11 +10,12 @@
 , shadow
 , procps
 , nixosTests
-, fetchpatch
+, installShellFiles
+, tailscale-nginx-auth
 }:
 
 let
-  version = "1.64.2";
+  version = "1.70.0";
 in
 buildGoModule {
   pname = "tailscale";
@@ -23,20 +25,21 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-DS7C/G1Nj9gIjYwXaEeCLbtH9HbB0tRoJBDjZc/nq5g=";
+    hash = "sha256-rB/zaJavA3OH1HK7Rfpta/QmQzi0xsEYTvW5JzzTAlI=";
   };
-  vendorHash = "sha256-pYeHqYd2cCOVQlD1r2lh//KC+732H0lj1fPDBr+W8qA=";
 
   patches = [
-    # Reverts "cmd/tailscaled/tailscaled.service: revert recent hardening"
+    # Fix "tailscale ssh" when built with ts_include_cli tag
+    # https://github.com/tailscale/tailscale/pull/12109
     (fetchpatch {
-      url = "https://github.com/tailscale/tailscale/commit/2889fabaefc50040507ead652d6d2b212f476c2b.patch";
-      hash = "sha256-DPBrv7kjSVXhmptUGGzOkaP4iXi/Bym3lvqy4otL9HE=";
-      revert = true;
+      url = "https://github.com/tailscale/tailscale/commit/325ca13c4549c1af58273330744d160602218af9.patch";
+      hash = "sha256-SMwqZiGNVflhPShlHP+7Gmn0v4b6Gr4VZGIF/oJAY8M=";
     })
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
+  vendorHash = "sha256-NtNjH2Vo1Leh98VIOkpyALErhC+6H5BE/uaPkwlejoo=";
+
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ] ++ [ installShellFiles ];
 
   CGO_ENABLED = 0;
 
@@ -62,19 +65,27 @@ buildGoModule {
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]} \
       --suffix PATH : ${lib.makeBinPath [ procps ]}
 
+    local INSTALL="$out/bin/tailscale"
+    installShellCompletion --cmd tailscale \
+      --bash <($out/bin/tailscale completion bash) \
+      --fish <($out/bin/tailscale completion fish) \
+      --zsh <($out/bin/tailscale completion zsh)
+
     sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
     install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
   '';
 
   passthru.tests = {
     inherit (nixosTests) headscale;
+    inherit tailscale-nginx-auth;
   };
 
   meta = with lib; {
     homepage = "https://tailscale.com";
-    description = "The node agent for Tailscale, a mesh VPN built on WireGuard";
+    description = "Node agent for Tailscale, a mesh VPN built on WireGuard";
+    changelog = "https://github.com/tailscale/tailscale/releases/tag/v${version}";
     license = licenses.bsd3;
     mainProgram = "tailscale";
-    maintainers = with maintainers; [ mbaillie jk mfrw ];
+    maintainers = with maintainers; [ mbaillie jk mfrw pyrox0 ];
   };
 }

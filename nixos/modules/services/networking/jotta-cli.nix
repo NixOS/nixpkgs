@@ -2,10 +2,10 @@
 
 with lib;
 
-let cfg = config.user.services.jotta-cli;
+let cfg = config.services.jotta-cli;
 in {
   options = {
-    user.services.jotta-cli = {
+    services.jotta-cli = {
 
       enable = mkEnableOption "Jottacloud Command-line Tool";
 

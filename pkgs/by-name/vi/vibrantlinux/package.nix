@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool to automate managing your screen's saturation depending on what programs are running";
+    description = "Tool to automate managing your screen's saturation depending on what programs are running";
     homepage = "https://github.com/libvibrant/vibrantLinux";
     license = licenses.mit;
     maintainers = with maintainers; [ unclamped ];

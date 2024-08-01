@@ -16,7 +16,7 @@ buildDunePackage rec {
     owner = "nomadic-labs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OJIzg2hnwkXkQHd4bRR051eLf4HNWa/XExxbj46SyUs=";
+    hash = "sha256-OJIzg2hnwkXkQHd4bRR051eLf4HNWa/XExxbj46SyUs=";
   };
 
   propagatedBuildInputs = [ integers_stubs_js ];

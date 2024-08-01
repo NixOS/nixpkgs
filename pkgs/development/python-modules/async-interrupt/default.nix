@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "async-interrupt";
-  version = "1.1.1";
+  version = "1.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "async_interrupt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mbvOj1ybCkDNr3je3PtFwmddkh2k/nHOerpC6hGSUYI=";
+    hash = "sha256-CFCWlIx4iAG6gW2ORRYfZpFWRvjukqdcR2yg6NjVqps=";
   };
 
   postPatch = ''
@@ -26,18 +27,14 @@ buildPythonPackage rec {
       --replace " --cov=async_interrupt --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "async_interrupt"
-  ];
+  pythonImportsCheck = [ "async_interrupt" ];
 
   meta = with lib; {
     description = "Context manager to raise an exception when a future is done";

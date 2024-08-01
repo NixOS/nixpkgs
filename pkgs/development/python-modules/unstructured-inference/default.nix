@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-# runtime dependencies
-, layoutparser
-, python-multipart
-, huggingface-hub
-, opencv
-, onnxruntime
-, transformers
-, detectron2
-, paddleocr
-# check inputs
-, pytestCheckHook
-, coverage
-, click
-, httpx
-, mypy
-, pytest-cov
-, pdf2image
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # runtime dependencies
+  layoutparser,
+  python-multipart,
+  huggingface-hub,
+  opencv,
+  onnxruntime,
+  transformers,
+  detectron2,
+  paddleocr,
+  # check inputs
+  pytestCheckHook,
+  coverage,
+  click,
+  httpx,
+  mypy,
+  pytest-cov,
+  pdf2image,
 }:
 
 buildPythonPackage rec {
@@ -37,19 +38,19 @@ buildPythonPackage rec {
       --replace "opencv-python" "opencv"
   '';
 
-  propagatedBuildInputs = [
-    layoutparser
-    python-multipart
-    huggingface-hub
-    opencv
-    onnxruntime
-    transformers
-    detectron2
-    paddleocr
-    # yolox
-  ]
-    ++ layoutparser.optional-dependencies.layoutmodels
-    ++ layoutparser.optional-dependencies.tesseract;
+  propagatedBuildInputs =
+    [
+      layoutparser
+      python-multipart
+      huggingface-hub
+      opencv
+      onnxruntime
+      transformers
+      detectron2
+      paddleocr
+      # yolox
+    ]
+    ++ layoutparser.optional-dependencies.layoutmodels ++ layoutparser.optional-dependencies.tesseract;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -94,6 +95,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

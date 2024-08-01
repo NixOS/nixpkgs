@@ -27,8 +27,10 @@ let
     "bird"
     "bitcoin"
     "blackbox"
+    "borgmatic"
     "buildkite-agent"
     "collectd"
+    "deluge"
     "dmarc"
     "dnsmasq"
     "dnssec"
@@ -52,7 +54,6 @@ let
     "lnd"
     "mail"
     "mikrotik"
-    "minio"
     "modemmanager"
     "mongodb"
     "mysqld"
@@ -279,20 +280,16 @@ let
 in
 {
 
-  imports = (lib.forEach [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
-                   "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
-                   "snmpExporter" "unifiExporter" "varnishExporter" ]
-       (opt: lib.mkRemovedOptionModule [ "services" "prometheus" "${opt}" ] ''
-         The prometheus exporters are now configured using `services.prometheus.exporters'.
-         See the 18.03 release notes for more information.
-       '' ));
-
   options.services.prometheus.exporters = mkOption {
     type = types.submodule {
       options = (mkSubModules);
       imports = [
         ../../../misc/assertions.nix
         (lib.mkRenamedOptionModule [ "unifi-poller" ] [ "unpoller" ])
+        (lib.mkRemovedOptionModule [ "minio" ] ''
+          The Minio exporter has been removed, as it was broken and unmaintained.
+          See the 24.11 release notes for more information.
+        '')
       ];
     };
     description = "Prometheus exporter configuration";
@@ -413,6 +410,14 @@ in
         Please ensure you have either `services.prometheus.exporters.idrac.configuration'
           or `services.prometheus.exporters.idrac.configurationPath' set!
       '';
+    } {
+      assertion = cfg.deluge.enable -> (
+        (cfg.deluge.delugePassword == null) != (cfg.deluge.delugePasswordFile == null)
+      );
+      message = ''
+        Please ensure you have either `services.prometheus.exporters.deluge.delugePassword'
+          or `services.prometheus.exporters.deluge.delugePasswordFile' set!
+      '';
     } ] ++ (flip map (attrNames exporterOpts) (exporter: {
       assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
       message = ''
@@ -438,14 +443,17 @@ in
         ''
       )
     ] ++ config.services.prometheus.exporters.warnings;
-  }] ++ [(mkIf config.services.minio.enable {
-    services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
-    services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
-    services.prometheus.exporters.minio.minioAccessSecret = mkDefault config.services.minio.secretKey;
-  })] ++ [(mkIf config.services.prometheus.exporters.rtl_433.enable {
+  }]  ++ [(mkIf config.services.prometheus.exporters.rtl_433.enable {
     hardware.rtl-sdr.enable = mkDefault true;
   })] ++ [(mkIf config.services.postfix.enable {
     services.prometheus.exporters.postfix.group = mkDefault config.services.postfix.setgidGroup;
+  })] ++ [(mkIf config.services.prometheus.exporters.deluge.enable {
+    system.activationScripts = {
+      deluge-exported.text = ''
+      mkdir -p /etc/deluge-exporter
+      echo "DELUGE_PASSWORD=$(cat ${config.services.prometheus.exporters.deluge.delugePasswordFile})" > /etc/deluge-exporter/password
+      '';
+    };
   })] ++ (mapAttrsToList (name: conf:
     mkExporterConf {
       inherit name;

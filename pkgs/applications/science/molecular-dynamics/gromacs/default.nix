@@ -24,7 +24,7 @@
 assert enableCuda -> singlePrec;
 
 let
-  inherit (cudaPackages.cudaFlags) cudaCapabilities dropDot;
+  inherit (cudaPackages.flags) cmakeCudaArchitecturesString;
 
   # Select reasonable defaults for all major platforms
   # The possible values are defined in CMakeLists.txt:
@@ -45,8 +45,8 @@ let
       }
     else
       {
-        version = "2024.1";
-        hash = "sha256-k32PEqNv/78q963XGtu1qlxVN4ktRsmnavvsqxqgqsc=";
+        version = "2024.2";
+        hash = "sha256-gCp+M18uiVdw9XsVnk7DaOuw/yzm2sz3BsboAlw2hSs=";
       };
 
 in stdenv.mkDerivation rec {
@@ -111,10 +111,10 @@ in stdenv.mkDerivation rec {
      ]
   ) ++ lib.optionals enableCuda [
     "-DGMX_GPU=CUDA"
-    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (builtins.concatStringsSep ";" (map dropDot cudaCapabilities)))
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
 
     # Gromacs seems to ignore and override the normal variables, so we add this ad hoc:
-    (lib.cmakeFeature "GMX_CUDA_TARGET_COMPUTE" (builtins.concatStringsSep ";" (map dropDot cudaCapabilities)))
+    (lib.cmakeFeature "GMX_CUDA_TARGET_COMPUTE" cmakeCudaArchitecturesString)
   ];
 
   postInstall = ''

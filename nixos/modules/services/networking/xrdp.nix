@@ -51,11 +51,11 @@ in
 
       enable = mkEnableOption "xrdp, the Remote Desktop Protocol server";
 
-      package = mkPackageOptionMD pkgs "xrdp" { };
+      package = mkPackageOption pkgs "xrdp" { };
 
       audio = {
         enable = mkEnableOption "audio support for xrdp sessions. So far it only works with PulseAudio sessions on the server side. No PipeWire support yet";
-        package = mkPackageOptionMD pkgs "pulseaudio-module-xrdp" {};
+        package = mkPackageOption pkgs "pulseaudio-module-xrdp" {};
       };
 
       port = mkOption {

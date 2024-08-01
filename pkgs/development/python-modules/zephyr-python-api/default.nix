@@ -1,26 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "zephyr-python-api";
-  version = "0.0.5";
+  version = "0.1.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "zephyr_python_api";
     inherit version;
-    hash = "sha256-tzuLFM2Oav5rKH1GEZcP/Kfw4NXRTObMf1gcn862UBw=";
+    hash = "sha256-YupGiybfhwb+I4ofr6RNBzS6LQfx5BQD/SU5nYrnqFk=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # No tests in archive
   doCheck = false;
@@ -29,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/nassauwinter/zephyr-python-api";
-    description = "A set of wrappers for Zephyr Scale (TM4J) REST API";
+    description = "Set of wrappers for Zephyr Scale (TM4J) REST API";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rapiteanu ];
   };

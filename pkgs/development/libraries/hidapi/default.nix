@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "hidapi";
-    rev = "${finalAttrs.pname}-${finalAttrs.version}";
+    rev = "hidapi-${finalAttrs.version}";
     sha256 = "sha256-p3uzBq5VxxQbVuy1lEHEEQdxXwnhQgJDIyAAWjVWNIg=";
   };
 
@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
       "hidapi-hidraw"
       "hidapi-libusb"
     ];
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
   };
 })

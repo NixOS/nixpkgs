@@ -1,27 +1,28 @@
-{ buildPythonPackage
-, fetchPypi
-, setuptools
-, wheel
-, comm
-, ipykernel
-, ipython
-, jsonschema
-, jupyterlab-widgets
-, lib
-, pytest7CheckHook
-, pytz
-, traitlets
-, widgetsnbextension
+{
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  wheel,
+  comm,
+  ipykernel,
+  ipython,
+  jsonschema,
+  jupyterlab-widgets,
+  lib,
+  pytest7CheckHook,
+  pytz,
+  traitlets,
+  widgetsnbextension,
 }:
 
 buildPythonPackage rec {
   pname = "ipywidgets";
-  version = "8.1.2";
+  version = "8.1.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0Lm0Hkm66SaoZuYTo5sPAJd0XSufHz3UBmQbSlfsQsk=";
+    hash = "sha256-9fnuquCCsYI86erCV1JylS9A10iJOXKVbcCXAKY5LZw=";
   };
 
   nativeBuildInputs = [

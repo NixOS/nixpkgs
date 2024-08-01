@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ebassi";
-    repo = finalAttrs.pname;
+    repo = "graphene";
     rev = finalAttrs.version;
     sha256 = "P6JQhSktzvyMHatP/iojNGXPmcsxsFxdYerXzS23ojI=";
   };
@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A thin layer of graphic data types";
+    description = "Thin layer of graphic data types";
     homepage = "https://github.com/ebassi/graphene";
     license = licenses.mit;
     maintainers = teams.gnome.members ++ (with maintainers; [ ]);

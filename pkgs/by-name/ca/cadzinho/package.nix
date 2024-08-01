@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cadzinho";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "zecruel";
     repo = "CadZinho";
     rev = version;
-    hash = "sha256-s2+k1TcmY3xwxXccHP7au71e0l3Qrso5XxmGGVvyIo0=";
+    hash = "sha256-AHojy6lYLEyeBaYiIzo6MdQCM3jX5ENNTKgU+PGSD00=";
   };
 
   postPatch = ''

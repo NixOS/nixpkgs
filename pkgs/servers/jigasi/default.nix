@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "A server-side application that allows regular SIP clients to join Jitsi Meet conferences";
+    description = "Server-side application that allows regular SIP clients to join Jitsi Meet conferences";
     mainProgram = "jigasi";
     longDescription = ''
       Jitsi Gateway to SIP: a server-side application that allows regular SIP clients to join Jitsi Meet conferences hosted by Jitsi Videobridge.

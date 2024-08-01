@@ -10,6 +10,7 @@
   pkg-config,
   qtsvg,
   qtwayland,
+  breeze,
   kaccounts-integration,
   SDL2,
   xkeyboard_config,
@@ -39,6 +40,10 @@ in
       })
       ./tzdir.patch
       ./no-discover-shortcut.patch
+      (substituteAll {
+        src = ./wallpaper-paths.patch;
+        wallpapers = "${lib.getBin breeze}/share/wallpapers";
+      })
     ];
 
     extraNativeBuildInputs = [pkg-config];

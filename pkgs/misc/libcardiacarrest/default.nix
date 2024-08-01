@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = src.meta // {
-    description = "A trivial implementation of libpulse PulseAudio library API";
+    description = "Trivial implementation of libpulse PulseAudio library API";
     longDescription = ''
       libcardiacarrest is a trivial implementation of libpulse
       PulseAudio library API that unconditionally (but gracefully)

@@ -56,13 +56,13 @@ let
   python = python2.withPackages (pp: [ pp.pygtk ]);
 in stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "2.10.36";
+  version = "2.10.38";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-PTvDxppL2zrqm6LVOF7ZjqA5U/OFeq/R1pdgEe1827I=";
+    sha256 = "sha256-UKhF7sEciDH+hmFweVD1uERuNfMO37ms+Y+FwRM/hW4=";
   };
 
   patches = [
@@ -190,7 +190,7 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "The GNU Image Manipulation Program";
+    description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
     maintainers = with maintainers; [ jtojnar ];
     license = licenses.gpl3Plus;

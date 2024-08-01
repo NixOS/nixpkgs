@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-V0mm2Adv2mVVfJE2fw+rCTYpDs3qRXyDHJ8/BZGKOqI=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Tests require network connection
   doCheck = false;
 
-  pythonImportsCheck = [
-    "youtube_search"
-  ];
+  pythonImportsCheck = [ "youtube_search" ];
 
   meta = with lib; {
     description = "Tool for searching for youtube videos to avoid using their heavily rate-limited API";

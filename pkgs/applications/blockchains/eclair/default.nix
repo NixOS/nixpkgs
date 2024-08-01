@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A scala implementation of the Lightning Network";
+    description = "Scala implementation of the Lightning Network";
     homepage = "https://github.com/ACINQ/eclair";
     license = licenses.asl20;
     maintainers = with maintainers; [ prusnak ];

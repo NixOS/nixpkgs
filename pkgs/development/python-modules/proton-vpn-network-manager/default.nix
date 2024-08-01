@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gobject-introspection
-, setuptools
-, networkmanager
-, proton-core
-, proton-vpn-connection
-, pycairo
-, pygobject3
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gobject-introspection,
+  setuptools,
+  networkmanager,
+  proton-core,
+  proton-vpn-connection,
+  pycairo,
+  pygobject3,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -55,6 +56,6 @@ buildPythonPackage rec {
     description = "Provides the necessary functionality for other ProtonVPN components to interact with NetworkManager";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-network-manager";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

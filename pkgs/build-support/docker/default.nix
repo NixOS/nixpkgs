@@ -4,6 +4,7 @@
 , callPackage
 , closureInfo
 , coreutils
+, devShellTools
 , e2fsprogs
 , proot
 , fakeNss
@@ -23,6 +24,7 @@
 , runtimeShell
 , shadow
 , skopeo
+, stdenv
 , storeDir ? builtins.storeDir
 , substituteAll
 , symlinkJoin
@@ -47,6 +49,10 @@ let
   inherit (lib)
     escapeShellArgs
     toList
+    ;
+
+  inherit (devShellTools)
+    valueToString
     ;
 
   mkDbExtraCommand = contents:
@@ -570,6 +576,8 @@ rec {
       created ? "1970-01-01T00:00:01Z"
     , # Compressor to use. One of: none, gz, zstd.
       compressor ? "gz"
+      # Populate the nix database in the image with the dependencies of `copyToRoot`.
+    , includeNixDB ? false
     , # Deprecated.
       contents ? null
     ,
@@ -607,20 +615,26 @@ rec {
 
       compress = compressorForImage compressor name;
 
+      # TODO: add the dependencies of the config json.
+      extraCommandsWithDB =
+        if includeNixDB then (mkDbExtraCommand rootContents) + extraCommands
+        else extraCommands;
+
       layer =
         if runAsRoot == null
         then
           mkPureLayer
             {
               name = baseName;
-              inherit baseJson keepContentsDirlinks extraCommands uid gid;
+              inherit baseJson keepContentsDirlinks uid gid;
+              extraCommands = extraCommandsWithDB;
               copyToRoot = rootContents;
             } else
           mkRootLayer {
             name = baseName;
             inherit baseJson fromImage fromImageName fromImageTag
-              keepContentsDirlinks runAsRoot diskSize buildVMMemorySize
-              extraCommands;
+              keepContentsDirlinks runAsRoot diskSize buildVMMemorySize;
+            extraCommands = extraCommandsWithDB;
             copyToRoot = rootContents;
           };
       result = runCommand "docker-image-${baseName}.tar${compress.ext}"
@@ -879,18 +893,9 @@ rec {
   # the container.
   # Be careful since this doesn't work well with multilayer.
   # TODO: add the dependencies of the config json.
-  buildImageWithNixDb = args@{ copyToRoot ? contents, contents ? null, extraCommands ? "", ... }: (
-    buildImage (args // {
-      extraCommands = (mkDbExtraCommand copyToRoot) + extraCommands;
-    })
-  );
+  buildImageWithNixDb = args: buildImage (args // { includeNixDB = true; });
 
-  # TODO: add the dependencies of the config json.
-  buildLayeredImageWithNixDb = args@{ contents ? null, extraCommands ? "", ... }: (
-    buildLayeredImage (args // {
-      extraCommands = (mkDbExtraCommand contents) + extraCommands;
-    })
-  );
+  buildLayeredImageWithNixDb = args: buildLayeredImage (args // { includeNixDB = true; });
 
   # Arguments are documented in ../../../doc/build-helpers/images/dockertools.section.md
   streamLayeredImage = lib.makeOverridable (
@@ -911,12 +916,20 @@ rec {
     , fakeRootCommands ? ""
     , enableFakechroot ? false
     , includeStorePaths ? true
+    , includeNixDB ? false
     , passthru ? {}
     ,
     }:
       assert
       (lib.assertMsg (maxLayers > 1)
         "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
+      assert
+      (lib.assertMsg (enableFakechroot -> !stdenv.isDarwin) ''
+        cannot use `enableFakechroot` because `proot` is not portable to Darwin. Workarounds:
+              - use `fakeRootCommands` with the restricted `fakeroot` environment
+              - cross-compile your packages
+              - run your packages in a virtual machine
+              Discussion: https://github.com/NixOS/nixpkgs/issues/327311'');
       let
         baseName = baseNameOf name;
 
@@ -941,7 +954,9 @@ rec {
         customisationLayer = symlinkJoin {
           name = "${baseName}-customisation-layer";
           paths = contentsList;
-          inherit extraCommands fakeRootCommands;
+          extraCommands =
+            (lib.optionalString includeNixDB (mkDbExtraCommand contents)) + extraCommands;
+          inherit fakeRootCommands;
           nativeBuildInputs = [
             fakeroot
           ] ++ optionals enableFakechroot [
@@ -1094,10 +1109,14 @@ rec {
 
         result = runCommand "stream-${baseName}"
           {
+            inherit conf;
             inherit (conf) imageName;
+            inherit streamScript;
             preferLocalBuild = true;
             passthru = passthru // {
               inherit (conf) imageTag;
+              inherit conf;
+              inherit streamScript;
 
               # Distinguish tarballs and exes at the Nix level so functions that
               # take images can know in advance how the image is supposed to be used.
@@ -1105,33 +1124,25 @@ rec {
             };
             nativeBuildInputs = [ makeWrapper ];
           } ''
-          makeWrapper ${streamScript} $out --add-flags ${conf}
+          makeWrapper $streamScript $out --add-flags $conf
         '';
       in
       result
   );
 
   # This function streams a docker image that behaves like a nix-shell for a derivation
+  # Docs: doc/build-helpers/images/dockertools.section.md
+  # Tests: nixos/tests/docker-tools-nix-shell.nix
   streamNixShellImage =
-    { # The derivation whose environment this docker image should be based on
-      drv
-    , # Image Name
-      name ? drv.name + "-env"
-    , # Image tag, the Nix's output hash will be used if null
-      tag ? null
-    , # User id to run the container as. Defaults to 1000, because many
-      # binaries don't like to be run as root
-      uid ? 1000
-    , # Group id to run the container as, see also uid
-      gid ? 1000
-    , # The home directory of the user
-      homeDirectory ? "/build"
-    , # The path to the bash binary to use as the shell. See `NIX_BUILD_SHELL` in `man nix-shell`
-      shell ? bashInteractive + "/bin/bash"
-    , # Run this command in the environment of the derivation, in an interactive shell. See `--command` in `man nix-shell`
-      command ? null
-    , # Same as `command`, but runs the command in a non-interactive shell instead. See `--run` in `man nix-shell`
-      run ? null
+    { drv
+    , name ? drv.name + "-env"
+    , tag ? null
+    , uid ? 1000
+    , gid ? 1000
+    , homeDirectory ? "/build"
+    , shell ? bashInteractive + "/bin/bash"
+    , command ? null
+    , run ? null
     }:
       assert lib.assertMsg (! (drv.drvAttrs.__structuredAttrs or false))
         "streamNixShellImage: Does not work with the derivation ${drv.name} because it uses __structuredAttrs";
@@ -1141,7 +1152,7 @@ rec {
 
         # A binary that calls the command to build the derivation
         builder = writeShellScriptBin "buildDerivation" ''
-          exec ${lib.escapeShellArg (stringValue drv.drvAttrs.builder)} ${lib.escapeShellArgs (map stringValue drv.drvAttrs.args)}
+          exec ${lib.escapeShellArg (valueToString drv.drvAttrs.builder)} ${lib.escapeShellArgs (map valueToString drv.drvAttrs.args)}
         '';
 
         staticPath = "${dirOf shell}:${lib.makeBinPath [ builder ]}";
@@ -1173,27 +1184,9 @@ rec {
         # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/globals.hh#L464-L465
         sandboxBuildDir = "/build";
 
-        # This function closely mirrors what this Nix code does:
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/primops.cc#L1102
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/eval.cc#L1981-L2036
-        stringValue = value:
-          # We can't just use `toString` on all derivation attributes because that
-          # would not put path literals in the closure. So we explicitly copy
-          # those into the store here
-          if builtins.typeOf value == "path" then "${value}"
-          else if builtins.typeOf value == "list" then toString (map stringValue value)
-          else toString value;
-
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L992-L1004
-        drvEnv = lib.mapAttrs' (name: value:
-          let str = stringValue value;
-          in if lib.elem name (drv.drvAttrs.passAsFile or [])
-          then lib.nameValuePair "${name}Path" (writeText "pass-as-text-${name}" str)
-          else lib.nameValuePair name str
-        ) drv.drvAttrs //
-          # A mapping from output name to the nix store path where they should end up
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/primops.cc#L1253
-          lib.genAttrs drv.outputs (output: builtins.unsafeDiscardStringContext drv.${output}.outPath);
+        drvEnv =
+          devShellTools.unstructuredDerivationInputEnv { inherit (drv) drvAttrs; }
+          // devShellTools.derivationOutputEnv { outputList = drv.outputs; outputMap = drv; };
 
         # Environment variables set in the image
         envVars = {
@@ -1285,6 +1278,8 @@ rec {
       };
 
   # Wrapper around streamNixShellImage to build an image from the result
+  # Docs: doc/build-helpers/images/dockertools.section.md
+  # Tests: nixos/tests/docker-tools-nix-shell.nix
   buildNixShellImage = { drv, compressor ? "gz", ... }@args:
     let
       stream = streamNixShellImage (builtins.removeAttrs args ["compressor"]);

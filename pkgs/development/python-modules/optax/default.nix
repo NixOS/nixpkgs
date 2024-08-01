@@ -1,18 +1,27 @@
-{ lib
-, absl-py
-, buildPythonPackage
-, flit-core
-, chex
-, fetchFromGitHub
-, jaxlib
-, numpy
-, callPackage
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  absl-py,
+  chex,
+  jax,
+  jaxlib,
+  numpy,
+  etils,
+
+  # checks
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "optax";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +30,7 @@ buildPythonPackage rec {
     owner = "deepmind";
     repo = "optax";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sBiKUuQR89mttc9Njrh1aeUJOYdlcF7Nlj3/+Y7OMb4=";
+    hash = "sha256-D1qKei3IjDP9fC62hf6fNtvHlnn09O/dKuzTBdLwW64=";
   };
 
   outputs = [
@@ -29,28 +38,23 @@ buildPythonPackage rec {
     "testsout"
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  buildInputs = [
-    jaxlib
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     absl-py
     chex
+    etils
+    jax
+    jaxlib
     numpy
-  ];
+  ] ++ etils.optional-dependencies.epy;
 
   postInstall = ''
     mkdir $testsout
     cp -R examples $testsout/examples
   '';
 
-  pythonImportsCheck = [
-    "optax"
-  ];
+  pythonImportsCheck = [ "optax" ];
 
   # check in passthru.tests.pytest to escape infinite recursion with flax
   doCheck = false;

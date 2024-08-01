@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, passlib
-, pip
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-git
-, twine
-, watchdog
-, webtest
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  passlib,
+  pip,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-git,
+  twine,
+  watchdog,
+  webtest,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -33,17 +34,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    pip
-  ];
+  propagatedBuildInputs = [ pip ];
 
   passthru.optional-dependencies = {
-    passlib = [
-      passlib
-    ];
-    cache = [
-      watchdog
-    ];
+    passlib = [ passlib ];
+    cache = [ watchdog ];
   };
 
   __darwinAllowLocalNetworking = true;
@@ -77,16 +72,17 @@ buildPythonPackage rec {
     "docker/test_docker.py"
   ];
 
-  pythonImportsCheck = [
-    "pypiserver"
-  ];
+  pythonImportsCheck = [ "pypiserver" ];
 
   meta = with lib; {
     description = "Minimal PyPI server for use with pip/easy_install";
     mainProgram = "pypi-server";
     homepage = "https://github.com/pypiserver/pypiserver";
     changelog = "https://github.com/pypiserver/pypiserver/releases/tag/v${version}";
-    license = with licenses; [ mit zlib ];
+    license = with licenses; [
+      mit
+      zlib
+    ];
     maintainers = with maintainers; [ austinbutler ];
   };
 }

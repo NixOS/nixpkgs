@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -16,13 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-p6lRuMHM2xJrlY5LDa0XLCGQPDE39UwCouK6e0U9zJE=";
   };
 
-  pythonImportsCheck = [
-    "urlman"
-  ];
+  pythonImportsCheck = [ "urlman" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Django URL pattern helpers";

@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-semver-checks";
-  version = "0.31.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-iumHMVDlgwjjQsn0aoSJUPoOKmLztD47b7he2nJhins=";
+    hash = "sha256-E9jEZXD7nY90v35y4Wv1cUp2aoKzC7dR9bFOTI+2fqo=";
   };
 
-  cargoHash = "sha256-/mrVrbPHi4lo2iu/IWwDYIjqWZYNkm/4lWpRMLKBNpA=";
+  cargoHash = "sha256-1lHF8S0Xf5iOLQyARoYeWGGC9i68GVpk3EvSHo21Q2w=";
 
   nativeBuildInputs = [
     cmake
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A tool to scan your Rust crate for semver violations";
+    description = "Tool to scan your Rust crate for semver violations";
     mainProgram = "cargo-semver-checks";
     homepage = "https://github.com/obi1kenobi/cargo-semver-checks";
     changelog = "https://github.com/obi1kenobi/cargo-semver-checks/releases/tag/v${version}";

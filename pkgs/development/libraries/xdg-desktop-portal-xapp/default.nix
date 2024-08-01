@@ -5,22 +5,23 @@
 , ninja
 , pkg-config
 , wrapGAppsHook3
-, cinnamon
+, cinnamon-desktop
 , glib
 , gsettings-desktop-schemas
+, gtk3
 , mate
 , xdg-desktop-portal
 }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-xapp";
-  version = "1.0.4";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xdg-desktop-portal-xapp";
     rev = version;
-    hash = "sha256-Zz44PCociYhUuHTS3HJNxJPCkiIl01FFe4//7jtgDsk=";
+    hash = "sha256-e8yfFL09nztFF6FZpnT0JZyPSQCPQEI76Q29V1b0gs8=";
   };
 
   nativeBuildInputs = [
@@ -31,9 +32,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cinnamon.cinnamon-desktop # org.cinnamon.desktop.background
+    cinnamon-desktop # org.cinnamon.desktop.background
     glib
     gsettings-desktop-schemas # org.gnome.system.location
+    gtk3
     mate.mate-desktop # org.mate.background
     xdg-desktop-portal
   ];

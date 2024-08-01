@@ -2,8 +2,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let cfg = config.programs.spacefm;
 
 in
@@ -14,21 +12,21 @@ in
 
     programs.spacefm = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to install SpaceFM and create {file}`/etc/spacefm/spacefm.conf`.
         '';
       };
 
-      settings = mkOption {
-        type = types.attrs;
+      settings = lib.mkOption {
+        type = lib.types.attrs;
         default = {
           tmp_dir = "/tmp";
           terminal_su = "${pkgs.sudo}/bin/sudo";
         };
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           {
             tmp_dir = "/tmp";
             terminal_su = "''${pkgs.sudo}/bin/sudo";
@@ -46,10 +44,10 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.spaceFM ];
 
     environment.etc."spacefm/spacefm.conf".text =
-      concatStrings (mapAttrsToList (n: v: "${n}=${toString v}\n") cfg.settings);
+      lib.concatStrings (lib.mapAttrsToList (n: v: "${n}=${builtins.toString v}\n") cfg.settings);
   };
 }

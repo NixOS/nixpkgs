@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "032qf72cpjdfffq1yq54gz3ahgqf2ijca4vl31sfabmjzq9q370d";
   };
 
+  separateDebugInfo = true;
+
   # Fixes support for gcrypt 1.6+
   patches = [ ./gcrypt-fix.patch ./freebsd-unistd.patch ];
 
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage    = "https://www.gnu.org/software/shishi/";
-    description = "An implementation of the Kerberos 5 network security system";
+    description = "Implementation of the Kerberos 5 network security system";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.linux;

@@ -2,7 +2,7 @@
 , dbus-glib
 , fetchurl
 , glib
-, gnome
+, gnome-common
 , libnotify
 , libtool
 , libwnck
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config makeWrapper libtool ];
   buildInputs = [
     glib libwnck libnotify dbus-glib
-    gsettings-desktop-schemas gnome.gnome-common
+    gsettings-desktop-schemas gnome-common
   ];
 
   configureFlags = [ "--libexecdir=$(out)/bin" ];

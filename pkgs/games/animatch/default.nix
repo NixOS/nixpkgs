@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gitlab.com/HolyPangolin/animatch/";
-    description = "A cute match three game for the Librem 5 smartphone";
+    description = "Cute match three game for the Librem 5 smartphone";
     mainProgram = "animatch";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ colinsane ];

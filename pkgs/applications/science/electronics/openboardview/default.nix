@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "OpenBoardView";
     repo = "OpenBoardView";
     rev = version;
-    sha256 = "sha256-sKDDOPpCagk7rBRlMlZhx+RYYbtoLzJsrnL8qKZMKW8=";
+    hash = "sha256-sKDDOPpCagk7rBRlMlZhx+RYYbtoLzJsrnL8qKZMKW8=";
     fetchSubmodules = true;
   };
 

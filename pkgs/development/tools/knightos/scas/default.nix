@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = lib.optionals isCrossCompiling [ buildPackages.knightos-scas ];
   nativeBuildInputs = [ asciidoc libxslt.bin cmake ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-error=implicit-function-declaration"
+  ]);
+
   postInstall = ''
     cd ..
     make DESTDIR=$out install_man

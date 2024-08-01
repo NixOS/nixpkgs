@@ -17,7 +17,7 @@
 , pcre
 , automake
 , autoconf
-, addOpenGLRunpath
+, addDriverRunpath
 , waylandSupport ? false
 , wayland
 }:
@@ -32,13 +32,13 @@ let
 in
 mkDerivation rec {
   pname = "renderdoc";
-  version = "1.32";
+  version = "1.33";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "sha256-8Q2QMANieY/Bvb50NtlZEN/Nmd6xurU6AJU0Uo8qDTs=";
+    sha256 = "sha256-BQR7ENgdblzamO5GgtLJriNiJFICsj0/iWVn1usxBjU=";
   };
 
   buildInputs = [
@@ -48,7 +48,7 @@ mkDerivation rec {
   ])
   ++ lib.optional waylandSupport wayland;
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addOpenGLRunpath ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addDriverRunpath ];
 
   postUnpack = ''
     cp -r ${custom_swig} swig
@@ -79,13 +79,13 @@ mkDerivation rec {
 
   # The only documentation for this so far is in pkgs/build-support/add-opengl-runpath/setup-hook.sh
   postFixup = ''
-    addOpenGLRunpath $out/lib/librenderdoc.so
+    addDriverRunpath $out/lib/librenderdoc.so
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A single-frame graphics debugger";
+    description = "Single-frame graphics debugger";
     homepage = "https://renderdoc.org/";
     license = licenses.mit;
     longDescription = ''

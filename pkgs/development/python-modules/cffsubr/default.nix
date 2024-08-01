@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, fonttools
-, pytestCheckHook
-, setuptools-scm
-, wheel
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  fonttools,
+  pytestCheckHook,
+  setuptools-scm,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -33,13 +34,9 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    fonttools
-  ];
+  propagatedBuildInputs = [ fonttools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cffsubr" ];
 
@@ -49,6 +46,6 @@ buildPythonPackage rec {
     mainProgram = "cffsubr";
     homepage = "https://github.com/adobe-type-tools/cffsubr";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

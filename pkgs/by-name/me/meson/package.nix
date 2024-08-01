@@ -4,6 +4,8 @@
 , installShellFiles
 , coreutils
 , darwin
+, libblocksruntime
+, llvmPackages
 , libxcrypt
 , openldap
 , ninja
@@ -11,6 +13,7 @@
 , python3
 , substituteAll
 , zlib
+, fetchpatch
 }:
 
 let
@@ -18,13 +21,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-hRTmKO2E6SIdvAhO7OJtV8dcsGm39c51H+2ZGEkdcFY=";
+    hash = "sha256-RBE4AUF5fymUA87JEDWtpUFXmVPFzdhZgDI7/kscTx4=";
   };
 
   patches = [
@@ -66,9 +69,18 @@ python3.pkgs.buildPythonApplication rec {
     # Nixpkgs cctools does not have bitcode support.
     ./006-disable-bitcode.patch
 
-    # Fix cross-compilation of proc-macro (and mesa)
-    # https://github.com/mesonbuild/meson/issues/12973
-    ./0001-Revert-rust-recursively-pull-proc-macro-dependencies.patch
+    # This edge case is explicitly part of meson but is wrong for nix
+    ./007-freebsd-pkgconfig-path.patch
+
+    # Find boost via pkg-config
+    # https://github.com/NixOS/nixpkgs/issues/86131
+    # Already merged upstream PR: https://github.com/mesonbuild/meson/pull/13272
+    # FIXME: Will be in meson 1.5.0
+    (fetchpatch {
+      name = "find-boost-pkg-config.patch";
+      url = "https://github.com/mesonbuild/meson/commit/c21b886ba8a60cce7fa56e4be40bd7547129fb00.patch";
+      hash = "sha256-uSilNuSx9yd1cxs0XVLcLw4MOXEd2uIe2g+wk+SBqeU=";
+    })
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
@@ -93,6 +105,11 @@ python3.pkgs.buildPythonApplication rec {
     OpenAL
     OpenGL
     openldap
+  ] ++ lib.optionals (stdenv.cc.isClang && !stdenv.isDarwin) [
+    # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
+    llvmPackages.openmp
+    # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
+    libblocksruntime
   ];
 
   checkPhase = lib.concatStringsSep "\n" ([
@@ -106,7 +123,7 @@ python3.pkgs.buildPythonApplication rec {
     ''
   ]
   # Remove problematic tests
-  ++ (builtins.map (f: ''rm -vr "${f}";'') [
+  ++ (builtins.map (f: ''rm -vr "${f}";'') ([
     # requires git, creating cyclic dependency
     ''test cases/common/66 vcstag''
     # requires glib, creating cyclic dependency
@@ -116,7 +133,10 @@ python3.pkgs.buildPythonApplication rec {
     ''test cases/linuxlike/14 static dynamic linkage''
     # Nixpkgs cctools does not have bitcode support.
     ''test cases/osx/7 bitcode''
-  ])
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    # pch doesn't work quite right on FreeBSD, I think
+    ''test cases/common/13 pch''
+  ]))
   ++ [
     ''HOME="$TMPDIR" python ./run_project_tests.py''
     "runHook postCheck"
@@ -146,7 +166,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://mesonbuild.com";
-    description = "An open source, fast and friendly build system made in Python";
+    description = "Open source, fast and friendly build system made in Python";
     mainProgram = "meson";
     longDescription = ''
       Meson is an open source build system meant to be both extremely fast, and,
@@ -158,7 +178,7 @@ python3.pkgs.buildPythonApplication rec {
       code.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres qyliss ];
     inherit (python3.meta) platforms;
   };
 }

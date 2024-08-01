@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A desktop text editor that supports common text editing features";
+    description = "Desktop text editor that supports common text editing features";
     homepage = "https://github.com/linuxdeepin/deepin-editor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   patches = [ ./2.7.7-fixes.patch ];
   buildInputs = [ jdk ];
 
+  CXXFLAGS = lib.optionalString stdenv.isDarwin "-D_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION";
+
   meta = with lib; {
     description = "Powerful parser generator";
     longDescription = ''

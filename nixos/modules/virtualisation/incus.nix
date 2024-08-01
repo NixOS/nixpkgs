@@ -55,6 +55,10 @@ let
         xdelta
         xz
       ]
+      ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.3.0") [
+        skopeo
+        umoci
+      ]
       ++ lib.optionals config.security.apparmor.enable [
         apparmor-bin-utils
 
@@ -105,6 +109,38 @@ let
       path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
     }
   ];
+
+  environment = lib.mkMerge [
+    {
+      INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
+      INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
+      PATH = lib.mkForce serverBinPath;
+    }
+    (lib.mkIf (lib.versionOlder cfg.package.version "6.3.0") { INCUS_OVMF_PATH = ovmf; })
+    (lib.mkIf (lib.versionAtLeast cfg.package.version "6.3.0") { INCUS_EDK2_PATH = ovmf; })
+    (lib.mkIf (cfg.ui.enable) { "INCUS_UI" = cfg.ui.package; })
+  ];
+
+  incus-startup = pkgs.writeShellScript "incus-startup" ''
+    case "$1" in
+        start)
+          systemctl is-active incus.service -q && exit 0
+          exec incusd activateifneeded
+        ;;
+
+        stop)
+          systemctl is-active incus.service -q || exit 0
+          exec incusd shutdown
+        ;;
+
+        *)
+          echo "unknown argument \`$1'" >&2
+          exit 1
+        ;;
+    esac
+
+    exit 0
+  '';
 in
 {
   meta = {
@@ -118,7 +154,7 @@ in
 
         Users in the "incus-admin" group can interact with
         the daemon (e.g. to start or stop containers) using the
-        {command}`incus` command line tool, among others.
+        {command}`incus` command line tool, among others
       '';
 
       package = lib.mkPackageOption pkgs "incus-lts" { };
@@ -135,6 +171,14 @@ in
         default = cfg.package.client;
         defaultText = lib.literalExpression "config.virtualisation.incus.package.client";
         description = "The incus client package to use. This package is added to PATH.";
+      };
+
+      softDaemonRestart = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Allow for incus.service to be stopped without affecting running instances.
+        '';
       };
 
       preseed = lib.mkOption {
@@ -282,6 +326,8 @@ in
     systemd.services.incus = {
       description = "Incus Container and Virtual Machine Management Daemon";
 
+      inherit environment;
+
       wantedBy = lib.mkIf (!cfg.socketActivation) [ "multi-user.target" ];
       after = [
         "network-online.target"
@@ -296,20 +342,10 @@ in
 
       wants = [ "network-online.target" ];
 
-      environment = lib.mkMerge [
-        {
-          INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
-          INCUS_OVMF_PATH = ovmf;
-          INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
-          PATH = lib.mkForce serverBinPath;
-        }
-        (lib.mkIf (cfg.ui.enable) { "INCUS_UI" = cfg.ui.package; })
-      ];
-
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/incusd --group incus-admin";
         ExecStartPost = "${cfg.package}/bin/incusd waitready --timeout=${cfg.startTimeout}";
-        ExecStop = "${cfg.package}/bin/incus admin shutdown";
+        ExecStop = lib.optionalString (!cfg.softDaemonRestart) "${cfg.package}/bin/incus admin shutdown";
 
         KillMode = "process"; # when stopping, leave the containers alone
         Delegate = "yes";
@@ -321,6 +357,27 @@ in
         Restart = "on-failure";
         TimeoutStartSec = "${cfg.startTimeout}s";
         TimeoutStopSec = "30s";
+      };
+    };
+
+    systemd.services.incus-startup = lib.mkIf cfg.softDaemonRestart {
+      description = "Incus Instances Startup/Shutdown";
+
+      inherit environment;
+
+      after = [
+        "incus.service"
+        "incus.socket"
+      ];
+      requires = [ "incus.socket" ];
+
+      serviceConfig = {
+        ExecStart = "${incus-startup} start";
+        ExecStop = "${incus-startup} stop";
+        RemainAfterExit = true;
+        TimeoutStartSec = "600s";
+        TimeoutStopSec = "600s";
+        Type = "oneshot";
       };
     };
 

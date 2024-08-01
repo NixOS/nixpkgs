@@ -17,14 +17,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.28";
+  version = "0.7.30";
   pname = "libsolv";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "libsolv";
     rev = version;
-    hash = "sha256-cL7SDwCzXM2qJQfiu/3nfAiFbcFNn1YXD23Sl3n9nzY=";
+    hash = "sha256-De2lQu80MjKvjnN0W3/Y9JwFbA8g7tleflVXC9Lib5Y=";
   };
 
   cmakeFlags = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withRpm rpm;
 
   meta = with lib; {
-    description = "A free package dependency solver";
+    description = "Free package dependency solver";
     homepage = "https://github.com/openSUSE/libsolv";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
