@@ -139,6 +139,7 @@
   ./misc/nixpkgs.nix
   ./misc/nixpkgs-flake.nix
   ./misc/passthru.nix
+  ./misc/socket-activation.nix
   ./misc/version.nix
   ./misc/wordlist.nix
   ./programs/_1password-gui.nix
