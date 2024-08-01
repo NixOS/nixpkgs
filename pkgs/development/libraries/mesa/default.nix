@@ -138,13 +138,6 @@ in stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
-
-    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/11533
-    (fetchpatch {
-      name = "ffmpeg.patch";
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/241f70e5a13bb9c13a168282446ad074e16c3d74.patch";
-      hash = "sha256-Cx7OL8iXGAOuDbCQReCCxSrWYvfZVrGoP0txIKSLTvs=";
-    })
   ];
 
   postPatch = ''
