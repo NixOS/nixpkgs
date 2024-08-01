@@ -2,12 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
   numpy,
   packaging,
   quantities,
   pythonOlder,
   setuptools,
+  pytestCheckHook,
+  pillow,
+  which,
 }:
 
 buildPythonPackage rec {
@@ -30,11 +32,16 @@ buildPythonPackage rec {
     quantities
   ];
 
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pillow
+    which
+  ];
 
-  checkPhase = ''
-    nosetests --exclude=iotest
-  '';
+  disabledTestPaths = [
+    # Requires network and export HOME dir
+    "neo/test/rawiotest/test_maxwellrawio.py"
+  ];
 
   pythonImportsCheck = [ "neo" ];
 

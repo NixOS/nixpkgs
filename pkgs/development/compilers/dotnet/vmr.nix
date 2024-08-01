@@ -25,6 +25,8 @@
 , xmlstarlet
 , nodejs
 , callPackage
+, unzip
+, yq
 
 , dotnetSdk
 , releaseManifestFile
@@ -78,6 +80,8 @@ in stdenv.mkDerivation rec {
     pkg-config
     python3
     xmlstarlet
+    unzip
+    yq
   ]
   ++ lib.optionals (lib.versionAtLeast version "9") [
     nodejs
@@ -353,6 +357,7 @@ in stdenv.mkDerivation rec {
     typeset -f isScript patchShebangs > src/aspnetcore/patch-shebangs.sh
   '';
 
+  dontConfigureNuget = true; # NUGET_PACKAGES breaks the build
   dontUseCmakeConfigure = true;
 
   # https://github.com/NixOS/nixpkgs/issues/38991
@@ -410,6 +415,16 @@ in stdenv.mkDerivation rec {
     done
     popd
 
+    local -r unpacked="$PWD/.unpacked"
+    for nupkg in $out/Private.SourceBuilt.Artifacts.*.${targetRid}/{,SourceBuildReferencePackages/}*.nupkg; do
+        rm -rf "$unpacked"
+        unzip -qd "$unpacked" "$nupkg"
+        chmod -R +rw "$unpacked"
+        rm "$nupkg"
+        mv "$unpacked" "$nupkg"
+        # TODO: should we fix executable flags here? see dotnetInstallHook
+    done
+
     runHook postInstall
   '';
 
@@ -418,7 +433,12 @@ in stdenv.mkDerivation rec {
   stripDebugList = [ "." ];
   # stripping dlls results in:
   # Failed to load System.Private.CoreLib.dll (error code 0x8007000B)
-  stripExclude = [ "*.dll" ];
+  # stripped crossgen2 results in:
+  # Failure processing application bundle; possible file corruption.
+  # this needs to be a bash array
+  preFixup = ''
+    stripExclude=(\*.dll crossgen2)
+  '';
 
   passthru = {
     inherit releaseManifest buildRid targetRid;
