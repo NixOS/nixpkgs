@@ -140,6 +140,7 @@ in lib.makeExtensible (self: ({
     patches = [
       patch-monitorfdhup
     ];
+    withNixDebugPatch = ./patches/set-NIX_DEBUG-on-nix-2.3.patch;
     self_attribute_name = "nix_2_3";
     maintainers = with lib.maintainers; [ flokli ];
   }).override { boehmgc = boehmgc-nix_2_3; }).overrideAttrs {
@@ -152,36 +153,42 @@ in lib.makeExtensible (self: ({
     version = "2.18.5";
     hash = "sha256-xEcYQuJz6DjdYfS6GxIYcn8U+3Hgopne3CvqrNoGguQ=";
     self_attribute_name = "nix_2_18";
+    withNixDebugPatch = ./patches/set-NIX_DEBUG-on-nix-2.18.patch;
   };
 
   nix_2_19 = common {
     version = "2.19.6";
     hash = "sha256-XT5xiwOLgXf+TdyOjbJVOl992wu9mBO25WXHoyli/Tk=";
     self_attribute_name = "nix_2_19";
+    withNixDebugPatch = ./patches/set-NIX_DEBUG-on-nix-2.19.patch;
   };
 
   nix_2_20 = common {
     version = "2.20.8";
     hash = "sha256-M2tkMtjKi8LDdNLsKi3IvD8oY/i3rtarjMpvhybS3WY=";
     self_attribute_name = "nix_2_20";
+    withNixDebugPatch = ./patches/set-NIX_DEBUG-on-nix-2.20.patch;
   };
 
   nix_2_21 = common {
     version = "2.21.4";
     hash = "sha256-c6nVZ0pSrfhFX3eVKqayS+ioqyAGp3zG9ZPO5rkXFRQ=";
     self_attribute_name = "nix_2_21";
+    withNixDebugPatch = ./patches/set-NIX_DEBUG-on-nix-2.21.patch;
   };
 
   nix_2_22 = common {
     version = "2.22.3";
     hash = "sha256-l04csH5rTWsK7eXPWVxJBUVRPMZXllFoSkYFTq/i8WU=";
     self_attribute_name = "nix_2_22";
+    withNixDebugPatch = ./patches/set-NIX_DEBUG-on-nix-2.22.patch;
   };
 
   nix_2_23 = common {
     version = "2.23.3";
     hash = "sha256-lAoLGVIhRFrfgv7wcyduEkyc83QKrtsfsq4of+WrBeg=";
     self_attribute_name = "nix_2_23";
+    withNixDebugPatch = ./patches/set-NIX_DEBUG-on-nix-2.23.patch;
   };
 
   git = (common rec {
