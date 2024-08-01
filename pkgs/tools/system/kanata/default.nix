@@ -3,6 +3,7 @@
 , darwin
 , rustPlatform
 , fetchFromGitHub
+, nixosTests
 , withCmd ? false
 }:
 
@@ -29,6 +30,12 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm 444 assets/kanata-icon.svg $out/share/icons/hicolor/scalable/apps/kanata.svg
   '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) kanata;
+    };
+  };
 
   meta = with lib; {
     description = "Tool to improve keyboard comfort and usability with advanced customization";
