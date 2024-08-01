@@ -103,6 +103,7 @@ python3.pkgs.buildPythonApplication rec {
     pymysql
     pypandoc
     pypdf
+    python-dotenv
     python-jose
     python-multipart
     python-pptx
