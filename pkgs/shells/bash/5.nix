@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
     #   https://savannah.gnu.org/patch/index.php?10373
     # Had to fetch manually to workaround -p0 default.
     ./parallel.patch
+    # Fix `pop_var_context: head of shell_variables not a function context`.
+    ./fix-pop-var-context-error.patch
   ];
 
   configureFlags = [
