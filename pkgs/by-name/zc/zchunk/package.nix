@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, argp-standalone
-, curl
-, meson
-, ninja
-, pkg-config
-, zstd
+{
+  lib,
+  argp-standalone,
+  curl,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
+  zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zchunk";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "zchunk";
-    repo = pname;
-    rev = version;
+    repo = "zchunk";
+    rev = finalAttrs.version;
     hash = "sha256-GiZM8Jh+v0US8xr90rySY0Ud3eAAl8UqLi162zDR3qw=";
   };
 
@@ -29,11 +30,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     zstd
-  ] ++ lib.optional stdenv.isDarwin argp-standalone;
+  ] ++ lib.optionals stdenv.isDarwin [ argp-standalone ];
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
-  meta = with lib; {
+
+  meta = {
     homepage = "https://github.com/zchunk/zchunk";
     description = "File format designed for highly efficient deltas while maintaining good compression";
     longDescription = ''
@@ -44,8 +50,8 @@ stdenv.mkDerivation rec {
       zchunk files are protected with strong checksums to verify that the file
       you downloaded is, in fact, the file you wanted.
     '';
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
