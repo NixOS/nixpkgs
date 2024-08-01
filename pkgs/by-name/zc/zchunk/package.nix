@@ -3,6 +3,7 @@
   argp-standalone,
   curl,
   fetchFromGitHub,
+  gitUpdater,
   meson,
   ninja,
   pkg-config,
@@ -36,8 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
     "lib"
+    "man"
   ];
 
+  strictDeps = true;
+
+  passthru = {
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     homepage = "https://github.com/zchunk/zchunk";
@@ -51,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       you downloaded is, in fact, the file you wanted.
     '';
     license = lib.licenses.bsd2;
+    mainProgram = "zck";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
