@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "await";
-  version = "0.999";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "slavaGanzin";
     repo = "await";
     rev = "v${version}";
-    hash = "sha256-z178TKA0x6UnpBQaA8dig2FLeJKGxPndfvwtmylAD90=";
+    hash = "sha256-7YQEHocMp34HnVnbcCsFNWBDoba6b6RJ5clEC8CP9HI=";
   };
 
   buildPhase = ''
