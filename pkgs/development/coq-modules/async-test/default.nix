@@ -8,7 +8,7 @@ mkCoqDerivation {
 
   defaultVersion = let inherit (lib.versions) range; in
     lib.switch coq.coq-version [
-      { case = range "8.12" "8.20"; out = "0.1.0"; }
+      { case = range "8.12" "8.19"; out = "0.1.0"; }
     ] null;
   release = {
     "0.1.0".sha256  = "sha256-0DBUS20337tpBi64mlJIWTQvIAdUvWbFCM9Sat7MEA8=";
