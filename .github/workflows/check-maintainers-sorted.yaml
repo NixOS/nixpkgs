@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   nixos:
+    name: maintainer-list-check
     runs-on: ubuntu-latest
     if: github.repository_owner == 'NixOS'
     steps:
