@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     mv app/lib/{jna-5.10.0/dist/jna.jar,}
     mv app/lib/{jna-5.10.0/dist/jna-platform.jar,}
     ln -sf ${batik}/* java/libraries/svg/library/
-    cp java/libraries/svg/library/lib/batik-all-${batik.version}.jar java/libraries/svg/library/batik.jar
+    cp java/libraries/svg/library/share/java/batik-all-${batik.version}.jar java/libraries/svg/library/batik.jar
     echo "tarring ffmpeg"
     tar --checkpoint=10000 -czf build/shared/tools/MovieMaker/ffmpeg-5.0.1.gz ${ffmpeg}
     cd build
