@@ -718,11 +718,6 @@ in
       (mkIf (!config.boot.initrd.systemd.enable) { inherit initialRamdisk; })
     ];
 
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isYes "TMPFS")
-      (isYes "BLK_DEV_INITRD")
-    ];
-
     boot.initrd.supportedFilesystems = map (fs: fs.fsType) fileSystems;
   };
 

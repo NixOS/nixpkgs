@@ -237,32 +237,17 @@ in
         kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
       in modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
     };
-
-    system.requiredKernelConfig = mkOption {
-      default = [];
-      example = literalExpression ''
-        with config.lib.kernelConfig; [
-          (isYes "MODULES")
-          (isEnabled "FB_CON_DECOR")
-          (isEnabled "BLK_DEV_INITRD")
-        ]
-      '';
-      internal = true;
-      type = types.listOf types.attrs;
-      description = ''
-        This option allows modules to specify the kernel config options that
-        must be set (or unset) for the module to work. Please use the
-        lib.kernelConfig functions to build list elements.
-      '';
-    };
-
   };
 
 
   ###### implementation
 
   config = mkMerge
-    [ (mkIf config.boot.initrd.enable {
+      (mkRemovedOptionModule [ "system" "requiredKernelConfig" ] ''
+        The option ‘boot.requiredKernelConfig’ has been removed. Please use
+        ‘boot.kernel.features’ instead.
+      '')
+      (mkIf config.boot.initrd.enable {
         boot.initrd.availableKernelModules =
           optionals config.boot.initrd.includeDefaultModules ([
             # Note: most of these (especially the SATA/PATA modules)
@@ -417,21 +402,6 @@ in
             configLine = "CONFIG_${option}=n";
           };
         };
-
-        # The config options that all modules can depend upon
-        system.requiredKernelConfig = with config.lib.kernelConfig;
-          [
-            # !!! Should this really be needed?
-            (isYes "MODULES")
-            (isYes "BINFMT_ELF")
-          ] ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
-
-        # nixpkgs kernels are assumed to have all required features
-        assertions = if config.boot.kernelPackages.kernel ? features then [] else
-          let cfg = config.boot.kernelPackages.kernel.config; in map (attrs:
-            { assertion = attrs.assertion cfg; inherit (attrs) message; }
-          ) config.system.requiredKernelConfig;
-
       })
 
     ];
