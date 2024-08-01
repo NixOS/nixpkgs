@@ -109,6 +109,7 @@
   ./hardware/sensor/hddtemp.nix
   ./hardware/sensor/iio.nix
   ./hardware/sheep-net.nix
+  ./hardware/smfc.nix
   ./hardware/steam-hardware.nix
   ./hardware/system-76.nix
   ./hardware/tenstorrent.nix
