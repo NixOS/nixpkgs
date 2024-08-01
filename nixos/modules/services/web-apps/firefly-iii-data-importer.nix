@@ -1,9 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ pkgs, config, lib, ... }:
 let cfg = config.services.firefly-iii.data-importer;
 in {
   options.services.firefly-iii.data-importer = {
-    enable =
-      lib.mkEnableOption { description = "Firefly-iii Data importer service"; };
+    enable = lib.mkEnableOption "Firefly-iii Data importer service";
 
     listenAddress = lib.mkOption {
       type = lib.types.str;
@@ -14,7 +13,8 @@ in {
     port = lib.mkOption {
       type = lib.types.port;
       default = 9000;
-      description = "Port on which to serve the Firefly-iii Data importer service.";
+      description =
+        "Port on which to serve the Firefly-iii Data importer service.";
     };
 
     settings = lib.mkOption {
