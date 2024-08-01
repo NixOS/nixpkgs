@@ -7,6 +7,7 @@ replace gopkg.in/alecthomas/kingpin.v2 => github.com/alecthomas/kingpin/v2 v2.3.
 
 require (
   github.com/btcsuite/btcd v0.24.2
+  github.com/fxamacker/cbor v1.5.1
   github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
   github.com/hlandau/buildinfo v0.0.0-20161112115716-337a29b54997
   github.com/hlandau/degoutils v0.0.0-20161011040956-8fa2440b6344
@@ -44,6 +45,7 @@ require (
   github.com/ogier/pflag v0.0.1 // indirect
   github.com/rogpeppe/go-internal v1.9.0 // indirect
   github.com/shiena/ansicolor v0.0.0-20230509054315-a9deabde6e02 // indirect
+  github.com/x448/float16 v0.8.4 // indirect
   github.com/xhit/go-str2duration/v2 v2.1.0 // indirect
   golang.org/x/crypto v0.25.0 // indirect
   golang.org/x/mod v0.18.0 // indirect

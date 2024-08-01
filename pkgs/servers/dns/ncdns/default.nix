@@ -55,23 +55,31 @@ let
 
 in
 
-buildGoModule rec {
+buildGoModule {
   pname = "ncdns";
-  version = "unstable-2022-10-07";
+  version = "unstable-2024-05-18";
 
   src = fetchFromGitHub {
     owner = "namecoin";
     repo = "ncdns";
-    rev = "5adda8d4726d389597df432eb2e17eac1677cea2";
-    hash = "sha256-Q/RrUTY4WfrByvQv1eCX29DQNf2vSIR29msmhgS73xk=";
+    rev = "8a9f7c3037384f12fae400268d0a7f79d26b5532";
+    hash = "sha256-lFpjfpOAgvYoV3ci2oSdy8ZOlQ2rWlApiFWcvOMdkyk=";
   };
 
+  # Note: to update ncdns add the following lines
+  #
+  #   chmod -R +w .
+  #   go mod tidy
+  #   cat go.mod go.sum
+  #   exit 1
+  #
+  # to the `preBuild` here and update the lock files
   preBuild = ''
     # Sideload the generated x509 module
     ln -s '${x509}' x509
   '';
 
-  vendorHash = "sha256-qzUabzHUjnTtRlLx/SQ2s85am2PfK9zAblcbEjFE4tQ=";
+  vendorHash = "sha256-FoCK2qkhbc+6D4V77pNLiC9d68nkeYJxb7uiNYEP2Xw=";
 
   buildInputs = [ libcap ];
 
