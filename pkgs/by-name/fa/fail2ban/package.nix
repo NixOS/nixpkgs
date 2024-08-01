@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
 , python3
 , installShellFiles
 }:
@@ -38,6 +41,19 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   doCheck = false;
+
+  patches = [
+    # Adjust sshd filter for OpenSSH 9.8 new daemon name - remove next release
+    (fetchpatch {
+      url = "https://github.com/fail2ban/fail2ban/commit/2fed408c05ac5206b490368d94599869bd6a056d.patch";
+      hash = "sha256-uyrCdcBm0QyA97IpHzuGfiQbSSvhGH6YaQluG5jVIiI=";
+    })
+    # filter.d/sshd.conf: ungroup (unneeded for _daemon) - remove next release
+    (fetchpatch {
+      url = "https://github.com/fail2ban/fail2ban/commit/50ff131a0fd8f54fdeb14b48353f842ee8ae8c1a.patch";
+      hash = "sha256-YGsUPfQRRDVqhBl7LogEfY0JqpLNkwPjihWIjfGdtnQ=";
+    })
+  ];
 
   preInstall = ''
     substituteInPlace setup.py --replace /usr/share/doc/ share/doc/
