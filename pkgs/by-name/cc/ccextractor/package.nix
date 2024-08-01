@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     # during Linking C executable ccextractor
     broken = stdenv.isAarch64;
     license = lib.licenses.gpl2Only;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.emily ];
     mainProgram = "ccextractor";
   };
 })
