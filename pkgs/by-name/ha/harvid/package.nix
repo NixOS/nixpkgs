@@ -9,14 +9,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "harvid";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "harvid";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-qt6aep7iMF8/lnlT2wLqu6LkFDqzdfsGLZvrOlXttG8=";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     rm -r $out/usr
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Decodes still images from movie files and serves them via HTTP";
     longDescription = ''
       harvid's intended use-case is to efficiently provide frame-accurate data
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
       processor.
     '';
     homepage = "http://x42.github.io/harvid";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mitchmindtree ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.mitchmindtree ];
     mainProgram = "harvid";
   };
-}
+})
