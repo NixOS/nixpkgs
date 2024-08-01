@@ -3,6 +3,7 @@
   stdenv,
   cmake,
   ninja,
+  qt6,
   python,
   moveBuildTree,
   shiboken6,
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.isDarwin [ moveBuildTree ];
 
   buildInputs =
-    with python.pkgs.qt6;
+    with qt6;
     [
       # required
       qtbase
