@@ -32093,7 +32093,7 @@ with pkgs;
   mediaelch-qt5 = libsForQt5.callPackage ../applications/misc/mediaelch { };
   mediaelch-qt6 = qt6Packages.callPackage ../applications/misc/mediaelch { };
 
-  mediathekview = callPackage ../applications/video/mediathekview { jre = temurin-bin-20; };
+  mediathekview = callPackage ../applications/video/mediathekview { };
 
   meteo = callPackage ../applications/networking/weather/meteo { };
 
