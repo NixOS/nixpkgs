@@ -14,7 +14,7 @@ in {
     port = lib.mkOption {
       type = lib.types.port;
       default = 9000;
-      description = "Port on which to serve the Mealie service.";
+      description = "Port on which to serve the Firefly-iii Data importer service.";
     };
 
     settings = lib.mkOption {
