@@ -645,6 +645,37 @@
       },
       "name": "netbeans-6-5-keymap"
     },
+    "18682": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "233.13135.1068": "https://plugins.jetbrains.com/files/18682/546280/Catppuccin_Theme-3.3.1.zip",
+        "241.17890.24": "https://plugins.jetbrains.com/files/18682/546280/Catppuccin_Theme-3.3.1.zip",
+        "241.17890.43": "https://plugins.jetbrains.com/files/18682/546280/Catppuccin_Theme-3.3.1.zip",
+        "241.18034.45": "https://plugins.jetbrains.com/files/18682/546280/Catppuccin_Theme-3.3.1.zip",
+        "241.18034.50": "https://plugins.jetbrains.com/files/18682/546280/Catppuccin_Theme-3.3.1.zip",
+        "241.18034.61": "https://plugins.jetbrains.com/files/18682/546280/Catppuccin_Theme-3.3.1.zip",
+        "241.18034.62": "https://plugins.jetbrains.com/files/18682/546280/Catppuccin_Theme-3.3.1.zip",
+        "241.18034.63": "https://plugins.jetbrains.com/files/18682/546280/Catppuccin_Theme-3.3.1.zip",
+        "241.18034.69": "https://plugins.jetbrains.com/files/18682/546280/Catppuccin_Theme-3.3.1.zip",
+        "241.18034.76": "https://plugins.jetbrains.com/files/18682/546280/Catppuccin_Theme-3.3.1.zip",
+        "241.18034.82": "https://plugins.jetbrains.com/files/18682/546280/Catppuccin_Theme-3.3.1.zip"
+      },
+      "name": "catppuccin-theme"
+    },
     "20146": {
       "compatible": [
         "clion",
@@ -707,6 +738,7 @@
     "https://plugins.jetbrains.com/files/164/578496/IdeaVIM-2.15.2.zip": "sha256-87U5KPVLKQ76UfXS021+lhuaWLcxGdBdZeH4l/ccFPU=",
     "https://plugins.jetbrains.com/files/17718/578624/github-copilot-intellij-1.5.17.6356.zip": "sha256-oIH+bJ9ucU+tIs3m0tz5Mr2oqE6BeA4x9RjxJ95OZR0=",
     "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip": "sha256-KrzZTKZMQqoEMw+vDUv2jjs0EX0leaPBkU8H/ecq/oI=",
+    "https://plugins.jetbrains.com/files/18682/546280/Catppuccin_Theme-3.3.1.zip": "sha256-AlxMNYxS84BvQalaj3o14zHEXONuRNE5EOaJO7kNqAQ=",
     "https://plugins.jetbrains.com/files/20146/537545/Mermaid-0.0.22_IJ.232.zip": "sha256-DUiIQYIzYoXmgtBakSLtMB+xxJMaR70Jgg9erySa3wQ=",
     "https://plugins.jetbrains.com/files/2162/542984/StringManipulation-9.14.1.zip": "sha256-OqeQCqFe8iW/8NPg+9i+UKh+twIPQ9uLZrItMukCi7k=",
     "https://plugins.jetbrains.com/files/22407/578199/intellij-rust-241.37890.44.zip": "sha256-p9A3RzGg0cTX6zgqSIX1qxlrroypIdPkSoW12leI2Hs=",
