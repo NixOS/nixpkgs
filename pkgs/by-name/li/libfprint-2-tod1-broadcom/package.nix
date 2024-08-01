@@ -31,9 +31,9 @@ let
     inherit version;
 
     src = builtins.path {
-      name = "${pname}-source";
+      name = "${pname}-wrapper-lib-source";
       path = ./.;
-      filter = (path: type: baseNameOf path == wrapperLibSource);
+      filter = path: type: baseNameOf path == wrapperLibSource;
     };
 
     postPatch = ''
