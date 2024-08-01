@@ -21,7 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit zig;
     isArocc = true;
-    wrapped = wrapCCWith { cc = finalAttrs.finalPackage; };
+    wrapped = wrapCCWith {
+      cc = finalAttrs.finalPackage;
+      inherit (finalAttrs.passthru.zig.passthru.stdenv.cc) bintools;
+    };
     stdenv = overrideCC stdenv finalAttrs.passthru.wrapped;
   };
 
