@@ -38,6 +38,7 @@
 , xdg-utils
 , microsoft-gsl
 , rlottie
+, ada
 , stdenv
 , darwin
 , lld
@@ -62,14 +63,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop";
-  version = "5.3.0";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-RmbMY73tCBZG69tSCZxNiKvqM9pFQObqppcMvyKXqxY=";
+    hash = "sha256-r5cAEoU6PLA5bQgGpyxzU2qKwQ6DC911FYaVbl+9mZA=";
   };
 
   patches = [
@@ -130,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     tg_owt
     microsoft-gsl
     rlottie
+    ada
   ] ++ lib.optionals stdenv.isLinux [
     qtwayland
     gtk3
