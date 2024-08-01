@@ -137,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
-  doInstallCheck = finalAttrs.doCheck;
+  doInstallCheck = finalAttrs.finalPackage.doCheck;
 
   separateDebugInfo = true;
 
