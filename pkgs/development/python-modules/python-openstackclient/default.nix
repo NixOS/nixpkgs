@@ -17,6 +17,7 @@
   python-mistralclient,
   python-neutronclient,
   python-openstackclient,
+  python-zaqarclient,
   requests-mock,
   requests,
   setuptools,
@@ -79,6 +80,7 @@ buildPythonPackage rec {
         python-manilaclient
         python-mistralclient
         python-neutronclient
+        python-zaqarclient
       ];
     };
     tests.version = testers.testVersion {
