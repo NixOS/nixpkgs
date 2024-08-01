@@ -6,7 +6,6 @@
   hatchling,
   opentelemetry-api,
   opentelemetry-instrumentation,
-  opentelemetry-sdk,
   opentelemetry-semantic-conventions,
   opentelemetry-test-utils,
   wrapt,
@@ -28,7 +27,6 @@ buildPythonPackage {
   dependencies = [
     opentelemetry-api
     opentelemetry-instrumentation
-    opentelemetry-sdk
     opentelemetry-semantic-conventions
     wrapt
   ];
@@ -55,5 +53,7 @@ buildPythonPackage {
   meta = opentelemetry-instrumentation.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/instrumentation/opentelemetry-instrumentation-grpc";
     description = "OpenTelemetry Instrumentation for grpc";
+    # https://github.com/open-telemetry/opentelemetry-python-contrib/issues/2483
+    broken = lib.versionAtLeast grpcio.version "1.63";
   };
 }
