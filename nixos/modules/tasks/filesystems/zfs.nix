@@ -231,7 +231,7 @@ in
           automatically imported based on NixOS's {option}`fileSystems` options.
 
           This option is needed when encrypted pools will be unlocked over SSH as the
-          SSH server in {option}`boot.initrd.network.ssh` only runs during stage 1.
+          SSH server during stage 2 does not start until after file systems are mounted.
         '';
       };
     };
