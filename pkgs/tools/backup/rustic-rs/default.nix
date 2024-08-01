@@ -38,6 +38,8 @@ rustPlatform.buildRustPackage rec {
     done
 
     installShellCompletion rustic.{ba,fi,z}sh
+
+    install -Dm444 -t $out/lib/systemd/system util/systemd/{rustic-backup,rustic-forget}@.{timer,service}
   '';
 
   passthru.updateScript = nix-update-script { };
