@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ lib, ... }: {
     maintainers = with lib.maintainers; [ ncfavier AndersonTorres ];
   };
 
-  machine = {
+  nodes.machine = {
     services.earlyoom = {
       enable = true;
     };
