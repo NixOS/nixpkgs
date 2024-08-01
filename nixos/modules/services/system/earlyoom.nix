@@ -4,8 +4,6 @@ let
   cfg = config.services.earlyoom;
 
   inherit (lib)
-    concatStringsSep
-    escapeShellArg
     literalExpression
     mkDefault
     mkEnableOption
