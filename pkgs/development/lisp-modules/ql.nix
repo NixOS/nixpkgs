@@ -283,6 +283,19 @@ let
     vk = super.vk.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.vulkan-loader ];
     });
+    cl-autowrap = super.cl-autowrap.overrideLispAttrs (o: {
+      asds = [ "cl-autowrap" "cl-plus-c" ];
+      systems = [ "cl-autowrap" "cl-autowrap/libffi" "cl-plus-c" ];
+      nativeLibs = [ pkgs.libffi ];
+      propagatedBuildInputs = [ pkgs.c2ffiHook ];
+      patches = [
+        (pkgs.substituteAll {
+          src = ./patches/cl-autowrap-c2ffi-path.patch;
+          c2ffi = "${pkgs.c2ffi}/bin/c2ffi";
+        })
+      ];
+    });
+    cl-plus-c = self.cl-autowrap;
   });
 
   qlpkgs =

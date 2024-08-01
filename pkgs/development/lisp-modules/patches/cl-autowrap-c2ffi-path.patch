@@ -1,0 +1,13 @@
+diff --git a/autowrap/c2ffi.lisp b/autowrap/c2ffi.lisp
+index f24fb88..0aa9edd 100644
+--- a/autowrap/c2ffi.lisp
++++ b/autowrap/c2ffi.lisp
+@@ -60,7 +60,7 @@
+ 
+  ;; c2ffi
+ 
+-(defvar *c2ffi-program* "c2ffi")
++(defvar *c2ffi-program* "@c2ffi@")
+ 
+ (defvar *trace-c2ffi* nil)
+ 
