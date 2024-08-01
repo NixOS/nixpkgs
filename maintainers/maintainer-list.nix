@@ -4735,6 +4735,12 @@
     githubId = 130508846;
     name = "Elliot Cameron";
   };
+  deadendpl = {
+    name = "Oliwier Czerwiński";
+    email = "oliwier.czerwi@proton.me";
+    github = "deadendpl";
+    githubId = 123810408;
+  };
   dearrude = {
     name = "Ebrahim Nejati";
     email = "dearrude@tfwno.gf";
