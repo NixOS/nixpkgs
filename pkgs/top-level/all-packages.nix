@@ -6124,6 +6124,10 @@ with pkgs;
 
   statserial = callPackage ../tools/misc/statserial { };
 
+  steampipePackages = recurseIntoAttrs (
+    callPackage ../tools/misc/steampipe-packages { }
+  );
+
   step-ca = callPackage ../tools/security/step-ca {
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
