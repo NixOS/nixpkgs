@@ -4,13 +4,15 @@
 , exo
 , gdk-pixbuf
 , gtk3
+, libexif
 , libgudev
 , libnotify
 , libX11
 , libxfce4ui
 , libxfce4util
 , libxslt
-, pcre
+, pcre2
+, xfce4-panel
 , xfconf
 , gobject-introspection
 , makeWrapper
@@ -36,11 +38,13 @@ let unwrapped = mkXfceDerivation {
     gdk-pixbuf
     gtk3
     libX11
+    libexif # image properties page
     libgudev
     libnotify
     libxfce4ui
     libxfce4util
-    pcre
+    pcre2 # search & replace renamer
+    xfce4-panel # trash panel applet plugin
     xfconf
   ];
 
