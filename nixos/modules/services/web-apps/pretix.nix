@@ -249,7 +249,7 @@ in
             };
 
             host = mkOption {
-              type = with types; nullOr types.path;
+              type = with types; nullOr path;
               default = if cfg.settings.database.backend == "postgresql" then "/run/postgresql" else null;
               defaultText = literalExpression ''
                 if config.services.pretix.settings..database.backend == "postgresql" then "/run/postgresql"
@@ -535,7 +535,7 @@ in
           fi
         '';
         serviceConfig = {
-          TimeoutStartSec = "5min";
+          TimeoutStartSec = "15min";
           ExecStart = "${getExe' pythonEnv "gunicorn"} --bind unix:/run/pretix/pretix.sock ${cfg.gunicorn.extraArgs} pretix.wsgi";
           RuntimeDirectory = "pretix";
         };

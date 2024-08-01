@@ -15995,6 +15995,7 @@ with pkgs;
     lld_19 = llvmPackages_19.lld;
     lldb_19 = llvmPackages_19.lldb;
     llvm_19 = llvmPackages_19.llvm;
+    bolt_19 = llvmPackages_19.bolt;
 
     llvmPackages_git = llvmPackagesSet.git;
   }) llvmPackages_13
@@ -16012,6 +16013,7 @@ with pkgs;
     lld_19
     lldb_19
     llvm_19
+    bolt_19
     llvmPackages_git;
 
   lorri = callPackage ../tools/misc/lorri {
