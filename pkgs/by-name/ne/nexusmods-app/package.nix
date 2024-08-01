@@ -58,7 +58,7 @@ buildDotnetModule rec {
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ desktop-file-utils ]}"
-    "--set APPIMAGE $out/bin/${meta.mainProgram}" # Make associating with nxm links work on Linux
+    "--set APPIMAGE ${placeholder "out"}/bin/${meta.mainProgram}" # Make associating with nxm links work on Linux
   ];
 
   runtimeDeps = [
@@ -68,7 +68,7 @@ buildDotnetModule rec {
     libX11
   ];
 
-  executables = [ nexusmods-app.meta.mainProgram ];
+  executables = [ meta.mainProgram ];
 
   doCheck = true;
 
@@ -92,24 +92,34 @@ buildDotnetModule rec {
   ];
 
   passthru = {
-    tests = {
-      serve = runCommand "${pname}-test-serve" { } ''
-        ${nexusmods-app}/bin/${nexusmods-app.meta.mainProgram}
-        touch $out
-      '';
-      help = runCommand "${pname}-test-help" { } ''
-        ${nexusmods-app}/bin/${nexusmods-app.meta.mainProgram} --help
-        touch $out
-      '';
-      associate-nxm = runCommand "${pname}-test-associate-nxm" { } ''
-        ${nexusmods-app}/bin/${nexusmods-app.meta.mainProgram} associate-nxm
-        touch $out
-      '';
-      list-tools = runCommand "${pname}-test-list-tools" { } ''
-        ${nexusmods-app}/bin/${nexusmods-app.meta.mainProgram} list-tools
-        touch $out
-      '';
-    };
+    tests =
+      let
+        runTest =
+          name: script:
+          runCommand "${pname}-test-${name}"
+            {
+              # TODO: use finalAttrs when buildDotnetModule has support
+              nativeBuildInputs = [ nexusmods-app ];
+            }
+            ''
+              ${script}
+              touch $out
+            '';
+      in
+      {
+        serve = runTest "serve" ''
+          NexusMods.App
+        '';
+        help = runTest "help" ''
+          NexusMods.App --help
+        '';
+        associate-nxm = runTest "associate-nxm" ''
+          NexusMods.App associate-nxm
+        '';
+        list-tools = runTest "list-tools" ''
+          NexusMods.App list-tools
+        '';
+      };
     updateScript = ./update.bash;
   };
 
