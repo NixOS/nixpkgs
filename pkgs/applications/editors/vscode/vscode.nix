@@ -30,21 +30,21 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "0ighhwwmc8cxdabq2wkzzr21sv6zaj90pnqi2cy8krfwm88w6jc0";
-    x86_64-darwin = "1fbpw0xib9vm47ab028frg789vgmkpwcdxs8m2in7ywrckl6xycy";
-    aarch64-linux = "0n0f518xl1fh17llsd159ldi50z2vihkghfq7plfnbnngpf0swy9";
-    aarch64-darwin = "03v3869yblx03j0c3njlvg7qgdmqrg8jvj9s1iyhqw1xpb2lc41c";
-    armv7l-linux = "12dv0vqqzriqr8ysjjx62hy2b41dky2p0rcr11wznqi259bryckr";
+    x86_64-linux = "1q8krqhwlqj3a76hp830nhz27sqwz9i0klh2q2b3n5l29x9cvd34";
+    x86_64-darwin = "1d0sp42g582ykzdpzmr1wqkc0ivg09l9zxm201fxd6irr6i6lvqz";
+    aarch64-linux = "0z48qlz8b7mvznr4d4vi47mibkffbsmbr2bp712h1z9s4jhx40h4";
+    aarch64-darwin = "01hmcnhpfdckaslz7133692n1haiq4ifbv72vbsdnzsrdxs7wd3m";
+    armv7l-linux = "1ifd7z1mvimckb26l1nzv6qd3vjamfrzm0h655367d93fqz4iph4";
   }.${system} or throwSystem;
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.91.1";
+    version = "1.92.0";
     pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
     # This is used for VS Code - Remote SSH test
-    rev = "f1e16e1e6214d7c44d078b1f0607b2388f29d729";
+    rev = "b1c0a14de1414fcdaa400695b4db1c0799bc3124";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
@@ -68,7 +68,7 @@ in
       src = fetchurl {
         name = "vscode-server-${rev}.tar.gz";
         url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-        sha256 = "0k38pkfz9kpbpx0n50iq531mrm7qxqggks092cs4zicv815jk8wg";
+        sha256 = "03skx6cla4k5clncxx8wlp0j40gkqggqcs9wl0dqkrv18cljy5zz";
       };
     };
 
