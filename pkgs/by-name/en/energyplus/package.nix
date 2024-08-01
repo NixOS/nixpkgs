@@ -1,24 +1,39 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
   cmake,
+  fetchFromGitHub,
+  gfortran,
+  glibc,
+  lib,
+  libGL,
   patchelf,
   python3,
-  gfortran,
-  libGL,
+  stdenv,
   xorg,
-  glibc,
 }:
 stdenv.mkDerivation rec {
   pname = "energyplus";
   version = "24.1.0";
 
-  src = fetchFromGitHub {
-    owner = "NREL";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-g8lWijcZvNkFclSiStU+7HWfm+F8LobP2kIJNV6zczE=";
+  src = lib.cleanSourceWith {
+    filter =
+      path: _:
+      let
+        pathDoesntContain = regex: (builtins.match regex path) == null;
+        removeSet = [
+          "datasets"
+          "weather"
+        ];
+      in
+      lib.pipe removeSet [
+        (map pathDoesntContain)
+        (builtins.all lib.id)
+      ];
+    src = fetchFromGitHub {
+      owner = "NREL";
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-g8lWijcZvNkFclSiStU+7HWfm+F8LobP2kIJNV6zczE=";
+    };
   };
 
   nativeBuildInputs = [
@@ -40,9 +55,15 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_FORTRAN=ON"
     "-DBUILD_PACKAGE=ON"
+    # "-DENABLE_UNITY=ON"
+    # "-DSINGLE_PROJECT=OFF" # disable windows builds
+    # "-DLINK_WITH_PYTHON=ON"
   ];
 
-  makeFlags = [ "package" ];
+  makeFlags = [
+    "package"
+    # "-j1"
+  ];
 
   postInstall = ''
     # binaries
@@ -59,7 +80,7 @@ stdenv.mkDerivation rec {
   '';
 
   # this would remove references to libenergyplus from the binaries
-  dontPatchELF = true;
+  # dontPatchELF = true;
 
   meta = with lib; {
     description = "A whole building energy simulation program to model both energy consumption and water use";
