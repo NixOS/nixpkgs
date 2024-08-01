@@ -15010,7 +15010,6 @@ with pkgs;
 
   corretto11 = javaPackages.compiler.corretto11;
   corretto17 = javaPackages.compiler.corretto17;
-  corretto19 = javaPackages.compiler.corretto19;
   corretto21 = javaPackages.compiler.corretto21;
 
   cotton = callPackage ../development/tools/cotton {
@@ -15745,7 +15744,7 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  inherit (javaPackages) openjfx11 openjfx17 openjfx19 openjfx20 openjfx21 openjfx22;
+  inherit (javaPackages) openjfx11 openjfx17 openjfx21 openjfx22;
   openjfx = openjfx17;
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
@@ -15767,16 +15766,6 @@ with pkgs;
   openjdk17_headless = javaPackages.compiler.openjdk17.headless;
   jdk17 = openjdk17;
   jdk17_headless = openjdk17_headless;
-
-  openjdk19 = javaPackages.compiler.openjdk19;
-  openjdk19_headless = javaPackages.compiler.openjdk19.headless;
-  jdk19 = openjdk19;
-  jdk19_headless = openjdk19_headless;
-
-  openjdk20 = javaPackages.compiler.openjdk20;
-  openjdk20_headless = javaPackages.compiler.openjdk20.headless;
-  jdk20 = openjdk20;
-  jdk20_headless = openjdk20_headless;
 
   openjdk21 = javaPackages.compiler.openjdk21;
   openjdk21_headless = javaPackages.compiler.openjdk21.headless;

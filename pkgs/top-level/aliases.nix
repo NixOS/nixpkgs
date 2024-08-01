@@ -246,6 +246,7 @@ mapAliases ({
   composable_kernel = throw "'composable_kernel' has been replaced with 'rocmPackages.composable_kernel'"; # Added 2023-10-08
   cope = throw "'cope' has been removed, as it is broken in nixpkgs since it was added, and fixing it is not trivial"; # Added 2024-04-12
   coriander = throw "'coriander' has been removed because it depends on GNOME 2 libraries"; # Added 2024-06-27
+  corretto19 = throw "Corretto 19 was removed as it has reached its end of life"; # Added 2024-08-01
   cosmic-tasks = tasks; # Added 2024-07-04
   cpp-ipfs-api = cpp-ipfs-http-client; # Project has been renamed. Added 2022-05-15
   crispyDoom = crispy-doom; # Added 2023-05-01
@@ -1073,6 +1074,16 @@ mapAliases ({
   openimageio2 = openimageio; # Added 2023-01-05
   openimageio_1 = throw "'openimageio_1' has been removed, please update to 'openimageio' 2"; # Added 2023-06-14
   openisns = open-isns; # Added 2020-01-28
+  openjdk19 = throw "OpenJDK 19 was removed as it has reached its end of life"; # Added 2024-08-01
+  openjdk19_headless = openjdk19; # Added 2024-08-01
+  jdk19 = openjdk19; # Added 2024-08-01
+  jdk19_headless = openjdk19; # Added 2024-08-01
+  openjdk20 = throw "OpenJDK 20 was removed as it has reached its end of life"; # Added 2024-08-01
+  openjdk20_headless = openjdk20; # Added 2024-08-01
+  jdk20 = openjdk20; # Added 2024-08-01
+  jdk20_headless = openjdk20; # Added 2024-08-01
+  openjfx19 = throw "OpenJFX 19 was removed as it has reached its end of life"; # Added 2024-08-01
+  openjfx20 = throw "OpenJFX 20 was removed as it has reached its end of life"; # Added 2024-08-01
   openjpeg_2 = openjpeg; # Added 2021-01-25
   openmpt123 = libopenmpt; # Added 2021-09-05
   openssl_3_0 = openssl_3; # Added 2022-06-27
