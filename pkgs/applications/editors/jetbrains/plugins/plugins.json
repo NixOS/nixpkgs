@@ -719,6 +719,37 @@
         "241.18034.62": "https://plugins.jetbrains.com/files/22407/578199/intellij-rust-241.37890.44.zip"
       },
       "name": "rust"
+    },
+    "23029": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "233.13135.1068": "https://plugins.jetbrains.com/files/23029/560748/Catppuccin_Icons-1.6.0.zip",
+        "241.17890.24": "https://plugins.jetbrains.com/files/23029/560748/Catppuccin_Icons-1.6.0.zip",
+        "241.17890.43": "https://plugins.jetbrains.com/files/23029/560748/Catppuccin_Icons-1.6.0.zip",
+        "241.18034.45": "https://plugins.jetbrains.com/files/23029/560748/Catppuccin_Icons-1.6.0.zip",
+        "241.18034.50": "https://plugins.jetbrains.com/files/23029/560748/Catppuccin_Icons-1.6.0.zip",
+        "241.18034.61": "https://plugins.jetbrains.com/files/23029/560748/Catppuccin_Icons-1.6.0.zip",
+        "241.18034.62": "https://plugins.jetbrains.com/files/23029/560748/Catppuccin_Icons-1.6.0.zip",
+        "241.18034.63": "https://plugins.jetbrains.com/files/23029/560748/Catppuccin_Icons-1.6.0.zip",
+        "241.18034.69": "https://plugins.jetbrains.com/files/23029/560748/Catppuccin_Icons-1.6.0.zip",
+        "241.18034.76": "https://plugins.jetbrains.com/files/23029/560748/Catppuccin_Icons-1.6.0.zip",
+        "241.18034.82": "https://plugins.jetbrains.com/files/23029/560748/Catppuccin_Icons-1.6.0.zip"
+      },
+      "name": "catppuccin-icons"
     }
   },
   "files": {
@@ -742,6 +773,7 @@
     "https://plugins.jetbrains.com/files/20146/537545/Mermaid-0.0.22_IJ.232.zip": "sha256-DUiIQYIzYoXmgtBakSLtMB+xxJMaR70Jgg9erySa3wQ=",
     "https://plugins.jetbrains.com/files/2162/542984/StringManipulation-9.14.1.zip": "sha256-OqeQCqFe8iW/8NPg+9i+UKh+twIPQ9uLZrItMukCi7k=",
     "https://plugins.jetbrains.com/files/22407/578199/intellij-rust-241.37890.44.zip": "sha256-p9A3RzGg0cTX6zgqSIX1qxlrroypIdPkSoW12leI2Hs=",
+    "https://plugins.jetbrains.com/files/23029/560748/Catppuccin_Icons-1.6.0.zip": "sha256-52tkitp0GL9T41iBuMxzq4AeaEzCX/EQ4eRuH0RXaCM=",
     "https://plugins.jetbrains.com/files/631/559769/python-241.18034.62.zip": "sha256-DnjjUcwRL9dbNrHTnZacQYPE0biRFLmq6lR2ApRGgXI=",
     "https://plugins.jetbrains.com/files/6981/561911/ini-241.18034.82.zip": "sha256-PdS+qm3vG4JB5J/kNc9/hsVvjO/gMl/RZTg69jCNWlQ=",
     "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip": "sha256-kVUEgfEKUupV/qlB4Dpzi5pFHjhVvX74XIPetKtjysM=",
