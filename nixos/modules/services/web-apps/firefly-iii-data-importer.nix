@@ -1,10 +1,9 @@
 { config, lib, pkgs, ... }:
-let
-  cfg = config.services.firefly-iii.data-importer;
-in
-{
+let cfg = config.services.firefly-iii.data-importer;
+in {
   options.services.firefly-iii.data-importer = {
-    enable = lib.mkEnableOption { description = "Firefly-iii Data importer service"; };
+    enable =
+      lib.mkEnableOption { description = "Firefly-iii Data importer service"; };
 
     listenAddress = lib.mkOption {
       type = lib.types.str;
@@ -20,15 +19,13 @@ in
 
     settings = lib.mkOption {
       type = with lib.types; attrsOf anything;
-      default = {};
+      default = { };
       description = ''
         Configuration of the Firefly-iii Data importer service.
 
         See [the documentation](https://docs.firefly-iii.org/how-to/data-importer/how-to-configure/) for available options and default values.
       '';
-      example = {
-        FIREFLY_III_URL = "http://app.url:8000";
-      };
+      example = { FIREFLY_III_URL = "http://app.url:8000"; };
     };
   };
 
@@ -50,7 +47,9 @@ in
         # Initialize the storage directories
         cp -r ${pkgs.firefly-iii-data-importer}/storage/* $STORAGE_PATH/
         chmod -R 770 $STORAGE_PATH/
-        ${lib.getExe pkgs.php83} -S ${cfg.listenAddress}:${builtins.toString cfg.port} -t ${pkgs.firefly-iii-data-importer}/public
+        ${lib.getExe pkgs.php83} -S ${cfg.listenAddress}:${
+          builtins.toString cfg.port
+        } -t ${pkgs.firefly-iii-data-importer}/public
       '';
     };
   };
