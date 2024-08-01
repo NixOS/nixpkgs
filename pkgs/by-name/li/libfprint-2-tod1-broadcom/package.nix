@@ -22,16 +22,22 @@ let
     inherit version;
   };
 
-  # wraps `fopen()` for finding firmware files
   wrapperLibName = "wrapper-lib.so";
+  wrapperLibSource = "wrapper-lib.c";
+
+  # wraps `fopen()` for finding firmware files
   wrapperLib = stdenv.mkDerivation {
     pname = "${pname}-wrapper-lib";
     inherit version;
 
-    src = ./.;
+    src = builtins.path {
+      name = "${pname}-source";
+      path = ./.;
+      filter = (path: type: baseNameOf path == wrapperLibSource);
+    };
 
     postPatch = ''
-      substitute wrapper-lib.c lib.c \
+      substitute ${wrapperLibSource} lib.c \
         --subst-var-by to "${src}/var/lib/fprint/fw"
       cc -fPIC -shared lib.c -o ${wrapperLibName}
     '';
