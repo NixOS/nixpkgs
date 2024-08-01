@@ -9,6 +9,10 @@
   pythonOlder,
   setuptools,
   typing-extensions,
+
+  # for passthru.tests
+  django,
+  aiosmtplib,
 }:
 
 buildPythonPackage rec {
@@ -48,6 +52,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "aiosmtpd" ];
+
+  passthru.tests = {
+    inherit django aiosmtplib;
+  };
 
   meta = with lib; {
     description = "Asyncio based SMTP server";

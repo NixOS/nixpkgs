@@ -1,7 +1,5 @@
 {
   python,
-  pythonAtLeast,
-  disabledIf,
   fetchurl,
   lib,
   stdenv,

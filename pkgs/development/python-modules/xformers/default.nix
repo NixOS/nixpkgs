@@ -18,7 +18,7 @@
   fairscale,
   scipy,
   cmake,
-  openai-triton,
+  triton,
   networkx,
   #, apex
   einops,
@@ -103,7 +103,7 @@ buildPythonPackage {
     scipy
     cmake
     networkx
-    openai-triton
+    triton
     # apex
     einops
     transformers

@@ -14,7 +14,7 @@
 }:
 buildPythonPackage rec {
   pname = "mkdocs-awesome-pages-plugin";
-  version = "2.9.2";
+  version = "2.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "lukasgeiter";
     repo = "mkdocs-awesome-pages-plugin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pYyZ84eNrslxgLSBr3teQqmV7hA+LHwJ+Z99QgPdh6U=";
+    hash = "sha256-jDPoMAJ20n9bQu11CRNvKLQthRUh3+jR6t+fM3+vGzY=";
   };
 
   propagatedBuildInputs = [
@@ -39,11 +39,6 @@ buildPythonPackage rec {
     beautifulsoup4
     mock-open
     importlib-metadata
-  ];
-
-  disabledTestPaths = [
-    # requires "generatedfiles" mkdocs plugin
-    "mkdocs_awesome_pages_plugin/tests/e2e/test_gen_files.py"
   ];
 
   meta = with lib; {

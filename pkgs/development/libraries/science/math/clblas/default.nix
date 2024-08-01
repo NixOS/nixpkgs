@@ -42,10 +42,9 @@ stdenv.mkDerivation rec {
      "-DBUILD_TEST=OFF"
   ];
 
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [ cmake gfortran python3 ];
   buildInputs = [
     blas
-    python3
     boost
   ] ++ lib.optionals (!stdenv.isDarwin) [
     ocl-icd

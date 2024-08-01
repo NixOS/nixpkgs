@@ -17,7 +17,7 @@
 , pciutils
 , sndio
 , libjack2
-, speechd
+, speechd-minimal
 , removeReferencesTo
 }:
 
@@ -98,7 +98,7 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
-            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd
+            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
             ++ pkcs11Modules
             ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];

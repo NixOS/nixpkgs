@@ -6,7 +6,6 @@
   jsonpath-ng,
   lupa,
   poetry-core,
-  pybloom-live,
   pyprobables,
   pytest-asyncio,
   pytest-mock,

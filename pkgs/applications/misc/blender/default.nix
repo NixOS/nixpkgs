@@ -5,7 +5,7 @@
   OpenAL,
   OpenGL,
   SDL,
-  addOpenGLRunpath,
+  addDriverRunpath,
   alembic,
   blender,
   boost,
@@ -220,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.wrapPython
     ]
     ++ lib.optionals cudaSupport [
-      addOpenGLRunpath
+      addDriverRunpath
       cudaPackages.cuda_nvcc
     ]
     ++ lib.optionals waylandSupport [ pkg-config ];
@@ -344,7 +344,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString cudaSupport ''
       for program in $out/bin/blender $out/bin/.blender-wrapped; do
         isELF "$program" || continue
-        addOpenGLRunpath "$program"
+        addDriverRunpath "$program"
       done
     ''
     + lib.optionalString stdenv.isDarwin ''
@@ -427,10 +427,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     # the current apple sdk is too old (currently 11_0) and fails to build "metal" on x86_64-darwin
     broken = stdenv.hostPlatform.system == "x86_64-darwin";
-    maintainers = with lib.maintainers; [
-      goibhniu
-      veprbl
-    ];
+    maintainers = with lib.maintainers; [ veprbl ];
     mainProgram = "blender";
   };
 })

@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     antlr4_12.runtime.cpp
     python3
     mysql
-    libxml2
+    (libxml2.override { enableHttp = true; })
     libmysqlconnectorcpp
     vsqlite
     gdal

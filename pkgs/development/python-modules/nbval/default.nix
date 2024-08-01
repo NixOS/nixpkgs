@@ -69,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/computationalmodelling/nbval";
     changelog = "https://github.com/computationalmodelling/nbval/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

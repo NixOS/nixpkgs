@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

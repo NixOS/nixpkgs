@@ -1,4 +1,4 @@
-{ addOpenGLRunpath
+{ addDriverRunpath
 , autoPatchelfHook
 , lib
 , makeWrapper
@@ -57,7 +57,7 @@ let cudaEnv = symlinkJoin {
       ];
       postBuild = ''
         if [ ! -e $out/lib/libcuda.so ]; then
-            ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib
+            ln -s ${addDriverRunpath.driverLink}/lib/libcuda.so $out/lib
         fi
         ln -s lib $out/lib64
       '';
@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
-  ] ++ lib.optional cudaSupport addOpenGLRunpath;
+  ] ++ lib.optional cudaSupport addDriverRunpath;
 
   buildInputs = [
     alsa-lib
@@ -136,8 +136,8 @@ in stdenv.mkDerivation {
     "--set QT_QPA_PLATFORM wayland;xcb"
   ] ++ lib.optionals cudaSupport [
     "--set CUDA_PATH ${cudaEnv}"
-    "--set NVIDIA_DRIVER_LIBRARY_PATH ${addOpenGLRunpath.driverLink}/lib/libnvidia-tls.so"
-    "--set CUDA_LIBRARY_PATH ${addOpenGLRunpath.driverLink}/lib/libcuda.so"
+    "--set NVIDIA_DRIVER_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib/libnvidia-tls.so"
+    "--set CUDA_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib/libcuda.so"
   ];
 
   unpackPhase = ''

@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-make";
-  version = "0.37.13";
+  version = "0.37.15";
 
   src = fetchFromGitHub {
     owner = "sagiegurari";
     repo = "cargo-make";
     rev = version;
-    hash = "sha256-5A0J3NtxXlhIhr0+GZoctCA5EwTnBt+9aL4I8HUiJqY=";
+    hash = "sha256-sIiRlqUn59BxrvOs7N1es3vJVQRerV0EhNntuXXgPJA=";
   };
 
-  cargoHash = "sha256-7UA9EOUF/A1FhWBErZdPrzL+rDukjbtC2KIK10cLDXI=";
+  cargoHash = "sha256-MvCGdlEevHND7buW+JuAyH6gRck5ppSAq9xylXSgm5w=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -32,7 +32,7 @@ buildPythonPackage rec {
     mainProgram = "ramlfications";
     homepage = "https://ramlfications.readthedocs.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 

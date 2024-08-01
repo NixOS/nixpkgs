@@ -1,9 +1,7 @@
 { lib
 , fetchFromGitLab
 , rustPlatform
-, cargo
 , pkg-config
-, binutils-unwrapped
 , gtk3-x11
 , atk
 , glib

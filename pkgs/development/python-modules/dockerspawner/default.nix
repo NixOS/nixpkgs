@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyterhub/dockerspawner";
     changelog = "https://github.com/jupyterhub/dockerspawner/blob/${version}/docs/source/changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

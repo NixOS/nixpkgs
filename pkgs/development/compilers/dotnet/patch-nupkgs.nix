@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, dotnetCorePackages
 , zlib
 , curl
 , icu
@@ -12,8 +11,6 @@
 }:
 
 let
-  buildRid = dotnetCorePackages.systemToDotnetRid stdenv.buildPlatform.system;
-
   binaryRPath = lib.makeLibraryPath ([
     stdenv.cc.cc
     zlib
@@ -37,13 +34,12 @@ in writeShellScriptBin "patch-nupkgs" (''
       if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
   }
   cd "$1"
-  for x in *.${buildRid}/* *.${buildRid}.*/*; do
+  for x in */* */*; do
     # .nupkg.metadata is written last, so we know the packages is complete
     [[ -d "$x" ]] && [[ -f "$x"/.nupkg.metadata ]] \
       && [[ ! -f "$x"/.nix-patched ]] || continue
     echo "Patching package $x"
-    pushd "$x"
-    for p in $(find -type f); do
+    find "$x" -type f -print0 | while IFS= read -rd "" p; do
       if [[ "$p" != *.nix-patched ]] \
         && isELF "$p" \
         && patchelf --print-interpreter "$p" &>/dev/null; then
@@ -68,19 +64,18 @@ in writeShellScriptBin "patch-nupkgs" (''
         mv "$tmp" "$p"
       fi
     done
-    touch .nix-patched
-    popd
+    touch "$x"/.nix-patched
   done
 '' + lib.optionalString stdenv.isDarwin ''
   for x in microsoft.dotnet.ilcompiler/*; do
     # .nupkg.metadata is written last, so we know the packages is complete
     [[ -d "$x" ]] && [[ -f "$x"/.nupkg.metadata ]] \
-      && [[ ! -f "$x"/.nix-patched ]] || continue
+      && [[ ! -f "$x"/.nix-patched-ilcompiler ]] || continue
     echo "Patching package $x"
     pushd "$x"
     sed -i 's: -no_code_signature_warning::g' build/Microsoft.NETCore.Native.targets
     sed -i 's:Include="-ld_classic"::g' build/Microsoft.NETCore.Native.Unix.targets
-    touch .nix-patched
+    touch .nix-patched-ilcompiler
     popd
   done
 '')

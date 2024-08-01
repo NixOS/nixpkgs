@@ -1,7 +1,7 @@
-From 0ecb8b5bc194fecb10c523d5856dc0b4cb78f6e4 Mon Sep 17 00:00:00 2001
+From 06b51e6a0c14e5ad7cfc1dc801561e6e6e1b2014 Mon Sep 17 00:00:00 2001
 From: Paul Meyer <49727155+katexochen@users.noreply.github.com>
 Date: Mon, 22 Apr 2024 11:58:00 +0200
-Subject: [PATCH 2/4] nixpkgs: use system Go
+Subject: [PATCH 2/3] nixpkgs: use system Go
 
 Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
 ---
@@ -10,11 +10,11 @@ Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
  2 files changed, 1 insertion(+), 4 deletions(-)
 
 diff --git a/bazel/dependency_imports.bzl b/bazel/dependency_imports.bzl
-index 0e29abb8d0..df19c84755 100644
+index 1bf6c54a25..4e55a129e4 100644
 --- a/bazel/dependency_imports.bzl
 +++ b/bazel/dependency_imports.bzl
-@@ -19,7 +19,7 @@ load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_regi
- load("@upb//bazel:workspace_deps.bzl", "upb_deps")
+@@ -18,7 +18,7 @@ load("@rules_rust//rust:defs.bzl", "rust_common")
+ load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_register_toolchains", "rust_repository_set")
  
  # go version for rules_go
 -GO_VERSION = "1.20"
@@ -23,7 +23,7 @@ index 0e29abb8d0..df19c84755 100644
  JQ_VERSION = "1.7"
  YQ_VERSION = "4.24.4"
 diff --git a/bazel/repositories.bzl b/bazel/repositories.bzl
-index d91aa712bd..6623972286 100644
+index 02f7abd725..aad9adac24 100644
 --- a/bazel/repositories.bzl
 +++ b/bazel/repositories.bzl
 @@ -246,9 +246,6 @@ def _go_deps(skip_targets):
@@ -37,5 +37,5 @@ index d91aa712bd..6623972286 100644
          external_http_archive("bazel_gazelle")
  
 -- 
-2.44.0
+2.45.1
 

@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Only;
     platforms = platforms.unix;    # "Hiawatha runs perfectly on Linux, BSD and MacOS X"
     mainProgram = "hiawatha";
-    maintainers = [];
+    maintainers = [ ];
   };
 
 })

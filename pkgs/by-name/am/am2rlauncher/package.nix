@@ -11,7 +11,6 @@
 , openssl
 , xdelta
 , file
-, busybox
 , openjdk
 , patchelf
 , fetchFromGitHub

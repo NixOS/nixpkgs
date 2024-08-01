@@ -22,6 +22,7 @@ in {
         libusermetrics
         lomiri
         lomiri-calculator-app
+        lomiri-camera-app
         lomiri-clock-app
         lomiri-download-manager
         lomiri-filemanager-app
@@ -63,7 +64,7 @@ in {
 
     fonts.packages = with pkgs; [
       # Applications tend to default to Ubuntu font
-      ubuntu_font_family
+      ubuntu-classic
     ];
 
     # Copy-pasted basic stuff

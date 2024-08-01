@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, fetchpatch
+{ stdenv, callPackage, fetchpatch
 , sasl, boost, Security, CoreFoundation, cctools
 , avxSupport ? stdenv.hostPlatform.avxSupport
 }:

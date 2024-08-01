@@ -121,7 +121,6 @@ let
         pahole
         perl
         elfutils
-        hexdump
         # module makefiles often run uname commands to find out the kernel version
         (buildPackages.deterministic-uname.override { inherit modDirVersion; })
       ]
@@ -158,6 +157,7 @@ let
         zstd
         python3Minimal
         kmod
+        hexdump
       ] ++ optional  needsUbootTools ubootTools
         ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
         ++ optionals withRust [ rustc rust-bindgen ];

@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Immutable URL class for easy URL-building and manipulation";
     homepage = "https://github.com/codeinthehole/purl";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

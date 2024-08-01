@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchurl,
-  isPy3k,
   python,
   apr,
   aprutil,
@@ -11,8 +10,8 @@
   e2fsprogs,
   expat,
   gcc,
-  glibcLocales,
   neon,
+  glibcLocales,
   openssl,
   pycxx,
   subversion,
@@ -20,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "pysvn";
-  version = "1.9.20";
+  version = "1.9.22";
   format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";
-    hash = "sha256-LbAz+KjEY3nkSJAzJNwlnSRYoWr4i1ITRUPV3ZBH7cc=";
+    hash = "sha256-KfLg9tuuKpXxJoniD002kDXGCTwOZ9jurCoPrWMRo7g=";
   };
 
   patches = [ ./replace-python-first.patch ];
@@ -61,7 +60,7 @@ buildPythonPackage rec {
 
     # It is not only shebangs, some tests also write scripts dynamically
     # so it is easier to simply search and replace
-    sed -i "s|/bin/bash|${bash}/bin/bash|" ../Tests/test-*.sh
+    sed -i "s|/bin/bash|${lib.getExe bash}|" ../Tests/test-*.sh
     make -C ../Tests
 
     runHook postCheck

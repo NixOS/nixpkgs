@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  pytest,
-  pytest-django,
   python,
 }:
 
@@ -33,6 +31,6 @@ buildPythonPackage rec {
     description = "Pickled object field for Django";
     homepage = "https://github.com/gintas/django-picklefield";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

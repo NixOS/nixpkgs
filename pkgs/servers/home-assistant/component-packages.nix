@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.7.2";
+  version = "2024.7.4";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -270,7 +270,8 @@
       pexpect
     ];
     "arve" = ps: with ps; [
-    ]; # missing inputs: asyncarve
+      asyncarve
+    ];
     "arwn" = ps: with ps; [
       paho-mqtt_1
     ];
@@ -366,7 +367,8 @@
       pybalboa
     ];
     "bang_olufsen" = ps: with ps; [
-    ]; # missing inputs: mozart-api
+      mozart-api
+    ];
     "bayesian" = ps: with ps; [
     ];
     "bbox" = ps: with ps; [
@@ -554,7 +556,8 @@
     "bswitch" = ps: with ps; [
     ];
     "bt_home_hub_5" = ps: with ps; [
-    ]; # missing inputs: bthomehub5-devicelist
+      bthomehub5-devicelist
+    ];
     "bt_smarthub" = ps: with ps; [
       btsmarthub-devicelist
     ];
@@ -626,7 +629,8 @@
       zeroconf
     ];
     "ccm15" = ps: with ps; [
-    ]; # missing inputs: py-ccm15
+      py-ccm15
+    ];
     "cert_expiry" = ps: with ps; [
     ];
     "channels" = ps: with ps; [
@@ -771,6 +775,7 @@
       aiodhcpwatcher
       aiodiscover
       async-upnp-client
+      av
       bleak
       bleak-retry-connector
       bluetooth-adapters
@@ -779,7 +784,6 @@
       cached-ipaddress
       dbus-fast
       fnv-hash-fast
-      ha-av
       ha-ffmpeg
       habluetooth
       hass-nabucasa
@@ -1484,7 +1488,7 @@
       aio-georss-gdacs
     ];
     "generic" = ps: with ps; [
-      ha-av
+      av
       pillow
     ];
     "generic_hygrostat" = ps: with ps; [
@@ -4301,7 +4305,7 @@
     "stookwijzer" = ps: with ps; [
     ]; # missing inputs: stookwijzer
     "stream" = ps: with ps; [
-      ha-av
+      av
       numpy_1
       pyturbojpeg
     ];
@@ -4456,10 +4460,12 @@
     ];
     "telegram" = ps: with ps; [
       python-telegram-bot
-    ]; # missing inputs: python-telegram-bot.optional-dependencies.socks
+    ]
+    ++ python-telegram-bot.optional-dependencies.socks;
     "telegram_bot" = ps: with ps; [
       python-telegram-bot
-    ]; # missing inputs: python-telegram-bot.optional-dependencies.socks
+    ]
+    ++ python-telegram-bot.optional-dependencies.socks;
     "tellduslive" = ps: with ps; [
       tellduslive
     ];
@@ -4883,8 +4889,9 @@
       hassil
       home-assistant-intents
       mutagen
+      voip-utils
       webrtc-noise-gain
-    ]; # missing inputs: voip-utils
+    ];
     "volkszaehler" = ps: with ps; [
       volkszaehler
     ];
@@ -5278,6 +5285,7 @@
     "aquacell"
     "aranet"
     "arcam_fmj"
+    "arve"
     "aseko_pool_live"
     "assist_pipeline"
     "asterisk_mbox"
@@ -5297,6 +5305,7 @@
     "backup"
     "baf"
     "balboa"
+    "bang_olufsen"
     "bayesian"
     "binary_sensor"
     "blackbird"
@@ -5326,6 +5335,7 @@
     "camera"
     "canary"
     "cast"
+    "ccm15"
     "cert_expiry"
     "clicksend_tts"
     "climate"
@@ -5937,6 +5947,8 @@
     "tcp"
     "technove"
     "tedee"
+    "telegram"
+    "telegram_bot"
     "tellduslive"
     "temper"
     "template"
@@ -6014,6 +6026,7 @@
     "vlc_telnet"
     "vodafone_station"
     "voicerss"
+    "voip"
     "volumio"
     "volvooncall"
     "vulcan"

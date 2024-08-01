@@ -48,6 +48,6 @@ stdenv.mkDerivation  rec {
     homepage = "https://setbfree.org";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ]; # fails on ARM and Darwin
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
   };
 }

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "This is an implementation of double-array structure for representing trie";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     pkgConfigModules = [ "datrie-0.2" ];
   };
 }

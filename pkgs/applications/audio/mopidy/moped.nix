@@ -20,7 +20,7 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://github.com/martijnboland/moped";
     description = "Web client for Mopidy";
     license = licenses.mit;
-    maintainers = [];
+    maintainers = [ ];
     hydraPlatforms = [];
   };
 }

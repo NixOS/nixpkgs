@@ -54,8 +54,12 @@ let
         src = fetchgit {
           inherit (upstream-info.deps.gn) url rev hash;
         };
+      } // lib.optionalAttrs (chromiumVersionAtLeast "127") {
+        # Relax hardening as otherwise gn unstable 2024-06-06 and later fail with:
+        # cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
+        hardeningDisable = [ "format" ];
       });
-      recompressTarball = callPackage ./recompress-tarball.nix { };
+      recompressTarball = callPackage ./recompress-tarball.nix { inherit chromiumVersionAtLeast; };
     });
 
     browser = callPackage ./browser.nix {

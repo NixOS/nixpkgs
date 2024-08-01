@@ -38,6 +38,6 @@ buildGoModule rec {
     homepage = "https://github.com/mkchoi212/fac";
     license = lib.licenses.mit;
     mainProgram = "fac";
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

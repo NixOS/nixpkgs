@@ -59,7 +59,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyproject_hooks" ];
 
   meta = with lib; {
-    description = "Low-level library for calling build-backends in `pyproject.toml`-based project ";
+    description = "Low-level library for calling build-backends in `pyproject.toml`-based project";
     homepage = "https://github.com/pypa/pyproject-hooks";
     changelog = "https://github.com/pypa/pyproject-hooks/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;

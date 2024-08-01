@@ -6,7 +6,6 @@
 
   # build-system
   setuptools,
-  wheel,
 
   # dependencies
   click,
@@ -41,7 +40,7 @@
 let
   self = buildPythonPackage rec {
     pname = "dask";
-    version = "2024.7.0";
+    version = "2024.7.1";
     pyproject = true;
 
     disabled = pythonOlder "3.9";
@@ -50,13 +49,10 @@ let
       owner = "dask";
       repo = "dask";
       rev = "refs/tags/${version}";
-      hash = "sha256-EvDn7i4GOEHYwhptYF+2yKUb3VDWjR7/WCUGKEJi/H4=";
+      hash = "sha256-aHira3GKtw674VQ5bc5lFEWyuLf4ZWexKQP6eaGwbzg=";
     };
 
-    build-system = [
-      setuptools
-      wheel
-    ];
+    build-system = [ setuptools ];
 
     dependencies = [
       click

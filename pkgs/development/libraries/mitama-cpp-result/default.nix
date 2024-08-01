@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
       (like Result and Option in Programming Language Rust).
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 })

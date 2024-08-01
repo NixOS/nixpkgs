@@ -293,7 +293,7 @@ Though this is not shown in the rendered documentation on nixos.org.
 
 #### Figures
 
-To define a referencable figure use the following fencing:
+To define a referenceable figure use the following fencing:
 
 ```markdown
 ::: {.figure #nixos-logo}

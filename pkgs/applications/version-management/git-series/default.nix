@@ -1,55 +1,49 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, stdenv
-, curl
-, libgit2
-, libssh2
-, openssl
-, zlib
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  stdenv,
+  curl,
+  installShellFiles,
+  libgit2,
+  libssh2,
+  openssl,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "git-series";
-  version = "unstable-2019-10-15";
+  version = "0.9.1-unstable-2024-02-02";
 
   src = fetchFromGitHub {
     owner = "git-series";
     repo = "git-series";
-    rev = "c570a015e15214be46a7fd06ba08526622738e20";
-    sha256 = "1i0m2b7ma6xvkg95k57gaj1wpc1rfvka6h8jr5hglxmqqbz6cb6w";
+    rev = "9c5d40edec87b79db0c5bac1458aa0e2c8fdeb8e";
+    hash = "sha256-DtOR7+vX7efNzYMRJwJTj5cXlFHQwzcS0Gp2feVdea4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-D83mfaH4iKagGjdX+YhCzva99+dCneHeWPNnkzZB/k0=";
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
-    curl
-  ];
+    installShellFiles
+  ] ++ lib.optionals stdenv.isDarwin [ curl ];
 
   buildInputs = [
     libgit2
     libssh2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    curl
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ curl ];
 
-  LIBGIT2_SYS_USE_PKG_CONFIG = true;
-  LIBSSH2_SYS_USE_PKG_CONFIG = true;
-
-  # update Cargo.lock to work with openssl 3
-  postPatch = ''
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
+  env = {
+    LIBGIT2_SYS_USE_PKG_CONFIG = true;
+    LIBSSH2_SYS_USE_PKG_CONFIG = true;
+  };
 
   postInstall = ''
-    install -D "$src/git-series.1" "$out/man/man1/git-series.1"
+    installManPage ./git-series.1
   '';
 
   meta = with lib; {
@@ -60,9 +54,12 @@ rustPlatform.buildRustPackage {
       formats the series for email, and prepares pull requests.
     '';
     homepage = "https://github.com/git-series/git-series";
-
     license = licenses.mit;
-    maintainers = with maintainers; [ edef vmandela ];
+    maintainers = with maintainers; [
+      edef
+      vmandela
+      aleksana
+    ];
     mainProgram = "git-series";
   };
 }

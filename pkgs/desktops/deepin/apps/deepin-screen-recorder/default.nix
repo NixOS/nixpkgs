@@ -8,7 +8,6 @@
 , dtkwidget
 , qt5integration
 , dde-qt-dbus-factory
-, dde-dock
 , qtbase
 , qtmultimedia
 , qtx11extras
@@ -27,22 +26,27 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-screen-recorder";
-  version = "unstable-2023-07-10";
+  version = "6.0.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
-    rev = "e8ee1e8330e2f3923e22acc952a0bd01bee94ad1";
-    hash = "sha256-QHV3hSALXI4e31YBDXRSRgT8b/J8gwm024bzlPWu2FA=";
+    rev = version;
+    hash = "sha256-nE+axTUxWCcgrxQ5y2cjkVswW2rwv/We0m7XgB4shko=";
   };
 
-  patches = [ ./dont_use_libPath.diff ];
+  patches = [
+    ./dont_use_libPath.diff
+  ];
 
+  # disable dock plugins, it's part of dde-shell now
   postPatch = ''
+    substituteInPlace screen_shot_recorder.pro \
+      --replace-fail " src/dde-dock-plugins" ""
     (
       shopt -s globstar
       substituteInPlace **/*.pro **/*.service **/*.desktop \
-        --replace "/usr/" "$out/"
+        --replace-quiet "/usr/" "$out/"
     )
   '';
 
@@ -56,7 +60,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dtkwidget
     dde-qt-dbus-factory
-    dde-dock
     qtbase
     qtmultimedia
     qtx11extras
@@ -78,9 +81,6 @@ stdenv.mkDerivation rec {
     gst-plugins-good
   ]);
 
-  # Fix build failure on dtk 5.6.20
-  env.NIX_CFLAGS_COMPILE = "-std=c++14";
-
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
   qtWrapperArgs = [
     "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
@@ -91,11 +91,11 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Screen recorder application for dde";
     homepage = "https://github.com/linuxdeepin/deepin-screen-recorder";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

@@ -336,6 +336,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "do-notation"
+version = "0.1.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a3e16a80c1dda2cf52fa07106427d3d798b6331dca8155fcb8c39f7fc78f6dd2"
+
+[[package]]
 name = "either"
 version = "1.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -431,6 +437,17 @@ dependencies = [
  "pin-project-lite",
  "pin-utils",
  "slab",
+]
+
+[[package]]
+name = "fuzzydate"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7265f35cc1f40c655aad829323a1daef5f21fd38904f6ed9bd5ec3df3cbd851c"
+dependencies = [
+ "chrono",
+ "lazy_static",
+ "thiserror",
 ]
 
 [[package]]
@@ -532,9 +549,9 @@ dependencies = [
 
 [[package]]
 name = "itertools"
-version = "0.10.5"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b0fd2260e829bddf4cb6ea802289de2f86d6a7a690192fbe91b3f46e0f2c8473"
+checksum = "413ee7dfc52ee1a4949ceeb7dbc8a33f2d6c088194d9f922fb8318faf1f01186"
 dependencies = [
  "either",
 ]
@@ -625,11 +642,13 @@ dependencies = [
 
 [[package]]
 name = "markdown-oxide"
-version = "0.1.0"
+version = "0.23.1"
 dependencies = [
  "anyhow",
  "chrono",
  "config",
+ "do-notation",
+ "fuzzydate",
  "indexmap",
  "itertools",
  "nanoid",

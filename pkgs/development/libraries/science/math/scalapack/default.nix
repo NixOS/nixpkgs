@@ -52,10 +52,11 @@ stdenv.mkDerivation rec {
       -DLAPACK_LIBRARIES="-llapack"
       -DBLAS_LIBRARIES="-lblas"
       -DCMAKE_Fortran_COMPILER=${lib.getDev mpi}/bin/mpif90
-      ${lib.optionalString passthru.isILP64 ''
-        -DCMAKE_Fortran_FLAGS="-fdefault-integer-8"
-        -DCMAKE_C_FLAGS="-DInt=long"
-      ''}
+      -DCMAKE_C_FLAGS="${lib.concatStringsSep " " [
+            "-Wno-implicit-function-declaration"
+            (lib.optionalString passthru.isILP64 "-DInt=long")
+      ]}"
+      ${lib.optionalString passthru.isILP64 ''-DCMAKE_Fortran_FLAGS="-fdefault-integer-8"''}
       )
   '';
 

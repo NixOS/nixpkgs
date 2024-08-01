@@ -27,3 +27,49 @@ devShellTools.valueToString (builtins.toFile "foo" "bar")
 devShellTools.valueToString false
 => ""
 ```
+
+:::
+
+## `devShellTools.unstructuredDerivationInputEnv` {#sec-devShellTools-unstructuredDerivationInputEnv}
+
+Convert a set of derivation attributes (as would be passed to [`derivation`]) to a set of environment variables that can be used in a shell script.
+This function does not support `__structuredAttrs`, but does support `passAsFile`.
+
+:::{.example}
+## `unstructuredDerivationInputEnv` usage example
+
+```nix
+devShellTools.unstructuredDerivationInputEnv {
+  drvAttrs = {
+    name = "foo";
+    buildInputs = [ hello figlet ];
+    builder = bash;
+    args = [ "-c" "${./builder.sh}" ];
+  };
+}
+=> {
+  name = "foo";
+  buildInputs = "/nix/store/...-hello /nix/store/...-figlet";
+  builder = "/nix/store/...-bash";
+}
+```
+
+Note that `args` is not included, because Nix does not added it to the builder process environment.
+
+:::
+
+## `devShellTools.derivationOutputEnv` {#sec-devShellTools-derivationOutputEnv}
+
+Takes the relevant parts of a derivation and returns a set of environment variables, that would be present in the derivation.
+
+:::{.example}
+## `derivationOutputEnv` usage example
+
+```nix
+let
+  pkg = hello;
+in
+devShellTools.derivationOutputEnv { outputList = pkg.outputs; outputMap = pkg; }
+```
+
+:::
