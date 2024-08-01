@@ -73,7 +73,7 @@
   libopus,
   libpng,
   snappy,
-  speechd-minimal,
+  speechd,
   ## Gentoo
   bzip2,
   libcap,
@@ -146,7 +146,7 @@ let
       pciutils
       pipewire
       snappy
-      speechd-minimal
+      speechd
       systemd
       util-linux
       wayland
