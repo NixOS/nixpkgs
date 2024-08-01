@@ -386,6 +386,37 @@
       },
       "name": "nixidea"
     },
+    "9333": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "233.13135.1068": "https://plugins.jetbrains.com/files/9333/454471/makefile-233.13135.65.zip",
+        "241.17890.24": "https://plugins.jetbrains.com/files/9333/508273/makefile-241.14494.150.zip",
+        "241.17890.43": "https://plugins.jetbrains.com/files/9333/508273/makefile-241.14494.150.zip",
+        "241.18034.45": "https://plugins.jetbrains.com/files/9333/508273/makefile-241.14494.150.zip",
+        "241.18034.50": "https://plugins.jetbrains.com/files/9333/508273/makefile-241.14494.150.zip",
+        "241.18034.61": "https://plugins.jetbrains.com/files/9333/508273/makefile-241.14494.150.zip",
+        "241.18034.62": "https://plugins.jetbrains.com/files/9333/508273/makefile-241.14494.150.zip",
+        "241.18034.63": "https://plugins.jetbrains.com/files/9333/508273/makefile-241.14494.150.zip",
+        "241.18034.69": "https://plugins.jetbrains.com/files/9333/508273/makefile-241.14494.150.zip",
+        "241.18034.76": "https://plugins.jetbrains.com/files/9333/508273/makefile-241.14494.150.zip",
+        "241.18034.82": "https://plugins.jetbrains.com/files/9333/508273/makefile-241.14494.150.zip"
+      },
+      "name": "makefile-language"
+    },
     "9568": {
       "compatible": [
         "goland",
@@ -851,6 +882,8 @@
     "https://plugins.jetbrains.com/files/8182/466854/intellij-rust-233.15445.zip": "sha256-+Lc/avYBLpyIV63DlbhAJtieHDv4HdggqdGFDw9iqN0=",
     "https://plugins.jetbrains.com/files/8554/535094/featuresTrainer-241.17011.14.zip": "sha256-p26GW1NyVI8OR1VypeWUFWW8qlwB+LtzrEoKyXBwiCw=",
     "https://plugins.jetbrains.com/files/8607/555059/NixIDEA-0.4.0.14.zip": "sha256-oP/tvAqzMSDLJ0Jah1eLJDZIm9WhOZas7lPWrvjWFMM=",
+    "https://plugins.jetbrains.com/files/9333/454471/makefile-233.13135.65.zip": "sha256-DlPPG+7v/+kHE9mNyPyNAuZ0xsXIvExfCOID8C9hrgg=",
+    "https://plugins.jetbrains.com/files/9333/508273/makefile-241.14494.150.zip": "sha256-yvFC9OSluy+mdnSyENOcJaHNkbPKPkBiWVbB4YlDVSA=",
     "https://plugins.jetbrains.com/files/9568/534161/go-plugin-241.17011.2.zip": "sha256-6+VdZVI/U+UxxNZM1/Va8RsiHG0ZnR6PpoOAhaOqk9U="
   }
 }
