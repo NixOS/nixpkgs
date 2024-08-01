@@ -28,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "VERSION=v${finalAttrs.version}"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
