@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  installShellFiles,
   pandoc,
   stdenv,
   nixosTests,
+  fetchpatch,
   # Boolean flags
   withManpage ? true,
 }:
@@ -22,24 +22,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ] ++ lib.optionals withManpage [ "man" ];
 
-  patches = [ ./0000-fix-dbus-path.patch ];
-
-  nativeBuildInputs = lib.optionals withManpage [
-    installShellFiles
-    pandoc
+  patches = [
+    ./0000-fix-dbus-path.patch
+    # Respect `MANDIR`.
+    (fetchpatch {
+      url = "https://github.com/rfjakob/earlyoom/commit/c5a1799a5ff4b3fd3132d50a510e8c126933cf4a.patch";
+      hash = "sha256-64AkpTMmjiqZ6Byq6687zNIqrQ/IGRGgzzjyyAfcg14=";
+    })
   ];
+
+  nativeBuildInputs = lib.optionals withManpage [ pandoc ];
 
   makeFlags = [
     "VERSION=${finalAttrs.version}"
-  ];
+    "PREFIX=${placeholder "out"}"
+    "SYSCONFDIR=${placeholder "out"}/etc"
+  ]
+  ++ lib.optional withManpage "MANDIR=/../../../${placeholder "man"}/share/man";
 
-  installPhase = ''
-    runHook preInstall
-    install -D earlyoom $out/bin/earlyoom
-  '' + lib.optionalString withManpage ''
-    installManPage earlyoom.1
-  '' + ''
-    runHook postInstall
+  postFixup = ''
+    substituteInPlace $out/etc/systemd/system/earlyoom.service \
+      --replace-fail "/bin/earlyoom" "$out/bin/earlyoom"
   '';
 
   passthru.tests = {
@@ -58,7 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "earlyoom";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      oxalica
+    ];
     platforms = lib.platforms.linux;
   };
 })
