@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  runCommandNoCC,
   cmake,
   llvmPackages,
   libxml2,
@@ -18,6 +19,7 @@ stdenv.mkDerivation (
   let
     common = callPackage ./common.nix {
       inherit (finalAttrs) pname version;
+      inherit runCommandNoCC;
       zig = finalAttrs.finalPackage;
     };
   in

@@ -2,6 +2,7 @@
   lib,
   darwin,
   callPackage,
+  runCommandNoCC,
   llvmPackages_13,
   llvmPackages_15,
   llvmPackages_16,
@@ -63,7 +64,9 @@ let
       patches ? [ ],
     }@args:
     {
-      generic = darwin.apple_sdk_11_0.callPackage ./generic.nix (removeAttrs args [ "bootstrapHashes" ]);
+      generic = darwin.apple_sdk_11_0.callPackage ./generic.nix (
+        removeAttrs args [ "bootstrapHashes" ] // { inherit runCommandNoCC; }
+      );
       bootstrap = callPackage ./bootstrap.nix (
         removeAttrs args [
           "patches"

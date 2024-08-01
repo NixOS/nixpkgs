@@ -1,8 +1,8 @@
 {
   lib,
-  runCommandNoCC,
-  zig,
   stdenv,
+  zig,
+  runCommandNoCC,
   makeWrapper,
 }:
 let
@@ -10,17 +10,12 @@ let
     stdenv.hostPlatform != stdenv.targetPlatform
   ) "${stdenv.targetPlatform.config}-";
 in
-runCommandNoCC "zig-cc-${zig.version}"
+runCommandNoCC "zig-bintools-${zig.version}"
   {
-    pname = "zig-cc";
+    pname = "zig-bintools";
     inherit (zig) version meta;
 
     nativeBuildInputs = [ makeWrapper ];
-
-    outputs = [
-      "out"
-      "lib"
-    ];
 
     passthru = {
       isZig = true;
@@ -31,15 +26,9 @@ runCommandNoCC "zig-cc-${zig.version}"
   }
   ''
     mkdir -p $out/bin
-    for tool in cc c++; do
-      makeWrapper "$zig/bin/zig" "$out/bin/${targetPrefix}$tool" \
+    for tool in ar objcopy; do
+      makeWrapper "$zig/bin/zig" "$out/bin/${targetPrefix}-$tool" \
         --add-flags "$tool" \
         --run "export ZIG_GLOBAL_CACHE_DIR=\$(mktemp -d)"
     done
-
-    mv $out/bin/c++ $out/bin/clang++
-    mv $out/bin/cc $out/bin/clang
-
-    # Fake lib output needed
-    mkdir -p $lib
   ''
