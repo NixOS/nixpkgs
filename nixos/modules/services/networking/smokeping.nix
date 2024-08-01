@@ -328,6 +328,7 @@ in
       };
       preStart = ''
         mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
+        chown -R ${cfg.user}:${cfg.user} ${smokepingHome}/{cache,data}
         ln -snf ${cfg.package}/htdocs/css ${smokepingHome}/css
         ln -snf ${cfg.package}/htdocs/js ${smokepingHome}/js
         ln -snf ${cgiHome} ${smokepingHome}/smokeping.fcgi
@@ -337,7 +338,11 @@ in
     };
 
     # use nginx to serve the smokeping web service
-    services.fcgiwrap.enable = mkIf cfg.webService true;
+    services.fcgiwrap.instances.smokeping = mkIf cfg.webService {
+      process.user = cfg.user;
+      process.group = cfg.user;
+      socket = { inherit (config.services.nginx) user group; };
+    };
     services.nginx = mkIf cfg.webService {
       enable = true;
       virtualHosts."smokeping" = {
@@ -349,7 +354,7 @@ in
         locations."/smokeping.fcgi" = {
           extraConfig = ''
             include ${config.services.nginx.package}/conf/fastcgi_params;
-            fastcgi_pass unix:${config.services.fcgiwrap.socketAddress};
+            fastcgi_pass unix:${config.services.fcgiwrap.instances.smokeping.socket.address};
             fastcgi_param SCRIPT_FILENAME ${smokepingHome}/smokeping.fcgi;
             fastcgi_param DOCUMENT_ROOT ${smokepingHome};
           '';
