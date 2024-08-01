@@ -823,6 +823,8 @@ self: super: with self; {
 
   asgiref = callPackage ../development/python-modules/asgiref { };
 
+  asgiref3_7 = callPackage ../development/python-modules/asgiref/3_7.nix { };
+
   asks = callPackage ../development/python-modules/asks { };
 
   asmog = callPackage ../development/python-modules/asmog { };
@@ -9484,7 +9486,9 @@ self: super: with self; {
 
   opentelemetry-instrumentation-aiohttp-client = callPackage ../development/python-modules/opentelemetry-instrumentation-aiohttp-client { };
 
-  opentelemetry-instrumentation-asgi = callPackage ../development/python-modules/opentelemetry-instrumentation-asgi { };
+  opentelemetry-instrumentation-asgi = callPackage ../development/python-modules/opentelemetry-instrumentation-asgi {
+    asgiref = pkgs.python3Packages.asgiref3_7;
+  };
 
   opentelemetry-instrumentation-django = callPackage ../development/python-modules/opentelemetry-instrumentation-django { };
 
@@ -9502,7 +9506,9 @@ self: super: with self; {
 
   opentelemetry-sdk = callPackage ../development/python-modules/opentelemetry-sdk { };
 
-  opentelemetry-test-utils = callPackage ../development/python-modules/opentelemetry-test-utils { };
+  opentelemetry-test-utils = callPackage ../development/python-modules/opentelemetry-test-utils {
+    asgiref = pkgs.python3Packages.asgiref3_7;
+  };
 
   opentelemetry-util-http = callPackage ../development/python-modules/opentelemetry-util-http { };
 
