@@ -70,6 +70,7 @@
   ./hardware/graphics.nix
   ./hardware/hackrf.nix
   ./hardware/i2c.nix
+  ./hardware/iosched.nix
   ./hardware/infiniband.nix
   ./hardware/keyboard/qmk.nix
   ./hardware/keyboard/teck.nix
