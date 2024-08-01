@@ -26,6 +26,7 @@ let
       category-theory = callPackage ../development/coq-modules/category-theory { };
       ceres = callPackage ../development/coq-modules/ceres {};
       Cheerios = callPackage ../development/coq-modules/Cheerios {};
+      coinduction = callPackage ../development/coq-modules/coinduction {};
       CoLoR = callPackage ../development/coq-modules/CoLoR (
         (lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
           bignums = self.bignums.override { version = "8.13.0"; };
