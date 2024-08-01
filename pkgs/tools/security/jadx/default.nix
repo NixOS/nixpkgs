@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jadx";
-  version = "1.4.7";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = "jadx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3t2e3WfH/ohkdGWlfV3t9oHJ1Q6YM6nSLOgmzgJEkls=";
+    hash = "sha256-+F+PHAd1+FmdAlQkjYDBsUYCUzKXG19ZUEorfvBUEg0=";
   };
 
   nativeBuildInputs = [ gradle jdk imagemagick makeWrapper copyDesktopItems ]
@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = licenses.asl20;
     platforms = platforms.unix;
+    mainProgram = "jadx-gui";
     maintainers = with maintainers; [ emilytrau ];
   };
 })
