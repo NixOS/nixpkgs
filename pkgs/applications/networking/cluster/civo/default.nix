@@ -42,6 +42,6 @@ buildGoModule rec {
     mainProgram = "civo";
     homepage = "https://github.com/civo/cli";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ techknowlogick ];
   };
 }
