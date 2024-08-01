@@ -4340,6 +4340,8 @@ self: super: with self; {
 
   first = callPackage ../development/python-modules/first { };
 
+  fissix = callPackage ../development/python-modules/fissix { };
+
   fitbit = callPackage ../development/python-modules/fitbit { };
 
   fivem-api = callPackage ../development/python-modules/fivem-api { };
@@ -9129,6 +9131,8 @@ self: super: with self; {
   nose = callPackage ../development/python-modules/nose { };
 
   nose2 = callPackage ../development/python-modules/nose2 { };
+
+  nose2pytest = callPackage ../development/python-modules/nose2pytest { };
 
   nose3 = callPackage ../development/python-modules/nose3 { };
 
