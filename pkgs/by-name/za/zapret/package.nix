@@ -47,7 +47,8 @@ stdenv.mkDerivation {
 
     substituteInPlace $out/usr/share/zapret/init.d/sysv/functions \
       --replace "ZAPRET_BASE=\$(readlink -f \"\$EXEDIR/../..\")" "ZAPRET_BASE=$out/usr/share/zapret" \
-      --replace ". \"\$ZAPRET_BASE/config\"" ""
+
+    touch $out/usr/share/zapret/config
 
     cp -r $src/docs/* $out/usr/share/docs
 
