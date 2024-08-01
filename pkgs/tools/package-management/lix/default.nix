@@ -54,6 +54,7 @@ lib.makeExtensible (self: ({
       version = "2.90.0";
       hash = "sha256-f8k+BezKdJfmE+k7zgBJiohtS3VkkriycdXYsKOm3sc=";
       docCargoHash = "sha256-vSf9MyD2XzofZlbzsmh6NP69G+LiX72GX4Um9UJp3dc=";
+      withNixDebugPatch = ./patches/set-NIX_DEBUG-on-lix-2.90.patch;
     }
   );
 

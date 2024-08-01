@@ -13,6 +13,7 @@
   docCargoHash ? null,
   docCargoLock ? null,
   patches ? [ ],
+  withNixDebugPatch ? null,
   maintainers ? lib.teams.lix.members,
 }@args:
 assert (hash == null) -> (src != null);
@@ -63,6 +64,7 @@ assert (hash == null) -> (src != null);
   rapidcheck,
   Security,
   sqlite,
+  substitute,
   util-linuxMinimal,
   xz,
   nixosTests,
@@ -80,11 +82,15 @@ assert (hash == null) -> (src != null);
   # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
+  # If non-`null`, the string value is what the environment variable `NIX_DEBUG`
+  # is set to when building any derivation. See the Nixpkgs manual for more.
+  withNixDebug ? null,
 
   confDir,
   stateDir,
   storeDir,
 }:
+assert lib.assertMsg ((withNixDebug != null) -> (withNixDebugPatch != null)) "Setting `withNixDebug` means `withNixDebugPatch` patch must be specified.";
 assert lib.assertMsg (docCargoHash != null || docCargoLock != null) "Either `lix-doc`'s cargoHash using `docCargoHash` or `lix-doc`'s `cargoLock.lockFile` using `docCargoLock` must be set!";
 stdenv.mkDerivation {
   pname = "lix";
@@ -92,7 +98,14 @@ stdenv.mkDerivation {
   version = "${version}${suffix}";
   VERSION_SUFFIX = suffix;
 
-  inherit src patches;
+  inherit src;
+
+  patches = patches ++ lib.optionals (withNixDebug != null) [
+    (substitute {
+      src = withNixDebugPatch;
+      substitutions = [ "--subst-var-by" "NIX_DEBUG" (toString withNixDebug) ];
+    })
+  ];
 
   outputs =
     [
