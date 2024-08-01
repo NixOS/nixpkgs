@@ -15990,6 +15990,12 @@ with pkgs;
     lldb_18 = llvmPackages_18.lldb;
     llvm_18 = llvmPackages_18.llvm;
 
+    llvmPackages_19 = llvmPackagesSet."19";
+    clang_19 = llvmPackages_19.clang;
+    lld_19 = llvmPackages_19.lld;
+    lldb_19 = llvmPackages_19.lldb;
+    llvm_19 = llvmPackages_19.llvm;
+
     llvmPackages_git = llvmPackagesSet.git;
   }) llvmPackages_13
     llvmPackages_14
@@ -16001,6 +16007,11 @@ with pkgs;
     lld_18
     lldb_18
     llvm_18
+    llvmPackages_19
+    clang_19
+    lld_19
+    lldb_19
+    llvm_19
     llvmPackages_git;
 
   lorri = callPackage ../tools/misc/lorri {
