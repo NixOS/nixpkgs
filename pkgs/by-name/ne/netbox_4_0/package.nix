@@ -100,6 +100,7 @@ py.pkgs.buildPythonApplication rec {
     inherit (py.pkgs) gunicorn;
     tests = {
       netbox = nixosTests.netbox_4_0;
+      inherit (nixosTests) netbox-upgrade;
     };
   };
 
