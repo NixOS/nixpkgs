@@ -266,6 +266,12 @@ in {
         description = "Match displays based on edid instead of name";
       };
 
+      matchEdid = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc "Match displays based on edid instead of name";
+      };
+
       hooks = mkOption {
         type = hooksModule;
         description = "Global hook scripts";
