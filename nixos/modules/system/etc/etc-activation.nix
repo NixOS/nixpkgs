@@ -26,13 +26,6 @@
           assertion = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6";
           message = "`system.etc.overlay.enable requires a newer kernel, at least version 6.6";
         }
-        {
-          assertion = config.systemd.sysusers.enable -> (config.users.mutableUsers == config.system.etc.overlay.mutable);
-          message = ''
-            When using systemd-sysusers and mounting `/etc` via an overlay, users
-            can only be mutable when `/etc` is mutable and vice versa.
-          '';
-        }
       ];
 
       boot.initrd.availableKernelModules = [ "loop" "erofs" "overlay" ];
