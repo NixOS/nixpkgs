@@ -123,7 +123,7 @@ nixVomitLog() {
 # logging for "implicit" hooks -- the ones specified directly
 # in derivation's arguments -- is done in _callImplicitHook instead.
 _logHook() {
-    # Fast path in case nixLog is no-op.
+    # Fast path in case nixTalkativeLog is no-op.
     if [[ -z ${NIX_LOG_FD-} ]]; then
         return
     fi
@@ -133,14 +133,14 @@ _logHook() {
     shift 2
 
     if declare -F "$hookExpr" > /dev/null 2>&1; then
-        nixLog "calling '$hookKind' function hook '$hookExpr'" "$@"
+        nixTalkativeLog "calling '$hookKind' function hook '$hookExpr'" "$@"
     elif type -p "$hookExpr" > /dev/null; then
-        nixLog "sourcing '$hookKind' script hook '$hookExpr'"
+        nixTalkativeLog "sourcing '$hookKind' script hook '$hookExpr'"
     elif [[ "$hookExpr" != "_callImplicitHook"* ]]; then
         # Here we have a string hook to eval.
-        # Join lines onto one with literal \n characters unless NIX_DEBUG >= 2.
+        # Join lines onto one with literal \n characters unless NIX_DEBUG >= 5.
         local exprToOutput
-        if (( "${NIX_DEBUG:-0}" >= 2 )); then
+        if [[ ${NIX_DEBUG:-0} -ge 5 ]]; then
             exprToOutput="$hookExpr"
         else
             # We have `r'\n'.join([line.lstrip() for lines in text.split('\n')])` at home.
@@ -159,7 +159,7 @@ _logHook() {
             # And then remove the final, unnecessary, \n
             exprToOutput="${exprToOutput%%\\n }"
         fi
-        nixLog "evaling '$hookKind' string hook '$exprToOutput'"
+        nixTalkativeLog "evaling '$hookKind' string hook '$exprToOutput'"
     fi
 }
 
@@ -217,13 +217,13 @@ _callImplicitHook() {
     local def="$1"
     local hookName="$2"
     if declare -F "$hookName" > /dev/null; then
-        nixLog "calling implicit '$hookName' function hook"
+        nixTalkativeLog "calling implicit '$hookName' function hook"
         "$hookName"
     elif type -p "$hookName" > /dev/null; then
-        nixLog "sourcing implicit '$hookName' script hook"
+        nixTalkativeLog "sourcing implicit '$hookName' script hook"
         source "$hookName"
     elif [ -n "${!hookName:-}" ]; then
-        nixLog "evaling implicit '$hookName' string hook"
+        nixTalkativeLog "evaling implicit '$hookName' string hook"
         eval "${!hookName}"
     else
         return "$def"
@@ -769,7 +769,7 @@ activatePackage() {
     (( hostOffset <= targetOffset )) || exit 1
 
     if [ -f "$pkg" ]; then
-        nixLog "sourcing setup hook '$pkg'"
+        nixTalkativeLog "sourcing setup hook '$pkg'"
         source "$pkg"
     fi
 
@@ -793,7 +793,7 @@ activatePackage() {
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
-        nixLog "sourcing setup hook '$pkg/nix-support/setup-hook'"
+        nixTalkativeLog "sourcing setup hook '$pkg/nix-support/setup-hook'"
         source "$pkg/nix-support/setup-hook"
     fi
 }
