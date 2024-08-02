@@ -74,19 +74,19 @@ let
           declare -p string
 
           declare -A associativeArray=(["X"]="Y")
-          [[ $(appendToVar associativeArray "fail" 2>&1) =~ "trying to use" ]] || (echo "prependToVar did not catch prepending associativeArray" && false)
-          [[ $(prependToVar associativeArray "fail" 2>&1) =~ "trying to use" ]] || (echo "prependToVar did not catch prepending associativeArray" && false)
+          [[ $(appendToVar associativeArray "fail" 2>&1) =~ "trying to use" ]] || (echo "appendToVar did not throw appending to associativeArray" && false)
+          [[ $(prependToVar associativeArray "fail" 2>&1) =~ "trying to use" ]] || (echo "prependToVar did not throw prepending associativeArray" && false)
 
           [[ $string == "world testing-string hello" ]] || (echo "'\$string' was not 'world testing-string hello'" && false)
 
           # test appending to a unset variable
           appendToVar nonExistant created hello
-          typeset -p nonExistant
+          declare -p nonExistant
           if [[ -n $__structuredAttrs ]]; then
             [[ "''${nonExistant[@]}" == "created hello" ]]
           else
             # there's a extra " " in front here and a extra " " in the end of prependToVar
-            # shouldn't matter because these functions will mostly be used for $*Flags and the Flag variable will in most cases already exit
+            # shouldn't matter because these functions will mostly be used for $*Flags and the Flag variable will in most cases already exist
             [[ "$nonExistant" == " created hello" ]]
           fi
 
