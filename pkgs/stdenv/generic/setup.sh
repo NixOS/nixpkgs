@@ -1597,6 +1597,13 @@ distPhase() {
 showPhaseHeader() {
     local phase="$1"
     echo "Running phase: $phase"
+
+    # The Nix structured logger allows derivations to update the phase as they're building,
+    # which shows up in the terminal UI. See `handleJSONLogMessage` in the Nix source.
+    if [[ -z ${NIX_LOG_FD-} ]]; then
+        return
+    fi
+    printf "@nix { \"action\": \"setPhase\", \"phase\": \"%s\" }\n" "$phase" >&"$NIX_LOG_FD"
 }
 
 
@@ -1628,8 +1635,6 @@ runPhase() {
     if [[ "$curPhase" = fixupPhase && -n "${dontFixup:-}" ]]; then return; fi
     if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then return; fi
     if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then return; fi
-
-    nixLog "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }"
 
     showPhaseHeader "$curPhase"
     dumpVars
