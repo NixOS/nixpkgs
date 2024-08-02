@@ -2179,7 +2179,9 @@ with pkgs;
 
   conform = callPackage ../applications/version-management/conform { };
 
-  datalad = callPackage ../applications/version-management/datalad { };
+  datalad = with python3Packages; toPythonApplication datalad;
+
+  datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
 
   darcs-to-git = callPackage ../applications/version-management/darcs-to-git { };
 
