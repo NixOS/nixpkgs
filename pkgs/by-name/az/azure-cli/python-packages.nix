@@ -23,6 +23,7 @@ let
     });
 
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
       inherit buildAzureCliPackage;
 

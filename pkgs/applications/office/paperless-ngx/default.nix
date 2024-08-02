@@ -37,6 +37,7 @@ let
   # https://github.com/NixOS/nixpkgs/issues/298719
   # https://github.com/paperless-ngx/paperless-ngx/issues/5494
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
