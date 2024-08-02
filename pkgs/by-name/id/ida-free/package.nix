@@ -121,6 +121,10 @@ stdenv.mkDerivation rec {
       ln -s $IDADIR/$bb $out/bin/$bb
     done
 
+    # runtimeDependencies don't get added to non-executables, and openssl is needed
+    #  for cloud decompilation
+    patchelf --add-needed libcrypto.so $IDADIR/libida64.so
+
     runHook postInstall
   '';
 
