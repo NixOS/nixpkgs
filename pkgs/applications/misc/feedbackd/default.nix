@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     description = "Daemon to provide haptic (and later more) feedback on events";
     homepage = "https://source.puri.sm/Librem5/feedbackd";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pacman99 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }
