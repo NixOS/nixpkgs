@@ -43,6 +43,7 @@ buildPythonPackage rec {
     description = "Asset download tool for GitHub Releases, PyPi, etc.";
     mainProgram = "homf";
     homepage = "https://github.com/duckinator/homf";
+    license = licenses.mit;
     maintainers = with maintainers; [ nicoo ];
   };
 }
