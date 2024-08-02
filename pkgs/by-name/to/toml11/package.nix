@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "toml11";
-  version = "3.7.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "ToruNiina";
     repo = "toml11";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HnhXBvIjo1JXhp+hUQvjs83t5IBVbNN6o3ZGhB4WESQ=";
+    hash = "sha256-NUuEgTpq86rDcsQnpG0IsSmgLT0cXhd1y32gT57QPAw=";
   };
 
   nativeBuildInputs = [
