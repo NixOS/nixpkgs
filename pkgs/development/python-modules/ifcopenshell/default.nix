@@ -187,6 +187,6 @@ buildPythonPackage rec {
     description = "Open source IFC library and geometry engine";
     homepage = "http://ifcopenshell.org/";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ fehnomenal ];
+    maintainers = with maintainers; [ autra ];
   };
 }
