@@ -62,6 +62,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "botorch" ];
 
+  # needs lots of undisturbed CPU time or prone to getting stuck
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     changelog = "https://github.com/pytorch/botorch/blob/${src.rev}/CHANGELOG.md";
     description = "Bayesian Optimization in PyTorch";
