@@ -1,50 +1,148 @@
 {
+  callPackage,
+  darwin,
+  fetchFromGitHub,
+  fetchYarnDeps,
   lib,
+  mkYarnPackage,
+  nixosTests,
   stdenv,
-  fetchurl,
+  testers,
 }:
 let
-
-  version = "0.25.1";
-
-  sources = {
-    x86_64-linux = {
-      url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-linux";
-      hash = "sha256-Rb4x6iKx6T9NPuWWDbNaz+35XPzLqZzSm0psv+k2Gw4=";
-    };
-    aarch64-linux = {
-      url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-linux-arm64v8";
-      hash = "sha256-6qPyIYKFkhmBNO47w9E91FSKlByepBOnl0MNJighGSc=";
-    };
-    x86_64-darwin = {
-      url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-macos";
-      hash = "sha256-W8+rgqWUDTOB8ykGO2GL9tKEjaDXdx9LpFg0TAtJsxM=";
-    };
-  };
-in
-stdenv.mkDerivation (finalAttrs: {
-  inherit version;
+  inherit (lib.importJSON ./version.json)
+    gitHash
+    srcHash
+    stamp
+    vendorHash
+    version
+    yarnHash
+    ;
 
   pname = "stash";
 
-  src = fetchurl { inherit (sources.${stdenv.system}) url hash; };
-
-  dontUnpack = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 $src $out/bin/stash
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
-    description = "Stash is a self-hosted porn app";
-    homepage = "https://github.com/stashapp/stash";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Golo300 ];
-    platforms = builtins.attrNames sources;
-    mainProgram = "stash";
+  src = fetchFromGitHub {
+    owner = "stashapp";
+    repo = pname;
+    rev = "v${version}";
+    hash = srcHash;
   };
-})
+
+  uiSrc = "${src}/ui/v2.5";
+
+  ui = mkYarnPackage {
+    inherit version;
+    pname = "${pname}-ui";
+    src = uiSrc;
+
+    packageJSON = ./package.json;
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${uiSrc}/yarn.lock";
+      hash = yarnHash;
+    };
+
+    postPatch = ''substituteInPlace codegen.ts --replace "../../graphql/" "${src}/graphql/"'';
+
+    configurePhase = ''ln -s $node_modules node_modules'';
+
+    buildPhase = ''
+      runHook preBuild
+
+      export HOME=$(mktemp -d)
+      export VITE_APP_DATE='${stamp}'
+      export VITE_APP_GITHASH=${gitHash}
+      export VITE_APP_STASH_VERSION=v${version}
+      export VITE_APP_NOLEGACY=true
+
+      yarn --offline run gqlgen
+      yarn --offline build
+
+      mv build $out
+
+      runHook postBuild
+    '';
+
+    distPhase = "true";
+    dontInstall = true;
+    dontFixup = true;
+  };
+
+  mininalBuildGoModule = callPackage ./buildGoVendor.nix {
+    inherit
+      pname
+      src
+      vendorHash
+      version
+      ;
+  };
+in
+mininalBuildGoModule.overrideAttrs (
+  final: prev: {
+    ldflags = [
+      "-s"
+      "-w"
+      "-X 'github.com/stashapp/stash/internal/build.buildstamp=${stamp}'"
+      "-X 'github.com/stashapp/stash/internal/build.githash=${gitHash}'"
+      "-X 'github.com/stashapp/stash/internal/build.version=v${version}'"
+      "-X 'github.com/stashapp/stash/internal/build.officialBuild=true'"
+    ];
+    tags = [ "sqlite_stat4" ];
+
+    subPackages = [ "cmd/stash" ];
+
+    buildInputs = lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Cocoa
+        WebKit
+      ]
+    );
+
+    preBuild = ''
+      cp -a ${ui} ui/v2.5/build
+      # `go mod tidy` requires internet access and does nothing
+      echo "skip_mod_tidy: true" >> gqlgen.yml
+      # remove `-trimpath` fron `GOFLAGS` because `gqlgen` does not work with it
+      GOFLAGS="''${GOFLAGS/-trimpath/}" go generate ./cmd/stash
+    '';
+
+    strictDeps = true;
+
+    passthru = {
+      updateScript = ./update.nu;
+
+      tests = {
+        stash = nixosTests.stash;
+        version = testers.testVersion {
+          package = final.finalPackage;
+          version = "v${version} (${gitHash}) - Official Build - ${stamp}";
+        };
+      };
+    };
+
+    meta = with lib; {
+      mainProgram = "stash";
+      description = "An organizer for your adult videos, written in Go.";
+      license = licenses.agpl3Only;
+      homepage = "https://stashapp.cc/";
+      changelog =
+        let
+          major = versions.major version;
+          minor = versions.minor version;
+          changelogFile = "v${major}${minor}0.md";
+        in
+        "https://github.com/stashapp/stash/blob/v${version}/ui/v2.5/src/docs/en/Changelog/${changelogFile}";
+      maintainers = with maintainers; [
+        Golo300
+        DrakeTDL
+      ];
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+    };
+  }
+)
