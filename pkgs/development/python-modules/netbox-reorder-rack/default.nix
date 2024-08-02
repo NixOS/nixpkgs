@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "netbox-reorder-rack";
-  version = "1.0.0";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-reorder-rack";
     rev = "v${version}";
-    hash = "sha256-UbTq3DHxSczDxQIUyAHCVJG3SZdqgyS9ULNvuDKQvEY=";
+    hash = "sha256-0572pj1OA08Zxl4vhMmFHvQA/K24hG/GhKEbo+hbW5Q=";
   };
 
   build-system = [
