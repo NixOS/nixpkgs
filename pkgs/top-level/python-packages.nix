@@ -17156,6 +17156,8 @@ self: super: with self; {
 
   vspyplugin = callPackage ../development/python-modules/vspyplugin { };
 
+  vsrgtools = callPackage ../development/python-modules/vsrgtools { };
+
   vstools = callPackage ../development/python-modules/vstools { };
 
   vsts = callPackage ../development/python-modules/vsts { };
