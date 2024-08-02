@@ -164,6 +164,7 @@ in {
   bpf = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bpf.nix {};
   bpftune = handleTest ./bpftune.nix {};
   breitbandmessung = handleTest ./breitbandmessung.nix {};
+  broadcast-box = handleTest ./broadcast-box.nix {};
   brscan5 = handleTest ./brscan5.nix {};
   btrbk = handleTest ./btrbk.nix {};
   btrbk-doas = handleTest ./btrbk-doas.nix {};
