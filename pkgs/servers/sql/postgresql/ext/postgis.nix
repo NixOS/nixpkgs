@@ -3,6 +3,7 @@
 , perl
 , libxml2
 , postgresql
+, postgresqlTestHook
 , geos
 , proj
 , gdalMinimal
@@ -11,6 +12,9 @@
 , file
 , protobufc
 , libiconv
+, libxslt
+, docbook_xml_dtd_45
+, cunit
 , pcre2
 , nixosTests
 , jitSupport
@@ -36,9 +40,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl pkg-config ] ++ lib.optional jitSupport llvm;
   dontDisableStatic = true;
 
+  nativeCheckInputs = [ postgresqlTestHook cunit libxslt ];
+
+  postgresqlTestUserOptions = "LOGIN SUPERUSER";
+  failureHook = "postgresqlStop";
+
   # postgis config directory assumes /include /lib from the same root for json-c library
   env.NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";
-
 
   preConfigure = ''
     sed -i 's@/usr/bin/file@${file}/bin/file@' configure
@@ -59,6 +67,15 @@ stdenv.mkDerivation rec {
     # postgis' build system assumes it is being installed to the same place as postgresql, and looks
     # for the postgres binary relative to $PREFIX. We gently support this system using an illusion.
     ln -s ${postgresql}/bin/postgres $out/bin/postgres
+  '';
+
+  doCheck = stdenv.isLinux;
+
+  preCheck = ''
+    substituteInPlace regress/run_test.pl --replace-fail "/share/contrib/postgis" "$out/share/postgresql/contrib/postgis"
+    substituteInPlace regress/Makefile --replace-fail 's,\$$libdir,$(REGRESS_INSTALLDIR)/lib,g' "s,\\$\$libdir,$PWD/regress/00-regress-install$out/lib,g" \
+      --replace-fail '$(REGRESS_INSTALLDIR)/share/contrib/postgis/*.sql' "$PWD/regress/00-regress-install$out/share/postgresql/contrib/postgis/*.sql"
+    substituteInPlace doc/postgis-out.xml --replace-fail "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" "${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd"
   '';
 
   # create aliases for all commands adding version information
