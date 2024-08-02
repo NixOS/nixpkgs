@@ -1,37 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, pkg-config
-, glib
-, gtk3
-, iw
-, makeWrapper
-, qrencode
-, hostapd
-, getopt
-, dnsmasq
-, iproute2
-, flock
-, iptables
-, gawk
-, coreutils
-, gnugrep
-, gnused
-, kmod
-, networkmanager
-, procps
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  pkg-config,
+  glib,
+  gtk3,
+  iw,
+  makeWrapper,
+  qrencode,
+  hostapd,
+  getopt,
+  dnsmasq,
+  iproute2,
+  flock,
+  iptables,
+  gawk,
+  coreutils,
+  gnugrep,
+  gnused,
+  kmod,
+  networkmanager,
+  procps,
 }:
 
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linux-wifi-hotspot";
   version = "4.7.2";
 
   src = fetchFromGitHub {
     owner = "lakinduakash";
-    repo = pname;
-    rev = "v${version}";
+    repo = "linux-wifi-hotspot";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+WHYWQ4EyAt+Kq0LHEgC7Kk5HpIqThz6W3PIdW8Wojk=";
   };
 
@@ -61,13 +61,12 @@ stdenv.mkDerivation rec {
       --replace "/usr" "$out"
   '';
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/create_ap \
-      --prefix PATH : ${lib.makeBinPath [
+      --prefix PATH : ${
+        lib.makeBinPath [
           coreutils
           dnsmasq
           flock
@@ -83,7 +82,8 @@ stdenv.mkDerivation rec {
           networkmanager
           procps
           which
-        ]}
+        ]
+      }
 
     wrapProgram $out/bin/wihotspot-gui \
       --prefix PATH : ${lib.makeBinPath [ iw ]} \
@@ -98,8 +98,11 @@ stdenv.mkDerivation rec {
     description = "Feature-rich wifi hotspot creator for Linux which provides both GUI and command-line interface";
     homepage = "https://github.com/lakinduakash/linux-wifi-hotspot";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [
+      johnrtitor
+      onny
+    ];
     platforms = platforms.unix;
   };
 
-}
+})
