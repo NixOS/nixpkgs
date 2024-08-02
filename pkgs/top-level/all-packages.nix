@@ -25885,20 +25885,20 @@ with pkgs;
     postgresql_15_jit
     postgresql_16_jit
   ;
-  postgresql = postgresql_15;
-  postgresql_jit = postgresql_15_jit;
+  postgresql = postgresql_16;
+  postgresql_jit = postgresql_16_jit;
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
   postgresqlJitPackages = recurseIntoAttrs postgresql_jit.pkgs;
   postgresql12Packages = recurseIntoAttrs postgresql_12.pkgs;
   postgresql13Packages = recurseIntoAttrs postgresql_13.pkgs;
   postgresql14Packages = recurseIntoAttrs postgresql_14.pkgs;
-  postgresql16Packages = recurseIntoAttrs postgresql_16.pkgs;
+  postgresql15Packages = recurseIntoAttrs postgresql_15.pkgs;
   postgresql12JitPackages = recurseIntoAttrs postgresql_12_jit.pkgs;
   postgresql13JitPackages = recurseIntoAttrs postgresql_13_jit.pkgs;
   postgresql14JitPackages = recurseIntoAttrs postgresql_14_jit.pkgs;
   postgresql15JitPackages = recurseIntoAttrs postgresql_15_jit.pkgs;
   postgresql16JitPackages = recurseIntoAttrs postgresql_16_jit.pkgs;
-  postgresql15Packages = postgresqlPackages;
+  postgresql16Packages = postgresqlPackages;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
