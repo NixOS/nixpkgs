@@ -55,14 +55,6 @@ getAllOutputNames() {
     fi
 }
 
-# Logs arguments to $NIX_LOG_FD, if it exists, no-op if it does not.
-nixLog() {
-    if [[ -z ${NIX_LOG_FD-} ]]; then
-        return
-    fi
-    echo "$@" >&"$NIX_LOG_FD"
-}
-
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlError` in the Nix source.
 nixErrorLog() {
@@ -539,10 +531,7 @@ done
 
 unset i
 
-if (( "${NIX_DEBUG:-0}" >= 1 )); then
-    echo "initial path: $PATH"
-fi
-
+nixWarnLog "initial path: $PATH"
 
 # Check that the pre-hook initialised SHELL.
 if [ -z "${SHELL:-}" ]; then echo "SHELL not set"; exit 1; fi
@@ -905,11 +894,10 @@ fi
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
 HOST_PATH="${_HOST_PATH-}${_HOST_PATH:+${HOST_PATH:+:}}$HOST_PATH"
 export XDG_DATA_DIRS="${_XDG_DATA_DIRS-}${_XDG_DATA_DIRS:+${XDG_DATA_DIRS:+:}}${XDG_DATA_DIRS-}"
-if (( "${NIX_DEBUG:-0}" >= 1 )); then
-    echo "final path: $PATH"
-    echo "final host path: $HOST_PATH"
-    echo "final data dirs: $XDG_DATA_DIRS"
-fi
+
+nixWarnLog "final path: $PATH"
+nixWarnLog "final host path: $HOST_PATH"
+nixWarnLog "final data dirs: $XDG_DATA_DIRS"
 
 unset _PATH
 unset _HOST_PATH
@@ -1058,14 +1046,11 @@ substituteInPlace() {
 }
 
 _allFlags() {
-    # export some local variables for the awk below
-    # so some substitutions such as name don't have to be in the env attrset
-    # when __structuredAttrs is enabled
+    # Export some local variables for the `awk` below so some substitutions (such as name)
+    # don't have to be in the env attrset when `__structuredAttrs` is enabled.
     export system pname name version
     while IFS='' read -r varName; do
-        if (( "${NIX_DEBUG:-0}" >= 1 )); then
-            printf "@%s@ -> %q\n" "${varName}" "${!varName}" >&2
-        fi
+        nixWarnLog "@${varName}@" "->" "${!varName}"
         args+=("--subst-var" "$varName")
     done < <(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }')
 }
