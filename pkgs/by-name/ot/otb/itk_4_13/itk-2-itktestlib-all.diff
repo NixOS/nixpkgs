@@ -1,0 +1,35 @@
+diff -burN InsightToolkit-4.12.0.orig/Modules/ThirdParty/VNL/src/CMakeLists.txt InsightToolkit-4.12.0/Modules/ThirdParty/VNL/src/CMakeLists.txt
+--- InsightToolkit-4.12.0.orig/Modules/ThirdParty/VNL/src/CMakeLists.txt	2017-08-22 11:53:55.960938649 +0200
++++ InsightToolkit-4.12.0/Modules/ThirdParty/VNL/src/CMakeLists.txt	2017-08-22 11:56:07.289820954 +0200
+@@ -18,10 +18,14 @@
+ # Retrive the variable type to CACHE.
+ set(BUILD_EXAMPLES ${BUILD_EXAMPLES} CACHE BOOL "Build the examples from the ITK Software Guide." FORCE)
+ 
+-foreach(lib itkvcl itkv3p_netlib itktestlib itkvnl itkvnl_algo itknetlib)
++foreach(lib itkvcl itkv3p_netlib itkvnl itkvnl_algo itknetlib)
+   itk_module_target(${lib} NO_INSTALL)
+ endforeach()
+ 
++if(BUILD_TESTING)
++  itk_module_target(itktestlib NO_INSTALL)
++endif()
++
+ foreach(exe
+     netlib_integral_test
+     netlib_lbfgs_example
+diff -burN InsightToolkit-4.12.0.orig/Modules/ThirdParty/VNL/src/vxl/core/CMakeLists.txt InsightToolkit-4.12.0/Modules/ThirdParty/VNL/src/vxl/core/CMakeLists.txt
+--- InsightToolkit-4.12.0.orig/Modules/ThirdParty/VNL/src/vxl/core/CMakeLists.txt	2017-08-22 11:53:55.960938649 +0200
++++ InsightToolkit-4.12.0/Modules/ThirdParty/VNL/src/vxl/core/CMakeLists.txt	2017-08-22 11:56:56.410150930 +0200
+@@ -131,8 +131,10 @@
+   set(CORE_VIDEO_FOUND OFF CACHE INTERNAL "VXL core video libraries built")
+ endif ()
+ 
+-# common test executable
+-add_subdirectory(testlib)
++# common test executable if testing enabled
++if(BUILD_TESTING)
++  add_subdirectory(testlib)
++endif()
+ 
+ # Tests that check and output the vxl configuration
+ # NOTE: some external projects remove the tests directory (aka ITK)
