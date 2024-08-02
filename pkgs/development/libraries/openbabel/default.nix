@@ -1,4 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, cmake, perl, zlib, libxml2, eigen, python, cairo, pcre, pkg-config, swig, rapidjson }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, perl
+, zlib
+, libxml2
+, eigen
+, python
+, cairo
+, pcre
+, pkg-config
+, swig
+, rapidjson
+}:
 
 stdenv.mkDerivation rec {
   pname = "openbabel";
@@ -19,18 +33,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  pythonMajorMinor = "${python.sourceVersion.major}.${python.sourceVersion.minor}";
-
-  cmakeFlags = [
-    "-DRUN_SWIG=ON"
-    "-DPYTHON_BINDINGS=ON"
-  ];
+  preConfigure = ''
+    cmakeFlagsArray+=(
+      "-DRUN_SWIG=ON"
+      "-DPYTHON_BINDINGS=ON"
+      "-DPYTHON_INSTDIR=$out/${python.sitePackages}"
+    )
+  '';
 
   # Setuptools only accepts PEP 440 version strings. The "unstable" identifier
   # can not be used. Instead we pretend to be the 3.2 beta release.
   postFixup = ''
-    cat <<EOF > $out/lib/python$pythonMajorMinor/site-packages/setup.py
-    from distutils.core import setup
+    cat << EOF > $out/${python.sitePackages}/setup.py
+    from setuptools import setup
 
     setup(
         name = 'pyopenbabel',
