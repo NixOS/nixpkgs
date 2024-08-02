@@ -6,19 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mapserver";
-  version = "8.0.1";
+  version = "8.2.1";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = "MapServer";
     rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-fAf4kOe/6bQW0i46+EZbD/6iWI2Bjkn2no6XeR/+mg4=";
+    sha256 = "sha256-kZEDC89yoQP0ma5avp6r+Hz8JMpErGlBVQkhlHO6UFw=";
   };
-
-  patches = [
-    # drop this patch for version 8.0.2
-    ./fix-build-w-libxml2-12.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -38,7 +33,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     librsvg
-    libxml2
+    (libxml2.override { enableHttp = true; })
     postgresql
     proj
     protobufc
