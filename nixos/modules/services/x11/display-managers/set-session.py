@@ -7,7 +7,7 @@ from gi.repository import AccountsService, GLib
 from ordered_set import OrderedSet
 
 
-def get_session_file(session):
+def get_session_file(session: str) -> str:
     system_data_dirs = GLib.get_system_data_dirs()
 
     session_dirs = OrderedSet(
@@ -41,15 +41,15 @@ def get_session_file(session):
         return session_files[0]
 
 
-def is_session_xsession(session_file):
+def is_session_xsession(session_file: str) -> bool:
     return "/xsessions/" in session_file
 
 
-def is_session_wayland(session_file):
+def is_session_wayland(session_file: str) -> bool:
     return "/wayland-sessions/" in session_file
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Set session type for all normal users."
     )
