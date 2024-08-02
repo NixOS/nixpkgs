@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kallisto";
-  version = "0.50.1";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     repo = "kallisto";
     owner = "pachterlab";
     rev = "v${version}";
-    sha256 = "sha256-JJZJOl4u6FzngrrMuC2AfD5ry2LBOT8tdz2piH+9LFE=";
+    sha256 = "sha256-+tnuka6uzoNr5pLuE2yV97KmqdThIG0IwiO+SCYiCk8=";
   };
 
   nativeBuildInputs = [ autoconf cmake ];
