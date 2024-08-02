@@ -6870,11 +6870,6 @@ self: super: with self; {
     inherit (pkgs) libgpiod;
   };
 
-  libgpuarray = callPackage ../development/python-modules/libgpuarray {
-    clblas = pkgs.clblas.override { inherit (self) boost; };
-    inherit (pkgs.config) cudaSupport;
-  };
-
   libgravatar = callPackage ../development/python-modules/libgravatar { };
 
   libiio = (toPythonModule (pkgs.libiio.override {
