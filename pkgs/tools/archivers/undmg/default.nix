@@ -31,15 +31,15 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/matthewbauer/undmg";
+  meta = {
     description = "Extract a DMG file";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    homepage = "https://github.com/matthewbauer/undmg";
+    license = lib.licenses.gpl3;
+    mainProgram = "undmg";
+    maintainers = with lib.maintainers; [
       matthewbauer
       lnl7
     ];
-    mainProgram = "undmg";
+    platforms = lib.platforms.all;
   };
 }
