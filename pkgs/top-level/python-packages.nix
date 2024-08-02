@@ -17154,6 +17154,8 @@ self: super: with self; {
 
   vskernels = callPackage ../development/python-modules/vskernels { };
 
+  vsmasktools = callPackage ../development/python-modules/vsmasktools { };
+
   vspyplugin = callPackage ../development/python-modules/vspyplugin { };
 
   vsrgtools = callPackage ../development/python-modules/vsrgtools { };
