@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildDartApplication,
   kdePackages,
+  nix-update-script,
 }:
 
 let
@@ -38,6 +39,8 @@ buildDartApplication {
       ./package/plasma-runner-vscode_runner.desktop \
       $out/share/krunner/dbusplugins/plasma-runner-vscode_runner.desktop
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "KRunner plugin for quickly opening recent VSCode workspaces";
