@@ -20434,8 +20434,6 @@ with pkgs;
 
   gdome2 = callPackage ../development/libraries/gdome2 { };
 
-  gdbm = callPackage ../development/libraries/gdbm { };
-
   gecode_3 = callPackage ../development/libraries/gecode/3.nix { };
   gecode_6 = qt5.callPackage ../development/libraries/gecode { };
   gecode = gecode_6;
