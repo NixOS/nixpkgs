@@ -41,6 +41,7 @@ FAKE_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 
 cat << EOF > "${WORKDIR}/${CHANNEL_NAME}/versions.nix"
 {
+  releaseName = "rke2_${CHANNEL_NAME}";
   rke2Version = "${RKE2_VERSION}";
   rke2RepoSha256 = "${RKE2_REPO_SHA256}";
   rke2Commit = "${RKE2_COMMIT}";
