@@ -1,7 +1,7 @@
 import ../../make-test-python.nix ({pkgs, ...}:
 {
   name = "pixelfed-standard";
-  meta.maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
+  meta.maintainers = [ ];
 
   nodes = {
     server = { pkgs, ... }: {
