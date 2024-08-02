@@ -15,14 +15,14 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-uZxNW/+BPEZRp/XOlBoDCI4KozQ0svS3OSrR73GmDTg=";
   };
 
-  meta = with lib; {
+  meta = {
     description = ''
       analyzeMFT.py is designed to fully parse the MFT file from an NTFS filesystem
       and present the results as accurately as possible in multiple formats.'';
     homepage = "https://github.com/rowingdude/analyzeMFT";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ MikeHorn-git ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ MikeHorn-git ];
     mainProgram = "analyzeMFT";
   };
 }
