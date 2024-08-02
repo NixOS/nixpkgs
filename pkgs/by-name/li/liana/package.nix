@@ -32,7 +32,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "liana";
-  version = "5.0";
+  version = "5.0"; # keep in sync with lianad
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
