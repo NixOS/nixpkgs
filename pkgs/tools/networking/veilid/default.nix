@@ -6,23 +6,24 @@
 , rustPlatform
 , protobuf
 , capnproto
+, cmake
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "veilid";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iaWdI6lhxX3xdpd5caPl5cWXrBkWiMc7T/dMXp2hqNM=";
+    hash = "sha256-nEJxiox2aoQBV83vlpiBB4In59+lfHF6/a8HqDYcFT4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ansi-parser-0.9.0" = "sha256-3qTJ4J3QE73ScDShnTFD4WPiZaDaiss0wqXmeRQEIt0=";
+      "ansi-parser-0.9.1" = "sha256-Vdjt8QDstrfxYfklZ5vYPGhVNG1BVh4cpKGwvvsHlS4=";
       "cursive-0.20.0" = "sha256-EGKO7JVN9hIqADKKC3mUHHOCSxMjPoXzYBZujzdgk3E=";
       "cursive_buffered_backend-0.6.1" = "sha256-+sTJnp570HupwaJxV2x+oKyLwNmqQ4HqOH2P1s9Hhw8=";
       "cursive_table_view-0.14.0" = "sha256-haos82qtobMsFCP3sNRu5u1mki4bsjrV+eqFxUGIHqk=";
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     capnproto
+    cmake
     protobuf
   ];
 
@@ -39,6 +41,8 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [
     "--workspace"
   ];
+
+  RUSTFLAGS = "--cfg tokio_unstable";
 
   doCheck = false;
 
@@ -49,7 +53,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An open-source, peer-to-peer, mobile-first, networked application framework";
+    description = "Open-source, peer-to-peer, mobile-first, networked application framework";
     homepage = "https://veilid.com";
     license = licenses.mpl20;
     maintainers = with maintainers; [ bbigras qbit ];
