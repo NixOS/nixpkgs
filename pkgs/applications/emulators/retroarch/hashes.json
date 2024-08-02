@@ -754,10 +754,10 @@
         "src": {
             "owner": "snes9xgit",
             "repo": "snes9x",
-            "rev": "881eeaed9a0d7b6ce9b16b094f25101785f0e39e",
-            "hash": "sha256-ZDp/k9TuaVUp9xH9rvzfpbB0VSJbCFRbkMcnR/oPWLM="
+            "rev": "e92b93ca9cd7936134abe0b90975bc9fc009fbf0",
+            "hash": "sha256-zsGf+3J0k7It/QEg/9SIZrb4yg8K8/6KXUE1/dK83yg="
         },
-        "version": "unstable-2024-07-14"
+        "version": "unstable-2024-07-29"
     },
     "snes9x2002": {
         "fetcher": "fetchFromGitHub",
