@@ -27,7 +27,8 @@
 
 , gsettings-desktop-schemas
 
-# For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
+# Allow video acceleration via VA-API to be disabled on systems where is doesn't
+# work reliably (--enable-features=VaapiVideoDecoder)
 , libvaSupport ? true, libva
 
 # For Vulkan support (--enable-features=Vulkan)
