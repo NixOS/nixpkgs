@@ -1,32 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, glib
-, alsa-lib
-, libpulseaudio
+{
+  lib,
+  alsa-lib,
+  fetchFromGitLab,
+  gitUpdater,
+  glib,
+  libpulseaudio,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "callaudiod";
   version = "0.1.10";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "mobian1";
-    repo = pname;
-    rev = version;
+    repo = "callaudiod";
+    rev = finalAttrs.version;
     hash = "sha256-gc66XrrFyhF1TvrDECBfGQc+MiDtqZPxdCn0S/43XQU=";
   };
 
-  strictDeps = true;
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
+
   nativeBuildInputs = [
+    glib
     meson
     ninja
     pkg-config
-    glib
   ];
 
   buildInputs = [
@@ -35,11 +42,18 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  meta = with lib; {
-    description = "Daemon for dealing with audio routing during phone calls";
-    homepage = "https://gitlab.com/mobian1/callaudiod";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+  strictDeps = true;
+
+  passthru = {
+    updateScript = gitUpdater { };
   };
-}
+
+  meta = {
+    homepage = "https://gitlab.com/mobian1/callaudiod";
+    description = "Daemon for dealing with audio routing during phone calls";
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "callaudiocli";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (alsa-lib.meta) platforms;
+  };
+})
