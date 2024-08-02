@@ -3,11 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-
   vapoursynth,
   vstools,
   vspyplugin,
   vsexprtools,
+  vs-removegrain,
+  rgsf,
+  akarin-expr,
 }:
 
 buildPythonPackage rec {
@@ -23,6 +25,12 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  buildInputs = [
+    vs-removegrain
+    rgsf
+    akarin-expr
+  ];
 
   dependencies = [
     vapoursynth
