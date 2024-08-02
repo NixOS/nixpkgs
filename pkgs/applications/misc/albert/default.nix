@@ -58,10 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;
 
-    # WARN: This is necessary for albert to detect the package libraries.
-    # Please check if the file below has changed upstream before updating.
-    sed -i src/app/qtpluginprovider.cpp \
-      -e "/QStringList install_paths;/a    install_paths << QFileInfo(\"$out/lib\").canonicalFilePath();"
+    substituteInPlace src/app/qtpluginprovider.cpp \
+      --replace-fail "QStringList install_paths;" "QStringList install_paths;${"\n"}install_paths << QFileInfo(\"$out/lib\").canonicalFilePath();"
   '';
 
   postFixup = ''
