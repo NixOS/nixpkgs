@@ -61,6 +61,14 @@ buildPythonPackage rec {
     ++ lib.optionals (stdenv.isAarch64 && pythonOlder "3.9") [
       # AssertionError: assert 'foo' in ['setup']
       "test_init_extension_module"
+    ]
+    ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
+      # InvalidPythonEnvironment: The python binary is potentially unsafe.
+      "test_create_environment_executable"
+      # AssertionError: assert ['', '.1000000000000001'] == ['', '.1']
+      "test_dict_keys_completions"
+      # AssertionError: assert ['', '.1000000000000001'] == ['', '.1']
+      "test_dict_completion"
     ];
 
   meta = with lib; {
