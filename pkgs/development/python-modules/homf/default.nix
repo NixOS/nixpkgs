@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "duckinator";
-    repo = pname;
+    repo = "homf";
     rev = "refs/tags/v${version}";
     hash = "sha256-PU5VjBIVSMupTBh/qvVuZSFWpBbJOylCR02lONn9/qw=";
   };
@@ -44,6 +44,5 @@ buildPythonPackage rec {
     mainProgram = "homf";
     homepage = "https://github.com/duckinator/homf";
     maintainers = with maintainers; [ nicoo ];
-    platforms = platforms.all;
   };
 }
