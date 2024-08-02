@@ -67,6 +67,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/duckinator/bork";
     license = licenses.mit;
     maintainers = with maintainers; [ nicoo ];
-    platforms = platforms.all;
   };
 }
