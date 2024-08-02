@@ -8,6 +8,10 @@
   vskernels,
   vsexprtools,
   vsrgtools,
+  vapoursynth-tcanny,
+  vapoursynth-tedgemask,
+  vapoursynth-awarpsharp2,
+  warpsharp,
 }:
 
 buildPythonPackage rec {
@@ -23,6 +27,13 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  buildInputs = [
+    vapoursynth-tcanny
+    vapoursynth-tedgemask
+    vapoursynth-awarpsharp2
+    warpsharp
+  ];
 
   dependencies = [
     vapoursynth
