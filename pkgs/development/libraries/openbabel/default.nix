@@ -12,6 +12,9 @@
 , pkg-config
 , swig
 , rapidjson
+, boost
+, maeparser
+, coordgenlibs
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
     sed '1i#include <ctime>' -i include/openbabel/obutil.h # gcc12
   '';
 
-  buildInputs = [ perl zlib libxml2 eigen python cairo pcre swig rapidjson ];
+  buildInputs = [ perl zlib libxml2 eigen python cairo pcre swig rapidjson boost maeparser coordgenlibs ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
