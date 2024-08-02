@@ -2,6 +2,7 @@
   lib,
   cmake,
   fetchFromGitHub,
+  gitUpdater,
   primesieve,
   stdenv,
 }:
@@ -37,6 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
     (lib.cmakeBool "BUILD_TESTS" true)
   ];
+
+  passthru = {
+    tests = {
+      inherit primesieve; # dependency
+    };
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = {
     homepage = "https://github.com/kimwalisch/primecount";
