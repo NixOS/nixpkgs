@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchCrate,
+  nix-update-script,
 }:
 
 let
@@ -17,6 +18,8 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-cn+R36koBSEp+wKtCQJK/L+mxeb8sHkZu8kWYRigIvw=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "MdBook preprocessor for removing yml header within --- (front-matter)";
