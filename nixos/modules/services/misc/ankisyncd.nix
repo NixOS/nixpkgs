@@ -43,6 +43,18 @@ in
         type = types.bool;
         description = "Whether to open the firewall for the specified port.";
       };
+
+      username = mkOption {
+        default = null;
+        type = types.nullOr types.str;
+        description = lib.mdDoc "Username of initial account.";
+      };
+
+      password = mkOption {
+        default = null;
+        type = types.nullOr types.str;
+        description = lib.mdDoc "Password of initial account.";
+      };
     };
 
     config = mkIf cfg.enable {
@@ -59,6 +71,11 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         path = [ cfg.package ];
+
+        environment = {
+          ANKISYNCD_USERNAME = cfg.username;
+          ANKISYNCD_PASSWORD = cfg.password;
+        };
 
         serviceConfig = {
           Type = "simple";
