@@ -26985,8 +26985,6 @@ with pkgs;
     enableVDO = true;
   };
 
-  maddy = callPackage ../servers/maddy { };
-
   mbelib = callPackage ../development/libraries/audio/mbelib { };
 
   mbpfan = callPackage ../os-specific/linux/mbpfan { };
