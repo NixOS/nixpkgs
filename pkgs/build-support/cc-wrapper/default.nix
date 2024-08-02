@@ -745,6 +745,7 @@ stdenvNoCC.mkDerivation {
     inherit libc_bin libc_dev libc_lib;
     inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
     default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+    isMBranchProtectionTarget = targetPlatform.isAarch64;
   };
 
   meta =

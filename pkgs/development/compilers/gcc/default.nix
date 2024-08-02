@@ -442,7 +442,12 @@ pipe ((callFile ./common/builder.nix {}) ({
         && targetPlatform.libc == "glibc"
       )) "shadowstack"
       ++ optional (!(atLeast9 && targetPlatform.isLinux && targetPlatform.isAarch64)) "pacret"
-      ++ optional (!(atLeast9 && targetPlatform.isLinux && targetPlatform.isAarch64)) "ibt"
+      ++ optional (
+        (!atLeast8)
+        || (targetPlatform.isAarch64 && !atLeast9)
+        || !(targetPlatform.isAarch64 || targetPlatform.isx86_64)
+        || !targetPlatform.isLinux
+      ) "ibt"
       ++ optionals (langFortran) [ "fortify" "format" ];
   };
 
