@@ -65,6 +65,7 @@ buildPythonPackage rec {
     description = "Python build and release management tool";
     mainProgram = "bork";
     homepage = "https://github.com/duckinator/bork";
+    license = licenses.mit;
     maintainers = with maintainers; [ nicoo ];
     platforms = platforms.all;
   };
