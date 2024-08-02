@@ -3408,6 +3408,8 @@ self: super: with self; {
 
   django-hijack = callPackage ../development/python-modules/django-hijack { };
 
+  django-htmx = callPackage ../development/python-modules/django-htmx { };
+
   django-i18nfield = callPackage ../development/python-modules/django-i18nfield { };
 
   django-import-export = callPackage ../development/python-modules/django-import-export { };
