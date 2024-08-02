@@ -17150,6 +17150,8 @@ self: super: with self; {
 
   vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
 
+  vsaa = callPackage ../development/python-modules/vsaa { };
+
   vsexprtools = callPackage ../development/python-modules/vsexprtools { };
 
   vskernels = callPackage ../development/python-modules/vskernels { };
