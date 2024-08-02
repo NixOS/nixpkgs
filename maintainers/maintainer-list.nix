@@ -2,18 +2,18 @@
   List of NixOS maintainers.
    ```nix
    handle = {
-   # Required
-   name = "Your name";
+     # Required
+     name = "Your name";
 
-   # Optional, but at least one of email, matrix or githubId must be given
-   email = "address@example.org";
-   matrix = "@user:example.org";
-   github = "GithubUsername";
-   githubId = your-github-id;
+     # Optional, but at least one of email, matrix or githubId must be given
+     email = "address@example.org";
+     matrix = "@user:example.org";
+     github = "GithubUsername";
+     githubId = your-github-id;
 
-   keys = [{
+     keys = [{
        fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
-   }];
+     }];
    };
    ```
 
@@ -30,14 +30,14 @@
    Specifying a GitHub account ensures that you automatically:
    - get invited to the @NixOS/nixpkgs-maintainers team ;
    - once you are part of the @NixOS org, OfBorg will request you review
-   pull requests that modify a package for which you are a maintainer.
+     pull requests that modify a package for which you are a maintainer.
 
    `handle == github` is strongly preferred whenever `github` is an acceptable attribute name and is short and convenient.
 
    If `github` begins with a numeral, `handle` should be prefixed with an underscore.
    ```nix
    _1example = {
-   github = "1example";
+     github = "1example";
    };
    ```
 
@@ -2423,13 +2423,6 @@
     email = "zbeezow@gmail.com";
     github = "beezow";
     githubId = 42082156;
-  };
-  behoof4mind = {
-    name = "Denis Lavrushko";
-    email = "dlavrushko@protonmail.com";
-    github = "behoof4mind";
-    githubId = 9162748;
-    keys = [ { fingerprint = "F4B6 7C35 BD08 6C48 32C4  3140 4B5E 6DEB F81C EFB6"; } ];
   };
   bendlas = {
     email = "herwig@bendlas.net";
