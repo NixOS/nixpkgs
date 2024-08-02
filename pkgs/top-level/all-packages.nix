@@ -9146,8 +9146,6 @@ with pkgs;
 
   jc = with python3Packages; toPythonApplication jc;
 
-  jcli = callPackage ../development/tools/misc/jcli { };
-
   jd-cli = callPackage ../tools/security/jd-cli { };
 
   jd-diff-patch = callPackage ../development/tools/jd-diff-patch { };
