@@ -42,8 +42,10 @@ in stdenv.mkDerivation rec {
       platform = platforms.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
       urlVersion = lib.replaceStrings [ "." ] [ "_" ] version;
     in fetchurl {
-      url =
-        "https://files.renoise.com/demo/Renoise_${urlVersion}_Demo_Linux_${platform.archSuffix}.tar.gz";
+      urls = [
+        "https://files.renoise.com/demo/Renoise_${urlVersion}_Demo_Linux_${platform.archSuffix}.tar.gz"
+        "https://files.renoise.com/demo/archive/Renoise_${urlVersion}_Demo_Linux_${platform.archSuffix}.tar.gz"
+      ];
       hash = platform.hash;
     };
 
