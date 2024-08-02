@@ -2,6 +2,7 @@
   lib,
   cmake,
   fetchFromGitHub,
+  gitUpdater,
   stdenv,
   primecount,
 }:
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit primecount; # dependent
     };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {
