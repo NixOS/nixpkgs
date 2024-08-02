@@ -16,9 +16,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = {
-    description = ''
-      analyzeMFT.py is designed to fully parse the MFT file from an NTFS filesystem
-      and present the results as accurately as possible in multiple formats.'';
+    description = "Tool to parse the MFT file from an NTFS filesystem";
     homepage = "https://github.com/rowingdude/analyzeMFT";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
