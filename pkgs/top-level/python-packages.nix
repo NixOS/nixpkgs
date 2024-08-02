@@ -14954,6 +14954,8 @@ self: super: with self; {
 
   stevedore = callPackage ../development/python-modules/stevedore { };
 
+  stgpytools = callPackage ../development/python-modules/stgpytools { };
+
   stickytape = callPackage ../development/python-modules/stickytape { };
 
   stim = callPackage ../development/python-modules/stim { };
