@@ -65,32 +65,4 @@
     name = "export-rt-sched-migrate";
     patch = ./export-rt-sched-migrate.patch;
   };
-
-  rust_1_75 = {
-    name = "rust-1.75.patch";
-    patch = ./rust-1.75.patch;
-  };
-
-  rust_1_76 = {
-    name = "rust-1.76.patch";
-    patch = fetchurl {
-      name = "rust-1.76.patch";
-      url = "https://lore.kernel.org/rust-for-linux/20240217002638.57373-2-ojeda@kernel.org/raw";
-      hash = "sha256-q3iNBo8t4b1Rn5k5lau2myqOAqdA/9V9A+ok2jGkLdY=";
-    };
-  };
-
-  rust_1_77-6_8 = {
-    name = "rust-1.77.patch";
-    patch = fetchurl {
-      name = "rust-1.77.patch";
-      url = "https://lore.kernel.org/rust-for-linux/20240217002717.57507-1-ojeda@kernel.org/raw";
-      hash = "sha256-0KW9nHpJeMSDssCPXWZbrN8kxq5bA434t+XuPfwslUc=";
-    };
-  };
-
-  rust_1_77-6_9 = {
-    name = "rust-1.77.patch";
-    patch = ./rust-1.77.patch;
-  };
 }
