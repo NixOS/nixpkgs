@@ -89,13 +89,13 @@ in stdenv.mkDerivation (finalAttrs: {
     cp -a usr/share/* $out/share
 
 
-    substituteInPlace $out/share/wavebox.io/$appname/$appname-launcher \
+    substituteInPlace $out/share/wavebox.io/wavebox/wavebox-launcher \
       --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
-    substituteInPlace $out/share/applications/$appname.desktop \
+    substituteInPlace $out/share/applications/wavebox.desktop \
       --replace-fail /opt/wavebox.io/wavebox/wavebox-launcher $exe
-    substituteInPlace $out/share/menu/$appname.menu \
+    substituteInPlace $out/share/menu/wavebox.menu \
       --replace-fail /opt $out/share \
-      --replace-fail $out/share/wavebox.io/$appname/$appname $exe
+      --replace-fail $out/share/wavebox.io/wavebox/wavebox $exe
 
     for icon_file in $out/share/wavebox.io/wavebox/product_logo_[0-9]*.png; do
       num_and_suffix="''${icon_file##*logo_}"
