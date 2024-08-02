@@ -224,7 +224,7 @@ in
         default = [];
         example = [ "encrypted_data" ];
         description = ''
-          Name or GUID of extra ZFS pools that you wish to import during boot stage 1.
+          Name of extra ZFS pools that you wish to import during boot stage 1.
 
           Most setups should use {option}`boot.zfs.extraPools` to import extra pools during
           stage 2 instead. The root pool(s) do not need to be listed here, as they are
@@ -272,7 +272,7 @@ in
         default = [];
         example = [ "tank" "data" ];
         description = ''
-          Name or GUID of extra ZFS pools that you wish to import during boot.
+          Name of extra ZFS pools that you wish to import during boot.
 
           Usually this is not necessary. Instead, you should set the mountpoint property
           of ZFS filesystems to `legacy` and add the ZFS filesystems to
