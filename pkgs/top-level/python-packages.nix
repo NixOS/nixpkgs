@@ -17152,6 +17152,8 @@ self: super: with self; {
 
   vsaa = callPackage ../development/python-modules/vsaa { };
 
+  vsdenoise = callPackage ../development/python-modules/vsdenoise { };
+
   vsexprtools = callPackage ../development/python-modules/vsexprtools { };
 
   vskernels = callPackage ../development/python-modules/vskernels { };
