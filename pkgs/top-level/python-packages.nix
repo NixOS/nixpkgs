@@ -7222,6 +7222,8 @@ self: super: with self; {
 
   lockfile = callPackage ../development/python-modules/lockfile { };
 
+  locust = callPackage ../development/python-modules/locust { };
+
   log-symbols = callPackage ../development/python-modules/log-symbols { };
 
   logbook = callPackage ../development/python-modules/logbook { };
@@ -13775,6 +13777,8 @@ self: super: with self; {
   rouge-score = callPackage ../development/python-modules/rouge-score { };
 
   routeros-api = callPackage ../development/python-modules/routeros-api { };
+
+  roundrobin = callPackage ../development/python-modules/roundrobin { };
 
   routes = callPackage ../development/python-modules/routes { };
 
