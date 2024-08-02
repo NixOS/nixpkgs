@@ -117,9 +117,16 @@ sub prependDangling {
 sub findFiles {
     my ($relName, $target, $baseName, $ignoreCollisions, $checkCollisionContents, $priority) = @_;
 
-    # The store path must not be a file
-    if (-f $target && isStorePath $target) {
-        die "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv!";
+    if (-f $target) {
+        if (-z $target) {
+            warn "skipping empty file: `$target'\n";
+            return;
+        }
+
+        # The store path must not be a file
+        if (isStorePath $target) {
+            die "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv!";
+        }
     }
 
     # Urgh, hacky...
