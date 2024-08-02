@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs:
     (nvim-lpeg-dylib ps)
     luabitop
     mpack
-  ] ++ lib.optionals finalAttrs.doCheck [
+  ] ++ lib.optionals finalAttrs.finalPackage.doCheck [
     luv
     coxpcall
     busted
@@ -105,7 +105,7 @@ in {
       tree-sitter
       unibilium
     ] ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ]
-      ++ lib.optionals finalAttrs.doCheck [ glibcLocales procps ]
+      ++ lib.optionals finalAttrs.finalPackage.doCheck [ glibcLocales procps ]
     ;
 
     doCheck = false;

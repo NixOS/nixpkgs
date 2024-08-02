@@ -40,13 +40,13 @@ let
   };
 
   pname = "pretix";
-  version = "2024.6.0";
+  version = "2024.7.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-erI3Ai6zwNSvMiF3YKfnU9ePb9R92rfi5rsxfAOh6EQ=";
+    hash = "sha256-08ykuFPcG3WvinJd9zadirXFqsMt9GbdOGU2CGbW7ls=";
   };
 
   npmDeps = buildNpmPackage {
@@ -54,7 +54,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-//CLPnx5eUxIHIUGc7x2UF8qsfAYRtvHbHXSDNtI/eI=";
+    npmDepsHash = "sha256-BfvKuwB5VLX09Lxji+EpMBvZeKTIQvptVtrHSRYY+14=";
 
     dontBuild = true;
 
@@ -76,6 +76,26 @@ python.pkgs.buildPythonApplication rec {
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
+
+    # https://github.com/pretix/pretix/pull/4362
+    # Fix TOCTOU race in directory creation
+    ./pr4362.patch
+  ];
+
+  pythonRelaxDeps = [
+    "bleach"
+    "importlib-metadata"
+    "pillow"
+    "protobuf"
+    "python-bidi"
+    "requests"
+    "sentry-sdk"
+  ];
+
+  pythonRemoveDeps = [
+    "phonenumberslite" # we provide phonenumbers instead
+    "psycopg2-binary" # we provide psycopg2 instead
+    "vat-moss-forked" # we provide a patched vat-moss package
   ];
 
   postPatch = ''
@@ -88,22 +108,8 @@ python.pkgs.buildPythonApplication rec {
     sed -i "/setuptools-rust/d" pyproject.toml
 
     substituteInPlace pyproject.toml \
-      --replace-fail phonenumberslite phonenumbers \
-      --replace-fail psycopg2-binary psycopg2 \
-      --replace-fail vat_moss_forked==2020.3.20.0.11.0 vat-moss \
-      --replace-fail "bleach==5.0.*" bleach \
-      --replace-fail "djangorestframework==3.15.*" djangorestframework \
-      --replace-fail "django-compressor==4.5" django-compressor \
-      --replace-fail "dnspython==2.6.*" dnspython \
-      --replace-fail "importlib_metadata==7.*" importlib_metadata \
-      --replace-fail "markdown==3.6" markdown \
-      --replace-fail "protobuf==5.27.*" protobuf \
-      --replace-fail "pycryptodome==3.20.*" pycryptodome \
-      --replace-fail "pypdf==4.2.*" pypdf \
-      --replace-fail "python-dateutil==2.9.*" python-dateutil \
-      --replace-fail "requests==2.31.*" "requests" \
-      --replace-fail "sentry-sdk==2.5.*" "sentry-sdk>=2" \
-      --replace-fail "stripe==7.9.*" stripe
+      --replace-fail '"backend"' '"setuptools.build_meta"' \
+      --replace-fail 'backend-path = ["_build"]' ""
   '';
 
   build-system = with python.pkgs; [
