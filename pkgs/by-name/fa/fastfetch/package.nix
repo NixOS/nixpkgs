@@ -7,6 +7,7 @@
 , dbus
 , dconf
 , ddcutil
+, directx-headers
 , glib
 , hwdata
 , imagemagick_light
@@ -76,6 +77,7 @@ stdenv'.mkDerivation (finalAttrs: {
     dbus
     dconf
     ddcutil
+    directx-headers
     glib
     hwdata
     libdrm
@@ -120,7 +122,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "${placeholder "out"}/etc")
-    (lib.cmakeBool "ENABLE_DIRECTX_HEADERS" false)
+    (lib.cmakeBool "ENABLE_DIRECTX_HEADERS" true)
     (lib.cmakeBool "ENABLE_DRM" false)
     (lib.cmakeBool "ENABLE_IMAGEMAGICK6" false)
     (lib.cmakeBool "ENABLE_OSMESA" false)
