@@ -1,7 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, cairo, curl, fcgi, freetype, fribidi, gdal, geos, giflib, harfbuzz
-, libjpeg, libpng, librsvg, libxml2, postgresql, proj, protobufc, zlib
-, withPython ? true, swig, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+
+  withPython ? true,
+
+  cairo,
+  cmake,
+  curl,
+  fcgi,
+  freetype,
+  fribidi,
+  gdal,
+  geos,
+  giflib,
+  harfbuzz,
+  libjpeg,
+  libpng,
+  librsvg,
+  libxml2,
+  pkg-config,
+  postgresql,
+  proj,
+  protobufc,
+  python3,
+  swig,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,10 +39,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kZEDC89yoQP0ma5avp6r+Hz8JMpErGlBVQkhlHO6UFw=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ] ++ lib.optionals withPython [ swig python3.pkgs.setuptools ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optionals withPython [
+      swig
+      python3.pkgs.setuptools
+    ];
 
   buildInputs = [
     cairo
