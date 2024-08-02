@@ -332,6 +332,7 @@ in {
               --pythonpath ${pkg}/opt/netbox/netbox
           '';
           PrivateTmp = true;
+          TimeoutStartSec = lib.mkDefault "5min";
         };
       };
 
