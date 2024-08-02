@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jy8BrJSHukRenPbZHw4nPx3cSi7E2GSg//WOXDh90mY=";
   };
 
-  sourceRoot = "source/frontend";
+  sourceRoot = "${finalAttrs.src.name}/frontend";
 
   patches = [
     ./01-localfont.patch
