@@ -14,7 +14,10 @@ in
 stdenv.mkDerivation (finalAttrs: {
   inherit (sources.vkd3d-proton) pname version src;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     glslang
