@@ -181,10 +181,6 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
-if [[ -n "$SUDO_USER" ]]; then
-    useSudo=1
-fi
-
 # log the given argument to stderr if verbose mode is on
 logVerbose() {
     if [ -n "$verboseScript" ]; then
