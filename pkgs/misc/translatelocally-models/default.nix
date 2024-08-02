@@ -37,10 +37,5 @@ let
     lib.listToAttrs (map (withCodeAsKey mkModelPackage) modelSpecs);
 
 in allModelPkgs // {
-  is-en-tiny = allModelPkgs.is-en-tiny.overrideAttrs (super: {
-    # missing model https://github.com/XapaJIaMnu/translateLocally/issues/147
-    meta = super.meta // { broken = true; };
-  });
-} // {
   passthru.updateScript = ./update.sh;
 }

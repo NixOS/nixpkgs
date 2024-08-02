@@ -9144,8 +9144,6 @@ self: super: with self; {
 
   nose2pytest = callPackage ../development/python-modules/nose2pytest { };
 
-  nose3 = callPackage ../development/python-modules/nose3 { };
-
   notebook = callPackage ../development/python-modules/notebook { };
 
   notebook-shim = callPackage ../development/python-modules/notebook-shim { };
@@ -10469,8 +10467,6 @@ self: super: with self; {
   pyzbar = callPackage ../development/python-modules/pyzbar { };
 
   pyzipper = callPackage ../development/python-modules/pyzipper { };
-
-  pkutils = callPackage ../development/python-modules/pkutils { };
 
   plac = callPackage ../development/python-modules/plac { };
 

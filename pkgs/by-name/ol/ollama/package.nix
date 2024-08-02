@@ -46,7 +46,7 @@ let
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-iD7LX4OstnNL2FZKObh4z9krkN0sfUUbFEZxu6OvdBs=";
+    hash = "sha256-ctz9xh1wisG0YUxglygKHIvU9bMgMLkGqDoknb8qSAU=";
     fetchSubmodules = true;
   };
 

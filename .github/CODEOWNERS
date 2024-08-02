@@ -267,6 +267,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/emacs                @adisbladis
 /pkgs/top-level/emacs-packages.nix              @adisbladis
 
+# Kakoune
+/pkgs/applications/editors/kakoune     @philiptaron
+
 # Neovim
 /pkgs/applications/editors/neovim      @figsoda @teto
 
