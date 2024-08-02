@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, writeScript
 , alsa-lib
 , fetchurl
 , libjack2
@@ -103,6 +104,27 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace $out/share/applications/renoise.desktop \
       --replace Exec=renoise Exec=$out/bin/renoise
+  '';
+
+  passthru.updateScript = writeScript "update-renoise" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -I nixpkgs=./. -i bash -p curl htmlq common-updater-scripts
+    set -euo pipefail
+
+    new_version="$(
+      curl 'https://files.renoise.com/demo/' \
+        | htmlq a --text \
+        | grep -E '^Renoise_([0-9]+_?)+_Demo_Linux_x86_64\.tar\.gz$' \
+        | grep -Eo '[0-9]+(_[0-9]+)*' \
+        | head -n1 \
+        | tr _ .
+    )"
+    hash_x86_64="$(nix-prefetch-url "https://files.renoise.com/demo/Renoise_$(echo "$new_version" | tr . _)_Demo_Linux_x86_64.tar.gz")"
+    hash_arm64="$( nix-prefetch-url "https://files.renoise.com/demo/Renoise_$(echo "$new_version" | tr . _)_Demo_Linux_arm64.tar.gz")"
+    sri_x86_64="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$hash_x86_64")"
+    sri_arm64="$( nix --extra-experimental-features nix-command hash to-sri --type sha256 "$hash_arm64")"
+    update-source-version renoise "$new_version" "$sri_x86_64" --system="x86_64-linux"  --ignore-same-version
+    update-source-version renoise "$new_version" "$sri_arm64"  --system="aarch64-linux" --ignore-same-version
   '';
 
   meta = {
