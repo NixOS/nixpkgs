@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, writeScript
 , libX11
 , libXext
 , alsa-lib
@@ -46,6 +47,23 @@ stdenv.mkDerivation rec {
     cp -r ./renoise_redux_x86_64/* $OUTDIR
 
     runHook postInstall
+  '';
+
+
+  passthru.updateScript = writeScript "update-redux" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -I nixpkgs=./. -i bash -p curl htmlq common-updater-scripts
+    set -euo pipefail
+
+    new_version="$(
+      curl 'https://files.renoise.com/demo/' \
+        | htmlq a --text \
+        | grep -E '^Renoise_Redux_([0-9]+_?)+_Demo_Linux_x86_64\.tar\.gz$' \
+        | grep -Eo '[0-9]+(_[0-9]+)*' \
+        | head -n1 \
+        | tr _ .
+    )"
+    update-source-version redux "$new_version" --system="x86_64-linux"
   '';
 
   meta = with lib; {
