@@ -75,21 +75,17 @@ in {
     package = lib.mkOption {
       type = lib.types.package;
       default =
-        if lib.versionAtLeast config.system.stateVersion "24.05"
+        if lib.versionAtLeast config.system.stateVersion "24.11"
+        then pkgs.netbox_4_1
+        else if lib.versionAtLeast config.system.stateVersion "24.05"
         then pkgs.netbox_3_7
-        else if lib.versionAtLeast config.system.stateVersion "23.11"
-        then pkgs.netbox_3_6
-        else if lib.versionAtLeast config.system.stateVersion "23.05"
-        then pkgs.netbox_3_5
-        else pkgs.netbox_3_3;
+        else pkgs.netbox_3_6;
       defaultText = lib.literalExpression ''
-        if lib.versionAtLeast config.system.stateVersion "24.05"
+        if lib.versionAtLeast config.system.stateVersion "24.11"
+        then pkgs.netbox_4_1
+        else if lib.versionAtLeast config.system.stateVersion "24.05"
         then pkgs.netbox_3_7
-        else if lib.versionAtLeast config.system.stateVersion "23.11"
-        then pkgs.netbox_3_6
-        else if lib.versionAtLeast config.system.stateVersion "23.05"
-        then pkgs.netbox_3_5
-        else pkgs.netbox_3_3;
+        else pkgs.netbox_3_6;
       '';
       description = ''
         NetBox package to use.
