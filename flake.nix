@@ -20,6 +20,8 @@
 
         nixos = import ./nixos/lib { lib = final; };
 
+        inherit forAllSystems;
+
         nixosSystem = args:
           import ./nixos/lib/eval-config.nix (
             {
