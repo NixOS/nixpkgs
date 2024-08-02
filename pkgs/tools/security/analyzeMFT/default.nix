@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "analyzeMFT";
-  version = "4.0.0";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "rowingdude";
     repo = "analyzeMFT";
-    rev = "b6ed04faaf0210708fde75488d4399a1a6bd4822";
-    hash = "sha256-DeEHGlP0o9zSCPA4bERVpkgesPIF9Ln2ET8cVmYk3HY=";
+    rev = "v${version}";
+    hash = "sha256-uZxNW/+BPEZRp/XOlBoDCI4KozQ0svS3OSrR73GmDTg=";
   };
 
   meta = with lib; {
