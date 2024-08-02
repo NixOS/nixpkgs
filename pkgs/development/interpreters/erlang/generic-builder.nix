@@ -122,10 +122,20 @@ stdenv.mkDerivation ({
   '';
 
   # For OTP 27+ we need ex_doc to build the documentation
+  # When exdocSupport is enabled, grab the raw ex_doc executable from the exdoc
+  # derivation. Next, patch the first line to use the escript that will be
+  # built during the build phase of this derivation. Finally, building the
+  # documentation requires the erlang-logo.png asset.
   preConfigure = ''
     ./otp_build autoconf
   '' + optionalString exdocSupport ''
-    export EX_DOC=${exdoc}/bin/.ex_doc-wrapped
+    mkdir -p $out/bin
+    cp ${exdoc}/bin/.ex_doc-wrapped $out/bin/ex_doc
+    sed -i "1 s:^.*$:#!$out/bin/escript:" $out/bin/ex_doc
+    export EX_DOC=$out/bin/ex_doc
+
+    mkdir -p $out/lib/erlang/system/doc/assets
+    cp $src/system/doc/assets/erlang-logo.png $out/lib/erlang/system/doc/assets
   '';
 
   configureFlags = [ "--with-ssl=${lib.getOutput "out" opensslPackage}" ]

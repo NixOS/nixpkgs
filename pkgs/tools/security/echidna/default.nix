@@ -1,53 +1,121 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, haskellPackages
-, slither-analyzer
+{
+  stdenv,
+  lib,
+  fetchpatch,
+  mkDerivation,
+  fetchFromGitHub,
+  haskellPackages,
+  slither-analyzer,
 }:
 
-mkDerivation rec {
-  pname = "echidna";
-  version = "2.2.2";
+mkDerivation (
+  rec {
+    pname = "echidna";
+    version = "2.2.3";
 
-  src = fetchFromGitHub {
-    owner = "crytic";
-    repo = "echidna";
-    rev = "v${version}";
-    sha256 = "sha256-l1ILdO+xb0zx/TFM6Am9j5hq1RnIMNf2HU6YvslAj0w=";
-  };
+    src = fetchFromGitHub {
+      owner = "crytic";
+      repo = "echidna";
+      rev = "v${version}";
+      sha256 = "sha256-NJ2G6EkexYE4P3GD7PZ+lLEs1dqnoqIB2zfAOD5SQ8M=";
+    };
 
-  isLibrary = true;
-  isExecutable = true;
+    patches = [
+      # Support cross platform vty 6.x with vty-crossplatform
+      # https://github.com/crytic/echidna/pull/1290
+      (fetchpatch {
+        url = "https://github.com/crytic/echidna/commit/2913b027d7e793390ed489ef6a47d23ec9b3c800.patch";
+        hash = "sha256-5CGD9nDbDUTG869xUybWYSvGRsrm7JP7n0WMBNYfayw=";
+      })
+    ];
 
-  libraryToolDepends = with haskellPackages; [
-    haskellPackages.hpack
-  ];
+    isExecutable = true;
 
-  executableHaskellDepends = with haskellPackages; [ aeson base base16-bytestring binary bytestring code-page
-  containers data-bword data-dword deepseq directory exceptions extra filepath hashable hevm html-conduit html-entities
-  http-conduit ListLike MonadRandom mtl optics optics-core optparse-applicative process random rosezipper semver split
-  strip-ansi-escape text time transformers unliftio utf8-string vector wai-extra warp with-utf8 word-wrap xml-conduit
-  yaml ];
+    libraryToolDepends = with haskellPackages; [ haskellPackages.hpack ];
 
-  # Note: there is also a runtime dependency of slither-analyzer, let's include it also.
-  executableSystemDepends = [ slither-analyzer ];
+    executableHaskellDepends = with haskellPackages; [
+      # package.yaml - dependencies
+      base
+      aeson
+      async
+      base16-bytestring
+      binary
+      bytestring
+      code-page
+      containers
+      data-bword
+      data-dword
+      deepseq
+      extra
+      directory
+      exceptions
+      filepath
+      hashable
+      hevm
+      html-entities
+      ListLike
+      MonadRandom
+      mtl
+      optparse-applicative
+      optics
+      optics-core
+      process
+      random
+      rosezipper
+      semver
+      split
+      text
+      transformers
+      time
+      unliftio
+      utf8-string
+      vector
+      with-utf8
+      word-wrap
+      yaml
+      http-conduit
+      html-conduit
+      warp
+      wai-extra
+      xml-conduit
+      strip-ansi-escape
+      # package.yaml - dependencies when "!os(windows)"
+      brick
+      unix
+      vty
+    ];
 
-  testHaskellDepends = with haskellPackages; [ tasty tasty-hunit tasty-quickcheck ];
+    # Note: there is also a runtime dependency of slither-analyzer. So, let's include it.
+    executableSystemDepends = [ slither-analyzer ];
 
-  preConfigure = ''
-    hpack
-    # re-enable dynamic build for Linux
-    sed -i -e 's/os(linux)/false/' echidna.cabal
-  '';
-  shellHook = "hpack";
-  doHaddock = false;
-  # tests depend on a specific version of solc
-  doCheck = false;
+    preConfigure = ''
+      hpack
+    '';
 
-  description = "Ethereum smart contract fuzzer";
-  homepage = "https://github.com/crytic/echidna";
-  license = lib.licenses.agpl3Plus;
-  maintainers = with lib.maintainers; [ arturcygan hellwolf ];
-  platforms = lib.platforms.unix;
-  mainProgram = "echidna-test";
-}
+    shellHook = "hpack";
+
+    doHaddock = false;
+
+    # tests depend on a specific version of solc
+    doCheck = false;
+
+    description = "Ethereum smart contract fuzzer";
+    homepage = "https://github.com/crytic/echidna";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
+      arturcygan
+      hellwolf
+    ];
+    platforms = lib.platforms.unix;
+    mainProgram = "echidna-test";
+
+  }
+  // lib.optionalAttrs (stdenv.isDarwin && stdenv.isAarch64) {
+
+    # https://github.com/NixOS/nixpkgs/pull/304352
+    postInstall = with haskellPackages; ''
+      remove-references-to -t ${warp.out} "$out/bin/echidna"
+      remove-references-to -t ${wreq.out} "$out/bin/echidna"
+    '';
+  }
+)

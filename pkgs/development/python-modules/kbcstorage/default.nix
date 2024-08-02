@@ -11,7 +11,6 @@
   setuptools,
   setuptools-git-versioning,
   setuptools-scm,
-  unittestCheckHook,
   urllib3,
 }:
 

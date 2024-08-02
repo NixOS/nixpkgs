@@ -26,19 +26,23 @@
   which,
   writeScript,
   makeWrapper,
+  withDPDK ? false,
+  dpdk,
+  numactl,
+  libpcap,
 }:
 
 let
   _kernel = kernel;
 in
 stdenv.mkDerivation rec {
-  pname = "openvswitch";
+  pname = if withDPDK then "openvswitch-dpdk" else "openvswitch";
   inherit version;
 
   kernel = lib.optional (_kernel != null) _kernel.dev;
 
   src = fetchurl {
-    url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
+    url = "https://www.openvswitch.org/releases/openvswitch-${version}.tar.gz";
     inherit hash;
   };
 
@@ -69,23 +73,32 @@ stdenv.mkDerivation rec {
 
   sphinxRoot = "./Documentation";
 
-  buildInputs = [
-    libcap_ng
-    openssl
-    perl
-    procps
-    python3
-    util-linux
-    which
-  ];
+  buildInputs =
+    [
+      libcap_ng
+      openssl
+      perl
+      procps
+      python3
+      util-linux
+      which
+    ]
+    ++ (lib.optionals withDPDK [
+      dpdk
+      numactl
+      libpcap
+    ]);
 
   preConfigure = "./boot.sh";
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--sharedstatedir=/var"
-    "--sbindir=$(out)/bin"
-  ] ++ (lib.optionals (_kernel != null) [ "--with-linux" ]);
+  configureFlags =
+    [
+      "--localstatedir=/var"
+      "--sharedstatedir=/var"
+      "--sbindir=$(out)/bin"
+    ]
+    ++ (lib.optionals (_kernel != null) [ "--with-linux" ])
+    ++ (lib.optionals withDPDK [ "--with-dpdk=shared" ]);
 
   # Leave /var out of this!
   installFlags = [
@@ -104,7 +117,7 @@ stdenv.mkDerivation rec {
       --prefix PYTHONPATH : $out/share/openvswitch/python
 
     wrapProgram $out/bin/ovs-tcpdump \
-      --prefix PATH : ${lib.makeBinPath [tcpdump]} \
+      --prefix PATH : ${lib.makeBinPath [ tcpdump ]} \
       --prefix PYTHONPATH : $out/share/openvswitch/python
   '';
 
@@ -148,6 +161,7 @@ stdenv.mkDerivation rec {
       adamcstephens
       kmcopper
       netixx
+      xddxdd
     ];
     platforms = platforms.linux;
   };

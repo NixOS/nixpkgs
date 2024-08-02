@@ -51,6 +51,14 @@ in
         example = literalExpression "./tika/tika-config.xml";
       };
 
+      enableOcr = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable OCR support by adding the `tesseract` package as a dependency.
+        '';
+      };
+
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -69,14 +77,20 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      serviceConfig = {
-        Type = "simple";
+      serviceConfig =
+        let
+          package = cfg.package.override { inherit (cfg) enableOcr; };
+        in
+        {
+          Type = "simple";
 
-        ExecStart = "${getExe cfg.package} --host ${cfg.listenAddress} --port ${toString cfg.port} ${lib.optionalString (cfg.configFile != null) "--config ${cfg.configFile}"}";
-        DynamicUser = true;
-        StateDirectory = "tika";
-        CacheDirectory = "tika";
-      };
+          ExecStart = "${getExe package} --host ${cfg.listenAddress} --port ${toString cfg.port} ${
+            lib.optionalString (cfg.configFile != null) "--config ${cfg.configFile}"
+          }";
+          DynamicUser = true;
+          StateDirectory = "tika";
+          CacheDirectory = "tika";
+        };
     };
 
     networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };

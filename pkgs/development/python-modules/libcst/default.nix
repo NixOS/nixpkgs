@@ -95,6 +95,6 @@ buildPythonPackage rec {
       asl20
       psfl
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

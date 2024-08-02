@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python3 nix nixfmt-classic nix-prefetch-git
+#! nix-shell -i python -p python3Packages.looseversion nix nixfmt-classic nix-prefetch-git
 
 """This script automatically updates chromium, google-chrome, chromedriver, and ungoogled-chromium
 via upstream-info.nix."""
@@ -15,7 +15,7 @@ import sys
 from codecs import iterdecode
 from collections import OrderedDict
 from datetime import datetime
-from distutils.version import LooseVersion
+from looseversion import LooseVersion
 from os.path import abspath, dirname
 from urllib.request import urlopen
 
@@ -214,7 +214,7 @@ with urlopen(RELEASES_URL) as resp:
         releases.append(get_latest_ungoogled_chromium_build(linux_stable_versions))
 
     for release in releases:
-        channel_name = re.findall("chrome\/platforms\/linux\/channels\/(.*)\/versions\/", release['name'])[0]
+        channel_name = re.findall("chrome/platforms/linux/channels/(.*)/versions/", release['name'])[0]
 
         # If we've already found a newer release for this channel, we're
         # no longer interested in it.

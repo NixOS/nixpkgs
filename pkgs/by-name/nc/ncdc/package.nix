@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncdc";
-  version = "1.24";
+  version = "1.24.1";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/ncdc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-IzUQ1TVfxy/a01eOvIqzXR2pWyHSd0mQ86E1a3ES2h4=";
+    hash = "sha256-Koq5rX1D8Bj8c7qLq9aJ36RKuozsU7iOR3AYXLl3ePc=";
   };
 
   nativeBuildInputs = [ perl pkg-config ];

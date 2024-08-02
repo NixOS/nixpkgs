@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://atelier-anchor.com/typefaces/smiley-sans/";
     changelog = "https://github.com/atelier-anchor/smiley-sans/blob/main/CHANGELOG.md";
     license = licenses.ofl;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

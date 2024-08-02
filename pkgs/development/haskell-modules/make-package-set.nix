@@ -624,7 +624,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
        Type: [str] -> drv -> drv
     */
     generateOptparseApplicativeCompletions =
-      (self.callPackage (
+      self.callPackage (
         { stdenv }:
 
         commands:
@@ -633,7 +633,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform
         then lib.foldr haskellLib.__generateOptparseApplicativeCompletion pkg commands
         else pkg
-      ) { }) // { __attrsFailEvaluation = true; };
+      ) { };
 
     /*
       Modify given Haskell package to force GHC to employ the LLVM

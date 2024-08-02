@@ -5,7 +5,7 @@
   OpenAL,
   OpenGL,
   SDL,
-  addOpenGLRunpath,
+  addDriverRunpath,
   alembic,
   blender,
   boost,
@@ -18,8 +18,7 @@
   cudaSupport ? config.cudaSupport,
   dbus,
   embree,
-  fetchpatch,
-  fetchurl,
+  fetchgit,
   fetchzip,
   ffmpeg,
   fftw,
@@ -55,7 +54,6 @@
   llvmPackages,
   makeWrapper,
   mesa,
-  ocl-icd,
   openal,
   opencollada,
   opencolorio,
@@ -102,41 +100,46 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.1.1";
+  version = "4.2.0";
 
-  src = fetchurl {
-    url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-T7s69k0/hN9ccQN0hFQibBiFwawu1Tc9DOoegOgsCEg=";
-  };
-
-  patches = [
-    ./draco.patch
-    (fetchpatch {
-      url = "https://projects.blender.org/blender/blender/commit/ae35b5758791bebb21741f9b505b9fca347ae50e.patch";
-      hash = "sha256-xUi55+7aiwEjtjqOi8to1YxdPlsBUThCCkCa5T6LIQc=";
+  srcs = [
+    (fetchzip {
+      name = "source";
+      url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
+      hash = "sha256-STG4IuEhkdA+sDPIpCAkSflyd3rSUZ9ZCS9PdB4vyTY=";
     })
-  ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
+    (fetchgit {
+      name = "assets";
+      url = "https://projects.blender.org/blender/blender-assets.git";
+      rev = "6864f1832e71a31e1e04f72bb7a5a1f53f0cd01c";
+      fetchLFS = true;
+      hash = "sha256-vepK0inPMuleAJBSipwoI99nMBBiFaK/eSMHDetEtjY=";
+    })
+  ];
+
+  postUnpack = ''
+    chmod -R u+w *
+    rm -r assets/working
+    mv assets --target-directory source/release/datafiles/
+  '';
+
+  sourceRoot = "source";
+
+  patches = [ ./draco.patch ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   postPatch =
-    (
-      if stdenv.isDarwin then
-        ''
-          : > build_files/cmake/platform/platform_apple_xcode.cmake
-          substituteInPlace source/creator/CMakeLists.txt \
-            --replace-fail '${"$"}{LIBDIR}/python' \
-                      '${python3}' \
-            --replace-fail '${"$"}{LIBDIR}/materialx/' '${python3Packages.materialx}/'
-          substituteInPlace build_files/cmake/platform/platform_apple.cmake \
-            --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlicommon-static.a' \
-                      '${lib.getLib brotli}/lib/libbrotlicommon.dylib' \
-            --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlidec-static.a' \
-                      '${lib.getLib brotli}/lib/libbrotlidec.dylib'
-        ''
-      else
-        ''
-          substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
-        ''
-    )
+    (lib.optionalString stdenv.isDarwin ''
+      : > build_files/cmake/platform/platform_apple_xcode.cmake
+      substituteInPlace source/creator/CMakeLists.txt \
+        --replace-fail '${"$"}{LIBDIR}/python' \
+                  '${python3}' \
+        --replace-fail '${"$"}{LIBDIR}/materialx/' '${python3Packages.materialx}/'
+      substituteInPlace build_files/cmake/platform/platform_apple.cmake \
+        --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlicommon-static.a' \
+                  '${lib.getLib brotli}/lib/libbrotlicommon.dylib' \
+        --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlidec-static.a' \
+                  '${lib.getLib brotli}/lib/libbrotlidec.dylib'
+    '')
     + (lib.optionalString hipSupport ''
       substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
@@ -217,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.wrapPython
     ]
     ++ lib.optionals cudaSupport [
-      addOpenGLRunpath
+      addDriverRunpath
       cudaPackages.cuda_nvcc
     ]
     ++ lib.optionals waylandSupport [ pkg-config ];
@@ -341,7 +344,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString cudaSupport ''
       for program in $out/bin/blender $out/bin/.blender-wrapped; do
         isELF "$program" || continue
-        addOpenGLRunpath "$program"
+        addDriverRunpath "$program"
       done
     ''
     + lib.optionalString stdenv.isDarwin ''
@@ -375,7 +378,7 @@ stdenv.mkDerivation (finalAttrs: {
         PYTHON
 
         mkdir $out
-        for engine in BLENDER_EEVEE CYCLES; do
+        for engine in BLENDER_EEVEE_NEXT CYCLES; do
           echo "Rendering with $engine..."
           # Beware that argument order matters
           ${lib.getExe finalAttrs.finalPackage} \
@@ -424,10 +427,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     # the current apple sdk is too old (currently 11_0) and fails to build "metal" on x86_64-darwin
     broken = stdenv.hostPlatform.system == "x86_64-darwin";
-    maintainers = with lib.maintainers; [
-      goibhniu
-      veprbl
-    ];
+    maintainers = with lib.maintainers; [ veprbl ];
     mainProgram = "blender";
   };
 })

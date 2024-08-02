@@ -1,24 +1,24 @@
 diff --git a/cmd/hare/build.ha b/cmd/hare/build.ha
-index b2ac6518..417b46c6 100644
+index ce19af9e..8631b325 100644
 --- a/cmd/hare/build.ha
 +++ b/cmd/hare/build.ha
-@@ -37,7 +37,7 @@ fn build(name: str, cmd: *getopt::command) (void | error) = {
+@@ -36,7 +36,7 @@ fn build(name: str, cmd: *getopt::command) (void | error) = {
  		case let ncpu: size =>
  			yield ncpu;
  		},
 -		version = build::get_version(os::tryenv("HAREC", "harec"))?,
-+		version = build::get_version(os::tryenv("HAREC", "@harec@"))?,
- 		arch = arch.qbe_name,
++		version = build::get_version(os::tryenv("HAREC", "@harec_bin@"))?,
+ 		arch = arch,
  		platform = build::get_platform(os::sysname())?,
  		...
-@@ -145,8 +145,8 @@ fn build(name: str, cmd: *getopt::command) (void | error) = {
+@@ -143,8 +143,8 @@ fn build(name: str, cmd: *getopt::command) (void | error) = {
  	set_arch_tags(&ctx.ctx.tags, arch);
  
  	ctx.cmds = ["",
 -		os::tryenv("HAREC", "harec"),
 -		os::tryenv("QBE", "qbe"),
-+		os::tryenv("HAREC", "@harec@"),
-+		os::tryenv("QBE", "@qbe@"),
++		os::tryenv("HAREC", "@harec_bin@"),
++		os::tryenv("QBE", "@qbe_bin@"),
  		os::tryenv("AS", arch.as_cmd),
  		os::tryenv("LD", arch.ld_cmd),
  	];

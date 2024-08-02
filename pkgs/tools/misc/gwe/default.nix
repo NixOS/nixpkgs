@@ -29,6 +29,7 @@ let
    rx
    gtk3
    reactivex
+   setuptools
  ]);
 in stdenv.mkDerivation rec {
   pname = "gwe";

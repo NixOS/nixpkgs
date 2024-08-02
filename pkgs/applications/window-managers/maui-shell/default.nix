@@ -1,11 +1,9 @@
 { lib
-, pkgs
 , mkDerivation
 , fetchFromGitHub
 , qtquickcontrols2
 , cmake
 , extra-cmake-modules
-, kio
 , krunner
 , prison
 , knotifyconfig

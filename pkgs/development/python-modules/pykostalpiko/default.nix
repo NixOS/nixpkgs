@@ -4,7 +4,6 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  pytestCheckHook,
   pythonOlder,
 }:
 

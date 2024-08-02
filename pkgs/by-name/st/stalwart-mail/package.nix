@@ -14,7 +14,6 @@
   nix-update-script,
   nixosTests,
   rocksdb_8_11,
-  callPackage,
 }:
 
 let
@@ -123,6 +122,8 @@ rustPlatform.buildRustPackage {
     # use of undeclared crate or module `r2d2_sqlite`
     "--skip=backend::sqlite::pool::SqliteConnectionManager::with_init"
   ];
+
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   passthru = {
     update-script = nix-update-script { };

@@ -55,6 +55,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/microsoft/knack/blob/v${version}/HISTORY.rst";
     platforms = platforms.all;
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

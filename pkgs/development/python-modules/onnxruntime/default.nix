@@ -59,6 +59,7 @@ buildPythonPackage {
         libcufft # libcufft.so.XX
         cudnn # libcudnn.soXX
         cuda_cudart # libcudart.so.XX
+        nccl # libnccl.so.XX
       ]
     );
 

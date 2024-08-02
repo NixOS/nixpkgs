@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   paho-mqtt,
-  pytestCheckHook,
   pythonOlder,
   pycryptodomex,
   requests,

@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-3vBIpPIsh+7PjTuNNqp7e/pdciOYnzuGkjb/Eks6QJw=";
   };
 
-  cargoSha256 = "sha256-poNPdrMguV79cwo2Eq1dGVUN0E4yG84Q63kU9o+eABo=";
+  cargoHash = "sha256-poNPdrMguV79cwo2Eq1dGVUN0E4yG84Q63kU9o+eABo=";
 
   nativeBuildInputs = [
     openssl

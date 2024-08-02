@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "await";
-  version = "0.999";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "slavaGanzin";
     repo = "await";
     rev = "v${version}";
-    hash = "sha256-z178TKA0x6UnpBQaA8dig2FLeJKGxPndfvwtmylAD90=";
+    hash = "sha256-5lKuqxrUAHfeV0hikrDbxkKAdPtODfal5byc3L7aZmw=";
   };
 
   buildPhase = ''

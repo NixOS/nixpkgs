@@ -11,31 +11,34 @@ let
 in
 
 appleDerivation {
+  patches = [ ./suppress-icu-check-crash.patch ];
+
   nativeBuildInputs = [ python3 ];
 
   depsBuildBuild = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ];
 
   postPatch = ''
     substituteInPlace makefile \
-      --replace "/usr/bin/" "" \
-      --replace "xcrun --sdk macosx --find" "echo -n" \
-      --replace "xcrun --sdk macosx.internal --show-sdk-path" "echo -n /dev/null" \
-      --replace "-install_name " "-install_name $out"
+      --replace-fail "/usr/bin/" "" \
+      --replace-fail "xcrun --sdk macosx --find" "echo -n" \
+      --replace-fail "xcrun --sdk macosx.internal --show-sdk-path" "echo -n /dev/null" \
+      --replace-fail "-install_name " "-install_name $out" \
+      --replace-fail '-x -u -r -S' '-x --keep-undefined -S'
 
     substituteInPlace icuSources/config/mh-darwin \
-      --replace "-install_name " "-install_name $out/"
+      --replace-fail "-install_name " "-install_name $out/"
 
     # drop using impure /var/db/timezone/icutz
     substituteInPlace makefile \
-      --replace '-DU_TIMEZONE_FILES_DIR=\"\\\"$(TZDATA_LOOKUP_DIR)\\\"\" -DU_TIMEZONE_PACKAGE=\"\\\"$(TZDATA_PACKAGE)\\\"\"' ""
+      --replace-fail '-DU_TIMEZONE_FILES_DIR=\"\\\"$(TZDATA_LOOKUP_DIR)\\\"\" -DU_TIMEZONE_PACKAGE=\"\\\"$(TZDATA_PACKAGE)\\\"\"' ""
 
     # FIXME: This will cause `ld: warning: OS version (12.0) too small, changing to 13.0.0`, APPLE should fix it.
     substituteInPlace makefile \
-      --replace "ZIPPERING_LDFLAGS=-Wl,-iosmac_version_min,12.0" "ZIPPERING_LDFLAGS="
+      --replace-fail "ZIPPERING_LDFLAGS=-Wl,-iosmac_version_min,12.0" "ZIPPERING_LDFLAGS="
 
     # skip test for missing encodingSamples data
     substituteInPlace icuSources/test/cintltst/ucsdetst.c \
-      --replace "&TestMailFilterCSS" "NULL"
+      --replace-fail "&TestMailFilterCSS" "NULL"
 
     patchShebangs icuSources
   '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
@@ -44,7 +47,7 @@ appleDerivation {
     # propagate the correct value of CC, CXX, etc, but has the following double
     # expansion that results in the empty string.
     substituteInPlace makefile \
-      --replace '$($(ENV_BUILDHOST))' '$(ENV_BUILDHOST)'
+      --replace-fail '$($(ENV_BUILDHOST))' '$(ENV_BUILDHOST)'
   '';
 
   # APPLE is using makefile to save its default configuration and call ./configure, so we hack makeFlags

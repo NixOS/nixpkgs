@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "phrase-cli";
-  version = "2.31.0";
+  version = "2.31.1";
 
   src = fetchFromGitHub {
     owner = "phrase";
     repo = "phrase-cli";
     rev = version;
-    sha256 = "sha256-Hz+bp/2Gq99ZQvOWU6ODbxThuqKmGN+abspsj1PvXHA=";
+    sha256 = "sha256-UfkFIvaKfJIIH05zEnrtYzgifSmVrLVgjUtZNjRe/SQ=";
   };
 
   vendorHash = "sha256-pBIAcEmEWmjy1TE8EwZ3vmNmDdolyam/vxY5XHMXU+E=";

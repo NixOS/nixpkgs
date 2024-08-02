@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "Osmocom IuH library";
     homepage = "https://osmocom.org/projects/osmohnbgw/wiki";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

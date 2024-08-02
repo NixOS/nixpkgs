@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
   env.NIX_CFLAGS_COMPILE = toString [ "-DPW_ENABLE_DEPRECATED" ];
 
   meta = with lib; {
-    description = "Simple and elegant pipewire graph editor ";
+    description = "Simple and elegant pipewire graph editor";
     homepage = "https://github.com/ax9d/pw-viz";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];

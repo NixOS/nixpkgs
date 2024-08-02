@@ -14,18 +14,24 @@
 , autoPatchelfHook
 , testers
 , signify
+, overrideSDK
 , withSsh ? true, openssh
 # Default editor to use when neither VISUAL nor EDITOR are defined
 , defaultEditor ? null
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  stdenv' = if stdenv.isDarwin && stdenv.isx86_64
+    then overrideSDK stdenv "11.0"
+    else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   pname = "got";
-  version = "0.100";
+  version = "0.101";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${finalAttrs.version}.tar.gz";
-    hash = "sha256-/DqKIGf/aZ09aL/rB7te+AauHmJ+mOTrVEbkqT9WUBI=";
+    hash = "sha256-JQZBgscxoMv4Dki77s8tYo4r5BBG+ErsDYnY5/am3MA=";
   };
 
   nativeBuildInputs = [ pkg-config bison ]

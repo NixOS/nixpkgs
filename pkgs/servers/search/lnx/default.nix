@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage {
   };
   buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation ];
   meta = with lib; {
-    description = "Insanely fast, Feature-rich searching. lnx is the adaptable, typo tollerant deployment of the tantivy search engine. Standing on the shoulders of giants. ";
+    description = "Insanely fast, Feature-rich searching. lnx is the adaptable, typo tollerant deployment of the tantivy search engine. Standing on the shoulders of giants.";
     mainProgram = "lnx";
     homepage = "https://lnx.rs/";
     license = licenses.mit;

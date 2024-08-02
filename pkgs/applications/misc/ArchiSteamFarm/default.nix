@@ -11,13 +11,13 @@
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "6.0.3.4";
+  version = "6.0.4.4";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-qYB94SJYCwcUrXdKtD+ZdiPRpwXg3rOHVmFWD+Y1ZXg=";
+    hash = "sha256-5jV+EJDZ90qtYF8w7RW8jGiy36nPYsLfoOVM35ilVvw=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;

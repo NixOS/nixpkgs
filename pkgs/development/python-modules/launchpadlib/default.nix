@@ -2,46 +2,42 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy3k,
   httplib2,
-  keyring_24,
   lazr-restfulclient,
   lazr-uri,
   setuptools,
   six,
   testresources,
-  wadllib,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "launchpadlib";
-  version = "1.11.0";
-  format = "pyproject";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AYmMk3R3sMZKdTOK2wl3Ao1zRqigGesCPPaP7ZmFAUY=";
+    hash = "sha256-XUqQlekXc6dWXUwVlZSuMOynkv1fm4ne1FnXEUhKlss=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     httplib2
-    keyring_24
     lazr-restfulclient
     lazr-uri
-    setuptools
     six
-    testresources
-    wadllib
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    testresources
+  ];
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
-
-  doCheck = isPy3k;
 
   pythonImportsCheck = [
     "launchpadlib"

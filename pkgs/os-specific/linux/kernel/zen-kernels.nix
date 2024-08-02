@@ -4,16 +4,16 @@ let
   # comments with variant added for update script
   # ./update-zen.py zen
   zenVariant = {
-    version = "6.9.8"; #zen
+    version = "6.10.1"; #zen
     suffix = "zen1"; #zen
-    sha256 = "1ixrdx2a6jp1x8kryjmxnrgl0fsrjg6fngg5c48vbl2574nizlbz"; #zen
+    sha256 = "0lr9qjz4hlvx3yc0lj65fnmbciyh6symycbi9ass761l1niswbk5"; #zen
     isLqx = false;
   };
   # ./update-zen.py lqx
   lqxVariant = {
-    version = "6.9.8"; #lqx
+    version = "6.9.11"; #lqx
     suffix = "lqx1"; #lqx
-    sha256 = "1r5ld2xibr0qkwi1yy7h746sclsmd8cq68z0zdpbbn2qrgyx302k"; #lqx
+    sha256 = "0i6i0ak10gswlk60pnkn5dlz74g4nd7n1xbnvf24nnwwp69kkd44"; #lqx
     isLqx = true;
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {
@@ -62,7 +62,7 @@ let
       RCU_FANOUT = freeform "64";
       RCU_FANOUT_LEAF = freeform "16";
       RCU_BOOST = yes;
-      RCU_BOOST_DELAY = freeform "500";
+      RCU_BOOST_DELAY = option (freeform "500");
       RCU_NOCB_CPU = yes;
       RCU_LAZY = yes;
       RCU_DOUBLE_CHECK_CB_TIME = yes;
@@ -94,7 +94,7 @@ let
 
       # https://github.com/damentz/liquorix-package/commit/a7055b936c0f4edb8f6afd5263fe1d2f8a5cd877
       RCU_BOOST = no;
-      RCU_LAZY = no;
+      RCU_LAZY = lib.mkOverride 60 no;
 
       # Swap storage is compressed with LZ4 using zswap
       ZSWAP_COMPRESSOR_DEFAULT_LZ4  = lib.mkOptionDefault yes;

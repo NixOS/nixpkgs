@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     description = "Secure Internet Live Conferencing server";
     mainProgram = "silcd";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

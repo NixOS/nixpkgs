@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     python3
     sqlite
     zlib
-    libxml2
+    (libxml2.override { enableHttp = true; })
     postgresql
     protozero
     sparsehash

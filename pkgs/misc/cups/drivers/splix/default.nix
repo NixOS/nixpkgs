@@ -49,6 +49,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://splix.ap2c.org";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

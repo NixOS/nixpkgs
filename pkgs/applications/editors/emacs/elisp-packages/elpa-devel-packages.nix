@@ -22,7 +22,7 @@ formats commits for you.
 
 */
 
-{ lib, stdenv, texinfo, writeText, gcc, pkgs, buildPackages }:
+{ lib, pkgs, buildPackages }:
 
 self: let
 
@@ -30,11 +30,6 @@ self: let
     elpaBuild = args: self.elpaBuild (args // {
       meta = (args.meta or {}) // { broken = true; };
     });
-  };
-
-  elpaBuild = import ../build-support/elpa.nix {
-    inherit lib stdenv texinfo writeText gcc;
-    inherit (self) emacs;
   };
 
   # Use custom elpa url fetcher with fallback/uncompress
@@ -62,26 +57,6 @@ self: let
           install-info $info_file dir
           popd
         '';
-      });
-
-      org = super.org.overrideAttrs (old: {
-        dontUnpack = false;
-        patches = old.patches or [ ] ++ lib.optionals (lib.versionOlder old.version "9.7.5") [
-          # security fix backported from 9.7.5
-          (pkgs.fetchpatch {
-            url = "https://git.savannah.gnu.org/cgit/emacs/org-mode.git/patch/?id=f4cc61636947b5c2f0afc67174dd369fe3277aa8";
-            hash = "sha256-bGgsnTSn6SMu1J8P2BfJjrKx2845FCsUB2okcIrEjDg=";
-            stripLen = 1;
-          })
-        ];
-        postPatch = old.postPatch or "" + "\n" + ''
-          pushd ..
-          local content_directory=${old.ename}-${old.version}
-          src=$PWD/$content_directory.tar
-          tar --create --verbose --file=$src $content_directory
-          popd
-        '';
-        dontBuild = true;
       });
 
       pq = super.pq.overrideAttrs (old: {
@@ -119,6 +94,6 @@ self: let
 
     elpaDevelPackages = super // overrides;
 
-  in elpaDevelPackages // { inherit elpaBuild; });
+  in elpaDevelPackages);
 
-in (generateElpa { }) // { __attrsFailEvaluation = true; }
+in generateElpa { }

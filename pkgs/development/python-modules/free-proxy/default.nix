@@ -1,8 +1,9 @@
-{ lib,
-  fetchPypi,
+{
+  lib,
   fetchFromGitHub,
   buildPythonPackage,
   setuptools,
+  pip-chill,
   lxml,
   requests,
 }:
@@ -13,15 +14,16 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jundymerk";
+    owner = "jundymek";
     repo = "free-proxy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1hTOMbsL1089/yPZbAIs5OgjtEzCBlFv2hGi+u4hV/k=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-82usyhUzZrdYir8puiAfaF650f0PxYJSXBE75zxYjK8=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    pip-chill
     lxml
     requests
   ];

@@ -42,7 +42,7 @@ buildPythonPackage rec {
     torch
     tqdm
     typer
-  ] ++ typer.passthru.optional-dependencies.all;
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

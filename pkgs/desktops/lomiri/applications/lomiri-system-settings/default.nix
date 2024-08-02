@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitLab
 , fetchpatch
+, fetchpatch2
 , gitUpdater
 , testers
 , accountsservice
@@ -80,6 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/67d9e28ebab8bdb9473d5bf8da2b7573e6848fa2.patch";
       hash = "sha256-pFWNne2UH3R5Fz9ayHvIpDXDQbXPs0k4b/oRg0fzi+s=";
     })
+
+    (fetchpatch2 {
+      name = "0004-lomiri-system-settings-QOfono-namespace-change.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/c0b5b007d77993fabdd95be5ccbbba5151f0f165.patch";
+      hash = "sha256-HB7qdlbY0AVG6X3hL3IHf0Z7rm1G0wfdqo5MXtY7bfE=";
+    })
   ] ++ [
 
     ./2000-Support-wrapping-for-Nixpkgs.patch
@@ -94,6 +101,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # Part of 0004-lomiri-system-settings-QOfono-namespace-change.patch, fetchpatch2 cannot handle rename-only changes
+    for unmovedThing in tests/mocks/MeeGo/QOfono/*; do
+      mv "$unmovedThing" "tests/mocks/QOfono/$(basename "$unmovedThing")"
+    done
+    rmdir tests/mocks/MeeGo/QOfono
+    rmdir tests/mocks/MeeGo
+
     substituteInPlace CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
 
@@ -127,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib # glib-compile-schemas
     intltool
     pkg-config
+    qtdeclarative
     validatePkgConfig
   ];
 

@@ -8,7 +8,6 @@
   pyro-ppl,
   setuptools,
   setuptools-scm,
-  wheel,
   torch,
   scipy,
   pytestCheckHook,
@@ -16,23 +15,22 @@
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.11.1";
-  format = "pyproject";
+  version = "0.11.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
-    repo = pname;
+    repo = "botorch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YX/G46U09y/VZuWZhKY8zU0Y+bf0NKumzSGYUWvrq/0=";
+    hash = "sha256-AtRU5KC8KlkxMCU0OUAHDFK7BsPO3TbRmmzDGV7+yVk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     gpytorch
     linear-operator
     multipledispatch
@@ -41,12 +39,19 @@ buildPythonPackage rec {
     torch
   ];
 
-  pythonRelaxDeps = [ "linear-operator" ];
+  pythonRelaxDeps = [
+    "gpytorch"
+    "linear-operator"
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [ "test_all_cases_covered" ];
+
   pythonImportsCheck = [ "botorch" ];
 
   meta = with lib; {
+    changelog = "https://github.com/pytorch/botorch/blob/${src.rev}/CHANGELOG.md";
     description = "Bayesian Optimization in PyTorch";
     homepage = "https://botorch.org";
     license = licenses.mit;

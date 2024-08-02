@@ -10,16 +10,16 @@
 
 buildNpmPackage rec {
   pname = "igir";
-  version = "2.9.0";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "emmercm";
     repo = "igir";
     rev = "v${version}";
-    hash = "sha256-AdoY1STLldud9agh6j68CkCeZ2F0OYuu5cEpCTyPCGs=";
+    hash = "sha256-3lEU3uK/Wp09TOhVJVNslOCx9vTVp0gBTbkQXB13i9Y=";
   };
 
-  npmDepsHash = "sha256-6V5ROCJF2msd0rt6GFXYAhkFtjSEquteCQMscPR8XIw=";
+  npmDepsHash = "sha256-gJvJwostQgEq14zDmMOatfWmkEYNAqGCL9MJPrv5kwk=";
 
   # I have no clue why I have to do this
   postPatch = ''
@@ -39,7 +39,7 @@ buildNpmPackage rec {
     mainProgram = "igir";
     homepage = "https://igir.io";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ TheBrainScrambler ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

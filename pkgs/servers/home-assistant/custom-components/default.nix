@@ -32,6 +32,8 @@
 
   localtuya = callPackage ./localtuya {};
 
+  mass = callPackage ./mass { };
+
   midea_ac_lan = callPackage ./midea_ac_lan {};
 
   midea-air-appliances-lan = callPackage ./midea-air-appliances-lan {};
@@ -57,6 +59,8 @@
   spook = callPackage ./spook {};
 
   tuya_local = callPackage ./tuya_local {};
+
+  volkswagencarnet = callPackage ./volkswagencarnet { };
 
   waste_collection_schedule = callPackage ./waste_collection_schedule {};
 

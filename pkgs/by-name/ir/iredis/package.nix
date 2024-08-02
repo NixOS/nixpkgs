@@ -64,7 +64,7 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/laixintao/iredis/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://iredis.xbin.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "iredis";
   };
 }

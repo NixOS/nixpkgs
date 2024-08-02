@@ -1,5 +1,6 @@
 { lib
 , pkgs
+, customQemu ? null
 , kernel ? pkgs.linux
 , img ? pkgs.stdenv.hostPlatform.linux-kernel.target
 , storeDir ? builtins.storeDir
@@ -218,7 +219,7 @@ rec {
 
 
   qemuCommandLinux = ''
-    ${qemu-common.qemuBinary qemu} \
+    ${if (customQemu != null) then customQemu else (qemu-common.qemuBinary qemu)} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \

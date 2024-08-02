@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , netchannel
 , ppx_sexp_conv
 , lwt

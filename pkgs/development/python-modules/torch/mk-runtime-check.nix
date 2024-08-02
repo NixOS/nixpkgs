@@ -1,14 +1,15 @@
 {
   cudaPackages,
   feature,
-  torch,
+  libraries,
   versionAttr,
+  pythonPackages,
 }:
 
-cudaPackages.writeGpuTestPython
+(cudaPackages.writeGpuTestPython.override { python3Packages = pythonPackages; })
   {
     inherit feature;
-    libraries = [ torch ];
+    inherit libraries;
     name = "${feature}Available";
   }
   ''

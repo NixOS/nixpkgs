@@ -89,6 +89,13 @@ in
         EnvironmentFile = cfg.environmentFile;
         ExecStart = "${cfg.package}/bin/livebook start";
         KillMode = "mixed";
+
+        # Fix for the issue described here:
+        # https://github.com/livebook-dev/livebook/issues/2691
+        #
+        # Without this, the livebook service fails to start and gets
+        # stuck running a `cat /dev/urandom | tr | fold` pipeline.
+        IgnoreSIGPIPE = false;
       };
       environment = mapAttrs (name: value:
         if isBool value then boolToString value else toString value)
@@ -98,5 +105,8 @@ in
     };
   };
 
-  meta.doc = ./livebook.md;
+  meta = {
+    doc = ./livebook.md;
+    maintainers = with lib.maintainers; [ munksgaard scvalex ];
+  };
 }

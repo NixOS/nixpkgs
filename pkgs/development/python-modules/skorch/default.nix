@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   pythonOlder,
   numpy,
   scikit-learn,

@@ -403,7 +403,7 @@ in
       path = with pkgs; [
         # unfree:
         # config.boot.kernelPackages.nvidiaPackages.latest.bin
-        ffmpeg_5-headless
+        ffmpeg-headless
         libva-utils
         procps
         radeontop

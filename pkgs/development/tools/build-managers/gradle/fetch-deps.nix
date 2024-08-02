@@ -123,10 +123,9 @@ let
 
             fileList = builtins.filter (x: lib.hasPrefix xmlBase x && x != url) (builtins.attrNames finalData);
             jarPomList = map parseArtifactUrl fileList;
-            sortedJarPomList =
-              lib.sort
-                (a: b: lib.splitVersion a.version < lib.splitVersion b.version)
-                jarPomList;
+
+            sortByVersion = a: b: (builtins.compareVersions a.version b.version) < 0;
+            sortedJarPomList = lib.sort sortByVersion jarPomList;
 
             uniqueVersionFiles =
               builtins.map ({ i, x }: x)

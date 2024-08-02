@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , asciidoctor
-, botan2
+, botan3
 , bzip2
 , cmake
 , fetchFromGitHub
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jUh7BxRnB6KePCk1jIvKzXgxSmWdKlQYmxshZZY4SBQ";
   };
 
-  buildInputs = [ zlib bzip2 json_c botan2 sexpp ];
+  buildInputs = [ zlib bzip2 json_c botan3 sexpp ];
 
   patches = [
   ];

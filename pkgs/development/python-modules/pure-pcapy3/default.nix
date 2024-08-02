@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Reimplementation of pcapy";
     homepage = "https://github.com/rcloran/pure-pcapy-3";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

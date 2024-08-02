@@ -2,6 +2,7 @@
   stdenv,
   lib,
   buildPythonPackage,
+  distutils,
   fetchFromGitHub,
   python,
   wheel,
@@ -32,6 +33,10 @@ buildPythonPackage rec {
 
   # Requires pytest, causing infinite recursion.
   doCheck = false;
+
+  passthru.tests = {
+    inherit distutils;
+  };
 
   meta = with lib; {
     description = "Utilities to facilitate the installation of Python packages";

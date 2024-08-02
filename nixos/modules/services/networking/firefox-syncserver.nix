@@ -316,7 +316,7 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     doc = ./firefox-syncserver.md;
   };
 }

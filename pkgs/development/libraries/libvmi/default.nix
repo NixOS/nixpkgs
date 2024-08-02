@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ gpl3 lgpl3 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    broken = true;
   };
 }

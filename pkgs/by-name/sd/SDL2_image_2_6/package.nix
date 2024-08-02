@@ -1,10 +1,6 @@
 # Dependency for hedgewars:
 # https://github.com/NixOS/nixpkgs/pull/274185#issuecomment-1856764786
-{
-  lib,
-  SDL2_image,
-  fetchurl,
-}:
+{ SDL2_image, fetchurl }:
 
 SDL2_image.overrideAttrs (oldAttrs: {
   version = "2.6.3";
