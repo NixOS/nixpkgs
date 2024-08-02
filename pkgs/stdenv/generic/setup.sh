@@ -12,7 +12,15 @@ fi
 
 shopt -s inherit_errexit
 
-if (( "${NIX_DEBUG:-0}" >= 6 )); then
+# $NIX_DEBUG must be a documented integer level, if set, so we can use it safely as an integer.
+# See the `Verbosity` enum in the Nix source for these levels.
+if ! [[ -z ${NIX_DEBUG-} || $NIX_DEBUG == [0-7] ]]; then
+    printf 'The `NIX_DEBUG` environment variable has an unexpected value: %s\n' "${NIX_DEBUG}"
+    echo "It can only be unset or an integer between 0 and 7."
+    exit 1
+fi
+
+if [[ ${NIX_DEBUG:-0} -ge 6 ]]; then
     set -x
 fi
 
@@ -53,6 +61,62 @@ nixLog() {
         return
     fi
     echo "$@" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlError` in the Nix source.
+nixErrorLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 0 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlWarn` in the Nix source.
+nixWarnLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 1 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlNotice` in the Nix source.
+nixNoticeLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 2 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlInfo` in the Nix source.
+nixInfoLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 3 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlTalkative` in the Nix source.
+nixTalkativeLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 4 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlChatty` in the Nix source.
+nixChattyLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 5 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlDebug` in the Nix source.
+nixDebugLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 6 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlVomit` in the Nix source.
+nixVomitLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 7 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
 }
 
 # Log a hook, to be run before the hook is actually called.
