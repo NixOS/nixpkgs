@@ -483,7 +483,7 @@ let
     }
     // attrs.meta or { }
     # Fill `meta.position` to identify the source location of the package.
-    // optionalAttrs (pos != null) {
+    // optionalAttrs (pos != null && !attrs ? meta.position) {
       position = pos.file + ":" + toString pos.line;
     } // {
       # Expose the result of the checks for everyone to see.
