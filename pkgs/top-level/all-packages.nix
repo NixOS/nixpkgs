@@ -3812,8 +3812,6 @@ with pkgs;
 
   harsh = callPackage ../applications/misc/harsh { };
 
-  harvid = callPackage ../tools/video/harvid { };
-
   headset = callPackage ../applications/audio/headset { };
 
   hilbish = callPackage ../shells/hilbish { };
@@ -33305,7 +33303,8 @@ with pkgs;
 
   qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
 
-  qmplay2 = libsForQt5.callPackage ../applications/video/qmplay2 { };
+  qmplay2-qt5 = qmplay2.override { qtVersion = "5"; };
+  qmplay2-qt6 = qmplay2.override { qtVersion = "6"; };
 
   qmidiarp = callPackage ../applications/audio/qmidiarp { };
 

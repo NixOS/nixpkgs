@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "linear-garage-door";
-  version = "0.2.9";
+  version = "0.2.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "IceBotYT";
     repo = "linear-garage-door";
     rev = "refs/tags/${version}";
-    hash = "sha256-hWWJgZnEItYaSxka7zBHPeVlTEiOqRnA2vg6/MvpJGE=";
+    hash = "sha256-ibOCqy7krIVC7N75SwEyUII3Tknb60nwA+zGbjOENv4=";
   };
 
   postPatch = ''
@@ -29,9 +29,9 @@ buildPythonPackage rec {
       -e "/--no-cov/d"
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     dnspython
     tenacity
