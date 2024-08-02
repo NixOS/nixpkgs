@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "zarf";
-  version = "0.35.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "defenseunicorns";
     repo = "zarf";
     rev = "v${version}";
-    hash = "sha256-HxHINy+zwkwLvckQUoDy1KqLhTYSH371+cucQGWJNIw=";
+    hash = "sha256-GgvpBYFPH1corqNCA6NQCg6Rkbdez9mFwv5HlmOCKvE=";
   };
 
-  vendorHash = "sha256-+3VYBvcA8TzO9uBl0863uATOavPY9cjt8xtgW7N7C4w=";
+  vendorHash = "sha256-gLnUvNxuxrMu6i+b0jgindgcbGOA+tk4N5N4owGV7B8=";
   proxyVendor = true;
 
   nativeBuildInputs = [ installShellFiles ];
