@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/rowingdude/analyzeMFT";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ MikeHorn-git ];
+    maintainers = with lib.maintainers; [ mikehorn ];
     mainProgram = "analyzeMFT";
   };
 }
