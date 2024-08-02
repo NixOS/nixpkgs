@@ -1,62 +1,160 @@
-{ lib, stdenv, patchelf, makeWrapper, fetchurl, writeScript
+{
+  lib,
+  stdenv,
+  patchelf,
+  makeWrapper,
+  fetchurl,
+  writeScript,
 
-# Libraries
-, glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, nss, nspr
-, libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
-, alsa-lib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
-, dbus, gtk3, gtk4, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
-, libkrb5, libdrm, libglvnd, mesa
-, libxkbcommon, pipewire, wayland
+  # Libraries
+  glib,
+  fontconfig,
+  freetype,
+  pango,
+  cairo,
+  libX11,
+  libXi,
+  atk,
+  nss,
+  nspr,
+  libXcursor,
+  libXext,
+  libXfixes,
+  libXrender,
+  libXScrnSaver,
+  libXcomposite,
+  libxcb,
+  alsa-lib,
+  libXdamage,
+  libXtst,
+  libXrandr,
+  libxshmfence,
+  expat,
+  cups,
+  dbus,
+  gtk3,
+  gtk4,
+  gdk-pixbuf,
+  gcc-unwrapped,
+  at-spi2-atk,
+  at-spi2-core,
+  libkrb5,
+  libdrm,
+  libglvnd,
+  mesa,
+  libxkbcommon,
+  pipewire,
+  wayland,
 
-, coreutils
+  coreutils,
 
-# command line arguments which are always set e.g "--disable-gpu"
-, commandLineArgs ? ""
+  # command line arguments which are always set e.g "--disable-gpu"
+  commandLineArgs ? "",
 
-, systemd
+  systemd,
 
-# Loaded at runtime.
-, libexif, pciutils
+  # Loaded at runtime.
+  libexif,
+  pciutils,
 
-, liberation_ttf, curl, util-linux, xdg-utils, wget
-, flac, harfbuzz, icu, libpng, libopus, snappy, speechd
-, bzip2, libcap
+  liberation_ttf,
+  curl,
+  util-linux,
+  xdg-utils,
+  wget,
+  flac,
+  harfbuzz,
+  icu,
+  libpng,
+  libopus,
+  snappy,
+  speechd,
+  bzip2,
+  libcap,
 
-# Necessary for USB audio devices.
-, pulseSupport ? true, libpulseaudio
+  # Necessary for USB audio devices.
+  pulseSupport ? true,
+  libpulseaudio,
 
-, gsettings-desktop-schemas
+  gsettings-desktop-schemas,
 
-# Allow video acceleration via VA-API to be disabled on systems where is doesn't
-# work reliably (--enable-features=VaapiVideoDecoder)
-, libvaSupport ? true, libva
+  # Allow video acceleration via VA-API to be disabled on systems where is doesn't
+  # work reliably (--enable-features=VaapiVideoDecoder)
+  libvaSupport ? true,
+  libva,
 
-# For Vulkan support (--enable-features=Vulkan)
-, addDriverRunpath
+  # For Vulkan support (--enable-features=Vulkan)
+  addDriverRunpath,
 }:
 
 let
-  opusWithCustomModes = libopus.override {
-    withCustomModes = true;
-  };
+  opusWithCustomModes = libopus.override { withCustomModes = true; };
 
-  deps = [
-    glib fontconfig freetype pango cairo libX11 libXi atk nss nspr
-    libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
-    alsa-lib libXdamage libXtst libXrandr libxshmfence expat cups
-    dbus gdk-pixbuf gcc-unwrapped.lib
-    systemd
-    libexif pciutils
-    liberation_ttf curl util-linux wget
-    flac harfbuzz icu libpng opusWithCustomModes snappy speechd
-    bzip2 libcap at-spi2-atk at-spi2-core
-    libkrb5 libdrm libglvnd mesa coreutils
-    libxkbcommon pipewire wayland
-  ] ++ lib.optional pulseSupport libpulseaudio
+  deps =
+    [
+      glib
+      fontconfig
+      freetype
+      pango
+      cairo
+      libX11
+      libXi
+      atk
+      nss
+      nspr
+      libXcursor
+      libXext
+      libXfixes
+      libXrender
+      libXScrnSaver
+      libXcomposite
+      libxcb
+      alsa-lib
+      libXdamage
+      libXtst
+      libXrandr
+      libxshmfence
+      expat
+      cups
+      dbus
+      gdk-pixbuf
+      gcc-unwrapped.lib
+      systemd
+      libexif
+      pciutils
+      liberation_ttf
+      curl
+      util-linux
+      wget
+      flac
+      harfbuzz
+      icu
+      libpng
+      opusWithCustomModes
+      snappy
+      speechd
+      bzip2
+      libcap
+      at-spi2-atk
+      at-spi2-core
+      libkrb5
+      libdrm
+      libglvnd
+      mesa
+      coreutils
+      libxkbcommon
+      pipewire
+      wayland
+    ]
+    ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional libvaSupport libva
-    ++ [ gtk3 gtk4 ];
+    ++ [
+      gtk3
+      gtk4
+    ];
 
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "wavebox";
   version = "10.127.10-2";
 
@@ -65,7 +163,10 @@ in stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-x095V2UhRJfPmmG+4/i7I9AnCU4WVrw0b71nEu73uew=";
   };
 
-  nativeBuildInputs = [ patchelf makeWrapper ];
+  nativeBuildInputs = [
+    patchelf
+    makeWrapper
+  ];
   buildInputs = [
     gsettings-desktop-schemas # needed for GSETTINGS_SCHEMAS_PATH
     glib
