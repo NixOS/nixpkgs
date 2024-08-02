@@ -19,7 +19,8 @@ let packages = self:
         appName = pname;
         appVersion = data.version;
         license = appBaseDefs.${pname};
-        inherit (data) url sha256 description homepage;
+        unpack = false;
+        inherit (data) url hash description homepage;
       }) {};
 
   } // lib.mapAttrs (type: pkgs:
