@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cp ./bin/bm $out/bin/
 
     substituteInPlace $out/bin/bm \
-      --replace /build/source $out/share/bonnmotion
+      --replace-fail "$PWD" $out/share/bonnmotion
 
     runHook postInstall
   '';
