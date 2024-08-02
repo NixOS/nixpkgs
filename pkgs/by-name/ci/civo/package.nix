@@ -1,13 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "civo";
   version = "1.0.88";
 
   src = fetchFromGitHub {
-    owner  = "civo";
-    repo   = "cli";
-    rev    = "v${version}";
+    owner = "civo";
+    repo = "cli";
+    rev = "v${version}";
     sha256 = "sha256-fPCafa0V5lbzXocUa1gabLxAcPbg8rqOExMT0QnGUk8=";
   };
 
@@ -42,6 +47,6 @@ buildGoModule rec {
     mainProgram = "civo";
     homepage = "https://github.com/civo/cli";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ techknowlogick ];
   };
 }
