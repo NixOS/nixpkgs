@@ -61,7 +61,7 @@ in {
   kernels = recurseIntoAttrs (lib.makeExtensible (self: with self;
     let callPackage = newScope self; in {
 
-    # NOTE: PLEASE DO NOT ADD NEW VENDOR KERNELS TO NIXPKGS.
+    # NOTE: PLEASE DO NOT ADD NEW DOWNSTREAM KERNELS TO NIXPKGS.
     # New vendor kernels should go to nixos-hardware instead.
     # e.g. https://github.com/NixOS/nixos-hardware/tree/master/microsoft/surface/kernel
 
