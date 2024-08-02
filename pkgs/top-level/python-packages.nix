@@ -17016,6 +17016,8 @@ self: super: with self; {
     inherit (pkgs) vapoursynth;
   };
 
+  vapoursynth-havsfunc = callPackage ../development/python-modules/vapoursynth-havsfunc { };
+
   variants = callPackage ../development/python-modules/variants { };
 
   varint = callPackage ../development/python-modules/varint { };
