@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, pkgs
 , fetchFromGitHub
 , mongoc
 , openssl
@@ -7,23 +7,26 @@
 , cmake
 , validatePkgConfig
 , testers
+, darwin
 }:
+
+let stdenv = if pkgs.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else pkgs.stdenv; in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongocxx";
-  version = "3.8.1";
+  version = "3.10.2";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-cxx-driver";
     rev = "refs/tags/r${finalAttrs.version}";
-    hash = "sha256-fBZg69jsvXzhllpcPBGXkjYyvUQImnGNkb2Ek5Oi0p4=";
+    hash = "sha256-nGLE0vyCe3PaNJf3duXdBfAhTdRvdeQ+OCwcaSDxi5Y=";
   };
 
   postPatch = ''
-    substituteInPlace src/bsoncxx/config/CMakeLists.txt \
-      src/mongocxx/config/CMakeLists.txt \
-      --replace "\\\''${prefix}/" ""
+    substituteInPlace src/bsoncxx/cmake/libbsoncxx.pc.in \
+      src/mongocxx/cmake/libmongocxx.pc.in \
+      --replace "\''${prefix}/" ""
   '';
 
   nativeBuildInputs = [
@@ -35,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     mongoc
     openssl
     cyrus_sasl
-  ];
+  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   cmakeFlags = [
     "-DCMAKE_CXX_STANDARD=20"
@@ -49,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Official C++ client library for MongoDB";
     homepage = "http://mongocxx.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ adriandole ];
+    maintainers = with maintainers; [ adriandole vcele ];
     pkgConfigModules = [ "libmongocxx" "libbsoncxx" ];
     platforms = platforms.all;
     badPlatforms = [ "x86_64-darwin" ]; # needs sdk >= 10.14

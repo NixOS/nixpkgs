@@ -21325,6 +21325,12 @@
     githubId = 8889722;
     name = "Vitomir Čanadi";
   };
+  vcele = {
+    email = "ejycebfx@duck.com";
+    github = "Vcele";
+    githubId = 101071881;
+    name = "Victor";
+  };
   vcunat = {
     name = "Vladimír Čunát";
     # vcunat@gmail.com predominated in commits before 2019/03
