@@ -16033,6 +16033,11 @@
     githubId = 1830959;
     name = "Piper McCorkle";
   };
+  pitkling = {
+    github = "pitkling";
+    githubId = 1018801;
+    name = "Peter Kling";
+  };
   piturnah = {
     email = "peterhebden6@gmail.com";
     github = "Piturnah";
