@@ -2424,6 +2424,13 @@
     github = "beezow";
     githubId = 42082156;
   };
+  behoof4mind = {
+    name = "Denis Lavrushko";
+    email = "dlavrushko@protonmail.com";
+    github = "behoof4mind";
+    githubId = 9162748;
+    keys = [ { fingerprint = "F4B6 7C35 BD08 6C48 32C4  3140 4B5E 6DEB F81C EFB6"; } ];
+  };
   bendlas = {
     email = "herwig@bendlas.net";
     matrix = "@bendlas:matrix.org";
