@@ -348,10 +348,10 @@
         "src": {
             "owner": "libretro",
             "repo": "gambatte-libretro",
-            "rev": "0cf1a421a2123205559c666853cdf9112382fa46",
-            "hash": "sha256-CjcmRMk+fL1WwiiNcFCv8FGeoPl/Ib9jMvXJRzApPNU="
+            "rev": "607c19668426b8945011fd11e25cfce7849f7e13",
+            "hash": "sha256-8uLKOxLRWbczUkhsXqjXVH7SDlIqrp0LNdzVjmxbP2U="
         },
-        "version": "unstable-2024-07-19"
+        "version": "unstable-2024-07-26"
     },
     "genesis-plus-gx": {
         "fetcher": "fetchFromGitHub",
