@@ -6,13 +6,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  owner = "eldadru";
   pname = "ksniff";
   version = "1.6.2";
 
   src = fetchurl {
-    url = "https://github.com/${owner}/${pname}/releases/download/v${version}/ksniff.zip";
-    sha256 = "sha256-xZtcnqhNbLdxCW8SRskZtxOJ+dQjToWPSSkgiVflYf0=";
+    url = "https://github.com/eldadru/ksniff/releases/download/v${version}/ksniff.zip";
+    hash = "sha256-xZtcnqhNbLdxCW8SRskZtxOJ+dQjToWPSSkgiVflYf0=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -39,15 +38,14 @@ stdenv.mkDerivation rec {
         exit 1
         ;;
     esac
-    mv $out/LICENSE $out/LICENSE.ksniff
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes CLI plugin for live capture of network traffic between pods";
     homepage = "https://github.com/eldadru/ksniff";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maintainers.behoof4mind ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ behoof4mind ];
+    platforms = lib.platforms; linux ++ darwin;
   };
 
 }
