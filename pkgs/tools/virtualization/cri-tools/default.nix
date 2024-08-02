@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -30,11 +31,12 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
     make install BINDIR=$out/bin
-
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish zsh; do
-      $out/bin/crictl completion $shell > crictl.$shell
-      installShellCompletion crictl.$shell
+      installShellCompletion --cmd crictl \
+        --$shell <($out/bin/crictl completion $shell)
     done
+  '' + ''
     runHook postInstall
   '';
 

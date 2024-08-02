@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     mainProgram = "xb-tool";
     homepage = "https://github.com/hughsie/libxmlb";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

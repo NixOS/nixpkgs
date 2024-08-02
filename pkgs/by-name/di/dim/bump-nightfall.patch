@@ -1,0 +1,48 @@
+diff --git a/dim/Cargo.toml b/dim/Cargo.toml
+index b7c8106493...38518ba29d 100644
+--- a/dim/Cargo.toml
++++ b/dim/Cargo.toml
+@@ -15,7 +15,7 @@
+ fdlimit = "0.2.1"
+ 
+ # git dependencies
+-nightfall = { git = "https://github.com/Dusk-Labs/nightfall", tag = "0.3.12-rc4", default-features = false, features = [
++nightfall = { git = "https://github.com/Dusk-Labs/nightfall", rev = "878f07edd5d2c71261c5ae02fe3a6db7cda18be7", default-features = false, features = [
+     "cuda",
+     "ssa_transmux",
+ ] }
+diff --git a/dim-core/Cargo.toml b/dim-core/Cargo.toml
+index b311b7c7af...ffc5d85dbb 100644
+--- a/dim-core/Cargo.toml
++++ b/dim-core/Cargo.toml
+@@ -11,7 +11,7 @@
+ 
+ [dependencies]
+ # git dependencies
+-nightfall = { git = "https://github.com/Dusk-Labs/nightfall", tag = "0.3.12-rc4", default-features = false, features = [
++nightfall = { git = "https://github.com/Dusk-Labs/nightfall", rev = "878f07edd5d2c71261c5ae02fe3a6db7cda18be7", default-features = false, features = [
+     "cuda",
+     "ssa_transmux",
+ ] }
+@@ -72,7 +72,7 @@
+     "json",
+ ] }
+ url = "2.2.2"
+-uuid = { version = "1.2.2", features = ["v4"] }
++uuid = { version = "1.6.1", features = ["v4"] }
+ xmlwriter = "0.1.0"
+ xtra = { version = "0.5.1", features = ["tokio", "with-tokio-1"] }
+ 
+diff --git a/dim-web/Cargo.toml b/dim-web/Cargo.toml
+index 2da5764d50...4c7574c0b4 100644
+--- a/dim-web/Cargo.toml
++++ b/dim-web/Cargo.toml
+@@ -14,7 +14,7 @@
+ dim-events = { path = "../dim-events" }
+ dim-core = { path = "../dim-core" }
+ 
+-nightfall = { git = "https://github.com/Dusk-Labs/nightfall", tag = "0.3.12-rc4", default-features = false, features = [
++nightfall = { git = "https://github.com/Dusk-Labs/nightfall", rev = "878f07edd5d2c71261c5ae02fe3a6db7cda18be7", default-features = false, features = [
+     "cuda",
+     "ssa_transmux",
+ ] }

@@ -1,7 +1,7 @@
-{ config, stdenv, kernel, fetchurl, lib, pam, libxslt
-, libX11, libXext, libXcursor, libXmu
+{ stdenv, kernel, fetchurl, lib, pam, libxslt
+, libXext, libXcursor, libXmu
 , glib, libXrandr, dbus, xz
-, pkg-config, which, zlib, xorg
+, pkg-config, which, xorg
 , yasm, patchelf, makeself
 , linuxHeaders, openssl}:
 

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, cmake, pkg-config, protobuf, icu, csdr, codecserver
+, cmake, protobuf, icu, csdr, codecserver
 }:
 
 stdenv.mkDerivation rec {

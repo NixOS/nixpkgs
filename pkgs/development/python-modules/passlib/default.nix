@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "Password hashing library for Python";
     homepage = "https://foss.heptapod.net/python-libs/passlib";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

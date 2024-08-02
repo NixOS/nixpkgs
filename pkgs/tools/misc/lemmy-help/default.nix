@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "cli" ];
 
-  cargoSha256 = "sha256-BCwpiBPvnLgbpOaXgUK2EDXnT8d4jo7aqgM6uwl80eg=";
+  cargoHash = "sha256-BCwpiBPvnLgbpOaXgUK2EDXnT8d4jo7aqgM6uwl80eg=";
 
   meta = with lib; {
     description = "CLI for generating vim help docs from emmylua comments";

@@ -27,11 +27,11 @@ buildPythonPackage rec {
     hash = "sha256-4Ie8fuk9CKdn/64TsCfN2No2dU16ICpBRWYerqqF0/0=";
   };
 
-  # Upstream wants to build against the oldest version of numpy possible, but
-  # we only want to build against the most recent version.
+  # Upstream wants to build against the newest version of numpy possible, but
+  # we only want to build against our default numpy.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "numpy==" "numpy>="
+      --replace-fail "numpy>=2.0.0rc1,<3" "numpy"
   '';
 
   nativeBuildInputs = [

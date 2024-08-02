@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "VPN Designed for Lossy Links, with Build-in Forward Error Correction(FEC) Support";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "tinyvpn";
   };
 }

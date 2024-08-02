@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy3k,
   numpy,
   six,
   withTreeVisualization ? false,

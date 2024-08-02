@@ -1,10 +1,10 @@
 { lib
+, stdenv
 , callPackage
 , fetchFromGitHub
 , makeWrapper
 , nixosTests
 , python3Packages
-, stdenv
 , writeShellScript
 }:
 
@@ -31,8 +31,17 @@ let
       rev = "c56dd9f29469c8a9f34456b8c0d6ae0476110516";
       hash = "sha256-XNps3ZApU8m07bfPEnvip1w+3hLajdn9+L5+IpEaP0c=";
     };
+
+    # Can remove once the `register` keyword is removed from source files
+    # Configure overwrites CXXFLAGS so patch it in the Makefile
+    postConfigure = lib.optionalString stdenv.cc.isClang ''
+      substituteInPlace Makefile \
+        --replace-fail "CXXFLAGS = " "CXXFLAGS = -std=c++14 "
+    '';
   };
-in pythonpkgs.buildPythonPackage rec {
+in
+
+pythonpkgs.buildPythonPackage rec {
   pname = "mealie";
   inherit version src;
   pyproject = true;

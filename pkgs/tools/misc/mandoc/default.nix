@@ -77,5 +77,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ ramkromberg sternenseemann ];
+    mainProgram = "man";
   };
 }

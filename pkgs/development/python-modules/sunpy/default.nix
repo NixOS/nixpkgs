@@ -159,7 +159,7 @@ buildPythonPackage rec {
     description = "Python for Solar Physics";
     homepage = "https://sunpy.org";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     broken = true;
   };
 }

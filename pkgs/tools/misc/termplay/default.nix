@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1w7hdqgqr1jgxid3k7f2j52wz31gv8bzr9rsm6xzp7nnihp6i45p";
   };
 
-  cargoSha256 = "08ip6x4kink244majlk595yh551c2ap3ry58wly994mh8wf6ifwb";
+  cargoHash = "sha256-i7toHEewkpQ85aj4PK4SLJQCfUllUqkqIWLaOEk3NyI=";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     description = "Play an image/video in your terminal";
     homepage = "https://jd91mzm2.github.io/termplay/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "termplay";
   };

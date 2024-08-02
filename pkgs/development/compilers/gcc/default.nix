@@ -33,6 +33,7 @@
 , nukeReferences
 , callPackage
 , majorMinorVersion
+, cctools
 , darwin
 
 # only for gcc<=6.x
@@ -449,15 +450,15 @@ pipe ((callFile ./common/builder.nix {}) ({
     badPlatforms =
       # avr-gcc8 is maintained for the `qmk` package
       if (is8 && targetPlatform.isAvr) then []
-      else if !(is48 || is49) then [ "aarch64-darwin" ]
+      else if !(is48 || is49 || is6) then [ "aarch64-darwin" ]
       else platforms.darwin;
-  } // optionalAttrs is11 {
+  } // optionalAttrs is10 {
     badPlatforms = if targetPlatform != hostPlatform then [ "aarch64-darwin" ] else [ ];
   };
 } // optionalAttrs (!atLeast10 && stdenv.targetPlatform.isDarwin) {
   # GCC <10 requires default cctools `strip` instead of `llvm-strip` used by Darwin bintools.
   preBuild = ''
-    makeFlagsArray+=('STRIP=${getBin darwin.cctools-port}/bin/${stdenv.cc.targetPrefix}strip')
+    makeFlagsArray+=('STRIP=${getBin cctools}/bin/${stdenv.cc.targetPrefix}strip')
   '';
 } // optionalAttrs (!atLeast8) {
   doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv

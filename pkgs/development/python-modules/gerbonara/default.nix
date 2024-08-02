@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gitUpdater,
   setuptools,
-  pytest,
   click,
   numpy,
   scipy,

@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://xmlbeans.apache.org/";
     downloadPage = "https://dlcdn.apache.org/poi/xmlbeans/release/bin/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

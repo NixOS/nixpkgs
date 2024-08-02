@@ -9,7 +9,6 @@
   pytestCheckHook,
   pythonOlder,
   requests,
-  setuptools,
   setuptools-scm,
   toml,
   mysqlclient,

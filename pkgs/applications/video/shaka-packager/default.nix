@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://shaka-project.github.io/shaka-packager/html/";
     license = lib.licenses.bsd3;
     mainProgram = "packager";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = builtins.attrNames sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

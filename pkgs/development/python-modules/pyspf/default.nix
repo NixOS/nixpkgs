@@ -1,6 +1,5 @@
 {
   lib,
-  python,
   buildPythonPackage,
   fetchFromGitHub,
   pydns,

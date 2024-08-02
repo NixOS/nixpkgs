@@ -56,7 +56,6 @@ makeScopeWithSplicing' {
 
       compat = self.callPackage ./pkgs/compat/package.nix {
         inherit (buildPackages) coreutils;
-        inherit (buildPackages.darwin) cctools-port;
         inherit (buildNetbsd) makeMinimal;
         inherit (self) install;
       };

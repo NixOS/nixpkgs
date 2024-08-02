@@ -37,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-ukBZLr/iyYQ68sv9JWrR4YP0ahHfGhytgcWKPzrF3Ps=";
   };
 
+  patches = [
+    ./pdal.pc.in.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -49,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     laszip
     libgeotiff
     libtiff
-    libxml2
+    (libxml2.override { enableHttp = true; })
     openscenegraph
     postgresql
     proj
@@ -124,7 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
       version = "pdal ${finalAttrs.finalPackage.version}";
     };
     pdal = callPackage ./tests.nix { pdal = finalAttrs.finalPackage; };
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {

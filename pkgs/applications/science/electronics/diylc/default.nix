@@ -73,6 +73,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

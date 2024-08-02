@@ -1,5 +1,5 @@
 dotnetPackages:
-{ buildEnv, makeWrapper, lib }:
+{ buildEnv, makeWrapper, lib, symlinkJoin }:
 # TODO: Rethink how we determine and/or get the CLI.
 #       Possible options raised in #187118:
 #         1. A separate argument for the CLI (as suggested by IvarWithoutBones
@@ -27,7 +27,10 @@ assert lib.assertMsg ((builtins.length dotnetPackages) > 0)
       inherit (cli) icu;
 
       versions = lib.catAttrs "version" dotnetPackages;
-      packages = lib.remove null (lib.catAttrs "packages" dotnetPackages);
+      packages = symlinkJoin {
+        name = "combined-packages";
+        paths = lib.remove null (lib.catAttrs "packages" dotnetPackages);
+      };
     };
 
     inherit (cli) meta;

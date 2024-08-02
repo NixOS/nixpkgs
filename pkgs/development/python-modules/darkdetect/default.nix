@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Detect OS Dark Mode from Python";
     homepage = "https://github.com/albertosottile/darkdetect";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

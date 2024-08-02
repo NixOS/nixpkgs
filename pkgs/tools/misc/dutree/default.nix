@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "0gg1w0xx36aswfm0y53nqwwz7zds25ysmklbrc8v2r91j74bhkzw";
+  cargoHash = "sha256-/E+4yJEhZbERy4vOqn0Ruv3zOcd2FA+q41qZ0Tvg4T0=";
 
   meta = with lib; {
     description = "Tool to analyze file system usage written in Rust";

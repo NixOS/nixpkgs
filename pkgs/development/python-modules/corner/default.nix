@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   dependencies = [ matplotlib ];
 
-  optional-dependencies = {
+  passthru.optional-dependencies = {
     arviz = [ arviz ];
     docs = [
       arviz

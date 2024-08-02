@@ -116,6 +116,55 @@ It has two modes:
 
 : The `lychee` package to use.
 
+## `shellcheck` {#tester-shellcheck}
+
+Runs files through `shellcheck`, a static analysis tool for shell scripts.
+
+:::{.example #ex-shellcheck}
+# Run `testers.shellcheck`
+
+A single script
+
+```nix
+testers.shellcheck {
+  name = "shellcheck";
+  src = ./script.sh;
+}
+```
+
+Multiple files
+
+```nix
+let
+  inherit (lib) fileset;
+in
+testers.shellcheck {
+  name = "shellcheck";
+  src = fileset.toSource {
+    root = ./.;
+    fileset = fileset.unions [
+      ./lib.sh
+      ./nixbsd-activate
+    ];
+  };
+}
+```
+
+:::
+
+### Inputs {#tester-shellcheck-inputs}
+
+[`src` (path or string)]{#tester-shellcheck-param-src}
+
+: The path to the shell script(s) to check.
+  This can be a single file or a directory containing shell files.
+  All files in `src` will be checked, so you may want to provide `fileset`-based source instead of a whole directory.
+
+### Return value {#tester-shellcheck-return}
+
+A derivation that runs `shellcheck` on the given script(s).
+The build will fail if `shellcheck` finds any issues.
+
 ## `testVersion` {#tester-testVersion}
 
 Checks that the output from running a command contains the specified version string in it as a whole word.

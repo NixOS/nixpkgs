@@ -3,17 +3,16 @@
   stdenvNoCC,
   fetchurl,
   makeWrapper,
-  # To grab metadata
-  pcsx2,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "pcsx2";
-  version = "1.7.5919";
+  pname = "pcsx2-bin";
+  version = "2.1.17";
 
   src = fetchurl {
     url = "https://github.com/PCSX2/pcsx2/releases/download/v${finalAttrs.version}/pcsx2-v${finalAttrs.version}-macos-Qt.tar.xz";
-    hash = "sha256-NYgHsYXoIhI2pxqqiMgz5sKBAezEFf4AfEfu5S3diMg=";
+    hash = "sha256-WuxvMcGuCyTAc99JkUjG0qcV7SXWy9fmaZR0+8iGepQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -26,28 +25,33 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{bin,Applications}
+    mkdir -p $out/Applications
     cp -r "PCSX2-v${finalAttrs.version}.app" $out/Applications/PCSX2.app
-    makeWrapper $out/Applications/PCSX2.app/Contents/MacOS/PCSX2 $out/bin/pcsx2-qt
     runHook postInstall
   '';
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
-    inherit (pcsx2.meta)
-      homepage
-      longDescription
-      license
-      changelog
-      downloadPage
-      ;
-    description = "Playstation 2 emulator; precompiled binary for MacOS, repacked from official website";
+    homepage = "https://pcsx2.net";
+    description = "Playstation 2 emulator (precompiled binary, repacked from official website)";
+    longDescription = ''
+      PCSX2 is an open-source PlayStation 2 (AKA PS2) emulator. Its purpose is
+      to emulate the PS2 hardware, using a combination of MIPS CPU Interpreters,
+      Recompilers and a Virtual Machine which manages hardware states and PS2
+      system memory. This allows you to play PS2 games on your PC, with many
+      additional features and benefits.
+    '';
+    changelog = "https://github.com/PCSX2/pcsx2/releases/tag/v${finalAttrs.version}";
+    downloadPage = "https://github.com/PCSX2/pcsx2";
+    license = with lib.licenses; [
+      gpl3Plus
+      lgpl3Plus
+    ];
     maintainers = with lib.maintainers; [ matteopacini ];
-    mainProgram = "pcsx2-qt";
-    platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isDarwin lib.systems.inspect.patterns.isx86_64;
+    platforms = [ "x86_64-darwin" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

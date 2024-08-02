@@ -4,6 +4,9 @@
   pythonOlder,
   fetchFromGitHub,
 
+  # build-system
+  setuptools,
+
   # dependencies
   rope,
   python-lsp-server,
@@ -25,6 +28,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-Mr+mWRvOXoy7+SosMae80o0V1jBMn1dEoGmaR/BGHrc=";
   };
+
+  build-system =  [
+    setuptools
+  ];
 
   dependencies = [
     rope

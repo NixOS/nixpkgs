@@ -62,7 +62,7 @@
 , substituteAll
 , glib
 , unifdef
-, addOpenGLRunpath
+, addDriverRunpath
 , enableGeoLocation ? true
 , enableExperimental ? false
 , withLibsecret ? true
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
-      inherit (addOpenGLRunpath) driverLink;
+      inherit (addDriverRunpath) driverLink;
     })
   ];
 

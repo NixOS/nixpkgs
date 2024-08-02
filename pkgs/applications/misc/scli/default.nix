@@ -54,6 +54,6 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "scli";
     homepage = "https://github.com/isamert/scli";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

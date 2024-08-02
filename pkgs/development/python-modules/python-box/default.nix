@@ -4,7 +4,6 @@
   cython,
   fetchFromGitHub,
   msgpack,
-  poetry-core,
   pytestCheckHook,
   pythonOlder,
   pyyaml,

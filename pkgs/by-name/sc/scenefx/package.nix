@@ -4,7 +4,7 @@
   fetchFromGitHub,
   meson,
   ninja,
-  wlroots,
+  wlroots_0_17,
   scdoc,
   pkg-config,
   wayland,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_17
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

@@ -58,6 +58,6 @@ buildPythonPackage rec {
       generate a variety of reports from them, and provides a web interface.
     '';
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [ sharzy polarmutex ];
   };
 }

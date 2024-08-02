@@ -38,7 +38,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/schwehr/libais";
     changelog = "https://github.com/schwehr/libais/blob/master/Changelog.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

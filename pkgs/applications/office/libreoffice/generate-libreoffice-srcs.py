@@ -9,6 +9,7 @@ of the input file, and writes the result to stdout.
 todo - Ideally we would move as much as possible into derivation dependencies.
 """
 import collections, itertools, json, re, subprocess, sys, os
+import urllib.request, urllib.error
 
 def main():
 
@@ -53,11 +54,28 @@ def main():
 
 def construct_url(x):
     if x['brief']:
-        return 'https://dev-www.libreoffice.org/src/{}{}'.format(
+        url = 'https://dev-www.libreoffice.org/src/{}{}'.format(
             x.get('subdir', ''), x['tarball'])
     else:
-        return 'https://dev-www.libreoffice.org/src/{}{}-{}'.format(
+        url = 'https://dev-www.libreoffice.org/src/{}{}-{}'.format(
             x.get('subdir', ''), x['md5'], x['tarball'])
+
+    if x['name'].startswith('FONT_NOTO_') and not probe_url(url):
+        return 'https://noto-website-2.storage.googleapis.com/pkgs/{}'.format(x['tarball'])
+
+    if x['name'] == 'FONT_OPENDYSLEXIC':
+        return 'https://github.com/antijingoist/opendyslexic/releases/download/v0.91.12/{}'.format(x['tarball'])
+
+    return url
+
+
+def probe_url(url: str) -> bool:
+    request = urllib.request.Request(url, method='HEAD')
+    try:
+        with urllib.request.urlopen(request) as response:
+            return response.status == 200
+    except urllib.error.HTTPError as e:
+        return False
 
 
 def download(url, name, hash, hashtype):

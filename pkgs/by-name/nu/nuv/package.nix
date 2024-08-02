@@ -2,7 +2,6 @@
 , symlinkJoin
 , callPackage
 , fetchFromGitHub
-, fetchurl
 , buildGoModule
 , makeWrapper
 , breakpointHook

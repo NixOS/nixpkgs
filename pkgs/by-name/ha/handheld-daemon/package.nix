@@ -1,5 +1,4 @@
 {
-  config,
   fetchFromGitHub,
   hidapi,
   kmod,

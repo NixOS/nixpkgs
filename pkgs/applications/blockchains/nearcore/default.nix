@@ -1,6 +1,6 @@
 { rustPlatform, lib, fetchFromGitHub
 , zlib, openssl
-, pkg-config, protobuf, llvmPackages
+, pkg-config, protobuf
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nearcore";

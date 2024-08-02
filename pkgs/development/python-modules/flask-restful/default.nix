@@ -64,6 +64,6 @@ buildPythonPackage rec {
       REST API.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

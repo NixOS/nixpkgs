@@ -3,7 +3,6 @@
   buildGoModule,
   fetchFromGitHub,
   stdenv,
-  darwin,
   copyDesktopItems,
   makeDesktopItem,
 

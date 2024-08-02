@@ -5,7 +5,7 @@
 , pkg-config
 , libpulseaudio
 , dbus
-, speechd
+, speechd-minimal
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libpulseaudio
     dbus
-    speechd
+    speechd-minimal
   ];
 
   nativeBuildInputs = [

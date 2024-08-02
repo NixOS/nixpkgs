@@ -1,7 +1,6 @@
 {
   lib,
   aiohttp,
-  aioresponses,
   aresponses,
   backoff,
   buildPythonPackage,

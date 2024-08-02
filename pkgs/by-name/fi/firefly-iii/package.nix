@@ -12,15 +12,15 @@
 
 let
   pname = "firefly-iii";
-  version = "6.1.18";
+  version = "6.1.19";
   phpPackage = php83;
-  npmDepsHash = "sha256-MoxkNxfVeIFkiNVzfehQ9FpC65kBj8ZmvwaRf4MVRIg=";
+  npmDepsHash = "sha256-/oz0raI0/AV5NamvMWxlUdiQbVsSKHRplsw2/KrMOwg=";
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
     repo = "firefly-iii";
     rev = "v${version}";
-    hash = "sha256-mA7gvKhHouUUz1Aix7253O/+VcufoEFwdcJeZxnazEo=";
+    hash = "sha256-SIvYRmCCzQI+qUr5aA78NQLLmO+EPO1ZEL7vcqJ5puw=";
   };
 in
 
@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   composerStrictValidation = true;
   strictDeps = true;
 
-  vendorHash = "sha256-EpMypgj6lZDz6T94bGoCUH9IVwh7VB4Ds08AcCsreRw=";
+  vendorHash = "sha256-qps/dWubCVqqvzgSizJJvx2MUzRZKiMeQCnWz08Ft+E=";
 
   npmDeps = fetchNpmDeps {
     inherit src;

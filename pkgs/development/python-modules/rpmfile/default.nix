@@ -6,12 +6,12 @@
 }:
 buildPythonPackage rec {
   pname = "rpmfile";
-  version = "2.0.0";
+  version = "2.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tLDdVTrZlxGk+oYmeCm/4XLAPx6hzkztJP+lXtiDhb4=";
+    hash = "sha256-CsK7qJJ3xxhcuGHJxtfQyaJovlFpUW28amjxVWqeP5k=";
   };
 
   # Tests access the internet

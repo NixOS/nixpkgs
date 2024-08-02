@@ -15,7 +15,6 @@
   packaging,
   pillow,
   platformdirs,
-  poetry-core,
   py,
   pydantic,
   pyjwt,
@@ -71,7 +70,7 @@ buildPythonPackage rec {
     pyjwt
     pytz
     typer
-  ] ++ typer.optional-dependencies.all ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   passthru.optional-dependencies = {
     shell = [

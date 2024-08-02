@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "show-midi";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "gbevin";
     repo = "ShowMIDI";
     rev = finalAttrs.version;
-    hash = "sha256-ezX2W3qCnbJORfBqZqiDuxuDyfuxDMyaWjF9AfoPAS8=";
+    hash = "sha256-jANrFZqJZZMTGyNa0sIthoQzaDMdLzpGZqHfxNw8hDg=";
     fetchSubmodules = true;
   };
 

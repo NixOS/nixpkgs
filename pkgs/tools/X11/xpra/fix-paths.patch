@@ -1,8 +1,8 @@
 diff --git a/xpra/x11/fakeXinerama.py b/xpra/x11/fakeXinerama.py
-index d5c1c8bb10..88c77e8142 100755
+index a5289e0e43..527cdf90c9 100755
 --- a/xpra/x11/fakeXinerama.py
 +++ b/xpra/x11/fakeXinerama.py
-@@ -22,31 +22,7 @@ fakeXinerama_config_files = [
+@@ -23,31 +23,7 @@ fakeXinerama_config_files = [
             ]
  
  def find_libfakeXinerama():
@@ -29,7 +29,7 @@ index d5c1c8bb10..88c77e8142 100755
 -        except Exception as e:
 -            log("find_libfakeXinerama()", exc_info=True)
 -            log.error("Error: cannot launch ldconfig -p to locate libfakeXinerama:")
--            log.error(" %s", e)
+-            log.estr(e)
 -    return find_lib("libfakeXinerama.so.1")
 +    return "@libfakeXinerama@/lib/libfakeXinerama.so.1.0"
  

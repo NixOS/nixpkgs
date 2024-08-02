@@ -101,6 +101,6 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     homepage = "https://www.damonlynch.net/rapid/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

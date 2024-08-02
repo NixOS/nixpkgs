@@ -99,17 +99,12 @@ in stdenv.mkDerivation rec {
     )
   '';
 
-  # Meson is no longer able to pick up Boost automatically.
-  # https://github.com/NixOS/nixpkgs/issues/86131
-  BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-  BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
-
   meta = with lib; {
     description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
     mainProgram = "pulseeffects";
     homepage = "https://github.com/wwmm/pulseeffects";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

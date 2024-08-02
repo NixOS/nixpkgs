@@ -7,33 +7,25 @@
   platformsh
 }:
 
+let versions = lib.importJSON ./versions.json;
+    arch = if stdenvNoCC.isx86_64 then "amd64"
+           else if stdenvNoCC.isAarch64 then "arm64"
+           else throw "Unsupported architecture";
+    os = if stdenvNoCC.isLinux then "linux"
+         else if stdenvNoCC.isDarwin then "darwin"
+         else throw "Unsupported os";
+    versionInfo = versions."${os}-${arch}";
+    inherit (versionInfo) hash url;
+
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "platformsh";
-  version = "5.0.15";
+  inherit (versions) version;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  src =
-    {
-      x86_64-darwin = fetchurl {
-        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_darwin_all.tar.gz";
-        hash = "sha256-G5/T6ZPcvC7dvw82p2CEMEOb7GCTyCAB8xJ2lxV2UXk=";
-      };
-      aarch64-darwin = fetchurl {
-        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_darwin_all.tar.gz";
-        hash = "sha256-G5/T6ZPcvC7dvw82p2CEMEOb7GCTyCAB8xJ2lxV2UXk=";
-      };
-      x86_64-linux = fetchurl {
-        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_linux_amd64.tar.gz";
-        hash = "sha256-0h5Thp9pSp1TgUyNVVAjsEw+kAZVzfbsHzPMXzhZhSk=";
-      };
-      aarch64-linux = fetchurl {
-        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_linux_arm64.tar.gz";
-        hash = "sha256-m0rxC9IfqY1k4Zh027zSkDWCGNv0E0oopFfBC/vYRgU=";
-      };
-    }
-    .${stdenvNoCC.system}
-      or (throw "${finalAttrs.pname}-${finalAttrs.version}: ${stdenvNoCC.system} is unsupported.");
+  # run ./update
+  src = fetchurl { inherit hash url; };
 
   dontConfigure = true;
   dontBuild = true;
@@ -51,6 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    updateScript = ./update.sh;
     tests.version = testers.testVersion {
       inherit (finalAttrs) version;
       package = platformsh;

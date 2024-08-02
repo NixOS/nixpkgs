@@ -23,6 +23,7 @@ maven.buildMavenPackage rec {
   };
 
   mvnFetchExtraArgs.dontConfigure = true;
+  mvnJdk = jdk_headless;
   mvnHash = "sha256-2uthmSjFQ43N5lgV11DsxuGce+ZptZsmRLTgjDo0M2w=";
 
   nativeBuildInputs = [ jdk_headless makeWrapper ];

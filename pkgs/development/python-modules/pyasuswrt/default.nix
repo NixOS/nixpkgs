@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ollo69/pyasuswrt";
     changelog = "https://github.com/ollo69/pyasuswrt/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

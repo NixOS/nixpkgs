@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace CMakeLists.txt \
         --replace-fail "pkg_get_variable($pcvarname LomiriSystemSettings $pcvar)" "set($pcvarname $(pkg-config LomiriSystemSettings --define-variable=prefix=$out --define-variable=libdir=$out/lib --variable=$pcvar))"
     done
+
+    # Compatibility with newer libqofono
+    substituteInPlace plugins/security-privacy/{Ofono,PageComponent,SimPin}.qml \
+      --replace-fail 'import MeeGo.QOfono' 'import QOfono'
   '';
 
   strictDeps = true;
@@ -41,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     python3
+    qtdeclarative
   ];
 
   buildInputs = [

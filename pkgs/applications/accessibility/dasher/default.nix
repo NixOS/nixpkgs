@@ -15,7 +15,7 @@
 , libxslt
 , libxml2
 , speechSupport ? true
-, speechd
+, speechd-minimal
 }:
 
 stdenv.mkDerivation {
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     # at-spi2 needs dbus to be recognized by pkg-config
     at-spi2-core
     dbus
-  ] ++ lib.optional speechSupport speechd;
+  ] ++ lib.optional speechSupport speechd-minimal;
 
   enableParallelBuilding = true;
 

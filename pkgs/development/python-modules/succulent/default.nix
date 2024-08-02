@@ -9,7 +9,6 @@
   poetry-core,
   pytestCheckHook,
   pythonOlder,
-  toml-adapt,
   xmltodict,
 }:
 

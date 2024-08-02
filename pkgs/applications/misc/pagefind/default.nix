@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , rustPlatform
 , fetchFromGitHub
 , fetchNpmDeps

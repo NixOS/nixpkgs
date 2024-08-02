@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (cmakeBool "BOX2D_BUILD_UNIT_TESTS" finalAttrs.doCheck)
+    (cmakeBool "BOX2D_BUILD_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   prePatch = ''

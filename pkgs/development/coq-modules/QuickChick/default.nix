@@ -1,6 +1,6 @@
 { lib, mkCoqDerivation, coq, ssreflect, coq-ext-lib, simple-io, version ? null }:
 
-let recent = lib.versions.isGe "8.7" coq.coq-version; in
+let recent = lib.versions.isGe "8.7" coq.coq-version || coq.coq-version == "dev"; in
 (mkCoqDerivation {
   pname = "QuickChick";
   owner = "QuickChick";
@@ -40,6 +40,9 @@ let recent = lib.versions.isGe "8.7" coq.coq-version; in
   preConfigure = lib.optionalString recent
     "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
 
+  useDuneifVersion = v: lib.versions.isGe "2.1" v || v == "dev";
+  opam-name = "coq-quickchick";
+
   mlPlugin = true;
   nativeBuildInputs = lib.optional recent coq.ocamlPackages.ocamlbuild;
   propagatedBuildInputs = [ ssreflect ]
@@ -54,9 +57,11 @@ let recent = lib.versions.isGe "8.7" coq.coq-version; in
   };
 }).overrideAttrs (o:
   let after_1_6 = lib.versions.isGe "1.6" o.version || o.version == "dev";
+      after_2_1 = lib.versions.isGe "2.1" o.version || o.version == "dev";
   in {
     nativeBuildInputs = o.nativeBuildInputs
-    ++ lib.optional after_1_6 coq.ocamlPackages.cppo;
+    ++ lib.optional after_1_6 coq.ocamlPackages.cppo
+    ++ lib.optional after_2_1 coq.ocamlPackages.menhir;
     propagatedBuildInputs = o.propagatedBuildInputs
     ++ lib.optionals after_1_6 (with coq.ocamlPackages; [ findlib zarith ]);
 })

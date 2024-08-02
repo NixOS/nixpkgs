@@ -49,6 +49,10 @@ resholve.mkDerivation rec {
       imagemagick
       zip
     ];
+    execer = [
+      # zip can exec; confirmed 2 invocations in pdf2odt don't
+      "cannot:${zip}/bin/zip"
+    ];
   };
 
   meta = with lib; {

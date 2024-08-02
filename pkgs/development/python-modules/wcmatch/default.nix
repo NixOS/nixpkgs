@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Wilcard File Name matching library";
     homepage = "https://github.com/facelessuser/wcmatch";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

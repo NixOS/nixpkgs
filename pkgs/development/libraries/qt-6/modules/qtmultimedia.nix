@@ -13,7 +13,7 @@
 , gst-plugins-good
 , gst-libav
 , gst-vaapi
-, ffmpeg_6
+, ffmpeg_7
 , libva
 , libpulseaudio
 , wayland
@@ -28,7 +28,7 @@
 qtModule {
   pname = "qtmultimedia";
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ffmpeg_6 ]
+  buildInputs = [ ffmpeg_7 ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [ libunwind orc ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ libpulseaudio alsa-lib wayland libXrandr libva ]
     ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [ elfutils ];

@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fetchzip, fetchpatch
+{ stdenv, lib, fetchFromGitHub, fetchzip
 , autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
 , gettext, pcre-cpp, yajl, fribidi, which
-, openssl, gperf, tinyxml2, tinyxml-2, taglib, libssh, swig, jre_headless
+, openssl, gperf, tinyxml2, tinyxml-2, taglib, libssh, jre_headless
 , gtest, ncurses, spdlog
 , libxml2, systemd
 , alsa-lib, libGLU, libGL, ffmpeg, fontconfig, freetype, ftgl
@@ -261,5 +261,6 @@ in stdenv.mkDerivation (finalAttrs: {
       license     = licenses.gpl2Plus;
       platforms   = platforms.linux;
       maintainers = teams.kodi.members;
+      mainProgram = "kodi";
     };
 })

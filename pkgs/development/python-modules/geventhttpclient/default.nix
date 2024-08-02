@@ -6,11 +6,9 @@
   dpkt,
   fetchFromGitHub,
   gevent,
-  llhttp,
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  six,
   stdenv,
   urllib3,
 }:

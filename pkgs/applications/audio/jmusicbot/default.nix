@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jagrosh/MusicBot";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     inherit (jre_headless.meta) platforms;
     mainProgram = "JMusicBot";
   };

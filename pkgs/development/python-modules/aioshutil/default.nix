@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aioshutil";
-  version = "1.4";
+  version = "1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "kumaraditya303";
     repo = "aioshutil";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OGxD7GusRcHpz7FdUpa/dJ6/jIAVexbTvXfouVw0C+I=";
+    hash = "sha256-hSUNx43sIUPs4YfQ+H39FXTpj3oCMUqRzDdHX2OdRdE=";
   };
 
   postPatch = ''

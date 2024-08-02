@@ -10,7 +10,6 @@
   jinja2,
   mkdocs,
   pytestCheckHook,
-  pythonImportsCheckHook,
   rich,
   setuptools,
 }:

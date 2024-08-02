@@ -6,7 +6,6 @@
   fetchFromGitHub,
   frelatage,
   libiconv,
-  maturin,
   pytestCheckHook,
   pythonOlder,
   rustc,

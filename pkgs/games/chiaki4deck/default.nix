@@ -6,7 +6,7 @@
 , pkg-config
 , protobuf
 , python3
-, ffmpeg_6
+, ffmpeg
 , libopus
 , wrapQtAppsHook
 , qtbase
@@ -36,24 +36,15 @@
 
 stdenv.mkDerivation rec {
   pname = "chiaki4deck";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NiShxa49ZKmK/3q8+PHwy7edwjaqtkOqfhd2ncWK5UQ=";
+    hash = "sha256-9EF+Mm6nZeo3XYH8KO7e22cJ4e9TWUEinhkm+Z213RU=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix build with miniupnpc 2.2.8
-    # https://github.com/streetpea/chiaki4deck/pull/355
-    (fetchpatch2 {
-      url = "https://github.com/streetpea/chiaki4deck/commit/e5806ae39cc6e8632d0f8cccefb5b7ddd458951a.patch?full_index=1";
-      hash = "sha256-0oGhymCZkhckJkvP64WNc4aaEzXlXYI84S7Blq7WgVw=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -67,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ffmpeg_6
+    ffmpeg
     libopus
     qtbase
     qtmultimedia
@@ -94,11 +85,8 @@ stdenv.mkDerivation rec {
     xxHash
   ];
 
-  # handle cmake not being able to identify if curl is built with websocket support, and library name discrepancy when curl not built with cmake
+  # handle library name discrepancy when curl not built with cmake
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail ' WS WSS' ""
-
     substituteInPlace lib/CMakeLists.txt \
       --replace-fail 'libcurl_shared' 'libcurl'
   '';
@@ -127,6 +115,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://streetpea.github.io/chiaki4deck/";
     description = "Fork of Chiaki (Open Source Playstation Remote Play) with Enhancements for Steam Deck";
+    # Includes OpenSSL linking exception that we currently have no way
+    # to represent.
+    #
+    # See also: <https://github.com/spdx/license-list-XML/issues/939>
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ devusb ];
     platforms = platforms.linux;

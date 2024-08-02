@@ -24,13 +24,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    bison
     cmake
+    flex
     makeWrapper
     python3
   ];
 
   buildInputs = [
-    bison
     flex
     zlib
   ];

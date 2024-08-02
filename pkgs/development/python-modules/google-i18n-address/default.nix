@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mirumee/google-i18n-address";
     changelog = "https://github.com/mirumee/google-i18n-address/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

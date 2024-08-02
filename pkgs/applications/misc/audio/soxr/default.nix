@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://soxr.sourceforge.net";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix ++ platforms.windows;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

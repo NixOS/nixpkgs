@@ -282,6 +282,6 @@ python311Packages.buildPythonApplication {
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ ttuegel arthsmn ];
+    maintainers = with maintainers; [ ttuegel ];
   };
 }

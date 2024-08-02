@@ -25,7 +25,6 @@
   typing-extensions,
   watchdog,
   xattr,
-  fetchpatch,
   pytestCheckHook,
   nixosTests,
 }:

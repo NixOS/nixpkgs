@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatch-regex-commit,
   hatchling,
   pythonOlder,
 }:

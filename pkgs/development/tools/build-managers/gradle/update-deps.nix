@@ -52,10 +52,10 @@ writeTextFile {
   text = ''
     #!${runtimeShell}
     set -eo pipefail
-    export PATH="${lib.makeBinPath [
-      bubblewrap coreutils curl jq mitm-cache openssl
+    export PATH="${lib.makeBinPath ([
+      coreutils curl jq mitm-cache openssl
       procps python3.pkgs.ephemeral-port-reserve
-    ]}:$PATH"
+    ] ++ lib.optional useBwrap bubblewrap)}:$PATH"
     outPath="${
       # if this is an absolute path in nix store, use path relative to the store path
       if lib.hasPrefix "${builtins.storeDir}/" (toString data)

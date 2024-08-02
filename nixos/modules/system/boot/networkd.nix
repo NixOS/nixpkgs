@@ -18,12 +18,16 @@ let
           "ManageForeignRoutes"
           "RouteTable"
           "IPv6PrivacyExtensions"
+          "IPv4Forwarding"
+          "IPv6Forwarding"
         ])
         (assertValueOneOf "SpeedMeter" boolValues)
         (assertInt "SpeedMeterIntervalSec")
         (assertValueOneOf "ManageForeignRoutingPolicyRules" boolValues)
         (assertValueOneOf "ManageForeignRoutes" boolValues)
         (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
+        (assertValueOneOf "IPv4Forwarding" boolValues)
+        (assertValueOneOf "IPv6Forwarding" boolValues)
       ];
 
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
@@ -652,6 +656,8 @@ let
           "DNSDefaultRoute"
           "NTP"
           "IPForward"
+          "IPv4Forwarding"
+          "IPv6Forwarding"
           "IPMasquerade"
           "IPv6PrivacyExtensions"
           "IPv6AcceptRA"
@@ -700,7 +706,9 @@ let
         (assertValueOneOf "LLDP" (boolValues ++ ["routers-only"]))
         (assertValueOneOf "EmitLLDP" (boolValues ++ ["nearest-bridge" "non-tpmr-bridge" "customer-bridge"]))
         (assertValueOneOf "DNSDefaultRoute" boolValues)
-        (assertValueOneOf "IPForward" (boolValues ++ ["ipv4" "ipv6"]))
+        (assertRemoved "IPForward" "IPv4Forwarding and IPv6Forwarding in systemd.network(5) and networkd.conf(5)")
+        (assertValueOneOf "IPv4Forwarding" boolValues)
+        (assertValueOneOf "IPv6Forwarding" boolValues)
         (assertValueOneOf "IPMasquerade" (boolValues ++ ["ipv4" "ipv6" "both"]))
         (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
         (assertValueOneOf "IPv6AcceptRA" boolValues)
@@ -770,8 +778,7 @@ let
         ])
         (assertInt "TypeOfService")
         (assertRange "TypeOfService" 0 255)
-        (assertInt "FirewallMark")
-        (assertRange "FirewallMark" 1 4294967295)
+        (assertRangeWithOptionalMask "FirewallMark" 1 4294967295)
         (assertInt "Priority")
         (assertPortOrPortRange "SourcePort")
         (assertPortOrPortRange "DestinationPort")
@@ -2835,6 +2842,7 @@ let
         "systemd-networkd-wait-online.service"
         "systemd-networkd.service"
         "systemd-networkd.socket"
+        "systemd-networkd-persistent-storage.service"
       ];
 
       environment.etc."systemd/networkd.conf" = renderConfig cfg.config;

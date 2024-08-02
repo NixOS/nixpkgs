@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "alpha-vantage";
-  version = "2.3.1";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,9 +22,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RomelTorres";
     repo = "alpha_vantage";
-    rev = "refs/tags/${version}";
-    hash = "sha256-DWnaLjnbAHhpe8aGUN7JaXEYC0ivWlizOSAfdvg33DM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Ae9WqEsAjJcD62NZOPh6a49g1wY4KMswzixDAZEtWkw=";
   };
+
+  postPatch = ''
+    # Files are only linked
+    rm alpha_vantage/async_support/*
+    cp alpha_vantage/{cryptocurrencies.py,foreignexchange.py,techindicators.py,timeseries.py} alpha_vantage/async_support/
+  '';
 
   build-system = [ setuptools ];
 
@@ -33,14 +39,19 @@ buildPythonPackage rec {
     requests
   ];
 
+  passthru.optional-dependencies = {
+    pandas = [
+      pandas
+    ];
+  };
+
   nativeCheckInputs = [
     aioresponses
     requests-mock
-    pandas
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  # https://github.com/RomelTorres/alpha_vantage/issues/344
+  # Starting with 3.0.0 most tests require an API key
   doCheck = false;
 
   pythonImportsCheck = [ "alpha_vantage" ];

@@ -22,13 +22,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    perl
   ];
 
   buildInputs = [
     libjpeg
     libpng
     libtiff
-    perl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Carbon
   ];

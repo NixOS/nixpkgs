@@ -1,5 +1,4 @@
 {
-  lib,
   fetchpatch,
   duckstation,
   shaderc,

@@ -59,7 +59,7 @@ let self = buildPythonPackage rec {
     description = "Backport of CPython tarfile module";
     homepage = "https://github.com/jaraco/backports.tarfile";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 };
 in self

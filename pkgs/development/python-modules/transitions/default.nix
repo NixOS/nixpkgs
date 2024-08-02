@@ -9,7 +9,6 @@
   pycodestyle,
   pygraphviz,
   pytestCheckHook,
-  pythonAtLeast,
   setuptools,
   six,
 }:

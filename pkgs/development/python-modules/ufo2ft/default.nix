@@ -68,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googlefonts/ufo2ft";
     changelog = "https://github.com/googlefonts/ufo2ft/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

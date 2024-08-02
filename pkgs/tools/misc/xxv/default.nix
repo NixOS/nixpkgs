@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0ppfsgdigza2jppbkg4qanjhlkpnq7p115c4471vc6vpikpfrlk3";
   };
 
-  cargoSha256 = "0pmpvlmy4pw252is34r9af1ysrp78xs8pz8cw4rys9s4fh2hmhjb";
+  cargoHash = "sha256-S8IKBXREJ+0z4Qz9i3RH52btg1Mpk6GjKIJf4ivdt14=";
 
   buildInputs = lib.optionals useNcurses [ ncurses ]
   ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ])
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage    = "https://chrisvest.github.io/xxv/";
     license     = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "xxv";
   };
 }

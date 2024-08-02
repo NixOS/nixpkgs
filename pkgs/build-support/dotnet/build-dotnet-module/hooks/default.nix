@@ -5,20 +5,16 @@
 , zlib
 , openssl
 , makeSetupHook
-, dotnetCorePackages
+, zip
   # Passed from ../default.nix
 , dotnet-sdk
 , dotnet-runtime
 }:
-let
-  runtimeId = dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system;
-in
 {
   dotnetConfigureHook = makeSetupHook
     {
       name = "dotnet-configure-hook";
       substitutions = {
-        runtimeId = lib.escapeShellArg runtimeId;
         dynamicLinker = "${stdenv.cc}/nix-support/dynamic-linker";
         libPath = lib.makeLibraryPath [
           stdenv.cc.cc.lib
@@ -34,18 +30,12 @@ in
   dotnetBuildHook = makeSetupHook
     {
       name = "dotnet-build-hook";
-      substitutions = {
-        runtimeId = lib.escapeShellArg runtimeId;
-      };
     }
     ./dotnet-build-hook.sh;
 
   dotnetCheckHook = makeSetupHook
     {
       name = "dotnet-check-hook";
-      substitutions = {
-        runtimeId = lib.escapeShellArg runtimeId;
-      };
     }
     ./dotnet-check-hook.sh;
 
@@ -53,7 +43,7 @@ in
     {
       name = "dotnet-install-hook";
       substitutions = {
-        runtimeId = lib.escapeShellArg runtimeId;
+        inherit zip;
       };
     }
     ./dotnet-install-hook.sh;

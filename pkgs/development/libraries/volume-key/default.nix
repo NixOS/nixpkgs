@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     mainProgram = "volume_key";
     homepage = "https://pagure.io/volume_key/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

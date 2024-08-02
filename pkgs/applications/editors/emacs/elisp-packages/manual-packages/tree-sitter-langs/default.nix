@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, writeText
 , melpaStablePackages
 , runCommand
 , tree-sitter-grammars

@@ -62,6 +62,6 @@ buildPythonPackage rec {
     description = "Generalized Linear Models with Dask";
     homepage = "https://github.com/dask/dask-glm/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

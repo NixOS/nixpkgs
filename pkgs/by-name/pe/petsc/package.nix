@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  darwin,
+  cctools,
   gfortran,
   python3,
   blas,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace config/install.py \
-      --replace /usr/bin/install_name_tool ${darwin.cctools}/bin/install_name_tool
+      --replace /usr/bin/install_name_tool ${cctools}/bin/install_name_tool
   '';
 
   # Both OpenMPI and MPICH get confused by the sandbox environment and spew errors like this (both to stdout and stderr):

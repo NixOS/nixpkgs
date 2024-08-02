@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , callPackage
-, pkgsBuildHost
 
 , releaseManifestFile
 , tarballHash
@@ -13,7 +12,7 @@ let
   mkPackages = callPackage ./packages.nix;
   mkVMR = callPackage ./vmr.nix;
 
-  stage0 = pkgsBuildHost.callPackage ./stage0.nix args;
+  stage0 = callPackage ./stage0.nix args;
 
   vmr = (mkVMR {
     inherit releaseManifestFile tarballHash;

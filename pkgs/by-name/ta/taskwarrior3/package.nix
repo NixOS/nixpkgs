@@ -8,7 +8,6 @@
   fetchFromGitHub,
   cmake,
   libuuid,
-  gnutls,
   python3,
   xdg-utils,
   installShellFiles,

@@ -46,6 +46,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/unitedstates/python-us/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -98,13 +98,13 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 For more detail about managing the `deps.nix` file, see [Generating and updating NuGet dependencies](#generating-and-updating-nuget-dependencies)
 :::
 
-* `packNupkg` is used to pack project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `projectReferences`.
-* `projectReferences` can be used to resolve `ProjectReference` project items. Referenced projects can be packed with `buildDotnetModule` by setting the `packNupkg = true` attribute and passing a list of derivations to `projectReferences`. Since we are sharing referenced projects as NuGets they must be added to csproj/fsproj files as `PackageReference` as well.
+* `packNupkg` is used to pack project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `buildInputs`.
+* `buildInputs` can be used to resolve `ProjectReference` project items. Referenced projects can be packed with `buildDotnetModule` by setting the `packNupkg = true` attribute and passing a list of derivations to `buildInputs`. Since we are sharing referenced projects as NuGets they must be added to csproj/fsproj files as `PackageReference` as well.
  For example, your project has a local dependency:
  ```xml
      <ProjectReference Include="../foo/bar.fsproj" />
  ```
- To enable discovery through `projectReferences` you would need to add:
+ To enable discovery through `buildInputs` you would need to add:
  ```xml
      <ProjectReference Include="../foo/bar.fsproj" />
      <PackageReference Include="bar" Version="*" Condition=" '$(ContinuousIntegrationBuild)'=='true' "/>
@@ -143,7 +143,7 @@ in buildDotnetModule rec {
   projectFile = "src/project.sln";
   nugetDeps = ./deps.nix; # see "Generating and updating NuGet dependencies" section for details
 
-  projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
+  buildInputs = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;

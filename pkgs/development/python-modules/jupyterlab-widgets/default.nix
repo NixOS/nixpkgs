@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Jupyter Widgets JupyterLab Extension";
     homepage = "https://github.com/jupyter-widgets/ipywidgets";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

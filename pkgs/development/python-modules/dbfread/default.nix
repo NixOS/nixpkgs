@@ -18,6 +18,6 @@ buildPythonPackage rec {
     description = "Read DBF Files with Python";
     homepage = "https://dbfread.readthedocs.org/";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

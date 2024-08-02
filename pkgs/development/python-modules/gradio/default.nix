@@ -123,7 +123,7 @@ buildPythonPackage rec {
     uvicorn
     typer
     tomlkit
-  ] ++ typer.passthru.optional-dependencies.all;
+  ];
 
   passthru.optional-dependencies.oauth = [
     authlib

@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Extensible Virtual Display Interface";
     homepage = "https://www.displaylink.com/";
     license = with licenses; [ lgpl21Only gpl2Only ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 })

@@ -35,23 +35,21 @@ rustPlatform.buildRustPackage rec {
   # the wrong Nix version (disabling bindnow permits loading libraries
   # requiring unavailable symbols if they are unreached)
   hardeningDisable = lib.optionals withPlugin [ "bindnow" ];
-  # Due to a Rust bug, setting -Z relro-level to anything including "off" on
+
+  # Due to a Rust bug, setting -C relro-level to anything including "off" on
   # macOS will cause link errors
   env = lib.optionalAttrs (withPlugin && stdenv.isLinux) {
-    # nix-doc does not use nightly features, however, there is no other way to
-    # set relro-level
-    RUSTC_BOOTSTRAP = 1;
-    RUSTFLAGS = "-Z relro-level=partial";
+    RUSTFLAGS = "-C relro-level=partial";
   };
 
-  cargoSha256 = "sha256-CHagzXTG9AfrFd3WmHanQ+YddMgmVxSuB8vK98A1Mlw=";
+  cargoHash = "sha256-CHagzXTG9AfrFd3WmHanQ+YddMgmVxSuB8vK98A1Mlw=";
 
   meta = with lib; {
     description = "Interactive Nix documentation tool";
     longDescription = "An interactive Nix documentation tool providing a CLI for function search, a Nix plugin for docs in the REPL, and a ctags implementation for Nix script";
     homepage = "https://github.com/lf-/nix-doc";
     license = licenses.lgpl3Plus;
-    maintainers = [ ];
+    maintainers = [ maintainers.philiptaron ];
     platforms = platforms.unix;
     mainProgram = "nix-doc";
   };

@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Object life-cycle events";
     changelog = "https://github.com/zopefoundation/zope.lifecycleevent/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

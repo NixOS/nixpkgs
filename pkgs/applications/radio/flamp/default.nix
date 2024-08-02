@@ -4,7 +4,6 @@
 , autoreconfHook
 , pkg-config
 , fltk13
-, libsndfile
 , gettext
 }:
 

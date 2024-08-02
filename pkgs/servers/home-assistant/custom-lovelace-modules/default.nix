@@ -4,6 +4,10 @@
 {
   android-tv-card = callPackage ./android-tv-card { };
 
+  apexcharts-card = callPackage ./apexcharts-card { };
+
+  atomic-calendar-revive = callPackage ./atomic-calendar-revive { };
+
   button-card = callPackage ./button-card { };
 
   card-mod = callPackage ./card-mod { };
@@ -21,6 +25,10 @@
   multiple-entity-row = callPackage ./multiple-entity-row { };
 
   mushroom = callPackage ./mushroom { };
+
+  rmv-card = callPackage ./rmv-card { };
+
+  template-entity-row = callPackage ./template-entity-row { };
 
   valetudo-map-card = callPackage ./valetudo-map-card { };
 

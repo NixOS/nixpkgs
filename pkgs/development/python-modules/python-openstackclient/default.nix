@@ -3,37 +3,46 @@
   buildPythonPackage,
   fetchPypi,
   ddt,
-  installShellFiles,
   openstackdocstheme,
   osc-lib,
   pbr,
+  python-barbicanclient,
   python-cinderclient,
+  python-designateclient,
+  python-heatclient,
+  python-ironicclient,
   python-keystoneclient,
+  python-manilaclient,
   python-novaclient,
+  python-openstackclient,
   requests-mock,
-  sphinx,
+  setuptools,
+  sphinxHook,
   sphinxcontrib-apidoc,
   stestr,
+  testers,
 }:
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
   version = "6.6.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-u+8e00gpxBBSsuyiZIDinKH3K+BY0UMNpTQexExPKVw=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
+  build-system = [
     openstackdocstheme
-    sphinx
+    setuptools
+    sphinxHook
     sphinxcontrib-apidoc
   ];
 
-  propagatedBuildInputs = [
+  sphinxBuilders = [ "man" ];
+
+  dependencies = [
     osc-lib
     pbr
     python-cinderclient
@@ -41,22 +50,36 @@ buildPythonPackage rec {
     python-novaclient
   ];
 
-  postInstall = ''
-    sphinx-build -a -E -d doc/build/doctrees -b man doc/source doc/build/man
-    installManPage doc/build/man/openstack.1
-  '';
-
   nativeCheckInputs = [
     ddt
-    stestr
     requests-mock
+    stestr
   ];
 
   checkPhase = ''
+    runHook preCheck
     stestr run
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "openstackclient" ];
+
+  passthru = {
+    optional-dependencies = {
+      # See https://github.com/openstack/python-openstackclient/blob/master/doc/source/contributor/plugins.rst
+      cli-plugins = [
+        python-barbicanclient
+        python-designateclient
+        python-heatclient
+        python-ironicclient
+        python-manilaclient
+      ];
+    };
+    tests.version = testers.testVersion {
+      package = python-openstackclient;
+      command = "openstack --version";
+    };
+  };
 
   meta = with lib; {
     description = "OpenStack Command-line Client";

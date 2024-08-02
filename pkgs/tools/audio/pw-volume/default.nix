@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-r/6AAZKZgPYUGic/Dag7OT5RtH+RKgEkJVWxsO5VGZ0=";
   };
 
-  cargoSha256 = "sha256-srwbrMBUJz/Xi+Hk2GY9oo4rcTfKl/r146YWSSx6dew=";
+  cargoHash = "sha256-srwbrMBUJz/Xi+Hk2GY9oo4rcTfKl/r146YWSSx6dew=";
 
   meta = with lib; {
     description = "Basic interface to PipeWire volume controls";

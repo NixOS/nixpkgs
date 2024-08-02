@@ -1,7 +1,5 @@
 {
   lib,
-  async-timeout,
-  bash,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,

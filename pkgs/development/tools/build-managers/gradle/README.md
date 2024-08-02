@@ -23,7 +23,7 @@ Obviously, this is horrible for reproducibility. Additionally, Gradle
 doesn't offer a way to export the list of dependency URLs and hashes (it
 does in a way, but it's far from being complete, and as such is useless
 for nixpkgs). Even if did, it would be annoying to use considering
-fetching non-Gradle dependendencies in Gradle scripts is commonplace.
+fetching non-Gradle dependencies in Gradle scripts is commonplace.
 
 That's why the setup hook uses mitm-cache, a program designed for
 intercepting all HTTP requests, recording all the files that were

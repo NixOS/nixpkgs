@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  bash,
   ocaml,
   ocamlPackages,
   dune_3,

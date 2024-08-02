@@ -69,7 +69,7 @@ mkDerivation rec {
     description = "Poker game ${target}";
     mainProgram = "pokerth";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ obadz yana ];
+    maintainers = with maintainers; [ obadz ];
     platforms = platforms.all;
   };
 }

@@ -721,7 +721,7 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     doc = ./mosquitto.md;
   };
 }

@@ -28,6 +28,6 @@ python3.pkgs.buildPythonPackage rec {
     mainProgram = "dict.cc.py";
     homepage = "https://github.com/rbaron/dict.cc.py";
     license = with licenses; [ cc0 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

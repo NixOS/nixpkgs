@@ -4,7 +4,6 @@
   fetchFromGitHub,
   python,
   digiham,
-  csdr,
   pycsdr,
   codecserver,
 }:

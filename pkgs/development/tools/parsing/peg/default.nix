@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uLcXvJOll2ijXWUlZ5pODOlOa/ZvkrrPKXnGR0VytFo=";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "strip" '$(STRIP)'
+  '';
+
   preBuild="makeFlagsArray+=( PREFIX=$out )";
 
   meta = with lib; {

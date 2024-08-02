@@ -55,7 +55,7 @@ unwrapped = stdenv.mkDerivation rec {
     mainProgram = "gsignond";
     homepage = "https://gitlab.com/accounts-sso/gsignond";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 };

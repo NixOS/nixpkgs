@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   env.BORING_BSSL_PATH = boringssl-wrapper;
 
-  optional-dependencies = {
+  passthru.optional-dependencies = {
     dev = [ pytest ];
   };
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchsvn, darwin, libtiff
+{ lib, stdenv, fetchsvn, cctools, libtiff
 , libpng, zlib, libwebp, libraw, openexr, openjpeg
 , libjpeg, jxrlib, pkg-config
 , fixDarwinDylibNames, autoSignDarwinBinariesHook }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+    cctools
     fixDarwinDylibNames
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       "CVE-2023-47995"
       "CVE-2023-47996"
     ];
-    maintainers = with lib.maintainers; [viric l-as];
+    maintainers = with lib.maintainers; [ l-as ];
     platforms = with lib.platforms; unix;
   };
 })

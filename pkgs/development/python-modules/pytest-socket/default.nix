@@ -5,7 +5,6 @@
   poetry-core,
   pytest,
   pythonOlder,
-  setuptoolsBuildHook,
 }:
 
 buildPythonPackage rec {
@@ -36,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/miketheman/pytest-socket";
     changelog = "https://github.com/miketheman/pytest-socket/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

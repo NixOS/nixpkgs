@@ -4,7 +4,6 @@
 , file
 , gnupg
 , gawk
-, notmuch
 , procps
 , withManpage ? false
 }:

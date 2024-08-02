@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , git
 , cmake
-, gnum4
 , gfortran
 , pkg-config
 , fftw

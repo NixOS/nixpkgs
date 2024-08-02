@@ -1,31 +1,36 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+  setuptools,
   colorama,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "migen";
-  version = "unstable-2022-09-02";
-  format = "setuptools";
+  version = "unstable-2024-07-21";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-labs";
     repo = "migen";
-    rev = "639e66f4f453438e83d86dc13491b9403bbd8ec6";
-    hash = "sha256-IPyhoFZLhY8d3jHB8jyvGdbey7V+X5eCzBZYSrJ18ec=";
+    rev = "9279e8623f8433bc4f23ac51e5e2331bfe544417";
+    hash = "sha256-z3LRhNmKZrjr6rFD0yxtccSa/SWvFIYmb+G/D5d2Jd8=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ colorama ];
 
+  nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "migen" ];
 
-  meta = with lib; {
+  meta = {
     description = " A Python toolbox for building complex digital hardware";
     homepage = "https://m-labs.hk/migen";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ l-as ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ l-as ];
   };
 }

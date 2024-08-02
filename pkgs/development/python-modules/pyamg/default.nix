@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyamg/pyamg";
     changelog = "https://github.com/pyamg/pyamg/blob/v${version}/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

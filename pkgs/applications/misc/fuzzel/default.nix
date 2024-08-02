@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://codeberg.org/dnkl/fuzzel";
     license = with licenses; [ mit zlib ];
     mainProgram = "fuzzel";
-    maintainers = with maintainers; [ fionera polykernel rodrgz ];
+    maintainers = with maintainers; [ fionera rodrgz ];
     platforms = with platforms; linux;
   };
 })

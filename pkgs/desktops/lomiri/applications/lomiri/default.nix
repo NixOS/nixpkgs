@@ -116,6 +116,14 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-guq/Ykcq4WcuXxNKO1eA4sJFyGSpZo0gtyFTdeK/GeE=";
     })
 
+    # fetchpatch2 for renames
+    # Remove when version > 0.2.1
+    (fetchpatch2 {
+      name = "1010-lomiri-QOfono-namespace.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/d0397dadb5f05097f916c5b39e6d9b95d4ab9e4d.patch";
+      hash = "sha256-wIkHlz2vYxF9eeH/sYYEdD9f8m4ylHEXXnX/DFG3HXg=";
+    })
+
     ./9901-lomiri-Disable-Wizard.patch
     ./9902-lomiri-Check-NIXOS_XKB_LAYOUTS.patch
   ];
@@ -125,6 +133,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace data/lomiri-greeter.desktop.in.in \
       --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/lomiri-greeter-wrapper @CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' '@CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' \
       --replace-fail 'X-LightDM-Session-Type=mir' 'X-LightDM-Session-Type=wayland'
+
+    # Part of QOfono namespace patch, fetchpatch2 cannot handle rename-only changes
+    for unmovedThing in tests/mocks/MeeGo/QOfono/*; do
+      mv "$unmovedThing" "tests/mocks/QOfono/$(basename "$unmovedThing")"
+    done
+    rmdir tests/mocks/MeeGo/QOfono
+    rmdir tests/mocks/MeeGo
 
     # Need to replace prefix
     substituteInPlace data/systemd-user/CMakeLists.txt \
@@ -154,8 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
     patchShebangs tests/whitespace/check_whitespace.py
   '';
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     cmake

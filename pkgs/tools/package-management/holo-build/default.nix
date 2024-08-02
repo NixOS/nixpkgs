@@ -54,7 +54,7 @@ buildGoModule rec {
     description = "Cross-distribution system package compiler";
     homepage = "https://holocm.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "holo-build";
   };
 }

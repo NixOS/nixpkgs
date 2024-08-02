@@ -41,15 +41,16 @@ let
   # get cccl from source to avoid license issues
   nvidia-cccl = clangStdenv.mkDerivation {
     pname = "nvidia-cccl";
-    # note that v2.2.0 has some cmake issues
-    version = "2.2.0-unstable-2024-01-26";
+    # note, after v2.2.0, manifold dependency fails with some swap() ambiguities
+    version = "2.2.0";
     src = fetchFromGitHub {
       owner = "NVIDIA";
       repo = "cccl";
       fetchSubmodules = true;
-      rev = "0c9d03276206a5f59368e908e3d643610f9fddcd";
-      hash = "sha256-f11CNfa8jF9VbzvOoX1vT8zGIJL9cZ/VBpiklUn0YdU=";
+      rev = "v2.2.0";
+      hash = "sha256-azHDAuK0rAHrH+XkN3gHDrbwZOclP3zbEMe8VRpMjDQ=";
     };
+    patches = [ ./thrust-cmake.patch ];
     nativeBuildInputs = [ cmake pkg-config ];
     buildInputs = [ tbb_2021_11 ];
     cmakeFlags = [
@@ -81,12 +82,12 @@ in
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2024-03-10";
+  version = "2024-07-24";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "db167b1df31fbd8a2101cf3a13dac148b0c2165d";
-    hash = "sha256-i2ZGYsNfMLDi3wRd/lohs9BuO2KuQ/7kJIXGtV65OQU=";
+    rev = "48f4430b12c29a95ab89ffdd8307205d7189421c";
+    hash = "sha256-A75JHmWVNlgURb5one5JFkztCrVff2RbyaDaObUp4ZY=";
     fetchSubmodules = true;
   };
   patches = [ ./test.diff ];

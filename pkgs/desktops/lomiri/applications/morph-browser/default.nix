@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/app/webbrowser/morph-browser.desktop.in.in \
       --replace 'Icon=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser.svg' 'Icon=/run/current-system/sw/share/icons/hicolor/scalable/apps/morph-browser.svg' \
       --replace 'X-Lomiri-Splash-Image=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/morph-browser.svg'
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
+  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     substituteInPlace CMakeLists.txt \
       --replace 'add_subdirectory(tests)' ""
   '';

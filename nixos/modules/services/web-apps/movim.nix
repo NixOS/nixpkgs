@@ -86,8 +86,8 @@ let
                   # `cfg.podConfig` to prevent confusing situtions where the
                   # values are rewritten on server reboot
                   ''
-                    substituteInPlace ${appDir}/app/widgets/AdminMain/adminmain.tpl \
-                      --replace-warn 'name="${k}"' 'name="${k}" disabled'
+                    substituteInPlace ${appDir}/app/Widgets/AdminMain/adminmain.tpl \
+                      --replace-warn 'name="${k}"' 'name="${k}" readonly'
                   '')
               [ ]
               cfg.podConfig));

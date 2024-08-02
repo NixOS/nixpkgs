@@ -4,7 +4,6 @@
   deprecated,
   fetchFromGitHub,
   ipython,
-  lark,
   matplotlib-inline,
   nest-asyncio,
   networkx,
@@ -20,25 +19,22 @@
   rpcq,
   scipy,
   syrupy,
-  tenacity,
   types-deprecated,
-  types-python-dateutil,
-  types-retry,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "4.10.1";
+  version = "4.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "pyquil";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mXcuvZauldoKmTZzFJ6TGgETxpqhXsXYBTCZpwc1I7Q=";
+    hash = "sha256-tfneoRtBOHPHWqeajpr+m0jDhtcl6+ReQNl2kt3ymUc=";
   };
 
   pythonRelaxDeps = [
@@ -46,6 +42,7 @@ buildPythonPackage rec {
     "networkx"
     "packaging"
     "qcs-sdk-python"
+    "rpcq"
   ];
 
   build-system = [ poetry-core ];
@@ -53,7 +50,6 @@ buildPythonPackage rec {
 
   dependencies = [
     deprecated
-    lark
     matplotlib-inline
     networkx
     numpy
@@ -61,10 +57,7 @@ buildPythonPackage rec {
     qcs-sdk-python
     rpcq
     scipy
-    tenacity
     types-deprecated
-    types-python-dateutil
-    types-retry
     typing-extensions
   ];
 

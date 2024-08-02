@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/derek73/python-nameparser";
     changelog = "https://github.com/derek73/python-nameparser/releases/tag/v${version}";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

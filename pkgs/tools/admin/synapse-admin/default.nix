@@ -16,11 +16,10 @@ mkYarnPackage rec {
     sha256 = "sha256-3MC5PCEwYfZzJy9AW9nHTpvU49Lk6wbYC4Rcv9J9MEg=";
   };
 
-  yarnLock = ./yarn.lock;
   packageJSON = ./package.json;
 
   offlineCache = fetchYarnDeps {
-    inherit yarnLock;
+    yarnLock = "${src}/yarn.lock";
     hash = "sha256-vpCwPL1B+hbIaVSHtlkGjPAteu9BFNNmCTE66CSyFkg=";
   };
 

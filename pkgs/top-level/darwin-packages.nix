@@ -90,7 +90,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   };
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
-    inherit (self) cctools;
+    inherit (pkgs) cctools;
     inherit (pkgs.llvmPackages) clang-unwrapped llvm llvm-manpages;
   };
 
@@ -120,7 +120,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     name = "${lib.getName self.binutils-unwrapped}-dualas-${lib.getVersion self.binutils-unwrapped}";
     paths = [
       self.binutils-unwrapped
-      (lib.getOutput "gas" self.cctools)
+      (lib.getOutput "gas" pkgs.cctools)
     ];
   };
 
@@ -131,20 +131,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   binutilsNoLibc = pkgs.wrapBintoolsWith {
     libc = preLibcCrossHeaders;
     bintools = self.binutils-unwrapped;
-  };
-
-  cctools = self.cctools-port;
-
-  cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
-  };
-
-  cctools-llvm = callPackage ../os-specific/darwin/cctools/llvm.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
-  };
-
-  cctools-port = callPackage ../os-specific/darwin/cctools/port.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
   # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.
@@ -245,7 +231,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
   # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { };
 
-  libtapi = callPackage ../os-specific/darwin/libtapi {};
+  libtapi = pkgs.libtapi;
 
   ios-deploy = callPackage ../os-specific/darwin/ios-deploy {};
 

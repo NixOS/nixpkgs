@@ -8,12 +8,14 @@
   optionalDeps ? [
     jq
     poppler_utils
-    unar
+    _7zz
     ffmpegthumbnailer
     fd
     ripgrep
     fzf
     zoxide
+    imagemagick
+    chafa
   ],
 
   # deps
@@ -23,12 +25,14 @@
   # optional deps
   jq,
   poppler_utils,
-  unar,
+  _7zz,
   ffmpegthumbnailer,
   fd,
   ripgrep,
   fzf,
   zoxide,
+  imagemagick,
+  chafa,
 
   settings ? { },
   plugins ? { },

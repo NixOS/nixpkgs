@@ -23,6 +23,7 @@
 , glslang
 , libliftoff
 , libdisplay-info
+, lcms2
 , nixosTests
 
 , enableXWayland ? true
@@ -137,5 +138,19 @@ rec {
     ];
   };
 
-  wlroots = wlroots_0_17;
+  wlroots_0_18 = generic {
+    version = "0.18.0";
+    hash = "sha256-LiRnvu7qCbfSg+ONWVCtWwdzxxFZHfbgmy7zApCIW40=";
+    extraNativeBuildInputs = [
+      hwdata
+    ];
+    extraBuildInputs = [
+      ffmpeg
+      libliftoff
+      libdisplay-info
+      lcms2
+    ];
+  };
+
+  wlroots = wlroots_0_18;
 }

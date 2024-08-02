@@ -9,17 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-sqv";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sqv";
     rev = "v${version}";
-    hash = "sha256-KoB9YnPNE2aB5MW5G9r6Bk+1QnANVSKA2dp3ufSJ44M=";
+    hash = "sha256-frGukJDsxq+BWLPC/4imfc42lDKVF8BPIQQDazaLaQ0=";
   };
-  cargoPatches = [ ./Cargo.lock.patch ];
 
-  cargoHash = "sha256-E6tNOc3omg6yLwCP+MdyBF/HmFTBFCiXd5r+jflfs4k=";
+  cargoHash = "sha256-1h1nXtXMTwL8ICxWTV8My0IdE+6w0L7xXZD012Cv5U8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,31 +29,29 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     nettle
   ];
-  # Otherwise, the shell completion files are not built
-  cargoBuildFlags = [
-    "--package" "sequoia-sqv"
-  ];
-  # Use a predictable target directory, to access it when installing shell
-  # completion files.
-  preBuild = ''
-    export CARGO_TARGET_DIR="$(pwd)/target"
-  '';
+  # Install shell completion files and manual pages. Unfortunatly it is hard to
+  # predict the paths to all of these files generated during the build, and it
+  # is impossible to control these using `$OUT_DIR` or alike, as implied by
+  # upstream's `build.rs`. This is a general Rust issue also discussed in
+  # https://github.com/rust-lang/cargo/issues/9661, also discussed upstream at:
+  # https://gitlab.com/sequoia-pgp/sequoia-wot/-/issues/56
   postInstall = ''
+    installManPage target/*/release/build/*/out/man-pages/sqv.1
     installShellCompletion --cmd sqv \
-      --zsh target/_sqv \
-      --bash target/sqv.bash \
-      --fish target/sqv.fish
+      --zsh target/*/release/build/*/out/shell-completions/_sqv \
+      --bash target/*/release/build/*/out/shell-completions/sqv.bash \
+      --fish target/*/release/build/*/out/shell-completions/sqv.fish
   '';
 
   doCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line OpenPGP signature verification tool";
     homepage = "https://docs.sequoia-pgp.org/sqv/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "sqv";
   };
 }

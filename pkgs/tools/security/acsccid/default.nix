@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = src.meta.homepage;
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; unix;
   };
 }

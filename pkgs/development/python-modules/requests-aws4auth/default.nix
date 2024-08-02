@@ -4,7 +4,6 @@
   fetchFromGitHub,
   httpx,
   pytestCheckHook,
-  python,
   pythonOlder,
   requests,
   six,

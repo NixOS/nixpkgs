@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  wheel,
   alabaster,
   attrs,
   babel,

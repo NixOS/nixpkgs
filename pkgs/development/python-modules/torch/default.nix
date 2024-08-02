@@ -26,7 +26,6 @@
 
   # tests.cudaAvailable:
   callPackage,
-  torchWithCuda,
 
   # Native build inputs
   cmake,
@@ -53,9 +52,9 @@
   cffi,
   click,
   typing-extensions,
-  # ROCm build and `torch.compile` requires `openai-triton`
+  # ROCm build and `torch.compile` requires `triton`
   tritonSupport ? (!stdenv.isDarwin),
-  openai-triton,
+  triton,
 
   # Unit tests
   hypothesis,
@@ -202,8 +201,11 @@ let
       ]);
     "MPI cudatoolkit does not match cudaPackages.cudatoolkit" =
       MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
+    # This used to be a deep package set comparison between cudaPackages and
+    # effectiveMagma.cudaPackages, making torch too strict in cudaPackages.
+    # In particular, this triggered warnings from cuda's `aliases.nix`
     "Magma cudaPackages does not match cudaPackages" =
-      cudaSupport && (effectiveMagma.cudaPackages != cudaPackages);
+      cudaSupport && (effectiveMagma.cudaPackages.cudaVersion != cudaPackages.cudaVersion);
     "Rocm support is currently broken because `rocmPackages.hipblaslt` is unpackaged. (2024-06-09)" = rocmSupport;
   };
 in
@@ -486,7 +488,7 @@ buildPythonPackage rec {
       CoreServices
       libobjc
     ]
-    ++ lib.optionals tritonSupport [ openai-triton ]
+    ++ lib.optionals tritonSupport [ triton ]
     ++ lib.optionals MPISupport [ mpi ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
@@ -514,7 +516,7 @@ buildPythonPackage rec {
 
     # torch/csrc requires `pybind11` at runtime
     pybind11
-  ] ++ lib.optionals tritonSupport [ openai-triton ];
+  ] ++ lib.optionals tritonSupport [ triton ];
 
   propagatedCxxBuildInputs =
     [ ] ++ lib.optionals MPISupport [ mpi ] ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];

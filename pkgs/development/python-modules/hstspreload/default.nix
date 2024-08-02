@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Chromium HSTS Preload list as a Python package and updated daily";
     homepage = "https://github.com/sethmlarson/hstspreload";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

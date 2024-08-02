@@ -9,6 +9,7 @@ nvidia_x11: sha256:
 , jansson
 , gtk2
 , dbus
+, vulkan-headers
 , gtk3
 , libXv
 , libXrandr
@@ -17,7 +18,7 @@ nvidia_x11: sha256:
 , libvdpau
 , librsvg
 , wrapGAppsHook3
-, addOpenGLRunpath
+, addDriverRunpath
 , withGtk2 ? false
 , withGtk3 ? true
 }:
@@ -114,10 +115,10 @@ stdenv.mkDerivation {
     fi
   '';
 
-  nativeBuildInputs = [ pkg-config m4 addOpenGLRunpath ]
+  nativeBuildInputs = [ pkg-config m4 addDriverRunpath ]
     ++ lib.optionals withGtk3 [ wrapGAppsHook3 ];
 
-  buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 dbus ]
+  buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 dbus vulkan-headers ]
     ++ lib.optionals (withGtk2 || lib.versionOlder nvidia_x11.settingsVersion "525.53") [ gtk2 ]
     ++ lib.optionals withGtk3 [ gtk3 librsvg ];
 
@@ -145,7 +146,7 @@ stdenv.mkDerivation {
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib:${libXv}/lib" \
       $out/bin/$binaryName
 
-    addOpenGLRunpath $out/bin/$binaryName
+    addDriverRunpath $out/bin/$binaryName
   '';
 
   passthru = {

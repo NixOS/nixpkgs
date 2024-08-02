@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Python wrapper for aspell (C extension and Python version)";
     homepage = "https://github.com/WojciechMula/aspell-python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

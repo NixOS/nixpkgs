@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  substituteAll,
   supervise,
   setuptools,
   pytestCheckHook,

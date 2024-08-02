@@ -241,6 +241,6 @@ in rec {
 
   ### Plugins
 
-  plugins = callPackage ./plugins.nix { } // { __attrsFailEvaluation = true; };
+  plugins = callPackage ./plugins.nix { };
 
 }

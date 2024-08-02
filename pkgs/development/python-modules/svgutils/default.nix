@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  fetchpatch2,
   setuptools,
   lxml,
   pytestCheckHook,
-  nose,
 }:
 
 buildPythonPackage rec {
@@ -25,12 +24,23 @@ buildPythonPackage rec {
 
   dependencies = [ lxml ];
 
-  doCheck = pythonOlder "3.12";
+  patches = [
+    # Remove nose dependency, see: https://github.com/btel/svg_utils/pull/131
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    nose
+    # this first commit is required, as isort moved nose imports
+    (fetchpatch2 {
+      url = "https://github.com/btel/svg_utils/commit/48b078a729aeb6b1160142ab65157474c95a61b6.patch?full_index=1";
+      hash = "sha256-9toOFfNkgGF3TvM340vYOTkuSEHBeiyBRSGqqobfiqI=";
+    })
+
+    # migrate to pytest
+    (fetchpatch2 {
+      url = "https://github.com/btel/svg_utils/commit/931a80220be7c0efa2fc6e1d47858d69a08df85e.patch?full_index=1";
+      hash = "sha256-SMv0i8p3s57TDn6NM17RrHF9kVgsy2YJJ0KEBQKn2J0=";
+    })
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "svgutils" ];
 

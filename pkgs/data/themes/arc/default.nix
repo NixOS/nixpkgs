@@ -8,7 +8,7 @@
 , gnome-themes-extra
 , gtk-engine-murrine
 , inkscape
-, cinnamon
+, cinnamon-common
 , makeFontsConf
 , python3
 }:
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # "-Dthemes=cinnamon,gnome-shell,gtk2,gtk3,plank,xfwm,metacity"
     # "-Dvariants=light,darker,dark,lighter"
-    "-Dcinnamon_version=${cinnamon.cinnamon-common.version}"
+    "-Dcinnamon_version=${cinnamon-common.version}"
     "-Dgnome_shell_version=${gnome.gnome-shell.version}"
     # You will need to patch gdm to make use of this.
     "-Dgnome_shell_gresource=true"

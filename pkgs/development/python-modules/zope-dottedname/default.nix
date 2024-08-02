@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Resolver for Python dotted names";
     changelog = "https://github.com/zopefoundation/zope.dottedname/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

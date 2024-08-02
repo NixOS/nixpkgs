@@ -8,6 +8,7 @@
 
 , boost
 , cairo
+, darwin
 , gettext
 , glibmm
 , gtk3
@@ -71,6 +72,10 @@ let
     configureFlags = [
       "--with-boost=${boost.dev}"
       "--with-boost-libdir=${boost.out}/lib"
+    ] ++ lib.optionals stdenv.cc.isClang [
+      # Newer versions of clang default to C++17, but synfig and some of its dependencies use deprecated APIs that
+      # are removed in C++17. Setting the language version to C++14 allows it to build.
+      "CXXFLAGS=-std=c++14"
     ];
 
     nativeBuildInputs = [
@@ -94,6 +99,8 @@ let
       fribidi
       openexr
       fftw
+    ] ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
     ];
   };
 in
@@ -110,6 +117,12 @@ stdenv.mkDerivation {
   preConfigure = ''
     ./bootstrap.sh
   '';
+
+  configureFlags = lib.optionals stdenv.cc.isClang [
+    # Newer versions of clang default to C++17, but synfig and some of its dependencies use deprecated APIs that
+    # are removed in C++17. Setting the language version to C++14 allows it to build.
+    "CXXFLAGS=-std=c++14"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -147,7 +160,7 @@ stdenv.mkDerivation {
     description = "2D animation program";
     homepage = "http://www.synfig.org";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

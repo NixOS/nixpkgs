@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  python,
   isPy3k,
   unittestCheckHook,
 }:

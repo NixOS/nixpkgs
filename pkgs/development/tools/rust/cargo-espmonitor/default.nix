@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "hWFdim84L2FfG6p9sEf+G5Uq4yhp5kv1ZMdk4sMHa+4=";
   };
 
-  cargoSha256 = "d0tN6NZiAd+RkRy941fIaVEw/moz6tkpL0rN8TZew3g=";
+  cargoHash = "sha256-d0tN6NZiAd+RkRy941fIaVEw/moz6tkpL0rN8TZew3g=";
 
   meta = with lib; {
     description = "Cargo tool for monitoring ESP32/ESP8266 execution";

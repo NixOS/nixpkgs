@@ -6,8 +6,10 @@
 , makeWrapper
 , nodejs
 , prefetch-yarn-deps
+, substituteAll
 , yarn
 , testers
+, typescript
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,6 +22,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-FCv0+tA7AuCdGeG6FEiMyRAHcl0WbezhNYLL7xp5FWU=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./default-fallbackTsserverPath.diff;
+      typescript = "${typescript}/lib/node_modules/typescript/lib/tsserver.js";
+    })
+  ];
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";

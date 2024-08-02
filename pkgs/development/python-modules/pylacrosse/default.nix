@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   mock,
-  nose,
   pyserial,
   pytestCheckHook,
   pythonOlder,
@@ -23,6 +23,14 @@ buildPythonPackage rec {
     hash = "sha256-jrkehoPLYbutDfxMBO/vlx4nMylTNs/gtvoBTFHFsDw=";
   };
 
+  patches = [
+    # Migrate to pytest, https://github.com/hthiery/python-lacrosse/pull/17
+    (fetchpatch2 {
+      url = "https://github.com/hthiery/python-lacrosse/commit/cc2623c667bc252360a9b5ccb4fc05296cf23d9c.patch?full_index=1";
+      hash = "sha256-LKryLnXMKj1lVClneyHNVOWM5KPPhOGy0/FX/7Qy/jU=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace "version = version," "version = '${version}',"
@@ -30,11 +38,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyserial ];
 
-  doCheck = pythonOlder "3.12";
-
   nativeCheckInputs = [
     mock
-    nose
     pytestCheckHook
   ];
 

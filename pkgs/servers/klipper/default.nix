@@ -57,6 +57,10 @@ stdenv.mkDerivation rec {
     cp -r $src/docs $out/lib/docs
     cp -r $src/config $out/lib/config
 
+    # Add version information. For the normal procedure see https://www.klipper3d.org/Packaging.html#versioning
+    # This is done like this because scripts/make_version.py is not available when sourceRoot is set to "${src.name}/klippy"
+    echo "${version}-NixOS" > $out/lib/klipper/.version
+
     mkdir -p $out/bin
     chmod 755 $out/lib/klipper/klippy.py
     makeWrapper $out/lib/klipper/klippy.py $out/bin/klippy --chdir $out/lib/klipper

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "re2";
-  version = "2024-06-01";
+  version = "2024-07-02";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = finalAttrs.version;
-    hash = "sha256-iQETsjdIFcYM5I/W8ytvV3z/4va6TaZ/+KkSjb8CtF0=";
+    hash = "sha256-IeANwJlJl45yf8iu/AZNDoiyIvTCZIeK1b74sdCfAIc=";
   };
 
   outputs = [
@@ -36,20 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  buildInputs = lib.optionals finalAttrs.doCheck [
+  buildInputs = [
     gbenchmark
     gtest
   ];
 
-  propagatedBuildInputs = [
-    abseil-cpp
-    icu
-  ];
+  propagatedBuildInputs = [ abseil-cpp ] ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ icu ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "RE2_BUILD_TESTING" finalAttrs.doCheck)
-    (lib.cmakeBool "RE2_USE_ICU" true)
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) (lib.cmakeBool "BUILD_SHARED_LIBS" true);
+  cmakeFlags =
+    [ (lib.cmakeBool "RE2_BUILD_TESTING" true) ]
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+      (lib.cmakeBool "RE2_USE_ICU" true)
+      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    ];
 
   doCheck = true;
 

@@ -150,16 +150,6 @@ let
         ];
       });
 
-      ha-av = super.av.overridePythonAttrs (oldAttrs: rec {
-        pname = "ha-av";
-        version = "10.1.1";
-
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-QaMFVvglipN0kG1+ZQNKk7WTydSyIPn2qa32UtvLidw=";
-        };
-      });
-
       intellifire4py = super.intellifire4py.overridePythonAttrs (oldAttrs: rec {
         version = "2.2.2";
         src = fetchFromGitHub {
@@ -455,6 +445,8 @@ let
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
+      homeassistant = self.toPythonModule home-assistant;
+      pytest-homeassistant-custom-component = self.callPackage ./pytest-homeassistant-custom-component.nix { };
     })
   ];
 
@@ -476,7 +468,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.7.3";
+  hassVersion = "2024.7.4";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -494,13 +486,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-6f4z1mpoLOntImC161+0CyyuT3NrPdfuCa6/+wqzHgs=";
+    hash = "sha256-PHKFQmlwdS0+XpD5Pd+Xwv5KNB2kJKouh9jfBH3aUIU=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-YtrOUSQFTgDFL+iPm3itkKsMXs9IKyB2rCnpe7Bn2Gk=";
+    hash = "sha256-NJ5gD6k05ahIPCwktJgTz9zczxgnfuLesfjR58fbRL4=";
   };
 
   build-system = with python.pkgs; [

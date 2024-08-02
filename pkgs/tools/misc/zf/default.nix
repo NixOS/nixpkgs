@@ -3,28 +3,28 @@
 , fetchFromGitHub
 , installShellFiles
 , testers
-, zig_0_11
+, zig_0_13
 , callPackage
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zf";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "natecraddock";
     repo = "zf";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-JPv/59ELh+CS1/akuLNy0qSimMEJsypPO8hiHFAOirI=";
+    hash = "sha256-8KfzsDG9sZ/jMOusz2ydt3oytp891vKOpCUlPAwS8TE=";
   };
 
   nativeBuildInputs = [
     installShellFiles
-    zig_0_11.hook
+    zig_0_13.hook
   ];
 
   postPatch = ''
-    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
+    cp -a ${callPackage ./deps.nix { }}/. $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
   postInstall = ''

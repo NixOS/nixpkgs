@@ -44,6 +44,9 @@ pkgs.runCommand "nixpkgs-release-checks"
         # Relies on impure eval
         export NIX_ABORT_ON_WARN=true
 
+        # Suppress GC warnings
+        export GC_LARGE_ALLOC_WARN_INTERVAL=100000
+
         set +e
         (
           set -x
@@ -62,7 +65,6 @@ pkgs.runCommand "nixpkgs-release-checks"
         fi
 
         s1=$(sha1sum packages1 | cut -c1-40)
-        echo $s1
 
         nix-env -f $src2 \
             --show-trace --argstr system "$platform" \
@@ -82,9 +84,10 @@ pkgs.runCommand "nixpkgs-release-checks"
         # Catch any trace calls not caught by NIX_ABORT_ON_WARN (lib.warn)
         if [ -s eval-warnings.log ]; then
             echo "Nixpkgs on $platform evaluated with warnings, aborting"
+            echo "Warnings logged:"
+            cat eval-warnings.log
             exit 1
         fi
-        rm eval-warnings.log
 
         nix-env -f $src \
             --show-trace --argstr system "$platform" \

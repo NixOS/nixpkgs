@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Enrich adds few missing features to the wonderful rich library";
     homepage = "https://github.com/pycontribs/enrich";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,0 +1,21 @@
+diff --git a/tree/CMakeLists.txt b/tree/CMakeLists.txt
+index 4fd1b1a..2d1d9d3 100644
+--- a/tree/CMakeLists.txt
++++ b/tree/CMakeLists.txt
+@@ -40,16 +40,6 @@ if (NOT (WIN32 OR MSVC))
+   endif()
+ endif()
+ 
+-if(APPLE)
+-  # On MacOS:
+-  #   -undefined dynamic_lookup is necessary for pybind11 linking
+-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-everything -w -undefined dynamic_lookup")
+-
+-  # On MacOS, we need this so that CMake will use the right Python if the user
+-  # has a virtual environment active
+-  set (CMAKE_FIND_FRAMEWORK LAST)
+-endif()
+-
+ # Fetch pybind to be able to use pybind11_add_module symbol.
+ set(PYBIND_VER v2.10.1)
+ include(FetchContent)

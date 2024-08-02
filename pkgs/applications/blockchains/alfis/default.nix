@@ -15,20 +15,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alfis";
-  version = "0.8.4-unstable-2024-03-08";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
-    rev = "28431ec0530405782038e7c02c2dedc3086bd7c9";
-    hash = "sha256-HL4RRGXE8PIcD+zTF1xZSyOpKMhKF75Mxm6KLGsR4Hc=";
+    rev = "v${version}";
+    hash = "sha256-ettStNktSDZnYNN/IWqTB1Ou1g1QEGFabS4EatnDLaE=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ecies-ed25519-ng-0.5.2" = "sha256-E+jVbgKKK1DnJWAJN+xGZPCV2n7Gxp2t7XXkDNDnPN4=";
-      "ureq-2.9.1" = "sha256-ATT2wJ9kmY/Jjw6FEbxqM9pDytKFLmu/ZqH/pJpZTu8=";
+      "ecies-ed25519-ng-0.5.3" = "sha256-sJZ5JCaGNa3DdAaHw7/2qeLYv+HDKEMcY4uHbzfzQBM=";
+      "ureq-2.10.0" = "sha256-XNjY8qTgt2OzlfKu7ECIfgRLkSlprvjpgITsNVMi1uc=";
       "web-view-0.7.3" = "sha256-eVMcpMRZHwOdWhfV6Z1uGUNOmhB41YZPaiz1tRQvhrI=";
     };
   };

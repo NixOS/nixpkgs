@@ -5,11 +5,10 @@
   cargo,
   darwin,
   fetchFromGitHub,
+  libiconv,
   pythonOlder,
   rustc,
   rustPlatform,
-  ufmt,
-  usort,
 }:
 
 buildPythonPackage rec {
@@ -43,6 +42,7 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.CoreServices
+    libiconv
   ];
 
   # Tests have issues at the moment, check with next update

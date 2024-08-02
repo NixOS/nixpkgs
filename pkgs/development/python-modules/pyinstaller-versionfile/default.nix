@@ -31,6 +31,6 @@ buildPythonPackage rec {
     mainProgram = "create-version-file";
     homepage = "https://pypi.org/project/pyinstaller-versionfile/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

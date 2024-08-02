@@ -119,7 +119,7 @@ let
   /* The working or failing mails for cross builds will be sent only to
      the following maintainers, as most package maintainers will not be
      interested in the result of cross building a package. */
-  crossMaintainers = [ maintainers.viric ];
+  crossMaintainers = [ ];
 
 
   # Generate attributes for all supported systems.

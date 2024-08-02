@@ -12,8 +12,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
-  websockets,
 }:
 
 buildPythonPackage rec {

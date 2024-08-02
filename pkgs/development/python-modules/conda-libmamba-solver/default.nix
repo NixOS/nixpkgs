@@ -9,15 +9,15 @@
 }:
 buildPythonPackage rec {
   pname = "conda-libmamba-solver";
-  version = "24.1.0";
+  version = "24.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     inherit pname version;
     owner = "conda";
     repo = "conda-libmamba-solver";
-    rev = version;
-    hash = "sha256-vsUYrDVNMKHd3mlaAFYCP4uPQ9HxeKsose5O8InaMcE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-HBbApS6hyIbRyxOpOwbC1+IalIYk17rYRo6HLcwKKW4=";
   };
 
 

@@ -1,6 +1,6 @@
 { lib, stdenv, makeWrapper
 , runCommand, wrapBintoolsWith, wrapCCWith, autoPatchelfHook
-, buildAndroidndk, androidndk, targetAndroidndkPkgs
+, llvmPackages, buildAndroidndk, androidndk, targetAndroidndkPkgs
 }:
 
 let
@@ -63,6 +63,7 @@ rec {
     passthru = {
       inherit targetPrefix;
       isClang = true; # clang based cc, but bintools ld
+      inherit (llvmPackages.clang.cc) hardeningUnsupportedFlagsByTargetPlatform;
     };
     dontUnpack = true;
     dontBuild = true;

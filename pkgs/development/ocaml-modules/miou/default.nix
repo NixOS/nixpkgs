@@ -16,6 +16,6 @@ buildDunePackage rec {
     homepage = "https://git.robur.coop/robur/miou";
     changelog = "https://git.robur.coop/robur/miou/src/tag/v${version}/CHANGES.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

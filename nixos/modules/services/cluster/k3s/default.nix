@@ -359,6 +359,53 @@ in
         by the k3s agent. This option only makes sense on nodes with an enabled agent.
       '';
     };
+
+    gracefulNodeShutdown = {
+      enable = lib.mkEnableOption ''
+        graceful node shutdowns where the kubelet attempts to detect
+        node system shutdown and terminates pods running on the node. See the
+        [documentation](https://kubernetes.io/docs/concepts/cluster-administration/node-shutdown/#graceful-node-shutdown)
+        for further information.
+      '';
+
+      shutdownGracePeriod = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        default = "30s";
+        example = "1m30s";
+        description = ''
+          Specifies the total duration that the node should delay the shutdown by. This is the total
+          grace period for pod termination for both regular and critical pods.
+        '';
+      };
+
+      shutdownGracePeriodCriticalPods = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        default = "10s";
+        example = "15s";
+        description = ''
+          Specifies the duration used to terminate critical pods during a node shutdown. This should be
+          less than `shutdownGracePeriod`.
+        '';
+      };
+    };
+
+    extraKubeletConfig = lib.mkOption {
+      type = with lib.types; attrsOf anything;
+      default = { };
+      example = {
+        podsPerCore = 3;
+        memoryThrottlingFactor = 0.69;
+        containerLogMaxSize = "5Mi";
+      };
+      description = ''
+        Extra configuration to add to the kubelet's configuration file. The subset of the kubelet's
+        configuration that can be configured via a file is defined by the
+        [KubeletConfiguration](https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/)
+        struct. See the
+        [documentation](https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/)
+        for further information.
+      '';
+    };
   };
 
   # implementation
@@ -397,43 +444,59 @@ in
 
     environment.systemPackages = [ config.services.k3s.package ];
 
-    systemd.services.k3s = {
-      description = "k3s service";
-      after = [
-        "firewall.service"
-        "network-online.target"
-      ];
-      wants = [
-        "firewall.service"
-        "network-online.target"
-      ];
-      wantedBy = [ "multi-user.target" ];
-      path = optional config.boot.zfs.enabled config.boot.zfs.package;
-      serviceConfig = {
-        # See: https://github.com/rancher/k3s/blob/dddbd16305284ae4bd14c0aade892412310d7edc/install.sh#L197
-        Type = if cfg.role == "agent" then "exec" else "notify";
-        KillMode = "process";
-        Delegate = "yes";
-        Restart = "always";
-        RestartSec = "5s";
-        LimitNOFILE = 1048576;
-        LimitNPROC = "infinity";
-        LimitCORE = "infinity";
-        TasksMax = "infinity";
-        EnvironmentFile = cfg.environmentFile;
-        ExecStartPre = activateK3sContent;
-        ExecStart = concatStringsSep " \\\n " (
-          [ "${cfg.package}/bin/k3s ${cfg.role}" ]
-          ++ (optional cfg.clusterInit "--cluster-init")
-          ++ (optional cfg.disableAgent "--disable-agent")
-          ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
-          ++ (optional (cfg.token != "") "--token ${cfg.token}")
-          ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
-          ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
-          ++ (lib.flatten cfg.extraFlags)
+    systemd.services.k3s =
+      let
+        kubeletParams =
+          (lib.optionalAttrs (cfg.gracefulNodeShutdown.enable) {
+            inherit (cfg.gracefulNodeShutdown) shutdownGracePeriod shutdownGracePeriodCriticalPods;
+          })
+          // cfg.extraKubeletConfig;
+        kubeletConfig = (pkgs.formats.yaml { }).generate "k3s-kubelet-config" (
+          {
+            apiVersion = "kubelet.config.k8s.io/v1beta1";
+            kind = "KubeletConfiguration";
+          }
+          // kubeletParams
         );
+      in
+      {
+        description = "k3s service";
+        after = [
+          "firewall.service"
+          "network-online.target"
+        ];
+        wants = [
+          "firewall.service"
+          "network-online.target"
+        ];
+        wantedBy = [ "multi-user.target" ];
+        path = optional config.boot.zfs.enabled config.boot.zfs.package;
+        serviceConfig = {
+          # See: https://github.com/rancher/k3s/blob/dddbd16305284ae4bd14c0aade892412310d7edc/install.sh#L197
+          Type = if cfg.role == "agent" then "exec" else "notify";
+          KillMode = "process";
+          Delegate = "yes";
+          Restart = "always";
+          RestartSec = "5s";
+          LimitNOFILE = 1048576;
+          LimitNPROC = "infinity";
+          LimitCORE = "infinity";
+          TasksMax = "infinity";
+          EnvironmentFile = cfg.environmentFile;
+          ExecStartPre = activateK3sContent;
+          ExecStart = concatStringsSep " \\\n " (
+            [ "${cfg.package}/bin/k3s ${cfg.role}" ]
+            ++ (optional cfg.clusterInit "--cluster-init")
+            ++ (optional cfg.disableAgent "--disable-agent")
+            ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
+            ++ (optional (cfg.token != "") "--token ${cfg.token}")
+            ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
+            ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
+            ++ (optional (kubeletParams != { }) "--kubelet-arg=config=${kubeletConfig}")
+            ++ (lib.flatten cfg.extraFlags)
+          );
+        };
       };
-    };
   };
 
   meta.maintainers = lib.teams.k3s.members;

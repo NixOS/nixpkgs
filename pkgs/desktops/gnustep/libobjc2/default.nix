@@ -2,21 +2,23 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, robin-map
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libobjc2";
-  version = "2.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "gnustep";
     repo = "libobjc2";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iDOVEDnTAfg9r3/kdHp7hzX2oIjO1ovaqgrlIV7V68M=";
+    hash = "sha256-+NP214bbisk7dCFAHaxnhNOfC/0bZLp8Dd2A9F2vK+s=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
+  buildInputs = [ robin-map ];
 
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
 

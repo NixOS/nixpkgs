@@ -60,6 +60,6 @@ buildPythonPackage rec {
     description = "Encryption library for Python";
     homepage = "https://github.com/wbond/oscrypto";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

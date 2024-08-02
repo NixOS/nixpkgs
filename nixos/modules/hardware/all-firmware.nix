@@ -43,7 +43,6 @@ in {
         rtl8192su-firmware
         rt5677-firmware
         rtl8761b-firmware
-        rtw88-firmware
         zd1211fw
         alsa-firmware
         sof-firmware

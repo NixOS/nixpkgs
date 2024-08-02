@@ -2,7 +2,6 @@
   buildPythonPackage,
   exempi,
   fetchFromGitHub,
-  mock,
   pytz,
   lib,
   stdenv,

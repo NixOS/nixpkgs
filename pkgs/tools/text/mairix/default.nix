@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     description = "Program for indexing and searching email messages stored in maildir, MH or mbox";
     mainProgram = "mairix";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
     platforms = with lib.platforms; all;
   };
 }

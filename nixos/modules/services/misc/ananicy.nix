@@ -116,7 +116,7 @@ in
       } // (if ((lib.getName cfg.package) == (lib.getName pkgs.ananicy-cpp)) then {
         # https://gitlab.com/ananicy-cpp/ananicy-cpp/-/blob/master/src/config.cpp#L12
         loglevel = mkOD "warn"; # default is info but its spammy
-        cgroup_realtime_workaround = mkOD config.systemd.enableUnifiedCgroupHierarchy;
+        cgroup_realtime_workaround = true;
         log_applied_rule = mkOD false;
       } else {
         # https://github.com/Nefelim4ag/Ananicy/blob/master/ananicy.d/ananicy.conf
@@ -125,8 +125,6 @@ in
       });
 
     systemd = {
-      # https://gitlab.com/ananicy-cpp/ananicy-cpp/#cgroups applies to both ananicy and -cpp
-      enableUnifiedCgroupHierarchy = mkDefault false;
       packages = [ cfg.package ];
       services."${servicename}" = {
         wantedBy = [ "default.target" ];

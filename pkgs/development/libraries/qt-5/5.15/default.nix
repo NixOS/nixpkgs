@@ -23,7 +23,7 @@ Check for any minor version changes.
 
 let
 
-  srcs = import ./srcs.nix { inherit lib fetchgit fetchFromGitHub; } // { __attrsFailEvaluation = true; };
+  srcs = import ./srcs.nix { inherit lib fetchgit fetchFromGitHub; };
 
   qtCompatVersion = srcs.qtbase.version;
 
@@ -314,7 +314,7 @@ let
           in if stdenv'.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
         inherit (srcs.qtwebengine) version;
         python = python3;
-        inherit (darwin) cctools xnu;
+        inherit (darwin) xnu;
         inherit (darwin.apple_sdk_11_0) libpm libunwind;
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
         inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit

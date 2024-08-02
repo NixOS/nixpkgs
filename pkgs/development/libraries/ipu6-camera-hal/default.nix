@@ -82,7 +82,7 @@ stdenv.mkDerivation {
     description = "HAL for processing of images in userspace";
     homepage = "https://github.com/intel/ipu6-camera-hal";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

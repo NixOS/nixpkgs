@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  gcc,
   cython,
   boost,
   bluez,

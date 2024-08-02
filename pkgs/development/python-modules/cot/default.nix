@@ -8,7 +8,6 @@
   pytest-mock,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pyvmomi,
   qemu,
   requests,

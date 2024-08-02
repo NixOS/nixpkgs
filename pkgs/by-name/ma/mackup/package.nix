@@ -3,6 +3,7 @@
   python3Packages,
   fetchFromGitHub,
   procps,
+  fetchpatch2,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "mackup";
@@ -16,26 +17,29 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-hAIl9nGFRaROlt764IZg4ejw+b1dpnYpiYq4CB9dJqQ=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      name = "remove-six.patch";
+      url = "https://github.com/lra/mackup/commit/31ae717d40360e2e9d2d46518f57dcdc95b165ca.patch";
+      hash = "sha256-M2gtY03SOlPefsHREPmeajhnfmIoHbNYjm+W4YZqwKM=";
+      excludes = [ "CHANGELOG.md" ];
+    })
+  ];
+
   postPatch = ''
     substituteInPlace mackup/utils.py \
-      --replace-fail '"/usr/bin/pgrep"' '"${lib.getExe' procps "pgrep"}"'
+      --replace-fail '"/usr/bin/pgrep"' '"${lib.getExe' procps "pgrep"}"' \
   '';
 
-  nativeBuildInputs = with python3Packages; [
-    poetry-core
-    nose
-  ];
+  build-system = with python3Packages; [ poetry-core ];
 
-  propagatedBuildInputs = with python3Packages; [
-    six
-    docopt
-  ];
+  dependencies = with python3Packages; [ docopt ];
 
   pythonImportsCheck = [ "mackup" ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "tests/*.py" ];
 
   meta = {
     description = "A tool to keep your application settings in sync (OS X/Linux)";

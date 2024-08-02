@@ -1,15 +1,15 @@
-{ stdenv, lib, fetchurl, gnum4 }:
+{ stdenv, lib, fetchurl, gnum4, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "adns";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchurl {
     urls = [
       "https://www.chiark.greenend.org.uk/~ian/adns/ftp/adns-${version}.tar.gz"
       "mirror://gnu/adns/adns-${version}.tar.gz"
     ];
-    sha256 = "1pi0xl07pav4zm2jrbrfpv43s1r1q1y12awgak8k7q41m5jp4hpv";
+    hash = "sha256-cTizeJt1Br1oP0UdT32FMHepGAO3s12G7GZ/D5zUAc0=";
   };
 
   nativeBuildInputs = [ gnum4 ];
@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
       $prog --help > /dev/null && echo $(basename $prog) shows usage
     done
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://www.chiark.greenend.org.uk/ucgi/~ianmdlvl/githttp/adns.git";
+    rev-prefix = "adns-";
+  };
 
   meta = with lib; {
     homepage = "http://www.chiark.greenend.org.uk/~ian/adns/";

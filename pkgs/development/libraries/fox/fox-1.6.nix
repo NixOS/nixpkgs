@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       '';
     homepage = "http://fox-toolkit.org";
     license = lib.licenses.lgpl3;
-    maintainers = [];
+    maintainers = [ ];
     platforms = lib.platforms.mesaPlatforms;
   };
 }

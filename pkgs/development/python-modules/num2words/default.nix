@@ -33,7 +33,7 @@ buildPythonPackage rec {
     mainProgram = "num2words";
     homepage = "https://github.com/savoirfairelinux/num2words";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
 
     longDescription = "num2words is a library that converts numbers like 42 to words like forty-two. It supports multiple languages (see the list below for full list of languages) and can even generate ordinal numbers like forty-second";
   };

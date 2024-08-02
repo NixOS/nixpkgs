@@ -7,18 +7,30 @@ name: Check that Nix files are formatted
 
 on:
   pull_request_target:
+    # See the comment at the same location in ./check-by-name.yml
+    types: [opened, synchronize, reopened, edited]
 permissions:
   contents: read
 
 jobs:
   nixos:
+    name: nixfmt-check
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'NixOS'
+    if: "!contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           # pull_request_target checks out the base branch by default
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          # Fetches the merge commit and its parents
+          fetch-depth: 2
+      - name: Checking out base branch
+        run: |
+          base=$(mktemp -d)
+          baseRev=$(git rev-parse HEAD^1)
+          git worktree add "$base" "$baseRev"
+          echo "baseRev=$baseRev" >> "$GITHUB_ENV"
+          echo "base=$base" >> "$GITHUB_ENV"
       - name: Get Nixpkgs revision for nixfmt
         run: |
           # pin to a commit from nixpkgs-unstable to avoid e.g. building nixfmt
@@ -26,7 +38,7 @@ jobs:
           # This should not be a URL, because it would allow PRs to run arbitrary code in CI!
           rev=$(jq -r .rev ci/pinned-nixpkgs.json)
           echo "url=https://github.com/NixOS/nixpkgs/archive/$rev.tar.gz" >> "$GITHUB_ENV"
-      - uses: cachix/install-nix-action@8887e596b4ee1134dae06b98d573bd674693f47c # v26
+      - uses: cachix/install-nix-action@ba0dd844c9180cbf77aa72a116d6fbc515d0e87b # v27
         with:
           # explicitly enable sandbox
           extra_nix_config: sandbox = true
@@ -34,43 +46,44 @@ jobs:
       - name: Install nixfmt
         run: "nix-env -f '<nixpkgs>' -iAP nixfmt-rfc-style"
       - name: Check that Nix files are formatted according to the RFC style
-        # Each environment variable beginning with NIX_FMT_PATHS_ is a list of
-        # paths to check with nixfmt.
-        env:
-          NIX_FMT_PATHS_BSD: pkgs/os-specific/bsd
-          NIX_FMT_PATHS_MPVSCRIPTS: pkgs/applications/video/mpv/scripts
-          # Format paths related to the Nixpkgs CUDA ecosystem.
-          NIX_FMT_PATHS_CUDA: |-
-            pkgs/development/cuda-modules
-            pkgs/test/cuda
-            pkgs/top-level/cuda-packages.nix
-          NIX_FMT_PATHS_MAINTAINERS: |-
-            maintainers/maintainer-list.nix
-            maintainers/team-list.nix
-          NIX_FMT_PATHS_K3S: |-
-            nixos/modules/services/cluster/k3s
-            nixos/tests/k3s
-            pkgs/applications/networking/cluster/k3s
-          NIX_FMT_PATHS_VSCODE_EXTS: pkgs/applications/editors/vscode/extensions
-          NIX_FMT_PATHS_PHP_PACKAGES: pkgs/development/php-packages
-          NIX_FMT_PATHS_BUILD_SUPPORT_PHP: pkgs/build-support/php
-        # Iterate over all environment variables beginning with NIX_FMT_PATHS_.
         run: |
-          unformattedPaths=()
-          for env_var in "${!NIX_FMT_PATHS_@}"; do
-            readarray -t paths <<< "${!env_var}"
-            if [[ "${paths[*]}" == "" ]]; then
-              echo "Error: $env_var is empty."
-              exit 1
+          unformattedFiles=()
+
+          # TODO: Make this more parallel
+
+          # Loop through all Nix files touched by the PR
+          while readarray -d '' -n 2 entry && (( ${#entry[@]} != 0 )); do
+            type=${entry[0]}
+            file=${entry[1]}
+            case $type in
+              A*)
+                source=""
+                dest=$file
+                ;;
+              M*)
+                source=$file
+                dest=$file
+                ;;
+              C*|R*)
+                source=$file
+                read -r -d '' dest
+                ;;
+              *)
+                echo "Ignoring file $file with type $type"
+                continue
+            esac
+
+            # Ignore files that weren't already formatted
+            if [[ -n "$source" ]] && ! nixfmt --check ${{ env.base }}/"$source" 2>/dev/null; then
+              echo "Ignoring file $file because it's not formatted in the base commit"
+            elif ! nixfmt --check "$dest"; then
+              unformattedFiles+=("$dest")
             fi
-            echo "Checking paths: ${paths[@]}"
-            if ! nixfmt --check "${paths[@]}"; then
-              unformattedPaths+=("${paths[@]}")
-            fi
-          done
-          if (( "${#unformattedPaths[@]}" > 0 )); then
-            echo "Some required Nix files are not properly formatted"
+          done < <(git diff -z --name-status ${{ env.baseRev }} -- '*.nix')
+
+          if (( "${#unformattedFiles[@]}" > 0 )); then
+            echo "Some new/changed Nix files are not properly formatted"
             echo "Please run the following in \`nix-shell\`:"
-            echo "nixfmt ${unformattedPaths[*]@Q}"
+            echo "nixfmt ${unformattedFiles[*]@Q}"
             exit 1
           fi

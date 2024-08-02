@@ -61,7 +61,7 @@
 
 assert cargoVendorDir == null && cargoLock == null
     -> !(args ? cargoSha256 && args.cargoSha256 != null) && !(args ? cargoHash && args.cargoHash != null)
-    -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
+    -> throw "cargoHash, cargoVendorDir, or cargoLock must be set";
 
 let
 
@@ -75,7 +75,7 @@ let
     } // lib.optionalAttrs (args ? cargoHash) {
       hash = args.cargoHash;
     } // lib.optionalAttrs (args ? cargoSha256) {
-      sha256 = args.cargoSha256;
+      sha256 = lib.warn "cargoSha256 is deprecated. Please use cargoHash with SRI hash instead" args.cargoSha256;
     } // depsExtraArgs);
 
   target = stdenv.hostPlatform.rust.rustcTargetSpec;

@@ -2,7 +2,6 @@
 , faust
 , lv2
 , qtbase
-, which
 }:
 
 faust.wrapWithBuildEnv {

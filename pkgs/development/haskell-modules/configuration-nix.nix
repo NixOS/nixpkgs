@@ -369,6 +369,11 @@ self: super: builtins.intersectAttrs super {
   warp = addTestToolDepend pkgs.curl super.warp;
   warp_3_3_30 = addTestToolDepend pkgs.curl super.warp_3_3_30;
 
+  safe-exceptions = overrideCabal (drv: {
+    # Fix strictDeps build error "could not execute: hspec-discover"
+    testToolDepends = drv.testToolDepends or [] ++ [ self.hspec-discover ];
+  }) super.safe-exceptions;
+
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
   hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements;

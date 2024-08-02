@@ -75,6 +75,6 @@ buildPythonPackage rec {
     description = "Library that lets you schedule your Python code to be executed";
     homepage = "https://github.com/agronholm/apscheduler";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

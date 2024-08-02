@@ -92,7 +92,7 @@ py.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/healthchecks/healthchecks";
-    description = "Cron monitoring tool written in Python & Django ";
+    description = "Cron monitoring tool written in Python & Django";
     license = licenses.bsd3;
     maintainers = with maintainers; [ phaer ];
   };

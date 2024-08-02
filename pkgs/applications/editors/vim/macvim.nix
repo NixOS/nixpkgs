@@ -205,7 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Vim - the text editor - for macOS";
     homepage = "https://macvim.org/";
     license = licenses.vim;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.darwin;
     hydraPlatforms = []; # hydra can't build this as long as we rely on Xcode and sandboxProfile
   };

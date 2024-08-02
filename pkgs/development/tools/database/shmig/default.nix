@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     mainProgram = "shmig";
     homepage = "https://github.com/mbucc/shmig";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
