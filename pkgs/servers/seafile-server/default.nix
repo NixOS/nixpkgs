@@ -1,48 +1,60 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, python3
-, autoreconfHook
-, libuuid
-, sqlite
-, glib
-, libevent
-, libsearpc
-, openssl
-, fuse
-, libarchive
-, libjwt
-, curl
-, which
-, vala
-, cmake
-, oniguruma
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  python3,
+  autoreconfHook,
+  libuuid,
+  libmysqlclient,
+  sqlite,
+  glib,
+  libevent,
+  libsearpc,
+  openssl,
+  fuse,
+  libarchive,
+  libjwt,
+  curl,
+  which,
+  vala,
+  cmake,
+  oniguruma,
+  nixosTests,
 }:
 
 let
   # seafile-server relies on a specific version of libevhtp.
   # It contains non upstreamed patches and is forked off an outdated version.
   libevhtp = import ./libevhtp.nix {
-    inherit stdenv lib fetchFromGitHub cmake libevent;
+    inherit
+      stdenv
+      lib
+      fetchFromGitHub
+      cmake
+      libevent
+      ;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "seafile-server";
-  version = "10.0.1";
+  version = "11.0.9";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-server";
-    rev = "db09baec1b88fc131bf4453a808ab63a3fc714c9"; # using a fixed revision because upstream may re-tag releases :/
-    sha256 = "sha256-a5vtJcbnaYzq6/3xmhbWk23BZ+Wil/Tb/q22ML4bDqs=";
+    rev = "4ca723d183e157507a0e9968c955f0e0e2d7ce16"; # using a fixed revision because upstream may re-tag releases :/
+    hash = "sha256-87rRSOwAmiLKaLwaKwn881jOsouEnxiNeraS7i5Voew=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     libuuid
+    libmysqlclient
     sqlite
     openssl
     glib
@@ -73,6 +85,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/haiwen/seafile-server";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ greizgh schmittlauch ];
+    maintainers = with maintainers; [
+      greizgh
+      schmittlauch
+    ];
+    mainProgram = "seaf-server";
   };
 }
