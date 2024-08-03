@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage {
     description = "MdBook preprocessor for removing yml header within --- (front-matter)";
     homepage = "https://github.com/dvogt23/mdbook-yml-header";
     license = lib.licenses.mpl20;
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     mainProgram = "mdbook-yml-header";
     maintainers = [ lib.maintainers.pinage404 ];
   };
