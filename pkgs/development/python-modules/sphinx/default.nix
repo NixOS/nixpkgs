@@ -36,6 +36,9 @@
   html5lib,
   pytestCheckHook,
   pytest-xdist,
+
+  # reverse dependencies to test
+  breathe,
 }:
 
 buildPythonPackage rec {
@@ -142,6 +145,10 @@ buildPythonPackage rec {
       "test_methoddescriptor"
       "test_partialfunction"
     ];
+
+  passthru.tests = {
+    inherit breathe;
+  };
 
   meta = {
     description = "Python documentation generator";
