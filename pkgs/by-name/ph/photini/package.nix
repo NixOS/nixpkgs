@@ -19,8 +19,7 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ setuptools-scm ];
   dependencies = with python3Packages; [
-    pyqt6
-    pyqt6-webengine
+    pyside6
     cachetools
     appdirs
     chardet
@@ -33,6 +32,7 @@ python3Packages.buildPythonApplication rec {
     gpxpy
     keyring
     pillow
+    toml
   ];
 
   passthru.updateScript = gitUpdater { };
