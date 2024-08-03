@@ -12,6 +12,7 @@
 
 let
   python = python3Packages.python.override {
+    self = python;
     packageOverrides = self: super: {
       esphome-dashboard = self.callPackage ./dashboard.nix { };
     };

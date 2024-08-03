@@ -8,6 +8,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       pyparsing = super.pyparsing.overridePythonAttrs rec {
         version = "2.4.7";

@@ -11,6 +11,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       django = super.django_4;
 
