@@ -21,14 +21,14 @@ in
       default = "";
 
       example = ''
-        MODE="nfqws"
+        TPWS_OPT="--hostspell=HOST --split-http-req=method --split-pos=3 --oob"
         NFQWS_OPT_DESYNC="--dpi-desync-ttl=5"
       '';
 
       description = ''
         Rules for zapret to work. Run ```nix-shell -p zapret --command blockcheck``` to get values to pass here.
 
-        Config example can be found here https://github.com/bol-van/zapret/blob/master/config
+        Config example can be found here https://github.com/bol-van/zapret/blob/master/config.default
       '';
     };
 
@@ -49,6 +49,20 @@ in
       default = true;
       description = ''
         Disable or enable usage of IpV6 by zapret
+      '';
+    };
+
+    mode = mkOption {
+      type = types.enum [
+        "tpws"
+        "tpws-socks"
+        "nfqws"
+        "filter"
+        "custom"
+      ];
+      default = "tpws";
+      description = ''
+        Which mode zapret should use
       '';
     };
   };
@@ -84,6 +98,7 @@ in
 
         EnvironmentFile = pkgs.writeText "${cfg.package.pname}-environment" (concatStrings [
           ''
+            MODE=${cfg.mode}
             FWTYPE=${cfg.firewallType}
             DISABLE_IPV6=${if cfg.disableIpv6 then "1" else "0"}
 
