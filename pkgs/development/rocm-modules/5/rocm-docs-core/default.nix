@@ -23,14 +23,14 @@
 # FIXME: Move to rocmPackages_common
 buildPythonPackage rec {
   pname = "rocm-docs-core";
-  version = "0.26.0";
+  version = "1.6.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocm-docs-core";
     rev = "v${version}";
-    hash = "sha256-Mr6/Ne6P+TapoCqN7xkKMNse3fTaIAvvLmMl0kVg7Vs=";
+    hash = "sha256-bDnOvvXmoMUnWhUiGjj4oB8Yo4sIzHabnvcSbBSAeTE=";
   };
 
   buildInputs = [ setuptools ];
