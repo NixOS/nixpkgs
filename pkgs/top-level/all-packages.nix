@@ -26432,7 +26432,12 @@ with pkgs;
 
   bridge-utils = callPackage ../os-specific/linux/bridge-utils { };
 
-  busybox = callPackage ../os-specific/linux/busybox { };
+  busybox = callPackage ../os-specific/linux/busybox {
+    # Fixes libunwind from being dynamically linked to a static binary.
+    stdenv = if (stdenv.targetPlatform.useLLVM or false) then
+      overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
+    else stdenv;
+  };
   busybox-sandbox-shell = callPackage ../os-specific/linux/busybox/sandbox-shell.nix {
     # musl roadmap has RISC-V support projected for 1.1.20
     busybox = if !stdenv.hostPlatform.isRiscV && !stdenv.hostPlatform.isLoongArch64 && stdenv.hostPlatform.libc != "bionic"
