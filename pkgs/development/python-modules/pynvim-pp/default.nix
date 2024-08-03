@@ -18,14 +18,14 @@ buildPythonPackage {
     hash = "sha256-W6YaxI/fa2HL6+FIBTTA+7K2Be02iuIfFFVO/hhYnpo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ pynvim ];
+  dependencies = [ pynvim ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ms-jpq/pynvim_pp";
     description = "Dependency to chadtree and coq_nvim plugins";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
