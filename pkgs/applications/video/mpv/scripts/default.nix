@@ -118,6 +118,7 @@ let
       quality-menu = callPackage ./quality-menu.nix { };
       reload = callPackage ./reload.nix { };
       simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
+      smart-copy-paste-2 = callPackage ./smart-copy-paste-2.nix { };
       sponsorblock = callPackage ./sponsorblock.nix { };
       sponsorblock-minimal = callPackage ./sponsorblock-minimal.nix { };
       thumbfast = callPackage ./thumbfast.nix { };
