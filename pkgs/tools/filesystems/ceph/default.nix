@@ -169,6 +169,7 @@ let
 
   # Watch out for python <> boost compatibility
   python = python311.override {
+    self = python;
     packageOverrides = self: super: let
       cryptographyOverrideVersion = "40.0.1";
       bcryptOverrideVersion = "4.0.1";

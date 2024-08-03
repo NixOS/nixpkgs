@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wayland-protocols";
-  version = "1.35";
+  version = "1.36";
 
   # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.linker == "bfd" && wayland.withLibraries;
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/${pname}/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
-    hash = "sha256-N6JxaigTPcgZNBxWiinSHoy3ITDlwSah/PyfQsI9las=";
+    hash = "sha256-cf1N4F55+aHKVZ+sMMH4Nl+hA0ZCL5/nlfdNd7nvfpI=";
   };
 
   postPatch = lib.optionalString doCheck ''

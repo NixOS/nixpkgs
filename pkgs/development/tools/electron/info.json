@@ -952,10 +952,10 @@
             },
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-6afs+tP0cGpqW8l2R0Zev/QwHCzOfMYfmJp2/Ad9w0w=",
+                "hash": "sha256-C0PIpx72aRo/SVD17axkAVA36DICGjbzD++ns3KSUYo=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v30.2.0"
+                "rev": "v30.3.1"
             },
             "src/media/cdm/api": {
                 "fetcher": "fetchFromGitiles",
@@ -1181,10 +1181,10 @@
             },
             "src/third_party/electron_node": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-48NsBhaiCwnsXEQah/rWPvAmz1LIJUsUKMTkjMQCW0Q=",
+                "hash": "sha256-FJVFKLhVCoOdM6dbuu/DQxw0hXjg+C8a2WfF0u3Qndw=",
                 "owner": "nodejs",
                 "repo": "node",
-                "rev": "v20.15.0"
+                "rev": "v20.15.1"
             },
             "src/third_party/emoji-segmenter/src": {
                 "fetcher": "fetchFromGitiles",
@@ -1818,7 +1818,7 @@
         },
         "electron_yarn_hash": "0vq12z09hcm6xdrd34b01vx1c47r4zdaqrkw9db6r612xrp2xi0c",
         "modules": "123",
-        "node": "20.15.0",
-        "version": "30.2.0"
+        "node": "20.15.1",
+        "version": "30.3.1"
     }
 }

@@ -1,10 +1,6 @@
 { lib, stdenv, libgcrypt, curl, gnutls, pkg-config, libiconv, libintl, version, src, meta ? {} }:
 
-let
-  meta_ = meta;
-in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmicrohttpd";
   inherit version src;
 
@@ -34,5 +30,5 @@ stdenv.mkDerivation rec {
 
     maintainers = with maintainers; [ eelco fpletz ];
     platforms = platforms.unix;
-  } // meta_;
-}
+  } // meta;
+})

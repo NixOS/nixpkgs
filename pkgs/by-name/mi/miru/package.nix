@@ -32,8 +32,25 @@ let
       instead of flat out closing MPV.
     '';
   };
+  passthru = {
+    updateScript = ./update.sh;
+  };
 in
 if stdenv.isDarwin then
-  callPackage ./darwin.nix { inherit pname version meta; }
+  callPackage ./darwin.nix {
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
+  }
 else
-  callPackage ./linux.nix { inherit pname version meta; }
+  callPackage ./linux.nix {
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
+  }

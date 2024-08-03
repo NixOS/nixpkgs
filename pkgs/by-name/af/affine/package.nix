@@ -1,12 +1,10 @@
 { lib
-, writeText
 , fetchurl
 , stdenvNoCC
 , copyDesktopItems
 , makeDesktopItem
 , makeWrapper
 , unzip
-, bash
 , electron
 , commandLineArgs ? ""
 }:

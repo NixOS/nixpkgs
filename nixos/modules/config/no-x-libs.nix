@@ -33,7 +33,6 @@ with lib;
       fastfetch = super.fastfetch.override { vulkanSupport = false; waylandSupport = false; x11Support = false; };
       ffmpeg = super.ffmpeg.override { ffmpegVariant = "headless"; };
       ffmpeg_4 = super.ffmpeg_4.override { ffmpegVariant = "headless"; };
-      ffmpeg_5 = super.ffmpeg_5.override { ffmpegVariant = "headless"; };
       ffmpeg_6 = super.ffmpeg_6.override { ffmpegVariant = "headless"; };
       ffmpeg_7 = super.ffmpeg_7.override { ffmpegVariant = "headless"; };
       # dep of graphviz, libXpm is optional for Xpm support

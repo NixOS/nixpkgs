@@ -53,15 +53,17 @@
 , libaom
 , portmidi
 , lua
+, dav1d
+, libyuv
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.8.0";
+  version = "4.8.1";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "sha256-QZhJ6QFScOQHXyNBxrVTLT0czMz6jxlZLLLqOtF/klU=";
+    sha256 = "sha256-kBsOLK7Tb7hhn99MYO37jTETS5R9MFS1xm/VXDivWZE=";
   };
 
   nativeBuildInputs = [ cmake ninja llvmPackages.llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook3 ];
@@ -106,6 +108,8 @@ stdenv.mkDerivation rec {
     libaom
     portmidi
     lua
+    dav1d
+    libyuv
   ] ++ lib.optionals stdenv.isLinux [
     colord
     colord-gtk

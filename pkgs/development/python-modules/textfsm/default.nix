@@ -37,6 +37,6 @@ buildPythonPackage rec {
     mainProgram = "textfsm";
     homepage = "https://github.com/google/textfsm";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

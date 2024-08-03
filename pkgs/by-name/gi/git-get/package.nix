@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, git, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 let config-module = "git-get/pkg/cfg";
 in

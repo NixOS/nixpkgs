@@ -21,7 +21,7 @@
 , qmake
 , qtbase
 , qtwayland
-, speechd
+, speechd-minimal
 , sqlite
 , wrapQtAppsHook
 , xdg-utils
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
       ] ++ lib.optional (unrarSupport) unrardll)
     )
     xdg-utils
-  ] ++ lib.optional (speechSupport) speechd;
+  ] ++ lib.optional (speechSupport) speechd-minimal;
 
   installPhase = ''
     runHook preInstall

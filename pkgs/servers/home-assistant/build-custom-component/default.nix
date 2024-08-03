@@ -39,5 +39,9 @@ home-assistant.python.pkgs.buildPythonPackage (
       packaging
     ] ++ (args.nativeCheckInputs or []);
 
-  } // builtins.removeAttrs args [ "nativeCheckInputs" ]
+    passthru = {
+      isHomeAssistantComponent = true;
+    } // args.passthru or { };
+
+  } // builtins.removeAttrs args [ "nativeCheckInputs" "passthru" ]
 )

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Memory tool to find where you allocate your memory";
     homepage = "https://github.com/memtt/malt";
     license = licenses.cecill-c;
-    maintainers = with maintainers; [ viric ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

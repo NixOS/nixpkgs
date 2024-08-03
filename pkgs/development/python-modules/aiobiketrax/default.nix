@@ -6,7 +6,6 @@
   fetchFromGitHub,
   poetry-core,
   pyjwt,
-  pytest-aiohttp,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,

@@ -23,6 +23,6 @@
     homepage = "https://github.com/paratestphp/paratest";
     license = lib.licenses.mit;
     mainProgram = "paratest";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

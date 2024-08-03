@@ -13,6 +13,7 @@
   setuptools,
   setuptools-scm,
   ufolib2,
+  vfblib,
 }:
 
 buildPythonPackage rec {
@@ -41,12 +42,22 @@ buildPythonPackage rec {
     openstep-plist
     orjson
     ufolib2
+    vfblib
   ];
 
   nativeCheckInputs = [
     defcon
     pytestCheckHook
   ];
+
+  # Want non exsiting test data
+  disabledTests = [
+    "test_rename"
+    "test_rename_nested"
+    "test_rename_contextual"
+  ];
+
+  disabledTestPaths = [ "tests/test_glyphs3_roundtrip.py" ];
 
   meta = with lib; {
     description = "Python library to load, examine, and save fonts in a variety of formats";

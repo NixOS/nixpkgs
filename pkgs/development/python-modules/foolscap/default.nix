@@ -63,6 +63,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/warner/foolscap";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

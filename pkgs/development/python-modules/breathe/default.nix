@@ -49,7 +49,7 @@ buildPythonPackage rec {
     mainProgram = "breathe-apidoc";
     homepage = "https://github.com/michaeljones/breathe";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     inherit (sphinx.meta) platforms;
   };
 }

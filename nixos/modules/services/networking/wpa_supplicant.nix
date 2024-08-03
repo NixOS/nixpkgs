@@ -139,9 +139,9 @@ let
                 $0 = substr($0, 1, i-1) repl substr($0, i+length(find))
             }
             print
-          }' "${configFile}" > "${finalConfig}"
+          }' "${configFile}" > ${finalConfig}
         else
-          touch "${finalConfig}"
+          touch ${finalConfig}
         fi
 
         iface_args="-s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"

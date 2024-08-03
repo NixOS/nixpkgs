@@ -14,14 +14,14 @@
 assert builtins.elem variant [ "arm64" "intel64" "universal" ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "vlc-bin-${variant}";
-  version = "3.0.20";
+  version = "3.0.21";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${finalAttrs.version}/macosx/vlc-${finalAttrs.version}-${variant}.dmg";
     hash = {
-      "arm64" = "sha256-XV8O5S2BmCpiL0AhkopktHBalVRJniDDPQusIlkLEY4=";
-      "intel64" = "sha256-pNwUQfyrjiuQxil0zlOZu4isv2xw1U8hxhWNn7H7onk=";
-      "universal" = "sha256-IqGPOWzMmHbGDV+0QxFslv19BC2J1Z5Qzcuja/Od1Us=";
+      "arm64" = "sha256-Fd1lv2SJ2p7Gpn9VhcdMQKWJk6z/QagpWKkW3XQXgEQ=";
+      "intel64" = "sha256-1DH9BRw9x68CvTE8bQXZDPYEtw7T7Fu6b9TEnvPmONk=";
+      "universal" = "sha256-UDgOVvgdYw41MUJqJlq/iz3ubAgiu3yeMLUyx9aaZcA=";
     }.${variant};
   };
 

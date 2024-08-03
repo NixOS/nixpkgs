@@ -39,12 +39,12 @@ buildPythonPackage rec {
     "gcovr.configuration"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python script for summarizing gcov data";
     mainProgram = "gcovr";
     homepage = "https://www.gcovr.com/";
     changelog = "https://github.com/gcovr/gcovr/blob/${version}/CHANGELOG.rst";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ sigmanificient ];
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

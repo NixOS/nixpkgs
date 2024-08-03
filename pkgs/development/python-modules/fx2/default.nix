@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  python,
   fetchFromGitHub,
   sdcc,
   libusb1,
@@ -50,6 +49,6 @@ buildPythonPackage rec {
     mainProgram = "fx2tool";
     homepage = "https://github.com/whitequark/libfx2";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

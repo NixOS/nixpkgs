@@ -21,7 +21,8 @@ let
     qtbase
     qtmultimedia
     qtwayland
-    wrapQtAppsHook;
+    wrapQtAppsHook
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
@@ -40,38 +41,45 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    SDL2
-    extra-cmake-modules
-    libarchive
-    libslirp
-    libGL
-    qtbase
-    qtmultimedia
-    zstd
-  ] ++ lib.optionals stdenv.isLinux [
-    wayland
-    qtwayland
-  ];
+  buildInputs =
+    [
+      SDL2
+      extra-cmake-modules
+      libarchive
+      libslirp
+      libGL
+      qtbase
+      qtmultimedia
+      zstd
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      wayland
+      qtwayland
+    ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "USE_QT6" true)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "USE_QT6" true) ];
 
   strictDeps = true;
 
-  qtWrapperArgs = lib.optionals stdenv.isLinux [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
-  ];
+  qtWrapperArgs =
+    lib.optionals stdenv.isLinux [
+      "--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libpcap
+          wayland
+        ]
+      }"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
+    ];
 
   installPhase = lib.optionalString stdenv.isDarwin ''
     runHook preInstall
     mkdir -p $out/Applications
     cp -r melonDS.app $out/Applications/
     runHook postInstall
- '';
+  '';
 
   passthru = {
     updateScript = unstableGitUpdater { };

@@ -9,7 +9,6 @@
 , libglvnd
 , libogg
 , libvorbis
-, makeWrapper
 , openal
 , portaudio
 , rtmidi

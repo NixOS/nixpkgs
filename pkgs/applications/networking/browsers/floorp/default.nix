@@ -38,7 +38,7 @@
     # thus is the full /nix/store/[..] path. To avoid breaking PWAs with each
     # update, rely on `floorp` being in $PATH, as before.
     substituteInPlace floorp/browser/base/content/modules/ssb/LinuxSupport.mjs \
-      --replace-fail 'Services.dirsvc.get("XREExeF",Ci.nsIFile).path' floorp
+      --replace-fail 'Services.dirsvc.get("XREExeF",Ci.nsIFile).path' '"floorp"'
   '';
 
   updateScript = ./update.sh;

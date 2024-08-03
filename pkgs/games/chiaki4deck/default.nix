@@ -85,11 +85,8 @@ stdenv.mkDerivation rec {
     xxHash
   ];
 
-  # handle cmake not being able to identify if curl is built with websocket support, and library name discrepancy when curl not built with cmake
+  # handle library name discrepancy when curl not built with cmake
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail ' WS WSS' ""
-
     substituteInPlace lib/CMakeLists.txt \
       --replace-fail 'libcurl_shared' 'libcurl'
   '';

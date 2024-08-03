@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/arangodb/linenoise-ng";
     description = "Small, portable GNU readline replacement for Linux, Windows and MacOS which is capable of handling UTF-8 characters";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
   };

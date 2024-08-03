@@ -8,7 +8,6 @@
 , writeTextDir
 , yt-dlp
 # the unwrapped mpv derivation
-, mpv
 }:
 
 let

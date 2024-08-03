@@ -73,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/agronholm/typeguard";
     changelog = "https://github.com/agronholm/typeguard/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -48,6 +48,7 @@ buildGhidraExtension {
   buildInputs = [
     zlib
   ];
+  gradleBuildTask = "assemble";
 
   installPhase = ''
     runHook preInstall

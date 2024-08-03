@@ -215,6 +215,7 @@ in
             # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
             "char-nvidiactl"
             "char-nvidia-caps"
+            "char-nvidia-frontend"
             "char-nvidia-uvm"
             # ROCm
             "char-drm"

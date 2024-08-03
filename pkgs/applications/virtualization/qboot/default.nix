@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     description = "Simple x86 firmware for booting Linux";
     homepage = "https://github.com/bonzini/qboot";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

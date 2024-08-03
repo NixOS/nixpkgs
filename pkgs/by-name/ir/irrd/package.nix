@@ -11,6 +11,7 @@
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = final: prev: {
       # sqlalchemy 1.4.x or 2.x are not supported
       sqlalchemy = prev.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
@@ -174,4 +175,3 @@ py.pkgs.buildPythonPackage rec {
     maintainers = teams.wdz.members;
   };
 }
-

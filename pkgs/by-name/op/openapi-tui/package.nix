@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,10 +1,11 @@
 { zstd
 , fetchurl
+, lib
+, chromiumVersionAtLeast
 }:
 
 { version
 , hash ? ""
-, ...
 } @ args:
 
 fetchurl ({
@@ -35,6 +36,13 @@ fetchurl ({
       --exclude=third_party/llvm \
       --exclude=third_party/rust-src \
       --exclude='build/linux/debian_*-sysroot' \
+    '' + lib.optionalString (chromiumVersionAtLeast "127") ''
+      --exclude='*.tar.[a-zA-Z0-9][a-zA-Z0-9]' \
+      --exclude='*.tar.[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]' \
+      --exclude=third_party/llvm-build \
+      --exclude=third_party/rust-toolchain \
+      --exclude=third_party/instrumented_libs \
+    '' + ''
       --strip-components=1
 
     tar \

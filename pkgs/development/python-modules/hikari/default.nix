@@ -68,11 +68,11 @@ buildPythonPackage rec {
       --replace-fail "__git_sha1__: typing.Final[str] = \"HEAD\"" "__git_sha1__: typing.Final[str] = \"$(cat $src/COMMIT)\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Discord API wrapper for Python written with asyncio";
     homepage = "https://www.hikari-py.dev/";
     changelog = "https://github.com/hikari-py/hikari/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tomodachi94 sigmanificient ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tomodachi94 sigmanificient ];
   };
 }

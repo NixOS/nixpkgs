@@ -20,6 +20,6 @@ buildNpmPackage rec {
     mainProgram = "rtlcss";
     homepage = "https://rtlcss.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

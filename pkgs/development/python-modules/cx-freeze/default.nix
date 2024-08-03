@@ -64,7 +64,7 @@ buildPythonPackage rec {
     homepage = "https://marcelotduarte.github.io/cx_Freeze/";
     changelog = "https://github.com/marcelotduarte/cx_Freeze/releases/tag/${version}";
     license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "cxfreeze";
   };
 }

@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
       json_c
       lerc
       xz
-      libxml2
+      (libxml2.override { enableHttp = true; })
       lz4
       openjpeg
       openssl

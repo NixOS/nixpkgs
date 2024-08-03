@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "High-level FTP client library (virtual file system and more)";
     homepage = "https://ftputil.sschwarzer.net/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

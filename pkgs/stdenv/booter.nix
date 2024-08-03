@@ -130,7 +130,7 @@ stageFuns: let
         # code here, we'll cause an infinite recursion. Since a set with
         # clang as its default compiler always means libc++, we can infer this
         # decision statically.
-        then buildPackages.llvmPackages.libcxxClang
+        then buildPackages.pkgsBuildTarget.llvmPackages.libcxxClang
         else buildPackages.gcc
       else
         # This will blow up if anything uses it, but that's OK. The `if

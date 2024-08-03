@@ -73,7 +73,11 @@ stdenv.mkDerivation rec {
     "--enable-deterministic-archives"
     (lib.enableFeature enableDebuginfod "libdebuginfod")
     (lib.enableFeature enableDebuginfod "debuginfod")
-  ];
+  ] ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "--disable-demangler"
+    ++ lib.optionals stdenv.cc.isClang [
+      "CFLAGS=-Wno-unused-private-field"
+      "CXXFLAGS=-Wno-unused-private-field"
+    ];
 
   enableParallelBuilding = true;
 

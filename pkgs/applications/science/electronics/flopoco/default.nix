@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     bison
     cmake
+    flex
     installShellFiles
   ];
 
   buildInputs = [
     boost
-    flex
     gmp
     libxml2
     mpfi

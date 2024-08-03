@@ -14,7 +14,6 @@
   importlib-metadata,
   substituteAll,
   runCommand,
-  symlinkJoin,
   writers,
   numba,
 

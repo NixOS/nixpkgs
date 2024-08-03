@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://transaction.readthedocs.io/";
     changelog = "https://github.com/zopefoundation/transaction/blob/${version}/CHANGES.rst";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

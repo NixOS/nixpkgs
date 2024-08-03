@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Kiosk browser session manager based on the surf browser";
     mainProgram = "surf-display";
     homepage = "https://code.it-zukunft-schule.de/cgit/surf-display/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

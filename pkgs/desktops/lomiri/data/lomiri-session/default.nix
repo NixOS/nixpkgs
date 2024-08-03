@@ -150,8 +150,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-fail '/usr/libexec/Xwayland.lomiri' '${lib.getBin lomiri}/libexec/Xwayland.lomiri'
   '';
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     cmake
     makeWrapper

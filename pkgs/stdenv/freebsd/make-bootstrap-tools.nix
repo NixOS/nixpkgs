@@ -48,6 +48,8 @@
   '';
   bootstrap-tools = tar-all "bootstrap-tools.tar.xz" (
     with pkgs;
+    # SYNCME: this version number must be synced with the one in default.nix
+    let llvmPackages = llvmPackages_18; in
     [
       (runCommand "bsdcp" { } "mkdir -p $out/bin; cp ${freebsd.cp}/bin/cp $out/bin/bsdcp")
       coreutils

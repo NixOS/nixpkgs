@@ -7,6 +7,9 @@ let
   allK3s = lib.filterAttrs (n: _: lib.strings.hasPrefix "k3s_" n) pkgs;
 in
 {
+  airgap-images = lib.mapAttrs (
+    _: k3s: import ./airgap-images.nix { inherit system pkgs k3s; }
+  ) allK3s;
   auto-deploy = lib.mapAttrs (_: k3s: import ./auto-deploy.nix { inherit system pkgs k3s; }) allK3s;
   etcd = lib.mapAttrs (
     _: k3s:

@@ -26,9 +26,11 @@ let
       preBuild = ''
         # Set project name, otherwise defaults to directory name
         echo -e '\nrootProject.name = "${pname}"' >> settings.gradle
+        ${args.preBuild or ""}
       '';
 
-      gradleFlags = [ "-PGHIDRA_INSTALL_DIR=${ghidra}/lib/ghidra" ];
+      gradleBuildTask = args.gradleBuildTask or "buildExtension";
+      gradleFlags = args.gradleFlags or [] ++ [ "-PGHIDRA_INSTALL_DIR=${ghidra}/lib/ghidra" ];
 
       installPhase = args.installPhase or ''
         runHook preInstall
