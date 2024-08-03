@@ -39641,7 +39641,7 @@ with pkgs;
   wmutils-opt = callPackage ../tools/X11/wmutils-opt { };
 
   inherit (callPackage ../servers/web-apps/wordpress {})
-    wordpress wordpress6_3 wordpress6_4 wordpress6_5 wordpress_6_6;
+    wordpress wordpress_6_5 wordpress_6_6;
 
   wordpressPackages = ( callPackage ../servers/web-apps/wordpress/packages {
     plugins = lib.importJSON ../servers/web-apps/wordpress/packages/plugins.json;
