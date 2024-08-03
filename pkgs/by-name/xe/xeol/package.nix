@@ -15,7 +15,9 @@ buildGoModule rec {
     hash = "sha256-/DWBDc8m5XYM5UBX5/GWuPRR3YktRar/LbENx2d5bc4=";
   };
 
-  vendorHash = "sha256-9zDzwiVEVsfgVzSrouNtLYpjumoWGlfSDpGWbj+zCGQ=";
+  vendorHash = "sha256-1Ms+/VAJTKOblf/mBMp+/Kupc13yLU19iZCXbY43Zks=";
+
+  proxyVendor = true;
 
   subPackages = [ "cmd/xeol/" ];
 
@@ -35,6 +37,5 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "xeol";
-    platforms = platforms.linux;
   };
 }
