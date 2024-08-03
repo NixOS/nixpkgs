@@ -1,51 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, docbook-xsl-nons
-, docutils
-, gi-docgen
-, gobject-introspection
-, gtk-doc
-, libxslt
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook3
-, glib
-, gsound
-, json-glib
-, libgudev
-, dbus
+{
+  lib,
+  callPackage,
+  dbus,
+  docbook-xsl-nons,
+  docutils,
+  fetchFromGitLab,
+  gi-docgen,
+  glib,
+  gobject-introspection,
+  gsound,
+  gtk-doc,
+  json-glib,
+  libgudev,
+  libxslt,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
+  vala,
+  wrapGAppsHook3,
 }:
 
 let
-  themes = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
-    repo = "feedbackd-device-themes";
-    rev = "v0.1.0";
-    sha256 = "sha256-YK9fJ3awmhf1FAhdz95T/POivSO93jsNApm+u4OOZ80=";
-  };
+  sources = callPackage ./sources.nix { };
+  themes = sources.feedbackd-device-themes.src;
 in
-stdenv.mkDerivation rec {
-  pname = "feedbackd";
-  version = "0.2.0";
+stdenv.mkDerivation {
+  inherit (sources.feedbackd) pname version src;
 
-  outputs = [ "out" "dev" "devdoc" ];
-
-  src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
-    repo = "feedbackd";
-    rev = "v${version}";
-    hash = "sha256-l5rfMx3ElW25A5WVqzfKBp57ebaNC9msqV7mvnwv10s=";
-    fetchSubmodules = true;
-  };
-
-  depsBuildBuild = [
-    pkg-config
+  outputs = [
+    "out"
+    "man"
+    "dev"
+    "devdoc"
   ];
+
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     docbook-xsl-nons
@@ -68,16 +58,16 @@ stdenv.mkDerivation rec {
     libgudev
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-    "-Dman=true"
-  ];
+  nativeCheckInputs = [ dbus ];
 
-  nativeCheckInputs = [
-    dbus
+  mesonFlags = [
+    (lib.mesonBool "gtk_doc" true)
+    (lib.mesonBool "man" true)
   ];
 
   doCheck = true;
+
+  strictDeps = true;
 
   postInstall = ''
     mkdir -p $out/lib/udev/rules.d
@@ -85,9 +75,10 @@ stdenv.mkDerivation rec {
     cp ${themes}/data/* $out/share/feedbackd/themes/
   '';
 
+  # Move developer documentation to devdoc output.
+  # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move
+  # right back.
   postFixup = ''
-    # Move developer documentation to devdoc output.
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     if [[ -d "$out/share/doc" ]]; then
         find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \
           | while IFS= read -r -d ''' file; do
@@ -96,11 +87,16 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with lib; {
-    description = "Daemon to provide haptic (and later more) feedback on events";
+  passthru = {
+    inherit sources;
+  };
+
+  meta = {
     homepage = "https://source.puri.sm/Librem5/feedbackd";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    description = "Daemon to provide haptic (and later more) feedback on events";
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "fbcli";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
 }
