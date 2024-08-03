@@ -63,10 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-x"
   ];
 
-  passthru = {
-    dockapps = callPackage ./dockapps { };
-  };
-
   meta = {
     homepage = "http://windowmaker.org/";
     description = "NeXTSTEP-like window manager";
