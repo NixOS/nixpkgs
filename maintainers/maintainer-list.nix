@@ -19203,6 +19203,11 @@
     githubId = 9720532;
     name = "Sergei K";
   };
+  sonjiku = {
+    email = "50nj1ku@proton.me";
+    github = "sonjiku";
+    githubId = 57968409;
+  };
   sontek = {
     email = "sontek@gmail.com";
     github = "sontek";
