@@ -84,7 +84,7 @@ in python.pkgs.buildPythonApplication rec {
       TZ=Europe/Kaliningrad \
       LC_TIME=C \
       xvfb-run -s '-screen 0 800x600x24' \
-      ${python.interpreter} setup.py test
+      ${python.interpreter} -m unittest
   '';
 
   meta = with lib; {
