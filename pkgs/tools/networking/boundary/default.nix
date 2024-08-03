@@ -1,30 +1,14 @@
-{ stdenv, lib, fetchzip }:
-
+{ stdenv, lib, fetchzip, writeShellScript, curl, jq, common-updater-scripts }:
+let
+  url' =
+    version: suffix: "https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${suffix}.zip";
+in
 stdenv.mkDerivation rec {
   pname = "boundary";
   version = "0.15.4";
 
-  src =
-    let
-      inherit (stdenv.hostPlatform) system;
-      selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
-      suffix = selectSystem {
-        x86_64-linux = "linux_amd64";
-        aarch64-linux = "linux_arm64";
-        x86_64-darwin = "darwin_amd64";
-        aarch64-darwin = "darwin_arm64";
-      };
-      sha256 = selectSystem {
-        x86_64-linux = "sha256-43Q69Pp5NLB4fITy2X8d0XHp5EX+gFLnwtHOontISoU=";
-        aarch64-linux = "sha256-z87peCBv50eJr/kiFWPZUOeb0WCN4X+0JnxCvn3lCXo=";
-        x86_64-darwin = "sha256-SAhlZNGq5rkNitKVd+EjLOeeTErhWg14tHFG4Bsexv8=";
-        aarch64-darwin = "sha256-2DJgOdgJY6eUR2sqWS47vNjdkQGXOEEsSXhZeUBZxxs=";
-      };
-    in
-    fetchzip {
-      url = "https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${suffix}.zip";
-      inherit sha256;
-    };
+  src = passthru.sources.${stdenv.hostPlatform.system}
+    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   dontConfigure = true;
   dontBuild = true;
@@ -47,7 +31,42 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
   dontStrip = true;
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    sources = {
+      "aarch64-darwin" = fetchzip {
+        url = url' version "darwin_arm64";
+        hash = "sha256-2DJgOdgJY6eUR2sqWS47vNjdkQGXOEEsSXhZeUBZxxs=";
+        stripRoot=false;
+      };
+      "aarch64-linux" = fetchzip {
+        url = url' version "linux_arm64";
+        hash = "sha256-z87peCBv50eJr/kiFWPZUOeb0WCN4X+0JnxCvn3lCXo=";
+        stripRoot=false;
+      };
+      "x86_64-darwin" = fetchzip {
+        url = url' version "darwin_amd64";
+        hash = "sha256-SAhlZNGq5rkNitKVd+EjLOeeTErhWg14tHFG4Bsexv8=";
+        stripRoot=false;
+      };
+      "x86_64-linux" = fetchzip {
+        url = url' version "linux_amd64";
+        hash = "sha256-43Q69Pp5NLB4fITy2X8d0XHp5EX+gFLnwtHOontISoU=";
+        stripRoot=false;
+      };
+    };
+     updateScript = writeShellScript "update-boundary" ''
+      set -o errexit
+      export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
+      BOUNDARY_VER=$(curl --silent https://api.github.com/repos/hashicorp/boundary/releases/latest | jq '.tag_name | ltrimstr("v")' --raw-output)
+      if [[ "${version}" = "$BOUNDARY_VER" ]]; then
+          echo "The new version same as the old version."
+          # exit 0
+      fi
+      for platform in ${lib.escapeShellArgs meta.platforms}; do
+        update-source-version "boundary" "$BOUNDARY_VER" --ignore-same-version --source-key="sources.$platform"
+      done
+    '';
+  };
 
   meta = with lib; {
     homepage = "https://boundaryproject.io/";
@@ -65,7 +84,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsl11;
     maintainers = with maintainers; [ jk techknowlogick ];
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "boundary";
   };
 }
