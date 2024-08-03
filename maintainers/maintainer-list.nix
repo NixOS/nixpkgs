@@ -23611,6 +23611,13 @@
     githubId = 1108325;
     name = "Théo Zimmermann";
   };
+  zimward = {
+    name = "zimward";
+    github = "zimward";
+    githubId = 96021122;
+    matrix = "@memoryfragmentation:matrix.org";
+    keys = [ { fingerprint = "CBF7 FA5E F4B5 8B68 5977  3E3E 4CAC 61D6 A482 FCD9"; } ];
+  };
   zlepper = {
     name = "Rasmus Hansen";
     github = "zlepper";
