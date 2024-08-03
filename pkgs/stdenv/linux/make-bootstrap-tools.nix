@@ -1,11 +1,21 @@
-{ pkgs ? import ../../.. {} }:
+{
+  pkgs ? import ../../.. { },
+}:
 
 let
   inherit (pkgs) lib stdenv config;
+
   libc = pkgs.stdenv.cc.libc;
-  patchelf = pkgs.patchelf.overrideAttrs(previousAttrs: {
-    NIX_CFLAGS_COMPILE = (previousAttrs.NIX_CFLAGS_COMPILE or []) ++ [ "-static-libgcc" "-static-libstdc++" ];
-    NIX_CFLAGS_LINK = (previousAttrs.NIX_CFLAGS_LINK or []) ++ [ "-static-libgcc" "-static-libstdc++" ];
+
+  patchelf = pkgs.patchelf.overrideAttrs (previousAttrs: {
+    NIX_CFLAGS_COMPILE = (previousAttrs.NIX_CFLAGS_COMPILE or [ ]) ++ [
+      "-static-libgcc"
+      "-static-libstdc++"
+    ];
+    NIX_CFLAGS_LINK = (previousAttrs.NIX_CFLAGS_LINK or [ ]) ++ [
+      "-static-libgcc"
+      "-static-libstdc++"
+    ];
   });
 in
 rec {
@@ -35,6 +45,7 @@ rec {
   };
 
   bootGCC = pkgs.gcc.cc.override { enableLTO = false; };
+
   bootBinutils = pkgs.binutils.bintools.override {
     withAllTargets = false;
     # Don't need two linkers, disable whatever's not primary/default.
@@ -44,7 +55,15 @@ rec {
   };
 
   build = pkgs.callPackage ./stdenv-bootstrap-tools.nix {
-    inherit bootBinutils coreutilsMinimal tarMinimal busyboxMinimal bootGCC libc patchelf;
+    inherit
+      bootBinutils
+      coreutilsMinimal
+      tarMinimal
+      busyboxMinimal
+      bootGCC
+      libc
+      patchelf
+      ;
   };
 
   inherit (build) bootstrapFiles;
