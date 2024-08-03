@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage {
     description = "Lint your mask targets";
     homepage = "https://github.com/brumhard/masklint";
     license = lib.licenses.mit;
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     maintainers = [ lib.maintainers.pinage404 ];
     mainProgram = "masklint";
   };
