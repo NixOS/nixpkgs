@@ -22031,8 +22031,6 @@ with pkgs;
     python = python3;
   };
 
-  libresample = callPackage ../development/libraries/libresample { };
-
   librevenge = callPackage ../development/libraries/librevenge { };
 
   librime = callPackage ../development/libraries/librime { };
