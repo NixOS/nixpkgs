@@ -19191,6 +19191,8 @@ with pkgs;
 
   spooles = callPackage ../development/libraries/science/math/spooles { };
 
+  spoolman-frontend = callPackage ../by-name/sp/spoolman/frontend.nix { };
+
   spr = callPackage ../development/tools/spr {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
