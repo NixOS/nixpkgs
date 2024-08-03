@@ -328,7 +328,7 @@ in
 
     createMailUser = mkEnableOption ''automatically creating the user
       given in {option}`services.dovecot.user` and the group
-      given in {option}`services.dovecot.group`.'' // { default = true; };
+      given in {option}`services.dovecot.group`'' // { default = true; };
 
     modules = mkOption {
       type = types.listOf types.package;

@@ -9,6 +9,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       mistune = super.mistune.overridePythonAttrs (old: rec {
         version = "2.0.5";

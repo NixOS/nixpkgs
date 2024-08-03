@@ -9,6 +9,7 @@
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
       paramiko = super.paramiko.overridePythonAttrs (oldAttrs: rec {
         version = "3.3.1";
