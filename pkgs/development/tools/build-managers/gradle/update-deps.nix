@@ -104,10 +104,10 @@ writeTextFile {
         --tmpfs /home --bind /tmp /tmp --ro-bind /nix /nix --ro-bind /run /run --proc /proc --dev /dev  \
         --ro-bind ${toString path} ${toString path} --bind "$MITM_CACHE_CERT_DIR" "$MITM_CACHE_CERT_DIR" \
         ${builtins.concatStringsSep " " (map (x: "--setenv ${x} \"\$${x}\"") keep)} \
-        --setenv NIX_BUILD_SHELL bash ${bwrapFlags} ''${BWRAP_FLAGS:-} \
+        --setenv NIX_BUILD_SHELL ${runtimeShell} ${bwrapFlags} ''${BWRAP_FLAGS:-} \
         -- ${nix}/bin/nix-shell --pure --run ${gradleScript} ${nixShellKeep} ${sourceDrvPath}
     else
-      NIX_BUILD_SHELL=bash nix-shell --pure --run ${gradleScript} ${nixShellKeep} ${sourceDrvPath}
+      NIX_BUILD_SHELL=${runtimeShell} nix-shell --pure --run ${gradleScript} ${nixShellKeep} ${sourceDrvPath}
     fi${lib.optionalString silent " >&2"}
     kill -s SIGINT "$MITM_CACHE_PID"
     for i in {0..20}; do
