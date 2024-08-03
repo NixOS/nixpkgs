@@ -1596,13 +1596,11 @@ in
         (concatMap attrValues)
         (filter (rule: rule.enable))
         (catAttrs "modulePath")
-        # TODO(@uninsane): replace this warning + filter with just an assertion
-        (map (modulePath: lib.warnIfNot
+        (map (modulePath: lib.throwIfNot
           (hasPrefix "/" modulePath)
-          ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor and will be treated as an error by future versions of nixpkgs; see <https://github.com/NixOS/nixpkgs/pull/314791>''
+          ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor''
           modulePath
         ))
-        (filter (hasPrefix "/"))
         unique
         (map (module: "mr ${module},"))
         concatLines
