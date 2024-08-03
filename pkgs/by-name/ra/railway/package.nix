@@ -1,15 +1,15 @@
 {
   lib,
+  darwin,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
   stdenv,
-  CoreServices,
-  Security,
-  SystemConfiguration,
 }:
-
+let
+  inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
+in
 rustPlatform.buildRustPackage rec {
   pname = "railway";
   version = "3.11.2";
