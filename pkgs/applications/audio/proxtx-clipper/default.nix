@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, libopus
-, pkg-config
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  libopus,
+  pkg-config,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage {
@@ -32,11 +33,7 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs = [
-    libopus
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = [ libopus ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   # Changing the name of the binary to proxtx-clipper
   postInstall = ''
