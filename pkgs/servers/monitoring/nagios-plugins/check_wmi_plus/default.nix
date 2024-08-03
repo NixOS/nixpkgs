@@ -1,34 +1,62 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, txt2man
-, monitoring-plugins
-, wmic-bin ? null }:
+{
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  monitoring-plugins,
+  perlPackages,
+  stdenv,
+  txt2man,
+  wmic-bin ? null,
+}:
 
 stdenv.mkDerivation rec {
-  pname = "check-wmiplus";
+  pname = "check-wmi-plus";
   version = "1.65";
 
-  # We fetch from github.com instead of the proper upstream as nix-build errors
-  # out with 406 when trying to fetch the sources
+  # Upstream has been moved from Github to tarballs on the author's website.
+  # See https://edcint.co.nz/checkwmiplus/releases/
   src = fetchFromGitHub {
     owner = "speartail";
     repo = "checkwmiplus";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "1as0iyhy4flpm37mb7lvah7rnd6ax88appjm1icwhy7iq03wi8pl";
   };
 
-  patches = [
-    ./wmiplus_fix_manpage.patch
-  ];
+  patches = [ ./wmiplus_fix_manpage.patch ];
 
   propagatedBuildInputs = with perlPackages; [
-    BHooksEndOfScope ClassDataInheritable ClassInspector ClassSingleton
-    ConfigIniFiles DateTime DateTimeLocale DateTimeTimeZone DevelStackTrace
-    EvalClosure ExceptionClass FileShareDir ModuleImplementation ModuleRuntime
-    MROCompat namespaceautoclean namespaceclean NumberFormat PackageStash
-    ParamsValidate ParamsValidationCompiler RoleTiny Specio
-    SubExporterProgressive SubIdentify TryTiny
+    BHooksEndOfScope
+    ClassDataInheritable
+    ClassInspector
+    ClassSingleton
+    ConfigIniFiles
+    DateTime
+    DateTimeLocale
+    DateTimeTimeZone
+    DevelStackTrace
+    EvalClosure
+    ExceptionClass
+    FileShareDir
+    ModuleImplementation
+    ModuleRuntime
+    MROCompat
+    namespaceautoclean
+    namespaceclean
+    NumberFormat
+    PackageStash
+    ParamsValidate
+    ParamsValidationCompiler
+    RoleTiny
+    Specio
+    SubExporterProgressive
+    SubIdentify
+    TryTiny
   ];
 
-  nativeBuildInputs = [ makeWrapper txt2man ];
+  nativeBuildInputs = [
+    makeWrapper
+    txt2man
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -36,11 +64,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace check_wmi_plus.pl \
-      --replace /usr/bin/wmic                      ${wmic-bin}/bin/wmic \
-      --replace /etc/check_wmi_plus                $out/etc/check_wmi_plus \
-      --replace /opt/nagios/bin/plugins            $out/etc/check_wmi_plus \
-      --replace /usr/lib/nagios/plugins            ${monitoring-plugins}/libexec \
-      --replace '$base_dir/check_wmi_plus_help.pl' "$out/bin/check_wmi_plus_help.pl"
+      --replace-fail /usr/bin/wmic                      ${wmic-bin}/bin/wmic \
+      --replace-fail /etc/check_wmi_plus                $out/etc/check_wmi_plus \
+      --replace-fail /opt/nagios/bin/plugins            $out/etc/check_wmi_plus \
+      --replace-fail /usr/lib/nagios/plugins            ${monitoring-plugins}/libexec \
+      --replace-fail '$base_dir/check_wmi_plus_help.pl' "$out/bin/check_wmi_plus_help.pl"
 
     for f in *.pl ; do
       substituteInPlace $f --replace /usr/bin/perl ${perlPackages.perl}/bin/perl
@@ -70,8 +98,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Sensu/nagios plugin using WMI to query Windows hosts";
-    homepage = "http://edcint.co.nz/checkwmiplus";
+    homepage = "https://edcint.co.nz/checkwmiplus/";
     license = licenses.gpl2Plus;
+    mainProgram = "check_wmi_plus";
     maintainers = with maintainers; [ peterhoeg ];
   };
 }
