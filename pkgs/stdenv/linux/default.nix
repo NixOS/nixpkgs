@@ -139,14 +139,11 @@ let
 
 
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
-  bootstrapTools = (import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
-    inherit system bootstrapFiles;
-    extraAttrs = lib.optionalAttrs config.contentAddressedByDefault {
-      __contentAddressed = true;
-      outputHashAlgo = "sha256";
-      outputHashMode = "recursive";
-    };
-  }) // { passthru.isFromBootstrapFiles = true; };
+  bootstrapTools = import ./bootstrap-tools {
+    inherit (localSystem) libc system;
+    inherit lib bootstrapFiles config;
+    isFromBootstrapFiles = true;
+  };
 
   getLibc = stage: stage.${localSystem.libc};
 
