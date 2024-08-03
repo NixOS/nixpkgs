@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
   click,
   click-default-group,
@@ -17,14 +17,16 @@
 
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.36";
+  version = "3.37";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3MMROU/obcFvZQN7AHXiOO/P0uEuZdU+0ZaVRQKZbzw=";
+  src = fetchFromGitHub {
+    owner = "simonw";
+    repo = "sqlite-utils";
+    rev = version;
+    hash = "sha256-M6PbP4/HRw9EfCtZl4zzQjE7Blcs/Icpw2aSe8f0ZTs=";
   };
 
   postPatch = ''
