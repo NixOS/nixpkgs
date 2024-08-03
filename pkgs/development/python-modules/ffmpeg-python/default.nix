@@ -8,19 +8,18 @@
   pytestCheckHook,
   pytest-mock,
   ffmpeg_4,
-  pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "ffmpeg-python";
-  version = "0.2.0";
+  version = "0.2.0-unstable-2022-07-11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kkroening";
     repo = "ffmpeg-python";
-    rev = version;
-    hash = "sha256-Dk3nHuYVlIiFF6nORZ5TVFkBXdoZUxLfoiz68V1tvlY=";
+    rev = "df129c7ba30aaa9ffffb81a48f53aa7253b0b4e6";
+    hash = "sha256-jPiFhYRwfuS+vo6LsLw0+65NWy2A+B+EdC8SewZTRP4=";
   };
 
   patches = [
@@ -39,14 +38,7 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'" ""
-  '';
-
   pythonImportsCheck = [ "ffmpeg" ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [ "test__output__video_size" ];
 
   meta = {
     description = "Python bindings for FFmpeg - with complex filtering support";
