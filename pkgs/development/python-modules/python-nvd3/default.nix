@@ -8,10 +8,10 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-nvd3";
   version = "0.15.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "areski";
@@ -20,21 +20,22 @@ buildPythonPackage rec {
     sha256 = "1vjnicszcc9j0rgb58104fk9sry5xad1xli64jana9bkx42c6x1v";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-slugify
     jinja2
-    setuptools
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "tests.py" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/areski/python-nvd3";
     description = "Python Wrapper for NVD3 - It's time for beautiful charts";
     mainProgram = "nvd3";
-    license = licenses.mit;
-    maintainers = [ maintainers.ivan-tkatchev ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ivan-tkatchev ];
   };
 }
