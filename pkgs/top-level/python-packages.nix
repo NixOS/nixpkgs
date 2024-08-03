@@ -5295,6 +5295,8 @@ self: super: with self; {
 
   gremlinpython = callPackage ../development/python-modules/gremlinpython { };
 
+  grep-ast = callPackage ../development/python-modules/grep-ast { };
+
   greynoise = callPackage ../development/python-modules/greynoise { };
 
   growattserver = callPackage ../development/python-modules/growattserver { };
