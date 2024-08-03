@@ -7,6 +7,7 @@
 , nix-update-script
 , pkg-config
 , openssl
+, curl
 }:
 
 rustPlatform.buildRustPackage {
@@ -16,7 +17,7 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = [ openssl ]
+  buildInputs = [ openssl curl ]
     ++ lib.optionals stdenv.isDarwin [ IOKit CoreFoundation ];
   cargoBuildFlags = [ "--package nu_plugin_query" ];
 

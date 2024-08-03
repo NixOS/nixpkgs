@@ -15,6 +15,8 @@ in {
   options = {
     services.flatpak = {
       enable = mkEnableOption "flatpak";
+
+      package = mkPackageOption pkgs "flatpak" { };
     };
   };
 
@@ -28,16 +30,16 @@ in {
       }
     ];
 
-    environment.systemPackages = [ pkgs.flatpak ];
+    environment.systemPackages = [ cfg.package ];
 
     security.polkit.enable = true;
 
     fonts.fontDir.enable = true;
 
-    services.dbus.packages = [ pkgs.flatpak ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.packages = [ pkgs.flatpak ];
-    systemd.tmpfiles.packages = [ pkgs.flatpak ];
+    systemd.packages = [ cfg.package ];
+    systemd.tmpfiles.packages = [ cfg.package ];
 
     environment.profiles = [
       "$HOME/.local/share/flatpak/exports"

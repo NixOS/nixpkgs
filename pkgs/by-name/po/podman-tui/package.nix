@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "podman-tui";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    hash = "sha256-my/y2cgF7F0wk5VJKfmqotBrV3HPmRQGPjlSdMe7wXk=";
+    hash = "sha256-+YY7pq+jLwfdWBT5Ug5KtvMVy8DRWQ7kfC5U2bzYWAs=";
   };
 
   vendorHash = null;
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   preCheck = ''
-    export USER=$(whoami)
+    export USER="$(whoami)"
     export HOME="$(mktemp -d)"
   '';
 
