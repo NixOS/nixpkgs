@@ -4597,6 +4597,8 @@ self: super: with self; {
 
   free-proxy = callPackage ../development/python-modules/free-proxy { };
 
+  freenub = callPackage ../development/python-modules/freenub { };
+
   skia-pathops = callPackage ../development/python-modules/skia-pathops {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL;
   };
