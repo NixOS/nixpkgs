@@ -5,7 +5,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "boundary";
-  version = "0.15.4";
+  version = "0.17.0";
 
   src = passthru.sources.${stdenv.hostPlatform.system}
     or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -35,22 +35,22 @@ stdenv.mkDerivation rec {
     sources = {
       "aarch64-darwin" = fetchzip {
         url = url' version "darwin_arm64";
-        hash = "sha256-2DJgOdgJY6eUR2sqWS47vNjdkQGXOEEsSXhZeUBZxxs=";
+        hash = "sha256-QbmSwwE345OfR2RvEyTzr4P5jjlDi1qANbnbRuFyNdo=";
         stripRoot=false;
       };
       "aarch64-linux" = fetchzip {
         url = url' version "linux_arm64";
-        hash = "sha256-z87peCBv50eJr/kiFWPZUOeb0WCN4X+0JnxCvn3lCXo=";
+        hash = "sha256-6G0BKIk+AN/B97vAdrwAy9c0dONtCJk30MUlfdLL9a0=";
         stripRoot=false;
       };
       "x86_64-darwin" = fetchzip {
         url = url' version "darwin_amd64";
-        hash = "sha256-SAhlZNGq5rkNitKVd+EjLOeeTErhWg14tHFG4Bsexv8=";
+        hash = "sha256-OKKbG6VH4xUSK3GsrXpKY2/PI2DWuveXges0XwGIecA=";
         stripRoot=false;
       };
       "x86_64-linux" = fetchzip {
         url = url' version "linux_amd64";
-        hash = "sha256-43Q69Pp5NLB4fITy2X8d0XHp5EX+gFLnwtHOontISoU=";
+        hash = "sha256-1yDIyAaYbWrtgHvuta8KrYam/Q/rfNYNqgl7EXfQ+5E=";
         stripRoot=false;
       };
     };
