@@ -12299,6 +12299,8 @@ self: super: with self; {
     inherit (pkgs) sqlcipher;
   };
 
+  pysqlite3 = callPackage ../development/python-modules/pysqlite3 { };
+
   pysqueezebox = callPackage ../development/python-modules/pysqueezebox { };
 
   pysrim = callPackage ../development/python-modules/pysrim { };
