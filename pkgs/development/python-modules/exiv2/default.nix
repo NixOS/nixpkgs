@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonPackage rec {
   pname = "exiv2";
-  version = "0.16.3";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jim-easterbrook";
     repo = "python-exiv2";
     rev = "refs/tags/${version}";
-    hash = "sha256-DX0pg80fOSkWqrIvcye0btZGglnizzM9ZEuVEpnEJKQ=";
+    hash = "sha256-nPSspQPq0y2Vg2S+iwQ1E+TdaOJ9aJN3eeXRrcDzdsM=";
   };
 
   build-system = with python3Packages; [
