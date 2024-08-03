@@ -1,0 +1,37 @@
+From 7305ce36af211220419eeab302ff28793d515df2 Mon Sep 17 00:00:00 2001
+From: Geoffrey McRae <geoff@hostfission.com>
+Date: Fri, 7 Jun 2024 19:01:38 +1000
+Subject: [PATCH] [module] fix build on linux 6.10
+
+Fixes #1124 - Thanks @pongo1231
+---
+ module/dkms.conf | 2 +-
+ module/kvmfr.c   | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/module/dkms.conf b/module/dkms.conf
+index 9d2a02c0..486a61ed 100644
+--- a/module/dkms.conf
++++ b/module/dkms.conf
+@@ -1,5 +1,5 @@
+ PACKAGE_NAME="kvmfr"
+-PACKAGE_VERSION="0.0.9"
++PACKAGE_VERSION="0.0.10"
+ BUILT_MODULE_NAME[0]="${PACKAGE_NAME}"
+ MAKE[0]="make KDIR=${kernel_source_dir}"
+ CLEAN="make KDIR=${kernel_source_dir} clean"
+diff --git a/module/kvmfr.c b/module/kvmfr.c
+index b5acd18d..c99a5d79 100644
+--- a/module/kvmfr.c
++++ b/module/kvmfr.c
+@@ -30,6 +30,7 @@
+ #include <linux/highmem.h>
+ #include <linux/memremap.h>
+ #include <linux/version.h>
++#include <linux/vmalloc.h>
+ 
+ #include <asm/io.h>
+ 
+-- 
+2.45.2
+

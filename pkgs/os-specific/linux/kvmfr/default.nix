@@ -6,6 +6,9 @@ stdenv.mkDerivation {
 
   src = looking-glass-client.src;
   sourceRoot = "${looking-glass-client.src.name}/module";
+  patches = lib.optional (kernel.kernelAtLeast "6.10") [
+    ./0001-module-fix-build-on-linux-6.10.patch
+  ];
   hardeningDisable = [ "pic" "format" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -26,7 +29,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/gnif/LookingGlass";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ j-brn ];
+    maintainers = with maintainers; [ j-brn starkca90 ];
     platforms = [ "x86_64-linux" ];
     broken = kernel.kernelOlder "5.3";
   };
