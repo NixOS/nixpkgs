@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "VapourSynth anti aliasing and scaling functions";
+    homepage = "https://github.com/Jaded-Encoding-Thaumaturgy/vs-aa";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
