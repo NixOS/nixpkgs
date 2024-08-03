@@ -31,7 +31,7 @@ let
   mkPhpValue = v:
     if isString v then escapeShellArg v
     # NOTE: If any value contains a , (comma) this will not get escaped
-    else if isList v && any lib.strings.isCoercibleToString v then escapeShellArg (concatMapStringsSep "," toString v)
+    else if isList v && strings.isConvertibleWithToString v then escapeShellArg (concatMapStringsSep "," toString v)
     else if isInt v then toString v
     else if isBool v then boolToString v
     else abort "The Invoiceplane config value ${lib.generators.toPretty {} v} can not be encoded."
