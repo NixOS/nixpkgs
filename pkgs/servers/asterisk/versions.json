@@ -1,14 +1,14 @@
 {
   "asterisk_18": {
-    "sha256": "a46a85f676ea820f9c3c550c7caa8d9515e7754512740768a1336a82e8cf6162",
-    "version": "18.23.1"
+    "sha256": "ddbaf55c222503fa393f3ff3e3d3d193c644e8eddcfba3e6d1d3c597869d9fed",
+    "version": "18.24.0"
   },
   "asterisk_20": {
-    "sha256": "fa498b6224e8c262de6840a67e00e3747e178fcefd9fb2595885d402ca3248f5",
-    "version": "20.8.1"
+    "sha256": "1a783adbd7c3d96439ee1ca0ca5b1421ee809be5948ac6960021c0ad8c19679c",
+    "version": "20.9.0"
   },
   "asterisk_21": {
-    "sha256": "cf59196b94851fbfdbcc63d1d6a8d2b83a4ae093c89c3d37b5d460b3a3d20f15",
-    "version": "21.3.1"
+    "sha256": "dfa4f8262461d40480cbd6cc4f7abf5f61fcfdf358f360fed18bcd1f61a16880",
+    "version": "21.4.0"
   }
 }
