@@ -8789,6 +8789,9 @@ with self; {
       description = "IMAP modified UTF-7 encoding";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
+    patches = [
+      ../development/perl-modules/encode-imaputf7.patch
+    ];
   };
 
   EncodeJIS2K = buildPerlPackage {
