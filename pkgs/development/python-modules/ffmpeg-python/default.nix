@@ -3,8 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   substituteAll,
+  fetchpatch2,
   setuptools,
-  future,
   pytestCheckHook,
   pytest-mock,
   ffmpeg_4,
@@ -27,11 +27,16 @@ buildPythonPackage {
       src = ./ffmpeg-location.patch;
       ffmpeg = ffmpeg_4;
     })
+
+    # Remove dependency on `future`
+    # https://github.com/kkroening/ffmpeg-python/pull/795
+    (fetchpatch2 {
+      url = "https://github.com/kkroening/ffmpeg-python/commit/dce459d39ace25f03edbabdad1735064787568f7.patch?full_index=1";
+      hash = "sha256-ZptCFplL88d0p2s741ymHiwyDsDGVFylBJ8FTrZDGMc=";
+    })
   ];
 
   build-system = [ setuptools ];
-
-  dependencies = [ future ];
 
   nativeCheckInputs = [
     pytestCheckHook
