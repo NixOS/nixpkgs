@@ -49,26 +49,11 @@ rec {
 
   inherit (build) bootstrapFiles;
 
-  bootstrapTools =
-    let extraAttrs = lib.optionalAttrs
-      config.contentAddressedByDefault
-      {
-        __contentAddressed = true;
-        outputHashAlgo = "sha256";
-        outputHashMode = "recursive";
-      };
-    in
-    if (stdenv.hostPlatform.libc == "glibc") then
-    import ./bootstrap-tools/glibc.nix {
-      inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles extraAttrs;
-    }
-    else if (stdenv.hostPlatform.libc == "musl") then
-    import ./bootstrap-tools/musl.nix {
-      inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles extraAttrs;
-    }
-    else throw "unsupported libc";
+  bootstrapTools = import ./bootstrap-tools {
+    inherit (stdenv.buildPlatform) system; # Used to determine where to build
+    inherit (stdenv.hostPlatform) libc;
+    inherit lib bootstrapFiles config;
+  };
 
   test = pkgs.callPackage ./test-bootstrap-tools.nix {
     inherit bootstrapTools;
