@@ -22,16 +22,12 @@ buildPythonPackage rec {
     owner = "boto";
     repo = "boto3";
     rev = "refs/tags/${version}";
-    hash = "sha256-1qnWJjYsDc70VkHYbKt0X26f0f4TugqMiS1FeaPjhq4=";
+    hash = "sha256-Y/T3byX6sCri+0yzjbTampyMN6YqTdKCj/z2oZsM7gg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "s3transfer" ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     botocore
     jmespath
     s3transfer
@@ -53,16 +49,16 @@ buildPythonPackage rec {
     crt = [ botocore.optional-dependencies.crt ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "AWS SDK for Python";
     homepage = "https://github.com/boto/boto3";
     changelog = "https://github.com/boto/boto3/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     longDescription = ''
       Boto3 is the Amazon Web Services (AWS) Software Development Kit (SDK) for
       Python, which allows Python developers to write software that makes use of
       services like Amazon S3 and Amazon EC2.
     '';
-    maintainers = with maintainers; [ anthonyroussel ];
+    maintainers = [ lib.maintainers.anthonyroussel ];
   };
 }
