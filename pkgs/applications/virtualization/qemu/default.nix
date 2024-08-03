@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
-, pixman, vde2, alsa-lib, flex
+, pixman, vde2, alsa-lib, flex, pcre2
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, dtc, ninja, meson
 , sigtool
 , makeWrapper, removeReferencesTo
@@ -82,7 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals enableDocs [ python3Packages.sphinx python3Packages.sphinx-rtd-theme ]
     ++ lib.optionals hexagonSupport [ glib ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ]
-    ++ lib.optionals (!userOnly) [ dtc ];
+    ++ lib.optionals (!userOnly) [ dtc ]
+    # workaround, remove once this patch lands: https://lore.kernel.org/qemu-devel/20240805104921.4035256-1-hi@alyssa.is/
+    ++ lib.optionals (hexagonSupport && stdenv.hostPlatform.isStatic) [ pcre2 ];
 
   buildInputs = [ zlib glib pixman
     vde2 lzo snappy libtasn1
@@ -118,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (!userOnly) [ dtc ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
+  dontAddStaticConfigureFlags = true;
 
   outputs = [ "out" ] ++ lib.optional guestAgentSupport "ga";
   # On aarch64-linux we would shoot over the Hydra's 2G output limit.
@@ -195,7 +198,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional capstoneSupport "--enable-capstone"
     ++ lib.optional (!pluginsSupport) "--disable-plugins"
     ++ lib.optional (!enableBlobs) "--disable-install-blobs"
-    ++ lib.optional userOnly "--disable-system";
+    ++ lib.optional userOnly "--disable-system"
+    ++ lib.optional stdenv.hostPlatform.isStatic "--static";
 
   dontWrapGApps = true;
 
