@@ -17,6 +17,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-uQs+BUBWdbSoE3UqrSjqImVm5uwYf7XiTFtGG1BcFZI=";
 
+  postPatch = ''
+    # Upstream started to redirect aarch64-unknown-linux-gnu to aarch64-linux-gnu-gcc
+    # for their CI which breaks compiling on aarch64 in nixpkgs:
+    #  error: linker `aarch64-linux-gnu-gcc` not found
+    rm .cargo/config.toml
+  '';
+
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
   buildInputs = [ acl ];
 
