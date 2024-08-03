@@ -1,13 +1,15 @@
 # This module defines a small NixOS installation CD.  It does not
 # contain any graphical stuff.
 
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
   imports = [
     ../../profiles/minimal.nix
     ./installation-cd-base.nix
   ];
+
+  programs.git.package = lib.mkOverride 500 pkgs.gitMinimal;
 
   # Causes a lot of uncached builds for a negligible decrease in size.
   environment.noXlibs = lib.mkOverride 500 false;
