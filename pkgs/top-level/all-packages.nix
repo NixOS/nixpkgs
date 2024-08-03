@@ -28348,6 +28348,8 @@ with pkgs;
 
   media-player-info = callPackage ../data/misc/media-player-info { };
 
+  media-types = callPackage ../data/misc/media-types {};
+
   medio = callPackage ../data/fonts/medio { };
 
   melete = callPackage ../data/fonts/melete { };
