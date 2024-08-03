@@ -6,7 +6,9 @@
 , makeDesktopItem
 , love
 , luajit
-, libcoldclear ? callPackage ./libcoldclear.nix { }
+, writeShellScript
+, nix-update
+, libcoldclear ? callPackage ./libcoldclear.nix { inherit ccloader; }
 , ccloader ? callPackage ./ccloader.nix { inherit libcoldclear luajit; }
 }:
 
@@ -39,7 +41,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ love ccloader ];
 
   dontUnpack = true;
 
@@ -62,6 +63,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit ccloader libcoldclear;
+    updateScript = writeShellScript "update-script.sh" ''
+      if ${lib.getExe nix-update} techmino | grep "Packages updated"; then
+        ${lib.getExe nix-update} techmino.ccloader
+      fi
+    '';
   };
 
   meta = with lib; {
