@@ -37,6 +37,7 @@ in
 , autoconf
 , cargo
 , dump_syms
+, envsubst
 , makeWrapper
 , mimalloc
 , nodejs
@@ -290,6 +291,7 @@ buildStdenv.mkDerivation {
   nativeBuildInputs = [
     autoconf
     cargo
+    envsubst
     gnum4
     llvmPackagesBuildBuild.bintools
     makeWrapper
@@ -556,6 +558,15 @@ buildStdenv.mkDerivation {
     # Install distribution customizations
     install -Dvm644 ${distributionIni} $out/lib/${binaryName}/distribution/distribution.ini
     install -Dvm644 ${defaultPrefsFile} $out/lib/${binaryName}/browser/defaults/preferences/nixos-default-prefs.js
+
+    # Install appstream metadata
+    mkdir -p $out/share/metainfo
+    # TODO: make input and output path configurable
+    substituteInPlace ../taskcluster/docker/firefox-flatpak/org.mozilla.firefox.appdata.xml.in \
+      --replace ' date="$DATE"' ""
+    VERSION="${version}" envsubst \
+      < ../taskcluster/docker/firefox-flatpak/org.mozilla.firefox.appdata.xml.in \
+      > $out/share/metainfo/org.mozilla.firefox.appdata.xml
 
   '' + lib.optionalString buildStdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
