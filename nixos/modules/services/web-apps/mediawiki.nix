@@ -40,9 +40,6 @@ let
   cacheDir = "/var/cache/mediawiki";
   stateDir = "/var/lib/mediawiki";
 
-  # https://www.mediawiki.org/wiki/Compatibility
-  php = pkgs.php82;
-
   pkg = pkgs.stdenv.mkDerivation rec {
     pname = "mediawiki-full";
     inherit (src) version;
@@ -79,7 +76,7 @@ let
       }
       ''
         mkdir -p $out/bin
-        makeWrapper ${php}/bin/php $out/bin/mediawiki-maintenance \
+        makeWrapper ${cfg.phpPackage}/bin/php $out/bin/mediawiki-maintenance \
           --set MEDIAWIKI_CONFIG ${mediawikiConfig} \
           --add-flags ${pkg}/share/mediawiki/maintenance/run.php
 
@@ -115,7 +112,7 @@ let
   mediawikiConfig = pkgs.writeTextFile {
     name = "LocalSettings.php";
     checkPhase = ''
-      ${php}/bin/php --syntax-check "$target"
+      ${cfg.phpPackage}/bin/php --syntax-check "$target"
     '';
     text = ''
       <?php
@@ -254,6 +251,11 @@ in
       enable = mkEnableOption "MediaWiki";
 
       package = mkPackageOption pkgs "mediawiki" { };
+
+      # https://www.mediawiki.org/wiki/Compatibility
+      phpPackage = mkPackageOption pkgs "php" {
+        default = "php82";
+      };
 
       finalPackage = mkOption {
         type = types.package;
@@ -588,7 +590,7 @@ in
     services.phpfpm.pools.mediawiki = {
       inherit user group;
       phpEnv.MEDIAWIKI_CONFIG = "${mediawikiConfig}";
-      phpPackage = php;
+      phpPackage = cfg.phpPackage;
       settings =
         (
           if (cfg.webserver == "apache") then
@@ -712,8 +714,8 @@ in
         fi
 
         echo "exit( \$this->getPrimaryDB()->tableExists( 'user' ) ? 1 : 0 );" | \
-        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/run.php eval --conf ${mediawikiConfig} && \
-        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
+        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/run.php eval --conf ${mediawikiConfig} && \
+        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
           --dbserver ${lib.escapeShellArg dbAddr} \
@@ -735,7 +737,7 @@ in
           ${lib.escapeShellArg cfg.name} \
           admin
 
-        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick --skip-external-dependencies
+        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick --skip-external-dependencies
       '';
 
       serviceConfig = {
