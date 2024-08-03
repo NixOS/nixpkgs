@@ -1,12 +1,11 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
-, fetchpatch2
 , gitUpdater
 , testers
 , accountsservice
 , ayatana-indicator-datetime
+, biometryd
 , cmake
 , cmake-extras
 , content-hub
@@ -30,11 +29,13 @@
 , lomiri-ui-toolkit
 , maliit-keyboard
 , pkg-config
+, polkit
 , python3
 , qmenumodel
 , qtbase
 , qtdeclarative
 , qtmultimedia
+, trust-store
 , ubports-click
 , upower
 , validatePkgConfig
@@ -45,13 +46,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-system-settings-unwrapped";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-system-settings";
     rev = finalAttrs.version;
-    hash = "sha256-Po5eArO7zyaGatTf6kqci3DdzFDJSZakeglbiMx9kR8=";
+    hash = "sha256-dWaXPr9Z5jz5SbwLSd3jVqjK0E5BdcKVeF15p8j47uM=";
   };
 
   outputs = [
@@ -60,54 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-system-settings/-/merge_requests/433 merged & in release
-    (fetchpatch {
-      name = "0001-lomiri-system-settings-plugins-language-Fix-linking-against-accountsservice.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/75763ae2f9669f5f7f29aec3566606e6f6cb7478.patch";
-      hash = "sha256-2CE0yizkaz93kK82DhaaFjKmGnMoaikrwFj4k7RN534=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-system-settings/-/merge_requests/434 merged & in release
-    (fetchpatch {
-      name = "0002-lomiri-system-settings-GNUInstallDirs-and-fix-absolute-path-handling.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/93ee84423f3677a608ef73addcd3ddcbe7dc1d32.patch";
-      hash = "sha256-lSKAhtE3oSSv7USvDbbcfBZWAtWMmuKneWawKQABIiM=";
-    })
-
-    # Fixes tests with very-recent python-dbusmock
-    # Remove when version > 1.1.0
-    (fetchpatch {
-      name = "0003-lomiri-system-settings-Revert-Pass-missing-parameter-to-dbusmock-bluez-PairDevice-function.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/67d9e28ebab8bdb9473d5bf8da2b7573e6848fa2.patch";
-      hash = "sha256-pFWNne2UH3R5Fz9ayHvIpDXDQbXPs0k4b/oRg0fzi+s=";
-    })
-
-    (fetchpatch2 {
-      name = "0004-lomiri-system-settings-QOfono-namespace-change.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/c0b5b007d77993fabdd95be5ccbbba5151f0f165.patch";
-      hash = "sha256-HB7qdlbY0AVG6X3hL3IHf0Z7rm1G0wfdqo5MXtY7bfE=";
-    })
-  ] ++ [
-
     ./2000-Support-wrapping-for-Nixpkgs.patch
-
-    # Make it work with regular accountsservice
-    # https://gitlab.com/ubports/development/core/lomiri-system-settings/-/issues/341
-    (fetchpatch {
-      name = "2001-lomiri-system-settings-disable-current-language-switching.patch";
-      url = "https://sources.debian.org/data/main/l/lomiri-system-settings/1.0.1-2/debian/patches/2001_disable-current-language-switching.patch";
-      hash = "sha256-ZOFYwxS8s6+qMFw8xDCBv3nLBOBm86m9d/VhbpOjamY=";
-    })
   ];
 
   postPatch = ''
-    # Part of 0004-lomiri-system-settings-QOfono-namespace-change.patch, fetchpatch2 cannot handle rename-only changes
-    for unmovedThing in tests/mocks/MeeGo/QOfono/*; do
-      mv "$unmovedThing" "tests/mocks/QOfono/$(basename "$unmovedThing")"
-    done
-    rmdir tests/mocks/MeeGo/QOfono
-    rmdir tests/mocks/MeeGo
-
     substituteInPlace CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
 
@@ -155,7 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     icu
     json-glib
+    polkit
     qtbase
+    trust-store
     ubports-click
     upower
   ];
@@ -163,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   # QML components and schemas the wrapper needs
   propagatedBuildInputs = [
     ayatana-indicator-datetime
+    biometryd
     content-hub
     libqofono
     lomiri-indicator-network
@@ -203,9 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
       ]})")
     ]))
   ];
-
-  # CMake option had to be excluded from earlier patchset
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (lib.strings.versionOlder python3.pkgs.python-dbusmock.version "0.30.1") "-DMODERN_PYTHON_DBUSMOCK";
 
   # The linking for this normally ignores missing symbols, which is inconvenient for figuring out why subpages may be
   # failing to load their library modules. Force it to report them at linktime instead of runtime.
