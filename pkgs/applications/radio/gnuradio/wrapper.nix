@@ -75,6 +75,7 @@ let
   pname = unwrapped.pname + "-wrapped";
   inherit (unwrapped) version;
   makeWrapperArgs = builtins.concatStringsSep " " ([
+      "--prefix" "PYTHONPATH" ":" "${pythonEnv}/${pythonEnv.sitePackages}"
   ]
     # Emulating wrapGAppsHook3 & wrapQtAppsHook working together
     ++ lib.optionals (
@@ -111,7 +112,7 @@ let
       ]}"
     ]
     ++ lib.optionals (extraPackages != []) [
-      "--prefix" "GRC_BLOCKS_PATH" ":" "${lib.makeSearchPath "share/gnuradio/grc/blocks" extraPackages}"
+      "--prefix" "GRC_BLOCKS_PATH" ":" "${lib.makeSearchPath "share/gnuradio/grc/blocks" ([unwrapped] ++ extraPackages)}"
     ]
     ++ lib.optionals (extraSoapySdrPackages != []) [
       "--prefix" "SOAPY_SDR_PLUGIN_PATH" ":" "${lib.makeSearchPath
