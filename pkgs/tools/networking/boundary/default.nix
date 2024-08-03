@@ -1,14 +1,24 @@
-{ stdenv, lib, fetchzip, writeShellScript, curl, jq, common-updater-scripts }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  writeShellScript,
+  curl,
+  jq,
+  common-updater-scripts,
+}:
 let
   url' =
-    version: suffix: "https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${suffix}.zip";
+    version: suffix:
+    "https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${suffix}.zip";
 in
 stdenv.mkDerivation rec {
   pname = "boundary";
   version = "0.17.0";
 
-  src = passthru.sources.${stdenv.hostPlatform.system}
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    passthru.sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   dontConfigure = true;
   dontBuild = true;
@@ -36,27 +46,33 @@ stdenv.mkDerivation rec {
       "aarch64-darwin" = fetchzip {
         url = url' version "darwin_arm64";
         hash = "sha256-QbmSwwE345OfR2RvEyTzr4P5jjlDi1qANbnbRuFyNdo=";
-        stripRoot=false;
+        stripRoot = false;
       };
       "aarch64-linux" = fetchzip {
         url = url' version "linux_arm64";
         hash = "sha256-6G0BKIk+AN/B97vAdrwAy9c0dONtCJk30MUlfdLL9a0=";
-        stripRoot=false;
+        stripRoot = false;
       };
       "x86_64-darwin" = fetchzip {
         url = url' version "darwin_amd64";
         hash = "sha256-OKKbG6VH4xUSK3GsrXpKY2/PI2DWuveXges0XwGIecA=";
-        stripRoot=false;
+        stripRoot = false;
       };
       "x86_64-linux" = fetchzip {
         url = url' version "linux_amd64";
         hash = "sha256-1yDIyAaYbWrtgHvuta8KrYam/Q/rfNYNqgl7EXfQ+5E=";
-        stripRoot=false;
+        stripRoot = false;
       };
     };
-     updateScript = writeShellScript "update-boundary" ''
+    updateScript = writeShellScript "update-boundary" ''
       set -o errexit
-      export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          common-updater-scripts
+        ]
+      }"
       BOUNDARY_VER=$(curl --silent https://api.github.com/repos/hashicorp/boundary/releases/latest | jq '.tag_name | ltrimstr("v")' --raw-output)
       if [[ "${version}" = "$BOUNDARY_VER" ]]; then
           echo "The new version same as the old version."
@@ -83,8 +99,16 @@ stdenv.mkDerivation rec {
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsl11;
-    maintainers = with maintainers; [ jk techknowlogick ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      jk
+      techknowlogick
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     mainProgram = "boundary";
   };
 }
