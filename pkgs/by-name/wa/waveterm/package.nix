@@ -91,8 +91,8 @@ let
 
     installPhase = ''
       runHook preInstall
-      mkdir -p $out/Applications/Waveterm.app
-      cp -R . $out/Applications/Waveterm.app
+      mkdir -p $out/Applications/Wave.app
+      cp -R . $out/Applications/Wave.app
       runHook postInstall
     '';
   };
