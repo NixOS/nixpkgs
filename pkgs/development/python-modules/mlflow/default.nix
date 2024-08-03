@@ -95,7 +95,7 @@ buildPythonPackage rec {
     requests
     scikit-learn
     scipy
-    setuptools
+    setuptools # https://github.com/mlflow/mlflow/issues/11330
     #shap
     simplejson
     sqlalchemy
