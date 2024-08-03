@@ -4,6 +4,7 @@
   fetchFromGitHub,
   python,
   setuptools-scm,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "f90nml" ];
 
