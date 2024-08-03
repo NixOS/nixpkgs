@@ -5,7 +5,7 @@
 , meson
 , ninja
 , systemd
-, enableSystemd ? true
+, enableSystemd ? true # enableSystemd=false maintained by maintainers.qyliss.
 , pkg-config
 , docutils
 , doxygen
