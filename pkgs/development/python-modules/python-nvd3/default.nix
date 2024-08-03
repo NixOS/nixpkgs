@@ -5,7 +5,7 @@
   python-slugify,
   jinja2,
   setuptools,
-  coverage,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,11 +25,10 @@ buildPythonPackage rec {
     jinja2
     setuptools
   ];
-  nativeCheckInputs = [ coverage ];
 
-  checkPhase = ''
-    coverage run --source=nvd3 setup.py test
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "tests.py" ];
 
   meta = with lib; {
     homepage = "https://github.com/areski/python-nvd3";
