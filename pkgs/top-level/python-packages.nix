@@ -2835,6 +2835,12 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
+  datalad = callPackage ../development/python-modules/datalad { };
+
+  datalad-gooey = callPackage ../development/python-modules/datalad-gooey { };
+
+  datalad-next = callPackage ../development/python-modules/datalad-next { };
+
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   datapoint = callPackage ../development/python-modules/datapoint { };
@@ -2842,6 +2848,8 @@ self: super: with self; {
   dataprep-ml = callPackage ../development/python-modules/dataprep-ml { };
 
   dataproperty = callPackage ../development/python-modules/dataproperty { };
+
+  datasalad = callPackage ../development/python-modules/datasalad { };
 
   dataset = callPackage ../development/python-modules/dataset { };
 
@@ -7180,6 +7188,8 @@ self: super: with self; {
     llvm = pkgs.llvm_14;
   };
 
+  lm-format-enforcer = callPackage ../development/python-modules/lm-format-enforcer { };
+
   lmcloud = callPackage ../development/python-modules/lmcloud { };
 
   lmdb = callPackage ../development/python-modules/lmdb {
@@ -9136,8 +9146,6 @@ self: super: with self; {
 
   nose2pytest = callPackage ../development/python-modules/nose2pytest { };
 
-  nose3 = callPackage ../development/python-modules/nose3 { };
-
   notebook = callPackage ../development/python-modules/notebook { };
 
   notebook-shim = callPackage ../development/python-modules/notebook-shim { };
@@ -9636,6 +9644,8 @@ self: super: with self; {
   ots-python = callPackage ../development/python-modules/ots-python { };
 
   outcome = callPackage ../development/python-modules/outcome { };
+
+  outdated = callPackage ../development/python-modules/outdated { };
 
   outspin = callPackage ../development/python-modules/outspin { };
 
@@ -10460,8 +10470,6 @@ self: super: with self; {
 
   pyzipper = callPackage ../development/python-modules/pyzipper { };
 
-  pkutils = callPackage ../development/python-modules/pkutils { };
-
   plac = callPackage ../development/python-modules/plac { };
 
   plaid-python = callPackage ../development/python-modules/plaid-python { };
@@ -10929,6 +10937,8 @@ self: super: with self; {
   pyahocorasick = callPackage ../development/python-modules/pyahocorasick { };
 
   pyairnow = callPackage ../development/python-modules/pyairnow { };
+
+  pyairports = callPackage ../development/python-modules/pyairports { };
 
   pyairvisual = callPackage ../development/python-modules/pyairvisual { };
 

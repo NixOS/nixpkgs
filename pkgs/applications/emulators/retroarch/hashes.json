@@ -15,10 +15,10 @@
         "src": {
             "owner": "libretro",
             "repo": "libretro-atari800",
-            "rev": "8bfa3b80f6a2db365dfd1e8a6c06b7b0844327cf",
-            "hash": "sha256-sUv1NT5aOwULOCC9vCrlRXcvVdlfZk9dmPMZg2NGAPg="
+            "rev": "50141a6bf1a069abd86dd8c53aa4031f3f7cfbd1",
+            "hash": "sha256-pS5nvU+2eZ7We0ySN+Te6+Y3uuro5bz2FTPuLgvNCl4="
         },
-        "version": "unstable-2024-05-18"
+        "version": "unstable-2024-07-25"
     },
     "beetle-gba": {
         "fetcher": "fetchFromGitHub",
@@ -55,20 +55,20 @@
         "src": {
             "owner": "libretro",
             "repo": "beetle-pce-libretro",
-            "rev": "372184b402852f9b3a3f1663ea676ffa910f6e48",
-            "hash": "sha256-Q15EKf2dKpmnBRx25KDAeiOOXBNUbNKNBBh16diV6tQ="
+            "rev": "03935421be14680a4aed799388e74ecab8167311",
+            "hash": "sha256-frZ+IYULs5QYGBSw8sp+kEM9U/ykEzZPM/XLdqPr7rs="
         },
-        "version": "unstable-2024-07-19"
+        "version": "unstable-2024-07-26"
     },
     "beetle-pce-fast": {
         "fetcher": "fetchFromGitHub",
         "src": {
             "owner": "libretro",
             "repo": "beetle-pce-fast-libretro",
-            "rev": "c68ee949ab5a572c0c6541d25b66e997174a09f6",
-            "hash": "sha256-6hGO1GGFMBJxhuGXeUulilSN5zAqYjls/b4pHnoyc0Y="
+            "rev": "7b7ad0760860f792f3f3a2768230397504e3f66d",
+            "hash": "sha256-KQLvjpUiA/p9wrUIrxd6jJddk91MEF7B58agPALmu/A="
         },
-        "version": "unstable-2024-07-19"
+        "version": "unstable-2024-07-26"
     },
     "beetle-pcfx": {
         "fetcher": "fetchFromGitHub",
@@ -85,10 +85,10 @@
         "src": {
             "owner": "libretro",
             "repo": "beetle-psx-libretro",
-            "rev": "9c3f4dbe9650c31fa690db230243b4eae9a2f131",
-            "hash": "sha256-9TJzviamGLClhS6Y9OUm1HfEtLEREaOzgaIXX4GSMYs="
+            "rev": "38d74b0b769e3a72e8ea574389b9cc80994e9cc8",
+            "hash": "sha256-1Lm7TYCTEx6hNa2tjSNWHJMh3vFhyR1oqwiuyVIu+XM="
         },
-        "version": "unstable-2024-07-19"
+        "version": "unstable-2024-07-26"
     },
     "beetle-saturn": {
         "fetcher": "fetchFromGitHub",
@@ -115,10 +115,10 @@
         "src": {
             "owner": "libretro",
             "repo": "beetle-supergrafx-libretro",
-            "rev": "0e6ce96d68c1565d1cfb2d64841970f19f3cfb66",
-            "hash": "sha256-4LEvzyIpWBH0jfTuJaRxYe1fKdrw7/Mes6UlkxNyS58="
+            "rev": "1943f676c70a9ceeee51f05a7422093c525e83ca",
+            "hash": "sha256-ANoD95tfBtJyOokB0fdBmFA+d+iJQ4EcFTZyBNXbfMY="
         },
-        "version": "unstable-2024-06-28"
+        "version": "unstable-2024-07-26"
     },
     "beetle-vb": {
         "fetcher": "fetchFromGitHub",
@@ -165,10 +165,10 @@
         "src": {
             "owner": "libretro",
             "repo": "bsnes-libretro",
-            "rev": "5c0115612ea84fefeebf7219c32006cd32b575ec",
-            "hash": "sha256-veOlN2OV6Xxl+GmH7T/DdTVCmEiSgK72QHgT9TGu89w="
+            "rev": "d63ec98054477d4be3398d108b6ec0a7b162349a",
+            "hash": "sha256-XONLqioPLJJkZMQ5e2wz0N2vMwZxsPG5FYkDeZgk+JU="
         },
-        "version": "unstable-2024-07-19"
+        "version": "unstable-2024-07-26"
     },
     "bsnes-hd": {
         "fetcher": "fetchFromGitHub",
@@ -246,10 +246,10 @@
         "src": {
             "owner": "schellingb",
             "repo": "dosbox-pure",
-            "rev": "1476308debfad87ce377c6cfe62db1398774cd65",
-            "hash": "sha256-Op+3UQoPSHOSBqOdebp9wjgTt0apTLuwlcbooPqMvLU="
+            "rev": "2b7544492940e2208147f2b44cf6209b97ce8493",
+            "hash": "sha256-felA+nEqtbgW7BJ/kJPrfqGmLcMsv8jqN4nWA4uCvOE="
         },
-        "version": "unstable-2024-07-20"
+        "version": "unstable-2024-08-01"
     },
     "easyrpg": {
         "fetcher": "fetchFromGitHub",
@@ -287,10 +287,10 @@
         "src": {
             "owner": "libretro",
             "repo": "fbneo",
-            "rev": "143452d376faf0090d40241c71cc9b532b0605e0",
-            "hash": "sha256-6IzxMuCX6w5QXR7B3Lz/7GfgIwHQ9MaSakb0bHwG5KU="
+            "rev": "6fbc30a830c54304c16ba7dccd3aca2cb30bb473",
+            "hash": "sha256-zVrkyVskf3VIwEz50gG+z0Zp5SUeMEAX2ls9lKcyLXY="
         },
-        "version": "unstable-2024-07-12"
+        "version": "unstable-2024-07-27"
     },
     "fceumm": {
         "fetcher": "fetchFromGitHub",
@@ -307,11 +307,11 @@
         "src": {
             "owner": "flyinghead",
             "repo": "flycast",
-            "rev": "0b6b8b3753fb219cb0e3a1d55d2ec7948f2e4842",
-            "hash": "sha256-3U7JTNROxi71NpHERlUzGb8i9oaGdsXDtqgClqcO0kM=",
+            "rev": "45bf218df428123f739714ef4e65e1b96c0959b7",
+            "hash": "sha256-TB8cSwvwyfG3tNsMf2qXDZGMTuwnNeRlhyH8fzDnvQM=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-07-19"
+        "version": "unstable-2024-07-29"
     },
     "fmsx": {
         "fetcher": "fetchFromGitHub",
@@ -348,20 +348,20 @@
         "src": {
             "owner": "libretro",
             "repo": "gambatte-libretro",
-            "rev": "0cf1a421a2123205559c666853cdf9112382fa46",
-            "hash": "sha256-CjcmRMk+fL1WwiiNcFCv8FGeoPl/Ib9jMvXJRzApPNU="
+            "rev": "607c19668426b8945011fd11e25cfce7849f7e13",
+            "hash": "sha256-8uLKOxLRWbczUkhsXqjXVH7SDlIqrp0LNdzVjmxbP2U="
         },
-        "version": "unstable-2024-07-19"
+        "version": "unstable-2024-07-26"
     },
     "genesis-plus-gx": {
         "fetcher": "fetchFromGitHub",
         "src": {
             "owner": "libretro",
             "repo": "Genesis-Plus-GX",
-            "rev": "7f3efe569177702f77d1cdfadba6568f82e30112",
-            "hash": "sha256-ABuWTzN0AvHXiODMSVU0lVYr44WGWpjtEuFfe0y6URw="
+            "rev": "5567ea92c6a1b76d72fedaee679a997056038001",
+            "hash": "sha256-4NWA963BSJ9OTq8Lv1v8P3kYwY+mBTQ8uN6zspmkUB4="
         },
-        "version": "unstable-2024-07-20"
+        "version": "unstable-2024-07-26"
     },
     "gpsp": {
         "fetcher": "fetchFromGitHub",
@@ -439,10 +439,10 @@
         "src": {
             "owner": "libretro",
             "repo": "mame2003-plus-libretro",
-            "rev": "eb6295935f5be566fb3aa34dae2856596c37c214",
-            "hash": "sha256-eYHbPi6rWvwrTPhwGGs2OmvKgs1Ks3SF+6/wgPyvUJw="
+            "rev": "8ffa3c773640956c02dfbcd7d5dc8e3a12fc6773",
+            "hash": "sha256-OzLXcXvrgNQa81n4z8MFEApqsYL4y1e9Cuela5kE34c="
         },
-        "version": "unstable-2024-07-20"
+        "version": "unstable-2024-07-28"
     },
     "mame2010": {
         "fetcher": "fetchFromGitHub",
@@ -631,10 +631,10 @@
         "src": {
             "owner": "libretro",
             "repo": "pcsx_rearmed",
-            "rev": "e87127f85b42b8ca4273f7962cdef8c30c2e2090",
-            "hash": "sha256-X8fcy83wGKuaYI91VTSbbOeURKNPFYbUpMliw8hat3Q="
+            "rev": "19f1a7d2de3a136810a84341db77d4f5eb8f3361",
+            "hash": "sha256-RnR6KuZa5cxw/Z+ZIZ2RhNrPRWlZupR9TDUhc2puBqQ="
         },
-        "version": "unstable-2024-07-16"
+        "version": "unstable-2024-07-24"
     },
     "picodrive": {
         "fetcher": "fetchFromGitHub",
@@ -652,22 +652,22 @@
         "src": {
             "owner": "jpd002",
             "repo": "Play-",
-            "rev": "fea21169c4d1fd6aa19f8a5c2ef960af2a3be554",
-            "hash": "sha256-GoLETeWLvtP+DMGkFL/nDhjt85P0pgr1/NTNif1PCCo=",
+            "rev": "06517ef014305c8579f38fa7574ef3685181d037",
+            "hash": "sha256-b9lsxVRjkV85OzPE5569ZbeShji2kudbcz3amd9aXnA=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-07-19"
+        "version": "unstable-2024-07-29"
     },
     "ppsspp": {
         "fetcher": "fetchFromGitHub",
         "src": {
             "owner": "hrydgard",
             "repo": "ppsspp",
-            "rev": "5edd02ef0a81fec0b9f0e6423cbea96123af083f",
-            "hash": "sha256-h+hXuRT/0UizOeJgdG4kqWk3mzl6Y88IdHDK/2XqsPA=",
+            "rev": "52cf10274c342c1dd97d91c273b109d5c859d227",
+            "hash": "sha256-/XDrbaMyDJgyCZd/5vYkAXw7OvIXx+oagbwqL51uCFI=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-07-20"
+        "version": "unstable-2024-07-29"
     },
     "prboom": {
         "fetcher": "fetchFromGitHub",
@@ -744,20 +744,20 @@
         "src": {
             "owner": "libretro",
             "repo": "smsplus-gx",
-            "rev": "081d956e07188ba9204595c9f15d34b2b0664796",
-            "hash": "sha256-oVzoVvbqxbyZytXLdnlpeYZDefRRG8mxBFdhgFCPPHM="
+            "rev": "29cd96822f5e9b71a8ccfa13a38c6c37ed83ccac",
+            "hash": "sha256-jdA5PDqwYCJ0V1MxTBJr2Lsm8r9jvZ+l2g2HgrhfP30="
         },
-        "version": "unstable-2024-07-20"
+        "version": "unstable-2024-07-22"
     },
     "snes9x": {
         "fetcher": "fetchFromGitHub",
         "src": {
             "owner": "snes9xgit",
             "repo": "snes9x",
-            "rev": "881eeaed9a0d7b6ce9b16b094f25101785f0e39e",
-            "hash": "sha256-ZDp/k9TuaVUp9xH9rvzfpbB0VSJbCFRbkMcnR/oPWLM="
+            "rev": "e92b93ca9cd7936134abe0b90975bc9fc009fbf0",
+            "hash": "sha256-zsGf+3J0k7It/QEg/9SIZrb4yg8K8/6KXUE1/dK83yg="
         },
-        "version": "unstable-2024-07-14"
+        "version": "unstable-2024-07-29"
     },
     "snes9x2002": {
         "fetcher": "fetchFromGitHub",
@@ -794,10 +794,10 @@
         "src": {
             "owner": "stella-emu",
             "repo": "stella",
-            "rev": "69b300b6f9d46c4f9caa2df1f848a74163cd1173",
-            "hash": "sha256-8TgbZzmuwDUn23zR1/XKIOdrLwgzq18oMS1KOhSs1oQ="
+            "rev": "56e6bd69bc070f1d31e13610f1a7ebb1ca8bacbf",
+            "hash": "sha256-M2pyCeBQ3N51E6Xy+NvnQwAcuAuXL8sRvZm3nuyeFv0="
         },
-        "version": "unstable-2024-06-30"
+        "version": "unstable-2024-07-30"
     },
     "stella2014": {
         "fetcher": "fetchFromGitHub",
@@ -814,10 +814,10 @@
         "src": {
             "owner": "libretro",
             "repo": "swanstation",
-            "rev": "b17b0e4348b3e21f67f84568b12a26a95d0631dc",
-            "hash": "sha256-Q+sDPXclfKnPFmMjgxtlY6/iK6ZnegwQ3uNoqUhDkoo="
+            "rev": "37cd87e14ca09ac1b558e5b2c7db4ad256865bbb",
+            "hash": "sha256-dNIxlTPoY4S6VMtTN22ti3DE4aU/8XN/XhAo3DMNR/E="
         },
-        "version": "unstable-2024-07-15"
+        "version": "unstable-2024-07-24"
     },
     "tgbdual": {
         "fetcher": "fetchFromGitHub",

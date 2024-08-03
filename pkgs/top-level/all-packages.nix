@@ -2179,7 +2179,9 @@ with pkgs;
 
   conform = callPackage ../applications/version-management/conform { };
 
-  datalad = callPackage ../applications/version-management/datalad { };
+  datalad = with python3Packages; toPythonApplication datalad;
+
+  datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
 
   darcs-to-git = callPackage ../applications/version-management/darcs-to-git { };
 
@@ -3812,8 +3814,6 @@ with pkgs;
 
   harsh = callPackage ../applications/misc/harsh { };
 
-  harvid = callPackage ../tools/video/harvid { };
-
   headset = callPackage ../applications/audio/headset { };
 
   hilbish = callPackage ../shells/hilbish { };
@@ -4654,9 +4654,7 @@ with pkgs;
 
   wl-mirror = callPackage ../tools/wayland/wl-mirror { };
 
-  wl-screenrec = callPackage ../tools/wayland/wl-screenrec {
-    ffmpeg = ffmpeg_6;
-  };
+  wl-screenrec = callPackage ../tools/wayland/wl-screenrec { };
 
   wleave = callPackage ../tools/wayland/wleave { };
 
@@ -7596,7 +7594,7 @@ with pkgs;
   easeprobe = callPackage ../tools/misc/easeprobe { };
 
   emscripten = callPackage ../development/compilers/emscripten {
-    llvmPackages = llvmPackages_git;
+    llvmPackages = llvmPackages_19;
   };
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
@@ -9145,8 +9143,6 @@ with pkgs;
   jazzy = callPackage ../development/tools/jazzy { };
 
   jc = with python3Packages; toPythonApplication jc;
-
-  jcli = callPackage ../development/tools/misc/jcli { };
 
   jd-cli = callPackage ../tools/security/jd-cli { };
 
@@ -13570,8 +13566,6 @@ with pkgs;
   twm = callPackage ../tools/misc/twm {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  txtpbfmt = callPackage ../development/tools/txtpbfmt { };
 
   ipbt = callPackage ../tools/misc/ipbt { };
 
@@ -26768,8 +26762,6 @@ with pkgs;
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
-  linux-wifi-hotspot = callPackage ../os-specific/linux/linux-wifi-hotspot { };
-
   linthesia = callPackage ../games/linthesia/default.nix { };
 
   libreelec-dvb-firmware = callPackage ../os-specific/linux/firmware/libreelec-dvb-firmware { };
@@ -33298,7 +33290,8 @@ with pkgs;
 
   qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
 
-  qmplay2 = libsForQt5.callPackage ../applications/video/qmplay2 { };
+  qmplay2-qt5 = qmplay2.override { qtVersion = "5"; };
+  qmplay2-qt6 = qmplay2.override { qtVersion = "6"; };
 
   qmidiarp = callPackage ../applications/audio/qmidiarp { };
 
@@ -33720,7 +33713,7 @@ with pkgs;
 
   viber = callPackage ../applications/networking/instant-messengers/viber { };
 
-  wavebox = libsForQt5.callPackage ../applications/networking/instant-messengers/wavebox { };
+  wavebox = callPackage ../applications/networking/instant-messengers/wavebox { };
 
   sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi { };
 
@@ -38393,8 +38386,6 @@ with pkgs;
   brightnessctl = callPackage ../misc/brightnessctl { };
 
   calaos_installer = libsForQt5.callPackage ../misc/calaos/installer { };
-
-  civo = callPackage ../applications/networking/cluster/civo { };
 
   click = callPackage ../applications/networking/cluster/click { };
 

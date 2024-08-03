@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.7";
+  version = "0.11.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "yanyongyu";
     repo = "githubkit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bh01m/L1ubQGc4EoHw8If/6yF64M5CsifSwVezZjFDQ=";
+    hash = "sha256-FTNLyCcwDU6EssQDJlwtmA7cQj57fsOaecvbpwswirU=";
   };
 
   postPatch = ''
