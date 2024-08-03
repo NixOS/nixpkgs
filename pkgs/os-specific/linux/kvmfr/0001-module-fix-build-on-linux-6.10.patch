@@ -11,8 +11,8 @@ Fixes #1124 - Thanks @pongo1231
 
 diff --git a/module/dkms.conf b/module/dkms.conf
 index 9d2a02c0..486a61ed 100644
---- a/module/dkms.conf
-+++ b/module/dkms.conf
+--- a/dkms.conf
++++ b/dkms.conf
 @@ -1,5 +1,5 @@
  PACKAGE_NAME="kvmfr"
 -PACKAGE_VERSION="0.0.9"
@@ -22,16 +22,16 @@ index 9d2a02c0..486a61ed 100644
  CLEAN="make KDIR=${kernel_source_dir} clean"
 diff --git a/module/kvmfr.c b/module/kvmfr.c
 index b5acd18d..c99a5d79 100644
---- a/module/kvmfr.c
-+++ b/module/kvmfr.c
+--- a/kvmfr.c
++++ b/kvmfr.c
 @@ -30,6 +30,7 @@
  #include <linux/highmem.h>
  #include <linux/memremap.h>
  #include <linux/version.h>
 +#include <linux/vmalloc.h>
- 
+
  #include <asm/io.h>
- 
--- 
+
+--
 2.45.2
 
