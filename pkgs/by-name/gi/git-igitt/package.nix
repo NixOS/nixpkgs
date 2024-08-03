@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage {
     description = "Interactive, cross-platform Git terminal application with clear git graphs arranged for your branching model";
     homepage = "https://github.com/mlange-42/git-igitt";
     license = lib.licenses.mit;
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     maintainers = [ lib.maintainers.pinage404 ];
     mainProgram = "git-igitt";
   };
