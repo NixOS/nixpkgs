@@ -8379,6 +8379,12 @@
     github = "the-furry-hubofeverything";
     githubId = 53921912;
   };
+  huetremy = {
+    name = "Rémy Huet";
+    email = "remy.huet@utc.fr";
+    github = "huetremy";
+    githubId = 32484913;
+  };
   hufman = {
     email = "hufman@gmail.com";
     github = "hufman";
