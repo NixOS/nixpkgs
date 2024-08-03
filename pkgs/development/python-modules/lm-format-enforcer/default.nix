@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "lm-format-enforcer";
-  version = "0.10.4";
+  version = "0.10.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "noamgat";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-GOnMj910rgzYeIeN2yLcXZDDel/Hu6nv7ov5BrlHJLg=";
+    hash = "sha256-DlHZ1gF+SJlAFZD5G1ATx5alutT2dctZa5gBNYmFh9E=";
   };
 
   build-system = [ poetry-core ];
