@@ -34,12 +34,18 @@ buildPythonPackage {
     matplotlib
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  separateChecks = true;
 
-  disabledTestPaths = [
-    # They hard-code the path to the dataset and expect you to edit the test to update it to your value
-    "test/test_dataset.py"
-  ];
+  checkArgs = {
+    nativeCheckInputs = [
+      pytestCheckHook
+    ];
+
+    disabledTestPaths = [
+      # They hard-code the path to the dataset and expect you to edit the test to update it to your value
+      "test/test_dataset.py"
+    ];
+  };
 
   meta = with lib; {
     description = "Tools for working with the MUSCIMA++ dataset of handwritten music notation";
