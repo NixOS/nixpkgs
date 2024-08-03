@@ -28,7 +28,11 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
-  dependencies = [ six ];
+
+  dependencies = [
+    mock
+    six
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
