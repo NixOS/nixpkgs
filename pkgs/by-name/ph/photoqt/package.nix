@@ -1,27 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, extra-cmake-modules
-, qttools
-, wrapQtAppsHook
-, exiv2
-, graphicsmagick
-, libarchive
-, libraw
-, mpv
-, poppler
-, pugixml
-, qtbase
-, qtcharts
-, qtdeclarative
-, qtimageformats
-, qtlocation
-, qtmultimedia
-, qtpositioning
-, qtsvg
-, zxing-cpp
-, qtwayland
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  extra-cmake-modules,
+  exiv2,
+  graphicsmagick,
+  libarchive,
+  libraw,
+  mpv,
+  pugixml,
+  qt6,
+  qt6Packages,
+  zxing-cpp,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,8 +27,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    qttools
-    wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -46,20 +37,18 @@ stdenv.mkDerivation rec {
     libarchive
     libraw
     mpv
-    poppler
     pugixml
-    qtbase
-    qtcharts
-    qtdeclarative
-    qtimageformats
-    qtlocation
-    qtmultimedia
-    qtpositioning
-    qtsvg
+    qt6.qtbase
+    qt6.qtcharts
+    qt6.qtdeclarative
+    qt6.qtimageformats
+    qt6.qtlocation
+    qt6.qtmultimedia
+    qt6.qtpositioning
+    qt6.qtsvg
+    qt6Packages.poppler
     zxing-cpp
-  ] ++ lib.optionals stdenv.isLinux [
-    qtwayland
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ qt6.qtwayland ];
 
   cmakeFlags = [
     (lib.cmakeBool "DEVIL" false)
