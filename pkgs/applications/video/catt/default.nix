@@ -6,6 +6,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       pychromecast = super.pychromecast.overridePythonAttrs (_: rec {
         version = "13.1.0";

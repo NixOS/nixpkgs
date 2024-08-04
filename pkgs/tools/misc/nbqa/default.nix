@@ -59,6 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     ]
     ++ (with python3.pkgs; [
       autoflake
+      distutils
       flake8
       isort
       jupytext

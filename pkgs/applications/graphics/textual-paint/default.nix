@@ -7,6 +7,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = _: super: {
       pillow = super.pillow.overridePythonAttrs rec {
         version = "9.5.0";
