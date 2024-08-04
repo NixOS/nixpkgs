@@ -33,8 +33,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "fonttools";
+    repo = "fonttools";
     rev = "refs/tags/${version}";
     hash = "sha256-9fxC6OKXZkhih3BFyBqO4t6sKXyarYfFIqBk+WOSiRY=";
   };
