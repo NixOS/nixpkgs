@@ -1,47 +1,48 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, accountsservice
-, ayatana-indicator-datetime
-, biometryd
-, cmake
-, cmake-extras
-, content-hub
-, dbus
-, deviceinfo
-, geonames
-, gettext
-, glib
-, gnome-desktop
-, gsettings-qt
-, gtk3
-, icu
-, intltool
-, json-glib
-, libqofono
-, libqtdbustest
-, libqtdbusmock
-, lomiri-indicator-network
-, lomiri-schemas
-, lomiri-settings-components
-, lomiri-ui-toolkit
-, maliit-keyboard
-, pkg-config
-, polkit
-, python3
-, qmenumodel
-, qtbase
-, qtdeclarative
-, qtmultimedia
-, trust-store
-, ubports-click
-, upower
-, validatePkgConfig
-, wrapGAppsHook3
-, wrapQtAppsHook
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  accountsservice,
+  ayatana-indicator-datetime,
+  biometryd,
+  cmake,
+  cmake-extras,
+  content-hub,
+  dbus,
+  deviceinfo,
+  geonames,
+  gettext,
+  glib,
+  gnome-desktop,
+  gsettings-qt,
+  gtk3,
+  icu,
+  intltool,
+  json-glib,
+  libqofono,
+  libqtdbustest,
+  libqtdbusmock,
+  lomiri-indicator-network,
+  lomiri-schemas,
+  lomiri-settings-components,
+  lomiri-ui-toolkit,
+  maliit-keyboard,
+  pkg-config,
+  polkit,
+  python3,
+  qmenumodel,
+  qtbase,
+  qtdeclarative,
+  qtmultimedia,
+  trust-store,
+  ubports-click,
+  upower,
+  validatePkgConfig,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,9 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  patches = [
-    ./2000-Support-wrapping-for-Nixpkgs.patch
-  ];
+  patches = [ ./2000-Support-wrapping-for-Nixpkgs.patch ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -137,9 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (ps: with ps; [ python-dbusmock ]))
     xvfb-run
   ];
 
@@ -154,14 +151,19 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_LIBDEVICEINFO" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
-      # Exclude tests
-      "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
-        # Hits OpenGL context issue inside lomiri-ui-toolkit, see derivation of that on details
-        "^testmouse"
-        "^tst_notifications"
-      ]})")
-    ]))
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
+      lib.concatStringsSep ";" [
+        # Exclude tests
+        "-E"
+        (lib.strings.escapeShellArg "(${
+          lib.concatStringsSep "|" [
+            # Hits OpenGL context issue inside lomiri-ui-toolkit, see derivation of that on details
+            "^testmouse"
+            "^tst_notifications"
+          ]
+        })")
+      ]
+    ))
   ];
 
   # The linking for this normally ignores missing symbols, which is inconvenient for figuring out why subpages may be
@@ -175,7 +177,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = ''
     export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
-    export QML2_IMPORT_PATH=${lib.makeSearchPathOutput "bin" qtbase.qtQmlPrefix ([ qtdeclarative lomiri-ui-toolkit lomiri-settings-components ] ++ lomiri-ui-toolkit.propagatedBuildInputs)}
+    export QML2_IMPORT_PATH=${
+      lib.makeSearchPathOutput "bin" qtbase.qtQmlPrefix (
+        [
+          qtdeclarative
+          lomiri-ui-toolkit
+          lomiri-settings-components
+        ]
+        ++ lomiri-ui-toolkit.propagatedBuildInputs
+      )
+    }
   '';
 
   postInstall = ''
@@ -201,8 +212,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "lomiri-system-settings";
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
-    pkgConfigModules = [
-      "LomiriSystemSettings"
-    ];
+    pkgConfigModules = [ "LomiriSystemSettings" ];
   };
 })
