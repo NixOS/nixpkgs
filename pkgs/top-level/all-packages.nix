@@ -3444,6 +3444,10 @@ with pkgs;
     openjdk11 = openjdk11.override { enableJavaFX = true; };
   };
 
+  bisq_2 = callPackage ../by-name/bi/bisq/package.nix {
+    openjdk = openjdk.override { enableJavaFX = true; };
+  };
+
   bic = callPackage ../development/interpreters/bic { };
 
   biscuit-cli = callPackage ../tools/security/biscuit-cli { };
