@@ -25,11 +25,15 @@ let
     "core.conf" = coreConfig;
     "webapp.conf" = webappConfig;
     "webserver.conf" = webserverConfig;
-    "resourcepacks" = pkgs.linkFarm "resourcepacks" cfg.resourcepacks;
+    "packs" = pkgs.linkFarm "packs" cfg.resourcepacks;
   };
 
   inherit (lib) mkOption;
 in {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "bluemap" "resourcepacks" ] [ "services" "bluemap" "packs" ])
+  ];
+
   options.services.bluemap = {
     enable = lib.mkEnableOption "bluemap";
 
@@ -249,10 +253,10 @@ in {
       '';
     };
 
-    resourcepacks = mkOption {
+    packs = mkOption {
       type = lib.types.attrsOf lib.types.pathInStore;
       default = { };
-      description = "A set of resourcepacks to use, loaded in alphabetical order";
+      description = "A set of resourcepacks and datapacks to use, loaded in alphabetical order";
     };
   };
 
@@ -293,8 +297,8 @@ in {
       "${cfg.host}" = {
         root = config.services.bluemap.webRoot;
         locations = {
-          "~* ^/maps/[^/]*/tiles/[^/]*.json$".extraConfig = ''
-            error_page 404 =200 /assets/emptyTile.json;
+          "~* ^/maps/[^/]*/tiles/[^/]*.prbm$".extraConfig = ''
+            error_page 404 =200 /assets/emptyTile.prbm;
             gzip_static always;
           '';
           "~* ^/maps/[^/]*/tiles/[^/]*.png$".tryFiles = "$uri =204";
