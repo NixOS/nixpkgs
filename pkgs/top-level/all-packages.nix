@@ -22916,6 +22916,7 @@ with pkgs;
   mistralclient = with python311Packages; toPythonApplication python-mistralclient;
   swiftclient = with python311Packages; toPythonApplication python-swiftclient;
   troveclient = with python311Packages; toPythonApplication python-troveclient;
+  watcherclient = with python311Packages; toPythonApplication python-watcherclient;
   zunclient = with python311Packages; toPythonApplication python-zunclient;
 
   openvdb = callPackage ../development/libraries/openvdb { };

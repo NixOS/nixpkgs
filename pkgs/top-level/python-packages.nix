@@ -12846,6 +12846,8 @@ self: super: with self; {
 
   python-vlc = callPackage ../development/python-modules/python-vlc { };
 
+  python-watcherclient = callPackage ../development/python-modules/python-watcherclient { };
+
   python-whois = callPackage ../development/python-modules/python-whois { };
 
   python-wifi = callPackage ../development/python-modules/python-wifi { };
