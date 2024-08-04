@@ -1,12 +1,14 @@
 {
   antora,
+  antora-lunr-extension,
+  antora-lunr-extension-test ? false,
   antora-ui-default,
   gitMinimal,
   lib,
   stdenvNoCC,
 }:
 stdenvNoCC.mkDerivation {
-  name = "${antora.pname}-test";
+  name = "${antora.pname}${lib.optionalString antora-lunr-extension-test "-${antora-lunr-extension.pname}"}-test";
   src = ./minimal_working_example;
 
   postPatch =
@@ -43,6 +45,7 @@ stdenvNoCC.mkDerivation {
       antora ${
         lib.cli.toGNUCommandLineShell { } {
           cache-dir = "$(mktemp --directory)";
+          extension = if antora-lunr-extension-test then antora-lunr-extension else false;
           to-dir = placeholder "out";
           ui-bundle-url = "${antora-ui-default}/ui-bundle.zip";
         }
