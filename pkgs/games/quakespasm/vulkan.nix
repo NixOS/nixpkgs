@@ -14,7 +14,6 @@
   gzip,
   libvorbis,
   libmad,
-  vulkan-headers,
   vulkan-loader,
   moltenvk,
 }:
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    vulkan-headers
   ];
 
   buildInputs = [
@@ -80,6 +78,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ ylh ];
+    maintainers = with maintainers; [ PopeRigby ylh ];
   };
 }
