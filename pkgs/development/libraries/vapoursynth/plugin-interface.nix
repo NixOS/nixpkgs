@@ -20,21 +20,30 @@ plugins: let
     paths = deepPlugins;
   };
 
-  pluginLoader = let
-    source = writeText "vapoursynth-nix-plugins.c" ''
-      void VSLoadPluginsNix(void (*load)(void *data, const char *path), void *data) {
-      ${lib.concatMapStringsSep "" (path: "load(data, \"${path}/lib/vapoursynth\");") deepPlugins}
+  pluginLoader =
+    let
+      source = writeText "vapoursynth-nix-plugins.cpp" ''
+        #include <filesystem>
+
+        struct VSCore;
+
+        void VSLoadPluginsNix(void (*load)(VSCore *, const std::filesystem::path &), VSCore *core) {
+        ${lib.concatMapStrings (
+          path: ''load(core, std::filesystem::u8path("${path}/lib/vapoursynth"));''
+        ) deepPlugins}
+        }
+      '';
+    in
+    runCommandCC "vapoursynth-plugin-loader"
+      {
+        executable = true;
+        preferLocalBuild = true;
+        allowSubstitutes = false;
       }
-    '';
-  in
-  runCommandCC "vapoursynth-plugin-loader" {
-    executable = true;
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-  } ''
-    mkdir -p $out/lib
-    $CC -shared -fPIC ${source} -o "$out/lib/libvapoursynth-nix-plugins${ext}"
-  '';
+      ''
+        mkdir -p $out/lib
+        $CXX -std=c++17 -shared -fPIC ${source} -o "$out/lib/libvapoursynth-nix-plugins${ext}"
+      '';
 
   ext = stdenv.hostPlatform.extensions.sharedLibrary;
 in

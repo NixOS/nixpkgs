@@ -6,17 +6,17 @@
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "65";
+  version = "69";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = "R${version}";
-    sha256 = "sha256-HrTXhRoKSFeLXYQM7W2FvYf7yCD1diSZGtPop9urrSk=";
+    hash   = "sha256-T2bCVNH0dLM9lFYChXzvD6AJM3xEtOVCb2tI10tIXJs=";
   };
 
   patches = [
-    ./0001-Call-weak-function-to-allow-adding-preloaded-plugins.patch
+    ./nix-plugin-loader.patch
   ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper ];
