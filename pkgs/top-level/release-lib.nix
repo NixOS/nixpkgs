@@ -4,11 +4,11 @@
 , scrubJobs ? true
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+# Just the Nixpkgs library functions and data.
+, lib ? (import ../../lib)
 }:
 
 let
-  lib = import ../../lib;
-
   inherit (lib)
     addMetaAttrs
     any
