@@ -112,15 +112,13 @@ in
         };
       };
     };
-    systemd.tmpfiles.settings.rss-bridge = let
-      perm = {
-        mode = "0750";
-        user = cfg.user;
-        group = cfg.group;
-      };
-    in {
-      "${configAttr.FileCache.path}".d = perm;
-      "${cfg.dataDir}/config.ini.php".z = perm;
+
+    systemd.tmpfiles.settings.rss-bridge = mkIf (hasAttrByPath ["FileCache" "path"] configAttr) {
+      "${configAttr.FileCache.path}".d = {
+          mode = "0750";
+          user = cfg.user;
+          group = cfg.group;
+        };
     };
 
     services.nginx = mkIf (cfg.virtualHost != null) {
@@ -139,7 +137,6 @@ in
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
               fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-              fastcgi_param RSSBRIDGE_DATA ${cfg.dataDir};
               ${cfgEnv}
             '';
           };
