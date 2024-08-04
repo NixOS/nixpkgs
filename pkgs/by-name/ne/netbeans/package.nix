@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
-, jdk, perl
+, jdk17, perl
 }:
 
 let
@@ -34,9 +34,9 @@ stdenv.mkDerivation {
     mkdir -pv $out/bin
     cp -a netbeans $out
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
-      --prefix PATH : ${lib.makeBinPath [ jdk which ]} \
-      --prefix JAVA_HOME : ${jdk.home} \
-      --add-flags "--jdkhome ${jdk.home} \
+      --prefix PATH : ${lib.makeBinPath [ jdk17 which ]} \
+      --prefix JAVA_HOME : ${jdk17.home} \
+      --add-flags "--jdkhome ${jdk17.home} \
       -J-Dawt.useSystemAAFontSettings=on -J-Dswing.aatext=true"
 
     # Extract pngs from the Apple icon image and create
