@@ -1,4 +1,4 @@
-{ testers, fetchgit, ... }: {
+{ testers, fetchgit, fetchurl, ... }: {
   simple = testers.invalidateFetcherByDrvHash fetchgit {
     name = "simple-nix-source";
     url = "https://github.com/NixOS/nix";
@@ -100,7 +100,40 @@
     verifyCommit = true;
     publicKeys = [{
         type="gpg";
-        key= ./testkey.asc;
+        key= fetchurl {
+          url = "https://keys.openpgp.org/vks/v1/by-fingerprint/5EF3A41171BB77E6110ED2D01F3D03348DB1A3E2";
+          sha256 = "sha256-xvBWfaS1py7vyDIIYGtATqBOnWafd3B6OB2Blhfm4MU=";
+        };
+      }];
+  };
+
+  gpg-tag-verification = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "gpg-tag-verification-source";
+    url = "https://gitlab.torproject.org/tpo/core/tor";
+    rev = "tor-0.4.8.12";
+    sha256 = "sha256-039kMxxf5B8FjOKoPjXie07+aQ3H8OauqAq62sU6LFo=";
+    verifyTag = true;
+    publicKeys = [{
+        type="gpg";
+        key= fetchurl {
+          url = "https://keys.openpgp.org/vks/v1/by-fingerprint/B74417EDDF22AC9F9E90F49142E86A2A11F48D36";
+          sha256 = "sha256-M4mvelY1nLeGuhgZIpF4oAe80kbJl2+wcDI6zp9YwXo=";
+        };
+      }];
+  };
+
+  gpg-tag-verification-refs-directory = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "gpg-tag-verification-source";
+    url = "https://gitlab.torproject.org/tpo/core/tor";
+    rev = "refs/tags/tor-0.4.8.12";
+    sha256 = "sha256-039kMxxf5B8FjOKoPjXie07+aQ3H8OauqAq62sU6LFo=";
+    verifyTag = true;
+    publicKeys = [{
+        type="gpg";
+        key= fetchurl {
+          url = "https://keys.openpgp.org/vks/v1/by-fingerprint/B74417EDDF22AC9F9E90F49142E86A2A11F48D36";
+          sha256 = "sha256-M4mvelY1nLeGuhgZIpF4oAe80kbJl2+wcDI6zp9YwXo=";
+        };
       }];
   };
 }
