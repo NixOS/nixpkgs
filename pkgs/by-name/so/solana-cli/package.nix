@@ -31,8 +31,8 @@
   ]
 }:
 let
-  version = "1.17.31";
-  sha256 = "sha256-5qPW199o+CVJlqGwiAegsquBRWEb5uDKITxjN5dQYAQ=";
+  version = "1.18.20";
+  sha256 = "sha256-+mLr8fwxRhmYCv9bpD7Q2E1QLWKEO/Y83eCPbNmEBAE=";
   rocksdb = rocksdb_8_3;
 
   inherit (darwin.apple_sdk_11_0) Libsystem;
@@ -53,7 +53,9 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
 
     outputHashes = {
+      "aes-gcm-siv-0.10.3" = "sha256-N1ppxvew4B50JQWsC3xzP0X4jgyXZ5aOQ0oJMmArjW8=";
       "crossbeam-epoch-0.9.5" = "sha256-Jf0RarsgJiXiZ+ddy0vp4jQ59J9m0k3sgXhWhCdhgws=";
+      "curve25519-dalek-3.2.1" = "sha256-FuVNFuGCyHXqKqg+sn3hocZf1KMCI092Ohk7cvLPNjQ=";
       "tokio-1.29.1" = "sha256-Z/kewMCqkPVTXdoBcSaFKG5GSQAdkdpj3mAzLLCjjGk=";
     };
   };
@@ -81,13 +83,16 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd solana \
-      --bash <($out/bin/solana completion --shell bash) \
-      --fish <($out/bin/solana completion --shell fish) \
-      --zsh  <($out/bin/solana completion --shell zsh)
+    # This is currently broken because of clap, so I'm commenting it out
+    # installShellCompletion --cmd solana \
+    #   --bash <($out/bin/solana completion --shell bash) \
+    #   --fish <($out/bin/solana completion --shell fish) \
+    #   --zsh  <($out/bin/solana completion --shell zsh)
 
     mkdir -p $out/bin/sdk/bpf
     cp -a ./sdk/bpf/* $out/bin/sdk/bpf/
+    mkdir -p $out/bin/sdk/sbf
+    cp -a ./sdk/sbf/* $out/bin/sdk/sbf/
   '';
 
   # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
