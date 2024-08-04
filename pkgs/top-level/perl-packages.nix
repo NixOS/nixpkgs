@@ -17457,11 +17457,12 @@ with self; {
       url = "mirror://cpan/authors/id/G/GF/GFUJI/MouseX-Getopt-0.38.tar.gz";
       hash = "sha256-3j6o70Ut2VAeqMTtqHRLciRgJgKwRpJgft19YrefA48=";
     };
-    patches = [
-      ../development/perl-modules/MouseX-Getopt-gld-tests.patch
-    ];
     buildInputs = [ ModuleBuildTiny MouseXConfigFromFile MouseXSimpleConfig TestException TestWarn ];
     propagatedBuildInputs = [ GetoptLongDescriptive Mouse ];
+    preCheck = ''
+      # Remove tests that fail due to updated Getopt::Long::Descriptive
+      rm -f t/109_help_flag.t t/107_no_auto_help.t t/104_override_usage.t t/110_sort_usage_by_attr_order.t
+    '';
     meta = {
       description = "Mouse role for processing command line options";
       homepage = "https://github.com/gfx/mousex-getopt";
