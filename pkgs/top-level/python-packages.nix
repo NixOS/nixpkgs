@@ -10688,6 +10688,8 @@ self: super: with self; {
 
   neurio = callPackage ../development/python-modules/neurio { };
 
+  neurite = callPackage ../development/python-modules/neurite { };
+
   neurokit2 = callPackage ../development/python-modules/neurokit2 { };
 
   neuron-full = pkgs.neuron-full.override { python3 = python; };
