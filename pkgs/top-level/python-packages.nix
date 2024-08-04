@@ -12860,6 +12860,8 @@ self: super: with self; {
 
   python-zbar = callPackage ../development/python-modules/python-zbar { };
 
+  python-zunclient = callPackage ../development/python-modules/python-zunclient { };
+
   pythran = callPackage ../development/python-modules/pythran {
     inherit (pkgs.llvmPackages) openmp;
   };
