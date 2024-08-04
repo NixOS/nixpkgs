@@ -4,8 +4,10 @@
   fetchFromGitHub,
   jinja2,
   markdown-it-py,
+  platformdirs,
   poetry-core,
   pytest-aiohttp,
+  pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   rich,
@@ -18,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.72.0";
+  version = "0.79.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,12 +29,13 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = "textual";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iNl9bos1GBLmHRvSgqYD8b6cptmmMktXkDXQbm3xMtc=";
+    hash = "sha256-QD9iRgl6hwlFL5DLYyXL5aA/Xsvpe5/KXdEdMS+3L/8=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
+    platformdirs
     markdown-it-py
     rich
     typing-extensions
@@ -41,13 +44,13 @@ buildPythonPackage rec {
   optional-dependencies = {
     syntax = [
       tree-sitter
-      tree-sitter-languages
-    ];
+    ] ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
   };
 
   nativeCheckInputs = [
     jinja2
     pytest-aiohttp
+    pytest-xdist
     pytestCheckHook
     syrupy
     time-machine
@@ -67,6 +70,10 @@ buildPythonPackage rec {
     "test_register_language"
     "test_language_binary_missing"
   ];
+
+  # Some tests in groups require state from previous tests
+  # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
+  pytestFlagsArray = [ "--dist=loadgroup" ];
 
   pythonImportsCheck = [ "textual" ];
 
