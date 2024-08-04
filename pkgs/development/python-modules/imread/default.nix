@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "imread";
-  version = "0.7.5";
+  version = "0.7.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "imread";
-    hash = "sha256-GiWpA128GuLlbBW1CQQHHVVeoZfu9Yyh2RFzSdtHDbc=";
+    hash = "sha256-ULPXCJyGJQTCKyVu9R/kWFGzRhbbFMDr/FU2AByZYBU=";
   };
 
   nativeBuildInputs = [
