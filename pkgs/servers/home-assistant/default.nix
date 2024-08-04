@@ -299,6 +299,16 @@ let
         };
       });
 
+      pyopenweathermap = super.pyopenweathermap.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.10";
+        src = fetchFromGitHub {
+          owner = "freekode";
+          repo = "pyopenweathermap";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-wEcE4IYVvxEwW5Hhz+DqDIqbjd5/O1hEr7dGgiuMI00=";
+        };
+      });
+
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
