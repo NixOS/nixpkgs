@@ -9372,6 +9372,12 @@
     githubId = 1608697;
     name = "Jens Binkert";
   };
+  JeppeX = {
+    email = "jesperi.luoto@iki.fi";
+    github = "JeppeX";
+    githubId = 29777790;
+    name = "Jesperi Luoto";
+  };
   jeremiahs = {
     email = "jeremiah@secrist.xyz";
     github = "JeremiahSecrist";
