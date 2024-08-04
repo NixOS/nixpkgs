@@ -1,29 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libspatialindex";
-  version = "1.9.3";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "libspatialindex";
     repo = "libspatialindex";
     rev = finalAttrs.version;
-    hash = "sha256-zsvS0IkCXyuNLCQpccKdAsFKoq0l+y66ifXlTHLNTkc=";
+    hash = "sha256-hZyAXz1ddRStjZeqDf4lYkV/g0JLqLy7+GrSUh75k20=";
   };
 
-  patches = [
-    # Allow building static libs
-    (fetchpatch {
-      name = "fix-static-lib-build.patch";
-      url = "https://github.com/libspatialindex/libspatialindex/commit/caee28d84685071da3ff3a4ea57ff0b6ae64fc87.patch";
-      hash = "sha256-nvTW/t9tw1ZLeycJY8nj7rQgZogxQb765Ca2b9NDvRo=";
-    })
-  ];
+  postPatch = ''
+    patchShebangs test/
+  '';
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DSIDX_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+
+    # The cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR
+    # correctly (setting it to an absolute path causes include files to go to
+    # $out/$out/include,  because the absolute path is interpreted with root
+    # at $out).
+    # See: https://github.com/NixOS/nixpkgs/issues/144170
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   doCheck = true;
