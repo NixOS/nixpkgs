@@ -1,34 +1,56 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit
+    (lib)
+    concatMapStrings
+    concatStringsSep
+    count
+    escapeShellArg
+    escapeShellArgs
+    filterAttrs
+    getExe
+    literalExpression
+    mapAttrs'
+    mapAttrsToList
+    mkIf
+    mkMerge
+    mkOption
+    mkPackageOption
+    nameValuePair
+    optional
+    optionalAttrs
+    optionalString
+    singleton
+    types;
+
+  cfg = config.services.borgbackup;
 
   isLocalPath = x:
     builtins.substring 0 1 x == "/"      # absolute path
     || builtins.substring 0 1 x == "."   # relative path
     || builtins.match "[.*:.*]" == null; # not machine:path
 
-  mkExcludeFile = cfg:
+  mkExcludeFile = job:
     # Write each exclude pattern to a new line
-    pkgs.writeText "excludefile" (concatMapStrings (s: s + "\n") cfg.exclude);
+    pkgs.writeText "excludefile" (concatMapStrings (s: s + "\n") job.exclude);
 
-  mkPatternsFile = cfg:
+  mkPatternsFile = job:
     # Write each pattern to a new line
-    pkgs.writeText "patternsfile" (concatMapStrings (s: s + "\n") cfg.patterns);
+    pkgs.writeText "patternsfile" (concatMapStrings (s: s + "\n") job.patterns);
 
-  mkKeepArgs = cfg:
-    # If cfg.prune.keep e.g. has a yearly attribute,
+  mkKeepArgs = job:
+    # If job.prune.keep e.g. has a yearly attribute,
     # its content is passed on as --keep-yearly
     concatStringsSep " "
-      (mapAttrsToList (x: y: "--keep-${x}=${toString y}") cfg.prune.keep);
+      (mapAttrsToList (x: y: "--keep-${x}=${toString y}") job.prune.keep);
 
-  mkBackupScript = name: cfg: pkgs.writeShellScript "${name}-script" (''
+  mkBackupScript = name: job: pkgs.writeShellScript "${name}-script" (''
     set -e
     on_exit()
     {
       exitStatus=$?
-      ${cfg.postHook}
+      ${job.postHook}
       exit $exitStatus
     }
     trap on_exit EXIT
@@ -36,7 +58,7 @@ let
     borgWrapper () {
       local result
       borg "$@" && result=$? || result=$?
-      if [[ -z "${toString cfg.failOnWarnings}" ]] && [[ "$result" == 1 ]]; then
+      if [[ -z "${toString job.failOnWarnings}" ]] && [[ "$result" == 1 ]]; then
         echo "ignoring warning return value 1"
         return 0
       else
@@ -44,100 +66,100 @@ let
       fi
     }
 
-    archiveName="${optionalString (cfg.archiveBaseName != null) (cfg.archiveBaseName + "-")}$(date ${cfg.dateFormat})"
-    archiveSuffix="${optionalString cfg.appendFailedSuffix ".failed"}"
-    ${cfg.preHook}
-  '' + optionalString cfg.doInit ''
+    archiveName="${optionalString (job.archiveBaseName != null) (job.archiveBaseName + "-")}$(date ${job.dateFormat})"
+    archiveSuffix="${optionalString job.appendFailedSuffix ".failed"}"
+    ${job.preHook}
+  '' + optionalString job.doInit ''
     # Run borg init if the repo doesn't exist yet
     if ! borgWrapper list $extraArgs > /dev/null; then
       borgWrapper init $extraArgs \
-        --encryption ${cfg.encryption.mode} \
+        --encryption ${job.encryption.mode} \
         $extraInitArgs
-      ${cfg.postInit}
+      ${job.postInit}
     fi
   '' + ''
     (
       set -o pipefail
-      ${optionalString (cfg.dumpCommand != null) ''${escapeShellArg cfg.dumpCommand} | \''}
+      ${optionalString (job.dumpCommand != null) ''${escapeShellArg job.dumpCommand} | \''}
       borgWrapper create $extraArgs \
-        --compression ${cfg.compression} \
-        --exclude-from ${mkExcludeFile cfg} \
-        --patterns-from ${mkPatternsFile cfg} \
+        --compression ${job.compression} \
+        --exclude-from ${mkExcludeFile job} \
+        --patterns-from ${mkPatternsFile job} \
         $extraCreateArgs \
         "::$archiveName$archiveSuffix" \
-        ${if cfg.paths == null then "-" else escapeShellArgs cfg.paths}
+        ${if job.paths == null then "-" else escapeShellArgs job.paths}
     )
-  '' + optionalString cfg.appendFailedSuffix ''
+  '' + optionalString job.appendFailedSuffix ''
     borgWrapper rename $extraArgs \
       "::$archiveName$archiveSuffix" "$archiveName"
   '' + ''
-    ${cfg.postCreate}
-  '' + optionalString (cfg.prune.keep != { }) ''
+    ${job.postCreate}
+  '' + optionalString (job.prune.keep != { }) ''
     borgWrapper prune $extraArgs \
-      ${mkKeepArgs cfg} \
-      ${optionalString (cfg.prune.prefix != null) "--glob-archives ${escapeShellArg "${cfg.prune.prefix}*"}"} \
+      ${mkKeepArgs job} \
+      ${optionalString (job.prune.prefix != null) "--glob-archives ${escapeShellArg "${job.prune.prefix}*"}"} \
       $extraPruneArgs
     borgWrapper compact $extraArgs $extraCompactArgs
-    ${cfg.postPrune}
+    ${job.postPrune}
   '');
 
-  mkPassEnv = cfg: with cfg.encryption;
+  mkPassEnv = job: with job.encryption;
     if passCommand != null then
       { BORG_PASSCOMMAND = passCommand; }
     else if passphrase != null then
       { BORG_PASSPHRASE = passphrase; }
     else { };
 
-  mkBackupService = name: cfg:
+  mkBackupService = name: job:
     let
-      userHome = config.users.users.${cfg.user}.home;
+      userHome = config.users.users.${job.user}.home;
       backupJobName = "borgbackup-job-${name}";
-      backupScript = mkBackupScript backupJobName cfg;
+      backupScript = mkBackupScript backupJobName job;
     in nameValuePair backupJobName {
       description = "BorgBackup job ${name}";
       path =  [
-        config.services.borgbackup.package pkgs.openssh
+        cfg.package pkgs.openssh
       ];
-      script = "exec " + optionalString cfg.inhibitsSleep ''\
+      script = "exec " + optionalString job.inhibitsSleep ''\
         ${pkgs.systemd}/bin/systemd-inhibit \
             --who="borgbackup" \
             --what="sleep" \
             --why="Scheduled backup" \
         '' + backupScript;
-      unitConfig = optionalAttrs (isLocalPath cfg.repo) {
-        RequiresMountsFor = [ cfg.repo ];
+      unitConfig = optionalAttrs (isLocalPath job.repo) {
+        RequiresMountsFor = [ job.repo ];
       };
       serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
+        User = job.user;
+        Group = job.group;
         # Only run when no other process is using CPU or disk
         CPUSchedulingPolicy = "idle";
         IOSchedulingClass = "idle";
         ProtectSystem = "strict";
         ReadWritePaths =
           [ "${userHome}/.config/borg" "${userHome}/.cache/borg" ]
-          ++ cfg.readWritePaths
+          ++ job.readWritePaths
           # Borg needs write access to repo if it is not remote
-          ++ optional (isLocalPath cfg.repo) cfg.repo;
-        PrivateTmp = cfg.privateTmp;
+          ++ optional (isLocalPath job.repo) job.repo;
+        PrivateTmp = job.privateTmp;
       };
       environment = {
-        BORG_REPO = cfg.repo;
-        inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs extraCompactArgs;
-      } // (mkPassEnv cfg) // cfg.environment;
+        BORG_REPO = job.repo;
+        inherit (job) extraArgs extraInitArgs extraCreateArgs extraPruneArgs extraCompactArgs;
+      } // (mkPassEnv job) // job.environment;
     };
 
-  mkBackupTimers = name: cfg:
+  mkBackupTimers = name: job:
     nameValuePair "borgbackup-job-${name}" {
       description = "BorgBackup job ${name} timer";
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        Persistent = cfg.persistentTimer;
-        OnCalendar = cfg.startAt;
+        Persistent = job.persistentTimer;
+        OnCalendar = job.startAt;
       };
       # if remote-backup wait for network
-      after = optional (cfg.persistentTimer && !isLocalPath cfg.repo) "network-online.target";
-      wants = optional (cfg.persistentTimer && !isLocalPath cfg.repo) "network-online.target";
+      after = optional (job.persistentTimer && !isLocalPath job.repo) "network-online.target";
+      wants = optional (job.persistentTimer && !isLocalPath job.repo) "network-online.target";
     };
 
   # utility function around makeWrapper
@@ -146,45 +168,45 @@ let
     }:
     pkgs.runCommand "${name}-wrapper" {
       nativeBuildInputs = [ pkgs.makeWrapper ];
-    } (with lib; ''
+    } ''
       makeWrapper "${original}" "$out/bin/${name}" \
         ${concatStringsSep " \\\n " (mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)}
-    '');
+    '';
 
-  mkBorgWrapper = name: cfg: mkWrapperDrv {
-    original = getExe config.services.borgbackup.package;
+  mkBorgWrapper = name: job: mkWrapperDrv {
+    original = getExe cfg.package;
     name = "borg-job-${name}";
-    set = { BORG_REPO = cfg.repo; } // (mkPassEnv cfg) // cfg.environment;
+    set = { BORG_REPO = job.repo; } // (mkPassEnv job) // job.environment;
   };
 
   # Paths listed in ReadWritePaths must exist before service is started
-  mkTmpfiles = name: cfg:
+  mkTmpfiles = name: job:
     let
-      settings = { inherit (cfg) user group; };
-    in lib.nameValuePair "borgbackup-job-${name}" ({
+      settings = { inherit (job) user group; };
+    in nameValuePair "borgbackup-job-${name}" ({
       # Create parent dirs separately, to ensure correct ownership.
-      "${config.users.users."${cfg.user}".home}/.config".d = settings;
-      "${config.users.users."${cfg.user}".home}/.cache".d = settings;
-      "${config.users.users."${cfg.user}".home}/.config/borg".d = settings;
-      "${config.users.users."${cfg.user}".home}/.cache/borg".d = settings;
-    } // optionalAttrs (isLocalPath cfg.repo && !cfg.removableDevice) {
-      "${cfg.repo}".d = settings;
+      "${config.users.users."${job.user}".home}/.config".d = settings;
+      "${config.users.users."${job.user}".home}/.cache".d = settings;
+      "${config.users.users."${job.user}".home}/.config/borg".d = settings;
+      "${config.users.users."${job.user}".home}/.cache/borg".d = settings;
+    } // optionalAttrs (isLocalPath job.repo && !job.removableDevice) {
+      "${job.repo}".d = settings;
     });
 
-  mkPassAssertion = name: cfg: {
-    assertion = with cfg.encryption;
+  mkPassAssertion = name: job: {
+    assertion = with job.encryption;
       mode != "none" -> passCommand != null || passphrase != null;
     message =
       "passCommand or passphrase has to be specified because"
       + '' borgbackup.jobs.${name}.encryption != "none"'';
   };
 
-  mkRepoService = name: cfg:
+  mkRepoService = name: repo:
     nameValuePair "borgbackup-repo-${name}" {
       description = "Create BorgBackup repository ${name} directory";
       script = ''
-        mkdir -p ${escapeShellArg cfg.path}
-        chown ${cfg.user}:${cfg.group} ${escapeShellArg cfg.path}
+        mkdir -p ${escapeShellArg repo.path}
+        chown ${repo.user}:${repo.group} ${escapeShellArg repo.path}
       '';
       serviceConfig = {
         # The service's only task is to ensure that the specified path exists
@@ -193,53 +215,53 @@ let
       wantedBy = [ "multi-user.target" ];
     };
 
-  mkAuthorizedKey = cfg: appendOnly: key:
+  mkAuthorizedKey = repo: appendOnly: key:
     let
       # Because of the following line, clients do not need to specify an absolute repo path
-      cdCommand = "cd ${escapeShellArg cfg.path}";
-      restrictedArg = "--restrict-to-${if cfg.allowSubRepos then "path" else "repository"} .";
+      cdCommand = "cd ${escapeShellArg repo.path}";
+      restrictedArg = "--restrict-to-${if repo.allowSubRepos then "path" else "repository"} .";
       appendOnlyArg = optionalString appendOnly "--append-only";
-      quotaArg = optionalString (cfg.quota != null) "--storage-quota ${cfg.quota}";
+      quotaArg = optionalString (repo.quota != null) "--storage-quota ${repo.quota}";
       serveCommand = "borg serve ${restrictedArg} ${appendOnlyArg} ${quotaArg}";
     in
       ''command="${cdCommand} && ${serveCommand}",restrict ${key}'';
 
-  mkUsersConfig = name: cfg: {
-    users.${cfg.user} = {
+  mkUsersConfig = name: repo: {
+    users.${repo.user} = {
       openssh.authorizedKeys.keys =
-        (map (mkAuthorizedKey cfg false) cfg.authorizedKeys
-        ++ map (mkAuthorizedKey cfg true) cfg.authorizedKeysAppendOnly);
+        (map (mkAuthorizedKey repo false) repo.authorizedKeys
+        ++ map (mkAuthorizedKey repo true) repo.authorizedKeysAppendOnly);
       useDefaultShell = true;
-      group = cfg.group;
+      group = repo.group;
       isSystemUser = true;
     };
-    groups.${cfg.group} = { };
+    groups.${repo.group} = { };
   };
 
-  mkKeysAssertion = name: cfg: {
-    assertion = cfg.authorizedKeys != [ ] || cfg.authorizedKeysAppendOnly != [ ];
+  mkKeysAssertion = name: repo: {
+    assertion = repo.authorizedKeys != [ ] || repo.authorizedKeysAppendOnly != [ ];
     message =
       "borgbackup.repos.${name} does not make sense"
       + " without at least one public key";
   };
 
-  mkSourceAssertions = name: cfg: {
-    assertion = count isNull [ cfg.dumpCommand cfg.paths ] == 1;
+  mkSourceAssertions = name: job: {
+    assertion = count isNull [ job.dumpCommand job.paths ] == 1;
     message = ''
       Exactly one of borgbackup.jobs.${name}.paths or borgbackup.jobs.${name}.dumpCommand
       must be set.
     '';
   };
 
-  mkRemovableDeviceAssertions = name: cfg: {
-    assertion = !(isLocalPath cfg.repo) -> !cfg.removableDevice;
+  mkRemovableDeviceAssertions = name: repo: {
+    assertion = !(isLocalPath repo.repo) -> !repo.removableDevice;
     message = ''
       borgbackup.repos.${name}: repo isn't a local path, thus it can't be a removable device!
     '';
   };
 
 in {
-  meta.maintainers = with maintainers; [ dotlambda ];
+  meta.maintainers = with lib.maintainers; [ dotlambda ];
   meta.doc = ./borgbackup.md;
 
   ###### interface
@@ -254,9 +276,9 @@ in {
       See also the chapter about BorgBackup in the NixOS manual.
     '';
     default = { };
-    example = literalExpression ''
-      { # for a local backup
-        rootBackup = {
+    example = {
+      # for a local backup
+        localBackup = {
           paths = "/";
           exclude = [ "/nix" ];
           repo = "/path/to/local/repo";
@@ -267,8 +289,8 @@ in {
           compression = "auto,lzma";
           startAt = "weekly";
         };
-      }
-      { # Root backing each day up to a remote backup server. We assume that you have
+      remoteBackup = {
+        # Root backing each day up to a remote backup server. We assume that you have
         #   * created a password less key: ssh-keygen -N "" -t ed25519 -f /path/to/ssh_key
         #     best practices are: use -t ed25519, /path/to = /run/keys
         #   * the passphrase is in the file /run/keys/borgbackup_passphrase
@@ -284,14 +306,14 @@ in {
         environment = { BORG_RSH = "ssh -i /path/to/ssh_key"; };
         compression = "auto,lzma";
         startAt = "daily";
+      };
     };
-    '';
     type = types.attrsOf (types.submodule (let globalConfig = config; in
       { name, config, ... }: {
         options = {
 
           paths = mkOption {
-            type = with types; nullOr (coercedTo str lib.singleton (listOf str));
+            type = with types; nullOr (coercedTo str singleton (listOf str));
             default = null;
             description = ''
               Path(s) to back up.
@@ -774,29 +796,30 @@ in {
 
   ###### implementation
 
-  config = mkIf (with config.services.borgbackup; jobs != { } || repos != { })
-    (with config.services.borgbackup; {
-      assertions =
-        mapAttrsToList mkPassAssertion jobs
-        ++ mapAttrsToList mkKeysAssertion repos
-        ++ mapAttrsToList mkSourceAssertions jobs
-        ++ mapAttrsToList mkRemovableDeviceAssertions jobs;
+  config = let
+    inherit (cfg) jobs repos;
+  in mkIf (jobs != { } || repos != { }) {
+    assertions =
+      mapAttrsToList mkPassAssertion jobs
+      ++ mapAttrsToList mkKeysAssertion repos
+      ++ mapAttrsToList mkSourceAssertions jobs
+      ++ mapAttrsToList mkRemovableDeviceAssertions jobs;
 
-      systemd.tmpfiles.settings = mapAttrs' mkTmpfiles jobs;
+    systemd.tmpfiles.settings = mapAttrs' mkTmpfiles jobs;
 
-      systemd.services =
-        # A job named "foo" is mapped to systemd.services.borgbackup-job-foo
-        mapAttrs' mkBackupService jobs
-        # A repo named "foo" is mapped to systemd.services.borgbackup-repo-foo
-        // mapAttrs' mkRepoService repos;
+    systemd.services =
+      # A job named "foo" is mapped to systemd.services.borgbackup-job-foo
+      mapAttrs' mkBackupService jobs
+      # A repo named "foo" is mapped to systemd.services.borgbackup-repo-foo
+      // mapAttrs' mkRepoService repos;
 
-      # A job named "foo" is mapped to systemd.timers.borgbackup-job-foo
-      # only generate the timer if interval (startAt) is set
-      systemd.timers = mapAttrs' mkBackupTimers (filterAttrs (_: cfg: cfg.startAt != []) jobs);
+    # A job named "foo" is mapped to systemd.timers.borgbackup-job-foo
+    # only generate the timer if interval (startAt) is set
+    systemd.timers = mapAttrs' mkBackupTimers (filterAttrs (_: cfg: cfg.startAt != []) jobs);
 
-      users = mkMerge (mapAttrsToList mkUsersConfig repos);
+    users = mkMerge (mapAttrsToList mkUsersConfig repos);
 
-      environment.systemPackages =
-        [ config.services.borgbackup.package ] ++ (mapAttrsToList mkBorgWrapper jobs);
-    });
+    environment.systemPackages =
+      [ config.services.borgbackup.package ] ++ (mapAttrsToList mkBorgWrapper jobs);
+  };
 }
