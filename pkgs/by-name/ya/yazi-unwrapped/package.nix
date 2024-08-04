@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 assets/logo.png $out/share/pixmaps/yazi.png
   '';
 
-  passthru.updateScript.command = [ ./update.sh ];
+  passthru.updateScript.command = [ ./update/update.sh ];
 
   meta = {
     description = "Blazing fast terminal file manager written in Rust, based on async I/O";
