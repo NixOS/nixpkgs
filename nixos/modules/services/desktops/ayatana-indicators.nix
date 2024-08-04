@@ -1,7 +1,8 @@
-{ config
-, pkgs
-, lib
-, ...
+{
+  config,
+  pkgs,
+  lib,
+  ...
 }:
 
 let
@@ -32,9 +33,7 @@ in
     environment = {
       systemPackages = cfg.packages;
 
-      pathsToLink = [
-        "/share/ayatana"
-      ];
+      pathsToLink = [ "/share/ayatana" ];
     };
 
     # libayatana-common's ayatana-indicators.target with explicit Wants & Before to bring up requested indicator services
