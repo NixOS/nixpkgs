@@ -47,7 +47,7 @@ let
   # import <nixpkgs> { config = { showDerivationWarnings = [ "maintainerless" ]; }; }
   showWarnings = config.showDerivationWarnings;
 
-  getNameWithVersion = attrs: attrs.name or ("${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}");
+  getNameWithVersion = attrs: attrs.name or "${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}";
 
   allowUnfree = config.allowUnfree
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
