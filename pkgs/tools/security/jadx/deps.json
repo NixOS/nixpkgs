@@ -911,6 +911,9 @@
   "net/sf/launch4j#launch4j/3.50/workdir-mac": {
    "jar": "sha256-ciYD+rZJnfaTUvdmC5+Y8MSF6aREBAD/f6PWJ/kXOyQ="
   },
+  "net/sf/launch4j#launch4j/3.50/workdir-linux64": {
+   "jar": "sha256-/uvoOrT+Q5F+qn3/Jy3uDvP6hUvWgzRDRDDgjjoS8zA="
+  },
   "net/sf/saxon#Saxon-HE/10.6": {
    "jar": "sha256-bQjfguTthrarsaAse3SiaPz8XgBOg7tP8AbsOlCb01Y=",
    "pom": "sha256-otbdpDjoZKuTXzG0O1MFLE6HEalQVkJxkZBRPnb0Ekg="

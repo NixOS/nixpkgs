@@ -6,7 +6,7 @@
   jdk,
   quark-engine,
   makeWrapper,
-  imagemagick,
+  graphicsmagick,
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gradle
     jdk
-    imagemagick
+    graphicsmagick
     makeWrapper
     copyDesktopItems
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
@@ -60,13 +60,19 @@ stdenv.mkDerivation (finalAttrs: {
         jadx-gui/src/main/resources/logos/jadx-logo-"$size"px.png \
         $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
     done
+
     for size in 64 128 256; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -resize "$size"x"$size" jadx-gui/src/main/resources/logos/jadx-logo.png $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
+      gm convert -resize "$size"x"$size" jadx-gui/src/main/resources/logos/jadx-logo.png $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
     done
 
     runHook postInstall
   '';
+
+  # for size in 64 128 256; do
+  #   mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+  #   convert -resize "$size"x"$size" jadx-gui/src/main/resources/logos/jadx-logo.png $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
+  # done
 
   desktopItems = [
     (makeDesktopItem {
