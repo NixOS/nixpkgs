@@ -8,16 +8,16 @@
 , makeWrapper
 , cups
 , jbigkit
+, libjpeg
+, libgcrypt
 , glib
 , gtk3
 , gdk-pixbuf
 , pango
 , cairo
-, coreutils
 , atk
 , pkg-config
 , libxml2
-, runtimeShell
 , libredirect
 , ghostscript
 , pkgs
@@ -32,26 +32,29 @@ let
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: lib.makeLibraryPath buildInputs;
 
-  version = "5.70";
-  dl = "8/0100007658/33";
+  version = "6.00";
+  dl = "0/0100009240/34";
 
   versionNoDots = builtins.replaceStrings [ "." ] [ "" ] version;
   src_canon = fetchurl {
-    url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-m17n-11.tar.gz";
-    hash = "sha256-d5VHlPpUPAr3RWVdQRdn42YLuVekOw1IaMFLVt1Iu7o=";
+    url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-m17n-00.tar.gz";
+    hash = "sha256-JQAe/avYG+9TAsH26UGai6u8/upRXwZrGBc/hd4jZe8=";
   };
 
-  buildInputs = [ cups zlib jbigkit glib gtk3 libxml2 gdk-pixbuf pango cairo atk ];
+  buildInputs = [ cups zlib jbigkit libjpeg libgcrypt glib gtk3 libxml2 gdk-pixbuf pango cairo atk ];
 in
 stdenv.mkDerivation rec {
   pname = "canon-cups-ufr2";
   inherit version;
   src = src_canon;
 
+  # we can't let patchelf remove unnecessary RPATHs because the driver uses dlopen to load libjpeg and libgcrypt
+  dontPatchELF = true;
+
   postUnpack = ''
     (
       cd $sourceRoot
-      tar -xf Sources/cnrdrvcups-lb-${version}-1.11.tar.xz
+      tar -xf Sources/cnrdrvcups-lb-${version}-1.00.tar.xz
       sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-common-${version}/allgen.sh
       sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-common-${version}/allgen.sh
       sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-common-${version}/allgen.sh
