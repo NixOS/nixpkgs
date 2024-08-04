@@ -1,6 +1,5 @@
 { gccStdenv, lib, pkgs,
-  git, openssl, autoconf, gcc, coreutils, gnused, gnugrep,
-  makeStaticLibraries,
+  git, openssl, autoconf, coreutils,
   src, version, git-version,
   stampYmd ? 0, stampHms ? 0,
   gambit-support,

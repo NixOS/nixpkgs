@@ -14,7 +14,6 @@ in
 , lib
 , noSysDirs
 , perl
-, substitute
 , zlib
 , CoreServices
 

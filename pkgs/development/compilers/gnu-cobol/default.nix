@@ -16,7 +16,6 @@
 , texinfo
 , texliveBasic
 # test
-, writeText
 }:
 
 stdenv.mkDerivation rec {

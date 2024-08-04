@@ -6,7 +6,6 @@
 , python3
 , jdk
 , git
-, libcef
 , rsync
 , lib
 , ant

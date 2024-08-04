@@ -14,7 +14,6 @@
 , clang-unwrapped
 , perl
 , pkg-config
-, xcbuild
 , version
 }:
 let

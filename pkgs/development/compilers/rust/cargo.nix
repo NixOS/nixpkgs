@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsBuildHost, pkgsHostHost
+{ lib, stdenv, pkgsHostHost
 , file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, rustPlatform, rustc
 , CoreFoundation, Security

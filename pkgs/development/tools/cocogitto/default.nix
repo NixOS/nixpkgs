@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv, Security, makeWrapper, libgit2 }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv, Security, libgit2 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cocogitto";

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoreconfHook, mpiCheckPhaseHook
-, gfortran, perl, mpi, blas, lapack, scalapack, openssh
+, perl, mpi, blas, lapack, scalapack, openssh
 # CPU optimizations
 , avxSupport ? stdenv.hostPlatform.avxSupport
 , avx2Support ? stdenv.hostPlatform.avx2Support

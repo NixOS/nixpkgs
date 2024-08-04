@@ -4597,6 +4597,8 @@ self: super: with self; {
 
   free-proxy = callPackage ../development/python-modules/free-proxy { };
 
+  freenub = callPackage ../development/python-modules/freenub { };
+
   skia-pathops = callPackage ../development/python-modules/skia-pathops {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL;
   };
@@ -5604,6 +5606,8 @@ self: super: with self; {
   homematicip = callPackage ../development/python-modules/homematicip { };
 
   homepluscontrol = callPackage ../development/python-modules/homepluscontrol { };
+
+  homf = callPackage ../development/python-modules/homf { };
 
   hoomd-blue = callPackage ../development/python-modules/hoomd-blue { };
 
@@ -10032,6 +10036,8 @@ self: super: with self; {
   psrpcore = callPackage ../development/python-modules/psrpcore { };
 
   pyaprilaire = callPackage ../development/python-modules/pyaprilaire { };
+
+  pwinput = callPackage ../development/python-modules/pwinput { };
 
   pybars3 = callPackage ../development/python-modules/pybars3 { };
 
@@ -14562,6 +14568,8 @@ self: super: with self; {
 
   sortedcontainers = callPackage ../development/python-modules/sortedcontainers { };
 
+  soundcard = callPackage ../development/python-modules/soundcard { };
+
   soundcloud-v2 = callPackage ../development/python-modules/soundcloud-v2 { };
 
   sounddevice = callPackage ../development/python-modules/sounddevice { };
@@ -15572,6 +15580,8 @@ self: super: with self; {
   tinyrecord = callPackage ../development/python-modules/tinyrecord { };
 
   tinysegmenter = callPackage ../development/python-modules/tinysegmenter { };
+
+  tinytag = callPackage ../development/python-modules/tinytag { };
 
   tinytuya = callPackage ../development/python-modules/tinytuya { };
 
