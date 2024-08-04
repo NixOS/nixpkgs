@@ -17,6 +17,8 @@ in {
 
     users.users.${user} = {
       inherit description password;
+      # polkit agent test
+      extraGroups = [ "wheel" ];
     };
 
     # To control mouse via scripting
@@ -73,24 +75,6 @@ in {
           '';
 
           inherit (alacritty) meta;
-        })
-
-        # Polkit requests eventually time out.
-        # Keep triggering them until we signal detection success
-        (writeShellApplication {
-          name = "lpa-check";
-          text = ''
-            while [ ! -f /tmp/lpa-checked ]; do
-              pkexec echo a
-            done
-          '';
-        })
-        # Signal detection success
-        (writeShellApplication {
-          name = "lpa-signal";
-          text = ''
-            touch /tmp/lpa-checked
-          '';
         })
       ];
     };
@@ -218,13 +202,15 @@ in {
 
         # Doing this here, since we need an in-session shell & separately starting a terminal again wastes time
         with subtest("polkit agent works"):
-            machine.send_chars("exec lpa-check\n")
-            machine.wait_for_text(r"(Elevated permissions|Login)")
+            machine.send_chars("pkexec touch /tmp/polkit-test\n")
+            # There's an authentication notification here that gains focus, but we struggle with OCRing it
+            # Just hope that it's up after a short wait
+            machine.sleep(10)
             machine.screenshot("polkit_agent")
-            machine.execute("lpa-signal")
+            machine.send_chars("${password}\n")
+            machine.wait_for_file("/tmp/polkit-test", 10)
 
-        # polkit test will quit terminal when agent request times out after OCR success
-        machine.wait_until_fails("pgrep -u ${user} -f lomiri-terminal-app")
+        machine.send_key("alt-f4")
 
     # We want the ability to launch applications
     with subtest("starter menu works"):
