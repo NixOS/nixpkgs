@@ -20215,6 +20215,8 @@ self: super: with self; {
 
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
 
+  voxelmorph = callPackage ../development/python-modules/voxelmorph { };
+
   vpk = callPackage ../development/python-modules/vpk { };
 
   vprof = callPackage ../development/python-modules/vprof { };
