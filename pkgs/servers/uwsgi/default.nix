@@ -46,6 +46,10 @@ let
       path = "plugins/cgi";
       inputs = [ ];
     })
+    (lib.nameValuePair "router_basicauth" {
+      path = "plugins/router_basicauth";
+      inputs = [ ];
+    })
     (lib.nameValuePair "php" {
       # usage: https://uwsgi-docs.readthedocs.io/en/latest/PHP.html#running-php-apps-with-nginx
       path = "plugins/php";
