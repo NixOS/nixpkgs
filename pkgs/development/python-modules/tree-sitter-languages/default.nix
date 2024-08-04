@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   cython,
-  tree-sitter0_21,
+  tree-sitter,
   pytestCheckHook,
   python,
 }:
@@ -36,10 +36,7 @@ buildPythonPackage rec {
     setuptools
     cython
   ];
-  dependencies = [
-    # https://github.com/grantjenks/py-tree-sitter-languages/issues/67
-    tree-sitter0_21
-  ];
+  dependencies = [ tree-sitter ];
   # Generate languages.so file (build won't fail without this, but tests will).
   preBuild = ''
     ${python.pythonOnBuildForHost.interpreter} build.py
@@ -61,5 +58,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/grantjenks/py-tree-sitter-languages";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];
+    # https://github.com/grantjenks/py-tree-sitter-languages/issues/67
+    broken = versionAtLeast tree-sitter.version "0.22";
   };
 }
