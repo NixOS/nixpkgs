@@ -15862,6 +15862,8 @@ self: super: with self; {
 
   ttach = callPackage ../development/python-modules/ttach { };
 
+  ttfautohint-py = callPackage ../development/python-modules/ttfautohint-py { };
+
   ttls = callPackage ../development/python-modules/ttls { };
 
   ttn-client = callPackage ../development/python-modules/ttn-client { };
