@@ -1,12 +1,20 @@
-{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron, nixosTests }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  electron,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "freetube";
-  version = "0.20.0";
+  version = "0.21.3";
 
   src = fetchurl {
     url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
-    sha256 = "sha256-7k5hyiK3m+117AxmsoecGsgXSxs8xhyTf8+rl4oBbB8=";
+    hash = "sha256-sg/ycFo4roOJ2sW4naRCE6dwGXVQFzF8uwAZQkS2EY4=";
   };
 
   passthru.tests = nixosTests.freetube;
@@ -43,11 +51,14 @@ stdenv.mkDerivation rec {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
   '';
 
-  meta = with lib; {
-    description = "An Open Source YouTube app for privacy";
+  meta = {
+    description = "Open Source YouTube app for privacy";
     homepage = "https://freetubeapp.io/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ryneeverett alyaeanyx ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      ryneeverett
+      alyaeanyx
+    ];
     inherit (electron.meta) platforms;
     mainProgram = "freetube";
   };
