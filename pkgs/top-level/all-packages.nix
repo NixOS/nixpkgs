@@ -12035,10 +12035,6 @@ with pkgs;
 
   raider = callPackage ../applications/misc/raider { };
 
-  railway = callPackage ../development/tools/railway {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
-  };
-
   quota = if stdenv.isLinux then linuxquota else unixtools.quota;
 
   qvge = libsForQt5.callPackage ../applications/graphics/qvge { };
@@ -15963,8 +15959,6 @@ with pkgs;
     lldb_19 = llvmPackages_19.lldb;
     llvm_19 = llvmPackages_19.llvm;
     bolt_19 = llvmPackages_19.bolt;
-
-    llvmPackages_git = llvmPackagesSet.git;
   }) llvmPackages_13
     llvmPackages_14
     llvmPackages_15
@@ -15980,8 +15974,7 @@ with pkgs;
     lld_19
     lldb_19
     llvm_19
-    bolt_19
-    llvmPackages_git;
+    bolt_19;
 
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;

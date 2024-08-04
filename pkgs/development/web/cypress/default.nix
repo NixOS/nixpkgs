@@ -1,6 +1,5 @@
 { alsa-lib
 , autoPatchelfHook
-, callPackage
 , fetchzip
 , gtk2
 , gtk3

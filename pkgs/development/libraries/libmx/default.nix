@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , libtool, pkg-config, automake, autoconf, intltool
-, glib, gobject-introspection, gtk2, gtk-doc
+, gobject-introspection, gtk2, gtk-doc
 , clutter, clutter-gtk
 }:
 

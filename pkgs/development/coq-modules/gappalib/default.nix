@@ -1,4 +1,4 @@
-{ which, lib, mkCoqDerivation, autoconf, coq, flocq, version ? null }:
+{ lib, mkCoqDerivation, autoconf, coq, flocq, version ? null }:
 
 mkCoqDerivation {
   pname = "gappalib";
