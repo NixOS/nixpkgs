@@ -36,7 +36,7 @@ import ./versions.nix ({ version, hash, ... }:
     meta = {
       description = "Enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = "https://www.zabbix.com/";
-      license = lib.licenses.gpl2Plus;
+      license = if (lib.versions.major version >= "7") then lib.licenses.agpl3Only else lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [ mmahut psyanticy ];
       platforms = lib.platforms.unix;
     };

@@ -22,11 +22,11 @@ import ./versions.nix ({ version, hash, ... }:
       cp ${phpConfig} $out/share/zabbix/conf/zabbix.conf.php
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Enterprise-class open source distributed monitoring solution (web frontend)";
       homepage = "https://www.zabbix.com/";
-      license = licenses.gpl2Plus;
-      maintainers = [ maintainers.mmahut ];
-      platforms = platforms.linux;
+      license = if (lib.versions.major version >= "7") then lib.licenses.agpl3Only else lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [ mmahut ];
+      platforms = lib.platforms.linux;
     };
   })
