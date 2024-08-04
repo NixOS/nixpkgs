@@ -1,7 +1,7 @@
 {
   mkDerivation,
   extra-cmake-modules, gettext, python3,
-  qtbase, qtdeclarative, qtscript,
+  qtdeclarative, qtscript,
 }:
 
 mkDerivation {

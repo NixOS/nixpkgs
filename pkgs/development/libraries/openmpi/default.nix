@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, removeReferencesTo, gfortran, perl, libnl
-, rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
+, rdma-core, zlib, numactl, libevent, hwloc, targetPackages
 , libpsm2, libfabric, pmix, ucx, ucc, makeWrapper
 , config
 # Enable CUDA support

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, makeWrapper
-, runCommandCC, runCommand, vapoursynth, writeText, patchelf, buildEnv
+, runCommandCC, runCommand, vapoursynth, writeText, buildEnv
 , zimg, libass, python3, libiconv, testers
 , ApplicationServices
 }:
