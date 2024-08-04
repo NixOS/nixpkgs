@@ -11151,6 +11151,8 @@ with pkgs;
 
   openfec = callPackage ../development/libraries/openfec { };
 
+  ophcrack-cli = ophcrack.override { enableGui = false; };
+
   ophis = python3Packages.callPackage ../development/compilers/ophis { };
 
   opendylan_bin = callPackage ../development/compilers/opendylan/bin.nix { };
