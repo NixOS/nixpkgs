@@ -59,12 +59,13 @@ rec {
       result = vmTools.runInLinuxVM (
         runCommand "${projectName}-image-${name}.sif"
           {
-            buildInputs = [
+            nativeBuildInputs = [
               singularity
               e2fsprogs
               util-linux
               gawk
             ];
+            strictDeps = true;
             layerClosure = writeClosure contents;
             preVM = vmTools.createEmptyImage {
               size = diskSize;
