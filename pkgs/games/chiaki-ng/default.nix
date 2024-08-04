@@ -35,12 +35,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "chiaki4deck";
+  pname = "chiaki-ng";
   version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "streetpea";
-    repo = pname;
+    repo = "chiaki-ng";
     rev = "v${version}";
     hash = "sha256-9EF+Mm6nZeo3XYH8KO7e22cJ4e9TWUEinhkm+Z213RU=";
     fetchSubmodules = true;
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://streetpea.github.io/chiaki4deck/";
+    homepage = "https://streetpea.github.io/chiaki-ng/";
     description = "Fork of Chiaki (Open Source Playstation Remote Play) with Enhancements for Steam Deck";
     # Includes OpenSSL linking exception that we currently have no way
     # to represent.
