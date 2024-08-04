@@ -69,6 +69,7 @@ in {
             yearly = 5;
           };
           exclude = [ "*/${excludeFile}" ];
+          extraCreateArgs = [ "--exclude-caches" ];
           postHook = "echo post";
           startAt = [ ]; # Do not run automatically
         };

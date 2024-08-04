@@ -3,6 +3,7 @@
 let
   inherit
     (lib)
+    concatLines
     concatMapStrings
     concatStringsSep
     count
@@ -45,8 +46,17 @@ let
     concatStringsSep " "
       (mapAttrsToList (x: y: "--keep-${x}=${toString y}") job.prune.keep);
 
+  mkExtraArgs = job: concatLines (mapAttrsToList (name: values: ''
+    ${name}=(${values})
+  '') {
+    inherit (job) extraArgs extraInitArgs extraCreateArgs extraPruneArgs extraCompactArgs;
+  });
+
   mkBackupScript = name: job: pkgs.writeShellScript "${name}-script" (''
     set -e
+
+    ${mkExtraArgs job}
+
     on_exit()
     {
       exitStatus=$?
@@ -145,7 +155,6 @@ let
       };
       environment = {
         BORG_REPO = job.repo;
-        inherit (job) extraArgs extraInitArgs extraCreateArgs extraPruneArgs extraCompactArgs;
       } // (mkPassEnv job) // job.environment;
     };
 
