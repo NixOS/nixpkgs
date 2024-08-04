@@ -5,18 +5,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-insta";
-  version = "1.33.0";
+  # use stable release once 1.40 lands
+  version = "1.39-unstable-2024-08-04";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
-    rev = "refs/tags/${version}";
-    hash = "sha256-w/dxIQ7KRrn86PwiE/g5L9Gn8KszPF9u/zlwE/FYDu4=";
+    rev = "16d243d562221f4b3ea358980418014325e60637";
+    hash = "sha256-wZ7JvPwMy76O8nkF3RkcIIRe8g1OVUsHpZxAuDSN248=";
   };
 
-  sourceRoot = "${src.name}/cargo-insta";
+  cargoHash = "sha256-UknrIWu83t2O/hdt7IaYLBxBz2y5dxOfKYrI9wa7AIM=";
 
-  cargoHash = "sha256-mEtmZ+wFo1WI1IMNYsVqSVScFDLdiXBbghH7c0l/3NQ=";
+  # Depends on `rustfmt` and does not matter for packaging.
+  checkFlags = [ "--skip=utils::test_format_rust_expression" ];
 
   meta = with lib; {
     description = "Cargo subcommand for snapshot testing";
