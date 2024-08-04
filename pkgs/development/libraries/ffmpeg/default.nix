@@ -34,6 +34,9 @@ let
 in
 
 rec {
+  # We keep FFmpeg 4 around for now mainly for a couple of binary
+  # packages (Spotify and REAPER). Please don’t add new source packages
+  # that depend on this version.
   ffmpeg_4 = mkFFmpeg v4 "small";
   ffmpeg_4-headless = mkFFmpeg v4 "headless";
   ffmpeg_4-full = mkFFmpeg v4 "full";
