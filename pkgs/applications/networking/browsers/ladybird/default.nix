@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, dav1d
 , fetchFromGitHub
 , fetchzip
 , fetchurl
@@ -10,8 +11,10 @@
 , cmake
 , ninja
 , pkg-config
+, libaom
 , libavif
 , libxcrypt
+, libyuv
 , python3
 , qt6Packages
 , woff2
@@ -118,9 +121,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = with qt6Packages; [
+    dav1d
     ffmpeg
+    libaom
     libavif
     libxcrypt
+    libyuv
     qtbase
     qtmultimedia
     skia
