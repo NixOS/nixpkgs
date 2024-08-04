@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       rnhmjoj
       sbruder
+      snaki
     ];
     mainProgram = "vspipe";
   };
