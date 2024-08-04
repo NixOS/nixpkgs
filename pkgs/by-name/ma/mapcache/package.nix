@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , apacheHttpd, apr, aprutil, curl, db, fcgi, gdal, geos
-, libgeotiff, libjpeg, libpng, libtiff, pcre, pixman, proj, sqlite, zlib
+, libgeotiff, libjpeg, libpng, libtiff, pcre2, pixman, proj, sqlite, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     libtiff
-    pcre
+    pcre2
     pixman
     proj
     sqlite
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DWITH_BERKELEY_DB=ON"
-    "-DWITH_MEMCACHE=ON"
-    "-DWITH_TIFF=ON"
-    "-DWITH_GEOTIFF=ON"
-    "-DWITH_PCRE=ON"
-    "-DAPACHE_MODULE_DIR=${placeholder "out"}/modules"
+    (lib.cmakeBool "WITH_BERKELEY_DB" true)
+    (lib.cmakeBool "WITH_MEMCACHE" true)
+    (lib.cmakeBool "WITH_TIFF" true)
+    (lib.cmakeBool "WITH_GEOTIFF" true)
+    (lib.cmakeBool "WITH_PCRE2" true)
+    (lib.cmakeFeature "APACHE_MODULE_DIR" "${placeholder "out"}/modules")
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-std=c99";
