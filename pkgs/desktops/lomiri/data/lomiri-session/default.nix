@@ -1,18 +1,19 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitLab
-, gitUpdater
-, nixosTests
-, bash
-, cmake
-, dbus
-, deviceinfo
-, inotify-tools
-, lomiri
-, makeWrapper
-, pkg-config
-, runtimeShell
-, systemd
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  nixosTests,
+  bash,
+  cmake,
+  dbus,
+  deviceinfo,
+  inotify-tools,
+  lomiri,
+  makeWrapper,
+  pkg-config,
+  runtimeShell,
+  systemd,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -26,9 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-XduE3tPUjw/wIjFCACasxtN33KO4bDLWrpl7pZcYaAA=";
   };
 
-  patches = [
-    ./1001-Unset-QT_QPA_PLATFORMTHEME.patch
-  ];
+  patches = [ ./1001-Unset-QT_QPA_PLATFORMTHEME.patch ];
 
   postPatch = ''
     substituteInPlace lomiri-session.in \
@@ -61,7 +60,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postInstall = ''
     patchShebangs $out/bin/lomiri-session
     wrapProgram $out/bin/lomiri-session \
-      --prefix PATH : ${lib.makeBinPath [ deviceinfo inotify-tools lomiri ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          deviceinfo
+          inotify-tools
+          lomiri
+        ]
+      }
   '';
 
   passthru = {
