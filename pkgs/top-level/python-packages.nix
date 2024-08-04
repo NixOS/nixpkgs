@@ -14654,6 +14654,8 @@ self: super: with self; {
 
   pystray = callPackage ../development/python-modules/pystray { };
 
+  pystrum = callPackage ../development/python-modules/pystrum { };
+
   pysubs2 = callPackage ../development/python-modules/pysubs2 { };
 
   pysuezv2 = callPackage ../development/python-modules/pysuezv2 { };
