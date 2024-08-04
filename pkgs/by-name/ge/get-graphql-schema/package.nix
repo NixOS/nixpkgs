@@ -32,9 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Command line tool for generating a changelog from git tags and commit history";
-    homepage = "https://github.com/cookpete/auto-changelog";
-    changelog = "https://github.com/cookpete/auto-changelog/blob/master/CHANGELOG.md";
+    description = "Fetch and print the GraphQL schema from a GraphQL HTTP endpoint.";
+    homepage = "https://github.com/prisma-labs/get-graphql-schema";
     license = lib.licenses.mit;
     mainProgram = "get-graphql-schema";
     maintainers = with lib.maintainers; [ pyrox0 ];
