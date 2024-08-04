@@ -24,17 +24,23 @@ rustPlatform.buildRustPackage rec {
     RUSTFLAGS = "-L ${xen-slim.out}/lib";
   };
 
-  nativeBuildInputs = [llvmPackages.clang xen-slim.out];
+  nativeBuildInputs = [
+    llvmPackages.clang
+    xen-slim.out
+  ];
 
   postFixup = ''
     patchelf $out/bin/xen-guest-agent --add-rpath ${xen-slim.out}/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Xen agent running in Linux/BSDs (POSIX) VMs";
     homepage = "https://gitlab.com/xen-project/xen-guest-agent";
-    license = licenses.agpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [matdibu];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      matdibu
+      sigmasquadron
+    ];
   };
 }
