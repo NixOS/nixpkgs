@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zmap";
     repo = "zlint";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-N199sSxe06nm0CInTYAuwRgoq7hN7IQpHz5ERUSpk3M=";
   };
 
@@ -32,7 +32,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X=main.version=${version}"
   ];
 
   passthru.tests.version = testers.testVersion {
