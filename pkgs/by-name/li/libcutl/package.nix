@@ -1,34 +1,36 @@
-{ lib, gccStdenv, fetchurl, xercesc }:
+{
+  fetchurl,
+  gccStdenv,
+  lib,
+  xercesc,
+}:
 
-let
-  stdenv = gccStdenv;
-in
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "libcutl";
   version = "1.10.0";
 
-  meta = with lib; {
-    description = "C++ utility library from Code Synthesis";
-    longDescription = ''
-        libcutl is a C++ utility library.
-        It contains a collection of generic and independent components such as
-        meta-programming tests, smart pointers, containers, compiler building blocks, etc.
-    '';
-    homepage = "https://codesynthesis.com/projects/libcutl/";
-    changelog = "https://git.codesynthesis.com/cgit/libcutl/libcutl/plain/NEWS?h=${version}";
-    platforms = platforms.all;
-    maintainers = [ ];
-    license = licenses.mit;
-  };
-
-  majmin = builtins.head ( builtins.match "([[:digit:]]\\.[[:digit:]]+).*" "${version}" );
   src = fetchurl {
-    url = "https://codesynthesis.com/download/${pname}/${majmin}/${pname}-${version}.tar.bz2";
-    sha256 = "070j2x02m4gm1fn7gnymrkbdxflgzxwl7m96aryv8wp3f3366l8j";
+    url = "https://codesynthesis.com/download/libcutl/${lib.versions.majorMinor finalAttrs.version}/libcutl-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-ElFjxnDjcrR9VibVQ3n/j7re1szV23esC/WRKkAXEhw=";
   };
 
   buildInputs = [ xercesc ];
+
   enableParallelBuilding = true;
 
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
-}
+
+  meta = {
+    description = "C++ utility library from Code Synthesis";
+    longDescription = ''
+      libcutl is a C++ utility library.
+      It contains a collection of generic and independent components such as
+      meta-programming tests, smart pointers, containers, compiler building blocks, etc.
+    '';
+    homepage = "https://codesynthesis.com/projects/libcutl/";
+    changelog = "https://git.codesynthesis.com/cgit/libcutl/libcutl/plain/NEWS?h=${finalAttrs.version}";
+    platforms = lib.platforms.all;
+    maintainers = [ ];
+    license = lib.licenses.mit;
+  };
+})
