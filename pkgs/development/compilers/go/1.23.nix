@@ -4,8 +4,8 @@
 , tzdata
 , substituteAll
 , iana-etc
-, Security
-, Foundation
+, darwin
+, overrideSDK
 , xcbuild
 , mailcap
 , buildPackages
@@ -44,8 +44,10 @@ let
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
 
   isCross = stdenv.buildPlatform != stdenv.targetPlatform;
+
+  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "go";
   version = "1.23rc2";
 
@@ -59,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
-  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [ Foundation Security xcbuild ];
+  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Foundation Security xcbuild ]);
 
   depsBuildTarget = lib.optional isCross targetCC;
 
