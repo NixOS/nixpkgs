@@ -34,6 +34,7 @@ self: super: {
   hpc = null;
   integer-gmp = null;
   mtl = null;
+  os-string = null;
   parsec = null;
   pretty = null;
   process = null;
