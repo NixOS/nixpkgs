@@ -5,10 +5,10 @@ let
 in
   {
     imports = [
-      (mkRenamedOptionModule [ "hardware" "tuxedo-keyboard" "enable" ] [ "hardware" "tuxedo-drivers" "enable" ])
+      (lib.mkRenamedOptionModule [ "hardware" "tuxedo-keyboard" "enable" ] [ "hardware" "tuxedo-drivers" "enable" ])
     ];
     options.hardware.tuxedo-drivers = {
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
           Driver pack for tuxedo devices including
           - Driver for Fn-keys
           - SysFS control of brightness/color/mode for most TUXEDO keyboards
