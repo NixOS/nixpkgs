@@ -1044,7 +1044,7 @@ substituteAllInPlace() {
 # the environment used for building.
 dumpVars() {
     if [ "${noDumpEnvVars:-0}" != 1 ]; then
-        export 2>/dev/null >| "$NIX_BUILD_TOP/env-vars" || true
+        install -m 0600 <(export 2>/dev/null) "$NIX_BUILD_TOP/env-vars" || true
     fi
 }
 
