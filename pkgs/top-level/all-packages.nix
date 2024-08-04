@@ -23761,25 +23761,19 @@ with pkgs;
   buildGoModule = buildGo123Module;
   buildGoPackage = buildGo123Package;
 
-  # requires a newer Apple SDK
-  go_1_22 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.22.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
-  };
-  buildGo122Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
+  go_1_22 = callPackage ../development/compilers/go/1.22.nix { };
+  buildGo122Module = callPackage ../build-support/go/module.nix {
     go = buildPackages.go_1_22;
   };
-  buildGo122Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
+  buildGo122Package = callPackage ../build-support/go/package.nix {
     go = buildPackages.go_1_22;
   };
 
-  # requires a newer Apple SDK
-  go_1_23 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.23.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
-  };
-  buildGo123Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
+  go_1_23 = callPackage ../development/compilers/go/1.23.nix { };
+  buildGo123Module = callPackage ../build-support/go/module.nix {
     go = buildPackages.go_1_23;
   };
-  buildGo123Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
+  buildGo123Package = callPackage ../build-support/go/package.nix {
     go = buildPackages.go_1_23;
   };
 
