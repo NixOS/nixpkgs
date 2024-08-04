@@ -69,11 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # for size in 64 128 256; do
-  #   mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-  #   convert -resize "$size"x"$size" jadx-gui/src/main/resources/logos/jadx-logo.png $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
-  # done
-
   desktopItems = [
     (makeDesktopItem {
       name = "jadx";
