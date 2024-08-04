@@ -17543,7 +17543,7 @@ with pkgs;
 
   vscode-langservers-extracted = callPackage ../development/tools/language-servers/vscode-langservers-extracted { };
 
-  zls = callPackage ../development/tools/language-servers/zls { };
+  zls = darwin.apple_sdk_11_0.callPackage ../development/tools/language-servers/zls { };
 
   ansible-later = callPackage ../tools/admin/ansible/later.nix { };
 
