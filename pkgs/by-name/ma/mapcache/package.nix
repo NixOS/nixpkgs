@@ -1,6 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, apacheHttpd, apr, aprutil, curl, db, fcgi, gdal, geos
-, libgeotiff, libjpeg, libpng, libtiff, pcre2, pixman, proj, sqlite, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  apacheHttpd,
+  apr,
+  aprutil,
+  curl,
+  db,
+  fcgi,
+  gdal,
+  geos,
+  libgeotiff,
+  libjpeg,
+  libpng,
+  libtiff,
+  pcre2,
+  pixman,
+  proj,
+  sqlite,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -9,9 +29,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "MapServer";
-    repo = pname;
+    repo = "mapcache";
     rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-AwdZdOEq9SZ5VzuBllg4U1gdVxZ9IVdqiDrn3QuRdCk=";
+    hash = "sha256-AwdZdOEq9SZ5VzuBllg4U1gdVxZ9IVdqiDrn3QuRdCk=";
   };
 
   nativeBuildInputs = [
@@ -50,12 +70,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-std=c99";
 
-  meta = with lib; {
+  meta = {
     description = "Server that implements tile caching to speed up access to WMS layers";
     homepage = "https://mapserver.org/mapcache/";
     changelog = "https://www.mapserver.org/development/changelog/mapcache/";
-    license = licenses.mit;
-    maintainers = teams.geospatial.members;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.geospatial.members;
+    platforms = lib.platforms.unix;
   };
 }
