@@ -23309,6 +23309,7 @@ with pkgs;
   ironicclient = with python311Packages; toPythonApplication python-ironicclient;
   manilaclient = with python311Packages; toPythonApplication python-manilaclient;
   swiftclient = with python311Packages; toPythonApplication python-swiftclient;
+  zunclient = with python311Packages; toPythonApplication python-zunclient;
 
   openvdb = callPackage ../development/libraries/openvdb { };
 
