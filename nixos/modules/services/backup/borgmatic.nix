@@ -26,8 +26,8 @@ let
     freeformType = settingsFormat.type;
     options = {
       source_directories = mkOption {
-        type = nullOr (listOf str);
-        default = null;
+        type = listOf str;
+        default = [];
         description = ''
           List of source directories and files to backup. Globs and tildes are
           expanded. Do not backslash spaces in path names.
@@ -35,8 +35,8 @@ let
         example = [ "/home" "/etc" "/var/log/syslog*" "/home/user/path with spaces" ];
       };
       repositories = mkOption {
-        type = nullOr (listOf repository);
-        default = null;
+        type = listOf repository;
+        default = [];
         description = ''
           A required list of local or remote repositories with paths and
           optional labels (which can be used with the --repository flag to
