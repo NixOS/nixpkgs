@@ -1598,11 +1598,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXtst = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXi, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXtst";
-    version = "1.2.4";
+    version = "1.2.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXtst-1.2.4.tar.xz";
-      sha256 = "1j1kr90b7vmpqniqd0pd786kn5924q799c5m2kpgzd2lj85z7xc4";
+      url = "mirror://xorg/individual/lib/libXtst-1.2.5.tar.xz";
+      sha256 = "0hljblisw72fk60y7zf9214ydn7lk32kj43cf12af2bhp4jlq3dm";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
