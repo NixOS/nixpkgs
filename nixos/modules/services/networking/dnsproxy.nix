@@ -25,7 +25,8 @@ let
   yaml = pkgs.formats.yaml { };
   configFile = yaml.generate "config.yaml" cfg.settings;
 
-  finalFlags = (lists.optional (cfg.settings != { }) "--config-path=${configFile}")
+  finalFlags =
+    (lists.optional (cfg.settings != { }) "--config-path=${configFile}")
     ++ cfg.flags
     # Set flags pointing to files loaded by systemd credentials.
     # Note: %d is equivalent to $CREDENTIALS_DIRECTORY
@@ -82,7 +83,9 @@ in
     secretFlags = mkOption {
       type = types.attrsOf (types.either types.str types.path);
       default = { };
-      example = { tls-key = "/path/to/cert.key"; };
+      example = {
+        tls-key = "/path/to/cert.key";
+      };
       description = ''
         An attribute set corresponding to command-line flags and
         their values. The values are expected to be file paths that will be
