@@ -18,12 +18,14 @@ libBuildHelper.extendMkDerivation' genericBuild (finalAttrs:
 
 {
 
+  elpa2nix = args.elpa2nix or ./elpa2nix.el;
+
   inherit dontUnpack;
 
   installPhase = args.installPhase or ''
     runHook preInstall
 
-    emacs --batch -Q -l ${./elpa2nix.el} \
+    emacs --batch -Q -l "$elpa2nix" \
         -f elpa2nix-install-package \
         "$src" "$out/share/emacs/site-lisp/elpa"
 
