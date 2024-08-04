@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, libunwind
-, lz4
-, pkg-config
-, elfutils
-, python311Packages
+{
+  lib,
+  elfutils,
+  fetchFromGitHub,
+  libunwind,
+  lz4,
+  pkg-config,
+  python3Packages,
 }:
 
-python311Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "memray";
   version = "1.13.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
@@ -19,40 +20,38 @@ python311Packages.buildPythonApplication rec {
     hash = "sha256-8ztnXNdsthoMvooWoJLKrB9yGHjkYhQ2jiwF3KujAnw=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
+  build-system = with python3Packages; [
+    distutils
+    setuptools
   ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libunwind
     lz4
-    elfutils  # for `-ldebuginfod`
-  ] ++ (with python311Packages; [
-    cython
-  ]);
+    elfutils # for `-ldebuginfod`
+  ] ++ (with python3Packages; [ cython ]);
 
-  propagatedBuildInputs = with python311Packages; [
+  dependencies = with python3Packages; [
     pkgconfig
     textual
     jinja2
     rich
   ];
 
-  nativeCheckInputs = with python311Packages; [
-    ipython
-    pytestCheckHook
-    pytest-cov # fix Unknown pytest.mark.no_cover
-  ] ++ lib.optionals (pythonOlder "3.12") [
-    greenlet
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      ipython
+      pytestCheckHook
+      pytest-cov # fix Unknown pytest.mark.no_cover
+    ]
+    ++ lib.optionals (pythonOlder "3.12") [ greenlet ];
 
-  pythonImportsCheck = [
-    "memray"
-  ];
+  pythonImportsCheck = [ "memray" ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   disabledTests = [
     # Import issue
