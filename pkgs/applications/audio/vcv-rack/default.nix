@@ -87,9 +87,9 @@ let
     rev = "5ed79544161e0fa9a55faa7c0a5f299e828e12ab"; # tip of branch v2
     sha256 = "0c6qpigyr0ppvra20hcy1fdcmqa212jckb9wkx4f6fgdby7565wv";
   };
-  vcv-rtaudio = stdenv.mkDerivation rec {
+  vcv-rtaudio = stdenv.mkDerivation {
     pname = "vcv-rtaudio";
-    version = "unstable-2020-01-30";
+    version = "5.1.0-unstable-2020-01-30";
 
     src = fetchFromGitHub {
       owner = "VCVRack";
@@ -110,14 +110,14 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vcv-rack";
   version = "2.5.1";
 
   desktopItems = [
     (makeDesktopItem {
       type = "Application";
-      name = pname;
+      name = "vcv-rack";
       desktopName = "VCV Rack";
       genericName = "Eurorack simulator";
       comment = "Create music by patching together virtual synthesizer modules";
@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Rack";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1q2bwjfn6crk9lyd6m3py0v754arw1xgpv5kkj6ka1bc2yz839qh";
   };
 
@@ -165,15 +165,15 @@ stdenv.mkDerivation rec {
     # Build and dist the Fundamental plugins
     cp -r ${fundamental-source} plugins/Fundamental/
     chmod -R +rw plugins/Fundamental # will be used as build dir
-    substituteInPlace plugin.mk --replace ":= all" ":= dist"
+    substituteInPlace plugin.mk --replace-fail ":= all" ":= dist"
     substituteInPlace plugins/Fundamental/src/Logic.cpp \
-      --replace \
+      --replace-fail \
         "LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>" \
         "struct rack::componentlibrary::LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>"
 
     # Fix reference to zenity
     substituteInPlace dep/osdialog/osdialog_zenity.c \
-      --replace 'zenityBin[] = "zenity"' 'zenityBin[] = "${zenity}/bin/zenity"'
+      --replace-fail 'zenityBin[] = "zenity"' 'zenityBin[] = "${lib.getExe zenity}"'
   '';
 
   nativeBuildInputs = [
