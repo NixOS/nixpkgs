@@ -80,7 +80,9 @@ in
   config = mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
-      etc."ananicy.d".source = pkgs.runCommandLocal "ananicyfiles" { } ''
+      etc."ananicy.d".source = pkgs.runCommand "ananicyfiles" {
+        preferLocalBuild = true;
+      } ''
         mkdir -p $out
         # ananicy-cpp does not include rules or settings on purpose
         if [[ -d "${cfg.rulesProvider}/etc/ananicy.d/00-default" ]]; then
