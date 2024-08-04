@@ -4444,8 +4444,6 @@ with pkgs;
     gflags = null; # only required for examples/tests
   };
 
-  cbor-diag = callPackage ../development/tools/cbor-diag { };
-
   cassowary = callPackage ../tools/networking/cassowary { };
 
   croc = callPackage ../tools/networking/croc { };
