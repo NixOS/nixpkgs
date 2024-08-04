@@ -8,11 +8,7 @@ in
 
 libBuildHelper.extendMkDerivation' (callPackage ./generic.nix envargs) (finalAttrs:
 
-{ pname
-, version
-, src
-, ...
-}@args:
+args:
 
 {
   buildPhase = args.buildPhase or ''

@@ -25,9 +25,7 @@ in
 
 libBuildHelper.extendMkDerivation' stdenv.mkDerivation (finalAttrs:
 
-{ pname
-, version
-, buildInputs ? []
+{ buildInputs ? []
 , nativeBuildInputs ? []
 , packageRequires ? []
 , propagatedBuildInputs ? []

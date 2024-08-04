@@ -11,8 +11,6 @@ in
 libBuildHelper.extendMkDerivation' genericBuild (finalAttrs:
 
 { pname
-, version
-, src
 , dontUnpack ? true
 , meta ? {}
 , ...
