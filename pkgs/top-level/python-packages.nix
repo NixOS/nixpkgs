@@ -773,6 +773,8 @@ self: super: with self; {
 
   arnparse = callPackage ../development/python-modules/arnparse { };
 
+  array-api-strict = callPackage ../development/python-modules/array-api-strict { };
+
   array-record = callPackage ../development/python-modules/array-record { };
 
   arrayqueues = callPackage ../development/python-modules/arrayqueues { };
