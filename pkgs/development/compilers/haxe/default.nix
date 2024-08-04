@@ -147,6 +147,7 @@ let
           maintainers.marcweber
           maintainers.locallycompact
           maintainers.logo
+          maintainers.bwkam
         ];
         platforms = platforms.linux ++ platforms.darwin;
       };
