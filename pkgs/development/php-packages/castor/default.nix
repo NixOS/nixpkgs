@@ -32,6 +32,10 @@ php.buildComposerProject (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  postPatch = ''
+    patchShebangs bin/castor
+  '';
+
   # install shell completions
   postInstall = ''
     installShellCompletion --cmd castor \
