@@ -19380,8 +19380,6 @@ with pkgs;
 
   vagrant = callPackage ../development/tools/vagrant { };
 
-  bashdb = callPackage ../development/tools/misc/bashdb { };
-
   gdb = callPackage ../development/tools/misc/gdb {
     guile = null;
   };
