@@ -473,7 +473,8 @@ let
             ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
           nixSupport.cc-ldflags = lib.optionals (
             !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
-          ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
+          ) [ "-L${targetLlvmLibraries.libunwind}/lib" ]
+            ++ lib.optional (lib.versionAtLeast metadata.release_version "17") "--undefined-version";
         }
       );
 
@@ -731,6 +732,7 @@ let
 
       compiler-rt-no-libc = callPackage ./compiler-rt {
         patches = compiler-rtPatches;
+        doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
         stdenv =
           if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform then
             stdenv
