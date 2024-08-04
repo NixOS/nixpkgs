@@ -4,8 +4,6 @@
 
 let
   inherit (lib) optionalAttrs;
-  handledArgs = [ "buildInputs" "nativeBuildInputs" "packageRequires" "propagatedBuildInputs" "propagatedUserEnvPkgs" "meta" ]
-    ++ lib.optionals (emacs.withNativeCompilation or false) [ "postInstall" ];
 
   setupHook = writeText "setup-hook.sh" ''
     source ${./emacs-funcs.sh}
@@ -21,11 +19,11 @@ let
     fi
   '';
 
-  libBuildHelper = import ./lib-build-helper.nix { inherit lib; };
+  libBuildHelper = import ./lib-build-helper.nix;
 
 in
 
-libBuildHelper.adaptMkDerivation { } stdenv.mkDerivation (finalAttrs:
+libBuildHelper.extendMkDerivation' stdenv.mkDerivation (finalAttrs:
 
 { pname
 , version
@@ -42,9 +40,9 @@ libBuildHelper.adaptMkDerivation { } stdenv.mkDerivation (finalAttrs:
 }@args:
 
 {
-  name = "emacs-${finalAttrs.pname}-${finalAttrs.version}";
+  name = args.name or "emacs-${finalAttrs.pname}-${finalAttrs.version}";
 
-  unpackCmd = ''
+  unpackCmd = args.unpackCmd or ''
     case "$curSrc" in
       *.el)
         # keep original source filename without the hash
@@ -60,12 +58,13 @@ libBuildHelper.adaptMkDerivation { } stdenv.mkDerivation (finalAttrs:
     esac
   '';
 
-  buildInputs = packageRequires ++ buildInputs;
+  inherit packageRequires;
+  buildInputs = finalAttrs.packageRequires ++ buildInputs;
   nativeBuildInputs = [ emacs texinfo ] ++ nativeBuildInputs;
-  propagatedBuildInputs = packageRequires ++ propagatedBuildInputs;
-  propagatedUserEnvPkgs = packageRequires ++ propagatedUserEnvPkgs;
+  propagatedBuildInputs = finalAttrs.packageRequires ++ propagatedBuildInputs;
+  propagatedUserEnvPkgs = finalAttrs.packageRequires ++ propagatedUserEnvPkgs;
 
-  inherit setupHook;
+  setupHook = args.setupHook or setupHook;
 
   meta = {
     broken = false;
@@ -77,7 +76,7 @@ libBuildHelper.adaptMkDerivation { } stdenv.mkDerivation (finalAttrs:
 
 // optionalAttrs (emacs.withNativeCompilation or false) {
 
-  addEmacsNativeLoadPath = true;
+  addEmacsNativeLoadPath = args.addEmacsNativeLoadPath or true;
 
   inherit turnCompilationWarningToError ignoreCompilationError;
 
@@ -100,4 +99,4 @@ libBuildHelper.adaptMkDerivation { } stdenv.mkDerivation (finalAttrs:
   '' + postInstall;
 }
 
-// removeAttrs args handledArgs)
+)

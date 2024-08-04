@@ -5,7 +5,7 @@
 
 let
   genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText; };
-  libBuildHelper = import ./lib-build-helper.nix { inherit lib; };
+  libBuildHelper = import ./lib-build-helper.nix;
 
   packageBuild = stdenv.mkDerivation {
     name = "package-build";
@@ -29,7 +29,7 @@ let
 
 in
 
-libBuildHelper.extendMkDerivation { } genericBuild (finalAttrs:
+libBuildHelper.extendMkDerivation' genericBuild (finalAttrs:
 
 { /*
     pname: Nix package name without special symbols and without version or

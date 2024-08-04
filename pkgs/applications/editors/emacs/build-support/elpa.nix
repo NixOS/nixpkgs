@@ -4,11 +4,11 @@
 
 let
   genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText; };
-  libBuildHelper = import ./lib-build-helper.nix { inherit lib; };
+  libBuildHelper = import ./lib-build-helper.nix;
 
 in
 
-libBuildHelper.extendMkDerivation { } genericBuild (finalAttrs:
+libBuildHelper.extendMkDerivation' genericBuild (finalAttrs:
 
 { pname
 , version

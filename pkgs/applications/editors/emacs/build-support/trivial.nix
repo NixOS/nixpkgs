@@ -3,10 +3,10 @@
 { callPackage, lib, ... }@envargs:
 
 let
-  libBuildHelper = import ./lib-build-helper.nix { inherit lib; };
+  libBuildHelper = import ./lib-build-helper.nix;
 in
 
-libBuildHelper.extendMkDerivation { } (callPackage ./generic.nix envargs) (finalAttrs:
+libBuildHelper.extendMkDerivation' (callPackage ./generic.nix envargs) (finalAttrs:
 
 { pname
 , version
