@@ -1,5 +1,6 @@
 {
-  fetchurl,
+  build2,
+  fetchgit,
   gccStdenv,
   lib,
   xercesc,
@@ -7,18 +8,21 @@
 
 gccStdenv.mkDerivation (finalAttrs: {
   pname = "libcutl";
-  version = "1.10.0";
+  version = "1.11.0";
 
-  src = fetchurl {
-    url = "https://codesynthesis.com/download/libcutl/${lib.versions.majorMinor finalAttrs.version}/libcutl-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-ElFjxnDjcrR9VibVQ3n/j7re1szV23esC/WRKkAXEhw=";
+  src = fetchgit {
+    url = "https://git.codesynthesis.com/libcutl/libcutl.git";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-LY2ZyxduI6xftVjVqjNkhYPFTL5bvHC289Qcei1Kiw4=";
   };
+
+  nativeBuildInputs = [ build2 ];
 
   buildInputs = [ xercesc ];
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
+  doCheck = true;
 
   meta = {
     description = "C++ utility library from Code Synthesis";
@@ -28,7 +32,7 @@ gccStdenv.mkDerivation (finalAttrs: {
       meta-programming tests, smart pointers, containers, compiler building blocks, etc.
     '';
     homepage = "https://codesynthesis.com/projects/libcutl/";
-    changelog = "https://git.codesynthesis.com/cgit/libcutl/libcutl/plain/NEWS?h=${finalAttrs.version}";
+    changelog = "https://git.codesynthesis.com/cgit/libcutl/libcutl/log/";
     platforms = lib.platforms.all;
     maintainers = [ ];
     license = lib.licenses.mit;
