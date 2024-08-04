@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
-    repo = pname;
+    repo = "packetry";
     rev = "v${version}";
     hash = "sha256-GmEv7wkYpSM3ds5AHGa+1IiuAdI2O793d+VtSU9vqag=";
   };
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A fast, intuitive USB 2.0 protocol analysis application for use with Cynthion.";
+    description = "USB 2.0 protocol analysis application for use with Cynthion.";
     homepage = "https://github.com/greatscottgadgets/packetry";
     license = licenses.bsd3;
     maintainers = with maintainers; [ carlossless ];
