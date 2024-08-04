@@ -31836,10 +31836,6 @@ with pkgs;
 
   nanorc = callPackage ../applications/editors/nano/nanorc { };
 
-  netbeans = callPackage ../applications/editors/netbeans {
-    jdk = jdk17;
-  };
-
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
 
   ncdu = callPackage ../tools/misc/ncdu {
