@@ -494,6 +494,8 @@ in {
 
     rust-out-of-tree-module = if lib.versionAtLeast kernel.version "6.7" then callPackage ../os-specific/linux/rust-out-of-tree-module { } else null;
 
+    tuxedo-drivers = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-drivers { } else null;
+
     tuxedo-keyboard = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-keyboard { } else null;
 
     jool = callPackage ../os-specific/linux/jool { };
