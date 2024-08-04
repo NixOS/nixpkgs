@@ -66,7 +66,7 @@ libBuildHelper.extendMkDerivation' genericBuild (finalAttrs:
   */
 , recipe ? (writeText "${finalAttrs.pname}-recipe" ''
     (${finalAttrs.ename} :fetcher git :url ""
-              ${lib.optionalString (finalAttrs.files or null != null) ":files ${finalAttrs.files}"})
+              ${lib.optionalString (finalAttrs.files != null) ":files ${finalAttrs.files}"})
   '')
 , preUnpack ? ""
 , postUnpack ? ""
@@ -79,7 +79,7 @@ libBuildHelper.extendMkDerivation' genericBuild (finalAttrs:
   elpa2nix = args.elpa2nix or ./elpa2nix.el;
   melpa2nix = args.melpa2nix or ./melpa2nix.el;
 
-  inherit commit ename recipe;
+  inherit commit ename files recipe;
 
   packageBuild = args.packageBuild or packageBuild;
 
