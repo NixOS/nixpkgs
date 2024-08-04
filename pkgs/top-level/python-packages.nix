@@ -10397,6 +10397,8 @@ self: super: with self; {
 
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
 
+  python-escpos = callPackage ../development/python-modules/python-escpos { };
+
   python-ffmpeg = callPackage ../development/python-modules/python-ffmpeg { };
 
   python-flirt = callPackage ../development/python-modules/python-flirt { };
