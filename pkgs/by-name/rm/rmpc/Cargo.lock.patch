@@ -1,0 +1,28 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index e4e2d1a..72839b4 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -198,9 +198,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "bitstream-io"
+-version = "2.5.0"
++version = "2.3.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3dcde5f311c85b8ca30c2e4198d4326bc342c76541590106f5fa4a50946ea499"
++checksum = "7c12d1856e42f0d817a835fe55853957c85c8c8a470114029143d3f12671446e"
+ 
+ [[package]]
+ name = "built"
+@@ -1376,9 +1376,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "ravif"
+-version = "0.11.8"
++version = "0.11.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c6ba61c28ba24c0cf8406e025cb29a742637e3f70776e61c27a8a8b72a042d12"
++checksum = "bc13288f5ab39e6d7c9d501759712e6969fcc9734220846fc9ed26cae2cc4234"
+ dependencies = [
+  "avif-serialize",
+  "imgref",

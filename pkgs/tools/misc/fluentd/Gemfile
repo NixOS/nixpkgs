@@ -1,0 +1,13 @@
+source "https://rubygems.org"
+
+gem 'fluentd'
+gem 'fluent-plugin-record-reformer'
+gem 'fluent-plugin-s3'
+gem 'fluent-plugin-kinesis'
+gem 'fluent-plugin-kafka'
+gem 'fluent-plugin-elasticsearch'
+gem 'fluent-plugin-mongo'
+gem 'fluent-plugin-webhdfs'
+gem 'fluent-plugin-rewrite-tag-filter'
+gem 'fluent-plugin-cloudwatch-logs'
+gem 'fluent-plugin-concat'

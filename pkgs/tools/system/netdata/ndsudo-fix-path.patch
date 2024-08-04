@@ -1,0 +1,16 @@
+# See https://github.com/netdata/netdata/pull/17377#issuecomment-2183017868
+#     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
+
+diff --git a/src/collectors/plugins.d/ndsudo.c b/src/collectors/plugins.d/ndsudo.c
+index 8b4d76f46..68fa52d38 100644
+--- a/src/collectors/plugins.d/ndsudo.c
++++ b/src/collectors/plugins.d/ndsudo.c
+@@ -357,9 +357,6 @@ int main(int argc, char *argv[]) {
+         return 3;
+     }
+
+-    char new_path[] = "PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin";
+-    putenv(new_path);
+-
+     bool found = false;
+     char filename[FILENAME_MAX];
