@@ -1,14 +1,21 @@
-{ lib, stdenv, fetchFromGitLab, kernel, kmod, pahole }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  kernel,
+  kmod,
+  pahole,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxedo-drivers-${kernel.version}";
-  version = "4.3.0";
+  version = "4.6.1";
 
   src = fetchFromGitLab {
     owner = "tuxedocomputers/development/packages";
     repo = "tuxedo-drivers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IZ1K7n4OrhI52u7EH0ljVkKwc/uf53sMd9qpTLjvzls=";
+    hash = "sha256-hZ4fY6TQj4YIOzFH+iZq90VPr87KIzke4N2PiJGYeEE=";
   };
 
   buildInputs = [ pahole ];
