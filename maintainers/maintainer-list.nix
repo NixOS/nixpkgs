@@ -15057,6 +15057,12 @@
     name = "Daniel Nagy";
     keys = [ { fingerprint = "F6AE 2C60 9196 A1BC ECD8  7108 1B8E 8DCB 576F B671"; } ];
   };
+  naho = {
+    github = "trueNAHO";
+    githubId = 90870942;
+    name = "Noah Pierre Biewesch";
+    keys = [ { fingerprint = "5FC6 088A FB1A 609D 4532  F919 0C1C 177B 3B64 68E0"; } ];
+  };
   nalbyuites = {
     email = "ashijit007@gmail.com";
     github = "nalbyuites";
