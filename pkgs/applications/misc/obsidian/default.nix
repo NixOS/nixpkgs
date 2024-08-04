@@ -11,7 +11,6 @@
 , commandLineArgs ? ""
 }:
 let
-  inherit (stdenv.hostPlatform) system;
   pname = "obsidian";
   version = "1.6.5";
   appname = "Obsidian";
