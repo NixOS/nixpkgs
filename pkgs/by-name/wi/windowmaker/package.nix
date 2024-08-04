@@ -64,6 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-x"
   ];
 
+  passthru = {
+    dockapps = lib.packagesFromDirectoryRecursive {
+      inherit callPackage;
+      directory = ./dockapps;
+    };
+  };
+
   meta = {
     homepage = "http://windowmaker.org/";
     description = "NeXTSTEP-like window manager";
