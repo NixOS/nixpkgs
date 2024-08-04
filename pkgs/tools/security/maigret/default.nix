@@ -1,18 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maigret";
   version = "0.4.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "soxoj";
-    repo = pname;
+    repo = "maigret";
     rev = "refs/tags/v${version}";
     hash = "sha256-Z8SnA7Z5+oKW0AOaNf+c/zR30lrPFmXaxxKkbnDXNNs=";
   };
@@ -26,8 +26,9 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aiodns
     aiohttp
     aiohttp-socks
@@ -68,8 +69,6 @@ python3.pkgs.buildPythonApplication rec {
     yarl
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   nativeCheckInputs = with python3.pkgs; [
     pytest-httpserver
     pytest-asyncio
@@ -77,6 +76,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = true;
+
   pythonRemoveDeps = [ "future-annotations" ];
 
   pytestFlagsArray = [
@@ -84,28 +84,25 @@ python3.pkgs.buildPythonApplication rec {
     "-W ignore::DeprecationWarning"
   ];
 
-  disabledTests = [
-    # Tests require network access
-    "test_extract_ids_from_page"
-    "test_import_aiohttp_cookies"
-    "test_maigret_results"
-    "test_pdf_report"
-    "test_self_check_db_negative_enabled"
-    "test_self_check_db_positive_enable"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # AsyncioProgressbarExecutor is slower on darwin than it should be,
-    # Upstream issue: https://github.com/soxoj/maigret/issues/679
-    "test_asyncio_progressbar_executor"
-  ];
+  disabledTests =
+    [
+      # Tests require network access
+      "test_extract_ids_from_page"
+      "test_import_aiohttp_cookies"
+      "test_maigret_results"
+      "test_pdf_report"
+      "test_self_check_db_negative_enabled"
+      "test_self_check_db_positive_enable"
+    ];
 
-  pythonImportsCheck = [
-    "maigret"
-  ];
+  pythonImportsCheck = [ "maigret" ];
 
   meta = with lib; {
     description = "Tool to collect details about an username";
     homepage = "https://maigret.readthedocs.io";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/soxoj/maigret/releases/tag/v${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }
