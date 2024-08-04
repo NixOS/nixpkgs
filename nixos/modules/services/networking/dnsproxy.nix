@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -12,14 +17,16 @@ let
     mkIf
     mkOption
     mkPackageOption
-    types;
+    types
+    ;
 
   cfg = config.services.dnsproxy;
 
   yaml = pkgs.formats.yaml { };
   configFile = yaml.generate "config.yaml" cfg.settings;
 
-  finalFlags = (lists.optional (cfg.settings != { }) "--config-path=${configFile}")
+  finalFlags =
+    (lists.optional (cfg.settings != { }) "--config-path=${configFile}")
     ++ cfg.flags
     # Set flags pointing to files loaded by systemd credentials.
     # Note: %d is equivalent to $CREDENTIALS_DIRECTORY
@@ -76,7 +83,9 @@ in
     secretFlags = mkOption {
       type = types.attrsOf (types.either types.str types.path);
       default = { };
-      example = { tls-key = "/path/to/cert.key"; };
+      example = {
+        tls-key = "/path/to/cert.key";
+      };
       description = ''
         An attribute set corresponding to command-line flags and
         their values. The values are expected to be file paths that will be
@@ -93,7 +102,10 @@ in
   config = mkIf cfg.enable {
     systemd.services.dnsproxy = {
       description = "Simple DNS proxy with DoH, DoT, DoQ and DNSCrypt support";
-      after = [ "network.target" "nss-lookup.target" ];
+      after = [
+        "network.target"
+        "nss-lookup.target"
+      ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${getExe cfg.package} ${escapeShellArgs finalFlags}";
@@ -112,13 +124,19 @@ in
         ProtectHostname = true;
         ProtectKernelLogs = true;
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+        ];
       };
     };
   };
