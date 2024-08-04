@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch2
 , stdenv
 , cmake
 , pkg-config
@@ -36,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "chiaki-ng";
-  version = "1.7.4";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = "chiaki-ng";
     rev = "v${version}";
-    hash = "sha256-9EF+Mm6nZeo3XYH8KO7e22cJ4e9TWUEinhkm+Z213RU=";
+    hash = "sha256-1tc2sh5YEQouYdWNbc3x2dclMmFDm7RuSWrKVsTvmmk=";
     fetchSubmodules = true;
   };
 
