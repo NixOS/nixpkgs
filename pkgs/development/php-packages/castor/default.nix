@@ -35,9 +35,9 @@ php.buildComposerProject (finalAttrs: {
   # install shell completions
   postInstall = ''
     installShellCompletion --cmd castor \
-      --bash <($out/bin/castor completion bash) \
-      --fish <($out/bin/castor completion fish) \
-      --zsh <($out/bin/castor completion zsh)
+      --bash <(php $out/bin/castor completion bash) \
+      --fish <(php $out/bin/castor completion fish) \
+      --zsh <(php $out/bin/castor completion zsh)
   '';
 
   passthru = {
