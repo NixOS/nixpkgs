@@ -15996,6 +15996,8 @@ with pkgs;
     lfe lfe_2_1;
   beamPackages = beam.packages.erlang // { __attrsFailEvaluation = true; };
 
+  erlang_language_platform = callPackage ../by-name/er/erlang-language-platform/package.nix { };
+
   expr = callPackage ../development/interpreters/expr { };
 
   genemichaels = callPackage ../development/tools/rust/genemichaels { };
