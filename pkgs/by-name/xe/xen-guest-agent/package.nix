@@ -3,31 +3,30 @@
   fetchFromGitLab,
   rustPlatform,
   llvmPackages,
+  pkg-config,
   xen-slim,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xen-guest-agent";
-  version = "0.3.0";
+  version = "0.4.0-unstable-2024-05-31";
 
   src = fetchFromGitLab {
     owner = "xen-project";
     repo = pname;
-    rev = version;
-    hash = "sha256-Csio24ofj+p0j/R0av/28P/KCNXhmcF+r8xGJEfoHjQ=";
+    rev = "03aaadbe030f303b1503e172ee2abb6d0cab7ac6";
+    hash = "sha256-OhzRsRwDvt0Ov+nLxQSP87G3RDYSLREMz2w9pPtSUYg=";
   };
 
-  cargoHash = "sha256-XWDDzSu88zCIwMuvkFjCb98DzXHvW2IP9u3EbpAMIgw=";
-
-  env = {
-    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-    BINDGEN_EXTRA_CLANG_ARGS = "-isystem ${xen-slim.dev}/include";
-    RUSTFLAGS = "-L ${xen-slim.out}/lib";
-  };
+  cargoHash = "sha256-E6QKh4FFr6sLAByU5n6sLppFwPHSKtKffhQ7FfdXAu4=";
 
   nativeBuildInputs = [
     llvmPackages.clang
-    xen-slim.out
+    pkg-config
   ];
+
+  buildInputs = [ xen-slim ];
+
+  env.LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   postFixup = ''
     patchelf $out/bin/xen-guest-agent --add-rpath ${xen-slim.out}/lib
