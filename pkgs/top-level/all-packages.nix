@@ -31912,8 +31912,6 @@ with pkgs;
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins {});
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix { };
 
-  obsidian = callPackage ../applications/misc/obsidian { };
-
   octoprint = callPackage ../applications/misc/octoprint { };
 
   oculante = callPackage ../applications/graphics/oculante { };
