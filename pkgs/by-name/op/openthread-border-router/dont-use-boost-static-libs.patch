@@ -1,0 +1,12 @@
+diff --git a/src/web/CMakeLists.txt b/src/web/CMakeLists.txt
+index 37ba68ffcf..3706061de5 100644
+--- a/src/web/CMakeLists.txt
++++ b/src/web/CMakeLists.txt
+@@ -27,7 +27,6 @@
+ #
+ 
+ pkg_check_modules(JSONCPP jsoncpp REQUIRED)
+-set(Boost_USE_STATIC_LIBS ON)
+ set(Boost_USE_MULTITHREADED ON)
+ set(Boost_USE_STATIC_RUNTIME OFF)
+ find_package(Boost REQUIRED COMPONENTS filesystem system)
