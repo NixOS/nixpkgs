@@ -4067,6 +4067,18 @@ final: prev:
     meta.homepage = "https://github.com/NTBBloodbath/galaxyline.nvim/";
   };
 
+  gen-nvim = buildVimPlugin {
+    pname = "gen.nvim";
+    version = "2024-05-03";
+    src = fetchFromGitHub {
+      owner = "David-Kunz";
+      repo = "gen.nvim";
+      rev = "bd19cf584b5b82123de977b44105e855e61e5f39";
+      sha256 = "1q95z9j4jhirlq2vkm90iyiih80rhji2zrlcl5gkw9xw57m020fh";
+    };
+    meta.homepage = "https://github.com/David-Kunz/gen.nvim/";
+  };
+
   gen_tags-vim = buildVimPlugin {
     pname = "gen_tags.vim";
     version = "2023-03-06";
