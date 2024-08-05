@@ -9700,10 +9700,11 @@
     name = "Jason Miller";
   };
   jn-sena = {
-    email = "jn-sena@proton.me";
+    email = "contact@sena.pink";
     github = "jn-sena";
     githubId = 45771313;
     name = "Sena";
+    keys = [ { fingerprint = "41DE CBC3 93E7 DB28 759F  6245 D014 7D14 A6B4 F0C5"; } ];
   };
   jnsgruk = {
     email = "jon@sgrs.uk";
