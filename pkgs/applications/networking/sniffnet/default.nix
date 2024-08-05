@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pkg-config
 , libpcap
+, libxkbcommon
 , openssl
 , stdenv
 , alsa-lib
@@ -40,6 +41,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libXcursor
     xorg.libXi
     xorg.libXrandr
+    libxkbcommon
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
     rustPlatform.bindgenHook
@@ -62,7 +64,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/sniffnet \
-      --add-rpath ${lib.makeLibraryPath [ vulkan-loader xorg.libX11 ]}
+      --add-rpath ${lib.makeLibraryPath [ vulkan-loader xorg.libX11 libxkbcommon ]}
   '';
 
   meta = with lib; {
