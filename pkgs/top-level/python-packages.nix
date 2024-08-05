@@ -11407,8 +11407,6 @@ self: super: with self; {
 
   pygdbmi = callPackage ../development/python-modules/pygdbmi { };
 
-  pygeoip = callPackage ../development/python-modules/pygeoip { };
-
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
 
   pygit2 = callPackage ../development/python-modules/pygit2 { };
@@ -14563,6 +14561,8 @@ self: super: with self; {
   sonos-websocket = callPackage ../development/python-modules/sonos-websocket { };
 
   sopel = callPackage ../development/python-modules/sopel { };
+
+  sopel-help = callPackage ../development/python-modules/sopel-help { };
 
   sorl-thumbnail = callPackage ../development/python-modules/sorl-thumbnail { };
 
