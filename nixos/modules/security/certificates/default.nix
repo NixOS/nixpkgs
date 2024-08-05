@@ -175,7 +175,7 @@ in
           generated and installed on the host at run time.
         '';
         type = attrsOf (submodule modules.specification);
-        default = [ ];
+        default = { };
       };
 
       # For authority collection to work and delegating certificate & authority
