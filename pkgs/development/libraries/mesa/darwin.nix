@@ -2,7 +2,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   bison,
   flex,
   meson,
@@ -14,7 +14,7 @@
   zlib,
 }:
 let
-  common = import ./common.nix { inherit lib fetchurl; };
+  common = import ./common.nix { inherit lib fetchFromGitLab; };
 in stdenv.mkDerivation {
   inherit (common) pname version src meta;
 
