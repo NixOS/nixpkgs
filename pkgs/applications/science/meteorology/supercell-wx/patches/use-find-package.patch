@@ -1,0 +1,129 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 08b5e82..0063794 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -15,32 +15,6 @@ enable_testing()
+ 
+ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+ 
+-include(${PROJECT_SOURCE_DIR}/external/cmake-conan/conan.cmake)
+-
+-set_property(DIRECTORY
+-             APPEND
+-             PROPERTY CMAKE_CONFIGURE_DEPENDS
+-             conanfile.py)
+-
+-# Don't use RelWithDebInfo Conan packages
+-if (${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
+-    set(conan_build_type "Release")
+-else()
+-    set(conan_build_type ${CMAKE_BUILD_TYPE})
+-endif()
+-
+-conan_cmake_autodetect(settings
+-                       BUILD_TYPE ${conan_build_type})
+-
+-conan_cmake_install(PATH_OR_REFERENCE ${PROJECT_SOURCE_DIR}
+-                    BUILD missing
+-                    REMOTE conancenter
+-                    SETTINGS ${settings})
+-
+-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+-include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
+-conan_basic_setup(TARGETS)
+-
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_ALL_NO_LIB")
+ 
+ set(SCWX_DIR ${PROJECT_SOURCE_DIR})
+diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
+index bbc76c6..e242ee4 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -13,8 +13,8 @@ set_property(DIRECTORY
+              textflowcpp.cmake
+              units.cmake)
+ 
+-include(aws-sdk-cpp.cmake)
+-include(date.cmake)
++find_package(AWSSDK CONFIG REQUIRED)
++
+ include(hsluv-c.cmake)
+ include(imgui.cmake)
+ include(maplibre-native-qt.cmake)
+diff --git a/scwx-qt/scwx-qt.cmake b/scwx-qt/scwx-qt.cmake
+index cda6c7f..008f4c4 100644
+--- a/scwx-qt/scwx-qt.cmake
++++ b/scwx-qt/scwx-qt.cmake
+@@ -11,14 +11,15 @@ set(CMAKE_AUTORCC ON)
+ set(CMAKE_CXX_STANDARD 20)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+-find_package(Boost)
++find_package(Boost REQUIRED COMPONENTS json timer)
+ find_package(Fontconfig)
+-find_package(geographiclib)
++find_package(GeographicLib)
+ find_package(geos)
+ find_package(GLEW)
+ find_package(glm)
+ find_package(Python COMPONENTS Interpreter)
+ find_package(SQLite3)
++find_package(PNG)
+ 
+ find_package(QT NAMES Qt6
+              COMPONENTS Gui
+@@ -29,6 +30,7 @@ find_package(QT NAMES Qt6
+                         OpenGLWidgets
+                         Positioning
+                         Svg
++                        Sql
+                         Widgets REQUIRED)
+ 
+ find_package(Qt${QT_VERSION_MAJOR}
+@@ -40,8 +42,8 @@ find_package(Qt${QT_VERSION_MAJOR}
+                         OpenGLWidgets
+                         Positioning
+                         Svg
+-                        Widgets
+-             REQUIRED)
++                        Sql
++                        Widgets REQUIRED)
+ 
+ set(SRC_EXE_MAIN source/scwx/qt/main/main.cpp)
+ 
+@@ -610,6 +612,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
+                                      glm::glm
+                                      imgui
+                                      SQLite::SQLite3
++                                     PNG::PNG
+                                      wxdata)
+ 
+ target_link_libraries(supercell-wx PRIVATE scwx-qt
+diff --git a/wxdata/wxdata.cmake b/wxdata/wxdata.cmake
+index 0ce08cb..3807810 100644
+--- a/wxdata/wxdata.cmake
++++ b/wxdata/wxdata.cmake
+@@ -2,11 +2,14 @@ cmake_minimum_required(VERSION 3.20)
+ 
+ project(scwx-data)
+ 
+-find_package(Boost)
++find_package(Boost REQUIRED COMPONENTS iostreams)
++find_package(BZip2)
+ find_package(cpr)
+ find_package(LibXml2)
+ find_package(re2)
+ find_package(spdlog)
++find_package(date)
++find_package(OpenSSL COMPONENTS Crypto)
+ 
+ if (NOT MSVC)
+     find_package(TBB)
+@@ -283,6 +286,7 @@ target_link_libraries(wxdata PUBLIC aws-cpp-sdk-core
+                                     re2::re2
+                                     spdlog::spdlog
+                                     units::units)
++target_link_libraries(wxdata PRIVATE OpenSSL::Crypto)
+ target_link_libraries(wxdata INTERFACE Boost::iostreams
+                                        BZip2::BZip2
+                                        hsluv-c)

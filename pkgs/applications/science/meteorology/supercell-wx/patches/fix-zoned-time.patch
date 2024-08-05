@@ -1,0 +1,36 @@
+diff --git a/wxdata/source/scwx/util/time.cpp b/wxdata/source/scwx/util/time.cpp
+index 0149e33..ed66072 100644
+--- a/wxdata/source/scwx/util/time.cpp
++++ b/wxdata/source/scwx/util/time.cpp
+@@ -71,26 +71,26 @@ std::string TimeString(std::chrono::system_clock::time_point time,
+    {
+       if (timeZone != nullptr)
+       {
+-         zoned_time zt = {timeZone, timeInSeconds};
++         date::zoned_time zt = {timeZone, timeInSeconds};
+ 
+          if (clockFormat == ClockFormat::_24Hour)
+          {
+-            os << format(FORMAT_STRING_24_HOUR, zt);
++            os << date::format(FORMAT_STRING_24_HOUR, zt);
+          }
+          else
+          {
+-            os << format(FORMAT_STRING_12_HOUR, zt);
++            os << date::format(FORMAT_STRING_12_HOUR, zt);
+          }
+       }
+       else
+       {
+          if (clockFormat == ClockFormat::_24Hour)
+          {
+-            os << format(FORMAT_STRING_24_HOUR, timeInSeconds);
++            os << date::format(FORMAT_STRING_24_HOUR, timeInSeconds);
+          }
+          else
+          {
+-            os << format(FORMAT_STRING_12_HOUR, timeInSeconds);
++            os << date::format(FORMAT_STRING_12_HOUR, timeInSeconds);
+          }
+       }
+    }
