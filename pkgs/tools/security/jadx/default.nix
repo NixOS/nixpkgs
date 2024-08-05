@@ -5,7 +5,7 @@
   gradle,
   jdk,
   quark-engine,
-  makeWrapper,
+  makeBinaryWrapper,
   imagemagick,
   makeDesktopItem,
   copyDesktopItems,
@@ -23,11 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+F+PHAd1+FmdAlQkjYDBsUYCUzKXG19ZUEorfvBUEg0=";
   };
 
+  patches = [
+    # Remove use of launch4j - contains platform binaries not able to be cached by mitmCache
+    ./no-native-deps.diff
+  ];
+
   nativeBuildInputs = [
     gradle
     jdk
     imagemagick
-    makeWrapper
+    makeBinaryWrapper
     copyDesktopItems
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
@@ -83,7 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/skylot/jadx/releases/tag/v${finalAttrs.version}";
     description = "Dex to Java decompiler";
+    homepage = "https://github.com/skylot/jadx";
     longDescription = ''
       Command line and GUI tools for produce Java source code from Android Dex
       and Apk files.
