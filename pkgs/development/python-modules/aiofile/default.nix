@@ -7,23 +7,26 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiofile";
   version = "3.8.6";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mosquito";
-    repo = pname;
+    repo = "aiofile";
     rev = "refs/tags/${version}";
     hash = "sha256-KBly/aeHHZh7mL8MJ9gmxbqS7PmR4sedtBY/2HCXt54=";
   };
 
-  propagatedBuildInputs = [ caio ];
+  build-system = [ setuptools ];
+
+  dependencies = [ caio ];
 
   nativeCheckInputs = [
     aiomisc
