@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       --replace-fail "includedir=$dev/$dev" "includedir=$dev"
 
     # add a symlink for backwards compatibility
-    ln -s $dev/bin/glslang $dev/bin/glslangValidator
+    ln -s $bin/bin/glslang $bin/bin/glslangValidator
   '';
 
   meta = with lib; {
