@@ -279,7 +279,7 @@ let
       if stdenv.hostPlatform.isLinux
       then self
       else nixpkgsFun {
-        localSystem = lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux";
+        crossSystem = lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux";
       };
 
     # Extend the package set with zero or more overlays. This preserves
