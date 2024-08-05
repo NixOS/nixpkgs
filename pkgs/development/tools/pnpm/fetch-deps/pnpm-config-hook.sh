@@ -26,7 +26,7 @@ pnpmConfigHook() {
 
     pnpm install \
         --offline \
-        --ignore-script \
+        --ignore-scripts \
         --frozen-lockfile
 
 

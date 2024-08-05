@@ -62,7 +62,7 @@
           # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
           pnpm install \
               --force \
-              --ignore-script \
+              --ignore-scripts \
               --frozen-lockfile
 
           runHook postInstall
