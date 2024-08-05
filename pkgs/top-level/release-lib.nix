@@ -165,16 +165,20 @@ let
 
   /* Recursively map a (nested) set of derivations to an isomorphic
      set of meta.platforms values. */
-  packagePlatforms = mapAttrs (name: value:
+  packagePlatformsWithBadPlatforms = badPlatforms: mapAttrs (name: value:
       if isDerivation value then
-        value.meta.hydraPlatforms
+        subtractLists badPlatforms (value.meta.hydraPlatforms
           or (subtractLists (value.meta.badPlatforms or [])
-               (value.meta.platforms or [ "x86_64-linux" ]))
+               (value.meta.platforms or [ "x86_64-linux" ])))
       else if value.recurseForDerivations or false || value.recurseForRelease or false then
         packagePlatforms value
       else
         []
     );
+
+  /* Recursively map a (nested) set of derivations to an isomorphic
+     set of meta.platforms values. */
+  packagePlatforms = packagePlatformsWithBadPlatforms [];
 
 in {
   /* Common platform groups on which to test packages. */
@@ -189,6 +193,7 @@ in {
     mapTestOn
     mapTestOnCross
     packagePlatforms
+    packagePlatformsWithBadPlatforms
     pkgs
     pkgsFor
     pkgsForCross

@@ -271,6 +271,7 @@ let
   #   https://github.com/NixOS/nixpkgs/pull/182058
   jobs = let
     packagePlatforms = if attrNamesOnly then id else release-lib.packagePlatforms;
+    packagePlatformsWithBadPlatforms = if attrNamesOnly then id else release-lib.packagePlatformsWithBadPlatforms;
     packageJobs = {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
@@ -290,7 +291,9 @@ let
       idrisPackages = packagePlatforms pkgs.idrisPackages;
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
-      pkgsLLVM.stdenv = [ "x86_64-linux" "aarch64-linux" ];
+      # Currently, pkgsLLVM.stdenv is a bit borked under x86_64-darwin but not aarch64-darwin.
+      pkgsLLVM = packagePlatformsWithBadPlatforms [ "aarch64-darwin" "x86_64-darwin" ] pkgs.pkgsLLVM;
+
       pkgsMusl.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsStatic.stdenv = [ "x86_64-linux" "aarch64-linux" ];
 
