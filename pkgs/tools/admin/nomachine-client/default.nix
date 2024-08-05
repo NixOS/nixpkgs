@@ -56,10 +56,10 @@ in
 
       mkdir $out/share/applications
       cp share/applnk/player/xdg/*.desktop $out/share/applications/
-      cp share/applnk/client/xdg-mime/*.desktop $out/share/applications/
+      cp share/applnk/runner/xdg-mime/*.desktop $out/share/applications/
 
       mkdir -p $out/share/mime/packages
-      cp share/applnk/client/xdg-mime/*.xml $out/share/mime/packages/
+      cp share/applnk/runner/xdg-mime/*.xml $out/share/mime/packages/
 
       for i in $out/share/applications/*.desktop; do
         substituteInPlace "$i" --replace /usr/NX/bin $out/bin
