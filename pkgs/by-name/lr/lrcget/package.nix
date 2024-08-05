@@ -108,7 +108,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tranxuanthang/lrcget";
     changelog = "https://github.com/tranxuanthang/lrcget/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ anas ];
+    maintainers = with lib.maintainers; [
+      anas
+      Scrumplex
+    ];
     mainProgram = "lrcget";
     platforms = with lib.platforms; unix ++ windows;
   };
