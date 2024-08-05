@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
   ++ lib.optional networkSupport networkmanager
   ;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     bleach
     bottle
     dataclasses-json
@@ -76,6 +76,8 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # https://github.com/sublime-music/sublime-music/issues/439
     "test_get_music_directory"
+    # Test want to play with mpv
+    "test_play"
   ];
 
   pythonImportsCheck = [
