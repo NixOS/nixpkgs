@@ -1,0 +1,28 @@
+freeing stack buffer in utf8asn1str
+https://curl.se/docs/CVE-2024-6197.html
+
+From 8718ae9a4f4d4803530a3253a074021d612a85d4 Mon Sep 17 00:00:00 2001
+From: z2_ <88509734+z2-2z@users.noreply.github.com>
+Date: Fri, 28 Jun 2024 14:45:47 +0200
+Subject: [PATCH] x509asn1: remove superfluous free()
+
+(cherry picked from commit 3a537a4db9e65e545ec45b1b5d5575ee09a2569d)
+---
+ lib/vtls/x509asn1.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/lib/vtls/x509asn1.c b/lib/vtls/x509asn1.c
+index da079361d..2ccf6327a 100644
+--- a/lib/vtls/x509asn1.c
++++ b/lib/vtls/x509asn1.c
+@@ -389,7 +389,6 @@ utf8asn1str(struct dynbuf *to, int type, const char *from, const char *end)
+         if(wc >= 0x00000800) {
+           if(wc >= 0x00010000) {
+             if(wc >= 0x00200000) {
+-              free(buf);
+               /* Invalid char. size for target encoding. */
+               return CURLE_WEIRD_SERVER_REPLY;
+             }
+-- 
+2.45.2
+
