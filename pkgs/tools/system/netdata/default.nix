@@ -43,7 +43,8 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake pkg-config makeWrapper go ninja ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper go ninja ]
+    ++ lib.optionals withCups [ cups.dev ];
   # bash is only used to rewrite shebangs
   buildInputs = [ bash curl jemalloc json_c libuv zlib libyaml ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
