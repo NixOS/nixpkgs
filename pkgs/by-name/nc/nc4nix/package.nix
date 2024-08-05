@@ -7,13 +7,13 @@
 
 buildGoModule {
   pname = "nc4nix";
-  version = "0-unstable-2024-08-01";
+  version = "0-unstable-2024-08-02";
 
   src = fetchFromGitHub {
     owner = "helsinki-systems";
     repo = "nc4nix";
-    rev = "827bb7244a3529e71c9474fe1f74aed51a4b08d5";
-    hash = "sha256-ToT+VvdXiUMmy0dNJAeyMlzMx87QhZPIwzxPXm2fR7s=";
+    rev = "38afda3073250f9ea1aebdd8326b93bcf9b4176a";
+    hash = "sha256-k/TI+6syayEDIboSpbIEWXFebGt4CFeKer7Cw/LcFm4=";
   };
 
   vendorHash = "sha256-qntRsv3KvAbV3lENjAHKkQOqh3uTo3gacfwase489tQ=";
