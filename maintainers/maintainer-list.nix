@@ -13547,6 +13547,12 @@
     githubId = 4587373;
     name = "Mitchell Nordine";
   };
+  mj = {
+    email = "miraj@bhattarai.com.au";
+    github = "jee-mj";
+    githubId = 28581723;
+    name = "Miraj Bhattarai";
+  };
   mjanczyk = {
     email = "m@dragonvr.pl";
     github = "mjanczyk";
