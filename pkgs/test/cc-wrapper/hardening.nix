@@ -4,6 +4,7 @@
 , runCommandWith
 , runCommandCC
 , bintools
+, linkFarm
 , hello
 , debian-devscripts
 }:
@@ -159,6 +160,16 @@ let
     instructionPresenceTest "pacret" "\\bpaciasp\\b" testBin expectFailure
   );
 
+  # can't really use as a negative test because gcc at least freely
+  # includes endbr instructions whether or not we've asked for them.
+  ibtInstrTest = testBin: expectFailure: if stdenv.isAarch64
+    then overridePlatforms [ "aarch64-linux" ] (
+      instructionPresenceTest "ibt" "\\bbti\\b" testBin expectFailure
+    )
+    else overridePlatforms [ "x86_64-linux" ] (
+      instructionPresenceTest "ibt" "\\bendbr(32|64)\\b" testBin expectFailure
+    );
+
   elfNoteTest = label: pattern: testBin: expectFailure: runCommand "${label}-elf-note-test" {
     nativeBuildInputs = [
       bintools
@@ -181,6 +192,20 @@ let
   shadowStackTest = testBin: expectFailure: brokenIf stdenv.hostPlatform.isMusl (overridePlatforms [ "x86_64-linux" ] (
     elfNoteTest "shadowstack" "\\bSHSTK\\b" testBin expectFailure
   ));
+
+  ibtElfNoteTest = testBin: expectFailure: brokenIf stdenv.hostPlatform.isMusl (if stdenv.isAarch64
+    then overridePlatforms [ "aarch64-linux" ] (
+      elfNoteTest "ibt" "\\bBTI\\b" testBin expectFailure
+    )
+    else overridePlatforms [ "x86_64-linux" ] (
+      elfNoteTest "ibt" "\\bIBT\\b" testBin expectFailure
+    )
+  );
+
+  ibtTest = testBin: linkFarm "ibt-test" {
+    instr-test = ibtInstrTest testBin false;
+    elf-note-test = ibtElfNoteTest testBin false;
+  };
 
 in nameDrvAfterAttrName ({
   bindNowExplicitEnabled = brokenIf stdenv.hostPlatform.isStatic (checkTestBin (f2exampleWithStdEnv stdenv {
@@ -252,9 +277,49 @@ in nameDrvAfterAttrName ({
     hardeningEnable = [ "pacret" ];
   }) false;
 
+  pacRetExplicitEnabledIbtExplicitDisabled = pacRetTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "pacret" ];
+    hardeningDisable = [ "ibt" ];
+  }) false;
+
+  pacRetExplicitEnabledIbtExplicitEnabled = pacRetTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "pacret" "ibt" ];
+  }) false;
+
   shadowStackExplicitEnabled = shadowStackTest (f1exampleWithStdEnv stdenv {
     hardeningEnable = [ "shadowstack" ];
   }) false;
+
+  shadowStackExplicitEnabledIbtExplicitDisabled = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningEnable = [ "shadowstack" ];
+    hardeningDisable = [ "ibt" ];
+  }) false;
+
+  shadowStackExplicitEnabledIbtExplicitEnabled = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningEnable = [ "shadowstack" "ibt" ];
+  }) false;
+
+  ibtExplicitEnabled = ibtTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "ibt" ];
+  });
+
+  ibtExplicitEnabledPacRetExplicitDisabled = ibtTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "ibt" ];
+    hardeningDisable = [ "pacret" ];
+  });
+
+  ibtExplicitEnabledPacRetExplicitEnabled = ibtTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "ibt" "pacret" ];
+  });
+
+  ibtExplicitEnabledShadowStackExplicitDisabled = ibtTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "ibt" ];
+    hardeningDisable = [ "shadowstack" ];
+  });
+
+  ibtExplicitEnabledShadowStackExplicitEnabled = ibtTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "ibt" "shadowstack" ];
+  });
 
   bindNowExplicitDisabled = checkTestBin (f2exampleWithStdEnv stdenv {
     hardeningDisable = [ "bindnow" ];
@@ -327,8 +392,48 @@ in nameDrvAfterAttrName ({
     hardeningDisable = [ "pacret" ];
   }) true;
 
+  pacRetExplicitDisabledIbtExplicitDisabled = pacRetTest (f1exampleWithStdEnv stdenv {
+    hardeningDisable = [ "pacret" "ibt" ];
+  }) true;
+
+  pacRetExplicitDisabledIbtExplicitEnabled = pacRetTest (f1exampleWithStdEnv stdenv {
+    hardeningDisable = [ "pacret" ];
+    hardeningEnable = [ "ibt" ];
+  }) true;
+
   shadowStackExplicitDisabled = shadowStackTest (f1exampleWithStdEnv stdenv {
     hardeningDisable = [ "shadowstack" ];
+  }) true;
+
+  shadowStackExplicitDisabledIbtExplicitDisabled = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningDisable = [ "shadowstack" "ibt" ];
+  }) true;
+
+  shadowStackExplicitDisabledIbtExplicitEnabled = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningDisable = [ "shadowstack" ];
+    hardeningEnable = [ "ibt" ];
+  }) true;
+
+  ibtExplicitDisabled = ibtElfNoteTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "ibt" ];
+  }) true;
+
+  ibtExplicitDisabledPacRetExplicitDisabled = ibtElfNoteTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "ibt" "pacret" ];
+  }) true;
+
+  ibtExplicitDisabledPacRetExplicitEnabled = ibtElfNoteTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "ibt" ];
+    hardeningEnable = [ "pacret" ];
+  }) true;
+
+  ibtExplicitDisabledShadowStackExplicitDisabled = ibtElfNoteTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "ibt" "shadowstack" ];
+  }) true;
+
+  ibtExplicitDisabledShadowStackExplicitEnabled = ibtElfNoteTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "ibt" ];
+    hardeningEnable = [ "shadowstack" ];
   }) true;
 
   # most flags can't be "unsupported" by compiler alone and
@@ -538,6 +643,10 @@ in {
   }) true;
 
   allExplicitDisabledShadowStack = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningDisable = [ "all" ];
+  }) true;
+
+  allExplicitDisabledIBT = ibtElfNoteTest (helloWithStdEnv stdenv {
     hardeningDisable = [ "all" ];
   }) true;
 }))
