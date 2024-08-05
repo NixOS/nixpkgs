@@ -1,12 +1,13 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, git
-, nodejs
-, pnpm
-, esbuild
-, nix-update-script
-, buildWebExtension ? false
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  git,
+  nodejs,
+  pnpm,
+  esbuild,
+  nix-update-script,
+  buildWebExtension ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
@@ -34,16 +35,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
-    ESBUILD_BINARY_PATH = lib.getExe (esbuild.overrideAttrs (final: _: {
-      version = "0.15.18";
-      src = fetchFromGitHub {
-        owner = "evanw";
-        repo = "esbuild";
-        rev = "v${final.version}";
-        hash = "sha256-b9R1ML+pgRg9j2yrkQmBulPuLHYLUQvW+WTyR/Cq6zE=";
-      };
-      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-    }));
+    ESBUILD_BINARY_PATH = lib.getExe (
+      esbuild.overrideAttrs (
+        final: _: {
+          version = "0.15.18";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            rev = "v${final.version}";
+            hash = "sha256-b9R1ML+pgRg9j2yrkQmBulPuLHYLUQvW+WTyR/Cq6zE=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      )
+    );
     VENCORD_REMOTE = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
   };
 
@@ -57,11 +62,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase =
-    if buildWebExtension then ''
-      cp -r dist/chromium-unpacked/ $out
-    '' else ''
-      cp -r dist/ $out
-    '';
+    if buildWebExtension then
+      ''
+        cp -r dist/chromium-unpacked/ $out
+      ''
+    else
+      ''
+        cp -r dist/ $out
+      '';
 
   passthru.updateScript = nix-update-script { };
 
@@ -69,6 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Vencord web extension";
     homepage = "https://github.com/Vendicated/Vencord";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ FlafyDev NotAShelf Scrumplex ];
+    maintainers = with maintainers; [
+      FlafyDev
+      NotAShelf
+      Scrumplex
+    ];
   };
 })
