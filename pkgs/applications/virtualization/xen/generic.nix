@@ -59,6 +59,7 @@ versionDefinition:
 
   # Documentation
   fig2dev,
+  imagemagick,
   pandoc,
 
   # Scripts
@@ -273,6 +274,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out" # TODO: Split $out in $bin for binaries and $lib for libraries.
     "man" # Manual pages for Xen userspace utilities.
+    "doc" # The full Xen documentation in HTML format.
     "dev" # Development headers.
     "boot" # xen.gz kernel, policy file if Flask is enabled, xen.efi if EFI is enabled.
   ];
@@ -293,6 +295,7 @@ stdenv.mkDerivation (finalAttrs: {
       bison
       cmake
       fig2dev
+      imagemagick # Causes build failures in Hydra related to fig generation if not included.
       flex
       pandoc
       pkg-config
