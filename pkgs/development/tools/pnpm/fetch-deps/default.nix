@@ -60,7 +60,10 @@
           pnpm config set update-notifier false
           # pnpm is going to warn us about using --force
           # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
-          pnpm install --frozen-lockfile --ignore-script --force
+          pnpm install \
+              --force \
+              --ignore-script \
+              --frozen-lockfile
 
           runHook postInstall
         '';
