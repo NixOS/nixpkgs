@@ -5741,8 +5741,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "lukas-reineke";
       repo = "lsp-format.nvim";
-      rev = "e790d2ad534394918d2bd0024fe5a9396484bbff";
-      sha256 = "0kz8ffzvhhjd2pwmjl1a7ln8g7jvacgkm4pvq1zhv03z0jaf3pc0";
+      rev = "0d1b6e3317ff64719e8e6a4f534eebeddae70582";
+      sha256 = "01g3xqn981k20a9qa2jz89vkj55hagzd75avq5zs8c0jzdlm1g2f";
     };
     meta.homepage = "https://github.com/lukas-reineke/lsp-format.nvim/";
   };
