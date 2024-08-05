@@ -188,17 +188,15 @@ let
             '';
           };
           config = mkOption {
-            type = types.nullOr (
-              types.submodule (
-                recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
-                  options.serverName = {
-                    default = "fedimintd-${name}";
-                    defaultText = "fedimintd-\${name}";
-                  };
-                }
-              )
+            type = types.submodule (
+              recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
+                options.serverName = {
+                  default = "fedimintd-${name}";
+                  defaultText = "fedimintd-\${name}";
+                };
+              }
             );
-            default = null;
+            default = { };
             description = "Overrides to the nginx vhost section for api";
           };
         };
