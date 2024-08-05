@@ -136,11 +136,16 @@ stdenv.mkDerivation (finalAttrs: {
       # Exclude tests
       "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
         # Flaky, randomly failing to launch properly & stuck until test timeout
+        # https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/issues/70
         "^HandlerTest"
         "^OfonoAccountEntryTest"
         "^TelepathyHelperSetupTest"
         "^AuthHandlerTest"
         "^ChatManagerTest"
+        "^AccountEntryTest"
+        "^AccountEntryFactoryTest"
+        "^PresenceRequestTest"
+        "^CallEntryTest"
       ]})")
     ]))
   ];
