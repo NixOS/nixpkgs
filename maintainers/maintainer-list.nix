@@ -15164,6 +15164,12 @@
     githubId = 848535;
     name = "Oleg Lebedev";
   };
+  oleina = {
+    email = "antholeinik@gmail.com";
+    github = "antholeole";
+    githubId = 48811365;
+    name = "Anthony Oleinik";
+  };
   olejorgenb = {
     email = "olejorgenb@yahoo.no";
     github = "olejorgenb";
