@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "Khronos reference front-end for GLSL and ESSL";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = [ maintainers.ralith ];
+    maintainers = [ ];
   };
 }
