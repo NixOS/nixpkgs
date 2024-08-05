@@ -1,12 +1,14 @@
-{ makeSetupHook, tests }:
+{ callPackage, makeSetupHook }:
 
-# See the header comment in ../setup-hooks/install-shell-files.sh for example usage.
+# Documentation can be found at:
+# - doc/hooks/installShellFiles.section.md at the root of Nixpkgs repo
+# - setup-hook.sh (with usage examples)
+
 let
   setupHook = makeSetupHook { name = "install-shell-files"; } ./setup-hook.sh;
 in
-
 setupHook.overrideAttrs (oldAttrs: {
-  passthru = (oldAttrs.passthru or {}) // {
-    tests = tests.install-shell-files;
+  passthru = (oldAttrs.passthru or { }) // {
+    tests = callPackage ./tests.nix { };
   };
 })
