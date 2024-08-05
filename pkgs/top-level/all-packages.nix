@@ -34782,6 +34782,8 @@ with pkgs;
 
   xborders = callPackage ../tools/X11/xborders { };
 
+  xnode-admin = callPackage ../openmesh/xnode/admin { };
+
   xxh = callPackage ../tools/networking/xxh { };
 
   kodiPackages = recurseIntoAttrs (kodi.packages);
