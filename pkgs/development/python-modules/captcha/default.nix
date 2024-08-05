@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "captcha";
-  version = "0.5.0";
+  version = "0.6.0";
 
   disabled = pythonOlder "3.8";
 
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lepture";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-TPPuf0BRZPSHPSF0HuGxhjhoSyZQ7r86kSjkrztgZ5w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5d5gts+BXS5OKVziR9cLczsD2QMXZ/n31sPEq+gPlxk=";
   };
 
   propagatedBuildInputs = [ pillow ];
