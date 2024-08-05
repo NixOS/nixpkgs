@@ -1,29 +1,53 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, cairo, curl, fcgi, freetype, fribidi, gdal, geos, giflib, harfbuzz
-, libjpeg, libpng, librsvg, libxml2, postgresql, proj, protobufc, zlib
-, withPython ? true, swig, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+
+  withPython ? true,
+
+  cairo,
+  cmake,
+  curl,
+  fcgi,
+  freetype,
+  fribidi,
+  gdal,
+  geos,
+  giflib,
+  harfbuzz,
+  libjpeg,
+  libpng,
+  librsvg,
+  libxml2,
+  pkg-config,
+  postgresql,
+  proj,
+  protobufc,
+  python3,
+  swig,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mapserver";
-  version = "8.0.1";
+  version = "8.2.1";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = "MapServer";
     rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-fAf4kOe/6bQW0i46+EZbD/6iWI2Bjkn2no6XeR/+mg4=";
+    sha256 = "sha256-kZEDC89yoQP0ma5avp6r+Hz8JMpErGlBVQkhlHO6UFw=";
   };
 
-  patches = [
-    # drop this patch for version 8.0.2
-    ./fix-build-w-libxml2-12.patch
-  ];
-
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ] ++ lib.optionals withPython [ swig python3.pkgs.setuptools ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optionals withPython [
+      swig
+      python3.pkgs.setuptools
+    ];
 
   buildInputs = [
     cairo
@@ -38,7 +62,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     librsvg
-    libxml2
+    (libxml2.override { enableHttp = true; })
     postgresql
     proj
     protobufc
