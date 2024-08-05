@@ -41,7 +41,6 @@ rustPlatform.buildRustPackage rec {
     xorg.libXcursor
     xorg.libXi
     xorg.libXrandr
-    libxkbcommon
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
     rustPlatform.bindgenHook
