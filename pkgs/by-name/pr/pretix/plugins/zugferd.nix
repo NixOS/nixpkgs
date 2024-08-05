@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pretix-plugin-build,
   setuptools,
+  django,
   drafthorse,
   ghostscript_headless,
 }:
@@ -28,9 +29,14 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "drafthorse" ];
 
   build-system = [
+    django
     pretix-plugin-build
     setuptools
   ];
+
+  postBuild = ''
+    make
+  '';
 
   dependencies = [ drafthorse ];
 
