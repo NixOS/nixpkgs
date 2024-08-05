@@ -12,37 +12,45 @@ let
   inherit (lib)
     literalExpression
     mapAttrsToList
+    mkEnableOption
     mkOption
     optionals
     types
     ;
 
-  mkMassRebuild = args: mkOption (builtins.removeAttrs args [ "feature" ] // {
-    type = args.type or (types.uniq types.bool);
-    default = args.default or false;
-    description = ((args.description or ''
-      Whether to ${args.feature} while building nixpkgs packages.
-    '') + ''
-      Changing the default may cause a mass rebuild.
-    '');
-  });
+  mkMassRebuild =
+    args:
+    mkOption (
+      builtins.removeAttrs args [ "feature" ]
+      // {
+        type = args.type or (types.uniq types.bool);
+        default = args.default or false;
+        description = (
+          (args.description or ''
+            Whether to ${args.feature} while building nixpkgs packages.
+          ''
+          )
+          + ''
+            Changing the default may cause a mass rebuild.
+          ''
+        );
+      }
+    );
 
   options = {
 
-    /* Internal stuff */
+    # Internal stuff
 
     # Hide built-in module system options from docs.
-    _module.args = mkOption {
-      internal = true;
-    };
+    _module.args = mkOption { internal = true; };
 
     warnings = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       internal = true;
     };
 
-    /* Config options */
+    # Config options
 
     warnUndeclaredOptions = mkOption {
       description = "Whether to warn when `config` contains an unrecognized attribute.";
@@ -50,13 +58,9 @@ let
       default = false;
     };
 
-    doCheckByDefault = mkMassRebuild {
-      feature = "run `checkPhase` by default";
-    };
+    doCheckByDefault = mkMassRebuild { feature = "run `checkPhase` by default"; };
 
-    strictDepsByDefault = mkMassRebuild {
-      feature = "set `strictDeps` to true by default";
-    };
+    strictDepsByDefault = mkMassRebuild { feature = "set `strictDeps` to true by default"; };
 
     structuredAttrsByDefault = mkMassRebuild {
       feature = "set `__structuredAttrs` to true by default";
@@ -104,6 +108,80 @@ let
       '';
     };
 
+    allowUnfreePredicate = mkOption {
+      type = types.functionTo types.bool;
+      default = _: false;
+      defaultText = literalExpression ''pkg: false'';
+      example = literalExpression ''pkg: lib.hasPrefix "vscode" pkg.name'';
+      description = ''
+        A function that specifies whether a given unfree package may be permitted.
+        Only takes effect if [`config.allowUnfree`](#opt-allowUnfree) is set to false.
+
+        See [Installing unfree packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree) in the NixOS manual.
+      '';
+    };
+
+    allowlistedLicenses = mkOption {
+      type = types.listOf (types.lazyAttrsOf types.raw); # list of license attrsets
+      default = [ ];
+      example = literalExpression ''
+        [
+          lib.licenses.cc-by-nc-sa-20
+          ({
+            spdxId = "Abstyles";
+            fullName = "Abstyles License";
+          })
+        ]
+      '';
+      description = ''
+        Permits evaluation of a package, if the package:
+          * only has free licenses or licenses in this allowlist, and
+          * does not fail evaluation for some other reason.
+      '';
+    };
+
+    blocklistedLicenses = mkOption {
+      type = types.listOf (types.lazyAttrsOf types.raw); # list of license attrsets
+      default = [ ];
+      example = literalExpression ''
+        [
+          lib.licenses.cc-by-nc-sa-20
+          ({
+            spdxId = "Abstyles";
+            fullName = "Abstyles License";
+          })
+        ]
+      '';
+      description = ''
+        Disallows evaluation of a package, if the package has a license in this blocklist.
+      '';
+    };
+
+    allowNonSource = mkEnableOption "" // {
+      default = true;
+      defaultText = literalExpression ''true && builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE" != "0"'';
+      description = ''
+        Whether to allow non-source packages.
+        Can be combined with `config.allowNonSourcePredicate`.
+      '';
+    };
+
+    allowNonSourcePredicate = mkOption {
+      type = types.functionTo types.bool;
+      default = _: false;
+      defaultText = literalExpression ''pkg: false'';
+      example = literalExpression ''
+        pkg:
+        (lib.all (
+          prov: prov.isSource || prov == lib.sourceTypes.binaryFirmware
+        ) pkg.meta.sourceProvenance);
+      '';
+      description = ''
+        A function that specifies whether a given non-source package may be permitted.
+        Only takes effect if [`config.allowNonSource`](#opt-allowNonSource) is set to false.
+      '';
+    };
+
     allowBroken = mkOption {
       type = types.bool;
       default = false;
@@ -128,6 +206,33 @@ let
       '';
     };
 
+    permittedInsecurePackages = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = ''
+        List of insecure package names that are permitted.
+        Only takes effect if [`config.allowInsecurePredicate`](#opt-allowInsecurePredicate) is left as default
+        or is written to use the values in this option.
+
+        See [Installing insecure packages](#sec-allow-insecure).
+      '';
+    };
+
+    allowInsecurePredicate = mkOption {
+      type = types.functionTo types.bool;
+      defaultText = literalExpression ''
+        pkg:
+        builtins.elem (pkg.name
+          or "''${pkg.pname or "«name-missing»"}-''${pkg.version or "«version-missing»"}"
+        ) config.permittedInsecurePackages
+      '';
+      description = ''
+        A function that specifies whether a given insecure package may be permitted.
+
+        See [Installing insecure packages](#sec-allow-insecure).
+      '';
+    };
+
     cudaSupport = mkMassRebuild {
       type = types.bool;
       default = false;
@@ -140,9 +245,26 @@ let
       feature = "build packages with ROCm support by default";
     };
 
+    packageOverrides = mkOption {
+      type = types.functionTo types.raw;
+      default = lib.id;
+      defaultText = literalExpression ''lib.id'';
+      example = literalExpression ''
+        pkgs: rec {
+          foo = pkgs.foo.override { /* ... */ };
+        };
+      '';
+      description = ''
+        A function that takes the current nixpkgs instance (`pkgs`) as an argument
+        and returns a modified set of packages.
+
+        See [Modify packages via `packageOverrides`](#sec-modify-via-packageOverrides).
+      '';
+    };
+
     showDerivationWarnings = mkOption {
       type = types.listOf (types.enum [ "maintainerless" ]);
-      default = [];
+      default = [ ];
       description = ''
         Which warnings to display for potentially dangerous
         or deprecated values passed into `stdenv.mkDerivation`.
@@ -162,23 +284,48 @@ let
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
       '';
     };
+
+    checkMetaRecursively = mkEnableOption "checking that the `meta` attribute of derivations and their references are correct during evalution";
+
+    handleEvalIssue = mkOption {
+      type = types.functionTo (types.functionTo types.bool);
+      internal = true;
+      description = ''
+        Function to handle evaluation errors and possibly output a more informative message.
+      '';
+    };
+
+    inHydra = mkEnableOption "" // {
+      internal = true;
+      description = ''
+        Whether the current nixpkgs instance is being evauluated by Hydra.
+        If set to true, evaluation checks will produce less verbose error messages.
+      '';
+    };
   };
 
-in {
+in
+{
 
   freeformType =
-    let t = types.lazyAttrsOf types.raw;
-    in t // {
-      merge = loc: defs:
-        let r = t.merge loc defs;
-        in r // { _undeclared = r; };
+    let
+      t = types.lazyAttrsOf types.raw;
+    in
+    t
+    // {
+      merge =
+        loc: defs:
+        let
+          r = t.merge loc defs;
+        in
+        r // { _undeclared = r; };
     };
 
   inherit options;
 
   config = {
     warnings = optionals config.warnUndeclaredOptions (
-      mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or {}
+      mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
     );
   };
 

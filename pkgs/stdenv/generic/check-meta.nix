@@ -41,12 +41,13 @@ let
 
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
-  inHydra = config.inHydra or false;
+  inherit (config) inHydra;
+
   # Allow the user to opt-into additional warnings, e.g.
   # import <nixpkgs> { config = { showDerivationWarnings = [ "maintainerless" ]; }; }
   showWarnings = config.showDerivationWarnings;
 
-  getNameWithVersion = attrs: attrs.name or ("${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}");
+  getNameWithVersion = attrs: attrs.name or "${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}";
 
   allowUnfree = config.allowUnfree
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
@@ -55,7 +56,7 @@ let
     envVar = builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE";
   in if envVar != ""
      then envVar != "0"
-     else config.allowNonSource or true;
+     else config.allowNonSource;
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];
@@ -113,7 +114,7 @@ let
   #   allowUnfree = false;
   #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "vscode" x.name);
   # }
-  allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
+  inherit (config) allowUnfreePredicate;
 
   # Check whether unfree packages are allowed and if not, whether the
   # package has an unfree license and is not explicitly allowed by the
@@ -123,7 +124,7 @@ let
     !allowUnfree &&
     !allowUnfreePredicate attrs;
 
-  allowInsecureDefaultPredicate = x: builtins.elem (getNameWithVersion x) (config.permittedInsecurePackages or []);
+  allowInsecureDefaultPredicate = x: elem (getNameWithVersion x) config.permittedInsecurePackages;
   allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
 
   hasAllowedInsecure = attrs:
@@ -145,7 +146,7 @@ let
   #   allowNonSource = false;
   #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) pkg.meta.sourceProvenance);
   # }
-  allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
+  inherit (config) allowNonSourcePredicate;
 
   # Check whether non-source packages are allowed and if not, whether the
   # package has non-source provenance and is not explicitly allowed by the
