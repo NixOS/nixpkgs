@@ -87,7 +87,7 @@ in
 
     storageDriver =
       mkOption {
-        type = types.nullOr (types.enum ["aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs"]);
+        type = types.nullOr (types.enum ["aufs" "btrfs"  "overlay" "overlay2" "zfs"]);
         default = null;
         description = ''
             This option determines which Docker
