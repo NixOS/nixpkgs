@@ -64917,58 +64917,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  concurrently = nodeEnv.buildNodePackage {
-    name = "concurrently";
-    packageName = "concurrently";
-    version = "8.2.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/concurrently/-/concurrently-8.2.2.tgz";
-      sha512 = "1dP4gpXFhei8IOtlXRE/T/4H88ElHgTiUzh71YUmtjTEHMSRS2Z/fgOxHSxxusGHogsRfxNq1vyAwxSC+EVyDg==";
-    };
-    dependencies = [
-      sources."@babel/runtime-7.24.8"
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-4.3.0"
-      (sources."chalk-4.1.2" // {
-        dependencies = [
-          sources."supports-color-7.2.0"
-        ];
-      })
-      sources."cliui-8.0.1"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."date-fns-2.30.0"
-      sources."emoji-regex-8.0.0"
-      sources."escalade-3.1.2"
-      sources."get-caller-file-2.0.5"
-      sources."has-flag-4.0.0"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."lodash-4.17.21"
-      sources."regenerator-runtime-0.14.1"
-      sources."require-directory-2.1.1"
-      sources."rxjs-7.8.1"
-      sources."shell-quote-1.8.1"
-      sources."spawn-command-0.0.2"
-      sources."string-width-4.2.3"
-      sources."strip-ansi-6.0.1"
-      sources."supports-color-8.1.1"
-      sources."tree-kill-1.2.2"
-      sources."tslib-2.6.3"
-      sources."wrap-ansi-7.0.0"
-      sources."y18n-5.0.8"
-      sources."yargs-17.7.2"
-      sources."yargs-parser-21.1.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Run commands concurrently";
-      homepage = "https://github.com/open-cli-tools/concurrently#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   conventional-changelog-cli = nodeEnv.buildNodePackage {
     name = "conventional-changelog-cli";
     packageName = "conventional-changelog-cli";

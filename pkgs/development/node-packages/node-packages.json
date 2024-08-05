@@ -77,7 +77,6 @@
 , "coc-yaml"
 , "coc-yank"
 , "code-theme-converter"
-, "concurrently"
 , "conventional-changelog-cli"
 , "cpy-cli"
 , "create-cycle-app"
