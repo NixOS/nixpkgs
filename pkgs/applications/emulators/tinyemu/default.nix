@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       purpose is to be small and simple while being complete.
     '';
     license = with licenses; [ mit bsd2 ];
-    maintainers = with maintainers; [ jhhuh AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
   };
 }
