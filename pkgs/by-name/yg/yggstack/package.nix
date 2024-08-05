@@ -31,6 +31,6 @@ buildGoModule rec {
     description = "Yggdrasil as SOCKS proxy / port forwarder";
     homepage = "https://yggdrasil-network.github.io/";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ ehmry ];
+    maintainers = with maintainers; [ ehmry peigongdsd ];
   };
 }
