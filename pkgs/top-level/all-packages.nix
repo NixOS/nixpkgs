@@ -3442,8 +3442,6 @@ with pkgs;
 
   bitwarden-menu = python3Packages.callPackage ../applications/misc/bitwarden-menu { };
 
-  inherit (nodePackages) concurrently;
-
   bklk = callPackage ../applications/misc/bklk { };
 
   bkt = callPackage ../tools/misc/bkt {  };
