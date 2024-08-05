@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "ownCloud client extension for Nautilus.";
+    description = "ownCloud client extension for Nautilus";
     license = licenses.gpl2;
     maintainers = with maintainers; [ e-renna ];
     homepage = "https://github.com/owncloud/client-desktop-shell-integration-nautilus";
