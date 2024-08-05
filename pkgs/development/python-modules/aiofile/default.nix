@@ -47,8 +47,12 @@ buildPythonPackage rec {
     "test_async_open_unicode"
     "test_async_open"
     "test_binary_io_wrapper"
+    "test_line_reader_one_line"
     "test_modes"
+    "test_open_non_existent_file_with_append"
     "test_text_io_wrapper"
+    "test_truncate"
+    "test_unicode_reader"
     "test_unicode_writer"
     "test_write_read_nothing"
   ];
