@@ -19,6 +19,9 @@ in
 with haskellLib;
 
 self: super: {
+  # enable list-transformer, jailbreaking is necessary until next release >0.13.0: https://github.com/ivanperez-keera/dunai/issues/427
+  dunai = doJailbreak (addBuildDepend self.list-transformer (enableCabalFlag "list-transformer" super.dunai));
+
   # Make sure that Cabal 3.10.* can be built as-is
   Cabal_3_10_3_0 = doDistribute (super.Cabal_3_10_3_0.override ({
     Cabal-syntax = self.Cabal-syntax_3_10_3_0;
