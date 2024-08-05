@@ -14145,6 +14145,12 @@
     githubId = 9636071;
     name = "Myrl Hex";
   };
+  mzacho = {
+    email = "nixpkgs@martinzacho.net";
+    github = "mzacho";
+    githubId = 16916972;
+    name = "Martin Zacho";
+  };
   n00b0ss = {
     email = "nixpkgs@n00b0ss.de";
     github = "n00b0ss";

@@ -38,4 +38,5 @@ in
     };
     environment.systemPackages = [ cfg.package ];
   };
+  meta.maintainers = with lib.maintainers; [ mzacho ];
 }
