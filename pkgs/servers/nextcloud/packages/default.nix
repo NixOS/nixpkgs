@@ -2,7 +2,13 @@
 # Licensed under: MIT
 # Slightly modified
 
-{ lib, pkgs, newScope, apps }:
+{
+  lib
+, pkgs
+, newScope
+, apps
+, callPackage
+}:
 
 let packages = self:
   let
@@ -27,4 +33,5 @@ let packages = self:
     lib.makeExtensible (_: lib.mapAttrs (pname: data: self.mkNextcloudDerivation { inherit pname; inherit data; }) pkgs))
     generatedJson;
 
-in (lib.makeExtensible (_: (lib.makeScope newScope packages))).extend (selfNC: superNC: {})
+# This creates an extensible scope.
+in lib.recursiveUpdate ((lib.makeExtensible (_: (lib.makeScope newScope packages))).extend (selfNC: superNC: {})) (callPackage ./thirdparty.nix {})
