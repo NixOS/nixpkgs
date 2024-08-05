@@ -5,7 +5,6 @@
 , nixosTests
 , cargo-pgrx_0_10_2
 , nix-update-script
-, stdenv
 }:
 
 (buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_10_2; }) rec {
