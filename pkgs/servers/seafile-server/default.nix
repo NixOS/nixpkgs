@@ -18,6 +18,7 @@
 , vala
 , cmake
 , oniguruma
+, libargon2
 , nixosTests
 }:
 
@@ -35,8 +36,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-server";
-    rev = "db09baec1b88fc131bf4453a808ab63a3fc714c9"; # using a fixed revision because upstream may re-tag releases :/
-    sha256 = "sha256-a5vtJcbnaYzq6/3xmhbWk23BZ+Wil/Tb/q22ML4bDqs=";
+    rev = "99301122499d68fdffd2dd5af8e11a0bae03cbb3"; # using a fixed revision because upstream may re-tag releases :/
+    sha256 = "0yqmf8z0zzs3blx9b93f13szxp8jhxchfj985mfxsvlw0wj55ks1";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     vala
     libevhtp
     oniguruma
+    libargon2
   ];
 
   postInstall = ''
