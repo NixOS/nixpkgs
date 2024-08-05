@@ -96,18 +96,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        # This prevents the weird case were disabling "system" and "user"
-        # actually enables both because the cli flags are not present.
-        assertion = cfg.system || cfg.user;
-        message = ''
-          systemd-journal-gatewayd cannot serve neither "system" nor "user"
-          journals.
-        '';
-      }
-    ];
-
     systemd.additionalUpstreamSystemUnits = [
       "systemd-journal-gatewayd.socket"
       "systemd-journal-gatewayd.service"
