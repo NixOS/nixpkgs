@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "myst-docutils";
-  version = "3.0.1";
+  version = "4.0.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "myst_docutils";
     inherit version;
-    hash = "sha256-alQvF0OWNjDck022ORJ1Nl4t1jgzMZKEbJxPHsrmBcI=";
+    hash = "sha256-TuJyxDxPknX6a13aEu24BtoLb/IOjluI+zIBttgeWY8=";
   };
 
   nativeBuildInputs = [ flit-core ];
