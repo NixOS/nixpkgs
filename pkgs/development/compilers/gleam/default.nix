@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gleam";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Wo8J8cv53kNWypb5VqUlKJas+zkCHZS6mICnpn0aZoc=";
+    hash = "sha256-z9xDMQXzVUeHne7KG4QsutQAiU01mgnV7ccdkjl+EkU=";
   };
 
   nativeBuildInputs = [ git pkg-config ];
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++
     lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  cargoHash = "sha256-ehQLNBDERLIZrqQfsS+epzZAIjap7HnBs18SsjdWuS4=";
+  cargoHash = "sha256-XKHcA4DSVsWZfUHT6BkRjK0Mzz90E+ohYrtwZKPMtTY=";
 
   passthru.updateScript = nix-update-script { };
 
