@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.9.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     rev = "refs/tags/python-v${version}";
-    hash = "sha256-RWmvqGm/Bekajb/fs/PQJ2fL0Vo1Mmy+x40PKaDmIEU=";
+    hash = "sha256-JT6HNuMjFO/q+6LlYRT+vKa0aV9DOC9b21ulHXq1gjY=";
   };
 
   # ratelimiter only support up to python310 and it has been removed from nixpkgs
