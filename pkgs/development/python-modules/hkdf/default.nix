@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
@@ -22,19 +22,14 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "hkdf" ];
 
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    runHook preCheck
+  pytestFlagsArray = [ "tests.py" ];
 
-    nosetests
-
-    runHook postCheck
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "HMAC-based Extract-and-Expand Key Derivation Function (HKDF)";
     homepage = "https://github.com/casebeer/python-hkdf";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }
