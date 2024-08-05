@@ -561,10 +561,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   postFixup =
-    # Fix binaries in $out/lib/xen/bin.
+    # Fix binaries in $out/libexec/xen/bin.
     ''
       addAutoPatchelfSearchPath $out/lib
-      autoPatchelf $out/libexec/xen/bin/
+      autoPatchelf $out/libexec/xen/bin
     ''
     # Flask is particularly hard to disable. Even after
     # setting the make flags to `n`, it still gets compiled.
