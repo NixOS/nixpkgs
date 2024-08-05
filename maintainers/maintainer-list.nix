@@ -13327,6 +13327,12 @@
     name = "midchildan";
     keys = [ { fingerprint = "FEF0 AE2D 5449 3482 5F06  40AA 186A 1EDA C5C6 3F83"; } ];
   };
+  midirhee12 = {
+    email = "midirhee@proton.me";
+    github = "midirhee12";
+    githubId = 38054771;
+    name = "midirhee12";
+  };
   mig4ng = {
     email = "mig4ng@gmail.com";
     github = "mig4ng";
