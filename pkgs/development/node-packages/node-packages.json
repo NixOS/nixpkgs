@@ -154,7 +154,6 @@
 , "nijs"
 , "node-gyp"
 , "node-gyp-build"
-, "node-pre-gyp"
 , "node-red"
 , "node2nix"
 , "np"
