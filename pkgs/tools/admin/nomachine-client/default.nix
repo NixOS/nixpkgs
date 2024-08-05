@@ -88,7 +88,7 @@ in
         url = "https://www.nomachine.com/licensing-7";
         free = false;
       };
-      maintainers = with maintainers; [ talyz ];
+      maintainers = with maintainers; [ talyz remcoschrijver ];
       platforms = [ "x86_64-linux" "i686-linux" ];
     };
   }
