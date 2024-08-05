@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.9.4";
+  version = "3.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,12 +28,13 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Af5WTmvUVO91GfnnjVnShMB188XINBdmk2NWC80REdI=";
+    hash = "sha256-uoiXUE36FjIzYrcoqVnHF5RpNeYm8Nkied9UzaEGeSY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "Cython >=3.0.9, <3.1.0" "Cython"
+      --replace-fail "scikit-build~=0.18.0" "scikit-build" \
+      --replace-fail "Cython >=3.0.10, <3.1.0" "Cython"
   '';
 
   build-system = [

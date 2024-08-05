@@ -1,8 +1,8 @@
 {
   "22": {
-    "version": "22.0.1-ga",
+    "version": "22.0.2-ga",
     "repo":    "jdk22u",
-    "hash":    "sha256-wCHgharBnvRSB3dWW8C3e80AZtxyFgP0SS5X1d4LzMc="
+    "hash":    "sha256-Zo1LOumkt9zTaPqbDcRL8lVJMqVle0QqzThtIz0JRNo="
   },
   "21": {
     "version": "21.0.3-ga",
