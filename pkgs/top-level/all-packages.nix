@@ -26095,7 +26095,7 @@ with pkgs;
 
   roon-server = callPackage ../servers/roon-server { };
 
-  rustic-rs = callPackage ../tools/backup/rustic-rs {
+  rustic-rs = callPackage ../by-name/ru/rustic-rs/package.nix {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
