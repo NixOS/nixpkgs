@@ -11,13 +11,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dockbarx";
-  version = "1.0-beta2";
+  version = "1.0-beta4";
 
   src = fetchFromGitHub {
     owner = "xuzhen";
     repo = "dockbarx";
     rev = version;
-    sha256 = "sha256-WMRTtprDHUbOOYVHshx7WpBlYshbiDjI12Rw3tQQuPI=";
+    sha256 = "sha256-J/5KpHptGzgRF1qIGrgjkRR3in5pE0ffkiYVTR3iZKY=";
   };
 
   nativeBuildInputs = [
@@ -45,23 +45,6 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   dontWrapGApps = true;
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace /usr/ "" \
-      --replace '"/", "usr", "share",' '"share",'
-
-    for f in \
-      dbx_preference \
-      dockbarx/applets.py \
-      dockbarx/dockbar.py \
-      dockbarx/iconfactory.py \
-      dockbarx/theme.py \
-      mate_panel_applet/dockbarx_mate_applet
-    do
-      substituteInPlace $f --replace /usr/share/ $out/share/
-    done
-  '';
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
