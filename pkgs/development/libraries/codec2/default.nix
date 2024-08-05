@@ -4,7 +4,6 @@
 , cmake
 , freedvSupport ? false
 , lpcnetfreedv
-, codec2
 }:
 
 stdenv.mkDerivation rec {

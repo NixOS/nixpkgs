@@ -159,6 +159,12 @@
     github = "13r0ck";
     githubId = 58987761;
   };
+  _1nv0k32 = {
+    name = "Armin";
+    email = "Armin.Mahdilou@gmail.com";
+    github = "1nv0k32";
+    githubId = 30079271;
+  };
   _21CSM = {
     name = "21CSM";
     email = "21CSM@tutanota.com";
@@ -12399,6 +12405,13 @@
     github = "mandos";
     githubId = 115060;
     name = "Marek Maksimczyk";
+  };
+  Mange = {
+    name = "Magnus Bergmark";
+    email = "me@mange.dev";
+    github = "Mange";
+    githubId = 1599;
+    keys = [ { fingerprint = "2EA6 F4AA 110A 1BF2 2275  19A9 0443 C69F 6F02 2CDE"; } ];
   };
   mangoiv = {
     email = "contact@mangoiv.com";

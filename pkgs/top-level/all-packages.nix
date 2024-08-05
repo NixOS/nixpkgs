@@ -334,8 +334,6 @@ with pkgs;
 
   bakelite = callPackage ../tools/backup/bakelite { };
 
-  bazecor = callPackage ../applications/misc/bazecor { };
-
   bearer = callPackage ../development/tools/bearer { };
 
   benthos = callPackage ../development/tools/benthos { };
@@ -1785,15 +1783,9 @@ with pkgs;
 
   gfshare = callPackage ../tools/security/gfshare { };
 
-  gh-actions-cache = callPackage ../tools/misc/gh-actions-cache { };
-
   gh-cal = callPackage ../tools/misc/gh-cal {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  gh-dash = callPackage ../tools/misc/gh-dash { };
-
-  gh-markdown-preview = callPackage ../tools/misc/gh-markdown-preview { };
 
   ghostie = callPackage ../tools/misc/ghostie { };
 
@@ -2990,8 +2982,6 @@ with pkgs;
   };
 
   sakura = callPackage ../applications/terminal-emulators/sakura { };
-
-  scriv = callPackage ../applications/version-management/scriv { };
 
   st = callPackage ../applications/terminal-emulators/st {
     conf = config.st.conf or null;
@@ -4461,8 +4451,6 @@ with pkgs;
   croc = callPackage ../tools/networking/croc { };
 
   cbftp = callPackage ../tools/networking/cbftp { };
-
-  cddl = callPackage ../development/tools/cddl { };
 
   cedille = callPackage ../applications/science/logic/cedille
                           { inherit (haskellPackages) alex happy Agda ghcWithPackages;
@@ -12035,10 +12023,6 @@ with pkgs;
 
   raider = callPackage ../applications/misc/raider { };
 
-  railway = callPackage ../development/tools/railway {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
-  };
-
   quota = if stdenv.isLinux then linuxquota else unixtools.quota;
 
   qvge = libsForQt5.callPackage ../applications/graphics/qvge { };
@@ -15963,8 +15947,6 @@ with pkgs;
     lldb_19 = llvmPackages_19.lldb;
     llvm_19 = llvmPackages_19.llvm;
     bolt_19 = llvmPackages_19.bolt;
-
-    llvmPackages_git = llvmPackagesSet.git;
   }) llvmPackages_13
     llvmPackages_14
     llvmPackages_15
@@ -15980,8 +15962,7 @@ with pkgs;
     lld_19
     lldb_19
     llvm_19
-    bolt_19
-    llvmPackages_git;
+    bolt_19;
 
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
@@ -30447,7 +30428,7 @@ with pkgs;
   firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
   firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
   firefox-esr-128-unwrapped = firefoxPackages.firefox-esr-128;
-  firefox-esr-unwrapped = firefoxPackages.firefox-esr-115;
+  firefox-esr-unwrapped = firefoxPackages.firefox-esr-128;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped {
@@ -30477,7 +30458,7 @@ with pkgs;
     wmClass = "firefox-esr";
     icon = "firefox-esr";
   };
-  firefox-esr = firefox-esr-115;
+  firefox-esr = firefox-esr-128;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     channel = "release";
@@ -32299,7 +32280,12 @@ with pkgs;
 
   rofi-calc = callPackage ../applications/science/math/rofi-calc { };
 
-  rofi-emoji = callPackage ../applications/misc/rofi-emoji { };
+  rofi-emoji = (callPackage ../applications/misc/rofi-emoji { }).v3;
+  rofi-emoji-wayland = (
+    callPackage ../applications/misc/rofi-emoji {
+      rofi-unwrapped = rofi-wayland-unwrapped;
+    }
+  ).v4;
 
   rofi-file-browser = callPackage ../applications/misc/rofi-file-browser { };
 
@@ -34117,6 +34103,7 @@ with pkgs;
   thunderbird-unwrapped = thunderbirdPackages.thunderbird;
   thunderbird = wrapThunderbird thunderbird-unwrapped { };
 
+  thunderbird-115 = wrapThunderbird thunderbirdPackages.thunderbird-115 { };
   thunderbird-128 = wrapThunderbird thunderbirdPackages.thunderbird-128 { };
 
   thunderbird-bin = wrapThunderbird thunderbird-bin-unwrapped {
@@ -37280,8 +37267,6 @@ with pkgs;
 
   svaba = callPackage ../applications/science/biology/svaba { };
 
-  tandem-aligner = callPackage ../applications/science/biology/tandem-aligner { };
-
   tebreak = callPackage ../applications/science/biology/tebreak { };
 
   treemix = callPackage ../applications/science/biology/treemix { };
@@ -37415,8 +37400,6 @@ with pkgs;
   scalapack = callPackage ../development/libraries/science/math/scalapack { };
 
   rankwidth = callPackage ../development/libraries/science/math/rankwidth { };
-
-  latte-integrale = callPackage ../development/libraries/science/math/latte-integrale { };
 
   lcalc = callPackage ../development/libraries/science/math/lcalc { };
 
@@ -39884,6 +39867,10 @@ with pkgs;
       };
     };
   };
+
+  compressDrv = callPackage ../build-support/compress-drv { };
+
+  compressDrvWeb = callPackage ../build-support/compress-drv/web.nix { };
 
   duti = callPackage ../os-specific/darwin/duti {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;

@@ -4,6 +4,9 @@
   fetchFromGitHub,
   rustPlatform,
   darwin,
+  testers,
+  gitMinimal,
+  serie,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,8 +30,9 @@ rustPlatform.buildRustPackage rec {
     ]
   );
 
-  # requires a git repository
-  doCheck = false;
+  nativeCheckInputs = [ gitMinimal ];
+
+  passthru.tests.version = testers.testVersion { package = serie; };
 
   meta = with lib; {
     description = "A rich git commit graph in your terminal, like magic";

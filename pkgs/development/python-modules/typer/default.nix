@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   click,
-  colorama,
   coverage,
   fetchPypi,
   pdm-backend,

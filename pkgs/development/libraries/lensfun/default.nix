@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib, zlib, libpng, cmake, libxml2, python3 }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, zlib, libpng, cmake, python3 }:
 
 let
   version = "0.3.4";
