@@ -20,13 +20,13 @@ let
 in
 buildDotnetModule rec {
   pname = "recyclarr";
-  version = "7.1.1";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "recyclarr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-0VPoCvhZQGMu8wZzQIk54J2OTlxe7+h/9QOxx+HuL+c=";
+    hash = "sha256-KXFGT1fprRKN+V+3k0hpjjaI/xpw6UDAk+jj9zMek7k=";
   };
 
   projectFile = "Recyclarr.sln";
