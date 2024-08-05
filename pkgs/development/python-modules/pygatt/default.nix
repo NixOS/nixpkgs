@@ -2,10 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   mock,
-  nose,
   pexpect,
   pyserial,
+  enum-compat,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pygatt";
-  version = "4.0.5";
+  version = "4.0.5-unstable-2021-09-13";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -21,32 +22,36 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "peplin";
     repo = "pygatt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DUZGsztZViVNZwmhXoRN5FOQ7BgUeI0SsYgCHlvsrv0=";
+    rev = "70c68684ca5a2c5cbd8c4f6f039503fe9b848d24";
+    hash = "sha256-u1kFw8JksWvMtAn1SqdcZeDs8kv5s0mdAj2+leXzMcc=";
   };
 
+  patches = [
+    # Migrate to pytest: https://github.com/peplin/pygatt/pull/351
+    (fetchpatch2 {
+      url = "https://github.com/peplin/pygatt/commit/467bd9620c73a17029c18b4beff8b1d38e46ec25.patch?full_index=1";
+      hash = "sha256-FR9ZoqdrQSbXjUDqHljlcfxMitbr7CDpVEJ3XuCAUoo=";
+    })
+  ];
+
+  pythonRemoveDeps = [ "coverage" ];
+
   postPatch = ''
-    # Not support for Python < 3.4
     substituteInPlace setup.py \
-      --replace-fail "'enum-compat'" "" \
-      --replace-fail "'coverage >= 3.7.1'," "" \
-      --replace-fail "'nose >= 1.3.7'" ""
-    substituteInPlace tests/bgapi/test_bgapi.py \
-       --replace-fail "assertEquals" "assertEqual"
+      --replace-fail '"coverage == 5.5", ' ""
   '';
 
   build-system = [ setuptools ];
 
-  dependencies = [ pyserial ];
+  dependencies = [
+    pyserial
+    enum-compat
+  ];
 
   optional-dependencies.GATTTOOL = [ pexpect ];
 
-  # tests require nose
-  doCheck = pythonOlder "3.12";
-
   nativeCheckInputs = [
     mock
-    nose
     pytestCheckHook
   ] ++ optional-dependencies.GATTTOOL;
 
