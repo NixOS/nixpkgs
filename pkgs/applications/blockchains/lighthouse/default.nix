@@ -21,7 +21,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "5.2.0";
+  version = "5.2.1";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    hash = "sha256-kruHYFPQ9H9HtEjzscQOyghPSpx++wNbHDYOVo0qtjY=";
+    hash = "sha256-nItMiFPP4jeRsRwR8AJTyT5VCeIKths9UNgCZXNWqYE=";
   };
 
   patches = [
