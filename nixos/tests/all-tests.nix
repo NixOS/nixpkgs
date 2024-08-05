@@ -349,6 +349,7 @@ in {
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
   forgejo = handleTest ./forgejo.nix { forgejoPackage = pkgs.forgejo; };
   forgejo-lts = handleTest ./forgejo.nix { forgejoPackage = pkgs.forgejo-lts; };
+  foundationdb = handleTest ./foundationdb.nix {};
   freenet = handleTest ./freenet.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
   freetube = discoverTests (import ./freetube.nix);

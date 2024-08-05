@@ -3,6 +3,7 @@
 
 , cmake, ninja, python3, openjdk8, mono, openssl, boost178
 , pkg-config, msgpack-cxx, toml11
+, nixosTests
 }@args:
 
 let
@@ -26,5 +27,9 @@ in {
         hash = "sha256-bneRoZvCzJp0Hp/G0SzAyUyuDrWErSpzv+ickZQJR5w=";
       })
     ];
+  } // {
+    passthrough.tests = {
+      inherit (nixosTests) foundationdb;
+    };
   };
 }
