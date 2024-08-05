@@ -1,21 +1,23 @@
-{ audit
-, bash
-, bison
-, cmake
-, elfutils
-, fetchFromGitHub
-, flex
-, iperf
-, lib
-, libbpf
-, llvmPackages
-, luajit
-, makeWrapper
-, netperf
-, nixosTests
-, python3
-, stdenv
-, zip
+{
+  audit,
+  bash,
+  bison,
+  cmake,
+  elfutils,
+  fetchFromGitHub,
+  flex,
+  iperf,
+  lib,
+  libbpf,
+  llvmPackages,
+  luajit,
+  makeWrapper,
+  netperf,
+  nixosTests,
+  python3,
+  readline,
+  stdenv,
+  zip,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -33,15 +35,25 @@ python3.pkgs.buildPythonApplication rec {
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm llvm.dev libclang
-    elfutils luajit netperf iperf
-    flex bash libbpf
+    bash
+    elfutils
+    flex
+    iperf
+    libbpf
+    libclang
+    llvm
+    llvm.dev
+    luajit
+    netperf
   ];
 
   patches = [
     # This is needed until we fix
     # https://github.com/NixOS/nixpkgs/issues/40427
     ./fix-deadlock-detector-import.patch
+    # Quick & dirty fix for bashreadline
+    # https://github.com/NixOS/nixpkgs/issues/328743
+    ./bashreadline.py-remove-dependency-on-elftools.patch
   ];
 
   propagatedBuildInputs = [ python3.pkgs.netaddr ];
@@ -78,6 +90,9 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/iovisor/bcc/issues/3996
     substituteInPlace src/cc/libbcc.pc.in \
       --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+
+    substituteInPlace tools/bashreadline.py \
+      --replace '/bin/bash' '${readline}/lib/libreadline.so'
   '';
 
   preInstall = ''
@@ -107,17 +122,25 @@ python3.pkgs.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   passthru.tests = {
-    bpf = nixosTests.bpf;
+    inherit (nixosTests) bpf;
   };
 
   meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage    = "https://iovisor.github.io/bcc/";
-    license     = licenses.asl20;
-    maintainers = with maintainers; [ ragge mic92 thoughtpolice martinetd ];
-    platforms   = platforms.linux;
+    homepage = "https://iovisor.github.io/bcc/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      ragge
+      mic92
+      thoughtpolice
+      martinetd
+    ];
+    platforms = platforms.linux;
   };
 }
