@@ -1050,7 +1050,7 @@ _allFlags() {
     # don't have to be in the env attrset when `__structuredAttrs` is enabled.
     export system pname name version
     while IFS='' read -r varName; do
-        nixWarnLog "@${varName}@" "->" "${!varName}"
+        nixTalkativeLog "@${varName}@ -> ${!varName}"
         args+=("--subst-var" "$varName")
     done < <(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }')
 }
