@@ -188,6 +188,7 @@ mapAliases {
   inherit (pkgs) web-ext; # added 2023-08-20
   inherit (pkgs) wrangler; # added 2024-07-01
   inherit (pkgs) write-good; # added 2023-08-20
+  inherit (pkgs) yalc; # added 2024-06-29
   inherit (pkgs) yaml-language-server; # added 2023-09-05
   inherit (pkgs) yo; # added 2023-08-20
   zx = pkgs.zx; # added 2023-08-01
