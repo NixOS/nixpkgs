@@ -476,11 +476,6 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-sxRXKKgUak5vsQTiV7ge8vp+N22CdTIvuczNgVRP72c=";
       })
       (fetchpatch2 {
-        name = "fix_vulkan_av1";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e06ce6d2b45edac4a2df04f304e18d4727417d24";
-        hash = "sha256-73mlX1rdJrguw7OXaSItfHtI7gflDrFj+7SepVvvUIg=";
-      })
-      (fetchpatch2 {
         name = "CVE-2024-31582.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/99debe5f823f45a482e1dc08de35879aa9c74bd2";
         hash = "sha256-+CQ9FXR6Vr/AmsbXFiCUXZcxKj1s8nInEdke/Oc/kUA=";
