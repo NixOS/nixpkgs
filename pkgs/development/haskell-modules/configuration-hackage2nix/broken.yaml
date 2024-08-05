@@ -1416,7 +1416,6 @@ broken-packages:
   - dumb-cas # failure in job https://hydra.nixos.org/build/252730634 at 2024-03-16
   - dump-core # failure in job https://hydra.nixos.org/build/233244428 at 2023-09-02
   - dunai-core # failure in job https://hydra.nixos.org/build/233255804 at 2023-09-02
-  - dunai # failure in job https://hydra.nixos.org/build/252732304 at 2024-03-16
   - Dung # failure in job https://hydra.nixos.org/build/233206343 at 2023-09-02
   - dupIO # failure in job https://hydra.nixos.org/build/236688265 at 2023-10-04
   - duplo # failure in job https://hydra.nixos.org/build/233237341 at 2023-09-02
