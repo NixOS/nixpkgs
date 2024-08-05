@@ -4875,6 +4875,8 @@ self: super: with self; {
 
   geopandas = callPackage ../development/python-modules/geopandas { };
 
+  geoparquet = callPackage  ../development/python-modules/geoparquet { };
+
   geopy = callPackage ../development/python-modules/geopy { };
 
   georss-client = callPackage ../development/python-modules/georss-client { };
