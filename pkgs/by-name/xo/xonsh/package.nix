@@ -7,6 +7,7 @@
   gitUpdater,
   glibcLocales,
   python3Packages,
+  python3,
 }:
 
 let
@@ -103,6 +104,7 @@ let
       python = python3Packages.python; # To the wrapper
       wrapper = callPackage ./wrapper.nix { };
       updateScript = gitUpdater { };
+      xontribs = import ./xontribs { inherit python3; };
     };
 
     meta = {
