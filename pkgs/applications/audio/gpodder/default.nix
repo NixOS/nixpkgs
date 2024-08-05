@@ -62,6 +62,7 @@ python311Packages.buildPythonApplication rec {
     podcastparser
     html5lib
     mutagen
+    yt-dlp  # for use by gpodder's builtin "youtube-dl" extension
   ];
 
   makeFlags = [
