@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, SDL
-, curl
-, openssl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL,
+  curl,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,9 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-voNR8hIYGbMXL87c5csYJvoSyH2ht+2Y8mnT6AKgVVU=";
   };
 
-  nativeBuildInputs = [
-    SDL
-  ];
+  nativeBuildInputs = [ SDL ];
 
   buildInputs = [
     SDL
@@ -60,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
       - Small code, easy to modify, few external dependancies
       - Javascript version running Linux and Windows 2000.
     '';
-    license = with lib.licenses; [ mit bsd2 ];
+    license = with lib.licenses; [
+      mit
+      bsd2
+    ];
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
