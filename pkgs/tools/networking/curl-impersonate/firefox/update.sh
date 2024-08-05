@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p git nix jq coreutils gnugrep gnused curl common-updater-scripts
+# shellcheck shell=bash
 set -euo pipefail
 
 nixpkgs="$(git rev-parse --show-toplevel || (printf 'Could not find root of nixpkgs repo\nAre we running from within the nixpkgs git repo?\n' >&2; exit 1))"
