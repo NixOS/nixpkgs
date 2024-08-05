@@ -8,7 +8,7 @@
 let
   desktopItem = makeDesktopItem {
     name = "qpaeq";
-    exec = "@out@/bin/qpaeq";
+    exec = "qpaeq";
     icon = "audio-volume-high";
     desktopName = "qpaeq";
     genericName = "Audio equalizer";

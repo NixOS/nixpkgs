@@ -6,7 +6,7 @@ let
     categories  = [ "Game" "AdventureGame" ];
     comment     = description;
     desktopName = long;
-    exec        = "@out@/bin/${short}";
+    exec        = short;
     genericName = description;
     icon        = "scummvm";
     name        = name;

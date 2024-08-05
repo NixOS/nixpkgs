@@ -21,7 +21,7 @@ let
 
   desktopItem = makeDesktopItem {
     name = "ssb-patchwork";
-    exec = "${binary}/bin/ssb-patchwork";
+    exec = "ssb-patchwork";
     icon = "ssb-patchwork";
     comment = "Client for the decentralized social network Secure Scuttlebutt";
     desktopName = "Patchwork";

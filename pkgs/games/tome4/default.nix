@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   desktop = makeDesktopItem {
     desktopName = pname;
     name = pname;
-    exec = "@out@/bin/${pname}";
+    exec = pname;
     icon = pname;
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";

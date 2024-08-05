@@ -3,7 +3,7 @@
 let
   desktopFile = makeDesktopItem {
     name = "system-syzygy";
-    exec = "@out@/bin/syzygy";
+    exec = "syzygy";
     comment = "A puzzle game";
     desktopName = "System Syzygy";
     categories = [ "Game" ];

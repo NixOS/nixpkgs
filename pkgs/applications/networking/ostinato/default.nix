@@ -39,7 +39,7 @@ mkDerivation rec {
     comment       = "Network packet and traffic generator and analyzer with a friendly GUI";
     categories    = [ "Network" ];
     startupNotify = true;
-    exec          = "@out@/bin/ostinato";
+    exec          = "ostinato";
     icon          =  ostinatoIcon;
     extraConfig   = {
       "GenericName[it]" = "Generatore ed Analizzatore di pacchetti di rete";

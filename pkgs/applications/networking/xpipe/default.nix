@@ -80,7 +80,7 @@ in stdenvNoCC.mkDerivation rec {
     categories = [ "Network" ];
     comment = "Your entire server infrastructure at your fingertips";
     desktopName = displayname;
-    exec = "/opt/${pname}/cli/bin/xpipe open %U";
+    exec = "xpipe open %U";
     genericName = "Shell connection hub";
     icon = "/opt/${pname}/logo.png";
     name = displayname;
