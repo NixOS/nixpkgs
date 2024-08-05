@@ -32,12 +32,10 @@ in
         ExecStart = "${cfg.package}/bin/todesk service";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGINT $MAINPID";
         Restart = "on-failure";
-        User = "root";
-        Group = "root";
         WorkingDirectory = "/var/lib/todesk";
         PrivateTmp = true;
         StateDirectory = "todesk";
-        StateDirectoryMode = "0777"; # Desktop application read /opt/todesk/config/config.ini. Such a pain!
+        StateDirectoryMode = "0777"; # Desktop application read and write /opt/todesk/config/config.ini. Such a pain!
         ProtectSystem = "strict";
         ProtectHome = "read-only";
         RemoveIPC = "yes";

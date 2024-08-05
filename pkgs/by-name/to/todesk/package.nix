@@ -121,8 +121,6 @@ buildFHSEnv {
     elif [ "''${1}" = 'service' ]
     then
         /opt/todesk/bin/ToDesk_Service
-    else
-        ''${1}
     fi
   ''; # a small script to choose what to exec
   extraInstallCommands = ''
