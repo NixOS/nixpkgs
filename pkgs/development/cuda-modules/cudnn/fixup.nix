@@ -48,8 +48,8 @@ finalAttrs: prevAttrs: {
         && strings.versionOlder finalAttrs.version "9.0.0.0"
       )
       ''
-        ${meta.getExe' patchelf "patchelf"} $lib/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
-        ${meta.getExe' patchelf "patchelf"} $lib/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
+        ${meta.getExe patchelf} $lib/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
+        ${meta.getExe patchelf} $lib/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
       '';
 
   passthru.useCudatoolkitRunfile = strings.versionOlder cudaVersion "11.3.999";
