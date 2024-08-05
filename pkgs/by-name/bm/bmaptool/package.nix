@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bmaptool";
-  version = "3.6";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "yoctoproject";
     repo = "bmaptool";
     rev = "v${version}";
-    sha256 = "01xzrv5nvd2nvj91lz4x9s91y9825j9pj96z0ap6yvy3w2dgvkkl";
+    sha256 = "sha256-YPY3sNuZ/TASNBPH94iqG6AuBRq5KjioKiuxAcu94+I=";
   };
 
   propagatedBuildInputs = with python3Packages; [ six ];
