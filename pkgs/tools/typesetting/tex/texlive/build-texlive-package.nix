@@ -50,6 +50,7 @@
 , hasManpages ? false
 , hasRunfiles ? false
 , hasTlpkg ? false
+, hasCatalogue ? false
 , extraNativeBuildInputs ? [ ]
 , ...
 }@args:
@@ -68,6 +69,8 @@ let
     priority = 10;
   } // lib.optionalAttrs (args ? shortdesc) {
     description = args.shortdesc;
+  } // lib.optionalAttrs (hasCatalogue || args ? catalogue) {
+    homepage = "https://ctan.org/pkg/${args.catalogue or pname}";
   };
 
   hasBinfiles = args ? binfiles && args.binfiles != [ ];
