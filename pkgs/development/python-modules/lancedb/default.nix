@@ -113,6 +113,7 @@ buildPythonPackage rec {
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";
     homepage = "https://github.com/lancedb/lancedb";
+    changelog = "https://github.com/lancedb/lancedb/releases/tag/python-v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
