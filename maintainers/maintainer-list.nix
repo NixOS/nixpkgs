@@ -8824,6 +8824,12 @@
     githubId = 2502736;
     name = "James Hillyerd";
   };
+  jhollowe = {
+    email = "jhollowe@johnhollowell.com";
+    github = "jhollowe";
+    githubId = 2881268;
+    name = "John Hollowell";
+  };
   j-hui = {
     email = "j-hui@cs.columbia.edu";
     github = "j-hui";
