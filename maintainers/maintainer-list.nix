@@ -17190,6 +17190,13 @@
     githubId = 801525;
     name = "rembo10";
   };
+  remcoschrijver = {
+    email = "info@writerit.nl";
+    matrix = "@remcoschrijver:tchncs.de";
+    github = "remcoschrijver";
+    githubId = 45097990;
+    name = "Remco Schrijver";
+  };
   remexre = {
     email = "nathan+nixpkgs@remexre.com";
     github = "remexre";
