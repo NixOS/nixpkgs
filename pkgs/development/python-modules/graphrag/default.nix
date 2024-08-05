@@ -118,6 +118,7 @@ buildPythonPackage rec {
   meta = {
     description = "Modular graph-based Retrieval-Augmented Generation (RAG) system";
     homepage = "https://github.com/microsoft/graphrag";
+    changelog = "https://github.com/microsoft/graphrag/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
