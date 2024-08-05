@@ -1,17 +1,7 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, unzip, writeText
+{ stdenv, lib, fetchurl, makeDesktopItem, copyDesktopItems, unzip, writeText
 , scummvm, runtimeShell }:
 
 let
-  desktopItem = name: short: long: description: makeDesktopItem {
-    categories  = [ "Game" "AdventureGame" ];
-    comment     = description;
-    desktopName = long;
-    exec        = short;
-    genericName = description;
-    icon        = "scummvm";
-    name        = name;
-  };
-
   run = name: short: code: writeText "${short}.sh" ''
     #!${runtimeShell} -eu
 
@@ -28,7 +18,19 @@ let
     in stdenv.mkDerivation ({
       name = "${pname}-${version}";
 
-      nativeBuildInputs = [ unzip ];
+      nativeBuildInputs = [ copyDesktopItems unzip ];
+
+      desktopItems = [
+        (makeDesktopItem {
+          categories  = [ "Game" "AdventureGame" ];
+          comment     = description;
+          desktopName = plong;
+          exec        = pshort;
+          genericName = description;
+          icon        = "scummvm";
+          name        = pname;
+        })
+      ];
 
       dontBuild = true;
       dontFixup = true;
@@ -42,8 +44,6 @@ let
         ${lib.concatStringsSep "\n" (map (f: "mv ${f} $out/share/${pname}") files)}
 
         substitute ${run pname pshort pcode} $out/bin/${pshort} \
-          --subst-var out
-        substitute ${desktopItem pname pshort plong description}/share/applications/${pname}.desktop $out/share/applications/${pname}.desktop \
           --subst-var out
 
         chmod 0755 $out/bin/${pshort}

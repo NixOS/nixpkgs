@@ -1,24 +1,16 @@
 { mkDerivation
 , makeDesktopItem
+, copyDesktopItems
 , python3
 , lib
 , pulseaudio
 }:
 
-let
-  desktopItem = makeDesktopItem {
-    name = "qpaeq";
-    exec = "qpaeq";
-    icon = "audio-volume-high";
-    desktopName = "qpaeq";
-    genericName = "Audio equalizer";
-    categories = [ "AudioVideo" "Audio" "Mixer" ];
-    startupNotify = false;
-  };
-in
-mkDerivation rec {
+mkDerivation {
   pname = "qpaeq";
   inherit (pulseaudio) version src;
+
+  nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [
     ((python3.withPackages (ps: with ps; [
@@ -33,9 +25,20 @@ mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -D ./src/utils/qpaeq $out/bin/qpaeq
-    install -D ${desktopItem}/share/applications/qpaeq.desktop $out/share/applications/qpaeq.desktop
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "qpaeq";
+      exec = "qpaeq";
+      icon = "audio-volume-high";
+      desktopName = "qpaeq";
+      genericName = "Audio equalizer";
+      categories = [ "AudioVideo" "Audio" "Mixer" ];
+      startupNotify = false;
+    })
+  ];
 
   preFixup = ''
     sed "s|,sip|,PyQt5.sip|g" -i $out/bin/qpaeq

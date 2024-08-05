@@ -1,4 +1,4 @@
-{ lib, fetchurl, tcl, tk, libX11, zlib, makeWrapper, which, makeDesktopItem }:
+{ lib, fetchurl, tcl, tk, libX11, zlib, makeWrapper, which, makeDesktopItem, copyDesktopItems }:
 
 tcl.mkTclDerivation rec {
   pname = "scid-vs-pc";
@@ -15,7 +15,7 @@ tcl.mkTclDerivation rec {
       --replace "which fc-cache" "false"
   '';
 
-  nativeBuildInputs = [ makeWrapper which ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper which ];
   buildInputs = [ tk libX11 zlib ];
 
   configureFlags = [
@@ -30,15 +30,17 @@ tcl.mkTclDerivation rec {
     install -D icons/scid.png "$out"/share/icons/hicolor/128x128/apps/scid.png
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "scid-vs-pc";
-    desktopName = "Scid vs. PC";
-    genericName = "Chess Database";
-    comment = meta.description;
-    icon = "scid";
-    exec = "scid";
-    categories = [ "Game" "BoardGame" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "scid-vs-pc";
+      desktopName = "Scid vs. PC";
+      genericName = "Chess Database";
+      comment = meta.description;
+      icon = "scid";
+      exec = "scid";
+      categories = [ "Game" "BoardGame" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Chess database with play and training functionality";

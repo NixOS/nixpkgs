@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, pcsclite, makeDesktopItem, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, pcsclite, copyDesktopItems, makeDesktopItem, makeWrapper }:
 
 let
   version = "1.2.4";
@@ -24,17 +24,19 @@ in stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    desktopName = "Open eCard App";
-    genericName = "eCard App";
-    comment = "Client side implementation of the eCard-API-Framework";
-    icon = "oec_logo_bg-transparent.svg";
-    exec = pname;
-    categories = [ "Utility" "Security" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = "Open eCard App";
+      genericName = "eCard App";
+      comment = "Client side implementation of the eCard-API-Framework";
+      icon = "oec_logo_bg-transparent.svg";
+      exec = pname;
+      categories = [ "Utility" "Security" ];
+    })
+  ];
 
   installPhase = ''
     mkdir -p $out/share/java
