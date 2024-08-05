@@ -36,7 +36,7 @@ let
 
     nix = config.nix.package.out;
 
-    timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
+    timeout = if config.boot.loader.timeout == null then "menu-force" else config.boot.loader.timeout;
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
