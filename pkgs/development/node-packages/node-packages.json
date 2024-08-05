@@ -30,7 +30,6 @@
 , "clipboard-cli"
 , "coc-clangd"
 , "coc-cmake"
-, "coc-css"
 , "coc-docker"
 , "coc-emmet"
 , "coc-eslint"

@@ -17,6 +17,7 @@
 , # Misc dependencies
   arrow-cpp
 , Cocoa
+, coc-css
 , coc-diagnostic
 , code-minimap
 , dasht
@@ -335,6 +336,11 @@
 
   cmp-zsh = super.cmp-zsh.overrideAttrs {
     dependencies = with self; [ nvim-cmp zsh ];
+  };
+
+  coc-css = buildVimPlugin {
+    inherit (coc-css) pname version meta;
+    src = "${coc-css}/lib/node_modules/coc-css";
   };
 
   coc-diagnostic = buildVimPlugin {
@@ -2123,7 +2129,6 @@
     nodePackageNames = [
       "coc-clangd"
       "coc-cmake"
-      "coc-css"
       "coc-docker"
       "coc-emmet"
       "coc-eslint"
