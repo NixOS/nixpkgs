@@ -188,7 +188,7 @@ in {
     })
     (mkIf (cfg.enable && (cfg.user == "jupyter")) {
       users.extraUsers.jupyter = {
-        group = [ cfg.group ]; # Required since a user's group attribute cannot be unset as this is unsafe.
+        group = cfg.group; # Required since a user's group attribute cannot be unset as this is unsafe.
         home = "/var/lib/jupyter";
         createHome = true;
         isSystemUser = true;
