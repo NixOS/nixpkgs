@@ -35,6 +35,13 @@ let
     # See: https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/106
     mkdir -p $out/share/plymouth/themes/spinfinity
     ln -s $logo $out/share/plymouth/themes/spinfinity/header-image.png
+
+    # Logo for catppuccin (two-step) theme
+    for flavour in mocha macchiato latte frappe
+    do
+      mkdir -p $out/share/plymouth/themes/catppuccin-"$flavour"
+      ln -s $logo $out/share/plymouth/themes/catppuccin-"$flavour"/header-image.png
+    done
   '';
 
   themesEnv = pkgs.buildEnv {
