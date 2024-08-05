@@ -36,7 +36,7 @@
   examples.
 */
 drv:
-{ formats, compressors, ... }:
+{ formats, compressors }:
 let
   validProg =
     ext: prog:

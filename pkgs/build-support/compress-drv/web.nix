@@ -95,7 +95,6 @@ drv:
     "gz" = "${zopfli}/bin/zopfli --keep {}";
     "br" = "${brotli}/bin/brotli --keep --no-copy-stat {}";
   },
-  ...
 }:
 compressDrv drv {
   formats = formats ++ extraFormats;
