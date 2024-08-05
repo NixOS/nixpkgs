@@ -190,5 +190,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ proglodyte matthewbauer ];
     platforms = platforms.unix;
     license = licenses.bsd3;
+    knownVulnerabilities = [ "Severely outdated with multiple publicly known vulnerabilities" ];
   };
 }
