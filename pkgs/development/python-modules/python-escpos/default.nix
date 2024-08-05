@@ -1,6 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, pillow, appdirs, argcomplete
-, pyserial, pyusb, pyyaml, qrcode, six, setuptools-scm, python-barcode
-, importlib-resources }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pillow,
+  appdirs,
+  argcomplete,
+  pyserial,
+  pyusb,
+  pyyaml,
+  qrcode,
+  six,
+  setuptools-scm,
+  python-barcode,
+  importlib-resources,
+}:
 
 buildPythonPackage rec {
   pname = "python-escpos";
@@ -34,8 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to manipulate ESC/POS printers";
     homepage = "https://github.com/python-escpos/python-escpos";
-    changelog =
-      "https://github.com/python-escpos/python-escpos/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/python-escpos/python-escpos/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ JeppeX ];
   };
