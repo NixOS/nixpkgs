@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.9.5";
+  version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     # Allow Vencord to query the Git commit during build
     leaveDotGit = true;
-    hash = "sha256-0FwUQZoaelo96CC95o9CAInIS740f1jx8CgSB6FKfB0=";
+    hash = "sha256-Xu93mSMF+DVAc90ma4cOM7bJSb2wOpRfm6w5pCGl+oQ=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
