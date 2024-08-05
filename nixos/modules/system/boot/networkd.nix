@@ -663,10 +663,12 @@ let
           "IPv6AcceptRA"
           "IPv6DuplicateAddressDetection"
           "IPv6HopLimit"
+          "IPv6RetransmissionTimeSec"
           "IPv4ReversePathFilter"
           "IPv4AcceptLocal"
           "IPv4RouteLocalnet"
           "IPv4ProxyARP"
+          "IPv4ProxyARPPrivateVLAN"
           "IPv6ProxyNDP"
           "IPv6ProxyNDPAddress"
           "IPv6SendRA"
@@ -716,10 +718,12 @@ let
         (assertMinimum "IPv6DuplicateAddressDetection" 0)
         (assertInt "IPv6HopLimit")
         (assertMinimum "IPv6HopLimit" 0)
+        (assertInt "IPv6RetransmissionTimeSec")
         (assertValueOneOf "IPv4ReversePathFilter" ["no" "strict" "loose"])
         (assertValueOneOf "IPv4AcceptLocal" boolValues)
         (assertValueOneOf "IPv4RouteLocalnet" boolValues)
         (assertValueOneOf "IPv4ProxyARP" boolValues)
+        (assertValueOneof "IPv4ProxyARPPrivateVLAN" boolValues)
         (assertValueOneOf "IPv6ProxyNDP" boolValues)
         (assertValueOneOf "IPv6SendRA" boolValues)
         (assertValueOneOf "DHCPPrefixDelegation" boolValues)
@@ -766,6 +770,7 @@ let
           "Priority"
           "IncomingInterface"
           "OutgoingInterface"
+          "L3MasterDevice"
           "SourcePort"
           "DestinationPort"
           "IPProtocol"
@@ -780,6 +785,7 @@ let
         (assertRange "TypeOfService" 0 255)
         (assertRangeWithOptionalMask "FirewallMark" 1 4294967295)
         (assertInt "Priority")
+        (assertValueOneOf "L3MasterDevice" boolValues)
         (assertPortOrPortRange "SourcePort")
         (assertPortOrPortRange "DestinationPort")
         (assertValueOneOf "InvertRule" boolValues)
