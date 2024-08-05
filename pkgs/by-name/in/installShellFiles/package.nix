@@ -1,4 +1,8 @@
-{ callPackage, makeSetupHook }:
+{
+  lib,
+  callPackage,
+  makeSetupHook,
+}:
 
 # Documentation can be found at:
 # - doc/hooks/installShellFiles.section.md at the root of Nixpkgs repo
@@ -9,6 +13,9 @@ let
 in
 setupHook.overrideAttrs (oldAttrs: {
   passthru = (oldAttrs.passthru or { }) // {
-    tests = callPackage ./tests.nix { };
+    tests = lib.packagesFromDirectoryRecursive {
+      inherit callPackage;
+      directory = ./tests;
+    };
   };
 })
