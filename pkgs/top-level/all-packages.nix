@@ -27393,11 +27393,11 @@ with pkgs;
 
   skopeo = callPackage ../development/tools/skopeo { };
 
-  srisum = callPackage ../tools/misc/srisum { };
-
   smem = callPackage ../os-specific/linux/smem { };
 
   smimesign = callPackage ../os-specific/darwin/smimesign { };
+
+  srisum = callPackage ../tools/misc/srisum { };
 
   statik = callPackage ../development/tools/statik { };
 
