@@ -43,6 +43,13 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
     postPatch = optionalString ocamlBindings ''
       export OCAMLFIND_DESTDIR=$ocaml/lib/ocaml/${ocaml.version}/site-lib
       mkdir -p $OCAMLFIND_DESTDIR/stublibs
+    '' + optionalString ((versionAtLeast python.version "3.12") && (versionOlder version "4.8.14")) ''
+      # See https://github.com/Z3Prover/z3/pull/5729. This is a specialization of this patch for 4.8.5.
+      for file in scripts/mk_util.py src/api/python/CMakeLists.txt; do
+        substituteInPlace "$file" \
+          --replace-fail "distutils.sysconfig.get_python_lib()" "sysconfig.get_path('purelib')" \
+          --replace-fail "distutils.sysconfig" "sysconfig"
+      done
     '';
 
     configurePhase = concatStringsSep " "
@@ -84,7 +91,7 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
       changelog = "https://github.com/Z3Prover/z3/releases/tag/z3-${version}";
       license = licenses.mit;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ thoughtpolice ttuegel ];
+      maintainers = with maintainers; [ thoughtpolice ttuegel numinit ];
     };
   };
 in
