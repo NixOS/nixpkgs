@@ -61,15 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  installPhase =
-    if buildWebExtension then
-      ''
-        cp -r dist/chromium-unpacked/ $out
-      ''
-    else
-      ''
-        cp -r dist/ $out
-      '';
+  installPhase = ''
+    runHook preInstall
+
+    cp -r dist/${lib.optionalString buildWebExtension "chromium-unpacked/"} $out
+
+    runHook postInstall
+  '';
 
   passthru.updateScript = nix-update-script { };
 
