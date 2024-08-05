@@ -19,7 +19,7 @@
           message = "`system.etc.overlay.enable` requires `boot.initrd.systemd.enable`";
         }
         {
-          assertion = (!config.system.etc.overlay.mutable) -> config.systemd.sysusers.enable;
+          assertion = (!config.system.etc.overlay.mutable) -> (config.systemd.sysusers.enable || config.services.userborn.enable);
           message = "`system.etc.overlay.mutable = false` requires `systemd.sysusers.enable`";
         }
         {
