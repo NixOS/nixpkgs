@@ -54,10 +54,10 @@ let
   passwordDescription = ''
     The options {option}`hashedPassword`,
     {option}`password` and {option}`hashedPasswordFile`
-    controls what password is set for the user.
-    {option}`hashedPassword` overrides both
-    {option}`password` and {option}`hashedPasswordFile`.
-    {option}`password` overrides {option}`hashedPasswordFile`.
+    normally controls what password is set for the user.
+    {option}`hashedPasswordFile` overrides both
+    {option}`password` and {option}`hashedPassword`.
+    {option}`hashedPassword` overrides {option}`password`.
     If none of these three options are set, no password is assigned to
     the user, and the user will not be able to do password logins.
     If the option {option}`users.mutableUsers` is true, the
@@ -67,6 +67,10 @@ let
     {option}`users.mutableUsers` is false, you cannot change
     user passwords, they will always be set according to the password
     options.
+
+    NOTE: one exception is if `systemd.sysusers.enable = true;`. In this case
+    one of `initialPassword`, `initialHashedPassword`, or `hashedPasswordFile`
+    must be set. The order of overriding is the order of three listed above.
   '';
 
   hashedPasswordDescription = ''
@@ -328,7 +332,8 @@ let
           equivalent to setting the {option}`hashedPassword` option.
 
           Note that the {option}`hashedPassword` option will override
-          this option if both are set.
+          this option if both are set. One exception to this rule is if
+          `systemd.sysusers.enable = true;`.
 
           ${hashedPasswordDescription}
         '';
@@ -350,7 +355,8 @@ let
           promptly.
 
           Note that the {option}`password` option will override this
-          option if both are set.
+          option if both are set. One exception to this rule is if
+          `systemd.sysusers.enable = true;`.
         '';
       };
 
@@ -956,11 +962,14 @@ in {
         ]));
       in optional (!unambiguousPasswordConfiguration) ''
         The user '${user.name}' has multiple of the options
-        `hashedPassword`, `password`, `hashedPasswordFile`, `initialPassword`
-        & `initialHashedPassword` set to a non-null value.
+        `initialHashedPassword`, `hashedPassword`, `initialPassword`, `password`,
+        & `hashedPasswordFile` set to a non-null value.
         The options silently discard others by the order of precedence
         given above which can lead to surprising results. To resolve this warning,
         set at most one of the options above to a non-`null` value.
+        NOTE: If `systemd.sysusers.enable = true;` then the the options and order
+        of precedence are: `initialPassword`,  `initialHashedPassword`,
+        & `hashedPasswordFile`.
       '')
       ++ filter (x: x != null) (
         flip mapAttrsToList cfg.users (_: user:
