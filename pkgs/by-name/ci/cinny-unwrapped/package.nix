@@ -1,23 +1,18 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, writeText
-, jq
-, python3
-, pkg-config
-, pixman
-, cairo
-, pango
-, stdenv
-, darwin
-, conf ? { }
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  python3,
+  pkg-config,
+  pixman,
+  cairo,
+  pango,
+  stdenv,
+  darwin,
 }:
 
-let
-  configOverrides = writeText "cinny-config-overrides.json" (builtins.toJSON conf);
-in
 buildNpmPackage rec {
-  pname = "cinny";
+  pname = "cinny-unwrapped";
   version = "4.0.3";
 
   src = fetchFromGitHub {
@@ -35,7 +30,6 @@ buildNpmPackage rec {
   ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
 
   nativeBuildInputs = [
-    jq
     python3
     pkg-config
   ];
@@ -44,15 +38,12 @@ buildNpmPackage rec {
     pixman
     cairo
     pango
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreText
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreText ];
 
   installPhase = ''
     runHook preInstall
 
     cp -r dist $out
-    jq -s '.[0] * .[1]' "config.json" "${configOverrides}" > "$out/config.json"
 
     runHook postInstall
   '';

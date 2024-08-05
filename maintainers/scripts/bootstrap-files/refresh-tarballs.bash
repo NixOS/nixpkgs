@@ -95,6 +95,7 @@ CROSS_TARGETS=(
     powerpc64-unknown-linux-gnuabielfv2
     powerpc64le-unknown-linux-gnu
     riscv64-unknown-linux-gnu
+    s390x-unknown-linux-gnu
     x86_64-unknown-freebsd
 )
 
