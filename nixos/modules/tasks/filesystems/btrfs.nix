@@ -1,8 +1,19 @@
 { config, lib, pkgs, utils, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    types
+    mkMerge
+    mkIf
+    optionals
+    mkDefault
+    nameValuePair
+    listToAttrs
+    filterAttrs
+    mapAttrsToList
+    foldl';
 
   inInitrd = config.boot.initrd.supportedFilesystems.btrfs or false;
   inSystem = config.boot.supportedFilesystems.btrfs or false;
@@ -27,8 +38,9 @@ in
         description = ''
           List of paths to btrfs filesystems to regularly call {command}`btrfs scrub` on.
           Defaults to all mount points with btrfs filesystems.
-          If you mount a filesystem multiple times or additionally mount subvolumes,
-          you need to manually specify this list to avoid scrubbing multiple times.
+          Note that if you have filesystems that span multiple devices (e.g. RAID), you should
+          take care to use the same device for any given mount point and let btrfs take care
+          of automatically mounting the rest, in order to avoid scrubbing the same data multiple times.
         '';
       };
 
@@ -97,12 +109,18 @@ in
         }
       ];
 
-      # This will yield duplicated units if the user mounts a filesystem multiple times
-      # or additionally mounts subvolumes, but going the other way around via devices would
-      # yield duplicated units when a filesystem spans multiple devices.
-      # This way around seems like the more sensible default.
-      services.btrfs.autoScrub.fileSystems = mkDefault (mapAttrsToList (name: fs: fs.mountPoint)
-      (filterAttrs (name: fs: fs.fsType == "btrfs") config.fileSystems));
+      # This will remove duplicated units from either having a filesystem mounted multiple
+      # time, or additionally mounted subvolumes, as well as having a filesystem span
+      # multiple devices (provided the same device is used to mount said filesystem).
+      services.btrfs.autoScrub.fileSystems =
+      let
+        isDeviceInList = list: device: builtins.filter (e: e.device == device) list != [ ];
+
+        uniqueDeviceList = foldl' (acc: e: if isDeviceInList acc e.device then acc else acc ++ [ e ]) [ ];
+      in
+      mkDefault (map (e: e.mountPoint)
+        (uniqueDeviceList (mapAttrsToList (name: fs: { mountPoint = fs.mountPoint; device = fs.device; })
+          (filterAttrs (name: fs: fs.fsType == "btrfs") config.fileSystems))));
 
       # TODO: Did not manage to do it via the usual btrfs-scrub@.timer/.service
       # template units due to problems enabling the parameterized units,

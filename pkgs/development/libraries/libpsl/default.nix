@@ -11,7 +11,6 @@
 , pkg-config
 , python3
 , buildPackages
-, valgrind
 , publicsuffix-list
 }:
 
