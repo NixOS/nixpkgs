@@ -1,26 +1,27 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, expat
-, fontconfig
-, freetype
-, libGL
-, libxkbcommon
-, pipewire
-, wayland
-, xorg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  expat,
+  fontconfig,
+  freetype,
+  libGL,
+  libxkbcommon,
+  pipewire,
+  wayland,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pw-viz";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ax9d";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lw4whdh8tNoS5XUlamQCq8f8z8K59uD90PSSo3skeyo=";
+    hash = "sha256-fB7PnWWahCMKhGREg6neLmOZjh2OWLu61Vpmfsl03wA=";
   };
 
   cargoLock = {
@@ -30,7 +31,10 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
 
   buildInputs = [
     expat
@@ -39,7 +43,6 @@ rustPlatform.buildRustPackage rec {
     libGL
     libxkbcommon
     pipewire
-    rustPlatform.bindgenHook
     wayland
     xorg.libX11
     xorg.libXcursor
@@ -49,18 +52,31 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     patchelf $out/bin/pw-viz \
-      --add-rpath ${lib.makeLibraryPath [ libGL libxkbcommon wayland ]}
+      --add-rpath ${
+        lib.makeLibraryPath [
+          libGL
+          libxkbcommon
+          wayland
+        ]
+      }
+  '';
+
+  postInstall = ''
+    install -m 444 \
+        -D assets/${pname}.desktop \
+        -t $out/share/applications
   '';
 
   # enables pipewire API deprecated in 0.3.64
   # fixes error caused by https://gitlab.freedesktop.org/pipewire/pipewire-rs/-/issues/55
   env.NIX_CFLAGS_COMPILE = toString [ "-DPW_ENABLE_DEPRECATED" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple and elegant pipewire graph editor";
     homepage = "https://github.com/ax9d/pw-viz";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ figsoda ];
+    platforms = lib.platforms.linux;
+    mainProgram = pname;
   };
 }
