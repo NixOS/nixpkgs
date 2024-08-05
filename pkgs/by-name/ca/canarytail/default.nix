@@ -7,7 +7,7 @@
 }:
 
 buildGoModule rec {
-  pname = "client";
+  pname = "canarytail";
   version = "0.1.1";
   outputs = [
     "out"
@@ -47,7 +47,10 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Terminal based graphical activity monitor inspired by gtop and vtop";
+    description = "Official CanaryTail implementation in Golang for easy, trackable, standardized warrant canaries.";
+    longDescription = ''
+      CanaryTail CLI is a simple proof-of-concept implementation of the CanaryTail standard
+    '';
     homepage = "https://github.com/canarytail/client";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.mj ];
