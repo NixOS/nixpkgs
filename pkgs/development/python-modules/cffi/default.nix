@@ -72,6 +72,10 @@ else
         --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
     '';
 
+    disabledTests = lib.optionals stdenv.isFreeBSD [
+      "test_dlopen_handle"  # assumes that libdl.dlopen works.
+    ];
+
     nativeBuildInputs = [
       pkg-config
       setuptools
