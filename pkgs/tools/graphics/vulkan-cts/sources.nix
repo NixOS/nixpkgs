@@ -11,8 +11,8 @@ rec {
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "b9b8fd917b195f680a1ce3f3f663c03e1c82579d";
-    hash = "sha256-85kHk1KqhhOqLodRVVpQMhE44IQnzLoFXf/YPNY8aUI=";
+    rev = "2b19bf7e1bc0b60cf2fe9d33e5ba6b37dfc1cc83";
+    hash = "sha256-/rDgVkem40aiL3YRSCIMGiJiIE/K6UZhMzGYZsV6mws=";
   };
 
   jsoncpp = fetchFromGitHub {
@@ -32,22 +32,22 @@ rec {
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "4f7b471f1a66b6d06462cd4ba57628cc0cd087d7";
-    hash = "sha256-CAmDDqeMVKNdV/91VQYAKyCc+e+H99PRYZzt5WjswBI=";
+    rev = "db5a00f8cebe81146cafabf89019674a3c4bf03d";
+    hash = "sha256-5lRPxsfXGWimJ7jNtM6kJembcAz357ER8PwFXnh6o4E=";
   };
 
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "dd4b663e13c07fea4fbb3f70c1c91c86731099f7";
-    hash = "sha256-at3krE0torhjg7G+NkX0/ewc26Sg/1t2xW7wghAAuZo=";
+    rev = "4c7e1fa5c3d988cca0e626d359d30b117b9c2822";
+    hash = "sha256-us9jX4WU5Dkpkeq6sBmNM7GMyqPjA7QyVUJDVdMttoI=";
   };
 
   vulkan-docs = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Docs";
-    rev = "dedb71a7edc6d5af3f9bfd5e2ef53814de999ef7";
-    hash = "sha256-A61qx7sdcRipX4mHpGJVhd9Qlcv1xcjeGGnfyblMxUg=";
+    rev = "7bb606eb87cde1d34f65f36f4d4c6f2c78f072c8";
+    hash = "sha256-T2Vgcj6/Yg7GtYQmS1I1YBfPsb3KqL+5horsTtR+z2I=";
   };
 
   vulkan-validationlayers = fetchFromGitHub {
