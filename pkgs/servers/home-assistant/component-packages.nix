@@ -4193,7 +4193,8 @@
     "solaredge_local" = ps: with ps; [
     ]; # missing inputs: solaredge-local
     "solarlog" = ps: with ps; [
-    ]; # missing inputs: solarlog_cli
+      solarlog-cli
+    ];
     "solax" = ps: with ps; [
       solax
     ];
@@ -5892,6 +5893,7 @@
     "snmp"
     "snooz"
     "solaredge"
+    "solarlog"
     "solax"
     "soma"
     "somfy_mylink"
