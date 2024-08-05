@@ -22,6 +22,7 @@ in {
         libusermetrics
         lomiri
         lomiri-calculator-app
+        lomiri-camera-app
         lomiri-clock-app
         lomiri-download-manager
         lomiri-filemanager-app
