@@ -318,6 +318,8 @@ with pkgs;
 
   atomic-swap = callPackage ../applications/blockchains/atomic-swap { };
 
+  neutrond = callPackage ../applications/blockchains/neutron { };
+
   avro-tools = callPackage ../development/tools/avro-tools { };
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack { };
