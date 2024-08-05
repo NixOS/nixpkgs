@@ -25579,8 +25579,6 @@ with pkgs;
   mariadb-connector-c_3_2 = callPackage ../servers/sql/mariadb/connector-c/3_2.nix { };
   mariadb-connector-c_3_3 = callPackage ../servers/sql/mariadb/connector-c/3_3.nix { };
 
-  mariadb-galera = callPackage ../servers/sql/mariadb/galera { };
-
   inherit (import ../servers/sql/mariadb pkgs)
     mariadb_105
     mariadb_106
