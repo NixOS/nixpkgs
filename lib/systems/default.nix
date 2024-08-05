@@ -25,7 +25,24 @@ let
   inspect = import ./inspect.nix { inherit lib; };
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
-  architectures = import ./architectures.nix { inherit lib; };
+
+  architectures = throw "lib.systems.architectures was deprecated and replaced via the new cpuModel attribute";
+
+  predicates = features: let
+    featureSupport = feature: builtins.elem feature (if (features == null) then [] else features);
+  in {
+    sse3Support    = featureSupport "sse3";
+    ssse3Support   = featureSupport "ssse3";
+    sse4_1Support  = featureSupport "sse4_1";
+    sse4_2Support  = featureSupport "sse4_2";
+    sse4_aSupport  = featureSupport "sse4a";
+    avxSupport     = featureSupport "avx";
+    avx2Support    = featureSupport "avx2";
+    avx512Support  = featureSupport "avx512";
+    aesSupport     = featureSupport "aes";
+    fmaSupport     = featureSupport "fma";
+    fma4Support    = featureSupport "fma4";
+  };
 
   /**
     Elaborated systems contain functions, which means that they don't satisfy
@@ -82,6 +99,16 @@ let
       isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
       # Derived meta-data
       useLLVM = final.isFreeBSD || final.isOpenBSD;
+
+      cpuModel = let
+        name = args.cpuModel or "generic";
+      in if isString name then
+        (parse.cpuModels final).${name} or (throw "Unknown CPU model ${name} for CPU architecture ${final.parsed.cpu.name}")
+      else if isFunction name then
+        name final
+      else name;
+
+      isCpuModelGeneric = final.cpuModel == (parse.cpuModels final).generic;
 
       libc =
         /**/ if final.isDarwin                then "libSystem"
@@ -302,8 +329,8 @@ let
           else throw "Don't know how to run ${final.config} executables.";
 
     }) // mapAttrs (n: v: v final.parsed) inspect.predicates
-      // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
-      // args // {
+      // predicates (final.cpuModel.features or [])
+      // builtins.removeAttrs args [ "cpuModel" ] // {
         rust = rust // {
           # Once args.rustc.platform.target-family is deprecated and
           # removed, there will no longer be any need to modify any

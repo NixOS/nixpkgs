@@ -26,7 +26,7 @@ rec {
   };
   ppc64-musl = {
     config = "powerpc64-unknown-linux-musl";
-    gcc = { abi = "elfv2"; };
+    abi = "elfv2";
   };
 
   sheevaplug = {
@@ -51,6 +51,16 @@ rec {
 
   armv7l-hf-multiplatform = {
     config = "armv7l-unknown-linux-gnueabihf";
+  };
+
+  asahi-m1 = {
+    config = "aarch64-unknown-linux-gnu";
+    cpuModel = "apple_m1";
+  };
+
+  asahi-m2 = {
+    config = "aarch64-unknown-linux-gnu";
+    cpuModel = "apple_m2";
   };
 
   aarch64-multiplatform = {
@@ -198,10 +208,12 @@ rec {
     libc = "newlib";
     # GCC8+ does not build without this
     # (https://www.mail-archive.com/gcc-bugs@gcc.gnu.org/msg552339.html):
-    gcc = {
-      arch = "armv5t";
-      fpu = "vfp";
+    cpuModel = {
+      gnu = "armv5t";
+      llvm = "armv5t";
+      zig = "armv5t";
     };
+    fpu = "vfp";
   };
 
   aarch64-embedded = {

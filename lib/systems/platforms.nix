@@ -67,8 +67,10 @@ rec {
       # TODO reenable once manual-config's config actually builds a .dtb and this is checked to be working
       #DTB = true;
     };
-    gcc = {
-      arch = "armv5te";
+    cpuModel = {
+      gnu = "armv5te";
+      llvm = "armv5te";
+      zig = "armv5te";
     };
   };
 
@@ -180,8 +182,10 @@ rec {
       target = "uImage";
       DTB = true; # Beyond 3.10
     };
-    gcc = {
-      arch = "armv5te";
+    cpuModel = {
+      gnu = "armv5te";
+      llvm = "armv5te";
+      zig = "armv5te";
     };
   };
 
@@ -200,10 +204,12 @@ rec {
       '';
       target = "zImage";
     };
-    gcc = {
-      arch = "armv6";
-      fpu = "vfp";
+    cpuModel = {
+      gnu = "armv6";
+      llvm = "armv6";
+      zig = "armv6";
     };
+    fpu = "vfp";
   };
 
   # Legacy attribute, for compatibility with existing configs only.
@@ -211,8 +217,10 @@ rec {
 
   # Nvidia Bluefield 2 (w. crypto support)
   bluefield2 = {
-    gcc = {
-      arch = "armv8-a+fp+simd+crc+crypto";
+    cpuModel = {
+      gnu = "armv8-a+fp+simd+crc+crypto";
+      llvm = "armv8-a+fp+simd+crc+crypto";
+      zig = "armv8-a+fp+simd+crc+crypto";
     };
   };
 
@@ -226,10 +234,12 @@ rec {
       autoModules = false;
       DTB = true;
     };
-    gcc = {
-      fpu = "neon";
-      cpu = "cortex-a9";
+    cpuModel = {
+      gnu = "cortex-a9";
+      llvm = "cortex-a9";
+      zig = "cortex-a9";
     };
+    fpu = "neon";
   };
 
   zero-sugar = {
@@ -242,11 +252,13 @@ rec {
       preferBuiltin = true;
       target = "zImage";
     };
-    gcc = {
-      cpu = "cortex-a7";
-      fpu = "neon-vfpv4";
-      float-abi = "hard";
+    cpuModel = {
+      gnu = "cortex-a7";
+      llvm = "cortex-a7";
+      zig = "cortex-a7";
     };
+    fpu = "neon-vfpv4";
+    float-abi = "hard";
   };
 
   utilite = {
@@ -268,10 +280,12 @@ rec {
       target = "uImage";
       DTB = true;
     };
-    gcc = {
-      cpu = "cortex-a9";
-      fpu = "neon";
+    cpuModel = {
+      gnu = "cortex-a9";
+      llvm = "cortex-a9";
+      zig = "cortex-a9";
     };
+    fpu = "neon";
   };
 
   guruplug = lib.recursiveUpdate sheevaplug {
@@ -295,11 +309,13 @@ rec {
   # https://developer.android.com/ndk/guides/abis#v7a
   armv7a-android = {
     linux-kernel.name = "armeabi-v7a";
-    gcc = {
-      arch = "armv7-a";
-      float-abi = "softfp";
-      fpu = "vfpv3-d16";
+    cpuModel = {
+      gnu = "armv7-a";
+      llvm = "armv7-a";
+      zig = "armv7-a";
     };
+    float-abi = "softfp";
+    fpu = "vfpv3-d16";
   };
 
   armv7l-hf-multiplatform = {
@@ -332,7 +348,7 @@ rec {
         KS8851_MLL y
       '';
     };
-    gcc = {
+    cpuModel = {
       # Some table about fpu flags:
       # http://community.arm.com/servlet/JiveServlet/showImage/38-1981-3827/blogentry-103749-004812900+1365712953_thumb.png
       # Cortex-A5: -mfpu=neon-fp16
@@ -346,13 +362,15 @@ rec {
 
       # vfpv3-d16 is what Debian uses and seems to be the best compromise: NEON is not supported in e.g. Scaleway or Tegra 2,
       # and the above page suggests NEON is only an improvement with hand-written assembly.
-      arch = "armv7-a";
-      fpu = "vfpv3-d16";
+      gnu = "armv7-a";
+      llvm = "armv7-a";
+      zig = "armv7-a";
 
       # For Raspberry Pi the 2 the best would be:
       #   cpu = "cortex-a7";
       #   fpu = "neon-vfpv4";
     };
+    fpu = "vfpv3-d16";
   };
 
   aarch64-multiplatform = {
@@ -385,16 +403,15 @@ rec {
       '';
       target = "Image";
     };
-    gcc = {
-      arch = "armv8-a";
+    cpuModel = {
+      gnu = "armv8-a";
+      llvm = "armv8-a";
+      zig = "armv8-a";
     };
   };
 
   apple-m1 = {
-    gcc = {
-      arch = "armv8.3-a+crypto+sha2+aes+crc+fp16+lse+simd+ras+rdm+rcpc";
-      cpu = "apple-a13";
-    };
+    cpuModel = "apple_m1";
   };
 
   ##
@@ -405,10 +422,12 @@ rec {
     linux-kernel = {
       name = "ben_nanonote";
     };
-    gcc = {
-      arch = "mips32";
-      float = "soft";
+    cpuModel = {
+      gnu = "mips32";
+      llvm = "mips32";
+      zig = "mips32";
     };
+    float = "soft";
   };
 
   fuloong2f_n32 = {
@@ -482,20 +501,22 @@ rec {
       '';
       target = "vmlinux";
     };
-    gcc = {
-      arch = "loongson2f";
-      float = "hard";
-      abi = "n32";
+    cpuModel = {
+      gnu = "loongson2f";
+      llvm = "loongson2f";
+      zig = "loongson2f";
     };
+    float = "hard";
+    abi = "n32";
   };
 
   # can execute on 32bit chip
-  gcc_mips32r2_o32 = { gcc = { arch = "mips32r2"; abi =  "32"; }; };
-  gcc_mips32r6_o32 = { gcc = { arch = "mips32r6"; abi =  "32"; }; };
-  gcc_mips64r2_n32 = { gcc = { arch = "mips64r2"; abi = "n32"; }; };
-  gcc_mips64r6_n32 = { gcc = { arch = "mips64r6"; abi = "n32"; }; };
-  gcc_mips64r2_64  = { gcc = { arch = "mips64r2"; abi =  "64"; }; };
-  gcc_mips64r6_64  = { gcc = { arch = "mips64r6"; abi =  "64"; }; };
+  gcc_mips32r2_o32 = { cpuModel = { gnu = "mips32r2"; llvm = "mips32r2"; zig = "mips32r2"; }; abi =  "32"; };
+  gcc_mips32r6_o32 = { cpuModel = { gnu = "mips32r6"; llvm = "mips32r6"; zig = "mips32r2"; }; abi =  "32"; };
+  gcc_mips64r2_n32 = { cpuModel = { gnu = "mips64r2"; llvm = "mips64r2"; zig = "mips64r2"; }; abi = "n32"; };
+  gcc_mips64r6_n32 = { cpuModel = { gnu = "mips64r6"; llvm = "mips64r6"; zig = "mips64r6"; }; abi = "n32"; };
+  gcc_mips64r2_64  = { cpuModel = { gnu = "mips64r2"; llvm = "mips64r2"; zig = "mips64r2"; }; abi =  "64"; };
+  gcc_mips64r6_64  = { cpuModel = { gnu = "mips64r6"; llvm = "mips64r6"; zig = "mips64r6"; }; abi =  "64"; };
 
   # based on:
   #   https://www.mail-archive.com/qemu-discuss@nongnu.org/msg05179.html
