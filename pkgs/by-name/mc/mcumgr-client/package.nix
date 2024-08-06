@@ -10,22 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mcumgr-client";
-  version = "0.0.4";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "vouch-opensource";
     repo = "mcumgr-client";
     rev = "v${version}";
-    hash = "sha256-MTNMnA5/CzwVrhNhDrfaXOatT4BFmc4nOPhIxTyc248=";
+    hash = "sha256-P5ykIVdWAxuCblMe7kzjswEca/+MsqpizCGUHIpR4qc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-9jlthe7YQJogcjGv+TOk+O2YW3Xrq6h9tTjXdKHG99k=";
 
   nativeBuildInputs = [ pkg-config ];
 
