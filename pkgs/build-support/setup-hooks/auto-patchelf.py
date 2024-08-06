@@ -197,7 +197,7 @@ class Dependency:
     found: bool = False     # Whether it was found somewhere
 
 
-def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list[Path] = [], extra_args: list[str] = []) -> list[Dependency]:
+def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list[Path] = [], keep_libc: bool = False, extra_args: list[str] = []) -> list[Dependency]:
     try:
         with open_elf(path) as elf:
 
@@ -267,7 +267,12 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             # add the dependency to rpath, as the original binary
             # presumably had it and this should be preserved.
 
+            is_libc = (libc_lib / candidate).is_file()
+
             if candidate.is_absolute() and candidate.is_file():
+                was_found = True
+                break
+            elif is_libc and not keep_libc:
                 was_found = True
                 break
             elif found_dependency := find_dependency(candidate.name, file_arch, file_osabi):
@@ -276,7 +281,7 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
                 print(f"    {candidate} -> found: {found_dependency}")
                 was_found = True
                 break
-            elif (libc_lib / candidate).is_file():
+            elif is_libc and keep_libc:
                 was_found = True
                 break
 
@@ -306,6 +311,7 @@ def auto_patchelf(
         recursive: bool = True,
         ignore_missing: list[str] = [],
         append_rpaths: list[Path] = [],
+        keep_libc: bool = False,
         extra_args: list[str] = []) -> None:
 
     if not paths_to_patch:
@@ -319,7 +325,7 @@ def auto_patchelf(
     dependencies = []
     for path in chain.from_iterable(glob(p, '*', recursive) for p in paths_to_patch):
         if not path.is_symlink() and path.is_file():
-            dependencies += auto_patchelf_file(path, runtime_deps, append_rpaths, extra_args)
+            dependencies += auto_patchelf_file(path, runtime_deps, append_rpaths, keep_libc, extra_args)
 
     missing = [dep for dep in dependencies if not dep.found]
 
@@ -378,6 +384,12 @@ def main() -> None:
         help="Paths to append to all runtime paths unconditionally",
     )
     parser.add_argument(
+        "--keep-libc",
+        dest="keep_libc",
+        action="store_true",
+        help="Leave libc in the rpath if it's found",
+    )
+    parser.add_argument(
         "--extra-args",
         # Undocumented Python argparse feature: consume all remaining arguments
         # as values for this one. This means this argument should always be passed
@@ -398,6 +410,7 @@ def main() -> None:
         args.recursive,
         args.ignore_missing,
         append_rpaths=args.append_rpaths,
+        keep_libc=args.keep_libc,
         extra_args=args.extra_args)
 
 
