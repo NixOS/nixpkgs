@@ -5,13 +5,19 @@ with python3.pkgs;
 buildPythonPackage rec {
   pname = "postorius";
   version = "1.3.10";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-GmbIqO+03LgbUxJ1nTStXrYN3t2MfvzbeYRAipfTW1o=";
   };
 
-  propagatedBuildInputs = [ django-mailman3 readme-renderer ];
+  build-system = [ setuptools ];
+
+  dependencies = [ django-mailman3 readme-renderer ]
+    # support markdown rendering of descriptions (and emails)
+    ++ readme-renderer.optional-dependencies.md;
+
   nativeCheckInputs = [ beautifulsoup4 vcrpy mock ];
 
   # Tries to connect to database.
