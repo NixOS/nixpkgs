@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   python3,
   fetchFromGitLab,
 }:
@@ -36,9 +37,18 @@ python.pkgs.buildPythonApplication rec {
       --replace "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 
-  build-system = with python.pkgs; [ poetry-core setuptools babel ];
+  build-system = with python.pkgs; [
+    poetry-core
+    setuptools
+    babel
+  ];
 
-  dependencies = with python.pkgs; [ flask flask-wtf pydantic-settings wtforms ];
+  dependencies = with python.pkgs; [
+    flask
+    flask-wtf
+    pydantic-settings
+    wtforms
+  ];
 
   nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
@@ -63,15 +73,9 @@ python.pkgs.buildPythonApplication rec {
       pytz
       toml
     ];
-    oidc = [
-      authlib
-    ];
-    ldap = [
-      python-ldap
-    ];
-    sentry = [
-      sentry-sdk
-    ];
+    oidc = [ authlib ];
+    ldap = [ python-ldap ];
+    sentry = [ sentry-sdk ];
     sql = [
       passlib
       sqlalchemy
