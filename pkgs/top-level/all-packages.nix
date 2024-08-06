@@ -19713,12 +19713,6 @@ with pkgs;
     cudaPackages = cudaPackages_11;
   };
 
-  ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
-
-  ndn-tools = callPackage ../tools/networking/ndn-tools { };
-
-  nfd = callPackage ../servers/nfd { };
-
   cddlib = callPackage ../development/libraries/cddlib { };
 
   cdk-go = callPackage ../tools/security/cdk-go { };
