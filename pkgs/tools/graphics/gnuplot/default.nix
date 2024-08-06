@@ -13,6 +13,7 @@
 , gnused ? null
 , coreutils ? null
 , withQt ? false, mkDerivation, qttools, qtbase, qtsvg
+, enableInfo ? true, emacs
 }:
 
 assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
@@ -28,7 +29,12 @@ in
     sha256 = "sha256-6FpmDBoqGAj/JPfmmYH/y6xmpFydz3EbZWELJupxN5o=";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config texinfo ] ++ lib.optional withQt qttools;
+  outputs = [ "out" ] ++ lib.optional enableInfo "info";
+
+  nativeBuildInputs =
+    [ makeWrapper pkg-config texinfo ]
+    ++ lib.optional withQt qttools
+    ++ lib.optional enableInfo emacs;
 
   buildInputs =
     [ cairo gd libcerf pango readline zlib ]
@@ -73,6 +79,10 @@ in
   ];
 
   enableParallelBuilding = true;
+
+  installTargets =
+    [ "install" ]
+    ++ lib.optional enableInfo "install-info";
 
   meta = with lib; {
     homepage = "http://www.gnuplot.info/";
