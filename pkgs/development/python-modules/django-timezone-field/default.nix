@@ -9,6 +9,7 @@
   pytestCheckHook,
   pytest-django,
   pytest-lazy-fixture,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-django
     pytest-lazy-fixture
+    pytz
   ];
 
   meta = with lib; {
