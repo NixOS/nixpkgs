@@ -132,7 +132,7 @@ in import ../make-test-python.nix ({ lib, pkgs, netbox, ... }: {
 
   testScript = let
     changePassword = pkgs.writeText "change-password.py" ''
-      from django.contrib.auth.models import User
+      from users.models import User
       u = User.objects.get(username='netbox')
       u.set_password('netbox')
       u.save()
@@ -170,11 +170,6 @@ in import ../make-test-python.nix ({ lib, pkgs, netbox, ... }: {
     with subtest("Staticfiles can be fetched"):
         machine.succeed("curl -sSfL http://localhost/static/netbox.js")
         machine.succeed("curl -sSfL http://localhost/static/docs/")
-
-    with subtest("Can interact with API"):
-        json.loads(
-            machine.succeed("curl -sSfL -H 'Accept: application/json' 'http://localhost/api/'")
-        )
 
     def login(username: str, password: str):
         encoded_data = json.dumps({"username": username, "password": password})

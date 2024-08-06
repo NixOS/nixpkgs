@@ -3251,6 +3251,8 @@ self: super: with self; {
 
   django-celery-results = callPackage ../development/python-modules/django-celery-results { };
 
+  django-choices-field = callPackage ../development/python-modules/django-choices-field { };
+
   django-ckeditor = callPackage ../development/python-modules/django-ckeditor { };
 
   django-classy-tags = callPackage ../development/python-modules/django-classy-tags { };
@@ -3320,6 +3322,8 @@ self: super: with self; {
   django-hierarkey = callPackage ../development/python-modules/django-hierarkey { };
 
   django-hijack = callPackage ../development/python-modules/django-hijack { };
+
+  django-htmx = callPackage ../development/python-modules/django-htmx { };
 
   django-i18nfield = callPackage ../development/python-modules/django-i18nfield { };
 
@@ -14993,6 +14997,8 @@ self: super: with self; {
   stravalib = callPackage ../development/python-modules/stravalib { };
 
   strawberry-graphql = callPackage ../development/python-modules/strawberry-graphql { };
+
+  strawberry-django = callPackage ../development/python-modules/strawberry-django { };
 
   strct = callPackage ../development/python-modules/strct { };
 
