@@ -50,23 +50,22 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "DO_USERDIRS=1" ];
 
-  preInstall = ''
-    mkdir -p "$out/bin"
-  '';
-
   env = lib.optionalAttrs stdenv.isDarwin {
     NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
   };
 
-  postFixup = ''
+  installPhase = ''
+    mkdir -p "$out/bin"
     cp vkquake "$out/bin"
+  '';
+
+  postFixup = ''
     patchelf $out/bin/vkquake \
       --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
   meta = with lib; {
     description = "Vulkan Quake port based on QuakeSpasm";
-    mainProgram = "vkquake";
     homepage = src.meta.homepage;
     longDescription = ''
       vkQuake is a Quake 1 port using Vulkan instead of OpenGL for rendering.
@@ -79,5 +78,6 @@ stdenv.mkDerivation rec {
 
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ PopeRigby ylh ];
+    mainProgram = "vkquake";
   };
 }
