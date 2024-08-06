@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nsncd";
-  version = "1.4.1";
+  version = "unstable-2024-03-18";
 
   src = fetchFromGitHub {
     owner = "twosigma";
     repo = "nsncd";
-    rev = "v${version}";
-    hash = "sha256-nTXtIZ/2SBpViCTk3fcv4mUAPjc+DRSEUjSVdNt04A8=";
+    rev =  "7605e330d5a313a8656e6fcaf1c10cd6b5cdd427";
+    hash = "sha256-Bd7qE9MP5coBCkr70TdoJfwYhQpdrn/zmN4KoARcaMI=";
   };
 
-  cargoHash = "sha256-S2kshoM9jEgMLcCTydmQN5DM/sGAv2ENPAAFlaGCedI=";
+  cargoHash = "sha256-i1rmc5wxtc631hZy2oM4d6r7od0w8GrG7+/pdM6Gqco=";
   checkFlags = [
     # Relies on the test environment to be able to resolve "localhost"
     # on IPv4. That's not the case in the Nix sandbox somehow. Works
