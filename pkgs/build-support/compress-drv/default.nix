@@ -70,9 +70,9 @@ let
     '';
   formatsPipe = builtins.concatStringsSep "|" formats;
 in
-runCommand "${drv.name}-compressed" { } ''
+runCommand "${drv.name}-compressed" { nativeBuildInputs = [ xorg.lndir ]; } ''
   mkdir $out
-  (cd $out; ${xorg.lndir}/bin/lndir ${drv})
+  (cd $out; lndir ${drv})
 
   ${lib.concatStringsSep "\n\n" (lib.mapAttrsToList mkCmd compressors)}
 ''
