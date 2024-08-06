@@ -27188,8 +27188,6 @@ with pkgs;
 
   reap = callPackage ../os-specific/linux/reap { };
 
-  rectangle = callPackage ../os-specific/darwin/rectangle { };
-
   regionset = callPackage ../os-specific/linux/regionset { };
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
