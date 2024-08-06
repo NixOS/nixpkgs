@@ -4,8 +4,7 @@
   buildPythonPackage,
   requests,
   mock,
-  pytest,
-  pytest-cov,
+  pytestCheckHook,
   isPy3k,
 }:
 
@@ -26,8 +25,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytest
-    pytest-cov
+    pytestCheckHook
   ];
 
   meta = with lib; {
