@@ -3758,7 +3758,8 @@
       vacuum-map-parser-roborock
     ];
     "rocketchat" = ps: with ps; [
-    ]; # missing inputs: rocketchat-API
+      rocketchat-api
+    ];
     "roku" = ps: with ps; [
       rokuecp
     ];
