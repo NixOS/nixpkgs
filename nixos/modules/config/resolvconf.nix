@@ -26,7 +26,7 @@ let
     '' + optionalString (length resolvconfOptions > 0) ''
       # Options as described in resolv.conf(5)
       resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
-    '' + optionalString cfg.useLocalResolver ''
+    '' + optionalString (config.networking.nameservers == [] && cfg.useLocalResolver) ''
       # This hosts runs a full-blown DNS resolver.
       name_servers='127.0.0.1${optionalString config.networking.enableIPv6 " ::1"}'
     '' + cfg.extraConfig;
