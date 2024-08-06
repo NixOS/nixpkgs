@@ -20,7 +20,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dialect";
-  version = "2.4.1";
+  version = "2.4.2";
   pyproject = false; # built with meson
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     repo = "dialect";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-WEeTdUdhDSfStu+rBYcuk6miuh5e0AsodbyF93Mg4mo=";
+    hash = "sha256-DAhzvia5ut806rTc2iMuMrVKyYBSaAiMyC4rEOyU4x0=";
   };
 
   nativeBuildInputs = [

@@ -16428,7 +16428,7 @@ with pkgs;
   tinycc = darwin.apple_sdk_11_0.callPackage ../development/compilers/tinycc { };
 
   tinygo = callPackage ../development/compilers/tinygo {
-    llvmPackages = llvmPackages_17;
+    llvmPackages = llvmPackages_18;
   };
 
   tinyscheme = callPackage ../development/interpreters/tinyscheme { };
@@ -26180,8 +26180,6 @@ with pkgs;
   fit-trackee = callPackage ../servers/geospatial/fit-trackee { };
 
   mapproxy = callPackage ../servers/geospatial/mapproxy { };
-
-  mapserver = callPackage ../servers/geospatial/mapserver { };
 
   martin = callPackage ../servers/geospatial/martin {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;

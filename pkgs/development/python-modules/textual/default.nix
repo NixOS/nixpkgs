@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.72.0";
+  version = "0.75.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,10 +39,7 @@ buildPythonPackage rec {
   ] ++ markdown-it-py.optional-dependencies.plugins ++ markdown-it-py.optional-dependencies.linkify;
 
   optional-dependencies = {
-    syntax = [
-      tree-sitter
-      tree-sitter-languages
-    ];
+    syntax = [ tree-sitter ] ++ lib.optionals (pythonOlder "3.12") [ tree-sitter-languages ];
   };
 
   nativeCheckInputs = [
