@@ -10776,6 +10776,12 @@
     github = "kira-bruneau";
     githubId = 382041;
   };
+  kiranshila = {
+    email = "me@kiranshila.com";
+    name = "Kiran Shila";
+    github = "kiranshila";
+    githubId = 6305359;
+  };
   kirelagin = {
     email = "kirelagin@gmail.com";
     matrix = "@kirelagin:matrix.org";
