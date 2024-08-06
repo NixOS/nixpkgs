@@ -91,6 +91,7 @@ buildPythonPackage rec {
   disabledTests = [
     # tests that require network access (like DNS lookups)
     "test_truesendall_with_dump_from_recording"
+    "test_aiohttp"
     "test_asyncio_record_replay"
     "test_gethostbyname"
     # httpx read failure

@@ -2075,8 +2075,6 @@ with pkgs;
     wine = wineWowPackages.stable;
   };
 
-  wtwitch = callPackage ../tools/video/wtwitch { };
-
   wwcd = callPackage ../tools/misc/wwcd { };
 
   writedisk = callPackage ../tools/misc/writedisk { };
@@ -17415,8 +17413,6 @@ with pkgs;
 
   neocmakelsp = callPackage ../development/tools/language-servers/neocmakelsp { };
 
-  nil = callPackage ../development/tools/language-servers/nil { };
-
   inherit (callPackages ../development/tools/language-servers/nixd {
     llvmPackages = llvmPackages_16;
     nix = nixVersions.nix_2_19;
@@ -20037,11 +20033,11 @@ with pkgs;
 
   eigenmath = callPackage ../applications/science/math/eigenmath { };
 
-  vapoursynth = callPackage ../development/libraries/vapoursynth {
+  vapoursynth = callPackage ../by-name/va/vapoursynth/package.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  vapoursynth-editor = libsForQt5.callPackage ../development/libraries/vapoursynth/editor.nix { };
+  vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
 
   vapoursynth-mvtools = callPackage ../development/libraries/vapoursynth-mvtools { };
 
