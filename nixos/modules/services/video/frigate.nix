@@ -7,7 +7,6 @@
 let
   inherit (lib)
     literalExpression
-    mkDefault
     mkEnableOption
     mkPackageOption
     mkIf
