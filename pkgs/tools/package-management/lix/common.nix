@@ -80,6 +80,9 @@ assert (hash == null) -> (src != null);
   # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
+  # If non-`null`, the string value is what the environment variable `NIX_DEBUG`
+  # is set to when building any derivation. See the Nixpkgs manual for more.
+  withNixDebug ? null,
 
   confDir,
   stateDir,
@@ -161,6 +164,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs --build tests
+  '' + lib.optionalString (withNixDebug != null) ''
+    grep -r -l -Z -e 'env."NIX_LOG_FD".*"2"' src | \
+      xargs -0 sed -i '/NIX_LOG_FD.*2/a env["NIX_DEBUG"] = "${toString withNixDebug}";'
   '';
 
   preConfigure =
