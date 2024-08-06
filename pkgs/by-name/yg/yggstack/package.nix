@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "yggstack";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "yggdrasil-network";
     repo = "yggstack";
     rev = "${version}";
-    sha256 = "sha256-pon9AZb3IQdoO//APxSipUvSAZyfx6G8gQAw6wMaZ14=";
+    sha256 = "sha256-RQ7AvVv+VLfgzlb7orZbSB7TNz/hj2fo832ed4WUN80=";
   };
 
   vendorHash = "sha256-Hjb3KSh+2qYYKdgv4+dsSp0kAbzz8gu9qnQdA7wB5fA=";
