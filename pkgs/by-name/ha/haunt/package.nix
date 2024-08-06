@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
       to do things that aren't provided out-of-the-box.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres AluisioASG ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (guile.meta) platforms;
   };
 })
