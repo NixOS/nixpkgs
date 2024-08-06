@@ -137,7 +137,7 @@ in
         secure-token
         rtmp
         vod
-      ];      
+      ];
       upstreams = {
         frigate-api.servers = {
           "127.0.0.1:5001" = { };
@@ -395,8 +395,8 @@ in
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [
         5000 # Internal unauthenticated UI and API access.
-        5001 
-        5002 
+        5001
+        5002
         8002
         8554 # RTSP feeds
         8555 # WebRTC over tcp
