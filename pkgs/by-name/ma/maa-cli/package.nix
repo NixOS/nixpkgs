@@ -42,10 +42,7 @@ rustPlatform.buildRustPackage rec {
 
   # https://github.com/MaaAssistantArknights/maa-cli/pull/126
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "git2"
-    "core_installer"
-  ];
+  buildFeatures = [ "git2" ];
 
   cargoHash = "sha256-C4NkJc7msyaUjQAsc0kbDwkr0cj3Esv+JjA24RvFsXA=";
 
