@@ -22,7 +22,6 @@ let
 
   # Remove null values, so we can document optional/forbidden values that don't end up in the generated TOML file.
   filterConfig = lib.converge (lib.filterAttrsRecursive (_: v: v != null));
-  settingsFile = settingsFormat.generate "config.toml" (filterConfig cfg.settings);
 
   finalPackage = cfg.package.overridePythonAttrs (old: {
     dependencies =
@@ -33,7 +32,7 @@ let
       ++ old.optional-dependencies.sentry
       ++ old.optional-dependencies.sql;
     makeWrapperArgs = (old.makeWrapperArgs or []) ++ [
-      "--set CONFIG \"${settingsFile}/config.toml\""
+      "--set CONFIG /etc/canaille/config.toml"
     ];
   });
   inherit (finalPackage) python;
@@ -49,15 +48,15 @@ in
   options.services.canaille = {
     enable = mkEnableOption "Canaille";
     package = mkPackageOption pkgs "canaille" { };
-    secretKeyFile = lib.mkOption {
-      description = ''
-        A file containing the Flask secret key. Its content is going to be provided to Canaille as `SECRET_KEY`. Make sure it has appropriate permissions. For example, copy the output of this to the specified file:
-        ```
-          python3 -c 'import secrets; print(secrets.token_hex())'
-        ```
-      '';
-      type = lib.types.path;
-    };
+    # secretKeyFile = lib.mkOption {
+    #   description = ''
+    #     A file containing the Flask secret key. Its content is going to be provided to Canaille as `SECRET_KEY`. Make sure it has appropriate permissions. For example, copy the output of this to the specified file:
+    #     ```
+    #       python3 -c 'import secrets; print(secrets.token_hex())'
+    #     ```
+    #   '';
+    #   type = lib.types.path;
+    # };
     settings = mkOption {
       default = { };
       description = "Settings for Canaille. See [the documentation](https://canaille.readthedocs.io/en/latest/references/configuration.html) for details.";
@@ -66,9 +65,18 @@ in
         options = {
           SECRET_KEY = lib.mkOption {
             readOnly = true;
-            description = "Flask Secret Key. Can't be set and must be provided through services.canaille.secretKeyFile";
+            description = "Flask Secret Key. Can't be set and must be provided through services.canaille.settings.SECRET_KEY_FILE";
             default = null;
             type = types.nullOr types.str;
+          };
+          SECRET_KEY_FILE = lib.mkOption {
+            description = ''
+              A file containing the Flask secret key. Its content is going to be provided to Canaille as `SECRET_KEY`. Make sure it has appropriate permissions. For example, copy the output of this to the specified file:
+              ```
+                python3 -c 'import secrets; print(secrets.token_hex())'
+              ```
+            '';
+            type = types.path;
           };
           SERVER_NAME = lib.mkOption {
             description = "The domain name on which canaille will be served.";
@@ -101,6 +109,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.etc."canaille/config.toml" = {
+      source = settingsFormat.generate "config.toml" (filterConfig cfg.settings);
+      user = "canaille";
+      group = "canaille";
+    };
+
     systemd.services.canaille = {
       description = "Canaille";
       documentation = [ "https://canaille.readthedocs.io/en/latest/tutorial/deployment.html" ];
@@ -112,7 +126,8 @@ in
       requires = [ "postgresql.service" "canaille.socket" ];
       environment = {
         PYTHONPATH = "${pythonEnv}/${python.sitePackages}/";
-        CONFIG = "${settingsFile}/config.toml";
+        CONFIG = "/etc/canaille/config.toml";
+        inherit (cfg.settings) SECRET_KEY_FILE;
       };
       serviceConfig = {
         WorkingDirectory = dataDir;
