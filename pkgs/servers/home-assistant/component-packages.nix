@@ -4304,7 +4304,8 @@
       stookalert
     ];
     "stookwijzer" = ps: with ps; [
-    ]; # missing inputs: stookwijzer
+      stookwijzer
+    ];
     "stream" = ps: with ps; [
       av
       numpy_1
@@ -5917,6 +5918,7 @@
     "steam_online"
     "steamist"
     "stookalert"
+    "stookwijzer"
     "stream"
     "streamlabswater"
     "stt"
