@@ -1,4 +1,10 @@
-{ config, lib, utils, pkgs, ... }:
+{
+  config,
+  lib,
+  utils,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -8,22 +14,22 @@ let
     mkPackageOption
     mkIf
     mkOption
-    types;
+    types
+    ;
 
   cfg = config.services.filebeat;
 
-  json = pkgs.formats.json {};
+  json = pkgs.formats.json { };
 in
 {
+  meta.maintainers = with lib.maintainers; [ felbinger ];
   options = {
 
     services.filebeat = {
 
       enable = mkEnableOption "filebeat";
 
-      package = mkPackageOption pkgs "filebeat" {
-        example = "filebeat7";
-      };
+      package = mkPackageOption pkgs "filebeat" { example = "filebeat7"; };
 
       inputs = mkOption {
         description = ''
@@ -41,23 +47,28 @@ in
 
           See <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
         '';
-        default = {};
-        type = types.attrsOf (types.submodule ({ name, ... }: {
-          freeformType = json.type;
-          options = {
-            type = mkOption {
-              type = types.str;
-              default = name;
-              description = ''
-                The input type.
+        default = { };
+        type = types.attrsOf (
+          types.submodule (
+            { name, ... }:
+            {
+              freeformType = json.type;
+              options = {
+                type = mkOption {
+                  type = types.str;
+                  default = name;
+                  description = ''
+                    The input type.
 
-                Look for the value after `type:` on
-                the individual input pages linked from
-                <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
-              '';
-            };
-          };
-        }));
+                    Look for the value after `type:` on
+                    the individual input pages linked from
+                    <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
+                  '';
+                };
+              };
+            }
+          )
+        );
         example = literalExpression ''
           {
             journald.id = "everything";  # Only for filebeat7
@@ -91,23 +102,28 @@ in
 
           See <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
         '';
-        default = {};
-        type = types.attrsOf (types.submodule ({ name, ... }: {
-          freeformType = json.type;
-          options = {
-            module = mkOption {
-              type = types.str;
-              default = name;
-              description = ''
-                The name of the module.
+        default = { };
+        type = types.attrsOf (
+          types.submodule (
+            { name, ... }:
+            {
+              freeformType = json.type;
+              options = {
+                module = mkOption {
+                  type = types.str;
+                  default = name;
+                  description = ''
+                    The name of the module.
 
-                Look for the value after `module:` on
-                the individual input pages linked from
-                <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
-              '';
-            };
-          };
-        }));
+                    Look for the value after `module:` on
+                    the individual input pages linked from
+                    <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
+                  '';
+                };
+              };
+            }
+          )
+        );
         example = literalExpression ''
           {
             nginx = {
@@ -129,30 +145,56 @@ in
           freeformType = json.type;
 
           options = {
-
-            output.elasticsearch.hosts = mkOption {
-              type = with types; listOf str;
-              default = [ "127.0.0.1:9200" ];
-              example = [ "myEShost:9200" ];
+            output = mkOption {
+              type = types.nullOr (
+                types.attrsOf (
+                  types.submodule {
+                    freeformType = json.type;
+                    options = {
+                      enabled = mkEnableOption "<name>";
+                      hosts = mkOption {
+                        type = with types; listOf str;
+                        default = [ ];
+                        description = ''
+                          The list of Elasticsearch/Logstash/Kafka/Redis nodes to connect to.
+                          The events are distributed to these nodes in round robin order. If
+                          one node becomes unreachable, the event is automatically sent to
+                          another node. Each node can be defined as a URL or IP:PORT.
+                        '';
+                      };
+                    };
+                  }
+                )
+              );
+              default = {
+                elasticsearch = {
+                  enable = true;
+                  hosts = [ "127.0.0.1:9200" ];
+                };
+              };
+              example = {
+                elasticsearch.enable = false;
+                logstash = {
+                  enable = true;
+                  hosts = [ "myEShost:9200" ];
+                };
+              };
               description = ''
-                The list of Elasticsearch nodes to connect to.
+                You configure Filebeat to write to a specific output by setting options in the
+                Outputs section of the `filebeat.yml` config file. Only a single output may be defined.
 
-                The events are distributed to these nodes in round
-                robin order. If one node becomes unreachable, the
-                event is automatically sent to another node. Each
-                Elasticsearch node can be defined as a URL or
-                IP:PORT. For example:
-                `http://192.15.3.2`,
-                `https://es.found.io:9230` or
-                `192.24.3.2:9300`. If no port is
-                specified, `9200` is used.
+                The following topics describe how to configure each supported output. If you've secured
+                the Elastic Stack, also read Secure for more about security-related configuration options.
+
+                For more information about the available outputs see
+                [elastic.co/guide/en/beats/filebeat/current/configuring-output.html](https://www.elastic.co/guide/en/beats/filebeat/current/configuring-output.html).
               '';
             };
 
             filebeat = {
               inputs = mkOption {
                 type = types.listOf json.type;
-                default = [];
+                default = [ ];
                 internal = true;
                 description = ''
                   Inputs specify how Filebeat locates and processes
@@ -163,7 +205,7 @@ in
               };
               modules = mkOption {
                 type = types.listOf json.type;
-                default = [];
+                default = [ ];
                 internal = true;
                 description = ''
                   Filebeat modules provide a quick way to get started
@@ -180,7 +222,7 @@ in
             };
           };
         };
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             settings = {
@@ -215,6 +257,51 @@ in
 
   config = mkIf cfg.enable {
 
+    assertions =
+      let
+        validOutputs = [
+          "elasticsearch"
+          "logstash"
+          "kafka"
+          "redis"
+          "file"
+          "console"
+          "discard"
+        ];
+        validOutputsHosts = [
+          "elasticsearch"
+          "logstash"
+          "kafka"
+          "redis"
+        ];
+
+        filterEnabled = attrset:
+          let
+            enabledNames = builtins.filter (name: attrset.${name}.enabled) (builtins.attrNames attrset);
+          in
+            builtins.listToAttrs (map (name: { name = name; value = attrset.${name}; }) enabledNames);
+
+        enabledOutputs = filterEnabled cfg.settings.output;
+      in
+      [
+        {
+          assertion = builtins.length (builtins.attrNames enabledOutputs) == 1;
+          message = "only one services.filebeat.settings.output can be configured";
+        }
+        {
+          assertion =
+            (builtins.length (builtins.attrNames enabledOutputs) != 1)
+            || (builtins.elem (builtins.head (builtins.attrNames enabledOutputs)) validOutputs);
+          message = "services.filebeat.settings.output is invalid, choose one of: ${lib.concatStringsSep ", " validOutputs}";
+        }
+        {
+          assertion =
+            (builtins.length (builtins.attrNames enabledOutputs) != 1)
+            || (builtins.elem (builtins.head (builtins.attrNames enabledOutputs)) validOutputsHosts);
+          message = "services.filebeat.settings.output.<name>.hosts can only be configured for: ${lib.concatStringsSep ", " validOutputsHosts}";
+        }
+      ];
+
     services.filebeat.settings.filebeat.inputs = attrValues cfg.inputs;
     services.filebeat.settings.filebeat.modules = attrValues cfg.modules;
 
@@ -229,10 +316,7 @@ in
 
           umask u=rwx,g=,o=
 
-          ${utils.genJqSecretsReplacementSnippet
-              cfg.settings
-              "/var/lib/filebeat/filebeat.yml"
-           }
+          ${utils.genJqSecretsReplacementSnippet cfg.settings "/var/lib/filebeat/filebeat.yml"}
         '';
         ExecStart = ''
           ${cfg.package}/bin/filebeat -e \
