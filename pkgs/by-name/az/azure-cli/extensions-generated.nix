@@ -514,9 +514,9 @@
   };
   hdinsightonaks = mkAzExtension rec {
     pname = "hdinsightonaks";
-    version = "1.0.0b2";
+    version = "1.0.0b3";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/hdinsightonaks-${version}-py3-none-any.whl";
-    sha256 = "c323291952f9ec6014af5f760b26860bd8029aa04cc226fd5996f20726641c59";
+    sha256 = "f549b85107b7b83ff64fcfa5c90a5d7e900a5ea2efe76eec9b1f81689e58c365";
     description = "Microsoft Azure Command-Line Tools Hdinsightonaks Extension";
   };
   healthbot = mkAzExtension rec {
