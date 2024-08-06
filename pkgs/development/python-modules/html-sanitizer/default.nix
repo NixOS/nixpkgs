@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   hatchling,
   lxml,
   beautifulsoup4,
@@ -22,6 +23,15 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-NWJLD70783Ie6efyCvGopxMIlP3rLz0uM/D1rLQwBXE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-34078.patch";
+      url = "https://github.com/matthiask/html-sanitizer/commit/48db42fc5143d0140c32d929c46b802f96913550.patch";
+      excludes = ["CHANGELOG.rst"];
+      hash = "sha256-VowhomgPsBKSMdJwKvZjL0+rGjkTWobpWQeEHGLNp2M=";
+    })
+  ];
 
   nativeBuildInputs = [ hatchling ];
 
