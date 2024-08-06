@@ -23,6 +23,9 @@ in stdenv.mkDerivation {
     NIX_DEBUG=1 $CC -v
     NIX_DEBUG=1 $CXX -v
 
+    echo "checking if cc-wrapper works with an empty \$PATH... " >&2
+    env - $NIX_CC/bin/$CC --version
+
     echo "checking whether compiler builds valid C binaries... " >&2
     $CC -o cc-check ${./cc-main.c}
     ${emulator} ./cc-check
