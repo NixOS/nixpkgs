@@ -12,7 +12,15 @@ fi
 
 shopt -s inherit_errexit
 
-if (( "${NIX_DEBUG:-0}" >= 6 )); then
+# $NIX_DEBUG must be a documented integer level, if set, so we can use it safely as an integer.
+# See the `Verbosity` enum in the Nix source for these levels.
+if ! [[ -z ${NIX_DEBUG-} || $NIX_DEBUG == [0-7] ]]; then
+    printf 'The `NIX_DEBUG` environment variable has an unexpected value: %s\n' "${NIX_DEBUG}"
+    echo "It can only be unset or an integer between 0 and 7."
+    exit 1
+fi
+
+if [[ ${NIX_DEBUG:-0} -ge 6 ]]; then
     set -x
 fi
 
@@ -47,19 +55,67 @@ getAllOutputNames() {
     fi
 }
 
-# Logs arguments to $NIX_LOG_FD, if it exists, no-op if it does not.
-nixLog() {
-    if [[ -z ${NIX_LOG_FD-} ]]; then
-        return
-    fi
-    echo "$@" >&"$NIX_LOG_FD"
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlError` in the Nix source.
+nixErrorLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 0 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlWarn` in the Nix source.
+nixWarnLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 1 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlNotice` in the Nix source.
+nixNoticeLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 2 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlInfo` in the Nix source.
+nixInfoLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 3 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlTalkative` in the Nix source.
+nixTalkativeLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 4 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlChatty` in the Nix source.
+nixChattyLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 5 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlDebug` in the Nix source.
+nixDebugLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 6 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+}
+
+# All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
+# Corresponds to `Verbosity::lvlVomit` in the Nix source.
+nixVomitLog() {
+    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 7 ]]; then return; fi
+    printf "%s\n" "$*" >&"$NIX_LOG_FD"
 }
 
 # Log a hook, to be run before the hook is actually called.
 # logging for "implicit" hooks -- the ones specified directly
 # in derivation's arguments -- is done in _callImplicitHook instead.
 _logHook() {
-    # Fast path in case nixLog is no-op.
+    # Fast path in case nixTalkativeLog is no-op.
     if [[ -z ${NIX_LOG_FD-} ]]; then
         return
     fi
@@ -69,14 +125,14 @@ _logHook() {
     shift 2
 
     if declare -F "$hookExpr" > /dev/null 2>&1; then
-        nixLog "calling '$hookKind' function hook '$hookExpr'" "$@"
+        nixTalkativeLog "calling '$hookKind' function hook '$hookExpr'" "$@"
     elif type -p "$hookExpr" > /dev/null; then
-        nixLog "sourcing '$hookKind' script hook '$hookExpr'"
+        nixTalkativeLog "sourcing '$hookKind' script hook '$hookExpr'"
     elif [[ "$hookExpr" != "_callImplicitHook"* ]]; then
         # Here we have a string hook to eval.
-        # Join lines onto one with literal \n characters unless NIX_DEBUG >= 2.
+        # Join lines onto one with literal \n characters unless NIX_DEBUG >= 5.
         local exprToOutput
-        if (( "${NIX_DEBUG:-0}" >= 2 )); then
+        if [[ ${NIX_DEBUG:-0} -ge 5 ]]; then
             exprToOutput="$hookExpr"
         else
             # We have `r'\n'.join([line.lstrip() for lines in text.split('\n')])` at home.
@@ -95,7 +151,7 @@ _logHook() {
             # And then remove the final, unnecessary, \n
             exprToOutput="${exprToOutput%%\\n }"
         fi
-        nixLog "evaling '$hookKind' string hook '$exprToOutput'"
+        nixTalkativeLog "evaling '$hookKind' string hook '$exprToOutput'"
     fi
 }
 
@@ -153,13 +209,13 @@ _callImplicitHook() {
     local def="$1"
     local hookName="$2"
     if declare -F "$hookName" > /dev/null; then
-        nixLog "calling implicit '$hookName' function hook"
+        nixTalkativeLog "calling implicit '$hookName' function hook"
         "$hookName"
     elif type -p "$hookName" > /dev/null; then
-        nixLog "sourcing implicit '$hookName' script hook"
+        nixTalkativeLog "sourcing implicit '$hookName' script hook"
         source "$hookName"
     elif [ -n "${!hookName:-}" ]; then
-        nixLog "evaling implicit '$hookName' string hook"
+        nixTalkativeLog "evaling implicit '$hookName' string hook"
         eval "${!hookName}"
     else
         return "$def"
@@ -475,10 +531,7 @@ done
 
 unset i
 
-if (( "${NIX_DEBUG:-0}" >= 1 )); then
-    echo "initial path: $PATH"
-fi
-
+nixWarnLog "initial path: $PATH"
 
 # Check that the pre-hook initialised SHELL.
 if [ -z "${SHELL:-}" ]; then echo "SHELL not set"; exit 1; fi
@@ -705,7 +758,7 @@ activatePackage() {
     (( hostOffset <= targetOffset )) || exit 1
 
     if [ -f "$pkg" ]; then
-        nixLog "sourcing setup hook '$pkg'"
+        nixTalkativeLog "sourcing setup hook '$pkg'"
         source "$pkg"
     fi
 
@@ -729,7 +782,7 @@ activatePackage() {
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
-        nixLog "sourcing setup hook '$pkg/nix-support/setup-hook'"
+        nixTalkativeLog "sourcing setup hook '$pkg/nix-support/setup-hook'"
         source "$pkg/nix-support/setup-hook"
     fi
 }
@@ -841,11 +894,10 @@ fi
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
 HOST_PATH="${_HOST_PATH-}${_HOST_PATH:+${HOST_PATH:+:}}$HOST_PATH"
 export XDG_DATA_DIRS="${_XDG_DATA_DIRS-}${_XDG_DATA_DIRS:+${XDG_DATA_DIRS:+:}}${XDG_DATA_DIRS-}"
-if (( "${NIX_DEBUG:-0}" >= 1 )); then
-    echo "final path: $PATH"
-    echo "final host path: $HOST_PATH"
-    echo "final data dirs: $XDG_DATA_DIRS"
-fi
+
+nixWarnLog "final path: $PATH"
+nixWarnLog "final host path: $HOST_PATH"
+nixWarnLog "final data dirs: $XDG_DATA_DIRS"
 
 unset _PATH
 unset _HOST_PATH
@@ -994,14 +1046,11 @@ substituteInPlace() {
 }
 
 _allFlags() {
-    # export some local variables for the awk below
-    # so some substitutions such as name don't have to be in the env attrset
-    # when __structuredAttrs is enabled
+    # Export some local variables for the `awk` below so some substitutions (such as name)
+    # don't have to be in the env attrset when `__structuredAttrs` is enabled.
     export system pname name version
     while IFS='' read -r varName; do
-        if (( "${NIX_DEBUG:-0}" >= 1 )); then
-            printf "@%s@ -> %q\n" "${varName}" "${!varName}" >&2
-        fi
+        nixTalkativeLog "@${varName}@ -> ${!varName}"
         args+=("--subst-var" "$varName")
     done < <(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }')
 }
@@ -1597,6 +1646,13 @@ distPhase() {
 showPhaseHeader() {
     local phase="$1"
     echo "Running phase: $phase"
+
+    # The Nix structured logger allows derivations to update the phase as they're building,
+    # which shows up in the terminal UI. See `handleJSONLogMessage` in the Nix source.
+    if [[ -z ${NIX_LOG_FD-} ]]; then
+        return
+    fi
+    printf "@nix { \"action\": \"setPhase\", \"phase\": \"%s\" }\n" "$phase" >&"$NIX_LOG_FD"
 }
 
 
@@ -1628,8 +1684,6 @@ runPhase() {
     if [[ "$curPhase" = fixupPhase && -n "${dontFixup:-}" ]]; then return; fi
     if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then return; fi
     if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then return; fi
-
-    nixLog "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }"
 
     showPhaseHeader "$curPhase"
     dumpVars
