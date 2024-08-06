@@ -11889,6 +11889,8 @@ with pkgs;
 
   pywal = with python3Packages; toPythonApplication pywal;
 
+  pywb = callPackage ../tools/misc/pywb {};
+
   pystring = callPackage ../development/libraries/pystring { };
 
   raysession = python3Packages.callPackage ../applications/audio/raysession {};
