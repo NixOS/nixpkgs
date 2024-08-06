@@ -5,12 +5,13 @@
   numpy,
   python,
   pythonOlder,
+  setuptools
 }:
 
 buildPythonPackage rec {
   pname = "cma";
   version = "3.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-wbAH0A5vpnnXqt7TTvLDPnCp6M3QjeCwD6l6LoTVu1w=";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  build-system = [ setuptools ];
+
+  dependencies = [ numpy ];
 
   checkPhase = ''
     # At least one doctest fails, thus only limited amount of files is tested
@@ -33,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Covariance Matrix Adaptation Evolution Strategy for non-linear numerical optimization";
     homepage = "https://github.com/CMA-ES/pycma";
+    changelog = "https://github.com/CMA-ES/pycma/releases/tag/r${version}";
     license = licenses.bsd3;
     maintainers = [ ];
   };
