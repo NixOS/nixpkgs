@@ -65,6 +65,8 @@ python.pkgs.buildPythonApplication rec {
       pytest-xdist
       slapd
       toml
+      faker
+      time-machine
     ]
     ++ optional-dependencies.front
     ++ optional-dependencies.oidc
