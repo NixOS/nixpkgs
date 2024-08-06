@@ -227,9 +227,9 @@
   };
   connectedmachine = mkAzExtension rec {
     pname = "connectedmachine";
-    version = "1.0.0b1";
+    version = "1.0.0b2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/connectedmachine-${version}-py3-none-any.whl";
-    sha256 = "f829b171bc489bd1bffea518040acc74608581dae798f4b23bedfe8bf7445383";
+    sha256 = "8b8c4340c4c6552e3826220ffb95bf619447675b0469304b71fa80e2e4e31c81";
     description = "Microsoft Azure Command-Line Tools ConnectedMachine Extension";
   };
   connectedvmware = mkAzExtension rec {
