@@ -38,8 +38,11 @@
   mingwSupport ? false,
   waylandSupport ? false,
   x11Support ? false,
+  d3dmetalSupport ? false, # Disabled by default because it’s non-free and requires manually downloading GPTK.
   embedInstallers ? false, # The Mono and Gecko MSI installers
-  moltenvk ? darwin.moltenvk # Allow users to override MoltenVK easily
+  # Allow users to override these easily since they may need a specific version for their system.
+  d3dmetal,
+  moltenvk ? darwin.moltenvk,
 }:
 
 let wine-build = build: release:
@@ -47,7 +50,7 @@ let wine-build = build: release:
         wineRelease = release;
         supportFlags = {
           inherit
-            alsaSupport cairoSupport cupsSupport cursesSupport dbusSupport
+            alsaSupport cairoSupport cupsSupport cursesSupport d3dmetalSupport dbusSupport
             embedInstallers fontconfigSupport gettextSupport gphoto2Support
             gstreamerSupport gtkSupport krb5Support mingwSupport netapiSupport
             odbcSupport openclSupport openglSupport pcapSupport
@@ -56,7 +59,7 @@ let wine-build = build: release:
             x11Support xineramaSupport
           ;
         };
-        inherit moltenvk;
+        inherit d3dmetal moltenvk;
       });
 
 in if wineRelease == "staging" then
