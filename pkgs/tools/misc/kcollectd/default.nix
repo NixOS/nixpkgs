@@ -26,6 +26,10 @@ mkDerivation rec {
     hash = "sha256-bUVL5eRQ5UkSZo562pnyEcj0fVoSC5WHRq4BfN67jEM=";
   };
 
+  postPatch = lib.optional (!lib.versionOlder rrdtool.version "1.9.0") ''
+    substituteInPlace kcollectd/rrd_interface.cc --replace-fail 'char *arg[] =' 'const char *arg[] ='
+  '';
+
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
