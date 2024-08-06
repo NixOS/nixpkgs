@@ -10191,6 +10191,8 @@ self: super: with self; {
 
   ppk2-api = callPackage ../development/python-modules/ppk2-api { };
 
+  print-color = callPackage ../development/python-modules/print-color { };
+
   private-gpt = callPackage ../development/python-modules/private-gpt { };
 
   prodict = callPackage ../development/python-modules/prodict { };
