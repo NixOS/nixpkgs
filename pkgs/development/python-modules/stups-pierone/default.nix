@@ -5,8 +5,7 @@
   requests,
   stups-cli-support,
   stups-zign,
-  pytest,
-  pytest-cov,
+  pytestCheckHook,
   hypothesis,
   pythonOlder,
 }:
@@ -36,8 +35,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    pytest
-    pytest-cov
+    pytestCheckHook
     hypothesis
   ];
 
