@@ -10,7 +10,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.120.0";
+  version = "1.121.0";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.8";
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "aws";
     repo = "aws-sam-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XFVh7e9ooIBhWRkVovPdrSuyosBMQ84PDRjV2o0x9ns=";
+    hash = "sha256-NzpI8YdPkdSk2/PMGqCMlpQSv074AuuFFosKAIojriw=";
   };
 
   build-system = with python3.pkgs; [
