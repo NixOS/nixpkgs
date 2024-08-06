@@ -101,7 +101,7 @@
     };
 
     meta = {
-      changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
+      changelog = "https://www.mozilla.org/en-US/firefox/${lib.removeSuffix "esr" version}/releasenotes/";
       description = "Web browser built from Firefox source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
       maintainers = with lib.maintainers; [ hexa ];
