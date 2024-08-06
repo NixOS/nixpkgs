@@ -7,6 +7,7 @@
   wrapGAppsHook4,
   gtk4,
   gtk4-layer-shell,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -22,6 +23,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-2t6WXQ5XoDtnlhzc96KeJ2cx+8sVS1oy2z3tsIRGq1Y=";
   subPackages = [ "cmd/walker.go" ];
+
+  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [
     pkg-config
