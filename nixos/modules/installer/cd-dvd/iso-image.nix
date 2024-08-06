@@ -828,10 +828,10 @@ in
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
-        { source = pkgs.substituteAll  {
+        { source = pkgs.substitute {
             name = "isolinux.cfg";
             src = pkgs.writeText "isolinux.cfg-in" isolinuxCfg;
-            bootRoot = "/boot";
+            substitutions = [ "--subst-var-by" "bootRoot" "/boot" ];
           };
           target = "/isolinux/isolinux.cfg";
         }
