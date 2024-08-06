@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , installShellFiles
 , nixosTests
@@ -22,26 +21,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.2";
+  version = "1.1.3";
   pname = "usbguard";
 
   src = fetchFromGitHub {
     owner = "USBGuard";
     repo = pname;
     rev = "usbguard-${version}";
-    hash = "sha256-uwNoKczmVOMpkU4KcKTOtbcTHiYVGXjk/rVbqMl5pGk=";
+    hash = "sha256-8y8zaKJfoIXc9AvG1wi3EzZA7BR2wVFLuOyD+zpBY0s=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Pull upstream fix for gcc-13:
-    #   https://github.com/USBGuard/usbguard/pull/586
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/USBGuard/usbguard/commit/22b1e0897af977cc96af926c730ff948bd120bb5.patch";
-      hash = "sha256-yw0ZHcn6naHcsfsqdBB/aTgCwvEHecew/6HDmjyY2ZA=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -94,6 +83,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://usbguard.github.io/";
     license = licenses.gpl2Plus;
+    platforms = platforms.linux;
     maintainers = [ maintainers.tnias ];
   };
 }
