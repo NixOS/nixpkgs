@@ -6,23 +6,24 @@
 }:
 let
   cfg = config.services.portmaster;
+  inherit (lib)
+    mkOption
+    mkEnableOption
+    types
+    mkIf
+    optionalString
+    maintainers
+    ;
 in
-with lib;
 {
   options.services.portmaster = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        This option enables the portmaster-core daemon.
-      '';
-    };
+    enable = mkEnableOption "Portmaster Core Daemon";
 
     devmode.enable = mkOption {
       type = types.bool;
       default = false;
       description = ''
-        This option enables the portmaster-core devmode.
+        This option enables the Portmaster Core devmode.
 
         The devmode makes the Portmaster UI available at `127.0.0.1:817`.
       '';
@@ -31,7 +32,6 @@ with lib;
     user = mkOption {
       type = types.str;
       default = "portmaster";
-      example = "yourUser";
       description = ''
         The user to run Portmaster as.
       '';
@@ -40,7 +40,6 @@ with lib;
     group = mkOption {
       type = types.str;
       default = "portmaster";
-      example = "yourGroup";
       description = ''
         The group to run Portmaster under.
       '';
@@ -60,24 +59,21 @@ with lib;
       group = cfg.group;
       home = cfg.dataDir;
       createHome = true;
-      uid = config.ids.uids.portmaster;
+      isSystemUser = true;
       description = "Portmaster daemon user";
     };
 
-    users.groups.${cfg.group}.gid = config.ids.gids.portmaster;
+    users.groups.${cfg.group}.gid = config.users.users.${cfg.user}.uid;
 
     systemd.services.portmaster = {
       enable = true;
       description = "Portmaster by Safing";
-      documentation = [
-        "https://safing.io"
-        "https://docs.safing.io"
-      ];
+      documentation = [ "https://docs.safing.io" ];
 
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = with pkgs; [ iptables ];
+      path = [ pkgs.iptables ];
 
       preStart = "${pkgs.portmaster}/bin/portmaster-start" + " --data \"${cfg.dataDir}\"" + " update";
 
