@@ -2,25 +2,35 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch2
 , installShellFiles
 }:
 
 buildGoModule rec {
   pname = "canarytail";
-  version = "0.1.1";
+  version = "0.1.2+unstable-latest";
   outputs = [
     "out"
   ];
 
   src = fetchFromGitHub {
     owner = "canarytail";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-WA/jhdCOpEuKKHKXhZyhbYx82iD/F3jHT6SlWKDaQjc=";
+    repo = "client";
+    rev = "3e585105ab155e4a5229a9dd8664a0aff60deb7c";
+    hash = "sha256-WQJvOg1Ax3zujIRVMweYrI8tpGX4PB7nmUzXZNe3V0U=";
   };
 
+  patches = [
+    # Update go mod crypto
+    # https://github.com/canarytail/client/pull/22
+    (fetchpatch2 {
+      url = "https://github.com/canarytail/client/commit/0871ad14489c0b96d5cd3d980fb0028f8026f2ee.patch?full_index=1";
+      hash = "sha256-uO4bSUTD3iBmZHGvhwFuOQDjFUElYSuIGICHvh+62eY=";
+    })
+  ];
+
   proxyVendor = true;
-  vendorHash = "sha256-u3xaiDcFE4Eh1kNClMHI18+j3KW9CkE5W5f9tIe8xtc=";
+  vendorHash = "sha256-5oxCi0A3yatnVdV1Nx7KBUgPbvB41VmjMgiqLpNl+oI=";
 
   ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
 
