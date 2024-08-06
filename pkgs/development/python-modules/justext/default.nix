@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pytest-cov-stub,
   lxml,
   lxml-html-clean,
 }:
@@ -24,13 +25,10 @@ buildPythonPackage rec {
     lxml-html-clean
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  # patch out coverage report
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail " --cov=justext --cov-report=term-missing --no-cov-on-fail" ""
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "justext" ];
 
