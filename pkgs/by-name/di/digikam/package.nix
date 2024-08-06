@@ -187,8 +187,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
     qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${kdePackages.qtbase.qtPluginPrefix}/digikam)
     substituteInPlace $out/bin/digitaglinktree \
-      --replace "/usr/bin/perl" "${perl}/bin/perl" \
-      --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
+      --replace "/usr/bin/perl" "${lib.getExe perl}" \
+      --replace "/usr/bin/sqlite3" "${lib.getExe sqlite}"
   '';
 
   meta = {
