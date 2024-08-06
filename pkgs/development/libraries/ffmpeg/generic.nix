@@ -402,36 +402,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = []
-    ++ optionals (versionOlder version "5") [
-      (fetchpatch2 {
-        name = "libsvtav1-1.5.0-compat-compressed_ten_bit_format.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/031f1561cd286596cdb374da32f8aa816ce3b135";
-        hash = "sha256-agJgzIzrBTQBAypuCmGXXFo7vw6Iodw5Ny5O5QCKCn8=";
-      })
-      (fetchpatch2 {
-        # Backport fix for binutils-2.41.
-        name = "binutils-2.41.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
-        hash = "sha256-vLSltvZVMcQ0CnkU0A29x6fJSywE8/aU+Mp9os8DZYY=";
-      })
-      # The upstream patch isn’t for ffmpeg 4, but it will apply with a few tweaks.
-      # Fixes a crash when built with clang 16 due to UB in ff_seek_frame_binary.
-      (fetchpatch2 {
-        name = "utils-fix_crash_in_ff_seek_frame_binary.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/ab792634197e364ca1bb194f9abe36836e42f12d";
-        hash = "sha256-vqqVACjbCcGL9Qvmg1QArSKqVmOqr8BEr+OxTBDt6mA=";
-        postFetch = ''
-          substituteInPlace "$out" \
-            --replace libavformat/seek.c libavformat/utils.c \
-            --replace 'const AVInputFormat *const ' 'const AVInputFormat *'
-        '';
-      })
-      (fetchpatch2 {
-        name = "CVE-2023-51794.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/50f0f8c53c818f73fe2d752708e2fa9d2a2d8a07";
-        hash = "sha256-5G9lmKjMEa0+vqbA8EEiNIr6QG+PeEoIL+uZP4Hlo28=";
-      })
-    ]
     ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
       (fetchpatch2 { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
