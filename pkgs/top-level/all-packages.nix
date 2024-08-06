@@ -17128,9 +17128,6 @@ with pkgs;
   spidermonkey_91 = callPackage ../development/interpreters/spidermonkey/91.nix {
     inherit (darwin) libobjc;
   };
-  spidermonkey_102 = callPackage ../development/interpreters/spidermonkey/102.nix {
-    inherit (darwin) libobjc;
-  };
   spidermonkey_115 = callPackage ../development/interpreters/spidermonkey/115.nix {
     inherit (darwin) libobjc;
   };
