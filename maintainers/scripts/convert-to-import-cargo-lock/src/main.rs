@@ -113,7 +113,7 @@ fn convert(attr: &str, hashes: &mut HashMap<String, String>) -> anyhow::Result<(
             .split_once('+')
             .expect("dependency should have well-formed source url");
 
-        if let Some(hash) = hashes.get(original_url) {
+        if hashes.contains_key(original_url) {
             continue;
         }
 
