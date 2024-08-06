@@ -17438,8 +17438,6 @@ with pkgs;
 
   vala-language-server = callPackage ../development/tools/language-servers/vala-language-server { };
 
-  verible = callPackage ../development/tools/language-servers/verible { };
-
   vscode-langservers-extracted = callPackage ../development/tools/language-servers/vscode-langservers-extracted { };
 
   zls = callPackage ../development/tools/language-servers/zls { };
