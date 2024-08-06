@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   HOME = "$TMPDIR";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd volta \
       --bash <($out/bin/volta completions bash) \
       --fish <($out/bin/volta completions fish) \

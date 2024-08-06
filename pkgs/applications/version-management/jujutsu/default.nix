@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/jj util mangen > ./jj.1
     installManPage ./jj.1
 
