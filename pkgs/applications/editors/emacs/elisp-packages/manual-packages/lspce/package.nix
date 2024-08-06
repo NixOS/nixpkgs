@@ -1,16 +1,12 @@
 {
   lib,
-  callPackage,
   f,
+  lspce-module,
   markdown-mode,
   melpaBuild,
-  nix-update-script,
   yasnippet,
 }:
 
-let
-  lspce-module = callPackage ./module.nix { };
-in
 melpaBuild {
   pname = "lspce";
   inherit (lspce-module) version src meta;
@@ -21,14 +17,10 @@ melpaBuild {
     yasnippet
   ];
 
-  # to compile lspce.el, it needs lspce-module.so
+  # lspce-module.so is needed to compile lspce.el
   files = ''(:defaults "${lib.getLib lspce-module}/lib/lspce-module.*")'';
 
   passthru = {
     inherit lspce-module;
-    updateScript = nix-update-script {
-      attrPath = "emacsPackages.lspce.lspce-module";
-      extraArgs = [ "--version=branch" ];
-    };
   };
 }

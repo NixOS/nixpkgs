@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   rustPlatform,
 }:
 
@@ -30,6 +31,10 @@ rustPlatform.buildRustPackage {
       mv --verbose $f $out/lib/lspce-module.''${f##*.}
     done
   '';
+
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  };
 
   meta = {
     homepage = "https://github.com/zbelial/lspce";
