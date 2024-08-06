@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_words_delete"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ltrs \
       --bash <($out/bin/ltrs completions bash) \
       --fish <($out/bin/ltrs completions fish) \

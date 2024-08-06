@@ -3693,7 +3693,8 @@
       praw
     ];
     "refoss" = ps: with ps; [
-    ]; # missing inputs: refoss-ha
+      refoss-ha
+    ];
     "rejseplanen" = ps: with ps; [
       rjpl
     ];
@@ -3758,7 +3759,8 @@
       vacuum-map-parser-roborock
     ];
     "rocketchat" = ps: with ps; [
-    ]; # missing inputs: rocketchat-API
+      rocketchat-api
+    ];
     "roku" = ps: with ps; [
       rokuecp
     ];
@@ -4244,7 +4246,8 @@
       spiderpy
     ];
     "splunk" = ps: with ps; [
-    ]; # missing inputs: hass-splunk
+      hass-splunk
+    ];
     "spotify" = ps: with ps; [
       fnv-hash-fast
       psutil-home-assistant
@@ -4304,7 +4307,8 @@
       stookalert
     ];
     "stookwijzer" = ps: with ps; [
-    ]; # missing inputs: stookwijzer
+      stookwijzer
+    ];
     "stream" = ps: with ps; [
       av
       numpy_1
@@ -5814,6 +5818,7 @@
     "recorder"
     "recovery_mode"
     "reddit"
+    "refoss"
     "remote"
     "renault"
     "renson"
@@ -5917,6 +5922,7 @@
     "steam_online"
     "steamist"
     "stookalert"
+    "stookwijzer"
     "stream"
     "streamlabswater"
     "stt"
