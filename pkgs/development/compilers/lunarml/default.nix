@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.1.0";
+  version = "0.2.0";
 in
 stdenvNoCC.mkDerivation {
   inherit version;
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation {
     owner = "minoki";
     repo = "LunarML";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wM6ppH0g8yIi+4fwTejzZGn1uv/Wvlajn87A+IKbPXw=";
+    hash = "sha256-w0DWvFegAdpJTab60cDLA+tketmMYeKApx1rCNr27i4=";
   };
 
   outputs = [ "out" "doc" ];
