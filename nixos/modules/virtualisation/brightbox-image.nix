@@ -10,7 +10,8 @@ in
   system.build.brightboxImage =
     pkgs.vmTools.runInLinuxVM (
       pkgs.runCommand "brightbox-image"
-        { preVM =
+        {
+          preVM =
             ''
               mkdir $out
               diskImage=$out/$diskImageBase
@@ -112,7 +113,8 @@ in
   environment.systemPackages = [ pkgs.cryptsetup ];
 
   systemd.services.fetch-ec2-data =
-    { description = "Fetch EC2 Data";
+    {
+      description = "Fetch EC2 Data";
 
       wantedBy = [ "multi-user.target" "sshd.service" ];
       before = [ "sshd.service" ];
@@ -141,7 +143,6 @@ in
                       cat /root/key.pub >> /root/.ssh/authorized_keys
                       echo "new key added to authorized_keys"
                   fi
-                  chmod 600 /root/.ssh/authorized_keys
                   rm -f /root/key.pub
               fi
           fi
@@ -154,13 +155,15 @@ in
           key_pub="$(sed 's/SSH_HOST_DSA_KEY_PUB://; t; d' /root/user-data)"
           if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_dsa_key ]; then
               mkdir -m 0755 -p /etc/ssh
-              (umask 077; echo "$key" > /etc/ssh/ssh_host_dsa_key)
+              echo "$key" > /etc/ssh/ssh_host_dsa_key
               echo "$key_pub" > /etc/ssh/ssh_host_dsa_key.pub
           fi
         '';
 
-      serviceConfig.Type = "oneshot";
-      serviceConfig.RemainAfterExit = true;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        UMask = "0077";
+      };
     };
-
 }
