@@ -13,6 +13,10 @@
 
   : List of file extensions to compress. Example: `["txt" "svg" "xml"]`.
 
+  `extraFindOperands` (String)
+
+  : Exclude pattern. Example: `-not -iregex ".*(\/apps\/.*\/l10n\/).*"`
+
   `compressors` ( { ${fileExtension} :: String })
 
   : Map a desired extension (e.g. `gz`) to a compress program.
@@ -51,7 +55,11 @@
   :::
 */
 drv:
-{ formats, compressors }:
+{
+  formats,
+  compressors,
+  extraFindOperands ? "",
+}:
 let
   validProg =
     ext: prog:
@@ -65,10 +73,10 @@ let
     ext: prog:
     assert validProg ext prog;
     ''
-      find -L $out -type f -regextype posix-extended -iregex '.*\.(${formatsPipe})' -print0 \
+      find -L $out -type f -regextype posix-extended -iregex '.*\.(${formatsPipe})' ${extraFindOperands} -print0 \
         | xargs -0 -P$NIX_BUILD_CORES -I{} ${prog}
     '';
-  formatsPipe = builtins.concatStringsSep "|" formats;
+  formatsPipe = lib.concatStringsSep "|" formats;
 in
 runCommand "${drv.name}-compressed" { nativeBuildInputs = [ xorg.lndir ]; } ''
   mkdir $out

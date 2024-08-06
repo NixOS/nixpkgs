@@ -132,8 +132,10 @@ drv:
     # https://github.com/NixOS/nixpkgs/pull/332752#issuecomment-2275110390
     zstd = "${lib.getExe zstd} --force --keep --quiet -19 {}";
   },
+  extraFindOperands ? "",
 }:
 compressDrv drv {
   formats = formats ++ extraFormats;
   compressors = compressors;
+  inherit extraFindOperands;
 }
