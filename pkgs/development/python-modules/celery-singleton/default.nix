@@ -8,6 +8,7 @@
   redis,
   pytestCheckHook,
   pytest-celery,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +22,6 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-fHlakxxjYIADELZdxIj6rvsZ/+1QfnKvAg3w5cdzvDc=";
   };
-
-  postPatch = ''
-    # Disable coverage reporting in tests
-    substituteInPlace setup.cfg \
-      --replace "--cov" "" \
-      --replace "--no-cov-on-fail" ""
-  '';
 
   patches = [
     # chore(poetry): use poetry-core
@@ -49,6 +43,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-celery
+    pytest-cov-stub
   ];
 
   pytestFlagsArray = [ "tests" ];
