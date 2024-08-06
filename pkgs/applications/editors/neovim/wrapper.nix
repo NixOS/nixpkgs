@@ -1,6 +1,6 @@
 { stdenv, symlinkJoin, lib, makeWrapper
 , writeText
-, nodePackages
+, neovim-node-client
 , python3
 , python3Packages
 , callPackage
@@ -119,7 +119,7 @@ let
         ln -s ${finalAttrs.rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
       ''
       + lib.optionalString finalAttrs.withNodeJs ''
-        ln -s ${nodePackages.neovim}/bin/neovim-node-host $out/bin/nvim-node
+        ln -s ${neovim-node-client}/bin/neovim-node-host $out/bin/nvim-node
       ''
       + lib.optionalString finalAttrs.withPerl ''
         ln -s ${perlEnv}/bin/perl $out/bin/nvim-perl
