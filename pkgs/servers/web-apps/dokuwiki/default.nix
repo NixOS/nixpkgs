@@ -86,6 +86,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     homepage = "https://www.dokuwiki.org";
     platforms = platforms.all;
-    maintainers = with maintainers; [ _1000101 ];
+    maintainers = with maintainers; [
+      _1000101
+      e1mo
+    ];
   };
 }
