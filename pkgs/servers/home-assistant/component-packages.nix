@@ -4244,7 +4244,8 @@
       spiderpy
     ];
     "splunk" = ps: with ps; [
-    ]; # missing inputs: hass-splunk
+      hass-splunk
+    ];
     "spotify" = ps: with ps; [
       fnv-hash-fast
       psutil-home-assistant
