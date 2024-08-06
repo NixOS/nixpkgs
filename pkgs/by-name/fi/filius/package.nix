@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       name = "Filius";
       desktopName = "Filius";
       genericName = "Computer network simulator";
-      comment = "A Computer network simulator for secondary schools";
+      comment = "A computer network simulator for secondary schools";
       icon = "filius";
       exec = "filius";
       terminal = false;
