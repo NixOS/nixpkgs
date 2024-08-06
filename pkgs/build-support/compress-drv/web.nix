@@ -109,10 +109,12 @@ drv:
   formats ? [
     "css"
     "eot"
+    "htm"
     "html"
     "js"
     "json"
     "map"
+    "otf"
     "svg"
     "ttf"
     "txt"
