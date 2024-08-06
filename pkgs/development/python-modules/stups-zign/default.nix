@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  setuptools,
   stups-tokens,
   stups-cli-support,
   pytestCheckHook,
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "stups-zign";
   version = "1.2";
-  format = "setuptools";
+  pyproject = true;
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
@@ -30,7 +31,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     stups-tokens
     stups-cli-support
   ];
