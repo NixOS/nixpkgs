@@ -29,6 +29,8 @@
     "solana-validator"
     "cargo-build-bpf"
     "cargo-test-bpf"
+    "cargo-build-sbf"
+    "cargo-test-sbf"
     "solana-dos"
     "solana-install-init"
     "solana-stake-accounts"
@@ -63,7 +65,9 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "aes-gcm-siv-0.10.3" = "sha256-N1ppxvew4B50JQWsC3xzP0X4jgyXZ5aOQ0oJMmArjW8=";
       "crossbeam-epoch-0.9.5" = "sha256-Jf0RarsgJiXiZ+ddy0vp4jQ59J9m0k3sgXhWhCdhgws=";
+      "curve25519-dalek-3.2.1" = "sha256-FuVNFuGCyHXqKqg+sn3hocZf1KMCI092Ohk7cvLPNjQ=";
       "tokio-1.29.1" = "sha256-Z/kewMCqkPVTXdoBcSaFKG5GSQAdkdpj3mAzLLCjjGk=";
     };
   };
@@ -80,6 +84,14 @@ rustPlatform.buildRustPackage rec {
   strictDeps = true;
 
   doCheck = false;
+
+  postInstall = ''
+    mkdir -p $out/bin/sdk/sbf
+    cp -a ./sdk/sbf/* $out/bin/sdk/sbf/
+    mkdir -p $out/bin/deps
+    find . -name libsolana_program.dylib -exec cp {} $out/bin/deps/ \;
+    find . -name libsolana_program.rlib -exec cp {} $out/bin/deps/ \;
+  '';
 
   env = {
     # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
