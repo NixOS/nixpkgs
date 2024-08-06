@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
   pythonOlder,
+  pytestCheckHook,
   setuptools,
   sqlite,
 }:
@@ -26,12 +26,19 @@ buildPythonPackage rec {
 
   buildInputs = [ sqlite ];
 
-  # Project uses custom test setup to exclude some tests by default, so using pytest
-  # requires more maintenance
-  # https://github.com/rogerbinns/apsw/issues/335
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "apsw/tests.py" ];
+
+  disabledTests = [
+    # we don't build the test extension
+    "testLoadExtension"
+    "testShell"
+    "testVFS"
+    "testVFSWithWAL"
+    # no lines in errout.txt
+    "testWriteUnraisable"
+  ];
 
   pythonImportsCheck = [ "apsw" ];
 
