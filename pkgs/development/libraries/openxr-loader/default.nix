@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.khronos.org/openxr";
     platforms   = platforms.linux;
     license     = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    maintainers = [ ];
   };
 }

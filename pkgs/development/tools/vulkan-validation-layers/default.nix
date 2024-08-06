@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
     platforms   = platforms.linux;
     license     = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    maintainers = [ ];
   };
 }

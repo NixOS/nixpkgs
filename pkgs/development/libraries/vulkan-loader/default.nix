@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage    = "https://www.lunarg.com";
     platforms   = platforms.unix ++ platforms.windows;
     license     = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    maintainers = [ ];
     broken = finalAttrs.version != vulkan-headers.version;
     pkgConfigModules = [ "vulkan" ];
   };
