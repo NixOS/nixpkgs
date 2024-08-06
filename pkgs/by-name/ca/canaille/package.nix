@@ -109,6 +109,11 @@ python.pkgs.buildPythonApplication rec {
     ];
   };
 
+  passthru = {
+    inherit python;
+    # tests = nixosTests.canaille;
+  };
+
   meta = with lib; {
     description = "Lightweight Identity and Autorization Management";
     homepage = "https://canaille.readthedocs.io/en/latest/index.html";
