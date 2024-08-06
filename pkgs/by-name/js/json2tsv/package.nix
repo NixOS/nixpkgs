@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "json2tsv";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchurl {
     url = "https://codemadness.org/releases/json2tsv/json2tsv-${version}.tar.gz";
-    hash = "sha256-7r5+YoZVivCqDbfFUqTB/x41DrZi7GZRVcJhGZCpw0o=";
+    hash = "sha256-ET5aeuspXn+BNfIxytkACR+Zrr1smDFvdh03fptQ/YQ=";
   };
 
   postPatch = ''
