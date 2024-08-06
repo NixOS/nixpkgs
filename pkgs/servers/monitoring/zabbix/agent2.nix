@@ -56,11 +56,11 @@ import ./versions.nix ({ version, hash, vendorHash ? throw "unsupported version 
       ln -s $out/bin/zabbix_agent2 $out/sbin/zabbix_agentd
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = "https://www.zabbix.com/";
-      license = licenses.gpl2Plus;
-      maintainers = [ maintainers.aanderse ];
-      platforms = platforms.linux;
+      license = lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [ aanderse ];
+      platforms = lib.platforms.unix;
     };
   })
