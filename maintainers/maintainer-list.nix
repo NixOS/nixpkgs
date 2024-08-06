@@ -15003,6 +15003,7 @@
     github = "nyadiia";
     githubId = 43252360;
     name = "Nadia";
+    keys = [ { fingerprint = "6B51 E324 238A F455 2381  313A 9254 1B0C D2A9 3AD8"; } ];
   };
   nyanbinary = {
     email = "nyanbinary@keemail.me";
