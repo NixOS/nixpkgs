@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitLab,
+  openldap,
 }:
 
 let
@@ -50,21 +51,43 @@ python.pkgs.buildPythonApplication rec {
     wtforms
   ];
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-    coverage
-    flask-webtest
-    pyquery
-    pytest-cov
-    pytest-httpserver
-    pytest-lazy-fixtures
-    pytest-smtpd
-    pytest-xdist
-    slapd
-    toml
-  ];
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      pytestCheckHook
+      coverage
+      flask-webtest
+      pyquery
+      pytest-cov
+      pytest-httpserver
+      pytest-lazy-fixtures
+      pytest-smtpd
+      pytest-xdist
+      slapd
+      toml
+    ]
+    ++ optional-dependencies.front
+    ++ optional-dependencies.oidc
+    ++ optional-dependencies.ldap
+    ++ optional-dependencies.sql;
 
-  passthru.optional-dependencies = with python.pkgs; {
+  postInstall = ''
+    mkdir -p $out/etc/schema
+    cp $out/${python.sitePackages}/canaille/backends/ldap/schemas/* $out/etc/schema/
+  '';
+
+  preCheck = ''
+    # Needed by tests to setup a mockup ldap server.
+    export BIN="${openldap}/bin"
+    export SBIN="${openldap}/bin"
+    export SLAPD="${openldap}/libexec/slapd"
+    export SCHEMA="${openldap}/etc/schema"
+
+    # is this right?
+    export CONFIG=canaille/config.sample.toml
+  '';
+
+  optional-dependencies = with python.pkgs; {
     front = [
       email-validator
       flask-babel
