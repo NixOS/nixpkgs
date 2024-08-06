@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "pyfwup";
   version = "0.5.1";
-
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,15 +24,15 @@ buildPythonPackage rec {
     hash = "sha256-pC4yVojOj/MiuN3FE7hAY6Jv4bH9SVE5DJLP9mWJoLc=";
   };
 
+  build-system = [
+    setuptools
+    setuptools-git-versioning
+  ];
+
   dependencies = [
     pyusb
     tqdm
     libusb1
-  ];
-
-  build-system = [
-    setuptools
-    setuptools-git-versioning
   ];
 
   pythonImportsCheck = [
@@ -44,6 +43,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python FirmWare UPgrader";
     homepage = "https://github.com/greatscottgadgets/pyfwup";
+    changelog = "https://github.com/greatscottgadgets/pyfwup/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.msanft ];
   };
