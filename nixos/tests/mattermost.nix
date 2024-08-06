@@ -20,6 +20,7 @@ let
         inherit siteName;
         listenAddress = "0.0.0.0:${port}";
         siteUrl = url;
+        databasePassword = "test_db";
         extraConfig = {
           SupportSettings.AboutLink = "https://nixos.org";
         };
