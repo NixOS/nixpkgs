@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   # in "checkPhase", hence fails in sandbox of "nix".
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)  ''
     installShellCompletion --cmd sn0int \
       --bash <($out/bin/sn0int completions bash) \
       --fish <($out/bin/sn0int completions fish) \

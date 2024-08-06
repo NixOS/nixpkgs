@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   # Tests depend on additional infrastructure to be running locally
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${meta.mainProgram} \
       --bash <($out/bin/${meta.mainProgram} generate-completions bash) \
       --fish <($out/bin/${meta.mainProgram} generate-completions fish) \

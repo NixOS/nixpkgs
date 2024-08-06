@@ -302,7 +302,6 @@ in
 
             trusted-users = mkOption {
               type = types.listOf types.str;
-              default = [ "root" ];
               example = [ "root" "alice" "@wheel" ];
               description = ''
                 A list of names of users that have additional rights when
@@ -376,6 +375,7 @@ in
     environment.etc."nix/nix.conf".source = nixConf;
     nix.settings = {
       trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+      trusted-users = [ "root" ];
       substituters = mkAfter [ "https://cache.nixos.org/" ];
       system-features = mkDefault (
         [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++

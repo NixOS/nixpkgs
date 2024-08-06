@@ -125,7 +125,7 @@ with lib;
     '';
 
     # allow nix-copy to live system
-    nix.settings.trusted-users = [ "root" "nixos" ];
+    nix.settings.trusted-users = [ "nixos" ];
 
     # Install less voices for speechd to save some space
     services.speechd.package = pkgs.speechd.override {

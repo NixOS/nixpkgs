@@ -5457,6 +5457,8 @@ self: super: with self; {
 
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
 
+  hass-splunk = callPackage ../development/python-modules/hass-splunk { };
+
   hassil = callPackage ../development/python-modules/hassil { };
 
   hatasmota = callPackage ../development/python-modules/hatasmota { };
@@ -7116,6 +7118,8 @@ self: super: with self; {
   livereload = callPackage ../development/python-modules/livereload { };
 
   lizard = callPackage ../development/python-modules/lizard { };
+
+  llama-cloud = callPackage ../development/python-modules/llama-cloud { };
 
   llama-index = callPackage ../development/python-modules/llama-index { };
 
@@ -13488,6 +13492,8 @@ self: super: with self; {
 
   reflink = callPackage ../development/python-modules/reflink { };
 
+  refoss-ha = callPackage ../development/python-modules/refoss-ha { };
+
   regenmaschine = callPackage ../development/python-modules/regenmaschine { };
 
   regex = callPackage ../development/python-modules/regex { };
@@ -13759,6 +13765,8 @@ self: super: with self; {
   robotsuite = callPackage ../development/python-modules/robotsuite { };
 
   rocket-errbot = callPackage ../development/python-modules/rocket-errbot { };
+
+  rocketchat-api = callPackage ../development/python-modules/rocketchat-api { };
 
   roku = callPackage ../development/python-modules/roku { };
 
@@ -14981,6 +14989,8 @@ self: super: with self; {
   stone = callPackage ../development/python-modules/stone { };
 
   stookalert = callPackage ../development/python-modules/stookalert { };
+
+  stookwijzer = callPackage ../development/python-modules/stookwijzer { };
 
   stopit = callPackage ../development/python-modules/stopit { };
 
