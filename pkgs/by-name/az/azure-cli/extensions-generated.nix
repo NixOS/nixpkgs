@@ -913,9 +913,9 @@
   };
   stack-hci-vm = mkAzExtension rec {
     pname = "stack-hci-vm";
-    version = "1.1.16";
+    version = "1.1.20";
     url = "https://hciarcvmsstorage.z13.web.core.windows.net/cli-extensions/stack_hci_vm-${version}-py3-none-any.whl";
-    sha256 = "6b08c750b3c3898aab17c459ff626210c17ad12f960f2ab89204765a17d530da";
+    sha256 = "7de544b8058ab11d9713b551db65aeaec6b8e5832cdadbbf26ccb7a4a282db6b";
     description = "Microsoft Azure Command-Line Tools Stack-HCi-VM Extension";
   };
   standbypool = mkAzExtension rec {
