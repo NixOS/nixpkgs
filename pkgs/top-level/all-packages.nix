@@ -20113,8 +20113,6 @@ with pkgs;
 
   fcl = callPackage ../development/libraries/fcl { };
 
-  febio = callPackage ../development/libraries/febio { };
-
   ffcast = callPackage ../tools/X11/ffcast { };
 
   fflas-ffpack = callPackage ../development/libraries/fflas-ffpack { };
@@ -37015,8 +37013,6 @@ with pkgs;
   exonerate = callPackage ../applications/science/biology/exonerate { };
 
   fastp = callPackage ../applications/science/biology/fastp { };
-
-  febio-studio = libsForQt5.callPackage ../applications/science/biology/febio-studio { };
 
   flywheel-cli = callPackage ../applications/science/biology/flywheel-cli { };
 
