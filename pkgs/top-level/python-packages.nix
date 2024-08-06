@@ -9373,6 +9373,8 @@ self: super: with self; {
 
   ondilo = callPackage ../development/python-modules/ondilo { };
 
+  onecache = callPackage ../development/python-modules/onecache { };
+
   onetimepass = callPackage ../development/python-modules/onetimepass { };
 
   onigurumacffi = callPackage ../development/python-modules/onigurumacffi { };
