@@ -5,8 +5,7 @@
   fetchpatch,
   stups-tokens,
   stups-cli-support,
-  pytest,
-  pytest-cov,
+  pytestCheckHook,
   isPy3k,
 }:
 
@@ -40,10 +39,7 @@ buildPythonPackage rec {
     export HOME=$TEMPDIR
   ";
 
-  nativeCheckInputs = [
-    pytest
-    pytest-cov
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "OAuth2 token management command line utility";
