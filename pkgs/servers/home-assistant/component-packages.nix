@@ -3693,7 +3693,8 @@
       praw
     ];
     "refoss" = ps: with ps; [
-    ]; # missing inputs: refoss-ha
+      refoss-ha
+    ];
     "rejseplanen" = ps: with ps; [
       rjpl
     ];
@@ -5815,6 +5816,7 @@
     "recorder"
     "recovery_mode"
     "reddit"
+    "refoss"
     "remote"
     "renault"
     "renson"
