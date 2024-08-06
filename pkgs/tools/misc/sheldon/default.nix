@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     "--skip lock_and_source_profiles"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sheldon \
       --bash <($out/bin/sheldon completions --shell bash) \
       --zsh <($out/bin/sheldon completions --shell zsh)

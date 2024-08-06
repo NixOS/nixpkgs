@@ -3,11 +3,12 @@
 , libdrm
 , version
 , src
+, patches
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libliftoff";
-  inherit version src;
+  inherit version src patches;
 
   nativeBuildInputs = [ meson pkg-config ninja ];
 

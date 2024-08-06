@@ -39,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "0.1.1";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hIAQOIqm9S9AtssE6UxcXfaIbSt3+506ueMrlathNaQ=";
+    hash = "sha256-VOcUjfRik4sdk6xbrAe5I7788d2/l4tuUByJajSjo4Q=";
   };
 
   build-system = [
@@ -57,7 +57,9 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "aiofiles"
     "azure-identity"
+    "lancedb"
     "scipy"
+    "tenacity"
     "tiktoken"
   ];
 
@@ -116,6 +118,7 @@ buildPythonPackage rec {
   meta = {
     description = "Modular graph-based Retrieval-Augmented Generation (RAG) system";
     homepage = "https://github.com/microsoft/graphrag";
+    changelog = "https://github.com/microsoft/graphrag/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

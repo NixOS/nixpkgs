@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=validate_printed_urls"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/miniserve --print-manpage >miniserve.1
     installManPage miniserve.1
 

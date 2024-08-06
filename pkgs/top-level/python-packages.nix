@@ -289,6 +289,8 @@ self: super: with self; {
 
   aioinflux = callPackage ../development/python-modules/aioinflux { };
 
+  aiojellyfin = callPackage ../development/python-modules/aiojellyfin { };
+
   aiojobs = callPackage ../development/python-modules/aiojobs { };
 
   aiokafka = callPackage ../development/python-modules/aiokafka { };
@@ -3123,6 +3125,8 @@ self: super: with self; {
 
   discovery30303 = callPackage ../development/python-modules/discovery30303 { };
 
+  discum = callPackage ../development/python-modules/discum { };
+
   diskcache = callPackage ../development/python-modules/diskcache { };
 
   dissect = callPackage ../development/python-modules/dissect { };
@@ -5453,6 +5457,8 @@ self: super: with self; {
 
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
 
+  hass-splunk = callPackage ../development/python-modules/hass-splunk { };
+
   hassil = callPackage ../development/python-modules/hassil { };
 
   hatasmota = callPackage ../development/python-modules/hatasmota { };
@@ -7113,6 +7119,8 @@ self: super: with self; {
 
   lizard = callPackage ../development/python-modules/lizard { };
 
+  llama-cloud = callPackage ../development/python-modules/llama-cloud { };
+
   llama-index = callPackage ../development/python-modules/llama-index { };
 
   llama-index-agent-openai = callPackage ../development/python-modules/llama-index-agent-openai { };
@@ -7876,6 +7884,8 @@ self: super: with self; {
   mock-ssh-server = callPackage ../development/python-modules/mock-ssh-server { };
 
   mockupdb = callPackage ../development/python-modules/mockupdb { };
+
+  modbus-tk = callPackage ../development/python-modules/modbus-tk { };
 
   moddb = callPackage ../development/python-modules/moddb { };
 
@@ -10191,6 +10201,10 @@ self: super: with self; {
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
+  ppk2-api = callPackage ../development/python-modules/ppk2-api { };
+
+  print-color = callPackage ../development/python-modules/print-color { };
+
   private-gpt = callPackage ../development/python-modules/private-gpt { };
 
   prodict = callPackage ../development/python-modules/prodict { };
@@ -11293,6 +11307,8 @@ self: super: with self; {
   pyemby = callPackage ../development/python-modules/pyemby { };
 
   pyemd = callPackage ../development/python-modules/pyemd { };
+
+  pyemoncms = callPackage ../development/python-modules/pyemoncms { };
 
   pyemvue = callPackage ../development/python-modules/pyemvue { };
 
@@ -13484,6 +13500,8 @@ self: super: with self; {
 
   reflink = callPackage ../development/python-modules/reflink { };
 
+  refoss-ha = callPackage ../development/python-modules/refoss-ha { };
+
   regenmaschine = callPackage ../development/python-modules/regenmaschine { };
 
   regex = callPackage ../development/python-modules/regex { };
@@ -13755,6 +13773,8 @@ self: super: with self; {
   robotsuite = callPackage ../development/python-modules/robotsuite { };
 
   rocket-errbot = callPackage ../development/python-modules/rocket-errbot { };
+
+  rocketchat-api = callPackage ../development/python-modules/rocketchat-api { };
 
   roku = callPackage ../development/python-modules/roku { };
 
@@ -14546,6 +14566,8 @@ self: super: with self; {
 
   softlayer = callPackage ../development/python-modules/softlayer { };
 
+  solarlog-cli = callPackage ../development/python-modules/solarlog-cli { };
+
   solax = callPackage ../development/python-modules/solax { };
 
   solc-select = callPackage ../development/python-modules/solc-select { };
@@ -14975,6 +14997,8 @@ self: super: with self; {
   stone = callPackage ../development/python-modules/stone { };
 
   stookalert = callPackage ../development/python-modules/stookalert { };
+
+  stookwijzer = callPackage ../development/python-modules/stookwijzer { };
 
   stopit = callPackage ../development/python-modules/stopit { };
 

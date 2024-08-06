@@ -76,6 +76,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/ESSS/pytest-regressions";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "LLNL";
     repo = "umpire";
     rev = "v${version}";
-    hash = "sha256-T3f5zFaDri7v09/LNJE7v45Nosx9QQjTptnuFREk6PM=";
+    hash = "sha256-JbYaJe4bqlB272aZxB3Amw8fX/pmZr/4/7kaukAiK8c=";
     fetchSubmodules = true;
   };
 

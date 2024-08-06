@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "r128gain";
     homepage = "https://github.com/desbma/r128gain";
     license = licenses.lgpl2Plus;
-    maintainers = [ maintainers.AluisioASG ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }
