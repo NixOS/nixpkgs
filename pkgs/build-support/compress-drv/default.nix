@@ -78,9 +78,17 @@ let
     '';
   formatsPipe = lib.concatStringsSep "|" formats;
 in
-runCommand "${drv.name}-compressed" { nativeBuildInputs = [ xorg.lndir ]; } ''
-  mkdir $out
-  (cd $out; lndir ${drv})
+runCommand "${drv.name}-compressed"
+  (
+    {
+      nativeBuildInputs = [ xorg.lndir ];
+    }
+    // (lib.optionalAttrs (drv ? pname) { inherit (drv) pname; })
+    // (lib.optionalAttrs (drv ? version) { inherit (drv) version; })
+  )
+  ''
+    mkdir $out
+    (cd $out; lndir ${drv})
 
-  ${lib.concatStringsSep "\n\n" (lib.mapAttrsToList mkCmd compressors)}
-''
+    ${lib.concatStringsSep "\n\n" (lib.mapAttrsToList mkCmd compressors)}
+  ''
