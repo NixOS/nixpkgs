@@ -1,7 +1,8 @@
 {
-  zopfli,
   brotli,
   compressDrv,
+  lib,
+  zopfli,
 }:
 /**
   compressDrvWeb compresses a derivation for common web server use.
@@ -123,8 +124,8 @@ drv:
   ],
   extraFormats ? [ ],
   compressors ? {
-    "gz" = "${zopfli}/bin/zopfli --keep {}";
-    "br" = "${brotli}/bin/brotli --keep --no-copy-stat {}";
+    br = "${lib.getExe brotli} --keep --no-copy-stat {}";
+    gz = "${lib.getExe zopfli} --keep {}";
   },
 }:
 compressDrv drv {
