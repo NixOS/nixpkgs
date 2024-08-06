@@ -1,4 +1,6 @@
 { lib
+, stdenv
+, darwin
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
@@ -17,6 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-9MnYSmMhLn31aHwooo8W/1Rp7N5P6Tar7Ft2iXRVnh0=";
 
+  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
