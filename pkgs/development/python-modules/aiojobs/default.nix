@@ -6,6 +6,7 @@
   fetchFromGitHub,
   fetchpatch,
   pytest-aiohttp,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -32,11 +33,6 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--cov=aiojobs/ --cov=tests/ --cov-report term" ""
-  '';
-
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ async-timeout ];
@@ -48,6 +44,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-aiohttp
+    pytest-cov-stub
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [ "aiojobs" ];
