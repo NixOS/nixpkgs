@@ -12,6 +12,7 @@
   bison,
   wrapGAppsHook3,
 
+  exiftool,
   opencv,
   libtiff,
   libpng,
@@ -181,6 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
         gnumake
         hugin
         enblend-enfuse
+        exiftool
       ]
     })
     qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${kdePackages.qtbase.qtPluginPrefix}/digikam)
