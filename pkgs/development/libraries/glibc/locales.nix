@@ -8,11 +8,15 @@
 
 { lib, stdenv, buildPackages, callPackage, writeText, glibc
 , allLocales ? true, locales ? [ "en_US.UTF-8/UTF-8" ]
+, linuxHeaders, withLinuxHeaders ? !stdenv.cc.isGNU
 }:
 
-(callPackage ./common.nix { inherit stdenv; } {
+(callPackage ./common.nix ({ inherit stdenv; } // lib.optionalAttrs withLinuxHeaders {
+  inherit linuxHeaders;
+}) {
   pname = "glibc-locales";
   extraNativeBuildInputs = [ glibc ];
+  inherit withLinuxHeaders;
 }).overrideAttrs(finalAttrs: previousAttrs: {
 
   builder = ./locales-builder.sh;
