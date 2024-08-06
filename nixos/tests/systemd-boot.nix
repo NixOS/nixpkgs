@@ -244,18 +244,31 @@ rec {
     testScript = ''
       machine.succeed("mount -o remount,rw /boot")
 
-      # Replace version inside sd-boot with something older. See magic[] string in systemd src/boot/efi/boot.c
-      machine.succeed(
-          """
-        find /boot -iname '*boot*.efi' -print0 | \
-        xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot .* ####/#### LoaderInfo: systemd-boot 000.0-1-notnixos ####/' '{}'
-      """
-      )
+      def switch():
+          # Replace version inside sd-boot with something older. See magic[] string in systemd src/boot/efi/boot.c
+          machine.succeed(
+            """
+            find /boot -iname '*boot*.efi' -print0 | \
+            xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot .* ####/#### LoaderInfo: systemd-boot 000.0-1-notnixos ####/' '{}'
+            """
+          )
+          return machine.succeed("/run/current-system/bin/switch-to-configuration boot 2>&1")
 
-      output = machine.succeed("/run/current-system/bin/switch-to-configuration boot 2>&1")
+      output = switch()
       assert "updating systemd-boot from 000.0-1-notnixos to " in output, "Couldn't find systemd-boot update message"
       assert 'to "/boot/EFI/systemd/systemd-bootx64.efi"' in output, "systemd-boot not copied to to /boot/EFI/systemd/systemd-bootx64.efi"
       assert 'to "/boot/EFI/BOOT/BOOTX64.EFI"' in output, "systemd-boot not copied to to /boot/EFI/BOOT/BOOTX64.EFI"
+
+      with subtest("Test that updating works with lowercase bootx64.efi"):
+          machine.succeed(
+              # Move to tmp file name first, otherwise mv complains the new location is the same
+              "mv /boot/EFI/BOOT/BOOTX64.EFI /boot/EFI/BOOT/bootx64.efi.new",
+              "mv /boot/EFI/BOOT/bootx64.efi.new /boot/EFI/BOOT/bootx64.efi",
+          )
+          output = switch()
+          assert "updating systemd-boot from 000.0-1-notnixos to " in output, "Couldn't find systemd-boot update message"
+          assert 'to "/boot/EFI/systemd/systemd-bootx64.efi"' in output, "systemd-boot not copied to to /boot/EFI/systemd/systemd-bootx64.efi"
+          assert 'to "/boot/EFI/BOOT/BOOTX64.EFI"' in output, "systemd-boot not copied to to /boot/EFI/BOOT/BOOTX64.EFI"
     '';
   };
 

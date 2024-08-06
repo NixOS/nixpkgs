@@ -1118,11 +1118,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libX11 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpthreadstubs, libxcb, xtrans, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libX11";
-    version = "1.8.9";
+    version = "1.8.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libX11-1.8.9.tar.xz";
-      sha256 = "0qijpp9l6hhwwx22hncrzjpmb5ffcakj6pxa5lzgjkhl3l8qz7bp";
+      url = "mirror://xorg/individual/lib/libX11-1.8.10.tar.xz";
+      sha256 = "0lywvwsz92j7isglvw2227g3na4ghyspvsvblpf43ns7jfnksfrb";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

@@ -37,6 +37,7 @@
 , profilingLibraries ? false
 , withGd ? false
 , enableCET ? false
+, enableCETRuntimeDefault ? false
 , extraBuildInputs ? []
 , extraNativeBuildInputs ? []
 , ...
@@ -50,6 +51,7 @@ in
 
 assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
+assert enableCET == false -> !enableCETRuntimeDefault;
 
 stdenv.mkDerivation ({
   version = version + patchSuffix;
@@ -114,7 +116,8 @@ stdenv.mkDerivation ({
       lib.optional (isAarch64 && isLinux) ./0001-aarch64-math-vector.h-add-NVCC-include-guard.patch
     )
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
-    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
+    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch
+    ++ lib.optional enableCETRuntimeDefault ./2.39-revert-cet-default-disable.patch;
 
   postPatch =
     ''

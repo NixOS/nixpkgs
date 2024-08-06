@@ -483,7 +483,8 @@ in
 
     services.postgresql.package = let
         mkThrow = ver: throw "postgresql_${ver} was removed, please upgrade your postgresql version.";
-        base = if versionAtLeast config.system.stateVersion "23.11" then pkgs.postgresql_15
+        base = if versionAtLeast config.system.stateVersion "24.11" then pkgs.postgresql_16
+            else if versionAtLeast config.system.stateVersion "23.11" then pkgs.postgresql_15
             else if versionAtLeast config.system.stateVersion "22.05" then pkgs.postgresql_14
             else if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
             else if versionAtLeast config.system.stateVersion "20.03" then mkThrow "11"

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abseil-cpp";
-  version = "20240116.2";
+  version = "20240722.0";
 
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-eA2/dZpNOlex1O5PNa3XSZhpMB3AmaIoHzVDI9TD/cg=";
+    hash = "sha256-51jpDhdZ0n+KLmxh8KVaTz53pZAB0dHjmILFX+OLud4=";
   };
 
   cmakeFlags = [
@@ -32,11 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ gtest ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source collection of C++ code designed to augment the C++ standard library";
     homepage = "https://abseil.io/";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = [ maintainers.GaetanLepage ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.GaetanLepage ];
   };
 })
