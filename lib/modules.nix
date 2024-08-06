@@ -7,6 +7,7 @@ let
     any
     attrByPath
     attrNames
+    attrValues
     catAttrs
     concatLists
     concatMap
@@ -1366,6 +1367,29 @@ let
       ]);
     };
 
+  doRenames = {
+    from,
+    to,
+  }:
+  { options, ... }:
+  let
+    optionsFor = toOptTree:
+      if toOptTree._type or null == "option"
+      then mkOption {
+        type = types.raw;
+        description = "Alias of {option}`${showOption toOptTree}`.";
+      }
+      else mapAttrs (k: optionsFor) toOptTree;
+    configFor = fromOptTree: toOptTree:
+      if toOptTree._type or null == "option"
+      then mkAliasAndWrapDefsWithPriority (x: x) fromOptTree
+      else mapAttrs (k: v: configFor fromOptTree.${k} v) toOptTree;
+  in
+  {
+    options = setAttrByPath from (optionsFor (getAttrFromPath to options));
+    config = setAttrByPath to (configFor (getAttrFromPath from options) (getAttrFromPath to options));
+  };
+
   /* Use this function to import a JSON file as NixOS configuration.
 
      modules.importJSON :: path -> attrs
@@ -1409,6 +1433,7 @@ private //
     defaultOverridePriority
     defaultPriority
     doRename
+    doRenames
     evalModules
     evalOptionValue  # for use by lib.types
     filterOverrides
