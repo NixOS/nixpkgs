@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "ftfy";
-  version = "6.2.0";
+  version = "6.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XkIUPHAl75eUTKJhnWthsGGfxmVPmHcdOehiwUJMdcA=";
+    hash = "sha256-ebUFmI8p1XelipBpr+dVU6AqRuQt5gkcBmDNxngSutw=";
   };
 
   nativeBuildInputs = [ poetry-core ];
