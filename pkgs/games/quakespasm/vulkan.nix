@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     cp vkquake "$out/bin"
-    wrapProgram $out/bin/vkquake \
-      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
+    patchelf $out/bin/vkquake \
+      --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
   meta = with lib; {
