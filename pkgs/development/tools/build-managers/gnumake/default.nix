@@ -32,6 +32,32 @@ stdenv.mkDerivation rec {
     ./0002-remove-impure-dirs.patch
   ];
 
+  # Remove unnecessary reference to C++ compiler if CXX is set to an absolute
+  # path. If CXX is not an absolute path, we avoid defaulting CXX to a compiler
+  # name that was used to build this derivation.
+  #
+  # Context: GNU Make defines default values for CC, CXX and other environment
+  # variables. For CXX, it usually defaults to g++, however, FreeBSD and OpenBSD
+  # no longer ship GCC as a system compiler (and use Clang instead). For C
+  # compiler, POSIX standardizes the name to be "cc", but there is no such
+  # standard for C++ compiler name. As a fix, GNU Make uses CXX set for build
+  # as a default (via MAKE_CXX preprocessor macro in the source code).
+  #
+  # We remove the line from the generated Autotools-based configure script that
+  # defines MAKE_CXX macro. If this macro is not defined, GNU Make falls back to
+  # the old behavior of using g++ as a default value for CXX.
+  #
+  # In stdenv, CXX environment variable is always defined and overrides the
+  # default CXX=g++ value.
+  #
+  # References:
+  # - https://savannah.gnu.org/bugs/?63668
+  # - https://git.savannah.gnu.org/cgit/make.git/commit/?id=ffa28f3914ff402b3915f75e4fed86ac6fb1449d
+  postPatch = ''
+    substituteInPlace configure \
+      --replace-fail 'printf "%s\n" "#define MAKE_CXX \"$CXX\"" >>confdefs.h' ""
+  '';
+
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ] ++ lib.optionals guileEnabled [ pkg-config ];
   buildInputs = lib.optionals guileEnabled [ guile ];
 
