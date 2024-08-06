@@ -2754,8 +2754,6 @@ with pkgs;
 
   tiny8086 = callPackage ../applications/emulators/tiny8086 { };
 
-  tinyemu = callPackage ../applications/emulators/tinyemu { };
-
   uae = callPackage ../applications/emulators/uae { };
 
   vbam = callPackage ../applications/emulators/vbam { };
