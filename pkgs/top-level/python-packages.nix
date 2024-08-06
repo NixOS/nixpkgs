@@ -14412,6 +14412,8 @@ self: super: with self; {
 
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
+  slapd = callPackage ../development/python-modules/slapd { };
+
   sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
   sleepyq = callPackage ../development/python-modules/sleepyq { };
