@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, gcc, gmp, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, gmp, gcc, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "spasm-ng";
 
-  version = "unstable-2020-08-03";
+  version = "unstable-2022-07-05";
 
   src = fetchFromGitHub {
     owner = "alberthdev";
@@ -12,14 +12,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-j7Z3oI+J0wZF4EG5OMMjuDe2o69KKGuJvfyHNPTLrXM=";
   };
 
-  nativeBuildInputs = [ gcc ];
-
+  # GCC is needed for Darwin
+  nativeBuildInputs = [ makeWrapper gcc ];
   buildInputs = [ gmp openssl zlib ];
 
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 spasm -t $out/bin
+    install -Dm555 inc/*.inc -t $out/include
+
+    runHook postInstall
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/spasm --add-flags "-I $out/include"
   '';
 
   meta = with lib; {
