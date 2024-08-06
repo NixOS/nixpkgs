@@ -95,8 +95,7 @@ python.pkgs.buildPythonApplication rec {
 
     substituteInPlace frigate/events/audio.py \
       --replace-warn "/cpu_audio_model.tflite" "${audio_model}" \
-      --replace-warn "/audio-labelmap.txt" "${placeholder "out"}/share/frigate/audio-labelmap.txt"      
-
+      --replace-warn "/audio-labelmap.txt" "${placeholder "out"}/share/frigate/audio-labelmap.txt"
 
     substituteInPlace frigate/app.py \
       --replace-warn "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
