@@ -1,0 +1,22 @@
+name: Ping maintainers
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, ready_for_review]
+  push:
+    types: [opened, synchronize, ready_for_review]
+
+jobs:
+  codenotify:
+    name: codenotify
+    runs-on: ubuntu-latest
+    # Don't notify people in forks os nixpkgs
+    if: github.repository_owner == 'NixOS'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # Already include changes in the PR for pinging
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+      - uses: sourcegraph/codenotify@v0.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.CODENOTIFY_GITHUB_TOKEN }}
