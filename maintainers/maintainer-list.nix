@@ -1430,6 +1430,12 @@
     githubId = 29845794;
     name = "Duncan Russell";
   };
+  anonrig = {
+    email = "yagiz@nizipli.com";
+    github = "anonrig";
+    githubId = 1935246;
+    name = "Yagiz Nizipli";
+  };
   anpin = {
     email = "pavel@anpin.fyi";
     github = "anpin";
