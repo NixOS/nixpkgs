@@ -52,6 +52,14 @@ let
     url = "https://github.com/openvinotoolkit/open_model_zoo/raw/master/data/dataset_classes/coco_91cl_bkgr.txt";
     hash = "sha256-5Cj2vEiWR8Z9d2xBmVoLZuNRv4UOuxHSGZQWTJorXUQ=";
   };
+
+  # Audio model
+  # https://github.com/blakeblackshear/frigate/blob/v0.13.2/docker/main/Dockerfile#L104
+  audio_model = fetchurl {
+    url = "https://www.kaggle.com/api/v1/models/google/yamnet/tfLite/classification-tflite/1/download";
+    hash = "sha256-G5cbITJ2AnOl+49dxQToZ4OyeFO7MTXVVa4G8eHjZfM=";
+    name = "cpu_audio_model.tflite";
+  };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "frigate";
@@ -85,31 +93,36 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     echo 'VERSION = "${version}"' > frigate/version.py
 
+    substituteInPlace frigate/events/audio.py \
+      --replace-warn "/cpu_audio_model.tflite" "${audio_model}" \
+      --replace-warn "/audio-labelmap.txt" "${placeholder "out"}/share/frigate/audio-labelmap.txt"      
+
+
     substituteInPlace frigate/app.py \
-      --replace "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
+      --replace-warn "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
 
     substituteInPlace frigate/const.py \
-      --replace "/media/frigate" "/var/lib/frigate" \
-      --replace "/tmp/cache" "/var/cache/frigate" \
-      --replace "/config" "/var/lib/frigate" \
-      --replace "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
+      --replace-warn "/media/frigate" "/var/lib/frigate" \
+      --replace-warn "/tmp/cache" "/var/cache/frigate" \
+      --replace-warn "/config" "/var/lib/frigate" \
+      --replace-warn "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
 
     substituteInPlace frigate/http.py \
-      --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
+      --replace-warn "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
 
     substituteInPlace frigate/output.py \
-      --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
+      --replace-warn "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
 
     substituteInPlace frigate/detectors/detector_config.py \
-      --replace "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
+      --replace-warn "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
 
     substituteInPlace frigate/config.py \
-      --replace "/cpu_model.tflite" "${tflite_cpu_model}" \
-      --replace "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
+      --replace-warn "/cpu_model.tflite" "${tflite_cpu_model}" \
+      --replace-warn "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
 
     substituteInPlace frigate/test/test_config.py \
-      --replace "(MODEL_CACHE_DIR" "('/build/model_cache'" \
-      --replace "/config/model_cache" "/build/model_cache"
+      --replace-warn "(MODEL_CACHE_DIR" "('/build/model_cache'" \
+      --replace-warn "/config/model_cache" "/build/model_cache"
   '';
 
   dontBuild = true;
@@ -153,7 +166,9 @@ python.pkgs.buildPythonApplication rec {
     cp -R frigate/* $out/${python.sitePackages}/frigate/
 
     mkdir -p $out/share/frigate
-    cp -R {migrations,labelmap.txt} $out/share/frigate/
+    cp -R {migrations,labelmap.txt,audio-labelmap.txt} $out/share/frigate/
+
+    cp ${audio_model} $out/share/frigate/
 
     cp --no-preserve=mode ${openvino_model} $out/share/frigate/coco_91cl_bkgr.txt
     sed -i 's/truck/car/g' $out/share/frigate/coco_91cl_bkgr.txt
