@@ -55,13 +55,19 @@ sets are
 * `pkgs.python311Packages`
 * `pkgs.python312Packages`
 * `pkgs.python313Packages`
-* `pkgs.pypyPackages`
+* `pkgs.pypy27Packages`
+* `pkgs.pypy39Packages`
+* `pkgs.pypy310Packages`
 
 and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
-* `pkgs.python3Packages` pointing to `pkgs.python311Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python312Packages`
 * `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
+* `pkgs.pypy2Packages` pointing to `pkgs.pypy27Packages`
+* `pkgs.pypy3Packages` pointing to `pkgs.pypy39Packages`
+* `pkgs.pypyPackages` pointing to `pkgs.pypy2Packages`
+
 
 #### `buildPythonPackage` function {#buildpythonpackage-function}
 
