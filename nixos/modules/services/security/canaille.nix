@@ -20,6 +20,10 @@ let
 
   settingsFormat = pkgs.formats.toml { };
 
+  # Remove null values, so we can document optional/forbidden values that don't end up in the generated TOML file.
+  filterConfig = lib.converge (lib.filterAttrsRecursive (_: v: v != null));
+  settingsFile = settingsFormat.generate "config.toml" (filterConfig cfg.settings);
+
   finalPackage = cfg.package.overridePythonAttrs (old: {
     dependencies =
       old.dependencies
@@ -28,6 +32,9 @@ let
       ++ old.optional-dependencies.ldap
       ++ old.optional-dependencies.sentry
       ++ old.optional-dependencies.sql;
+    makeWrapperArgs = (old.makeWrapperArgs or []) ++ [
+      "--set CONFIG \"${settingsFile}/config.toml\""
+    ];
   });
   inherit (finalPackage) python;
   pythonEnv = python.buildEnv.override {
@@ -61,7 +68,7 @@ in
             readOnly = true;
             description = "Flask Secret Key. Can't be set and must be provided through services.canaille.secretKeyFile";
             default = null;
-            type = types.str;
+            type = types.nullOr types.str;
           };
           SERVER_NAME = lib.mkOption {
             description = "The domain name on which canaille will be served.";
@@ -102,8 +109,11 @@ in
         "network.target"
         "postgresql.target"
       ];
-      requires = [ "postgresql.service" ];
-      environment.PYTHONPATH = "${pythonEnv}/${python.sitePackages}/";
+      requires = [ "postgresql.service" "canaille.socket" ];
+      environment = {
+        PYTHONPATH = "${pythonEnv}/${python.sitePackages}/";
+        CONFIG = "${settingsFile}/config.toml";
+      };
       serviceConfig = {
         WorkingDirectory = dataDir;
         User = "canaille";
@@ -113,9 +123,22 @@ in
         Restart = "on-failure";
         ExecStart = ''
           ${python.pkgs.gunicorn}/bin/gunicorn \
+            --name=canaille \
+            --bind='unix:///run/canaille.socket' \
             'canaille:create_app()'
         '';
         PrivateTmp = true;
+      };
+    };
+
+    systemd.sockets.canaille = {
+      before = [ "nginx.service" ];
+      wantedBy = [ "sockets.target" ];
+      socketConfig = {
+        ListenStream = "/run/canaille.socket";
+        SocketUser = "canaille";
+        SocketGroup = "canaille";
+        SocketMode = "770";
       };
     };
 

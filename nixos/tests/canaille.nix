@@ -21,7 +21,12 @@ import ./make-test-python.nix (
           secretKeyFile = pkgs.writeText "canaille-secret-key" ''
             this is not a secret key
           '';
+          settings = {
+            SERVER_NAME = domain;
+          };
         };
+
+        users.users.canaille.shell = pkgs.bashInteractive;
       };
 
     testScript =
@@ -29,6 +34,7 @@ import ./make-test-python.nix (
       ''
         start_all()
         server.wait_for_unit("canaille.service")
+        server.succeed("sudo -iu canaille -- canaille check")
       '';
   }
 )
