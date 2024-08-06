@@ -20033,11 +20033,11 @@ with pkgs;
 
   eigenmath = callPackage ../applications/science/math/eigenmath { };
 
-  vapoursynth = callPackage ../development/libraries/vapoursynth {
+  vapoursynth = callPackage ../by-name/va/vapoursynth/package.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  vapoursynth-editor = libsForQt5.callPackage ../development/libraries/vapoursynth/editor.nix { };
+  vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
 
   vapoursynth-mvtools = callPackage ../development/libraries/vapoursynth-mvtools { };
 
