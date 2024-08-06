@@ -121,8 +121,13 @@ in
         StateDirectory = "canaille";
         StateDirectoryMode = "0750";
         Restart = "on-failure";
-        ExecStart = ''
-          ${python.pkgs.gunicorn}/bin/gunicorn \
+        ExecStart = let
+          gunicorn = python.pkgs.gunicorn.overridePythonAttrs (old: {
+            # Allows Gunicorn to set a meaningful process name
+            dependencies = (old.dependencies or []) ++ old.optional-dependencies.setproctitle;
+          });
+        in ''
+          ${gunicorn}/bin/gunicorn \
             --name=canaille \
             --bind='unix:///run/canaille.socket' \
             'canaille:create_app()'
