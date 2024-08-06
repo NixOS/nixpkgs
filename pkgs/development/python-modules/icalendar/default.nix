@@ -6,13 +6,13 @@
   setuptools,
   backports-zoneinfo,
   python-dateutil,
-  pytz,
+  tzdata,
   hypothesis,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "5.0.13";
+  version = "6.0.0a0";
   pname = "icalendar";
   pyproject = true;
 
@@ -20,14 +20,14 @@ buildPythonPackage rec {
     owner = "collective";
     repo = "icalendar";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2gpWfLXR4HThw23AWxY2rY9oiK6CF3Qiad8DWHCs4Qk=";
+    hash = "sha256-TpKyTKQVzSrF6CCpjjHQ5Ybd2PhxM14kUasdQlE5P+s=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     python-dateutil
-    pytz
+    tzdata
   ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
 
   nativeCheckInputs = [
