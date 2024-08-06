@@ -108,16 +108,16 @@ drv:
 {
   formats ? [
     "css"
+    "eot"
+    "html"
     "js"
+    "json"
+    "map"
     "svg"
     "ttf"
-    "eot"
     "txt"
-    "xml"
-    "map"
-    "html"
-    "json"
     "webmanifest"
+    "xml"
   ],
   extraFormats ? [ ],
   compressors ? {
