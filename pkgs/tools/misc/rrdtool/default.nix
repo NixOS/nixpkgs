@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , gettext
 , perl
@@ -23,6 +24,12 @@ perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-CPbSu1mosNlfj2nqiNVH14a5C5njkfvJM8ix3X3aP8E=";
   };
+
+  # Fix darwin build
+  patches = lib.optional stdenv.isDarwin (fetchpatch {
+    url = "https://github.com/oetiker/rrdtool-1.x/pull/1262.patch";
+    hash = "sha256-aP0rmDlILn6VC8Tg7HpRXbxL9+KD/PRTbXnbQ7HgPEg=";
+  });
 
   nativeBuildInputs = [
     pkg-config
