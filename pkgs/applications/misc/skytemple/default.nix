@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
-  version = "1.6.5";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple";
     rev = "refs/tags/${version}";
-    hash = "sha256-yfXu1sboKi8STPiX5FUD9q+1U9GfhOyEKDRvU9rgdfI=";
+    hash = "sha256-o6FDcswuuLSAMuEpjUI1da7WX2axmSDUaxZIz7ekf9M=";
   };
 
   build-system = with python3Packages; [ setuptools ];
