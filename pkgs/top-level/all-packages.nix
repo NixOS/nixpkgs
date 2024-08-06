@@ -20889,13 +20889,11 @@ with pkgs;
 
   hubble = callPackage ../applications/networking/cluster/hubble { };
 
-  hunspell = callPackage ../development/libraries/hunspell { };
-
   hunspellDicts = recurseIntoAttrs (callPackages ../development/libraries/hunspell/dictionaries.nix {});
 
   hunspellDictsChromium = recurseIntoAttrs (callPackages ../development/libraries/hunspell/dictionaries-chromium.nix {});
 
-  hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
+  hunspellWithDicts = dicts: callPackage ../by-name/hu/hunspell/wrapper.nix { inherit dicts; };
 
   hwloc = callPackage ../development/libraries/hwloc { };
 

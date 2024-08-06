@@ -1,37 +1,67 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, readline, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  ncurses,
+  nix-update-script,
+  readline,
+  testers,
+  validatePkgConfig,
+}:
 
-stdenv.mkDerivation rec {
-  version = "1.7.2";
+stdenv.mkDerivation (finalAttrs: {
   pname = "hunspell";
+  version = "1.7.2";
+
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "hunspell";
     repo = "hunspell";
-    rev = "v${version}";
-    sha256 = "sha256-x2FXxnVIqsf5/UEQcvchAndXBv/3mW8Z55djQAFgNA8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-x2FXxnVIqsf5/UEQcvchAndXBv/3mW8Z55djQAFgNA8=";
   };
 
-  outputs = [ "bin" "dev" "out" "man" ];
-
-  buildInputs = [ ncurses readline ];
-  nativeBuildInputs = [ autoreconfHook ];
-
-  patches = [
-    ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch
-  ];
+  patches = [ ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch ];
 
   postPatch = ''
     patchShebangs tests
   '';
 
+  buildInputs = [
+    ncurses
+    readline
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    validatePkgConfig
+  ];
+
   autoreconfFlags = [ "-vfi" ];
 
-  configureFlags = [ "--with-ui" "--with-readline" ];
+  configureFlags = [
+    "--with-ui"
+    "--with-readline"
+  ];
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
-    homepage = "https://hunspell.sourceforge.net";
+  passthru = {
+    tests = {
+      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
+    };
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Spell checker";
     longDescription = ''
       Hunspell is the spell checker of LibreOffice, OpenOffice.org, Mozilla
@@ -53,8 +83,16 @@ stdenv.mkDerivation rec {
             ~/Library/Spelling or /Library/Spelling for spell checking),
         * Delphi, Java (JNA, JNI), Perl, .NET, Python, Ruby ([1], [2]), UNO.
     '';
-    platforms = platforms.all;
-    license = with licenses; [ gpl2 lgpl21 mpl11 ];
-    maintainers = [ ];
+    homepage = "http://hunspell.github.io/";
+    changelog = "https://github.com/hunspell/hunspell/releases/tag/${finalAttrs.src.rev}";
+    license = with lib.licenses; [
+      gpl2
+      lgpl21
+      mpl11
+    ];
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "hunspell";
+    platforms = lib.platforms.all;
+    pkgConfigModules = [ "hunspell" ];
   };
-}
+})
