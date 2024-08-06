@@ -5,8 +5,7 @@
   clickclick,
   dnspython,
   requests,
-  pytest,
-  pytest-cov,
+  pytestCheckHook,
   isPy3k,
 }:
 
@@ -31,10 +30,7 @@ buildPythonPackage rec {
 
   preCheck = "export HOME=$TEMPDIR";
 
-  nativeCheckInputs = [
-    pytest
-    pytest-cov
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Helper library for all STUPS command line tools";
