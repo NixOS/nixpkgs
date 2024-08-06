@@ -1,5 +1,7 @@
 { stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils, writeScript
-, common-updater-scripts, git, gnused, nix, nixfmt-classic, majorVersion }:
+, common-updater-scripts, git, gnused, nix, nixfmt-classic, majorVersion
+, ncurses
+}:
 
 let
   repo = "git@github.com:scala/scala.git";
@@ -28,6 +30,18 @@ let
       sha256 = "r+fm+1njyIRX6Z9wGHMOUvuifI0V49cVT3KWggbKhxk=";
       pname = "scala_2_13";
     };
+
+    "3.3" = {
+      version = "3.3.3";
+      sha256 = "61lAETEvqkEqr5pbDltFkh+Qvp+EnCDilXN9X67NFNE=";
+      pname = "scala_3_3";
+    };
+
+    "3.4" = {
+      version = "3.4.2";
+      sha256 = "JEfwlRJsZTKk0DAIlsh+U1Dozm4UQXwVeLSkNIGHMEs=";
+      pname = "scala_3_4";
+    };
   };
 
 in with versionMap.${majorVersion};
@@ -39,10 +53,16 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit sha256;
-    url = "https://www.scala-lang.org/files/archive/scala-${version}.tgz";
+    url =
+      if (lib.strings.hasPrefix "2" majorVersion) then
+        "https://www.scala-lang.org/files/archive/scala-${version}.tgz"
+      else
+        "https://github.com/scala/scala3/releases/download/${version}/scala3-${version}.tar.gz";
+
   };
 
-  propagatedBuildInputs = [ jre ];
+  propagatedBuildInputs = [ jre ] ++
+    lib.optional (lib.strings.hasPrefix "3" majorVersion) ncurses.dev;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -51,25 +71,42 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     rm bin/*.bat
     mv * $out
-    # put docs in correct subdirectory
-    mkdir -p $out/share/doc
-    mv $out/doc $out/share/doc/${name}
-    mv $out/man $out/share/man
-    for p in $(ls $out/bin/) ; do
-        wrapProgram $out/bin/$p \
-          --prefix PATH ":" ${coreutils}/bin \
-          --prefix PATH ":" ${gnugrep}/bin \
-          --prefix PATH ":" ${jre}/bin \
-          --set JAVA_HOME ${jre}
-    done
+    if [ -d $out/doc ]; then
+      # put docs in correct subdirectory
+      mkdir -p $out/share/doc
+      mv $out/doc $out/share/doc/${name}
+    fi
+    if [ -d $out/man ]; then
+      mv $out/man $out/share/man
+    fi
     runHook postInstall
   '';
+
+  # Use preFixup instead of fixupPhase
+  # because we want the default fixupPhase as well
+  preFixup = ''
+        bin_files=$(find $out/bin -type f ! -name common ! -name common-shared)
+        for f in $bin_files ; do
+          wrapProgram $f \
+            --set JAVA_HOME ${jre} \
+            ${ if (lib.strings.hasPrefix "2" majorVersion) then
+                "--prefix PATH : ${coreutils}/bin " +
+                "--prefix PATH : ${gnugrep}/bin " +
+                "--prefix PATH : ${jre}/bin"
+               else
+                "--prefix PATH : '${ncurses.dev}/bin'"
+             }
+        done
+  '';
+
 
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/scalac -version 2>&1 | grep '^Scala compiler version ${version}'
 
-    echo 'println("foo"*3)' | $out/bin/scala 2>/dev/null | grep "foofoofoo"
+    ${ lib.strings.optionalString (lib.strings.hasPrefix "2" majorVersion)
+         "echo 'println(\"foo\"*3)' | $out/bin/scala 2>/dev/null | grep \"foofoofoo\""
+     }
   '';
 
   passthru = {
@@ -114,6 +151,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     branch = versions.majorMinor version;
-    maintainers = with maintainers; [ nequissimus kashw2 ];
+    maintainers = with maintainers; [ nequissimus kashw2 karolchmist virusdave ];
   };
 }
