@@ -763,6 +763,7 @@ in {
   php83 = handleTest ./php { php = pkgs.php83; };
   phylactery = handleTest ./web-apps/phylactery.nix {};
   pict-rs = handleTest ./pict-rs.nix {};
+  pingvin-share = handleTest ./pingvin-share.nix {} ;
   pinnwand = handleTest ./pinnwand.nix {};
   plantuml-server = handleTest ./plantuml-server.nix {};
   plasma-bigscreen = handleTest ./plasma-bigscreen.nix {};
