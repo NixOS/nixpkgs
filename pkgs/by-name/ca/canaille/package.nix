@@ -53,7 +53,7 @@ python.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
     coverage
-    # flask-webtest
+    flask-webtest
     pyquery
     pytest-cov
     pytest-httpserver
