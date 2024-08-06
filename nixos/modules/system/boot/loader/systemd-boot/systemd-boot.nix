@@ -40,7 +40,7 @@ let
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
-    inherit (cfg) consoleMode graceful editor;
+    inherit (cfg) consoleMode graceful editor rebootForBitlocker;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
@@ -333,6 +333,22 @@ in {
       };
     };
 
+    rebootForBitlocker = mkOption {
+      default = false;
+
+      type = types.bool;
+
+      description = ''
+        Enable *EXPERIMENTAL* BitLocker support.
+
+        Try to detect BitLocker encrypted drives along with an active
+        TPM. If both are found and Windows Boot Manager is selected in
+        the boot menu, set the "BootNext" EFI variable and restart the
+        system. The firmware will then start Windows Boot Manager
+        directly, leaving the TPM PCRs in expected states so that
+        Windows can unseal the encryption key.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {

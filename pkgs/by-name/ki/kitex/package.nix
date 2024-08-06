@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "kitex";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "cloudwego";
     repo = "kitex";
     rev = "v${version}";
-    hash = "sha256-eiwOivulPBYEK7Pmztmb2dgUytPT0hZW5BiCpovUZWw=";
+    hash = "sha256-TvWFbjmKIvX26KV3JZRXcd7jF823tdTr5pCP/N66nIc=";
   };
 
-  vendorHash = "sha256-4tOi1BENGNdqo3xG7PnKbIUb/QsUFhm0wDcRYrMGC0M=";
+  vendorHash = "sha256-nscMcJGFZ1YPPynTV+Mp8tXndtlIcszDZm36zMbNBYs=";
 
   subPackages = [ "tool/cmd/kitex" ];
 

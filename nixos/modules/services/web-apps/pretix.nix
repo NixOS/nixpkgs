@@ -538,6 +538,7 @@ in
           TimeoutStartSec = "15min";
           ExecStart = "${getExe' pythonEnv "gunicorn"} --bind unix:/run/pretix/pretix.sock ${cfg.gunicorn.extraArgs} pretix.wsgi";
           RuntimeDirectory = "pretix";
+          Restart = "on-failure";
         };
       };
 
@@ -559,7 +560,10 @@ in
           "postgresql.service"
         ];
         wantedBy = [ "multi-user.target" ];
-        serviceConfig.ExecStart = "${getExe' pythonEnv "celery"} -A pretix.celery_app worker ${cfg.celery.extraArgs}";
+        serviceConfig = {
+          ExecStart = "${getExe' pythonEnv "celery"} -A pretix.celery_app worker ${cfg.celery.extraArgs}";
+          Restart = "on-failure";
+        };
       };
 
       nginx.serviceConfig.SupplementaryGroups = mkIf cfg.nginx.enable [ "pretix" ];

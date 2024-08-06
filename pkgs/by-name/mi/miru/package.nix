@@ -5,7 +5,7 @@
 }:
 let
   pname = "miru";
-  version = "5.1.6";
+  version = "5.2.7";
   meta = with lib; {
     description = "Stream anime torrents, real-time with no waiting for downloads";
     homepage = "https://miru.watch";

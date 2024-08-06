@@ -159,6 +159,12 @@
     github = "13r0ck";
     githubId = 58987761;
   };
+  _1nv0k32 = {
+    name = "Armin";
+    email = "Armin.Mahdilou@gmail.com";
+    github = "1nv0k32";
+    githubId = 30079271;
+  };
   _21CSM = {
     name = "21CSM";
     email = "21CSM@tutanota.com";
@@ -12400,6 +12406,13 @@
     githubId = 115060;
     name = "Marek Maksimczyk";
   };
+  Mange = {
+    name = "Magnus Bergmark";
+    email = "me@mange.dev";
+    github = "Mange";
+    githubId = 1599;
+    keys = [ { fingerprint = "2EA6 F4AA 110A 1BF2 2275  19A9 0443 C69F 6F02 2CDE"; } ];
+  };
   mangoiv = {
     email = "contact@mangoiv.com";
     github = "mangoiv";
@@ -12648,6 +12661,12 @@
     github = "matklad";
     githubId = 1711539;
     name = "matklad";
+  };
+  matko = {
+    email = "maren.van.otterdijk@gmail.com";
+    github = "matko";
+    githubId = 155603;
+    name = "Maren van Otterdijk";
   };
   matrss = {
     name = "Matthias Riße";
@@ -13313,6 +13332,12 @@
     githubId = 7343721;
     name = "midchildan";
     keys = [ { fingerprint = "FEF0 AE2D 5449 3482 5F06  40AA 186A 1EDA C5C6 3F83"; } ];
+  };
+  midirhee12 = {
+    email = "midirhee@proton.me";
+    github = "midirhee12";
+    githubId = 38054771;
+    name = "midirhee12";
   };
   mig4ng = {
     email = "mig4ng@gmail.com";
@@ -15150,6 +15175,12 @@
     github = "olebedev";
     githubId = 848535;
     name = "Oleg Lebedev";
+  };
+  oleina = {
+    email = "antholeinik@gmail.com";
+    github = "antholeole";
+    githubId = 48811365;
+    name = "Anthony Oleinik";
   };
   olejorgenb = {
     email = "olejorgenb@yahoo.no";
@@ -17170,6 +17201,13 @@
     github = "rembo10";
     githubId = 801525;
     name = "rembo10";
+  };
+  remcoschrijver = {
+    email = "info@writerit.nl";
+    matrix = "@remcoschrijver:tchncs.de";
+    github = "remcoschrijver";
+    githubId = 45097990;
+    name = "Remco Schrijver";
   };
   remexre = {
     email = "nathan+nixpkgs@remexre.com";

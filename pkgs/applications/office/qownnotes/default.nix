@@ -8,7 +8,6 @@
 , qtsvg
 , qtwayland
 , qtwebsockets
-, qt5compat
 , makeWrapper
 , wrapQtAppsHook
 , botan2
@@ -21,14 +20,14 @@
 let
   pname = "qownnotes";
   appname = "QOwnNotes";
-  version = "24.8.2";
+  version = "24.8.3";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/pbek/QOwnNotes/releases/download/v${version}/qownnotes-${version}.tar.xz";
-    hash = "sha256-aNsfDpO11VaT0SpGxc8V+8cgsPKrBKDKociIgZd3SdA=";
+    hash = "sha256-lbNJT6IbIgTYLpsMWK6Nk0XXhw1De+wZgrH4DE1vDKg=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +44,6 @@ stdenv.mkDerivation {
     qtdeclarative
     qtsvg
     qtwebsockets
-    qt5compat
     botan2
   ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
 

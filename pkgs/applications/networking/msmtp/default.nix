@@ -25,13 +25,13 @@
 let
   inherit (lib) getBin getExe optionals;
 
-  version = "1.8.22";
+  version = "1.8.25";
 
   src = fetchFromGitHub {
     owner = "marlam";
-    repo = "msmtp-mirror";
+    repo = "msmtp";
     rev = "msmtp-${version}";
-    hash = "sha256-Jt/uvGBrYYr6ua6LVPiP0nuRiIkxBJASdgHBNHivzxQ=";
+    hash = "sha256-UZKUpF/ZwYPM2rPDudL1O8e8LguKJh9sTcJRT3vgsf4=";
   };
 
   meta = with lib; {
@@ -68,7 +68,10 @@ let
     pname = "msmtp-scripts";
     inherit version src meta;
 
-    patches = [ ./paths.patch ];
+    patches = [
+      ./msmtpq-remove-binary-check.patch
+      ./msmtpq-systemd-logging.patch
+    ];
 
     postPatch = ''
       substituteInPlace scripts/msmtpq/msmtpq \

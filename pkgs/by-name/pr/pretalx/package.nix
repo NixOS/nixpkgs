@@ -111,6 +111,7 @@ python.pkgs.buildPythonApplication rec {
     "reportlab"
     "requests"
     "rules"
+    "whitenoise"
   ];
 
   propagatedBuildInputs = with python.pkgs; [

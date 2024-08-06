@@ -289,6 +289,8 @@ self: super: with self; {
 
   aioinflux = callPackage ../development/python-modules/aioinflux { };
 
+  aiojellyfin = callPackage ../development/python-modules/aiojellyfin { };
+
   aiojobs = callPackage ../development/python-modules/aiojobs { };
 
   aiokafka = callPackage ../development/python-modules/aiokafka { };
@@ -3123,6 +3125,8 @@ self: super: with self; {
 
   discovery30303 = callPackage ../development/python-modules/discovery30303 { };
 
+  discum = callPackage ../development/python-modules/discum { };
+
   diskcache = callPackage ../development/python-modules/diskcache { };
 
   dissect = callPackage ../development/python-modules/dissect { };
@@ -5297,6 +5301,8 @@ self: super: with self; {
 
   gremlinpython = callPackage ../development/python-modules/gremlinpython { };
 
+  grep-ast = callPackage ../development/python-modules/grep-ast { };
+
   greynoise = callPackage ../development/python-modules/greynoise { };
 
   growattserver = callPackage ../development/python-modules/growattserver { };
@@ -7110,6 +7116,8 @@ self: super: with self; {
   livereload = callPackage ../development/python-modules/livereload { };
 
   lizard = callPackage ../development/python-modules/lizard { };
+
+  llama-cloud = callPackage ../development/python-modules/llama-cloud { };
 
   llama-index = callPackage ../development/python-modules/llama-index { };
 
@@ -14543,6 +14551,8 @@ self: super: with self; {
   soco = callPackage ../development/python-modules/soco { };
 
   softlayer = callPackage ../development/python-modules/softlayer { };
+
+  solarlog-cli = callPackage ../development/python-modules/solarlog-cli { };
 
   solax = callPackage ../development/python-modules/solax { };
 

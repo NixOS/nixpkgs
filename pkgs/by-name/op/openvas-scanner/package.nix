@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openvas-scanner";
-  version = "23.6.0";
+  version = "23.8.2";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "openvas-scanner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VIjkrlE39eq8a7Kgj4QZSZ5R9bAnw0oodUc8m/4bSCQ=";
+    hash = "sha256-sHu6GF+T5Ce2aiGccv9uM+KdAWCLB8CCXujxgxhg4Ho=";
   };
 
   nativeBuildInputs = [
