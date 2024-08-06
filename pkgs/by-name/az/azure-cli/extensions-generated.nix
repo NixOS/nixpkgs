@@ -1025,9 +1025,9 @@
   };
   vmware = mkAzExtension rec {
     pname = "vmware";
-    version = "6.0.1";
+    version = "7.0.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/vmware-${version}-py2.py3-none-any.whl";
-    sha256 = "2e07a4ddf1b244cfe8b63a29b7f82c3ec94294f10bacfe8fd604841d290020b5";
+    sha256 = "e0fadce4fc02996443a8e1673d19ebd24383c584ca89bd396ce963e85865ac0d";
     description = "Azure VMware Solution commands";
   };
   webapp = mkAzExtension rec {
