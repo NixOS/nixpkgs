@@ -187,8 +187,7 @@ def system_dir(profile: str | None, generation: int, specialisation: str | None)
 
 def write_loader_conf(profile: str | None) -> None:
     with open(f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf.tmp", 'w') as f:
-        if TIMEOUT != "":
-            f.write(f"timeout {TIMEOUT}\n")
+        f.write(f"timeout {TIMEOUT}\n")
         if profile:
             f.write("default nixos-%s-generation-*\n" % profile)
         else:
