@@ -1,9 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, electron
-, zstd
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  electron,
+  zstd,
+  makeWrapper,
+  commandLineArgs ? "",
 }:
 
 stdenv.mkDerivation rec {
@@ -34,18 +36,25 @@ stdenv.mkDerivation rec {
     cp -r opt/apps/io.github.msojocs.bilibili/files/bin/app $out/opt
     makeWrapper ${electron}/bin/electron $out/bin/bilibili \
       --argv0 "bilibili" \
-      --add-flags "$out/opt/app.asar"
+      --add-flags "$out/opt/app.asar" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Electron-based bilibili desktop client";
     homepage = "https://github.com/msojocs/bilibili-linux";
-    license = with licenses; [ unfree mit ];
-    maintainers = with maintainers; [ jedsek kashw2 ];
+    license = with lib.licenses; [
+      unfree
+      mit
+    ];
+    maintainers = with lib.maintainers; [
+      jedsek
+      kashw2
+    ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "bilibili";
   };
 }
