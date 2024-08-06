@@ -47,14 +47,14 @@
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "3.5.0";
+  version = "3.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zeia3b6QDDevJaIFKuF0ttO6HvCMkf1att/XEuGEw5k=";
+    hash = "sha256-IdvoaEKyTYPHOhrvLeNGoafBHENwFdbp0YChY35ugZc=";
   };
 
   src_test = fetchFromGitHub {
