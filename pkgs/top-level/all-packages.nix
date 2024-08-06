@@ -1041,8 +1041,6 @@ with pkgs;
 
   mod = callPackage ../development/tools/mod { };
 
-  mongosh = callPackage ../development/tools/mongosh { };
-
   mya = callPackage ../applications/misc/mya { };
 
   mysql-shell = mysql-shell_8;
