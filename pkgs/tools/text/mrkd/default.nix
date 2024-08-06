@@ -5,6 +5,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       # https://github.com/refi64/mrkd/pull/6
       mistune = super.mistune.overridePythonAttrs (old: rec {

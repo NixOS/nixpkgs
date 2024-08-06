@@ -49,6 +49,7 @@
 
 let
   py = python311.override {
+    self = py;
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
         withLocation = true;
@@ -78,14 +79,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.38.0";
+  version = "3.38.1";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-vL9Go8Kn6VFOeztD/LZi5QHpZVPFfOFarTsCLTf4D2s=";
+    hash = "sha256-8fwLn77CK8w4srJNUilfJumDt2wCcQLs9D5/4tzpzPA=";
   };
 
   passthru = {

@@ -39,7 +39,7 @@ buildNpmPackage rec {
     mainProgram = "igir";
     homepage = "https://igir.io";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ TheBrainScrambler ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

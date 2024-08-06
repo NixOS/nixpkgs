@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , cmake
@@ -57,6 +58,9 @@ mkDerivation rec {
     homepage = "https://github.com/bistromath/gr-ais";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    # rpcserver_aggregator.h:111:54: error: no template named 'unary_function'
+    # in namespace 'std'; did you mean '__unary_function'?
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ mog ];
   };
 }

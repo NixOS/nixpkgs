@@ -22,16 +22,16 @@ let
 in
 buildGoModule rec {
   pname = "gotenberg";
-  version = "8.8.0";
+  version = "8.8.1";
 
   src = fetchFromGitHub {
     owner = "gotenberg";
     repo = "gotenberg";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OHvtdUFZYm+I8DN8lAdlNAIRLWNRC/GbVEueRfyrwDA=";
+    hash = "sha256-vXrSPu/iY6JsOvPKDRdg6TnUjNV7X5GEb5l9bk4lSpY=";
   };
 
-  vendorHash = "sha256-w9Q3hK8d5NwDYp8kydrWrlBlOmMyDqDixdv3z79yhK8=";
+  vendorHash = "sha256-Hxava/dRQ2TFWrg7fIvRkp3NW61QWmWNEQiBP71wlR8=";
 
   postPatch = ''
     find ./pkg -name '*_test.go' -exec sed -i -e 's#/tests#${src}#g' {} \;

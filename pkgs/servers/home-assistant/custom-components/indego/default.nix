@@ -6,23 +6,23 @@
 }:
 
 buildHomeAssistantComponent rec {
-  owner = "jm-73";
+  owner = "sander1988";
   domain = "indego";
-  version = "5.7.2";
+  version = "5.7.4";
 
   src = fetchFromGitHub {
-    owner = "jm-73";
+    owner = "sander1988";
     repo = "Indego";
     rev = "refs/tags/${version}";
-    hash = "sha256-9q8aHbAMIA2xKhZl/CDXWSV1ylDCEVkpL8OUlELoG0Q=";
+    hash = "sha256-SiYjducy0NP5bF3STVzhBdnJraNjHywHfD7OmAnYmr0=";
   };
 
   dependencies = [ pyindego ];
 
   meta = with lib; {
     description = "Bosch Indego lawn mower component";
-    changelog = "https://github.com/jm-73/Indego/releases/tag/${version}";
-    homepage = "https://github.com/jm-73/Indego";
+    changelog = "https://github.com/sander1988/Indego/releases/tag/${version}";
+    homepage = "https://github.com/sander1988/Indego";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];
   };

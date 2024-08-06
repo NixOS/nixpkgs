@@ -1,20 +1,18 @@
 {
   lib,
-  pkgs,
-  stdenv,
   fetchFromGitHub,
   python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "skypilot";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "skypilot-org";
     repo = "skypilot";
-    rev = "v${version}";
-    hash = "sha256-SddXouful2RSp7ijx6YLzfBhBvzN9xKM2dRzivgNflw==";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZrNI9s7U39SMHqIzOtyuth8Wrkn+T2KSsMfpqO1pxoI=";
   };
 
   pyproject = true;

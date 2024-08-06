@@ -1,5 +1,4 @@
 { buildGoModule
-, config
 , fetchFromGitHub
 , lib
 , nixosTests

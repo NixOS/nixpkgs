@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   poetry-core,
@@ -13,7 +14,6 @@
   graphene-django,
 
   # tests
-  python,
   pytest-django,
   pytestCheckHook
 }:
@@ -21,7 +21,7 @@
 buildPythonPackage rec {
   pname = "django-graphiql-debug-toolbar";
   version = "0.2.0";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -31,9 +31,18 @@ buildPythonPackage rec {
     sha256 = "0fikr7xl786jqfkjdifymqpqnxy4qj8g3nlkgfm24wwq0za719dw";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  patches = [
+    # Add compatibility for py-django-debug-toolbar >= 4.4.6
+    # https://github.com/flavors/django-graphiql-debug-toolbar/pull/27
+    (fetchpatch {
+      url = "https://github.com/flavors/django-graphiql-debug-toolbar/commit/2b42fdb1bc40109d9bb0ae1fb4d2163d13904724.patch";
+      hash = "sha256-ywTLqXlAxA2DCacrJOqmB7jSzfpeuGTX2ETu0fKmhq4=";
+     })
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     django
     django-debug-toolbar
     graphene-django

@@ -1,5 +1,13 @@
 {
   "x86_64-linux": {
+    "aqua": {
+      "update-channel": "Aqua EAP licensing:EAP",
+      "url-template": "https://download.jetbrains.com/aqua/aqua-{version}.tar.gz",
+      "version": "2024.1 Public Preview",
+      "sha256": "027cac4bfab747ef97f055b63eff8a69cefc32751fcca9510c3eccaf7c36b2be",
+      "url": "https://download.jetbrains.com/aqua/aqua-241.15989.28.tar.gz",
+      "build_number": "241.15989.28"
+    },
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}.tar.gz",
@@ -76,18 +84,18 @@
     "pycharm-community": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}.tar.gz",
-      "version": "2024.1.3",
-      "sha256": "7c05b5ade8c5eea48677d83a2ec816a86559dadfcf04c67f2c8584acf8716bc3",
-      "url": "https://download.jetbrains.com/python/pycharm-community-2024.1.3.tar.gz",
-      "build_number": "241.17890.14"
+      "version": "2024.1.4",
+      "sha256": "043c33371cb5fb31fdeab6deccc809189efdc6d404f771c541d4dd779adcd2fa",
+      "url": "https://download.jetbrains.com/python/pycharm-community-2024.1.4.tar.gz",
+      "build_number": "241.18034.82"
     },
     "pycharm-professional": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}.tar.gz",
-      "version": "2024.1.3",
-      "sha256": "be3be94349ec55726fe9180d8a46097e7110a9e1cb7fd2cca85b961814a6e415",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.1.3.tar.gz",
-      "build_number": "241.17890.14"
+      "version": "2024.1.4",
+      "sha256": "3a12ada098a839ba3c32820071ecc04cb71e8e1066d0753397399c2e52941de9",
+      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.1.4.tar.gz",
+      "build_number": "241.18034.82"
     },
     "rider": {
       "update-channel": "Rider RELEASE",
@@ -108,10 +116,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.tar.gz",
-      "version": "2024.1.2",
-      "sha256": "68a94f4d57ca937629f825be9c1375328b4fbf50c4bf0561d1b9b8db04102a62",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.2.tar.gz",
-      "build_number": "241.17011.169"
+      "version": "2024.1.6",
+      "sha256": "42cf845a9159ab5ab182f501cb95154a27701af04ea01e309308ef6a5bb9ebfa",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.6.tar.gz",
+      "build_number": "241.17890.43"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -125,12 +133,20 @@
       "update-channel": "Writerside EAP",
       "url-template": "https://download.jetbrains.com/writerside/writerside-{version}.tar.gz",
       "version": "2024.1 EAP",
-      "sha256": "efb69c46ab8f3a461c42d5b6d4f7e843d01f584ae97030110d36d71de453e320",
-      "url": "https://download.jetbrains.com/writerside/writerside-241.16003.85.tar.gz",
-      "build_number": "241.16003.85"
+      "sha256": "47b3323fc18e6f8c9edc71ed309b95f09385123d9b9c9492b55ad6a77b2925ee",
+      "url": "https://download.jetbrains.com/writerside/writerside-241.18775.98.tar.gz",
+      "build_number": "241.18775.98"
     }
   },
   "aarch64-linux": {
+    "aqua": {
+      "update-channel": "Aqua EAP licensing:EAP",
+      "url-template": "https://download.jetbrains.com/aqua/aqua-{version}-aarch64.tar.gz",
+      "version": "2024.1 Public Preview",
+      "sha256": "ec59ff6e259ce0f03441e30a9d8bce8334d11c3ae858705d2f17375565adb80c",
+      "url": "https://download.jetbrains.com/aqua/aqua-241.15989.28-aarch64.tar.gz",
+      "build_number": "241.15989.28"
+    },
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}-aarch64.tar.gz",
@@ -207,18 +223,18 @@
     "pycharm-community": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}-aarch64.tar.gz",
-      "version": "2024.1.3",
-      "sha256": "bf3156d442119f6a522c08e888a591d6c199a441550bff90ee5729087d0401b9",
-      "url": "https://download.jetbrains.com/python/pycharm-community-2024.1.3-aarch64.tar.gz",
-      "build_number": "241.17890.14"
+      "version": "2024.1.4",
+      "sha256": "40dc15c31f44afd8ea5b42de54863253036b0d0f41b20612d0abd937e36af267",
+      "url": "https://download.jetbrains.com/python/pycharm-community-2024.1.4-aarch64.tar.gz",
+      "build_number": "241.18034.82"
     },
     "pycharm-professional": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}-aarch64.tar.gz",
-      "version": "2024.1.3",
-      "sha256": "44f6134f352d0d3754a29d6ca6a6c2a084a2918d302946b45141714f3b8ceaaf",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.1.3-aarch64.tar.gz",
-      "build_number": "241.17890.14"
+      "version": "2024.1.4",
+      "sha256": "a90c657a333e1825c934d524cb426115c85d19d7aebfa4a149fda5062be29fab",
+      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.1.4-aarch64.tar.gz",
+      "build_number": "241.18034.82"
     },
     "rider": {
       "update-channel": "Rider RELEASE",
@@ -239,10 +255,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.tar.gz",
-      "version": "2024.1.2",
-      "sha256": "a6abde77ef84f10d342b57c3f6bff84d0b973d8265c2baeb2490fc36dbcca13f",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.2-aarch64.tar.gz",
-      "build_number": "241.17011.169"
+      "version": "2024.1.6",
+      "sha256": "4671d426dfbf89f614c1ce367c7afba0ef64b7058b4777b72ce145715a352fd1",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.6-aarch64.tar.gz",
+      "build_number": "241.17890.43"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -256,12 +272,20 @@
       "update-channel": "Writerside EAP",
       "url-template": "https://download.jetbrains.com/writerside/writerside-{version}-aarch64.tar.gz",
       "version": "2024.1 EAP",
-      "sha256": "d9f764a8fcbdf13e67f1f152f790c38602792b07fdfd7a8935d320ed8ae68921",
-      "url": "https://download.jetbrains.com/writerside/writerside-241.16003.85-aarch64.tar.gz",
-      "build_number": "241.16003.85"
+      "sha256": "937c30cdfd1431bcdde10bf47f1236ea57c10eca8cd1210a04629a64b383c054",
+      "url": "https://download.jetbrains.com/writerside/writerside-241.18775.98-aarch64.tar.gz",
+      "build_number": "241.18775.98"
     }
   },
   "x86_64-darwin": {
+    "aqua": {
+      "update-channel": "Aqua EAP licensing:EAP",
+      "url-template": "https://download.jetbrains.com/aqua/aqua-{version}.dmg",
+      "version": "2024.1 Public Preview",
+      "sha256": "e90b3cc44efcabd3f31025bae506ec87da138f0a06f5cd4eaf7f96bb57db123a",
+      "url": "https://download.jetbrains.com/aqua/aqua-241.15989.28.dmg",
+      "build_number": "241.15989.28"
+    },
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}.dmg",
@@ -338,18 +362,18 @@
     "pycharm-community": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}.dmg",
-      "version": "2024.1.3",
-      "sha256": "e115df42536457558b632647b93f86605feaca23bcec5af2d03a8c50ce80e81e",
-      "url": "https://download.jetbrains.com/python/pycharm-community-2024.1.3.dmg",
-      "build_number": "241.17890.14"
+      "version": "2024.1.4",
+      "sha256": "22558efc74b2d10fcde02650765cc3b500841d71796dba48d018fc8f794cfd5f",
+      "url": "https://download.jetbrains.com/python/pycharm-community-2024.1.4.dmg",
+      "build_number": "241.18034.82"
     },
     "pycharm-professional": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}.dmg",
-      "version": "2024.1.3",
-      "sha256": "01e29968ef3b5ef18b5425a1aa23d5a36d8c9f413a8ff6b0565f0d59e8601779",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.1.3.dmg",
-      "build_number": "241.17890.14"
+      "version": "2024.1.4",
+      "sha256": "99f22cba7855dbe8acaa0ec222dfaa75cea2ebe5975f1adca6c7b52c7fa763a5",
+      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.1.4.dmg",
+      "build_number": "241.18034.82"
     },
     "rider": {
       "update-channel": "Rider RELEASE",
@@ -370,10 +394,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.dmg",
-      "version": "2024.1.2",
-      "sha256": "d937f1f8eb6a7d0ce35218a616d6e7e237b86c7fdb9562b2ff3213ad3c3730de",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.2.dmg",
-      "build_number": "241.17011.169"
+      "version": "2024.1.6",
+      "sha256": "c5f079356ae9e38424be3257734b8665393146c831bddc917a4b1086321682cf",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.6.dmg",
+      "build_number": "241.17890.43"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -387,12 +411,20 @@
       "update-channel": "Writerside EAP",
       "url-template": "https://download.jetbrains.com/writerside/writerside-{version}.dmg",
       "version": "2024.1 EAP",
-      "sha256": "a9ad84d95ad86b38f35bec25032235b907e19ddf3ef696404f4341650a7eb7b1",
-      "url": "https://download.jetbrains.com/writerside/writerside-241.16003.85.dmg",
-      "build_number": "241.16003.85"
+      "sha256": "0e97d9a2ef53f18930b63a48d7303783aca7422c5d6818543f4805c01991ba41",
+      "url": "https://download.jetbrains.com/writerside/writerside-241.18775.98.dmg",
+      "build_number": "241.18775.98"
     }
   },
   "aarch64-darwin": {
+    "aqua": {
+      "update-channel": "Aqua EAP licensing:EAP",
+      "url-template": "https://download.jetbrains.com/aqua/aqua-{version}-aarch64.dmg",
+      "version": "2024.1 Public Preview",
+      "sha256": "29b975e6845b62ed466d26920fec4c9e5e74588b5ff5cf384d672b98bb602549",
+      "url": "https://download.jetbrains.com/aqua/aqua-241.15989.28-aarch64.dmg",
+      "build_number": "241.15989.28"
+    },
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}-aarch64.dmg",
@@ -469,18 +501,18 @@
     "pycharm-community": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}-aarch64.dmg",
-      "version": "2024.1.3",
-      "sha256": "4f0112b2629faa60325e82d70e8864bb796a41942eb06ddb287ca1ef0d9feba9",
-      "url": "https://download.jetbrains.com/python/pycharm-community-2024.1.3-aarch64.dmg",
-      "build_number": "241.17890.14"
+      "version": "2024.1.4",
+      "sha256": "63c0a14bbad81ab0c1c733802eaf86328e46ebc2de4e7bc0e240f76aefbdf54e",
+      "url": "https://download.jetbrains.com/python/pycharm-community-2024.1.4-aarch64.dmg",
+      "build_number": "241.18034.82"
     },
     "pycharm-professional": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}-aarch64.dmg",
-      "version": "2024.1.3",
-      "sha256": "28ec2b34fecc8abd38a1ba1661f8a3e784b7cb8d7cf496a51235475db66a190a",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.1.3-aarch64.dmg",
-      "build_number": "241.17890.14"
+      "version": "2024.1.4",
+      "sha256": "ecfd340566f8c9ed6afcd42331568db5d91fa3a036c511ae8427f573199c3a44",
+      "url": "https://download.jetbrains.com/python/pycharm-professional-2024.1.4-aarch64.dmg",
+      "build_number": "241.18034.82"
     },
     "rider": {
       "update-channel": "Rider RELEASE",
@@ -501,10 +533,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.dmg",
-      "version": "2024.1.2",
-      "sha256": "af973b73e5ced9982703d7f5d163e3bd8bee8b095aac16b2151ec2c7f1d4d870",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.2-aarch64.dmg",
-      "build_number": "241.17011.169"
+      "version": "2024.1.6",
+      "sha256": "5216ea7e5e994a3df4f1095772f5a44e999d7ca0ac02a21698149c8023c46893",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.6-aarch64.dmg",
+      "build_number": "241.17890.43"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -518,9 +550,9 @@
       "update-channel": "Writerside EAP",
       "url-template": "https://download.jetbrains.com/writerside/writerside-{version}-aarch64.dmg",
       "version": "2024.1 EAP",
-      "sha256": "d3bb0079046570dbfa5175b388e091b1567c024a7ec8587e7c8e5389cf1bd721",
-      "url": "https://download.jetbrains.com/writerside/writerside-241.16003.85-aarch64.dmg",
-      "build_number": "241.16003.85"
+      "sha256": "956fc3d39a2aa34648c272780843729356a20c0a4a1ceb20e69a9f86a562278c",
+      "url": "https://download.jetbrains.com/writerside/writerside-241.18775.98-aarch64.dmg",
+      "build_number": "241.18775.98"
     }
   }
 }

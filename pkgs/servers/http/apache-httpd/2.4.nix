@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which ];
 
-  buildInputs = [ perl libxcrypt ] ++
+  buildInputs = [ perl libxcrypt zlib ] ++
     lib.optional brotliSupport brotli ++
     lib.optional sslSupport openssl ++
     lib.optional modTlsSupport rustls-ffi ++

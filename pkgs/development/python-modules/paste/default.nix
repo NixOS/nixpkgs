@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   setuptools,
   six,
@@ -46,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://pythonpaste.readthedocs.io/";
     changelog = "https://github.com/cdent/paste/blob/${version}/docs/news.txt";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, bundlerApp, bundlerUpdateScript, ruby, makeWrapper, git, docutils, nixosTests }:
+{ lib, bundlerApp, bundlerUpdateScript, ruby, makeWrapper, nixosTests }:
 
 bundlerApp rec {
   pname = "gollum";

@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "032qf72cpjdfffq1yq54gz3ahgqf2ijca4vl31sfabmjzq9q370d";
   };
 
+  separateDebugInfo = true;
+
   # Fixes support for gcrypt 1.6+
   patches = [ ./gcrypt-fix.patch ./freebsd-unistd.patch ];
 

@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/MagicStack/httptools";
     changelog = "https://github.com/MagicStack/httptools/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

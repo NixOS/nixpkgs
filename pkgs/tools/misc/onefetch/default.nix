@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     git commit -m test
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd onefetch \
       --bash <($out/bin/onefetch --generate bash) \
       --fish <($out/bin/onefetch --generate fish) \

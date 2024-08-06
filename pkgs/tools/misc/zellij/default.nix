@@ -50,6 +50,7 @@ rustPlatform.buildRustPackage rec {
     mandown docs/MANPAGE.md > zellij.1
     installManPage zellij.1
 
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd $pname \
       --bash <($out/bin/zellij setup --generate-completion bash) \
       --fish <($out/bin/zellij setup --generate-completion fish) \

@@ -21,6 +21,7 @@
   file2c,
   bintrans,
   xargs-j,
+  kldxref,
 }:
 let
   hostArchBsd = freebsd-lib.mkBsdArch stdenv;
@@ -83,6 +84,7 @@ mkDerivation rec {
     file2c
     bintrans
     xargs-j
+    kldxref
   ];
 
   # --dynamic-linker /red/herring is used when building the kernel.
@@ -98,7 +100,10 @@ mkDerivation rec {
   ];
 
   # hardeningDisable = stackprotector doesn't seem to be enough, put it in cflags too
-  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
+  NIX_CFLAGS_COMPILE = [
+    "-fno-stack-protector"
+    "-Wno-unneeded-internal-declaration" # some openzfs code trips this
+  ];
 
   inherit env;
   passthru.env = env;

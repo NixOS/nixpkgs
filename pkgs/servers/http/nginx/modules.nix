@@ -54,7 +54,7 @@ let
       description = "Forward proxy module for CONNECT request handling";
       homepage = "https://github.com/chobits/ngx_http_proxy_connect_module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -77,7 +77,7 @@ let self = {
       description = "Validates Akamai v2 query string tokens";
       homepage = "https://github.com/kaltura/nginx-akamai-token-validate-module";
       license = with licenses; [ agpl3Only ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -109,7 +109,7 @@ let self = {
       description = "Integrate ARPA2 Resource ACLs into nginx";
       homepage = "https://gitlab.com/arpa2/nginx-auth-a2aclr";
       license = with licenses; [ isc ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -127,7 +127,7 @@ let self = {
       description = "Proxy to authenticated AWS services";
       homepage = "https://github.com/anomalizer/ngx_aws_auth";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -152,7 +152,7 @@ let self = {
       description = "Brotli compression";
       homepage = "https://github.com/google/ngx_brotli";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -170,7 +170,7 @@ let self = {
       description = "Adds ability to purge content from FastCGI, proxy, SCGI and uWSGI caches";
       homepage = "https://github.com/nginx-modules/ngx_cache_purge";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -188,7 +188,7 @@ let self = {
       description = "Collection of small and useful nginx add-ons";
       homepage = "https://github.com/FRiCKLE/ngx_coolkit";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -208,7 +208,7 @@ let self = {
       description = "WebDAV PROPFIND,OPTIONS,LOCK,UNLOCK support";
       homepage = "https://github.com/arut/nginx-dav-ext-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -226,7 +226,7 @@ let self = {
       description = "Adds additional generic tools that module developers can use in their own modules";
       homepage = "https://github.com/vision5/ngx_devel_kit";
       license = with licenses; [ bsd3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -246,7 +246,7 @@ let self = {
       description = "Brings echo, sleep, time, exec and more shell-style goodies to Nginx";
       homepage = "https://github.com/openresty/echo-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -282,7 +282,7 @@ let self = {
       description = "Fluentd data collector";
       homepage = "https://github.com/fluent/nginx-fluentd-module";
       license = with licenses; [ asl20 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -330,7 +330,7 @@ let self = {
       description = " IP address anonymizer";
       homepage = "https://github.com/masonicboom/ipscrub";
       license = with licenses; [ bsd3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -348,7 +348,7 @@ let self = {
       description = "Limit the total speed from the specific user";
       homepage = "https://github.com/yaoweibin/nginx_limit_speed_module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -366,7 +366,7 @@ let self = {
       description = "HTTP live module";
       homepage = "https://github.com/arut/nginx-live-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -402,7 +402,7 @@ let self = {
       description = "Embed the Power of Lua";
       homepage = "https://github.com/openresty/lua-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -423,7 +423,7 @@ let self = {
       description = "Expose Lua API to ngx_lua for Nginx upstreams";
       homepage = "https://github.com/openresty/lua-upstream-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -444,7 +444,7 @@ let self = {
       description = "Open source, cross platform web application firewall (WAF)";
       homepage = "https://github.com/SpiderLabs/ModSecurity";
       license = with licenses; [ asl20 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -480,7 +480,7 @@ let self = {
       description = "MPEG-TS Live Module";
       homepage = "https://github.com/arut/nginx-ts-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -498,7 +498,7 @@ let self = {
       description = "Open-source, high performance, low rules maintenance WAF";
       homepage = "https://github.com/nbs-system/naxsi";
       license = with licenses; [ gpl3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -528,7 +528,7 @@ let self = {
       description = "Subset of the JavaScript language that allows extending nginx functionality";
       homepage = "https://nginx.org/en/docs/njs/";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -550,7 +550,7 @@ let self = {
       description = "Enable requests served by nginx for distributed tracing via The OpenTracing Project";
       homepage = "https://github.com/opentracing-contrib/nginx-opentracing";
       license = with licenses; [ asl20 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -583,7 +583,7 @@ let self = {
       description = "Automatic PageSpeed optimization";
       homepage = "https://github.com/apache/incubator-pagespeed-ngx";
       license = with licenses; [ asl20 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -600,10 +600,10 @@ let self = {
     inputs = [ pam ];
 
     meta = with lib; {
-      description = "Use PAM for simple http authentication ";
+      description = "Use PAM for simple http authentication";
       homepage = "https://github.com/sto/ngx_http_auth_pam_module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -621,7 +621,7 @@ let self = {
       description = "Pinba module for nginx";
       homepage = "https://github.com/tony2001/ngx_http_pinba_module";
       license = with licenses; [ unfree ]; # no license in repo
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -639,7 +639,7 @@ let self = {
       description = "Pure stream http push technology";
       homepage = "https://github.com/wandenberg/nginx-push-stream-module";
       license = with licenses; [ gpl3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -657,7 +657,7 @@ let self = {
       description = "Media Streaming Server";
       homepage = "https://github.com/arut/nginx-rtmp-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -678,7 +678,7 @@ let self = {
       description = "Generates CDN tokens, either as a cookie or as a query string parameter";
       homepage = "https://github.com/kaltura/nginx-secure-token-module";
       license = with licenses; [ agpl3Only ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -696,7 +696,7 @@ let self = {
       description = "Various set_xxx directives added to the rewrite module (md5/sha1, sql/json quoting and many more)";
       homepage = "https://github.com/openresty/set-misc-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -714,7 +714,7 @@ let self = {
       description = "Shibboleth auth request";
       homepage = "https://github.com/nginx-shib/nginx-http-shibboleth";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -732,7 +732,7 @@ let self = {
       description = "Implements a collection of augmented statistics based on HTTP-codes and upstreams response time";
       homepage = "https://github.com/goldenclone/nginx-sla";
       license = with licenses; [ unfree ]; # no license in repo
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -750,7 +750,7 @@ let self = {
       description = "Adds ability to cache static files";
       homepage = "https://github.com/friCKLE/ngx_slowfs_cache";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -768,7 +768,7 @@ let self = {
       description = "Expose querystring parameters sorted in a variable";
       homepage = "https://github.com/wandenberg/nginx-sorted-querystring-module";
       license = with licenses; [ mit ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -806,7 +806,7 @@ let self = {
       description = "Send statistics to statsd";
       homepage = "https://github.com/harvesthq/nginx-statsd";
       license = with licenses; [ bsd3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -824,7 +824,7 @@ let self = {
       description = "Stream server traffic status core module";
       homepage = "https://github.com/vozlt/nginx-module-stream-sts";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -842,7 +842,7 @@ let self = {
       description = "Stream server traffic status module";
       homepage = "https://github.com/vozlt/nginx-module-sts";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -860,7 +860,7 @@ let self = {
       description = "Filter module which can do both regular expression and fixed string substitutions";
       homepage = "https://github.com/yaoweibin/ngx_http_substitutions_filter_module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -878,7 +878,7 @@ let self = {
       description = "Nginx sysguard module";
       homepage = "https://github.com/vozlt/nginx-module-sysguard";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -896,7 +896,7 @@ let self = {
       description = "Handle file uploads using multipart/form-data encoding and resumable uploads";
       homepage = "https://github.com/fdintino/nginx-upload-module";
       license = with licenses; [ bsd3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -914,7 +914,7 @@ let self = {
       description = "Support upstream health check";
       homepage = "https://github.com/yaoweibin/nginx_upstream_check_module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -934,7 +934,7 @@ let self = {
       description = "Tarantool NginX upstream module (REST, JSON API, websockets, load balancing)";
       homepage = "https://github.com/tarantool/nginx_upstream_module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -952,7 +952,7 @@ let self = {
       description = "URL encoding converting module";
       homepage = "https://github.com/vozlt/nginx-module-url";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -973,7 +973,7 @@ let self = {
       description = "Extract thumbs from a video file";
       homepage = "https://github.com/wandenberg/nginx-video-thumbextractor-module";
       license = with licenses; [ gpl3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -983,8 +983,8 @@ let self = {
       name = "vod";
       owner = "kaltura";
       repo = "nginx-vod-module";
-      rev = "1.32";
-      hash = "sha256-ZpG0oj60D3o7/7uyE8AybCiOtncVe1Jnjaz22sIFypk=";
+      rev = "1.33";
+      hash = "sha256-xcdbaogJV/vSzFfP55uK2+zw3zF5j9AHaJI0QItTSss=";
       postFetch = ''
         substituteInPlace $out/vod/media_set.h \
           --replace "MAX_CLIPS (128)" "MAX_CLIPS (1024)"
@@ -997,7 +997,7 @@ let self = {
       description = "VOD packager";
       homepage = "https://github.com/kaltura/nginx-vod-module";
       license = with licenses; [ agpl3Only ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 

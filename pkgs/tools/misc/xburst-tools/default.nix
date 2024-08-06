@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     description = "Qi tools to access the Ben Nanonote USB_BOOT mode";
     license = lib.licenses.gpl3;
     homepage = "http://www.linux-mtd.infradead.org/";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
     platforms = lib.platforms.x86_64;
   };
 }

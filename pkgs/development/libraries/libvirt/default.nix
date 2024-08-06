@@ -9,7 +9,6 @@
 , dnsmasq
 , docutils
 , fetchFromGitLab
-, fetchpatch
 , gettext
 , glib
 , gnutls

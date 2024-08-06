@@ -21,6 +21,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ghickman/linode";
     description = "Thin python wrapper around Linode's API";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

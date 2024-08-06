@@ -13,21 +13,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pixi";
-  version = "0.24.2";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     rev = "v${version}";
-    hash = "sha256-Qlr4CcrCq29ig3FPFWCR5oOtFrbREm/7zyGXUB3XL98=";
+    hash = "sha256-N8nNB+FOD8n+W7jFYhq9JoEnLOq6xLMLBC77DiK3RLU=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async_zip-0.0.17" = "sha256-Q5fMDJrQtob54CTII3+SXHeozy5S5s3iLOzntevdGOs=";
-      "cache-key-0.0.1" = "sha256-lJJqjxyAzGQKZi6RtzZ7A9pCAOyIJnstHoS8jlUWeGA=";
-      "pubgrub-0.2.1" = "sha256-mAPyo2R996ymzCt6TAX2G7xU1C3vDGjYF0z7R8lI1yg=";
+      "cache-key-0.0.1" = "sha256-tg3zRakZsnf7xBjs5tSlkmhkhHp5HGs6dwrTmdZBTl4=";
+      "pubgrub-0.2.1" = "sha256-6tr+HATYSn1A1uVJwmz40S4yLDOJlX8vEokOOtdFG0M=";
     };
   };
 
@@ -78,9 +78,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_task_with_env"
     "--skip=test_pixi_only_env_activation"
     "--skip=cli::shell_hook::tests::test_environment_json"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--skip=task::task_environment::tests::test_find_ambiguous_task"
+    "--skip=task::task_environment::tests::test_find_task_dual_defined"
+    "--skip=task::task_environment::tests::test_find_task_explicit_defined"
+    "--skip=task::task_graph::test::test_custom_command"
+    "--skip=task::task_graph::test::test_multi_env_defaults_ambigu"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pixi \
       --bash <($out/bin/pixi completion --shell bash) \
       --fish <($out/bin/pixi completion --shell fish) \

@@ -44,6 +44,7 @@ let
             };
             plugins = with config.services.keycloak.package.plugins; [
               keycloak-discord
+              keycloak-metrics-spi
             ];
           };
           environment.systemPackages = with pkgs; [
@@ -120,6 +121,14 @@ let
                    '${frontendUrl}/realms/master/protocol/openid-connect/token' \
                    | jq -r '"Authorization: bearer " + .access_token' >admin_auth_header
           """)
+
+          # Register the metrics SPI
+          keycloak.succeed(
+              """${pkgs.jre}/bin/keytool -import -alias snakeoil -file ${certs.ca.cert} -storepass aaaaaa -keystore cacert.jks -noprompt""",
+              """KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' kcadm.sh config credentials --server '${frontendUrl}' --realm master --user admin --password "$(<${adminPasswordFile})" """,
+              """KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' kcadm.sh update events/config -s 'eventsEnabled=true' -s 'adminEventsEnabled=true' -s 'eventsListeners+=metrics-listener'""",
+              """curl -sSf '${frontendUrl}/realms/master/metrics' | grep '^keycloak_admin_event_UPDATE'"""
+          )
 
           # Publish the realm, including a test OIDC client and user
           keycloak.succeed(

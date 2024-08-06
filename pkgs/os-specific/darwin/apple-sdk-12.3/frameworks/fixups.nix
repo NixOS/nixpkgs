@@ -47,6 +47,9 @@
       CoreAudio = {
         inherit IOKit;
       };
+      CoreData = {
+        inherit CloudKit;
+      };
       CoreFoundation = {
         inherit libobjc;
       };

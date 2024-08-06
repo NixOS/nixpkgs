@@ -2,39 +2,46 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
   numpy,
   packaging,
   quantities,
   pythonOlder,
   setuptools,
+  pytestCheckHook,
+  pillow,
+  which,
 }:
 
 buildPythonPackage rec {
   pname = "neo";
-  version = "0.13.1";
+  version = "0.13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gVhbKLZaTciakucc7TlCxdv9qnG90sw4U3G3ebVlTK0=";
+    hash = "sha256-aYDZVC55XVNR/VtdnTlBBKR/MNDvfwUR+spqe14ncrw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     packaging
     quantities
   ];
 
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pillow
+    which
+  ];
 
-  checkPhase = ''
-    nosetests --exclude=iotest
-  '';
+  disabledTestPaths = [
+    # Requires network and export HOME dir
+    "neo/test/rawiotest/test_maxwellrawio.py"
+  ];
 
   pythonImportsCheck = [ "neo" ];
 

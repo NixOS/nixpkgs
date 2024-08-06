@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "go" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd typeshare \
       --bash <($out/bin/typeshare completions bash) \
       --fish <($out/bin/typeshare completions fish) \

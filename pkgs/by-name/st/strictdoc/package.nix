@@ -60,6 +60,7 @@ python3.pkgs.buildPythonApplication rec {
     "python-datauri"
     "xlsxwriter"
     "lxml"
+    "textx"
   ];
 
   pythonImportsCheck = [ "strictdoc" ];

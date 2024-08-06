@@ -1,5 +1,4 @@
 { stdenv
-, bash
 , buildPackages
 , buildBazelPackage
 , fetchFromGitHub

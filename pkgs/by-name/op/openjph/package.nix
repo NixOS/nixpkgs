@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openjph";
-  version = "0.14.2";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "aous72";
     repo = "openjph";
     rev = finalAttrs.version;
-    hash = "sha256-jksQfNcgw3LRzQlcsGpTAn6avmM3BsH6wGNTdX9khYY=";
+    hash = "sha256-v4rqBTS6rk5fgDQqvqPwFAYxLNxtsRhZuQsj+y3sE3o=";
   };
 
   nativeBuildInputs = [ cmake validatePkgConfig ];

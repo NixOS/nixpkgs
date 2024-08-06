@@ -91,6 +91,6 @@ buildPythonPackage rec {
     homepage = "https://flask-limiter.readthedocs.org/";
     changelog = "https://github.com/alisaifee/flask-limiter/blob/${version}/HISTORY.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/jbruchon/jdupes";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "jdupes";
   };
 }

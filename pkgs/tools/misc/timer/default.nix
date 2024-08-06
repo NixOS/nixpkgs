@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "timer";
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "timer";
     rev = "v${version}";
-    hash = "sha256-mA52lrtChPbEeZr7kh1RYJ8yTqe7PaShqQ/0aJ+o83E=";
+    hash = "sha256-nHQPTinrSXMeZeiZC16drliFf0ib9+gjxJr9oViZqOc=";
   };
 
-  vendorHash = "sha256-bLGP9xAs0V6ttaU2duQVeiX7TQi/TX7Kjawh9nmtsl4=";
+  vendorHash = "sha256-mE/C4S2gqcFGfnmCeMS/VpQwXHrI8SXos0M1+rV3hPo=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 

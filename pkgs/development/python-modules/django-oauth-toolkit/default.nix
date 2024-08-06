@@ -12,7 +12,6 @@
   # tests
   djangorestframework,
   pytest-django,
-  pytest-xdist,
   pytest-mock,
   pytestCheckHook,
 }:

@@ -112,6 +112,6 @@ stdenv.mkDerivation {
     mainProgram = "itkTestDriver";
     homepage = "https://www.itk.org";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
   };
 }

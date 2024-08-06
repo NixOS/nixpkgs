@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "Daemon for communicating with WebOS devices";
     mainProgram = "novacomd";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

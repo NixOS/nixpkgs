@@ -7,7 +7,7 @@
   python,
   pythonAtLeast,
   pythonOlder,
-  addOpenGLRunpath,
+  addDriverRunpath,
   callPackage,
   cudaPackages,
   future,
@@ -16,7 +16,6 @@
   pyyaml,
   requests,
   setuptools,
-  torch-bin,
   typing-extensions,
   sympy,
   jinja2,
@@ -44,7 +43,7 @@ buildPythonPackage {
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
-    addOpenGLRunpath
+    addDriverRunpath
     autoPatchelfHook
     autoAddDriverRunpath
   ];

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sourceforge.net/projects/gmrun/";
     license = licenses.gpl2;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "gmrun";
   };

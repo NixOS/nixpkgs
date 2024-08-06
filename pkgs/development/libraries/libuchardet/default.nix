@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     mainProgram = "uchardet";
     homepage = "https://www.freedesktop.org/wiki/Software/uchardet/";
     license = licenses.mpl11;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; unix;
   };
 }

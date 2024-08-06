@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , buildPythonPackage
 , fetchPypi
 }:
@@ -36,6 +35,6 @@ buildPythonPackage rec {
     description = "Python attributes without boilerplate";
     homepage = "https://github.com/hynek/attrs";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

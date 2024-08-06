@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "trayscale";
-  version = "0.12.6";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "DeedleFake";
     repo = "trayscale";
     rev = "v${version}";
-    hash = "sha256-4zjT5GrGOYaKD61EWG7gxAMwf2ZQivWlzaKH0h4jLGU=";
+    hash = "sha256-uaHForU+0dAkLPczHr6ZBpNZ6iirvsje+6i8rHrNXdQ=";
   };
 
-  vendorHash = "sha256-h5FdXlDvvorP9iOsKXxc6q3HwyB44faZGvw/Ew3LkkQ=";
+  vendorHash = "sha256-RvGKPIXdkeTdpFraxie76xrtfqRsIpzpBricEQZNFYc=";
 
   subPackages = [ "cmd/trayscale" ];
 
@@ -50,7 +50,7 @@ buildGoModule rec {
     description = "Unofficial GUI wrapper around the Tailscale CLI client";
     homepage = "https://github.com/DeedleFake/trayscale";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "trayscale";
     platforms = platforms.linux;
   };

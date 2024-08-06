@@ -334,20 +334,13 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
       llvmPackages = pkgs.llvmPackages_15;
     };
-    ghc96 = compiler.ghc965;
+    ghc96 = compiler.ghc966;
     ghc981 = callPackage ../development/compilers/ghc/9.8.1.nix {
       bootPkgs =
         # For GHC 9.6 no armv7l bindists are available.
         if stdenv.hostPlatform.isAarch32 then
           packages.ghc963
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
-          packages.ghc963
-        else if stdenv.hostPlatform.isDarwin then
-          # it seems like the GHC 9.6.* bindists are built with a different
-          # toolchain than we are using (which I'm guessing from the fact
-          # that 9.6.4 bindists pass linker flags our ld doesn't support).
-          # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-          # the clock package (probably a hsc2hs problem).
           packages.ghc963
         else
           packages.ghc963Binary;
@@ -366,13 +359,6 @@ in {
         if stdenv.hostPlatform.isAarch32 then
           packages.ghc963
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
-          packages.ghc963
-        else if stdenv.hostPlatform.isDarwin then
-          # it seems like the GHC 9.6.* bindists are built with a different
-          # toolchain than we are using (which I'm guessing from the fact
-          # that 9.6.4 bindists pass linker flags our ld doesn't support).
-          # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-          # the clock package (probably a hsc2hs problem).
           packages.ghc963
         else
           packages.ghc963Binary;
@@ -418,13 +404,6 @@ in {
         if stdenv.hostPlatform.isAarch32 then
           packages.ghc963
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
-          packages.ghc963
-        else if stdenv.hostPlatform.isDarwin then
-          # it seems like the GHC 9.6.* bindists are built with a different
-          # toolchain than we are using (which I'm guessing from the fact
-          # that 9.6.4 bindists pass linker flags our ld doesn't support).
-          # With both 9.6.3 and 9.6.4 binary it is impossible to link against
-          # the clock package (probably a hsc2hs problem).
           packages.ghc963
         else
           packages.ghc963Binary;
@@ -570,7 +549,7 @@ in {
       ghc = bh.compiler.ghc966;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
     };
-    ghc96 = packages.ghc965;
+    ghc96 = packages.ghc966;
     ghc981 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc981;
       ghc = bh.compiler.ghc981;

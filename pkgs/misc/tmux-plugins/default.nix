@@ -736,6 +736,26 @@ in rec {
     };
   };
 
+  tmux-floax = mkTmuxPlugin {
+    pluginName = "tmux-floax";
+    rtpFilePath = "floax.tmux";
+    version = "0-unstable-2024-07-24";
+    src = fetchFromGitHub {
+      owner = "omerxx";
+      repo = "tmux-floax";
+      rev = "46c0a6a8c3cf79b83d1b338f547acbbd1d306301";
+      hash = "sha256-bALZfVWcoAzcTeWwkBHhi7TzUQJicOBTNdeJh3O/Bj8=";
+    };
+    meta = {
+      description = "Floating pane for Tmux";
+      homepage = "https://github.com/omerxx/tmux-floax";
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [ redyf ];
+      mainProgram = "tmux-floax";
+      platforms = lib.platforms.all;
+    };
+  };
+
   tmux-fzf = mkTmuxPlugin {
     pluginName = "tmux-fzf";
     rtpFilePath = "main.tmux";

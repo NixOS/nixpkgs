@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     scapy
     typer
     typing-extensions
-  ] ++ typer.optional-dependencies.all);
+  ]);
 
   # Project has no tests
   doCheck = false;

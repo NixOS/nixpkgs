@@ -3,25 +3,34 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   cmake,
   ninja,
   pybind11,
   setuptools,
   wheel,
+
+  # buildInputs
   SDL2,
   zlib,
+
+  # dependencies
   importlib-resources,
   numpy,
   typing-extensions,
   importlib-metadata,
+
+  # checks
   gymnasium,
   pytestCheckHook,
+
   stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "ale-py";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,13 +39,8 @@ buildPythonPackage rec {
     owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
     rev = "refs/tags/v${version}";
-    hash = "sha256-obZfNQ0+ppnq/BD4IFeMFAqJnCVV3X/2HeRwbdSKRFk=";
+    hash = "sha256-MpumAQ5OW/+fRIvrBlRWkgioxMVceb5LxEH2JjRk5zY=";
   };
-
-  patches = [
-    # don't download pybind11, use local pybind11
-    ./cmake-pybind11.patch
-  ];
 
   build-system = [
     cmake
@@ -57,10 +61,16 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
-  '';
+  postPatch =
+    # Relax the pybind11 version
+    ''
+      substituteInPlace src/python/CMakeLists.txt \
+        --replace-fail 'find_package(pybind11 ''${PYBIND11_VER} QUIET)' 'find_package(pybind11 QUIET)'
+    ''
+    + ''
+      substituteInPlace pyproject.toml \
+        --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+    '';
 
   dontUseCmakeConfigure = true;
 

@@ -22,13 +22,12 @@
   withSerialPort ? false,
   withTools ? false,
   pkgsBuildTarget,
-  buildPackages,
   dbusSupport ? !stdenv.isDarwin,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt5";
-  version = "5.15.9";
+  version = "5.15.10";
   format = "pyproject";
 
   disabled = isPy27;
@@ -36,7 +35,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQt5";
     inherit version;
-    hash = "sha256-3EHoQBqQ3D4raStBG9VJKrVZrieidCTu1L05FVZOxMA=";
+    hash = "sha256-1Gt4BLGxCk/5F1P4ET5bVYDStEYvMiYoji2ESXM0iYo=";
   };
 
   patches = [

@@ -54,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-50OIFUtcGXtLfuQvDc6MX7vd1NNhCT74jU+zA+M9pf4=";
   };
 
+  patches = [
+    ./tracker-landlock-nix-store-permission.patch
+  ];
+
   nativeBuildInputs = [
     asciidoc
     docbook-xsl-nons

@@ -10,6 +10,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
       django-bootstrap4 = prev.django-bootstrap4.overridePythonAttrs (oldAttrs: rec {
         version = "3.0.0";
@@ -110,6 +111,7 @@ python.pkgs.buildPythonApplication rec {
     "reportlab"
     "requests"
     "rules"
+    "whitenoise"
   ];
 
   propagatedBuildInputs = with python.pkgs; [

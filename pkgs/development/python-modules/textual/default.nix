@@ -12,12 +12,13 @@
   syrupy,
   time-machine,
   tree-sitter,
+  tree-sitter-languages,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.72.0";
+  version = "0.75.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,10 +39,7 @@ buildPythonPackage rec {
   ] ++ markdown-it-py.optional-dependencies.plugins ++ markdown-it-py.optional-dependencies.linkify;
 
   optional-dependencies = {
-    syntax = [
-      tree-sitter
-      # tree-sitter-languages
-    ];
+    syntax = [ tree-sitter ] ++ lib.optionals (pythonOlder "3.12") [ tree-sitter-languages ];
   };
 
   nativeCheckInputs = [
@@ -50,19 +48,18 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
     time-machine
-  ] ++ optional-dependencies.syntax;
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
-    # snapshot tests require syrupy<4
+    # Snapshot tests require syrupy<4
     "tests/snapshot_tests/test_snapshots.py"
   ];
 
   disabledTests = [
     # Assertion issues
     "test_textual_env_var"
-    "test_softbreak_split_links_rendered_correctly"
 
-    # requires tree-sitter-languages which is not packaged in nixpkgs
+    # Requirements for tests are not quite ready
     "test_register_language"
     "test_language_binary_missing"
   ];

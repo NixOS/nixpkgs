@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrunfw";
-  version = "4.0.0-unstable-2024-06-10";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrunfw";
-    rev = "12236fa4caa42423ff3081b6179aa0a5f37c67c9";
-    hash = "sha256-Vcbg2zBVMQsiAQF/cEEIRMqppMBVGnqUBlDquGzRBsc=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-LaIyPk9QkxPFP169r6PqyBMpFujbQBlX77z63OqKGYc=";
   };
 
   kernelSrc = fetchurl {

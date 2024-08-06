@@ -2,6 +2,7 @@
 , stdenvNoCC
 , callPackages
 , fetchFromGitHub
+, fetchpatch
 , fetchzip
 , buildNpmPackage
 , buildGoModule
@@ -178,6 +179,40 @@ let
         pyproject = true;
       };
 
+      # Use 3.14.0 until https://github.com/encode/django-rest-framework/issues/9358 is fixed.
+      # Otherwise applying blueprints/default/default-brand.yaml fails with:
+      #   authentik.flows.models.RelatedObjectDoesNotExist: FlowStageBinding has no target.
+      djangorestframework = prev.buildPythonPackage rec {
+        pname = "djangorestframework";
+        version = "3.14.0";
+        format = "setuptools";
+
+        src = fetchFromGitHub {
+          owner = "encode";
+          repo = "django-rest-framework";
+          rev = version;
+          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
+        };
+
+        propagatedBuildInputs = with final; [
+          django
+          pytz
+        ];
+
+        nativeCheckInputs = with final; [
+          pytest-django
+          pytest7CheckHook
+
+          # optional tests
+          coreapi
+          django-guardian
+          pyyaml
+          uritemplate
+        ];
+
+        pythonImportsCheck = [ "rest_framework" ];
+      };
+
       tenant-schemas-celery = prev.buildPythonPackage rec {
         pname = "tenant-schemas-celery";
         version = "3.0.0";
@@ -225,16 +260,23 @@ let
         inherit version src meta;
         pyproject = true;
 
+        patches = [
+          (fetchpatch {
+            name = "scim-schema-load.patch";
+            url = "https://github.com/goauthentik/authentik/commit/f3640bd3c0ee2f43efcfd506bb71d2b7b6761017.patch";
+            hash = "sha256-4AC7Dc4TM7ok964ztc+XdHvoU/DKyi9yJoz5u1dljEM=";
+          })
+        ];
+
         postPatch = ''
           rm lifecycle/system_migrations/tenant_files.py
           substituteInPlace authentik/root/settings.py \
-            --replace-fail 'Path(__file__).absolute().parent.parent.parent' "\"$out\""
+            --replace-fail 'Path(__file__).absolute().parent.parent.parent' "Path(\"$out\")"
           substituteInPlace authentik/lib/default.yml \
             --replace-fail '/blueprints' "$out/blueprints" \
             --replace-fail './media' '/var/lib/authentik/media'
           substituteInPlace pyproject.toml \
             --replace-fail 'dumb-init = "*"' "" \
-            --replace-fail 'djangorestframework = "3.14.0"' 'djangorestframework = "*"' \
             --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2'
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
@@ -306,9 +348,9 @@ let
           wsproto
           xmlsec
           zxcvbn
-        ] ++ [
-          codespell
-        ];
+        ]
+        ++ uvicorn.optional-dependencies.standard
+        ++ [ codespell ];
 
         postInstall = ''
           mkdir -p $out/web $out/website
@@ -316,6 +358,7 @@ let
           cp -r blueprints $out/
           cp -r ${webui}/dist ${webui}/authentik $out/web/
           cp -r ${website} $out/website/help
+          ln -s $out/${prev.python.sitePackages}/authentik $out/authentik
           ln -s $out/${prev.python.sitePackages}/lifecycle $out/lifecycle
         '';
       };

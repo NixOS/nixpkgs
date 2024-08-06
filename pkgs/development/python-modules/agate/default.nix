@@ -14,22 +14,21 @@
   python-slugify,
   pythonOlder,
   pytimeparse,
-  pytz,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "agate";
-  version = "1.9.1";
+  version = "1.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wireservice";
     repo = "agate";
     rev = "refs/tags/${version}";
-    hash = "sha256-I7jvZA/m06kUuUcfglySaroDbJ5wbgiF2lb84EFPmpw=";
+    hash = "sha256-JVBf21as4DNmGT84dSG+54RIU6PbRBoLPSsWj2FGXxc=";
   };
 
   build-system = [ setuptools ];
@@ -49,7 +48,6 @@ buildPythonPackage rec {
     lxml
     pyicu
     pytestCheckHook
-    pytz
   ];
 
   pythonImportsCheck = [ "agate" ];
@@ -59,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wireservice/agate";
     changelog = "https://github.com/wireservice/agate/blob/${version}/CHANGELOG.rst";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

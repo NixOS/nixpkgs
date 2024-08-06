@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple and easy-to-use library to enjoy videogames programming";
     homepage = "https://www.raylib.com/";
     license = licenses.zlib;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
     changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.version}/CHANGELOG";
   };
