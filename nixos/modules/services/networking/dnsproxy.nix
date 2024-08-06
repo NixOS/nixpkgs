@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -7,18 +12,25 @@ let
     lists
     literalExpression
     maintainers
+    mapAttrsToList
     mkEnableOption
     mkIf
     mkOption
     mkPackageOption
-    types;
+    types
+    ;
 
   cfg = config.services.dnsproxy;
 
   yaml = pkgs.formats.yaml { };
   configFile = yaml.generate "config.yaml" cfg.settings;
 
-  finalFlags = (lists.optional (cfg.settings != { }) "--config-path=${configFile}") ++ cfg.flags;
+  finalFlags =
+    (lists.optional (cfg.settings != { }) "--config-path=${configFile}")
+    ++ cfg.flags
+    # Set flags pointing to files loaded by systemd credentials.
+    # Note: %d is equivalent to $CREDENTIALS_DIRECTORY
+    ++ (mapAttrsToList (name: _: "--${name}=%d/${name}") cfg.secretFlags);
 in
 {
 
@@ -67,18 +79,41 @@ in
       '';
     };
 
+    # Allows files to be securely passed in command-line flags through systemd credentials
+    secretFlags = mkOption {
+      type = types.attrsOf (types.either types.str types.path);
+      default = { };
+      example = {
+        tls-key = "/path/to/cert.key";
+      };
+      description = ''
+        An attribute set corresponding to command-line flags and
+        their values. The values are expected to be file paths that will be
+        loaded by systemd credentials, allowing sensitive files to be passed
+        to the service (e.g., certificate keys).
+        For details on the available options, see <https://github.com/AdguardTeam/dnsproxy#usage>.
+        Keep in mind that options passed through command-line flags override
+        config options.
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
     systemd.services.dnsproxy = {
       description = "Simple DNS proxy with DoH, DoT, DoQ and DNSCrypt support";
-      after = [ "network.target" "nss-lookup.target" ];
+      after = [
+        "network.target"
+        "nss-lookup.target"
+      ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${getExe cfg.package} ${escapeShellArgs finalFlags}";
         Restart = "always";
         RestartSec = 10;
         DynamicUser = true;
+
+        LoadCredential = mapAttrsToList (name: path: "${name}:${path}") cfg.secretFlags;
 
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         LockPersonality = true;
@@ -89,13 +124,19 @@ in
         ProtectHostname = true;
         ProtectKernelLogs = true;
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+        ];
       };
     };
   };
