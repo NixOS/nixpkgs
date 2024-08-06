@@ -864,9 +864,9 @@
   };
   scvmm = mkAzExtension rec {
     pname = "scvmm";
-    version = "1.0.0";
+    version = "1.1.1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/scvmm-${version}-py2.py3-none-any.whl";
-    sha256 = "565aa9d75dd4d276df2f8ffec5311bd2ae16a2d6172d525a7763fc5972b262b7";
+    sha256 = "7d704578bc5eb60b8105de0b4a924176581a4cf2fd162b0896d81246f7f73a68";
     description = "Microsoft Azure Command-Line Tools SCVMM Extension";
   };
   self-help = mkAzExtension rec {
