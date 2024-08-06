@@ -12662,6 +12662,12 @@
     githubId = 1711539;
     name = "matklad";
   };
+  matko = {
+    email = "maren.van.otterdijk@gmail.com";
+    github = "matko";
+    githubId = 155603;
+    name = "Maren van Otterdijk";
+  };
   matrss = {
     name = "Matthias Riße";
     email = "matthias.risze@t-online.de";
@@ -13326,6 +13332,12 @@
     githubId = 7343721;
     name = "midchildan";
     keys = [ { fingerprint = "FEF0 AE2D 5449 3482 5F06  40AA 186A 1EDA C5C6 3F83"; } ];
+  };
+  midirhee12 = {
+    email = "midirhee@proton.me";
+    github = "midirhee12";
+    githubId = 38054771;
+    name = "midirhee12";
   };
   mig4ng = {
     email = "mig4ng@gmail.com";
@@ -15163,6 +15175,12 @@
     github = "olebedev";
     githubId = 848535;
     name = "Oleg Lebedev";
+  };
+  oleina = {
+    email = "antholeinik@gmail.com";
+    github = "antholeole";
+    githubId = 48811365;
+    name = "Anthony Oleinik";
   };
   olejorgenb = {
     email = "olejorgenb@yahoo.no";
@@ -17183,6 +17201,13 @@
     github = "rembo10";
     githubId = 801525;
     name = "rembo10";
+  };
+  remcoschrijver = {
+    email = "info@writerit.nl";
+    matrix = "@remcoschrijver:tchncs.de";
+    github = "remcoschrijver";
+    githubId = 45097990;
+    name = "Remco Schrijver";
   };
   remexre = {
     email = "nathan+nixpkgs@remexre.com";
