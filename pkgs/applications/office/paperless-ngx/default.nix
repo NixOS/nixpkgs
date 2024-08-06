@@ -21,6 +21,7 @@
 , pango
 , pkg-config
 , nltk-data
+, xorg
 }:
 
 let
@@ -121,6 +122,7 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
+    xorg.lndir
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -194,9 +196,9 @@ python.pkgs.buildPythonApplication rec {
   in ''
     runHook preInstall
 
-    mkdir -p $out/lib/paperless-ngx
+    mkdir -p $out/lib/paperless-ngx/static/frontend
     cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
-    ln -s ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/
+    lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
     chmod +x $out/lib/paperless-ngx/src/manage.py
     makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
       --prefix PYTHONPATH : "${pythonPath}" \
