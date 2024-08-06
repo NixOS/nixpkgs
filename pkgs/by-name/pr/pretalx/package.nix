@@ -81,9 +81,11 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
-  ] ++ (with python.pkgs; [
+  ];
+
+  build-system = with python.pkgs; [
     setuptools
-  ]);
+  ];
 
   pythonRelaxDeps = [
     "celery"
@@ -105,7 +107,7 @@ python.pkgs.buildPythonApplication rec {
     "whitenoise"
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     beautifulsoup4
     bleach
     celery
@@ -141,9 +143,12 @@ python.pkgs.buildPythonApplication rec {
     vobject
     whitenoise
     zxcvbn
-  ] ++ beautifulsoup4.optional-dependencies.lxml ++ plugins;
+  ]
+  ++ beautifulsoup4.optional-dependencies.lxml
+  ++ django.optional-dependencies.argon2
+  ++ plugins;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     mysql = with python.pkgs; [
       mysqlclient
     ];
@@ -196,7 +201,7 @@ python.pkgs.buildPythonApplication rec {
     pytest-xdist
     pytestCheckHook
     responses
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # tries to run npm run i18n:extract
