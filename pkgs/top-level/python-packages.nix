@@ -14984,6 +14984,8 @@ self: super: with self; {
 
   stookalert = callPackage ../development/python-modules/stookalert { };
 
+  stookwijzer = callPackage ../development/python-modules/stookwijzer { };
+
   stopit = callPackage ../development/python-modules/stopit { };
 
   stransi = callPackage ../development/python-modules/stransi { };
