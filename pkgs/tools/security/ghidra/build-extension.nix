@@ -26,11 +26,16 @@ let
       preBuild = ''
         # Set project name, otherwise defaults to directory name
         echo -e '\nrootProject.name = "${pname}"' >> settings.gradle
+        # A config directory needs to exist when ghidra's GHelpBuilder is run
+        export XDG_CONFIG_HOME="''${XDG_CONFIG_HOME:-$(mktemp -d)}"
         ${args.preBuild or ""}
       '';
 
+      # Needed to run gradle on darwin
+      __darwinAllowLocalNetworking = true;
+
       gradleBuildTask = args.gradleBuildTask or "buildExtension";
-      gradleFlags = args.gradleFlags or [] ++ [ "-PGHIDRA_INSTALL_DIR=${ghidra}/lib/ghidra" ];
+      gradleFlags = args.gradleFlags or [ ] ++ [ "-PGHIDRA_INSTALL_DIR=${ghidra}/lib/ghidra" ];
 
       installPhase = args.installPhase or ''
         runHook preInstall
