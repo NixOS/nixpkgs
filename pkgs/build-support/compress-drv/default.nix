@@ -76,13 +76,18 @@ let
     '';
   formatsPipe = lib.concatStringsSep "|" formats;
 in
-runCommand "${drv.name}-compressed" { } ''
-  mkdir $out
+runCommand "${drv.name}-compressed"
+  (
+    (lib.optionalAttrs (drv ? pname) { inherit (drv) pname; })
+    // (lib.optionalAttrs (drv ? version) { inherit (drv) version; })
+  )
+  ''
+    mkdir $out
 
-  # cannot use lndir here, because it also symlinks directories,
-  # which we do not need; we only need to symlink files.
-  (cd ${drv}; find -L -type d -exec mkdir -p $out/{} ';')
-  (cd ${drv}; find -L -type f -exec ln -s ${drv}/{} $out/{} ';')
+    # cannot use lndir here, because it also symlinks directories,
+    # which we do not need; we only need to symlink files.
+    (cd ${drv}; find -L -type d -exec mkdir -p $out/{} ';')
+    (cd ${drv}; find -L -type f -exec ln -s ${drv}/{} $out/{} ';')
 
-  ${lib.concatStringsSep "\n\n" (lib.mapAttrsToList mkCmd compressors)}
-''
+    ${lib.concatStringsSep "\n\n" (lib.mapAttrsToList mkCmd compressors)}
+  ''
