@@ -39,7 +39,7 @@ let
                 '';
               };
               roles = mkOption {
-                type = listOf (enum [ "detect" "record" "rtmp" ]);
+                type = listOf (enum [ "detect" "record" "rtmp" "audio" ]);
                 example = literalExpression ''
                   [ "detect" "rtmp" ]
                 '';
@@ -120,6 +120,14 @@ in
         - [Configuration reference](https://docs.frigate.video/configuration/index)
       '';
     };
+
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether or not to open the required ports on the firewall.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -129,10 +137,7 @@ in
         secure-token
         rtmp
         vod
-      ];
-      recommendedProxySettings = mkDefault true;
-      recommendedGzipSettings = mkDefault true;
-      mapHashBucketSize = mkDefault 128;
+      ];      
       upstreams = {
         frigate-api.servers = {
           "127.0.0.1:5001" = { };
@@ -386,6 +391,30 @@ in
       group = "frigate";
     };
     users.groups.frigate = { };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [
+        5000 # Internal unauthenticated UI and API access.
+        5001 
+        5002 
+        8002
+        8554 # RTSP feeds
+        8555 # WebRTC over tcp
+        8971 # Authenticated UI and API access without TLS.
+        1984 
+      ];
+      allowedUDPPorts = [
+        8555 # WebRTC over udp
+      ];
+    };
+
+    systemd.tmpfiles.rules = [
+      "d '/var/cache/frigate' 0700 frigate frigate - -"
+      "d '/dev/shm/logs/frigate' 0700 frigate frigate - -"
+      "d '/dev/shm/logs/go2rtc' 0700 frigate frigate - -"
+      "d '/dev/shm/logs/nginx' 0700 frigate frigate - -"
+    ];
+
 
     systemd.services.frigate = {
       after = [
