@@ -4,7 +4,6 @@
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
   isPyPy,
 
   # build-system
@@ -36,13 +35,14 @@
   html5lib,
   pytestCheckHook,
   pytest-xdist,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "7.3.7";
-  format = "pyproject";
-  disabled = pythonOlder "3.9";
+  version = "8.0.2";
+  pyproject = true;
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
@@ -55,16 +55,8 @@ buildPythonPackage rec {
       mv tests/roots/test-images/{testimäge,testimæge}.png
       sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
     '';
-    hash = "sha256-XGGRWEvd1SbQsK8W5yxDzBd5hlvXcDzr8t5Qa6skH/M=";
+    hash = "sha256-s4y4bsbM92UzwZxrLwqDzeP0oRjvkOoZ0erPjfrJl4w=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "python-3.13-compat.patch";
-      url = "https://github.com/sphinx-doc/sphinx/commit/3496de62b743942115acb486cf35dfcc102586c3.patch";
-      hash = "sha256-5VBPOQeGyj3a8VBq4hc9S/eKaeVZeGCTNislwgsauZo=";
-    })
-  ];
 
   build-system = [ flit-core ];
 
@@ -99,6 +91,7 @@ buildPythonPackage rec {
     html5lib
     pytestCheckHook
     pytest-xdist
+    typing-extensions
   ];
 
   preCheck = ''
