@@ -3517,6 +3517,8 @@ self: super: with self; {
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
 
+  dmt-core = callPackage ../development/python-modules/dmt-core { };
+
   dm-control = callPackage ../development/python-modules/dm-control { };
 
   dm-env = callPackage ../development/python-modules/dm-env { };
@@ -13546,6 +13548,8 @@ self: super: with self; {
 
   repoze-who = callPackage ../development/python-modules/repoze-who { };
 
+  reprint = callPackage ../development/python-modules/reprint { };
+
   reproject = callPackage ../development/python-modules/reproject { };
 
   reprshed = callPackage ../development/python-modules/reprshed { };
@@ -17067,6 +17071,8 @@ self: super: with self; {
   velbus-aio = callPackage ../development/python-modules/velbus-aio { };
 
   verboselogs = callPackage ../development/python-modules/verboselogs { };
+
+  verilogae = callPackage ../development/python-modules/verilogae { };
 
   verlib2 = callPackage ../development/python-modules/verlib2 { };
 
