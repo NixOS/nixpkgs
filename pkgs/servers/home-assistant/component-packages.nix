@@ -1071,7 +1071,8 @@
       pyemby
     ];
     "emoncms" = ps: with ps; [
-    ]; # missing inputs: pyemoncms
+      pyemoncms
+    ];
     "emoncms_history" = ps: with ps; [
     ];
     "emonitor" = ps: with ps; [
