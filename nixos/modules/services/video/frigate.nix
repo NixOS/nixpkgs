@@ -400,7 +400,7 @@ in
         8554 # RTSP feeds
         8555 # WebRTC over tcp
         8971 # Authenticated UI and API access without TLS.
-        1984 
+        1984
       ];
       allowedUDPPorts = [
         8555 # WebRTC over udp
