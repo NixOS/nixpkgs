@@ -1287,6 +1287,7 @@
   ./services/security/aesmd.nix
   ./services/security/authelia.nix
   ./services/security/bitwarden-directory-connector-cli.nix
+  ./services/security/canaille.nix
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
