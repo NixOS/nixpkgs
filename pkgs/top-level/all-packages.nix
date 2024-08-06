@@ -36871,14 +36871,6 @@ with pkgs;
 
   octopus = callPackage ../applications/science/chemistry/octopus { };
 
-  openlp = libsForQt5.callPackage ../applications/misc/openlp { };
-  openlpFull = openlp.override {
-    pdfSupport = true;
-    presentationSupport = true;
-    vlcSupport = true;
-    gstreamerSupport = true;
-  };
-
   autodock-vina = callPackage ../applications/science/chemistry/autodock-vina { };
 
   dkh = callPackage ../applications/science/chemistry/dkh { };
