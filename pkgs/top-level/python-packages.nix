@@ -6536,7 +6536,8 @@ self: super: with self; {
   k-diffusion = callPackage ../development/python-modules/k-diffusion { };
 
   k5test = callPackage ../development/python-modules/k5test {
-    inherit (pkgs) krb5 findutils;
+    inherit (pkgs) findutils;
+    krb5-c = pkgs.krb5;
   };
 
   kaa-base = callPackage ../development/python-modules/kaa-base { };
