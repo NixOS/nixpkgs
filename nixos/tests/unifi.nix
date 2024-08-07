@@ -27,7 +27,13 @@ let
 
     testScript = ''
       server.wait_for_unit("unifi.service")
+      server.succeed("systemctl show unifi.service | grep -q 'ActiveState=active'")
       server.wait_until_succeeds("curl -Lk https://localhost:8443 >&2", timeout=300)
+      server.succeed("systemctl stop unifi.service")
+      server.succeed("systemctl show unifi.service | grep -q 'ActiveState=inactive'")
+      server.succeed("systemctl start unifi.service")
+      server.wait_for_unit("unifi.service")
+      server.succeed("systemctl show unifi.service | grep -q 'ActiveState=active'")
     '';
   };
 in with pkgs; {
