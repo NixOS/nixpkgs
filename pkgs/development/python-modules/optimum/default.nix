@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.21.2";
+  version = "1.21.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "optimum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OhquE+QhNOXFkKy/TvKlLn65CMchvKjcbR/S4Rl2MT4=";
+    hash = "sha256-eEfKWBwhtDkoAhsLH8P2ybM7aF/d2yREIv7/5RVz0Z8=";
   };
 
   build-system = [ setuptools ];
