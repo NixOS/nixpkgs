@@ -40092,5 +40092,5 @@ with pkgs;
     fltk = fltk13;
   };
 
-  ypbind-mt = callPackage ../by-name/yp/ypbind-mt { };
+  ypbind-mt = callPackage ../by-name/yp/ypbind-mt/package.nix { };
 }
