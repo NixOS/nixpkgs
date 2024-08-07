@@ -8128,6 +8128,8 @@ self: super: with self; {
 
   myjwt = callPackage ../development/python-modules/myjwt { };
 
+  mypermobil = callPackage ../development/python-modules/mypermobil { };
+
   mypy = callPackage ../development/python-modules/mypy { };
 
   mypy-boto3-builder = callPackage ../development/python-modules/mypy-boto3-builder { };

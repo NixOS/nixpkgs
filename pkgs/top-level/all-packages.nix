@@ -1041,8 +1041,6 @@ with pkgs;
 
   mod = callPackage ../development/tools/mod { };
 
-  mongosh = callPackage ../development/tools/mongosh { };
-
   mya = callPackage ../applications/misc/mya { };
 
   mysql-shell = mysql-shell_8;
@@ -2877,8 +2875,6 @@ with pkgs;
   pcmanfm = callPackage ../applications/file-managers/pcmanfm { };
 
   portfolio-filemanager = callPackage ../applications/file-managers/portfolio-filemanager { };
-
-  pot = callPackage ../by-name/po/pot/package.nix { pnpm = pnpm_8; };
 
   potreeconverter = callPackage ../applications/graphics/potreeconverter { };
 
@@ -16051,11 +16047,11 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... } @ args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_79 = callPackage ../development/compilers/rust/1_79.nix {
+  rust_1_80 = callPackage ../development/compilers/rust/1_80.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_18 = llvmPackages_18.libllvm;
   };
-  rust = rust_1_79;
+  rust = rust_1_80;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -16063,8 +16059,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_79 = rust_1_79.packages.stable;
-  rustPackages = rustPackages_1_79;
+  rustPackages_1_80 = rust_1_80.packages.stable;
+  rustPackages = rustPackages_1_80;
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
 
