@@ -18,16 +18,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "uiua";
-  version = "0.11.1";
+  version = "0.12.0-dev.4";
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
     rev = version;
-    hash = "sha256-bK5Z6aoyZti46GLulpdxGPxHM+EfEVQgeAUY6fRc7YY=";
+    hash = "sha256-ZI1MkhBn1YRYqp5s4KWNug3GRTcBMKcRUOAVf5a+sJk=";
   };
 
-  cargoHash = "sha256-iq5V+FGOcK2opmA4ot0KF9ZToYWC82gRsRyVqftuFPA=";
+  cargoHash = "sha256-e2Lxs6Gptou96V87NIhJZ7hlUfbpWPU95UmWcUwCihc=";
 
   nativeBuildInputs =
     lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ]
