@@ -212,7 +212,12 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.pipe wrapperDataFileNames [
         (lib.mapCartesianProduct (
           { part1, part2 }:
-          ''
+          # From some reason the Darwin build doesn't include some of these
+          # wrapperDataSubstitutions strings and even some of the files. Hence
+          # we currently don't perform these substitutions on other platforms,
+          # until a Darwin user will care enough about this cross platform
+          # related substitution.
+          lib.optionalString stdenv.isLinux ''
             substituteInPlace "''${!outputDev}/share/openmpi/${part1}${part2}-wrapper-data.txt" \
               --replace-fail \
                 compiler=${lib.elemAt wrapperDataSubstitutions.${part2} 0} \
