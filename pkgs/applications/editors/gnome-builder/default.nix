@@ -12,6 +12,7 @@
 , gobject-introspection
 , enchant
 , icu
+, gom
 , gtk4
 , gtksourceview5
 , json-glib
@@ -26,7 +27,6 @@
 , meson
 , ninja
 , ostree
-, d-spy
 , pcre2
 , pkg-config
 , python3
@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-builder";
-  version = "46.3";
+  version = "47.beta";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-builder/${lib.versions.major finalAttrs.version}/gnome-builder-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EvJ8DipKcxb59+IYWd9r8bd1cNKWb5V6QzBvaZ7FRhI=";
+    hash = "sha256-pkpH54aaJGcnPzo1HERDpXF5lpoM5KJhaTwtjZXVaZU=";
   };
 
   patches = [
@@ -87,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     vte-gtk4
     enchant
     icu
+    gom
     gtk4
     gtksourceview5
     json-glib
@@ -97,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsysprof-capture
     libxml2
     ostree
-    d-spy
     pcre2
     python3
     template-glib
