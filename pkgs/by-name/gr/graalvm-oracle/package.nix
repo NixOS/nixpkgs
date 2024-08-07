@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, graalvmPackages
-, useMusl ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  graalvmPackages,
+  useMusl ? false,
 }:
 
 graalvmPackages.buildGraalvm {
@@ -13,4 +14,3 @@ graalvmPackages.buildGraalvm {
   meta.license = lib.licenses.unfree;
   pname = "graalvm-oracle";
 }
-

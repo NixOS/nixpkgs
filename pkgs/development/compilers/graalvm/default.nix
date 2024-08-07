@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, callPackage
-, fetchurl
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchurl,
 }:
 
 {
