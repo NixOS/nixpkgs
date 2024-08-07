@@ -6,10 +6,10 @@ let
   password = "foobar";
 in
 {
-  desktop = makeTest (
+  greeter = makeTest (
     { pkgs, lib, ... }:
     {
-      name = "lomiri";
+      name = "lomiri-greeter";
 
       meta = {
         maintainers = lib.teams.lomiri.members;
@@ -20,10 +20,82 @@ in
         {
           imports = [ ./common/user-account.nix ];
 
+          virtualisation.memorySize = 2047;
+
+          users.users.${user} = {
+            inherit description password;
+          };
+
+          services.desktopManager.lomiri.enable = lib.mkForce true;
+          services.displayManager.defaultSession = lib.mkForce "lomiri";
+
+          # Help with OCR
+          fonts.packages = [ pkgs.inconsolata ];
+        };
+
+      enableOCR = true;
+
+      testScript =
+        { nodes, ... }:
+        ''
+          start_all()
+          machine.wait_for_unit("multi-user.target")
+
+          # Lomiri in greeter mode should work & be able to start a session
+          with subtest("lomiri greeter works"):
+              machine.wait_for_unit("display-manager.service")
+              machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
+
+              # Start page shows current time
+              machine.wait_for_text(r"(AM|PM)")
+              machine.screenshot("lomiri_greeter_launched")
+
+              # Advance to login part
+              machine.send_key("ret")
+              machine.wait_for_text("${description}")
+              machine.screenshot("lomiri_greeter_login")
+
+              # Login
+              machine.send_chars("${password}\n")
+              machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+
+              # Output rendering from Lomiri has started when it starts printing performance diagnostics
+              machine.wait_for_console_text("Last frame took")
+              # Look for datetime's clock, one of the last elements to load
+              machine.wait_for_text(r"(AM|PM)")
+              machine.screenshot("lomiri_launched")
+        '';
+    }
+  );
+
+  desktop = makeTest (
+    { pkgs, lib, ... }:
+    {
+      name = "lomiri-desktop";
+
+      meta = {
+        maintainers = lib.teams.lomiri.members;
+      };
+
+      nodes.machine =
+        { config, ... }:
+        {
+          imports = [
+            ./common/auto.nix
+            ./common/user-account.nix
+          ];
+
+          virtualisation.memorySize = 2047;
+
           users.users.${user} = {
             inherit description password;
             # polkit agent test
             extraGroups = [ "wheel" ];
+          };
+
+          test-support.displayManager.auto = {
+            enable = true;
+            inherit user;
           };
 
           # To control mouse via scripting
@@ -174,26 +246,9 @@ in
           start_all()
           machine.wait_for_unit("multi-user.target")
 
-          # Lomiri in greeter mode should work & be able to start a session
-          with subtest("lomiri greeter works"):
-              machine.wait_for_unit("display-manager.service")
-              machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
-
-              # Start page shows current time
-              machine.wait_for_text(r"(AM|PM)")
-              machine.screenshot("lomiri_greeter_launched")
-
-              # Advance to login part
-              machine.send_key("ret")
-              machine.wait_for_text("${description}")
-              machine.screenshot("lomiri_greeter_login")
-
-              # Login
-              machine.send_chars("${password}\n")
-              machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-
           # The session should start, and not be stuck in i.e. a crash loop
           with subtest("lomiri starts"):
+              machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
               # Output rendering from Lomiri has started when it starts printing performance diagnostics
               machine.wait_for_console_text("Last frame took")
               # Look for datetime's clock, one of the last elements to load
@@ -306,6 +361,81 @@ in
 
               machine.sleep(2) # sleep a tiny bit so morph can close & the focus can return to LSS
               machine.send_key("alt-f4")
+        '';
+    }
+  );
+
+  desktop-ayatana-indicators = makeTest (
+    { pkgs, lib, ... }:
+    {
+      name = "lomiri-desktop-ayatana-indicators";
+
+      meta = {
+        maintainers = lib.teams.lomiri.members;
+      };
+
+      nodes.machine =
+        { config, ... }:
+        {
+          imports = [
+            ./common/auto.nix
+            ./common/user-account.nix
+          ];
+
+          virtualisation.memorySize = 2047;
+
+          users.users.${user} = {
+            inherit description password;
+          };
+
+          test-support.displayManager.auto = {
+            enable = true;
+            inherit user;
+          };
+
+          # To control mouse via scripting
+          programs.ydotool.enable = true;
+
+          services.desktopManager.lomiri.enable = lib.mkForce true;
+          services.displayManager.defaultSession = lib.mkForce "lomiri";
+
+          # Help with OCR
+          fonts.packages = [ pkgs.inconsolata ];
+        };
+
+      enableOCR = true;
+
+      testScript =
+        { nodes, ... }:
+        ''
+          def mouse_click(xpos, ypos):
+              """
+              Move the mouse to a screen location and hit left-click.
+              """
+
+              # Need to reset to top-left, --absolute doesn't work?
+              machine.execute("ydotool mousemove -- -10000 -10000")
+              machine.sleep(2)
+
+              # Move
+              machine.execute(f"ydotool mousemove -- {xpos} {ypos}")
+              machine.sleep(2)
+
+              # Click (C0 - left button: down & up)
+              machine.execute("ydotool click 0xC0")
+              machine.sleep(2)
+
+          start_all()
+          machine.wait_for_unit("multi-user.target")
+
+          # The session should start, and not be stuck in i.e. a crash loop
+          with subtest("lomiri starts"):
+              machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+              # Output rendering from Lomiri has started when it starts printing performance diagnostics
+              machine.wait_for_console_text("Last frame took")
+              # Look for datetime's clock, one of the last elements to load
+              machine.wait_for_text(r"(AM|PM)")
+              machine.screenshot("lomiri_launched")
 
           # The ayatana indicators are an important part of the experience, and they hold the only graphical way of exiting the session.
           # There's a test app we could use that also displays their contents, but it's abit inconsistent.
@@ -357,8 +487,8 @@ in
                   mouse_click(720, 280) # "Log Out"
                   mouse_click(400, 240) # confirm logout
                   machine.wait_until_fails("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-                  machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
         '';
     }
   );
+
 }
