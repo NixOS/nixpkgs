@@ -1,7 +1,7 @@
 {
+  lib,
   buildNpmPackage,
   fetchFromGitHub,
-  lib,
 }:
 buildNpmPackage rec {
   pname = "mailsy";
@@ -16,17 +16,21 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-ljmqNmLvRHPdsKyOdDfECBXHTIExM6nPZF45lqV+pDM=";
 
-  npmFlags = ["--legacy-peer-deps"];
+  npmFlags = [ "--legacy-peer-deps" ];
 
   dontNpmBuild = true;
 
-  patches = [./fix-file-lookup.patch];
+  postPatch = ''
+    substituteInPlace utils/index.js \
+    --replace-fail 'dirname, "../data/account.json"' 'process.cwd(), "account.json"' \
+    --replace-fail 'dirname, "../data/email.html"' 'process.cwd(), "email.html"'
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Quickly generate a disposable email straight from terminal";
     mainProgram = "mailsy";
     homepage = "https://fig.io/manual/mailsy";
-    license = licenses.mit;
-    maintainers = [maintainers._404wolf];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers._404wolf ];
   };
 }
