@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, darwin
-, fetchFromGitHub
-, rust
-, rustPlatform
-, cargo-tauri
-, cinny
-, copyDesktopItems
-, wrapGAppsHook3
-, pkg-config
-, openssl
-, dbus
-, glib
-, glib-networking
-, libayatana-appindicator
-, webkitgtk
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  darwin,
+  fetchFromGitHub,
+  rust,
+  rustPlatform,
+  cargo-tauri,
+  cinny,
+  copyDesktopItems,
+  wrapGAppsHook3,
+  pkg-config,
+  openssl,
+  dbus,
+  glib,
+  glib-networking,
+  libayatana-appindicator,
+  webkitgtk,
+  makeDesktopItem,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,37 +35,44 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-bM+V37PJAob/DA2jy2g69zUY99ZyZBzgO6djadbdiJw=";
 
-  postPatch = let
-    cinny' =
-      assert lib.assertMsg (cinny.version == version) "cinny.version (${cinny.version}) != cinny-desktop.version (${version})";
-      cinny.override {
-        conf = {
-          hashRouter.enabled = true;
+  postPatch =
+    let
+      cinny' =
+        assert lib.assertMsg (
+          cinny.version == version
+        ) "cinny.version (${cinny.version}) != cinny-desktop.version (${version})";
+        cinny.override {
+          conf = {
+            hashRouter.enabled = true;
+          };
         };
-      };
-  in ''
-    substituteInPlace tauri.conf.json \
-      --replace '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
-    substituteInPlace tauri.conf.json \
-      --replace '"cd cinny && npm run build"' '""'
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-      --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-  '';
+    in
+    ''
+      substituteInPlace tauri.conf.json \
+        --replace '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
+      substituteInPlace tauri.conf.json \
+        --replace '"cd cinny && npm run build"' '""'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+        --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+    '';
 
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cargo tauri build --bundles app --target "${rust.envVars.rustHostPlatform}"
   '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -DT icons/128x128@2x.png $out/share/icons/hicolor/256x256@2/apps/cinny.png
-    install -DT icons/128x128.png $out/share/icons/hicolor/128x128/apps/cinny.png
-    install -DT icons/32x32.png $out/share/icons/hicolor/32x32/apps/cinny.png
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p "$out/Applications/"
-    cp -r "target/${rust.envVars.rustHostPlatform}/release/bundle/macos/Cinny.app" "$out/Applications/"
-    ln -sf "$out/Applications/Cinny.app/Contents/MacOS/Cinny" "$out/bin/cinny"
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -DT icons/128x128@2x.png $out/share/icons/hicolor/256x256@2/apps/cinny.png
+      install -DT icons/128x128.png $out/share/icons/hicolor/128x128/apps/cinny.png
+      install -DT icons/32x32.png $out/share/icons/hicolor/32x32/apps/cinny.png
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out/Applications/"
+      cp -r "target/${rust.envVars.rustHostPlatform}/release/bundle/macos/Cinny.app" "$out/Applications/"
+      ln -sf "$out/Applications/Cinny.app/Contents/MacOS/Cinny" "$out/bin/cinny"
+    '';
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -73,18 +81,21 @@ rustPlatform.buildRustPackage rec {
     cargo-tauri
   ];
 
-  buildInputs = [
-    openssl
-    dbus
-    glib
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    glib-networking
-    libayatana-appindicator
-    webkitgtk
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.DarwinTools
-    darwin.apple_sdk.frameworks.WebKit
-  ];
+  buildInputs =
+    [
+      openssl
+      dbus
+      glib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      glib-networking
+      libayatana-appindicator
+      webkitgtk
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.DarwinTools
+      darwin.apple_sdk.frameworks.WebKit
+    ];
 
   desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
@@ -93,14 +104,20 @@ rustPlatform.buildRustPackage rec {
       icon = "cinny";
       desktopName = "Cinny";
       comment = meta.description;
-      categories = [ "Network" "InstantMessaging" ];
+      categories = [
+        "Network"
+        "InstantMessaging"
+      ];
     })
   ];
 
   meta = {
     description = "Yet another matrix client for desktop";
     homepage = "https://github.com/cinnyapp/cinny-desktop";
-    maintainers = with lib.maintainers; [ qyriad ryand56 ];
+    maintainers = with lib.maintainers; [
+      qyriad
+      ryand56
+    ];
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cinny";
