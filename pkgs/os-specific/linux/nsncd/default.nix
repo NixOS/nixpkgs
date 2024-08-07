@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage {
@@ -18,9 +19,7 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-N7U9YsyGh8+fLT973GGZTmVXcdnWhpqkeYTxzJ0rzdo=";
 
   # TOREMOVE when https://github.com/twosigma/nsncd/pull/119 gets merged.
-  cargoPatches = [
-    ./0001-cargo-bump.patch
-  ];
+  cargoPatches = [ ./0001-cargo-bump.patch ];
 
   # TOREMOVE when https://github.com/twosigma/nsncd/pull/119 gets merged.
   RUSTFLAGS = "-A dead_code";
@@ -40,7 +39,10 @@ rustPlatform.buildRustPackage {
     '';
     homepage = "https://github.com/twosigma/nsncd";
     license = licenses.asl20;
-    maintainers = with maintainers; [ flokli picnoir ];
+    maintainers = with maintainers; [
+      flokli
+      picnoir
+    ];
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin;
   };
