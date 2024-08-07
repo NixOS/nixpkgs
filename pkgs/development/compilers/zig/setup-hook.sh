@@ -3,6 +3,8 @@
 readonly zigDefaultFlagsArray=(@zig_default_flags@)
 
 function zigSetGlobalCacheDir {
+    if [ "${IN_NIX_SHELL-}" = impure ]; then return 0; fi
+
     ZIG_GLOBAL_CACHE_DIR=$(mktemp -d)
     export ZIG_GLOBAL_CACHE_DIR
 }
