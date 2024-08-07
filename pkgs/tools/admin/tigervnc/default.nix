@@ -23,14 +23,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.13.1";
+  version = "1.14.0";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
     rev = "v${version}";
-    sha256 = "sha256-YSkgkk87bbHg7lJGoPBs7bfjvd1hvUeOZulFHYpXvvo=";
+    sha256 = "sha256-TgVV/4MRsQHYKpDf9L5eHMLVpdwvNy1KPDIe7xMlQ9o=";
   };
 
   postPatch = lib.optionalString stdenv.isLinux ''
@@ -38,8 +38,6 @@ stdenv.mkDerivation rec {
     fontPath=
     substituteInPlace vncviewer/vncviewer.cxx \
        --replace '"/usr/bin/ssh' '"${openssh}/bin/ssh'
-
-    cp unix/xserver21.1.1.patch unix/xserver211.patch
     source_top="$(pwd)"
   '' + ''
     # On Mac, do not build a .dmg, instead copy the .app to the source dir
@@ -66,7 +64,7 @@ stdenv.mkDerivation rec {
     tar xf ${xorg.xorgserver.src}
     cp -R xorg*/* unix/xserver
     pushd unix/xserver
-    version=$(echo ${xorg.xorgserver.name} | sed 's/.*-\([0-9]\+\).\([0-9]\+\).*/\1\2/g')
+    version=$(echo ${xorg.xorgserver.name} | sed 's/.*-\([0-9]\+\).[0-9]\+.*/\1/g')
     patch -p1 < "$source_top/unix/xserver$version.patch"
     autoreconf -vfi
     ./configure $configureFlags  --disable-devel-docs --disable-docs \
@@ -131,6 +129,8 @@ stdenv.mkDerivation rec {
     libXfont2
     libpciaccess
     libGLU
+    libXrandr
+    libXdamage
   ] ++ xorg.xorgserver.buildInputs
   );
 
