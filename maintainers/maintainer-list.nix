@@ -15858,6 +15858,11 @@
     githubId = 28323;
     name = "Peter Simons";
   };
+  petingoso = {
+    email = "petingavasco@protonmail.com";
+    github = "Petingoso";
+    githubId = 92183955;
+  };
   petrosagg = {
     email = "petrosagg@gmail.com";
     github = "petrosagg";
