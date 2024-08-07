@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "tree-sitter0_21";
+  pname = "tree-sitter";
   version = "0.21.3";
   pyproject = true;
 
