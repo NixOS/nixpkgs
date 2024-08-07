@@ -55,6 +55,9 @@ stdenv.mkDerivation rec {
       # driver is hardcoded to look in /opt/brother/scanner/brscan5/models for model metadata.
       # patch it to look in /etc/opt/brother/scanner/models instead, so nixos environment.etc can make it available
       printf '/etc/opt/brother/scanner/models\x00' | dd of=opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 bs=1 seek=${toString patchOffsetBytes} conv=notrunc
+
+      # remove deprecated SYSFS udev rule
+      sed -i -e '/^SYSFS/d' opt/brother/scanner/brscan5/udev-rules/*.rules
     '';
 
   installPhase = with lib; ''

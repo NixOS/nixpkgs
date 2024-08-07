@@ -39,5 +39,9 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     print(scanimage)
     assert """device `brother5:net1;dev0' is a Brother b ADS-1200""" in scanimage
     assert """device `brother5:net1;dev1' is a Brother a ADS-1200""" in scanimage
+
+    # Confirm systemd-udevd no longer logs errors about SYSFS
+    logs = machine.succeed('journalctl --unit systemd-udevd')
+    assert "Invalid key 'SYSFS'" not in logs
   '';
 })
