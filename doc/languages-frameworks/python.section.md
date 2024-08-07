@@ -1371,6 +1371,10 @@ those specified in `build-system`. If a package requires incompatible build
 time dependencies, they should be removed in `postPatch` through
 `substituteInPlace` or similar.
 
+For ease of use, both `buildPythonPackage` and `buildPythonApplication` will
+automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
+`pythonRemoveDeps` is specified.
+
 #### Using unittestCheckHook {#using-unittestcheckhook}
 
 `unittestCheckHook` is a hook which will set up (or configure) a [`checkPhase`](#ssec-check-phase) to run `python -m unittest discover`:
