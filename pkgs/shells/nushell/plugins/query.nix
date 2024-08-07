@@ -37,5 +37,6 @@ rustPlatform.buildRustPackage {
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada aidalgol ];
     platforms = with platforms; all;
+    mainProgram = "nu_plugin_query";
   };
 }

@@ -34,5 +34,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ mrkkrp aidalgol ];
     platforms = with platforms; all;
+    mainProgram = "nu_plugin_gstat";
   };
 }

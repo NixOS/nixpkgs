@@ -26888,6 +26888,7 @@ with pkgs;
   nushell = darwin.apple_sdk_11_0.callPackage ../shells/nushell {
     inherit (darwin.apple_sdk_11_0) Libsystem;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Security;
+    plugins = with nushellPlugins; [ formats gstat query ];
   };
 
   nu_scripts = callPackage ../shells/nushell/nu_scripts { };
