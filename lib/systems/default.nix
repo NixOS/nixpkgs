@@ -277,25 +277,6 @@ let
       let
         selectEmulator = pkgs:
           let
-            qemu-user = pkgs.qemu.override {
-              smartcardSupport = false;
-              spiceSupport = false;
-              openGLSupport = false;
-              virglSupport = false;
-              vncSupport = false;
-              gtkSupport = false;
-              sdlSupport = false;
-              alsaSupport = false;
-              pulseSupport = false;
-              pipewireSupport = false;
-              jackSupport = false;
-              smbdSupport = false;
-              seccompSupport = false;
-              tpmSupport = false;
-              capstoneSupport = false;
-              enableDocs = false;
-              hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
-            };
             wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
           in
           # Note: we guarantee that the return value is either `null` or a path
@@ -306,7 +287,7 @@ let
           else if final.isWindows
           then "${wine}/bin/wine${optionalString (final.parsed.cpu.bits == 64) "64"}"
           else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
-          then "${qemu-user}/bin/qemu-${final.qemuArch}"
+          then "${pkgs.qemu-user}/bin/qemu-${final.qemuArch}"
           else if final.isWasi
           then "${pkgs.wasmtime}/bin/wasmtime"
           else if final.isMmix
