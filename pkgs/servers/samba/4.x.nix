@@ -64,11 +64,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.20.1";
+  version = "4.20.2";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+Tw69SlTQNCBBsfA3PuF5PhQV9/RRYeqiBe+sxr/iPc=";
+    hash = "sha256-+Wn/7VjM8+hcu8wOM6FybQJcK0D0KmU7ESW4K5LS4OU=";
   };
 
   outputs = [ "out" "dev" "man" ];
