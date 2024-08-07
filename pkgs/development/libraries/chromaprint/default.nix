@@ -2,8 +2,10 @@
 , stdenv
 , fetchurl
 , fetchpatch
+, fetchpatch2
 , cmake
-, ffmpeg_6
+, ninja
+, ffmpeg_7
 , darwin
 , zlib
 }:
@@ -31,11 +33,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/acoustid/chromaprint/commit/aa67c95b9e486884a6d3ee8b0c91207d8c2b0551.patch";
       hash = "sha256-dLY8FBzBqJehAofE924ayZK0HA/aKiuFhEFxL7dg6rY=";
     })
+    # Fix for FFmpeg 7
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/chromaprint/-/raw/74ae4c7faea2114f2d70a57755f714e348476d28/ffmpeg-7.patch";
+      hash = "sha256-io+dzhDNlz+2hWhNfsyePKLQjiUvSzbv10lHVKumTEk=";
+    })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [ ffmpeg_6 ] ++ lib.optionals stdenv.isDarwin
+  buildInputs = [ ffmpeg_7 ] ++ lib.optionals stdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [ Accelerate CoreGraphics CoreVideo zlib ]);
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=ON" "-DBUILD_TOOLS=ON" ];
