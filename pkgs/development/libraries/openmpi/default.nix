@@ -116,8 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature cudaSupport "mca-dso")
     (lib.enableFeature fortranSupport "mpi-fortran")
     (lib.withFeatureAs stdenv.isLinux "libnl" (lib.getDev libnl))
-    "--with-pmix=${if stdenv.isLinux then (lib.getDev pmix) else "internal"}"
-    (lib.withFeatureAs stdenv.isLinux "pmix-libdir" "${lib.getLib pmix}/lib")
     # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
     (lib.withFeatureAs stdenv.isLinux "prrte" (lib.getBin prrte))
     (lib.withFeature enableSGE "sge")
@@ -131,7 +129,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs fabricSupport "ofi" (lib.getDev libfabric))
     # The flag --without-ofi-libdir is not supported from some reason, so we
     # don't use lib.withFeatureAs
-  ] ++ lib.optionals fabricSupport [ "--with-ofi-libdir=${lib.getLib libfabric}/lib" ];
+  ] ++ lib.optional fabricSupport "--with-ofi-libdir=${lib.getLib libfabric}/lib"
+    # The pmix flags should only be set when pmix is used
+    ++ lib.optionals stdenv.isLinux [
+    "--with-pmix=${lib.getDev pmix}"
+    "--with-pmix-libdir=${lib.getLib pmix}/lib"
+  ];
 
   enableParallelBuilding = true;
 
