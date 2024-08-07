@@ -15,13 +15,13 @@ in
 
 buildDunePackage rec {
   pname = "opam-publish";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "ocaml-opam";
     repo = pname;
     rev = version;
-    hash = "sha256-ll6G9L7zAw53R7FxvZDBL300b+YElzpBygbiIWB3FUU=";
+    hash = "sha256-7TIBLHpLVzI8Ex01wiQqVPllMZuiiUQsbuGtsNmrW3Q=";
   };
 
   buildInputs = [
