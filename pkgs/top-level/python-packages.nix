@@ -8128,6 +8128,8 @@ self: super: with self; {
 
   myjwt = callPackage ../development/python-modules/myjwt { };
 
+  mypermobil = callPackage ../development/python-modules/mypermobil { };
+
   mypy = callPackage ../development/python-modules/mypy { };
 
   mypy-boto3-builder = callPackage ../development/python-modules/mypy-boto3-builder { };
@@ -10401,6 +10403,8 @@ self: super: with self; {
 
   pytlv = callPackage ../development/python-modules/pytlv { };
 
+  pywebcopy = callPackage ../development/python-modules/pywebcopy { };
+
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-creole = callPackage ../development/python-modules/python-creole { };
@@ -10412,6 +10416,8 @@ self: super: with self; {
   python-djvulibre = callPackage ../development/python-modules/python-djvulibre { };
 
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
+
+  python-escpos = callPackage ../development/python-modules/python-escpos { };
 
   python-ffmpeg = callPackage ../development/python-modules/python-ffmpeg { };
 
@@ -12027,9 +12033,7 @@ self: super: with self; {
 
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
-  pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine {
-    pythonPackages = self;
-  };
+  pyqtwebengine = callPackage ../development/python-modules/pyqtwebengine { };
 
   pyquery = callPackage ../development/python-modules/pyquery { };
 
@@ -13681,6 +13685,8 @@ self: super: with self; {
   rich-rst = callPackage ../development/python-modules/rich-rst { };
 
   rich-theme-manager = callPackage ../development/python-modules/rich-theme-manager { };
+
+  riden = callPackage ../development/python-modules/riden { };
 
   ring-doorbell = callPackage ../development/python-modules/ring-doorbell { };
 

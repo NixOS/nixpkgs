@@ -16351,6 +16351,11 @@
     githubId = 4201956;
     name = "pongo1231";
   };
+  PopeRigby = {
+    name = "PopeRigby";
+    github = "poperigby";
+    githubId = 20866468;
+  };
   poptart = {
     email = "poptart@hosakacorp.net";
     github = "terrorbyte";
@@ -19142,6 +19147,13 @@
     github = "snaar";
     githubId = 602439;
     name = "Serguei Narojnyi";
+  };
+  snaki = {
+    email = "ek@kyouma.net";
+    matrix = "@snaki:kescher.at";
+    name = "emily";
+    github = "snaakey";
+    githubId = 38018554;
   };
   snapdgn = {
     email = "snapdgn@proton.me";

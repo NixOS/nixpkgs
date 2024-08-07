@@ -1,29 +1,56 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, makeWrapper
-, runCommandCC, runCommand, vapoursynth, writeText, buildEnv
-, zimg, libass, python3, libiconv, testers
-, ApplicationServices
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  makeWrapper,
+  runCommandCC,
+  runCommand,
+  vapoursynth,
+  writeText,
+  buildEnv,
+  zimg,
+  libass,
+  python3,
+  libiconv,
+  testers,
+  ApplicationServices,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "65";
+  version = "69";
 
   src = fetchFromGitHub {
-    owner  = "vapoursynth";
-    repo   = "vapoursynth";
-    rev    = "R${version}";
-    sha256 = "sha256-HrTXhRoKSFeLXYQM7W2FvYf7yCD1diSZGtPop9urrSk=";
+    owner = "vapoursynth";
+    repo = "vapoursynth";
+    rev = "R${version}";
+    hash = "sha256-T2bCVNH0dLM9lFYChXzvD6AJM3xEtOVCb2tI10tIXJs=";
   };
 
-  patches = [
-    ./0001-Call-weak-function-to-allow-adding-preloaded-plugins.patch
-  ];
+  patches = [ ./nix-plugin-loader.patch ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper ];
-  buildInputs = [
-    zimg libass
-    (python3.withPackages (ps: with ps; [ sphinx cython ]))
-  ] ++ lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    makeWrapper
+  ];
+  buildInputs =
+    [
+      zimg
+      libass
+      (python3.withPackages (
+        ps: with ps; [
+          sphinx
+          cython
+        ]
+      ))
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      ApplicationServices
+    ];
 
   enableParallelBuilding = true;
 
@@ -35,8 +62,18 @@ stdenv.mkDerivation rec {
     inherit python3;
 
     withPlugins = import ./plugin-interface.nix {
-      inherit lib python3 buildEnv writeText runCommandCC stdenv runCommand
-        vapoursynth makeWrapper withPlugins;
+      inherit
+        lib
+        python3
+        buildEnv
+        writeText
+        runCommandCC
+        stdenv
+        runCommand
+        vapoursynth
+        makeWrapper
+        withPlugins
+        ;
     };
 
     tests.version = testers.testVersion {
@@ -58,10 +95,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     broken = stdenv.isDarwin; # see https://github.com/NixOS/nixpkgs/pull/189446 for partial fix
     description = "Video processing framework with the future in mind";
-    homepage    = "http://www.vapoursynth.com/";
-    license     = licenses.lgpl21;
-    platforms   = platforms.x86_64;
-    maintainers = with maintainers; [ rnhmjoj sbruder ];
+    homepage = "http://www.vapoursynth.com/";
+    license = licenses.lgpl21;
+    platforms = platforms.x86_64;
+    maintainers = with maintainers; [
+      rnhmjoj
+      sbruder
+      snaki
+    ];
     mainProgram = "vspipe";
   };
 }

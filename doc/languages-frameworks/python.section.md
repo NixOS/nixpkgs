@@ -55,13 +55,19 @@ sets are
 * `pkgs.python311Packages`
 * `pkgs.python312Packages`
 * `pkgs.python313Packages`
-* `pkgs.pypyPackages`
+* `pkgs.pypy27Packages`
+* `pkgs.pypy39Packages`
+* `pkgs.pypy310Packages`
 
 and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
-* `pkgs.python3Packages` pointing to `pkgs.python311Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python312Packages`
 * `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
+* `pkgs.pypy2Packages` pointing to `pkgs.pypy27Packages`
+* `pkgs.pypy3Packages` pointing to `pkgs.pypy39Packages`
+* `pkgs.pypyPackages` pointing to `pkgs.pypy2Packages`
+
 
 #### `buildPythonPackage` function {#buildpythonpackage-function}
 
@@ -1364,6 +1370,10 @@ The `pythonRelaxDepsHook` has no effect on build time dependencies, such as
 those specified in `build-system`. If a package requires incompatible build
 time dependencies, they should be removed in `postPatch` through
 `substituteInPlace` or similar.
+
+For ease of use, both `buildPythonPackage` and `buildPythonApplication` will
+automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
+`pythonRemoveDeps` is specified.
 
 #### Using unittestCheckHook {#using-unittestcheckhook}
 
