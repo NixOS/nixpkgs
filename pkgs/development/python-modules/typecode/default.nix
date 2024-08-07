@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "typecode";
-  version = "30.0.1";
+  version = "30.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Glc5QiTVr//euymeNTxGN+FVaOEa6cUxHGyGo9bQrJc=";
+    hash = "sha256-F2idIK8K5hFueX7yxd5l8M6AkSjPDmhHmzS9a6S8OJg=";
   };
 
   dontConfigure = true;
