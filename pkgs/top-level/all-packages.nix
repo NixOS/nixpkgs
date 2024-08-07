@@ -3699,7 +3699,24 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  grub2 = callPackage ../tools/misc/grub/default.nix { };
+  grub2_upstream = callPackage ../tools/misc/grub/default.nix { };
+
+  # downgrade to 2.06 from 163b243c2a1c4ce666d69635a90e4e08cf27d899
+  grub2 = assert lib.asserts.assertMsg
+    (grub2_upstream.version == "2.12-rc1" || grub2_upstream.version == "2.12") ''
+      grub2 upgraded past 2.12. Check for fix to https://github.com/NixOS/nixpkgs/issues/293038
+    '';
+    callPackage ../tools/misc/grub/2_06.nix {
+    # update breaks grub2
+    gnulib = pkgs.gnulib.overrideAttrs {
+      version = "20200223";
+      src = fetchgit {
+        url = "https://git.savannah.gnu.org/r/gnulib.git";
+        rev = "292fd5d6ff5ecce81ec3c648f353732a9ece83c0";
+        sha256 = "0hkg3nql8nsll0vrqk4ifda0v4kpi67xz42r8daqsql6c4rciqnw";
+      };
+    };
+  };
 
   grub2_efi = grub2.override {
     efiSupport = true;
