@@ -187,9 +187,7 @@ in
         add_header Referrer-Policy                      "same-origin"   always;
       '';
       locations = {
-        "/".extraConfig = ''
-          uwsgi_pass unix:///run/canaille.socket;
-        '';
+        "/".proxyPass = "http://unix:///run/canaille.socket";
         "/static" = {
           root = "${finalPackage}/${python.sitePackages}/canaille/static";
         };
