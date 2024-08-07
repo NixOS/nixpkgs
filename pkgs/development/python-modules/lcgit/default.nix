@@ -4,12 +4,13 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "lcgit";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,8 +23,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace " --cov" ""
+      --replace-fail " --cov" ""
   '';
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
