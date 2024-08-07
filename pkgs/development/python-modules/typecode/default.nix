@@ -2,6 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
   setuptools-scm,
   attrs,
   pdfminer-six,
@@ -17,7 +18,7 @@
 buildPythonPackage rec {
   pname = "typecode";
   version = "30.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,9 +29,12 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     pdfminer-six
     commoncode
