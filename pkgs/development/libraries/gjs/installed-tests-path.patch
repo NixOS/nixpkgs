@@ -1,35 +1,57 @@
 diff --git a/installed-tests/meson.build b/installed-tests/meson.build
-index 04c7910f..9647908c 100644
+index 7a7c48ab..52508c2c 100644
 --- a/installed-tests/meson.build
 +++ b/installed-tests/meson.build
-@@ -1,7 +1,7 @@
- ### Installed tests ############################################################
+@@ -30,7 +30,7 @@ foreach test : simple_tests
  
--installed_tests_execdir = get_option('prefix') / get_option('libexecdir') / 'installed-tests' / meson.project_name()
--installed_tests_metadir = abs_datadir / 'installed-tests' / meson.project_name()
-+installed_tests_execdir = get_option('installed_test_prefix') / 'libexec' / 'installed-tests' / meson.project_name()
-+installed_tests_metadir = get_option('installed_test_prefix') / 'share' / 'installed-tests' / meson.project_name()
+     test_description_subst = {
+         'name': 'test@0@.sh'.format(test),
+-        'installed_tests_execdir': prefix / installed_tests_execdir,
++        'installed_tests_execdir': installed_tests_execdir,
+     }
+     configure_file(configuration: test_description_subst,
+         input: 'script.test.in', output: 'test@0@.sh.test'.format(test),
+@@ -85,7 +85,7 @@ foreach test : debugger_tests
  
- # Simple shell script tests #
- 
+     test_description_subst = {
+         'name': '@0@.debugger'.format(test),
+-        'installed_tests_execdir': prefix / installed_tests_execdir,
++        'installed_tests_execdir': installed_tests_execdir,
+     }
+     configure_file(configuration: test_description_subst,
+         input: 'debugger.test.in',
 diff --git a/meson.build b/meson.build
-index 9ab29475..42ffe07f 100644
+index 83dce932..9d3bca18 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -557,7 +557,7 @@ install_data('installed-tests/extra/lsan.supp',
-     install_dir: get_option('datadir') / api_name / 'lsan')
+@@ -25,8 +25,8 @@ datadir = get_option('datadir')
+ libexecdir = get_option('libexecdir')
+ gjsjsdir = datadir / api_name
+ pkglibdir = libdir / meson.project_name()
+-installed_tests_execdir = libexecdir / 'installed-tests' / meson.project_name()
+-installed_tests_metadir = datadir / 'installed-tests' / meson.project_name()
++installed_tests_execdir = get_option('installed_test_prefix') / libexecdir / 'installed-tests' / meson.project_name()
++installed_tests_metadir = get_option('installed_test_prefix') / datadir / 'installed-tests' / meson.project_name()
+ 
+ ### Check for conflicting build options ########################################
+ 
+@@ -577,9 +577,9 @@ install_data('installed-tests/extra/gjs.supp', install_dir: gjsjsdir / 'valgrind
+ install_data('installed-tests/extra/lsan.supp', install_dir: gjsjsdir / 'lsan')
  
  if get_option('installed_tests')
--    schemadir = abs_datadir / 'glib-2.0' / 'schemas'
-+    schemadir = get_option('installed_test_prefix') / 'share' / 'glib-2.0' / 'schemas'
+-    schemadir = datadir / 'glib-2.0' / 'schemas'
++    schemadir = get_option('installed_test_prefix') / datadir / 'glib-2.0' / 'schemas'
      install_data('installed-tests/js/org.gnome.GjsTest.gschema.xml', install_dir: schemadir)
-     meson.add_install_script('build/compile-gschemas.py', schemadir)
+-    meson.add_install_script(glib_compile_schemas, prefix / schemadir, skip_if_destdir: true)
++    meson.add_install_script(glib_compile_schemas, schemadir, skip_if_destdir: true)
  endif
+ 
+ ### Generate pkg-config file ###################################################
 diff --git a/meson_options.txt b/meson_options.txt
-index 825ba77a..21f0323c 100644
+index fe425efd..29325756 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -25,3 +25,5 @@ option('skip_gtk_tests', type: 'boolean', value: false,
+@@ -24,3 +24,5 @@ option('skip_gtk_tests', type: 'boolean', value: false,
      description: 'Skip tests that need a display connection')
  option('verbose_logs', type: 'boolean', value: false,
      description: 'Enable extra log messages that may decrease performance (not allowed in release builds)')
