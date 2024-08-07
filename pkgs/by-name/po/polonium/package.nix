@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildNpmPackage
-, plasma-framework
+, libsForQt5
 }:
 
 # how to update:
@@ -28,7 +28,7 @@ buildNpmPackage rec {
   # manually do the install
   buildFlags = [ "res" "src" ];
 
-  nativeBuildInputs = [ plasma-framework ];
+  nativeBuildInputs = with libsForQt5; [ plasma-framework ];
 
   dontNpmBuild = true;
 
@@ -50,6 +50,6 @@ buildNpmPackage rec {
       kotatsuyaki
       HeitorAugustoLN
     ];
-    inherit (plasma-framework.meta) platforms;
+    inherit (libsForQt5.plasma-framework.meta) platforms;
   };
 }
