@@ -3766,6 +3766,12 @@
     githubId = 199180;
     name = "Claes Wallin";
   };
+  claha = {
+    email = "hallstrom.claes@gmail.com";
+    github = "claha";
+    githubId = 9336788;
+    name = "Claes Hallström";
+  };
   clebs = {
     email = "borja.clemente@gmail.com";
     github = "clebs";
