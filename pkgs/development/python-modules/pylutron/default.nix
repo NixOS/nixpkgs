@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pylutron";
-  version = "0.2.13";
+  version = "0.2.15";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s5qprIVPlq495XWKjgIuohDzPV0EfU43zkfQ2DvH04Y=";
+    hash = "sha256-1UUW3Ym11jR4dxSS1OOVPl6h69I6H782Q4ZeVitty0c=";
   };
 
   build-system = [ setuptools ];
