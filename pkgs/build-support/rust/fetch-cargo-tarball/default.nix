@@ -26,7 +26,9 @@ let
   };
 in
 {
-  name ? "cargo-deps",
+  pname ? null,
+  version ? null,
+  name ? if args ? pname && args ? version then "${pname}-${version}" else "cargo-deps",
   src ? null,
   srcs ? [ ],
   patches ? [ ],
@@ -36,7 +38,23 @@ in
   ...
 }@args:
 
+assert lib.assertMsg (
+  (args ? pname || args ? version) -> !(args ? name)
+) "Either specify `pname` with `version`, or specify `name` only, not a mix of both.";
+assert lib.assertMsg (
+  args ? pname == args ? version
+) "If `pname` is specified, `version` must be also, and vice versa.";
 let
+  # args to remove from the final call to stdenv.mkDerivation, as we've already handled them
+  removedArgs = [
+    "name"
+    "pname"
+    "version"
+    "sha256"
+    "cargoUpdateHook"
+    "nativeBuildInputs"
+  ];
+
   hash_ =
     if args ? hash then
       {
@@ -134,10 +152,5 @@ stdenv.mkDerivation (
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_CRATES_INDEX" ];
   }
-  // (builtins.removeAttrs args [
-    "name"
-    "sha256"
-    "cargoUpdateHook"
-    "nativeBuildInputs"
-  ])
+  // (removeAttrs args removedArgs)
 )
