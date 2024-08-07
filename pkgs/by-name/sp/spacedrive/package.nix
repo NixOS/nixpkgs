@@ -17,7 +17,7 @@
 
 let
   pname = "spacedrive";
-  version = "0.3.1";
+  version = "0.4.1";
 
   src =
     fetchurl
@@ -32,7 +32,7 @@ let
         };
         x86_64-linux = {
           url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.deb";
-          hash = "sha256-E1mOODG4YzBc0TPZJmKgrt/c5hp5LwzLaYPl+J5dnkg=";
+          hash = "sha256-Y6GVO8N3Rz+voKYWYB87phbmNyTAczqjc+ImRM+5v20=";
         };
       }
       .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
