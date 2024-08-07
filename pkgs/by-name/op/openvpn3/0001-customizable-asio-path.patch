@@ -1,0 +1,13 @@
+diff --git a/meson.build b/meson.build
+index 2bba337..092b4ce 100644
+--- a/meson.build
++++ b/meson.build
+@@ -68,7 +68,7 @@ endif
+ #
+ #  Setup additional include header dirs
+ #
+-asio_inc = get_option('asio_path') / 'asio' / 'include'
++asio_inc = get_option('asio_path') / 'include'
+ message ('ASIO library: ' + asio_inc)
+ 
+ openvpn3_core_inc = get_option('openvpn3_core_path')
