@@ -88,7 +88,7 @@ runCommand "${drv.name}-compressed"
   )
   ''
     mkdir $out
-    (cd $out; lndir ${drv})
+    (cd $out; lndir -silent ${drv})
 
     ${lib.concatStringsSep "\n\n" (lib.mapAttrsToList mkCmd compressors)}
   ''
