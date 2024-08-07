@@ -45,6 +45,12 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxkbcommon libinput libglvnd mesa udev wayland ];
 
+  postInstall = ''
+    mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+    cp data/*.desktop $out/share/applications/
+    cp data/*.svg $out/share/icons/hicolor/scalable/apps/
+  '';
+
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client, which is always dlopen()ed except by the
   # obscure winit backend.
