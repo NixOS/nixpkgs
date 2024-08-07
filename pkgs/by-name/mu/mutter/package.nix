@@ -28,7 +28,6 @@
   libxkbfile,
   xkeyboard_config,
   libxkbcommon,
-  libXrender,
   libxcb,
   libXrandr,
   libXinerama,
@@ -68,7 +67,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "46.4";
+  version = "47.beta";
 
   outputs = [
     "out"
@@ -79,13 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YRvZz5gq21ZZfOKzQiQnL9phm7O7kSpoTXXG8sN1AuQ=";
+    hash = "sha256-yJ6ARNnVy2FmOji96aGTKTY+MXH5qv6O6eqb3xgFt7U=";
   };
 
   mesonFlags = [
     "-Degl_device=true"
     "-Dinstalled_tests=false" # TODO: enable these
-    "-Dtests=false"
+    "-Dtests=disabled"
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
@@ -159,7 +158,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbfile
     xkeyboard_config
     libxkbcommon
-    libXrender
     libxcb
     libXrandr
     libXinerama
@@ -177,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
-    moveToOutput "share/mutter-14/doc" "$devdoc"
+    moveToOutput "share/mutter-15/doc" "$devdoc"
   '';
 
   # Install udev files into our own tree.
@@ -186,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
-    libdir = "${finalAttrs.finalPackage}/lib/mutter-14";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-15";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" { } ''
