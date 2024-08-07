@@ -250,12 +250,6 @@ stdenv.mkDerivation (finalAttrs: {
     "test_sentinel2_zipped"
     # tries to call unwrapped executable
     "test_SetPROJAuxDbPaths"
-    # fixed and renamed in 3.8.0RC1
-    # https://github.com/OSGeo/gdal/commit/c8b471ca1e6318866ff668d2b57bb6f076e3ae29
-    "test_visoss_6"
-    # failing with PROJ 9.3.1
-    # https://github.com/OSGeo/gdal/issues/8908
-    "test_osr_esri_28"
   ] ++ lib.optionals (!stdenv.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"
