@@ -1,0 +1,176 @@
+diff --git a/include/autoconf.h.in b/include/autoconf.h.in
+index bab2fcfa6c...22bc9202ca 100644
+--- a/include/autoconf.h.in
++++ b/include/autoconf.h.in
+@@ -797,6 +797,9 @@
+ /* UPNP support library 1.7 */
+ #undef HAVE_LIBMINIUPNP17
+ 
++/* UPNP support library 2.2.8 */
++#undef HAVE_LIBMINIUPNP228
++
+ /* Define to 1 if you have the `prldap60' library (-lprldap60). */
+ #undef HAVE_LIBPRLDAP60
+ 
+diff --git a/include/common.h b/include/common.h
+index 137f5ec51f...2c24759b52 100755
+--- a/include/common.h
++++ b/include/common.h
+@@ -1404,8 +1404,14 @@
+ /* return codes from UPNP_GetValidIGD(). */
+ #define UPNP_NO_IGD           (0)
+ #define UPNP_CONNECTED_IGD    (1)
++#if HAVE_LIBMINIUPNP228
++#define UPNP_RESERVED_IGD     (2)
++#define UPNP_DISCONNECTED_IGD (3)
++#define UPNP_UNKNOWN_DEVICE   (4)
++#else /* !HAVE_LIBMINIUPNP_228 */
+ #define UPNP_DISCONNECTED_IGD (2)
+ #define UPNP_UNKNOWN_DEVICE   (3)
++#endif /* !HAVE_LIBMINIUPNP_228 */
+ 
+ #define UPNP_SUCCESS          (1)
+ #define UPNP_FAILURE          (2)
+diff --git a/lib/upnp.c b/lib/upnp.c
+index d9535ca03c...dc99d53c06 100644
+--- a/lib/upnp.c
++++ b/lib/upnp.c
+@@ -154,7 +154,7 @@
+                            addrstring,
+                            NULL,
+                            0
+-#if HAVE_LIBMINIUPNP17
++#if HAVE_LIBMINIUPNP17 || HAVE_LIBMINIUPNP228
+                           ,0,
+ 
+ #if MINIUPNPC_API_VERSION >= 14
+@@ -162,7 +162,7 @@
+ #endif /* MINIUPNPC_API_VERSION >= 14 */
+ 
+                           &rc
+-#endif /* HAVE_LIBMINIUPNP17 */
++#endif /* HAVE_LIBMINIUPNP17 || HAVE_LIBMINIUPNP228 */
+                          );
+ 
+ #if SOCKS_CLIENT && SOCKSLIBRARY_DYNAMIC
+@@ -208,7 +208,12 @@
+          socks_autoadd_directroute(&commands, &protocols, &saddr, &smask);
+       }
+ 
++#if HAVE_LIBMINIUPNP228
++      devtype = UPNP_GetValidIGD(dev, &url, &data, myaddr, sizeof(myaddr),
++                                 NULL, 0);
++#else /* !HAVE_LIBMINIUPNP228 */
+       devtype = UPNP_GetValidIGD(dev, &url, &data, myaddr, sizeof(myaddr));
++#endif /* !HAVE_LIBMINIUPNP228 */
+       switch (devtype) {
+          case UPNP_NO_IGD:
+             snprintf(emsg, emsglen, "no UPNP IGD discovered on local network");
+@@ -226,9 +231,10 @@
+             rc = 0;
+             break;
+ 
+-         case UPNP_DISCONNECTED_IGD:
++#if HAVE_LIBMINIUPNP228
++         case UPNP_RESERVED_IGD:
+             snprintf(emsg, emsglen,
+-                    "UPNP IGD discovered at url %s, but it is not connected",
++                    "UPNP IGD discovered at url %s, but its IP is reserved",
+                     str2vis(url.controlURL,
+                            strlen(url.controlURL),
+                             vbuf,
+@@ -236,6 +242,18 @@
+ 
+             swarnx("%s: %s", function, emsg);
+             rc = -1;
++#endif /* HAVE_LIBMINIUPNP228 */
++
++         case UPNP_DISCONNECTED_IGD:
++            snprintf(emsg, emsglen,
++                    "UPNP IGD discovered at url %s, but it is not connected",
++                    str2vis(url.controlURL,
++                           strlen(url.controlURL),
++                            vbuf,
++                            sizeof(vbuf)));
++
++            swarnx("%s: %s", function, emsg);
++            rc = -1;
+             break;
+ 
+          case UPNP_UNKNOWN_DEVICE:
+@@ -273,12 +291,12 @@
+ #if HAVE_LIBMINIUPNP13
+       STRCPY_ASSERTLEN(gw->state.data.upnp.servicetype, data.servicetype);
+ 
+-#elif HAVE_LIBMINIUPNP14 || HAVE_LIBMINIUPNP17
++#elif HAVE_LIBMINIUPNP14 || HAVE_LIBMINIUPNP17 || HAVE_LIBMINIUPNP228
+       STRCPY_ASSERTLEN(gw->state.data.upnp.servicetype, data.CIF.servicetype);
+ 
+ #else
+ #  error "unexpected miniupnp version"
+-#endif /* HAVE_LIBMINIUPNP17 */
++#endif /* HAVE_LIBMINIUPNP14 || HAVE_LIBMINIUPNP17 || HAVE_LIBMINIUPNP228 */
+ 
+       slog(LOG_NEGOTIATE, "%s: inited ok.  controlurl: %s, servicetype: %s",
+            function,
+@@ -756,9 +774,9 @@
+                                        buf,
+                                        protocol,
+                                        NULL
+-#if HAVE_LIBMINIUPNP17
++#if HAVE_LIBMINIUPNP17 || HAVE_LIBMINIUPNP228
+                                        ,0
+-#endif /* HAVE_LIBMINIUPNP17 */
++#endif /* HAVE_LIBMINIUPNP17 || HAVE_LIBMINIUPNP228 */
+                                        )) != UPNPCOMMAND_SUCCESS) {
+                snprintf(emsg, emsglen,
+                        "UPNP_AddPortMapping() failed: %s", strupnperror(rc));
+diff --git a/miniupnpc.m4 b/miniupnpc.m4
+index 85086d4917...ebb8875763 100644
+--- a/miniupnpc.m4
++++ b/miniupnpc.m4
+@@ -20,7 +20,7 @@
+ 	LIBS=$oLIBS
+     fi
+     if test x"${have_libminiupnp}" = xt; then
+-        AC_MSG_CHECKING([for miniupnpc version >= 1.7])
++        AC_MSG_CHECKING([for miniupnpc version >= 2.2.8])
+ 	AC_TRY_COMPILE([
+             #include <stdio.h>
+             #include <miniupnpc/miniupnpc.h>
+@@ -30,12 +30,34 @@
+             #ifndef MINIUPNPC_API_VERSION
+ 	    #error "no api version define"
+             #else
+-            # if MINIUPNPC_API_VERSION < 8
++            # if MINIUPNPC_API_VERSION < 18
+             #error "api version too low"
+             # endif
+             #endif],
+          [AC_MSG_RESULT(yes)
+           AC_DEFINE(HAVE_LIBMINIUPNP, 1, [UPNP support library])
++          AC_DEFINE(HAVE_LIBMINIUPNP228, 1, [UPNP support library 2.2.8])
++          unset no_upnp
++	  SOCKDDEPS="${SOCKDDEPS}${SOCKDDEPS:+ }$UPNPLIB"
++	  DLIBDEPS="${DLIBDEPS}${DLIBDEPS:+ }$UPNPLIB"],
++         [AC_MSG_RESULT(no)])
++
++        AC_MSG_CHECKING([for miniupnpc version >= 1.7])
++	AC_TRY_COMPILE([
++            #include <stdio.h>
++            #include <miniupnpc/miniupnpc.h>
++            #include <miniupnpc/upnpcommands.h>
++            #include <miniupnpc/upnperrors.h>], [
++
++            #ifndef MINIUPNPC_API_VERSION
++	    #error "no api version define"
++            #else
++            # if MINIUPNPC_API_VERSION < 8 || MINIUPNPC_API_VERSION > 17
++            #error "api version too low or high"
++            # endif
++            #endif],
++         [AC_MSG_RESULT(yes)
++          AC_DEFINE(HAVE_LIBMINIUPNP, 1, [UPNP support library])
+           AC_DEFINE(HAVE_LIBMINIUPNP17, 1, [UPNP support library 1.7])
+           unset no_upnp
+ 	  SOCKDDEPS="${SOCKDDEPS}${SOCKDDEPS:+ }$UPNPLIB"

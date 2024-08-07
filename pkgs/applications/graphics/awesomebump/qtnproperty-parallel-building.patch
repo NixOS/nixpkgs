@@ -1,0 +1,9 @@
+--- a/PEG/Flex.pri
++++ b/PEG/Flex.pri
+@@ -1,5 +1,6 @@
+ flex.name = Flex ${QMAKE_FILE_IN}
+ flex.input = FLEX_SOURCES
++flex.depends = ${QMAKE_FILE_PATH}/${QMAKE_FILE_BASE}.parser.cpp
+ flex.output = ${QMAKE_FILE_PATH}/${QMAKE_FILE_BASE}.lexer.cpp
+ 
+ win32:flex.commands = win_flex --wincompat -o ${QMAKE_FILE_PATH}/${QMAKE_FILE_BASE}.lexer.cpp ${QMAKE_FILE_IN}

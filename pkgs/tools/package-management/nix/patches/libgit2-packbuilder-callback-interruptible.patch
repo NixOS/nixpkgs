@@ -1,0 +1,930 @@
+commit e9823c5da4fa977c46bcb97167fbdd0d70adb5ff
+Author: Robert Hensing <robert@roberthensing.nl>
+Date:   Mon Aug 26 20:07:04 2024 +0200
+
+    Make packbuilder interruptible using progress callback
+    
+    Forward errors from packbuilder->progress_cb
+    
+    This allows the callback to terminate long-running operations when
+    the application is interrupted.
+
+diff --git a/include/git2/pack.h b/include/git2/pack.h
+index 0f6bd2ab9..bee72a6c0 100644
+--- a/include/git2/pack.h
++++ b/include/git2/pack.h
+@@ -247,6 +247,9 @@ typedef int GIT_CALLBACK(git_packbuilder_progress)(
+  * @param progress_cb Function to call with progress information during
+  * pack building. Be aware that this is called inline with pack building
+  * operations, so performance may be affected.
++ * When progress_cb returns an error, the pack building process will be
++ * aborted and the error will be returned from the invoked function.
++ * `pb` must then be freed.
+  * @param progress_cb_payload Payload for progress callback.
+  * @return 0 or an error code
+  */
+diff --git a/src/libgit2/pack-objects.c b/src/libgit2/pack-objects.c
+index b2d80cba9..7c331c2d5 100644
+--- a/src/libgit2/pack-objects.c
++++ b/src/libgit2/pack-objects.c
+@@ -932,6 +932,9 @@ static int report_delta_progress(
+ {
+ 	int ret;
+ 
++	if (pb->failure)
++		return pb->failure;
++
+ 	if (pb->progress_cb) {
+ 		uint64_t current_time = git_time_monotonic();
+ 		uint64_t elapsed = current_time - pb->last_progress_report_time;
+@@ -943,8 +946,10 @@ static int report_delta_progress(
+ 				GIT_PACKBUILDER_DELTAFICATION,
+ 				count, pb->nr_objects, pb->progress_cb_payload);
+ 
+-			if (ret)
++			if (ret) {
++				pb->failure = ret;
+ 				return git_error_set_after_callback(ret);
++			}
+ 		}
+ 	}
+ 
+@@ -976,7 +981,10 @@ static int find_deltas(git_packbuilder *pb, git_pobject **list,
+ 		}
+ 
+ 		pb->nr_deltified += 1;
+-		report_delta_progress(pb, pb->nr_deltified, false);
++		if ((error = report_delta_progress(pb, pb->nr_deltified, false)) < 0) {
++				GIT_ASSERT(git_packbuilder__progress_unlock(pb) == 0);
++				goto on_error;
++		}
+ 
+ 		po = *list++;
+ 		(*list_size)--;
+@@ -1124,6 +1132,10 @@ struct thread_params {
+ 	size_t depth;
+ 	size_t working;
+ 	size_t data_ready;
++
++	/* A pb->progress_cb can stop the packing process by returning an error.
++	   When that happens, all threads observe the error and stop voluntarily. */
++	bool stopped;
+ };
+ 
+ static void *threaded_find_deltas(void *arg)
+@@ -1133,7 +1145,12 @@ static void *threaded_find_deltas(void *arg)
+ 	while (me->remaining) {
+ 		if (find_deltas(me->pb, me->list, &me->remaining,
+ 				me->window, me->depth) < 0) {
+-			; /* TODO */
++			me->stopped = true;
++			GIT_ASSERT_WITH_RETVAL(git_packbuilder__progress_lock(me->pb) == 0, NULL);
++			me->working = false;
++			git_cond_signal(&me->pb->progress_cond);
++			GIT_ASSERT_WITH_RETVAL(git_packbuilder__progress_unlock(me->pb) == 0, NULL);
++			return NULL;
+ 		}
+ 
+ 		GIT_ASSERT_WITH_RETVAL(git_packbuilder__progress_lock(me->pb) == 0, NULL);
+@@ -1175,8 +1192,7 @@ static int ll_find_deltas(git_packbuilder *pb, git_pobject **list,
+ 		pb->nr_threads = git__online_cpus();
+ 
+ 	if (pb->nr_threads <= 1) {
+-		find_deltas(pb, list, &list_size, window, depth);
+-		return 0;
++		return find_deltas(pb, list, &list_size, window, depth);
+ 	}
+ 
+ 	p = git__mallocarray(pb->nr_threads, sizeof(*p));
+@@ -1195,6 +1211,7 @@ static int ll_find_deltas(git_packbuilder *pb, git_pobject **list,
+ 		p[i].depth = depth;
+ 		p[i].working = 1;
+ 		p[i].data_ready = 0;
++		p[i].stopped = 0;
+ 
+ 		/* try to split chunks on "path" boundaries */
+ 		while (sub_size && sub_size < list_size &&
+@@ -1262,7 +1279,7 @@ static int ll_find_deltas(git_packbuilder *pb, git_pobject **list,
+ 			    (!victim || victim->remaining < p[i].remaining))
+ 				victim = &p[i];
+ 
+-		if (victim) {
++		if (victim && !target->stopped) {
+ 			sub_size = victim->remaining / 2;
+ 			list = victim->list + victim->list_size - sub_size;
+ 			while (sub_size && list[0]->hash &&
+@@ -1286,7 +1303,7 @@ static int ll_find_deltas(git_packbuilder *pb, git_pobject **list,
+ 		}
+ 		target->list_size = sub_size;
+ 		target->remaining = sub_size;
+-		target->working = 1;
++		target->working = 1; /* even when target->stopped, so that we don't process this thread again */
+ 		GIT_ASSERT(git_packbuilder__progress_unlock(pb) == 0);
+ 
+ 		if (git_mutex_lock(&target->mutex)) {
+@@ -1299,7 +1316,7 @@ static int ll_find_deltas(git_packbuilder *pb, git_pobject **list,
+ 		git_cond_signal(&target->cond);
+ 		git_mutex_unlock(&target->mutex);
+ 
+-		if (!sub_size) {
++		if (target->stopped || !sub_size) {
+ 			git_thread_join(&target->thread, NULL);
+ 			git_cond_free(&target->cond);
+ 			git_mutex_free(&target->mutex);
+@@ -1308,7 +1325,7 @@ static int ll_find_deltas(git_packbuilder *pb, git_pobject **list,
+ 	}
+ 
+ 	git__free(p);
+-	return 0;
++	return pb->failure;
+ }
+ 
+ #else
+@@ -1319,6 +1336,7 @@ int git_packbuilder__prepare(git_packbuilder *pb)
+ {
+ 	git_pobject **delta_list;
+ 	size_t i, n = 0;
++	int error;
+ 
+ 	if (pb->nr_objects == 0 || pb->done)
+ 		return 0; /* nothing to do */
+@@ -1327,8 +1345,10 @@ int git_packbuilder__prepare(git_packbuilder *pb)
+ 	 * Although we do not report progress during deltafication, we
+ 	 * at least report that we are in the deltafication stage
+ 	 */
+-	if (pb->progress_cb)
+-			pb->progress_cb(GIT_PACKBUILDER_DELTAFICATION, 0, pb->nr_objects, pb->progress_cb_payload);
++	if (pb->progress_cb) {
++		if ((error = pb->progress_cb(GIT_PACKBUILDER_DELTAFICATION, 0, pb->nr_objects, pb->progress_cb_payload)) < 0)
++			return git_error_set_after_callback(error);
++	}
+ 
+ 	delta_list = git__mallocarray(pb->nr_objects, sizeof(*delta_list));
+ 	GIT_ERROR_CHECK_ALLOC(delta_list);
+@@ -1345,31 +1365,33 @@ int git_packbuilder__prepare(git_packbuilder *pb)
+ 
+ 	if (n > 1) {
+ 		git__tsort((void **)delta_list, n, type_size_sort);
+-		if (ll_find_deltas(pb, delta_list, n,
++		if ((error = ll_find_deltas(pb, delta_list, n,
+ 				   GIT_PACK_WINDOW + 1,
+-				   GIT_PACK_DEPTH) < 0) {
++				   GIT_PACK_DEPTH)) < 0) {
+ 			git__free(delta_list);
+-			return -1;
++			return error;
+ 		}
+ 	}
+ 
+-	report_delta_progress(pb, pb->nr_objects, true);
++	error = report_delta_progress(pb, pb->nr_objects, true);
+ 
+ 	pb->done = true;
+ 	git__free(delta_list);
+-	return 0;
++	return error;
+ }
+ 
+-#define PREPARE_PACK if (git_packbuilder__prepare(pb) < 0) { return -1; }
++#define PREPARE_PACK error = git_packbuilder__prepare(pb); if (error < 0) { return error; }
+ 
+ int git_packbuilder_foreach(git_packbuilder *pb, int (*cb)(void *buf, size_t size, void *payload), void *payload)
+ {
++	int error;
+ 	PREPARE_PACK;
+ 	return write_pack(pb, cb, payload);
+ }
+ 
+ int git_packbuilder__write_buf(git_str *buf, git_packbuilder *pb)
+ {
++	int error;
+ 	PREPARE_PACK;
+ 
+ 	return write_pack(pb, &write_pack_buf, buf);
+diff --git a/src/libgit2/pack-objects.h b/src/libgit2/pack-objects.h
+index bbc8b9430..380a28ebe 100644
+--- a/src/libgit2/pack-objects.h
++++ b/src/libgit2/pack-objects.h
+@@ -100,6 +100,10 @@ struct git_packbuilder {
+ 	uint64_t last_progress_report_time;
+ 
+ 	bool done;
++
++	/* A non-zero error code in failure causes all threads to shut themselves
++	   down. Some functions will return this error code.  */
++	volatile int failure;
+ };
+ 
+ int git_packbuilder__write_buf(git_str *buf, git_packbuilder *pb);
+diff --git a/tests/libgit2/pack/cancel.c b/tests/libgit2/pack/cancel.c
+new file mode 100644
+index 000000000..a0aa9716a
+--- /dev/null
++++ b/tests/libgit2/pack/cancel.c
+@@ -0,0 +1,240 @@
++#include "clar_libgit2.h"
++#include "futils.h"
++#include "pack.h"
++#include "hash.h"
++#include "iterator.h"
++#include "vector.h"
++#include "posix.h"
++#include "hash.h"
++#include "pack-objects.h"
++
++static git_repository *_repo;
++static git_revwalk *_revwalker;
++static git_packbuilder *_packbuilder;
++static git_indexer *_indexer;
++static git_vector _commits;
++static int _commits_is_initialized;
++static git_indexer_progress _stats;
++
++extern bool git_disable_pack_keep_file_checks;
++
++static void pack_packbuilder_init(const char *sandbox) {
++	_repo = cl_git_sandbox_init(sandbox);
++	/* cl_git_pass(p_chdir(sandbox)); */
++	cl_git_pass(git_revwalk_new(&_revwalker, _repo));
++	cl_git_pass(git_packbuilder_new(&_packbuilder, _repo));
++	cl_git_pass(git_vector_init(&_commits, 0, NULL));
++	_commits_is_initialized = 1;
++	memset(&_stats, 0, sizeof(_stats));
++	p_fsync__cnt = 0;
++}
++
++void test_pack_cancel__initialize(void)
++{
++	pack_packbuilder_init("small.git");
++}
++
++void test_pack_cancel__cleanup(void)
++{
++	git_oid *o;
++	unsigned int i;
++
++	cl_git_pass(git_libgit2_opts(GIT_OPT_ENABLE_FSYNC_GITDIR, 0));
++	cl_git_pass(git_libgit2_opts(GIT_OPT_DISABLE_PACK_KEEP_FILE_CHECKS, false));
++
++	if (_commits_is_initialized) {
++		_commits_is_initialized = 0;
++		git_vector_foreach(&_commits, i, o) {
++			git__free(o);
++		}
++		git_vector_free(&_commits);
++	}
++
++	git_packbuilder_free(_packbuilder);
++	_packbuilder = NULL;
++
++	git_revwalk_free(_revwalker);
++	_revwalker = NULL;
++
++	git_indexer_free(_indexer);
++	_indexer = NULL;
++
++	/* cl_git_pass(p_chdir("..")); */
++	cl_git_sandbox_cleanup();
++	_repo = NULL;
++}
++
++static int seed_packbuilder(void)
++{
++	int error;
++	git_oid oid, *o;
++	unsigned int i;
++
++	git_revwalk_sorting(_revwalker, GIT_SORT_TIME);
++	cl_git_pass(git_revwalk_push_ref(_revwalker, "HEAD"));
++
++	while (git_revwalk_next(&oid, _revwalker) == 0) {
++		o = git__malloc(sizeof(git_oid));
++		cl_assert(o != NULL);
++		git_oid_cpy(o, &oid);
++		cl_git_pass(git_vector_insert(&_commits, o));
++	}
++
++	git_vector_foreach(&_commits, i, o) {
++		if((error = git_packbuilder_insert(_packbuilder, o, NULL)) < 0)
++			return error;
++	}
++
++	git_vector_foreach(&_commits, i, o) {
++		git_object *obj;
++		cl_git_pass(git_object_lookup(&obj, _repo, o, GIT_OBJECT_COMMIT));
++		error = git_packbuilder_insert_tree(_packbuilder,
++					git_commit_tree_id((git_commit *)obj));
++		git_object_free(obj);
++		if (error < 0)
++			return error;
++	}
++
++	return 0;
++}
++
++static int fail_stage;
++
++static int packbuilder_cancel_after_n_calls_cb(int stage, uint32_t current, uint32_t total, void *payload)
++{
++
++	/* Force the callback to run again on the next opportunity regardless
++	   of how fast we're running. */
++	_packbuilder->last_progress_report_time = 0;
++
++	if (stage == fail_stage) {
++		int *calls = (int *)payload;
++		int n = *calls;
++		/* Always decrement, including past zero. This way the error is only
++		   triggered once, making sure it is picked up immediately. */
++		--*calls;
++		if (n == 0)
++			return GIT_EUSER;
++	}
++
++	return 0;
++}
++
++static void test_cancel(int n)
++{
++
++	int calls_remaining = n;
++	int err;
++	git_buf buf = GIT_BUF_INIT;
++
++	/* Switch to a small repository, so that `packbuilder_cancel_after_n_calls_cb`
++	   can hack the time to call the callback on every opportunity. */
++
++	cl_git_pass(git_packbuilder_set_callbacks(_packbuilder, &packbuilder_cancel_after_n_calls_cb, &calls_remaining));
++	err = seed_packbuilder();
++	if (!err)
++		err = git_packbuilder_write_buf(&buf, _packbuilder);
++
++	cl_assert_equal_i(GIT_EUSER, err);
++}
++void test_pack_cancel__cancel_after_add_0(void)
++{
++	fail_stage = GIT_PACKBUILDER_ADDING_OBJECTS;
++	test_cancel(0);
++}
++
++void test_pack_cancel__cancel_after_add_1(void)
++{
++	cl_skip();
++	fail_stage = GIT_PACKBUILDER_ADDING_OBJECTS;
++	test_cancel(1);
++}
++
++void test_pack_cancel__cancel_after_delta_0(void)
++{
++	fail_stage = GIT_PACKBUILDER_DELTAFICATION;
++	test_cancel(0);
++}
++
++void test_pack_cancel__cancel_after_delta_1(void)
++{
++	fail_stage = GIT_PACKBUILDER_DELTAFICATION;
++	test_cancel(1);
++}
++
++void test_pack_cancel__cancel_after_delta_0_threaded(void)
++{
++#ifdef GIT_THREADS
++	git_packbuilder_set_threads(_packbuilder, 8);
++	fail_stage = GIT_PACKBUILDER_DELTAFICATION;
++	test_cancel(0);
++#else
++	cl_skip();
++#endif
++}
++
++void test_pack_cancel__cancel_after_delta_1_threaded(void)
++{
++#ifdef GIT_THREADS
++	git_packbuilder_set_threads(_packbuilder, 8);
++	fail_stage = GIT_PACKBUILDER_DELTAFICATION;
++	test_cancel(1);
++#else
++	cl_skip();
++#endif
++}
++
++static int foreach_cb(void *buf, size_t len, void *payload)
++{
++	git_indexer *idx = (git_indexer *) payload;
++	cl_git_pass(git_indexer_append(idx, buf, len, &_stats));
++	return 0;
++}
++
++void test_pack_cancel__foreach(void)
++{
++	git_indexer *idx;
++
++	seed_packbuilder();
++
++#ifdef GIT_EXPERIMENTAL_SHA256
++	cl_git_pass(git_indexer_new(&idx, ".", GIT_OID_SHA1, NULL));
++#else
++	cl_git_pass(git_indexer_new(&idx, ".", 0, NULL, NULL));
++#endif
++
++	cl_git_pass(git_packbuilder_foreach(_packbuilder, foreach_cb, idx));
++	cl_git_pass(git_indexer_commit(idx, &_stats));
++	git_indexer_free(idx);
++}
++
++static int foreach_cancel_cb(void *buf, size_t len, void *payload)
++{
++	git_indexer *idx = (git_indexer *)payload;
++	cl_git_pass(git_indexer_append(idx, buf, len, &_stats));
++	return (_stats.total_objects > 2) ? -1111 : 0;
++}
++
++void test_pack_cancel__foreach_with_cancel(void)
++{
++	git_indexer *idx;
++
++	seed_packbuilder();
++
++#ifdef GIT_EXPERIMENTAL_SHA256
++	cl_git_pass(git_indexer_new(&idx, ".", GIT_OID_SHA1, NULL));
++#else
++	cl_git_pass(git_indexer_new(&idx, ".", 0, NULL, NULL));
++#endif
++
++	cl_git_fail_with(
++		git_packbuilder_foreach(_packbuilder, foreach_cancel_cb, idx), -1111);
++	git_indexer_free(idx);
++}
++
++void test_pack_cancel__keep_file_check(void)
++{
++	assert(!git_disable_pack_keep_file_checks);
++	cl_git_pass(git_libgit2_opts(GIT_OPT_DISABLE_PACK_KEEP_FILE_CHECKS, true));
++	assert(git_disable_pack_keep_file_checks);
++}
+diff --git a/tests/resources/small.git/HEAD b/tests/resources/small.git/HEAD
+new file mode 100644
+index 0000000000000000000000000000000000000000..cb089cd89a7d7686d284d8761201649346b5aa1c
+GIT binary patch
+literal 23
+ecmXR)O|w!cN=+-)&qz&7Db~+TEG|hc;sO9;xClW2
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/config b/tests/resources/small.git/config
+new file mode 100644
+index 0000000000000000000000000000000000000000..07d359d07cf1ed0c0074fdad71ffff5942f0adfa
+GIT binary patch
+literal 66
+zcmaz}&M!)h<>D+#Eyyp<EXgmbOv^9IO)M!(Eh^5;&r`5fFyP`$%gjm5%}+@M@=A(I
+MQ@J>k5{uv*03B5png9R*
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/description b/tests/resources/small.git/description
+new file mode 100644
+index 0000000000000000000000000000000000000000..498b267a8c7812490d6479839c5577eaaec79d62
+GIT binary patch
+literal 73
+zcmWH|%S+5nO;IRHEyyp<EXgmbv{pz>$t+PQ$;d2LNXyJgRZve!Elw`VEGWs$&r??@
+Q$yWgB0LrH#Y0~2Y0PnOK(EtDd
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/applypatch-msg.sample b/tests/resources/small.git/hooks/applypatch-msg.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..dcbf8167fa503f96ff6a39c68409007eadc9b1f3
+GIT binary patch
+literal 535
+zcmY+AX;Q;542A#a6e8^~FyI8r&I~hf2QJ{GO6(?HuvEG*+#R{4EI%zhfA8r{j%sh$
+zHE~E-UtQd8{bq4@*S%jq3@bmxwQDXGv#o!N`o3AHMw3xD)hy0#>&E&zzl%vRffo<B
+z)-H|+CWHZ~O*S%cfYx9;02_ohIA<Bg(1SxF-6OCb&_lBkf{t<AM9r;%E(Hf#h{|a@
+z9>mqo=v6>_2NRa#TwDdYvTVQyueO*15Nlo%=#DXgC0bhF3vTa`LQGaO9;jeD$OP?~
+za$G4Q{z+Q_{5V?5h;a-noM$P{<>Q~j4o7u%#P6^o^16{y*jU=-K8GYD_dUtdj4FSx
+zSC0C!DvAnv%S!4d<Yg@O<;m`;oSw)=Fz+hrL<mY{rBr8j4pi^88FX3}jKrYUP)>gk
+XB^)11aoGMJPCqWs%IS0YSv(eBT&%T6
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/commit-msg.sample b/tests/resources/small.git/hooks/commit-msg.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..f3780f92349638ebe32f6baf24c7c3027675d7c9
+GIT binary patch
+literal 953
+zcmaJ<TW`}a6n<`g#Ya}rZCaYOzy?UGG&Tf#VG`?}7@eHtB=MTqneFUS%75oLS;atz
+zm&iUo=ey->y@-{3h^^Cx;#d0zEA@DDc$nY4ez&|=%jTg@_HU*ub=!!y$xW09TSjlj
+z(`I@QCsM`!9&80$I98wsQ8yK#)Orb<8re8FjkKh630D$QUDwi~(gkX=RunYm$rDjk
+zlp%RUSnzA#6yjdG5?T?2DcYKp+v_lts0ljn&bh3J0bD5@N@1UKZ190O6ZeWr-BuZ^
+zWRebCX%(%=Xoj#(xYk1Cjtr!=tyBesf@m6}8zY6Ijbz9i9ziI_jG9Mv<Cz(ymp*>R
+zDH*e>^ga9IR?2wrSrAVm;eButj4<aWB@zzNl|1Wp@4;}1O?MUF>Y>7(E2?b~jsu>&
+zRKCJ7bp#19sqYh627wD%D9R$8=Ml$TNlumDypl~$jBu*G>5fIR^FB0h0Ex&TGZNr>
+zL5hs1_K>taRb!|ThN9ns7^@4MXKP+6aGI_UK)T-M#rcP$;kN(Vcf#P)+5GzWa{l@J
+z>-E{`$1iiNVYxq27}<DnwLRXQUG0o_hw&da-s5T#H=`Y9D_8=eTZ?cpWatp#a1vs@
+z2BjrO)z@aTuI#g#`)oJcnhM7oYLT@~CHX@CNXv4>j;uo%;)r3kJI2xCFF~Ux;$Q%)
+wjbk6JlDCM`jU&P+UVOvg`|iYl<7~9k>HHB4I;pdlQ=I-^$DrHaN$@lH1?P!0U;qFB
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/fsmonitor-watchman.sample b/tests/resources/small.git/hooks/fsmonitor-watchman.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..41184ebc318c159f51cd1ebe2290559805df89d8
+GIT binary patch
+literal 4777
+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
+bw<Ywj(b#kdcCk7dCBY;|DBNpPjIa1F6*dXN
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/post-update.sample b/tests/resources/small.git/hooks/post-update.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..9f95e41a39cf974958277c8881ac6cce405ebb20
+GIT binary patch
+literal 246
+zcmXZVO?HDY3<Ti4Poaiwjq^yGw9DKf7mz^&Ly=V5q$H=W^Rt|p_r9s#9Ea7VERo!9
+zyT9>uJRJJV$M^KdldiMhj?ImK6~FvwJ*L5a){QoM=L5TYHkGO1$UrO3`a>{?Opw|b
+zG(#59NQ#jFL9v~vgOVkM@^^(^A}onOE))yWEwhIlk&{ZyseZ^O0b=w8&O=BK{k<5B
+k^Q-B@eG}LeHrquz%(SVEp_N)VhYZikCW__82JXfD17`J9Qvd(}
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/pre-applypatch.sample b/tests/resources/small.git/hooks/pre-applypatch.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..625837e25f91421b8809a097f4a3103dd387ef31
+GIT binary patch
+literal 481
+zcmY+ATTa6;5Jms9iouO45IBJXEg&Jm9@v1LPHMM_ZR|;#6tQ<EeSrA%_2`_rGr1_8
+z?aM?yVtIc%-@9SGSk&8x=grP-Lf`7!^=$7xgL=|ysZ}!av6zL~ywui}<2##V6L@!k
+zy=p^)V7%Wzs-g`9<Y9}^)&uN}BCrXR_T3@Z2$gSJON2`X=mAs+%@7n-2I}ZrP|TFA
+zvJJGDl3HPLP<@!Q!}zXQvey#qEE#a#$vs97i4=A0stF@YQ)k_ZajaoS^dVYBc&37_
+zVI(L=X<V335r9~7T<;|HfKF+yM}}LB9d96V)Si;sj(;9Rh$#P>h$71hSXq*MxP;V&
+zj0cY7SCL=x4`a46sF)C>94Gk%=3q$W2s;j6iHtB2$R0%gix4oK@&T~=ALd_o*CKxt
+I-`Pv{1Bpzc>;M1&
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/pre-commit.sample b/tests/resources/small.git/hooks/pre-commit.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..10b39b2e26981b8f87ea424e735ef87359066dbb
+GIT binary patch
+literal 1706
+zcmZuxU2ohr5PY_N#pZ0-F<{-<Zkx1j&cMNSQ3FN`GzR*R1O+9oPV`BnOj7q@1pV!u
+zrF0Hl^i33(yR)-1d-!H%&2|=|^E~_R{N1zNJ-&Zmt-t?iwXv&i+ZN}Km(TX8Q$H4u
+zd7(m`|1iDmF5k@xV`p;C4zojASmLc}yN0QDZbhN=ri&CEt=XGuN1IwjGJ#a#`t-kG
+zDqY)}7+Ft|;YKwLYbtg$S(-TBO=x3cP1cd}%f4kB!<6Wu-dCwz-)KDMEuM^_Hh*UC
+zC`1)|)T<(U6b`+yOH!6p*Ll}@qastwA*dyjsgOf5C=?LTprfORG6O{5L%@S0wyHpj
+zu|_A-=NWnYYR5m7kvm6|&T~GzoJ_OKR3sgFUgw?ifho^NQhvK#{6g0=&Fh)%n}#m0
+zk1sNmwb_AMDq};OOGw5|;OyX#?yQMMH6yAk(x$3tjFjHE?c$E2XC_xXav8tnIeIG?
+zYMI|~MLEVGkuT*>v&v-X^RA+u>k}E$4d&uD7=g_fA8+pNNV=4s0|iD3p<=DTXClTS
+zXV23tJ;ECmN@M0j@zUAKEYW@3bv!SeYZ8ZH`YQNTApFVNc;F|9r5p4TqGs=>8E?6y
+zi|gY{iM#PG1nL?UE9YCnWTk72kgZPG*Usqw!~Qd3c?~@w2?%eg@~)+VlSs6N5Yf2^
+zz;ow<fjf3n`imj7u5lnzt||q9QFM(H@<3EJCK|l5P!$yDfn~U-(5Vu7s+GqxNKyeI
+zP=-Oa(KH&gK`NhUa`cLj3B8%qL};DR7dk!`A^h&3-hFB6p($5Ufy^tGir)3et}qK4
+zpkPKYWzC+?=&gw-L6S)S=<lfq)%uLUAa%~81Jf9hk)w~U!DItnoSy`m^}#38M}K-o
+z!PqisQkV!&z4E*V01ro~qlVK^0BI`pLk6D+)f~*y!hCvwHq8zY9BGh<2s$@b^A<8G
+zRaqk}&qZyyv&|0QDFPA%h4TgF&vdlc|JUq*=>F#K#r^&KMq1A`oqVGFpD&-!Pv|Rc
+zO3KSqA@h9nSc%bm`0)Amk6*J}@14J*1-219l%%7D!Pl}UK>|lVi0Dfgu2jN3WC!uL
+z0ej??b2iSehVgdnWHmZV4kUo*QL#aiIp}U=9x)IXk}JJ7VQ;CI9Rtn5e0VcjbY<bp
+zv{}WlG6L;H!EzFKdY>cVt+`x5D+svCGD<sXw4|)E|JX43I1_3P(sI4{wj87bPSrNG
+w!SIr>;Z5hm*<gY+X;)Ryx4=nzaab9m`bwE*^s(%u*E3HbUuOR@+&s_z1=MCi2LJ#7
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/pre-merge-commit.sample b/tests/resources/small.git/hooks/pre-merge-commit.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..d8e8ad4bcf8337f23c78a98537ecab4831301202
+GIT binary patch
+literal 473
+zcmaJ-O;f@!5WV+TJd4B0whSt$H%Dh2t`2u6q1!glCNbGU;n%yxdNsG~zR#WA6xIwy
+zWEZHoU#u?nykD=Y<HPgeWDkDm^kTof*l(|%^gh!nHrZpo^vhMDjV;E1GD~K7wV*+D
+zz9lry9T0cHcm_KhDVXYvQ==FrLTT4u=bEr{U1yl7%thf%wJnv<XQZ`ZbQEezaWdS%
+zI;c?h9a)Y!ux<WK8rQd_aA^?61hv_Pf<t7*z1USuL40FxYz<|hybsO?qnN}aMpcuf
+z6phFw1%Xx=wUk(m>E$jSEQZ%SQ(}oLgslTvrKK@9Qf#b!hajVFnp9@oIix;NcI9Wk
+xjnh0ya!AWet{I7YpD;y6HXyzI*lfSvH=o6*7mJZPkuaYpm>vzZ`wyGEBtOQPo|pgt
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/pre-push.sample b/tests/resources/small.git/hooks/pre-push.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..02cbd80c287f959fe33975bb66c56293e3f5b396
+GIT binary patch
+literal 1431
+zcmaJ>U60!~5PUX&#a1@z9B{IIZkjLT0t5kq9#8~D(I5{+8&J~9;#ndUk~-ZT`r|uG
+z$#K$$J{TsK<m~Lsu9iP+t-0TZ=sa(K+C6);54X>s*LP1}9!GoZ@4I4myMMG_di|of
+z%?llx{O8TS-#^<H#%^V=)RNv>;(OioEmPy%kwWQBA1OMzV{hsQ8XFzS1k!~YQoLa5
+zhtP1fA$q6VmMbbAC_9)4I628k*O5J$NR19uHe4QYDK<==I~SQk)Nu%xQ~<Hy8U>KH
+z53w=!ke(FGb_PpnZfd*+hnXDTn;2*`u^~;?+5C~cn?bRka7NR%06%e6O91{MAgN6J
+zmlO8{Biw4&wr&&(z4p3eln`E}XR9m9bNYZ7Ibrg(4yZIXrfgD7N*AFD7L3YSM#j}%
+zo__rOS5fr;@8UM<6cl+cv_$YB$PQ&9dv($eM*))g!_cu!QcSh-mqE9i#QDZT)=o#`
+z?8!RtE?w6p?GkGZ-6yt_p~5~4ecu|Sf^)6096%h*q-eNiEA1;Xwg)p~Q&iGSG7-IQ
+z9aII&`ps$WOojFA`*bjG<mBv1n0hcYZWN0~(X01-hx(ExqWqaXgSk*@-GMp|K_3!5
+z9|O21N3%~izh(4fbp9wzd+!b&7cVwSP5H00)m5ej-(s=Pl#(90UOhn@OA9u+D{i@r
+za4*CP0I#<d-)-#xq5q-iY5nIef2s5OuQjcA>kFk|E@sHHuD}W^d`7YJ3YE^zrQnqR
+zGoq?;YGKe)93o|_=^f%3U1KYZGPOXRRxK7w`UUbMMa3<86OmVH!EKP$8RCrn9mWX+
+zC?9yF!fRVLmud3hF<}x;;sR}f(*r}6Gap3fR6zLHR~kbMgD{98N`L+r&?3p~*0+FX
+zcAL%j=(SO}xTJUTvA`&Lf`2mv4koPG9&|<CA~EHbWHMoFPwT(&U=7t0`RoFZPO9Kq
+zwwe$i=T|AXY#hD$aZlNMH`wZ%gwilGJ(zeYpOn*F3cy0XKXio^Sj#WXx=PWV`WGaA
+B&~*R+
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/pre-rebase.sample b/tests/resources/small.git/hooks/pre-rebase.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..193ee3f127387f469894675f0d621b5bb9c275da
+GIT binary patch
+literal 5006
+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
+P!fA@Yk4s_DjDP<F98V`a
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/pre-receive.sample b/tests/resources/small.git/hooks/pre-receive.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..32b597f8c32399017c3d7d51134d1f6490ad9575
+GIT binary patch
+literal 601
+zcmZ`#+iu%141Kn~f>Vt3>Nw4M*;=?j(TBD#O@XCv0|MEhA;z}kTFRv@`tPHhp=&Yh
+zg%Zhg4i7o_k{a5i&f5;tZ==%}^Sn4aD_6%qs<o-wO_Prn;}`SPs_*$C$(7T|$#C3`
+zPt%-C8gelZ1GqAP8`ZQmg0{8-S9H{R@D>_XAuJt&EumdH4Yu`UjT<s+s_~uXh}qA8
+zg|_HG)%7Pdc&$7*uR0HF@)~vmFjqyD?XZwCbLen^h5t)sm9<90Oa!@Y%8!~rF8G?W
+zkzmCF8kMtuuelMHIAlqqnm?72LeGM1J4`w(kX9&%LQn}ForlDLjBoCyvxmo@x3kH^
+z^loxLyPiDWPo-cBMnsg2M6}kuPGHEGBqVkC{D&9Kt%xFAsTw4QC1$_=fwBl=3dI+e
+zaSxI}JS}=Z(Ec80eF`!Zq3mqapXI|UN!a)t;@4hcu%Eq2xcoW}%!><-+XHTuHss+b
+YOmM2;hq8Egm*4=7_P9T{21QBYH*F=mfB*mh
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/prepare-commit-msg.sample b/tests/resources/small.git/hooks/prepare-commit-msg.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..b1970da1b6d3f42f00069fd17c325de72cda812e
+GIT binary patch
+literal 1702
+zcmb_cTW{Mo6n>t6#i?x6xmZ$SFLf{QfG*3r0L?Pg?px55l8$UTGO3bO;spKi{V3XX
+z))weX0X>M9bNMcZ-6yG%>(n}JI2|25dr<ew@wmMG{l(3lx~bQz>}WZBP@ih?JX^+@
+zu#5O48P>yRX(m<b*PU*sORp92TCD1dX`%HE+1$w5k<(Ngu7zQ83#MGJR?<<W=d@yL
+z#heqwo{FmCg0g#x<~R+PBD#}q(MBn;V$x;%UrJPP3*l%XtlvTWChI2SfJ$9e`YvSj
+zRSOQ?NUgSMLI`3vL48YBHzwzVXoe7v0ef|0YHgV$N@?N(-R)rPqRDrK$n(%+OF$`P
+zWdjC5N~`#RjV9}aYwQ4_yF5O-$h2`>fDIhYP)doc1&TADZa@ZGpusJ$6G+e$ZMcmC
+zoOosDQPS}l{H?YPsq(4;0SGkATa9eeqAaDcj<jNAU+LTSmM1jo(ti~T0B7acJnnTX
+zTarYy;Husdxal0!S<ba8=uu&a*SNYtr7|d7$g-q3_JHER2*oBsVW~i~XXdMx%LW~0
+zT*960LF<qZ6K&FZ;vGmtyywBU3^Q>q8n2wALbFwU@2i@FAaRV!=uw-nwx1gKn2SvY
+z>Ff>;2sg!+Hxfkwv1lsiii=p6WenF=5)6LZc<a$zDCD$GRuwvG4Fr+B#h?#9gTbio
+zk#MdxC@WY%zSGN#i}Ts_#q`bf-{)`7CcWeB*7WlIyHjioJJWw&A5VItPUq3^9!r}S
+zbykelFV-VFvcr>QaZ=aS_}+-4Y&?!@HWh|<^gJ21!|T@+%On#w6azxPHV}XsRbe*w
+zR_TZ2XEsQa1lPK~biYqg@0-RW@5J1@=<87cFzEUABdCoFH2CZo?}l(Z*!OFqUxo>K
+z_d`l#4d9|H6;VPT{X?^{VJ>oL|D7K{BJwwqB>`YcPoGk+9hbvHnoQ{EM|kPgD_`wk
+zKm4#2xu;-y`RAm!=L_BnLvJ8$AZm8@?)v<%vwvsw8AF2x6!mTT;c72A_~U9nIq0ST
+zv)N0!I!^1p=g8-RQfx5)E_Mb_4I2vtQpI30XZ&t<!9D6nI|;V7YR3)l6=S~QhuwLQ
+g$e&^kTY-M99*<-Iw@(78*M5W!4}U}|8YyMx3->-9h5!Hn
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/push-to-checkout.sample b/tests/resources/small.git/hooks/push-to-checkout.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..a80611e18896f212c390d845e49a3f6d5693b41d
+GIT binary patch
+literal 2840
+zcmai0U31$u5PXh)#YOS7cE^-rw@uolNhe9&aUS|HtvhX>G$45tVUYj>fRdF?|9kfU
+zNR~aG=E)WbEbeyq7JTw}ZuHIE2kUtL<<n;$&G!2F^Je|kx2ug=4L5!H^!ogx`7o$&
+z%Il(3zAe6<oe$^F=A|}s`8}CDp*M#3M)gC-)LOeDUpYMl3YNy9R)I-T)pE7sy09aj
+zJ7%&5PnSB-F#2{jc><WLR{I2izuK%VHc+{hRfXe<^_q)8RjcE(6WX+F2)iAtDtI{x
+ztAHVBq)eSp_E^xcV^i_5KLIHA$g{zEjh?rsacu+(Eyvve2~Kmw%;n3g(kWB56j~Js
+z<yE5tYUsAR&PY0wgRvM8x!zgLX8SI!eVY&}YZ|>AoeCNptd-NM1aZLhESzC;I`+Ns
+zfmNNjdAp^W8#Q*}l>CT7RB9F5(BbI8ly2l~+E};JW|>&d1)=epZ-8vm8ppkbEVn#R
+zt30a5A-c(YQR8eM5%;|UAnO>rt!&@x@G@yp+92%w-}%(5P_+P&Wf_zb$f-Qrl5(7z
+z2ah(bkE;!DK(&aAMuQ%1TS>ai?wSXCOCSj=_}8x4IbCx^$}9q)<W{Y<9o<WqZo^oV
+z3bR;Qa%VT-M~kU@2n{=+=)C!MD`12;@<F*EtPfV3K#g^1%&ggH?4{m<R$WEKcUI4%
+zl6{ik6Bo46pmNjdXg5@?hn;SjG$}rr3Gy#-BGgVD$8oD)OcK(oqca)L_kk)UBZ_&6
+z*ourb#Yc8l3J+uSda_Y$GY--5Zp3QK9w^?P%E0xb57?fY+Q#+KU4)+R>whwv)SBt|
+zg#MX4;;Oau`m=MI9(^&zPbueY@~>3*ixX%mvR5m_1&nAg@ZKvY1E$O}&EtLiG;mhV
+z1xhMIm~fGjmf_#{62f`y;09?I7M1W2tWQvz<}i9lR>OpQyUJi45_&*pQus&EkwY<>
+zI|ZAx=*3i9a-)g)hXkvO7>UJ5MNgL(Z+-wpXVcgbSgpmFmbf1~DPA(OVGI&FNLeIE
+zNH!_aiH$vsif$_j7=T2{cS(!DOI`~bn@)vSd-0d7xL=DF;UNP|tW}4i<qWTSNCe|y
+zg9kV&L9g;FhC@tvsVu#V-brqShHy2qZpA!gg{ZTY>h>DvHtu9tY_pbJ6x(6E*hxgC
+zzNDao%qlr-IE%YGbS4hF!n!on7#W3$bX-_hbZAaws^nHu#)Dx=WzdbJ>AKzAy@T$x
+zSWE^x9+|TEHVEPyaPYa0DOChp?AeHSBBDbZNokQpAY{lE!7geZI=jV)G^2@<iI(N4
+zJLJjy@Y<VI$yq;3bVpJICW3D?YDMDl4Oe5pDf{d`i1_3Qx%4uX`$dOz<9e}jm2B-u
+z8-?%!7XuiNF2O&MAdl-iw{drG+$F^zT2Z7WRV#c6;IRZEf>l)&91Zb1+`T+oq9wWF
+zRV~kGTGce0O~p^6mj{kT5kL(pv>r;Lvd7VDX*P>A^Th`$3cWO<svk?_?FeP@458*2
+zA1PqUOdd%VP5&4~ocLK16{1GLll64c=mU81RMFstpnMoLuI7hNIE4N)U%h*#<Fz{C
+z9#>0<l7lRrls|W(8=W1O80P~6+U7<4BqC}N4-4GR3w#{O7YmH?JxwJfru2d?e){$5
+z@5R+`7Z;1)FW;OkE-(HPisCS;5F4O^Q>L81p4Ysdo3ZP1(SrR-peEdTo;-@bkB((G
+zPHYQXUL!@Q$e(OQ;R9r%@Afz+50I7>*^^c&&|E*r-jN)LH=pM4AqMwWxSv|nqjddE
+Z4{_hwv8!W(<d3>T<BC%y-6O5i(|^OS%`gA}
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/sendemail-validate.sample b/tests/resources/small.git/hooks/sendemail-validate.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..effa6f54f2a5c1f0cebe258bf4805904be4b4852
+GIT binary patch
+literal 2365
+zcmb_dU2oe)5PUX&#g-Nv2{5JDX_MA~3%Iq?8g*kpRgpYZIFU=~BI=I5J6e{T{`bz^
+zk+$48h#x9Ika!=nv$M0y{clD}-j1x(hDWbnzP?l2k8j?TH{brS+Nf21yPm)Nczma>
+zYw`X3V>TCdnSD1ru8&`j=2DIPbCT@SnIgUw>$+lEYP}+x8(BMYnr=iT3*ndq)xzaV
+z>I+qjv}vC#8_9M+b1p#uNS0M0)q<p>8!3p_LRQ0MA3M`!2foxzRUjbFY@}O~(ki=S
+zqscnq8cU*dY)D$$cqE}n)V0yIk>CNKHCrndOtSP*HbOb;nbwAHSb;R+gs^?^Dve%)
+zoW}t(*D}$>O3ab0TS^-;J|u&sb-PkZzo#kn*#xYt(;<xzKW(YtQZ$u23?yV#kyh1~
+z@+Idh;EG5jXx8@%<;Y_W8SA=|T;MPQ)TB!!<QcbU)YR4)79eeeg4|vp-8jm%Dl3^I
+zRS7+i3>FGuwzSb^g&RDiGcOz9TB;Hu`nJh)$W=C=XCSm2AY=$w3G3P-V#Oo+N*;#2
+z4ijJ-pBZ=;T(RTgp_HYrD!uW-dTMfkuqY5jwOy)~gM;#=P^i{!l7`pXTS^s(&^{RU
+zydaw}OpS#^D1cXM8?FW+fh`t7D(g;yr6|}fdaNtZBx3hlK~IpkTu3!Qq%R+zAo#<L
+zU&m+XIFB0>t}Bs8^3$vHD+-TGT@`F>H1Cc#WAVW;&$S6%fE2d6@kLS0g&ihIM{}0z
+z8#XhD>b>3{(BH|Px7}&lJ4%y1v<t$W+!F|W@<gaU4;MqSHKR(wdML<XnCv;zaPrSi
+zxVCvek26-bf#Q!H+uAgy_{e_1UZCq>(CihZJx@8MPoGdl*BJGD;usf*iS7%;{Joe;
+zNFuBa>*~o&qETDPo~u&~$FxE1xb^x&(CbE`Y3GfsibL2rl+L;>P6j&Y3U>K$mkp*6
+zd`Q{<^+^&;GskGjwD-%!boR&i-TC<Uvy02w+l$Nb?B}aL-%ZDpluqd=K_@}z*fyuV
+zzAs1Hf?3v$k!X7GTc8Q=r`WJ_Uu=>A9UOR|@=GYb5x#<f&WSMH%mCJU<#=7=qFdL6
+zG?Wz&6z&J<@I(B>+dhd7fkaVIR^pol`Mv+rUbmZ43dVL6^S7g3{NsPiG$iy$5EDB%
+z6KIgnb$H(n&t3e4E6d4V7w^B?JS}JkG)PM6+X3Co`SQs($O*AA+MG~{S7RJ=cy-l&
+z>~%3y`tjfx2>uOu<lDGWewcb=oL@}B@B6FCZ?oxSJWldrm%UfOduahk%C0H>tB_^s
+ziwG=e=ch|FQ0IkN91US7rhdQkXhwwt$gU0WEVDjo=IPb+?6PC=s8}J*ua(Ms))`UL
+fi$|vMHn?H<rred|1&u#kOoJ`%vx)-*g-ZSfgGvdP
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/hooks/update.sample b/tests/resources/small.git/hooks/update.sample
+new file mode 100755
+index 0000000000000000000000000000000000000000..c3430f6fe27e572a1cebdb2f2bec70add0642a60
+GIT binary patch
+literal 3707
+zcmb_fU2oeq6n(aS#jRq*br9K3y0z;^QgkUc^kKlTrB6js&@yE)mPu8l<0$L?`wmIT
+zrsXba))@gJi@e|G+<SfSXe`CeSQ}OG@sr8ZTUlQ{dzM}Q@O-hBi}GeUom`#X%FiYH
+zX?m4Rna-0RN2lfK)A3ZuvHcz$L<jUn62D=~vfz{}wIH2VqBLX_O$(JSXeF7H$}q!c
+zWY}C&R;eX%X?P{%d;|>_tSE3ettp-hLlsZCxaLX8(nU;bVRB;Ce6@s#eu2|WvLz>-
+zvy(&>Gyfp@+BtKnpqWkKi^+v{4jn_pNw_zeuxE<mRXKx8G3;9pl+45&4~hHW!G@wo
+za7?X(0B}HbX*ExkDmas*xzV)FxygC8AL?2Z1x-0QJqS@qn8sD7r{bm30@<%eL_gOw
+z;~85O$Xw2AS}Qp)5ViRUe3|ir8;&&I<B7Y6^!kkNyYXF4EY(b8_5DsTYn_&?wkdEz
+z0y$tADo<&}nGs5kg2-J=0KlEGPb(%<An(pXY{K`qIZCuwiT|2{8JD&5o_~`o6<;dD
+zi@J#zCE4={8j%<uy|iutvHu1QKo5Tno-BAF2FwD%%O#UDDum=w!;!PNe-cOFNX4)5
+zd>TifiGO|)w}OANj2n2D^K=o3j6P6uOL70#cbA{uzWXDlk1wr9GV1X(2W{RuTvjXV
+zCmd<W?kH^?PXjkbF`XZtwu1B+%4@ZvHIwGpJ*8@8`MWAhq^B|Hj1lzj3R8bVuMpNb
+zz4Gzk!3T3bY;WEGIww&kq9BYW6EP*q$K|EB-@TH(Fjtz*`HMTO?i+3E;5tdSah&xZ
+z+t!x4K7)dpy5wiJhlJz~8qF|r8a&-SV7^I3C@_q=P`yt@_x_F-;PQR)fzP<zNN>8u
+zH%V`94=q3)Dk)PHNrnFC(T1)Om6f{Usj;u1R->&XoCYVK2V3ZlgZuF?N}1+33<P7e
+z<0yVF?Qoa{l#7q(3&jv=Ab)gpM8A7`p%3InNzSxy)ZER2U0C#9zKpnLY0I?>OER*x
+z*9Z=L=zI8CN>A_^jYjt0F$psO$sL=38q5q|SG)qCN6{^>RFh5E&l5GZ$pEahnF&d+
+z5c>64t}uJPkf~_!VUj#&N%nC-gUMj%=@B=!V>&}xtj2%@-mOm#rQUSJ3(ccmc+fza
+znZ#uxF>N?QN5UrIEd!5RgHEf<eGg}P45aAs(Xs6u!XW9r1I*E6XJ^1movX@xYLuPz
+z|7xBN4z@b}#x>W#;(nKYF+D<*rdshJ$X-z2OZ2X;)nn@KSVdVhaA?}@3;6gZxb4<W
+z`9sa`0lR_azMX|=t_(FvG@%w2);9P}SG0u&K1(*oX3};~=<<!N*F$UTSxD{V&6mgL
+ztw9Ntc2eOF@c!OJytNC4T^#)Ien7-`dI{6s#co~0f^E3J<0Ty)l3xq2u@Y8DXTK>v
+zozoWSr{{+!h}zGpumG3H`=AvWpm^9kW;J$Jp^Xl*?8ckr`fqN%c|Z;VC0|cM4vSrk
+zH_O8Yvh85nvJp^;``wo8=z0f`FWg?`>gO#y1hjX1{}rTlg9rwIKia8eyGexA3GnuR
+z`Rg~XZoW;0pA)vI8=p5!+6sIn#C^FCvR>ffv39h6SCNi9v);%WD;WZ`of_MgwyRWy
+z-yY%n*Y>X8<Sf+RyB|Sr2YG@1w~%U$o`(5EDkJ|3$u=eMZA&_wxEsy<Xxh2k^tP?4
+RGx&ZHQs^8zuIpu!=pQhfp8Eg*
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/info/exclude b/tests/resources/small.git/info/exclude
+new file mode 100644
+index 0000000000000000000000000000000000000000..a5196d1be8fb59edf8062bef36d3a602e0812139
+GIT binary patch
+literal 240
+zcmXYqK?=e!6h!x)VxWtv*mf_t5?px$aS_{}Hj?C*<cHXeXE&AZhT*-L3ZoI&*l1%Z
+zqG?zr3TvQGZ__}H4(u*%p*rI=cU!%ya5ugfGATh66$IJHgu1Gs0-<N;$V+SsdE)?u
+zIq;i$f#WE4f$_MWicZjMEob9LWKMR#iwZq54~QgST^6=i%u0lUkJu-_J**QBMq}ZG
+Wth_)NDbl|`oQr&HAFQ5h`0jqAIZ*BZ
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/objects/88/f9a6eaa2cf008b9bc92847178621f21fa99f3e b/tests/resources/small.git/objects/88/f9a6eaa2cf008b9bc92847178621f21fa99f3e
+new file mode 100644
+index 0000000000000000000000000000000000000000..7d80b8d78e0dc55669d831a6638f48ec9fed0982
+GIT binary patch
+literal 50
+zcmV-20L}k+0V^p=O;s>9W-v4`Ff%bx$Vkn}$!Ay}rnY6F$m-Kg*KD_+;Lx#g4|^&N
+I02NaX#p`nv=Kufz
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/objects/af/5626b4a114abcb82d63db7c8082c3c4756e51b b/tests/resources/small.git/objects/af/5626b4a114abcb82d63db7c8082c3c4756e51b
+new file mode 100644
+index 0000000000000000000000000000000000000000..822bc151862ec3763cf2d3fa2372b93bbd3a4b65
+GIT binary patch
+literal 30
+mcmb<m^geacKghr&@q@?NlP9kSYMj?U<r(;diNWtH+YSKNt_|)0
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/objects/c6/97d4f7a6eac8d7b131673c340bd3cc5bac14d4 b/tests/resources/small.git/objects/c6/97d4f7a6eac8d7b131673c340bd3cc5bac14d4
+new file mode 100644
+index 0000000000000000000000000000000000000000..5adfa88cc6b00bb19f2031b8ab61f6d07f9ccdb8
+GIT binary patch
+literal 130
+zcmV-|0Db>>0i}&W3IZ_@1U=^!a~EV1casc=c+{&un1qQN*i9hD|0|m(2n|iwp*q%W
+z%N;b$hu%cM`$TMo*~EnC1BFP&Pfj~;jZVKXQ96s_PhV<-XAROi+@-v8dBLUa`!;GB
+k^i<X>XlEv8$>R)1G>9th&t3j;s7J{?^9n<zzF|~BaA?ar-~a#s
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/resources/small.git/refs/heads/master b/tests/resources/small.git/refs/heads/master
+new file mode 100644
+index 0000000000000000000000000000000000000000..4eb36d22298f060fd324155ab854d9d6486fc498
+GIT binary patch
+literal 41
+ucmV~$!4Uu;2m`Rc)5uXl$AMP&AHjriQg~T$i(A>|7U^`%mXoWC24Q^m!3%@{
+
+literal 0
+HcmV?d00001
+
