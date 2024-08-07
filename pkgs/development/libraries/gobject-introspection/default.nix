@@ -69,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "pie"
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [

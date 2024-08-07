@@ -48,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
   '';
 
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "pie"
+  ];
+
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 

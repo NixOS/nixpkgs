@@ -131,6 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./gmodule-rtld_local.patch
   ];
 
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "pie"
+  ];
+
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   setupHook = ./setup-hook.sh;
