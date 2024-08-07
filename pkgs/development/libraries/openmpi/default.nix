@@ -193,7 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
         ];
         part2 = builtins.attrNames wrapperDataSubstitutions;
       };
-    in
+    in lib.optionalString stdenv.isLinux
     ''
       find $out/lib/ -name "*.la" -exec rm -f \{} \;
 
