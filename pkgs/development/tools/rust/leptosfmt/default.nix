@@ -1,4 +1,3 @@
-with import <nixpkgs> {};
 { lib
 , rustPlatform
 , fetchFromGitHub
