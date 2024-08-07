@@ -4502,6 +4502,13 @@
     github = "dariof4";
     githubId = 9992814;
   };
+  darkkronicle = {
+    name = "DarkKronicle";
+    email = "darkkronicle@gmail.com";
+    matrix = "@darkkronicle:jpxs.io";
+    github = "DarkKronicle";
+    githubId = 38167691;
+  };
   darkonion0 = {
     name = "Alexandre Peruggia";
     email = "darkgenius1@protonmail.com";
