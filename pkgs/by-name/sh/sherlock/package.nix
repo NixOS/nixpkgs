@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, python3
-, unstableGitUpdater
-, poetry
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  unstableGitUpdater,
+  poetry,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -67,9 +68,7 @@ python3.pkgs.buildPythonApplication rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "stem"
-  ];
+  pythonRelaxDeps = [ "stem" ];
 
   pytestFlagsArray = [
     "-m"
