@@ -12031,9 +12031,7 @@ self: super: with self; {
 
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
-  pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine {
-    pythonPackages = self;
-  };
+  pyqtwebengine = callPackage ../development/python-modules/pyqtwebengine { };
 
   pyquery = callPackage ../development/python-modules/pyquery { };
 
