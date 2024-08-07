@@ -57,6 +57,7 @@ import ../make-test-python.nix ({ pkgs, ... }:
             };
 
             bridge.permissions."@${username}:server" = "user";
+            bridgemanagement_room_text.welcome = "Hello, I'm an mautrix bridge bot.";
           };
         };
 
@@ -76,6 +77,7 @@ import ../make-test-python.nix ({ pkgs, ... }:
             };
 
             bridge.permissions."@${username}:server" = "user";
+            bridgemanagement_room_text.welcome = "Hello, I'm an mautrix bridge bot.";
           };
         };
 
@@ -150,7 +152,7 @@ import ../make-test-python.nix ({ pkgs, ... }:
                   assert isinstance(response, RoomInviteResponse)
 
                   callback = functools.partial(
-                      message_callback, matrix, "Hello, I'm an Instagram bridge bot."
+                      message_callback, matrix, "Hello, I'm an mautrix bridge bot."
                   )
                   matrix.add_event_callback(callback, RoomMessageNotice)
 

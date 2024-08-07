@@ -541,6 +541,7 @@ in {
 
             bridge = {
               username_template = mkDefault "facebook_{{.}}";
+              management_room_text.welcome = "Hello, I'm an Facebook bridge bot.";
             };
 
             appservice = {
@@ -549,6 +550,26 @@ in {
               bot = {
                 username = mkDefault "facebookbot";
                 displayname = mkDefault "Facebook bridge bot";
+                avatar = mkDefault "mxc://maunium.net/ygtkteZsXnGJLJHRchUwYWak";
+              };
+            };
+          };
+        };
+        messenger = {
+          settings = {
+            meta.mode = mkDefault "messenger";
+
+            bridge = {
+              username_template = mkDefault "messenger_{{.}}";
+              management_room_text.welcome = "Hello, I'm an Messenger bridge bot.";
+            };
+
+            appservice = {
+              id = mkDefault "messenger";
+              port = mkDefault 29322;
+              bot = {
+                username = mkDefault "messengerbot";
+                displayname = mkDefault "Messenger bridge bot";
                 avatar = mkDefault "mxc://maunium.net/ygtkteZsXnGJLJHRchUwYWak";
               };
             };
