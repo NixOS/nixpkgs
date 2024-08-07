@@ -194,4 +194,21 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
       platforms = platforms.all;
     };
   };
+
+  kakoune-catppuccin = buildKakounePluginFrom2Nix {
+    pname = "kakoune-catppuccin";
+    version = "2024-03-29";
+    src = fetchFromGitHub {
+      owner = "catppuccin";
+      repo = "kakoune";
+      rev = "7f187d9da2867a7fda568b2135d29b9c00cfbb94";
+      sha256 = "0vfpkmm111srkxshvchqfayv26qbfs85gifv5460nckww914xh39";
+    };
+    meta = with lib; {
+      description = "Soothing pastel theme for Kakoune";
+      homepage = "https://github.com/catppuccin/kakoune/";
+      license = licenses.mit;
+      platforms = platforms.all;
+    };
+  };
 }
