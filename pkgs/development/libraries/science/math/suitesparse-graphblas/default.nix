@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
   '';
 
+  cmakeFlags = [ (lib.cmakeBool "GRAPHBLAS_USE_JIT" (!(stdenv.isLinux && stdenv.isAarch64))) ];
+
   meta = with lib; {
     description = "Graph algorithms in the language of linear algebra";
     homepage = "https://people.engr.tamu.edu/davis/GraphBLAS.html";
