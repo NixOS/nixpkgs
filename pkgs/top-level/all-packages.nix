@@ -24071,8 +24071,6 @@ with pkgs;
 
   theft = callPackage ../development/libraries/theft { };
 
-  thrift = callPackage ../development/libraries/thrift { };
-
   tidyp = callPackage ../development/libraries/tidyp { };
 
   tidal-hifi = callPackage ../applications/audio/tidal-hifi { };
