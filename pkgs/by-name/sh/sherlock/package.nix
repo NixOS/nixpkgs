@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sherlock";
-  version = "0-unstable-2024-06-09";
+  version = "0.15.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sherlock-project";
     repo = "sherlock";
-    rev = "d678908c00f16c7f6c44efc0357cef713fa96739";
-    hash = "sha256-XAXDqbdHQta9OiupbPmmyp3TK1VLtDQ7CadsOei/6rs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+fQDvvwsLpiEvy+vC49AzlOA/KaKrhhpS97sZvFbpLA=";
   };
 
   patches = [
@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share
-    cp -R ./sherlock $out/share
+    cp -R ./sherlock_project $out/share
 
     runHook postInstall
   '';
@@ -53,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
   postFixup = ''
     makeWrapper ${python3.interpreter} $out/bin/sherlock \
       --add-flags "-m" \
-      --add-flags "sherlock" \
+      --add-flags "sherlock_project" \
       --prefix PYTHONPATH : "$PYTHONPATH:$out/share"
   '';
 
@@ -75,10 +75,6 @@ python3.pkgs.buildPythonApplication rec {
     "-m"
     "'not online'"
   ];
-
-  passthru.updateScript = unstableGitUpdater {
-    hardcodeZeroVersion = true;
-  };
 
   meta = with lib; {
     homepage = "https://sherlock-project.github.io/";
