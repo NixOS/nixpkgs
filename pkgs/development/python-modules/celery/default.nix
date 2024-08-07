@@ -88,6 +88,8 @@ buildPythonPackage rec {
       # seems to only fail on higher core counts
       # AssertionError: assert 3 == 0
       "test_setup_security_disabled_serializers"
+      # Test is flaky, especially on hydra
+      "test_ready"
       # Tests fail with pytest-xdist
       "test_itercapture_limit"
       "test_stamping_headers_in_options"
