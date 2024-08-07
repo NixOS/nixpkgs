@@ -26,14 +26,34 @@ import ./make-test-python.nix (
           };
         };
 
+        services.nginx.virtualHosts."${domain}" = {
+          enableACME = lib.mkForce false;
+          sslCertificate = certs."${domain}".cert;
+          sslCertificateKey = certs."${domain}".key;
+        };
+
+        networking.hosts."::1" = [ "${domain}" ];
+        networking.firewall.allowedTCPPorts = [
+          80
+          443
+        ];
+
         users.users.canaille.shell = pkgs.bashInteractive;
+
+        security.pki.certificateFiles = [ certs.ca.cert ];
       };
+
+    nodes.client = { nodes, ... }: {
+      networking.hosts."${nodes.server.networking.primaryIPAddress}" = [ "${domain}" ];
+      security.pki.certificateFiles = [ certs.ca.cert ];
+    };
 
     testScript =
       { nodes, ... }:
       ''
         start_all()
         server.wait_for_unit("canaille.service")
+        client.wait_until_succeeds("curl -f https://${domain}/")
         server.succeed("sudo -iu canaille -- canaille check")
       '';
   }

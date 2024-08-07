@@ -151,6 +151,8 @@ in
           ${gunicorn}/bin/gunicorn \
             --name=canaille \
             --bind='unix:///run/canaille.socket' \
+            --log-level debug \
+            --workers=2 \
             'canaille:create_app()'
         '';
       };
@@ -164,6 +166,37 @@ in
         SocketUser = "canaille";
         SocketGroup = "canaille";
         SocketMode = "770";
+      };
+    };
+
+    services.nginx.enable = true;
+    services.nginx.recommendedGzipSettings = true;
+    services.nginx.virtualHosts."${cfg.settings.SERVER_NAME}" = {
+      forceSSL = true;
+      enableACME = true;
+      # Config from https://canaille.readthedocs.io/en/latest/tutorial/deployment.html#nginx
+      extraConfig = ''
+        charset utf-8;
+        client_max_body_size 10M;
+
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+        add_header X-Frame-Options                      "SAMEORIGIN"    always;
+        add_header X-XSS-Protection                     "1; mode=block" always;
+        add_header X-Content-Type-Options               "nosniff"       always;
+        add_header Referrer-Policy                      "same-origin"   always;
+      '';
+      locations = {
+        "/".extraConfig = ''
+          uwsgi_pass unix:///run/canaille.socket;
+        '';
+        "/static" = {
+          root = "${finalPackage}/${python.sitePackages}/canaille/static";
+        };
+        "~* ^/static/.+\\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|woff2|svg)$".extraConfig = ''
+          access_log off;
+          expires 30d;
+          more_set_headers Cache-Control public;
+        '';
       };
     };
 
@@ -186,4 +219,6 @@ in
 
     users.groups.canaille.members = [ config.services.nginx.user ];
   };
+
+  meta.maintainers = with lib.maintainers; [ erictapen ];
 }
