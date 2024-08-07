@@ -3,7 +3,6 @@
   fetchFromGitHub,
   makeWrapper,
   python3,
-  unstableGitUpdater,
   poetry,
 }:
 
@@ -75,11 +74,11 @@ python3.pkgs.buildPythonApplication rec {
     "'not online'"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sherlock-project.github.io/";
     description = "Hunt down social media accounts by username across social networks";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "sherlock";
-    maintainers = with maintainers; [ applePrincess ];
+    maintainers = with lib.maintainers; [ applePrincess ];
   };
 }
