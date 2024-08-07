@@ -18,6 +18,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir $out
     mv bin doc $out/
+    cp LICENSE $out/doc/LICENSE
   '';
 
   passthru = {
