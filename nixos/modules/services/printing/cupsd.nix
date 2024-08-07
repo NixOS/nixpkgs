@@ -339,7 +339,7 @@ in
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
     services.udev.packages = cfg.drivers;
 
-    # Allow asswordless printer admin for members of wheel group
+    # Allow passwordless printer admin for members of wheel group
     security.polkit.extraConfig = mkIf polkitEnabled ''
       polkit.addRule(function(action, subject) {
           if (action.id == "org.opensuse.cupspkhelper.mechanism.all-edit" &&
