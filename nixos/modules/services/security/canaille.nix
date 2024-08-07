@@ -17,6 +17,7 @@ let
     ;
 
   dataDir = "/var/lib/canaille";
+  secretsDir = "${dataDir}/secrets";
 
   settingsFormat = pkgs.formats.toml { };
 
@@ -34,6 +35,7 @@ let
       ++ old.optional-dependencies.postgresql;
     makeWrapperArgs = (old.makeWrapperArgs or []) ++ [
       "--set CONFIG /etc/canaille/config.toml"
+      "--set SECRETS_DIR \"${secretsDir}\""
     ];
   });
   inherit (finalPackage) python;
@@ -49,15 +51,15 @@ in
   options.services.canaille = {
     enable = mkEnableOption "Canaille";
     package = mkPackageOption pkgs "canaille" { };
-    # secretKeyFile = lib.mkOption {
-    #   description = ''
-    #     A file containing the Flask secret key. Its content is going to be provided to Canaille as `SECRET_KEY`. Make sure it has appropriate permissions. For example, copy the output of this to the specified file:
-    #     ```
-    #       python3 -c 'import secrets; print(secrets.token_hex())'
-    #     ```
-    #   '';
-    #   type = lib.types.path;
-    # };
+    secretKeyFile = lib.mkOption {
+      description = ''
+        A file containing the Flask secret key. Its content is going to be provided to Canaille as `SECRET_KEY`. Make sure it has appropriate permissions. For example, copy the output of this to the specified file:
+        ```
+          python3 -c 'import secrets; print(secrets.token_hex())'
+        ```
+      '';
+      type = lib.types.path;
+    };
     settings = mkOption {
       default = { };
       description = "Settings for Canaille. See [the documentation](https://canaille.readthedocs.io/en/latest/references/configuration.html) for details.";
@@ -66,18 +68,9 @@ in
         options = {
           SECRET_KEY = lib.mkOption {
             readOnly = true;
-            description = "Flask Secret Key. Can't be set and must be provided through services.canaille.settings.SECRET_KEY_FILE";
+            description = "Flask Secret Key. Can't be set and must be provided through services.canaille.settings.secretKeyFile";
             default = null;
             type = types.nullOr types.str;
-          };
-          SECRET_KEY_FILE = lib.mkOption {
-            description = ''
-              A file containing the Flask secret key. Its content is going to be provided to Canaille as `SECRET_KEY`. Make sure it has appropriate permissions. For example, copy the output of this to the specified file:
-              ```
-                python3 -c 'import secrets; print(secrets.token_hex())'
-              ```
-            '';
-            type = types.path;
           };
           SERVER_NAME = lib.mkOption {
             description = "The domain name on which canaille will be served.";
@@ -116,6 +109,17 @@ in
       group = "canaille";
     };
 
+    # Secrets management is unfortunately done in a semi stateful way, due to these constraints:
+    # - Canaille uses Pydantic, which currently only accepts an env file or a single
+    #   directory (SECRETS_DIR) for loading settings from files.
+    # - The canaille user needs access to secrets, as it needs to run the CLI
+    #   for e.g. user creation. Therefore specifying the SECRETS_DIR as systemds
+    #   CREDENTIALS_DIRECTORY is not an option.
+    systemd.tmpfiles.rules = [
+      "Z  ${secretsDir} 700 canaille canaille - -"
+      "L+ ${secretsDir}/SECRET_KEY - - - - ${cfg.secretKeyFile}"
+    ];
+
     systemd.services.canaille = {
       description = "Canaille";
       documentation = [ "https://canaille.readthedocs.io/en/latest/tutorial/deployment.html" ];
@@ -128,7 +132,7 @@ in
       environment = {
         PYTHONPATH = "${pythonEnv}/${python.sitePackages}/";
         CONFIG = "/etc/canaille/config.toml";
-        inherit (cfg.settings) SECRET_KEY_FILE;
+        SECRETS_DIR = secretsDir;
       };
       serviceConfig = {
         WorkingDirectory = dataDir;
@@ -137,7 +141,8 @@ in
         StateDirectory = "canaille";
         StateDirectoryMode = "0750";
         Restart = "on-failure";
-        ExecStart = let
+        PrivateTmp = true;
+        ExecStart= let
           gunicorn = python.pkgs.gunicorn.overridePythonAttrs (old: {
             # Allows Gunicorn to set a meaningful process name
             dependencies = (old.dependencies or []) ++ old.optional-dependencies.setproctitle;
@@ -148,7 +153,6 @@ in
             --bind='unix:///run/canaille.socket' \
             'canaille:create_app()'
         '';
-        PrivateTmp = true;
       };
     };
 

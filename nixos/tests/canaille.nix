@@ -3,10 +3,6 @@ import ./make-test-python.nix (
   let
     certs = import ./common/acme/server/snakeoil-certs.nix;
     inherit (certs) domain;
-
-    secretKeyFile = pkgs.writeText "canaille-secret-key" ''
-      this is not a secret key
-    '';
   in
   {
     name = "canaille";
@@ -22,9 +18,11 @@ import ./make-test-python.nix (
       {
         services.canaille = {
           enable = true;
+          secretKeyFile = pkgs.writeText "canaille-secret-key" ''
+            this is not a secret key
+          '';
           settings = {
             SERVER_NAME = domain;
-            SECRET_KEY_FILE = secretKeyFile;
           };
         };
 
