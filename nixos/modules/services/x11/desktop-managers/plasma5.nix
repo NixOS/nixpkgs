@@ -292,8 +292,7 @@ in
         # Optional hardware support features
         ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
-        ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
-        ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
+        ++ lib.optional config.hardware.pulseaudio.available plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable pkgs.colord-kde
         ++ lib.optional config.services.hardware.bolt.enable pkgs.plasma5Packages.plasma-thunderbolt
@@ -475,8 +474,8 @@ in
         }
         {
           # The user interface breaks without pulse
-          assertion = config.hardware.pulseaudio.enable || (config.services.pipewire.enable && config.services.pipewire.pulse.enable);
-          message = "Plasma Mobile requires pulseaudio.";
+          assertion = config.hardware.pulseaudio.available;
+          message = "Plasma Mobile requires a pulseaudio server to be enabled.";
         }
       ];
 
@@ -512,7 +511,7 @@ in
 
       # The following services are needed or the UI is broken.
       hardware.bluetooth.enable = true;
-      hardware.pulseaudio.enable = true;
+      hardware.pulseaudio.available = true;
       networking.networkmanager.enable = true;
       # Required for autorotate
       hardware.sensor.iio.enable = lib.mkDefault true;
