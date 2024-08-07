@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Noltari";
