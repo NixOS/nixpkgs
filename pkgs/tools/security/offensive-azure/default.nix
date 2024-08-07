@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "offensive-azure";
-  version = "0.4.10";
+  version = "0.048";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-5JHix+/uGGhXM89VLimI81g4evci5ZUtNV1c1xopjuI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Dc0Qu0EoVMW3GsP+5E5vGBoL7kiEG+DkY1nPeUIPnBg=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
