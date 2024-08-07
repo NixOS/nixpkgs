@@ -5,6 +5,9 @@
   qtbase,
   qtdeclarative,
   substituteAll,
+  # clang-based c++ parser for qdoc and lupdate
+  withClang ? false,
+  llvmPackages,
 }:
 
 qtModule {
@@ -15,6 +18,11 @@ qtModule {
     "dev"
     "bin"
   ];
+
+  buildInputs = lib.optionals withClang (with llvmPackages; [
+    libclang
+    libllvm
+  ]);
 
   propagatedBuildInputs = [
     qtbase
@@ -28,6 +36,12 @@ qtModule {
       qtbaseDev = lib.getDev qtbase;
     })
   ];
+
+  postPatch = ''
+    # llvm-config --includedir gives libllvm includedir, looks for libclang header there
+    substituteInPlace src/qdoc/configure.pri \
+      --replace-fail "\''$\''$CLANG_INCLUDEPATH/clang-c" "${lib.getDev llvmPackages.libclang}/include/clang-c"
+  '';
 
   devTools = [
     "bin/qcollectiongenerator"
