@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+namespace=`kreadconfig5 --file PACKAGE_DIR/metadata.desktop --group "Desktop Entry" --key X-KDE-PluginInfo-Name`
+version_file=$HOME/.local/share/plasma/plasmoids/$namespace/nix-version
+
+kpackagetool5 -t Plasma/Applet -s $namespace &> /dev/null
+
+# Update and relaunch if already installed but nix-version does not match; otherwise, install.
+if [ $? == 0 ] ; then
+	version="_"
+
+	if [ -f $version_file ] ; then
+		version=`cat $version_file`
+	fi
+
+	if [ $version != VERSION ]; then
+		kpackagetool5 -t Plasma/Applet -u PACKAGE_DIR
+		echo VERSION > $version_file
+		kquitapp5 plasmashell
+		nohup kstart5 plasmashell &>/dev/null &
+	fi
+else
+	kpackagetool5 -t Plasma/Applet -i PACKAGE_DIR
+	echo VERSION > $version_file
+fi
