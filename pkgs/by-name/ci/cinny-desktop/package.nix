@@ -96,7 +96,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Yet another matrix client for desktop";
     homepage = "https://github.com/cinnyapp/cinny-desktop";
-    maintainers = with lib.maintainers; [ qyriad ];
+    maintainers = with lib.maintainers; [ qyriad ryand56 ];
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cinny";
