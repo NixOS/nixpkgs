@@ -8,11 +8,12 @@ let
     filterAttrs
     mapAttrs
     mapAttrsToList
-    mkAfter
     mkMerge
     mkOption
     optional
+    optionals
     pipe
+    stringLength
     types;
   cfg = config.security.certificates.authorities.local;
   modules = with types; {
@@ -89,6 +90,8 @@ in
             cfg.roots
           )
         ));
+      mkCommand = cmd: args: concatStringsSep " " ([ cmd ] ++ args);
+      openssl = mkCommand "openssl";
       # Helper to create an appropriate install line
       install =
         src:
@@ -97,9 +100,17 @@ in
         , group ? "$(id -g)"
         , mode ? "0600"
         }:
-        "${pkgs.coreutils}/bin/install"
-        + " -Dv -o ${owner} -g ${group} -m ${mode}"
-        + " ${escapeShellArg src} ${escapeShellArg path}";
+        mkCommand "${pkgs.coreutils}/bin/install" [
+          "-Dv"
+          "-o"
+          owner
+          "-g"
+          group
+          "-m"
+          mode
+          (escapeShellArg src)
+          (escapeShellArg path)
+        ];
       # Generate install lines for all needed files
       installs =
         { certificate
@@ -125,7 +136,10 @@ in
       # base service config
       baseService = {
         wantedBy = [ "multi-user.target" ];
-        path = [ pkgs.openssl ];
+        path = [
+          pkgs.openssl
+          pkgs.util-linux
+        ];
         serviceConfig = rec {
           User = "cert-local";
           DynamicUser = true;
@@ -149,15 +163,17 @@ in
                   mkdir -m 0700 -p ./${name}
                   touch ./${name}/index.txt
                   echo 00 > ./${name}/serial
-                  openssl req                   \
-                    -config ${opensslCfg}       \
-                    -x509                       \
-                    -nodes                      \
-                    -days 365                   \
-                    -newkey rsa:2048            \
-                    -keyout ${name}/ca.key.pem  \
-                    -out ${name}/ca.cert.pem    \
-                    -subj "/CN=${root.CN}"      \
+                  ${openssl [
+                    "req"
+                    "-config" "${opensslCfg}"
+                    "-x509"
+                    "-nodes"
+                    "-days"   "365"
+                    "-newkey" "rsa:2048"
+                    "-keyout" "${name}/ca.key.pem"
+                    "-out"    "${name}/ca.cert.pem"
+                    "-subj"   (escapeShellArg "/CN=${root.CN}")
+                  ]}
                 '';
               }
             ];
@@ -177,6 +193,45 @@ in
                   map (dns: "DNS:" + dns) request.hosts.dns
                   ++ map (ip: "IP:" + ip) request.hosts.ip
                 );
+                subjNameStr = pipe
+                  (request.names // { inherit (request) CN; })
+                  [
+                    (mapAttrsToList (type: value: "${type}=${value}"))
+                    (concatStringsSep "/")
+                    (str: "/${str}")
+                    escapeShellArg
+                  ];
+                genRequest = openssl ([
+                  "req"
+                  "-config"
+                  "${opensslCfg}"
+                  "-noenc"
+                  "-newkey"
+                  "rsa:2048"
+                  "-keyout"
+                  (path "key.pem")
+                  "-subj"
+                  subjNameStr
+                ] ++ (
+                  if ((stringLength SAN) > 0)
+                  then [
+                    "-addext"
+                    (escapeShellArg "subjectAltName=${SAN}")
+                  ]
+                  else [ ]
+                ));
+                signRequest = openssl [
+                  "ca"
+                  "-batch"
+                  "-config"
+                  "${opensslCfg}"
+                  "-name"
+                  authority.local.root
+                  "-out"
+                  (path "cert.pem")
+                  "-in"
+                  "-"
+                ];
               in
               {
                 "${service}" = mkMerge [
@@ -186,23 +241,16 @@ in
                     after = [ "certificate-local@${root}.service" ];
                     script = ''
                       mkdir -m 0700 -p ${path ""}
-                      openssl req                         \
-                        -config ${opensslCfg}             \
-                        -noenc                            \
-                        -newkey rsa:2048                  \
-                        -keyout ${path "key.pem"}         \
-                        -addext "subjectAltName=${SAN}"   \
-                        -subj "/CN=${request.CN}"         |\
-                      openssl ca                          \
-                        -batch                            \
-                        -config ${opensslCfg}             \
-                        -name ${authority.local.root}  \
-                        -out ${path "cert.pem"}           \
-                        -in -
+                      (
+                        flock 99
+                        ${genRequest} | ${signRequest}
+                      ) 99> ./lock
                     '';
-                    serviceConfig.ExecStart = mkAfter (map
-                      (line: "+${line}")
-                      (installs spec));
+                    serviceConfig.ExecStartPost = (
+                      map
+                        (line: "+${line}")
+                        (installs spec)
+                    );
                   }
                 ];
               }
