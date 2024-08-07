@@ -1352,6 +1352,7 @@
   ./services/torrent/rtorrent.nix
   ./services/torrent/transmission.nix
   ./services/torrent/torrentstream.nix
+  ./services/torrent/qbittorrent.nix
   ./services/tracing/tempo.nix
   ./services/ttys/getty.nix
   ./services/ttys/gpm.nix
