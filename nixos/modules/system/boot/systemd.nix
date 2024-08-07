@@ -118,7 +118,11 @@ let
       "sleep.target"
       "hybrid-sleep.target"
       "systemd-hibernate.service"
+      ] ++ (optionals cfg.package.withBootloader [
       "systemd-hibernate-clear.service"
+      "systemd-bootctl@.service"
+      "systemd-bootctl.socket"
+      ]) ++ [
       "systemd-hybrid-sleep.service"
       "systemd-suspend.service"
       "systemd-suspend-then-hibernate.service"
@@ -144,11 +148,9 @@ let
       "systemd-ask-password-wall.service"
 
       # Varlink APIs
-      "systemd-bootctl@.service"
-      "systemd-bootctl.socket"
       "systemd-creds@.service"
       "systemd-creds.socket"
-    ] ++ lib.optional cfg.package.withTpm2Tss [
+    ] ++ lib.optional (cfg.package.withBootloader && cfg.package.withTpm2Tss) [
       "systemd-pcrlock@.service"
       "systemd-pcrlock.socket"
     ] ++ [
