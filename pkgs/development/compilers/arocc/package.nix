@@ -13,12 +13,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ zig.hook ];
 
+  outputs = [
+    "out"
+    "lib"
+  ];
+
   passthru = {
     inherit zig;
     isArocc = true;
-    wrapped = wrapCCWith { cc = finalAttrs.finalPackage; };
+    wrapped = wrapCCWith {
+      cc = finalAttrs.finalPackage;
+      inherit (finalAttrs.passthru.zig.passthru.stdenv.cc) bintools;
+    };
     stdenv = overrideCC stdenv finalAttrs.passthru.wrapped;
   };
+
+  postInstall = ''
+    # Fake for eval
+    mkdir -p $lib
+  '';
 
   meta = {
     description = "C compiler written in Zig.";

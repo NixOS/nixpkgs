@@ -1,0 +1,81 @@
+From 2baae244c995794d9addfe6ed924dfa72f01be82 Mon Sep 17 00:00:00 2001
+From: Andrei Alexeyev <akari@taisei-project.org>
+Date: Wed, 27 Sep 2023 11:43:23 +0200
+Subject: [PATCH] linkers: basic support for the 'zig cc' linker
+
+---
+ docs/markdown/Reference-tables.md |  1 +
+ docs/markdown/snippets/zig_ld.md  | 18 ++++++++++++++++++
+ mesonbuild/linkers/detect.py      |  3 +++
+ mesonbuild/linkers/linkers.py     |  7 +++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 docs/markdown/snippets/zig_ld.md
+
+diff --git a/docs/markdown/Reference-tables.md b/docs/markdown/Reference-tables.md
+index 86f3e9ea5668..8ad2ad874125 100644
+--- a/docs/markdown/Reference-tables.md
++++ b/docs/markdown/Reference-tables.md
+@@ -60,6 +60,7 @@ These are return values of the `get_linker_id` method in a compiler object.
+ | ld.mold    | The fast MOLD linker                        |
+ | ld.solaris | Solaris and illumos                         |
+ | ld.wasm    | emscripten's wasm-ld linker                 |
++| ld.zigcc   | The Zig linker (C/C++ frontend; GNU-like)   |
+ | ld64       | Apple ld64                                  |
+ | ld64.lld   | The LLVM linker, with the ld64 interface    |
+ | link       | MSVC linker                                 |
+diff --git a/docs/markdown/snippets/zig_ld.md b/docs/markdown/snippets/zig_ld.md
+new file mode 100644
+index 000000000000..8835c38ca4f7
+--- /dev/null
++++ b/docs/markdown/snippets/zig_ld.md
+@@ -0,0 +1,18 @@
++## Zig 0.11 can be used as a C/C++ compiler frontend
++
++Zig offers
++[a C/C++ frontend](https://andrewkelley.me/post/zig-cc-powerful-drop-in-replacement-gcc-clang.html) as a drop-in replacement for Clang. It worked fine with Meson up to Zig 0.10. Since 0.11, Zig's
++dynamic linker reports itself as `zig ld`, which wasn't known to Meson. Meson now correctly handles
++Zig's linker.
++
++You can use Zig's frontend via a [machine file](Machine-files.md):
++
++```ini
++[binaries]
++c = ['zig', 'cc']
++cpp = ['zig', 'c++']
++ar = ['zig', 'ar']
++ranlib = ['zig', 'ranlib']
++lib = ['zig', 'lib']
++dlltool = ['zig', 'dlltool']
++```
+diff --git a/mesonbuild/linkers/detect.py b/mesonbuild/linkers/detect.py
+index 918f2e63426b..6809a040d050 100644
+--- a/mesonbuild/linkers/detect.py
++++ b/mesonbuild/linkers/detect.py
+@@ -219,6 +219,9 @@ def guess_nix_linker(env: 'Environment', compiler: T.List[str], comp_class: T.Ty
+         linker = linkers.AIXDynamicLinker(
+             compiler, for_machine, comp_class.LINKER_PREFIX, override,
+             version=search_version(e))
++    elif o.startswith('zig ld'):
++        linker = linkers.ZigCCDynamicLinker(
++            compiler, for_machine, comp_class.LINKER_PREFIX, override, version=v)
+     else:
+         __failed_to_detect_linker(compiler, check_args, o, e)
+     return linker
+diff --git a/mesonbuild/linkers/linkers.py b/mesonbuild/linkers/linkers.py
+index 0e181299baa7..6b66e9718559 100644
+--- a/mesonbuild/linkers/linkers.py
++++ b/mesonbuild/linkers/linkers.py
+@@ -910,6 +910,13 @@ def get_win_subsystem_args(self, value: str) -> T.List[str]:
+             raise mesonlib.MesonBugException(f'win_subsystem: {value} not handled in lld linker. This should not be possible.')
+ 
+ 
++class ZigCCDynamicLinker(LLVMDynamicLinker):
++    id = 'ld.zigcc'
++
++    def get_thinlto_cache_args(self, path: str) -> T.List[str]:
++        return []
++
++
+ class WASMDynamicLinker(GnuLikeDynamicLinkerMixin, PosixDynamicLinkerMixin, DynamicLinker):
+ 
+     """Emscripten's wasm-ld."""

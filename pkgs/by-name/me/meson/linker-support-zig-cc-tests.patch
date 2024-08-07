@@ -1,0 +1,25 @@
+From d4c501a9210c464603ab3df8ae526d41f89a3e2e Mon Sep 17 00:00:00 2001
+From: Tristan Ross <tristan.ross@midstall.com>
+Date: Tue, 30 Jul 2024 18:50:19 -0700
+Subject: [PATCH] linkers: Disable -rpath-link with ld.zigcc
+
+Zig issue https://github.com/ziglang/zig/issues/18713
+---
+ mesonbuild/linkers/linkers.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/mesonbuild/linkers/linkers.py b/mesonbuild/linkers/linkers.py
+index c3750ccc372f..40f228238fe9 100644
+--- a/mesonbuild/linkers/linkers.py
++++ b/mesonbuild/linkers/linkers.py
+@@ -705,7 +705,9 @@ def build_rpath_args(self, env: 'Environment', build_dir: str, from_dir: str,
+         args.extend(self._apply_prefix('-rpath,' + paths))
+ 
+         # TODO: should this actually be "for solaris/sunos"?
+-        if mesonlib.is_sunos():
++        # NOTE: Remove the zigcc check once zig support "-rpath-link"
++        # See https://github.com/ziglang/zig/issues/18713
++        if mesonlib.is_sunos() or self.id == 'ld.zigcc':
+             return (args, rpath_dirs_to_remove)
+ 
+         # Rpaths to use while linking must be absolute. These are not
