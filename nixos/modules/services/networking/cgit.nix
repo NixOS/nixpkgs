@@ -6,6 +6,7 @@ let
   cfgs = config.services.cgit;
 
   settingType = with types; oneOf [ bool int str ];
+  repeatedSettingType = with types; oneOf [ settingType (listOf settingType) ];
 
   genAttrs' = names: f: listToAttrs (map f names);
 
@@ -44,12 +45,20 @@ let
       toString value
   }";
 
+  # list value as multiple lines (for "readme" for example)
+  cgitrcEntry = name: value:
+    if isList value then
+      map (cgitrcLine name) value
+    else
+      [ (cgitrcLine name value) ];
+
   mkCgitrc = cfg: pkgs.writeText "cgitrc" ''
     # global settings
     ${concatStringsSep "\n" (
-        mapAttrsToList
-          cgitrcLine
+        flatten (mapAttrsToList
+          cgitrcEntry
           ({ virtual-root = cfg.nginx.location; } // cfg.settings)
+        )
       )
     }
     ${optionalString (cfg.scanPath != null) (cgitrcLine "scan-path" cfg.scanPath)}
@@ -125,7 +134,7 @@ in
 
           settings = mkOption {
             description = "cgit configuration, see cgitrc(5)";
-            type = types.attrsOf settingType;
+            type = types.attrsOf repeatedSettingType;
             default = {};
             example = literalExpression ''
               {
