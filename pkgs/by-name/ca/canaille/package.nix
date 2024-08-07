@@ -109,9 +109,7 @@ python.pkgs.buildPythonApplication rec {
     ];
     # This isn't defined by upstream actually, but seems to be required.
     # Possibly included by using the sqlalchemy[postgresql] extra?
-    postgresql = [
-      psycopg2
-    ];
+    postgresql = [ psycopg2 ];
   };
 
   passthru = {
