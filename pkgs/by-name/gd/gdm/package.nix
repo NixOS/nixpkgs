@@ -44,7 +44,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "46.2";
+  version = "47.alpha";
 
   outputs = [
     "out"
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/gdm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TuNFQioWU3FQzYQkUM2lKyyoaYS8Ue4gzcAl3PS9Jos=";
+    hash = "sha256-A1lcGdkSyPUOWYsDcGCXzBPLhT90NbfReJKMPvYOMag=";
   };
 
   mesonFlags = [
@@ -138,6 +138,12 @@ stdenv.mkDerivation (finalAttrs: {
     echo #!/bin/sh > build-aux/find-x-server.sh
     echo "echo ${lib.getBin xorg.xorgserver}/bin/X" >> build-aux/find-x-server.sh
     patchShebangs build-aux/find-x-server.sh
+
+    # Reverts https://gitlab.gnome.org/GNOME/gdm/-/commit/b0f802e36ff948a415bfd2bccaa268b6990515b7
+    # The gdm-auth-config tool is probably not too useful for NixOS, but we still want the dconf profile
+    # installed (mostly just because .passthru.tests can make use of it).
+    substituteInPlace meson.build \
+      --replace-fail "dconf_prefix = dconf_dep.get_variable(pkgconfig: 'prefix')" "dconf_prefix = gdm_prefix"
   '';
 
   preInstall = ''
@@ -156,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Ensure we did not forget to install anything.
     rmdir --parents --ignore-fail-on-non-empty "$DESTDIR${builtins.storeDir}"
-    ! test -e "$DESTDIR"
+    [ ! -e "$DESTDIR" ] || (echo "Some files are still left in a temporary DESTDIR and aren't properly installed."; exit 1)
 
     # We are setting DESTDIR so the post-install script does not compile the schemas.
     glib-compile-schemas "$out/share/glib-2.0/schemas"
