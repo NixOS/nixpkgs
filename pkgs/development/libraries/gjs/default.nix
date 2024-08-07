@@ -9,7 +9,7 @@
 , gtk3
 , atk
 , gobject-introspection
-, spidermonkey_115
+, spidermonkey_128
 , pango
 , cairo
 , readline
@@ -32,13 +32,13 @@ let
   ];
 in stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
-  version = "1.80.2";
+  version = "1.81.2";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-E145xaxZEJYjPlV8/ld9ZAk/UFRBHUfLLiFLrX1Bmb0=";
+    hash = "sha256-LwkwI5LXCI0B25YltzcfFypgE2Z7SuTPqNWgvRBUKdM=";
   };
 
   patches = [
@@ -70,7 +70,7 @@ in stdenv.mkDerivation (finalAttrs: {
     cairo
     readline
     libsysprof-capture
-    spidermonkey_115
+    spidermonkey_128
   ];
 
   nativeCheckInputs = [
