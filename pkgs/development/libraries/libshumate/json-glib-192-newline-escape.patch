@@ -1,0 +1,13 @@
+diff --git a/tests/vector-expression.c b/tests/vector-expression.c
+index 9e258fb..59d1d67 100644
+--- a/tests/vector-expression.c
++++ b/tests/vector-expression.c
+@@ -592,7 +592,7 @@ test_vector_expression_formatted_string ()
+   node = json_from_string ("[\"format\",\
+     \"Hello \",\
+     [\"concat\", \"world\", \"!\"], {\"font-scale\": 0.1},\
+-    \"\n\", {\"text-color\": [\"coalesce\", \"red\"]},\
++    \"\\n\", {\"text-color\": [\"coalesce\", \"red\"]},\
+     null,\
+     \"test\"\
+     ]", &error);
