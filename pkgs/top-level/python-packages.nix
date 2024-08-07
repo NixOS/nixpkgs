@@ -17479,6 +17479,8 @@ self: super: with self; {
 
   wyoming = callPackage ../development/python-modules/wyoming { };
 
+  x-transformers = callPackage ../development/python-modules/x-transformers { };
+
   x-wr-timezone = callPackage ../development/python-modules/x-wr-timezone { };
 
   x11-hash = callPackage ../development/python-modules/x11-hash { };
