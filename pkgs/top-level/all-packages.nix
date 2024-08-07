@@ -14134,6 +14134,8 @@ with pkgs;
 
   xbanish = callPackage ../tools/X11/xbanish { };
 
+  xbar = callPackage ../os-specific/darwin/xbar { };
+
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
   xdg-launch = callPackage ../applications/misc/xdg-launch { };
