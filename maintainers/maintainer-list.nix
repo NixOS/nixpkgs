@@ -6112,6 +6112,12 @@
     name = "Alexandre Iooss";
     keys = [ { fingerprint = "2D37 1AD2 7E2B BC77 97E1  B759 6C79 278F 3FCD CC02"; } ];
   };
+  e-renna = {
+    email = "nixpkgs@enricorenna.me";
+    github = "e-renna";
+    githubId = 115326412;
+    name = "Enrico Renna";
+  };
   ereslibre = {
     email = "ereslibre@ereslibre.es";
     matrix = "@ereslibre:matrix.org";
