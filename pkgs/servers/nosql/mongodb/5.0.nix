@@ -28,5 +28,9 @@ buildMongoDB {
     ./forget-build-dependencies-4-4.patch
     ./asio-no-experimental-string-view-4-4.patch
     ./fix-gcc-Wno-exceptions-5.0.patch
-  ] ++ variants.patches;
+  ] ++ variants.patches
+    ++ lib.optionals stdenv.isAarch64 [
+    # src/mongo/db/stats/counters.h:224:47: error: static assertion failed: cache line spill
+    ./mongodb-4.4.15-adjust-cache-alignment-assumptions.patch
+  ];
 }
