@@ -20,28 +20,31 @@ let
 
   commonDerivationAttrs = rec {
     pname = "lldap";
-    version = "0.5.0";
+    version = "0.5.1-alpha-6aa930";
 
     src = fetchFromGitHub {
       owner = "lldap";
       repo = "lldap";
-      rev = "v${version}";
-      hash = "sha256-2MEfwppkS9l3iHPNlkJB4tJnma0xMi0AckLv6wpzy1Y=";
+      # rev = "v${version}";
+      # hash = "";
+      rev = "6aa9303339ac1793b4be9ae01c56a6369a5d77f0";
+      hash = "sha256-UbkpnPvDoTaioB0g1HBvRczqUEuPlVuH1gIVBU07RpY=";
     };
+
+  };
+
+  frontend = rustPlatform.buildRustPackage (commonDerivationAttrs // {
+    pname = commonDerivationAttrs.pname + "-frontend";
 
     # `Cargo.lock` has git dependencies, meaning can't use `cargoHash`
     cargoLock = {
-      lockFile = ./Cargo.lock;
+      lockFile = ./Cargo.original.lock;
       outputHashes = {
         "lber-0.4.1" = "sha256-2rGTpg8puIAXggX9rEbXPdirfetNOHWfFc80xqzPMT4=";
         "opaque-ke-0.6.1" = "sha256-99gaDv7eIcYChmvOKQ4yXuaGVzo2Q6BcgSQOzsLF+fM=";
         "yew_form-0.1.8" = "sha256-1n9C7NiFfTjbmc9B5bDEnz7ZpYJo9ZT8/dioRXJ65hc=";
       };
     };
-  };
-
-  frontend = rustPlatform.buildRustPackage (commonDerivationAttrs // {
-    pname = commonDerivationAttrs.pname + "-frontend";
 
     nativeBuildInputs = [
       wasm-pack wasm-bindgen-84 binaryen which rustc rustc.llvmPackages.lld
@@ -60,11 +63,27 @@ let
   });
 
 in rustPlatform.buildRustPackage (commonDerivationAttrs // {
-
   cargoBuildFlags = [ "-p" "lldap" "-p" "lldap_migration_tool" "-p" "lldap_set_password" ];
 
+  # `Cargo.lock` has git dependencies, meaning can't use `cargoHash`
+  ## FIXME coalesce this back with frontend, after
+  ## https://github.com/lldap/lldap/issues/945
+  cargoLock = {
+    lockFile = ./Cargo.updated.lock;
+    outputHashes = {
+      "lber-0.4.3" = "sha256-67aa6QiTd/YTBJFjVxbNSkEPelgd8UAhoJBfkmxu2O0=";
+      "opaque-ke-0.6.1" = "sha256-99gaDv7eIcYChmvOKQ4yXuaGVzo2Q6BcgSQOzsLF+fM=";
+      "yew_form-0.1.8" = "sha256-1n9C7NiFfTjbmc9B5bDEnz7ZpYJo9ZT8/dioRXJ65hc=";
+    };
+  };
+
+  ## when cargo file is different from source
+  postUnpack = ''
+    cp ${./Cargo.updated.lock} $sourceRoot/Cargo.lock
+  '';
+
   patches = [
-    ./static-frontend-path.patch
+    ./0001-parameterize-frontend-location.patch
   ];
 
   postPatch = ''

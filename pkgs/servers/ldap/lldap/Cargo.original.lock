@@ -1351,8 +1351,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4e56602b469b2201400dec66a66aec5a9b8761ee97cd1b8c96ab2483fcc16cc9"
 dependencies = [
  "atomic",
+ "parking_lot",
  "pear",
  "serde",
+ "tempfile",
  "toml",
  "uncased",
  "version_check",
@@ -2364,9 +2366,9 @@ dependencies = [
 
 [[package]]
 name = "ldap3_proto"
-version = "0.4.0"
+version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "db993ebb4a1acda7ac25fa7e8609cff225a65f1f4a668e378eb252a1a6de433a"
+checksum = "a29eca0a9fef365d6d376a1b262e269a17b1c8c6de2cee76618642cd3c923506"
 dependencies = [
  "base64 0.21.0",
  "bytes",
@@ -2453,7 +2455,7 @@ checksum = "f051f77a7c8e6957c0696eac88f26b0117e54f52d3fc682ab19397a8812846a4"
 
 [[package]]
 name = "lldap"
-version = "0.5.0"
+version = "0.5.1-alpha"
 dependencies = [
  "actix",
  "actix-files",
@@ -2473,6 +2475,7 @@ dependencies = [
  "clap",
  "cron",
  "derive_builder",
+ "derive_more",
  "figment",
  "figment_file_provider_adapter",
  "futures",
@@ -2528,7 +2531,7 @@ dependencies = [
 
 [[package]]
 name = "lldap_app"
-version = "0.5.0"
+version = "0.5.1-alpha"
 dependencies = [
  "anyhow",
  "base64 0.13.1",
@@ -2569,6 +2572,7 @@ dependencies = [
  "opaque-ke",
  "rand 0.8.5",
  "rust-argon2",
+ "sea-orm",
  "serde",
  "sha2 0.9.9",
  "thiserror",
@@ -4893,9 +4897,9 @@ dependencies = [
 
 [[package]]
 name = "webpki"
-version = "0.22.1"
+version = "0.22.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f0e74f82d49d545ad128049b7e88f6576df2da6b02e9ce565c6f533be576957e"
+checksum = "07ecc0cd7cac091bf682ec5efa18b1cff79d617b84181f38b3951dbe135f607f"
 dependencies = [
  "ring",
  "untrusted",
