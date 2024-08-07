@@ -51,9 +51,15 @@ import ./make-test-python.nix (
     testScript =
       { nodes, ... }:
       ''
+        import json
+
         start_all()
         server.wait_for_unit("canaille.service")
-        client.wait_until_succeeds("curl -f https://${domain}/")
+        server.succeed("sudo -iu canaille -- canaille create user --user-name admin --password adminpass --emails admin@${domain}")
+        (rv, json_str) = server.execute("sudo -iu canaille -- canaille get user")
+        assert rv == 0
+        assert json.loads(json_str)[0]["user_name"] == "admin"
+        server.wait_until_succeeds("curl -f https://${domain}/login")
         server.succeed("sudo -iu canaille -- canaille check")
       '';
   }

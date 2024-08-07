@@ -120,6 +120,25 @@ in
       "L+ ${secretsDir}/SECRET_KEY - - - - ${cfg.secretKeyFile}"
     ];
 
+    # This is not a migration, just an initial setup of schemas
+    systemd.services.canaille-install = {
+      wantedBy = [ "canaille.service" "multi-user.target" ];
+      after = [
+        "postgresql.service"
+      ];
+      requires = [ "postgresql.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${finalPackage}/bin/canaille install";
+        WorkingDirectory = dataDir;
+        User = "canaille";
+        Group = "canaille";
+        StateDirectory = "canaille";
+        StateDirectoryMode = "0750";
+        PrivateTmp = true;
+      };
+    };
+
     systemd.services.canaille = {
       description = "Canaille";
       documentation = [ "https://canaille.readthedocs.io/en/latest/tutorial/deployment.html" ];
@@ -127,14 +146,14 @@ in
       after = [
         "network.target"
         "postgresql.target"
+        "canaille-install.service"
       ];
-      requires = [ "postgresql.service" "canaille.socket" ];
+      requires = [ "postgresql.service" "canaille.socket" "canaille-install.service" ];
       environment = {
         PYTHONPATH = "${pythonEnv}/${python.sitePackages}/";
         CONFIG = "/etc/canaille/config.toml";
         SECRETS_DIR = secretsDir;
       };
-      restartTriggers = [ "/etc/canaille/config.toml" ];
       serviceConfig = {
         WorkingDirectory = dataDir;
         User = "canaille";
@@ -143,7 +162,7 @@ in
         StateDirectoryMode = "0750";
         Restart = "on-failure";
         PrivateTmp = true;
-        ExecStart= let
+        ExecStart = let
           gunicorn = python.pkgs.gunicorn.overridePythonAttrs (old: {
             # Allows Gunicorn to set a meaningful process name
             dependencies = (old.dependencies or []) ++ old.optional-dependencies.setproctitle;
@@ -157,6 +176,7 @@ in
             'canaille:create_app()'
         '';
       };
+      restartTriggers = [ "/etc/canaille/config.toml" ];
     };
 
     systemd.sockets.canaille = {
