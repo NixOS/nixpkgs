@@ -7,20 +7,24 @@
   wrapGAppsHook4,
   gtk4,
   gtk4-layer-shell,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "walker";
-  version = "0.0.88";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "walker";
     rev = "v${version}";
-    hash = "sha256-1y4lXKpaNUoxjFJNhGn3e6wn/IPXNqHFeSetfyKoAXE=";
+    hash = "sha256-BuqxodieG5RUSXPkU1tFXiKtweM4uyJV71aIjh7GbVs=";
   };
 
-  vendorHash = "sha256-zDntJ695k8dbwyFXbg9PapWD335MHrWbep1xxzXNIL4=";
+  vendorHash = "sha256-2t6WXQ5XoDtnlhzc96KeJ2cx+8sVS1oy2z3tsIRGq1Y=";
+  subPackages = [ "cmd/walker.go" ];
+
+  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [
     pkg-config

@@ -3356,7 +3356,8 @@
     "pepco" = ps: with ps; [
     ];
     "permobil" = ps: with ps; [
-    ]; # missing inputs: mypermobil
+      mypermobil
+    ];
     "persistent_notification" = ps: with ps; [
     ];
     "person" = ps: with ps; [
@@ -5768,6 +5769,7 @@
     "panel_iframe"
     "peco"
     "pegel_online"
+    "permobil"
     "persistent_notification"
     "person"
     "philips_js"
