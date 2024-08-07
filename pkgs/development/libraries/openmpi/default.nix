@@ -116,8 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature cudaSupport "mca-dso")
     (lib.enableFeature fortranSupport "mpi-fortran")
     (lib.withFeatureAs stdenv.isLinux "libnl" (lib.getDev libnl))
-    "--with-pmix=${if stdenv.isLinux then (lib.getDev pmix) else "internal"}"
-    (lib.withFeatureAs stdenv.isLinux "pmix-libdir" "${lib.getLib pmix}/lib")
+    "--with-pmix=${lib.getDev pmix}"
+    "--with-pmix-libdir=${lib.getLib pmix}/lib"
     # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
     (lib.withFeatureAs stdenv.isLinux "prrte" (lib.getBin prrte))
     (lib.withFeature enableSGE "sge")
