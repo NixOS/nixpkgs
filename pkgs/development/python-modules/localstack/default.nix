@@ -18,6 +18,7 @@
   requests,
   rich,
   semver,
+  setuptools,
   tailer,
 }:
 
@@ -32,6 +33,8 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-MAECVYO6+1JqSZN8PFvHcMWizeYBUnU+7o7l48uwpv4=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [
     apispec
