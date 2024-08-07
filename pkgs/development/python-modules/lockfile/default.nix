@@ -4,7 +4,7 @@
   fetchPypi,
   setuptools,
   pbr,
-  nose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,18 +17,14 @@ buildPythonPackage rec {
     sha256 = "6aed02de03cba24efabcd600b30540140634fc06cfa603822d508d5361e9f799";
   };
 
+  patches = [ ./fix-tests.patch ];
+
   build-system = [
     pbr
     setuptools
   ];
 
-  nativeCheckInputs = [ nose ];
-
-  checkPhase = ''
-    runHook preCheck
-    nosetests
-    runHook postcheck
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://launchpad.net/pylockfile";
