@@ -27,9 +27,11 @@ buildPythonPackage rec {
     hash = "sha256-ebUFmI8p1XelipBpr+dVU6AqRuQt5gkcBmDNxngSutw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ wcwidth ];
+  dependencies = [ wcwidth ];
+
+  pythonImportsCheck = [ "ftfy" ];
 
   nativeCheckInputs = [
     versionCheckHook
