@@ -39,6 +39,7 @@ in
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
       hash =
         if version == "7.17.16" then "sha256-wgm6N5fofs5wTM25ZT3dJkg7iDesXsc3Up419IAY9gk="
+        else if version == "8.14.1" then "sha256-uRHsdYq9KUOEqG5OXkQWKla1pUI+6/BvVUFGj/SWx5M="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -55,6 +56,7 @@ in
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
       hash =
         if version == "7.17.16" then "sha256-SShdBcWfm21XoVhghSSiWIhsoXzG7wz6162iOmuf5EU="
+        else if version == "8.14.1" then "sha256-h+jkSrEp37XITu5+S8dgRcYScZpmQ5a2nuhP1rILsTI="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -64,7 +66,8 @@ in
     };
   };
 
-  analysis-lemmagen = esPlugin rec {
+  # analysis-lemmagen is not yet released for elasticsearch 8.14.1
+  analysis-lemmagen = lib.optional (esVersion == "7.17.16") (esPlugin rec {
     pluginName = "analysis-lemmagen";
     version = esVersion;
     src = fetchurl {
@@ -79,7 +82,7 @@ in
       license = licenses.asl20;
       broken = true; # Not released yet for ES 7.17.10
     };
-  };
+  });
 
   analysis-phonetic = esPlugin rec {
     pluginName = "analysis-phonetic";
@@ -88,6 +91,7 @@ in
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
       hash =
         if version == "7.17.16" then "sha256-S/Cp9opeLitFh2/3Qw7/MFt6GcYKufxXKD6cJSi3SaQ="
+        else if version == "8.14.1" then "sha256-RCzUfMCnaClGwNfEumM+wOdayROY0rdYBhMmO/nN3Mc="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -104,6 +108,7 @@ in
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
       hash =
         if version == "7.17.16" then "sha256-hMErTLd5fXg420Olz+j6Zv7WByA1aNq9FlEgCtkYIxY="
+        else if version == "8.14.1" then "sha256-u27u8CmYBB5lWWhN2df8gp035ojP2NL8VjFkErvS8dc="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -113,13 +118,15 @@ in
     };
   };
 
-  ingest-attachment = esPlugin rec {
+  # ingest attachment is not released for elasticsearch 8.14.1
+  ingest-attachment = lib.optional (esVersion == "7.17.16") (esPlugin rec {
     pluginName = "ingest-attachment";
     version = esVersion;
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
       hash =
         if version == "7.17.16" then "sha256-z0gfdx98urCzdQNlVn99CmteG6jweOmUDmGJW89twtU="
+        else if version == "8.14.1" then "sha256-wgm6m5fofs5wTM25ZT3dJkg7iDesXsc3Up419IAY9gk="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -127,15 +134,17 @@ in
       description = "Ingest processor that uses Apache Tika to extract contents";
       license = licenses.asl20;
     };
-  };
+  });
 
-  repository-s3 = esPlugin rec {
+  # repository-s3 is not released for elasticsearch 8.14.1
+  repository-s3 = lib.optional (esVersion == "7.17.16") (esPlugin rec {
     pluginName = "repository-s3";
     version = esVersion;
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${esVersion}.zip";
       hash =
         if version == "7.17.16" then "sha256-TWMN8jzFjzBVTUB+zn4tJr47VMXHC8U+014BvnArK8M="
+        else if version == "8.14.1" then "sha256-wgm6m5fofs5wTM25ZT3dJkg7iDesXsc3Up419IAY9gk="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -143,9 +152,10 @@ in
       description = "S3 repository plugin adds support for using AWS S3 as a repository for Snapshot/Restore";
       license = licenses.asl20;
     };
-  };
+  });
 
-  repository-gcs = esPlugin rec {
+  # repository-gcs is not released for elasticsearch 8.14.1
+  repository-gcs = lib.optional (esVersion == "7.17.16") (esPlugin rec {
     pluginName = "repository-gcs";
     version = esVersion;
     src = fetchurl {
@@ -159,11 +169,12 @@ in
       description = "GCS repository plugin adds support for using Google Cloud Storage as a repository for Snapshot/Restore";
       license = licenses.asl20;
     };
-  };
+  });
 
+  # Search Guard is not yet released for elasticsearch 8.14.1
   search-guard = let
     majorVersion = lib.head (builtins.splitVersion esVersion);
-  in esPlugin rec {
+  in lib.optional (esVersion == "7.17.16") (esPlugin rec {
     pluginName = "search-guard";
     version =
       # https://docs.search-guard.com/latest/search-guard-versions
@@ -181,5 +192,5 @@ in
       description = "Elasticsearch plugin that offers encryption, authentication, and authorisation";
       license = licenses.asl20;
     };
-  };
+  });
 }

@@ -117,6 +117,11 @@ let
               elasticsearch = {
                 enable = true;
                 package = elk.elasticsearch;
+                # starting with elastic8, security is enabled by default;
+                # thus we need to deactivate it.
+                extraConf = lib.optionalString (builtins.compareVersions elk.elasticsearch.version "8" >= 0) ''
+                  xpack.security.enabled: false
+                '';
               };
 
               elasticsearch-curator = {
@@ -271,6 +276,12 @@ in {
       logstash      = pkgs.logstash7;
       filebeat      = pkgs.filebeat7;
       metricbeat    = pkgs.metricbeat7;
+    };
+    ELK-8 = mkElkTest "elk-8" {
+      elasticsearch = pkgs.elasticsearch8;
+      logstash = pkgs.logstash8;
+      filebeat = pkgs.filebeat8;
+      metricbeat = pkgs.metricbeat8;
     };
   };
 }

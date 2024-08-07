@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.elasticsearch;
 
-  es7 = builtins.compareVersions cfg.package.version "7" >= 0;
+  es7 = builtins.compareVersions cfg.package.version "7" >= 0 && builtins.compareVersions cfg.package.version "8" < 0;
 
   esConfig = ''
     network.host: ${cfg.listenAddress}
@@ -211,10 +211,31 @@ in
         if [ "$(id -u)" = 0 ]; then chown -R elasticsearch:elasticsearch ${cfg.dataDir}; fi
       '';
       postStart = ''
-        # Make sure elasticsearch is up and running before dependents
-        # are started
-        while ! ${pkgs.curl}/bin/curl -sS -f http://${cfg.listenAddress}:${toString cfg.port} 2>/dev/null; do
-          sleep 1
+        # In elastic 8 we can't just  curl the api, because we might have no access to the instance, because security is enabled.
+        # We check whether we get a success http status code or an empty return from the server or an unauthorized access http status code.
+        while true; do
+          case "$(${pkgs.curl}/bin/curl -sS -f http://${cfg.listenAddress}:${toString cfg.port} -o /dev/null -w "%{exitcode},%{http_code}" 2> /dev/null)" in
+            0,* )
+              # Successful connected
+              break
+              ;;
+            22,401 )
+              # The connection was established, but we are not allowed to get an answer
+              # due to missing creadentials -> the service is running, but we cant obtain the requested page
+              # most likely if security is enabled, but xpack..security.http.ssl is disabled (ssl is provided by an
+              # other service)
+              break
+              ;;
+            52,* )
+              # empty response from server (see man curl for details)
+              # An empty response means, that an http request is sent to an https endpoint, and the server
+              # has dropped the request -> successful, because the service is available
+              break
+              ;;
+            *)
+              sleep 1
+              ;;
+          esac
         done
       '';
     };

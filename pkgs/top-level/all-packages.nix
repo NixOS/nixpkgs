@@ -4157,12 +4157,17 @@ with pkgs;
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
-  inherit (callPackages ../misc/logging/beats/7.x.nix { })
+  inherit (callPackages ../misc/logging/beats { })
     auditbeat7
+    auditbeat8
     filebeat7
+    filebeat8
     heartbeat7
+    heartbeat8
     metricbeat7
-    packetbeat7;
+    metricbeat8
+    packetbeat7
+    packetbeat8;
 
   auditbeat = auditbeat7;
   filebeat = filebeat7;
@@ -7580,16 +7585,23 @@ with pkgs;
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   # When updating make sure to update all plugins or they will break!
   elk7Version = "7.17.16";
+  elk8Version = "8.14.1";
 
   elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
     util-linux = util-linuxMinimal;
-    jre_headless = jdk11_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
+
   elasticsearch = elasticsearch7;
 
-  elasticsearchPlugins = recurseIntoAttrs (
-    callPackage ../servers/search/elasticsearch/plugins.nix {}
+  elasticsearch8Plugins = recurseIntoAttrs (
+    callPackage ../servers/search/elasticsearch/plugins.nix { elasticsearch = elasticsearch8; }
   );
+
+  elasticsearch7Plugins = recurseIntoAttrs (
+    callPackage ../servers/search/elasticsearch/plugins.nix { elasticsearch = elasticsearch7; }
+  );
+
+  elasticsearchPlugins = elasticsearch7Plugins;
 
   embree = callPackage ../development/libraries/embree { };
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
@@ -9516,15 +9528,23 @@ with pkgs;
 
   loganalyzer = libsForQt5.callPackage ../development/tools/loganalyzer { };
 
-  logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
+  logstash7 = (callPackage ../tools/misc/logstash {
     # https://www.elastic.co/support/matrix#logstash-and-jvm
     jre = jdk11_headless;
-  };
-  logstash7-oss = callPackage ../tools/misc/logstash/7.x.nix {
+  }).logstash7;
+
+  logstash7-oss = callPackage ../tools/misc/logstash {
     enableUnfree = false;
     # https://www.elastic.co/support/matrix#logstash-and-jvm
     jre = jdk11_headless;
   };
+
+  logstash8 = (callPackage ../tools/misc/logstash {}).logstash8;
+
+  logstash8-oss = (callPackage ../tools/misc/logstash {
+    enableUnfree = false;
+  }).logstash8;
+
   logstash = logstash7;
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
