@@ -10945,11 +10945,6 @@ with pkgs;
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
-  nzbhydra2 = callPackage ../servers/nzbhydra2 {
-    # Requires Java 17, not lower, not higher
-    jre = openjdk17;
-  };
-
   oapi-codegen = callPackage ../tools/networking/oapi-codegen { };
 
   oath-toolkit = callPackage ../tools/security/oath-toolkit { };
