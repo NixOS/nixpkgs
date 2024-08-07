@@ -189,13 +189,16 @@ in
       locations = {
         "/".proxyPass = "http://unix:///run/canaille.socket";
         "/static" = {
-          root = "${finalPackage}/${python.sitePackages}/canaille/static";
+          root = "${finalPackage}/${python.sitePackages}/canaille";
         };
-        "~* ^/static/.+\\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|woff2|svg)$".extraConfig = ''
-          access_log off;
-          expires 30d;
-          more_set_headers Cache-Control public;
-        '';
+        "~* ^/static/.+\\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|woff2|svg)$" = {
+          root = "${finalPackage}/${python.sitePackages}/canaille";
+          extraConfig = ''
+            access_log off;
+            expires 30d;
+            more_set_headers Cache-Control public;
+          '';
+        };
       };
     };
 
