@@ -27,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-SxHUnfAyVcVW4R9j0ONGzCXqGWdaeseP/QU3vNhMtI8=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     botocore
     fsspec
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pandas = [ pandas ];
     sqlalchemy = [ sqlalchemy ];
     arrow = [ pyarrow ];
