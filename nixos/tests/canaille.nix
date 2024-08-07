@@ -43,10 +43,12 @@ import ./make-test-python.nix (
         security.pki.certificateFiles = [ certs.ca.cert ];
       };
 
-    nodes.client = { nodes, ... }: {
-      networking.hosts."${nodes.server.networking.primaryIPAddress}" = [ "${domain}" ];
-      security.pki.certificateFiles = [ certs.ca.cert ];
-    };
+    nodes.client =
+      { nodes, ... }:
+      {
+        networking.hosts."${nodes.server.networking.primaryIPAddress}" = [ "${domain}" ];
+        security.pki.certificateFiles = [ certs.ca.cert ];
+      };
 
     testScript =
       { nodes, ... }:

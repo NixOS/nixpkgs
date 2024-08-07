@@ -33,7 +33,7 @@ let
       ++ old.optional-dependencies.sentry
       ++ old.optional-dependencies.sql
       ++ old.optional-dependencies.postgresql;
-    makeWrapperArgs = (old.makeWrapperArgs or []) ++ [
+    makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
       "--set CONFIG /etc/canaille/config.toml"
       "--set SECRETS_DIR \"${secretsDir}\""
     ];
@@ -122,10 +122,11 @@ in
 
     # This is not a migration, just an initial setup of schemas
     systemd.services.canaille-install = {
-      wantedBy = [ "canaille.service" "multi-user.target" ];
-      after = [
-        "postgresql.service"
+      wantedBy = [
+        "canaille.service"
+        "multi-user.target"
       ];
+      after = [ "postgresql.service" ];
       requires = [ "postgresql.service" ];
       serviceConfig = {
         Type = "oneshot";
@@ -148,7 +149,11 @@ in
         "postgresql.target"
         "canaille-install.service"
       ];
-      requires = [ "postgresql.service" "canaille.socket" "canaille-install.service" ];
+      requires = [
+        "postgresql.service"
+        "canaille.socket"
+        "canaille-install.service"
+      ];
       environment = {
         PYTHONPATH = "${pythonEnv}/${python.sitePackages}/";
         CONFIG = "/etc/canaille/config.toml";
@@ -162,19 +167,21 @@ in
         StateDirectoryMode = "0750";
         Restart = "on-failure";
         PrivateTmp = true;
-        ExecStart = let
-          gunicorn = python.pkgs.gunicorn.overridePythonAttrs (old: {
-            # Allows Gunicorn to set a meaningful process name
-            dependencies = (old.dependencies or []) ++ old.optional-dependencies.setproctitle;
-          });
-        in ''
-          ${gunicorn}/bin/gunicorn \
-            --name=canaille \
-            --bind='unix:///run/canaille.socket' \
-            --log-level debug \
-            --workers=2 \
-            'canaille:create_app()'
-        '';
+        ExecStart =
+          let
+            gunicorn = python.pkgs.gunicorn.overridePythonAttrs (old: {
+              # Allows Gunicorn to set a meaningful process name
+              dependencies = (old.dependencies or [ ]) ++ old.optional-dependencies.setproctitle;
+            });
+          in
+          ''
+            ${gunicorn}/bin/gunicorn \
+              --name=canaille \
+              --bind='unix:///run/canaille.socket' \
+              --log-level debug \
+              --workers=2 \
+              'canaille:create_app()'
+          '';
       };
       restartTriggers = [ "/etc/canaille/config.toml" ];
     };
