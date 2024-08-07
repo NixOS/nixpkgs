@@ -1,29 +1,49 @@
-From 2d6dd1c286eb57fbf968510318cafc94888b98de Mon Sep 17 00:00:00 2001
-From: OPNA2608 <christoph.neidahl@gmail.com>
-Date: Sun, 13 Jun 2021 21:56:03 +0200
-Subject: [PATCH] Darwin build fix
+From 339866ba796d6646f28a826b8c5f335b7b07182a Mon Sep 17 00:00:00 2001
+From: Bobby Rong <rjl931189261@126.com>
+Date: Thu, 5 Sep 2024 23:13:37 +0800
+Subject: [PATCH] build: Fix darwin build
 
+Fixes "unknown type name 'NSString'" and "undefined symbols for architecture
+arm64 __gspell_osx_get_preferred_spell_language" on darwin by restoring
+https://gitlab.gnome.org/GNOME/gspell/-/blob/1.12.2/gspell/Makefile.am#L148-L161.
 ---
- gspell/Makefile.am | 7 +++++++
- 1 file changed, 7 insertions(+)
+ gspell/meson.build | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/gspell/Makefile.am b/gspell/Makefile.am
-index 69ee421..7c58973 100644
---- a/gspell/Makefile.am
-+++ b/gspell/Makefile.am
-@@ -161,6 +162,12 @@ gspell_private_headers += \
- gspell_private_c_files += \
- 	gspell-osx.c
+diff --git a/gspell/meson.build b/gspell/meson.build
+index c5156a0..60a1271 100644
+--- a/gspell/meson.build
++++ b/gspell/meson.build
+@@ -57,6 +57,17 @@ gspell_private_c_files = [
+   'gspell-utils.c',
+ ]
  
-+libgspell_core_la_CFLAGS += \
-+	-xobjective-c
++gspell_static_lib_c_args = ['-DGSPELL_COMPILATION']
++gspell_static_lib_link_args = []
 +
-+libgspell_core_la_LDFLAGS += \
-+	-framework Cocoa
++if host_machine.system() == 'darwin'
++  GSPELL_PRIVATE_HEADERS += ['gspell-osx.h']
++  gspell_private_c_files += ['gspell-osx.c']
 +
- endif # OS_OSX
++  gspell_static_lib_c_args += ['-xobjective-c']
++  gspell_static_lib_link_args += ['-framework', 'Cocoa']
++endif
++
+ headers_install_dir = get_option('includedir') / '@0@-@1@/gspell/'.format(meson.project_name(), GSPELL_API_VERSION)
+ install_headers(
+   gspell_public_headers,
+@@ -81,9 +92,8 @@ gspell_static_lib = static_library(
+   pic: true, # gspell_static_lib is linked in a shared library.
+   include_directories: ROOT_INCLUDE_DIR,
+   dependencies: GSPELL_DEPS,
+-  c_args: [
+-    '-DGSPELL_COMPILATION',
+-  ],
++  c_args: gspell_static_lib_c_args,
++  link_args: gspell_static_lib_link_args,
+ )
  
- if HAVE_INTROSPECTION
+ # For unit tests, to be able to test private functions.
 -- 
-2.29.3
+GitLab
 
