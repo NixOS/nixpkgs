@@ -13379,6 +13379,12 @@
     githubId = 978196;
     name = "Michaël Faille";
   };
+  mikehorn = {
+    email = "mikehornproton@proton.me";
+    github = "MikeHorn-git";
+    githubId = 123373126;
+    name = "Mike Horn";
+  };
   mikesperber = {
     email = "sperber@deinprogramm.de";
     github = "mikesperber";

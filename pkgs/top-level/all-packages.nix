@@ -266,6 +266,8 @@ with pkgs;
 
   altserver-linux = callPackage ../tools/misc/altserver-linux { };
 
+  analyzeMFT = pkgs.python3Packages.callPackage ../tools/security/analyzeMFT { };
+
   archipelago-minecraft = callPackage ../by-name/ar/archipelago/package.nix { extraPackages = [jdk17]; };
 
   asciicam = callPackage ../applications/video/asciicam { };
