@@ -29,18 +29,36 @@ in
   imports = [
     (mkRemovedOptionModule [ "sdImage" "bootPartitionID" ] "The FAT partition for SD image now only holds the Raspberry Pi firmware files. Use firmwarePartitionID to configure that partition's ID.")
     (mkRemovedOptionModule [ "sdImage" "bootSize" ] "The boot files for SD image have been moved to the main ext4 partition. The FAT partition now only holds the Raspberry Pi firmware files. Changing its size may not be required.")
+    (mkRemovedOptionModule [ "sdImage" "populateFirmwareCommands" ] ''
+      Use sdImage.firmwarePartitionContents instead.
+
+      For example, if your sdImage.populateFirmwareCommands were:
+
+        '''
+          cp ''${pkgs.myBootLoader}/u-boot.bin firmware/
+        '''
+
+      You need to convert it to a derivation creating a directory:
+
+        pkgs.runCommand "myFirmware" {} '''
+          mkdir $out
+          cp ''${pkgs.myBootLoader}/u-boot.bin $out/
+        '''
+    '')
     ../../profiles/all-hardware.nix
   ];
 
   options.sdImage = {
     imageName = mkOption {
-      default = "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img";
+      type = types.str;
+      defaultText = literalExpression ''"''${config.sdImage.imageBaseName}-''${config.system.nixos.label}-''${pkgs.stdenv.hostPlatform.system}.img"'';
       description = ''
         Name of the generated image file.
       '';
     };
 
     imageBaseName = mkOption {
+      type = types.str;
       default = "nixos-sd-image";
       description = ''
         Prefix of the name of the generated image file.
@@ -106,16 +124,22 @@ in
       '';
     };
 
-    populateFirmwareCommands = mkOption {
-      example = literalExpression "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
+    firmwarePartitionContents = mkOption {
+      type = types.nullOr types.path;
+      default = null;
       description = ''
-        Shell commands to populate the ./firmware directory.
-        All files in that directory are copied to the
-        /boot/firmware partition on the SD image.
+        Directory representing /boot/firmware partition on the SD image.
+      '';
+      example = literalExpression ''
+        pkgs.runCommand "myFirmware" {} '''
+          mkdir $out
+          cp ''${pkgs.myBootLoader}/u-boot.bin $out/
+        '''
       '';
     };
 
     populateRootCommands = mkOption {
+      type = types.lines;
       example = literalExpression "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
       description = ''
         Shell commands to populate the ./files directory.
@@ -126,6 +150,7 @@ in
     };
 
     postBuildCommands = mkOption {
+      type = types.lines;
       example = literalExpression "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
       default = "";
       description = ''
@@ -168,6 +193,7 @@ in
       };
     };
 
+    sdImage.imageName = lib.mkDefault "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img";
     sdImage.storePaths = [ config.system.build.toplevel ];
 
     system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs,
@@ -227,9 +253,17 @@ in
 
         mkfs.vfat --invariant -i ${config.sdImage.firmwarePartitionID} -n ${config.sdImage.firmwarePartitionName} firmware_part.img
 
-        # Populate the files intended for /boot/firmware
-        mkdir firmware
-        ${config.sdImage.populateFirmwareCommands}
+        ${if (!isNull config.sdImage.firmwarePartitionContents)
+          then
+          ''
+          # Copy the files intended for /boot/firmware
+          test -d ${config.sdImage.firmwarePartitionContents} \
+              || (echo "Output of sdImage.firmwarePartitionContents is not a directory"; exit 1)
+          cp -rv ${config.sdImage.firmwarePartitionContents} firmware
+          ''
+          else
+          "mkdir firmware"
+        }
 
         find firmware -exec touch --date=2000-01-01 {} +
         # Copy the populated /boot/firmware into the SD image

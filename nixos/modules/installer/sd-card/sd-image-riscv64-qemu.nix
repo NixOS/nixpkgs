@@ -23,7 +23,6 @@
   boot.kernelParams = [ "console=tty0" "console=ttyS0,115200n8" ];
 
   sdImage = {
-    populateFirmwareCommands = "";
     populateRootCommands = ''
       mkdir -p ./files/boot
       ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot

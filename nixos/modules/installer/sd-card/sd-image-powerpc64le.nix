@@ -24,7 +24,6 @@
   boot.kernelParams = [ "console=hvc0" ];
 
   sdImage = {
-    populateFirmwareCommands = "";
     populateRootCommands = ''
       mkdir -p ./files/boot
       ${config.boot.loader.generic-extlinux-compatible.populateCmd} \
