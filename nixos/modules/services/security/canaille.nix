@@ -134,6 +134,7 @@ in
         CONFIG = "/etc/canaille/config.toml";
         SECRETS_DIR = secretsDir;
       };
+      restartTriggers = [ "/etc/canaille/config.toml" ];
       serviceConfig = {
         WorkingDirectory = dataDir;
         User = "canaille";
