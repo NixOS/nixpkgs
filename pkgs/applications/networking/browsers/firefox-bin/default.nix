@@ -31,6 +31,7 @@ let
   mozillaPlatforms = {
     i686-linux = "linux-i686";
     x86_64-linux = "linux-x86_64";
+    aarch64-linux = "linux-aarch64";
   };
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};
