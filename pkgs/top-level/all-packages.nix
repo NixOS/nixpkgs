@@ -28610,8 +28610,6 @@ with pkgs;
 
   takao = callPackage ../data/fonts/takao { };
 
-  taskspooler = callPackage ../tools/system/taskspooler { };
-
   tamsyn = callPackage ../data/fonts/tamsyn { };
 
   tamzen = callPackage ../data/fonts/tamzen { };
