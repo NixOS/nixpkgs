@@ -121,6 +121,8 @@ let
       smpl = callPackage ../development/coq-modules/smpl { };
       smtcoq = callPackage ../development/coq-modules/smtcoq { };
       ssprove = callPackage ../development/coq-modules/ssprove {};
+      stalmarck-tactic = callPackage ../development/coq-modules/stalmarck {};
+      stalmarck = self.stalmarck-tactic.stalmarck;
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};

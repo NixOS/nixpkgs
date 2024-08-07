@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.75.0";
+  version = "0.72.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +39,10 @@ buildPythonPackage rec {
   ] ++ markdown-it-py.optional-dependencies.plugins ++ markdown-it-py.optional-dependencies.linkify;
 
   optional-dependencies = {
-    syntax = [ tree-sitter ] ++ lib.optionals (pythonOlder "3.12") [ tree-sitter-languages ];
+    syntax = [
+      tree-sitter
+      tree-sitter-languages
+    ];
   };
 
   nativeCheckInputs = [
@@ -48,7 +51,8 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
     time-machine
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    tree-sitter
+  ];
 
   disabledTestPaths = [
     # Snapshot tests require syrupy<4
