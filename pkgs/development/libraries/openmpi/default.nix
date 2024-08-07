@@ -193,8 +193,8 @@ stdenv.mkDerivation (finalAttrs: {
         ];
         part2 = builtins.attrNames wrapperDataSubstitutions;
       };
-    in lib.optionalString stdenv.isLinux
-    ''
+    in
+    lib.optionalString stdenv.isLinux ''
       find $out/lib/ -name "*.la" -exec rm -f \{} \;
 
       # The main wrapper that all the rest of the commonly used binaries are
