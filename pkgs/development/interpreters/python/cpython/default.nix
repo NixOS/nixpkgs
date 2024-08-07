@@ -1,4 +1,5 @@
-{ lib
+{ config
+, lib
 , stdenv
 , fetchurl
 , fetchpatch
@@ -64,7 +65,7 @@
 
 # pgo (not reproducible) + -fno-semantic-interposition
 # https://docs.python.org/3/using/configure.html#cmdoption-enable-optimizations
-, enableOptimizations ? false
+, enableOptimizations ? config.allowUnreproducibleOptimizations
 
 # improves performance, but remains reproducible
 , enableNoSemanticInterposition ? true

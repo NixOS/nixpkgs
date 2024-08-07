@@ -82,6 +82,9 @@ let
   allowBroken = config.allowBroken
     || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
+  allowUnreproducibleOptimizations = config.allowUnreproducibleOptimizations
+    || builtins.getEnv "NIXPKGS_ALLOW_UNREPRODUCIBLE_OPTIMIZATIONS" == "1";
+
   allowUnsupportedSystem = config.allowUnsupportedSystem
     || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
 

@@ -116,6 +116,16 @@ let
       '';
     };
 
+    allowUnreproducibleOptimizations = mkOption {
+      type = types.bool;
+      default = false;
+      # getEnv part is in check-meta.nix
+      defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_UNREPRODUCIBLE_OPTIMIZATIONS" == "1"'';
+      description = ''
+        Whether to allow unreproducible optimizations.
+      '';
+    };
+
     allowUnsupportedSystem = mkOption {
       type = types.bool;
       default = false;
