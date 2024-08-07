@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 *.woff2 -t $out/share/fonts/woff2
 
     for f in *.fnt; do fnt2psf $f $(basename -- $f .fnt).psf; done
-    install -Dm644 *.psf -t $out/share/fonts/misc
+    install -Dm644 *.psf -t $out/share/consolefonts
 
     runHook postInstall
   '';
