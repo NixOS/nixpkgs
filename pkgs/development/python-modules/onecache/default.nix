@@ -4,7 +4,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  python,
   poetry-core,
   pytest,
 }:
@@ -25,7 +24,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  nativeCheckInputs = [ pkgs.poetry pytest ];
+  nativeCheckInputs = [
+    pkgs.poetry
+    pytest
+  ];
 
   checkPhase = ''
     export HOME="$(mktemp -d)"
