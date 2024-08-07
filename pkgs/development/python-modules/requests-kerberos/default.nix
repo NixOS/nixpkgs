@@ -30,18 +30,12 @@ buildPythonPackage rec {
     requests
     pykerberos
     pyspnego
-  ];
+  ] ++ pyspnego.optional-dependencies.kerberos;
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ];
-
-  # avoid needing to package krb5
-  postPatch = ''
-    substituteInPlace setup.py \
-    --replace "pyspnego[kerberos]" "pyspnego"
-  '';
 
   pythonImportsCheck = [ "requests_kerberos" ];
 
