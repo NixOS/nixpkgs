@@ -4,13 +4,11 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  python,
   poetry-core,
   # install_requires
   charset-normalizer,
   h2,
   onecache,
-  setuptools,
   pytest,
 }:
 
@@ -33,9 +31,17 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [ charset-normalizer onecache h2 ];
+  propagatedBuildInputs = [
+    charset-normalizer
+    onecache
+    h2
+  ];
 
-  nativeCheckInputs = [ pkgs.poetry pytest pkgs.nodejs ];
+  nativeCheckInputs = [
+    pkgs.poetry
+    pytest
+    pkgs.nodejs
+  ];
 
   checkPhase = ''
     export HOME="$(mktemp -d)"
