@@ -20126,6 +20126,11 @@
     githubId = 38222826;
     name = "Aamaruvi Yogamani";
   };
+  technobaboo = {
+    github = "technobaboo";
+    githubId = 4541968;
+    name = "Nova King";
+  };
   teh = {
     email = "tehunger@gmail.com";
     github = "teh";
