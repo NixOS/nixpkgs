@@ -1,36 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
   pythonOlder,
   pyserial,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "modbus-tk";
-  version = "1.1.1";
+  version = "1.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
-  src = fetchFromGitHub {
-    owner = "ljean";
-    repo = "modbus-tk";
-    rev = "refs/tags/${version}";
-    hash = "sha256-zikfVMFdlOJvuKVQGEsK03i58X6BGFsGWGrGOJZGC0g=";
+  src = fetchPypi {
+    pname = "modbus_tk";
+    inherit version;
+    hash = "sha256-aQ+nu4bql4mSRl0tYci1rMY5zg6LgzoKqW1N0XLFZEo=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ pyserial ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  # Source no tagged anymore and PyPI doesn't ship tests
+  doCheck = false;
 
   pythonImportsCheck = [ "modbus_tk" ];
-
-  pytestFlagsArray = [ "tests/unittest_*.py" ];
 
   meta = with lib; {
     description = "Module for simple Modbus interactions";
