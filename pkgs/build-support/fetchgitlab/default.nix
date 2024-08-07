@@ -32,5 +32,8 @@ let
   }) // passthruAttrs // { inherit name; };
 in
 
-fetcher fetcherArgs // { meta.homepage = "${protocol}://${domain}/${slug}/"; inherit rev owner repo; }
-)
+fetcher fetcherArgs // {
+  meta.homepage = "${protocol}://${domain}/${slug}/";
+  meta.repository = [ gitRepoUrl ];
+  inherit rev owner repo;
+})

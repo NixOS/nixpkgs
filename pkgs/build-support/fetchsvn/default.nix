@@ -56,4 +56,6 @@ stdenvNoCC.mkDerivation {
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars;
   inherit preferLocalBuild;
+
+  meta.repository = [ url ];
 }
