@@ -1,21 +1,12 @@
 {
+  pkgs,
   lib,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
   python,
   poetry-core,
-  # install_requires
-  autopep8,
-  sphinx,
-  pylint,
-  # tests_require
-  flake8,
-  flake8-docstrings,
   pytest,
-  pytest-asyncio,
-  pytest-sugar,
-  pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -32,9 +23,15 @@ buildPythonPackage rec {
     hash = "sha256-go/3HntSLzzTmHS9CxGPHT6mwXl+6LuWFmkGygGIjqU=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
+
+  nativeCheckInputs = [ pkgs.poetry pytest ];
+
+  checkPhase = ''
+    export HOME="$(mktemp -d)"
+    poetry install
+    poetry run pytest --cov-append
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/sonic182/onecache/blob/${version}/CHANGELOG.md";
