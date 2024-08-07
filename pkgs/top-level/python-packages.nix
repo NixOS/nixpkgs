@@ -7194,6 +7194,7 @@ self: super: with self; {
   };
 
   llm = callPackage ../development/python-modules/llm { };
+  llm-clip = callPackage ../development/python-modules/llm-clip { };
 
   llmx = callPackage ../development/python-modules/llmx { };
 
