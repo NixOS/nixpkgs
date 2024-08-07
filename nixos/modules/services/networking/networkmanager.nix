@@ -1,40 +1,85 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
-  cfg = config.networking.networkmanager;
-  ini = pkgs.formats.ini { };
+  inherit (builtins)
+    isInt
+    isBool
+    isString toString
+    concatStringsSep
+    attrNames
+    listToAttrs
+    ;
 
-  delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [ ];
+  inherit (lib)
+    imap1
+
+    concatMapStringsSep
+    mapAttrsToList
+    filterAttrs
+    filterAttrsRecursive
+    recursiveUpdate
+    concatStrings
+    optional
+    optionals
+    optionalAttrs
+
+    makeBinPath
+    escapeShellArg
+
+    assertMsg
+
+    types
+    mkOption
+    mkPackageOption
+    mdDoc
+    literalExpression
+
+    mkIf
+    mkRenamedOptionModule
+    mkRemovedOptionModule
+
+    teams
+    ;
+
+  cfg = config.networking.networkmanager;
+
+  delegateWireless = config.networking.wireless.enable && cfg.unmanaged != [ ];
 
   enableIwd = cfg.wifi.backend == "iwd";
 
-  configAttrs = lib.recursiveUpdate {
+  configAttrs = recursiveUpdate {
     main = {
       plugins = "keyfile";
       inherit (cfg) dhcp dns;
+
       # If resolvconf is disabled that means that resolv.conf is managed by some other module.
       rc-manager =
-        if config.networking.resolvconf.enable then "resolvconf"
-        else "unmanaged";
+        if config.networking.resolvconf.enable
+          then "resolvconf"
+          else "unmanaged";
     };
+
     keyfile = {
       unmanaged-devices =
-      if cfg.unmanaged == [ ] then null
-      else lib.concatStringsSep ";" cfg.unmanaged;
+        if cfg.unmanaged == [ ]
+          then null
+          else lib.concatStringsSep ";" cfg.unmanaged;
     };
+
     logging = {
       audit = config.security.audit.enable;
       level = cfg.logLevel;
     };
+
     connection = cfg.connectionConfig;
+
     device = {
         "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
         "wifi.backend" = cfg.wifi.backend;
     };
   } cfg.settings;
-  configFile = ini.generate "NetworkManager.conf" configAttrs;
+
+  configFile = lib.ini.generate "NetworkManager.conf" configAttrs;
 
   /*
     [network-manager]
@@ -62,20 +107,27 @@ let
     });
   '';
 
-  ns = xs: pkgs.writeText "nameservers" (
-    concatStrings (map (s: "nameserver ${s}\n") xs)
-  );
+  overrideNameserversScript = let
+    binPath = makeBinPath [ pkgs.gnused pkgs.gnugrep pkgs.coreutils ];
 
-  overrideNameserversScript = pkgs.writeScript "02overridedns" ''
-    #!/bin/sh
-    PATH=${with pkgs; makeBinPath [ gnused gnugrep coreutils ]}
-    tmp=$(mktemp)
-    sed '/nameserver /d' /etc/resolv.conf > $tmp
-    grep 'nameserver ' /etc/resolv.conf | \
-      grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
-    cat $tmp ${ns cfg.insertNameservers} $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf
-    rm -f $tmp $tmp.ns
-  '';
+    ns = xs: pkgs.writeText "nameservers"
+      (concatStrings (map (s: "nameserver ${s}\n") xs));
+  in
+    pkgs.writeScript "02overridedns" ''
+      #!/bin/sh
+
+      PATH=${binPath}
+      tmp=$(mktemp)
+
+      sed '/nameserver /d' /etc/resolv.conf > $tmp
+
+      grep 'nameserver ' /etc/resolv.conf | \
+        grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
+
+      cat $tmp ${ns cfg.insertNameservers} $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf
+
+      rm -f $tmp $tmp.ns
+    '';
 
   dispatcherTypesSubdirMap = {
     basic = "";
@@ -114,15 +166,13 @@ let
     '';
   };
 
-  packages = [
-    pkgs.modemmanager
-    pkgs.networkmanager
-  ]
-  ++ cfg.plugins
-  ++ lib.optionals (!delegateWireless && !enableIwd) [
-    pkgs.wpa_supplicant
-  ];
+  nmPackage = cfg.package;
+  mmPackage = cfg.modemmanager.package;
 
+  packages =
+    [ mmPackage nmPackage ]
+      ++ cfg.plugins
+      ++ lib.optionals (!delegateWireless && !enableIwd) [ pkgs.wpa_supplicant ];
 in
 {
 
@@ -148,12 +198,14 @@ in
         '';
       };
 
+      package = mkPackageOption pkgs "networkmanager" { };
+
+      modemmanager.package = mkPackageOption pkgs "modemmanager" { };
+
       connectionConfig = mkOption {
-        type = with types; attrsOf (nullOr (oneOf [
-          bool
-          int
-          str
-        ]));
+        type = let t = types; in
+          t.attrsOf (t.nullOr (t.oneOf [ t.bool t.int t.str ]));
+
         default = { };
         description = ''
           Configuration for the [connection] section of NetworkManager.conf.
@@ -198,24 +250,22 @@ in
       };
 
       plugins = mkOption {
-        type =
-          let
-            networkManagerPluginPackage = types.package // {
-              description = "NetworkManager plug-in";
-              check =
-                p:
-                lib.assertMsg
-                  (types.package.check p
-                    && p ? networkManagerPlugin
-                    && lib.isString p.networkManagerPlugin)
-                  ''
-                    Package ‘${p.name}’, is not a NetworkManager plug-in.
-                    Those need to have a ‘networkManagerPlugin’ attribute.
-                  '';
-            };
-          in
+        type = let
+          networkManagerPluginPackage = types.package // {
+            description = "NetworkManager plug-in";
+            check = p: assertMsg
+              (types.package.check p
+                && isString (p.networkManagerPlugin or null))
+              ''
+                Package ‘${p.name}’, is not a NetworkManager plug-in.
+                Those need to have a ‘networkManagerPlugin’ attribute.
+              '';
+          };
+        in
           types.listOf networkManagerPluginPackage;
+
         default = [ ];
+
         description = ''
           List of NetworkManager plug-ins to enable.
           Some plug-ins are enabled by the NetworkManager module by default.
@@ -365,40 +415,49 @@ in
               type = types.str;
               description = "vid:pid of either the PCI or USB vendor and product ID";
             };
+
             path = mkOption {
               type = types.path;
               description = "Path to the unlock script";
             };
           };
         });
+
         default = [ ];
+
         example = literalExpression ''[{ id = "03f0:4e1d"; path = "''${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/03f0:4e1d"; }]'';
+
         description = ''
           List of FCC unlock scripts to enable on the system, behaving as described in
           https://modemmanager.org/docs/modemmanager/fcc-unlock/#integration-with-third-party-fcc-unlock-tools.
         '';
       };
+
       ensureProfiles = {
-        profiles = with lib.types; mkOption {
-          type = attrsOf (submodule {
-            freeformType = ini.type;
+        profiles = let t = lib.types; in mkOption {
+          type = t.attrsOf (t.submodule {
+            freeformType = (pkgs.formats.ini { }).type;
 
             options = {
               connection = {
-                id = lib.mkOption {
-                  type = str;
+                id = mkOption {
+                  type = t.str;
                   description = "This is the name that will be displayed by NetworkManager and GUIs.";
                 };
-                type = lib.mkOption {
-                  type = str;
+
+                type = mkOption {
+                  type = t.str;
                   description = "The connection type defines the connection kind, like vpn, wireguard, gsm, wifi and more.";
                   example = "vpn";
                 };
               };
             };
           });
-          apply = (lib.filterAttrsRecursive (n: v: v != { }));
+
+          apply = filterAttrsRecursive (n: v: v != { });
+
           default = { };
+
           example = {
             home-wifi = {
               connection = {
@@ -406,20 +465,24 @@ in
                 type = "wifi";
                 permissions = "";
               };
+
               wifi = {
                 mac-address-blacklist = "";
                 mode = "infrastructure";
                 ssid = "Home Wi-Fi";
               };
+
               wifi-security = {
                 auth-alg = "open";
                 key-mgmt = "wpa-psk";
                 psk = "$HOME_WIFI_PASSWORD";
               };
+
               ipv4 = {
                 dns-search = "";
                 method = "auto";
               };
+
               ipv6 = {
                 addr-gen-mode = "stable-privacy";
                 dns-search = "";
@@ -427,6 +490,7 @@ in
               };
             };
           };
+
           description = ''
             Declaratively define NetworkManager profiles. You can find information about the generated file format [here](https://networkmanager.dev/docs/api/latest/nm-settings-keyfile.html) and [here](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/assembly_networkmanager-connection-profiles-in-keyfile-format_configuring-and-managing-networking).
             You current profiles which are most likely stored in `/etc/NetworkManager/system-connections` and there is [a tool](https://github.com/janik-haag/nm2nix) to convert them to the needed nix code.
@@ -437,10 +501,14 @@ in
             If `networking.resolvconf.enable` is true, attributes affecting the name resolution (such as `ignore-auto-dns`) may not end up changing `/etc/resolv.conf` as expected when other name services (for example `networking.dhcpcd`) are enabled. Run `resolvconf -l` in the terminal to see what each service produces.
           '';
         };
+
         environmentFiles = mkOption {
-          default = [];
           type = types.listOf types.path;
+
+          default = [];
+
           example = [ "/run/secrets/network-manager.env" ];
+
           description = ''
             Files to load as environment file. Environment variables from this file
             will be substituted into the static configuration file using [envsubst](https://github.com/a8m/envsubst).
@@ -455,10 +523,12 @@ in
       [ "networking" "networkmanager" "packages" ]
       [ "networking" "networkmanager" "plugins" ]
     )
+
     (mkRenamedOptionModule
       [ "networking" "networkmanager" "useDnsmasq" ]
       [ "networking" "networkmanager" "dns" ]
     )
+
     (mkRemovedOptionModule [ "networking" "networkmanager" "extraConfig" ] ''
       This option was removed in favour of `networking.networkmanager.settings`,
       which accepts structured nix-code equivalent to the ini
@@ -475,6 +545,7 @@ in
       ```
     ''
     )
+
     (mkRemovedOptionModule [ "networking" "networkmanager" "enableFccUnlock" ] ''
       This option was removed, because using bundled FCC unlock scripts is risky,
       might conflict with vendor-provided unlock scripts, and should
@@ -482,6 +553,7 @@ in
       Instead it's recommended to use the
       `networking.networkmanager.fccUnlockScripts` option.
     '')
+
     (mkRemovedOptionModule [ "networking" "networkmanager" "dynamicHosts" ] ''
       This option was removed because allowing (multiple) regular users to
       override host entries affecting the whole system opens up a huge attack
@@ -490,6 +562,7 @@ in
       them via the DNS server in your network, or use environment.etc
       to add a file into /etc/NetworkManager/dnsmasq.d reconfiguring hostsdir.
     '')
+
     (mkRemovedOptionModule [ "networking" "networkmanager" "firewallBackend" ] ''
       This option was removed as NixOS is now using iptables-nftables-compat even when using iptables, therefore Networkmanager now uses the nftables backend unconditionally.
     '')
@@ -502,40 +575,60 @@ in
 
     assertions = [
       {
-        assertion = config.networking.wireless.enable == true -> cfg.unmanaged != [ ];
+        assertion = config.networking.wireless.enable -> cfg.unmanaged != [ ];
         message = ''
-          You can not use networking.networkmanager with networking.wireless.
-          Except if you mark some interfaces as <literal>unmanaged</literal> by NetworkManager.
+          You cannot use networking.networkmanager with networking.wireless,
+          except if you mark some interfaces as <literal>unmanaged</literal> by NetworkManager.
         '';
       }
     ];
 
     hardware.wirelessRegulatoryDatabase = true;
 
-    environment.etc = {
-      "NetworkManager/NetworkManager.conf".source = configFile;
-    }
-    // builtins.listToAttrs (map
-      (pkg: nameValuePair "NetworkManager/${pkg.networkManagerPlugin}" {
-        source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
-      })
-      cfg.plugins)
-    // builtins.listToAttrs (map
-      (e: nameValuePair "ModemManager/fcc-unlock.d/${e.id}" {
-        source = e.path;
-      })
-      cfg.fccUnlockScripts)
-    // optionalAttrs (cfg.appendNameservers != [ ] || cfg.insertNameservers != [ ])
-      {
-        "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
-      }
-    // listToAttrs (lib.imap1
-      (i: s:
+    environment.etc = let
+      nmConf = {
+        "NetworkManager/NetworkManager.conf".source = configFile;
+      };
+
+      plugins = listToAttrs
+        (map
+          (pkg: {
+            name = "NetworkManager/${pkg.networkManagerPlugin}";
+            value.source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
+          })
+          cfg.plugins);
+
+      fccUnlockScripts = listToAttrs
+        (map
+          (e: {
+            name = "ModemManager/fcc-unlock.d/${e.id}";
+            value.source = e.path;
+          })
+          cfg.fccUnlockScripts);
+
+      overrideNameservers = optionalAttrs
+        (cfg.appendNameservers != [ ] || cfg.insertNameservers != [ ])
         {
-          name = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
-          value = { mode = "0544"; inherit (s) source; };
-        })
-      cfg.dispatcherScripts);
+          "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
+        };
+
+      dispatcherScripts = listToAttrs
+        (imap1
+          (i: s: let
+            prefix = dispatcherTypesSubdirMap.${s.type};
+            suffix = lib.fixedWidthNumber 4 i;
+          in {
+            name = "NetworkManager/dispatcher.d/${prefix}03userscript${suffix}";
+            value = { mode = "0544"; inherit (s) source; };
+          })
+          cfg.dispatcherScripts);
+    in
+      nmConf
+        // plugins
+        // fccUnlockScripts
+        // overrideNameservers
+        // dispatcherScripts
+        ;
 
     environment.systemPackages = packages;
 
@@ -550,6 +643,7 @@ in
         group = "nm-openvpn";
         extraGroups = [ "networkmanager" ];
       };
+
       nm-iodine = {
         isSystemUser = true;
         group = "networkmanager";
@@ -586,7 +680,7 @@ in
 
     systemd.services.ModemManager = {
       aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
-      path = lib.optionals (cfg.fccUnlockScripts != []) [ pkgs.libqmi pkgs.libmbim ];
+      path = optionals (cfg.fccUnlockScripts != []) [ pkgs.libqmi pkgs.libmbim ];
     };
 
     systemd.services.NetworkManager-dispatcher = {
@@ -603,17 +697,32 @@ in
       wantedBy = [ "multi-user.target" ];
       before = [ "network-online.target" ];
       after = [ "NetworkManager.service" ];
+
       script = let
-        path = id: "/run/NetworkManager/system-connections/${id}.nmconnection";
+        substProfile = profile: let
+          ini = pkgs.formats.ini { };
+
+          connectionPath = id:
+            "/run/NetworkManager/system-connections/${id}.nmconnection";
+
+          inputPath = ini.generate (escapeShellArg profile.n) profile.v;
+          outputPath = connectionPath (escapeShellArg profile.n);
+        in ''
+          ${pkgs.envsubst}/bin/envsubst -i ${inputPath} > ${outputPath}
+        '';
+
+        attrsToList = mapAttrsToList (n: v: { inherit n v; });
+
+        profileScript = concatMapStringsSep "\n"
+          substProfile
+          (attrsToList cfg.ensureProfiles.profiles);
+
       in ''
         mkdir -p /run/NetworkManager/system-connections
-      '' + lib.concatMapStringsSep "\n"
-        (profile: ''
-          ${pkgs.envsubst}/bin/envsubst -i ${ini.generate (lib.escapeShellArg profile.n) profile.v} > ${path (lib.escapeShellArg profile.n)}
-        '') (lib.mapAttrsToList (n: v: { inherit n v; }) cfg.ensureProfiles.profiles)
-      + ''
-        ${pkgs.networkmanager}/bin/nmcli connection reload
+        ${profileScript}
+        ${nmPackage}/bin/nmcli connection reload
       '';
+
       serviceConfig = {
         EnvironmentFile = cfg.ensureProfiles.environmentFiles;
         UMask = "0177";
@@ -621,43 +730,35 @@ in
       };
     };
 
-    # Turn off NixOS' network management when networking is managed entirely by NetworkManager
-    networking = mkMerge [
-      (mkIf (!delegateWireless) {
-        useDHCP = false;
-      })
+    networking = {
+      # Turn off NixOS' network management when networking is managed entirely by NetworkManager
+      useDHCP = mkIf (!delegateWireless) false;
 
-      {
-        networkmanager.plugins = with pkgs; [
-          networkmanager-fortisslvpn
-          networkmanager-iodine
-          networkmanager-l2tp
-          networkmanager-openconnect
-          networkmanager-openvpn
-          networkmanager-vpnc
-          networkmanager-sstp
-        ];
-      }
+      networkmanager.plugins = [
+        pkgs.networkmanager-fortisslvpn
+        pkgs.networkmanager-iodine
+        pkgs.networkmanager-l2tp
+        pkgs.networkmanager-openconnect
+        pkgs.networkmanager-openvpn
+        pkgs.networkmanager-vpnc
+        pkgs.networkmanager-sstp
+      ] ++ optional cfg.enableStrongSwan pkgs.networkmanager_strongswan;
 
-      (mkIf cfg.enableStrongSwan {
-        networkmanager.plugins = [ pkgs.networkmanager_strongswan ];
-      })
+      wireless.iwd.enable = mkIf enableIwd true;
 
-      (mkIf enableIwd {
-        wireless.iwd.enable = true;
-      })
+      networkmanager.connectionConfig = {
+        "ethernet.cloned-mac-address" = cfg.ethernet.macAddress;
+        "wifi.cloned-mac-address" = cfg.wifi.macAddress;
 
-      {
-        networkmanager.connectionConfig = {
-          "ethernet.cloned-mac-address" = cfg.ethernet.macAddress;
-          "wifi.cloned-mac-address" = cfg.wifi.macAddress;
-          "wifi.powersave" =
-            if cfg.wifi.powersave == null then null
-            else if cfg.wifi.powersave then 3
-            else 2;
-        };
-      }
-    ];
+        "wifi.powersave" =
+          if cfg.wifi.powersave == null then
+            null
+          else if cfg.wifi.powersave then
+            3
+          else
+            2;
+      };
+    };
 
     boot.kernelModules = [ "ctr" ];
 
