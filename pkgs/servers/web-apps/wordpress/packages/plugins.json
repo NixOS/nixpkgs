@@ -185,6 +185,12 @@
     "sha256": "06rq7axcyw5jrar5gzma61liwq0h0cc2c9b0zxcg3gyz9n1aj5zx",
     "version": "2.0"
   },
+  "wp-fail2ban-addon-contact-form-7": {
+    "path": "wp-fail2ban-addon-contact-form-7/tags/2.0.0",
+    "rev": "3069647",
+    "sha256": "05qfh64dja3dbzs4z7y0gn9b0bm2a03babr3qkjn6g9v4wa6m36i",
+    "version": "2.0.0"
+  },
   "wp-fastest-cache": {
     "path": "wp-fastest-cache/tags/1.2.7",
     "rev": "3091143",
