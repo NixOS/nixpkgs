@@ -3623,6 +3623,8 @@ with pkgs;
 
   dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
 
+  doomsday-engine3 = callPackage ../by-name/do/doomsday-engine/3.x.nix { };
+
   doona = callPackage ../tools/security/doona { };
 
   dotter = callPackage ../tools/misc/dotter {
