@@ -10,17 +10,17 @@
 , gtk4
 , enableBackend ? stdenv.isLinux
 , json-glib
+, keyutils
 , libadwaita
 , librest_1_0
 , libxml2
 , libsecret
-, gtk-doc
 , gobject-introspection
 , gettext
+, gi-docgen
 , glib-networking
 , libsoup_3
 , docbook-xsl-nons
-, docbook_xml_dtd_412
 , gnome
 , gcr_4
 , libkrb5
@@ -31,30 +31,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts";
-  version = "3.50.4";
+  version = "3.51.1";
 
   outputs = [ "out" "dev" ] ++ lib.optionals enableBackend [ "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-online-accounts/${lib.versions.majorMinor finalAttrs.version}/gnome-online-accounts-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MMoTA4zXpp1bay1TZD+6ZUjRcSuSXwwhbzEzw2y/d3M=";
+    hash = "sha256-LfoklMDCO8lmMgluuLxzWRk/780+RCNTugqMNHNFtDI=";
   };
 
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.
     "-Dgoabackend=${lib.boolToString enableBackend}"
-    "-Dgtk_doc=${lib.boolToString enableBackend}"
+    "-Ddocumentation=${lib.boolToString enableBackend}"
     "-Dman=${lib.boolToString enableBackend}"
     "-Dwebdav=true"
   ];
 
   nativeBuildInputs = [
     dbus # used for checks and pkg-config to install dbus service/s
-    docbook_xml_dtd_412
-    docbook-xsl-nons
+    docbook-xsl-nons # for goa-daemon.xml
     gettext
+    gi-docgen
     gobject-introspection
-    gtk-doc
     libxslt
     meson
     ninja
@@ -76,7 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libsecret
     libsoup_3
+  ] ++ lib.optionals enableBackend [
+    keyutils
   ];
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   separateDebugInfo = true;
 
