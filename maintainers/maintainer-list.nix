@@ -1059,13 +1059,6 @@
     githubId = 45176912;
     name = "Tomasz Hołubowicz";
   };
-  AluisioASG = {
-    name = "Aluísio Augusto Silva Gonçalves";
-    email = "aluisio@aasg.name";
-    github = "AluisioASG";
-    githubId = 1904165;
-    keys = [ { fingerprint = "7FDB 17B3 C29B 5BA6 E5A9  8BB2 9FAA 63E0 9750 6D9D"; } ];
-  };
   alunduil = {
     email = "alunduil@gmail.com";
     github = "alunduil";
@@ -1934,7 +1927,7 @@
   };
   atemu = {
     name = "Atemu";
-    email = "atemu.main+nixpkgs@gmail.com";
+    email = "nixpkgs@mail.atemu.net";
     github = "Atemu";
     githubId = 18599032;
   };
@@ -6570,6 +6563,11 @@
     github = "fdns";
     githubId = 541748;
     name = "Felipe Espinoza";
+  };
+  feathecutie = {
+    name = "feathecutie";
+    github = "feathecutie";
+    githubId = 53912746;
   };
   fedx-sudo = {
     email = "fedx-sudo@pm.me";
@@ -19138,6 +19136,13 @@
     github = "snaar";
     githubId = 602439;
     name = "Serguei Narojnyi";
+  };
+  snaki = {
+    email = "ek@kyouma.net";
+    matrix = "@snaki:kescher.at";
+    name = "emily";
+    github = "snaakey";
+    githubId = 38018554;
   };
   snapdgn = {
     email = "snapdgn@proton.me";

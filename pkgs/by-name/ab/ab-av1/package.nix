@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ab-av1";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ab-av1 \
       --bash <($out/bin/ab-av1 print-completions bash) \
       --fish <($out/bin/ab-av1 print-completions fish) \

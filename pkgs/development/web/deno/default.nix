@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
     find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd deno \
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \

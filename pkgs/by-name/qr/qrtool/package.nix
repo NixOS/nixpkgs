@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , asciidoctor
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage rec {
     # Built by ./build.rs using `asciidoctor`
     installManPage ./target/*/release/build/qrtool*/out/*.?
 
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd qrtool \
       --bash <($out/bin/qrtool --generate-completion bash) \
       --fish <($out/bin/qrtool --generate-completion fish) \

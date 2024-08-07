@@ -3,6 +3,7 @@
 , installShellFiles
 , rustPlatform
 , protobuf
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     "--skip config::tests::toml_example_changed"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tokio-console \
       --bash <($out/bin/tokio-console --log-dir $(mktemp -d) gen-completion bash) \
       --fish <($out/bin/tokio-console --log-dir $(mktemp -d) gen-completion fish) \

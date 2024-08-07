@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     sqlite
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd leetcode \
       --bash <($out/bin/leetcode completions bash) \
       --fish <($out/bin/leetcode completions fish) \

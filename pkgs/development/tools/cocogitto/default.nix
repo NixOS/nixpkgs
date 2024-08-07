@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ libgit2 ] ++ lib.optional stdenv.isDarwin Security;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cog \
       --bash <($out/bin/cog generate-completions bash) \
       --fish <($out/bin/cog generate-completions fish) \

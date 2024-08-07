@@ -106,7 +106,7 @@ final: prev: {
 
       libsecret
       final.node-gyp-build
-      final.node-pre-gyp
+      node-pre-gyp
 
       pixman
       cairo
@@ -179,7 +179,7 @@ final: prev: {
   };
 
   node-red = prev.node-red.override {
-    buildInputs = [ final.node-pre-gyp ];
+    buildInputs = [ pkgs.node-pre-gyp ];
   };
 
   node2nix = prev.node2nix.override {
@@ -349,15 +349,15 @@ final: prev: {
   });
 
   thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {
-    nativeBuildInputs = [ final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ];
   };
 
   thelounge-plugin-giphy = prev.thelounge-plugin-giphy.override {
-    nativeBuildInputs = [ final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ];
   };
 
   thelounge-theme-flat-blue = prev.thelounge-theme-flat-blue.override {
-    nativeBuildInputs = [ final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ];
     # TODO: needed until upstream pins thelounge version 4.3.1+ (which fixes dependency on old sqlite3 and transitively very old node-gyp 3.x)
     preRebuild = ''
       rm -r node_modules/node-gyp
@@ -365,7 +365,7 @@ final: prev: {
   };
 
   thelounge-theme-flat-dark = prev.thelounge-theme-flat-dark.override {
-    nativeBuildInputs = [ final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ];
     # TODO: needed until upstream pins thelounge version 4.3.1+ (which fixes dependency on old sqlite3 and transitively very old node-gyp 3.x)
     preRebuild = ''
       rm -r node_modules/node-gyp
@@ -395,7 +395,7 @@ final: prev: {
   vega-cli = prev.vega-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = with pkgs; [
-      final.node-pre-gyp
+      node-pre-gyp
       pixman
       cairo
       pango
@@ -422,7 +422,7 @@ final: prev: {
   };
 
   wavedrom-cli = prev.wavedrom-cli.override {
-    nativeBuildInputs = [ pkgs.pkg-config final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.pkg-config pkgs.node-pre-gyp ];
     # These dependencies are required by
     # https://github.com/Automattic/node-canvas.
     buildInputs = with pkgs; [

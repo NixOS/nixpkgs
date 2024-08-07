@@ -2,6 +2,7 @@
 , lib
 , rustPlatform
 , fetchFromGitHub
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-MSN0xQj6IfOjI0qQqVBaGhh0BQJa4z24El2rGLlFBSM=";
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd steamguard \
       --bash <($out/bin/steamguard completion --shell bash) \
       --fish <($out/bin/steamguard completion --shell fish) \

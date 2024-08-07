@@ -123,7 +123,7 @@ in
 
       max-free = cfg.max-free;
 
-      trusted-users = [ "root" user ];
+      trusted-users = [ user ];
     };
 
     services = {

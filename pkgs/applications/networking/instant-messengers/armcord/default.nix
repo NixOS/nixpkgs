@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = "armcord";
       desktopName = "ArmCord";
-      exec = "${placeholder "out"}/bin/armcord %U";
+      exec = "armcord %U";
       icon = "armcord";
       comment = meta.description;
       categories = [ "Network" ];

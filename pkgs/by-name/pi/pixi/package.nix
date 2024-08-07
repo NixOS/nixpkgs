@@ -86,7 +86,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=task::task_graph::test::test_multi_env_defaults_ambigu"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pixi \
       --bash <($out/bin/pixi completion --shell bash) \
       --fish <($out/bin/pixi completion --shell fish) \
