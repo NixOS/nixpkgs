@@ -1,6 +1,6 @@
 --- $src/utils/index.js	2024-08-06 19:13:25.329421171 -0400
 +++ $src/utils/index.js	2024-08-06 19:14:10.896022059 -0400
-@@ -10,7 +10,7 @@
+@@ -10,7 +10,7 @@ import open from "open";
  
  const dirname = path.dirname(fileURLToPath(import.meta.url));
  
@@ -9,7 +9,7 @@
  
  const db = new Low(adapter);
  
-@@ -142,7 +142,7 @@
+@@ -142,7 +142,7 @@ const deleteAccount = async () => {
      });
  
      // delete the account.json file
@@ -18,5 +18,14 @@
  
      // stop the spinner
      spinner.stop();
+@@ -192,7 +192,7 @@ const showDetails = async () => {
+ 
+ // open specific email
+ const openEmail = async (email) => {
+-  const emailFilePath = path.join(dirname, "../data/email.html");
++  const emailFilePath = path.join(process.cwd() + "email.html");
+   const spinner = ora("opening...").start();
+ 
+   try {
 
 
