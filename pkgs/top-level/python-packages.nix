@@ -14584,6 +14584,8 @@ self: super: with self; {
 
   somfy-mylink-synergy = callPackage ../development/python-modules/somfy-mylink-synergy { };
 
+  somweb = callPackage ../development/python-modules/somweb { };
+
   sonarr = callPackage ../development/python-modules/sonarr { };
 
   sonos-websocket = callPackage ../development/python-modules/sonos-websocket { };
