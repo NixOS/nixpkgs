@@ -45,7 +45,11 @@ buildNpmPackage rec {
   meta = with lib; {
     description = "Auto-tiler that uses KWin 6.0+ tiling functionality";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg kotatsuyaki ];
+    maintainers = with maintainers; [
+      peterhoeg
+      kotatsuyaki
+      HeitorAugustoLN
+    ];
     inherit (plasma-framework.meta) platforms;
   };
 }
