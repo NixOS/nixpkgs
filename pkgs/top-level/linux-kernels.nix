@@ -543,6 +543,8 @@ in {
 
     turbostat = callPackage ../os-specific/linux/turbostat { };
 
+    corefreq = callPackage ../os-specific/linux/corefreq { };
+
     trelay = callPackage ../os-specific/linux/trelay { };
 
     usbip = callPackage ../os-specific/linux/usbip { };
