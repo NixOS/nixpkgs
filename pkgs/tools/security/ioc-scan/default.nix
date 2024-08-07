@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ioc-scan";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cisagov";
@@ -17,21 +17,19 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace " --cov" ""
+      --replace-fail " --cov" ""
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    docopt
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
+
+  propagatedBuildInputs = with python3.pkgs; [ docopt];
 
   nativeCheckInputs = with python3.pkgs; [
     pyfakefs
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "ioc_scan"
-  ];
+  pythonImportsCheck = [ "ioc_scan" ];
 
   meta = with lib; {
     description = "Tool to search a filesystem for indicators of compromise (IoC)";
