@@ -43,9 +43,11 @@
 /pkgs/top-level/stage.nix                        @Ericson2314
 /pkgs/top-level/splice.nix                       @Ericson2314
 /pkgs/top-level/release-cross.nix                @Ericson2314
+/pkgs/stdenv                                     @philiptaron
 /pkgs/stdenv/generic                             @Ericson2314
 /pkgs/stdenv/generic/check-meta.nix              @Ericson2314
 /pkgs/stdenv/cross                               @Ericson2314
+/pkgs/build-support                              @philiptaron
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
