@@ -1,5 +1,7 @@
-{ go, cacert, git, lib, stdenv }:
-
+{ go, cacert, git, lib, stdenv, overrideSDK }:
+let
+  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+in
 { name ? "${args'.pname}-${args'.version}"
 , src
 , nativeBuildInputs ? [ ]
@@ -64,7 +66,7 @@ let
   GOTOOLCHAIN = "local";
 
   goModules = if (vendorHash == null) then "" else
-  (stdenv.mkDerivation {
+  (stdenv'.mkDerivation {
     name = "${name}-go-modules";
 
     nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ go git cacert ];
@@ -158,7 +160,7 @@ let
     outputHashAlgo = if vendorHash == "" then "sha256" else null;
   }).overrideAttrs overrideModAttrs;
 
-  package = stdenv.mkDerivation (args // {
+  package = stdenv'.mkDerivation (args // {
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
     inherit (go) GOOS GOARCH;
@@ -265,7 +267,7 @@ let
         echo "Building subPackage $pkg"
         buildGoDir install "$pkg"
       done
-    '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    '' + lib.optionalString (stdenv'.hostPlatform != stdenv'.buildPlatform) ''
       # normalize cross-compiled builds w.r.t. native builds
       (
         dir=$GOPATH/bin/${go.GOOS}_${go.GOARCH}
