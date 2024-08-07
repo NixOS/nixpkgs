@@ -1,9 +1,23 @@
-{ qtModule, stdenv, lib, qtbase, qtdeclarative, substituteAll }:
+{
+  qtModule,
+  stdenv,
+  lib,
+  qtbase,
+  qtdeclarative,
+  substituteAll,
+}:
 
 qtModule {
   pname = "qttools";
-  propagatedBuildInputs = [ qtbase qtdeclarative ];
-  outputs = [ "out" "dev" "bin" ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+  ];
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 
   patches = [
     # fixQtBuiltinPaths overwrites builtin paths we should keep
@@ -32,11 +46,11 @@ qtModule {
     "bin/qthelpconverter"
     "bin/lprodump"
     "bin/qdistancefieldgenerator"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "bin/macdeployqt"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "bin/macdeployqt" ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && qtdeclarative != null) ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.isDarwin && qtdeclarative != null
+  ) ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
 
   setupHook = ../hooks/qttools-setup-hook.sh;
 }
