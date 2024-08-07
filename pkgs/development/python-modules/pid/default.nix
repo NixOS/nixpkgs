@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0e33670e83f6a33ebb0822e43a609c3247178d4a375ff50a4689e266d853eb66";
   };
 
-  buildInputs = [ nose ];
+  buildInputs = [ ];
 
   # No tests included
   doCheck = false;
