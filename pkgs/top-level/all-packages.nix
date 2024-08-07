@@ -17346,8 +17346,6 @@ with pkgs;
 
   ansible-doctor = callPackage ../tools/admin/ansible/doctor.nix { };
 
-  ansible-navigator = with python3Packages; toPythonApplication ansible-navigator;
-
   dbus-test-runner = callPackage ../development/tools/dbus-test-runner { };
 
   doq = callPackage ../development/tools/misc/doq { };
