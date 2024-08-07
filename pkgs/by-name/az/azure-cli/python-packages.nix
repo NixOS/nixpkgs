@@ -1,9 +1,7 @@
 {
-  lib,
   stdenv,
   python3,
   fetchPypi,
-  fetchpatch,
   src,
   version,
 }:
@@ -23,6 +21,7 @@ let
     });
 
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
       inherit buildAzureCliPackage;
 

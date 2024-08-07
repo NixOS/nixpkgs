@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "syshud";
-  version = "0-unstable-2024-07-16";
+  version = "0-unstable-2024-07-29";
 
   src = fetchFromGitHub {
     owner = "System64fumo";
     repo = "syshud";
-    rev = "d60c3bb6c8eefba743478fe7c183055fa057e69e";
-    hash = "sha256-2aVqCXUZYGtv6xIqbZ1yk3SZK45igZVgPl0byxTXu8E=";
+    rev = "f245db6bcd2278cfae6d296c152bfc526f1f7601";
+    hash = "sha256-XxyYLRPIWNsCJFTI7ZoIEvJ0gt2Ok9EgK2fhRf2VWZQ=";
   };
 
   postPatch = ''

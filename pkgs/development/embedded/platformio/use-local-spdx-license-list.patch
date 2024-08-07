@@ -1,12 +1,12 @@
 diff --git a/platformio/package/manifest/schema.py b/platformio/package/manifest/schema.py
-index 95e08108..6c2cfaed 100644
+index c1d22ab5..6c2cfaed 100644
 --- a/platformio/package/manifest/schema.py
 +++ b/platformio/package/manifest/schema.py
 @@ -276,9 +276,6 @@ class ManifestSchema(BaseSchema):
      @staticmethod
      @memoized(expire="1h")
      def load_spdx_licenses():
--        version = "3.21"
+-        version = "3.23"
 -        spdx_data_url = (
 -            "https://raw.githubusercontent.com/spdx/license-list-data/"
 -            f"v{version}/json/licenses.json"

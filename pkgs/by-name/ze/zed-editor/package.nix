@@ -35,13 +35,13 @@ assert withGLES -> stdenv.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.145.1";
+  version = "0.146.5";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fO1VT2LiZa9XkQxP7QcEG9uCTtEm3soces7FCFwosbU=";
+    hash = "sha256-rHdvANczB2ccLOCNh1ZgkkknCNbTaPPODT72WjuOezs=";
     fetchSubmodules = true;
   };
 
@@ -50,13 +50,11 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "alacritty_terminal-0.24.1-dev" = "sha256-aVB1CNOLjNh6AtvdbomODNrk00Md8yz8QzldzvDo1LI=";
       "async-pipe-0.1.3" = "sha256-g120X88HGT8P6GNCrzpS5SutALx5H+45Sf4iSSxzctE=";
-      "blade-graphics-0.4.0" = "sha256-c0KhzG/FCpAyiafGZTbxDMz1ktCTURNDxO3fkB16nUw=";
+      "blade-graphics-0.4.0" = "sha256-o3iYBrHcLXSrdvd0J/LXJb7VkTcFyB/S2Nk9WrmZupI=";
       "cosmic-text-0.11.2" = "sha256-TLPDnqixuW+aPAhiBhSvuZIa69vgV3xLcw32OlkdCcM=";
-      "font-kit-0.11.0" = "sha256-+4zMzjFyMS60HfLMEXGfXqKn6P+pOngLA45udV09DM8=";
+      "font-kit-0.14.1" = "sha256-qUKvmi+RDoyhMrZ7T6SoVAyMc/aasQ9Y/okzre4SzXo=";
       "lsp-types-0.95.1" = "sha256-N4MKoU9j1p/Xeowki/+XiNQPwIcTm9DgmfM/Eieq4js=";
-      "naga-0.20.0" = "sha256-07lLKQLfWYyOwWmvzFQ0vMeuC5pxmclz6Ub72ooSmwk=";
       "nvim-rs-0.6.0-pre" = "sha256-bdWWuCsBv01mnPA5e5zRpq48BgOqaqIcAu+b7y1NnM8=";
-      "pathfinder_simd-0.5.3" = "sha256-94/qS5d0UKYXAdx+Lswj6clOTuuK2yxqWuhpYZ8x1nI=";
       "tree-sitter-0.20.100" = "sha256-xZDWAjNIhWC2n39H7jJdKDgyE/J6+MAVSa8dHtZ6CLE=";
       "tree-sitter-go-0.20.0" = "sha256-/mE21JSa3LWEiOgYPJcq0FYzTbBuNwp9JdZTZqmDIUU=";
       "tree-sitter-gowork-0.0.1" = "sha256-lM4L4Ap/c8uCr4xUw9+l/vaGb3FxxnuZI0+xKYFDPVg=";
@@ -142,6 +140,9 @@ rustPlatform.buildRustPackage rec {
   checkFlags = lib.optionals stdenv.hostPlatform.isLinux [
     # Fails on certain hosts (including Hydra) for unclear reason
     "--skip=test_open_paths_action"
+
+    # Flaky: unreliably fails on certain hosts (including Hydra)
+    "--skip=zed::tests::test_window_edit_state_restoring_enabled"
   ];
 
   installPhase = ''

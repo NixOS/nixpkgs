@@ -36,11 +36,11 @@ let
 
     nix = config.nix.package.out;
 
-    timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
+    timeout = if config.boot.loader.timeout == null then "menu-force" else config.boot.loader.timeout;
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
-    inherit (cfg) consoleMode graceful editor;
+    inherit (cfg) consoleMode graceful editor rebootForBitlocker;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
@@ -191,6 +191,15 @@ in {
       '';
     };
 
+    installDeviceTree = mkOption {
+      default = with config.hardware.deviceTree; enable && name != null;
+      defaultText = ''with config.hardware.deviceTree; enable && name != null'';
+      description = ''
+        Install the devicetree blob specified by `config.hardware.deviceTree.name`
+        to the ESP and instruct systemd-boot to pass this DTB to linux.
+      '';
+    };
+
     extraInstallCommands = mkOption {
       default = "";
       example = ''
@@ -333,6 +342,22 @@ in {
       };
     };
 
+    rebootForBitlocker = mkOption {
+      default = false;
+
+      type = types.bool;
+
+      description = ''
+        Enable *EXPERIMENTAL* BitLocker support.
+
+        Try to detect BitLocker encrypted drives along with an active
+        TPM. If both are found and Windows Boot Manager is selected in
+        the boot menu, set the "BootNext" EFI variable and restart the
+        system. The firmware will then start Windows Boot Manager
+        directly, leaving the TPM PCRs in expected states so that
+        Windows can unseal the encryption key.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -352,6 +377,10 @@ in {
       {
         assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;
         message = "This kernel does not support the EFI boot stub";
+      }
+      {
+        assertion = cfg.installDeviceTree -> config.hardware.deviceTree.enable -> config.hardware.deviceTree.name != null;
+        message = "Cannot install devicetree without 'config.hardware.deviceTree.enable' enabled and 'config.hardware.deviceTree.name' set";
       }
     ] ++ concatMap (filename: [
       {
@@ -410,6 +439,7 @@ in {
 
     boot.bootspec.extensions."org.nixos.systemd-boot" = {
       inherit (config.boot.loader.systemd-boot) sortKey;
+      devicetree = lib.mkIf cfg.installDeviceTree "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
     };
 
     system = {

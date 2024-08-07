@@ -2,16 +2,10 @@
   lib,
   buildPythonPackage,
   dj-database-url,
-  django,
-  django-rq,
   fetchFromGitHub,
   flit-core,
-  freezegun,
-  google-cloud-translate,
-  polib,
   python,
   pythonOlder,
-  typing-extensions,
   wagtail,
 }:
 

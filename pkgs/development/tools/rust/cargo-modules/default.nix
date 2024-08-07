@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
-  version = "0.16.6";
+  version = "0.16.8";
 
   src = fetchFromGitHub {
     owner = "regexident";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-noUlwAoJMDim1TI3aiacLtOXsHd2IEZbrjYQoeoo7yM=";
+    hash = "sha256-F1hVKktU9zhdxXWhpLgymehJQlOX6WbXL2cqQGB+Y5k=";
   };
 
-  cargoHash = "sha256-EbhLIVe9FizxNmyoEo3b/IZQ6jbL6vQUunFzfM2QRL8=";
+  cargoHash = "sha256-j3AYWKq7SrlNlsY7A80iwcWKW8wi6hx0U9UwDIQkXZs=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices

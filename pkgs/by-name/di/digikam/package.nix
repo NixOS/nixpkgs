@@ -12,6 +12,7 @@
   bison,
   wrapGAppsHook3,
 
+  exiftool,
   opencv,
   libtiff,
   libpng,
@@ -149,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ kdePackages.qtdeclarative ];
 
-  postConfigure = lib.optionalString finalAttrs.doCheck ''
+  postConfigure = lib.optionalString finalAttrs.finalPackage.doCheck ''
     ln -s ${testData} $cmakeDir/test-data
   '';
 
@@ -181,12 +182,13 @@ stdenv.mkDerivation (finalAttrs: {
         gnumake
         hugin
         enblend-enfuse
+        exiftool
       ]
     })
     qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${kdePackages.qtbase.qtPluginPrefix}/digikam)
     substituteInPlace $out/bin/digitaglinktree \
-      --replace "/usr/bin/perl" "${perl}/bin/perl" \
-      --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
+      --replace "/usr/bin/perl" "${lib.getExe perl}" \
+      --replace "/usr/bin/sqlite3" "${lib.getExe sqlite}"
   '';
 
   meta = {

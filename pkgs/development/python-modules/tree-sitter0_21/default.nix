@@ -6,6 +6,7 @@
   pythonOlder,
   pythonAtLeast,
   setuptools,
+  distutils,
 }:
 
 buildPythonPackage rec {
@@ -13,8 +14,7 @@ buildPythonPackage rec {
   version = "0.21.3";
   pyproject = true;
 
-  # https://github.com/tree-sitter/py-tree-sitter/issues/209
-  disabled = pythonAtLeast "3.12" || pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -29,6 +29,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "tree_sitter" ];
+
+  # Needed explicitly for Python >= 3.12 as tree-sitter provides
+  # calls to distutils functions to compile language files
+  dependencies = lib.optionals (pythonAtLeast "3.12") [ distutils ];
 
   preCheck = ''
     rm -r tree_sitter

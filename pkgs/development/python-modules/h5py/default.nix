@@ -14,6 +14,7 @@
   pytestCheckHook,
   pytest-mpi,
   cached-property,
+  stdenv,
 }:
 
 assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
@@ -46,9 +47,7 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail "numpy >=2.0.0rc1" "numpy"
   '';
-  pythonRelaxDeps = [
-    "mpi4py"
-  ];
+  pythonRelaxDeps = [ "mpi4py" ];
 
   HDF5_DIR = "${hdf5}";
   HDF5_MPI = if mpiSupport then "ON" else "OFF";
@@ -100,5 +99,9 @@ buildPythonPackage rec {
     homepage = "http://www.h5py.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
+    # When importing `h5py` during the build, we get:
+    #
+    # ValueError: Not a datatype (not a datatype)
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

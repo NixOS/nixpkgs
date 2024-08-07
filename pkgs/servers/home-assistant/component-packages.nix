@@ -1071,7 +1071,8 @@
       pyemby
     ];
     "emoncms" = ps: with ps; [
-    ]; # missing inputs: pyemoncms
+      pyemoncms
+    ];
     "emoncms_history" = ps: with ps; [
     ];
     "emonitor" = ps: with ps; [
@@ -3355,7 +3356,8 @@
     "pepco" = ps: with ps; [
     ];
     "permobil" = ps: with ps; [
-    ]; # missing inputs: mypermobil
+      mypermobil
+    ];
     "persistent_notification" = ps: with ps; [
     ];
     "person" = ps: with ps; [
@@ -3693,7 +3695,8 @@
       praw
     ];
     "refoss" = ps: with ps; [
-    ]; # missing inputs: refoss-ha
+      refoss-ha
+    ];
     "rejseplanen" = ps: with ps; [
       rjpl
     ];
@@ -3758,7 +3761,8 @@
       vacuum-map-parser-roborock
     ];
     "rocketchat" = ps: with ps; [
-    ]; # missing inputs: rocketchat-API
+      rocketchat-api
+    ];
     "roku" = ps: with ps; [
       rokuecp
     ];
@@ -4193,7 +4197,8 @@
     "solaredge_local" = ps: with ps; [
     ]; # missing inputs: solaredge-local
     "solarlog" = ps: with ps; [
-    ]; # missing inputs: solarlog_cli
+      solarlog-cli
+    ];
     "solax" = ps: with ps; [
       solax
     ];
@@ -4243,7 +4248,8 @@
       spiderpy
     ];
     "splunk" = ps: with ps; [
-    ]; # missing inputs: hass-splunk
+      hass-splunk
+    ];
     "spotify" = ps: with ps; [
       fnv-hash-fast
       psutil-home-assistant
@@ -4303,7 +4309,8 @@
       stookalert
     ];
     "stookwijzer" = ps: with ps; [
-    ]; # missing inputs: stookwijzer
+      stookwijzer
+    ];
     "stream" = ps: with ps; [
       av
       numpy_1
@@ -5762,6 +5769,7 @@
     "panel_iframe"
     "peco"
     "pegel_online"
+    "permobil"
     "persistent_notification"
     "person"
     "philips_js"
@@ -5813,6 +5821,7 @@
     "recorder"
     "recovery_mode"
     "reddit"
+    "refoss"
     "remote"
     "renault"
     "renson"
@@ -5892,6 +5901,7 @@
     "snmp"
     "snooz"
     "solaredge"
+    "solarlog"
     "solax"
     "soma"
     "somfy_mylink"
@@ -5915,6 +5925,7 @@
     "steam_online"
     "steamist"
     "stookalert"
+    "stookwijzer"
     "stream"
     "streamlabswater"
     "stt"

@@ -21,6 +21,7 @@
 , djvulibre
 , libspectre
 , libarchive
+, libgxps
 , libhandy
 , libsecret
 , wrapGAppsHook3
@@ -35,20 +36,18 @@
 , gst_all_1
 , gi-docgen
 , supportMultimedia ? true # PDF multimedia
-, libgxps
-, supportXPS ? true # Open XML Paper Specification via libgxps
 , withLibsecret ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "evince";
-  version = "46.3";
+  version = "46.3.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major finalAttrs.version}/evince-${finalAttrs.version}.tar.xz";
-    hash = "sha256-vA0dQbnX/8di6Z0qv6+sv3RRgvCzHYbbXuyMZ/XzAGs=";
+    hash = "sha256-lFwgpvI4ObDVMycpFxRY6QaA2oJk6Zxvn0HCGcfu7nw=";
   };
 
   depsBuildBuild = [
@@ -81,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     gspell
     gtk3
     libarchive
+    libgxps
     libhandy
     librsvg
     libspectre
@@ -90,8 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     texlive.bin.core # kpathsea for DVI support
   ] ++ lib.optionals withLibsecret [
     libsecret
-  ] ++ lib.optionals supportXPS [
-    libgxps
   ] ++ lib.optionals supportMultimedia (with gst_all_1; [
     gstreamer
     gst-plugins-base

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook, autoconf-archive
 , installShellFiles, libiconv }:
 

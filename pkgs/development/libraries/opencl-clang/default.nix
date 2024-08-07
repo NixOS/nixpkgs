@@ -2,7 +2,6 @@
 , stdenv
 , applyPatches
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , git
 , llvmPackages_14

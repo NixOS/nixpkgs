@@ -129,9 +129,8 @@
 , withXcbShape ? withFullDeps # X11 grabbing shape rendering
 , withXcbShm ? withFullDeps # X11 grabbing shm communication
 , withXcbxfixes ? withFullDeps # X11 grabbing mouse rendering
-# Currently only supports gcc and msvc as compiler, the limitation for clang get removed in the next release, but that does not fix building on darwin.
-, withXevd ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 && stdenv.cc.isGNU # MPEG-5 EVC decoding
-, withXeve ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 && stdenv.cc.isGNU # MPEG-5 EVC encoding
+, withXevd ? withFullDeps && lib.versionAtLeast version "7" && !xevd.meta.broken # MPEG-5 EVC decoding
+, withXeve ? withFullDeps && lib.versionAtLeast version "7" && !xeve.meta.broken # MPEG-5 EVC encoding
 , withXlib ? withFullDeps # Xlib support
 , withXml2 ? withFullDeps # libxml2 support, for IMF and DASH demuxers
 , withXvid ? withHeadlessDeps && withGPL # Xvid encoder, native encoder exists
@@ -485,6 +484,12 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ optionals (lib.versionAtLeast version "7.0") [
       ./0001-avfoundation.m-macOS-SDK-10.12-compatibility.patch
+
+      # Expose a private API for Chromium / Qt WebEngine.
+      (fetchpatch2 {
+        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
+        hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
+      })
     ];
 
   configurePlatforms = [];
@@ -907,7 +912,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
     broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
-    maintainers = with maintainers; [ atemu jopejoe1 ];
+    maintainers = with maintainers; [ atemu jopejoe1 emily ];
     mainProgram = "ffmpeg";
   };
 } // lib.optionalAttrs withCudaLLVM {

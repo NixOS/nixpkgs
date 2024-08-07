@@ -70,6 +70,7 @@
 , libpwquality
 , qrencode
 , libarchive
+, llvmPackages
 
   # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to
   # be available during build time.
@@ -376,6 +377,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withPasswordQuality [ libpwquality ]
     ++ lib.optionals withQrencode [ qrencode ]
     ++ lib.optionals withLibarchive [ libarchive ]
+    ++ lib.optional (withBootloader && stdenv.targetPlatform.useLLVM or false) (llvmPackages.compiler-rt.override {
+      doFakeLibgcc = true;
+    })
   ;
 
   mesonBuildType = "release";

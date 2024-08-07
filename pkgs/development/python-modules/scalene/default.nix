@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.42.2";
+  version = "1.5.43.2";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0ZGk0xFBFSeeg4vjNXu/ppGdEKGhUc2ql4R6oWG23aQ=";
+    hash = "sha256-LtD7v3pLz4UCnh6xlhkPdcEjyu3mt+YQPYZ0nNCLuDw=";
   };
 
   nativeBuildInputs = [

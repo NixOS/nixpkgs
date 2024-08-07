@@ -31,7 +31,13 @@ buildDotnetModule rec {
     hash = "sha256-FzQphMhiC1g+6qmk/R1v4rq2ldy35NcaWm0RR1UlwLA=";
   };
 
-  projectFile = "NexusMods.App.sln";
+  # If the whole solution is published, there seems to be a race condition where
+  # it will sometimes publish the wrong version of a dependent assembly, for
+  # example: Microsoft.Extensions.Hosting.dll 6.0.0 instead of 8.0.0.
+  # https://learn.microsoft.com/en-us/dotnet/core/compatibility/sdk/7.0/solution-level-output-no-longer-valid
+  # TODO: do something about this in buildDotnetModule
+  projectFile = "src/NexusMods.App/NexusMods.App.csproj";
+  testProjectFile = "NexusMods.App.sln";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -49,6 +55,9 @@ buildDotnetModule rec {
 
   postPatch = ''
     ln --force --symbolic "${lib.getExe _7zzWithOptionalUnfreeRarSupport}" src/ArchiveManagement/NexusMods.FileExtractor/runtimes/linux-x64/native/7zz
+
+    # for some reason these tests fail (intermittently?) with a zero timestamp
+    touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
   '';
 
   makeWrapperArgs = [

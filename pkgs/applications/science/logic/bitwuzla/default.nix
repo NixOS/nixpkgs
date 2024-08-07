@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     # but setting it to shared works even in pkgsStatic
     "-Ddefault_library=shared"
 
-    (lib.strings.mesonEnable "testing" finalAttrs.doCheck)
+    (lib.strings.mesonEnable "testing" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeCheckInputs = [ python3 ];

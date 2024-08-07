@@ -3,7 +3,6 @@
 , mrustc
 , mrustc-minicargo
 , llvm_12
-, llvmPackages_12
 , libffi
 , cmake
 , python3

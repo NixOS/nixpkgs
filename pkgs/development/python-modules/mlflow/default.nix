@@ -41,22 +41,19 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.14.2";
+  version = "2.14.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zqC2eK3zjR+PbNlxMKhjJddLsVk7iVtq+tx1ACHr9aI=";
+    hash = "sha256-KSyuS4NXSgyyIxF+IkyqZ5iTMHivAjNxnCthK+pkVhc=";
   };
 
   # Remove currently broken dependency `shap`, a model explainability package.
   # This seems quite unprincipled especially with tests not being enabled,
   # but not mlflow has a 'skinny' install option which does not require `shap`.
-  nativeBuildInputs = [
-    setuptools
-  ];
   pythonRemoveDeps = [ "shap" ];
   pythonRelaxDeps = [
     "packaging"
@@ -95,6 +92,7 @@ buildPythonPackage rec {
     requests
     scikit-learn
     scipy
+    setuptools
     #shap
     simplejson
     sqlalchemy

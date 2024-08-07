@@ -9,8 +9,6 @@
   pythonOlder,
   rustc,
   rustPlatform,
-  ufmt,
-  usort,
 }:
 
 buildPythonPackage rec {

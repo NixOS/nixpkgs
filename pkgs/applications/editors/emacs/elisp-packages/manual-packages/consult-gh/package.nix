@@ -12,13 +12,13 @@
 
 melpaBuild {
   pname = "consult-gh";
-  version = "0.12-unstable-2024-04-23";
+  version = "1.0-unstable-2024-08-02";
 
   src = fetchFromGitHub {
     owner = "armindarvish";
     repo = "consult-gh";
-    rev = "3a07139a1f7e38b959ce177a122c8f47c401d7fa";
-    hash = "sha256-BZloG5RuQzC2RwCfvqPPhGcbsCabQWBnRHdU62rwNdo=";
+    rev = "e12b24e68116ac6c171d628c547c017458d6aa2b";
+    hash = "sha256-skZkpYUWncGUf9k0IfEq3LAqDXHIfCJJ3p3b3ey+Rks=";
   };
 
   packageRequires = [

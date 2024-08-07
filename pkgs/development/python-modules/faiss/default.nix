@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  callPackage,
   faiss-build,
   numpy,
   packaging,
@@ -38,6 +39,14 @@ buildPythonPackage {
   dontBuild = true;
 
   pythonImportsCheck = [ "faiss" ];
+
+  passthru = {
+    inherit (faiss-build) cudaSupport cudaPackages pythonSupport;
+
+    tests = {
+      pytest = callPackage ./pytest.nix { inherit faiss-build; };
+    };
+  };
 
   meta = lib.pipe (faiss-build.meta or { }) [
     (lib.flip builtins.removeAttrs [ "mainProgram" ])

@@ -7,6 +7,7 @@
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
 
       # Requires "urwid~=2.1.2", otherwise some tests are failing

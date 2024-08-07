@@ -5,6 +5,7 @@
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
       emoji = super.emoji.overridePythonAttrs rec {
         version = "1.7.0";
