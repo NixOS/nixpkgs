@@ -131,6 +131,7 @@ let
       commitIdFromGitRepo cleanSourceWith pathHasContext
       canCleanSource pathIsGitRepo;
     inherit (self.modules) evalModules setDefaultModuleLocation
+      importApply
       unifyModuleSyntax applyModuleArgsIfFunction mergeModules
       mergeModules' mergeOptionDecls mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
