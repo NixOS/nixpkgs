@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkg-config
 }:
 
 stdenv.mkDerivation rec {
