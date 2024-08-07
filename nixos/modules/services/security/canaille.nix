@@ -30,7 +30,8 @@ let
       ++ old.optional-dependencies.oidc
       ++ old.optional-dependencies.ldap
       ++ old.optional-dependencies.sentry
-      ++ old.optional-dependencies.sql;
+      ++ old.optional-dependencies.sql
+      ++ old.optional-dependencies.postgresql;
     makeWrapperArgs = (old.makeWrapperArgs or []) ++ [
       "--set CONFIG /etc/canaille/config.toml"
     ];

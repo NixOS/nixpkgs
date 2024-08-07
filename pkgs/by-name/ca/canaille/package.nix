@@ -107,6 +107,11 @@ python.pkgs.buildPythonApplication rec {
       sqlalchemy-json
       sqlalchemy-utils
     ];
+    # This isn't defined by upstream actually, but seems to be required.
+    # Possibly included by using the sqlalchemy[postgresql] extra?
+    postgresql = [
+      psycopg2
+    ];
   };
 
   passthru = {
