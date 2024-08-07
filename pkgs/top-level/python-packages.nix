@@ -6686,6 +6686,10 @@ self: super: with self; {
 
   krakenex = callPackage ../development/python-modules/krakenex { };
 
+  krb5 = callPackage ../development/python-modules/krb5 {
+    krb5-c = pkgs.krb5;
+  };
+
   krfzf-py = callPackage ../development/python-modules/krfzf-py { };
 
   kserve = callPackage ../development/python-modules/kserve { };
