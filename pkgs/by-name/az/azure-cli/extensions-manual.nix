@@ -7,7 +7,6 @@
   mkAzExtension,
   mycli,
   python3Packages,
-  python3,
 }:
 
 {
@@ -17,9 +16,7 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/application_insights-${version}-py2.py3-none-any.whl";
     sha256 = "e1fa824eb587e2bec7f4cb4d1c4ce1033ab3d3fac65af42dd6218f673b019cee";
     description = "Support for managing Application Insights components and querying metrics, events, and logs from such components";
-    propagatedBuildInputs = with python3Packages; [
-      isodate
-    ];
+    propagatedBuildInputs = with python3Packages; [ isodate ];
     meta.maintainers = with lib.maintainers; [ andreasvoss ];
   };
 
@@ -59,10 +56,11 @@
         pymysql
         setproctitle
       ])
-      ++ [ (mycli.override { inherit python3; }) ];
+      ++ [ mycli ];
     meta.maintainers = with lib.maintainers; [ obreitwi ];
   };
 
   # Removed extensions
   blockchain = throw "The 'blockchain' extension for azure-cli was deprecated upstream"; # Added 2024-04-26
+  vm-repair = throw "The 'vm-repair' extension for azure-cli was deprecated upstream"; # Added 2024-08-06
 }
