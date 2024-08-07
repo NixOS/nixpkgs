@@ -3,17 +3,18 @@
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
+  setuptools,
   numpy,
   cython,
   zlib,
   python-lzo,
-  nose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bx-python";
   version = "0.12.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -24,16 +25,25 @@ buildPythonPackage rec {
     hash = "sha256-ZpZjh7OXdUY7rd692h7VYHzC3qCrDKFme6r+wuG7GP4=";
   };
 
-  nativeBuildInputs = [ cython ];
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace-fail "--doctest-cython" ""
+  '';
+
+  build-system = [
+    cython
+    numpy
+    setuptools
+  ];
 
   buildInputs = [ zlib ];
 
-  propagatedBuildInputs = [
-    numpy
+  dependencies = [ numpy ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
     python-lzo
   ];
-
-  nativeCheckInputs = [ nose ];
 
   postInstall = ''
     cp -r scripts/* $out/bin
@@ -43,6 +53,10 @@ buildPythonPackage rec {
     # working directory allows the tests to run
     rm -rf scripts
     ln -s $out/bin scripts
+  '';
+
+  preCheck = ''
+    rm -r lib
   '';
 
   meta = with lib; {
