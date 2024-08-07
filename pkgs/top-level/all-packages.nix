@@ -33872,6 +33872,8 @@ with pkgs;
 
   tap-plugins = callPackage ../applications/audio/tap-plugins { };
 
+  blop-plugins = callPackage ../applications/audio/blop-plugins { };
+
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
   tabula-java = callPackage ../applications/misc/tabula-java { };
