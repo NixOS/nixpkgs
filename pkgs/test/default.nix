@@ -183,5 +183,7 @@ with pkgs;
 
   systemd = callPackage ./systemd { };
 
+  replaceVars = recurseIntoAttrs (callPackage ./replace-vars { });
+
   substitute = recurseIntoAttrs (callPackage ./substitute { });
 }
