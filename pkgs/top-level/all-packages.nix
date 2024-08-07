@@ -40091,4 +40091,6 @@ with pkgs;
   dillo = callPackage ../by-name/di/dillo/package.nix {
     fltk = fltk13;
   };
+
+  ypbind-mt = callPackage ../os-specific/linux/ypbind-mt { };
 }
