@@ -13132,6 +13132,8 @@ self: super: with self; {
 
   pywfa = callPackage ../development/python-modules/pywfa { };
 
+  pywikibot = callPackage ../development/python-modules/pywikibot { };
+
   pywilight = callPackage ../development/python-modules/pywilight { };
 
   pywinrm = callPackage ../development/python-modules/pywinrm { };
