@@ -16138,6 +16138,7 @@ with pkgs;
     cargo-pgrx_0_10_2
     cargo-pgrx_0_11_2
     cargo-pgrx_0_11_3
+    cargo-pgrx_0_12_0_alpha_1
     ;
   cargo-pgrx = cargo-pgrx_0_11_2;
 
