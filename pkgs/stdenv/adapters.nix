@@ -104,7 +104,7 @@ rec {
           NIX_CFLAGS_LINK = toString args.env.NIX_CFLAGS_LINK + " -static";
         };
       } else {
-        NIX_CFLAGS_LINK = toString (args.env.NIX_CFLAGS_LINK or "") + " -static";
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
       } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
         configureFlags = (args.configureFlags or []) ++ [
           "--disable-shared" # brrr...
