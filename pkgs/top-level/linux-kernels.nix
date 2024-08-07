@@ -377,6 +377,8 @@ in {
 
     intel-speed-select = if lib.versionAtLeast kernel.version "5.3" then callPackage ../os-specific/linux/intel-speed-select { } else null;
 
+    intel-vtune-sepdk = callPackage ../os-specific/linux/intel-vtune-sepdk { };
+
     ipu6-drivers =
       if kernelOlder "6.10"
       then callPackage ../os-specific/linux/ipu6-drivers {}
