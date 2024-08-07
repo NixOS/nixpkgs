@@ -1,4 +1,5 @@
 {
+  pkgs,
   lib,
   buildPythonPackage,
   pythonOlder,
@@ -10,33 +11,7 @@
   h2,
   onecache,
   setuptools,
-  # tests_require
-  aiodns,
-  aiohttp,
-  asgiref,
-  black,
-  django,
-  click,
-  httpx,
-  proxy-py,
   pytest,
-  pytest-aiohttp,
-  pytest-asyncio,
-  pytest-black,
-  pytest-cov,
-  pytest-django,
-  pytest-mock,
-  pytest-runner,
-  pytest-sugar,
-  pytest-timeout,
-  uvicorn,
-  httptools,
-  mypy,
-  mypy-extensions,
-  pytest-mypy,
-  typed-ast,
-  uvloop,
-  requests,
 }:
 
 buildPythonPackage rec {
@@ -45,7 +20,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   disabled = pythonOlder "3.8";
-  dontCheckRuntimeDeps = true;
+  doCheck = true;
 
   src = fetchFromGitHub {
     owner = "sonic182";
@@ -54,11 +29,19 @@ buildPythonPackage rec {
     hash = "sha256-RMkmmXUqzt9Nsx8N+f9Xdbgjt1nd5NuJHs9dzarx8IY=";
   };
 
-  build-system = [
-    poetry-core
-    pytest-runner
-    setuptools
-  ];
+  __darwinAllowLocalNetworking = true;
+
+  nativeBuildInputs = [ poetry-core ];
+
+  propagatedBuildInputs = [ charset-normalizer onecache h2 ];
+
+  nativeCheckInputs = [ pkgs.poetry pytest pkgs.nodejs ];
+
+  checkPhase = ''
+    export HOME="$(mktemp -d)"
+    poetry install
+    poetry run pytest --cov-append
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/sonic182/aiosonic/blob/${version}/CHANGELOG.md";
