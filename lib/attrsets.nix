@@ -11,7 +11,7 @@ let
 in
 
 rec {
-  inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr removeAttrs intersectAttrs;
+  inherit (builtins) attrNames listToAttrs hasAttr isAttrs isList getAttr removeAttrs intersectAttrs;
 
 
   /**
@@ -856,8 +856,16 @@ rec {
     => [["b"] [1]]
 
     collect (x: x ? outPath)
-       { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
-    => [{ outPath = "a/"; } { outPath = "b/"; }]
+      {
+        a = { outPath = "a/"; };
+        b.b = { outPath = "b/"; };
+        c = [ { outPath = "c/"; } ];
+      }
+    => [
+      { outPath = "a/"; }
+      { outPath = "b/"; }
+      { outPath = "c/"; }
+    ]
     ```
 
     :::
@@ -869,6 +877,8 @@ rec {
       [ attrs ]
     else if isAttrs attrs then
       concatMap (collect pred) (attrValues attrs)
+    else if isList attrs then
+      concatMap (collect pred) attrs
     else
       [];
 
