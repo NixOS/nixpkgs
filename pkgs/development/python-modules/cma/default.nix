@@ -5,7 +5,7 @@
   numpy,
   python,
   pythonOlder,
-  setuptools
+  setuptools,
 }:
 
 buildPythonPackage rec {
