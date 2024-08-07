@@ -1,11 +1,14 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
+, docbook-xsl-nons
 , meson
 , ninja
 , pkg-config
 , vala
 , gettext
 , libxml2
+, libxslt
 , gobject-introspection
 , wrapGAppsHook3
 , python3
@@ -28,14 +31,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rygel";
-  version = "0.42.6";
+  version = "0.43.0";
 
   # TODO: split out lib
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/rygel/${lib.versions.majorMinor finalAttrs.version}/rygel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-R9JXBLYQiDdeJqq6Vr5HwXGJRy5vgMdSq+hvAu9OMwQ=";
+    hash = "sha256-kzqQiOSAkaeG/5gcGc48q2FpQL57J25DpvyG69IFCSw=";
   };
 
   patches = [
@@ -43,12 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    docbook-xsl-nons
     meson
     ninja
     pkg-config
     vala
     gettext
     libxml2
+    libxslt # for xsltproc
     gobject-introspection
     wrapGAppsHook3
     python3
