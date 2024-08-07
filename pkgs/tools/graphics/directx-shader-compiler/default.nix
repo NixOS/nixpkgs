@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "directx-shader-compiler";
-  version = "1.8.2405";
+  version = "1.8.2407";
 
   # Put headers in dev, there are lot of them which aren't necessary for
   # using the compiler binary.
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "microsoft";
     repo = "DirectXShaderCompiler";
     rev = "v${version}";
-    hash = "sha256-p1sQcKWSQo0VU1JwB7J0eqT85CzNWxAMqC4HZ95NySg=";
+    hash = "sha256-7quRcuY3SAuGuS4Slz476WxJ7GHMjJmT2Jmb8kdmsI8=";
     fetchSubmodules = true;
   };
 
