@@ -1,2 +1,1 @@
-{ graalvmPackages }:
-graalvmPackages.graalvm-ce
+{ graalvmPackages }: graalvmPackages.graalvm-ce
