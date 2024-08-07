@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , makeWrapper
-, openjdk17
+, openjdk
 , wget
 , which
 , gnused
@@ -15,16 +15,16 @@ let
   nextflow =
 stdenv.mkDerivation rec {
   pname = "nextflow";
-  version = "22.10.6";
+  version = "23.10.1";
 
   src = fetchurl {
     url = "https://github.com/nextflow-io/nextflow/releases/download/v${version}/nextflow-${version}-all";
-    hash = "sha256-zeYsKxWRnzr0W6CD+yjoAXwCN/AbN5P4HhH1oftnrjY=";
+    hash = "sha256-XY6xuEkQjgWNu8wNvHN3MSFahaRTUyGTbDZejAbHQJ4=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    openjdk17
+    openjdk
     wget
     which
     gnused
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/nextflow \
       --prefix PATH : ${lib.makeBinPath nativeBuildInputs} \
-      --set JAVA_HOME ${openjdk17.home}
+      --set JAVA_HOME ${openjdk.home}
   '';
 
   meta = with lib; {
