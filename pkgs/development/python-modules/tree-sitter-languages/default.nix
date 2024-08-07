@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  wheel,
   cython,
   tree-sitter0_21,
   pytestCheckHook,
@@ -35,7 +34,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
     cython
   ];
   dependencies = [
