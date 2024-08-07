@@ -12265,8 +12265,6 @@ self: super: with self; {
 
   pysmi = callPackage ../development/python-modules/pysmi { };
 
-  pysmi-lextudio = callPackage ../development/python-modules/pysmi-lextudio { };
-
   pysml = callPackage ../development/python-modules/pysml { };
 
   pysmt = callPackage ../development/python-modules/pysmt { };
@@ -12274,8 +12272,6 @@ self: super: with self; {
   pysnmp = callPackage ../development/python-modules/pysnmp { };
 
   pysnmpcrypto = callPackage ../development/python-modules/pysnmpcrypto { };
-
-  pysnmp-lextudio = callPackage ../development/python-modules/pysnmp-lextudio { };
 
   pysnmp-pyasn1 = callPackage ../development/python-modules/pysnmp-pyasn1 { };
 

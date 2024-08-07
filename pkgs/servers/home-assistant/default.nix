@@ -543,6 +543,8 @@ in python.pkgs.buildPythonApplication rec {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
     })
+
+    ./patches/pysnmp-compat.patch
   ];
 
   postPatch = ''
