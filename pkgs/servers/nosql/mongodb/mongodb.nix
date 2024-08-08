@@ -47,7 +47,6 @@ let
 
   system-libraries = [
     "boost"
-    "pcre"
     "snappy"
     "yaml"
     "zlib"
@@ -55,7 +54,11 @@ let
     #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
     #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
     #"wiredtiger"
-  ] ++ lib.optionals stdenv.isLinux [ "tcmalloc" ];
+  ] ++ lib.optionals stdenv.isLinux [
+    "tcmalloc"
+  ] ++ lib.optionals (lib.versionOlder version "7.0") [
+    "pcre"
+  ];
   inherit (lib) systems subtractLists;
 
 in stdenv.mkDerivation rec {
@@ -72,7 +75,9 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     scons
     python
-  ] ++ lib.optional stdenv.isLinux net-snmp;
+  ] ++ lib.optionals stdenv.isLinux [
+    net-snmp
+  ];
 
   buildInputs = [
     boost
@@ -85,10 +90,15 @@ in stdenv.mkDerivation rec {
     pcre-cpp
     sasl
     snappy
+    xz
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ]
-  ++ lib.optional stdenv.isLinux net-snmp
-  ++ [ xz ];
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+    CoreFoundation
+    cctools
+  ] ++ lib.optionals stdenv.isLinux [
+    net-snmp
+  ];
 
   # MongoDB keeps track of its build parameters, which tricks nix into
   # keeping dependencies to build inputs in the final output.
@@ -122,6 +132,7 @@ in stdenv.mkDerivation rec {
     "-Wno-unused-command-line-argument";
 
   sconsFlags = [
+    "--linker=gold"
     "--release"
     "--ssl"
     #"--rocksdb" # Don't have this packaged yet
