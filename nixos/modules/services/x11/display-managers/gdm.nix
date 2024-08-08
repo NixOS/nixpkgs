@@ -165,7 +165,7 @@ in
           # this environment variable.
           GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
         };
-        execCmd = "exec ${package}/bin/gdm";
+        execCmd = "exec ${lib.getExe package}";
         preStart = lib.optionalString (defaultSessionName != null) ''
           # Set default session in session chooser to a specified values – basically ignore session history.
           ${setSessionScript}/bin/set-session ${config.services.displayManager.sessionData.autologinSession}
