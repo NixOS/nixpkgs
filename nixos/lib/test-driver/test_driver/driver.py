@@ -197,7 +197,7 @@ class Driver:
                             machine.start_command = start_cmd
                 else:
                     self.logger.warning(
-                        f"{start_cmd.machine_name} has multiple instances. This shouldn't be possible, but either way it's now ambiguous which to update."
+                        f"Skipping the update of {start_cmd.machine_name}, because it has multiple instances. This shouldn't be possible, but either way it's now ambiguous which to update."
                     )
 
         with self.logger.nested("updating vlans"):
