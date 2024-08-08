@@ -102,8 +102,9 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  # .so files in the SystemARM64 directory are not loaded properly on aarch64-linux
-  appendRunpaths = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+  # Bring in game's .so files into lookup. Otherwise game fails to start
+  # as: `Object not found: Class Render.Render`
+  appendRunpaths = [
     "${placeholder "out"}/${systemDir}"
   ];
 
