@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
-  version = "5.2.98";
+  version = "5.2.112";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    hash = "sha256-PZnAB+LOlwkiJO0ICqYqn0TgqQY2KdUbgGJRFSzGxdE=";
+    hash = "sha256-HMeR/0QWAYgaa5emKz+eXfeFS0scY0ZexcNbIOJouFs=";
   };
 
   nativeBuildInputs = [ cmake ];
