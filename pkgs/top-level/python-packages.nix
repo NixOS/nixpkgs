@@ -4062,6 +4062,8 @@ self: super: with self; {
 
   evohome-async = callPackage ../development/python-modules/evohome-async { };
 
+  evolutionhttp = callPackage ../development/python-modules/evolutionhttp { };
+
   evosax = callPackage ../development/python-modules/evosax { };
 
   evtx = callPackage ../development/python-modules/evtx { };
