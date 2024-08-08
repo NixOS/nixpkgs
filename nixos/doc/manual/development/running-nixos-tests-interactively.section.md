@@ -119,8 +119,8 @@ executable produced by the command provided.
 ```
 
 By default the new `nixos-test-driver` executable is assumed to be located at
-the same place the running driver was launched from. This works because the
-`reuslt/` symlink is updated to point at the new derivation. If needed, the path
+the same place the running driver was launched from. This works when the
+`result/` symlink is updated to point at the new derivation output. If needed, the path
 can be overridden with the `exe` parameter to `rebuild()`.
 
 You can also specify the rebuild command at the command line when the driver is
