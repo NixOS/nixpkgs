@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
   pname = "ypbind-mt";
   version = "2.7.2";
 
+  src = fetchurl {
+    url = "https://github.com/thkukuk/ypbind-mt/releases/download/v${version}/ypbind-mt-${version}.tar.xz";
+    hash = "sha256-Bk8vGFZzxUk9+D9kALeZ86NZ3lYRi2ujfEMnER8vzYs=";
+  };
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -27,11 +32,6 @@ stdenv.mkDerivation rec {
     rpcbind
     systemdLibs
   ];
-
-  src = fetchurl {
-    url = "https://github.com/thkukuk/ypbind-mt/releases/download/v${version}/ypbind-mt-${version}.tar.xz";
-    hash = "sha256-Bk8vGFZzxUk9+D9kALeZ86NZ3lYRi2ujfEMnER8vzYs=";
-  };
 
   meta = with lib; {
     description = "Multithreaded daemon maintaining the NIS binding informations.";
