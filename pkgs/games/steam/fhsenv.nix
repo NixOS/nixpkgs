@@ -60,8 +60,8 @@ let
   # bootstrap.tar.xz has 444 permissions, which means that simple deletes fail
   # and steam will not be able to start
   fixBootstrap = ''
-    if [ -r $HOME/.local/share/Steam/bootstrap.tar.xz ]; then
-      chmod +w $HOME/.local/share/Steam/bootstrap.tar.xz
+    if [ -r $HOME/.steam/root/bootstrap.tar.xz ]; then
+      chmod +w $HOME/.steam/root/bootstrap.tar.xz
     fi
   '';
 
