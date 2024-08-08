@@ -73,32 +73,39 @@ runCommandWith {
 :::
 
 
-## `runCommand` {#trivial-builder-runCommand}
+## `runCommand` and `runCommandCC` {#trivial-builder-runCommand}
 
-`runCommand :: String -> AttrSet -> String -> Derivation`
+The function `runCommand` returns a derivation built using the specified command(s), in the `stdenvNoCC` environment.
 
-The result of `runCommand name drvAttrs buildCommand` is a derivation that is built by running the specified shell commands.
+`runCommandCC` is similar but uses the default compiler environment. To minimize dependencies, `runCommandCC`
+should only be used when the build command needs a C compiler.
 
-By default `runCommand` runs in a stdenv with no compiler environment, whereas [`runCommandCC`](#trivial-builder-runCommandCC) uses the default stdenv, `pkgs.stdenv`.
+### Type {#trivial-builder-runCommand-Type}
 
-`name :: String`
-:   The name that Nix will append to the store path in the same way that `stdenv.mkDerivation` uses its `name` attribute.
+```
+runCommand   :: String -> AttrSet -> String -> Derivation
+runCommandCC :: String -> AttrSet -> String -> Derivation
+```
 
-`drvAttr :: AttrSet`
-:   Attributes to pass to the underlying call to [`stdenv.mkDerivation`](#chap-stdenv).
+### Input {#trivial-builder-runCommand-Input}
 
-`buildCommand :: String`
-:   Shell commands to run in the derivation builder.
+While the type signature(s) differ from `runCommandWith`, individual arguments with the same name will have the same type and meaning:
 
-    ::: {.note}
-    You have to create a file or directory `$out` for Nix to be able to run the builder successfully.
-    :::
+`name` (String)
+:   The derivation's name
+
+`derivationArgs` (Attribute set)
+:   Additional parameters passed to [`mkDerivation`]
+
+`buildCommand` (String)
+:   The command(s) run to build the derivation.
+
 
 ::: {.example #ex-runcommand-simple}
 # Invocation of `runCommand`
 
 ```nix
-(import <nixpkgs> {}).runCommand "my-example" {} ''
+runCommand "my-example" {} ''
   echo My example command is running
 
   mkdir $out
@@ -118,10 +125,6 @@ By default `runCommand` runs in a stdenv with no compiler environment, whereas [
 ''
 ```
 :::
-
-## `runCommandCC` {#trivial-builder-runCommandCC}
-
-This works just like `runCommand`. The only difference is that it also provides a C compiler in `buildCommand`'s environment. To minimize your dependencies, you should only use this if you are sure you will need a C compiler as part of running your command.
 
 ## `runCommandLocal` {#trivial-builder-runCommandLocal}
 
