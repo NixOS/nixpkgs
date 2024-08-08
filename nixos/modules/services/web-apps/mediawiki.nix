@@ -3,7 +3,7 @@
 let
 
   inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge mkOption;
-  inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionals optionalString types;
+  inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionals optionalString types versionAtLeast;
 
   cfg = config.services.mediawiki;
   fpm = config.services.phpfpm.pools.mediawiki;
@@ -17,9 +17,6 @@ let
 
   cacheDir = "/var/cache/mediawiki";
   stateDir = "/var/lib/mediawiki";
-
-  # https://www.mediawiki.org/wiki/Compatibility
-  php = pkgs.php82;
 
   pkg = pkgs.stdenv.mkDerivation rec {
     pname = "mediawiki-full";
@@ -49,7 +46,7 @@ let
   } ''
     mkdir -p $out/bin
     for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php update.php; do
-      makeWrapper ${php}/bin/php $out/bin/mediawiki-$(basename $i .php) \
+      makeWrapper ${cfg.phpPackage}/bin/php $out/bin/mediawiki-$(basename $i .php) \
         --set MEDIAWIKI_CONFIG ${mediawikiConfig} \
         --add-flags ${pkg}/share/mediawiki/maintenance/$i
     done
@@ -67,7 +64,7 @@ let
   mediawikiConfig = pkgs.writeTextFile {
     name = "LocalSettings.php";
     checkPhase = ''
-      ${php}/bin/php --syntax-check "$target"
+      ${cfg.phpPackage}/bin/php --syntax-check "$target"
     '';
     text = ''
       <?php
@@ -204,6 +201,12 @@ in
       enable = mkEnableOption "MediaWiki";
 
       package = mkPackageOption pkgs "mediawiki" { };
+
+      # https://www.mediawiki.org/wiki/Compatibility
+      phpPackage = (mkPackageOption pkgs "php" { }) // {
+        default = if versionAtLeast config.services.mediawiki.package.version "1.42.0" then pkgs.php82 else pkgs.php81;
+        defaultText = literalExpression ''if versionAtLeast config.services.mediawiki.package.version "1.42.0" then pkgs.php82 else pkgs.php81'';
+      };
 
       finalPackage = mkOption {
         type = types.package;
@@ -496,7 +499,7 @@ in
     services.phpfpm.pools.mediawiki = {
       inherit user group;
       phpEnv.MEDIAWIKI_CONFIG = "${mediawikiConfig}";
-      phpPackage = php;
+      phpPackage = cfg.phpPackage;
       settings = (if (cfg.webserver == "apache") then {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;
@@ -608,8 +611,8 @@ in
         fi
 
         echo "exit( wfGetDB( DB_MASTER )->tableExists( 'user' ) ? 1 : 0 );" | \
-        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/eval.php --conf ${mediawikiConfig} && \
-        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
+        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/eval.php --conf ${mediawikiConfig} && \
+        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
           --dbserver ${lib.escapeShellArg dbAddr} \
@@ -623,7 +626,7 @@ in
           ${lib.escapeShellArg cfg.name} \
           admin
 
-        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
+        ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
       '';
 
       serviceConfig = {
