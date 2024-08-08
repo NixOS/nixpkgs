@@ -28,9 +28,18 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ flask webtest blinker ];
+  dependencies = [
+    flask
+    webtest
+    blinker
+  ];
 
-  nativeCheckInputs = [ flake8 twine flask-sqlalchemy greenlet ];
+  nativeCheckInputs = [
+    flake8
+    twine
+    flask-sqlalchemy
+    greenlet
+  ];
 
   checkPhase = ''
     python3 setup.py sdist
