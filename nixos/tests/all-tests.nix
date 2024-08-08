@@ -275,6 +275,7 @@ in {
   domination = handleTest ./domination.nix {};
   dovecot = handleTest ./dovecot.nix {};
   drawterm = discoverTests (import ./drawterm.nix);
+  draupnir = handleTest ./matrix/draupnir.nix {};
   drbd = handleTest ./drbd.nix {};
   druid = handleTestOn [ "x86_64-linux" ] ./druid {};
   dublin-traceroute = handleTest ./dublin-traceroute.nix {};
