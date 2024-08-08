@@ -6,7 +6,7 @@ in
 py.toPythonApplication
   (py.mlflow.overridePythonAttrs(old: rec {
 
-    propagatedBuildInputs = old.propagatedBuildInputs ++ [
+    dependencies = old.dependencies ++ [
       py.boto3
       py.mysqlclient
     ];
