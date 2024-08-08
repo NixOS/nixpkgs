@@ -286,11 +286,6 @@ let
         "test-tls-cli-max-version-1.3"
         "test-tls-client-auth"
         "test-tls-sni-option"
-      ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
-        # Disable tests that don’t work under macOS sandbox.
-        "test-macos-app-sandbox"
-        "test-os"
-        "test-os-process-priority"
         # This is a bit weird, but for some reason fs watch tests fail with
         # sandbox.
         "test-fs-promises-watch"
@@ -311,6 +306,11 @@ let
         "test-runner-run"
         "test-runner-watch-mode"
         "test-watch-mode-files_watcher"
+      ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
+        # Disable tests that don’t work under macOS sandbox.
+        "test-macos-app-sandbox"
+        "test-os"
+        "test-os-process-priority"
       ] ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
         # These tests fail on x86_64-darwin (even without sandbox).
         # TODO: revisit at a later date.
