@@ -3,6 +3,7 @@
 , makeWrapper
 , nodejs
 , matrix-sdk-crypto-nodejs
+, sqlite
 , mkYarnPackage
 , fetchYarnDeps
 , nixosTests
@@ -24,6 +25,7 @@ in
 
     nativeBuildInputs = [
       makeWrapper
+      sqlite
     ];
 
     offlineCache = fetchYarnDeps {
