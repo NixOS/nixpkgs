@@ -48,7 +48,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";
-  version = "4.6.0";
+  version = "4.6.0-unstable-2024-08-08";
   format = "pyproject";
 
   outputs = [
@@ -59,8 +59,8 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "quodlibet";
     repo = "quodlibet";
-    rev = "refs/tags/release-${version}";
-    hash = "sha256-dkO/CFN7Dk72xhtmcSDcwUciOPMeEjQS2mch+jSfiII=";
+    rev = "3dcf31dfc8db9806d1f73a47fdabc950d35ded1d";
+    hash = "sha256-8qWuxTvMF6ksDkbZ6wRLPCJK1cSqgGMPac/ht6qVpnA=";
   };
 
   nativeBuildInputs =
@@ -110,6 +110,7 @@ python3.pkgs.buildPythonApplication rec {
     [
       feedparser
       gst-python
+      senf
       mutagen
       pycairo
       pygobject3
@@ -130,6 +131,7 @@ python3.pkgs.buildPythonApplication rec {
       xvfb-run
     ]
     ++ (with python3.pkgs; [
+      distutils
       polib
       pytest
       pytest-xdist
