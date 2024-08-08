@@ -4819,6 +4819,12 @@
     githubId = 47436522;
     name = "deliciouslytyped";
   };
+    delirehberi = {
+    email = "z@emre.xyz";
+    github = "delirehberi";
+    githubId = 803964;
+    name = "Emre Yilmaz";
+  };
   delliott = {
     name = "Darragh Elliott";
     github = "delliottxyz";
