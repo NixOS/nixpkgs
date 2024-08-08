@@ -3,6 +3,7 @@
   python3,
   fetchFromGitLab,
   openldap,
+  nixosTests,
 }:
 
 let
@@ -85,7 +86,7 @@ python.pkgs.buildPythonApplication rec {
     export SLAPD="${openldap}/libexec/slapd"
     export SCHEMA="${openldap}/etc/schema"
 
-    # is this right?
+    # Just use their example config for testing
     export CONFIG=canaille/config.sample.toml
   '';
 
@@ -114,7 +115,9 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit python;
-    # tests = nixosTests.canaille;
+    tests = {
+      inherit (nixosTests) canaille;
+    };
   };
 
   meta = with lib; {
