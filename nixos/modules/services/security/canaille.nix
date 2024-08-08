@@ -340,8 +340,14 @@ in
       locations = {
         "/" = {
           proxyPass = "http://unix:///run/canaille.socket";
+          # From https://docs.gunicorn.org/en/stable/deploy.html#nginx-configuration
           extraConfig = ''
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
             proxy_set_header Host $host;
+            # we don't want nginx trying to do something clever with
+            # redirects, we set the Host: header above already.
+            proxy_redirect off;
           '';
         };
         "/static" = {
