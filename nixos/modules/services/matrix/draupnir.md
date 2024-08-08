@@ -1,4 +1,4 @@
-# Draupnir (Matrix Moderation Tool) {#module-services-draupnir}
+# Draupnir (Matrix Moderation Bot) {#module-services-draupnir}
 
 This chapter will show you how to set up your own, self-hosted
 [Draupnir](https://github.com/the-draupnir-project/Draupnir) instance.
@@ -11,10 +11,10 @@ accounts for moderation.
 
 The bot by default includes support for bans, redactions, anti-spam,
 server ACLs, room directory changes, room alias transfers, account
-deactivation, room shutdown, and more.
+deactivation, room shutdown, and more. (This depends on homeserver configuration and implementation.)
 
 See the [README](https://github.com/the-draupnir-project/draupnir#readme)
-page and the [Moderator's guide](https://github.com/the-draupnir-project/Draupnir/blob/main/docs/moderators.md)
+page and the [Moderator's guide](https://the-draupnir-project.github.io/draupnir-documentation/moderator/setting-up-and-configuring)
 for additional instructions on how to setup and use Draupnir.
 
 For [additional settings](#opt-services.draupnir.settings)
@@ -37,36 +37,40 @@ you'll need to make the Draupnir user a Matrix server admin.
 
 Now invite the Draupnir user to the management room.
 
-It is recommended to use [Pantalaimon](https://github.com/matrix-org/pantalaimon),
-so your management room can be encrypted. This also applies if you are looking to moderate an encrypted room.
+It is not recommended to use End to End Encryption when not needed,
+as it is known to break parts of Draupnir.
 
-To enable the Pantalaimon E2E Proxy for draupnir, enable
+To enable the Pantalaimon E2EE Proxy for Draupnir, enable
 [services.draupnir.pantalaimon](#opt-services.draupnir.pantalaimon.enable). This will
 autoconfigure a new Pantalaimon instance, which will connect to the homeserver
-set in [services.draupnir.settings.homeserverUrl](#opt-services.draupnir.settings.homeserverUrl) and Draupnir itself
+set in [services.draupnir.homeserverUrl](#opt-services.draupnir.homeserverUrl) and Draupnir itself
 will be configured to connect to the new Pantalaimon instance.
 
 ```
 {
   services.draupnir = {
     enable = true;
-    pantalaimon = {
-       enable = true;
-       username = "draupnir";
-       passwordFile = "/run/secrets/draupnir-password";
-       options = {
-        homeserver = "http://localhost:8008";
-        ssl = false;
-       };
-    };
+
+    # Point this to your reverse proxy, if eg. Synapse's workers are in use!
+    homeserverUrl = "http://localhost:8008";
+
     settings = {
       managementRoom = "!yyy:domain.tld";
-      protectedRooms = [
-        "https://matrix.to/#/!xxx:domain.tld"
-      ];
     };
   };
 }
+```
+
+Additional config for Pantalaimon:
+```
+pantalaimon = {
+  enable = true;
+  username = "draupnir";
+  passwordFile = "/run/secrets/draupnir-password";
+  options = {
+    ssl = false;
+  };
+};
 ```
 
 ### Element Matrix Services (EMS) {#module-services-draupnir-setup-ems}
@@ -78,3 +82,5 @@ log entry with a URL to the consent page will be generated.
 ## Synapse Antispam Module {#module-services-draupnir-matrix-synapse-antispam}
 
 Use the Mjolnir Antispam module, Draupnir made no changes here and as such was not packaged.
+It may be possible that the Mjolir Antispam module does *not* work with Draupnir in the future,
+nor is the one in the Draupnir repository maintained or tested.
