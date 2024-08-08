@@ -1,4 +1,4 @@
-{ buildNpmPackage, lib, makeWrapper, bundlerEnv, testers, shopify-cli }:
+{ buildNpmPackage, lib, importNpmLock, makeWrapper, bundlerEnv, testers, shopify-cli }:
 let
   version = "3.63.2";
 
@@ -20,8 +20,11 @@ buildNpmPackage {
     ];
   };
 
-  npmDepsHash = "sha256-6CEDcWXZXYHFrT2xpbj5NwMrbDZXH6HclgTGkfKDlJs=";
+  npmDeps = importNpmLock {
+    npmRoot = ./.;
+  };
   dontNpmBuild = true;
+  npmConfigHook = importNpmLock.npmConfigHook;
 
   nativeBuildInputs = [ makeWrapper ];
 

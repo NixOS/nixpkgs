@@ -24,8 +24,6 @@ sed -i "s|$UPDATE_NIX_OLD_VERSION|$version|g" package.json
 # Update the package-lock.json
 rm -f package-lock.json
 npm i --package-lock-only
-npm_hash=$(prefetch-npm-deps package-lock.json)
-sed -i "s|npmDepsHash = \".*\";|npmDepsHash = \"$npm_hash\";|" package.nix
 
 # Update the Gemfile
 curl -sf "https://raw.githubusercontent.com/Shopify/cli/$version/packages/cli-kit/src/public/node/ruby.ts" > $tmp/ruby.ts
