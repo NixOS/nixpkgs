@@ -28,7 +28,7 @@ overrideCC stdenv (wrapCCWith rec {
   ];
 
   extraBuildCommands = ''
-    clang_version=`${cc}/bin/clang -v 2>&1 | grep "clang version " | grep -E -o "[0-9.-]+"`
+    clang_version=`${cc}/bin/clang -v 2>&1 | grep "clang version " | grep -E -o "[0-9]+" | head -1`
     mkdir -p $out/resource-root
     ln -s ${cc}/lib/clang/$clang_version/include $out/resource-root
     ln -s ${runtimes}/lib $out/resource-root
