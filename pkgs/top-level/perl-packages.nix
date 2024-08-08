@@ -8040,6 +8040,21 @@ with self; {
     };
   };
 
+  DistBuild = buildPerlModule {
+    pname = "Dist-Build";
+    version = "0.010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Dist-Build-0.010.tar.gz";
+      hash = "sha256-fz9ku/Hb4S2s53Cs8UtS4a0lII/0bdlP+j7/lw3x1fo=";
+    };
+    buildInputs = [ ExtUtilsHasCompiler ];
+    propagatedBuildInputs = [ CPANRequirementsDynamic ExtUtilsBuilder ExtUtilsBuilderCompiler ExtUtilsConfig ExtUtilsHelpers ExtUtilsInstallPaths ];
+    meta = {
+      description = "A modern module builder, author tools not included!";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DistCheckConflicts = buildPerlPackage {
     pname = "Dist-CheckConflicts";
     version = "0.11";
