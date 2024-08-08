@@ -205,8 +205,6 @@ in
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/buildkite-agent start --config ${cfg.dataDir}/buildkite-agent.cfg";
         User = "buildkite-agent-${name}";
-        # Workaround https://github.com/buildkite/agent/issues/2916
-        PrivateTmp = lib.mkDefault true;
         RestartSec = 5;
         Restart = "on-failure";
         TimeoutSec = 10;
