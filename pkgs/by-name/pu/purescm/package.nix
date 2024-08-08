@@ -1,6 +1,6 @@
 { lib
 , buildNpmPackage
-, fetchNpmDeps
+, importNpmLock
 , testers
 }:
 
@@ -25,16 +25,8 @@ let
     };
     dontNpmBuild = true;
 
-    npmDeps = fetchNpmDeps {
-      src = fileset.toSource {
-        root = ./.;
-        fileset = fileset.unions [
-          ./package-lock.json
-          ./package.json
-        ];
-      };
-      hash = "sha256-ljeFcLvIET77Q0OR6O5Ok1fGnaxaKaoywpcy2aHq/6o=";
-    };
+    npmDeps = importNpmLock { npmRoot = ./.; };
+    npmConfigHook = importNpmLock.npmConfigHook;
 
     installPhase = ''
       mkdir -p $out/share/${pname}
