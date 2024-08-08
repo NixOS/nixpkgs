@@ -1,0 +1,12 @@
+diff --git a/lib_pypy/_sysconfigdata.py b/lib_pypy/_sysconfigdata.py
+index d784211..5cc4d66 100644
+--- a/lib_pypy/_sysconfigdata.py
++++ b/lib_pypy/_sysconfigdata.py
+@@ -26,6 +26,7 @@
+     'CCSHARED': "-fPIC",
+     'LDFLAGS': "-Wl,-Bsymbolic-functions",
+     'LDSHARED': "cc -pthread -shared -Wl,-Bsymbolic-functions",
++    'LDCXXSHARED': "c++ -shared",
+     'EXT_SUFFIX': so_ext,
+     'SHLIB_SUFFIX': ".so",
+     'AR': "ar",
