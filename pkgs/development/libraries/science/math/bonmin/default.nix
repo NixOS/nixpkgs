@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  configureFlagsArray = lib.optionals stdenv.isDarwin [
+    "--with-asl-lib=-lipoptamplinterface -lamplsolver"
+  ];
+
   meta = with lib; {
     description = "Open-source code for solving general MINLP (Mixed Integer NonLinear Programming) problems";
     mainProgram = "bonmin";
@@ -48,7 +52,5 @@ stdenv.mkDerivation rec {
     license = licenses.epl10;
     platforms = platforms.unix;
     maintainers = with maintainers; [ aanderse ];
-    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
   };
 }
