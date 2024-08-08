@@ -9,7 +9,7 @@ import urllib.error
 import urllib.request
 from operator import itemgetter
 from pathlib import Path
-from typing import List, Dict, Optional, Any, Tuple
+from typing import List, Dict, Optional, Any, Tuple, Set
 
 # We don't want all those deprecated legacy extensions
 # Group extensions by GNOME "major" version for compatibility reasons
@@ -302,15 +302,21 @@ if __name__ == "__main__":
         json.load(out)
 
     with open(updater_dir_path / "collisions.json", "w") as out:
+        # Find the name collisions only for the last 3 shell versions
+        last_3_versions = sorted(supported_versions.keys(), key=lambda v: float(v), reverse=True)[:3]
+        package_name_registry_for_versions = [v for k, v in package_name_registry.items() if k in last_3_versions]
+        # Merge all package names into a single dictionary
+        package_name_registry_filtered: Dict[PackageName, Set[Uuid]] = {}
+        for pkgs in package_name_registry_for_versions:
+            for pname, uuids in pkgs.items():
+                if pname not in package_name_registry_filtered:
+                    package_name_registry_filtered[pname] = set()
+                package_name_registry_filtered[pname].update(uuids)
         # Filter out those that are not duplicates
-        package_name_registry_filtered: Dict[ShellVersion, Dict[PackageName, List[Uuid]]] = {
-            # The outer level keys are shell versions
-            shell_version: {
-                # The inner keys are extension names, with a list of all extensions with that name as value.
-                pname: extensions for pname, extensions in collisions.items() if len(extensions) > 1
-            } for shell_version, collisions in package_name_registry.items()
-        }
-        json.dump(package_name_registry_filtered, out, indent=2, ensure_ascii=False)
+        package_name_registry_filtered = {k: v for k, v in package_name_registry_filtered.items() if len(v) > 1}
+        # Convert set to list
+        collisions: Dict[PackageName, List[Uuid]] = {k: list(v) for k, v in package_name_registry_filtered.items()}
+        json.dump(collisions, out, indent=2, ensure_ascii=False)
         out.write("\n")
 
     logging.info(
