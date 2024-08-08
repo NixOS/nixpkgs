@@ -52,12 +52,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "homeassistant_cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for Home Assistant";
     mainProgram = "hass-cli";
     homepage = "https://github.com/home-assistant-ecosystem/home-assistant-cli";
     changelog = "https://github.com/home-assistant-ecosystem/home-assistant-cli/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.home-assistant.members;
   };
 }
