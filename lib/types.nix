@@ -839,6 +839,7 @@ rec {
       { modules
       , specialArgs ? {}
       , shorthandOnlyDefinesConfig ? false
+      , definedOptionsOnly ? false
       , description ? null
       , class ? null
       }@attrs:
@@ -852,7 +853,7 @@ rec {
         ) defs;
 
         base = evalModules {
-          inherit class specialArgs;
+          inherit class definedOptionsOnly specialArgs;
           modules = [{
             # This is a work-around for the fact that some sub-modules,
             # such as the one included in an attribute set, expects an "args"
