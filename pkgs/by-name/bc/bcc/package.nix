@@ -20,15 +20,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.30.0";
+  version = "0.31.0";
 
   disabled = !stdenv.isLinux;
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
-    rev = "v${version}";
-    hash = "sha256-ngGLGfLv2prnjhgaRPf8ea3oyy4129zGodR0Yz1QtCw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ludgmHFOyBu1CwUiaqczmNui0J8bUBAA5QGBiado8yw=";
   };
   format = "other";
 
