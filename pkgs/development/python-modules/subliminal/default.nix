@@ -4,64 +4,67 @@
   fetchFromGitHub,
   pythonOlder,
 
-  appdirs,
   babelfish,
   beautifulsoup4,
   chardet,
   click,
+  click-option-group,
   dogpile-cache,
   enzyme,
   guessit,
-  pysrt,
-  pytz,
+  srt,
+  pysubs2,
   rarfile,
   requests,
-  six,
+  platformdirs,
   stevedore,
+  tomli,
 
   pytestCheckHook,
+  pytest-cov,
+  pytest-xdist,
+  mypy,
   sympy,
   vcrpy,
 }:
 
 buildPythonPackage rec {
   pname = "subliminal";
-  version = "2.1.0";
-  format = "setuptools";
+  version = "2.2.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Diaoul";
     repo = "subliminal";
     rev = "refs/tags/${version}";
-    hash = "sha256-P4gVxKKCGKS3MC4F3yTAaOSv36TtdoYfrf61tBHg8VY=";
+    hash = "sha256-g7gg2qdLKl7bg/nNXRWN9wZaNShOOc38sVASZrIycMU=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace " --pep8 --flakes" ""
-  '';
-
   propagatedBuildInputs = [
-    appdirs
     babelfish
     beautifulsoup4
     chardet
     click
+    click-option-group
     dogpile-cache
     enzyme
     guessit
-    pysrt
-    pytz
+    srt
+    pysubs2
     rarfile
     requests
-    six
+    platformdirs
     stevedore
+    tomli
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov
+    pytest-xdist
+    mypy
     sympy
     vcrpy
   ];
@@ -70,20 +73,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require network access
-    "test_refine_video_metadata"
+    "test_refine"
     "test_scan"
     "test_hash"
-    "test_provider_pool_list_subtitles"
-    "test_async_provider_pool_list_subtitles"
-    "test_list_subtitles"
-    "test_download_bad_subtitle"
-    # Not implemented
-    "test_save_subtitles"
-  ];
-
-  disabledTestPaths = [
-    # AttributeError: module 'rarfile' has no attribute 'custom_check'
-    "tests/test_legendastv.py"
   ];
 
   meta = {
