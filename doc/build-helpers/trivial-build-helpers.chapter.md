@@ -126,6 +126,24 @@ runCommand "my-example" {} ''
 ```
 :::
 
+::: {.note}
+`runCommand name derivationArgs buildCommand` is equivalent to
+```nix
+runCommandWith {
+  inherit name derivationArgs;
+  stdenv = stdenvNoCC;
+} buildCommand
+```
+
+Likewise, `runCommandCC name derivationArgs buildCommand` is equivalent to
+```nix
+runCommandWith {
+  inherit name derivationArgs;
+} buildCommand
+```
+:::
+
+
 ## `runCommandLocal` {#trivial-builder-runCommandLocal}
 
 Variant of `runCommand` that forces the derivation to be built locally, it is not substituted. This is intended for very cheap commands (<1s execution time). It saves on the network round-trip and can speed up a build.
