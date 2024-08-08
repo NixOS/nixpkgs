@@ -45,7 +45,10 @@ self: super:
       postInstallHooks+=(wrapWithXFileSearchPath)
   '')) {};
 
-  appres = addMainProgram super.appres { };
+  appres = super.appres.overrideAttrs (attrs: {
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
+    meta = attrs.meta // { mainProgram = "appres"; };
+  });
 
   bdftopcf = super.bdftopcf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
