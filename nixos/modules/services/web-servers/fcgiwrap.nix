@@ -9,6 +9,12 @@ let
     This global instance option is deprecated in favour of per-instance
     options configured through `services.fcgiwrap.instances.*`.
   '';
+  securityWarning = ''
+    The fcgiwrap module is configured with a global shared instance.
+    This has security implications: <TODO: advisory link>.
+    Isolated instances should instead be configured through `services.fcgiwrap.instances.*'.
+    The global options at `services.fcgiwrap.*` will be removed in NixOS 24.11.
+  '';
 
 in {
 
@@ -18,6 +24,17 @@ in {
         type = types.bool;
         default = false;
         description = "Whether to enable fcgiwrap, a server for running CGI applications over FastCGI." + deprecationNote;
+      };
+
+      allowGlobalInstanceLocalPrivilegeEscalation = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          The global instance of fcgiwrap configured through this module
+          has a local privilege escalation vulnerability.
+          Set this option to true to accept the risk and bypass the evaluation
+          failure regardless.
+        '';
       };
 
       preforkProcesses = mkOption {
@@ -54,14 +71,17 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = [
-      ''
-        The fcgiwrap module is configured with a global shared instance.
-        This has security implications: <TODO: advisory link>.
-        Isolated instances should instead be configured through `services.fcgiwrap.instances.*'.
-        The global options at `services.fcgiwrap.*` will be removed in NixOS 24.11.
-      ''
+    assertions = [
+      {
+        assertion = cfg.allowGlobalInstanceLocalPrivilegeEscalation;
+        message = securityWarning + ''
+          To temporarily accept the risk and continue using the global instance,
+          set `services.fcgiwrap.allowGlobalInstanceLocalPrivilegeEscalation` to true.
+        '';
+      }
     ];
+
+    warnings = [ securityWarning ];
 
     systemd.services.fcgiwrap = {
       after = [ "nss-user-lookup.target" ];
