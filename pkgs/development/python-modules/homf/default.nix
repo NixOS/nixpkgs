@@ -1,9 +1,11 @@
 {
   lib,
   buildPythonPackage,
+  callPackage,
   fetchFromGitHub,
   # pytestCheckHook,
   pythonOlder,
+  versionCheckHook,
 
   hatchling,
   packaging,
@@ -25,7 +27,6 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [ "packaging" ];
-
   dependencies = [ packaging ];
 
   pythonImportsCheck = [
@@ -38,6 +39,11 @@ buildPythonPackage rec {
   # There are currently no checks which do not require network access, which breaks the check hook somehow?
   # nativeCheckInputs = [ pytestCheckHook ];
   # pytestFlagsArray = [ "-m 'not network'" ];
+
+  nativeBuildInputs = [ versionCheckHook ];
+
+  # (Ab)using `callPackage` as a fix-point operator, so tests can use the `homf` drv
+  passthru.tests = callPackage ./tests.nix { };
 
   meta = with lib; {
     description = "Asset download tool for GitHub Releases, PyPi, etc.";
