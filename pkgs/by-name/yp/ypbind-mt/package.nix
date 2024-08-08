@@ -1,14 +1,11 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchurl,
   autoreconfHook,
-  docbook-xsl-nons,
   libnsl,
   libtirpc,
   libxcrypt,
-  libxml2,
-  libxslt,
   pkg-config,
   rpcbind,
   systemdLibs,
@@ -20,10 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    docbook-xsl-nons
     pkg-config
-    libxml2
-    libxslt
   ];
 
   buildInputs = [
@@ -34,33 +28,10 @@ stdenv.mkDerivation rec {
     systemdLibs
   ];
 
-  src = fetchFromGitHub {
-    owner = "thkukuk";
-    repo = "ypbind-mt";
-    rev = "v${version}";
-    hash = "sha256-P8LH1vBTrNdgUQhzeixxBZR4atXyRVF+DuUbR6UeBJY=";
+  src = fetchurl {
+    url = "https://github.com/thkukuk/ypbind-mt/releases/download/v${version}/ypbind-mt-${version}.tar.xz";
+    hash = "sha256-Bk8vGFZzxUk9+D9kALeZ86NZ3lYRi2ujfEMnER8vzYs=";
   };
-
-  outputs = [ "out" ];
-
-  configurePhase = ''
-    runHook preConfigure
-
-    ./configure --prefix=/
-    sed -i -e 's/^#yp/yp/g' man/Makefile
-    sed -i -E 's/^#(\s+\$)/\1/g' man/Makefile
-    sed -i '/xmllint/d' man/Makefile
-
-    runHook postConfigure
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    DESTDIR="$out" make install
-
-    runHook postInstall
-  '';
 
   meta = with lib; {
     description = "Multithreaded daemon maintaining the NIS binding informations.";
