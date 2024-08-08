@@ -6,10 +6,15 @@ let
   cfg = config.services.flannel;
 
   networkConfig = filterAttrs (n: v: v != null) {
+    EnableIPv6 = cfg.ipv6Network != null;
     Network = cfg.network;
+    IPv6Network = cfg.ipv6Network;
     SubnetLen = cfg.subnetLen;
     SubnetMin = cfg.subnetMin;
     SubnetMax = cfg.subnetMax;
+    Ipv6SubnetLen = cfg.ipv6SubnetLen;
+    Ipv6SubnetMin = cfg.ipv6SubnetMin;
+    Ipv6SubnetMax = cfg.ipv6SubnetMax;
     Backend = cfg.backend;
   };
 in {
@@ -82,6 +87,11 @@ in {
       type = types.str;
     };
 
+    ipv6Network = mkOption {
+      description = " IPv6 network in CIDR format to use for the entire flannel network.";
+      type = types.nullOr types.str;
+    };
+
     nodeName = mkOption {
       description = ''
         Needed when running with Kubernetes as backend as this cannot be auto-detected";
@@ -121,6 +131,34 @@ in {
       description = ''
         The end of IP range which the subnet allocation should start with.
         Defaults to the last subnet of Network.
+      '';
+      type = types.nullOr types.str;
+      default = null;
+    };
+
+    ipv6SubnetLen = mkOption {
+      description = ''
+        The size of the ipv6 subnet allocated to each host. Defaults to 64 (i.e. /64)
+        unless Ipv6Network was configured to be smaller than a /62 in which case
+        it is two less than the network.
+      '';
+      type = types.int;
+      default = 24;
+    };
+
+    ipv6SubnetMin = mkOption {
+      description = ''
+        The beginning of IPv6 range which the subnet allocation should start with.
+        Defaults to the second subnet of Ipv6Network.
+      '';
+      type = types.nullOr types.str;
+      default = null;
+    };
+
+    ipv6SubnetMax = mkOption {
+      description = ''
+        The end of the IPv6 range at which the subnet allocation should end with.
+        Defaults to the last subnet of Ipv6Network.
       '';
       type = types.nullOr types.str;
       default = null;
