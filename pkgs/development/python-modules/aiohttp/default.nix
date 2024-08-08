@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.10.1";
+  version = "3.10.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiohttp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+1Qu5Y1FwrsqWuvhOANdYXamxZJ9Z41EXaiEhyvtFUE=";
+    hash = "sha256-jetgFHFD9l2hW7FWbGESM6Tqeav+2rM8C2TCV0bPJwU=";
   };
 
   patches = [
