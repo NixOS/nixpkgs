@@ -187,6 +187,7 @@ buildFHSEnv {
 
   targetPkgs = pkgs: with pkgs; [
     alsa-lib
+    pulseaudio
     aprutil
     bzip2
     davinci
