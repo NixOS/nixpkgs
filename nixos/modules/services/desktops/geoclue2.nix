@@ -12,6 +12,8 @@ let
 
   defaultWhitelist = [ "gnome-shell" "io.elementary.desktop.agent-geoclue2" ];
 
+  mozillaLocationServices = "https://location.services.mozilla.com/v1/geolocate?key=geoclue";
+
   appConfigModule = types.submodule ({ name, ... }: {
     options = {
       desktopID = mkOption {
@@ -125,7 +127,7 @@ in
 
       geoProviderUrl = mkOption {
         type = types.str;
-        default = "https://location.services.mozilla.com/v1/geolocate?key=geoclue";
+        default = mozillaLocationServices;
         example = "https://www.googleapis.com/geolocation/v1/geolocate?key=YOUR_KEY";
         description = ''
           The url to the wifi GeoLocation Service.
@@ -179,6 +181,12 @@ in
 
   ###### implementation
   config = mkIf cfg.enable {
+    warnings = optional (cfg.geoProviderUrl == mozillaLocationServices)
+      ''
+        The location server at ${cfg.geoProviderUrl} has been retired and is no longer functional.
+        Any services reliant on geoclue2 for location services will likely fail to operate correctly.
+        Consider setting an alternative provider URL to continue using geoclue2.
+      '';
 
     environment.systemPackages = [ package ];
 
