@@ -112,26 +112,31 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
     ++ lib.optionals fortranSupport [ gfortran ];
 
-  configureFlags = [
-    (lib.enableFeature cudaSupport "mca-dso")
-    (lib.enableFeature fortranSupport "mpi-fortran")
-    (lib.withFeatureAs stdenv.isLinux "libnl" (lib.getDev libnl))
-    "--with-pmix=${if stdenv.isLinux then (lib.getDev pmix) else "internal"}"
-    (lib.withFeatureAs stdenv.isLinux "pmix-libdir" "${lib.getLib pmix}/lib")
-    # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
-    (lib.withFeatureAs stdenv.isLinux "prrte" (lib.getBin prrte))
-    (lib.withFeature enableSGE "sge")
-    (lib.enableFeature enablePrefix "mpirun-prefix-by-default")
-    # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
-    # https://github.com/openucx/ucx
-    # https://www.open-mpi.org/faq/?category=buildcuda
-    (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
-    (lib.enableFeature cudaSupport "dlopen")
-    (lib.withFeatureAs fabricSupport "psm2" (lib.getDev libpsm2))
-    (lib.withFeatureAs fabricSupport "ofi" (lib.getDev libfabric))
-    # The flag --without-ofi-libdir is not supported from some reason, so we
-    # don't use lib.withFeatureAs
-  ] ++ lib.optionals fabricSupport [ "--with-ofi-libdir=${lib.getLib libfabric}/lib" ];
+  configureFlags =
+    [
+      (lib.enableFeature cudaSupport "mca-dso")
+      (lib.enableFeature fortranSupport "mpi-fortran")
+      (lib.withFeatureAs stdenv.isLinux "libnl" (lib.getDev libnl))
+      # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
+      (lib.withFeatureAs stdenv.isLinux "prrte" (lib.getBin prrte))
+      (lib.withFeature enableSGE "sge")
+      (lib.enableFeature enablePrefix "mpirun-prefix-by-default")
+      # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
+      # https://github.com/openucx/ucx
+      # https://www.open-mpi.org/faq/?category=buildcuda
+      (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
+      (lib.enableFeature cudaSupport "dlopen")
+      (lib.withFeatureAs fabricSupport "psm2" (lib.getDev libpsm2))
+      (lib.withFeatureAs fabricSupport "ofi" (lib.getDev libfabric))
+      # The flag --without-ofi-libdir is not supported from some reason, so we
+      # don't use lib.withFeatureAs
+    ]
+    ++ lib.optional fabricSupport "--with-ofi-libdir=${lib.getLib libfabric}/lib"
+    # The pmix flags should only be set when pmix is used
+    ++ lib.optionals stdenv.isLinux [
+      "--with-pmix=${lib.getDev pmix}"
+      "--with-pmix-libdir=${lib.getLib pmix}/lib"
+    ];
 
   enableParallelBuilding = true;
 
@@ -189,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
         part2 = builtins.attrNames wrapperDataSubstitutions;
       };
     in
-    ''
+    lib.optionalString stdenv.isLinux ''
       find $out/lib/ -name "*.la" -exec rm -f \{} \;
 
       # The main wrapper that all the rest of the commonly used binaries are
@@ -221,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
         ))
         (lib.concatStringsSep "\n")
       ]}
-      # A symlink to ${lib.getDev pmix}/bin/pmixcc upstreeam puts here as well
+      # A symlink to ''${lib.getDev pmix}/bin/pmixcc upstream puts here as well
       # from some reason.
       moveToOutput "bin/pcc" "''${!outputDev}"
 
