@@ -1,0 +1,16 @@
+[
+  {
+    "operation": "exchange-enable-wire-0",
+    "arguments": {
+      "payto_uri": "payto://x-taler-bank/exchange:8081/exchange?receiver-name=exchange",
+      "debit_restrictions": [],
+      "credit_restrictions": [],
+      "priority": 0,
+      "validity_start": {
+        "t_s": 1721946915
+      },
+      "master_sig_add": "N7K9K6191JV19MDQP355V7AX5PT4TZ9YBAXJCRN9FTKY99H5JH22G28J8YCY813G0YM2S7E4KNS66TPZC9JET4AQ8SYDPVDX6193W30",
+      "master_sig_wire": "DYD3ZT88HP21CH10FMQG5DE0BRTC744KM5KX0FJ9S3VGXMY6D7BX1QKDSFVK6A0PKWHGVDQ9XHM52PZTPQQFCTMZH8Q7F63SEA2500R"
+    }
+  }
+]

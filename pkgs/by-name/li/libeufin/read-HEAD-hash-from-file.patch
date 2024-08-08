@@ -1,0 +1,24 @@
+diff --git a/build.gradle b/build.gradle
+index 632f7c52..9cd52a1e 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -40,9 +40,11 @@ idea {
+ }
+ 
+ task versionFile() {
++    // At this point, .git has been deleted
+     def stdout = new ByteArrayOutputStream()
+     exec {
+-        commandLine 'git', 'rev-parse', '--short', 'HEAD'
++        // Generated during src.postFetch
++        commandLine 'cat', "${projectDir}/common/src/main/resources/HEAD.txt"
+         standardOutput = stdout
+     }
+     def gitHash = stdout.toString().trim()
+@@ -59,4 +61,4 @@ task libeufinVersion {
+ 
+ classes {
+     dependsOn versionFile
+-}
++}
+\ No newline at end of file

@@ -1,0 +1,116 @@
+diff --git a/bank/build.gradle b/bank/build.gradle
+index 01b884ab..cf934496 100644
+--- a/bank/build.gradle
++++ b/bank/build.gradle
+@@ -24,17 +24,17 @@ dependencies {
+     implementation(project(":common"))
+ 
+     implementation("org.postgresql:postgresql:$postgres_version")
+-    implementation("com.github.ajalt.clikt:clikt:$clikt_version")
++    implementation("com.github.ajalt.clikt:clikt-jvm:$clikt_version")
+ 
+-    implementation("io.ktor:ktor-server-core:$ktor_version")
+-    implementation("io.ktor:ktor-server-netty:$ktor_version")
+-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
++    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
++    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
++    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
+ 
+     // UNIX domain sockets support (used to connect to PostgreSQL)
+     implementation("com.kohlschutter.junixsocket:junixsocket-core:$junixsocket_version")
+ 
+     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
+-    testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
++    testImplementation("io.ktor:ktor-server-test-host-jvm:$ktor_version")
+ 
+     testImplementation(project(":common"))
+ }
+diff --git a/common/build.gradle b/common/build.gradle
+index cdc9c3e0..48fa02a9 100644
+--- a/common/build.gradle
++++ b/common/build.gradle
+@@ -24,18 +24,18 @@ dependencies {
+     implementation("org.postgresql:postgresql:$postgres_version")
+     implementation("com.zaxxer:HikariCP:5.1.0")
+     
+-    implementation("io.ktor:ktor-server-core:$ktor_version")
+-    implementation("io.ktor:ktor-server-call-logging:$ktor_version")
+-    implementation("io.ktor:ktor-server-cors:$ktor_version")
+-    implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
+-    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+-    implementation("io.ktor:ktor-server-netty:$ktor_version")
+-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+-    implementation("io.ktor:ktor-server-forwarded-header:$ktor_version")
+-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+-    implementation("io.ktor:ktor-server-test-host:$ktor_version")
++    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
++    implementation("io.ktor:ktor-server-call-logging-jvm:$ktor_version")
++    implementation("io.ktor:ktor-server-cors-jvm:$ktor_version")
++    implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
++    implementation("io.ktor:ktor-server-status-pages-jvm:$ktor_version")
++    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
++    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
++    implementation("io.ktor:ktor-server-forwarded-header-jvm:$ktor_version")
++    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
++    implementation("io.ktor:ktor-server-test-host-jvm:$ktor_version")
+     
+-    implementation("com.github.ajalt.clikt:clikt:$clikt_version")
++    implementation("com.github.ajalt.clikt:clikt-jvm:$clikt_version")
+ 
+     implementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
+     testImplementation("uk.org.webcompere:system-stubs-core:2.1.6")
+diff --git a/nexus/build.gradle b/nexus/build.gradle
+index de8b8648..90a7106e 100644
+--- a/nexus/build.gradle
++++ b/nexus/build.gradle
+@@ -24,11 +24,11 @@ dependencies {
+     implementation(project(":common"))
+ 
+     // Command line parsing
+-    implementation("com.github.ajalt.clikt:clikt:$clikt_version")
++    implementation("com.github.ajalt.clikt:clikt-jvm:$clikt_version")
+     implementation("org.postgresql:postgresql:$postgres_version")
+     // Ktor client library
+-    implementation("io.ktor:ktor-server-core:$ktor_version")
+-    implementation("io.ktor:ktor-client-cio:$ktor_version")
++    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
++    implementation("io.ktor:ktor-client-cio-jvm:$ktor_version")
+ 
+     // PDF generation
+     implementation("com.itextpdf:itext-core:8.0.3")
+@@ -37,12 +37,12 @@ dependencies {
+     implementation("com.kohlschutter.junixsocket:junixsocket-core:$junixsocket_version")
+ 
+     // Serialization
+-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
++    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
+ 
+     // Unit testing
+     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
+-    testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
+-    testImplementation("io.ktor:ktor-client-mock:$ktor_version")
++    testImplementation("io.ktor:ktor-server-test-host-jvm:$ktor_version")
++    testImplementation("io.ktor:ktor-client-mock-jvm:$ktor_version")
+ }
+ 
+ application {
+diff --git a/testbench/build.gradle b/testbench/build.gradle
+index 4dda8348..2552cb7b 100644
+--- a/testbench/build.gradle
++++ b/testbench/build.gradle
+@@ -21,12 +21,12 @@ dependencies {
+     implementation(project(":bank"))
+     implementation(project(":nexus"))
+ 
+-    implementation("com.github.ajalt.clikt:clikt:$clikt_version")
++    implementation("com.github.ajalt.clikt:clikt-jvm:$clikt_version")
+ 
+     implementation("org.postgresql:postgresql:$postgres_version")
+ 
+-    implementation("io.ktor:ktor-server-test-host:$ktor_version")
+-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
++    implementation("io.ktor:ktor-server-test-host-jvm:$ktor_version")
++    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
+     implementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
+ }
+ 
