@@ -140,7 +140,7 @@ in
       after = [ "postgresql.service" ];
       serviceConfig = commonServiceConfig // {
         Type = "oneshot";
-        ExecStart = "${finalPackage}/bin/canaille install";
+        ExecStart = "${getExe finalPackage} install";
       };
     };
 
@@ -171,7 +171,7 @@ in
             });
           in
           ''
-            ${gunicorn}/bin/gunicorn \
+            ${getExe gunicorn} \
               --name=canaille \
               --bind='unix:///run/canaille.socket' \
               'canaille:create_app()'

@@ -9,12 +9,7 @@ import ./make-test-python.nix (
     meta.maintainers = with pkgs.lib.maintainers; [ erictapen ];
 
     nodes.server =
-      {
-        config,
-        pkgs,
-        lib,
-        ...
-      }:
+      { pkgs, lib, ... }:
       {
         services.canaille = {
           enable = true;
@@ -51,7 +46,7 @@ import ./make-test-python.nix (
       };
 
     testScript =
-      { nodes, ... }:
+      { ... }:
       ''
         import json
 
