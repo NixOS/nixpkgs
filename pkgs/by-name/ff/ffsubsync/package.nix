@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   python3,
 }:
 
@@ -15,6 +16,14 @@ python3.pkgs.buildPythonApplication rec {
     rev = "refs/tags/${version}";
     hash = "sha256-ZdKZeKfAUe/FXLOur9Btb5RgXewmy3EHunQphqlxpIc=";
   };
+
+  patches = [
+    # updates for python 3.12 (not currently included in a release)
+    (fetchpatch {
+      url = "https://github.com/smacke/ffsubsync/commit/de75bdbfe846b3376f8c0bcfe2e5e5db82d7ff20.patch";
+      hash = "sha256-JN7F9H9G8HK2aLOlm/Ec+GsWnU+65f1P658nq8FbAjo=";
+    })
+  ];
 
   nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
