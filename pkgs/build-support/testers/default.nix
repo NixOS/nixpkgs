@@ -7,7 +7,9 @@
 
   diffoscopeMinimal,
   runCommand,
+  runCommandWith,
   stdenv,
+  stdenvNoCC,
   substituteAll,
   testers,
 }:
@@ -98,6 +100,31 @@
         then throw "invalidateFetcherByDrvHash: Adding the derivation hash to the fixed-output derivation name had no effect. Make sure the fetcher's name argument ends up in the derivation name. Otherwise, the fetcher will not be re-run when its implementation changes. This is important for testing."
         else salted;
     in checked;
+
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-runCommand
+  runCommand = testers.invalidateFetcherByDrvHash (
+    {
+      hash ? "sha256-d6xi4mKdjkX2JFicDIv5niSzpyI0m/Hnm8GGAIU04kY=", # hash value of empty file
+      name,
+      script,
+      stdenv ? stdenvNoCC,
+      ...
+    }@args:
+
+    runCommandWith {
+      inherit name stdenv;
+
+      derivationArgs = {
+        outputHash = hash;
+        outputHashMode = "recursive";
+      } // lib.removeAttrs args [
+        "hash"
+        "name"
+        "script"
+        "stdenv"
+      ];
+    } script
+  );
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest
   # or doc/build-helpers/testers.chapter.md
