@@ -4,14 +4,14 @@
 , hwloc, munge, zlib, pandoc, gitMinimal
 } :
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pmix";
   version = "5.0.3";
 
   src = fetchFromGitHub {
     repo = "openpmix";
     owner = "openpmix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5qBZj4L0Qu/RvNj8meL0OlLCdfGvBP0D916Mr+0XOCQ=";
     fetchSubmodules = true;
   };
@@ -85,5 +85,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.markuskowa ];
     platforms = platforms.linux;
   };
-}
+})
 
