@@ -3,7 +3,6 @@
 , fetchPypi
 , alsa-utils
 , gobject-introspection
-, libappindicator-gtk3
 , libnotify
 , wlrctl
 , gtk3
@@ -36,7 +35,6 @@ buildPythonApplication rec {
 
   buildInputs = [
     gtk3
-    libappindicator-gtk3
     libnotify
   ];
 
