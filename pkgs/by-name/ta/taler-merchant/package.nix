@@ -8,6 +8,7 @@
   libtool,
   pkg-config,
   autoreconfHook,
+  makeWrapper,
   jq,
 }:
 
@@ -36,9 +37,20 @@ stdenv.mkDerivation {
     ln -s ${taler-wallet-core}/spa.html $sourceRoot/contrib/
   '';
 
+  # TODO: These wrongly use the taler-exchange prefix for the `templates` and
+  # `spa`, which prevents the merchant fron starting.
+  # It's unclear how patching these out affects the program, but it would be
+  # ideal to fix this upstream.
+  postPatch = ''
+    substituteInPlace src/backend/taler-merchant-httpd.c \
+      --replace-fail 'TALER_TEMPLATING_init ("merchant");' " " \
+      --replace-fail 'TMH_spa_init ())' 'GNUNET_OK)'
+  '';
+
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    makeWrapper
   ];
 
   buildInputs = taler-exchange.buildInputs ++ [
@@ -63,6 +75,15 @@ stdenv.mkDerivation {
     "--with-gnunet=${gnunet}"
     "--with-exchange=${taler-exchange}"
   ];
+
+  # NOTE: The program that need database access fails to detect the postgresql
+  # library in `$out/lib/taler`, so we need to wrap them.
+  postInstall = ''
+    for exec in dbinit httpd webhook wirewatch depositcheck exchange; do
+      wrapProgram $out/bin/taler-merchant-$exec \
+        --prefix LD_LIBRARY_PATH : "$out/lib/taler"
+    done
+  '';
 
   enableParallelBuilding = true;
 
