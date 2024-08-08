@@ -275,7 +275,9 @@ in
                   # Just hope that it's up after a short wait
                   machine.sleep(10)
                   machine.screenshot("polkit_agent")
-                  machine.send_chars("${password}\n")
+                  machine.send_chars("${password}")
+                  machine.sleep(2) # Hopefully enough delay to make sure all the password characters have been registered? Maybe just placebo
+                  machine.send_chars("\n")
                   machine.wait_for_file("/tmp/polkit-test", 10)
 
               machine.send_key("alt-f4")
