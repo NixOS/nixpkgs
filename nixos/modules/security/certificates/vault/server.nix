@@ -6,7 +6,8 @@ let
   addr = "http://127.0.0.1:8200";
   token = "/var/lib/vault/.vault-token";
   role = "test";
-in {
+in
+{
   options.security.certificates.authorities.vault.server = {
     enable = mkOption {
       type = types.bool;

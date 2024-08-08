@@ -6,10 +6,12 @@ let
   # Module of options for generated certificate files
   ini = pkgs.formats.ini { };
   toOpenSSLMultiVal = name: list:
-    listToAttrs (imap1 (i: val: {
-      name = "${name}.${toString i}";
-      value = toString val;
-    }) list);
+    listToAttrs (imap1
+      (i: val: {
+        name = "${name}.${toString i}";
+        value = toString val;
+      })
+      list);
   toOpenSSLMultiVals = attrs:
     pipe attrs [
       (mapAttrsToList (name: value:
@@ -117,7 +119,8 @@ let
       };
     };
   };
-in {
+in
+{
   options = with types; {
     service = mkOption {
       type = str;
@@ -239,58 +242,71 @@ in {
 
   config = {
     openssl = {
-      config = let
-        dnSect = "${name}_distringished_name";
-        extSect = "${name}_extensions";
-        sanSect = "${name}_subjectAltName";
-      in {
-        "req" = {
-          prompt = "no";
-          distinguished_name = dnSect;
-          req_extensions = extSect;
+      config =
+        let
+          dnSect = "${name}_distringished_name";
+          extSect = "${name}_extensions";
+          sanSect = "${name}_subjectAltName";
+        in
+        {
+          "req" = {
+            prompt = "no";
+            distinguished_name = dnSect;
+            req_extensions = extSect;
+          };
+          # Distinguished Name
+          ${dnSect} = { inherit (config.request) CN; } // config.request.names;
+          # Extensions
+          ${extSect} = { subjectAltName = "@${sanSect}"; };
+          # Subject Alternative Names
+          ${sanSect} = toOpenSSLMultiVals config.request.hosts;
         };
-        # Distinguished Name
-        ${dnSect} = { inherit (config.request) CN; } // config.request.names;
-        # Extensions
-        ${extSect} = { subjectAltName = "@${sanSect}"; };
-        # Subject Alternative Names
-        ${sanSect} = toOpenSSLMultiVals config.request.hosts;
-      };
 
       configFile = ini.generate "${name}_csr.cfg" config.openssl.config;
     };
     scripts = {
-      csr = pkgs.writeShellScript "${name}-mkcsr" (let
-        openssl = "${pkgs.openssl}/bin/openssl";
-        cfg = config.openssl.configFile;
-      in ''
-        ${openssl} req -config ${cfg} -batch -new -key /dev/stdin -outform PEM
-      '');
+      csr = pkgs.writeShellScript "${name}-mkcsr" (
+        let
+          openssl = "${pkgs.openssl}/bin/openssl";
+          cfg = config.openssl.configFile;
+        in
+        ''
+          ${openssl} req -config ${cfg} -batch -new -key /dev/stdin -outform PEM
+        ''
+      );
 
-      key = pkgs.writeShellScript "${name}-mkkey" (let
-        openssl = "${pkgs.openssl}/bin/openssl";
-        inherit (config.request) key;
-      in if (key ? rsa) then ''
-        ${openssl} genrsa ${toString (key.rsa.size or 2048)}
-      '' else if (key ? ecdsa) then ''
-        ${openssl} ecparam -name ${key.ecdsa.curve} -genkey -outform PEM
-      '' else
-        abort "Unknown key type: ${elemAt (attrNames key) 0}");
+      key = pkgs.writeShellScript "${name}-mkkey" (
+        let
+          openssl = "${pkgs.openssl}/bin/openssl";
+          inherit (config.request) key;
+        in
+        if (key ? rsa) then ''
+          ${openssl} genrsa ${toString (key.rsa.size or 2048)}
+        '' else if (key ? ecdsa) then ''
+          ${openssl} ecparam -name ${key.ecdsa.curve} -genkey -outform PEM
+        '' else
+          abort "Unknown key type: ${elemAt (attrNames key) 0}"
+      );
 
-      install = pkgs.writeShellScript "${name}-install" (let
-        install = src:
-          { path, owner ? "$(id -u)", group ? "$(id -g)", mode ? "0600" }:
-          "${pkgs.coreutils}/bin/install -Dv " + "-o ${owner} " + "-g ${group} "
-          + "-m ${mode} " + "${src} ${escapeShellArg path}";
-      in concatLines ([''
-        PKEY=''${1:-/dev/null}
-        CERT=''${2:-/dev/null}
-        CA=''${3:-/dev/null}
-      ''] ++ (optional (config ? private_key)
-        (install "$PKEY" config.private_key))
+      install = pkgs.writeShellScript "${name}-install" (
+        let
+          install = src:
+            { path, owner ? "$(id -u)", group ? "$(id -g)", mode ? "0600" }:
+            "${pkgs.coreutils}/bin/install -Dv " + "-o ${owner} " + "-g ${group} "
+            + "-m ${mode} " + "${src} ${escapeShellArg path}";
+        in
+        concatLines ([
+          ''
+            PKEY=''${1:-/dev/null}
+            CERT=''${2:-/dev/null}
+            CA=''${3:-/dev/null}
+          ''
+        ] ++ (optional (config ? private_key)
+          (install "$PKEY" config.private_key))
         ++ (optional (config ? private_key)
           (install "$CERT" config.certificate))
-        ++ (optional (config ? ca) (install "$CA" config.ca))));
+        ++ (optional (config ? ca) (install "$CA" config.ca)))
+      );
     };
   };
 }

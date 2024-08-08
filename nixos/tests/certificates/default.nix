@@ -38,7 +38,8 @@ let
   '';
 
   # TODO: Make a better certificate testing framework for multiple authorities to hook into
-in {
+in
+{
   local = runTest {
     inherit testScript defaults;
     name = "certificates-local";
@@ -53,7 +54,7 @@ in {
     inherit testScript defaults;
     name = "certificate-vault";
     node.pkgsReadOnly = false;
-    nodes.machine = { pkgs, config, lib, ... }: {
+    nodes.machine = { config, ... }: {
       nixpkgs.config.allowUnfree = true;
       security.certificates = {
         authorities.vault = { server.enable = true; };

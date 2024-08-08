@@ -9,10 +9,11 @@ let
   # `security.certificates.authorities` and map to their settings
   authorities = lib.pipe
     (evalModules { modules = top.authorities.type.getSubModules; }).options [
-      (lib.filterAttrs (name: _: name != "_module"))
-      (mapAttrs (_: value: value.settings or (mkOption { })))
-    ];
-in {
+    (lib.filterAttrs (name: _: name != "_module"))
+    (mapAttrs (_: value: value.settings or (mkOption { })))
+  ];
+in
+{
   options.security.certificates = with types; {
     specifications = mkOption {
       description = ''
@@ -62,24 +63,27 @@ in {
     };
   };
   imports = [ ./local.nix ./vault ];
-  config = let cfg = config.security.certificates;
-  in {
-    assertions = (mapAttrsToList (name: settings: {
-      assertion = (settings._type or null) == "option";
-      message = ''
-        security.certificate.authorities.${name}.settings must be declared as
-        a option
-      '';
-    }) authorities);
+  config =
+    let cfg = config.security.certificates;
+    in {
+      assertions = (mapAttrsToList
+        (name: settings: {
+          assertion = (settings._type or null) == "option";
+          message = ''
+            security.certificate.authorities.${name}.settings must be declared as
+            a option
+          '';
+        })
+        authorities);
 
-    systemd.targets = {
-      certificates = {
-        wants = mapAttrsToList (_: cert: "${cert.service}.service")
-          cfg.specifications;
-        wantedBy = [ "multi-user.target" ];
+      systemd.targets = {
+        certificates = {
+          wants = mapAttrsToList (_: cert: "${cert.service}.service")
+            cfg.specifications;
+          wantedBy = [ "multi-user.target" ];
+        };
       };
     };
-  };
 
   meta = { maintainers = lib.maintainers.MadnessASAP; };
 }
