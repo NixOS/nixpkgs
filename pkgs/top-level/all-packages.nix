@@ -9221,8 +9221,6 @@ with pkgs;
 
   jrnl = callPackage ../applications/misc/jrnl { };
 
-  jsawk = callPackage ../tools/text/jsawk { };
-
   jsbeautifier = with python3Packages; toPythonApplication jsbeautifier;
 
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
@@ -17128,9 +17126,6 @@ with pkgs;
     inherit (darwin) libobjc;
   };
   spidermonkey_91 = callPackage ../development/interpreters/spidermonkey/91.nix {
-    inherit (darwin) libobjc;
-  };
-  spidermonkey_102 = callPackage ../development/interpreters/spidermonkey/102.nix {
     inherit (darwin) libobjc;
   };
   spidermonkey_115 = callPackage ../development/interpreters/spidermonkey/115.nix {
@@ -29295,7 +29290,7 @@ with pkgs;
   cardo = callPackage ../data/fonts/cardo { };
 
   cage = callPackage ../applications/window-managers/cage {
-    wlroots = wlroots_0_16;
+    wlroots = wlroots_0_17;
   };
 
   calf = callPackage ../applications/audio/calf {
@@ -30991,7 +30986,6 @@ with pkgs;
   super-productivity = callPackage ../applications/office/super-productivity { };
 
   inherit (callPackages ../development/libraries/wlroots {})
-    wlroots_0_16
     wlroots_0_17
     wlroots_0_18;
 

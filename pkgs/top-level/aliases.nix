@@ -689,6 +689,7 @@ mapAliases ({
   jfbview = throw "'jfbview' has been removed, because it depends on an outdated and insecure version of mupdf"; # Added 2023-06-27
   jira-cli = throw "jira-cli was removed because it is no longer maintained"; # Added 2023-02-28
   join-desktop = throw "'join-desktop' has been removed because it is unmaintained upstream"; # Added 2023-10-04
+  jsawk = throw "'jsawk' has been removed because it is unmaintained upstream"; # Added 2028-08-07
 
   # Julia
   julia_18 = throw "'julia_18' has been removed from nixpkgs as it has reached end of life"; # Added 2024-01-11
@@ -1400,6 +1401,7 @@ mapAliases ({
   spice-gtk_libsoup2 = throw "'spice-gtk_libsoup2' has been renamed to/replaced by 'spice-gtk'"; # Added 2023-02-21
   # spidermonkey is not ABI upwards-compatible, so only allow this for nix-shell
   spidermonkey = spidermonkey_78; # Added 2020-10-09
+  spidermonkey_102 = throw "'spidermonkey_102' is EOL since 2023/03"; # Added 2024-08-07
   spotify-tui = throw "'spotify-tui' has been removed, as it was broken and unmaintained"; # Added 2024-03-12
   spotify-unwrapped = spotify; # added 2022-11-06
   spring-boot = spring-boot-cli; # added 2020-04-24
@@ -1550,6 +1552,7 @@ mapAliases ({
   wkhtmltopdf-bin = wkhtmltopdf; # Added 2024-07-17
   wlroots_0_14 = throw "'wlroots_0_14' has been removed in favor of newer versions"; # Added 2023-07-29
   wlroots_0_15 = throw "'wlroots_0_15' has been removed in favor of newer versions"; # Added 2024-03-28
+  wlroots_0_16 = throw "'wlroots_0_16' has been removed in favor of newer versions"; # Added 2024-07-14
   wlroots = wlroots_0_18; # wlroots is unstable, we must keep depending on 'wlroots_0_*', convert to package after a stable(1.x) release
   wordpress6_1 = throw "'wordpress6_1' has been removed in favor of the latest version"; # Added 2023-10-10
   wordpress6_2 = throw "'wordpress6_2' has been removed in favor of the latest version"; # Added 2023-10-10
