@@ -18,6 +18,7 @@
 
 # runtime
 , flatbuffers
+, gflags
 , level-zero
 , libusb1
 , libxml2
@@ -58,14 +59,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2024.2.0";
+  version = "2024.3.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-HiKKvmqgbwW625An+Su0EOHqVrP18yvG2aOzrS0jWr4=";
+    hash = "sha256-87uBZ+AMYsiUlBBBTs5NCNrrUgvooKmUnRWrq7q4kV8=";
   };
 
   outputs = [
@@ -138,6 +139,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     flatbuffers
+    gflags
     level-zero
     libusb1
     libxml2
