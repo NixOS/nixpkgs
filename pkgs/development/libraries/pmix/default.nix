@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+  ] ++ lib.optionals stdenv.isLinux [
     "dev"
   ];
 
@@ -80,6 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "bin/pmixcc" "''${!outputDev}"
     moveToOutput "share/pmix/pmixcc-wrapper-data.txt" "''${!outputDev}"
 
+    ''
+    # From some reason the Darwin build doesn't include this file, so we
+    # currently disable this substitution for any non-Linux platform, until a
+    # Darwin user will care enough about this cross platform fix.
+    + lib.optionalString stdenv.isLinux ''
     # Pin the compiler to the current version in a cross compiler friendly way.
     # Same pattern as for openmpi (see https://github.com/NixOS/nixpkgs/pull/58964#discussion_r275059427).
     substituteInPlace "''${!outputDev}"/share/pmix/pmixcc-wrapper-data.txt \
@@ -88,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
+  '' + lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
     # The build info (parameters to ./configure) are hardcoded
     # into the library. This clears all references to $dev/include.
     remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libpmix.so)
@@ -109,6 +116,5 @@ stdenv.mkDerivation (finalAttrs: {
       markuskowa
       doronbehar
     ];
-    platforms = lib.platforms.linux;
   };
 })
