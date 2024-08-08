@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "homf";
-  version = "1.0.0";
+  version = "1.1.1";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "duckinator";
     repo = "homf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PU5VjBIVSMupTBh/qvVuZSFWpBbJOylCR02lONn9/qw=";
+    hash = "sha256-fDH6uJ2d/Jsnuudv+Qlv1tr3slxOJWh7b4smGS32n9A=";
   };
 
   build-system = [ hatchling ];
