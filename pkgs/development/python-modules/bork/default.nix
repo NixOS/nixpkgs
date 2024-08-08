@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  callPackage,
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
@@ -60,6 +61,8 @@ buildPythonPackage rec {
     # tries to call python -m bork
     "test_repo"
   ];
+
+  passthru.tests = callPackage ./tests.nix { };
 
   meta = with lib; {
     description = "Python build and release management tool";

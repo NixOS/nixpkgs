@@ -19,6 +19,8 @@ lib.recurseIntoAttrs {
   shellcheck = pkgs.callPackage ../shellcheck/tests.nix { };
 
   runCommand = lib.recurseIntoAttrs {
+    bork = pkgs.python3Packages.bork.tests.pytest-network;
+
     dns-resolution = testers.runCommand {
       name = "runCommand-dns-resolution-test";
       nativeBuildInputs = [ pkgs.ldns ];
