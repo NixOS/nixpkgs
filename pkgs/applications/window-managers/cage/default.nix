@@ -1,4 +1,5 @@
 { lib, stdenv, fetchFromGitHub
+, substituteAll
 , meson, ninja, pkg-config, wayland-scanner, scdoc, makeWrapper
 , wlroots, wayland, wayland-protocols, pixman, libxkbcommon, xcbutilwm
 , systemd, libGL, libX11, mesa
@@ -8,14 +9,23 @@
 
 stdenv.mkDerivation rec {
   pname = "cage";
-  version = "0.1.5";
+  version = "0.1.5-unstable-2024-07-29";
 
   src = fetchFromGitHub {
-    owner = "Hjdskes";
+    owner = "cage-kiosk";
     repo = "cage";
-    rev = "v${version}";
-    hash = "sha256-Suq14YRw/MReDRvO/TQqjpZvpzAEDnHUyVbQj0BPT4c=";
+    rev = "d3fb99d6654325ec46277cfdb589f89316bed701";
+    hash = "sha256-WP0rWO9Wbs/09wTY8IlIUybnVUnwiNdXD9JgsoVG4rM=";
   };
+
+  patches = [
+    # TODO: Remove on next stable release.
+    (substituteAll {
+      src = ./inject-git-commit.patch;
+      gitCommit = lib.substring 0 7 src.rev;
+      gitBranch = "master";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -29,9 +39,7 @@ stdenv.mkDerivation rec {
     systemd libGL libX11
   ];
 
-  mesonFlags = [ "-Dxwayland=${lib.boolToString (xwayland != null)}" ];
-
-  postFixup = lib.optionalString (xwayland != null) ''
+  postFixup = lib.optionalString wlroots.enableXWayland ''
     wrapProgram $out/bin/cage --prefix PATH : "${xwayland}/bin"
   '';
 
