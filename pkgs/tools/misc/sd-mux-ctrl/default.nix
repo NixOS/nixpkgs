@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Tool for controlling multiple sd-mux devices";
     homepage = "https://wiki.tizen.org/SD_MUX";
     license = licenses.asl20;
-    maintainers =  with maintainers; [ sarcasticadmin ];
+    maintainers =  with maintainers; [ newam sarcasticadmin ];
     platforms = platforms.unix;
     mainProgram = "sd-mux-ctrl";
   };
