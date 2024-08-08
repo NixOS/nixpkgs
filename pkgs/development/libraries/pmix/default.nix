@@ -80,11 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "bin/pmixcc" "''${!outputDev}"
     moveToOutput "share/pmix/pmixcc-wrapper-data.txt" "''${!outputDev}"
 
-    # The path to the pmixcc-wrapper-data.txt is hard coded and
-    # points to $out instead of dev. Use wrapper to fix paths.
-    wrapProgram "''${!outputDev}"/bin/pmixcc \
-      --set PMIX_INCLUDEDIR "''${!outputDev}"/include \
-      --set PMIX_PKGDATADIR "''${!outputDev}"/share/pmix
+    # Pin the compiler to the current version in a cross compiler friendly way.
+    # Same pattern as for openmpi (see https://github.com/NixOS/nixpkgs/pull/58964#discussion_r275059427).
+    substituteInPlace "''${!outputDev}"/share/pmix/pmixcc-wrapper-data.txt \
+      --replace-fail compiler=gcc \
+        compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
   '';
 
   postFixup = ''
@@ -92,11 +92,11 @@ stdenv.mkDerivation (finalAttrs: {
     # into the library. This clears all references to $dev/include.
     remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libpmix.so)
 
-    # Pin the compiler to the current version in a cross compiler friendly way.
-    # Same pattern as for openmpi (see https://github.com/NixOS/nixpkgs/pull/58964#discussion_r275059427).
-    substituteInPlace "''${!outputDev}"/share/pmix/pmixcc-wrapper-data.txt \
-      --replace-fail compiler=gcc \
-        compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
+    # The path to the pmixcc-wrapper-data.txt is hard coded and
+    # points to $out instead of dev. Use wrapper to fix paths.
+    wrapProgram "''${!outputDev}"/bin/pmixcc \
+      --set PMIX_INCLUDEDIR "''${!outputDev}"/include \
+      --set PMIX_PKGDATADIR "''${!outputDev}"/share/pmix
   '';
 
   enableParallelBuilding = true;
