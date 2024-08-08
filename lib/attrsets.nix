@@ -690,7 +690,67 @@ rec {
 
     :::
   */
-  filterAttrsRecursive =
+  filterAttrsRecursive = filterAttrsRecursiveCond (as: true);
+
+  /**
+    Like `filterAttrsRecursive`, but it takes an additional predicate that tells it whether to recurse into an attribute set.
+    If the predicate returns false, `filterAttrsRecursiveCond` does not recurse, but instead applies the filter function.
+    If the predicate returns true, it does recurse, and does not apply the filter function.
+
+    Note: the attrset is filtered top-down, first testing the predicate on "branch" attrs
+    before recursing towards leaf values.
+    This is different to `mapAttrsRecursive` and `mapAttrsRecursiveCond`, which only apply the mapping function to leaf nodes.
+
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.filterAttrsRecursiveCond` usage example
+
+    ```nix
+    filterAttrsRecursiveCond
+      (as: ! lib.isDerivation as)
+      (_: v: lib.isDerivation v -> v.name == "hello")
+      {
+        foo = {
+          type = "derivation";
+          name = "hello";
+        };
+        bar = {
+          type = "derivation";
+          name = "bar";
+        };
+        hello.world = {
+          type = "derivation";
+          name = "hello";
+          nester.attr = null;
+        };
+        foobar.baz = {
+          type = "derivation";
+          name = "baz";
+          nester.attr = null;
+        };
+      };
+    => {
+      foo = {
+        type = "derivation";
+        name = "hello";
+      };
+      hello.world = {
+        type = "derivation";
+        name = "hello";
+        nester.attr = null;
+      };
+      foobar = { };
+    ```
+    :::
+
+    # Type
+    ```
+    filterAttrsRecursiveCond :: (AttrSet -> Bool) -> (String -> Any -> Bool) -> AttrSet -> AttrSet
+    ```
+  */
+  filterAttrsRecursiveCond =
+    cond:
     pred:
     set:
     listToAttrs (
@@ -698,8 +758,10 @@ rec {
         let v = set.${name}; in
         if pred name v then [
           (nameValuePair name (
-            if isAttrs v then filterAttrsRecursive pred v
-            else v
+            if isAttrs v && cond v then
+              filterAttrsRecursiveCond cond pred v
+            else
+              v
           ))
         ] else []
       ) (attrNames set)

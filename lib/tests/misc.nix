@@ -47,6 +47,7 @@ let
     evalModules
     filter
     filterAttrsRecursive
+    filterAttrsRecursiveCond
     fix
     fold
     foldAttrs
@@ -1133,6 +1134,46 @@ runTests {
     };
     expected = {
       hello.world = "Hello, world!";
+    };
+  };
+
+  # The example filters for derivations named "hello"
+  testFilterAttrsRecursiveCondExample = {
+    expr =
+      filterAttrsRecursiveCond
+      (as: ! lib.isDerivation as)
+      (_: v: lib.isDerivation v -> v.name == "hello")
+      {
+        foo = {
+          type = "derivation";
+          name = "hello";
+        };
+        bar = {
+          type = "derivation";
+          name = "bar";
+        };
+        hello.world = {
+          type = "derivation";
+          name = "hello";
+          nester.attr = null;
+        };
+        foobar.baz = {
+          type = "derivation";
+          name = "baz";
+          nester.attr = null;
+        };
+      };
+    expected = {
+      foo = {
+        type = "derivation";
+        name = "hello";
+      };
+      hello.world = {
+        type = "derivation";
+        name = "hello";
+        nester.attr = null;
+      };
+      foobar = { };
     };
   };
 
