@@ -1281,7 +1281,7 @@ in
         openpam
         openssl.out
         patch
-        xar
+        xar.lib
         xz.bin
         xz.out
         zlib.dev
