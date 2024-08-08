@@ -1,23 +1,25 @@
 {
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
   appdirs,
   babelfish,
   beautifulsoup4,
-  buildPythonPackage,
   chardet,
   click,
   dogpile-cache,
   enzyme,
-  fetchFromGitHub,
   guessit,
   pysrt,
-  pytestCheckHook,
-  pythonOlder,
   pytz,
   rarfile,
   requests,
   six,
   stevedore,
+
+  pytestCheckHook,
   sympy,
   vcrpy,
 }:
@@ -31,7 +33,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Diaoul";
-    repo = pname;
+    repo = "subliminal";
     rev = "refs/tags/${version}";
     hash = "sha256-P4gVxKKCGKS3MC4F3yTAaOSv36TtdoYfrf61tBHg8VY=";
   };
@@ -59,15 +61,15 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytestCheckHook
     sympy
     vcrpy
-    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "subliminal" ];
 
   disabledTests = [
-    # Tests rewuire network access
+    # Tests require network access
     "test_refine_video_metadata"
     "test_scan"
     "test_hash"
@@ -84,12 +86,12 @@ buildPythonPackage rec {
     "tests/test_legendastv.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to search and download subtitles";
     homepage = "https://github.com/Diaoul/subliminal";
     changelog = "https://github.com/Diaoul/subliminal/blob/${version}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
     # Too many tests fail ever since a certain python-updates merge, see:
     # https://github.com/Diaoul/subliminal/issues/1062 . Disabling tests
     # alltogether may produce a not completly failing executable, but that
