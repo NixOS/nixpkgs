@@ -323,6 +323,7 @@ in
 
     services.nginx.enable = true;
     services.nginx.recommendedGzipSettings = true;
+    services.nginx.recommendedProxySettings = true;
     services.nginx.virtualHosts."${cfg.settings.SERVER_NAME}" = {
       forceSSL = true;
       enableACME = true;
@@ -338,18 +339,7 @@ in
         add_header Referrer-Policy                      "same-origin"   always;
       '';
       locations = {
-        "/" = {
-          proxyPass = "http://unix:///run/canaille.socket";
-          # From https://docs.gunicorn.org/en/stable/deploy.html#nginx-configuration
-          extraConfig = ''
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header Host $host;
-            # we don't want nginx trying to do something clever with
-            # redirects, we set the Host: header above already.
-            proxy_redirect off;
-          '';
-        };
+        "/".proxyPass = "http://unix:///run/canaille.socket";
         "/static" = {
           root = "${finalPackage}/${python.sitePackages}/canaille";
         };
