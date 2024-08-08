@@ -20020,6 +20020,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
+  vapoursynth-bm3dcpu = callPackage ../by-name/va/vapoursynth-bm3dcuda/package.nix {
+    cudaSupport = false;
+    cpuSupport = true;
+  };
+
   vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
 
   vapoursynth-mvtools = callPackage ../development/libraries/vapoursynth-mvtools { };
