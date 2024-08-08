@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "dns_lexicon";
-  version = "3.17.0";
+  version = "3.16.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "Analogj";
     repo = "lexicon";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fTR3sXMdpcI6/Vch59XHff0h1SgnvQzYeKWHv3FUsXY=";
+    hash = "sha256-79/zz0TOCpx26TEo6gi9JDBQeVW2azWnxAjWr/FGRLA=";
   };
 
   nativeBuildInputs = [ poetry-core ];
