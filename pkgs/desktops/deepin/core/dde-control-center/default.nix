@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-control-center";
-  version = "6.0.55";
+  version = "6.0.59";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-dCUtCS7Vmd7LX34JA70P3dgsmSdRefgO//NERhKlRlE=";
+    hash = "sha256-OniY/B/9319AYYFFPnsUMNrnc0yVGG3rfCLPjgNFyag=";
   };
 
   postPatch = ''
