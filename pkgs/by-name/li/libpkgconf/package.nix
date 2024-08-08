@@ -2,15 +2,16 @@
 , stdenv
 , fetchurl
 , removeReferencesTo
+, gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkgconf";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://distfiles.dereferenced.org/pkgconf/pkgconf-${finalAttrs.version}.tar.xz";
-    hash = "sha256-sG/2OoNTaqjC9kIvqArUXkgz9ZAmb+sU6t3+HUyFPGk=";
+    hash = "sha256-OpCArFHQNhXnwZEKCiqN8IQkiStfE7BiiiBNP8zg6os=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "doc" ];
@@ -39,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     mv ${placeholder "dev"}/share ${placeholder "out"}
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/pkgconf/pkgconf.git";
+    rev-prefix = "pkgconf-";
+  };
 
   meta = {
     homepage = "https://github.com/pkgconf/pkgconf";
