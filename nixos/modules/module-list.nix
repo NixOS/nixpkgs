@@ -496,6 +496,7 @@
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
   ./services/desktops/espanso.nix
+  ./services/desktops/espanso-capdacoverride
   ./services/desktops/flatpak.nix
   ./services/desktops/geoclue2.nix
   ./services/desktops/playerctld.nix
