@@ -7,21 +7,21 @@
 }:
 let
   pname = "dbgate";
-  version = "5.3.1";
+  version = "5.3.4";
   src =
     fetchurl
       {
         aarch64-linux = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-linux_arm64.AppImage";
-          hash = "sha256-Qz0VA2pHT8muw9RdLg7Y3w3mJ3ubFnqf4dmfdZdnJHI=";
+          hash = "sha256-szG0orYBB1+DE9Vwjq0sluIaLDBlWOScKuruJR4iQKg=";
         };
         x86_64-linux = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-linux_x86_64.AppImage";
-          hash = "sha256-H/2Tb6ZnO6LJx+rv/ADdItaRMP95x4G3lPNK0sbZn9I=";
+          hash = "sha256-C0BJ3dydaeV8ypc8c0EDiMBhvByLAKuKTGHOozqbd+w=";
         };
         x86_64-darwin = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-mac_x64.dmg";
-          hash = "sha256-gZrfv9qe2arytVgiYtX9uwfwC4Z30SHEDiBUXcpF968=";
+          hash = "sha256-WwUpFFeZ9NmosHZqrHCbsz673fSbdQvwxhEvz/6JJtw=";
         };
       }
       .${stdenv.system} or (throw "dbgate: ${stdenv.system} is unsupported.");
