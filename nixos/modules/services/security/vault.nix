@@ -6,31 +6,8 @@ let
   cfg = config.services.vault;
   opt = options.services.vault;
 
-  configFile = pkgs.writeText "vault.hcl" ''
-    # vault in dev mode will refuse to start if its configuration sets listener
-    ${lib.optionalString (!cfg.dev) ''
-    listener "tcp" {
-      address = "${cfg.address}"
-      ${if (cfg.tlsCertFile == null || cfg.tlsKeyFile == null) then ''
-          tls_disable = "true"
-        '' else ''
-          tls_cert_file = "${cfg.tlsCertFile}"
-          tls_key_file = "${cfg.tlsKeyFile}"
-        ''}
-      ${cfg.listenerExtraConfig}
-    }
-    ''}
-    storage "${cfg.storageBackend}" {
-      ${optionalString (cfg.storagePath   != null) ''path = "${cfg.storagePath}"''}
-      ${optionalString (cfg.storageConfig != null) cfg.storageConfig}
-    }
-    ${optionalString (cfg.telemetryConfig != "") ''
-        telemetry {
-          ${cfg.telemetryConfig}
-        }
-      ''}
-    ${cfg.extraConfig}
-  '';
+  format = pkgs.formats.json {};
+  configFile = format.generate "vault.hcl.json" (filterAttrsRecursive (_: v: v != null) cfg.settings);
 
   allConfigPaths = [configFile] ++ cfg.extraSettingsPaths;
   configOptions = escapeShellArgs
@@ -38,9 +15,22 @@ let
      lib.optional (cfg.dev && cfg.devRootTokenID != null) "-dev-root-token-id=${cfg.devRootTokenID}"
       ++ (concatMap (p: ["-config" p]) allConfigPaths));
 
+  storagePath = if cfg.storageBackend == "file" || cfg.storageBackend == "raft" then cfg.settings.storage.${cfg.storageBackend}.path else null;
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "vault" "address" ] [ "services" "vault" "settings" "listener" "tcp" "address" ])
+    (mkRenamedOptionModule [ "services" "vault" "tlsCertFile" ] [ "services" "vault" "settings" "listener" "tcp" "tls_cert_file" ])
+    (mkRenamedOptionModule [ "services" "vault" "tlsKeyFile" ] [ "services" "vault" "settings" "listener" "tcp" "tls_key_file" ])
+    (mkRenamedOptionModule [ "services" "vault" "storagePath" ] [ "services" "vault" "settings" "storage" cfg.storageBackend "path" ])
+
+    (mkRemovedOptionModule [ "services" "vault" "listenerExtraConfig" ] "Use services.vault.settings.listener.tcp instead")
+    (mkRemovedOptionModule [ "services" "vault" "storageConfig" ] "Use services.vault.settings.storage.${cfg.storageBackend} instead")
+    (mkRemovedOptionModule [ "services" "vault" "telemetryConfig" ] "Use services.vault.settings.telemetry instead")
+    (mkRemovedOptionModule [ "services" "vault" "extraConfig" ] "Use services.vault.settings instead")
+  ];
+
   options = {
     services.vault = {
       enable = mkEnableOption "Vault daemon";
@@ -63,74 +53,147 @@ in
         '';
       };
 
-      address = mkOption {
-        type = types.str;
-        default = "127.0.0.1:8200";
-        description = "The name of the ip interface to listen to";
-      };
-
-      tlsCertFile = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "/path/to/your/cert.pem";
-        description = "TLS certificate file. TLS will be disabled unless this option is set";
-      };
-
-      tlsKeyFile = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "/path/to/your/key.pem";
-        description = "TLS private key file. TLS will be disabled unless this option is set";
-      };
-
-      listenerExtraConfig = mkOption {
-        type = types.lines;
-        default = ''
-          tls_min_version = "tls12"
-        '';
-        description = "Extra text appended to the listener section.";
-      };
-
       storageBackend = mkOption {
         type = types.enum [ "inmem" "file" "consul" "zookeeper" "s3" "azure" "dynamodb" "etcd" "mssql" "mysql" "postgresql" "swift" "gcs" "raft" ];
         default = "inmem";
         description = "The name of the type of storage backend";
       };
 
-      storagePath = mkOption {
-        type = types.nullOr types.path;
-        default = if cfg.storageBackend == "file" || cfg.storageBackend == "raft" then "/var/lib/vault" else null;
-        defaultText = literalExpression ''
-          if config.${opt.storageBackend} == "file" || cfg.storageBackend == "raft"
-          then "/var/lib/vault"
-          else null
-        '';
-        description = "Data directory for file backend";
-      };
+      settings = mkOption {
+        type = types.submodule {
+          freeformType = format.type;
 
-      storageConfig = mkOption {
-        type = types.nullOr types.lines;
-        default = null;
+          options = {
+            listener = mkOption {
+              type = types.nullOr (types.submodule {
+                freeformType = format.type;
+
+                options = {
+                  tcp = mkOption {
+                    type = types.nullOr (types.submodule ({ config, ... }: {
+                      freeformType = format.type;
+
+                      options = {
+                        address = mkOption {
+                          type = types.str;
+                          default = "127.0.0.1:8200";
+                          description = ''
+                            Specifies the address to bind to for listening. This can be dynamically defined
+                            with a [go-sockaddr](https://pkg.go.dev/github.com/hashicorp/go-sockaddr/template)
+                            template that is resolved at runtime.
+                          '';
+                        };
+
+                        tls_cert_file = mkOption {
+                          type = types.nullOr types.str;
+                          default = null;
+                          example = "/path/to/your/cert.pem";
+                          description = "TLS certificate file. TLS will be disabled unless this option is set";
+                        };
+
+                        tls_key_file = mkOption {
+                          type = types.nullOr types.str;
+                          default = null;
+                          example = "/path/to/your/key.pem";
+                          description = "TLS private key file. TLS will be disabled unless this option is set";
+                        };
+
+                        tls_disable = mkOption {
+                          type = types.bool;
+                          default = config.tls_cert_file == null || config.tls_key_file == null;
+                          description = ''
+                            Specifies if TLS will be disabled.
+                          '';
+                        };
+                      };
+                    }));
+                    default = { };
+                    description = ''
+                      The TCP listener configures Vault to listen on a TCP address/port.
+
+                      See <https://developer.hashicorp.com/vault/docs/configuration/listener/tcp#tcp-listener-parameters>
+                      for details.
+                    '';
+                  };
+                };
+              });
+              default = { };
+              description = ''
+                The `listener` stanza configures the addresses and ports on which Vault will respond to requests.
+
+                See <https://developer.hashicorp.com/vault/docs/configuration/listener> for details.
+              '';
+            };
+
+            storage = mkOption {
+              type = types.nullOr (types.submodule {
+                freeformType = format.type;
+
+                options = {
+                  file = mkOption {
+                    type = types.nullOr (types.submodule {
+                      freeformType = format.type;
+
+                      options = {
+                        path = mkOption {
+                          type = types.path;
+                          default = "/var/lib/vault";
+                          description = "The absolute path on disk to the directory where the data will be stored.";
+                        };
+                      };
+                    });
+                    default = null;
+                    description = ''
+                      The Filesystem storage backend stores Vault's data on the filesystem using a standard directory
+                      structure. It can be used for durable single server situations, or to develop locally where
+                      durability is not critical.
+
+                      See <https://developer.hashicorp.com/vault/docs/configuration/storage/filesystem#file-parameters>
+                      for details.
+                    '';
+                  };
+
+                  raft = mkOption {
+                    type = types.nullOr (types.submodule {
+                      freeformType = format.type;
+
+                      options = {
+                        path = mkOption {
+                          type = types.path;
+                          default = "/var/lib/vault";
+                          description = "The file system path where all the Vault data gets stored.";
+                        };
+                      };
+                    });
+                    default = null;
+                    description = ''
+                      The Integrated Storage backend is used to persist Vault's data. Unlike other storage
+                      backends, Integrated Storage does not operate from a single source of data. Instead all the nodes
+                      in a Vault cluster will have a replicated copy of Vault's data. Data gets replicated across all
+                      the nodes via the [Raft Consensus Algorithm](https://raft.github.io/).
+
+                      See <https://developer.hashicorp.com/vault/docs/configuration/storage/raft#raft-parameters>
+                      for details.
+                    '';
+                  };
+                };
+              });
+              default = { };
+              description = ''
+                The `storage` stanza configures the storage backend, which represents the location for the durable
+                storage of Vault's information. Each backend has pros, cons, advantages, and trade-offs. For example,
+                some backends support high availability while others provide a more robust backup and restoration
+                process.
+
+                See <https://developer.hashicorp.com/vault/docs/configuration/storage> for details.
+              '';
+            };
+          };
+        };
+        default = { };
         description = ''
-          HCL configuration to insert in the storageBackend section.
-
-          Confidential values should not be specified here because this option's
-          value is written to the Nix store, which is publicly readable.
-          Provide credentials and such in a separate file using
-          [](#opt-services.vault.extraSettingsPaths).
+          Configuration of Vault. See https://developer.hashicorp.com/vault/docs/configuration for a description of options.
         '';
-      };
-
-      telemetryConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Telemetry configuration";
-      };
-
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Extra text appended to {file}`vault.hcl`.";
       };
 
       extraSettingsPaths = mkOption {
@@ -166,18 +229,15 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = [
+    services.vault.settings = mkMerge [
       {
-        assertion = cfg.storageBackend == "inmem" -> (cfg.storagePath == null && cfg.storageConfig == null);
-        message = ''The "inmem" storage expects no services.vault.storagePath nor services.vault.storageConfig'';
+        storage.${cfg.storageBackend} = { };
       }
-      {
-        assertion = (
-          (cfg.storageBackend == "file" -> (cfg.storagePath != null && cfg.storageConfig == null)) &&
-          (cfg.storagePath != null -> (cfg.storageBackend == "file" || cfg.storageBackend == "raft"))
-        );
-        message = ''You must set services.vault.storagePath only when using the "file" or "raft" backend'';
-      }
+
+      # vault in dev mode will refuse to start if its configuration sets listener
+      (mkIf cfg.dev {
+        listener = mkForce null;
+      })
     ];
 
     users.users.vault = {
@@ -188,8 +248,8 @@ in
     };
     users.groups.vault.gid = config.ids.gids.vault;
 
-    systemd.tmpfiles.rules = optional (cfg.storagePath != null)
-      "d '${cfg.storagePath}' 0700 vault vault - -";
+    systemd.tmpfiles.rules = optional (storagePath != null)
+      "d '${storagePath}' 0700 vault vault - -";
 
     systemd.services.vault = {
       description = "Vault server daemon";
@@ -222,7 +282,7 @@ in
         Restart = "on-failure";
       };
 
-      unitConfig.RequiresMountsFor = optional (cfg.storagePath != null) cfg.storagePath;
+      unitConfig.RequiresMountsFor = optional (storagePath != null) storagePath;
     };
   };
 
