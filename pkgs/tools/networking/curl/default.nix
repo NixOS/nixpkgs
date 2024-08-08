@@ -59,6 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8pL2zAUdW7q/cl74XUMt/qzIcR3XF+qXYSrlkGQ4AeU=";
   };
 
+  patches = [
+    # fixes https://github.com/curl/curl/issues/14344
+    # https://github.com/curl/curl/pull/14390
+    ./fix-sigpipe-leak.patch
+  ];
+
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
   postPatch = ''
