@@ -20,8 +20,8 @@ appleDerivation {
     # disable w, test install
     # get rid of permission stuff
     substituteInPlace xcodescripts/install-files.sh \
+      --replace-fail '/usr/' '/' \
       --replace-fail 'ln -f "$BINDIR/w" "$BINDIR/uptime"' "" \
-      --replace-fail 'ln -f "$DSTROOT/bin/test" "$DSTROOT/bin/["' "" \
       --replace-fail "-o root -g wheel -m 0755" "" \
       --replace-fail "-o root -g wheel -m 0644" ""
   '';
@@ -34,11 +34,12 @@ appleDerivation {
       fi
     done
 
+    mv $out/usr/* $out
+
     export DSTROOT=$out
     export SRCROOT=$PWD
     . xcodescripts/install-files.sh
 
-    mv $out/usr/* $out
     mv $out/private/etc $out
     rmdir $out/usr $out/private
   '';
