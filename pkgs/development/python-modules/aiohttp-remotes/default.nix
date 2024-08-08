@@ -45,6 +45,8 @@ buildPythonPackage rec {
     "--asyncio-mode=auto"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Set of useful tools for aiohttp.web server";
     homepage = "https://github.com/wikibusiness/aiohttp-remotes";
