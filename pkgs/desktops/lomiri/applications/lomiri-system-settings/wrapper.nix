@@ -4,10 +4,9 @@
 , glib
 , lndir
 , lomiri-system-settings-unwrapped
-, lomiri-system-settings-security-privacy
 , wrapGAppsHook3
 , wrapQtAppsHook
-, plugins ? [ lomiri-system-settings-security-privacy ]
+, plugins ? [ ]
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,4 +1,5 @@
-{ lib
+{ config
+, lib
 , pkgs
 , libsForQt5
 }:
@@ -14,7 +15,6 @@ let
     lomiri-clock-app = callPackage ./applications/lomiri-clock-app { };
     lomiri-filemanager-app = callPackage ./applications/lomiri-filemanager-app { };
     lomiri-system-settings-unwrapped = callPackage ./applications/lomiri-system-settings { };
-    lomiri-system-settings-security-privacy = callPackage ./applications/lomiri-system-settings/plugins/lomiri-system-settings-security-privacy.nix { };
     lomiri-system-settings = callPackage ./applications/lomiri-system-settings/wrapper.nix { };
     lomiri-terminal-app = callPackage ./applications/lomiri-terminal-app { };
     morph-browser = callPackage ./applications/morph-browser { };
@@ -62,4 +62,6 @@ let
     telephony-service = callPackage ./services/telephony-service { };
   };
 in
-  lib.makeScope libsForQt5.newScope packages
+  lib.makeScope libsForQt5.newScope packages // lib.optionalAttrs config.allowAliases {
+    lomiri-system-settings-security-privacy = lib.warn "`lomiri-system-settings-security-privacy` upstream was merged into `lomiri-system-settings`. Please use `pkgs.lomiri.lomiri-system-settings-unwrapped` if you need to directly access the plugins that belonged to this project." pkgs.lomiri.lomiri-system-settings-unwrapped; # Added on 2024-08-08
+  }
