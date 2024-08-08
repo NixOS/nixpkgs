@@ -10922,6 +10922,8 @@ self: super: with self; {
 
   py-dormakaba-dkey = callPackage ../development/python-modules/py-dormakaba-dkey { };
 
+  py-madvr2 = callPackage ../development/python-modules/py-madvr2 { };
+
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
   py-partiql-parser = callPackage ../development/python-modules/py-partiql-parser { };
