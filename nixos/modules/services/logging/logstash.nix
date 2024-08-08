@@ -1,8 +1,17 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    concatMapStringsSep
+    concatStringsSep
+    filter
+    mkIf
+    mkOption
+    mkPackageOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    stringLength
+    types;
   cfg = config.services.logstash;
   ops = lib.optionalString;
   verbosityFlag = "--log.level " + cfg.logLevel;
@@ -59,7 +68,7 @@ in
       plugins = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        example = literalExpression "[ pkgs.logstash-contrib ]";
+        example = lib.literalExpression "[ pkgs.logstash-contrib ]";
         description = "The paths to find other logstash plugins in.";
       };
 
@@ -100,7 +109,7 @@ in
         type = types.lines;
         default = "generator { }";
         description = "Logstash input configuration.";
-        example = literalExpression ''
+        example = lib.literalExpression ''
           '''
             # Read from journal
             pipe {

@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkEnableOption boolToString mkOption types concatStringsSep literalExpression versionOlder mkIf;
   cfg = config.services.graylog;
 
   confFile = pkgs.writeText "graylog.conf" ''

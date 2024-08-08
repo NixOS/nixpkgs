@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) getAttrFromPath types mkOption mapAttrsToList optionalAttrs mkIf;
   cfg = config.services.logcheck;
 
   defaultRules = pkgs.runCommand "logcheck-default-rules" { preferLocalBuild = true; } ''
@@ -43,7 +42,7 @@ let
       };
 
   writeIgnoreCronRule = name: {level, user, regex, cmdline, ...}:
-    let escapeRegex = escape (stringToCharacters "\\[]{}()^$?*+|.");
+    let escapeRegex = lib.escape (lib.stringToCharacters "\\[]{}()^$?*+|.");
         cmdline_ = builtins.unsafeDiscardStringContext cmdline;
         re = if regex != "" then regex else if cmdline_ == "" then ".*" else escapeRegex cmdline_;
     in writeIgnoreRule "cron-${name}" {
@@ -109,7 +108,7 @@ in
 {
   options = {
     services.logcheck = {
-      enable = mkEnableOption "logcheck cron job, to mail anomalies in the system logfiles to the administrator";
+      enable = lib.mkEnableOption "logcheck cron job, to mail anomalies in the system logfiles to the administrator";
 
       user = mkOption {
         default = "logcheck";
@@ -236,7 +235,7 @@ in
             mkCron = name: {user, cmdline, timeArgs, ...}: ''
               ${timeArgs} ${user} ${cmdline}
             '';
-        in mapAttrsToList mkCron (filterAttrs withTime cfg.ignoreCron)
+        in mapAttrsToList mkCron (lib.filterAttrs withTime cfg.ignoreCron)
            ++ [ cronJob ];
   };
 }

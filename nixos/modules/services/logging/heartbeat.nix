@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkEnableOption mkPackageOption mkOption types mkIf;
   cfg = config.services.heartbeat;
 
   heartbeatYml = pkgs.writeText "heartbeat.yml" ''
@@ -62,7 +61,7 @@ in
       "d '${cfg.stateDir}' - nobody nogroup - -"
     ];
 
-    systemd.services.heartbeat = with pkgs; {
+    systemd.services.heartbeat = {
       description = "heartbeat log shipper";
       wantedBy = [ "multi-user.target" ];
       preStart = ''

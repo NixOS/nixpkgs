@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkEnableOption mkOption mkPackageOption types mkIf hasPrefix;
   cfg = config.services.journalbeat;
 
   journalbeatYml = pkgs.writeText "journalbeat.yml" ''

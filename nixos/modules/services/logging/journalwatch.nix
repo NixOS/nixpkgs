@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
-with lib;
-
 let
+  inherit (lib) optionalString concatStringsSep mkOption mkPackageOption mkIf types literalExpression;
   cfg = config.services.journalwatch;
   user = "journalwatch";
   # for journal access
@@ -242,7 +241,7 @@ in {
         # requires a relative directory name to create beneath /var/lib
         StateDirectory = user;
         StateDirectoryMode = "0750";
-        ExecStart = "${getExe cfg.package} mail";
+        ExecStart = "${lib.getExe cfg.package} mail";
         # lowest CPU and IO priority, but both still in best-effort class to prevent starvation
         Nice=19;
         IOSchedulingPriority=7;

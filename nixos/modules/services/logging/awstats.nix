@@ -1,8 +1,21 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    mkEnableOption
+    mkIf
+    optionalString
+    filterAttrs
+    mapAttrs'
+    mapAttrsToList
+    nameValuePair
+    concatStringsSep;
+
   cfg = config.services.awstats;
   package = pkgs.awstats;
   configOpts = {name, config, ...}: {
