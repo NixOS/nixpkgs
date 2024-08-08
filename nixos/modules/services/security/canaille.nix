@@ -210,7 +210,12 @@ in
         add_header Referrer-Policy                      "same-origin"   always;
       '';
       locations = {
-        "/".proxyPass = "http://unix:///run/canaille.socket";
+        "/" = {
+          proxyPass = "http://unix:///run/canaille.socket";
+          extraConfig = ''
+            proxy_set_header Host $host;
+          '';
+        };
         "/static" = {
           root = "${finalPackage}/${python.sitePackages}/canaille";
         };
