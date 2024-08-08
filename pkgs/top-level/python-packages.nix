@@ -6052,6 +6052,8 @@ self: super: with self; {
 
   iotawattpy = callPackage ../development/python-modules/iotawattpy { };
 
+  iottycloud = callPackage ../development/python-modules/iottycloud { };
+
   iowait = callPackage ../development/python-modules/iowait { };
 
   ipadic = callPackage ../development/python-modules/ipadic { };
