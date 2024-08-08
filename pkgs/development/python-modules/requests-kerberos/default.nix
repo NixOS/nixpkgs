@@ -3,7 +3,6 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
-  pykerberos,
   pyspnego,
   pytest-mock,
   pytestCheckHook,
@@ -28,7 +27,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cryptography
     requests
-    pykerberos
     pyspnego
   ] ++ pyspnego.optional-dependencies.kerberos;
 
