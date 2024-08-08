@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Process Management Interface for HPC environments";
     homepage = "https://openpmix.github.io/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ markuskowa ];
+    maintainers = with lib.maintainers; [ markuskowa doronbehar ];
     platforms = lib.platforms.linux;
   };
 })
