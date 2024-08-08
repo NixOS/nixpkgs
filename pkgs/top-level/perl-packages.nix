@@ -4878,6 +4878,22 @@ with self; {
     };
   };
 
+  CPANMetaRequirements = buildPerlPackage {
+    # CPAN::Meta::Requirements is part of core, but CPAN::Requirements::Dynamic
+    # 0.001 needs newer than what's in perl-5.38
+    pname = "CPAN-Meta-Requirements";
+    version = "2.143";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Meta-Requirements-2.143.tar.gz";
+      hash = "sha256-bsfkaXu1qM6g7jyL1dSyDOCGFoqAhHeNbnpMNzVv34s=";
+    };
+    meta = {
+      homepage = "https://github.com/Perl-Toolchain-Gang/CPAN-Meta-Requirements";
+      description = "A set of version requirements for a CPAN dist";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CPANPerlReleases = buildPerlPackage {
     pname = "CPAN-Perl-Releases";
     version = "5.20230920";
@@ -29290,7 +29306,7 @@ with self; {
   AttributeHandlers = null; # part of Perl 5.26
   base = null; # part of Perl 5.26
   CPANMeta = null; # part of Perl 5.26
-  CPANMetaRequirements = null; # part of Perl 5.26
+  # CPANMetaRequirements = null; # part of Perl 5.26
   CPANMetaYAML = null; # part of Perl 5.26
   DigestMD5 = null; # part of Perl 5.26
   LocaleMaketext = null; # part of Perl 5.26
