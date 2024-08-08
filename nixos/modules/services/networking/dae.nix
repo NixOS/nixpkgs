@@ -129,6 +129,8 @@ in
             });
         in
         {
+          after = [ "network-online.target" "systemd-sysctl.service" ];
+          wants = [ "network-online.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             LoadCredential = [ "config.dae:${configPath}" ];
