@@ -33,7 +33,7 @@ buildPythonPackage rec {
     description = "Module for inotify";
     homepage = "https://github.com/absperf/asyncinotify/";
     changelog = "https://github.com/absperf/asyncinotify/releases/tag/v${version}";
-    license = licenses.mit;
+    license = licenses.mpl20;
     maintainers = with maintainers; [ cynerd ];
   };
 }
