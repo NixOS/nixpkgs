@@ -63,17 +63,34 @@ let
           });
         default = { };
       };
-      key = {
-        algo = mkOption {
-          type = enum [ "rsa" "ecdsa" ];
-          description = "Key algorithim used to generate private key.";
-          defaultText = "Provider dependent";
+      key = mkOption {
+        type = attrTag {
+          rsa = mkOption {
+            type = submodule {
+              options.size = mkOption {
+                type = ints.positive;
+                description = ''
+                  RSA key size in bits
+                '';
+                default = 2048;
+              };
+            };
+          };
+          ecdsa = mkOption {
+            type = submodule {
+              options.curve = mkOption {
+                type = str;
+                description = ''
+                  Named elliptic curve to use for key generation.
+                  See `openssl ecparam -list_curves`
+                '';
+                default = "prime256v1";
+              };
+            };
+            description = "Elliptic Curve DSA";
+          };
         };
-        size = mkOption {
-          type = ints.positive;
-          description = "Key length in bits";
-          defaultText = "Provider dependent";
-        };
+        default = { rsa = { size = 2048; }; };
       };
       names = mkOption {
         type = attrsOf str;
