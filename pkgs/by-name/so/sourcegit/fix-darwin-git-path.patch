@@ -1,0 +1,28 @@
+diff --git a/src/Native/Linux.cs b/src/Native/Linux.cs
+index 172d598..bace235 100644
+--- a/src/Native/Linux.cs
++++ b/src/Native/Linux.cs
+@@ -118,7 +118,7 @@ namespace SourceGit.Native
+             proc.Close();
+         }
+ 
+-        private string FindExecutable(string filename)
++        public static string FindExecutable(string filename)
+         {
+             var pathVariable = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+             var pathes = pathVariable.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries);
+diff --git a/src/Native/MacOS.cs b/src/Native/MacOS.cs
+index 28519e4..2eac2c2 100644
+--- a/src/Native/MacOS.cs
++++ b/src/Native/MacOS.cs
+@@ -23,9 +23,7 @@ namespace SourceGit.Native
+ 
+         public string FindGitExecutable()
+         {
+-            if (File.Exists("/usr/bin/git"))
+-                return "/usr/bin/git";
+-            return string.Empty;
++            return Linux.FindExecutable("git");
+         }
+ 
+         public List<Models.ExternalTool> FindExternalTools()
