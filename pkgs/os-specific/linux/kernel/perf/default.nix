@@ -57,9 +57,12 @@ in
 
 stdenv.mkDerivation {
   pname = "perf-linux";
-  version = kernel.version;
+  inherit (kernel) version src;
 
-  inherit (kernel) src;
+  patches = [
+    # fix wrong path to dmesg
+    ./fix-dmesg-path.diff
+  ];
 
   # Fix 6.10.0 holding pkg-config completely wrong.
   # Patches from perf-tools-next, should be in 6.11 or hopefully backported.
