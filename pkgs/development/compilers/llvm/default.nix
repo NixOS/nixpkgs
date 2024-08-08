@@ -77,4 +77,4 @@ let
 
   llvmPackages = lib.mapAttrs' (version: args: mkPackage (args // { inherit version; })) versions;
 in
-llvmPackages
+llvmPackages // { inherit mkPackage; }
