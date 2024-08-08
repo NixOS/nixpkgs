@@ -9217,6 +9217,19 @@ with self; {
     };
   };
 
+  ExtUtilsHasCompiler = buildPerlPackage {
+    pname = "ExtUtils-HasCompiler";
+    version = "0.025";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-HasCompiler-0.025.tar.gz";
+      hash = "sha256-AuHnJ13wBoLTyo6hwnowWR1t0Is+OGXAlYr66RFjWmY=";
+    };
+    meta = {
+      description = "Check for the presence of a compiler";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ExtUtilsHelpers = buildPerlPackage {
     pname = "ExtUtils-Helpers";
     version = "0.026";
