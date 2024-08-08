@@ -12205,6 +12205,8 @@ with pkgs;
 
   reveal-md = callPackage ../tools/text/reveal-md { };
 
+  realmd = callPackage ../os-specific/linux/realmd { };
+
   rewritefs = callPackage ../os-specific/linux/rewritefs { };
 
   rdiff-backup = callPackage ../tools/backup/rdiff-backup { };
