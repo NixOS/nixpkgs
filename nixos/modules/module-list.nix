@@ -591,6 +591,7 @@
   ./services/hardware/lirc.nix
   ./services/hardware/nvidia-container-toolkit
   ./services/hardware/monado.nix
+  ./services/hardware/logiops.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/openrgb.nix
   ./services/hardware/pcscd.nix
