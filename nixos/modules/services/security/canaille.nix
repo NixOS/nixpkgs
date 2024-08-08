@@ -213,7 +213,7 @@ in
   config = mkIf cfg.enable {
     # We can use some kind of fix point for the config anyways, and
     # /etc/canaille is recommended by upstream. The alternative would be to use
-    # a double wrapped canaille executable, to avoid having to rebuild canaille
+    # a double wrapped canaille executable, to avoid having to rebuild Canaille
     # on every config change.
     environment.etc."canaille/config.toml" = {
       source = settingsFormat.generate "config.toml" (filterConfig cfg.settings);
@@ -227,6 +227,9 @@ in
     # - The canaille user needs access to secrets, as it needs to run the CLI
     #   for e.g. user creation. Therefore specifying the SECRETS_DIR as systemd's
     #   CREDENTIALS_DIRECTORY is not an option.
+    #
+    # See this for how Pydantic maps file names/env vars to config settings:
+    # https://docs.pydantic.dev/latest/concepts/pydantic_settings/#parsing-environment-variable-values
     systemd.tmpfiles.rules =
       [
         "Z  ${secretsDir} 700 canaille canaille - -"
