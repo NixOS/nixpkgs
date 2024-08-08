@@ -328,7 +328,7 @@ let
     config = {
       enable = mkDefault (elem cfg.mode [ "standalone" "netserver" "netclient" ]);
       settings = {
-        RUN_AS_USER = "root"; # TODO: replace 'root' by another username.
+        RUN_AS_USER = mkDefault "root"; # TODO: replace 'root' by another username.
         MINSUPPLIES = mkDefault 1;
         NOTIFYCMD = mkDefault "${pkgs.nut}/bin/upssched";
         SHUTDOWNCMD = mkDefault "${pkgs.systemd}/bin/shutdown now";
