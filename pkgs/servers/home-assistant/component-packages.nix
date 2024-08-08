@@ -1095,7 +1095,8 @@
       sqlalchemy
     ];
     "energenie_power_sockets" = ps: with ps; [
-    ]; # missing inputs: pyegps
+      pyegps
+    ];
     "energie_vanons" = ps: with ps; [
     ];
     "energy" = ps: with ps; [
@@ -5419,6 +5420,7 @@
     "emulated_hue"
     "emulated_kasa"
     "emulated_roku"
+    "energenie_power_sockets"
     "energy"
     "energyzero"
     "enigma2"
