@@ -55,16 +55,16 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.16.0";
-  format = "pyproject";
+  version = "0.16.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "wandb";
+    repo = "wandb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XXs9KjiAPzZ932r4UJ87RpM+qhg/bNDWEYsq2Ua6SRw=";
+    hash = "sha256-YIL/tBUTwt/bkEjlVTRmcWV3XL+l8GZ3TejkPSLcMlM=";
   };
 
   patches = [
