@@ -31,11 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  outputs = [
-    "out"
-  ] ++ lib.optionals stdenv.isLinux [
-    "dev"
-  ];
+  outputs = [ "out" ] ++ lib.optionals stdenv.isLinux [ "dev" ];
 
   postPatch = ''
     patchShebangs ./autogen.pl
@@ -74,27 +70,27 @@ stdenv.mkDerivation (finalAttrs: {
     ./autogen.pl
   '';
 
-  postInstall = ''
-    find $out/lib/ -name "*.la" -exec rm -f \{} \;
+  postInstall =
+    ''
+      find $out/lib/ -name "*.la" -exec rm -f \{} \;
 
-    moveToOutput "bin/pmix_info" "''${!outputDev}"
-    moveToOutput "bin/pmixcc" "''${!outputDev}"
-    moveToOutput "share/pmix/pmixcc-wrapper-data.txt" "''${!outputDev}"
+      moveToOutput "bin/pmix_info" "''${!outputDev}"
+      moveToOutput "bin/pmixcc" "''${!outputDev}"
+      moveToOutput "share/pmix/pmixcc-wrapper-data.txt" "''${!outputDev}"
 
     ''
     # From some reason the Darwin build doesn't include this file, so we
     # currently disable this substitution for any non-Linux platform, until a
     # Darwin user will care enough about this cross platform fix.
     + lib.optionalString stdenv.isLinux ''
-    # Pin the compiler to the current version in a cross compiler friendly way.
-    # Same pattern as for openmpi (see https://github.com/NixOS/nixpkgs/pull/58964#discussion_r275059427).
-    substituteInPlace "''${!outputDev}"/share/pmix/pmixcc-wrapper-data.txt \
-      --replace-fail compiler=gcc \
-        compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
-  '';
+      # Pin the compiler to the current version in a cross compiler friendly way.
+      # Same pattern as for openmpi (see https://github.com/NixOS/nixpkgs/pull/58964#discussion_r275059427).
+      substituteInPlace "''${!outputDev}"/share/pmix/pmixcc-wrapper-data.txt \
+        --replace-fail compiler=gcc \
+          compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
+    '';
 
-  postFixup = ''
-  '' + lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
+  postFixup = lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
     # The build info (parameters to ./configure) are hardcoded
     # into the library. This clears all references to $dev/include.
     remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libpmix.so)
