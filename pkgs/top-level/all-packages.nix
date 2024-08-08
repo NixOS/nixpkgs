@@ -14712,9 +14712,9 @@ with pkgs;
 
   es = callPackage ../shells/es { };
 
-  fish = callPackage ../shells/fish { };
+  fish-unwrapped = callPackage ../shells/fish { };
 
-  wrapFish = callPackage ../shells/fish/wrapper.nix { };
+  fish = callPackage ../shells/fish/wrapper.nix { };
 
   fishPlugins = recurseIntoAttrs (callPackage ../shells/fish/plugins { });
 

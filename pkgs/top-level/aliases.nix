@@ -488,6 +488,8 @@ mapAliases ({
   fcitx5-unikey = libsForQt5.fcitx5-unikey; # Added 2024-03-01
   fcitx5-with-addons = libsForQt5.fcitx5-with-addons; # Added 2024-03-01
 
+  wrapFish = throw "fish is now defaults to wrapper, use fish.override instead of wrapFish."; # Added 2024-07-29
+
   ### G ###
 
   g4music = gapless; # Added 2024-07-26
