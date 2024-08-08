@@ -34,6 +34,7 @@ in
         ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
         Restart = "on-failure";
       };
+      environment.HOME = "/var/empty";
     };
 
     networking.firewall = mkIf cfg.openFirewall {
