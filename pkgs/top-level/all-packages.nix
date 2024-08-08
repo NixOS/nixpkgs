@@ -20029,6 +20029,18 @@ with pkgs;
 
   vapoursynth-mvtools = callPackage ../development/libraries/vapoursynth-mvtools { };
 
+  vs-dfttest2cuda = callPackage ../by-name/vs/vs-dfttest2/package.nix {
+    cudaSupport = true;
+  };
+
+  vs-dfttest2gcc = callPackage ../by-name/vs/vs-dfttest2/package.nix {
+    genericVector = true;
+  };
+
+  vs-dfttest2hip = callPackage ../by-name/vs/vs-dfttest2/package.nix {
+    rocmSupport = true;
+  };
+
   vmmlib = callPackage ../development/libraries/vmmlib {
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   };
