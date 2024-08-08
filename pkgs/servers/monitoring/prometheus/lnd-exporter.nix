@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "lndmon";
-  version = "0.2.7";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lndmon";
     rev = "v${version}";
-    hash = "sha256-j9T60J7n9sya9/nN0Y6wsPDXN2h35pXxMdadsOkAMWI=";
+    hash = "sha256-PzmDotyuG8Fgkr6SlBWofqQamDG39v65fFjRUKjIWWM=";
   };
 
-  vendorHash = "sha256-h9+/BOy1KFiqUUV35M548fDKFC3Q5mBaANuD7t1rpp8=";
+  vendorHash = "sha256-6wBA9OZcjGsbIgWzMXlcT2571sFvtYqIsHRfLAz/o60=";
 
   # Irrelevant tools dependencies.
   excludedPackages = [ "./tools" ];
