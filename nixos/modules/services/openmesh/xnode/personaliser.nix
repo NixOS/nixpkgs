@@ -24,10 +24,10 @@ in {
 
     systemd.services.xnode-personaliser = {
       description = "Openmesh Xnode Personalisation Script";
-      wantedBy = [ "openmesh-xnode-admin.target" ];
+      wantedBy = [ "openmesh-xnode-admin.service" ];
       after = [ "network.target" ];
       wants = [ "network-online.target" ];
-      before = [ "openmesh-xnode-admin.target" ];
+      before = [ "openmesh-xnode-admin.service" ];
 
       serviceConfig = {
         ExecStart = ''${cfg.package}/bin/xnode-personaliser ${cfg.stateDir}'';
