@@ -245,8 +245,6 @@ self: super: with self; {
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
-  aiohttp-fast-url-dispatcher = callPackage ../development/python-modules/aiohttp-fast-url-dispatcher { };
-
   aiohttp-fast-zlib = callPackage ../development/python-modules/aiohttp-fast-zlib { };
 
   aiohttp-isal = callPackage ../development/python-modules/aiohttp-isal { };
