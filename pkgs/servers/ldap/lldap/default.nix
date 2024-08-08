@@ -44,7 +44,8 @@ let
 
     patches = [
       (fetchpatch {
-        url = "https://github.com/lldap/lldap/pull/947.patch";
+        ## https://github.com/lldap/lldap/pull/947
+        url = "https://github.com/lldap/lldap/compare/6aa9303339ac1793b4be9ae01c56a6369a5d77f0...620939be9c8c32f8ace4519cc49a7ac07d88fe87.patch";
         hash = "sha256-MlVP/2+qdRrCLsfJebq1F/uQTjYLT+b+0U8utx3XQb4=";
       })
     ];
