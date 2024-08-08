@@ -7,7 +7,7 @@
 , boost
 , eigen
 , example-robot-data
-, casadiSupport ? !stdenv.isDarwin
+, casadiSupport ? true
 , collisionSupport ? true
 , console-bridge
 , jrl-cmakemodules
