@@ -71,6 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
       # Don't use missing tools
       "skia_use_dng_sdk=false"
       "skia_use_wuffs=false"
+      # Renable options that get disabled by component build
+      "skia_enable_svg=true"
+      "skia_enable_skottie=true"
       # Use system dependencies
       "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
     ] ++ map (lib: "skia_use_system_${lib}=true") [
@@ -95,10 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Includes
     pushd ../include
-    find . -name '*.h' -exec install -Dm644 {} $out/include/skia/{} \;
+    find . -name '*.h' -exec install -Dm644 {} $out/include/{} \;
     popd
     pushd ../modules
-    find . -name '*.h' -exec install -Dm644 {} $out/include/skia/modules/{} \;
+    find . -name '*.h' -exec install -Dm644 {} $out/include/modules/{} \;
+    popd
+    pushd ../src
+    find . -name '*.h' -exec install -Dm644 {} $out/include/src/{} \;
     popd
 
     # Pkg-config
@@ -107,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     prefix=${placeholder "out"}
     exec_prefix=''${prefix}
     libdir=''${prefix}/lib
-    includedir=''${prefix}/include/skia
+    includedir=''${prefix}/include
     Name: skia
     Description: 2D graphic library for drawing text, geometries and images.
     URL: https://skia.org/

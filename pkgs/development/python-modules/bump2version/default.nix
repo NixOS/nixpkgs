@@ -1,23 +1,30 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, testfixtures
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  testfixtures,
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "bump2version";
   version = "1.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "c4urself";
-    repo = pname;
+    repo = "bump2version";
     rev = "v${version}";
     sha256 = "sha256-j6HKi3jTwSgGBrA8PCJJNg+yQqRMo1aqaLgPGf4KAKU=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

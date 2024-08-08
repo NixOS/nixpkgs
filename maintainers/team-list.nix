@@ -740,6 +740,12 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  notofonts = {
+    members = [ jopejoe1 ];
+    scope = "Maintain notofont packages.";
+    shortName = "Noto Fonts";
+  };
+
   ocaml = {
     members = [ alizter ];
     githubTeams = [ "ocaml" ];
