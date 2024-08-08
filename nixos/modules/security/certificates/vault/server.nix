@@ -1,21 +1,12 @@
 { lib, pkgs, config, ... }:
 let
-  inherit (lib)
-    filterAttrs
-    hasSuffix
-    mapAttrsToList
-    mkIf
-    mkMerge
-    mkOption
-    pipe
-    types;
+  inherit (lib) filterAttrs mapAttrsToList mkIf mkMerge mkOption pipe types;
   top = config.security.certificates;
   cfg = top.authorities.vault;
   addr = "http://127.0.0.1:8200";
   token = "/var/lib/vault/.vault-token";
   role = "test";
-in
-{
+in {
   options.security.certificates.authorities.vault.server = {
     enable = mkOption {
       type = types.bool;
@@ -52,22 +43,17 @@ in
           after = [ "vault.service" ];
           before = requiredBy;
 
-          path = with pkgs; [
-            getent
-            vault
-          ];
+          path = with pkgs; [ getent vault ];
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
           };
-          environment = {
-            VAULT_ADDR = addr;
-          };
+          environment = { VAULT_ADDR = addr; };
           script = ''
             echo Configuring Vault PKI Server
             export VAULT_TOKEN=$(cat ${token})
             pki_init() {
-              vault secrets enable pki  
+              vault secrets enable pki
               vault secrets tune -max-lease-ttl=365d pki
               vault write pki/root/generate/internal          \
                 common_name=localhost                         \
@@ -78,7 +64,7 @@ in
               vault write pki/roles/${role}                   \
                 allowed_domains=test                          \
                 allow_subdomains=true                         \
-                max_ttl=7d                                    
+                max_ttl=7d
             }
             log() {
               local level=$1
@@ -92,9 +78,8 @@ in
     })
     # Split this part out to prevent an inf-rec
     {
-      security.certificates.authorities.vault.settings = mkIf (cfg.server.enable) {
-        inherit token role;
-      };
+      security.certificates.authorities.vault.settings =
+        mkIf (cfg.server.enable) { inherit token role; };
     }
   ];
 }

@@ -1,46 +1,25 @@
-{ lib
-, config
-, pkgs
-, name
-, authorities
-, defaultAuthority
-, ...
-}:
+{ lib, config, pkgs, name, authorities, defaultAuthority, ... }:
 let
   inherit (lib)
-    attrNames
-    concatLines
-    elemAt
-    escapeShellArg
-    imap1
-    isList
-    listToAttrs
-    mapAttrsToList
-    mergeAttrsList
-    optional
-    pipe
-    mkOption
-    types;
+    attrNames concatLines elemAt escapeShellArg imap1 isList listToAttrs
+    mapAttrsToList mergeAttrsList optional pipe mkOption types;
   # Module of options for generated certificate files
   ini = pkgs.formats.ini { };
-  toOpenSSLMultiVal = name: list: listToAttrs (
-    imap1
-      (i: val: {
-        name = "${name}.${toString i}";
-        value = toString val;
-      })
-      list
-  );
-  toOpenSSLMultiVals = attrs: pipe attrs [
-    (mapAttrsToList
-      (name: value:
-        if (isList value)
-        then (toOpenSSLMultiVal name value)
-        else { ${name} = value; }
-      )
-    )
-    mergeAttrsList
-  ];
+  toOpenSSLMultiVal = name: list:
+    listToAttrs (imap1 (i: val: {
+      name = "${name}.${toString i}";
+      value = toString val;
+    }) list);
+  toOpenSSLMultiVals = attrs:
+    pipe attrs [
+      (mapAttrsToList (name: value:
+        if (isList value) then
+          (toOpenSSLMultiVal name value)
+        else {
+          ${name} = value;
+        }))
+      mergeAttrsList
+    ];
   file = with types; {
     options = {
       path = mkOption {
@@ -79,25 +58,20 @@ let
           Subject Alternate Names for the certificate, can be provided as either
           a list of host names or specified by type.
         '';
-        type = coercedTo
-          (listOf str)
-          (hosts: { DNS = hosts; })
-          (submodule {
-            options = {
-              DNS = mkOption {
-                type = listOf str;
-                description =
-                  "DNS SANs.";
-                default = [ ];
-              };
-              IP = mkOption {
-                type = listOf str;
-                description =
-                  "IP SANs.";
-                default = [ ];
-              };
+        type = coercedTo (listOf str) (hosts: { DNS = hosts; }) (submodule {
+          options = {
+            DNS = mkOption {
+              type = listOf str;
+              description = "DNS SANs.";
+              default = [ ];
             };
-          });
+            IP = mkOption {
+              type = listOf str;
+              description = "IP SANs.";
+              default = [ ];
+            };
+          };
+        });
         default = { };
       };
       key = mkOption {
@@ -143,8 +117,7 @@ let
       };
     };
   };
-in
-{
+in {
   options = with types; {
     service = mkOption {
       type = str;
@@ -152,9 +125,9 @@ in
         The systemd service that will become `active` once the certificate is
         installed and ready for use.
         ::: {.note}
-        This option is generally set by the authority and should not be 
+        This option is generally set by the authority and should not be
         changed by the user.
-        :::  
+        :::
       '';
       default = "certificate@${name}";
     };
@@ -204,10 +177,10 @@ in
       config = mkOption {
         type = ini.type;
         description = ''
-          The resultant CSR structures as a OpenSSL config file. suitable for 
+          The resultant CSR structures as a OpenSSL config file. suitable for
           passing to `openssl req`.
           ::: {.note}
-          This will typically be used to generate `configFile` and auto 
+          This will typically be used to generate `configFile` and auto
           generated from the certificate specification.
           :::
         '';
@@ -232,9 +205,9 @@ in
         type = pathInStore;
         description = ''
           A executable that when run will read the private key on stdin and output
-          a Certificate Signing Request on stdout in PEM format.  
+          a Certificate Signing Request on stdout in PEM format.
           ::: {.warn}
-          Store objects are world readable and MUST not contain any secrets. As 
+          Store objects are world readable and MUST not contain any secrets. As
           such keys and certificates are generated at runtime not buildtime.
           :::
         '';
@@ -244,10 +217,10 @@ in
       key = mkOption {
         type = pathInStore;
         description = ''
-          A executable that when run will produce a private key on stdout in PEM 
+          A executable that when run will produce a private key on stdout in PEM
           format.
           ::: {.warn}
-          Store objects are world readable and MUST not contain any secrets. As 
+          Store objects are world readable and MUST not contain any secrets. As
           such keys and certificates are generated at runtime not buildtime.
           :::
         '';
@@ -256,9 +229,9 @@ in
       install = mkOption {
         type = pathInStore;
         description = ''
-          A executable that takes 3 path arguments to the private key file, 
-          certificate file, and certificate authority certificate file. Then 
-          copies those file to their destinations ensuring correct permissions.  
+          A executable that takes 3 path arguments to the private key file,
+          certificate file, and certificate authority certificate file. Then
+          copies those file to their destinations ensuring correct permissions.
         '';
       };
     };
@@ -266,87 +239,58 @@ in
 
   config = {
     openssl = {
-      config =
-        let
-          dnSect = "${name}_distringished_name";
-          extSect = "${name}_extensions";
-          sanSect = "${name}_subjectAltName";
-        in
-        {
-          "req" = {
-            prompt = "no";
-            distinguished_name = dnSect;
-            req_extensions = extSect;
-          };
-          # Distinguished Name
-          ${dnSect} = {
-            inherit (config.request) CN;
-          } // config.request.names;
-          # Extensions
-          ${extSect} = {
-            subjectAltName = "@${sanSect}";
-          };
-          # Subject Alternative Names
-          ${sanSect} = toOpenSSLMultiVals config.request.hosts;
+      config = let
+        dnSect = "${name}_distringished_name";
+        extSect = "${name}_extensions";
+        sanSect = "${name}_subjectAltName";
+      in {
+        "req" = {
+          prompt = "no";
+          distinguished_name = dnSect;
+          req_extensions = extSect;
         };
+        # Distinguished Name
+        ${dnSect} = { inherit (config.request) CN; } // config.request.names;
+        # Extensions
+        ${extSect} = { subjectAltName = "@${sanSect}"; };
+        # Subject Alternative Names
+        ${sanSect} = toOpenSSLMultiVals config.request.hosts;
+      };
 
       configFile = ini.generate "${name}_csr.cfg" config.openssl.config;
     };
     scripts = {
-      csr = pkgs.writeShellScript "${name}-mkcsr" (
-        let
-          openssl = "${pkgs.openssl}/bin/openssl";
-          cfg = config.openssl.configFile;
-        in
-        ''
-          ${openssl} req -config ${cfg} -batch -new -key /dev/stdin -outform PEM 
-        ''
-      );
+      csr = pkgs.writeShellScript "${name}-mkcsr" (let
+        openssl = "${pkgs.openssl}/bin/openssl";
+        cfg = config.openssl.configFile;
+      in ''
+        ${openssl} req -config ${cfg} -batch -new -key /dev/stdin -outform PEM
+      '');
 
-      key = pkgs.writeShellScript "${name}-mkkey" (
-        let
-          openssl = "${pkgs.openssl}/bin/openssl";
-          inherit (config.request) key;
-        in
-        if (key ? rsa) then ''
-          ${openssl} genrsa ${toString (key.rsa.size or 2048)}
-        ''
-        else if (key ? ecdsa) then ''
-          ${openssl} ecparam -name ${key.ecdsa.curve} -genkey -outform PEM
-        ''
-        else abort "Unknown key type: ${elemAt (attrNames key) 0}"
-      );
+      key = pkgs.writeShellScript "${name}-mkkey" (let
+        openssl = "${pkgs.openssl}/bin/openssl";
+        inherit (config.request) key;
+      in if (key ? rsa) then ''
+        ${openssl} genrsa ${toString (key.rsa.size or 2048)}
+      '' else if (key ? ecdsa) then ''
+        ${openssl} ecparam -name ${key.ecdsa.curve} -genkey -outform PEM
+      '' else
+        abort "Unknown key type: ${elemAt (attrNames key) 0}");
 
-      install = pkgs.writeShellScript "${name}-install" (
-        let
-          install =
-            src:
-            { path
-            , owner ? "$(id -u)"
-            , group ? "$(id -g)"
-            , mode ? "0600"
-            }:
-            "${pkgs.coreutils}/bin/install -Dv "
-            + "-o ${owner} "
-            + "-g ${group} "
-            + "-m ${mode} "
-            + "${src} ${escapeShellArg path}";
-        in
-        concatLines (
-          [
-            ''
-              PKEY=''${1:-/dev/null}
-              CERT=''${2:-/dev/null}
-              CA=''${3:-/dev/null}
-            ''
-          ]
-          ++ (optional (config ? private_key)
-            (install "$PKEY" config.private_key))
-          ++ (optional (config ? private_key)
-            (install "$CERT" config.certificate))
-          ++ (optional (config ? ca) (install "$CA" config.ca))
-        )
-      );
+      install = pkgs.writeShellScript "${name}-install" (let
+        install = src:
+          { path, owner ? "$(id -u)", group ? "$(id -g)", mode ? "0600" }:
+          "${pkgs.coreutils}/bin/install -Dv " + "-o ${owner} " + "-g ${group} "
+          + "-m ${mode} " + "${src} ${escapeShellArg path}";
+      in concatLines ([''
+        PKEY=''${1:-/dev/null}
+        CERT=''${2:-/dev/null}
+        CA=''${3:-/dev/null}
+      ''] ++ (optional (config ? private_key)
+        (install "$PKEY" config.private_key))
+        ++ (optional (config ? private_key)
+          (install "$CERT" config.certificate))
+        ++ (optional (config ? ca) (install "$CA" config.ca))));
     };
   };
 }
