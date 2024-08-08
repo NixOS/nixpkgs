@@ -30,6 +30,16 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      aioazuredevops = super.aioazuredevops.overridePythonAttrs (old: rec {
+        version = "2.1.1";
+        src = fetchFromGitHub {
+          owner = "timmo001";
+          repo = "aioazuredevops";
+          rev = "refs/tags/${version}";
+          hash = "sha256-rnvWjsTRBoojsuNG3uSdBlyycE4XSrhgjmb77jy7fxY=";
+        };
+      });
+
       aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchFromGitHub {
