@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    substituteInPlace bootstrap --replace-fail glibtoolize libtoolize
+  '';
+
   preConfigure = ''
     ./bootstrap
   '';
