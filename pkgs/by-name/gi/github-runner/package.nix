@@ -1,5 +1,5 @@
-{ autoSignDarwinBinariesHook
-, buildDotnetModule
+{ buildDotnetModule
+, darwin
 , dotnetCorePackages
 , fetchFromGitHub
 , fetchpatch
@@ -114,7 +114,7 @@ buildDotnetModule rec {
     which
     git
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ];
 
   buildInputs = [ stdenv.cc.cc.lib ];
