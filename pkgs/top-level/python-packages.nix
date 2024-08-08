@@ -14344,6 +14344,8 @@ self: super: with self; {
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
+  simplefin4py = callPackage ../development/python-modules/simplefin4py { };
+
   simplefix = callPackage ../development/python-modules/simplefix { };
 
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
