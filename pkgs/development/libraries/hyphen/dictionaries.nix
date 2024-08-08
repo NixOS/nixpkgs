@@ -25,7 +25,7 @@ let
         maintainers = with maintainers; [ theCapypara ];
         platforms = platforms.all;
       };
-      phases = [ "unpackPhase" "installPhase" ];
+      dontBuild = true;
       installPhase = ''
         runHook preInstall
         cd $src/${subdir}
