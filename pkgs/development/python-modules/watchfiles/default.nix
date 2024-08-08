@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "0.22.0";
+  version = "0.23.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,13 +27,13 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-TtRSRgtMOqsnhdvsic3lg33xlA+r/DcYHlzewSOu/44=";
+    hash = "sha256-kFScg3pkOD0gASRtfXSfwZxyW/XvW9x0zgMn0AQek4A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-n9yN/VRNQWCxh+BoliIMkKqJC51inpB9DQ9WtqR4oA0=";
+    hash = "sha256-fg+uH/ATjIW67er7yZJLpnKOWremd+cPt5ksSAjv9xY=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
