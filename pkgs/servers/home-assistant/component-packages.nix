@@ -1037,7 +1037,8 @@
     "eight_sleep" = ps: with ps; [
     ];
     "electrasmart" = ps: with ps; [
-    ]; # missing inputs: pyElectra
+      pyelectra
+    ];
     "electric_kiwi" = ps: with ps; [
       fnv-hash-fast
       psutil-home-assistant
@@ -5412,6 +5413,7 @@
     "edl21"
     "efergy"
     "eight_sleep"
+    "electrasmart"
     "elgato"
     "elkm1"
     "elmax"
