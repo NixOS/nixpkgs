@@ -6142,6 +6142,8 @@ self: super: with self; {
 
   isoweek = callPackage ../development/python-modules/isoweek { };
 
+  israel-rail-api = callPackage ../development/python-modules/israel-rail-api { };
+
   itanium-demangler = callPackage ../development/python-modules/itanium-demangler { };
 
   item-synchronizer = callPackage ../development/python-modules/item-synchronizer { };
