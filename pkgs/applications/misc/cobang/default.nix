@@ -97,8 +97,8 @@ buildPythonApplication rec {
     description = "QR code scanner desktop app for Linux";
     homepage = "https://github.com/hongquan/CoBang";
     license = licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with maintainers; [ aleksana dvaerum ];
     mainProgram = "cobang";
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 }

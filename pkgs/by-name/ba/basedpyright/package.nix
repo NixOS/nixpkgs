@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "1.15.1";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     rev = "refs/tags/v${version}";
-    hash = "sha256-x4hSzkVDTbF6CyJttTLbZmnA3Ccs3k9mW90lp2Krk6E=";
+    hash = "sha256-N51wZjhdoNbhHpMrgcEEzd9FIVwKwYs9sU7jyFV2b8g=";
   };
 
   patchedPackageJSON = runCommand "package.json" { } ''
@@ -47,7 +47,7 @@ let
     pname = "pyright-internal";
     inherit version src;
     sourceRoot = "${src.name}/packages/pyright-internal";
-    npmDepsHash = "sha256-Kg2y+z1izv3KV83UdUqEdyd8m0geMseb8uSb6tv4c5o=";
+    npmDepsHash = "sha256-RkMgCa7oAPFbTHC5WAcz6b8cUOEORR0sZr2VxhQki1k=";
     dontNpmBuild = true;
     # FIXME: Remove this flag when TypeScript 5.5 is released
     npmFlags = [ "--legacy-peer-deps" ];
@@ -94,7 +94,7 @@ buildNpmPackage rec {
   inherit version src;
 
   sourceRoot = "${src.name}/packages/pyright";
-  npmDepsHash = "sha256-0zLSTePWvf3ZB6OE3cmjimYuAkoCmQ0besM2PiEEWao=";
+  npmDepsHash = "sha256-6Zhd5IothE7RoetaITL5MmLIF6YDNk6IiHcfTzbbjLY=";
 
   postPatch = ''
     chmod +w ../../

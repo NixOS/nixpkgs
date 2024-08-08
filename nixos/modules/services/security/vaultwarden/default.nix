@@ -168,7 +168,7 @@ in {
         message = "Backups for database backends other than sqlite will need customization";
       }
       {
-        assertion = !(lib.hasPrefix dataDir cfg.backupDir);
+        assertion = cfg.backupDir != null -> !(lib.hasPrefix dataDir cfg.backupDir);
         message = "Backup directory can not be in ${dataDir}";
       }
     ];

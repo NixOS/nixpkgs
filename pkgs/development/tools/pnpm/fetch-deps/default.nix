@@ -14,6 +14,8 @@
     {
       hash ? "",
       pname,
+      pnpmWorkspace ? "",
+      prePnpmInstall ? "",
       ...
     }@args:
     let
@@ -29,6 +31,7 @@
             outputHash = "";
             outputHashAlgo = "sha256";
           };
+      installFlags = lib.optionalString (pnpmWorkspace != "")  "--filter=${pnpmWorkspace}";
     in
     stdenvNoCC.mkDerivation (finalAttrs: (
       args'
@@ -58,9 +61,15 @@
           pnpm config set side-effects-cache false
           # As we pin pnpm versions, we don't really care about updates
           pnpm config set update-notifier false
+          # Run any additional pnpm configuration commands that users provide.
+          ${prePnpmInstall}
           # pnpm is going to warn us about using --force
           # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
-          pnpm install --frozen-lockfile --ignore-script --force
+          pnpm install \
+              --force \
+              --ignore-scripts \
+              ${installFlags} \
+              --frozen-lockfile
 
           runHook postInstall
         '';
