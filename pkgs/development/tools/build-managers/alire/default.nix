@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/alire-project/alire/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ atalii ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
     mainProgram = "alr";
   };
 })
