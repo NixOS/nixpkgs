@@ -11826,6 +11826,8 @@ self: super: with self; {
     inherit (pkgs) which;
   };
 
+  pynecil = callPackage ../development/python-modules/pynecil { };
+
   pynello = callPackage ../development/python-modules/pynello { };
 
   pynest2d = callPackage ../development/python-modules/pynest2d { };
