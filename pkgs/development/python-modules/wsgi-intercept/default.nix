@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "wsgi-intercept";
-  version = "1.13.0";
+  version = "1.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "wsgi_intercept";
     inherit version;
-    hash = "sha256-daA+HQHdtCAC+1a4Ss0qeo7OJe/dIGREoTqfH7z6k0w=";
+    hash = "sha256-eb1sY5qxH36r5dGK2aIPYu6CocQ1EkqHbP/YA49sJME=";
   };
 
   nativeBuildInputs = [ setuptools ];
