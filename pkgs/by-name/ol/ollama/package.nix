@@ -40,13 +40,13 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.3.1";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-ctz9xh1wisG0YUxglygKHIvU9bMgMLkGqDoknb8qSAU=";
+    hash = "sha256-W/R2mmHswKrg0g6UOOAetRQWmUV5R7+X7SuhGzhCLVg=";
     fetchSubmodules = true;
   };
 
@@ -64,7 +64,8 @@ let
     (preparePatch "06-embeddings.diff" "sha256-lqg2SI0OapD9LCoAG6MJW6HIHXEmCTv7P75rE9yq/Mo=")
     (preparePatch "07-clip-unicode.diff" "sha256-1qMJoXhDewxsqPbmi+/7xILQfGaybZDyXc5eH0winL8=")
     (preparePatch "08-pooling.diff" "sha256-7meKWbr06lbVrtxau0AU9BwJ88Z9svwtDXhmHI+hYBk=")
-    (preparePatch "09-lora.diff" "sha256-nyKqK/lKWU9HkOSV61Zfoj+25/IKbzPaLkQvAijWObY=")
+    (preparePatch "09-lora.diff" "sha256-tNtI3WHHjBq+PJZGJCBsXHa15dlNJeJm+IiaUbFC0LE=")
+    (preparePatch "11-phi3-sliding-window.diff" "sha256-VbcR4SLa9UXoh8Jq/bPVBerxfg68JZyWALRs7fz7hEs=")
   ];
 
   preparePatch =
