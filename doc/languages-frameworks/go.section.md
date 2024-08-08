@@ -62,6 +62,62 @@ The following is an example expression using `buildGoModule`:
 }
 ```
 
+### Obtaining and overriding `vendorHash` for `buildGoModule` {#buildGoModule-vendorHash}
+
+`nix-prefetch` can be used to obtain the actual hash. The following command gets the value of `vendorHash` for package `pet`:
+
+```sh
+cd path/to/nixpkgs
+nix-prefetch -E "{ hash }: ((import ./. { }).my-package.overrideAttrs (_: { vendorHash = hash; })).go-modules"
+```
+
+To obtain the hash without external tools, set `vendorHash = lib.fakeHash;` and run the build. ([more details here](#sec-source-hashes)).
+
+`vendorHash` can be overridden with `overrideAttrs`. Override the above example like this:
+
+```nix
+{
+  pet_0_4_0 = pet.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      version = "0.4.0";
+      src = fetchFromGitHub {
+        inherit (previousAttrs.src) owner repo;
+        rev = "v${finalAttrs.version}";
+        hash = "sha256-gVTpzmXekQxGMucDKskGi+e+34nJwwsXwvQTjRO6Gdg=";
+      };
+      vendorHash = "sha256-dUvp7FEW09V0xMuhewPGw3TuAic/sD7xyXEYviZ2Ivs=";
+    }
+  );
+}
+```
+
+### Overriding `goModules` (#buildGoModule-goModules-override)
+
+Overriding `<pkg>.goModules` by calling `goModules.overrideAttrs` is unsupported. Still, it is possible to override the `vendorHash` (`goModules`'s `outputHash`) and the `pre`/`post` hooks for both the build and patch phases of the primary and `goModules` derivation. Alternatively, the primary derivation provides an overridable `passthru.overrideModAttrs` function to store the attribute overlay implicitly taken by `goModules.overrideAttrs`. Here's an example usage of `overrideModAttrs`:
+
+```nix
+let
+  pet-foo = pkgs.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      passthru = previousAttrs.passthru // {
+        overrideModAttrs = lib.composeExtensions previousAttrs.passthru.overrideModAttrs (
+          finalModAttrs: previousModAttrs: {
+            # goModules-specific overriding goes here
+            postBuild = ''
+              # Here you have access to the `vendor` directory.
+              substituteInPlace vendor/github.com/example/repo/file.go \
+                --replace-fail "panic(err)" ""
+            '';
+          }
+        );
+      };
+    }
+  );
+  pet-vendored = pet-foo.overrideAttrs { vendorHash = null; };
+in
+pet-vendored
+```
+
 ## `buildGoPackage` (legacy) {#ssec-go-legacy}
 
 The function `buildGoPackage` builds legacy Go programs, not supporting Go modules.
