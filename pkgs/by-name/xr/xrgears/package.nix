@@ -13,18 +13,19 @@
 , makeWrapper
 , libGL
 , glib
+, unstableGitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xrgears";
-  version = "unstable-2021-06-19";
+  version = "1.0.1-unstable-2024-07-09";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "demos/xrgears";
-    rev = "6331b98e065494995c9cc4b48ccdd9d5ccaef461";
-    sha256 = "sha256-buw2beTPIWScq+3VQjUyF+uOwS6VF+mnAPHZ2eFGZjc=";
+    rev = "9cabbd34b1f60f27402a9a50fc260f77a41b835b";
+    sha256 = "sha256-9VV1zAOZKkl1zzjnsQQQOINi+T+wpbltdWpJ/d66+cM=";
   };
 
   nativeBuildInputs = [
@@ -49,12 +50,14 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ SDL2 libGL ]}
   '';
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/monado/demos/xrgears";
     description = "OpenXR example using Vulkan for rendering";
     mainProgram = "xrgears";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [ expipiplus1 Scrumplex ];
   };
 }
