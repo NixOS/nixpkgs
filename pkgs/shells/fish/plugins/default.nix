@@ -50,6 +50,8 @@ lib.makeScope newScope (self: with self; {
 
   plugin-git = callPackage ./plugin-git.nix { };
 
+  plugin-sudope = callPackage ./plugin-sudope.nix { };
+
   puffer = callPackage ./puffer.nix { };
 
   pure = callPackage ./pure.nix { };
