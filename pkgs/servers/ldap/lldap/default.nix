@@ -26,8 +26,6 @@ let
     src = fetchFromGitHub {
       owner = "lldap";
       repo = "lldap";
-      # rev = "v${version}";
-      # hash = "";
       rev = "6aa9303339ac1793b4be9ae01c56a6369a5d77f0";
       hash = "sha256-UbkpnPvDoTaioB0g1HBvRczqUEuPlVuH1gIVBU07RpY=";
     };
