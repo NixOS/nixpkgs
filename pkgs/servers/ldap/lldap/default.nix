@@ -18,7 +18,7 @@ let
     cargoHash = "sha256-vcpxcRlW1OKoD64owFF6mkxSqmNrvY+y3Ckn5UwEQ50=";
   };
 
-  commonDerivationAttrs = rec {
+  commonDerivationAttrs = {
     pname = "lldap";
     version = "0.5.1-alpha-6aa930";
 
