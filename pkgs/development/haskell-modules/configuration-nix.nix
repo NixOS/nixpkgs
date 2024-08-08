@@ -156,16 +156,16 @@ self: super: builtins.intersectAttrs super {
   # hledger* overrides
   inherit (
     let
-      installHledgerExtraFiles = overrideCabal (drv: {
+      installHledgerExtraFiles = manpagePathPrefix: overrideCabal (drv: {
         buildTools = drv.buildTools or [] ++ [
           pkgs.buildPackages.installShellFiles
         ];
         postInstall = ''
           for i in $(seq 1 9); do
-            installManPage *.$i
+            installManPage ./${manpagePathPrefix}/*.$i
           done
 
-          install -v -Dm644 *.info* -t "$out/share/info/"
+          install -v -Dm644 ./${manpagePathPrefix}/*.info* -t "$out/share/info/"
 
           if [ -e shell-completion/hledger-completion.bash ]; then
             installShellCompletion --name hledger shell-completion/hledger-completion.bash
@@ -181,25 +181,31 @@ self: super: builtins.intersectAttrs super {
       });
     in
     {
-      hledger = installHledgerExtraFiles super.hledger;
-      hledger-web = installHledgerExtraFiles (hledgerWebTestFix super.hledger-web);
-      hledger-ui = installHledgerExtraFiles super.hledger-ui;
+      hledger = installHledgerExtraFiles "" super.hledger;
+      hledger-web = installHledgerExtraFiles "" (hledgerWebTestFix super.hledger-web);
+      hledger-ui = installHledgerExtraFiles "" super.hledger-ui;
 
-      hledger_1_30_1 = installHledgerExtraFiles
-        (doDistribute (super.hledger_1_30_1.override {
-          hledger-lib = self.hledger-lib_1_30;
+      hledger_1_34 = installHledgerExtraFiles "embeddedfiles"
+        (doDistribute (super.hledger_1_34.override {
+          hledger-lib = self.hledger-lib_1_34;
         }));
-      hledger-web_1_30 = installHledgerExtraFiles (hledgerWebTestFix
-        (doDistribute (super.hledger-web_1_30.override {
-          hledger = self.hledger_1_30_1;
-          hledger-lib = self.hledger-lib_1_30;
+      hledger-ui_1_34 = installHledgerExtraFiles ""
+        (doDistribute (super.hledger-ui_1_34.override {
+          hledger = self.hledger_1_34;
+          hledger-lib = self.hledger-lib_1_34;
+        }));
+      hledger-web_1_34 = installHledgerExtraFiles "" (hledgerWebTestFix
+        (doDistribute (super.hledger-web_1_34.override {
+          hledger = self.hledger_1_34;
+          hledger-lib = self.hledger-lib_1_34;
         })));
     }
   ) hledger
     hledger-web
     hledger-ui
-    hledger_1_30_1
-    hledger-web_1_30
+    hledger_1_34
+    hledger-ui_1_34
+    hledger-web_1_34
     ;
 
   cufft = overrideCabal (drv: {
