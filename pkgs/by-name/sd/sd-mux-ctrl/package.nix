@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool for controlling multiple sd-mux devices";
-    homepage = "https://wiki.tizen.org/SD_MUX";
+    homepage = "https://git.tizen.org/cgit/tools/testlab/sd-mux";
     license = licenses.asl20;
     maintainers =  with maintainers; [ newam sarcasticadmin ];
     platforms = platforms.unix;

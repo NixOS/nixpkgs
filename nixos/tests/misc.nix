@@ -99,6 +99,9 @@ in {
       with subtest("whether systemd-tmpfiles settings works"):
           machine.succeed("[ -e /tmp/somefile ]")
 
+      with subtest("/etc/mtab"):
+          assert "/proc/mounts" == machine.succeed("readlink --no-newline /etc/mtab")
+
       with subtest("whether automounting works"):
           machine.fail("grep '/tmp2 tmpfs' /proc/mounts")
           machine.succeed("touch /tmp2/x")
