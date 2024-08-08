@@ -35,6 +35,16 @@ in
       certificates themselves. This can have security consequences depending on your usecases
     '';
 
+    security.pki.useHashedCertificates = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Some applications, such as steam games, look for individual hashed certificates
+        instead of a CA bundle. This option creates the certificates in {file}`/etc/ssl/certs/`.
+      '';
+    };
+
     security.pki.certificateFiles = mkOption {
       type = types.listOf types.path;
       default = [];
@@ -86,7 +96,9 @@ in
 
   };
 
-  config = mkIf cfg.installCACerts {
+  config = mkMerge [
+
+  (mkIf cfg.installCACerts {
 
     # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
     environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
@@ -100,6 +112,18 @@ in
     # P11-Kit trust source.
     environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
 
-  };
+  })
+
+  (mkIf cfg.useHashedCertificates {
+    # Link all certificates in the hashed output to /etc/ssl/certs
+    environment.etc = let
+      hashed = "${pkgs.cacert.hashed}/etc/ssl/certs";
+    in lib.mapAttrs' (name: _: {
+      name = "ssl/certs/${name}";
+      value = { source = "${hashed}/${name}"; };
+    }) (builtins.readDir hashed);
+  })
+
+  ];
 
 }
