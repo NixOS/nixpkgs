@@ -1,8 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, buildPackages
 , installShellFiles
-, coreutils
 , darwin
 , libblocksruntime
 , llvmPackages
@@ -11,6 +11,7 @@
 , ninja
 , pkg-config
 , python3
+, python3Packages
 , substituteAll
 , zlib
 , fetchpatch
@@ -18,8 +19,28 @@
 
 let
   inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation LDAP OpenAL OpenGL;
+
+  # Meson relies heavily on Python executable being named python3 for tests, so
+  # we give it a wrapper that executes appropriate executable.
+  pythonWrapper = buildPackages.writeCBin "python3" ''
+    #include <assert.h>
+    #include <errno.h>
+    #include <stdio.h>
+    #include <string.h>
+    #include <unistd.h>
+
+    const char* argv0 = "${python3.executable}";
+
+    int main(int argc, char *argv[]) {
+      assert(argc > 0);
+      argv[0] = argv0;
+      execvp(argv0, argv);
+      fprintf(stderr, "python3: %s: %s\n", argv0, strerror(errno));
+      return 1;
+    }
+  '';
 in
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "meson";
   version = "1.5.1";
 
@@ -103,6 +124,8 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = [
     ninja
     pkg-config
+  ] ++ lib.optionals python3Packages.isPyPy [
+    pythonWrapper
   ];
 
   checkInputs = [
@@ -123,14 +146,18 @@ python3.pkgs.buildPythonApplication rec {
     libblocksruntime
   ];
 
+  disallowedReferences = lib.optionals python3.isPyPy [
+    pythonWrapper
+  ];
+
   checkPhase = lib.concatStringsSep "\n" ([
     "runHook preCheck"
     ''
-      patchShebangs 'test cases'
+      patchShebangs --build 'test cases'
       substituteInPlace \
         'test cases/native/8 external program shebang parsing/script.int.in' \
         'test cases/common/273 customtarget exe for test/generate.py' \
-          --replace /usr/bin/env ${coreutils}/bin/env
+          --replace-fail /usr/bin/env ${buildPackages.coreutils}/bin/env
     ''
   ]
   # Remove problematic tests
@@ -152,7 +179,7 @@ python3.pkgs.buildPythonApplication rec {
     ''test cases/common/13 pch''
   ]))
   ++ [
-    ''HOME="$TMPDIR" python ./run_project_tests.py''
+    ''HOME="$TMPDIR" ${python3.executable} ./run_project_tests.py''
     "runHook postCheck"
   ]);
 
@@ -173,7 +200,7 @@ python3.pkgs.buildPythonApplication rec {
     rm $out/nix-support/propagated-build-inputs
 
     substituteInPlace "$out/share/bash-completion/completions/meson" \
-      --replace "python3 -c " "${python3.interpreter} -c "
+      --replace-fail "python3 -c " "${python3.interpreter} -c "
   '';
 
   setupHook = ./setup-hook.sh;
