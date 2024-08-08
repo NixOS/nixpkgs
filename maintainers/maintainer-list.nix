@@ -1084,6 +1084,12 @@
     githubId = 26391003;
     name = "Amadej Kastelic";
   };
+  amaihoefner = {
+    email = "alexander.maihoefner@protonmail.com";
+    github = "amaihoefner";
+    githubId = 52039028;
+    name = "Alexander Maihöfner";
+  };
   aman9das = {
     email = "amandas62640@gmail.com";
     github = "Aman9das";
