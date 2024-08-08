@@ -9173,10 +9173,10 @@ with self; {
 
   ExtUtilsConfig = buildPerlPackage {
     pname = "ExtUtils-Config";
-    version = "0.008";
+    version = "0.009";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Config-0.008.tar.gz";
-      hash = "sha256-rlEE9jRlDc6KebftE/tZ1no5whOmd2z9qj7nSeYvGow=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Config-0.009.tar.gz";
+      hash = "sha256-TvhOc6rVCjvjMohdKjsS88qxseC60k6IKXoSO085884=";
     };
     meta = {
       description = "Wrapper for perl's configuration";
