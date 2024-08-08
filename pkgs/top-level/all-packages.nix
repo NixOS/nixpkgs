@@ -6361,8 +6361,6 @@ with pkgs;
 
   boofuzz= callPackage ../tools/security/boofuzz { };
 
-  briar-desktop = callPackage ../applications/networking/instant-messengers/briar-desktop { };
-
   bsdbuild = callPackage ../development/tools/misc/bsdbuild { };
 
   bsdiff = callPackage ../tools/compression/bsdiff { };
