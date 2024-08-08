@@ -6,6 +6,19 @@ let
   top = config.services.kubernetes;
   cfg = top.flannel;
 
+  extractIpv4Cidr = cidr:
+    let v4 = builtins.head (lib.strings.splitString "," cidr);
+    in if builtins.match ".*\\..*/.*" v4 != null then v4 else null;
+
+  extractIpv6Cidr = cidr:
+    let parts = lib.strings.splitString "," cidr;
+    in if builtins.length parts == 2 then builtins.elemAt parts 1 else
+       if builtins.match ":.*" (builtins.head parts) != null then builtins.head parts else null;
+
+  clusterCidr = top.clusterCidr;
+  clusterIpv4Cidr = extractIpv4Cidr clusterCidr;
+  clusterIpv6Cidr = extractIpv6Cidr clusterCidr;
+
   # we want flannel to use kubernetes itself as configuration backend, not direct etcd
   storageBackend = "kubernetes";
 in
@@ -25,9 +38,9 @@ in
   ###### implementation
   config = mkIf cfg.enable {
     services.flannel = {
-
       enable = mkDefault true;
-      network = mkDefault top.clusterCidr;
+      network = mkDefault clusterIpv4Cidr;
+      ipv6Network = mkDefault clusterIpv6Cidr;
       inherit storageBackend;
       nodeName = config.services.kubernetes.kubelet.hostname;
     };

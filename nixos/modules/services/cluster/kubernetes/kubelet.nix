@@ -61,11 +61,13 @@ let
     containerRuntimeEndpoint = cfg.containerRuntimeEndpoint;
     healthzPort = cfg.healthz.port;
     healthzBindAddress = cfg.healthz.bind;
+    failSwapOn = cfg.failSwapOn;
   } // lib.optionalAttrs (cfg.tlsCertFile != null)  { tlsCertFile = cfg.tlsCertFile; }
     // lib.optionalAttrs (cfg.tlsKeyFile != null)   { tlsPrivateKeyFile = cfg.tlsKeyFile; }
     // lib.optionalAttrs (cfg.clusterDomain != "")  { clusterDomain = cfg.clusterDomain; }
-    // lib.optionalAttrs (cfg.clusterDns != "")     { clusterDNS = [ cfg.clusterDns ] ; }
+    // lib.optionalAttrs (cfg.clusterDns != "")     { clusterDNS = [ cfg.clusterDns ]; }
     // lib.optionalAttrs (cfg.featureGates != [])   { featureGates = cfg.featureGates; }
+    // cfg.extraConfig
   ));
 
   manifestPath = "kubernetes/manifests";
@@ -178,6 +180,12 @@ in
 
     enable = mkEnableOption "Kubernetes kubelet";
 
+    extraConfig = mkOption {
+      description = "Kubernetes kubelet extra config file options.";
+      default = {};
+      type = attrs;
+    };
+
     extraOpts = mkOption {
       description = "Kubernetes kubelet extra command line options.";
       default = "";
@@ -223,6 +231,13 @@ in
       description = "IP address of the node. If set, kubelet will use this IP address for the node.";
       default = null;
       type = nullOr str;
+    };
+
+    failSwapOn = mkOption {
+      description = "Needed to be false if you use swap";
+      default = true;
+      type = bool;
+      example = false;
     };
 
     registerNode = mkOption {
@@ -334,7 +349,6 @@ in
             --kubeconfig=${kubeconfig} \
             ${optionalString (cfg.nodeIp != null)
               "--node-ip=${cfg.nodeIp}"} \
-            --pod-infra-container-image=pause \
             ${optionalString (cfg.manifests != {})
               "--pod-manifest-path=/etc/${manifestPath}"} \
             ${optionalString (taints != "")
