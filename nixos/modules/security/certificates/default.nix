@@ -1,5 +1,5 @@
 # TODO: Make a utility library of common functions that authorities will want.
-{ lib, config, options, ... }:
+{ lib, config, options, pkgs, ... }:
 let
   inherit (lib)
     evalModules
@@ -34,9 +34,9 @@ in
           modules = [
             (import ./specification.nix)
             {
-              config._module.args = { 
+              config._module.args = {
                 inherit (config.security.certificates) defaultAuthority;
-                inherit authorities;
+                inherit pkgs authorities;
               };
             }
           ];
