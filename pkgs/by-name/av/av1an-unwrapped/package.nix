@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "av1an-unwrapped";
-  version = "0.4.2";
+  version = "latest";
 
   src = fetchFromGitHub {
     owner = "master-of-zen";
     repo = "av1an";
     rev = version;
-    hash = "sha256-A4/1UdM8N5CHP44PBNB+ZH2Gcl84rcpUBwQRSnubBGc=";
+    hash = "sha256-fZWgN3HOZXsRLCFcLkeRcHNj3fOiTosiC91jAK5xm30=";
   };
 
-  cargoHash = "sha256-ahoiCAUREtXgXLNrWVQ2Gc65bWMo4pIJXP9xjnQAlaI=";
+  cargoHash = "sha256-w/APCWJou8vszSV1+d+QMsKpni7/CpSIH/8tPPwjJXE=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
