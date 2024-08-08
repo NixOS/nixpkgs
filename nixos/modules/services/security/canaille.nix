@@ -45,6 +45,15 @@ let
       celery
     ];
   };
+
+  commonServiceConfig = {
+    WorkingDirectory = dataDir;
+    User = "canaille";
+    Group = "canaille";
+    StateDirectory = "canaille";
+    StateDirectoryMode = "0750";
+    PrivateTmp = true;
+  };
 in
 {
 
@@ -103,6 +112,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # We can use some kind of fix point for the config anyways, and
+    # /etc/canaille is recommended by upstream. The alternative would be to use
+    # a double wrapped canaille executable, to avoid having to rebuild canaille
+    # on every config change.
     environment.etc."canaille/config.toml" = {
       source = settingsFormat.generate "config.toml" (filterConfig cfg.settings);
       user = "canaille";
@@ -113,7 +126,7 @@ in
     # - Canaille uses Pydantic, which currently only accepts an env file or a single
     #   directory (SECRETS_DIR) for loading settings from files.
     # - The canaille user needs access to secrets, as it needs to run the CLI
-    #   for e.g. user creation. Therefore specifying the SECRETS_DIR as systemds
+    #   for e.g. user creation. Therefore specifying the SECRETS_DIR as systemd's
     #   CREDENTIALS_DIRECTORY is not an option.
     systemd.tmpfiles.rules = [
       "Z  ${secretsDir} 700 canaille canaille - -"
@@ -122,51 +135,34 @@ in
 
     # This is not a migration, just an initial setup of schemas
     systemd.services.canaille-install = {
-      wantedBy = [
-        "canaille.service"
-        "multi-user.target"
-      ];
+      # We want this on boot, not on socket activation
+      wantedBy = [ "multi-user.target" ];
       after = [ "postgresql.service" ];
-      requires = [ "postgresql.service" ];
-      serviceConfig = {
+      serviceConfig = commonServiceConfig // {
         Type = "oneshot";
         ExecStart = "${finalPackage}/bin/canaille install";
-        WorkingDirectory = dataDir;
-        User = "canaille";
-        Group = "canaille";
-        StateDirectory = "canaille";
-        StateDirectoryMode = "0750";
-        PrivateTmp = true;
       };
     };
 
     systemd.services.canaille = {
       description = "Canaille";
       documentation = [ "https://canaille.readthedocs.io/en/latest/tutorial/deployment.html" ];
-      wantedBy = [ "multi-user.target" ];
       after = [
         "network.target"
-        "postgresql.target"
+        "postgresql.service"
         "canaille-install.service"
       ];
       requires = [
-        "postgresql.service"
-        "canaille.socket"
         "canaille-install.service"
+        "canaille.socket"
       ];
       environment = {
         PYTHONPATH = "${pythonEnv}/${python.sitePackages}/";
         CONFIG = "/etc/canaille/config.toml";
         SECRETS_DIR = secretsDir;
       };
-      serviceConfig = {
-        WorkingDirectory = dataDir;
-        User = "canaille";
-        Group = "canaille";
-        StateDirectory = "canaille";
-        StateDirectoryMode = "0750";
+      serviceConfig = commonServiceConfig // {
         Restart = "on-failure";
-        PrivateTmp = true;
         ExecStart =
           let
             gunicorn = python.pkgs.gunicorn.overridePythonAttrs (old: {
