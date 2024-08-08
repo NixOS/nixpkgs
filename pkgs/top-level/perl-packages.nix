@@ -4924,6 +4924,22 @@ with self; {
     };
   };
 
+  CPANRequirementsDynamic = buildPerlPackage {
+    pname = "CPAN-Requirements-Dynamic";
+    version = "0.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/CPAN-Requirements-Dynamic-0.001.tar.gz";
+      hash = "sha256-S1kOcSuaymgMNjGFXuFqULhPoCJ8Ni4TsjenWgFInvU=";
+    };
+    propagatedBuildInputs = [ ExtUtilsConfig ExtUtilsHasCompiler
+                              CPANMetaRequirements # needs never than in core
+                            ];
+    meta = {
+      description = "Dynamic prerequisites in meta files";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CPANUploader = buildPerlPackage {
     pname = "CPAN-Uploader";
     version = "0.103018";
