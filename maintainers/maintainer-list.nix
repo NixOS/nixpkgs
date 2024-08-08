@@ -19761,6 +19761,12 @@
     githubId = 7258858;
     name = "Sandro Jäckel";
   };
+  supinie = {
+    name = "supinie";
+    email = "nix@supinie.com";
+    github = "supinie";
+    githubId = 86788874;
+  };
   SuprDewd = {
     email = "suprdewd@gmail.com";
     github = "SuprDewd";
