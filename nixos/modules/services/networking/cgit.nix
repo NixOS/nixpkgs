@@ -206,15 +206,6 @@ in
               '';
             })
         ) // {
-          "~ ${regexLocation cfg}/.+/(info/refs|git-upload-pack)" = {
-            fastcgiParams = rec {
-              SCRIPT_FILENAME = "${pkgs.git}/libexec/git-core/git-http-backend";
-              GIT_HTTP_EXPORT_ALL = "1";
-              GIT_PROJECT_ROOT = gitProjectRoot name cfg;
-              HOME = GIT_PROJECT_ROOT;
-            };
-            extraConfig = mkFastcgiPass name cfg;
-          };
           "${stripLocation cfg}/" = {
             fastcgiParams = {
               SCRIPT_FILENAME = "${cfg.package}/cgit/cgit.cgi";
