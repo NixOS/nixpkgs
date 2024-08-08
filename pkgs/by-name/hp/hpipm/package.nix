@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DBLASFEO_PATH=${blasfeo}"
+    "-DBUILD_SHARED_LIBS=ON"
   ] ++ lib.optionals (!stdenv.isx86_64) [ "-DTARGET=GENERIC" ];
 
   meta = {
