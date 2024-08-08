@@ -3,7 +3,9 @@
   assertpy,
   buildPythonPackage,
   fetchFromGitHub,
+  freezegun,
   poetry-core,
+  pycryptodome,
   pytest-asyncio,
   pytest-mockservers,
   pytest-resource-path,
@@ -11,26 +13,34 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
+  requests,
   time-machine,
+  types-requests,
 }:
 
 buildPythonPackage rec {
   pname = "aioswitcher";
-  version = "3.4.3";
+  version = "4.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "TomerFi";
-    repo = pname;
+    repo = "aioswitcher";
     rev = "refs/tags/${version}";
-    hash = "sha256-yKHSExtnO9m8Tc3BmCqV8tJs59ynKOqUmekaOatGRTc=";
+    hash = "sha256-a6Sl36X+r6mVqRAcO0C2f4CT/FDPF7r3VHnQp3328qo=";
   };
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    pycryptodome
+    requests
+    types-requests
+  ];
 
   preCheck = ''
     export TZ=Asia/Jerusalem
@@ -38,6 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     assertpy
+    freezegun
     pytest-asyncio
     pytest-mockservers
     pytest-resource-path
