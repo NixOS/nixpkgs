@@ -3,9 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  cython_0,
+  cython,
   hypothesis,
-  numpy,
+  numpy_2,
   pytestCheckHook,
   pythonOlder,
   gitUpdater,
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "blis";
-  version = "0.7.11";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,15 +21,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cython-blis";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-p8pzGZc5OiiGTvXULDgzsBC3jIhovTKUq3RtPnQ/+to=";
+    rev = "refs/tags/release-v${version}";
+    hash = "sha256-XS6h2c+8BJ9pAvIX8340C4vRZEBRmEZc6/6tH7ooqNU=";
   };
 
   postPatch = ''
     # See https://github.com/numpy/numpy/issues/21079
     # has no functional difference as the name is only used in log output
     substituteInPlace blis/benchmark.py \
-      --replace 'numpy.__config__.blas_ilp64_opt_info["libraries"]' '["dummy"]'
+      --replace-fail 'numpy.__config__.blas_ilp64_opt_info["libraries"]' '["dummy"]'
   '';
 
   preCheck = ''
@@ -37,12 +37,12 @@ buildPythonPackage rec {
     rm -rf ./blis
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    cython_0
+    cython
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy_2 ];
 
   nativeCheckInputs = [
     hypothesis
