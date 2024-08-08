@@ -14146,6 +14146,8 @@ self: super: with self; {
 
   sendgrid = callPackage ../development/python-modules/sendgrid { };
 
+  senf = callPackage ../development/python-modules/senf { };
+
   sense-energy = callPackage ../development/python-modules/sense-energy { };
 
   sensirion-ble = callPackage ../development/python-modules/sensirion-ble { };
