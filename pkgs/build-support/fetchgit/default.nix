@@ -1,4 +1,4 @@
-{lib, stdenvNoCC, git, git-lfs, cacert}: let
+{lib, stdenvNoCC, git, git-lfs, cacert, runCommand, writeShellApplication, writeText, openssh, gnupg}: let
   urlToName = url: rev: let
     inherit (lib) removeSuffix splitString last;
     base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
@@ -29,6 +29,9 @@ lib.makeOverridable (
   netrcImpureEnvVars ? []
 , meta ? {}
 , allowedRequisites ? null
+, publicKeys ? []
+, verifyCommit ? false
+, verifyTag ? false
 }:
 
 /* NOTE:
@@ -61,8 +64,8 @@ if hash != "" && sha256 != "" then
 else if builtins.isString sparseCheckout then
   # Changed to throw on 2023-06-04
   throw "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
-else
-stdenvNoCC.mkDerivation {
+else let
+fetchresult = stdenvNoCC.mkDerivation {
   inherit name;
   builder = ./builder.sh;
   fetcher = ./nix-prefetch-git;
@@ -84,7 +87,9 @@ stdenvNoCC.mkDerivation {
   # > from standard in as a newline-delimited list instead of from the arguments.
   sparseCheckout = builtins.concatStringsSep "\n" sparseCheckout;
 
-  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName nonConeMode postFetch;
+  inherit url rev fetchLFS fetchSubmodules deepClone branchName nonConeMode postFetch;
+
+  leaveDotGit = leaveDotGit || verifyCommit || verifyTag;
 
   postHook = if netrcPhase == null then null else ''
     ${netrcPhase}
@@ -93,6 +98,9 @@ stdenvNoCC.mkDerivation {
     export NETRC=$PWD/.netrc
     export HOME=$PWD
   '';
+
+  # if verifyTag enabled assume rev to be a tag and include it in the .git directory
+  NIX_PREFETCH_GIT_CHECKOUT_HOOK = if verifyTag then ''clean_git -C "$dir" fetch origin "refs/tags/$rev:refs/tags/$rev"'' else null;
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
@@ -106,5 +114,44 @@ stdenvNoCC.mkDerivation {
   passthru = {
     gitRepoUrl = url;
   };
-}
+};
+keysPartitioned = lib.partition (k: k.type == "gpg") publicKeys;
+gpgKeyring = runCommand "gpgKeyring" {buildInputs = [gnupg];} ("gpg --no-default-keyring --homedir /build --keyring $out --fingerprint\n" + (lib.concatMapStrings (k: "gpg --homedir /build --no-default-keyring --keyring $out --import ${k.key}\n") keysPartitioned.right));
+gpgWithKeys = writeShellApplication {
+  name = "gpgWithKeys";
+  runtimeInputs = [gnupg];
+  text = ''
+    gpg --always-trust --homedir /build --no-default-keyring --keyring ${gpgKeyring} "$@"
+    '';
+};
+allowedSignersFile = writeText "allowed signers" (lib.concatMapStrings (k: "* ${k.type} ${k.key}\n") keysPartitioned.wrong);
+in
+if verifyCommit || verifyTag then
+runCommand name {
+  buildInputs = [git openssh gpgWithKeys];
+  inherit verifyCommit verifyTag leaveDotGit;
+    } ''
+  if test "$verifyCommit" == 1; then
+      git \
+        -c gpg.ssh.allowedSignersFile="${allowedSignersFile}" \
+        -c safe.directory='*' \
+        -c gpg.program="gpgWithKeys" \
+        -C "${fetchresult}" \
+        verify-commit ${rev}
+  fi
+  if test "$verifyTag" == 1; then
+      git \
+        -c gpg.ssh.allowedSignersFile="${allowedSignersFile}" \
+        -c safe.directory='*' \
+        -c gpg.program="gpgWithKeys" \
+        -C "${fetchresult}" \
+        verify-tag ${rev}
+  fi
+  cp -r --no-preserve=all "${fetchresult}" $out
+  if test "$leaveDotGit" != 1; then
+      rm -rf "$out"/.git
+  fi
+''
+else
+fetchresult
 )
