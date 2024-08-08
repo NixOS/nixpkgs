@@ -29388,6 +29388,8 @@ with pkgs;
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
+  chromium-bin = callPackage ../applications/networking/browsers/chromium-bin {};
+
   chuck = callPackage ../applications/audio/chuck {
     inherit (darwin) DarwinTools;
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel MultitouchSupport;
