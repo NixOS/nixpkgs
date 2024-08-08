@@ -78,12 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Process Management Interface for HPC environments";
     homepage = "https://openpmix.github.io/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ markuskowa ];
+    platforms = lib.platforms.linux;
   };
 })
 
