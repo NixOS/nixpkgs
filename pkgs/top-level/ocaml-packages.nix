@@ -751,7 +751,9 @@ let
 
     # Jane Street
     janePackage =
-      if lib.versionOlder "4.13.1" ocaml.version
+      if lib.versionOlder "5.1" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/janePackage_0_17.nix {}
+      else if lib.versionOlder "4.13.1" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/janePackage_0_16.nix {}
       else if lib.versionOlder "4.10.2" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/janePackage_0_15.nix {}
@@ -762,7 +764,13 @@ let
       else null;
 
     janeStreet =
-      if lib.versionOlder "4.13.1" ocaml.version
+      if lib.versionOlder "5.1" ocaml.version
+      then import ../development/ocaml-modules/janestreet/0.17.nix
+         {
+           inherit self;
+           inherit (pkgs) bash fzf lib openssl zstd;
+         }
+      else if lib.versionOlder "4.13.1" ocaml.version
       then import ../development/ocaml-modules/janestreet/0.16.nix {
         inherit self;
         inherit (pkgs) bash fetchpatch fzf lib openssl zstd krb5;
