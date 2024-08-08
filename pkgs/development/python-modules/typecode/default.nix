@@ -52,7 +52,7 @@ buildPythonPackage rec {
     "TestFileTypesDataDriven"
 
     # Many of the failures below are reported in:
-    # https://github.com/nexB/typecode/issues/36
+    # https://github.com/aboutcode-org/typecode/issues/36
 
     # AssertionError: assert 'application/x-bytecode.python'...
     "test_compiled_python_1"
@@ -67,8 +67,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Comprehensive filetype and mimetype detection using libmagic and Pygments";
-    homepage = "https://github.com/nexB/typecode";
-    changelog = "https://github.com/nexB/typecode/releases/tag/v${version}";
+    homepage = "https://github.com/aboutcode-org/typecode";
+    changelog = "https://github.com/aboutcode-org/typecode/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = [ ];
   };
