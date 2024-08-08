@@ -6,11 +6,22 @@ with lib;
   options = {
     services.v2raya = {
       enable = options.mkEnableOption "the v2rayA service";
+
+      cliPackage = mkOption {
+        type = types.package;
+        default = pkgs.v2ray;
+        defaultText = literalExpression "pkgs.v2ray";
+        example = literalExpression "pkgs.xray";
+        description = ''
+          The package used for the cli binary.
+        '';
+        relatedPackages = [ "xray" "v2ray" ];
+      };
     };
   };
 
   config = mkIf config.services.v2raya.enable {
-    environment.systemPackages = [ pkgs.v2raya ];
+    environment.systemPackages = [ (pkgs.v2raya.override { v2ray = config.services.v2raya.cliPackage; }) ];
 
     systemd.services.v2raya =
       let
@@ -33,7 +44,7 @@ with lib;
 
         serviceConfig = {
           User = "root";
-          ExecStart = "${getExe pkgs.v2raya} --log-disable-timestamp";
+          ExecStart = "${getExe (pkgs.v2raya.override { v2ray = config.services.v2raya.cliPackage; })} --log-disable-timestamp";
           Environment = [ "V2RAYA_LOG_FILE=/var/log/v2raya/v2raya.log" ];
           LimitNPROC = 500;
           LimitNOFILE = 1000000;
