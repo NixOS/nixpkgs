@@ -104,7 +104,7 @@
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-runCommand
   runCommand = testers.invalidateFetcherByDrvHash (
     {
-      hash ? "sha256-d6xi4mKdjkX2JFicDIv5niSzpyI0m/Hnm8GGAIU04kY=", # hash value of empty file
+      hash ? pkgs.emptyFile.outputHash,
       name,
       script,
       stdenv ? stdenvNoCC,
