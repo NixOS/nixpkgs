@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -49,9 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "homeassistant_cli"
-  ];
+  pythonImportsCheck = [ "homeassistant_cli" ];
 
   meta = with lib; {
     description = "Command-line tool for Home Assistant";
