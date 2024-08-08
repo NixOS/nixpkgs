@@ -37,7 +37,7 @@ in
         "iptables"
         "nftables"
       ];
-      default = "nftables";
+      default = "iptables";
       description = ''
         Which firewall zapret should use
       '';
@@ -83,6 +83,7 @@ in
       path = with pkgs; [
         (if cfg.firewallType == "iptables" then iptables else nftables)
         gawk
+        ipset
       ];
 
       serviceConfig = {
