@@ -35444,6 +35444,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+  xash3d-unwrapped = callPackage ../games/xash3d/default.nix { };
+  xash3dGames = recurseIntoAttrs (callPackage ../games/xash3d/games.nix { });
+
   ### GAMES/DOOM-PORTS
 
   dhewm3 = callPackage ../games/doom-ports/dhewm3 { };
