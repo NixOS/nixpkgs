@@ -4964,6 +4964,7 @@ with self; {
       hash = "sha256-Zx7qYwyp3l5ejNjQi+HiVfilTHz8We8CBZU+rqvzlyQ=";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
+    buildInputs = [ DistBuild ];
     meta = {
       description = "Perl interface to the Argon2 key derivation functions";
       license = with lib.licenses; [ cc0 ];
