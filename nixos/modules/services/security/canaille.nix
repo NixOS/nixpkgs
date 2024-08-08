@@ -174,8 +174,6 @@ in
             ${gunicorn}/bin/gunicorn \
               --name=canaille \
               --bind='unix:///run/canaille.socket' \
-              --log-level debug \
-              --workers=2 \
               'canaille:create_app()'
           '';
       };
