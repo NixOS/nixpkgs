@@ -80,9 +80,16 @@ in
       '';
       type = types.path;
     };
+    smtpPasswordFile = mkOption {
+      description = ''
+        File containing the SMTP password. Make sure it has appropriate permissions.
+      '';
+      default = null;
+      type = types.nullOr types.path;
+    };
     jwtPrivateKeyFile = mkOption {
       description = ''
-        File containing JWT private key. Make sure it has appropriate permissions.
+        File containing the JWT private key. Make sure it has appropriate permissions.
 
         You can generate one using
         ```
@@ -151,7 +158,19 @@ in
 
                 See also [the documentation](https://canaille.readthedocs.io/en/latest/references/configuration.html#canaille.core.configuration.SMTPSettings).
               '';
-              type = types.nullOr (types.submodule { });
+              type = types.nullOr (
+                types.submodule {
+                  PASSWORD = mkOption {
+                    readOnly = true;
+                    description = ''
+                      SMTP Password. Can't be set and has to be provided using
+                      `services.canaille.smtpPasswordFile`.
+                    '';
+                    default = null;
+                    type = types.nullOr types.str;
+                  };
+                }
+              );
             };
 
           };
@@ -235,6 +254,9 @@ in
         "Z  ${secretsDir} 700 canaille canaille - -"
         "L+ ${secretsDir}/SECRET_KEY - - - - ${cfg.secretKeyFile}"
       ]
+      ++ optional (
+        cfg.smtpPasswordFile != null
+      ) "L+ ${secretsDir}/CANAILLE_SMTP__PASSWORD - - - - ${cfg.smtpPasswordFile}"
       ++ optional (
         cfg.jwtPrivateKeyFile != null
       ) "L+ ${secretsDir}/CANAILLE_OIDC__JWT__PRIVATE_KEY - - - - ${cfg.jwtPrivateKeyFile}"
