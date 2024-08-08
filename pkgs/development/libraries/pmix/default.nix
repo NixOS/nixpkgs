@@ -1,8 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, perl, autoconf, automake
-, removeReferencesTo, libtool, python3, flex, libevent
-, targetPackages, makeWrapper
-, hwloc, munge, zlib, pandoc, gitMinimal
-} :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  autoconf,
+  automake,
+  removeReferencesTo,
+  libtool,
+  python3,
+  flex,
+  libevent,
+  targetPackages,
+  makeWrapper,
+  hwloc,
+  munge,
+  zlib,
+  pandoc,
+  gitMinimal,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pmix";
@@ -16,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     patchShebangs ./autogen.pl
@@ -36,7 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [ libevent hwloc munge zlib ];
+  buildInputs = [
+    libevent
+    hwloc
+    munge
+    zlib
+  ];
 
   configureFlags = [
     "--with-libevent=${lib.getDev libevent}"
@@ -82,8 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Process Management Interface for HPC environments";
     homepage = "https://openpmix.github.io/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ markuskowa doronbehar ];
+    maintainers = with lib.maintainers; [
+      markuskowa
+      doronbehar
+    ];
     platforms = lib.platforms.linux;
   };
 })
-
