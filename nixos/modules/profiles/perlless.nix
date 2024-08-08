@@ -1,6 +1,5 @@
-# WARNING: If you enable this profile, you will NOT be able to switch to a new
-# configuration and thus you will not be able to rebuild your system with
-# nixos-rebuild!
+# WARNING: If you enable this profile, you will NOT be able to use nixos-rebuild!
+# However, you can still switch configuration thanks to switch-to-configuration-ng
 
 { lib, ... }:
 
