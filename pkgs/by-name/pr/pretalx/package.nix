@@ -70,6 +70,12 @@ python.pkgs.buildPythonApplication rec {
     "static"
   ];
 
+  patches = [
+    # Fix persisent XSS in Markdown Preview
+    # https://github.com/pretalx/pretalx/commit/58e9990d4e2c81d1eb9a23f77801efcf5155ac08
+    ./0001-Sanitize-markdown-preview.patch
+  ];
+
   postPatch = ''
     substituteInPlace src/pretalx/common/management/commands/rebuild.py \
       --replace 'subprocess.check_call(["npm", "run", "build"], cwd=frontend_dir, env=env)' ""
