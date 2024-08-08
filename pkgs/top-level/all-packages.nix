@@ -1067,6 +1067,9 @@ with pkgs;
 
   broadlink-cli = callPackage ../tools/misc/broadlink-cli { };
 
+  # this is used by most `fetch*` functions
+  repoRevToNameMaybe = lib.repoRevToName config.nameSourcesPrettily;
+
   fetchpatch = callPackage ../build-support/fetchpatch {
     # 0.3.4 would change hashes: https://github.com/NixOS/nixpkgs/issues/25154
     patchutils = __splicedPackages.patchutils_0_3_3;

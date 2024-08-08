@@ -129,7 +129,7 @@ let
     inherit (self.sources) cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
-      canCleanSource pathIsGitRepo;
+      canCleanSource pathIsGitRepo repoRevToName;
     inherit (self.modules) evalModules setDefaultModuleLocation
       unifyModuleSyntax applyModuleArgsIfFunction mergeModules
       mergeModules' mergeOptionDecls mergeDefinitions
