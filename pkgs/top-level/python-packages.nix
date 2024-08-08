@@ -10461,6 +10461,8 @@ self: super: with self; {
 
   python-keystoneclient = callPackage ../development/python-modules/python-keystoneclient { };
 
+  python-linkplay = callPackage ../development/python-modules/python-linkplay { };
+
   python-lsp-black = callPackage ../development/python-modules/python-lsp-black { };
 
   python-mbedtls = callPackage ../development/python-modules/python-mbedtls { };
