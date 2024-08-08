@@ -1,4 +1,16 @@
-{ pkgs, pkgsLinux, buildPackages, diffoscopeMinimal, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
+{
+  lib,
+  buildPackages,
+  callPackage,
+  pkgs,
+  pkgsLinux,
+
+  diffoscopeMinimal,
+  runCommand,
+  stdenv,
+  substituteAll,
+  testers,
+}:
 # Documentation is in doc/build-helpers/testers.chapter.md
 {
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
