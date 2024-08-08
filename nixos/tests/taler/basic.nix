@@ -36,6 +36,27 @@ import ../make-test-python.nix (
           environment.systemPackages = [ config.services.taler.exchange.package ];
         };
 
+      merchant =
+        { config, ... }:
+        {
+          services.taler = {
+            settings = {
+              taler.CURRENCY = CURRENCY;
+            };
+            merchant = {
+              enable = true;
+              debug = true;
+              settings.merchant-exchange-test = {
+                EXCHANGE_BASE_URL = "http://exchange:8081/";
+                MASTER_KEY = "2TQSTPFZBC2MC4E52NHPA050YXYG02VC3AB50QESM6JX1QJEYVQ0";
+                inherit CURRENCY;
+              };
+            };
+          };
+          networking.firewall.enable = false;
+          environment.systemPackages = [ config.services.taler.merchant.package ];
+        };
+
       bank =
         { config, pkgs, ... }:
         {
@@ -126,6 +147,7 @@ import ../make-test-python.nix (
         };
     };
 
+    # TODO: split this into many separate tests
     testScript =
       { nodes, ... }:
       let
@@ -234,6 +256,7 @@ import ../make-test-python.nix (
 
         bank.wait_for_open_port(8082)
         exchange.wait_for_open_port(8081)
+        merchant.wait_for_open_port(8083)
 
         # Enable exchange wire account
         with subtest("Enable exchange wire account"):
