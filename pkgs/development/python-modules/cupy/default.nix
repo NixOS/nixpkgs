@@ -17,7 +17,7 @@
 }:
 
 let
-  inherit (cudaPackages) cudnn cutensor nccl;
+  inherit (cudaPackages) cudnn_8_9 cutensor nccl;
   outpaths = with cudaPackages; [
       cuda_cccl # <nv/target>
       cuda_cudart
@@ -83,7 +83,9 @@ buildPythonPackage rec {
 
   buildInputs = [
     cudatoolkit-joined
-    cudnn
+    # CuDNN 9 is not supported:
+    # https://github.com/cupy/cupy/issues/8215
+    cudnn_8_9
     cutensor
     nccl
   ];
