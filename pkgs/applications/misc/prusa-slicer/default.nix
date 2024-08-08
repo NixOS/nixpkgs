@@ -128,6 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
   # prusa-slicer uses dlopen on `libudev.so` at runtime
   NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";
 
+  # FIXME: remove in 2.8.0
+  NIX_CFLAGS_COMPILE = "-Wno-enum-constexpr-conversion";
+
   prePatch = ''
     # Since version 2.5.0 of nlopt we need to link to libnlopt, as libnlopt_cxx
     # now seems to be integrated into the main lib.

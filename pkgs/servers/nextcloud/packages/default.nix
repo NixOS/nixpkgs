@@ -19,7 +19,6 @@ let packages = self:
         appName = pname;
         appVersion = data.version;
         license = appBaseDefs.${pname};
-        unpack = false;
         inherit (data) url hash description homepage;
       }) {};
 

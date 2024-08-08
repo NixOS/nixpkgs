@@ -5,18 +5,23 @@
   podman,
   fetchPypi,
   buildPythonPackage,
+  pythonOlder,
 }:
+
 buildPythonPackage rec {
   pname = "ansible-navigator";
-  version = "24.3.2";
-  format = "pyproject";
+  version = "24.7.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-IAcZFisB3BOmdxZuGZ3PZcDl2CXsg6ToI/1fdPpkIXw=";
+    pname = "ansible_navigator";
+    inherit version;
+    hash = "sha256-XMwJzDxo/VZ+0qy5MLg/Kw/7j3V594qfV+T6jeVEWzg=";
   };
 
-  buildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     setuptools
     setuptools-scm
   ];
@@ -32,15 +37,15 @@ buildPythonPackage rec {
     onigurumacffi
   ];
 
-  patchPhase = ''
-    # scm_git_archive doesn't exist anymore. Fixed upstream but unreleased
-    # Rev: https://github.com/ansible/ansible-navigator/pull/1716
-    sed -i '/setuptools_scm_git_archive/d' pyproject.toml
-  '';
+  # Tests want to run in tmux
+  doCheck = false;
+
+  pythonImportsCheck = [ "ansible_navigator" ];
 
   meta = with lib; {
     description = "Text-based user interface (TUI) for Ansible";
     homepage = "https://ansible.readthedocs.io/projects/navigator/";
+    changelog = "https://github.com/ansible/ansible-navigator/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ melkor333 ];
   };

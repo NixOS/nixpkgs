@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  nix-update-script,
   pkg-config,
   udev,
   stdenv,
@@ -23,8 +22,6 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
   };
-
-  passthru.updateScript = nix-update-script { };
 
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock

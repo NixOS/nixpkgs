@@ -543,6 +543,7 @@
   ./services/display-managers/default.nix
   ./services/display-managers/greetd.nix
   ./services/display-managers/sddm.nix
+  ./services/display-managers/ly.nix
   ./services/editors/emacs.nix
   ./services/editors/haste.nix
   ./services/editors/infinoted.nix
@@ -1165,6 +1166,7 @@
   ./services/networking/r53-ddns.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
+  ./services/networking/rathole.nix
   ./services/networking/rdnssd.nix
   ./services/networking/realm.nix
   ./services/networking/redsocks.nix
@@ -1437,6 +1439,7 @@
   ./services/web-apps/meme-bingo-web.nix
   ./services/web-apps/microbin.nix
   ./services/web-apps/miniflux.nix
+  ./services/web-apps/misskey.nix
   ./services/web-apps/monica.nix
   ./services/web-apps/moodle.nix
   ./services/web-apps/movim.nix

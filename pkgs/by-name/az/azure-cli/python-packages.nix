@@ -1,9 +1,7 @@
 {
-  lib,
   stdenv,
   python3,
   fetchPypi,
-  fetchpatch,
   src,
   version,
 }:

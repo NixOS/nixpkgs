@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     unwrapped = matrix-synapse-unwrapped;
 
     # for backward compatibility
-    inherit (matrix-synapse-unwrapped) plugins tools;
+    inherit (matrix-synapse-unwrapped) plugins tests tools;
   };
 
   # Carry the maintainer, licenses, and various useful information.

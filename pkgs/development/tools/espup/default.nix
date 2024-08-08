@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=toolchain::rust::tests::test_xtensa_rust_parse_version"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd espup \
       --bash <($out/bin/espup completions bash) \
       --fish <($out/bin/espup completions fish) \

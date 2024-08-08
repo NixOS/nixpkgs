@@ -7,6 +7,7 @@
   watchdog,
   portalocker,
   pytestCheckHook,
+  pytest-cov-stub,
   pymongo,
   dnspython,
   pymongo-inmemory,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "cachier";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "python-cachier";
     repo = "cachier";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3rKsgcJQ9RQwosVruD7H99msB8iGtAai320okrCZCTI=";
+    hash = "sha256-VApP1DRs+mjx+SELpdDOm2Sa7zBYHDqD/htFF/eNLu0=";
   };
 
   pythonRemoveDeps = [ "setuptools" ];
@@ -39,15 +40,9 @@ buildPythonPackage rec {
     portalocker
   ];
 
-  preCheck = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail  \
-        '"--cov' \
-        '#"--cov'
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pymongo
     dnspython
     pymongo-inmemory

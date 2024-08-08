@@ -1,7 +1,6 @@
 [
   "@angular/cli"
 , "@antfu/ni"
-, "@astrojs/language-server"
 , "@babel/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
@@ -77,7 +76,6 @@
 , "coc-yaml"
 , "coc-yank"
 , "code-theme-converter"
-, "concurrently"
 , "conventional-changelog-cli"
 , "cpy-cli"
 , "create-cycle-app"
@@ -154,7 +152,6 @@
 , "nijs"
 , "node-gyp"
 , "node-gyp-build"
-, "node-pre-gyp"
 , "node-red"
 , "node2nix"
 , "np"

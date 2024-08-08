@@ -6,6 +6,7 @@
 , dbus
 , libseccomp
 , systemd
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ dbus libseccomp systemd ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd youki \
       --bash <($out/bin/youki completion -s bash) \
       --fish <($out/bin/youki completion -s fish) \

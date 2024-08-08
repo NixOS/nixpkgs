@@ -2,6 +2,7 @@
 , buildKakounePluginFrom2Nix
 , kakoune-lsp, parinfer-rust, rep
 , fzf, git, guile, kakoune-unwrapped, lua5_3, plan9port
+, rustPlatform
 }:
 
 self: super: {
@@ -130,6 +131,41 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
         --replace ' git ' ' ${git}/bin/git '
     '';
   });
+
+  hop-kak = rustPlatform.buildRustPackage rec {
+    pname = "hop-kak";
+    version = "0.2.0";
+
+    src = fetchgit {
+      url = "https://git.sr.ht/~hadronized/hop.kak";
+      rev = "7314ec64809a69e0044ba7ec57a18b43e3b5f005";
+      sha256 = "stmGZQU0tp+5xxrexKMzwSwHj5F/F4HzDO9BorNWC3w=";
+
+      # this package uses git to put the commit hash in the
+      # help dialog, so leave the .git folder so the command
+      # succeeds.
+      leaveDotGit = true;
+    };
+
+    nativeBuildInputs = [
+      git
+    ];
+
+    cargoHash = "sha256-EjSj/+BysGwJBxK6Ccg2+pXHdB2Lg3dxIURRsSVTHVY=";
+
+    postInstall = ''
+      mkdir -p $out/share/kak/bin
+      mv $out/bin/hop-kak $out/share/kak/bin/
+    '';
+
+    meta = with lib; {
+      description = "hinting brought to Kakoune selections";
+      homepage = "https://git.sr.ht/~hadronized/hop.kak/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ oleina ];
+      platforms = platforms.all;
+    };
+  };
 
   quickscope-kak = buildKakounePluginFrom2Nix rec {
     pname = "quickscope-kak";

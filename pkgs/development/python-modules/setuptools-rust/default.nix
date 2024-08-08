@@ -1,11 +1,15 @@
 {
-  callPackage,
   lib,
   buildPythonPackage,
   fetchPypi,
+  maturin,
   pythonOlder,
+  rustPlatform,
+  rustc,
+  cargo,
   semantic-version,
   setuptools,
+  setuptools-rust,
   setuptools-scm,
   tomli,
   typing-extensions,
@@ -38,7 +42,26 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  passthru.tests.pyo3 = callPackage ./pyo3-test { };
+  passthru.tests = {
+    pyo3 = maturin.tests.pyo3.override {
+      format = "setuptools";
+      buildAndTestSubdir = null;
+
+      nativeBuildInputs =
+        [ setuptools-rust ]
+        ++ [
+          rustPlatform.cargoSetupHook
+          cargo
+          rustc
+        ];
+
+      preConfigure = ''
+        # sourceRoot puts Cargo.lock in the wrong place due to the
+        # example setup.
+        cd examples/word-count
+      '';
+    };
+  };
 
   meta = with lib; {
     description = "Setuptools plugin for Rust support";

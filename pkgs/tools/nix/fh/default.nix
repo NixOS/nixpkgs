@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     NIX_CFLAGS_COMPILE = "-I${lib.getDev libcxx}/include/c++/v1";
   };
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fh \
       --bash <($out/bin/fh completion bash) \
       --fish <($out/bin/fh completion fish) \

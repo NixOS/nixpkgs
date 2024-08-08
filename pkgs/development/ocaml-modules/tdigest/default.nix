@@ -17,10 +17,13 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.14";
 
-  propagatedBuildInputs = [ base ppx_sexp_conv ];
-
   # base v0.17 compatibility
   patches = [ ./tdigest.patch ];
+
+  propagatedBuildInputs = [
+    base
+    ppx_sexp_conv
+  ];
 
   passthru.updateScript = nix-update-script { };
 
