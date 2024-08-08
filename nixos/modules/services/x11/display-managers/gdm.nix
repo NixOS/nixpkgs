@@ -3,7 +3,7 @@
 let
 
   cfg = config.services.xserver.displayManager;
-  gdm = pkgs.gnome.gdm;
+  inherit (cfg.gdm) package;
   pamCfg = config.security.pam.services;
   settingsFormat = pkgs.formats.ini { };
   configFile = settingsFormat.generate "custom.conf" cfg.gdm.settings;
@@ -65,6 +65,8 @@ in
     services.xserver.displayManager.gdm = {
 
       enable = lib.mkEnableOption "GDM, the GNOME Display Manager";
+
+      package = lib.mkPackageOption pkgs [ "gnome" "gdm" ] { };
 
       debug = lib.mkEnableOption "debugging messages in GDM";
 
@@ -151,7 +153,7 @@ in
           GDM_X_SERVER_EXTRA_ARGS = toString
             (lib.filter (arg: arg != "-terminate") cfg.xserverArgs);
           XDG_DATA_DIRS = lib.makeSearchPath "share" [
-            gdm # for gnome-login.session
+            package # for gnome-login.session
             config.services.displayManager.sessionData.desktops
             pkgs.gnome.gnome-control-center # for accessibility icon
             pkgs.adwaita-icon-theme
@@ -163,7 +165,7 @@ in
           # this environment variable.
           GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
         };
-        execCmd = "exec ${gdm}/bin/gdm";
+        execCmd = "exec ${package}/bin/gdm";
         preStart = lib.optionalString (defaultSessionName != null) ''
           # Set default session in session chooser to a specified values – basically ignore session history.
           ${setSessionScript}/bin/set-session ${config.services.displayManager.sessionData.autologinSession}
@@ -200,12 +202,12 @@ in
       "rc-local.service"
       "systemd-machined.service"
       "systemd-user-sessions.service"
-      "getty@tty${gdm.initialVT}.service"
+      "getty@tty${package.initialVT}.service"
       "plymouth-quit.service"
       "plymouth-start.service"
     ];
     systemd.services.display-manager.conflicts = [
-      "getty@tty${gdm.initialVT}.service"
+      "getty@tty${package.initialVT}.service"
       "plymouth-quit.service"
     ];
     systemd.services.display-manager.onFailure = [
@@ -237,7 +239,7 @@ in
     # Allow choosing an user account
     services.accounts-daemon.enable = true;
 
-    services.dbus.packages = [ gdm ];
+    services.dbus.packages = [ package ];
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
@@ -253,7 +255,7 @@ in
         banner-message-enable = true;
         banner-message-text = cfg.gdm.banner;
       };
-    }] ++ [ "${gdm}/share/gdm/greeter-dconf-defaults" ];
+    }] ++ [ "${package}/share/gdm/greeter-dconf-defaults" ];
 
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still
