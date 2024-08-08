@@ -377,8 +377,9 @@ rustPlatform.buildRustPackage {
 
 #### Setting `test-threads` {#setting-test-threads}
 
-`buildRustPackage` will use parallel test threads by default,
-sometimes it may be necessary to disable this so the tests run consecutively.
+`buildRustPackage` will use parallel test threads by default (by setting
+`RUST_TEST_THREADS`), sometimes it may be necessary to disable this so the
+tests run consecutively.
 
 ```nix
 rustPlatform.buildRustPackage {

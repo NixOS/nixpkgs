@@ -31,9 +31,6 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  # thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: invalid option '--test-threads''
-  doCheck = false;
-
   meta = with lib; {
     description = "Portable, modern regular expression language";
     mainProgram = "pomsky";

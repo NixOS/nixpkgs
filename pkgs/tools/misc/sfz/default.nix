@@ -13,9 +13,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-MgbK39xAr8g9F+1MXZiw5rE/PsgQPcLZ2ZV6LiQbA24=";
 
-  # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context
-  doCheck = false;
-
   meta = with lib; {
     description = "Simple static file serving command-line tool written in Rust";
     homepage = "https://github.com/weihanglo/sfz";
