@@ -64,14 +64,7 @@ in {
       servers = mkOption {
         type = with types; attrsOf (submodule ({ config, name, ... }: {
           options = {
-            enable = mkEnableOption ''
-              Redis server.
-
-              Note that the NixOS module for Redis disables kernel support
-              for Transparent Huge Pages (THP),
-              because this features causes major performance problems for Redis,
-              e.g. (https://redis.io/topics/latency)
-            '';
+            enable = mkEnableOption "Redis server";
 
             user = mkOption {
               type = types.str;
