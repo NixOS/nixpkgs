@@ -10,10 +10,14 @@ let
 
   inherit (lib)
     mkOption
+    mkIf
     mkEnableOption
     mkPackageOption
     types
     getExe
+    optional
+    converge
+    filterAttrsRecursive
     ;
 
   dataDir = "/var/lib/canaille";
@@ -22,7 +26,7 @@ let
   settingsFormat = pkgs.formats.toml { };
 
   # Remove null values, so we can document optional/forbidden values that don't end up in the generated TOML file.
-  filterConfig = lib.converge (lib.filterAttrsRecursive (_: v: v != null));
+  filterConfig = converge (filterAttrsRecursive (_: v: v != null));
 
   finalPackage = cfg.package.overridePythonAttrs (old: {
     dependencies =
@@ -54,22 +58,29 @@ let
     StateDirectoryMode = "0750";
     PrivateTmp = true;
   };
+
+  postgresqlHost = "postgresql://localhost/canaille?host=/run/postgresql";
+  createLocalPostgresqlDb = cfg.settings.CANAILLE_SQL.DATABASE_URI == postgresqlHost;
 in
 {
 
   options.services.canaille = {
     enable = mkEnableOption "Canaille";
     package = mkPackageOption pkgs "canaille" { };
-    secretKeyFile = lib.mkOption {
+    secretKeyFile = mkOption {
       description = ''
-        File containing the Flask secret key. Its content is going to be provided to Canaille as `SECRET_KEY`. Make sure it has appropriate permissions. For example, copy the output of this to the specified file:
+        File containing the Flask secret key. Its content is going to be
+        provided to Canaille as `SECRET_KEY`. Make sure it has appropriate
+        permissions. For example, copy the output of this to the specified
+        file:
+
         ```
         python3 -c 'import secrets; print(secrets.token_hex())'
         ```
       '';
-      type = lib.types.path;
+      type = types.path;
     };
-    jwtPrivateKeyFile = lib.mkOption {
+    jwtPrivateKeyFile = mkOption {
       description = ''
         File containing JWT private key. Make sure it has appropriate permissions.
 
@@ -79,7 +90,15 @@ in
         openssl rsa -in private.pem -pubout -outform PEM -out public.pem
         ```
       '';
-      type = lib.types.path;
+      default = null;
+      type = types.nullOr types.path;
+    };
+    ldapBindPasswordFile = mkOption {
+      description = ''
+        File containing the LDAP bind password.
+      '';
+      default = null;
+      type = types.nullOr types.path;
     };
     settings = mkOption {
       default = { };
@@ -87,18 +106,21 @@ in
       type = types.submodule {
         freeformType = settingsFormat.type;
         options = {
-          SECRET_KEY = lib.mkOption {
+          SECRET_KEY = mkOption {
             readOnly = true;
-            description = "Flask Secret Key. Can't be set and must be provided through services.canaille.settings.secretKeyFile";
+            description = ''
+              Flask Secret Key. Can't be set and must be provided through
+              `services.canaille.settings.secretKeyFile`.
+            '';
             default = null;
             type = types.nullOr types.str;
           };
-          SERVER_NAME = lib.mkOption {
+          SERVER_NAME = mkOption {
             description = "The domain name on which canaille will be served.";
             example = "auth.example.org";
             type = types.str;
           };
-          PREFERRED_URL_SCHEME = lib.mkOption {
+          PREFERRED_URL_SCHEME = mkOption {
             description = "The url scheme by which canaille will be served.";
             default = "https";
             type = types.enum [
@@ -121,9 +143,11 @@ in
               default = null;
               example = { };
               description = ''
-                SMTP configuration. By default, sending emails is not configured.
+                SMTP configuration. By default, sending emails is not
+                configured.
 
-                Set to an empty attrs to send emails from localhost without authentication.
+                Set to an empty attrs to send emails from localhost without
+                authentication.
 
                 See also [the documentation](https://canaille.readthedocs.io/en/latest/references/configuration.html#canaille.core.configuration.SMTPSettings).
               '';
@@ -131,18 +155,53 @@ in
             };
 
           };
-          CANAILLE_OIDC.JWT.PRIVATE_KEY = mkOption {
-            readOnly = true;
-            description = ''
-              JWT private key. Can't be set and has to be provided using `services.canaille.jwtPrivateKeyFile`.
-            '';
+          CANAILLE_OIDC = mkOption {
             default = null;
-            type = types.nullOr types.str;
+            description = ''
+              OpenID Connect settings. See [the documentation](https://canaille.readthedocs.io/en/latest/references/configuration.html#canaille.oidc.configuration.OIDCSettings).
+            '';
+            type = types.nullOr (
+              types.submodule {
+                JWT.PRIVATE_KEY = mkOption {
+                  readOnly = true;
+                  description = ''
+                    JWT private key. Can't be set and has to be provided using
+                    `services.canaille.jwtPrivateKeyFile`.
+                  '';
+                  default = null;
+                  type = types.nullOr types.str;
+                };
+              }
+            );
+          };
+          CANAILLE_LDAP = mkOption {
+            default = null;
+            description = ''
+              Configuration for the LDAP backend. This storage backend is not
+              yet supported by the module, so use at your own risk!
+            '';
+            type = types.nullOr (
+              types.submodule {
+                BIND_PW = mkOption {
+                  readOnly = true;
+                  description = ''
+                    The LDAP bind password. Can't be set and has to be provided using
+                    `services.canaille.ldapBindPasswordFile`.
+                  '';
+                  default = null;
+                  type = types.nullOr types.str;
+                };
+              }
+            );
           };
           CANAILLE_SQL = {
-            DATABASE_URI = lib.mkOption {
-              description = "The SQL server URI. Will configure a local PostgreSQL db if left to default. Please note that the NixOS module only supports PostgreSQL for now.";
-              default = "postgresql://localhost/canaille?host=/run/postgresql";
+            DATABASE_URI = mkOption {
+              description = ''
+                The SQL server URI. Will configure a local PostgreSQL db if
+                left to default. Please note that the NixOS module only really
+                supports PostgreSQL for now. Change at your own risk!
+              '';
+              default = postgresqlHost;
               type = types.str;
             };
           };
@@ -151,7 +210,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     # We can use some kind of fix point for the config anyways, and
     # /etc/canaille is recommended by upstream. The alternative would be to use
     # a double wrapped canaille executable, to avoid having to rebuild canaille
@@ -168,17 +227,23 @@ in
     # - The canaille user needs access to secrets, as it needs to run the CLI
     #   for e.g. user creation. Therefore specifying the SECRETS_DIR as systemd's
     #   CREDENTIALS_DIRECTORY is not an option.
-    systemd.tmpfiles.rules = [
-      "Z  ${secretsDir} 700 canaille canaille - -"
-      "L+ ${secretsDir}/SECRET_KEY - - - - ${cfg.secretKeyFile}"
-      "L+ ${secretsDir}/CANAILLE_OIDC__JWT__PRIVATE_KEY - - - - ${cfg.jwtPrivateKeyFile}"
-    ];
+    systemd.tmpfiles.rules =
+      [
+        "Z  ${secretsDir} 700 canaille canaille - -"
+        "L+ ${secretsDir}/SECRET_KEY - - - - ${cfg.secretKeyFile}"
+      ]
+      ++ optional (
+        cfg.jwtPrivateKeyFile != null
+      ) "L+ ${secretsDir}/CANAILLE_OIDC__JWT__PRIVATE_KEY - - - - ${cfg.jwtPrivateKeyFile}"
+      ++ optional (
+        cfg.ldapBindPasswordFile != null
+      ) "L+ ${secretsDir}/CANAILLE_LDAP__BIND_PW - - - - ${cfg.ldapBindPasswordFile}";
 
     # This is not a migration, just an initial setup of schemas
     systemd.services.canaille-install = {
       # We want this on boot, not on socket activation
       wantedBy = [ "multi-user.target" ];
-      after = [ "postgresql.service" ];
+      after = optional createLocalPostgresqlDb "postgresql.service";
       serviceConfig = commonServiceConfig // {
         Type = "oneshot";
         ExecStart = "${getExe finalPackage} install";
@@ -190,9 +255,8 @@ in
       documentation = [ "https://canaille.readthedocs.io/en/latest/tutorial/deployment.html" ];
       after = [
         "network.target"
-        "postgresql.service"
         "canaille-install.service"
-      ];
+      ] ++ optional createLocalPostgresqlDb "postgresql.service";
       requires = [
         "canaille-install.service"
         "canaille.socket"
@@ -269,7 +333,7 @@ in
       };
     };
 
-    services.postgresql = {
+    services.postgresql = mkIf createLocalPostgresqlDb {
       enable = true;
       ensureUsers = [
         {
