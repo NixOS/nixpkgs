@@ -186,7 +186,7 @@ class Driver:
                         with self.logger.nested(
                             f"{start_cmd.machine_name} updated. switching to new configuration"
                         ):
-                            # TODO: assuming things are at well-known paths isn't great
+                            machine.succeed(f"ls {start_cmd._cmd}")
                             switch_cmd = (
                                 Path(start_cmd._cmd).parent.parent
                                 / "system"
@@ -217,11 +217,10 @@ class Driver:
                 if nr not in old_nrs:
                     self.vlans.append(VLan(nr, tmp_dir, self.logger))
 
-        # if the test script has already been run we can't post-hoc modify the actions, but we can at least update the script
         new_tests = Path(testscript).read_text()
         if new_tests != self.tests:
             self.tests = Path(testscript).read_text()
-            self.logger.info("test script updated")
+            self.logger.info("Test script updated. We cannot post-hoc modify anything caused by running test_script(), but if you run it now it will reflect the new version.")
 
         # we can't copy the existing outputs over to the new directory because there might be other files mixed in (and usually is)
         new_out_dir = Path(output_directory)
