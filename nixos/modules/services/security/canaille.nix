@@ -62,9 +62,21 @@ in
     package = mkPackageOption pkgs "canaille" { };
     secretKeyFile = lib.mkOption {
       description = ''
-        A file containing the Flask secret key. Its content is going to be provided to Canaille as `SECRET_KEY`. Make sure it has appropriate permissions. For example, copy the output of this to the specified file:
+        File containing the Flask secret key. Its content is going to be provided to Canaille as `SECRET_KEY`. Make sure it has appropriate permissions. For example, copy the output of this to the specified file:
         ```
-          python3 -c 'import secrets; print(secrets.token_hex())'
+        python3 -c 'import secrets; print(secrets.token_hex())'
+        ```
+      '';
+      type = lib.types.path;
+    };
+    jwtPrivateKeyFile = lib.mkOption {
+      description = ''
+        File containing JWT private key. Make sure it has appropriate permissions.
+
+        You can generate one using
+        ```
+        openssl genrsa -out private.pem 4096
+        openssl rsa -in private.pem -pubout -outform PEM -out public.pem
         ```
       '';
       type = lib.types.path;
@@ -96,8 +108,36 @@ in
           };
 
           CANAILLE = {
-            ACL = { };
-            SMTP = { };
+            ACL = mkOption {
+              default = null;
+              description = ''
+                Access Control Lists.
+
+                See also [the documentation](https://canaille.readthedocs.io/en/latest/references/configuration.html#canaille.core.configuration.ACLSettings).
+              '';
+              type = types.nullOr (types.submodule { });
+            };
+            SMTP = mkOption {
+              default = null;
+              example = { };
+              description = ''
+                SMTP configuration. By default, sending emails is not configured.
+
+                Set to an empty attrs to send emails from localhost without authentication.
+
+                See also [the documentation](https://canaille.readthedocs.io/en/latest/references/configuration.html#canaille.core.configuration.SMTPSettings).
+              '';
+              type = types.nullOr (types.submodule { });
+            };
+
+          };
+          CANAILLE_OIDC.JWT.PRIVATE_KEY = mkOption {
+            readOnly = true;
+            description = ''
+              JWT private key. Can't be set and has to be provided using `services.canaille.jwtPrivateKeyFile`.
+            '';
+            default = null;
+            type = types.nullOr types.str;
           };
           CANAILLE_SQL = {
             DATABASE_URI = lib.mkOption {
@@ -131,6 +171,7 @@ in
     systemd.tmpfiles.rules = [
       "Z  ${secretsDir} 700 canaille canaille - -"
       "L+ ${secretsDir}/SECRET_KEY - - - - ${cfg.secretKeyFile}"
+      "L+ ${secretsDir}/CANAILLE_OIDC__JWT__PRIVATE_KEY - - - - ${cfg.jwtPrivateKeyFile}"
     ];
 
     # This is not a migration, just an initial setup of schemas
