@@ -1429,6 +1429,7 @@
   ./services/web-apps/komga.nix
   ./services/web-apps/lanraragi.nix
   ./services/web-apps/lemmy.nix
+  ./services/web-apps/logseq-webapp.nix
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/mainsail.nix
   ./services/web-apps/mastodon.nix
