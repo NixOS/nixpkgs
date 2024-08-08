@@ -88,6 +88,7 @@ let
                 default = 2048;
               };
             };
+            description = "RSA private key";
           };
           ecdsa = mkOption {
             type = submodule {
@@ -100,10 +101,20 @@ let
                 default = "prime256v1";
               };
             };
-            description = "Elliptic Curve DSA";
+            description = "Elliptic Curve DSA private key";
           };
         };
-        default = { rsa = { size = 2048; }; };
+        description = ''
+          The type of key-pair to generate for the certificate.
+          :::{.note}
+          The key will be generated at runtime and never exist within the store
+          :::
+        '';
+        default = {
+          rsa = {
+            size = 2048;
+          };
+        };
       };
       names = mkOption {
         type = attrsOf str;
@@ -150,6 +161,8 @@ in
       description = ''
         Authority used to provide the certificate.
       '';
+      defaultText = lib.literalExpression
+        "config.security.certificates.defaultAuthority";
       default = defaultAuthority;
     };
 

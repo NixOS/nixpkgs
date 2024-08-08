@@ -47,6 +47,9 @@ in
           };
         };
       };
+      description = ''
+        Per certificate options specific to the "vault" authority.
+      '';
       default = { };
     };
   };

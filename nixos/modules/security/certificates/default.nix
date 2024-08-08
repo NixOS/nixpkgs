@@ -1,17 +1,21 @@
 # TODO: Make a utility library of common functions that authorities will want.
 { lib, config, options, pkgs, ... }:
 let
-  inherit (lib) evalModules mapAttrs mapAttrsToList mkOption types;
+  inherit (lib) evalModules getAttr mapAttrs mapAttrsToList mkOption types;
   # TODO: option names could probably be changed
   top = options.security.certificates;
 
   # collect all the authorities defined under
   # `security.certificates.authorities` and map to their settings
   authorities = lib.pipe
-    (evalModules { modules = top.authorities.type.getSubModules; }).options [
-    (lib.filterAttrs (name: _: name != "_module"))
-    (mapAttrs (_: value: value.settings or (mkOption { })))
-  ];
+    top.authorities.type.getSubModules
+    [
+      (modules: { inherit modules; })
+      evalModules
+      (getAttr "options")
+      (lib.filterAttrs (name: _: name != "_module"))
+      (mapAttrs (_: value: value.settings or (mkOption { })))
+    ];
 in
 {
   options.security.certificates = with types; {

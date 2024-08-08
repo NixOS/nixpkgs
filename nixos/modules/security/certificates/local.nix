@@ -26,13 +26,26 @@ in
     security.certificates.authorities.local = with types; {
       roots = mkOption {
         type = attrsOf (submodule modules.root);
+        description = ''
+          Certificate Authority roots to generate for signing certificates.
+        '';
         default = { default = { CN = "Self Signed CA"; }; };
       };
       settings = mkOption {
         type = submodule modules.settings;
+        description = ''
+          Per certificate options specific to the "local" authority.
+        '';
         default = { };
       };
     };
+    # description = ''
+    #   Generates a basic Certificate Authority locally which is then used to
+    #   sign certificates.
+    #   :::{.warn}
+    #   Primarily meant for testing purposes.
+    #   :::
+    # '';
   };
   # TODO: Certificate renewal
   config =
