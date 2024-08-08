@@ -11314,6 +11314,8 @@ self: super: with self; {
 
   pyeight = callPackage ../development/python-modules/pyeight { };
 
+  pyelectra = callPackage ../development/python-modules/pyelectra { };
+
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
   pyemby = callPackage ../development/python-modules/pyemby { };
