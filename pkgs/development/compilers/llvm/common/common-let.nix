@@ -9,7 +9,10 @@
 
 rec {
   llvm_meta = {
-    license = lib.licenses.ncsa;
+    license = with lib.licenses; [ ncsa ] ++
+      # Contributions after June 1st, 2024 are only licensed under asl20-llvm:
+      # https://github.com/llvm/llvm-project/pull/92394
+      lib.optional (lib.versionAtLeast release_version "19") asl20-llvm;
     maintainers = lib.teams.llvm.members;
 
     # See llvm/cmake/config-ix.cmake.
