@@ -9129,6 +9129,20 @@ with self; {
     };
   };
 
+  ExtUtilsBuilder = buildPerlPackage {
+    pname = "ExtUtils-Builder";
+    version = "0.011";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Builder-0.011.tar.gz";
+      hash = "sha256-65wQUBLjGdqM5tL51+JyrMnaSF6miyL91VfWhTr87IM=";
+    };
+    propagatedBuildInputs = [ ExtUtilsConfig ];
+    meta = {
+      description = "An overview of the foundations of the ExtUtils::Builder Plan framework";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ExtUtilsCChecker = buildPerlModule {
     pname = "ExtUtils-CChecker";
     version = "0.11";
