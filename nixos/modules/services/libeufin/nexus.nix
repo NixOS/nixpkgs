@@ -8,7 +8,7 @@
 # TODO: refactor shared code with the bank
 let
   this = config.services.libeufin.nexus;
-  nexusServiceName = "libeufin-nexus";
+  serviceName = "libeufin-nexus";
   dbinitServiceName = "libeufin-nexus-dbinit";
   inherit (config.services.libeufin) configFile;
 
@@ -106,7 +106,7 @@ in
           nexus-httpd = {
             PORT = lib.mkOption {
               type = lib.types.port;
-              default = 8083;
+              default = 8084;
               description = ''
                 The port on which libeufin-bank should listen.
               '';
@@ -117,7 +117,7 @@ in
             CONFIG = lib.mkOption {
               type = lib.types.str;
               internal = true;
-              default = "postgresql:///${nexusServiceName}";
+              default = "postgresql:///${serviceName}";
             };
           };
         };
@@ -132,15 +132,16 @@ in
 
     systemd.services =
       let
-        nexusExe = "${lib.getExe' this.package nexusServiceName}";
+        nexusExe = "${lib.getExe' this.package serviceName}";
       in
       {
-        ${nexusServiceName} = {
+        ${serviceName} = {
           serviceConfig = {
             DynamicUser = true;
-            User = nexusServiceName;
+            User = serviceName;
             ExecStart = "${nexusExe} serve -c ${configFile}" + lib.optionalString this.debug " -L debug";
-            ReadWritePaths = [ "/var/lib/libeufin-nexus" ];
+            StateDirectory = serviceName;
+            ReadWritePaths = [ "/var/lib/${serviceName}" ];
           };
           requires = [ "${dbinitServiceName}.service" ];
           after = [ "${dbinitServiceName}.service" ];
@@ -152,7 +153,7 @@ in
           serviceConfig = {
             Type = "oneshot";
             DynamicUser = true;
-            User = nexusServiceName;
+            User = serviceName;
           };
           requires = [ "postgresql.service" ];
           after = [ "postgresql.service" ];
@@ -160,10 +161,10 @@ in
       };
 
     services.postgresql.enable = true;
-    services.postgresql.ensureDatabases = [ nexusServiceName ];
+    services.postgresql.ensureDatabases = [ serviceName ];
     services.postgresql.ensureUsers = [
       {
-        name = nexusServiceName;
+        name = serviceName;
         ensureDBOwnership = true;
       }
     ];
