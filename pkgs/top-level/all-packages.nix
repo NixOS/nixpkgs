@@ -19080,6 +19080,7 @@ with pkgs;
   catboost = callPackage ../development/libraries/catboost {
     # https://github.com/catboost/catboost/issues/2540
     cudaPackages = cudaPackages_11;
+    llvmPackagesCuda = llvmPackages_14;
   };
 
   cddlib = callPackage ../development/libraries/cddlib { };

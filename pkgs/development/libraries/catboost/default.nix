@@ -13,7 +13,7 @@
 , zlib
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
-, llvmPackages_12
+, llvmPackagesCuda ? llvmPackages
 , pythonSupport ? false
 }:
 let
@@ -76,11 +76,15 @@ stdenv.mkDerivation (finalAttrs: {
     libcublas
   ]);
 
-  env = {
-    # catboost requires clang 14+ for build, but does clang 12 for cuda build.
-    # after bumping the default version of llvm, check for compatibility with the cuda backend and pin it.
+  env =
+    # Supports 3.2 > and < LLVM 15 for Cuda.
+    # https://catboost.ai/en/docs/installation/build-environment-setup-for-cmake#compilers,-linkers-and-related-tools
+    assert
+      cudaSupport
+      -> lib.versionOlder llvmPackagesCuda.release_version "15";
+  {
     # see https://catboost.ai/en/docs/installation/build-environment-setup-for-cmake#compilers,-linkers-and-related-tools
-    CUDAHOSTCXX = lib.optionalString cudaSupport "${llvmPackages_12.stdenv.cc}/bin/cc";
+    CUDAHOSTCXX = lib.optionalString cudaSupport "${llvmPackagesCuda.stdenv.cc}/bin/cc";
     NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isLinux "-fuse-ld=lld";
     NIX_LDFLAGS = "-lc -lm";
   };
