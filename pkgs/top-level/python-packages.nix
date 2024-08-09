@@ -9056,6 +9056,8 @@ self: super: with self; {
 
   nextdns = callPackage ../development/python-modules/nextdns { };
 
+  nf-core = callPackage ../developement/python-modules/nf-core { };
+
   nfcpy = callPackage ../development/python-modules/nfcpy { };
 
   nftables = callPackage ../os-specific/linux/nftables/python.nix {
@@ -9892,6 +9894,8 @@ self: super: with self; {
   pdftotext = callPackage ../development/python-modules/pdftotext { };
 
   pdfx = callPackage ../development/python-modules/pdfx { };
+
+  pdiff = callPackage ../development/python-modules/pdiff { };
 
   pdm-backend = callPackage ../development/python-modules/pdm-backend { };
 
@@ -12667,6 +12671,8 @@ self: super: with self; {
   pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
 
   pytest-watch = callPackage ../development/python-modules/pytest-watch { };
+
+  pytest-workflow = callPackage ../development/python-modules/pytest-workflow { };
 
   pytest-xdist = callPackage ../development/python-modules/pytest-xdist { };
 
@@ -15887,6 +15893,8 @@ self: super: with self; {
   tritonclient = callPackage ../development/python-modules/tritonclient { };
 
   trlib = toPythonModule (pkgs.trlib.override { pythonSupport = true; python3Packages = self;});
+
+  trogon = callPackage ../development/python-modules/trogon { };
 
   troposphere = callPackage ../development/python-modules/troposphere { };
 
