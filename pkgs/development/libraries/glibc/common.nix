@@ -35,6 +35,7 @@
 { pname
 , withLinuxHeaders ? false
 , profilingLibraries ? false
+, withLdFallbackPatch ? false
 , withGd ? false
 , enableCET ? false
 , extraBuildInputs ? []
@@ -101,6 +102,7 @@ stdenv.mkDerivation ({
       */
       ./reenable_DT_HASH.patch
     ]
+    ++ lib.optional withLdFallbackPatch ./ld-fallback.patch
     /* NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
        every HPC piece of software, without this patch CUDA compilation on ARM
        is effectively broken. See
@@ -213,7 +215,7 @@ stdenv.mkDerivation ({
   passthru = { inherit version; minorRelease = version; };
 }
 
-// (removeAttrs args [ "withLinuxHeaders" "withGd" "enableCET" "postInstall" "makeFlags" ]) //
+// (removeAttrs args [ "withLinuxHeaders" "withLdFallbackPatch" "withGd" "enableCET" "postInstall" "makeFlags" ]) //
 
 {
   src = fetchurl {
