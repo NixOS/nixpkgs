@@ -4,6 +4,7 @@
 , substituteAll
 , fetchurl
 , pkg-config
+, docutils
 , gettext
 , graphene
 , gi-docgen
@@ -37,7 +38,6 @@
 , x11Support ? stdenv.hostPlatform.isLinux
 , waylandSupport ? stdenv.hostPlatform.isLinux
 , libGL
-# experimental and can cause crashes in inspector
 , vulkanSupport ? stdenv.hostPlatform.isLinux
 , shaderc
 , vulkan-loader
@@ -69,7 +69,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.14.5";
+  version = "4.15.4";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = with finalAttrs; "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    hash = "sha256-VUfyufAGsTOZPgcLh8F4BOBR79o5E/6soRCPor5B4k0=";
+    hash = "sha256-huMJOp1KaW9ZzTDw+BzdFzcnLL08SKRVYxHDjQZRLBs=";
   };
 
   depsBuildBuild = [
@@ -89,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    docutils # for rst2man, rst2html5
     gettext
     gobject-introspection
     makeWrapper
