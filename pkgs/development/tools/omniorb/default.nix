@@ -2,21 +2,21 @@
 , stdenv
 , fetchurl
 , pkg-config
-, python3
+, python3Packages
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "omniorb";
   version = "4.3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/omniorb/omniORB/omniORB-${version}/omniORB-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/omniorb/omniORB/omniORB-${finalAttrs.version}/omniORB-${finalAttrs.version}.tar.bz2";
     hash = "sha256-HHRTMNAZBK/Xoe0KWJa5puU6waS4ZKSFA7k8fuy/H6g=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ python3 ];
+  buildInputs = [ python3Packages.python ];
 
   enableParallelBuilding = true;
   hardeningDisable = [ "format" ];
@@ -24,16 +24,16 @@ stdenv.mkDerivation rec {
   # Transform omniidl_be into a PEP420 namespace to allow other projects to define
   # their omniidl backends. Especially useful for omniorbpy, the python backend.
   postInstall = ''
-    rm $out/${python3.sitePackages}/omniidl_be/__init__.py
-    rm $out/${python3.sitePackages}/omniidl_be/__pycache__/__init__.*.pyc
+    rm $out/${python3Packages.python.sitePackages}/omniidl_be/__init__.py
+    rm $out/${python3Packages.python.sitePackages}/omniidl_be/__pycache__/__init__.*.pyc
   '';
 
   # Ensure postInstall didn't break cxx backend
   # Same as 'pythonImportsCheck = ["omniidl_be.cxx"];', but outside buildPythonPackage
   doInstallCheck = true;
   postInstallCheck = ''
-    export PYTHONPATH=$out/${python3.sitePackages}:$PYTHONPATH
-    ${lib.getExe python3} -c "import omniidl_be.cxx"
+    export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
+    ${python3Packages.python.interpreter} -c "import omniidl_be.cxx"
   '';
 
   meta = with lib; {
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ smironov ];
     platforms   = platforms.unix;
   };
-}
+})

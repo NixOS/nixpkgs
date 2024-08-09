@@ -48,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -id \
       $out/lib/libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.dylib \
       $out/lib/libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.dylib
-    install_name_tool -id \
+    install_name_tool -change \
+               libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.3.dylib \
+      $out/lib/libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.3.dylib \
+      -id \
       $out/lib/libPythonQt_QtAll-Qt5-Python3.${python3.sourceVersion.minor}.dylib \
       $out/lib/libPythonQt_QtAll-Qt5-Python3.${python3.sourceVersion.minor}.dylib
   '';

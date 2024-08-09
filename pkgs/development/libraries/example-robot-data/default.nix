@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs = lib.optionals pythonSupport [
+  propagatedBuildInputs = lib.optionals pythonSupport [
     python3Packages.pinocchio
   ];
 
