@@ -4,6 +4,8 @@ let
   inherit (lib)
     concatStringsSep escapeShellArg filterAttrs mapAttrs mapAttrsToList mkMerge
     mkOption pipe types;
+  lib-cert = import ./lib.nix { inherit lib; };
+  toOpenSSLShell = lib-cert.openssl.toShell;
   cfg = config.security.certificates.authorities.local;
   modules = with types; {
     root.options = {
@@ -39,20 +41,28 @@ in
         default = { };
       };
     };
-    # description = ''
-    #   Generates a basic Certificate Authority locally which is then used to
-    #   sign certificates.
-    #   :::{.warn}
-    #   Primarily meant for testing purposes.
-    #   :::
-    # '';
   };
   # TODO: Certificate renewal
   config =
     let
-      # Self-signed root CA script, manually generated using OpenSSL to support
-      # user-defined CN and potentially other features
-      opensslCfg = writeText "cert-local-config" (lib.generators.toINI { } ({
+      # config sections for defined CA roots
+      rootsConfig = mapAttrs
+        (name: root:
+          let dir = "$ENV::STATE_DIRECTORY/${name}";
+          in {
+            certificate = "${dir}/ca.cert.pem";
+            private_key = "${dir}/ca.key.pem";
+            database = "${dir}/index.txt";
+            serial = "${dir}/serial";
+            new_certs_dir = "${dir}";
+            policy = "policy_default";
+            default_md = "sha256";
+            default_days = 365;
+            copy_extensions = "copy";
+          })
+        cfg.roots;
+      # config for signing certificates
+      authorityConfig = {
         ca.default_ca = cfg.settings.root;
         req.x509_extensions = "v3_ca";
         policy_default = {
@@ -66,27 +76,21 @@ in
         v3_ca = {
           subjectKeyIdentifier = "hash";
           authorityKeyIdentifier = "keyid:always,issuer";
-          basicConstraints = "critical, CA:true";
-          keyUsage = "critical, digitalSignature, cRLSign, keyCertSign";
+          basicConstraints = [
+            "critical"
+            "CA:true"
+          ];
+          keyUsage = [
+            "critical"
+            "digitalSignature"
+            "cRLSign"
+            "keyCertSign"
+          ];
         };
-      } // (mapAttrs
-        (name: root:
-          let dir = "$ENV::STATE_DIRECTORY/${name}";
-          in {
-            certificate = "${dir}/ca.cert.pem";
-            private_key = "${dir}/ca.key.pem";
-            database = "${dir}/index.txt";
-            serial = "${dir}/serial";
-            new_certs_dir = "${dir}";
-            policy = "policy_default";
-            default_md = "sha256";
-
-            default_days = 365;
-            copy_extensions = "copy";
-          })
-        cfg.roots)));
-      mkCommand = cmd: args: concatStringsSep " " ([ cmd ] ++ args);
-      openssl = mkCommand "openssl";
+      } // rootsConfig;
+      opensslCnf = writeText
+        "cert-local-config"
+        (lib-cert.openssl.toConfigFile { } authorityConfig);
       # base service config
       baseService = {
         wantedBy = [ "multi-user.target" ];
@@ -114,23 +118,16 @@ in
                   mkdir -m 0700 -p ./${name}
                   touch ./${name}/index.txt
                   echo 00 > ./${name}/serial
-                  ${openssl [
-                    "req"
-                    "-config"
-                    "${opensslCfg}"
-                    "-x509"
-                    "-nodes"
-                    "-days"
-                    "365"
-                    "-newkey"
-                    "rsa:2048"
-                    "-keyout"
-                    "${name}/ca.key.pem"
-                    "-out"
-                    "${name}/ca.cert.pem"
-                    "-subj"
-                    (escapeShellArg "/CN=${root.CN}")
-                  ]}
+                  ${toOpenSSLShell "req" {
+                    config = opensslCnf;
+                    x509 = true;
+                    nodes = true;
+                    days = 365;
+                    newkey = "rsa:2048";
+                    keyout = "${name}/ca.key.pem";
+                    out = "${name}/ca.cert.pem";
+                    subj = "/CN=${root.CN}";
+                  }}
                 '';
               }
             ];
@@ -149,16 +146,12 @@ in
               key = path "key.pem";
               crt = path "crt.pem";
               ca = escapeShellArg "./${root}/ca.cert.pem";
-              signRequest = openssl [
-                "ca"
-                "-batch"
-                "-config"
-                "${opensslCfg}"
-                "-name"
-                authority.local.root
-                "-in"
-                "-"
-              ];
+              signRequest = toOpenSSLShell "ca" {
+                config = opensslCnf;
+                batch = true;
+                name = authority.local.root;
+                "in" = "-";
+              };
             in
             {
               "${service}" = mkMerge [
