@@ -131,6 +131,7 @@ in {
         libksysguard
         systemsettings
         kcmutils
+        powerdevil
       ];
       optionalPackages = [
         plasma-browser-integration
@@ -173,7 +174,6 @@ in {
       ++ lib.optional config.networking.networkmanager.enable plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
       ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
-      ++ lib.optional config.powerManagement.enable powerdevil
       ++ lib.optional config.services.printing.enable print-manager
       ++ lib.optional config.services.colord.enable colord-kde
       ++ lib.optional config.services.hardware.bolt.enable plasma-thunderbolt
