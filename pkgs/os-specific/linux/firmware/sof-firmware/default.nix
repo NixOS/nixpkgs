@@ -32,6 +32,6 @@ stdenvNoCC.mkDerivation rec {
     license = with licenses; [ bsd3 isc ];
     maintainers = with maintainers; [ lblasc evenbrenden hmenke ];
     platforms = with platforms; linux;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryFirmware ];
   };
 }
