@@ -7,6 +7,7 @@ let
     mapAttrs
     mkDefault
     mkIf
+    mkMerge
     mkOption mkForce
     optional
     optionalAttrs
@@ -159,10 +160,11 @@ in
 
     passthru.nodes = config.nodesCompat;
 
-    defaults = mkIf config.node.pkgsReadOnly {
-      nixpkgs.pkgs = config.node.pkgs;
-      imports = [ ../../modules/misc/nixpkgs/read-only.nix ];
-    };
+    defaults = mkMerge [
+      (mkIf config.node.pkgsReadOnly {
+        imports = [ ../../modules/misc/nixpkgs/read-only.nix ];
+      })
+    ];
 
   };
 }
