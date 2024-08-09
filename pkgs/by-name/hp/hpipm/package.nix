@@ -29,6 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBLASFEO_PATH=${blasfeo}"
   ] ++ lib.optionals (!stdenv.isx86_64) [ "-DTARGET=GENERIC" ];
 
+  postPatch = ''
+    # build shared lib
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "add_library(hpipm " \
+      "add_library(hpipm SHARED "
+  '';
+
   meta = {
     description = "High-performance interior-point-method QP and QCQP solvers";
     homepage = "https://github.com/giaf/hpipm";

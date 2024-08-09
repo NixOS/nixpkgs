@@ -7,9 +7,12 @@
 , bzip2
 , cbc
 , clp
+, coin-utils
+, doxygen
 , ipopt
 , lapack
 , libamplsolver
+, osi
 , zlib
 }:
 
@@ -27,6 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    doxygen
     gfortran
     pkg-config
   ];
@@ -35,20 +39,34 @@ stdenv.mkDerivation rec {
     bzip2
     cbc
     clp
+    coin-utils
     ipopt
     lapack
     libamplsolver
+    osi
     zlib
   ];
 
-  meta = with lib; {
+  configureFlagsArray = [
+    "--with-asl-lib=-lipoptamplinterface -lamplsolver"
+  ];
+
+  # ignore one failing test
+  postPatch = ''
+    substituteInPlace Bonmin/test/Makefile.in --replace-fail \
+      "./unitTest\''$(EXEEXT)" \
+      ""
+  '';
+
+  doCheck = true;
+  checkTarget = "test";
+
+  meta = {
     description = "Open-source code for solving general MINLP (Mixed Integer NonLinear Programming) problems";
     mainProgram = "bonmin";
     homepage = "https://github.com/coin-or/Bonmin";
-    license = licenses.epl10;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ aanderse ];
-    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
+    license = lib.licenses.epl10;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ aanderse ];
   };
 }

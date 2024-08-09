@@ -30,7 +30,7 @@
   #sundials,
   superscs,
   spral,
-  swig,
+  swig4,
   tinyxml-2,
   withUnfree ? false,
 }:
@@ -96,6 +96,17 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace swig/python/CMakeLists.txt --replace-fail \
         "if (SWIG_IMPORT)" \
         "if (NOT SWIG_IMPORT)"
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # this is only printing stuff, and is not defined on all CPU
+      substituteInPlace casadi/interfaces/hpipm/hpipm_runtime.hpp --replace-fail \
+        "d_print_exp_tran_mat" \
+        "//d_print_exp_tran_mat"
+
+      # fix missing symbols
+      substituteInPlace cmake/FindCLANG.cmake --replace-fail \
+        "clangBasic)" \
+        "clangBasic clangASTMatchers clangSupport)"
     '';
 
   nativeBuildInputs = [
@@ -128,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
       #sundials
       superscs
       spral
-      swig
+      swig4
       tinyxml-2
     ]
     ++ lib.optionals withUnfree [
@@ -138,6 +149,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals pythonSupport [
       python3Packages.numpy
       python3Packages.python
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      llvmPackages_17.openmp
     ];
 
   cmakeFlags = [

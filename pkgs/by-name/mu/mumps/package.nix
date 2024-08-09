@@ -30,6 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Compatibility with coin-or-mumps version
     # https://github.com/coin-or-tools/ThirdParty-Mumps/blob/stable/3.0/get.Mumps#L66
     cp libseq/mpi.h libseq/mumps_mpi.h
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/Makefile --replace-fail \
+      "-Wl,\''$(SONAME),libmumps_common" \
+      "-Wl,-install_name,$out/lib/libmumps_common"
   '';
 
   configurePhase = ''
@@ -67,11 +71,59 @@ stdenv.mkDerivation (finalAttrs: {
     scotch
   ];
 
+  preFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool \
+      -change    libmpiseq.dylib \
+        $out/lib/libmpiseq.dylib \
+      -change    libpord.dylib \
+        $out/lib/libpord.dylib \
+        $out/lib/libmumps_common.dylib
+    install_name_tool \
+      -change    libmpiseq.dylib \
+        $out/lib/libmpiseq.dylib \
+      -change    libpord.dylib \
+        $out/lib/libpord.dylib \
+      -id \
+        $out/lib/libcmumps.dylib \
+        $out/lib/libcmumps.dylib
+    install_name_tool \
+      -change    libmpiseq.dylib \
+        $out/lib/libmpiseq.dylib \
+      -change    libpord.dylib \
+        $out/lib/libpord.dylib \
+      -id \
+        $out/lib/libdmumps.dylib \
+        $out/lib/libdmumps.dylib
+    install_name_tool \
+      -change    libmpiseq.dylib \
+        $out/lib/libmpiseq.dylib \
+      -change    libpord.dylib \
+        $out/lib/libpord.dylib \
+      -id \
+        $out/lib/libsmumps.dylib \
+        $out/lib/libsmumps.dylib
+    install_name_tool \
+      -change    libmpiseq.dylib \
+        $out/lib/libmpiseq.dylib \
+      -change    libpord.dylib \
+        $out/lib/libpord.dylib \
+      -id \
+        $out/lib/libzmumps.dylib \
+        $out/lib/libzmumps.dylib
+    install_name_tool \
+      -id \
+        $out/lib/libmpiseq.dylib \
+        $out/lib/libmpiseq.dylib
+    install_name_tool \
+      -id \
+        $out/lib/libpord.dylib \
+        $out/lib/libpord.dylib
+  '';
+
   meta = {
     description = "MUltifrontal Massively Parallel sparse direct Solver";
     homepage = "http://mumps-solver.org/";
     license = lib.licenses.cecill-c;
     maintainers = with lib.maintainers; [ nim65s ];
-    broken = stdenv.isDarwin;
   };
 })
