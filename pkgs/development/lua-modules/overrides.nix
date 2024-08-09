@@ -143,15 +143,6 @@ in
       '';
   });
 
-  fennel = prev.fennel.overrideAttrs(oa: {
-    nativeBuildInputs = oa.nativeBuildInputs ++ [
-      installShellFiles
-    ];
-    postInstall = ''
-      installManPage fennel.1
-    '';
-  });
-
   # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
   # we have to invoke busted manually
   fzy = prev.fzy.overrideAttrs(oa: {
@@ -511,6 +502,9 @@ in
 
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
 
+    # ld: symbol(s) not found for architecture arm64
+    # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
+    meta.broken = stdenv.isDarwin;
   });
 
   lush-nvim = prev.lush-nvim.overrideAttrs (drv: {
@@ -810,7 +804,7 @@ in
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-2P+mokkjdj2PccQG/kAGnIoUPVnK2FqNfYpHPhsp8kw=";
+      hash = "sha256-PLihirhJshcUQI3L1eTcnQiZvocDl29eQHhdBwJQRU8=";
     };
 
     NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
