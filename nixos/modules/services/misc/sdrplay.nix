@@ -29,7 +29,9 @@ with lib;
         RestartSec = "1s";
       };
     };
+
     services.udev.packages = [ pkgs.sdrplay ];
 
+    boot.blacklistedKernelModules = [ "sdr_msi3101" "msi001" "msi2500" ];
   };
 }
