@@ -17,6 +17,9 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.14";
 
+  # base v0.17 compatibility
+  patches = [ ./tdigest.patch ];
+
   propagatedBuildInputs = [
     base
     ppx_sexp_conv
