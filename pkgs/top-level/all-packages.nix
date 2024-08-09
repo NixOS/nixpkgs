@@ -17116,15 +17116,26 @@ with pkgs;
 
   sparkleshare = callPackage ../applications/version-management/sparkleshare { };
 
-  spidermonkey_78 = callPackage ../development/interpreters/spidermonkey/78.nix {
-    inherit (darwin) libobjc;
-  };
-  spidermonkey_91 = callPackage ../development/interpreters/spidermonkey/91.nix {
-    inherit (darwin) libobjc;
-  };
-  spidermonkey_115 = callPackage ../development/interpreters/spidermonkey/115.nix {
-    inherit (darwin) libobjc;
-  };
+  inherit
+    ({
+      spidermonkey_78 = callPackage ../development/interpreters/spidermonkey/78.nix {
+        inherit (darwin) libobjc;
+      };
+      spidermonkey_91 = callPackage ../development/interpreters/spidermonkey/91.nix {
+        inherit (darwin) libobjc;
+      };
+      spidermonkey_115 = callPackage ../development/interpreters/spidermonkey/115.nix {
+        inherit (darwin) libobjc;
+      };
+      spidermonkey_128 = callPackage ../development/interpreters/spidermonkey/128.nix {
+        inherit (darwin) libobjc;
+      };
+    })
+    spidermonkey_78
+    spidermonkey_91
+    spidermonkey_115
+    spidermonkey_128
+    ;
 
   starlark-rust = callPackage ../development/interpreters/starlark-rust { };
 
