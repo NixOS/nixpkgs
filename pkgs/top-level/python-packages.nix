@@ -15685,6 +15685,8 @@ self: super: with self; {
 
   toposort = callPackage ../development/python-modules/toposort { };
 
+  toptica-lasersdk = callPackage ../development/python-modules/toptica-lasersdk { };
+
   torch = callPackage ../development/python-modules/torch {
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
