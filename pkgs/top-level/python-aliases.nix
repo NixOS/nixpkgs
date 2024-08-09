@@ -561,6 +561,7 @@ mapAliases ({
   sphinxcontrib_newsfeed = sphinxcontrib-newsfeed; # added 2023-07-20
   sphinxcontrib_plantuml = sphinxcontrib-plantuml; # added 2021-08-02
   sphinx-navtree = throw "sphinx-navtree has been removed since it is not compatible with sphinx 3.3 and unmaintained"; # added 2023-07-03
+  sqlalchemy-migrate = throw "sqlalchemy-migrate has been removed because it is abandoned upstream and incompatible with SQLAlchemy 2"; # added 2024-07-29
   sqlalchemy_migrate = sqlalchemy-migrate; # added 2021-10-28
   SQLAlchemy-ImageAttach = throw "sqlalchemy-imageattach has been removed as it is incompatible with sqlalchemy 1.4 and unmaintained"; # added 2022-04-23
   sqlsoup = throw "sqlsoup has been removed as it is incompatible with modern SQLAlchemy and unmaintained"; # added 2024-05-13
@@ -570,6 +571,7 @@ mapAliases ({
   suseapi = throw "suseapi has been removed because it is no longer maintained"; # added 2023-02-27
   synologydsm-api = py-synologydsm-api; # added 2024-07-29
   sysv_ipc = sysv-ipc; # added 2024-01-07
+  tempita = throw "tempita has been removed because it is unmaintained and the upstream repository is gone"; # added 2024-07-29
   tensorflow-bin_2 = tensorflow-bin; # added 2021-11-25
   tensorflow-build_2 = tensorflow-build; # added 2021-11-25
   tensorflow-estimator = tensorflow-estimator-bin; # added 2023-01-17
