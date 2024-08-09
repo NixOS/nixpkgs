@@ -9,8 +9,6 @@
 , darwin
 }:
 
-assert wayland.withLibraries;
-
 let
   stdenv = clangStdenv;
 in

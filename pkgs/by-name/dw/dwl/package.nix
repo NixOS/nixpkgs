@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags =
     [
       "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
-      "WAYLAND_SCANNER=wayland-scanner"
+      "WAYLAND_SCANNER=wayland-scanner" # TODO: check if this can be removed
       "PREFIX=$(out)"
       "MANDIR=$(man)/share/man"
     ]

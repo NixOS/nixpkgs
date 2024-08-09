@@ -6,6 +6,7 @@
 , qtwayland
 , wayland
 , wayland-protocols
+, wayland-scanner
 , extra-cmake-modules
 , deepin-wayland-protocols
 , qttools
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     qttools
+    wayland-scanner
   ];
 
   buildInputs = [

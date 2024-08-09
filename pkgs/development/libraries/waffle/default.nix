@@ -11,7 +11,7 @@
 , pkg-config
 , python3
 , x11Support ? true, libxcb, libX11
-, waylandSupport ? true, wayland, wayland-protocols
+, waylandSupport ? true, wayland, wayland-protocols, wayland-scanner
 , useGbm ? true, mesa, udev
 }:
 
@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+  ] ++ lib.optionals waylandSupport [
+    wayland-scanner
   ];
 
   PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
