@@ -90,7 +90,6 @@ in {
             "/var/run/mysqld";
 
         CapabilityBoundingSet = "";
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
 
         DeviceAllow = "";
 
