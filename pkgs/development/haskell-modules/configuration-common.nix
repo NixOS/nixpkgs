@@ -169,7 +169,7 @@ self: super: {
   };
 
   # 2024-07-09: rhine 1.4.* needs newer monad-schedule than stackage (and is only consumer)
-  monad-schedule = assert super.monad-schedule.version == "0.1.2.2"; doDistribute self.monad-schedule_0_2;
+  monad-schedule = assert super.monad-schedule.version == "0.1.2.2"; doDistribute self.monad-schedule_0_2_0_1;
 
   aeson =
     # aeson's test suite includes some tests with big numbers that fail on 32bit
