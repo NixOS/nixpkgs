@@ -368,18 +368,6 @@ in
           PgBouncer exporter needs either connectionStringFile or connectionString configured"
         '';
     } {
-      assertion = cfg.pgbouncer.enable -> (
-        config.services.pgbouncer.ignoreStartupParameters != null && builtins.match ".*extra_float_digits.*" config.services.pgbouncer.ignoreStartupParameters != null
-        );
-        message = ''
-          Prometheus PgBouncer exporter requires including `extra_float_digits` in services.pgbouncer.ignoreStartupParameters
-
-          Example:
-          services.pgbouncer.ignoreStartupParameters = extra_float_digits;
-
-          See https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
-        '';
-    } {
       assertion = cfg.sql.enable -> (
         (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
       );
@@ -435,11 +423,6 @@ in
       (mkIf
         (cfg.pgbouncer.enable && cfg.pgbouncer.connectionString != "") ''
           config.services.prometheus.exporters.pgbouncer.connectionString is insecure. Use connectionStringFile instead.
-        ''
-      )
-      (mkIf
-        (cfg.pgbouncer.enable && config.services.pgbouncer.authType != "any") ''
-          Admin user (with password or passwordless) MUST exist in the services.pgbouncer.authFile if authType other than any is used.
         ''
       )
     ] ++ config.services.prometheus.exporters.warnings;
