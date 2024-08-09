@@ -8,6 +8,7 @@
 , pam
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
+, sqlite
 , nlsSupport ? true
 , translateManpages ? true
 , po4a
@@ -20,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = "2.39.4";
+  version = "2.40.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-bE+HI9r9QcOdk+y/FlCfyIwzzVvTJ3iArlodl6AU/Q4=";
+    hash = "sha256-14s3pm9ZItcO3zvfsBprM9NO08PK/WYoIDsqK2fI6LM=";
   };
 
   patches = [
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   postPatch = ''
-    patchShebangs tests/run.sh
+    patchShebangs tests/run.sh tools/all_syscalls
 
     substituteInPlace sys-utils/eject.c \
       --replace "/bin/umount" "$bin/bin/umount"
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config installShellFiles ]
     ++ lib.optionals translateManpages [ po4a ];
 
-  buildInputs = [ zlib libxcrypt ]
+  buildInputs = [ zlib libxcrypt sqlite ]
     ++ lib.optionals pamSupport [ pam ]
     ++ lib.optionals capabilitiesSupport [ libcap_ng ]
     ++ lib.optionals ncursesSupport [ ncurses ]
