@@ -61,6 +61,8 @@
 , withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 
 , buildPackages
+, gnome
+, remmina
 }:
 
 let
@@ -193,6 +195,11 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
     "-framework AudioToolbox"
   ]);
+
+  passthru.tests = {
+    inherit remmina;
+    inherit (gnome) gnome-remote-desktop;
+  };
 
   meta = with lib; {
     description = "Remote Desktop Protocol Client";
