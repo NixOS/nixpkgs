@@ -3,13 +3,19 @@
 with lib;
 
 let
-  cfg = config.hardware.tuxedo-keyboard;
-  tuxedo-keyboard = config.boot.kernelPackages.tuxedo-keyboard;
+  cfg = config.hardware.tuxedo-drivers;
+  tuxedo-drivers = config.boot.kernelPackages.tuxedo-drivers;
 in
   {
-    options.hardware.tuxedo-keyboard = {
+    imports = [
+      (mkRenamedOptionModule [ "hardware" "tuxedo-keyboard" "enable" ] [ "hardware" "tuxedo-drivers" "enable" ])
+    ];
+    options.hardware.tuxedo-drivers = {
       enable = mkEnableOption ''
-          the tuxedo-keyboard driver.
+          Driver pack for tuxedo devices including
+          - Driver for Fn-keys
+          - SysFS control of brightness/color/mode for most TUXEDO keyboards
+          - Hardware I/O driver for TUXEDO Control Center
 
           To configure the driver, pass the options to the {option}`boot.kernelParams` configuration.
           There are several parameters you can change. It's best to check at the source code description which options are supported.
@@ -29,7 +35,11 @@ in
 
     config = mkIf cfg.enable
     {
-      boot.kernelModules = ["tuxedo_keyboard"];
-      boot.extraModulePackages = [ tuxedo-keyboard ];
+      boot.kernelModules = [
+        "tuxedo_keyboard"
+        "tuxedo_compatibility_check"
+        "tuxedo_io"
+      ];
+      boot.extraModulePackages = [ tuxedo-drivers ];
     };
   }
