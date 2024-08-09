@@ -193,5 +193,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
+    mainProgram = "gdm";
   };
 })
