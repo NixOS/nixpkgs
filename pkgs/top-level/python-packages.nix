@@ -2375,6 +2375,8 @@ self: super: with self; {
     inherit (pkgs) cmigemo;
   };
 
+  cmsdials = callPackage ../development/python-modules/cmsdials { };
+
   cmsis-pack-manager = callPackage ../development/python-modules/cmsis-pack-manager { };
 
   cmsis-svd = callPackage ../development/python-modules/cmsis-svd { };
