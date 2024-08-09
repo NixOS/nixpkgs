@@ -89,9 +89,7 @@ let
         }
       );
     in
-    {
-      llef = callPackage ./lldb-plugins/llef.nix { };
-    }
+    lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
   );
 
   tools = lib.makeExtensible (
