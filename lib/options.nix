@@ -1,4 +1,6 @@
-/* Nixpkgs/NixOS option handling. */
+/**
+  Nixpkgs/NixOS option handling.
+*/
 { lib }:
 
 let
@@ -45,23 +47,44 @@ let
 in
 rec {
 
-  /* Returns true when the given argument is an option
+  /**
+    Returns true when the given argument is an option
 
-     Type: isOption :: a -> bool
+    # Type
 
-     Example:
-       isOption 1             // => false
-       isOption (mkOption {}) // => true
+    ```
+    isOption :: a -> bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `isOption` usage example
+
+    ```nix
+    isOption 1             // => false
+    isOption (mkOption {}) // => true
+    ```
+
+    :::
   */
   isOption = lib.isType "option";
 
-  /* Creates an Option attribute set. mkOption accepts an attribute set with the following keys:
+  /**
+    Creates an Option attribute set. mkOption accepts an attribute set with the following keys:
 
-     All keys default to `null` when not given.
+    All keys default to `null` when not given.
 
-     Example:
-       mkOption { }  // => { _type = "option"; }
-       mkOption { default = "foo"; } // => { _type = "option"; default = "foo"; }
+
+    # Examples
+    :::{.example}
+    ## `mkOption` usage example
+
+    ```nix
+    mkOption { }  // => { _type = "option"; }
+    mkOption { default = "foo"; } // => { _type = "option"; default = "foo"; }
+    ```
+
+    :::
   */
   mkOption =
     {
@@ -88,12 +111,28 @@ rec {
     } @ attrs:
     attrs // { _type = "option"; };
 
-  /* Creates an Option attribute set for a boolean value option i.e an
-     option to be toggled on or off:
+  /**
+    Creates an Option attribute set for a boolean value option i.e an
+    option to be toggled on or off:
 
-     Example:
-       mkEnableOption "foo"
-       => { _type = "option"; default = false; description = "Whether to enable foo."; example = true; type = { ... }; }
+
+    # Inputs
+
+    `name`
+
+    : Name for the created option
+
+
+    # Examples
+    :::{.example}
+    ## `mkEnableOption` usage example
+
+    ```nix
+    mkEnableOption "foo"
+    => { _type = "option"; default = false; description = "Whether to enable foo."; example = true; type = { ... }; }
+    ```
+
+    :::
   */
   mkEnableOption =
     # Name for the created option
@@ -104,83 +143,106 @@ rec {
     type = lib.types.bool;
   };
 
-  /* Creates an Option attribute set for an option that specifies the
-     package a module should use for some purpose.
+  /**
+    Creates an Option attribute set for an option that specifies the
+    package a module should use for some purpose.
 
-     The package is specified in the third argument under `default` as a list of strings
-     representing its attribute path in nixpkgs (or another package set).
-     Because of this, you need to pass nixpkgs itself (usually `pkgs` in a module;
-     alternatively to nixpkgs itself, another package set) as the first argument.
+    The package is specified in the third argument under `default` as a list of strings
+    representing its attribute path in nixpkgs (or another package set).
+    Because of this, you need to pass nixpkgs itself (usually `pkgs` in a module;
+    alternatively to nixpkgs itself, another package set) as the first argument.
 
-     If you pass another package set you should set the `pkgsText` option.
-     This option is used to display the expression for the package set. It is `"pkgs"` by default.
-     If your expression is complex you should parenthesize it, as the `pkgsText` argument
-     is usually immediately followed by an attribute lookup (`.`).
+    If you pass another package set you should set the `pkgsText` option.
+    This option is used to display the expression for the package set. It is `"pkgs"` by default.
+    If your expression is complex you should parenthesize it, as the `pkgsText` argument
+    is usually immediately followed by an attribute lookup (`.`).
 
-     The second argument may be either a string or a list of strings.
-     It provides the display name of the package in the description of the generated option
-     (using only the last element if the passed value is a list)
-     and serves as the fallback value for the `default` argument.
+    The second argument may be either a string or a list of strings.
+    It provides the display name of the package in the description of the generated option
+    (using only the last element if the passed value is a list)
+    and serves as the fallback value for the `default` argument.
 
-     To include extra information in the description, pass `extraDescription` to
-     append arbitrary text to the generated description.
+    To include extra information in the description, pass `extraDescription` to
+    append arbitrary text to the generated description.
 
-     You can also pass an `example` value, either a literal string or an attribute path.
+    You can also pass an `example` value, either a literal string or an attribute path.
 
-     The `default` argument can be omitted if the provided name is
-     an attribute of pkgs (if `name` is a string) or a valid attribute path in pkgs (if `name` is a list).
-     You can also set `default` to just a string in which case it is interpreted as an attribute name
-     (a singleton attribute path, if you will).
+    The `default` argument can be omitted if the provided name is
+    an attribute of pkgs (if `name` is a string) or a valid attribute path in pkgs (if `name` is a list).
+    You can also set `default` to just a string in which case it is interpreted as an attribute name
+    (a singleton attribute path, if you will).
 
-     If you wish to explicitly provide no default, pass `null` as `default`.
+    If you wish to explicitly provide no default, pass `null` as `default`.
 
-     If you want users to be able to set no package, pass `nullable = true`.
-     In this mode a `default = null` will not be interpreted as no default and is interpreted literally.
+    If you want users to be able to set no package, pass `nullable = true`.
+    In this mode a `default = null` will not be interpreted as no default and is interpreted literally.
 
-     Type: mkPackageOption :: pkgs -> (string|[string]) -> { nullable? :: bool, default? :: string|[string], example? :: null|string|[string], extraDescription? :: string, pkgsText? :: string } -> option
 
-     Example:
-       mkPackageOption pkgs "hello" { }
-       => { ...; default = pkgs.hello; defaultText = literalExpression "pkgs.hello"; description = "The hello package to use."; type = package; }
+    # Inputs
 
-     Example:
-       mkPackageOption pkgs "GHC" {
-         default = [ "ghc" ];
-         example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
-       }
-       => { ...; default = pkgs.ghc; defaultText = literalExpression "pkgs.ghc"; description = "The GHC package to use."; example = literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])"; type = package; }
+    `pkgs`
 
-     Example:
-       mkPackageOption pkgs [ "python3Packages" "pytorch" ] {
-         extraDescription = "This is an example and doesn't actually do anything.";
-       }
-       => { ...; default = pkgs.python3Packages.pytorch; defaultText = literalExpression "pkgs.python3Packages.pytorch"; description = "The pytorch package to use. This is an example and doesn't actually do anything."; type = package; }
+    : Package set (an instantiation of nixpkgs such as pkgs in modules or another package set)
 
-     Example:
-       mkPackageOption pkgs "nushell" {
-         nullable = true;
-       }
-       => { ...; default = pkgs.nushell; defaultText = literalExpression "pkgs.nushell"; description = "The nushell package to use."; type = nullOr package; }
+    `name`
 
-     Example:
-       mkPackageOption pkgs "coreutils" {
-         default = null;
-       }
-       => { ...; description = "The coreutils package to use."; type = package; }
+    : Name for the package, shown in option description
 
-     Example:
-       mkPackageOption pkgs "dbus" {
-         nullable = true;
-         default = null;
-       }
-       => { ...; default = null; description = "The dbus package to use."; type = nullOr package; }
+    # Type
 
-     Example:
-       mkPackageOption pkgs.javaPackages "OpenJFX" {
-         default = "openjfx20";
-         pkgsText = "pkgs.javaPackages";
-       }
-       => { ...; default = pkgs.javaPackages.openjfx20; defaultText = literalExpression "pkgs.javaPackages.openjfx20"; description = "The OpenJFX package to use."; type = package; }
+    ```
+    mkPackageOption :: pkgs -> (string|[string]) -> { nullable? :: bool, default? :: string|[string], example? :: null|string|[string], extraDescription? :: string, pkgsText? :: string } -> option
+    ```
+
+    # Examples
+    :::{.example}
+    ## `mkPackageOption` usage example
+
+    ```nix
+    mkPackageOption pkgs "hello" { }
+    => { ...; default = pkgs.hello; defaultText = literalExpression "pkgs.hello"; description = "The hello package to use."; type = package; }
+
+
+    mkPackageOption pkgs "GHC" {
+      default = [ "ghc" ];
+      example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
+    }
+    => { ...; default = pkgs.ghc; defaultText = literalExpression "pkgs.ghc"; description = "The GHC package to use."; example = literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])"; type = package; }
+
+
+    mkPackageOption pkgs [ "python3Packages" "pytorch" ] {
+      extraDescription = "This is an example and doesn't actually do anything.";
+    }
+    => { ...; default = pkgs.python3Packages.pytorch; defaultText = literalExpression "pkgs.python3Packages.pytorch"; description = "The pytorch package to use. This is an example and doesn't actually do anything."; type = package; }
+
+
+    mkPackageOption pkgs "nushell" {
+      nullable = true;
+    }
+    => { ...; default = pkgs.nushell; defaultText = literalExpression "pkgs.nushell"; description = "The nushell package to use."; type = nullOr package; }
+
+
+    mkPackageOption pkgs "coreutils" {
+      default = null;
+    }
+    => { ...; description = "The coreutils package to use."; type = package; }
+
+
+    mkPackageOption pkgs "dbus" {
+      nullable = true;
+      default = null;
+    }
+    => { ...; default = null; description = "The dbus package to use."; type = nullOr package; }
+
+
+    mkPackageOption pkgs.javaPackages "OpenJFX" {
+      default = "openjfx20";
+      pkgsText = "pkgs.javaPackages";
+    }
+    => { ...; default = pkgs.javaPackages.openjfx20; defaultText = literalExpression "pkgs.javaPackages.openjfx20"; description = "The OpenJFX package to use."; type = package; }
+    ```
+
+    :::
   */
   mkPackageOption =
     # Package set (an instantiation of nixpkgs such as pkgs in modules or another package set)
@@ -220,16 +282,26 @@ rec {
           (if isList example then "${pkgsText}." + concatStringsSep "." example else example);
       });
 
-  /* Deprecated alias of mkPackageOption, to be removed in 25.05.
-     Previously used to create options with markdown documentation, which is no longer required.
+  /**
+    Deprecated alias of mkPackageOption, to be removed in 25.05.
+    Previously used to create options with markdown documentation, which is no longer required.
   */
   mkPackageOptionMD = lib.warn "mkPackageOptionMD is deprecated and will be removed in 25.05; please use mkPackageOption." mkPackageOption;
 
-  /* This option accepts anything, but it does not produce any result.
+  /**
+    This option accepts anything, but it does not produce any result.
 
-     This is useful for sharing a module across different module sets
-     without having to implement similar features as long as the
-     values of the options are not accessed. */
+    This is useful for sharing a module across different module sets
+    without having to implement similar features as long as the
+    values of the options are not accessed.
+
+
+    # Inputs
+
+    `attrs`
+
+    : 1\. Function argument
+  */
   mkSinkUndeclaredOptions = attrs: mkOption ({
     internal = true;
     visible = false;
@@ -254,18 +326,29 @@ rec {
     else if all isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption loc}'. Definition values:${showDefs defs}";
 
-  /*
+  /**
     Require a single definition.
 
     WARNING: Does not perform nested checks, as this does not run the merge function!
-    */
+  */
   mergeOneOption = mergeUniqueOption { message = ""; };
 
-  /*
+  /**
     Require a single definition.
 
     NOTE: When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
-   */
+
+
+    # Inputs
+
+    `loc`
+
+    : 2\. Function argument
+
+    `defs`
+
+    : 3\. Function argument
+  */
   mergeUniqueOption = args@{
       message,
       # WARNING: the default merge function assumes that the definition is a valid (option) value. You MUST pass a merge function if the return value needs to be
@@ -280,7 +363,20 @@ rec {
         assert length defs > 1;
         throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
 
-  /* "Merge" option definitions by checking that they all have the same value. */
+  /**
+    "Merge" option definitions by checking that they all have the same value.
+
+
+    # Inputs
+
+    `loc`
+
+    : 1\. Function argument
+
+    `defs`
+
+    : 2\. Function argument
+  */
   mergeEqualOption = loc: defs:
     if defs == [] then abort "This case should never happen."
     # Return early if we only have one element
@@ -293,23 +389,47 @@ rec {
       else
         first) (head defs) (tail defs)).value;
 
-  /* Extracts values of all "value" keys of the given list.
+  /**
+    Extracts values of all "value" keys of the given list.
 
-     Type: getValues :: [ { value :: a; } ] -> [a]
+    # Type
 
-     Example:
-       getValues [ { value = 1; } { value = 2; } ] // => [ 1 2 ]
-       getValues [ ]                               // => [ ]
+    ```
+    getValues :: [ { value :: a; } ] -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `getValues` usage example
+
+    ```nix
+    getValues [ { value = 1; } { value = 2; } ] // => [ 1 2 ]
+    getValues [ ]                               // => [ ]
+    ```
+
+    :::
   */
   getValues = map (x: x.value);
 
-  /* Extracts values of all "file" keys of the given list
+  /**
+    Extracts values of all "file" keys of the given list
 
-     Type: getFiles :: [ { file :: a; } ] -> [a]
+    # Type
 
-     Example:
-       getFiles [ { file = "file1"; } { file = "file2"; } ] // => [ "file1" "file2" ]
-       getFiles [ ]                                         // => [ ]
+    ```
+    getFiles :: [ { file :: a; } ] -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `getFiles` usage example
+
+    ```nix
+    getFiles [ { file = "file1"; } { file = "file2"; } ] // => [ "file1" "file2" ]
+    getFiles [ ]                                         // => [ ]
+    ```
+
+    :::
   */
   getFiles = map (x: x.file);
 
@@ -358,16 +478,24 @@ rec {
         [ docOption ] ++ optionals subOptionsVisible subOptions) (collect isOption options);
 
 
-  /* This function recursively removes all derivation attributes from
-     `x` except for the `name` attribute.
+  /**
+    This function recursively removes all derivation attributes from
+    `x` except for the `name` attribute.
 
-     This is to make the generation of `options.xml` much more
-     efficient: the XML representation of derivations is very large
-     (on the order of megabytes) and is not actually used by the
-     manual generator.
+    This is to make the generation of `options.xml` much more
+    efficient: the XML representation of derivations is very large
+    (on the order of megabytes) and is not actually used by the
+    manual generator.
 
-     This function was made obsolete by renderOptionValue and is kept for
-     compatibility with out-of-tree code.
+    This function was made obsolete by renderOptionValue and is kept for
+    compatibility with out-of-tree code.
+
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
   */
   scrubOptionValue = x:
     if isDerivation x then
@@ -377,8 +505,16 @@ rec {
     else x;
 
 
-  /* Ensures that the given option value (default or example) is a `_type`d string
-     by rendering Nix values to `literalExpression`s.
+  /**
+    Ensures that the given option value (default or example) is a `_type`d string
+    by rendering Nix values to `literalExpression`s.
+
+
+    # Inputs
+
+    `v`
+
+    : 1\. Function argument
   */
   renderOptionValue = v:
     if v ? _type && v ? text then v
@@ -388,10 +524,18 @@ rec {
     } v);
 
 
-  /* For use in the `defaultText` and `example` option attributes. Causes the
-     given string to be rendered verbatim in the documentation as Nix code. This
-     is necessary for complex values, e.g. functions, or values that depend on
-     other values or packages.
+  /**
+    For use in the `defaultText` and `example` option attributes. Causes the
+    given string to be rendered verbatim in the documentation as Nix code. This
+    is necessary for complex values, e.g. functions, or values that depend on
+    other values or packages.
+
+
+    # Inputs
+
+    `text`
+
+    : 1\. Function argument
   */
   literalExpression = text:
     if ! isString text then throw "literalExpression expects a string."
@@ -399,16 +543,25 @@ rec {
 
   literalExample = lib.warn "lib.literalExample is deprecated, use lib.literalExpression instead, or use lib.literalMD for a non-Nix description." literalExpression;
 
-  /* Transition marker for documentation that's already migrated to markdown
-     syntax. Has been a no-op for some while and been removed from nixpkgs.
-     Kept here to alert downstream users who may not be aware of the migration's
-     completion that it should be removed from modules.
+  /**
+    Transition marker for documentation that's already migrated to markdown
+    syntax. Has been a no-op for some while and been removed from nixpkgs.
+    Kept here to alert downstream users who may not be aware of the migration's
+    completion that it should be removed from modules.
   */
   mdDoc = lib.warn "lib.mdDoc will be removed from nixpkgs in 24.11. Option descriptions are now in Markdown by default; you can remove any remaining uses of lib.mdDoc.";
 
-  /* For use in the `defaultText` and `example` option attributes. Causes the
-     given MD text to be inserted verbatim in the documentation, for when
-     a `literalExpression` would be too hard to read.
+  /**
+    For use in the `defaultText` and `example` option attributes. Causes the
+    given MD text to be inserted verbatim in the documentation, for when
+    a `literalExpression` would be too hard to read.
+
+
+    # Inputs
+
+    `text`
+
+    : 1\. Function argument
   */
   literalMD = text:
     if ! isString text then throw "literalMD expects a string."
@@ -416,17 +569,33 @@ rec {
 
   # Helper functions.
 
-  /* Convert an option, described as a list of the option parts to a
-     human-readable version.
+  /**
+    Convert an option, described as a list of the option parts to a
+    human-readable version.
 
-     Example:
-       (showOption ["foo" "bar" "baz"]) == "foo.bar.baz"
-       (showOption ["foo" "bar.baz" "tux"]) == "foo.\"bar.baz\".tux"
-       (showOption ["windowManager" "2bwm" "enable"]) == "windowManager.\"2bwm\".enable"
 
-     Placeholders will not be quoted as they are not actual values:
-       (showOption ["foo" "*" "bar"]) == "foo.*.bar"
-       (showOption ["foo" "<name>" "bar"]) == "foo.<name>.bar"
+    # Inputs
+
+    `parts`
+
+    : 1\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `showOption` usage example
+
+    ```nix
+    (showOption ["foo" "bar" "baz"]) == "foo.bar.baz"
+      (showOption ["foo" "bar.baz" "tux"]) == "foo.\"bar.baz\".tux"
+      (showOption ["windowManager" "2bwm" "enable"]) == "windowManager.\"2bwm\".enable"
+
+    Placeholders will not be quoted as they are not actual values:
+      (showOption ["foo" "*" "bar"]) == "foo.*.bar"
+      (showOption ["foo" "<name>" "bar"]) == "foo.<name>.bar"
+    ```
+
+    :::
   */
   showOption = parts: let
     escapeOptionPart = part:

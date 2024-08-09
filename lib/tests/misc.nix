@@ -206,7 +206,7 @@ runTests {
     '';
   };
 
-  /*
+  /**
     testOr = {
       expr = or true false;
       expected = true;

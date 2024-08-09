@@ -10,7 +10,7 @@ let
     expected = lib.sort lib.lessThan y;
   };
 
-  /*
+  /**
     Try to convert an elaborated system back to a simple string. If not possible,
     return null. So we have the property:
 
@@ -19,6 +19,13 @@ let
 
     NOTE: This property is not guaranteed when `sys` was elaborated by a different
           version of Nixpkgs.
+
+
+    # Inputs
+
+    `sys`
+
+    : 1\. Function argument
   */
   toLosslessStringMaybe = sys:
     if lib.isString sys then sys
@@ -55,7 +62,9 @@ lib.runTests (
   testfreebsd = mseteq freebsd [ "i686-freebsd" "x86_64-freebsd" ];
   testgenode = mseteq genode [ "aarch64-genode" "i686-genode" "x86_64-genode" ];
   testredox = mseteq redox [ "x86_64-redox" ];
-  testgnu = mseteq gnu (linux /* ++ kfreebsd ++ ... */);
+  testgnu = mseteq gnu (linux /**
+  ++ kfreebsd ++ ...
+*/);
   testillumos = mseteq illumos [ "x86_64-solaris" ];
   testlinux = mseteq linux [ "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux" "i686-linux" "loongarch64-linux" "m68k-linux" "microblaze-linux" "microblazeel-linux" "mips-linux" "mips64-linux" "mips64el-linux" "mipsel-linux" "powerpc64-linux" "powerpc64le-linux" "riscv32-linux" "riscv64-linux" "s390-linux" "s390x-linux" "x86_64-linux" ];
   testnetbsd = mseteq netbsd [ "aarch64-netbsd" "armv6l-netbsd" "armv7a-netbsd" "armv7l-netbsd" "i686-netbsd" "m68k-netbsd" "mipsel-netbsd" "powerpc-netbsd" "riscv32-netbsd" "riscv64-netbsd" "x86_64-netbsd" ];
@@ -100,6 +109,8 @@ lib.runTests (
       }?${platformAttrName};
     };
 
-}) (lib.systems.elaborate "x86_64-linux" /* arbitrary choice, just to get all the elaborated attrNames */)
+}) (lib.systems.elaborate "x86_64-linux" /**
+  arbitrary choice, just to get all the elaborated attrNames
+*/)
 
 )
