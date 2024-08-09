@@ -93,6 +93,8 @@ self: super: with self; {
 
   advocate = callPackage ../development/python-modules/advocate { };
 
+  aeidon = callPackage ../development/python-modules/aeidon { };
+
   aemet-opendata = callPackage ../development/python-modules/aemet-opendata { };
 
   aenum = callPackage ../development/python-modules/aenum { };
@@ -124,6 +126,8 @@ self: super: with self; {
   ago = callPackage ../development/python-modules/ago { };
 
   aggdraw = callPackage ../development/python-modules/aggdraw { };
+
+  ahocorasick-rs = callPackage ../development/python-modules/ahocorasick-rs { };
 
   aigpy = callPackage ../development/python-modules/aigpy { };
 
@@ -3272,6 +3276,8 @@ self: super: with self; {
   django-cors-headers = callPackage ../development/python-modules/django-cors-headers { };
 
   django-countries = callPackage ../development/python-modules/django-countries { };
+
+  django-crispy-bootstrap3 = callPackage ../development/python-modules/django-crispy-bootstrap3 { };
 
   django-crispy-bootstrap4 = callPackage ../development/python-modules/django-crispy-bootstrap4 { };
 
@@ -9991,6 +9997,8 @@ self: super: with self; {
 
   phe = callPackage ../development/python-modules/phe { };
 
+  phply = callPackage ../development/python-modules/phply { };
+
   phik = callPackage ../development/python-modules/phik { };
 
   phone-modem = callPackage ../development/python-modules/phone-modem { };
@@ -11523,6 +11531,8 @@ self: super: with self; {
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
   pyicu = callPackage ../development/python-modules/pyicu { };
+
+  pyicumessageformat = callPackage ../development/python-modules/pyicumessageformat { };
 
   pyimpfuzzy = callPackage ../development/python-modules/pyimpfuzzy {
     inherit (pkgs) ssdeep;
@@ -14388,6 +14398,8 @@ self: super: with self; {
 
   sip = callPackage ../development/python-modules/sip { };
 
+  siphashc = callPackage ../development/python-modules/siphashc { };
+
   sip4 = callPackage ../development/python-modules/sip/4.x.nix { };
 
   sipyco = callPackage ../development/python-modules/sipyco { };
@@ -15781,6 +15793,10 @@ self: super: with self; {
   tracerite = callPackage ../development/python-modules/tracerite { };
 
   tracing = callPackage ../development/python-modules/tracing { };
+
+  translate-toolkit = callPackage ../development/python-modules/translate-toolkit { };
+
+  translation-finder = callPackage ../development/python-modules/translation-finder { };
 
   trackpy = callPackage ../development/python-modules/trackpy { };
 
@@ -17347,6 +17363,10 @@ self: super: with self; {
   webencodings = callPackage ../development/python-modules/webencodings { };
 
   webexteamssdk = callPackage ../development/python-modules/webexteamssdk { };
+
+  weblate-language-data = callPackage ../development/python-modules/weblate-language-data { };
+
+  weblate-schemas = callPackage ../development/python-modules/weblate-schemas { };
 
   webob = callPackage ../development/python-modules/webob { };
 
