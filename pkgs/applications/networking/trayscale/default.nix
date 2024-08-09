@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , pkg-config
@@ -7,6 +8,7 @@
 , gtk4
 , gobject-introspection
 , libadwaita
+, darwin
 }:
 
 buildGoModule rec {
@@ -31,7 +33,13 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = [ pkg-config gobject-introspection wrapGAppsHook4 ];
-  buildInputs = [ gtk4 libadwaita ];
+
+  buildInputs = [
+    gtk4
+    libadwaita
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
+  ];
 
   # there are no actual tests, and it takes 20 minutes to rebuild
   doCheck = false;
