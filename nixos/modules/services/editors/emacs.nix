@@ -84,7 +84,7 @@ in
 
     environment.systemPackages = [ cfg.package editorScript ];
 
-    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "emacseditor");
+    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "/run/current-system/sw/bin/emacseditor");
   };
 
   meta.doc = ./emacs.md;
