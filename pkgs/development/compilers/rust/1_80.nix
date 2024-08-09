@@ -46,8 +46,8 @@ let
 in
 import ./default.nix
   {
-    rustcVersion = "1.80.0";
-    rustcSha256 = "sha256-b2BsGT8jD2ssrkV297JNUPX5sl3/Edv5si94fTUh1nI=";
+    rustcVersion = "1.80.1";
+    rustcSha256 = "sha256-LAuPZDlC3LgQy8xQ8pJWSxtuRNtdX0UJEVOZbfldLcQ=";
 
     llvmSharedForBuild = llvmSharedFor pkgsBuildBuild;
     llvmSharedForHost = llvmSharedFor pkgsBuildHost;

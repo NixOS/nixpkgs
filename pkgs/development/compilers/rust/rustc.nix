@@ -2,7 +2,7 @@
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , runCommandLocal, fetchurl, file, python3
 , darwin, cargo, cmake, rustc, rustfmt
-, pkg-config, openssl, xz
+, pkg-config, openssl, xz, zlib
 , libiconv
 , which, libffi
 , withBundledLLVM ? false
@@ -255,7 +255,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ++ optionals fastCross [ lndir makeWrapper ];
 
   buildInputs = [ openssl ]
-    ++ optionals stdenv.isDarwin [ libiconv Security ]
+    ++ optionals stdenv.isDarwin [ libiconv Security zlib ]
     ++ optional (!withBundledLLVM) llvmShared.lib
     ++ optional (useLLVM && !withBundledLLVM) [
       llvmPackages.libunwind
