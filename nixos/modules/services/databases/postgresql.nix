@@ -59,6 +59,31 @@ let
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
+  upgradeScript = let
+    args = {
+      old-bindir = "${cfg.databaseDir}/current/nix-postgresql-bin";
+      old-datadir = "${cfg.databaseDir}/current";
+      new-datadir = cfg.dataDir;
+    };
+  in pkgs.writeShellApplication {
+    name = "upgrade.sh";
+    text = ''
+      if ! [[ -e "${cfg.databaseDir}/current" ]]; then
+        echo "No old data found, assuming fresh deployment"
+        exit 0
+      fi
+
+      if [[ "$(cat "${cfg.databaseDir}/current/PG_VERSION")" == "${postgresql.psqlSchema}" ]]; then
+        echo "Previous major version matches the current one. No upgrade necessary"
+        exit 0
+      fi
+
+      pushd "${cfg.dataDir}"
+      ${postgresql}/bin/pg_upgrade ${lib.cli.toGNUCommandLineShell { } args} ${lib.escapeShellArgs cfg.upgrade.extraArgs}
+      touch .post_upgrade
+    '';
+  };
+
 in
 
 {
@@ -89,9 +114,18 @@ in
         description = "Check the syntax of the configuration file at compile time";
       };
 
+      databaseDir = mkOption {
+        type = types.path;
+        description = ''
+          Version-independent location of the database data directories.
+          Unlike `dataDir`, this value must not contain the postgresql version.
+        '';
+        default = "/var/lib/postgresql";
+      };
+
       dataDir = mkOption {
         type = types.path;
-        defaultText = literalExpression ''"/var/lib/postgresql/''${config.services.postgresql.package.psqlSchema}"'';
+        defaultText = literalExpression ''"''${config.services.postgresql.databaseDir}/''${config.services.postgresql.package.psqlSchema}"'';
         example = "/var/lib/postgresql/15";
         description = ''
           The data directory for PostgreSQL. If left as the default value
@@ -451,7 +485,47 @@ in
           PostgreSQL superuser account to use for various operations. Internal since changing
           this value would lead to breakage while setting up databases.
         '';
+      };
+
+      upgrade = mkOption {
+        type = types.submodule {
+          options = {
+            enable = mkEnableOption "Major version automatic upgrades";
+
+            enablePreviousInstallationAutodetection = lib.mkOption {
+              type = types.bool;
+              description = ''
+                Adds an activation script that tries to detect dataDir and binDir from previous installation using systemctl Environment.
+                The activation script has no effect if "''${cfg.databaseDir}/current" symlink already exists.
+
+                If this option is disabled, you must ensure that the "''${cfg.databaseDir}/current" symlink already exists (e.g. by starting the database at least once without upgrading),
+                otherwise setting newer major release of postgresql will start with empty dataDir.
+                Not setting the option is ok for fresh deployments.
+              '';
+            };
+
+            runAnalyze = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                Whether to run `vacuumdb --all --analyze-in-stages` after an successful upgrade as pg_upgrade suggests.
+              '';
+            };
+
+            extraArgs = mkOption {
+              type = types.listOf types.str;
+              description = ''
+                Additional arguments passed to pg_upgrade.
+                See [pg_upgrade docs]<https://www.postgresql.org/docs/current/pgupgrade.html> for available options.
+              '';
+              default = [ ];
+              example = [ "--link" "--jobs=16" ];
+            };
+          };
         };
+        default = { };
+        description = "Settings related to automatically upgrading major versions";
+      };
     };
 
   };
@@ -460,8 +534,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    assertions = map ({ name, ensureDBOwnership, ... }: {
+    assertions = (map ({ name, ensureDBOwnership, ... }: {
       assertion = ensureDBOwnership -> elem name cfg.ensureDatabases;
       message = ''
         For each database user defined with `services.postgresql.ensureUsers` and
@@ -470,7 +543,28 @@ in
 
         Offender: ${name} has not been found among databases.
       '';
-    }) cfg.ensureUsers;
+    }) cfg.ensureUsers) ++ [
+      {
+        # Note: We don't really need to be versioned _under databaseDir_ can probably we could make this less strict.
+        # However, the requirement for versioned dataDir is necessary.
+        assertion = cfg.upgrade.enable -> cfg.dataDir == "${cfg.databaseDir}/${cfg.package.psqlSchema}";
+        message = ''
+          Automatic postgresql upgrades require dataDir to be versioned under databaseDir.
+
+          Example:
+          ```
+          databaseDir = "/var/lib/postgresql"
+          dataDir     = "/var/lib/postgresql/15"
+          ```
+
+          Current:
+          ```
+          databaseDir = "${cfg.databaseDir}"
+          dataDir     = "${cfg.dataDir}"
+          ```
+        '';
+      }
+    ];
 
     services.postgresql.settings =
       {
@@ -495,7 +589,9 @@ in
       # systems!
       mkDefault (if cfg.enableJIT then base.withJIT else base);
 
-    services.postgresql.dataDir = mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
+    services.postgresql.dataDir = mkDefault "${cfg.databaseDir}/${cfg.package.psqlSchema}";
+
+    services.postgresql.upgrade.enablePreviousInstallationAutodetection = lib.mkDefault (!lib.versionAtLeast config.system.stateVersion "24.11");
 
     services.postgresql.authentication = mkMerge [
       (mkBefore "# Generated file; do not edit!")
@@ -546,8 +642,12 @@ in
               # Initialise the database.
               initdb -U ${cfg.superUser} ${concatStringsSep " " cfg.initdbArgs}
 
-              # See postStart!
-              touch "${cfg.dataDir}/.first_startup"
+              ${optionalString cfg.upgrade.enable (lib.getExe upgradeScript)}
+
+              if ! test -e "${cfg.dataDir}/.post_upgrade"; then
+                # See postStart!
+                touch "${cfg.dataDir}/.first_startup"
+              fi
             fi
 
             ln -sfn "${configFile}/postgresql.conf" "${cfg.dataDir}/postgresql.conf"
@@ -555,6 +655,11 @@ in
               ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
                 "${cfg.dataDir}/recovery.conf"
             ''}
+
+            ln -sfn "${postgresql}/bin" "${cfg.dataDir}/nix-postgresql-bin"
+            if [[ -d "${cfg.databaseDir}" ]]; then
+              ln -sfn "${cfg.dataDir}" "${cfg.databaseDir}/current"
+            fi
           '';
 
         # Wait for PostgreSQL to be ready to accept connections.
@@ -572,6 +677,13 @@ in
                 $PSQL -f "${cfg.initialScript}" -d postgres
               ''}
               rm -f "${cfg.dataDir}/.first_startup"
+            fi
+          '' + optionalString cfg.upgrade.enable ''
+            if test -e "${cfg.dataDir}/.post_upgrade"; then
+              ${optionalString cfg.upgrade.runAnalyze ''
+                vacuumdb --port=${toString cfg.settings.port} --all --analyze-in-stages
+              ''}
+              rm -f "${cfg.dataDir}/.post_upgrade"
             fi
           '' + optionalString (cfg.ensureDatabases != []) ''
             ${concatMapStrings (database: ''
@@ -629,6 +741,48 @@ in
         ];
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";
+      };
+
+      system.activationScripts.detect-previous-postgresql-installation = lib.mkIf (cfg.upgrade.enable && cfg.upgrade.enablePreviousInstallationAutodetection) {
+        deps = [ "etc" ];
+        text = ''
+          previousPgDetect() {
+            echo "Trying to detect prevoius PostgreSQL installation, because 'current' symlink does not exist in 'config.services.postgresql.databaseDir'."
+
+            if [[ ! -x /run/current-system/sw/bin/systemctl ]]; then
+              echo "systemctl binary is missing or is not executable. This is ok on fresh deployments. Not running previous PostgreSQL installation detection."
+              return
+            fi
+
+            prev_postgresql_env="$(/run/current-system/sw/bin/systemctl show postgresql.service --property=Environment --value || true)"
+            if [[ -z "$prev_postgresql_env" ]]; then
+              echo "Cannot load old PostgreSQL Environment from systemctl."
+              return
+            fi
+            old_data_dir="$(export $prev_postgresql_env; echo "''${PGDATA:-}")"
+            if [[ -z "$old_data_dir" ]]; then
+              echo "Cannot detect old PostgreSQL data dir!"
+              return
+            fi
+            old_bin=$(export $prev_postgresql_env; command -v postgres)
+            if [[ -z "$old_bin" ]]; then
+              echo "Cannot detect old PostgreSQL binary!"
+              return
+            fi
+            old_bin_dir=$(dirname "$old_bin")
+
+            echo "Detected old PostgreSQL installation!"
+            echo "Setting old dataDir to '$old_data_dir'"
+            echo "Setting old binDir to '$old_bin_dir'"
+
+            ln -sn "$old_data_dir" "${cfg.databaseDir}/current"
+            ln -sn "$old_bin_dir" "${cfg.databaseDir}/current/nix-postgresql-bin"
+          }
+
+          if [[ ! -e "${cfg.databaseDir}/current" ]]; then
+            previousPgDetect
+          fi
+        '';
       };
 
   };
