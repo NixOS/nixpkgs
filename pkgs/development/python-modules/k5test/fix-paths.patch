@@ -5,13 +5,13 @@
      # if there was no LD_LIBRARY_PATH, or the above failed
      if _PLUGIN_DIR is None:
 -        lib_dir = os.path.join(get_output("krb5-config --prefix"), "lib64")
-+        lib_dir = os.path.join(get_output("@krb5Dev@/bin/krb5-config --prefix"), "lib64")
++        lib_dir = "@krb5Lib@/lib"
          _PLUGIN_DIR = _decide_plugin_dir(_find_plugin_dirs_installed(lib_dir))
  
      # /usr/lib64 seems only to be distinct on Fedora/RHEL/Centos family
      if _PLUGIN_DIR is None:
 -        lib_dir = os.path.join(get_output("krb5-config --prefix"), "lib")
-+        lib_dir = os.path.join(get_output("@krb5Dev@/bin/krb5-config --prefix"), "lib")
++        lib_dir = "@krb5Lib@/lib"
          _PLUGIN_DIR = _decide_plugin_dir(_find_plugin_dirs_installed(lib_dir))
  
      if _PLUGIN_DIR is not None:
@@ -49,7 +49,7 @@
  
          if provider_cls == K5Realm:
 -            krb5_config = _discover_path("krb5-config", "/usr/bin/krb5-config", kwargs)
-+            krb5_config = _discover_path("krb5-config", "@krb5@/bin/krb5-config", kwargs)
++            krb5_config = _discover_path("krb5-config", "@krb5Dev@/bin/krb5-config", kwargs)
  
              try:
                  krb5_version = subprocess.check_output(
@@ -58,7 +58,7 @@
                  # macOS output doesn't contain Heimdal
                  if "heimdal" in krb5_version.lower() or (
 -                    sys.platform == "darwin" and krb5_config == "/usr/bin/krb5-config"
-+                    sys.platform == "darwin" and krb5_config == "@krb5@/bin/krb5-config"
++                    sys.platform == "darwin" and krb5_config == "@krb5Dev@/bin/krb5-config"
                  ):
                      provider_cls = HeimdalRealm
                  else:
