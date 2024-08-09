@@ -2078,6 +2078,10 @@
     sourceRoot = ".";
   };
 
+  yazi-nvim = super.yazi-nvim.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
+  };
+
   YouCompleteMe = super.YouCompleteMe.overrideAttrs {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
