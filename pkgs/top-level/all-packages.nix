@@ -25596,7 +25596,7 @@ with pkgs;
         buildPlatform = old.buildPlatform // { darwinMinVersion = "10.14"; };
         targetPlatform = old.targetPlatform // { darwinMinVersion = "10.14"; };
       }) else
-      if stdenv.cc.isClang then llvmPackages.stdenv else gcc11Stdenv;
+      if stdenv.cc.isClang then llvmPackages.stdenv else gcc12Stdenv;
   };
 
   immudb = callPackage ../servers/nosql/immudb { };
