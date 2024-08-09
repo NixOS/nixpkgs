@@ -5872,6 +5872,8 @@ self: super: with self; {
     inherit (pkgs) igraph;
   };
 
+  ihcsdk = callPackage ../development/python-modules/ihcsdk { };
+
   ihm = callPackage ../development/python-modules/ihm { };
 
   iisignature = callPackage ../development/python-modules/iisignature { };
