@@ -45,6 +45,7 @@ buildPythonPackage rec {
       url = "https://github.com/onnx/onnx/commit/08a399ba75a805b7813ab8936b91d0e274b08287.patch";
       hash = "sha256-9X92N9i/hpQjDGe4I/C+FwUcTUTtP2Nf7+pcTA2sXoA=";
     })
+    ./1.15.0-CVE-2024-5187.patch
   ];
 
   nativeBuildInputs = [
