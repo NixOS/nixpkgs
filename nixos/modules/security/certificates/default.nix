@@ -1,21 +1,32 @@
 # TODO: Make a utility library of common functions that authorities will want.
-{ lib, config, options, pkgs, ... }:
+{
+  lib,
+  config,
+  options,
+  pkgs,
+  ...
+}:
 let
-  inherit (lib) evalModules getAttr mapAttrs mapAttrsToList mkOption types;
+  inherit (lib)
+    evalModules
+    getAttr
+    mapAttrs
+    mapAttrsToList
+    mkOption
+    types
+    ;
   # TODO: option names could probably be changed
   top = options.security.certificates;
 
   # collect all the authorities defined under
   # `security.certificates.authorities` and map to their settings
-  authorities = lib.pipe
-    top.authorities.type.getSubModules
-    [
-      (modules: { inherit modules; })
-      evalModules
-      (getAttr "options")
-      (lib.filterAttrs (name: _: name != "_module"))
-      (mapAttrs (_: value: value.settings or (mkOption { })))
-    ];
+  authorities = lib.pipe top.authorities.type.getSubModules [
+    (modules: { inherit modules; })
+    evalModules
+    (getAttr "options")
+    (lib.filterAttrs (name: _: name != "_module"))
+    (mapAttrs (_: value: value.settings or (mkOption { })))
+  ];
 in
 {
   options.security.certificates = with types; {
@@ -66,28 +77,34 @@ in
       readOnly = true;
     };
   };
-  imports = [ ./local.nix ./vault ];
+  imports = [
+    ./local.nix
+    ./vault
+  ];
   config =
-    let cfg = config.security.certificates;
-    in {
-      assertions = (mapAttrsToList
-        (name: settings: {
+    let
+      cfg = config.security.certificates;
+    in
+    {
+      assertions = (
+        mapAttrsToList (name: settings: {
           assertion = (settings._type or null) == "option";
           message = ''
             security.certificate.authorities.${name}.settings must be declared as
             a option
           '';
-        })
-        authorities);
+        }) authorities
+      );
 
       systemd.targets = {
         certificates = {
-          wants = mapAttrsToList (_: cert: "${cert.service}.service")
-            cfg.specifications;
+          wants = mapAttrsToList (_: cert: "${cert.service}.service") cfg.specifications;
           wantedBy = [ "multi-user.target" ];
         };
       };
     };
 
-  meta = { maintainers = lib.maintainers.MadnessASAP; };
+  meta = {
+    maintainers = lib.maintainers.MadnessASAP;
+  };
 }

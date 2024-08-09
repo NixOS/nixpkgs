@@ -5,14 +5,28 @@ let
       CN = "client.test";
       hosts = [ "www.client.test" ];
     };
-    certificate = { path = "/run/cert.pem"; };
-    private_key = { path = "/run/key.pem"; };
-    ca = { path = "/run/ca.pem"; };
+    certificate = {
+      path = "/run/cert.pem";
+    };
+    private_key = {
+      path = "/run/key.pem";
+    };
+    ca = {
+      path = "/run/ca.pem";
+    };
   };
-  defaults = { pkgs, ... }: {
-    security.certificates.specifications = { inherit testCert; };
-    environment.systemPackages = with pkgs; [ openssl jq jc ];
-  };
+  defaults =
+    { pkgs, ... }:
+    {
+      security.certificates.specifications = {
+        inherit testCert;
+      };
+      environment.systemPackages = with pkgs; [
+        openssl
+        jq
+        jc
+      ];
+    };
   # TODO: Make a more comprehensive test, file permissions, key type, etc?
   testScript = with testCert; ''
     start_all()
@@ -37,30 +51,41 @@ let
     )
   '';
 
-  # TODO: Make a better certificate testing framework for multiple authorities to hook into
 in
+# TODO: Make a better certificate testing framework for multiple authorities to hook into
 {
   local = runTest {
     inherit testScript defaults;
     name = "certificates-local";
-    nodes.machine = { pkgs, ... }: {
-      security.certificates = {
-        authorities.local = { roots.testRoot = { CN = "Test Root CA"; }; };
-        defaultAuthority.local = { root = "testRoot"; };
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        security.certificates = {
+          authorities.local = {
+            roots.testRoot = {
+              CN = "Test Root CA";
+            };
+          };
+          defaultAuthority.local = {
+            root = "testRoot";
+          };
+        };
       };
-    };
   };
   vault = runTest {
     inherit testScript defaults;
     name = "certificate-vault";
     node.pkgsReadOnly = false;
-    nodes.machine = { config, ... }: {
-      nixpkgs.config.allowUnfree = true;
-      security.certificates = {
-        authorities.vault = { server.enable = true; };
-        defaultAuthority.vault =
-          config.security.certificates.authorities.vault.settings;
+    nodes.machine =
+      { config, ... }:
+      {
+        nixpkgs.config.allowUnfree = true;
+        security.certificates = {
+          authorities.vault = {
+            server.enable = true;
+          };
+          defaultAuthority.vault = config.security.certificates.authorities.vault.settings;
+        };
       };
-    };
   };
 }

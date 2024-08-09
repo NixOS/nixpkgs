@@ -1,6 +1,18 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 let
-  inherit (lib) concatStringsSep filterAttrs isPath mapAttrs' mkOption types;
+  inherit (lib)
+    concatStringsSep
+    filterAttrs
+    isPath
+    mapAttrs'
+    mkOption
+    types
+    ;
   top = config.security.certificates;
 in
 {
@@ -16,7 +28,11 @@ in
           };
           vault = {
             protocol = mkOption {
-              type = enum [ "unix" "http" "https" ];
+              type = enum [
+                "unix"
+                "http"
+                "https"
+              ];
               description = ''
                 Protocol to use when connecting to Vault.
               '';
@@ -60,67 +76,78 @@ in
       specs = filterAttrs (_: spec: spec.authority ? vault) top.specifications;
     in
     {
-      systemd.services = mapAttrs'
-        (name:
-          { request, scripts, authority, service, ... }:
-          let
-            inherit (authority) vault;
-            token = "$(cat ${vault.token})";
-            # `authority.vault` is a attrTag and *should* only have one child
-            # attr which *should* be convertible to a string
-            addr = with vault.vault;
-              if (protocol == "unix") then
-                (if (isPath address) then
+      systemd.services = mapAttrs' (
+        name:
+        {
+          request,
+          scripts,
+          authority,
+          service,
+          ...
+        }:
+        let
+          inherit (authority) vault;
+          token = "$(cat ${vault.token})";
+          # `authority.vault` is a attrTag and *should* only have one child
+          # attr which *should* be convertible to a string
+          addr =
+            with vault.vault;
+            if (protocol == "unix") then
+              (
+                if (isPath address) then
                   "--unix-socket ${address} http://unix"
                 else
-                  abort
-                    "Vault protocol is unix but address ${address} is not a valid path")
-              else
-                "${protocol}://${address}:${toString port}";
-            endpoint = "${addr}/v1/pki/sign/${vault.role}";
-            curlFlags = concatStringsSep " " [
-              "--silent"
-              "--show-error"
-              "--header"
-              ("X-Vault-Token:${token}")
-              "--request"
-              "POST"
+                  abort "Vault protocol is unix but address ${address} is not a valid path"
+              )
+            else
+              "${protocol}://${address}:${toString port}";
+          endpoint = "${addr}/v1/pki/sign/${vault.role}";
+          curlFlags = concatStringsSep " " [
+            "--silent"
+            "--show-error"
+            "--header"
+            ("X-Vault-Token:${token}")
+            "--request"
+            "POST"
+          ];
+        in
+        {
+          name = service;
+          value = {
+            path = with pkgs; [
+              curl
+              coreutils
+              jq
             ];
-          in
-          {
-            name = service;
-            value = {
-              path = with pkgs; [ curl coreutils jq ];
-              serviceConfig = {
-                Type = "oneshot";
-                RemainAfterExit = "true";
-                RuntimeDirectory = "certificate/${name}";
-                WorkingDirectory = "%t/certificate/${name}";
-                ExecStartPost =
-                  [ "+${scripts.install} ./key.pem ./crt.pem ./ca.pem" ];
-              };
-              script = ''
-                KEY=./key.pem
-                CSR=./csr.pem
-                ${scripts.key} > $KEY
-                ${scripts.csr} < $KEY > $CSR
-                DATA=$(jq -n -c --rawfile CSR $CSR '{"csr":$CSR}')
-                curl --data "$DATA" ${curlFlags} ${endpoint} > cert.json
-                if jq -e 'has("errors")' < cert.json > /dev/null; then
-                  echo '<3>Certificate request failed with:'
-                  jq -r '.errors | map("<3>  " + .)[]' < cert.json
-                  exit 1
-                fi
-                if jq -e 'has("warnings")' < cert.json > /dev/null; then
-                  echo '<4>Certificate created with warnings:'
-                  jq -r '.warnings | map("<4>  " + .)[]' < cert.json
-                fi
-                jq -r .data.certificate < cert.json > crt.pem
-                jq -r .data.issuing_ca < cert.json > ca.pem
-              '';
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = "true";
+              RuntimeDirectory = "certificate/${name}";
+              WorkingDirectory = "%t/certificate/${name}";
+              ExecStartPost = [ "+${scripts.install} ./key.pem ./crt.pem ./ca.pem" ];
             };
-          })
-        specs;
+            script = ''
+              KEY=./key.pem
+              CSR=./csr.pem
+              ${scripts.key} > $KEY
+              ${scripts.csr} < $KEY > $CSR
+              DATA=$(jq -n -c --rawfile CSR $CSR '{"csr":$CSR}')
+              curl --data "$DATA" ${curlFlags} ${endpoint} > cert.json
+              if jq -e 'has("errors")' < cert.json > /dev/null; then
+                echo '<3>Certificate request failed with:'
+                jq -r '.errors | map("<3>  " + .)[]' < cert.json
+                exit 1
+              fi
+              if jq -e 'has("warnings")' < cert.json > /dev/null; then
+                echo '<4>Certificate created with warnings:'
+                jq -r '.warnings | map("<4>  " + .)[]' < cert.json
+              fi
+              jq -r .data.certificate < cert.json > crt.pem
+              jq -r .data.issuing_ca < cert.json > ca.pem
+            '';
+          };
+        }
+      ) specs;
     };
   imports = [ ./server.nix ];
 }

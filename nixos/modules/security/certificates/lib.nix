@@ -9,7 +9,8 @@ let
     listToAttrs
     mapAttrsToList
     mergeAttrsList
-    pipe;
+    pipe
+    ;
 in
 {
   openssl = rec {
@@ -27,10 +28,12 @@ in
       toMultiValueShort :: [string] -> string
       ```
     */
-    toMultiValShort = list:
-      if any (lib.hasInfix ",") list
-      then abort "toMultiValShort called with a string containing ','"
-      else concatStringsSep "," list;
+    toMultiValShort =
+      list:
+      if any (lib.hasInfix ",") list then
+        abort "toMultiValShort called with a string containing ','"
+      else
+        concatStringsSep "," list;
 
     /**
       OpenSSL multi-value long form
@@ -50,13 +53,14 @@ in
       toMultiValueLong :: string -> [string] -> AttrSet
       ```
     */
-    toMultiValLong = name: list:
-      listToAttrs (imap1
-        (i: val: {
+    toMultiValLong =
+      name: list:
+      listToAttrs (
+        imap1 (i: val: {
           name = "${name}.${toString i}";
           value = toString val;
-        })
-        list);
+        }) list
+      );
 
     /**
       OpenSSL multi-value section
@@ -73,14 +77,11 @@ in
       toMultiVals :: AttrSet -> AttrSet
       ```
     */
-    toMultiVals = attrs:
+    toMultiVals =
+      attrs:
       pipe attrs [
-        (mapAttrsToList (name: value:
-          if (isList value) then
-            (toMultiValLong name value)
-          else {
-            ${name} = value;
-          }
+        (mapAttrsToList (
+          name: value: if (isList value) then (toMultiValLong name value) else { ${name} = value; }
         ))
         mergeAttrsList
       ];
@@ -105,16 +106,19 @@ in
       toConfigFile :: AttrSet -> AttrSet
       ```
     */
-    toConfigFile = with lib.generators; {}: toINI {
-      mkKeyValue = mkKeyValueDefault
-        {
-          mkValueString = v:
-            if (lib.isList v)
-            then toMultiValShort (map (mkValueStringDefault { }) v)
-            else mkValueStringDefault { } v;
-        }
-        "=";
-    };
+    toConfigFile =
+      with lib.generators;
+      { }:
+      toINI {
+        mkKeyValue = mkKeyValueDefault {
+          mkValueString =
+            v:
+            if (lib.isList v) then
+              toMultiValShort (map (mkValueStringDefault { }) v)
+            else
+              mkValueStringDefault { } v;
+        } "=";
+      };
     /**
       OpenSSL shell command
 
@@ -132,13 +136,7 @@ in
       toShell :: string -> AttrSet -> string
       ```
     */
-    toShell = cmd: args:
-      "openssl ${cmd} ${
-        lib.cli.toGNUCommandLineShell
-          {
-            mkOptionName = k: "-${k}";
-          }
-          args
-      }";
+    toShell =
+      cmd: args: "openssl ${cmd} ${lib.cli.toGNUCommandLineShell { mkOptionName = k: "-${k}"; } args}";
   };
 }

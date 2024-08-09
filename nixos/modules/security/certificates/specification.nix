@@ -1,8 +1,28 @@
-{ lib, config, pkgs, name, authorities, defaultAuthority, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  name,
+  authorities,
+  defaultAuthority,
+  ...
+}:
 let
   inherit (lib)
-    attrNames concatLines elemAt escapeShellArg imap1 isList listToAttrs
-    mapAttrsToList mergeAttrsList optional pipe mkOption types;
+    attrNames
+    concatLines
+    elemAt
+    escapeShellArg
+    imap1
+    isList
+    listToAttrs
+    mapAttrsToList
+    mergeAttrsList
+    optional
+    pipe
+    mkOption
+    types
+    ;
   lib-cert = import ./lib.nix { inherit lib; };
   # Module of options for generated certificate files
   file = with types; {
@@ -144,8 +164,7 @@ in
       description = ''
         Authority used to provide the certificate.
       '';
-      defaultText = lib.literalExpression
-        "config.security.certificates.defaultAuthority";
+      defaultText = lib.literalExpression "config.security.certificates.defaultAuthority";
       default = defaultAuthority;
     };
 
@@ -174,20 +193,18 @@ in
     # Internal options for use by authorities
     openssl = {
       config = mkOption {
-        type = attrsOf (attrsOf (
-          oneOf [
+        type = attrsOf (
+          attrsOf (oneOf [
             bool
             number
             str
-            (listOf (
-              oneOf [
-                bool
-                number
-                str
-              ]
-            ))
-          ]
-        ));
+            (listOf (oneOf [
+              bool
+              number
+              str
+            ]))
+          ])
+        );
         description = ''
           The resultant CSR structures as a OpenSSL config file. suitable for
           passing to `openssl req`.
@@ -251,8 +268,7 @@ in
 
   config =
     let
-      openssl = cmd: args:
-        "${pkgs.openssl}/bin/${lib-cert.openssl.toShell cmd args}";
+      openssl = cmd: args: "${pkgs.openssl}/bin/${lib-cert.openssl.toShell cmd args}";
     in
     {
       openssl = {
@@ -269,16 +285,20 @@ in
               req_extensions = extSect;
             };
             # Distinguished Name
-            ${dnSect} = { inherit (config.request) CN; } // config.request.names;
+            ${dnSect} = {
+              inherit (config.request) CN;
+            } // config.request.names;
             # Extensions
-            ${extSect} = { subjectAltName = "@${sanSect}"; };
+            ${extSect} = {
+              subjectAltName = "@${sanSect}";
+            };
             # Subject Alternative Names
             ${sanSect} = lib-cert.openssl.toMultiVals config.request.hosts;
           };
 
-        configFile = pkgs.writeText
-          "${name}-openssl.cnf"
-          (lib-cert.openssl.toConfigFile { } config.openssl.config);
+        configFile = pkgs.writeText "${name}-openssl.cnf" (
+          lib-cert.openssl.toConfigFile { } config.openssl.config
+        );
       };
       scripts = {
         csr = pkgs.writeShellScript "${name}-mkcsr" (
@@ -295,50 +315,53 @@ in
           let
             inherit (config.request) key;
           in
-          if (key ? rsa)
-          then
-            openssl "genpkey"
-              {
-                outform = "PEM";
-                algorithm = "RSA";
-                pkeyopt = "rsa_keygen_bits:${toString key.rsa.size}";
-              }
-          else if (key ? ecdsa)
-          then
-            openssl "ecparam"
-              {
-                outform = "PEM";
-                name = key.ecdsa.curve;
-                genkey = true;
-              }
+          if (key ? rsa) then
+            openssl "genpkey" {
+              outform = "PEM";
+              algorithm = "RSA";
+              pkeyopt = "rsa_keygen_bits:${toString key.rsa.size}";
+            }
+          else if (key ? ecdsa) then
+            openssl "ecparam" {
+              outform = "PEM";
+              name = key.ecdsa.curve;
+              genkey = true;
+            }
           else
             abort "Unknown key type: ${elemAt (attrNames key) 0}"
         );
 
         install = pkgs.writeShellScript "${name}-install" (
           let
-            install = src:
-              { path, owner ? "$(id -u)", group ? "$(id -g)", mode ? "0600" }:
+            install =
+              src:
+              {
+                path,
+                owner ? "$(id -u)",
+                group ? "$(id -g)",
+                mode ? "0600",
+              }:
               "${pkgs.coreutils}/bin/install ${
-                  lib.cli.toGNUCommandLineShell {} {
-                    inherit owner group mode;
-                    D = true;
-                    verbose = true;
-                    compare = true;
-                  }
-                } ${src} ${escapeShellArg path}";
+                lib.cli.toGNUCommandLineShell { } {
+                  inherit owner group mode;
+                  D = true;
+                  verbose = true;
+                  compare = true;
+                }
+              } ${src} ${escapeShellArg path}";
           in
-          concatLines ([
-            ''
-              PKEY=''${1:-/dev/null}
-              CERT=''${2:-/dev/null}
-              CA=''${3:-/dev/null}
-            ''
-          ] ++ (optional (config ? private_key)
-            (install "$PKEY" config.private_key))
-          ++ (optional (config ? private_key)
-            (install "$CERT" config.certificate))
-          ++ (optional (config ? ca) (install "$CA" config.ca)))
+          concatLines (
+            [
+              ''
+                PKEY=''${1:-/dev/null}
+                CERT=''${2:-/dev/null}
+                CA=''${3:-/dev/null}
+              ''
+            ]
+            ++ (optional (config ? private_key) (install "$PKEY" config.private_key))
+            ++ (optional (config ? private_key) (install "$CERT" config.certificate))
+            ++ (optional (config ? ca) (install "$CA" config.ca))
+          )
         );
       };
     };

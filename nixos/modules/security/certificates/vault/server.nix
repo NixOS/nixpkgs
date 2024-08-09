@@ -1,6 +1,19 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 let
-  inherit (lib) filterAttrs mapAttrsToList mkIf mkMerge mkOption pipe types;
+  inherit (lib)
+    filterAttrs
+    mapAttrsToList
+    mkIf
+    mkMerge
+    mkOption
+    pipe
+    types
+    ;
   top = config.security.certificates;
   cfg = top.authorities.vault;
   addr = "http://127.0.0.1:8200";
@@ -44,12 +57,17 @@ in
           after = [ "vault.service" ];
           before = requiredBy;
 
-          path = with pkgs; [ getent vault ];
+          path = with pkgs; [
+            getent
+            vault
+          ];
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
           };
-          environment = { VAULT_ADDR = addr; };
+          environment = {
+            VAULT_ADDR = addr;
+          };
           script = ''
             echo Configuring Vault PKI Server
             export VAULT_TOKEN=$(cat ${token})
@@ -79,8 +97,7 @@ in
     })
     # Split this part out to prevent an inf-rec
     {
-      security.certificates.authorities.vault.settings =
-        mkIf (cfg.server.enable) { inherit token role; };
+      security.certificates.authorities.vault.settings = mkIf (cfg.server.enable) { inherit token role; };
     }
   ];
 }

@@ -1,9 +1,22 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   inherit (pkgs) writeText;
   inherit (lib)
-    concatStringsSep escapeShellArg filterAttrs mapAttrs mapAttrsToList mkMerge
-    mkOption pipe types;
+    concatStringsSep
+    escapeShellArg
+    filterAttrs
+    mapAttrs
+    mapAttrsToList
+    mkMerge
+    mkOption
+    pipe
+    types
+    ;
   lib-cert = import ./lib.nix { inherit lib; };
   toOpenSSLShell = lib-cert.openssl.toShell;
   cfg = config.security.certificates.authorities.local;
@@ -31,7 +44,11 @@ in
         description = ''
           Certificate Authority roots to generate for signing certificates.
         '';
-        default = { default = { CN = "Self Signed CA"; }; };
+        default = {
+          default = {
+            CN = "Self Signed CA";
+          };
+        };
       };
       settings = mkOption {
         type = submodule modules.settings;
@@ -46,21 +63,23 @@ in
   config =
     let
       # config sections for defined CA roots
-      rootsConfig = mapAttrs
-        (name: root:
-          let dir = "$ENV::STATE_DIRECTORY/${name}";
-          in {
-            certificate = "${dir}/ca.cert.pem";
-            private_key = "${dir}/ca.key.pem";
-            database = "${dir}/index.txt";
-            serial = "${dir}/serial";
-            new_certs_dir = "${dir}";
-            policy = "policy_default";
-            default_md = "sha256";
-            default_days = 365;
-            copy_extensions = "copy";
-          })
-        cfg.roots;
+      rootsConfig = mapAttrs (
+        name: root:
+        let
+          dir = "$ENV::STATE_DIRECTORY/${name}";
+        in
+        {
+          certificate = "${dir}/ca.cert.pem";
+          private_key = "${dir}/ca.key.pem";
+          database = "${dir}/index.txt";
+          serial = "${dir}/serial";
+          new_certs_dir = "${dir}";
+          policy = "policy_default";
+          default_md = "sha256";
+          default_days = 365;
+          copy_extensions = "copy";
+        }
+      ) cfg.roots;
       # config for signing certificates
       authorityConfig = {
         ca.default_ca = cfg.settings.root;
@@ -88,13 +107,14 @@ in
           ];
         };
       } // rootsConfig;
-      opensslCnf = writeText
-        "cert-local-config"
-        (lib-cert.openssl.toConfigFile { } authorityConfig);
+      opensslCnf = writeText "cert-local-config" (lib-cert.openssl.toConfigFile { } authorityConfig);
       # base service config
       baseService = {
         wantedBy = [ "multi-user.target" ];
-        path = [ pkgs.openssl pkgs.util-linux ];
+        path = [
+          pkgs.openssl
+          pkgs.util-linux
+        ];
         serviceConfig = rec {
           User = "cert-local";
           DynamicUser = true;
@@ -108,38 +128,42 @@ in
     {
       systemd.services = mkMerge (
         # Generate all local roots
-        (mapAttrsToList
-          (name: root: {
-            "certificate-local@${name}" = mkMerge [
-              baseService
-              {
-                description = "Generates CA roots for ";
-                script = ''
-                  mkdir -m 0700 -p ./${name}
-                  touch ./${name}/index.txt
-                  echo 00 > ./${name}/serial
-                  ${toOpenSSLShell "req" {
-                    config = opensslCnf;
-                    x509 = true;
-                    nodes = true;
-                    days = 365;
-                    newkey = "rsa:2048";
-                    keyout = "${name}/ca.key.pem";
-                    out = "${name}/ca.cert.pem";
-                    subj = "/CN=${root.CN}";
-                  }}
-                '';
-              }
-            ];
-          })
-          cfg.roots)
+        (mapAttrsToList (name: root: {
+          "certificate-local@${name}" = mkMerge [
+            baseService
+            {
+              description = "Generates CA roots for ";
+              script = ''
+                mkdir -m 0700 -p ./${name}
+                touch ./${name}/index.txt
+                echo 00 > ./${name}/serial
+                ${toOpenSSLShell "req" {
+                  config = opensslCnf;
+                  x509 = true;
+                  nodes = true;
+                  days = 365;
+                  newkey = "rsa:2048";
+                  keyout = "${name}/ca.key.pem";
+                  out = "${name}/ca.cert.pem";
+                  subj = "/CN=${root.CN}";
+                }}
+              '';
+            }
+          ];
+        }) cfg.roots)
         # Generate requested certificates
         ++ (pipe config.security.certificates.specifications [
           # Get only the specifications with local as the authority
           (filterAttrs (_: spec: spec.authority ? local))
           # Generate services to create the certificates
-          (mapAttrsToList (name:
-            { authority, service, scripts, ... }:
+          (mapAttrsToList (
+            name:
+            {
+              authority,
+              service,
+              scripts,
+              ...
+            }:
             let
               inherit (authority.local) root;
               path = file: escapeShellArg "./${name}/${file}";
@@ -167,13 +191,12 @@ in
                     ${scripts.key} > ${key}
                     ${scripts.csr} < ${key} | flock ./lock ${signRequest} > ${crt}
                   '';
-                  serviceConfig.ExecStartPost =
-                    [ "+${scripts.install} ${key} ${crt} ${ca}" ];
+                  serviceConfig.ExecStartPost = [ "+${scripts.install} ${key} ${crt} ${ca}" ];
                 }
               ];
-            }))
+            }
+          ))
         ])
       );
     };
 }
-
