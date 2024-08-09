@@ -91,7 +91,7 @@ let
             && (p == "clang/purity.patch" || p == "libunwind/gnu-install-dirs.patch")
           then
             ../15/${p}
-          else if p == "compiler-rt/X86-support-extension.patch" then
+          else if p == "compiler-rt/X86-support-extension.patch" || p == "lldb/procfs.patch" then
             (if lib.versionAtLeast release_version "15" then ../15/${p} else ../12/${p})
           else if
             lib.versionAtLeast release_version "13"
@@ -102,7 +102,11 @@ let
           else if p == "compiler-rt/gnu-install-dirs.patch" && lib.versionAtLeast release_version "15" then
             (if lib.versionAtLeast release_version "15" then ../15/${p} else ../12/${p})
           else if
-            (p == "compiler-rt/darwin-targetconditionals.patch" || p == "compiler-rt/codesign.patch")
+            (
+              p == "compiler-rt/darwin-targetconditionals.patch"
+              || p == "compiler-rt/codesign.patch"
+              || p == "lldb/cpu_subtype_arm64e_replacement.patch"
+            )
             && lib.versionAtLeast release_version "13"
           then
             ../13/${p}
@@ -111,7 +115,10 @@ let
             && (p == "lld/add-table-base.patch" || p == "compiler-rt/normalize-var.patch")
           then
             ../16/${p}
-          else if lib.versionOlder release_version "16" && p == "compiler-rt/normalize-var.patch" then
+          else if
+            lib.versionOlder release_version "16"
+            && (p == "compiler-rt/normalize-var.patch" || p == "lldb/resource-dir.patch")
+          then
             ../12/${p}
           else if lib.versionOlder release_version "14" && p == "lld/gnu-install-dirs.patch" then
             ../12/${p}
