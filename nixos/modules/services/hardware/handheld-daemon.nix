@@ -11,6 +11,11 @@ in
     enable = mkEnableOption "Handheld Daemon";
     package = mkPackageOption pkgs "handheld-daemon" { };
 
+    ui = {
+      enable = mkEnableOption "Handheld Daemon UI";
+      package = mkPackageOption pkgs "handheld-daemon-ui" { };
+    };
+
     user = mkOption {
       type = types.str;
       description = ''
@@ -20,7 +25,11 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    services.handheld-daemon.ui.enable = mkDefault true;
+    environment.systemPackages = [
+      cfg.package
+      (mkIf cfg.ui.enable cfg.ui.package)
+    ];
     services.udev.packages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
 
@@ -30,6 +39,11 @@ in
       wantedBy = [ "multi-user.target" ];
 
       restartIfChanged = true;
+
+      path = mkIf cfg.ui.enable [
+        pkgs.handheld-daemon-ui
+        pkgs.lsof
+      ];
 
       serviceConfig = {
         ExecStart = "${ lib.getExe cfg.package } --user ${ cfg.user }";
