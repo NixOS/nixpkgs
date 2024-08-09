@@ -35833,6 +35833,8 @@ with pkgs;
 
   forge-mtg = callPackage ../games/forge-mtg { };
 
+  freecad-wayland = freecad.override { withWayland = true; };
+
   freeciv = callPackage ../games/freeciv {
     sdl2Client = false;
     gtkClient = true;
