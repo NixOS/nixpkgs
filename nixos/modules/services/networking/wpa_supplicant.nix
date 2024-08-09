@@ -517,8 +517,8 @@ in {
 
     hardware.wirelessRegulatoryDatabase = true;
 
-    environment.systemPackages = [ package ];
-    services.dbus.packages = optional cfg.dbusControlled package;
+    environment.systemPackages = [ pkgs.wpa_supplicant ];
+    services.dbus.packages = optional cfg.dbusControlled pkgs.wpa_supplicant;
 
     systemd.services =
       if cfg.interfaces == []
