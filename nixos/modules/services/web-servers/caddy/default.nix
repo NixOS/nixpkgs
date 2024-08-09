@@ -96,6 +96,15 @@ in
 
     package = mkPackageOption pkgs "caddy" { };
 
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/root/caddy-secrets.env";
+      description = ''
+        Environment file to inject e.g. secrets into the configuration.
+      '';
+    };
+
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/caddy";
@@ -366,6 +375,7 @@ in
         ExecStart = [ "" ''${cfg.package}/bin/caddy run ${runOptions} ${optionalString cfg.resume "--resume"}'' ];
         # Validating the configuration before applying it ensures we’ll get a proper error that will be reported when switching to the configuration
         ExecReload = [ "" ] ++ lib.optional cfg.enableReload "${lib.getExe cfg.package} reload ${runOptions} --force";
+        EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
         User = cfg.user;
         Group = cfg.group;
         ReadWritePaths = [ cfg.dataDir ];
