@@ -9,6 +9,8 @@
 , knownVulnerabilities ? [ ]
 , CoreServices ? null
 , Security ? null
+, System ? null
+, Libsystem ? null
 , ...
 }:
 
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python3 ];
   buildInputs = [ bzip2 zlib gmp boost ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Security System Libsystem ];
 
   configurePhase = ''
     runHook preConfigure
