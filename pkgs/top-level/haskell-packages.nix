@@ -595,9 +595,10 @@ in {
             ghc = bh.compiler.integer-simple.${name};
             buildHaskellPackages = bh.packages.integer-simple.${name};
             overrides =
-              pkgs.lib.composeExtensions
+              pkgs.lib.composeManyExtensions [
                 (oldAttrs.overrides or (_: _: {}))
-                (_: _: { integer-simple = null; });
+                (_: _: { integer-simple = null; })
+              ];
           })
         );
 

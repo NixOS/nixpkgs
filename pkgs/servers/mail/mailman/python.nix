@@ -2,8 +2,9 @@
 
 lib.fix (self: python3.override {
   inherit self;
-  packageOverrides = lib.composeExtensions
-    (self: super: {
+  packageOverrides = lib.composeManyExtensions
+    [
+      (self: super: {
       /*
         This overlay can be used whenever we need to override
         dependencies specific to the mailman ecosystem: in the past
@@ -29,7 +30,7 @@ lib.fix (self: python3.override {
           hash = "sha256-WF3FFrnrBCphnvCjnD19Vf6BvbTfCaUsnN3g0Hvxqn0=";
         };
       });
-    })
-
-    overlay;
+      })
+      overlay
+    ];
 })
