@@ -4,9 +4,21 @@
 
 let
   inherit (pkgs) lib darwin;
-in
 
-with haskellLib;
+  inherit (haskellLib)
+    addBuildDepend
+    addExtraLibraries
+    addExtraLibrary
+    addPkgconfigDepends
+    addTestToolDepends
+    appendConfigureFlag
+    appendPatch
+    disableCabalFlag
+    doCheck
+    dontCheck
+    overrideCabal
+    ;
+in
 
 self: super: ({
 
