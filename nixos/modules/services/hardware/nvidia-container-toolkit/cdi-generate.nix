@@ -1,4 +1,5 @@
 {
+  deviceNameStrategy,
   glibc,
   jq,
   lib,
@@ -25,6 +26,7 @@ writeScriptBin "nvidia-cdi-generator"
 function cdiGenerate {
   ${lib.getExe' nvidia-container-toolkit "nvidia-ctk"} cdi generate \
     --format json \
+    --device-name-strategy ${deviceNameStrategy} \
     --ldconfig-path ${lib.getExe' glibc "ldconfig"} \
     --library-search-path ${lib.getLib nvidia-driver}/lib \
     --nvidia-ctk-path ${lib.getExe' nvidia-container-toolkit "nvidia-ctk"}
