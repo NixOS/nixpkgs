@@ -88,6 +88,7 @@ let
               || p == "llvm/gnu-install-dirs.patch"
               || p == "llvm/gnu-install-dirs-polly.patch"
               || p == "llvm/lit-shell-script-runner-set-dyld-library-path.patch"
+              || p == "libcxx/0001-darwin-10.12-mbstate_t-fix.patch"
             )
           then
             ../18/${p}
@@ -131,7 +132,11 @@ let
             ../16/${p}
           else if
             lib.versionOlder release_version "16"
-            && (p == "compiler-rt/normalize-var.patch" || p == "lldb/resource-dir.patch")
+            && (
+              p == "compiler-rt/normalize-var.patch"
+              || p == "lldb/resource-dir.patch"
+              || p == "clang/purity.patch"
+            )
           then
             ../12/${p}
           else if lib.versionOlder release_version "14" && p == "lld/gnu-install-dirs.patch" then
@@ -146,13 +151,8 @@ let
             ../14/${p}
           else if
             lib.versionAtLeast release_version "16"
-            && (
-              (
-                lib.versionOlder release_version "18"
-                && p == "llvm/lit-shell-script-runner-set-dyld-library-path.patch"
-              )
-              || p == "openmp/run-lit-directly.patch"
-            )
+            && lib.versionOlder release_version "18"
+            && p == "llvm/lit-shell-script-runner-set-dyld-library-path.patch"
           then
             ../16/${p}
           else if
