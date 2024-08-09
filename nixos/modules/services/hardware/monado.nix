@@ -15,6 +15,10 @@ in
 
     package = mkPackageOption pkgs "monado" { };
 
+    layersPackage = mkPackageOption pkgs "monado-vulkan-layers" {};
+
+    hardwarePackage = mkPackageOption pkgs "xr-hardware" {};
+
     defaultRuntime = mkOption {
       type = types.bool;
       description = ''
@@ -41,7 +45,7 @@ in
       source = lib.getExe' cfg.package "monado-service";
     };
 
-    services.udev.packages = with pkgs; [ xr-hardware ];
+    services.udev.packages = [ cfg.hardwarePackage ];
 
     systemd.user = {
       services.monado = {
@@ -92,6 +96,8 @@ in
 
     environment.systemPackages = [ cfg.package ];
     environment.pathsToLink = [ "/share/openxr" ];
+
+    hardware.opengl.extraPackages = [ cfg.layersPackage ];
 
     environment.etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {
       source = "${cfg.package}/share/openxr/1/openxr_monado.json";
