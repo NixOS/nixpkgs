@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pycddl";
   version = "0.6.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
