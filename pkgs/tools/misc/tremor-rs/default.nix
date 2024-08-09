@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   # tests failed on x86_64-darwin with SIGILL: illegal instruction
-  doCheck = !(stdenv.system == "x86_64-darwin");
+  doCheck = stdenv.system != "x86_64-darwin";
 
   checkFlags = [
     # all try to make a network access
