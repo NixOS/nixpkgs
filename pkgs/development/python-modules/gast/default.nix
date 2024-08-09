@@ -5,21 +5,24 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "gast";
-  version = "0.5.3";
-  format = "setuptools";
+  version = "0.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
-    repo = pname;
+    repo = "gast";
     rev = version;
-    hash = "sha256-0y2bHT7YEfTvDxTm6yLl3GmnPUYEieoGEnwkzfA6mOg=";
+    hash = "sha256-zrbxW8qWhCY6tObP+/WDReoCnlCpMEzQucX2inpRTL4=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     astunparse
