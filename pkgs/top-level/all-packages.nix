@@ -24598,11 +24598,6 @@ with pkgs;
 
   smack = callPackage ../development/libraries/java/smack { };
 
-  swt_jdk8 = callPackage ../by-name/sw/swt/package.nix {
-    jdk = jdk8;
-  };
-
-
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
   nodehun = callPackage ../development/tools/nodehun { };
@@ -34185,10 +34180,7 @@ with pkgs;
 
   tuxedo-rs = callPackage ../os-specific/linux/tuxedo-rs { };
 
-  tuxguitar = callPackage ../applications/editors/music/tuxguitar {
-    jre = jre8;
-    swt = swt_jdk8;
-  };
+  tuxguitar = callPackage ../applications/editors/music/tuxguitar { };
 
   twmn = libsForQt5.callPackage ../applications/misc/twmn { };
 
