@@ -1,37 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, libtool
-, zlib
-, pkg-config
-, openssl
-, freetype
-, expat
+{
+  lib,
+  stdenv,
+  libsForQt5,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  openssl,
+  expat,
+  enableGui ? true,
 }:
-
 stdenv.mkDerivation rec {
+
   pname = "ophcrack";
   version = "3.8.0";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/ophcrack/files/ophcrack/3.8.0/ophcrack-3.8.0.tar.bz2";
+    url = "mirror://ophcrack/ophcrack/${version}/ophcrack-${version}.tar.bz2";
     hash = "sha256-BIpt9XmDo6WjGsfE7BLfFqpJ5lKilnbZPU75WdUK7uA=";
   };
-
-  nativeBuildInputs = [
-    autoreconfHook
-    libtool
-    expat
-  ];
-
-  buildInputs = [
-    zlib
-    openssl
-    freetype
-    pkg-config
-  ];
 
   patches = [
     (fetchpatch {
@@ -44,30 +30,31 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [
-    "--with-libssl=yes"
-    "--disable-gui"
-  ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optional enableGui libsForQt5.wrapQtAppsHook;
+  buildInputs =
+    [ openssl ]
+    ++ (if enableGui then [ libsForQt5.qtcharts ] else [ expat ]) ++ lib.optional stdenv.isDarwin expat;
 
-  buildPhase = ''
-    runHook preBuild
+  configureFlags =
+    [
+      "--with-libssl"
+    ]
+    ++ (
+      if enableGui then
+        [
+          "--enable-gui"
+          "--with-qt5charts"
+        ]
+      else
+        [ "--disable-gui" ]
+    );
 
-    make
-
-    runHook postBuild
-  '';
-
-  postInstall = ''
-    mv $out/bin/ophcrack $out/bin/ophcrack-cli
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Free Windows password cracker based on rainbow tables";
     homepage = "https://ophcrack.sourceforge.io";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ tochiaha ];
-    mainProgram = "ophcrack-cli";
-    platforms = platforms.all;
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ tochiaha ];
+    mainProgram = "ophcrack";
+    platforms = lib.platforms.all;
   };
 }
-
