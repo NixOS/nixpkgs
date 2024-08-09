@@ -4,11 +4,11 @@
   writeText,
   symlinkJoin,
   targetPlatform,
-  hostPlatform,
+  buildPlatform,
   darwin,
   clang,
   llvm,
-  tools ? callPackage ./tools.nix { inherit hostPlatform; },
+  tools ? callPackage ./tools.nix { inherit buildPlatform; },
   stdenv,
   stdenvNoCC,
   dart,
@@ -44,7 +44,7 @@
   patches,
   url,
   runtimeMode ? "release",
-  isOptimized ? true,
+  isOptimized ? runtimeMode != "debug",
 }:
 with lib;
 let
@@ -53,14 +53,17 @@ let
 
   expandDeps = deps: flatten (map expandSingleDep deps);
 
-  constants = callPackage ./constants.nix { inherit targetPlatform; };
+  constants = callPackage ./constants.nix { platform = targetPlatform; };
 
   src = callPackage ./source.nix {
     inherit
       tools
+      flutterVersion
       version
       hashes
       url
+      targetPlatform
+      buildPlatform
       ;
   };
 
@@ -82,7 +85,7 @@ let
     ];
   };
 
-  outName = "host_${runtimeMode}${lib.optionalString (!isOptimized) "_unopt --unoptimized"}";
+  outName = "host_${runtimeMode}${lib.optionalString (!isOptimized) "_unopt"}";
 
   dartPath = "${if (lib.versionAtLeast flutterVersion "3.23") then "flutter/third_party" else "third_party"}/dart";
 in
@@ -97,6 +100,9 @@ stdenv.mkDerivation (finalAttrs: {
     src
     outName
     swiftshader;
+
+  setOutputFlags = false;
+  doStrip = isOptimized;
 
   toolchain = symlinkJoin {
     name = "flutter-engine-toolchain-${version}";
@@ -146,7 +152,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  NIX_CFLAGS_COMPILE = "-I${finalAttrs.toolchain}/include";
+  NIX_CFLAGS_COMPILE = [ "-I${finalAttrs.toolchain}/include" ]
+    ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE";
 
   nativeCheckInputs = lib.optionals stdenv.isLinux [ xorg.xorgserver openbox ];
 
@@ -170,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ gtk3 ];
 
   patchtools = [
-    "${dartPath}/tools/sdks/dart-sdk/bin/dart"
     "flutter/third_party/gn/gn"
   ];
 
@@ -195,6 +201,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p src/flutter/buildtools/${constants.alt-platform}
     ln -s ${llvm} src/flutter/buildtools/${constants.alt-platform}/clang
 
+    mkdir -p src/buildtools/${constants.alt-platform}
+    ln -s ${llvm} src/buildtools/${constants.alt-platform}/clang
+
     ln -s ${dart} src/${dartPath}/tools/sdks/dart-sdk
 
     ${lib.optionalString (stdenv.isLinux) ''
@@ -205,13 +214,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     for dir in ''${patchgit[@]}; do
       pushd src/$dir
-      rev=$(cat .git/HEAD)
       rm -rf .git
       git init
       git add .
       git config user.name "nobody"
       git config user.email "nobody@local.host"
-      git commit -a -m "$rev" --quiet
+      git commit -a -m "$dir" --quiet
       popd
     done
 
@@ -236,11 +244,11 @@ stdenv.mkDerivation (finalAttrs: {
       "--no-prebuilt-dart-sdk"
       "--embedder-for-target"
       "--no-goma"
-    ]
-    ++ optionals (targetPlatform.isx86_64 == false) [
+    ] ++ lib.optionals (targetPlatform.isx86_64 == false) [
       "--linux"
       "--linux-cpu ${constants.alt-arch}"
-    ];
+    ] ++ lib.optional (!isOptimized) "--unoptimized"
+      ++ lib.optional (runtimeMode == "debug") "--no-stripped";
 
   # NOTE: Once https://github.com/flutter/flutter/issues/127606 is fixed, use "--no-prebuilt-dart-sdk"
   configurePhase =
@@ -324,5 +332,7 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+  } // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") {
+    hydraPlatforms = [];
   };
 })
