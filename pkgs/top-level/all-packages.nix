@@ -35288,7 +35288,6 @@ with pkgs;
   xborders = callPackage ../tools/X11/xborders { };
 
   xnode-admin = callPackage ../openmesh/xnode/admin { };
-  xnode-personaliser = callPackage ../openmesh/xnode/personaliser { };
 
   xxh = callPackage ../tools/networking/xxh { };
 
