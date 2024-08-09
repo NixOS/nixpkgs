@@ -4,9 +4,11 @@
 , stdenv
 , click
 , coloredlogs
+, mido
 , psutil
 , pycyphal
-, pyserial
+, pysdl2
+, python-rtmidi
 , ruamel-yaml
 , requests
 , scipy
@@ -29,14 +31,23 @@ buildPythonApplication rec {
     coloredlogs
     psutil
     pycyphal
-    pyserial
-    ruamel-yaml
     requests
+    ruamel-yaml
     scipy
     simplejson
-  ];
+  ] ++ builtins.foldl' (x: y: x ++ y) [ ]
+    (builtins.attrValues pycyphal.passthru.optional-dependencies)
+  ;
 
-  # Can't seem to run the tests on nix
+  passthru.optional-dependencies = {
+    joystick = [
+      pysdl2
+      mido
+      python-rtmidi
+    ];
+  };
+
+  # All these require extra permissions and/or actual hardware connected
   doCheck = false;
 
   meta = with lib; {
