@@ -185,6 +185,8 @@ buildPythonPackage rec {
     blas = blas.provider;
     blasImplementation = blas.implementation;
     inherit cfg;
+    isNumpy2 = false;
+    coreIncludeDir = "${python.sitePackages}/numpy/core/include";
     tests = {
       inherit sage;
     };

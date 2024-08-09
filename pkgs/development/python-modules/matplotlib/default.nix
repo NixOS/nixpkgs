@@ -115,9 +115,13 @@ buildPythonPackage rec {
   # With the following patch we just hard-code these paths into the install
   # script.
   postPatch =
-    ''
+    # Allows you to override it with numpy_2 and be sure you use a consistent
+    # numpy in the build
+    lib.optionalString (!numpy.isNumpy2) ''
       substituteInPlace pyproject.toml \
         --replace-fail '"numpy>=2.0.0rc1,<2.3",' ""
+    ''
+    + ''
       patchShebangs tools
     ''
     + lib.optionalString (stdenv.isLinux && interactive) ''

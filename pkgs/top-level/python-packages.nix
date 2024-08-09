@@ -2521,6 +2521,10 @@ self: super: with self; {
 
   contourpy = callPackage ../development/python-modules/contourpy { };
 
+  contourpy-numpy_2 = contourpy.override {
+    numpy = numpy_2;
+  };
+
   controku = callPackage ../development/python-modules/controku { };
 
   convertdate = callPackage ../development/python-modules/convertdate { };
@@ -5421,6 +5425,10 @@ self: super: with self; {
 
   h5py = callPackage ../development/python-modules/h5py { };
 
+  h5py-numpy_2 = self.h5py.override {
+    numpy = numpy_2;
+  };
+
   h5py-mpi = self.h5py.override {
     hdf5 = pkgs.hdf5-mpi;
   };
@@ -7502,6 +7510,10 @@ self: super: with self; {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
     ghostscript = pkgs.ghostscript_headless;
+  };
+  matplotlib-numpy_2 = matplotlib.override {
+    numpy = numpy_2;
+    contourpy = contourpy-numpy_2;
   };
 
   matplotlib-inline = callPackage ../development/python-modules/matplotlib-inline { };
@@ -13008,6 +13020,10 @@ self: super: with self; {
     inherit (pkgs.llvmPackages) openmp;
   };
 
+  pythran-numpy_2 = self.pythran.override {
+    numpy = numpy_2;
+  };
+
   pyeapi = callPackage ../development/python-modules/pyeapi { };
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
@@ -14053,6 +14069,11 @@ self: super: with self; {
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
 
   scipy = callPackage ../development/python-modules/scipy { };
+
+  scipy-numpy_2 = self.scipy.override {
+    numpy = numpy_2;
+    pythran = pythran-numpy_2;
+  };
 
   scmrepo = callPackage ../development/python-modules/scmrepo { };
 
