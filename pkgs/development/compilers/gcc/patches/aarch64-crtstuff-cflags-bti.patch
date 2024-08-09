@@ -1,0 +1,18 @@
+Ensure crtbegin, crtend et al are built with BTI on aarch64. Otherwise
+no executables using these files will be granted the BTI ELF note.
+
+gcc has built-in provisions to do the equivalent for intel's CET/IBT on x86_64
+
+diff --git a/libgcc/config/aarch64/t-aarch64 b/libgcc/config/aarch64/t-aarch64
+index b70e7b94edd..763af47777e 100644
+--- a/libgcc/config/aarch64/t-aarch64
++++ b/libgcc/config/aarch64/t-aarch64
+@@ -18,6 +18,8 @@
+ # along with GCC; see the file COPYING3.  If not see
+ # <http://www.gnu.org/licenses/>.
+ 
++CRTSTUFF_T_CFLAGS += -mbranch-protection=bti
++
+ LIB2ADD += $(srcdir)/config/aarch64/sync-cache.c
+ LIB2ADD += $(srcdir)/config/aarch64/cpuinfo.c
+ 
