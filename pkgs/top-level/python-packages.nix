@@ -613,8 +613,6 @@ self: super: with self; {
 
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
-  ansible-navigator = callPackage ../development/python-modules/ansible-navigator { };
-
   ansible-pylibssh = callPackage ../development/python-modules/ansible-pylibssh { };
 
   ansible-runner = callPackage ../development/python-modules/ansible-runner { };
@@ -15935,6 +15933,8 @@ self: super: with self; {
   tskit = callPackage ../development/python-modules/tskit { };
 
   ttach = callPackage ../development/python-modules/ttach { };
+
+  ttfautohint-py = callPackage ../development/python-modules/ttfautohint-py { };
 
   ttls = callPackage ../development/python-modules/ttls { };
 

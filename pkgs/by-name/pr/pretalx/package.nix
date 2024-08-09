@@ -29,13 +29,13 @@ let
     };
   };
 
-  version = "2024.2.0";
+  version = "2024.2.1";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     rev = "v${version}";
-    hash = "sha256-2HkxFS+T/lN/8EvAL3S4iVYn30y0OPmaUSneEPEA62k=";
+    hash = "sha256-D0ju9aOVy/new9GWqyFalZYCisdmM7irWSbn2TVCJYQ=";
   };
 
   meta = with lib; {
