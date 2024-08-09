@@ -33,6 +33,7 @@ let
     mkAfter
     mkIf
     optional
+    optionals
     optionalAttrs
     optionalString
     pipe
@@ -195,6 +196,44 @@ in rec {
   assertRemoved = name: see: group: attr:
     optional (attr ? ${name})
       "Systemd ${group} field `${name}' has been removed. See ${see}";
+
+  # https://github.com/systemd/systemd/blob/af1a6db58fde8f64edcf7d27e1f3b636c999934c/src/basic/parse-util.c#L794
+  assertNftSet = name: group: attr:
+    let
+      splitSet = (splitString ":");
+      allSets = if isString attr.${name} then [(splitSet attr.${name})] else map splitSet attr.${name};
+      getField = xs: i: if length xs >= i + 1 then elemAt xs i else null;
+      assertNotNull = field: val: optional (val == null || val == "")
+          "\t`${field}' must be specified.";
+      assertOneOf = field: values: val:
+        (assertNotNull field val) ++
+        (optional (val != null && !elem val values)
+          "\t`${field}' cannot have value `${val}'.");
+      assertStrLen = field: min: max: val:
+        (assertNotNull field val) ++
+        (optional (val != null && val != "" && (stringLength val < min || stringLength val > max))
+          "\t`${field}' length must be between ${toString min} and ${toString max}.");
+      assertNameValid = field: val:
+        optional (val != null && match "[a-zA-Z][a-zA-Z0-9/\\_.]*" val == null)
+          "\t`${field}' must begin with an alphabetic character (a-z,A-Z), followed by zero or more alphanumeric characters (a-z,A-Z,0-9) and the characters slash (/), backslash (\\), underscore (_) and dot (.).";
+      check = def: [
+        (assertOneOf "source" [ "address" "prefix" "ifindex" ] (getField def 0))
+        (assertOneOf "family" [ "arp" "bridge" "inet" "ip" "ip6" "netdev" ] (getField def 1))
+        (assertStrLen "table" 1 31 (getField def 2))
+        (assertNameValid "table" (getField def 2))
+        (assertStrLen "set" 1 31 (getField def 3))
+        (assertNameValid "set" (getField def 3))
+      ];
+      errors = flatten (map check allSets);
+      assertions =
+        if ! (isString attr.${name} || isList attr.${name}) then
+          [ "Systemd ${group} field `${name}' is not a string or list of strings." ]
+        else
+          optional (length errors > 0)
+            "`${name}' must be in the form source:family:table:set."
+          ++ errors;
+    in
+    optionals (attr ? ${name}) assertions;
 
   checkUnitConfig = group: checks: attrs: let
     # We're applied at the top-level type (attrsOf unitOption), so the actual

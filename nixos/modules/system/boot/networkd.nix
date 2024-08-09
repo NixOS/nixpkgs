@@ -745,6 +745,7 @@ let
           "ManageTemporaryAddress"
           "AddPrefixRoute"
           "AutoJoin"
+          "NFTSet"
         ])
         (assertHasField "Address")
         (assertValueOneOf "PreferredLifetime" ["forever" "infinity" "0" 0])
@@ -754,6 +755,7 @@ let
         (assertValueOneOf "ManageTemporaryAddress" boolValues)
         (assertValueOneOf "AddPrefixRoute" boolValues)
         (assertValueOneOf "AutoJoin" boolValues)
+        (assertNftSet "NFTSet")
       ];
 
       sectionRoutingPolicyRule = checkUnitConfigWithLegacyKey "routingPolicyRuleConfig" "RoutingPolicyRule" [
@@ -871,6 +873,7 @@ let
           "FallbackLeaseLifetimeSec"
           "Label"
           "Use6RD"
+          "NFTSet"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "RoutesToDNS" boolValues)
@@ -896,6 +899,7 @@ let
         (assertValueOneOf "SendDecline" boolValues)
         (assertValueOneOf "FallbackLeaseLifetimeSec" ["forever" "infinity"])
         (assertValueOneOf "Use6RD" boolValues)
+        (assertNftSet "NFTSet")
       ];
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [
@@ -920,6 +924,7 @@ let
           "IAID"
           "UseDelegatedPrefix"
           "SendRelease"
+          "NFTSet"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
@@ -933,6 +938,7 @@ let
         (assertInt "IAID")
         (assertValueOneOf "UseDelegatedPrefix" boolValues)
         (assertValueOneOf "SendRelease" boolValues)
+        (assertNftSet "NFTSet")
       ];
 
       sectionDHCPPrefixDelegation = checkUnitConfig "DHCPPrefixDelegation" [
@@ -944,11 +950,13 @@ let
           "Token"
           "ManageTemporaryAddress"
           "RouteMetric"
+          "NFTSet"
         ])
         (assertValueOneOf "Announce" boolValues)
         (assertValueOneOf "Assign" boolValues)
         (assertValueOneOf "ManageTemporaryAddress" boolValues)
         (assertRange "RouteMetric" 0 4294967295)
+        (assertNftSet "NFTSet")
       ];
 
       sectionIPv6AcceptRA = checkUnitConfig "IPv6AcceptRA" [
@@ -971,6 +979,7 @@ let
           "UseRoutePrefix"
           "Token"
           "UsePREF64"
+          "NFTSet"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
@@ -982,6 +991,7 @@ let
         (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutePrefix" boolValues)
         (assertValueOneOf "UsePREF64" boolValues)
+        (assertNftSet "NFTSet")
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
