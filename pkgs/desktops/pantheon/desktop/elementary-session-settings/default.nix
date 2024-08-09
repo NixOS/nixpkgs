@@ -60,7 +60,7 @@ let
     X-GNOME-Autostart-Phase=EarlyInitialization
   '';
 
-  executable = writeScript "pantheon" ''
+  common-export = ''
     # gnome-session can find RequiredComponents for `pantheon` session (notably pantheon's patched g-s-d autostarts)
     export XDG_CONFIG_DIRS=@out@/etc/xdg:$XDG_CONFIG_DIRS
 
@@ -70,10 +70,17 @@ let
     # * gnome-session can find the `pantheon' session
     # * use pantheon-mimeapps.list
     export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
+  '';
 
+  executable = writeScript "pantheon" (common-export + ''
     # Start pantheon session. Keep in sync with upstream
     exec ${gnome-session}/bin/gnome-session --session=pantheon "$@"
-  '';
+  '');
+
+  executable-wayland = writeScript "pantheon-wayland" (common-export + ''
+    # Start pantheon-wayland session. Keep in sync with upstream
+    exec ${gnome-session}/bin/gnome-session --session=pantheon-wayland "$@"
+  '');
 
   # Absolute path patched version of the upstream xsession
   xsession = writeText "pantheon.desktop" ''
@@ -87,11 +94,21 @@ let
     Type=Application
   '';
 
+  wayland-session = writeText "pantheon-wayland.desktop" ''
+    [Desktop Entry]
+    Name=Pantheon (Wayland)
+    Comment=This session provides elementary experience
+    Exec=@out@/libexec/pantheon-wayland
+    TryExec=${wingpanel}/bin/io.elementary.wingpanel
+    Icon=
+    DesktopNames=Pantheon
+    Type=Application
+  '';
 in
 
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
-  version = "6.0.0-unstable-2024-03-29";
+  version = "6.0.0-unstable-2024-05-30";
 
   src = fetchFromGitHub {
     owner = "elementary";
@@ -99,8 +116,8 @@ stdenv.mkDerivation rec {
     # For systemd managed gnome-session support.
     # https://github.com/NixOS/nixpkgs/issues/228946
     # nixpkgs-update: no auto update
-    rev = "53bf57e5b32936befc3003a0f99c5b3a69349c76";
-    sha256 = "sha256-TX9V6gZiuPEKSHQoSD4+5QptuqEvuErCJ8OF2KFRf9k=";
+    rev = "71b7b445189419c34ef24bfbb47709f714055136";
+    sha256 = "sha256-Ska64MtyODPtyWkq7PUJnGO/ssegShH6XNuLMVMaFBM=";
   };
 
   nativeBuildInputs = [
@@ -123,6 +140,7 @@ stdenv.mkDerivation rec {
     "-Dfallback-session=GNOME"
     "-Ddetect-program-prefixes=true"
     "--sysconfdir=${placeholder "out"}/etc"
+    "-Dwayland=true"
   ];
 
   postInstall = ''
@@ -137,10 +155,12 @@ stdenv.mkDerivation rec {
     # script `Exec` to start pantheon
     mkdir -p $out/libexec
     substitute ${executable} $out/libexec/pantheon --subst-var out
-    chmod +x $out/libexec/pantheon
+    substitute ${executable-wayland} $out/libexec/pantheon-wayland --subst-var out
+    chmod +x $out/libexec/pantheon{,-wayland}
 
     # absolute path patched xsession
     substitute ${xsession} $out/share/xsessions/pantheon.desktop --subst-var out
+    substitute ${wayland-session} $out/share/wayland-sessions/pantheon-wayland.desktop --subst-var out
   '';
 
   passthru = {
@@ -148,6 +168,7 @@ stdenv.mkDerivation rec {
 
     providedSessions = [
       "pantheon"
+      "pantheon-wayland"
     ];
   };
 

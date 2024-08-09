@@ -4,7 +4,6 @@
 lib.makeScope pkgs.newScope (self: with self; {
 
   switchboardPlugs = [
-    switchboard-plug-a11y
     switchboard-plug-about
     switchboard-plug-applications
     switchboard-plug-bluetooth
@@ -26,7 +25,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanelIndicators = [
     wingpanel-applications-menu
-    wingpanel-indicator-a11y
     wingpanel-indicator-bluetooth
     wingpanel-indicator-datetime
     wingpanel-indicator-keyboard
@@ -34,16 +32,16 @@ lib.makeScope pkgs.newScope (self: with self; {
     wingpanel-indicator-nightlight
     wingpanel-indicator-notifications
     wingpanel-indicator-power
-    wingpanel-indicator-session
     wingpanel-indicator-sound
+    wingpanel-quick-settings
   ];
 
   maintainers = lib.teams.pantheon.members;
 
-  mutter = pkgs.gnome.mutter43;
+  # We will likely stay on 46 when GNOME 47 happens.
+  mutter = pkgs.gnome.mutter;
 
-  # Using 43 to match Mutter used in Pantheon
-  gnome-settings-daemon = pkgs.gnome.gnome-settings-daemon43;
+  gnome-settings-daemon = pkgs.gnome.gnome-settings-daemon;
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
@@ -74,6 +72,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-music = callPackage ./apps/elementary-music { };
 
   elementary-photos = callPackage ./apps/elementary-photos { };
+
+  elementary-plank = callPackage ./apps/elementary-plank { };
 
   elementary-screenshot = callPackage ./apps/elementary-screenshot { };
 
@@ -163,6 +163,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanel-indicator-sound = callPackage ./desktop/wingpanel-indicators/sound { };
 
+  wingpanel-quick-settings = callPackage ./desktop/wingpanel-indicators/quick-settings { };
+
   #### SWITCHBOARD
 
   switchboard = callPackage ./apps/switchboard { };
@@ -170,8 +172,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   switchboard-with-plugs = callPackage ./apps/switchboard/wrapper.nix {
     plugs = null;
   };
-
-  switchboard-plug-a11y = callPackage ./apps/switchboard-plugs/a11y { };
 
   switchboard-plug-about = callPackage ./apps/switchboard-plugs/about { };
 
@@ -246,4 +246,5 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   notes-up = throw "The ‘pantheon.notes-up’ alias was removed on 2022-02-02, please use ‘pkgs.notes-up’ directly."; # added 2021-12-18
 
+  switchboard-plug-a11y = throw "pantheon.switchboard-plug-a11y has been removed, abandoned by upstream"; # added 2024-05-16
 }

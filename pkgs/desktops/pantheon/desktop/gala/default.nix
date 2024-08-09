@@ -1,59 +1,47 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
-, python3
 , ninja
 , vala
 , desktop-file-utils
 , gettext
 , libxml2
 , gtk3
+, gtk4
 , granite
+, granite7
 , libgee
-, bamf
+, libhandy
 , libcanberra-gtk3
 , gnome-desktop
 , mesa
 , mutter
 , gnome-settings-daemon
+, wayland-scanner
 , wrapGAppsHook3
-, gexiv2
+, sqlite
 , systemd
+, pantheon-agent-polkit
 }:
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "7.1.3";
+  version = "7.1.3-unstable-2024-07-28";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-0fDbR28gh7F8Bcnofn48BBP1CTsYnfmY5kG72ookOXw=";
+    rev = "72ee7e1d751370779675a86258b5a764b363142a"; #1990
+    sha256 = "sha256-NnRc4DD1CdVkhJQRBcqvJd3MJKv+gfzYUuBVcHEG2W8=";
   };
 
   patches = [
     # We look for plugins in `/run/current-system/sw/lib/` because
     # there are multiple plugin providers (e.g. gala and wingpanel).
     ./plugins-dir.patch
-
-    # Start gala-daemon internally (needed for systemd managed gnome-session)
-    # https://github.com/elementary/gala/pull/1844
-    (fetchpatch {
-      url = "https://github.com/elementary/gala/commit/351722c5a4fded46992b725e03dc94971c5bd31f.patch";
-      hash = "sha256-RvdVHQjCUNmLrROBZTF+m1vE2XudtQZjk/YW28P/vKc=";
-    })
-
-    # InternalUtils: Fix window placement
-    # https://github.com/elementary/gala/pull/1913
-    (fetchpatch {
-      url = "https://github.com/elementary/gala/commit/2d30bee678788c5a853721d16b5b39c997b23c02.patch";
-      hash = "sha256-vhGFaLpJZFx1VTfjY1BahQiOUvBPi0dBSXLGhYc7r8A=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -63,28 +51,34 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
+    wayland-scanner
     wrapGAppsHook3
   ];
 
   buildInputs = [
-    bamf
     gnome-settings-daemon
-    gexiv2
     gnome-desktop
     granite
+    granite7
     gtk3
+    gtk4 # gala-daemon
     libcanberra-gtk3
     libgee
+    libhandy
     mesa # for libEGL
     mutter
+    sqlite
     systemd
   ];
 
+  # Draft PR! Temporarily adding this for debugging.
+  VALAFLAGS = "-g";
+  separateDebugInfo = true;
+
   postPatch = ''
-    chmod +x build-aux/meson/post_install.py
-    patchShebangs build-aux/meson/post_install.py
+    substituteInPlace data/io.elementary.desktop.wm.shell \
+      --replace-fail "/usr/libexec" "${pantheon-agent-polkit}/libexec"
   '';
 
   passthru = {

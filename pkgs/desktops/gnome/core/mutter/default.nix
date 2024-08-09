@@ -1,4 +1,5 @@
 { fetchurl
+, fetchpatch
 , runCommand
 , lib
 , stdenv
@@ -74,6 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
     hash = "sha256-YRvZz5gq21ZZfOKzQiQnL9phm7O7kSpoTXXG8sN1AuQ=";
   };
+
+  patches = [
+    # Unbreak Pantheon's greeter-compositor
+    # https://github.com/elementary/greeter/issues/682
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/3329
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/mutter/raw/db2ff8f219a5fd7690b1414c2d24e9a46134f1b8/f/0001-modified-3329.patch";
+      hash = "sha256-TohOKm6pkhnFVPSMHWFOtM6SypDRnfN1ZU9U+Ga5eWM=";
+    })
+  ];
 
   mesonFlags = [
     "-Degl_device=true"

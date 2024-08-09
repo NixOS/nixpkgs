@@ -4,10 +4,9 @@
 , elementary-default-settings
 , glib
 , gala
-, epiphany
 , gnome-settings-daemon
 , gtk3
-, elementary-dock
+, elementary-plank
 , gsettings-desktop-schemas
 , extraGSettingsOverrides ? ""
 , extraGSettingsOverridePackages ? [ ]
@@ -18,9 +17,8 @@ let
   inherit (lib) concatMapStringsSep;
 
   gsettingsOverridePackages = [
-    elementary-dock
+    elementary-plank
     gnome-settings-daemon
-    epiphany
     gala
     gsettings-desktop-schemas
     gtk3

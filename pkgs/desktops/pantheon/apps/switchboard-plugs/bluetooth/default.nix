@@ -1,15 +1,15 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
 , pkg-config
 , vala
+, libadwaita
 , libgee
-, granite
-, gtk3
+, granite7
+, gtk4
 , bluez
 , switchboard
 , wingpanel-indicator-bluetooth
@@ -17,23 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-bluetooth";
-  version = "2.3.6";
+  version = "2.3.6-unstable-2024-05-04";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "0n9fhi9g0ww341bjk6lpc5ppnl7qj9b3d63j9a7iqnap57bgks9y";
+    rev = "e22627e924312261611760c458a6ee5495d39549";
+    sha256 = "sha256-7bIKbaP+Oai8D5iVwGjjo2aXbBjmW5yA5PZepGZXOYg=";
   };
-
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard-plug-bluetooth/pull/182
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-bluetooth/commit/031dd5660b4bcb0bb4e82ebe6d8bcdaa1791c385.patch";
-      sha256 = "1g01ad6md7pqp1fx00avbra8yfnr8ipg8y6zhfg35fgjakj4aags";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -44,8 +35,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bluez
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
     switchboard
     wingpanel-indicator-bluetooth # settings schema

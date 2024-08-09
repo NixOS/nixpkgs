@@ -6,23 +6,25 @@
 , meson
 , python3
 , ninja
+, sassc
 , vala
-, gtk3
+, glib
+, gtk4
+, libadwaita
 , libgee
-, libhandy
-, granite
-, wrapGAppsHook3
+, granite7
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
-  version = "6.0.2";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2c+anQ17lrdFy+cbjoYY94EFxYUcS+4mZrwbrLohfUg=";
+    sha256 = "sha256-qSqZQcE/g9oOHI8OAxMACSIFXrJMgSFLraAbTHjggLY=";
   };
 
   nativeBuildInputs = [
@@ -30,15 +32,18 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+    sassc
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
-  buildInputs = [
-    granite
-    gtk3
+  propagatedBuildInputs = [
+    # Required by switchboard-3.pc.
+    glib
+    granite7
+    gtk4
+    libadwaita
     libgee
-    libhandy
   ];
 
   patches = [
@@ -60,6 +65,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
-    mainProgram = "io.elementary.switchboard";
+    mainProgram = "io.elementary.settings";
   };
 }

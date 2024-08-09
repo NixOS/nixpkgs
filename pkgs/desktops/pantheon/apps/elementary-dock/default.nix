@@ -1,78 +1,48 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, vala
-, atk
-, cairo
-, dconf
-, glib
-, gtk3
-, libwnck
-, libX11
-, libXfixes
-, libXi
-, pango
-, pkg-config
-, libxml2
-, bamf
-, gdk-pixbuf
-, libdbusmenu-gtk3
-, gnome-menus
-, libgee
-, wrapGAppsHook3
 , meson
 , ninja
-, granite
+, pkg-config
+, vala
+, wayland-scanner
+, wrapGAppsHook4
+, glib
+, granite7
+, gtk4
+, libadwaita
+, wayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-dock";
-  version = "unstable-2021-05-07";
+  version = "0-unstable-2024-07-13";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "dock";
-    rev = "113c3b0bc7744501d2101dd7afc1ef21ba66b326";
-    sha256 = "sha256-YlvdB02/hUGaDyHIHy21bgloHyVy3vHcanyNKnp3YbM=";
+    rev = "db6d118de5ec95c4981f380f0bc35fd496ef88ec";
+    sha256 = "sha256-MpBQbluddyrgonVnNfzJuQr6QnoNAjtThDaAp64N5ko=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    libxml2 # xmllint
     pkg-config
     vala
-    wrapGAppsHook3
+    wayland-scanner
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    atk
-    bamf
-    cairo
-    gdk-pixbuf
     glib
-    gnome-menus
-    dconf
-    granite
-    gtk3
-    libX11
-    libXfixes
-    libXi
-    libdbusmenu-gtk3
-    libgee
-    libwnck
-    pango
+    granite7
+    gtk4
+    libadwaita
+    wayland
   ];
-
-  postInstall = ''
-    # elementary/dock/master is missing a Meson post
-    # install script that does this. This has been
-    # resolved after the dock rewrite (the `main` branch).
-    # https://github.com/elementary/default-settings/issues/267
-    glib-compile-schemas $out/share/glib-2.0/schemas
-  '';
 
   meta = with lib; {
     description = "Elegant, simple, clean dock";
@@ -80,6 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
-    mainProgram = "plank";
+    mainProgram = "io.elementary.dock";
   };
 }

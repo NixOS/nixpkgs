@@ -52,17 +52,11 @@ in
 
   gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
 
-  # Using 43 to match Mutter used in Pantheon
-  gnome-settings-daemon43 = callPackage ./core/gnome-settings-daemon/43 { };
-
   gnome-software = callPackage ./core/gnome-software { };
 
   gvfs = pkgs.gvfs.override { gnomeSupport = true; };
 
   mutter = callPackage ./core/mutter { };
-
-  # Needed for elementary's gala, wingpanel and greeter until support for higher versions is provided
-  mutter43 = callPackage ./core/mutter/43 { };
 
   networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
     withGnome = true;
@@ -223,4 +217,6 @@ in
 
 #### Removals
   anjuta = throw "`anjuta` was removed after not being maintained upstream and losing control of its official domain."; # 2024-01-16
+  gnome-settings-daemon43 = throw "`gnome-settings-daemon43` was removed as this is no longer needed by Pantheon."; # 2024-05-17
+  mutter43 = throw "`mutter43` was removed as this is no longer needed by Pantheon."; # 2024-05-17
 }
