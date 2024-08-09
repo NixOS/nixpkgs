@@ -5,6 +5,7 @@
   setuptools,
   pythonAtLeast,
   fetchPypi,
+  fetchurl,
   substituteAll,
 
   # build
@@ -40,11 +41,16 @@
   six,
 }:
 
+let
+  waf_2_0_25 = fetchurl {
+    url = "https://waf.io/waf-2.0.25";
+    hash = "sha256-IRmc0iDM9gQ0Ez4f0quMjlIXw3mRmcgnIlQ5cNyOONU=";
+  };
+in
 buildPythonPackage rec {
   pname = "wxpython";
   version = "4.2.1";
   format = "other";
-  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     pname = "wxPython";
@@ -60,6 +66,15 @@ buildPythonPackage rec {
       libcairo = "${cairo}/lib/libcairo.so";
     })
   ];
+
+  postPatch = ''
+    cp ${waf_2_0_25} bin/waf-2.0.25
+    chmod +x bin/waf-2.0.25
+    substituteInPlace build.py \
+      --replace-fail "wafCurrentVersion = '2.0.24'" "wafCurrentVersion = '2.0.25'" \
+      --replace-fail "wafMD5 = '698f382cca34a08323670f34830325c4'" "wafMD5 = 'a4b1c34a03d594e5744f9e42f80d969d'" \
+      --replace-fail "distutils.dep_util" "setuptools.modified"
+  '';
 
   nativeBuildInputs = [
     attrdict
