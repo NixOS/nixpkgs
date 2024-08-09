@@ -80,7 +80,10 @@ let
             && p == "clang/gnu-install-dirs.patch"
           then
             (if lib.versionAtLeast release_version "19" then ../19/${p} else ../12/${p})
-          else if lib.versionAtLeast release_version "18" && p == "clang/purity.patch" then
+          else if
+            lib.versionAtLeast release_version "18"
+            && (p == "clang/purity.patch" || p == "lld/gnu-install-dirs.patch")
+          then
             ../18/${p}
           else if
             lib.versionAtLeast release_version "15"
@@ -103,9 +106,14 @@ let
             && lib.versionAtLeast release_version "13"
           then
             ../13/${p}
-          else if lib.versionAtLeast release_version "16" && p == "compiler-rt/normalize-var.patch" then
+          else if
+            lib.versionAtLeast release_version "16"
+            && (p == "lld/add-table-base.patch" || p == "compiler-rt/normalize-var.patch")
+          then
             ../16/${p}
           else if lib.versionOlder release_version "16" && p == "compiler-rt/normalize-var.patch" then
+            ../12/${p}
+          else if lib.versionOlder release_version "14" && p == "lld/gnu-install-dirs.patch" then
             ../12/${p}
           else
             "${metadata.versionDir}/${p}";
