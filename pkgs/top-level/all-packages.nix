@@ -9633,8 +9633,6 @@ with pkgs;
 
   mdbook-cmdrun = callPackage ../tools/text/mdbook-cmdrun { };
 
-  mdbook-d2 = callPackage ../tools/text/mdbook-d2 { };
-
   mdbook-pagetoc = callPackage ../tools/text/mdbook-pagetoc { };
 
   mdbook-graphviz = callPackage ../tools/text/mdbook-graphviz {
@@ -32898,7 +32896,9 @@ with pkgs;
 
   phantomsocks = callPackage ../tools/networking/phantomsocks { };
 
-  photoqt = qt6Packages.callPackage ../applications/graphics/photoqt { };
+  photoqt = callPackage ../by-name/ph/photoqt/package.nix {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 
   photoflare = libsForQt5.callPackage ../applications/graphics/photoflare { };
 

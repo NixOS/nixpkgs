@@ -141,13 +141,13 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /pkgs/top-level/release-python.nix                      @natsukium
 
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @ncfavier
-/maintainers/scripts/haskell                  @sternenseemann @maralorn @ncfavier
-/pkgs/development/compilers/ghc               @sternenseemann @maralorn @ncfavier
-/pkgs/development/haskell-modules             @sternenseemann @maralorn @ncfavier
-/pkgs/test/haskell                            @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @ncfavier
+/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn
+/maintainers/scripts/haskell                  @sternenseemann @maralorn
+/pkgs/development/compilers/ghc               @sternenseemann @maralorn
+/pkgs/development/haskell-modules             @sternenseemann @maralorn
+/pkgs/test/haskell                            @sternenseemann @maralorn
+/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn
+/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn
 
 # Perl
 /pkgs/development/interpreters/perl @stigtsp @zakame @marcusramberg
