@@ -1,100 +1,76 @@
-{ stdenv
-, lib
-, makeWrapper
-, fetchurl
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, imagemagick
-, openjdk21
-, gradle
-, gnumake
-, protobuf
-, writeScript
-, bash
-, stripJavaArchivesHook
-, tor
-, zip
-, xz
-, findutils
-, perl
-}:
+{ lib, stdenv, fetchurl, fetchFromGitHub, jdk, jre, gradle, bash, coreutils, substituteAll, nixosTests, fetchpatch, writeText }:
+
+# Refer to https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/gradle.section.md for packaging details
 
 stdenv.mkDerivation rec {
   pname = "haveno";
-  version = "1.0.3-281b7d0";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "haveno-dex";
     repo = "haveno";
-    rev = "281b7d0905a0272d8c202c6776191642172843c7";
-    hash = "sha256-uDJhmK7Jr6BTe6bYY7pp19zhymnXJXtTuQ1jkzyRQ8E=";
+    rev = version;
+    hash = "sha256-5ENXC6SWPt08ZixbHHdNAMkjVIXOodk+/Y1hgQ9fm68=";
   };
 
-  nativeBuildInputs = [ gradle makeWrapper ];
+  # postPatch = ''
+  #   rm gradle/verification-{keyring.keys,metadata.xml}
+  # '';
 
-  # TODO(Krey)
-  # desktopItems = [
-  #   (makeDesktopItem {
-  #     name = "Bisq";
-  #     exec = "bisq-desktop";
-  #     icon = "bisq";
-  #     desktopName = "Bisq ${version}";
-  #     genericName = "Decentralized bitcoin exchange";
-  #     categories = [ "Network" "P2P" ];
-  #   })
-  # ];
+  nativeBuildInputs = [ gradle jdk ];
 
-  # fake build to pre-download deps into fixed-output derivation
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit src version;
-    nativeBuildInputs = [ gradle perl ];
-    buildPhase = ''
-      export GRADLE_USER_HOME="$(mktemp -d)"
-      gradle --no-daemon build
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/okio-jvm/okio/r)}" #e' \
-        | sh
-    '';
-    # Don't move info to share/
-    forceShare = [ "dummy" ];
-    outputHashMode = "recursive";
-    # Downloaded jars differ by platform
-    # outputHash = "sha256-cs95YI0SpvzCo5x5trMXlVUGepNKIH9oZ95AfLErKIU=";
-    outputHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  # wrapper = substituteAll {
+  #   src = ./havenoWrapper;
+  #   inherit bash coreutils jre;
+  # };
+
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
   };
 
-  preBuild = ''
-    # Use the local packages from deps
-    sed -i -e '/repositories {/a maven { url uri("${deps}") }' build.gradle
-    mkdir -p .localnet
-  '';
+  # this is required for using mitm-cache on Darwin
+  __darwinAllowLocalNetworking = true;
 
-  buildPhase = ''
-    gradle --offline --no-daemon build
-  '';
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jdk}"
+    "-Dfile.encoding=utf-8"
+  ];
 
-  installPhase = ''
-    runHook preInstall
+  gradleBuildTask = "jar";
 
-    # "haveno-apitest" "haveno-cli" "haveno-daemon" "haveno-desktop" "haveno-inventory" "haveno-monitor" "haveno-relay" "haveno-seednode" "haveno-statsnode"
+  # will run the gradleCheckTask (defaults to "test")
+  doCheck = true;
 
-    # ...
+  # installPhase = ''
+  #   mkdir -p $out/{bin,share/haveno}
+  #   cp build/libs/haveno-all.jar $out/share/haveno
 
-    runHook postInstall
-  '';
+  #   makeWrapper ${jre}/bin/java $out/bin/haveno \
+  #     --add-flags "-jar $out/share/haveno/haveno-all.jar"
 
-  # passthru.updateScript = ./update.sh;
+  #   cp ${src}/haveno.1 $out/share/man/man1
+  # '';
 
-  meta = with lib; {
-    description = "A decentralized bitcoin exchange network";
-    homepage = "https://bisq.network";
-    license = licenses.mit;
-    maintainers = with maintainers; [ juaningan emmanuelrosa ];
-    platforms = [ "x86_64-linux" ];
+  # installPhase = ''
+  #   runHook preInstall
+  #   install -Dm444 build/libs/freenet.jar $out/share/freenet/freenet.jar
+  #   ln -s ${freenet_ext} $out/share/freenet/freenet-ext.jar
+  #   mkdir -p $out/bin
+  #   install -Dm555 ${wrapper} $out/bin/freenet
+  #   substituteInPlace $out/bin/freenet \
+  #     --subst-var-by outFreenet $out
+  #   runHook postInstall
+  # '';
+
+  # passthru.tests = { inherit (nixosTests) freenet; };
+
+  meta = {
+    description = "A decentralized monero exchange network";
+    homepage = "https://haveno.exchange";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ juaningan emmanuelrosa ];
+    platforms = with lib.platforms; linux;
+    # changelog = "";
   };
 }
