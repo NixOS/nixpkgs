@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-D_GLIBCXX_USE_NANOSLEEP";
 
-
   meta = with lib; {
     description = "C++11 Lightweight Redis client: async, thread-safe, no dependency, pipelining, multi-platform";
     homepage = "https://github.com/cpp-redis/cpp_redis";
