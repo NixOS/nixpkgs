@@ -163,7 +163,7 @@ in
     hash = "sha256-QP5/jwexQXai1A5Iiwiyrm+/vkdAc+9NVGt+jEQz2mY=";
   };
   haxe_4_3 = generic {
-    version = "4.3.5";
-    hash = "sha256-vms7FoOL8cDPorHd/EJq8HEHGRX1JfL8EZmDtxW9lOw=";
+    version = "4.3.6";
+    hash = "sha256-m/A0xxB3fw+syPmH1GPKKCcj0a2G/HMRKOu+FKrO5jQ=";
   };
 }
