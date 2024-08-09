@@ -72,33 +72,44 @@ let
       + "/${if (gitRelease != null) then "git" else lib.versions.major release_version}";
     getVersionFile =
       p:
-      if
-        (lib.versionOlder release_version "14" || lib.versionAtLeast release_version "19")
-        && p == "clang/gnu-install-dirs.patch"
-      then
-        builtins.path {
-          name = builtins.baseNameOf p;
-          path = if lib.versionAtLeast release_version "19" then ../19/${p} else ../12/${p};
-        }
-      else if lib.versionAtLeast release_version "18" && p == "clang/purity.patch" then
-        builtins.path {
-          name = builtins.baseNameOf p;
-          path = ../18/${p};
-        }
-      else if
-        lib.versionAtLeast release_version "15"
-        && lib.versionOlder release_version "17"
-        && p == "clang/purity.patch"
-      then
-        builtins.path {
-          name = builtins.baseNameOf p;
-          path = ../15/${p};
-        }
-      else
-        builtins.path {
-          name = builtins.baseNameOf p;
-          path = "${metadata.versionDir}/${p}";
-        };
+      builtins.path {
+        name = builtins.baseNameOf p;
+        path =
+          if
+            (lib.versionOlder release_version "14" || lib.versionAtLeast release_version "19")
+            && p == "clang/gnu-install-dirs.patch"
+          then
+            (if lib.versionAtLeast release_version "19" then ../19/${p} else ../12/${p})
+          else if lib.versionAtLeast release_version "18" && p == "clang/purity.patch" then
+            ../18/${p}
+          else if
+            lib.versionAtLeast release_version "15"
+            && lib.versionOlder release_version "17"
+            && p == "clang/purity.patch"
+          then
+            ../15/${p}
+          else if p == "compiler-rt/X86-support-extension.patch" then
+            (if lib.versionAtLeast release_version "15" then ../15/${p} else ../12/${p})
+          else if
+            lib.versionAtLeast release_version "13"
+            && lib.versionOlder release_version "15"
+            && p == "compiler-rt/armv7l.patch"
+          then
+            ../13/${p}
+          else if p == "compiler-rt/gnu-install-dirs.patch" && lib.versionAtLeast release_version "15" then
+            (if lib.versionAtLeast release_version "15" then ../15/${p} else ../12/${p})
+          else if
+            (p == "compiler-rt/darwin-targetconditionals.patch" || p == "compiler-rt/codesign.patch")
+            && lib.versionAtLeast release_version "13"
+          then
+            ../13/${p}
+          else if lib.versionAtLeast release_version "16" && p == "compiler-rt/normalize-var.patch" then
+            ../16/${p}
+          else if lib.versionOlder release_version "16" && p == "compiler-rt/normalize-var.patch" then
+            ../12/${p}
+          else
+            "${metadata.versionDir}/${p}";
+      };
   };
 
   lldbPlugins = lib.makeExtensible (
