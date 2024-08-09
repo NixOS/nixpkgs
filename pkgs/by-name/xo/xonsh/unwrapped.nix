@@ -12,7 +12,7 @@ let
 
   argset = {
     pname = "xonsh";
-    version = "0.17.0";
+    version = "0.18.2";
     pyproject = true;
 
     # PyPI package ships incomplete tests
@@ -20,7 +20,7 @@ let
       owner = "xonsh";
       repo = "xonsh";
       rev = "refs/tags/${argset.version}";
-      hash = "sha256-9sRY9aetWWXzCFfgdHCBCia48THIJcMxsYMnFR6Xa8A=";
+      hash = "sha256-iTdUu2yGixWwDJICDLfzRcwgGe+xlq2CvxUeSbmDiUU=";
     };
 
     nativeBuildInputs = with pythonPackages; [
@@ -28,23 +28,28 @@ let
       wheel
     ];
 
-    propagatedBuildInputs = (with pythonPackages; [
-      ply
-      prompt-toolkit
-      pygments
-    ]);
+    propagatedBuildInputs = (
+      with pythonPackages;
+      [
+        ply
+        prompt-toolkit
+        pygments
+      ]
+    );
 
-    nativeCheckInputs = [
-      git
-      glibcLocales
-    ] ++ (with pythonPackages; [
-      pip
-      pyte
-      pytest-mock
-      pytest-subprocess
-      pytestCheckHook
-      requests
-    ]);
+    nativeCheckInputs =
+      [
+        git
+        glibcLocales
+      ]
+      ++ (with pythonPackages; [
+        pip
+        pyte
+        pytest-mock
+        pytest-subprocess
+        pytestCheckHook
+        requests
+      ]);
 
     disabledTests = [
       # fails on sandbox
@@ -71,14 +76,13 @@ let
       "test_subproc_output_format"
 
       # https://github.com/xonsh/xonsh/issues/5569
-      "test_spec_modifier_alias_output_format"
+      "test_spec_decorator_alias_output_format"
     ];
 
     disabledTestPaths = [
       # fails on sandbox
       "tests/completers/test_command_completers.py"
-      "tests/test_ptk_highlight.py"
-      "tests/test_ptk_shell.py"
+      "tests/shell/test_ptk_highlight.py"
       # fails on non-interactive shells
       "tests/prompt/test_gitstatus.py"
       "tests/completers/test_bash_completer.py"
