@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   qt6,
@@ -15,10 +16,12 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-fAVsjknhLhsrGdHu2Q6JWLoFoxZoc+wDCNja+ySCsR4=";
   };
 
-   nativeBuildInputs = [
+  nativeBuildInputs = [
     qt6.wrapQtAppsHook
     qt6.qtbase
   ];
+
+  buildInputs = lib.optional stdenv.isLinux qt6.qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
     cython
