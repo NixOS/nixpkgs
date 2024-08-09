@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "asf-search";
-  version = "7.1.4";
+  version = "8.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "asfadmin";
     repo = "Discovery-asf_search";
     rev = "refs/tags/v${version}";
-    hash = "sha256-l1FrhQ82+0g/ivm2K2yXJ5EZNDGM3Olcj1AxiQc8cZI=";
+    hash = "sha256-cmKZ+pM7KDvGbO/+B6Xmm7zS69aq3MbRuyByV8ZT6hc=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];
