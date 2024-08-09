@@ -10403,7 +10403,11 @@ self: super: with self; {
 
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 
+  pytest-docker = callPackage ../development/python-modules/pytest-docker { };
+
   pytest-mockito = callPackage ../development/python-modules/pytest-mockito { };
+
+  pytest-pycodestyle  = callPackage ../development/python-modules/pytest-pycodestyle { };
 
   pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
 
