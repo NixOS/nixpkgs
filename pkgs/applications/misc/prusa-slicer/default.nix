@@ -177,6 +177,8 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "$out/lib"
+      # Otherwise crashes the application for many people (see #293854, #328235)
+      --unset __GLX_VENDOR_LIBRARY_NAME
     )
   '';
 

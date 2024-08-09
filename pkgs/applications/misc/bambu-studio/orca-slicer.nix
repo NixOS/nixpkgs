@@ -35,6 +35,8 @@ bambu-studio.overrideAttrs (
       gappsWrapperArgs+=(
         # Fixes blackscreen dialogs
         --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+        # Otherwise crashes the application for many people (see #293854, #328235)
+        --unset __GLX_VENDOR_LIBRARY_NAME
       )
     '';
 
