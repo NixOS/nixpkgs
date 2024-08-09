@@ -80,26 +80,22 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "mistral-rs";
-  version = "0.1.18";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lMDFWNv9b0UfckqLmyWRVwnqmGe6nxYsUHzoi2+oG84=";
+    hash = "sha256-uK2rqiKUO6I9XNc2pu5iyXLL0nQk7zTKz0Tk4Hq1Aj4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "candle-core-0.6.0" = "sha256-DxGBWf2H7MamrbboTJ4zHy1HeE8ZVT7QvE3sTYrRxBc=";
-      "range-checked-0.1.0" = "sha256-S+zcF13TjwQPFWZLIbUDkvEeaYdaxCOtDLtI+JRvum8=";
+      "bindgen_cuda-0.1.6" = "sha256-OWGcQxT+x5HyIFskNVWpPr6Qfkh6Mv/g4PVSm5oA27g=";
+      "candle-core-0.6.0" = "sha256-gbajbhlKfA7YqwIvEG2O+Wjpl2ngbNO/YE13LRy6ECw=";
     };
   };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -120,7 +116,13 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin darwinBuildInputs;
 
   cargoBuildFlags =
-    lib.optionals cudaSupport [ "--features=cuda" ]
+    [
+      # This disables the plotly crate which fails to build because of the kaleido feature requiring
+      # network access at build-time.
+      # See https://github.com/NixOS/nixpkgs/pull/323788#issuecomment-2206085825
+      "--no-default-features"
+    ]
+    ++ lib.optionals cudaSupport [ "--features=cuda" ]
     ++ lib.optionals mklSupport [ "--features=mkl" ]
     ++ lib.optionals (stdenv.isDarwin && metalSupport) [ "--features=metal" ];
 
@@ -129,7 +131,7 @@ rustPlatform.buildRustPackage rec {
       SWAGGER_UI_DOWNLOAD_URL =
         let
           # When updating:
-          # - Look for the version of `utopia-swagger-ui` at:
+          # - Look for the version of `utoipa-swagger-ui` at:
           #   https://github.com/EricLBuehler/mistral.rs/blob/v<MISTRAL-RS-VERSION>/mistralrs-server/Cargo.toml
           # - Look at the corresponding version of `swagger-ui` at:
           #   https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-<UTOPIA-SWAGGER-UI-VERSION>/utoipa-swagger-ui/build.rs#L21-L22
