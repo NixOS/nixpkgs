@@ -1,0 +1,16 @@
+--- source.orig/bootstrap	1969-12-31 19:00:01.000000000 -0500
++++ source/bootstrap	2024-08-07 17:35:33.221629977 -0400
+@@ -5,8 +5,11 @@
+ touch README NEWS AUTHORS INSTALL ChangeLog
+ 
+ set -ex
+-case `uname` in Darwin*) glibtoolize --copy ;;
+-  *) libtoolize --copy ;; esac
++if command -v glibtoolize >/dev/null 2>&1; then
++    glibtoolize --copy
++else
++    libtoolize --copy
++fi
+ 
+ autoreconf -i -Wall,no-obsolete
+ rm -rf autom4te.cache config.h.in~

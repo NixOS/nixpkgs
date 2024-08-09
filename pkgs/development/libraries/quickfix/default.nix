@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
       sha256 = "1wlk4j0wmck0zm6a70g3nrnq8fz0id7wnyxn81f7w048061ldhyd";
     })
     ./disableUnitTests.patch
+    ./glibtoolize.patch
   ];
 
   # autoreconfHook does not work
