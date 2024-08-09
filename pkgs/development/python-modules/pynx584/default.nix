@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   flask,
   mock,
   prettytable,
@@ -12,20 +13,23 @@
   stevedore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pynx584";
-  version = "0.8.1";
-  format = "setuptools";
+  version = "0.8.2";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kk7ds";
-    repo = pname;
-    rev = version;
-    hash = "sha256-nF8+LbKqy/GrnPpykS5wEQMPoFYxi40pfM3Ys/UXCeo=";
+    repo = "pynx584";
+    rev = "refs/tags/0.8.2";
+    hash = "sha256-q5ra7tH4kaBrw0VAiyMsmWOkVhA7Y6bRuFP8dlxQjsE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     prettytable
     pyserial

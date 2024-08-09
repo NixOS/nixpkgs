@@ -32,7 +32,7 @@ in customEmacsPackages.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
 
 */
 
-{ lib, lndir, makeBinaryWrapper, runCommand, gcc }:
+{ lib, lndir, makeBinaryWrapper, runCommand }:
 self:
 let
   inherit (self) emacs;
@@ -60,7 +60,6 @@ runCommand
     deps = runCommand "emacs-packages-deps"
       ({
         inherit explicitRequires lndir emacs;
-        nativeBuildInputs = lib.optional withNativeCompilation gcc;
       } // lib.optionalAttrs withNativeCompilation {
         inherit (emacs) LIBRARY_PATH;
       })

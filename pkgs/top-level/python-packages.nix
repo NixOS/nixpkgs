@@ -245,8 +245,6 @@ self: super: with self; {
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
-  aiohttp-fast-url-dispatcher = callPackage ../development/python-modules/aiohttp-fast-url-dispatcher { };
-
   aiohttp-fast-zlib = callPackage ../development/python-modules/aiohttp-fast-zlib { };
 
   aiohttp-isal = callPackage ../development/python-modules/aiohttp-isal { };
@@ -394,6 +392,8 @@ self: super: with self; {
   aiortsp = callPackage ../development/python-modules/aiortsp { };
 
   aioruckus = callPackage ../development/python-modules/aioruckus { };
+
+  aiorussound = callPackage ../development/python-modules/aiorussound { };
 
   aiorun = callPackage ../development/python-modules/aiorun { };
 
@@ -3105,6 +3105,8 @@ self: super: with self; {
 
   dinghy = callPackage ../development/python-modules/dinghy { };
 
+  dio-chacon-wifi-api = callPackage ../development/python-modules/dio-chacon-wifi-api { };
+
   diofant = callPackage ../development/python-modules/diofant { };
 
   dipy = callPackage ../development/python-modules/dipy { };
@@ -3870,6 +3872,8 @@ self: super: with self; {
 
   elevate = callPackage ../development/python-modules/elevate { };
 
+  elevenlabs = callPackage ../development/python-modules/elevenlabs { };
+
   eliot = callPackage ../development/python-modules/eliot { };
 
   eliqonline = callPackage ../development/python-modules/eliqonline { };
@@ -4057,6 +4061,8 @@ self: super: with self; {
   evernote = callPackage ../development/python-modules/evernote { };
 
   evohome-async = callPackage ../development/python-modules/evohome-async { };
+
+  evolutionhttp = callPackage ../development/python-modules/evolutionhttp { };
 
   evosax = callPackage ../development/python-modules/evosax { };
 
@@ -6050,6 +6056,8 @@ self: super: with self; {
 
   iotawattpy = callPackage ../development/python-modules/iotawattpy { };
 
+  iottycloud = callPackage ../development/python-modules/iottycloud { };
+
   iowait = callPackage ../development/python-modules/iowait { };
 
   ipadic = callPackage ../development/python-modules/ipadic { };
@@ -6139,6 +6147,8 @@ self: super: with self; {
   isounidecode = callPackage ../development/python-modules/isounidecode { };
 
   isoweek = callPackage ../development/python-modules/isoweek { };
+
+  israel-rail-api = callPackage ../development/python-modules/israel-rail-api { };
 
   itanium-demangler = callPackage ../development/python-modules/itanium-demangler { };
 
@@ -9292,6 +9302,8 @@ self: super: with self; {
 
   py-radix-sr = callPackage ../development/python-modules/py-radix-sr { };
 
+  py-sucks = callPackage ../development/python-modules/py-sucks { };
+
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
   oasatelematics = callPackage ../development/python-modules/oasatelematics { };
@@ -10455,6 +10467,8 @@ self: super: with self; {
 
   python-keystoneclient = callPackage ../development/python-modules/python-keystoneclient { };
 
+  python-linkplay = callPackage ../development/python-modules/python-linkplay { };
+
   python-lsp-black = callPackage ../development/python-modules/python-lsp-black { };
 
   python-mbedtls = callPackage ../development/python-modules/python-mbedtls { };
@@ -10914,6 +10928,8 @@ self: super: with self; {
 
   py-dormakaba-dkey = callPackage ../development/python-modules/py-dormakaba-dkey { };
 
+  py-madvr2 = callPackage ../development/python-modules/py-madvr2 { };
+
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
   py-partiql-parser = callPackage ../development/python-modules/py-partiql-parser { };
@@ -10933,8 +10949,6 @@ self: super: with self; {
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
 
   py-zabbix = callPackage ../development/python-modules/py-zabbix { };
-
-  py17track = callPackage ../development/python-modules/py17track { };
 
   py2bit = callPackage ../development/python-modules/py2bit { };
 
@@ -11050,6 +11064,8 @@ self: super: with self; {
 
   pybloom-live = callPackage ../development/python-modules/pybloom-live { };
 
+  pyblu = callPackage ../development/python-modules/pyblu { };
+
   pybluez = callPackage ../development/python-modules/pybluez {
     inherit (pkgs) bluez;
   };
@@ -11143,6 +11159,8 @@ self: super: with self; {
   pycotap = callPackage ../development/python-modules/pycotap { };
 
   pycountry = callPackage ../development/python-modules/pycountry { };
+
+  pycountry-convert = callPackage ../development/python-modules/pycountry-convert { };
 
   pycparser = callPackage ../development/python-modules/pycparser { };
 
@@ -11746,6 +11764,8 @@ self: super: with self; {
 
   pymetno = callPackage ../development/python-modules/pymetno { };
 
+  pymicro-vad = callPackage ../development/python-modules/pymicro-vad { };
+
   pymicrobot = callPackage ../development/python-modules/pymicrobot { };
 
   pymiele = callPackage ../development/python-modules/pymiele { };
@@ -11821,6 +11841,8 @@ self: super: with self; {
   pync = callPackage ../development/python-modules/pync {
     inherit (pkgs) which;
   };
+
+  pynecil = callPackage ../development/python-modules/pynecil { };
 
   pynello = callPackage ../development/python-modules/pynello { };
 
@@ -12200,6 +12222,8 @@ self: super: with self; {
   pyserial-asyncio-fast = callPackage ../development/python-modules/pyserial-asyncio-fast { };
 
   pyserial = callPackage ../development/python-modules/pyserial { };
+
+  pyseventeentrack = callPackage ../development/python-modules/pyseventeentrack { };
 
   pysftp = callPackage ../development/python-modules/pysftp { };
 
@@ -14328,6 +14352,8 @@ self: super: with self; {
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
+  simplefin4py = callPackage ../development/python-modules/simplefin4py { };
+
   simplefix = callPackage ../development/python-modules/simplefix { };
 
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
@@ -14439,6 +14465,8 @@ self: super: with self; {
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
   sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
+
+  sleekxmppfs = callPackage ../development/python-modules/sleekxmppfs { };
 
   sleepyq = callPackage ../development/python-modules/sleepyq { };
 

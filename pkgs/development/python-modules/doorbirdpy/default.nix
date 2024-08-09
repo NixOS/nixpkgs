@@ -2,33 +2,49 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  requests,
+  fetchpatch2,
+  setuptools,
+  aiohttp,
+  aioresponses,
+  pytest-asyncio,
   pytestCheckHook,
-  requests-mock,
 }:
 
 buildPythonPackage rec {
   pname = "doorbirdpy";
-  version = "2.2.2";
-  format = "setuptools";
+  version = "3.0.2";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "klikini";
     repo = "doorbirdpy";
-    rev = version;
-    hash = "sha256-pgL4JegD1gANefp7jLYb74N9wgpkDgQc/Fe+NyLBrkA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-6B4EMK41vEpmLoQLD+XN9yStLdxyHHk/Mym9J0o7Qvc=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  patches = [
+    # https://gitlab.com/klikini/doorbirdpy/-/merge_requests/15
+    (fetchpatch2 {
+      name = "aiohttp-3.10-compat.patch";
+      url = "https://gitlab.com/klikini/doorbirdpy/-/commit/91f417433be36a0c9d2baaf0d6ff1a45042f94eb.patch";
+      hash = "sha256-b/ORH6ygkiBreWYTH7rP8b68HlFUEyLQCzVo1KLffPQ=";
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
     pytestCheckHook
-    requests-mock
   ];
 
   pythonImportsCheck = [ "doorbirdpy" ];
 
   meta = with lib; {
+    changelog = "https://gitlab.com/klikini/doorbirdpy/-/tags/${version}";
     description = "Python wrapper for the DoorBird LAN API";
     homepage = "https://gitlab.com/klikini/doorbirdpy";
     license = licenses.mit;

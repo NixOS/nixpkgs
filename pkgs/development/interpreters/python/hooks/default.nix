@@ -200,14 +200,7 @@ in {
       };
     } ./setuptools-build-hook.sh) {};
 
-  setuptoolsCheckHook = callPackage ({ makePythonHook, setuptools }:
-    makePythonHook {
-      name = "setuptools-check-hook";
-      propagatedBuildInputs = [ setuptools ];
-      substitutions = {
-        inherit pythonCheckInterpreter setuppy;
-      };
-    } ./setuptools-check-hook.sh) {};
+  setuptoolsCheckHook = throw "The setuptoolsCheckHook has been removed, since the test command has been removed in setuptools 72.0";
 
     setuptoolsRustBuildHook = callPackage ({ makePythonHook, setuptools-rust }:
       makePythonHook {
