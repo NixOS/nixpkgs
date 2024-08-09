@@ -4280,6 +4280,12 @@
     githubId = 16950437;
     name = "cwyc";
   };
+  Cyberczy = {
+    email = "czysheep@gmail.com";
+    github = "Cyberczy";
+    githubId = 109653523;
+    name = "Cyberczy";
+  };
   cybershadow = {
     name = "Vladimir Panteleev";
     email = "nixpkgs@cy.md";
