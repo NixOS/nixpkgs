@@ -1,5 +1,5 @@
 { lib
-, derivationWithMeta
+, minimal-bootstrap
 , kaem-unwrapped
 , mescc-tools
 , src
@@ -8,7 +8,7 @@
 , m2libcArch
 , m2libcOS
 }:
-derivationWithMeta {
+minimal-bootstrap.derivationWithMeta {
   inherit version src mescc-tools m2libcArch m2libcOS;
   pname = "mescc-tools-extra";
   builder = kaem-unwrapped;

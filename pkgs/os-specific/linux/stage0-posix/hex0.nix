@@ -1,5 +1,5 @@
 { lib
-, derivationWithMeta
+, minimal-bootstrap
 , hostPlatform
 , src
 , version
@@ -23,7 +23,7 @@ let
     inherit hash;
   };
 in
-derivationWithMeta {
+minimal-bootstrap.derivationWithMeta {
   inherit version;
   pname = "hex0";
   builder = hex0-seed;

@@ -1,12 +1,11 @@
 { lib
 , derivationWithMeta
 , fetchurl
-, kaem
+, stage0-posix
 , tinycc
 , gnumake
 , gnupatch
 , coreutils
-, mescc-tools-extra
 , bash_2_05
 }:
 let
@@ -66,7 +65,7 @@ let
     })
   ];
 in
-kaem.runCommand "${pname}-${version}" {
+stage0-posix.kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [
@@ -105,12 +104,12 @@ kaem.runCommand "${pname}-${version}" {
         bash_2_05
         coreutils
         # provides untar, ungz, and unbz2
-        mescc-tools-extra
+        stage0-posix.mescc-tools-extra
       ]);
     } // (builtins.removeAttrs env [ "nativeBuildInputs" ]));
 
   passthru.tests.get-version = result:
-    kaem.runCommand "${pname}-get-version-${version}" {} ''
+    stage0-posix.kaem.runCommand "${pname}-get-version-${version}" {} ''
       ${result}/bin/bash --version
       mkdir ''${out}
     '';
