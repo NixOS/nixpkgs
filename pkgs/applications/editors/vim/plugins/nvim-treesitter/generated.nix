@@ -2560,7 +2560,7 @@
       owner = "derekstride";
       repo = "tree-sitter-sql";
       rev = "b8175006d9c8120d41cf40a4ef3711bbbbc08973";
-      hash = "sha256-idQB8Wqw7lvU192y7+UgFvcwlmY71/mu9jJ4hRc4ud4=";
+      hash = "sha256-ZURUEd7TokBIVVejRoBiXMQ1XwUEgMnzOhQiV+Tdpk0=";
     };
     meta.homepage = "https://github.com/derekstride/tree-sitter-sql";
   };
