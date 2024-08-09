@@ -15,28 +15,28 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.40.5";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "agent";
     rev = "v${version}";
-    hash = "sha256-Ctv/s9lgZQ9uCXx+xwJlNVe1ycQnQHtziVNafdYVBig=";
+    hash = "sha256-qSxm00zC1Ms9C5R077Zn5FKluEqFs8KYUPnDUaMvMs8=";
   };
 
-  vendorHash = "sha256-pI2hk91wqMVaZ5/6uegoQOh94p4zb7Tvn2CtOMRhZME=";
+  vendorHash = "sha256-rC8iqCZ6tzXVCOHNqH+jAMDh2yTAR88zj45HcgJ2lSg=";
   proxyVendor = true; # darwin/linux hash mismatch
 
   frontendYarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/web/ui/yarn.lock";
-    hash = "sha256-WqbIg18qUNcs9O2wh7DAzwXKb60iEuPL8zFCIgScqI0=";
+    yarnLock = src + "/internal/web/ui/yarn.lock";
+    hash = "sha256-FvrfWcuKld242YfZ8CixF5GGFRp8iFWZ3Vkef3Kf4ag=";
   };
 
   ldflags = let
-    prefix = "github.com/grafana/agent/pkg/build";
+    prefix = "github.com/grafana/agent/internal/build";
   in [
     "-s" "-w"
-    # https://github.com/grafana/agent/blob/d672eba4ca8cb010ad8a9caef4f8b66ea6ee3ef2/Makefile#L125
+    # https://github.com/grafana/agent/blob/v0.41.0/Makefile#L132-L137
     "-X ${prefix}.Version=${version}"
     "-X ${prefix}.Branch=v${version}"
     "-X ${prefix}.Revision=v${version}"
@@ -56,13 +56,13 @@ buildGoModule rec {
   subPackages = [
     "cmd/grafana-agent"
     "cmd/grafana-agentctl"
-    "web/ui"
+    "internal/web/ui"
   ];
 
   preBuild = ''
     export HOME="$TMPDIR"
 
-    pushd web/ui
+    pushd internal/web/ui
     fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror $frontendYarnOfflineCache
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
