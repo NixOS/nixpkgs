@@ -2014,7 +2014,8 @@
     ];
     "ihc" = ps: with ps; [
       defusedxml
-    ]; # missing inputs: ihcsdk
+      ihcsdk
+    ];
     "image" = ps: with ps; [
     ];
     "image_processing" = ps: with ps; [
