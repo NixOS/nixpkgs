@@ -16,12 +16,16 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0dfsjgidsnah8nrclrq10yz3ja859123z81kq4zdifbrhnrn5a2x";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "'pytest-runner'," ""
+  '';
+
   # crun patchelf proot runc fakechroot
   # are download statistically linked during runtime
   buildInputs = [
     singularity
   ] ++ (with python3Packages; [
-    pytest-runner
     pycurl
   ]);
 
@@ -39,6 +43,10 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     "test_02__load_structure"
     "test_05__get_volume_bindings"
+    # AttributeError: 'called_with' is not a valid assertion. Use a spec for the mock if 'called_with' is meant to be an attribute.
+    "test_01_init"
+    "test_03_setvalue_from_file"
+    "test_22__run_banner"
   ];
 
   disabledTestPaths = [

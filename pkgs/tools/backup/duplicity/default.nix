@@ -39,6 +39,9 @@ let self = python3.pkgs.buildPythonApplication rec {
     # don't try to use gtar on darwin/bsd
     substituteInPlace testing/functional/test_restart.py \
       --replace-fail 'tarcmd = "gtar"' 'tarcmd = "tar"'
+
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pytest-runner",' ""
   '' + lib.optionalString stdenv.isDarwin ''
     # tests try to access these files in the sandbox, but can't deal with EPERM
     substituteInPlace testing/unit/test_globmatch.py \
@@ -99,8 +102,7 @@ let self = python3.pkgs.buildPythonApplication rec {
     lockfile
     mock
     pexpect
-    pytest
-    pytest-runner
+    pytestCheckHook
     fasteners
   ]);
 
