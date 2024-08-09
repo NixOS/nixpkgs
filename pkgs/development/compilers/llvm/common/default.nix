@@ -122,7 +122,11 @@ let
             ../13/${p}
           else if
             lib.versionAtLeast release_version "16"
-            && (p == "lld/add-table-base.patch" || p == "compiler-rt/normalize-var.patch")
+            && (
+              p == "lld/add-table-base.patch"
+              || p == "compiler-rt/normalize-var.patch"
+              || p == "openmp/run-lit-directly.patch"
+            )
           then
             ../16/${p}
           else if
@@ -134,18 +138,26 @@ let
             ../12/${p}
           else if
             lib.versionAtLeast release_version "14"
-            && lib.versionOlder release_version "18"
-            && p == "llvm/gnu-install-dirs-polly.patch"
+            && (
+              (lib.versionOlder release_version "18" && p == "llvm/gnu-install-dirs-polly.patch")
+              || (lib.versionOlder release_version "16" && p == "openmp/run-lit-directly.patch")
+            )
           then
             ../14/${p}
           else if
             lib.versionAtLeast release_version "16"
-            && lib.versionOlder release_version "18"
-            && p == "llvm/lit-shell-script-runner-set-dyld-library-path.patch"
+            && (
+              (
+                lib.versionOlder release_version "18"
+                && p == "llvm/lit-shell-script-runner-set-dyld-library-path.patch"
+              )
+              || p == "openmp/run-lit-directly.patch"
+            )
           then
             ../16/${p}
           else if
-            lib.versionAtLeast release_version "17" && p == "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch"
+            lib.versionAtLeast release_version "17"
+            && (p == "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch" || p == "openmp/fix-find-tool.patch")
           then
             ../17/${p}
           else if
