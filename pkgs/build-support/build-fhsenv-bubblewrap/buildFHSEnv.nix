@@ -235,7 +235,7 @@ let
         cp -rsHf ${staticUsrProfileTarget}/share share
       fi
     fi
-    for i in bin sbin include; do
+    for i in bin sbin libexec include; do
       if [ -d "${staticUsrProfileTarget}/$i" ]; then
         cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
       fi
