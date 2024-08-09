@@ -25177,6 +25177,8 @@ with pkgs;
 
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
+  home-assistant-companion = callPackage ../servers/home-assistant/companion.nix { };
+
   home-assistant-component-tests = recurseIntoAttrs home-assistant.tests.components;
 
   honk = callPackage ../servers/honk { };
