@@ -20879,6 +20879,10 @@ with pkgs;
 
   hubble = callPackage ../applications/networking/cluster/hubble { };
 
+  hiddify-next = callPackage ../by-name/hi/hiddify-next/package.nix {
+    flutter = flutter319;
+  };
+
   hunspell = callPackage ../development/libraries/hunspell { };
 
   hunspellDicts = recurseIntoAttrs (callPackages ../development/libraries/hunspell/dictionaries.nix {});
