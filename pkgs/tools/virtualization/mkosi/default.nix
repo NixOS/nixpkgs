@@ -12,6 +12,7 @@
 , bash
 , coreutils
 , btrfs-progs
+, su
 
   # Python packages
 , setuptools
@@ -83,6 +84,7 @@ buildPythonApplication rec {
     cpio
     gnutar
     kmod
+    su
     systemdForMkosi
     util-linux
   ] ++ lib.optional withQemu [
