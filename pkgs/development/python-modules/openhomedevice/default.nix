@@ -36,6 +36,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # https://github.com/bazwilliams/openhomedevice/issues/23
+    "test_two"
+    "test_three"
+  ];
+
   pythonImportsCheck = [ "openhomedevice" ];
 
   pytestFlagsArray = [ "tests/*.py" ];
