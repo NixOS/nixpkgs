@@ -2854,27 +2854,6 @@ self: super: {
   # https://github.com/brandonchinn178/tasty-autocollect/issues/54
   tasty-autocollect = dontCheck super.tasty-autocollect;
 
-  # https://github.com/UnkindPartition/tasty/pull/420#issuecomment-2187406691
-  # Note also 1.5.1 was faux-revoked because of this. See
-  # https://github.com/UnkindPartition/tasty/issues/426
-  tasty_1_5_1 = lib.pipe super.tasty_1_5_1 [
-    (appendPatch
-      (fetchpatch2 {
-        name = "tasty-1.5.1-revert-cr-sufficient-to-clear-line";
-        url = "https://github.com/UnkindPartition/tasty/commit/b152a0bc63166a4592e1f3639ef09e78a43f2b57.diff";
-        hash = "sha256-tlFCyEnIp8geNlJSkye32tUOaPMwkdqLHBMzpAwSDVQ=";
-        revert = true;
-        stripLen = 1;
-      })
-    )
-    (overrideCabal
-      (drv: assert drv.revision == "1"; {
-          revision = null;
-          editedCabalFile = null;
-      })
-    )
-  ];
-
   postgrest = lib.pipe super.postgrest [
     # 2023-12-20: New version needs extra dependencies
     (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
@@ -3079,7 +3058,7 @@ self: super: {
   cornelis = dontCheck super.cornelis;
 
   lzma = doJailbreak (super.lzma.overrideScope (self: super: {
-    tasty = super.tasty_1_5_1;
+    tasty = super.tasty_1_5;
   }));
 
   # Fixes build on some platforms: https://github.com/obsidiansystems/commutative-semigroups/pull/18
