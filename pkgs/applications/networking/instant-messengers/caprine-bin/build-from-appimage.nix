@@ -4,6 +4,7 @@
 , pname
 , version
 , sha256
+, makeWrapper
 , metaCommon ? { }
 }:
 
@@ -27,6 +28,10 @@ in
   '';
 
   extraInstallCommands = ''
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram $out/bin/caprine \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+
     mkdir -p $out/share
     "${xorg.lndir}/bin/lndir" -silent "${extracted}/usr/share" "$out/share"
     ln -s ${extracted}/caprine.png $out/share/icons/caprine.png
