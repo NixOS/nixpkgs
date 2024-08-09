@@ -6,7 +6,7 @@ index 6673493..9191004 100644
          "/usr/share/vulkan",
          "/etc/vulkan",
          "/usr/local/share/vulkan",
--        "/usr/local/etc/vulkan"
+-        "/usr/local/etc/vulkan",
 +        "/usr/local/etc/vulkan",
 +        "/run/opengl-driver/share/vulkan",
 +        "/run/opengl-driver-32/share/vulkan",
