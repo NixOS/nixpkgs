@@ -1,14 +1,14 @@
 { lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "bmap-tools";
-  version = "3.6";
+  pname = "bmaptool";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
-    owner = "intel";
-    repo = "bmap-tools";
+    owner = "yoctoproject";
+    repo = "bmaptool";
     rev = "v${version}";
-    sha256 = "01xzrv5nvd2nvj91lz4x9s91y9825j9pj96z0ap6yvy3w2dgvkkl";
+    sha256 = "sha256-YPY3sNuZ/TASNBPH94iqG6AuBRq5KjioKiuxAcu94+I=";
   };
 
   propagatedBuildInputs = with python3Packages; [ six ];
@@ -17,8 +17,8 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "bmap-related tools";
-    homepage = "https://github.com/intel/bmap-tools";
+    description = "BMAP Tools";
+    homepage = "https://github.com/yoctoproject/bmaptool";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;
