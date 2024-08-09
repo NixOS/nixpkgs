@@ -2,12 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   fsspec,
   lightning-utilities,
   numpy,
   packaging,
   pyyaml,
-  setuptools,
   tensorboardx,
   torch,
   torchmetrics,
@@ -21,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "2.3.3";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
     rev = "refs/tags/${version}";
-    hash = "sha256-JgT+OiBToBBa3h556gF+kmcqLKLaK17tlTPokvEDyUE=";
+    hash = "sha256-FngD3nYTGVEjS1VrXAVps2/B8VlS7BZMDAsmIDtAyW0=";
   };
 
   preConfigure = ''
@@ -39,12 +43,12 @@ buildPythonPackage rec {
 
   dependencies = [
     fsspec
+    lightning-utilities
     numpy
     packaging
     pyyaml
     tensorboardx
     torch
-    lightning-utilities
     torchmetrics
     tqdm
     traitlets
@@ -61,11 +65,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytorch_lightning" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight PyTorch wrapper for machine learning researchers";
     homepage = "https://github.com/Lightning-AI/pytorch-lightning";
     changelog = "https://github.com/Lightning-AI/pytorch-lightning/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tbenst ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tbenst ];
   };
 }
