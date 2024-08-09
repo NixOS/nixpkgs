@@ -75,8 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper "$out"/share/lua-language-server/bin/lua-language-server \
       $out/bin/lua-language-server \
-      --add-flags "-E $out/share/lua-language-server/main.lua \
-      --logpath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/lua-language-server/log \
+      --add-flags "--logpath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/lua-language-server/log \
       --metapath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/lua-language-server/meta"
 
     runHook postInstall
