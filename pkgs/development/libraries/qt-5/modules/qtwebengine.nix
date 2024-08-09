@@ -173,6 +173,10 @@ qtModule ({
     # ld: fatal warning(s) induced error (-fatal_warnings)
     substituteInPlace src/3rdparty/chromium/build/config/compiler/BUILD.gn \
       --replace "-Wl,-fatal_warnings" ""
+
+    # Use system ffmpeg
+    echo "gn_args += use_system_ffmpeg=true" >> src/core/config/mac_osx.pri
+    echo "LIBS += -lavformat -lavcodec -lavutil" >> src/core/core_common.pri
   '') + postPatch;
 
   env = {
