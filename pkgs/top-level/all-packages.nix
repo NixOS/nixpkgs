@@ -1333,7 +1333,18 @@ with pkgs;
 
   substituteAllFiles = callPackage ../build-support/substitute-files/substitute-all-files.nix { };
 
-  replaceDependency = callPackage ../build-support/replace-dependency.nix { };
+  replaceDependencies = callPackage ../build-support/replace-dependencies.nix { };
+
+  replaceDependency = { drv, oldDependency, newDependency, verbose ? true }: replaceDependencies {
+    inherit drv verbose;
+    replacements = [{
+      inherit oldDependency newDependency;
+    }];
+    # When newDependency depends on drv, instead of causing infinite recursion, keep it as is.
+    cutoffPackages = [ newDependency ];
+  };
+
+  replaceDirectDependencies = callPackage ../build-support/replace-direct-dependencies.nix { };
 
   replaceVars = callPackage ../build-support/replace-vars { };
 
