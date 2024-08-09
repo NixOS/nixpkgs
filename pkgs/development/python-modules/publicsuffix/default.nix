@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Allows to get the public suffix of a domain name";
     homepage = "https://pypi.python.org/pypi/publicsuffix/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

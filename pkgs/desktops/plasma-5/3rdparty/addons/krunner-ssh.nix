@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "Programie";
     repo = "krunner-ssh";
     rev = version;
-    sha256 = "sha256-rFTTvmetDeN6t0axVc+8t1TRiuyPBpwqhvsq2IFxa/A=";
+    hash = "sha256-rFTTvmetDeN6t0axVc+8t1TRiuyPBpwqhvsq2IFxa/A=";
   };
 
   postPatch = ''

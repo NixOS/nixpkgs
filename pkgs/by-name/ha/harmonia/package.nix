@@ -5,7 +5,6 @@
 , nixVersions
 , pkg-config
 , rustPlatform
-, stdenv
 , nix-update-script
 , nixosTests
 }:

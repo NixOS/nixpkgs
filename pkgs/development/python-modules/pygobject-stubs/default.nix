@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pygobject3,
   pythonOlder,
   setuptools,
 }:

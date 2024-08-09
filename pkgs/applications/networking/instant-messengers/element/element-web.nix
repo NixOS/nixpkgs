@@ -1,9 +1,7 @@
 { lib
 , stdenv
-, runCommand
 , fetchFromGitHub
 , fetchYarnDeps
-, writeText
 , jq
 , yarn
 , fixup-yarn-lock
@@ -23,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
 
   src = fetchFromGitHub {
     owner = "vector-im";
-    repo = finalAttrs.pname;
+    repo = "element-web";
     rev = "v${finalAttrs.version}";
     hash = webSrcHash;
   };

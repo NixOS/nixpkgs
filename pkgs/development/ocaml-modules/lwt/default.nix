@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, libev, buildDunePackage
-, ocaml, cppo, dune-configurator, ocplib-endian
+, cppo, dune-configurator, ocplib-endian
 }:
 
 buildDunePackage rec {

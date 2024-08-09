@@ -23,7 +23,7 @@ let
   inherit (pythonPackages) buildPythonApplication pythonOlder;
 in
 buildPythonApplication rec {
-  version = "5.2.2";
+  version = "5.2.3";
   pname = "gramps";
   pyproject = true;
 
@@ -33,7 +33,7 @@ buildPythonApplication rec {
     owner = "gramps-project";
     repo = "gramps";
     rev = "refs/tags/v${version}";
-    hash = "sha256-umyc5G4p0GSEQEtq6sPUgtq1waNL1OW7iLxnf5dGcLc=";
+    hash = "sha256-DfKKB+rgMGQ8HTqhCp11UTYLj3Fdd0B0v4a922GJ8L8=";
   };
 
   patches = [

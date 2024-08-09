@@ -16,7 +16,7 @@
 , pipewire
 , libsecret
 , libpulseaudio
-, speechd
+, speechd-minimal
 , info
 }:
 
@@ -199,7 +199,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
         stdenv.cc.cc.lib
         libsecret
         libpulseaudio
-        speechd
+        speechd-minimal
       ];
     in
   base.postFixup + ''

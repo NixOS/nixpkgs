@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     description = "Database drivers for libdbi";
     platforms = platforms.all;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

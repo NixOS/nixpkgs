@@ -10,7 +10,6 @@
   pandas,
   pytestCheckHook,
   pythonOlder,
-  setuptools-scm,
   tabulate,
 }:
 

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "spicy";
-  version = "1.10.1";
+  version = "1.11.0";
 
   strictDeps = true;
 
@@ -19,18 +19,19 @@ stdenv.mkDerivation rec {
     owner = "zeek";
     repo = "spicy";
     rev = "v${version}";
-    hash = "sha256-D7DWZDZH3/PFggMxsr+x5S1B6SV5E8xpJoXfGcDelKs=";
+    hash = "sha256-zndqNd4CTzXuDkkc6uzjwKdUnypnV/4NppcVJ0N3S1U=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    bison
     cmake
+    flex
     makeWrapper
     python3
   ];
 
   buildInputs = [
-    bison
     flex
     zlib
   ];

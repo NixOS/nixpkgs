@@ -3,56 +3,45 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+
+  # build-system
   meson-python,
+  numpy,
   pkg-config,
+
+  # buildInputs
   Accelerate,
   blas,
   lapack,
-  numpy,
+
+  # dependencies
   scipy,
+
   # check inputs
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "scs";
-  version = "3.2.4";
+  version = "3.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bodono";
     repo = "scs-python";
-    rev = version;
-    hash = "sha256-UmMbnj7QZSvHWSUk1Qa0VP4i3iDCYHxoa+qBmEdFjRs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Sl0+1/uEXAg+V2ijDFGmez6hBKQjbi63gN26lPCiEnI=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # needed for building against netlib's reference blas implementation and
-    # the pkg-config patch. remove on next update
-    (fetchpatch {
-      name = "find-and-ld-lapack.patch";
-      url = "https://github.com/bodono/scs-python/commit/a0aea80e7d490770d6a47d2c79396f6c3341c1f9.patch";
-      hash = "sha256-yHF8f7SLoG7veZ6DEq1HVH6rT2KtFONwJtqSiKcxOdg=";
-    })
-    # add support for pkg-config. remove on next update
-    (fetchpatch {
-      name = "use-pkg-config.patch";
-      url = "https://github.com/bodono/scs-python/commit/dd17e2e5282ebe85f2df8a7c6b25cfdeb894970d.patch";
-      hash = "sha256-vSeSJeeu5Wx3RXPyB39YTo0RU8HtAojrUw85Q76/QzA=";
-    })
-    # fix test_solve_random_cone_prob on linux after scipy 1.12 update
-    # https://github.com/bodono/scs-python/pull/82
-    (fetchpatch {
-      name = "scipy-1.12-fix.patch";
-      url = "https://github.com/bodono/scs-python/commit/4baf4effdc2ce7ac2dd1beaf864f1a5292eb06c6.patch";
-      hash = "sha256-U/F5MakwYZN5hCaeAkcCG38WQxX9mXy9OvhyEQqN038=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy >= 2.0.0" "numpy"
+  '';
 
-  nativeBuildInputs = [
+  build-system = [
     meson-python
+    numpy
     pkg-config
   ];
 
@@ -65,7 +54,7 @@ buildPythonPackage rec {
         lapack
       ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
   ];
@@ -73,7 +62,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "scs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for SCS: Splitting Conic Solver";
     longDescription = ''
       Solves convex cone programs via operator splitting.
@@ -82,7 +71,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/cvxgrp/scs"; # upstream C package
     downloadPage = "https://github.com/bodono/scs-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }

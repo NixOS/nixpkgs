@@ -18,6 +18,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "genemichaels";
     homepage = "https://github.com/andrewbaxter/genemichaels";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.anselmschueler ];
+    maintainers = [ ];
   };
 }

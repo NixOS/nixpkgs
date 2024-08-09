@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "Collection of programs that access and manipulate ELF files";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.dtzWill ];
+    maintainers = [ ];
   };
 }

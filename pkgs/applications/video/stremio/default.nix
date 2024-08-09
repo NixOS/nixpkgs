@@ -6,7 +6,6 @@
 , mpv
 , nodejs
 , qmake
-, qtwebchannel
 , qtwebengine
 , wrapQtAppsHook
 }:
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-Gky0/HaGm11PeV4twoQV71T99NG2o0mYzQxu/c9x5oE=";
+    hash = "sha256-Gky0/HaGm11PeV4twoQV71T99NG2o0mYzQxu/c9x5oE=";
   };
 
   server = fetchurl {

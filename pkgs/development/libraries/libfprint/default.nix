@@ -9,7 +9,6 @@
 , glib
 , nss
 , gobject-introspection
-, coreutils
 , cairo
 , libgudev
 , gtk-doc

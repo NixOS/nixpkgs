@@ -28,6 +28,7 @@ in lib.mapAttrs (n: make) (with lib.systems.examples; {
   powerpc64-unknown-linux-gnuabielfv2 = ppc64;
   powerpc64le-unknown-linux-gnu = powernv;
   riscv64-unknown-linux-gnu = riscv64;
+  s390x-unknown-linux-gnu = s390x;
 
   # musl
   aarch64-unknown-linux-musl = aarch64-multiplatform-musl;

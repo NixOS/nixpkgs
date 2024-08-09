@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     description = "Lightning fast web crawler which extracts URLs, files, intel & endpoints from a target";
     homepage = "https://github.com/s0md3v/Photon";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "photon";
   };
 }

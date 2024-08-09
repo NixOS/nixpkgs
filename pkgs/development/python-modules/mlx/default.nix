@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   buildPythonPackage,
@@ -8,7 +7,6 @@
   cmake,
   xcbuild,
   zsh,
-  darwin,
   blas,
   lapack,
 }:

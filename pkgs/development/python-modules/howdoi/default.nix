@@ -60,6 +60,6 @@ buildPythonPackage rec {
     description = "Instant coding answers via the command line";
     homepage = "https://github.com/gleitz/howdoi";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

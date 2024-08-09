@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "trackpy";
-  version = "0.6.3";
+  version = "0.6.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "soft-matter";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-AChtnwkGDzD4O0h0POmQrHJbgFvbFZUp15H4fKqm0Co=";
+    hash = "sha256-6i1IfdxgV6bpf//mXATpnsQ0zN26S8rlL0/1ql68sd8=";
   };
 
   propagatedBuildInputs = [
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/soft-matter/trackpy";
     changelog = "https://github.com/soft-matter/trackpy/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }

@@ -7,7 +7,6 @@
   jinja2,
   mako,
   passlib,
-  pytest,
   pyyaml,
   requests,
   rtoml,

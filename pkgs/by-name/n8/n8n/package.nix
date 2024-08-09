@@ -17,18 +17,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.46.0";
+  version = "1.48.3";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     rev = "n8n@${finalAttrs.version}";
-    hash = "sha256-9T/x2k7XIO+PV0olTQhb4WF1congTbXFvHqaxoaNbp4=";
+    hash = "sha256-aCMbii5+iJ7m4P6Krr1/pcoH6fBsrFLtSjCx9DBYOeg=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-oldvZC0B/r3fagI5hCn16wjQsD9n4q9foo73lJBJXeU=";
+    hash = "sha256-n1U5ftbB7BbiDIkZMVPG2ieoRBlJ+nPYFT3fNJRRTCI=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp rebuild
     popd
 
-    pnpm build
+    # TODO: use deploy after resolved https://github.com/pnpm/pnpm/issues/5315
+    pnpm build --filter=n8n
 
     runHook postBuild
   '';
@@ -61,10 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{lib,bin}
-    cp -r {packages,node_modules} $out/lib
+    mkdir -p $out/{bin,lib/n8n}
+    mv {packages,node_modules} $out/lib/n8n
 
-    makeWrapper $out/lib/packages/cli/bin/n8n $out/bin/n8n \
+    makeWrapper $out/lib/n8n/packages/cli/bin/n8n $out/bin/n8n \
       --set N8N_RELEASE_TYPE "stable"
 
     runHook postInstall
@@ -94,6 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = licenses.sustainableUse;
     mainProgram = "n8n";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

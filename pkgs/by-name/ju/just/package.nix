@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "1.29.1";
+  version = "1.34.0";
   outputs = [ "out" "man" "doc" ];
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-R797aRLsaDjNSaYVFUSmKCUr+HQ5xarrssHJe3fwhTw=";
+    hash = "sha256-fAzBAiF7eVl5tieSH0m3Wa9UWthVjX7e5tAex5peRQw=";
   };
 
-  cargoHash = "sha256-DVjhmJPyIRHwKTBWoIBYMJbigLpakDrXeCHQ9Y8/T48=";
+  cargoHash = "sha256-v3z0Md66fzT0JQfVfISPqhJAunYHl8UmpYL1ASVWxVU=";
 
   nativeBuildInputs = [ installShellFiles mdbook ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
@@ -99,7 +99,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
     description = "Handy way to save and run project-specific commands";
     license = licenses.cc0;
-    maintainers = with maintainers; [ xrelkd jk adamcstephens ];
+    maintainers = with maintainers; [ xrelkd jk ];
     mainProgram = "just";
   };
 }

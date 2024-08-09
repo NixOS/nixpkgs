@@ -16,7 +16,7 @@ let
       src = fetchgit {
         url = "https://anongit.freedesktop.org/git/libreoffice/dictionaries.git";
         rev = "a2bf59878dd76685803ec260e15d875746ad6e25";
-        sha256 = "sha256-3CvjgNjsrm4obATK6LmtYob8i2ngTbwP6FB4HlJMPCE=";
+        hash = "sha256-3CvjgNjsrm4obATK6LmtYob8i2ngTbwP6FB4HlJMPCE=";
       };
       meta = with lib; {
         description = "Hyphen dictionary for ${shortDescription} from LibreOffice";
@@ -25,7 +25,7 @@ let
         maintainers = with maintainers; [ theCapypara ];
         platforms = platforms.all;
       };
-      phases = [ "unpackPhase" "installPhase" ];
+      dontBuild = true;
       installPhase = ''
         runHook preInstall
         cd $src/${subdir}

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, bash-completion, pkg-config, libconfig, autoreconfHook }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, libconfig, autoreconfHook }:
 stdenv.mkDerivation {
   pname = "libusbgx";
   version = "unstable-2021-10-31";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
       lgpl21Plus # library
       gpl2Plus # examples
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

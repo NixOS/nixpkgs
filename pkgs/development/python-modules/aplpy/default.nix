@@ -33,7 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-KCdmBwQWt7IfHsjq7pWlbSISEpfQZDyt+SQSTDaUCV4=";
   };
 
-  # Fix build with Astropy 6 and Python 3.12.
+  # Fix build with Astropy 6.1, Python 3.12 and matplotlib 3.9
   patches = [
     # https://github.com/aplpy/aplpy/pull/496
     (fetchpatch {
@@ -44,6 +44,16 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/aplpy/aplpy/commit/468be394970b39f1aaa6debef51eb674e2dd86d8.patch";
       hash = "sha256-/ovLrFOKb3RQ8TZSviuOV6EYNgz0gtrhVWZLFJBrzFg=";
+    })
+    # https://github.com/aplpy/aplpy/pull/500
+    (fetchpatch {
+      url = "https://github.com/aplpy/aplpy/commit/c9049261b3724821f4d309d85fe73cabcc04d890.patch";
+      hash = "sha256-ivdXLh1Z+WG3EL5u1wO+lqz6X1AP6WpyoZix5YiqW0w=";
+    })
+    # https://github.com/aplpy/aplpy/pull/503
+    (fetchpatch {
+      url = "https://github.com/aplpy/aplpy/commit/edc2aa9770b72bd3ac42db95a6e027b276be9c31.patch";
+      hash = "sha256-QUZenY3XQ/T2tl5apxZUqjf4ACjOzJWb+1AUp5limi4=";
     })
   ];
 

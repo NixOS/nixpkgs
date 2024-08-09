@@ -17,7 +17,6 @@
   pylink-square,
   pyusb,
   pyyaml,
-  setuptools,
   setuptools-scm,
   typing-extensions,
   stdenv,
@@ -44,17 +43,11 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "libusb-package>=1.0,<2.0" ""
-  '';
+  pythonRemoveDeps = [ "libusb-package" ];
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     capstone_4
     cmsis-pack-manager
     colorama
@@ -73,6 +66,12 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!stdenv.isLinux) [ hidapi ];
 
   pythonImportsCheck = [ "pyocd" ];
+
+  disabledTests = [
+    # AttributeError: 'not_called' is not a valid assertion
+    # Upstream fix at https://github.com/pyocd/pyOCD/pull/1710
+    "test_transfer_err_not_flushed"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

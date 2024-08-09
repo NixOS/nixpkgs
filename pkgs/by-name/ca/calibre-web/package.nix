@@ -7,6 +7,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy_1_4;
     };
@@ -36,6 +37,7 @@ python.pkgs.buildPythonApplication rec {
     flask-principal
     flask-wtf
     iso-639
+    jsonschema
     lxml
     pypdf
     python-magic

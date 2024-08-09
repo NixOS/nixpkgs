@@ -1,13 +1,17 @@
 { godot3
 , callPackage
 , mkNugetDeps
-, mkNugetSource
 , mono
 , dotnet-sdk
-, writeText
+, scons
+, python311Packages
 }:
 
-godot3.overrideAttrs (self: base: {
+(godot3.override {
+  scons = scons.override {
+    python3Packages = python311Packages;
+  };
+}).overrideAttrs (self: base: {
   pname = "godot3-mono";
 
   godotBuildDescription = "mono build";
@@ -16,30 +20,14 @@ godot3.overrideAttrs (self: base: {
 
   glue = callPackage ./glue.nix {};
 
-  nugetDeps = mkNugetDeps { name = "deps"; nugetDeps = import ./deps.nix; };
-
-  nugetSource =
-    mkNugetSource {
-      name = "${self.pname}-nuget-source";
-      description = "Nuget source with dependencies for ${self.pname}";
-      deps = [ self.nugetDeps ];
-    };
-
-  nugetConfig = writeText "NuGet.Config" ''
-    <?xml version="1.0" encoding="utf-8"?>
-    <configuration>
-      <packageSources>
-        <add key="${self.pname}-deps" value="${self.nugetSource}/lib" />
-      </packageSources>
-    </configuration>
-  '';
+  buildInputs = base.buildInputs ++ [
+    (mkNugetDeps { name = "deps"; nugetDeps = import ./deps.nix; })
+  ];
 
   sconsFlags = base.sconsFlags ++ [
     "module_mono_enabled=true"
     "mono_prefix=${mono}"
   ];
-
-  shouldConfigureNuget = true;
 
   postConfigure = ''
     echo "Setting up buildhome."
@@ -48,12 +36,6 @@ godot3.overrideAttrs (self: base: {
 
     echo "Overlaying godot glue."
     cp -R --no-preserve=mode "$glue"/. .
-
-    if [ -n "$shouldConfigureNuget" ]; then
-      echo "Configuring NuGet."
-      mkdir -p ~/.nuget/NuGet
-      ln -s "$nugetConfig" ~/.nuget/NuGet/NuGet.Config
-    fi
   '';
 
   installedGodotShortcutFileName = "org.godotengine.GodotMono3.desktop";

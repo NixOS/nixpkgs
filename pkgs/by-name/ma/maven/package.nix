@@ -2,13 +2,13 @@
   lib,
   callPackage,
   fetchurl,
-  jdk,
+  jdk_headless,
   makeWrapper,
   stdenvNoCC,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "apache-maven";
+  pname = "maven";
   version = "3.9.8";
 
   src = fetchurl {
@@ -27,9 +27,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r apache-maven-${finalAttrs.version}/* $out/maven
 
     makeWrapper $out/maven/bin/mvn $out/bin/mvn \
-      --set-default JAVA_HOME "${jdk}"
+      --set-default JAVA_HOME "${jdk_headless}"
     makeWrapper $out/maven/bin/mvnDebug $out/bin/mvnDebug \
-      --set-default JAVA_HOME "${jdk}"
+      --set-default JAVA_HOME "${jdk_headless}"
 
     runHook postInstall
   '';
@@ -54,7 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.asl20;
     mainProgram = "mvn";
-    maintainers = with lib.maintainers; [ ];
-    inherit (jdk.meta) platforms;
+    maintainers = [ ];
+    inherit (jdk_headless.meta) platforms;
   };
 })

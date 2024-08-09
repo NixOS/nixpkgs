@@ -46,7 +46,7 @@ in
 
     src = fetchFromGitHub {
       owner = "NVlabs";
-      repo = finalAttrs.pname;
+      repo = "tiny-cuda-nn";
       rev = "v${finalAttrs.version}";
       fetchSubmodules = true;
       hash = "sha256-qW6Fk2GB71fvZSsfu+mykabSxEKvaikZ/pQQZUycOy0=";

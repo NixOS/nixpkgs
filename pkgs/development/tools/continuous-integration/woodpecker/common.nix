@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 let
-  version = "2.6.0";
-  srcHash = "sha256-SuTizOHsj1t4WovbOX5MuMZixbPo7TyCnD6nnf62/H4=";
+  version = "2.7.0";
+  srcHash = "sha256-A9F+kKR4oM4IEA5qLqMaQiW9KAjuQgyvv3peXos3gX8=";
   # The tarball contains vendored dependencies
   vendorHash = null;
 in
@@ -21,8 +21,8 @@ in
         mv -- "$f" "woodpecker"
         # Issue a warning to the user if they call the deprecated executable
         cat >woodpecker-cli << EOF
-    #/bin/sh
-    echo 'WARNING: calling `woodpecker-cli` is deprecated, use `woodpecker` instead.' >&2
+    #!/bin/sh
+    echo 'WARNING: calling \`woodpecker-cli\` is deprecated, use \`woodpecker\` instead.' >&2
     $out/bin/woodpecker "\$@"
     EOF
         chmod +x woodpecker-cli

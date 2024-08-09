@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     mainProgram = "amdctl";
     homepage = "https://github.com/kevinlekiller/amdctl";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

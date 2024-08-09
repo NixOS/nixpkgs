@@ -1,27 +1,25 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
   colorlog,
-  pyvmomi,
-  requests,
-  verboselogs,
-  pyopenssl,
-  setuptools,
+  fetchPypi,
   mock,
+  pyopenssl,
   pytest-mock,
   pytestCheckHook,
+  pythonAtLeast,
+  pyvmomi,
   qemu,
+  requests,
+  setuptools,
+  stdenv,
+  verboselogs,
 }:
 
 buildPythonPackage rec {
   pname = "cot";
   version = "2.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -75,15 +73,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "COT" ];
 
-  meta = with lib; {
+  meta = {
+    homepage = "https://github.com/glennmatthews/cot";
     description = "Common OVF Tool";
     mainProgram = "cot";
     longDescription = ''
-      COT (the Common OVF Tool) is a tool for editing Open Virtualization Format (.ovf, .ova) virtual appliances,
-      with a focus on virtualized network appliances such as the Cisco CSR 1000V and Cisco IOS XRv platforms.
+      COT (the Common OVF Tool) is a tool for editing Open Virtualization Format
+      (.ovf, .ova) virtual appliances, with a focus on virtualized network
+      appliances such as the Cisco CSR 1000V and Cisco IOS XRv platforms.
     '';
-    homepage = "https://github.com/glennmatthews/cot";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evanjs ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ evanjs ];
+    broken = pythonAtLeast "3.12"; # Because it requires packages removed from 3.12 onwards
   };
 }

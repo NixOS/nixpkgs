@@ -10,7 +10,7 @@ buildPythonPackage rec {
   format = "setuptools";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nXEul8E5WFm+E9K0V4jJGGzZfxwE2sUQOZEw8yhkM2c=";
+    hash = "sha256-nXEul8E5WFm+E9K0V4jJGGzZfxwE2sUQOZEw8yhkM2c=";
   };
   pythonImportsCheck = [ "em" ];
   meta = with lib; {

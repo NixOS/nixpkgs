@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, xorg, ncurses, freetype, fontconfig
 , pkg-config, makeWrapper, nixosTests, gitUpdater
-, nix, gnused, coreutils, enableDecLocator ? true }:
+, enableDecLocator ? true }:
 
 stdenv.mkDerivation rec {
   pname = "xterm";
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://invisible-island.net/xterm";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ nequissimus vrthra ];
+    maintainers = with lib.maintainers; [ nequissimus ];
     platforms = with lib.platforms; linux ++ darwin;
     changelog = "https://invisible-island.net/xterm/xterm.log.html";
   };

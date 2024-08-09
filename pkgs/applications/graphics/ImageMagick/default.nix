@@ -30,11 +30,9 @@
 , ApplicationServices
 , Foundation
 , testers
-, imagemagick
 , nixos-icons
 , perlPackages
 , python3
-, fetchpatch
 }:
 
 assert libXtSupport -> libX11Support;
@@ -51,13 +49,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-34";
+  version = "7.1.1-36";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-rECU/dp8HQKFs1PW6QeTZIMxCIzzh1w7CckapnxdzxU=";
+    hash = "sha256-Y/tj8IAhsCFK7Yd0MXZ8X6AOLxICyVOIaSaQveMf17k=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
-    repo = finalAttrs.pname;
+    repo = "UHDM";
     rev = "v${finalAttrs.version}";
     hash = "sha256-va8qAzsg589C6rLmG1uIMDr4X30qpBgRO1ZVKdEs5ok=";
     fetchSubmodules = false;  # we use all dependencies from nix

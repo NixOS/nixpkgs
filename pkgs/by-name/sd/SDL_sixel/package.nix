@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     license = lib.licenses.lgpl21;
     mainProgram = "sdl-config";
     maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ vrthra ]);
+                  ++ (with lib.maintainers; [ ]);
     platforms = lib.platforms.linux;
   };
 }

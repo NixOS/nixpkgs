@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl, gettext
+{ stdenv, lib, buildPackages, fetchurl, fetchpatch, gettext
 , genPosixLockObjOnly ? false
 }: let
   genPosixLockObjOnlyAttrs = lib.optionalAttrs genPosixLockObjOnly {
@@ -17,12 +17,20 @@
   };
 in stdenv.mkDerivation (rec {
   pname = "libgpg-error";
-  version = "1.49";
+  version = "1.50";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-i3nVRjnb9KvAi1QG+y835mmi3sCR3QJPuH3TZxMcY6k=";
+    hash = "sha256-aUBTSeCmM+REooxbNc6PFEhGhFGKUI3EigiZkv6T4go=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/macports/macports-ports/raw/cc17f22f4056d84967bd94cf41458e3d3150f9e1/devel/libgpg-error/files/patch-src-spawn-posix.c.diff";
+      extraPrefix = "";
+      hash = "sha256-nIS9oKcgHdHtRTlaSx7mgwQPXq855t+SNujplQKKhzQ=";
+    })
+  ];
 
   postPatch = ''
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
@@ -75,6 +83,6 @@ in stdenv.mkDerivation (rec {
 
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
   };
 } // genPosixLockObjOnlyAttrs)

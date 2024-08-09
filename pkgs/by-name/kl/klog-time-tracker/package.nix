@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "klog-time-tracker";
-  version = "6.3";
+  version = "6.4";
 
   src = fetchFromGitHub {
     owner = "jotaen";
     repo = "klog";
     rev = "v${version}";
-    hash = "sha256-/NbMXJY853XIiEEVPJdZRO5IZEDYaalSekQ4kxnZgIw=";
+    hash = "sha256-ouWgmSSqGdbZRZRgCoxG4c4fFoJ4Djfmv0JvhBkEQU4=";
   };
 
   vendorHash = "sha256-L84eKm1wktClye01JeyF0LOV9A8ip6Fr+/h09VVZ56k=";

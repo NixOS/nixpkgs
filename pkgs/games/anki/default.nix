@@ -28,14 +28,14 @@
 
 let
   pname = "anki";
-  version = "24.04";
-  rev = "429bc9e14cefb597646a0e1beac6ef140f226b6f";
+  version = "24.06.2";
+  rev = "33a923797afc9655c3b4f79847e1705a1f998d03";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-H/Y6ZEJ7meprk4SWIPkoABs6AV1CzbK2l22jEnMSvyk=";
+    hash = "sha256-jn8MxyDPVk36neHyiuvwOQQ+x7x4JPOR8BnNutTRmnY=";
     fetchSubmodules = true;
   };
 
@@ -50,7 +50,7 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-7yBN6si1Q+xvyosP7YnOw9ZfGcLZdy5ukXXFvvI20Js=";
+    hash = "sha256-wyrVoaDdCkSe5z6C7EAw04G87s6tQ1cfc2d6ygGU0DM=";
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [
@@ -250,12 +250,25 @@ python3.pkgs.buildPythonApplication {
   '';
 
   # mimic https://github.com/ankitects/anki/blob/76d8807315fcc2675e7fa44d9ddf3d4608efc487/build/ninja_gen/src/python.rs#L232-L250
-  checkPhase = ''
+  checkPhase = let
+    disabledTestsString = lib.pipe [
+      # assumes / is not writeable, somehow fails on nix-portable brwap
+      "test_create_open"
+    ] [
+      (lib.map (test: "not ${test}"))
+      (lib.concatStringsSep " and ")
+      lib.escapeShellArg
+    ];
+
+  in ''
+    runHook preCheck
     HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
-      pytest -p no:cacheprovider pylib/tests
+      pytest -p no:cacheprovider pylib/tests -k ${disabledTestsString}
     HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
-      pytest -p no:cacheprovider qt/tests
+      pytest -p no:cacheprovider qt/tests -k ${disabledTestsString}
+    runHook postCheck
   '';
+
 
   preInstall = ''
     mkdir dist

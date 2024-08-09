@@ -10,9 +10,7 @@
 , pprint
 , makeWrapper
 , lem
-, z3
 , linksem
-, num
 , yojson
 }:
 

@@ -1,7 +1,6 @@
 { darwin
 , fetchFromGitHub
 , lib
-, pkg-config
 , rustPlatform
 , stdenv
 }:

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/logrotate/logrotate";
     description = "Rotates and compresses system logs";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.viric ];
+    maintainers = [ maintainers.tobim ];
     platforms = platforms.all;
     mainProgram = "logrotate";
   };

@@ -17,11 +17,11 @@ let
   perl' = perl.withPackages (p: with p; [ FileFcntlLock ]);
 in stdenv.mkDerivation rec {
   pname = "exim";
-  version = "4.97.1";
+  version = "4.98";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    hash = "sha256-vXggV1CaeTWTUIUoWQYm0YXqFgzjLLNL7aJi6Zzv36k=";
+    hash = "sha256-DrwQinefkpO6S0I8IIGPmj23m2AobZarxrprhaFYUvc=";
   };
 
   enableParallelBuilding = true;

@@ -7,19 +7,19 @@
 }:
 let
   pname = "open-webui";
-  version = "0.3.7";
+  version = "0.3.12";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     rev = "v${version}";
-    hash = "sha256-tsJILQ+CuVy8LYSixYNJAwSIZtRegrXXvGzvyf7Knd0=";
+    hash = "sha256-Ot8QsRgRbe0l37C9KGlREDCjq5nTTvcJ1TJaeBe2oxw=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-fB5gvC2sLfH2dJJi+CYyF7PRg+GhZDavhKgeRStaR7I=";
+    npmDepsHash = "sha256-fr+IA6I1pE+vJ+uGE1sf2++s65rPzK//ZL+xT3QoLOA=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -59,10 +59,14 @@ python3.pkgs.buildPythonApplication rec {
     "opencv-python-headless"
     # using `psycopg2` instead
     "psycopg2-binary"
+    "docker"
+    "pytest"
+    "pytest-docker"
   ];
 
   dependencies = with python3.pkgs; [
     aiohttp
+    alembic
     anthropic
     apscheduler
     argon2-cffi
@@ -94,6 +98,7 @@ python3.pkgs.buildPythonApplication rec {
     passlib
     peewee
     peewee-migrate
+    psutil
     psycopg2
     pydub
     pyjwt
@@ -101,6 +106,7 @@ python3.pkgs.buildPythonApplication rec {
     pymysql
     pypandoc
     pypdf
+    python-dotenv
     python-jose
     python-multipart
     python-pptx
@@ -112,7 +118,7 @@ python3.pkgs.buildPythonApplication rec {
     redis
     requests
     sentence-transformers
-    sqlalchemy
+    tiktoken
     unstructured
     uvicorn
     validators
@@ -121,7 +127,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   build-system = with python3.pkgs; [ hatchling ];
-
 
   pythonImportsCheck = [ "open_webui" ];
 
@@ -132,7 +137,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    description = "Full-stack of open-webui. open-webui is a user-friendly WebUI for LLMs (Formerly Ollama WebUI)";
+    description = "Comprehensive suite for LLMs with a user-friendly WebUI";
     homepage = "https://github.com/open-webui/open-webui";
     changelog = "https://github.com/open-webui/open-webui/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;

@@ -1,9 +1,7 @@
-{ bash
-, coreutils
+{ coreutils
 , fetchFromGitHub
 , lib
 , python39
-, substituteAll
 }:
 
 let

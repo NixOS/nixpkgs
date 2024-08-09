@@ -6,19 +6,9 @@
 , faketty
 }:
 
-let
-  # Grafana seems to just set it to the latest version available
-  # nowadays.
-  patchGoVersion = ''
-    substituteInPlace go.{mod,work} pkg/build/wire/go.mod \
-      --replace-fail "go 1.22.4" "go 1.22.3"
-    substituteInPlace Makefile \
-      --replace-fail "GO_VERSION = 1.22.4" "GO_VERSION = 1.22.3"
-  '';
-in
 buildGoModule rec {
   pname = "grafana";
-  version = "11.1.0";
+  version = "11.1.3";
 
   subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
@@ -26,7 +16,7 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-iTTT10YN8jBT4/ukGXNK1QHcyzXnAqg2LiFtNiwnENw=";
+    hash = "sha256-PfkKBKegMk+VjVJMocGj+GPTuUJipjD8+857skwmoco=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -46,9 +36,6 @@ buildGoModule rec {
       jq moreutils python3
     # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
     ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
-    postPatch = ''
-      ${patchGoVersion}
-    '';
     buildPhase = ''
       runHook preBuild
       export HOME="$(mktemp -d)"
@@ -73,16 +60,12 @@ buildGoModule rec {
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-Ny/SoelFVPvBBn50QpHcLTuVY3ynKbCegM1uQkJzB9Y=";
+  vendorHash = "sha256-vd3hb7+lmhQPTZO/Xqi59XSPGj5sd218xQAD1bRbUz8=";
 
   proxyVendor = true;
 
   nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 faketty ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
-
-  postPatch = ''
-    ${patchGoVersion}
-  '';
 
   postConfigure = ''
     # Generate DI code that's required to compile the package.

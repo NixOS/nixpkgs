@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pmix";
-  version = "5.0.1";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     repo = "openpmix";
     owner = "openpmix";
     rev = "v${version}";
-    hash = "sha256-ZuuzQ8j5zqQ/9mBFEODAaoX9/doWB9Nt9Sl75JkJyqU=";
+    hash = "sha256-5qBZj4L0Qu/RvNj8meL0OlLCdfGvBP0D916Mr+0XOCQ=";
     fetchSubmodules = true;
   };
 
@@ -71,8 +71,9 @@ stdenv.mkDerivation rec {
 
     # Pin the compiler to the current version in a cross compiler friendly way.
     # Same pattern as for openmpi (see https://github.com/NixOS/nixpkgs/pull/58964#discussion_r275059427).
-    sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
-      $dev/share/pmix/pmixcc-wrapper-data.txt
+    substituteInPlace $dev/share/pmix/pmixcc-wrapper-data.txt \
+      --replace-fail compiler=gcc \
+        compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
   '';
 
   enableParallelBuilding = true;

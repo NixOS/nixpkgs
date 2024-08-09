@@ -7,14 +7,14 @@
 }:
 buildLua (finalAttrs: {
   pname = "modernx-zydezu";
-  version = "0.3.5.5";
+  version = "0.3.6.6";
 
   scriptPath = "modernx.lua";
   src = fetchFromGitHub {
     owner = "zydezu";
     repo = "ModernX";
     rev = finalAttrs.version;
-    hash = "sha256-sPpVwI8w5JsP/jML0viOSqhyYBVKfxWuKbxHkX3GVug=";
+    hash = "sha256-Jt3Y/4no3dUOopjvbS/dBGU0vw9Lq4o5inb4efuyYBM=";
   };
 
   postInstall = ''
@@ -31,11 +31,12 @@ buildLua (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Modern OSC UI replacement for MPV that retains the functionality of the default OSC";
+    changelog = "https://github.com/zydezu/ModernX/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/zydezu/ModernX";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       Guanran928
     ];

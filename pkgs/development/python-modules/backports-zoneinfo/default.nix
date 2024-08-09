@@ -75,6 +75,6 @@ buildPythonPackage rec {
     description = "Backport of the standard library module zoneinfo";
     homepage = "https://github.com/pganssle/zoneinfo";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -20,18 +20,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs doc
-
-  '' + lib.optionalString doCheck ''
-    # Work around lack of DNS resolution in chroots.
-    for i in "tests/"*.pm "tests/"*.px
-    do
-      sed -i "$i" -e's/localhost/127.0.0.1/g'
-    done
   '';
 
   nativeBuildInputs = [ gettext pkg-config perlPackages.perl lzip libiconv libintl ];
   buildInputs = [ libidn2 zlib pcre libuuid ]
-    ++ lib.optionals doCheck [ perlPackages.IOSocketSSL perlPackages.LWP python3 ]
     ++ lib.optional withOpenssl openssl
     ++ lib.optional withLibpsl libpsl
     ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices perlPackages.perl ];
@@ -43,7 +35,35 @@ stdenv.mkDerivation rec {
     "--without-included-regex"
   ];
 
-  doCheck = false;
+  doCheck = true;
+  preCheck = ''
+    patchShebangs tests fuzz
+
+    # Work around lack of DNS resolution in chroots.
+    for i in "tests/"*.pm "tests/"*.px
+    do
+      sed -i "$i" -e's/localhost/127.0.0.1/g'
+    done
+  '' + lib.optionalString stdenv.isDarwin ''
+    # depending on the underlying filesystem, some tests
+    # creating exotic file names fail
+    for f in tests/Test-ftp-iri.px \
+      tests/Test-ftp-iri-fallback.px \
+      tests/Test-ftp-iri-recursive.px \
+      tests/Test-ftp-iri-disabled.px \
+      tests/Test-iri-disabled.px \
+      tests/Test-iri-list.px ;
+    do
+      # just return magic "skip" exit code 77
+      sed -i 's/^exit/exit 77 #/' $f
+    done
+  '';
+  checkInputs = [
+    perlPackages.HTTPDaemon
+    python3
+  ] ++ lib.optionals stdenv.isDarwin [
+    perlPackages.IOSocketSSL
+  ];
 
   meta = with lib; {
     description = "Tool for retrieving files using HTTP, HTTPS, and FTP";

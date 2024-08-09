@@ -73,6 +73,6 @@ buildPythonPackage rec {
     mainProgram = "jupyter-events";
     homepage = "https://github.com/jupyter/jupyter_events";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

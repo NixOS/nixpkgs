@@ -4,7 +4,6 @@
   fetchurl,
   buildPythonPackage,
   isPy3k,
-  pythonOlder,
   pythonAtLeast,
   astor,
   gast,
@@ -31,7 +30,7 @@
   python,
   keras-applications,
   keras-preprocessing,
-  addOpenGLRunpath,
+  addDriverRunpath,
   astunparse,
   flatbuffers,
   h5py,
@@ -91,7 +90,7 @@ buildPythonPackage {
     h5py
   ] ++ lib.optional (!isPy3k) mock;
 
-  build-system = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+  build-system = [ wheel ] ++ lib.optionals cudaSupport [ addDriverRunpath ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -189,7 +188,7 @@ buildPythonPackage {
         chmod a+rx "$lib"
         patchelf --set-rpath "$rrPath" "$lib"
         ${lib.optionalString cudaSupport ''
-          addOpenGLRunpath "$lib"
+          addDriverRunpath "$lib"
         ''}
       done
     '';
@@ -208,16 +207,16 @@ buildPythonPackage {
     "tensorflow.python.framework"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Computation using data flow graphs for scalable machine learning";
     homepage = "http://tensorflow.org";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jyp
       abbradar
     ];
-    platforms = platforms.all;
+    badPlatforms = [ "x86_64-darwin" ];
     # Cannot import tensortfow on python 3.12 as it still dependends on distutils:
     # ModuleNotFoundError: No module named 'distutils'
     # https://github.com/tensorflow/tensorflow/issues/58073

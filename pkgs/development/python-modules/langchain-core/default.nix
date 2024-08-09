@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
   grandalf,
+  httpx,
   jsonpatch,
   langsmith,
   numpy,
@@ -23,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.2.9";
+  version = "0.2.21";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,18 +34,19 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-core==${version}";
-    hash = "sha256-/BUn/NxaE9l3VY6dPshr1JJaHTGzn9NMQhSQ2De65Jg=";
+    hash = "sha256-8qEN03iimGLnhg6TdpPal+MXBZJ/QHJKwjxRF96abBw=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
-  pythonRelaxDeps = [
-    "langsmith"
-    "packaging"
-  ];
+  preConfigure = ''
+    ln -s ${src}/libs/standard-tests/langchain_standard_tests ./langchain_standard_tests
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "path = \"../standard-tests\"" "path = \"./langchain_standard_tests\""
+  '';
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     jsonpatch
@@ -59,6 +62,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     grandalf
+    httpx
     numpy
     pytest-asyncio
     pytest-mock
@@ -68,13 +72,6 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [ "tests/unit_tests" ];
-
-  disabledTests = [
-    # Fail for an unclear reason with:
-    # AssertionError: assert '6a92363c-4ac...-d344769ab6ac' == '09af124a-2ed...-671c64c72b70'
-    "test_config_traceable_handoff"
-    "test_config_traceable_async_handoff"
-  ];
 
   passthru = {
     updateScript = writeScript "update.sh" ''
@@ -88,6 +85,16 @@ buildPythonPackage rec {
       nix-update --commit --version-regex 'langchain-community==(.*)' python3Packages.langchain-community
     '';
   };
+
+  disabledTests = [
+    # flaky, sometimes fail to strip uuid from AIMessageChunk before comparing to test value
+    "test_map_stream"
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    # Langchain-core the following tests due to the test comparing execution time with magic values.
+    "test_queue_for_streaming_via_sync_call"
+    "test_same_event_loop"
+  ];
 
   meta = {
     description = "Building applications with LLMs through composability";

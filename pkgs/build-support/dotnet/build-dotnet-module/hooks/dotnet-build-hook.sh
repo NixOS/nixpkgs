@@ -3,20 +3,20 @@ dotnetBuildHook() {
 
     runHook preBuild
 
-    local -r hostRuntimeId=@runtimeId@
     local -r dotnetBuildType="${dotnetBuildType-Release}"
-    local -r dotnetRuntimeId="${dotnetRuntimeId-$hostRuntimeId}"
 
     if [[ -n $__structuredAttrs ]]; then
         local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
         local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
         local dotnetFlagsArray=( "${dotnetFlags[@]}" )
         local dotnetBuildFlagsArray=( "${dotnetBuildFlags[@]}" )
+        local dotnetRuntimeIdsArray=( "${dotnetRuntimeIds[@]}" )
     else
         local dotnetProjectFilesArray=($dotnetProjectFiles)
         local dotnetTestProjectFilesArray=($dotnetTestProjectFiles)
         local dotnetFlagsArray=($dotnetFlags)
         local dotnetBuildFlagsArray=($dotnetBuildFlags)
+        local dotnetRuntimeIdsArray=($dotnetRuntimeIds)
     fi
 
     if [[ -n "${enableParallelBuilding-}" ]]; then
@@ -49,22 +49,25 @@ dotnetBuildHook() {
     dotnetBuild() {
         local -r projectFile="${1-}"
 
-        local runtimeIdFlagsArray=()
-        if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
-            runtimeIdFlagsArray+=("--runtime" "$dotnetRuntimeId")
-        fi
+        for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
+            local runtimeIdFlagsArray=()
+            if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
+                runtimeIdFlagsArray+=("--runtime" "$runtimeId")
+            fi
 
-        dotnet build ${1+"$projectFile"} \
-            -maxcpucount:"$maxCpuFlag" \
-            -p:BuildInParallel="$parallelBuildFlag" \
-            -p:ContinuousIntegrationBuild=true \
-            -p:Deterministic=true \
-            --configuration "$dotnetBuildType" \
-            --no-restore \
-            "${versionFlagsArray[@]}" \
-            "${runtimeIdFlagsArray[@]}" \
-            "${dotnetBuildFlagsArray[@]}" \
-            "${dotnetFlagsArray[@]}"
+            dotnet build ${1+"$projectFile"} \
+                -maxcpucount:"$maxCpuFlag" \
+                -p:BuildInParallel="$parallelBuildFlag" \
+                -p:ContinuousIntegrationBuild=true \
+                -p:Deterministic=true \
+                -p:OverwriteReadOnlyFiles=true \
+                --configuration "$dotnetBuildType" \
+                --no-restore \
+                "${versionFlagsArray[@]}" \
+                "${runtimeIdFlagsArray[@]}" \
+                "${dotnetBuildFlagsArray[@]}" \
+                "${dotnetFlagsArray[@]}"
+        done
     }
 
     if (( ${#dotnetProjectFilesArray[@]} == 0 )); then

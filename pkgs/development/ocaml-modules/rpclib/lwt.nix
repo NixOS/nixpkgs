@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , rpclib
 , lwt
 , alcotest-lwt

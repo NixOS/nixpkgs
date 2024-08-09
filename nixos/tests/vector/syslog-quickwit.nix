@@ -61,6 +61,7 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
                 }
                 .scope_name = structured.msgid
                 del(.message)
+                del(.host)
                 del(.timestamp)
                 del(.service)
                 del(.source_type)

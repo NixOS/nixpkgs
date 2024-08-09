@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "packages";
     repo = pname;
     rev = "upstream/${version}";
-    sha256 = "sha256-dF9QmBckyHAZ+JbLr0jTmp0eMu947unJqjrTMsJAfIE=";
+    hash = "sha256-dF9QmBckyHAZ+JbLr0jTmp0eMu947unJqjrTMsJAfIE=";
   };
 
   patches = [

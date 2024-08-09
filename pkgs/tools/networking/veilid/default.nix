@@ -6,17 +6,18 @@
 , rustPlatform
 , protobuf
 , capnproto
+, cmake
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "veilid";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Gm65fvLImbsAU8kMYQv5VFEjkBQnhBFDqwheddRbtU8=";
+    hash = "sha256-nEJxiox2aoQBV83vlpiBB4In59+lfHF6/a8HqDYcFT4=";
   };
 
   cargoLock = {
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     capnproto
+    cmake
     protobuf
   ];
 
@@ -39,6 +41,8 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [
     "--workspace"
   ];
+
+  RUSTFLAGS = "--cfg tokio_unstable";
 
   doCheck = false;
 

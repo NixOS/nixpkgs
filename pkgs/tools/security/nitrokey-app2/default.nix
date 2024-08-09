@@ -9,7 +9,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.3.0";
+  version = "2.3.1";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.9";
@@ -17,8 +17,8 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
-    rev = "v${version}";
-    hash = "sha256-BSq3ezNt6btQUO1hMVw9bN3VCyUOUhfRFJcHDGkIm6Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-A/HGMFgYaxgJApR3LQfFuBD5B0A3GGBeoTT5brp/UAs=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -36,6 +36,8 @@ python3.pkgs.buildPythonApplication rec {
     pyside6
     qt-material
   ];
+
+  pythonRelaxDeps = [ "pynitrokey" ];
 
   pythonImportsCheck = [
     "nitrokeyapp"

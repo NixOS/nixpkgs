@@ -1,10 +1,11 @@
 {
-  stdenv,
   fetchFromSourcehut,
+  fetchpatch,
   hareHook,
   haredo,
   lib,
   scdoc,
+  stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "treecat";
@@ -21,6 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "d277aed99eb48eef891b76916a61029989c41d2d";
     hash = "sha256-4A01MAGkBSSzkyRw4omNbLoX8z+pHfoUO7/6QvEUu70=";
   };
+
+  patches = [
+    # Update for Hare 0.24.2.
+    (fetchpatch {
+      url = "https://git.sr.ht/~autumnull/treecat/commit/53ad8126261051dd3b3493c34ae49f23db2c2d16.patch";
+      hash = "sha256-cF/lMZjg1hB93rBXcjecT5Rrzb2Y73u6DSW1WcP5Vek=";
+    })
+  ];
 
   nativeBuildInputs = [
     hareHook

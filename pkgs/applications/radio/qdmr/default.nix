@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  writeText,
   cmake,
   libxslt,
   docbook_xsl_ns,
@@ -22,13 +21,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "qdmr";
-  version = "0.11.3";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "hmatuschek";
     repo = "qdmr";
     rev = "v${version}";
-    hash = "sha256-YLGsKGcKIPd0ihd5IzlT71dYkxZfeH7BpnKQMEyY8dI=";
+    hash = "sha256-8NV0+M9eMcvkP3UERDkaimbapTKxB4rYRLbHZjzG4Ws=";
   };
 
   nativeBuildInputs = [

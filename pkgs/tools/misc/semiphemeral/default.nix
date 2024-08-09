@@ -9,7 +9,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KRi3zfRWGRZJjQ6KPqBI9wQ6yU8Ohx0TDtA5qoak35U=";
+    hash = "sha256-KRi3zfRWGRZJjQ6KPqBI9wQ6yU8Ohx0TDtA5qoak35U=";
   };
 
   doCheck = false; # upstream has no tests

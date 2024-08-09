@@ -17,7 +17,7 @@ buildGoModule rec {
     repo = "trezord-go";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-3I6NOzDMhzRyVSOURl7TjJ1Z0P0RcKrSs5rNaZ0Ho9M=";
+    hash = "sha256-3I6NOzDMhzRyVSOURl7TjJ1Z0P0RcKrSs5rNaZ0Ho9M=";
   };
 
   vendorHash = "sha256-wXgAmZEXdM4FcMCQbAs+ydXshCAMu7nl/yVv/3sqaXE=";

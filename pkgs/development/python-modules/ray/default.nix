@@ -1,58 +1,62 @@
 {
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  pythonAtLeast,
+  python,
+  fetchPypi,
+  autoPatchelfHook,
+
+  # dependencies
   aiohttp,
   aiohttp-cors,
-  aiorwlock,
   aiosignal,
   attrs,
-  autoPatchelfHook,
-  buildPythonPackage,
-  fetchPypi,
   click,
   cloudpickle,
   colorama,
   colorful,
   cython,
-  dm-tree,
-  fastapi,
   filelock,
   frozenlist,
-  fsspec,
   gpustat,
   grpcio,
-  gym,
   jsonschema,
-  lib,
-  lz4,
-  matplotlib,
   msgpack,
   numpy,
   opencensus,
   packaging,
-  pandas,
-  py-spy,
   prometheus-client,
   psutil,
-  pyarrow,
   pydantic,
-  python,
-  pythonAtLeast,
-  pythonOlder,
+  py-spy,
   pyyaml,
   requests,
-  scikit-image,
-  scipy,
   setproctitle,
   smart-open,
+  virtualenv,
+
+  # optional-dependencies
+  fsspec,
+  pandas,
+  pyarrow,
+  dm-tree,
+  gym,
+  lz4,
+  matplotlib,
+  scikit-image,
+  scipy,
+  aiorwlock,
+  fastapi,
   starlette,
+  uvicorn,
   tabulate,
   tensorboardx,
-  uvicorn,
-  virtualenv,
 }:
 
 let
   pname = "ray";
-  version = "2.31.0";
+  version = "2.34.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -76,39 +80,6 @@ buildPythonPackage rec {
       // binary-hash
     );
 
-  passthru.optional-dependencies = rec {
-    data-deps = [
-      pandas
-      pyarrow
-      fsspec
-    ];
-
-    serve-deps = [
-      aiorwlock
-      fastapi
-      pandas
-      starlette
-      uvicorn
-    ];
-
-    tune-deps = [
-      tabulate
-      tensorboardx
-    ];
-
-    rllib-deps = tune-deps ++ [
-      dm-tree
-      gym
-      lz4
-      matplotlib
-      scikit-image
-      pyyaml
-      scipy
-    ];
-
-    air-deps = data-deps ++ serve-deps ++ tune-deps ++ rllib-deps;
-  };
-
   nativeBuildInputs = [
     autoPatchelfHook
   ];
@@ -121,10 +92,10 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    attrs
     aiohttp
     aiohttp-cors
     aiosignal
+    attrs
     click
     cloudpickle
     colorama
@@ -139,16 +110,45 @@ buildPythonPackage rec {
     numpy
     opencensus
     packaging
-    py-spy
     prometheus-client
     psutil
     pydantic
+    py-spy
     pyyaml
     requests
     setproctitle
     smart-open
     virtualenv
   ];
+
+  optional-dependencies = rec {
+    air-deps = data-deps ++ serve-deps ++ tune-deps ++ rllib-deps;
+    data-deps = [
+      fsspec
+      pandas
+      pyarrow
+    ];
+    rllib-deps = tune-deps ++ [
+      dm-tree
+      gym
+      lz4
+      matplotlib
+      pyyaml
+      scikit-image
+      scipy
+    ];
+    serve-deps = [
+      aiorwlock
+      fastapi
+      pandas
+      starlette
+      uvicorn
+    ];
+    tune-deps = [
+      tabulate
+      tensorboardx
+    ];
+  };
 
   postInstall = ''
     chmod +x $out/${python.sitePackages}/ray/core/src/ray/{gcs/gcs_server,raylet/raylet}

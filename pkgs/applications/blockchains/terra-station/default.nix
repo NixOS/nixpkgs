@@ -1,8 +1,6 @@
 { lib, stdenv
 , fetchurl
 , dpkg
-, util-linux
-, bash
 , makeWrapper
 , electron
 , asar

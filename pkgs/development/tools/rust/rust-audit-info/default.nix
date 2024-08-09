@@ -6,10 +6,10 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-g7ElNehBAVSRRlqsxkNm20C0KOMkf310bXNs3EN+/NQ=";
+    hash = "sha256-g7ElNehBAVSRRlqsxkNm20C0KOMkf310bXNs3EN+/NQ=";
   };
 
-  cargoSha256 = "sha256-bKrdgz6dyv/PF5JXMq7uvsh7SsK/qEd2W7tm6+YYlxg=";
+  cargoHash = "sha256-bKrdgz6dyv/PF5JXMq7uvsh7SsK/qEd2W7tm6+YYlxg=";
 
   meta = with lib; {
     description = "Command-line tool to extract the dependency trees embedded in binaries by cargo-auditable";

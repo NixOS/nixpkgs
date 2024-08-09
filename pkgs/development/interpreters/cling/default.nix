@@ -7,7 +7,6 @@
 , makeWrapper
 , ncurses
 , python3
-, runCommand
 , zlib
 
 # *NOT* from LLVM 9!

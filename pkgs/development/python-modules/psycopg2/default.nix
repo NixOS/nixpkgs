@@ -72,6 +72,6 @@ buildPythonPackage rec {
       lgpl3Plus
       zpl20
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

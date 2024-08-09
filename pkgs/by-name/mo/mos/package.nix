@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "http://mos.caldis.me/";
     changelog = "https://github.com/Caldis/Mos/releases/tag/${finalAttrs.version}";
     license = licenses.cc-by-nc-40;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = platforms.darwin;
   };

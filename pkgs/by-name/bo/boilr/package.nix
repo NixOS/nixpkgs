@@ -7,14 +7,14 @@
 , xorg
 , perl
 , openssl
-, speechd
+, speechd-minimal
 , libxkbcommon
 , libGL
 , wayland
 }:
 let
   rpathLibs = [
-    speechd
+    speechd-minimal
     openssl
     gtk3
     libxkbcommon

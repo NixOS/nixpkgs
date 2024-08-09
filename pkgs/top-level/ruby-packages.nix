@@ -1244,7 +1244,7 @@
     version = "2.0.24";
   };
   gtk3 = {
-    dependencies = ["atk" "gdk3"];
+    dependencies = ["atk" "cairo" "gdk3"];
     groups = ["default"];
     platforms = [];
     source = {

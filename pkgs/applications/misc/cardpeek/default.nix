@@ -10,7 +10,6 @@
 , curl
 , readline
 , PCSC
-, xcbuild
 }:
 let
   version = "0.8.4";

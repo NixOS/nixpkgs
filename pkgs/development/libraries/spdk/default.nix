@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "spdk";
     repo = "spdk";
     rev = "v${version}";
-    sha256 = "sha256-kjZWaarvNSYXseJ/uH7Ak7DbWEgrLnAwXcL8byJ9fjU=";
+    hash = "sha256-kjZWaarvNSYXseJ/uH7Ak7DbWEgrLnAwXcL8byJ9fjU=";
     fetchSubmodules = true;
   };
 

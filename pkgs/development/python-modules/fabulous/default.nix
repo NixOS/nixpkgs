@@ -2,14 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pillow,
+  setuptools,
   python,
 }:
 
 buildPythonPackage rec {
   pname = "fabulous";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jart";
@@ -18,9 +20,18 @@ buildPythonPackage rec {
     hash = "sha256-hchlxuB5QP+VxCx+QZ2739/mR5SQmYyE+9kXLKJ2ij4=";
   };
 
-  patches = [ ./relative_import.patch ];
+  patches = [
+    ./relative_import.patch
+    # https://github.com/jart/fabulous/pull/22
+    (fetchpatch2 {
+      url = "https://github.com/jart/fabulous/commit/5779f2dfbc88fd81b5b5865247913d4775e67959.patch?full_index=1";
+      hash = "sha256-miWFt4vDpwWhSUgnWDjWUXoibijcDa1c1dDOSkfWoUg=";
+    })
+  ];
 
-  propagatedBuildInputs = [ pillow ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pillow ];
 
   checkPhase = ''
     for i in tests/*.py; do
@@ -28,10 +39,10 @@ buildPythonPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Make the output of terminal applications look fabulous";
     homepage = "https://jart.github.io/fabulous";
-    license = licenses.asl20;
-    maintainers = [ maintainers.symphorien ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.symphorien ];
   };
 }

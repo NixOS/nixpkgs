@@ -27,6 +27,7 @@
 , stb
 , wlroots
 , libdecor
+, lcms
 , lib
 , makeBinaryWrapper
 , patchelfUnstable
@@ -44,19 +45,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.14.23";
+  version = "3.14.26";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-qXwCzNGlkGmO3BkQ74tJxufmjh4dUWzIgjHzDCEShU8=";
+    hash = "sha256-vCPKySLB1D9oKgCrYrXqt/s0hV+/ocuWOrcDUzKbdKI=";
   };
 
   patches = [
     # Make it look for shaders in the right place
     ./shaders-path.patch
+    # patch relative gamescopereaper path with absolute
+    ./gamescopereaper.patch
   ];
 
   # We can't substitute the patch itself because substituteAll is itself a derivation,
@@ -65,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/reshade_effect_manager.cpp --replace "@out@" "$out"
     # Patching shebangs in the main `libdisplay-info` build
     patchShebangs subprojects/libdisplay-info/tool/gen-search-table.py
+    # Replace gamescopereeaper with absolute path
+    substituteInPlace src/Utils/Process.cpp --subst-var-by "gamescopereaper" "$out/bin/gamescopereaper"
   '';
 
   mesonFlags = [
@@ -128,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     libcap
     stb
+    lcms
   ]);
 
   postInstall = lib.optionalString enableExecutable ''

@@ -7,6 +7,8 @@
 , lib
 , makeWrapper
 , man-db
+, nixos
+, nixosTests
 , openssh
 , radicle-node
 , runCommand
@@ -16,15 +18,15 @@
 , xdg-utils
 }: rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
-  version = "1.0.0-rc.12";
+  version = "1.0.0-rc.14";
   env.RADICLE_VERSION = version;
 
   src = fetchgit {
     url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
     rev = "refs/namespaces/z6MksFqXN3Yhqk8pTJdUGLwATkRfQvwZXPqR2qMEhbS9wzpT/refs/tags/v${version}";
-    hash = "sha256-bXFhufmMgJ+bX4PASIUPmNQ2L5Y8LHJ+pLevpJAYkYc=";
+    hash = "sha256-vqLDutaLeRuqRu8R9+0x2sDKxBrDeJ1RgKAiedkTvAw=";
   };
-  cargoHash = "sha256-CAxy9J5bOPHedf6g7TEfM35F+Batom6g2V3k7CPC8Sk=";
+  cargoHash = "sha256-Qipt1IstoFGo1qQn/ZSwm3d1jrqj4mwIJep/A+/21WY=";
 
   nativeBuildInputs = [ asciidoctor installShellFiles makeWrapper ];
   nativeCheckInputs = [ git ];
@@ -89,6 +91,19 @@
 
         touch $out
       '';
+      nixos-build = lib.recurseIntoAttrs {
+        checkConfig-success = (nixos {
+            services.radicle.settings = {
+              node.alias = "foo";
+            };
+          }).config.services.radicle.configFile;
+        checkConfig-failure = testers.testBuildFailure (nixos {
+            services.radicle.settings = {
+              node.alias = null;
+            };
+          }).config.services.radicle.configFile;
+      };
+      nixos-run = nixosTests.radicle;
     };
 
   meta = {

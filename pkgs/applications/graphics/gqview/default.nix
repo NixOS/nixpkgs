@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gqview.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "gqview";
   };
 }

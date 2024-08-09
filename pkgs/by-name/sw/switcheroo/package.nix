@@ -6,6 +6,7 @@
 , fetchFromGitLab
 , glib
 , gtk4
+, imagemagick
 , libadwaita
 , meson
 , ninja
@@ -52,6 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"
+    )
+  '';
 
   # Workaround for the gettext-sys issue
   # https://github.com/Koka/gettext-rs/issues/114

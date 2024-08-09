@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
-    rev = "${finalAttrs.pname}-${finalAttrs.version}";
+    rev = "vulkan-cts-${finalAttrs.version}";
     hash = "sha256-JCepNBVHaN4KXRcLOZ2z7toBMri90tV7kjNWHRXRESE=";
   };
 
@@ -128,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Khronos Vulkan Conformance Tests";
     homepage = "https://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/vulkancts/README.md";
-    changelog = "https://github.com/KhronosGroup/VK-GL-CTS/releases/tag/${finalAttrs.pname}-${finalAttrs.version}";
+    changelog = "https://github.com/KhronosGroup/VK-GL-CTS/releases/tag/vulkan-cts-${finalAttrs.version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ Flakebi ];
   };

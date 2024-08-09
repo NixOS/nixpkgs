@@ -7,10 +7,19 @@
   mkAzExtension,
   mycli,
   python3Packages,
-  python3,
 }:
 
 {
+  application-insights = mkAzExtension rec {
+    pname = "application-insights";
+    version = "1.2.1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/application_insights-${version}-py2.py3-none-any.whl";
+    sha256 = "e1fa824eb587e2bec7f4cb4d1c4ce1033ab3d3fac65af42dd6218f673b019cee";
+    description = "Support for managing Application Insights components and querying metrics, events, and logs from such components";
+    propagatedBuildInputs = with python3Packages; [ isodate ];
+    meta.maintainers = with lib.maintainers; [ andreasvoss ];
+  };
+
   azure-devops = mkAzExtension rec {
     pname = "azure-devops";
     version = "1.0.1";
@@ -19,6 +28,19 @@
     description = "Tools for managing Azure DevOps";
     propagatedBuildInputs = with python3Packages; [ distro ];
     meta.maintainers = with lib.maintainers; [ katexochen ];
+  };
+
+  containerapp = mkAzExtension rec {
+    pname = "containerapp";
+    version = "0.3.53";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/containerapp-${version}-py2.py3-none-any.whl";
+    sha256 = "f9b4f3928469efcc1bfbc98cd906d9d92e72617e5c21cf3ade8b37651607c3e1";
+    description = "Microsoft Azure Command-Line Tools Containerapp Extension";
+    propagatedBuildInputs = with python3Packages; [
+      docker
+      pycomposefile
+    ];
+    meta.maintainers = with lib.maintainers; [ giggio ];
   };
 
   rdbms-connect = mkAzExtension rec {
@@ -34,10 +56,11 @@
         pymysql
         setproctitle
       ])
-      ++ [ (mycli.override { inherit python3; }) ];
+      ++ [ mycli ];
     meta.maintainers = with lib.maintainers; [ obreitwi ];
   };
 
   # Removed extensions
   blockchain = throw "The 'blockchain' extension for azure-cli was deprecated upstream"; # Added 2024-04-26
+  vm-repair = throw "The 'vm-repair' extension for azure-cli was deprecated upstream"; # Added 2024-08-06
 }

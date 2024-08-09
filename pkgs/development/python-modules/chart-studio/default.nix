@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "chart-studio";
-  version = "5.22.0";
+  version = "5.23.0";
   pyproject = true;
 
   # chart-studio was split from plotly
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "plotly";
     repo = "plotly.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cEm0vLQ4PAVxvplqK+yayxLpNCvyfZtjZva0Bl2Sdfs=";
+    hash = "sha256-K1hEs00AGBCe2fgytyPNWqE5M0jU5ESTzynP55kc05Y=";
   };
 
   sourceRoot = "${src.name}/packages/python/chart-studio";
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Utilities for interfacing with Plotly's Chart Studio service";
     homepage = "https://github.com/plotly/plotly.py/tree/master/packages/python/chart-studio";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

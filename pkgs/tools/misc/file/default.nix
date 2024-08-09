@@ -14,8 +14,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     urls = [
-      "https://astron.com/pub/file/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
-      "https://distfiles.macports.org/file/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
+      "https://astron.com/pub/file/file-${finalAttrs.version}.tar.gz"
+      "https://distfiles.macports.org/file/file-${finalAttrs.version}.tar.gz"
     ];
     hash = "sha256-/Jf1ECm7DiyfTjv/79r2ePDgOe6HK53lwAKm0Jx4TYI=";
   };

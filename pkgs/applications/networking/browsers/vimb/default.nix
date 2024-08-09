@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://fanglingsu.github.io/vimb/";
     license = lib.licenses.gpl3;
-    maintainers = [];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

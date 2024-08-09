@@ -6,6 +6,7 @@
 }:
 let
   py = python3.override {
+    self = py;
     packageOverrides = final: prev: {
       django = prev.django_5;
     };
@@ -92,7 +93,7 @@ py.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/healthchecks/healthchecks";
-    description = "Cron monitoring tool written in Python & Django ";
+    description = "Cron monitoring tool written in Python & Django";
     license = licenses.bsd3;
     maintainers = with maintainers; [ phaer ];
   };

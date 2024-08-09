@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tdnf";
-  version = "3.5.7";
+  version = "3.5.8";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "tdnf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+oVmIZqWi1JdiOv40C4dS2a9VqK3hzGl+PQ7sk1l11o=";
+    hash = "sha256-rs6NMIwpJCBsO7Ca+za8pVJXQwpcgFvpd15ayS01mQM=";
   };
 
   nativeBuildInputs = [

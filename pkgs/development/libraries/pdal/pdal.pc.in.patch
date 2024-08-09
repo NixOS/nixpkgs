@@ -1,0 +1,12 @@
+diff --git a/apps/pdal.pc.in b/apps/pdal.pc.in
+index 6885221cacc8..a07ee82cea68 100644
+--- a/apps/pdal.pc.in
++++ b/apps/pdal.pc.in
+@@ -1,6 +1,6 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@/bin
+-libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ includedir=@CMAKE_INSTALL_PREFIX@/include
+ 
+ Name: PDAL

@@ -1,23 +1,36 @@
-{ lib
-, clash-verge
-, mihomo
-, fetchurl
+{
+  lib,
+  appimageTools,
+  fetchurl,
+  nix-update-script,
 }:
-
-(clash-verge.override {
-  clash-meta = mihomo;
-}).overrideAttrs (old: rec {
+appimageTools.wrapType2 rec {
   pname = "clash-nyanpasu";
-  version = "1.4.5";
+  version = "1.5.1";
 
   src = fetchurl {
-    url = "https://github.com/keiko233/clash-nyanpasu/releases/download/v${version}/clash-nyanpasu_${version}_amd64.deb";
-    hash = "sha256-cxaq7Rndf0ytEaqc7CGQix5SOAdsTOoTj1Jlhjr5wEA=";
+    url = "https://github.com/LibNyanpasu/clash-nyanpasu/releases/download/v${version}/clash-nyanpasu_${version}_amd64.AppImage";
+    hash = "sha256-uUWs7yfSrqe/6kTb4iMA9ty6j/Wi9qGYX65VzTG5nkc=";
   };
 
-  meta = old.meta // (with lib; {
+  extraInstallCommands =
+    let
+      appimageContents = appimageTools.extractType2 { inherit pname version src; };
+    in
+    ''
+      install -Dm444 ${appimageContents}/clash-nyanpasu.desktop -t $out/share/applications
+      cp -r ${appimageContents}/usr/share/icons $out/share
+    '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Clash GUI based on tauri";
     homepage = "https://github.com/keiko233/clash-nyanpasu";
-    maintainers = with maintainers; [ Guanran928 ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "clash-nyanpasu";
-  });
-})
+    maintainers = with lib.maintainers; [ Guanran928 ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+  };
+}

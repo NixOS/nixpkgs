@@ -364,6 +364,9 @@ in stdenv.mkDerivation {
     ''}
   '';
 
+  # > clang-15-unwrapped: error: unsupported option '-fzero-call-used-regs=used-gpr' for target 'arm64-apple-macosx10.9.0'
+  hardeningDisable = lib.optional stdenv.isDarwin "zerocallusedregs";
+
   configurePhase = ''
     export SWIFT_SOURCE_ROOT="$PWD"
     mkdir -p ../build
@@ -699,10 +702,9 @@ in stdenv.mkDerivation {
   meta = {
     description = "Swift Programming Language";
     homepage = "https://github.com/apple/swift";
-    maintainers = with lib.maintainers; [ dtzWill trepetti dduan trundle stephank ];
+    maintainers = lib.teams.swift.members;
     license = lib.licenses.asl20;
     platforms = with lib.platforms; linux ++ darwin;
-    broken = stdenv.isDarwin;
     # Swift doesn't support 32-bit Linux, unknown on other platforms.
     badPlatforms = lib.platforms.i686;
     timeout = 86400; # 24 hours.

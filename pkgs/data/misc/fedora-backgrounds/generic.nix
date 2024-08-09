@@ -43,6 +43,6 @@ stdenvNoCC.mkDerivation {
     description = "Set of default and supplemental wallpapers for Fedora";
     license = licenses.cc-by-sa-40;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  pythonAtLeast,
   fetchFromGitHub,
   # build inputs
   inflect,

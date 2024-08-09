@@ -25,17 +25,17 @@
 
 let
   stamps = fetchurl {
-    url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2023-07-20/tuxpaint-stamps-2023.07.20.tar.gz";
-    hash = "sha256-D7QgYXRRdZpN3Ni/4lXoXCtsJORT+T2hHaLUFpgDeEI=";
+    url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2024-01-29/tuxpaint-stamps-2024.01.29.tar.gz";
+    hash = "sha256-GwJx9tqaX7I623tJQYO53iiaApZtYsTLQw2ptBIFlKk=";
   };
 in
 stdenv.mkDerivation rec {
-  version = "0.9.31";
+  version = "0.9.32";
   pname = "tuxpaint";
 
   src = fetchurl {
     url = "mirror://sourceforge/tuxpaint/${version}/tuxpaint-${version}.tar.gz";
-    hash = "sha256-GoXAT6XJrms//Syo+oaoTAyLRitQWfofwsRFtc+oV+4=";
+    hash = "sha256-CcziIkFIHcE2D8S8XU2h0xgV16JWO56fohemcrqXS/I=";
   };
 
   patches = [
@@ -98,7 +98,6 @@ stdenv.mkDerivation rec {
     tar xzf ${stamps}
     cd tuxpaint-stamps-*
     make install-all PREFIX=$out
-    rm -rf $out/share/tuxpaint/stamps/military
 
     # Requirements for tuxpaint-import
     wrapProgram $out/bin/tuxpaint-import \

@@ -1,5 +1,4 @@
 {
-  lib,
   runCommand,
   ratchet,
 }: let

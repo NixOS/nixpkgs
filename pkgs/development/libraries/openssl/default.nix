@@ -24,7 +24,7 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://www.openssl.org/source/${finalAttrs.pname}-${version}.tar.gz";
+      url = "https://www.openssl.org/source/openssl-${version}.tar.gz";
       inherit hash;
     };
 
@@ -233,7 +233,7 @@ let
       description = "Cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
       mainProgram = "openssl";
-      maintainers = with maintainers; [ thillux ];
+      maintainers = with maintainers; [ thillux ] ++ lib.teams.stridtech.members;
       pkgConfigModules = [
         "libcrypto"
         "libssl"
@@ -286,6 +286,8 @@ in {
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      ./3.3/CVE-2024-5535.patch
+
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
        else ./use-etc-ssl-certs.patch)
@@ -309,6 +311,8 @@ in {
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      ./3.3/CVE-2024-5535.patch
+
       (if stdenv.hostPlatform.isDarwin
        then ./3.2/use-etc-ssl-certs-darwin.patch
        else ./3.2/use-etc-ssl-certs.patch)
@@ -331,6 +335,8 @@ in {
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
+
+      ./3.3/CVE-2024-5535.patch
 
       (if stdenv.hostPlatform.isDarwin
        then ./3.2/use-etc-ssl-certs-darwin.patch

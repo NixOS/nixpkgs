@@ -1,7 +1,5 @@
 { lib
 , stdenv
-, autoreconfHook
-, bash
 , boost
 , bzip2
 , cereal_1_3_2

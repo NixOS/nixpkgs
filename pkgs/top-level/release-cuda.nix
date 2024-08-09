@@ -19,10 +19,10 @@ let
     builtins.all (
       license:
       license.free
-      || license.redistributable
       || builtins.elem license.shortName [
         "CUDA EULA"
         "cuDNN EULA"
+        "cuTENSOR EULA"
         "NVidia OptiX EULA"
       ]
     ) (ensureList p.meta.license);
@@ -132,7 +132,7 @@ let
         mxnet = linux;
         numpy = linux; # Only affected by MKL?
         onnx = linux;
-        openai-triton = linux;
+        triton = linux;
         openai-whisper = linux;
         opencv4 = linux;
         opensfm = linux;

@@ -102,6 +102,10 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "lib" "dev" "python" ];
 
+  hardeningDisable = [
+    "trivialautovarinit"
+  ];
+
   nativeBuildInputs = [ cmake ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
     ++ [ python ]
@@ -417,9 +421,11 @@ stdenv.mkDerivation (rec {
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   ''
-  + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (if stdenv.buildPlatform.canExecute stdenv.hostPlatform then ''
+    ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native
+  '' else ''
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
-  '';
+  '');
 
   inherit doCheck;
 
@@ -535,6 +541,4 @@ stdenv.mkDerivation (rec {
     check_version minor ${minor}
     check_version patch ${patch}
   '';
-} // lib.optionalAttrs (lib.versionOlder release_version "17" || lib.versionAtLeast release_version "18") {
-  hardeningDisable = [ "trivialautovarinit" ];
 })

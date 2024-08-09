@@ -31,7 +31,7 @@
   - Naming convention for:
     - Adding a new extension:
 
-      > vscode-extensions.publisher.extension-name: init 1.2.3
+      > vscode-extensions.publisher.extension-name: init at 1.2.3
       >
       > Release: https://github.com/owner/project/releases/tag/1.2.3
     - Updating an extension:

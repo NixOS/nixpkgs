@@ -7,6 +7,7 @@
 .idea/
 .nixos-test-history
 .vscode/
+.helix/
 outputs/
 result-*
 result
@@ -20,6 +21,7 @@ tags
 /source/
 .version-suffix
 .direnv
+.envrc
 
 .DS_Store
 .mypy_cache

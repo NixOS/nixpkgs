@@ -7,7 +7,7 @@
   python,
   pythonAtLeast,
   pythonOlder,
-  addOpenGLRunpath,
+  addDriverRunpath,
   callPackage,
   cudaPackages,
   future,
@@ -16,13 +16,12 @@
   pyyaml,
   requests,
   setuptools,
-  torch-bin,
   typing-extensions,
   sympy,
   jinja2,
   networkx,
   filelock,
-  openai-triton,
+  triton,
 }:
 
 let
@@ -44,7 +43,7 @@ buildPythonPackage {
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
-    addOpenGLRunpath
+    addDriverRunpath
     autoPatchelfHook
     autoAddDriverRunpath
   ];
@@ -88,7 +87,7 @@ buildPythonPackage {
     jinja2
     networkx
     filelock
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [ openai-triton ];
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [ triton ];
 
   postInstall = ''
     # ONNX conversion
@@ -121,10 +120,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torch" ];
 
-  passthru.tests = callPackage ./tests.nix {
-    torchWithCuda = torch-bin;
-    torchWithRocm = torch-bin;
-  };
+  passthru.tests = callPackage ./tests.nix {};
 
   meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";

@@ -10,17 +10,17 @@
 # requiring to build a special variant for that software. Example: 'haproxy'
 , variant ? "all"
 , extraConfigureFlags ? []
-, enableLto ? !(stdenv.isDarwin || stdenv.hostPlatform.isStatic || stdenv.cc.isClang)
+, enableLto ? !(stdenv.hostPlatform.isStatic || stdenv.cc.isClang)
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wolfssl-${variant}";
-  version = "5.7.0";
+  version = "5.7.2";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "refs/tags/v${finalAttrs.version}-stable";
-    hash = "sha256-4j1GqeZJn5UWx56DjGjge05jlzBbIGn4IXxcaIBxON4=";
+    hash = "sha256-VTMVgBSDL6pw1eEKnxGzTdyQYWVbMd3mAnOnpAOKVhk=";
   };
 
   postPatch = ''

@@ -1,5 +1,4 @@
-{ lib
-, runCommand
+{ runCommand
 , R
 , rstudio
 , makeWrapper

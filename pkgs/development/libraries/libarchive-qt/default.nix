@@ -8,7 +8,7 @@ mkDerivation rec {
     owner = "marcusbritanicus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-31a6DsxObSJWyLfT6mVtyjloT26IwFHpH53iuyC2mco=";
+    hash = "sha256-31a6DsxObSJWyLfT6mVtyjloT26IwFHpH53iuyC2mco=";
   };
 
   nativeBuildInputs = [

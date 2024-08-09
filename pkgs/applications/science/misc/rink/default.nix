@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform, openssl, pkg-config, ncurses
-, curl, libiconv, Security }:
+, curl, installShellFiles, asciidoctor, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   version = "0.8.0";
@@ -14,12 +14,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-j1pQfMjDNu57otOBTVBQEZIx80p4/beEUQdUkAJhvso=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config installShellFiles asciidoctor ];
   buildInputs = [ ncurses ]
     ++ (if stdenv.isDarwin then [ curl libiconv Security ] else [ openssl ]);
 
   # Some tests fail and/or attempt to use internet servers.
   doCheck = false;
+
+  postBuild = ''
+    make man
+  '';
+
+  postInstall = ''
+    installManPage build/*
+  '';
 
   meta = with lib; {
     description = "Unit-aware calculator";

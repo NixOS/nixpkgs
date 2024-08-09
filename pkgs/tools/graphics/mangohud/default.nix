@@ -13,7 +13,7 @@
 , dbus
 , hwdata
 , mangohud32
-, addOpenGLRunpath
+, addDriverRunpath
 , appstream
 , git
 , glslang
@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     git
     glslang
     mako
@@ -232,10 +232,10 @@ stdenv.mkDerivation (finalAttrs: {
         --replace "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
     '' + ''
       # Add OpenGL driver and libXNVCtrl paths to RUNPATH to support NVIDIA cards
-      addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
+      addDriverRunpath "$out/lib/mangohud/libMangoHud.so"
       patchelf --add-rpath ${libXNVCtrl}/lib "$out/lib/mangohud/libMangoHud.so"
     '' + lib.optionalString gamescopeSupport ''
-      addOpenGLRunpath "$out/bin/mangoapp"
+      addDriverRunpath "$out/bin/mangoapp"
     '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
       # libcmocka.so is only used for tests
       rm "$out/lib/libcmocka.so"

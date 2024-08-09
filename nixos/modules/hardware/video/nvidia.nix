@@ -96,8 +96,15 @@ in
         Enabling this fixes screen tearing when using Optimus via PRIME (see
         {option}`hardware.nvidia.prime.sync.enable`. This is not enabled
         by default because it is not officially supported by NVIDIA and would not
-        work with SLI
-      '';
+        work with SLI.
+
+        Enabling this and using version 545 or newer of the proprietary NVIDIA
+        driver causes it to provide its own framebuffer device, which can cause
+        Wayland compositors to work when they otherwise wouldn't.
+      '' // {
+        default = lib.versionAtLeast cfg.package.version "535";
+        defaultText = lib.literalExpression "lib.versionAtLeast cfg.package.version \"535\"";
+      };
 
       prime.nvidiaBusId = lib.mkOption {
         type = busIDType;
@@ -249,7 +256,9 @@ in
 
       open = lib.mkEnableOption ''
         the open source NVIDIA kernel module
-      '';
+      '' // {
+        defaultText = lib.literalExpression ''lib.versionAtLeast config.hardware.nvidia.package.version "560"'';
+      };
     };
   };
 
@@ -298,6 +307,8 @@ in
             extraPackages32 = [ nvidia_x11.lib32 ];
           };
           environment.systemPackages = [ nvidia_x11.bin ];
+
+          hardware.nvidia.open = lib.mkDefault (lib.versionAtLeast nvidia_x11.version "560");
         })
 
         # X11
@@ -465,7 +476,6 @@ in
 
           hardware.graphics = {
             extraPackages = [ pkgs.nvidia-vaapi-driver ];
-            extraPackages32 = [ pkgs.pkgsi686Linux.nvidia-vaapi-driver ];
           };
 
           environment.systemPackages =
@@ -568,9 +578,10 @@ in
               "nvidia_drm"
             ];
 
-            # If requested enable modesetting via kernel parameter.
+            # If requested enable modesetting via kernel parameters.
             kernelParams =
               lib.optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
+              ++ lib.optional ((offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545") "nvidia-drm.fbdev=1"
               ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
               ++ lib.optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
               ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";

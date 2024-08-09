@@ -8,7 +8,10 @@
 , gsettings-desktop-schemas
 , gtk3
 , libsoup
-, mkYarnPackage
+, stdenv
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
 , openssl
 , pkg-config
 , rustPlatform
@@ -28,31 +31,20 @@ let
     fetchLFS = true;
   };
 
-  frontend-build = mkYarnPackage {
-    inherit version src;
+  frontend-build = stdenv.mkDerivation (finalAttrs: {
     pname = "treedome-ui";
+    inherit version src;
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
       hash = "sha256-CrD/n8z5fJKkBKEcvpRHJaqXBt1gbON7VsuLb2JGu1A=";
     };
 
-    packageJSON = ./package.json;
-
-    configurePhase = ''
-      runHook preConfigure
-      ln -s $node_modules node_modules
-      runHook postConfigure
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-
-      export HOME=$(mktemp -d)
-      yarn --offline run build
-
-      runHook postBuild
-    '';
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
 
     installPhase = ''
       runHook preInstall
@@ -62,9 +54,7 @@ let
 
       runHook postInstall
     '';
-
-    doDist = false;
-  };
+  });
 in
 rustPlatform.buildRustPackage {
   inherit version pname src;

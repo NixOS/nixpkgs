@@ -8,7 +8,7 @@ mkDerivation rec {
     owner = "dail8859";
     repo = "NotepadNext";
     rev = "v${version}";
-    sha256 = "sha256-fwHTsTKcVaeIv0NQQBjzfXscGDfXr3X/yH07YnYh3fU=";
+    hash = "sha256-fwHTsTKcVaeIv0NQQBjzfXscGDfXr3X/yH07YnYh3fU=";
     # External dependencies - https://github.com/dail8859/NotepadNext/issues/135
     fetchSubmodules = true;
   };

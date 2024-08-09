@@ -1,10 +1,12 @@
 { callPackage
 , nixosTests
-, python3
+, python311
 , fetchFromGitHub
 }:
 let
-  python = python3.override {
+  # python-ldap-3.4.4 does not work with python3(12)
+  python = python311.override {
+    self = python;
     packageOverrides = self: super: {
       validators = super.validators.overridePythonAttrs (_: rec {
         version = "0.20.0";
@@ -27,6 +29,15 @@ let
           pytest7CheckHook
           pytest-django
         ];
+      });
+
+      # python3.11-extruct-0.16.0 doesn't work with lxml-5.2.2
+      lxml = super.lxml.overridePythonAttrs (oldAttrs: rec {
+        version = "5.1.0";
+        src = oldAttrs.src.override {
+          rev = version;
+          hash = "sha256-eWLYzZWatYDmhuBTZynsdytlNFKKmtWQ1XIyzVD8sDY=";
+        };
       });
     };
   };

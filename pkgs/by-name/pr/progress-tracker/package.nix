@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "progress-tracker";
-  version = "1.5.1";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "smolBlackCat";
     repo = "progress-tracker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0FpWUNsXYIQRn6ciLoRbKBuEZT739sAAIfSBxFqfEpk=";
+    hash = "sha256-uUw3+BJWRoCT1VH27SZBEBRsEbbpaP4IahKonfSOyeM=";
   };
 
   nativeBuildInputs = [

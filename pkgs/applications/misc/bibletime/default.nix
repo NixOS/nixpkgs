@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "bibletime";
-    repo = finalAttrs.pname;
+    repo = "bibletime";
     rev = "v${finalAttrs.version}";
     hash = "sha256-4O8F5/EyoJFJBEWOAs9lzN3TKuu/CEdKfPaOF8gNqps=";
   };

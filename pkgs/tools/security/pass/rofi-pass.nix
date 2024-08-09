@@ -88,6 +88,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/carnager/rofi-pass";
     license = lib.licenses.gpl3;
     platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

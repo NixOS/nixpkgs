@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "tarantool";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yCRU5IxC6gNS+O2KYtKWjFk35EHkBnnzWy5UnyuB9f4=";
+    hash = "sha256-yCRU5IxC6gNS+O2KYtKWjFk35EHkBnnzWy5UnyuB9f4=";
     fetchSubmodules = true;
   };
 

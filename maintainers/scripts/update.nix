@@ -13,6 +13,7 @@
 , include-overlays ? false
 , keep-going ? null
 , commit ? null
+, skip-prompt ? null
 }:
 
 let
@@ -184,6 +185,10 @@ let
     that support it by adding
 
         --argstr commit true
+
+    to skip prompt:
+
+        --argstr skip-prompt true
   '';
 
   /* Transform a matched package into an object for update.py.
@@ -204,7 +209,8 @@ let
   optionalArgs =
     lib.optional (max-workers != null) "--max-workers=${max-workers}"
     ++ lib.optional (keep-going == "true") "--keep-going"
-    ++ lib.optional (commit == "true") "--commit";
+    ++ lib.optional (commit == "true") "--commit"
+    ++ lib.optional (skip-prompt == "true") "--skip-prompt";
 
   args = [ packagesJson ] ++ optionalArgs;
 

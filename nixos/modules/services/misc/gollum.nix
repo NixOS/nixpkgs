@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,6 +12,17 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule
+      [
+        "services"
+        "gollum"
+        "mathjax"
+      ]
+      "MathJax rendering might be discontinued in the future, use services.gollum.math instead to enable KaTeX rendering or file a PR if you really need Mathjax"
+    )
+  ];
+
   options.services.gollum = {
     enable = mkEnableOption "Gollum, a git-powered wiki service";
 
@@ -28,20 +44,30 @@ in
       description = "Content of the configuration file";
     };
 
-    mathjax = mkOption {
+    math = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable support for math rendering using MathJax";
+      description = "Enable support for math rendering using KaTeX";
     };
 
     allowUploads = mkOption {
-      type = types.nullOr (types.enum [ "dir" "page" ]);
+      type = types.nullOr (
+        types.enum [
+          "dir"
+          "page"
+        ]
+      );
       default = null;
       description = "Enable uploads of external files";
     };
 
     user-icons = mkOption {
-      type = types.nullOr (types.enum [ "gravatar" "identicon" ]);
+      type = types.nullOr (
+        types.enum [
+          "gravatar"
+          "identicon"
+        ]
+      );
       default = null;
       description = "Enable specific user icons for history view";
     };
@@ -109,9 +135,7 @@ in
 
     users.groups."${cfg.group}" = { };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.rules = [ "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -" ];
 
     systemd.services.gollum = {
       description = "Gollum wiki";
@@ -134,7 +158,7 @@ in
             --host ${cfg.address} \
             --config ${pkgs.writeText "gollum-config.rb" cfg.extraConfig} \
             --ref ${cfg.branch} \
-            ${optionalString cfg.mathjax "--mathjax"} \
+            ${optionalString cfg.math "--math"} \
             ${optionalString cfg.emoji "--emoji"} \
             ${optionalString cfg.h1-title "--h1-title"} \
             ${optionalString cfg.no-edit "--no-edit"} \
@@ -147,5 +171,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ erictapen bbenno ];
+  meta.maintainers = with lib.maintainers; [
+    erictapen
+    bbenno
+  ];
 }

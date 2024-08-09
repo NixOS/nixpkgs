@@ -1021,4 +1021,15 @@ rec {
       platforms = platforms.all;
     };
   };
+
+  /* GREEK */
+
+  el_GR = el-gr;
+  el-gr = mkDictFromLibreOffice {
+    shortName = "el-gr";
+    dictFileName = "el_GR";
+    shortDescription = "Greek (Greece)";
+    readmeFile = "README_el_GR.txt";
+    license = with lib.licenses; [ mpl11 gpl2 lgpl21 ];
+  };
 }

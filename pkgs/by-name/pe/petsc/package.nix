@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  darwin,
+  cctools,
   gfortran,
   python3,
   blas,
@@ -28,11 +28,11 @@ assert petsc-withp4est -> p4est.mpiSupport;
 
 stdenv.mkDerivation rec {
   pname = "petsc";
-  version = "3.21.0";
+  version = "3.21.3";
 
   src = fetchzip {
     url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${version}.tar.gz";
-    hash = "sha256-2J6jtIKz1ZT9qwN8tuYQNBIeBJdE4Gt9cE3b5rTIeF4=";
+    hash = "sha256-dxHa8JUJCN4zRIXMCx7gcvbzFH2SPtkJ377ssIevjgU=";
   };
 
   inherit mpiSupport;
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace config/install.py \
-      --replace /usr/bin/install_name_tool ${darwin.cctools}/bin/install_name_tool
+      --replace /usr/bin/install_name_tool ${cctools}/bin/install_name_tool
   '';
 
   # Both OpenMPI and MPICH get confused by the sandbox environment and spew errors like this (both to stdout and stderr):

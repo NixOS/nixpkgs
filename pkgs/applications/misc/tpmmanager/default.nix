@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Tool for managing the TPM";
     mainProgram = "tpmmanager";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

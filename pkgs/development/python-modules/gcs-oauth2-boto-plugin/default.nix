@@ -2,7 +2,6 @@
   lib,
   boto,
   buildPythonPackage,
-  fasteners,
   fetchFromGitHub,
   freezegun,
   google-reauth,

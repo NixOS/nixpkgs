@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3Packages,
   appstream,
+  blueprint-compiler,
   desktop-file-utils,
   glib,
   gobject-introspection,
@@ -15,18 +16,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "binary";
-  version = "0.3";
+  version = "0.3.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "fizzyizzy05";
     repo = "binary";
     rev = "refs/tags/${version}";
-    hash = "sha256-bR0oCqbnyUTCueT4f0Ij7qbwjNnN4eMDAOUK9MnCEJ0=";
+    hash = "sha256-4Ep7d5grMXCCy9tL8wquJsx13jVIp+piDPeJh6mYFpI=";
   };
 
   nativeBuildInputs = [
     appstream
+    blueprint-compiler
     desktop-file-utils
     glib # need glib-compile-schemas
     gobject-introspection

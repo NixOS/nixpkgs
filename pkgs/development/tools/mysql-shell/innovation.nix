@@ -34,8 +34,8 @@
 let
   pythonDeps = with python3.pkgs; [ certifi paramiko pyyaml ];
 
-  mysqlShellVersion = "8.4.0";
-  mysqlServerVersion = "8.4.0";
+  mysqlShellVersion = "9.0.1";
+  mysqlServerVersion = "9.0.1";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell-innovation";
@@ -44,11 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-R6VDP83WOduDa5nhtUWcK4E8va0j/ytd1K0n95K6kY4=";
+      hash = "sha256-GPpl8epq6nHkGP4FSFUtmijeaOK4vDupU2WZ60WaZgY=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-QT30FNogn7JR/dQ3V86QaAZaMREMKvTocRTUaNLGVlg=";
+      hash = "sha256-F77W+cY1X29p4DIA1JOxJ6jAKT+8Qz4LkHh91MASlE0=";
     })
   ];
 
@@ -58,11 +58,17 @@ stdenv.mkDerivation (finalAttrs: {
     mv mysql-${mysqlServerVersion} mysql
   '';
 
-  postPatch = ''
-    substituteInPlace ../mysql/cmake/libutils.cmake --replace-quiet /usr/bin/libtool libtool
-    substituteInPlace ../mysql/cmake/os/Darwin.cmake --replace-quiet /usr/bin/libtool libtool
+  patches = [
+    # No openssl bundling on macOS. It's not working.
+    # See https://github.com/mysql/mysql-shell/blob/5b84e0be59fc0e027ef3f4920df15f7be97624c1/cmake/ssl.cmake#L53
+    ./no-openssl-bundling.patch
+  ];
 
-    substituteInPlace cmake/libutils.cmake --replace-quiet /usr/bin/libtool libtool
+  postPatch = ''
+    substituteInPlace ../mysql/cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
+    substituteInPlace ../mysql/cmake/os/Darwin.cmake --replace-fail /usr/bin/libtool libtool
+
+    substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
   '';
 
   nativeBuildInputs = [ pkg-config cmake git bison makeWrapper ]

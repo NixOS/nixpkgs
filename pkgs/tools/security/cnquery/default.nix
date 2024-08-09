@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "cnquery";
-  version = "11.11.0";
+  version = "11.15.1";
 
   src = fetchFromGitHub {
     owner = "mondoohq";
     repo = "cnquery";
     rev = "refs/tags/v${version}";
-    hash = "sha256-G2mVr0TB5BBzBdo4YcE3gH2jU9iZ9UuTgrYlqsEhQXs=";
+    hash = "sha256-K9yNh4UEImBWeucl8O1yUUSAfvKwXtrmW8SCrP/pk3o=";
   };
 
   subPackages = [ "apps/cnquery" ];
 
-  vendorHash = "sha256-aXt/Ehh1G9k0rYGOrdbpddVB4faGTkOy0zWSz2X8BtI=";
+  vendorHash = "sha256-muG1TFpEbZOjsmsgtpCPcZCD5geC9t/zyRwU9P2uCCY=";
 
   ldflags = [
     "-w"

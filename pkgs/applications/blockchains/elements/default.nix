@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , autoreconfHook
 , pkg-config
 , util-linux
@@ -32,6 +33,14 @@ stdenv.mkDerivation rec {
     rev = "elements-${version}";
     sha256 = "sha256-qHtSgfZGZ4Beu5fsJAOZm8ejj7wfHBbOS6WAjOrCuw4=";
   };
+
+  patches = [
+    # upnp: fix build with miniupnpc 2.2.8
+    (fetchpatch2 {
+      url = "https://github.com/bitcoin/bitcoin/commit/8acdf66540834b9f9cf28f16d389e8b6a48516d5.patch?full_index=1";
+      hash = "sha256-oDvHUvwAEp0LJCf6QBESn38Bu359TcPpLhvuLX3sm6M=";
+    })
+  ];
 
   nativeBuildInputs =
     [ autoreconfHook pkg-config ]

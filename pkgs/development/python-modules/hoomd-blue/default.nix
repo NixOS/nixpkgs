@@ -66,5 +66,8 @@ buildPythonPackage rec {
     license = licenses.bsdOriginal;
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
+    # Has compilation errors since some dependencies got updated, will probably
+    # be fixed if updated by itself to the latest version.
+    broken = true;
   };
 }

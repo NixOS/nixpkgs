@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "WebAssembly";
     repo = "wabt";
     rev = version;
-    sha256 = "sha256-oWyHR2HRDA/N5Rm9EXhOi+lZ2N7In6HmE74ZL2Nyu9A=";
+    hash = "sha256-oWyHR2HRDA/N5Rm9EXhOi+lZ2N7In6HmE74ZL2Nyu9A=";
     fetchSubmodules = true;
   };
 

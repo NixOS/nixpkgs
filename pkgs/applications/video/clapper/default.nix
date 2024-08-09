@@ -1,5 +1,4 @@
-{ config
-, lib
+{ lib
 , stdenv
 , fetchFromGitHub
 , gobject-introspection

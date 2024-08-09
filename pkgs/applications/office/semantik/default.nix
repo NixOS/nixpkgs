@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , mkDerivation
 , fetchFromGitLab
 , wafHook

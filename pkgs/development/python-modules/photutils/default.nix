@@ -9,7 +9,6 @@
   gwcs,
   matplotlib,
   numpy,
-  photutils,
   pythonOlder,
   rasterio,
   scikit-image,
@@ -18,9 +17,7 @@
   setuptools-scm,
   setuptools,
   shapely,
-  tomli,
   tqdm,
-  python,
   wheel,
 }:
 

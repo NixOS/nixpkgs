@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.24.2";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Z88amcPb2jCJduRu8CGQ20y2o5cXmL4rpRL0hGCEYgM=";
+    hash = "sha256-eowsQhaS9RGfsw157HahENuWUWtwkwyPNSFw135MW0c=";
     fetchSubmodules = true;
   };
 
@@ -58,10 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;
 
-    # WARN: This is necessary for albert to detect the package libraries.
-    # Please check if the file below has changed upstream before updating.
-    sed -i src/app/qtpluginprovider.cpp \
-      -e "/QStringList install_paths;/a    install_paths << QFileInfo(\"$out/lib\").canonicalFilePath();"
+    substituteInPlace src/app/qtpluginprovider.cpp \
+      --replace-fail "QStringList install_paths;" "QStringList install_paths;${"\n"}install_paths << QFileInfo(\"$out/lib\").canonicalFilePath();"
   '';
 
   postFixup = ''
@@ -74,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast and flexible keyboard launcher";
     longDescription = ''
       Albert is a desktop agnostic launcher. Its goals are usability and beauty,
@@ -84,13 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://albertlauncher.github.io";
     changelog = "https://github.com/albertlauncher/albert/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     # See: https://github.com/NixOS/nixpkgs/issues/279226
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       ericsagnes
       synthetica
       eljamm
     ];
     mainProgram = "albert";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

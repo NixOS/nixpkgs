@@ -30,12 +30,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ASy2vIP94lnSKgxixK1GoC84yAysaJpxeyuggV4MrP4=";
   };
 
-  # This addresses a linker issue with Darwin
-  # https://github.com/NixOS/nixpkgs/issues/19098
-  preBuild = lib.optionalString stdenv.isDarwin ''
-    sed -i.orig '/^\#\#\# 3.*Link Time Optimization/,/^\#\#\# 3/d' Makefile
-  '';
-
   postUnpack = ''
     sourceRoot+=/src
     echo ${nnue}

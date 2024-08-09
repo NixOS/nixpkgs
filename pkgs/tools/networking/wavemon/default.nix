@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wavemon";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "uoaerg";
     repo = "wavemon";
     rev = "v${version}";
-    sha256 = "sha256-MvIFuPATI0Y7aIYZkb2Yr+iCco4gILHhDU5FWeMCk5Q=";
+    sha256 = "sha256-OnELXlnzXamQflCAWuc4fxwvqHZtl+nrlTpkKK4IGKw=";
   };
 
   nativeBuildInputs = [

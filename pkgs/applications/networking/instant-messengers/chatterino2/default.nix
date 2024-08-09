@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "Chatterino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-c3Vhzes54xLjKV0Of7D1eFpQvIWJwcUBXvLT2p6VwBE=";
+    hash = "sha256-c3Vhzes54xLjKV0Of7D1eFpQvIWJwcUBXvLT2p6VwBE=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ cmake pkg-config qt6.wrapQtAppsHook ];

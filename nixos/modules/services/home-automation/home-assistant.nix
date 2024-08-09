@@ -192,7 +192,12 @@ in {
     };
 
     customComponents = mkOption {
-      type = types.listOf types.package;
+      type = types.listOf (
+        types.addCheck types.package (p: p.isHomeAssistantComponent or false) // {
+          name = "home-assistant-component";
+          description = "package that is a Home Assistant component";
+        }
+      );
       default = [];
       example = literalExpression ''
         with pkgs.home-assistant-custom-components; [

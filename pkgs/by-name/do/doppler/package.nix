@@ -4,6 +4,7 @@
 , installShellFiles
 , lib
 , testers
+, stdenv
 }:
 
 buildGoModule rec {
@@ -28,6 +29,9 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/cli $out/bin/doppler
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    export HOME=$TMPDIR
+    mkdir $HOME/.doppler # to avoid race conditions below
     installShellCompletion --cmd doppler \
       --bash <($out/bin/doppler completion bash) \
       --fish <($out/bin/doppler completion fish) \

@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     "--with-posix-acl"
     "--with-selinux"
     "--with-xattr"
+    "--sysconfdir=/etc"
     ];
 
   meta = with lib; {

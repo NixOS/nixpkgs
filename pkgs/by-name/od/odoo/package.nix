@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchgit
 , fetchzip
 , python310
@@ -12,6 +11,7 @@
 
 let
   python = python310.override {
+    self = python;
     packageOverrides = final: prev: {
       # requirements.txt fixes docutils at 0.17; the default 0.21.1 tested throws exceptions
       docutils-0_17 = prev.docutils.overridePythonAttrs (old: rec {
@@ -53,12 +53,14 @@ in python.pkgs.buildPythonApplication rec {
     docutils-0_17  # sphinx has a docutils requirement >= 18
     ebaysdk
     freezegun
+    geoip2
     gevent
     greenlet
     idna
     jinja2
     libsass
     lxml
+    lxml-html-clean
     markupsafe
     num2words
     ofxparse

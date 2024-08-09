@@ -12,13 +12,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "osmo-ggsn";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-ggsn";
     rev = version;
-    hash = "sha256-TQQOj8DgsMI/+9Fpcpz95fuk746EWumYtTdPtYCXKTw=";
+    hash = "sha256-sSAIJI7iGNmyXr3t+PXPi1SSzS2Nd3Aze2nvzu/MNI4=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Osmocom Gateway GPRS Support Node (GGSN), successor of OpenGGSN";
     homepage = "https://osmocom.org/projects/openggsn";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "osmo-ggsn";
   };

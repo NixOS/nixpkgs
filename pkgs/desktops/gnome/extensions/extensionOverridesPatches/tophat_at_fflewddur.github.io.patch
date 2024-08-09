@@ -1,13 +1,65 @@
-diff --git a/extension.js b/extension.js
-index 60396f8..b044872 100644
---- a/extension.js
-+++ b/extension.js
-@@ -20,6 +20,8 @@
- 
- /* exported init, enable, disable */
- 
+diff --git a/lib/cpu.js b/lib/cpu.js
+--- a/lib/cpu.js
++++ b/lib/cpu.js
+@@ -21,7 +21,8 @@ import Clutter from 'gi://Clutter';
+ import Gio from 'gi://Gio';
+ import GLib from 'gi://GLib';
+ import GObject from 'gi://GObject';
+-import GTop from 'gi://GTop';
 +imports.gi.GIRepository.Repository.prepend_search_path('@gtop_path@');
-+
- let depFailures = [];
- let missingLibs = [];
++const {default: GTop} = await import('gi://GTop');
+ import St from 'gi://St';
  
+ import {gettext as _, ngettext} from 'resource:///org/gnome/shell/extensions/extension.js';
+diff --git a/lib/fs.js b/lib/fs.js
+--- a/lib/fs.js
++++ b/lib/fs.js
+@@ -21,7 +21,8 @@ import Clutter from 'gi://Clutter';
+ import Gio from 'gi://Gio';
+ import GLib from 'gi://GLib';
+ import GObject from 'gi://GObject';
+-import GTop from 'gi://GTop';
++imports.gi.GIRepository.Repository.prepend_search_path('@gtop_path@');
++const {default: GTop} = await import('gi://GTop');
+ import St from 'gi://St';
+ 
+ import * as Config from './config.js';
+diff --git a/lib/mem.js b/lib/mem.js
+--- a/lib/mem.js
++++ b/lib/mem.js
+@@ -21,7 +21,8 @@ import Clutter from 'gi://Clutter';
+ import Gio from 'gi://Gio';
+ import GLib from 'gi://GLib';
+ import GObject from 'gi://GObject';
+-import GTop from 'gi://GTop';
++imports.gi.GIRepository.Repository.prepend_search_path('@gtop_path@');
++const {default: GTop} = await import('gi://GTop');
+ import St from 'gi://St';
+ 
+ import {gettext as _, ngettext} from 'resource:///org/gnome/shell/extensions/extension.js';
+diff --git a/lib/net.js b/lib/net.js
+--- a/lib/net.js
++++ b/lib/net.js
+@@ -21,7 +21,8 @@ import Clutter from 'gi://Clutter';
+ import Gio from 'gi://Gio';
+ import GLib from 'gi://GLib';
+ import GObject from 'gi://GObject';
+-import GTop from 'gi://GTop';
++imports.gi.GIRepository.Repository.prepend_search_path('@gtop_path@');
++const {default: GTop} = await import('gi://GTop');
+ import St from 'gi://St';
+ 
+ import {gettext as _, ngettext} from 'resource:///org/gnome/shell/extensions/extension.js';
+diff --git a/lib/shared.js b/lib/shared.js
+--- a/lib/shared.js
++++ b/lib/shared.js
+@@ -18,7 +18,8 @@
+ // along with TopHat. If not, see <https://www.gnu.org/licenses/>.
+ 
+ import Gio from 'gi://Gio';
+-import GTop from 'gi://GTop';
++imports.gi.GIRepository.Repository.prepend_search_path('@gtop_path@');
++const {default: GTop} = await import('gi://GTop');
+ import Clutter from 'gi://Clutter';
+ 
+ export const SECOND_AS_MICROSECONDS = 1000000;

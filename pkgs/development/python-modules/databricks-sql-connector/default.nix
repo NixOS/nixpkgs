@@ -12,27 +12,40 @@
   pyarrow,
   pytestCheckHook,
   pythonOlder,
+  pythonAtLeast,
   sqlalchemy,
   thrift,
+  requests,
+  urllib3,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
-  version = "3.2.0";
+  version = "3.3.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  # Depends on thrift that at the moment do not work in Python 3.12
+  # see PR 328415 fix this.
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sql-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Sk/tYgFnWWHAsMSHhEUIwUagc6femAzQpQGyzJGXW1E=";
+    hash = "sha256-a3OeKJ3c2UCClsPMah7iJY2YvIVLfHmmBuHAx8vdXZs=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-pandas.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/databricks/databricks-sql-python/pull/416.patch";
+      sha256 = "sha256-sNCp8xSSmKP2yNzDK4wyWC5Hoe574AeHnKTeNcIxaek=";
+    })
+  ];
+
   pythonRelaxDeps = [
-    "numpy"
-    "thrift"
+    "pyarrow"
   ];
 
   nativeBuildInputs = [
@@ -49,6 +62,8 @@ buildPythonPackage rec {
     pyarrow
     sqlalchemy
     thrift
+    requests
+    urllib3
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -63,8 +78,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/databricks/databricks-sql-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ harvidsen ];
-    # No SQLAlchemy 2.0 support
-    # https://github.com/databricks/databricks-sql-python/issues/91
-    broken = true;
   };
 }

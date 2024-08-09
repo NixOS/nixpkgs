@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "20240511";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.dmg";
+    url = "mirror://sourceforge/xld/xld-${finalAttrs.version}.dmg";
     hash = "sha256-8xfjAWgtSdbD8gGlkGzT8QRz7egIf4PE/rFsFEDX0+c=";
   };
 

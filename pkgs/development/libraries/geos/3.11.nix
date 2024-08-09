@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.11.4";
 
   src = fetchurl {
-    url = "https://download.osgeo.org/geos/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
+    url = "https://download.osgeo.org/geos/geos-${finalAttrs.version}.tar.bz2";
     hash = "sha256-NkyIzPw4qlDPZccA57KuRwbtEDMmEoST2/dQx40TbSw=";
   };
 

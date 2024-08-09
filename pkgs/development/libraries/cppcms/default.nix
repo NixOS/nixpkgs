@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aXAxx9FB/dIVxr5QkLZuIQamO7PlLwnugSDo78bAiiE=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ pcre zlib python3 openssl ];
+  nativeBuildInputs = [ cmake python3 ];
+  buildInputs = [ pcre zlib openssl ];
 
   strictDeps = true;
 

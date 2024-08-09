@@ -69,9 +69,7 @@ makeScopeWithSplicing' {
     };
   in (lib.makeOverridable mkMaui attrs);
 
-  noExtraAttrs = set:
-    lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ]
-    // { __attrsFailEvaluation = true; };
+  noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ];
 
 in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // mauiPackages // qt5 // {
 
@@ -158,6 +156,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   libopenshot = callPackage ../development/libraries/libopenshot {
     stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    python3 = pkgs.python311;
   };
 
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
@@ -171,8 +170,6 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   };
 
   libqofono = callPackage ../development/libraries/libqofono { };
-
-  libqtav = callPackage ../development/libraries/libqtav { };
 
   libquotient = callPackage ../development/libraries/libquotient { };
 

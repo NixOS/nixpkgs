@@ -7,16 +7,16 @@
 }:
 let
   pname = "matrix-media-repo";
-  version = "1.3.4";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
     owner = "t2bot";
     repo = "matrix-media-repo";
     rev = "v${version}";
-    hash = "sha256-wC69OiB3HjRs/i46+E1YS+M4zKmvH5vENHyfgU7nt1I=";
+    hash = "sha256-trVn+Mn98aJLQCpQX1+qps/uuA5+8zeDoM94eauxHO8=";
   };
 
-  vendorHash = "sha256-STzpKqn47qS0iogVYhFl4QBfKUtnqgxobqv1WaW6UtQ=";
+  vendorHash = "sha256-fKDdL7C3L33caoXxlutzoND2izB5GH+5qTeojTskIUg=";
 
   asset-compiler = buildGoModule {
     pname = "${pname}-compile_assets";
@@ -30,10 +30,6 @@ in
 
 buildGoModule {
   inherit pname version src vendorHash;
-
-  patches = [
-    ./synapse-import-u+x.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config

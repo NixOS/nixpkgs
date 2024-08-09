@@ -77,7 +77,6 @@ buildPythonPackage rec {
     pypaBuildPhase
   '';
 
-  pythonRemoveDeps = [ "scikit-build" ];
 
   pythonImportsCheck = [
     "libmambapy"

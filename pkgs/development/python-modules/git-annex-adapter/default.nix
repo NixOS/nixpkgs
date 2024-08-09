@@ -8,7 +8,6 @@
   gitMinimal,
   pygit2,
   pytestCheckHook,
-  python,
   pythonOlder,
   setuptools,
   substituteAll,

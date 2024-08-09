@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
     rev = "v${version}";
-    sha256 = "sha256-0YveqiylXJi4cdDCfnPtwCVOJbQrZYsxnXES+9B4Yfw=";
+    hash = "sha256-0YveqiylXJi4cdDCfnPtwCVOJbQrZYsxnXES+9B4Yfw=";
     fetchSubmodules = true;
   };
 

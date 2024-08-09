@@ -1,5 +1,4 @@
 { fetchFromGitHub
-, cargo
 , ctags
 , lib
 , makeWrapper

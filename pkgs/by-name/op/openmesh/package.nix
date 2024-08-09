@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "OpenMesh";
     rev = "OpenMesh-${lib.versions.majorMinor finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-1FmAieCaskKaaAWjgEXr/CWpFxrhB2Rca1sXpxLrQHw=";
+    hash = "sha256-1FmAieCaskKaaAWjgEXr/CWpFxrhB2Rca1sXpxLrQHw=";
   };
 
   nativeBuildInputs = [ cmake ];

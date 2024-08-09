@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pycrdt-websocket";
-  version = "0.13.5";
+  version = "0.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "jupyter-server";
     repo = "pycrdt-websocket";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dzlmgxrdQ97+DO/vDtoX7PIOpngEE+FGUGq1vdVmhNw=";
+    hash = "sha256-lQ8ZYzFKdVvIEp38WztOWFpJhi4LtA8ODpAFgSZVpU8=";
   };
 
   build-system = [ hatchling ];

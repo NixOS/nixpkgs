@@ -1,7 +1,8 @@
-diff -u -r a/frontend/linux/workbench/mysql-workbench.in b/frontend/linux/workbench/mysql-workbench.in
---- a/frontend/linux/workbench/mysql-workbench.in	2022-03-25 09:06:06.000000000 +0200
-+++ b/frontend/linux/workbench/mysql-workbench.in	2022-06-17 00:22:51.290117109 +0300
-@@ -100,8 +100,8 @@
+diff --git a/frontend/linux/workbench/mysql-workbench.in b/frontend/linux/workbench/mysql-workbench.in
+index cbecde4..ea5d3cc 100755
+--- a/frontend/linux/workbench/mysql-workbench.in
++++ b/frontend/linux/workbench/mysql-workbench.in
+@@ -100,8 +100,8 @@ fi
  if test "$WB_DEBUG" != ""; then
    $WB_DEBUG $MWB_BINARIES_DIR/mysql-workbench-bin "$@"
  else
@@ -12,28 +13,29 @@ diff -u -r a/frontend/linux/workbench/mysql-workbench.in b/frontend/linux/workbe
    else
    $MWB_BINARIES_DIR/mysql-workbench-bin "$@"
    fi
-diff -u -r a/plugins/migration/frontend/migration_bulk_copy_data.py b/plugins/migration/frontend/migration_bulk_copy_data.py
---- a/plugins/migration/frontend/migration_bulk_copy_data.py	2022-03-25 09:06:06.000000000 +0200
-+++ b/plugins/migration/frontend/migration_bulk_copy_data.py	2022-06-17 00:13:29.430055453 +0300
-@@ -110,7 +110,7 @@
+diff --git a/plugins/migration/frontend/migration_bulk_copy_data.py b/plugins/migration/frontend/migration_bulk_copy_data.py
+index da6aa9f..9f4fe78 100644
+--- a/plugins/migration/frontend/migration_bulk_copy_data.py
++++ b/plugins/migration/frontend/migration_bulk_copy_data.py
+@@ -111,7 +111,7 @@ class ImportScriptLinux(ImportScript):
          return 'sh'
  
      def generate_import_script(self, connection_args, path_to_file, schema_name):
 -        output = ['#!/bin/bash']
 +        output = ['#!/usr/bin/env bash']
-         output.append('MYPATH=\`pwd\`')
+         output.append(r'MYPATH=\`pwd\`')
          
-         output.append('if [ -f \$MYPATH/%s ] ; then' % self.error_log_name)
-@@ -164,7 +164,7 @@
+         output.append(r'if [ -f \$MYPATH/%s ] ; then' % self.error_log_name)
+@@ -165,7 +165,7 @@ class ImportScriptDarwin(ImportScript):
          return 'sh'
  
      def generate_import_script(self, connection_args, path_to_file, schema_name):
 -        output = ['#!/bin/bash']
 +        output = ['#!/usr/bin/env bash']
-         output.append('MYPATH=\`pwd\`')
+         output.append(r'MYPATH=\`pwd\`')
          
-         output.append('if [ -f \$MYPATH/%s ] ; then' % self.error_log_name)
-@@ -417,7 +417,7 @@
+         output.append(r'if [ -f \$MYPATH/%s ] ; then' % self.error_log_name)
+@@ -418,7 +418,7 @@ class DataCopyScriptLinux(DataCopyScript):
      
          with open(script_path, 'w+') as f:
              os.chmod(script_path, 0o700)
@@ -42,7 +44,7 @@ diff -u -r a/plugins/migration/frontend/migration_bulk_copy_data.py b/plugins/mi
              f.write('MYPATH=`pwd`\n')
              
              f.write("arg_source_password=\"<put source password here>\"\n")
-@@ -521,7 +521,7 @@
+@@ -522,7 +522,7 @@ class DataCopyScriptDarwin(DataCopyScript):
      
          with open(script_path, 'w+') as f:
              os.chmod(script_path, 0o700)
@@ -51,10 +53,11 @@ diff -u -r a/plugins/migration/frontend/migration_bulk_copy_data.py b/plugins/mi
              f.write('MYPATH=`pwd`\n')
              
              f.write("arg_source_password=\"<put source password here>\"\n")
-diff -u -r a/plugins/wb.admin/backend/wb_server_control.py b/plugins/wb.admin/backend/wb_server_control.py
---- a/plugins/wb.admin/backend/wb_server_control.py	2022-03-25 09:06:06.000000000 +0200
-+++ b/plugins/wb.admin/backend/wb_server_control.py	2022-06-17 00:14:26.937905324 +0300
-@@ -39,7 +39,7 @@
+diff --git a/plugins/wb.admin/backend/wb_server_control.py b/plugins/wb.admin/backend/wb_server_control.py
+index 353f461..f7daa9e 100644
+--- a/plugins/wb.admin/backend/wb_server_control.py
++++ b/plugins/wb.admin/backend/wb_server_control.py
+@@ -40,7 +40,7 @@ import re
  
  UnixVariant = {
      "" : {
@@ -63,10 +66,11 @@ diff -u -r a/plugins/wb.admin/backend/wb_server_control.py b/plugins/wb.admin/ba
      }
  }
  
-diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin/backend/wb_server_management.py
---- a/plugins/wb.admin/backend/wb_server_management.py	2022-03-25 09:06:06.000000000 +0200
-+++ b/plugins/wb.admin/backend/wb_server_management.py	2022-06-17 00:18:58.034028354 +0300
-@@ -40,7 +40,7 @@
+diff --git a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin/backend/wb_server_management.py
+index 40ed515..00da327 100644
+--- a/plugins/wb.admin/backend/wb_server_management.py
++++ b/plugins/wb.admin/backend/wb_server_management.py
+@@ -41,7 +41,7 @@ default_sudo_prefix = ''
  
  def reset_sudo_prefix():
      global default_sudo_prefix
@@ -75,7 +79,7 @@ diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin
  
  reset_sudo_prefix()
  
-@@ -100,7 +100,7 @@
+@@ -101,7 +101,7 @@ def wrap_for_sudo(command, sudo_prefix, as_user = Users.ADMIN, to_spawn = False)
  
      if to_spawn:
          command += ' &'
@@ -84,7 +88,7 @@ diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin
        
      # If as_user is the CURRENT then there's no need to sudo
      if as_user != Users.CURRENT:
-@@ -111,7 +111,7 @@
+@@ -112,7 +112,7 @@ def wrap_for_sudo(command, sudo_prefix, as_user = Users.ADMIN, to_spawn = False)
          if '/bin/sh' in sudo_prefix or '/bin/bash' in sudo_prefix:
              command = "LANG=C " + sudo_prefix + " \"" + command.replace('\\', '\\\\').replace('"', r'\"').replace('$','\\$') + "\""
          else:
@@ -93,7 +97,7 @@ diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin
  
      return command
  
-@@ -878,9 +878,9 @@
+@@ -879,9 +879,9 @@ class FileOpsLinuxBase(object):
      @useAbsPath("path")
      def get_file_owner(self, path, as_user = Users.CURRENT, user_password = None):
          if self.target_os == wbaOS.linux:
@@ -105,7 +109,7 @@ diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin
        
          output = io.StringIO()
          command = command + quote_path(path)
-@@ -904,9 +904,9 @@
+@@ -905,9 +905,9 @@ class FileOpsLinuxBase(object):
              if as_user == Users.CURRENT:
                  raise PermissionDeniedError("Cannot set owner of directory %s" % path)        
              else:
@@ -117,7 +121,7 @@ diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin
              
          res = self.process_ops.exec_cmd(command,
                                          as_user   = as_user,
-@@ -935,7 +935,7 @@
+@@ -936,7 +936,7 @@ class FileOpsLinuxBase(object):
      @useAbsPath("path")
      def remove_directory(self, path, as_user = Users.CURRENT, user_password = None):
          output = io.StringIO()
@@ -126,7 +130,7 @@ diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin
                                          as_user   = as_user,
                                          user_password = user_password,
                                          output_handler = output.write,
-@@ -948,7 +948,7 @@
+@@ -949,7 +949,7 @@ class FileOpsLinuxBase(object):
      @useAbsPath("path")
      def remove_directory_recursive(self, path, as_user = Users.CURRENT, user_password = None):
          output = io.StringIO()
@@ -135,7 +139,7 @@ diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin
                                          as_user   = as_user,
                                          user_password = user_password,
                                          output_handler = output.write,
-@@ -961,7 +961,7 @@
+@@ -962,7 +962,7 @@ class FileOpsLinuxBase(object):
      @useAbsPath("path")
      def delete_file(self, path, as_user = Users.CURRENT, user_password = None):
          output = io.StringIO()
@@ -144,7 +148,7 @@ diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin
                                          as_user   = as_user,
                                          user_password = user_password,
                                          output_handler = output.write,
-@@ -1009,7 +1009,7 @@
+@@ -1010,7 +1010,7 @@ class FileOpsLinuxBase(object):
      def _copy_file(self, source, dest, as_user = Users.CURRENT, user_password = None):
          output = io.StringIO()
          
@@ -153,7 +157,7 @@ diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin
                        as_user   = as_user,
                        user_password = user_password,
                        output_handler = output.write,
-@@ -1085,9 +1085,9 @@
+@@ -1086,9 +1086,9 @@ class FileOpsLinuxBase(object):
              # for ls -l, the output format changes depending on stdout being a terminal or not
              # since both cases are possible, we need to handle both at the same time (1st line being total <nnnn> or not)
              # the good news is that if the line is there, then it will always start with total, regardless of the locale
@@ -165,7 +169,7 @@ diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin
              
          output = io.StringIO()
          res = self.process_ops.exec_cmd(command,
-@@ -2163,9 +2163,9 @@
+@@ -2164,9 +2164,9 @@ class SudoTailInputFile(object):
      def get_range(self, start, end):
          f = io.StringIO()
          if not self._need_sudo:
@@ -177,7 +181,7 @@ diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin
  
          if ret != 0:
              raise RuntimeError("Could not get data from file %s" % self.path)
-@@ -2173,9 +2173,9 @@
+@@ -2174,9 +2174,9 @@ class SudoTailInputFile(object):
  
      def read_task(self, offset, file):
          if not self._need_sudo:
@@ -189,7 +193,7 @@ diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin
          # this will signal the reader end that there's no more data
          file.close()
  
-@@ -2202,9 +2202,9 @@
+@@ -2203,9 +2203,9 @@ class SudoTailInputFile(object):
          self._pos = offset
          f = io.StringIO()
          if not self._need_sudo:

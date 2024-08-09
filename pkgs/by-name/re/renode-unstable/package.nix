@@ -5,11 +5,11 @@
 
 renode.overrideAttrs (finalAttrs: _: {
   pname = "renode-unstable";
-  version = "1.15.1+20240627git66a08265a";
+  version = "1.15.1+20240801git19eb5fb22";
 
   src = fetchurl {
-    url = "https://builds.renode.io/renode-${finalAttrs.version}.linux-portable.tar.gz";
-    hash = "sha256-Np/+QydZ+temEOCPI4K+PHScCQBYeFPZ2pOlFLWYXmA=";
+    url = "https://builds.renode.io/renode-${finalAttrs.version}.linux-dotnet.tar.gz";
+    hash = "sha256-dIyMQtFXvHivlzC+Y3TrWsN81/cETKTaucZY5r/x5rU=";
   };
 
   passthru.updateScript =
@@ -23,9 +23,9 @@ renode.overrideAttrs (finalAttrs: _: {
       latestVersion=$(
         curl -sS https://builds.renode.io \
           | pup 'a text{}' \
-          | egrep 'renode-${versionRegex}\.linux-portable\.tar\.gz' \
+          | egrep 'renode-${versionRegex}\.linux-dotnet\.tar\.gz' \
           | head -n1 \
-          | sed -e 's,renode-\(.*\)\.linux-portable\.tar\.gz,\1,g'
+          | sed -e 's,renode-\(.*\)\.linux-dotnet\.tar\.gz,\1,g'
       )
 
       update-source-version ${finalAttrs.pname} "$latestVersion" \

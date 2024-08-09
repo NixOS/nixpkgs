@@ -12,17 +12,17 @@
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.18.0";
+  version = "0.18.2";
 
   src = fetchFromSourcehut {
     owner = "~rjarry";
     repo = "aerc";
     rev = version;
-    hash = "sha256-azIgf9kv4Pg8BW1j56D2Ta1DIQNHC9Mql3tebp+MLSY=";
+    hash = "sha256-J4W7ynJ5DpE97sILENNt6eya04aiq9DWBhlytsVmZHg=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-BQ36LJFo9bQNQdwb/vygksk3ih/tVaMwfWT1f31bsbY=";
+  vendorHash = "sha256-STQzc25gRozNHKjjYb8J8CL5WMhnx+nTJOGbuFmUYSU=";
 
   nativeBuildInputs = [
     scdoc
@@ -60,18 +60,18 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/aerc \
-      --prefix PATH ":" "${lib.makeBinPath [ ncurses ]}"
+      --prefix PATH : ${lib.makeBinPath [ ncurses ]}
     wrapProgram $out/libexec/aerc/filters/html \
-      --prefix PATH ":"  ${lib.makeBinPath [ w3m dante ]}
+      --prefix PATH : ${lib.makeBinPath [ w3m dante ]}
     wrapProgram $out/libexec/aerc/filters/html-unsafe \
-      --prefix PATH ":" ${lib.makeBinPath [ w3m dante ]}
+      --prefix PATH : ${lib.makeBinPath [ w3m dante ]}
     patchShebangs $out/libexec/aerc/filters
   '';
 
   meta = with lib; {
     description = "Email client for your terminal";
     homepage = "https://aerc-mail.org/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "aerc";
     license = licenses.mit;
     platforms = platforms.unix;

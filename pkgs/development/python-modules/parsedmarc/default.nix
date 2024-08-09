@@ -20,7 +20,7 @@
   google-auth-oauthlib,
   hatchling,
   imapclient,
-  kafka-python,
+  kafka-python-ng,
   lxml,
   mailsuite,
   msgraph-core,
@@ -77,7 +77,7 @@ buildPythonPackage rec {
     google-auth-httplib2
     google-auth-oauthlib
     imapclient
-    kafka-python
+    kafka-python-ng
     lxml
     mailsuite
     msgraph-core

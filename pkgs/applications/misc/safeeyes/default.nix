@@ -3,7 +3,6 @@
 , fetchPypi
 , alsa-utils
 , gobject-introspection
-, libappindicator-gtk3
 , libnotify
 , wlrctl
 , gtk3
@@ -18,11 +17,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "safeeyes";
-  version = "2.1.9";
+  version = "2.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Z1c1DVwCwPiOPvCYNsoXJBMfVzIQA+/6wStV8BShahc=";
+    hash = "sha256-k/CNxLScZDCXiwJhP5qh5HD5VUKlOLaYV8ICYgz6NKI=";
   };
 
   postPatch = ''
@@ -36,7 +35,6 @@ buildPythonApplication rec {
 
   buildInputs = [
     gtk3
-    libappindicator-gtk3
     libnotify
   ];
 
@@ -47,6 +45,8 @@ buildPythonApplication rec {
     pygobject3
     dbus-python
     croniter
+    setuptools
+    packaging
   ];
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.

@@ -21,6 +21,7 @@ rec {
       , withBtrfs ? stdenv.isLinux, btrfs-progs
       , withLvm ? stdenv.isLinux, lvm2
       , withSeccomp ? stdenv.isLinux, libseccomp
+      , knownVulnerabilities ? []
     }:
   let
     docker-runc = runc.overrideAttrs {
@@ -267,6 +268,7 @@ rec {
       license = licenses.asl20;
       maintainers = with maintainers; [ offline vdemeester periklis teutat3s ];
       mainProgram = "docker";
+      inherit knownVulnerabilities;
     };
   });
 
@@ -284,46 +286,52 @@ rec {
     containerdHash = "sha256-y3CYDZbA2QjIn1vyq/p1F1pAVxQHi/0a6hGWZCRWzyk=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+    knownVulnerabilities = [
+      "CVE-2024-23651"
+      "CVE-2024-23652"
+      "CVE-2024-23653"
+      "CVE-2024-41110"
+    ];
   };
 
   docker_25 = callPackage dockerGen rec {
-    version = "25.0.5";
+    version = "25.0.6";
     cliRev = "v${version}";
-    cliHash = "sha256-CACMi3bXUN6oGc2f/Z+lNQqMgQ4llRWPRKgijdpiPGg=";
+    cliHash = "sha256-7ZKjlONL5RXEJZrvssrL1PQMNANP0qTw4myGKdtd19U=";
     mobyRev = "v${version}";
-    mobyHash = "sha256-4QGz22fXxyAD77pyUWb2lF3VKqxmPIrGqcJGoyrEHew=";
+    mobyHash = "sha256-+zkhUMeVD3HNq8WrWQmLskq+HykvD5kzSACmf67YbJE=";
     runcRev = "v1.1.12";
     runcHash = "sha256-N77CU5XiGYIdwQNPFyluXjseTeaYuNJ//OsEUS0g/v0=";
-    containerdRev = "v1.7.13";
-    containerdHash = "sha256-y3CYDZbA2QjIn1vyq/p1F1pAVxQHi/0a6hGWZCRWzyk=";
+    containerdRev = "v1.7.20";
+    containerdHash = "sha256-Q9lTzz+G5PSoChy8MZtbOpO81AyNWXC+CgGkdOg14uY=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
 
   docker_26 = callPackage dockerGen rec {
-    version = "26.1.4";
+    version = "26.1.5";
     cliRev = "v${version}";
-    cliHash = "sha256-7yCR49Un1i1kB+66IKt/8lgwKNkUjtVh52DH9OY8Pw4=";
+    cliHash = "sha256-UlN+Uc0YHhLyu14h5oDBXP4K9y2tYKPOIPTGZCe4PVY=";
     mobyRev = "v${version}";
-    mobyHash = "sha256-0WwlpUECvmNq6DBm7U7rjzYfGKF7pxsfs9+x5uVPV0k=";
+    mobyHash = "sha256-6Hx7GnA7P6HqDlnGoc+HpPHSl69XezwAEGbvWYUVQlE=";
     runcRev = "v1.1.12";
     runcHash = "sha256-N77CU5XiGYIdwQNPFyluXjseTeaYuNJ//OsEUS0g/v0=";
-    containerdRev = "v1.7.15";
-    containerdHash = "sha256-qLrPLGxsUmgEscrhyl+1rJ0k7c9ibKnpMpsJPD4xDZU=";
+    containerdRev = "v1.7.18";
+    containerdHash = "sha256-IlK5IwniaBhqMgxQzV8btQcbdJkNEQeUMoh6aOsBOHQ=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
 
   docker_27 = callPackage dockerGen rec {
-    version = "27.0.3";
+    version = "27.1.1";
     cliRev = "v${version}";
-    cliHash = "sha256-fpjSnUq3T6WZO/FLeT377FWxwevbULob9dPiSBxZdHI=";
+    cliHash = "sha256-r9figEMYHHSbMYVFiw7GUMzjZBhlF+jyZqKixyCpoQ0=";
     mobyRev = "v${version}";
-    mobyHash = "sha256-v5uhFQPbBIpfnKtAkmbq4w+TbaG01tqTSWNBE3NvPKU=";
+    mobyHash = "sha256-LuCEdQQ3eWt8VyzmWkQTxlxTok9h/UlACTVls5LcI7g=";
     runcRev = "v1.1.13";
     runcHash = "sha256-RQsM8Q7HogDVGbNpen3wxXNGR9lfqmNhkXTRoC+LBk8=";
-    containerdRev = "v1.7.18";
-    containerdHash = "sha256-IlK5IwniaBhqMgxQzV8btQcbdJkNEQeUMoh6aOsBOHQ=";
+    containerdRev = "v1.7.20";
+    containerdHash = "sha256-Q9lTzz+G5PSoChy8MZtbOpO81AyNWXC+CgGkdOg14uY=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };

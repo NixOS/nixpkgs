@@ -19,7 +19,7 @@ in
   meta.maintainers = with maintainers; [ etu stunkymonkey mattchrist ];
 
   options.services.freshrss = {
-    enable = mkEnableOption "FreshRSS RSS aggregator and reader with php-fpm backend.";
+    enable = mkEnableOption "FreshRSS RSS aggregator and reader with php-fpm backend";
 
     package = mkPackageOption pkgs "freshrss" { };
 
@@ -281,7 +281,10 @@ in
               ${if cfg.database.passFile != null then "--db-password" else null} = ''"$(cat ${cfg.database.passFile})"'';
               ${if cfg.database.user != null then "--db-user" else null} = ''"${cfg.database.user}"'';
               ${if cfg.database.tableprefix != null then "--db-prefix" else null} = ''"${cfg.database.tableprefix}"'';
+              # hostname:port e.g. "localhost:5432"
               ${if cfg.database.host != null && cfg.database.port != null then "--db-host" else null} = ''"${cfg.database.host}:${toString cfg.database.port}"'';
+              # socket path e.g. "/run/postgresql"
+              ${if cfg.database.host != null && cfg.database.port == null then "--db-host" else null} = ''"${cfg.database.host}"'';
             });
         in
         {

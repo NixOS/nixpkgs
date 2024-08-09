@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchurl
 , libxml2
 , libxslt

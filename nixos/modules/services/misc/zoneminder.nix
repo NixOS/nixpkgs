@@ -202,10 +202,11 @@ in {
     ];
 
     services = {
-      fcgiwrap.zoneminder = lib.mkIf useNginx {
+      fcgiwrap.instances.zoneminder = lib.mkIf useNginx {
         process.prefork = cfg.cameras;
         process.user = user;
         process.group = group;
+        socket = { inherit (config.services.nginx) user group; };
       };
 
       mysql = lib.mkIf cfg.database.createLocally {
@@ -255,7 +256,7 @@ in {
                   fastcgi_param HTTP_PROXY "";
                   fastcgi_intercept_errors on;
 
-                  fastcgi_pass unix:${config.services.fcgiwrap.zoneminder.socket.address};
+                  fastcgi_pass unix:${config.services.fcgiwrap.instances.zoneminder.socket.address};
                 }
 
                 location /cache/ {
@@ -372,5 +373,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 }

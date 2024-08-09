@@ -7,33 +7,37 @@
 , ncurses
 , nim
 , pandoc
-, perl
 , pkg-config
 , zlib
+, unstableGitUpdater
+, libseccomp
+, substituteAll
 }:
 
 stdenv.mkDerivation {
   pname = "chawan";
-  version = "0-unstable-2024-03-01";
+  version = "0-unstable-2024-07-14";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "87ba9a87be15abbe06837f1519cfb76f4bf759f3";
-    hash = "sha256-Xs+Mxe5/uoxPMf4FuelpO+bRJ1KdfASVI7rWqtboJZw=";
+    rev = "0e3d67f31df2c2d53aa0e578439852731e5f5af9";
+    hash = "sha256-eVoZisQyaebWO58a0a0KR7fwsL1kTmPX1SayqdnmSuk=";
     fetchSubmodules = true;
   };
 
   patches = [
     # Include chawan's man pages in mancha's search path
-    ./mancha-augment-path.diff
+    (substituteAll {
+      src = ./mancha-augment-path.diff;
+      out = placeholder "out";
+    })
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optional stdenv.cc.isClang "-Wno-error=implicit-function-declaration"
   );
 
-  buildInputs = [ curlMinimal ncurses perl zlib ];
   nativeBuildInputs = [
     makeBinaryWrapper
     nim
@@ -41,10 +45,12 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  postPatch = ''
-    substituteInPlace adapter/protocol/man \
-      --replace-fail "OUT" $out
-  '';
+  buildInputs = [
+    curlMinimal
+    libseccomp
+    ncurses
+    zlib
+  ];
 
   buildFlags = [ "all" "manpage" ];
   installFlags = [
@@ -63,6 +69,8 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/cha ${makeWrapperArgs}
     wrapProgram $out/bin/mancha ${makeWrapperArgs}
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Lightweight and featureful terminal web browser";

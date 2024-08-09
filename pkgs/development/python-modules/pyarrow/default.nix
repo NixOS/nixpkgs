@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  sourceRoot = "apache-arrow-${version}/python";
+  sourceRoot = "${src.name}/python";
 
   nativeBuildInputs = [
     cmake

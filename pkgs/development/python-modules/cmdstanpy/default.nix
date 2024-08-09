@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   substituteAll,
   cmdstan,
   setuptools,
@@ -31,11 +30,6 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./use-nix-cmdstan-path.patch;
       cmdstan = "${cmdstan}/opt/cmdstan";
-    })
-    # Fix seed-dependent tests
-    (fetchpatch {
-      url = "https://github.com/stan-dev/cmdstanpy/commit/c72acd0b8123c02b47d5d583bdd7d8408b04562c.patch";
-      hash = "sha256-cliyDDko4spYa62DMwWBavy5pePkofJo4Kf8I0RzueM=";
     })
   ];
 

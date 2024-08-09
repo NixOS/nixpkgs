@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages
+{ stdenv, lib, fetchFromGitHub, python3Packages
 , hackrf, rtl-sdr, airspy, limesuite, libiio
 , libbladeRF
 , qt5
@@ -17,7 +17,8 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
   buildInputs = [ hackrf rtl-sdr airspy limesuite libiio libbladeRF ]
-    ++ lib.optional USRPSupport uhd;
+    ++ lib.optional USRPSupport uhd
+    ++ lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;
 
   propagatedBuildInputs = with python3Packages; [
     pyqt5 numpy psutil cython pyzmq pyaudio setuptools

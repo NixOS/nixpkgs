@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "mobian1";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gc66XrrFyhF1TvrDECBfGQc+MiDtqZPxdCn0S/43XQU=";
+    hash = "sha256-gc66XrrFyhF1TvrDECBfGQc+MiDtqZPxdCn0S/43XQU=";
   };
 
   strictDeps = true;

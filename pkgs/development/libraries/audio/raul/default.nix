@@ -1,27 +1,34 @@
-{ lib, stdenv, fetchgit, boost, gtk2, pkg-config, python3, wafHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "raul";
-  version = "unstable-2019-12-09";
-  name = "${pname}-${version}";
+  version = "2.0.0-unstable-2024-07-04";
 
-  src = fetchgit {
-    url = "https://gitlab.com/drobilla/raul.git";
-    fetchSubmodules = true;
-    rev = "e87bb398f025912fb989a09f1450b838b251aea1";
-    sha256 = "1z37jb6ghc13b8nv8a8hcg669gl8vh4ni9djvfgga9vcz8rmcg8l";
+  src = fetchFromGitLab {
+    owner = "drobilla";
+    repo = "raul";
+    rev = "9097952a918f8330a5db9039ad390fc2457f841d";
+    hash = "sha256-k+EU3ROVJyjJPAtNxPmRXp9DALpUHzohCLL6Xe3NUxk=";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook python3 ];
-  buildInputs = [ boost gtk2 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "C++ utility library primarily aimed at audio/musical applications";
     homepage = "http://drobilla.net/software/raul";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ t4ccer ];
+    platforms = lib.platforms.unix;
   };
 }

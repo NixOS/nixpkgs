@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, runCommand
 , fetchCrate
 , rustPlatform
 , Security

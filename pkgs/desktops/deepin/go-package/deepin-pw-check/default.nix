@@ -23,6 +23,10 @@ buildGoModule rec {
     hash = "sha256-kBrkcB0IWGUV4ZrkFzwdPglRgDcnVvYDFhTXS20pKOk=";
   };
 
+  patches = [
+    "${src}/rpm/0001-Mangle-Suit-Cracklib2.9.6.patch"
+  ];
+
   vendorHash = "sha256-L0vUEkUN70Hrx5roIvTfaZBHbbq7mf3WpQJeFAMU5HY=";
 
   nativeBuildInputs = [

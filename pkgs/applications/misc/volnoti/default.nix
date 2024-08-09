@@ -33,6 +33,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/davidbrazdil/volnoti";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jazzband/prettytable";
     changelog = "https://github.com/jazzband/prettytable/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

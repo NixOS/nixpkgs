@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, util-linux, xxd, runtimeShell
-, ghostscript, a2ps, bash }:
+, ghostscript, a2ps }:
 
 # Why:
 # The executable "brprintconf_mfcj880dw" binary is looking for "/opt/brother/Printers/%s/inf/br%sfunc" and "/opt/brother/Printers/%s/inf/br%src".

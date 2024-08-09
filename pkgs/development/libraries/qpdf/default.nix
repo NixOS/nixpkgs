@@ -11,22 +11,35 @@
 , pdfmixtool
 , pdfslicer
 , python3
+, testers
+, versionCheckHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qpdf";
   version = "11.9.1";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DhrOKjUPgNo61db8av0OTfM8mCNebQocQWtTWdt002s=";
   };
+
+  outputs = [
+    "bin"
+    "doc"
+    "lib"
+    "man"
+    "out"
+  ];
 
   nativeBuildInputs = [ cmake perl ];
 
   buildInputs = [ zlib libjpeg ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   preConfigure = ''
     patchShebangs qtest/bin/qtest-driver
@@ -38,6 +51,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     inherit (python3.pkgs) pikepdf;
     inherit
       cups-filters
@@ -46,12 +60,14 @@ stdenv.mkDerivation rec {
     ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://qpdf.sourceforge.io/";
     description = "C++ library and set of programs that inspect and manipulate the structure of PDF files";
-    license = licenses.asl20; # as of 7.0.0, people may stay at artistic2
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.all;
-    changelog = "https://github.com/qpdf/qpdf/blob/v${version}/ChangeLog";
+    license = lib.licenses.asl20; # as of 7.0.0, people may stay at artistic2
+    maintainers = with lib.maintainers; [ abbradar ];
+    mainProgram = "qpdf";
+    platforms = lib.platforms.all;
+    changelog = "https://github.com/qpdf/qpdf/blob/v${finalAttrs.version}/ChangeLog";
+    pkgConfigModules = [ "libqpdf" ];
   };
-}
+})

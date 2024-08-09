@@ -60,7 +60,7 @@ in
       serviceConfig = {
         Type = "simple";
         Group = if (config.services.scion.scion-dispatcher.enable == true) then "scion" else null;
-        ExecStart = "${pkgs.scion}/bin/scion-control --config ${configFile}";
+        ExecStart = "${globalCfg.package}/bin/scion-control --config ${configFile}";
         DynamicUser = true;
         Restart = "on-failure";
         BindPaths = [ "/dev/shm:/run/shm" ];

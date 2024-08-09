@@ -7,8 +7,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "steam-play-none";
   version = "0-unstable-2022-12-15";
   src = fetchFromGitHub {
-    repo = finalAttrs.pname;
     owner = "Scrumplex";
+    repo = "steam-play-none";
     rev = "42e38706eb37fdaaedbe9951d59ef44148fcacbf";
     hash = "sha256-sSHLrB5TlGMKpztTnbh5oIOhcrRd+ke2OUUbiQUqoh0=";
   };

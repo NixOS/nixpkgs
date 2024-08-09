@@ -1,6 +1,7 @@
 { lib
 , substituteAll
 , fetchurl
+, fetchpatch
 , ocaml
 , dune_3
 , buildDunePackage
@@ -56,11 +57,23 @@ buildDunePackage {
     sha256 = hashes."${version}";
   };
 
-  patches = [
+  patches = let
+    branch = lib.head (lib.tail (lib.splitString "-" version));
+    needsVimPatch = lib.versionOlder version "4.17" ||
+                    branch == "502" && lib.versionOlder version "5.2";
+  in
+  [
     (substituteAll {
       src = ./fix-paths.patch;
       dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_3}/bin/dune";
+    })
+  ] ++ lib.optionals needsVimPatch [
+    # https://github.com/ocaml/merlin/pull/1798
+    (fetchpatch {
+      name = "vim-python-12-syntax-warning-fix.patch";
+      url = "https://github.com/ocaml/merlin/commit/9e0c47b0d5fd0c4edc37c4c7ce927b155877557d.patch";
+      hash = "sha256-HmdTISE/s45C5cwLgsCHNUW6OAPSsvQ/GcJE6VDEobs=";
     })
   ];
 

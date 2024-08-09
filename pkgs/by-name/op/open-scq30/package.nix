@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage rec {
     pango
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk.frameworks.CoreBluetooth
     darwin.apple_sdk.frameworks.CoreGraphics
     darwin.apple_sdk.frameworks.Foundation
   ];
