@@ -5519,6 +5519,8 @@ with pkgs;
 
   klaus = with python3Packages; toPythonApplication klaus;
 
+  klassy-qt5 = callPackage ../by-name/kl/klassy/package.nix { qtMajorVersion = "5"; };
+
   klipper = callPackage ../servers/klipper { };
 
   klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { gcc-arm-embedded = gcc-arm-embedded-13; };
