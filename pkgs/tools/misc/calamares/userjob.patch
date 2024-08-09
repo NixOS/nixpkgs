@@ -1,14 +1,23 @@
 diff --git a/src/modules/users/Config.cpp b/src/modules/users/Config.cpp
-index eedfd274d..0f3e78848 100644
+index cd56bc3e2..5bf76d6d1 100644
 --- a/src/modules/users/Config.cpp
 +++ b/src/modules/users/Config.cpp
-@@ -972,26 +972,11 @@ Config::createJobs() const
+@@ -1028,35 +1028,11 @@ Config::createJobs() const
  
      Calamares::Job* j;
  
 -    if ( !m_sudoersGroup.isEmpty() )
 -    {
 -        j = new SetupSudoJob( m_sudoersGroup, m_sudoStyle );
+-        jobs.append( Calamares::job_ptr( j ) );
+-    }
+-
+-    if ( getActiveDirectoryUsed() )
+-    {
+-        j = new ActiveDirectoryJob( m_activeDirectoryAdminUsername,
+-                                    m_activeDirectoryAdminPassword,
+-                                    m_activeDirectoryDomain,
+-                                    m_activeDirectoryIP );
 -        jobs.append( Calamares::job_ptr( j ) );
 -    }
 -

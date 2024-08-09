@@ -21,20 +21,19 @@ index 632f32028..fe9052449 100644
  
      if ( m_output )
 diff --git a/src/modules/mount/main.py b/src/modules/mount/main.py
-index 4202639f3..de2556b91 100644
+index 4a16f8872..6d32916a5 100644
 --- a/src/modules/mount/main.py
 +++ b/src/modules/mount/main.py
-@@ -235,7 +235,8 @@ def mount_partition(root_mount_point, partition, partitions, mount_options, moun
- 
+@@ -244,7 +244,7 @@ def mount_partition(root_mount_point, partition, partitions, mount_options, moun
      # Ensure that the created directory has the correct SELinux context on
      # SELinux-enabled systems.
+ 
 -    os.makedirs(mount_point, exist_ok=True)
 +    subprocess.check_call(["pkexec", "mkdir", "-p", mount_point])
-+
+ 
      try:
          subprocess.call(['chcon', '--reference=' + raw_mount_point, mount_point])
-     except FileNotFoundError as e:
-@@ -278,13 +279,13 @@ def mount_partition(root_mount_point, partition, partitions, mount_options, moun
+@@ -288,13 +288,13 @@ def mount_partition(root_mount_point, partition, partitions, mount_options, moun
          for s in btrfs_subvolumes:
              if not s["subvolume"]:
                  continue
