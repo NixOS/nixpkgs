@@ -82,13 +82,23 @@ let
             (if lib.versionAtLeast release_version "19" then ../19/${p} else ../12/${p})
           else if
             lib.versionAtLeast release_version "18"
-            && (p == "clang/purity.patch" || p == "lld/gnu-install-dirs.patch")
+            && (
+              p == "clang/purity.patch"
+              || p == "lld/gnu-install-dirs.patch"
+              || p == "llvm/gnu-install-dirs.patch"
+              || p == "llvm/gnu-install-dirs-polly.patch"
+              || p == "llvm/lit-shell-script-runner-set-dyld-library-path.patch"
+            )
           then
             ../18/${p}
           else if
             lib.versionAtLeast release_version "15"
             && lib.versionOlder release_version "17"
-            && (p == "clang/purity.patch" || p == "libunwind/gnu-install-dirs.patch")
+            && (
+              p == "clang/purity.patch"
+              || p == "libunwind/gnu-install-dirs.patch"
+              || p == "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch"
+            )
           then
             ../15/${p}
           else if p == "compiler-rt/X86-support-extension.patch" || p == "lldb/procfs.patch" then
@@ -122,6 +132,26 @@ let
             ../12/${p}
           else if lib.versionOlder release_version "14" && p == "lld/gnu-install-dirs.patch" then
             ../12/${p}
+          else if
+            lib.versionAtLeast release_version "14"
+            && lib.versionOlder release_version "18"
+            && p == "llvm/gnu-install-dirs-polly.patch"
+          then
+            ../14/${p}
+          else if
+            lib.versionAtLeast release_version "16"
+            && lib.versionOlder release_version "18"
+            && p == "llvm/lit-shell-script-runner-set-dyld-library-path.patch"
+          then
+            ../16/${p}
+          else if
+            lib.versionAtLeast release_version "17" && p == "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch"
+          then
+            ../17/${p}
+          else if
+            lib.versionAtLeast release_version "15" && p == "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch"
+          then
+            ../15/${p}
           else
             "${metadata.versionDir}/${p}";
       };
