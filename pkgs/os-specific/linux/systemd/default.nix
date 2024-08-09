@@ -788,7 +788,8 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (nixosTests)
         switchTest
         systemd-journal
-        systemd-journal-gateway
+        # This test is currently broken, see https://github.com/NixOS/nixpkgs/pull/297870
+        #systemd-journal-gateway
         systemd-journal-upload;
       cross =
         let
