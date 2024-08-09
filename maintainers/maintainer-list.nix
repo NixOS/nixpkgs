@@ -9569,6 +9569,11 @@
     githubId = 1061229;
     name = "Jiehong Ma";
   };
+  jigglycrumb = {
+    github = "jigglycrumb";
+    githubId = 1476865;
+    name = "jigglycrumb";
+  };
   jirkamarsik = {
     email = "jiri.marsik89@gmail.com";
     github = "jirkamarsik";
