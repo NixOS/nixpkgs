@@ -5,8 +5,7 @@
 , elfutils
 , expat
 , fetchCrate
-, fetchurl
-, fetchpatch
+, fetchFromGitLab
 , file
 , flex
 , glslang
@@ -44,12 +43,12 @@
 , galliumDrivers ? [
     "d3d12" # WSL emulated GPU (aka Dozen)
     "iris" # new Intel (Broadwell+)
-    "kmsro" # special "render only" driver for GPUs without a display controller
+    "llvmpipe" # software renderer
     "nouveau" # Nvidia
-    "radeonsi" # new AMD (GCN+)
     "r300" # very old AMD
     "r600" # less old AMD
-    "swrast" # software renderer (aka LLVMPipe)
+    "radeonsi" # new AMD (GCN+)
+    "softpipe" # older software renderer
     "svga" # VMWare virtualized GPU
     "virgl" # QEMU virtualized GPU (aka VirGL)
     "zink" # generic OpenGL over Vulkan, experimental
@@ -103,8 +102,8 @@ let
     }
     {
       pname = "proc-macro2";
-      version = "1.0.70";
-      hash = "sha256-e4ZgyZUTu5nAtaH5QVkLelqJQX/XPj/rWkzf/g2c+1g=";
+      version = "1.0.86";
+      hash = "sha256-9fYAlWRGVIwPp8OKX7Id84Kjt8OoN2cANJ/D9ZOUUZE=";
     }
     {
       pname = "quote";
@@ -113,8 +112,8 @@ let
     }
     {
       pname = "syn";
-      version = "2.0.39";
-      hash = "sha256-Mjen2L/omhVbhU/+Ao65mogs3BP3fY+Bodab3uU63EI=";
+      version = "2.0.68";
+      hash = "sha256-nGLBbxR0DFBpsXMngXdegTm/o13FBS6QsM7TwxHXbgQ=";
     }
     {
       pname = "unicode-ident";
@@ -132,19 +131,13 @@ let
 
   needNativeCLC = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  common = import ./common.nix { inherit lib fetchurl; };
+  common = import ./common.nix { inherit lib fetchFromGitLab; };
 in stdenv.mkDerivation {
   inherit (common) pname version src meta;
 
   patches = [
     ./opencl.patch
-
-    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/11533
-    (fetchpatch {
-      name = "ffmpeg.patch";
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/241f70e5a13bb9c13a168282446ad074e16c3d74.patch";
-      hash = "sha256-Cx7OL8iXGAOuDbCQReCCxSrWYvfZVrGoP0txIKSLTvs=";
-    })
+    ./gbm.patch
   ];
 
   postPatch = ''
@@ -281,6 +274,7 @@ in stdenv.mkDerivation {
     python3Packages.pycparser
     python3Packages.mako
     python3Packages.ply
+    python3Packages.pyyaml
     jdupes
     glslang
     rustc
@@ -303,6 +297,9 @@ in stdenv.mkDerivation {
   postInstall = ''
     # Move driver-related bits to $drivers
     moveToOutput "lib/lib*_mesa*" $drivers
+    moveToOutput "lib/libgallium*" $drivers
+    moveToOutput "lib/gbm" $drivers
+    moveToOutput "lib/libglapi*" $drivers
     moveToOutput "lib/libpowervr_rogue*" $drivers
     moveToOutput "lib/libxatracker*" $drivers
     moveToOutput "lib/libvulkan_*" $drivers
@@ -372,7 +369,7 @@ in stdenv.mkDerivation {
     done
 
     # add RPATH here so Zink can find libvulkan.so
-    patchelf --add-rpath ${vulkan-loader}/lib $drivers/lib/dri/zink_dri.so
+    patchelf --add-rpath ${vulkan-loader}/lib $drivers/lib/libgallium*.so
   '';
 
   env.NIX_CFLAGS_COMPILE = toString ([
