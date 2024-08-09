@@ -1992,6 +1992,12 @@
     githubId = 574938;
     name = "Jonathan Glines";
   };
+  aurreland = {
+    name = "Aurélien Andreo";
+    email = "aurelien.andreo@proton.me";
+    github = "aurreland";
+    githubId = 118772542;
+  };
   austin-artificial = {
     email = "austin.platt@artificial.io";
     github = "austin-artificial";
