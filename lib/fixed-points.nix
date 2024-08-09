@@ -63,7 +63,6 @@ rec {
     See [`extends`](#function-library-lib.fixedPoints.extends) for an example use case.
     There `self` is also often called `final`.
 
-
     # Inputs
 
     `f`
@@ -90,7 +89,12 @@ rec {
 
     :::
   */
-  fix = f: let x = f x; in x;
+  fix =
+    f:
+    let
+      x = f x;
+    in
+    x;
 
   /**
     A variant of `fix` that records the original recursive attribute set in the
@@ -99,14 +103,20 @@ rec {
     This is useful in combination with the `extends` function to
     implement deep overriding.
 
-
     # Inputs
 
     `f`
 
     : 1\. Function argument
   */
-  fix' = f: let x = f x // { __unfix__ = f; }; in x;
+  fix' =
+    f:
+    let
+      x = f x // {
+        __unfix__ = f;
+      };
+    in
+    x;
 
   /**
     Return the fixpoint that `f` converges to when called iteratively, starting
@@ -116,7 +126,6 @@ rec {
     nix-repl> converge (x: x / 2) 16
     0
     ```
-
 
     # Inputs
 
@@ -134,13 +143,12 @@ rec {
     (a -> a) -> a -> a
     ```
   */
-  converge = f: x:
+  converge =
+    f: x:
     let
       x' = f x;
     in
-      if x' == x
-      then x
-      else converge f x';
+    if x' == x then x else converge f x';
 
   /**
     Extend a function using an overlay.
@@ -148,7 +156,6 @@ rec {
     Overlays allow modifying and extending fixed-point functions, specifically ones returning attribute sets.
     A fixed-point function is a function which is intended to be evaluated by passing the result of itself as the argument.
     This is possible due to Nix's lazy evaluation.
-
 
     A fixed-point function returning an attribute set has the form
 
@@ -257,7 +264,6 @@ rec {
     ```
     :::
 
-
     # Inputs
 
     `overlay`
@@ -299,8 +305,7 @@ rec {
     :::
   */
   extends =
-    overlay:
-    f:
+    overlay: f:
     # The result should be thought of as a function, the argument of that function is not an argument to `extends` itself
     (
       final:
@@ -311,63 +316,141 @@ rec {
     );
 
   /**
-    Compose two extending functions of the type expected by 'extends'
-    into one where changes made in the first are available in the
-    'super' of the second
-
-
-    # Inputs
-
-    `f`
-
-    : 1\. Function argument
-
-    `g`
-
-    : 2\. Function argument
-
-    `final`
-
-    : 3\. Function argument
-
-    `prev`
-
-    : 4\. Function argument
+    Compose two overlay functions and return a single overlay function that combines them.
+    For more details see: [composeManyExtensions](#function-library-lib.fixedPoints.composeManyExtensions).
   */
   composeExtensions =
     f: g: final: prev:
-      let fApplied = f final prev;
-          prev' = prev // fApplied;
-      in fApplied // g final prev';
+    let
+      fApplied = f final prev;
+      prev' = prev // fApplied;
+    in
+    fApplied // g final prev';
 
   /**
-    Compose several extending functions of the type expected by 'extends' into
-    one where changes made in preceding functions are made available to
-    subsequent ones.
+    Composes a list of [`overlays`](#chap-overlays) and returns a single overlay function that combines them.
+
+    :::{.note}
+    The result is produced by using the update operator `//`.
+    This means nested values of previous overlays are not merged recursively.
+    :::
+
+    # Inputs
+
+    `extensions`
+
+    : A list of overlay functions
+      :::{.note}
+      The order of the overlays in the list is important.
+      :::
+
+    : Each overlay function takes two arguments, `final` and `prev`, and returns an attribute set.
+      - `final` is the result of the fixed-point function, with all overlays applied.
+      - `prev` is the result of the previous overlay function.
+
+    `final`
+
+    : The return value of the original function that is extended by the overlays `f` and `g`.
+
+      If `composeManyExtensions extensions` is itself used in a composition of overlays, then any overlays that precede it can be considered to be part of "the original function".
+
+    `prev`
+
+    : The intermediate result of applying preceding overlays.
+
+    # Type
 
     ```
-    composeManyExtensions : [packageSet -> packageSet -> packageSet] -> packageSet -> packageSet -> packageSet
-                              ^final        ^prev         ^overrides     ^final        ^prev         ^overrides
+    # Pseudo code
+    let
+      OverlayFn :: ( { ... } -> { ... } -> { ... } );
+    in
+      composeManyExtensions :: [ OverlayFn ] -> OverlayFn
     ```
+
+    # Examples
+    :::{.example}
+    ## `lib.fixedPoints.composeManyExtensions` usage example without `lib.extends`
+
+    The following usage of `lib.fixedPoints.composeManyExtensions` without `lib.extends` demonstrates overlays as an atomic concept.
+    In nixpkgs however, it is required to use `lib.extends` such that the original function becomes part of the fixed point as shown in the next example.
+
+    ```nix
+    let
+      # Each overlay function has 'final' and 'prev' as arguments.
+      overlayA = final: prev: {
+        b = final.c; # The final value of c after overlayB
+        c = 3;
+      };
+      overlayB = final: prev: {
+        c = 10;
+        cPrev = prev.c; # The value of c before overlayB
+      };
+
+      extensions = composeManyExtensions [ overlayA overlayB ];
+
+      # Calculate the fixed point of all composed overlays.
+      # With an empty attribute set as the initial value.
+      fixedpoint = lib.fix (final: extensions final {});
+
+    in fixedpoint
+    =>
+    {
+      b = 10;
+      c = 10;
+      cPrev = 3;
+    }
+    ```
+    :::
+
+    :::{.example}
+    ## `lib.fixedPoints.composeManyExtensions` usage example with `lib.extends`
+
+    If the original function should be part of the fixed point, `lib.extends` should be used to apply the composed overlays.
+
+    ```nix
+    let
+      # The "original function" that is extended by the overlays.
+      # Note that it doesn't have prev: as argument since it can be thought of as the first function.
+      original = final: { a = 1; };
+
+      # Each overlay function has 'final' and 'prev' as arguments.
+      overlayA = final: prev: { b = final.c; c = 3; };
+      overlayB = final: prev: { c = 10; cPrev = prev.c; };
+
+      extensions = composeManyExtensions [ overlayA overlayB ];
+
+      # Caluculate the fixed point of all composed overlays.
+      fixedpoint = lib.fix (lib.extends extensions original );
+
+    in fixedpoint
+    =>
+    {
+      a = 1;
+      b = 10;
+      c = 10;
+      cPrev = 3;
+    }
+    ```
+    :::
   */
-  composeManyExtensions =
-    lib.foldr (x: y: composeExtensions x y) (final: prev: {});
+  composeManyExtensions = lib.foldr (x: y: composeExtensions x y) (final: prev: { });
 
   /**
     Create an overridable, recursive attribute set. For example:
 
     ```
-    nix-repl> obj = makeExtensible (self: { })
+    nix-repl> obj = makeExtensible (final: { })
 
     nix-repl> obj
     { __unfix__ = «lambda»; extend = «lambda»; }
 
-    nix-repl> obj = obj.extend (self: super: { foo = "foo"; })
+    nix-repl> obj = obj.extend (final: prev: { foo = "foo"; })
 
     nix-repl> obj
     { __unfix__ = «lambda»; extend = «lambda»; foo = "foo"; }
 
-    nix-repl> obj = obj.extend (self: super: { foo = super.foo + " + "; bar = "bar"; foobar = self.foo + self.bar; })
+    nix-repl> obj = obj.extend (final: prev: { foo = prev.foo + " + "; bar = "bar"; foobar = final.foo + final.bar; })
 
     nix-repl> obj
     { __unfix__ = «lambda»; bar = "bar"; extend = «lambda»; foo = "foo + "; foobar = "foo + bar"; }
@@ -379,7 +462,6 @@ rec {
     Same as `makeExtensible` but the name of the extending attribute is
     customized.
 
-
     # Inputs
 
     `extenderName`
@@ -390,8 +472,13 @@ rec {
 
     : 2\. Function argument
   */
-  makeExtensibleWithCustomName = extenderName: rattrs:
-    fix' (self: (rattrs self) // {
-      ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
-    });
+  makeExtensibleWithCustomName =
+    extenderName: rattrs:
+    fix' (
+      self:
+      (rattrs self)
+      // {
+        ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
+      }
+    );
 }
