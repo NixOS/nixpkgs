@@ -287,6 +287,34 @@ buildNpmPackage {
 }
 ```
 
+#### importNpmLock.buildNodeModules {#javascript-buildNpmPackage-importNpmLock.buildNodeModules}
+
+`importNpmLock.buildNodeModules` is a Nix function that requires the following optional arguments:
+
+- `npmRoot`: Path to package directory containing the source tree
+- `package`: Parsed contents of `package.json`
+- `packageLock`: Parsed contents of `package-lock.json`
+- `pname`: Package name
+- `version`: Package version
+
+It returns a derivation with a pre-built `node_modules` directory, as imported by `importNpmLock`.
+This is to be used together with `importNpmLock.hooks.linkNodeModulesHook` to facilitate `nix-shell`/`nix develop` based development workflows.
+
+```nix
+pkgs.mkShell {
+  packages = [
+    importNpmLock.hooks.linkNodeModulesHook
+    nodejs
+  ];
+
+  npmDeps = importNpmLock.buildNodeModules {
+    npmRoot = ./.;
+    inherit nodejs;
+  };
+}
+```
+will create a development shell where a `node_modules` directory is created & packages symlinked to the Nix store when activated.
+
 ### corepack {#javascript-corepack}
 
 This package puts the corepack wrappers for pnpm and yarn in your PATH, and they will honor the `packageManager` setting in the `package.json`.
