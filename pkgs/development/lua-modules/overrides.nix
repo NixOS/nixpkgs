@@ -502,6 +502,9 @@ in
 
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
 
+    # ld: symbol(s) not found for architecture arm64
+    # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
+    meta.broken = stdenv.isDarwin;
   });
 
   lush-nvim = prev.lush-nvim.overrideAttrs (drv: {
