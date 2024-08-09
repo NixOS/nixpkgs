@@ -33,6 +33,11 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/miniflux.app $out/bin/miniflux
     installManPage miniflux.1
+
+    # Upstream vendors a Systemd service.
+    # Ship it with the package, for `systemd.packages`
+    mkdir -p $out/lib/systemd/system
+    cp packaging/systemd/miniflux.service $out/lib/systemd/system/miniflux.service
   '';
 
   passthru.tests = nixosTests.miniflux;
