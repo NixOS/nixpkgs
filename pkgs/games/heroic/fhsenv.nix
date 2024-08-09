@@ -78,6 +78,7 @@ buildFHSEnv {
     glib
     gnutls
     gtk3
+    icu
     lcms2
     libevdev
     libgcrypt
