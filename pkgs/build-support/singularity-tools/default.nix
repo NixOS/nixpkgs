@@ -5,44 +5,55 @@
   runCommand,
   vmTools,
   writeClosure,
+  writers,
   writeScript,
   # Native build inputs
+  buildPackages,
   e2fsprogs,
-  gawk,
   util-linux,
   # Build inputs
-  bash,
+  bashInteractive,
   runtimeShell,
   singularity,
-  storeDir ? builtins.storeDir,
 }:
-rec {
-  shellScript =
-    name: text:
-    writeScript name ''
-      #!${runtimeShell}
-      set -e
-      ${text}
-    '';
 
+let
+  defaultSingularity = singularity;
+in
+rec {
+  # TODO(@ShamrockLee): Remove after Nixpkgs 24.11 branch-off.
+  shellScript =
+    lib.warn
+      "`singularity-tools.shellScript` is deprecated. Use `writeScript`, `writeShellScripts` or `writers.writeBash` instead."
+      (
+        name: text:
+        writeScript name ''
+          #!${runtimeShell}
+          set -e
+          ${text}
+        ''
+      );
+
+  # TODO(@ShamrockLee): Remove after Nixpkgs 24.11 branch-off.
   mkLayer =
-    {
-      name,
-      contents ? [ ],
-      # May be "apptainer" instead of "singularity"
-      projectName ? (singularity.projectName or "singularity"),
-    }:
-    runCommand "${projectName}-layer-${name}" { inherit contents; } ''
-      mkdir $out
-      for f in $contents ; do
-        cp -ra $f $out/
-      done
-    '';
+    lib.warn
+      "`singularity-tools.mkLayer` is deprecated, as it is no longer used to implement `singularity-tools.buildImages`."
+      (
+        {
+          name,
+          contents ? [ ],
+          # May be "apptainer" instead of "singularity"
+          projectName ? (singularity.projectName or "singularity"),
+        }:
+        runCommand "${projectName}-layer-${name}" { inherit contents; } ''
+          mkdir $out
+          for f in $contents ; do
+            cp -ra $f $out/
+          done
+        ''
+      );
 
   buildImage =
-    let
-      defaultSingularity = singularity;
-    in
     {
       name,
       contents ? [ ],
@@ -54,17 +65,23 @@ rec {
     }:
     let
       projectName = singularity.projectName or "singularity";
-      runAsRootFile = shellScript "run-as-root.sh" runAsRoot;
-      runScriptFile = shellScript "run-script.sh" runScript;
+      runAsRootFile = buildPackages.writers.writeBash "run-as-root.sh" ''
+        set -e
+        ${runAsRoot}
+      '';
+      runScriptFile = writers.writeBash "run-script.sh" ''
+        set -e
+        ${runScript}
+      '';
       result = vmTools.runInLinuxVM (
-        runCommand "${projectName}-image-${name}.img"
+        runCommand "${projectName}-image-${name}.sif"
           {
-            buildInputs = [
+            nativeBuildInputs = [
               singularity
               e2fsprogs
               util-linux
-              gawk
             ];
+            strictDeps = true;
             layerClosure = writeClosure contents;
             preVM = vmTools.createEmptyImage {
               size = diskSize;
@@ -83,10 +100,10 @@ rec {
 
             # Run root script
             ${lib.optionalString (runAsRoot != null) ''
-              mkdir -p ./${storeDir}
-              mount --rbind ${storeDir} ./${storeDir}
+              mkdir -p ./${builtins.storeDir}
+              mount --rbind "${builtins.storeDir}" ./${builtins.storeDir}
               unshare -imnpuf --mount-proc chroot ./ ${runAsRootFile}
-              umount -R ./${storeDir}
+              umount -R ./${builtins.storeDir}
             ''}
 
             # Build /bin and copy across closure
@@ -105,14 +122,14 @@ rec {
 
             # Create runScript and link shell
             if [ ! -e bin/sh ]; then
-              ln -s ${runtimeShell} bin/sh
+              ln -s ${lib.getExe bashInteractive} bin/sh
             fi
-            mkdir -p .${projectName}.d
-            ln -s ${runScriptFile} .${projectName}.d/runscript
+            mkdir -p .singularity.d
+            ln -s ${runScriptFile} .singularity.d/runscript
 
-            # Fill out .${projectName}.d
-            mkdir -p .${projectName}.d/env
-            touch .${projectName}.d/env/94-appsbase.sh
+            # Fill out .singularity.d
+            mkdir -p .singularity.d/env
+            touch .singularity.d/env/94-appsbase.sh
 
             cd ..
             mkdir -p /var/lib/${projectName}/mnt/session
