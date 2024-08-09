@@ -1670,6 +1670,8 @@ self: super: with self; {
 
   blis = callPackage ../development/python-modules/blis { };
 
+  blivet = callPackage ../development/python-modules/blivet { };
+
   blobfile = callPackage ../development/python-modules/blobfile { };
 
   blockchain = callPackage ../development/python-modules/blockchain { };
@@ -1906,6 +1908,8 @@ self: super: with self; {
   bwapy = callPackage ../development/python-modules/bwapy { };
 
   bytecode = callPackage ../development/python-modules/bytecode { };
+
+  bytesize = toPythonModule (pkgs.libbytesize.override { python3 = python; });
 
   bytewax = callPackage ../development/python-modules/bytewax { };
 
