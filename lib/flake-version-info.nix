@@ -9,12 +9,8 @@
 
 self: # from the flake
 
-finalLib: prevLib: # lib overlay
-
-{
-  trivial = prevLib.trivial // {
-    versionSuffix =
-      ".${finalLib.substring 0 8 (self.lastModifiedDate or "19700101")}.${self.shortRev or "dirty"}";
-    revisionWithDefault = default: self.rev or default;
-  };
+import ./version-info-fixup.nix {
+  versionSuffix = lib:
+    ".${lib.substring 0 8 (self.lastModifiedDate or "19700101")}.${self.shortRev or "dirty"}";
+  revision = default: self.rev or default;
 }

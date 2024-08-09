@@ -42,6 +42,7 @@ let
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
+    curl = lib.getExe pkgs.curl;
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
     hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
     detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
@@ -49,6 +50,47 @@ let
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
     xserverEnabled = config.services.xserver.enable;
     manPage = ./manpages/nixos-generate-config.8;
+    templateDir = let
+      areWeUnstable = lib.hasSuffix "-unstable" config.system.defaultChannel;
+    in pkgs.substituteAllFiles {
+      name = "nixos-generate-config-templates";
+      src = ./config-templates;
+      files = let
+        # all files in the templates directory, and subdirectories
+        getFiles = base: lib.pipe (getFiles' base ".") [
+          lib.attrNames
+          (lib.map (path: lib.removePrefix (builtins.toString base) path))
+        ];
+        getFiles' = base: dir: lib.pipe "${base}/${dir}" [
+          builtins.readDir
+          (lib.concatMapAttrs (name: type:
+            if type == "directory" then
+              lib.concatMapAttrs (name: type: { "${dir}/${name}" = type; } ) (getFiles' base "${dir}/${name}")
+            else { "${dir}/${name}" = type; }
+          ))
+        ];
+      in getFiles ./config-templates;
+
+      inherit (nixos-generate-config) hostPlatformSystem;
+      hostname = config.networking.hostName;
+      stable = if areWeUnstable then "unstable" else "stable";
+      stableVersion = let
+        currentVersion = lib.sublist 0 2 (lib.versions.splitVersion lib.version);
+        previousVersion = if (lib.toInt (lib.elemAt currentVersion 1)) > 6 then
+          [
+            (lib.elemAt currentVersion 0)
+            (lib.fixedWidthNumber 2 (lib.toInt (lib.elemAt currentVersion 1) - 6))
+          ]
+        else
+          [
+            ((lib.toInt (lib.elemAt currentVersion 0) - 1))
+            (lib.fixedWidthNumber 2 (lib.toInt (lib.elemAt currentVersion 1) + 6))
+          ];
+      in lib.concatStringsSep "." (if areWeUnstable then previousVersion else currentVersion);
+      thisNixpkgs = builtins.toString ../../../..;
+    };
+    inherit (nixos-generate-config.templateDir) stableVersion;
+    nixpkgsVersion = lib.trivial.release;
   };
 
   inherit (pkgs) nixos-option;
