@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pycoolmasternet-async";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "OnFreund";
     repo = "pycoolmasternet-async";
     rev = "v${version}";
-    hash = "sha256-uEZORtCZ5VOlTqonkgAtxhRIbhW+JTUMccuQ2zY7Jyo=";
+    hash = "sha256-q8hOT9Dx7JcEDCpPL6AFgF4cqHBrZGq9kjEaq5wuwJY=";
   };
 
   build-system = [ setuptools ];
