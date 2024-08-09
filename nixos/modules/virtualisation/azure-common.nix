@@ -12,9 +12,10 @@ in
     };
   };
 
-  imports = [ ../profiles/headless.nix ];
-
-  require = [ ./azure-agent.nix ];
+  imports = [ 
+    ../profiles/headless.nix 
+    ./azure-agent.nix
+  ];
 
   config = let
     mlxDrivers = [ "mlx4_en" "mlx4_core" "mlx5_core" ];
