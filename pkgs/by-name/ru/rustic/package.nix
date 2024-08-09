@@ -9,7 +9,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "rustic-rs";
+  pname = "rustic";
   version = "0.7.0";
 
   src = fetchFromGitHub {
