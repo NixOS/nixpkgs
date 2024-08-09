@@ -6,6 +6,7 @@ _:
     self: super: {
 
       hmr_enabler = callPackage ./apps/hmr_enabler.nix { };
+      recognize = callPackage ./apps/recognize.nix { };
 
     }
   );
