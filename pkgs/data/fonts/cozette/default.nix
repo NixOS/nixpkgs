@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchzip }:
+{ lib, stdenvNoCC, fetchzip, psftools }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "cozette";
@@ -9,6 +9,8 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-Cnl7DTPcZmCRM06qe7WXfZorok3uUNYcB9bR/auzCao=";
   };
 
+  buildInputs = [ psftools ];
+
   installPhase = ''
     runHook preInstall
 
@@ -16,8 +18,12 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 *.otf -t $out/share/fonts/opentype
     install -Dm644 *.bdf -t $out/share/fonts/misc
     install -Dm644 *.otb -t $out/share/fonts/misc
+    install -Dm644 *.fnt -t $out/share/fonts/misc
     install -Dm644 *.woff -t $out/share/fonts/woff
     install -Dm644 *.woff2 -t $out/share/fonts/woff2
+
+    for f in *.fnt; do fnt2psf $f $(basename -- $f .fnt).psf; done
+    install -Dm644 *.psf -t $out/share/consolefonts
 
     runHook postInstall
   '';
