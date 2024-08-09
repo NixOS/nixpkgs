@@ -1,20 +1,29 @@
-{ fetchurl, lib, stdenv }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+}:
 
 let
   version = "1.8.0";
   # nixpkgs-update: no auto update
 
-  suffix = {
-    x86_64-linux = "x86_64";
-    aarch64-linux = "aarch64";
-  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  suffix =
+    {
+      x86_64-linux = "x86_64";
+      aarch64-linux = "aarch64";
+    }
+    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   baseurl = "https://github.com/firecracker-microvm/firecracker/releases/download";
 
-  dlbin = hash: fetchurl {
-    url = "${baseurl}/v${version}/firecracker-v${version}-${suffix}.tgz";
-    hash = hash."${stdenv.hostPlatform.system}"or (throw "unsupported system ${stdenv.hostPlatform.system}");
-  };
+  dlbin =
+    hash:
+    fetchurl {
+      url = "${baseurl}/v${version}/firecracker-v${version}-${suffix}.tgz";
+      hash =
+        hash."${stdenv.hostPlatform.system}" or (throw "unsupported system ${stdenv.hostPlatform.system}");
+    };
 
 in
 stdenv.mkDerivation {
@@ -53,7 +62,13 @@ stdenv.mkDerivation {
     changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${version}";
     mainProgram = "firecracker";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ thoughtpolice qjoly ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      qjoly
+    ];
   };
 }
