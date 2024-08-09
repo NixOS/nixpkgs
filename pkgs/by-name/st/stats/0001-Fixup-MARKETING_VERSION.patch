@@ -1,0 +1,13 @@
+diff --git a/Stats.xcodeproj/project.pbxproj b/Stats.xcodeproj/project.pbxproj
+index d7cb8ae1..44821cf9 100644
+--- a/Stats.xcodeproj/project.pbxproj
++++ b/Stats.xcodeproj/project.pbxproj
+@@ -1968,7 +1968,7 @@
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+-			shellScript = "MARKETING_VERSION=$(/usr/libexec/PlistBuddy -c 'print :objects:9A141107229E721200D29793:buildSettings:MARKETING_VERSION' \"$(PWD)/Stats.xcodeproj/project.pbxproj\")\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString $MARKETING_VERSION\" \"$(PWD)/Widgets/Supporting Files/Info.plist\"\nBUNDLE_VERSION=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$(PWD)/Stats/Supporting Files/Info.plist\")\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $BUNDLE_VERSION\" \"$(PWD)/Widgets/Supporting Files/Info.plist\"\n";
++      shellScript = "MARKETING_VERSION=$(PlistBuddy -c 'print :objects:9A141107229E721200D29793:buildSettings:MARKETING_VERSION' \"${PWD}/Stats.xcodeproj/project.pbxproj\")\nPlistBuddy -c \"Set :CFBundleShortVersionString $MARKETING_VERSION\" \"${PWD}/Widgets/Supporting Files/Info.plist\"\nBUNDLE_VERSION=$(PlistBuddy -c \"Print CFBundleVersion\" \"${PWD}/Stats/Supporting Files/Info.plist\")\nPlistBuddy -c \"Set :CFBundleVersion $BUNDLE_VERSION\" \"${PWD}/Widgets/Supporting Files/Info.plist\"\n";
+ 		};
+ 		9A88E2672659002E00E2B7B0 /* ShellScript */ = {
+ 			isa = PBXShellScriptBuildPhase;
