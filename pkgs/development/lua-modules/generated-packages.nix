@@ -2086,6 +2086,30 @@ buildLuarocksPackage {
   };
 }) {};
 
+luarocks-build-treesitter-parser-cpp = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, luafilesystem }:
+buildLuarocksPackage {
+  pname = "luarocks-build-treesitter-parser-cpp";
+  version = "1.0.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/luarocks-build-treesitter-parser-cpp-1.0.0-1.rockspec";
+    sha256 = "0vvw3ai42jif2z2ir6l14jkjq138djbn04wnjblm3vilaz5k0sfv";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/nvim-neorocks/luarocks-build-treesitter-parser-cpp/archive/v1.0.0.zip";
+    sha256 = "0j1f3wq19zng8ay6pniphb7m0xp131i9alqpdf0szpyq8y00w2s1";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ luafilesystem ];
+
+  meta = {
+    homepage = "https://github.com/nvim-neorocks/luarocks-build-treesitter-parser-cpp";
+    description = "A luarocks build backend for tree-sitter parsers written in C++.";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 luasec = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luaOlder, luasocket }:
 buildLuarocksPackage {
   pname = "luasec";
