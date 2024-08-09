@@ -1,5 +1,6 @@
 { binaryen
 , fetchFromGitHub
+, fetchpatch
 , lib
 , lldap
 , nixosTests
@@ -18,15 +19,15 @@ let
     cargoHash = "sha256-vcpxcRlW1OKoD64owFF6mkxSqmNrvY+y3Ckn5UwEQ50=";
   };
 
-  commonDerivationAttrs = rec {
+  commonDerivationAttrs = {
     pname = "lldap";
-    version = "0.5.0";
+    version = "0.5.1-alpha-6aa930";
 
     src = fetchFromGitHub {
       owner = "lldap";
       repo = "lldap";
-      rev = "v${version}";
-      hash = "sha256-2MEfwppkS9l3iHPNlkJB4tJnma0xMi0AckLv6wpzy1Y=";
+      rev = "6aa9303339ac1793b4be9ae01c56a6369a5d77f0";
+      hash = "sha256-UbkpnPvDoTaioB0g1HBvRczqUEuPlVuH1gIVBU07RpY=";
     };
 
     # `Cargo.lock` has git dependencies, meaning can't use `cargoHash`
@@ -38,6 +39,12 @@ let
         "yew_form-0.1.8" = "sha256-1n9C7NiFfTjbmc9B5bDEnz7ZpYJo9ZT8/dioRXJ65hc=";
       };
     };
+
+    patches = [
+      ## https://github.com/lldap/lldap/pull/947
+      ./947.patch
+    ];
+
   };
 
   frontend = rustPlatform.buildRustPackage (commonDerivationAttrs // {
@@ -60,11 +67,10 @@ let
   });
 
 in rustPlatform.buildRustPackage (commonDerivationAttrs // {
-
   cargoBuildFlags = [ "-p" "lldap" "-p" "lldap_migration_tool" "-p" "lldap_set_password" ];
 
-  patches = [
-    ./static-frontend-path.patch
+  patches = commonDerivationAttrs.patches ++ [
+    ./0001-parameterize-frontend-location.patch
   ];
 
   postPatch = ''
