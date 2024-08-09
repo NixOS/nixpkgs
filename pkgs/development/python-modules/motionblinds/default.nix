@@ -21,11 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-4ao0FalOFrr4or7iUqx5aAw93yqI2i3/uF4rdHOsa7M=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ pycryptodomex ];
+  dependencies = [ pycryptodomex ];
 
-  # Project has no tests
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "motionblinds" ];
