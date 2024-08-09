@@ -39,20 +39,20 @@ in
 jdk.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
   javaVersion = "21.0.3";
-  build = "465.3";
+  build = "509.4";
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
   # git checkout jbr-release-${javaVersion}b${build}
   # git log --simplify-by-decoration --decorate=short --pretty=short | grep "jbr-" --color=never | cut -d "(" -f2 | cut -d ")" -f1 | awk '{print $2}' | sort -t "-" -k 2 -g | tail -n 1 | tr -d ","
-  openjdkTag = "jbr-21.0.2+3";
+  openjdkTag = "jbr-21.0.2+13";
   version = "${javaVersion}-b${build}";
 
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash = "sha256-Pup/XeHExCE6yy2o74wF7VlYU6MI9cg8gb69V3bclIo=";
+    hash = "sha256-YVz2LiRxszdE9+XNujKpHm+84/4dfYldn4T7oHy/6Pg=";
   };
 
   BOOT_JDK = jdk.home;
