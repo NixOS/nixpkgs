@@ -101,7 +101,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];
-    broken = true;  # At 2024-06-25. 49 unit tests fail.
-                    # https://hydra.nixos.org/build/263906391/nixlog/1
   };
 }
