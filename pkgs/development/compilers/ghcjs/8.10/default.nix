@@ -29,7 +29,7 @@ let
       inherit (bootGhcjs) version;
       happy = bootPkgs.happy_1_19_12;
     };
-    bootPkgs = bootPkgs.extend (lib.foldr lib.composeExtensions (_:_:{}) [
+    bootPkgs = bootPkgs.extend (lib.composeManyExtensions [
       (self: _: import stage0 {
         inherit (passthru) configuredSrc;
         inherit (self) callPackage;

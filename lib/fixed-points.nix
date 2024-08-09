@@ -1,4 +1,13 @@
 { lib, ... }:
+let
+  # Internal helper function to compose two overlay functions
+  # The public API is `composeManyExtensions` which uses this operation in a fold manner
+  _composeExtensions =
+    f: g: final: prev:
+      let fApplied = f final prev;
+          prev' = prev // fApplied;
+      in fApplied // g final prev';
+in
 rec {
   /**
     `fix f` computes the fixed point of the given function `f`. In other words, the return value is `x` in `x = f x`.
@@ -334,11 +343,7 @@ rec {
 
     : 4\. Function argument
   */
-  composeExtensions =
-    f: g: final: prev:
-      let fApplied = f final prev;
-          prev' = prev // fApplied;
-      in fApplied // g final prev';
+  composeExtensions = lib.warn "'composeManyExtensions a b' is deprecated. Use 'composeManyExtensions [a b]' instead." _composeExtensions;
 
   /**
     Compose several extending functions of the type expected by 'extends' into
@@ -351,7 +356,8 @@ rec {
     ```
   */
   composeManyExtensions =
-    lib.foldr (x: y: composeExtensions x y) (final: prev: {});
+    lib.foldr (x: y: _composeExtensions x y) (final: prev: {});
+
 
   /**
     Create an overridable, recursive attribute set. For example:

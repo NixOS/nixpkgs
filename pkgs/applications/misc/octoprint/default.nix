@@ -16,7 +16,7 @@ let
 
   py = python3.override {
     self = py;
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
+    packageOverrides = lib.composeManyExtensions [
       (
         # Due to flask > 2.3 the login will not work
         self: super: {
@@ -271,7 +271,7 @@ let
       })
       (callPackage ./plugins.nix { })
       packageOverrides
-    ]);
+    ];
   };
 in
 with py.pkgs;

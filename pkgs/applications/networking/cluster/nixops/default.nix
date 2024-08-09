@@ -89,7 +89,7 @@ let
        * them with the `withPlugins` method.
        */
       addAvailablePlugins = newPlugins: this.extend (finalThis: oldThis: {
-        plugins = lib.composeExtensions oldThis.plugins newPlugins;
+        plugins = lib.composeManyExtensions [oldThis.plugins newPlugins];
       });
 
       # For those who need or dare.
