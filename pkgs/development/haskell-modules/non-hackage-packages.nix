@@ -20,9 +20,9 @@ self: super: {
   # https://github.com/channable/vaultenv/issues/1
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 
-  # spago is not released to Hackage.
+  # spago-legacy is not released to Hackage.
   # https://github.com/spacchetti/spago/issues/512
-  spago = self.callPackage ../tools/purescript/spago/spago.nix { };
+  spago-legacy = self.callPackage ../tools/purescript/spago-legacy/spago-legacy.nix { };
 
   nix-linter = self.callPackage ../../development/tools/analysis/nix-linter { };
 

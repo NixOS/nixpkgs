@@ -849,7 +849,7 @@ self: super: builtins.intersectAttrs super {
   cairo = addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.cairo;
   pango = disableHardening ["fortify"] (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.pango);
 
-  spago =
+  spago-legacy =
     let
       docsSearchApp_0_0_10 = pkgs.fetchurl {
         url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.10/docs-search-app.js";
@@ -871,7 +871,7 @@ self: super: builtins.intersectAttrs super {
         sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
       };
     in
-    lib.pipe (super.spago.override {
+    lib.pipe (super.spago-legacy.override {
       versions = self.versions_5_0_5;
       fsnotify = self.fsnotify_0_3_0_1;
     }) [

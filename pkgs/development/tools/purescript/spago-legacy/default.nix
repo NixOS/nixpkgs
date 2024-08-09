@@ -3,7 +3,7 @@
 , lib
 
 # The following are only needed for the passthru.tests:
-, spago
+, spago-legacy
 , cacert
 , git
 , nodejs
@@ -12,12 +12,12 @@
 }:
 
 lib.pipe
-  haskellPackages.spago
+  haskellPackages.spago-legacy
   [
     haskell.lib.compose.justStaticExecutables
 
     (haskell.lib.compose.overrideCabal (oldAttrs: {
-      changelog = "https://github.com/purescript/spago/releases/tag/${oldAttrs.version}";
+      changelog = "https://github.com/purescript/spago-legacy/releases/tag/${oldAttrs.version}";
 
       passthru = (oldAttrs.passthru or {}) // {
         updateScript = ./update.sh;
@@ -26,11 +26,11 @@ lib.pipe
         # network, so they cannot be run in the nix sandbox.  sudo is needed in
         # order to change the sandbox option.
         #
-        # $ sudo nix-build -A spago.passthru.tests --option sandbox relaxed
+        # $ sudo nix-build -A spago-legacy.passthru.tests --option sandbox relaxed
         #
         tests =
           runCommand
-            "spago-tests"
+            "spago-legacy-tests"
             {
               __noChroot = true;
               nativeBuildInputs = [
@@ -38,7 +38,7 @@ lib.pipe
                 git
                 nodejs
                 purescript
-                spago
+                spago-legacy
               ];
             }
             ''
