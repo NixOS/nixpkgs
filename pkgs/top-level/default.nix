@@ -44,7 +44,9 @@
 
 let # Rename the function arguments
   config0 = config;
-  crossSystem0 = crossSystem;
+  isCross = args ? "crossSystem" && crossSystem != null;
+  crossSystem0 = if crossSystem == null then localSystem else crossSystem;
+  localSystem0 = localSystem;
 
 in let
   lib = import ../../lib;
@@ -58,7 +60,7 @@ in let
     lib.foldr (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.") (r: r) crossOverlays
     ;
 
-  localSystem = lib.systems.elaborate args.localSystem;
+  localSystem = lib.systems.elaborate localSystem0;
 
   # Condition preserves sharing which in turn affects equality.
   #
@@ -74,7 +76,7 @@ in let
   # inferred from the system double in `localSystem`.
   crossSystem =
     let system = lib.systems.elaborate crossSystem0; in
-    if crossSystem0 == null || lib.systems.equals system localSystem
+    if lib.systems.equals system localSystem
     then localSystem
     else system;
 
@@ -101,22 +103,18 @@ in let
   config = lib.showWarnings configEval.config.warnings configEval.config;
 
   # A few packages make a new package set to draw their dependencies from.
-  # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
-  # give `all-packages.nix` all the arguments to this function, even ones that
-  # don't concern it, we give it this function to "re-call" nixpkgs, inheriting
-  # whatever arguments it doesn't explicitly provide. This way,
-  # `all-packages.nix` doesn't know more than it needs too.
+  # Rather than give `all-packages.nix` all the arguments to this function,
+  # even ones that don't concern it, we give it this function to "re-call"
+  # nixpkgs, inheriting whatever arguments it doesn't explicitly provide. This
+  # way, `all-packages.nix` doesn't know more than it needs to.
   #
   # It's OK that `args` doesn't include default arguments from this file:
-  # they'll be deterministically inferred. In fact we must *not* include them,
+  # They'll be deterministically inferred. In fact we must *not* include them,
   # because it's important that if some parameter which affects the default is
   # substituted with a different argument, the default is re-inferred.
   #
-  # To put this in concrete terms, this function is basically just used today to
-  # use package for a different platform for the current platform (namely cross
-  # compiling toolchains and 32-bit packages on x86_64). In both those cases we
-  # want the provided non-native `localSystem` argument to affect the stdenv
-  # chosen.
+  # To put this in concrete terms, we want the provided non-native `localSystem`
+  # and `crossSystem` arguments to affect the stdenv chosen.
   #
   # NB!!! This thing gets its `config` argument from `args`, i.e. it's actually
   # `config0`. It is important to keep it to `config0` format (as opposed to the
@@ -125,7 +123,19 @@ in let
   # via `evalModules` is not idempotent. In other words, if you add `config` to
   # `newArgs`, expect strange very hard to debug errors! (Yes, I'm speaking from
   # experience here.)
-  nixpkgsFun = newArgs: import ./. (args // newArgs);
+  nixpkgsFun = newArgs: import ./. (
+    args // lib.optionalAttrs (newArgs ? "localSystem" && !isCross) {
+      localSystem = lib.systems.asAttrs localSystem0 // newArgs.localSystem;
+    } // lib.optionalAttrs (newArgs ? "localSystem" && isCross) {
+      # Redirect "localSystem" from stage.nix package sets to crossSystem when we
+      # are already cross. Otherwise pkgsCross.X.pkgsY will modify the localSystem,
+      # which is more than unexpected.
+      crossSystem = lib.systems.asAttrs crossSystem0 // newArgs.localSystem;
+    } // lib.optionalAttrs (newArgs ? "crossSystem") {
+      crossSystem = lib.systems.asAttrs crossSystem0 // newArgs.crossSystem;
+    } // lib.optionalAttrs (newArgs ? "overlays") {
+      overlays = overlays ++ newArgs.overlays;
+    });
 
   # Partially apply some arguments for building bootstraping stage pkgs
   # sets. Only apply arguments which no stdenv would want to override.
