@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv }:
 
 let
-  version = "1.7.0";
+  version = "1.8.0";
   # nixpkgs-update: no auto update
 
   suffix = {
@@ -11,9 +11,9 @@ let
 
   baseurl = "https://github.com/firecracker-microvm/firecracker/releases/download";
 
-  dlbin = sha256: fetchurl {
+  dlbin = hash: fetchurl {
     url = "${baseurl}/v${version}/firecracker-v${version}-${suffix}.tgz";
-    sha256 = sha256."${stdenv.hostPlatform.system}"or (throw "unsupported system ${stdenv.hostPlatform.system}");
+    hash = hash."${stdenv.hostPlatform.system}"or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
 
 in
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   src = dlbin {
-    x86_64-linux = "sha256-Vb0+bVmf3RCONuUvmu4jGfBsGKkPL6SbZOk/3wb1/1M=";
-    aarch64-linux = "sha256-PLoQA4a6qulxSns/ZRSgn6EtHr46/hstNhP1pAHt9VA=";
+    x86_64-linux = "sha256-vImb2u+NCqew+vv0miv2R+AphVj0+u5Elw2HocbRri0=";
+    aarch64-linux = "sha256-ZLSc61MWfXYWv0/Sxz3vaWoyAlnqbgfPFEfJCRxfknE=";
   };
 
   dontConfigure = true;
