@@ -26,7 +26,6 @@ with import ../lib/testing-python.nix { inherit system; };
           services.ferretdb = {
             enable = true;
             settings.FERRETDB_HANDLER = "pg";
-            settings.FERRETDB_POSTGRESQL_URL = "postgres://ferretdb@localhost/ferretdb?host=/run/postgresql";
           };
 
           systemd.services.ferretdb.serviceConfig = {
