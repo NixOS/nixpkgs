@@ -85,7 +85,7 @@ let
           else if
             lib.versionAtLeast release_version "15"
             && lib.versionOlder release_version "17"
-            && p == "clang/purity.patch"
+            && (p == "clang/purity.patch" || p == "libunwind/gnu-install-dirs.patch")
           then
             ../15/${p}
           else if p == "compiler-rt/X86-support-extension.patch" then
