@@ -8774,6 +8774,8 @@ with pkgs;
 
   hivemind = callPackage ../applications/misc/hivemind { };
 
+  hmm = callPackage ../applications/editors/hmm { };
+
   hobbits = libsForQt5.callPackage ../tools/graphics/hobbits { };
 
   hfsprogs = callPackage ../tools/filesystems/hfsprogs { };
