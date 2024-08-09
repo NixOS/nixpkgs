@@ -9800,7 +9800,15 @@ with pkgs;
 
   nkeys = callPackage ../tools/system/nkeys { };
 
-  nyxt = callPackage ../applications/networking/browsers/nyxt { };
+  nyxt = callPackage ../applications/networking/browsers/nyxt {
+    inherit (gst_all_1)
+      gstreamer
+      gst-libav
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly;
+  };
 
   nfpm = callPackage ../tools/package-management/nfpm { };
 
