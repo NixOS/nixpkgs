@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, openssl, pkg-config, libnl
-, nixosTests, wpa_supplicant_gui
+{ lib, stdenv, fetchurl, fetchpatch, openssl, pkg-config
+, libnl, nixosTests, wpa_supplicant_gui
 , dbusSupport ? !stdenv.hostPlatform.isStatic, dbus
 , withReadline ? true, readline
 , withPcsclite ? !stdenv.hostPlatform.isStatic, pcsclite
@@ -15,6 +15,16 @@ stdenv.mkDerivation rec {
     url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
     sha256 = "sha256-kS6gb3TjCo42+7aAZNbN/yGNjVkdsPxddd7myBrH/Ao=";
   };
+
+  patches = [
+    # Fix WPA2-PSK / WPA3-SAE authentication on devices with brcmfmac driver
+    (fetchpatch {
+      name = "mark-authorization-completed-on-driver-indication-during-4-way-hs-offload.patch";
+      url = "https://w1.fi/cgit/hostap/patch/?id=41638606054a09867fe3f9a2b5523aa4678cbfa5";
+      sha256 = "sha256-X6mBbj7BkW66aYeSCiI3JKBJv10etLQxaTRfRgwsFmM=";
+      revert = true;
+    })
+  ];
 
   # TODO: Patch epoll so that the dbus actually responds
   # TODO: Figure out how to get privsep working, currently getting SIGBUS
