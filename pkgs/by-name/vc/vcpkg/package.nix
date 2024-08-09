@@ -3,6 +3,7 @@
 , lib
 , vcpkg-tool
 , makeWrapper
+, git
 , doWrap ? true
 }:
 
@@ -14,10 +15,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "microsoft";
     repo = "vcpkg";
     rev = finalAttrs.version;
-    hash = "sha256-eDpMGDtC44eh0elLWV0r1H/WbpVdZ5qMedKh7Ct50Cs=";
+    hash = "sha256-7qYhslx/ZNJvlREB0DOs4YFGV105NWIvf/pOwykQ4i8=";
+    leaveDotGit = true;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper git ];
 
   postPatch = ''
     substituteInPlace scripts/toolchains/linux.cmake \
@@ -44,13 +46,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ''}
 
       ln -s "$out/bin/vcpkg" "$out/share/vcpkg/vcpkg"
+      VCPKG_BASELINE_COMMIT_SHA=$(git rev-parse --verify HEAD)
+
+      # Here's the code that Creates this json file in Visual Studio deployment and the code that reads it:
+      #   https://github.com/microsoft/vcpkg-tool/blob/f098d3e0aaa7e46ea84a1f7079586e1ec5af8ab5/vcpkg-init/mint-standalone-bundle.ps1#L21
+      #   https://github.com/microsoft/vcpkg-tool/blob/f098d3e0aaa7e46ea84a1f7079586e1ec5af8ab5/src/vcpkg/bundlesettings.cpp#L87
+      #
+      # Here's the code that we target with this setting. If we use embeddedsha combined with usegitregistry, vcpkg
+      # will checkout a remote instead of trying to do git operation in the vcpkg root
+      #   https://github.com/microsoft/vcpkg-tool/blob/d272c0d4f5175b26bd56c6109d4c4935b791a157/src/vcpkg/vcpkgpaths.cpp#L920
+      #   https://github.com/microsoft/vcpkg-tool/blob/d272c0d4f5175b26bd56c6109d4c4935b791a157/src/vcpkg/configuration.cpp#L718
+      echo '{ "readonly": true, "usegitregistry": true, "deployment": "Git", "embeddedsha": "'"$VCPKG_BASELINE_COMMIT_SHA"'" }' > "$out/share/vcpkg/vcpkg-bundle.json"
       touch "$out/share/vcpkg/vcpkg.disable-metrics"
 
       runHook postInstall
     '';
 
   meta = {
-    description = "C++ Library Manager";
+    description = "C++ Library Manager for Windows, Linux, and MacOS";
     mainProgram = "vcpkg";
     homepage = "https://vcpkg.io/";
     license = lib.licenses.mit;
