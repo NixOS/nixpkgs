@@ -37,7 +37,7 @@ in
 
     xwayland.enable = lib.mkEnableOption "XWayland" // { default = true; };
 
-    systemd.setPath.enable = lib.mkEnableOption null // {
+    systemd.setPath.enable = lib.mkEnableOption "" // {
       default = lib.versionOlder cfg.package.version "0.41.2";
       defaultText = lib.literalExpression ''lib.versionOlder cfg.package.version "0.41.2"'';
       example = false;
