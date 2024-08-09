@@ -125,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtnetworkauth
     kdePackages.qtscxml
     kdePackages.qtsvg
+    kdePackages.qtwayland
     kdePackages.qtwebengine
     kdePackages.qt5compat
     kdePackages.qtmultimedia
