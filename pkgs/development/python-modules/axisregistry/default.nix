@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Fonts registry of OpenType variation axis tags";
     homepage = "https://github.com/googlefonts/axisregistry";
+    changelog = "https://github.com/googlefonts/axisregistry/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ danc86 ];
   };
