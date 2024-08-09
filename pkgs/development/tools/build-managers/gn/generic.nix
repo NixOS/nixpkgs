@@ -48,6 +48,7 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     install -vD out/gn "$out/bin/gn"
+    install -vD misc/emacs/gn-mode.el $out/share/emacs/site-lisp/gn-mode.el
   '';
 
   setupHook = ./setup-hook.sh;
