@@ -2,15 +2,16 @@
 , stdenvNoCC
 , fetchurl
 , _7zz
+, nix-update-script
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "aldente";
-  version = "1.24.1";
+  version = "1.25.2";
 
   src = fetchurl {
     url = "https://github.com/davidwernhart/aldente-charge-limiter/releases/download/${finalAttrs.version}/AlDente.dmg";
-    hash = "sha256-vOv52SrUki2f9vGzYy8dhVJVxna2ZvhtG6WbKjCv3gA=";
+    hash = "sha256-GKsBtOiK0UlGd7u+pr3OJzihUvUMkF5utsEzZsIi6d4=";
   };
 
   dontBuild = true;
@@ -29,6 +30,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "macOS tool to limit maximum charging percentage";
