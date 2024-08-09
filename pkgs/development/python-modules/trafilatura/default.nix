@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "trafilatura";
-  version = "1.10.0";
+  version = "1.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-exBXPi3Ra2cC9W9WhYsl80/4HWsW5CmvCjsmbwdGru4=";
+    hash = "sha256-F9IHTs/ixWK/CGPefoOfrRTMZtX5gJB0HqqRjqv7+dU=";
   };
 
   # Patch out gui cli because it is not supported in this packaging and
@@ -32,7 +32,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace-fail '"trafilatura_gui=trafilatura.gui:main",' ""
     substituteInPlace tests/cli_tests.py \
-      --replace-fail "trafilatura_bin = 'trafilatura'" "trafilatura_bin = '$out/bin/trafilatura'"
+      --replace-fail 'trafilatura_bin = "trafilatura"' \
+                     'trafilatura_bin = "${placeholder "out"}/bin/trafilatura"'
   '';
 
   build-system = [ setuptools ];
@@ -60,16 +61,17 @@ buildPythonPackage rec {
     "test_queue"
     "test_redirection"
     "test_whole"
+    "test_is_live_page"
   ];
 
   pythonImportsCheck = [ "trafilatura" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package and command-line tool designed to gather text on the Web";
     homepage = "https://trafilatura.readthedocs.io";
     changelog = "https://github.com/adbar/trafilatura/blob/v${version}/HISTORY.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jokatzke ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jokatzke ];
     mainProgram = "trafilatura";
   };
 }

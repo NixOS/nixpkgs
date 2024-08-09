@@ -17,21 +17,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "1.0.5";
+  version = "1.0.6";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     rev = version;
-    hash = "sha256-xNQLaMvZaJq7Bmz+c8OQhta3IdFXpVB2bSNwXCRj6rY=";
+    hash = "sha256-3xsntOPkcCV8ZizRS6du8cG1ZZEekehjf+4m3pofZBs=";
   };
-
-  patches = [
-    # Change the way XDG paths are handled so it makes sense outside of flatpak
-    # https://github.com/Jeffser/Alpaca/pull/187
-    ./flatpak_path_fixes.patch
-  ];
 
   nativeBuildInputs = [
     appstream

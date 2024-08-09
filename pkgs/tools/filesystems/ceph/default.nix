@@ -341,8 +341,6 @@ in rec {
       graphviz
     ];
 
-    enableParallelBuilding = true;
-
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       arrow-cpp
       babeltrace
@@ -449,6 +447,14 @@ in rec {
       # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
       ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
     ] ++ lib.optional stdenv.isLinux "-DWITH_SYSTEM_LIBURING=ON";
+
+    preBuild =
+      # The legacy-option-headers target is not correctly empbedded in the build graph.
+      # It also contains some internal race conditions that we work around by building with `-j 1`.
+      # Upstream discussion for additional context at https://tracker.ceph.com/issues/63402.
+      ''
+        cmake --build . --target legacy-option-headers -j 1
+      '';
 
     postFixup = ''
       wrapPythonPrograms
