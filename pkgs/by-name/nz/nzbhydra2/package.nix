@@ -3,7 +3,7 @@
   stdenv,
   fetchzip,
   makeWrapper,
-  jre,
+  openjdk17,
   python3,
   unzip,
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    jre
+    openjdk17
     makeWrapper
     unzip
   ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${python3}/bin/python $out/bin/nzbhydra2 \
       --add-flags "$out/lib/nzbhydra2/nzbhydra2wrapperPy3.py" \
-      --prefix PATH ":" ${jre}/bin
+      --prefix PATH ":" ${openjdk17}/bin
 
     runHook postInstall
   '';
