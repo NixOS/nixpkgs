@@ -46,6 +46,7 @@ let
     escapeXML
     evalModules
     filter
+    filterAttrsRecursive
     fix
     fold
     foldAttrs
@@ -1116,6 +1117,24 @@ runTests {
     };
   };
 
+  testFilterAttrsRecursiveExample1 = {
+    expr = filterAttrsRecursive (n: v: v != null) {
+      foo.bar = null;
+    };
+    expected = {
+      foo = { };
+    };
+  };
+
+  testFilterAttrsRecursiveExample2 = {
+    expr = filterAttrsRecursive (n: v: n != "foo") {
+      foo.bar = null;
+      hello.world = "Hello, world!";
+    };
+    expected = {
+      hello.world = "Hello, world!";
+    };
+  };
 
   testMergeAttrsListExample1 = {
     expr = attrsets.mergeAttrsList [ { a = 0; b = 1; } { c = 2; d = 3; } ];

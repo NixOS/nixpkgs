@@ -651,6 +651,10 @@ rec {
     Filter an attribute set recursively by removing all attributes for
     which the given predicate return false.
 
+    Note: the attrset is filtered top-down, first testing the predicate on "branch" attrs
+    before recursing towards leaf values.
+    This is different to `mapAttrsRecursive` and `mapAttrsRecursiveCond`, which only apply the mapping function to leaf nodes.
+
 
     # Inputs
 
@@ -675,6 +679,13 @@ rec {
     ```nix
     filterAttrsRecursive (n: v: v != null) { foo = { bar = null; }; }
     => { foo = {}; }
+    ```
+    :::{.example}
+    ## `lib.attrsets.filterAttrsRecursive` removing branch nodes
+
+    ```nix
+    filterAttrsRecursive (n: v: n != "foo") { foo = { bar = null; }; hello = { world = "Hello, world!"; }; }
+    => { hello = { world = "Hello, world!"; }; }
     ```
 
     :::
