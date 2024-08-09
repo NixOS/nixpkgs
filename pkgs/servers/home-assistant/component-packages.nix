@@ -4585,7 +4585,8 @@
     "webhook" = ps: with ps; [
     ];
     "webmin" = ps: with ps; [
-    ]; # missing inputs: webmin-xmlrpc
+      webmin-xmlrpc
+    ];
     "webostv" = ps: with ps; [
       aiowebostv
     ];
@@ -5655,6 +5656,7 @@
     "weatherflow_cloud"
     "weatherkit"
     "webhook"
+    "webmin"
     "webostv"
     "websocket_api"
     "wemo"
