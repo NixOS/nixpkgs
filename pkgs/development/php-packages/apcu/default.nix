@@ -3,6 +3,7 @@
   lib,
   pcre2,
   fetchFromGitHub,
+  php,
 }:
 
 let
@@ -18,6 +19,12 @@ buildPecl {
     rev = "v${version}";
     sha256 = "sha256-UDKLLCCnYJj/lCD8ZkkDf2WYZMoIbcP75+0/IXo4vdQ=";
   };
+
+  patches = lib.optionals (lib.versions.majorMinor php.version == "8.4") [
+    # Fix broken test (apc_entry_002) with PHP 8.4 alpha1
+    # See https://github.com/krakjoe/apcu/issues/510
+    ./php84-fix-apc-entry-002-test.patch
+  ];
 
   buildInputs = [ pcre2 ];
   doCheck = true;
