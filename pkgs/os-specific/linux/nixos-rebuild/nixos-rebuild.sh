@@ -39,6 +39,7 @@ buildFile=default.nix
 buildingAttribute=1
 installBootloader=
 json=
+specialArgs=()
 
 # log the given argument to stderr
 log() {
@@ -117,6 +118,16 @@ while [ "$#" -gt 0 ]; do
         j="$1"; shift 1
         k="$1"; shift 1
         extraBuildFlags+=("$i" "$j" "$k")
+        ;;
+      --special-arg)
+        j="$1"; shift 1
+        k="$1"; shift 1
+        specialArgs+=(--arg "$j" "$k")
+        ;;
+      --special-argstr)
+        j="$1"; shift 1
+        k="$1"; shift 1
+        specialArgs+=(--argstr "$j" "$k")
         ;;
       --fast)
         buildNix=
@@ -353,6 +364,15 @@ nixFlakeBuild() {
     fi
 }
 
+
+# Convert special args to a single argument.
+if [[ "${#specialArgs[@]}" -gt 0 ]]; then
+    extraBuildFlags+=(
+        --arg
+        specialArgs
+        "$(nix-instantiate --eval --strict --expr '{ ... }@args: args' "${specialArgs[@]}")"
+    )
+fi
 
 if [ -z "$action" ]; then showSyntax; fi
 
