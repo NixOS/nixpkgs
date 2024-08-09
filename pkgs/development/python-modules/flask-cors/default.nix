@@ -24,9 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-ISot5KglCjfbJNsnveDLK44vVaapHRAFdS+1tOd08pw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ flask ];
+  dependencies = [ flask ];
 
   nativeCheckInputs = [
     pytestCheckHook
