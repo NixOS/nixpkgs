@@ -23,8 +23,10 @@ rec {
 
     ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
     cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-    linkerForHost = if shouldUseLLD stdenv.targetPlatform
-      && !stdenv.cc.bintools.isLLVM
+    # For wasi: Rust recognizes "clang" or "gcc" as compilers, but not "cc" as in ccForHost.
+    #           So it defaults to expecting lld and passes arguments accordingly.
+    linkerForHost = if stdenv.targetPlatform.isWasi
+      || (shouldUseLLD stdenv.targetPlatform && !stdenv.cc.bintools.isLLVM)
       then "${pkgsBuildHost.llvmPackages.bintools}/bin/${stdenv.cc.targetPrefix}ld.lld"
       else ccForHost;
 

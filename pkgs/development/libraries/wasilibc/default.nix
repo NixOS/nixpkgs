@@ -51,6 +51,12 @@ stdenv.mkDerivation {
 
   preFixup = ''
     ln -s $share/share/undefined-symbols.txt $out/lib/wasi.imports
+    # rustc build expects lib at the path where a make install would put them without the SYSROOT_* overrides
+    TARGET_TRIPLE=wasm32-wasi
+    test -d build/$TARGET_TRIPLE # target triple might change if this is adapted to build p2 or threads, make sure the following doesn't break
+    ln -s $out/lib/ $out/lib/$TARGET_TRIPLE
+    ln -s $dev/include $dev/include/$TARGET_TRIPLE
+    ln -s $share/share $share/share/$TARGET_TRIPLE
   '';
 
   passthru.tests = {
