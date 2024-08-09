@@ -5542,6 +5542,10 @@
     githubId = 6872940;
     name = "Dennis Værum";
   };
+  duvetfall = {
+    name = "Darya Mukhina";
+    email = "nix@myxa.me";
+  };
   dvn0 = {
     email = "git@dvn.me";
     github = "dvn0";
