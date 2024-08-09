@@ -32,6 +32,7 @@
   toml,
   tqdm,
   uproot,
+  vector,
 
   # checks
   distributed,
@@ -41,7 +42,7 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.6.1";
+  version = "2024.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -50,7 +51,7 @@ buildPythonPackage rec {
     owner = "CoffeaTeam";
     repo = "coffea";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Z6c8R8B8IrDkXVDx89XVtg3eRgORuHPfUyAPRGwAlrg=";
+    hash = "sha256-ghqJHTvCKAbbHPPwMVGxGqOV3fc25Gocs5VKebcb074=";
   };
 
   build-system = [
@@ -82,6 +83,7 @@ buildPythonPackage rec {
     toml
     tqdm
     uproot
+    vector
   ] ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
