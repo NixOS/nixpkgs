@@ -2956,7 +2956,9 @@ with pkgs;
 
   mlterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/mlterm { };
   mlterm-wayland = mlterm.override {
-    enableX11 = false;
+    configuration = {
+      x11 = false;
+    };
   };
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
