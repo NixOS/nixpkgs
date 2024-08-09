@@ -69,6 +69,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       thoughtpolice
       qjoly
+      techknowlogick
     ];
   };
 }
