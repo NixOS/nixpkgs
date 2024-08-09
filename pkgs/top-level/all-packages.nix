@@ -28755,6 +28755,8 @@ with pkgs;
 
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
+  inherit (callPackage ../data/fonts/windows-fonts { }) windows10-fonts windows11-fonts;
+
   work-sans  = callPackage ../data/fonts/work-sans { };
 
   wqy_microhei = callPackage ../data/fonts/wqy-microhei { };
