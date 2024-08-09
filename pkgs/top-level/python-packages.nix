@@ -13508,6 +13508,8 @@ self: super: with self; {
 
   refery = callPackage ../development/python-modules/refery { };
 
+  reflex-hosting-cli = callPackage ../development/python-modules/reflex-hosting-cli { };
+
   reflink = callPackage ../development/python-modules/reflink { };
 
   refoss-ha = callPackage ../development/python-modules/refoss-ha { };
