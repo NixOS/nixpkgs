@@ -192,18 +192,14 @@ let
           sed -i '/^  CONFIG\["\(BASERUBY\|SHELL\|GREP\|EGREP\|MKDIR_P\|MAKEDIRS\|INSTALL\)"\]/d' $rbConfig
           # Remove unnecessary groff reference from runtime closure, since it's big
           sed -i '/NROFF/d' $rbConfig
-          ${
-            lib.optionalString (!jitSupport) ''
-              # Get rid of the CC runtime dependency
-              remove-references-to \
-                -t ${stdenv.cc} \
-                $out/lib/libruby*
-              remove-references-to \
-                -t ${stdenv.cc} \
-                $rbConfig
-              sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
-            ''
-          }
+        '' + lib.optionalString (!jitSupport) ''
+          # Get rid of the CC runtime dependency
+          remove-references-to \
+            -t "$NIX_CC" \
+            -t "$NIX_BINTOOLS" \
+            -- "$rbConfig" "$out"/lib/libruby*
+          sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
+        '' + ''
 
           # Allow to override compiler. This is important for cross compiling as
           # we need to set a compiler that is different from the build one.
@@ -255,8 +251,13 @@ let
           fi
 
           fallback_cc=$(unset CC; $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
-          if [[ "$fallback_cc" != "$CC" ]]; then
-             echo "CC='$fallback_cc' should be '$CC' by default" >&2
+        '' + (if jitSupport then ''
+          expected_fallback_cc=$CC
+        '' else ''
+          expected_fallback_cc=$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-''${NIX_CC#"$NIX_STORE"/*-}/bin/$NIX_CC_BASENAME
+        '') + ''
+          if [[ "$fallback_cc" != "$expected_fallback_cc" ]]; then
+             echo "CC='$fallback_cc' should be '$expected_fallback_cc' by default" >&2
              false
           fi
         '';

@@ -57,22 +57,16 @@ in stdenv.mkDerivation (finalAttrs: {
     cd "$buildRoot/gcc"
     (
       # We "shift" the tools over to fake platforms perspective from the previous stage.
-      export AS_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$AS_FOR_BUILD
-      export CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$CC_FOR_BUILD
-      export CPP_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$CPP_FOR_BUILD
-      export CXX_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$CXX_FOR_BUILD
-      export LD_FOR_BUILD=${buildPackages.stdenv.cc.bintools}/bin/$LD_FOR_BUILD
-
       export AS=$AS_FOR_BUILD
       export CC=$CC_FOR_BUILD
       export CPP=$CPP_FOR_BUILD
       export CXX=$CXX_FOR_BUILD
       export LD=$LD_FOR_BUILD
 
-      export AS_FOR_TARGET=${stdenv.cc}/bin/$AS
-      export CC_FOR_TARGET=${stdenv.cc}/bin/$CC
-      export CPP_FOR_TARGET=${stdenv.cc}/bin/$CPP
-      export LD_FOR_TARGET=${stdenv.cc.bintools}/bin/$LD
+      export AS_FOR_TARGET=$AS
+      export CC_FOR_TARGET=$CC
+      export CPP_FOR_TARGET=$CPP
+      export LD_FOR_TARGET=$LD
 
       # We define GENERATOR_FILE so nothing bothers looking for GNU GMP.
       export NIX_CFLAGS_COMPILE_FOR_BUILD+=' -DGENERATOR_FILE=1'
@@ -104,23 +98,6 @@ in stdenv.mkDerivation (finalAttrs: {
     cd "$buildRoot/gcc/${stdenv.hostPlatform.config}/libgcc"
     configureScript=$sourceRoot/configure
     chmod +x "$configureScript"
-
-    export AS_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$AS_FOR_BUILD
-    export CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$CC_FOR_BUILD
-    export CPP_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$CPP_FOR_BUILD
-    export CXX_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$CXX_FOR_BUILD
-    export LD_FOR_BUILD=${buildPackages.stdenv.cc.bintools}/bin/$LD_FOR_BUILD
-
-    export AS=${stdenv.cc}/bin/$AS
-    export CC=${stdenv.cc}/bin/$CC
-    export CPP=${stdenv.cc}/bin/$CPP
-    export CXX=${stdenv.cc}/bin/$CXX
-    export LD=${stdenv.cc.bintools}/bin/$LD
-
-    export AS_FOR_TARGET=${stdenv.cc}/bin/$AS_FOR_TARGET
-    export CC_FOR_TARGET=${stdenv.cc}/bin/$CC_FOR_TARGET
-    export CPP_FOR_TARGET=${stdenv.cc}/bin/$CPP_FOR_TARGET
-    export LD_FOR_TARGET=${stdenv.cc.bintools}/bin/$LD_FOR_TARGET
   '';
 
   configurePlatforms = [ "build" "host" ];

@@ -5,6 +5,7 @@
 , updateAutotoolsGnuConfigScriptsHook
 , bison
 , util-linux
+, removeReferencesTo
 
   # patch for cygwin requires readline support
 , interactive ? stdenv.isCygwin
@@ -100,6 +101,7 @@ stdenv.mkDerivation rec {
   # Note: Bison is needed because the patches above modify parse.y.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook bison ]
+    ++ lib.optional interactive removeReferencesTo
     ++ lib.optional withDocs texinfo
     ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
 
@@ -123,8 +125,8 @@ stdenv.mkDerivation rec {
   postFixup =
     if interactive
     then ''
-      substituteInPlace "$out/bin/bashbug" \
-        --replace '#!/bin/sh' "#!$out/bin/bash"
+      remove-references-to -t "$NIX_CC" -- "$out"/bin/bashbug
+      HOST_PATH=$out/bin patchShebangs --host -- "$out"/bin/bashbug
     ''
     # most space is taken by locale data
     else ''
