@@ -7,7 +7,7 @@
    - ./nix-remote-build.nix
    - nixos/modules/services/system/nix-daemon.nix
  */
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 let
   inherit (lib)
@@ -30,6 +30,7 @@ let
     mkDefault
     mkIf
     mkOption
+    mkOverride
     mkRenamedOptionModuleWith
     optionalString
     optionals
@@ -386,5 +387,14 @@ in
         )
       );
     };
+
+    # Enable git if flake support is enabled
+    programs.git = let
+      hasFlakes = lib.elem "flakes" cfg.settings.experimental-features || lib.elem "flakes" cfg.settings.extra-experimental-features || config.nixpkgs.flake.source != null;
+    in mkIf hasFlakes ({
+      enable = mkOverride 1400 true; # mkOptionDefault is 1500, mkDefault is 1000
+    } // mkIf (options.programs.git.enable.highestPrio == 1400) {
+      package = pkgs.gitMinimal;
+    });
   };
 }
