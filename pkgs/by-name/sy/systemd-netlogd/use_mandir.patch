@@ -1,0 +1,10 @@
+diff --git a/doc/meson.build b/doc/meson.build
+index 258344a..87055ad 100644
+--- a/doc/meson.build
++++ b/doc/meson.build
+@@ -18,4 +18,4 @@ custom_target(
+               input : sphinx_sources,
+               output : man_pages,
+               install : true,
+-              install_dir : '/usr/share/man/man8')
++              install_dir : mandir1)
