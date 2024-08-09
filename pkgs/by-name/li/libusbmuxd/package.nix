@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
+    substituteInPlace src/Makefile.am \
+      --replace-fail Iphlpapi iphlpapi
     export RELEASE_VERSION=${version}
   '';
 
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Client library to multiplex connections from and to iOS devices";
     homepage = "https://github.com/libimobiledevice/libusbmuxd";
     license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.unix;
+    platforms = with lib.platforms; unix ++ windows;
     maintainers = [ ];
   };
 }

@@ -46,9 +46,11 @@ stdenv.mkDerivation rec {
   # aarch64
   configurePlatforms = [ "host" "build" ];
 
-  postConfigure = ''
+  postConfigure = lib.optionalString (!stdenv.hostPlatform.isMinGW) ''
     sed -i configure \
         -e 's/NOEXECSTACK_FLAGS=$/NOEXECSTACK_FLAGS="-Wa,--noexecstack"/'
+  '' + lib.optionalString stdenv.hostPlatform.isMinGW ''
+    export LDFLAGS+='-z noexecstack'
   '';
 
   enableParallelBuilding = true;
