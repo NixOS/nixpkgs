@@ -1,0 +1,49 @@
+--- a/src/config.h 2012-09-01 07:53:25.000000000 +0200
++++ b/src/config.h 2012-09-05 09:08:37.099387176 +0200
+@@ -35,10 +35,10 @@
+ 
+ /* Default paths to runtime files: */
+ 
+-#define ASSETS_DIR              "assets"
++#define ASSETS_DIR              "@out@/share/skipfish/assets"
+ 
+ /* Default signature file */
+-#define SIG_FILE                "signatures/signatures.conf"
++#define SIG_FILE                "@out@/share/skipfish/signatures/signatures.conf"
+ 
+ /* Various default settings for HTTP client (cmdline override): */
+
+
+--- a/signatures/signatures.conf 2012-09-01 07:53:25.000000000 +0200
++++ b/signatures/signatures.conf 2012-09-05 09:09:10.027968510 +0200
+@@ -6,23 +6,23 @@
+ # The mime signatures warn about server responses that have an interesting
+ # mime. For example anything that is presented as php-source will likely
+ # be interesting
+-include signatures/mime.sigs
++include @out@/share/skipfish/signatures/mime.sigs
+ 
+ # The files signature will use the content to determine if a response
+ # is an interesting file. For example, a SVN file.
+-include signatures/files.sigs
++include @out@/share/skipfish/signatures/files.sigs
+ 
+ # The messages signatures look for interesting server messages. Most
+ # are based on errors, such as caused by incorrect SQL queries or PHP
+ # execution failures.
+-include signatures/messages.sigs
++include @out@/share/skipfish/signatures/messages.sigs
+ 
+ # The apps signatures will help to find pages and applications who's
+ # functionality is a security risk by default. For example, phpinfo()
+ # pages that leak information or CMS admin interfaces.
+-include signatures/apps.sigs
++include @out@/share/skipfish/signatures/apps.sigs
+ 
+ # Context signatures are linked to injection tests. They look for strings
+ # that are relevant to the current injection test and help to highlight
+ # potential vulnerabilities.
+-include signatures/context.sigs
++include @out@/share/skipfish/signatures/context.sigs
+
+  
