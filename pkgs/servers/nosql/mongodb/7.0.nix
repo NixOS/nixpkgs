@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   callPackage,
   sasl,
@@ -26,4 +27,5 @@ buildMongoDB {
   version = "7.0.12";
   sha256 = "sha256-kB1Q0dcxB7G/usGs44GTST4766Mb3cCsZRG9Dd+RfRk=";
   patches = [ ./SConstruct-disable-mongo-tooling-metrics.patch ];
+  license = lib.licenses.asl20; # Temporarily switch the license to build on Github
 }
