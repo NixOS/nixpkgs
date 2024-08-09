@@ -17,14 +17,16 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    ./01-fix-sleep_for.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
   CFLAGS = "-D_GLIBCXX_USE_NANOSLEEP";
-  patches = [
-    ./01-fix-sleep_for.patch
-  ];
 
 
   meta = with lib; {
