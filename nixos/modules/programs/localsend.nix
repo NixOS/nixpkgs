@@ -24,6 +24,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall [ firewallPort ];
+    networking.firewall.allowedUDPPorts = lib.optionals cfg.openFirewall [ firewallPort ];
   };
 
   meta.maintainers = with lib.maintainers; [ pandapip1 ];
