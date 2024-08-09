@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bugstalker";
-  version = "0.1.4";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "godzie44";
     repo = "BugStalker";
     rev = "v${version}";
-    hash = "sha256-16bmvz6/t8H8Sx/32l+fp3QqP5lwi0o1Q9KqDHqF22U=";
+    hash = "sha256-JacRt+zNwL7hdpdh5h9Mxztqi47f5eUbcZyx6ct/5Bc=";
   };
 
-  cargoHash = "sha256-kp0GZ0cM57BMpH/8lhxevnBuJhUSH0rtxP4B/9fXYiU=";
+  cargoHash = "sha256-ljT7Dl9553sfZBqTe6gT3iYPH+D1Jp9ZsyGVQGOekxw=";
 
   buildInputs = [ libunwind ];
 
