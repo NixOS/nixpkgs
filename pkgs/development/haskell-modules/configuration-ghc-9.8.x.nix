@@ -4,6 +4,8 @@ with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
+
+  disableParallelBuilding = haskellLib.overrideCabal (drv: { enableParallelBuilding = false; });
 in
 
 self: super: {
@@ -143,5 +145,8 @@ self: super: {
     url = "https://github.com/reflex-frp/reflex/commit/0ac53ca3eab2649dd3f3edc585e10af8d13b28cd.patch";
     sha256 = "sha256-umjwgdSKebJdRrXjwHhsi8HBqotx1vFibY9ttLkyT/0=";
   }) super.reflex;
+
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/23392
+  gi-gtk = disableParallelBuilding super.gi-gtk;
 
 }
