@@ -9,8 +9,8 @@
 
 graalvmPackages.buildGraalvm {
   inherit useMusl version;
-  src = fetchurl (import ./hashes.nix).${version}.hashes.${stdenv.system};
-  meta.platforms = builtins.attrNames (import ./hashes.nix).${version}.hashes;
+  src = fetchurl (import ./hashes.nix).${version}.${stdenv.system};
+  meta.platforms = builtins.attrNames (import ./hashes.nix).${version};
   meta.license = lib.licenses.unfree;
   pname = "graalvm-oracle";
 }
