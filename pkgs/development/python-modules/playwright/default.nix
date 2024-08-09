@@ -21,7 +21,7 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.44.0";
+  version = "1.45.1";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RM04I1QiyJhPvKdAdy8w2GmOOR+BWilxrZ5QUrwxBWA=";
+    hash = "sha256-DHWjQk4k8wGlSFZcsrL0xYYlbKN6qWGBPMbSiLPqg3k=";
   };
 
   patches = [
