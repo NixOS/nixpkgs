@@ -193,6 +193,7 @@
   ./programs/fish.nix
   ./programs/flashrom.nix
   ./programs/flexoptix-app.nix
+  ./programs/foot
   ./programs/freetds.nix
   ./programs/fuse.nix
   ./programs/fzf.nix
