@@ -207,7 +207,7 @@ let
           })
           openSha256;
         settings =
-          if useSettings then
+          if useSettings && !libsOnly then
             (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256)
               {
                 withGtk2 = preferGtk2;
