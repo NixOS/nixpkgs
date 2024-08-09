@@ -1,4 +1,4 @@
-declare -a cargoBuildFlags
+declare -a cargoBuildFlagsArray
 
 cargoBuildHook() {
     echo "Executing cargoBuildHook"
@@ -43,7 +43,8 @@ cargoBuildHook() {
         ${cargoBuildProfileFlag} \
         ${cargoBuildNoDefaultFeaturesFlag} \
         ${cargoBuildFeaturesFlag} \
-        ${cargoBuildFlags}
+        ${cargoBuildFlags} \
+        ${cargoBuildFlagsArray+"${cargoBuildFlagsArray[@]}"}
     )
 
     if [ ! -z "${buildAndTestSubdir-}" ]; then

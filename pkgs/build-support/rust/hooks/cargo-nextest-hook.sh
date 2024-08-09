@@ -1,5 +1,5 @@
-declare -a checkFlags
-declare -a cargoTestFlags
+declare -a checkFlagsArray
+declare -a cargoTestFlagsArray
 
 cargoNextestHook() {
     echo "Executing cargoNextestHook"
@@ -28,14 +28,18 @@ cargoNextestHook() {
         cargoCheckFeaturesFlag="--features=${cargoCheckFeatures// /,}"
     fi
 
-    argstr="${cargoCheckProfileFlag} ${cargoCheckNoDefaultFeaturesFlag} ${cargoCheckFeaturesFlag}
-        --target @rustHostPlatformSpec@ --offline ${cargoTestFlags}"
-
     (
         set -x
         cargo nextest run \
               -j ${threads} \
-              ${argstr} -- \
+              ${cargoCheckProfileFlag} \
+              ${cargoCheckNoDefaultFeaturesFlag} \
+              ${cargoCheckFeaturesFlag} \
+              --target @rustHostPlatformSpec@ \
+              --offline \
+              ${cargoTestFlags} \
+              ${cargoTestFlagsArray+"${cargoTestFlagsArray[@]}"} \
+              -- \
               ${checkFlags} \
               ${checkFlagsArray+"${checkFlagsArray[@]}"}
     )
