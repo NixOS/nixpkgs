@@ -28,6 +28,7 @@ DISTRO_NAME = "@distroName@"
 NIX = "@nix@"
 SYSTEMD = "@systemd@"
 CONFIGURATION_LIMIT = int("@configurationLimit@")
+REBOOT_FOR_BITLOCKER = bool("@rebootForBitlocker@")
 CAN_TOUCH_EFI_VARIABLES = "@canTouchEfiVariables@"
 GRACEFUL = "@graceful@"
 COPY_EXTRA_FILES = "@copyExtraFiles@"
@@ -99,6 +100,8 @@ def write_loader_conf(profile: str | None, generation: int, specialisation: str 
         f.write("default %s\n" % generation_conf_filename(profile, generation, specialisation))
         if not EDITOR:
             f.write("editor 0\n")
+        if REBOOT_FOR_BITLOCKER:
+            f.write("reboot-for-bitlocker yes\n");
         f.write(f"console-mode {CONSOLE_MODE}\n")
         f.flush()
         os.fsync(f.fileno())
