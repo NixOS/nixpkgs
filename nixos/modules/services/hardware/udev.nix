@@ -438,6 +438,8 @@ in
 
     systemd.services.systemd-udevd =
       { restartTriggers = cfg.packages;
+        requiredBy = [ "sysinit-reactivation.target" ];
+        before = [ "sysinit-reactivation.target" ];
       };
 
   };

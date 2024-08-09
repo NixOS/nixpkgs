@@ -373,6 +373,8 @@ in
 
         systemd.services.systemd-modules-load =
           { wantedBy = [ "multi-user.target" ];
+            requiredBy = [ "sysinit-reactivation.target" ];
+            before = [ "sysinit-reactivation.target" ];
             restartTriggers = [ kernelModulesConf ];
             serviceConfig =
               { # Ignore failed module loads.  Typically some of the
