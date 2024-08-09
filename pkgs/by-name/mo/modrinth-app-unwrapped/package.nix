@@ -1,34 +1,29 @@
 {
   lib,
   stdenv,
-  stdenvNoCC,
   fetchFromGitHub,
   rustPlatform,
   buildGoModule,
   nix-update-script,
-  modrinth-app-unwrapped,
-  cacert,
   cargo-tauri,
   desktop-file-utils,
   esbuild,
   darwin,
-  jq,
   libsoup,
-  moreutils,
-  pnpm_8,
   nodejs,
   openssl,
   pkg-config,
+  pnpm_8,
   webkitgtk,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "modrinth-app-unwrapped";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "theseus";
-    rev = "v${modrinth-app-unwrapped.version}";
+    rev = "v${version}";
     sha256 = "sha256-JWR0e2vOBvOLosr22Oo2mAlR0KAhL+261RRybhNctlM=";
   };
 
@@ -39,47 +34,18 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  pnpm-deps = stdenvNoCC.mkDerivation (finalAttrs: {
-    pname = "${modrinth-app-unwrapped.pname}-pnpm-deps";
-    inherit (modrinth-app-unwrapped) version src;
-    sourceRoot = "${finalAttrs.src.name}/theseus_gui";
-
-    dontConfigure = true;
-    dontBuild = true;
-    doCheck = false;
-
-    nativeBuildInputs = [
-      cacert
-      jq
-      moreutils
-      pnpm_8
-    ];
-
-    # https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
-    installPhase = ''
-      export HOME=$(mktemp -d)
-
-      pnpm config set store-dir "$out"
-      pnpm install --frozen-lockfile --ignore-script --force
-
-      # remove timestamp and sort json files
-      rm -rf "$out"/v3/tmp
-      for f in $(find "$out" -name "*.json"); do
-        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-        jq --sort-keys . "$f" | sponge "$f"
-      done
-    '';
-
-    dontFixup = true;
-    outputHashMode = "recursive";
-    outputHash = "sha256-g/uUGfC9TQh0LE8ed51oFY17FySoeTvfaeEpzpNeMao=";
-  });
+  pnpmDeps = pnpm_8.fetchDeps {
+    inherit pname version src;
+    sourceRoot = "${src.name}/theseus_gui";
+    hash = "sha256-g/uUGfC9TQh0LE8ed51oFY17FySoeTvfaeEpzpNeMao=";
+  };
+  pnpmRoot = "theseus_gui";
 
   nativeBuildInputs = [
     cargo-tauri
     desktop-file-utils
-    pnpm_8
     nodejs
+    pnpm_8.configHook
     pkg-config
   ];
 
@@ -106,7 +72,7 @@ rustPlatform.buildRustPackage {
         Darwin = "app";
       }
       .${stdenv.hostPlatform.uname.system}
-      or (builtins.throw "No tauri bundle available for ${stdenv.hostPlatform.uname.system}!");
+      or (throw "No tauri bundle available for ${stdenv.hostPlatform.uname.system}!");
 
     ESBUILD_BINARY_PATH = lib.getExe (
       esbuild.override {
@@ -123,19 +89,6 @@ rustPlatform.buildRustPackage {
       }
     );
   };
-
-  postPatch = ''
-    export HOME=$(mktemp -d)
-    export STORE_PATH=$(mktemp -d)
-
-    pushd theseus_gui
-    cp -rT ${modrinth-app-unwrapped.pnpm-deps} "$STORE_PATH"
-    chmod -R +w "$STORE_PATH"
-
-    pnpm config set store-dir "$STORE_PATH"
-    pnpm install --offline --frozen-lockfile --ignore-script
-    popd
-  '';
 
   buildPhase = ''
     runHook preBuild
@@ -179,14 +132,14 @@ rustPlatform.buildRustPackage {
       A unique, open source launcher that allows you to play your favorite mods,
       and keep them up to date, all in one neat little package
     '';
-    mainProgram = "modrinth-app";
     homepage = "https://modrinth.com";
-    changelog = "https://github.com/modrinth/theseus/releases/tag/v${modrinth-app-unwrapped.version}";
+    changelog = "https://github.com/modrinth/theseus/releases/tag/v${version}";
     license = with lib.licenses; [
       gpl3Plus
       unfreeRedistributable
     ];
     maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "modrinth-app";
     platforms = with lib; platforms.linux ++ platforms.darwin;
     # this builds on architectures like aarch64, but the launcher itself does not support them yet
     broken = !stdenv.isx86_64;
