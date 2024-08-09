@@ -1,8 +1,9 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 let
   cfg = config.virtualisation.azure;
+  mlxDrivers = [ "mlx4_en" "mlx4_core" "mlx5_core" ];
 in
 {
   options.virtualisation.azure = {
@@ -12,19 +13,17 @@ in
     };
   };
 
-  imports = [ 
+  imports = [
     ../profiles/headless.nix 
     ./azure-agent.nix
   ];
 
-  config = let
-    mlxDrivers = [ "mlx4_en" "mlx4_core" "mlx5_core" ];
-  in
-  {
+  config = {
     virtualisation.azure.agent.enable = true;
 
     boot.kernelParams = [ "console=ttyS0" "earlyprintk=ttyS0" "rootdelay=300" "panic=1" "boot.panic_on_fail" ];
-    boot.initrd.kernelModules = [ "hv_vmbus" "hv_netvsc" "hv_utils" "hv_storvsc" ] ++ (lib.optionals cfg.acceleratedNetworking mlxDrivers);
+    boot.initrd.kernelModules = [ "hv_vmbus" "hv_netvsc" "hv_utils" "hv_storvsc" ] 
+      ++ (lib.optionals cfg.acceleratedNetworking mlxDrivers);
 
     # Accelerated networking
     systemd.network.networks."99-azure-unmanaged-devices.network" = lib.mkIf cfg.acceleratedNetworking {
