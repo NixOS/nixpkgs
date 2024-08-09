@@ -51,15 +51,15 @@ self: super:
   boost = super.boost.override {
     python = self.python3;
   };
-  rr = super.callPackage ./pkgs/rr {
+  rr = self.callPackage ./pkgs/rr {
     stdenv = self.stdenv_32bit;
   };
 }
 ```
 
-The first argument (`self`) corresponds to the final package set. You should use this set for the dependencies of all packages specified in your overlay. For example, all the dependencies of `rr` in the example above come from `self`, as well as the overridden dependencies used in the `boost` override.
+The first argument (`self`) corresponds to the final package set. You should use this set for the dependencies of all packages specified in your overlay, including any nixpkgs functions. In the example above, `self` provides all the overridden dependencies of `boost` and `rr`, as well as the `callPackage` function.
 
-The second argument (`super`) corresponds to the result of the evaluation of the previous stages of Nixpkgs. It does not contain any of the packages added by the current overlay, nor any of the following overlays. This set should be used either to refer to packages you wish to override, or to access functions defined in Nixpkgs. For example, the original recipe of `boost` in the above example, comes from `super`, as well as the `callPackage` function.
+The second argument (`super`) corresponds to the result of the evaluation of the previous stages of Nixpkgs. It does not contain any of the packages added by the current overlay, nor any of the following overlays. This set should be used to refer to packages you wish to override (where using `self` would result in infinite recursion). In the example above, the original recipe of `boost` comes from `super`.
 
 The value returned by this function should be a set similar to `pkgs/top-level/all-packages.nix`, containing overridden and/or new packages.
 
