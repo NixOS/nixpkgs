@@ -1243,6 +1243,7 @@
   ./services/networking/uptermd.nix
   ./services/networking/v2ray.nix
   ./services/networking/v2raya.nix
+  ./services/networking/veilid.nix
   ./services/networking/vdirsyncer.nix
   ./services/networking/vsftpd.nix
   ./services/networking/wasabibackend.nix
@@ -1705,9 +1706,7 @@
   ./virtualisation/xe-guest-utilities.nix
   ./virtualisation/xen-dom0.nix
   {
-    documentation.nixos.extraModules = [
-      ./virtualisation/qemu-vm.nix
-      ./image/repart.nix
-    ];
+    documentation.nixos.extraModules =
+      [ ./virtualisation/qemu-vm.nix ./image/repart.nix ];
   }
 ]
