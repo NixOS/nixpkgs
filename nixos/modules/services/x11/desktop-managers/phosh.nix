@@ -9,7 +9,7 @@ let
   oskItem = pkgs.makeDesktopItem {
     name = "sm.puri.OSK0";
     desktopName = "On-screen keyboard";
-    exec = "${pkgs.squeekboard}/bin/squeekboard";
+    exec = "squeekboard";
     categories = [ "GNOME" "Core" ];
     onlyShowIn = [ "GNOME" ];
     noDisplay = true;

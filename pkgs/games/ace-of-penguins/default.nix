@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   desktopItems = let
     generateItem = gameName: {
       name = "${pname}-${gameName}";
-      exec = "${placeholder "out"}/bin/${gameName}";
+      exec = gameName;
       comment = "Ace of Penguins ${gameName} Card Game";
       desktopName = gameName;
       genericName = gameName;

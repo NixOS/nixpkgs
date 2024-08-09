@@ -125,7 +125,7 @@ stdenv.mkDerivation {
   desktopItems = [
     (makeDesktopItem {
       name = "svp-manager4";
-      exec = "${fhs}/bin/SVPManager %f";
+      exec = "SVPManager %f";
       desktopName = "SVP 4 Linux";
       genericName = "Real time frame interpolation";
       icon = "svp-manager4";

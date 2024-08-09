@@ -32,7 +32,7 @@ buildGoModule rec {
     cp -r ${
       makeDesktopItem {
         name = "net.maunium.gomuks.desktop";
-        exec = "@out@/bin/gomuks";
+        exec = "gomuks";
         terminal = true;
         desktopName = "Gomuks";
         genericName = "Matrix client";

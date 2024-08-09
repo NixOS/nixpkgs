@@ -118,7 +118,7 @@ let
     name = "vmware-view";
     desktopName = "VMware Horizon Client";
     icon = "${vmwareHorizonClientFiles}/share/icons/vmware-view.png";
-    exec = "${vmwareFHSUserEnv mainProgram}/bin/${mainProgram} %u";
+    exec = "${mainProgram} %u";
     mimeTypes = [ "x-scheme-handler/vmware-view" ];
   };
 
