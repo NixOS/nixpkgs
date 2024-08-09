@@ -1408,4 +1408,13 @@ self: super: builtins.intersectAttrs super {
   kmonad = enableSeparateBinOutput super.kmonad;
 
   xmobar = enableSeparateBinOutput super.xmobar;
+
+  # 2024-08-09: Disable some cabal-doctest tests pending further investigation.
+  doctest = overrideCabal (drv: {
+    testFlags = drv.testFlags or [] ++ [
+      # These tests require cabal-install
+      "--skip=/Cabal.Options"
+      "--skip=/Cabal.Paths/paths"
+    ];
+  }) super.doctest;
 }
