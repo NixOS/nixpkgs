@@ -25,8 +25,10 @@
 let
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.14";
+    version = "0.15";
     pyproject = true;
+
+    build-system = [ setuptools ];
 
     disabled = pythonOlder "3.8";
 
@@ -34,14 +36,12 @@ let
       owner = "simonw";
       repo = "llm";
       rev = "refs/tags/${version}";
-      hash = "sha256-CgGVFUsntVkF0zORAtYQQMAeGtIwBbj9hE0Ei1OCGq4=";
+      hash = "sha256-PPmbqY9+OYGs4U3z3LHs7a3BjQ0AlRY6J+SKmCY3bXk=";
     };
 
     patches = [ ./001-disable-install-uninstall-commands.patch ];
 
-    nativeBuildInputs = [ setuptools ];
-
-    propagatedBuildInputs = [
+    dependencies = [
       click-default-group
       numpy
       openai
