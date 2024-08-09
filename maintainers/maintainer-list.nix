@@ -12765,6 +12765,12 @@
     githubId = 279868;
     name = "Matti Kariluoma";
   };
+  MattKang = {
+    email = "wavy-wisdom-volley@duck.com";
+    github = "MattKang";
+    githubId = 2027430;
+    name = "Matthew Kang";
+  };
   mattpolzin = {
     email = "matt.polzin@gmail.com";
     github = "mattpolzin";
