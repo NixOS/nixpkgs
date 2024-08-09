@@ -6,6 +6,7 @@
   markdown-it-py,
   poetry-core,
   pytest-aiohttp,
+  pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   rich,
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.72.0";
+  version = "0.75.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = "textual";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iNl9bos1GBLmHRvSgqYD8b6cptmmMktXkDXQbm3xMtc=";
+    hash = "sha256-lGf7kGqQfddIyFOUdm/L1rZW9O6rZCLi6HXwI84YZDc=";
   };
 
   build-system = [ poetry-core ];
@@ -39,15 +40,13 @@ buildPythonPackage rec {
   ] ++ markdown-it-py.optional-dependencies.plugins ++ markdown-it-py.optional-dependencies.linkify;
 
   optional-dependencies = {
-    syntax = [
-      tree-sitter
-      tree-sitter-languages
-    ];
+    syntax = [ tree-sitter ] ++ lib.optionals (pythonOlder "3.12") [ tree-sitter-languages ];
   };
 
   nativeCheckInputs = [
     jinja2
     pytest-aiohttp
+    pytest-xdist
     pytestCheckHook
     syrupy
     time-machine
