@@ -740,7 +740,7 @@ class Machine:
         """
 
         def check_file(_: Any) -> bool:
-            status, _ = self.execute(f"test -e {filename}")
+            status, _ = self.execute(f'test -e "{filename}"')
             return status == 0
 
         with self.nested(f"waiting for file '{filename}'"):

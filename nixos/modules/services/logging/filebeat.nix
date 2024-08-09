@@ -229,10 +229,11 @@ in
 
           umask u=rwx,g=,o=
 
-          ${utils.genJqSecretsReplacementSnippet
-              cfg.settings
-              "/var/lib/filebeat/filebeat.yml"
-           }
+          ${utils.genConfigOutOfBand {
+              config = cfg.settings;
+              configLocation = "/var/lib/filebeat/filebeat.yml";
+              generator = utils.genConfigOutOfBandFormatAdapter json;
+          }}
         '';
         ExecStart = ''
           ${cfg.package}/bin/filebeat -e \

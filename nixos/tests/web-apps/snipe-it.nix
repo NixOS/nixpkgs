@@ -31,7 +31,7 @@ in {
           from.address = "snipe-it@localhost";
           replyTo.address = "snipe-it@localhost";
           user = "snipe-it@localhost";
-          passwordFile = toString (pkgs.writeText "snipe-it-mail-pass" "a-secure-mail-password");
+          passwordFile = pkgs.writeText "snipe-it-mail-pass" "a-secure-mail-password";
         };
       };
     };

@@ -1,4 +1,4 @@
-{ lib, systemdUtils }:
+{ lib, systemdUtils, utils }:
 
 let
   inherit (systemdUtils.lib)
@@ -18,6 +18,7 @@ let
     filterOverrides
     isList
     mergeEqualOption
+    mkDefault
     mkIf
     mkMerge
     mkOption
@@ -424,9 +425,63 @@ in rec {
         default = [];
       };
 
+      outOfBandConfig = mkOption {
+        default = [];
+        description = ''
+          Configuration files that will be generated with out of band values.
+        '';
+        type = types.listOf (types.submodule {
+          options = {
+            name = mkOption {
+              type = types.str;
+              description = ''
+                Name of the configuration file.
+              '';
+              example = "config.json";
+            };
+            config = mkOption {
+              type = types.anything;
+              description = ''
+                Configuration, including path to secrets, that will be generated.
+              '';
+            };
+            generator = mkOption {
+              type = types.anything;
+              description = ''
+                Generator function that will produce the configuration in the expected format.
+              '';
+            };
+          };
+        });
+      };
     };
 
     config = mkMerge [
+      (mkIf (config.outOfBandConfig != []) (
+        let
+          mkScript = cfg: utils.genConfigOutOfBandSystemd {
+            inherit (cfg) config generator;
+            configLocation = "$STATE_DIRECTORY/${cfg.name}";
+          };
+
+          mkJobScript = cfg: let
+            script = mkScript cfg;
+          in
+            makeJobScript "${cfg.name}-outOfBandConfig" script.preStart;
+
+          jobScripts = map mkJobScript config.outOfBandConfig;
+
+          mkLoadCredential = cfg: (mkScript cfg).loadCredentials;
+
+          loadCredentials = concatMap mkLoadCredential config.outOfBandConfig;
+        in
+          rec {
+            inherit jobScripts;
+            serviceConfig.ExecStartPre = jobScripts;
+            serviceConfig.LoadCredential = loadCredentials;
+            serviceConfig.StateDirectory = mkDefault "%N";
+          }
+      ))
       (mkIf (config.preStart != "") rec {
         jobScripts = makeJobScript "${name}-pre-start" config.preStart;
         serviceConfig.ExecStartPre = [ jobScripts ];

@@ -6,12 +6,15 @@
 let
   inherit (builtins) head length;
   inherit (lib.trivial) isInOldestRelease mergeAttrs warn warnIf;
-  inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
-  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl;
+  inherit (lib.strings) concatMapStrings concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName toUpper;
+  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl imap0;
+
+  placeholderName = path:
+      "%SECRET${toUpper (concatMapStrings (s: "_" + s) path)}%";
 in
 
 rec {
-  inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr removeAttrs intersectAttrs;
+  inherit (builtins) attrNames listToAttrs hasAttr isAttrs isList getAttr removeAttrs intersectAttrs;
 
 
   /**
@@ -869,6 +872,19 @@ rec {
       [ attrs ]
     else if isAttrs attrs then
       concatMap (collect pred) (attrValues attrs)
+   else
+      [];
+
+  # Like collect but also recurses on lists.
+  collect' =
+  pred:
+  attrs:
+    if pred attrs then
+      [ attrs ]
+    else if isAttrs attrs then
+      concatMap (collect' pred) (attrValues attrs)
+    else if isList attrs then
+      concatMap (collect' pred) attrs
     else
       [];
 
@@ -1208,6 +1224,21 @@ rec {
             else f (path ++ [ name ]) value);
     in
     recurse [ ] set;
+
+  # Like `mapAttrsRecursiveCond` but also recurse over lists.
+  mapAttrsRecursiveCond' =
+    cond:
+    f:
+    set:
+    let
+      recurse = path: val:
+        if isAttrs val && cond val
+        then mapAttrs (n: v: recurse (path ++ [n]) v) val
+        else if isList val && cond val
+        then imap0 (i: v: recurse (path ++ [(toString i)]) v) val
+        else f path val;
+    in
+      recurse [] set;
 
 
   /**
@@ -2127,6 +2158,93 @@ rec {
         intersection;
     in
       (x // y) // mask;
+
+  /**
+    `replaceWithPlaceholder` is used to replace secrets with a unique placeholder value in a possibly nested configuration represented as a nix object.
+
+    It should probably not be used as-is. Prefer to use the `utils.genConfigOutOfBand` function when writing a NixOS module.
+
+    This function descends recursively in the given attrset (`attrs`) until it finds an attrset that has a field named `sourceField`.
+    When such an attrset is found, it is replaced by a unique placeholder value computed by `placeholderName`.
+
+    It recurses on all fields of an attrset and also in all items of a list.
+  */
+  replaceWithPlaceholder = sourceField: attrs:
+    let
+      hasPlaceholderField = v: isAttrs v && hasAttr sourceField v;
+
+      valueOrPlaceholder = path: value:
+        if ! (hasPlaceholderField value)
+        then value
+        else placeholderName path;
+    in
+      mapAttrsRecursiveCond' (v: ! (hasPlaceholderField v)) valueOrPlaceholder attrs;
+
+  /**
+    `getPlaceholderReplacements` extracts secrets from a possibly nested configuration represented as a nix object.
+
+    It should probably not be used as-is. Prefer to use the `utils.genConfigOutOfBand` function when writing a NixOS module.
+
+    This function descends recursively in the given attrset (`attrs`) until it finds an attrset that has a field named `sourceField`.
+    It then returns an attrset of all those matching ones as value and with the key computed from calling `placeholderName`.
+
+    It recurses on all fields of an attrset and also in all items of a list.
+  */
+  getPlaceholderReplacements = sourceField: attrs:
+    let
+      hasPlaceholderField = v: isAttrs v && hasAttr sourceField v;
+
+      addPathField = path: value:
+        if ! (hasPlaceholderField value)
+        then value
+        else value // { inherit path; };
+
+      secretsWithPath = mapAttrsRecursiveCond' (v: ! (hasPlaceholderField v)) addPathField attrs;
+
+      allSecrets = collect' (v: hasPlaceholderField v) secretsWithPath;
+
+      genReplacement = secret:
+        let
+          secretConfig = {
+            ${sourceField} = getAttr sourceField secret;
+            prefix = secret.prefix or "";
+            suffix = secret.suffix or "";
+            prefixIfNotPresent = secret.prefixIfNotPresent or "";
+            suffixIfNotPresent = secret.suffixIfNotPresent or "";
+          };
+        in
+          nameValuePair (placeholderName secret.path) secretConfig;
+    in
+      listToAttrs (map genReplacement allSecrets);
+
+  updateToLoadCredentials = sourceField: rootDir: attrs:
+    let
+      hasPlaceholderField = v: isAttrs v && hasAttr sourceField v;
+
+      valueOrLoadCredential = path: value:
+        if ! (hasPlaceholderField value)
+        then value
+        else value // { ${sourceField} = rootDir + "/" + concatStringsSep "_" path; };
+    in
+      mapAttrsRecursiveCond' (v: ! (hasPlaceholderField v)) valueOrLoadCredential attrs;
+
+  getLoadCredentials = sourceField: attrs:
+    let
+      hasPlaceholderField = v: isAttrs v && hasAttr sourceField v;
+
+      addPathField = path: value:
+        if ! (hasPlaceholderField value)
+        then value
+        else value // { inherit path; };
+
+      secretsWithPath = mapAttrsRecursiveCond' (v: ! (hasPlaceholderField v)) addPathField attrs;
+
+      allSecrets = collect' (v: hasPlaceholderField v) secretsWithPath;
+
+      genLoadCredentials = secret:
+        "${concatStringsSep "_" secret.path}:${secret.${sourceField}}";
+    in
+      map genLoadCredentials allSecrets;
 
   # DEPRECATED
   zipWithNames = warn
