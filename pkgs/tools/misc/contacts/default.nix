@@ -20,8 +20,12 @@ stdenv.mkDerivation {
   buildInputs = [ Foundation AddressBook ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp Products/Default/contacts $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

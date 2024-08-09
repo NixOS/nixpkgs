@@ -88,6 +88,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 app/cudatext -t $out/bin
 
     install -dm755 $out/share/cudatext
@@ -112,7 +114,9 @@ stdenv.mkDerivation rec {
       Text/code editor with lite UI. Syntax highlighting for 200+ languages.
       Config system in JSON files. Multi-carets and multi-selections.
       Search and replace with RegEx. Extendable by Python plugins and themes.
-    '';
+
+    runHook postInstall
+  '';
     homepage = "https://cudatext.github.io/";
     changelog = "https://cudatext.github.io/history.txt";
     license = licenses.mpl20;

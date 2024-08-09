@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     for cmd in $(cat package/commands); do
       install -Dm755 "command/$cmd" "$out/bin/$cmd"
     done
@@ -50,6 +52,8 @@ stdenv.mkDerivation rec {
     sed -i "s_/command/__"                    "$out/bin/svscanboot"
     sed -i "s_/service_/var/service_g"        "$out/bin/svscanboot"
     sed -i "s_^PATH=.*_PATH=$out/bin:\$PATH_" "$out/bin/svscanboot"
+
+    runHook postInstall
   '';
 
   # Keep README.man in the man output (see _multioutDocs())

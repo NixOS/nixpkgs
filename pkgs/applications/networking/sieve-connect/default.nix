@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   buildFlags = [ "PERL5LIB=${perlPackages.makePerlPath [ perlPackages.FileSlurp ]}" "bin" "man" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m 755 sieve-connect $out/bin
     installManPage sieve-connect.1
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
       --prefix PERL5LIB : "${with perlPackages; makePerlPath [
         AuthenSASL Socket6 IOSocketINET6 IOSocketSSL NetSSLeay NetDNS
         TermReadKey TermReadLineGnu ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

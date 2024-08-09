@@ -54,6 +54,8 @@ in
   unpackCmd = "unzip $curSrc";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec $out/share/{applications,pixmaps}
     mv * $out/libexec/
 
@@ -63,6 +65,8 @@ in
     makeWrapper $out/libexec/sqldeveloper/bin/sqldeveloper $out/bin/sqldeveloper \
       --set JAVA_HOME ${jdk.home} \
       --chdir "$out/libexec/sqldeveloper/bin"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
     $AR rvs libcrossguid.a guid.o
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{lib,include}
     install -D -m644 libcrossguid.a "$out/lib/libcrossguid.a"
     install -D -m644 guid.h "$out/include/guid.h"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

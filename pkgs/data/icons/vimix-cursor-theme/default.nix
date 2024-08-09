@@ -15,12 +15,16 @@ stdenvNoCC.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     sed -i 's/Vimix Cursors$/Vimix-Cursors/g' dist{,-white}/index.theme
 
     install -dm 755 $out/share/icons/Vimix-Cursors{,-White}
 
     cp -dr --no-preserve='ownership' dist/*        $out/share/icons/Vimix-Cursors
     cp -dr --no-preserve='ownership' dist-white/*  $out/share/icons/Vimix-Cursors-White
+
+    runHook postInstall
   '';
 
   meta = with lib; {

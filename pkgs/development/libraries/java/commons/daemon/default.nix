@@ -10,9 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     tar xf ${src}
     mkdir -p $out/share/java
     cp *.jar $out/share/java/
+
+    runHook postInstall
   '';
 
   meta = {

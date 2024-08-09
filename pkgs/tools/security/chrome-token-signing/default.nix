@@ -23,10 +23,14 @@ mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/bin host-linux/chrome-token-signing
     # TODO: wire these up
     install -D -t $out/etc/chromium/native-messaging-hosts host-linux/ee.ria.esteid.json
     install -D -t $out/lib/mozilla/native-messaging-hosts host-linux/ff/ee.ria.esteid.json
+
+    runHook postInstall
   '';
 
   meta = with lib; {

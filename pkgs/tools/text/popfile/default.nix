@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   ]);
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     # I user `cd` rather than `cp $out/* ...` b/c the * breaks syntax
     # highlighting in emacs for me.
@@ -45,6 +47,8 @@ stdenv.mkDerivation rec {
         --run 'export POPFILE_USER=''${POPFILE_USER:-$HOME/.popfile}' \
         --run 'test -d "$POPFILE_USER" || mkdir -m 0700 -p "$POPFILE_USER"'
     done
+
+    runHook postInstall
   '';
 
   meta = {

@@ -43,9 +43,13 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D i2pd $out/bin/i2pd
     install --mode=444 -D 'contrib/i2pd.service' "$out/etc/systemd/system/i2pd.service"
     installManPage 'debian/i2pd.1'
+
+    runHook postInstall
   '';
 
   meta = with lib; {

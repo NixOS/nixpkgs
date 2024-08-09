@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     };
 
   in ''
+    runHook preInstall
+
     install -v -m 755    -d $out/share/java/swingsane/
     install -v -m 644 *.jar $out/share/java/swingsane/
 
@@ -41,6 +43,8 @@ stdenv.mkDerivation rec {
     install -v -D -m 644 swingsane_512x512.png $out/share/pixmaps/swingsane.png
 
     cp -v -r ${desktopItem}/share/applications $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {

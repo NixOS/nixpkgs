@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -D $src $out/bin/hashi-ui
+
+    runHook postInstall
   '';
 
   meta = with lib; {

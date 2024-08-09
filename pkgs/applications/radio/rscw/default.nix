@@ -21,10 +21,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 fftw ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m 0755 noisycw $out/bin/noisycw
     install -D -m 0755 rs12tlmdec $out/bin/rs12tlmdec
     install -D -m 0755 rscw $out/bin/rscw
     install -D -m 0755 rscwx $out/bin/rscwx
+
+    runHook postInstall
   '';
 
   meta = with lib; {

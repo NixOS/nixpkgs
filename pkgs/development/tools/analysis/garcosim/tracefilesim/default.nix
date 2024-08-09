@@ -15,8 +15,12 @@ stdenv.mkDerivation {
   hardeningDisable = [ "fortify" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir --parents "$out/bin"
     cp ./traceFileSim "$out/bin"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

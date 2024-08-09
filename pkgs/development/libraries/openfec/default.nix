@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   installPhase =
     let so = stdenv.hostPlatform.extensions.library;
     in ''
+      runHook preInstall
+
       # This is pretty horrible but sadly there is not installation procedure
       # provided.
       mkdir -p $dev/include
@@ -39,6 +41,8 @@ stdenv.mkDerivation rec {
       install_name_tool -id $out/lib/libopenfec${so} $out/lib/libopenfec${so}
     '' + ''
       ln -s libopenfec${so} $out/lib/libopenfec${so}.1
+
+      runHook postInstall
     '';
 
   passthru.updateScript = gitUpdater {

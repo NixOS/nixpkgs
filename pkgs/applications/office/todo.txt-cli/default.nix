@@ -11,12 +11,16 @@ in stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -vd $out/bin
     install -vm 755 todo.sh $out/bin
     install -vd $out/share/bash-completion/completions
     install -vm 644 todo_completion $out/share/bash-completion/completions/todo
     install -vd $out/etc/todo
     install -vm 644 todo.cfg $out/etc/todo/config
+
+    runHook postInstall
   '';
 
   meta = {

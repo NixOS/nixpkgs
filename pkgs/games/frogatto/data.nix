@@ -12,8 +12,12 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/frogatto/modules
     cp -ar . $out/share/frogatto/modules/frogatto4
+
+    runHook postInstall
   '';
 
   meta = with lib; {

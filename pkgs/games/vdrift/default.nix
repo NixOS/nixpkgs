@@ -45,7 +45,7 @@ let
       export CXXFLAGS="$(pkg-config --cflags SDL2_image)"
       scons -j$NIX_BUILD_CORES
     '';
-    installPhase = "scons install";
+    installPhase = "runHook preInstall; scons install; runHook postInstall";
 
     meta = {
       description = "Car racing game";

@@ -24,11 +24,15 @@ in stdenv.mkDerivation rec {
   buildInputs = [ pythonEnv libarchive ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/opt/sickgear
     cp -R {autoProcessTV,gui,lib,sickgear,sickgear.py} $out/opt/sickgear/
 
     makeWrapper $out/opt/sickgear/sickgear.py $out/bin/sickgear \
       --suffix PATH : ${lib.makeBinPath [ libarchive ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

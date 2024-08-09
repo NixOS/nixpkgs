@@ -18,9 +18,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+      runHook preInstall
+
       install -D -t $out/lib pg_uuidv7${postgresql.dlSuffix}
       install -D {sql/pg_uuidv7--${lib.versions.majorMinor version}.sql,pg_uuidv7.control} -t $out/share/postgresql/extension
-  '';
+
+      runHook postInstall
+    '';
 
   meta = with lib; {
     description = "Tiny Postgres extension to create version 7 UUIDs";

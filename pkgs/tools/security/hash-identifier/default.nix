@@ -14,7 +14,11 @@ python3Packages.buildPythonApplication rec {
   format = "other"; # no setup.py
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0775 hash-id.py $out/bin/hash-identifier
+
+    runHook postInstall
   '';
 
   meta = with lib; {

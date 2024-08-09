@@ -22,7 +22,7 @@ in python3Packages.buildPythonApplication {
                 "EXE_FILE = '${file}/bin/file'"
   '';
 
-  installPhase = "install -Dm755 Mimeo.py $out/bin/mimeo";
+  installPhase = "runHook preInstall; install -Dm755 Mimeo.py $out/bin/mimeo; runHook postInstall";
 
   doInstallCheck = true;
   installCheckPhase = ''

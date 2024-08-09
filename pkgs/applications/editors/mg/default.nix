@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m 555 -Dt $out/bin mg
     install -m 444 -Dt $out/share/man/man1 mg.1
+
+    runHook postInstall
   '';
   nativeBuildInputs = [ pkg-config ];
 

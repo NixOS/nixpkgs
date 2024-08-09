@@ -14,8 +14,12 @@ stdenv.mkDerivation {
   buildInputs = [ postgresql ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D tsearch_extras${postgresql.dlSuffix} -t $out/lib/
     install -D ./{tsearch_extras--1.0.sql,tsearch_extras.control} -t $out/share/postgresql/extension
+
+    runHook postInstall
   '';
 
   meta = with lib; {

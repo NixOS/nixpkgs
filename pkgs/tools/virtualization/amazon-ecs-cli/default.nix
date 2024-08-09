@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp $src $out/bin/ecs-cli
       chmod +x $out/bin/ecs-cli
+
+      runHook postInstall
     '';  # */
 
   meta = with lib; {

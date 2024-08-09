@@ -24,11 +24,15 @@ stdenv.mkDerivation {
 
   inherit dejavu_fonts;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv vcs $out/bin/vcs
     substituteAllInPlace $out/bin/vcs
     chmod +x $out/bin/vcs
     wrapProgram $out/bin/vcs --argv0 vcs --set PATH "${lib.makeBinPath runtimeDeps}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

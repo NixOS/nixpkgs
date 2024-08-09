@@ -20,11 +20,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/sbin
     cp check_wtmpx chkdirs chklastlog chkproc chkrootkit chkutmp chkwtmp ifpromisc strings-static $out/sbin
 
     wrapProgram $out/sbin/chkrootkit \
       --prefix PATH : "${lib.makeBinPath [ binutils-unwrapped ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

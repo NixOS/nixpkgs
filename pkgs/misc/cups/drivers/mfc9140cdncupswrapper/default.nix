@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     lpr=${mfc9140cdnlpr}/opt/brother/Printers/mfc9140cdn
     dir=$out/opt/brother/Printers/mfc9140cdn
 
@@ -56,7 +58,9 @@ stdenv.mkDerivation rec {
     sed -n '/!ENDOFWFILTER!/,/!ENDOFWFILTER!/p' "$dir/cupswrapper/cupswrappermfc9140cdn" | sed '1 br; b; :r s/.*/printer_model=mfc9140cdn; cat <<!ENDOFWFILTER!/'  | bash > $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
     sed -i "/#! \/bin\/sh/a PATH=${lib.makeBinPath [ coreutils gnused gnugrep ]}:\$PATH" $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
     chmod +x $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
-    '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Brother MFC-9140CDN CUPS wrapper driver";

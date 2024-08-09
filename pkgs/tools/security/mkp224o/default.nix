@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
             inherit version src configureFlags;
             nativeBuildInputs = [ autoreconfHook ];
             buildInputs = [ libsodium ];
-            installPhase = "install -D mkp224o $out";
+            installPhase = "runHook preInstall; install -D mkp224o $out; runHook postInstall";
           }
         } $out/bin/mkp224o-${suffix}
       '') variants;

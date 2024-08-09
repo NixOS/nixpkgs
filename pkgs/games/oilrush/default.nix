@@ -48,6 +48,8 @@ stdenv.mkDerivation {
              OilRush_$arch
   '';
   installPhase = ''
+    runHook preInstall
+
     cd ..
     mkdir -p "$out/opt/oilrush"
     cp -r * "$out/opt/oilrush"
@@ -59,6 +61,8 @@ stdenv.mkDerivation {
     exec ./launcher_$arch.sh "\$@"
     EOF
     chmod +x "$out/bin/oilrush"
+
+    runHook postInstall
   '';
   meta = {
     description = "Naval strategy game";

@@ -18,7 +18,11 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ pyqt5 ];
 
   installPhase = ''
+    runHook preInstall
+
     python3 install.py -p $out -x
+
+    runHook postInstall
   '';
 
   postFixup = ''

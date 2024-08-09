@@ -114,6 +114,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -r $out/usr/share $out/share
 
     substituteInPlace $out/lib/systemd/system/appgate-dumb-resolver.service \
@@ -146,6 +148,8 @@ stdenv.mkDerivation rec {
         --set LD_LIBRARY_PATH $out/opt/appgate:${lib.makeLibraryPath deps}
 
     wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH
+
+    runHook postInstall
   '';
 
   meta = with lib; {

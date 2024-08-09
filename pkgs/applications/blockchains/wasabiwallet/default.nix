@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/opt/${pname} $out/bin $out/share/applications
     cp -Rv . $out/opt/${pname}
 
@@ -59,6 +61,8 @@ stdenv.mkDerivation rec {
       --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
 
     cp -v $desktopItem/share/applications/* $out/share/applications
+
+    runHook postInstall
   '';
 
   meta = with lib; {

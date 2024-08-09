@@ -27,11 +27,15 @@ stdenv.mkDerivation rec {
     make nuweb.pdf nuwebdoc.pdf all
   '';
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin $out/share/man/man1 $out/share/doc/${pname}-${version} $out/share/emacs/site-lisp
     cp nuweb $out/bin
     cp nuweb.el $out/share/emacs/site-lisp
     gzip -c nuweb.1 > $out/share/man/man1/nuweb.1.gz
     cp htdocs/index.html nuweb.w nuweb.pdf nuwebdoc.pdf README $out/share/doc/${pname}-${version}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

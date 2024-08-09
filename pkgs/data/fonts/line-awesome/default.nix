@@ -15,12 +15,16 @@ stdenv.mkDerivation rec {
   sourceRoot = "${version}/fonts";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     mkdir -p $out/share/fonts/woff
     mkdir -p $out/share/fonts/woff2
     cp *.ttf $out/share/fonts/truetype
     cp *.woff $out/share/fonts/woff
     cp *.woff2 $out/share/fonts/woff2
+
+    runHook postInstall
   '';
 
   meta = with lib; {

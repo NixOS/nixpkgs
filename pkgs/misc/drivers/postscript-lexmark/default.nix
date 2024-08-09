@@ -23,9 +23,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/cups/model/postscript-lexmark
     cp opt/OpenPrinting-Lexmark/ppds/Lexmark/*.ppd $out/share/cups/model/postscript-lexmark/
     cp -r opt/OpenPrinting-Lexmark/doc $out/doc
+
+    runHook postInstall
   '';
 
   meta = with lib; {

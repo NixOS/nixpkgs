@@ -14,8 +14,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp wavrsocvt $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

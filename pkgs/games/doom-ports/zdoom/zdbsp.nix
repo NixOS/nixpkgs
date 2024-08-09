@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 zdbsp $out/bin/zdbsp
+
+    runHook postInstall
   '';
 
   meta = with lib; {

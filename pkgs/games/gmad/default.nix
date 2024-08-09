@@ -29,7 +29,11 @@ stdenv.mkDerivation rec {
   premakeFlags = [ "--bootil_lib=${bootil}/lib" "--bootil_inc=${bootil}/include" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ${targetName} $out/bin/gmad
+
+    runHook postInstall
   '';
 }

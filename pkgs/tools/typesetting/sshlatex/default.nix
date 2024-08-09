@@ -16,9 +16,13 @@ stdenv.mkDerivation rec {
   installPhase = let
     binPath = lib.makeBinPath [ openssh perl gnutar bash inotify-tools ];
   in ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp sshlatex $out/bin
     wrapProgram $out/bin/sshlatex --prefix PATH : "${binPath}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -18,10 +18,14 @@ stdenv.mkDerivation rec {
   configureFlags = ["--with-apxs2=${apacheHttpd.dev}/bin/apxs" "--exec-prefix=$out"];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ./mellon_create_metadata.sh $out/bin
     mkdir -p $out/modules
     cp ./.libs/mod_auth_mellon.so $out/modules
+
+    runHook postInstall
   '';
 
   meta = with lib; {

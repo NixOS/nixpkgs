@@ -15,8 +15,12 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = "-mavx";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/obs-plugins/
     mv liblooking-glass-obs.so $out/lib/obs-plugins/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

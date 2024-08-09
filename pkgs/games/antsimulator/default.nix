@@ -26,8 +26,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 -t $out/opt/antsimulator res/*
     install -Dm755 ./AntSimulator $out/bin/antsimulator
+
+    runHook postInstall
   '';
 
   meta = with lib; {

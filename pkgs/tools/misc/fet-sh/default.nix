@@ -16,7 +16,11 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -D fet.sh $out/bin/fet.sh
+
+    runHook postInstall
   '';
 
   meta = with lib; {

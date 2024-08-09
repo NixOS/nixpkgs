@@ -12,8 +12,12 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     cp $src $out/share/autosort.py
+
+    runHook postInstall
   '';
 
   passthru = {

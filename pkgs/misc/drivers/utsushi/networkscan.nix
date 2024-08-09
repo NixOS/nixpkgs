@@ -16,12 +16,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ rpmextract ];
 
   installPhase = ''
+    runHook preInstall
+
     rpmextract plugins/imagescan-plugin-networkscan-${version}-*.x86_64.rpm
     install -Dm755 usr/libexec/utsushi/networkscan $out/libexec/utsushi/networkscan
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --set-rpath ${lib.makeLibraryPath [ stdenv.cc.cc ]} \
       $out/libexec/utsushi/networkscan
+
+    runHook postInstall
   '';
 
   meta = with lib; {

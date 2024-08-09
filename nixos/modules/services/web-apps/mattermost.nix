@@ -32,8 +32,12 @@ let
     map (plugin: stdenv.mkDerivation {
       name = "mattermost-plugin";
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/share
         cp ${plugin} $out/share/plugin.tar.gz
+
+        runHook postInstall
       '';
       dontUnpack = true;
       dontPatch = true;
@@ -53,6 +57,8 @@ let
         cfg.package
       ];
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/data/plugins
         plugins=(${escapeShellArgs (map (plugin: "${plugin}/share/plugin.tar.gz") mattermostPluginDerivations)})
         for plugin in "''${plugins[@]}"; do
@@ -63,6 +69,8 @@ let
           GZIP_OPT=-9 tar -C "$hash" -cvzf "$out/data/plugins/$hash.tar.gz" .
           rm -rf "$hash"
         done
+
+        runHook postInstall
       '';
 
       dontUnpack = true;

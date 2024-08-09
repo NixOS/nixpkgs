@@ -39,6 +39,8 @@ stdenv.mkDerivation {
   makeFlags = ["-B"];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib
     install -m 0755 bin/urn.lua $out/bin/urn
     cp -r lib $out/lib/urn
@@ -47,6 +49,8 @@ stdenv.mkDerivation {
       --add-flags "${concatMapStringsSep " " (x: "-i ${x.libraryPath}") extraLibraries}" \
       --prefix PATH : ${urn-rt}/bin/ \
       --prefix LD_LIBRARY_PATH : ${urn-rt}/lib/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -14,11 +14,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,core,modules,lib}
     mv bin core modules lib share $out/
 
     wrapProgram $out/bin/terranix-doc-json \
       --prefix PATH : ${lib.makeBinPath [ jq nix ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

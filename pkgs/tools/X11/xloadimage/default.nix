@@ -61,12 +61,16 @@ stdenv.mkDerivation rec {
   # NOTE: we're not installing the `uufilter` binary; if needed, the standard
   # `uudecode` tool should work just fine.
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 xloadimage $out/bin/xloadimage
     ln -sv $out/bin/{xloadimage,xsetbg}
 
     install -D -m644 xloadimagerc $out/etc/xloadimagerc.example
     install -D -m644 xloadimage.man $out/share/man/man1/xloadimage.1x
     ln -sv $out/share/man/man1/{xloadimage,xsetbg}.1x
+
+    runHook postInstall
   '';
 
   meta = {

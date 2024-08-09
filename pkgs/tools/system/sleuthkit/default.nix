@@ -44,12 +44,16 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -m 755 -p $out/bindings/java
       cp -r bindings/java/lib $out/bindings/java
       mkdir -m 755 -p $out/case-uco/java
       cp -r case-uco/java/lib $out/case-uco/java
       cp -r $IVY_HOME/lib $out
       chmod -R 755 $out/lib
+
+      runHook postInstall
     '';
 
     outputHashMode = "recursive";

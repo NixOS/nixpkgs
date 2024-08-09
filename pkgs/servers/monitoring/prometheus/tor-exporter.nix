@@ -17,8 +17,12 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [ prometheus-client stem retrying ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/
     cp prometheus-tor-exporter.py $out/share/
+
+    runHook postInstall
   '';
 
   fixupPhase = ''

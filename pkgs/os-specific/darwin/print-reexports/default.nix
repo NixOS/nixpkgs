@@ -11,8 +11,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv print-reexports $out/bin
+
+    runHook postInstall
   '';
   meta.mainProgram = "print-reexports";
 }

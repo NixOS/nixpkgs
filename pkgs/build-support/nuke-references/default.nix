@@ -21,9 +21,13 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     substituteAll ${./nuke-refs.sh} $out/bin/nuke-refs
     chmod a+x $out/bin/nuke-refs
+
+    runHook postInstall
   '';
 
   postFixup = lib.optionalString darwinCodeSign ''

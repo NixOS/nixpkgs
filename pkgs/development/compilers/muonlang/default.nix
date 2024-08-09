@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     makeWrapper $out/bin/mu-unwrapped $out/bin/mu \
       --add-flags $out/share/mu/lib/core.mu
+
+    runHook postInstall
   '';
 
   meta = with lib; {

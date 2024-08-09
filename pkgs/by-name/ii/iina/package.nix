@@ -20,9 +20,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   sourceRoot = "IINA.app";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,Applications/IINA.app}
     cp -R . "$out/Applications/IINA.app"
     ln -s "$out/Applications/IINA.app/Contents/MacOS/iina-cli" "$out/bin/iina"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };

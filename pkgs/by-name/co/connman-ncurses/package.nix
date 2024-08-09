@@ -27,8 +27,12 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp -va connman_ncurses "$out/bin/"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     dpkg-deb -x $src $out
     substituteInPlace $out/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw \
       --replace /opt "$out/opt"
@@ -76,7 +78,9 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" ${ lib.makeBinPath [ coreutils gnused gawk ] }
     wrapProgram $out/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw \
       --prefix PATH ":" ${ lib.makeBinPath [ coreutils gnused file ghostscript a2ps ] }
-    '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description  = "Brother MFC-J6510DW LPR driver";

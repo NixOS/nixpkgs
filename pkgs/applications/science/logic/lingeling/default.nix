@@ -28,12 +28,16 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $lib/lib $dev/include
 
     cp lglib.h  $dev/include
     cp liblgl.a $lib/lib
 
     cp lingeling plingeling treengeling ilingeling blimc $out/bin
+
+    runHook postInstall
   '';
 
   outputs = [ "out" "dev" "lib" ];

@@ -21,6 +21,8 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     # install lpr
     dpkg-deb -x ${lprdeb} $out
 
@@ -51,7 +53,9 @@ stdenv.mkDerivation {
 
     wrapProgram $out/opt/brother/Printers/HL1210W/cupswrapper/brother_lpdwrapper_HL1210W \
       --prefix PATH ":" ${ lib.makeBinPath [ gnused coreutils gawk ] }
-    '';
+
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "http://www.brother.com/";

@@ -15,9 +15,13 @@ stdenv.mkDerivation {
   buildInputs = [ boost ladspaH lilv lv2 serd sord sratom ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp plugin-torture $out/bin/
     cp find-safe-plugins $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

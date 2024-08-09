@@ -90,6 +90,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     (
       cd lgmon3
       make install
@@ -127,6 +129,8 @@ stdenv.mkDerivation {
 
     mkdir -p $out/share/cups/model
     cp ppd/*.ppd $out/share/cups/model
+
+    runHook postInstall
   '';
 
   meta = with lib; {

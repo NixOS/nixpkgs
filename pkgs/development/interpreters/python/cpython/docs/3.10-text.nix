@@ -11,8 +11,12 @@ stdenv.mkDerivation {
     sha256 = "1zbmm2fvdjnl214y41yffyqw3ywfai5r5npc00n1wkfxsdp7gcc3";
   };
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/doc/python310
     cp -R ./ $out/share/doc/python310/text
+
+    runHook postInstall
   '';
   meta = {
     maintainers = [ ];

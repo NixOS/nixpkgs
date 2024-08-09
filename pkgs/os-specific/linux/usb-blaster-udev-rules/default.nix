@@ -7,7 +7,11 @@ stdenvNoCC.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 644 "${udevRules}" "$out/lib/udev/rules.d/51-usbblaster.rules"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -44,6 +44,8 @@ buildDotnetModule rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     pkg="$out/lib/dotnet/microsoft.net.compilers.toolset/${version}"
     mkdir -p "$out/bin" "$pkg"
 
@@ -56,6 +58,8 @@ buildDotnetModule rec {
       --add-flags "$pkg/tasks/net472/csc.exe"
     makeWrapper ${mono}/bin/mono $out/bin/vbc \
       --add-flags "$pkg/tasks/net472/vbc.exe"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

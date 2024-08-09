@@ -15,8 +15,12 @@ stdenv.mkDerivation {
   buildInputs = [ libusb1 ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ltwheelconf $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

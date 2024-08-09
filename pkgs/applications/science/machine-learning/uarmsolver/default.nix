@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/bin uARMSolver
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -46,8 +46,12 @@ stdenv.mkDerivation rec {
   unpackCmd = "dpkg -x $curSrc source";
 
   installPhase = ''
+    runHook preInstall
+
     mv usr $out
- '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "ToneLib NoiseReducer – two-unit noise reduction rack effect plugin";

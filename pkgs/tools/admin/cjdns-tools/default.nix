@@ -27,6 +27,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cat ${./wrapper.sh} | sed "s|@@out@@|$out|g" > $out/bin/cjdns-tools
     chmod +x $out/bin/cjdns-tools
@@ -34,6 +36,8 @@ stdenv.mkDerivation {
     cp -r tools $out/tools
     find $out/tools -maxdepth 1 -type f -exec chmod -v a+x {} \;
     cp -r node_modules $out/node_modules
+
+    runHook postInstall
   '';
 
   meta = with lib; {

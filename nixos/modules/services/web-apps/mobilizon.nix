@@ -26,6 +26,8 @@ let
     dontBuild = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
 
       makeWrapper \
@@ -41,6 +43,8 @@ let
         --run '. ${secretEnvFile}' \
         --set MOBILIZON_CONFIG_PATH "${configFile}" \
         --set-default RELEASE_TMP "/tmp"
+
+      runHook postInstall
     '';
   };
 

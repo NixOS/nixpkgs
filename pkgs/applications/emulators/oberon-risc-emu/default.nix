@@ -14,8 +14,12 @@ stdenv.mkDerivation {
   buildInputs = [ SDL2 ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv risc $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

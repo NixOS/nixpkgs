@@ -17,6 +17,8 @@ in stdenv.mkDerivation {
   };
   buildInputs = [ gems ruby ];
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share}
     cp tree-from-tags.rb $out/share/
     bin=$out/bin/tree-from-tags
@@ -26,6 +28,8 @@ in stdenv.mkDerivation {
 exec ${gems}/bin/bundle exec ${ruby}/bin/ruby "$out"/share/tree-from-tags.rb "\$@"
 EOF
     chmod +x $bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

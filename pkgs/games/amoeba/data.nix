@@ -10,8 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/amoeba
     cp demo.dat $out/share/amoeba/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

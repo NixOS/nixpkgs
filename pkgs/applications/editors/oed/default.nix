@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -Dt $out/bin ed
     install -m644 -Dt $out/share/man/man1 ed.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

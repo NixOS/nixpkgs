@@ -23,12 +23,16 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
+      runHook preInstall
+
       o=$out/sgml/dtd/docbook-3.1
       mkdir -p $o
       cd $o
       unzip ${src}
       unzip ${isoents}
       sed -e "s/iso-/ISO/" -e "s/.gml//" -i docbook.cat
+
+      runHook postInstall
     '';
 
   meta = {

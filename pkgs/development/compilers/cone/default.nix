@@ -28,8 +28,12 @@ llvmPackages.stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 conec $out/bin/conec
     install -Dm644 libconestd.a $out/lib/libconestd.a
+
+    runHook postInstall
   '';
 
   meta = with lib; {

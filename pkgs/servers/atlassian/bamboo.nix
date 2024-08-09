@@ -24,8 +24,12 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -rva . $out
     patchShebangs $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

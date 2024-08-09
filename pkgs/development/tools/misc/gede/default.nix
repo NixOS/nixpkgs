@@ -20,9 +20,13 @@ mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     python build.py install --verbose --prefix="$out"
     wrapProgram $out/bin/gede \
       --prefix PATH : ${lib.makeBinPath [ ctags gdb ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

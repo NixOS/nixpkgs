@@ -17,10 +17,14 @@ gccStdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     if [[ "$(uname)" == "Darwin" ]]; then
       mv mslink.exe mslink
     fi
     install -D mslink $out/bin/mslink
+
+    runHook postInstall
   '';
 
   meta = with lib; {

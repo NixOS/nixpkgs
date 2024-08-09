@@ -12,12 +12,16 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     substituteInPlace font-size \
       --replace "xrdb -merge" "${xrdb}/bin/xrdb -merge" \
       --replace "xlsfonts" "${xlsfonts}/bin/xlsfonts"
 
     mkdir -p $out/lib/urxvt/perl
     cp font-size $out/lib/urxvt/perl
+
+    runHook postInstall
   '';
 
   meta = with lib; {

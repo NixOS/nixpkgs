@@ -15,10 +15,14 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec/quantomatic
     cp $src $out/libexec/quantomatic/quantomatic.jar
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/quantomatic --add-flags "-jar $out/libexec/quantomatic/quantomatic.jar"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

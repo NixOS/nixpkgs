@@ -48,10 +48,14 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/lib/hol_light" "$out/bin"
     cp -a  . $out/lib/hol_light
     echo "${start_script}" > "$out/bin/hol_light"
     chmod a+x "$out/bin/hol_light"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

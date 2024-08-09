@@ -34,8 +34,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp PosteRazor $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

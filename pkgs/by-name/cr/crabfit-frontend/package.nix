@@ -99,12 +99,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -R .next/* $out
     cp -R public $out/standalone/
     cp -R .next/static $out/standalone/.next
 
     ln -s /var/cache/crabfit $out/standalone/.next/cache
+
+    runHook postInstall
   '';
 
   passthru.tests = [ nixosTests.crabfit ];

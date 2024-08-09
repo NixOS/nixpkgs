@@ -20,12 +20,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses glibc ];
 
   installPhase = ''
+  runHook preInstall
+
   mkdir -p $out/bin
   cp statserial $out/bin
 
   mkdir -p $out/share/man/man1
   cp statserial.1 $out/share/man/man1
-  '';
+
+  runHook postInstall
+'';
 
   meta = with lib; {
     homepage = "https://sites.google.com/site/tranter/software";

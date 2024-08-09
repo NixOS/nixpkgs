@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   dontFixup = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/udev/rules.d
     cp dist/linux64/50-oryx.rules $out/lib/udev/rules.d/
     cp dist/linux64/50-wally.rules $out/lib/udev/rules.d/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -14,9 +14,13 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp latexrun $out/bin/latexrun
     chmod +x $out/bin/latexrun
+
+    runHook postInstall
   '';
 
   meta = with lib; {

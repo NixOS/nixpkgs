@@ -15,8 +15,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/cups/model/Kyocera
     cp ${region}/English/*.PPD $out/share/cups/model/Kyocera/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

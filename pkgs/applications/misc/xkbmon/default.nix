@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
-  installPhase = "install -D -t $out/bin xkbmon";
+  installPhase = "runHook preInstall; install -D -t $out/bin xkbmon; runHook postInstall";
 
   meta = with lib; {
     homepage = "https://github.com/xkbmon/xkbmon";

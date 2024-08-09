@@ -15,8 +15,12 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
+      runHook preInstall
+
       install -Dm555 -t $out/bin/ smem smemcap
       install -Dm444 -t $out/share/man/man8/ smem.8
+
+      runHook postInstall
     '';
 
   meta = {

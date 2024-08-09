@@ -22,8 +22,12 @@ stdenv.mkDerivation rec {
     ++ (with perlPackages; [ JSON perl ]);
 
   installPhase = ''
+    runHook preInstall
+
     make PREFIX=$out
     make PREFIX=$out install
+
+    runHook postInstall
   '';
 
   postFixup = ''

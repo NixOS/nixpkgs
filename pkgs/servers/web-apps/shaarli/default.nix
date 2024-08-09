@@ -44,11 +44,15 @@ stdenv.mkDerivation rec {
 #      */ ?>
 
   installPhase = ''
+    runHook preInstall
+
     rm -r {cache,pagecache,tmp,data}/
     mkdir -p $doc/share/doc
     mv doc/ $doc/share/doc/shaarli
     mkdir $out/
     cp -R ./* $out
+
+    runHook postInstall
   '';
 
   meta = with lib; {

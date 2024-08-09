@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp dadadodo $out/bin
+
+    runHook postInstall
   '';
 
   hardeningDisable = [ "format" ];

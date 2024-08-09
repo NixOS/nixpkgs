@@ -12,10 +12,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     rm bin/sshoogr.bat
     cp -r . $out
     wrapProgram $out/bin/sshoogr \
       --prefix JAVA_HOME : ${jdk}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

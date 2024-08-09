@@ -203,8 +203,12 @@ stdenv.mkDerivation (rec {
 
   # manually install lldb man page
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/man/man1
     install docs/man/lldb.1 -t $out/share/man/man1/
+
+    runHook postInstall
   '';
 
   postPatch = null;

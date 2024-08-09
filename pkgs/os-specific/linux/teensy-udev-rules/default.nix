@@ -12,9 +12,13 @@ stdenv.mkDerivation {
   runtimeDeps = [ coreutils ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D $src $out/etc/udev/rules.d/70-teensy.rules
     substituteInPlace $out/etc/udev/rules.d/70-teensy.rules \
       --replace "/bin/stty" "${coreutils}/bin/stty"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

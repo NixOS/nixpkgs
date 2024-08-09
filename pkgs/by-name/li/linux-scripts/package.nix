@@ -50,8 +50,12 @@ stdenvNoCC.mkDerivation
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     ${toWrapScriptLines "extract-ikconfig"}
     ${toWrapScriptLines "extract-vmlinux"}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

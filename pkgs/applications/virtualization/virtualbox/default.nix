@@ -204,6 +204,8 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     libexec="$out/libexec/virtualbox"
     share="${if enableHardening then "$out/share/virtualbox" else "$libexec"}"
 
@@ -253,6 +255,8 @@ in stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/share/virtualbox"
     cp -rv src/VBox/Main/UnattendedTemplates "$out/share/virtualbox"
     ln -s "${finalAttrs.virtualboxGuestAdditionsIso}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
+
+    runHook postInstall
   '';
 
   preFixup = optionalString (!headless) ''

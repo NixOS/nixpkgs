@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 usrbin/gitstatusd $out/bin/gitstatusd
     install -Dm444 gitstatus.plugin.sh -t $out/share/gitstatus/
     install -Dm444 gitstatus.plugin.zsh -t $out/share/gitstatus/
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
     # because the FHS directories don't start at /
     substituteInPlace install \
       --replace "_gitstatus_install_main ." "_gitstatus_install_main $out"
+
+    runHook postInstall
   '';
 
   # Don't install the "install" and "build.info" files, which the end user

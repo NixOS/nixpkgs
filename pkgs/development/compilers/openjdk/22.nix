@@ -189,6 +189,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = [ "images" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
 
     mv build/*/images/jdk $out/lib/openjdk
@@ -214,6 +216,8 @@ stdenv.mkDerivation (finalAttrs: {
     ''}
 
     ln -s $out/lib/openjdk/bin $out/bin
+
+    runHook postInstall
   '';
 
   preFixup = ''

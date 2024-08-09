@@ -23,8 +23,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man1
     make install PREFIX=$out MANDIR=$out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {

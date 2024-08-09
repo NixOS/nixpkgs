@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include
     cp mustache.hpp $out/include
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -77,10 +77,14 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out/lib/electron-fiddle/resources"
       cp "out/Electron Fiddle-"*/resources/app.asar "$out/lib/electron-fiddle/resources/"
       mkdir -p "$out/share/icons/hicolor/scalable/apps"
       cp assets/icons/fiddle.svg "$out/share/icons/hicolor/scalable/apps/electron-fiddle.svg"
+
+      runHook postInstall
     '';
   };
 

@@ -18,9 +18,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0555 src/wsdd.py $out/bin/wsdd
     installManPage man/wsdd.8
     wrapProgram $out/bin/wsdd --prefix PYTHONPATH : "$PYTHONPATH"
+
+    runHook postInstall
   '';
 
   passthru = {

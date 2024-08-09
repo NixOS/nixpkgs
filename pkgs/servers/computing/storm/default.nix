@@ -19,6 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ zip unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/${finalAttrs.name}
     mv public $out/docs
     mv examples $out/share/${finalAttrs.name}/.
@@ -26,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv external extlib* lib $out/.
     mv conf bin $out/.
     mv log4j2 $out/conf/.
+
+    runHook postInstall
   '';
 
   fixupPhase = ''

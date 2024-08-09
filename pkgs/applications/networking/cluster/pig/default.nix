@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     mv * $out
 
@@ -24,6 +26,8 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${lib.makeBinPath [ jre bash ]}" \
         --set JAVA_HOME "${jre}" --set HADOOP_PREFIX "${hadoop}"
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

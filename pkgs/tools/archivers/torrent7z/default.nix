@@ -37,8 +37,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ../../../../bin/t7z $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -15,8 +15,12 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/${pname}
     cp *.zsh $out/share/${pname}/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -22,11 +22,15 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec/platypus
     cp -r ./* $out/libexec/platypus
 
     mkdir -p $out/bin
     makeWrapper ${python}/bin/python $out/bin/platypus --add-flags "$out/libexec/platypus/bin/Platypus.py"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

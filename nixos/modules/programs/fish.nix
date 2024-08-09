@@ -252,8 +252,12 @@ in
             patches = [ ./fish_completion-generator.patch ]; # to prevent collisions of identical completion files
             dontBuild = true;
             installPhase = ''
+              runHook preInstall
+
               mkdir -p $out
               cp * $out/
+
+              runHook postInstall
             '';
             preferLocalBuild = true;
             allowSubstitutes = false;

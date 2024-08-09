@@ -21,9 +21,13 @@ stdenv.mkDerivation {
       '';
 
   installPhase = ''
+     runHook preInstall
+
      mkdir -p $dev/include/OpenFX/
      cp -r include/* $dev/include/OpenFX/
-  '';
+
+     runHook postInstall
+   '';
 
   meta = with lib; {
     description = "Image processing plug-in standard";

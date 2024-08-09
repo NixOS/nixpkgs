@@ -19,10 +19,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r * $out/
     ln -s $out/lib $out/include
     ln -s $out/gnulib-tool $out/bin/
+
+    runHook postInstall
   '';
 
   # do not change headers to not update all vendored build files

@@ -23,7 +23,11 @@ python3.pkgs.buildPythonApplication {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     install -D -T -m 755 src/pdf_quench.py $out/bin/pdf-quench
+
+    runHook postInstall
   '';
 
   meta = with lib; {

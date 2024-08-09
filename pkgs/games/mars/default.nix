@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libGLU libGL sfml fribidi taglib ];
   installPhase = ''
+    runHook preInstall
+
     cd ..
     mkdir -p "$out/share/mars/"
     mkdir -p "$out/bin/"
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
     exec "$out/bin/mars.bin" "\$@"
     EOF
     chmod +x "$out/bin/mars"
+
+    runHook postInstall
   '';
   meta = with lib; {
     homepage = "https://mars-game.sourceforge.net/";

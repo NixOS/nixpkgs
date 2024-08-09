@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -R usr/* $out/
     ln -sf ${luajit_lua52}/bin/luajit $out/lib/koreader/luajit
@@ -59,6 +61,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [ gtk3-x11 SDL2 glib stdenv.cc.cc.lib ]
     }
+
+    runHook postInstall
   '';
 
   meta = with lib; {

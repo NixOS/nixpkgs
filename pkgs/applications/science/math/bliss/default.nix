@@ -21,11 +21,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/doc/bliss $out/lib $out/include/bliss
     mv bliss $out/bin
     mv html/* COPYING* $out/share/doc/bliss
     mv *.a $out/lib
     mv *.h *.hh $out/include/bliss
+
+    runHook postInstall
   '';
 
   meta = with lib; {

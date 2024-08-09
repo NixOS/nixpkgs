@@ -14,7 +14,11 @@ stdenv.mkDerivation {
   ]);
   dontStrip = debug;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     $CC $CFLAGS ${./wrapper.c} -I${unsecvars} -o $out/bin/security-wrapper
+
+    runHook postInstall
   '';
 }

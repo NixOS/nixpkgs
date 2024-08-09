@@ -12,7 +12,11 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     make PREFIX=$out install
+
+    runHook postInstall
   '';
 
   outputs = [ "out" "man" ];

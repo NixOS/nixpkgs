@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lm";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp airstrike $out/bin
 
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/airstrike \
       --chdir "$out/share"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

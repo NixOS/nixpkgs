@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   buildFlags = [ "PREFIX=${placeholder "out"}" "CFG=release" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 bin.release/klystrack $out/bin/klystrack
 
     mkdir -p $out/lib/klystrack
@@ -46,6 +48,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     substitute linux/klystrack.desktop $out/share/applications/klystrack.desktop \
       --replace "klystrack %f" "$out/bin/klystrack %f"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

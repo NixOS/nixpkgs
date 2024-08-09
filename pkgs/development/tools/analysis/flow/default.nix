@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "FLOW_RELEASE=1" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 bin/flow $out/bin/flow
     install -Dm644 resources/shell/bash-completion $out/share/bash-completion/completions/flow
+
+    runHook postInstall
   '';
 
   strictDeps = true;

@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     lpr=${mfc5890cnlpr}/usr/local/Brother/Printer/mfc5890cn
     dir=$out/usr/local/Brother/Printer/mfc5890cn
 
@@ -62,7 +64,9 @@ stdenv.mkDerivation rec {
     ln $out/usr/lib64/cups/filter/brlpdwrappermfc5890cn $out/lib/cups/filter
     ln $dir/cupswrapper/cupswrappermfc5890cn $out/lib/cups/filter
     ln $out/usr/share/ppd/brmfc5890cn.ppd $out/share/cups/model
-    '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Brother MFC-5890CN CUPS wrapper driver";

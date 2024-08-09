@@ -40,9 +40,13 @@ stdenv.mkDerivation rec {
   dontFixup = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ${src} $out/bin/tailwindcss
     chmod 755 $out/bin/tailwindcss
+
+    runHook postInstall
   '';
 
   passthru.tests.helptext = runCommand "tailwindcss-test-helptext" { } ''

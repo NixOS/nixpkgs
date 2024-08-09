@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_LINK = "-lzopfli";
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin apngasm
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

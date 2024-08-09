@@ -141,6 +141,8 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp $TMP/ya/{usr/share,opt} $out/ -R
     cp $out/share/applications/yandex-browser${app}.desktop $out/share/applications/${pname}.desktop || true
     rm -f $out/share/applications/yandex-browser.desktop
@@ -149,6 +151,8 @@ in stdenv.mkDerivation rec {
     substituteInPlace $out/share/gnome-control-center/default-apps/yandex-browser${app}.xml --replace /opt/ $out/opt/
     ln -sf ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so $out/opt/yandex/browser${app}/libffmpeg.so
     ln -sf $out/opt/yandex/browser${app}/yandex-browser${app} $out/bin/${pname}
+
+    runHook postInstall
   '';
 
   runtimeDependencies = map lib.getLib [

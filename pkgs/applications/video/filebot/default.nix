@@ -30,6 +30,8 @@ in stdenv.mkDerivation (finalAttrs: {
 
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/opt $out/bin
     # Since FileBot has dependencies on relative paths between files, all required files are copied to the same location as is.
     cp -r filebot.sh lib/ jar/ $out/opt/
@@ -42,6 +44,8 @@ in stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
     # Expose the binary in bin to make runnable.
     ln -s $out/opt/filebot.sh $out/bin/filebot
+
+    runHook postInstall
   '';
 
   passthru.updateScript = genericUpdater {

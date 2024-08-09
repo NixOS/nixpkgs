@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/graphs"
     cp * "$out/share/graphs/"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

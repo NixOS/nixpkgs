@@ -40,8 +40,12 @@ resholve.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp wsl-vpnkit $out/bin
+
+    runHook postInstall
   '';
 
   solutions.wsl-vpnkit = {

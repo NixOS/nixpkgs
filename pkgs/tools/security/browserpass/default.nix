@@ -48,6 +48,8 @@ buildGoModule rec {
   checkTarget = "test";
 
   installPhase = ''
+    runHook preInstall
+
     make install
 
     wrapProgram $out/bin/browserpass \
@@ -57,6 +59,8 @@ buildGoModule rec {
     mkdir -p $out/lib/mozilla/native-messaging-hosts
     # Copy ff manifests rather than linking to allow link-farming to work recursively in dependants
     cp $out/lib/browserpass/hosts/firefox/*.json $out/lib/mozilla/native-messaging-hosts/
+
+    runHook postInstall
   '';
 
   passthru.tests.version = testers.testVersion {

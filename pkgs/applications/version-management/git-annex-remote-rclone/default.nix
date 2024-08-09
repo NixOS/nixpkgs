@@ -14,9 +14,13 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin git-annex-remote-rclone
     wrapProgram "$out/bin/git-annex-remote-rclone" \
       --prefix PATH ":" "${lib.makeBinPath [ rclone ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

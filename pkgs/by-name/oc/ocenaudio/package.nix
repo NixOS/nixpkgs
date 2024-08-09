@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     dpkg -x $src $out
     cp -av $out/opt/ocenaudio/* $out
@@ -51,6 +53,8 @@ stdenv.mkDerivation rec {
 
     # Create symlink bzip2 library
     ln -s ${bzip2.out}/lib/libbz2.so.1 $out/lib/libbz2.so.1.0
+
+    runHook postInstall
   '';
 
   meta = with lib; {

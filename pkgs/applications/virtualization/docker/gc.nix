@@ -13,11 +13,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp docker-gc $out/bin
     chmod +x $out/bin/docker-gc
     wrapProgram $out/bin/docker-gc \
         --prefix PATH : "${lib.makeBinPath [ docker coreutils procps gnused findutils gnugrep ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

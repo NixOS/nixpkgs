@@ -50,7 +50,11 @@ in buildBazelPackage rec {
 
   buildAttrs = {
     installPhase = ''
+      runHook preInstall
+
       install -D --strip bazel-bin/bant/bant "$out/bin/bant"
+
+      runHook postInstall
     '';
   };
 

@@ -90,10 +90,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/lv2 $out/lib/vst3 $out/bin
     cp -r ChowKick_artefacts/Release/LV2/ChowKick.lv2 $out/lib/lv2
     cp -r ChowKick_artefacts/Release/VST3/ChowKick.vst3 $out/lib/vst3
     cp ChowKick_artefacts/Release/Standalone/ChowKick  $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

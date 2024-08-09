@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   # move to nix-support to not create that many symlinks..
   # TODO burnomat tries to read /usr/local/etc/avrdude.conf (but you can edit it within the settings dialog)
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{nix-support,bin}
     mv *.jar license_gpl-3.0.txt lib *.xml *.png $out/nix-support
     cat >> $out/bin/avr8-burn-omat << EOF
@@ -21,6 +23,8 @@ stdenv.mkDerivation rec {
     cd $out/nix-support; exec java -jar AVR8_Burn_O_Mat.jar
     EOF
     chmod +x $out/bin/avr8-burn-omat
+
+    runHook postInstall
   '';
 
   meta = with lib; {

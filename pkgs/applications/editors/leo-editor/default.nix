@@ -39,6 +39,8 @@ mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/icons/hicolor/32x32/apps"
     cp leo/Icons/leoapp32.png "$out/share/icons/hicolor/32x32/apps"
 
@@ -53,6 +55,8 @@ mkDerivation rec {
       --add-flags "-O $out/share/leo-editor/launchLeo.py"
 
     wrapQtApp $out/bin/leo
+
+    runHook postInstall
   '';
 
   meta = with lib; {

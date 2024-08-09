@@ -16,11 +16,15 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     outdir=$out/share/zsh/${pname}
     install -D zsh-edit.plugin.zsh $outdir/zsh-edit.plugin.zsh
     install -D _bind $outdir/_bind
     install -d $outdir/functions
     install -D functions/{,.edit}* $outdir/functions
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp $src $out/share/java/${pname}.jar
 
     cat > $out/bin/${pname} << EOF
@@ -26,6 +28,8 @@ $jdk/bin/java -jar $out/share/java/${pname}.jar "\$@"
 EOF
 
     chmod +x $out/bin/${pname}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

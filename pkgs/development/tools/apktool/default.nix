@@ -26,11 +26,15 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
+      runHook preInstall
+
       install -D ${src} "$out/libexec/apktool/apktool.jar"
       mkdir -p "$out/bin"
       makeWrapper "${jdk_headless}/bin/java" "$out/bin/apktool" \
           --add-flags "-jar $out/libexec/apktool/apktool.jar" \
           --prefix PATH : ${lib.getBin aapt}
+
+      runHook postInstall
     '';
 
   meta = with lib; {

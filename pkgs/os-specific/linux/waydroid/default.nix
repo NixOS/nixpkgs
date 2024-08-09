@@ -60,7 +60,11 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   installPhase = ''
+    runHook preInstall
+
     make install PREFIX=$out USE_SYSTEMD=0
+
+    runHook postInstall
   '';
 
   preFixup = ''

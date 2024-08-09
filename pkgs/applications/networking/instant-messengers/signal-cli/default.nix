@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r lib $out/lib
     cp bin/signal-cli $out/bin/signal-cli
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
     export PATH=$PATH:$out/bin
     # --help returns non-0 exit code even when working
     signal-cli --version
+
+    runHook postInstall
   '';
 
   meta = with lib; {

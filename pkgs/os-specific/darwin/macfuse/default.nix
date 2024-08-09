@@ -32,10 +32,14 @@ stdenv.mkDerivation rec {
   # NOTE: Keep in mind that different parts of macFUSE are distributed under a
   # different license
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include $out/lib/pkgconfig
     cp usr/local/lib/*.tbd $out/lib
     cp usr/local/lib/pkgconfig/*.pc $out/lib/pkgconfig
     cp -R usr/local/include/* $out/include
+
+    runHook postInstall
   '';
 
   meta = with lib; {

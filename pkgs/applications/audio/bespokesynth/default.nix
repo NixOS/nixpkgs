@@ -52,7 +52,11 @@ let
       sha256 = "0da16iwac590wphz2sm5afrfj42jrsnkr1bxcy93lj7a369ildkj";
     };
     installPhase = ''
+      runHook preInstall
+
       cp -r . $out
+
+      runHook postInstall
     '';
   };
 

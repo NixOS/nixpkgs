@@ -45,6 +45,8 @@ self: super: {
     };
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin $out/share/kak/autoload/plugins/
       cp kak-ansi-filter $out/bin/
       # Hard-code path of filter and don't try to build when Kakoune boots
@@ -53,6 +55,8 @@ self: super: {
 declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
         /^declare-option.* ansi_filter /,/^}/d
       ' rc/ansi.kak >$out/share/kak/autoload/plugins/ansi.kak
+
+      runHook postInstall
     '';
 
     meta = with lib; {
@@ -76,6 +80,8 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
     };
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin $out/share/kak/autoload/plugins/
       substitute rc/plumb.kak $out/share/kak/autoload/plugins/plumb.kak \
         --replace '9 plumb' '${plan9port}/bin/9 plumb'
@@ -83,6 +89,8 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
         --replace '9 9p' '${plan9port}/bin/9 9p' \
         --replace 'kak -p' '${kakoune-unwrapped}/bin/kak -p'
       chmod +x $out/bin/edit-client
+
+      runHook postInstall
     '';
 
     meta = with lib; {
@@ -180,10 +188,14 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
     buildInputs = [ lua5_3 ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/kak/autoload/plugins/
       cp quickscope.* $out/share/kak/autoload/plugins/
       # substituteInPlace does not like the pipe
       sed -e 's,[|] *lua,|${lua5_3}/bin/lua,' quickscope.kak >$out/share/kak/autoload/plugins/quickscope.kak
+
+      runHook postInstall
     '';
 
     meta = with lib; {

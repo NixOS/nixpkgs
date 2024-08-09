@@ -33,6 +33,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/java
     cp *.jar lib/*.jar $out/share/java
     chmod +x $out/share/java/*.jar
@@ -43,6 +45,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         --add-flags "-classpath $classpath" \
         --add-flags "org.apache.batik.apps.$appName.Main"
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

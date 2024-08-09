@@ -30,6 +30,8 @@ in appleDerivation {
       --replace 'DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";' ""
   '';
   installPhase = ''
+    runHook preInstall
+
     install -D Products/Release/libdisk.a $out/lib/libdisk.a
     rm Products/Release/libdisk.a
     for f in Products/Release/*; do
@@ -37,6 +39,8 @@ in appleDerivation {
         install -D $f $out/bin/$(basename $f)
       fi
     done
+
+    runHook postInstall
   '';
 
   meta = {

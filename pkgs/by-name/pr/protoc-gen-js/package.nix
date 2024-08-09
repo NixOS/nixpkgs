@@ -22,8 +22,12 @@ buildBazelPackage rec {
   fetchAttrs.sha256 = "sha256-WOBlZ0XNrl5UxIaSDxZeOfzS2a8ZkrKdTLKHBDC9UNQ=";
 
   buildAttrs.installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -Dm755 bazel-bin/generator/protoc-gen-js $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -60,6 +60,8 @@ in stdenv.mkDerivation {
   hardeningDisable = [ "stackprotector" "fortify" ]; # buffer overflow without this
 
   installPhase = ''
+    runHook preInstall
+
     install -d "$out"/share/games
     cp -r rr_share "$out"/share/games/rrootage
     install -D src/rrootage "$out"/bin/rrootage
@@ -70,6 +72,8 @@ in stdenv.mkDerivation {
     install -D -m 644 readme.txt "$out"/share/doc/rrootage/README.jp
     install -m 644 readme_e.txt "$out"/share/doc/rrootage/README.en
     install -m 644 readme_linux "$out"/share/doc/rrootage/README
+
+    runHook postInstall
   '';
 
   meta = with lib; {

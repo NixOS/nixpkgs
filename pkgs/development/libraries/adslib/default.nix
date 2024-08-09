@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     cp adslib.so $out/lib/adslib.so
+
+    runHook postInstall
   '';
 
   meta = with lib; {

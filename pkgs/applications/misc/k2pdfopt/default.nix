@@ -169,7 +169,11 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lpthread";
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m 755 k2pdfopt $out/bin/k2pdfopt
+
+    runHook postInstall
   '';
 
   preFixup = lib.optionalString enableTesseract ''

@@ -15,10 +15,14 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec/varscan
     cp $src $out/libexec/varscan/varscan.jar
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/varscan --add-flags "-jar $out/libexec/varscan/varscan.jar"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

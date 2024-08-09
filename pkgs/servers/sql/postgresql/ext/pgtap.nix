@@ -22,7 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ postgresql perl perlPackages.TAPParserSourceHandlerpgTAP which ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D {sql/pgtap--${finalAttrs.version}.sql,pgtap.control} -t $out/share/postgresql/extension
+
+    runHook postInstall
   '';
 
   passthru.tests.extension = stdenv.mkDerivation {
@@ -46,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       psql -a -v ON_ERROR_STOP=1 -f $sqlPath
       runHook postCheck
     '';
-    installPhase = "touch $out";
+    installPhase = "runHook preInstall; touch $out; runHook postInstall";
   };
 
   meta = with lib; {

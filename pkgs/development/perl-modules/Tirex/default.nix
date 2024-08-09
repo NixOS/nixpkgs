@@ -47,10 +47,14 @@ buildPerlPackage rec {
   ] ++ mapnik.buildInputs;
 
   installPhase = ''
+    runHook preInstall
+
     install -m 755 -d $out/usr/libexec
     make install DESTDIR=$out INSTALLOPTS=""
     mv $out/$out/lib $out/$out/share $out
     rmdir $out/$out $out/nix/store $out/nix
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };

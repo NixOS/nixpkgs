@@ -87,6 +87,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cd Installer
     # don't restrict PATH, that has already been done
     sed -i -e 's/^PATH=/# PATH=/' MathInstaller
@@ -106,6 +108,8 @@ stdenv.mkDerivation rec {
       line=$(grep -n QT_PLUGIN_PATH $path | sed 's/:.*//')
       sed -i -e "$line iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"" $path
     done
+
+    runHook postInstall
   '';
 
   preFixup = ''

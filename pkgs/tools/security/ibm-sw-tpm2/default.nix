@@ -49,8 +49,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp tpm_server $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

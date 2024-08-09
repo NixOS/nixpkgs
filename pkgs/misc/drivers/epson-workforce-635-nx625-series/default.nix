@@ -46,6 +46,8 @@ in stdenv.mkDerivation rec {
         else if stdenv.system == "i686_linux" then "lib"
         else throw "other platforms than i686_linux and x86_64-linux are not yet supported";
     in ''
+      runHook preInstall
+
       mkdir -p "$out" "${docdir}" "${filterdir}" "${ppddir}"
       cp src/epson_inkjet_printer_filter "${filterdir}"
 
@@ -56,6 +58,8 @@ in stdenv.mkDerivation rec {
       done
       cp COPYING.EPSON README "${docdir}"
       cp -r resource watermark ${libdir} "$out"
+
+      runHook postInstall
     '';
 
   meta = {

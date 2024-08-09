@@ -20,11 +20,15 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/share/dwmbar
     cp -r modules $out/share/dwmbar/
     install -D -t $out/share/dwmbar/ config
     install -D -t $out/share/dwmbar/ bar.sh
     install -Dm755 -t $out/bin/ dwmbar
+
+    runHook postInstall
   '';
 
   meta = with lib; {

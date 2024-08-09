@@ -11,6 +11,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontStrip = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/flyway
     cp -r sql jars drivers conf $out/share/flyway
     install -Dt $out/share/flyway/lib lib/community/*.jar lib/*.jar lib/aad/*.jar lib/oracle_wallet/*.jar
@@ -19,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/drivers/*'" \
       --add-flags "org.flywaydb.commandline.Main" \
       --add-flags "-jarDirs='$out/share/flyway/jars'"
+
+    runHook postInstall
   '';
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };

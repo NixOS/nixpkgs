@@ -25,9 +25,13 @@ stdenv.mkDerivation {
   buildPhase = "make -f makefile linux KFLAGS='-D_IO_file_flags' LNKFLAGS='-lcrypt -lresolv'";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/man/man1
     make -f makefile install
+
+    runHook postInstall
   '';
 
   meta = with lib; {

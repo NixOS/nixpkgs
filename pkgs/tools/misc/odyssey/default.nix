@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DPQ_LIBRARY=${postgresql.lib}/lib" "-DBUILD_COMPRESSION=ON" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin sources/odyssey
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/{doc,themes}/E17gtk
     cp -va index.theme gtk-2.0 gtk-3.0 metacity-1 $out/share/themes/E17gtk/
     cp -va README.md WORKAROUNDS screenshot.jpg $out/share/doc/E17gtk/
+
+    runHook postInstall
   '';
 
   meta = {

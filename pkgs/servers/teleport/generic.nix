@@ -113,8 +113,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -R webassets/. $out
+
+      runHook postInstall
     '';
   };
 in

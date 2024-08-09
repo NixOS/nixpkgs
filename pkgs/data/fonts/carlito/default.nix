@@ -10,10 +10,14 @@ stdenvNoCC.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/etc/fonts/conf.d
     mkdir -p $out/share/fonts/truetype
     cp -v *.ttf $out/share/fonts/truetype
     cp -v ${./calibri-alias.conf} $out/etc/fonts/conf.d/30-calibri.conf
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     replace-literal -f -r -e /etc/postfix /run/discourse-mail-receiver .
@@ -26,6 +28,8 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/receive-mail --set RUBYLIB $out/lib
     wrapProgram $out/bin/discourse-smtp-fast-rejection --set RUBYLIB $out/lib
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -12,7 +12,11 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dpm644 $src $out/lib/udev/rules.d/70-meletrix.rules
+
+    runHook postInstall
   '';
 
   meta = with lib; {

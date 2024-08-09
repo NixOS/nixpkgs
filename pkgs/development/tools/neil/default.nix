@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D neil $out/bin/neil
     wrapProgram $out/bin/neil \
       --prefix PATH : "${lib.makeBinPath [ babashka ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

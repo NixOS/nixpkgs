@@ -16,11 +16,15 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{lib,share/postgresql/extension}
 
     cp *${postgresql.dlSuffix} $out/lib
     cp sql/*.sql $out/share/postgresql/extension
     cp *.control $out/share/postgresql/extension
+
+    runHook postInstall
   '';
 
   meta = with lib; {

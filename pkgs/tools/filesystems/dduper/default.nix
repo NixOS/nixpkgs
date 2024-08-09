@@ -35,8 +35,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m755 ./dduper $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

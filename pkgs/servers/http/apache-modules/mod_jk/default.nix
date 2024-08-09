@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/modules
     cp apache-2.0/mod_jk.so $out/modules
+
+    runHook postInstall
   '';
 
   buildInputs = [ apacheHttpd jdk ];

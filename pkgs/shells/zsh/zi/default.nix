@@ -15,10 +15,14 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r lib zi.zsh $out
     installManPage docs/man/zi.1
     installShellCompletion --zsh lib/_zi
+
+    runHook postInstall
   '';
 
   meta = with lib; {

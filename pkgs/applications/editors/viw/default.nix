@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
   checkFlags = [ "test-command" "test-buffer" "test-state" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 755 -t $out/bin viw
     install -Dm 644 -t $out/share/doc/${pname} README.md
+
+    runHook postInstall
   '';
 
   meta = with lib; {

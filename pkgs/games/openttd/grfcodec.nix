@@ -15,8 +15,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [cmake git];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a grfcodec grfid grfstrip nforenum $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -202,13 +202,17 @@ let
     dontBuild = true;
     dontUnpack = true;
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rake $out/bin/gitlab-rake \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set PATH '${lib.makeBinPath runtimeDeps}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --chdir '${cfg.packages.gitlab}/share/gitlab'
-     '';
+
+      runHook postInstall
+    '';
   };
 
   gitlab-rails = pkgs.stdenv.mkDerivation {
@@ -217,12 +221,16 @@ let
     dontBuild = true;
     dontUnpack = true;
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rails $out/bin/gitlab-rails \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set PATH '${lib.makeBinPath runtimeDeps}:$PATH' \
           --chdir '${cfg.packages.gitlab}/share/gitlab'
-     '';
+
+      runHook postInstall
+    '';
   };
 
   extraGitlabRb = pkgs.writeText "extra-gitlab.rb" cfg.extraGitlabRb;

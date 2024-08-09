@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   sourceRoot = "${src.name}/src";
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 -t $out/bin bully
     install -Dm444 -t $out/share/doc/${pname} ../*.md
+
+    runHook postInstall
   '';
 
   meta = with lib; {

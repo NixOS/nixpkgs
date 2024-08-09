@@ -9,7 +9,11 @@ stdenv.mkDerivation {
   inherit src;
 
   installPhase = ''
+    runHook preInstall
+
     install *.ttf -Dt $out/share/fonts/wine
+
+    runHook postInstall
   '';
 
   meta = {

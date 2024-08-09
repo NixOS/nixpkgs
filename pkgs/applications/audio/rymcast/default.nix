@@ -16,10 +16,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ alsa-lib curl gtk3 stdenv.cc.cc.lib webkitgtk zenity ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp RYMCast "$out/bin/"
     wrapProgram "$out/bin/RYMCast" \
       --set PATH "${lib.makeBinPath [ zenity ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

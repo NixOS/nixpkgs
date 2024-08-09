@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 spasm -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

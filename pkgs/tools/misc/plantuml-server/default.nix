@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/webapps"
     cp "$src" "$out/webapps/plantuml.war"
+
+    runHook postInstall
   '';
 
   passthru.tests = {

@@ -15,9 +15,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp et $out/bin
     cp et-status.sh $out/bin/et-status
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -49,11 +49,15 @@ maven.buildMavenPackage rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D target/${pname}-${version}.jar $out/share/java/${pname}-${version}.jar
 
     makeWrapper ${jre}/bin/java $out/bin/schemaspy \
       --add-flags "-jar $out/share/java/${pname}-${version}.jar" \
       --prefix PATH : "$wrappedPath"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

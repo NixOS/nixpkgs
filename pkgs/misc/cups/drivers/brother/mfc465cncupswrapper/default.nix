@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     lpr=${mfc465cnlpr}/usr/local/Brother/Printer/mfc465cn
     dir=$out/usr/local/Brother/Printer/mfc465cn
     interpreter=${pkgsi686Linux.glibc.out}/lib/ld-linux.so.2
@@ -69,7 +71,9 @@ stdenv.mkDerivation rec {
     sed -n '/!ENDOFWFILTER!/,/!ENDOFWFILTER!/p' "$dir/cupswrapper/cupswrappermfc465cn" | sed '1 br; b; :r s/.*/printer_model=mfc465cn; cat <<!ENDOFWFILTER!/'  | bash > $out/lib/cups/filter/brlpdwrappermfc465cn
     sed -i "/#! \/bin\/sh/a PATH=${lib.makeBinPath [ coreutils gnused gnugrep ]}:\$PATH" $out/lib/cups/filter/brlpdwrappermfc465cn
     chmod 755 $out/lib/cups/filter/brlpdwrappermfc465cn
-    '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Brother MFC-465CN CUPS wrapper driver";

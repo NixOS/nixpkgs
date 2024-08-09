@@ -21,8 +21,12 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fluidd
     cp -r fluidd $out/share/fluidd/htdocs
+
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) fluidd; };

@@ -23,8 +23,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       install -Dm644 soldat.smod -t $out/share/soldat
       install -Dm644 client/play-regular.ttf -t $out/share/soldat
+
+      runHook postInstall
     '';
 
     meta = with lib; {

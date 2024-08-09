@@ -23,11 +23,15 @@ stdenv.mkDerivation rec {
       binPath = lib.makeBinPath [ jre ];
     in
     ''
+      runHook preInstall
+
       install -D $src_alda $out/bin/alda
       install -D $src_player $out/bin/alda-player
 
       wrapProgram $out/bin/alda --prefix PATH : $out/bin:${binPath}
       wrapProgram $out/bin/alda-player --prefix PATH : $out/bin:${binPath}
+
+      runHook postInstall
     '';
 
   meta = with lib; {

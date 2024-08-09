@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/portfolio
     cp -av ./* $out/portfolio
 
@@ -63,6 +65,8 @@ stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     ln -s $out/portfolio/icon.xpm $out/share/pixmaps/portfolio.xpm
+
+    runHook postInstall
   '';
 
   passthru.updateScript = gitUpdater { url = "https://github.com/buchen/portfolio.git"; };

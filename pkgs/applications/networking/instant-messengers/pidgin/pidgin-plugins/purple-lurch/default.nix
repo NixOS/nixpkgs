@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/lib/purple-2 build/lurch.so
+
+    runHook postInstall
   '';
 
   meta = with lib; {

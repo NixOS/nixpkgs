@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/themes
     cp -a Shades-of-gray* $out/share/themes/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

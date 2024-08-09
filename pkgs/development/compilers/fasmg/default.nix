@@ -42,10 +42,14 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 fasmg $out/bin/fasmg
 
     mkdir -p $doc/share/doc/fasmg
     cp docs/*.txt $doc/share/doc/fasmg
+
+    runHook postInstall
   '';
 
   meta = with lib; {

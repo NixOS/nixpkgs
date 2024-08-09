@@ -40,11 +40,15 @@ maven.buildMavenPackage rec {
   preConfigure = defineMvnWrapper;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/lib/java" "$out/share/java"
     cp tool/target/gp.jar "$out/share/java"
     makeWrapper "${jre8_headless}/bin/java" "$out/bin/gp" \
       --add-flags "-jar '$out/share/java/gp.jar'" \
       --prefix LD_LIBRARY_PATH : "${lib.getLib pcsclite}/lib"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

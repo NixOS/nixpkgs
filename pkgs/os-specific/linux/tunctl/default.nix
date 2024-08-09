@@ -11,8 +11,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "tunctl" ];
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp tunctl $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

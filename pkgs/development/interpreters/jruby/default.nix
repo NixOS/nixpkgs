@@ -16,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv $out/share/jruby/docs
     mv * $out
     rm $out/bin/*.{bat,dll,exe,sh}
@@ -39,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
 
       addEnvHooks "$hostOffset" addGemPath
     EOF
+
+    runHook postInstall
   '';
 
   postFixup = ''

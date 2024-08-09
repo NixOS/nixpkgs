@@ -29,8 +29,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -R public $out
+
+      runHook postInstall
     '';
 
     npmDepsHash = "sha256-Sy321tIQOOrypk+EOGGixEzrPdhA9U8Hak+DOS+d00A=";

@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   makefile = "Makefile.ldc";
 
   installPhase = ''
+    runHook preInstall
+
     for exe in {ccutter,ct2util}; do
       install -D $exe $out/bin/$exe
     done
@@ -41,6 +43,8 @@ stdenv.mkDerivation rec {
     for res in $(ls icons | sed -e 's/cc//g' -e 's/.png//g'); do
       install -Dm444 icons/cc$res.png $out/share/icons/hicolor/''${res}x''${res}/apps/cheesecutter.png
     done
+
+    runHook postInstall
   '';
 
   postFixup =

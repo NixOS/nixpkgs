@@ -14,11 +14,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     cp $src $out/lib/JMusicBot
 
     makeWrapper ${jre_headless}/bin/java $out/bin/JMusicBot \
       --add-flags "-Xmx1G -Dnogui=true -Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -jar $out/lib/JMusicBot"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

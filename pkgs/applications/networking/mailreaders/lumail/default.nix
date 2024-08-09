@@ -55,6 +55,8 @@ stdenv.mkDerivation {
   buildFlags = lib.optional debugBuild "lumail2-debug";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin || true
     install -m755 ${binaryName} $out/bin/
   ''
@@ -63,6 +65,8 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/${binaryName} \
         --prefix LUA_PATH : "${luaPath}" \
         --prefix LUA_CPATH : "${luaCPath}"
+
+    runHook postInstall
   '';
 
   makeFlags = [

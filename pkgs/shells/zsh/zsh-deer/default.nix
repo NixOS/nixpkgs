@@ -21,8 +21,12 @@ stdenv.mkDerivation rec {
   patches = [ ./realpath.patch ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/zsh/site-functions/
     cp deer $out/share/zsh/site-functions/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

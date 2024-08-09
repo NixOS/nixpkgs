@@ -19,11 +19,15 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
+      runHook preInstall
+
       mkdir -p $out/sbin
       cp vconfig $out/sbin/
 
       mkdir -p $out/share/man/man8
       cp vconfig.8 $out/share/man/man8/
+
+      runHook postInstall
     '';
 
   meta = with lib; {

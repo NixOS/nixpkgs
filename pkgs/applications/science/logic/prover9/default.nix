@@ -27,8 +27,12 @@ stdenv.mkDerivation {
   checkPhase = "make test1";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/* $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

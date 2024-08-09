@@ -33,12 +33,16 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ stdenv.cc.cc zlib krb5 ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/${pname}-${version}}
     cp -r * $out/share/${pname}-${version}
 
     makeWrapper $out/share/${pname}-${version}/Ombi $out/bin/Ombi \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl icu ]} \
       --chdir "$out/share/${pname}-${version}"
+
+    runHook postInstall
   '';
 
   passthru = {

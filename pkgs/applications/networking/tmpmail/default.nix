@@ -18,10 +18,14 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -Dm755 -t $out/bin tmpmail
     installManPage tmpmail.1
     wrapProgram $out/bin/tmpmail --prefix PATH : ${lib.makeBinPath [ w3m curl jq xclip ]}
+
+    runHook postInstall
   '';
 
    meta = with lib; {

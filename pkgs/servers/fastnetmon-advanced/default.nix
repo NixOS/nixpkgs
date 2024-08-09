@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec/fastnetmon
     cp -r opt/fastnetmon/app/bin $out/bin
     cp -r opt/fastnetmon/libraries $out/libexec/fastnetmon
@@ -53,6 +55,8 @@ stdenv.mkDerivation rec {
     ln -s $(readlink usr/bin/gobgp | sed "s:/opt/fastnetmon:$out/libexec/fastnetmon:") $out/bin/fnm-gobgp
 
     addAutoPatchelfSearchPath $out/libexec/fastnetmon/libraries
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;

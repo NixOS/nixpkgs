@@ -38,6 +38,8 @@ in stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/etc/udev/rules.d/";
     cat > "$out/etc/udev/rules.d/90-rfkill.rules" << EOF
       SUBSYSTEM=="rfkill", ATTR{type}=="wlan", RUN+="$out/bin/rfkill-hook.sh"
@@ -45,6 +47,8 @@ in stdenv.mkDerivation {
 
     mkdir -p "$out/bin/";
     cp ${rfkillHook} "$out/bin/rfkill-hook.sh"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

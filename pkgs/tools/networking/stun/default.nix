@@ -24,11 +24,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $server/bin $out/man/man1 $server/man/man8
     cp -v client $out/bin/stun
     cp -v server $server/bin/stund
     cp -v debian/manpages/stun.1.gz  $out/man/man1
     cp -v debian/manpages/stund.8.gz $server/man/man8
+
+    runHook postInstall
   '';
 
   meta = with lib; {

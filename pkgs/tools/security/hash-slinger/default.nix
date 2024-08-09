@@ -49,9 +49,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/man $out/${python3.sitePackages}
     make install
     wrapPythonPrograms
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -730,7 +730,11 @@ in {
         ${makeTarget}
     '';
     installPhase = ''
+      runHook preInstall
+
       cp .config $out
+
+      runHook postInstall
     '';
   };
 

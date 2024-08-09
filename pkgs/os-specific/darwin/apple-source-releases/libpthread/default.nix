@@ -4,6 +4,8 @@ appleDerivation' stdenvNoCC {
   propagatedBuildInputs = [ libdispatch xnu ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include/pthread/
     mkdir -p $out/include/sys/_types
     cp pthread/*.h $out/include/pthread/
@@ -13,6 +15,8 @@ appleDerivation' stdenvNoCC {
 
     cp -r sys $out/include
     cp -r sys/_pthread/*.h $out/include/sys/_types/
+
+    runHook postInstall
   '';
 
   appleHeaders = ''

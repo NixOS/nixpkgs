@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D git-secret $out/bin/git-secret
 
     wrapProgram $out/bin/git-secret \
@@ -21,6 +23,8 @@ stdenv.mkDerivation rec {
 
     mkdir $out/share
     cp -r man $out/share
+
+    runHook postInstall
   '';
 
   meta = {

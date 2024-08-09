@@ -31,6 +31,8 @@ stdenvNoCC.mkDerivation rec {
   dontConfigure = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp $src/trunk/xvfb-run $out/bin/xvfb-run
     installManPage $src/trunk/xvfb-run.1
@@ -40,6 +42,8 @@ stdenvNoCC.mkDerivation rec {
     wrapProgram $out/bin/xvfb-run \
       --set-default FONTCONFIG_FILE "${fontsConf}" \
       --prefix PATH : ${lib.makeBinPath [ getopt xorg.xvfb xauth which util-linux gawk coreutils ]}
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;

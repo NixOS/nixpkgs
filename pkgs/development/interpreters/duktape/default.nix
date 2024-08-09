@@ -20,12 +20,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin
     install -m755 duk $out/bin/
     install -d $out/lib/pkgconfig
     install -d $out/include
     make -f Makefile.sharedlibrary install INSTALL_PREFIX=$out
     substituteAll ${./duktape.pc.in} $out/lib/pkgconfig/duktape.pc
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

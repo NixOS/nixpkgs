@@ -107,6 +107,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/var/lib/sage"
     cp -r installed "$out/var/lib/sage"
 
@@ -127,6 +129,8 @@ stdenv.mkDerivation rec {
     cp -f '${sage-env}/sage-env' "$out/bin/sage-env"
     substituteInPlace "$out/bin/sage-env" \
       --subst-var-by sage-local "$out"
+
+    runHook postInstall
   '';
 
   passthru = {

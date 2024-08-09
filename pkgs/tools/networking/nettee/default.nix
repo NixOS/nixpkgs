@@ -40,6 +40,8 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     ${cleanPackaging.commonFileActions {
         docFiles = [
           "*.html"
@@ -60,6 +62,8 @@ in stdenv.mkDerivation {
     mkdir -p $man/share/man/{man1,man3}
     mv nettee.1 $man/share/man/man1
     mv nettee_cmd.3 $man/share/man/man3
+
+    runHook postInstall
   '';
 
   postFixup = ''

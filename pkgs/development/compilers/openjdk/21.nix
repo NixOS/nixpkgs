@@ -121,6 +121,8 @@ let
     buildFlags = [ "images" ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib
 
       mv build/*/images/jdk $out/lib/openjdk
@@ -146,6 +148,8 @@ let
       ''}
 
       ln -s $out/lib/openjdk/bin $out/bin
+
+      runHook postInstall
     '';
 
     preFixup = ''

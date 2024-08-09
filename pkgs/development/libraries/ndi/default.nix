@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     mv bin/${ndiPlatform} $out/bin
     for i in $out/bin/*; do
@@ -48,6 +50,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/doc/${pname}-${version}
     mv licenses $out/share/doc/${pname}-${version}/licenses
     mv documentation/* $out/share/doc/${pname}-${version}/
+
+    runHook postInstall
   '';
 
   # Stripping breaks ndi-record.

@@ -23,7 +23,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 {,$out/bin/}marlin-calc
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -30,10 +30,14 @@ stdenv.mkDerivation {
     make -j $NIX_BUILD_CORES -f Makefile.$ARCH
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share
     cp picat $out/bin/
     cp -r ../doc $out/share/doc
     cp -r ../exs $out/share/examples
+
+    runHook postInstall
   '';
 
   meta = with lib; {

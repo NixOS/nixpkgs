@@ -22,7 +22,11 @@ in pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [ opencv4_ midiutil pygame pyopengl ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 v2m.py $out/bin/v2m.py
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -19,8 +19,12 @@ let
         $CC -std=c99 -shared ${name}.c -o lib${name}.dylib -Wl,-install_name,$out/lib/lib${name}.dylib
       '';
       installPhase = ''
+        runHook preInstall
+
         mkdir -p "$out/lib"
         mv lib${name}.dylib "$out/lib"
+
+        runHook postInstall
       '';
       meta.platforms = lib.platforms.darwin;
     }) count;
@@ -58,8 +62,12 @@ let
       '';
       buildInputs = sillyLibs;
       installPhase = ''
+        runHook preInstall
+
         mkdir -p "$out/bin"
         mv ${prefix}-asdf "$out/bin"
+
+        runHook postInstall
       '';
       meta.platforms = lib.platforms.darwin;
     };

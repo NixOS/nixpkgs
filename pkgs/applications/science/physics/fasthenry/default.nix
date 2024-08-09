@@ -40,12 +40,16 @@ stdenv.mkDerivation rec {
   '');
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r bin/* $out/bin/
     mkdir -p $out/share/doc/${pname}-${version}
     cp -r doc/* $out/share/doc/${pname}-${version}
     mkdir -p $out/share/${pname}-${version}/examples
     cp -r examples/* $out/share/${pname}-${version}/examples
+
+    runHook postInstall
   '';
 
   meta = with lib; {

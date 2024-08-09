@@ -43,8 +43,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ${arch} $out/bin/bandwidth
+
+    runHook postInstall
   '';
 
   meta = with lib; {

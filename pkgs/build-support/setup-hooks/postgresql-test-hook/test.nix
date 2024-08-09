@@ -24,7 +24,11 @@ stdenv.mkDerivation {
     runHook postCheck
   '';
   installPhase = ''
+    runHook preInstall
+
     [[ $TEST_RAN == 1 && $TEST_POST_HOOK_RAN == 1 ]]
     touch $out
+
+    runHook postInstall
   '';
 }

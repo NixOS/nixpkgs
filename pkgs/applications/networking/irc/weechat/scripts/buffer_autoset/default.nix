@@ -14,7 +14,11 @@ stdenv.mkDerivation {
   passthru.scripts = [ "buffer_autoset.py" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D $src $out/share/buffer_autoset.py
+
+    runHook postInstall
   '';
 
   meta = with lib; {

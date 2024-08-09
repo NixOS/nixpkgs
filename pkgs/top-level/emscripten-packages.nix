@@ -121,6 +121,8 @@ rec {
     outputs = [ "out" "doc" ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share
       mkdir -p $doc/share/${pname}
 
@@ -134,6 +136,8 @@ rec {
       cp *.json $out/share
       cp *.rng $out/share
       cp README.md $doc/share/${pname}
+
+      runHook postInstall
     '';
     checkPhase = ''
     '';
@@ -152,7 +156,11 @@ rec {
         emmake make
       '';
       installPhase = ''
+        runHook preInstall
+
         emmake make install
+
+        runHook postInstall
       '';
       checkPhase = ''
         echo "================= testing zlib using node ================="

@@ -133,6 +133,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -R opt usr/bin usr/share $out
 
@@ -173,6 +175,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/opt/microsoft/${shortName}/xdg-settings \
       --replace "\''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "\''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
       --replace "\''${XDG_CONFIG_DIRS:-/etc/xdg}" "\''${XDG_CONFIG_DIRS:-/run/current-system/sw/etc/xdg}"
+
+    runHook postInstall
   '';
 
   postFixup = ''

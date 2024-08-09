@@ -20,8 +20,12 @@ let
     dontUnpack = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out/share/FlightGear"
       tar xf "${src}" -C "$out/share/FlightGear/" --strip-components=1
+
+      runHook postInstall
     '';
   };
 in

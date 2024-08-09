@@ -28,9 +28,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp multilockscreen $out/bin/multilockscreen
     wrapProgram "$out/bin/multilockscreen" --prefix PATH : "${binPath}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

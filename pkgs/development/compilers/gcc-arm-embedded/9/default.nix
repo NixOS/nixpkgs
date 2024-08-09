@@ -31,9 +31,13 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r * $out
     ln -s $out/share/doc/gcc-arm-none-eabi/man $out/man
+
+    runHook postInstall
   '';
 
   preFixup = ''

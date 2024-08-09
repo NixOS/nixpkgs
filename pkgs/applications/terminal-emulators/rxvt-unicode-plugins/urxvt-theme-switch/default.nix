@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/urxvt/perl
     sed -i -e "s|/usr/bin/env||" color-themes
     cp color-themes $out/lib/urxvt/perl
+
+    runHook postInstall
   '';
 
   meta = with lib; {

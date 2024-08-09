@@ -57,7 +57,11 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mv server/ui/dist $out
+
+      runHook postInstall
     '';
   };
 

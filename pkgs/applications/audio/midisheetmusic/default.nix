@@ -40,6 +40,8 @@ in stdenv.mkDerivation {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/applications $out/share/pixmaps $out/bin
 
     cp deb/midisheetmusic.desktop $out/share/applications
@@ -50,6 +52,8 @@ in stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gtk2 cups ]} \
       --prefix PATH : ${lib.makeBinPath [ timidity ]} \
       --add-flags $out/bin/.MidiSheetMusic.exe
+
+    runHook postInstall
   '';
 
   meta = with lib; {

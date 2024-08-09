@@ -162,6 +162,8 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
   installPhase = ''
+    runHook preInstall
+
     # This deb file contains a setuid binary,
     # so 'dpkg -x' doesn't work here.
     dpkg --fsys-tarfile $src | tar --extract
@@ -197,6 +199,8 @@ stdenv.mkDerivation {
     # e.g. openldap version 2.4
     # so replace it with our own libcurl.so
     ln -sf ${curl}/lib/libcurl.so $out/opt/bytedance/feishu/libcurl.so
+
+    runHook postInstall
   '';
 
   passthru = {

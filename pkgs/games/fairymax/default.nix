@@ -29,9 +29,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,share/fairymax}
     cp fairymax "$out/bin"
     cp fmax.ini "$out/share/fairymax"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

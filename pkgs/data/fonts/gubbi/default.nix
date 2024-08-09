@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   preBuild = "patchShebangs generate.pe";
 
-  installPhase = "install -Dm444 -t $out/share/fonts/truetype/ Gubbi.ttf";
+  installPhase = "runHook preInstall; install -Dm444 -t $out/share/fonts/truetype/ Gubbi.ttf; runHook postInstall";
 
   meta = with lib; {
     inherit (src.meta) homepage;

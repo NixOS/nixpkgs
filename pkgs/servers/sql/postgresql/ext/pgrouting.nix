@@ -15,9 +15,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D lib/*.so                        -t $out/lib
     install -D sql/pgrouting--${version}.sql   -t $out/share/postgresql/extension
     install -D sql/common/pgrouting.control    -t $out/share/postgresql/extension
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -14,6 +14,8 @@ stdenvNoCC.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ installShellFiles ];
   installPhase = ''
+    runHook preInstall
+
     outdir="$out/share/$pname"
 
     cd "$src"
@@ -31,6 +33,7 @@ stdenvNoCC.mkDerivation rec {
     # find zmodules/ -type d -exec install -dm 755 "{}" "$outdir/{}" \;
     # find zmodules/ -type f -exec install -m 744 "{}" "$outdir/{}" \;
 
+    runHook postInstall
   '';
   #TODO:doc output
 

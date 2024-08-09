@@ -14,13 +14,17 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   installPhase = ''
+  runHook preInstall
+
   mkdir -p $out/share
   cp -r * $out/share
   mkdir $out/bin
   makeWrapper $out/share/workcraft $out/bin/workcraft \
     --set JAVA_HOME "${jre}" \
     --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=gasp';
-  '';
+
+  runHook postInstall
+'';
 
   meta = {
     homepage = "https://workcraft.org/";

@@ -27,8 +27,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp ./shab $out/bin/shab
+
+      runHook postInstall
     '';
 
     installCheckPhase = ''

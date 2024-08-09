@@ -12,10 +12,14 @@ stdenvNoCC.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/
     for name in *.ttf; do
       mv "$name" "$out/share/fonts/$(echo $name | sed -r 's/(.*)\(.*\)\.ttf/\1.ttf/')"
     done
+
+    runHook postInstall
   '';
 
   meta = {

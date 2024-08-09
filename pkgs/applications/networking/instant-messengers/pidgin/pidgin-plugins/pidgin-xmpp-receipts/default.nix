@@ -17,8 +17,12 @@ stdenv.mkDerivation {
   buildInputs = [ pidgin ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/pidgin/
     cp xmpp-receipts.so $out/lib/pidgin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

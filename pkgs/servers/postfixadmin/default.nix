@@ -12,10 +12,14 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -r * $out/
     ln -sf /etc/postfixadmin/config.local.php $out/
     ln -sf /var/cache/postfixadmin/templates_c $out/
+
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) postfixadmin; };

@@ -95,7 +95,11 @@ buildBazelPackage rec {
     '';
 
     installPhase = ''
+      runHook preInstall
+
       install -Dm755 bazel-bin/cmd/ibazel/ibazel_/ibazel $out/bin/ibazel
+
+      runHook postInstall
     '';
   };
 

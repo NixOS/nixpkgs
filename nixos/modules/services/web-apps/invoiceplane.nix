@@ -53,6 +53,8 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r * $out/
 
@@ -70,6 +72,8 @@ let
 
       # symlink additional templates
       ${concatMapStringsSep "\n" (template: "cp -r ${template}/. $out/application/views/invoice_templates/pdf/") cfg.invoiceTemplates}
+
+      runHook postInstall
     '';
   };
 

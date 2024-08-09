@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = "make";
 
-  installPhase = "mkdir -p $out/bin && mv mid2key $out/bin";
+  installPhase = "runHook preInstall; mkdir -p $out/bin && mv mid2key $out/bin; runHook postInstall";
 
   meta = with lib; {
     homepage = "http://code.google.com/p/mid2key/";

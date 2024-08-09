@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase trousers ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -Dpm755 -D bin/tpmmanager $out/bin/tpmmanager
 
@@ -41,7 +43,9 @@ stdenv.mkDerivation rec {
     Exec=$out/bin/tpmmanager
     Terminal=false
     EOF
-    '';
+
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://projects.sirrix.com/trac/tpmmanager";

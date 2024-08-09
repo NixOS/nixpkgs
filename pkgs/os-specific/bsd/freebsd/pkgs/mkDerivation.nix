@@ -101,7 +101,7 @@ lib.makeOverridable (
     }
     // lib.optionalAttrs (stdenv'.isx86_32) { USE_SSP = "no"; }
     // lib.optionalAttrs (attrs.headersOnly or false) {
-      installPhase = "includesPhase";
+      installPhase = "runHook preInstall; includesPhase; runHook postInstall";
       dontBuild = true;
     }
     // attrs

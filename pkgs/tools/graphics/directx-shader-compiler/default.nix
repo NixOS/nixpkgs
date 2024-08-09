@@ -44,10 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/microsoft/DirectXShaderCompiler/blob/master/appveyor.yml#L63-L66
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin $out/lib $dev/include
     mv bin/dxc* $out/bin/
     mv lib/libdxcompiler.so* lib/libdxcompiler.*dylib $out/lib/
     cp -r $src/include/dxc $dev/include/
+
     runHook postInstall
   '';
 

@@ -26,8 +26,12 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/mpv/scripts
     cp -r 360plugin.lua $out/share/mpv/scripts/
+
+    runHook postInstall
   '';
 
   passthru.scriptName = "360plugin.lua";

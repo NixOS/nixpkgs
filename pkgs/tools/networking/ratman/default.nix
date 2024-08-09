@@ -72,10 +72,14 @@ rustPlatform.buildRustPackage rec {
     '';
 
     installPhase = ''
+      runHook preInstall
+
       cp -R . $out
 
       mv $out/dist $dist
       ln -s $dist $out/dist
+
+      runHook postInstall
     '';
   };
 

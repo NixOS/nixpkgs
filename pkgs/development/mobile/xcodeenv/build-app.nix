@@ -146,5 +146,5 @@ stdenv.mkDerivation ({
 
   failureHook = lib.optionalString release deleteKeychain;
 
-  installPhase = "true";
+  installPhase = "runHook preInstall; true; runHook postInstall";
 } // extraArgs)

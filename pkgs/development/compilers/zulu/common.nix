@@ -100,6 +100,8 @@ let
     ] else null;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       mv * $out
 
@@ -113,6 +115,8 @@ let
         install -D $out/LICENSE $out/share/zulu/LICENSE
         rm $out/LICENSE
       fi
+
+      runHook postInstall
     '';
 
     preFixup = ''

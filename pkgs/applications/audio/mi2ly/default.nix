@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
 
   buildPhase = "./cc";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,share/doc/mi2ly}
     cp mi2ly "$out/bin"
     cp README Doc.txt COPYING Manual.txt "$out/share/doc/mi2ly"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

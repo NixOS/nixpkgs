@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin" "$out/opt/ipmicfg"
     cp Linux/64bit/* "$out/opt/ipmicfg"
 
@@ -20,6 +22,8 @@ stdenv.mkDerivation rec {
        "$out/opt/ipmicfg/IPMICFG-Linux.x86_64"
 
     ln -s "$out/opt/ipmicfg/IPMICFG-Linux.x86_64" "$out/bin/ipmicfg"
+
+    runHook postInstall
   '';
 
    dontPatchShebangs = true; # There are no scripts and it complains about null bytes.

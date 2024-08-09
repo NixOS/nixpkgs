@@ -14,10 +14,14 @@ stdenvNoCC.mkDerivation rec{
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     rm LICENSE README.md
     mkdir -p $out/share
     mv GTK $out/share/themes
     mv * $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {

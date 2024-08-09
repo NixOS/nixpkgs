@@ -25,9 +25,13 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ wrapPython ];
 
   installPhase = ''
+    runHook preInstall
+
     install -vD droopy $out/bin/droopy
     install -vD -m 644 man/droopy.1 $out/share/man/man1/droopy.1
     wrapPythonPrograms
+
+    runHook postInstall
   '';
 
   meta = with lib; {

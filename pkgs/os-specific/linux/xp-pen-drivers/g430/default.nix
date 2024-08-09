@@ -23,9 +23,13 @@ mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp Pentablet_Driver $out/bin/pentablet-driver
     cp config.xml $out/bin/config.xml
+
+    runHook postInstall
   '';
 
   meta = with lib; {

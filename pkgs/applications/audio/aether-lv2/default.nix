@@ -25,8 +25,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/lv2
     cp -r aether.lv2 $out/lib/lv2
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mandir=$out/share/man/man9
     mkdir -p $mandir
 
@@ -29,6 +31,8 @@ stdenv.mkDerivation rec {
           | scripts/split-man.pl '$mandir kernel-doc
 
     test -f $mandir/kmalloc.9
+
+    runHook postInstall
   '';
 
   meta = with lib; {

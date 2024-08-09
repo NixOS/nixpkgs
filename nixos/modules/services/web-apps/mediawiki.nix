@@ -27,6 +27,8 @@ let
     src = cfg.package;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r * $out/
 
@@ -40,6 +42,8 @@ let
         rm -rf $out/share/mediawiki/extensions/${k}
         ln -s ${if v != null then v else "$src/share/mediawiki/extensions/${k}"} $out/share/mediawiki/extensions/${k}
       '') cfg.extensions)}
+
+      runHook postInstall
     '';
   };
 

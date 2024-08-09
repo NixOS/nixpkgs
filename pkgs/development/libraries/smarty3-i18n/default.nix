@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp block.t.php $out
+
+    runHook postInstall
   '';
 
   meta = with lib; {

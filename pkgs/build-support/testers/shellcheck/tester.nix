@@ -23,6 +23,10 @@ stdenv.mkDerivation {
       | xargs -0 shellcheck
   '';
   installPhase = ''
+    runHook preInstall
+
     touch $out
+
+    runHook postInstall
   '';
 }

@@ -75,10 +75,14 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $lib/hack/{plugins,lua} $art/data/art
     cp -a */twbt.plug.so $lib/hack/plugins/
     cp -a *.lua $lib/hack/lua/
     cp -a *.png $art/data/art/
+
+    runHook postInstall
   '';
 
   passthru = {

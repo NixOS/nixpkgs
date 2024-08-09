@@ -14,8 +14,12 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -fa colormake.pl colormake colormake-short clmake clmake-short $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

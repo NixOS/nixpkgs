@@ -18,6 +18,8 @@ let result = stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mv ../$sourceRoot $out
 
     mkdir -p $out/nix-support
@@ -27,6 +29,8 @@ let result = stdenv.mkDerivation rec {
     cat <<EOF >> $out/nix-support/setup-hook
     if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
     EOF
+
+    runHook postInstall
   '';
 
   postFixup = ''

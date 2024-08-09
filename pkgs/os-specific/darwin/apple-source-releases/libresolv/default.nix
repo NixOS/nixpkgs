@@ -37,6 +37,8 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include $out/include/arpa $out/lib
 
     cp dns.h           $out/include/
@@ -48,5 +50,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) {
 
     cp libresolv.9.dylib $out/lib
     ln -s libresolv.9.dylib $out/lib/libresolv.dylib
+
+    runHook postInstall
   '';
 }

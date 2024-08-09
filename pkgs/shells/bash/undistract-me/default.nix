@@ -65,11 +65,15 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/undistract-me" "$out/etc/profile.d" "$out/share/licenses/undistract-me"
     cp long-running.bash "$out/share/undistract-me"
     cp preexec.bash "$out/share/undistract-me"
     cp undistract-me.sh "$out/etc/profile.d"
     cp LICENSE "$out/share/licenses/undistract-me"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

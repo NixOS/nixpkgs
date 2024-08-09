@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv -v xgeometry-select $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
     cp dejsonlz4 $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

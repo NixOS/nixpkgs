@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv $out/res
     cp -r * $out/res
 
@@ -45,6 +47,7 @@ stdenv.mkDerivation rec {
 
     chmod +x $out/bin/Tibia
 
+    runHook postInstall
   '';
 
   meta = {

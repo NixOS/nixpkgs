@@ -29,9 +29,13 @@ tracee.overrideAttrs (oa: {
   '';
   doCheck = false;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv $GOPATH/tracee-integration/{integration.test,syscaller} $out/bin/
     # cp -r ${tracee}/bin/signatures $out/bin/
+
+    runHook postInstall
   '';
   doInstallCheck = false;
 

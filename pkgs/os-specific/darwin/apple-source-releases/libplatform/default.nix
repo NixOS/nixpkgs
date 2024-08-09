@@ -2,9 +2,13 @@
 
 appleDerivation' stdenvNoCC (finalAttrs: {
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -r include $out/include
     test -d private && cp -r private/* $out/include
+
+    runHook postInstall
   '';
 
   appleHeaders = ''

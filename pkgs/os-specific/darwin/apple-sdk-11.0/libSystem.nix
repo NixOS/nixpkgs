@@ -26,6 +26,8 @@ stdenvNoCC.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{include,lib/swift}
 
     for dir in $includeDirs; do
@@ -83,6 +85,8 @@ stdenvNoCC.mkDerivation {
         -r ${builtins.storeDir} \
         "$tbd"
     done
+
+    runHook postInstall
   '';
 }
 

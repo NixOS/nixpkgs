@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/doc,libexec,share/man/man1}
     install docs/iozone.1 $out/share/man/man1/
     install docs/Iozone_ps.gz $out/share/doc/
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/Generate_Graphs $out/bin/iozone_generate_graphs
     # License copy is mandated by the license, but it's not in the tarball.
     install ${license} $out/share/doc/Iozone_License.txt
+
+    runHook postInstall
   '';
 
   preFixup = ''

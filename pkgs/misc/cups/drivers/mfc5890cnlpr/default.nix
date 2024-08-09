@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     dir=$out/usr/local/Brother/Printer/mfc5890cn
 
     patchelf --set-interpreter ${pkgsi686Linux.glibc.out}/lib/ld-linux.so.2 $dir/lpd/brmfc5890cnfilter
@@ -62,6 +64,8 @@ stdenv.mkDerivation rec {
         gnused
         gawk
       ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

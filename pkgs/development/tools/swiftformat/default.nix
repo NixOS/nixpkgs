@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m 0555 build/Release/swiftformat $out/bin/swiftformat
+
+    runHook postInstall
   '';
 
   sandboxProfile = ''

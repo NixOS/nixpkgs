@@ -48,8 +48,12 @@ let
     dontUnpack = true;
     dontBuild = true;
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       ln -s '${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config' $out/bin/pkg-config
+
+      runHook postInstall
     '';
   };
 

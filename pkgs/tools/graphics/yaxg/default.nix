@@ -16,10 +16,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ maim slop ffmpeg byzanz libnotify xdpyinfo ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
     mv yaxg $out/bin/
     chmod +x $out/bin/yaxg
     wrapProgram $out/bin/yaxg --prefix PATH : ${ lib.makeBinPath [ maim slop ffmpeg byzanz libnotify xdpyinfo ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

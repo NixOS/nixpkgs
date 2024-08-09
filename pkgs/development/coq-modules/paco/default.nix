@@ -21,9 +21,13 @@ mkCoqDerivation {
   preBuild = "cd src";
 
   installPhase = ''
+    runHook preInstall
+
     COQLIB=$out/lib/coq/${coq.coq-version}/
     mkdir -p $COQLIB/user-contrib/Paco
     cp -pR *.vo $COQLIB/user-contrib/Paco
+
+    runHook postInstall
   '';
 
   meta = {

@@ -29,11 +29,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp keychain $out/bin/keychain
     installManPage keychain.1
     wrapProgram $out/bin/keychain \
       --prefix PATH ":" "${lib.makeBinPath [ coreutils findutils gawk gnupg gnugrep gnused openssh procps ]}" \
+
+    runHook postInstall
   '';
 
   meta = with lib; {

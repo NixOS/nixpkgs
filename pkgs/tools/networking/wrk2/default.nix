@@ -28,8 +28,12 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv ./wrk $out/bin/wrk2
+
+    runHook postInstall
   '';
 
   meta = {

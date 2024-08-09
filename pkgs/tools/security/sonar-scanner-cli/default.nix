@@ -24,12 +24,16 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     cp -r lib/* $out/lib/
     mkdir -p $out/bin
     cp bin/* $out/bin/
     mkdir -p $out/conf
     cp conf/* $out/conf/
+
+    runHook postInstall
   '';
 
   fixupPhase = ''

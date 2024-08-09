@@ -86,7 +86,7 @@ def get_archive_derivation(uuid, artifact_name, url, sha256):
         sourceRoot = ".";
         dontConfigure = true;
         dontBuild = true;
-        installPhase = "cp -r . $out";
+        installPhase = "runHook preInstall; cp -r . $out; runHook postInstall";
         {fixup};
       }}"""
 

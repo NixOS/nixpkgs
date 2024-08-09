@@ -34,14 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
+     install -Dm755 build/cano -t $out/bin
 
-    install -Dm755 build/cano -t $out/bin
+     mkdir -p $out/share
+     cp -r docs/help $out/share
+     installManPage docs/cano.1
 
-    mkdir -p $out/share
-    cp -r docs/help $out/share
-    installManPage docs/cano.1
-
-    runHook postInstall
+     runHook postInstall
   '';
 
   meta = {

@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a ifenslave $out/bin
+
+    runHook postInstall
   '';
 
   hardeningDisable = [ "format" ];

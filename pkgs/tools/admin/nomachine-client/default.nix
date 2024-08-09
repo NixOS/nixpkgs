@@ -40,6 +40,8 @@ in
     buildInputs = [ jsoncpp libpulseaudio ];
 
     installPhase = ''
+      runHook preInstall
+
       rm bin/nxplayer bin/nxrunner
 
       mkdir -p $out/NX
@@ -64,6 +66,8 @@ in
       for i in $out/share/applications/*.desktop; do
         substituteInPlace "$i" --replace /usr/NX/bin $out/bin
       done
+
+      runHook postInstall
     '';
 
     postFixup = ''

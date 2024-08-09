@@ -59,6 +59,8 @@ perlPackages.buildPerlPackage rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
 
     cp -r bin $out
@@ -71,6 +73,8 @@ perlPackages.buildPerlPackage rec {
         wrapProgram "$cur" --prefix PATH : ${lib.makeBinPath [nix dmidecode pciutils usbutils nettools iproute2]}
       fi
     done
+
+    runHook postInstall
   '';
 
   outputs = [ "out" ];

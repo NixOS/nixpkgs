@@ -33,11 +33,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out $driver
     cp -R Installer.pkg/Applications Installer.pkg/Library $out
     cp -R Karabiner-DriverKit-VirtualHIDDevice.pkg/Applications Karabiner-DriverKit-VirtualHIDDevice.pkg/Library $driver
 
     cp "$out/Library/Application Support/org.pqrs/Karabiner-Elements/package-version" "$out/Library/Application Support/org.pqrs/Karabiner-Elements/version"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = ./updater.sh;

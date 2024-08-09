@@ -24,12 +24,16 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     ${coreutils}/bin/install -Dm755 \
       oysttyer.pl \
       $out/bin/oysttyer
 
     wrapProgram $out/bin/oysttyer \
       --prefix PERL5LIB : $PERL5LIB
+
+    runHook postInstall
   '';
 
   meta = with lib; {

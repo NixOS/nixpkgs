@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/doc && cp -a bin $out/
     cp *pdf $out/share/doc
     cp -r ITSx_db $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {

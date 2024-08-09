@@ -15,10 +15,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ jre ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java $out/bin
     cp ${src} $out/share/java/closure-compiler-v${version}.jar
     makeWrapper ${jre}/bin/java $out/bin/closure-compiler \
       --add-flags "-jar $out/share/java/closure-compiler-v${version}.jar"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

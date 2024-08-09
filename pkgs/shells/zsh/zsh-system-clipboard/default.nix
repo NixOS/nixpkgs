@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   installPhase = ''
+    runHook preInstall
+
     install -D zsh-system-clipboard.zsh $out/share/zsh/${pname}/zsh-system-clipboard.zsh
+
+    runHook postInstall
   '';
 
   meta = with lib; {

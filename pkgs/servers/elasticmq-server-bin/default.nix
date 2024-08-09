@@ -15,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/elasticmq-server
 
     cp $src $out/share/elasticmq-server/elasticmq-server.jar
@@ -22,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: how to add extraArgs? current workaround is to use JAVA_TOOL_OPTIONS environment to specify properties
     makeWrapper ${jre}/bin/java $out/bin/elasticmq-server \
       --add-flags "-jar $out/share/elasticmq-server/elasticmq-server.jar"
+
+    runHook postInstall
   '';
 
   passthru.tests.elasticmqTest = import ./elasticmq-test.nix {

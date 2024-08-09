@@ -14,10 +14,14 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/lib temporal_tables${postgresql.dlSuffix}
     install -D -t $out/share/postgresql/extension *.sql
     install -D -t $out/share/postgresql/extension *.control
- '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Temporal Tables PostgreSQL Extension";

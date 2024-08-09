@@ -29,6 +29,8 @@ mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # libmd is used by install. do it yourself!
     mkdir -p $out/include $out/lib $man/share/man
     cp libmd.a $out/lib/libmd.a
@@ -40,6 +42,8 @@ mkDerivation {
     for f in $(make $makeFlags -V MAN); do
       cp "$f" "$man/share/man/$f"
     done
+
+    runHook postInstall
   '';
 
   outputs = [

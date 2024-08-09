@@ -30,8 +30,12 @@ stdenv.mkDerivation rec {
 
   installPhase =
   ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp crackxls2003 $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

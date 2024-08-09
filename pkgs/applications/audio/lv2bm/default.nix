@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib libsndfile lilv lv2 serd sord sratom ];
 
   installPhase = ''
+    runHook preInstall
+
     make install PREFIX=$out
+
+    runHook postInstall
   '';
 
   meta = with lib; {

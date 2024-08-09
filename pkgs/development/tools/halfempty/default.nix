@@ -32,7 +32,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -vDt $out/bin halfempty
+
+    runHook postInstall
   '';
 
   doCheck = true;

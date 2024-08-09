@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
   buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     # Manually copy, make install copies to /usr/local/bin
     mkdir -pv $out/bin/
     cp stm32flash $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

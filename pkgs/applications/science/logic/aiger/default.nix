@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $dev/include $lib/lib
 
     # Do the installation manually, as the Makefile has odd
@@ -46,6 +48,8 @@ stdenv.mkDerivation rec {
 
     cp -v aiger.o $lib/lib
     cp -v aiger.h $dev/include
+
+    runHook postInstall
   '';
 
   outputs = [ "out" "dev" "lib" ];

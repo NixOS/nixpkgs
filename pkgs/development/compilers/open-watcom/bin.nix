@@ -104,12 +104,16 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     performInstall ./install-bin-unwrapped
 
     for e in $(find $out/binl -type f -executable); do
       echo "Wrapping $e"
       wrapInPlace "$e"
     done
+
+    runHook postInstall
   '';
 
   passthru.prettyName = "open-watcom-bin";

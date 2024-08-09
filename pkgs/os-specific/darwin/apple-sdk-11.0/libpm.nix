@@ -10,8 +10,12 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ checkReexportsHook ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     cp ${MacOSX-SDK}/usr/lib/libpm* $out/lib
+
+    runHook postInstall
   '';
 
   passthru = {

@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bklk $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

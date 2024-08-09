@@ -31,8 +31,12 @@ stdenvNoCC.mkDerivation {
   buildFlags = targets;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     mv build $out/share/iso-flags
+
+    runHook postInstall
   '';
 
   meta = with lib; {

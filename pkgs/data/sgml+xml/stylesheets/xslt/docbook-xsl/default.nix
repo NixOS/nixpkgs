@@ -47,6 +47,8 @@ let
       dontBuild = true;
 
       installPhase = ''
+        runHook preInstall
+
         dst=$out/share/xml/${pname}
         mkdir -p $dst
         rm -rf RELEASE* README* INSTALL TODO NEWS* BUGS install.sh tools Makefile tests extensions webhelp
@@ -58,6 +60,8 @@ let
 
         # More backwards compatibility
         ln -s $dst $out/share/xml/docbook-xsl${legacySuffix}
+
+        runHook postInstall
       '';
 
       passthru.dbtoepub = writeScriptBin "dbtoepub"

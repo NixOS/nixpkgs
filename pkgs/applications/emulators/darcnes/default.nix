@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [ ./label.patch ];
 
   buildInputs = [ libX11 libXt libXext libXaw ];
-  installPhase = "install -Dt $out/bin darcnes";
+  installPhase = "runHook preInstall; install -Dt $out/bin darcnes; runHook postInstall";
 
   meta = {
     homepage = "https://web.archive.org/web/20130502171725/http://www.dridus.com/~nyef/darcnes/";

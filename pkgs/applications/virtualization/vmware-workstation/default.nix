@@ -88,8 +88,12 @@ let
     };
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib
       cp .libs/libgdbm*.so* $out/lib/
+
+      runHook postInstall
     '';
   });
 
@@ -167,6 +171,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p \
       $out/bin \
       $out/etc/vmware \
@@ -419,6 +425,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/lib/vmware/bin/vmware-vmx
     rm $out/lib/vmware/bin/vmware-vmx
     ln -s /run/wrappers/bin/vmware-vmx $out/lib/vmware/bin/vmware-vmx
+
+    runHook postInstall
   '';
 
   meta = with lib; {

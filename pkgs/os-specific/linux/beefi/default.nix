@@ -30,8 +30,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 beefi $out/bin/beefi
     installManPage beefi.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

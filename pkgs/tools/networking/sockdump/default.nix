@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
 
   format = "other"; # none
 
-  installPhase = "install -D ${pname}.py $out/bin/${pname}";
+  installPhase = "runHook preInstall; install -D ${pname}.py $out/bin/${pname}; runHook postInstall";
 
   meta = src.meta // {
     description = "Dump unix domain socket traffic with bpf";

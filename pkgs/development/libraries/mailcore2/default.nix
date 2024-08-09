@@ -47,11 +47,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -r src/include $out
 
     mkdir $out/lib
     cp src/libMailCore.* $out/lib
+
+    runHook postInstall
   '';
 
   doCheck = !stdenv.isDarwin;

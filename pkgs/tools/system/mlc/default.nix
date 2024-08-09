@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
   sourceRoot = "Linux";
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 mlc $out/bin/mlc
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ patchelf ];

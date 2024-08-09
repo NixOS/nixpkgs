@@ -61,10 +61,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/OutFox $out/share/applications
     cp -r ./. $out/share/OutFox
     ln -s ${desktop}/share/applications/project-outfox.desktop $out/share/applications/project-outfox.desktop
     makeWrapper $out/share/OutFox/OutFox $out/bin/OutFox --argv0
+
+    runHook postInstall
   '';
 
   meta = with lib; {

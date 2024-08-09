@@ -16,9 +16,13 @@ stdenv.mkDerivation rec {
   makeFlags = [ "build" "build_shared" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 -t $out/lib libpg_query.a
     install -Dm644 -t $out/include pg_query.h
     install -Dm644 -t $out/lib libpg_query${stdenv.hostPlatform.extensions.sharedLibrary}
+
+    runHook postInstall
   '';
 
   doCheck = true;

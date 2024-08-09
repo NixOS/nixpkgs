@@ -877,7 +877,7 @@ rec {
         preferLocalBuild = true;
         allowSubstitutes = false;
         phases = "unpackPhase patchPhase installPhase";
-        installPhase = "cp -R ./ $out";
+        installPhase = "runHook preInstall; cp -R ./ $out; runHook postInstall";
       }
       # Carry `meta` information from the underlying `src` if present.
       // (optionalAttrs (src?meta) { inherit (src) meta; })

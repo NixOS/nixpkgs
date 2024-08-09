@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
+      runHook preInstall
+
       # install otb fonts
       install -m 644 -D unifont.otb "$out/share/fonts/unifont.otb"
       mkfontdir "$out/share/fonts"
@@ -39,6 +41,8 @@ stdenv.mkDerivation rec {
       cd "$out/share/fonts"
       mkfontdir
       mkfontscale
+
+      runHook postInstall
     '';
 
   meta = with lib; {

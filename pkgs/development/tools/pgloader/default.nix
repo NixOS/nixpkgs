@@ -24,8 +24,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 bin/pgloader "$out/bin/pgloader"
     wrapProgram $out/bin/pgloader --prefix LD_LIBRARY_PATH : "${LD_LIBRARY_PATH}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -22,6 +22,8 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man1
 
     cp bin/{schema2ldif,ldap-schema-manager} $out/bin
@@ -30,6 +32,8 @@ stdenvNoCC.mkDerivation rec {
 
     wrapProgram $out/bin/schema2ldif \
        --prefix PERL5PATH : "${perlPackages.makePerlPath [ perlPackages.GetoptLong ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

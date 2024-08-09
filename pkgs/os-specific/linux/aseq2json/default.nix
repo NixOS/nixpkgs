@@ -15,7 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ alsa-lib glib json-glib ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D --target-directory "$out/bin" aseq2json
+
+    runHook postInstall
   '';
 
   meta = with lib; {

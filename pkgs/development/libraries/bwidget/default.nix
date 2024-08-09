@@ -13,8 +13,12 @@ tcl.mkTclDerivation rec {
   propagatedBuildInputs = [ tk ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/lib/bwidget${version}"
     cp -R *.tcl lang images "$out/lib/bwidget${version}"
+
+    runHook postInstall
   '';
 
   meta = {

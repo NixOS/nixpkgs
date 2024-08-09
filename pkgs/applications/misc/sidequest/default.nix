@@ -50,10 +50,14 @@
       nativeBuildInputs = [ makeWrapper ];
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p "$out/lib/SideQuest" "$out/bin"
         tar -xJf "$src" -C "$out/lib/SideQuest" --strip-components 1
 
         ln -s "$out/lib/SideQuest/sidequest" "$out/bin"
+
+        runHook postInstall
       '';
 
       postFixup = let

@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,lib}
     for d in bin lib; do
       for i in ./$d/*; do
@@ -60,6 +62,8 @@ stdenv.mkDerivation rec {
           cp -r "$(readlink -f $i)" "$out/$d"
       done
     done
+
+    runHook postInstall
   '';
 
   doCheck = true;

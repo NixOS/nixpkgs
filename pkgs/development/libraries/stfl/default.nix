@@ -39,11 +39,15 @@ stdenv.mkDerivation rec {
   '' ;
 
   installPhase = ''
+    runHook preInstall
+
     DESTDIR=$out prefix=\"\" make install
   ''
   # some programs rely on libstfl.so.0 to be present, so link it
   + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     ln -s $out/lib/libstfl.so.0.24 $out/lib/libstfl.so.0
+
+    runHook postInstall
   '';
 
   meta = {

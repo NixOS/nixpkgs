@@ -16,11 +16,15 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -Dt $out/bin git-test
     install -m444 -Dt $out/share/man/man1 git-test.1
 
     wrapProgram $out/bin/git-test \
       --prefix PATH : "${lib.makeBinPath [ git ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

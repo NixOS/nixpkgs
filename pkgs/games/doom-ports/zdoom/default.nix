@@ -35,12 +35,16 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 zdoom "$out/lib/zdoom/zdoom"
     for i in *.pk3; do
       install -Dm644 "$i" "$out/lib/zdoom/$i"
     done
     mkdir -p $out/bin
     ln -s $out/lib/zdoom/zdoom $out/bin/zdoom
+
+    runHook postInstall
   '';
 
   meta = with lib; {

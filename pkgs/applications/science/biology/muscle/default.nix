@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
   sourceRoot = "${src.name}/src";
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -D Linux/muscle $out/bin/muscle
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -165,12 +165,16 @@ let
     dontBuild = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/{bin,share/factorio}
       cp -a data $out/share/factorio
       cp -a bin/${tarDirectory}/factorio $out/bin/factorio
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
         $out/bin/factorio
+
+      runHook postInstall
     '';
 
     passthru.updateScript =

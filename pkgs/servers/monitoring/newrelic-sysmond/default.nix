@@ -10,10 +10,14 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -v -m755 daemon/nrsysmond.x64 $out/bin/nrsysmond
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $out/bin/nrsysmond
+
+    runHook postInstall
   '';
 
   meta = with lib; {

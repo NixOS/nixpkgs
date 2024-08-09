@@ -71,7 +71,11 @@ in stdenv.mkDerivation {
   gradleBuildTask = "sdk";
 
   installPhase = ''
+    runHook preInstall
+
     cp -r build/modular-sdk $out
+
+    runHook postInstall
   '';
 
   stripDebugList = [ "." ];

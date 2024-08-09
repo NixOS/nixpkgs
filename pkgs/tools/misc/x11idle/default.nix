@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     gcc -lXss -lX11 $src -o $out/bin/x11idle
+
+    runHook postInstall
   '';
 
   meta = with lib; {

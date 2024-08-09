@@ -32,9 +32,13 @@ python3Packages.buildPythonApplication rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share"
     cp -r data lib20k lightyears "$out/share"
     install -Dm755 lightyears "$out/bin/lightyears"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -38,9 +38,13 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/frogatto
     cp -ar data images modules $out/share/frogatto/
     cp -a anura $out/bin/frogatto
+
+    runHook postInstall
   '';
 
   meta = with lib; {

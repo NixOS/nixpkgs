@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib notmuch ];
 
-  installPhase = "install -D notmuch-addrlookup $out/bin/notmuch-addrlookup";
+  installPhase = "runHook preInstall; install -D notmuch-addrlookup $out/bin/notmuch-addrlookup; runHook postInstall";
 
   meta = with lib; {
     description = "Address lookup tool for Notmuch in C";

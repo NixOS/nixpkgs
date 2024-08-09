@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 ccx_${version} $out/bin/ccx
+
+    runHook postInstall
   '';
 
   meta = with lib; {

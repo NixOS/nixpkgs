@@ -28,8 +28,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -v ../execute/DLPOLY.X $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

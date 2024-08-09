@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ${pname} $out/bin
     chmod +x $out/bin/${pname}
+
+    runHook postInstall
   '';
 
   postFixup = ''

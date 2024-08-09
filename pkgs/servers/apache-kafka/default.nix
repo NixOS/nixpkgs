@@ -31,6 +31,8 @@ let
     buildInputs = [ jre bash gnugrep gnused coreutils ps ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -R config libs $out
 
@@ -52,6 +54,8 @@ let
           --prefix PATH : "${bash}/bin:${coreutils}/bin:${gnugrep}/bin:${gnused}/bin"
       done
       chmod +x $out/bin\/*
+
+      runHook postInstall
     '';
 
     passthru = {

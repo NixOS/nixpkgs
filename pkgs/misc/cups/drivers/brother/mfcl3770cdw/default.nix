@@ -31,6 +31,8 @@ in rec {
     unpackPhase = "dpkg-deb -x $src $out";
 
     installPhase = ''
+      runHook preInstall
+
       dir="$out/${reldir}"
       substituteInPlace $dir/lpd/filter_${model} \
         --replace /usr/bin/perl ${perl}/bin/perl \
@@ -43,6 +45,8 @@ in rec {
     # need to use i686 glibc here, these are 32bit proprietary binaries
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $dir/lpd/brmfcl3770cdwfilter
+
+      runHook postInstall
     '';
 
     meta = {
@@ -64,6 +68,8 @@ in rec {
     unpackPhase = "dpkg-deb -x $src $out";
 
     installPhase = ''
+      runHook preInstall
+
       basedir=${driver}/${reldir}
       dir=$out/${reldir}
       substituteInPlace $dir/cupswrapper/brother_lpdwrapper_${model} \
@@ -76,6 +82,8 @@ in rec {
       mkdir -p $out/share/cups/model
       ln $dir/cupswrapper/brother_lpdwrapper_${model} $out/lib/cups/filter
       ln $dir/cupswrapper/brother_${model}_printer_en.ppd $out/share/cups/model
+
+      runHook postInstall
     '';
 
     meta = {

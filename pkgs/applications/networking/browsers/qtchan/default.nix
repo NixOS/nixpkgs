@@ -16,8 +16,12 @@ mkDerivation rec {
   qmakeFlags = [ "CONFIG-=app_bundle" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp qtchan $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

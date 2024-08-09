@@ -10,6 +10,8 @@ appleDerivation' stdenv {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/Library/Frameworks/Security.framework
 
     ###### IMPURITIES
@@ -111,5 +113,6 @@ appleDerivation' stdenv {
     cp libsecurity_transform/lib/SecTransform.h              $dest
     cp libsecurity_transform/lib/SecTransformReadTransform.h $dest
 
+    runHook postInstall
   '';
 }

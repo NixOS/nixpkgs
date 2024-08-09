@@ -32,8 +32,12 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r * $out
+
+    runHook postInstall
   '';
 
   preFixup = ''

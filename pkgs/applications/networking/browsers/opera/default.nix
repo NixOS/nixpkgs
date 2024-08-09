@@ -126,6 +126,8 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r usr $out
     cp -r usr/share $out/share
@@ -133,6 +135,8 @@ stdenv.mkDerivation rec {
     # we already using QT6, autopatchelf wants to patch this as well
     rm $out/usr/lib/x86_64-linux-gnu/opera/libqt5_shim.so
     ln -s $out/usr/bin/opera $out/bin/opera
+
+    runHook postInstall
   '';
 
   meta = with lib; {

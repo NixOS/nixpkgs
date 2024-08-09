@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r lib $out/
 
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/svn2git \
       --set RUBYLIB $out/lib \
       --prefix PATH : ${git}/bin
+
+    runHook postInstall
   '';
 
   meta = {

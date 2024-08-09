@@ -17,8 +17,12 @@ stdenvNoCC.mkDerivation {
   buildInputs = [ python3 ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m 755 ssh-ident $out/bin/ssh-ident
+
+    runHook postInstall
   '';
 
   meta = with lib; {

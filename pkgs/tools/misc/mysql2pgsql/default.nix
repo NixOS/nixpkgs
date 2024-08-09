@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv {,$out/bin/}mysql2psql
+
+    runHook postInstall
   '';
 
   meta = {

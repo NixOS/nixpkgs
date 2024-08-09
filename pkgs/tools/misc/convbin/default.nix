@@ -29,7 +29,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 bin/convbin $out/bin/convbin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

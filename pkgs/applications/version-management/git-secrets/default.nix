@@ -16,11 +16,15 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -Dt $out/bin git-secrets
     install -m444 -Dt $out/share/man/man1 git-secrets.1
 
     wrapProgram $out/bin/git-secrets \
       --prefix PATH : "${lib.makeBinPath [ git coreutils ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

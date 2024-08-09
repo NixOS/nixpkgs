@@ -11,10 +11,14 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
   installPhase = ''
+    runHook preInstall
+
     cp -r . "$out"
     for i in "$out"/bin/*; do
       wrapProgram "$i" --prefix "PATH" : "${java}/bin/"
     done
+
+    runHook postInstall
   '';
   meta = with lib; {
     description = "RDF database";

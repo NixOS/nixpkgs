@@ -33,6 +33,8 @@ rec {
     unpackPhase = "dpkg-deb -x $src $out";
 
     installPhase = ''
+      runHook preInstall
+
       substituteInPlace $out/opt/brother/Printers/${model}/lpd/filter${model} \
       --replace /opt "$out/opt"
 
@@ -53,6 +55,8 @@ rec {
           coreutils
           which
         ]}
+
+      runHook postInstall
     '';
 
     meta = with lib; {
@@ -80,12 +84,16 @@ rec {
     unpackPhase = "dpkg-deb -x $src $out";
 
     installPhase = ''
+      runHook preInstall
+
       for f in $out/opt/brother/Printers/${model}/cupswrapper/cupswrapper${model}; do
         wrapProgram $f --prefix PATH : ${lib.makeBinPath [ coreutils ghostscript gnugrep gnused ]}
       done
 
       mkdir -p $out/share/cups/model
       ln -s $out/opt/brother/Printers/${model}/cupswrapper/brother_${model}_printer_en.ppd $out/share/cups/model/
+
+      runHook postInstall
     '';
 
     meta = with lib; {

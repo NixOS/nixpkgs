@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -m444 -Dt $out/share/fonts/opentype *.otf
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -31,9 +31,13 @@ resholve.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 755 wgnord -t $out/bin/
     install -Dm 644 countries.txt -t $out/share/
     install -Dm 644 countries_iso31662.txt -t $out/share/
+
+    runHook postInstall
   '';
 
   solutions.default = {

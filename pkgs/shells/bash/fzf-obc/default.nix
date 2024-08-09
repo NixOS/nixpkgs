@@ -14,11 +14,15 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fzf-obc/{bin,lib/fzf-obc,plugins/{kill,gradle}}
     install -m644 bin/* $out/share/fzf-obc/bin
     install -m644 lib/fzf-obc/* $out/share/fzf-obc/lib/fzf-obc
     install -m644 plugins/kill/* $out/share/fzf-obc/plugins/kill
     install -m644 plugins/gradle/* $out/share/fzf-obc/plugins/gradle
+
+    runHook postInstall
   '';
 
   meta = with lib; {

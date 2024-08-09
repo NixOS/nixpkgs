@@ -43,11 +43,15 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a rofi-pass $out/bin/rofi-pass
 
     mkdir -p $out/share/doc/rofi-pass/
     cp -a config.example $out/share/doc/rofi-pass/config.example
+
+    runHook postInstall
   '';
 
   wrapperPath = lib.makeBinPath ([

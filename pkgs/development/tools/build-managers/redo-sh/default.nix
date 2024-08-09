@@ -13,12 +13,16 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share"
     mv man "$out/share"
     mv bin "$out"
     for p in $out/bin/*; do
       wrapProgram "$p" --prefix PATH : "$out/bin:${coreutils}/bin"
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

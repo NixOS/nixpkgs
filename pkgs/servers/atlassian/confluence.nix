@@ -37,8 +37,12 @@ lib.warnIf (crowdProperties != null) "Using `crowdProperties` is deprecated!"
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -rva . $out
     patchShebangs $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

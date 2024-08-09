@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp "z3_tptp5" "$out/bin/"
     ln -s "z3_tptp5" "$out/bin/z3-tptp"
+
+    runHook postInstall
   '';
 
   meta = {

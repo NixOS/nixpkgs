@@ -55,6 +55,8 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/opt/rgp $out/bin
     cp -r . $out/opt/rgp/
 
@@ -74,6 +76,8 @@ stdenv.mkDerivation {
         --set QT_QPA_PLATFORM xcb \
         --prefix LD_LIBRARY_PATH : $out/opt/rgp/lib
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

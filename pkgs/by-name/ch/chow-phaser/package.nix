@@ -55,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/lv2 $out/lib/vst3 $out/bin $out/share/doc/ChowPhaser/
     cd ChowPhaserMono_artefacts/Release
     cp libChowPhaserMono_SharedCode.a  $out/lib
@@ -64,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp libChowPhaserStereo_SharedCode.a  $out/lib
     cp -r VST3/ChowPhaserStereo.vst3 $out/lib/vst3
     cp Standalone/ChowPhaserStereo  $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

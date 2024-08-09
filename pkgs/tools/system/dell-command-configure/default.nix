@@ -44,8 +44,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir $out
       cp -r . $out
+
+      runHook postInstall
     '';
   };
 
@@ -65,7 +69,11 @@ let
       cc -fPIC -shared lib.c -o ${wrapperLibName}
     '';
     installPhase = ''
+      runHook preInstall
+
       install -D ${wrapperLibName} -t $out/lib
+
+      runHook postInstall
     '';
   };
 
@@ -80,6 +88,8 @@ in stdenv.mkDerivation rec {
   src = unpacked;
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/lib -m644 -v command-configure/opt/dell/dcc/libhapiintf.so
     install -D -t $out/lib -m644 -v command-configure/opt/dell/dcc/libsmbios_c.so.2
     install -D -t $out/bin -m755 -v command-configure/opt/dell/dcc/cctk
@@ -87,6 +97,8 @@ in stdenv.mkDerivation rec {
     for lib in $(find srvadmin-hapi/opt/dell/srvadmin/lib64 -type l); do
         install -D -t $out/lib -m644 -v $lib
     done
+
+    runHook postInstall
   '';
 
   postFixup = ''

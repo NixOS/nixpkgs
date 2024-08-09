@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
   preCheck = "cd tests";
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 $src/include/*.h -t $out/include
+
+    runHook postInstall
   '';
 
   meta = with lib; {

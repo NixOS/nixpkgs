@@ -15,8 +15,12 @@ stdenv.mkDerivation {
   dontConfigure = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/udev/rules.d
     cp 20-hw1.rules $out/lib/udev/rules.d/20-ledger.rules
+
+    runHook postInstall
   '';
 
   meta = with lib; {

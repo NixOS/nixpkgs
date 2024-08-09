@@ -35,8 +35,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv $NIX_BUILD_TOP/rund $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

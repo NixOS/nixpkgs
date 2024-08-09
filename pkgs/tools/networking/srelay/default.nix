@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxcrypt ];
 
-  installPhase = "install -D srelay $out/bin/srelay";
+  installPhase = "runHook preInstall; install -D srelay $out/bin/srelay; runHook postInstall";
 
   meta = {
     description = "SOCKS proxy and relay";

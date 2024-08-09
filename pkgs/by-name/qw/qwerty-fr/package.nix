@@ -16,8 +16,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/X11/xkb/symbols
     cp $src/linux/us_qwerty-fr $out/share/X11/xkb/symbols
+
+    runHook postInstall
   '';
 
   meta = with lib; {

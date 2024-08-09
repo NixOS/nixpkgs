@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m0755 hans $out/bin/hans
+
+    runHook postInstall
   '';
 
   meta = with lib; {

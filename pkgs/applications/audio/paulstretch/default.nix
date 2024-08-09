@@ -42,7 +42,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 ./paulstretch $out/bin/paulstretch
+
+    runHook postInstall
   '';
 
   meta = with lib; {

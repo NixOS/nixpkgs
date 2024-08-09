@@ -13,7 +13,11 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   installPhase = ''
+    runHook preInstall
+
     install -Dm0644 lambda-mod.zsh-theme $out/share/zsh/themes/lambda-mod.zsh-theme
+
+    runHook postInstall
   '';
 
   meta = with lib; {

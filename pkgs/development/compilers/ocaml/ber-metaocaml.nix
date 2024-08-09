@@ -58,8 +58,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     make install
     make install.opt
+
+    runHook postInstall
   '';
 
   checkPhase = ''

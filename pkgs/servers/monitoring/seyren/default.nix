@@ -15,8 +15,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ jre ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/bin
     makeWrapper "${jre}/bin/java" "$out"/bin/seyren --add-flags "-jar $src"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

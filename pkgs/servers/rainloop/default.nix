@@ -42,12 +42,16 @@
       '';
 
       installPhase = ''
+        runHook preInstall
+
         mkdir $out
         cp -r rainloop/* $out
         rm -rf $out/data
         cp ${includeScript} $out/include.php
         mkdir $out/data
         chmod 700 $out/data
+
+        runHook postInstall
       '';
 
       meta = with lib; {

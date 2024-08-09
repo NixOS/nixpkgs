@@ -20,9 +20,13 @@ stdenv.mkDerivation rec {
     '';
 
   installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin $out/lib
       install -m 755 slurm-spank-x11 $out/bin
       install -m 755 x11.so $out/lib
+
+      runHook postInstall
     '';
 
   meta = with lib; {

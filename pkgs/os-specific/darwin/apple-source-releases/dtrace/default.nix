@@ -39,6 +39,8 @@ appleDerivation {
 
   # xcbuild doesn't support install
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
 
     cp -r Products/Release/usr/include $out/include
@@ -53,5 +55,7 @@ appleDerivation {
     mkdir -p $out/lib/dtrace
 
     install_name_tool -change $PWD/Products/Release/libdtrace.dylib $out/lib/libdtrace.dylib $out/bin/dtrace
+
+    runHook postInstall
   '';
 }

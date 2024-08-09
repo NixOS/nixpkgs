@@ -15,9 +15,13 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/themes
     cp -a Snowblind* $out/share/themes
     rm $out/share/themes/*/{COPYING,CREDITS}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

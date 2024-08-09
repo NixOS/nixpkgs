@@ -23,8 +23,12 @@ buildNpmPackage rec {
   nativeBuildInputs = [ python3 ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     cp -r {node_modules,dist} $out/share
+
+    runHook postInstall
   '';
 
   postFixup = ''

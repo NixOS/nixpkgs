@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify3" ];
 
   installPhase = ''
+    runHook preInstall
+
     ./platform2_preinstall.sh ${version} $out/include/chromeos
 
     mkdir -p $out/lib/pkgconfig $out/include/chromeos $out/bin \
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
     cp -v *.pc $out/lib/pkgconfig
     cp -v libminijail.h scoped_minijail.h $out/include/chromeos
     cp -v minijail0 $out/bin
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

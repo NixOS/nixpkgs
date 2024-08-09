@@ -13,11 +13,15 @@ appleDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     for f in Products/Release/*; do
       if [ -f $f ]; then
         install -D $f $out/bin/$(basename $f)
       fi
     done
+
+    runHook postInstall
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [

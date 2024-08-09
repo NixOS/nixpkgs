@@ -24,7 +24,13 @@ stdenv.mkDerivation {
 
   doCheck = false; # hasdescriptor.c test fails, hrm.
 
-  installPhase = ''prefix="/" DESTDIR=$out ./installlib'';
+  installPhase = ''
+  runHook preInstall
+
+  prefix="/" DESTDIR=$out ./installlib
+
+  runHook postInstall
+'';
 
   meta = with lib; {
     description = "Installs the BlocksRuntime library from the compiler-rt";

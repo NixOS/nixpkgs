@@ -15,7 +15,11 @@ let
       dontBuild = true;
 
       installPhase = ''
+        runHook preInstall
+
         cp ${dictFileName} $out
+
+        runHook postInstall
       '';
 
       passthru = {

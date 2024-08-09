@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 flasm -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

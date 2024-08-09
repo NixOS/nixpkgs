@@ -18,6 +18,8 @@ let
     dontPatchELF = true;
     dontStrip = true;
     installPhase = ''
+      runHook preInstall
+
       mkdir $out/
       cp -r * $out/
 
@@ -28,6 +30,8 @@ let
       find $out/ -name "*.so" -type f -exec patchelf \
           --set-rpath "${rpath}" \
           "{}" \;
+
+      runHook postInstall
     '';
 
     meta.platforms = with lib; platforms.redox ++ platforms.linux;

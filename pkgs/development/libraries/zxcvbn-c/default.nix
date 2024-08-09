@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/lib libzxcvbn.so*
+
+    runHook postInstall
   '';
 
   meta = with lib; {

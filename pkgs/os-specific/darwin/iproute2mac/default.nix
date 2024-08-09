@@ -23,8 +23,12 @@ stdenv.mkDerivation rec {
       --replace /usr/sbin/networksetup ${darwin.network_cmds}/bin/networksetup
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -D -m 755 src/ip.py $out/bin/ip
+
+    runHook postInstall
   '';
 
   meta = with lib; {

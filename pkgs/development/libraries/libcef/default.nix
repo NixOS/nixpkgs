@@ -93,6 +93,8 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/ $out/share/cef/
     cp libcef_dll_wrapper/libcef_dll_wrapper.a $out/lib/
     cp ../Release/libcef.so $out/lib/
@@ -104,6 +106,8 @@ stdenv.mkDerivation rec {
     cp ../Release/*.bin $out/share/cef/
     cp -r ../Resources/* $out/share/cef/
     cp -r ../include $out/
+
+    runHook postInstall
   '';
 
   passthru.tests = {

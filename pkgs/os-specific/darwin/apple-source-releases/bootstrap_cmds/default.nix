@@ -25,6 +25,8 @@ appleDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/libexec $out/share/man/man1
 
     chmod +x mig.sh
@@ -39,5 +41,7 @@ appleDerivation {
       --replace '/usr/bin/' "" \
       --replace '/bin/rmdir' "rmdir" \
       --replace 'C=''${MIGCC}' "C=${targetTargetPrefix}cc"
+
+    runHook postInstall
   '';
 }

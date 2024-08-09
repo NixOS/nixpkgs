@@ -11,8 +11,12 @@ stdenv.mkDerivation {
     sha256 = "1wj7mxs52kp5lmn5mvv574sygkfnk00kbz9ya9c03yfq5dd5nvy8";
   };
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/doc/python27
     cp -R ./ $out/share/doc/python27/text
+
+    runHook postInstall
   '';
   meta = {
     maintainers = [ ];

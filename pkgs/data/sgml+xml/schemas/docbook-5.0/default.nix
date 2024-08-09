@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
+      runHook preInstall
+
       dst=$out/share/xml/docbook-5.0
       mkdir -p $dst
       cp -prv * $dst/
@@ -25,6 +27,8 @@ stdenv.mkDerivation rec {
       mkdir -p $out/xml/rng $out/xml/dtd
       ln -s $dst/rng $out/xml/rng/docbook
       ln -s $dst/dtd $out/xml/dtd/docbook
+
+      runHook postInstall
     '';
 
   meta = {

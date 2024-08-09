@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/share/hyperrogue/{sounds,music}
 
     install -m 555 -D hyperrogue $out/bin/hyperrogue
@@ -55,6 +57,8 @@ stdenv.mkDerivation rec {
       $out/share/icons/hicolor/144x144/apps/hyperrogue.png
     install -m 444 -D hyperroid/app/src/main/res/drawable-xxxhdpi/icon.png \
       $out/share/icons/hicolor/192x192/apps/hyperrogue.png
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

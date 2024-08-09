@@ -15,10 +15,14 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec/picard
     cp $src $out/libexec/picard/picard.jar
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/picard --add-flags "-jar $out/libexec/picard/picard.jar"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

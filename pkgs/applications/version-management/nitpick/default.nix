@@ -19,11 +19,15 @@ buildPythonPackage rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/src
     install -m 755 -t $out/share/src nitpick.py
 
     mkdir -p $out/bin
     ln -s $out/share/src/nitpick.py $out/bin/nitpick
+
+    runHook postInstall
   '';
 
   meta = {

@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   patches = [ ./dict.patch ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/dict
     mkdir -p $out/share/man/man1
@@ -45,6 +47,8 @@ stdenv.mkDerivation rec {
     cp -v ding.desktop $out/share/applications/
 
     wrapProgram $out/bin/ding --prefix PATH : ${lib.makeBinPath [ gnugrep aspellEnv tk fortune ]} --prefix ASPELL_CONF : "\"prefix ${aspellEnv};\""
+
+    runHook postInstall
   '';
 
   meta = with lib; {

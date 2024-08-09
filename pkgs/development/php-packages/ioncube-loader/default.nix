@@ -42,10 +42,14 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/php/extensions
     cp $src/ioncube_loader_${
       variant.${stdenv.hostPlatform.system}.prefix
     }_${phpVersion}.so $out/lib/php/extensions/ioncube-loader.so
+
+    runHook postInstall
   '';
 
   meta = with lib; {

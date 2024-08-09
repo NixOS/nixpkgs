@@ -15,9 +15,13 @@ stdenv.mkDerivation rec {
   buildPhase = "ant";
 
   installPhase = ''
+    runHook preInstall
+
     install -D dist/Vuze_0000-00.jar $out/share/java/Vuze_${version}-00.jar
     makeWrapper ${jre}/bin/java $out/bin/vuze \
       --add-flags "-Xmx256m -Djava.library.path=${swt}/lib -cp $out/share/java/Vuze_${version}-00.jar:${swt}/jars/swt.jar org.gudy.azureus2.ui.swt.Main"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

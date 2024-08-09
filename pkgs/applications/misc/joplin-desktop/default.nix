@@ -69,8 +69,12 @@ let
     sourceRoot = "Joplin.app";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Applications/Joplin.app
       cp -R . $out/Applications/Joplin.app
+
+      runHook postInstall
     '';
   };
 in

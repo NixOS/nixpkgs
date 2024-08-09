@@ -136,6 +136,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/opt/PixInsight $out/share/{applications,mime/packages,icons/hicolor}
 
     bwrap --bind /build /build --bind $out/opt /opt --bind /nix /nix --dev /dev fakeroot script -ec "./installer \
@@ -153,6 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove signatures of plugins, as they are only working if actually installed
     # under /opt. In the Nix setup, they are causing trouble.
     find $out/opt/PixInsight/ -name "*.xsgn" -exec rm {} \;
+
+    runHook postInstall
   '';
 
   # Some very exotic Qt libraries are not available in nixpkgs

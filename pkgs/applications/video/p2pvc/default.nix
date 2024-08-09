@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  installPhase = "mkdir -p $out/bin; cp p2pvc $out/bin/";
+  installPhase = "runHook preInstall; mkdir -p $out/bin; cp p2pvc $out/bin/; runHook postInstall";
 
   src = fetchFromGitHub {
     owner = "mofarrell";

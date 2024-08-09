@@ -73,6 +73,8 @@ stdenv.mkDerivation rec {
 
   # Won't work well without C or en_US. Setting LANG might not be enough if the user is making use of LC_* so wrap with LC_ALL instead
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/lib/zandronum
     cp zandronum${suffix} \
@@ -82,6 +84,8 @@ stdenv.mkDerivation rec {
     makeWrapper $out/lib/zandronum/zandronum${suffix} $out/bin/zandronum${suffix}
     wrapProgram $out/bin/zandronum${suffix} \
       --set LC_ALL="C"
+
+    runHook postInstall
   '';
 
   postFixup = lib.optionalString (!serverOnly) ''

@@ -41,8 +41,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ./ImageLOL $out/bin
+
+    runHook postInstall
   '';
 
   cmakeFlags = [ (lib.cmakeFeature "CMAKE_C_FLAGS" "-std=gnu90") ] ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "-DPNG_ARM_NEON=off";

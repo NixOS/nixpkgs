@@ -14,10 +14,14 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/lib hll${postgresql.dlSuffix}
     install -D -t $out/share/postgresql/extension *.sql
     install -D -t $out/share/postgresql/extension *.control
- '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "HyperLogLog for PostgreSQL";

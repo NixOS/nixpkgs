@@ -22,6 +22,8 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/include";
     tar -xf \
         ${lib.escapeShellArg libc.src} \
@@ -29,6 +31,8 @@ stdenvNoCC.mkDerivation {
         --to-stdout \
       | sed -e '/features\.h/d' \
       > "$out/include/elf.h"
+
+    runHook postInstall
   '';
 
   meta = libc.meta // {

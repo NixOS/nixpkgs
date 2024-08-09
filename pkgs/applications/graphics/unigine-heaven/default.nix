@@ -46,6 +46,8 @@ stdenv.mkDerivation
 
   installPhase =
     ''
+      runHook preInstall
+
       sh $src --target $name
 
       mkdir -p $out/lib/unigine/heaven/bin
@@ -73,6 +75,8 @@ stdenv.mkDerivation
       done
 
       ln -s ${desktopItem}/share/applications/* $out/share/applications
+
+      runHook postInstall
     '';
 
   nativeBuildInputs =

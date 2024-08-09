@@ -16,8 +16,12 @@ stdenv.mkDerivation {
   buildPhase = "sh -e make.sh";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp rowhammer_test double_sided_rowhammer $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

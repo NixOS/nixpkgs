@@ -60,8 +60,12 @@ in stdenv.mkDerivation rec {
   passthru.scripts = [ "weechat_otr.py" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     cp weechat_otr.py $out/share/weechat_otr.py
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -48,8 +48,12 @@ python3Packages.buildPythonApplication rec {
   makeWrapperArgs = ["--prefix PATH : ${lib.escapeShellArg wrapperPath}"];
 
   installPhase = ''
+    runHook preInstall
+
     make DESTDIR=$out install
     wrapPythonPrograms
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -20,9 +20,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     dir=$out/Isabelle${isabelle.version}/contrib/${pname}-${version}
     mkdir -p $dir
     cp -r * $dir/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

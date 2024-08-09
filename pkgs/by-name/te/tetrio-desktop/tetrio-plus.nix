@@ -67,7 +67,11 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       cp -r pkg/ $out
+
+      runHook postInstall
     '';
 
     doCheck = false;
@@ -142,12 +146,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     runHook preinstall
 
     mkdir -p $out
     asar pack out $out/app.asar
 
     runHook postinstall
+
+    runHook postInstall
   '';
 
   meta = {

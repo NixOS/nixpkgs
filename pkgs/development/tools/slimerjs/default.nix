@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     strip-nondeterminism --type zip omni.ja
     mkdir -p "$out"/{bin,share/doc/slimerjs,lib/slimerjs}
     cp LICENSE README* "$out/share/doc/slimerjs"
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
     echo "'$out/lib/slimerjs/slimerjs' \"\$@\"" >> "$out/bin/slimerjs"
     chmod a+x "$out/bin/slimerjs"
     sed -e 's@MaxVersion=[3456][0-9][.]@MaxVersion=99.@' -i "$out/lib/slimerjs/application.ini"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

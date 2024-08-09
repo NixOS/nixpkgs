@@ -26,9 +26,13 @@ let
     nativeBuildInputs = [ dpkg makeWrapper ];
 
     installPhase = ''
+      runHook preInstall
+
       dpkg-deb -x $src $out
       makeWrapper "$out/opt/pt/bin/PacketTracer7" "$out/bin/packettracer7" \
           --prefix LD_LIBRARY_PATH : "$out/opt/pt/bin"
+
+      runHook postInstall
     '';
   };
 
@@ -71,8 +75,12 @@ in stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     ${lndir}/bin/lndir -silent ${fhs} $out
+
+    runHook postInstall
   '';
 
   desktopItems = [ desktopItem ];

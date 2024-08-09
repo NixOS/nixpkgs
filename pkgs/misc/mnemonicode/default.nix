@@ -10,9 +10,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-bGipPvLj6ig+lMLsl/Yve8PmuA93ETvhNKoMPh0JMBM=";
   };
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv mnencode $out/bin
     mv mndecode $out/bin
+
+    runHook postInstall
   '';
   meta = with lib; {
     homepage = "https://github.com/singpolyma/mnemonicode";

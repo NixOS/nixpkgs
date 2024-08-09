@@ -17,10 +17,14 @@ stdenv.mkDerivation {
   patches = [ ./bcc-warning-fix.patch ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib,share/doc}
     install -m755 bcc $out/bin/bcc
     cp -av doc $out/share/doc/bcc
     cp -av lib $out/lib/bcc
+
+    runHook postInstall
   '';
 
   meta = with lib; {

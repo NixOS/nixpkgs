@@ -28,8 +28,12 @@ let
 
     # override npmInstallHook, we only care about the build/ directory
     installPhase = ''
+      runHook preInstall
+
       mkdir $out
       cp -r build/* $out/
+
+      runHook postInstall
     '';
   };
 in

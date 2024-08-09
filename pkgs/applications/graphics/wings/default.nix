@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
 
   # I did not test the *cl* part. I added the -pa just by imitation.
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib/wings-${version}/ebin
     cp ebin/* $out/lib/wings-${version}/ebin
     cp -R textures shaders plugins $out/lib/wings-${version}
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
       -pa $out/lib/wings-${version}/ebin -run wings_start start_halt "$@"
     EOF
     chmod +x $out/bin/wings
+
+    runHook postInstall
   '';
 
   meta = {

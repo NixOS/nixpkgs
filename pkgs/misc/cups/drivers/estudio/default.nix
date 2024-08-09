@@ -19,12 +19,16 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/cups/filter
     mkdir -p $out/share/cups/model/Toshiba
     cp {.,$out}/lib/cups/filter/est6550_Authentication
     chmod 755 $out/lib/cups/filter/est6550_Authentication
     cp {.,$out}/share/cups/model/Toshiba/TOSHIBA_ColorMFP_CUPS.gz
     chmod 755 $out/share/cups/model/Toshiba/TOSHIBA_ColorMFP_CUPS.gz
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -3,6 +3,8 @@
 appleDerivation' stdenv {
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include/ppp
 
     cp Controller/ppp_msg.h                    $out/include/ppp
@@ -11,5 +13,7 @@ appleDerivation' stdenv {
     cp Controller/pppcontroller.defs           $out/include/ppp
     cp Controller/pppcontroller_mach_defines.h $out/include
     cp Controller/PPPControllerPriv.h          $out/include/ppp
+
+    runHook postInstall
   '';
 }

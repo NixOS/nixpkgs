@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
 
   configurePhase = false;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install bin/* $out/bin
+
+    runHook postInstall
   '';
 
   preCheck = ''

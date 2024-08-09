@@ -16,9 +16,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/lib roaringbitmap${postgresql.dlSuffix}
     install -D -t $out/share/postgresql/extension roaringbitmap-*.sql
     install -D -t $out/share/postgresql/extension roaringbitmap.control
+
+    runHook postInstall
   '';
 
   meta = with lib; {

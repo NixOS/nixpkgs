@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     for path in *.dylib *.so *.so.* *.o *.o.*; do
       mv $path $out/lib/
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
     fi
     mkdir -p $doc/share/doc/${pname}
     cp -r ../doc/. $doc/share/doc/${pname}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

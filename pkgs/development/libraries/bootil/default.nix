@@ -28,8 +28,12 @@ stdenv.mkDerivation {
   premakefile = "projects/premake4.lua";
 
   installPhase = ''
+    runHook preInstall
+
     install -D libbootil_static.a $out/lib/libbootil_static.a
     cp -r include $out
+
+    runHook postInstall
   '';
 
   meta = with lib; {

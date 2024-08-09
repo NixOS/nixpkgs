@@ -24,8 +24,12 @@ buildGoModule rec {
   buildInputs = [ perl ];
 
   postInstall = ''
+    runHook preInstall
+
     install cmd/{bash,perl}/ssh-*/ssh-* -t $out/bin
     installManPage man/*.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

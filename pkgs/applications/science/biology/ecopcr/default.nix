@@ -16,12 +16,16 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -v ecoPCR $out/bin
     cp -v ecogrep $out/bin
     cp -v ecofind $out/bin
     cp -v ../tools/ecoPCRFormat.py $out/bin/ecoPCRFormat
     chmod a+x $out/bin/ecoPCRFormat
+
+    runHook postInstall
   '';
 
   meta = with lib; {

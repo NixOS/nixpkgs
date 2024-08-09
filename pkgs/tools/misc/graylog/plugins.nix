@@ -76,9 +76,13 @@ in {
       sha256 = "0yr2lmf50w8qw5amimmym6y4jxga4d7s7cbiqs5sqzvipgsknbwj";
     };
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       tar --strip-components=2 -xf $src
       cp ${pluginName}-${version}.jar $out/bin/${pluginName}-${version}.jar
+
+      runHook postInstall
     '';
     meta = {
       homepage = "https://docs.graylog.org/en/3.3/pages/integrations.html#enterprise";
@@ -108,9 +112,13 @@ in {
       sha256 = "0q858ffmkinngyqqsaszcrx93zc4fg43ny0xb7vm0p4wd48hjyqc";
     };
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       tar --strip-components=2 -xf $src
       cp ${pluginName}-${version}.jar $out/bin/${pluginName}-${version}.jar
+
+      runHook postInstall
     '';
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-integrations";

@@ -18,9 +18,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{lib,include/fastpbkdf2}
     cp *.a $out/lib
     cp fastpbkdf2.h $out/include/fastpbkdf2
+
+    runHook postInstall
   '';
 
   meta = with lib; {

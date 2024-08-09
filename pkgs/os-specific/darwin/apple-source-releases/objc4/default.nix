@@ -11,6 +11,8 @@ appleDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include/objc $out/lib
     cp ${darwin-stubs}/usr/lib/libobjc.A.tbd $out/lib/libobjc.A.tbd
     ln -s libobjc.A.tbd $out/lib/libobjc.tbd
@@ -31,5 +33,7 @@ appleDerivation {
     cp runtime/objc-sync.h $out/include/objc/objc-sync.h
     cp runtime/objc.h $out/include/objc/objc.h
     cp runtime/runtime.h $out/include/objc/runtime.h
+
+    runHook postInstall
   '';
 }

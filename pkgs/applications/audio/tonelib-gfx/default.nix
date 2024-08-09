@@ -44,9 +44,13 @@ stdenv.mkDerivation rec {
   unpackCmd = "dpkg -x $curSrc source";
 
   installPhase = ''
+    runHook preInstall
+
     mv usr $out
     substituteInPlace $out/share/applications/ToneLib-GFX.desktop --replace /usr/ $out/
- '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Tonelib GFX is an amp and effects modeling software for electric guitar and bass";

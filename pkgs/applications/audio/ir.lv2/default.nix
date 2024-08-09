@@ -19,12 +19,16 @@ stdenv.mkDerivation rec {
   postBuild = "make convert4chan";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mkdir "$out/include"
     mkdir -p "$out/share/doc"
 
     make PREFIX="$out" INSTDIR="$out/lib/lv2" install
     install -Dm755 convert4chan "$out/bin/convert4chan"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

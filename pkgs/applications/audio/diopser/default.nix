@@ -58,8 +58,12 @@ in  stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/vst3
     cp -r Diopser_artefacts/Release/VST3/Diopser.vst3 $out/lib/vst3
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];

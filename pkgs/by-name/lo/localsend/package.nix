@@ -86,9 +86,13 @@ let
     sourceRoot = ".";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Applications
       cp -r *.app $out/Applications
       makeBinaryWrapper $out/Applications/LocalSend.app/Contents/MacOS/LocalSend $out/bin/localsend
+
+      runHook postInstall
     '';
 
     meta = metaCommon // {

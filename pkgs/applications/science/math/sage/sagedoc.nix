@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cd "$SAGE_DOC_OVERRIDE"
 
     mkdir -p "$out/share/doc/sage"
@@ -50,6 +52,8 @@ stdenv.mkDerivation rec {
           ln -rs html/en/_static $_dir
     done
     mv html/en/_static{.tmp,}
+
+    runHook postInstall
   '';
 
   doCheck = true;

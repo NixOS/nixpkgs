@@ -46,9 +46,13 @@ stdenv.mkDerivation rec {
   unpackCmd = "dpkg -x $curSrc source";
 
   installPhase = ''
+    runHook preInstall
+
     mv usr $out
     substituteInPlace $out/share/applications/ToneLib-Metal.desktop --replace /usr/ $out/
- '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "ToneLib Metal – Guitar amp simulator targeted at metal players";

@@ -12,6 +12,8 @@ appleDerivation' stdenv {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/Library/Frameworks/IOKit.framework
 
     ###### IMPURITIES
@@ -178,6 +180,8 @@ appleDerivation' stdenv {
     cp IOUSBFamily*-630.4.5/IOUSBFamily/Headers/USBSpec.h             $dest/usb
 
     # video: missing altogether
+
+    runHook postInstall
   '';
 
   meta = with lib; {

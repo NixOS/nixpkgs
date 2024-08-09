@@ -14,12 +14,16 @@ stdenv.mkDerivation (finalAttrs: {
   unpackCmd = "unzip $curSrc";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec
     mv * $out/libexec/
 
     makeWrapper $out/libexec/bin/sql $out/bin/sqlcl \
       --set JAVA_HOME ${jdk.home} \
       --chdir "$out/libexec/bin"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

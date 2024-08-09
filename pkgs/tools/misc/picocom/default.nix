@@ -34,9 +34,13 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional stdenv.isDarwin IOKit;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 -t $out/bin picocom
     installManPage picocom.1
     installShellCompletion --bash bash_completion/picocom
+
+    runHook postInstall
   '';
 
   meta = with lib; {

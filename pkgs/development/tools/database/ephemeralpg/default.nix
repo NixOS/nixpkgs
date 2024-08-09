@@ -8,9 +8,13 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     PREFIX=$out make install
     wrapProgram $out/bin/pg_tmp --prefix PATH : ${lib.makeBinPath [ postgresql getopt ]}
+
+    runHook postInstall
   '';
   meta = with lib; {
     description = "Run tests on an isolated, temporary PostgreSQL database";

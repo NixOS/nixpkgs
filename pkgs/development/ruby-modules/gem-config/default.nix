@@ -318,7 +318,11 @@ in
         ;
         dontBuilt = true;
         installPhase = ''
+          runHook preInstall
+
           cp -R ext/fast_mmaped_file_rs $out
+
+          runHook postInstall
         '';
       };
       hash = if lib.versionAtLeast attrs.version "1.1.1"

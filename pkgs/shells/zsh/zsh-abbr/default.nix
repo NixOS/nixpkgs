@@ -17,10 +17,14 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D zsh-abbr.zsh $out/share/zsh/${pname}/abbr.plugin.zsh
     # Needed so that `man` can find the manpage, since it looks via PATH
     mkdir -p $out/bin
     mv man $out/share/man
+
+    runHook postInstall
   '';
 
   meta = with lib; {

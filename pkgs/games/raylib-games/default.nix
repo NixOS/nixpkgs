@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     runHook preBuild
     mkdir -p $out/bin $out/resources
     find . -type f -executable -exec cp {} $out/bin \;
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
       fi
     done
     runHook postBuild
+
+    runHook postInstall
   '';
 
   meta = with lib; {

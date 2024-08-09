@@ -23,7 +23,11 @@ stdenvNoCC.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mv vendor $out
+
+    runHook postInstall
   '';
 
   preferLocalBuild = true;

@@ -14,8 +14,12 @@ stdenvNoCC.mkDerivation rec {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/firmware
     b43-fwcutter -w $out/lib/firmware *.wl_apsta.o
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -33,6 +33,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp rpi-eeprom-config rpi-eeprom-update rpi-eeprom-digest "$out/bin"
 
@@ -41,6 +43,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         dirname_suffix="''${dirname/#firmware-}"
         cp -rP "$dirname" "$out/lib/firmware/raspberrypi/bootloader-$dirname_suffix"
     done
+
+    runHook postInstall
   '';
 
   fixupPhase = ''

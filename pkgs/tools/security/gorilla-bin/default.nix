@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
     libPath = lib.makeLibraryPath [ libXft libX11 freetype fontconfig libXrender libXScrnSaver libXext ];
   in ''
+    runHook preInstall
+
     mkdir -p $out/opt/password-gorilla
     mkdir -p $out/bin
     cp gorilla-${version} $out/opt/password-gorilla
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "${interpreter}" "$out/opt/password-gorilla/gorilla-${version}"
     makeWrapper "$out/opt/password-gorilla/gorilla-${version}" "$out/bin/gorilla" \
       --prefix LD_LIBRARY_PATH : "${libPath}"
+
+    runHook postInstall
   '';
 
   meta = {

@@ -27,12 +27,16 @@ stdenv.mkDerivation rec {
   buildInputs = postgresql.buildInputs ++ [ postgresql curl json_c ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib,share/postgresql/extension}
 
     cp repmgr{,d} $out/bin
     cp *${postgresql.dlSuffix} $out/lib
     cp *.sql      $out/share/postgresql/extension
     cp *.control  $out/share/postgresql/extension
+
+    runHook postInstall
   '';
 
   meta = with lib; {

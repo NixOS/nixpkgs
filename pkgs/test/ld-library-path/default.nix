@@ -16,9 +16,13 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib
       $CC -c -fpic libgreeting.c
       $CC -shared libgreeting.o -o $out/lib/libgreeting.so
+
+      runHook postInstall
     '';
   };
 
@@ -51,6 +55,8 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       $CC -c greeting-test.c
       $CC greeting-test.o -lgreeting -o $out/bin/greeting-test
@@ -67,6 +73,8 @@ let
         # And finally, test that a library in LD_LIBRARY_PATH takes precedence over the linked-in library.
         [ "$(LD_LIBRARY_PATH=${libgoodbye}/lib greeting-test)" = "Goodbye, world!" ]
       )
+
+      runHook postInstall
     '';
 
   };

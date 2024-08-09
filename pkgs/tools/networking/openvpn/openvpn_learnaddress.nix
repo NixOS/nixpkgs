@@ -14,10 +14,14 @@ stdenv.mkDerivation {
   buildInputs = [ coreutils gawk util-linux ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 ovpn-learnaddress $out/libexec/openvpn/openvpn-learnaddress
 
     wrapProgram $out/libexec/openvpn/openvpn-learnaddress \
         --prefix PATH : ${lib.makeBinPath [ coreutils gawk util-linux ]}
+
+    runHook postInstall
   '';
 
   meta = {

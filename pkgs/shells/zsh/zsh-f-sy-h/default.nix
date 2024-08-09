@@ -16,10 +16,14 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     plugindir="$out/share/zsh/site-functions"
 
     mkdir -p "$plugindir"
     cp -r -- F-Sy-H.plugin.zsh chroma functions share themes "$plugindir"/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

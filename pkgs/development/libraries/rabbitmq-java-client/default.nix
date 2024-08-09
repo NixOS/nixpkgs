@@ -15,12 +15,16 @@ stdenv.mkDerivation rec {
   buildPhase = "ant dist";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/java
     cp build/lib/*.jar lib/*.jar $out/share/java
 
     # There is a script in the source archive, but ours is cleaner
     makeWrapper ${jre}/bin/java $out/bin/PerfTest \
       --add-flags "-Djava.awt.headless=true -cp $out/share/java/\* com.rabbitmq.examples.PerfTest"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

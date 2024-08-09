@@ -15,10 +15,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ libGL SDL2 SDL2_mixer SDL2_net ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 eternity/eternity $out/lib/eternity/eternity
     cp -r $src/base $out/lib/eternity/base
     mkdir $out/bin
     makeWrapper $out/lib/eternity/eternity $out/bin/eternity
+
+    runHook postInstall
   '';
 
   meta = {

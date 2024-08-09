@@ -23,9 +23,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man
     mv xgalaga++ $out/bin
     mv xgalaga++.6x $out/share/man
+
+    runHook postInstall
   '';
 
   meta = with lib; {

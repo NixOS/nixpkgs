@@ -119,10 +119,14 @@ let
     dontBuild = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/libexec/electron $out/bin
       unzip -d $out/libexec/electron $src
       ln -s $out/libexec/electron/electron $out/bin
       chmod u-x $out/libexec/electron/*.so*
+
+      runHook postInstall
     '';
 
     postFixup = ''

@@ -46,6 +46,8 @@ grimshot = stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ makeWrapper installShellFiles ];
   buildInputs = [ bash ];
   installPhase = ''
+    runHook preInstall
+
     installManPage grimshot.1
     installShellCompletion --cmd grimshot grimshot-completion.bash
 
@@ -61,6 +63,8 @@ grimshot = stdenvNoCC.mkDerivation {
         jq
         gnugrep
         ] }"
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;
@@ -96,7 +100,11 @@ in python3Packages.buildPythonApplication {
   propagatedBuildInputs = [ python3Packages.i3ipc ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 0755 $src/${lname}.py $out/bin/${lname}.py
+
+    runHook postInstall
   '';
 
   meta = with lib; meta // {

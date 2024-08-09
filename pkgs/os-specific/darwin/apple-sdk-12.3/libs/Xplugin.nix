@@ -22,9 +22,13 @@ stdenvNoCC.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include $out/lib
     cp "${darwin-stubs}/include/Xplugin.h" $out/include/Xplugin.h
     cp ${darwin-stubs}/usr/lib/libXplugin.1.tbd $out/lib
     ln -s libXplugin.1.tbd $out/lib/libXplugin.tbd
+
+    runHook postInstall
   '';
 }

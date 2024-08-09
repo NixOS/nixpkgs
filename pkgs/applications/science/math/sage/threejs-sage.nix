@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/lib/node_modules/three/"
     cp version "$out/lib/node_modules/three"
     cp -r build "$out/lib/node_modules/three/$(cat version)"
+
+    runHook postInstall
   '';
 }

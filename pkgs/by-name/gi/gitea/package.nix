@@ -30,8 +30,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -R public $out/
+
+      runHook postInstall
     '';
   };
 in buildGoModule rec {

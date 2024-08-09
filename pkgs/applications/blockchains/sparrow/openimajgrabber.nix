@@ -26,8 +26,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     cp hardware/core-video-capture/src-native/linux/OpenIMAJGrabber.so $out/lib
+
+    runHook postInstall
   '';
 
   meta = with lib; {

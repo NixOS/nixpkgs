@@ -15,10 +15,14 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+     runHook preInstall
+
      mkdir -pv $out/bin
      cp $src $out/jython.jar
      makeWrapper ${jre}/bin/java $out/bin/jython --add-flags "-jar $out/jython.jar"
-  '';
+
+     runHook postInstall
+   '';
 
   meta = {
     description = "Python interpreter written in Java";

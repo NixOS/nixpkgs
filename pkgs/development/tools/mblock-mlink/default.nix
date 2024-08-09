@@ -22,11 +22,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mv $out/usr/local/makeblock $out/usr/makeblock
     rmdir $out/usr/local
     mkdir -p $out/bin
     echo $out/usr/makeblock/mLink/mnode $out/usr/makeblock/mLink/app.js > $out/bin/mlink
     chmod +x $out/bin/mlink
+
+    runHook postInstall
   '';
 
   meta = with lib; {

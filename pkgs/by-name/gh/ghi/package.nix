@@ -30,9 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ finalAttrs.env.wrappedRuby ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     cp ghi $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

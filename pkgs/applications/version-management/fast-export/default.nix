@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [mercurial.python mercurial];
 
   installPhase = ''
+    runHook preInstall
+
     binPath=$out/bin
     libexecPath=$out/libexec/${pname}
     sitepackagesPath=$out/${mercurial.python.sitePackages}
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${git}/bin":"${mercurial.python}/bin":$libexec \
         --prefix PYTHONPATH : "${mercurial}/${mercurial.python.sitePackages}":$sitepackagesPath
     done
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;

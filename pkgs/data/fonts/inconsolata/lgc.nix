@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ fontforge ];
 
   installPhase = ''
+    runHook preInstall
+
     find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
     find . -name '*.otf' -exec install -m444 -Dt $out/share/fonts/opentype {} \;
     install -m444 -Dt $out/share/doc/${pname}-${version} LICENSE README
+
+    runHook postInstall
   '';
 
   meta = with lib; {

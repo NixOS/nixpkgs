@@ -85,8 +85,12 @@ let
       };
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/include/tmd
         cp ${name}/include/tmd/${name}.h $out/include/tmd/
+
+        runHook postInstall
       '';
     };
 

@@ -14,11 +14,15 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     cp -ra application bin etc library modules public $out
     cp -ra doc $out/share
 
     wrapProgram $out/bin/icingacli --prefix PATH : "${lib.makeBinPath [ php ]}"
+
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) icingaweb2; };

@@ -31,6 +31,8 @@ let
     ];
 
     installPhase = ''
+      runHook preInstall
+
       # replace dangling symlinks which are not copied into fhs with actually files
       rm lib/*.so*
       for file in var/www/onlyoffice/documentserver/server/FileConverter/bin/*.so* ; do
@@ -51,6 +53,8 @@ let
       mkdir -p var/lib/onlyoffice/ var/www/onlyoffice/documentserver/fonts/
 
       mv * $out/
+
+      runHook postInstall
     '';
 
     # stripping self extracting javascript binaries likely breaks them

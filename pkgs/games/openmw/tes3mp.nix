@@ -43,7 +43,11 @@ let
     nativeBuildInputs = [ cmake ];
 
     installPhase = ''
+      runHook preInstall
+
       install -Dm555 lib/libRakNetLibStatic.a $out/lib/libRakNetLibStatic.a
+
+      runHook postInstall
     '';
   };
 

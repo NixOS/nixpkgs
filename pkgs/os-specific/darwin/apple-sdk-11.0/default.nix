@@ -31,7 +31,11 @@ let
     };
 
     installPhase = ''
+      runHook preInstall
+
       mv Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk $out
+
+      runHook postInstall
     '';
   };
 
@@ -46,7 +50,11 @@ let
     };
 
     installPhase = ''
+      runHook preInstall
+
       mv Library/Developer/CommandLineTools $out
+
+      runHook postInstall
     '';
   };
 

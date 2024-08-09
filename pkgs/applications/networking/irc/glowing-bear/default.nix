@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp index.html serviceworker.js webapp.manifest.json $out
     cp -R 3rdparty assets css directives js $out
+
+    runHook postInstall
   '';
 
   meta = with lib; {

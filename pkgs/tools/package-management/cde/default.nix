@@ -34,8 +34,12 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin
     install -t $out/bin cde cde-exec
+
+    runHook postInstall
   '';
 
   meta = with lib; {

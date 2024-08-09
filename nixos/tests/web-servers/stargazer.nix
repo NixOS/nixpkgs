@@ -7,8 +7,12 @@ let
     dontBuild = true;
     doCheck = false;
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp scripts/gemini-diagnostics $out/bin/test
+
+      runHook postInstall
     '';
   };
   test_env = pkgs.stdenv.mkDerivation {
@@ -19,8 +23,12 @@ let
     '';
     doCheck = false;
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r * $out/
+
+      runHook postInstall
     '';
   };
   scgi_server = pkgs.stdenv.mkDerivation {
@@ -31,8 +39,12 @@ let
     dontBuild = true;
     doCheck = false;
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp scripts/scgi-server $out/bin/scgi-server
+
+      runHook postInstall
     '';
   };
 in

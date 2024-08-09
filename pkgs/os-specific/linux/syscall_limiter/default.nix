@@ -19,12 +19,16 @@ stdenv.mkDerivation {
   buildInputs = [ libseccomp ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -v limit_syscalls $out/bin
     cp -v monitor.sh $out/bin/limit_syscalls_monitor.sh
     substituteInPlace $out/bin/limit_syscalls_monitor.sh \
       --replace perl ${perl}/bin/perl \
       --replace which ${which}/bin/which
+
+    runHook postInstall
   '';
 
   meta = with lib; {

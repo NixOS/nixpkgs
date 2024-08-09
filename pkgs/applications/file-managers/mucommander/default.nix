@@ -40,12 +40,16 @@ stdenv.mkDerivation (finalAttrs: {
   gradleBuildTask = "tgz";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/mucommander
     tar xvf build/distributions/mucommander-*.tgz --directory=$out/share/mucommander
 
     makeWrapper $out/share/mucommander/mucommander.sh $out/bin/mucommander \
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
       --set JAVA_HOME ${jdk}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -14,12 +14,16 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -r * $out/
     ln -sf /etc/roundcube/config.inc.php $out/config/config.inc.php
     rm -rf $out/installer
     # shut up updater
     rm $out/composer.json-dist
+
+    runHook postInstall
   '';
 
   passthru.withPlugins = f: buildEnv {

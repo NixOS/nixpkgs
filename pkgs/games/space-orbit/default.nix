@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r .. $out/dump
     cat >$out/bin/space-orbit <<EOF
@@ -35,6 +37,8 @@ stdenv.mkDerivation rec {
 exec $out/dump/orbit "\$@"
 EOF
     chmod a+x $out/bin/space-orbit
+
+    runHook postInstall
   '';
 
   meta = with lib; {

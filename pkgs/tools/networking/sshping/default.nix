@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
     '';
 
   installPhase = ''
+      runHook preInstall
+
       install -Dm755 bin/sshping $out/bin/sshping
+
+      runHook postInstall
     '';
 
   meta = with lib; {

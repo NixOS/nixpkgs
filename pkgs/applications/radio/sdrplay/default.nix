@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib,include,lib/udev/rules.d}
     majorVersion="${lib.concatStringsSep "." (lib.take 1 (builtins.splitVersion version))}"
     majorMinorVersion="${lib.concatStringsSep "." (lib.take 2 (builtins.splitVersion version))}"
@@ -51,6 +53,8 @@ stdenv.mkDerivation rec {
     cp "${arch}/sdrplay_apiService" $out/bin/
     cp -r inc/* $out/include/
     cp 66-mirics.rules $out/lib/udev/rules.d/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

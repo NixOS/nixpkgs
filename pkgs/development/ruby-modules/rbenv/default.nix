@@ -19,12 +19,16 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     popd
     mkdir -p $out/bin
     mv libexec $out
     ln -s $out/libexec/rbenv $out/bin/rbenv
 
     installShellCompletion completions/rbenv.{bash,zsh}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

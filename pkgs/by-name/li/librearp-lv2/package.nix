@@ -37,9 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/lv2
     cd LibreArp_artefacts/Release
     cp -r LV2/LibreArp.lv2 $out/lib/lv2
+
+    runHook postInstall
   '';
 
   meta = with lib; {

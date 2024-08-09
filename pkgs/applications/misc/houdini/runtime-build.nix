@@ -5,6 +5,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ bc ];
   installPhase = ''
+    runHook preInstall
+
     patchShebangs houdini.install
     mkdir -p $out
     ./houdini.install --install-houdini \
@@ -16,6 +18,8 @@ stdenv.mkDerivation {
                       --accept-EULA ${eulaDate} \
                       $out
     echo "licensingMode = localValidator" >> $out/houdini/Licensing.opt  # does not seem to do anything any more. not sure, official docs do not say anything about it
+
+    runHook postInstall
   '';
 
   dontFixup = true;

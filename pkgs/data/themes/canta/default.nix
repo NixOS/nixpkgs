@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
   dontDropIconThemeCache = true;
 
   installPhase = ''
+    runHook preInstall
+
     patchShebangs .
     mkdir -p $out/share/themes
     name= ./install.sh --dest $out/share/themes
@@ -53,6 +55,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons
     cp -a icons/Canta $out/share/icons
     gtk-update-icon-cache $out/share/icons/Canta
+
+    runHook postInstall
   '';
 
   meta = with lib; {

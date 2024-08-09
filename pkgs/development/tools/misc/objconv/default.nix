@@ -24,9 +24,13 @@ stdenv.mkDerivation rec {
   buildPhase = "c++ -o objconv -O2 *.cpp";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/doc/objconv
     mv objconv $out/bin
     mv objconv-instructions.pdf $out/doc/objconv
+
+    runHook postInstall
   '';
 
   meta = with lib; {

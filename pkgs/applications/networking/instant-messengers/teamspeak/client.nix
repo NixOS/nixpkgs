@@ -74,6 +74,8 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
+      runHook preInstall
+
       # Delete unecessary libraries - these are provided by nixos.
       rm *.so.* *.so
       rm QtWebEngineProcess
@@ -100,6 +102,8 @@ stdenv.mkDerivation rec {
     '' /* wayland is currently broken, remove when TS3 fixes that */ + ''
         --set QT_QPA_PLATFORM xcb \
         --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
+
+      runHook postInstall
     '';
 
   dontStrip = true;

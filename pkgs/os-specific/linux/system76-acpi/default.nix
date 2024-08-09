@@ -24,9 +24,13 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D system76_acpi.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76_acpi.ko
     mkdir -p $out/lib/udev/hwdb.d
     mv lib/udev/hwdb.d/* $out/lib/udev/hwdb.d
+
+    runHook postInstall
   '';
 
   meta = with lib; {

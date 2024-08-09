@@ -23,9 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D bin/pg_repack -t $out/bin/
     install -D lib/pg_repack${postgresql.dlSuffix} -t $out/lib/
     install -D lib/{pg_repack--${finalAttrs.version}.sql,pg_repack.control} -t $out/share/postgresql/extension
+
+    runHook postInstall
   '';
 
   passthru.tests = {
@@ -45,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
         psql -a -v ON_ERROR_STOP=1 -c "CREATE EXTENSION pg_repack;"
         runHook postCheck
       '';
-      installPhase = "touch $out";
+      installPhase = "runHook preInstall; touch $out; runHook postInstall";
     };
   };
 

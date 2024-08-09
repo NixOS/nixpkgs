@@ -34,6 +34,8 @@ appleDerivation' stdenv {
   dontFixup = true;
 
   installPhase = ''
+    runHook preInstall
+
     export NIX_ENFORCE_PURITY=
 
     mkdir -p $out/lib $out/include
@@ -143,6 +145,8 @@ appleDerivation' stdenv {
       -change "$resolv_libSystem" /usr/lib/libSystem.dylib \
       $out/lib/libresolv.9.dylib
     ln -s libresolv.9.dylib $out/lib/libresolv.dylib
+
+    runHook postInstall
   '';
 
   appleHeaders = builtins.readFile ./headers.txt;

@@ -82,7 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
   # The source directory for ROCgdb (based on upstream GDB) contains multiple project
   # of GNU’s toolchain (binutils and onther), we only need to install the GDB part.
   installPhase = ''
+    runHook preInstall
+
     make install-gdb
+
+    runHook postInstall
   '';
 
   # `-Wno-format-nonliteral` doesn't work

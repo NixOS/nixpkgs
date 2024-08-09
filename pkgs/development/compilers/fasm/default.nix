@@ -18,11 +18,15 @@ stdenv.mkDerivation {
   outputs = [ "out" "doc" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin fasm tools/libc/fasm-*
 
     docs=$doc/share/doc/fasm
     mkdir -p $docs
     cp -r examples/ *.txt tools/fas.txt $docs
     cp tools/readme.txt $docs/tools.txt
+
+    runHook postInstall
   '';
 }

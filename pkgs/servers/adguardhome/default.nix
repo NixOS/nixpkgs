@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
   src = sources.${system} or (throw "Source for ${pname} is not available for ${system}");
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -D ./AdGuardHome $out/bin/adguardhome
+
+    runHook postInstall
   '';
 
   passthru = {

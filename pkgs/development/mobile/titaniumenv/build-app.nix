@@ -157,6 +157,8 @@ stdenv.mkDerivation ({
   '';
 
   installPhase = ''
+    runHook preInstall
+
     ${if target == "android" then ''
       ${lib.optionalString (!release) ''
         cp "$(ls build/android/bin/*.apk | grep -v '\-unsigned.apk')" $out
@@ -180,6 +182,8 @@ stdenv.mkDerivation ({
         ''}
       ''
     else throw "Target: ${target} is not supported!"}
+
+    runHook postInstall
   '';
 
   failureHook = lib.optionalString (release && target == "iphone") deleteKeychain;

@@ -15,6 +15,8 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 LICENSE.md "$out/share/licenses/spaceship-prompt/LICENSE"
     install -Dm644 README.md "$out/share/doc/spaceship-prompt/README.md"
     find docs -type f -exec install -Dm644 {} "$out/share/doc/spaceship-prompt/{}" \;
@@ -27,6 +29,8 @@ stdenvNoCC.mkDerivation rec {
     ln -s "$out/lib/spaceship-prompt/spaceship.zsh" "$out/share/zsh/themes/spaceship.zsh-theme"
     install -d "$out/share/zsh/site-functions/"
     ln -s "$out/lib/spaceship-prompt/spaceship.zsh" "$out/share/zsh/site-functions/prompt_spaceship_setup"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

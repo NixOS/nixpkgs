@@ -14,11 +14,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a kodi-cli $out/bin
     wrapProgram $out/bin/kodi-cli --prefix PATH : ${lib.makeBinPath [ curl bash ]}
     cp -a playlist_to_kodi $out/bin
     wrapProgram $out/bin/playlist_to_kodi --prefix PATH : ${lib.makeBinPath [ curl bash zenity jq youtube-dl ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -24,9 +24,13 @@ in mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib
     cp -vr $sourceRoot/usr/bin/ODAFileConverter_${version} $out/libexec
     cp -vr $sourceRoot/usr/share $out/share
+
+    runHook postInstall
   '';
 
   dontWrapQtApps = true;

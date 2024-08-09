@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share
     cp -a . $out/share/alchemy
     cat >> $out/bin/alchemy << EOF
@@ -20,6 +22,8 @@ stdenv.mkDerivation rec {
     ${jre}/bin/java -jar Alchemy.jar "$@"
     EOF
     chmod +x $out/bin/alchemy
+
+    runHook postInstall
   '';
 
   meta = with lib; {

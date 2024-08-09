@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     mkdir -p $out/share/doc/groovy
     rm bin/*.bat
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
             --set JAVA_HOME "${jdk}" \
             --prefix PATH ":" "${jdk}/bin"
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

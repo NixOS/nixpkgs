@@ -103,6 +103,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     stage1/mono-msbuild/msbuild mono/build/install.proj /p:MonoInstallPrefix="$out" /p:Configuration=Release-MONO
 
     ln -s ${roslyn}/lib/dotnet/microsoft.net.compilers.toolset/*/tasks/net472 $out/lib/mono/msbuild/Current/bin/Roslyn
@@ -112,6 +114,8 @@ stdenv.mkDerivation rec {
       --add-flags "$out/lib/mono/msbuild/15.0/bin/MSBuild.dll"
 
     ln -s $(find ${dotnet-sdk} -name libhostfxr${sharedLibrary}) $out/lib/mono/msbuild/Current/bin/SdkResolvers/Microsoft.DotNet.MSBuildSdkResolver/
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;

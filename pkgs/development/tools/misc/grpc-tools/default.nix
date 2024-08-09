@@ -22,8 +22,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin grpc_node_plugin
     install -Dm755 -t $out/bin deps/protobuf/protoc
+
+    runHook postInstall
   '';
 
   passthru.updateScript = gitUpdater {

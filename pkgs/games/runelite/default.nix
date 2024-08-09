@@ -40,6 +40,8 @@ maven.buildMavenPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/icons
     mkdir -p $out/share/applications
 
@@ -51,6 +53,8 @@ maven.buildMavenPackage rec {
     makeWrapper ${jre}/bin/java $out/bin/runelite \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libXxf86vm libGL ]}" \
       --add-flags "-jar $out/share/RuneLite.jar"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = gitUpdater { };

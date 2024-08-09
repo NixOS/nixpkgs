@@ -10,12 +10,16 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     mv * $out/
     for j in `find $out/lib -name "*.jar"`; do
       cp="''${cp:+"$cp:"}$j";
     done
     echo "CLASSPATH=$cp" > $out/lib/classpath.env
+
+    runHook postInstall
   '';
 
   meta = {

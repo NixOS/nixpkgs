@@ -10,8 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     cp lib/bsf.jar $out/share/java/
+
+    runHook postInstall
   '';
 
   meta = {

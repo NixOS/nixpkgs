@@ -13,8 +13,12 @@ stdenv.mkDerivation {
 
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/postgresql/extension
     cp pg*sql *.control $out/share/postgresql/extension
+
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater { };

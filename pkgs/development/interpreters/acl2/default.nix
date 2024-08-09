@@ -83,11 +83,15 @@ in stdenv.mkDerivation rec {
   checkTarget = "mini-proveall";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     ln -s $out/share/${pname}/saved_acl2           $out/bin/${pname}
   '' + lib.optionalString certifyBooks ''
     ln -s $out/share/${pname}/books/build/cert.pl  $out/bin/${pname}-cert
     ln -s $out/share/${pname}/books/build/clean.pl $out/bin/${pname}-clean
+
+    runHook postInstall
   '';
 
   preDistPhases = [ (if certifyBooks then "certifyBooksPhase" else "removeBooksPhase") ];

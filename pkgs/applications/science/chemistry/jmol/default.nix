@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/jmol" "$out/bin"
 
     ${unzip}/bin/unzip jsmol.zip -d "$out/share/"
@@ -47,6 +49,8 @@ stdenv.mkDerivation rec {
     cp *.jar jmol.sh "$out/share/jmol"
     cp -r ${desktopItem}/share/applications $out/share
     cp jmol $out/bin
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

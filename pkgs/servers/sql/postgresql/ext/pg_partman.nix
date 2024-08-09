@@ -14,12 +14,16 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{lib,share/postgresql/extension}
 
     cp src/*${postgresql.dlSuffix} $out/lib
     cp updates/*     $out/share/postgresql/extension
     cp -r sql/*      $out/share/postgresql/extension
     cp *.control     $out/share/postgresql/extension
+
+    runHook postInstall
   '';
 
   meta = with lib; {

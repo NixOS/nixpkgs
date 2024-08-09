@@ -13,9 +13,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     cp -r licenses $out/share/common-licenses
     cat debian/base-files.links | grep common-licenses | sed -e "s|usr|$out|g" -e "s|^|ln -s |g" | bash -x
+
+    runHook postInstall
   '';
 
   meta = with lib; {

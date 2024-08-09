@@ -14,8 +14,12 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ buildPackages.darwin.checkReexportsHook ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     cp ${darwin-stubs}/usr/lib/libpm* $out/lib
+
+    runHook postInstall
   '';
 
   passthru.tbdRewrites = {

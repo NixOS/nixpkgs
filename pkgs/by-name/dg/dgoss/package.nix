@@ -17,8 +17,12 @@ resholve.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     sed -i '2i GOSS_PATH=${goss}/bin/goss' extras/dgoss/dgoss
     install -D extras/dgoss/dgoss $out/bin/dgoss
+
+    runHook postInstall
   '';
 
   solutions = {

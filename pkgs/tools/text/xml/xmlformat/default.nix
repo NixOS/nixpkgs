@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ./xmlformat.pl $out/bin/xmlformat
     cp ./LICENSE $out/
+
+    runHook postInstall
   '';
 
   meta = {

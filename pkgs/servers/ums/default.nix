@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     cp -a . $out/
     mkdir $out/bin
     mv $out/documentation /$out/doc
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
     makeWrapper "$out/UMS.sh" "$out/bin/ums" \
       --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath [ libzen libmediainfo] }" \
       --set JAVA_HOME "${jre8}"
+
+    runHook postInstall
   '';
 
   meta = {

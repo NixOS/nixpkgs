@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ eigen ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include
     cp -r vcg wrap $out/include
     find $out -name \*.h -exec sed -i 's,<eigenlib/,<eigen3/,g' {} \;
+
+    runHook postInstall
   '';
 
   meta = with lib; {

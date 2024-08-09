@@ -8,9 +8,13 @@ appleDerivation {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
   NIX_LDFLAGS = "-lutil";
   installPhase = ''
+    runHook preInstall
+
     install -D Products/Release/libtop.a $out/lib/libtop.a
     install -D Products/Release/libtop.h $out/include/libtop.h
     install -D Products/Release/top $out/bin/top
+
+    runHook postInstall
   '';
   meta = {
     platforms = lib.platforms.darwin;

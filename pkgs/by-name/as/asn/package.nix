@@ -29,10 +29,14 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dv asn "$out/bin/asn"
 
     wrapProgram $out/bin/asn \
       --prefix PATH : "${lib.makeBinPath [ curl whois bind mtr jq ipcalc grepcidr nmap aha ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -31,8 +31,12 @@ stdenv.mkDerivation rec {
   # CMAKE_INSTALL_PREFIX has no effect so let's install manually. See:
   # https://gitlab.linphone.org/BC/public/msopenh264/issues/1
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/mediastreamer/plugins
     cp src/libmsopenh264.so $out/lib/mediastreamer/plugins/
+
+    runHook postInstall
   '';
 
   meta = with lib; {
