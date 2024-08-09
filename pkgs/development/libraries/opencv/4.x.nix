@@ -474,7 +474,8 @@ effectiveStdenv.mkDerivation {
   ] ++ lib.optionals (!effectiveStdenv.isDarwin) [
     "-DOPENCL_LIBRARY=${ocl-icd}/lib/libOpenCL.so"
   ] ++ lib.optionals enablePython [
-    "-DOPENCV_SKIP_PYTHON_LOADER=ON"
+    # This is required for Python type stubs to be installed
+    "-DOPENCV_PYTHON_INSTALL_PATH=${pythonPackages.python.sitePackages}"
   ] ++ lib.optionals (enabledModules != [ ]) [
     "-DBUILD_LIST=${lib.concatStringsSep "," enabledModules}"
   ];
@@ -521,10 +522,6 @@ effectiveStdenv.mkDerivation {
 
     pushd dist
     python -m pip install ./*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache
-
-    # the cv2/__init__.py just tries to check provide "nice user feedback" if the installation is bad
-    # however, this also causes infinite recursion when used by other packages
-    rm -r $out/${pythonPackages.python.sitePackages}/cv2
 
     popd
     popd
