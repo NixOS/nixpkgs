@@ -1,28 +1,40 @@
 { version
+, dmdRevision ? "v${version}"
+, phobosRevision ? "v${version}"
 , dmdHash
 , phobosHash
+, bootstrap ? false
 }:
 
 { stdenv
 , lib
-, fetchFromGitHub
-, removeReferencesTo
-, makeWrapper
-, which
-, writeTextFile
-, curl
-, tzdata
-, gdb
-, Foundation
 , callPackage
-, targetPackages
+, fetchFromGitHub
 , fetchpatch
-, bash
 , installShellFiles
+, makeWrapper
+, removeReferencesTo
+, targetPackages
+, writeTextFile
+, bash
+, curl
+, darwin
+, gdb
 , git
+, tzdata
 , unzip
-, dmdBootstrap ? callPackage ./bootstrap.nix { }
-, dmdBin ? "${dmdBootstrap}/bin"
+, which
+
+, dmdBootstrap ?
+  if !bootstrap then
+    callPackage ./bootstrap.nix { }
+  else
+    null
+, dmdBin ?
+  if !bootstrap then
+    lib.getExe dmdBootstrap
+  else
+    ""
 }:
 
 let
@@ -34,19 +46,21 @@ let
       };
     });
   };
-
+  # TODO: move dmd.conf for non-bootstrap builds to etc/
+  dmdConfPath = "$out/${if bootstrap then "etc" else "bin"}/dmd.conf";
+  druntimeImport = (lib.optionalString (!bootstrap) "dmd/") + "druntime/import/";
   bits = builtins.toString stdenv.hostPlatform.parsed.cpu.bits;
   osname =
     if stdenv.isDarwin then
       "osx"
     else
       stdenv.hostPlatform.parsed.kernel.name;
-
   pathToDmd = "\${NIX_BUILD_TOP}/dmd/generated/${osname}/release/${bits}/dmd";
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "dmd";
+  pname = "dmd"
+    + lib.optionalString bootstrap "-bootstrap";
   inherit version;
 
   enableParallelBuilding = true;
@@ -55,16 +69,24 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchFromGitHub {
       owner = "dlang";
       repo = "dmd";
-      rev = "v${finalAttrs.version}";
+      rev = dmdRevision;
       hash = dmdHash;
       name = "dmd";
     })
     (fetchFromGitHub {
       owner = "dlang";
       repo = "phobos";
-      rev = "v${finalAttrs.version}";
+      rev = phobosRevision;
       hash = phobosHash;
       name = "phobos";
+    })
+  ] ++ lib.optionals bootstrap [
+    (fetchFromGitHub {
+      owner = "dlang";
+      repo = "druntime";
+      rev = "98c6ff0cf1241a0cfac196bf8a0523b1d4ecd3ac";
+      hash = "sha256-4xhPzyNeafuayy39wAlXiJ+eD0eXcpcgPPMxELGlcMk=";
+      name = "druntime";
     })
   ];
 
@@ -73,7 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
   # https://issues.dlang.org/show_bug.cgi?id=19553
   hardeningDisable = [ "fortify" ];
 
-  patches = lib.optionals (lib.versionOlder version "2.088.0") [
+  patches = lib.optionals bootstrap [
+    ./bootstrap-sysconfdir.diff
+  ] ++ lib.optionals (!bootstrap && lib.versionOlder version "2.088.0") [
     # Migrates D1-style operator overloads in DMD source, to allow building with
     # a newer DMD
     (fetchpatch {
@@ -85,6 +109,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+  '' + lib.optionalString bootstrap ''
+    substituteInPlace dmd/src/inifile.c \
+      --subst-var out
+  '' + lib.optionalString (!bootstrap) ''
     patchShebangs dmd/compiler/test/{runnable,fail_compilation,compilable,tools}{,/extra-files}/*.sh
 
     rm dmd/compiler/test/runnable/gdb1.d
@@ -116,6 +144,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     which
     installShellFiles
+  ] ++ lib.optionals (!bootstrap) [
+    dmdBootstrap
   ] ++ lib.optionals (lib.versionOlder version "2.088.0") [
     git
   ];
@@ -124,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     tzdata
   ] ++ lib.optionals stdenv.isDarwin [
-    Foundation
+    darwin.apple_sdk.frameworks.Foundation
   ];
 
   nativeCheckInputs = [
@@ -133,11 +163,16 @@ stdenv.mkDerivation (finalAttrs: {
     unzip
   ];
 
-  buildFlags = [
-    "BUILD=release"
-    "ENABLE_RELEASE=1"
-    "PIC=1"
-  ];
+  buildFlags =
+    if bootstrap then [
+      "-fposix.mak"
+      "CXXFLAGS+=-Wno-format-security"
+      "CXXFLAGS+=-DTARGET_LINUX"
+    ] else [
+      "BUILD=release"
+      "ENABLE_RELEASE=1"
+      "PIC=1"
+    ];
 
   # Build and install are based on http://wiki.dlang.org/Building_DMD
   buildPhase = ''
@@ -145,9 +180,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     export buildJobs=$NIX_BUILD_CORES
     [ -z "$enableParallelBuilding" ] && buildJobs=1
-
-    ${dmdBin}/rdmd dmd/compiler/src/build.d -j$buildJobs $buildFlags \
-      HOST_DMD=${dmdBin}/dmd
+  '' + lib.optionalString bootstrap ''
+    make -C dmd -j$buildJobs $buildFlags
+  '' + lib.optionalString (!bootstrap) ''
+    ${dmdBin} -run dmd/compiler/src/build.d -j$buildJobs $buildFlags \
+      HOST_DMD=${dmdBin}
     make -C dmd/druntime -j$buildJobs DMD=${pathToDmd} $buildFlags
     echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
     echo ${lib.getLib curl}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} \
@@ -158,7 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  doCheck = true;
+  doCheck = !bootstrap;
 
   # many tests are disabled because they are failing
 
@@ -171,7 +208,8 @@ stdenv.mkDerivation (finalAttrs: {
     [ -z "$enableParallelChecking" ] && checkJobs=1
 
     CC=$CXX HOST_DMD=${pathToDmd} NIX_ENFORCE_PURITY= \
-      ${dmdBin}/rdmd dmd/compiler/test/run.d -j$checkJobs
+      ${dmdBin} -i -Idmd/compiler/test \
+      -run dmd/compiler/test/run.d -j$checkJobs
 
     NIX_ENFORCE_PURITY= \
       make -C phobos unittest -j$checkJobs $checkFlags \
@@ -188,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage dmd/docs/man/man*/*
 
     mkdir -p $out/include/dmd
-    cp -r {dmd/druntime/import/*,phobos/{std,etc}} $out/include/dmd/
+    cp -r {${druntimeImport}/*,phobos/{std,etc}} $out/include/dmd/
 
     mkdir $out/lib
     cp phobos/generated/${osname}/release/${bits}/libphobos2.* $out/lib/
@@ -197,19 +235,19 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${targetPackages.stdenv.cc}/bin" \
       --set-default CC "${targetPackages.stdenv.cc}/bin/cc"
 
-    substitute ${dmdConfFile} "$out/bin/dmd.conf" --subst-var out
+    substitute ${dmdConfFile} ${dmdConfPath} --subst-var out
 
     runHook postInstall
   '';
 
   preFixup = ''
-    find $out/bin -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${dmdBin}/dmd '{}' +
+    find $out/bin -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${dmdBin} '{}' +
   '';
 
-  disallowedReferences = [ dmdBootstrap ];
+  disallowedReferences = lib.optional (!bootstrap) dmdBootstrap;
 
   passthru = {
-    inherit dmdBootstrap;
+    bootstrap = dmdBootstrap;
   };
 
   meta = with lib; {
