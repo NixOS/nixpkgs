@@ -258,6 +258,8 @@ let
     # unconditionally just in case. If the abi specifically sets hard
     # vs. soft floats we use it here.
     optional (targetPlatform ? gcc.float-abi) "-mfloat-abi=${targetPlatform.gcc.float-abi}" ++
+    # Clang doesn't parse gnuabielfv{1,2} triplet parts for powerpc64{,le}, need to manually set abi
+    optional (targetPlatform.isPower64 && lib.strings.hasPrefix "gnuabielfv" targetPlatform.parsed.abi.name) "-mabi=${targetPlatform.parsed.abi.abi}" ++
     optional (targetPlatform ? gcc.fpu) "-mfpu=${targetPlatform.gcc.fpu}" ++
     optional (targetPlatform ? gcc.mode) "-mmode=${targetPlatform.gcc.mode}" ++
     optional (targetPlatform ? gcc.thumb) "-m${thumb}" ++
