@@ -182,21 +182,16 @@ let
         "test-tls-cli-max-version-1.3"
         "test-tls-client-auth"
         "test-tls-sni-option"
-      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        # Disable tests that don’t work under macOS sandbox.
-        "test-macos-app-sandbox"
-        "test-os"
-        "test-os-process-priority"
         # This is a bit weird, but for some reason fs watch tests fail with
         # sandbox.
         "test-fs-promises-watch"
         "test-fs-watch"
         "test-fs-watch-encoding"
         "test-fs-watch-non-recursive"
-        "test-fs-watch-recursive-add-file"
         "test-fs-watch-recursive-add-file-to-existing-subfolder"
         "test-fs-watch-recursive-add-file-to-new-folder"
         "test-fs-watch-recursive-add-file-with-url"
+        "test-fs-watch-recursive-add-file"
         "test-fs-watch-recursive-add-folder"
         "test-fs-watch-recursive-assert-leaks"
         "test-fs-watch-recursive-promise"
@@ -206,7 +201,16 @@ let
         "test-fs-watchfile"
         "test-runner-run"
         "test-runner-watch-mode"
+        "test-trace-events-fs-async"
+        "test-trace-events-fs-sync"
+        "test-url-parse-invalid-input"
+        "test-v8-coverage"
         "test-watch-mode-files_watcher"
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Disable tests that don’t work under macOS sandbox.
+        "test-macos-app-sandbox"
+        "test-os"
+        "test-os-process-priority"
       ])}"
     ];
 
