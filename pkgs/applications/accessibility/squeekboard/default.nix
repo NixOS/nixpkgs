@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "1.38.0";
+  version = "1.39.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZVSnLH2wLPcOHkU2pO0BgIdGmULMNiacIYMRmhN+bZ8=";
+    hash = "sha256-upMrwXotyWnSmc9EbvWyXwU+RC5jeb+Opoo+c8b0UPs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-tcn1tRuRlHVTYvc8T/ePfCEPNjih6B9lo/hdX+WwitQ=";
+    hash = "sha256-D/dn9MlS3ah2n1TA1O+PEMno5gdJQbR6ru9z0Od4xNU=";
   };
 
   nativeBuildInputs = [

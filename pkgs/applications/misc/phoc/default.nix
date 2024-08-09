@@ -22,16 +22,18 @@
 , directoryListingUpdater
 , nixosTests
 , testers
+, cmake
+, gmobile
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.38.0";
+  version = "0.40.1";
 
   src = fetchurl {
     # This tarball includes the meson wrapped subproject 'gmobile'.
     url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-OcRUnw1Fck9bMSgfMMcWqqR6a6yzyKjY8P3nqcwVULc=";
+    hash = "sha256-y8ZSWKANy58kqG7YIWo2Oh0NEbl39HmHBIzPeHTKPrk=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     wrapGAppsHook3
+    cmake
   ];
 
   buildInputs = [
@@ -56,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     finalAttrs.wlroots
     xorg.xcbutilwm
+    gmobile
   ];
 
   mesonFlags = ["-Dembed-wlroots=disabled"];

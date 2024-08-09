@@ -17,6 +17,9 @@
 , json-glib
 , libgudev
 , dbus
+, cmake
+, gmobile
+, umockdev
 }:
 
 let
@@ -24,13 +27,13 @@ let
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "feedbackd-device-themes";
-    rev = "v0.1.0";
-    sha256 = "sha256-YK9fJ3awmhf1FAhdz95T/POivSO93jsNApm+u4OOZ80=";
+    rev = "v0.4.0";
+    hash = "sha256-kY/+DyRxKEUzq7ctl6Va14AKUCpWU7NRQhJOwhtkJp8=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "feedbackd";
-  version = "0.2.0";
+  version = "0.4.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -39,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = "feedbackd";
     rev = "v${version}";
-    hash = "sha256-l5rfMx3ElW25A5WVqzfKBp57ebaNC9msqV7mvnwv10s=";
+    hash = "sha256-zjq1UT/r768KVRKm8fWsdPBahqKy2ofnK0LnTKCy4/g=";
     fetchSubmodules = true;
   };
 
@@ -59,6 +62,8 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     wrapGAppsHook3
+    cmake
+    umockdev
   ];
 
   buildInputs = [
@@ -66,6 +71,7 @@ stdenv.mkDerivation rec {
     gsound
     json-glib
     libgudev
+    gmobile
   ];
 
   mesonFlags = [

@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh-mobile-settings";
-  version = "0.39.0";
+  version = "0.40.0";
 
   src = fetchurl {
     # This tarball includes the meson wrapped subproject 'gmobile'.
     url = "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-9vN4IqGoRHDJQYohycrrSj4ITJHHaSNgPjpEjRCCvUw=";
+    hash = "sha256-SEiAcpeCpGQ1WsipMItpVuwwgLmB6D8dfFc+Avk9YRA=";
   };
 
   nativeBuildInputs = [

@@ -32,16 +32,18 @@
 , libsecret
 , evolution-data-server
 , nixosTests
+, cmake
+, gmobile
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.39.0";
+  version = "0.40.0";
 
   src = fetchurl {
     # Release tarball which includes subprojects gvc and libcall-ui
     url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-n1ZegSJAUr1Lbn0+Mx64vHhl4bwSJEdnO1xN/QdEKlw=";
+    hash = "sha256-0IiVsZCVpKn76CRwAwSXNhWTbFXAsEh38gJpJU191kA=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     wrapGAppsHook4
+    cmake
   ];
 
   buildInputs = [
@@ -67,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     gcr
     networkmanager
     polkit
+    gmobile
     gnome.gnome-control-center
     gnome-desktop
     gnome.gnome-session
@@ -87,11 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   mesonFlags = [
-    "-Dsystemd=true"
     "-Dcompositor=${phoc}/bin/phoc"
-    # https://github.com/NixOS/nixpkgs/issues/36468
-    # https://gitlab.gnome.org/World/Phosh/phosh/-/merge_requests/1363
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
     # Save some time building if tests are disabled
     "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
   ];
