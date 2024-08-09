@@ -2,12 +2,12 @@
 
 let
   name = "xnode-personaliser";
-  version = "0.0.0";
+  version = "v0.0.0-0xnodepkgs0";
   src = pkgs.fetchFromGitHub {
     owner = "Openmesh-Network";
     repo = name;
-    rev = "655cff7c0a8869fbc72323c3c76daec930a8f605";
-    sha256 = "sha256-Dd678TQMkCS1kYKFeqXjk9nc2nKsE9ndPVcoc25k/xc=";
+    rev = "a85b06512149c0306d302038f70fba7c48530514";
+    sha256 = "sha256-UlAc1/OtGalZONEWX5tE9VuLBmbq8lU7Bf5TkMCL49k=";
   };
 in
 (import "${src}/package.nix") {
