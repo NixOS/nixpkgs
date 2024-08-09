@@ -82,10 +82,16 @@ let
   targetIsJSON = lib.hasSuffix ".json" target;
   useSysroot = targetIsJSON && !__internal_dontAddSysroot;
 
+  isDarwinDebug = stdenv.isDarwin && buildType == "debug";
+
+  RUSTFLAGS =
+    toString (args.env.RUSTFLAGS or args.RUSTFLAGS or "")
+    + lib.optionalString isDarwinDebug "-C split-debuginfo=packed "
+    + lib.optionalString useSysroot "--sysroot ${sysroot} ";
+
   sysroot = callPackage ./sysroot { } {
-    inherit target;
+    inherit target RUSTFLAGS;
     shortTarget = stdenv.hostPlatform.rust.cargoShortTarget;
-    RUSTFLAGS = args.RUSTFLAGS or "";
     originalCargoToml = src + /Cargo.toml; # profile info is later extracted
   };
 
@@ -95,9 +101,10 @@ in
 # See https://os.phil-opp.com/testing/ for more information.
 assert useSysroot -> !(args.doCheck or true);
 
-stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "cargoLock" ]) // lib.optionalAttrs useSysroot {
-  RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
-} // {
+stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "cargoLock" ]) //
+  lib.optionalAttrs (args ? env.RUSTFLAGS) { env.RUSTFLAGS = args.env.RUSTFLAGS; } //
+  lib.optionalAttrs (args ? RUSTFLAGS) { inherit (args) RUSTFLAGS; } // {
+
   inherit buildAndTestSubdir cargoDeps;
 
   cargoBuildType = buildType;
