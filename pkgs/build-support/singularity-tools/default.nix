@@ -10,7 +10,7 @@
   e2fsprogs,
   util-linux,
   # Build inputs
-  bash,
+  bashInteractive,
   runtimeShell,
   singularity,
   storeDir ? builtins.storeDir,
@@ -105,7 +105,7 @@ rec {
 
             # Create runScript and link shell
             if [ ! -e bin/sh ]; then
-              ln -s ${runtimeShell} bin/sh
+              ln -s ${lib.getExe bashInteractive} bin/sh
             fi
             mkdir -p .singularity.d
             ln -s ${runScriptFile} .singularity.d/runscript
