@@ -9,6 +9,7 @@
   gtk-layer-shell,
   stdenv,
   libdbusmenu-gtk3,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -48,6 +49,8 @@ rustPlatform.buildRustPackage rec {
 
   # requires unstable rust features
   RUSTC_BOOTSTRAP = 1;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Widget system made in Rust to create widgets for any WM";
