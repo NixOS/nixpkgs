@@ -777,7 +777,7 @@ in {
       namedExtensions = builtins.map
         (drv: {
           name = drv.name;
-          value = mkExtension drv;
+          value = mkExtension (builtins.removeAttrs drv [ "enable" ]);
         })
         (builtins.filter (i: i.enable or true) extensionData);
 
