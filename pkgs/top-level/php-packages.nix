@@ -6,7 +6,6 @@
 , phpPackage
 , autoconf
 , pkg-config
-, aspell
 , bzip2
 , curl
 , cyrus_sasl
@@ -324,6 +323,8 @@ in {
 
     protobuf = callPackage ../development/php-packages/protobuf { };
 
+    pspell = callPackage ../development/php-packages/pspell { };
+
     rdkafka = callPackage ../development/php-packages/rdkafka { };
 
     redis = callPackage ../development/php-packages/redis { };
@@ -584,7 +585,6 @@ in {
           doCheck = false;
         }
         { name = "posix"; doCheck = false; }
-        { name = "pspell"; configureFlags = [ "--with-pspell=${aspell}" ]; }
         {
           name = "readline";
           buildInputs = [
