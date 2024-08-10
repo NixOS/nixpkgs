@@ -5,6 +5,7 @@
 , nodejs
 , makeBinaryWrapper
 , shellcheck
+, versionCheckHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pnpm_8.configHook
     makeBinaryWrapper
+    versionCheckHook
   ];
   buildPhase = ''
     runHook preBuild
@@ -59,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "A language server for Bash";
