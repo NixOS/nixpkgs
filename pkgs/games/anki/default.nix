@@ -130,6 +130,8 @@ python3.pkgs.buildPythonApplication {
     ./patches/disable-auto-update.patch
     ./patches/remove-the-gl-library-workaround.patch
     ./patches/skip-formatting-python-code.patch
+    # Also remove from anki/sync-server.nix on next update
+    ./patches/Cargo.lock-update-time-for-rust-1.80.patch
   ];
 
   inherit cargoDeps yarnOfflineCache;
