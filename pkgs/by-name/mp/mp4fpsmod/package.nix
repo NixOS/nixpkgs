@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, ... }@args:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  ...
+}@args:
 
 stdenv.mkDerivation rec {
   pname = "mp4fpsmod";
@@ -23,8 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tiny mp4 time code editor";
-    longDescription =
-      "Tiny mp4 time code editor. You can use this for changing fps, delaying audio tracks, executing DTS compression, extracting time codes of mp4.";
+    longDescription = "Tiny mp4 time code editor. You can use this for changing fps, delaying audio tracks, executing DTS compression, extracting time codes of mp4.";
     homepage = "https://github.com/nu774/mp4fpsmod";
     license = with lib.licenses; [
       # All files are distributed as Public Domain, except for the followings:
