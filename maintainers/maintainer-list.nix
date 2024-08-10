@@ -22165,6 +22165,11 @@
     githubId = 6162814;
     keys = [ { fingerprint = "21E1 6B8D 2EE8 7530 6A6C  9968 D830 77B9 9F8C 6643"; } ];
   };
+  wrocket = {
+    name = "wrocketdev";
+    github = "wrocket";
+    githubId = 152736998;
+  };
   wscott = {
     email = "wsc9tt@gmail.com";
     github = "wscott";
