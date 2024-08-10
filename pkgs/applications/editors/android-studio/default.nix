@@ -9,8 +9,8 @@ let
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2024.1.1.12"; # "Android Studio Koala | 2024.1.1 Patch 1"
-    sha256Hash = "sha256-Qvi/Mc4NEk3dERlfZiowBk2Pmqsgbl5mg56HamvG7aI=";
+    version = "2024.1.1.13"; # "Android Studio Koala | 2024.1.1 Patch 2"
+    sha256Hash = "sha256-h8kOL/vULA1eCmVxP62T9I5oATTS40Qs2YAI4riRadY=";
   };
   betaVersion = {
     version = "2024.1.2.10"; # "Android Studio Koala Feature Drop | 2024.1.2 Beta 2"
