@@ -10933,11 +10933,6 @@ with pkgs;
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
-  nzbhydra2 = callPackage ../servers/nzbhydra2 {
-    # Requires Java 17, not lower, not higher
-    jre = openjdk17;
-  };
-
   oapi-codegen = callPackage ../tools/networking/oapi-codegen { };
 
   oath-toolkit = callPackage ../tools/security/oath-toolkit { };
@@ -13544,12 +13539,6 @@ with pkgs;
   };
 
   tuptime = callPackage ../tools/system/tuptime { };
-
-  turbo = callPackage ../tools/misc/turbo/wrapper.nix { };
-
-  turbo-unwrapped = callPackage ../tools/misc/turbo {
-    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreServices CoreFoundation;
-  };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
