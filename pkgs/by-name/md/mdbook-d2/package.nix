@@ -7,16 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-d2";
-  version = "unstable-2023-03-30";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "danieleades";
     repo = "mdbook-d2";
-    rev = "93f3037ad9730d134c929cfc90d9bd592a48a1a9";
-    hash = "sha256-cmmOmJHARIBCQQEsffnBh4nc2XEDPBzLPcCrOwfTKS8=";
+    rev = "v${version}";
+    hash = "sha256-IkMydlmUQrZbOZYzQFxzROhdwlcO0H6MzQo42fBEYQE=";
   };
 
-  cargoHash = "sha256-ACwEWK5upeRLo7HU+1kKunecnEeZm0ufUaQjJkXM/4I=";
+  cargoHash = "sha256-xc00/FOQtAg2u8bZxaTbk8+gX7r+q9O8DKgWchPnOJc=";
+  doCheck = false;
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation

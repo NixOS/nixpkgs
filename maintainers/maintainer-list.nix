@@ -9395,6 +9395,12 @@
     githubId = 9425955;
     name = "Jean-François Labonté";
   };
+  jemand771 = {
+    email = "willy@jemand771.net";
+    github = "jemand771";
+    githubId = 19669567;
+    name = "Willy";
+  };
   jensbin = {
     email = "jensbin+git@pm.me";
     github = "jensbin";
@@ -15009,6 +15015,7 @@
     github = "nyadiia";
     githubId = 43252360;
     name = "Nadia";
+    keys = [ { fingerprint = "6B51 E324 238A F455 2381  313A 9254 1B0C D2A9 3AD8"; } ];
   };
   nyanbinary = {
     email = "nyanbinary@keemail.me";

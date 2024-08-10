@@ -645,6 +645,8 @@ mapAliases ({
   hll2390dw-cups = throw "The hll2390dw-cups package was dropped since it was unmaintained."; # Added 2024-06-21
   ht-rust = xh; # Added 2021-02-13
   hydra-unstable = hydra_unstable; # added 2022-05-10
+  hydron = throw "hydron has been removed as the project has been archived upstream since 2022 and is affected by a severe remote code execution vulnerability";
+
   hyper-haskell = throw "'hyper-haskell' has been removed. reason: has been broken for a long time and depends on an insecure electron version"; # Added 2024-03-14
   hyper-haskell-server-with-packages = throw "'hyper-haskell-server-with-packages' has been removed. reason: has been broken for a long time"; # Added 2024-03-14
 
@@ -1093,6 +1095,7 @@ mapAliases ({
   openjfx19 = throw "OpenJFX 19 was removed as it has reached its end of life"; # Added 2024-08-01
   openjfx20 = throw "OpenJFX 20 was removed as it has reached its end of life"; # Added 2024-08-01
   openjpeg_2 = openjpeg; # Added 2021-01-25
+  openlp = throw "openlp has been removed for now because the outdated version depended on insecure and removed packages and it needs help to upgrade and maintain it; see https://github.com/NixOS/nixpkgs/pull/314882"; # Added 2024-07-29
   openmpt123 = libopenmpt; # Added 2021-09-05
   openssl_3_0 = openssl_3; # Added 2022-06-27
   openvpn_24 = throw "openvpn_24 has been removed, because it went EOL. 2.5.x or newer is still available"; # Added 2023-01-23

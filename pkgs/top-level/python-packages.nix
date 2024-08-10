@@ -613,8 +613,6 @@ self: super: with self; {
 
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
-  ansible-navigator = callPackage ../development/python-modules/ansible-navigator { };
-
   ansible-pylibssh = callPackage ../development/python-modules/ansible-pylibssh { };
 
   ansible-runner = callPackage ../development/python-modules/ansible-runner { };
@@ -6886,11 +6884,6 @@ self: super: with self; {
     inherit (pkgs) libgpiod;
   };
 
-  libgpuarray = callPackage ../development/python-modules/libgpuarray {
-    clblas = pkgs.clblas.override { inherit (self) boost; };
-    inherit (pkgs.config) cudaSupport;
-  };
-
   libgravatar = callPackage ../development/python-modules/libgravatar { };
 
   libiio = (toPythonModule (pkgs.libiio.override {
@@ -11312,7 +11305,11 @@ self: super: with self; {
 
   pyefergy = callPackage ../development/python-modules/pyefergy { };
 
+  pyegps = callPackage ../development/python-modules/pyegps { };
+
   pyeight = callPackage ../development/python-modules/pyeight { };
+
+  pyelectra = callPackage ../development/python-modules/pyelectra { };
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
@@ -14868,8 +14865,6 @@ self: super: with self; {
 
   sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
 
-  sqlalchemy-migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
-
   sqlalchemy-mixins = callPackage ../development/python-modules/sqlalchemy-mixins { };
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
@@ -15295,8 +15290,6 @@ self: super: with self; {
   temperusb = callPackage ../development/python-modules/temperusb { };
 
   tempest = callPackage ../development/python-modules/tempest { };
-
-  tempita = callPackage ../development/python-modules/tempita { };
 
   templateflow = callPackage ../development/python-modules/templateflow { };
 
@@ -15903,6 +15896,8 @@ self: super: with self; {
   tskit = callPackage ../development/python-modules/tskit { };
 
   ttach = callPackage ../development/python-modules/ttach { };
+
+  ttfautohint-py = callPackage ../development/python-modules/ttfautohint-py { };
 
   ttls = callPackage ../development/python-modules/ttls { };
 
