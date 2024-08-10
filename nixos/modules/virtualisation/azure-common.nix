@@ -22,8 +22,8 @@ in
     virtualisation.azure.agent.enable = true;
 
     boot.kernelParams = [ "console=ttyS0" "earlyprintk=ttyS0" "rootdelay=300" "panic=1" "boot.panic_on_fail" ];
-    boot.initrd.kernelModules = [ "hv_vmbus" "hv_netvsc" "hv_utils" "hv_storvsc" ]
-      ++ (lib.optionals cfg.acceleratedNetworking mlxDrivers);
+    boot.initrd.kernelModules = [ "hv_vmbus" "hv_netvsc" "hv_utils" "hv_storvsc" ];
+    boot.initrd.availableKernelModules = lib.optionals cfg.acceleratedNetworking mlxDrivers;
 
     # Accelerated networking
     systemd.network.networks."99-azure-unmanaged-devices.network" = lib.mkIf cfg.acceleratedNetworking {
