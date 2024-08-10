@@ -3,29 +3,29 @@
   stdenv,
   fetchurl,
   electron,
-  zstd,
+  dpkg,
   makeWrapper,
   commandLineArgs ? "",
 }:
 
 stdenv.mkDerivation rec {
   pname = "bilibili";
-  version = "1.14.0-1";
+  version = "1.14.0-2";
   src = fetchurl {
     url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_amd64.deb";
-    hash = "sha256-4+DGL/DNR3wLFUff17OquAM6dOkcsXFNeCqA7ITtCaI=";
+    hash = "sha256-QQMdEpKE7r/fPMaX/yEoaa7KjilhiPMYLRvGPkv1jds=";
   };
 
   unpackPhase = ''
     runHook preUnpack
-
-    ar x $src
-    tar -I ${zstd}/bin/zstd -xvf data.tar.zst
-
+    dpkg -x $src ./
     runHook postUnpack
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    dpkg
+  ];
 
   installPhase = ''
     runHook preInstall
