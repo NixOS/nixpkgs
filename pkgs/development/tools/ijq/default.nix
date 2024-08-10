@@ -1,4 +1,12 @@
-{ buildGoModule, fetchFromSourcehut, lib, jq, installShellFiles, makeWrapper, scdoc }:
+{
+  buildGoModule,
+  fetchFromSourcehut,
+  lib,
+  jq,
+  installShellFiles,
+  makeBinaryWrapper,
+  scdoc,
+}:
 
 buildGoModule rec {
   pname = "ijq";
@@ -6,16 +14,24 @@ buildGoModule rec {
 
   src = fetchFromSourcehut {
     owner = "~gpanders";
-    repo = pname;
+    repo = "ijq";
     rev = "v${version}";
-    sha256 = "sha256-rnSpXMadZW6I+7tIYqr1Cb4z00gdREsqin/r6OXaDMA=";
+    hash = "sha256-rnSpXMadZW6I+7tIYqr1Cb4z00gdREsqin/r6OXaDMA=";
   };
 
   vendorHash = "sha256-zRa8MPWFvcoVm+LstbSAl1VY3oWMujZPjWS/ti1VXjE=";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper scdoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+    scdoc
+  ];
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+  ];
 
   postBuild = ''
     scdoc < ijq.1.scd > ijq.1
@@ -32,6 +48,10 @@ buildGoModule rec {
     mainProgram = "ijq";
     homepage = "https://git.sr.ht/~gpanders/ijq";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ justinas mattpolzin SuperSandro2000 ];
+    maintainers = with maintainers; [
+      justinas
+      mattpolzin
+      SuperSandro2000
+    ];
   };
 }
