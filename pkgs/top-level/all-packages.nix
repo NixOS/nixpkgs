@@ -6848,6 +6848,8 @@ with pkgs;
 
   cloc = callPackage ../tools/misc/cloc { };
 
+  c-lolcat = callPackage ../tools/misc/c-lolcat { };
+
   clolcat = callPackage ../tools/misc/clolcat { };
 
   cloog = callPackage ../development/libraries/cloog {
