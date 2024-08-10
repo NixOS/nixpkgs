@@ -21,13 +21,13 @@ let
 
   commonDerivationAttrs = {
     pname = "lldap";
-    version = "0.5.1-alpha-6aa930";
+    version = "0.5.1-unstable-2024-08-09";
 
     src = fetchFromGitHub {
       owner = "lldap";
       repo = "lldap";
-      rev = "6aa9303339ac1793b4be9ae01c56a6369a5d77f0";
-      hash = "sha256-UbkpnPvDoTaioB0g1HBvRczqUEuPlVuH1gIVBU07RpY=";
+      rev = "4138963bee15f5423629c081ec88805d43b8235c";
+      hash = "sha256-g/Y+StSQQiA+1O0yh2xIhBHO9/MjM4QW1DNQIABTHdI=";
     };
 
     # `Cargo.lock` has git dependencies, meaning can't use `cargoHash`
@@ -39,11 +39,6 @@ let
         "yew_form-0.1.8" = "sha256-1n9C7NiFfTjbmc9B5bDEnz7ZpYJo9ZT8/dioRXJ65hc=";
       };
     };
-
-    patches = [
-      ## https://github.com/lldap/lldap/pull/947
-      ./947.patch
-    ];
 
   };
 
@@ -69,7 +64,7 @@ let
 in rustPlatform.buildRustPackage (commonDerivationAttrs // {
   cargoBuildFlags = [ "-p" "lldap" "-p" "lldap_migration_tool" "-p" "lldap_set_password" ];
 
-  patches = commonDerivationAttrs.patches ++ [
+  patches = [
     ./0001-parameterize-frontend-location.patch
   ];
 
