@@ -8414,6 +8414,12 @@
     githubId = 1592375;
     name = "Walter Huf";
   };
+  huggy = {
+    email = "nixpkgs@huggy.moe";
+    github = "makeding";
+    githubId = 6511667;
+    name = "huggy";
+  };
   hughobrien = {
     email = "github@hughobrien.ie";
     github = "hughobrien";
