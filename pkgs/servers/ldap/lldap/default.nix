@@ -1,6 +1,5 @@
 { binaryen
 , fetchFromGitHub
-, fetchpatch
 , lib
 , lldap
 , nixosTests
