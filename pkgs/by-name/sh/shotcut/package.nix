@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , stdenv
-, wrapQtAppsHook
 , substituteAll
 , SDL2
 , frei0r
@@ -11,12 +10,9 @@
 , jack1
 , pkg-config
 , fftw
-, qtbase
-, qttools
-, qtmultimedia
-, qtcharts
+, qt6
 , cmake
-, Cocoa
+, darwin
 , gitUpdater
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9eQF3s4BAUK81/94z7cMkd2NWdNLVMraP08qsDmuAI8=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
+  nativeBuildInputs = [ pkg-config cmake qt6.wrapQtAppsHook ];
   buildInputs = [
     SDL2
     frei0r
@@ -38,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     mlt
     fftw
-    qtbase
-    qttools
-    qtmultimedia
-    qtcharts
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtmultimedia
+    qt6.qtcharts
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
+    darwin.apple_sdk.frameworks.Cocoa
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DSHOTCUT_NOUPGRADE";
