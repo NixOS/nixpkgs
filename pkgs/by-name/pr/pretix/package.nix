@@ -95,6 +95,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "importlib-metadata"
+    "kombu"
     "pillow"
     "protobuf"
     "python-bidi"
