@@ -27239,8 +27239,6 @@ with pkgs;
 
   acpitool = callPackage ../os-specific/linux/acpitool { };
 
-  aldente = callPackage ../os-specific/darwin/aldente { };
-
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
   alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
