@@ -12,6 +12,8 @@ let
            "-s" cfg.selector
          ] ++ lib.optionals (cfg.configFile != null) [ "-x" cfg.configFile ];
 
+  configFile = pkgs.writeText "opendkim.conf"
+    (lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "${name} ${value}") cfg.settings));
 in {
   imports = [
     (lib.mkRenamedOptionModule [ "services" "opendkim" "keyFile" ] [ "services" "opendkim" "keyPath" ])
@@ -93,10 +95,14 @@ in {
       opendkim.gid = config.ids.gids.opendkim;
     };
 
-    environment.systemPackages = [ pkgs.opendkim ];
+    environment = {
+      etc = lib.mkIf (cfg.settings != { }) {
+        "opendkim/opendkim.conf".source = configFile;
+      };
+      systemPackages = [ pkgs.opendkim ];
+    };
 
-    services.opendkim.configFile = lib.mkIf (cfg.settings != { }) (pkgs.writeText "opendkim.conf"
-      (lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "${name} ${value}") cfg.settings)));
+    services.opendkim.configFile = lib.mkIf (cfg.settings != { }) configFile;
 
     systemd.tmpfiles.rules = [
       "d '${cfg.keyPath}' - ${cfg.user} ${cfg.group} - -"
