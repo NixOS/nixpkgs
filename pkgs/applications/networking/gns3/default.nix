@@ -1,10 +1,12 @@
 { callPackage
 , libsForQt5
+, python311
 }:
 
 let
   mkGui = args: callPackage (import ./gui.nix (args)) {
     inherit (libsForQt5) wrapQtAppsHook;
+    python3 = python311;
   };
 
   mkServer = args: callPackage (import ./server.nix (args)) { };

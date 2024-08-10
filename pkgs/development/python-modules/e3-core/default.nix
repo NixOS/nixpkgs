@@ -2,16 +2,11 @@
   autoPatchelfHook,
   buildPythonPackage,
   colorama,
-  coverage,
   distro,
   fetchFromGitHub,
-  httpretty,
   lib,
-  mock,
   packaging,
   psutil,
-  pytest,
-  pytest-socket,
   python-dateutil,
   pyyaml,
   requests,
@@ -20,10 +15,7 @@
   stdenv,
   setuptools,
   stevedore,
-  tomlkit,
-  tox,
   tqdm,
-  typeguard,
 }:
 
 buildPythonPackage rec {

@@ -79,7 +79,7 @@ let
     nativeBuildInputs = [ cmake pkg-config ];
     buildInputs = [ glib xorg.libX11 libdbusmenu ];
     inherit src;
-    sourceRoot = "source/native/LinuxGlobalMenu";
+    sourceRoot = "${src.name}/native/LinuxGlobalMenu";
     patches = [ ../patches/libdbm-headers.patch ];
     postPatch = "cp ${libdbusmenu-jb}/lib/libdbusmenu-glib.a libdbusmenu-glib.a";
     passthru.patched-libdbusmenu = libdbusmenu-jb;
@@ -97,7 +97,7 @@ let
     pname = "fsnotifier";
     version = buildVer;
     inherit src;
-    sourceRoot = "source/native/fsNotifier/linux";
+    sourceRoot = "${src.name}/native/fsNotifier/linux";
     buildPhase = ''
       runHook preBuild
       $CC -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"${buildVer}\"" -std=c11 main.c inotify.c util.c -o fsnotifier
@@ -115,7 +115,7 @@ let
     pname = "restarter";
     version = buildVer;
     inherit src;
-    sourceRoot = "source/native/restarter";
+    sourceRoot = "${src.name}/native/restarter";
     cargoHash = restarterHash;
   };
 
@@ -138,7 +138,7 @@ let
     pname = "jps-bootstrap";
     version = buildVer;
     inherit src;
-    sourceRoot = "source/platform/jps-bootstrap";
+    sourceRoot = "${src.name}/platform/jps-bootstrap";
     nativeBuildInputs = [ ant makeWrapper jbr ];
     patches = [ ../patches/kotlinc-path.patch ];
     postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";

@@ -101,7 +101,7 @@ let
 
         meta = with lib; {
           description = "Apple SDK framework ${name}";
-          maintainers = with maintainers; [ ];
+          maintainers = [ ];
           platforms = platforms.darwin;
         };
       };

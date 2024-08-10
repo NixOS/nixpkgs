@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , makeWrapper
+, bc
 , bluez
 }:
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
     install -D --target-directory=$out/bin/ ./rofi-bluetooth
 
     wrapProgram $out/bin/rofi-bluetooth \
-      --prefix PATH ":" ${lib.makeBinPath [ bluez ] }
+      --prefix PATH ":" ${lib.makeBinPath [ bc bluez ] }
 
     runHook postInstall
   '';

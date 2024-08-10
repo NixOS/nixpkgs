@@ -1,5 +1,4 @@
 { buildPythonPackage
-, python
 , lib
 , gfortran
 , fetchgit

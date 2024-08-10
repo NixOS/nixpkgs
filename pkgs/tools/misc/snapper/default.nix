@@ -2,7 +2,7 @@
 , autoreconfHook, pkg-config, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, coreutils, dbus, diffutils, e2fsprogs, libxml2
 , lvm2, pam, util-linux, json_c, nixosTests
-, ncurses }:
+, ncurses, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "snapper";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam util-linux json_c ncurses
+    lvm2 pam util-linux json_c ncurses zlib
   ];
 
   passthru.tests.snapper = nixosTests.snapper;

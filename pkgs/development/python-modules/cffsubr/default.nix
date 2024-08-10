@@ -46,6 +46,6 @@ buildPythonPackage rec {
     mainProgram = "cffsubr";
     homepage = "https://github.com/adobe-type-tools/cffsubr";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

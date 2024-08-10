@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Extra Pydantic types";
     homepage = "https://github.com/pydantic/pydantic-extra-types";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

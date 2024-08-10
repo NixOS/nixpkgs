@@ -1,5 +1,8 @@
 updateSourceDateEpoch() {
     local path="$1"
+    # Avoid passing option-looking directory to find. The example is diffoscope-269:
+    #   https://salsa.debian.org/reproducible-builds/diffoscope/-/issues/378
+    [[ $path == -* ]] && path="./$path"
 
     # Get the last modification time of all regular files, sort them,
     # and get the most recent. Maybe we should use

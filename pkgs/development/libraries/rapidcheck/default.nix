@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "C++ framework for property based testing inspired by QuickCheck";
     inherit (finalAttrs.src.meta) homepage;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.bsd2;
     pkgConfigModules = [
       "rapidcheck"

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mainProgram = "muchsync";
     homepage = "http://www.muchsync.org/";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [];
+    maintainers = [ ];
     license = lib.licenses.gpl2Plus;
   };
 }

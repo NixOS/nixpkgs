@@ -6,7 +6,6 @@
 , mpv
 , nodejs
 , qmake
-, qtwebchannel
 , qtwebengine
 , wrapQtAppsHook
 }:

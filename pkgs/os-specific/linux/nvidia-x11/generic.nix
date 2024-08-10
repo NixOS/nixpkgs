@@ -41,6 +41,7 @@
 , nukeReferences
 , which
 , libarchive
+, jq
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -175,7 +176,7 @@ let
     libPath = libPathFor pkgs;
     libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
 
-    nativeBuildInputs = [ perl nukeReferences which libarchive ]
+    nativeBuildInputs = [ perl nukeReferences which libarchive jq ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
     disallowedReferences = optionals (!libsOnly) [ kernel.dev ];

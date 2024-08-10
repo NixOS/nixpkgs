@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  pythonAtLeast,
   fetchPypi,
   requests,
   six,
@@ -10,6 +11,8 @@ buildPythonPackage rec {
   pname = "hypchat";
   version = "0.21";
   format = "setuptools";
+
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

@@ -6,7 +6,6 @@
   mutf8,
   webassets,
   pytestCheckHook,
-  pytest-cov,
   mock,
 }:
 

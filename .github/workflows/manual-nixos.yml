@@ -11,6 +11,7 @@ on:
 
 jobs:
   nixos:
+    name: nixos-manual-build
     runs-on: ubuntu-latest
     if: github.repository_owner == 'NixOS'
     steps:

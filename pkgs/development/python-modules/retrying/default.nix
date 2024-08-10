@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "General-purpose retrying library";
     homepage = "https://github.com/rholder/retrying";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
-  version = "1.5.2";
+  version = "1.5.3";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "libadwaita";
     rev = finalAttrs.version;
-    hash = "sha256-0Zu6knxP6GiqJMtwd8uRN72Lf7JfwB6JWjS1ggeANPM=";
+    hash = "sha256-NCQCd/QnJg2fEI6q5ys8HQXinGnKaoxhMUHd8rwxAmk=";
   };
 
   depsBuildBuild = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dgtk_doc=true"
-  ] ++ lib.optionals (!finalAttrs.doCheck) [
+  ] ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
     "-Dtests=false"
   ];
 

@@ -16,8 +16,6 @@
   pyyaml,
   scikit-image,
   scikit-learn,
-  scipy,
-  typing-extensions,
 
   deepdiff,
   pytestCheckHook,

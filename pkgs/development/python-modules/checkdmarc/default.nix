@@ -8,7 +8,6 @@
   hatchling,
   publicsuffixlist,
   pyleri,
-  iana-etc,
   pytestCheckHook,
   pythonOlder,
   requests,

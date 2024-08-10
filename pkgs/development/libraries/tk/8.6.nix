@@ -1,5 +1,4 @@
-{ lib
-, callPackage
+{ callPackage
 , fetchurl
 , tcl
 , ...

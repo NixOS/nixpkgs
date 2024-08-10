@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "Simple text editor forked from Leafpad using GTK+ 3.x";
     homepage = "https://github.com/stevenhoneyman/l3afpad";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl2;
     mainProgram = "l3afpad";
   };

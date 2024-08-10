@@ -327,7 +327,7 @@ in
       hdfs = 295;
       mapred = 296;
       hadoop = 297;
-      hydron = 298;
+      #hydron = 298; # removed 2024-08-03
       cfssl = 299;
       cassandra = 300;
       qemu-libvirtd = 301;
@@ -637,7 +637,7 @@ in
       hdfs = 295;
       mapred = 296;
       hadoop = 297;
-      hydron = 298;
+      #hydron = 298; # removed 2024-08-03
       cfssl = 299;
       cassandra = 300;
       qemu-libvirtd = 301;

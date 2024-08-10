@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "clarifai-grpc";
-  version = "10.6.3";
+  version = "10.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Clarifai";
     repo = "clarifai-python-grpc";
     rev = "refs/tags/${version}";
-    hash = "sha256-CeBTcIs+WjqpwKUAy4Ws+27jcO5pkopMXhPwrpzdWnA=";
+    hash = "sha256-OWx+YtpZRWTsap4go89yia+DqqAewZq+0cTaoXdDRSk=";
   };
 
   build-system = [ setuptools ];

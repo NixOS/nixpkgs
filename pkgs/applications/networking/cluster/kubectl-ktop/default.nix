@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kubectl-ktop";
-  version = "0.3.6";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "vladimirvivien";
     repo = "ktop";
     rev = "v${version}";
-    sha256 = "sha256-nVZ1e/GKiJFTwuq5dPIzF4Jrv2DJ2wwWAiOn304hTA4=";
+    sha256 = "sha256-oxyEkDY53HjBgjWRajlcg+8Kx092lyLkPgOJleioO7o=";
   };
 
   vendorHash = "sha256-MLIcTHWo7lsqtAqH8naSvpS013t8KBVPRbch+CfeUNk=";

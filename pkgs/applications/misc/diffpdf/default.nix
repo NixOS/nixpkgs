@@ -53,7 +53,7 @@ mkDerivation rec {
     description = "Tool for diffing pdf files visually or textually";
     mainProgram = "diffpdf";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

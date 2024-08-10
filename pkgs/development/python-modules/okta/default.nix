@@ -5,10 +5,12 @@
   buildPythonPackage,
   fetchPypi,
   flatdict,
+  jwcrypto,
   pycryptodome,
   pycryptodomex,
   pydash,
   pyfakefs,
+  pyjwt,
   pytest-asyncio,
   pytest-mock,
   pytest-recording,
@@ -36,9 +38,11 @@ buildPythonPackage rec {
     aenum
     aiohttp
     flatdict
+    jwcrypto
     pycryptodome
     pycryptodomex
     pydash
+    pyjwt
     python-jose
     pyyaml
     xmltodict

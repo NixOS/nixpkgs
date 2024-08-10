@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchgit, fetchHex, rebar3WithPlugins, rebar3-nix, rebar3Relx
+{ fetchFromGitHub, fetchgit, fetchHex, rebar3Relx
 , buildRebar3, writeScript, lib }:
 
 let

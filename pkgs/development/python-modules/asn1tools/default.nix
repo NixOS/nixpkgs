@@ -57,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/eerimoq/asn1tools";
     changelog = "https://github.com/eerimoq/asn1tools/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

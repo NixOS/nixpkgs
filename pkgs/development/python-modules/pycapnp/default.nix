@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://capnproto.github.io/pycapnp/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.bsd2;
     # No support for capnproto 1.0 yet
     # https://github.com/capnproto/pycapnp/issues/323

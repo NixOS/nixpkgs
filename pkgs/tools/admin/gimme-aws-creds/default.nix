@@ -10,6 +10,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       fido2 = super.fido2.overridePythonAttrs (oldAttrs: rec {
         version = "0.9.3";

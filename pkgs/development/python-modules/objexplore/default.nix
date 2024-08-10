@@ -10,9 +10,9 @@
   pandas
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "objexplore";
-  version = "1.5.4";
+  version = "1.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kylepollina";
     repo = "objexplore";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FFQIiip7pk9fQhjGLxMSMakwoXbzaUjXcbQgDX52dnI=";
+    # tags for >1.5.4 are not availables on github
+    # see: https://github.com/kylepollina/objexplore/issues/25
+    rev = "3c2196d26e5a873eed0a694cddca66352ea7c81e";
+    hash = "sha256-BgeuRRuvbB4p99mwCjNxm3hYEZuGua8x2GdoVssQ7eI=";
   };
 
   pythonRelaxDeps = [ "blessed" "rich" ];

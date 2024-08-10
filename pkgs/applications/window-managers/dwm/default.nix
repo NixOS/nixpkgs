@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       tags.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ viric neonfuz ];
+    maintainers = with maintainers; [ neonfuz ];
     platforms = platforms.all;
     mainProgram = "dwm";
   };

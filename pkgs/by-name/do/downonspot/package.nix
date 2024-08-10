@@ -10,19 +10,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "downonspot";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "oSumAtrIX";
     repo = "DownOnSpot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PA11R/hVAmismayE8uU03P0eeNnrgpD2HxbMW0vlk3k=";
+    hash = "sha256-F0SW/qce7eEEDC4FQvO6eW9V4POkRK/WP8bMUBtzGIw=";
   };
 
   # Use official public librespot version
   cargoPatches = [ ./Cargo.lock.patch ];
 
-  cargoHash = "sha256-jdscYr4Emm2+mWXbxfhU1rp855tsGY5hrdJsDEfXeUo=";
+  cargoHash = "sha256-kLMV8jDadb2BryOqXGkiunQvZRjzjbVTh9Z+jHSSHbU=";
 
   nativeBuildInputs = [
     pkg-config

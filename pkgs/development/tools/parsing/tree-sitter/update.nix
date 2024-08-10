@@ -102,6 +102,10 @@ let
       orga = "polarmutex";
       repo = "tree-sitter-beancount";
     };
+    "tree-sitter-bqn" = {
+      orga = "shnarazk";
+      repo = "tree-sitter-bqn";
+    };
     "tree-sitter-clojure" = {
       orga = "sogaiu";
       repo = "tree-sitter-clojure";

@@ -43,6 +43,6 @@ buildPythonPackage rec {
     mainProgram = "jenkins-jobs";
     homepage = "https://jenkins-job-builder.readthedocs.io/en/latest/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

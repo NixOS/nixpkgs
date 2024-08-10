@@ -157,18 +157,16 @@ let
 
         otool = cc.bintools.bintools;
 
-        # GHC needs install_name_tool on all darwin platforms. On aarch64-darwin it is
-        # part of the bintools wrapper (due to codesigning requirements), but not on
-        # x86_64-darwin. We decide based on target platform to have consistent tools
-        # across all GHC stages.
-        install_name_tool =
-          if stdenv.targetPlatform.isAarch64
-          then cc.bintools
-          else cc.bintools.bintools;
-        # Same goes for strip.
+        # GHC needs install_name_tool on all darwin platforms. The same one can
+        # be used on both platforms. It is safe to use with linker-generated
+        # signatures because it will update the signatures automatically after
+        # modifying the target binary.
+        install_name_tool = cc.bintools.bintools;
+
+        # strip on darwin is wrapped to enable deterministic mode.
         strip =
           # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
-          if stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin
+          if stdenv.targetPlatform.isDarwin
           then cc.bintools
           else cc.bintools.bintools;
       }.${name};

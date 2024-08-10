@@ -105,7 +105,7 @@ let
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
       escapeShellArg escapeShellArgs
       isStorePath isStringLike
-      isValidPosixName toShellVar toShellVars
+      isValidPosixName toShellVar toShellVars trim trimWith
       escapeRegex escapeURL escapeXML replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
@@ -123,7 +123,7 @@ let
     inherit (self.derivations) lazyDerivation optionalDrvAttr;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
-      hiPrioSet getLicenseFromSpdxId getExe getExe';
+      hiPrioSet getLicenseFromSpdxId getLicenseFromSpdxIdOr getExe getExe';
     inherit (self.filesystem) pathType pathIsDirectory pathIsRegularFile
       packagesFromDirectoryRecursive;
     inherit (self.sources) cleanSourceFilter

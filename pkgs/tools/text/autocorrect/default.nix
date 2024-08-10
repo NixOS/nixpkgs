@@ -32,6 +32,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://huacnlee.github.io/autocorrect";
     changelog = "https://github.com/huacnlee/autocorrect/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

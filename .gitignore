@@ -21,6 +21,7 @@ tags
 /source/
 .version-suffix
 .direnv
+.envrc
 
 .DS_Store
 .mypy_cache

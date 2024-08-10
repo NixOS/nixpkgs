@@ -7,7 +7,6 @@
 , just
 , rust-script
 , installShellFiles
-, bzip2
 , nettle
 , openssl
 , sqlite

@@ -1,29 +1,21 @@
 { lib, fetchFromGitHub, buildDunePackage
 , algaeff
 , bwd
-, eio
-, eio_main
-, lsp
-, notty
 }:
 
 buildDunePackage rec {
   pname = "asai";
-  version = "0.1.1";
+  version = "0.3.0";
   src = fetchFromGitHub {
     owner = "RedPRL";
     repo = pname;
     rev = version;
-    hash = "sha256-Jd90WhSjK4K2amFA5uyGF57NzsgHA8QiccX6qtxO1rQ=";
+    hash = "sha256-Rp4TvSbRz+5+X4XJ1tKUDDgldpLzHHtaF7G7AG6HgKU=";
   };
 
   propagatedBuildInputs = [
     algaeff
     bwd
-    lsp
-    eio
-    eio_main
-    notty
   ];
 
   meta = {

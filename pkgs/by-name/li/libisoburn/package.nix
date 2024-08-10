@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://libburnia-project.org/";
-    description = "Enables creation and expansion of ISO-9660 filesystems on CD/DVD/BD ";
+    description = "Enables creation and expansion of ISO-9660 filesystems on CD/DVD/BD";
     changelog = "https://dev.lovelyhq.com/libburnia/libisoburn/src/tag/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     mainProgram = "osirrox";

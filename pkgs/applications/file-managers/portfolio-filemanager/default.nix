@@ -4,7 +4,6 @@
 , appstream-glib
 , desktop-file-utils
 , gettext
-, glib
 , gobject-introspection
 , gtk3
 , gtk4

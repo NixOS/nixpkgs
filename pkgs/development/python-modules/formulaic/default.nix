@@ -3,7 +3,6 @@
   astor,
   buildPythonPackage,
   fetchFromGitHub,
-  git,
   hatch-vcs,
   hatchling,
   interface-meta,

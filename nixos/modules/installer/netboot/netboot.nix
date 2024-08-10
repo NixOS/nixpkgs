@@ -88,8 +88,8 @@ with lib;
       prepend = [ "${config.system.build.initialRamdisk}/initrd" ];
 
       contents =
-        [ { object = config.system.build.squashfsStore;
-            symlink = "/nix-store.squashfs";
+        [ { source = config.system.build.squashfsStore;
+            target = "/nix-store.squashfs";
           }
         ];
     };

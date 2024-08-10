@@ -20,7 +20,7 @@
 , lsof
 , coreutils
 , gsettings-desktop-schemas
-, speechd
+, speechd-minimal
 , brltty
 , liblouis
 , gst_all_1
@@ -65,7 +65,7 @@ python3.pkgs.buildPythonApplication rec {
     brltty
     liblouis
     psutil
-    speechd
+    speechd-minimal
     gst-python
     setproctitle
   ];

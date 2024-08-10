@@ -30,6 +30,16 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      aioazuredevops = super.aioazuredevops.overridePythonAttrs (old: rec {
+        version = "2.1.1";
+        src = fetchFromGitHub {
+          owner = "timmo001";
+          repo = "aioazuredevops";
+          rev = "refs/tags/${version}";
+          hash = "sha256-rnvWjsTRBoojsuNG3uSdBlyycE4XSrhgjmb77jy7fxY=";
+        };
+      });
+
       aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchFromGitHub {
@@ -148,16 +158,6 @@ let
         dependencies = with self; [
           requests
         ];
-      });
-
-      ha-av = super.av.overridePythonAttrs (oldAttrs: rec {
-        pname = "ha-av";
-        version = "10.1.1";
-
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-QaMFVvglipN0kG1+ZQNKk7WTydSyIPn2qa32UtvLidw=";
-        };
       });
 
       intellifire4py = super.intellifire4py.overridePythonAttrs (oldAttrs: rec {
@@ -306,6 +306,16 @@ let
           repo = "pyoctoprintapi";
           rev = "refs/tags/v${version}";
           hash = "sha256-Jf/zYnBHVl3TYxFy9Chy6qNH/eCroZkmUOEWfd62RIo=";
+        };
+      });
+
+      pyopenweathermap = super.pyopenweathermap.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.10";
+        src = fetchFromGitHub {
+          owner = "freekode";
+          repo = "pyopenweathermap";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-wEcE4IYVvxEwW5Hhz+DqDIqbjd5/O1hEr7dGgiuMI00=";
         };
       });
 
@@ -461,6 +471,7 @@ let
   ];
 
   python = python312.override {
+    self = python;
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
 
@@ -478,7 +489,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.7.3";
+  hassVersion = "2024.7.4";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -496,13 +507,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-6f4z1mpoLOntImC161+0CyyuT3NrPdfuCa6/+wqzHgs=";
+    hash = "sha256-PHKFQmlwdS0+XpD5Pd+Xwv5KNB2kJKouh9jfBH3aUIU=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-YtrOUSQFTgDFL+iPm3itkKsMXs9IKyB2rCnpe7Bn2Gk=";
+    hash = "sha256-NJ5gD6k05ahIPCwktJgTz9zczxgnfuLesfjR58fbRL4=";
   };
 
   build-system = with python.pkgs; [

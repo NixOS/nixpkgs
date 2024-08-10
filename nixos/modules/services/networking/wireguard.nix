@@ -481,29 +481,27 @@ let
           RemainAfterExit = true;
         };
 
-        script = ''
-          ${optionalString (!config.boot.isContainer) "modprobe wireguard || true"}
-
-          ${values.preSetup}
-
-          ${ipPreMove} link add dev "${name}" type wireguard
-          ${optionalString (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''}
-          ${optionalString (values.mtu != null) ''${ipPostMove} link set "${name}" mtu ${toString values.mtu}''}
-
-          ${concatMapStringsSep "\n" (ip:
+        script = concatStringsSep "\n" (
+          optional (!config.boot.isContainer) "modprobe wireguard || true"
+          ++ [
+            values.preSetup
+            ''${ipPreMove} link add dev "${name}" type wireguard''
+          ]
+          ++ optional (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''
+          ++ optional (values.mtu != null) ''${ipPostMove} link set "${name}" mtu ${toString values.mtu}''
+          ++ (map (ip:
             ''${ipPostMove} address add "${ip}" dev "${name}"''
-          ) values.ips}
-
-          ${concatStringsSep " " (
+          ) values.ips)
+          ++ [
+            (concatStringsSep " " (
             [ ''${wg} set "${name}" private-key "${privKey}"'' ]
             ++ optional (values.listenPort != null) ''listen-port "${toString values.listenPort}"''
             ++ optional (values.fwMark != null) ''fwmark "${values.fwMark}"''
-          )}
-
-          ${ipPostMove} link set up dev "${name}"
-
-          ${values.postSetup}
-        '';
+            ))
+            ''${ipPostMove} link set up dev "${name}"''
+            values.postSetup
+          ]
+          );
 
         postStop = ''
           ${values.preShutdown}

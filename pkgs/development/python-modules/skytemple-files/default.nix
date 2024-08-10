@@ -47,7 +47,7 @@ buildPythonPackage rec {
     (fetchpatch2 {
       name = "fix-tests.patch";
       url = "https://github.com/SkyTemple/skytemple-files/commit/854e5514e6c63ba082618d14643e3a4b30a6c2b2.patch";
-      hash = "sha256-dZM9n332IMiZIp3QL0Z+yJrIW1SJsqpjh7i3VRFFf7w=";
+      hash = "sha256-oTV2EQQ2OPgu2pYB2fLd4jODfybnV29YNLxzDs2v6Cg=";
     })
   ];
 

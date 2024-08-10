@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, bash, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "rbenv";

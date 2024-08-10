@@ -20,7 +20,7 @@
 , pkg-config
 , python3
 , wrapGAppsHook3
-, cinnamon
+, cinnamon-desktop
 , yelp-tools
 , xapp
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cinnamon.cinnamon-desktop
+    cinnamon-desktop
     exempi
     gdk-pixbuf
     glib

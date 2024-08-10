@@ -32,7 +32,7 @@ buildPythonPackage rec {
       gpl3Plus
       mit
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "parsegemfile";
   };
 }

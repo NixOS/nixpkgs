@@ -6,7 +6,6 @@
 , cmake
 , hwloc
 , gperftools
-, ninja
 , pkg-config
 , python3
 }:

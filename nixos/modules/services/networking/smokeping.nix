@@ -337,7 +337,7 @@ in
     };
 
     # use nginx to serve the smokeping web service
-    services.fcgiwrap.smokeping = mkIf cfg.webService {
+    services.fcgiwrap.instances.smokeping = mkIf cfg.webService {
       process.user = cfg.user;
       process.group = cfg.user;
       socket = { inherit (config.services.nginx) user group; };
@@ -353,7 +353,7 @@ in
         locations."/smokeping.fcgi" = {
           extraConfig = ''
             include ${config.services.nginx.package}/conf/fastcgi_params;
-            fastcgi_pass unix:${config.services.fcgiwrap.smokeping.socket.address};
+            fastcgi_pass unix:${config.services.fcgiwrap.instances.smokeping.socket.address};
             fastcgi_param SCRIPT_FILENAME ${smokepingHome}/smokeping.fcgi;
             fastcgi_param DOCUMENT_ROOT ${smokepingHome};
           '';

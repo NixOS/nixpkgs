@@ -1,37 +1,37 @@
 {
   stable = {
     chromedriver = {
-      hash_darwin = "sha256-YdQgrcTgyGtSfT6wBedSfBt40DaK3fG+uvB0yanvROU=";
+      hash_darwin = "sha256-Evz39J4o3FJdJbYsFxmnLiZ9QiMeZttcbTtZ6wAVXoQ=";
       hash_darwin_aarch64 =
-        "sha256-ht7LoA4ibEcWuXOk+JimCN0sjjPomHBcO8IZFNnMauk=";
-      hash_linux = "sha256-VeCNeBKsKZ2bEM6Z9lJJaBVRjS1pW2gK2DMvmghfNEA=";
-      version = "126.0.6478.182";
+        "sha256-4Dkdi5C6dcuEewYvy60F5m4ynzb5lGWrJFs1Q+4vapI=";
+      hash_linux = "sha256-Lls/gwyA28G8X41wXEIKlgNdmKWgWnPf6iHZGrU8e54=";
+      version = "127.0.6533.99";
     };
     deps = {
       gn = {
-        hash = "sha256-mNoQeHSSM+rhR0UHrpbyzLJC9vFqfxK1SD0X8GiRsqw=";
-        rev = "df98b86690c83b81aedc909ded18857296406159";
+        hash = "sha256-vzZu/Mo4/xATSD9KgKcRuBKVg9CoRZC9i0PEajYr4UM=";
+        rev = "b3a0bff47dd81073bfe67a402971bad92e4f2423";
         url = "https://gn.googlesource.com/gn";
-        version = "2024-05-13";
+        version = "2024-06-06";
       };
     };
-    hash = "sha256-vZ7P8+vHTMCo6lXkV84ENqRZVG3/fDEwl+BTNJTGMn4=";
-    version = "126.0.6478.182";
+    hash = "sha256-VKPlcBfS6iw4E1nz0nYJLg273XmJ+RcGGktRbqQTTwQ=";
+    version = "127.0.6533.99";
   };
   ungoogled-chromium = {
     deps = {
       gn = {
-        hash = "sha256-mNoQeHSSM+rhR0UHrpbyzLJC9vFqfxK1SD0X8GiRsqw=";
-        rev = "df98b86690c83b81aedc909ded18857296406159";
+        hash = "sha256-vzZu/Mo4/xATSD9KgKcRuBKVg9CoRZC9i0PEajYr4UM=";
+        rev = "b3a0bff47dd81073bfe67a402971bad92e4f2423";
         url = "https://gn.googlesource.com/gn";
-        version = "2024-05-13";
+        version = "2024-06-06";
       };
       ungoogled-patches = {
-        hash = "sha256-jDWL4gXcWF6GMlFJ/sua4dfVURs9vWYXRMjnYNqESWc=";
-        rev = "126.0.6478.182-1";
+        hash = "sha256-4LfYBqFQ/e/ePaOTSFBpELt0ilo/Vohwnwp8FvkfavU=";
+        rev = "127.0.6533.88-1";
       };
     };
-    hash = "sha256-vZ7P8+vHTMCo6lXkV84ENqRZVG3/fDEwl+BTNJTGMn4=";
-    version = "126.0.6478.182";
+    hash = "sha256-nZZ2yrVu+0TloMaM455bmyeoeVnfeGR3EGubAf8snNU=";
+    version = "127.0.6533.88";
   };
 }

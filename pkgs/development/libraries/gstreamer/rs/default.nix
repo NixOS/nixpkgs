@@ -11,6 +11,7 @@
 , rustc
 , cargo
 , cargo-c
+, lld
 , nasm
 , gstreamer
 , gst-plugins-base
@@ -199,9 +200,13 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     cargo-c'
     nasm
+  ] ++ lib.optionals stdenv.isDarwin [
+    lld
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
+
+  env = lib.optionalAttrs stdenv.isDarwin { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
 
   buildInputs = [
     gstreamer
@@ -258,6 +263,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs";
     license = with licenses; [ mpl20 asl20 mit lgpl21Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 })

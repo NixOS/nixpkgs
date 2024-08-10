@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     # -kk
     ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
-  configureFlags = [ "--enable-mpers=check" ];
+  configureFlags = [ "--enable-mpers=check" ]
+    ++ lib.optional stdenv.cc.isClang "CFLAGS=-Wno-unused-function";
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.

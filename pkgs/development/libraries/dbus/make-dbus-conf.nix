@@ -1,5 +1,4 @@
 { runCommand
-, writeText
 , libxslt
 , dbus
 , findXMLCatalogs

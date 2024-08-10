@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "OpenIPMI";
-  version = "2.0.35";
+  version = "2.0.36";
 
   src = fetchurl {
     url = "mirror://sourceforge/openipmi/OpenIPMI-${version}.tar.gz";
-    sha256 = "sha256-sFkRT2KZ1z8E/252oIV6Crgao2Le6ZZE0layI4ckN60=";
+    sha256 = "sha256-oEAxSPpfe+2TDJWKTRxVgEfic3Y6QIs6A2jtwTfMVdk=";
   };
 
   buildInputs = [ ncurses popt python3 readline openssl ];

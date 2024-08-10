@@ -49,7 +49,7 @@ let
   helpersBin = symlinkJoin {
     name = "podman-helper-binary-wrapper";
 
-    # this only works for some binaries, others may need to be be added to `binPath` or in the modules
+    # this only works for some binaries, others may need to be added to `binPath` or in the modules
     paths = [
       gvproxy
     ] ++ lib.optionals stdenv.isLinux [
@@ -65,13 +65,13 @@ let
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.1.2";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-IeGOagP1MGH92Si2i6HPwZ71XrYJ7RpxxRNbQN3HGOw=";
+    hash = "sha256-Rb9rOetMVxf1GhEOzZmaUwRI4nkPdJnpkpjIyJcb6r8=";
   };
 
   patches = [

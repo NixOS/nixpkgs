@@ -4,7 +4,7 @@
   symlinkJoin,
   modrinth-app-unwrapped,
   wrapGAppsHook3,
-  addOpenGLRunpath,
+  addDriverRunpath,
   flite,
   glib,
   glib-networking,
@@ -38,7 +38,7 @@ symlinkJoin rec {
   ];
 
   runtimeDependencies = lib.optionalString stdenv.isLinux (lib.makeLibraryPath [
-    addOpenGLRunpath.driverLink
+    addDriverRunpath.driverLink
     flite # narrator support
 
     udev # oshi

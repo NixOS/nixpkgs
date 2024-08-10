@@ -10,7 +10,6 @@
 , libxslt
 , pkg-config
 , python3
-, valgrind
 , publicsuffix-list
 }:
 

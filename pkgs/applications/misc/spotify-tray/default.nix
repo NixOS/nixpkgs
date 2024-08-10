@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Adds a tray icon to the Spotify Linux client application";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "spotify-tray";
   };
 }

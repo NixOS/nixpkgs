@@ -11,6 +11,7 @@
   pam,
   wayland,
   wayland-protocols,
+  wayland-scanner,
   cairo,
   file,
   libjpeg,
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [

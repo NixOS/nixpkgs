@@ -11,6 +11,7 @@
 
 let
   python = python310.override {
+    self = python;
     packageOverrides = final: prev: {
       # requirements.txt fixes docutils at 0.17; the default 0.21.1 tested throws exceptions
       docutils-0_17 = prev.docutils.overridePythonAttrs (old: rec {

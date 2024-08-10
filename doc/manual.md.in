@@ -12,4 +12,5 @@ stdenv.md
 build-helpers.md
 development.md
 contributing.md
+interoperability.md
 ```

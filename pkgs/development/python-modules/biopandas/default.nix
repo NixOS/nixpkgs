@@ -5,11 +5,10 @@
   setuptools,
   looseversion,
   mmtf-python,
-  nose,
   numpy,
   pandas,
   pytestCheckHook,
-  pythonOlder,
+  fetchpatch2,
 }:
 
 buildPythonPackage rec {
@@ -24,6 +23,22 @@ buildPythonPackage rec {
     hash = "sha256-1c78baBBsDyvAWrNx5mZI/Q75wyXv0DAwAdWm3EwX/I=";
   };
 
+  patches = [
+    # Needed for below patch to apply properly
+    (fetchpatch2 {
+      name = "deprecate-mmtf-parsing.patch";
+      url = "https://github.com/BioPandas/biopandas/commit/7a1517dbe76f2c70da8edb35f90c9fa69254e726.patch?full_index=1";
+      hash = "sha256-RFtXFqUYl8GnZ319HsBwx5SUbfUDnR66Ppakdvtg/wI=";
+    })
+    # Remove nose as a dependency.
+    (fetchpatch2 {
+      name = "remove-nose.patch";
+      url = "https://github.com/BioPandas/biopandas/commit/67aa2f237c70c826cd9ab59d6ae114582da2112f.patch?full_index=1";
+      hash = "sha256-fVl57/vGuzlYX/MBZnma1ZFCVmIpjr1k8t3bUJnb/uI=";
+      excludes = [ "setup.py" ];
+    })
+  ];
+
   pythonRelaxDeps = [ "looseversion" ];
 
   build-system = [ setuptools ];
@@ -35,14 +50,7 @@ buildPythonPackage rec {
     looseversion
   ];
 
-  # tests rely on nose
-  # resolved in 0.5.1: https://github.com/BioPandas/biopandas/commit/67aa2f237c70c826cd9ab59d6ae114582da2112f
-  doCheck = pythonOlder "3.12";
-
-  nativeCheckInputs = [
-    nose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # require network access

@@ -15,16 +15,14 @@ in
 
 buildDunePackage rec {
   pname = "opam-publish";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "ocaml-opam";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CiZOljFBUUC3ExGSzzTATGqmxKjbzjRlL4aaL/fx9zI=";
+    hash = "sha256-7TIBLHpLVzI8Ex01wiQqVPllMZuiiUQsbuGtsNmrW3Q=";
   };
-
-  duneVersion = "3";
 
   buildInputs = [
     cmdliner

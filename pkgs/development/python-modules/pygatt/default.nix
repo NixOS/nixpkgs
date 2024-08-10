@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   mock,
-  nose,
   pexpect,
   pyserial,
   pytestCheckHook,
@@ -13,27 +12,24 @@
 
 buildPythonPackage rec {
   pname = "pygatt";
-  version = "4.0.5";
+  version = "5.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "peplin";
     repo = "pygatt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DUZGsztZViVNZwmhXoRN5FOQ7BgUeI0SsYgCHlvsrv0=";
+    hash = "sha256-TMIqC+JvNOLU38a9jkacRAbdmAAd4UekFUDRoAWhHFo=";
   };
 
   postPatch = ''
-    # Not support for Python < 3.4
     substituteInPlace setup.py \
-      --replace-fail "'enum-compat'" "" \
-      --replace-fail "'coverage >= 3.7.1'," "" \
-      --replace-fail "'nose >= 1.3.7'" ""
-    substituteInPlace tests/bgapi/test_bgapi.py \
-       --replace-fail "assertEquals" "assertEqual"
+      --replace-fail "setup_requires" "test_requires"
   '';
+
+  pythonRemoveDeps = [ "enum-compat" ];
 
   build-system = [ setuptools ];
 
@@ -41,12 +37,8 @@ buildPythonPackage rec {
 
   optional-dependencies.GATTTOOL = [ pexpect ];
 
-  # tests require nose
-  doCheck = pythonOlder "3.12";
-
   nativeCheckInputs = [
     mock
-    nose
     pytestCheckHook
   ] ++ optional-dependencies.GATTTOOL;
 

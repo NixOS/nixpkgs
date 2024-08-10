@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hpp-fcl";
-  version = "2.4.4";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "humanoid-path-planner";
     repo = "hpp-fcl";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-BwS9RSirdlD6Cqwp7KD59dkh2WsJVwdlH9LzM2AFjI4=";
+    hash = "sha256-0OORdtT7vMpvK3BPJvtvuLcz0+bfu1+nVvzs3y+LyQw=";
   };
 
   strictDeps = true;
@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     doxygen
+  ] ++ lib.optionals pythonSupport [
+    python3Packages.numpy
   ];
 
   propagatedBuildInputs = [

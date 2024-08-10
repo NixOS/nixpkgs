@@ -4,6 +4,7 @@
   fetchFromGitHub,
   bson,
   pytestCheckHook,
+  pytest-cov-stub,
   pyyaml,
   setuptools,
 }:
@@ -23,8 +24,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "'pytest-runner'" ""
-    substituteInPlace setup.cfg \
-      --replace "--cov=pymarshal --cov-report=html --cov-report=term" ""
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -33,6 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     bson
     pyyaml
   ];

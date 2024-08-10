@@ -24,16 +24,16 @@ let
 in
 buildRustPackage rec {
   pname = "fedimint";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
     rev = "v${version}";
-    hash = "sha256-FEzlNLo6X4zZQM3KEsf6wwJm4Uw6/8HJNZiM4jK2x2k=";
+    hash = "sha256-0SsIuMCdsZdYSRA1yT1axMe6+p+tIpXyN71V+1B7jYc=";
   };
 
-  cargoHash = "sha256-lILETtCaPDAWgObNwHIfO/w6pqs0PkbqpDbjODRDOzw=";
+  cargoHash = "sha256-nQvEcgNOT04H5OgMHfN1713A4nbEaKK2KDx9E3qxcbM=";
 
   nativeBuildInputs = [
     protobuf

@@ -2,6 +2,7 @@
   mkKdeDerivation,
   fetchpatch,
   qtsvg,
+  knotifications,
 }:
 mkKdeDerivation {
   pname = "francis";
@@ -15,5 +16,5 @@ mkKdeDerivation {
     })
   ];
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [qtsvg knotifications];
 }

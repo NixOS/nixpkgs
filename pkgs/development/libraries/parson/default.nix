@@ -13,11 +13,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ meson ninja ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight JSON library written in C";
     homepage = "https://github.com/kgabis/parson";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

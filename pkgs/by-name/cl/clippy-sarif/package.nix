@@ -8,14 +8,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "clippy-sarif";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-ylfL4N1BtbB1R7+Glwtgn5E6/v3wQ6oXWdmeyKNHdOw=";
+    hash = "sha256-VFwLys5lVVQw3dmfY1nrI+Bi0tm7kjD2/1c1DLczLwk=";
   };
 
-  cargoHash = "sha256-O0bLgj7rWwbEswVMfexsBGgJyObxseOohYht21Y6HpU=";
+  cargoHash = "sha256-zktbOyBa200YSZBuLs3xU95bh9kvj5XZQKb7tpiTs1I=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

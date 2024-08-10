@@ -1,0 +1,28 @@
+diff --git a/src/core/vscore.cpp b/src/core/vscore.cpp
+index 73e2eafc..66a01326 100644
+--- a/src/core/vscore.cpp
++++ b/src/core/vscore.cpp
+@@ -1779,6 +1779,12 @@ void VSCore::isPortableInit() {
+ }
+ #endif
+ 
++void __attribute__((weak)) VSLoadPluginsNix(void (*load)(VSCore *core, const std::filesystem::path &), VSCore *);
++
++static void VSLoadPluginsNixCallback(VSCore *core, const std::filesystem::path &path) {
++    core->loadAllPluginsInPath(path);
++}
++
+ VSCore::VSCore(int flags) :
+     numFilterInstances(1),
+     numFunctionInstances(0),
+@@ -1890,6 +1896,10 @@ VSCore::VSCore(int flags) :
+ #endif
+     }
+ 
++    if (VSLoadPluginsNix != nullptr) {
++        VSLoadPluginsNix(VSLoadPluginsNixCallback, this);
++    };
++
+     VSMap *settings = readSettings(configFile);
+     const char *error = vs_internal_vsapi.mapGetError(settings);
+     if (error) {

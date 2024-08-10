@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook }:
+{ stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation ( finalAttrs: {
   pname = "blst";
-  version = "0.3.12";
+  version = "0.3.13";
 
   src = fetchFromGitHub {
     owner = "supranational";
     repo = "blst";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-z/xnttMuAOfoKn/yCBwdYbgcd6cDLD6tZxInAWn8XIk=";
+    hash = "sha256-+Ae2cCVVEXnV/ftVOApxDcXM3COf/4DXXd1AOuGS5uc=";
   };
 
   buildPhase = ''

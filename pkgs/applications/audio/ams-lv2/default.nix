@@ -25,7 +25,7 @@ stdenv.mkDerivation  rec {
     description = "LV2 port of the internal modules found in Alsa Modular Synth";
     homepage = "https://github.com/blablack/ams-lv2";
     license = licenses.gpl3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
     # Build uses `-msse` and `-mfpmath=sse`
     badPlatforms = [ "aarch64-linux" ];

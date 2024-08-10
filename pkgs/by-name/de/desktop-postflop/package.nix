@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  sourceRoot = "source/src-tauri";
+  sourceRoot = "${src.name}/src-tauri";
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -86,4 +86,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ tomasajt ];
   };
 }
-

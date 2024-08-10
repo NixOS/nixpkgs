@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";
     homepage    = "https://www.fluidsynth.org";
     license     = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ goibhniu lovek323 ];
+    maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
     mainProgram = "fluidsynth";
   };

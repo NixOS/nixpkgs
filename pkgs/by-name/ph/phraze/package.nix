@@ -5,22 +5,25 @@
   nix-update-script,
   phraze,
   rustPlatform,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "phraze";
-  version = "0.3.12";
+  version = "0.3.13";
 
   src = fetchFromGitHub {
     owner = "sts10";
     repo = "phraze";
     rev = "v${version}";
-    hash = "sha256-lW7oYivIDGYg78MgcLFFNyxciVk+wKU/OBzWYx3KwPI=";
+    hash = "sha256-xjkS1Ehqh2LfuIwAtj6V7Q9DcuERk7PyJKJEuDE7A34=";
   };
 
   doCheck = true;
 
-  cargoHash = "sha256-kFk04YKDYiABWtild6aaP9H8gt/TuckOWRJE69dAXGU=";
+  cargoHash = "sha256-jsQlcGRZqa4HHUS3Xc9OZUbI6pHalt9A3fVaz+Th1l0=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -29,12 +32,24 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  postInstall = ''
+    installManPage target/man/phraze.1
+
+    installShellCompletion --cmd phraze \
+      --bash target/completions/phraze.bash \
+      --fish target/completions/phraze.fish \
+      --zsh target/completions/_phraze
+  '';
+
   meta = {
     description = "Generate random passphrases";
     homepage = "https://github.com/sts10/phraze";
     changelog = "https://github.com/sts10/phraze/releases/tag/v${version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ x123 ];
+    maintainers = with lib.maintainers; [
+      x123
+      donovanglover
+    ];
     mainProgram = "phraze";
   };
 }

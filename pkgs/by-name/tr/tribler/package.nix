@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
       xvapx
-      viric
+
       mkg20001
     ];
     platforms = lib.platforms.linux;

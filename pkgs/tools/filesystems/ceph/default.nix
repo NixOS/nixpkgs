@@ -169,6 +169,7 @@ let
 
   # Watch out for python <> boost compatibility
   python = python311.override {
+    self = python;
     packageOverrides = self: super: let
       cryptographyOverrideVersion = "40.0.1";
       bcryptOverrideVersion = "4.0.1";
@@ -308,10 +309,10 @@ let
   ]);
   inherit (ceph-python-env.python) sitePackages;
 
-  version = "18.2.1";
+  version = "18.2.4";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256-gHWwNHf0KtI7Hv0MwaCqP6A3YR/AWakfUZTktRyddko=";
+    hash = "sha256-EFqteP3Jo+hASXVesH6gkjDjFO7/1RN151tIf/lQ06s=";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -339,8 +340,6 @@ in rec {
       doxygen
       graphviz
     ];
-
-    enableParallelBuilding = true;
 
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       arrow-cpp
@@ -448,6 +447,14 @@ in rec {
       # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
       ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
     ] ++ lib.optional stdenv.isLinux "-DWITH_SYSTEM_LIBURING=ON";
+
+    preBuild =
+      # The legacy-option-headers target is not correctly empbedded in the build graph.
+      # It also contains some internal race conditions that we work around by building with `-j 1`.
+      # Upstream discussion for additional context at https://tracker.ceph.com/issues/63402.
+      ''
+        cmake --build . --target legacy-option-headers -j 1
+      '';
 
     postFixup = ''
       wrapPythonPrograms

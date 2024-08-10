@@ -12,7 +12,7 @@
 
 { lib, ncurses, graphviz, lua, fetchzip,
   mkCoqDerivation, withDoc ? false, single ? false,
-  coqPackages, coq, hierarchy-builder, version ? null }@args:
+  coq, hierarchy-builder, version ? null }@args:
 
 let
   repo  = "math-comp";

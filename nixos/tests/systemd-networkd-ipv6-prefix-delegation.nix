@@ -40,7 +40,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             address = [
               "2001:DB8::1/64"
             ];
-            networkConfig.IPForward = true;
+            networkConfig.IPv4Forwarding = true;
+            networkConfig.IPv6Forwarding = true;
           };
         };
       };

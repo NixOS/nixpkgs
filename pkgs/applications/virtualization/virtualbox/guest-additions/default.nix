@@ -1,6 +1,5 @@
-{ config, stdenv, kernel, callPackage, lib, dbus
-, libX11, libXext, libXcursor, libXmu, xorg
-, which, zlib, patchelf, makeWrapper
+{ stdenv, kernel, callPackage, lib, dbus
+, xorg, zlib, patchelf, makeWrapper
 }:
 
 with lib;

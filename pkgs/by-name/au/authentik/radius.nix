@@ -1,4 +1,4 @@
-{ lib, buildGoModule, authentik }:
+{ buildGoModule, authentik }:
 
 buildGoModule {
   pname = "authentik-radius-outpost";

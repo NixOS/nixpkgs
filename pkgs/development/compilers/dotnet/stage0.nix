@@ -1,15 +1,14 @@
 { stdenv
-, stdenvNoCC
 , callPackage
 , lib
 , writeShellScript
-, pkgsBuildHost
 , mkNugetDeps
 , nix
 , cacert
 , nuget-to-nix
 , dotnetCorePackages
 , xmlstarlet
+, patchNupkgs
 
 , releaseManifestFile
 , tarballHash
@@ -21,13 +20,15 @@ let
   mkPackages = callPackage ./packages.nix;
   mkVMR = callPackage ./vmr.nix;
 
-  dotnetSdk = pkgsBuildHost.callPackage bootstrapSdk {};
-
-  patchNupkgs = pkgsBuildHost.callPackage ./patch-nupkgs.nix {};
+  dotnetSdk = callPackage bootstrapSdk {};
 
   deps = mkNugetDeps {
     name = "dotnet-vmr-deps";
     sourceFile = depsFile;
+  };
+
+  sdkPackages = dotnetSdk.packages.override {
+    installable = true;
   };
 
   vmr = (mkVMR {
@@ -36,6 +37,7 @@ let
     prebuiltPackages = mkNugetDeps {
       name = "dotnet-vmr-deps";
       sourceFile = depsFile;
+      installable = true;
     };
 
     nativeBuildInputs =
@@ -52,7 +54,9 @@ let
     '';
 
     postConfigure = old.postConfigure or "" + ''
-      [[ ! -v prebuiltPackages ]] || ln -sf "$prebuiltPackages"/* prereqs/packages/prebuilt/
+      [[ ! -v prebuiltPackages ]] || \
+        ln -sf "$prebuiltPackages"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
+      ln -sf "${sdkPackages}"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
     '';
 
     buildFlags =

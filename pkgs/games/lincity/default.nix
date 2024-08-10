@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     mainProgram = "xlincity";
     license = licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/lincity";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     # ../lcintl.h:14:10: fatal error: 'libintl.h' file not found
     broken = stdenv.isDarwin;
   };
