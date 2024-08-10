@@ -134,7 +134,6 @@ in
       startupNotify = true;
       startupWMClass = shortName;
       categories = [ "Utility" "TextEditor" "Development" "IDE" ];
-      mimeTypes = [ "text/plain" "inode/directory" ];
       keywords = [ "vscode" ];
       actions.new-empty-window = {
         name = "New Empty Window";
