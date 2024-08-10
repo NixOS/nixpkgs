@@ -2,7 +2,7 @@
 
 1.  Copy the old Nix expression (e.g., `linux-2.6.21.nix`) to the new one (e.g., `linux-2.6.22.nix`) and update it.
 
-2.  Add the new kernel to the `kernels` attribute set in [`linux-kernels.nix`](./linux-kernels.nix) (e.g., create an attribute `kernel_2_6_22`).
+2.  Add the new kernel to the `kernels` attribute set in [`linux-kernels.nix`](../../../top-level/linux-kernels.nix) (e.g., create an attribute `kernel_2_6_22`).
 
 3.  Update the kernel configuration:
 
