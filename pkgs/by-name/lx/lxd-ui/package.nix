@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/canonical/lxd-ui";
     changelog = "https://github.com/canonical/lxd-ui/releases/tag/${version}";
     license = lib.licenses.gpl3;
-    maintainers = lib.teams.lxc.members;
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }
