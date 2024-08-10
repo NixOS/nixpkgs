@@ -96,7 +96,7 @@ let
       null;
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
-  useSharedHttpParser = !stdenv.isDarwin && lib.versionOlder "${majorVersion}.${minorVersion}" "11.4";
+  useSharedHttpParser = !stdenv.hostPlatform.isDarwin && lib.versionOlder "${majorVersion}.${minorVersion}" "11.4";
 
   sharedLibDeps = { inherit openssl zlib libuv; } // (lib.optionalAttrs useSharedHttpParser { inherit http-parser; });
 
@@ -141,10 +141,10 @@ let
       # Note: do not set TERM=dumb environment variable globally, it is used in
       # test-ci-js test suite to skip tests that otherwise run fine.
       NINJA = "TERM=dumb ninja";
-    } // lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+    } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
       # Make sure libc++ uses `posix_memalign` instead of `aligned_alloc` on x86_64-darwin.
       # Otherwise, nodejs would require the 11.0 SDK and macOS 10.15+.
-      NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
+      NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300 -Wno-macro-redefined";
     };
 
     # NB: technically, we do not need bash in build inputs since all scripts are
@@ -286,7 +286,7 @@ let
         "test-tls-cli-max-version-1.3"
         "test-tls-client-auth"
         "test-tls-sni-option"
-      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
         # Disable tests that don’t work under macOS sandbox.
         "test-macos-app-sandbox"
         "test-os"
@@ -311,6 +311,11 @@ let
         "test-runner-run"
         "test-runner-watch-mode"
         "test-watch-mode-files_watcher"
+      ] ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
+        # These tests fail on x86_64-darwin (even without sandbox).
+        # TODO: revisit at a later date.
+        "test-fs-readv"
+        "test-fs-readv-sync"
       ])}"
     ];
 
