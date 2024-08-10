@@ -20,7 +20,7 @@
 let
   defaultSingularity = singularity;
 in
-rec {
+lib.makeExtensible (final: {
   # TODO(@ShamrockLee): Remove after Nixpkgs 24.11 branch-off.
   shellScript =
     lib.warn
@@ -147,4 +147,4 @@ rec {
 
     in
     result;
-}
+})
