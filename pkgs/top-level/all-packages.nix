@@ -243,8 +243,6 @@ with pkgs;
 
   anders = callPackage ../applications/science/logic/anders { };
 
-  ankisyncd = callPackage ../servers/ankisyncd { };
-
   ariang = callPackage ../servers/ariang { };
 
   ani-cli = callPackage ../applications/video/ani-cli { };
