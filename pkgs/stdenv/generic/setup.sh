@@ -382,7 +382,7 @@ concatStringsSep() {
                 local IFS="$sep"
                 echo -n "${nameref[*]}" ;;
             *)
-                echo -n "${nameref// /${sep}}" ;;
+                echo -n "${nameref// /"${sep}"}" ;;
         esac
     fi
 }
