@@ -1,13 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-with lib;
+let
+  cfg = config.services.xserver.displayManager.sx;
 
-let cfg = config.services.xserver.displayManager.sx;
-
-in {
+in
+{
   options = {
     services.xserver.displayManager.sx = {
-      enable = mkEnableOption "sx pseudo-display manager" // {
+      enable = lib.mkEnableOption "sx pseudo-display manager" // {
         description = ''
           Whether to enable the "sx" pseudo-display manager, which allows users
           to start manually via the "sx" command from a vt shell. The X server
@@ -22,13 +27,13 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.sx ];
     services.xserver = {
       exportConfiguration = true;
-      logFile = mkDefault null;
+      logFile = lib.mkDefault null;
     };
   };
 
-  meta.maintainers = with maintainers; [ figsoda ];
+  meta.maintainers = with lib.maintainers; [ figsoda ];
 }
