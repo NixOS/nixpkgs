@@ -265,6 +265,9 @@ in {
 
     imagick = callPackage ../development/php-packages/imagick { };
 
+    # Shadowed by built-in version on PHP < 8.3.
+    imap = callPackage ../development/php-packages/imap { };
+
     inotify = callPackage ../development/php-packages/inotify { };
 
     ioncube-loader = callPackage ../development/php-packages/ioncube-loader { };
@@ -453,6 +456,8 @@ in {
           name = "imap";
           buildInputs = [ uwimap openssl pam pcre2 libkrb5 ];
           configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" "--with-kerberos" ];
+          # Using version from PECL on new PHP versions.
+          enable = lib.versionOlder php.version "8.3";
         }
         {
           name = "intl";
