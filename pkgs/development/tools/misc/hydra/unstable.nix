@@ -43,7 +43,6 @@
 , cacert
 , glibcLocales
 , fetchFromGitHub
-, fetchpatch2
 , nixosTests
 }:
 

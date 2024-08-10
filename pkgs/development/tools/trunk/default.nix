@@ -4,21 +4,19 @@ rustPlatform,
 fetchFromGitHub,
 pkg-config,
 openssl,
-jq,
-moreutils,
 CoreServices,
 SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "trunk";
-  version = "0.20.2";
+  version = "0.20.3";
 
   src = fetchFromGitHub {
     owner = "trunk-rs";
     repo = "trunk";
     rev = "v${version}";
-    hash = "sha256-hyjv3UJWIfJjdGtju4T6ufhz97F76uib/B9kyBHsC64=";
+    hash = "sha256-3p3HllZu69e2ERLoEJwSWL0OXl23lxvIPHV9HK30CqM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
-  cargoHash = "sha256-BI/jA5/7/QP62EtOXXRkbsJILsHbVacZY/bKZGcXk34=";
+  cargoHash = "sha256-4b+ASz8uV17Y7gO50YKiu8Zhhq4sL+HJj1WAD7VkEE4=";
 
   meta = with lib; {
     homepage = "https://github.com/trunk-rs/trunk";

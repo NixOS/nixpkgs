@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   # all tests involve networking and are bound fail
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd wormhole-rs \
       --bash <($out/bin/wormhole-rs completion bash) \
       --fish <($out/bin/wormhole-rs completion fish) \

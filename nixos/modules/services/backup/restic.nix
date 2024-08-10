@@ -374,7 +374,7 @@ in
                 ${resticCmd} cat config > /dev/null || ${resticCmd} init
               ''}
               ${optionalString (backup.paths != null && backup.paths != []) ''
-                cat ${pkgs.writeText "staticPaths" (concatStringsSep "\n" backup.paths)} >> ${filesFromTmpFile}
+                cat ${pkgs.writeText "staticPaths" (concatLines backup.paths)} >> ${filesFromTmpFile}
               ''}
               ${optionalString (backup.dynamicFilesFrom != null) ''
                 ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} >> ${filesFromTmpFile}

@@ -9,12 +9,12 @@
 }:
 
 let
-  version = "1.9.0";
+  version = "1.11.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     rev = "v${version}";
-    hash = "sha256-gg7ClclBS9j9n4/3HLxbX8HXTz9Zw5+BYG2MEYRsRBU=";
+    hash = "sha256-tBbvmM66zCNpKqeekPY48j0t5PjLHeyQ8+kJ6755ivo=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
@@ -93,8 +93,16 @@ pythonpkgs.buildPythonPackage rec {
   ];
 
   postPatch = ''
+    rm -rf dev # Do not need dev scripts & code
+
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'
+
+    substituteInPlace mealie/services/backups_v2/alchemy_exporter.py \
+      --replace-fail 'PROJECT_DIR = ' "PROJECT_DIR = Path('$out') #"
+
+    substituteInPlace mealie/db/init_db.py \
+      --replace-fail 'PROJECT_DIR = ' "PROJECT_DIR = Path('$out') #"
   '';
 
   postInstall = let
@@ -106,10 +114,10 @@ pythonpkgs.buildPythonPackage rec {
       ${python.interpreter} $OUT/${python.sitePackages}/mealie/db/init_db.py
     '';
   in ''
-    mkdir -p $out/config $out/bin $out/libexec
+    mkdir -p $out/bin $out/libexec
     rm -f $out/bin/*
 
-    substitute ${src}/alembic.ini $out/config/alembic.ini \
+    substitute ${src}/alembic.ini $out/alembic.ini \
       --replace-fail 'script_location = alembic' 'script_location = ${src}/alembic'
 
     makeWrapper ${start_script} $out/bin/mealie \

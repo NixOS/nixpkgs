@@ -19,7 +19,7 @@ in
   meta.maintainers = with maintainers; [ etu stunkymonkey mattchrist ];
 
   options.services.freshrss = {
-    enable = mkEnableOption "FreshRSS RSS aggregator and reader with php-fpm backend.";
+    enable = mkEnableOption "FreshRSS RSS aggregator and reader with php-fpm backend";
 
     package = mkPackageOption pkgs "freshrss" { };
 

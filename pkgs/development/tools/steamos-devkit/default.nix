@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , fetchFromGitLab
-, writeScript
 , python3
 , copyDesktopItems
 , makeDesktopItem

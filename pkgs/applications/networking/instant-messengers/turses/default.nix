@@ -7,6 +7,7 @@
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
 
       # Support for later tweepy releases is missing

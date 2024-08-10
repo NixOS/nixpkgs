@@ -1,5 +1,4 @@
 { stdenv
-, stdenvNoCC
 , callPackage
 , lib
 , writeShellScript

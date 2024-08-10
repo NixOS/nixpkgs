@@ -9,7 +9,21 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
+      aiojellyfin = super.aiojellyfin.overridePythonAttrs rec {
+        version = "0.9.2";
+
+        src = fetchFromGitHub {
+          owner = "jc2k";
+          repo = "aiojellyfin";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-q+b1tKr46qq3PULPkCaQk2VoC1aaNxPK/E1Kj4PABfI=";
+        };
+
+        doCheck = false;
+      };
+
       music-assistant-frontend = self.callPackage ./frontend.nix { };
     };
   };
@@ -23,14 +37,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.0.7";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
-    rev = version;
-    hash = "sha256-JtdlZ3hH4fRU5TjmMUlrdSSCnLrIGCuSwSSrnLgjYEs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ALsl2xfAFYejDEhR5/ZpeIxoHFgvz471tb4OP5xQAUE=";
   };
 
   patches = [
@@ -42,8 +56,6 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-
     substituteInPlace pyproject.toml \
       --replace-fail "0.0.0" "${version}"
   '';
@@ -70,6 +82,7 @@ python.pkgs.buildPythonApplication rec {
       certifi
       colorlog
       cryptography
+      eyed3
       faust-cchardet
       ifaddr
       mashumaro
@@ -86,10 +99,13 @@ python.pkgs.buildPythonApplication rec {
   };
 
   nativeCheckInputs = with python.pkgs; [
-    ffmpeg-headless
+    aiojellyfin
     pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+    syrupy
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "music_assistant" ];
 

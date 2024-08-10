@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/mdit-py-plugins";
     changelog = "https://github.com/executablebooks/mdit-py-plugins/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

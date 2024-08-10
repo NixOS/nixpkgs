@@ -4,7 +4,6 @@
   fetchurl,
   buildPythonPackage,
   isPy3k,
-  pythonAtLeast,
   astor,
   gast,
   google-pasta,
@@ -18,6 +17,7 @@
   grpcio,
   mock,
   scipy,
+  distutils,
   wheel,
   jax,
   opt-einsum,
@@ -90,7 +90,10 @@ buildPythonPackage {
     h5py
   ] ++ lib.optional (!isPy3k) mock;
 
-  build-system = [ wheel ] ++ lib.optionals cudaSupport [ addDriverRunpath ];
+  build-system = [
+    distutils
+    wheel
+  ] ++ lib.optionals cudaSupport [ addDriverRunpath ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -217,9 +220,5 @@ buildPythonPackage {
       abbradar
     ];
     badPlatforms = [ "x86_64-darwin" ];
-    # Cannot import tensortfow on python 3.12 as it still dependends on distutils:
-    # ModuleNotFoundError: No module named 'distutils'
-    # https://github.com/tensorflow/tensorflow/issues/58073
-    broken = pythonAtLeast "3.12";
   };
 }

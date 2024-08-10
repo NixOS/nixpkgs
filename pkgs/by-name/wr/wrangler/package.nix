@@ -6,6 +6,7 @@
   nodejs,
   pnpm_9,
   autoPatchelfHook,
+  cacert,
   llvmPackages,
   musl,
   xorg,
@@ -70,7 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${lib.getExe nodejs} $out/bin/wrangler \
       --inherit-argv0 \
       --prefix-each NODE_PATH : "$${NODE_PATH_ARRAY[@]}" \
-      --add-flags $out/lib/packages/wrangler/bin/wrangler.js
+      --add-flags $out/lib/packages/wrangler/bin/wrangler.js \
+      --set-default SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" # https://github.com/cloudflare/workers-sdk/issues/3264
     runHook postInstall
   '';
 

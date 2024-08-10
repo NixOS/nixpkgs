@@ -648,7 +648,8 @@ in
                     || dmConf.xpra.enable
                     || dmConf.sx.enable
                     || dmConf.startx.enable
-                    || config.services.greetd.enable);
+                    || config.services.greetd.enable
+                    || config.services.displayManager.ly.enable);
       in mkIf (default) (mkDefault true);
 
     services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];

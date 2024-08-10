@@ -13,20 +13,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "2.1.2";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "swsnr";
     repo = "mdcat";
     rev = "mdcat-${version}";
-    hash = "sha256-qdNORp9THxHWR95uVcYtCy59OQqdop1012thZN5i64w=";
+    hash = "sha256-Geq4I4QjWg2dBfGw0j68gG5butWFLXynLC5c9AQTfPs=";
   };
 
   nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  cargoHash = "sha256-/avxRvT35LxCBWkTYJDCtdd95VC67epZIPCMv994uBo=";
+  cargoHash = "sha256-G+vTW3hYNjZN3V5svltbKEeeUEolAVVbTOaAKVHEcUI=";
 
   nativeCheckInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.
@@ -44,12 +44,12 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage $releaseDir/build/mdcat-*/out/mdcat.1
     ln -sr $out/bin/{mdcat,mdless}
-
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for bin in mdcat mdless; do
-      installShellCompletion \
-        --bash $releaseDir/build/mdcat-*/out/completions/$bin.bash \
-        --fish $releaseDir/build/mdcat-*/out/completions/$bin.fish \
-        --zsh $releaseDir/build/mdcat-*/out/completions/_$bin
+      installShellCompletion --cmd $bin \
+        --bash <($out/bin/$bin --completions bash) \
+        --fish <($out/bin/$bin --completions fish) \
+        --zsh <($out/bin/$bin --completions zsh)
     done
   '';
 

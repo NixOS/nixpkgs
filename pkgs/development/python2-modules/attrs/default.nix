@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , buildPythonPackage
 , fetchPypi
 }:

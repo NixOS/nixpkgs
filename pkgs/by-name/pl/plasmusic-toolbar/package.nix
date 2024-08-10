@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , kdePackages
+, nix-update-script
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "plasmusic-toolbar";
@@ -20,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r src/* $out/share/plasma/plasmoids/plasmusic-toolbar
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "KDE Plasma widget that shows currently playing song information and provide playback controls.";

@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitea
+, fetchpatch
 , makeWrapper
 , pkg-config
 , glib
@@ -16,15 +17,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "faircamp";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "simonrepp";
     repo = "faircamp";
     rev = version;
-    hash = "sha256-gHlm5ZQ5u+gOSBERlg6iYJxGTfs/+L4y2TY+ZOsVYh8=";
+    hash = "sha256-V8fz65LNNCEhexV+ps3cclc0CJljVlAwBf2KjZCBx88=";
   };
+
+  patches = [
+    # Fix build error in tests
+    (fetchpatch {
+      url = "https://codeberg.org/simonrepp/faircamp/commit/7240dd707f3669d49e755088393d27369ca368c2.patch";
+      hash = "sha256-Ec75Gte2zUp/q912keLdYXUse60QirTQ+DkSaCwEboQ=";
+    })
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;

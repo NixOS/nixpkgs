@@ -37,12 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     # The optional QVR dependency is not currently packaged.
   ];
 
-  # LTO is currently broken on macOS.
-  # https://github.com/NixOS/nixpkgs/issues/19098
-  cmakeFlags = lib.optionals stdenv.isDarwin [
-    (lib.cmakeBool "CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE" false)
-  ];
-
   meta = {
     description = "Video player with a focus on 3D and Virtual Reality";
     homepage = "https://bino3d.org/";

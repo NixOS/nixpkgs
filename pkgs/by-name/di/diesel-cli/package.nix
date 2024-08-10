@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage rec {
   # Tests currently fail due to *many* duplicate definition errors
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd diesel \
       --bash <($out/bin/diesel completions bash) \
       --fish <($out/bin/diesel completions fish) \

@@ -351,12 +351,16 @@ in
             sha256 = "0imblp0kw9vkcr7sp962jmj20fpmb3hvd3hmf4cs4x04klnq3k90";
             finalImageTag = "21.1.2-debian-11-r0";
           })
+
+          config.services.k3s.package.airgapImages
         ]
       '';
       description = ''
         List of derivations that provide container images.
         All images are linked to {file}`${imageDir}` before k3s starts and consequently imported
-        by the k3s agent. This option only makes sense on nodes with an enabled agent.
+        by the k3s agent. Consider importing the k3s airgap images archive of the k3s package in
+        use, if you want to pre-provision this node with all k3s container images. This option
+        only makes sense on nodes with an enabled agent.
       '';
     };
 

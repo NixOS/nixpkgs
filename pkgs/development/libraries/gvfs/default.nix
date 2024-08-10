@@ -41,7 +41,6 @@
 , libgdata
 , libmsgraph
 , python3
-, python3Packages
 , gsettings-desktop-schemas
 }:
 

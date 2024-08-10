@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [ which installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dotter \
       --bash <($out/bin/dotter gen-completions --shell bash) \
       --fish <($out/bin/dotter gen-completions --shell fish) \

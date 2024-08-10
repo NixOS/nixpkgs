@@ -1,19 +1,22 @@
 {
   lib,
-  fsspec,
-  stdenv,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   hatch-fancy-pypi-readme,
   hatchling,
+
+  # dependencies
   awkward-cpp,
-  importlib-metadata,
+  fsspec,
   numpy,
   packaging,
   typing-extensions,
-  jax,
-  jaxlib,
+  importlib-metadata,
+
+  # checks
   numba,
   setuptools,
   numexpr,
@@ -21,11 +24,15 @@
   pyarrow,
   pytest-xdist,
   pytestCheckHook,
+  jax,
+  jaxlib,
+
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.6.6";
+  version = "2.6.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,7 +41,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "awkward";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5Jg+Ki1vJ4Rz22TbqTvVtb5YLvkvP8EOQ7cmTmI6gQU=";
+    hash = "sha256-6Q2eXriMYmfrgv69ytxvyrxK9HPMX8AIZ3ZStZUMGIk=";
   };
 
   build-system = [
@@ -46,7 +53,6 @@ buildPythonPackage rec {
     [
       awkward-cpp
       fsspec
-      importlib-metadata
       numpy
       packaging
     ]

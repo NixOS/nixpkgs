@@ -29,17 +29,19 @@
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "5.4.1";
+  version = "5.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ecederstrand";
     repo = "exchangelib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FPn2l+PkTXFqzjqF4kQ8KE49BXZUzDDIcFI3UqoxqQM=";
+    hash = "sha256-UAc8Aju2+AM7m8XbWliVNzfWlL5fdPDa2q6Fsw04nHQ=";
   };
+
+  pythonRelaxDeps = [ "defusedxml" ];
 
   build-system = [ setuptools ];
 

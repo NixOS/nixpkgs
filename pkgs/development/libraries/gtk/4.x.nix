@@ -17,7 +17,6 @@
 , glib
 , cairo
 , pango
-, pandoc
 , gdk-pixbuf
 , gobject-introspection
 , fribidi

@@ -7,7 +7,7 @@
   fetchFromGitHub,
   runCommand,
   installShellFiles,
-  python311,
+  python3,
   writeScriptBin,
 
   # Whether to include patches that enable placing certain behavior-defining
@@ -21,20 +21,15 @@
 }:
 
 let
-  version = "2.62.0";
+  version = "2.63.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-Rb27KRAb50YzTZzMs6n8g04x14ni3rIYAL3c5j/ieRw=";
+    hash = "sha256-HpWdEZAMnAkB07fnE7IrA0FqpBYKChqojxwAo8RfuQs=";
   };
-
-  # Pin Python version to 3.11.
-  # See https://discourse.nixos.org/t/breaking-changes-announcement-for-unstable/17574/53
-  # and https://github.com/Azure/azure-cli/issues/27673
-  python3 = python311;
 
   # put packages that needs to be overridden in the py package scope
   py = callPackage ./python-packages.nix { inherit src version python3; };
@@ -74,7 +69,7 @@ let
   extensions =
     callPackages ./extensions-generated.nix { inherit mkAzExtension; }
     // callPackages ./extensions-manual.nix {
-      inherit mkAzExtension python3;
+      inherit mkAzExtension;
       python3Packages = python3.pkgs;
     };
 

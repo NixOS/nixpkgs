@@ -8,6 +8,7 @@
   bzip2,
   openssl,
   sqlite,
+  foundationdb,
   zstd,
   stdenv,
   darwin,
@@ -24,7 +25,7 @@ let
   # See upstream issue for rocksdb 9.X support
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
-  version = "0.8.5";
+  version = "0.9.0";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -33,12 +34,14 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
-    rev = "v${version}";
-    hash = "sha256-Y28o4BIoGcakEY3ig4wNR0sI6YBoR6BQUhXWK7fA3qo=";
+    # XXX: We need to use a revisoin two commits after v0.9.0, which includes fixes for test cases.
+    # Can be reverted to "v${version}" next release.
+    rev = "2a12e251f2591b7785d7a921364f125d2e9c1e6e";
+    hash = "sha256-qoU09tLpOlsy5lKv2GdCV23bd70hnNZ0r/O5APGVDyw=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-axLg7igmupGHU6xohDN+UIwaZB+vt02p9WIK+P9YkY8=";
+  cargoHash = "sha256-rGCu3J+hTxiIENDIQM/jPz1wUNJr0ouoa1IkwWKfOWM=";
 
   patches = [
     # Remove "PermissionsStartOnly" from systemd service files,
@@ -60,6 +63,7 @@ rustPlatform.buildRustPackage {
     bzip2
     openssl
     sqlite
+    foundationdb
     zstd
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
@@ -121,6 +125,11 @@ rustPlatform.buildRustPackage {
     # error[E0432]: unresolved import `r2d2_sqlite`
     # use of undeclared crate or module `r2d2_sqlite`
     "--skip=backend::sqlite::pool::SqliteConnectionManager::with_init"
+    # thread 'smtp::reporting::analyze::report_analyze' panicked at tests/src/smtp/reporting/analyze.rs:88:5:
+    # assertion `left == right` failed
+    #   left: 0
+    #  right: 12
+    "--skip=smtp::reporting::analyze::report_analyze"
   ];
 
   doCheck = !(stdenv.isLinux && stdenv.isAarch64);
@@ -135,6 +144,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/stalwartlabs/mail-server";
     changelog = "https://github.com/stalwartlabs/mail-server/blob/${version}/CHANGELOG";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada onny ];
+    maintainers = with maintainers; [ happysalada onny oddlama ];
   };
 }

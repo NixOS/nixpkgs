@@ -8,13 +8,13 @@
 melpaBuild {
   pname = "font-lock-plus";
   ename = "font-lock+";
-  version = "208-unstable-2018-01-01";
+  version = "208-unstable-2022-04-02";
 
   src = fetchFromGitHub {
     owner = "emacsmirror";
     repo = "font-lock-plus";
-    rev = "f2c1ddcd4c9d581bd32be88fad026b49f98b6541";
-    hash = "sha256-lFmdVMXIIXZ9ZohAJw5rhxpTv017qIyzmpuKOWDdeJ4=";
+    rev = "aa1c82d05c9222b09099a0ccd7468e955497940c";
+    hash = "sha256-er+knxqAejgKAtOnhqHfsGN286biHFdeMIUlbW7JyYw=";
   };
 
   passthru.updateScript = unstableGitUpdater { };

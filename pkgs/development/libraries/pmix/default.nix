@@ -71,8 +71,9 @@ stdenv.mkDerivation rec {
 
     # Pin the compiler to the current version in a cross compiler friendly way.
     # Same pattern as for openmpi (see https://github.com/NixOS/nixpkgs/pull/58964#discussion_r275059427).
-    sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
-      $dev/share/pmix/pmixcc-wrapper-data.txt
+    substituteInPlace $dev/share/pmix/pmixcc-wrapper-data.txt \
+      --replace-fail compiler=gcc \
+        compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
   '';
 
   enableParallelBuilding = true;

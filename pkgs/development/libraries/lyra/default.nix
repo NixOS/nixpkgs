@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, meson, ninja }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "lyra";

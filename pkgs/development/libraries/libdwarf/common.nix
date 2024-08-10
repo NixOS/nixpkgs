@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildInputs, hash, version, libelf, url, knownVulnerabilities }:
+{ lib, stdenv, fetchurl, buildInputs, hash, version, url, knownVulnerabilities }:
 
 stdenv.mkDerivation rec {
   pname = "libdwarf";

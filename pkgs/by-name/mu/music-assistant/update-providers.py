@@ -102,7 +102,7 @@ async def get_provider_manifests(version: str = "master") -> List:
     manifests = []
     with tempfile.TemporaryDirectory() as tmp:
         with urlopen(
-            f"https://github.com/music-assistant/music-assistant/archive/{version}.tar.gz"
+            f"https://github.com/music-assistant/music-assistant/archive/refs/tags/{version}.tar.gz"
         ) as response:
             tarfile.open(fileobj=BytesIO(response.read())).extractall(
                 tmp, filter="data"

@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Foundation
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd joshuto \
       --bash <($out/bin/joshuto completions bash) \
       --zsh <($out/bin/joshuto completions zsh) \

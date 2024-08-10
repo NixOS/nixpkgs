@@ -172,10 +172,23 @@ rec {
       imports = [ common ];
       specialisation.something.configuration = {
         boot.loader.systemd-boot.sortKey = "something";
+
+        # Since qemu will dynamically create a devicetree blob when starting
+        # up, it is not straight forward to create an export of that devicetree
+        # blob without knowing before-hand all the flags we would pass to qemu
+        # (we would then be able to use `dumpdtb`). Thus, the following config
+        # will not boot, but it does allow us to assert that the boot entry has
+        # the correct contents.
+        boot.loader.systemd-boot.installDeviceTree = pkgs.stdenv.hostPlatform.isAarch64;
+        hardware.deviceTree.name = "dummy.dtb";
+        hardware.deviceTree.package = lib.mkForce (pkgs.runCommand "dummy-devicetree-package" { } ''
+          mkdir -p $out
+          cp ${pkgs.emptyFile} $out/dummy.dtb
+        '');
       };
     };
 
-    testScript = ''
+    testScript = { nodes, ... }: ''
       machine.start()
       machine.wait_for_unit("multi-user.target")
 
@@ -187,6 +200,10 @@ rec {
       )
       machine.succeed(
           "grep 'sort-key something' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
+      )
+    '' + pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isAarch64 ''
+      machine.succeed(
+          "grep 'devicetree .*dummy' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
       )
     '';
   };

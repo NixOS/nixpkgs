@@ -14,6 +14,7 @@
 , gnum4
 , openssl
 , libxml2
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2
+    zlib
   ];
 
   dontUseCmakeConfigure = true;

@@ -1,24 +1,35 @@
-{ system, bootstrapFiles, extraAttrs }:
+{
+  lib,
+  libc,
+  config,
+  system,
+  bootstrapFiles,
+  isFromBootstrapFiles ? false,
+}:
 
-derivation ({
-  name = "bootstrap-tools";
+let
+  maybeDenoteProvenance = lib.optionalAttrs isFromBootstrapFiles {
+    passthru = {
+      inherit isFromBootstrapFiles;
+    };
+  };
 
-  builder = bootstrapFiles.busybox;
+  maybeContentAddressed = lib.optionalAttrs config.contentAddressedByDefault {
+    __contentAddressed = true;
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
 
-  args = [ "ash" "-e" ./scripts/unpack-bootstrap-tools.sh ];
-
-  tarball = bootstrapFiles.bootstrapTools;
-
-  inherit system;
-
-  # Needed by the GCC wrapper.
-  langC = true;
-  langCC = true;
-  isGNU = true;
-  hardeningUnsupportedFlags = [
-    "fortify3"
-    "stackclashprotection"
-    "trivialautovarinit"
-    "zerocallusedregs"
-  ];
-} // extraAttrs)
+  args = {
+    inherit system bootstrapFiles;
+    extraAttrs = maybeContentAddressed;
+  };
+  result =
+    if libc == "glibc" then
+      import ./glibc.nix args
+    else if libc == "musl" then
+      import ./musl.nix args
+    else
+      throw "unsupported libc";
+in
+result // maybeDenoteProvenance

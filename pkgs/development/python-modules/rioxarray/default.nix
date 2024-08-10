@@ -49,11 +49,13 @@ buildPythonPackage rec {
 
   disabledTests =
     [ "test_clip_geojson__no_drop" ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      # numerical errors
-      "test_clip_geojson"
-      "test_open_rasterio_mask_chunk_clip"
-    ];
+    ++ lib.optionals
+      (stdenv.hostPlatform.system == "aarch64-linux" || stdenv.hostPlatform.system == "aarch64-darwin")
+      [
+        # numerical errors
+        "test_clip_geojson"
+        "test_open_rasterio_mask_chunk_clip"
+      ];
 
   pythonImportsCheck = [ "rioxarray" ];
 

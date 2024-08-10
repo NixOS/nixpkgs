@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.20.0";
+  version = "2.21.0";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = pname;
     rev = version;
-    hash = "sha256-aQeKzOxRlSGuVewh3HEx1M12vmaxhy6ImnqMDc5b0DI=";
+    hash = "sha256-KQs7b+skXQhHbfHIJkgowNY2FB6oS2V8TQFdkmElC/k=";
   };
 
-  cargoHash = "sha256-g+fTmZGyPkQLgnJ9Bb4sLTfDMPPBRA+s6f3OxXTKwsM=";
+  cargoHash = "sha256-gKA1MMahoaDFia8LR33GG3jRttZzHwpUpFawlCQcy7g=";
 
   cargoPatches = [
     # enable pkg-config feature of zstd
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     git commit -m test
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd onefetch \
       --bash <($out/bin/onefetch --generate bash) \
       --fish <($out/bin/onefetch --generate fish) \

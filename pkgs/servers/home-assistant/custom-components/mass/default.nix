@@ -4,6 +4,9 @@
 , toPythonModule
 , async-timeout
 , music-assistant
+, pytestCheckHook
+, pytest-asyncio
+, pytest-homeassistant-custom-component
 }:
 
 buildHomeAssistantComponent rec {
@@ -18,12 +21,22 @@ buildHomeAssistantComponent rec {
     hash = "sha256-Wvc+vUYkUJmS4U34Sh/sDCVXmQA0AtEqIT8MNXd++3M=";
   };
 
+  postPatch = ''
+    sed -i "s/--cov//" pyproject.toml
+  '';
+
   dependencies = [
     async-timeout
     (toPythonModule music-assistant)
   ];
 
   dontCheckManifest = true; # expects music-assistant 2.0.6, we have 2.0.7
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-homeassistant-custom-component
+  ];
 
   meta = with lib; {
     description = "Turn your Home Assistant instance into a jukebox, hassle free streaming of your favorite media to Home Assistant media players";

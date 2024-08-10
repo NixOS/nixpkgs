@@ -9,6 +9,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       pydantic = super.pydantic_1;
     };

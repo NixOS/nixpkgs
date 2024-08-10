@@ -3,13 +3,13 @@
 , gettext
 , python3
 , fetchFromGitHub
-, fetchpatch2
 , plugins ? [ ]
 , nixosTests
 }:
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
       django-bootstrap4 = prev.django-bootstrap4.overridePythonAttrs (oldAttrs: rec {
         version = "3.0.0";
@@ -29,13 +29,13 @@ let
     };
   };
 
-  version = "2024.1.0";
+  version = "2024.2.1";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     rev = "v${version}";
-    hash = "sha256-rFOlovybaEZnv5wBx6Dv8bVkP1D+CgYAKRXuNb6hLKQ=";
+    hash = "sha256-D0ju9aOVy/new9GWqyFalZYCisdmM7irWSbn2TVCJYQ=";
   };
 
   meta = with lib; {
@@ -54,7 +54,7 @@ let
 
     sourceRoot = "${src.name}/src/pretalx/frontend/schedule-editor";
 
-    npmDepsHash = "sha256-B9R3Nn4tURNxzeyLDHscqHxYOQK9AcmDnyNq3k5WQQs=";
+    npmDepsHash = "sha256-EAdeXdcC3gHun6BOHzvqpzv9+oDl1b/VTeNkYLiD+hA=";
 
     npmBuildScript = "build";
 
@@ -71,15 +71,6 @@ python.pkgs.buildPythonApplication rec {
     "static"
   ];
 
-  patches = [
-    (fetchpatch2 {
-      # Backport support for Djangorestframework 3.15.x
-      name = "pretalx-drf-3.15.patch";
-      url = "https://github.com/pretalx/pretalx/commit/43a0416c6968d64ea57720abdb82f482940b11f8.patch";
-      hash = "sha256-Iw1xVF7j7c712kwIk1SMbQSF0ixMUZr1BJib3KAb2HY=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace src/pretalx/common/management/commands/rebuild.py \
       --replace 'subprocess.check_call(["npm", "run", "build"], cwd=frontend_dir, env=env)' ""
@@ -90,14 +81,17 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
-  ] ++ (with python.pkgs; [
+  ];
+
+  build-system = with python.pkgs; [
     setuptools
-  ]);
+  ];
 
   pythonRelaxDeps = [
     "celery"
     "css-inline"
     "cssutils"
+    "defusedxml"
     "django-compressor"
     "django-csp"
     "django-filter"
@@ -110,9 +104,10 @@ python.pkgs.buildPythonApplication rec {
     "reportlab"
     "requests"
     "rules"
+    "whitenoise"
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     beautifulsoup4
     bleach
     celery
@@ -120,6 +115,7 @@ python.pkgs.buildPythonApplication rec {
     csscompressor
     cssutils
     defusedcsv
+    defusedxml
     django
     django-bootstrap4
     django-compressor
@@ -147,9 +143,12 @@ python.pkgs.buildPythonApplication rec {
     vobject
     whitenoise
     zxcvbn
-  ] ++ beautifulsoup4.optional-dependencies.lxml ++ plugins;
+  ]
+  ++ beautifulsoup4.optional-dependencies.lxml
+  ++ django.optional-dependencies.argon2
+  ++ plugins;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     mysql = with python.pkgs; [
       mysqlclient
     ];
@@ -202,7 +201,7 @@ python.pkgs.buildPythonApplication rec {
     pytest-xdist
     pytestCheckHook
     responses
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # tries to run npm run i18n:extract

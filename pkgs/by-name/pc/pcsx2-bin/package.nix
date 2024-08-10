@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchurl,
   makeWrapper,
-  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -31,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
   };
 
   meta = {

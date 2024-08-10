@@ -8,7 +8,6 @@
 
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
-  "@astrojs/language-server" = "astro-ls";
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
   "@gitbeaker/cli" = "gitbeaker";

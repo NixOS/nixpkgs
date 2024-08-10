@@ -6,7 +6,6 @@
 , src ? null
 , patches ? []
 , runCommand
-, substitute
 , cmake
 , lndir
 , ninja

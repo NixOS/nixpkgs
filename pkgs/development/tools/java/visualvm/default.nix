@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, lib, makeWrapper, makeDesktopItem, jdk, gawk }:
+{ stdenv, fetchzip, lib, makeWrapper, makeDesktopItem, jdk }:
 
 stdenv.mkDerivation rec {
   version = "2.1.8";

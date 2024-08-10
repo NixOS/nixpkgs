@@ -2,10 +2,8 @@
   lib,
   buildPecl,
   fetchFromGitHub,
-  writeText,
   libcouchbase,
   zlib,
-  php,
   substituteAll,
 }:
 let

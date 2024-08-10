@@ -24,6 +24,7 @@ let
   };
 
   python = python311.override {
+    self = python;
     packageOverrides = self: super: {
       pydantic = super.pydantic_1;
 

@@ -12,8 +12,6 @@
 , withDebug ? false
 }:
 
-with lib;
-
 let
   phpConfig = {
     embedSupport = true;
@@ -27,6 +25,7 @@ let
   php81-unit = php81.override phpConfig;
   php82-unit = php82.override phpConfig;
 
+  inherit (lib) optional optionals optionalString;
 in stdenv.mkDerivation rec {
   version = "1.32.1";
   pname = "unit";
@@ -74,7 +73,7 @@ in stdenv.mkDerivation rec {
 
   passthru.tests.unit-php = nixosTests.unit-php;
 
-  meta = {
+  meta = with lib; {
     description = "Dynamic web and application server, designed to run applications in multiple languages";
     mainProgram = "unitd";
     homepage    = "https://unit.nginx.org/";

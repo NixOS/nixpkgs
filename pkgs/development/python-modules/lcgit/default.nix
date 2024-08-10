@@ -4,12 +4,13 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "lcgit";
-  version = "0.2.1";
-  format = "setuptools";
+  version = "1.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,13 +18,15 @@ buildPythonPackage rec {
     owner = "cisagov";
     repo = "lcgit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bLeblC68+j+YwvgnV1wgJiWm/jxZFzhTSDwXpoSzUTg=";
+    hash = "sha256-aMwjgN9//jAnTYnbJJvQyfE/f+5QosKxF1l4vF+3myc=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace " --cov" ""
+      --replace-fail " --cov" ""
   '';
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

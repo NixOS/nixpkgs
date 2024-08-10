@@ -15,6 +15,14 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  # ref https://github.com/osqp/osqp/pull/481
+  # but this patch does not apply directly on v0.6.3
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "$<INSTALL_PREFIX>/\''${CMAKE_INSTALL_INCLUDEDIR}" \
+      "\''${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {

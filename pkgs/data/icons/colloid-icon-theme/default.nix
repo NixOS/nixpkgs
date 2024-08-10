@@ -13,7 +13,7 @@ let
   pname = "colloid-icon-theme";
 
 in
-lib.checkListOfEnum "${pname}: scheme variants" [ "default" "nord" "dracula" "all" ] schemeVariants
+lib.checkListOfEnum "${pname}: scheme variants" [ "default" "nord" "dracula" "gruvbox" "everforest" "catppuccin" "all" ] schemeVariants
 lib.checkListOfEnum "${pname}: color variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "grey" "all" ] colorVariants
 
 stdenvNoCC.mkDerivation rec {

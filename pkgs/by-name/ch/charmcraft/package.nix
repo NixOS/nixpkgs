@@ -8,6 +8,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
         version = "0.11.2";

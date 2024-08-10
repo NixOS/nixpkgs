@@ -428,6 +428,12 @@ self: super: {
       # (this should be possible by also taking PREFIX into account).
       ./patches/git-annex-no-usr-prefix.patch
     ];
+
+    postPatch = ''
+      substituteInPlace Makefile \
+        --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
+                       'InstallDesktopFile git-annex'
+    '';
   }) super.git-annex;
 
   # Too strict bounds on servant

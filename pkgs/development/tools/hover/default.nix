@@ -6,7 +6,6 @@
 , pkg-config
 , fetchFromGitHub
 , roboto
-, writeScript
 , xorg
 , libglvnd
 , addDriverRunpath

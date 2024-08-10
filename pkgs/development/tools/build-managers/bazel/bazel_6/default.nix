@@ -2,7 +2,7 @@
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
-, lr, xe, zip, unzip, bash, writeCBin, coreutils
+, lr, xe, zip, unzip, bash, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
 , diffutils, gnupatch
 # updater
@@ -15,8 +15,6 @@
 # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
 # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
-, gcc-unwrapped
-, autoPatchelfHook
 , file
 , substituteAll
 , writeTextFile

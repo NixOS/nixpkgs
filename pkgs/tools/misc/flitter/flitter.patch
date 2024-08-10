@@ -1,5 +1,38 @@
+diff --git a/src/big.ml b/src/big.ml
+index 7cd327f..f84bc10 100644
+--- a/src/big.ml
++++ b/src/big.ml
+@@ -11,7 +11,7 @@ let big_font_map =
+   ] in
+ 
+   let uchar_of_char = 
+-    let open Caml.Uchar in
++    let open Stdlib.Uchar in
+     function
+     | '[' -> of_int 0x258C
+     | ']' -> of_int 0x2590
+@@ -48,4 +48,4 @@ let image_of_string attr str =
+   List.map (String.to_list str) ~f:(fun ch ->
+       List.map (Map.find_exn big_font_map ch) ~f:(I.uchars attr)
+       |> I.vcat
+-    ) |> I.hcat
+\ No newline at end of file
++    ) |> I.hcat
+diff --git a/src/display.ml b/src/display.ml
+index bd6f7e4..44d7f6d 100644
+--- a/src/display.ml
++++ b/src/display.ml
+@@ -41,7 +41,7 @@ let splits_header timer width =
+   let joined = I.hcat cell_padded in
+   let padded = left_pad width joined in
+ 
+-  let br = I.uchar Colors.label (Caml.Uchar.of_int 0x2500) width 1 in
++  let br = I.uchar Colors.label (Stdlib.Uchar.of_int 0x2500) width 1 in
+   I.(padded <-> br)
+ 
+ type time_status = Ahead_gain | Ahead_loss | Behind_gain | Behind_loss | Gold
 diff --git a/src/dune b/src/dune
-index a50b09a..54cc770 100644
+index a50b09a..2b00ee2 100644
 --- a/src/dune
 +++ b/src/dune
 @@ -1,7 +1,7 @@

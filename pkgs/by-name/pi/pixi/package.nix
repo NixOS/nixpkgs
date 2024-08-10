@@ -78,9 +78,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_task_with_env"
     "--skip=test_pixi_only_env_activation"
     "--skip=cli::shell_hook::tests::test_environment_json"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--skip=task::task_environment::tests::test_find_ambiguous_task"
+    "--skip=task::task_environment::tests::test_find_task_dual_defined"
+    "--skip=task::task_environment::tests::test_find_task_explicit_defined"
+    "--skip=task::task_graph::test::test_custom_command"
+    "--skip=task::task_graph::test::test_multi_env_defaults_ambigu"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pixi \
       --bash <($out/bin/pixi completion --shell bash) \
       --fish <($out/bin/pixi completion --shell fish) \

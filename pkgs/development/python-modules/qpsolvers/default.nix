@@ -19,14 +19,14 @@
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
-  version = "4.3.2";
+  version = "4.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qpsolvers";
     repo = "qpsolvers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EU7/OGLeOIHw7wyNTibMmHZLAiRTCUFwjEaVNsHg1vw=";
+    hash = "sha256-AQHd3tBfPzISQXsXHQQyh59nmym5gt8Jfogd6gRG3EM=";
   };
 
   nativeBuildInputs = [ flit-core ];

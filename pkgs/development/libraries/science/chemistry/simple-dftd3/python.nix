@@ -1,6 +1,4 @@
 { buildPythonPackage
-, pkg-config
-, meson
 , simple-dftd3
 , cffi
 , numpy

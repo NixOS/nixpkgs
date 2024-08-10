@@ -9,6 +9,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
       # aiosqlite>=0.16,<0.19
       aiosqlite = prev.aiosqlite.overridePythonAttrs (old: rec {

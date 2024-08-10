@@ -30,7 +30,6 @@
 , libepoxy
 , libxkbcommon
 , libxml2
-, gmp
 , gnome
 , gsettings-desktop-schemas
 , sassc

@@ -18,14 +18,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.7.8";
+  version = "1.7.9";
   pname = "pmacct";
 
   src = fetchFromGitHub {
     owner = "pmacct";
     repo = "pmacct";
     rev = "v${version}";
-    hash = "sha256-AcgZ5/8d1U/zGs4QeOkgkZS7ttCW6gtUv/Xuf4O4VE0=";
+    hash = "sha256-3gV6GUhTQnH09NRIJQI0xBn05Bgo3AJsE2cSxNPXITo=";
   };
 
   nativeBuildInputs = [

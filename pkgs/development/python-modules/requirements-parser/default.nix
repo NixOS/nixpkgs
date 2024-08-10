@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "requirements-parser";
-  version = "0.9.0";
+  version = "0.10.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "madpah";
     repo = "requirements-parser";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZkyfK2s6wmKX/AJsOXlAHOpJ2/zZO0zipdM3j2BrrWo=";
+    hash = "sha256-/zV9PfG4mEE7VN0FIk3m4sUVhKIyuryI6znQNh+zjak=";
   };
 
   build-system = [ poetry-core ];

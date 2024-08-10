@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2024.7.1";
+  version = "2024.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "distributed";
     rev = "refs/tags/${version}";
-    hash = "sha256-1VLYOUPo2esFltcoI6B/HMGyuyRq4vvkE55C8acdbG8=";
+    hash = "sha256-7Z/KKm9C/n4yFKv9KHmGhIUeddwCIZL1A/SBGJKDlbI=";
   };
 
   postPatch = ''

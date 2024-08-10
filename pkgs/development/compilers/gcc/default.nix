@@ -8,6 +8,8 @@
 , reproducibleBuild ? true
 , profiledCompiler ? false
 , langJit ? false
+, langRust ? false
+, cargo
 , staticCompiler ? false
 , enableShared ? stdenv.targetPlatform.hasSharedLibraries
 , enableLTO ? stdenv.hostPlatform.hasSharedLibraries
@@ -128,6 +130,7 @@ let
       inherit
         binutils
         buildPackages
+        cargo
         cloog
         withoutTargetLibc
         darwin
@@ -153,6 +156,7 @@ let
         langJit
         langObjC
         langObjCpp
+        langRust
         lib
         libcCross
         libmpc

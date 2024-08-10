@@ -22,7 +22,7 @@ mkHyprlandPlugin hyprland {
     runHook preInstall
 
     mkdir -p $out/lib
-    mv out/dynamic-cursors.so $out/lib/libdynamic-cursors.so
+    mv out/dynamic-cursors.so $out/lib/libhypr-dynamic-cursors.so
 
     runHook postInstall
   '';

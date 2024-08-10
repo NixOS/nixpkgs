@@ -1,7 +1,8 @@
-{ config
-, pkgs
-, lib
-, ...
+{
+  config,
+  pkgs,
+  lib,
+  ...
 }:
 
 let
@@ -32,26 +33,27 @@ in
     environment = {
       systemPackages = cfg.packages;
 
-      pathsToLink = [
-        "/share/ayatana"
-      ];
+      pathsToLink = [ "/share/ayatana" ];
     };
 
     # libayatana-common's ayatana-indicators.target with explicit Wants & Before to bring up requested indicator services
-    systemd.user.targets."ayatana-indicators" =
+    systemd.user.targets =
       let
-        indicatorServices = lib.lists.flatten
-          (map
-            (pkg:
-              (map (ind: "${ind}.service") pkg.passthru.ayatana-indicators))
-            cfg.packages);
+        indicatorServices = lib.lists.flatten (
+          map (pkg: (map (ind: "${ind}.service") pkg.passthru.ayatana-indicators)) cfg.packages
+        );
       in
-      {
-        description = "Target representing the lifecycle of the Ayatana Indicators. Each indicator should be bound to it in its individual service file";
-        partOf = [ "graphical-session.target" ];
-        wants = indicatorServices;
-        before = indicatorServices;
-      };
+      lib.attrsets.mapAttrs
+        (_: desc: {
+          description = "Target representing the lifecycle of the ${desc}. Each indicator should be bound to it in its individual service file";
+          partOf = [ "graphical-session.target" ];
+          wants = indicatorServices;
+          before = indicatorServices;
+        })
+        {
+          ayatana-indicators = "Ayatana Indicators";
+          lomiri-indicators = "Ayatana/Lomiri Indicators that shall be run in Lomiri";
+        };
   };
 
   meta.maintainers = with lib.maintainers; [ OPNA2608 ];

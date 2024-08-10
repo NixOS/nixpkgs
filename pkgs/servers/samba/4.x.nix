@@ -50,16 +50,17 @@
 , enablePam ? (!stdenv.isDarwin), pam
 }:
 
-with lib;
-
 let
   # samba-tool requires libxcrypt-legacy algorithms
   python = python3Packages.python.override {
+    self = python;
     libxcrypt = libxcrypt-legacy;
   };
   wrapPython = python3Packages.wrapPython.override {
     inherit python;
   };
+
+  inherit (lib) optional optionals;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
@@ -199,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Save asn1_compile and compile_et so they are available to run on the build
   # platform when cross-compiling
-  postInstall = optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p "$dev/bin"
     cp bin/asn1_compile bin/compile_et "$dev/bin"
   '';

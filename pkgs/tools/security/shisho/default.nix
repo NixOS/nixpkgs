@@ -3,6 +3,7 @@
 , rustPlatform
 , installShellFiles
 , rustfmt
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     rustfmt
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd shisho \
       --bash <($out/bin/shisho completion bash) \
       --fish <($out/bin/shisho completion fish) \

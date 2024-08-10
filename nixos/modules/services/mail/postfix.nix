@@ -484,7 +484,7 @@ in
       };
 
       config = mkOption {
-        type = with types; attrsOf (oneOf [ bool str (listOf str) ]);
+        type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
         description = ''
           The main.cf configuration file as key value set.
         '';

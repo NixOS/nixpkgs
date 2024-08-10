@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pytelegrambotapi";
-  version = "4.21.0";
+  version = "4.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";
     rev = "refs/tags/${version}";
-    hash = "sha256-e0cyxwofixdtv3qNEAnb+dG2ya8wUqKmIx3hRGkFrpE=";
+    hash = "sha256-hP9MXv3/754ouvPgyOZKzBtEU2BugHUUE/e8biZPLFY=";
   };
 
   build-system = [ hatchling ];

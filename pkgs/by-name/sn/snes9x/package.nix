@@ -5,6 +5,7 @@
   cmake,
   fetchFromGitHub,
   gtkmm3,
+  libGL,
   libX11,
   libXdmcp,
   libXext,
@@ -87,6 +88,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-avx2"
   ];
 
+  postPatch = ''
+    substituteInPlace external/glad/src/egl.c \
+      --replace-fail libEGL.so.1 "${lib.getLib libGL}/lib/libEGL.so.1"
+    substituteInPlace external/glad/src/glx.c \
+      --replace-fail libGL.so.1 ${lib.getLib libGL}/lib/libGL.so.1
+  '';
+
   preConfigure = ''
     cd ${if withGtk then "gtk" else "unix"}
   '';
@@ -126,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
         AndersonTorres
         qknight
         thiagokokada
+        sugar700
       ];
       platforms = lib.platforms.unix;
       broken = (withGtk && stdenv.isDarwin);

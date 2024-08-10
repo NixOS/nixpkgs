@@ -1,4 +1,4 @@
-{ metaFetch, mkCoqDerivation, coq, lib, glib, adwaita-icon-theme, wrapGAppsHook3,
+{ metaFetch, coq, lib, glib, adwaita-icon-theme, wrapGAppsHook3,
   version ? null }:
 
 let ocamlPackages = coq.ocamlPackages;

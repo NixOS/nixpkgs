@@ -7,14 +7,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nbqa";
-  version = "1.8.5";
+  version = "1.8.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbQA-dev";
     repo = "nbQA";
     rev = "refs/tags/${version}";
-    hash = "sha256-vRJxpWs2i4A8gi8F4YrTlmgBSnA73KeMCrmjLNF1zpA=";
+    hash = "sha256-zn+e/svaxeJU9P1sIaRrVuKW0+FM0GLKZTUx3PfuThk=";
   };
 
   build-system = with python3.pkgs; [
@@ -59,6 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     ]
     ++ (with python3.pkgs; [
       autoflake
+      distutils
       flake8
       isort
       jupytext
@@ -82,10 +83,6 @@ python3.pkgs.buildPythonApplication rec {
     "test_unable_to_reconstruct_message_pythonpath"
     "test_with_subcommand"
     "test_pylint_works"
-
-    # Test cases not updated to work with ruff>=0.5.0
-    # https://github.com/nbQA-dev/nbQA/issues/856
-    "test_ruff_works"
   ];
 
   disabledTestPaths = [

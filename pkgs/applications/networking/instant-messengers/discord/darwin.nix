@@ -1,8 +1,21 @@
-{ pname, version, src, meta, stdenv, binaryName, desktopName, lib, undmg, makeWrapper, writeScript
+{ pname, version, src, meta, stdenv, binaryName, desktopName, lib, undmg, makeWrapper, writeScript, python3, runCommand
 , branch
 , withOpenASAR ? false, openasar
 , withVencord ? false, vencord }:
 
+let
+  disableBreakingUpdates = runCommand "disable-breaking-updates.py"
+    {
+      pythonInterpreter = "${python3.interpreter}";
+      configDirName = lib.toLower binaryName;
+      meta.mainProgram = "disable-breaking-updates.py";
+    } ''
+    mkdir -p $out/bin
+    cp ${./disable-breaking-updates.py} $out/bin/disable-breaking-updates.py
+    substituteAllInPlace $out/bin/disable-breaking-updates.py
+    chmod +x $out/bin/disable-breaking-updates.py
+  '';
+in
 stdenv.mkDerivation {
   inherit pname version src meta;
 
@@ -18,7 +31,8 @@ stdenv.mkDerivation {
 
     # wrap executable to $out/bin
     mkdir -p $out/bin
-    makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}"
+    makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}" \
+      --run ${lib.getExe disableBreakingUpdates}
 
     runHook postInstall
   '';
@@ -33,6 +47,8 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
+    # make it possible to run disableBreakingUpdates standalone
+    inherit disableBreakingUpdates;
     updateScript = writeScript "discord-update-script" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl gnugrep common-updater-scripts

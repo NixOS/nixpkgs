@@ -43,9 +43,11 @@
 /pkgs/top-level/stage.nix                        @Ericson2314
 /pkgs/top-level/splice.nix                       @Ericson2314
 /pkgs/top-level/release-cross.nix                @Ericson2314
+/pkgs/stdenv                                     @philiptaron
 /pkgs/stdenv/generic                             @Ericson2314
 /pkgs/stdenv/generic/check-meta.nix              @Ericson2314
 /pkgs/stdenv/cross                               @Ericson2314
+/pkgs/build-support                              @philiptaron
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
@@ -139,13 +141,13 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /pkgs/top-level/release-python.nix                      @natsukium
 
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @ncfavier
-/maintainers/scripts/haskell                  @sternenseemann @maralorn @ncfavier
-/pkgs/development/compilers/ghc               @sternenseemann @maralorn @ncfavier
-/pkgs/development/haskell-modules             @sternenseemann @maralorn @ncfavier
-/pkgs/test/haskell                            @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @ncfavier
+/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn
+/maintainers/scripts/haskell                  @sternenseemann @maralorn
+/pkgs/development/compilers/ghc               @sternenseemann @maralorn
+/pkgs/development/haskell-modules             @sternenseemann @maralorn
+/pkgs/test/haskell                            @sternenseemann @maralorn
+/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn
+/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn
 
 # Perl
 /pkgs/development/interpreters/perl @stigtsp @zakame @marcusramberg
@@ -266,6 +268,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/emacs/elisp-packages @adisbladis
 /pkgs/applications/editors/emacs                @adisbladis
 /pkgs/top-level/emacs-packages.nix              @adisbladis
+
+# Kakoune
+/pkgs/applications/editors/kakoune     @philiptaron
 
 # Neovim
 /pkgs/applications/editors/neovim      @figsoda @teto

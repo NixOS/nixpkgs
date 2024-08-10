@@ -13,6 +13,7 @@
 
 let
   python = python39.override {
+    self = python;
     packageOverrides = self: super: {
       ntfy-webpush = self.callPackage ./webpush.nix { };
 

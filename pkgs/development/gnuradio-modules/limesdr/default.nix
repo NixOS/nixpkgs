@@ -5,7 +5,6 @@
 , thrift
 , cmake
 , pkg-config
-, doxygen
 , swig
 , python
 , logLib

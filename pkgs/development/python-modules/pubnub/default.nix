@@ -62,7 +62,9 @@ buildPythonPackage rec {
     description = "Python-based APIs for PubNub";
     homepage = "https://github.com/pubnub/python";
     changelog = "https://github.com/pubnub/python/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    # PubNub Software Development Kit License Agreement
+    # https://github.com/pubnub/python/blob/master/LICENSE
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ fab ];
   };
 }

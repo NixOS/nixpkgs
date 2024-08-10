@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gmid";
-  version = "2.0.5";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
     repo = pname;
     rev = version;
-    hash = "sha256-xuA5yLtRu9GDrSr7FBlAwEjCjFVRmnOuBM62AHOHDhc=";
+    hash = "sha256-C9CheVP0ZFf44J26KKa3+fkp8MB1sNVHnsHiNuNPKwQ=";
   };
 
   nativeBuildInputs = [ bison ];

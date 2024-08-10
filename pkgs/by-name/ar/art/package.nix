@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "art";
-  version = "1.22.1";
+  version = "1.23";
 
   src = fetchFromBitbucket {
     owner = "agriggio";
     repo = "art";
     rev = version;
-    hash = "sha256-f6SnTvMelJaPGNeGboI34RvWXcJatEi1G6vfAdDFy8A=";
+    hash = "sha256-OB/Rr4rHNJc40o6esNPDRbhN4EPGf2zhlzzM+mBpUUU=";
   };
 
   nativeBuildInputs = [

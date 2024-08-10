@@ -24,21 +24,32 @@ let
   phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
 in phpPackage.buildComposerProject rec {
   pname = "librenms";
-  version = "23.9.1";
+  version = "24.7.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = pname;
     rev = "${version}";
-    sha256 = "sha256-glcD9AhxkvMmGo/7/RhQFeOtvHJ4pSiEFxaAjeVrTaI=";
+    sha256 = "sha256-XAtIm1YVmDhf2JjSiLDPGYhXRTL9lDQxDX+4//skC8Q=";
   };
 
-  vendorHash = "sha256-s6vdGfM7Ehy1bbkB44EQaHBBvTkpVw9yxhVsc/O8dHc=";
+  vendorHash = "sha256-adPBPmm4BDUEY/BGsvghWGc38SbcFxsnDwLfvX6SjvQ=";
 
   php = phpPackage;
 
   buildInputs = [
+    graphviz
+    ipmitool
+    libvirt
+    monitoring-plugins
+    mtr
+    net-snmp
+    nfdump
+    nmap
+    rrdtool
+    system-sendmail
     unixtools.whereis
+    whois
     (python3.withPackages (ps: with ps; [
       pymysql
       python-dotenv
@@ -80,12 +91,14 @@ in phpPackage.buildComposerProject rec {
       --replace '"default": "/usr/bin/snmpwalk",' '"default": "${net-snmp}/bin/snmpwalk",' \
       --replace '"default": "/usr/bin/virsh",' '"default": "${libvirt}/bin/virsh",' \
       --replace '"default": "/usr/bin/whois",' '"default": "${whois}/bin/whois",' \
-      --replace '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/libexec",' \
+      --replace '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/bin",' \
       --replace '"default": "/usr/sbin/sendmail",' '"default": "${system-sendmail}/bin/sendmail",'
 
     substituteInPlace $out/LibreNMS/wrapper.py --replace '/usr/bin/env php' '${phpPackage}/bin/php'
     substituteInPlace $out/LibreNMS/__init__.py --replace '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
     substituteInPlace $out/snmp-scan.py --replace '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
+
+    substituteInPlace $out/lnms --replace '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
 
     wrapProgram $out/daily.sh --prefix PATH : ${phpPackage}/bin
 

@@ -22,6 +22,8 @@ buildGoModule rec {
 
   postInstall = ''
     cp -r "$NIX_BUILD_TOP/source"/bin/* $out/bin
+    mv $out/bin/install $out/bin/gitlab-shell-install
+    mv $out/bin/check $out/bin/gitlab-shell-check
     cp -r "$NIX_BUILD_TOP/source"/{support,VERSION} $out/
   '';
   doCheck = false;

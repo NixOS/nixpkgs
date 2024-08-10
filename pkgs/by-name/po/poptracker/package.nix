@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poptracker";
-  version = "0.26.1";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "black-sliver";
     repo = "PopTracker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NeUIU+vXML9lP+JL7MJyGNxZB0ggAngOpf8mMgOE+r8=";
+    hash = "sha256-Tz3rVbaHw5RfFKuLih4BEEnn3uNeLrtDQpBD2yYUzkM=";
     fetchSubmodules = true;
   };
 

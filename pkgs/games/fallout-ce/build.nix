@@ -71,7 +71,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     license = licenses.sustainableUse;
-    maintainers = with maintainers; [ hughobrien TheBrainScrambler ];
+    maintainers = with maintainers; [ hughobrien ];
     platforms = platforms.linux;
   } // extraMeta;
 }

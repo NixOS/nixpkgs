@@ -1,6 +1,6 @@
 { stdenv, lib, fetchgit
 , gn, ninja, python3, glib, pkg-config, icu
-, xcbuild, darwin
+, xcbuild
 , fetchpatch
 , llvmPackages
 , symlinkJoin

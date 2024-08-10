@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd snazy \
       --bash <($out/bin/snazy --shell-completion bash) \
       --fish <($out/bin/snazy --shell-completion fish) \

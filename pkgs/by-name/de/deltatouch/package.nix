@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitea
-, fetchpatch
 , cmake
 , intltool
 , libdeltachat
@@ -12,25 +11,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltatouch";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "lk108";
     repo = "deltatouch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tqcQmFmF8Z9smVMfaXOmXQ3Uw41bUcU4iUi8fxBlg8U=";
+    hash = "sha256-OQrTxxmiBiAc9il1O5aEl9iN3fCfoxSAwJDfrASCPxs=";
     fetchSubmodules = true;
   };
 
-
-  patches = [
-    (fetchpatch {
-      name = "0001-deltatouch-Fix-localisation.patch";
-      url = "https://codeberg.org/lk108/deltatouch/commit/dcfdd8a0fca5fff10d0383f77f4c0cbea302de00.patch";
-      hash = "sha256-RRjHG/xKtj757ZP2SY0GtWwh66kkTWoICV1vDkFAw3k=";
-    })
-  ];
 
   nativeBuildInputs = [
     qt5.wrapQtAppsHook
@@ -76,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    changelog = "https://codeberg.org/lk108/deltatouch/src/commit/${finalAttrs.src.rev}/CHANGELOG";
+    changelog = "https://codeberg.org/lk108/deltatouch/src/tag/${finalAttrs.src.rev}/CHANGELOG";
     description = "Messaging app for Ubuntu Touch, powered by Delta Chat core";
     longDescription = ''
       DeltaTouch is a messenger for Ubuntu Touch based on Delta Chat core.

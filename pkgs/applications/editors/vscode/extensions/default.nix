@@ -1625,8 +1625,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.22.1";
-          hash = "sha256-zi+Rcy63AUqDnVZCbPuljs+aBHsyOTHgbiJ+h9dB9us=";
+          version = "0.23.0";
+          hash = "sha256-eqS/xYK7yh7MvPAl61o1ZJ9wH9amqngJupU+puDq9xs=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -2020,8 +2020,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.219.1019"; # compatible with vscode ^1.91.0
-          hash = "sha256-W39hZyJ5XtDghkKu4Ml99M0/jZ1tVMGesKAKPquTkb8=";
+          version = "1.219.1028"; # compatible with vscode ^1.92.0
+          hash = "sha256-5f1P/CV6+Rp2kS9oSz5Ko5jMUt/Q6pWa9a+3nPyin6k=";
         };
 
         meta = {
@@ -2037,8 +2037,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot-chat";
-          version = "0.17.2024062801"; # compatible with vscode ^1.91.0
-          hash = "sha256-aDTqHDGdWE/CG5bt/9um62sGFngHsJJvTl38NEqNq8E=";
+          version = "0.19.2024073102"; # compatible with vscode ^1.92.0
+          hash = "sha256-ekRBmJiAav1gITWlqBOuWtZMt1YZeseF+3fw326db/s=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";

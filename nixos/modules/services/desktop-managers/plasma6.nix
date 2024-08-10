@@ -238,6 +238,8 @@ in {
     systemd.packages = [kdePackages.drkonqi];
     systemd.services."drkonqi-coredump-processor@".wantedBy = ["systemd-coredump@.service"];
 
+    xdg.icons.enable = true;
+
     xdg.portal.enable = true;
     xdg.portal.extraPortals = [kdePackages.xdg-desktop-portal-kde];
     xdg.portal.configPackages = mkDefault [kdePackages.xdg-desktop-portal-kde];

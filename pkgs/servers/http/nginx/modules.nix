@@ -983,8 +983,8 @@ let self = {
       name = "vod";
       owner = "kaltura";
       repo = "nginx-vod-module";
-      rev = "1.32";
-      hash = "sha256-ZpG0oj60D3o7/7uyE8AybCiOtncVe1Jnjaz22sIFypk=";
+      rev = "1.33";
+      hash = "sha256-xcdbaogJV/vSzFfP55uK2+zw3zF5j9AHaJI0QItTSss=";
       postFetch = ''
         substituteInPlace $out/vod/media_set.h \
           --replace "MAX_CLIPS (128)" "MAX_CLIPS (1024)"

@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoTestFlags = [ "--package" "bws" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd bws \
       --bash <($out/bin/bws completions bash) \
       --fish <($out/bin/bws completions fish) \

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "polyswarm-api";
-  version = "3.8.0";
+  version = "3.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "polyswarm";
     repo = "polyswarm-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-AH0DJYmZL+EejIkhy97JyekdB6ywf49kka0C2sDbdlY=";
+    hash = "sha256-RjzB7S3qTCl6fo+qZ+mVCsQg6CLUnSwutNse5QPQOHU=";
   };
 
   pythonRelaxDeps = [ "future" ];

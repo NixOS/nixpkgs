@@ -32,6 +32,9 @@
     with subtest("direct symlinks point to the target without indirection"):
       assert machine.succeed("readlink -n /etc/localtime") == "/etc/zoneinfo/Utc"
 
+    with subtest("/etc/mtab points to the right file"):
+      assert "/proc/mounts" == machine.succeed("readlink --no-newline /etc/mtab")
+
     with subtest("Correct mode on the source password files"):
       assert machine.succeed("stat -c '%a' /var/lib/nixos/etc/passwd") == "644\n"
       assert machine.succeed("stat -c '%a' /var/lib/nixos/etc/group") == "644\n"

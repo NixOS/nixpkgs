@@ -7,6 +7,7 @@
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   poetry-core,
   pyhumps,
   pytest-asyncio,
@@ -29,10 +30,14 @@ buildPythonPackage rec {
     hash = "sha256-HlDydPreHe/O+fqVwjkwQlQx0o9UxI/fwA+idB02Gng=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'pyhumps = "^3.0.2,!=3.7.3"' 'pyhumps = "^3.0.2"'
-  '';
+  patches = [
+    # https://github.com/iMicknl/python-overkiz-api/pull/1309
+    (fetchpatch2 {
+      url = "https://github.com/iMicknl/python-overkiz-api/commit/9e5bbec3fc88faac9dae0c0c001ed7582c4933e2.patch";
+      excludes = [ "poetry.lock" ];
+      hash = "sha256-KzagDvljkKoUJT+41o7Jv5OPLpPXQDeGmz3O/HOk1YQ=";
+    })
+  ];
 
   build-system = [ poetry-core ];
 
@@ -40,11 +45,10 @@ buildPythonPackage rec {
     aiohttp
     attrs
     backoff
-    backports-strenum
     boto3
     pyhumps
     warrant-lite
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ backports-strenum ];
 
   nativeCheckInputs = [
     pytest-asyncio

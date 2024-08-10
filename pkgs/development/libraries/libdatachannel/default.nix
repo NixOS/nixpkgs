@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, srcOnly
 , cmake
 , ninja
 , pkg-config

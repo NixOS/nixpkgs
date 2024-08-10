@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , doxygen, fontconfig, graphviz-nox, libxml2, pkg-config, which
 , systemd }:
 

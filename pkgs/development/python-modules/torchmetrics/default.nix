@@ -1,28 +1,35 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   pythonOlder,
+  fetchFromGitHub,
+
+  # dependencies
   numpy,
   lightning-utilities,
-  cloudpickle,
-  scikit-learn,
-  scikit-image,
   packaging,
   pretty-errors,
-  psutil,
-  py-deprecate,
+
+  # buildInputs
   torch,
+
+  # checks
+  cloudpickle,
+  psutil,
   pytestCheckHook,
-  torchmetrics,
-  pytorch-lightning,
   pytest-doctestplus,
   pytest-xdist,
+  pytorch-lightning,
+  scikit-image,
+  scikit-learn,
+
+  # passthru
+  torchmetrics,
 }:
 
 let
   pname = "torchmetrics";
-  version = "1.4.0.post0";
+  version = "1.4.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -34,7 +41,7 @@ buildPythonPackage {
     owner = "Lightning-AI";
     repo = "torchmetrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tQqlLfdk8rSJqwR3rC7kqnM+pLFYZSPHfI7RmIi2Iq4=";
+    hash = "sha256-NOxj1vVY9ynCS/Pf6V+ONNx50jjKqfkhzYbc60Sf4Qw=";
   };
 
   dependencies = [
@@ -42,21 +49,20 @@ buildPythonPackage {
     lightning-utilities
     packaging
     pretty-errors
-    py-deprecate
   ];
 
   # Let the user bring their own instance
   buildInputs = [ torch ];
 
   nativeCheckInputs = [
-    pytorch-lightning
-    scikit-learn
-    scikit-image
     cloudpickle
     psutil
     pytestCheckHook
     pytest-doctestplus
     pytest-xdist
+    pytorch-lightning
+    scikit-image
+    scikit-learn
   ];
 
   # A cyclic dependency in: integrations/test_lightning.py
@@ -86,11 +92,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torchmetrics" ];
 
-  meta = with lib; {
+  meta = {
     description = "Machine learning metrics for distributed, scalable PyTorch applications (used in pytorch-lightning)";
     homepage = "https://lightning.ai/docs/torchmetrics/";
     changelog = "https://github.com/Lightning-AI/torchmetrics/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

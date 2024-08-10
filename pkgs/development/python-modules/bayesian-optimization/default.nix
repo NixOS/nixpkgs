@@ -3,34 +3,49 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  poetry-core,
   scikit-learn,
+  numpy,
   scipy,
   colorama,
+  jupyter,
+  matplotlib,
+  nbconvert,
+  nbformat,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
-  version = "1.4.3";
-  format = "setuptools";
+  version = "1.5.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bayesian-optimization";
     repo = "BayesianOptimization";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Bp/ZhVSW5lTGwnsd/doOXu++Gxw/51owCfMm96Qmgd4=";
+    hash = "sha256-pDgvdQhlJ5aMRGdi2qXRXVCdJRvrOP/Nr0SSZyHH1WM=";
   };
+
+  build-system = [ poetry-core ];
 
   propagatedBuildInputs = [
     scikit-learn
+    numpy
     scipy
     colorama
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    jupyter
+    matplotlib
+    nbconvert
+    nbformat
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "bayes_opt" ];
 

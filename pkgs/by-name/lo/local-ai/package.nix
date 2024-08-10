@@ -174,7 +174,7 @@ let
   espeak-ng' = espeak-ng.overrideAttrs (self: {
     name = "espeak-ng'";
     inherit (go-piper) src;
-    sourceRoot = "source/espeak";
+    sourceRoot = "${go-piper.src.name}/espeak";
     patches = [ ];
     nativeBuildInputs = [ cmake ];
     cmakeFlags = (self.cmakeFlags or [ ]) ++ [
@@ -194,7 +194,7 @@ let
   piper-phonemize = stdenv.mkDerivation {
     name = "piper-phonemize";
     inherit (go-piper) src;
-    sourceRoot = "source/piper-phonemize";
+    sourceRoot = "${go-piper.src.name}/piper-phonemize";
     buildInputs = [ espeak-ng' onnxruntime ];
     nativeBuildInputs = [ cmake pkg-config ];
     cmakeFlags = [
@@ -207,7 +207,7 @@ let
   piper-tts' = (piper-tts.override { inherit piper-phonemize; }).overrideAttrs (self: {
     name = "piper-tts'";
     inherit (go-piper) src;
-    sourceRoot = "source/piper";
+    sourceRoot = "${go-piper.src.name}/piper";
     installPhase = null;
     postInstall = ''
       cp CMakeFiles/piper.dir/src/cpp/piper.cpp.o $out/piper.o
@@ -339,7 +339,7 @@ let
   go-tiny-dream-ncnn = ncnn.overrideAttrs (self: {
     name = "go-tiny-dream-ncnn";
     inherit (go-tiny-dream) src;
-    sourceRoot = "source/ncnn";
+    sourceRoot = "${go-tiny-dream.src.name}/ncnn";
     cmakeFlags = self.cmakeFlags ++ [
       (lib.cmakeBool "NCNN_SHARED_LIB" false)
       (lib.cmakeBool "NCNN_OPENMP" false)
