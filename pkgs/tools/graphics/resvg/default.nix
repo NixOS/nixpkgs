@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "resvg";
-  version = "0.42.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-GAP/jCWtaMVmsLGD8EosspfzemrDAIAdts1tAz+zNik=";
+    hash = "sha256-7JnNgTLpRo39EjYWchnfjGRfNgEwy5x4tUUzWT/d8h0=";
   };
 
-  cargoHash = "sha256-mRj5Hz8jY0NZSUJXFCvLswQE7H3+fkouZbNtWLP47FE=";
+  cargoHash = "sha256-ok+Bqtc6YJoCRFis8JRmtKs1Jag04Ged2J4p4trI2ls=";
 
   cargoBuildFlags = [
     "--package=resvg"
