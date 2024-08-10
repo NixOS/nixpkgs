@@ -4,6 +4,7 @@
 , buildPackages
 , boost
 , gperftools
+, pcre2
 , pcre-cpp
 , snappy
 , zlib
@@ -13,6 +14,9 @@
 , openldap
 , openssl
 , libpcap
+, libunwind
+, libstemmer
+, pkg-config
 , python311Packages
 , curl
 , Security
@@ -57,7 +61,8 @@ let
   ] ++ lib.optionals stdenv.isLinux [
     "tcmalloc"
   ] ++ lib.optionals (lib.versionOlder version "7.0") [
-    "pcre"
+    "pcre2"
+    "libstemmer"
   ];
   inherit (lib) systems subtractLists;
 
@@ -74,6 +79,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     scons
+    pkg-config
     python
   ] ++ lib.optionals stdenv.isLinux [
     net-snmp
@@ -84,9 +90,12 @@ in stdenv.mkDerivation rec {
     curl
     gperftools
     libpcap
+    libunwind
+    libstemmer
     yaml-cpp
     openssl
     openldap
+    pcre2.dev
     pcre-cpp
     sasl
     snappy
@@ -132,7 +141,6 @@ in stdenv.mkDerivation rec {
     "-Wno-unused-command-line-argument";
 
   sconsFlags = [
-    "--linker=gold"
     "--release"
     "--ssl"
     #"--rocksdb" # Don't have this packaged yet
@@ -143,6 +151,14 @@ in stdenv.mkDerivation rec {
     "VARIANT_DIR=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
     "--link-model=static"
     "MONGO_VERSION=${version}"
+    "--use-system-boost"
+    "--use-system-yaml"
+    "--use-system-zlib"
+    "--use-system-zstd"
+    "--use-system-tcmalloc"
+    "--use-system-stemmer"
+    "--use-system-libunwind"
+    "--runtime-hardening=off"
   ]
   ++ map (lib: "--use-system-${lib}") system-libraries;
 

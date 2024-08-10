@@ -1,6 +1,8 @@
---- a/SConstruct	2024-06-19 03:26:19 UTC
-+++ a/SConstruct
-@@ -23,7 +23,6 @@ import SCons.Script
+diff --git a/SConstruct b/SConstruct
+index 92d557b..80ee9e8 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -23,7 +23,6 @@ from pkg_resources import parse_version
 
  import SCons
  import SCons.Script
@@ -8,12 +10,10 @@
  from site_scons.mongo import build_profiles
 
  # This must be first, even before EnsureSConsVersion, if
-@@ -1653,16 +1652,6 @@ env.AddMethod(lambda env, name, **kwargs: add_option(n
- del envDict
- env.AddMethod(lambda env, name, **kwargs: add_option(name, **kwargs), 'AddOption')
+@@ -1649,13 +1648,6 @@ env.AddMethod(lambda env, name, **kwargs: add_option(name, **kwargs), 'AddOption
 
--# The placement of this is intentional. Here we setup an atexit method to store tooling metrics.
--# We should only register this function after env, env_vars and the parser have been properly initialized.
+ # The placement of this is intentional. Here we setup an atexit method to store tooling metrics.
+ # We should only register this function after env, env_vars and the parser have been properly initialized.
 -SConsToolingMetrics.register_metrics(
 -    utc_starttime=datetime.utcnow(),
 -    artifact_dir=env.Dir('$BUILD_DIR').get_abspath(),
@@ -21,19 +21,120 @@
 -    env=env,
 -    parser=_parser,
 -)
--
+
  if get_option('build-metrics'):
      env['BUILD_METRICS_ARTIFACTS_DIR'] = '$BUILD_ROOT/$VARIANT_DIR'
-     env.Tool('build_metrics')
-@@ -1799,9 +1788,9 @@ if has_option('variables-help'):
-     print(env_vars.GenerateHelpText(env))
-     Exit(0)
+@@ -3026,7 +3018,6 @@ if env.TargetOSIs('posix'):
+     env.Append(
+         CCFLAGS=[
+             "-fasynchronous-unwind-tables",
+-            "-g2" if not env.TargetOSIs('emscripten') else "-g",
+             "-Wall",
+             "-Wsign-compare",
+             "-Wno-unknown-pragmas",
+@@ -3143,7 +3136,7 @@ if env.TargetOSIs('posix'):
+         ], )
 
--unknown_vars = env_vars.UnknownVariables()
--if unknown_vars:
--    env.FatalError("Unknown variables specified: {0}", ", ".join(list(unknown_vars.keys())))
-+#unknown_vars = env_vars.UnknownVariables()
-+#if unknown_vars:
-+#    env.FatalError("Unknown variables specified: {0}", ", ".join(list(unknown_vars.keys())))
+     #make scons colorgcc friendly
+-    for key in ('HOME', 'TERM'):
++    for key in ('HOME', 'TERM', 'PATH'):
+         try:
+             env['ENV'][key] = os.environ[key]
+         except KeyError:
+@@ -3543,33 +3536,6 @@ def doConfigure(myenv):
+         myenv.AddMethod(
+             functools.partial(var_func, var=var, func=CheckFlag), f"Check{var}Supported")
 
- install_actions.setup(env, get_option('install-action'))
+-    if myenv.ToolchainIs('gcc', 'clang'):
+-        # This tells clang/gcc to use the gold linker if it is available - we prefer the gold linker
+-        # because it is much faster. Don't use it if the user has already configured another linker
+-        # selection manually.
+-        if any(flag.startswith('-fuse-ld=') for flag in env['LINKFLAGS']):
+-            myenv.FatalError(
+-                f"Use the '--linker' option instead of modifying the LINKFLAGS directly.")
+-
+-        linker_ld = get_option('linker')
+-        if linker_ld == 'auto':
+-            if not env.TargetOSIs('darwin', 'macOS'):
+-                if not myenv.AddToLINKFLAGSIfSupported('-fuse-ld=lld'):
+-                    myenv.FatalError(
+-                        f"The recommended linker 'lld' is not supported with the current compiler configuration, you can try the 'gold' linker with '--linker=gold'."
+-                    )
+-        elif link_model.startswith("dynamic") and linker_ld == 'bfd':
+-            # BFD is not supported due to issues with it causing warnings from some of
+-            # the third party libraries that mongodb is linked with:
+-            # https://jira.mongodb.org/browse/SERVER-49465
+-            myenv.FatalError(f"Linker {linker_ld} is not supported with dynamic link model builds.")
+-        else:
+-            if not myenv.AddToLINKFLAGSIfSupported(f'-fuse-ld={linker_ld}'):
+-                myenv.FatalError(f"Linker {linker_ld} could not be configured.")
+-
+-        if has_option('gcov') and myenv.AddToCCFLAGSIfSupported('-fprofile-update=single'):
+-            myenv.AppendUnique(LINKFLAGS=['-fprofile-update=single'])
+-
+     detectCompiler = Configure(
+         myenv,
+         help=False,
+@@ -4621,43 +4587,6 @@ def doConfigure(myenv):
+     if optBuild == "off" and myenv.ToolchainIs('clang') and env.TargetOSIs('darwin'):
+         myenv.AddToLINKFLAGSIfSupported("-Wl,-no_deduplicate")
+
+-    # Apply any link time optimization settings as selected by the 'lto' option.
+-    if has_option('lto'):
+-        if myenv.ToolchainIs('msvc'):
+-            # Note that this is actually more aggressive than LTO, it is whole program
+-            # optimization due to /GL. However, this is historically what we have done for
+-            # windows, so we are keeping it.
+-            #
+-            # /GL implies /LTCG, so no need to say it in CCFLAGS, but we do need /LTCG on the
+-            # link flags.
+-            myenv.Append(CCFLAGS=['/GL'])
+-            myenv.Append(LINKFLAGS=['/LTCG'])
+-            myenv.Append(ARFLAGS=['/LTCG'])
+-        elif myenv.ToolchainIs('gcc', 'clang'):
+-            # For GCC and clang, the flag is -flto, and we need to pass it both on the compile
+-            # and link lines.
+-            if not myenv.AddToCCFLAGSIfSupported('-flto') or \
+-                    not myenv.AddToLINKFLAGSIfSupported('-flto'):
+-                myenv.ConfError("Link time optimization requested, "
+-                                "but selected compiler does not honor -flto")
+-
+-            if myenv.TargetOSIs('darwin'):
+-                myenv.AddToLINKFLAGSIfSupported('-Wl,-object_path_lto,${TARGET}.lto')
+-            else:
+-                # According to intel benchmarks -fno-plt increases perf
+-                # See PM-2215
+-                if linker_ld != "gold":
+-                    myenv.ConfError("lto compilation currently only works with the --linker=gold")
+-                if link_model != "object":
+-                    myenv.ConfError(
+-                        "lto compilation currently only works with the --link-model=object")
+-                if not myenv.AddToCCFLAGSIfSupported('-fno-plt') or \
+-                    not myenv.AddToLINKFLAGSIfSupported('-fno-plt'):
+-                    myenv.ConfError("-fno-plt is not supported by the compiler")
+-
+-        else:
+-            myenv.ConfError("Don't know how to enable --lto on current toolchain")
+-
+     if get_option('runtime-hardening') == "on" and optBuild != "off":
+         # Older glibc doesn't work well with _FORTIFY_SOURCE=2. Selecting 2.11 as the minimum was an
+         # emperical decision, as that is the oldest non-broken glibc we seem to require. It is possible
+@@ -5120,17 +5049,13 @@ def doConfigure(myenv):
+         "BOOST_LOG_NO_SHORTHAND_NAMES",
+         "BOOST_LOG_USE_NATIVE_SYSLOG",
+         "BOOST_LOG_WITHOUT_THREAD_ATTR",
++        "BOOST_LOG_DYN_LINK",
+         "BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS",
+         "BOOST_SYSTEM_NO_DEPRECATED",
+         "BOOST_THREAD_USES_DATETIME",
+         ("BOOST_THREAD_VERSION", "5"),
+     ])
+
+-    if link_model.startswith("dynamic") and not link_model == 'dynamic-sdk':
+-        conf.env.AppendUnique(CPPDEFINES=[
+-            "BOOST_LOG_DYN_LINK",
+-        ])
+-
+     if use_system_version_of_library("boost"):
+         if not conf.CheckCXXHeader("boost/filesystem/operations.hpp"):
+             myenv.ConfError("can't find boost headers")
