@@ -6,6 +6,7 @@
 , git
 , perl
 , python3
+, stdenv
 , stdenvNoCC
 , ninja
 , autoPatchelfHook
@@ -13,6 +14,7 @@
 , jq
 , removeReferencesTo
 , nixosTests
+, file
 }:
 
 let
@@ -50,7 +52,7 @@ let
     sha256 = opensslSha256;
   };
 
-  toolchain = import ./toolchain-bin.nix { inherit autoPatchelfHook stdenvNoCC lib fetchzip; };
+  toolchain = import ./toolchain-bin.nix { inherit stdenv lib fetchzip file; };
 
 in
 
