@@ -44,6 +44,7 @@ in
 lib.mapAttrs (name: lib.makeOverridable (mkScript name)) {
 
   # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
+  crop.meta.description = "Crop the current video in a visual manner.";
   seekTo.meta.description = "Mpv script for seeking to a specific position";
   blacklistExtensions.meta.description = "Automatically remove playlist entries based on their extension.";
 }
