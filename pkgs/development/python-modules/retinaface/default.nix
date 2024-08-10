@@ -4,6 +4,7 @@
   fetchFromGitHub,
   gdown,
   keras,
+  tf-keras,
   numpy,
   opencv4,
   pillow,
@@ -53,6 +54,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     gdown
     keras
+    tf-keras
     numpy
     opencv4
     pillow

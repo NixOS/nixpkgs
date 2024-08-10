@@ -17,7 +17,7 @@
   requests,
   retinaface,
   setuptools,
-  tensorflow,
+  tensorflow-bin,
   tqdm,
 }:
 
@@ -101,7 +101,7 @@ buildPythonPackage rec {
     pillow
     requests
     retinaface
-    tensorflow
+    tensorflow-bin
     tqdm
   ];
 

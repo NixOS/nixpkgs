@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   keras,
+  tf-keras,
   opencv4,
   pythonOlder,
   setuptools,
@@ -41,6 +42,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     keras
+    tf-keras
     opencv4
   ];
 

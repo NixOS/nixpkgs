@@ -6,7 +6,7 @@
   setuptools,
   wheel,
   numpy,
-  tensorflow,
+  tensorflow-bin,
   pytestCheckHook,
 }:
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   dependencies = [
     numpy
-    tensorflow
+    tensorflow-bin
   ];
 
   pythonImportsCheck = [ "tf_keras" ];
