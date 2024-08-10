@@ -20464,6 +20464,12 @@
     name = "Thiago K. Okada";
     matrix = "@k0kada:matrix.org";
   };
+  thibaultd = {
+    email = "t@lichess.org";
+    github = "ornicar";
+    githubId = 140370;
+    name = "Thibault D";
+  };
   thibaultlemaire = {
     email = "thibault.lemaire@protonmail.com";
     github = "ThibaultLemaire";
