@@ -35,7 +35,7 @@ remoteSudo=
 verboseScript=
 noFlake=
 attr=
-buildFile=default.nix
+buildFile=
 buildingFile=
 installBootloader=
 json=
@@ -370,6 +370,39 @@ fi
 # at the same time
 if [[ -n $buildingFile && -n $flake ]]; then
     log "error: '--flake' cannot be used with '--file' or '--attr'"
+    exit 1
+fi
+
+# Finds a specific file in a directory or its parents
+findInParents() {
+    local dir=$1
+    local filename=$2
+    while [[ ! -f "$dir/$filename" ]] && [[ "$dir" != / ]]; do
+        dir=$(dirname "$dir")
+    done
+    if [[ -f "$dir/$filename" ]]; then
+        echo "$dir/$filename"
+    else
+        return 1
+    fi
+}
+
+# Default build file if none is specified in the arguments
+if [[ -z $buildFile ]]; then
+    # From NIX_PATH
+    if ! buildFile=$(runCmd nix-instantiate --find-file nixos-system 2>/dev/null); then
+        # From system.nix up from the current directory
+        if ! buildFile=$(findInParents "$PWD" system.nix); then
+            # Hardcoded to /etc/nixos/system.nix
+            if [[ -f "/etc/nixos/system.nix" ]]; then
+                buildFile=/etc/nixos/system.nix
+            fi
+        fi
+    fi
+fi
+
+if [[ -n $attr && -z $buildFile ]]; then
+    log "error: '--attr' cannot be used without '--file', a 'nixos-system' entry in 'NIX_PATH', or '/etc/nixos/system.nix' existing"
     exit 1
 fi
 
