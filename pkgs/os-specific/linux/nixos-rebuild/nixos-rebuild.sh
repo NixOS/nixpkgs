@@ -478,7 +478,7 @@ fi
 
 # Find configuration.nix and open editor instead of building.
 if [ "$action" = edit ]; then
-    if [[ -n $attr || -n $buildFile ]]; then
+    if [[ -z $buildingAttribute ]]; then
         log "error: '--file' and '--attr' are not supported with 'edit'"
         exit 1
     elif [[ -z $flake ]]; then
