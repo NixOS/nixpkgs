@@ -59,26 +59,26 @@ buildPythonPackage rec {
       deepface/basemodels/VGGFace.py
     do
       substituteInPlace $x \
-        --replace-fail "tensorflow.keras" "tensorflow.python.keras"
+        --replace-fail "tensorflow.keras" "keras.api"
     done
 
     substituteInPlace deepface/modules/preprocessing.py \
       --replace-fail "tensorflow." ""
 
-    substituteInPlace deepface/basemodels/OpenFace.py \
-      --replace-fail ", BatchNormalization" "" \
-      --replace-fail "# pylint: disable=unnecessary-lambda" "from keras.layers import BatchNormalization"
+    # substituteInPlace deepface/basemodels/OpenFace.py \
+    #   --replace-fail ", BatchNormalization" "" \
+    #   --replace-fail "# pylint: disable=unnecessary-lambda" "from keras.layers import BatchNormalization"
 
-    substituteInPlace deepface/basemodels/ArcFace.py \
-      --replace-fail "BatchNormalization," "" \
-      --replace-fail "# pylint: disable=too-few-public-methods" "from keras.layers import BatchNormalization"
+    # substituteInPlace deepface/basemodels/ArcFace.py \
+    #   --replace-fail "BatchNormalization," "" \
+    #   --replace-fail "# pylint: disable=too-few-public-methods" "from keras.layers import BatchNormalization"
 
-    substituteInPlace deepface/basemodels/GhostFaceNet.py \
-      --replace-fail "BatchNormalization," "" \
-      --replace-fail "# pylint: disable=line-too-long, too-few-public-methods, no-else-return, unsubscriptable-object, comparison-with-callable" "from keras.layers import BatchNormalization"
+    # substituteInPlace deepface/basemodels/GhostFaceNet.py \
+    #   --replace-fail "BatchNormalization," "" \
+    #   --replace-fail "# pylint: disable=line-too-long, too-few-public-methods, no-else-return, unsubscriptable-object, comparison-with-callable" "from keras.layers import BatchNormalization"
 
-    substituteInPlace deepface/basemodels/Facenet.py \
-      --replace-fail "from tensorflow.python.keras.layers import BatchNormalization" "from keras.layers import BatchNormalization" \
+    # substituteInPlace deepface/basemodels/Facenet.py \
+    #   --replace-fail "from keras.layers import BatchNormalization" "from keras.layers import BatchNormalization" \
 
     # fix path
     substituteInPlace deepface/detectors/OpenCv.py \
