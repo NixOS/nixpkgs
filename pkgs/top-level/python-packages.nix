@@ -1790,8 +1790,6 @@ self: super: with self; {
 
   boto3-stubs = callPackage ../development/python-modules/boto3-stubs { };
 
-  boto = callPackage ../development/python-modules/boto { };
-
   botocore = callPackage ../development/python-modules/botocore { };
 
   botocore-stubs = callPackage ../development/python-modules/botocore-stubs { };
