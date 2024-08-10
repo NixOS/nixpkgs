@@ -51,7 +51,8 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
     time-machine
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    tree-sitter
+  ];
 
   disabledTestPaths = [
     # Snapshot tests require syrupy<4

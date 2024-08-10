@@ -64,7 +64,10 @@ in
   #
   # "XSA_100" = xsaPatch {
   #   id = "100";
-  #   name = "Verbatim Title of XSA";
+  #   title = "Verbatim Title of XSA";
+  #   description = ''
+  #     Verbatim description of XSA.
+  #   '';
   #   cve = [ "CVE-1999-0001" "CVE-1999-0002" ]; # Not all XSAs have CVEs. This attribute is optional.
   #   hash = "sha256-0000000000000000000000000000000000000000000000000000";
   # };

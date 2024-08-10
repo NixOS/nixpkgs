@@ -1037,7 +1037,8 @@
     "eight_sleep" = ps: with ps; [
     ];
     "electrasmart" = ps: with ps; [
-    ]; # missing inputs: pyElectra
+      pyelectra
+    ];
     "electric_kiwi" = ps: with ps; [
       fnv-hash-fast
       psutil-home-assistant
@@ -1095,7 +1096,8 @@
       sqlalchemy
     ];
     "energenie_power_sockets" = ps: with ps; [
-    ]; # missing inputs: pyegps
+      pyegps
+    ];
     "energie_vanons" = ps: with ps; [
     ];
     "energy" = ps: with ps; [
@@ -5412,6 +5414,7 @@
     "edl21"
     "efergy"
     "eight_sleep"
+    "electrasmart"
     "elgato"
     "elkm1"
     "elmax"
@@ -5419,6 +5422,7 @@
     "emulated_hue"
     "emulated_kasa"
     "emulated_roku"
+    "energenie_power_sockets"
     "energy"
     "energyzero"
     "enigma2"

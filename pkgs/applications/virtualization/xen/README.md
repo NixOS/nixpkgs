@@ -40,7 +40,8 @@ but you should verify this information by seeking the fingerprint from other tru
 sources, as this document may be compromised. Once the PGP key is verified, it will
 use `git verify-tag` to ascertain the validity of the cloned Xen sources.
 
-After the script is done, follow the steps in [**For Both Update Methods**](#for-both-update-methods) below.
+After the script is done, follow the steps in
+[**For Both Update Methods**](#for-both-update-methods) below.
 
 #### Downstream Patch Names
 
@@ -87,8 +88,17 @@ open a PR fixing the script, and update Xen manually:
 
 ### For Both Update Methods
 
+1. Update `packages.nix` with the new versions. Don't forget the `slim` packages!
 1. Make sure all branches build. (Both the `standard` and `slim` versions)
 1. Use the NixOS module to test if dom0 boots successfully on all new versions.
+1. Make sure the `meta` attributes evaluate to something that makes sense. The
+   following one-line command is useful for testing this:
+
+   ```console
+   xenToEvaluate=xen; echo -e "\033[1m$(nix eval .#"$xenToEvaluate".meta.description 2> /dev/null | tail -c +2 | head -c -2)\033[0m\n\n$(nix eval .#"$xenToEvaluate".meta.longDescription 2> /dev/null | tail -c +2 | head -c -2)"
+   ```
+
+   Change the value of `xenToEvaluate` to evaluate all relevant Xen packages.
 1. Clean up your changes and commit them, making sure to follow the
    [Nixpkgs Contribution Guidelines](../../../../CONTRIBUTING.md).
 1. Open a PR and await a review from the current maintainers.
