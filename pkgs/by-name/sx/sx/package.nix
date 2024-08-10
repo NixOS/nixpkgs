@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, patsh
-, xorg
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  patsh,
+  xorg,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -34,7 +35,10 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/earnestly/sx";
     license = licenses.mit;
     mainProgram = "sx";
-    maintainers = with maintainers; [ figsoda thiagokokada ];
+    maintainers = with maintainers; [
+      figsoda
+      thiagokokada
+    ];
     platforms = platforms.linux;
   };
 }
