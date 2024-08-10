@@ -1,8 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.hardware.uinput;
-in {
+in
+{
   options.hardware.uinput = {
     enable = lib.mkEnableOption "uinput support";
   };
