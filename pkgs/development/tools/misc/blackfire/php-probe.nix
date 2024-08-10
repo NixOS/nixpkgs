@@ -13,6 +13,7 @@ assert lib.assertMsg (!php.ztsSupport) "blackfire only supports non zts versions
 
 let
   phpMajor = lib.versions.majorMinor php.version;
+  inherit (stdenv.hostPlatform) system;
 
   version = "1.92.21";
 
@@ -68,14 +69,16 @@ let
       hash = hashes.${system}.hash.${phpMajor};
     };
 in
+
+assert lib.assertMsg (hashes ? ${system}.hash.${phpMajor}) "blackfire does not support PHP version ${phpMajor} on ${system}.";
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "php-blackfire";
   extensionName = "blackfire";
   inherit version;
 
   src = makeSource {
-    system = stdenv.hostPlatform.system;
-    inherit phpMajor;
+    inherit system phpMajor;
   };
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
@@ -122,15 +125,12 @@ stdenv.mkDerivation (finalAttrs: {
             (finalAttrs.finalPackage.overrideAttrs (attrs: {
               src = makeSource sourceParams;
             }));
-
-        # Filter out all attributes other than hashes.
-        hashesOnly = lib.filterAttrsRecursive (name: _value: name != "system") hashes;
       in
       lib.concatMapAttrs (
         system:
-        { hashes, ... }:
+        { hash, ... }:
 
-        lib.mapAttrs' (phpMajor: _hash: createUpdateable { inherit phpMajor system; })
+        lib.mapAttrs' (phpMajor: _hash: createUpdateable { inherit phpMajor system; }) hash
       ) hashes;
   };
 
