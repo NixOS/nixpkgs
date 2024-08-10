@@ -2,33 +2,29 @@
   lib,
   aiohttp,
   aioresponses,
-  pydantic,
   buildPythonPackage,
   fetchFromGitHub,
+  mashumaro,
   poetry-core,
   pytest-aiohttp,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aioopenexchangerates";
-  version = "0.4.16";
+  version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aioopenexchangerates";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cSHqlFzZiQ0CCH+rPDqPulrLPuE6BB7Qd+wWb4ZWPtk=";
+    hash = "sha256-XvpSHxPCsfxgHdPVf8NGKPpCYbeZhVLwRtj6koAt/Rk=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=aioopenexchangerates --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonRelaxDeps = [ "pydantic" ];
 
@@ -37,12 +33,13 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
-    pydantic
+    mashumaro
   ];
 
   nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
   ];
 
