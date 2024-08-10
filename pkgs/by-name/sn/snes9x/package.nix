@@ -134,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
         AndersonTorres
         qknight
         thiagokokada
+        sugar700
       ];
       platforms = lib.platforms.unix;
       broken = (withGtk && stdenv.isDarwin);
