@@ -7,7 +7,7 @@
   flask-cors,
   gdown,
   gunicorn,
-  keras,
+  tf-keras,
   mtcnn,
   numpy,
   opencv4,
@@ -56,29 +56,27 @@ buildPythonPackage rec {
       deepface/basemodels/ArcFace.py \
       deepface/basemodels/GhostFaceNet.py \
       deepface/basemodels/OpenFace.py \
-      deepface/basemodels/VGGFace.py
+      deepface/basemodels/VGGFace.py \
+      deepface/modules/preprocessing.py
     do
       substituteInPlace $x \
-        --replace-fail "tensorflow.keras" "tensorflow.python.keras"
+        --replace-fail "tensorflow.keras" "tf_keras.api._v2.keras"
     done
 
-    substituteInPlace deepface/modules/preprocessing.py \
-      --replace-fail "tensorflow." ""
+    # substituteInPlace deepface/basemodels/OpenFace.py \
+    #   --replace-fail ", BatchNormalization" "" \
+    #   --replace-fail "# pylint: disable=unnecessary-lambda" "from keras.layers import BatchNormalization"
 
-    substituteInPlace deepface/basemodels/OpenFace.py \
-      --replace-fail ", BatchNormalization" "" \
-      --replace-fail "# pylint: disable=unnecessary-lambda" "from keras.layers import BatchNormalization"
+    # substituteInPlace deepface/basemodels/ArcFace.py \
+    #   --replace-fail "BatchNormalization," "" \
+    #   --replace-fail "# pylint: disable=too-few-public-methods" "from keras.layers import BatchNormalization"
 
-    substituteInPlace deepface/basemodels/ArcFace.py \
-      --replace-fail "BatchNormalization," "" \
-      --replace-fail "# pylint: disable=too-few-public-methods" "from keras.layers import BatchNormalization"
+    # substituteInPlace deepface/basemodels/GhostFaceNet.py \
+    #   --replace-fail "BatchNormalization," "" \
+    #   --replace-fail "# pylint: disable=line-too-long, too-few-public-methods, no-else-return, unsubscriptable-object, comparison-with-callable" "from keras.layers import BatchNormalization"
 
-    substituteInPlace deepface/basemodels/GhostFaceNet.py \
-      --replace-fail "BatchNormalization," "" \
-      --replace-fail "# pylint: disable=line-too-long, too-few-public-methods, no-else-return, unsubscriptable-object, comparison-with-callable" "from keras.layers import BatchNormalization"
-
-    substituteInPlace deepface/basemodels/Facenet.py \
-      --replace-fail "from tensorflow.python.keras.layers import BatchNormalization" "from keras.layers import BatchNormalization" \
+    # substituteInPlace deepface/basemodels/Facenet.py \
+    #   --replace-fail "from keras.layers import BatchNormalization" "from keras.layers import BatchNormalization" \
 
     # fix path
     substituteInPlace deepface/detectors/OpenCv.py \
@@ -93,7 +91,7 @@ buildPythonPackage rec {
     flask-cors
     gdown
     gunicorn
-    keras
+    tf-keras
     mtcnn
     numpy
     opencv4

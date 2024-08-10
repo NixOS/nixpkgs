@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   gdown,
-  keras,
   tf-keras,
   numpy,
   opencv4,
@@ -35,12 +34,12 @@ buildPythonPackage rec {
 
     # https://github.com/tensorflow/tensorflow/issues/15736
     substituteInPlace retinaface/RetinaFace.py \
-      --replace-fail "tensorflow." "tensorflow.python."
+      --replace-fail "tensorflow.keras" "tf_keras.api._v2.keras"
 
     substituteInPlace retinaface/model/retinaface_model.py \
-      --replace-fail "tensorflow." "tensorflow.python." \
-      --replace-fail "BatchNormalization," "" \
-      --replace-fail "# configurations" "from keras.layers import BatchNormalization"
+      --replace-fail "tensorflow.keras" "tf_keras.api._v2.keras" \
+      # --replace-fail "BatchNormalization," "" \
+      # --replace-fail "# configurations" "from keras.layers import BatchNormalization"
   '';
 
   disabledTestPaths = [
@@ -53,7 +52,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     gdown
-    keras
     tf-keras
     numpy
     opencv4

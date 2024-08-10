@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  keras,
   tf-keras,
   opencv4,
   pythonOlder,
@@ -35,13 +34,12 @@ buildPythonPackage {
 
     # https://github.com/tensorflow/tensorflow/issues/15736
     substituteInPlace mtcnn/network/factory.py \
-      --replace-fail "tensorflow." ""
+      --replace-fail "tensorflow.keras" "tf_keras.api._v2.keras"
   '';
 
   build-system = [ setuptools ];
 
   propagatedBuildInputs = [
-    keras
     tf-keras
     opencv4
   ];
