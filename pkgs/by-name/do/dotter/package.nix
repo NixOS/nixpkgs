@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , nix-update-script
 , rustPlatform
-, CoreServices
+, darwin
 , which
 , installShellFiles
 }:
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-jNHq1cH3I29b6LIoO2ApLDTYzFGGSua1lACvYCBpbQQ=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
   nativeCheckInputs = [ which installShellFiles ];
 
