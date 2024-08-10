@@ -64,10 +64,19 @@ in {
         description = "Selector to use when signing.";
       };
 
+      # TODO: deprecate this?
       configFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = "Additional opendkim configuration.";
+        description = "Additional opendkim configuration as a file.";
+      };
+
+      settings = lib.mkOption {
+        type = with lib.types; submodule {
+          freeformType = attrsOf str;
+        };
+        default = { };
+        description = "Additional opendkim configuration";
       };
     };
   };
@@ -85,6 +94,9 @@ in {
     };
 
     environment.systemPackages = [ pkgs.opendkim ];
+
+    services.opendkim.configFile = lib.mkIf (cfg.settings != { }) (pkgs.writeText "opendkim.conf"
+      (lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "${name} ${value}") cfg.settings)));
 
     systemd.tmpfiles.rules = [
       "d '${cfg.keyPath}' - ${cfg.user} ${cfg.group} - -"
