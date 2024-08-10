@@ -92,9 +92,13 @@ stdenv.mkDerivation rec {
       ${mkFlag (!stdenv.hostPlatform.isStatic) "ENABLE_SHARED"}
       -DHIGH_BIT_DEPTH=OFF
       -DENABLE_HDR10_PLUS=ON
-      ${mkFlag (isCross && stdenv.hostPlatform.isAarch) "CROSS_COMPILE_ARM"}
+      ${mkFlag (isCross && stdenv.hostPlatform.isAarch32) "CROSS_COMPILE_ARM"}
       ${mkFlag cliSupport "ENABLE_CLI"}
       ${mkFlag unittestsSupport "ENABLE_TESTS"}
+    )
+  '' + lib.optionalString isCross ''
+    cmakeFlagsArray+=(
+      ${mkFlag (isCross && stdenv.hostPlatform.isAarch64) "CROSS_COMPILE_ARM64"}
     )
   '';
 

@@ -2375,6 +2375,8 @@ self: super: with self; {
     inherit (pkgs) cmigemo;
   };
 
+  cmsdials = callPackage ../development/python-modules/cmsdials { };
+
   cmsis-pack-manager = callPackage ../development/python-modules/cmsis-pack-manager { };
 
   cmsis-svd = callPackage ../development/python-modules/cmsis-svd { };
@@ -9257,6 +9259,8 @@ self: super: with self; {
 
   nutils = callPackage ../development/python-modules/nutils { };
 
+  nutils-poly = callPackage ../development/python-modules/nutils-poly { };
+
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
   nvdlib = callPackage ../development/python-modules/nvdlib { };
@@ -11148,8 +11152,6 @@ self: super: with self; {
   pycollada = callPackage ../development/python-modules/pycollada { };
 
   pycomfoconnect = callPackage ../development/python-modules/pycomfoconnect { };
-
-  pycontracts = callPackage ../development/python-modules/pycontracts { };
 
   pycosat = callPackage ../development/python-modules/pycosat { };
 
