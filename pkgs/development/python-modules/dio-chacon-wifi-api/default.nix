@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "dio-chacon-wifi-api";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cnico";
     repo = "dio-chacon-wifi-api";
     rev = "v${version}";
-    hash = "sha256-TeunMvkiQw4TzLb2dsAHAg49nUzD3DGiO0DuXKGcICU=";
+    hash = "sha256-iIDBHyZuI9qNLRmTY0nXOl5wplFKDoiKkqQb1m4uIxs=";
   };
 
   build-system = [ poetry-core ];
