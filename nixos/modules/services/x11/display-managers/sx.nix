@@ -24,11 +24,14 @@ in
           dependency.
         '';
       };
+
+      package = lib.mkPackageOption pkgs "sx" { };
     };
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.sx ];
+    environment.systemPackages = [ cfg.package ];
+
     services.xserver = {
       exportConfiguration = true;
       logFile = lib.mkDefault null;
