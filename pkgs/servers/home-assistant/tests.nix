@@ -35,6 +35,9 @@ let
     shelly = [
       pyswitchbot
     ];
+    songpal = [
+      isal
+    ];
     tilt_ble = [
       ibeacon-ble
     ];
