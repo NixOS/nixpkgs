@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    pnpm --filter=bash-language-server build
+    pnpm compile server
 
     runHook postBuild
   '';
