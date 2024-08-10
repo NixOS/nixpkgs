@@ -3,15 +3,17 @@
   buildPythonPackage,
   fetchFromGitHub,
   keras,
-  nose3,
+  tf-keras,
   opencv4,
   pythonOlder,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
   pname = "mtcnn";
   version = "0.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,6 +30,7 @@ buildPythonPackage {
       --replace-fail "setup, setuptools" "setup, find_packages"\
       --replace-fail "setuptools.find_packages" "find_packages"\
       --replace-fail "opencv-python>=4.1.0" ""\
+      --replace-fail "keras>=2.0.0" ""\
       --replace-fail "tests_require=['nose']," ""
 
     # https://github.com/tensorflow/tensorflow/issues/15736
@@ -35,18 +38,22 @@ buildPythonPackage {
       --replace-fail "tensorflow." ""
   '';
 
-  nativeCheckInputs = [ nose3 ];
+  build-system = [ setuptools ];
+
   propagatedBuildInputs = [
     keras
+    tf-keras
     opencv4
   ];
 
   pythonImportsCheck = [ "mtcnn" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "MTCNN face detection implementation for TensorFlow, as a PIP package";
     homepage = "https://github.com/ipazc/mtcnn";
-    license = licenses.mit;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

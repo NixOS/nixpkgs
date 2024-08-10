@@ -6,7 +6,7 @@
   setuptools,
   wheel,
   numpy,
-  tensorflow,
+  tensorflow-bin,
   pytestCheckHook,
 }:
 
@@ -23,8 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-21OJHxrJgZfCrM7ZjNyowGuoJVZVpst+uV7UlnYRgoA=";
   };
 
-  nativeBuildInputs = [
-  ];
+  postPatch = ''
+    # Remove dependencies
+    substituteInPlace setup.py \
+      --replace-fail "install_requires=install_requires," ""
+  '';
 
   pythonRelaxDeps = [
     "tensorflow"
@@ -37,7 +40,7 @@ buildPythonPackage rec {
 
   dependencies = [
     numpy
-    tensorflow
+    tensorflow-bin
   ];
 
   pythonImportsCheck = [ "tf_keras" ];

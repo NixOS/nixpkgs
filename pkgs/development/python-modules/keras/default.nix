@@ -18,7 +18,7 @@
   optree,
   packaging,
   rich,
-  tensorflow,
+  tensorflow-bin,
 }:
 
 buildPythonPackage rec {
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     optree
     packaging
     rich
-    tensorflow
+    tensorflow-bin
   ];
 
   pythonImportsCheck = [

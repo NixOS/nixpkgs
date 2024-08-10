@@ -16,28 +16,31 @@
   pythonOlder,
   requests,
   retinaface,
-  tensorflow,
+  setuptools,
+  tensorflow-bin,
   tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "deepface";
   version = "0.0.92";
-  format = "setuptools";
+  pyproject = true;
+  build-system = [ setuptools ];
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "serengil";
     repo = "deepface";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-Vjm8lfpGyJ7/1CUwIvxXxHqwmv0+iKewYV3vE08gpPQ=";
   };
 
   postPatch = ''
     # prevent collisions
     substituteInPlace setup.py \
-      --replace-fail "data_files=[(\"\", [\"README.md\", \"requirements.txt\", \"package_info.json\"])]," ""
+      --replace-fail "data_files=[(\"\", [\"README.md\", \"requirements.txt\", \"package_info.json\"])]," "" \
+      --replace-fail "install_requires=requirements," ""
 
     # https://github.com/tensorflow/tensorflow/issues/15736
     for x in \
@@ -76,6 +79,12 @@ buildPythonPackage rec {
 
     substituteInPlace deepface/basemodels/Facenet.py \
       --replace-fail "from tensorflow.python.keras.layers import BatchNormalization" "from keras.layers import BatchNormalization" \
+
+    # fix path
+    substituteInPlace deepface/detectors/OpenCv.py \
+      --replace-fail "opencv_home = cv2.__file__" "opencv_home = os.readlink(cv2.__file__)" \
+      --replace-fail "folders = opencv_home.split(os.path.sep)[0:-1]" "folders = opencv_home.split(os.path.sep)[0:-4]" \
+      --replace-fail "return path + \"/data/\"" "return path + \"/share/opencv4/haarcascades/\""
   '';
 
   propagatedBuildInputs = [
@@ -92,7 +101,7 @@ buildPythonPackage rec {
     pillow
     requests
     retinaface
-    tensorflow
+    tensorflow-bin
     tqdm
   ];
 
@@ -101,11 +110,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deepface" ];
 
-  meta = with lib; {
-    description = "A Lightweight Face Recognition and Facial Attribute Analysis (Age, Gender, Emotion and Race) Library for Python";
+  meta = {
+    description = "Lightweight Face Recognition and Facial Attribute Analysis (Age, Gender, Emotion and Race) Library for Python";
     homepage = "https://github.com/serengil/deepface";
     changelog = "https://github.com/serengil/deepface/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

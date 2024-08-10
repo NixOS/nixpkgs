@@ -4,31 +4,34 @@
   fetchFromGitHub,
   gdown,
   keras,
+  tf-keras,
   numpy,
   opencv4,
   pillow,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "retinaface";
   version = "0.0.17";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "serengil";
     repo = "retinaface";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-0s1CSGlK2bF1F2V/IuG2ZqD7CkNfHGvp1M5C3zDnuKs=";
   };
 
   postPatch = ''
     # prevent collisions
     substituteInPlace setup.py \
-      --replace-fail "data_files=[(\"\", [\"README.md\", \"requirements.txt\", \"package_info.json\"])]," ""
+      --replace-fail "data_files=[(\"\", [\"README.md\", \"requirements.txt\", \"package_info.json\"])]," "" \
+      --replace-fail "install_requires=requirements," ""
 
     # https://github.com/tensorflow/tensorflow/issues/15736
     substituteInPlace retinaface/RetinaFace.py \
@@ -40,17 +43,18 @@ buildPythonPackage rec {
       --replace-fail "# configurations" "from keras.layers import BatchNormalization"
   '';
 
-  checkPhase = ''
-    # Require internet connection
-    rm tests/test_actions.py
-    rm tests/test_align_first.py
-    rm tests/test_expand_face_area.py
-    runHook pytestCheckPhase
-  '';
+  disabledTestPaths = [
+    "tests/test_actions.py"
+    "tests/test_align_first.py"
+    "tests/test_expand_face_area.py"
+  ];
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     gdown
     keras
+    tf-keras
     numpy
     opencv4
     pillow
@@ -60,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "retinaface" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deep Face Detection Library for Python";
     homepage = "https://github.com/serengil/retinaface";
     changelog = "https://github.com/serengil/retinaface/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }
