@@ -90,6 +90,9 @@ rustPlatform.buildRustPackage rec {
     # we also need to have `tracing` support in `tokio` for `console-subscriber`
     RUSTFLAGS = "--cfg tokio_unstable";
 
+    # Needed to get openssl-sys to use pkg-config.
+    OPENSSL_NO_VENDOR = 1;
+
     tauriBundle =
       {
         Linux = "deb";
