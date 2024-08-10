@@ -11133,8 +11133,6 @@ self: super: with self; {
 
   pycomfoconnect = callPackage ../development/python-modules/pycomfoconnect { };
 
-  pycontracts = callPackage ../development/python-modules/pycontracts { };
-
   pycosat = callPackage ../development/python-modules/pycosat { };
 
   pycotap = callPackage ../development/python-modules/pycotap { };
