@@ -1708,7 +1708,8 @@
       pycec
     ];
     "heatmiser" = ps: with ps; [
-    ]; # missing inputs: heatmiserV3
+      heatmiserv3
+    ];
     "heiwa" = ps: with ps; [
     ];
     "heos" = ps: with ps; [
