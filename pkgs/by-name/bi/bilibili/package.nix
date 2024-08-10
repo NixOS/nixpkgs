@@ -7,15 +7,25 @@
   makeWrapper,
   commandLineArgs ? "",
 }:
-
-stdenv.mkDerivation rec {
-  pname = "bilibili";
+let
   version = "1.14.0-2";
-  src = fetchurl {
-    url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_amd64.deb";
-    hash = "sha256-QQMdEpKE7r/fPMaX/yEoaa7KjilhiPMYLRvGPkv1jds=";
+  srcs = {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_amd64.deb";
+      hash = "sha256-QQMdEpKE7r/fPMaX/yEoaa7KjilhiPMYLRvGPkv1jds=";
+    };
+    aarch64-linux = fetchurl {
+      url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_arm64.deb";
+      hash = "sha256-UaGI4BLhfoYluZpARsj+I0iEmFXYYNfl4JWhBWOOip0=";
+    };
   };
-
+  src =
+    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+in
+stdenv.mkDerivation {
+  pname = "bilibili";
+  inherit src;
+  inherit version;
   unpackPhase = ''
     runHook preUnpack
     dpkg -x $src ./
@@ -53,7 +63,10 @@ stdenv.mkDerivation rec {
       jedsek
       kashw2
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "bilibili";
   };
