@@ -470,6 +470,31 @@ runTests {
     expected = [ "A" "B" ];
   };
 
+  testEscapeShellArg = {
+    expr = strings.escapeShellArg "esc'ape\nme";
+    expected = "'esc'\\''ape\nme'";
+  };
+
+  testEscapeShellArgs = {
+    expr = strings.escapeShellArgs ["one" "two three" "four'five"];
+    expected = "'one' 'two three' 'four'\\''five'";
+  };
+
+  testEscapeBashArgQuote = {
+    expr = strings.escapeBashArg "foo'bar";
+    expected = "'foo'\\''bar'";
+  };
+
+  testEscapeBashArgPlain = {
+    expr = strings.escapeBashArg "foobar";
+    expected = "foobar";
+  };
+
+  testEscapeBashArgs = {
+    expr = strings.escapeBashArgs ["one" "two three" "four'five"];
+    expected = "one 'two three' 'four'\\''five'";
+  };
+
   testSplitStringsDerivation = {
     expr = take 3  (strings.splitString "/" (derivation {
       name = "name";

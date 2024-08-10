@@ -103,7 +103,7 @@ let
       concatImapStringsSep concatLines makeSearchPath makeSearchPathOutput
       makeLibraryPath makeIncludePath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
-      escapeShellArg escapeShellArgs
+      escapeBashArg escapeBashArgs escapeShellArg escapeShellArgs
       isStorePath isStringLike
       isValidPosixName toShellVar toShellVars trim trimWith
       escapeRegex escapeURL escapeXML replaceChars lowerChars
