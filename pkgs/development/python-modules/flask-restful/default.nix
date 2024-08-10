@@ -7,7 +7,6 @@
   flask,
   fetchpatch2,
   mock,
-  nose,
   pytestCheckHook,
   pythonOlder,
   pytz,
@@ -51,7 +50,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     blinker
     mock
-    nose
     pytestCheckHook
   ];
 
