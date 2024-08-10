@@ -15,6 +15,8 @@ buildNodejs {
   version = "20.15.1";
   sha256 = "sha256-/dU6VynZNmkaKhFRBG+0iXchy4sPyir5V4I6m0D+DDQ=";
   patches = [
+    ./configure-emulator.patch
+    ./configure-armv6-vfpv2.patch
     ./disable-darwin-v8-system-instrumentation-node19.patch
     ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch
