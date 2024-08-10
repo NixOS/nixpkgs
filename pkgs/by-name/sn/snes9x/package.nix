@@ -5,6 +5,7 @@
   cmake,
   fetchFromGitHub,
   gtkmm3,
+  libGL,
   libX11,
   libXdmcp,
   libXext,
@@ -86,6 +87,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.avx2Support [
     "--enable-avx2"
   ];
+
+  postPatch = ''
+    substituteInPlace external/glad/src/egl.c \
+      --replace-fail libEGL.so.1 "${lib.getLib libGL}/lib/libEGL.so.1"
+    substituteInPlace external/glad/src/glx.c \
+      --replace-fail libGL.so.1 ${lib.getLib libGL}/lib/libGL.so.1
+  '';
 
   preConfigure = ''
     cd ${if withGtk then "gtk" else "unix"}
