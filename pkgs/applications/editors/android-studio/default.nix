@@ -17,8 +17,8 @@ let
     sha256Hash = "sha256-/LrHYyrOPfnSliM5XUOzENjJ+G+M1Ajw31tFAOsbfnQ=";
   };
   latestVersion = {
-    version = "2024.1.3.3"; # "Android Studio Ladybug | 2024.1.3 Canary 3"
-    sha256Hash = "sha256-Ps3jMtNAdfPitFeXIFKpjSyM4si4tp4MrS3r5VURFh4=";
+    version = "2024.2.1.1"; # "Android Studio Ladybug | 2024.2.1 Canary 5"
+    sha256Hash = "sha256-yfb23cYwRghUA04Ckf4I2yfqmdED9sf//0FSeWL+ze4=";
   };
 in {
   # Attributes are named by their corresponding release channels
