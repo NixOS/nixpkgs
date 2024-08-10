@@ -20372,7 +20372,13 @@ with pkgs;
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
-  libgit2 = callPackage ../development/libraries/libgit2 {
+  # Should be flipped for version 1.8.x soon
+  libgit2 = callPackage ../development/libraries/libgit2/1-7-2.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  # Future default version
+  libgit2_1_8 = callPackage ../development/libraries/libgit2/1-8-1.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
