@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation {
     longDescription = ''
       Simple Pedro racoon meme Plymouth theme.
     '';
-    homepage = "https://github.com/storax/plymouth-matrix-theme";
+    homepage = "https://github.com/FilaCo/pedro-raccoon-plymouth";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wrocket ];
