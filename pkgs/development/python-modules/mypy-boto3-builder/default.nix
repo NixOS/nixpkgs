@@ -33,9 +33,9 @@ buildPythonPackage rec {
     hash = "sha256-DHGeljGY8NRndlcDqvK1Noud90wUQrkaS54489b/6RQ=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     black
     boto3
     cryptography
@@ -61,10 +61,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Type annotations builder for boto3";
-    mainProgram = "mypy_boto3_builder";
     homepage = "https://github.com/youtype/mypy_boto3_builder";
     changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "mypy_boto3_builder";
   };
 }
