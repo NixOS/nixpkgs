@@ -7,6 +7,7 @@
   groff,
   libpng,
   tk,
+  callPackage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,6 +38,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
+
+  passthru.tests =
+    let
+      all-tests = callPackage ./tests { };
+    in
+    {
+      inherit (all-tests)
+        hello
+        prime
+        no-prime
+        brainfuck
+        ;
+    };
 
   meta = {
     description = "Interpreter for piet programs. Also includes npietedit and npiet-foogol";
