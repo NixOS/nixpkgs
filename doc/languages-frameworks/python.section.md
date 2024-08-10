@@ -316,13 +316,7 @@ python3Packages.buildPythonApplication rec {
 }
 ```
 
-This is then added to `all-packages.nix` just as any other application would be.
-
-```nix
-{
-  luigi = callPackage ../applications/networking/cluster/luigi { };
-}
-```
+This is then added to `pkgs/by-name` just as any other application would be.
 
 Since the package is an application, a consumer doesn't need to care about
 Python versions or modules, which is why they don't go in `python3Packages`.
@@ -331,25 +325,27 @@ Python versions or modules, which is why they don't go in `python3Packages`.
 
 A distinction is made between applications and libraries, however, sometimes a
 package is used as both. In this case the package is added as a library to
-`python-packages.nix` and as an application to `all-packages.nix`. To reduce
+`python-packages.nix` and as an application to `pkgs/by-name`. To reduce
 duplication the `toPythonApplication` can be used to convert a library to an
 application.
 
 The Nix expression shall use [`buildPythonPackage`](#buildpythonpackage-function) and be called from
-`python-packages.nix`. A reference shall be created from `all-packages.nix` to
+`python-packages.nix`. A reference shall be created from `pkgs/by-name` to
 the attribute in `python-packages.nix`, and the `toPythonApplication` shall be
 applied to the reference:
 
 ```nix
 {
-  youtube-dl = with python3Packages; toPythonApplication youtube-dl;
-}
+  python3Packages,
+}:
+
+python3Packages.toPythonApplication python3Packages.youtube-dl
 ```
 
 #### `toPythonModule` function {#topythonmodule-function}
 
 In some cases, such as bindings, a package is created using
-[`stdenv.mkDerivation`](#sec-using-stdenv) and added as attribute in `all-packages.nix`. The Python
+[`stdenv.mkDerivation`](#sec-using-stdenv) and added as attribute in `pkgs/by-name` or in `all-packages.nix`. The Python
 bindings should be made available from `python-packages.nix`. The
 `toPythonModule` function takes a derivation and makes certain Python-specific
 modifications.
