@@ -1835,7 +1835,8 @@
     ];
     "ihc" = ps: with ps; [
       defusedxml
-    ]; # missing inputs: ihcsdk
+      ihcsdk
+    ];
     "image" = ps: with ps; [
     ];
     "image_processing" = ps: with ps; [
@@ -4584,7 +4585,8 @@
     "webhook" = ps: with ps; [
     ];
     "webmin" = ps: with ps; [
-    ]; # missing inputs: webmin-xmlrpc
+      webmin-xmlrpc
+    ];
     "webostv" = ps: with ps; [
       aiowebostv
     ];
@@ -5654,6 +5656,7 @@
     "weatherflow_cloud"
     "weatherkit"
     "webhook"
+    "webmin"
     "webostv"
     "websocket_api"
     "wemo"
