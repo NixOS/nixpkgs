@@ -15893,6 +15893,8 @@ self: super: with self; {
 
   trytond = callPackage ../development/python-modules/trytond { };
 
+  ts1-signatures = callPackage ../development/python-modules/ts1-signatures { };
+
   tsfresh = callPackage ../development/python-modules/tsfresh { };
 
   tskit = callPackage ../development/python-modules/tskit { };
