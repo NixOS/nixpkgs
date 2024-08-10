@@ -5,6 +5,7 @@
   fetchpatch2,
   setuptools,
   fissix,
+  pytest,
   pytestCheckHook,
   nose,
 }:
@@ -37,7 +38,10 @@ buildPythonPackage {
 
   build-system = [ setuptools ];
 
-  dependencies = [ fissix ];
+  dependencies = [
+    fissix
+    pytest
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
