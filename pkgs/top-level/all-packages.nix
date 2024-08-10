@@ -39672,8 +39672,6 @@ with pkgs;
 
   wtf = callPackage ../applications/misc/wtf { };
 
-  zk-shell = callPackage ../applications/misc/zk-shell { };
-
   tora = libsForQt5.callPackage ../development/tools/tora { };
 
   xrq = callPackage ../applications/misc/xrq { };

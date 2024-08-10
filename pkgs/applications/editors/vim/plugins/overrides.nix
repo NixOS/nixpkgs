@@ -1054,6 +1054,10 @@
       '';
     };
 
+  markview-nvim = super.markview-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-web-devicons ];
+  };
+
   mason-lspconfig-nvim = super.mason-lspconfig-nvim.overrideAttrs {
     dependencies = with self; [ mason-nvim nvim-lspconfig ];
   };
