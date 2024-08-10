@@ -14,9 +14,36 @@
 let
   inherit (pkgs) fetchpatch fetchpatch2 lib;
   inherit (lib) throwIfNot versionOlder versions;
-in
 
-with haskellLib;
+  inherit (haskellLib)
+    addBuildDepend
+    addBuildDepends
+    addBuildTool
+    addBuildTools
+    addExtraLibrary
+    addTestToolDepends
+    appendConfigureFlag
+    appendConfigureFlags
+    appendPatch
+    appendPatches
+    disableCabalFlag
+    disableHardening
+    disableLibraryProfiling
+    doCheck
+    doDistribute
+    doHaddock
+    doJailbreak
+    dontCheck
+    dontCheckIf
+    dontDistribute
+    dontHaddock
+    generateOptparseApplicativeCompletions
+    markBroken
+    overrideCabal
+    overrideSrc
+    unmarkBroken
+    ;
+in
 
 self: super: {
   # enable list-transformer, jailbreaking is necessary until next release >0.13.0: https://github.com/ivanperez-keera/dunai/issues/427
