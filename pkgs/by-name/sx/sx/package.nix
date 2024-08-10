@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  makeDesktopItem,
   patsh,
   xorg,
 }:
@@ -28,7 +29,18 @@ stdenvNoCC.mkDerivation rec {
 
   postInstall = ''
     patsh -f $out/bin/sx -s ${builtins.storeDir}
+
+    install -Dm755 -t $out/share/xsessions ${
+      makeDesktopItem {
+        name = "sx";
+        desktopName = "sx";
+        comment = "Start a xorg server";
+        exec = "sx";
+      }
+    }/share/applications/sx.desktop
   '';
+
+  passthru.providedSessions = [ "sx" ];
 
   meta = with lib; {
     description = "Simple alternative to both xinit and startx for starting a Xorg server";
