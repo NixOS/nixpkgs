@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     longDescription =
       "Tiny mp4 time code editor. You can use this for changing fps, delaying audio tracks, executing DTS compression, extracting time codes of mp4.";
     homepage = "https://github.com/nu774/mp4fpsmod";
-    license = [
+    license = with lib.licenses; [
       # All files are distributed as Public Domain, except for the followings:
-      "MPL-1.1" # mp4v2
-      "BSL-1.0" # Boost
-      "BSD-2-Clause" # FreeBSD CVS
+      mpl11 # mp4v2
+      boost # Boost
+      bsd2 # FreeBSD CVS
     ];
     platforms = platforms.all;
     maintainers = with lib.maintainers; [ huggy ];
