@@ -12,7 +12,7 @@ in
 {
   options = {
     services.xserver.displayManager.sx = {
-      enable = lib.mkEnableOption "sx pseudo-display manager" // {
+      enable = lib.mkEnableOption "" // {
         description = ''
           Whether to enable the "sx" pseudo-display manager, which allows users
           to start manually via the "sx" command from a vt shell. The X server
@@ -25,6 +25,14 @@ in
         '';
       };
 
+      addAsSession = lib.mkEnableOption "" // {
+        description = ''
+          Whether to add sx as a display manager session. Keep in mind that sx
+          expects to be run from a TTY, so it may not work in your display
+          manager.
+        '';
+      };
+
       package = lib.mkPackageOption pkgs "sx" { };
     };
   };
@@ -32,9 +40,13 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    services.xserver = {
-      exportConfiguration = true;
-      logFile = lib.mkDefault null;
+    services = {
+      displayManager.sessionPackages = lib.optionals cfg.addAsSession [ cfg.package ];
+
+      xserver = {
+        exportConfiguration = true;
+        logFile = lib.mkDefault null;
+      };
     };
   };
 
