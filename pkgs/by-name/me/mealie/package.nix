@@ -52,7 +52,6 @@ pythonpkgs.buildPythonApplication rec {
 
   dontWrapPythonPrograms = true;
 
-  doCheck = false;
   pythonRelaxDeps = true;
 
   dependencies = with pythonpkgs; [
@@ -131,6 +130,16 @@ pythonpkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with pythonpkgs; [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # KeyError: 'alembic_version'
+    "tests/unit_tests/services_tests/backup_v2_tests/test_backup_v2.py"
+    "tests/unit_tests/services_tests/backup_v2_tests/test_alchemy_exporter.py"
+    # sqlite3.OperationalError: no such table
+    "tests/unit_tests/services_tests/scheduler/tasks/test_create_timeline_events.py"
+    "tests/unit_tests/test_ingredient_parser.py"
+    "tests/unit_tests/test_security.py"
+  ];
 
   passthru.tests = {
     inherit (nixosTests) mealie;
