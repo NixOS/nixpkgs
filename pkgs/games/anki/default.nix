@@ -28,14 +28,14 @@
 
 let
   pname = "anki";
-  version = "24.06.2";
-  rev = "33a923797afc9655c3b4f79847e1705a1f998d03";
+  version = "24.06.3";
+  rev = "d678e39350a2d243242a69f4e22f5192b04398f2";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-jn8MxyDPVk36neHyiuvwOQQ+x7x4JPOR8BnNutTRmnY=";
+    hash = "sha256-ap8WFDDSGonk5kgXXIsADwAwd7o6Nsy6Wxsa7r1iUIM=";
     fetchSubmodules = true;
   };
 
@@ -50,7 +50,7 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-wyrVoaDdCkSe5z6C7EAw04G87s6tQ1cfc2d6ygGU0DM=";
+    hash = "sha256-Dbd7RtE0td7li7oqPPfBmAsbXPM8ed9NTAhM5gytpG8=";
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [
