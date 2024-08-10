@@ -32,6 +32,6 @@ buildGoModule rec {
     mainProgram = "ijq";
     homepage = "https://git.sr.ht/~gpanders/ijq";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ justinas SuperSandro2000 ];
+    maintainers = with maintainers; [ justinas mattpolzin SuperSandro2000 ];
   };
 }
