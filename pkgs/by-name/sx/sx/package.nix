@@ -7,14 +7,14 @@
   xorg,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sx";
   version = "3.0";
 
   src = fetchFromGitHub {
     owner = "earnestly";
-    repo = pname;
-    rev = version;
+    repo = "sx";
+    rev = finalAttrs.version;
     hash = "sha256-hKoz7Kuus8Yp7D0F05wCOQs6BvV0NkRM9uUXTntLJxQ=";
   };
 
@@ -42,15 +42,15 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.providedSessions = [ "sx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple alternative to both xinit and startx for starting a Xorg server";
     homepage = "https://github.com/earnestly/sx";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "sx";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       thiagokokada
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
