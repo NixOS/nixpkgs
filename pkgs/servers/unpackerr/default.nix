@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "unpackerr";
-  version = "0.14.3";
+  version = "0.14.5";
 
   src = fetchFromGitHub {
     owner = "davidnewhall";
     repo = "unpackerr";
     rev = "v${version}";
-    sha256 = "sha256-QwsrH0Wq5oix1qFqObFadZTCIJr8ny4Umx8cwErcBcM=";
+    sha256 = "sha256-uQwpdgV6ksouW9JTuiiuQjxBGOE/ypDW769kNJgWrHw=";
   };
 
   vendorHash = "sha256-wWIw0gNn5tqRq0udzPy/n2OkiIVESpSotOSn2YlBNS4=";
