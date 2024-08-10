@@ -5,6 +5,7 @@
   makeDesktopItem,
   patsh,
   xorg,
+  nixosTests,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -40,7 +41,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     }/share/applications/sx.desktop
   '';
 
-  passthru.providedSessions = [ "sx" ];
+  passthru = {
+    providedSessions = [ "sx" ];
+    tests = {
+      inherit (nixosTests) sx;
+    };
+  };
 
   meta = {
     description = "Simple alternative to both xinit and startx for starting a Xorg server";
