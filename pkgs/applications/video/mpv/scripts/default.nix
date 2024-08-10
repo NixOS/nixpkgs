@@ -92,7 +92,12 @@ let
         autodeint
         autoload
         ;
-      inherit (callPackage ./occivink.nix { }) blacklistExtensions seekTo;
+      inherit (callPackage ./occivink.nix { })
+        blacklistExtensions
+        crop
+        encode
+        seekTo
+        ;
 
       buildLua = callPackage ./buildLua.nix { };
       autosubsync-mpv = callPackage ./autosubsync-mpv.nix { };
