@@ -27554,8 +27554,6 @@ with pkgs;
 
   adi1090x-plymouth-themes = callPackage ../data/themes/adi1090x-plymouth-themes { };
 
-  pedro-raccoon-plymouth = callPackage ../by-name/pe/pedro-raccoon-plymouth/package.nix { };
-
   adwaita-qt = libsForQt5.callPackage ../data/themes/adwaita-qt { };
 
   adwaita-qt6 = qt6Packages.callPackage ../data/themes/adwaita-qt {
