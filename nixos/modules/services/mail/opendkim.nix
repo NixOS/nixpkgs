@@ -1,16 +1,14 @@
 { config, lib, pkgs, ... }:
-let
 
+let
   cfg = config.services.opendkim;
 
   defaultSock = "local:/run/opendkim/opendkim.sock";
 
-  keyFile = "${cfg.keyPath}/${cfg.selector}.private";
-
   args = [ "-f" "-l"
            "-p" cfg.socket
            "-d" cfg.domains
-           "-k" keyFile
+           "-k" "${cfg.keyPath}/${cfg.selector}.private"
            "-s" cfg.selector
          ] ++ lib.optionals (cfg.configFile != null) [ "-x" cfg.configFile ];
 
@@ -19,17 +17,9 @@ in {
     (lib.mkRenamedOptionModule [ "services" "opendkim" "keyFile" ] [ "services" "opendkim" "keyPath" ])
   ];
 
-  ###### interface
-
   options = {
-
     services.opendkim = {
-
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the OpenDKIM sender authentication system.";
-      };
+      enable = lib.mkEnableOption "OpenDKIM sender authentication system";
 
       socket = lib.mkOption {
         type = lib.types.str;
@@ -79,16 +69,10 @@ in {
         default = null;
         description = "Additional opendkim configuration.";
       };
-
     };
-
   };
 
-
-  ###### implementation
-
   config = lib.mkIf cfg.enable {
-
     users.users = lib.optionalAttrs (cfg.user == "opendkim") {
       opendkim = {
         group = cfg.group;
@@ -159,6 +143,5 @@ in {
         UMask = "0077";
       };
     };
-
   };
 }
