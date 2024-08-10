@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      desktopName = "Youtube Music Desktop App";
+      desktopName = "YouTube Music Desktop App";
       exec = "ytmdesktop";
       icon = "ytmdesktop";
       name = "ytmdesktop";
@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
         "Audio"
       ];
       startupNotify = true;
+      startupWMClass = "YouTube Music Desktop App";
     })
   ];
 
