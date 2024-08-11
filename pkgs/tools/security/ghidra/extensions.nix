@@ -23,4 +23,5 @@ lib.makeScope newScope (self: {
 
   sleighdevtools = self.callPackage ./extensions/sleighdevtools { inherit ghidra; };
 
+  ghidra-delinker-extension = self.callPackage ./extensions/ghidra-delinker-extension { };
 })
