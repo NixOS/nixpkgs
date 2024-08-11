@@ -266,7 +266,6 @@ in
       services.gnome.evolution-data-server.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gnome.gnome-online-accounts.enable = mkDefault true;
-      services.gnome.gnome-online-miners.enable = true;
       services.gnome.tracker-miners.enable = mkDefault true;
       services.gnome.tracker.enable = mkDefault true;
       services.hardware.bolt.enable = mkDefault true;

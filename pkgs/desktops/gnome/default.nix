@@ -38,8 +38,6 @@ in
 
   gnome-initial-setup = callPackage ./core/gnome-initial-setup { };
 
-  gnome-online-miners = callPackage ./core/gnome-online-miners { };
-
   gnome-remote-desktop = callPackage ./core/gnome-remote-desktop { };
 
   gnome-session = callPackage ./core/gnome-session { };
@@ -177,6 +175,7 @@ in
 
   gedit = throw "The ‘gnome.gedit’ alias was removed. Please use ‘pkgs.gedit’ directly."; # converted to throw on 2023-12-27
   gnome-todo = throw "The ‘gnome.gnome-todo’ alias was removed. Please use ‘pkgs.endeavour’ directly."; # converted to throw on 2023-12-27
+  gnome-online-miners = throw "The ‘gnome.gnome-online-miners’ was removed, it was broken and abandoned."; # added on 2024-08-11.
 
   accerciser = lib.warn "The ‘gnome.accerciser’ was moved to top-level. Please use ‘pkgs.accerciser’ directly." pkgs.accerciser; # Added on 2024-06-22.
   adwaita-icon-theme = lib.warn "The ‘gnome.adwaita-icon-theme’ was moved to top-level. Please use ‘pkgs.adwaita-icon-theme’ directly." pkgs.adwaita-icon-theme; # Added on 2024-06-22.
