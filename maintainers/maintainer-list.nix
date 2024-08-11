@@ -16685,6 +16685,13 @@
     githubId = 23097564;
     name = "Nora Widdecke";
   };
+  pwnwriter = {
+    name = "Nabeen Tiwaree";
+    email = "hey@pwnwriter.xyz";
+    keys = [ { fingerprint = "B681 763F 9B5B DF27 9A13  9E0C 0544 A89B C519 20AA"; } ];
+    github = "pwnwriter";
+    githubId = 90331517;
+  };
   pwoelfel = {
     name = "Philipp Woelfel";
     email = "philipp.woelfel@gmail.com";
