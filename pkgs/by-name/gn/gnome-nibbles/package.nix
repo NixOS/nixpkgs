@@ -49,10 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-nibbles";
-      attrPath = "gnome.gnome-nibbles";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-nibbles"; };
   };
 
   meta = with lib; {

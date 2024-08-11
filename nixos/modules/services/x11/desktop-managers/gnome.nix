@@ -464,7 +464,7 @@ in
         pkgs.gnome-klotski
         pkgs.gnome-mahjongg
         pkgs.gnome-mines
-        gnome-nibbles
+        pkgs.gnome-nibbles
         gnome-robots
         gnome-sudoku
         gnome-taquin

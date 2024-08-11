@@ -80,8 +80,6 @@ in
 
 #### Games
 
-  gnome-nibbles = callPackage ./games/gnome-nibbles { };
-
   gnome-robots = callPackage ./games/gnome-robots { };
 
   gnome-sudoku = callPackage ./games/gnome-sudoku { };
@@ -163,6 +161,7 @@ in
   gnome-mines = lib.warn "The ‘gnome.gnome-mines’ was moved to top-level. Please use ‘pkgs.gnome-mines’ directly." pkgs.gnome-mines; # Added on 2024-08-11.
   gnome-music = lib.warn "The ‘gnome.gnome-music’ was moved to top-level. Please use ‘pkgs.gnome-music’ directly." pkgs.gnome-music; # Added on 2024-08-11.
   gnome-nettool = lib.warn "The ‘gnome.gnome-nettool’ was moved to top-level. Please use ‘pkgs.gnome-nettool’ directly." pkgs.gnome-nettool; # Added on 2024-08-11.
+  gnome-nibbles = lib.warn "The ‘gnome.gnome-nibbles’ was moved to top-level. Please use ‘pkgs.gnome-nibbles’ directly." pkgs.gnome-nibbles; # Added on 2024-08-11.
   gnome-notes = lib.warn "The ‘gnome.gnome-notes’ was moved to top-level. Please use ‘pkgs.gnome-notes’ directly." pkgs.gnome-notes; # Added on 2024-08-11.
   gnome-packagekit = lib.warn "The ‘gnome.gnome-packagekit’ was moved to top-level. Please use ‘pkgs.gnome-packagekit’ directly." pkgs.gnome-packagekit; # Added on 2024-06-22.
   gnome-power-manager = lib.warn "The ‘gnome.gnome-power-manager’ was moved to top-level. Please use ‘pkgs.gnome-power-manager’ directly." pkgs.gnome-power-manager; # Added on 2024-08-11.
