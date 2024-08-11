@@ -408,7 +408,7 @@ in
             pkgs.gnome-console
             gnome-contacts
             pkgs.gnome-font-viewer
-            gnome-logs
+            pkgs.gnome-logs
             gnome-maps
             gnome-music
             pkgs.gnome-system-monitor

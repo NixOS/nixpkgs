@@ -59,10 +59,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-logs";
-      attrPath = "gnome.gnome-logs";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-logs"; };
   };
 
   meta = with lib; {
