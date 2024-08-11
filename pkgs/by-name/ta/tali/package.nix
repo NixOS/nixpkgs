@@ -54,10 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "tali";
-      attrPath = "gnome.tali";
-    };
+    updateScript = gnome.updateScript { packageName = "tali"; };
   };
 
   meta = with lib; {

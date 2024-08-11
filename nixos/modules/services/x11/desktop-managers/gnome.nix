@@ -474,7 +474,7 @@ in
         pkgs.lightsoff
         quadrapassel
         pkgs.swell-foop
-        tali
+        pkgs.tali
       ] config.environment.gnome.excludePackages;
     })
 
