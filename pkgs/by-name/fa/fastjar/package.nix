@@ -1,31 +1,46 @@
-{ fetchurl, lib, stdenv, zlib }:
+{
+  lib,
+  fetchzip,
+  stdenv,
+  zlib,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastjar";
   version = "0.98";
 
-  src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/fastjar/fastjar-${version}.tar.gz";
-    sha256 = "0iginbz2m15hcsa3x4y7v3mhk54gr1r7m3ghx0pg4n46vv2snmpi";
+  src = fetchzip {
+    pname = "fastjar-source";
+    inherit (finalAttrs) version;
+    url = "https://download.savannah.gnu.org/releases/fastjar/fastjar-${finalAttrs.version}.tar.gz";
+    hash = "sha256-8VyKNQaPLrXAy/UEm2QkBx56SSSoLdU/7w4IwrxbsQc=";
   };
 
+  outputs = [
+    "out"
+    "info"
+    "man"
+  ];
+
   buildInputs = [ zlib ];
+
+  strictDeps = true;
 
   doCheck = true;
 
   meta = {
-    description = "Fast Java archiver written in C";
-
-    longDescription = ''
-      Fastjar is a version of Sun's `jar' utility, written entirely in C, and
-      therefore quite a bit faster.  Fastjar can be up to 100x faster than
-      the stock `jar' program running without a JIT.
-    '';
-
     homepage = "https://savannah.nongnu.org/projects/fastjar/";
-
+    description = "Fast Java archiver written in C";
+    longDescription = ''
+      FastJar is an attempt at creating a feature-for-feature copy of Sun's
+      JDK's 'jar' command.  Sun's jar (or Blackdown's for that matter) is
+      written entirely in Java which makes it dog slow.  Since FastJar is
+      written in C, it can create the same .jar file as Sun's tool in a fraction
+      of the time.
+    '';
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = [ ];
+    mainProgram = "fastjar";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.all;
   };
-}
+})
