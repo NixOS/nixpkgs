@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-backgrounds/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-backgrounds/${lib.versions.major version}/gnome-backgrounds-${version}.tar.xz";
     hash = "sha256-Td06xDmkoGeHaAWSG7dfTTyLhaIY1Hwnbd3eiShEPC4=";
   };
 
