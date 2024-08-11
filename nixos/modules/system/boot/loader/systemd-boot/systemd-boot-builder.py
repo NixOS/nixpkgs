@@ -65,7 +65,7 @@ class Entry:
         # Matching nixos*-generation-$number*.conf
         rex_generation = re.compile(r"^nixos.*-generation-([0-9]+).*\.conf$")
         # Matching nixos*-generation-$number-specialisation-$specialisation_name*.conf
-        rex_specialisation = re.compile(r"^nixos.*-generation-([0-9]+)-specialisation-([a-zA-Z0-9]+).*\.conf$")
+        rex_specialisation = re.compile(r"^nixos.*-generation-([0-9]+)-specialisation-(.*)\.conf$")
         profile = rex_profile.sub(r"\1", filename) if rex_profile.match(filename) else None
         specialisation = rex_specialisation.sub(r"\2", filename) if rex_specialisation.match(filename) else None
         try:
@@ -114,6 +114,7 @@ class DiskEntry:
             sort_key=entry_map.get("sort_key", "nixos"),
             devicetree=entry_map.get("devicetree"),
         )
+        assert disk_entry.path.samefile(path)
         return disk_entry
 
     def write(self, sorted_first: str) -> None:
