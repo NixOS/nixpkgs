@@ -465,7 +465,7 @@ in
         pkgs.gnome-mahjongg
         pkgs.gnome-mines
         pkgs.gnome-nibbles
-        gnome-robots
+        pkgs.gnome-robots
         gnome-sudoku
         gnome-taquin
         gnome-tetravex

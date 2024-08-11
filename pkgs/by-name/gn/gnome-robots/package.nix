@@ -58,10 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-robots";
-      attrPath = "gnome.gnome-robots";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-robots"; };
   };
 
   meta = with lib; {
