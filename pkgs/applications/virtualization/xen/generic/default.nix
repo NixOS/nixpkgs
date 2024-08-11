@@ -58,8 +58,6 @@ versionDefinition:
   binutils-unwrapped,
 
   # Documentation
-  fig2dev,
-  imagemagick,
   pandoc,
 
   # Scripts
@@ -333,16 +331,17 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (pkg.xen) hash;
   };
 
-  # Gets the patches from the pkg.xen.patches attribute from the versioned files.
-  patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.xen) pkg.xen.patches;
+  patches =
+    # Generic Xen patches that apply to all Xen versions.
+    [ ./0000-xen-ipxe-src-generic.patch ]
+    # Gets the patches from the pkg.xen.patches attribute from the versioned files.
+    ++ lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.xen) pkg.xen.patches;
 
   nativeBuildInputs =
     [
       autoPatchelfHook
       bison
       cmake
-      fig2dev
-      imagemagick # Causes build failures in Hydra related to fig generation if not included.
       flex
       pandoc
       pkg-config
