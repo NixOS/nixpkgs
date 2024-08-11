@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, vala
-, pkg-config
-, desktop-file-utils
-, wrapGAppsHook4
-, gobject-introspection
-, gettext
-, itstool
-, libxml2
-, gnome
-, glib
-, gtk4
-, libadwaita
-, librsvg
-, pango
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  desktop-file-utils,
+  wrapGAppsHook4,
+  gobject-introspection,
+  gettext,
+  itstool,
+  libxml2,
+  gnome,
+  glib,
+  gtk4,
+  libadwaita,
+  librsvg,
+  pango,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-chess/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-chess/${lib.versions.major version}/gnome-chess-${version}.tar.xz";
     hash = "sha256-oryQ4KdUMSxXibkZi0knMDd1tiWDqOlnbSxqlztG/ec=";
   };
 
