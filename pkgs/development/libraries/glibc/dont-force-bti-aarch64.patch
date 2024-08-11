@@ -1,0 +1,18 @@
+diff --git a/sysdeps/aarch64/Makefile b/sysdeps/aarch64/Makefile
+index 141d7d9cc2..37e70d1c89 100644
+--- a/sysdeps/aarch64/Makefile
++++ b/sysdeps/aarch64/Makefile
+@@ -1,13 +1,5 @@
+ long-double-fcts = yes
+ 
+-ifeq (yes,$(aarch64-bti))
+-# Mark linker output BTI compatible, it warns on non-BTI inputs.
+-sysdep-LDFLAGS += -Wl,-z,force-bti
+-# Make warnings fatal outside the test system.
+-LDFLAGS-lib.so += -Wl,--fatal-warnings
+-LDFLAGS-rtld += -Wl,-z,force-bti,--fatal-warnings
+-endif
+-
+ ifeq ($(subdir),elf)
+ sysdep-dl-routines += dl-bti
+ 

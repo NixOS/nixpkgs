@@ -149,6 +149,12 @@ let
           || !targetPlatform.isLinux
         ) "pacret"
         ++ lib.optional (
+          (lib.versionOlder release_version "7")
+          || (targetPlatform.isAarch64 && (lib.versionOlder release_version "8"))
+          || !(targetPlatform.isAarch64 || targetPlatform.isx86_64)
+          || !targetPlatform.isLinux
+        ) "ibt"
+        ++ lib.optional (
           (lib.versionOlder release_version "11")
           || (targetPlatform.isAarch64 && (lib.versionOlder release_version "18.1"))
           || (targetPlatform.isFreeBSD && (lib.versionOlder release_version "15"))

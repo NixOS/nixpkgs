@@ -49,6 +49,12 @@ in
     # invocation does not work.
     hardeningDisable = [ "fortify" "pie" "stackprotector" ];
 
+    # Without at least the crt files built with ibt ("BTI" on aarch64), no
+    # executables built against glibc will be granted the BTI ELF note.
+    # glibc has built-in provisions to do the equivalent for intel's CET/IBT
+    # on x86_64.
+    hardeningEnable = lib.optional stdenv.hostPlatform.isAarch64 "ibt";
+
     env = (previousAttrs.env or { }) // {
       NIX_CFLAGS_COMPILE = (previousAttrs.env.NIX_CFLAGS_COMPILE or "") + lib.concatStringsSep " "
         (builtins.concatLists [

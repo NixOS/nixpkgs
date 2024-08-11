@@ -3,6 +3,8 @@
 , runCommand
 , runCommandWith
 , runCommandCC
+, bintools
+, linkFarm
 , hello
 , debian-devscripts
 }:
@@ -130,6 +132,80 @@ let
   '';
 
   brokenIf = cond: drv: if cond then drv.overrideAttrs (old: { meta = old.meta or {} // { broken = true; }; }) else drv;
+  overridePlatforms = platforms: drv: drv.overrideAttrs (old: { meta = old.meta or {} // { inherit platforms; }; });
+
+  instructionPresenceTest = label: mnemonicPattern: testBin: expectFailure: runCommand "${label}-instr-test" {
+    nativeBuildInputs = [
+      bintools
+    ];
+    buildInputs = [
+      testBin
+    ];
+  } ''
+    touch $out
+    if $OBJDUMP -d \
+      --no-addresses \
+      --no-show-raw-insn \
+      "$(PATH=$HOST_PATH type -P test-bin)" \
+      | grep -E '${mnemonicPattern}' > /dev/null ; then
+      echo "Found ${label} instructions" >&2
+      ${lib.optionalString expectFailure "exit 1"}
+    else
+      echo "Did not find ${label} instructions" >&2
+      ${lib.optionalString (!expectFailure) "exit 1"}
+    fi
+  '';
+
+  pacRetTest = testBin: expectFailure: overridePlatforms [ "aarch64-linux" ] (
+    instructionPresenceTest "pacret" "\\bpaciasp\\b" testBin expectFailure
+  );
+
+  # can't really use as a negative test because gcc at least freely
+  # includes endbr instructions whether or not we've asked for them.
+  ibtInstrTest = testBin: expectFailure: if stdenv.isAarch64
+    then overridePlatforms [ "aarch64-linux" ] (
+      instructionPresenceTest "ibt" "\\bbti\\b" testBin expectFailure
+    )
+    else overridePlatforms [ "x86_64-linux" ] (
+      instructionPresenceTest "ibt" "\\bendbr(32|64)\\b" testBin expectFailure
+    );
+
+  elfNoteTest = label: pattern: testBin: expectFailure: runCommand "${label}-elf-note-test" {
+    nativeBuildInputs = [
+      bintools
+    ];
+    buildInputs = [
+      testBin
+    ];
+  } ''
+    touch $out
+    if $READELF -n "$(PATH=$HOST_PATH type -P test-bin)" \
+      | grep -E '${pattern}' > /dev/null ; then
+      echo "Found ${label} note" >&2
+      ${lib.optionalString expectFailure "exit 1"}
+    else
+      echo "Did not find ${label} note" >&2
+      ${lib.optionalString (!expectFailure) "exit 1"}
+    fi
+  '';
+
+  shadowStackTest = testBin: expectFailure: brokenIf stdenv.hostPlatform.isMusl (overridePlatforms [ "x86_64-linux" ] (
+    elfNoteTest "shadowstack" "\\bSHSTK\\b" testBin expectFailure
+  ));
+
+  ibtElfNoteTest = testBin: expectFailure: brokenIf stdenv.hostPlatform.isMusl (if stdenv.isAarch64
+    then overridePlatforms [ "aarch64-linux" ] (
+      elfNoteTest "ibt" "\\bBTI\\b" testBin expectFailure
+    )
+    else overridePlatforms [ "x86_64-linux" ] (
+      elfNoteTest "ibt" "\\bIBT\\b" testBin expectFailure
+    )
+  );
+
+  ibtTest = testBin: linkFarm "ibt-test" {
+    instr-test = ibtInstrTest testBin false;
+    elf-note-test = ibtElfNoteTest testBin false;
+  };
 
 in nameDrvAfterAttrName ({
   bindNowExplicitEnabled = brokenIf stdenv.hostPlatform.isStatic (checkTestBin (f2exampleWithStdEnv stdenv {
@@ -195,6 +271,54 @@ in nameDrvAfterAttrName ({
     hardeningEnable = [ "stackclashprotection" ];
   }) {
     ignoreStackClashProtection = false;
+  });
+
+  pacRetExplicitEnabled = pacRetTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "pacret" ];
+  }) false;
+
+  pacRetExplicitEnabledIbtExplicitDisabled = pacRetTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "pacret" ];
+    hardeningDisable = [ "ibt" ];
+  }) false;
+
+  pacRetExplicitEnabledIbtExplicitEnabled = pacRetTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "pacret" "ibt" ];
+  }) false;
+
+  shadowStackExplicitEnabled = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningEnable = [ "shadowstack" ];
+  }) false;
+
+  shadowStackExplicitEnabledIbtExplicitDisabled = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningEnable = [ "shadowstack" ];
+    hardeningDisable = [ "ibt" ];
+  }) false;
+
+  shadowStackExplicitEnabledIbtExplicitEnabled = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningEnable = [ "shadowstack" "ibt" ];
+  }) false;
+
+  ibtExplicitEnabled = ibtTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "ibt" ];
+  });
+
+  ibtExplicitEnabledPacRetExplicitDisabled = ibtTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "ibt" ];
+    hardeningDisable = [ "pacret" ];
+  });
+
+  ibtExplicitEnabledPacRetExplicitEnabled = ibtTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "ibt" "pacret" ];
+  });
+
+  ibtExplicitEnabledShadowStackExplicitDisabled = ibtTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "ibt" ];
+    hardeningDisable = [ "shadowstack" ];
+  });
+
+  ibtExplicitEnabledShadowStackExplicitEnabled = ibtTest (helloWithStdEnv stdenv {
+    hardeningEnable = [ "ibt" "shadowstack" ];
   });
 
   bindNowExplicitDisabled = checkTestBin (f2exampleWithStdEnv stdenv {
@@ -263,6 +387,54 @@ in nameDrvAfterAttrName ({
     ignoreStackClashProtection = false;
     expectFailure = true;
   };
+
+  pacRetExplicitDisabled = pacRetTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "pacret" ];
+  }) true;
+
+  pacRetExplicitDisabledIbtExplicitDisabled = pacRetTest (f1exampleWithStdEnv stdenv {
+    hardeningDisable = [ "pacret" "ibt" ];
+  }) true;
+
+  pacRetExplicitDisabledIbtExplicitEnabled = pacRetTest (f1exampleWithStdEnv stdenv {
+    hardeningDisable = [ "pacret" ];
+    hardeningEnable = [ "ibt" ];
+  }) true;
+
+  shadowStackExplicitDisabled = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningDisable = [ "shadowstack" ];
+  }) true;
+
+  shadowStackExplicitDisabledIbtExplicitDisabled = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningDisable = [ "shadowstack" "ibt" ];
+  }) true;
+
+  shadowStackExplicitDisabledIbtExplicitEnabled = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningDisable = [ "shadowstack" ];
+    hardeningEnable = [ "ibt" ];
+  }) true;
+
+  ibtExplicitDisabled = ibtElfNoteTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "ibt" ];
+  }) true;
+
+  ibtExplicitDisabledPacRetExplicitDisabled = ibtElfNoteTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "ibt" "pacret" ];
+  }) true;
+
+  ibtExplicitDisabledPacRetExplicitEnabled = ibtElfNoteTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "ibt" ];
+    hardeningEnable = [ "pacret" ];
+  }) true;
+
+  ibtExplicitDisabledShadowStackExplicitDisabled = ibtElfNoteTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "ibt" "shadowstack" ];
+  }) true;
+
+  ibtExplicitDisabledShadowStackExplicitEnabled = ibtElfNoteTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "ibt" ];
+    hardeningEnable = [ "shadowstack" ];
+  }) true;
 
   # most flags can't be "unsupported" by compiler alone and
   # binutils doesn't have an accessible hardeningUnsupportedFlags
@@ -465,4 +637,16 @@ in {
     ignoreStackClashProtection = false;
     expectFailure = true;
   };
+
+  allExplicitDisabledPacRet = pacRetTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "all" ];
+  }) true;
+
+  allExplicitDisabledShadowStack = shadowStackTest (f1exampleWithStdEnv stdenv {
+    hardeningDisable = [ "all" ];
+  }) true;
+
+  allExplicitDisabledIBT = ibtElfNoteTest (helloWithStdEnv stdenv {
+    hardeningDisable = [ "all" ];
+  }) true;
 }))

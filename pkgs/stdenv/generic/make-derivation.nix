@@ -116,6 +116,7 @@ let
     "fortify"
     "fortify3"
     "shadowstack"
+    "ibt"
     "pacret"
     "pic"
     "pie"

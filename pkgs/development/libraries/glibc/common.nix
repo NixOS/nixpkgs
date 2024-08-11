@@ -102,6 +102,15 @@ stdenv.mkDerivation ({
          & https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991
       */
       ./reenable_DT_HASH.patch
+
+      /* Attempting to force all linker output to be marked BTI
+         causes failures, and for now we're mostly concerned with
+         getting crt1.o et al built with BTI, which isn't something
+         that needs forcing
+
+         Related thread for debian: https://lists.debian.org/debian-glibc/2023/12/msg00022.html
+      */
+      ./dont-force-bti-aarch64.patch
     ]
     /* NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
        every HPC piece of software, without this patch CUDA compilation on ARM

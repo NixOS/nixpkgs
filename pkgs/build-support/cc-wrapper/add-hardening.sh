@@ -32,7 +32,7 @@ if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
 fi
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -a allHardeningFlags=(fortify fortify3 shadowstack stackprotector stackclashprotection pacret pie pic strictoverflow format trivialautovarinit zerocallusedregs)
+  declare -a allHardeningFlags=(fortify fortify3 shadowstack stackprotector stackclashprotection pacret ibt pie pic strictoverflow format trivialautovarinit zerocallusedregs)
   declare -A hardeningDisableMap=()
 
   # Determine which flags were effectively disabled so we can report below.
@@ -77,11 +77,43 @@ for flag in "${!hardeningEnableMap[@]}"; do
       ;;
     shadowstack)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling shadowstack >&2; fi
-      hardeningCFlagsBefore+=('-fcf-protection=return')
+      # helpfully, and despite the suggestions of the documentation, multiple
+      # uses of -fcf-protection don't appear to be composed, so if both shadowstack
+      # and ibt are to be enabled, we need to handle them together.
+      if [[ -n "${hardeningEnableMap[ibt]-}" ]] ; then
+        if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling ibt >&2; fi
+        hardeningCFlagsBefore+=('-fcf-protection=full')
+      else
+        hardeningCFlagsBefore+=('-fcf-protection=return')
+      fi
       ;;
     pacret)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling pacret >&2; fi
-      hardeningCFlagsBefore+=('-mbranch-protection=pac-ret')
+      # helpfully, multiple uses of -mbranch-protection= aren't composed, so if
+      # both pac-ret and ibt are to be enabled, we need to handle them together.
+      if [[ -n "${hardeningEnableMap[ibt]-}" ]] ; then
+        if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling ibt >&2; fi
+        hardeningCFlagsBefore+=('-mbranch-protection=standard')
+      else
+        hardeningCFlagsBefore+=('-mbranch-protection=pac-ret')
+      fi
+      ;;
+    ibt)
+      if (( @isMBranchProtectionTarget@ )) ; then
+        if [[ -z "${hardeningEnableMap[pacret]-}" ]] ; then
+          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling ibt >&2; fi
+          hardeningCFlagsBefore+=('-mbranch-protection=bti')
+
+          # else bti will be enabled during the handling of pacret
+        fi
+      else
+        if [[ -z "${hardeningEnableMap[shadowstack]-}" ]] ; then
+          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling ibt >&2; fi
+          hardeningCFlagsBefore+=('-fcf-protection=branch')
+
+          # else ibt will be enabled during the handling of shadowstack
+        fi
+      fi
       ;;
     stackprotector)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi

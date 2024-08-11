@@ -77,6 +77,7 @@ in
 ++ optional langFortran (if atLeast12 then ./gcc-12-gfortran-driving.patch else ./gfortran-driving.patch)
 ++ optional atLeast7 ./ppc-musl.patch
 ++ optional (atLeast9 && langD) ./libphobos.patch
+++ optional atLeast9 ./aarch64-crtstuff-cflags-bti.patch
 
 
 
