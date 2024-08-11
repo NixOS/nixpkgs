@@ -32,8 +32,6 @@ in
 
   gnome-color-manager = callPackage ./core/gnome-color-manager { };
 
-  gnome-contacts = callPackage ./core/gnome-contacts { };
-
   gnome-control-center = callPackage ./core/gnome-control-center { };
 
   gnome-initial-setup = callPackage ./core/gnome-initial-setup { };
@@ -170,6 +168,7 @@ in
   gnome-common = lib.warn "The ‘gnome.gnome-common’ was moved to top-level. Please use ‘pkgs.gnome-common’ directly." pkgs.gnome-common; # Added on 2024-06-22.
   gnome-calculator = lib.warn "The ‘gnome.gnome-calculator’ was moved to top-level. Please use ‘pkgs.gnome-calculator’ directly." pkgs.gnome-calculator; # Added on 2024-06-22.
   gnome-calendar = lib.warn "The ‘gnome.gnome-calendar’ was moved to top-level. Please use ‘pkgs.gnome-calendar’ directly." pkgs.gnome-calendar; # Added on 2024-06-22.
+  gnome-contacts = lib.warn "The ‘gnome.gnome-contacts’ was moved to top-level. Please use ‘pkgs.gnome-contacts’ directly." pkgs.gnome-contacts; # Added on 2024-08-11.
   gnome-dictionary = lib.warn "The ‘gnome.gnome-dictionary’ was moved to top-level. Please use ‘pkgs.gnome-dictionary’ directly." pkgs.gnome-dictionary; # Added on 2024-06-22.
   gnome-disk-utility = lib.warn "The ‘gnome.gnome-disk-utility’ was moved to top-level. Please use ‘pkgs.gnome-disk-utility’ directly." pkgs.gnome-disk-utility; # Added on 2024-06-22.
   gnome-font-viewer = lib.warn "The ‘gnome.gnome-font-viewer’ was moved to top-level. Please use ‘pkgs.gnome-font-viewer’ directly." pkgs.gnome-font-viewer; # Added on 2024-06-22.

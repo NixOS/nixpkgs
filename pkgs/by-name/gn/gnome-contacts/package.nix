@@ -63,10 +63,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-contacts";
-      attrPath = "gnome.gnome-contacts";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-contacts"; };
   };
 
   meta = with lib; {

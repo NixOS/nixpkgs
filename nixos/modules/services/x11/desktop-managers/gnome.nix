@@ -406,7 +406,7 @@ in
             pkgs.gnome-characters
             pkgs.gnome-clocks
             pkgs.gnome-console
-            gnome-contacts
+            pkgs.gnome-contacts
             pkgs.gnome-font-viewer
             pkgs.gnome-logs
             pkgs.gnome-maps
