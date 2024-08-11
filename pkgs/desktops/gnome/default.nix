@@ -80,8 +80,6 @@ in
 
 #### Games
 
-  lightsoff = callPackage ./games/lightsoff { };
-
   swell-foop = callPackage ./games/swell-foop { };
 
   tali = callPackage ./games/tali { };
@@ -171,6 +169,7 @@ in
   gucharmap = lib.warn "The ‘gnome.gucharmap’ was moved to top-level. Please use ‘pkgs.gucharmap’ directly." pkgs.gucharmap; # Added on 2024-06-22.
   hitori = lib.warn "The ‘gnome.hitori’ was moved to top-level. Please use ‘pkgs.hitori’ directly." pkgs.hitori; # Added on 2024-08-11.
   iagno = lib.warn "The ‘gnome.iagno’ was moved to top-level. Please use ‘pkgs.iagno’ directly." pkgs.iagno; # Added on 2024-08-11.
+  lightsoff = lib.warn "The ‘gnome.lightsoff’ was moved to top-level. Please use ‘pkgs.lightsoff’ directly." pkgs.lightsoff; # Added on 2024-08-11.
   nautilus = lib.warn "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly." pkgs.nautilus; # Added on 2024-06-13.
   nautilus-python = lib.warn "The ‘gnome.nautilus-python’ was moved to top-level. Please use ‘pkgs.nautilus-python’ directly." pkgs.nautilus-python; # Added on 2024-06-13.
   polari = lib.warn "The ‘gnome.polari’ was moved to top-level. Please use ‘pkgs.polari’ directly." pkgs.polari; # Added on 2024-08-11.

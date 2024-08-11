@@ -58,10 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "lightsoff";
-      attrPath = "gnome.lightsoff";
-    };
+    updateScript = gnome.updateScript { packageName = "lightsoff"; };
   };
 
   meta = with lib; {

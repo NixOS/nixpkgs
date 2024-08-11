@@ -471,7 +471,7 @@ in
         pkgs.gnome-tetravex
         pkgs.hitori
         pkgs.iagno
-        lightsoff
+        pkgs.lightsoff
         quadrapassel
         swell-foop
         tali
