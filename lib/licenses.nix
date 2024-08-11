@@ -879,6 +879,12 @@ lib.mapAttrs mkLicense ({
     fullName = "feh License";
   };
 
+  mit-modern = {
+    # Also known as Zsh license
+    spdxId = "MIT-Modern-Variant";
+    fullName = "MIT License Modern Variant";
+  };
+
   mitAdvertising = {
     spdxId = "MIT-advertising";
     fullName = "Enlightenment License (e16)";
@@ -1309,11 +1315,6 @@ lib.mapAttrs mkLicense ({
   zlib = {
     spdxId = "Zlib";
     fullName = "zlib License";
-  };
-
-  zsh = {
-    url = "https://github.com/zsh-users/zsh/blob/master/LICENCE";
-    fullName = "Zsh License";
   };
 
   zpl20 = {
