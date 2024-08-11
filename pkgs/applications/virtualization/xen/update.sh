@@ -150,6 +150,7 @@ let
 in
 
 callPackage (import ../generic/default.nix {
+  pname = "xen";
   branch = "$branch";
   version = "$version";
   latest = $latest;

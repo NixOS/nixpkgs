@@ -99,11 +99,11 @@ let
     which
   ];
 
+  inherit (versionDefinition) pname;
   inherit (versionDefinition) branch;
   inherit (versionDefinition) version;
   inherit (versionDefinition) latest;
   inherit (versionDefinition) pkg;
-  pname = "xen";
 
   # Sources needed to build tools and firmwares.
   prefetchedSources =

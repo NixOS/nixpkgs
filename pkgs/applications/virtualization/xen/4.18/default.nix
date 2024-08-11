@@ -21,6 +21,7 @@ let
 in
 
 callPackage (import ../generic/default.nix {
+  pname = "xen";
   branch = "4.18";
   version = "4.18.2";
   latest = false;
