@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.8.0";
+  version = "2024.8.1";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -645,7 +645,7 @@
     "coautilities" = ps: with ps; [
     ];
     "coinbase" = ps: with ps; [
-    ]; # missing inputs: coinbase
+    ]; # missing inputs: coinbase coinbase-advanced-py
     "color_extractor" = ps: with ps; [
       colorthief
     ];

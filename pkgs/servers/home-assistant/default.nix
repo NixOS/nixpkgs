@@ -311,16 +311,6 @@ let
         };
       });
 
-      pyopenweathermap = super.pyopenweathermap.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.10";
-        src = fetchFromGitHub {
-          owner = "freekode";
-          repo = "pyopenweathermap";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-wEcE4IYVvxEwW5Hhz+DqDIqbjd5/O1hEr7dGgiuMI00=";
-        };
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -481,7 +471,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.8.0";
+  hassVersion = "2024.8.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -499,13 +489,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-WGbT53bmyV1d/6GKlv5+bxLmGRqsAHEKbs2halMkPB4=";
+    hash = "sha256-sbXfvlQJRRVkvSRJ8v/Su8us9WnoJUF4odAJrewryco=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-RfTkF8HO5bZCupo5vBLbSG2shr+b31GfDN+iJpH5sc8=";
+    hash = "sha256-VzoH+wrpUAXJRjEZC2x9qjRzTSsiaUm6aI6/uHv6h/4=";
   };
 
   build-system = with python.pkgs; [
