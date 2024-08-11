@@ -862,8 +862,6 @@ lib.mapAttrs mkLicense ({
     url = "https://opensource.org/licenses/MirOS";
   };
 
-  # spdx.org does not (yet) differentiate between the X11 and Expat versions
-  # for details see https://en.wikipedia.org/wiki/MIT_License#Various_versions
   mit = {
     spdxId = "MIT";
     fullName = "MIT License";
