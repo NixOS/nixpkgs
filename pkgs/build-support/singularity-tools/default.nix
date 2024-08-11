@@ -118,7 +118,7 @@ lib.makeExtensible (final: {
             mkdir -p bin ./${builtins.storeDir}
             # Loop over the line-separated paths in $layerClosure
             while IFS= read -r f; do
-              cp -ar "$f" "./$f"
+              cp -r "$f" "./$f"
             done < "$layerClosure"
 
             # TODO(@ShamrockLee):
