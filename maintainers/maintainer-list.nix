@@ -3033,10 +3033,11 @@
     name = "Roman Gerasimenko";
   };
   builditluc = {
-    email = "builditluc@icloud.com";
+    email = "git@builditluc.eu";
     github = "Builditluc";
     githubId = 37375448;
-    name = "Buildit";
+    name = "Builditluc";
+    keys = [ { fingerprint = "FF16E475723B8C1E57A6B2569374074AE2D6F20E"; } ];
   };
   buurro = {
     email = "marcoburro98@gmail.com";

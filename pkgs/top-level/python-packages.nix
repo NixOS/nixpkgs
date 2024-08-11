@@ -773,6 +773,8 @@ self: super: with self; {
 
   arnparse = callPackage ../development/python-modules/arnparse { };
 
+  array-api-strict = callPackage ../development/python-modules/array-api-strict { };
+
   array-record = callPackage ../development/python-modules/array-record { };
 
   arrayqueues = callPackage ../development/python-modules/arrayqueues { };
@@ -7579,6 +7581,8 @@ self: super: with self; {
   mdx-truly-sane-lists = callPackage ../development/python-modules/mdx-truly-sane-lists { };
 
   md2gemini = callPackage ../development/python-modules/md2gemini { };
+
+  md2pdf = callPackage ../development/python-modules/md2pdf { };
 
   mdformat = callPackage ../development/python-modules/mdformat { };
   mdformat-admon = callPackage ../development/python-modules/mdformat-admon { };
