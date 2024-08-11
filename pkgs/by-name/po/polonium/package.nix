@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildNpmPackage
-, plasma-framework
+, libsForQt5
 }:
 
 # how to update:
@@ -28,7 +28,7 @@ buildNpmPackage rec {
   # manually do the install
   buildFlags = [ "res" "src" ];
 
-  nativeBuildInputs = [ plasma-framework ];
+  nativeBuildInputs = with libsForQt5; [ plasma-framework ];
 
   dontNpmBuild = true;
 
@@ -45,7 +45,11 @@ buildNpmPackage rec {
   meta = with lib; {
     description = "Auto-tiler that uses KWin 6.0+ tiling functionality";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg kotatsuyaki ];
-    inherit (plasma-framework.meta) platforms;
+    maintainers = with maintainers; [
+      peterhoeg
+      kotatsuyaki
+      HeitorAugustoLN
+    ];
+    inherit (libsForQt5.plasma-framework.meta) platforms;
   };
 }
