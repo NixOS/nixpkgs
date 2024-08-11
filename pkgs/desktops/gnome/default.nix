@@ -90,8 +90,6 @@ in
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
-  polari = callPackage ./apps/polari { };
-
   vinagre = callPackage ./apps/vinagre { };
 
 #### Games
@@ -199,6 +197,7 @@ in
   gucharmap = lib.warn "The ‘gnome.gucharmap’ was moved to top-level. Please use ‘pkgs.gucharmap’ directly." pkgs.gucharmap; # Added on 2024-06-22.
   nautilus = lib.warn "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly." pkgs.nautilus; # Added on 2024-06-13.
   nautilus-python = lib.warn "The ‘gnome.nautilus-python’ was moved to top-level. Please use ‘pkgs.nautilus-python’ directly." pkgs.nautilus-python; # Added on 2024-06-13.
+  polari = lib.warn "The ‘gnome.polari’ was moved to top-level. Please use ‘pkgs.polari’ directly." pkgs.polari; # Added on 2024-08-11.
   pomodoro = lib.warn "The ‘gnome.pomodoro’ was moved to top-level. Please use ‘pkgs.gnome-pomodoro’ directly." pkgs.gnome-pomodoro; # Added on 2024-06-22.
   rygel = lib.warn "The ‘gnome.rygel’ was moved to top-level. Please use ‘pkgs.rygel’ directly." pkgs.rygel; # Added on 2024-06-22.
   seahorse = lib.warn "The ‘gnome.seahorse’ was moved to top-level. Please use ‘pkgs.seahorse’ directly." pkgs.seahorse; # Added on 2024-06-22.

@@ -79,10 +79,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "polari";
-      attrPath = "gnome.polari";
-    };
+    updateScript = gnome.updateScript { packageName = "polari"; };
   };
 
   meta = with lib; {
