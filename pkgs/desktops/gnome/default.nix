@@ -17,8 +17,6 @@ in
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
-  caribou = callPackage ./core/caribou { };
-
   gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
 
   gnome-bluetooth_1_0 = callPackage ./core/gnome-bluetooth/1.0 { };
@@ -97,6 +95,7 @@ in
   aisleriot = lib.warn "The ‘gnome.aisleriot’ was moved to top-level. Please use ‘pkgs.aisleriot’ directly." pkgs.aisleriot; # Added on 2024-08-11.
   atomix = lib.warn "The ‘gnome.atomix’ was moved to top-level. Please use ‘pkgs.atomix’ directly." pkgs.atomix; # Added on 2024-08-11.
   baobab = lib.warn "The ‘gnome.baobab’ was moved to top-level. Please use ‘pkgs.baobab’ directly." pkgs.baobab; # Added on 2024-06-22.
+  caribou = lib.warn "The ‘gnome.caribou’ was moved to top-level. Please use ‘pkgs.caribou’ directly." pkgs.caribou; # Added on 2024-08-11.
   cheese = lib.warn "The ‘gnome.cheese’ was moved to top-level. Please use ‘pkgs.cheese’ directly." pkgs.cheese; # Added on 2024-06-22.
   dconf-editor = lib.warn "The ‘gnome.dconf-editor’ was moved to top-level. Please use ‘pkgs.dconf-editor’ directly." pkgs.dconf-editor; # Added on 2024-06-22.
   devhelp = lib.warn "The ‘gnome.devhelp’ was moved to top-level. Please use ‘pkgs.devhelp’ directly." pkgs.devhelp; # Added on 2024-06-22.

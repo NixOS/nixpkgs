@@ -92,10 +92,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "caribou";
-      attrPath = "gnome.caribou";
-    };
+    updateScript = gnome.updateScript { packageName = "caribou"; };
   };
 
   meta = with lib; {
