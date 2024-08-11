@@ -60,10 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-tetravex";
-      attrPath = "gnome.gnome-tetravex";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-tetravex"; };
   };
 
   meta = with lib; {

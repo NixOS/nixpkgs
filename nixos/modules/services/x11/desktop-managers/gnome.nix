@@ -468,7 +468,7 @@ in
         pkgs.gnome-robots
         pkgs.gnome-sudoku
         pkgs.gnome-taquin
-        gnome-tetravex
+        pkgs.gnome-tetravex
         hitori
         iagno
         lightsoff
