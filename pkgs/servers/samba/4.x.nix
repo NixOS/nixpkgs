@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtasn1
     tdb
     libxcrypt
-  ] ++ optionals stdenv.isLinux [ liburing systemd ]
+  ] ++ optionals (stdenv.isLinux && !stdenv.hostPlatform.isStatic) [ liburing systemd ]
     ++ optionals stdenv.isDarwin [ libiconv ]
     ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
     ++ optionals (!enableLDAP && stdenv.isLinux) [ ldb talloc tevent ]
@@ -207,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Some libraries don't have /lib/samba in RPATH but need it.
   # Use find -type f -executable -exec echo {} \; -exec sh -c 'ldd {} | grep "not found"' \;
   # Looks like a bug in installer scripts.
-  postFixup = ''
+  postFixup = (lib.optionalString (!stdenv.hostPlatform.isStatic) (''
     export SAMBA_LIBS="$(find $out -type f -regex '.*\${stdenv.hostPlatform.extensions.sharedLibrary}\(\..*\)?' -exec dirname {} \; | sort | uniq)"
     read -r -d "" SCRIPT << EOF || true
     [ -z "\$SAMBA_LIBS" ] && exit 1;
@@ -227,7 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
     find $out -type f -regex '.*\${stdenv.hostPlatform.extensions.sharedLibrary}\(\..*\)?' -exec $SHELL -c "$SCRIPT" \;
     find $out/bin -type f -exec $SHELL -c "$SCRIPT" \;
-
+  '')) + ''
     # Fix PYTHONPATH for some tools
     wrapPythonPrograms
 
