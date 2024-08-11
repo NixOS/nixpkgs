@@ -24,8 +24,6 @@ in
 
   gdm = callPackage ./core/gdm { };
 
-  gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
-
   gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
 
   gnome-bluetooth_1_0 = callPackage ./core/gnome-bluetooth/1.0 { };
@@ -162,6 +160,7 @@ in
   ghex = lib.warn "The ‘gnome.ghex’ was moved to top-level. Please use ‘pkgs.ghex’ directly." pkgs.ghex; # Added on 2024-06-22.
   gitg = lib.warn "The ‘gnome.gitg’ was moved to top-level. Please use ‘pkgs.gitg’ directly." pkgs.gitg; # Added on 2024-06-22.
   gnome-autoar = lib.warn "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly." pkgs.gnome-autoar; # Added on 2024-06-13.
+  gnome-backgrounds = lib.warn "The ‘gnome.gnome-backgrounds’ was moved to top-level. Please use ‘pkgs.gnome-backgrounds’ directly." pkgs.gnome-backgrounds; # Added on 2024-08-11.
   gnome-boxes = lib.warn "The ‘gnome.gnome-boxes’ was moved to top-level. Please use ‘pkgs.gnome-boxes’ directly." pkgs.gnome-boxes; # Added on 2024-08-11.
   gnome-characters = lib.warn "The ‘gnome.gnome-characters’ was moved to top-level. Please use ‘pkgs.gnome-characters’ directly." pkgs.gnome-characters; # Added on 2024-08-11.
   gnome-clocks = lib.warn "The ‘gnome.gnome-clocks’ was moved to top-level. Please use ‘pkgs.gnome-clocks’ directly." pkgs.gnome-clocks; # Added on 2024-08-11.

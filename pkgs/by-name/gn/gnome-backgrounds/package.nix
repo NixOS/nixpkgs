@@ -29,10 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-backgrounds";
-      attrPath = "gnome.gnome-backgrounds";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-backgrounds"; };
   };
 
   meta = with lib; {

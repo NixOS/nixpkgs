@@ -374,7 +374,7 @@ in
           optionalPackages = with pkgs.gnome; [
             pkgs.adwaita-icon-theme
             nixos-background-info
-            gnome-backgrounds
+            pkgs.gnome-backgrounds
             gnome-bluetooth
             gnome-color-manager
             gnome-control-center
