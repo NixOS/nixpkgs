@@ -26,7 +26,10 @@ callPackage (import ../generic.nix {
     xen = {
       rev = "d530627aaa9b6e03c7f911434bb342fca3d13300";
       hash = "sha256-4ltQUzo4XPzGT/7fGt1hnNMqBQBVF7VP+WXD9ZaJcGo=";
-      patches = [ ./0000-xen-ipxe-src-4.17.patch ] ++ upstreamPatchList;
+      patches = [
+        ./0000-xen-ipxe-src-4.17.patch
+        ./0001-xen-fig-geneneration-4.17.patch
+      ] ++ upstreamPatchList;
     };
     qemu = {
       rev = "ffb451126550b22b43b62fb8731a0d78e3376c03";

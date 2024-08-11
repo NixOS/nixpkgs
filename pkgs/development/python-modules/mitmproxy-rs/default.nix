@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy-rs";
-  version = "0.6.2";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy_rs";
     rev = version;
-    hash = "sha256-zBlt83mtJOsVqskDAkpk50yZHxJO6B8QP7iv8L1YPWA=";
+    hash = "sha256-rnM2MNJ9ZVmwFjhXU8kPEQjpqNIzVZ3bVtm43WvGj5E=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rust bits in mitmproxy";
     homepage = "https://github.com/mitmproxy/mitmproxy_rs";
-    changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${src.rev}/CHANGELOG.md#${lib.replaceStrings ["."] [""] version}";
     license = licenses.mit;
     inherit (mitmproxy.meta) maintainers;
   };
