@@ -22,7 +22,6 @@
 , gnome
 , icu
 , libuuid
-, libsoup
 , libsoup_3
 , json-glib
 , avahi
@@ -33,14 +32,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "tracker";
-  version = "3.7.3";
+  pname = "tinysparql";
+  version = "3.8.beta";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-qz1KUJN+BMXteEb227mZ4pCYGUAvOJylku5rd90o0fk=";
+    url = with finalAttrs; "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
+    hash = "sha256-Xn3Fr+Py5XbUNyXXU8hpFiuhnoeCkW362+ILk8eIey4=";
   };
 
   strictDeps = true;
@@ -72,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     sqlite
     icu
-    libsoup
     libsoup_3
     libuuid
     json-glib
@@ -91,10 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddocs=true"
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "vapi" withIntrospection)
-    (lib.mesonBool "test_utils" withIntrospection)
   ] ++ (
     let
-      # https://gitlab.gnome.org/GNOME/tracker/-/blob/master/meson.build#L159
+      # https://gitlab.gnome.org/GNOME/tinysparql/-/blob/3.7.3/meson.build#L170
       crossFile = writeText "cross-file.conf" ''
         [properties]
         sqlite3_has_fts5 = '${lib.boolToString (lib.hasInfix "-DSQLITE_ENABLE_FTS3" sqlite.NIX_CFLAGS_COMPILE)}'
@@ -108,10 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck =
-    # https://gitlab.gnome.org/GNOME/tracker/-/issues/402
+    # https://gitlab.gnome.org/GNOME/tinysparql/-/issues/402
     !stdenv.hostPlatform.isDarwin
-    # https://gitlab.gnome.org/GNOME/tracker/-/issues/398
-    && !stdenv.hostPlatform.is32bit;
+    # https://gitlab.gnome.org/GNOME/tinysparql/-/issues/398
+    && !stdenv.hostPlatform.is32bit
+    # https://gitlab.gnome.org/GNOME/tinysparql/-/issues/474
+    && !stdenv.hostPlatform.isMusl;
 
   postPatch = ''
     chmod +x \
@@ -138,16 +137,17 @@ stdenv.mkDerivation (finalAttrs: {
       # though, so we need to replace the absolute path with a local one during build.
       # We are using a symlink that will be overridden during installation.
       mkdir -p $out/lib
-      ln -s $PWD/src/libtracker-sparql/libtracker-sparql-3.0${darwinDot0}${extension} $out/lib/libtracker-sparql-3.0${darwinDot0}${extension}${linuxDot0}
+      ln -s $PWD/src/libtracker-sparql/libtinysparql-3.0${darwinDot0}${extension} $out/lib/libtinysparql-3.0${darwinDot0}${extension}${linuxDot0}
     '';
 
   checkPhase = ''
     runHook preCheck
 
+    # The "tinysparql:core / service" test can take 180s+ when builder is in high load.
     dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
       meson test \
-        --timeout-multiplier 2 \
+        --timeout-multiplier 0 \
         --print-errorlogs
 
     runHook postCheck
@@ -166,6 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = finalAttrs.pname;
+      attrPath = "tracker";
     };
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
@@ -175,10 +176,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://tracker.gnome.org/";
     description = "Desktop-neutral user information store, search tool and indexer";
-    mainProgram = "tracker3";
+    mainProgram = "tinysparql";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    pkgConfigModules = [ "tracker-sparql-3.0" "tracker-testutils-3.0" ];
+    pkgConfigModules = [ "tracker-sparql-3.0" "tinysparql-3.0" ];
   };
 })
