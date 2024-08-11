@@ -44,10 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-power-manager";
-      attrPath = "gnome.gnome-power-manager";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-power-manager"; };
   };
 
   meta = with lib; {
