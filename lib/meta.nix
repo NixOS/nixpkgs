@@ -287,6 +287,32 @@ rec {
     all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
 
   /**
+    Mapping of SPDX ID to the attributes in lib.licenses.
+
+    For SPDX IDs, see https://spdx.org/licenses
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.licensesSpdx` usage example
+
+    ```nix
+    lib.licensesSpdx.MIT == lib.licenses.mit
+    => true
+    lib.licensesSpdx."MY LICENSE"
+    => error: attribute 'MY LICENSE' missing
+    ```
+
+    :::
+  */
+  licensesSpdx =
+    lib.attrsets.mapAttrs'
+    (_key: license: {
+      name = license.spdxId;
+      value = license;
+    })
+    (lib.attrsets.filterAttrs (_key: license: license ? spdxId) lib.licenses);
+
+  /**
     Get the corresponding attribute in lib.licenses from the SPDX ID
     or warn and fallback to `{ shortName = <license string>; }`.
 
@@ -361,10 +387,12 @@ rec {
   */
   getLicenseFromSpdxIdOr =
     let
-      spdxLicenses = lib.mapAttrs (id: ls: assert lib.length ls == 1; builtins.head ls)
-        (lib.groupBy (l: lib.toLower l.spdxId) (lib.filter (l: l ? spdxId) (lib.attrValues lib.licenses)));
+      lowercaseLicenses = lib.mapAttrs' (name: value: {
+        name = lib.toLower name;
+        inherit value;
+      }) licensesSpdx;
     in licstr: default:
-      spdxLicenses.${ lib.toLower licstr } or default;
+      lowercaseLicenses.${ lib.toLower licstr } or default;
 
   /**
     Get the path to the main program of a package based on meta.mainProgram
