@@ -38776,8 +38776,6 @@ with pkgs;
 
   nix-query-tree-viewer = callPackage ../tools/nix/nix-query-tree-viewer { };
 
-  nix-update = callPackage ../tools/package-management/nix-update { };
-
   nix-update-source = callPackage ../tools/package-management/nix-update-source { };
 
   nix-script = callPackage ../tools/nix/nix-script { };
