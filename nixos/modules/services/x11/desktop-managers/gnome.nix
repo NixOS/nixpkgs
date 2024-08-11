@@ -466,7 +466,7 @@ in
         pkgs.gnome-mines
         pkgs.gnome-nibbles
         pkgs.gnome-robots
-        gnome-sudoku
+        pkgs.gnome-sudoku
         gnome-taquin
         gnome-tetravex
         hitori

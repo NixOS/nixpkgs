@@ -51,10 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-sudoku";
-      attrPath = "gnome.gnome-sudoku";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-sudoku"; };
   };
 
   meta = with lib; {
