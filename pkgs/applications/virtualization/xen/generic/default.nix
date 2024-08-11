@@ -81,7 +81,7 @@ versionDefinition:
 
 let
   #TODO: fix paths instead.
-  scriptEnvPath = lib.strings.concatMapStringsSep ":" (x: "${x}/bin") [
+  scriptEnvPath = lib.strings.makeSearchPathOutput "out" "bin" [
     bridge-utils
     coreutils
     diffutils
@@ -95,7 +95,7 @@ let
     nbd
     openvswitch
     perl
-    util-linux
+    util-linux.bin
     which
   ];
 
@@ -105,10 +105,16 @@ let
   inherit (versionDefinition) latest;
   inherit (versionDefinition) pkg;
 
-  # Sources needed to build tools and firmwares.
+  ## Pre-fetched Source Handling ##
+
+  # Main attribute set for sources needed to build tools and firmwares.
+  # Each source takes in:
+  # * A `src` attribute, which contains the actual fetcher,
+  # * A 'patches` attribute, which is a list of patches that need to be applied in the source.
+  # * A `path` attribute, which is the destination of the source inside the Xen tree.
   prefetchedSources =
     lib.attrsets.optionalAttrs withInternalQEMU {
-      qemu-xen = {
+      qemu = {
         src = fetchgit {
           url = "https://xenbits.xen.org/git-http/qemu-xen.git";
           fetchSubmodules = true;
@@ -116,10 +122,11 @@ let
           inherit (pkg.qemu) hash;
         };
         patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.qemu) pkg.qemu.patches;
+        path = "tools/qemu-xen";
       };
     }
     // lib.attrsets.optionalAttrs withInternalSeaBIOS {
-      "firmware/seabios-dir-remote" = {
+      seaBIOS = {
         src = fetchgit {
           url = "https://xenbits.xen.org/git-http/seabios.git";
           inherit (pkg.seaBIOS) rev;
@@ -128,10 +135,11 @@ let
         patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [
           "patches"
         ] pkg.seaBIOS) pkg.seaBIOS.patches;
+        path = "tools/firmware/seabios-dir-remote";
       };
     }
     // lib.attrsets.optionalAttrs withInternalOVMF {
-      "firmware/ovmf-dir-remote" = {
+      ovmf = {
         src = fetchgit {
           url = "https://xenbits.xen.org/git-http/ovmf.git";
           fetchSubmodules = true;
@@ -139,10 +147,11 @@ let
           inherit (pkg.ovmf) hash;
         };
         patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.ovmf) pkg.ovmf.patches;
+        path = "tools/firmware/ovmf-dir-remote";
       };
     }
     // lib.attrsets.optionalAttrs withInternalIPXE {
-      "firmware/etherboot/ipxe.git" = {
+      ipxe = {
         src = fetchFromGitHub {
           owner = "ipxe";
           repo = "ipxe";
@@ -150,10 +159,68 @@ let
           inherit (pkg.ipxe) hash;
         };
         patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.ipxe) pkg.ipxe.patches;
+        path = "tools/firmware/etherboot/ipxe.git";
       };
     };
-  withPrefetchedSources =
-    sourcePkg: lib.strings.concatLines (lib.attrsets.mapAttrsToList sourcePkg prefetchedSources);
+
+  # Gets a list containing the names of the top-level attribute for each pre-fetched
+  # source, to be used in the map functions below.
+  prefetchedSourcesList = lib.attrsets.mapAttrsToList (name: value: name) prefetchedSources;
+
+  # Produces bash commands that will copy each pre-fetched source.
+  copyPrefetchedSources =
+    # Finish the deployment by concatnating the list of commands together.
+    lib.strings.concatLines (
+      # Iterate on each pre-fetched source.
+      builtins.map (
+        source:
+        # Only produce a copy command if patches exist.
+        lib.strings.optionalString (lib.attrsets.hasAttrByPath [ "${source}" ] prefetchedSources)
+          # The actual copy command. `src` is always an absolute path to a fetcher output
+          # inside the /nix/store, and `path` is always a path relative to the Xen root.
+          # We need to `mkdir -p` the target directory first, and `chmod +w` the contents last,
+          # as the copied files will still be edited by the postPatchPhase.
+          ''
+            echo "Copying ${prefetchedSources.${source}.src} -> ${prefetchedSources.${source}.path}"
+            mkdir --parents ${prefetchedSources.${source}.path}
+            cp --recursive --no-target-directory ${prefetchedSources.${source}.src} ${
+              prefetchedSources.${source}.path
+            }
+            chmod --recursive +w ${prefetchedSources.${source}.path}
+          ''
+      ) prefetchedSourcesList
+    );
+
+  # Produces strings with `patch` commands to be ran on postPatch.
+  # These deploy the .patch files for each pre-fetched source.
+  deployPrefetchedSourcesPatches =
+    # Finish the deployment by concatnating the list of commands together.
+    lib.strings.concatLines (
+      # The double map functions create a list of lists. Flatten it so we can concatnate it.
+      lib.lists.flatten (
+        # Iterate on each pre-fetched source.
+        builtins.map (
+          source:
+          # Iterate on each available patch.
+          (builtins.map (
+            patch:
+            # Only produce a patch command if patches exist.
+            lib.strings.optionalString
+              (lib.attrsets.hasAttrByPath [
+                "${source}"
+                "patches"
+              ] prefetchedSources)
+              # The actual patch command. It changes directories to the correct source each time.
+              ''
+                echo "Applying patch ${patch} to ${source}."
+                patch --directory ${prefetchedSources.${source}.path} --strip 1 < ${patch}
+              ''
+          ) prefetchedSources.${source}.patches)
+        ) prefetchedSourcesList
+      )
+    );
+
+  ## XSA Patches Description Builder ##
 
   # Sometimes patches are sourced through a path, like ./0000-xen.patch.
   # This would break the patch attribute parser functions, so we normalise
@@ -232,19 +299,7 @@ let
     else
       [ ];
 
-  withTools =
-    attr: file:
-    withPrefetchedSources (
-      name: source:
-      lib.strings.optionalString (builtins.hasAttr attr source) ''
-        echo "processing ${name}"
-        __do() {
-          cd "tools/${name}"
-          ${file name source}
-        }
-        ( __do )
-      ''
-    );
+  ## Binutils Override ##
 
   # Originally, there were two versions of binutils being used: the standard one and
   # this patched one. Unfortunately, that required patches to the Xen Makefiles, and
@@ -438,17 +493,9 @@ stdenv.mkDerivation (finalAttrs: {
       rm --recursive --force tools/qemu-xen tools/qemu-xen-traditional
     ''
 
-    # The following expression moves the sources we fetched in the
-    # versioned Nix expressions to their correct locations inside
-    # the Xen source tree.
+    # Call copyPrefetchedSources, which copies all aviable sources to their correct positions.
     + ''
-      ${withPrefetchedSources (
-        name: source: ''
-          echo "Copying pre-fetched source: ${source.src} -> tools/${name}"
-          cp --recursive ${source.src} tools/${name}
-          chmod --recursive +w tools/${name}
-        ''
-      )}
+      ${copyPrefetchedSources}
     '';
 
   postPatch =
@@ -481,19 +528,9 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
     ''
 
-    # The following expression applies the patches defined on each
-    # prefetchedSources attribute.
+    # # Call deployPrefetchedSourcesPatches, which patches all pre-fetched sources with their specified patchlists.
     + ''
-      ${withTools "patches" (
-        name: source: ''
-          ${lib.strings.concatMapStringsSep "\n" (patch: ''
-            echo "Patching with ${patch}"
-            patch --strip 1 < ${patch}
-          '') source.patches}
-        ''
-      )}
-
-
+      ${deployPrefetchedSourcesPatches}
     ''
     # Patch shebangs for QEMU and OVMF build scripts.
     + ''
