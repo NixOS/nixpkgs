@@ -477,21 +477,6 @@ runTests {
 
   testEscapeShellArgs = {
     expr = strings.escapeShellArgs ["one" "two three" "four'five"];
-    expected = "'one' 'two three' 'four'\\''five'";
-  };
-
-  testEscapeBashArgQuote = {
-    expr = strings.escapeBashArg "foo'bar";
-    expected = "'foo'\\''bar'";
-  };
-
-  testEscapeBashArgPlain = {
-    expr = strings.escapeBashArg "foobar";
-    expected = "foobar";
-  };
-
-  testEscapeBashArgs = {
-    expr = strings.escapeBashArgs ["one" "two three" "four'five"];
     expected = "one 'two three' 'four'\\''five'";
   };
 
@@ -594,12 +579,12 @@ runTests {
     '';
     expected = ''
       STRing01='just a '\'''string'\''''
-      declare -a _array_=('with' 'more strings')
+      declare -a _array_=(with 'more strings')
       declare -A assoc=(['with some']='strings
       possibly newlines
       ')
-      drv='/drv'
-      path='/path'
+      drv=/drv
+      path=/path
       stringable='hello toString'
     '';
   };
@@ -1779,7 +1764,7 @@ runTests {
       verbose = true;
     };
 
-    expected = "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
+    expected = "-X PUT --data '{\"id\":0}' --retry 3 --url https://example.com/foo --url https://example.com/bar --verbose";
   };
 
   testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {

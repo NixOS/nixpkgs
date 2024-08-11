@@ -1026,7 +1026,8 @@ rec {
     replaceStrings (builtins.attrNames toEscape) (lib.mapAttrsToList (_: c: "%${fixedWidthString 2 "0" (lib.toHexString c)}") toEscape);
 
   /**
-    Quote `string` to be used safely within the Bourne shell.
+    Quote `string` to be used safely within the Bourne shell if it has any
+    special characters.
 
 
     # Inputs
@@ -1051,10 +1052,17 @@ rec {
 
     :::
   */
-  escapeShellArg = arg: "'${replaceStrings ["'"] ["'\\''"] (toString arg)}'";
+  escapeShellArg = arg:
+    let
+      string = toString arg;
+    in
+      if match ".*[]\\[\"'[:space:]\\\\#$&(){}<>|;*?=!~].*" string == null
+      then string
+      else "'${replaceStrings ["'"] ["'\\''"] string}'";
 
   /**
-    Quote all arguments to be safely passed to the Bourne shell.
+    Quote all arguments that have special characters to be safely passed to the
+    Bourne shell.
 
     # Inputs
 
@@ -1073,73 +1081,12 @@ rec {
 
     ```nix
     escapeShellArgs ["one" "two three" "four'five"]
-    => "'one' 'two three' 'four'\\''five'"
-    ```
-
-    :::
-  */
-  escapeShellArgs = concatMapStringsSep " " escapeShellArg;
-
-  /**
-    This is like `escapeShellArg` except it won't quote the argument if not
-    necessary.
-
-    # Inputs
-
-    `string`
-    : 1\. Function argument
-
-    # Type
-
-    ```
-    escapeBashArg :: string -> string
-    ```
-
-    # Examples
-    :::{.example}
-    ## `lib.strings.escapeBashArg` usage example
-
-    ```nix
-    escapeBashArg "foo'bar"
-    => "'foo'\\''bar'"
-    escapeBashArg "foobar"
-    => "foobar"
-    ```
-
-    :::
-  */
-  escapeBashArg = arg:
-    if match ".*[]\\[\"'[:space:]\\\\#$&(){}<>|;*?=!~].*" arg == null
-    then arg
-    else escapeShellArg arg;
-
-  /**
-    This is like `escapeShellArg` except it won't quote the arguments if not
-    necessary.
-
-    # Inputs
-
-    `args`
-    : 1\. Function argument
-
-    # Type
-
-    ```
-    escapeBashArgs :: [string] -> string
-    ```
-
-    # Examples
-    :::{.example}
-    ## `lib.strings.escapeBashArgs` usage example
-
-    ```nix
-    escapeBashArgs ["one" "two three" "four'five"]
     => "one 'two three' 'four'\\''five'"
     ```
 
     :::
   */
-  escapeBashArgs = concatMapStringsSep " " escapeBashArg;
+  escapeShellArgs = concatMapStringsSep " " escapeShellArg;
 
   /**
     Test whether the given `name` is a valid POSIX shell variable name.
