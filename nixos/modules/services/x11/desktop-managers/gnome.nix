@@ -462,7 +462,7 @@ in
         pkgs.gnome-2048
         pkgs.gnome-chess
         pkgs.gnome-klotski
-        gnome-mahjongg
+        pkgs.gnome-mahjongg
         gnome-mines
         gnome-nibbles
         gnome-robots

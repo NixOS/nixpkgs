@@ -80,8 +80,6 @@ in
 
 #### Games
 
-  gnome-mahjongg = callPackage ./games/gnome-mahjongg { };
-
   gnome-mines = callPackage ./games/gnome-mines { };
 
   gnome-nibbles = callPackage ./games/gnome-nibbles { };
@@ -162,6 +160,7 @@ in
   gnome-keyring = lib.warn "The ‘gnome.gnome-keyring’ was moved to top-level. Please use ‘pkgs.gnome-keyring’ directly." pkgs.gnome-keyring; # Added on 2024-06-22.
   gnome-klotski = lib.warn "The ‘gnome.gnome-klotski’ was moved to top-level. Please use ‘pkgs.gnome-klotski’ directly." pkgs.gnome-klotski; # Added on 2024-08-11.
   gnome-logs = lib.warn "The ‘gnome.gnome-logs’ was moved to top-level. Please use ‘pkgs.gnome-logs’ directly." pkgs.gnome-logs; # Added on 2024-08-11.
+  gnome-mahjongg = lib.warn "The ‘gnome.gnome-mahjongg’ was moved to top-level. Please use ‘pkgs.gnome-mahjongg’ directly." pkgs.gnome-mahjongg; # Added on 2024-08-11.
   gnome-maps = lib.warn "The ‘gnome.gnome-maps’ was moved to top-level. Please use ‘pkgs.gnome-maps’ directly." pkgs.gnome-maps; # Added on 2024-08-11.
   gnome-music = lib.warn "The ‘gnome.gnome-music’ was moved to top-level. Please use ‘pkgs.gnome-music’ directly." pkgs.gnome-music; # Added on 2024-08-11.
   gnome-nettool = lib.warn "The ‘gnome.gnome-nettool’ was moved to top-level. Please use ‘pkgs.gnome-nettool’ directly." pkgs.gnome-nettool; # Added on 2024-08-11.

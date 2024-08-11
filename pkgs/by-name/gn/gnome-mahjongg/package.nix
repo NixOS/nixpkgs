@@ -48,10 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-mahjongg";
-      attrPath = "gnome.gnome-mahjongg";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-mahjongg"; };
   };
 
   meta = with lib; {
