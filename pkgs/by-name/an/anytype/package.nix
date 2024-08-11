@@ -1,4 +1,10 @@
-{ lib, fetchurl, appimageTools, makeWrapper }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  enableWayland ? true,
+}:
 
 let
   pname = "anytype";
@@ -10,7 +16,8 @@ let
     hash = "sha256-4Tz080lNQXqTq+LEax4fYV27/DDSRUalpkO46KZ1ay8=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
@@ -18,8 +25,15 @@ in appimageTools.wrapType2 {
   extraInstallCommands = ''
     mv $out/bin/${name} $out/bin/${pname}
     source "${makeWrapper}/nix-support/setup-hook"
-    wrapProgram $out/bin/${pname} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+    ${
+      if enableWayland then
+        ''
+          wrapProgram $out/bin/${pname} \
+            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        ''
+      else
+        ""
+    }
     install -m 444 -D ${appimageContents}/anytype.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/anytype.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
