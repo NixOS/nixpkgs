@@ -128,10 +128,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-boxes";
-      attrPath = "gnome.gnome-boxes";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-boxes"; };
   };
 
   meta = with lib; {
