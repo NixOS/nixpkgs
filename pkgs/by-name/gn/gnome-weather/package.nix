@@ -63,10 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-weather";
-      attrPath = "gnome.gnome-weather";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-weather"; };
   };
 
   meta = with lib; {

@@ -412,7 +412,7 @@ in
             pkgs.gnome-maps
             pkgs.gnome-music
             pkgs.gnome-system-monitor
-            gnome-weather
+            pkgs.gnome-weather
             pkgs.loupe
             pkgs.nautilus
             pkgs.gnome-connections
