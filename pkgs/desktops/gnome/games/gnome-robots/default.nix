@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gnome
-, gtk3
-, wrapGAppsHook3
-, librsvg
-, gsound
-, gettext
-, itstool
-, libxml2
-, libgnome-games-support
-, libgee
-, meson
-, ninja
-, vala
-, python3
-, desktop-file-utils
-, adwaita-icon-theme
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gnome,
+  gtk3,
+  wrapGAppsHook3,
+  librsvg,
+  gsound,
+  gettext,
+  itstool,
+  libxml2,
+  libgnome-games-support,
+  libgee,
+  meson,
+  ninja,
+  vala,
+  python3,
+  desktop-file-utils,
+  adwaita-icon-theme,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-robots/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-robots/${lib.versions.major version}/gnome-robots-${version}.tar.xz";
     sha256 = "04fbykj576dq1h6cycgfhh8wd6yxmlsqykvj188sbwahay42zgvg";
   };
 
