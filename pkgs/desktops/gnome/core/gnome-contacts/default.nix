@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, evolution-data-server-gtk4
-, pkg-config
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, desktop-file-utils
-, gtk4
-, glib
-, libportal-gtk4
-, gnome-online-accounts
-, qrencode
-, wrapGAppsHook4
-, folks
-, libxml2
-, gnome
-, vala
-, meson
-, ninja
-, libadwaita
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  evolution-data-server-gtk4,
+  pkg-config,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  desktop-file-utils,
+  gtk4,
+  glib,
+  libportal-gtk4,
+  gnome-online-accounts,
+  qrencode,
+  wrapGAppsHook4,
+  folks,
+  libxml2,
+  gnome,
+  vala,
+  meson,
+  ninja,
+  libadwaita,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/gnome-contacts-${version}.tar.xz";
     hash = "sha256-cK606DWhx3+bzH5XotzCN22TvbYXVxYYJXRF9WxjcN8=";
   };
 
