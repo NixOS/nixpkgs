@@ -41,6 +41,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-ZjUx80HFOJ9GDXMOYuEKT8yjQoyiyhCWk4Z7xf4uKAc=";
   };
 
+  # TODO: apply patch unconditionally in staging. It's conditional to
+  # save rebuild on staging-next.
+  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    ./darwin-__rdtsc.patch
+  ];
+
   sourceRoot = "x265_${version}/source";
 
   postPatch = ''
