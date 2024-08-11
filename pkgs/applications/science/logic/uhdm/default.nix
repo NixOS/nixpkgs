@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Universal Hardware Data Model";
     homepage = "https://github.com/chipsalliance/UHDM";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ matthuszagh ];
+    maintainers = with lib.maintainers; [ matthuszagh hzeller ];
     platforms = lib.platforms.all;
   };
 })
