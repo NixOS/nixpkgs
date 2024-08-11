@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    maintainers = [ ];
   };
 }
