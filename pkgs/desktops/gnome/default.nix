@@ -28,8 +28,6 @@ in
 
   gnome-bluetooth_1_0 = callPackage ./core/gnome-bluetooth/1.0 { };
 
-  gnome-color-manager = callPackage ./core/gnome-color-manager { };
-
   gnome-control-center = callPackage ./core/gnome-control-center { };
 
   gnome-initial-setup = callPackage ./core/gnome-initial-setup { };
@@ -164,6 +162,7 @@ in
   gnome-boxes = lib.warn "The ‘gnome.gnome-boxes’ was moved to top-level. Please use ‘pkgs.gnome-boxes’ directly." pkgs.gnome-boxes; # Added on 2024-08-11.
   gnome-characters = lib.warn "The ‘gnome.gnome-characters’ was moved to top-level. Please use ‘pkgs.gnome-characters’ directly." pkgs.gnome-characters; # Added on 2024-08-11.
   gnome-clocks = lib.warn "The ‘gnome.gnome-clocks’ was moved to top-level. Please use ‘pkgs.gnome-clocks’ directly." pkgs.gnome-clocks; # Added on 2024-08-11.
+  gnome-color-manager = lib.warn "The ‘gnome.gnome-color-manager’ was moved to top-level. Please use ‘pkgs.gnome-color-manager’ directly." pkgs.gnome-color-manager; # Added on 2024-08-11.
   gnome-common = lib.warn "The ‘gnome.gnome-common’ was moved to top-level. Please use ‘pkgs.gnome-common’ directly." pkgs.gnome-common; # Added on 2024-06-22.
   gnome-calculator = lib.warn "The ‘gnome.gnome-calculator’ was moved to top-level. Please use ‘pkgs.gnome-calculator’ directly." pkgs.gnome-calculator; # Added on 2024-06-22.
   gnome-calendar = lib.warn "The ‘gnome.gnome-calendar’ was moved to top-level. Please use ‘pkgs.gnome-calendar’ directly." pkgs.gnome-calendar; # Added on 2024-06-22.

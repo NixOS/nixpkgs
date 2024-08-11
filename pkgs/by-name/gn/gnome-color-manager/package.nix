@@ -60,7 +60,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-color-manager";
-      attrPath = "gnome.gnome-color-manager";
       freeze = true;
     };
   };

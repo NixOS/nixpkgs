@@ -376,7 +376,7 @@ in
             nixos-background-info
             pkgs.gnome-backgrounds
             gnome-bluetooth
-            gnome-color-manager
+            pkgs.gnome-color-manager
             gnome-control-center
             gnome-shell-extensions
             pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.

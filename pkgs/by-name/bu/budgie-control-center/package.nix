@@ -21,6 +21,7 @@
   glib-networking,
   glibc,
   gnome,
+  gnome-color-manager,
   gnome-desktop,
   gnome-user-share,
   gsettings-desktop-schemas,
@@ -78,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./paths.patch;
       budgie_desktop = budgie-desktop;
-      gcm = gnome.gnome-color-manager;
+      gcm = gnome-color-manager;
       inherit
         cups
         glibc
