@@ -10718,8 +10718,6 @@ self: super: with self; {
 
   praw = callPackage ../development/python-modules/praw { };
 
-  prayer-times-calculator = callPackage ../development/python-modules/prayer-times-calculator { };
-
   prayer-times-calculator-offline = callPackage ../development/python-modules/prayer-times-calculator-offline { };
 
   precis-i18n = callPackage ../development/python-modules/precis-i18n { };
