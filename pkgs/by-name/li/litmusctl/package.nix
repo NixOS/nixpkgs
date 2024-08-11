@@ -29,7 +29,7 @@ buildGoModule rec {
   postInstall = ''
     installShellCompletion --cmd litmusctl \
       --bash <($out/bin/litmusctl completion bash) \
-      --fish <($out/bin/listmusctl completion fish) \
+      --fish <($out/bin/litmusctl completion fish) \
       --zsh <($out/bin/litmusctl completion zsh)
   '';
 

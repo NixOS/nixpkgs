@@ -14,6 +14,7 @@
   environs,
   fastparquet,
   graspologic,
+  json-repair,
   lancedb,
   networkx,
   nltk,
@@ -39,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "0.2.0";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VOcUjfRik4sdk6xbrAe5I7788d2/l4tuUByJajSjo4Q=";
+    hash = "sha256-X4mhnKSaQQo0i10EsdaDtMgKwfBxFvOOrkDrkUM2cQI=";
   };
 
   build-system = [
@@ -57,9 +58,11 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "aiofiles"
     "azure-identity"
+    "json-repair"
     "lancedb"
     "scipy"
     "tenacity"
+    "textual"
     "tiktoken"
   ];
 
@@ -74,6 +77,7 @@ buildPythonPackage rec {
     environs
     fastparquet
     graspologic
+    json-repair
     lancedb
     networkx
     nltk
