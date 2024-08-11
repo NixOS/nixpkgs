@@ -50,10 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "five-or-more";
-      attrPath = "gnome.five-or-more";
-    };
+    updateScript = gnome.updateScript { packageName = "five-or-more"; };
   };
 
   meta = with lib; {

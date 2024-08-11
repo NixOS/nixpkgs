@@ -457,7 +457,7 @@ in
       environment.systemPackages = with pkgs.gnome; utils.removePackagesByName [
         pkgs.aisleriot
         pkgs.atomix
-        five-or-more
+        pkgs.five-or-more
         four-in-a-row
         pkgs.gnome-2048
         gnome-chess
