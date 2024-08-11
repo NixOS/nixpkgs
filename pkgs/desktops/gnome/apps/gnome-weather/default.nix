@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, desktop-file-utils
-, pkg-config
-, gnome
-, adwaita-icon-theme
-, gtk4
-, libadwaita
-, wrapGAppsHook4
-, gjs
-, gobject-introspection
-, libgweather
-, meson
-, ninja
-, geoclue2
-, python3
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  fetchurl,
+  desktop-file-utils,
+  pkg-config,
+  gnome,
+  adwaita-icon-theme,
+  gtk4,
+  libadwaita,
+  wrapGAppsHook4,
+  gjs,
+  gobject-introspection,
+  libgweather,
+  meson,
+  ninja,
+  geoclue2,
+  python3,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-weather/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-weather/${lib.versions.major version}/gnome-weather-${version}.tar.xz";
     hash = "sha256-FTgmcFzPZy4U8v5N/Hgvjom3xMvkqv6VpVMvveej1J0=";
   };
 
