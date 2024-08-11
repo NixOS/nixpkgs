@@ -17977,6 +17977,7 @@ with pkgs;
   electron_28 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_28 then electron-source.electron_28 else electron_28-bin;
   electron_29 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_29 then electron-source.electron_29 else electron_29-bin;
   electron_30 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_30 then electron-source.electron_30 else electron_30-bin;
+  electron_31 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_31 then electron-source.electron_31 else electron_31-bin;
   electron = electron_29;
   electron-bin = electron_29-bin;
 
