@@ -1,50 +1,51 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, wrapGAppsHook3
-, pkg-config
-, gettext
-, itstool
-, libvirt-glib
-, glib
-, gobject-introspection
-, libxml2
-, gtk3
-, libvirt
-, spice-gtk
-, spice-protocol
-, libhandy
-, libsoup_3
-, libosinfo
-, systemd
-, vala
-, libcap
-, yajl
-, gmp
-, gdbm
-, cyrus_sasl
-, gnome
-, adwaita-icon-theme
-, librsvg
-, desktop-file-utils
-, mtools
-, cdrkit
-, libcdio
-, libusb1
-, libarchive
-, acl
-, libgudev
-, libcap_ng
-, numactl
-, libapparmor
-, json-glib
-, webkitgtk_4_1
-, vte
-, glib-networking
-, qemu-utils
-, libportal-gtk3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  wrapGAppsHook3,
+  pkg-config,
+  gettext,
+  itstool,
+  libvirt-glib,
+  glib,
+  gobject-introspection,
+  libxml2,
+  gtk3,
+  libvirt,
+  spice-gtk,
+  spice-protocol,
+  libhandy,
+  libsoup_3,
+  libosinfo,
+  systemd,
+  vala,
+  libcap,
+  yajl,
+  gmp,
+  gdbm,
+  cyrus_sasl,
+  gnome,
+  adwaita-icon-theme,
+  librsvg,
+  desktop-file-utils,
+  mtools,
+  cdrkit,
+  libcdio,
+  libusb1,
+  libarchive,
+  acl,
+  libgudev,
+  libcap_ng,
+  numactl,
+  libapparmor,
+  json-glib,
+  webkitgtk_4_1,
+  vte,
+  glib-networking,
+  qemu-utils,
+  libportal-gtk3,
 }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
   version = "46.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-boxes/${lib.versions.major version}/gnome-boxes-${version}.tar.xz";
     hash = "sha256-kAwXf2diZANwpmNM+efTzYIH5Jg2eopmemtzGwQRYDY=";
   };
 
@@ -80,9 +81,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Required for USB redirection PolicyKit rules file
-  propagatedUserEnvPkgs = [
-    spice-gtk
-  ];
+  propagatedUserEnvPkgs = [ spice-gtk ];
 
   buildInputs = [
     acl
@@ -118,13 +117,20 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio qemu-utils ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${
+      lib.makeBinPath [
+        mtools
+        cdrkit
+        libcdio
+        qemu-utils
+      ]
+    }")
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-boxes";
+      attrPath = "gnome.gnome-boxes";
     };
   };
 
