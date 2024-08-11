@@ -116,14 +116,14 @@ lib.makeExtensible (final: {
 
             # Build /bin and copy across closure
             mkdir -p bin ./${builtins.storeDir}
-            for f in $(cat $layerClosure) ; do
-              cp -ar $f ./$f
+            for f in $(cat "$layerClosure") ; do
+              cp -ar "$f" "./$f"
             done
 
             for c in ${toString contents} ; do
-              for f in $c/bin/* ; do
-                if [ ! -e bin/$(basename $f) ] ; then
-                  ln -s $f bin/
+              for f in "$c"/bin/* ; do
+                if [ ! -e "bin/$(basename "$f")" ] ; then
+                  ln -s "$f" bin/
                 fi
               done
             done
@@ -143,7 +143,7 @@ lib.makeExtensible (final: {
             mkdir -p /var/lib/${projectName}/mnt/session
             echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
             echo > /etc/resolv.conf
-            TMPDIR=$(pwd -P) ${projectName} build $out ./img
+            TMPDIR="$(pwd -P)" ${projectName} build "$out" ./img
           ''
       );
 
