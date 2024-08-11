@@ -8,6 +8,7 @@
   gnused,
   autoPatchelfHook,
   wrapGAppsHook3,
+  gtk3,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -46,6 +47,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       autoPatchelfHook
     ]
     ++ lib.optionals stdenvNoCC.isDarwin [ undmg ];
+
+  buildInputs = [ gtk3 ];
 
   dontConfigure = true;
   dontBuild = true;
