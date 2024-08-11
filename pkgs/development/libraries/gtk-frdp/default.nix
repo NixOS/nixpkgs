@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-frdp";
-  version = "3.37.1-unstable-2024-03-01";
+  version = "0-unstable-2024-03-01";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = unstableGitUpdater {
       tagPrefix = "v";
+      hardcodeZeroVersion = true;
     };
   };
 
