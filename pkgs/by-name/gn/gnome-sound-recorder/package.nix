@@ -62,10 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-sound-recorder";
-      attrPath = "gnome.gnome-sound-recorder";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-sound-recorder"; };
   };
 
   meta = with lib; {
