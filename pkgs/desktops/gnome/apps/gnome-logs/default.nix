@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gnome
-, glib
-, gtk4
-, desktop-file-utils
-, wrapGAppsHook4
-, gettext
-, itstool
-, libadwaita
-, libxml2
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, systemd
-, gsettings-desktop-schemas
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  glib,
+  gtk4,
+  desktop-file-utils,
+  wrapGAppsHook4,
+  gettext,
+  itstool,
+  libadwaita,
+  libxml2,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  systemd,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "45.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-logs/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-logs/${lib.versions.major version}/gnome-logs-${version}.tar.xz";
     hash = "sha256-sooG6lyYvRfyhztQfwhbDKDemBATZhH08u6wmGFOzlI=";
   };
 
@@ -53,9 +54,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
   ];
 
-  mesonFlags = [
-    "-Dman=true"
-  ];
+  mesonFlags = [ "-Dman=true" ];
 
   doCheck = true;
 
