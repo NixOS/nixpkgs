@@ -1,0 +1,13 @@
+diff --git a/src/command/schema.rs b/src/command/schema.rs
+index 96a76bdd..9d1ff146 100644
+--- a/src/command/schema.rs
++++ b/src/command/schema.rs
+@@ -529,7 +529,7 @@ fn create_stub(
+     so_rustc_invocation.stderr(Stdio::inherit());
+ 
+     if let Some(rustc_flags_str) = std::env::var("RUSTFLAGS").ok() {
+-        let rustc_flags = rustc_flags_str.split(' ').collect::<Vec<_>>();
++        let rustc_flags = rustc_flags_str.split(' ').filter(|&x| !x.is_empty()).collect::<Vec<_>>();
+         so_rustc_invocation.args(rustc_flags);
+     }
+ 

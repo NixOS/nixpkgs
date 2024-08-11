@@ -60,11 +60,13 @@ in
     cargoHash = "sha256-syZ3cQq8qDHBLvqmNDGoxeK6zXHJ47Jwkw3uhaXNCzI=";
   };
 
-  cargo-pgrx_0_11_2 = generic {
+  cargo-pgrx_0_11_2 = (generic {
     version = "0.11.2";
     hash = "sha256-8NlpMDFaltTIA8G4JioYm8LaPJ2RGKH5o6sd6lBHmmM=";
     cargoHash = "sha256-qTb3JV3u42EilaK2jP9oa5D09mkuHyRbGGRs9Rg4TzI=";
-  };
+  }).overrideAttrs (prev: {
+    patches = prev.patches ++ [ ./fix_empty_rustc_args.patch ];
+  });
 
   cargo-pgrx_0_11_3 = generic {
     version = "0.11.3";
