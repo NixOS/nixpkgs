@@ -89,8 +89,8 @@ in
 
   hxcpp = buildHaxeLib rec {
     libname = "hxcpp";
-    version = "4.2.1";
-    sha256 = "10ijb8wiflh46bg30gihg7fyxpcf26gibifmq5ylx0fam4r51lhp";
+    version = "4.3.2";
+    sha256 = "sha256-mm0JObjNgi9JSLRv7IUAZeMUFV2f8+7OG8FhRWtNlqQ=";
     postFixup = ''
       for f in $out/lib/haxe/${withCommas libname}/${withCommas version}/{,project/libs/nekoapi/}bin/Linux{,64}/*; do
         chmod +w "$f"
@@ -100,10 +100,16 @@ in
     '';
     setupHook = writeText "setup-hook.sh" ''
       if [ "$\{enableParallelBuilding-}" ]; then
-        export HXCPP_COMPILE_THREADS=$NIX_BUILD_CORES
+        HXCPP_COMPILE_THREADS=$NIX_BUILD_CORES
+        # This may called before NIX_BUILD_CORES is initialized in pkgs/stdenv/generic/setup.sh
+        if ((HXCPP_COMPILE_THREADS <= 0)); then
+          guess=$(nproc 2>/dev/null || true)
+          ((HXCPP_COMPILE_THREADS = guess <= 0 ? 1 : guess))
+        fi
       else
-        export HXCPP_COMPILE_THREADS=1
+        HXCPP_COMPILE_THREADS=1
       fi
+      export HXCPP_COMPILE_THREADS
     '';
     meta.description = "Runtime support library for the Haxe C++ backend";
   };
