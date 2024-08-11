@@ -10,7 +10,7 @@
 }:
 let
   pname = "beeper";
-  version = "3.104.7";
+  version = "3.108.3";
   name = "${pname}-${version}";
   src = fetchurl {
     url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.104.7-build-2405024h1b4qoap-x86_64.AppImage";
