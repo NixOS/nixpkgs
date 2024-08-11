@@ -1,30 +1,31 @@
-{ stdenv
-, lib
-, itstool
-, fetchurl
-, gdk-pixbuf
-, telepathy-glib
-, gjs
-, meson
-, ninja
-, gettext
-, telepathy-idle
-, libxml2
-, desktop-file-utils
-, pkg-config
-, gtk4
-, tracker
-, libadwaita
-, gtk3
-, glib
-, libsecret
-, libsoup_3
-, webkitgtk_4_1
-, gobject-introspection
-, gnome
-, wrapGAppsHook4
-, gspell
-, gsettings-desktop-schemas
+{
+  stdenv,
+  lib,
+  itstool,
+  fetchurl,
+  gdk-pixbuf,
+  telepathy-glib,
+  gjs,
+  meson,
+  ninja,
+  gettext,
+  telepathy-idle,
+  libxml2,
+  desktop-file-utils,
+  pkg-config,
+  gtk4,
+  tracker,
+  libadwaita,
+  gtk3,
+  glib,
+  libsecret,
+  libsoup_3,
+  webkitgtk_4_1,
+  gobject-introspection,
+  gnome,
+  wrapGAppsHook4,
+  gspell,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/polari/${lib.versions.major version}/polari-${version}.tar.xz";
     hash = "sha256-0rFwnjeRiSlPU9TvFfA/i8u76MUvD0FeYvfV8Aw2CjE=";
   };
 
@@ -43,9 +44,7 @@ stdenv.mkDerivation rec {
     ./make-thumbnailer-wrappable.patch
   ];
 
-  propagatedUserEnvPkgs = [
-    telepathy-idle
-  ];
+  propagatedUserEnvPkgs = [ telepathy-idle ];
 
   nativeBuildInputs = [
     meson
@@ -81,8 +80,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "polari";
+      attrPath = "gnome.polari";
     };
   };
 
