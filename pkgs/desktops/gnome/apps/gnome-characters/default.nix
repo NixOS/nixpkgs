@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, gnome
-, glib
-, gtk4
-, pango
-, wrapGAppsHook4
-, desktop-file-utils
-, gobject-introspection
-, gjs
-, libunistring
-, libadwaita
-, gsettings-desktop-schemas
-, gnome-desktop
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  gnome,
+  glib,
+  gtk4,
+  pango,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  gobject-introspection,
+  gjs,
+  libunistring,
+  libadwaita,
+  gsettings-desktop-schemas,
+  gnome-desktop,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-characters/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-characters/${lib.versions.major version}/gnome-characters-${version}.tar.xz";
     hash = "sha256-pOjixRC/SCBLmZSk581TeEQkbnTIqYb52+BOIj9dgnw=";
   };
 
@@ -37,7 +38,6 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     wrapGAppsHook4
   ];
-
 
   buildInputs = [
     gjs
@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-characters";
+      attrPath = "gnome.gnome-characters";
     };
   };
 
