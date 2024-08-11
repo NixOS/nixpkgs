@@ -17965,7 +17965,8 @@ with pkgs;
     electron_27-bin
     electron_28-bin
     electron_29-bin
-    electron_30-bin;
+    electron_30-bin
+    electron_31-bin;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
     electron-chromedriver_29
