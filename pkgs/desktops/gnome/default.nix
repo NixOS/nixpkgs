@@ -80,8 +80,6 @@ in
 
 #### Games
 
-  gnome-taquin = callPackage ./games/gnome-taquin { };
-
   gnome-tetravex = callPackage ./games/gnome-tetravex { };
 
   hitori = callPackage ./games/hitori { };
@@ -168,6 +166,7 @@ in
   gnome-sound-recorder = lib.warn "The ‘gnome.gnome-sound-recorder’ was moved to top-level. Please use ‘pkgs.gnome-sound-recorder’ directly." pkgs.gnome-sound-recorder; # Added on 2024-08-11.
   gnome-sudoku = lib.warn "The ‘gnome.gnome-sudoku’ was moved to top-level. Please use ‘pkgs.gnome-sudoku’ directly." pkgs.gnome-sudoku; # Added on 2024-08-11.
   gnome-system-monitor = lib.warn "The ‘gnome.gnome-system-monitor’ was moved to top-level. Please use ‘pkgs.gnome-system-monitor’ directly." pkgs.gnome-system-monitor; # Added on 2024-06-22.
+  gnome-taquin = lib.warn "The ‘gnome.gnome-taquin’ was moved to top-level. Please use ‘pkgs.gnome-taquin’ directly." pkgs.gnome-taquin; # Added on 2024-08-11.
   gnome-terminal = lib.warn "The ‘gnome.gnome-terminal’ was moved to top-level. Please use ‘pkgs.gnome-terminal’ directly." pkgs.gnome-terminal; # Added on 2024-06-13.
   gnome-themes-extra = lib.warn "The ‘gnome.gnome-themes-extra’ was moved to top-level. Please use ‘pkgs.gnome-themes-extra’ directly." pkgs.gnome-themes-extra; # Added on 2024-06-22.
   gnome-tweaks = lib.warn "The ‘gnome.gnome-tweaks’ was moved to top-level. Please use ‘pkgs.gnome-tweaks’ directly." pkgs.gnome-tweaks; # Added on 2024-06-22.

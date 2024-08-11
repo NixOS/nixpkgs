@@ -467,7 +467,7 @@ in
         pkgs.gnome-nibbles
         pkgs.gnome-robots
         pkgs.gnome-sudoku
-        gnome-taquin
+        pkgs.gnome-taquin
         gnome-tetravex
         hitori
         iagno

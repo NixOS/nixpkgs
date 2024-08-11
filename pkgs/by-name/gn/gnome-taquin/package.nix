@@ -62,10 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-taquin";
-      attrPath = "gnome.gnome-taquin";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-taquin"; };
   };
 
   meta = with lib; {
