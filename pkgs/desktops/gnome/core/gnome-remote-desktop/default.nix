@@ -1,31 +1,32 @@
-{ stdenv
-, lib
-, fetchurl
-, cairo
-, meson
-, ninja
-, pkg-config
-, python3
-, asciidoc
-, wrapGAppsHook3
-, glib
-, libei
-, libepoxy
-, libdrm
-, nv-codec-headers-11
-, pipewire
-, systemd
-, libsecret
-, libnotify
-, libopus
-, libxkbcommon
-, gdk-pixbuf
-, freerdp3
-, fdk_aac
-, tpm2-tss
-, fuse3
-, gnome
-, polkit
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cairo,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  asciidoc,
+  wrapGAppsHook3,
+  glib,
+  libei,
+  libepoxy,
+  libdrm,
+  nv-codec-headers-11,
+  pipewire,
+  systemd,
+  libsecret,
+  libnotify,
+  libopus,
+  libxkbcommon,
+  gdk-pixbuf,
+  freerdp3,
+  fdk_aac,
+  tpm2-tss,
+  fuse3,
+  gnome,
+  polkit,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
   version = "46.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-remote-desktop/${lib.versions.major version}/gnome-remote-desktop-${version}.tar.xz";
     hash = "sha256-KLwH6W2qFJy45NCldN8KLObsbOZHutyGFUzmEoIsxR4=";
   };
 
@@ -80,8 +81,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-remote-desktop";
+      attrPath = "gnome.gnome-remote-desktop";
     };
   };
 
