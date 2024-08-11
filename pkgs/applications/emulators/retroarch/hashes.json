@@ -641,11 +641,11 @@
         "src": {
             "owner": "libretro",
             "repo": "picodrive",
-            "rev": "d6f625a1251c78caf6f2dc81c1ffdb724587bb24",
-            "hash": "sha256-3RjPYXVfv1ts8Khl/9hkWMdYalNoQmHb+S8xgNfstpo=",
+            "rev": "479f120b928153815a4543b7c4104c0aa355a660",
+            "hash": "sha256-FhixFmIPerXWLNzMDMRka5xWwN/pt0tKqvSbZpmLyPI=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-06-30"
+        "version": "unstable-2024-08-09"
     },
     "play": {
         "fetcher": "fetchFromGitHub",
