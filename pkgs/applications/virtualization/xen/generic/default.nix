@@ -329,7 +329,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.lists.optional (lib.strings.versionOlder version "4.19") systemdMinimal;
 
   configureFlags =
-    [ "--enable-systemd" ]
+    [
+      "--enable-systemd"
+      "--disable-qemu-traditional"
+    ]
     ++ lib.lists.optional (!withInternalQEMU) "--with-system-qemu"
 
     ++ lib.lists.optional withSeaBIOS "--with-system-seabios=${seabios}/share/seabios"
