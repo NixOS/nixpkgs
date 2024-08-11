@@ -37,12 +37,6 @@ stdenv.mkDerivation rec {
       url = "https://github.com/ninjamuffin99/Funkin/pull/941/commits/996c9b6d89bf4447b1f39390bb6e8fb7d6a8c37c.patch";
       sha256 = "1m5b47y2pbdwdk5dsvgivq8705cz95n8imdckyg3r9jazhkrvh6k";
     })
-    # Fix link opening
-    (fetchpatch {
-      name = "Makes-the-donation-button-actually-work-on-Linux.patch";
-      url = "https://github.com/ninjamuffin99/Funkin/pull/172.patch";
-      sha256 = "1491fw52j5am5bg02v05y82njbdj1aqqdidxz36i4g6kcdy2x2iz";
-    })
   ];
 
   postPatch = ''
