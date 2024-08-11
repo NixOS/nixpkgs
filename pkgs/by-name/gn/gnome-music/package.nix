@@ -98,10 +98,7 @@ python3.pkgs.buildPythonApplication rec {
   strictDeps = false;
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-music";
-      attrPath = "gnome.gnome-music";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-music"; };
   };
 
   meta = with lib; {

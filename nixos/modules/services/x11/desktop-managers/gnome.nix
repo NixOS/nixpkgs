@@ -410,7 +410,7 @@ in
             pkgs.gnome-font-viewer
             pkgs.gnome-logs
             pkgs.gnome-maps
-            gnome-music
+            pkgs.gnome-music
             pkgs.gnome-system-monitor
             gnome-weather
             pkgs.loupe
