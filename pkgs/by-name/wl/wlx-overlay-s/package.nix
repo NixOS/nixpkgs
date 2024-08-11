@@ -22,13 +22,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wlx-overlay-s";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "wlx-overlay-s";
     rev = "v${version}";
-    hash = "sha256-zdm2ADBIsW0QGgxnuDkp2nQjWtMxe3pT9LXhw6juQ34=";
+    hash = "sha256-+pWhtaYOzh7LPSCQeUTlU+/IxtcQTqRci9X7xEUV18U=";
   };
 
   cargoLock = {
