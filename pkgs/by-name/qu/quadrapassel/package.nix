@@ -58,10 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "quadrapassel";
-      attrPath = "gnome.quadrapassel";
-    };
+    updateScript = gnome.updateScript { packageName = "quadrapassel"; };
   };
 
   meta = with lib; {

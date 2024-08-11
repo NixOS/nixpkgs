@@ -454,7 +454,7 @@ in
     })
 
     (lib.mkIf serviceCfg.games.enable {
-      environment.systemPackages = with pkgs.gnome; utils.removePackagesByName [
+      environment.systemPackages = utils.removePackagesByName [
         pkgs.aisleriot
         pkgs.atomix
         pkgs.five-or-more
@@ -472,7 +472,7 @@ in
         pkgs.hitori
         pkgs.iagno
         pkgs.lightsoff
-        quadrapassel
+        pkgs.quadrapassel
         pkgs.swell-foop
         pkgs.tali
       ] config.environment.gnome.excludePackages;
