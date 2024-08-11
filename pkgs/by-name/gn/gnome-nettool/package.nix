@@ -73,10 +73,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-nettool";
-      attrPath = "gnome.gnome-nettool";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-nettool"; };
   };
 
   meta = with lib; {
