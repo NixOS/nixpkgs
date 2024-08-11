@@ -21,6 +21,7 @@
 , roundedMaxWindow ? false # default: false
 , nordColor ? false # default = false
 , darkerColor ? false # default = false
+, montereyStyle ? false # default = false
 }:
 
 let
@@ -72,6 +73,9 @@ stdenv.mkDerivation rec {
 
     # Provides a dummy home directory
     substituteInPlace shell/lib-core.sh --replace 'MY_HOME=$(getent passwd "''${MY_USERNAME}" | cut -d: -f6)' 'MY_HOME=/tmp'
+
+    # Place libadwaita files in a directory to be able to link them to ~/.config/gtk-4.0 correctly
+    substituteInPlace shell/lib-install.sh --replace "\''${HOME}/.config/gtk-4.0" "$out/gtk4"
   '';
 
   dontBuild = true;
@@ -82,6 +86,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/themes
 
     ./install.sh  \
+      --libadwaita \
       ${toString (map (x: "--alt " + x) altVariants)} \
       ${toString (map (x: "--color " + x) colorVariants)} \
       ${toString (map (x: "--opacity " + x) opacityVariants)} \
@@ -94,6 +99,7 @@ stdenv.mkDerivation rec {
       ${lib.optionalString (roundedMaxWindow == true) "--roundedmaxwindow"} \
       ${lib.optionalString (nordColor == true) "--nordcolor"} \
       ${lib.optionalString (darkerColor == true) "--darkercolor"} \
+      ${lib.optionalString (montereyStyle == true) "--monterey"} \
       --dest $out/share/themes
 
     jdupes --quiet --link-soft --recurse $out/share
