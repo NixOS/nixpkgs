@@ -99,11 +99,11 @@ lib.makeExtensible (final: {
           }
           ''
             rmdir "$out"
-            mkdir disk
+            mkdir workspace
             mkfs -t ext3 -b 4096 /dev/${vmTools.hd}
-            mount /dev/${vmTools.hd} disk
-            mkdir -p disk/img
-            cd disk/img
+            mount /dev/${vmTools.hd} workspace
+            mkdir -p workspace/img
+            cd workspace/img
             mkdir proc sys dev
 
             # Run root script
