@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, gnome
-, adwaita-icon-theme
-, gtk3
-, wrapGAppsHook3
-, librsvg
-, gsound
-, gettext
-, itstool
-, libxml2
-, meson
-, ninja
-, vala
-, python3
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  gnome,
+  adwaita-icon-theme,
+  gtk3,
+  wrapGAppsHook3,
+  librsvg,
+  gsound,
+  gettext,
+  itstool,
+  libxml2,
+  meson,
+  ninja,
+  vala,
+  python3,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-taquin/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-taquin/${lib.versions.majorMinor version}/gnome-taquin-${version}.tar.xz";
     sha256 = "0kw131q0ad0rbsp6qifjc8fjlhvjxyihil8a76kj8ya9mn7kvnwn";
   };
 
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     vala
     desktop-file-utils
   ];
+
   buildInputs = [
     gtk3
     librsvg
