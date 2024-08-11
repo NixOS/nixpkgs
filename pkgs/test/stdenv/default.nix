@@ -136,18 +136,21 @@ let
       {
         inherit name;
 
+        # NOTE: Testing with "&" as separator is intentional, because unquoted
+        # "&" has a special meaning in the "${var//pattern/replacement}" syntax.
+        # Cf. https://github.com/NixOS/nixpkgs/pull/318614#discussion_r1706191919
         passAsFile = [ "buildCommand" ];
         buildCommand = ''
           declare -A associativeArray=(["X"]="Y")
           [[ $(concatStringsSep ";" associativeArray 2>&1) =~ "trying to use" ]] || (echo "concatStringsSep did not throw concatenating associativeArray" && false)
 
           string="lorem ipsum dolor sit amet"
-          stringWithSep="$(concatStringsSep ";" string)"
-          [[ "$stringWithSep" == "lorem;ipsum;dolor;sit;amet" ]] || (echo "'\$stringWithSep' was not 'lorem;ipsum;dolor;sit;amet'" && false)
+          stringWithSep="$(concatStringsSep "&" string)"
+          [[ "$stringWithSep" == "lorem&ipsum&dolor&sit&amet" ]] || (echo "'\$stringWithSep' was not 'lorem&ipsum&dolor&sit&amet'" && false)
 
           array=("lorem ipsum" "dolor" "sit amet")
-          arrayWithSep="$(concatStringsSep ";" array)"
-          [[ "$arrayWithSep" == "lorem ipsum;dolor;sit amet" ]] || (echo "'\$arrayWithSep' was not 'lorem ipsum;dolor;sit amet'" && false)
+          arrayWithSep="$(concatStringsSep "&" array)"
+          [[ "$arrayWithSep" == "lorem ipsum&dolor&sit amet" ]] || (echo "'\$arrayWithSep' was not 'lorem ipsum&dolor&sit amet'" && false)
 
           touch $out
         '';
