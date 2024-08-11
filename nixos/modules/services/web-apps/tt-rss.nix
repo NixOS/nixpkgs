@@ -18,11 +18,19 @@ let
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
 
   tt-rss-config = let
-    password =
+    dbPassword =
       if (cfg.database.password != null) then
         "'${(escape ["'" "\\"] cfg.database.password)}'"
       else if (cfg.database.passwordFile != null) then
         "file_get_contents('${cfg.database.passwordFile}')"
+      else
+        null
+      ;
+    smtpPassword =
+      if (cfg.email.password != null) then
+        "'${(escape ["'" "\\"] cfg.email.password)}'"
+      else if (cfg.email.passwordFile != null) then
+        "file_get_contents('${cfg.email.passwordFile}')"
       else
         null
       ;
@@ -42,7 +50,7 @@ let
       putenv('TTRSS_DB_HOST=${optionalString (cfg.database.host != null) cfg.database.host}');
       putenv('TTRSS_DB_USER=${cfg.database.user}');
       putenv('TTRSS_DB_NAME=${cfg.database.name}');
-      putenv('TTRSS_DB_PASS=' ${optionalString (password != null) ". ${password}"});
+      putenv('TTRSS_DB_PASS=' ${optionalString (dbPassword != null) ". ${dbPassword}"});
       putenv('TTRSS_DB_PORT=${toString dbPort}');
 
       putenv('TTRSS_AUTH_AUTO_CREATE=${boolToString cfg.auth.autoCreate}');
@@ -89,7 +97,7 @@ let
 
       putenv('TTRSS_SMTP_SERVER=${cfg.email.server}');
       putenv('TTRSS_SMTP_LOGIN=${cfg.email.login}');
-      putenv('TTRSS_SMTP_PASSWORD=${escape ["'" "\\"] cfg.email.password}');
+      putenv('TTRSS_SMTP_PASSWORD=${optionalString (smtpPassword != null) ". ${smtpPassword}"}');
       putenv('TTRSS_SMTP_SECURE=${cfg.email.security}');
 
       putenv('TTRSS_SMTP_FROM_NAME=${escape ["'" "\\"] cfg.email.fromName}');
@@ -336,8 +344,16 @@ let
         };
 
         password = mkOption {
-          type = types.str;
-          default = "";
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            SMTP authentication password used when sending outgoing mail.
+          '';
+        };
+
+        passwordFile = mkOption {
+          type = types.nullOr types.str;
+          default = null;
           description = ''
             SMTP authentication password used when sending outgoing mail.
           '';
@@ -538,7 +554,11 @@ let
     assertions = [
       {
         assertion = cfg.database.password != null -> cfg.database.passwordFile == null;
-        message = "Cannot set both password and passwordFile";
+        message = "Cannot set both database password and passwordFile";
+      }
+      {
+        assertion = cfg.email.password == null || cfg.email.passwordFile == null;
+        message = "Cannot set both email password and passwordFile";
       }
       {
         assertion = cfg.database.createLocally -> cfg.database.name == cfg.user && cfg.database.user == cfg.user;
