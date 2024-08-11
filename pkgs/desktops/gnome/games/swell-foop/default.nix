@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, gtk4
-, libgee
-, libgnome-games-support_2_0
-, pango
-, gnome
-, desktop-file-utils
-, gettext
-, itstool
-, libxml2
-, wrapGAppsHook4
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  glib,
+  gtk4,
+  libgee,
+  libgnome-games-support_2_0,
+  pango,
+  gnome,
+  desktop-file-utils,
+  gettext,
+  itstool,
+  libxml2,
+  wrapGAppsHook4,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/swell-foop/${lib.versions.major version}/swell-foop-${version}.tar.xz";
     hash = "sha256-BvireAfXHOyUi4aDcfR/ut7vzLXDV+E9HvPISBiR/KM=";
   };
 
@@ -51,8 +52,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "swell-foop";
+      attrPath = "gnome.swell-foop";
     };
   };
 
