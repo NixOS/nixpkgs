@@ -116,10 +116,6 @@ let
           inherit (pkg.qemu) hash;
         };
         patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.qemu) pkg.qemu.patches;
-        postPatch = ''
-          substituteInPlace scripts/tracetool.py \
-            --replace-fail "/usr/bin/env python" "${python311Packages.python}/bin/python"
-        '';
       };
     }
     // lib.attrsets.optionalAttrs withInternalSeaBIOS {
@@ -143,11 +139,6 @@ let
           inherit (pkg.ovmf) hash;
         };
         patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.ovmf) pkg.ovmf.patches;
-        postPatch = ''
-          substituteInPlace \
-            OvmfPkg/build.sh BaseTools/BinWrappers/PosixLike/{AmlToC,BrotliCompress,build,GenFfs,GenFv,GenFw,GenSec,LzmaCompress,TianoCompress,Trim,VfrCompile} \
-          --replace-fail "/usr/bin/env bash" ${stdenv.shell}
-        '';
       };
     }
     // lib.attrsets.optionalAttrs withInternalIPXE {
@@ -497,18 +488,13 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       )}
 
-           ${withTools "postPatch" (name: source: source.postPatch)}
 
-           ${pkg.xen.postPatch or ""}
+    ''
+    # Patch shebangs for QEMU and OVMF build scripts.
+    + ''
+      patchShebangs --build tools/qemu-xen/scripts/tracetool.py
+      patchShebangs --build tools/firmware/ovmf-dir-remote/OvmfPkg/build.sh tools/firmware/ovmf-dir-remote/BaseTools/BinWrappers/PosixLike/{AmlToC,BrotliCompress,build,GenFfs,GenFv,GenFw,GenSec,LzmaCompress,TianoCompress,Trim,VfrCompile}
     '';
-
-  preBuild = lib.lists.optionals (lib.attrsets.hasAttrByPath [ "preBuild" ] pkg.xen) pkg.xen.preBuild;
-
-  postBuild = ''
-    ${withTools "buildPhase" (name: source: source.buildPhase)}
-
-    ${pkg.xen.postBuild or ""}
-  '';
 
   installPhase =
     let
@@ -555,12 +541,6 @@ stdenv.mkDerivation (finalAttrs: {
       for i in $out/etc/xen/scripts/!(*.sh); do
         sed --in-place "2s@^@export PATH=$out/bin:${scriptEnvPath}\n@" $i
       done
-    ''
-
-    + ''
-      ${withTools "installPhase" (name: source: source.installPhase)}
-
-      ${pkg.xen.installPhase or ""}
     '';
 
   postFixup =
