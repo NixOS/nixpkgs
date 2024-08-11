@@ -7,7 +7,7 @@ let
   };
 
   gypPatches = callPackage ./gyp-patches.nix { } ++ [
-    ./gyp-patches-pre-v22-import-sys.patch
+    ./patches/gyp-patches-pre-v22-import-sys.patch
   ];
 in
 buildNodejs {
@@ -15,12 +15,12 @@ buildNodejs {
   version = "20.16.0";
   sha256 = "cd6c8fc3ff2606aadbc7155db6f7e77247d2d0065ac18e2f7f049095584b8b46";
   patches = [
-    ./configure-emulator.patch
-    ./configure-armv6-vfpv2.patch
-    ./disable-darwin-v8-system-instrumentation-node19.patch
-    ./bypass-darwin-xcrun-node16.patch
-    ./node-npm-build-npm-package-logic.patch
-    ./use-correct-env-in-tests.patch
+    ./patches/configure-emulator.patch
+    ./patches/configure-armv6-vfpv2.patch
+    ./patches/disable-darwin-v8-system-instrumentation-node19.patch
+    ./patches/bypass-darwin-xcrun-node16.patch
+    ./patches/node-npm-build-npm-package-logic.patch
+    ./patches/use-correct-env-in-tests.patch
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/87598d4b63ef2c827a2bebdfa0f1540c35718519.patch";
       hash = "sha256-efRJ2nN9QXaT91SQTB+ESkHvXtBq30Cb9BEDEZU9M/8=";

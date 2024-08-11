@@ -18,7 +18,7 @@ let
   };
 
   gypPatches = callPackage ./gyp-patches.nix { } ++ [
-    ./gyp-patches-pre-v22-import-sys.patch
+    ./patches/gyp-patches-pre-v22-import-sys.patch
   ];
 in
 buildNodejs {
@@ -26,15 +26,15 @@ buildNodejs {
   version = "18.20.4";
   sha256 = "sha256-p2x+oblq62ljoViAYmDICUtiRNZKaWUp0CBUe5qVyio=";
   patches = [
-    ./configure-emulator-node18.patch
-    ./configure-armv6-vfpv2.patch
-    ./disable-darwin-v8-system-instrumentation.patch
-    ./bypass-darwin-xcrun-node16.patch
-    ./revert-arm64-pointer-auth.patch
-    ./node-npm-build-npm-package-logic.patch
-    ./trap-handler-backport.patch
-    ./use-correct-env-in-tests.patch
-    ./v18-openssl-3.0.14.patch
+    ./patches/configure-emulator-node18.patch
+    ./patches/configure-armv6-vfpv2.patch
+    ./patches/disable-darwin-v8-system-instrumentation.patch
+    ./patches/bypass-darwin-xcrun-node16.patch
+    ./patches/revert-arm64-pointer-auth.patch
+    ./patches/node-npm-build-npm-package-logic.patch
+    ./patches/trap-handler-backport.patch
+    ./patches/use-correct-env-in-tests.patch
+    ./patches/v18-openssl-3.0.14.patch
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/534c122de166cb6464b489f3e6a9a544ceb1c913.patch";
       hash = "sha256-4q4LFsq4yU1xRwNsM1sJoNVphJCnxaVe2IyL6AeHJ/I=";
@@ -42,7 +42,7 @@ buildNodejs {
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/87598d4b63ef2c827a2bebdfa0f1540c35718519.patch";
       hash = "sha256-JJi8z9aaWnu/y3nZGOSUfeNzNSCYzD9dzoHXaGkeaEA=";
-      includes = ["test/common/assertSnapshot.js"];
+      includes = [ "test/common/assertSnapshot.js" ];
     })
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/d0a6b605fba6cd69a82e6f12ff0363eef8fe1ee9.patch";
