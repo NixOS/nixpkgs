@@ -316,7 +316,6 @@ stdenv.mkDerivation (finalAttrs: {
       # oxenstored
       ocamlPackages.findlib
       ocamlPackages.ocaml
-      systemdMinimal
 
       # Python Fixes
       python311Packages.wrapPython
@@ -326,7 +325,8 @@ stdenv.mkDerivation (finalAttrs: {
       pixman
     ]
     ++ lib.lists.optional withInternalOVMF nasm
-    ++ lib.lists.optional withFlask checkpolicy;
+    ++ lib.lists.optional withFlask checkpolicy
+    ++ lib.lists.optional (lib.strings.versionOlder version "4.19") systemdMinimal;
 
   configureFlags =
     [ "--enable-systemd" ]
