@@ -229,6 +229,7 @@ lib.mapAttrs mkLicense ({
   };
 
   bsl11 = {
+    spdxId = "BUSL-1.1";
     fullName = "Business Source License 1.1";
     url = "https://mariadb.com/bsl11";
     free = false;
