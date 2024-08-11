@@ -22,6 +22,7 @@ let
     version,
     sha256 ? null,
     src ? null,
+    linc_lib ? null,
     meta,
     ...
   } @ attrs:
@@ -37,17 +38,19 @@ let
         stripRoot = false;
       });
 
+      postPatch = (attrs.postPatch or "") + ''
+        ${lib.optionalString (linc_lib != null) ''
+          # Workaround to permit cache to work correctly with linc
+          # When there are dependancies in multiple directories, it create a random temporary folder with them merged. This usually isn’t a problem,
+          # but here, -I<include_path>, a compiler arguments that’s used in the cache hash, change at every compilation
+          # Also, can’t modify Linc.hx directly, as they are supposed to be identical (I think?)
+          substituteInPlace linc/linc_${linc_lib}.xml \
+            --replace $\{LINC_${lib.toUpper linc_lib}_PATH} $out/lib/haxe/${withCommas libname}/${withCommas version}/
+        ''}
+      '';
+
       installPhase = attrs.installPhase or ''
-        runHook preInstall
-        (
-          if [ $(ls $src | wc -l) == 1 ]; then
-            cd $src/* || cd $src
-          else
-            cd $src
-          fi
-          ${installLibHaxe { inherit libname version; }}
-        )
-        runHook postInstall
+        ${installLibHaxe { inherit libname version; }}
       '';
 
       meta = {
@@ -87,16 +90,26 @@ in
     meta.description = "SDL/GL support for Haxe/HL";
   };
 
+  # Cache should work properly if used outside nix build. For development on nix, you can:
+  # add ``export HXCPP_COMPILE_CACHE=/tmp/hxcpp-cache`` and ``export HXCPP_CACHE_MB=8000`` in the setupHook and
+  # running sudo mkdir /tmp/hxcpp-cache
+  # running sudo chmod a+xrw /tmp/hxcpp-cache/ (make sure no untrusted code is running at user-level to avoid risk)
+  # call nix with the ``--option extra-sandbox-paths /tmp/hxcpp-cache`` flag
+
   hxcpp = buildHaxeLib rec {
     libname = "hxcpp";
     version = "4.3.2";
-    sha256 = "sha256-mm0JObjNgi9JSLRv7IUAZeMUFV2f8+7OG8FhRWtNlqQ=";
-    postFixup = ''
-      for f in $out/lib/haxe/${withCommas libname}/${withCommas version}/{,project/libs/nekoapi/}bin/Linux{,64}/*; do
-        chmod +w "$f"
-        patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)   "$f" || true
-        patchelf --set-rpath ${ lib.makeLibraryPath [ stdenv.cc.cc ] }  "$f" || true
-      done
+    src = fetchFromGitHub {
+      owner = "HaxeFoundation";
+      repo = "hxcpp";
+      rev = "v${version}";
+      sha256 = "sha256-G/qW4HnF/5L6wyCVmt7aFs5QTClvcxH7TA2eYwJ4eLM=";
+    };
+    buildPhase = ''
+      (
+        cd tools/hxcpp
+        haxe compile.hxml
+      )
     '';
     setupHook = writeText "setup-hook.sh" ''
       if [ "$\{enableParallelBuilding-}" ]; then
@@ -209,6 +222,7 @@ in
       fetchSubmodules = true;
       sha256 = "0w3f9772ypqil348dq8xvhh5g1z5dii5rrwlmmvcdr2gs2c28c7k";
     };
+    linc_lib = "discord_rpc";
     meta = with lib; {
       license = licenses.mit;
       description = "Native bindings for discord-rpc";
