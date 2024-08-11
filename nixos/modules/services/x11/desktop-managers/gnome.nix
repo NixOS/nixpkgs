@@ -404,7 +404,7 @@ in
             pkgs.gnome-calculator
             pkgs.gnome-calendar
             pkgs.gnome-characters
-            gnome-clocks
+            pkgs.gnome-clocks
             pkgs.gnome-console
             gnome-contacts
             pkgs.gnome-font-viewer

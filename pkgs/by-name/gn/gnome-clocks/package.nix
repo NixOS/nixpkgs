@@ -67,10 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-clocks";
-      attrPath = "gnome.gnome-clocks";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-clocks"; };
   };
 
   meta = {
