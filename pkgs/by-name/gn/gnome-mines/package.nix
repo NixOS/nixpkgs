@@ -56,10 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-mines";
-      attrPath = "gnome.gnome-mines";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-mines"; };
   };
 
   meta = with lib; {

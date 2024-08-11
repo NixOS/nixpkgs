@@ -463,7 +463,7 @@ in
         pkgs.gnome-chess
         pkgs.gnome-klotski
         pkgs.gnome-mahjongg
-        gnome-mines
+        pkgs.gnome-mines
         gnome-nibbles
         gnome-robots
         gnome-sudoku
