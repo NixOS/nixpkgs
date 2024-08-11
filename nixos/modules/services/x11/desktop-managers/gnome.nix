@@ -461,7 +461,7 @@ in
         pkgs.four-in-a-row
         pkgs.gnome-2048
         pkgs.gnome-chess
-        gnome-klotski
+        pkgs.gnome-klotski
         gnome-mahjongg
         gnome-mines
         gnome-nibbles

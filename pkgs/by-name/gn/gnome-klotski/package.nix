@@ -60,10 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-klotski";
-      attrPath = "gnome.gnome-klotski";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-klotski"; };
   };
 
   meta = with lib; {
