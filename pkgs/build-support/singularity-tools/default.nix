@@ -116,9 +116,10 @@ lib.makeExtensible (final: {
 
             # Build /bin and copy across closure
             mkdir -p bin ./${builtins.storeDir}
-            for f in $(cat "$layerClosure") ; do
+            # Loop over the line-separated paths in $layerClosure
+            while IFS= read -r f; do
               cp -ar "$f" "./$f"
-            done
+            done < "$layerClosure"
 
             # TODO(@ShamrockLee):
             # Once vmTools.runInLinuxVMm works with `__structuredAttrs = true` (#334705),
