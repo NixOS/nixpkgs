@@ -30,8 +30,6 @@ in
 
   gnome-control-center = callPackage ./core/gnome-control-center { };
 
-  gnome-initial-setup = callPackage ./core/gnome-initial-setup { };
-
   gnome-session = callPackage ./core/gnome-session { };
 
   gnome-session-ctl = callPackage ./core/gnome-session/ctl.nix { };
@@ -131,6 +129,7 @@ in
   gnome-dictionary = lib.warn "The ‘gnome.gnome-dictionary’ was moved to top-level. Please use ‘pkgs.gnome-dictionary’ directly." pkgs.gnome-dictionary; # Added on 2024-06-22.
   gnome-disk-utility = lib.warn "The ‘gnome.gnome-disk-utility’ was moved to top-level. Please use ‘pkgs.gnome-disk-utility’ directly." pkgs.gnome-disk-utility; # Added on 2024-06-22.
   gnome-font-viewer = lib.warn "The ‘gnome.gnome-font-viewer’ was moved to top-level. Please use ‘pkgs.gnome-font-viewer’ directly." pkgs.gnome-font-viewer; # Added on 2024-06-22.
+  gnome-initial-setup = lib.warn "The ‘gnome.gnome-initial-setup’ was moved to top-level. Please use ‘pkgs.gnome-initial-setup’ directly." pkgs.gnome-initial-setup; # Added on 2024-08-11.
   gnome-keyring = lib.warn "The ‘gnome.gnome-keyring’ was moved to top-level. Please use ‘pkgs.gnome-keyring’ directly." pkgs.gnome-keyring; # Added on 2024-06-22.
   gnome-klotski = lib.warn "The ‘gnome.gnome-klotski’ was moved to top-level. Please use ‘pkgs.gnome-klotski’ directly." pkgs.gnome-klotski; # Added on 2024-08-11.
   gnome-logs = lib.warn "The ‘gnome.gnome-logs’ was moved to top-level. Please use ‘pkgs.gnome-logs’ directly." pkgs.gnome-logs; # Added on 2024-08-11.

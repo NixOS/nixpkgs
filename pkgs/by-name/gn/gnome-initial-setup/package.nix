@@ -92,10 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-initial-setup";
-      attrPath = "gnome.gnome-initial-setup";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-initial-setup"; };
   };
 
   meta = with lib; {
