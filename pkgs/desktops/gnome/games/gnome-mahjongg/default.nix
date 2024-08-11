@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, gnome
-, gtk4
-, wrapGAppsHook4
-, libadwaita
-, librsvg
-, gettext
-, itstool
-, libxml2
-, meson
-, ninja
-, glib
-, vala
-, desktop-file-utils
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  gnome,
+  gtk4,
+  wrapGAppsHook4,
+  libadwaita,
+  librsvg,
+  gettext,
+  itstool,
+  libxml2,
+  meson,
+  ninja,
+  glib,
+  vala,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "3.40.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-mahjongg/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-mahjongg/${lib.versions.majorMinor version}/gnome-mahjongg-${version}.tar.xz";
     hash = "sha256-jtVO7K3jawgzaQb9jmyQKg1ve7u7Z2U8I5Vqa2MSI/Y=";
   };
 
@@ -48,8 +49,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-mahjongg";
+      attrPath = "gnome.gnome-mahjongg";
     };
   };
 
