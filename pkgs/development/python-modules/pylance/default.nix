@@ -16,6 +16,7 @@
   polars,
   pytestCheckHook,
   tqdm,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -85,6 +86,14 @@ buildPythonPackage rec {
     "test_polar_scan"
     "test_simple_predicates"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--generate-lockfile"
+      "--lockfile-metadata-path"
+      "python"
+    ];
+  };
 
   meta = {
     description = "Python wrapper for Lance columnar format";
