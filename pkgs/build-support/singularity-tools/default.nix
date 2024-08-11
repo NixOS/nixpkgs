@@ -92,11 +92,13 @@ lib.makeExtensible (final: {
             preVM = vmTools.createEmptyImage {
               size = diskSize;
               fullName = "${projectName}-run-disk";
+              # Leaving "$out" for the Singularity/Container image
+              destination = "disk-image";
             };
             inherit memSize;
           }
           ''
-            rm -rf $out
+            rmdir "$out"
             mkdir disk
             mkfs -t ext3 -b 4096 /dev/${vmTools.hd}
             mount /dev/${vmTools.hd} disk
