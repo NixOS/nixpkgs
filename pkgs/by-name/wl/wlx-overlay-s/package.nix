@@ -1,23 +1,26 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, alsa-lib
-, dbus
-, fontconfig
-, libxkbcommon
-, makeWrapper
-, nix-update-script
-, openvr
-, openxr-loader
-, pipewire
-, pkg-config
-, pulseaudio
-, shaderc
-, testers
-, wayland
-, wlx-overlay-s
-, xorg
+{
+  alsa-lib,
+  dbus,
+  fetchFromGitHub,
+  fontconfig,
+  lib,
+  libX11,
+  libXext,
+  libXrandr,
+  libxkbcommon,
+  makeWrapper,
+  nix-update-script,
+  openvr,
+  openxr-loader,
+  pipewire,
+  pkg-config,
+  pulseaudio,
+  rustPlatform,
+  shaderc,
+  stdenv,
+  testers,
+  wayland,
+  wlx-overlay-s,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -56,9 +59,9 @@ rustPlatform.buildRustPackage rec {
     openvr
     openxr-loader
     pipewire
-    xorg.libX11
-    xorg.libXext
-    xorg.libXrandr
+    libX11
+    libXext
+    libXrandr
   ];
 
   env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
