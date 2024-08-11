@@ -56,10 +56,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "vinagre";
-      attrPath = "gnome.vinagre";
-    };
+    updateScript = gnome.updateScript { packageName = "vinagre"; };
   };
 
   meta = with lib; {

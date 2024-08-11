@@ -88,10 +88,6 @@ in
 
   nixos-gsettings-overrides = callPackage ./nixos/gsettings-overrides { };
 
-#### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
-
-  vinagre = callPackage ./apps/vinagre { };
-
 #### Games
 
   aisleriot = callPackage ./games/aisleriot { };
@@ -204,6 +200,7 @@ in
   simple-scan = lib.warn "The ‘gnome.simple-scan’ was moved to top-level. Please use ‘pkgs.simple-scan’ directly." pkgs.simple-scan; # Added on 2024-06-22.
   sushi = lib.warn "The ‘gnome.sushi’ was moved to top-level. Please use ‘pkgs.sushi’ directly." pkgs.sushi; # Added on 2024-06-22.
   totem = lib.warn "The ‘gnome.totem’ was moved to top-level. Please use ‘pkgs.totem’ directly." pkgs.totem; # Added on 2024-06-22.
+  vinagre = lib.warn "The ‘gnome.vinagre’ was moved to top-level. Please use ‘pkgs.vinagre’ directly." pkgs.vinagre; # Added on 2024-08-11.
   yelp = lib.warn "The ‘gnome.yelp’ was moved to top-level. Please use ‘pkgs.yelp’ directly." pkgs.yelp; # Added on 2024-06-22.
   yelp-xsl = lib.warn "The ‘gnome.yelp-xsl’ was moved to top-level. Please use ‘pkgs.yelp-xsl’ directly." pkgs.yelp-xsl; # Added on 2024-06-22.
   zenity = lib.warn "The ‘gnome.zenity’ was moved to top-level. Please use ‘pkgs.zenity’ directly." pkgs.zenity; # Added on 2024-06-22.
