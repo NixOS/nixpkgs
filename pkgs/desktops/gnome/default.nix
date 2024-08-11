@@ -80,8 +80,6 @@ in
 
 #### Games
 
-  gnome-chess = callPackage ./games/gnome-chess { };
-
   gnome-klotski = callPackage ./games/gnome-klotski { };
 
   gnome-mahjongg = callPackage ./games/gnome-mahjongg { };
@@ -153,6 +151,7 @@ in
   gnome-backgrounds = lib.warn "The ‘gnome.gnome-backgrounds’ was moved to top-level. Please use ‘pkgs.gnome-backgrounds’ directly." pkgs.gnome-backgrounds; # Added on 2024-08-11.
   gnome-boxes = lib.warn "The ‘gnome.gnome-boxes’ was moved to top-level. Please use ‘pkgs.gnome-boxes’ directly." pkgs.gnome-boxes; # Added on 2024-08-11.
   gnome-characters = lib.warn "The ‘gnome.gnome-characters’ was moved to top-level. Please use ‘pkgs.gnome-characters’ directly." pkgs.gnome-characters; # Added on 2024-08-11.
+  gnome-chess = lib.warn "The ‘gnome.gnome-chess’ was moved to top-level. Please use ‘pkgs.gnome-chess’ directly." pkgs.gnome-chess; # Added on 2024-08-11.
   gnome-clocks = lib.warn "The ‘gnome.gnome-clocks’ was moved to top-level. Please use ‘pkgs.gnome-clocks’ directly." pkgs.gnome-clocks; # Added on 2024-08-11.
   gnome-color-manager = lib.warn "The ‘gnome.gnome-color-manager’ was moved to top-level. Please use ‘pkgs.gnome-color-manager’ directly." pkgs.gnome-color-manager; # Added on 2024-08-11.
   gnome-common = lib.warn "The ‘gnome.gnome-common’ was moved to top-level. Please use ‘pkgs.gnome-common’ directly." pkgs.gnome-common; # Added on 2024-06-22.

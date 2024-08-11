@@ -51,10 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-chess";
-      attrPath = "gnome.gnome-chess";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-chess"; };
   };
 
   meta = with lib; {

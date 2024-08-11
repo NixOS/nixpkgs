@@ -460,7 +460,7 @@ in
         pkgs.five-or-more
         pkgs.four-in-a-row
         pkgs.gnome-2048
-        gnome-chess
+        pkgs.gnome-chess
         gnome-klotski
         gnome-mahjongg
         gnome-mines
