@@ -100,12 +100,12 @@ let
     };
   };
 
-  metaCommon = with lib; {
+  metaCommon = {
     description = "Open source cross-platform alternative to AirDrop";
     homepage = "https://localsend.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "localsend";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sikmir
       linsui
       pandapip1
