@@ -17,8 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "nix-community";
-    repo = pname;
-    rev = "refs/tags/${pname}-v${version}";
+    repo = "harmonia";
+    rev = "refs/tags/harmonia-v${version}";
     hash = "sha256-S5UU6/JZzp4mJKplhpJjcACr+M1rQCFQFWuyk9Wwumg=";
   };
 
