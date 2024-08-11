@@ -90,8 +90,6 @@ in
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
-  gnome-notes = callPackage ./apps/gnome-notes { };
-
   gnome-power-manager = callPackage ./apps/gnome-power-manager { };
 
   gnome-sound-recorder = callPackage ./apps/gnome-sound-recorder { };
@@ -192,6 +190,7 @@ in
   gnome-maps = lib.warn "The ‘gnome.gnome-maps’ was moved to top-level. Please use ‘pkgs.gnome-maps’ directly." pkgs.gnome-maps; # Added on 2024-08-11.
   gnome-music = lib.warn "The ‘gnome.gnome-music’ was moved to top-level. Please use ‘pkgs.gnome-music’ directly." pkgs.gnome-music; # Added on 2024-08-11.
   gnome-nettool = lib.warn "The ‘gnome.gnome-nettool’ was moved to top-level. Please use ‘pkgs.gnome-nettool’ directly." pkgs.gnome-nettool; # Added on 2024-08-11.
+  gnome-notes = lib.warn "The ‘gnome.gnome-notes’ was moved to top-level. Please use ‘pkgs.gnome-notes’ directly." pkgs.gnome-notes; # Added on 2024-08-11.
   gnome-packagekit = lib.warn "The ‘gnome.gnome-packagekit’ was moved to top-level. Please use ‘pkgs.gnome-packagekit’ directly." pkgs.gnome-packagekit; # Added on 2024-06-22.
   gnome-screenshot = lib.warn "The ‘gnome.gnome-screenshot’ was moved to top-level. Please use ‘pkgs.gnome-screenshot’ directly." pkgs.gnome-screenshot; # Added on 2024-06-22.
   gnome-system-monitor = lib.warn "The ‘gnome.gnome-system-monitor’ was moved to top-level. Please use ‘pkgs.gnome-system-monitor’ directly." pkgs.gnome-system-monitor; # Added on 2024-06-22.

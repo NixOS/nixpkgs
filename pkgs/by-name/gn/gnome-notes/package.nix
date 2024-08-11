@@ -82,10 +82,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dupdate_mimedb=false" ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "bijiben";
-      attrPath = "gnome.gnome-notes";
-    };
+    updateScript = gnome.updateScript { packageName = "bijiben"; };
   };
 
   meta = with lib; {
