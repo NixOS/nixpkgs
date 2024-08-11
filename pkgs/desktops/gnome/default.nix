@@ -22,8 +22,6 @@ in
 
   caribou = callPackage ./core/caribou { };
 
-  gdm = callPackage ./core/gdm { };
-
   gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
 
   gnome-bluetooth_1_0 = callPackage ./core/gnome-bluetooth/1.0 { };
@@ -112,6 +110,7 @@ in
   file-roller = lib.warn "The ‘gnome.file-roller’ was moved to top-level. Please use ‘pkgs.file-roller’ directly." pkgs.file-roller; # Added on 2024-06-13.
   five-or-more = lib.warn "The ‘gnome.five-or-more’ was moved to top-level. Please use ‘pkgs.five-or-more’ directly." pkgs.five-or-more; # Added on 2024-08-11.
   four-in-a-row = lib.warn "The ‘gnome.four-in-a-row’ was moved to top-level. Please use ‘pkgs.four-in-a-row’ directly." pkgs.four-in-a-row; # Added on 2024-08-11.
+  gdm = lib.warn "The ‘gnome.gdm’ was moved to top-level. Please use ‘pkgs.gdm’ directly." pkgs.gdm; # Added on 2024-08-11.
   geary = lib.warn "The ‘gnome.geary’ was moved to top-level. Please use ‘pkgs.geary’ directly." pkgs.geary; # Added on 2024-06-22.
   ghex = lib.warn "The ‘gnome.ghex’ was moved to top-level. Please use ‘pkgs.ghex’ directly." pkgs.ghex; # Added on 2024-06-22.
   gitg = lib.warn "The ‘gnome.gitg’ was moved to top-level. Please use ‘pkgs.gitg’ directly." pkgs.gitg; # Added on 2024-06-22.

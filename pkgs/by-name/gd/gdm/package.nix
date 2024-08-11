@@ -175,10 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gdm";
-      attrPath = "gnome.gdm";
-    };
+    updateScript = gnome.updateScript { packageName = "gdm"; };
 
     # Used in GDM NixOS module
     # Don't remove.
