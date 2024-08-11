@@ -98,10 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-maps";
-      attrPath = "gnome.gnome-maps";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-maps"; };
   };
 
   meta = with lib; {

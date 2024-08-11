@@ -409,7 +409,7 @@ in
             gnome-contacts
             pkgs.gnome-font-viewer
             pkgs.gnome-logs
-            gnome-maps
+            pkgs.gnome-maps
             gnome-music
             pkgs.gnome-system-monitor
             gnome-weather
