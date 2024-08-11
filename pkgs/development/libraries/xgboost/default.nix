@@ -22,7 +22,7 @@ assert ncclSupport -> (cudaSupport && !cudaPackages.nccl.meta.unsupported);
 # 2) the R package creates a different binary shared
 # object that isn't compatible with the regular CLI
 # tests.
-assert rLibrary -> doCheck != true;
+assert rLibrary -> !doCheck;
 
 let
   # This ensures xgboost gets the correct libstdc++ when
