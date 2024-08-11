@@ -6,8 +6,8 @@ index 28b96c996..0b1fad9ab 100644
  static void
  export_tracker2_data (NautilusTagManager *self)
  {
--    gchar *argv[] = {"tracker3", "export", "--2to3", "files-starred", "--keyfile", NULL};
-+    gchar *argv[] = {"@tracker@/bin/tracker3", "export", "--2to3", "files-starred", "--keyfile", NULL};
+-    gchar *argv[] = {"tinysparql3", "export", "--2to3", "files-starred", "--keyfile", NULL};
++    gchar *argv[] = {"@tracker@/bin/tinysparql", "export", "--2to3", "files-starred", "--keyfile", NULL};
      gint stdout_fd;
      GPid child_pid;
      g_autoptr (GError) error = NULL;
