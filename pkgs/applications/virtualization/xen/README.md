@@ -88,7 +88,8 @@ open a PR fixing the script, and update Xen manually:
 
 ### For Both Update Methods
 
-1. Update `packages.nix` with the new versions. Don't forget the `slim` packages!
+1. Update `packages.nix` and `../../../top-level/all-packages.nix` with the new
+   versions. Don't forget the `slim` packages!
 1. Make sure all branches build. (Both the `standard` and `slim` versions)
 1. Use the NixOS module to test if dom0 boots successfully on all new versions.
 1. Make sure the `meta` attributes evaluate to something that makes sense. The
