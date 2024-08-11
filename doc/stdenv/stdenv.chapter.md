@@ -1560,6 +1560,14 @@ This should be turned off or fixed for build errors such as:
 sorry, unimplemented: __builtin_clear_padding not supported for variable length aggregates
 ```
 
+#### `ibt` {#ibt}
+
+This flag adds the `-fcf-protection=branch` compiler option on x86_64-linux targets and the `-mbranch-protection=bti` compiler option on aarch64-linux. This enabled "Indirect Branch Tracking" which adds "landing pad" instructions at all points in the code where an indirect branch could potentially land. Hardened indirect branch instructions are then used which will, on supporting processors, throw an error if the destination instruction is not one of these "landing pad" instructions. This makes it much harder for an attacker to hijack one of the indirect branches instructions to jump to an unexpected point in code and ultimately gain arbitrary code execution.
+
+This is currently only supported on some newer Intel processors as part of the Intel CET set of features and on ARM v8.5+ processors (where the feature is known as BTI - Branch Target Indication). However, the generated code should continue to work on older processors which will simply omit any of this checking, treating "landing pad" instructions as no-ops and the hardened indirect branch instrutions will be treated as normal indirect branches.
+
+If enabling this hardening flag it is important to test the result on a system that has known working and runtime-enabled IBT support, so that any such breakage can be discovered.
+
 #### `stackclashprotection` {#stackclashprotection}
 
 This flag adds the `-fstack-clash-protection` compiler option, which causes growth of a program's stack to access each successive page in order. This should force the guard page to be accessed and cause an attempt to "jump over" this guard page to crash.
