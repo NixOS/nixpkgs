@@ -469,7 +469,7 @@ in
         pkgs.gnome-sudoku
         pkgs.gnome-taquin
         pkgs.gnome-tetravex
-        hitori
+        pkgs.hitori
         iagno
         lightsoff
         quadrapassel

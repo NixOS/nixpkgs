@@ -50,10 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "hitori";
-      attrPath = "gnome.hitori";
-    };
+    updateScript = gnome.updateScript { packageName = "hitori"; };
   };
 
   meta = with lib; {
