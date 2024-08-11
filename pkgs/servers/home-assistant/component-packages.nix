@@ -1265,7 +1265,8 @@
       pymodbus
     ];
     "flexit_bacnet" = ps: with ps; [
-    ]; # missing inputs: flexit_bacnet
+      flexit-bacnet
+    ];
     "flexom" = ps: with ps; [
     ];
     "flic" = ps: with ps; [
@@ -5046,6 +5047,7 @@
     "fitbit"
     "fivem"
     "fjaraskupan"
+    "flexit_bacnet"
     "flic"
     "flick_electric"
     "flipr"
