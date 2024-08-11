@@ -51,10 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "swell-foop";
-      attrPath = "gnome.swell-foop";
-    };
+    updateScript = gnome.updateScript { packageName = "swell-foop"; };
   };
 
   meta = with lib; {

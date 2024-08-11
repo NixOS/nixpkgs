@@ -80,8 +80,6 @@ in
 
 #### Games
 
-  swell-foop = callPackage ./games/swell-foop { };
-
   tali = callPackage ./games/tali { };
 
   quadrapassel = callPackage ./games/quadrapassel { };
@@ -178,6 +176,7 @@ in
   seahorse = lib.warn "The ‘gnome.seahorse’ was moved to top-level. Please use ‘pkgs.seahorse’ directly." pkgs.seahorse; # Added on 2024-06-22.
   simple-scan = lib.warn "The ‘gnome.simple-scan’ was moved to top-level. Please use ‘pkgs.simple-scan’ directly." pkgs.simple-scan; # Added on 2024-06-22.
   sushi = lib.warn "The ‘gnome.sushi’ was moved to top-level. Please use ‘pkgs.sushi’ directly." pkgs.sushi; # Added on 2024-06-22.
+  swell-foop = lib.warn "The ‘gnome.swell-foop’ was moved to top-level. Please use ‘pkgs.swell-foop’ directly." pkgs.swell-foop; # Added on 2024-08-11.
   totem = lib.warn "The ‘gnome.totem’ was moved to top-level. Please use ‘pkgs.totem’ directly." pkgs.totem; # Added on 2024-06-22.
   vinagre = lib.warn "The ‘gnome.vinagre’ was moved to top-level. Please use ‘pkgs.vinagre’ directly." pkgs.vinagre; # Added on 2024-08-11.
   yelp = lib.warn "The ‘gnome.yelp’ was moved to top-level. Please use ‘pkgs.yelp’ directly." pkgs.yelp; # Added on 2024-06-22.

@@ -473,7 +473,7 @@ in
         pkgs.iagno
         pkgs.lightsoff
         quadrapassel
-        swell-foop
+        pkgs.swell-foop
         tali
       ] config.environment.gnome.excludePackages;
     })
