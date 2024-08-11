@@ -7,7 +7,7 @@
 }@genericDefinition:
 
 let
-  upstreamPatches = import ../patches.nix {
+  upstreamPatches = import ../generic/patches.nix {
     inherit lib;
     inherit fetchpatch;
   };
@@ -20,7 +20,7 @@ let
   ];
 in
 
-callPackage (import ../generic.nix {
+callPackage (import ../generic/default.nix {
   branch = "4.17";
   version = "4.17.4";
   latest = false;

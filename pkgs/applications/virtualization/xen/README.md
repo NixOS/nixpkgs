@@ -118,7 +118,7 @@ are requested by the main Xen build.
 Building `xen.efi` requires an `ld` with PE support.[^2]
 
 We use a `makeFlag` to override the `$LD` environment variable to point to our
-patched `efiBinutils`. For more information, see the comment in `./generic.nix`.
+patched `efiBinutils`. For more information, see the comment in `./generic/default.nix`.
 
 > [!TIP]
 > If you are certain you will not be running Xen in an x86 EFI environment, disable

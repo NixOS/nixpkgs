@@ -175,7 +175,7 @@ let
       if builtins.isPath patch then
         { type = "path"; }
       else
-        throw "xen/generic.nix: normalisedPatchList attempted to normalise something that is not a Path or an Attribute Set."
+        throw "xen/generic/default.nix: normalisedPatchList attempted to normalise something that is not a Path or an Attribute Set."
     else
       patch
   ) pkg.xen.patches;
@@ -632,7 +632,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Starts with the longDescription from ./packages.nix.
       (packageDefinition.meta.longDescription or "")
       + lib.strings.optionalString (!withInternalQEMU) (
-        "\nUse with `qemu_xen_${lib.stringAsChars (x: if x == "." then "_" else x) branch}`"
+        "\nUse with `qemu_xen_${lib.strings.stringAsChars (x: if x == "." then "_" else x) branch}`"
         + lib.strings.optionalString latest " or `qemu_xen`"
         + ".\n"
       )
