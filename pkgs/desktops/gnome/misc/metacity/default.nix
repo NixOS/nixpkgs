@@ -1,19 +1,21 @@
-{ lib, stdenv
-, fetchurl
-, gettext
-, glib
-, gnome
-, gsettings-desktop-schemas
-, gtk3
-, xorg
-, libcanberra-gtk3
-, libgtop
-, libstartup_notification
-, libxml2
-, pkg-config
-, substituteAll
-, wrapGAppsHook3
-, zenity
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  glib,
+  gnome,
+  gsettings-desktop-schemas,
+  gtk3,
+  xorg,
+  libcanberra-gtk3,
+  libgtop,
+  libstartup_notification,
+  libxml2,
+  pkg-config,
+  substituteAll,
+  wrapGAppsHook3,
+  zenity,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "3.52.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/metacity/${lib.versions.majorMinor version}/metacity-${version}.tar.xz";
     hash = "sha256-pyQ4rObVkDrnkzjGCYsbNauRyKl8QyNwHTvvHz7rGRw=";
   };
 
@@ -56,8 +58,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "metacity";
+      attrPath = "gnome.metacity";
       versionPolicy = "odd-unstable";
     };
   };
