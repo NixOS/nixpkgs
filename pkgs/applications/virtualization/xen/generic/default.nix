@@ -342,7 +342,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.lists.optional withInternalOVMF "--enable-ovmf"
 
     ++ lib.lists.optional withIPXE "--with-system-ipxe=${ipxe}"
-    ++ lib.lists.optional withInternalIPXE "--enable-ipxe";
+    ++ lib.lists.optional withInternalIPXE "--enable-ipxe"
+
+    ++ lib.lists.optional withFlask "--enable-xsmpolicy";
 
   makeFlags =
     [
