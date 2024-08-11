@@ -1993,7 +1993,8 @@
       isal
     ];
     "islamic_prayer_times" = ps: with ps; [
-    ]; # missing inputs: prayer-times-calculator-offline
+      prayer-times-calculator-offline
+    ];
     "ismartwindow" = ps: with ps; [
     ];
     "israel_rail" = ps: with ps; [
@@ -5185,6 +5186,7 @@
     "iqvia"
     "iron_os"
     "isal"
+    "islamic_prayer_times"
     "israel_rail"
     "ista_ecotrend"
     "isy994"
