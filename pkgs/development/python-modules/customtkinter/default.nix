@@ -2,11 +2,12 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
-  wheel,
   tkinter,
   darkdetect,
+  packaging,
+  typing-extensions,
 }:
 let
   pname = "customtkinter";
@@ -17,20 +18,26 @@ buildPythonPackage {
   pyproject = true;
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/Y2zuvqWHJgu5gMNuoC0wuJYWGMHVrUTmG2xkRPY0gc=";
+  src = fetchFromGitHub {
+    owner = "TomSchimansky";
+    repo = "CustomTkinter";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1g2wdXbUv5xNnpflFLXvU39s16kmwvuegKWd91E3qm4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
+    tkinter
   ];
-  buildInputs = [ tkinter ];
-  propagatedBuildInputs = [ darkdetect ];
 
-  # No tests
-  doCheck = false;
+  dependencies = [
+    darkdetect
+    packaging
+    typing-extensions
+  ];
+
+  patches = [ ./0001-Add-Missing-Cfg-Packages.patch ];
+
   pythonImportsCheck = [ "customtkinter" ];
 
   meta = {
