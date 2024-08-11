@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gnome
-, glib
-, gtk3
-, cairo
-, wrapGAppsHook3
-, libxml2
-, python3
-, gettext
-, itstool
-, desktop-file-utils
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  glib,
+  gtk3,
+  cairo,
+  wrapGAppsHook3,
+  libxml2,
+  python3,
+  gettext,
+  itstool,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
