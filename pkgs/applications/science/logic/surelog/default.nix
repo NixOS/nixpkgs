@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/chipsalliance/Surelog";
     license = lib.licenses.asl20;
     mainProgram = "surelog";
-    maintainers = with lib.maintainers; [ matthuszagh ];
+    maintainers = with lib.maintainers; [ matthuszagh hzeller ];
     platforms = lib.platforms.all;
   };
 })
