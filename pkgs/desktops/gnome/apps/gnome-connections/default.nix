@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, vala
-, gettext
-, itstool
-, desktop-file-utils
-, wrapGAppsHook3
-, glib
-, gtk3
-, libhandy
-, libsecret
-, libxml2
-, gtk-vnc
-, gtk-frdp
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gettext,
+  itstool,
+  desktop-file-utils,
+  wrapGAppsHook3,
+  glib,
+  gtk3,
+  libhandy,
+  libsecret,
+  libxml2,
+  gtk-vnc,
+  gtk-frdp,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-connections/${lib.versions.major version}/gnome-connections-${version}.tar.xz";
     hash = "sha256-+xzqaOeTC73B2yi3zQqaN80xDUtOeHL+gU9QoWqNJdM=";
   };
 
@@ -51,9 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-connections"; };
   };
 
   meta = with lib; {
