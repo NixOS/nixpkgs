@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, gettext
-, gobject-introspection
-, wrapGAppsHook4
-, gjs
-, glib
-, gtk4
-, gdk-pixbuf
-, gst_all_1
-, gnome
-, meson
-, ninja
-, python3
-, desktop-file-utils
-, libadwaita
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gobject-introspection,
+  wrapGAppsHook4,
+  gjs,
+  glib,
+  gtk4,
+  gdk-pixbuf,
+  gst_all_1,
+  gnome,
+  meson,
+  ninja,
+  python3,
+  desktop-file-utils,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "43.beta";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-sound-recorder/${lib.versions.major version}/gnome-sound-recorder-${version}.tar.xz";
     sha256 = "bbbbmjsbUv0KtU+aW/Tymctx5SoTrF/fw+dOtGmFpOY=";
   };
 
@@ -38,18 +39,20 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    gjs
-    glib
-    gtk4
-    gdk-pixbuf
-    libadwaita
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad # for gstreamer-player-1.0
-  ]);
+  buildInputs =
+    [
+      gjs
+      glib
+      gtk4
+      gdk-pixbuf
+      libadwaita
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad # for gstreamer-player-1.0
+    ]);
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
@@ -60,8 +63,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-sound-recorder";
+      attrPath = "gnome.gnome-sound-recorder";
     };
   };
 
