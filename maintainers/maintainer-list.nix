@@ -10675,6 +10675,12 @@
     githubId = 37185887;
     name = "Calvin Kim";
   };
+  kdhingra307 = {
+    email = "kdhingra307@gmail.com";
+    github = "kdhingra307";
+    githubId = 11820697;
+    name = "Karan Dhingra";
+  };
   keenanweaver = {
     email = "keenanweaver@protonmail.com";
     name = "Keenan Weaver";
