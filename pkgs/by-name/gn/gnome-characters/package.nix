@@ -61,10 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-characters";
-      attrPath = "gnome.gnome-characters";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-characters"; };
   };
 
   meta = with lib; {

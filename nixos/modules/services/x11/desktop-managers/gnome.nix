@@ -403,7 +403,7 @@ in
             pkgs.gnome-text-editor
             pkgs.gnome-calculator
             pkgs.gnome-calendar
-            gnome-characters
+            pkgs.gnome-characters
             gnome-clocks
             pkgs.gnome-console
             gnome-contacts
