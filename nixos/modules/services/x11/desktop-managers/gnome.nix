@@ -52,9 +52,9 @@ let
 
   flashbackEnabled = cfg.flashback.enableMetacity || lib.length cfg.flashback.customSessions > 0;
   flashbackWms = lib.optional cfg.flashback.enableMetacity {
-    wmName = "metacity";
+    wmName = "pkgs.metacity";
     wmLabel = "Metacity";
-    wmCommand = "${pkgs.gnome.metacity}/bin/metacity";
+    wmCommand = "${pkgs.metacity}/bin/metacity";
     enableGnomePanel = true;
   } ++ cfg.flashback.customSessions;
 

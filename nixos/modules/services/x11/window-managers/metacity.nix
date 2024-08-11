@@ -5,7 +5,7 @@ with lib;
 let
 
   cfg = config.services.xserver.windowManager.metacity;
-  inherit (pkgs) gnome;
+  inherit (pkgs) metacity;
 in
 
 {
@@ -18,12 +18,12 @@ in
     services.xserver.windowManager.session = singleton
       { name = "metacity";
         start = ''
-          ${gnome.metacity}/bin/metacity &
+          ${metacity}/bin/metacity &
           waitPID=$!
         '';
       };
 
-    environment.systemPackages = [ gnome.metacity ];
+    environment.systemPackages = [ metacity ];
 
   };
 

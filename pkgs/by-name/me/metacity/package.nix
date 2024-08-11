@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "metacity";
-      attrPath = "gnome.metacity";
       versionPolicy = "odd-unstable";
     };
   };
