@@ -66,10 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-shell-extensions";
-      attrPath = "gnome.gnome-shell-extensions";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-shell-extensions"; };
   };
 
   meta = with lib; {

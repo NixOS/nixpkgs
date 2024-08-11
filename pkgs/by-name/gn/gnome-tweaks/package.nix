@@ -8,6 +8,7 @@
 , glib
 , gnome
 , gnome-desktop
+, gnome-shell-extensions
 , gobject-introspection
 , gsettings-desktop-schemas
 , gtk4
@@ -50,7 +51,7 @@ python3Packages.buildPythonApplication rec {
     gnome.gnome-settings-daemon
     gnome.gnome-shell
     # Makes it possible to select user themes through the `user-theme` extension
-    gnome.gnome-shell-extensions
+    gnome-shell-extensions
     gnome.mutter
     gsettings-desktop-schemas
     gtk4

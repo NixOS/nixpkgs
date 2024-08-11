@@ -312,7 +312,7 @@ in
             pkgs.gnome.gnome-shell
           ];
           optionalPackages = [
-            pkgs.gnome.gnome-shell-extensions
+            pkgs.gnome-shell-extensions
           ];
         in
         mandatoryPackages
@@ -378,7 +378,7 @@ in
             gnome-bluetooth
             pkgs.gnome-color-manager
             gnome-control-center
-            gnome-shell-extensions
+            pkgs.gnome-shell-extensions
             pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
             pkgs.gnome-user-docs
             pkgs.orca
