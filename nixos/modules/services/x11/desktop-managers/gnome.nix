@@ -395,7 +395,6 @@ in
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-45/elements/core/meta-gnome-core-utilities.bst
     (lib.mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages =
-        with pkgs.gnome;
         utils.removePackagesByName
           ([
             pkgs.baobab
@@ -423,7 +422,7 @@ in
           ] ++ lib.optionals config.services.flatpak.enable [
             # Since PackageKit Nix support is not there yet,
             # only install gnome-software if flatpak is enabled.
-            gnome-software
+            pkgs.gnome-software
           ])
           config.environment.gnome.excludePackages;
 

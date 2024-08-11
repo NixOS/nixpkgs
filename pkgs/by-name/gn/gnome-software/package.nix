@@ -108,10 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (!withFwupd) [ "-Dfwupd=false" ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-software";
-      attrPath = "gnome.gnome-software";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-software"; };
   };
 
   meta = with lib; {
