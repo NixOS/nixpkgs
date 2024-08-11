@@ -23,6 +23,7 @@
   gnome,
   gnome-color-manager,
   gnome-desktop,
+  gnome-remote-desktop,
   gnome-user-share,
   gsettings-desktop-schemas,
   gsound,
@@ -116,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     adwaita-icon-theme
     cheese
     gnome.gnome-bluetooth_1_0
-    gnome.gnome-remote-desktop
+    gnome-remote-desktop
     gnome.gnome-settings-daemon
     gnome-user-share
     gnome.mutter

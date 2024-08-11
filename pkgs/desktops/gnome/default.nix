@@ -32,8 +32,6 @@ in
 
   gnome-initial-setup = callPackage ./core/gnome-initial-setup { };
 
-  gnome-remote-desktop = callPackage ./core/gnome-remote-desktop { };
-
   gnome-session = callPackage ./core/gnome-session { };
 
   gnome-session-ctl = callPackage ./core/gnome-session/ctl.nix { };
@@ -176,6 +174,7 @@ in
   gnome-notes = lib.warn "The ‘gnome.gnome-notes’ was moved to top-level. Please use ‘pkgs.gnome-notes’ directly." pkgs.gnome-notes; # Added on 2024-08-11.
   gnome-packagekit = lib.warn "The ‘gnome.gnome-packagekit’ was moved to top-level. Please use ‘pkgs.gnome-packagekit’ directly." pkgs.gnome-packagekit; # Added on 2024-06-22.
   gnome-power-manager = lib.warn "The ‘gnome.gnome-power-manager’ was moved to top-level. Please use ‘pkgs.gnome-power-manager’ directly." pkgs.gnome-power-manager; # Added on 2024-08-11.
+  gnome-remote-desktop = lib.warn "The ‘gnome.gnome-remote-desktop’ was moved to top-level. Please use ‘pkgs.gnome-remote-desktop’ directly." pkgs.gnome-remote-desktop; # Added on 2024-08-11.
   gnome-screenshot = lib.warn "The ‘gnome.gnome-screenshot’ was moved to top-level. Please use ‘pkgs.gnome-screenshot’ directly." pkgs.gnome-screenshot; # Added on 2024-06-22.
   gnome-software = lib.warn "The ‘gnome.gnome-software’ was moved to top-level. Please use ‘pkgs.gnome-software’ directly." pkgs.gnome-software; # Added on 2024-08-11.
   gnome-sound-recorder = lib.warn "The ‘gnome.gnome-sound-recorder’ was moved to top-level. Please use ‘pkgs.gnome-sound-recorder’ directly." pkgs.gnome-sound-recorder; # Added on 2024-08-11.

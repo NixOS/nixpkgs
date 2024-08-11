@@ -80,10 +80,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-remote-desktop";
-      attrPath = "gnome.gnome-remote-desktop";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-remote-desktop"; };
   };
 
   meta = with lib; {
