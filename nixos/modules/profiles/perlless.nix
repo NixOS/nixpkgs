@@ -12,7 +12,7 @@
   # Remove perl from activation
   boot.initrd.systemd.enable = lib.mkDefault true;
   system.etc.overlay.enable = lib.mkDefault true;
-  systemd.sysusers.enable = lib.mkDefault true;
+  services.userborn.enable = lib.mkDefault true;
 
   # Random perl remnants
   system.disableInstallerTools = lib.mkDefault true;
