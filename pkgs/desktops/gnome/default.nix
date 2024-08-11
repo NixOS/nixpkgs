@@ -77,7 +77,6 @@ in
 
   gnome-panel-with-modules = callPackage ./misc/gnome-panel/wrapper.nix { };
 
-  gtkhtml = callPackage ./misc/gtkhtml { enchant = pkgs.enchant2; };
 }) // lib.optionalAttrs config.allowAliases {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
   libgnome-keyring = lib.warn "The ‘gnome.libgnome-keyring’ was moved to top-level. Please use ‘pkgs.libgnome-keyring’ directly." pkgs.libgnome-keyring; # Added on 2024-06-22.
@@ -151,6 +150,7 @@ in
   gnome-user-share = lib.warn "The ‘gnome.gnome-user-share’ was moved to top-level. Please use ‘pkgs.gnome-user-share’ directly." pkgs.gnome-user-share; # Added on 2024-06-13.
   gnome-weather = lib.warn "The ‘gnome.gnome-weather’ was moved to top-level. Please use ‘pkgs.gnome-weather’ directly." pkgs.gnome-weather; # Added on 2024-08-11.
   gpaste = lib.warn "The ‘gnome.gpaste’ was moved to top-level. Please use ‘pkgs.gpaste’ directly." pkgs.gpaste; # Added on 2024-06-22.
+  gtkhtml = lib.warn "The ‘gnome.gtkhtml’ was moved to top-level. Please use ‘pkgs.gtkhtml’ directly." pkgs.gtkhtml; # Added on 2024-08-11.
   gucharmap = lib.warn "The ‘gnome.gucharmap’ was moved to top-level. Please use ‘pkgs.gucharmap’ directly." pkgs.gucharmap; # Added on 2024-06-22.
   hitori = lib.warn "The ‘gnome.hitori’ was moved to top-level. Please use ‘pkgs.hitori’ directly." pkgs.hitori; # Added on 2024-08-11.
   iagno = lib.warn "The ‘gnome.iagno’ was moved to top-level. Please use ‘pkgs.iagno’ directly." pkgs.iagno; # Added on 2024-08-11.

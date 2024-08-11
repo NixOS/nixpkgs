@@ -35,10 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gtkhtml";
-      attrPath = "gnome.gtkhtml";
-    };
+    updateScript = gnome.updateScript { packageName = "gtkhtml"; };
   };
 
   nativeBuildInputs = [

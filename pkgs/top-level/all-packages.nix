@@ -34847,9 +34847,7 @@ with pkgs;
     inherit (gnome2) libglade GConf;
   };
 
-  xiphos = callPackage ../applications/misc/xiphos {
-    gtkhtml = gnome.gtkhtml;
-  };
+  xiphos = callPackage ../applications/misc/xiphos { };
 
   xournal = callPackage ../applications/graphics/xournal {
     inherit (gnome2) libgnomecanvas;
