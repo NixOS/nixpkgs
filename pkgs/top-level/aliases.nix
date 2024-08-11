@@ -1467,6 +1467,7 @@ mapAliases ({
   transifex-client = transifex-cli; # Added 2023-12-29
   trezor_agent = trezor-agent; # Added 2024-01-07
   openai-triton-llvm = triton-llvm; # added 2024-07-18
+  trust-dns = hickory-dns; # Added 2024-08-07
   trustedGrub = throw "trustedGrub has been removed, because it is not maintained upstream anymore"; # Added 2023-05-10
   trustedGrub-for-HP = throw "trustedGrub-for-HP has been removed, because it is not maintained upstream anymore"; # Added 2023-05-10
   tumpa = throw "tumpa has been removed, as it is broken"; # Added 2024-07-15
