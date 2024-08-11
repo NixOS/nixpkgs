@@ -80,8 +80,6 @@ in
 
 #### Games
 
-  atomix = callPackage ./games/atomix { };
-
   five-or-more = callPackage ./games/five-or-more { };
 
   four-in-a-row = callPackage ./games/four-in-a-row { };
@@ -140,6 +138,7 @@ in
   accerciser = lib.warn "The ‘gnome.accerciser’ was moved to top-level. Please use ‘pkgs.accerciser’ directly." pkgs.accerciser; # Added on 2024-06-22.
   adwaita-icon-theme = lib.warn "The ‘gnome.adwaita-icon-theme’ was moved to top-level. Please use ‘pkgs.adwaita-icon-theme’ directly." pkgs.adwaita-icon-theme; # Added on 2024-06-22.
   aisleriot = lib.warn "The ‘gnome.aisleriot’ was moved to top-level. Please use ‘pkgs.aisleriot’ directly." pkgs.aisleriot; # Added on 2024-08-11.
+  atomix = lib.warn "The ‘gnome.atomix’ was moved to top-level. Please use ‘pkgs.atomix’ directly." pkgs.atomix; # Added on 2024-08-11.
   baobab = lib.warn "The ‘gnome.baobab’ was moved to top-level. Please use ‘pkgs.baobab’ directly." pkgs.baobab; # Added on 2024-06-22.
   cheese = lib.warn "The ‘gnome.cheese’ was moved to top-level. Please use ‘pkgs.cheese’ directly." pkgs.cheese; # Added on 2024-06-22.
   dconf-editor = lib.warn "The ‘gnome.dconf-editor’ was moved to top-level. Please use ‘pkgs.dconf-editor’ directly." pkgs.dconf-editor; # Added on 2024-06-22.

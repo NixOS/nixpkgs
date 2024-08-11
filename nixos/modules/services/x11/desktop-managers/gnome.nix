@@ -456,7 +456,7 @@ in
     (lib.mkIf serviceCfg.games.enable {
       environment.systemPackages = with pkgs.gnome; utils.removePackagesByName [
         pkgs.aisleriot
-        atomix
+        pkgs.atomix
         five-or-more
         four-in-a-row
         pkgs.gnome-2048

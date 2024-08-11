@@ -46,10 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "atomix";
-      attrPath = "gnome.atomix";
-    };
+    updateScript = gnome.updateScript { packageName = "atomix"; };
   };
 
   meta = with lib; {
