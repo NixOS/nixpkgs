@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, pkg-config
-, gnome
-, adwaita-icon-theme
-, gtk3
-, wrapGAppsHook3
-, libxml2
-, gettext
-, itstool
-, meson
-, ninja
-, python3
-, vala
-, desktop-file-utils
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  gnome,
+  adwaita-icon-theme,
+  gtk3,
+  wrapGAppsHook3,
+  libxml2,
+  gettext,
+  itstool,
+  meson,
+  ninja,
+  python3,
+  vala,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-tetravex/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-tetravex/${lib.versions.majorMinor version}/gnome-tetravex-${version}.tar.xz";
     sha256 = "06wihvqp2p52zd2dnknsc3rii69qib4a30yp15h558xrg44z3k8z";
   };
 
@@ -51,9 +52,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
