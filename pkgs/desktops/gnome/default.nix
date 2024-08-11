@@ -13,7 +13,6 @@ in
   _gdkPixbufCacheBuilder_DO_NOT_USE = callPackage ./gdk-pixbuf-cache-builder.nix { };
 
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
-  libchamplain = pkgs.libchamplain.override { inherit (self) libsoup; };
 
 # ISO installer
 # installerIso = callPackage ./installer.nix {};
@@ -88,6 +87,7 @@ in
 }) // lib.optionalAttrs config.allowAliases {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
   libgnome-keyring = lib.warn "The ‘gnome.libgnome-keyring’ was moved to top-level. Please use ‘pkgs.libgnome-keyring’ directly." pkgs.libgnome-keyring; # Added on 2024-06-22.
+  libchamplain = lib.warn "The ‘gnome.libchamplain’ was removed as unused. Please use ‘pkgs.libchamplain’ directly." pkgs.libchamplain; # Added on 2024-08-11.
 
   gedit = throw "The ‘gnome.gedit’ alias was removed. Please use ‘pkgs.gedit’ directly."; # converted to throw on 2023-12-27
   gnome-todo = throw "The ‘gnome.gnome-todo’ alias was removed. Please use ‘pkgs.endeavour’ directly."; # converted to throw on 2023-12-27
