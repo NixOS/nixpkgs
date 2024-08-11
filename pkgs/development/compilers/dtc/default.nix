@@ -110,10 +110,22 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/pull/118700#issuecomment-885892436
     !stdenv.isDarwin &&
 
+    # tests attempt to link .so files
+    # https://github.com/dgibson/dtc/commit/dcef5f834ea34bcb9f8d0e86db1268fde52ead77
+    !stdenv.hostPlatform.isStatic &&
+
     # we must explicitly disable this here so that mesonFlags receives
     # `-Dtests=disabled`; without it meson will attempt to run
     # hostPlatform binaries during the configurePhase.
     (with stdenv; buildPlatform.canExecute hostPlatform);
+
+  strictDeps = true;
+
+  nativeCheckInputs = [ pkg-config ];
+  preCheck = ''
+    # remove on next release: https://github.com/dgibson/dtc/commit/dcef5f834ea34bcb9f8d0e86db1268fde52ead77
+    substituteInPlace ../tests/run_tests.sh --replace-fail pkg-config $PKG_CONFIG
+  '';
 
   meta = with lib; {
     description = "Device Tree Compiler";
