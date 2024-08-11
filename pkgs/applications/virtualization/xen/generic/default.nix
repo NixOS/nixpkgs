@@ -664,7 +664,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Development headers in $dev/include.
       mit
     ];
-    maintainers = [ lib.maintainers.sigmasquadron ];
+    maintainers = with lib.maintainers; [ sigmasquadron ];
     mainProgram = "xl";
     # Evaluates to x86_64-linux.
     platforms = lib.lists.intersectLists lib.platforms.linux lib.platforms.x86_64;
