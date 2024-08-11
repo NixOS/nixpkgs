@@ -120,7 +120,12 @@ lib.makeExtensible (final: {
               cp -ar "$f" "./$f"
             done
 
-            for c in ${toString contents} ; do
+            # TODO(@ShamrockLee):
+            # Once vmTools.runInLinuxVMm works with `__structuredAttrs = true` (#334705),
+            # set __structuredAttrs = true and pass contents as an attribute
+            # so that we could loop with `for c in ''${contents[@]}`
+            # instead of expanding all the paths in contents into the Bash string.
+            for c in ${lib.escapeShellArgs contents} ; do
               for f in "$c"/bin/* ; do
                 if [ ! -e "bin/$(basename "$f")" ] ; then
                   ln -s "$f" bin/
