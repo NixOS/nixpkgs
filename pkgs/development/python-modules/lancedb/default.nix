@@ -23,6 +23,7 @@
   polars,
   pytest-asyncio,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -109,6 +110,16 @@ buildPythonPackage rec {
     # touch the network
     "test_s3.py"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "python-v(.*)"
+      "--generate-lockfile"
+      "--lockfile-metadata-path"
+      "python"
+    ];
+  };
 
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";
