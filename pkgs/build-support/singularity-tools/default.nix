@@ -82,7 +82,13 @@ rec {
               util-linux
             ];
             strictDeps = true;
-            layerClosure = writeClosure contents;
+            layerClosure = writeClosure (
+              [
+                bashInteractive
+                runScriptFile
+              ]
+              ++ contents
+            );
             preVM = vmTools.createEmptyImage {
               size = diskSize;
               fullName = "${projectName}-run-disk";
