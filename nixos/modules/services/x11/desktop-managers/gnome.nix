@@ -458,7 +458,7 @@ in
         pkgs.aisleriot
         pkgs.atomix
         pkgs.five-or-more
-        four-in-a-row
+        pkgs.four-in-a-row
         pkgs.gnome-2048
         gnome-chess
         gnome-klotski

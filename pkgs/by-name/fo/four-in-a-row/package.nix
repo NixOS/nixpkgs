@@ -52,10 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "four-in-a-row";
-      attrPath = "gnome.four-in-a-row";
-    };
+    updateScript = gnome.updateScript { packageName = "four-in-a-row"; };
   };
 
   meta = with lib; {

@@ -80,8 +80,6 @@ in
 
 #### Games
 
-  four-in-a-row = callPackage ./games/four-in-a-row { };
-
   gnome-chess = callPackage ./games/gnome-chess { };
 
   gnome-klotski = callPackage ./games/gnome-klotski { };
@@ -147,6 +145,7 @@ in
   evolution-data-server = lib.warn "The ‘gnome.evolution-data-server’ was moved to top-level. Please use ‘pkgs.evolution-data-server’ directly." pkgs.evolution-data-server; # Added on 2024-06-13.
   file-roller = lib.warn "The ‘gnome.file-roller’ was moved to top-level. Please use ‘pkgs.file-roller’ directly." pkgs.file-roller; # Added on 2024-06-13.
   five-or-more = lib.warn "The ‘gnome.five-or-more’ was moved to top-level. Please use ‘pkgs.five-or-more’ directly." pkgs.five-or-more; # Added on 2024-08-11.
+  four-in-a-row = lib.warn "The ‘gnome.four-in-a-row’ was moved to top-level. Please use ‘pkgs.four-in-a-row’ directly." pkgs.four-in-a-row; # Added on 2024-08-11.
   geary = lib.warn "The ‘gnome.geary’ was moved to top-level. Please use ‘pkgs.geary’ directly." pkgs.geary; # Added on 2024-06-22.
   ghex = lib.warn "The ‘gnome.ghex’ was moved to top-level. Please use ‘pkgs.ghex’ directly." pkgs.ghex; # Added on 2024-06-22.
   gitg = lib.warn "The ‘gnome.gitg’ was moved to top-level. Please use ‘pkgs.gitg’ directly." pkgs.gitg; # Added on 2024-06-22.
