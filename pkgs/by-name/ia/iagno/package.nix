@@ -64,10 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "iagno";
-      attrPath = "gnome.iagno";
-    };
+    updateScript = gnome.updateScript { packageName = "iagno"; };
   };
 
   meta = with lib; {

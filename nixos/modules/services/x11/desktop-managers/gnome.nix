@@ -470,7 +470,7 @@ in
         pkgs.gnome-taquin
         pkgs.gnome-tetravex
         pkgs.hitori
-        iagno
+        pkgs.iagno
         lightsoff
         quadrapassel
         swell-foop
