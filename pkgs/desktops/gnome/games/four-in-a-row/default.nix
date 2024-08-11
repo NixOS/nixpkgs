@@ -1,21 +1,50 @@
-{ lib, stdenv, fetchurl, pkg-config, gnome, adwaita-icon-theme, gtk3, wrapGAppsHook3
-, gettext, meson, gsound, librsvg, itstool, vala
-, python3, ninja, desktop-file-utils }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gnome,
+  adwaita-icon-theme,
+  gtk3,
+  wrapGAppsHook3,
+  gettext,
+  meson,
+  gsound,
+  librsvg,
+  itstool,
+  vala,
+  python3,
+  ninja,
+  desktop-file-utils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "four-in-a-row";
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/four-in-a-row/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/four-in-a-row/${lib.versions.majorMinor version}/four-in-a-row-${version}.tar.xz";
     sha256 = "10ji60bdfdzb6wk5dkwjc3yww7hqi3yjcx1k1z7x2521h2dpdli1";
   };
 
   nativeBuildInputs = [
-    pkg-config wrapGAppsHook3 gettext meson itstool vala
-    ninja python3 desktop-file-utils
+    pkg-config
+    wrapGAppsHook3
+    gettext
+    meson
+    itstool
+    vala
+    ninja
+    python3
+    desktop-file-utils
   ];
-  buildInputs = [ gtk3 gsound librsvg adwaita-icon-theme ];
+
+  buildInputs = [
+    gtk3
+    gsound
+    librsvg
+    adwaita-icon-theme
+  ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
