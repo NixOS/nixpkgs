@@ -1,14 +1,15 @@
 {
   lib,
   buildPythonPackage,
+  certifi,
   fetchFromGitHub,
+  pytestCheckHook,
+  python-dateutil,
+  python-dotenv,
   pythonOlder,
   setuptools,
-  certifi,
   six,
-  python-dateutil,
   urllib3,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,12 +32,18 @@ buildPythonPackage rec {
     certifi
     six
     python-dateutil
+    python-dotenv
     urllib3
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "asana" ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "build_tests/"
+  ];
 
   meta = with lib; {
     description = "Python client library for Asana";
