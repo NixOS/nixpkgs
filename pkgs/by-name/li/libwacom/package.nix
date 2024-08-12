@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonEnable "tests" finalAttrs.doCheck)
-    "--sysconfdir=/etc"
+    (lib.mesonOption "sysconfdir" "/etc")
   ];
 
   # Tests are in the `tests` pass-through derivation because one of them is flaky, frequently causing build failures.
