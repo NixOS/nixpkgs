@@ -157,5 +157,7 @@ python3.pkgs.buildPythonApplication {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ bbjubjub ];
+    # test "test_reestablish_with_old_state" hangs indefinitely, 2 other tests fail
+    broken = true;
   };
 }
