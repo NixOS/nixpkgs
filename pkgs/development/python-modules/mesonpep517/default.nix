@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "mesonpep517";
   version = "0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -26,15 +26,15 @@ buildPythonPackage rec {
   #
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'backend-path = "."' 'backend-path = ["."]'
+      --replace-fail 'backend-path = "."' 'backend-path = ["."]'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [ toml ];
+  dependencies = [ toml ];
 
   propagatedNativeBuildInputs = [
     meson
