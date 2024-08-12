@@ -11,6 +11,7 @@
   openssl,
   paramiko,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
@@ -37,10 +38,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace Makefile \
     --replace "SHELL := /bin/bash" "SHELL := ${bash}/bin/bash"
-    substituteInPlace pytest.ini \
-      --replace-fail "-p pytest_cov" "" \
-      --replace-fail "--no-cov-on-fail" ""
-    sed -i "/--cov/d" pytest.ini
   '';
 
   build-system = [ setuptools-scm ];
@@ -58,6 +55,7 @@ buildPythonPackage rec {
     hyperframe
     openssl
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytest-xdist
     pytestCheckHook

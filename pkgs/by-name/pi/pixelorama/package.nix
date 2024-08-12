@@ -1,64 +1,73 @@
-{ lib
-, stdenv
-, alsa-lib
-, autoPatchelfHook
-, fetchFromGitHub
-, godot3-headless
-, godot3-export-templates
-, libGLU
-, libpulseaudio
-, libX11
-, libXcursor
-, libXi
-, libXinerama
-, libXrandr
-, libXrender
-, nix-update-script
-, udev
+{
+  lib,
+  stdenv,
+  alsa-lib,
+  autoPatchelfHook,
+  fetchFromGitHub,
+  godot_4,
+  godot_4-export-templates,
+  libGL,
+  libpulseaudio,
+  libX11,
+  libXcursor,
+  libXext,
+  libXi,
+  libXrandr,
+  nix-update-script,
+  udev,
+  vulkan-loader,
 }:
 
 let
   preset =
     if stdenv.isLinux then
-      if stdenv.is64bit then "Linux/X11 64-bit"
-      else "Linux/X11 32-bit"
-    else if stdenv.isDarwin then "Mac OSX"
-    else throw "unsupported platform";
-in stdenv.mkDerivation (finalAttrs: {
+      if stdenv.is64bit then "Linux/X11 64-bit" else "Linux/X11 32-bit"
+    else if stdenv.isDarwin then
+      "Mac OSX"
+    else
+      throw "unsupported platform";
+
+  godot_version_folder = lib.replaceStrings [ "-" ] [ "." ] godot_4.version;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "0.11.4";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-VEQjZ9kDqXz1hoT4PrsBtzoi1TYWyN+YcPMyf9qJMRE=";
+    hash = "sha256-lfim5ZiykOhI1kgsu0ni2frUVHPRIPJdrGx6TuUQcSY=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoPatchelfHook
-    godot3-headless
+    godot_4
   ];
 
-  buildInputs = [
-    libGLU
+  runtimeDependencies = map lib.getLib [
+    alsa-lib
+    libGL
+    libpulseaudio
     libX11
     libXcursor
+    libXext
     libXi
-    libXinerama
     libXrandr
-    libXrender
+    udev
+    vulkan-loader
   ];
 
   buildPhase = ''
     runHook preBuild
 
     export HOME=$(mktemp -d)
-    mkdir -p $HOME/.local/share/godot/
-    ln -s "${godot3-export-templates}/share/godot/templates" "$HOME/.local/share/godot/templates"
+    mkdir -p $HOME/.local/share/godot/export_templates
+    ln -s "${godot_4-export-templates}" "$HOME/.local/share/godot/export_templates/${godot_version_folder}"
     mkdir -p build
-    godot3-headless -v --export "${preset}" ./build/pixelorama
-    godot3-headless -v --export-pack "${preset}" ./build/pixelorama.pck
+    godot4 --headless --export-release "${preset}" ./build/pixelorama
 
     runHook postBuild
   '';
@@ -76,12 +85,6 @@ in stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  runtimeDependencies = map lib.getLib [
-    alsa-lib
-    libpulseaudio
-    udev
-  ];
-
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
@@ -89,7 +92,10 @@ in stdenv.mkDerivation (finalAttrs: {
     description = "Free & open-source 2D sprite editor, made with the Godot Engine!";
     changelog = "https://github.com/Orama-Interactive/Pixelorama/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     maintainers = with maintainers; [ felschr ];
     mainProgram = "pixelorama";
   };
