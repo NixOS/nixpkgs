@@ -77,7 +77,7 @@ in
       type = types.attrsOf cfgType;
     };
 
-    enableConfigCheck = mkEnableOption (lib.mdDoc "checking all configurations during build time") // { default = true; };
+    enableConfigCheck = mkEnableOption "checking all configurations during build time" // { default = true; };
   };
 
   config =
