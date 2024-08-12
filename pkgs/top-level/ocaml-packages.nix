@@ -1123,8 +1123,6 @@ let
 
     mirage-console = callPackage ../development/ocaml-modules/mirage-console { };
 
-    mirage-console-unix = callPackage ../development/ocaml-modules/mirage-console/unix.nix { };
-
     mirage-crypto = callPackage ../development/ocaml-modules/mirage-crypto { };
 
     mirage-crypto-ec = callPackage ../development/ocaml-modules/mirage-crypto/ec.nix { };
