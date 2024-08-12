@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   fetchzip,
   stdenv,
   zlib,
@@ -27,6 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   doCheck = true;
+
+  passthru = {
+    tests = lib.packagesFromDirectoryRecursive {
+      inherit callPackage;
+      directory = ./tests;
+    };
+  };
 
   meta = {
     homepage = "https://savannah.nongnu.org/projects/fastjar/";
