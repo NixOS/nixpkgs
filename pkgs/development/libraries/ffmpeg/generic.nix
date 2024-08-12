@@ -98,6 +98,7 @@
 , withQuirc ? withFullDeps && lib.versionAtLeast version "7" # QR decoding
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
 , withRtmp ? withFullDeps # RTMP[E] support
+, withRubberband ? withFullDeps && withGPL # Rubberband filter
 , withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
 , withSdl2 ? withSmallDeps
 , withShaderc ? withFullDeps && !stdenv.isDarwin && lib.versionAtLeast version "5.0"
@@ -296,6 +297,7 @@
 , quirc
 , rav1e
 , rtmpdump
+, rubberband
 , twolame
 , samba
 , SDL2
@@ -625,6 +627,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ [
     (enableFeature withRav1e "librav1e")
     (enableFeature withRtmp "librtmp")
+    (enableFeature withRubberband "librubberband")
     (enableFeature withSamba "libsmbclient")
     (enableFeature withSdl2 "sdl2")
   ] ++ optionals (versionAtLeast version "5.0") [
@@ -768,6 +771,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withQuirc [ quirc ]
   ++ optionals withRav1e [ rav1e ]
   ++ optionals withRtmp [ rtmpdump ]
+  ++ optionals withRubberband [ rubberband ]
   ++ optionals withSamba [ samba ]
   ++ optionals withSdl2 [ SDL2 ]
   ++ optionals withShaderc [ shaderc ]
