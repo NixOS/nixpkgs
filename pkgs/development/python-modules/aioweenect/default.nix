@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  httpx,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -34,10 +33,7 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies = [
-    aiohttp
-    httpx
-  ];
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     aresponses
