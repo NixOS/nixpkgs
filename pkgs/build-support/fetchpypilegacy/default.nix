@@ -4,6 +4,20 @@
   lib,
   python3,
 }:
+let
+  inherit (lib)
+    optionalAttrs
+    fetchers
+    optional
+    inPureEvalMode
+    filter
+    head
+    concatStringsSep
+    escapeShellArg
+    ;
+
+  impureEnvVars = fetchers.proxyImpureEnvVars ++ optional inPureEvalMode "NETRC";
+in
 {
   # package name
   pname,
@@ -19,10 +33,10 @@
   name ? null,
 }:
 let
-  urls' = urls ++ lib.optional (url != null) url;
+  urls' = urls ++ optional (url != null) url;
 
-  pathParts = lib.filter ({ prefix, path }: "NETRC" == prefix) builtins.nixPath;
-  netrc_file = if (pathParts != [ ]) then (lib.head pathParts).path else "";
+  pathParts = filter ({ prefix, path }: "NETRC" == prefix) builtins.nixPath;
+  netrc_file = if (pathParts != [ ]) then (head pathParts).path else "";
 
 in
 # Assert that we have at least one URL
@@ -31,18 +45,18 @@ runCommand file
   (
     {
       nativeBuildInputs = [ python3 ];
-      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+      inherit impureEnvVars;
       outputHashMode = "flat";
       # if hash is empty select a default algo to let nix propose the actual hash.
       outputHashAlgo = if hash == "" then "sha256" else null;
       outputHash = hash;
-      NETRC = netrc_file;
     }
-    // (lib.optionalAttrs (name != null) { inherit name; })
+    // optionalAttrs (name != null) { inherit name; }
+    // optionalAttrs (!inPureEvalMode) { env.NETRC = netrc_file; }
   )
   ''
     python ${./fetch-legacy.py} ${
-      lib.concatStringsSep " " (map (url: "--url ${lib.escapeShellArg url}") urls')
+      concatStringsSep " " (map (url: "--url ${escapeShellArg url}") urls')
     } --pname ${pname} --filename ${file}
     mv ${file} $out
   ''
