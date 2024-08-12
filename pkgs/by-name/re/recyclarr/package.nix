@@ -6,7 +6,6 @@
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
-  recyclarr,
   testers,
 }:
 let
@@ -18,14 +17,14 @@ let
     </configuration>
   '';
 in
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "recyclarr";
   version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "recyclarr";
-    repo = pname;
-    rev = "v${version}";
+    repo = "recyclarr";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KXFGT1fprRKN+V+3k0hpjjaI/xpw6UDAk+jj9zMek7k=";
   };
 
@@ -34,10 +33,10 @@ buildDotnetModule rec {
 
   prePatch = ''
     substituteInPlace src/Recyclarr.Cli/Program.cs \
-      --replace-fail '$"v{GitVersionInformation.SemVer} ({GitVersionInformation.FullBuildMetaData})"' '"${version}-nixpkgs"'
+      --replace-fail '$"v{GitVersionInformation.SemVer} ({GitVersionInformation.FullBuildMetaData})"' '"${finalAttrs.version}-nixpkgs"'
 
     substituteInPlace src/Recyclarr.Cli/Console/Setup/ProgramInformationDisplayTask.cs \
-      --replace-fail 'GitVersionInformation.InformationalVersion' '"${version}-nixpkgs"'
+      --replace-fail 'GitVersionInformation.InformationalVersion' '"${finalAttrs.version}-nixpkgs"'
   '';
   patches = [ ./001-Git-Version.patch ];
 
@@ -61,23 +60,19 @@ buildDotnetModule rec {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion { package = recyclarr; };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Automatically sync TRaSH guides to your Sonarr and Radarr instances";
     homepage = "https://recyclarr.dev/";
-    changelog = "https://github.com/recyclarr/recyclarr/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/recyclarr/recyclarr/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       josephst
       aldoborrero
     ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
+    mainProgram = "recyclarr";
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
-}
+})
