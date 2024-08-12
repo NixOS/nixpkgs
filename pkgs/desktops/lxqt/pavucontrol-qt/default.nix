@@ -7,6 +7,7 @@
   lxqt-build-tools,
   pkg-config,
   qtbase,
+  qtsvg,
   qttools,
   qtwayland,
   wrapQtAppsHook,
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpulseaudio
     qtbase
+    qtsvg
     qtwayland
   ];
 
