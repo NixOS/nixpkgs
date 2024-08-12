@@ -16,25 +16,26 @@ let
 
   optFlag = w: (if w then "1" else "0");
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kime";
-  version = "3.0.2";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "Riey";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-qLQ6DmV7KHhdXWR5KtO52cmXBm818zKJVj4nxsR14dc=";
+    repo = "kime";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-apQkxAUve7+2h9XACZZgroqBK1sCUYMNfsX/4nEnCPA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    sha256 = "sha256-/o9b7YvrpV+IujkllFWAz6Mg4CbS9BInF8antfZ0Vsw=";
+    inherit (finalAttrs) src;
+    hash = "sha256-2MG6xigiKdvQX8PR457d6AXswTRPRJBPERvZqemjv24=";
   };
 
   # Replace autostart path
   postPatch = ''
-    substituteInPlace res/kime.desktop --replace "/usr/bin/kime" "$out/bin/kime"
+    substituteInPlace res/kime.desktop res/kime-xdg-autostart \
+      --replace-warn "/usr/bin/kime" "kime"
   '';
 
   dontUseCmakeConfigure = true;
@@ -81,7 +82,7 @@ stdenv.mkDerivation rec {
     # Don't pipe output to head directly it will cause broken pipe error https://github.com/rust-lang/rust/issues/46016
     kimeVersion=$(echo "$($out/bin/kime --version)" | head -n1)
     echo "'kime --version | head -n1' returns: $kimeVersion"
-    [[ "$kimeVersion" == "kime ${version}" ]]
+    [[ "$kimeVersion" == "kime ${finalAttrs.version}" ]]
     runHook postInstallCheck
   '';
 
@@ -104,11 +105,11 @@ stdenv.mkDerivation rec {
 
   RUST_BACKTRACE = 1;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Riey/kime";
     description = "Korean IME";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.riey ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.riey ];
+    platforms = lib.platforms.linux;
   };
-}
+})
