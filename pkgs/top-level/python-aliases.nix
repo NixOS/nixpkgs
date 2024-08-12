@@ -60,6 +60,7 @@ mapAliases ({
   asyncio-nats-client = nats-py; # added 2022-02-08
   atsim_potentials = atsim-potentials; # added 2023-10-08
   awkward0 = throw "awkward0 has been removed, use awkward instead"; # added 2022-12-13
+  autologging = throw "autologging was removed because it is no longer maintained and broken"; # added 2024-08-12
   Babel = babel; # added 2022-05-06
   backports_csv = throw "backports_csv has been removed, since we no longer need to backport to python2"; # added 2023-07-28
   backports_functools_lru_cache = throw "backports_functools_lru_cache has been removed, since we no longer need to backport to python3.2"; # added 2023-07-28
