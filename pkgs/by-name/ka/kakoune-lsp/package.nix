@@ -12,18 +12,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kakoune-lsp";
-  version = "17.0.1";
+  version = "17.1.1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "kakoune-lsp";
+    repo = "kakoune-lsp";
     rev = "v${version}";
-    sha256 = "sha256-uXKquAjfytUn/Q0kx+0BGRQTkVMQ9rMRnTCy622upag=";
+    sha256 = "sha256-XBH2pMDiHJNXrx90Lt0IcsbMFUM+X7GAHgiHpdlIdR4=";
   };
 
   patches = [ (replaceVars ./Hardcode-perl.patch { inherit perl; }) ];
 
-  cargoHash = "sha256-XnhYODMzqInwbgM8wveY048sljZ8OKw4hLYJG5h8Twc=";
+  cargoHash = "sha256-Yi+T+9E3Wvce4kDLsRgZ07RAGLrq7dkinKpvvGeLeS0=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreServices
