@@ -19,13 +19,9 @@ php.buildComposerProject (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postPatch = ''
-    patchShebangs bin/phpactor
-  '';
-
   postInstall = ''
     installShellCompletion --cmd phpactor \
-      --bash <($out/bin/phpactor completion bash)
+      --bash <(php $out/bin/phpactor completion bash)
   '';
 
   meta = {
