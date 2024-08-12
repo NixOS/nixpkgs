@@ -36,6 +36,8 @@
 , Kernel
 , buildClient ? true
 , buildServer ? true
+, SDL2
+, useSDL2 ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_CLIENT" buildClient)
     (lib.cmakeBool "BUILD_SERVER" buildServer)
     (lib.cmakeBool "ENABLE_PROMETHEUS" buildServer)
+    (lib.cmakeBool "USE_SDL2" useSDL2)
     # Ensure we use system libraries
     (lib.cmakeBool "ENABLE_SYSTEM_GMP" true)
     (lib.cmakeBool "ENABLE_SYSTEM_JSONCPP" true)
@@ -102,7 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
     openal
     libogg
     libvorbis
-  ] ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin) [
+  ] ++ lib.optionals (buildClient && useSDL2) [
+    SDL2
+  ] ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin && !useSDL2) [
     xorg.libX11
     xorg.libXi
   ] ++ lib.optionals buildServer [
