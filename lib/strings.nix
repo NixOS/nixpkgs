@@ -1056,9 +1056,9 @@ rec {
     let
       string = toString arg;
     in
-      if match ".*[]\\[\"'[:space:]\\\\#$&(){}<>|;*?=!~].*" string == null
-      then string
-      else "'${replaceStrings ["'"] ["'\\''"] string}'";
+      if match "[[:alnum:],._+:@%/-]*" string == null
+      then "'${replaceStrings ["'"] ["'\\''"] string}'"
+      else string;
 
   /**
     Quote all arguments that have special characters to be safely passed to the
