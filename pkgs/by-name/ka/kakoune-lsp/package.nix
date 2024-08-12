@@ -1,8 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, substituteAll, perl
-, stdenv, CoreServices, Security, SystemConfiguration
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  substituteAll,
+  perl,
+  stdenv,
+  CoreServices,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,13 +30,28 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-XnhYODMzqInwbgM8wveY048sljZ8OKw4hLYJG5h8Twc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+    Security
+    SystemConfiguration
+  ];
 
   meta = {
     description = "Kakoune Language Server Protocol Client";
     homepage = "https://github.com/kakoune-lsp/kakoune-lsp";
-    license = with lib.licenses; [ unlicense /* or */ mit ];
-    maintainers = with lib.maintainers; [ philiptaron spacekookie poweredbypie ];
+
+    # See https://github.com/kakoune-lsp/kakoune-lsp/commit/55dfc83409b9b7d3556bacda8ef8b71fc33b58cd
+    license = with lib.licenses; [
+      unlicense
+      mit
+    ];
+
+    maintainers = with lib.maintainers; [
+      philiptaron
+      spacekookie
+      poweredbypie
+    ];
+
     mainProgram = "kak-lsp";
   };
 }
