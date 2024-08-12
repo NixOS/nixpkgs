@@ -46,7 +46,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  patches = [ ./write-in-app-storage.diff ];
+
   postPatch = ''
+    substituteInPlace source/funkin/util/Constants.hx \
+      --replace "funkin.util.macro.GitCommit.getGitCommitHash();" "\"unspecified-nix\";" \
+      --replace "funkin.util.macro.GitCommit.getGitBranch()" "\"main\""
+
     # Real API keys are stripped from repo
     cat >source/APIStuff.hx <<EOF
     package;
@@ -112,12 +118,6 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-
-  prePatch = ''
-    substituteInPlace source/funkin/util/Constants.hx \
-      --replace "funkin.util.macro.GitCommit.getGitCommitHash();" "\"unspecified-nix\";" \
-      --replace "funkin.util.macro.GitCommit.getGitBranch()" "\"main\""
-  '';
 
   buildPhase = ''
     runHook preBuild
