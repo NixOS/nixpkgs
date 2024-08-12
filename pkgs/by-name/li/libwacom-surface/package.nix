@@ -8,17 +8,17 @@ let
   libwacom-surface = fetchFromGitHub {
     owner = "linux-surface";
     repo = "libwacom-surface";
-    rev = "v2.12.0-1";
-    hash = "sha256-z/qNXbe89/0GIDj0BDQY6xdjHKA9chAPpviHPtBLjFM=";
+    rev = "v2.12.2-1";
+    hash = "sha256-MreAwOaT8pd5NMWBpZDBbPz73DhcChgeXXBNyjw99Pw=";
   };
 in
-libwacom.overrideAttrs (old: {
+libwacom.overrideAttrs (prevAttrs: {
   pname = "libwacom-surface";
 
   # These patches will not be included upstream:
   # https://github.com/linux-surface/libwacom/issues/2
   patches =
-    old.patches or [ ]
+    (prevAttrs.patches or [ ])
     ++ map (p: "${libwacom-surface}/patches/v2/${p}") [
       "0001-Add-support-for-BUS_VIRTUAL.patch"
       "0002-Add-support-for-Intel-Management-Engine-bus.patch"
@@ -38,7 +38,7 @@ libwacom.overrideAttrs (old: {
       "0016-data-Add-Microsoft-Surface-Laptop-Studio.patch"
     ];
 
-  meta = old.meta // {
+  meta = prevAttrs.meta // {
     homepage = "https://github.com/linux-surface/libwacom-surface";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
