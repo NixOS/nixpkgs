@@ -99,6 +99,6 @@ buildPythonPackage rec {
     homepage = "https://graph-tool.skewed.de";
     changelog = "https://git.skewed.de/count0/graph-tool/commits/release-${version}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.mjoerg ];
   };
 }
