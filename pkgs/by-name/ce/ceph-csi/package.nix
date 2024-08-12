@@ -1,4 +1,10 @@
-{ ceph, fetchFromGitHub, go, lib, stdenv }:
+{
+  ceph,
+  fetchFromGitHub,
+  go,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ceph-csi";
@@ -36,6 +42,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     mainProgram = "cephcsi";
     maintainers = with lib.maintainers; [ johanot ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }
