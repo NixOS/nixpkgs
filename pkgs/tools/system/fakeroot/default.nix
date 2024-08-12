@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://salsa.debian.org/clint/fakeroot";
     description = "Give a fake root environment through LD_PRELOAD";
+    mainProgram = "fakeroot";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
