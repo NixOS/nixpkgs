@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
     tests.version = testers.testVersion {
       package = recyclarr;
+      version = "v${version}";
     };
   };
 
