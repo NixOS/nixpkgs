@@ -52,13 +52,13 @@
 
 buildPythonPackage rec {
   pname = "datalad";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-HBHz1z34GFurDROm2goDxm3G2ml3SYOOTU2cQE36VYg=";
+    hash = "sha256-Y7P9vRfFUJ5ZhVRTAYeImI9cv1LtWVAeBoBl6wANnrc=";
   };
 
   postPatch = ''

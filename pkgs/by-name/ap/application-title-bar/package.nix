@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "application-title-bar";
-  version = "0.6.9";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "antroids";
     repo = "application-title-bar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-49QZ2/77mj05xIJ9bVrxiNLzlfF1zURYr34kqt6tNzg=";
+    hash = "sha256-4eSlhrh40L/32N7P7Q3/qqj8BlUQuDKqpuKGNwimeDU=";
   };
 
   propagatedUserEnvPkgs = with kdePackages; [ kconfig ];

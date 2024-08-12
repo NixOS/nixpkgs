@@ -1,29 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, rustPlatform
-, CoreServices
-, which
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  rustPlatform,
+  darwin,
+  which,
+  installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "dotter";
-  version = "0.13.2";
+  version = "0.13.2-unstable-2024-08-02";
 
   src = fetchFromGitHub {
     owner = "SuperCuber";
     repo = "dotter";
-    rev = "v${version}";
-    hash = "sha256-IV3wvmRiRtzu5UhIlL1BnL8hy+fQHQA9Mfiy6dIsjdw=";
+    rev = "d5199df24e6db039c460fa37fe3279f89c3bfc63";
+    hash = "sha256-8/drsrJq8mfrWvTCcNX0eoPHzywxQNuyRdxQE/zb8lA=";
   };
 
-  cargoHash = "sha256-jNHq1cH3I29b6LIoO2ApLDTYzFGGSua1lACvYCBpbQQ=";
+  cargoHash = "sha256-+LBmswq2mvM0hb6wwCQMxL+C/TdpRGZQGufgsqC1KSQ=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
-  nativeCheckInputs = [ which installShellFiles ];
+  nativeCheckInputs = [
+    which
+    installShellFiles
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dotter \
@@ -35,7 +39,6 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = nix-update-script { };
   };
-
 
   meta = with lib; {
     description = "Dotfile manager and templater written in rust 🦀";

@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 let
@@ -20,10 +21,13 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-dbcz66t9fLhFjFkDMQ6VJmKa/lI/x2J7sHbguamA4Pw=";
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Lint your mask targets";
     homepage = "https://github.com/brumhard/masklint";
     license = lib.licenses.mit;
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     maintainers = [ lib.maintainers.pinage404 ];
     mainProgram = "masklint";
   };

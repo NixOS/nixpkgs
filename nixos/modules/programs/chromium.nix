@@ -17,7 +17,7 @@ in
 
   options = {
     programs.chromium = {
-      enable = lib.mkEnableOption "{command}`chromium` policies";
+      enable = lib.mkEnableOption "the {command}`chromium` web browser";
 
       package = lib.mkPackageOption pkgs "chromium" { };
 
