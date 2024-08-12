@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "trustymail";
-  version = "0.8.3";
+  version = "1.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cisagov";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-aFXz78Gviki0yIcnn2EgR3mHmt0wMoY5u6RoT6zQc1Y=";
+    hash = "sha256-Zkw+NfeVtIArrBxR1qR9bAQe5yd7mAtNiT0x5Mqr3Ic=";
   };
 
   postPatch = ''
