@@ -28,6 +28,7 @@
   packaging,
   pandas,
   passlib,
+  setuptools,
   peft,
   pgmpy,
   plotly,
@@ -47,11 +48,10 @@
   scikit-learn,
   sentence-transformers,
   seqeval,
-  setuptools,
   smart-open,
   snorkel,
-  spacy,
   spacy-transformers,
+  spacy,
   sqlalchemy,
   tqdm,
   transformers,
@@ -79,6 +79,8 @@ buildPythonPackage rec {
     hash = "sha256-+eQNvLDV063JY6CyngpGyo4NdSd6HvAHFgGWtPfZNVQ=";
   };
 
+  sourceRoot = "${src.name}/${pname}";
+
   pythonRelaxDeps = [
     "httpx"
     "numpy"
@@ -88,7 +90,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ setuptools ];
-
 
   dependencies = [
     httpx
