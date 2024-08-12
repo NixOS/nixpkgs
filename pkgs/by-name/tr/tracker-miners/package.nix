@@ -20,6 +20,7 @@
 , exempi
 , giflib
 , glib
+, gobject-introspection
 , gnome
 , gst_all_1
 , icu
@@ -27,6 +28,7 @@
 , libcue
 , libexif
 , libgsf
+, libgudev
 , libgxps
 , libiptcdata
 , libjpeg
@@ -46,12 +48,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "tracker-miners";
-  version = "3.7.3";
+  pname = "localsearch";
+  version = "3.8.beta";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/tracker-miners/${lib.versions.majorMinor finalAttrs.version}/tracker-miners-${finalAttrs.version}.tar.xz";
-    hash = "sha256-50OIFUtcGXtLfuQvDc6MX7vd1NNhCT74jU+zA+M9pf4=";
+    url = "mirror://gnome/sources/localsearch/${lib.versions.majorMinor finalAttrs.version}/localsearch-${finalAttrs.version}.tar.xz";
+    hash = "sha256-KPolJ/pOty5MBj3Jk1ydPQzvxB3O7HP8knQz3E7SBqk=";
   };
 
   patches = [
@@ -64,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_45
     gettext
     glib
+    gobject-introspection
     itstool
     libxslt
     meson
@@ -95,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcue
     libexif
     libgsf
+    libgudev
     libgxps
     libiptcdata
     libjpeg
@@ -134,15 +138,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "tracker-miners";
+      packageName = "localsearch";
+      attrPath = "tracker-miners";
     };
   };
 
   meta = {
-    homepage = "https://gitlab.gnome.org/GNOME/tracker-miners";
+    homepage = "https://gitlab.gnome.org/GNOME/localsearch";
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = lib.teams.gnome.members;
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    mainProgram = "localsearch";
   };
 })
