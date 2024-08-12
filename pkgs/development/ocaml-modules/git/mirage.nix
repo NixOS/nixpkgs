@@ -11,7 +11,6 @@
 , tls
 , tls-mirage
 , uri
-, hex
 , happy-eyeballs-mirage
 , happy-eyeballs
 , ca-certs-nss
@@ -26,10 +25,7 @@
 , lwt
 , mirage-clock
 , mirage-flow
-, mirage-random
 , mirage-time
-, result
-, rresult
 , alcotest
 , alcotest-lwt
 , bigstringaf
@@ -49,8 +45,6 @@ buildDunePackage {
     dns-client
     happy-eyeballs-mirage
     ipaddr
-    mirage-random
-    rresult
   ];
 
   propagatedBuildInputs = [
@@ -64,7 +58,6 @@ buildDunePackage {
     tls
     tls-mirage
     uri
-    hex
     happy-eyeballs
     ca-certs-nss
     mirage-crypto
@@ -78,7 +71,6 @@ buildDunePackage {
     mirage-clock
     mirage-flow
     mirage-time
-    result
   ];
 
   checkInputs = [
