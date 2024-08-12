@@ -1,22 +1,23 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, fetchpatch2
-, ledger
-, hledger
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  fetchpatch2,
+  ledger,
+  hledger,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ledger-autosync";
   version = "1.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "egh";
     repo = "ledger-autosync";
     rev = "v${version}";
-    sha256 = "0n3y4qxsv1cyvyap95h3rj4bj1sinyfgsajygm7s8di3j5aabqr2";
+    hash = "sha256-IuOlVJEjNqRPfV4q/Zy3UQe5iMwDlnSV356FrTsmflg=";
   };
 
   patches = [
@@ -32,11 +33,9 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    poetry-core
-  ];
+  build-system = with python3Packages; [ poetry-core ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     ofxclient
     ofxparse
   ];
@@ -57,8 +56,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/egh/ledger-autosync";
+    changelog = "https://github.com/egh/ledger-autosync/releases/tag/v${version}";
     description = "OFX/CSV autosync for ledger and hledger";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ eamsden ];
   };
 }
