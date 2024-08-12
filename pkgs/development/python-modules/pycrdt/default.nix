@@ -11,6 +11,7 @@
   pytestCheckHook,
   trio,
   y-py,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -48,6 +49,8 @@ buildPythonPackage rec {
     trio
     y-py
   ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
 
   meta = with lib; {
     description = "CRDTs based on Yrs";
