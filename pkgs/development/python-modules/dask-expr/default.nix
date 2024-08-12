@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask-expr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JLOTmpaKDyv4dgEM/dQFeQrD0OZcwNxBi7/pq/STJYY=";
+    hash = "sha256-z/+0d/mcC51rXfSCkVosc2iJ9SKHuKlPO+n/+SisQBg=";
   };
 
   postPatch = ''
