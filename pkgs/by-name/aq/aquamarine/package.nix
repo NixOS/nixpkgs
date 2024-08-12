@@ -22,13 +22,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aquamarine";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "aquamarine";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UKdFUKA/h6SeiXpQ06BSZkBJKDwFOFaGI3NtiuaDOhg=";
+    hash = "sha256-1RYuBS/CQhtyIeXrLDvGWJhuVG1kiQMG+aYaBkoGnEU=";
   };
 
   nativeBuildInputs = [
@@ -62,9 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeBuildType = "RelWithDebInfo";
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/hyprwm/aquamarine/releases/tag/${finalAttrs.version}";
@@ -75,6 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
       fufexan
       johnrtitor
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })
