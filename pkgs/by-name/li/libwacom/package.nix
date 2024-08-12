@@ -13,17 +13,6 @@
   valgrind,
 }:
 
-let
-  testsDisabled = "-Dtests=disabled";
-  testsEnabled = "-Dtests=enabled";
-  replaceDisabledWithEnabled =
-    flag:
-    lib.replaceStrings [
-      testsDisabled
-      testsEnabled
-    ] flag;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwacom";
   version = "2.12.2";
@@ -58,29 +47,26 @@ stdenv.mkDerivation (finalAttrs: {
     libgudev
   ];
 
-  # Tests are in the `tests` pass-through derivation.
-  # See https://github.com/NixOS/nixpkgs/issues/328140
-  doCheck = false;
   mesonFlags = [
-    testsDisabled
+    (lib.mesonEnable "tests" finalAttrs.doCheck)
     "--sysconfdir=/etc"
   ];
 
+  # Tests are in the `tests` pass-through derivation because one of them is flaky, frequently causing build failures.
+  # See https://github.com/NixOS/nixpkgs/issues/328140
+  doCheck = false;
+
+  nativeCheckInputs = [
+    valgrind
+    (python3.withPackages (ps: [
+      ps.libevdev
+      ps.pytest
+      ps.pyudev
+    ]))
+  ];
+
   passthru = {
-    tests = finalAttrs.finalPackage.overrideAttrs (prevAttrs: {
-      doCheck = true;
-
-      mesonFlags = map replaceDisabledWithEnabled prevAttrs.mesonFlags;
-
-      nativeCheckInputs = [
-        valgrind
-        (python3.withPackages (ps: [
-          ps.libevdev
-          ps.pytest
-          ps.pyudev
-        ]))
-      ];
-    });
+    tests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
   };
 
   meta = with lib; {
