@@ -17457,6 +17457,8 @@ self: super: with self; {
 
   winsspi = callPackage ../development/python-modules/winsspi { };
 
+  wirerope = callPackage ../development/python-modules/wirerope { };
+
   withings-api = callPackage ../development/python-modules/withings-api { };
 
   withings-sync = callPackage ../development/python-modules/withings-sync { };
