@@ -3,6 +3,7 @@
   mkHyprlandPlugin,
   fetchFromGitHub,
   hyprland,
+  unstableGitUpdater,
 }:
 
 mkHyprlandPlugin hyprland {
@@ -26,6 +27,8 @@ mkHyprlandPlugin hyprland {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Plugin to make your Hyprland cursor more realistic";
