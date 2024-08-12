@@ -67,7 +67,7 @@
 
 buildPythonPackage rec {
   pname = "argilla";
-  version = "1.29.0";
+  version = "1.29.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -76,7 +76,7 @@ buildPythonPackage rec {
     owner = "argilla-io";
     repo = "argilla";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+eQNvLDV063JY6CyngpGyo4NdSd6HvAHFgGWtPfZNVQ=";
+    hash = "sha256-ndendXlgACFdwnZ/P2W22Tr/Ji8AYw/6jtb8F3/zqSA=";
   };
 
   sourceRoot = "${src.name}/${pname}";
