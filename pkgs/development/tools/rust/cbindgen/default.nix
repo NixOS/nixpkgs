@@ -5,6 +5,11 @@
 , cmake
 , python3Packages
 , Security
+
+# tests
+, firefox-unwrapped
+, firefox-esr-unwrapped
+, mesa
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,6 +45,14 @@ rustPlatform.buildRustPackage rec {
     # https://github.com/eqrion/cbindgen/issues/628
     "--skip test_body"
   ];
+
+  passthru.tests = {
+    inherit
+      firefox-unwrapped
+      firefox-esr-unwrapped
+      mesa
+    ;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/mozilla/cbindgen/blob/v${version}/CHANGES";
