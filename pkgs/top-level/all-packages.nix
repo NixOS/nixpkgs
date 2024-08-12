@@ -22562,8 +22562,6 @@ with pkgs;
 
   libzdb = callPackage ../development/libraries/libzdb { };
 
-  libwacom = callPackage ../development/libraries/libwacom { };
-
   libwacom-surface = callPackage ../development/libraries/libwacom/surface.nix { };
 
   lightlocker = callPackage ../misc/screensavers/light-locker { };
