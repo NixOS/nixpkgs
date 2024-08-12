@@ -32,13 +32,13 @@
 buildPythonPackage rec {
   pname = "commitizen";
   version = "3.29.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
-    repo = pname;
+    repo = "commitizen";
     rev = "refs/tags/v${version}";
     hash = "sha256-7EQFip8r2Ey7Rbbwns1gvhsBOj7Hjm94NYhq8aANDIo=";
   };
@@ -48,12 +48,11 @@ buildPythonPackage rec {
     "decli"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    installShellFiles
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ installShellFiles ];
+
+  dependencies = [
     argcomplete
     charset-normalizer
     colorama
