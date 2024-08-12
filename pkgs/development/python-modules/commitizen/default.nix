@@ -1,31 +1,32 @@
-{ lib
-, commitizen
-, fetchFromGitHub
-, buildPythonPackage
-, git
-, pythonOlder
-, stdenv
-, installShellFiles
-, poetry-core
-, nix-update-script
-, testers
-, argcomplete
-, charset-normalizer
-, colorama
-, decli
-, importlib-metadata
-, jinja2
-, packaging
-, pyyaml
-, questionary
-, termcolor
-, tomlkit
-, py
-, pytest-freezer
-, pytest-mock
-, pytest-regressions
-, pytest7CheckHook
-, deprecated
+{
+  lib,
+  commitizen,
+  fetchFromGitHub,
+  buildPythonPackage,
+  git,
+  pythonOlder,
+  stdenv,
+  installShellFiles,
+  poetry-core,
+  nix-update-script,
+  testers,
+  argcomplete,
+  charset-normalizer,
+  colorama,
+  decli,
+  importlib-metadata,
+  jinja2,
+  packaging,
+  pyyaml,
+  questionary,
+  termcolor,
+  tomlkit,
+  py,
+  pytest-freezer,
+  pytest-mock,
+  pytest-regressions,
+  pytest7CheckHook,
+  deprecated,
 }:
 
 buildPythonPackage rec {
@@ -108,13 +109,12 @@ buildPythonPackage rec {
     let
       register-python-argcomplete = lib.getExe' argcomplete "register-python-argcomplete";
     in
-    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-      ''
-        installShellCompletion --cmd cz \
-          --bash <(${register-python-argcomplete} --shell bash $out/bin/cz) \
-          --zsh <(${register-python-argcomplete} --shell zsh $out/bin/cz) \
-          --fish <(${register-python-argcomplete} --shell fish $out/bin/cz)
-      '';
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd cz \
+        --bash <(${register-python-argcomplete} --shell bash $out/bin/cz) \
+        --zsh <(${register-python-argcomplete} --shell zsh $out/bin/cz) \
+        --fish <(${register-python-argcomplete} --shell fish $out/bin/cz)
+    '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -130,6 +130,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/commitizen-tools/commitizen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = "cz";
-    maintainers = with maintainers; [ lovesegfault anthonyroussel ];
+    maintainers = with maintainers; [
+      lovesegfault
+      anthonyroussel
+    ];
   };
 }
