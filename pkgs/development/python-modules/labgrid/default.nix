@@ -27,13 +27,13 @@
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "23.0.6";
+  version = "24.0";
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UAfBzQZeFNs2UJSFb5fH5wHXQoVU/dOTFciR0/UB7vc=";
+    hash = "sha256-XlndAmLkDjb4S2BD85noTMJCeqa5srZocjgg1x6Ry/g=";
   };
 
   nativeBuildInputs = [
