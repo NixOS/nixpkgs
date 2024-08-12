@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   perl,
   stdenv,
   CoreServices,
@@ -21,12 +21,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-uXKquAjfytUn/Q0kx+0BGRQTkVMQ9rMRnTCy622upag=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./Hardcode-perl.patch;
-      perl = lib.getExe perl;
-    })
-  ];
+  patches = [ (replaceVars ./Hardcode-perl.patch { inherit perl; }) ];
 
   cargoHash = "sha256-XnhYODMzqInwbgM8wveY048sljZ8OKw4hLYJG5h8Twc=";
 
