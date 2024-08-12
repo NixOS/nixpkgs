@@ -8,7 +8,6 @@
   numpy,
   numba,
   pandas,
-  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -37,8 +36,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "numpy_groupies" ];
-
-  passthru.updateScript = gitUpdater { tagPrefix = "v"; };
 
   meta = with lib; {
     homepage = "https://github.com/ml31415/numpy-groupies";
