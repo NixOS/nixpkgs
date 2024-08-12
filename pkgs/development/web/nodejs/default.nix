@@ -28,17 +28,6 @@
 }:
 
 let
-  # FIXME: add dev output and use propagatedBuildInputs instead of copying
-  # headers. Delaying this change since it is a significant refactor. Also
-  # Nixpkgs currently uses Node.js package as a provider for libv8 (because
-  # actual v8 package is outdated). We should instead update the v8 package
-  # and remove libv8 output from Node.js…
-  copyLibHeaders = map (p: "${lib.getDev p}/include/*") [
-    openssl
-    zlib
-    libuv
-  ];
-
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
   # Currently stdenv sets CC/LD/AR/etc environment variables to program names
@@ -365,10 +354,6 @@ let
           done
         ''
         + ''
-          # install the missing headers for node-gyp
-          # FIXME: add dev output and use propagatedBuildInputs instead of copying headers.
-          cp -r ${lib.concatStringsSep " " copyLibHeaders} $out/include/node
-
           # assemble a static v8 library and put it in the 'libv8' output
           mkdir -p $libv8/lib
           pushd out/Release/obj
