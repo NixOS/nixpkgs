@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "nebula3-python";
-  version = "3.8.1";
+  version = "3.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "vesoft-inc";
     repo = "nebula-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AcfKcrfDBY5K5xDDA7rLzKnsnhwhtpLXHkPLd0SfC4M=";
+    hash = "sha256-XwrrT5Vuwqw57u3Xt9nS4NjmFG2VD62gWSVfeek2478=";
   };
 
   build-system = [ pdm-backend ];
