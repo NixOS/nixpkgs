@@ -1,20 +1,26 @@
-{ lib, stdenv, fetchzip }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+}:
 
-stdenv.mkDerivation rec {
-  pname = "abcMIDI";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "abcmidi";
   version = "2024.08.11";
 
-  src = fetchzip {
-    url = "https://ifdo.ca/~seymour/runabc/${pname}-${version}.zip";
+  src = fetchFromGitHub {
+    owner = "sshlien";
+    repo = "abcmidi";
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-ljRwRSF6Odv99ej8mmMjtf9NE0du7TtAypkw7W9TEYU=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://abc.sourceforge.net/abcMIDI/";
     downloadPage = "https://ifdo.ca/~seymour/runabc/top.html";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "Utilities for converting between abc and MIDI";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.dotlambda ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})
