@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   lib,
 }:
@@ -8,7 +9,7 @@
 buildPythonPackage rec {
   pname = "leb128";
   version = "1.0.7";
-  format = "setuptools";
+  pyproject = true;
 
   # fetchPypi doesn't include files required for tests
   src = fetchFromGitHub {
@@ -18,7 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-17C0Eic8T2PFkuIGExcrfb3b1HldaSBAPSh5TtRBUuU=";
   };
 
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "leb128" ];
 
   meta = with lib; {
