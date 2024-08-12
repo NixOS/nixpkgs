@@ -15539,6 +15539,11 @@
     githubId = 686076;
     name = "Vitalii Voloshyn";
   };
+  pancaek = {
+    github = "pancaek";
+    githubId = 20342389;
+    name = "paneku";
+  };
   panda2134 = {
     email = "me+nixpkgs@panda2134.site";
     github = "panda2134";
