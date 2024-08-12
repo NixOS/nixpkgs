@@ -1,18 +1,20 @@
 {
-  lib,
-  stdenv,
-  symlinkJoin,
-  prismlauncher-unwrapped,
   addDriverRunpath,
   alsa-lib,
   flite,
   gamemode,
   glfw3-minecraft,
-  jdk8,
   jdk17,
   jdk21,
+  jdk8,
   kdePackages,
+  lib,
   libGL,
+  libX11,
+  libXcursor,
+  libXext,
+  libXrandr,
+  libXxf86vm,
   libjack2,
   libpulseaudio,
   libusb1,
@@ -20,9 +22,12 @@
   openal,
   pciutils,
   pipewire,
+  prismlauncher-unwrapped,
+  stdenv,
+  symlinkJoin,
   udev,
   vulkan-loader,
-  xorg,
+  xrandr,
 
   additionalLibs ? [ ],
   additionalPrograms ? [ ],
@@ -86,11 +91,11 @@ symlinkJoin {
 
           ## glfw
           libGL
-          xorg.libX11
-          xorg.libXext
-          xorg.libXcursor
-          xorg.libXrandr
-          xorg.libXxf86vm
+          libX11
+          libXcursor
+          libXext
+          libXrandr
+          libXxf86vm
 
           udev # oshi
 
@@ -104,7 +109,7 @@ symlinkJoin {
       runtimePrograms = [
         mesa-demos
         pciutils # need lspci
-        xorg.xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
+        xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
       ] ++ additionalPrograms;
 
     in
