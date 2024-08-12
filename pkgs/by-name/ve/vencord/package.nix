@@ -1,12 +1,12 @@
 {
-  stdenv,
+  esbuild,
   fetchFromGitHub,
-  lib,
   git,
+  lib,
+  nix-update-script,
   nodejs,
   pnpm,
-  esbuild,
-  nix-update-script,
+  stdenv,
   buildWebExtension ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
