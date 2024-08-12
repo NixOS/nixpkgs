@@ -13,14 +13,14 @@
 , sqlite
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doxygen";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
-    rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "sha256-FPI5ICdn9Tne/g9SP6jAQS813AAyoDNooDR/Hyvq6R4=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
 
     platforms = if qt5 != null then lib.platforms.linux else lib.platforms.unix;
   };
-}
+})
