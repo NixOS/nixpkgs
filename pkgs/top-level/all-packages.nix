@@ -35854,8 +35854,6 @@ with pkgs;
 
   frozen-bubble = callPackage ../games/frozen-bubble { };
 
-  funkin = callPackage ../games/funkin { };
-
   gambit-chess = callPackage ../games/gambit { };
 
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
