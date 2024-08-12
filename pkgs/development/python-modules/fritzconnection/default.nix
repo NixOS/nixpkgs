@@ -6,23 +6,26 @@
   pytestCheckHook,
   requests,
   segno,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "1.13.2";
-  format = "setuptools";
+  version = "1.14.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kbr";
-    repo = pname;
+    repo = "fritzconnection";
     rev = "refs/tags/${version}";
-    hash = "sha256-nWXtXhF2pUBxHdrivi4DA7+bFiZPyxb2nqsiN3j4HdI=";
+    hash = "sha256-1LLfSEOKqUIhWIR/RQEG0Bp41d908hAKDlslJlWCHys=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   optional-dependencies = {
     qr = [ segno ];
