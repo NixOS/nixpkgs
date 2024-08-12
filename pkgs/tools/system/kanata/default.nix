@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
     else "sha256-9CXrOP6SI+sCD9Q94N8TlRB/h+F/l7t3zHbtVDqddS4=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
 
   buildFeatures = lib.optional withCmd "cmd";
 
@@ -37,6 +38,5 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ bmanuel linj ];
     platforms = platforms.unix;
     mainProgram = "kanata";
-    broken = stdenv.isDarwin;
   };
 }
