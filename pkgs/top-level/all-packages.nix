@@ -36046,10 +36046,9 @@ with pkgs;
   moon-buggy = callPackage ../games/moon-buggy { };
 
   minetest = callPackage ../games/minetest {
-    inherit (darwin.apple_sdk.frameworks) OpenGL OpenAL Carbon Cocoa;
+    inherit (darwin.apple_sdk.frameworks) OpenGL OpenAL Carbon Cocoa Kernel;
   };
   minetestclient = minetest.override { buildServer = false; };
-  minetest-touch = minetest.override { buildServer = false; withTouchSupport = true; };
   minetestserver = minetest.override { buildClient = false; };
 
   mnemosyne = callPackage ../games/mnemosyne {

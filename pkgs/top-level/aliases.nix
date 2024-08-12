@@ -947,6 +947,7 @@ mapAliases ({
   miopen-hip = throw "'miopen-hip' has been replaced with 'rocmPackages.miopen-hip'"; # Added 2023-10-08
   miopen-opencl = throw "'miopen-opencl' has been replaced with 'rocmPackages.miopen-opencl'"; # Added 2023-10-08
   mime-types = mailcap; # Added 2022-01-21
+  minetest-touch = minetestclient; # Added 2024-08-12
   minetestclient_5 = minetestclient; # Added 2023-12-11
   minetestserver_5 = minetestserver; # Added 2023-12-11
   minizip2 = pkgs.minizip-ng; # Added 2022-12-28

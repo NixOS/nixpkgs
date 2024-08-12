@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , gitUpdater
 , cmake
-, irrlichtmt
 , coreutils
 , libpng
 , bzip2
@@ -15,7 +14,6 @@
 , openal
 , libvorbis
 , sqlite
-, lua5_1
 , luajit
 , freetype
 , gettext
@@ -29,37 +27,32 @@
 , postgresql
 , hiredis
 , libiconv
-, zlib
-, libXrandr
-, libX11
 , ninja
 , prometheus-cpp
-, mesa
 , OpenGL
 , OpenAL ? openal
 , Carbon
 , Cocoa
-, withTouchSupport ? false
+, Kernel
 , buildClient ? true
 , buildServer ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minetest";
-  version = "5.8.0";
+  version = "5.9.0";
 
   src = fetchFromGitHub {
     owner = "minetest";
     repo = "minetest";
     rev = finalAttrs.version;
-    hash = "sha256-Oct8nQORSH8PjYs+gHU9QrKObMfapjAlGvycj+AJnOs=";
+    hash = "sha256-cxbiuoD1J3WFoveUgxeR/XXdE7MMR0UEDFleDiaxnsA=";
   };
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_CLIENT" buildClient)
     (lib.cmakeBool "BUILD_SERVER" buildServer)
     (lib.cmakeBool "ENABLE_PROMETHEUS" buildServer)
-    (lib.cmakeBool "ENABLE_TOUCH" withTouchSupport)
     # Ensure we use system libraries
     (lib.cmakeBool "ENABLE_SYSTEM_GMP" true)
     (lib.cmakeBool "ENABLE_SYSTEM_JSONCPP" true)
@@ -85,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    irrlichtmt
     jsoncpp
     gettext
     freetype
@@ -97,12 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
     libspatialindex
   ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform luajit) luajit
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    mesa # for <KHR/khrplatform.h>
     libiconv
     OpenGL
     OpenAL
     Carbon
     Cocoa
+    Kernel
   ] ++ lib.optionals buildClient [
     libpng
     libjpeg
@@ -112,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
   ] ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin) [
     xorg.libX11
+    xorg.libXi
   ] ++ lib.optionals buildServer [
     leveldb
     postgresql
