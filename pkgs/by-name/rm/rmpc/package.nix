@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   cmake,
 }:
@@ -20,11 +21,21 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-PieGA8/C7d8Q5rdu7oRdVuCLNhwGp5LZYz/rM4agqng=";
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config
     cmake
   ];
 
   env.VERGEN_GIT_DESCRIBE = version;
+
+  postInstall = ''
+    installManPage target/man/rmpc.1
+
+    installShellCompletion --cmd rmpc \
+      --bash target/completions/rmpc.bash \
+      --fish target/completions/rmpc.fish \
+      --zsh target/completions/_rmpc
+  '';
 
   meta = {
     changelog = "https://github.com/mierak/rmpc/releases/tag/${src.rev}";
