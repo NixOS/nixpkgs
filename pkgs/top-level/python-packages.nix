@@ -5936,6 +5936,8 @@ self: super: with self; {
 
   imgtool = callPackage ../development/python-modules/imgtool { };
 
+  imgw-pib = callPackage ../development/python-modules/imgw-pib { };
+
   imia = callPackage ../development/python-modules/imia { };
 
   iminuit = callPackage ../development/python-modules/iminuit { };
