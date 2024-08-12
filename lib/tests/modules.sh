@@ -20,10 +20,16 @@ cd "$DIR"/modules
 pass=0
 fail=0
 
-# prints the location of the call of to the function that calls it
+# loc
+#   prints the location of the call of to the function that calls it
+# loc n
+#   prints the location n levels up the call stack
 loc() {
     local caller depth
     depth=1
+    if [[ $# -gt 0 ]]; then
+        depth=$1
+    fi
     # ( lineno fnname file ) of the caller
     caller=( $(caller $depth) )
     echo "${caller[2]}:${caller[0]}"
