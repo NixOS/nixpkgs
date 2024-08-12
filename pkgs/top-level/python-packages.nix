@@ -15470,6 +15470,8 @@ self: super: with self; {
 
   texsoup = callPackage ../development/python-modules/texsoup { };
 
+  textblob = callPackage ../development/python-modules/textblob { };
+
   textfsm = callPackage ../development/python-modules/textfsm { };
 
   textile = callPackage ../development/python-modules/textile { };
