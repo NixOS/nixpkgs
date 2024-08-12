@@ -705,8 +705,6 @@ with pkgs;
 
   n98-magerun = callPackage ../development/tools/misc/n98-magerun { };
 
-  n98-magerun2 = callPackage ../development/tools/misc/n98-magerun2 { };
-
   prisma-engines = callPackage ../development/tools/database/prisma-engines {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -2684,7 +2682,6 @@ with pkgs;
   ppsspp-sdl = let
     argset = {
       ffmpeg = ffmpeg_4;
-      glew = glew.override { enableEGL = argset.forceWayland; };
       enableQt = false;
       enableVulkan = true;
       forceWayland = false;
@@ -2695,7 +2692,6 @@ with pkgs;
   ppsspp-sdl-wayland = let
     argset = {
       ffmpeg = ffmpeg_4;
-      glew = glew.override { enableEGL = argset.forceWayland; };
       enableQt = false;
       enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/13845
       forceWayland = true;
@@ -2706,7 +2702,6 @@ with pkgs;
   ppsspp-qt = let
     argset = {
       ffmpeg = ffmpeg_4;
-      glew = glew.override { enableEGL = argset.forceWayland; };
       enableQt = true;
       enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/11628
       forceWayland = false;
@@ -3626,10 +3621,6 @@ with pkgs;
   dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
 
   doona = callPackage ../tools/security/doona { };
-
-  dotter = callPackage ../tools/misc/dotter {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
 
   droidcam = callPackage ../applications/video/droidcam { };
 
@@ -6928,8 +6919,6 @@ with pkgs;
 
   cpufetch = callPackage ../tools/misc/cpufetch { };
 
-  crackmapexec = callPackage ../tools/security/crackmapexec { };
-
   crackxls = callPackage ../tools/security/crackxls { };
 
   crd2pulumi = callPackage ../development/tools/crd2pulumi { };
@@ -8935,8 +8924,6 @@ with pkgs;
     packages = config.ihaskell.packages or (_: []);
   };
 
-  ijq = callPackage ../development/tools/ijq { };
-
   iruby = callPackage ../applications/editors/jupyter-kernels/iruby { };
 
   ike-scan = callPackage ../tools/security/ike-scan { };
@@ -9622,6 +9609,8 @@ with pkgs;
   m2r = with python3Packages; toPythonApplication m2r;
 
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
+
+  md2pdf = with python3Packages; toPythonApplication md2pdf;
 
   mdbook-emojicodes = callPackage ../tools/text/mdbook-emojicodes { };
 
@@ -20388,11 +20377,6 @@ with pkgs;
   glew110 = callPackage ../development/libraries/glew/1.10.nix {
     inherit (darwin.apple_sdk.frameworks) AGL OpenGL;
   };
-  glew-egl = callPackage ../development/libraries/glew {
-    inherit (darwin.apple_sdk.frameworks) OpenGL;
-    enableEGL = true;
-  };
-
   glfw = glfw3;
   glfw-wayland-minecraft = callPackage ../development/libraries/glfw/3.x-wayland-minecraft.nix {};
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
@@ -24200,8 +24184,6 @@ with pkgs;
     hdf5 = hdf5.override { usev110Api = true; };
   };
 
-  vkd3d-proton = callPackage ../development/libraries/vkd3d-proton {};
-
   vkdisplayinfo = callPackage ../tools/graphics/vkdisplayinfo { };
 
   vkdt = callPackage ../applications/graphics/vkdt { };
@@ -26024,8 +26006,6 @@ with pkgs;
 
   shiori = callPackage ../servers/web-apps/shiori { };
 
-  slskd = callPackage ../servers/web-apps/slskd { };
-
   inherit (callPackages ../servers/web-apps/matomo {})
     matomo
     matomo_5
@@ -27361,8 +27341,6 @@ with pkgs;
   trinsic-cli = callPackage ../tools/admin/trinsic-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  trust-dns = callPackage ../servers/dns/trust-dns { };
 
   trustymail = callPackage ../tools/security/trustymail { };
 
@@ -30913,8 +30891,6 @@ with pkgs;
 
   pixelnuke = callPackage ../applications/graphics/pixelnuke { };
 
-  pixelorama = callPackage ../applications/editors/pixelorama { };
-
   pixeluvo = callPackage ../applications/graphics/pixeluvo { };
 
   pixinsight = qt6Packages.callPackage ../applications/graphics/pixinsight { };
@@ -33201,7 +33177,6 @@ with pkgs;
     withDbusPython = true;
     withMusicBrainzNgs = true;
     withPahoMqtt = true;
-    withPyInotify = true;
     withPypresence = true;
     withSoco = true;
   };
@@ -33628,8 +33603,6 @@ with pkgs;
 
   bambu-studio = callPackage ../applications/misc/bambu-studio {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad gst-plugins-good;
-
-    glew = glew-egl;
 
     wxGTK31 = wxGTK31.override {
       withCurl = true;
@@ -38775,8 +38748,6 @@ with pkgs;
     nix-prefetch-scripts;
 
   nix-query-tree-viewer = callPackage ../tools/nix/nix-query-tree-viewer { };
-
-  nix-update = callPackage ../tools/package-management/nix-update { };
 
   nix-update-source = callPackage ../tools/package-management/nix-update-source { };
 

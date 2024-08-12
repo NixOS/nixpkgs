@@ -6,6 +6,7 @@
   django,
   django-stubs,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-django,
   parameterized,
 }:
@@ -25,14 +26,6 @@ buildPythonPackage {
     hash = "sha256-zFY8YsM1Qp6rdcb+Upfk0/6mTv0o1zwxGqKzTupZ1zI=";
   };
 
-  # Remove all references to pytest-cov
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--no-cov-on-fail" "" \
-      --replace "--cov-report=\"\"" "" \
-      --replace "--cov modeltranslation" ""
-  '';
-
   disabled = pythonOlder "3.6";
 
   propagatedBuildInputs = [ django ];
@@ -40,6 +33,7 @@ buildPythonPackage {
   nativeCheckInputs = [
     django-stubs
     pytestCheckHook
+    pytest-cov-stub
     pytest-django
     parameterized
   ];

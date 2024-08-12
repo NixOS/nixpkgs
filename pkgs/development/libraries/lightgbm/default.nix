@@ -4,9 +4,9 @@
 , rLibrary ? false, cudaPackages, opencl-headers, ocl-icd, boost
 , llvmPackages, openmpi, openjdk, swig, hadoop, R, rPackages, pandoc }:
 
-assert doCheck -> mpiSupport != true;
-assert openclSupport -> cudaSupport != true;
-assert cudaSupport -> openclSupport != true;
+assert doCheck -> !mpiSupport;
+assert openclSupport -> !cudaSupport;
+assert cudaSupport -> !openclSupport;
 
 stdenv.mkDerivation rec {
   pnameBase = "lightgbm";

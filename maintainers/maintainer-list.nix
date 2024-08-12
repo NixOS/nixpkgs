@@ -2544,6 +2544,13 @@
     githubId = 410028;
     name = "Tobias Bergkvist";
   };
+  berquist = {
+    name = "Eric Berquist";
+    email = "eric.berquist@gmail.com";
+    github = "berquist";
+    githubId = 727571;
+    keys = [ { fingerprint = "AAD4 3B70 A504 9675 CFC8  B101 BAFD 205D 5FA2 B329"; } ];
+  };
   berryp = {
     email = "berryphillips@gmail.com";
     github = "berryp";
@@ -3026,10 +3033,11 @@
     name = "Roman Gerasimenko";
   };
   builditluc = {
-    email = "builditluc@icloud.com";
+    email = "git@builditluc.eu";
     github = "Builditluc";
     githubId = 37375448;
-    name = "Buildit";
+    name = "Builditluc";
+    keys = [ { fingerprint = "FF16E475723B8C1E57A6B2569374074AE2D6F20E"; } ];
   };
   buurro = {
     email = "marcoburro98@gmail.com";
@@ -19724,6 +19732,12 @@
     github = "SubhrajyotiSen";
     githubId = 12984845;
     name = "Subhrajyoti Sen";
+  };
+  sudoforge = {
+    github = "sudoforge";
+    githubId = 3893293;
+    name = "sudoforge";
+    keys = [ { fingerprint = "7EBCE51F278D30AE1C34036341BF61468C327D5A"; } ];
   };
   sudosubin = {
     email = "sudosubin@gmail.com";

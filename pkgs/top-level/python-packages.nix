@@ -773,6 +773,8 @@ self: super: with self; {
 
   arnparse = callPackage ../development/python-modules/arnparse { };
 
+  array-api-strict = callPackage ../development/python-modules/array-api-strict { };
+
   array-record = callPackage ../development/python-modules/array-record { };
 
   arrayqueues = callPackage ../development/python-modules/arrayqueues { };
@@ -5551,6 +5553,8 @@ self: super: with self; {
 
   highdicom = callPackage ../development/python-modules/highdicom { };
 
+  highspy = callPackage ../development/python-modules/highspy { };
+
   hid = callPackage ../development/python-modules/hid {
     inherit (pkgs) hidapi;
   };
@@ -6358,6 +6362,8 @@ self: super: with self; {
   json-home-client = callPackage ../development/python-modules/json-home-client { };
 
   json-merge-patch = callPackage ../development/python-modules/json-merge-patch { };
+
+  json-repair = callPackage ../development/python-modules/json-repair { };
 
   json-schema-for-humans = callPackage ../development/python-modules/json-schema-for-humans { };
 
@@ -7285,6 +7291,8 @@ self: super: with self; {
 
   lottie = callPackage ../development/python-modules/lottie { };
 
+  lox = callPackage ../development/python-modules/lox { };
+
   lpc-checksum = callPackage ../development/python-modules/lpc-checksum { };
 
   lrcalc-python = callPackage ../development/python-modules/lrcalc-python { };
@@ -7557,6 +7565,8 @@ self: super: with self; {
   mdx-truly-sane-lists = callPackage ../development/python-modules/mdx-truly-sane-lists { };
 
   md2gemini = callPackage ../development/python-modules/md2gemini { };
+
+  md2pdf = callPackage ../development/python-modules/md2pdf { };
 
   mdformat = callPackage ../development/python-modules/mdformat { };
   mdformat-admon = callPackage ../development/python-modules/mdformat-admon { };
@@ -9244,6 +9254,8 @@ self: super: with self; {
   numpy_1 = callPackage ../development/python-modules/numpy/1.nix { };
   numpy_2 = callPackage ../development/python-modules/numpy/2.nix { };
   numpy = if self.pythonOlder "3.13" then numpy_1 else numpy_2;
+
+  numpy-groupies = callPackage ../development/python-modules/numpy-groupies { };
 
   numpy-stl = callPackage ../development/python-modules/numpy-stl { };
 
@@ -15726,6 +15738,8 @@ self: super: with self; {
   torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix {
     cudaPackages = pkgs.cudaPackages_12;
   };
+
+  torchcrepe = callPackage ../development/python-modules/torchcrepe { };
 
   torchdiffeq = callPackage ../development/python-modules/torchdiffeq { };
 

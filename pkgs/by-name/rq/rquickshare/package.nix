@@ -5,19 +5,19 @@
 }:
 let
   pname = "rquickshare";
-  version = "0.8.2";
+  version = "0.10.2";
   src = fetchurl {
-    url = "https://github.com/Martichou/rquickshare/releases/download/v${version}/r-quick-share_${version}_amd64.AppImage";
-    hash = "sha256-0r8G3f46nHfTeReai4mWCykyx65AoaoGc0L7nrGEhTQ=";
+    url = "https://github.com/Martichou/rquickshare/releases/download/v${version}/r-quick-share-main_v${version}_glibc-2.39_amd64.AppImage";
+    hash = "sha256-VbHz9bSob3XSt7ut3jAiSl1/AV+Jw+SOP1mWBI5ggYQ=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;
   extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/r-quick-share.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/r-quick-share.desktop \
-      --replace-fail 'Exec=r-quick-share' 'Exec=rquickshare %u'
+    install -Dm444 ${appimageContents}/rquickshare.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/rquickshare.desktop \
+      --replace-fail 'Exec=rquickshare' 'Exec=rquickshare %u'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 

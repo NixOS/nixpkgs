@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "protolint";
-  version = "0.50.4";
+  version = "0.50.5";
 
   src = fetchFromGitHub {
     owner = "yoheimuta";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YUQ9DXsb45ggFi/sOeuONTO0hpmtxl/GLL1X6YKVE1g=";
+    hash = "sha256-dJurnM+AXdAd0/WBfnGT8KfpLmKHd5YAIZvMj5HHibI=";
   };
 
   vendorHash = "sha256-pjDVOD6McJdER+BbUckKt4WW/AXsCxdA2nNn8iWSlGE=";
