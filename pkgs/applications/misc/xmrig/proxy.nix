@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xmrig-proxy";
-  version = "6.21.1";
+  version = "6.22.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig-proxy";
     rev = "v${version}";
-    hash = "sha256-70SYdO3uyPINanAoARd2lDwyiuc2f/gg4QuoDgoXjjs=";
+    hash = "sha256-qRn/FiYvogGFUIUj3CojtfO6fXRZghH+bgRP+ysI6mc=";
   };
 
   postPatch = ''
