@@ -385,6 +385,9 @@ in
             configureFlags = (a.configureFlags or []) ++ [
               "--with-native-system-header-dir=/include"
               "--with-build-sysroot=${lib.getDev self.stdenv.cc.libc}"
+              # Don't assume that `gettext` was built with iconv support, since we don't have
+              # our own `glibc` yet.
+              "--disable-nls"
             ];
 
             # This is a separate phase because gcc assembles its phase scripts
@@ -507,7 +510,7 @@ in
     overrides = self: super: rec {
       inherit (prevStage)
         ccWrapperStdenv
-        binutils coreutils gnugrep gettext
+        binutils coreutils gnugrep
         perl patchelf linuxHeaders gnum4 bison libidn2 libunistring libxcrypt;
         # We build a special copy of libgmp which doesn't use libstdc++, because
         # xgcc++'s libstdc++ references the bootstrap-files (which is what
