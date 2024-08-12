@@ -35,6 +35,22 @@ loc() {
     echo "${caller[2]}:${caller[0]}"
 }
 
+line() {
+    echo "----------------------------------------"
+}
+logStartFailure() {
+    line
+}
+logEndFailure() {
+    line
+    echo
+}
+
+logFailure() {
+    # bold red
+    printf '\033[1;31mTEST FAILED\033[0m at %s\n' "$(loc 2)"
+}
+
 evalConfig() {
     local attr=$1
     shift
@@ -57,9 +73,12 @@ checkConfigOutput() {
     if evalConfig "$@" 2>/dev/null | grep -E --silent "$outputContains" ; then
         ((++pass))
     else
-        echo "test failure at $(loc):"
-        echo "error: Expected result matching '$outputContains', while evaluating"
+        logStartFailure
+        echo "ACTUAL:"
         reportFailure "$@"
+        echo "EXPECTED: result matching '$outputContains'"
+        logFailure
+        logEndFailure
     fi
 }
 
@@ -68,16 +87,22 @@ checkConfigError() {
     local err=""
     shift
     if err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
-        echo "test failure at $(loc):"
-        echo "error: Expected error code, got exit code 0, while evaluating"
+        logStartFailure
+        echo "ACTUAL: exit code 0, output:"
         reportFailure "$@"
+        echo "EXPECTED: non-zero exit code"
+        logFailure
+        logEndFailure
     else
         if echo "$err" | grep -zP --silent "$errorContains" ; then
             ((++pass))
         else
-            echo "test failure at $(loc):"
-            echo "error: Expected error matching '$errorContains', while evaluating"
+            logStartFailure
+            echo "ACTUAL:"
             reportFailure "$@"
+            echo "EXPECTED: error matching '$errorContains'"
+            logFailure
+            logEndFailure
         fi
     fi
 }
