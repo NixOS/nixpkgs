@@ -13,7 +13,7 @@ set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
 
 # https://stackoverflow.com/a/246128/6605742
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 cd "$DIR"/modules
 
@@ -40,7 +40,7 @@ reportFailure() {
     local attr=$1
     shift
     local script="import ./default.nix { modules = [ $* ];}"
-    echo 2>&1 "$ nix-instantiate -E '$script' -A '$attr' --eval-only --json"
+    echo "$ nix-instantiate -E '$script' -A '$attr' --eval-only --json"
     evalConfig "$attr" "$@" || true
     ((++fail))
 }
@@ -52,7 +52,7 @@ checkConfigOutput() {
         ((++pass))
     else
         echo "test failure at $(loc):"
-        echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
+        echo "error: Expected result matching '$outputContains', while evaluating"
         reportFailure "$@"
     fi
 }
@@ -63,14 +63,14 @@ checkConfigError() {
     shift
     if err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
         echo "test failure at $(loc):"
-        echo 2>&1 "error: Expected error code, got exit code 0, while evaluating"
+        echo "error: Expected error code, got exit code 0, while evaluating"
         reportFailure "$@"
     else
         if echo "$err" | grep -zP --silent "$errorContains" ; then
             ((++pass))
         else
             echo "test failure at $(loc):"
-            echo 2>&1 "error: Expected error matching '$errorContains', while evaluating"
+            echo "error: Expected error matching '$errorContains', while evaluating"
             reportFailure "$@"
         fi
     fi
