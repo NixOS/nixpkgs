@@ -22326,6 +22326,14 @@
     github = "wuyoli";
     githubId = 104238274;
   };
+  wwmoraes = {
+    email = "nixpkgs@artero.dev";
+    github = "wwmoraes";
+    githubId = 682095;
+    keys = [ { fingerprint = "32B4 330B 1B66 828E 4A96  9EEB EED9 9464 5D7C 9BDE"; } ];
+    matrix = "@wwmoraes:hachyderm.io";
+    name = "William Artero";
+  };
   wykurz = {
     email = "wykurz@gmail.com";
     github = "wykurz";
