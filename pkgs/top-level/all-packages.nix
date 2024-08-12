@@ -8136,10 +8136,6 @@ with pkgs;
 
   github-backup = callPackage ../tools/misc/github-backup { };
 
-  github-runner = callPackage ../development/tools/continuous-integration/github-runner {
-     inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   gitkraken = callPackage ../applications/version-management/gitkraken { };
 
   gitlab = callPackage ../applications/version-management/gitlab { };
@@ -25448,7 +25444,11 @@ with pkgs;
 
   openxr-loader = callPackage ../development/libraries/openxr-loader { };
 
-  osrm-backend = callPackage ../servers/osrm-backend { };
+  osrm-backend = callPackage ../servers/osrm-backend {
+    tbb = tbb_2021_11;
+    # https://github.com/Project-OSRM/osrm-backend/issues/6503
+    boost = boost179;
+  };
 
   oven-media-engine = callPackage ../servers/misc/oven-media-engine { };
 
