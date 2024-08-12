@@ -13,6 +13,17 @@
   valgrind,
 }:
 
+let
+  testsDisabled = "-Dtests=disabled";
+  testsEnabled = "-Dtests=enabled";
+  replaceDisabledWithEnabled =
+    flag:
+    lib.replaceStrings [
+      testsDisabled
+      testsEnabled
+    ] flag;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwacom";
   version = "2.12.2";
@@ -47,27 +58,30 @@ stdenv.mkDerivation (finalAttrs: {
     libgudev
   ];
 
-  doCheck =
-    stdenv.hostPlatform == stdenv.buildPlatform
-    && lib.meta.availableOn stdenv.hostPlatform valgrind
-    && !stdenv.hostPlatform.isPower # one test times out
-  ;
-
+  # Tests are in the `tests` pass-through derivation.
+  # See https://github.com/NixOS/nixpkgs/issues/328140
+  doCheck = false;
   mesonFlags = [
-    "-Dtests=${if finalAttrs.finalPackage.doCheck then "enabled" else "disabled"}"
+    testsDisabled
     "--sysconfdir=/etc"
   ];
 
-  nativeCheckInputs = [
-    valgrind
-    (python3.withPackages (
-      ps: with ps; [
-        ps.libevdev
-        pytest
-        pyudev
-      ]
-    ))
-  ];
+  passthru = {
+    tests = finalAttrs.finalPackage.overrideAttrs (prevAttrs: {
+      doCheck = true;
+
+      mesonFlags = map replaceDisabledWithEnabled prevAttrs.mesonFlags;
+
+      nativeCheckInputs = [
+        valgrind
+        (python3.withPackages (ps: [
+          ps.libevdev
+          ps.pytest
+          ps.pyudev
+        ]))
+      ];
+    });
+  };
 
   meta = with lib; {
     platforms = platforms.linux;
