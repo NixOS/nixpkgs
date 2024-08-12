@@ -20,6 +20,15 @@ cd "$DIR"/modules
 pass=0
 fail=0
 
+# prints the location of the call of to the function that calls it
+loc() {
+    local caller depth
+    depth=1
+    # ( lineno fnname file ) of the caller
+    caller=( $(caller $depth) )
+    echo "${caller[2]}:${caller[0]}"
+}
+
 evalConfig() {
     local attr=$1
     shift
@@ -42,6 +51,7 @@ checkConfigOutput() {
     if evalConfig "$@" 2>/dev/null | grep -E --silent "$outputContains" ; then
         ((++pass))
     else
+        echo "test failure at $(loc):"
         echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
         reportFailure "$@"
     fi
@@ -52,12 +62,14 @@ checkConfigError() {
     local err=""
     shift
     if err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
+        echo "test failure at $(loc):"
         echo 2>&1 "error: Expected error code, got exit code 0, while evaluating"
         reportFailure "$@"
     else
         if echo "$err" | grep -zP --silent "$errorContains" ; then
             ((++pass))
         else
+            echo "test failure at $(loc):"
             echo 2>&1 "error: Expected error matching '$errorContains', while evaluating"
             reportFailure "$@"
         fi
