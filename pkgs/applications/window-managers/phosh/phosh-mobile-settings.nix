@@ -6,6 +6,7 @@
 , meson
 , ninja
 , pkg-config
+, wayland-scanner
 , wrapGAppsHook4
 , desktop-file-utils
 , feedbackd
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     ninja
     phosh
     pkg-config
+    wayland-scanner
     wrapGAppsHook4
   ];
 

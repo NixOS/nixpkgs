@@ -1,4 +1,5 @@
 { stdenv
+, buildPackages
 , edid-decode
 , fetchFromGitHub
 , meson
@@ -12,6 +13,7 @@
 , vulkan-headers
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libxkbcommon
 , glm
 , gbenchmark
@@ -30,7 +32,6 @@
 , lcms
 , lib
 , makeBinaryWrapper
-, patchelfUnstable
 , nix-update-script
 , enableExecutable ? true
 , enableWsi ? true
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -138,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString enableExecutable ''
     # using patchelf unstable because the stable version corrupts the binary
-    ${lib.getExe patchelfUnstable} $out/bin/gamescope \
+    ${lib.getExe buildPackages.patchelfUnstable} $out/bin/gamescope \
       --add-rpath ${vulkan-loader}/lib --add-needed libvulkan.so.1
 
     # --debug-layers flag expects these in the path
