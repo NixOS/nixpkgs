@@ -13,6 +13,7 @@
 , ipopt
 , lapack
 , libamplsolver
+, osi
 , texliveSmall
 , zlib
 }:
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     ipopt
     lapack
     libamplsolver
+    osi
     zlib
   ];
 
