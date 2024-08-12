@@ -1,7 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, copyDesktopItems
-, haxe, haxePackages, neko, makeWrapper, imagemagick
-, alsa-lib, libpulseaudio, libGL, libX11, libXdmcp, libXext, libXi, libXinerama, libXrandr
-, makeDesktopItem
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  copyDesktopItems,
+  haxe,
+  haxePackages,
+  neko,
+  makeWrapper,
+  imagemagick,
+  alsa-lib,
+  libpulseaudio,
+  libGL,
+  libX11,
+  libXdmcp,
+  libXext,
+  libXi,
+  libXinerama,
+  libXrandr,
+  makeDesktopItem,
 }:
 
 let
@@ -106,15 +122,15 @@ let
   });
 
   jsonpatch = haxePackages.jsonpatch.overrideAttrs (old: {
-    propagatedBuildInputs = builtins.filter (x: x.pname != "thx.core") (old.propagatedBuildInputs or []) ++ [
-      thx_core
-    ];
+    propagatedBuildInputs =
+      builtins.filter (x: x.pname != "thx.core") (old.propagatedBuildInputs or [ ])
+      ++ [ thx_core ];
   });
 
   polymod = haxePackages.polymod.overrideAttrs (old: {
-    propagatedBuildInputs = builtins.filter (x: x.pname != "jsonpatch") (old.propagatedBuildInputs or []) ++ [
-      jsonpatch
-    ];
+    propagatedBuildInputs =
+      builtins.filter (x: x.pname != "jsonpatch") (old.propagatedBuildInputs or [ ])
+      ++ [ jsonpatch ];
   });
 in
 stdenv.mkDerivation rec {
@@ -129,13 +145,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5VvxsEL9TA7sYdX2jJB22r+tZiwdf9FoaTxE4Q59UAY=";
   };
 
-  desktopItems = [(makeDesktopItem {
-    name = "funkin";
-    exec = "Funkin";
-    desktopName = "Friday Night Funkin";
-    categories = ["Game" "ArcadeGame"];
-    icon = "funkin";
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "funkin";
+      exec = "Funkin";
+      desktopName = "Friday Night Funkin";
+      categories = [
+        "Game"
+        "ArcadeGame"
+      ];
+      icon = "funkin";
+    })
+  ];
 
   postPatch = ''
     # Real API keys are stripped from repo
@@ -150,38 +171,53 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  nativeBuildInputs = [ haxe neko makeWrapper imagemagick copyDesktopItems ]
-  ++ (with haxePackages; [
-    # Here, in the same order as in the Project.xml file
-    hxcpp
+  nativeBuildInputs =
+    [
+      haxe
+      neko
+      makeWrapper
+      imagemagick
+      copyDesktopItems
+    ]
+    ++ (with haxePackages; [
+      # Here, in the same order as in the Project.xml file
+      hxcpp
 
-    lime
-    openfl
-    flixel
+      lime
+      openfl
+      flixel
 
-    flixel-addons
-    hscript
-    flixel-ui
-    haxeui-core
-    haxeui-flixel
-    flixel-text-input
-    polymod
-    flxanimate
-    hxcodec
-    funkin.vis
-    grig.audio
+      flixel-addons
+      hscript
+      flixel-ui
+      haxeui-core
+      haxeui-flixel
+      flixel-text-input
+      polymod
+      flxanimate
+      hxcodec
+      funkin.vis
+      grig.audio
 
+      format
+      hxp
+      FlxPartialSound
+      thx_core
+      thx_semver
+      json2object
+    ]);
 
-
-    format
-    hxp
-    FlxPartialSound
-    thx_core
-    thx_semver
-    json2object
-  ]);
-
-  buildInputs = [ alsa-lib libpulseaudio libGL libX11 libXdmcp libXext libXi libXinerama libXrandr ];
+  buildInputs = [
+    alsa-lib
+    libpulseaudio
+    libGL
+    libX11
+    libXdmcp
+    libXext
+    libXi
+    libXinerama
+    libXrandr
+  ];
 
   enableParallelBuilding = true;
 
@@ -236,7 +272,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ninja-muffin24.itch.io/funkin";
     # code is asl20, but most assets are unfree
-    license = [ licenses.asl20 licenses.unfree ];
+    license = [
+      licenses.asl20
+      licenses.unfree
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ marius851000 ];
   };
