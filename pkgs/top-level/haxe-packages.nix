@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, fetchFromGitHub, writeText, haxe, neko, jdk, mono }:
+{ stdenv, lib, fetchzip, fetchFromGitHub, fetchFromGitLab, writeText, haxe, neko, jdk, mono, libvlc }:
 
 let
   withCommas = lib.replaceStrings [ "." ] [ "," ];
@@ -38,6 +38,12 @@ let
         stripRoot = false;
       });
 
+      prePatch = attrs.prePatch or ''
+        if [ $(ls . | wc -l) == 1 ]; then
+          cd ./* || cd .
+        fi
+      '';
+
       postPatch = (attrs.postPatch or "") + ''
         ${lib.optionalString (linc_lib != null) ''
           # Workaround to permit cache to work correctly with linc
@@ -60,12 +66,13 @@ let
         description = throw "please write meta.description";
       } // attrs.meta;
     });
-in
-{
+in rec {
+  inherit buildHaxeLib;
+
   format = buildHaxeLib {
     libname = "format";
-    version = "3.5.0";
-    sha256 = "sha256-5vZ7b+P74uGx0Gb7X/+jbsx5048dO/jv5nqCDtw5y/A=";
+    version = "3.7.0";
+    sha256 = "sha256-/xXMP/UkLOXd9Qs43d3APjDZ3c0TZV0NqXCIrqmsaj0=";
     meta.description = "A Haxe Library for supporting different file formats";
   };
 
@@ -174,8 +181,8 @@ in
 
   hscript = buildHaxeLib {
     libname = "hscript";
-    version = "2.4.0";
-    sha256 = "0qdxgqb75j1v125l9xavs1d32wwzi60rhfymngdhjqhdvq72bhxx";
+    version = "2.5.0";
+    sha256 = "sha256-R+RuoVkw6DiR4bHZZIr1AfYcdDcgE2McxpJuubqvGeU=";
     meta = with lib; {
       license = licenses.mit;
       description = "Scripting engine for a subset of the Haxe language";
@@ -184,8 +191,8 @@ in
 
   flixel = buildHaxeLib {
     libname = "flixel";
-    version = "4.11.0";
-    sha256 = "sha256-xgiBzXu+ieXbT8nxRuEqft3p4sYTOF+weQqzcYsf+o0=";
+    version = "5.8.0";
+    sha256 = "sha256-UkfuOtquKmq4kFlnYihKCovDB+aqws++wjR4IsHlJos=";
     meta = with lib; {
       license = licenses.mit;
       description = "2D game engine based on OpenFL that delivers cross-platform games";
@@ -194,8 +201,8 @@ in
 
   flixel-addons = buildHaxeLib {
     libname = "flixel-addons";
-    version = "2.11.0";
-    sha256 = "sha256-mRKpLzhlh1UXxIdg1/a0NTVzriNEW1wsSirL1UOkvAI=";
+    version = "3.2.3";
+    sha256 = "sha256-cda4HooAeQ7IaHNLAVLotDc9tCy1H6MzjhTj3A7s+1g=";
     meta = with lib; {
       license = licenses.mit;
       description = "Set of useful, but optional classes for HaxeFlixel created by the community";
@@ -204,28 +211,51 @@ in
 
   flixel-ui = buildHaxeLib {
     libname = "flixel-ui";
-    version = "2.4.0";
-    sha256 = "sha256-5oNeDQWkA8Sfrl+kEi7H2DLOc5N2DfbbcwiRw5DBSGw=";
+    version = "2.6.1";
+    sha256 = "sha256-jRfBnWx8AIjboovPUbKbTP0XrnKHvRLJg3glzQBzW3E=";
     meta = with lib; {
       license = licenses.mit;
       description = "UI library for Flixel";
     };
   };
 
-  discord_rpc = buildHaxeLib {
-    libname = "discord_rpc";
-    version = "unstable-2021-03-26";
-    src = fetchFromGitHub {
-      owner = "Aidan63";
-      repo = "linc_discord-rpc";
-      rev = "2d83fa863ef0c1eace5f1cf67c3ac315d1a3a8a5";
-      fetchSubmodules = true;
-      sha256 = "0w3f9772ypqil348dq8xvhh5g1z5dii5rrwlmmvcdr2gs2c28c7k";
-    };
-    linc_lib = "discord_rpc";
+  haxeui-core = buildHaxeLib {
+    libname = "haxeui-core";
+    version = "1.7.0";
+    sha256 = "sha256-P0CgY0Or0M9nia0LHfXzjSztNzIsZGoiL7sLoPWOhQo=";
     meta = with lib; {
       license = licenses.mit;
-      description = "Native bindings for discord-rpc";
+      description = "Core library of the HaxeUI framework";
+    };
+  };
+
+  haxeui-flixel = buildHaxeLib {
+    libname = "haxeui-flixel";
+    version = "1.7.0";
+    sha256 = "sha256-VI+SDGMFms2sMhEAsVRb+cKuaeFQbj+otPWsFvY5egU=";
+    meta = with lib; {
+      license = licenses.mit;
+      description = "Flixel backend of the HaxeUI framework";
+    };
+  };
+
+  flixel-text-input = buildHaxeLib {
+    libname = "flixel-text-input";
+    version = "2.0.2";
+    sha256 = "sha256-c3XhV2Jz9jm5yRLJIVEEIFzjYXFu/PKJFOAx9P3Jels=";
+    meta = with lib; {
+      license = licenses.mit;
+      description = "Improved text input object for HaxeFlixel.";
+    };
+  };
+
+  flxanimate = buildHaxeLib {
+    libname = "flxanimate";
+    version = "3.0.4";
+    sha256 = "sha256-PJserY/EpjmaEnYd9ufhI9+/6U9Ws6HD+talROAMJ64=";
+    meta = with lib; {
+      license = licenses.mit;
+      description = "Adobe Animate's texture atlases player for HaxeFlixel.";
     };
   };
 
@@ -238,11 +268,45 @@ in
       description = "Atomic modding framework for Haxe games/apps";
     };
   };
+  jsonpath = buildHaxeLib {
+    libname = "jsonpath";
+    version = "1.0.0";
+    src = fetchFromGitHub {
+      owner = "EliteMasterEric";
+      repo = "jsonpath";
+      rev = "7a24193717b36393458c15c0435bb7c4470ecdda";
+      sha256 = "sha256-aLQ3FwKjxx7XXgG/J1oeaNtCu59etaJhklc3KuoOlb0=";
+    };
+    meta = with lib; {
+      license = licenses.mit;
+      description = "Library for parsing and evaluating JSONPath queries on JSON data objects.";
+    };
+  };
+
+  thx_core = buildHaxeLib {
+    libname = "thx.core";
+    version = "0.44.0";
+    sha256 = "sha256-FdCk2wTznJ9qQBcPzB+OR9hGzL7ZGfstsGUyCjv7yYk=";
+    meta = with lib; {
+      license = licenses.mit;
+      description = "General purpose library. It contains extensions to many of the types contained in the standard library as well as new complementary types.";
+    };
+  };
+
+  thx_semver = buildHaxeLib {
+    libname = "thx.semver";
+    version = "0.2.2";
+    sha256 = "sha256-BO/YgaM8UZNWETsu+P5fFqMfCrAXew+bsMx316eR00s=";
+    meta = with lib; {
+      license = licenses.mit;
+      description = "Semantic version library for Haxe. It follows the specifications for Semantic Versioning 2.0.0 described at http://semver.org/";
+    };
+  };
 
   newgrounds = buildHaxeLib {
     libname = "newgrounds";
-    version = "1.1.5";
-    sha256 = "sha256-Aqc6HYPva3YyerMLgC9tsAVO8DJrko/sWZbVFCfeAsE=";
+    version = "2.0.3";
+    sha256 = "sha256-dbgny7r2I8XLdagWsYTVYJO5esoTeQdeiSeYW5AuC7k=";
     meta = with lib; {
       license = licenses.mit;
       description = "Newgrounds API for haxe";
@@ -251,8 +315,8 @@ in
 
   openfl = buildHaxeLib {
     libname = "openfl";
-    version = "9.1.0";
-    sha256 = "0ri9s8d7973d2jz6alhl5i4fx4ijh0kb27mvapq28kf02sp8kgim";
+    version = "9.3.4";
+    sha256 = "sha256-D0DDgHFCUPb+vMwvTflNil6hKxPuuo9V8YAOmVMq+x4=";
     meta = with lib; {
       license = licenses.mit;
       description = "Open Flash Library for fast 2D development";
@@ -266,6 +330,70 @@ in
     meta = with lib; {
       license = licenses.mit;
       description = "Flexible, lightweight layer for Haxe cross-platform developers";
+    };
+  };
+  grig.audio = buildHaxeLib {
+    libname = "grig.audio";
+    version = "unstable-23-05-2024";
+    src = fetchFromGitLab {
+      owner = "haxe-grig";
+      repo = "grig.audio";
+      rev = "57f5d47f2533fd0c3dcd025a86cb86c0dfa0b6d2";
+      sha256 = "sha256-aa73zpeExfmoa2b2jSlyWiQGIc5H7Q1ZcwZnJF3tkR8=";
+    };
+    prePatch = "cd src/";
+    meta = {
+      license = lib.licenses.mit;
+      description = "Audio I/O and Audio Primitives for haxe.";
+    };
+  };
+
+  funkin.vis = buildHaxeLib {
+    libname = "funkin.vis";
+    version = "unstable-07-06-2024";
+    src = fetchFromGitHub {
+      owner = "FunkinCrew";
+      repo = "funkVis";
+      rev = "d5361037efa3a02c4ab20b5bd14ca11e7d00f519";
+      sha256 = "sha256-uvln//zhcY7iumJxnN/sNEduE7v43BHA3s/XYJhj6dE=";
+    };
+    # Code is a M.I.T, a few examples are cc-by
+    meta = {
+      license = [ lib.licenses.mit lib.licenses.cc-by-30 ];
+    };
+  };
+
+  FlxPartialSound = buildHaxeLib {
+    libname = "FlxPartialSound";
+    version = "unstable-18-06-2024";
+    src = fetchFromGitHub {
+      owner = "FunkinCrew";
+      repo = "FlxPartialSound";
+      rev = "a1eab7b9bf507b87200a3341719054fe427f3b15";
+      sha256 = "sha256-uDvzArqh/ECxKye+9Mh6nA7yac2zA690ek5Bg4AQSss=";
+    };
+    meta = {
+      license = lib.licenses.mit;
+      description = "Haxelib for haxeflixel for loading partial data from an audio file";
+    };
+  };
+  hxjsonast = buildHaxeLib {
+    libname = "hxjsonast";
+    version = "1.1.0";
+    sha256 = "sha256-5Kbq/hDKypx29omnU8bFfd634KqBVYybEmUZh13qjYc=";
+    meta = {
+      license = lib.licenses.mit;
+      description = "Type-safe position-aware JSON parsing & printing";
+    };
+  };
+
+  hxp = buildHaxeLib {
+    libname = "hxp";
+    version = "1.3.0";
+    sha256 = "sha256-h1vziyWzJUk/pHGkkMO1gMrs38rdhKjp9HYi6+QBbCM=";
+    meta = {
+      license = lib.licenses.mit;
+      description = "Cross-platform build tools for desktop, mobile, web and consoles";
     };
   };
 }
