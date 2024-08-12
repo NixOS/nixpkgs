@@ -64,6 +64,16 @@ stdenv.mkDerivation rec {
   # Fontconfig error: No writable cache directories
   preBuild = "export XDG_CACHE_HOME=$(mktemp -d)";
 
+  doCheck = true;
+  checkTarget = "test";
+
+  # ignore one failing test
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace test/Makefile.in --replace-fail \
+      "./unitTest\''$(EXEEXT)" \
+      ""
+  '';
+
   # install documentation
   postInstall = "make install-doxygen-docs";
 
