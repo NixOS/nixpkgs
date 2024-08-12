@@ -48,14 +48,14 @@ effectiveStdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "2.0.3";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-LWco3A6zwdnAf8blU4qjW7PFEeZaTcJlVTwVrs7nwWM=";
+    hash = "sha256-qkTCQ257ZwQ2q4VPYqdEVqFQR1tf/qrur3hR54Uvqio=";
   };
 
   patches = lib.optionals (cudaSupport && cudaPackages.cudaMajorMinorVersion == "12.4") [
