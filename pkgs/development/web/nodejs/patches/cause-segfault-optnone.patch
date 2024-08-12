@@ -1,0 +1,13 @@
+Disable optimizations for CauseSegfault. At least clang over-optimizes
+this function and it does not actually segfault.
+
+--- a/src/node_process_methods.cc
++++ b/src/node_process_methods.cc
+@@ -73,6 +73,6 @@ static void Abort(const FunctionCallbackInfo<Value>& args) {
+ // For internal testing only, not exposed to userland.
+ static void CauseSegfault(const FunctionCallbackInfo<Value>& args) {
+   // This should crash hard all platforms.
+-  volatile void** d = static_cast<volatile void**>(nullptr);
++  void* volatile* d = static_cast<void* volatile*>(nullptr);
+   *d = nullptr;
+ }

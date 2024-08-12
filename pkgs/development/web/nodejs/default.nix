@@ -433,6 +433,7 @@ in
     patches = [
       ./patches/configure-emulator-node18.patch
       ./patches/configure-armv6-vfpv2.patch
+      ./patches/cause-segfault-optnone.patch
       ./patches/disable-darwin-v8-system-instrumentation.patch
       ./patches/bypass-darwin-xcrun-node16.patch
       ./patches/revert-arm64-pointer-auth.patch
@@ -462,6 +463,7 @@ in
     patches = [
       ./patches/configure-emulator.patch
       ./patches/configure-armv6-vfpv2.patch
+      ./patches/cause-segfault-optnone.patch
       ./patches/disable-darwin-v8-system-instrumentation-node19.patch
       ./patches/bypass-darwin-xcrun-node16.patch
       ./patches/node-npm-build-npm-package-logic.patch
@@ -491,6 +493,7 @@ in
     patches = [
       ./patches/configure-emulator.patch
       ./patches/configure-armv6-vfpv2.patch
+      ./patches/cause-segfault-optnone.patch
       ./patches/disable-darwin-v8-system-instrumentation-node19.patch
       ./patches/bypass-darwin-xcrun-node16.patch
       ./patches/node-npm-build-npm-package-logic.patch
