@@ -2,7 +2,6 @@
 , stdenv
 , cmake
 , fetchFromGitHub
-, fetchpatch
 , python3
 , flex
 , bison
@@ -15,22 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doxygen";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
     rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    sha256 = "sha256-FPI5ICdn9Tne/g9SP6jAQS813AAyoDNooDR/Hyvq6R4=";
+    hash = "sha256-4zSaM49TjOaZvrUChM4dNJLondCsQPSArOXZnTHS4yI=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "sys-spdlog-fix.patch";
-      url = "https://github.com/doxygen/doxygen/commit/0df6da616f01057d28b11c8bee28443c102dd424.patch";
-      hash = "sha256-7efkCQFYGslwqhIuPsLYTEiA1rq+mO0DuyQBMt0O+m0=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -44,7 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   cmakeFlags = [
-    "-DICONV_INCLUDE_DIR=${libiconv}/include"
     "-Duse_sys_spdlog=ON"
     "-Duse_sys_sqlite3=ON"
   ] ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
