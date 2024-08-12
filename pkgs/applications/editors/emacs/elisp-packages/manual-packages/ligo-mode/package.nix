@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   melpaBuild,
   fetchFromGitLab,
@@ -25,5 +26,6 @@ melpaBuild {
     homepage = "https://gitlab.com/ligolang/ligo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ AndersonTorres ];
+    broken = stdenv.isDarwin; # different src hash on darwin
   };
 }
