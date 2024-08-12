@@ -27,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-O9xobndM+eNV6SSw/lpWLVXKo4XXIjT/57gbN426Ng8=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ pyelftools ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  dependencies = [ pyelftools ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     pretend
