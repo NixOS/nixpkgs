@@ -28,7 +28,8 @@ let
   } @ attrs:
     assert sha256 != null || src != null;
     stdenv.mkDerivation (attrs // {
-      name = "${libname}-${version}";
+      pname = libname;
+      inherit version;
 
       nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [ haxe neko ]; # for setup-hook.sh to work
       src = attrs.src or (fetchzip rec {
@@ -119,6 +120,7 @@ in rec {
       )
     '';
     setupHook = writeText "setup-hook.sh" ''
+
       if [ "$\{enableParallelBuilding-}" ]; then
         HXCPP_COMPILE_THREADS=$NIX_BUILD_CORES
         # This may called before NIX_BUILD_CORES is initialized in pkgs/stdenv/generic/setup.sh
@@ -261,13 +263,33 @@ in rec {
 
   polymod = buildHaxeLib {
     libname = "polymod";
-    version = "1.5.2";
-    sha256 = "sha256-iKikj+KDg8qanuA+50cleKwXXsitNUY2sqhRCVMslAo=";
+    version = "1.8.0";
+    sha256 = "sha256-RoBIW4u+bcG2UNYbyDbUoW+CDHymhUWgCP7nn2ldDCA=";
+    propagatedBuildInputs = [
+      jsonpatch
+      jsonpath
+      thx_semver
+    ];
     meta = with lib; {
       license = licenses.mit;
       description = "Atomic modding framework for Haxe games/apps";
     };
   };
+
+  jsonpatch = buildHaxeLib {
+    libname = "jsonpatch";
+    version = "1.0.0";
+    sha256 = "sha256-5R+qiss7oVFWds5sxV13DbkUju7SjNbbEwCEmgRVCrc=";
+    propagatedBuildInputs = [
+      jsonpath
+      thx_core
+    ];
+    meta = with lib; {
+      license = licenses.mit;
+      description = "Llibrary for parsing and evaluating JSONPatch documents on JSON data objects.";
+    };
+  };
+
   jsonpath = buildHaxeLib {
     libname = "jsonpath";
     version = "1.0.0";
@@ -323,15 +345,39 @@ in rec {
     };
   };
 
-  lime = buildHaxeLib rec {
+  lime = buildHaxeLib {
     libname = "lime";
-    version = "7.9.0";
-    sha256 = "sha256-7UBSgzQEQjmMYk2MGfMZPYSj3quWbiP8LWM+vtyeWFg=";
+    version = "8.1.3";
+    sha256 = "sha256-ZdwhgCIqzsgSeViCITLk71ouOTIANzY/082ibLa1As0=";
+    buildInputs = [
+      hxcpp
+      format
+      hxp
+    ];
+    buildPhase = ''
+      (
+        cd tools
+        rm -f tools.n
+        haxe ./tools.hxml
+      )
+    '';
     meta = with lib; {
       license = licenses.mit;
       description = "Flexible, lightweight layer for Haxe cross-platform developers";
     };
   };
+
+  hxcodec = buildHaxeLib {
+    libname = "hxCodec";
+    version = "3.0.2";
+    sha256 = "sha256-M9ZfkM4puCy6fMLaF5wY7VOAcHInHtxEzRZJ6xcWJpw=";
+    propagatedBuildInputs = [ libvlc ];
+    meta = with lib; {
+      license = licenses.mpl20;
+      description = "Native video support for HaxeFlixel & OpenFL";
+    };
+  };
+
   grig.audio = buildHaxeLib {
     libname = "grig.audio";
     version = "unstable-23-05-2024";
@@ -377,6 +423,20 @@ in rec {
       description = "Haxelib for haxeflixel for loading partial data from an audio file";
     };
   };
+
+  json2object = buildHaxeLib {
+    libname = "json2object";
+    version = "3.11.0";
+    sha256 = "sha256-M2iJZjI9Un6QOIWd/7Qv0XsQSntq3JJmXwTIzBSEXCo=";
+    propagatedBuildInputs = [
+      hxjsonast
+    ];
+    meta = {
+      license = lib.licenses.mit;
+      description = "Type safe Haxe/JSON (de)serializer";
+    };
+  };
+
   hxjsonast = buildHaxeLib {
     libname = "hxjsonast";
     version = "1.1.0";
