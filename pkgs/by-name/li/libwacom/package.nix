@@ -13,7 +13,7 @@
   valgrind,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwacom";
   version = "2.12.2";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxwacom";
     repo = "libwacom";
-    rev = "libwacom-${version}";
+    rev = "libwacom-${finalAttrs.version}";
     hash = "sha256-dxnXh+O/8q8ShsPbpqvaBPNQR6lJBphBolYTmcJEF/0=";
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ;
 
   mesonFlags = [
-    "-Dtests=${if doCheck then "enabled" else "disabled"}"
+    "-Dtests=${if finalAttrs.finalPackage.doCheck then "enabled" else "disabled"}"
     "--sysconfdir=/etc"
   ];
 
@@ -72,9 +72,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     platforms = platforms.linux;
     homepage = "https://linuxwacom.github.io/";
-    changelog = "https://github.com/linuxwacom/libwacom/blob/${src.rev}/NEWS";
+    changelog = "https://github.com/linuxwacom/libwacom/blob/${finalAttrs.src.rev}/NEWS";
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
     maintainers = teams.freedesktop.members;
     license = licenses.hpnd;
   };
-}
+})
