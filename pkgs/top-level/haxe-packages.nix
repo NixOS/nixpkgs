@@ -39,6 +39,10 @@ let
         stripRoot = false;
       });
 
+      passthru = {
+        haxe_libname = libname;
+      };
+
       prePatch = attrs.prePatch or ''
         if [ $(ls . | wc -l) == 1 ]; then
           cd ./* || cd .

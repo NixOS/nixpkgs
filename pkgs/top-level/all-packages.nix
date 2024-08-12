@@ -15494,6 +15494,8 @@ with pkgs;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
 
+  overrideHaxeLibFromHMM = callPackage ../build-support/haxe/override-haxe-lib-from-hmm.nix { };
+
   hop = callPackage ../development/compilers/hop { };
 
   hop-cli = callPackage ../tools/admin/hop-cli {
