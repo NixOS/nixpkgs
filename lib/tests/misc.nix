@@ -480,6 +480,11 @@ runTests {
     expected = "one 'two three' 'four'\\''five'";
   };
 
+  testEscapeShellArgsUnicode = {
+    expr = strings.escapeShellArg "á";
+    expected = "'á'";
+  };
+
   testSplitStringsDerivation = {
     expr = take 3  (strings.splitString "/" (derivation {
       name = "name";
