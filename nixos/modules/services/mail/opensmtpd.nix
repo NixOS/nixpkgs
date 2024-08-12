@@ -5,7 +5,32 @@ with lib;
 let
 
   cfg = config.services.opensmtpd;
-  conf = pkgs.writeText "smtpd.conf" cfg.serverConfiguration;
+  certs = config.security.acme.certs;
+
+  # This path is created by systemd but is predictable if you know the service name
+  # See here for discussion: https://github.com/NixOS/nixpkgs/issues/101389#issuecomment-841704851
+  certsDir = "/run/credentials/opensmtpd.service";
+
+  # Add each host listed in useACMEHosts to the config as a pki.
+  # Certs are assumed to be in the working directory so that we can
+  # test the configuration in opensmtp-acme-restart.service
+  certConf = concatStringsSep "\n" (concatMap (host: [
+    "pki ${host} cert \"${certsDir}/${host}.cert.pem\""
+    "pki ${host} key \"${certsDir}/${host}.key.pem\""
+  ]) cfg.useACMEHosts);
+
+  # Prepare systemd LoadCredential list
+  credsConf = concatMap (host: let
+    certDir = certs."${host}".directory;
+  in [
+    "${host}.cert.pem:${certDir}/cert.pem"
+    "${host}.key.pem:${certDir}/key.pem"
+  ]) cfg.useACMEHosts;
+
+  certTargets = map (host: "acme-finished-${host}.target") cfg.useACMEHosts;
+  certServices = map (host: "acme-${host}.service") cfg.useACMEHosts;
+
+  conf = pkgs.writeText "smtpd.conf" (certConf + "\n" + cfg.serverConfiguration);
   args = concatStringsSep " " cfg.extraServerArgs;
 
   sendmail = pkgs.runCommand "opensmtpd-sendmail" { preferLocalBuild = true; } ''
@@ -71,8 +96,20 @@ in {
           that package.
         '';
       };
-    };
 
+      useACMEHosts = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          A list of hosts of existing Let's Encrypt certificates to load on start up.
+          This will add the appropriate "pki $host" lines to the configuration and add
+          systemd service dependencies on the relevant ACME renewal services, but will
+          not configure any "listen" directives to use the certificates.
+          <emphasis>Note that this option does not create any certificates – you will need
+          to create them manually using <option>security.acme.certs</option></emphasis>
+        '';
+      };
+    };
   };
 
 
@@ -122,9 +159,31 @@ in {
       };
     in {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
+      wants = certTargets;
+      after = [ "network.target" ] ++ certServices;
+      serviceConfig = {
+        ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
+        LoadCredential = credsConf;
+      };
       environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
+    };
+
+    # This service works in a similar fashion to the httpd/nginx-config-reload services.
+    # Its purpose is to collate multiple cert updates into a single service restart.
+    systemd.services.opensmtpd-acme-restart = mkIf (cfg.useACMEHosts != []) {
+      description = "Restart OpenSMTPD when ACME certificates are updated";
+      requisite = [ "opensmtpd.service" ];
+      wantedBy = certServices;
+      before = certTargets;
+      after = [ "opensmtpd.service" ] ++ certServices;
+      # Block reloading if not all certs exist yet.
+      # Happens when config changes add new certs.
+      unitConfig.ConditionPathExists = map (certName: certs.${certName}.directory + "/cert.pem") cfg.useACMEHosts;
+      serviceConfig = {
+        Type = "oneshot";
+        TimeoutSec = 60;
+        ExecStart = "/run/current-system/systemd/bin/systemctl restart opensmtpd.service";
+      };
     };
   };
 }
