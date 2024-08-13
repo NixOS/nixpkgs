@@ -73,15 +73,9 @@ fi
 
 if [[ "${download:-}" == true ]]; then
     extensionFile="$(mktemp)"
-    chmod 644 "${extensionFile}"
     echo "Downloading extensions index to ${extensionFile}" >&2
     curl -fsSL "https://azcliextensionsync.blob.core.windows.net/index1/index.json" > "${extensionFile}"
 fi
-
-# The index file has this annoying "formatVersion" field after extensions that makes JSON parsing messy
-# These commands remove it and give us clean json to work with
-grep -oP '"extensions":\s*\[.*\]' "${extensionFile}" > "${extensionFile}.filtered"
-echo "{\"extensions\": $(cat "${extensionFile}.filtered")}" > "${extensionFile}.filtered"
 
 # shellcheck disable=SC2016
 jqProgram='
