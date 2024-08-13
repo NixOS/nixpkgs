@@ -1,6 +1,7 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, nixosTests
 }:
 buildGoModule rec {
   pname = "litestream";
@@ -20,6 +21,8 @@ buildGoModule rec {
   ];
 
   vendorHash = "sha256-sYIY3Z3VrCqbjEbQtEY7q6Jljg8jMoa2qWEB/IkDjzM=";
+
+  passthru.tests = { inherit (nixosTests) litestream; };
 
   meta = with lib; {
     description = "Streaming replication for SQLite";
