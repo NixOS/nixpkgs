@@ -75,6 +75,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Myriad-Dreamin/tinymist";
     license = lib.licenses.asl20;
     mainProgram = "tinymist";
-    maintainers = with lib.maintainers; [ lampros ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      lampros
+    ];
   };
 }
