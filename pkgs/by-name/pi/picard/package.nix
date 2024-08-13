@@ -1,8 +1,6 @@
 {
   lib,
-  # Python 3.12 demonstrates a peculiar segmentation fault with pyqt5. Using
-  # pyqt6 with Python 3.12 should work, but this is not released yet.
-  python311Packages,
+  python3Packages,
   fetchFromGitHub,
 
   chromaprint,
@@ -14,20 +12,20 @@
 }:
 
 let
-  pythonPackages = python311Packages;
+  pythonPackages = python3Packages;
   pyqt5 = if enablePlayback then pythonPackages.pyqt5-multimedia else pythonPackages.pyqt5;
 in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
   # nix-update --commit picard --version-regex 'release-(.*)'
-  version = "2.12";
+  version = "2.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-+++NDJzXw4tA5eQd24r+l3UK3YS8Jy1t9WNiEU9sH0Q=";
+    hash = "sha256-wKPE4lj3DIlY+X5A/MqhnwyrhPTXGjmUnLK1VWXUOas=";
   };
 
   build-system = [ pythonPackages.setuptools ];
