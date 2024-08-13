@@ -18,6 +18,7 @@ flutter.buildFlutterApplication rec {
     rev = version;
     hash = "sha256-M2Qy66RqsjXg7ZpHwaXCN8qXRIsisnIyaENx3KqmUfQ=";
   };
+
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = {
