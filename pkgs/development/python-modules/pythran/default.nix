@@ -3,6 +3,7 @@
   python,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   isPy3k,
   substituteAll,
 
@@ -36,6 +37,11 @@ buildPythonPackage rec {
   };
 
   patches = [
+    (fetchpatch2 {
+      name = "bump-gast-to-0.6.0.patch";
+      url = "https://github.com/serge-sans-paille/pythran/commit/840a0e706ec39963aec6bcd1f118bf33177c20b4.patch";
+      hash = "sha256-FHGXWuAX/Nmn6uEfQgAXfUxIdApDwSfHHtOStxyme/0=";
+    })
     # Hardcode path to mp library
     (substituteAll {
       src = ./0001-hardcode-path-to-libgomp.patch;
