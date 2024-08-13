@@ -1,18 +1,24 @@
 { runTest }:
 let
   testCert = {
-    request = {
+    subject = {
       CN = "client.test";
-      hosts = [ "www.client.test" ];
     };
-    certificate = {
-      path = "/run/cert.pem";
+    extensions = {
+      subjectAltName = {
+        DNS = [ "www.client.test" ];
+      };
     };
-    private_key = {
-      path = "/run/key.pem";
-    };
-    ca = {
-      path = "/run/ca.pem";
+    install = {
+      certificate = {
+        path = "/run/cert.pem";
+      };
+      privateKey = {
+        path = "/run/key.pem";
+      };
+      authority = {
+        path = "/run/ca.pem";
+      };
     };
   };
   defaults =
@@ -30,23 +36,23 @@ let
   # TODO: Make a more comprehensive test, file permissions, key type, etc?
   testScript = with testCert; ''
     start_all()
-    machine.wait_for_unit("certificate@testCert.service")
+    machine.wait_for_unit("certificate-testCert.service")
 
     # Check correct files were created
-    machine.succeed("test -e ${ca.path}")
-    machine.succeed("test -e ${certificate.path}")
-    machine.succeed("test -e ${private_key.path}")
+    machine.succeed("test -e ${install.authority.path}")
+    machine.succeed("test -e ${install.certificate.path}")
+    machine.succeed("test -e ${install.privateKey.path}")
 
     # Check certificate is valid
-    machine.succeed("openssl verify -verbose -x509_strict -CAfile ${ca.path} ${certificate.path}")
+    machine.succeed("openssl verify -verbose -x509_strict -CAfile ${install.authority.path} ${install.certificate.path}")
 
     # Export Certificate to JSON
-    machine.succeed("jc --x509-cert < ${certificate.path} > /tmp/cert.json")
+    machine.succeed("jc --x509-cert < ${install.certificate.path} > /tmp/cert.json")
 
     # Check Common Name
     machine.succeed(
       """
-        jq -e '.[].tbs_certificate.subject.common_name == "${request.CN}"' < /tmp/cert.json
+        jq -e '.[].tbs_certificate.subject.common_name == "${subject.CN}"' < /tmp/cert.json
       """
     )
   '';
@@ -58,7 +64,7 @@ in
     inherit testScript defaults;
     name = "certificates-local";
     nodes.machine =
-      { pkgs, ... }:
+      { ... }:
       {
         security.certificates = {
           authorities.local = {

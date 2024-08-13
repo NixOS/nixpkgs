@@ -1,10 +1,9 @@
 # TODO: Make a utility library of common functions that authorities will want.
-{
-  lib,
-  config,
-  options,
-  pkgs,
-  ...
+{ lib
+, config
+, options
+, pkgs
+, ...
 }:
 let
   inherit (lib)
@@ -29,15 +28,15 @@ let
   ];
 in
 {
-  options.security.certificates = with types; {
+  options.security.certificates = {
     specifications = mkOption {
       description = ''
         Certificate specifications, certificates defined within here will be
         generated and installed on the host at run time.
       '';
-      type = attrsOf (submoduleWith {
+      type = types.attrsOf (types.submoduleWith {
         modules = [
-          (import ./specification.nix)
+          (import ./specification)
           {
             config._module.args = {
               inherit (config.security.certificates) defaultAuthority;
@@ -56,7 +55,7 @@ in
     # TODO: There's probably a better way to do this but I haven't figured
     # it out yet.
     authorities = mkOption {
-      type = submodule { };
+      type = types.submodule { };
       description = ''
         Authority modules for use in certificate specifications.
         :::{.warn}
@@ -70,7 +69,7 @@ in
     # TODO: Is this a good way to do this? Is a enum str (attrNames authorities)
     # a better way to do this?
     defaultAuthority = mkOption {
-      type = attrTag authorities;
+      type = types.attrTag authorities;
       description = ''
         Default certificate authority to use
       '';
@@ -87,13 +86,15 @@ in
     in
     {
       assertions = (
-        mapAttrsToList (name: settings: {
-          assertion = (settings._type or null) == "option";
-          message = ''
-            security.certificate.authorities.${name}.settings must be declared as
-            a option
-          '';
-        }) authorities
+        mapAttrsToList
+          (name: settings: {
+            assertion = (settings._type or null) == "option";
+            message = ''
+              security.certificate.authorities.${name}.settings must be declared as
+              a option
+            '';
+          })
+          authorities
       );
 
       systemd.targets = {
