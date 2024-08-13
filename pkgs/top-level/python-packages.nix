@@ -4020,6 +4020,8 @@ self: super: with self; {
 
   esp-idf-monitor = callPackage ../development/python-modules/esp-idf-monitor { };
 
+  esp-idf-nvs-partition-gen = callPackage ../development/python-modules/esp-idf-nvs-partition-gen { };
+
   esp-idf-panic-decoder = callPackage ../development/python-modules/esp-idf-panic-decoder { };
 
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
