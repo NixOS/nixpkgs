@@ -10,11 +10,13 @@
 , mesa
 , udev
 , wrapGAppsHook3
+, writeScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "termius";
   version = "9.3.1";
+  revision = "199";
 
   src = fetchurl {
     # find the latest version with
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_url' -r
     # and the sha512 with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
-    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_199.snap";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_${revision}.snap";
     hash = "sha512-CYbJDNtJV71kL1cH1D+8nk8VQQWbHY7a8Yaiva5PI4wFxKNWRDpty6DETtOPz03vxpjnEcHjt3b4d7eya8aGfA==";
   };
 
@@ -75,6 +77,28 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper $out/opt/termius/termius-app $out/bin/termius-app \
       "''${gappsWrapperArgs[@]}"
+  '';
+
+  passthru.updateScript = writeScript "update-termius" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl jq
+
+    set -eu -o pipefail
+
+    data=$(curl -H 'X-Ubuntu-Series: 16' \
+    'https://api.snapcraft.io/api/v1/snaps/details/termius-app?fields=download_sha512,revision,version')
+
+    version=$(jq -r .version <<<"$data")
+
+    if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$version" ]]; then
+
+        revision=$(jq -r .revision <<<"$data")
+        hash=$(nix hash to-sri "sha512:$(jq -r .download_sha512 <<<"$data")")
+
+        update-source-version "$UPDATE_NIX_ATTR_PATH" "$version" "$hash"
+        update-source-version --ignore-same-hash --version-key=revision "$UPDATE_NIX_ATTR_PATH" "$revision" "$hash"
+
+    fi
   '';
 
   meta = with lib; {
