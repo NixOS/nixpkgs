@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
     install -D safeupdate${postgresql.dlSuffix} -t $out/lib
   '';
 
+  passthru = {
+    shared_preload_library = "safeupdate";
+  };
+
   meta = with lib; {
     description = "Simple extension to PostgreSQL that requires criteria for UPDATE and DELETE";
     homepage    = "https://github.com/eradman/pg-safeupdate";
