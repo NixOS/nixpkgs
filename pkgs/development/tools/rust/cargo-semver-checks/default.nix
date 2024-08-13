@@ -8,13 +8,13 @@
 , git
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "cargo-semver-checks";
   version = "0.33.0-unstable-2024-08-04";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
-    repo = pname;
+    repo = "cargo-semver-checks";
     rev = "0d956d3dba2dffb5615d9333834cbcc21e8943c9";
     hash = "sha256-7r4QFfIUvQe9EHlr5pfoXguxcf6uJA+6NXqHvFpM47w=";
   };
