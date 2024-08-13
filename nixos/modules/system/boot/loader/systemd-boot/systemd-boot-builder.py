@@ -65,7 +65,7 @@ class Entry:
         # Matching nixos*-generation-$number*.conf
         rex_generation = re.compile(r"^nixos.*-generation-([0-9]+).*\.conf$")
         # Matching nixos*-generation-$number-specialisation-$specialisation_name*.conf
-        rex_specialisation = re.compile(r"^nixos.*-generation-([0-9]+)-specialisation-([a-zA-Z0-9]+).*\.conf$")
+        rex_specialisation = re.compile(r"^nixos.*-generation-([0-9]+)-specialisation-([a-zA-Z0-9_]+).*\.conf$")
         profile = rex_profile.sub(r"\1", filename) if rex_profile.match(filename) else None
         specialisation = rex_specialisation.sub(r"\2", filename) if rex_specialisation.match(filename) else None
         try:
