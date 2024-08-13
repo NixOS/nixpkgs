@@ -11,6 +11,14 @@ in
     maintainers = lib.teams.gnome.members;
   };
 
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "gnome" "tracker" "subcommandPackages" ] ''
+      This option is broken since 3.7 and since 3.8 tracker (tinysparql) no longer expect
+      CLI to be extended by external projects, note that tracker-miners (localsearch) now
+      provides its own CLI tool.
+    '')
+  ];
+
   ###### interface
 
   options = {
@@ -23,15 +31,6 @@ in
         description = ''
           Whether to enable Tracker services, a search engine,
           search tool and metadata storage system.
-        '';
-      };
-
-      subcommandPackages = lib.mkOption {
-        type = lib.types.listOf lib.types.package;
-        default = [ ];
-        internal = true;
-        description = ''
-          List of packages containing tracker3 subcommands.
         '';
       };
 
@@ -49,17 +48,6 @@ in
     services.dbus.packages = [ pkgs.tracker ];
 
     systemd.packages = [ pkgs.tracker ];
-
-    environment.variables = {
-      TRACKER_CLI_SUBCOMMANDS_DIR =
-        let
-          subcommandPackagesTree = pkgs.symlinkJoin {
-            name = "tracker-with-subcommands-${pkgs.tracker.version}";
-            paths = [ pkgs.tracker ] ++ cfg.subcommandPackages;
-          };
-        in
-        "${subcommandPackagesTree}/libexec/tracker3";
-    };
 
   };
 
