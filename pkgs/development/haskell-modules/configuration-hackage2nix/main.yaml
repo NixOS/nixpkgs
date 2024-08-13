@@ -398,10 +398,12 @@ package-maintainers:
     - strongweak
     - generic-data-functions
     - binrep
+    - rerefined
+    - symparsec
+    - bytezap
     - bytepatch
     - heystone
     - refined
-    - refined1
     - flatparse
   roberth:
     - arion-compose

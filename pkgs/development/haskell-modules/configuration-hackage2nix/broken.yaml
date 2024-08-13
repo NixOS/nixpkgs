@@ -596,7 +596,6 @@ broken-packages:
   - bytestring-substring # failure in job https://hydra.nixos.org/build/233244318 at 2023-09-02
   - bytestring-time # failure in job https://hydra.nixos.org/build/233190686 at 2023-09-02
   - bytestring-typenats # failure in job https://hydra.nixos.org/build/233211815 at 2023-09-02
-  - bytezap # failure in job https://hydra.nixos.org/build/259967564 at 2024-05-19
   - bzlib-conduit-jappie # failure in job https://hydra.nixos.org/build/233210179 at 2023-09-02
   - c10k # failure in job https://hydra.nixos.org/build/233213264 at 2023-09-02
   - c2ats # failure in job https://hydra.nixos.org/build/233220801 at 2023-09-02
