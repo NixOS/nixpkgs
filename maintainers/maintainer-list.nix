@@ -10023,6 +10023,12 @@
     github = "jooooscha";
     githubId = 57965027;
   };
+  joseph-flinn = {
+    name = "Joseph Flinn";
+    email = "joseph.s.flinn@gmail.com";
+    github = "joseph-flinn";
+    githubId = 58369717;
+  };
   josephst = {
     name = "Joseph Stahl";
     email = "hello@josephstahl.com";
