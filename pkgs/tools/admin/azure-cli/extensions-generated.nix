@@ -839,6 +839,13 @@
     sha256 = "ab19142c9a2e06190b6dac272d8cf29e179c9e283f965f8e3a4d29275b847ce5";
     description = "Microsoft Azure Command-Line Tools SiteRecovery Extension";
   };
+  ssh = mkAzExtension rec {
+    pname = "ssh";
+    version = "1.1.3";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/ssh-${version}-py3-none-any.whl";
+    sha256 = "7cc245377b2a287b6ca4d2b47119ee48a1c5aa18443db00e6ea0e071825f7adf";
+    description = "SSH into Azure VMs using RBAC and AAD OpenSSH Certificates";
+  };
   spring = mkAzExtension rec {
     pname = "spring";
     version = "1.19.3";
