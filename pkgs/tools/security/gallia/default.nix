@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     aiohttp
     aiosqlite
     argcomplete
-    can
+    python-can
     exitcode
     construct
     httpx

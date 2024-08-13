@@ -19,7 +19,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "can";
+  pname = "python-can";
   version = "4.4.2";
   pyproject = true;
 
