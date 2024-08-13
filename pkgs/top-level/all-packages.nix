@@ -31692,8 +31692,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  ledger-autosync = callPackage  ../applications/office/ledger-autosync { };
-
   ledger-web = callPackage ../applications/office/ledger-web { };
 
   ledger2beancount = callPackage ../tools/text/ledger2beancount { };
