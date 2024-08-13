@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/postgresql/extension *.control
   '';
 
+  passthru = {
+    shared_preload_library = "pg_relusage";
+  };
+
   meta = with lib; {
     description = "pg_relusage extension for PostgreSQL: discover and log the relations used in your statements";
     homepage    = "https://github.com/adept/pg_relusage";
