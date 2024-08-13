@@ -31,10 +31,10 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
       kernelModules = [ "raid0" ];
     };
 
-    specialisation.boot-swraid.configuration.virtualisation.rootDevice = "/dev/disk/by-label/testraid";
+    specialisation.boot_swraid.configuration.virtualisation.rootDevice = "/dev/disk/by-label/testraid";
     # This protects against a regression. We do not have to switch to it.
     # It's sufficient to trigger its evaluation.
-    specialisation.build-old-initrd.configuration.boot.initrd.systemd.enable = lib.mkForce false;
+    specialisation.build_old_initrd.configuration.boot.initrd.systemd.enable = lib.mkForce false;
   };
 
   testScript = ''
@@ -44,16 +44,18 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.succeed("mkdir -p /mnt && mount /dev/md0 /mnt && echo hello > /mnt/test && umount /mnt")
 
     # Boot from the RAID
-    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-swraid.conf")
+    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot_swraid.conf")
     machine.succeed("sync")
     machine.crash()
     machine.wait_for_unit("multi-user.target")
 
     # Ensure we have successfully booted from the RAID
-    assert "(initrd)" in machine.succeed("systemd-analyze")  # booted with systemd in stage 1
-    assert "/dev/md0 on / type ext4" in machine.succeed("mount")
-    assert "hello" in machine.succeed("cat /test")
-    assert "md0" in machine.succeed("cat /proc/mdstat")
+    assert "(initrd)" in machine.succeed("systemd-analyze"), "not booted with systemd in stage 1"
+    mounts = machine.succeed("mount")
+    print(mounts)
+    assert "/dev/md0 on / type ext4" in mounts, "/dev/md0 not mounted on /"
+    assert "hello" in machine.succeed("cat /test"), "unexpected content in /test"
+    assert "md0" in machine.succeed("cat /proc/mdstat"), "md0 not in /proc/mdstat"
 
     expected_config = """MAILADDR test@example.com
 

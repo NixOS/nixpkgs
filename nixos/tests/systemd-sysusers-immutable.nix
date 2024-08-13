@@ -29,7 +29,7 @@ in
       initialHashedPassword = sysuserPassword;
     };
 
-    specialisation.new-generation.configuration = {
+    specialisation.new_generation.configuration = {
       users.users.new-sysuser = {
         isSystemUser = true;
         group = "wheel";
@@ -53,7 +53,7 @@ in
       machine.fail("useradd manual-sysuser")
 
 
-    machine.succeed("/run/current-system/specialisation/new-generation/bin/switch-to-configuration switch")
+    machine.succeed("/run/current-system/specialisation/new_generation/bin/switch-to-configuration switch")
 
 
     with subtest("new-sysuser user is created after switching to new generation"):

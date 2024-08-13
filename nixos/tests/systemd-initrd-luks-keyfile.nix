@@ -26,7 +26,7 @@ in {
       emergencyAccess = true;
     };
 
-    specialisation.boot-luks.configuration = {
+    specialisation.boot_luks.configuration = {
       boot.initrd.luks.devices = lib.mkVMOverride {
         cryptroot = {
           device = "/dev/vdb";
@@ -45,7 +45,7 @@ in {
     machine.succeed("cryptsetup luksFormat -q --iter-time=1 -d ${keyfile} /dev/vdb")
 
     # Boot from the encrypted disk
-    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")
+    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot_luks.conf")
     machine.succeed("sync")
     machine.crash()
 

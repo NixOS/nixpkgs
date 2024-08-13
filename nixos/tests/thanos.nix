@@ -125,7 +125,7 @@ in import ./make-test-python.nix {
       # functionality actually reloads the prometheus service instead of
       # restarting it.
       specialisation = {
-        "prometheus-config-change" = {
+        "prometheus_config_change" = {
           configuration = {
             environment.systemPackages = [ pkgs.yq ];
 

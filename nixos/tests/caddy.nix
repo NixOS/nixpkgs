@@ -22,13 +22,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       '';
       services.caddy.enableReload = true;
 
-      specialisation.config-reload.configuration = {
+      specialisation.config_reload.configuration = {
         services.caddy.extraConfig = ''
           http://localhost:8080 {
           }
         '';
       };
-      specialisation.multiple-configs.configuration = {
+      specialisation.multiple_configs.configuration = {
         services.caddy.virtualHosts = {
           "http://localhost:8080" = { };
           "http://localhost:8081" = { };
@@ -48,7 +48,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           };
         };
       };
-      specialisation.explicit-config-file.configuration = {
+      specialisation.explicit_config_file.configuration = {
         services.caddy.configFile = pkgs.writeText "Caddyfile" ''
         localhost:80
 
@@ -60,9 +60,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = { nodes, ... }:
     let
-      explicitConfigFile = "${nodes.webserver.system.build.toplevel}/specialisation/explicit-config-file";
-      justReloadSystem = "${nodes.webserver.system.build.toplevel}/specialisation/config-reload";
-      multipleConfigs = "${nodes.webserver.system.build.toplevel}/specialisation/multiple-configs";
+      explicitConfigFile = "${nodes.webserver.system.build.toplevel}/specialisation/explicit_config_file";
+      justReloadSystem = "${nodes.webserver.system.build.toplevel}/specialisation/config_reload";
+      multipleConfigs = "${nodes.webserver.system.build.toplevel}/specialisation/multiple_configs";
       rfc42Config = "${nodes.webserver.system.build.toplevel}/specialisation/rfc42";
     in
     ''

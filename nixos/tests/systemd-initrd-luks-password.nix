@@ -18,7 +18,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
       emergencyAccess = true;
     };
 
-    specialisation.boot-luks.configuration = {
+    specialisation.boot_luks.configuration = {
       boot.initrd.luks.devices = lib.mkVMOverride {
         # We have two disks and only type one password - key reuse is in place
         cryptroot.device = "/dev/vdb";
@@ -40,7 +40,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.succeed("mkfs.ext4 /dev/mapper/cryptroot2")
 
     # Boot from the encrypted disk
-    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")
+    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot_luks.conf")
     machine.succeed("sync")
     machine.crash()
 

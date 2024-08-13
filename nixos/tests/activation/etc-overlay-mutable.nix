@@ -12,7 +12,7 @@
     boot.initrd.systemd.enable = true;
     boot.kernelPackages = pkgs.linuxPackages_latest;
 
-    specialisation.new-generation.configuration = {
+    specialisation.new_generation.configuration = {
       environment.etc."newgen".text = "newgen";
     };
   };
@@ -37,7 +37,7 @@
       machine.succeed("touch /etc/filemount")
       machine.succeed("mount --bind /dev/null /etc/filemount")
 
-      machine.succeed("/run/current-system/specialisation/new-generation/bin/switch-to-configuration switch")
+      machine.succeed("/run/current-system/specialisation/new_generation/bin/switch-to-configuration switch")
 
       assert machine.succeed("cat /etc/newgen") == "newgen"
       assert machine.succeed("cat /etc/mutable") == "mutable"

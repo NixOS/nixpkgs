@@ -17,7 +17,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
     environment.systemPackages = with pkgs; [ cryptsetup ];
 
-    specialisation.boot-luks.configuration = {
+    specialisation.boot_luks.configuration = {
       boot.initrd.luks.devices = lib.mkVMOverride {
         cryptroot = {
           device = "/dev/vdb";
@@ -36,7 +36,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.succeed("PASSWORD=supersecret SYSTEMD_LOG_LEVEL=debug systemd-cryptenroll --fido2-device=auto /dev/vdb |& systemd-cat")
 
     # Boot from the encrypted disk
-    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")
+    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot_luks.conf")
     machine.succeed("sync")
     machine.crash()
 

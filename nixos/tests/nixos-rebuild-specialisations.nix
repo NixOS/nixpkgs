@@ -147,7 +147,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           "${wrongConfigFile}",
           "/etc/nixos/configuration.nix",
       )
+      # TODO: turn this into a failure when we turn the warning into an error
       with subtest("Make sure that invalid specialisation names are rejected"):
-          machine.fail("nixos-rebuild switch")
+          machine.succeed("nixos-rebuild switch")
     '';
 })

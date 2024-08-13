@@ -19,7 +19,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
       emergencyAccess = true;
     };
 
-    specialisation.boot-btrfs-raid.configuration = {
+    specialisation.boot_btrfs_raid.configuration = {
       fileSystems = lib.mkVMOverride {
         "/".fsType = lib.mkForce "btrfs";
       };
@@ -33,7 +33,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.succeed("mkdir -p /mnt && mount /dev/vdb /mnt && echo hello > /mnt/test && umount /mnt")
 
     # Boot from the RAID
-    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-btrfs-raid.conf")
+    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot_btrfs_raid.conf")
     machine.succeed("sync")
     machine.crash()
     machine.wait_for_unit("multi-user.target")

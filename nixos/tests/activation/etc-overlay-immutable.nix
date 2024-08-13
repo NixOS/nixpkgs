@@ -20,7 +20,7 @@
       "filemount".text = "keep";
     };
 
-    specialisation.new-generation.configuration = {
+    specialisation.new_generation.configuration = {
       environment.etc."newgen".text = "newgen";
     };
   };
@@ -57,7 +57,7 @@
       machine.succeed("touch /etc/mountpoint/extra-file")
       machine.succeed("mount --bind /dev/null /etc/filemount")
 
-      machine.succeed("/run/current-system/specialisation/new-generation/bin/switch-to-configuration switch")
+      machine.succeed("/run/current-system/specialisation/new_generation/bin/switch-to-configuration switch")
 
       assert machine.succeed("cat /etc/newgen") == "newgen"
 

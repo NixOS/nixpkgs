@@ -35,7 +35,7 @@ in {
     };
     environment.systemPackages = with pkgs; [ cryptsetup ];
 
-    specialisation.boot-luks-wrong-keyfile.configuration = {
+    specialisation.boot_luks_wrong_keyfile.configuration = {
       boot.initrd.luks.devices = lib.mkVMOverride {
         cryptroot = {
           device = "/dev/vdb";
@@ -48,7 +48,7 @@ in {
       boot.initrd.secrets."/etc/cryptroot.key" = keyfile;
     };
 
-    specialisation.boot-luks-missing-keyfile.configuration = {
+    specialisation.boot_luks_missing_keyfile.configuration = {
       boot.initrd.luks.devices = lib.mkVMOverride {
         cryptroot = {
           device = "/dev/vdb";
@@ -85,7 +85,7 @@ in {
     # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
     machine.succeed("echo "" | cryptsetup luksFormat /dev/vdb --batch-mode")
-    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks-wrong-keyfile.conf")
+    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot_luks_wrong_keyfile.conf")
     machine.succeed("sync")
     machine.crash()
 
@@ -94,7 +94,7 @@ in {
     assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount")
 
     # Choose boot-luks-missing-keyfile specialisation
-    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks-missing-keyfile.conf")
+    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot_luks_missing_keyfile.conf")
     machine.succeed("sync")
     machine.crash()
 

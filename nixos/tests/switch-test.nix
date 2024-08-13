@@ -337,7 +337,7 @@ in {
           systemd.services."instantiated@".serviceConfig.X-Test = "test";
         };
 
-        restart-and-reload-by-activation-script.configuration = {
+        restart_and_reload_by_activation_script.configuration = {
           systemd.services = rec {
             simple-service = {
               # No wantedBy so we can check if the activation script restart triggers them
@@ -430,8 +430,8 @@ in {
           };
         };
 
-        restart-and-reload-by-activation-script-modified.configuration = {
-          imports = [ restart-and-reload-by-activation-script.configuration ];
+        restart_and_reload_by_activation_script_modified.configuration = {
+          imports = [ restart_and_reload_by_activation_script.configuration ];
           systemd.services.reload-triggers-and-restart.serviceConfig.X-Modified = "test";
           systemd.services."templated-reload-triggers-and-restart@instance" = {
             overrideStrategy = "asDropin";
@@ -439,7 +439,7 @@ in {
           };
         };
 
-        simple-socket.configuration = {
+        simple_socket.configuration = {
           systemd.services.socket-activated = {
             description = "A socket-activated service";
             stopIfChanged = lib.mkDefault false;
@@ -455,18 +455,18 @@ in {
           };
         };
 
-        simple-socket-service-modified.configuration = {
-          imports = [ simple-socket.configuration ];
+        simple_socket_service_modified.configuration = {
+          imports = [ simple_socket.configuration ];
           systemd.services.socket-activated.serviceConfig.X-Test = "test";
         };
 
-        simple-socket-stop-if-changed.configuration = {
-          imports = [ simple-socket.configuration ];
+        simple_socket_stop_if_changed.configuration = {
+          imports = [ simple_socket.configuration ];
           systemd.services.socket-activated.stopIfChanged = true;
         };
 
-        simple-socket-stop-if-changed-and-reloadtrigger.configuration = {
-          imports = [ simple-socket.configuration ];
+        simple_socket_stop_if_changed_and_reloadtrigger.configuration = {
+          imports = [ simple_socket.configuration ];
           systemd.services.socket-activated = {
             stopIfChanged = true;
             reloadTriggers = [ "test" ];
@@ -1105,7 +1105,7 @@ in {
 
     with subtest("restart and reload by activation script"):
         switch_to_specialisation("${machine}", "simpleServiceNorestart")
-        out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script")
+        out = switch_to_specialisation("${machine}", "restart_and_reload_by_activation_script")
         assert_contains(out, "stopping the following units: test.service\n")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
@@ -1147,7 +1147,7 @@ in {
         ]}\n")
         # Switch to the same system where the example services get restarted
         # and reloaded by the activation script
-        out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script")
+        out = switch_to_specialisation("${machine}", "restart_and_reload_by_activation_script")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_contains(out, "reloading the following units: ${sortedUnits [
@@ -1170,7 +1170,7 @@ in {
         assert_lacks(out, "the following new units were started:")
         # Switch to the same system and see if the service gets restarted when it's modified
         # while the fact that it's supposed to be reloaded by the activation script is ignored.
-        out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script-modified")
+        out = switch_to_specialisation("${machine}", "restart_and_reload_by_activation_script_modified")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_contains(out, "reloading the following units: ${sortedUnits [
@@ -1192,7 +1192,7 @@ in {
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
         # The same, but in dry mode
-        out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script", action="dry-activate")
+        out = switch_to_specialisation("${machine}", "restart_and_reload_by_activation_script", action="dry-activate")
         assert_lacks(out, "would stop the following units:")
         assert_lacks(out, "would NOT stop the following changed units:")
         assert_contains(out, "would reload the following units: ${sortedUnits [
@@ -1216,7 +1216,7 @@ in {
     with subtest("socket-activated services"):
         # Socket-activated services don't get started, just the socket
         machine.fail("[ -S /run/test.sock ]")
-        out = switch_to_specialisation("${machine}", "simple-socket")
+        out = switch_to_specialisation("${machine}", "simple_socket")
         # assert_lacks(out, "stopping the following units:") not relevant
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
@@ -1226,7 +1226,7 @@ in {
         machine.succeed("[ -S /run/test.sock ]")
 
         # Changing a non-activated service does nothing
-        out = switch_to_specialisation("${machine}", "simple-socket-service-modified")
+        out = switch_to_specialisation("${machine}", "simple_socket_service_modified")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
@@ -1239,7 +1239,7 @@ in {
             raise Exception("Socket was not properly activated")  # idk how that would happen tbh
 
         # Changing an activated service with stopIfChanged=false restarts the service
-        out = switch_to_specialisation("${machine}", "simple-socket")
+        out = switch_to_specialisation("${machine}", "simple_socket")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
@@ -1253,7 +1253,7 @@ in {
 
         # Changing an activated service with stopIfChanged=true stops the service and
         # socket and starts the socket
-        out = switch_to_specialisation("${machine}", "simple-socket-stop-if-changed")
+        out = switch_to_specialisation("${machine}", "simple_socket_stop_if_changed")
         assert_contains(out, "stopping the following units: socket-activated.service, socket-activated.socket\n")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
@@ -1266,7 +1266,7 @@ in {
             raise Exception("Socket was not properly activated after the service was restarted")
 
         # Changing a reload trigger of a socket-activated unit only reloads it
-        out = switch_to_specialisation("${machine}", "simple-socket-stop-if-changed-and-reloadtrigger")
+        out = switch_to_specialisation("${machine}", "simple_socket_stop_if_changed_and_reloadtrigger")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_contains(out, "reloading the following units: socket-activated.service\n")
