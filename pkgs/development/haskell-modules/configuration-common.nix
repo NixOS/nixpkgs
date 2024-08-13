@@ -3115,4 +3115,20 @@ self: super: {
     doJailbreak
   ];
 
+  # 2024-08-09: Apply optparse-applicative compat fix from master branch
+  # https://github.com/NorfairKing/feedback/commit/9368468934a4d8bd94709bdcb1116210b162bab8
+  feedback = overrideCabal (drv: assert drv.version == "0.1.0.5"; {
+    postPatch = drv.postPatch or "" + ''
+      substituteInPlace src/Feedback/Loop/OptParse.hs \
+        --replace-fail '(uncurry loopConfigLine)' '(pure . uncurry loopConfigLine)'
+    '';
+  }) (doDistribute (super.feedback.overrideScope (self: super: {
+    # 2024-08-09: The stackage versions of safe-coloured-text* are old and broken
+    safe-coloured-text = unmarkBroken self.safe-coloured-text_0_3_0_2;
+    safe-coloured-text-gen = unmarkBroken self.safe-coloured-text-gen_0_0_0_3;
+    safe-coloured-text-layout = unmarkBroken self.safe-coloured-text-layout_0_2_0_0;
+    safe-coloured-text-layout-gen = unmarkBroken self.safe-coloured-text-layout-gen_0_0_0_1;
+    safe-coloured-text-terminfo = unmarkBroken self.safe-coloured-text-terminfo_0_3_0_0;
+  })));
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
