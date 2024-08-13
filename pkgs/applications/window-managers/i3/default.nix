@@ -3,6 +3,7 @@
 , yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
 , xorgserver, xvfb-run, xdotool, xorg, which
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -77,6 +78,9 @@ stdenv.mkDerivation rec {
   '';
 
   separateDebugInfo = true;
+
+  passthru.tests = { inherit (nixosTests) i3wm; };
+
 
   meta = with lib; {
     description = "Tiling window manager";
