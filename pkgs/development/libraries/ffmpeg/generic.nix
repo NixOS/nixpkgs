@@ -74,6 +74,7 @@
 , withIlbc ? withFullDeps # iLBC de/encoding
 , withJack ? withFullDeps && !stdenv.hostPlatform.isDarwin # Jack audio
 , withJxl ? withFullDeps && lib.versionAtLeast version "5" # JPEG XL de/encoding
+, withKvazaar ? withFullDeps # HEVC encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLcms2 ? withFullDeps # ICC profile support via lcms2
 , withLzma ? withHeadlessDeps # xz-utils
@@ -243,6 +244,7 @@
 , gsm
 , harfbuzz
 , intel-media-sdk
+, kvazaar
 , ladspaH
 , lame
 , lcms2
@@ -600,6 +602,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
     (enableFeature withJxl "libjxl")
   ] ++ [
+    (enableFeature withKvazaar "libkvazaar")
     (enableFeature withLadspa "ladspa")
   ] ++ optionals (versionAtLeast version "5.1") [
     (enableFeature withLcms2 "lcms2")
@@ -760,6 +763,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withIlbc [ libilbc ]
   ++ optionals withJack [ libjack2 ]
   ++ optionals withJxl [ libjxl ]
+  ++ optionals withKvazaar [ kvazaar ]
   ++ optionals withLadspa [ ladspaH ]
   ++ optionals withLcms2 [ lcms2 ]
   ++ optionals withLzma [ xz ]
