@@ -1,3 +1,16 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Victor Fuentes <vmfuentes64@gmail.com>
+Date: Thu, 1 Aug 2024 16:00:43 -0400
+Subject: [PATCH] Adds unfree qml to packagechooserq
+
+---
+ .../packagechooserq/packagechooserq.qrc       |  1 +
+ .../packagechooserq@unfree.qml                | 75 +++++++++++++++++++
+ src/modules/packagechooserq/unfree.conf       | 11 +++
+ 3 files changed, 87 insertions(+)
+ create mode 100644 src/modules/packagechooserq/packagechooserq@unfree.qml
+ create mode 100644 src/modules/packagechooserq/unfree.conf
+
 diff --git a/src/modules/packagechooserq/packagechooserq.qrc b/src/modules/packagechooserq/packagechooserq.qrc
 index 1b892dce1..ee80a934b 100644
 --- a/src/modules/packagechooserq/packagechooserq.qrc
@@ -11,7 +24,7 @@ index 1b892dce1..ee80a934b 100644
  </RCC>
 diff --git a/src/modules/packagechooserq/packagechooserq@unfree.qml b/src/modules/packagechooserq/packagechooserq@unfree.qml
 new file mode 100644
-index 000000000..cb87d864a
+index 000000000..5e36d77d9
 --- /dev/null
 +++ b/src/modules/packagechooserq/packagechooserq@unfree.qml
 @@ -0,0 +1,75 @@
@@ -32,7 +45,7 @@ index 000000000..cb87d864a
 +import QtQuick.Layouts 1.3
 +
 +Item {
-+    
++
 +    SystemPalette {
 +        id: palette
 +        colorGroup: SystemPalette.Active
