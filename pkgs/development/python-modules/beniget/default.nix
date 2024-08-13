@@ -15,11 +15,12 @@ buildPythonPackage rec {
     sha256 = "75554b3b8ad0553ce2f607627dad3d95c60c441189875b98e097528f8e23ac0c";
   };
 
-  propagatedBuildInputs = [ gast ];
+  dependencies = [ gast ];
 
   meta = {
     description = "Extract semantic information about static Python code";
     homepage = "https://github.com/serge-sans-paille/beniget";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ];
   };
 }
