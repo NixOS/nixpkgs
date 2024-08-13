@@ -160,4 +160,4 @@ jq -r \
     --arg extName "${extName:-}" \
     --arg nix "${nix:-}" \
     --arg requirements "${requirements:-}" \
-    "$jqProgram" "${extensionFile}.filtered"
+    "$jqProgram" "${extensionFile}"
