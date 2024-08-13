@@ -5902,6 +5902,8 @@ self: super: with self; {
 
   identify = callPackage ../development/python-modules/identify { };
 
+  idf-component-manager = callPackage ../development/python-modules/idf-component-manager { };
+
   idna = callPackage ../development/python-modules/idna { };
 
   idna-ssl = callPackage ../development/python-modules/idna-ssl { };
