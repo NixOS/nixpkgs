@@ -37,8 +37,6 @@
 
     systemd.packages = [ pkgs.tracker-miners ];
 
-    services.gnome.tracker.subcommandPackages = [ pkgs.tracker-miners ];
-
   };
 
 }
