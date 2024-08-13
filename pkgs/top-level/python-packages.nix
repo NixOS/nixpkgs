@@ -14850,6 +14850,8 @@ self: super: with self; {
 
   sphinx-codeautolink = callPackage ../development/python-modules/sphinx-codeautolink { };
 
+  sphinx-collapse = callPackage ../development/python-modules/sphinx-collapse { };
+
   sphinx-comments = callPackage ../development/python-modules/sphinx-comments { };
 
   sphinx-design = callPackage ../development/python-modules/sphinx-design { };
