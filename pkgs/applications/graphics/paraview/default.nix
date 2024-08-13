@@ -26,7 +26,7 @@
 }:
 
 let
-  version = "5.12.0";
+  version = "5.12.1";
 
   docFiles = [
     (fetchurl {
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     owner = "paraview";
     repo = "paraview";
     rev = "v${version}";
-    hash = "sha256-PAD48IlOU39TosjfTiDz7IjEeYEP/7F75M+8dYBIUxI=";
+    hash = "sha256-jbqMqj3D7LTwQ+hHIPscCHw4TfY/BR2HuVmMYom2+dA=";
     fetchSubmodules = true;
   };
 
@@ -128,11 +128,12 @@ stdenv.mkDerivation rec {
     ))
   ];
 
-  meta = with lib; {
-    homepage = "https://www.paraview.org/";
+  meta = {
+    homepage = "https://www.paraview.org";
     description = "3D Data analysis and visualization application";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ guibert ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ guibert ];
+    changelog = "https://www.kitware.com/paraview-${lib.concatStringsSep "-" (lib.versions.splitVersion version)}-release-notes";
+    platforms = lib.platforms.linux;
   };
 }
