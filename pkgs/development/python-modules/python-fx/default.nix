@@ -22,7 +22,6 @@
   antlr4,
   pyyaml,
   setuptools,
-  six,
   urwid,
   parameterized,
   wcwidth,
@@ -32,7 +31,7 @@
 buildPythonPackage rec {
   pname = "python-fx";
   version = "0.3.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -51,10 +50,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = [
-    antlr4
-    setuptools
-  ];
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ antlr4 ];
 
   propagatedBuildInputs = [
     antlr4-python3-runtime
@@ -72,7 +70,6 @@ buildPythonPackage rec {
     pyfiglet
     pyperclip
     pyyaml
-    six
     urwid
     wcwidth
     yamale
@@ -90,10 +87,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to view JSON in a TUI";
-    mainProgram = "pyfx";
     homepage = "https://github.com/cielong/pyfx";
     changelog = "https://github.com/cielong/pyfx/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pyfx";
   };
 }
