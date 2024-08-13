@@ -46,12 +46,11 @@
   runtimeMode ? "release",
   isOptimized ? true,
 }:
-with lib;
 let
   expandSingleDep =
     dep: lib.optionals (lib.isDerivation dep) ([ dep ] ++ map (output: dep.${output}) dep.outputs);
 
-  expandDeps = deps: flatten (map expandSingleDep deps);
+  expandDeps = deps: lib.flatten (map expandSingleDep deps);
 
   constants = callPackage ./constants.nix { inherit targetPlatform; };
 
@@ -103,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     paths =
       expandDeps (
-        optionals (stdenv.isLinux) [
+        lib.optionals (stdenv.isLinux) [
           gtk3
           wayland
           libepoxy
@@ -128,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
           xorg.xorgproto
           zlib
         ]
-        ++ optionals (stdenv.isDarwin) [
+        ++ lib.optionals (stdenv.isDarwin) [
           clang
           llvm
         ]
@@ -160,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
       dart
     ]
     ++ lib.optionals (stdenv.isLinux) [ patchelf ]
-    ++ optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.isDarwin) [
       darwin.system_cmds
       darwin.xcode
       tools.xcode-select
@@ -237,7 +236,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--embedder-for-target"
       "--no-goma"
     ]
-    ++ optionals (targetPlatform.isx86_64 == false) [
+    ++ lib.optionals (targetPlatform.isx86_64 == false) [
       "--linux"
       "--linux-cpu ${constants.alt-arch}"
     ];
@@ -311,7 +310,7 @@ stdenv.mkDerivation (finalAttrs: {
     dart = callPackage ./dart.nix { engine = finalAttrs.finalPackage; };
   };
 
-  meta = {
+  meta = with lib; {
     # Very broken on Darwin
     broken = stdenv.isDarwin;
     description = "The Flutter engine";
