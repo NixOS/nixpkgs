@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "edeneast";
     repo = pname;
-    rev = "tuxmux-v${version}";
+    rev = "v${version}";
     hash = "sha256-WtcEPvNC1GLOfX0ULUnGHtVO8CyHWQYAPCKwsUlKEzc=";
   };
 
