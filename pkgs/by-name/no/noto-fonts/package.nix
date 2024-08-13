@@ -2,6 +2,7 @@
 , stdenvNoCC
 , fetchFromGitHub
 , gitUpdater
+, nixosTests
 , variants ? [ ]
 , suffix ? ""
 , longDescription ? ''
@@ -61,6 +62,8 @@ stdenvNoCC.mkDerivation rec {
   passthru.updateScript = gitUpdater {
     rev-prefix = "noto-monthly-release-";
   };
+
+  passthru.tests = { inherit (nixosTests) noto-fonts; };
 
   meta = {
     description = "Beautiful and free fonts for many languages";
