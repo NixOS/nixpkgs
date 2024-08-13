@@ -25,35 +25,39 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.extension = stdenv.mkDerivation {
-    name = "pg_squeeze-test";
-    dontUnpack = true;
-    doCheck = true;
-    nativeCheckInputs = [ postgresqlTestHook (postgresql.withPackages (_: [ finalAttrs.finalPackage ])) ];
-    failureHook = "postgresqlStop";
-    postgresqlTestUserOptions = "LOGIN SUPERUSER";
-    postgresqlExtraSettings = ''
-      wal_level = logical
-      shared_preload_libraries = 'pg_squeeze'
-    '';
-    passAsFile = [ "sql" ];
-    sql = ''
-      CREATE EXTENSION pg_squeeze;
+  passthru = {
+    shared_preload_library = "pg_squeeze";
 
-      SELECT squeeze.start_worker();
+    tests.extension = stdenv.mkDerivation {
+      name = "pg_squeeze-test";
+      dontUnpack = true;
+      doCheck = true;
+      nativeCheckInputs = [ postgresqlTestHook (postgresql.withPackages (_: [ finalAttrs.finalPackage ])) ];
+      failureHook = "postgresqlStop";
+      postgresqlTestUserOptions = "LOGIN SUPERUSER";
+      postgresqlExtraSettings = ''
+        wal_level = logical
+        shared_preload_libraries = 'pg_squeeze'
+      '';
+      passAsFile = [ "sql" ];
+      sql = ''
+        CREATE EXTENSION pg_squeeze;
 
-      CREATE TABLE a(i int PRIMARY KEY, j int);
-      INSERT INTO a(i, j) SELECT x, x FROM generate_series(1, 20) AS g(x);
-      INSERT INTO squeeze.tables (tabschema, tabname, schedule)
-      VALUES ('public', 'a', ('{30}', '{22}', NULL, NULL, '{3, 5}'));
-      SELECT squeeze.squeeze_table('public', 'a', NULL, NULL, NULL);
-    '';
-    checkPhase = ''
-      runHook preCheck
-      psql -a -v ON_ERROR_STOP=1 -f $sqlPath
-      runHook postCheck
-    '';
-    installPhase = "touch $out";
+        SELECT squeeze.start_worker();
+
+        CREATE TABLE a(i int PRIMARY KEY, j int);
+        INSERT INTO a(i, j) SELECT x, x FROM generate_series(1, 20) AS g(x);
+        INSERT INTO squeeze.tables (tabschema, tabname, schedule)
+        VALUES ('public', 'a', ('{30}', '{22}', NULL, NULL, '{3, 5}'));
+        SELECT squeeze.squeeze_table('public', 'a', NULL, NULL, NULL);
+      '';
+      checkPhase = ''
+        runHook preCheck
+        psql -a -v ON_ERROR_STOP=1 -f $sqlPath
+        runHook postCheck
+      '';
+      installPhase = "touch $out";
+    };
   };
 
   meta = with lib; {
