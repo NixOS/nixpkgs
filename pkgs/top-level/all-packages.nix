@@ -16490,6 +16490,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_17 = llvmPackages_17.libllvm;
   };
+  rust_1_79 = callPackage ../development/compilers/rust/1_79.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
+    llvm_18 = llvmPackages_18.libllvm;
+  };
   rust = rust_1_77;
 
   mrustc = callPackage ../development/compilers/mrustc { };
@@ -16499,6 +16503,7 @@ with pkgs;
   };
 
   rustPackages_1_77 = rust_1_77.packages.stable;
+  rustPackages_1_79 = rust_1_79.packages.stable;
   rustPackages = rustPackages_1_77;
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
@@ -40209,6 +40214,7 @@ with pkgs;
   vazir-code-font = callPackage ../data/fonts/vazir-code-font { };
 
   vaultwarden = callPackage ../tools/security/vaultwarden {
+    inherit (rustPackages_1_79) rustPlatform;
     inherit (darwin.apple_sdk.frameworks) Security CoreServices SystemConfiguration;
   };
   vaultwarden-sqlite = vaultwarden;
