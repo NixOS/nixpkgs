@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/postgresql/extension src/monitor/pgautofailover.control
   '';
 
+  passthru = {
+    shared_preload_library = "pgautofailover";
+  };
+
   meta = with lib; {
     description = "PostgreSQL extension and service for automated failover and high-availability";
     mainProgram = "pg_autoctl";
