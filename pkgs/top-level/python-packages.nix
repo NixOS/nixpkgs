@@ -4024,6 +4024,8 @@ self: super: with self; {
 
   esp-idf-panic-decoder = callPackage ../development/python-modules/esp-idf-panic-decoder { };
 
+  esp-idf-size = callPackage ../development/python-modules/esp-idf-size { };
+
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
   esper = callPackage ../development/python-modules/esper { };
