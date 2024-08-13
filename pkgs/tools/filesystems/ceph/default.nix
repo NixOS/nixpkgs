@@ -4,6 +4,7 @@
 , fetchurl
 , fetchFromGitHub
 , fetchPypi
+, fetchpatch
 
 # Build time
 , cmake
@@ -317,6 +318,17 @@ in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
     inherit src version;
+
+    patches = [
+      # Fixes mgr not being able to import `packaging` due to autotools >= 70.
+      # Remove once https://github.com/ceph/ceph/pull/58624 is merged, see
+      # https://github.com/NixOS/nixpkgs/pull/330226#issuecomment-2268421031
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/commit/8da2d857fa8fdfedd7aad0ca90e1780a3ed085c9.patch";
+        name = "ceph-mgr-python-fix-packaging-import.patch";
+        hash = "sha256-3Yl1X6UfTf0XCXJxgRnM/Js9sz8tS+hsqViY6gDExoI=";
+      })
+    ];
 
     postPatch = ''
       substituteInPlace cmake/modules/Finduring.cmake \
