@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    shared_preload_library = "citus";
+  };
+
   meta = with lib; {
     # "Our soft policy for Postgres version compatibility is to support Citus'
     # latest release with Postgres' 3 latest releases."
