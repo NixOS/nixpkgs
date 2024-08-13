@@ -24,12 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-40WNvpFNBhjg2+1H5PRBlziKrcSjl1fppUk4HOmDRDk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pycognito
     requests
   ];
