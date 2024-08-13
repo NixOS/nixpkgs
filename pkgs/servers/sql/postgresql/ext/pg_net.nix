@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     cp *.control $out/share/postgresql/extension
   '';
 
+  passthru = {
+    shared_preload_library = "pg_net";
+  };
+
   meta = with lib; {
     description = "Async networking for Postgres";
     homepage    = "https://github.com/supabase/pg_net";
