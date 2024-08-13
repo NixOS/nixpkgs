@@ -9,6 +9,7 @@ ninjaBuildPhase() {
     fi
 
     local flagsArray=(
+        --verbose
         -j$buildCores
         $ninjaFlags "${ninjaFlagsArray[@]}"
     )
@@ -38,6 +39,7 @@ ninjaCheckPhase() {
         fi
 
         local flagsArray=(
+            --verbose
             -j$buildCores
             $ninjaFlags "${ninjaFlagsArray[@]}"
             $checkTarget
@@ -62,6 +64,7 @@ ninjaInstallPhase() {
 
     # shellcheck disable=SC2086
     local flagsArray=(
+        --verbose
         -j$buildCores
         $ninjaFlags "${ninjaFlagsArray[@]}"
         ${installTargets:-install}
