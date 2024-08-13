@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
+{ stdenvNoCC, lib, fetchFromGitHub, nixosTests }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2-ipl";
@@ -15,6 +15,8 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p "$out"
     cp -r * "$out"
   '';
+
+  passthru.tests = { inherit (nixosTests) icingaweb2; };
 
   meta = {
     description = "PHP library package for Icingaweb 2";
