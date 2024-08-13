@@ -8,7 +8,7 @@
 }:
 let
   pname = "tracexec";
-  version = "0.5.1";
+  version = "0.5.2";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage {
     owner = "kxxt";
     repo = "tracexec";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RDOVKcGzSbej8THJGJgdLo/RPoD4Eks6USifXvd5PvY=";
+    hash = "sha256-PLUB0t9eDR0mYUI6TiUxafo6yMymwdTux7ykF8rTGGc=";
   };
 
-  cargoHash = "sha256-ELNksIEwGvcZ5grrmK4Nyvkyw2bkEdNQ2q4RSy4VqdM=";
+  cargoHash = "sha256-PJclGjQTAOvnl8LJTxlDyEuzdWE1R7A2gJe1I1sKde0=";
 
   nativeBuildInputs = [ cargo-about ];
 
