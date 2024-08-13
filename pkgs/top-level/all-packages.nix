@@ -10833,8 +10833,6 @@ with pkgs;
 
   npapi_sdk = callPackage ../development/libraries/npapi-sdk { };
 
-  npiet = callPackage ../development/interpreters/npiet { };
-
   npth = callPackage ../development/libraries/npth { };
 
   nmap-formatter = callPackage ../tools/security/nmap-formatter { };
@@ -31703,8 +31701,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  ledger-autosync = callPackage  ../applications/office/ledger-autosync { };
-
   ledger-web = callPackage ../applications/office/ledger-web { };
 
   ledger2beancount = callPackage ../tools/text/ledger2beancount { };
@@ -33067,6 +33063,11 @@ with pkgs;
 
   qemu-utils = qemu.override {
     toolsOnly = true;
+  };
+
+  # variant of qemu building user space emulator only - intended to be used from pkgsStatic
+  qemu-user = qemu.override {
+    userOnly = true;
   };
 
   canokey-qemu = callPackage ../applications/virtualization/qemu/canokey-qemu.nix { };
