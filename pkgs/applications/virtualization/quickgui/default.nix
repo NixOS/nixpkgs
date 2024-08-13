@@ -6,9 +6,6 @@
 , quickemu
 , zenity
 }:
-let
-  runtimeBinDependencies = [ quickemu zenity ];
-in
 flutter.buildFlutterApplication rec {
   pname = "quickgui";
   version = "1.2.10";
