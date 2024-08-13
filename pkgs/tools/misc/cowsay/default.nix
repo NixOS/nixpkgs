@@ -1,10 +1,21 @@
-{ lib, stdenv, perl, fetchFromGitHub, makeWrapper, nix-update-script, testers }:
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  nix-update-script,
+  perl,
+  stdenv,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cowsay";
   version = "3.8.1";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "cowsay-org";
@@ -14,16 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [ perl ];
+
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/cowsay \
       --suffix COWPATH : $out/share/cowsay/cows
   '';
-
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-  ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -39,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/cowsay-org/cowsay/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ rob anthonyroussel ];
+    maintainers = with maintainers; [
+      rob
+      anthonyroussel
+    ];
     mainProgram = "cowsay";
   };
 })
