@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
-  isPy3k,
   substituteAll,
 
   # build-system
@@ -32,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-TpD8YZnnv48PKYrUqR0/qvJG1XRbcMBcrkcERh6Q4q0=";
   };
 
@@ -57,9 +56,9 @@ buildPythonPackage rec {
     ln -s '${lib.getDev xsimd}'/include/xsimd pythran/
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ply
     gast
     numpy
@@ -79,9 +78,8 @@ buildPythonPackage rec {
   # Test suite is huge and has a circular dependency on scipy.
   doCheck = false;
 
-  disabled = !isPy3k;
-
   meta = {
+    changelog = "https://github.com/serge-sans-paille/pythran/blob/${src.rev}/Changelog";
     description = "Ahead of Time compiler for numeric kernels";
     homepage = "https://github.com/serge-sans-paille/pythran";
     license = lib.licenses.bsd3;
