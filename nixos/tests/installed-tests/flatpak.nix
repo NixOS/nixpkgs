@@ -15,4 +15,7 @@ makeInstalledTest {
   };
 
   testRunnerFlags = [ "--timeout" "3600" ];
+
+  # Runs for multiple hours, fails on timeout or log limit exceeded
+  meta.broken = true;
 }
