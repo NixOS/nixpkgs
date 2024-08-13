@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/termius
     cp -r ./ $out/opt/termius
 
-    mkdir -p "$out/share/applications" "$out/share/pixmaps/termius-app.png"
+    mkdir -p "$out/share/applications" "$out/share/pixmaps"
     cp "${desktopItem}/share/applications/"* "$out/share/applications"
     cp meta/gui/icon.png $out/share/pixmaps/termius-app.png
 
