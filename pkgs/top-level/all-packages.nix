@@ -32871,8 +32871,6 @@ with pkgs;
 
   pianoteq = callPackage ../applications/audio/pianoteq { };
 
-  picard = callPackage ../applications/audio/picard { };
-
   picocom = callPackage ../tools/misc/picocom {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
