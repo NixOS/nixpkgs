@@ -8964,6 +8964,8 @@ self: super: with self; {
 
   napari-console = callPackage ../development/python-modules/napari-console { };
 
+  napari-nifti = callPackage ../development/python-modules/napari-nifti { };
+
   napari-npe2 = callPackage ../development/python-modules/napari-npe2 { };
 
   napari-plugin-engine = callPackage ../development/python-modules/napari-plugin-engine { };
