@@ -17,8 +17,6 @@ cargoInstallPostBuildHook() {
 cargoInstallHook() {
     echo "Executing cargoInstallHook"
 
-    runHook preInstall
-
     # rename the output dir to a architecture independent one
 
     releaseDir=target/@targetSubdirectory@/$cargoBuildType
@@ -37,13 +35,24 @@ cargoInstallHook() {
       -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \
       -print0 | xargs -r -0 cp -t $out/lib
     rmdir --ignore-fail-on-non-empty $out/lib $out/bin
-    runHook postInstall
 
     echo "Finished cargoInstallHook"
 }
 
+cargoInstallPhase() {
+    runHook preInstall
 
-if [ -z "${dontCargoInstall-}" ] && [ -z "${installPhase-}" ]; then
-  installPhase=cargoInstallHook
-  postBuildHooks+=(cargoInstallPostBuildHook)
+    cargoInstallHook
+
+    runHook postInstall
+}
+
+
+if [ -z "${dontCargoInstall-}" ]; then
+    if [ -z "${installPhase-}" ]; then
+        installPhase=cargoInstallPhase
+    else
+        preInstallHooks+=(cargoInstallHook)
+    fi
+    postBuildHooks+=(cargoInstallPostBuildHook)
 fi

@@ -3,8 +3,6 @@ declare -a cargoBuildFlags
 cargoBuildHook() {
     echo "Executing cargoBuildHook"
 
-    runHook preBuild
-
     # Let stdenv handle stripping, for consistency and to not break
     # separateDebugInfo.
     export "CARGO_PROFILE_${cargoBuildType@U}_STRIP"=false
@@ -50,11 +48,21 @@ cargoBuildHook() {
         popd
     fi
 
-    runHook postBuild
-
     echo "Finished cargoBuildHook"
 }
 
-if [ -z "${dontCargoBuild-}" ] && [ -z "${buildPhase-}" ]; then
-  buildPhase=cargoBuildHook
+cargoBuildPhase() {
+    runHook preBuild
+
+    cargoBuildHook
+
+    runHook postBuild
+}
+
+if [ -z "${dontCargoBuild-}" ]; then
+    if [ -z "${buildPhase-}" ]; then
+        buildPhase=cargoBuildPhase
+    else
+        preBuildHooks+=(cargoBuildHook)
+    fi
 fi
