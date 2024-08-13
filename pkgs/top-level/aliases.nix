@@ -766,6 +766,7 @@ mapAliases ({
   libjpeg_drop = libjpeg_original; # Added 2020-06-05
   liblastfm = libsForQt5.liblastfm; # Added 2020-06-14
   libmongo-client = throw "'libmongo-client' has been removed, upstream gone"; # Added 2023-06-22
+  liboop = throw "liboop has been removed as it is unmaintained upstream."; # Added 2024-08-14
   libpulseaudio-vanilla = libpulseaudio; # Added 2022-04-20
   libquotient = libsForQt5.libquotient; # Added 2023-11-11
   librarian-puppet-go = throw "'librarian-puppet-go' has been removed, as it's upstream is unmaintained"; # Added 2024-06-10

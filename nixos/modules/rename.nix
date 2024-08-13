@@ -37,6 +37,7 @@ in
       The xow package was removed from nixpkgs. Upstream has deprecated
       the project and users are urged to switch to xone.
     '')
+    (mkRemovedOptionModule [ "networking" "liboop" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "networking" "vpnc" ] "Use environment.etc.\"vpnc/service.conf\" instead.")
     (mkRemovedOptionModule [ "networking" "wicd" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "gnome-documents" ] "The corresponding package was removed from nixpkgs.")
