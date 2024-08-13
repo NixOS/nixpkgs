@@ -7,6 +7,7 @@
 , gst_all_1
 , check, libintl, meson, ninja, m4, wrapGAppsHook3
 , fetchpatch2
+, nixosTests
 
 , x11Support ? false
 
@@ -181,6 +182,8 @@ stdenv.mkDerivation rec {
         substituteInPlace "$f" --replace "$out/.bin-unwrapped/" "$out/bin/"
     done
   '';
+
+  passthru.tests = { inherit (nixosTests) pulseaudio; };
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";
