@@ -104,7 +104,16 @@ let
     name = "initrd-bin-env";
     paths = map getBin cfg.initrdBin;
     pathsToLink = ["/bin" "/sbin"];
-    postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -sf '${v}' $out/bin/'${n}'") cfg.extraBin);
+
+    # Make sure sbin and bin have the same contents, and add extraBin
+    postBuild = ''
+      find $out/bin -maxdepth 1 -type l -print0 | xargs --null cp --no-dereference --no-clobber -t $out/sbin/
+      find $out/sbin -maxdepth 1 -type l -print0 | xargs --null cp --no-dereference --no-clobber -t $out/bin/
+      ${concatStringsSep "\n" (mapAttrsToList (n: v: ''
+        ln -sf '${v}' $out/bin/'${n}'
+        ln -sf '${v}' $out/sbin/'${n}'
+      '') cfg.extraBin)}
+    '';
   };
 
   initialRamdisk = pkgs.makeInitrdNG {
