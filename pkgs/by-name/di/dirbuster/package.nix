@@ -47,9 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r lib/ $out/share/java/lib/
 
     # Copy wordlists
-    mkdir -p $out/share/dirbuster
+    mkdir -p $out/share/{dirbuster,wordlists}
     for f in *.txt; do
       cp $f $out/share/dirbuster/
+      cp $f $out/share/wordlists/
     done
 
     # Extract embedded desktop icon
