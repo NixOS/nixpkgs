@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch2,
   setuptools,
   flask,
   webassets,
@@ -13,16 +14,25 @@ buildPythonPackage rec {
   version = "2.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "Flask-Assets";
-    inherit version;
-    hash = "sha256-+E1lMv/lnJ/zUoheh0D/TaJcC8+s2AXwqAaBXkQ1SBM=";
+  src = fetchFromGitHub {
+    owner = "miracle2k";
+    repo = "flask-assets";
+    rev = "refs/tags/${version}";
+    hash = "sha256-R6cFTT+r/i5j5/QQ+cCFmeuO7SNTiV1F+e0JTxwIUGY=";
   };
 
-  patchPhase = ''
-    substituteInPlace tests/test_integration.py --replace 'static_path=' 'static_url_path='
-    substituteInPlace tests/test_integration.py --replace "static_folder = '/'" "static_folder = '/x'"
-    substituteInPlace tests/test_integration.py --replace "'/foo'" "'/x/foo'"
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/miracle2k/flask-assets/commit/56e06dbb160c165e0289ac97496354786fe3f3fd.patch?full_index=1";
+      hash = "sha256-Feo7gHHmHtWRB+3XvlECdU4i5rpyjyKEYEUCuy24rf4=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace tests/test_integration.py \
+      --replace-fail 'static_path=' 'static_url_path=' \
+      --replace-fail "static_folder = '/'" "static_folder = '/x'" \
+      --replace-fail "'/foo'" "'/x/foo'"
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -31,8 +41,6 @@ buildPythonPackage rec {
     flask
     webassets
   ];
-
-  doCheck = false; # tests are broken with webassets 2.0
 
   nativeCheckInputs = [ pytestCheckHook ];
 
