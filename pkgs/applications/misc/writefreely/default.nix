@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "writefreely";
@@ -22,6 +22,8 @@ buildGoModule rec {
   tags = [ "sqlite" ];
 
   subPackages = [ "cmd/writefreely" ];
+
+  passthru.tests = { inherit (nixosTests) writefreely; };
 
   meta = with lib; {
     description = "Build a digital writing community";
