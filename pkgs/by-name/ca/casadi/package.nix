@@ -155,6 +155,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "WITH_PYTHON" pythonSupport)
     (lib.cmakeBool "WITH_PYTHON3" pythonSupport)
+    # We don't mind always setting this cmake variable, it will be read only if
+    # pythonSupport is enabled.
+    "-DPYTHON_PREFIX=${placeholder "out"}/${python3Packages.python.sitePackages}"
     (lib.cmakeBool "WITH_JSON" false)
     (lib.cmakeBool "WITH_INSTALL_INTERNAL_HEADERS" true)
     (lib.cmakeBool "INSTALL_INTERNAL_HEADERS" true)
@@ -200,11 +203,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_HIGHS" true)
     #(lib.cmakeBool "WITH_ALPAQA" true)  # this requires casadi...
   ];
-
-  # I don't know how to pass absolute $out path from cmakeFlags
-  postConfigure = lib.optionalString pythonSupport ''
-    cmake -DPYTHON_PREFIX=$out/${python3Packages.python.sitePackages} ..
-  '';
 
   doCheck = true;
 
