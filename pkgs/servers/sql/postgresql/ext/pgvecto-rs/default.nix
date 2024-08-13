@@ -85,6 +85,10 @@ in
   usePgTestCheckFeature = false;
 
   passthru = {
+    # This looks odd but is correct according to the documentation
+    # https://docs.pgvecto.rs/getting-started/installation.html#from-zip-package
+    shared_preload_library = "vectors.so";
+
     updateScript = nix-update-script { };
     tests = {
       pgvecto-rs = nixosTests.pgvecto-rs;
