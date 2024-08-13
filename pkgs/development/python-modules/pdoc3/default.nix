@@ -7,6 +7,7 @@
   markdown,
   setuptools-git,
   setuptools-scm,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,10 @@ buildPythonPackage rec {
     mako
     markdown
   ];
+
+  pythonImportsCheck = [ "pdoc" ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = {
     changelog = "https://github.com/pdoc3/pdoc/blob/${src.rev}/CHANGELOG";
