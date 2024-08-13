@@ -13035,6 +13035,12 @@
     github = "matrss";
     githubId = 9308656;
   };
+  matt1432 = {
+    email = "matt@nelim.org";
+    github = "matt1432";
+    githubId = 98562002;
+    name = "Mathis H.";
+  };
   mattchrist = {
     email = "nixpkgs-matt@christ.systems";
     github = "mattchrist";
