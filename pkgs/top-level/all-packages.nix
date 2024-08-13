@@ -32200,19 +32200,18 @@ with pkgs;
 
   multimon-ng = callPackage ../applications/radio/multimon-ng { };
 
-  murmur = (callPackages ../applications/networking/mumble {
+  murmur = callPackage ../by-name/mu/murmur/package.nix {
       avahi = avahi-compat;
-      pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
-    }).murmur;
+    };
 
-  mumble = (callPackages ../applications/networking/mumble {
+  mumble = callPackage ../by-name/mu/mumble/package.nix {
       avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
-    }).mumble;
+    };
 
-  mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
+  mumble_overlay = callPackage ../by-name/mu/mumble_overlay/package.nix {
     mumble_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
       then pkgsi686Linux.mumble
       else null;
