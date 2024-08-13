@@ -33,11 +33,11 @@ import ./versions.nix ({ version, hash, ... }:
       cp conf/zabbix_agentd/*.conf $out/etc/zabbix_agentd.conf.d/
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = "https://www.zabbix.com/";
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ mmahut psyanticy ];
-      platforms = platforms.linux;
+      license = lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [ mmahut psyanticy ];
+      platforms = lib.platforms.unix;
     };
   })
