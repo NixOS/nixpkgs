@@ -17190,6 +17190,12 @@
     githubId = 131856;
     name = "Arnout Engelen";
   };
+  racci = {
+    name = "James Draycott";
+    email = "me@racci.dev";
+    github = "DaRacci";
+    githubId = 90304606;
+  };
   raehik = {
     email = "thefirstmuffinman@gmail.com";
     github = "raehik";
