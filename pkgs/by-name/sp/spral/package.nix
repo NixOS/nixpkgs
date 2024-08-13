@@ -11,14 +11,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spral";
   version = "2024.05.08";
 
   src = fetchFromGitHub {
     owner = "ralna";
     repo = "spral";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1CdRwQ0LQrYcXvoGtGxR9Ug3Q2N4skXq8z+LdNpv8p4=";
   };
 
@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Sparse Parallel Robust Algorithms Library";
     homepage = "https://github.com/ralna/spral";
-    changelog = "https://github.com/ralna/spral/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/ralna/spral/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})
