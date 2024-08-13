@@ -140,6 +140,38 @@ let
 
       inherit patches;
 
+      outputs = [
+        "out"
+        "include"
+        "dev"
+        "libv8"
+      ];
+
+      # TODO: remove this once build-support/setup-hooks/multiple-outputs.sh
+      # properly sets outputInclude for include output. Currently it defaults to
+      # $outputDev.
+      outputInclude = "include";
+
+      __structuredAttrs = true;
+
+      outputChecks = {
+        out.disallowedReferences = [
+          "include"
+          "dev"
+          "libv8"
+          openssl.dev
+          zlib.dev
+          libuv.dev
+          icu.dev
+        ];
+
+        libv8.disallowedReferences = [
+          "out"
+          "include"
+          "dev"
+        ];
+      };
+
       strictDeps = true;
 
       env =
@@ -157,22 +189,6 @@ let
           NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300 -Wno-macro-redefined";
         };
 
-      buildInputs =
-        [
-          zlib
-          libuv
-          openssl
-          icu
-          # NB: technically, we do not need bash in build inputs since all
-          # scripts are wrappers over the corresponding JS scripts. There are
-          # some packages though that use bash wrappers, e.g. polaris-web.
-          bash
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          CoreServices
-          ApplicationServices
-        ];
-
       nativeBuildInputs =
         [
           installShellFiles
@@ -189,18 +205,30 @@ let
           darwin-cctools-only-libtool
         ];
 
+      buildInputs =
+        [
+          zlib
+          libuv
+          openssl
+          icu
+          # For patchShebangsAuto. Technically, we do not need bash in build
+          # inputs since all scripts are wrappers over the corresponding JS
+          # scripts. There are some packages though that use bash wrappers, e.g.
+          # polaris-web.
+          bash
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          CoreServices
+          ApplicationServices
+        ];
+
       # We currently rely on Makefile and stdenv for build phases, so do not let
       # ninja’s setup hook to override default stdenv phases.
       dontUseNinjaBuild = true;
       dontUseNinjaCheck = true;
       dontUseNinjaInstall = true;
 
-      outputs = [
-        "out"
-        "libv8"
-      ];
       setOutputFlags = false;
-      moveToDev = false;
 
       configureFlags =
         [
@@ -360,6 +388,13 @@ let
         # libv8 output in Nixpkgs.
         + builtins.readFile ./libv8.sh;
 
+      # Do not use _multioutDevs to avoid accidentally merging files from "$out"
+      # and "$libv8" under "$dev" output.
+      moveToDev = false;
+      preFixup = ''
+        moveToOutput include/node "''${!outputInclude}"
+      '';
+
       passthru.tests = {
         version = testers.testVersion {
           package = finalAttrs.finalPackage;
@@ -448,6 +483,7 @@ in
     patches = [
       ./patches/configure-emulator-node18.patch
       ./patches/configure-armv6-vfpv2.patch
+      ./patches/pkgconf-remove-references.patch
       ./patches/cause-segfault-optnone.patch
       ./patches/disable-darwin-v8-system-instrumentation.patch
       ./patches/bypass-darwin-xcrun-node16.patch
@@ -471,6 +507,7 @@ in
     patches = [
       ./patches/configure-emulator.patch
       ./patches/configure-armv6-vfpv2.patch
+      ./patches/pkgconf-remove-references.patch
       ./patches/cause-segfault-optnone.patch
       ./patches/disable-darwin-v8-system-instrumentation-node19.patch
       ./patches/bypass-darwin-xcrun-node16.patch
@@ -492,6 +529,7 @@ in
     patches = [
       ./patches/configure-emulator.patch
       ./patches/configure-armv6-vfpv2.patch
+      ./patches/pkgconf-remove-references.patch
       ./patches/cause-segfault-optnone.patch
       ./patches/disable-darwin-v8-system-instrumentation-node19.patch
       ./patches/bypass-darwin-xcrun-node16.patch

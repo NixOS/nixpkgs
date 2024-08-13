@@ -1,0 +1,31 @@
+Do not return -I and -L flags because these are recorded in config.gypi
+that gets embedded in the resulting bin/node binary. We’d like to keep
+closure size under control, so avoid unnecessary store references. Note
+that C compiler wrapper from stdenv already uses appropriate flags for
+each build input. That is, configure script only needs to know -l flags
+and a version.
+
+Also note that node-gyp do not use target_defaults from config.gypi.
+https://github.com/nodejs/node-gyp/blob/e6f4ede10cca28e9edeaa85d7830914c5d1499c7/lib/create-config-gypi.js#L50-L53
+
+--- a/configure.py
++++ b/configure.py
+@@ -1034,8 +1034,7 @@ def pkg_config(pkg):
+   pkg_config = os.environ.get('PKG_CONFIG', 'pkg-config')
+   args = []  # Print pkg-config warnings on first round.
+   retval = []
+-  for flag in ['--libs-only-l', '--cflags-only-I',
+-               '--libs-only-L', '--modversion']:
++  for flag in ['--libs-only-l', '--modversion']:
+     args += [flag]
+     if isinstance(pkg, list):
+       args += pkg
+@@ -1052,7 +1051,7 @@ def pkg_config(pkg):
+       return (None, None, None, None)  # No pkg-config/pkgconf installed.
+     retval.append(val)
+     args = ['--silence-errors']
+-  return tuple(retval)
++  return (retval[0], "", "", retval[1])
+ 
+ 
+ def try_check_compiler(cc, lang):
