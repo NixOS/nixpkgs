@@ -140,13 +140,12 @@ let
   };
 in
 
-with lib;
-pipe scope [
-  (makeScope newScope)
+lib.pipe scope [
+  (lib.makeScope newScope)
   (
     self:
     assert builtins.intersectAttrs self aliases == { };
-    self // optionalAttrs config.allowAliases aliases
+    self // lib.optionalAttrs config.allowAliases aliases
   )
-  recurseIntoAttrs
+  lib.recurseIntoAttrs
 ]
