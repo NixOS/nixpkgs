@@ -54,6 +54,7 @@
   xorg,
   xz,
   zstd,
+  withGtkDoc ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -147,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     libcap
     libseccomp
+    libxml2
     xz
     zstd
     polkit
@@ -157,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     glib-networking
     librsvg # for flatpak-validate-icon
-  ];
+  ] ++ lib.optionals withGtkDoc [ gtk-doc ];
 
   # Required by flatpak.pc
   propagatedBuildInputs = [
@@ -169,6 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # TODO: some issues with temporary files
   doCheck = false;
+  strictDeps = true;
 
   NIX_LDFLAGS = "-lpthread";
 
@@ -182,8 +185,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-profile-dir=${placeholder "out"}/etc/profile.d"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    "--enable-gtk-doc"
+    "--enable-gtk-doc=${if withGtkDoc then "yes" else "no"}"
     "--enable-installed-tests"
+    "--enable-selinux-module=no"
   ];
 
   makeFlags = [
@@ -193,12 +197,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch =
     let
-      vsc-py = python3.withPackages (pp: [ pp.pyparsing ]);
+      vsc-py = python3.pythonOnBuildForHost.withPackages (pp: [ pp.pyparsing ]);
     in
     ''
       patchShebangs buildutil
       patchShebangs tests
       PATH=${lib.makeBinPath [ vsc-py ]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
+
+      substituteInPlace configure.ac \
+        --replace-fail '$BWRAP --version' 'echo ${bubblewrap.version}' \
+        --replace-fail '$DBUS_PROXY --version' 'echo ${xdg-dbus-proxy.version}'
     '';
 
   passthru = {
