@@ -11252,6 +11252,8 @@ self: super: with self; {
 
   pychromecast = callPackage ../development/python-modules/pychromecast { };
 
+  pyclang = callPackage ../development/python-modules/pyclang { };
+
   pyclimacell = callPackage ../development/python-modules/pyclimacell { };
 
   pyclip = callPackage ../development/python-modules/pyclip { };
