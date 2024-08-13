@@ -328,6 +328,18 @@ in rec {
         name = "ceph-mgr-python-fix-packaging-import.patch";
         hash = "sha256-3Yl1X6UfTf0XCXJxgRnM/Js9sz8tS+hsqViY6gDExoI=";
       })
+
+      # Fixes cryptesetup version parsing regex, see
+      # * https://github.com/NixOS/nixpkgs/issues/334227
+      # * https://www.mail-archive.com/ceph-users@ceph.io/msg26309.html
+      # * https://github.com/ceph/ceph/pull/58997
+      # Remove once we're on the next version of Ceph 18, when this should be in:
+      # https://github.com/ceph/ceph/pull/58997
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/commit/6ae874902b63652fa199563b6e7950cd75151304.patch";
+        name = "ceph-reef-ceph-volume-fix-set_dmcrypt_no_workqueue.patch";
+        hash = "sha256-r+7hcCz2WF/rJfgKwTatKY9unJlE8Uw3fmOyaY5jVH0=";
+      })
     ];
 
     postPatch = ''
