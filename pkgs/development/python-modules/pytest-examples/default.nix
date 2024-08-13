@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-examples";
-  version = "0.0.12";
+  version = "0.0.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pytest-examples";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hTLTL3w4OEv8Pkzc/h9qDMnlhe6P+Q6XUImLVDsDKvk=";
+    hash = "sha256-R0gSWQEGMkJhkeXImyris2wzqjJ0hC3zO0voEdhWLoY=";
   };
 
   postPatch = ''
