@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
   pname = "picard";
   # nix-update --commit picard --version-regex 'release-(.*)'
   version = "2.12";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "metabrainz";
@@ -29,6 +29,8 @@ pythonPackages.buildPythonApplication rec {
     rev = "refs/tags/release-${version}";
     hash = "sha256-+++NDJzXw4tA5eQd24r+l3UK3YS8Jy1t9WNiEU9sH0Q=";
   };
+
+  build-system = [ pythonPackages.setuptools ];
 
   nativeBuildInputs =
     [
@@ -48,7 +50,8 @@ pythonPackages.buildPythonApplication rec {
     qt5.qtwayland
   ] ++ lib.optionals (pyqt5.multimediaEnabled) [ qt5.qtmultimedia.bin ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  dependencies = with pythonPackages; [
+    charset-normalizer
     chromaprint
     discid
     fasteners
