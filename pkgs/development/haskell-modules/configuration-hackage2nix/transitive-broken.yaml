@@ -1351,7 +1351,6 @@ dont-distribute-packages:
  - feed-translator
  - feed2lj
  - feed2twitter
- - feedback
  - fei-base
  - fei-dataiter
  - fei-datasets
