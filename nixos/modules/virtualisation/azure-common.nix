@@ -33,13 +33,8 @@ in
 
     # Generate a GRUB menu.
     boot.loader.grub.device = "/dev/sda";
-    boot.loader.timeout = 0;
 
     boot.growPartition = true;
-
-    # Don't put old configurations in the GRUB menu.  The user has no
-    # way to select them anyway.
-    boot.loader.grub.configurationLimit = 0;
 
     fileSystems."/" = {
       device = "/dev/disk/by-label/nixos";
