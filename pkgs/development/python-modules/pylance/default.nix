@@ -15,19 +15,20 @@
   pillow,
   polars,
   pytestCheckHook,
+  torch,
   tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.15.0";
+  version = "0.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zJ6zyS9DNhlJ1wbXHZRtNMDytF/Beh9DDHKB8S9HFwk=";
+    hash = "sha256-y9mDECGwXycrZTBuJVsBzTg2Tup3xd58FKruywP98gU=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -65,6 +66,10 @@ buildPythonPackage rec {
     pyarrow
   ];
 
+  passthru.optional-dependencies = {
+    torch = [ torch ];
+  };
+
   pythonImportsCheck = [ "lance" ];
 
   nativeCheckInputs = [
@@ -74,7 +79,7 @@ buildPythonPackage rec {
     polars
     pytestCheckHook
     tqdm
-  ];
+  ] ++ passthru.optional-dependencies.torch;
 
   preCheck = ''
     cd python/tests
