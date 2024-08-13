@@ -213,5 +213,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/casadi/casadi";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ nim65s ];
+    platforms = lib.platforms.all;
   };
 })
