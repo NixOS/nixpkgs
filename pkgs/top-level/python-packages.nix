@@ -4015,6 +4015,8 @@ self: super: with self; {
   esig = callPackage ../development/python-modules/esig { };
 
   esp-coredump = callPackage ../development/python-modules/esp-coredump { };
+  
+  esp-idf-kconfig = callPackage ../development/python-modules/esp-idf-kconfig { };
 
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
