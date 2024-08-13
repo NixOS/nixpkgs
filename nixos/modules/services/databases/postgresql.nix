@@ -50,7 +50,7 @@ let
     else builtins.toString value;
 
   # The main PostgreSQL configuration file.
-  configFile = pkgs.writeTextDir "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") (filterAttrs (const (x: x != null)) cfg.settings)));
+  configFile = pkgs.writeTextDir "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") (filterAttrs (const (x: x != null)) cfg.finalSettings)));
 
   configFileCheck = pkgs.runCommand "postgresql-configfile-check" {} ''
     ${cfg.package}/bin/postgres -D${configFile} -C config_file >/dev/null
@@ -379,12 +379,28 @@ in
         '';
       };
 
+      autoloadPlugins = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to automatically load plugins from the `extraPlugins` list into shared_preload_libraries.
+        '';
+      };
+
+      finalSettings = mkOption {
+        type = types.anything;
+        readOnly = true;
+        description = ''
+          Post-processed settings for the PostgreSQL server.
+        '';
+      };
+
       settings = mkOption {
         type = with types; submodule {
           freeformType = attrsOf (oneOf [ bool float int str ]);
           options = {
             shared_preload_libraries = mkOption {
-              type = nullOr (coercedTo (listOf str) (concatStringsSep ", ") str);
+              type = nullOr (listOf str);
               default = null;
               example = literalExpression ''[ "auto_explain" "anon" ]'';
               description = ''
@@ -451,7 +467,7 @@ in
           PostgreSQL superuser account to use for various operations. Internal since changing
           this value would lead to breakage while setting up databases.
         '';
-        };
+      };
     };
 
   };
@@ -481,7 +497,29 @@ in
         jit = mkDefault (if cfg.enableJIT then "on" else "off");
       };
 
-    services.postgresql.package = let
+    services.postgresql.finalSettings =
+      let
+        found_libs =
+          (builtins.map (plugMap: plugMap.passthru.shared_preload_library)
+            (builtins.filter (plugFilter: (plugFilter.passthru.shared_preload_library or null) != null)
+              (cfg.extraPlugins { postgresql = cfg.package; })));
+
+        all_libs =
+          (cfg.settings.shared_preload_libraries or [ ]) ++
+          (if cfg.autoloadPlugins then found_libs else [ ]);
+      in
+      cfg.settings // {
+        shared_preload_libraries =
+          if all_libs == [ ]
+          then null
+          else
+            lib.concatStringsSep
+              (", ")
+              (lib.unique all_libs);
+      };
+
+    services.postgresql.package =
+      let
         mkThrow = ver: throw "postgresql_${ver} was removed, please upgrade your postgresql version.";
         base = if versionAtLeast config.system.stateVersion "24.11" then pkgs.postgresql_16
             else if versionAtLeast config.system.stateVersion "23.11" then pkgs.postgresql_15
@@ -523,7 +561,7 @@ in
     environment.systemPackages = [ postgresql ];
 
     environment.pathsToLink = [
-     "/share/postgresql"
+      "/share/postgresql"
     ];
 
     system.checks = lib.optional (cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) configFileCheck;
@@ -561,7 +599,7 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            PSQL="psql --port=${builtins.toString cfg.settings.port}"
+            PSQL="psql --port=${builtins.toString cfg.finalSettings.port}"
 
             while ! $PSQL -d postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi
