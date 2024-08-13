@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) literalExpression types mkBefore;
+  inherit (lib) literalExpression types;
 
   cfg = config.services.ollama;
   ollamaPackage = cfg.package.override { inherit (cfg) acceleration; };
@@ -50,7 +50,6 @@ in
           The user will automatically be created, if this option is set to a non-null value.
         '';
       };
-
       group = lib.mkOption {
         type = with types; nullOr str;
         default = cfg.user;
@@ -71,7 +70,6 @@ in
           The home directory that the ollama service is started in.
         '';
       };
-
       models = lib.mkOption {
         type = types.str;
         default = "${cfg.home}/models";
@@ -98,6 +96,7 @@ in
           Which port the ollama server listens to.
         '';
       };
+
       acceleration = lib.mkOption {
         type = types.nullOr (
           types.enum [
@@ -136,6 +135,7 @@ in
           ) for details.
         '';
       };
+
       environmentVariables = lib.mkOption {
         type = types.attrsOf types.str;
         default = { };
@@ -155,7 +155,10 @@ in
         type = types.listOf types.str;
         default = [ ];
         description = ''
-          The models to download as soon as the service starts.
+          Download these models using `ollama pull` as soon as `ollama.service` has started.
+
+          This creates a systemd unit `ollama-model-loader.service`.
+
           Search for models of your choice from: https://ollama.com/library
         '';
       };
@@ -164,6 +167,7 @@ in
         default = false;
         description = ''
           Whether to open the firewall for ollama.
+
           This adds `services.ollama.port` to `networking.firewall.allowedTCPPorts`.
         '';
       };
@@ -200,6 +204,7 @@ in
           Group = cfg.group;
         }
         // {
+          Type = "exec";
           DynamicUser = true;
           ExecStart = "${lib.getExe ollamaPackage} serve";
           WorkingDirectory = cfg.home;
@@ -255,13 +260,50 @@ in
           ];
           UMask = "0077";
         };
-      postStart = mkBefore ''
-        set -x
-        export OLLAMA_HOST=${lib.escapeShellArg cfg.host}:${builtins.toString cfg.port}
-        for model in ${lib.escapeShellArgs cfg.loadModels}
-        do
-          ${lib.escapeShellArg (lib.getExe ollamaPackage)} pull "$model"
+    };
+
+    systemd.services.ollama-model-loader = lib.mkIf (cfg.loadModels != [ ]) {
+      description = "Download ollama models in the background";
+      wantedBy = [
+        "multi-user.target"
+        "ollama.service"
+      ];
+      after = [ "ollama.service" ];
+      bindsTo = [ "ollama.service" ];
+      environment = config.systemd.services.ollama.environment;
+      serviceConfig = {
+        Type = "exec";
+        DynamicUser = true;
+        Restart = "on-failure";
+        # bounded exponential backoff
+        RestartSec = "1s";
+        RestartMaxDelaySec = "2h";
+        RestartSteps = "10";
+      };
+
+      script = ''
+        total=${toString (builtins.length cfg.loadModels)}
+        failed=0
+
+        for model in ${lib.escapeShellArgs cfg.loadModels}; do
+          '${lib.getExe ollamaPackage}' pull "$model" &
         done
+
+        for job in $(jobs -p); do
+          set +e
+          wait $job
+          exit_code=$?
+          set -e
+
+          if [ $exit_code != 0 ]; then
+            failed=$((failed + 1))
+          fi
+        done
+
+        if [ $failed != 0 ]; then
+          echo "error: $failed out of $total attempted model downloads failed" >&2
+          exit 1
+        fi
       '';
     };
 
