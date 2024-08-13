@@ -1,0 +1,11 @@
+--- a/meson.build
++++ b/meson.build
+@@ -437,7 +437,7 @@
+     glib_networking_works_run = cc.run(
+       '''#include <gio/gio.h>
+       int main() {
+-        return !g_tls_backend_supports_tls (g_tls_backend_get_default ());
++        return g_tls_backend_supports_tls (g_tls_backend_get_default ());
+       }''',
+       dependencies: gio,
+     )
