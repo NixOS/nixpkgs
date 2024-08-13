@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , jq
 , moreutils
+, nix-update-script
 , withCmd ? false
 }:
 
@@ -49,6 +50,10 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm 444 assets/kanata-icon.svg $out/share/icons/hicolor/scalable/apps/kanata.svg
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Tool to improve keyboard comfort and usability with advanced customization";
