@@ -2,6 +2,11 @@ preConfigurePhases="${preConfigurePhases:-} autoreconfPhase"
 
 autoreconfPhase() {
     runHook preAutoreconf
-    autoreconf ${autoreconfFlags:---install --force --verbose}
+
+    local flagsArray=()
+    : "${autoreconfFlags:=--install --force --verbose}"
+    concatTo flagsArray autoreconfFlags
+
+    autoreconf "${flagsArray[@]}"
     runHook postAutoreconf
 }
