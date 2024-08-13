@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     cp *.control  $out/share/postgresql/extension
   '';
 
+  passthru = {
+    shared_preload_library = "repmgr";
+  };
+
   meta = with lib; {
     homepage = "https://repmgr.org/";
     description = "Replication manager for PostgreSQL cluster";
