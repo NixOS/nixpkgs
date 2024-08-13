@@ -2682,6 +2682,7 @@ version = "0.10.0"
 source = "git+https://github.com/galister/openxrs?rev=af4a55d#af4a55df60125491c80c61464c824219c6019b76"
 dependencies = [
  "libc",
+ "mint",
 ]
 
 [[package]]
@@ -4573,7 +4574,7 @@ dependencies = [
 
 [[package]]
 name = "wlx-overlay-s"
-version = "0.4.3"
+version = "0.4.4"
 dependencies = [
  "anyhow",
  "ash",
@@ -4599,6 +4600,7 @@ dependencies = [
  "libmonado-rs",
  "log",
  "log-panics",
+ "mint",
  "once_cell",
  "openxr",
  "ovr_overlay",

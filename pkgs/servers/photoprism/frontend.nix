@@ -8,7 +8,7 @@ buildNpmPackage {
     cd frontend
   '';
 
-  npmDepsHash = "sha256-mgDg6awsEHkZyMzvFLwlfXGjdvjtwkNJiiNcnRBSJVo=";
+  npmDepsHash = "sha256-y2Mj0sJP2urTDrsVPReVFi7G9fLjuKz76vDPLvkaMFA=";
 
   installPhase = ''
     runHook preInstall

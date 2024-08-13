@@ -35,6 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-zHfv4OZK/nVJc2rl+dBSCc4f6qndpAKcFZtThw06+LY=";
   };
 
+  patches = [
+    # Package ladybird uses SkFontMgr_New_FontConfig, but this version of skia
+    # does not export it.
+    # https://skia.googlesource.com/skia/+/4bf56844d4a661d7317882cc545ecd978715a11e%5E!/?
+    ./export-SkFontMgr_New_FontConfig.patch
+  ];
+
   postPatch = ''
     # System zlib detection bug workaround
     substituteInPlace BUILD.gn \
