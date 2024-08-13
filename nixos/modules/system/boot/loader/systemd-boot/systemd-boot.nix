@@ -382,6 +382,24 @@ in {
         assertion = cfg.installDeviceTree -> config.hardware.deviceTree.enable -> config.hardware.deviceTree.name != null;
         message = "Cannot install devicetree without 'config.hardware.deviceTree.enable' enabled and 'config.hardware.deviceTree.name' set";
       }
+      (let
+        invalidNames = filter (name: match ".*\\+[[:digit:]]+(-[[:digit:]]+)?$" name != null) (attrNames config.specialisation);
+      in {
+        assertion = length invalidNames == 0;
+        message = ''
+          Specialisation names may not end in valid boot counts when systemd-boot is enabled. See https://uapi-group.org/specifications/specs/boot_loader_specification/#boot-counting
+          Invalid specialisation names: ${concatStringsSep ", " invalidNames}
+        '';
+      })
+      (let
+        invalidNames = filter (name: match ".*\\+.*" name != null) (attrNames config.specialisation);
+      in {
+        assertion = cfg.bootCounting.enable -> length invalidNames == 0;
+        message = ''
+          Specialisation names may not contain '+' when boot counting is enabled, as systemd-boot does not behave correctly.
+          Invalid specialisation names: ${concatStringsSep ", " invalidNames}
+        '';
+      })
     ] ++ concatMap (filename: [
       {
         assertion = !(hasInfix "/" filename);

@@ -170,8 +170,12 @@ rec {
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
-      specialisation.something.configuration = {
-        boot.loader.systemd-boot.sortKey = "something";
+      # The hyphen is important in this name. It tests that the
+      # regexes in systemd-boot-builder are not dropping parts of the
+      # specialisation name.
+      specialisation.some-thing.configuration = {
+        boot.loader.systemd-boot.sortKey = "some-thing";
+        boot.loader.systemd-boot.configurationLimit = 1;
 
         # Since qemu will dynamically create a devicetree blob when starting
         # up, it is not straight forward to create an export of that devicetree
@@ -193,18 +197,26 @@ rec {
       machine.wait_for_unit("multi-user.target")
 
       machine.succeed(
-          "test -e /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
+          "test -e /boot/loader/entries/nixos-generation-1-specialisation-some-thing.conf"
       )
       machine.succeed(
-          "grep -q 'title NixOS (something)' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
+          "grep -q 'title NixOS (some-thing)' /boot/loader/entries/nixos-generation-1-specialisation-some-thing.conf"
       )
       machine.succeed(
-          "grep 'sort-key something' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
+          "grep 'sort-key some-thing' /boot/loader/entries/nixos-generation-1-specialisation-some-thing.conf"
       )
     '' + pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isAarch64 ''
       machine.succeed(
-          "grep 'devicetree .*dummy' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
+          "grep 'devicetree .*dummy' /boot/loader/entries/nixos-generation-1-specialisation-some-thing.conf"
       )
+    '' + ''
+      with subtest("remove an old generation from the boot menu, including its specialisations"):
+          machine.succeed(
+              "nix-env -p /nix/var/nix/profiles/system --set /run/current-system/specialisation/some-thing",
+              "/nix/var/nix/profiles/system/bin/switch-to-configuration boot",
+              "! test -e /boot/loader/entries/nixos-generation-1.conf",
+              "! test -e /boot/loader/entries/nixos-generation-1-specialisation-some-thing.conf",
+          )
     '';
   };
 

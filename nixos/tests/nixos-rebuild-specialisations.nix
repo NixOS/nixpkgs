@@ -78,11 +78,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
-          boot.loader.grub = {
-            enable = true;
-            device = "/dev/vda";
-            forceInstall = true;
-          };
+          boot.loader.systemd-boot.enable = true;
 
           documentation.enable = false;
 
@@ -90,7 +86,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             (pkgs.writeShellScriptBin "parent" "")
           ];
 
-          specialisation.foo-bar = {
+          specialisation."foo+3" = {
             inheritParentConfig = true;
 
             configuration = { ... }: { };
@@ -148,6 +144,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           "/etc/nixos/configuration.nix",
       )
       with subtest("Make sure that invalid specialisation names are rejected"):
-          machine.fail("nixos-rebuild switch")
+          output = machine.fail("nixos-rebuild switch 2>&1")
+          print("output was: " + output)
+          assert "Specialisation names may not end in valid boot counts" in output
     '';
 })
