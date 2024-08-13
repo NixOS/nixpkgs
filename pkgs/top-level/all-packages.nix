@@ -268,6 +268,8 @@ with pkgs;
 
   archipelago-minecraft = callPackage ../by-name/ar/archipelago/package.nix { extraPackages = [jdk17]; };
 
+  search = callPackage ../by-name/se/search/package.nix { };
+
   asciicam = callPackage ../applications/video/asciicam { };
 
   asitop = pkgs.python3Packages.callPackage ../os-specific/darwin/asitop { };
