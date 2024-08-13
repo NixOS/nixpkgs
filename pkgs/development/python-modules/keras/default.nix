@@ -19,11 +19,12 @@
   packaging,
   rich,
   tensorflow,
+  tf-keras,
 }:
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.4.1";
+  version = "3.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     owner = "keras-team";
     repo = "keras";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Pp84wTvcrWnxuksYUrzs9amapwBC8yU1PA0PE5dRl6k=";
+    hash = "sha256-hp+kKsKI2Jmh30/KeUZ+uBW0MG49+QgsyR5yCS63p08=";
   };
 
   build-system = [
@@ -51,6 +52,7 @@ buildPythonPackage rec {
     packaging
     rich
     tensorflow
+    tf-keras
   ];
 
   pythonImportsCheck = [
