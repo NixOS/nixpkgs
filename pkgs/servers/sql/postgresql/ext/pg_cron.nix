@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     cp *.control $out/share/postgresql/extension
   '';
 
+  passthru = {
+    shared_preload_library = "pg_cron";
+  };
+
   meta = with lib; {
     description = "Run Cron jobs through PostgreSQL";
     homepage    = "https://github.com/citusdata/pg_cron";
