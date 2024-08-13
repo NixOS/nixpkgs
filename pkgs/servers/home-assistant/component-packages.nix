@@ -1851,7 +1851,8 @@
       aioimaplib
     ];
     "imgw_pib" = ps: with ps; [
-    ]; # missing inputs: imgw_pib
+      imgw-pib
+    ];
     "improv_ble" = ps: with ps; [
       aioesphomeapi
       aioruuvigateway
@@ -5165,6 +5166,7 @@
     "image_processing"
     "image_upload"
     "imap"
+    "imgw_pib"
     "incomfort"
     "influxdb"
     "inkbird"
