@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/postgresql/extension *.control
   '';
 
+  passthru = {
+    shared_preload_library = "pg_bigm";
+  };
+
   meta = with lib; {
     description = "Text similarity measurement and index searching based on bigrams";
     homepage = "https://pgbigm.osdn.jp/";
