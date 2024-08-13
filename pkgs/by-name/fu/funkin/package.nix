@@ -18,7 +18,7 @@
   libXinerama,
   libXrandr,
   makeDesktopItem,
-  overrideHaxeLibFromHMM
+  overrideHaxeLibFromHMM,
 }:
 
 stdenv.mkDerivation rec {
@@ -76,33 +76,36 @@ stdenv.mkDerivation rec {
     ++ (overrideHaxeLibFromHMM {
       hmm = lib.importJSON ./hmm.json;
       hashes = lib.importJSON ./hashes.json;
-      packages = (with haxePackages; [
-        # Here, in the same order as in the Project.xml file
-        hxcpp
+      packages = (
+        with haxePackages;
+        [
+          # Here, in the same order as in the Project.xml file
+          hxcpp
 
-        lime
-        openfl
-        flixel
+          lime
+          openfl
+          flixel
 
-        flixel-addons
-        hscript
-        flixel-ui
-        haxeui-core
-        haxeui-flixel
-        flixel-text-input
-        polymod
-        flxanimate
-        hxcodec
-        funkin.vis
-        grig.audio
+          flixel-addons
+          hscript
+          flixel-ui
+          haxeui-core
+          haxeui-flixel
+          flixel-text-input
+          polymod
+          flxanimate
+          hxcodec
+          funkin.vis
+          grig.audio
 
-        format
-        hxp
-        FlxPartialSound
-        thx_core
-        thx_semver
-        json2object
-      ]);
+          format
+          hxp
+          FlxPartialSound
+          thx_core
+          thx_semver
+          json2object
+        ]
+      );
     });
 
   buildInputs = [
