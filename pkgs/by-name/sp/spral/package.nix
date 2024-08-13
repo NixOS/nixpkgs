@@ -29,6 +29,12 @@ stdenv.mkDerivation rec {
       substituteInPlace tests/meson.build --replace-fail \
         "subdir('ssids')" \
         ""
+
+      # Skipped tests: ssmfet & ssmfet_c
+      # those timeout after 300s on hydra, even if they are fine in <1s on my machines
+      substituteInPlace tests/meson.build --replace-fail \
+        "subdir('ssmfe')" \
+        ""
     ''
     + lib.optionalString stdenv.isDarwin ''
       # Skipped test: lsmrt, segfault
