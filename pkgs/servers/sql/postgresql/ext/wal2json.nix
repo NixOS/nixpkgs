@@ -20,10 +20,13 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/postgresql/extension sql/*.sql
   '';
 
-  passthru.tests.wal2json = lib.recurseIntoAttrs (callPackage ../../../../../nixos/tests/postgresql-wal2json.nix {
-    inherit (stdenv) system;
-    inherit postgresql;
-  });
+  passthru = {
+    shared_preload_library = "wal2json";
+    tests.wal2json = lib.recurseIntoAttrs (callPackage ../../../../../nixos/tests/postgresql-wal2json.nix {
+      inherit (stdenv) system;
+      inherit postgresql;
+    });
+  };
 
   meta = with lib; {
     description = "PostgreSQL JSON output plugin for changeset extraction";
