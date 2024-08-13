@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://dqlite.io/";
     license = licenses.asl20;
-    maintainers = teams.lxc.members;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

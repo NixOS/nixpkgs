@@ -18,10 +18,6 @@ let
 in {
   name = "lxd-container";
 
-  meta = {
-    maintainers = lib.teams.lxc.members;
-  };
-
   nodes.machine = { lib, ... }: {
     virtualisation = {
       diskSize = 6144;

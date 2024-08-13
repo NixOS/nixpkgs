@@ -1476,8 +1476,6 @@ with pkgs;
 
   abcm2ps = callPackage ../tools/audio/abcm2ps { };
 
-  abcmidi = callPackage ../tools/audio/abcmidi { };
-
   abduco = callPackage ../tools/misc/abduco { };
 
   acct = callPackage ../tools/system/acct { };
