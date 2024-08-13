@@ -4014,6 +4014,8 @@ self: super: with self; {
 
   esig = callPackage ../development/python-modules/esig { };
 
+  esp-coredump = callPackage ../development/python-modules/esp-coredump { };
+
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
   esper = callPackage ../development/python-modules/esper { };
