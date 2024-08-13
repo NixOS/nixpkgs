@@ -4024,6 +4024,8 @@ self: super: with self; {
 
   esprima = callPackage ../development/python-modules/esprima { };
 
+  esptool = toPythonModule pkgs.esptool;
+
   escapism = callPackage ../development/python-modules/escapism { };
 
   essentials = callPackage ../development/python-modules/essentials { };
