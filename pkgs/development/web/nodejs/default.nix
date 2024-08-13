@@ -388,7 +388,56 @@ let
       };
     });
 
-  gypPatches = import ./gyp-patches.nix { inherit fetchpatch2; };
+  backports = {
+    # Fixes builds with Nix sandbox on Darwin for gyp.
+    # See https://github.com/NixOS/nixpkgs/issues/261820
+    # and https://github.com/nodejs/gyp-next/pull/216
+    tools-gyp-darwin-sandbox-patch = fetchpatch2 {
+      name = "tools-gyp-darwin-sandbox.patch";
+      url = "https://github.com/nodejs/gyp-next/commit/706d04aba5bd18f311dc56f84720e99f64c73466.patch?full_index=1";
+      hash = "sha256-iV9qvj0meZkgRzFNur2v1jtLZahbqvSJ237NoM8pPZc=";
+      stripLen = 1;
+      extraPrefix = "tools/gyp/";
+    };
+    deps-gyp-darwin-sandbox-patch = fetchpatch2 {
+      name = "deps-gyp-darwin-sandbox.patch";
+      url = "https://github.com/nodejs/gyp-next/commit/706d04aba5bd18f311dc56f84720e99f64c73466.patch?full_index=1";
+      hash = "sha256-1iyeeAprmWpmLafvOOXW45iZ4jWFSloWJxQ0reAKBOo=";
+      stripLen = 1;
+      extraPrefix = "deps/npm/node_modules/node-gyp/gyp/";
+    };
+
+    tests-use-python-from-env-patch = fetchpatch2 {
+      name = "tests-use-python-from-env.patch";
+      url = "https://github.com/nodejs/node/commit/d0a6b605fba6cd69a82e6f12ff0363eef8fe1ee9.patch?full_index=1";
+      hash = "sha256-bZJumM1KkB/REPhIiiMCe62t/tEfgVVFrcASn9rvtNo=";
+    };
+
+    makefile-skip-tests-patch = fetchpatch2 {
+      name = "makefile-skip-tests.patch";
+      url = "https://github.com/nodejs/node/commit/534c122de166cb6464b489f3e6a9a544ceb1c913.patch?full_index=1";
+      hash = "sha256-Ac1mQwYX1qPKFFo6M1cfthBJ/fgFvglMw5wP2fcKZ+o=";
+    };
+
+    v20-openssl-3-0-14-patch = fetchpatch2 {
+      name = "v20-openssl-3.0.14.patch";
+      url = "https://github.com/nodejs/node/commit/14863e80584e579fd48c55f6373878c821c7ff7e.patch?full_index=1";
+      hash = "sha256-gICknl2vGx1iBfHgrtYPka/7dT8XANC0Ndz/BLZispc=";
+    };
+
+    do-not-assume-cwd-in-snapshot-tests-patch = fetchpatch2 {
+      name = "do-not-assume-cwd-in-snapshot-tests.patch";
+      url = "https://github.com/nodejs/node/commit/87598d4b63ef2c827a2bebdfa0f1540c35718519.patch?full_index=1";
+      hash = "sha256-2xxNtrexEOJcq3BIe58LX02EwrwcI4yHzgHNILCIqII=";
+    };
+
+    v18-do-not-assume-cwd-in-snapshot-tests = fetchpatch2 {
+      name = "v18-do-not-assume-cwd-in-snapshot-tests.patch";
+      url = "https://github.com/nodejs/node/commit/87598d4b63ef2c827a2bebdfa0f1540c35718519.patch?full_index=1";
+      hash = "sha256-1WN3tndfZlvsTJfK9jGS89HKfnqWEhU6BshQLDd68hs=";
+      includes = [ "test/common/assertSnapshot.js" ];
+    };
+  };
 in
 {
   nodejs_18 = buildNodejs {
@@ -396,7 +445,6 @@ in
 
     version = "18.20.4";
     hash = "sha256-p2x+oblq62ljoViAYmDICUtiRNZKaWUp0CBUe5qVyio=";
-
     patches = [
       ./patches/configure-emulator-node18.patch
       ./patches/configure-armv6-vfpv2.patch
@@ -408,20 +456,13 @@ in
       ./patches/trap-handler-backport.patch
       ./patches/use-correct-env-in-tests.patch
       ./patches/v18-openssl-3.0.14.patch
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/534c122de166cb6464b489f3e6a9a544ceb1c913.patch";
-        hash = "sha256-4q4LFsq4yU1xRwNsM1sJoNVphJCnxaVe2IyL6AeHJ/I=";
-      })
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/87598d4b63ef2c827a2bebdfa0f1540c35718519.patch";
-        hash = "sha256-JJi8z9aaWnu/y3nZGOSUfeNzNSCYzD9dzoHXaGkeaEA=";
-        includes = [ "test/common/assertSnapshot.js" ];
-      })
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/d0a6b605fba6cd69a82e6f12ff0363eef8fe1ee9.patch";
-        hash = "sha256-TfYal/PikRZHL6zpAlC3SmkYXCe+/8Gs83dLX/X/P/k=";
-      })
-    ] ++ gypPatches ++ [ ./patches/gyp-patches-pre-v22-import-sys.patch ];
+      backports.makefile-skip-tests-patch
+      backports.v18-do-not-assume-cwd-in-snapshot-tests
+      backports.tests-use-python-from-env-patch
+      backports.tools-gyp-darwin-sandbox-patch
+      backports.deps-gyp-darwin-sandbox-patch
+      ./patches/gyp-patches-pre-v22-import-sys.patch
+    ];
   };
 
   nodejs_20 = buildNodejs {
@@ -435,23 +476,14 @@ in
       ./patches/bypass-darwin-xcrun-node16.patch
       ./patches/node-npm-build-npm-package-logic.patch
       ./patches/use-correct-env-in-tests.patch
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/534c122de166cb6464b489f3e6a9a544ceb1c913.patch";
-        hash = "sha256-4q4LFsq4yU1xRwNsM1sJoNVphJCnxaVe2IyL6AeHJ/I=";
-      })
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/14863e80584e579fd48c55f6373878c821c7ff7e.patch";
-        hash = "sha256-I7Wjc7DE059a/ZyXAvAqEGvDudPjxQqtkBafckHCFzo=";
-      })
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/87598d4b63ef2c827a2bebdfa0f1540c35718519.patch";
-        hash = "sha256-efRJ2nN9QXaT91SQTB+ESkHvXtBq30Cb9BEDEZU9M/8=";
-      })
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/d0a6b605fba6cd69a82e6f12ff0363eef8fe1ee9.patch";
-        hash = "sha256-TfYal/PikRZHL6zpAlC3SmkYXCe+/8Gs83dLX/X/P/k=";
-      })
-    ] ++ gypPatches ++ [ ./patches/gyp-patches-pre-v22-import-sys.patch ];
+      backports.makefile-skip-tests-patch
+      backports.v20-openssl-3-0-14-patch
+      backports.do-not-assume-cwd-in-snapshot-tests-patch
+      backports.tests-use-python-from-env-patch
+      backports.tools-gyp-darwin-sandbox-patch
+      backports.deps-gyp-darwin-sandbox-patch
+      ./patches/gyp-patches-pre-v22-import-sys.patch
+    ];
   };
 
   nodejs_22 = buildNodejs {
@@ -466,10 +498,10 @@ in
       ./patches/node-npm-build-npm-package-logic.patch
       ./patches/use-correct-env-in-tests.patch
       ./patches/bin-sh-node-run-v22.patch
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/d0a6b605fba6cd69a82e6f12ff0363eef8fe1ee9.patch";
-        hash = "sha256-TfYal/PikRZHL6zpAlC3SmkYXCe+/8Gs83dLX/X/P/k=";
-      })
-    ] ++ gypPatches ++ [ ./patches/gyp-patches-v22-import-sys.patch ];
+      backports.tests-use-python-from-env-patch
+      backports.tools-gyp-darwin-sandbox-patch
+      backports.deps-gyp-darwin-sandbox-patch
+      ./patches/gyp-patches-v22-import-sys.patch
+    ];
   };
 }
