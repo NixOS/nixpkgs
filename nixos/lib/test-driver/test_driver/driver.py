@@ -150,7 +150,7 @@ class Driver:
                 if machine.name not in names:
                     if machine.is_up():
                         self.logger.warning(
-                            f"{machine.name} removed from the test, but it's running so we're not going to shut it down automatically. Call driver.machines[\"{machine.name}\"].stop() and re-run rebuild() to remove."
+                            f"{machine.name} removed from the test, but it's running so we're not going to shut it down automatically. Call {machine.name}.stop() and re-run rebuild() to remove."
                         )
                     else:
                         to_del.append(idx)
@@ -173,7 +173,7 @@ class Driver:
                     self.machines.append(machine)
 
                     self.logger.info(
-                        f'new machine created {start_cmd.machine_name}. start it with driver.machines["{start_cmd.machine_name}"].start()'
+                        f"new machine created {start_cmd.machine_name}. start it with {start_cmd.machine_name}.start()"
                     )
                 elif len(existing) == 1:
                     machine = existing[0]
@@ -186,18 +186,24 @@ class Driver:
                         with self.logger.nested(
                             f"{start_cmd.machine_name} updated. switching to new configuration"
                         ):
-                            machine.succeed(f"ls {start_cmd._cmd}")
-                            switch_cmd = (
-                                Path(start_cmd._cmd).parent.parent
-                                / "system"
-                                / "bin"
-                                / "switch-to-configuration"
-                            )
-                            machine.succeed(f"{switch_cmd} test")
-                            machine.start_command = start_cmd
+                            store_path = Path(start_cmd._cmd).parent.parent
+                            store_path_exists, _ = machine.execute(f"ls {store_path}")
+                            if store_path_exists != 0:
+                                self.logger.error(
+                                    f"Skipping the update of {start_cmd.machine_name}, because the store output {start_cmd._cmd} does not exist on the VM. This will happen if `virtualisation.useNixStoreImage = true;`."
+                                )
+                            else:
+                                switch_cmd = (
+                                    store_path
+                                    / "system"
+                                    / "bin"
+                                    / "switch-to-configuration"
+                                )
+                                machine.succeed(f"{switch_cmd} test")
+                                machine.start_command = start_cmd
                 else:
-                    self.logger.warning(
-                        f"Skipping the update of {start_cmd.machine_name}, because it has multiple instances. This shouldn't be possible, but either way it's now ambiguous which to update."
+                    self.logger.error(
+                        f"Skipping the update of {start_cmd.machine_name}, because there are mltiple machines with that name. This shouldn't be possible, and is an error in the testing framework."
                     )
 
         with self.logger.nested("updating vlans"):
@@ -220,7 +226,9 @@ class Driver:
         new_tests = Path(testscript).read_text()
         if new_tests != self.tests:
             self.tests = Path(testscript).read_text()
-            self.logger.info("Test script updated. We cannot post-hoc modify anything caused by running test_script(), but if you run it now it will reflect the new version.")
+            self.logger.info(
+                "Test script updated. We cannot post-hoc modify anything caused by running test_script(), but if you run it now it will reflect the new version."
+            )
 
         # we can't copy the existing outputs over to the new directory because there might be other files mixed in (and usually is)
         new_out_dir = Path(output_directory)
