@@ -780,6 +780,7 @@ unsupported-platforms:
   xmobar:                                       [ platforms.darwin ]
   xmonad-extras:                                [ platforms.darwin ]
   xmonad-volume:                                [ platforms.darwin ]
+  xnobar:                                       [ platforms.darwin ]
   kmonad:                                       [ platforms.darwin ]
 
 supported-platforms:
