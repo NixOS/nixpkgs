@@ -196,6 +196,11 @@ checkConfigError "attribute 'age' in selection path 'config.people.alice.age' no
 # record optional field with definition
 checkConfigOutput '^27$' config.people.mike.age ./declare-record-optional-field.nix ./define-record-mike.nix
 
+#TODO:
+# - test empty definitions
+# - test neseted records
+# - test nested optional records
+# - etc?
 
 
 if false; then
