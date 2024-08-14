@@ -4,41 +4,21 @@
   fetchpatch,
   fetchurl,
   cmake,
-  extra-cmake-modules,
   shared-mime-info,
-  wrapQtAppsHook,
-
-  qtbase,
-
-  karchive,
-  kcompletion,
-  kconfig,
-  kcoreaddons,
-  kcrash,
-  kdoctools,
-  ki18n,
-  kiconthemes,
-  kio,
-  knewstuff,
-  kparts,
-  ktextwidgets,
-  kxmlgui,
-  syntax-highlighting,
-
+  qt6,
+  kdePackages,
   gsl,
-
-  poppler,
+  bison,
+  pkg-config,
   fftw,
   hdf5,
   netcdf,
   cfitsio,
   libcerf,
-  cantor,
   zlib,
   lz4,
   readstat,
   matio,
-  qtserialport,
   discount,
 }:
 
@@ -58,43 +38,46 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     shared-mime-info
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    qt6.qtbase
+    qt6.qtsvg
 
-    karchive
-    kcompletion
-    kconfig
-    kcoreaddons
-    kcrash
-    kdoctools
-    ki18n
-    kiconthemes
-    kio
-    knewstuff
-    kparts
-    ktextwidgets
-    kxmlgui
+    kdePackages.karchive
+    kdePackages.kcompletion
+    kdePackages.kconfig
+    kdePackages.kcoreaddons
+    kdePackages.kcrash
+    kdePackages.kdoctools
+    kdePackages.ki18n
+    kdePackages.kiconthemes
+    kdePackages.kio
+    kdePackages.knewstuff
+    kdePackages.kparts
+    kdePackages.ktextwidgets
+    kdePackages.kxmlgui
 
-    syntax-highlighting
+    kdePackages.syntax-highlighting
     gsl
 
-    poppler
+    kdePackages.poppler
+    bison
+    pkg-config
     fftw
     hdf5
     netcdf
     cfitsio
     libcerf
-    cantor
+    # kdePackages.cantor
     zlib
     lz4
     readstat
     matio
-    qtserialport
+    qt6.qtserialport
     discount
   ];
 
