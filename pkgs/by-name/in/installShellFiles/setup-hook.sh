@@ -233,3 +233,27 @@ installShellCompletion() {
     fi
     return $retval
 }
+
+# installBin <path> [...<path>]
+#
+# Install each argument to $outputBin
+installBin() {
+    local path
+    for path in "$@"; do
+        if (( "${NIX_DEBUG:-0}" >= 1 )); then
+            echo "installBin: installing $path"
+        fi
+        if test -z "$path"; then
+            echo "installBin: error: path cannot be empty" >&2
+            return 1
+        fi
+        local basename
+        # use stripHash in case it's a nix store path
+        basename=$(stripHash "$path")
+
+        local outRoot
+        outRoot=${!outputBin:?}
+
+        install -D --mode=755 --no-target-directory "$path" "${outRoot}/bin/$basename" || return
+    done
+}
