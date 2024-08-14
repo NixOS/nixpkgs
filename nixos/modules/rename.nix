@@ -37,7 +37,6 @@ in
       The xow package was removed from nixpkgs. Upstream has deprecated
       the project and users are urged to switch to xone.
     '')
-    (mkRemovedOptionModule [ "networking" "liboop" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "networking" "vpnc" ] "Use environment.etc.\"vpnc/service.conf\" instead.")
     (mkRemovedOptionModule [ "networking" "wicd" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "gnome-documents" ] "The corresponding package was removed from nixpkgs.")
@@ -71,6 +70,7 @@ in
     (mkRemovedOptionModule [ "services" "hydron" ] "The `services.hydron` module has been removed as the project has been archived upstream since 2022 and is affected by a severe remote code execution vulnerability.")
     (mkRemovedOptionModule [ "services" "ihatemoney" ] "The ihatemoney module has been removed for lack of downstream maintainer")
     (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "lshd" ] "The corresponding package was removed from nixpkgs as it had no maintainer in Nixpkgs and hasn't seen an upstream release in over a decades.")
     (mkRemovedOptionModule [ "services" "mailpile" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "marathon" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mathics" ] "The Mathics module has been removed")

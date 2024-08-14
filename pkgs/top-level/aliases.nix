@@ -912,6 +912,7 @@ mapAliases ({
   llvm_11 = throw "llvm_11 has been removed from nixpkgs"; # Added 2024-01-24
 
   lobster-two = google-fonts; # Added 2021-07-22
+  lsh = throw "lsh has been removed as it had no maintainer in Nixpkgs and hasn't seen an upstream release in over a decade"; # Added 2024-08-14
   luxcorerender = throw "'luxcorerender' has been removed as it's unmaintained and broken in nixpkgs since a while ago"; # Added 2023-06-07
   lv_img_conv = throw "'lv_img_conv' has been removed from nixpkgs as it is broken"; # Added 2024-06-18
   lxd = lib.warn "lxd has been renamed to lxd-lts" lxd-lts; # Added 2024-04-01
