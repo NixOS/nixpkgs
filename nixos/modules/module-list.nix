@@ -846,6 +846,7 @@
   ./services/misc/tabby.nix
   ./services/misc/tandoor-recipes.nix
   ./services/misc/taskserver
+  ./services/misc/taskchampion-sync-server.nix
   ./services/misc/tautulli.nix
   ./services/misc/tiddlywiki.nix
   ./services/misc/tp-auto-kbbl.nix

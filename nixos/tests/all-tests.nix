@@ -996,6 +996,7 @@ in {
   tandoor-recipes-script-name = handleTest ./tandoor-recipes-script-name.nix {};
   tang = handleTest ./tang.nix {};
   taskserver = handleTest ./taskserver.nix {};
+  taskchampion-sync-server = handleTest ./taskchampion-sync-server.nix {};
   tayga = handleTest ./tayga.nix {};
   technitium-dns-server = handleTest ./technitium-dns-server.nix {};
   teeworlds = handleTest ./teeworlds.nix {};

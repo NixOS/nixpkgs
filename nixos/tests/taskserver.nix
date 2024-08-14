@@ -81,7 +81,7 @@ in {
     };
 
     client1 = { pkgs, ... }: {
-      environment.systemPackages = [ pkgs.taskwarrior pkgs.gnutls ];
+      environment.systemPackages = [ pkgs.taskwarrior2 pkgs.gnutls ];
       users.users.alice.isNormalUser = true;
       users.users.bob.isNormalUser = true;
       users.users.foo.isNormalUser = true;
