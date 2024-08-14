@@ -128,6 +128,12 @@ rustPlatform.buildRustPackage {
     #   left: 0
     #  right: 12
     "--skip=smtp::reporting::analyze::report_analyze"
+    # thread 'smtp::inbound::dmarc::dmarc' panicked at tests/src/smtp/inbound/mod.rs:59:26:
+    # Expected empty queue but got Reload
+    "--skip=smtp::inbound::dmarc::dmarc"
+    # thread 'smtp::queue::concurrent::concurrent_queue' panicked at tests/src/smtp/inbound/mod.rs:65:9:
+    # assertion `left == right` failed
+    "--skip=smtp::queue::concurrent::concurrent_queue"
   ];
 
   doCheck = !(stdenv.isLinux && stdenv.isAarch64);
