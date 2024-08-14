@@ -31,10 +31,6 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  nativeCheckInputs = [
-    git
-  ];
-
   checkFlags = [
     # requires internet access
     "--skip=detects_target_dependencies"
@@ -42,7 +38,10 @@ rustPlatform.buildRustPackage rec {
 
   preCheck = ''
     patchShebangs scripts/regenerate_test_rustdocs.sh
-    git init
+    substituteInPlace scripts/regenerate_test_rustdocs.sh \
+      --replace-fail \
+        'TOPLEVEL="$(git rev-parse --show-toplevel)"' \
+        "TOPLEVEL=$PWD"
     scripts/regenerate_test_rustdocs.sh
   '';
 
