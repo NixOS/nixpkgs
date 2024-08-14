@@ -1,12 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
-  substituteAll,
   findutils,
-  krb5,
+  krb5-c,
+  pythonOlder,
   setuptools,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +24,10 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit findutils krb5;
+      inherit findutils;
+      krb5 = krb5-c;
       # krb5-config is in dev output
-      krb5Dev = krb5.dev;
+      krb5Dev = krb5-c.dev;
     })
   ];
 
