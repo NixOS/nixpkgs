@@ -4,6 +4,7 @@
   fetchFromGitLab,
   fetchpatch,
   gitUpdater,
+  nixosTests,
   cmake,
   content-hub,
   exiv2,
@@ -169,6 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests.vm = nixosTests.lomiri-gallery-app;
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
