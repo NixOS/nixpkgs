@@ -7,6 +7,7 @@ let
     removeAttrs
     attrNames
     showOption
+    optional
     mergeDefinitions
     mkOptionType
     isAttrs
@@ -61,17 +62,11 @@ let
             builtins.addErrorContext "while evaluating the field `${fieldName}' of option `${showOption loc}'" (
               (mergeDefinitions (loc ++ [ fieldName ]) fieldOption.type (
                 data.${fieldName} or [ ]
-                ++ (
-                  if fieldOption ? default then
-                    [
-                      {
-                        value = fieldOption.default;
-                        file = "the default value of option ${showOption loc}";
-                      }
-                    ]
-                  else
-                    [ ]
-                )
+                # FIXME: isn't this handled by `mergeDefinitions` already?
+                ++ optional (fieldOption ? default) {
+                  value = fieldOption.default;
+                  file = "the default value of option ${showOption loc}";
+                }
               )).mergedValue
             )
           ) fields;
