@@ -165,6 +165,7 @@ stdenv.mkDerivation rec {
     "-Dfail-on-missing=ON"
     "-Dfitsio=OFF"
     "-Dgnuinstall=ON"
+    "-Dmathmore=ON"
     "-Dmysql=OFF"
     "-Dpgsql=OFF"
     "-Dsqlite=OFF"
