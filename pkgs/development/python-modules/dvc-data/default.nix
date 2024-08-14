@@ -27,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-23DsG5uEc8SGvbPrUavCCPzhf/lRaTcBKHmSJ35+sDU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dictdiffer
     diskcache
     dvc-objects
