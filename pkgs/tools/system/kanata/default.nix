@@ -3,6 +3,9 @@
 , darwin
 , rustPlatform
 , fetchFromGitHub
+, jq
+, moreutils
+, nix-update-script
 , withCmd ? false
 }:
 
@@ -17,10 +20,28 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-eDeGVmh1gI/DhiP6gxJyGH9G9LNH1NHW0+DNuOPUnBY=";
   };
 
-  cargoHash =
-    if stdenv.isLinux
-    then "sha256-gRJdfvb3Q+G7pXpOyKrgozrZPJJbDajC63Kk5QtgX00="
-    else "sha256-i9eY8dvteOLYmM+ad1nw+fohec2SPGCGqColXNamEBo=";
+  cargoHash = "sha256-Om9Thyr10wc39J6adSWgmXtvjckaEW0z68sWxUqa4wc=";
+
+  # the dependency native-windows-gui contains both README.md and readme.md,
+  # which causes a hash mismatch on systems with a case-insensitive filesystem
+  # this removes the readme files and updates cargo's checksum file accordingly
+  depsExtraArgs = {
+    nativeBuildInputs = [
+      jq
+      moreutils
+    ];
+
+    postBuild = ''
+      pushd $name/native-windows-gui
+
+      rm --force --verbose README.md readme.md
+      jq 'del(.files."README.md") | del(.files."readme.md")' \
+        .cargo-checksum.json -c \
+        | sponge .cargo-checksum.json
+
+      popd
+    '';
+  };
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
@@ -29,6 +50,10 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm 444 assets/kanata-icon.svg $out/share/icons/hicolor/scalable/apps/kanata.svg
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Tool to improve keyboard comfort and usability with advanced customization";
